@@ -2,118 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C29CA2903EA
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 13:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F8E2903F7
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 13:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394897AbgJPLRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 07:17:40 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13038 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405579AbgJPLRk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 07:17:40 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f8981270000>; Fri, 16 Oct 2020 04:16:55 -0700
-Received: from [10.41.23.128] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Oct
- 2020 11:17:37 +0000
-Subject: Re: [PATCH] cpufreq: Improve code around unlisted freq check
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>
-CC:     <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        <linux-kernel@vger.kernel.org>, Sumit Gupta <sumitg@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-References: <37c3f1f76c055b305d1bba2c2001ac5b1d7a9b5f.1602565964.git.viresh.kumar@linaro.org>
-From:   Sumit Gupta <sumitg@nvidia.com>
-Message-ID: <75176efa-a837-004f-c9ec-c9e2370834ae@nvidia.com>
-Date:   Fri, 16 Oct 2020 16:47:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2405578AbgJPL0Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 07:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406030AbgJPL0N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 07:26:13 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773B8C0613D3
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 04:26:11 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e9so2155795ybj.11
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 04:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:mime-version:message-id:date:subject:from:to:cc;
+        bh=3ebDBpjfYB18MuoFXn3zyWkL13VkNV9A5TzUsx3Jwns=;
+        b=TyCPqnNlQ2tcgOI9HZRRvbcDUw1pNMZrSfzIxK5M9PKlD78GCSdhSu6X9TCI/RpJsj
+         oOAK5YQ6mcJmeEcljL/CtUx0PNhbdF+Z2OEwZU9X7sO3dPo7LgOJklrtAU9Mjrz3DxKS
+         MLvYrkb88kID2iKty7cfxG9LCi4ARCPAE8/JiftnwlqR2ggPM4O1LZCstgKHs0T3GIfC
+         WqGwo5rDpFDzg+z3Eg8jr7tS7xe8gs0NWZXbLwXIFXE2YnUpQEgABEHV8f0OFXxMJRaD
+         Gmlg2NiRSEktPhMo0Xc7okfc544MdNyS5nFEILM+MzygLv+dKUhfcPF/2EF8+v3l2/XY
+         47tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:mime-version:message-id:date:subject:from
+         :to:cc;
+        bh=3ebDBpjfYB18MuoFXn3zyWkL13VkNV9A5TzUsx3Jwns=;
+        b=sBQSsb2gSvSQ8+jKgLlGqX5RJB20H3v3KWEyYowYMDAJjQqBTGVoTIWHh2HRskLPSB
+         PYZnBeg/x68T0O+N73CkEURtKtnbThwJWEWVrOiEGuCqX9+nWneTe4oYKd4ic6SRdCds
+         HgPbzEZuLcN1nHNsgcxfWqxE8ptwYHd3sHvdevYoOUth5494k5lDjVTmauPC1DbpCfUV
+         IFdz4Fq9MXE+PsVhUxlDKH0WM2FKuiWK+eLLRp6XRGOIWa8GfjKZSzmcxCL9AS5cTI6W
+         EBY1lSDQZ6tZisu7Ij5HMIy/gZARCysq/bjDX8e3pY/H4y4WbU7teYvTKiAte44k61RY
+         GnNw==
+X-Gm-Message-State: AOAM530RmTHUYV95XJSl1V1TSpIz1f2kDJuCcT7yxaGXiECKAeyC5xpc
+        2lodhjLS6xl6WKa0JIMuCxE8N9mWyd6jxo2a
+X-Google-Smtp-Source: ABdhPJybTUwPfKQYF1YsUkaWjuIOOnZy4F3lP/IWLqxa37JyufLE2W+lbH1WIDnfweIefkboX933fGFaCJAzEwl3
+Sender: "josephjang via sendgmr" 
+        <josephjang@josephjang-p920.ntc.corp.google.com>
 MIME-Version: 1.0
-In-Reply-To: <37c3f1f76c055b305d1bba2c2001ac5b1d7a9b5f.1602565964.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1602847015; bh=bmbZpnsVueT5P6vdVy7J6oHE188K2FYe5c+5IO6rybg=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=EZ6gTy1CF8YbzwdJ2bJAorKva+sDFfhxaZ3Kl2ePopgn7QKSgt5yz89nC2XP9VBjg
-         3DoBiPmIiBdwT2IBQ9jtIty6NL01+MgUYwmVcfaU4O67w7iv9Sle2jw4p3EhHdNEow
-         PA0G7cnQKiCQt5LiwYbb2xRFIXy37HRVBY8VcxrPI1VboIWPNhR7pU/yPdJK7CpRHK
-         p0TQzB9LZBf9Fz/iVb2haDj0P3BnyaOR4QC1YLly7T0pakWhXNE7x1NZYs9cbpgkvP
-         akyEKNlnkjcpLGBf2qFa2IFs4pF17ihW1wmYZdqkKC6Jg7ZLiGigSKRPxUHgIz6J80
-         Yrldz5NsudeeA==
+X-Received: from josephjang-p920.ntc.corp.google.com ([2401:fa00:fc:1:7220:84ff:fe09:41e0])
+ (user=josephjang job=sendgmr) by 2002:a25:ea02:: with SMTP id
+ p2mr4338796ybd.95.1602847570438; Fri, 16 Oct 2020 04:26:10 -0700 (PDT)
+Message-ID: <00000000000011154c05b1c8083a@google.com>
+Date:   Fri, 16 Oct 2020 11:26:10 +0000
+Subject: [PATCH] power: suspend: Add suspend timeout handler
+From:   <josephjang@google.com>
+To:     gregkh@linuxfoundation.org, rjw@rjwysocki.net, pavel@ucw.cz,
+        len.brown@intel.com, pmladek@suse.com,
+        sergey.senozhatsky@gmail.com, rostedt@goodmis.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        jonglin@google.com, woodylin@google.com, markcheng@google.com,
+        josephjang@google.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Thank you Petr for promptly reply.
+
+> On Fri 2020-10-16 11:51:09, Joseph Jang wrote:
+> > From: josephjang <josephjang@google.com>
+> >
+> > Add suspend timeout handler to prevent device stuck during suspend/
+> > resume process. Suspend timeout handler will dump disk sleep task
+> > at first round timeout and trigger kernel panic at second round timeout.
+> > The default timer for each round is 30 seconds.
+
+> A better solution would be to resume instead of panic().
 
 
-On 13/10/20 10:42 AM, Viresh Kumar wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> The cpufreq core checks if the frequency programmed by the bootloaders
-> is not listed in the freq table and programs one from the table in such
-> a case. This is done only if the driver has set the
-> CPUFREQ_NEED_INITIAL_FREQ_CHECK flag.
-> 
-> Currently we print two separate messages, with almost the same content,
-> and do this with a pr_warn() which may be a bit too much as the driver
-> only asked us to check this as it expected this to be the case. Lower
-> down the severity of the print message by switching to pr_info() instead
-> and print a single message only.
-> 
+[Joseph] suspend_timeout() will trigger kernel panic() only when
+suspend thread stuck (deadlock/hang) for 2*30 seconds.
+At that moment, I don't know how to resume the suspend thread. So I
+just could trigger panic to reboot system.
+If you have better suggestions, I am willing to study it.
 
-Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
-Tested-by: Sumit Gupta <sumitg@nvidia.com>
+> > Note: Can use following command to simulate suspend hang for testing.
+> >     adb shell echo 1 > /sys/power/pm_hang
 
-> Reported-by: Sumit Gupta <sumitg@nvidia.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/cpufreq.c | 15 +++++++--------
->   1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 2ea245a6c0c0..99864afac272 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1461,14 +1461,13 @@ static int cpufreq_online(unsigned int cpu)
->           */
->          if ((cpufreq_driver->flags & CPUFREQ_NEED_INITIAL_FREQ_CHECK)
->              && has_target()) {
-> +               unsigned int old_freq = policy->cur;
-> +
->                  /* Are we running at unknown frequency ? */
-> -               ret = cpufreq_frequency_table_get_index(policy, policy->cur);
-> +               ret = cpufreq_frequency_table_get_index(policy, old_freq);
->                  if (ret == -EINVAL) {
-> -                       /* Warn user and fix it */
-> -                       pr_warn("%s: CPU%d: Running at unlisted freq: %u KHz\n",
-> -                               __func__, policy->cpu, policy->cur);
-> -                       ret = __cpufreq_driver_target(policy, policy->cur - 1,
-> -                               CPUFREQ_RELATION_L);
-> +                       ret = __cpufreq_driver_target(policy, old_freq - 1,
-> +                                                     CPUFREQ_RELATION_L);
-> 
->                          /*
->                           * Reaching here after boot in a few seconds may not
-> @@ -1476,8 +1475,8 @@ static int cpufreq_online(unsigned int cpu)
->                           * frequency for longer duration. Hence, a BUG_ON().
->                           */
->                          BUG_ON(ret);
-> -                       pr_warn("%s: CPU%d: Unlisted initial frequency changed to: %u KHz\n",
-> -                               __func__, policy->cpu, policy->cur);
-> +                       pr_info("%s: CPU%d: Running at unlisted initial frequency: %u KHz, changing to: %u KHz\n",
-> +                               __func__, policy->cpu, old_freq, policy->cur);
->                  }
->          }
-> 
-> --
-> 2.25.0.rc1.19.g042ed3e048af
-> 
+> This looks dangerous. It adds a simple way to panic() the system.
+
+> First, it should get enabled separately. e.g.
+> CONFIG_TEST_PM_SLEEP_MONITOR.
+
+> Second, I would add it as a module that might get loaded
+> and unloaded.
+
+
+[Joseph] Agree to enable new compile flag for test module.
+I think it is better to create separate patch for the new test module right?
+
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index 8b1bb5ee7e5d..6f2679cfd9d1 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> Using kthread looks like an overkill to me. I wonder how this actually
+> works when the kthreads get freezed. It might be enough to implement
+> just a timer callback. Start the timer in start_suspend_mon() and
+> delete it in stop_suspend_mon(). Or do I miss anything?
+
+> Anyway, the kthread implementation looks a but hairy. If you really
+> need to use kthread, I suggest to use kthread_worker API. You would
+> need to run an init work to setup the RT scheduling. Then you
+> could just call kthread_queue_delayed_work(()
+> and kthread_cancel_delayed_work_sync() to start and stop
+> the monitor.
+
+
+
+[Joseph]
+Actually, I had ever think we just need to use
+add_timer()/del_timer_sync() for start_suspend_mon()/stop_suspend_mon()  
+before.
+
+But I am not sure if add_timer() may cause any performance impact in
+suspend thread or not.
+So I try to create a suspend monitor kthread and just flip the flag in
+suspend thread.
+
+
+> > @@ -114,6 +251,10 @@ static void s2idle_enter(void)
+> >       s2idle_state = S2IDLE_STATE_NONE;
+> >       raw_spin_unlock_irq(&s2idle_lock);
+> >
+> > +#ifdef CONFIG_PM_SLEEP_MONITOR
+> > +     start_suspend_mon();
+> > +#endif
+
+> It is better to solve this by defining start_suspend_mon() as empty
+> function when the config option is disabled. For example, see
+> how  vgacon_text_force() is defined in console.h.
+
+
+[Joseph] Thank you for good suggestions.
+May I know if I could use IS_ENABLED() ?
+if (IS_ENABLED(CONFIG_PM_SLEEP_MONITOR))
+     start_suspend_mon();
+
+> Best Regards,
+> Petr
+
