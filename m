@@ -2,113 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B678290B37
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 20:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F384290B3E
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 20:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391549AbgJPSRc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 14:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S2391417AbgJPSXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 14:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391441AbgJPSRc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 14:17:32 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB66EC061755
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:17:31 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id a16so1879663qtj.7
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:17:31 -0700 (PDT)
+        with ESMTP id S2391390AbgJPSXp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 14:23:45 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5317C061755
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:23:44 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id p15so3290064wmi.4
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:cc;
-        bh=jSjH1eyM8iVzeEs2L9+1VUmTOGY9+1KpajutAHg/TE8=;
-        b=stpM8PVUNvapHN5s3GE6OEHXwbzMr7MaqXEB3iezjKNeivnwwyNR3KGpmNu6x4y9yU
-         UswZlo7ZUSX34RMC/ZwjPm5rE+hc8UrG5+UDizTp0RdKJClCXsISUAO1ZWr6Z3Pcturf
-         g2f0IVLQ7ftWZn039a+ocgXPaPqzGOuynE7yaH8fxx1W77dGedK9ar/lZj2jMybL3EQK
-         avRl4dUR7bdVCxMwyfRka2vNbRH8dUOULVcA18YIpMqx8hjQ+ygk8+DrPv6oNRDiis2d
-         sKS/ToQvqYgpb+MRvnTt/hib+RFrcWyB1a0BZUN45Qxg8l9OnQeTKrrEE2dl2o0pCpQh
-         L2hA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zMd/PE6SkMQGEjnH+y069gqvi/8V6l4jTsxAP4NdnU4=;
+        b=najltAJwVmZII+1e30IFrzBErsEFDns68aGIAEAFuHIBfIiNVMWuswnl4H7BamM+UL
+         iLk0aX9VfPU1IiZOy0vGaCAgS8P4f5mgPuREzuBk+lu9GNG5gD4hsoLDCFMsoSV8PXhu
+         PtG3MvU4gunRyRsZ9IqQpKz71uxLBzQLf6fa6Aj3EAH9/bNcH8IuKgRjkjWdqF29cNyU
+         2eYXQjTsvsHlVmpJMUa8LCQLhHxznKRL5MUjNzDRLdi62BSAg4JvYB4ZMiOvPbSzzGTk
+         fO/GTwKFBKWiRe4Idh7+VOHSbZx4QASL56IQelaTja7j4/rQEO7va5KsXRxEaHPBre2W
+         j3tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc;
-        bh=jSjH1eyM8iVzeEs2L9+1VUmTOGY9+1KpajutAHg/TE8=;
-        b=BpPNzPRaRTzDZTQkYXIm84INP3lcQw/wPWBl9Bw7qqUKw87vmOETalBoiZaZ6upvP9
-         QHntUkob4jb7qXqIQAavAenMsAVsN2P333LDRDVuxIP6J3d+LfVafdvhQE9V5I4wxhW7
-         JMq+TwBe99RgZZzfRrwW3IuJwEaPqOHRmYu6Z7Jel9lPnT6qbkGllOmXiTfTUme+UO7L
-         VtKS8NQU9H/CPmIPRr8yGwBAVJjv/1MsScWnLd80OHdTVPnGxLGrKJf5QA/SURyhOU75
-         GNil7iMiNdLGR33Rhd/CvusqqJBtP5qMHOdQnhNBIVr6cG+XuFfEVO7tP4LqFEa5NJkQ
-         1jzw==
-X-Gm-Message-State: AOAM531Ad9NHkDpf2ASyyblCc2WRtdm5m+k9EQS4wBKQfXvxhbT+bfaE
-        1xy6KCEsxheVvwgzkTDyaWcZyf4=
-X-Google-Smtp-Source: ABdhPJwBwRGWQ8hx/LhLhBXqOKsJPOZy8AYuESOLuGtz5uVcUy5TNC7Rpt5+0cDqhHwQ1UC00IuKzzA=
-Sender: "wvw via sendgmr" <wvw@wvw-pc.mtv.corp.google.com>
-X-Received: from wvw-pc.mtv.corp.google.com ([2620:15c:211:1:f693:9fff:fef4:4f9b])
- (user=wvw job=sendgmr) by 2002:ad4:45ec:: with SMTP id q12mr5445691qvu.33.1602872250940;
- Fri, 16 Oct 2020 11:17:30 -0700 (PDT)
-Date:   Fri, 16 Oct 2020 11:17:22 -0700
-In-Reply-To: <CAGXk5yoNxZBD9gX-8RvtsqAwB4rO=hFQKBewFhOGoMO171aJVA@mail.gmail.com>
-Message-Id: <20201016181722.884812-1-wvw@google.com>
-Mime-Version: 1.0
-References: <CAGXk5yoNxZBD9gX-8RvtsqAwB4rO=hFQKBewFhOGoMO171aJVA@mail.gmail.com>
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-Subject: [PATCH] sched: cpufreq_schedutil: restore cached freq when next_f is
- not changed
-From:   Wei Wang <wvw@google.com>
-Cc:     wei.vince.wang@gmail.com, viresh.kumar@linaro.org,
-        qperret@google.com, rafael@kernel.org, Wei Wang <wvw@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zMd/PE6SkMQGEjnH+y069gqvi/8V6l4jTsxAP4NdnU4=;
+        b=UP18fmrFgRAywLB7MJQGDbEuzdZYPb+XQQ8xuu2TWKsj9wrgiHy4+vzvHlsNhkeVST
+         WhNUqt4ACtexcnQhPGkzpPBGtrRN6ktdr1nx/E90dzTpv6HeVWXzvu9RQf0Si8gAKNsz
+         L99yz2dx01nQ+wq6Grt3ddcqFuizNlksIg9iCm1KfgylZspuWrp6Q5Prx46e4HGf4FDu
+         ywh5Ie96o2a+E8F/XSvTJrMpX0crYcde+fhn+b9G3UcLrE6aWXcnZDuVIjbwuehf0dLs
+         2s7xsBtnocIIpY2iyP+d9mtPSpovGQqRD5yaG1MNrqhXMuizN0Rysu4f5SmCrlCFuZA6
+         Inng==
+X-Gm-Message-State: AOAM5302ofxoff8dVZh2ibswzAy7HJZsnncTfs9cRI7uFeEVAgaMp0jE
+        f6Q4FGOxVDPBoLgg2CjuUyq4WUpirxs=
+X-Google-Smtp-Source: ABdhPJx3E+fI3LvtQeu3Wr8spwrtP8mSBJ80aiVr8NhksghvBHGO4U5qk81Rvta003NaTaFmceY3tw==
+X-Received: by 2002:a1c:7d48:: with SMTP id y69mr4982700wmc.82.1602872623090;
+        Fri, 16 Oct 2020 11:23:43 -0700 (PDT)
+Received: from tool.localnet ([213.177.192.103])
+        by smtp.gmail.com with ESMTPSA id 4sm4463334wrp.58.2020.10.16.11.23.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2020 11:23:42 -0700 (PDT)
+From:   Daniel =?ISO-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org
+Subject: [PATCH] power: reset: linkstation-poweroff: add missing put_device()
+Date:   Fri, 16 Oct 2020 20:22:37 +0200
+Message-ID: <21115613.dmes8fMApM@tool>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We have the raw cached freq to reduce the chance in calling cpufreq
-driver where it could be costly in some arch/SoC.
+The of_mdio_find_bus() takes a reference to the underlying device
+structure, we should release that reference using a put_device() call.
 
-Currently, the raw cached freq will be reset when next_f is changed for
-correctness. This patch changes it to maintain the cached value instead
-of dropping it to honor the purpose of the cached value.
+Signed-off-by: Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>
+=2D--
+ drivers/power/reset/linkstation-poweroff.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-This is adapted from https://android-review.googlesource.com/1352810/
+diff --git a/drivers/power/reset/linkstation-poweroff.c b/drivers/power/res=
+et/linkstation-poweroff.c
+index 39e89baed..f1e843df0 100644
+=2D-- a/drivers/power/reset/linkstation-poweroff.c
++++ b/drivers/power/reset/linkstation-poweroff.c
+@@ -113,6 +113,7 @@ static int __init linkstation_poweroff_init(void)
+ 		return -EPROBE_DEFER;
+=20
+ 	phydev =3D phy_find_first(bus);
++	put_device(&bus->dev);
+ 	if (!phydev)
+ 		return -EPROBE_DEFER;
+=20
+=2D-=20
+2.28.0
 
-Signed-off-by: Wei Wang <wvw@google.com>
----
- kernel/sched/cpufreq_schedutil.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 5ae7b4e6e8d6..e254745a82cb 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -441,6 +441,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
- 	unsigned long util, max;
- 	unsigned int next_f;
- 	bool busy;
-+	unsigned int cached_freq = sg_policy->cached_raw_freq;
- 
- 	sugov_iowait_boost(sg_cpu, time, flags);
- 	sg_cpu->last_update = time;
-@@ -464,8 +465,8 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
- 	if (busy && next_f < sg_policy->next_freq) {
- 		next_f = sg_policy->next_freq;
- 
--		/* Reset cached freq as next_freq has changed */
--		sg_policy->cached_raw_freq = 0;
-+		/* Restore cached freq as next_freq has changed */
-+		sg_policy->cached_raw_freq = cached_freq;
- 	}
- 
- 	/*
--- 
-2.29.0.rc1.297.gfa9743e501-goog
+
 
