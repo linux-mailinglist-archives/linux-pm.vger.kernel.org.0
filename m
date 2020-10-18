@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA80C291E41
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Oct 2020 21:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE0F291D59
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Oct 2020 21:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388208AbgJRTve (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Oct 2020 15:51:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33258 "EHLO mail.kernel.org"
+        id S1732211AbgJRTpD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Oct 2020 15:45:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36334 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729308AbgJRTVQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:16 -0400
+        id S1730181AbgJRTXN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:23:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8BB7422314;
-        Sun, 18 Oct 2020 19:21:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C3E6B222EA;
+        Sun, 18 Oct 2020 19:23:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048876;
-        bh=EsmeZiwtz1CEd+9P9WiTqdjUZJhkzUS4Hese3uC56H0=;
+        s=default; t=1603048993;
+        bh=KBactvEaUAEvgP4dzWOQ7pgiFuIZ3IED/EG1+Kb8/xQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q7VmQUoNpy1D21DsuUY7GLSV0gkgKNWW73asztbjVbuwFmxGsJ0u9on4Nhna6ozou
-         PkzATyWX6YPGpyEQ6kKPo2fhjbKYzVVdiOewp7qTpe7LwBGjn+CBfilLNb7QIZeAO9
-         wSzYPmuNwN2vFL7Qn/pjwed64RXpiW/iVTy+GcTI=
+        b=wE/l0xLW06ZSMu3cgLyne4IlKdBPD6yf1aNpJ7DVHBs3yDKWyBEehWZ7NI+QJUO9J
+         3Gv0ma++I/Exn++KxHCMr7iLCgdc40ClMf3gFxY5Ljn8+MPSH30Cw3HZSos6daUBop
+         nq2Dv6lBjX81Ufq46QYRSG+co29qt6ZWCbjfud5s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christoph Hellwig <hch@lst.de>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 040/101] PM: hibernate: remove the bogus call to get_gendisk() in software_resume()
-Date:   Sun, 18 Oct 2020 15:19:25 -0400
-Message-Id: <20201018192026.4053674-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 31/80] PM: hibernate: remove the bogus call to get_gendisk() in software_resume()
+Date:   Sun, 18 Oct 2020 15:21:42 -0400
+Message-Id: <20201018192231.4054535-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
-References: <20201018192026.4053674-1-sashal@kernel.org>
+In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
+References: <20201018192231.4054535-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 11 deletions(-)
 
 diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 02ec716a49271..0e60e10ed66a3 100644
+index b6c5895ced36b..69c4cd472def3 100644
 --- a/kernel/power/hibernate.c
 +++ b/kernel/power/hibernate.c
-@@ -851,17 +851,6 @@ static int software_resume(void)
+@@ -839,17 +839,6 @@ static int software_resume(void)
  
  	/* Check if the device is there */
  	swsusp_resume_device = name_to_dev_t(resume_file);
