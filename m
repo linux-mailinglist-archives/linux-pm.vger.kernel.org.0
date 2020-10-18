@@ -2,125 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BAF2917BA
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Oct 2020 16:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D878D291806
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Oct 2020 17:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbgJROFC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Oct 2020 10:05:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54055 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726942AbgJROFA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Oct 2020 10:05:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603029898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kBVMPnQfqrYuRmZ0mFLSkNqYWCaxPfshC6ZYuKW12NQ=;
-        b=CE3TTm0ZWS3xUbYzjwLA7+TYTk7Dg+VxIL4Zp73oDsqTuzAXXNjBX0Doq5M5Cu6ffXkYev
-        bZ3C9BpL47kMqRFuXYSmeuVfmCYD0R8cyybmNyMbwair6n3qDaCsRQ2KiiaxG8Fe9Zs8sm
-        6xUrramWNvo4ZIP3aUKUh3vEKSsfIgI=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-380-XaMN9JeLPue5WFD4bKa25g-1; Sun, 18 Oct 2020 10:04:56 -0400
-X-MC-Unique: XaMN9JeLPue5WFD4bKa25g-1
-Received: by mail-qk1-f200.google.com with SMTP id m126so5503163qkd.13
-        for <linux-pm@vger.kernel.org>; Sun, 18 Oct 2020 07:04:56 -0700 (PDT)
+        id S1726765AbgJRPVg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Oct 2020 11:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726635AbgJRPVf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Oct 2020 11:21:35 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB78C061755;
+        Sun, 18 Oct 2020 08:21:35 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id 23so4025046ljv.7;
+        Sun, 18 Oct 2020 08:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VtpdlBX2SFrPia1lw3w/twJyFVdNiSIe4U4QQ2v4e1c=;
+        b=FQqTEExB4p06tKd9q0RIuPTm064MqB0pFGJ7i8nqIEmtZkt+d2dHMytpo+4+bazN2+
+         yPFn/sT1iS95v56+3FF5Yz5bEMtLeyz4DccMpJxdDEH3wrP7/IfTakmBuss4QvCOa94C
+         o/zCKWd8QOZr1uoLu8jJYodghD9UNueMlDguEWzx5s0zYdfBIyjwZIn9O/8oS/Ju9/Iq
+         cnckAT2pOungAPLwxZnT7+t0QjWQN5dlyDCB8g7kJj4OpU98E3anwie96RARCCH/vamx
+         9JdAGacYAS0QbKqcZ9AyI6ZSc4QGDRDuKNVIp7uERSq/uACRXastuV7d/jtSdR4HTHT+
+         MiLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=kBVMPnQfqrYuRmZ0mFLSkNqYWCaxPfshC6ZYuKW12NQ=;
-        b=EJBqZVyo29rlTv4OP0JNA7eIj5LJBofcH6gmwRpEdVg5VmbWHH2b18U3fKGMi2PRBi
-         tRskw1EHeQdNjMHhIlXYysnAxGYzd7axxlJPBZ3Dee9YsyewODlHnDWSbUBG7SAC8W3q
-         MYKEj85aynxbFLZBV/VgYl8+9TetjZbbUFMoadulw32dyrde4FM5N6L/A5LfaWXXpiaR
-         tY7JVP/MxNeOXlc0dRMA6XJNYbL66wK1FnQd9XE2ho5HZQfIoS8GjSXrfU6ObDSjPwAc
-         Q93VnR3LRbLCejRjeZb7fe1Nghc9X3pX7sdXw996Tg7QaMSDoyiu8eQjIkDUo0ZHQqu9
-         EKlg==
-X-Gm-Message-State: AOAM533GQdt9EUhKAz43vBLev+mKNBw+mmM0Wdzb1IDeBaieiQQRUjJ6
-        7LypYmStR/9D3qeJmiKMsG1swZSoYGQ7IJMiJxGS51vYtw/6FbpXPksSsUD7hGqyOhQisJ80gfN
-        ZVuPXpURF2nKYxRcO5uM=
-X-Received: by 2002:a05:620a:1287:: with SMTP id w7mr12724305qki.436.1603029896364;
-        Sun, 18 Oct 2020 07:04:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy6z5rS79nBj0nCbIqVRZ9qmkAzjArqewdITB0rtwnhi1UUe/kvxLZTENMJDRITA4iBlrUAlw==
-X-Received: by 2002:a05:620a:1287:: with SMTP id w7mr12724258qki.436.1603029896034;
-        Sun, 18 Oct 2020 07:04:56 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id u16sm3288927qth.42.2020.10.18.07.04.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Oct 2020 07:04:55 -0700 (PDT)
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm@lists.01.org, linux-pci@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org, clang-built-linux@googlegroups.com
-References: <20201017160928.12698-1-trix@redhat.com>
- <20201018054332.GB593954@kroah.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <eecb7c3e-88b2-ec2f-0235-280da51ae69c@redhat.com>
-Date:   Sun, 18 Oct 2020 07:04:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VtpdlBX2SFrPia1lw3w/twJyFVdNiSIe4U4QQ2v4e1c=;
+        b=NZJxyUPu6Lnc7AyR7GpBcPN/++aO2ePLcT31IzHhvK7oWryS3iLW97SnzD1EG8ZCgi
+         I+Cg0ZqVi5aT3NacdA9LFzUroXfuSIy+opAB/Qts3H2FT7oC0FuvYqKXnM7I9wWqZIML
+         7Km4R+AKVbLTDyp1TaG81RYexa57xA/1J4DaVxXCJFUbGO9zjIZwqfDPusu5bGhPTlFB
+         eZ5iQGiuftlgRHkvuWO/5EXgc1F5hnQ3Kkf66s9+m29MHqDED5AfvsSmBoJZCa5gxhTH
+         XFybqT+LorJF/BDHszTFN+K58qtofSFyg58QfzNXK4toVnCSlpP60vI2gJGj6Y3/NUq4
+         De6Q==
+X-Gm-Message-State: AOAM530MRmon2PxFsd8Z23zOo4RGd0RC8bB+4jPdn5sF8zPkZ7ZTQue1
+        8QOW7cGspkaOhFEEL+6v9m6bL58p9bHPj2mE
+X-Google-Smtp-Source: ABdhPJyTaYX+sDOnTnWEIAc3rQHytBudND0xZSCVfZi5lCJYUuHxF9IClsZFGHYc9lZ/QVvQc0eGzA==
+X-Received: by 2002:a2e:2a86:: with SMTP id q128mr3972086ljq.158.1603034493667;
+        Sun, 18 Oct 2020 08:21:33 -0700 (PDT)
+Received: from localhost ([2a02:a310:53e:fc00:a13a:fe7:fa56:f3f9])
+        by smtp.gmail.com with ESMTPSA id m13sm2787966lfl.269.2020.10.18.08.21.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Oct 2020 08:21:33 -0700 (PDT)
+From:   Hubert Jasudowicz <hubert.jasudowicz@gmail.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] powercap: Fix typo in Kconfig "Plance" -> "Plane"
+Date:   Sun, 18 Oct 2020 17:21:06 +0200
+Message-Id: <adc856179a9496f73be4036d80e6e6fa5c7ee591.1603033133.git.hubert.jasudowicz@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20201018054332.GB593954@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Signed-off-by: Hubert Jasudowicz <hubert.jasudowicz@gmail.com>
+---
+ drivers/powercap/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 10/17/20 10:43 PM, Greg KH wrote:
-> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> This is a upcoming change to clean up a new warning treewide.
->> I am wondering if the change could be one mega patch (see below) or
->> normal patch per file about 100 patches or somewhere half way by collecting
->> early acks.
-> Please break it up into one-patch-per-subsystem, like normal, and get it
-> merged that way.
+diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+index ebc4d4578339..bc228725346b 100644
+--- a/drivers/powercap/Kconfig
++++ b/drivers/powercap/Kconfig
+@@ -30,7 +30,7 @@ config INTEL_RAPL
+ 
+ 	  In RAPL, the platform level settings are divided into domains for
+ 	  fine grained control. These domains include processor package, DRAM
+-	  controller, CPU core (Power Plance 0), graphics uncore (Power Plane
++	  controller, CPU core (Power Plane 0), graphics uncore (Power Plane
+ 	  1), etc.
+ 
+ config IDLE_INJECT
 
-OK.
-
-Thanks,
-
-Tom
-
->
-> Sending us a patch, without even a diffstat to review, isn't going to
-> get you very far...
->
-> thanks,
->
-> greg k-h
->
+base-commit: 9d9af1007bc08971953ae915d88dc9bb21344b53
+-- 
+2.28.0
 
