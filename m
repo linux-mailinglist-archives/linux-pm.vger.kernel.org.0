@@ -2,73 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC8E292913
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 16:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CDD292A65
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 17:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729157AbgJSOOO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 10:14:14 -0400
-Received: from foss.arm.com ([217.140.110.172]:58672 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728802AbgJSOOO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 19 Oct 2020 10:14:14 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1BECD6E;
-        Mon, 19 Oct 2020 07:14:13 -0700 (PDT)
-Received: from bogus (unknown [10.57.12.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E23D63F66E;
-        Mon, 19 Oct 2020 07:14:10 -0700 (PDT)
-Date:   Mon, 19 Oct 2020 15:10:07 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     ulf.hansson@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>, nks@flawful.org,
-        georgi.djakov@linaro.org, Stephan Gerhold <stephan@gerhold.net>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
- -EPROBE_DEFER
-Message-ID: <20201019141007.GA6358@bogus>
-References: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
- <20201015180555.gacdzkofpibkdn2e@bogus>
- <20201016042434.org6ibdqsqbzcdww@vireshk-i7>
- <20201016060021.sotk72u4hioctg7o@bogus>
- <20201016111222.lvakbmjhlrocpogt@bogus>
- <20201019045827.kl6qnx6gidhzjkrs@vireshk-i7>
- <20201019091723.GA12087@bogus>
- <20201019092411.b3znjxebay3puq2j@vireshk-i7>
- <20201019101241.GB12908@bogus>
- <20201019103535.ksp5ackoihamam4g@vireshk-i7>
+        id S1729987AbgJSP35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 11:29:57 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36351 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729075AbgJSP35 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 11:29:57 -0400
+Received: by mail-ot1-f66.google.com with SMTP id 32so10865897otm.3;
+        Mon, 19 Oct 2020 08:29:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ufauCX1mTVCFB7Ocw9R6zTidUIroDFBpcM3yia+iYYA=;
+        b=Mq/B0bNtwxPCmz9qksEdAJ30zSV3oAof7tgYIM/grEvvqD/jR209m4e4VG4mNEfFee
+         JbkPdkcS69kmbUu6ly/wytjdV/pnY63kDTnr3jfzwZFf4ptOqtyJHDDfbfp9HMXlV4HG
+         F931Okm2XiFXU6NmGcos1t0AtUZYsh4Hh7GKK3cYfIJ3SBQBl7gcuDovnv8VqvyZi/yj
+         LiSsUhM/tiPkUChvoy7ctW/oMrlTHOAEb0u51l6E2IsBtOnGmpcMp0pxNGR5Ksm9a2ul
+         8JIfBvkYUw5PTsOueAKg9zoT+ohT07ifuHzaQkA96qwkI1YOBetAGa3nbiGmddt/OkPX
+         4WPw==
+X-Gm-Message-State: AOAM533mugTb52LfrB8AsqFAZB5MKmGBj3PWx9VSwrAguibgpwJSRPBC
+        B18HR/lnIa6KQPpuPEKLmpiMAwotgapN06JhqGM=
+X-Google-Smtp-Source: ABdhPJy0cAg9mRLdvJiGO5d2Z+lYL4CHi4TBBcdKbJMJzOBjWYxOdUw4ImJi/uqHWbPDoavzmuJ/hrqbEyKGPj6AMEI=
+X-Received: by 2002:a9d:ac9:: with SMTP id 67mr368114otq.321.1603121396651;
+ Mon, 19 Oct 2020 08:29:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201019103535.ksp5ackoihamam4g@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20201019035741.2279043-1-wei.huang2@amd.com>
+In-Reply-To: <20201019035741.2279043-1-wei.huang2@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 19 Oct 2020 17:29:45 +0200
+Message-ID: <CAJZ5v0gaQOSezJsJ7La5VC5apYj5zYL+wKAvyEB8T4w1V0TkCA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] acpi-cpufreq: Honor _PSD table setting in CPU
+ frequency control
+To:     Wei Huang <wei.huang2@amd.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 04:05:35PM +0530, Viresh Kumar wrote:
-> On 19-10-20, 11:12, Sudeep Holla wrote:
-> > Yes it has clocks property but used by SCMI(for CPUFreq/DevFreq) and not
-> > by any clock provider driver. E.g. the issue you will see if "clocks"
-> > property is used instead of "qcom,freq-domain" on Qcom parts.
-> 
-> Okay, I understand. But what I still don't understand is why it fails
-> for you. You have a clocks property in DT for the CPU, the OPP core
-> tries to get it and will get deferred-probed, which will try probing
-> at a later point of time and it shall work then. Isn't it ?
+On Mon, Oct 19, 2020 at 5:57 AM Wei Huang <wei.huang2@amd.com> wrote:
 >
+> acpi-cpufreq has a old quirk that overrides the _PSD table supplied by
+> BIOS on AMD CPUs. However the _PSD table of new AMD CPUs (Family 19h+)
+> now accurately reports the P-state dependency of CPU cores. Hence this
+> quirk needs to be fixed in order to support new CPUs' frequency control.
+>
+> Fixes: acd316248205 ("acpi-cpufreq: Add quirk to disable _PSD usage on all AMD CPUs")
+> Signed-off-by: Wei Huang <wei.huang2@amd.com>
+> ---
+>  drivers/cpufreq/acpi-cpufreq.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index e4ff681faaaa..1e4fbb002a31 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -691,7 +691,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>                 cpumask_copy(policy->cpus, topology_core_cpumask(cpu));
+>         }
+>
+> -       if (check_amd_hwpstate_cpu(cpu) && !acpi_pstate_strict) {
+> +       if (check_amd_hwpstate_cpu(cpu) && boot_cpu_data.x86 < 0x19 &&
+> +           !acpi_pstate_strict) {
+>                 cpumask_clear(policy->cpus);
+>                 cpumask_set_cpu(cpu, policy->cpus);
+>                 cpumask_copy(data->freqdomain_cpus,
+> --
 
-Nope unfortunately. We don't have clock provider, so clk_get will
-never succeed and always return -EPROBE_DEFER.
-
--- 
-Regards,
-Sudeep
+Applied as 5.10-rc material under edited subject, thanks!
