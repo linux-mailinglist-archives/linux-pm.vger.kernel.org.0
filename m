@@ -2,74 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 986DC292F03
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 21:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB3B292F18
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 22:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727550AbgJST6K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 15:58:10 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:43200 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726385AbgJST6K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 15:58:10 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l85so1286154oih.10;
-        Mon, 19 Oct 2020 12:58:09 -0700 (PDT)
+        id S1728121AbgJSUDn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 16:03:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:45751 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728542AbgJSUDl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 16:03:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603137820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=F3+eVVhD9pRO1Lc4WB7w+1NvqWHmj8ke9+eowsdGJTU=;
+        b=ejWQKpFQG8xKIPLSPSGPz3eht2VzCxukEkWsCRzK2tCGmSFxUxrPsOoJJycXtVcXxSshAN
+        nukK9Z9dkWb++LRQBSMtLIDHLSXwxq1IAp0oYHcWu+AytRWIpMZIMwmm4GVX2HmUAQ1VxX
+        djq1yjfEYQMZj3/I7eQqO0M/l2onq+o=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-314-xd3tQLTWPEq_1fJejtsN_Q-1; Mon, 19 Oct 2020 16:03:37 -0400
+X-MC-Unique: xd3tQLTWPEq_1fJejtsN_Q-1
+Received: by mail-qk1-f200.google.com with SMTP id b7so542482qkh.20
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 13:03:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mAIEX3MCxnydcfZQGLl5+Qr/ufAD4KGlqDGMYeDQQbk=;
-        b=DYehqOOWVRENeV9LpG+0PW9AVW6kbFhmo2F3UgDblwvAJqQg8dJobK7ZOToOyo6xDF
-         5jdD1r7zb8OvvFPRBEC8KcXJOfL1qkficmZP2a2SPRBf+ZuPeJZ9SOyFIFd2vqBJWszj
-         br27Y82ogtVBYxOqEODDdWMiwEyQggSGxbhXEqdU0S4Tz5NMqkQVSNNYlkaM45Jln56m
-         QObVczD0IcZTjYzUoyhhVT2WZH6wH/drVax1uQUL1q/Md1oToNYH/2z6+EhagVSOLLob
-         ggjLn3gq+4LoBTOqm/xYxQMKlPE7bA2ja9gSaHeoiGxTu5IjKBaD2iM3gPQ3JpTLXMou
-         Pvhg==
-X-Gm-Message-State: AOAM533As2/QljPZCxDRT4p6+4ousBIJRB61cu/M7S1XSkw8VaNNoQpR
-        XcA6D1hstC13qluXxnm8lw==
-X-Google-Smtp-Source: ABdhPJyfj11L8m9ewvYmM1xdCvfyfgXKQb9URLFFSGhjrk8e/3vvZfFYKTtbRi/55SOwtaIciwi6lQ==
-X-Received: by 2002:a05:6808:4b:: with SMTP id v11mr717033oic.117.1603137488863;
-        Mon, 19 Oct 2020 12:58:08 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g65sm177171otb.35.2020.10.19.12.58.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=F3+eVVhD9pRO1Lc4WB7w+1NvqWHmj8ke9+eowsdGJTU=;
+        b=AGoggyG87cwCnF8HEV8KD8k9kKvMwRkYbK8RsZQVDhm0NyIOQSKgTqS0CUTM3NWeet
+         s2l3z9WzjdtJt179tbQrmvHbNmfBvtte2adH1OEI71ImJPSt4J1KcLlwUux2D93w2Gjg
+         YFxjntPf37V7PnZXo3tY4hrvBFLBQCuis1bqXqQBKdE9kIqB9775jzhleA2MEMzLu0IV
+         7xFGOGtDSJdv2VvyoSgJ4ULnJjACHbX+A3yFozO8t4KHz93IOvkXaf2DNAZY0bgkT25R
+         n7Hdlf7IYYyrGWvwXRkpy4Q42SySIH5sB76fLQF0Cz57Jb+Lqtf0KqEO8SR1k/+XIIJ8
+         cXhw==
+X-Gm-Message-State: AOAM530kXZ2mYTeRNzc5fig3bCFNis6KEwih/gO/UkqTpD9IGdnTmdrA
+        IfJdYkiaDAbklOk2zSgW1eDhuk3K9oHgFsUAOjszq+xEAKTOc89mor4o1l5nrNNno83nEaPGOnO
+        Hzen+oxWdLKdTwb3vwyw=
+X-Received: by 2002:a05:622a:208:: with SMTP id b8mr1115067qtx.101.1603137816586;
+        Mon, 19 Oct 2020 13:03:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyXb/rxXb4baPbjkHkFnR27pl71Et9H9wJy5V10S3g9lhcLq1MOxErN1KlNZHkIc8VzD/YJ0A==
+X-Received: by 2002:a05:622a:208:: with SMTP id b8mr1115049qtx.101.1603137816368;
+        Mon, 19 Oct 2020 13:03:36 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id e19sm451471qkl.94.2020.10.19.13.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 12:58:08 -0700 (PDT)
-Received: (nullmailer pid 3508604 invoked by uid 1000);
-        Mon, 19 Oct 2020 19:58:07 -0000
-Date:   Mon, 19 Oct 2020 14:58:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     kholk11@gmail.com
-Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        agross@kernel.org, martin.botka1@gmail.com,
-        devicetree@vger.kernel.org, marijns95@gmail.com,
-        konradybcio@gmail.com, phone-devel@vger.kernel.org,
-        linux-pm@vger.kernel.org, georgi.djakov@linaro.org,
-        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: interconnect: Add bindings for
- Qualcomm SDM660 NoC
-Message-ID: <20201019195807.GA3508546@bogus>
-References: <20201017133718.31327-1-kholk11@gmail.com>
- <20201017133718.31327-2-kholk11@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201017133718.31327-2-kholk11@gmail.com>
+        Mon, 19 Oct 2020 13:03:35 -0700 (PDT)
+From:   trix@redhat.com
+To:     rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] PM: sleep: remove unneeded break
+Date:   Mon, 19 Oct 2020 13:03:30 -0700
+Message-Id: <20201019200330.16629-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 17 Oct 2020 15:37:17 +0200, kholk11@gmail.com wrote:
-> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> 
-> Add the bindings for the Qualcomm SDM660-class NoC, valid for
-> SDM630, SDM636, SDM660 and SDA variants.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> ---
->  .../bindings/interconnect/qcom,sdm660.yaml    | 147 ++++++++++++++++++
->  .../dt-bindings/interconnect/qcom,sdm660.h    | 116 ++++++++++++++
->  2 files changed, 263 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sdm660.h
-> 
+From: Tom Rix <trix@redhat.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+A break is not needed if it is preceded by a return
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/base/power/main.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index 205a06752ca9..c7ac49042cee 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -363,7 +363,6 @@ static pm_callback_t pm_op(const struct dev_pm_ops *ops, pm_message_t state)
+ 	case PM_EVENT_THAW:
+ 	case PM_EVENT_RECOVER:
+ 		return ops->thaw;
+-		break;
+ 	case PM_EVENT_RESTORE:
+ 		return ops->restore;
+ #endif /* CONFIG_HIBERNATE_CALLBACKS */
+-- 
+2.18.1
+
