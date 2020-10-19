@@ -2,160 +2,278 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F55292DAE
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 20:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC1A292DA8
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 20:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730809AbgJSSn0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 14:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730710AbgJSSnZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 14:43:25 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674A4C0613D0
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 11:43:25 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id b15so839557iod.13
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 11:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XS0b41HJUJUqgJ5lkLHS/Jz0mUrtabIGSzld1xEhiLY=;
-        b=ir9bJ0Xz8Qh7mhbng1X4z3mYPFaJwefOpeicuAqbfOrUlnrKft0l4Y+orq5vragl/i
-         g0cIy90g/N9UBPEVsyrSPed6Pb9dhgG88ex4yUpPLuko5abT3E/Q0MmcS9WDO9xoitbM
-         KVbI//mNp5qBrEPTf+4pDS2i1lAf/nm08NGo0b1MrcnUXVk/wwnbTbkpHUJVm9kXfW//
-         M+w7+oBcgI/w7+cxteVTEfuHYo3M/nGcXw3/jNiIeQG6CAwK/rJdNoi+CCCBtHkegfp/
-         pvKLJsGqDQ2qGltmC25UQbObpMlP1nxjziF4yqc2bA8M/YnUZlNffjB5/PZIUhhL1Fk5
-         Uvng==
+        id S1730807AbgJSSnI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 14:43:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22812 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730464AbgJSSnI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 14:43:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603132986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AQQ/b9d7tZqO6GOijh8WddiJi4O517TeURbfqd1GNew=;
+        b=WpwKycO2zeMWjWEPLeKvgsKPyXpO/t/JTgwFUml7KoK4Ra5NXyuhEu+IBZsRAnFl7gqwMX
+        UEZo4xxbTkIw7dfCgLDayuV34LvnVvV9KdEeNgL7Fsxx/v1ZbNWFr5e+8KFaSeKvT2ayqh
+        rnKJ6kE0FUtPGRS3i3/67Php3AH0ff8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-381-SsDw4ozOOuCgnBt_1n1CLg-1; Mon, 19 Oct 2020 14:43:04 -0400
+X-MC-Unique: SsDw4ozOOuCgnBt_1n1CLg-1
+Received: by mail-ej1-f69.google.com with SMTP id c11so229245ejp.9
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 11:43:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XS0b41HJUJUqgJ5lkLHS/Jz0mUrtabIGSzld1xEhiLY=;
-        b=MVl2VQxQdz5e5e1E/wnHwVoh4rRyQWRs0cKd9ElG8xiD5fu0ZnWVLX3knAZz/CLKE+
-         SelxR1aKWTb46yYvAHb06aLFS5f1CxeIbIOkMFDQZsdbZ41HLGR4GEZiR0xZEF03BtZ5
-         ptTNISVAkL+2mvznGLevV90BEJaD+40Dx07UyN6EqLrJM8KJpqNxwQnb47eeGk5EH3UX
-         ReUkjCVOvbsVzFQnh/vt5nfSEd4vqdQd9sIlnfA74JiPI+s1858HCoeYmExzzWJBhU6z
-         Qrf+1yoDJK6kMCDNPco1LpnNESP2l4JXsue6IAXZ/DKzUo6SYMrUmT8lrIkuh6VBoPSv
-         QvtQ==
-X-Gm-Message-State: AOAM531XQ/uZSZ7z/6CDqHfuAyZ0exSCjWh4mlpa/SF84Kg0s29nACCY
-        pCoWW7XfIYSxt5g9n1WZMeeNUaNBg3YKIPmquCIWWA==
-X-Google-Smtp-Source: ABdhPJxJAhL3IVfX23GRdC+ITCUP/phL4EJ1fYf/dYu5u9+SppORNH4yVRdNUGLOsnSubsAxikaKvN6MUW8UjZo5oW4=
-X-Received: by 2002:a05:6638:d49:: with SMTP id d9mr1165361jak.85.1603133004559;
- Mon, 19 Oct 2020 11:43:24 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AQQ/b9d7tZqO6GOijh8WddiJi4O517TeURbfqd1GNew=;
+        b=VI9kuvt2gY6FBdZ3Yq1xpoGePrkv6QOEExMA5c6Nzdbsd9TvKul3hWKfYI/vUAzZYi
+         NAQIRlk3MRGBnXvpaMWvgss9i9/bCuFv1eIGrZJtS0469l4YrL8g+P1YdfZz0941jaqz
+         nbS+FTOWz3ckLCbYIwPvYi18ERkyXEtEIBffzPvI/aOI4OVBt/ZZMLLiLpcdAhQnUL/G
+         ggdzyzdtXnip8UEQUOciTn3LqCp80LNHyFAbaQZ27/TxapZScCGjcgBgABdwxIxw1gUL
+         OE+EakqHH3QnYAMy08QIim9wNjjAR7R72TXZRuCLmSBvfryAA/NG9m5197k+pymFyFxE
+         O1ww==
+X-Gm-Message-State: AOAM5307RSJPwhwOxOEfZ3Uy+Rle7Fv36by5EEwraJguhbujfay6YIec
+        Ywu+NWWwtoLgv4N2r2JkaQA6UCbXvBO/QMmkQIXlULmHM04tkQFQjOMatkdqMF0wY1adu0giReG
+        x+44aOsmB040wB59j99Q=
+X-Received: by 2002:a17:906:8349:: with SMTP id b9mr1345623ejy.88.1603132983120;
+        Mon, 19 Oct 2020 11:43:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy2RYRkpUJLfaW0sZ5MlI4xMt/nfAxsXhCkRJDCLs7ZOkpypG4yuuYWUXP2NQNlNJQ1c4s9Iw==
+X-Received: by 2002:a17:906:8349:: with SMTP id b9mr1345597ejy.88.1603132982803;
+        Mon, 19 Oct 2020 11:43:02 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id h4sm1075820ejk.71.2020.10.19.11.43.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Oct 2020 11:43:02 -0700 (PDT)
+Subject: Re: [RFC] Documentation: Add documentation for new
+ performance_profile sysfs class (Also Re: [PATCH 0/4] powercap/dtpm: Add the
+ DTPM framework)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mark Pearson <mpearson@lenovo.com>,
+        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Elia Devito <eliadevito@gmail.com>,
+        Benjamin Berg <bberg@redhat.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
+ <eb26a00d-eee0-a4d1-ed25-61a661ad5683@redhat.com>
+ <8be66efd-7833-2c8a-427d-b0055c2f6ec1@linaro.org>
+ <97e5368b-228d-eca1-85a5-b918dfcfd336@redhat.com>
+ <CAJZ5v0gwc_d1vnwDVWXY+i4f0T2r0tAz8xuWV7oS_afsy7OocQ@mail.gmail.com>
+ <63dfa6a1-0424-7985-7803-756c0c5cc4a5@redhat.com>
+ <CAJZ5v0jpYpu3Tk7qq_MCVs0wUr-Dw0rY5EZELrVbQta0NZaoVA@mail.gmail.com>
+ <87d9a808-39d6-4949-c4f9-6a80d14a3768@redhat.com>
+ <CAJZ5v0iWmmu5WV7cX7uNb61NMYQ7s0dnhg1K+T0x90b3sBfU9w@mail.gmail.com>
+ <943531a7-74d6-7c7f-67bc-2645b3ba7b8a@redhat.com>
+ <CAJZ5v0j8o5Ot-4U0HmUtckUUBSNqC+TRB6CCRzqdjeE0p_XfvA@mail.gmail.com>
+ <25d000cc-0c00-3b17-50f7-ca8de8b7a65b@redhat.com>
+ <CAJZ5v0jC=rrTEtqoTvjw5vi=OH7i5OGC-KFuJgjCaXaDsKhUeQ@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <64de7cf0-5d52-f8b3-426a-431fb3a6a6ec@redhat.com>
+Date:   Mon, 19 Oct 2020 20:43:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-References: <20200917032226.820371-1-thara.gopinath@linaro.org>
-In-Reply-To: <20200917032226.820371-1-thara.gopinath@linaro.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Date:   Mon, 19 Oct 2020 14:42:48 -0400
-Message-ID: <CALD-y_wQeuUq=0+_TGWYwOAcM4zdmGbtCMYZ+Oa587HtzHHqVQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/8] Introduce warming in thermal framework
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        lukasz.luba@arm.com, amitk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0jC=rrTEtqoTvjw5vi=OH7i5OGC-KFuJgjCaXaDsKhUeQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 16 Sep 2020 at 23:22, Thara Gopinath <thara.gopinath@linaro.org> wrote:
->
-> Thermal framework today supports monitoring for rising temperatures and
-> subsequently initiating cooling action in case of a thermal trip point
-> being crossed. There are scenarios where a SoC need warming mitigating
-> action to be activated if the temperature falls below a cetain permissible
-> limit.  Since warming action can be considered mirror opposite of cooling
-> action, most of the thermal framework can be re-used to achieve this. The
-> key assumption in this patch series is that a device can act either as a
-> warming device or a cooling device and not as both.
->
-> In order to support warming three extensions are needed in the thermal
-> framework.
->
-> 1. Indication that a trip point is being monitored for falling temperature
-> and not rising temperature. We discussed two different ways to achieve this
-> during LPC. First option is to introduce a new trip type to indicate that a
-> trip is a cold trip(THERMAL_TRIP_COLD). The second option is to introduce a
-> new property for trip point that will indicate whether a trip point is
-> being monitored for rising temperature or falling temperature. The patch
-> series(patches 1-4) chooses the second approach since it allows trip points
-> of any type to be monitored for rising or falling temperature.Also this was
-> the preferred approach when discussed during LPC. The approach that
-> introduces a new cold trip type was posted on the list earlier as a RFC and
-> can be found at [1].
->
-> 2. Extend the exisitng governors to handle monitoring of falling
-> temperature. The patch series(patches 5 & 6) extends the step wise governor
-> to monitor the falling temperature.Other governors return doing nothing if
-> the trip point they are being called for is being monitored for falling
-> temperature. The governors' mitigate function is called "throttle" in the
-> thermal framework and with this patch series it is a misnomer as the
-> function is called for both throttling and warming up. Ideally
-> "throttle" should be renamed to "mitigate" to improve readability of code.
-> The renaming is not part of this series.
->
-> 3. Finally, the cooling device framework itself can be reused for a warming
-> device. As stated before a device can act either as a warming device or a
-> cooling device and not as both.  With this the cooling state in the
-> framework can be considered as mitigating state with 0 as the state with no
-> thermal mitigation and higher the number higher the thermal mitigation.
-> Again what affects the code readability and comprehension is the term
-> "cooling" which is a misnomer here. Ideally the term "cooling" should be
-> renamed to "mitigating" and hence thermal_cooling_device will become
-> thermal_mitgating_device. The renaming is not part of the patch series as
-> even though the renaming is a simple search-replace, it will change a lot
-> of files.  The patch series(patches 7 & 8) instead introduces a minimal set
-> of _warming_device_ apis to register and unregister warming devices which
-> internally is identical to the _cooling_device_ counterpart.
+Hi,
 
-Gentle ping for review..
+On 10/18/20 2:31 PM, Rafael J. Wysocki wrote:
+> On Sun, Oct 18, 2020 at 11:41 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Hi,
+>>
+>> On 10/16/20 4:51 PM, Rafael J. Wysocki wrote:
+>>> On Fri, Oct 16, 2020 at 1:11 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>>>
+>>>> <note folding the 2 threads we are having on this into one, adding every one from both threads to the Cc>
+>>>>
+>>>> Hi,
+>>>>
+>>>> On 10/14/20 5:42 PM, Rafael J. Wysocki wrote:
+>>>>> On Wed, Oct 14, 2020 at 4:06 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>>>>> On 10/14/20 3:33 PM, Rafael J. Wysocki wrote:
+>>>>
+>>>> <snip>
+>>>>
+>>>>>>> First, a common place to register a DPTF system profile seems to be
+>>>>>>> needed and, as I said above, I wouldn't expect more than one such
+>>>>>>> thing to be present in the system at any given time, so it may be
+>>>>>>> registered along with the list of supported profiles and user space
+>>>>>>> will have to understand what they mean.
+>>>>>>
+>>>>>> Mostly Ack, I would still like to have an enum for DPTF system
+>>>>>> profiles in the kernel and have a single piece of code map that
+>>>>>> enum to profile names. This enum can then be extended as
+>>>>>> necessary, but I want to avoid having one driver use
+>>>>>> "Performance" and the other "performance" or one using
+>>>>>> "performance-balanced" and the other "balanced-performance", etc.
+>>>>>>
+>>>>>> With the goal being that new drivers use existing values from
+>>>>>> the enum as much as possible, but we extend it where necessary.
+>>>>>
+>>>>> IOW, just a table of known profile names with specific indices assigned to them.
+>>>>
+>>>> Yes.
+>>>>
+>>>>> This sounds reasonable.
+>>>>>
+>>>>>>> Second, irrespective of the above, it may be useful to have a
+>>>>>>> consistent way to pass performance-vs-power preference information
+>>>>>>> from user space to different parts of the kernel so as to allow them
+>>>>>>> to adjust their operation and this could be done with a system-wide
+>>>>>>> power profile attribute IMO.
+>>>>>>
+>>>>>> I agree, which is why I tried to tackle both things in one go,
+>>>>>> but as you said doing both in 1 API is probably not the best idea.
+>>>>>> So I believe we should park this second issue for now and revisit it
+>>>>>> when we find a need for it.
+>>>>>
+>>>>> Agreed.
+>>>>>
+>>>>>> Do you have any specific userspace API in mind for the
+>>>>>> DPTF system profile selection?
+>>>>>
+>>>>> Not really.
+>>>>
+>>>> So before /sys/power/profile was mentioned, but that seems more like
+>>>> a thing which should have a set of fixed possible values, iow that is
+>>>> out of scope for this discussion.
+>>>
+>>> Yes.
+>>>
+>>>> Since we all seem to agree that this is something which we need
+>>>> specifically for DPTF profiles maybe just add:
+>>>>
+>>>> /sys/power/dptf_current_profile    (rw)
+>>>> /sys/power/dptf_available_profiles (ro)
+>>>>
+>>>> (which will only be visible if a dptf-profile handler
+>>>>  has been registered) ?
+>>>>
+>>>> Or more generic and thus better (in case other platforms
+>>>> later need something similar) I think, mirror the:
+>>>>
+>>>> /sys/bus/cpu/devices/cpu#/cpufreq/energy_performance_* bits
+>>>> for a system-wide energy-performance setting, so we get:
+>>>>
+>>>> /sys/power/energy_performance_preference
+>>>> /sys/power/energy_performance_available_preferences
+>>>
+>>> But this is not about energy vs performance only in general, is it?
+>>>
+>>>> (again only visible when applicable) ?
+>>>>
+>>>> I personally like the second option best.
+>>>
+>>> But I would put it under /sys/firmware/ instead of /sys/power/ and I
+>>> would call it something like platform_profile (and
+>>> platform_profile_choices or similar).
+>>
+>> Currently we only have dirs under /sys/firmware:
+>>
+>> [hans@x1 ~]$ ls /sys/firmware
+>> acpi  dmi  efi  memmap
+>>
+>> But we do have /sys/firmware/apci/pm_profile:
+>>
+>> Documentation/ABI/stable/sysfs-acpi-pmprofile
+>>
+>> What:           /sys/firmware/acpi/pm_profile
+>> Date:           03-Nov-2011
+>> KernelVersion:  v3.2
+>> Contact:        linux-acpi@vger.kernel.org
+>> Description:    The ACPI pm_profile sysfs interface exports the platform
+>>                 power management (and performance) requirement expectations
+>>                 as provided by BIOS. The integer value is directly passed as
+>>                 retrieved from the FADT ACPI table.
+>> Values:         For possible values see ACPI specification:
+>>                 5.2.9 Fixed ACPI Description Table (FADT)
+>>                 Field: Preferred_PM_Profile
+>>
+>>                 Currently these values are defined by spec:
+>>                 0 Unspecified
+>>                 1 Desktop
+>>                 2 Mobile
+>>                 3 Workstation
+>>                 4 Enterprise Server
+>>                 ...
+>>
+>> Since all platforms which we need this for are ACPI based
+>> (and the involved interfaces are also all ACPI interfaces)
+>> how about:
+>>
+>> /sys/firmware/acpi/platform_profile
+>> /sys/firmware/acpi/platform_profile_choices
+>>
+>> ?
+>>
+>> I think this goes nice together with /sys/firmware/acpi/pm_profile
+>> although that is read-only and this is a read/write setting.
+>>
+>> Rafel, would:
+>>
+>> /sys/firmware/acpi/platform_profile
+>> /sys/firmware/acpi/platform_profile_choices
+>>
+>> work for you ?
+> 
+> Yes, it would.
 
->
-> 1. https://lkml.org/lkml/2020/7/10/639
->
-> Thara Gopinath (8):
->   dt-bindings: thermal: Introduce monitor-falling parameter to thermal
->     trip point binding
->   thermal: Introduce new property monitor_type for trip point.
->   thermal: thermal_of: Extend thermal dt driver to support
->     bi-directional monitoring of a thermal trip point.
->   thermal:core:Add genetlink notifications for monitoring falling
->     temperature
->   thermal: gov_step_wise: Extend thermal step-wise governor to monitor
->     falling temperature.
->   thermal: Modify thermal governors to do nothing for trip points being
->     monitored for falling temperature
->   thermal:core: Add is_warming_dev and supporting warming device api's
->     to the cooling dev framework.
->   soc:qcom:qcom_aoss: Change cooling_device_register to
->     warming_device_register
->
->  .../bindings/thermal/thermal-zones.yaml       |   7 ++
->  drivers/soc/qcom/qcom_aoss.c                  |   6 +-
->  drivers/thermal/gov_bang_bang.c               |  12 ++
->  drivers/thermal/gov_fair_share.c              |  12 ++
->  drivers/thermal/gov_power_allocator.c         |  12 ++
->  drivers/thermal/gov_step_wise.c               |  62 +++++++---
->  drivers/thermal/thermal_core.c                | 113 +++++++++++++++---
->  drivers/thermal/thermal_core.h                |   2 +
->  drivers/thermal/thermal_of.c                  |  22 ++++
->  include/linux/thermal.h                       |   9 ++
->  include/uapi/linux/thermal.h                  |   5 +
->  11 files changed, 226 insertions(+), 36 deletions(-)
->
-> --
-> 2.25.1
->
+Great. So I think hat means that we have the most important part
+for moving forward with this.
+
+So I guess the plan for this now looks something like this.
+
+1. Rewrite my API docs RFC to update it for the new /sys/firmware/acpi/platform_profile[_choices]
+   plan (should be easy and a bunch of stuff like the "type" bit can just be dropped)
+
+2. Add code somewhere under drivers/acpi which allows code from else where
+   to register itself as platform_profile handler/provider.
+
+Rafael, any suggestions / preference for where this should be added under
+drivers/acpi ?  In a new .c file perhaps ?
+
+3.1 Use the code from 2 to add support for platform-profile selection in
+    thinkpad_acpi (something for me or Mark Pearson) to do
+3.2 Use the code from 2 to add support for platform-profile selection
+    to hp-wmi
+3.3 (and to other drivers in the future).
 
 
--- 
-Warm Regards
-Thara
+An open question is who will take care of 1. and 2. Mark (Pearson)
+do you feel up to this? or do you want me to take care of this?
+
+Regards,
+
+Hans
+
+
+
+
+
+
+
