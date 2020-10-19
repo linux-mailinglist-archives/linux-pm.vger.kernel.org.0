@@ -2,95 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 045EC293147
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 00:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775C029315A
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 00:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388207AbgJSWdJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 18:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        id S2388229AbgJSWkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 18:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388205AbgJSWdH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 18:33:07 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD67C0613CE
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 15:33:06 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id w21so831291pfc.7
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 15:33:06 -0700 (PDT)
+        with ESMTP id S1726532AbgJSWkB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 18:40:01 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C62EC0613CE;
+        Mon, 19 Oct 2020 15:40:00 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id b1so1920412lfp.11;
+        Mon, 19 Oct 2020 15:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YRjo2HvYrN2YlB7PX+blFf8vNEJz+jYGbB/nTBk0Ba8=;
-        b=OC1dGuQQU6DMsWrKaHis4dloEGAs6n41NTtAe9LMiaBcJ2/K05WNyxvaq3h1OtI6TH
-         Kb4YbJhU16bT6ftitK6musRNCmsn5BcYU4gPT30kNnP6dq+jIJtWlXQrmv3jVAeRMkPv
-         0L1pc3rfXNArykrq0o3ZFqtB7llzIqY/nSSsg=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rZp4itAJz8aEdqmJauni1XP9ot/pmBFocBopP+DQNbI=;
+        b=PmrjE89voAP6Q7skyHT7DnQ3/Q0kESjOJXSXQYXLOjLcouxJhA9CZrdJmJe+AvKant
+         5UjDEk4/OW9F5aoaahlU7UO6PVjz7MWCV07+Ap20Qb2er2IEd9VARCo5JLolbj71JqDZ
+         BhfCFcNscITIYKeqFh5r5M2qe5iZFIRwm3Yuw7Tm9zkUD9rnPkU8af/a0nfCz0qfd8IJ
+         RUsWxUfLe5pdE2YsNkL2XgNPgyPcvOQXIOnKB0yuQK+SnNJSDHS8K+96dADiFxdpQ8PX
+         liDTqF0xzUmnTioXR7iiZQPMSkZmfnXLO/ZEzk4XY8MofSXDKfK+jNu9Ad2Bpy4BiWBt
+         5aWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YRjo2HvYrN2YlB7PX+blFf8vNEJz+jYGbB/nTBk0Ba8=;
-        b=qz7ahT4Zyt4qUTD3LZoFZIm+i8pJSSEWllANkOGYtWrdbPM4upwifg3pMstYWPu03i
-         EyOpdkrxK8ng2HzmoUe+nOxU/PbMOyd914Xs/TVLNYkOFpgY5b4S2VnrM8fWFgHj1LJr
-         KUC8YbPdhB+4Nbni8EsdnAcFHKoefpBbrxNyttTCj7Xp6piRNehjSuGcZxgnFBc2n2yo
-         0oDg+KgcRameqfa3yc5OuCmWmv+CyCRKrdOa8M8l0BhkdWxPCIM4kB51L+Gk8HWeAK4U
-         2pyE4PUj85v2UI9EYhnxYhwX0agZ5HGjJHlktKuFVqgIDZluipR48bvf0oft3Zo7R4Er
-         ZmUw==
-X-Gm-Message-State: AOAM530Ss6k0cswY9Xkvrb9TzqxZDVaYP1c9nYn8bJOub/ekJXscmfXV
-        jv6Y6U8WQtuPFX0evxBytgdbYQ==
-X-Google-Smtp-Source: ABdhPJyTbuytBMp2b9itw0xRGEp0pJ/7XBda2m5Bgy8XEUYi7Nw/fAI/195+z3HlU3iNnktZRLY8BA==
-X-Received: by 2002:a63:f84c:: with SMTP id v12mr29801pgj.125.1603146786040;
-        Mon, 19 Oct 2020 15:33:06 -0700 (PDT)
-Received: from apsdesk.mtv.corp.google.com ([2620:15c:202:1:7220:84ff:fe09:2b94])
-        by smtp.gmail.com with ESMTPSA id s20sm10897pfu.112.2020.10.19.15.33.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 15:33:05 -0700 (PDT)
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rafael.j.wysocki@intel.com, swboyd@chromium.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 1/1] kobject: Don't emit change events if not in sysfs
-Date:   Mon, 19 Oct 2020 15:32:57 -0700
-Message-Id: <20201019153232.1.I797f9874972a07fc381fe586b6748ce71c7b1fda@changeid>
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-In-Reply-To: <20201019223257.261223-1-abhishekpandit@chromium.org>
-References: <20201019223257.261223-1-abhishekpandit@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rZp4itAJz8aEdqmJauni1XP9ot/pmBFocBopP+DQNbI=;
+        b=DylXiRVfzAu/oG+KoMQhb4vxXCsUgOV27FFsaX0l/TAGCB57p4UusYcTO0NYXH3Kbn
+         R1D4Rf9u6rO3kzxAaS7WfrimgYxphBA2kuM5VzO4Z5itDEMuzc+5fZpjkhJcwTLOGPKI
+         fUAuL5GXMVMRtE2TBhueFfeV8QHQF7PlmUiRnHtCfS/e+w53Z2A4hMl1yY2rZuKYHxwd
+         CelILTUxL3Qw9wK37fWVBEti1jqWemAJbnVlAXQEbGr4IMbKam/p9uUxW+kPmVm2aQNT
+         AZwNXJSmLq852cqg/BNnVp8PgSIjZpGQTUUEOAzmBfKdR/+KbreiBVLNSOzjscuQmCJo
+         GoMw==
+X-Gm-Message-State: AOAM530Q4UkSEB8cRTyWeLlQkC77uufV6cPpE+gQ3BbllEJ4vuuOAGvf
+        7HGxRjwZ5o1NkyLcYYJHNOg=
+X-Google-Smtp-Source: ABdhPJwOdn6hxkyk5CuoGoi1IrNy/FXi/wBwkWM3vILY7vzYJ9dHYIFrL45tykSeqkfW4kdDHUnk7g==
+X-Received: by 2002:a19:2355:: with SMTP id j82mr557878lfj.36.1603147198583;
+        Mon, 19 Oct 2020 15:39:58 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
+        by smtp.googlemail.com with ESMTPSA id o17sm192940lfb.55.2020.10.19.15.39.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Oct 2020 15:39:57 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] PM / devfreq: Add governor feature flag
+To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Cc:     leonard.crestez@nxp.com, lukasz.luba@arm.com,
+        enric.balletbo@collabora.com, hl@rock-chips.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, abel.vesa@nxp.com,
+        k.konieczny@samsung.com, b.zolnierkie@samsung.com,
+        chanwoo@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com
+References: <20201007050703.20759-1-cw00.choi@samsung.com>
+ <CGME20201007045340epcas1p4e63955385b1841f44e7a07e2d5d962c4@epcas1p4.samsung.com>
+ <20201007050703.20759-2-cw00.choi@samsung.com>
+ <83b952ab-a25e-8984-8804-1dd990eec835@gmail.com>
+ <9267f046-1adc-b43d-51ef-2e0ad41dc322@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <0d3d20f1-6a23-27c2-1a9d-1c7ac60ce1e7@gmail.com>
+Date:   Tue, 20 Oct 2020 01:39:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <9267f046-1adc-b43d-51ef-2e0ad41dc322@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a check to make sure the kobj is created and in sysfs before sending
-a change event notification. Otherwise, udev rules that depend on the
-change notification may find that the path that changed doesn't actually
-exist.
+19.10.2020 06:53, Chanwoo Choi пишет:
+...
+>>> +	const u64 flag;
+>> A plural form of flag(s) is more common, IMO.
+> 
+> When need to add more feature flag, I prefer to add
+> the definition instead of changing the structure.
+> I think it is better.
 
-Fixes: a45aca510b73b7 (PM: sleep: core: Emit changed uevent on wakeup_sysfs_add/remove)
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
-
- lib/kobject_uevent.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
-index 7998affa45d49a..f08197e907d5ce 100644
---- a/lib/kobject_uevent.c
-+++ b/lib/kobject_uevent.c
-@@ -473,6 +473,11 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
- 	if (action == KOBJ_REMOVE)
- 		kobj->state_remove_uevent_sent = 1;
- 
-+	if (action == KOBJ_CHANGE && !kobj->state_in_sysfs) {
-+		pr_debug("kobject: can't emit KOBJ_CHANGE until in sysfs\n");
-+		return -EINVAL;
-+	}
-+
- 	pr_debug("kobject: '%s' (%p): %s\n",
- 		 kobject_name(kobj), kobj, __func__);
- 
--- 
-2.29.0.rc1.297.gfa9743e501-goog
-
+I meant to rename the new member "flag" to "flags".
