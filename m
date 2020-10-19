@@ -2,104 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49515292A94
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 17:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A76292A9C
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 17:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729910AbgJSPkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 11:40:02 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43953 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729075AbgJSPkC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 11:40:02 -0400
-Received: by mail-ot1-f67.google.com with SMTP id k68so6422415otk.10;
-        Mon, 19 Oct 2020 08:40:02 -0700 (PDT)
+        id S1729910AbgJSPmV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 11:42:21 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:34926 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729075AbgJSPmV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 11:42:21 -0400
+Received: by mail-oi1-f193.google.com with SMTP id w141so400866oia.2;
+        Mon, 19 Oct 2020 08:42:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sQXDksdWJB9OPOkEy4qlnDk19u+YPFVgLo+Sa2g/Kho=;
-        b=OQjvnSQZbqZoff/o1/9S3Cxm+FCAs+VPOmMFjejuvAYsrEDyEb4s92f1AVXjPwbkNl
-         OZDMpWyuePDLSKsiU9+j2fyNS7alwFVcfHX3Kt3j0FPdbEy4eFjJgAQvDPhZCdNLdGn/
-         W7LDX4SP52tbDGKOgi6kiyMUb+ripD61w+WnxyNtfaBt4Mho8fHu4cCQLPZoKZWPUSWK
-         xrbbgCZV7G6EfeOd8FWjJ7QK88s+r9SyFCIilh5iF7Z1x/Diw4A5EJH1bN+NRTTYVIDl
-         9SJuo7pif39chQTnYcwFM8mhAcZ1ZC5edVChiY+Kwj+CLUfOyVH8RwvAHmFXvOClwJTL
-         x13Q==
-X-Gm-Message-State: AOAM5302Gle0wvmYfEK+IXJ000ceAcsSkwuPwX9ZLHO6/n1cioWYs9B3
-        cyjZ+hFrf8IIcqJYeqQfhYkWCmuCo4Lm0zA7ths=
-X-Google-Smtp-Source: ABdhPJxV2jiT94je+9YQXAAdxh67yLt2Jd6HQXV8DuJOBcna4yNKkadtyZwauQAoMC/xI6EG+zjmgpvrHH3dhX2Ku+k=
-X-Received: by 2002:a05:6830:18cd:: with SMTP id v13mr447185ote.206.1603122001657;
- Mon, 19 Oct 2020 08:40:01 -0700 (PDT)
+        bh=BXEochqhW0YkK393ZCrugBsw7tLHP+l1LR04jQHwvdc=;
+        b=tp3v45WmqVMvmGXXX/E9c8Hugu8+YrGEDX6yFo2XVxVJ8mNPs+ZNyuYr0kdULrwETn
+         Q1ZZlKFvupbxRa414Y9Q3SohnlnY/7+QDe6S5EN9tPcX5+PkAUTAf88ACDvLggAzGs+x
+         8dP4DHnHy84wd26nzJMVztcmdwzpydVUItpnwNsSjy1kFF0797ZfsREIVTwJaWfITV0O
+         X/Ech/Wo7QS6jZCC15Xd5RpEOwcwJuuhbfLZrLhyvYO/j4TE25NbSpIs08NrzaWrsqlS
+         7AbCEFiSJT8a2cU2rgEm52uJWQOEY4hZr++Um+ts8pKAl2vnSUFnthqmDDIjITpmNWZP
+         tobw==
+X-Gm-Message-State: AOAM531MqD4T/Kmz+tFKlP483hPjhhXaHYnw1f83wZfYS9vJxisMO4+Y
+        WHF4kv8GH1B4XDcBrlkZ75fJpStStuR5fdabTOcoF90R
+X-Google-Smtp-Source: ABdhPJy3t/DLE7nMLkpfnS5dLvjK74mc81ZKGW7Knws0aAm3X4kZYGsmsX+rvX1ICF3Czt5lpvEL0Do34779XnJcCB0=
+X-Received: by 2002:aca:5256:: with SMTP id g83mr241803oib.71.1603122140910;
+ Mon, 19 Oct 2020 08:42:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAGXk5yoNxZBD9gX-8RvtsqAwB4rO=hFQKBewFhOGoMO171aJVA@mail.gmail.com>
- <20201016181722.884812-1-wvw@google.com>
-In-Reply-To: <20201016181722.884812-1-wvw@google.com>
+References: <adc856179a9496f73be4036d80e6e6fa5c7ee591.1603033133.git.hubert.jasudowicz@gmail.com>
+In-Reply-To: <adc856179a9496f73be4036d80e6e6fa5c7ee591.1603033133.git.hubert.jasudowicz@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 19 Oct 2020 17:39:50 +0200
-Message-ID: <CAJZ5v0jaftAQv9-=5YucNnm__Z7NWRWmN2mCO07i0ZhV9K5EsQ@mail.gmail.com>
-Subject: Re: [PATCH] sched: cpufreq_schedutil: restore cached freq when next_f
- is not changed
-To:     Wei Wang <wvw@google.com>
-Cc:     Wei Wang <wei.vince.wang@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Mon, 19 Oct 2020 17:42:10 +0200
+Message-ID: <CAJZ5v0jkT5q1X_KiXuO0WE8epzYpy8q490vJN=J3m_V+H7qpuQ@mail.gmail.com>
+Subject: Re: [PATCH] powercap: Fix typo in Kconfig "Plance" -> "Plane"
+To:     Hubert Jasudowicz <hubert.jasudowicz@gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 8:17 PM Wei Wang <wvw@google.com> wrote:
+On Sun, Oct 18, 2020 at 5:21 PM Hubert Jasudowicz
+<hubert.jasudowicz@gmail.com> wrote:
 >
-> We have the raw cached freq to reduce the chance in calling cpufreq
-> driver where it could be costly in some arch/SoC.
->
-> Currently, the raw cached freq will be reset when next_f is changed for
-> correctness. This patch changes it to maintain the cached value instead
-> of dropping it to honor the purpose of the cached value.
->
-> This is adapted from https://android-review.googlesource.com/1352810/
->
-> Signed-off-by: Wei Wang <wvw@google.com>
+> Signed-off-by: Hubert Jasudowicz <hubert.jasudowicz@gmail.com>
 > ---
->  kernel/sched/cpufreq_schedutil.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  drivers/powercap/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 5ae7b4e6e8d6..e254745a82cb 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -441,6 +441,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
->         unsigned long util, max;
->         unsigned int next_f;
->         bool busy;
-> +       unsigned int cached_freq = sg_policy->cached_raw_freq;
+> diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+> index ebc4d4578339..bc228725346b 100644
+> --- a/drivers/powercap/Kconfig
+> +++ b/drivers/powercap/Kconfig
+> @@ -30,7 +30,7 @@ config INTEL_RAPL
 >
->         sugov_iowait_boost(sg_cpu, time, flags);
->         sg_cpu->last_update = time;
-> @@ -464,8 +465,8 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
->         if (busy && next_f < sg_policy->next_freq) {
->                 next_f = sg_policy->next_freq;
+>           In RAPL, the platform level settings are divided into domains for
+>           fine grained control. These domains include processor package, DRAM
+> -         controller, CPU core (Power Plance 0), graphics uncore (Power Plane
+> +         controller, CPU core (Power Plane 0), graphics uncore (Power Plane
+>           1), etc.
 >
-> -               /* Reset cached freq as next_freq has changed */
-> -               sg_policy->cached_raw_freq = 0;
-> +               /* Restore cached freq as next_freq has changed */
-> +               sg_policy->cached_raw_freq = cached_freq;
->         }
+>  config IDLE_INJECT
 >
->         /*
+> base-commit: 9d9af1007bc08971953ae915d88dc9bb21344b53
 > --
 
-Applied as 5.10-rc material with edited subject and rewritten changelog.
-
-Thanks!
+Applied as 5.10-rc material, thanks!
