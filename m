@@ -2,135 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2343F292637
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 13:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A47C2926DC
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 13:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727629AbgJSLLA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 07:11:00 -0400
-Received: from foss.arm.com ([217.140.110.172]:55260 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbgJSLK7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 19 Oct 2020 07:10:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03C0F30E;
-        Mon, 19 Oct 2020 04:10:59 -0700 (PDT)
-Received: from [10.57.15.200] (unknown [10.57.15.200])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 373403F719;
-        Mon, 19 Oct 2020 04:10:56 -0700 (PDT)
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <cover.1594707424.git.viresh.kumar@linaro.org>
- <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
- <20200716115605.GR10769@hirez.programming.kicks-ass.net>
- <681fb3e8-d645-2558-38de-b39b372499de@arm.com>
- <CAKfTPtA+BPegK2h6PQMFs+p4dpxO+sk1FDQuOfJvSpGCJ-rBrA@mail.gmail.com>
- <20200730062414.uq3ip7ukpu7nkiyg@vireshk-mac-ubuntu>
- <bc99342a-48ee-ce30-0116-4ba5c76787c2@arm.com>
- <20201019074037.75oueqxny5fhrsxt@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <d2a75b18-1eae-f396-4dc5-af41b539e581@arm.com>
-Date:   Mon, 19 Oct 2020 12:10:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725799AbgJSL6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 07:58:51 -0400
+Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:36308 "EHLO
+        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726087AbgJSL6v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 07:58:51 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07483579|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0805089-0.00178873-0.917702;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.IlUILxe_1603108718;
+Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.IlUILxe_1603108718)
+          by smtp.aliyun-inc.com(10.147.41.120);
+          Mon, 19 Oct 2020 19:58:43 +0800
+From:   Frank Lee <frank@allwinnertech.com>
+To:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org, mripard@kernel.org,
+        wens@csie.org
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank@allwinnertech.com>
+Subject: [PATCH] thermal: sun8i: Use bitmap API instead of open code
+Date:   Mon, 19 Oct 2020 19:58:36 +0800
+Message-Id: <20201019115836.13982-1-frank@allwinnertech.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20201019074037.75oueqxny5fhrsxt@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Yangtao Li <frank@allwinnertech.com>
 
+Thw bitmap_* API is the standard way to access data in the bitfield.
 
-On 10/19/20 8:40 AM, Viresh Kumar wrote:
-> On 30-07-20, 12:16, Lukasz Luba wrote:
->> Hi Viresh,
->>
->> On 7/30/20 7:24 AM, Viresh Kumar wrote:
->>> On 17-07-20, 11:46, Vincent Guittot wrote:
->>>> On Thu, 16 Jul 2020 at 16:24, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>> On 7/16/20 12:56 PM, Peter Zijlstra wrote:
->>>>>> Currently cpufreq_cooling appears to estimate the CPU energy usage by
->>>>>> calculating the percentage of idle time using the per-cpu cpustat stuff,
->>>>>> which is pretty horrific.
->>>>>
->>>>> Even worse, it then *samples* the *current* CPU frequency at that
->>>>> particular point in time and assumes that when the CPU wasn't idle
->>>>> during that period - it had *this* frequency...
->>>>
->>>> So there is 2 problems in the power calculation of cpufreq cooling device :
->>>> - How to get an accurate utilization level of the cpu which is what
->>>> this patch is trying to fix because using idle time is just wrong
->>>> whereas scheduler utilization is frequency invariant
->>>
->>> Since this patch is targeted only towards fixing this particular
->>> problem, should I change something in the patch to make it acceptable
->>> ?
->>>
->>>> - How to get power estimate from this utilization level. And as you
->>>> pointed out, using the current freq which is not accurate.
->>>
->>> This should be tackled separately I believe.
->>>
->>
->> I don't think that these two are separate. Furthermore, I think we
->> would need this kind of information also in future in the powercap.
->> I've discussed with Daniel this possible scenario.
->>
->> We have a vendor who presented issue with the IPA input power and
->> pointed out these issues. Unfortunately, I don't have this vendor
->> phone but I assume it can last a few minutes without changing the
->> max allowed OPP. Based on their plots the frequency driven by the
->> governor is changing, also the idles are present during the IPA period.
->>
->> Please give me a few days, because I am also plumbing these stuff
->> and would like to present it. These two interfaces: involving cpufreq
->> driver or fallback mode for utilization and EM.
-> 
-> Its been almost 3 months, do we have any update for this? We really
-> would like to get this patchset merged in some form as it provides a
-> simple update and I think more work can be done by anyone over it in
-> future.
-> 
+Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+---
+ drivers/thermal/sun8i_thermal.c | 35 +++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
 
-I made a few implementations to compare the results with reality (power
-measured using power meter on cluster rails). This idea with utilization
-from the schedutil_cpu_util() has some edge cases with errors. The
-signal is good for comparison and short prediction, but taking it as an
-approximation for past arbitrary period (e.g. 100ms) has issues. It is
-good when estimating energy cost during e.g. compute_energy().
-
-What your renamed function of old schedutil_cpu_util() does is returning
-the sum of utilization of runqueues (CFS, RT, DL, (IRQ)) at that
-time. This utilization is dependent on sum of utilization of tasks being
-there. These tasks could shuffle in the past (especially when we deal
-with period ~100ms in IPA)...
-
-I am currently working on a few different topics, not full time on this
-one. Thus, I tend to agree that this provides 'simple update and ...
-more work can be done' in future. Although, I am a bit concerned that it
-would require some exports from the scheduler, some changed to
-schedutil, which I am not sure they would pay off.
-
-If Rafael and Peter will allow you to change these sub-systems, then I
-don't mind.
-
-What I am trying to implement is different than this idea.
-
-Regards,
-Lukasz
-
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index f8b13071a6f4..f2e4a4f18101 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -8,6 +8,7 @@
+  * Based on the work of Josef Gajdusek <atx@atx.name>
+  */
+ 
++#include <linux/bitmap.h>
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/interrupt.h>
+@@ -74,7 +75,7 @@ struct ths_thermal_chip {
+ 	int		(*calibrate)(struct ths_device *tmdev,
+ 				     u16 *caldata, int callen);
+ 	int		(*init)(struct ths_device *tmdev);
+-	int             (*irq_ack)(struct ths_device *tmdev);
++	void		(*irq_ack)(struct ths_device *tmdev);
+ 	int		(*calc_temp)(struct ths_device *tmdev,
+ 				     int id, int reg);
+ };
+@@ -82,6 +83,7 @@ struct ths_thermal_chip {
+ struct ths_device {
+ 	const struct ths_thermal_chip		*chip;
+ 	struct device				*dev;
++	DECLARE_BITMAP(irq_bitmap, MAX_SENSOR_NUM);
+ 	struct regmap				*regmap;
+ 	struct reset_control			*reset;
+ 	struct clk				*bus_clk;
+@@ -146,9 +148,11 @@ static const struct regmap_config config = {
+ 	.max_register = 0xfc,
+ };
+ 
+-static int sun8i_h3_irq_ack(struct ths_device *tmdev)
++static void sun8i_h3_irq_ack(struct ths_device *tmdev)
+ {
+-	int i, state, ret = 0;
++	int i, state;
++
++	bitmap_zero(tmdev->irq_bitmap, tmdev->chip->sensor_num);
+ 
+ 	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
+ 
+@@ -156,16 +160,16 @@ static int sun8i_h3_irq_ack(struct ths_device *tmdev)
+ 		if (state & SUN8I_THS_DATA_IRQ_STS(i)) {
+ 			regmap_write(tmdev->regmap, SUN8I_THS_IS,
+ 				     SUN8I_THS_DATA_IRQ_STS(i));
+-			ret |= BIT(i);
++			bitmap_set(tmdev->irq_bitmap, i, 1);
+ 		}
+ 	}
+-
+-	return ret;
+ }
+ 
+-static int sun50i_h6_irq_ack(struct ths_device *tmdev)
++static void sun50i_h6_irq_ack(struct ths_device *tmdev)
+ {
+-	int i, state, ret = 0;
++	int i, state;
++
++	bitmap_zero(tmdev->irq_bitmap, tmdev->chip->sensor_num);
+ 
+ 	regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
+ 
+@@ -173,24 +177,21 @@ static int sun50i_h6_irq_ack(struct ths_device *tmdev)
+ 		if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
+ 			regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
+ 				     SUN50I_H6_THS_DATA_IRQ_STS(i));
+-			ret |= BIT(i);
++			bitmap_set(tmdev->irq_bitmap, i, 1);
+ 		}
+ 	}
+-
+-	return ret;
+ }
+ 
+ static irqreturn_t sun8i_irq_thread(int irq, void *data)
+ {
+ 	struct ths_device *tmdev = data;
+-	int i, state;
++	int i;
+ 
+-	state = tmdev->chip->irq_ack(tmdev);
++	tmdev->chip->irq_ack(tmdev);
+ 
+-	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+-		if (state & BIT(i))
+-			thermal_zone_device_update(tmdev->sensor[i].tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
++	for_each_set_bit(i, tmdev->irq_bitmap, tmdev->chip->sensor_num) {
++		thermal_zone_device_update(tmdev->sensor[i].tzd,
++					   THERMAL_EVENT_UNSPECIFIED);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+-- 
+2.28.0
 
