@@ -2,84 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB3B292F18
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 22:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6014A292FA2
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 22:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728121AbgJSUDn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 16:03:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:45751 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728542AbgJSUDl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 16:03:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603137820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=F3+eVVhD9pRO1Lc4WB7w+1NvqWHmj8ke9+eowsdGJTU=;
-        b=ejWQKpFQG8xKIPLSPSGPz3eht2VzCxukEkWsCRzK2tCGmSFxUxrPsOoJJycXtVcXxSshAN
-        nukK9Z9dkWb++LRQBSMtLIDHLSXwxq1IAp0oYHcWu+AytRWIpMZIMwmm4GVX2HmUAQ1VxX
-        djq1yjfEYQMZj3/I7eQqO0M/l2onq+o=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-314-xd3tQLTWPEq_1fJejtsN_Q-1; Mon, 19 Oct 2020 16:03:37 -0400
-X-MC-Unique: xd3tQLTWPEq_1fJejtsN_Q-1
-Received: by mail-qk1-f200.google.com with SMTP id b7so542482qkh.20
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 13:03:36 -0700 (PDT)
+        id S1726594AbgJSUpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 16:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbgJSUo7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 16:44:59 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4D8C0613CE;
+        Mon, 19 Oct 2020 13:44:59 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id t21so709494eds.6;
+        Mon, 19 Oct 2020 13:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sRKQZM/u0KyuM0HK57jZaq4ro1c5W2LrViHCVfdTkUA=;
+        b=Ta1EUzyHX5+eIKSCjA1c6DssesWEAtxcwtK5/HyZ+9kxtC/Ro8Rma0Ash/CGWcmXWy
+         0b0Aka3dRAyQWFkHr7523c2N7VJMVYqOmgB/6qKIoCqLBMOMxMJXbj0Qqw7FCAS5P/vA
+         7sHzK2+fW4pCvfcmJwXlX+YQKRQdMpP7JRVbBgzES/MDY1aIexpTQaIzEpWDeZEPgic3
+         i1FGcCsh/COQwQAhpqfAsNpEBknZsvkPlIXQcETO7sDqgDsVEWgEAre9BhZ2PYUzV970
+         2jFxJMfFdNRP6VKTLIa4vqHJ85jS6VIRobVJRF3hR70deARXtODjLzN6x3MKwbdV6sBI
+         DvCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=F3+eVVhD9pRO1Lc4WB7w+1NvqWHmj8ke9+eowsdGJTU=;
-        b=AGoggyG87cwCnF8HEV8KD8k9kKvMwRkYbK8RsZQVDhm0NyIOQSKgTqS0CUTM3NWeet
-         s2l3z9WzjdtJt179tbQrmvHbNmfBvtte2adH1OEI71ImJPSt4J1KcLlwUux2D93w2Gjg
-         YFxjntPf37V7PnZXo3tY4hrvBFLBQCuis1bqXqQBKdE9kIqB9775jzhleA2MEMzLu0IV
-         7xFGOGtDSJdv2VvyoSgJ4ULnJjACHbX+A3yFozO8t4KHz93IOvkXaf2DNAZY0bgkT25R
-         n7Hdlf7IYYyrGWvwXRkpy4Q42SySIH5sB76fLQF0Cz57Jb+Lqtf0KqEO8SR1k/+XIIJ8
-         cXhw==
-X-Gm-Message-State: AOAM530kXZ2mYTeRNzc5fig3bCFNis6KEwih/gO/UkqTpD9IGdnTmdrA
-        IfJdYkiaDAbklOk2zSgW1eDhuk3K9oHgFsUAOjszq+xEAKTOc89mor4o1l5nrNNno83nEaPGOnO
-        Hzen+oxWdLKdTwb3vwyw=
-X-Received: by 2002:a05:622a:208:: with SMTP id b8mr1115067qtx.101.1603137816586;
-        Mon, 19 Oct 2020 13:03:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyXb/rxXb4baPbjkHkFnR27pl71Et9H9wJy5V10S3g9lhcLq1MOxErN1KlNZHkIc8VzD/YJ0A==
-X-Received: by 2002:a05:622a:208:: with SMTP id b8mr1115049qtx.101.1603137816368;
-        Mon, 19 Oct 2020 13:03:36 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id e19sm451471qkl.94.2020.10.19.13.03.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 13:03:35 -0700 (PDT)
-From:   trix@redhat.com
-To:     rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
-        gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] PM: sleep: remove unneeded break
-Date:   Mon, 19 Oct 2020 13:03:30 -0700
-Message-Id: <20201019200330.16629-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sRKQZM/u0KyuM0HK57jZaq4ro1c5W2LrViHCVfdTkUA=;
+        b=rQhwyKRbXEGUcVvg4H8qONI4sEUNpdpavsSqk+8CmK14jMdQiEpQjhkDvcbbraIvmY
+         Up+p/s8OevNjYzphvIPmWa6USXea6Nov6yp7Yukg0AuBl2xxOZIAlR5Hp06PrE9JNig2
+         CyVK9W7cwngWJBsqyiJmxGfOoMIfVzV3MMzGZulapAoKe4i2TxtF0hwaBkOIhIijIjz4
+         acsG+D8ktv5Rq0BZ9tOE1I9SIjB2ye6FjIYWFdm0vnWLTnSTuFxjv/DS2SjKw1/xoUcB
+         w7VVMB6C0hzbjrt5aspngLkWsEfB5O+qwcU7CwU7yWsjxe6/5Wl4Sk/35kvBsPMYQCqU
+         e83Q==
+X-Gm-Message-State: AOAM533X+uhzS4bgKpdjIMqtv9O5ym3ifxl9bUxA+REnzeT2my0q9ivs
+        jgUV7CQblXrDRUfQyEOT/dq1X10By3UCTRB83zs=
+X-Google-Smtp-Source: ABdhPJyromYhLQ7NIhPxuPFo2Tfup77z4dyWm34xZ7SgFwejpZnC4Ncxq2+3wUkC11C6x8mao7s+yoCsO22AXqUZrU4=
+X-Received: by 2002:a50:85c6:: with SMTP id q6mr1781028edh.126.1603140298100;
+ Mon, 19 Oct 2020 13:44:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201017133718.31327-1-kholk11@gmail.com> <20201017133718.31327-2-kholk11@gmail.com>
+ <20201019195807.GA3508546@bogus>
+In-Reply-To: <20201019195807.GA3508546@bogus>
+From:   Martin Botka <martin.botka1@gmail.com>
+Date:   Mon, 19 Oct 2020 22:44:46 +0200
+Message-ID: <CADQ2G_HZ9nt88vW9MNiC-+Rdjzsu-hSHoqmqLC75vyiG2JKpQQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: interconnect: Add bindings for
+ Qualcomm SDM660 NoC
+To:     Rob Herring <robh@kernel.org>
+Cc:     kholk11@gmail.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>, marijns95@gmail.com,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        phone-devel@vger.kernel.org, linux-pm@vger.kernel.org,
+        georgi.djakov@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+> Documentation/devicetree/bindings/interconnect/qcom,sdm660.example.dts:20:18: fatal error: dt-bindings/clock/qcom,mmcc-sdm660.h: No such file or directory
+>    20 |         #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A break is not needed if it is preceded by a return
-
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/base/power/main.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 205a06752ca9..c7ac49042cee 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -363,7 +363,6 @@ static pm_callback_t pm_op(const struct dev_pm_ops *ops, pm_message_t state)
- 	case PM_EVENT_THAW:
- 	case PM_EVENT_RECOVER:
- 		return ops->thaw;
--		break;
- 	case PM_EVENT_RESTORE:
- 		return ops->restore;
- #endif /* CONFIG_HIBERNATE_CALLBACKS */
--- 
-2.18.1
-
+This patch depends on my MMCC patch (sent by angelo).
