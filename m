@@ -2,323 +2,1992 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A68293032
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 23:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5D12930CE
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 23:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732500AbgJSVIh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 17:08:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54848 "EHLO mail.kernel.org"
+        id S1728347AbgJSVxe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 17:53:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732495AbgJSVIh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 19 Oct 2020 17:08:37 -0400
+        id S1727088AbgJSVxe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 19 Oct 2020 17:53:34 -0400
 Received: from earth.universe (unknown [185.213.155.232])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2CA6A22282;
-        Mon, 19 Oct 2020 21:08:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECBFE22400;
+        Mon, 19 Oct 2020 21:53:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603141715;
-        bh=uF0PNfHiox/oHKa9qtJANU9pYn+637+4mD50qc8UIQ4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Me30rbQ9xp8qu3iis4TZCKkBBZIuMQATsKFLPQEHOxiO/MfAatyKvb5Zr/U+vWFCY
-         4guIY5Z6pj2Gu3hRSbUGMNsoAir1seU4265/NSwyxghnRK9kN+D0zWUeCB4grE5+g5
-         ECAQic9bs33lXjAQ4onoS/TJMyLfblOPx7fo71S8=
+        s=default; t=1603144410;
+        bh=BK+jbTFN+rAis9aT6Ga+T4faz+Wz3dOXJtaLP89IS0E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CidSYbGV5Mm0Jrkl1TMgXKOvlgMaFdVco0VrDEkkuhxn4DUu8VaJQ1yMZpBHtKmgh
+         6xkio57BTLiOLAlDNszk8xc5LIeRZQiUtFrpBLoo40u0A0pE0bJ4X7wb8w8XYpgI6k
+         3aejbK/KTRkfGsU3cvZD6r1bNQ2uOHne9w/un1js=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 1C48D3C0C8E; Mon, 19 Oct 2020 23:08:33 +0200 (CEST)
-Date:   Mon, 19 Oct 2020 23:08:33 +0200
+        id AAF1B3C0C8E; Mon, 19 Oct 2020 23:53:27 +0200 (CEST)
+Date:   Mon, 19 Oct 2020 23:53:27 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 5.10
-Message-ID: <20201019210833.ll5l2g3ok5kyi6r6@earth.universe>
+To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Cc:     robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmurphy@ti.com
+Subject: Re: [PATCH v6 2/2] power: supply: bq256xx: Introduce the BQ256XX
+ charger driver
+Message-ID: <20201019215327.equpebrunkjyjlzj@earth.universe>
+References: <20201005214709.10924-1-r-rivera-matos@ti.com>
+ <20201005214709.10924-3-r-rivera-matos@ti.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nvzplde2bn7bpea6"
+        protocol="application/pgp-signature"; boundary="z7oribbza7yt3mws"
 Content-Disposition: inline
+In-Reply-To: <20201005214709.10924-3-r-rivera-matos@ti.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---nvzplde2bn7bpea6
-Content-Type: text/plain; charset=utf-8
+--z7oribbza7yt3mws
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hi Ricardo,
 
-The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+On Mon, Oct 05, 2020 at 04:47:09PM -0500, Ricardo Rivera-Matos wrote:
+> The BQ256XX family of devices are highly integrated buck chargers
+> for single cell batteries.
+>=20
+> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+>=20
+> v5 - adds power_supply_put_battery_info() and devm_add_action_or_rest() c=
+alls
+>=20
+> v6 - implements bq256xx_remove function
 
-  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+v6 unfortunately makes things worse. You might want to read some
+background information about managed resources:
 
-are available in the Git repository at:
+https://lwn.net/Articles/222860/
+https://www.kernel.org/doc/html/latest/driver-api/driver-model/devres.html
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
-pply.git tags/for-v5.10
+> ---
+>  drivers/power/supply/Kconfig           |   11 +
+>  drivers/power/supply/Makefile          |    1 +
+>  drivers/power/supply/bq256xx_charger.c | 1803 ++++++++++++++++++++++++
+>  3 files changed, 1815 insertions(+)
+>  create mode 100644 drivers/power/supply/bq256xx_charger.c
+>=20
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 44d3c8512fb8..87d852914bc2 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -618,6 +618,17 @@ config CHARGER_BQ25890
+>  	help
+>  	  Say Y to enable support for the TI BQ25890 battery charger.
+> =20
+> +config CHARGER_BQ256XX
+> +	tristate "TI BQ256XX battery charger driver"
+> +	depends on I2C
+> +	depends on GPIOLIB || COMPILE_TEST
+> +	select REGMAP_I2C
+> +	help
+> +	  Say Y to enable support for the TI BQ256XX battery chargers. The
+> +	  BQ256XX family of devices are highly-integrated, switch-mode battery
+> +	  charge management and system power path management devices for single
+> +	  cell Li-ion and Li-polymer batteries.
+> +
+>  config CHARGER_SMB347
+>  	tristate "Summit Microelectronics SMB347 Battery Charger"
+>  	depends on I2C
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index b9644663e435..e762442c7cc6 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -83,6 +83,7 @@ obj-$(CONFIG_CHARGER_BQ24190)	+=3D bq24190_charger.o
+>  obj-$(CONFIG_CHARGER_BQ24257)	+=3D bq24257_charger.o
+>  obj-$(CONFIG_CHARGER_BQ24735)	+=3D bq24735-charger.o
+>  obj-$(CONFIG_CHARGER_BQ25890)	+=3D bq25890_charger.o
+> +obj-$(CONFIG_CHARGER_BQ256XX)	+=3D bq256xx_charger.o
+>  obj-$(CONFIG_CHARGER_SMB347)	+=3D smb347-charger.o
+>  obj-$(CONFIG_CHARGER_TPS65090)	+=3D tps65090-charger.o
+>  obj-$(CONFIG_CHARGER_TPS65217)	+=3D tps65217_charger.o
+> diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/suppl=
+y/bq256xx_charger.c
+> new file mode 100644
+> index 000000000000..b9caec10c456
+> --- /dev/null
+> +++ b/drivers/power/supply/bq256xx_charger.c
+> @@ -0,0 +1,1803 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// BQ256XX Battery Charger Driver
+> +// Copyright (C) 2020 Texas Instruments Incorporated - http://www.ti.com/
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/regmap.h>
+> +#include <linux/types.h>
+> +#include <linux/usb/phy.h>
+> +#include <linux/device.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/slab.h>
+> +#include <linux/acpi.h>
+> +
+> +#define BQ256XX_MANUFACTURER "Texas Instruments"
+> +
+> +#define BQ256XX_INPUT_CURRENT_LIMIT		0x00
+> +#define BQ256XX_CHARGER_CONTROL_0		0x01
+> +#define BQ256XX_CHARGE_CURRENT_LIMIT		0x02
+> +#define BQ256XX_PRECHG_AND_TERM_CURR_LIM	0x03
+> +#define BQ256XX_BATTERY_VOLTAGE_LIMIT		0x04
+> +#define BQ256XX_CHARGER_CONTROL_1		0x05
+> +#define BQ256XX_CHARGER_CONTROL_2		0x06
+> +#define BQ256XX_CHARGER_CONTROL_3		0x07
+> +#define BQ256XX_CHARGER_STATUS_0		0x08
+> +#define BQ256XX_CHARGER_STATUS_1		0x09
+> +#define BQ256XX_CHARGER_STATUS_2		0x0a
+> +#define BQ256XX_PART_INFORMATION		0x0b
+> +#define BQ256XX_CHARGER_CONTROL_4		0x0c
+> +
+> +#define BQ256XX_IINDPM_MASK		GENMASK(4, 0)
+> +#define BQ256XX_IINDPM_STEP_uA		100000
+> +#define BQ256XX_IINDPM_OFFSET_uA	100000
+> +#define BQ256XX_IINDPM_MIN_uA		100000
+> +#define BQ256XX_IINDPM_MAX_uA		3200000
+> +#define BQ256XX_IINDPM_DEF_uA		2400000
+> +
+> +#define BQ256XX_VINDPM_MASK		GENMASK(3, 0)
+> +#define BQ256XX_VINDPM_STEP_uV		100000
+> +#define BQ256XX_VINDPM_OFFSET_uV	3900000
+> +#define BQ256XX_VINDPM_MIN_uV		3900000
+> +#define BQ256XX_VINDPM_MAX_uV		5400000
+> +#define BQ256XX_VINDPM_DEF_uV		4500000
+> +
+> +#define BQ256XX_VBATREG_MASK		GENMASK(7, 3)
+> +#define BQ2560X_VBATREG_STEP_uV		32000
+> +#define BQ2560X_VBATREG_OFFSET_uV	3856000
+> +#define BQ2560X_VBATREG_MIN_uV		3856000
+> +#define BQ2560X_VBATREG_MAX_uV		4624000
+> +#define BQ2560X_VBATREG_DEF_uV		4208000
+> +#define BQ25601D_VBATREG_OFFSET_uV	3847000
+> +#define BQ25601D_VBATREG_MIN_uV		3847000
+> +#define BQ25601D_VBATREG_MAX_uV		4615000
+> +#define BQ25601D_VBATREG_DEF_uV		4199000
+> +#define BQ2561X_VBATREG_STEP_uV		10000
+> +#define BQ25611D_VBATREG_MIN_uV		3494000
+> +#define BQ25611D_VBATREG_MAX_uV		4510000
+> +#define BQ25611D_VBATREG_DEF_uV		4190000
+> +#define BQ25618_VBATREG_MIN_uV		3504000
+> +#define BQ25618_VBATREG_MAX_uV		4500000
+> +#define BQ25618_VBATREG_DEF_uV		4200000
+> +#define BQ256XX_VBATREG_BIT_SHIFT	3
+> +#define BQ2561X_VBATREG_THRESH		0x8
+> +#define BQ25611D_VBATREG_THRESH_uV	4290000
+> +#define BQ25618_VBATREG_THRESH_uV	4300000
+> +
+> +#define BQ256XX_ITERM_MASK		GENMASK(3, 0)
+> +#define BQ256XX_ITERM_STEP_uA		60000
+> +#define BQ256XX_ITERM_OFFSET_uA		60000
+> +#define BQ256XX_ITERM_MIN_uA		60000
+> +#define BQ256XX_ITERM_MAX_uA		780000
+> +#define BQ256XX_ITERM_DEF_uA		180000
+> +#define BQ25618_ITERM_STEP_uA		20000
+> +#define BQ25618_ITERM_OFFSET_uA		20000
+> +#define BQ25618_ITERM_MIN_uA		20000
+> +#define BQ25618_ITERM_MAX_uA		260000
+> +#define BQ25618_ITERM_DEF_uA		60000
+> +
+> +#define BQ256XX_IPRECHG_MASK		GENMASK(7, 4)
+> +#define BQ256XX_IPRECHG_STEP_uA		60000
+> +#define BQ256XX_IPRECHG_OFFSET_uA	60000
+> +#define BQ256XX_IPRECHG_MIN_uA		60000
+> +#define BQ256XX_IPRECHG_MAX_uA		780000
+> +#define BQ256XX_IPRECHG_DEF_uA		180000
+> +#define BQ25618_IPRECHG_STEP_uA		20000
+> +#define BQ25618_IPRECHG_OFFSET_uA	20000
+> +#define BQ25618_IPRECHG_MIN_uA		20000
+> +#define BQ25618_IPRECHG_MAX_uA		260000
+> +#define BQ25618_IPRECHG_DEF_uA		40000
+> +#define BQ256XX_IPRECHG_BIT_SHIFT	4
+> +
+> +#define BQ256XX_ICHG_MASK		GENMASK(5, 0)
+> +#define BQ256XX_ICHG_STEP_uA		60000
+> +#define BQ256XX_ICHG_MIN_uA		0
+> +#define BQ256XX_ICHG_MAX_uA		3000000
+> +#define BQ2560X_ICHG_DEF_uA		2040000
+> +#define BQ25611D_ICHG_DEF_uA		1020000
+> +#define BQ25618_ICHG_STEP_uA		20000
+> +#define BQ25618_ICHG_MIN_uA		0
+> +#define BQ25618_ICHG_MAX_uA		1500000
+> +#define BQ25618_ICHG_DEF_uA		340000
+> +#define BQ25618_ICHG_THRESH		0x3c
+> +#define BQ25618_ICHG_THRESH_uA		1180000
+> +
+> +#define BQ256XX_VBUS_STAT_MASK		GENMASK(7, 5)
+> +#define BQ256XX_VBUS_STAT_NO_INPUT	0
+> +#define BQ256XX_VBUS_STAT_USB_SDP	BIT(5)
+> +#define BQ256XX_VBUS_STAT_USB_CDP	BIT(6)
+> +#define BQ256XX_VBUS_STAT_USB_DCP	(BIT(6) | BIT(5))
+> +#define BQ256XX_VBUS_STAT_USB_OTG	(BIT(7) | BIT(6) | BIT(5))
+> +
+> +#define BQ256XX_CHRG_STAT_MASK		GENMASK(4, 3)
+> +#define BQ256XX_CHRG_STAT_NOT_CHRGING	0
+> +#define BQ256XX_CHRG_STAT_PRECHRGING	BIT(3)
+> +#define BQ256XX_CHRG_STAT_FAST_CHRGING	BIT(4)
+> +#define BQ256XX_CHRG_STAT_CHRG_TERM	(BIT(4) | BIT(3))
+> +
+> +#define BQ256XX_PG_STAT_MASK		BIT(2)
+> +#define BQ256XX_WDT_FAULT_MASK		BIT(7)
+> +#define BQ256XX_CHRG_FAULT_MASK		GENMASK(5, 4)
+> +#define BQ256XX_CHRG_FAULT_NORMAL	0
+> +#define BQ256XX_CHRG_FAULT_INPUT	BIT(4)
+> +#define BQ256XX_CHRG_FAULT_THERM	BIT(5)
+> +#define BQ256XX_CHRG_FAULT_CST_EXPIRE	(BIT(5) | BIT(4))
+> +#define BQ256XX_BAT_FAULT_MASK		BIT(3)
+> +#define BQ256XX_NTC_FAULT_MASK		GENMASK(2, 0)
+> +#define BQ256XX_NTC_FAULT_WARM		BIT(1)
+> +#define BQ256XX_NTC_FAULT_COOL		(BIT(1) | BIT(0))
+> +#define BQ256XX_NTC_FAULT_COLD		(BIT(2) | BIT(0))
+> +#define BQ256XX_NTC_FAULT_HOT		(BIT(2) | BIT(1))
+> +
+> +#define BQ256XX_NUM_WD_VAL	8
+> +#define BQ256XX_WATCHDOG_MASK	GENMASK(5, 4)
+> +#define BQ256XX_WATCHDOG_MAX	1600000
+> +#define BQ256XX_WATCHDOG_DIS	0
+> +#define BQ256XX_WDT_BIT_SHIFT	4
+> +
+> +#define BQ256XX_REG_RST		BIT(7)
+> +
+> +/**
+> + * struct bq256xx_init_data -
+> + * @ichg: fast charge current
+> + * @iindpm: input current limit
+> + * @vbatreg: charge voltage
+> + * @iterm: termination current
+> + * @iprechg: precharge current
+> + * @vindpm: input voltage limit
+> + * @ichg_max: maximum fast charge current
+> + * @vbatreg_max: maximum charge voltage
+> + */
+> +struct bq256xx_init_data {
+> +	u32 ichg;
+> +	u32 iindpm;
+> +	u32 vbatreg;
+> +	u32 iterm;
+> +	u32 iprechg;
+> +	u32 vindpm;
+> +	u32 ichg_max;
+> +	u32 vbatreg_max;
+> +};
+> +
+> +/**
+> + * struct bq256xx_state -
+> + * @vbus_stat: VBUS status according to BQ256XX_CHARGER_STATUS_0
+> + * @chrg_stat: charging status according to BQ256XX_CHARGER_STATUS_0
+> + * @online: PG status according to BQ256XX_CHARGER_STATUS_0
+> + *
+> + * @wdt_fault: watchdog fault according to BQ256XX_CHARGER_STATUS_1
+> + * @bat_fault: battery fault according to BQ256XX_CHARGER_STATUS_1
+> + * @chrg_fault: charging fault according to BQ256XX_CHARGER_STATUS_1
+> + * @ntc_fault: TS fault according to BQ256XX_CHARGER_STATUS_1
+> + */
+> +struct bq256xx_state {
+> +	u8 vbus_stat;
+> +	u8 chrg_stat;
+> +	bool online;
+> +
+> +	u8 wdt_fault;
+> +	u8 bat_fault;
+> +	u8 chrg_fault;
+> +	u8 ntc_fault;
+> +};
+> +
+> +enum bq256xx_id {
+> +	BQ25600,
+> +	BQ25600D,
+> +	BQ25601,
+> +	BQ25601D,
+> +	BQ25618,
+> +	BQ25619,
+> +	BQ25611D,
+> +};
+> +
+> +/**
+> + * struct bq256xx_device -
+> + * @client: i2c client structure
+> + * @regmap: register map structure
+> + * @dev: device structure
+> + * @lock: mutex lock structure
+> + *
+> + * @usb2_phy: usb_phy identifier
+> + * @usb3_phy: usb_phy identifier
+> + * @usb_nb: notifier block
+> + * @usb_work: usb work queue
+> + * @usb_event: usb_event code
+> + *
+> + * @model_name: i2c name string
+> + *
+> + * @init_data: initialization data
+> + * @chip_info: device variant information
+> + * @state: device status and faults
+> + * @watchdog_timer: watchdog timer value in milliseconds
+> + */
+> +struct bq256xx_device {
+> +	struct i2c_client *client;
+> +	struct device *dev;
+> +	struct power_supply *charger;
+> +	struct power_supply *battery;
+> +	struct mutex lock;
+> +	struct regmap *regmap;
+> +
+> +	struct usb_phy *usb2_phy;
+> +	struct usb_phy *usb3_phy;
+> +	struct notifier_block usb_nb;
+> +	struct work_struct usb_work;
+> +	unsigned long usb_event;
+> +
+> +	char model_name[I2C_NAME_SIZE];
+> +
+> +	struct bq256xx_init_data init_data;
+> +	const struct bq256xx_chip_info *chip_info;
+> +	struct bq256xx_state state;
+> +	int watchdog_timer;
+> +};
+> +
+> +/**
+> + * struct bq256xx_chip_info -
+> + * @model_id: device instance
+> + *
+> + * @bq256xx_regmap_config: regmap configuration struct
+> + * @bq256xx_get_ichg: pointer to instance specific get_ichg function
+> + * @bq256xx_get_iindpm: pointer to instance specific get_iindpm function
+> + * @bq256xx_get_vbatreg: pointer to instance specific get_vbatreg functi=
+on
+> + * @bq256xx_get_iterm: pointer to instance specific get_iterm function
+> + * @bq256xx_get_iprechg: pointer to instance specific get_iprechg functi=
+on
+> + * @bq256xx_get_vindpm: pointer to instance specific get_vindpm function
+> + *
+> + * @bq256xx_set_ichg: pointer to instance specific set_ichg function
+> + * @bq256xx_set_iindpm: pointer to instance specific set_iindpm function
+> + * @bq256xx_set_vbatreg: pointer to instance specific set_vbatreg functi=
+on
+> + * @bq256xx_set_iterm: pointer to instance specific set_iterm function
+> + * @bq256xx_set_iprechg: pointer to instance specific set_iprechg functi=
+on
+> + * @bq256xx_set_vindpm: pointer to instance specific set_vindpm function
+> + *
+> + * @bq256xx_def_ichg: default ichg value in microamps
+> + * @bq256xx_def_iindpm: default iindpm value in microamps
+> + * @bq256xx_def_vbatreg: default vbatreg value in microvolts
+> + * @bq256xx_def_iterm: default iterm value in microamps
+> + * @bq256xx_def_iprechg: default iprechg value in microamps
+> + * @bq256xx_def_vindpm: default vindpm value in microvolts
+> + *
+> + * @bq256xx_max_ichg: maximum charge current in microamps
+> + * @bq256xx_max_vbatreg: maximum battery regulation voltage in microvolts
+> + *
+> + * @has_usb_detect: indicates whether device has BC1.2 detection
+> + */
+> +struct bq256xx_chip_info {
+> +	int model_id;
+> +
+> +	const struct regmap_config *bq256xx_regmap_config;
+> +
+> +	int (*bq256xx_get_ichg)(struct bq256xx_device *bq);
+> +	int (*bq256xx_get_iindpm)(struct bq256xx_device *bq);
+> +	int (*bq256xx_get_vbatreg)(struct bq256xx_device *bq);
+> +	int (*bq256xx_get_iterm)(struct bq256xx_device *bq);
+> +	int (*bq256xx_get_iprechg)(struct bq256xx_device *bq);
+> +	int (*bq256xx_get_vindpm)(struct bq256xx_device *bq);
+> +
+> +	int (*bq256xx_set_ichg)(struct bq256xx_device *bq, int ichg);
+> +	int (*bq256xx_set_iindpm)(struct bq256xx_device *bq, int iindpm);
+> +	int (*bq256xx_set_vbatreg)(struct bq256xx_device *bq, int vbatreg);
+> +	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
+> +	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
+> +	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
+> +
+> +	int bq256xx_def_ichg;
+> +	int bq256xx_def_iindpm;
+> +	int bq256xx_def_vbatreg;
+> +	int bq256xx_def_iterm;
+> +	int bq256xx_def_iprechg;
+> +	int bq256xx_def_vindpm;
+> +
+> +	int bq256xx_max_ichg;
+> +	int bq256xx_max_vbatreg;
+> +
+> +	bool has_usb_detect;
+> +};
+> +
+> +static int bq256xx_watchdog_time[BQ256XX_NUM_WD_VAL] =3D {
+> +	0, 40000, 80000, 1600000
+> +};
+> +
+> +static const int bq25611d_vbatreg_values[] =3D {
+> +	3494000, 3590000, 3686000, 3790000, 3894000, 3990000, 4090000, 4140000,
+> +	4190000
+> +};
+> +
+> +static const int bq25618_619_vbatreg_values[] =3D {
+> +	3504000, 3600000, 3696000, 3800000, 3904000, 4000000, 4100000, 4150000,
+> +	4200000
+> +};
+> +
+> +static const int bq25618_619_ichg_values[] =3D {
+> +	1290000, 1360000, 1430000, 1500000
+> +};
+> +
+> +static enum power_supply_usb_type bq256xx_usb_type[] =3D {
+> +	POWER_SUPPLY_USB_TYPE_SDP,
+> +	POWER_SUPPLY_USB_TYPE_CDP,
+> +	POWER_SUPPLY_USB_TYPE_DCP,
+> +	POWER_SUPPLY_USB_TYPE_UNKNOWN,
+> +	POWER_SUPPLY_USB_TYPE_ACA,
+> +};
+> +
+> +static int bq256xx_array_parse(int array_size, int val, const int array[=
+])
+> +{
+> +	int i =3D 0;
+> +
+> +	if (val < array[i])
+> +		return i - 1;
 
-for you to fetch changes up to 7007fab4ae82c092cb52691c338f1b776005e32b:
+You probably want to return 0 here?
 
-  power: reset: POWER_RESET_OCELOT_RESET should depend on Ocelot or Sparx5 =
-(2020-10-15 21:37:59 +0200)
+> +
+> +	if (val >=3D array[array_size - 1])
+> +		return array_size - 1;
+> +
+> +	for (i =3D 1; i < array_size; i++) {
+> +		if (val =3D=3D array[i])
+> +			return i;
+> +
+> +		if (val > array[i - 1] && val < array[i]) {
+> +			if (val < array[i])
+> +				return i - 1;
+> +			else
+> +				return i;
+> +		}
+> +	}
+> +	return -EINVAL;
+> +}
+> +
+> +static int bq256xx_usb_notifier(struct notifier_block *nb, unsigned long=
+ val,
+> +				void *priv)
+> +{
+> +	struct bq256xx_device *bq =3D
+> +			container_of(nb, struct bq256xx_device, usb_nb);
+> +
+> +	bq->usb_event =3D val;
+> +	queue_work(system_power_efficient_wq, &bq->usb_work);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static void bq256xx_usb_work(struct work_struct *data)
+> +{
+> +	struct bq256xx_device *bq =3D
+> +			container_of(data, struct bq256xx_device, usb_work);
+> +
+> +	switch (bq->usb_event) {
+> +	case USB_EVENT_ID:
+> +		break;
+> +
+> +	case USB_EVENT_NONE:
+> +		power_supply_changed(bq->charger);
+> +		break;
+> +	default:
+> +		dev_err(bq->dev, "Error switching to charger mode.\n");
+> +		break;
+> +	}
+> +}
+> +
+> +static struct reg_default bq2560x_reg_defs[] =3D {
+> +	{BQ256XX_INPUT_CURRENT_LIMIT, 0x17},
+> +	{BQ256XX_CHARGER_CONTROL_0, 0x1a},
+> +	{BQ256XX_CHARGE_CURRENT_LIMIT, 0xa2},
+> +	{BQ256XX_PRECHG_AND_TERM_CURR_LIM, 0x22},
+> +	{BQ256XX_BATTERY_VOLTAGE_LIMIT, 0x58},
+> +	{BQ256XX_CHARGER_CONTROL_1, 0x9f},
+> +	{BQ256XX_CHARGER_CONTROL_2, 0x66},
+> +	{BQ256XX_CHARGER_CONTROL_3, 0x4c},
+> +};
+> +
+> +static struct reg_default bq25611d_reg_defs[] =3D {
+> +	{BQ256XX_INPUT_CURRENT_LIMIT, 0x17},
+> +	{BQ256XX_CHARGER_CONTROL_0, 0x1a},
+> +	{BQ256XX_CHARGE_CURRENT_LIMIT, 0x91},
+> +	{BQ256XX_PRECHG_AND_TERM_CURR_LIM, 0x12},
+> +	{BQ256XX_BATTERY_VOLTAGE_LIMIT, 0x40},
+> +	{BQ256XX_CHARGER_CONTROL_1, 0x9e},
+> +	{BQ256XX_CHARGER_CONTROL_2, 0xe6},
+> +	{BQ256XX_CHARGER_CONTROL_3, 0x4c},
+> +	{BQ256XX_PART_INFORMATION, 0x54},
+> +	{BQ256XX_CHARGER_CONTROL_4, 0x75},
+> +};
+> +
+> +static struct reg_default bq25618_619_reg_defs[] =3D {
+> +	{BQ256XX_INPUT_CURRENT_LIMIT, 0x17},
+> +	{BQ256XX_CHARGER_CONTROL_0, 0x1a},
+> +	{BQ256XX_CHARGE_CURRENT_LIMIT, 0x91},
+> +	{BQ256XX_PRECHG_AND_TERM_CURR_LIM, 0x12},
+> +	{BQ256XX_BATTERY_VOLTAGE_LIMIT, 0x40},
+> +	{BQ256XX_CHARGER_CONTROL_1, 0x9e},
+> +	{BQ256XX_CHARGER_CONTROL_2, 0xe6},
+> +	{BQ256XX_CHARGER_CONTROL_3, 0x4c},
+> +	{BQ256XX_PART_INFORMATION, 0x2c},
+> +	{BQ256XX_CHARGER_CONTROL_4, 0x75},
+> +};
+> +
+> +static int bq256xx_get_state(struct bq256xx_device *bq,
+> +				struct bq256xx_state *state)
+> +{
+> +	unsigned int charger_status_0;
+> +	unsigned int charger_status_1;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_CHARGER_STATUS_0,
+> +						&charger_status_0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_CHARGER_STATUS_1,
+> +						&charger_status_1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	state->vbus_stat =3D charger_status_0 & BQ256XX_VBUS_STAT_MASK;
+> +	state->chrg_stat =3D charger_status_0 & BQ256XX_CHRG_STAT_MASK;
+> +	state->online =3D charger_status_0 & BQ256XX_PG_STAT_MASK;
+> +
+> +	state->wdt_fault =3D charger_status_1 & BQ256XX_WDT_FAULT_MASK;
+> +	state->bat_fault =3D charger_status_1 & BQ256XX_BAT_FAULT_MASK;
+> +	state->chrg_fault =3D charger_status_1 & BQ256XX_CHRG_FAULT_MASK;
+> +	state->ntc_fault =3D charger_status_1 & BQ256XX_NTC_FAULT_MASK;
+> +
+> +	return 0;
+> +}
+> +
+> +static int bq256xx_get_ichg_curr(struct bq256xx_device *bq)
+> +{
+> +	unsigned int charge_current_limit;
+> +	unsigned int ichg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_CHARGE_CURRENT_LIMIT,
+> +						&charge_current_limit);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ichg_reg_code =3D charge_current_limit & BQ256XX_ICHG_MASK;
+> +
+> +	return ichg_reg_code * BQ256XX_ICHG_STEP_uA;
+> +}
+> +
+> +static int bq25618_619_get_ichg_curr(struct bq256xx_device *bq)
+> +{
+> +	unsigned int charge_current_limit;
+> +	unsigned int ichg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_CHARGE_CURRENT_LIMIT,
+> +						&charge_current_limit);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ichg_reg_code =3D charge_current_limit & BQ256XX_ICHG_MASK;
+> +
+> +	if (ichg_reg_code < BQ25618_ICHG_THRESH)
+> +		return ichg_reg_code * BQ25618_ICHG_STEP_uA;
+> +
+> +	return bq25618_619_ichg_values[ichg_reg_code - BQ25618_ICHG_THRESH];
+> +}
+> +
+> +static int bq256xx_set_ichg_curr(struct bq256xx_device *bq, int ichg)
+> +{
+> +	unsigned int ichg_reg_code;
+> +
+> +	if (ichg < BQ256XX_ICHG_MIN_uA)
+> +		ichg =3D BQ256XX_ICHG_MIN_uA;
+> +	else if (ichg > bq->init_data.ichg_max)
+> +		ichg =3D bq->init_data.ichg_max;
 
-----------------------------------------------------------------
-power supply and reset changes for the v5.10 series
+Please replace above pattern with the following in the complete
+driver:
 
-power-supply core:
- * Add wireless type
- * Properly document current direction
+ichg =3D clamp(ichg, BQ256XX_ICHG_MIN_uA, bq->init_data.ichg_max);
 
-battery/charger driver changes:
- * New fuel-gauge/charger driver for RN5T618/RN5T619
- * New charger driver for BQ25980, BQ25975 and BQ25960
- * bq27xxx-battery: add support for TI bq34z100
- * gpio-charger: convert to GPIO descriptors
- * gpio-charger: add optional support for charge current limiting
- * max17040: add support for max17041, max17043, max17044
- * max17040: add support for max17048, max17049, max17058, max17059
- * smb347-charger: add DT support
- * smb247-charger: add SMB345 and SMB358 support
- * simple-battery: add temperature properties
- * lots of minor fixes, cleanups and DT binding YAML conversions
+> +
+> +	ichg_reg_code =3D ichg / BQ256XX_ICHG_STEP_uA;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_CHARGE_CURRENT_LIMIT,
+> +					BQ256XX_ICHG_MASK, ichg_reg_code);
+> +}
+> +
+> +static int bq25618_619_set_ichg_curr(struct bq256xx_device *bq, int ichg)
+> +{
+> +	int array_size =3D ARRAY_SIZE(bq25618_619_ichg_values);
+> +	unsigned int ichg_reg_code;
+> +
+> +	if (ichg < BQ25618_ICHG_MIN_uA)
+> +		ichg =3D BQ25618_ICHG_MIN_uA;
+> +	else if (ichg > bq->init_data.ichg_max)
+> +		ichg =3D bq->init_data.ichg_max;
+> +
+> +	if (ichg <=3D BQ25618_ICHG_THRESH_uA) {
+> +		ichg_reg_code =3D ichg / BQ25618_ICHG_STEP_uA;
+> +	} else {
+> +		ichg_reg_code =3D bq256xx_array_parse(array_size, ichg,
+> +			bq25618_619_ichg_values) + BQ25618_ICHG_THRESH;
+> +	}
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_CHARGE_CURRENT_LIMIT,
+> +					BQ256XX_ICHG_MASK, ichg_reg_code);
+> +}
+> +
+> +static int bq25618_619_get_chrg_volt(struct bq256xx_device *bq)
+> +{
+> +	unsigned int battery_volt_lim;
+> +	unsigned int vbatreg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +							&battery_volt_lim);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	vbatreg_reg_code =3D (battery_volt_lim & BQ256XX_VBATREG_MASK) >>
+> +						BQ256XX_VBATREG_BIT_SHIFT;
+> +
+> +	if (vbatreg_reg_code > BQ2561X_VBATREG_THRESH)
+> +		return ((vbatreg_reg_code - BQ2561X_VBATREG_THRESH) *
+> +					BQ2561X_VBATREG_STEP_uV) +
+> +					BQ25618_VBATREG_THRESH_uV;
+> +
+> +	return bq25618_619_vbatreg_values[vbatreg_reg_code];
+> +}
+> +
+> +static int bq25611d_get_chrg_volt(struct bq256xx_device *bq)
+> +{
+> +	unsigned int battery_volt_lim;
+> +	unsigned int vbatreg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +							&battery_volt_lim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vbatreg_reg_code =3D (battery_volt_lim & BQ256XX_VBATREG_MASK) >>
+> +						BQ256XX_VBATREG_BIT_SHIFT;
+> +
+> +	if (vbatreg_reg_code > BQ2561X_VBATREG_THRESH)
+> +		return ((vbatreg_reg_code - BQ2561X_VBATREG_THRESH) *
+> +					BQ2561X_VBATREG_STEP_uV) +
+> +					BQ25611D_VBATREG_THRESH_uV;
+> +
+> +	return bq25611d_vbatreg_values[vbatreg_reg_code];
+> +}
+> +
+> +static int bq2560x_get_chrg_volt(struct bq256xx_device *bq)
+> +{
+> +	unsigned int battery_volt_lim;
+> +	unsigned int vbatreg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +							&battery_volt_lim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vbatreg_reg_code =3D (battery_volt_lim & BQ256XX_VBATREG_MASK) >>
+> +						BQ256XX_VBATREG_BIT_SHIFT;
+> +
+> +	return (vbatreg_reg_code * BQ2560X_VBATREG_STEP_uV)
+> +					+ BQ2560X_VBATREG_OFFSET_uV;
+> +}
+> +
+> +static int bq25601d_get_chrg_volt(struct bq256xx_device *bq)
+> +{
+> +	unsigned int battery_volt_lim;
+> +	unsigned int vbatreg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +							&battery_volt_lim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vbatreg_reg_code =3D (battery_volt_lim & BQ256XX_VBATREG_MASK) >>
+> +						BQ256XX_VBATREG_BIT_SHIFT;
+> +
+> +	return (vbatreg_reg_code * BQ2560X_VBATREG_STEP_uV)
+> +					+ BQ25601D_VBATREG_OFFSET_uV;
+> +}
+> +
+> +static int bq25618_619_set_chrg_volt(struct bq256xx_device *bq, int vbat=
+reg)
+> +{
+> +	int array_size =3D ARRAY_SIZE(bq25618_619_vbatreg_values);
+> +	unsigned int vbatreg_reg_code;
+> +
+> +	if (vbatreg < BQ25618_VBATREG_MIN_uV)
+> +		vbatreg =3D BQ25618_VBATREG_MIN_uV;
+> +	else if (vbatreg > bq->init_data.vbatreg_max)
+> +		vbatreg =3D bq->init_data.vbatreg_max;
+> +
+> +	if (vbatreg > BQ25618_VBATREG_THRESH_uV)
+> +		vbatreg_reg_code =3D ((vbatreg -
+> +		BQ25618_VBATREG_THRESH_uV) /
+> +		(BQ2561X_VBATREG_STEP_uV)) + BQ2561X_VBATREG_THRESH;
+> +	else {
+> +		vbatreg_reg_code =3D bq256xx_array_parse(array_size, vbatreg,
+> +						bq25618_619_vbatreg_values);
+> +	}
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +				BQ256XX_VBATREG_MASK, vbatreg_reg_code <<
+> +						BQ256XX_VBATREG_BIT_SHIFT);
+> +}
+> +
+> +static int bq25611d_set_chrg_volt(struct bq256xx_device *bq, int vbatreg)
+> +{
+> +	int array_size =3D ARRAY_SIZE(bq25611d_vbatreg_values);
+> +	unsigned int vbatreg_reg_code;
+> +
+> +	if (vbatreg < BQ25611D_VBATREG_MIN_uV)
+> +		vbatreg =3D BQ25611D_VBATREG_MIN_uV;
+> +	else if (vbatreg > bq->init_data.vbatreg_max)
+> +		vbatreg =3D bq->init_data.vbatreg_max;
+> +
+> +	if (vbatreg > BQ25611D_VBATREG_THRESH_uV)
+> +		vbatreg_reg_code =3D ((vbatreg -
+> +		BQ25611D_VBATREG_THRESH_uV) /
+> +		(BQ2561X_VBATREG_STEP_uV)) + BQ2561X_VBATREG_THRESH;
+> +	else {
+> +		vbatreg_reg_code =3D bq256xx_array_parse(array_size, vbatreg,
+> +						bq25611d_vbatreg_values);
+> +	}
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +				BQ256XX_VBATREG_MASK, vbatreg_reg_code <<
+> +						BQ256XX_VBATREG_BIT_SHIFT);
+> +}
+> +
+> +static int bq2560x_set_chrg_volt(struct bq256xx_device *bq, int vbatreg)
+> +{
+> +	unsigned int vbatreg_reg_code;
+> +
+> +	if (vbatreg < BQ2560X_VBATREG_MIN_uV)
+> +		vbatreg =3D BQ2560X_VBATREG_MIN_uV;
+> +	else if (vbatreg > bq->init_data.vbatreg_max)
+> +		vbatreg =3D bq->init_data.vbatreg_max;
+> +
+> +	vbatreg_reg_code =3D (vbatreg - BQ2560X_VBATREG_OFFSET_uV) /
+> +						BQ2560X_VBATREG_STEP_uV;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +				BQ256XX_VBATREG_MASK, vbatreg_reg_code <<
+> +						BQ256XX_VBATREG_BIT_SHIFT);
+> +}
+> +
+> +static int bq25601d_set_chrg_volt(struct bq256xx_device *bq, int vbatreg)
+> +{
+> +	unsigned int vbatreg_reg_code;
+> +
+> +	if (vbatreg < BQ25601D_VBATREG_MIN_uV)
+> +		vbatreg =3D BQ25601D_VBATREG_MIN_uV;
+> +	else if (vbatreg > bq->init_data.vbatreg_max)
+> +		vbatreg =3D bq->init_data.vbatreg_max;
+> +
+> +	vbatreg_reg_code =3D (vbatreg - BQ25601D_VBATREG_OFFSET_uV) /
+> +						BQ2560X_VBATREG_STEP_uV;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_BATTERY_VOLTAGE_LIMIT,
+> +				BQ256XX_VBATREG_MASK, vbatreg_reg_code <<
+> +						BQ256XX_VBATREG_BIT_SHIFT);
+> +}
+> +
+> +static int bq256xx_get_prechrg_curr(struct bq256xx_device *bq)
+> +{
+> +	unsigned int prechg_and_term_curr_lim;
+> +	unsigned int iprechg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +						&prechg_and_term_curr_lim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	iprechg_reg_code =3D (prechg_and_term_curr_lim & BQ256XX_IPRECHG_MASK)
+> +						>> BQ256XX_IPRECHG_BIT_SHIFT;
+> +
+> +	return (iprechg_reg_code * BQ256XX_IPRECHG_STEP_uA) +
+> +						BQ256XX_IPRECHG_OFFSET_uA;
+> +}
+> +
+> +static int bq256xx_set_prechrg_curr(struct bq256xx_device *bq, int iprec=
+hg)
+> +{
+> +	unsigned int iprechg_reg_code;
+> +
+> +	if (iprechg < BQ256XX_IPRECHG_MIN_uA)
+> +		iprechg =3D BQ256XX_IPRECHG_MIN_uA;
+> +	else if (iprechg > BQ256XX_IPRECHG_MAX_uA)
+> +		iprechg =3D BQ256XX_IPRECHG_MAX_uA;
+> +
+> +	iprechg_reg_code =3D ((iprechg - BQ256XX_IPRECHG_OFFSET_uA) /
+> +			BQ256XX_IPRECHG_STEP_uA) << BQ256XX_IPRECHG_BIT_SHIFT;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +				BQ256XX_IPRECHG_MASK, iprechg_reg_code);
+> +}
+> +
+> +static int bq25618_619_get_prechrg_curr(struct bq256xx_device *bq)
+> +{
+> +	unsigned int prechg_and_term_curr_lim;
+> +	unsigned int iprechg_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +						&prechg_and_term_curr_lim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	iprechg_reg_code =3D (prechg_and_term_curr_lim & BQ256XX_IPRECHG_MASK)
+> +						>> BQ256XX_IPRECHG_BIT_SHIFT;
+> +
+> +	return (iprechg_reg_code * BQ25618_IPRECHG_STEP_uA) +
+> +						BQ25618_IPRECHG_OFFSET_uA;
+> +}
+> +
+> +static int bq25618_619_set_prechrg_curr(struct bq256xx_device *bq, int i=
+prechg)
+> +{
+> +	unsigned int iprechg_reg_code;
+> +
+> +	if (iprechg < BQ25618_IPRECHG_MIN_uA)
+> +		iprechg =3D BQ25618_IPRECHG_MIN_uA;
+> +	else if (iprechg > BQ25618_IPRECHG_MAX_uA)
+> +		iprechg =3D BQ25618_IPRECHG_MAX_uA;
+> +
+> +	iprechg_reg_code =3D ((iprechg - BQ25618_IPRECHG_OFFSET_uA) /
+> +			BQ25618_IPRECHG_STEP_uA) << BQ256XX_IPRECHG_BIT_SHIFT;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +				BQ256XX_IPRECHG_MASK, iprechg_reg_code);
+> +}
+> +
+> +static int bq256xx_get_term_curr(struct bq256xx_device *bq)
+> +{
+> +	unsigned int prechg_and_term_curr_lim;
+> +	unsigned int iterm_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +						&prechg_and_term_curr_lim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	iterm_reg_code =3D prechg_and_term_curr_lim & BQ256XX_ITERM_MASK;
+> +
+> +	return (iterm_reg_code * BQ256XX_ITERM_STEP_uA) +
+> +						BQ256XX_ITERM_OFFSET_uA;
+> +}
+> +
+> +static int bq256xx_set_term_curr(struct bq256xx_device *bq, int iterm)
+> +{
+> +	unsigned int iterm_reg_code;
+> +
+> +	if (iterm < BQ256XX_ITERM_MIN_uA)
+> +		iterm =3D BQ256XX_ITERM_MIN_uA;
+> +	else if (iterm > BQ256XX_ITERM_MAX_uA)
+> +		iterm =3D BQ256XX_ITERM_MAX_uA;
+> +
+> +	iterm_reg_code =3D (iterm - BQ256XX_ITERM_OFFSET_uA) /
+> +							BQ256XX_ITERM_STEP_uA;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +				BQ256XX_ITERM_MASK, iterm_reg_code);
+> +}
+> +
+> +static int bq25618_619_get_term_curr(struct bq256xx_device *bq)
+> +{
+> +	unsigned int prechg_and_term_curr_lim;
+> +	unsigned int iterm_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +						&prechg_and_term_curr_lim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	iterm_reg_code =3D prechg_and_term_curr_lim & BQ256XX_ITERM_MASK;
+> +
+> +	return (iterm_reg_code * BQ25618_ITERM_STEP_uA) +
+> +						BQ25618_ITERM_OFFSET_uA;
+> +}
+> +
+> +static int bq25618_619_set_term_curr(struct bq256xx_device *bq, int iter=
+m)
+> +{
+> +	unsigned int iterm_reg_code;
+> +
+> +	if (iterm < BQ25618_ITERM_MIN_uA)
+> +		iterm =3D BQ25618_ITERM_MIN_uA;
+> +	else if (iterm > BQ25618_ITERM_MAX_uA)
+> +		iterm =3D BQ25618_ITERM_MAX_uA;
+> +
+> +	iterm_reg_code =3D (iterm - BQ25618_ITERM_OFFSET_uA) /
+> +							BQ25618_ITERM_STEP_uA;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_PRECHG_AND_TERM_CURR_LIM,
+> +				BQ256XX_ITERM_MASK, iterm_reg_code);
+> +}
+> +
+> +static int bq256xx_get_input_volt_lim(struct bq256xx_device *bq)
+> +{
+> +	unsigned int charger_control_2;
+> +	unsigned int vindpm_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_CHARGER_CONTROL_2,
+> +						&charger_control_2);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vindpm_reg_code =3D charger_control_2 & BQ256XX_VINDPM_MASK;
+> +
+> +	return (vindpm_reg_code * BQ256XX_VINDPM_STEP_uV) +
+> +						BQ256XX_VINDPM_OFFSET_uV;
+> +}
+> +
+> +static int bq256xx_set_input_volt_lim(struct bq256xx_device *bq, int vin=
+dpm)
+> +{
+> +	unsigned int vindpm_reg_code;
+> +
+> +	if (vindpm < BQ256XX_VINDPM_MIN_uV)
+> +		vindpm =3D BQ256XX_VINDPM_MIN_uV;
+> +	else if (vindpm > BQ256XX_VINDPM_MAX_uV)
+> +		vindpm =3D BQ256XX_VINDPM_MAX_uV;
+> +
+> +	vindpm_reg_code =3D (vindpm - BQ256XX_VINDPM_OFFSET_uV) /
+> +							BQ256XX_VINDPM_STEP_uV;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_2,
+> +					BQ256XX_VINDPM_MASK, vindpm_reg_code);
+> +}
+> +
+> +static int bq256xx_get_input_curr_lim(struct bq256xx_device *bq)
+> +{
+> +	unsigned int input_current_limit;
+> +	unsigned int iindpm_reg_code;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(bq->regmap, BQ256XX_INPUT_CURRENT_LIMIT,
+> +						&input_current_limit);
+> +	if (ret)
+> +		return ret;
+> +
+> +	iindpm_reg_code =3D input_current_limit & BQ256XX_IINDPM_MASK;
+> +
+> +	return (iindpm_reg_code * BQ256XX_IINDPM_STEP_uA) +
+> +						BQ256XX_IINDPM_OFFSET_uA;
+> +}
+> +
+> +static int bq256xx_set_input_curr_lim(struct bq256xx_device *bq, int iin=
+dpm)
+> +{
+> +	unsigned int iindpm_reg_code;
+> +
+> +	if (iindpm < BQ256XX_IINDPM_MIN_uA)
+> +		iindpm =3D BQ256XX_IINDPM_MIN_uA;
+> +	else if (iindpm > BQ256XX_IINDPM_MAX_uA)
+> +		iindpm =3D BQ256XX_IINDPM_MAX_uA;
+> +
+> +	iindpm_reg_code =3D (iindpm - BQ256XX_IINDPM_OFFSET_uA) /
+> +							BQ256XX_IINDPM_STEP_uA;
+> +
+> +	return regmap_update_bits(bq->regmap, BQ256XX_INPUT_CURRENT_LIMIT,
+> +					BQ256XX_IINDPM_MASK, iindpm_reg_code);
+> +}
+> +
+> +static void bq256xx_charger_reset(void *data)
+> +{
+> +	struct bq256xx_device *bq =3D data;
+> +
+> +	regmap_update_bits(bq->regmap, BQ256XX_PART_INFORMATION,
+> +					BQ256XX_REG_RST, BQ256XX_REG_RST);
+> +}
+> +
+> +static int bq256xx_set_charger_property(struct power_supply *psy,
+> +		enum power_supply_property prop,
+> +		const union power_supply_propval *val)
+> +{
+> +	struct bq256xx_device *bq =3D power_supply_get_drvdata(psy);
+> +	int ret =3D -EINVAL;
+> +
+> +	switch (prop) {
+> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +		ret =3D bq->chip_info->bq256xx_set_iindpm(bq, val->intval);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> +		ret =3D bq->chip_info->bq256xx_set_vbatreg(bq, val->intval);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+> +		ret =3D bq->chip_info->bq256xx_set_ichg(bq, val->intval);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +		ret =3D bq->chip_info->bq256xx_set_iprechg(bq, val->intval);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> +		ret =3D bq->chip_info->bq256xx_set_iterm(bq, val->intval);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
+> +		ret =3D bq->chip_info->bq256xx_set_vindpm(bq, val->intval);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +
+> +static int bq256xx_get_battery_property(struct power_supply *psy,
+> +				enum power_supply_property psp,
+> +				union power_supply_propval *val)
+> +{
+> +	struct bq256xx_device *bq =3D power_supply_get_drvdata(psy);
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> +		val->intval =3D bq->init_data.ichg_max;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> +		val->intval =3D bq->init_data.vbatreg_max;
+> +		break;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int bq256xx_get_charger_property(struct power_supply *psy,
+> +				enum power_supply_property psp,
+> +				union power_supply_propval *val)
+> +{
+> +	struct bq256xx_device *bq =3D power_supply_get_drvdata(psy);
+> +	struct bq256xx_state state;
+> +	int ret =3D 0;
+> +
+> +	mutex_lock(&bq->lock);
+> +	ret =3D bq256xx_get_state(bq, &state);
+> +	mutex_unlock(&bq->lock);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		if (state.vbus_stat =3D=3D BQ256XX_VBUS_STAT_NO_INPUT ||
+> +		    state.vbus_stat =3D=3D BQ256XX_VBUS_STAT_USB_OTG)
+> +			val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> +		else if (state.chrg_stat =3D=3D BQ256XX_CHRG_STAT_NOT_CHRGING)
+> +			val->intval =3D POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +		else if (state.chrg_stat =3D=3D BQ256XX_CHRG_STAT_CHRG_TERM)
+> +			val->intval =3D POWER_SUPPLY_STATUS_FULL;
+> +		else
+> +			val->intval =3D POWER_SUPPLY_STATUS_CHARGING;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_HEALTH:
+> +		val->intval =3D POWER_SUPPLY_HEALTH_UNKNOWN;
+> +		if (state.wdt_fault) {
+> +			val->intval =3D
+> +				POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE;
+> +		} else if (state.bat_fault) {
+> +			val->intval =3D POWER_SUPPLY_HEALTH_OVERVOLTAGE;
+> +		} else {
+> +			switch (state.chrg_stat) {
+> +			case BQ256XX_CHRG_FAULT_INPUT:
+> +				val->intval =3D
+> +					POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+> +				break;
+> +			case BQ256XX_CHRG_FAULT_THERM:
+> +				val->intval =3D POWER_SUPPLY_HEALTH_OVERHEAT;
+> +				break;
+> +			case BQ256XX_CHRG_FAULT_CST_EXPIRE:
+> +				val->intval =3D
+> +				POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE;
+> +				break;
+> +			default:
+> +				break;
+> +			}
+> +
+> +			switch (state.ntc_fault) {
+> +			case BQ256XX_NTC_FAULT_WARM:
+> +				val->intval =3D POWER_SUPPLY_HEALTH_WARM;
+> +				break;
+> +			case BQ256XX_NTC_FAULT_COOL:
+> +				val->intval =3D POWER_SUPPLY_HEALTH_COOL;
+> +				break;
+> +			case BQ256XX_NTC_FAULT_COLD:
+> +				val->intval =3D POWER_SUPPLY_HEALTH_COLD;
+> +				break;
+> +			case BQ256XX_NTC_FAULT_HOT:
+> +				val->intval =3D POWER_SUPPLY_HEALTH_HOT;
+> +				break;
+> +			default:
+> +				val->intval =3D POWER_SUPPLY_HEALTH_GOOD;
+> +				break;
+> +			}
+> +		}
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_USB_TYPE:
+> +		if (bq->chip_info->has_usb_detect) {
+> +			switch (state.vbus_stat) {
+> +			case BQ256XX_VBUS_STAT_USB_SDP:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_SDP;
+> +				break;
+> +			case BQ256XX_VBUS_STAT_USB_CDP:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_CDP;
+> +				break;
+> +			case BQ256XX_VBUS_STAT_USB_DCP:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_DCP;
+> +				break;
+> +			case BQ256XX_VBUS_STAT_USB_OTG:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_ACA;
+> +				break;
+> +			default:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_UNKNOWN;
+> +				break;
+> +			}
+> +		} else {
+> +			switch (state.vbus_stat) {
+> +			case BQ256XX_VBUS_STAT_USB_SDP:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_SDP;
+> +				break;
+> +			case BQ256XX_VBUS_STAT_USB_OTG:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_ACA;
+> +				break;
+> +			default:
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_UNKNOWN;
+> +				break;
+> +			}
+> +		}
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> +		switch (state.chrg_stat) {
+> +		case BQ256XX_CHRG_STAT_NOT_CHRGING:
+> +			val->intval =3D POWER_SUPPLY_CHARGE_TYPE_NONE;
+> +			break;
+> +		case BQ256XX_CHRG_STAT_PRECHRGING:
+> +			val->intval =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+> +			break;
+> +		case BQ256XX_CHRG_STAT_FAST_CHRGING:
+> +			val->intval =3D POWER_SUPPLY_CHARGE_TYPE_FAST;
+> +			break;
+> +		case BQ256XX_CHRG_STAT_CHRG_TERM:
+> +			val->intval =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+> +			break;
+> +		default:
+> +			val->intval =3D POWER_SUPPLY_CHARGE_TYPE_UNKNOWN;
+> +		}
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_MANUFACTURER:
+> +		val->strval =3D BQ256XX_MANUFACTURER;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_MODEL_NAME:
+> +		val->strval =3D bq->model_name;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		val->intval =3D state.online;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
+> +		ret =3D bq->chip_info->bq256xx_get_vindpm(bq);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +		ret =3D bq->chip_info->bq256xx_get_iindpm(bq);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> +		ret =3D bq->chip_info->bq256xx_get_vbatreg(bq);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+> +		ret =3D bq->chip_info->bq256xx_get_ichg(bq);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +		ret =3D bq->chip_info->bq256xx_get_iprechg(bq);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> +		ret =3D bq->chip_info->bq256xx_get_iterm(bq);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+> +		break;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static bool bq256xx_state_changed(struct bq256xx_device *bq,
+> +				  struct bq256xx_state *new_state)
+> +{
+> +	struct bq256xx_state old_state;
+> +
+> +	mutex_lock(&bq->lock);
+> +	old_state =3D bq->state;
+> +	mutex_unlock(&bq->lock);
+> +
+> +	return (old_state.vbus_stat !=3D new_state->vbus_stat ||
+> +		old_state.chrg_stat !=3D new_state->chrg_stat ||
+> +		old_state.online !=3D new_state->online ||
+> +		old_state.wdt_fault !=3D new_state->wdt_fault ||
+> +		old_state.bat_fault !=3D new_state->bat_fault ||
+> +		old_state.chrg_fault !=3D new_state->chrg_fault ||
+> +		old_state.ntc_fault !=3D new_state->ntc_fault);
 
-reset drivers:
- * ocelot: Add support for Sparx5
+it should be possible to just do this?
 
-----------------------------------------------------------------
-Alex Dewar (1):
-      power: supply: Add dependency to lego-ev3-battery Kconfig options
+return memcmp(old_state, new_state, sizeof(struct bq256xx_state)) !=3D 0;
 
-Andreas Kemnade (1):
-      power: supply: Add support for RN5T618/RC5T619 charger and fuel gauge
+> +}
+> +
+> +static irqreturn_t bq256xx_irq_handler_thread(int irq, void *private)
+> +{
+> +	struct bq256xx_device *bq =3D private;
+> +	struct bq256xx_state state;
+> +	int ret;
+> +
+> +	ret =3D bq256xx_get_state(bq, &state);
+> +	if (ret < 0)
+> +		goto irq_out;
+> +
+> +	if (!bq256xx_state_changed(bq, &state))
+> +		goto irq_out;
+> +
+> +	mutex_lock(&bq->lock);
+> +	bq->state =3D state;
+> +	mutex_unlock(&bq->lock);
+> +
+> +	power_supply_changed(bq->charger);
+> +
+> +irq_out:
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static enum power_supply_property bq256xx_power_supply_props[] =3D {
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_STATUS,
+> +	POWER_SUPPLY_PROP_ONLINE,
+> +	POWER_SUPPLY_PROP_HEALTH,
+> +	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
+> +	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+> +	POWER_SUPPLY_PROP_CHARGE_TYPE,
+> +	POWER_SUPPLY_PROP_USB_TYPE,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
+> +	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+> +	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
+> +};
+> +
+> +static enum power_supply_property bq256xx_battery_props[] =3D {
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
+> +};
+> +
+> +static char *bq256xx_charger_supplied_to[] =3D {
+> +	"main-battery",
+> +};
+> +
+> +static int bq256xx_property_is_writeable(struct power_supply *psy,
+> +					 enum power_supply_property prop)
+> +{
+> +	switch (prop) {
+> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static const struct power_supply_desc bq256xx_power_supply_desc =3D {
+> +	.name =3D "bq256xx-charger",
+> +	.type =3D POWER_SUPPLY_TYPE_USB,
+> +	.usb_types =3D bq256xx_usb_type,
+> +	.num_usb_types =3D ARRAY_SIZE(bq256xx_usb_type),
+> +	.properties =3D bq256xx_power_supply_props,
+> +	.num_properties =3D ARRAY_SIZE(bq256xx_power_supply_props),
+> +	.get_property =3D bq256xx_get_charger_property,
+> +	.set_property =3D bq256xx_set_charger_property,
+> +	.property_is_writeable =3D bq256xx_property_is_writeable,
+> +};
+> +
+> +static struct power_supply_desc bq256xx_battery_desc =3D {
+> +	.name			=3D "bq256xx-battery",
+> +	.type			=3D POWER_SUPPLY_TYPE_BATTERY,
+> +	.get_property		=3D bq256xx_get_battery_property,
+> +	.properties		=3D bq256xx_battery_props,
+> +	.num_properties		=3D ARRAY_SIZE(bq256xx_battery_props),
+> +	.property_is_writeable	=3D bq256xx_property_is_writeable,
+> +};
+> +
+> +
+> +static bool bq256xx_is_volatile_reg(struct device *dev, unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case BQ256XX_INPUT_CURRENT_LIMIT:
+> +	case BQ256XX_CHARGER_STATUS_0...BQ256XX_CHARGER_STATUS_2:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static const struct regmap_config bq25600_regmap_config =3D {
+> +	.reg_bits =3D 8,
+> +	.val_bits =3D 8,
+> +
+> +	.max_register =3D BQ256XX_PART_INFORMATION,
+> +	.reg_defaults	=3D bq2560x_reg_defs,
+> +	.num_reg_defaults =3D ARRAY_SIZE(bq2560x_reg_defs),
+> +	.cache_type =3D REGCACHE_RBTREE,
+> +	.volatile_reg =3D bq256xx_is_volatile_reg,
+> +};
+> +
+> +static const struct regmap_config bq25611d_regmap_config =3D {
+> +	.reg_bits =3D 8,
+> +	.val_bits =3D 8,
+> +
+> +	.max_register =3D BQ256XX_CHARGER_CONTROL_4,
+> +	.reg_defaults	=3D bq25611d_reg_defs,
+> +	.num_reg_defaults =3D ARRAY_SIZE(bq25611d_reg_defs),
+> +	.cache_type =3D REGCACHE_RBTREE,
+> +	.volatile_reg =3D bq256xx_is_volatile_reg,
+> +};
+> +
+> +static const struct regmap_config bq25618_619_regmap_config =3D {
+> +	.reg_bits =3D 8,
+> +	.val_bits =3D 8,
+> +
+> +	.max_register =3D BQ256XX_CHARGER_CONTROL_4,
+> +	.reg_defaults	=3D bq25618_619_reg_defs,
+> +	.num_reg_defaults =3D ARRAY_SIZE(bq25618_619_reg_defs),
+> +	.cache_type =3D REGCACHE_RBTREE,
 
-Artur Rojek (2):
-      dt-bindings: power: Convert ingenic,battery.txt to YAML
-      dt-bindings: power: ingenic,battery: add new compatibles
+there are no holes in the register map, so it's better to use
+REGCACHE_FLAT to keep overhead small.
 
-Colin Ian King (4):
-      power: supply: pm2301_charger: fix spelling mistake "chargind" -> "ch=
-arging"
-      power: supply: fix spelling mistake "unprecise" -> "imprecise"
-      power: supply: bq25980: remove redundant zero check on ret
-      power: supply: charger-manager: fix incorrect check on charging_durat=
-ion_ms
+> +	.volatile_reg =3D bq256xx_is_volatile_reg,
+> +};
+> +
+> +static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] =3D {
+> +	[BQ25600] =3D {
+> +		.model_id =3D BQ25600,
+> +		.bq256xx_regmap_config =3D &bq25600_regmap_config,
+> +		.bq256xx_get_ichg =3D bq256xx_get_ichg_curr,
+> +		.bq256xx_get_iindpm =3D bq256xx_get_input_curr_lim,
+> +		.bq256xx_get_vbatreg =3D bq2560x_get_chrg_volt,
+> +		.bq256xx_get_iterm =3D bq256xx_get_term_curr,
+> +		.bq256xx_get_iprechg =3D bq256xx_get_prechrg_curr,
+> +		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +
+> +		.bq256xx_set_ichg =3D bq256xx_set_ichg_curr,
+> +		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> +		.bq256xx_set_vbatreg =3D bq2560x_set_chrg_volt,
+> +		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+> +		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+> +		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +
+> +		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+> +		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> +		.bq256xx_def_vbatreg =3D BQ2560X_VBATREG_DEF_uV,
+> +		.bq256xx_def_iterm =3D BQ256XX_ITERM_DEF_uA,
+> +		.bq256xx_def_iprechg =3D BQ256XX_IPRECHG_DEF_uA,
+> +		.bq256xx_def_vindpm =3D BQ256XX_VINDPM_DEF_uV,
+> +
+> +		.bq256xx_max_ichg =3D BQ256XX_ICHG_MAX_uA,
+> +		.bq256xx_max_vbatreg =3D BQ2560X_VBATREG_MAX_uV,
+> +
+> +		.has_usb_detect =3D false,
+> +	},
+> +
+> +	[BQ25600D] =3D {
+> +		.model_id =3D BQ25600D,
+> +		.bq256xx_regmap_config =3D &bq25600_regmap_config,
+> +		.bq256xx_get_ichg =3D bq256xx_get_ichg_curr,
+> +		.bq256xx_get_iindpm =3D bq256xx_get_input_curr_lim,
+> +		.bq256xx_get_vbatreg =3D bq2560x_get_chrg_volt,
+> +		.bq256xx_get_iterm =3D bq256xx_get_term_curr,
+> +		.bq256xx_get_iprechg =3D bq256xx_get_prechrg_curr,
+> +		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +
+> +		.bq256xx_set_ichg =3D bq256xx_set_ichg_curr,
+> +		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> +		.bq256xx_set_vbatreg =3D bq2560x_set_chrg_volt,
+> +		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+> +		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+> +		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +
+> +		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+> +		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> +		.bq256xx_def_vbatreg =3D BQ2560X_VBATREG_DEF_uV,
+> +		.bq256xx_def_iterm =3D BQ256XX_ITERM_DEF_uA,
+> +		.bq256xx_def_iprechg =3D BQ256XX_IPRECHG_DEF_uA,
+> +		.bq256xx_def_vindpm =3D BQ256XX_VINDPM_DEF_uV,
+> +
+> +		.bq256xx_max_ichg =3D BQ256XX_ICHG_MAX_uA,
+> +		.bq256xx_max_vbatreg =3D BQ2560X_VBATREG_MAX_uV,
+> +
+> +		.has_usb_detect =3D true,
+> +	},
+> +
+> +	[BQ25601] =3D {
+> +		.model_id =3D BQ25601,
+> +		.bq256xx_regmap_config =3D &bq25600_regmap_config,
+> +		.bq256xx_get_ichg =3D bq256xx_get_ichg_curr,
+> +		.bq256xx_get_iindpm =3D bq256xx_get_input_curr_lim,
+> +		.bq256xx_get_vbatreg =3D bq2560x_get_chrg_volt,
+> +		.bq256xx_get_iterm =3D bq256xx_get_term_curr,
+> +		.bq256xx_get_iprechg =3D bq256xx_get_prechrg_curr,
+> +		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +
+> +		.bq256xx_set_ichg =3D bq256xx_set_ichg_curr,
+> +		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> +		.bq256xx_set_vbatreg =3D bq2560x_set_chrg_volt,
+> +		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+> +		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+> +		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +
+> +		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+> +		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> +		.bq256xx_def_vbatreg =3D BQ2560X_VBATREG_DEF_uV,
+> +		.bq256xx_def_iterm =3D BQ256XX_ITERM_DEF_uA,
+> +		.bq256xx_def_iprechg =3D BQ256XX_IPRECHG_DEF_uA,
+> +		.bq256xx_def_vindpm =3D BQ256XX_VINDPM_DEF_uV,
+> +
+> +		.bq256xx_max_ichg =3D BQ256XX_ICHG_MAX_uA,
+> +		.bq256xx_max_vbatreg =3D BQ2560X_VBATREG_MAX_uV,
+> +
+> +		.has_usb_detect =3D false,
+> +	},
+> +
+> +	[BQ25601D] =3D {
+> +		.model_id =3D BQ25601D,
+> +		.bq256xx_regmap_config =3D &bq25600_regmap_config,
+> +		.bq256xx_get_ichg =3D bq256xx_get_ichg_curr,
+> +		.bq256xx_get_iindpm =3D bq256xx_get_input_curr_lim,
+> +		.bq256xx_get_vbatreg =3D bq25601d_get_chrg_volt,
+> +		.bq256xx_get_iterm =3D bq256xx_get_term_curr,
+> +		.bq256xx_get_iprechg =3D bq256xx_get_prechrg_curr,
+> +		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +
+> +		.bq256xx_set_ichg =3D bq256xx_set_ichg_curr,
+> +		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> +		.bq256xx_set_vbatreg =3D bq25601d_set_chrg_volt,
+> +		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+> +		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+> +		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +
+> +		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+> +		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> +		.bq256xx_def_vbatreg =3D BQ2560X_VBATREG_DEF_uV,
+> +		.bq256xx_def_iterm =3D BQ256XX_ITERM_DEF_uA,
+> +		.bq256xx_def_iprechg =3D BQ256XX_IPRECHG_DEF_uA,
+> +		.bq256xx_def_vindpm =3D BQ256XX_VINDPM_DEF_uV,
+> +
+> +		.bq256xx_max_ichg =3D BQ256XX_ICHG_MAX_uA,
+> +		.bq256xx_max_vbatreg =3D BQ2560X_VBATREG_MAX_uV,
+> +
+> +		.has_usb_detect =3D true,
+> +	},
+> +
+> +	[BQ25611D] =3D {
+> +		.model_id =3D BQ25611D,
+> +		.bq256xx_regmap_config =3D &bq25611d_regmap_config,
+> +		.bq256xx_get_ichg =3D bq256xx_get_ichg_curr,
+> +		.bq256xx_get_iindpm =3D bq256xx_get_input_curr_lim,
+> +		.bq256xx_get_vbatreg =3D bq25611d_get_chrg_volt,
+> +		.bq256xx_get_iterm =3D bq256xx_get_term_curr,
+> +		.bq256xx_get_iprechg =3D bq256xx_get_prechrg_curr,
+> +		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +
+> +		.bq256xx_set_ichg =3D bq256xx_set_ichg_curr,
+> +		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> +		.bq256xx_set_vbatreg =3D bq25611d_set_chrg_volt,
+> +		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+> +		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+> +		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +
+> +		.bq256xx_def_ichg =3D BQ25611D_ICHG_DEF_uA,
+> +		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> +		.bq256xx_def_vbatreg =3D BQ25611D_VBATREG_DEF_uV,
+> +		.bq256xx_def_iterm =3D BQ256XX_ITERM_DEF_uA,
+> +		.bq256xx_def_iprechg =3D BQ256XX_IPRECHG_DEF_uA,
+> +		.bq256xx_def_vindpm =3D BQ256XX_VINDPM_DEF_uV,
+> +
+> +		.bq256xx_max_ichg =3D BQ256XX_ICHG_MAX_uA,
+> +		.bq256xx_max_vbatreg =3D BQ25611D_VBATREG_MAX_uV,
+> +
+> +		.has_usb_detect =3D true,
+> +	},
+> +
+> +	[BQ25618] =3D {
+> +		.model_id =3D BQ25618,
+> +		.bq256xx_regmap_config =3D &bq25618_619_regmap_config,
+> +		.bq256xx_get_ichg =3D bq25618_619_get_ichg_curr,
+> +		.bq256xx_get_iindpm =3D bq256xx_get_input_curr_lim,
+> +		.bq256xx_get_vbatreg =3D bq25618_619_get_chrg_volt,
+> +		.bq256xx_get_iterm =3D bq25618_619_get_term_curr,
+> +		.bq256xx_get_iprechg =3D bq25618_619_get_prechrg_curr,
+> +		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +
+> +		.bq256xx_set_ichg =3D bq25618_619_set_ichg_curr,
+> +		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> +		.bq256xx_set_vbatreg =3D bq25618_619_set_chrg_volt,
+> +		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
+> +		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
+> +		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +
+> +		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
+> +		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> +		.bq256xx_def_vbatreg =3D BQ25618_VBATREG_DEF_uV,
+> +		.bq256xx_def_iterm =3D BQ25618_ITERM_DEF_uA,
+> +		.bq256xx_def_iprechg =3D BQ25618_IPRECHG_DEF_uA,
+> +		.bq256xx_def_vindpm =3D BQ256XX_VINDPM_DEF_uV,
+> +
+> +		.bq256xx_max_ichg =3D BQ25618_ICHG_MAX_uA,
+> +		.bq256xx_max_vbatreg =3D BQ25618_VBATREG_MAX_uV,
+> +
+> +		.has_usb_detect =3D false,
+> +	},
+> +
+> +	[BQ25619] =3D {
+> +		.model_id =3D BQ25619,
+> +		.bq256xx_regmap_config =3D &bq25618_619_regmap_config,
+> +		.bq256xx_get_ichg =3D bq25618_619_get_ichg_curr,
+> +		.bq256xx_get_iindpm =3D bq256xx_get_input_curr_lim,
+> +		.bq256xx_get_vbatreg =3D bq25618_619_get_chrg_volt,
+> +		.bq256xx_get_iterm =3D bq25618_619_get_term_curr,
+> +		.bq256xx_get_iprechg =3D bq25618_619_get_prechrg_curr,
+> +		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +
+> +		.bq256xx_set_ichg =3D bq25618_619_set_ichg_curr,
+> +		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> +		.bq256xx_set_vbatreg =3D bq25618_619_set_chrg_volt,
+> +		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
+> +		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
+> +		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +
+> +		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
+> +		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> +		.bq256xx_def_vbatreg =3D BQ25618_VBATREG_DEF_uV,
+> +		.bq256xx_def_iterm =3D BQ25618_ITERM_DEF_uA,
+> +		.bq256xx_def_iprechg =3D BQ25618_IPRECHG_DEF_uA,
+> +		.bq256xx_def_vindpm =3D BQ256XX_VINDPM_DEF_uV,
+> +
+> +		.bq256xx_max_ichg =3D BQ25618_ICHG_MAX_uA,
+> +		.bq256xx_max_vbatreg =3D BQ25618_VBATREG_MAX_uV,
+> +
+> +		.has_usb_detect =3D false,
+> +	},
+> +};
+> +
+> +static int bq256xx_power_supply_init(struct bq256xx_device *bq,
+> +							struct device *dev)
+> +{
+> +	struct power_supply_config psy_cfg =3D { .drv_data =3D bq,
+> +						.of_node =3D dev->of_node, };
+> +
+> +	psy_cfg.supplied_to =3D bq256xx_charger_supplied_to;
+> +	psy_cfg.num_supplicants =3D ARRAY_SIZE(bq256xx_charger_supplied_to);
 
-Dan Murphy (6):
-      power: bq27xxx: Update to SPDX licensing
-      MAINTAINERS: Remove Andrew F. Davis
-      dt-binding: bq25980: Add the bq25980 flash charger
-      power: supply: bq25980: Add support for the BQ259xx family
-      power: supply: bq25980: Fix uninitialized wd_reg_val
-      power: supply: bq25980: Fix uninitialized wd_reg_val and overrun
+Why do you initialize the supplied_to information?
+This should be initialized from DT.
 
-David Heidelberg (5):
-      power: supply: smb347-charger: Use resource-managed API
-      dt-bindings: power: supply: Add device-tree binding for Summit SMB3xx
-      power: supply: smb347-charger: Implement device-tree support
-      power: supply: smb347-charger: Support SMB345 and SMB358
-      power: supply: smb347-charger: Remove virtual smb347-battery
+> +	bq->charger =3D devm_power_supply_register(bq->dev,
+> +						 &bq256xx_power_supply_desc,
+> +						 &psy_cfg);
+> +	if (IS_ERR(bq->charger))
+> +		return -EINVAL;
+> +
+> +	bq->battery =3D devm_power_supply_register(bq->dev,
+> +						      &bq256xx_battery_desc,
+> +						      &psy_cfg);
+> +	if (IS_ERR(bq->battery))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int bq256xx_hw_init(struct bq256xx_device *bq)
+> +{
+> +	struct power_supply_battery_info bat_info =3D { };
+> +	int wd_reg_val =3D BQ256XX_WATCHDOG_DIS;
+> +	int ret =3D 0;
+> +	int i;
+> +
+> +	for (i =3D 0; i < BQ256XX_NUM_WD_VAL; i++) {
+> +		if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
+> +		    bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
+> +			wd_reg_val =3D i;
+> +	}
+> +	ret =3D regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
+> +				 BQ256XX_WATCHDOG_MASK, wd_reg_val <<
+> +						BQ256XX_WDT_BIT_SHIFT);
+> +
+> +	ret =3D power_supply_get_battery_info(bq->charger, &bat_info);
+> +	if (ret) {
+> +		dev_warn(bq->dev, "battery info missing, default values will be applie=
+d\n");
+> +
+> +		bat_info.constant_charge_current_max_ua =3D
+> +				bq->chip_info->bq256xx_def_ichg;
+> +
+> +		bat_info.constant_charge_voltage_max_uv =3D
+> +				bq->chip_info->bq256xx_def_vbatreg;
+> +
+> +		bat_info.precharge_current_ua =3D
+> +				bq->chip_info->bq256xx_def_iprechg;
+> +
+> +		bat_info.charge_term_current_ua =3D
+> +				bq->chip_info->bq256xx_def_iterm;
+> +
+> +		bq->init_data.ichg_max =3D
+> +				bq->chip_info->bq256xx_max_ichg;
+> +
+> +		bq->init_data.vbatreg_max =3D
+> +				bq->chip_info->bq256xx_max_vbatreg;
+> +	} else {
+> +		bq->init_data.ichg_max =3D
+> +			bat_info.constant_charge_current_max_ua;
+> +
+> +		bq->init_data.vbatreg_max =3D
+> +			bat_info.constant_charge_voltage_max_uv;
+> +	}
+> +
+> +	ret =3D bq->chip_info->bq256xx_set_vindpm(bq, bq->init_data.vindpm);
+> +	if (ret)
+> +		goto err_out;
+> +
+> +	ret =3D bq->chip_info->bq256xx_set_iindpm(bq, bq->init_data.iindpm);
+> +	if (ret)
+> +		goto err_out;
+> +
+> +	ret =3D bq->chip_info->bq256xx_set_ichg(bq,
+> +				bat_info.constant_charge_current_max_ua);
+> +	if (ret)
+> +		goto err_out;
+> +
+> +	ret =3D bq->chip_info->bq256xx_set_iprechg(bq,
+> +				bat_info.precharge_current_ua);
+> +	if (ret)
+> +		goto err_out;
+> +
+> +	ret =3D bq->chip_info->bq256xx_set_vbatreg(bq,
+> +				bat_info.constant_charge_voltage_max_uv);
+> +	if (ret)
+> +		goto err_out;
+> +
+> +	ret =3D bq->chip_info->bq256xx_set_iterm(bq,
+> +				bat_info.charge_term_current_ua);
+> +	if (ret)
+> +		goto err_out;
+> +
+> +	power_supply_put_battery_info(bq->charger, &bat_info);
+> +
+> +	return 0;
+> +
+> +err_out:
+> +	return ret;
+> +}
+> +
+> +static int bq256xx_parse_dt(struct bq256xx_device *bq)
+> +{
+> +	int ret =3D 0;
+> +
+> +	ret =3D device_property_read_u32(bq->dev, "ti,watchdog-timeout-ms",
+> +				       &bq->watchdog_timer);
+> +	if (ret)
+> +		bq->watchdog_timer =3D BQ256XX_WATCHDOG_DIS;
+> +
+> +	if (bq->watchdog_timer > BQ256XX_WATCHDOG_MAX ||
+> +	    bq->watchdog_timer < BQ256XX_WATCHDOG_DIS)
+> +		return -EINVAL;
+> +
+> +	ret =3D device_property_read_u32(bq->dev,
+> +				       "input-voltage-limit-microvolt",
+> +				       &bq->init_data.vindpm);
+> +	if (ret)
+> +		bq->init_data.vindpm =3D bq->chip_info->bq256xx_def_vindpm;
+> +
+> +	ret =3D device_property_read_u32(bq->dev,
+> +				       "input-current-limit-microamp",
+> +				       &bq->init_data.iindpm);
+> +	if (ret)
+> +		bq->init_data.iindpm =3D bq->chip_info->bq256xx_def_iindpm;
+> +
+> +	return 0;
+> +}
+> +
+> +static int bq256xx_probe(struct i2c_client *client,
+> +			 const struct i2c_device_id *id)
+> +{
+> +	struct device *dev =3D &client->dev;
+> +	struct bq256xx_device *bq;
+> +	int ret;
+> +
+> +	bq =3D devm_kzalloc(dev, sizeof(*bq), GFP_KERNEL);
+> +	if (!bq)
+> +		return -ENOMEM;
+> +
+> +	bq->client =3D client;
+> +	bq->dev =3D dev;
+> +	bq->chip_info =3D &bq256xx_chip_info_tbl[id->driver_data];
+> +
+> +	mutex_init(&bq->lock);
+> +
+> +	strncpy(bq->model_name, id->name, I2C_NAME_SIZE);
+> +
+> +	bq->regmap =3D devm_regmap_init_i2c(client,
+> +					bq->chip_info->bq256xx_regmap_config);
+> +
+> +	if (IS_ERR(bq->regmap)) {
+> +		dev_err(dev, "Failed to allocate register map\n");
+> +		return PTR_ERR(bq->regmap);
+> +	}
+> +
+> +	i2c_set_clientdata(client, bq);
+> +
+> +	ret =3D bq256xx_parse_dt(bq);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read device tree properties%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* OTG reporting */
+> +	bq->usb2_phy =3D devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+> +	if (!IS_ERR_OR_NULL(bq->usb2_phy)) {
+> +		INIT_WORK(&bq->usb_work, bq256xx_usb_work);
+> +		bq->usb_nb.notifier_call =3D bq256xx_usb_notifier;
+> +		usb_register_notifier(bq->usb2_phy, &bq->usb_nb);
+> +	}
+> +
+> +	bq->usb3_phy =3D devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
+> +	if (!IS_ERR_OR_NULL(bq->usb3_phy)) {
+> +		INIT_WORK(&bq->usb_work, bq256xx_usb_work);
+> +		bq->usb_nb.notifier_call =3D bq256xx_usb_notifier;
+> +		usb_register_notifier(bq->usb3_phy, &bq->usb_nb);
+> +	}
+> +
+> +	if (client->irq) {
+> +		ret =3D devm_request_threaded_irq(dev, client->irq, NULL,
+> +						bq256xx_irq_handler_thread,
+> +						IRQF_TRIGGER_FALLING |
+> +						IRQF_ONESHOT,
+> +						dev_name(&client->dev), bq);
+> +		if (ret)
+> +			goto error_out;
+> +	}
+> +
+> +	ret =3D devm_add_action_or_reset(dev, bq256xx_charger_reset, bq);
+> +	if (ret)
+> +		goto error_out;
+> +
+> +	ret =3D bq256xx_power_supply_init(bq, dev);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register power supply\n");
+> +		goto error_out;
+> +	}
+> +
+> +	ret =3D bq256xx_hw_init(bq);
+> +	if (ret) {
+> +		dev_err(dev, "Cannot initialize the chip.\n");
+> +		goto error_out;
+> +	}
+> +
+> +	return ret;
+> +
+> +error_out:
+> +	if (!IS_ERR_OR_NULL(bq->usb2_phy))
+> +		usb_unregister_notifier(bq->usb2_phy, &bq->usb_nb);
+> +
+> +	if (!IS_ERR_OR_NULL(bq->usb3_phy))
+> +		usb_unregister_notifier(bq->usb3_phy, &bq->usb_nb);
+> +	return ret;
+> +}
+> +
+> +static int bq256xx_remove(struct i2c_client *client)
+> +{
+> +	struct bq256xx_device *bq =3D i2c_get_clientdata(client);
+> +
+> +	power_supply_unregister(bq->charger);
 
-Dmitry Osipenko (3):
-      dt-bindings: battery: Add temperature properties
-      power: supply: Support battery temperature device-tree properties
-      power: supply: smb347-charger: Replace mutex with IRQ disable/enable
+You are registering the charger with devm_power_supply_register,
+so this is not needed and actually wrong (results in double free).
 
-Elliot Berman (1):
-      dt-bindings: power: reset: Convert reboot-mode to YAML
+> +	if (!IS_ERR_OR_NULL(bq->usb2_phy))
+> +		usb_unregister_notifier(bq->usb2_phy, &bq->usb_nb);
+> +
+> +	if (!IS_ERR_OR_NULL(bq->usb3_phy))
+> +		usb_unregister_notifier(bq->usb3_phy, &bq->usb_nb);
 
-Geert Uytterhoeven (1):
-      power: reset: POWER_RESET_OCELOT_RESET should depend on Ocelot or Spa=
-rx5
+Do this via devm_add_action_or_reset, so that we do not need
+the code twice (in probe error path and on module removal).
+Alternatively implement devm_usb_register_notifier() and use
+that instead of usb_register_notifier().
 
-Harley A.W. Lorenzo (1):
-      power: supply: test-power: revise parameter printing to use sprintf
+> +	bq256xx_charger_reset(bq);
 
-Ikjoon Jang (4):
-      power: supply: sbs-battery: remove unused enable_detection flags
-      power: supply: sbs-battery: combine get_presence_and_health
-      power: supply: sbs-battery: don't assume i2c errors as battery discon=
-nect
-      power: supply: sbs-battery: keep error code when get_property() fails
+This is also already handled automatically via the call you
+registered with devm_add_action_or_reset.
 
-Iskren Chernev (9):
-      power: supply: max17040: Use devm_ to automate remove
-      power: supply: max17040: Use regmap i2c
-      dt-bindings: power: supply: Extend max17040 compatibility
-      power: supply: max17040: Support compatible devices
-      dt-bindings: power: supply: max17040: Add maxim,rcomp
-      power: supply: max17040: Support setting rcomp
-      power: supply: max17040: Support soc alert
-      power: supply: max17040: Fix ptr to enum cast
-      power: supply: ltc2941: Fix ptr to enum cast
+> +	return 0;
+> +}
+> +
+> +static const struct i2c_device_id bq256xx_i2c_ids[] =3D {
+> +	{ "bq25600", BQ25600 },
+> +	{ "bq25600d", BQ25600D },
+> +	{ "bq25601", BQ25601 },
+> +	{ "bq25601d", BQ25601D },
+> +	{ "bq25611d", BQ25611D },
+> +	{ "bq25618", BQ25618 },
+> +	{ "bq25619", BQ25619 },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(i2c, bq256xx_i2c_ids);
+> +
+> +static const struct of_device_id bq256xx_of_match[] =3D {
+> +	{ .compatible =3D "ti,bq25600", .data =3D (void *)BQ25600 },
+> +	{ .compatible =3D "ti,bq25600d", .data =3D (void *)BQ25600D },
+> +	{ .compatible =3D "ti,bq25601", .data =3D (void *)BQ25601 },
+> +	{ .compatible =3D "ti,bq25601d", .data =3D (void *)BQ25601D },
+> +	{ .compatible =3D "ti,bq25611d", .data =3D (void *)BQ25611D },
+> +	{ .compatible =3D "ti,bq25618", .data =3D (void *)BQ25618 },
+> +	{ .compatible =3D "ti,bq25619", .data =3D (void *)BQ25619 },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, bq256xx_of_match);
+> +
+> +static const struct acpi_device_id bq256xx_acpi_match[] =3D {
+> +	{ "bq25600", BQ25600 },
+> +	{ "bq25600d", BQ25600D },
+> +	{ "bq25601", BQ25601 },
+> +	{ "bq25601d", BQ25601D },
+> +	{ "bq25611d", BQ25611D },
+> +	{ "bq25618", BQ25618 },
+> +	{ "bq25619", BQ25619 },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(acpi, bq256xx_acpi_match);
+> +
+> +static struct i2c_driver bq256xx_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "bq256xx-charger",
+> +		.of_match_table =3D bq256xx_of_match,
+> +		.acpi_match_table =3D ACPI_PTR(bq256xx_acpi_match),
+> +	},
+> +	.probe =3D bq256xx_probe,
+> +	.remove =3D bq256xx_remove,
+> +	.id_table =3D bq256xx_i2c_ids,
+> +};
+> +module_i2c_driver(bq256xx_driver);
+> +
+> +MODULE_AUTHOR("Ricardo Rivera-Matos <r-rivera-matos@ti.com>");
+> +MODULE_DESCRIPTION("bq256xx charger driver");
+> +MODULE_LICENSE("GPL v2");
+> --=20
+> 2.28.0
+>=20
 
-Jonathan Bakker (4):
-      power: supply: charger-manager: Always use POWER_SUPPLY_PROP_TEMP
-      power: supply: charger-manager: Update extcon functions
-      power: supply: charger-manager: Count cm-chargers property directly
-      dt-bindings: power: supply: Cleanup charger-manager bindings
-
-Jonghwa Lee (6):
-      power: supply: charger-manager: Swap private uevent for power_supply_=
-changed
-      power: supply: charger-manager: Remove cm_notify_event function
-      power: supply: charger-manager: Correct usage of CHARGE_NOW/FULL
-      power: supply: charger-manager: Collect all power_supply_changed() ca=
-lls
-      power: supply: charger-manager: Make decisions focussed on battery st=
-atus
-      power: supply: charger-manager: Don't start charging in cable nofitic=
-ation
-
-Krzysztof Kozlowski (18):
-      power: supply: bq27xxx: Simplify with dev_err_probe()
-      power: supply: cpcap: Simplify with dev_err_probe()
-      power: supply: gpio-charger: Simplify with dev_err_probe()
-      power: supply: ingenic: Simplify with dev_err_probe()
-      power: supply: lego_ev3: Simplify with dev_err_probe()
-      dt-bindings: power: bq27xxx: add bq34z100
-      power: supply: bq27xxx: report "not charging" on all types
-      power: supply: bq27xxx: adjust whitespace and use BIT() for bitflags
-      power: supply: bq27xxx: add separate flag for single SoC register
-      power: supply: bq27xxx: add separate flag for capacity inaccurate
-      power: supply: bq27xxx: add support for TI bq34z100
-      power: supply: bq24257: skip 'struct acpi_device_id' when !CONFIG_ACPI
-      power: supply: bq2515x: fix kerneldoc
-      power: supply: bq25890: skip 'struct acpi_device_id' when !CONFIG_ACPI
-      power: supply: goldfish: skip 'struct acpi_device_id' when !CONFIG_AC=
-PI
-      power: supply: rt9455: skip 'struct acpi_device_id' when !CONFIG_ACPI
-      power: supply: charger-manager: drop unused charger assignment
-      power: supply: pm2301: drop duplicated i2c_device_id
-
-Lars Povlsen (2):
-      dt-bindings: reset: ocelot: Add Sparx5 support
-      power: reset: ocelot: Add support for Sparx5
-
-Linus Walleij (1):
-      power: supply: gpio-charger: Convert to GPIO descriptors
-
-Lucas Stach (1):
-      power: supply: ucs1002: fix some health status issues
-
-Micha=C5=82 Miros=C5=82aw (2):
-      power: supply: bq25890: support IBAT compensation
-      power: supply: bq25890: document IBAT compensation DT properties
-
-Rikard Falkeborn (1):
-      power: supply: bq2515x: Constify static variables
-
-Sebastian Reichel (5):
-      Merge tag 'psy-arm-gpio-charger-immutable-for-5.10-signed' into psy-n=
-ext
-      power: supply: gpio-charger: add charge-current-limit feature
-      power: supply: smb347-charger: Drop pdata support
-      power: supply: smb347-charger: Use generic property framework
-      power: supply: document current direction
-
-Subbaraman Narayanamurthy (1):
-      power: supply: add wireless type
-
-Wang Qing (2):
-      power: supply: ds278x: fix spelling typo
-      power: supply: ab8500-fg: fix spelling typo
-
-Xiongfeng Wang (1):
-      power: supply: test_power: add missing newlines when printing paramet=
-ers by sysfs
-
- Documentation/ABI/testing/sysfs-class-power        |    8 +-
- .../bindings/power/reset/ocelot-reset.txt          |    7 +-
- .../bindings/power/reset/reboot-mode.txt           |   25 -
- .../bindings/power/reset/reboot-mode.yaml          |   47 +
- .../devicetree/bindings/power/supply/battery.yaml  |   24 +
- .../devicetree/bindings/power/supply/bq25890.txt   |    4 +
- .../devicetree/bindings/power/supply/bq25980.yaml  |  114 ++
- .../devicetree/bindings/power/supply/bq27xxx.yaml  |    1 +
- .../bindings/power/supply/charger-manager.txt      |   30 +-
- .../bindings/power/supply/gpio-charger.yaml        |   31 +
- .../bindings/power/supply/ingenic,battery.txt      |   31 -
- .../bindings/power/supply/ingenic,battery.yaml     |   61 +
- .../bindings/power/supply/max17040_battery.txt     |   21 +-
- .../power/supply/summit,smb347-charger.yaml        |  152 +++
- MAINTAINERS                                        |    4 +-
- arch/arm/mach-pxa/tosa.c                           |   12 +-
- arch/arm/mach-sa1100/collie.c                      |   14 +-
- drivers/power/reset/Kconfig                        |    4 +-
- drivers/power/reset/ocelot-reset.c                 |   55 +-
- drivers/power/supply/Kconfig                       |   36 +-
- drivers/power/supply/Makefile                      |    2 +
- drivers/power/supply/ab8500_fg.c                   |    4 +-
- drivers/power/supply/bq24257_charger.c             |    2 +
- drivers/power/supply/bq2515x_charger.c             |   14 +-
- drivers/power/supply/bq25890_charger.c             |   17 +-
- drivers/power/supply/bq25980_charger.c             | 1314 ++++++++++++++++=
-++++
- drivers/power/supply/bq25980_charger.h             |  178 +++
- drivers/power/supply/bq27xxx_battery.c             |  102 +-
- drivers/power/supply/bq27xxx_battery_hdq.c         |    9 +-
- drivers/power/supply/bq27xxx_battery_i2c.c         |   12 +-
- drivers/power/supply/charger-manager.c             |  578 +++------
- drivers/power/supply/cpcap-battery.c               |    7 +-
- drivers/power/supply/ds2780_battery.c              |    6 +-
- drivers/power/supply/ds2781_battery.c              |    6 +-
- drivers/power/supply/goldfish_battery.c            |    2 +
- drivers/power/supply/gpio-charger.c                |  172 ++-
- drivers/power/supply/ingenic-battery.c             |    8 +-
- drivers/power/supply/lego_ev3_battery.c            |   24 +-
- drivers/power/supply/ltc2941-battery-gauge.c       |    3 +-
- drivers/power/supply/max17040_battery.c            |  489 +++++---
- drivers/power/supply/pm2301_charger.c              |    7 +-
- drivers/power/supply/power_supply_core.c           |   19 +
- drivers/power/supply/power_supply_sysfs.c          |    1 +
- drivers/power/supply/rn5t618_power.c               |  556 +++++++++
- drivers/power/supply/rt9455_charger.c              |    2 +
- drivers/power/supply/sbs-battery.c                 |  125 +-
- drivers/power/supply/smb347-charger.c              |  692 ++++++-----
- drivers/power/supply/test_power.c                  |   26 +-
- drivers/power/supply/ucs1002_power.c               |   75 +-
- include/dt-bindings/power/summit,smb347-charger.h  |   19 +
- include/linux/power/bq27xxx_battery.h              |    1 +
- include/linux/power/charger-manager.h              |   41 +-
- include/linux/power/gpio-charger.h                 |    6 -
- include/linux/power/smb347-charger.h               |  114 --
- include/linux/power_supply.h                       |    7 +
- 55 files changed, 3938 insertions(+), 1383 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/reset/reboot-mo=
-de.txt
- create mode 100644 Documentation/devicetree/bindings/power/reset/reboot-mo=
-de.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/bq25980.=
-yaml
- delete mode 100644 Documentation/devicetree/bindings/power/supply/ingenic,=
-battery.txt
- create mode 100644 Documentation/devicetree/bindings/power/supply/ingenic,=
-battery.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/summit,s=
-mb347-charger.yaml
- create mode 100644 drivers/power/supply/bq25980_charger.c
- create mode 100644 drivers/power/supply/bq25980_charger.h
- create mode 100644 drivers/power/supply/rn5t618_power.c
- create mode 100644 include/dt-bindings/power/summit,smb347-charger.h
- delete mode 100644 include/linux/power/smb347-charger.h
-
---nvzplde2bn7bpea6
+--z7oribbza7yt3mws
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl+OAE0ACgkQ2O7X88g7
-+ppSsg/+M41RTmH2bKiMqf6RwTJs/X9DYya90c9BsioLhYsmHCV/CsHNMpFHG/+Y
-rNSm8E7D7PlupOuCUpEIAluFgXh4ZMKT71VKbQYopMStzgzGDREMxYjMwDuDFCI6
-XZqzsew6mIO3MyntXFl+2dGt4w9GhEoMpnrq3V6YnIv0/2L9VSriqLXjT8FNH4mq
-1FEPi7fMGUAjjjSdePreVBDURc+cfyeG9dPeP/6HfMQ6V5gEGNiL2A2y8n2vUUwk
-YUpY67GRW5x/rZuseSD3uuc9FYM20uL5R/wZJwqaKwiL68iQJ/XFdAyaMf1z4dYx
-kiTFL6BORQmNwQBj0dPaBpC+cBgu+DnBC0cZZ2d0Mo6AkkTJsAcakgNWwEMgWjSB
-EOcmtqV4A4bKuEp6IW4m47I5cEFNnM7VuF2a6a/FdmrRgIw3TSxi3jjECNLdZW10
-E1KD3kSrEeW5Wsbo11oYje+xnln2sGBvab3/KHH8OnxAvQFkimZenKHcBsBsgoiA
-4ceuMlxyeaxR1JyqSlEUuCHlZm4jexCMCr3V3pZyuhHZjeg/iisVI8M/mJjr/UgL
-qSVDs37AnE0j0kvIEAr0nGP3kxdKC2+cR/3t9Y1qUZ5WyNJD5fMTC8JQpy6D2Az4
-9BIyYtq/olgF6jlg1DrDx61DNZ337xbwXvbKgmIe8aSkwz/ewHs=
-=/5yB
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl+OCtQACgkQ2O7X88g7
++prrng/+PbHm3AmC0pfdke9EDyPPObL7AGfxeIzvH1vYD++2sYMbA22ytv83asY0
+94tF8eBmhDdYsyTT1WtDy9XFPp4SRaH0+3N+FPLje+yGIubz8yJuz2U6B8qCeBu6
+42p/PYZzmaTDes1Iy9c5F6DVMVVT9L4mCW8PbdYmcJmGNasRvejGrUoUmh42C7yX
+cPFQ6ZPEOFMyP71eGfrVVAkXpFhuiTwOmNn9JKq/sNQS7iDe7zLir6WPBCQpotyw
+qALRRiXhjrLuAH/qvwRxZ+75NIUpZ3H/yh6A6elcB9VUdj0OUZvRRsa/k0UufoOU
+MdyYmH4kXHWCrSi+pwaKAQWcpK8mI2nmMkFkheEdntkPGrEyc6BxMtqHIk2th3H+
+4EZXFJRb+yqVkEKYOqqvtlfo/2nHzamCoRlbVeQ870AMlGn+wmZNetb8nkeklISX
+yEy9/9x7/AscsciiWLL6Jy1uM8LhqggsBgYBN+sRleEUlfsgggb4uwRND+ZCdaJW
+52ddKei5kjVGhio56J04TXRmujPiJuKwCzh/kYrGKGb13JzOJnx1ujrkryV5vVOW
+z4igPr1SPlNRd3BFMKcegT0Vdhpa6W7r1S3HfwzMXl4ZjeLkYDOe8rPyLN0A5s5I
+i/3WS3v54Al8QxT9qjWTBP3GmfG5ginfA2AkqtFiFPX9ZcrJNbg=
+=mC5R
 -----END PGP SIGNATURE-----
 
---nvzplde2bn7bpea6--
+--z7oribbza7yt3mws--
