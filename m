@@ -2,79 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CDD292A65
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 17:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49515292A94
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Oct 2020 17:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729987AbgJSP35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 11:29:57 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:36351 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729075AbgJSP35 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 11:29:57 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 32so10865897otm.3;
-        Mon, 19 Oct 2020 08:29:57 -0700 (PDT)
+        id S1729910AbgJSPkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 11:40:02 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:43953 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729075AbgJSPkC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 11:40:02 -0400
+Received: by mail-ot1-f67.google.com with SMTP id k68so6422415otk.10;
+        Mon, 19 Oct 2020 08:40:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ufauCX1mTVCFB7Ocw9R6zTidUIroDFBpcM3yia+iYYA=;
-        b=Mq/B0bNtwxPCmz9qksEdAJ30zSV3oAof7tgYIM/grEvvqD/jR209m4e4VG4mNEfFee
-         JbkPdkcS69kmbUu6ly/wytjdV/pnY63kDTnr3jfzwZFf4ptOqtyJHDDfbfp9HMXlV4HG
-         F931Okm2XiFXU6NmGcos1t0AtUZYsh4Hh7GKK3cYfIJ3SBQBl7gcuDovnv8VqvyZi/yj
-         LiSsUhM/tiPkUChvoy7ctW/oMrlTHOAEb0u51l6E2IsBtOnGmpcMp0pxNGR5Ksm9a2ul
-         8JIfBvkYUw5PTsOueAKg9zoT+ohT07ifuHzaQkA96qwkI1YOBetAGa3nbiGmddt/OkPX
-         4WPw==
-X-Gm-Message-State: AOAM533mugTb52LfrB8AsqFAZB5MKmGBj3PWx9VSwrAguibgpwJSRPBC
-        B18HR/lnIa6KQPpuPEKLmpiMAwotgapN06JhqGM=
-X-Google-Smtp-Source: ABdhPJy0cAg9mRLdvJiGO5d2Z+lYL4CHi4TBBcdKbJMJzOBjWYxOdUw4ImJi/uqHWbPDoavzmuJ/hrqbEyKGPj6AMEI=
-X-Received: by 2002:a9d:ac9:: with SMTP id 67mr368114otq.321.1603121396651;
- Mon, 19 Oct 2020 08:29:56 -0700 (PDT)
+        bh=sQXDksdWJB9OPOkEy4qlnDk19u+YPFVgLo+Sa2g/Kho=;
+        b=OQjvnSQZbqZoff/o1/9S3Cxm+FCAs+VPOmMFjejuvAYsrEDyEb4s92f1AVXjPwbkNl
+         OZDMpWyuePDLSKsiU9+j2fyNS7alwFVcfHX3Kt3j0FPdbEy4eFjJgAQvDPhZCdNLdGn/
+         W7LDX4SP52tbDGKOgi6kiyMUb+ripD61w+WnxyNtfaBt4Mho8fHu4cCQLPZoKZWPUSWK
+         xrbbgCZV7G6EfeOd8FWjJ7QK88s+r9SyFCIilh5iF7Z1x/Diw4A5EJH1bN+NRTTYVIDl
+         9SJuo7pif39chQTnYcwFM8mhAcZ1ZC5edVChiY+Kwj+CLUfOyVH8RwvAHmFXvOClwJTL
+         x13Q==
+X-Gm-Message-State: AOAM5302Gle0wvmYfEK+IXJ000ceAcsSkwuPwX9ZLHO6/n1cioWYs9B3
+        cyjZ+hFrf8IIcqJYeqQfhYkWCmuCo4Lm0zA7ths=
+X-Google-Smtp-Source: ABdhPJxV2jiT94je+9YQXAAdxh67yLt2Jd6HQXV8DuJOBcna4yNKkadtyZwauQAoMC/xI6EG+zjmgpvrHH3dhX2Ku+k=
+X-Received: by 2002:a05:6830:18cd:: with SMTP id v13mr447185ote.206.1603122001657;
+ Mon, 19 Oct 2020 08:40:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201019035741.2279043-1-wei.huang2@amd.com>
-In-Reply-To: <20201019035741.2279043-1-wei.huang2@amd.com>
+References: <CAGXk5yoNxZBD9gX-8RvtsqAwB4rO=hFQKBewFhOGoMO171aJVA@mail.gmail.com>
+ <20201016181722.884812-1-wvw@google.com>
+In-Reply-To: <20201016181722.884812-1-wvw@google.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 19 Oct 2020 17:29:45 +0200
-Message-ID: <CAJZ5v0gaQOSezJsJ7La5VC5apYj5zYL+wKAvyEB8T4w1V0TkCA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] acpi-cpufreq: Honor _PSD table setting in CPU
- frequency control
-To:     Wei Huang <wei.huang2@amd.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+Date:   Mon, 19 Oct 2020 17:39:50 +0200
+Message-ID: <CAJZ5v0jaftAQv9-=5YucNnm__Z7NWRWmN2mCO07i0ZhV9K5EsQ@mail.gmail.com>
+Subject: Re: [PATCH] sched: cpufreq_schedutil: restore cached freq when next_f
+ is not changed
+To:     Wei Wang <wvw@google.com>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Quentin Perret <qperret@google.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 5:57 AM Wei Huang <wei.huang2@amd.com> wrote:
+On Fri, Oct 16, 2020 at 8:17 PM Wei Wang <wvw@google.com> wrote:
 >
-> acpi-cpufreq has a old quirk that overrides the _PSD table supplied by
-> BIOS on AMD CPUs. However the _PSD table of new AMD CPUs (Family 19h+)
-> now accurately reports the P-state dependency of CPU cores. Hence this
-> quirk needs to be fixed in order to support new CPUs' frequency control.
+> We have the raw cached freq to reduce the chance in calling cpufreq
+> driver where it could be costly in some arch/SoC.
 >
-> Fixes: acd316248205 ("acpi-cpufreq: Add quirk to disable _PSD usage on all AMD CPUs")
-> Signed-off-by: Wei Huang <wei.huang2@amd.com>
+> Currently, the raw cached freq will be reset when next_f is changed for
+> correctness. This patch changes it to maintain the cached value instead
+> of dropping it to honor the purpose of the cached value.
+>
+> This is adapted from https://android-review.googlesource.com/1352810/
+>
+> Signed-off-by: Wei Wang <wvw@google.com>
 > ---
->  drivers/cpufreq/acpi-cpufreq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  kernel/sched/cpufreq_schedutil.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index e4ff681faaaa..1e4fbb002a31 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -691,7 +691,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
->                 cpumask_copy(policy->cpus, topology_core_cpumask(cpu));
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 5ae7b4e6e8d6..e254745a82cb 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -441,6 +441,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+>         unsigned long util, max;
+>         unsigned int next_f;
+>         bool busy;
+> +       unsigned int cached_freq = sg_policy->cached_raw_freq;
+>
+>         sugov_iowait_boost(sg_cpu, time, flags);
+>         sg_cpu->last_update = time;
+> @@ -464,8 +465,8 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+>         if (busy && next_f < sg_policy->next_freq) {
+>                 next_f = sg_policy->next_freq;
+>
+> -               /* Reset cached freq as next_freq has changed */
+> -               sg_policy->cached_raw_freq = 0;
+> +               /* Restore cached freq as next_freq has changed */
+> +               sg_policy->cached_raw_freq = cached_freq;
 >         }
 >
-> -       if (check_amd_hwpstate_cpu(cpu) && !acpi_pstate_strict) {
-> +       if (check_amd_hwpstate_cpu(cpu) && boot_cpu_data.x86 < 0x19 &&
-> +           !acpi_pstate_strict) {
->                 cpumask_clear(policy->cpus);
->                 cpumask_set_cpu(cpu, policy->cpus);
->                 cpumask_copy(data->freqdomain_cpus,
+>         /*
 > --
 
-Applied as 5.10-rc material under edited subject, thanks!
+Applied as 5.10-rc material with edited subject and rewritten changelog.
+
+Thanks!
