@@ -2,131 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C79A7293940
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 12:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA79293959
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 12:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393242AbgJTKgW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Oct 2020 06:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S2393297AbgJTKsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Oct 2020 06:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392110AbgJTKgV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 06:36:21 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6D8C061755
-        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 03:36:21 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id lw2so756271pjb.3
-        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 03:36:21 -0700 (PDT)
+        with ESMTP id S2390218AbgJTKsx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 06:48:53 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E6FC0613CE
+        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 03:48:53 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id b23so853014pgb.3
+        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 03:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=xMyFD9aGKc1uxqgQqPeeOsvhMt6C8yiL5bwMNHZ2olo=;
-        b=GSMeM7NOjHfz41kQrfcTjo3+JWRn+PyrY3mFZMC2M7Mzs89wRF4FVzkzCX3S6+NOjB
-         zk57fp2xG9nMX7vfnuakibqPWCHF1dqli5JQZVtB7epDQDX30IRoXNZNw3hRhLvcnMG7
-         pes7iP9/6KdH0Aapb3g1e+xoPbZaOv/6/fxiCR7M4yzDnA5/Rhel6MyoO5DGRKiGrrJV
-         Re7WID/H5J23z/hqNWh87jJhavo/A8n1jxkgzhsk1Fi/uRIRUG7aLhk45P0gGFXKlA7m
-         I4wxUl0djcYJMx/BiPlyYNVL7TnodAnUuhUoUKuQGpOIs/lcPuNVZu9cVeL2aShEwg0a
-         vJMQ==
+        bh=h3csrAd1jky9coyQEUbNeul9O9JSQ+GT/yRMQvwVlRM=;
+        b=MOvMlkKIsU6yWtu6fAoRdXZqQmwKbFRGPzNPt7EIow+NWzRVTfWnoJMkb4id5xG+9Z
+         nJdblopJrWREVTQzC32ssLnNCvh79+bgD+En93s6UUXb+cWsfU0QGVYDeTZokuWfucGM
+         qaUkEcjKk9rAaiWSxQqqYAihvB9Q0Q6n3KfgFYr5qX47wDwxf57ddG7wNZIcKo0hgZTD
+         FgV5+HWg3Xt5rTso+qIcJQvlWTLoAS7RczcRiyEP0L+Xn57EZ7VWWeY66OL8XSTqC5Zf
+         Cjvc7mIId/NUeHFGu19k5Htu63MbgSNOGsL1GZdvCGJzHS4iB/t7g/YP55hjZ2ktX2wk
+         2s8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xMyFD9aGKc1uxqgQqPeeOsvhMt6C8yiL5bwMNHZ2olo=;
-        b=Ao7hSnTSzdoCEzCG5eTPPPbDACE6qjUYbC1I/ADmLC6TPxQB71J37KK0yvkNVVkaZk
-         J6CiMzbbAI+1CmIBj6/Nvtq0CGCOJ6X32PAxbbHPEsGP/zDyY1QyQXVhoDvVOhUuW/My
-         QfF5OFiAkBLNgs81vILoYlXxEsRHBqj/gS5JJD3rjcwlvHSh4KatOQPlMfuDkPNC8nMj
-         2A/OEl4U06VUJojCBaAEaaFx6QHGRPwPGGuBIuwwFlJZgLWWuRcBREPYwg8nxzefwv2s
-         yXcCWbGyNlGHUIO3va9OtWobfJVcTNvJJSNwdhf2+vvo3Sg8etUPK20gDFaiQMh0api8
-         PH2w==
-X-Gm-Message-State: AOAM532pWlC6HJg0x+aiY5Rvf5Rm1uHIhTkyxnC7/gNCahg6OSbOigp6
-        ISFA48O7eMcUkGn/A2XhWbS/rw==
-X-Google-Smtp-Source: ABdhPJxk4To5ufiwxPrTIXU0TYP0McrQLZP7E8JHmy9qgb+tIux4p/Hw0G7cVl1LQfteqOAETflXLw==
-X-Received: by 2002:a17:902:c252:b029:d3:d480:9e10 with SMTP id 18-20020a170902c252b02900d3d4809e10mr2364704plg.47.1603190180695;
-        Tue, 20 Oct 2020 03:36:20 -0700 (PDT)
+        bh=h3csrAd1jky9coyQEUbNeul9O9JSQ+GT/yRMQvwVlRM=;
+        b=ew6fj+hqSbqcORtQ+PJ56su2JJUZaTvd8UmMzMuhhZblurU7DJ7miG5b5bT43hlJjn
+         gOYaOPcTKCBCC3lXO/rZwONBRmbPxH7iUp6apj1O/AarNp41NKe+tLoYZh+eJne3Msme
+         5qlAPumswK0ZHkM39WfxXxVRRwQrzOpQZSj6ds8bxYykanXd5m2KDpGisO98Y0NDHlUE
+         c1DuYLKjDGZ0F1s+GC3U+m0kmyuR6alsARcx4O0o4fzIDhthDgDW6MzzTrsoxbsQM/Tj
+         2lYLpwfw/JpM5hX8EhzOULxcmVP6dbVahYjlcpY/gtzEX1cdAvWSKF5mcP2bIauNI0RO
+         ldXw==
+X-Gm-Message-State: AOAM533OGnCxuVejozgWZZgQY3YECTyQHPwamCRmy7Hs7VJR75mo+OGo
+        BYGV2UNdst1Z5Lb7PnXdsXn8+Q==
+X-Google-Smtp-Source: ABdhPJyYDuvahYkU1IUub/PaLxmkTTPYqoYoyfGPonplDkCIKP9bIbjkkmWOPnvsvKP8u2DD0SQXww==
+X-Received: by 2002:a63:504b:: with SMTP id q11mr2076091pgl.17.1603190932800;
+        Tue, 20 Oct 2020 03:48:52 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id 70sm1792610pfu.203.2020.10.20.03.36.19
+        by smtp.gmail.com with ESMTPSA id b5sm1827560pgi.55.2020.10.20.03.48.51
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Oct 2020 03:36:19 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 16:06:17 +0530
+        Tue, 20 Oct 2020 03:48:51 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 16:18:49 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Dave Gerlach <d-gerlach@ti.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>, sbhanu@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>, nm@ti.com
-Subject: Re: WARNING: at drivers/opp/core.c:678
- dev_pm_opp_set_rate+0x4cc/0x5d4 - on arm x15
-Message-ID: <20201020103617.qramu2ejlp44qxcz@vireshk-i7>
-References: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
- <20200827094651.3grvs6ungv3dh7y3@vireshk-i7>
- <20200827211832.3ebeda8a@canb.auug.org.au>
- <20200828045128.y7ybkd7dnvn4h6dt@vireshk-i7>
- <CA+G9fYsn1S-SieuP85-Z4qKO+aNyqJarrBR0xx0X-YbtF9eo0g@mail.gmail.com>
- <20200831044132.jb7aflr2sfbart2z@vireshk-i7>
- <CA+G9fYsLd77Wuz6Fdwr0w4eFvs=rX5ooewrztFtSe7MeyRJeGQ@mail.gmail.com>
- <20200831060203.7guhirtxb72odow2@vireshk-i7>
- <CA+G9fYv5WKQkDvjZsc+xth54X_MK3qUmuUTXhUDVUHpS3UhNpQ@mail.gmail.com>
- <20201016054551.jwxk2xdvvnk7o5yy@vireshk-i7>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        chris.redpath@arm.com, morten.rasmussen@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201020104849.xh4prj4az5islmpt@vireshk-i7>
+References: <20201008150317.GB20268@arm.com>
+ <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
+ <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+ <20201012154915.GD16519@bogus>
+ <20201012165219.GA3573@arm.com>
+ <17819d4d-9e7e-9a38-4227-d0d10a0749f1@arm.com>
+ <20201014042531.r7iykzygkvmpsqck@vireshk-i7>
+ <503af305-77a4-964a-ed17-8df8b4e3a546@arm.com>
+ <20201019094633.m3yvxurfm2xwsb6a@vireshk-i7>
+ <e3b3a583-5e0f-f512-85e6-81c55a0e6db5@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201016054551.jwxk2xdvvnk7o5yy@vireshk-i7>
+In-Reply-To: <e3b3a583-5e0f-f512-85e6-81c55a0e6db5@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-10-20, 11:15, Viresh Kumar wrote:
-> +Dave,
+On 19-10-20, 14:36, Nicola Mazzucato wrote:
+> Hi Viresh,
 > 
-> On 15-10-20, 15:26, Naresh Kamboju wrote:
-> > The arm x15 boot failed on Linus 's mainline version 5.9.0.
 > 
-> Don't mention the version as this doesn't give the right information.
-> You tested it over 5.9 + 5.10-rc1 material.
-> 
-> > I have listed the latest commits on drivers/opp/ .
+> On 10/19/20 10:46 AM, Viresh Kumar wrote:
+> > On 19-10-20, 09:50, Nicola Mazzucato wrote:
+> >> Hi Viresh,
+> >>
+> >> thank you for your suggestion on using 'opp-shared'.
+> >> I think it could work for most of the cases we explained earlier.
+> >>
+> >> Summarising, there are two parts of this entire proposal:
+> >> 1) where/how to get the information: now we are focusing on taking advantage of
+> >> 'opp-shared' within an empty opp table
+> >> 2) and how/where this information will be consumed
+> >>
+> >> Further details below:
+> >>
+> >> 1) a CPUFreq driver that takes the OPPs from firmware, can call
+> >> dev_pm_opp_of_get_sharing_cpus like you suggested. When doing so, a provided
+> >> cpumaksk will be populated with the corresponding cpus that share the same
+> >> (empty) table opp in DT.
+> >> All good so far.
 > > 
-> > metadata:
-> >   git branch: master
-> >   git repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-> >   git commit: 3e4fb4346c781068610d03c12b16c0cfb0fd24a3
-> >   git describe: v5.9-4105-g3e4fb4346c78
-> >   make_kernelversion: 5.9.0
-> >   kernel-config:
-> > https://builds.tuxbuild.com/2BB2g61t29VaadVLXEl4cQ/kernel.config
+> > Great.
 > > 
+> >> The current opp core is not expecting an empty table and therefore some errors
+> >> are thrown when this happens.
+> >> Since we are now allowing this corner-case, I am presenting below where I think
+> >> some minor corrections may be needed:
+> >>
+> >> --- a/drivers/opp/of.c
+> >> +++ b/drivers/opp/of.c
+> >> @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+> >>         struct device_node *required_np, *np;
+> >>         int count, i;
+> >>
+> >>         /* Traversing the first OPP node is all we need */
+> >>         np = of_get_next_available_child(opp_np, NULL);
+> >>         if (!np) {
+> >> -               dev_err(dev, "Empty OPP table\n");
+> >> +               dev_warn(dev, "Empty OPP table\n");
+> >> +
+> >> +               /*
+> >> +                * With empty table we remove shared_opp. This is to leave the
+> >> +                * responsibility to decide which opp are shared to the opp users
+> >> +                */
+> >> +               opp_table->shared_opp = OPP_TABLE_ACCESS_EXCLUSIVE;
+> >> +
+> >>                 return;
+> >>         }
+> >>
+> >> @@ int dev_pm_opp_of_find_icc_paths(struct device *dev,
+> >>         int ret, i, count, num_paths;
+> >>         struct icc_path **paths;
+> >>
+> >>         ret = _bandwidth_supported(dev, opp_table);
+> >> -       if (ret <= 0)
+> >> +       if (ret == -EINVAL)
+> >> +               return 0; /* Empty OPP table is a valid corner-case, let's not
+> >> fail */
+> >> +       else if (ret <= 0)
+> >>                 return ret;
+> >>
+> >> The above are not 'strictly' necessary to achieve the intended goal, but they
+> >> make clearer that an empty table is now allowed and not an error anymore.
+> >> What it is your point of view on this?
 > > 
-> > ------------[ cut here ]------------
-> > [   13.530971] sdhci-omap 4809c000.mmc: Got CD GPIO
-> > [   13.535647] WARNING: CPU: 0 PID: 137 at drivers/opp/core.c:678
-> > dev_pm_opp_set_rate+0x4cc/0x5d4
+> > Why is this stuff getting called in your case ? We shouldn't be trying
+> > to create an OPP table here and it should still be an error in the
+> > code if we are asked to parse an empty OPP table.
 > 
-> Looks like the stuff from drivers/opp/ti-opp-supply.c supply didn't
-> work as expected.
+> A driver that gets a set of opp-points from f/w needs to add them to each
+> device. To do so, it will call dev_pm_opp_add(). If an opp_table struct for this
+> device is not found, one will be created and the opp-point will be added to it.
+> When allocation a new opp_table the opp will try to initialise it by parsing the
+> values in DT. It will also try to find_icc_paths.
 > 
-> One of the major changes came with these patches:
-> 
-> dc279ac6e5b4 cpufreq: dt: Refactor initialization to handle probe deferral properly
-> dd461cd9183f opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER
-> 
-> And that's where I think it may have gone wrong.
-> 
-> Dave: Will you (or someone else from TI) can have a look at it as well
-> ?
+> Everything happens silently if we don't have a table in DT.
 
-http://lore.kernel.org/lkml/be911bcddc1dbf4a152513cb3d83f8eed7d2574c.1603189831.git.viresh.kumar@linaro.org
-
-I think this will fix it now.
+Right, you need something like your patch here.
 
 -- 
 viresh
