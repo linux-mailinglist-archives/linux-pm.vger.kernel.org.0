@@ -2,181 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 625992935DC
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 09:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4042935FA
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 09:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728228AbgJTHfJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Oct 2020 03:35:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57096 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727383AbgJTHfJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Oct 2020 03:35:09 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 38F7A22242;
-        Tue, 20 Oct 2020 07:35:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603179308;
-        bh=7c5tNsP80/p2MClrPz8smyz815OvdBDNUOhglxHODvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PZSegkpU99bRsYcoFQZmQHiAVZDempjfzTfMwRIwl4Zd/OyHWPrBQiyYydB2/KD2T
-         BzvwmjFvWMrWimgcuMuM+Mw953HpzZ3HVlRJGWF72uR/B0iTCeW5EbajwHxQh8y29+
-         ICPk6CLLt8B9IpOQm6Ni+oCaXkJq+M1oCNmR8hl0=
-Date:   Tue, 20 Oct 2020 09:35:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Joseph Jang <josephjang@google.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        jonglin@google.com, woodylin@google.com, markcheng@google.com
-Subject: Re: [PATCH] power: suspend: Add sleep timer and timeout handler
-Message-ID: <20201020073551.GD3803984@kroah.com>
-References: <20201020062226.1457732-1-josephjang@google.com>
+        id S1731637AbgJTHmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Oct 2020 03:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727226AbgJTHmo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 03:42:44 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA8FC0613CE
+        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 00:42:44 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id l18so594275pgg.0
+        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 00:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KP7TO4IqJs2R6VQkkfsXXAMpoJtd3P3We64dmLRZJCY=;
+        b=gYhhlBYuG5dxeeCxQ3KKWcxYK2CKCEO+HlA60wyby2cM7UwcBEcE44b7yo6tKoq1Kw
+         Z2vepaTJb+1YnmCsegFajb8NsSElZbO9K0DLJeuidKx96r7fZm3Ftz9xo5jWSZFiuqp+
+         zQiFjRAfk0xa7R/yiM26thD0wbp+lOy2qZAxyZaI9HDK4u/kunlcj64rXkuJmcCzyfq/
+         4a/aobS9oEPlY+TG6+v11hAu33RWwPKEJZ6jAau00pvVDkVsphuLbcqDz4SCdtpFmO2E
+         5UieukcmFpcwZ+JzLgpUD8N1JZzQB5eMLgtYCuXSmFT2llHxsA+2fTl7HPR6+Bn8Ee0F
+         fiag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KP7TO4IqJs2R6VQkkfsXXAMpoJtd3P3We64dmLRZJCY=;
+        b=lBGfilutqFtucMZAkLSDJqAVG6D7TjWpz/TwX+dws67RQXA34BRXt2leNFw/LdzVRq
+         l8WLFL66aQt9ODr1I2mx6mh0BzQklobvfyOIyc1jzVU0FzJdKuovltaC5OFQ8G4RsCQm
+         pvibGW9OQU42/JSf2CKqyTy/i8LXYknU5AFji6y0/j6677cK4q+UHulDoWJ5uzxe2kEB
+         8nFNc/kADhcIcXjMYXPfxS/oTUQmDMbBdcl79VrKi8MoBa90o9zIw4auFOwa7R1/zU8D
+         PhbJ/hVl4rytFGaT9/nKxzJl4EQGfNgJTspi4kwn3CvbKvrspz+44VB2yfyVsWHGFAdQ
+         sFFw==
+X-Gm-Message-State: AOAM531nJFe9NUPpC0yePfp94/75NGiOZs3/zqcYM/KbAyTeJ6cp8ivx
+        qiqaf/3YU/1HPBAo206C0g0GOA==
+X-Google-Smtp-Source: ABdhPJylUfKQEed6xGiGgP22ggEP0jO91vz907NqWzyJo1lCZax5hOvdSlNlX6AUWBeYqJE3a7niEA==
+X-Received: by 2002:aa7:96f8:0:b029:152:94c0:7e5 with SMTP id i24-20020aa796f80000b029015294c007e5mr1619215pfq.76.1603179764068;
+        Tue, 20 Oct 2020 00:42:44 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id z26sm1407060pfq.131.2020.10.20.00.42.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Oct 2020 00:42:43 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 13:12:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Defang Bo <bodefang@126.com>
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: ti-cpufreq: fix memory leak in
+ ti_cpufreq_probe()
+Message-ID: <20201020074240.p2d3fhirer4sflom@vireshk-i7>
+References: <1603113151-5219-1-git-send-email-bodefang@126.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201020062226.1457732-1-josephjang@google.com>
+In-Reply-To: <1603113151-5219-1-git-send-email-bodefang@126.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:22:26PM +0800, Joseph Jang wrote:
-> Add sleep timer and timeout handler to prevent device stuck during suspend/
-> resume process. The timeout handler will dump disk sleep task at first
-> round timeout and trigger kernel panic at second round timeout.
-> The default timer for each round is defined in
-> CONFIG_PM_SLEEP_TIMER_TIMEOUT.
-> 
-> Signed-off-by: Joseph Jang <josephjang@google.com>
+On 19-10-20, 21:12, Defang Bo wrote:
+> Similar to commit<05829d9431df>("cpufreq: ti-cpufreq: kfree opp_data when failure"), opp_data needs to be freed when failure, including fail_put_node.
+
+This is allocated using devm_kzalloc() and so we don't need to free it
+explicitly.
+
+> Signed-off-by: Defang Bo <bodefang@126.com>
 > ---
->  MAINTAINERS                   |  2 +
->  include/linux/console.h       |  1 +
->  include/linux/suspend_timer.h | 90 +++++++++++++++++++++++++++++++++++
-
-Why is this file in include/linux/ if you only ever call it from one .c
-file?
-
-> --- /dev/null
-> +++ b/include/linux/suspend_timer.h
-> @@ -0,0 +1,90 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_SLEEP_TIMER_H
-> +#define _LINUX_SLEEP_TIMER_H
-> +
-> +#include <linux/sched/debug.h>
-> +
-> +#ifdef CONFIG_PM_SLEEP_MONITOR
-> +struct sleep_timer {
-> +	struct task_struct	*tsk;
-> +	struct timer_list	timer;
-> +};
-> +
-> +#define DECLARE_SLEEP_TIMER(st) \
-> +	struct sleep_timer st
-> +
-> +/**
-> + * init_sleep_timer - Initialize sleep timer.
-> + * @st: Sleep timer to initialize.
-> + * @func: Sleep timer timeout handler.
-> + */
-> +static void init_sleep_timer(struct sleep_timer *st, void (*func))
-> +{
-> +	struct timer_list *timer = &st->timer;
-> +
-> +	timer_setup(timer, func, 0);
-> +}
-> +
-> +/**
-> + * start_sleep_timer - Enable sleep timer to monitor suspend thread.
-> + * @st: Sleep timer to enable.
-> + */
-> +static void start_sleep_timer(struct sleep_timer *st)
-> +{
-> +	struct timer_list *timer = &st->timer;
-> +
-> +	st->tsk = current;
-> +
-> +	/* use same timeout value for both suspend and resume */
-> +	timer->expires = jiffies + HZ * CONFIG_PM_SLEEP_TIMER_TIMEOUT;
-> +	add_timer(timer);
-> +}
-> +
-> +/**
-> + * stop_sleep_timer - Disable sleep timer.
-> + * @st: sleep timer to disable.
-> + */
-> +static void stop_sleep_timer(struct sleep_timer *st)
-> +{
-> +	struct timer_list *timer = &st->timer;
-> +
-> +	del_timer_sync(timer);
-> +}
-> +
-> +/**
-> + * sleep_timeout_handler - sleep timer timeout handler.
-> + * @t: The timer list that sleep timer depends on.
-> + *
-> + * Called when suspend thread has timeout suspending or resuming.
-> + * Dump all uninterruptible tasks' call stack and call panic() to
-> + * reboot system in second round timeout.
-> + */
-> +static void sleep_timeout_handler(struct timer_list *t)
-> +{
-> +	struct sleep_timer *st = from_timer(st, t, timer);
-> +	static int timeout_count;
-> +
-> +	pr_info("Sleep timeout (timer is %d seconds)\n",
-> +		(CONFIG_PM_SLEEP_TIMER_TIMEOUT));
-> +	show_stack(st->tsk, NULL, KERN_EMERG);
-> +	show_state_filter(TASK_UNINTERRUPTIBLE);
-> +
-> +	if (timeout_count < 1) {
-> +		timeout_count++;
-> +		start_sleep_timer(st);
-> +		return;
-> +	}
-> +
-> +	if (console_is_suspended())
-> +		resume_console();
-> +
-> +	panic("Sleep timeout and panic\n");
-> +}
-> +#else
-> +#define DECLARE_SLEEP_TIMER(st)
-> +#define init_sleep_timer(x, y)
-> +#define start_sleep_timer(x)
-> +#define stop_sleep_timer(x)
-> +#endif
-> +
-> +#endif /* _LINUX_SLEEP_TIMER_H */
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index a7320f07689d..9e2b274db0c1 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -207,6 +207,21 @@ config PM_SLEEP_DEBUG
->  	def_bool y
->  	depends on PM_DEBUG && PM_SLEEP
+>  drivers/cpufreq/ti-cpufreq.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+> index ab0de27..f23be8f 100644
+> --- a/drivers/cpufreq/ti-cpufreq.c
+> +++ b/drivers/cpufreq/ti-cpufreq.c
+> @@ -342,7 +342,8 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
+>  	opp_data->cpu_dev = get_cpu_device(0);
+>  	if (!opp_data->cpu_dev) {
+>  		pr_err("%s: Failed to get device for CPU0\n", __func__);
+> -		return -ENODEV;
+> +		ret = ENODEV;
+> +		goto free_opp_data;
+>  	}
 >  
-> +config PM_SLEEP_MONITOR
-> +	bool "Linux kernel suspend/resume process monitor"
-> +	depends on PM_SLEEP
-> +	help
-> +	This option will enable sleep timer to prevent device stuck
-> +	during suspend/resume process. Sleep timeout handler will dump
-> +	disk sleep task at first round timeout and trigger kernel panic
-> +	at second round timeout. The timer for each round is defined in
-> +	CONFIG_PM_SLEEP_TIMER_TIMEOUT.
+>  	opp_data->opp_node = dev_pm_opp_of_get_opp_desc_node(opp_data->cpu_dev);
+> @@ -404,7 +405,8 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
+>  
+>  fail_put_node:
+>  	of_node_put(opp_data->opp_node);
+> -
+> +free_opp_data:
+> +	kfree(opp_data)
 
-I thought we already had a watchdog for all of this, why not just always
-add this to that code, for that config option?
+Did you even try to compile this code ?
 
-And why isn't the watchdog sufficient for you?  Why are you "open
-coding" a watchdog timer logic here at all???
+>  	return ret;
+>  }
+>  
+> -- 
+> 1.9.1
 
-thanks,
-
-greg k-h
+-- 
+viresh
