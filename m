@@ -2,236 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 015BA29324D
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 02:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4042932BA
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 03:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389319AbgJTARW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 20:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727220AbgJTARW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 20:17:22 -0400
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C5AC0613CE
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 17:17:20 -0700 (PDT)
-Received: by mail-ua1-x942.google.com with SMTP id c1so73722uap.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 17:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mXGSyBwNaBjMrW2ERxIvilFJ1fWcA9bm1Ase8U4RnoM=;
-        b=BIplX+9oOilzheiFYjLxzo3YjWEXmrI1MjMABQjE7ctb6s08QF6kZjgen0t9fbJWIq
-         tv4E6cikhwb0C1hDeBHbJC/GGHoTnx7TM9dixTQk/JORHRWWpvDjhtVyp+RSrnXL0yJd
-         d3TrcsXmGMqp/Eh0b23VbcNRzpCpqUgsL0u4o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mXGSyBwNaBjMrW2ERxIvilFJ1fWcA9bm1Ase8U4RnoM=;
-        b=cApTbcC0i8l2zokTbDDoHZ4ZdkvC8uQKEgGqrk8hRo3tAZIjtzFKzO65omQy4ol1aU
-         KTYUfMtxDGn4D5nTT6RCTqwyihd7C4gzpqCuE3cmgRX9mlNkEsXVCV1JRmxlnOIOFa7j
-         J7xZMwlBCE1/vNbQlAWy6zwADI2O32qKNN1GCc4yVoVkoxIG8WlNNP3h1uUAfv0yRxtG
-         bvM2CCwHP64pA/fzVqQ7XlLWP6yvUyljiryJPTnFrpuscS8mx+ncnnHuUAcLl2GRuPqd
-         CCFNODyPu4SNEabzrmUuf1LZ2BYMwFdeXDqJdvkgA5vx+EZzxUJx+RHhvfwjdGtawSiA
-         pscA==
-X-Gm-Message-State: AOAM532nW6tjZEy6R4zNrw/QFzt9ruiExTbBEi0Feo5wMs/aeb+0zdRN
-        s6MounNRA+vESootbOqwGifCbAg01cNTsw==
-X-Google-Smtp-Source: ABdhPJy8P8IQocdQOkM3TXlF0KC1IZmaBlYXoV314lZpkLr0nlICQ13VkhMfQ+eEkBnffUDBPzmXDw==
-X-Received: by 2002:ab0:335a:: with SMTP id h26mr70697uap.62.1603153039828;
-        Mon, 19 Oct 2020 17:17:19 -0700 (PDT)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id a22sm3234vsh.13.2020.10.19.17.17.18
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2020 17:17:19 -0700 (PDT)
-Received: by mail-vs1-f41.google.com with SMTP id f8so78906vsl.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 17:17:18 -0700 (PDT)
-X-Received: by 2002:a67:b405:: with SMTP id x5mr143939vsl.4.1603153038232;
- Mon, 19 Oct 2020 17:17:18 -0700 (PDT)
+        id S2390083AbgJTBke (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 21:40:34 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:12786 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390078AbgJTBke (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 21:40:34 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201020014032epoutp01d431e557c8c47ab5a843622ed6852467~-j7x6TAs50990309903epoutp01g
+        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 01:40:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201020014032epoutp01d431e557c8c47ab5a843622ed6852467~-j7x6TAs50990309903epoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1603158032;
+        bh=Lp9BxQtLA61gpoNNU8F/S/p3RAvMH1U9ct/wG2U7yQQ=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=uYpFwa9/rG6pmhw0fzS/RKz38pbdxGp7EKu0IYT8+rTiF9447QM1LLKsrY9fVsnqj
+         Z/SfERTz8u7zWQ5rfbeDTCohcEcqDrR8lez5p8tw8JmoMbTwf5ynOC/WdeCawVig+a
+         F4pV9YHFx5rGAfQyD9Vco/QMJxIDqLwPsv4M/TwY=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20201020014031epcas1p329e6260e7b77e435b8261e7e7db0c764~-j7xKh8nt1746017460epcas1p36;
+        Tue, 20 Oct 2020 01:40:31 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.155]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4CFbt46y2szMqYkf; Tue, 20 Oct
+        2020 01:40:28 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2C.A6.09543.C004E8F5; Tue, 20 Oct 2020 10:40:28 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20201020014028epcas1p30b4a11de9b3a598b0c4622665a38c9cc~-j7uYDDob1746017460epcas1p3z;
+        Tue, 20 Oct 2020 01:40:28 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201020014028epsmtrp14fe8d55285fdc2d68814696ec3510f81~-j7uXF2-52839628396epsmtrp1D;
+        Tue, 20 Oct 2020 01:40:28 +0000 (GMT)
+X-AuditID: b6c32a35-347ff70000002547-ad-5f8e400cbc46
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        16.3E.08604.C004E8F5; Tue, 20 Oct 2020 10:40:28 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201020014027epsmtip1f076a002ef970953421ddfe7c56a277e~-j7uB8C550193201932epsmtip1j;
+        Tue, 20 Oct 2020 01:40:27 +0000 (GMT)
+Subject: Re: [PATCH v3 1/2] PM / devfreq: Add governor feature flag
+To:     Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Cc:     leonard.crestez@nxp.com, lukasz.luba@arm.com,
+        enric.balletbo@collabora.com, hl@rock-chips.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, abel.vesa@nxp.com,
+        k.konieczny@samsung.com, b.zolnierkie@samsung.com,
+        chanwoo@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <81b05e8b-48c6-2ed4-ed2e-4516b8824369@samsung.com>
+Date:   Tue, 20 Oct 2020 10:53:52 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-References: <20201019140601.3047-1-lukasz.luba@arm.com> <20201019140601.3047-2-lukasz.luba@arm.com>
-In-Reply-To: <20201019140601.3047-2-lukasz.luba@arm.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 19 Oct 2020 17:17:06 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Up1Qssb=Q2UfXTKmd1oLGrEpTCH50ejgFSPnRQP1d-iQ@mail.gmail.com>
-Message-ID: <CAD=FV=Up1Qssb=Q2UfXTKmd1oLGrEpTCH50ejgFSPnRQP1d-iQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] PM / EM: Add a flag indicating units of power
- values in Energy Model
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
-        morten.rasmussen@arm.com, Quentin Perret <qperret@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <0d3d20f1-6a23-27c2-1a9d-1c7ac60ce1e7@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf0wbZRjH8/au13ZaPQpsL1UcPYIJID9upewwg83BtjOQSGSYhWSrJxwt
+        A9quV+ZQ5xCQURgw1CjWUahjDimTrTIsLIYMMK5kGH5MBQkEBgmFKRMGDubPHmWR/77P83ye
+        93m/7w8xIvsZk4tzdCbWqGPyCGwb2tEbGhHx5L5qdXRfUQz1xfB3gLpW1yakakfvoJR9aQZQ
+        reM9gFq72o9QpZbPUapxuU5IDRT/KqKaJ5aE1EjXBYx6UNUHKPOKBaNsxaUiavy9Zoxa77Ki
+        +3C61doKaOdEE6A7LRMi2tFixuiqkkWMvrboFNB/W7pRurq9BdAPHM+lSjJy92hZJos1BrG6
+        TH1Wjk4TTySnqRPVqthoMoKMo3YTQTomn40nklJSIw7m5Hl8EEEnmbwCTyqV4TgiKmGPUV9g
+        YoO0es4UT7CGrDxDnCGSY/K5Ap0mMlOf/yIZHb1L5QFfz9VevwgNQ8ipb3pq0SLgFlQAiRji
+        MdBitQkrwDaxDHcCeKvTDbzBMoDmCxUblAz/A0B7r+lxh+2rr0Ve6FsAKwf5pfjgPoB3eycx
+        nvLFE+G5s49EvPbDT8O+oSmMhxC8WQBb2wZQvoDhYbDbPbrR8DSugD+uzQBeS/EE+NFls4cR
+        i1E8BLY2nOLT/vhr0NVRuon4QNensxuIBI+H0yWZfBrBd8BfZhsEXr0Tllz/DOHHQnxFDO80
+        3d/0nARv3VgDXu0LF75vF3m1HM7XlG3qt+GXrj7M21wOYHv3oNBbUMLuSx8K+MEIHgrbuqK8
+        aQXs/LMeeAc/BRdXzwl5BOJSWF4m8yLBcGRqYnMLAfDiWTN2HhCWLW4sWyxYtliw/D+sEaAt
+        YDtr4PI1LEcayK137QAbLzxM5QS1v/0e2QMEYtADoBgh/KTnhdVqmTSLKXyLNerVxoI8lusB
+        Ks/x1iJy/0y954voTGpStUupVFIxZKyKJIkd0r/Cy9UyXMOY2FyWNbDGx30CsUReJHDuT3+0
+        3DTWoHiovBuS7Bc1dHru8DuN66EmW3Z4kPKTq2n0Xvdydkxg6dHdSZXsB+M1hv6OaddD++Wb
+        fQvkG7YzZxKOH2o/4pqME5SkvFKezBUcLVt6Jt3nJURjDrQevDfnHrAFZt1+dyDqTd/YKseB
+        G2OylpAV5Bhtn6++8uqliNVpv0PZYPTK8+T+wJ0nZvYWzk9kzJyssRUycsbP9UNA8cvDY5PN
+        ZgU+XnbkxOzh4GdzggMWmrerR7Qa9+0M6RO1Kath6cfw3Hr/9f5Rn0HrlNZfgX6crPx3+ICz
+        MyqjO/EFf93x4bpQBmsPGfzJdM8pSeNuovX/cD5ux1xl+Pt2AuW0DBmGGDnmP29Op2NqBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAIsWRmVeSWpSXmKPExsWy7bCSnC6PQ1+8wbatbBbLLh1ltNg4Yz2r
+        xcQbV1gsVn98zGix5vYhRosfG04xW7TMWsRiseDTDFaLs01v2C1W3P3IanF51xw2i8+9Rxgt
+        Or/MYrNY2NTCbnG7cQWbxc9d81gcBDzWzFvD6LHj7hJGj52z7rJ7bFrVyebR2/yOzWPjux1M
+        Hn9n7Wfx6NuyitHj8ya5AM4oLpuU1JzMstQifbsEroytiyUKLjJXbD80kaWB8QVTFyMnh4SA
+        icTCdZvZQWwhgd2MEv83MkLEJSWmXTzK3MXIAWQLSxw+XNzFyAVU8pZR4tW3FhaQGmEBZ4me
+        9l9gvSICtRKvVk9nBbGZBVYwSSz8LATRcItJ4k7HbDaQBJuAlsT+FzfAbH4BRYmrPx6DLeMV
+        sJOYsryTBWQZi4CqxJr5FSBhUYEwiZ1LHjNBlAhKnJz5BKyEU8BW4mFzMsQqdYk/8y4xQ9ji
+        EreezGeCsOUlmrfOZp7AKDwLSfcsJC2zkLTMQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5x
+        aV66XnJ+7iZGcCRrae5g3L7qg94hRiYOxkOMEhzMSiK8E1j74oV4UxIrq1KL8uOLSnNSiw8x
+        SnOwKInz3ihcGCckkJ5YkpqdmlqQWgSTZeLglGpg2rIm0a5kg/UKFXeBlqM1pp2BknLT1/n6
+        XF7I26kYt2N6X5DMheLgGZ+nsO9hXspzm9HHnGWi6565h9hE7+UU5Ro1Jal9NP7C0FKtJnsr
+        ICa17e/Wf79P3bp/LFe7+srn3WtVQ1YEmGzJ2nGvXTlm2ZvHmvMsG/W7u8yzLpUumVR/Imzf
+        synijkwfFKb9V5PiuMFaE2h/xu3xs84nn6Z0qDVkLJc6oDXP4YbAI8mQqLWV5z6YVVYJyUxP
+        OCP1dObOruxz2f0uz3bU+IXb9jyPmGXRrnzo+IyNm1qsrQK3xx50mdsj+XXS4efnLMTWK/ps
+        1OGRzn6ulsqXpl78uCH0t13uzxahGye2rXx2q/+sEktxRqKhFnNRcSIAz8YKlFMDAAA=
+X-CMS-MailID: 20201020014028epcas1p30b4a11de9b3a598b0c4622665a38c9cc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20201007045340epcas1p4e63955385b1841f44e7a07e2d5d962c4
+References: <20201007050703.20759-1-cw00.choi@samsung.com>
+        <CGME20201007045340epcas1p4e63955385b1841f44e7a07e2d5d962c4@epcas1p4.samsung.com>
+        <20201007050703.20759-2-cw00.choi@samsung.com>
+        <83b952ab-a25e-8984-8804-1dd990eec835@gmail.com>
+        <9267f046-1adc-b43d-51ef-2e0ad41dc322@samsung.com>
+        <0d3d20f1-6a23-27c2-1a9d-1c7ac60ce1e7@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 10/20/20 7:39 AM, Dmitry Osipenko wrote:
+> 19.10.2020 06:53, Chanwoo Choi пишет:
+> ...
+>>>> +	const u64 flag;
+>>> A plural form of flag(s) is more common, IMO.
+>>
+>> When need to add more feature flag, I prefer to add
+>> the definition instead of changing the structure.
+>> I think it is better.
+> 
+> I meant to rename the new member "flag" to "flags".
 
-On Mon, Oct 19, 2020 at 7:06 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> There are different platforms and devices which might use different scale
-> for the power values. Kernel sub-systems might need to check if all
-> Energy Model (EM) devices are using the same scale. Address that issue and
-> store the information inside EM for each device. Thanks to that they can
-> be easily compared and proper action triggered.
->
-> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  drivers/cpufreq/scmi-cpufreq.c |  3 ++-
->  drivers/opp/of.c               |  2 +-
->  include/linux/energy_model.h   |  9 +++++++--
->  kernel/power/energy_model.c    | 24 +++++++++++++++++++++++-
->  4 files changed, 33 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index e855e8612a67..3714a4cd07fa 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -188,7 +188,8 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->         policy->fast_switch_possible =
->                 handle->perf_ops->fast_switch_possible(handle, cpu_dev);
->
-> -       em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, policy->cpus);
-> +       em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, policy->cpus,
-> +                                   false);
->
->         return 0;
->
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 874b58756220..9e1307061de5 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -1333,7 +1333,7 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
->                 goto failed;
->         }
->
-> -       ret = em_dev_register_perf_domain(dev, nr_opp, &em_cb, cpus);
-> +       ret = em_dev_register_perf_domain(dev, nr_opp, &em_cb, cpus, true);
->         if (ret)
->                 goto failed;
->
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index b67a51c574b9..2c31d79bb922 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -29,6 +29,8 @@ struct em_perf_state {
->   * em_perf_domain - Performance domain
->   * @table:             List of performance states, in ascending order
->   * @nr_perf_states:    Number of performance states
-> + * @milliwatts:                Flag indicating the power values are in milli-Watts
-> + *                     or some other scale.
->   * @cpus:              Cpumask covering the CPUs of the domain. It's here
->   *                     for performance reasons to avoid potential cache
->   *                     misses during energy calculations in the scheduler
-> @@ -43,6 +45,7 @@ struct em_perf_state {
->  struct em_perf_domain {
->         struct em_perf_state *table;
->         int nr_perf_states;
-> +       bool milliwatts;
->         unsigned long cpus[];
->  };
->
-> @@ -79,7 +82,8 @@ struct em_data_callback {
->  struct em_perf_domain *em_cpu_get(int cpu);
->  struct em_perf_domain *em_pd_get(struct device *dev);
->  int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
-> -                               struct em_data_callback *cb, cpumask_t *span);
-> +                               struct em_data_callback *cb, cpumask_t *spani,
-> +                               bool milliwatts);
->  void em_dev_unregister_perf_domain(struct device *dev);
->
->  /**
-> @@ -186,7 +190,8 @@ struct em_data_callback {};
->
->  static inline
->  int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
-> -                               struct em_data_callback *cb, cpumask_t *span)
-> +                               struct em_data_callback *cb, cpumask_t *span,
-> +                               bool milliwatts)
->  {
->         return -EINVAL;
->  }
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index c1ff7fa030ab..efe2a595988e 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -52,6 +52,17 @@ static int em_debug_cpus_show(struct seq_file *s, void *unused)
->  }
->  DEFINE_SHOW_ATTRIBUTE(em_debug_cpus);
->
-> +static int em_debug_units_show(struct seq_file *s, void *unused)
-> +{
-> +       struct em_perf_domain *pd = s->private;
-> +       char *units = pd->milliwatts ? "milliWatts" : "bogoWatts";
-> +
-> +       seq_printf(s, "%s\n", units);
-> +
-> +       return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(em_debug_units);
-> +
->  static void em_debug_create_pd(struct device *dev)
->  {
->         struct dentry *d;
-> @@ -64,6 +75,8 @@ static void em_debug_create_pd(struct device *dev)
->                 debugfs_create_file("cpus", 0444, d, dev->em_pd->cpus,
->                                     &em_debug_cpus_fops);
->
-> +       debugfs_create_file("units", 0444, d, dev->em_pd, &em_debug_units_fops);
-> +
->         /* Create a sub-directory for each performance state */
->         for (i = 0; i < dev->em_pd->nr_perf_states; i++)
->                 em_debug_create_ps(&dev->em_pd->table[i], d);
-> @@ -250,17 +263,24 @@ EXPORT_SYMBOL_GPL(em_cpu_get);
->   * @cpus       : Pointer to cpumask_t, which in case of a CPU device is
->   *             obligatory. It can be taken from i.e. 'policy->cpus'. For other
->   *             type of devices this should be set to NULL.
-> + * @milliwatts : Flag indicating that the power values are in milliWatts or
-> + *             in some other scale. It must be set properly.
->   *
->   * Create Energy Model tables for a performance domain using the callbacks
->   * defined in cb.
->   *
-> + * The @milliwatts is important to set with correct value. Some kernel
-> + * sub-systems might rely on this flag and check if all devices in the EM are
-> + * using the same scale.
-> + *
->   * If multiple clients register the same performance domain, all but the first
->   * registration will be ignored.
-
-Should the bullet point above be changed?
-
-I haven't dug through all the code so I may be being naive, but it
-seems like if someone registers with "milliWatts" set to true then it
-should ignore the old values where milliWatts were false?  Otherwise,
-I think, if SCMI registers some numbers first does that mean we can't
-later register updated numbers in the device tree?  Also, what happens
-when some devices register with milliWatts, some with bogoWatts, and
-some with both?  How do we decide what we should be using and what we
-should be throwing away?
-
-As per my response in the cover letter, I guess one option would be to
-try to figure out a bogoWatts to milliWatts conversion factor the
-first time someone tried to register once one way and once the other
-way?
+I misunderstood. I'll edit it.
 
 
--Doug
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
