@@ -2,210 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C14FE29341F
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 06:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249FD293432
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 07:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391413AbgJTEhp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Oct 2020 00:37:45 -0400
-Received: from mga05.intel.com ([192.55.52.43]:58541 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391382AbgJTEhp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Oct 2020 00:37:45 -0400
-IronPort-SDR: 1OHzR+hxhWqcbnTuWNk97SruEqnc6imwW3iiEzc0jceCbYBhqbqqS3yoybXz4357x51LMoaI88
- eYhNF3VrjepQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="251847590"
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="251847590"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 21:37:45 -0700
-IronPort-SDR: PzaCLT5bntA2untvrWoxXnzT3TWDtmDEGRu6xWXwlMw12o+B1Z/nWvtPF5Jopsh5NO9zRS+xho
- IPGQBHA1Quew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="359050909"
-Received: from lkp-server01.sh.intel.com (HELO 88424da292e0) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Oct 2020 21:37:43 -0700
-Received: from kbuild by 88424da292e0 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kUjP4-0000OS-Op; Tue, 20 Oct 2020 04:37:42 +0000
-Date:   Tue, 20 Oct 2020 12:37:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD REGRESSION
- 2a58871c00f77abfc45935812e7e62a9d8a59a40
-Message-ID: <5f8e696e.7otAekyi64MWacHT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2391375AbgJTFGF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Oct 2020 01:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391360AbgJTFGF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 01:06:05 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF906C0613D3
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 22:06:03 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id x13so357706pgp.7
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 22:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=BzDvCT5g2ND13ShvMBrA2tEQLZj9RI4ctTQKR5Kpfuc=;
+        b=uPEeeX/DkYsg9UWKSh0+FRdUxTreGbPlkgnEhDxaInY8nddcQU3qyV1wfRBNMpqWjN
+         9rF5Q56o1pwGUjrzDvlAirLfrFoFOxzxO0jlWQjkX1RkxArCXT7DQ4utHJCGrbmskRpn
+         A347sF/7AzVP8ltjvo2yc7ixP+LpN7wbq5cLyPz3xPj8cH2Fsuj8CHz/tsZ7yj7v0t9o
+         YqP/+7SxWRHjDG8fiQE7hgucXSQmUa9aD3DTe4g3iL2ZDwaWWURVdsLYhBJyZwIyyHbX
+         XqAvtI5wfYvuzsmdXehkIxSqMqI00c5Ci+RcMIuC1iSr7y++pZhcip11evlQ1nC0XX4+
+         qZGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BzDvCT5g2ND13ShvMBrA2tEQLZj9RI4ctTQKR5Kpfuc=;
+        b=Z8opJaa4lVQn641oYdwEjw7E5HtPpH4E3jtM9K98c/GKnfAyUXHx7sYq+7/P93Ia8d
+         VraxRxMf9lr+jbcJfME1AvSGMp41t2HXy0DRZ5xJ1hHdjcfupV4WlmQKMLTjhBxQQBen
+         1h3+8q65TwCBiBoRmZgUJAMcU796AA/dBZJ4AjSKUhVBJWtLfw834M859oG3BAiGR9Tt
+         ZklTNFoiS+oCWIOFX9GTq+0IMOkB76v4PpcxELS0vPduGczcZ+2wmX6IddkBI0OWxpJ5
+         EBi99Z71+KlxONPLRCeVoUjZlQpzSVSlLrraTntvY/0vyVX0kMxS104PIwOcTUhkzbID
+         bnpA==
+X-Gm-Message-State: AOAM533o6HVL5P1+LpkCPTI3YVhJ5i8xVwPGS9JBmXMoT2LDFegvQCbZ
+        ZNdzeF+iuPUV9kKh/k3G2jDKkg==
+X-Google-Smtp-Source: ABdhPJyntUjcVPO+MPmgw2P4aUUdPM5qJP0EIygPQXWlro3nbJAxdzYw/V2F3UVp/3OBcrgNnw2YHw==
+X-Received: by 2002:a63:4c55:: with SMTP id m21mr1226500pgl.305.1603170363147;
+        Mon, 19 Oct 2020 22:06:03 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id a4sm496798pgl.51.2020.10.19.22.06.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Oct 2020 22:06:02 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 10:35:57 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     ulf.hansson@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>, nks@flawful.org,
+        georgi.djakov@linaro.org, Stephan Gerhold <stephan@gerhold.net>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
+ -EPROBE_DEFER
+Message-ID: <20201020050557.a3b2nk33eeyxnvl2@vireshk-i7>
+References: <20201015180555.gacdzkofpibkdn2e@bogus>
+ <20201016042434.org6ibdqsqbzcdww@vireshk-i7>
+ <20201016060021.sotk72u4hioctg7o@bogus>
+ <20201016111222.lvakbmjhlrocpogt@bogus>
+ <20201019045827.kl6qnx6gidhzjkrs@vireshk-i7>
+ <20201019091723.GA12087@bogus>
+ <20201019092411.b3znjxebay3puq2j@vireshk-i7>
+ <20201019101241.GB12908@bogus>
+ <20201019103535.ksp5ackoihamam4g@vireshk-i7>
+ <20201019141007.GA6358@bogus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20201019141007.GA6358@bogus>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 2a58871c00f77abfc45935812e7e62a9d8a59a40  Merge branch 'powercap' into bleeding-edge
+On 19-10-20, 15:10, Sudeep Holla wrote:
+> On Mon, Oct 19, 2020 at 04:05:35PM +0530, Viresh Kumar wrote:
+> > On 19-10-20, 11:12, Sudeep Holla wrote:
+> > > Yes it has clocks property but used by SCMI(for CPUFreq/DevFreq) and not
+> > > by any clock provider driver. E.g. the issue you will see if "clocks"
+> > > property is used instead of "qcom,freq-domain" on Qcom parts.
+> > 
+> > Okay, I understand. But what I still don't understand is why it fails
+> > for you. You have a clocks property in DT for the CPU, the OPP core
+> > tries to get it and will get deferred-probed, which will try probing
+> > at a later point of time and it shall work then. Isn't it ?
+> >
+> 
+> Nope unfortunately. We don't have clock provider, so clk_get will
+> never succeed and always return -EPROBE_DEFER.
 
-Error/Warning reports:
+Now this is really bad, you have a fake clocks property, how is the
+OPP core supposed to know it ? Damn.
 
-https://lore.kernel.org/linux-acpi/202010200230.0MxnAfAW-lkp@intel.com
-
-Error/Warning in current branch:
-
-drivers/base/power/domain.c:419:8: error: implicit declaration of function '__raw_notifier_call_chain'; did you mean 'raw_notifier_call_chain'? [-Werror=implicit-function-declaration]
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm-allmodconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- arm-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- arm-defconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- arm64-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- arm64-defconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- i386-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- i386-randconfig-s001-20201019
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- ia64-allmodconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- ia64-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- mips-allmodconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- mips-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- nds32-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- powerpc-allmodconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- powerpc-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- riscv-allmodconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- riscv-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- sh-allmodconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- sparc-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- x86_64-allyesconfig
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-|-- x86_64-randconfig-a003-20201019
-|   `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-`-- xtensa-allyesconfig
-    `-- drivers-base-power-domain.c:error:implicit-declaration-of-function-__raw_notifier_call_chain
-
-elapsed time: 720m
-
-configs tested: 94
-configs skipped: 2
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arc                     haps_hs_smp_defconfig
-mips                      malta_kvm_defconfig
-powerpc                  storcenter_defconfig
-sh                     sh7710voipgw_defconfig
-arm                            zeus_defconfig
-arm                        spear6xx_defconfig
-xtensa                  audio_kc705_defconfig
-arm                          tango4_defconfig
-mips                        nlm_xlr_defconfig
-powerpc                      makalu_defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                        workpad_defconfig
-mips                     loongson1b_defconfig
-sh                            migor_defconfig
-mips                         tb0219_defconfig
-sh                          urquell_defconfig
-nios2                         10m50_defconfig
-sparc64                             defconfig
-arm                           omap1_defconfig
-mips                    maltaup_xpa_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20201019
-i386                 randconfig-a005-20201019
-i386                 randconfig-a001-20201019
-i386                 randconfig-a003-20201019
-i386                 randconfig-a004-20201019
-i386                 randconfig-a002-20201019
-i386                 randconfig-a015-20201019
-i386                 randconfig-a013-20201019
-i386                 randconfig-a016-20201019
-i386                 randconfig-a012-20201019
-i386                 randconfig-a011-20201019
-i386                 randconfig-a014-20201019
-x86_64               randconfig-a004-20201019
-x86_64               randconfig-a002-20201019
-x86_64               randconfig-a006-20201019
-x86_64               randconfig-a003-20201019
-x86_64               randconfig-a005-20201019
-x86_64               randconfig-a001-20201019
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a016-20201019
-x86_64               randconfig-a015-20201019
-x86_64               randconfig-a012-20201019
-x86_64               randconfig-a013-20201019
-x86_64               randconfig-a011-20201019
-x86_64               randconfig-a014-20201019
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+viresh
