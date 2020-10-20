@@ -2,130 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7502941A9
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 19:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8DF2941B2
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 19:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391772AbgJTRoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Oct 2020 13:44:19 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34493 "EHLO
+        id S2391938AbgJTRra (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Oct 2020 13:47:30 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:33652 "EHLO
         mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391771AbgJTRoS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 13:44:18 -0400
-Received: by mail-oi1-f194.google.com with SMTP id n3so3034006oie.1
-        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 10:44:18 -0700 (PDT)
+        with ESMTP id S2391926AbgJTRra (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 13:47:30 -0400
+Received: by mail-oi1-f194.google.com with SMTP id s21so3049099oij.0;
+        Tue, 20 Oct 2020 10:47:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zwM+oHGYyaKFQxvWDCBNLQLma9Ytjb9tBcj+VURgZT4=;
-        b=ln7BNJxctUUB9wvxpEiNUIg+IMPpT3T5pT9y5IP1P5hmLShUBa7M/26EnK7/9Bu+M8
-         FmF6Wn1KTw12eFiaIa15jpT6Tk/tNhFiMdaKCwPZAiFNlrji2zQJSQKUKTbxYsFtdomj
-         JgeEC25YRVjZCD+v+EjxcewirKBphDNk2h7MqFWwoJ0A4cBOzFVTisGO/r5HYGxk1nvt
-         Y3zANntdESU5iMoQdXQJcQVB1ztOwRhbQt574nopRpAK36WhfhcbxV00y3rwjGdcFuLe
-         dFm0UB+I7HTMYqmpSPZVZxV9FTAZUTH5vQEdGv5Z3fYJaMDpDRvER3sns1ACxSAV9Dui
-         Xdgw==
-X-Gm-Message-State: AOAM532aMvQcazEtlr3x7H+FipMhGZACM7tNTFSAy/fcfwTT4XirP9wM
-        kAmuxXHjDYmhOLeDa12yBM6evB0jMpnttTHTVvg=
-X-Google-Smtp-Source: ABdhPJzzJ7OB7OmNdHBeLythO4I9lErxMY5zcpN8R+7J7znDBWEjMiaekpLuAcVDkqph0r8/YWeGGWIaOGa5Uw17e+Q=
-X-Received: by 2002:aca:fd52:: with SMTP id b79mr2606887oii.69.1603215857804;
- Tue, 20 Oct 2020 10:44:17 -0700 (PDT)
+        bh=A0uibEfz+ciy8ofxK6YZ+EAdpctLhGnvS3VskKto7xY=;
+        b=KtTYdHSktybr/ufJQaVQgLBmQb4WW0eCcpf1XR5SGfRlpjbproSdxca1bhnmNDLT4I
+         DrW3ZPXzdrw4bkCPxBa+odT0e55K0L/AhRPpcmg3AjrVLLHkV8PQ8z/Urv7jHeE8VoiU
+         kC+6Mo/ZCiHgSffPGdw4MUO+bQ/b4wmXhYOcRdoCHHkmw/HeezBxNacBkSGDtE6z8aA/
+         RqlYtj84S8FEr/BNYqsnt0BN9sd8f0MxuvZ65ecEzyuIQO0yWhYvOOQJflSZDa3GIN9k
+         Cn6g50AASFQQtlBUFcFEF4CHG35VXTLfWn3Njp8i7OChLSR4X6DtFXXC930W8YjLvZUl
+         czPQ==
+X-Gm-Message-State: AOAM530kPMR4761tk/1xqQKvz98alPFIKhVrNsEizafTB9vkFiJLMIFZ
+        WbJX7mjDnlwMOK6x2q4f6ek7V3iNPN9iQvGxFdM=
+X-Google-Smtp-Source: ABdhPJw9lF7hmug0zt5tWMRwOEX4oLuIdlBiODwkuCna7zAa6GyAijNwB1Copu+Sj701FKCpaQYEhGAJWblXosY0+ew=
+X-Received: by 2002:aca:5256:: with SMTP id g83mr2703332oib.71.1603216048705;
+ Tue, 20 Oct 2020 10:47:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201020081035.563849-1-ulf.hansson@linaro.org>
-In-Reply-To: <20201020081035.563849-1-ulf.hansson@linaro.org>
+References: <20201020150027.27392-1-huobean@gmail.com>
+In-Reply-To: <20201020150027.27392-1-huobean@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 20 Oct 2020 19:44:06 +0200
-Message-ID: <CAJZ5v0hep9-wUqGdzXqOR9ELqkkTvUaSyjRq0BVGbUVx8d09Rg@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Fix build error for genpd notifiers
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+Date:   Tue, 20 Oct 2020 19:47:17 +0200
+Message-ID: <CAJZ5v0i=R_TqENKJmBEHDpmGAAcg-++8mbBEOYXZwf2cRvvqag@mail.gmail.com>
+Subject: Re: [PATCH] PM: Fix typo in pm_runtime_set_active() helper comment
+To:     Bean Huo <huobean@gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        kernel test robot <lkp@intel.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bean Huo <beanhuo@micron.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 10:10 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Tue, Oct 20, 2020 at 5:00 PM Bean Huo <huobean@gmail.com> wrote:
 >
-> The __raw_notifier_call_chain() was recently removed and replaced with
-> raw_notifier_call_chain_robust(). Recent changes to genpd didn't take that
-> into account, which causes a build error. Let's fix this by converting to
-> the raw_notifier_call_chain_robust() in genpd.
+> From: Bean Huo <beanhuo@micron.com>
 >
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Lina Iyer <ilina@codeaurora.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> This patch is to fix typo in the comment of helper pm_runtime_set_active().
+>
+> Signed-off-by: Bean Huo <beanhuo@micron.com>
 > ---
+>  include/linux/pm_runtime.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Rafael, feel free to to squash this into the patch "PM: domains: Add support
-> for PM domain on/off notifiers for genpd".
-
-Applied separately, thanks!
-
-> ---
->  drivers/base/power/domain.c | 25 +++++++++++--------------
->  1 file changed, 11 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 859cdb207010..743268996336 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -413,15 +413,15 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->         unsigned int state_idx = genpd->state_idx;
->         ktime_t time_start;
->         s64 elapsed_ns;
-> -       int ret, nr_calls = 0;
-> +       int ret;
->
->         /* Notify consumers that we are about to power on. */
-> -       ret = __raw_notifier_call_chain(&genpd->power_notifiers,
-> -                                       GENPD_NOTIFY_PRE_ON, NULL, -1,
-> -                                       &nr_calls);
-> +       ret = raw_notifier_call_chain_robust(&genpd->power_notifiers,
-> +                                            GENPD_NOTIFY_PRE_ON,
-> +                                            GENPD_NOTIFY_OFF, NULL);
->         ret = notifier_to_errno(ret);
->         if (ret)
-> -               goto err;
-> +               return ret;
->
->         if (!genpd->power_on)
->                 goto out;
-> @@ -462,15 +462,15 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
->         unsigned int state_idx = genpd->state_idx;
->         ktime_t time_start;
->         s64 elapsed_ns;
-> -       int ret, nr_calls = 0;
-> +       int ret;
->
->         /* Notify consumers that we are about to power off. */
-> -       ret = __raw_notifier_call_chain(&genpd->power_notifiers,
-> -                                       GENPD_NOTIFY_PRE_OFF, NULL, -1,
-> -                                       &nr_calls);
-> +       ret = raw_notifier_call_chain_robust(&genpd->power_notifiers,
-> +                                            GENPD_NOTIFY_PRE_OFF,
-> +                                            GENPD_NOTIFY_ON, NULL);
->         ret = notifier_to_errno(ret);
->         if (ret)
-> -               goto busy;
-> +               return ret;
->
->         if (!genpd->power_off)
->                 goto out;
-> @@ -502,10 +502,7 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
->                                 NULL);
->         return 0;
->  busy:
-> -       if (nr_calls)
-> -               __raw_notifier_call_chain(&genpd->power_notifiers,
-> -                                         GENPD_NOTIFY_ON, NULL, nr_calls - 1,
-> -                                         NULL);
-> +       raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
->         return ret;
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 6245caa18034..18b02dcc168e 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -479,7 +479,7 @@ static inline int pm_runtime_set_active(struct device *dev)
 >  }
 >
+>  /**
+> - * pm_runtime_set_suspended - Set runtime PM status to "active".
+> + * pm_runtime_set_suspended - Set runtime PM status to "suspended".
+>   * @dev: Target device.
+>   *
+>   * Set the runtime PM status of @dev to %RPM_SUSPENDED and ensure that
 > --
-> 2.25.1
->
+
+Applied as 5.10-rc material with edited subject, thanks!
