@@ -2,106 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 249FD293432
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 07:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06311293444
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 07:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391375AbgJTFGF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Oct 2020 01:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
+        id S2391621AbgJTF24 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Oct 2020 01:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391360AbgJTFGF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 01:06:05 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF906C0613D3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 22:06:03 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id x13so357706pgp.7
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 22:06:03 -0700 (PDT)
+        with ESMTP id S2391618AbgJTF24 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 01:28:56 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D38C0613CE
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 22:28:55 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id 1so417418ple.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 22:28:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=BzDvCT5g2ND13ShvMBrA2tEQLZj9RI4ctTQKR5Kpfuc=;
-        b=uPEeeX/DkYsg9UWKSh0+FRdUxTreGbPlkgnEhDxaInY8nddcQU3qyV1wfRBNMpqWjN
-         9rF5Q56o1pwGUjrzDvlAirLfrFoFOxzxO0jlWQjkX1RkxArCXT7DQ4utHJCGrbmskRpn
-         A347sF/7AzVP8ltjvo2yc7ixP+LpN7wbq5cLyPz3xPj8cH2Fsuj8CHz/tsZ7yj7v0t9o
-         YqP/+7SxWRHjDG8fiQE7hgucXSQmUa9aD3DTe4g3iL2ZDwaWWURVdsLYhBJyZwIyyHbX
-         XqAvtI5wfYvuzsmdXehkIxSqMqI00c5Ci+RcMIuC1iSr7y++pZhcip11evlQ1nC0XX4+
-         qZGQ==
+        bh=V64RutUaOwaP5aDYnM06DL8iwrCFkhKNHW2ldYIGiQU=;
+        b=jwrqTIQg5vEhaej5X1jLnZdiNwefkZBXvjCSPGiJrHkvN8S9lIm701X706lYw9vT8/
+         Nd3rU2BUKhdh2iLoX/X9eYH+fpwyHWRsoH+lhxzwtvoD3CJVlusj6B6JIelSrTzUfXNv
+         QHi/4pzErElf8bZtdv9SVf9x0Abl0xFB2Lkyn4JScnF4IRWIeEuHUbPV5mL6o9SbMRix
+         8VektMERlKZcg6yHnIncGD9yGAvpPUBGHv8Csd8Z94lHnoKKHGfTwWwN+nYws0HsXDaR
+         Y3e8mE1rvyur6unfBWPM89LmuaoIT4m8K+jlqAUXNTH0xbpzXZhpkaqY3uKpdXx6Zr76
+         G7Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BzDvCT5g2ND13ShvMBrA2tEQLZj9RI4ctTQKR5Kpfuc=;
-        b=Z8opJaa4lVQn641oYdwEjw7E5HtPpH4E3jtM9K98c/GKnfAyUXHx7sYq+7/P93Ia8d
-         VraxRxMf9lr+jbcJfME1AvSGMp41t2HXy0DRZ5xJ1hHdjcfupV4WlmQKMLTjhBxQQBen
-         1h3+8q65TwCBiBoRmZgUJAMcU796AA/dBZJ4AjSKUhVBJWtLfw834M859oG3BAiGR9Tt
-         ZklTNFoiS+oCWIOFX9GTq+0IMOkB76v4PpcxELS0vPduGczcZ+2wmX6IddkBI0OWxpJ5
-         EBi99Z71+KlxONPLRCeVoUjZlQpzSVSlLrraTntvY/0vyVX0kMxS104PIwOcTUhkzbID
-         bnpA==
-X-Gm-Message-State: AOAM533o6HVL5P1+LpkCPTI3YVhJ5i8xVwPGS9JBmXMoT2LDFegvQCbZ
-        ZNdzeF+iuPUV9kKh/k3G2jDKkg==
-X-Google-Smtp-Source: ABdhPJyntUjcVPO+MPmgw2P4aUUdPM5qJP0EIygPQXWlro3nbJAxdzYw/V2F3UVp/3OBcrgNnw2YHw==
-X-Received: by 2002:a63:4c55:: with SMTP id m21mr1226500pgl.305.1603170363147;
-        Mon, 19 Oct 2020 22:06:03 -0700 (PDT)
+        bh=V64RutUaOwaP5aDYnM06DL8iwrCFkhKNHW2ldYIGiQU=;
+        b=LTNFOpXD6ukpPEAFqGrJqYJRs7UGwEFFkX77NZaVRbkygPfUoNBIPv87nDjt3ugn8Y
+         Tjyw3N5A1OBbJ/MVmvcn3RBlOeDFGsJ9gQL9H9i/GnYZAO+UTUrViH+aUmYMesKVJrJt
+         GHh9tBaPvtHz21sNqe5V72N6csxr78lAZLCYskBF7xU4OiM2B7+hbQ6L1LF4ZogRpyxv
+         pNRKOGaikcI1MRCcn+779XsbfC/231eB76wItetN+eZcDg6p7D7CKbNg1SIBMpxTLJ8w
+         4bFvkgmiXWKoYy9rQva8VVS7gbjsMqr6r5NvXvCHnOBxJL/lV8l2UFZ6pS8XaRbWYtnV
+         9SRw==
+X-Gm-Message-State: AOAM530YYf+nrNGU3VdgEpDfSTxb5X0AFLtZP27Ev5Xb2P6me0K7reDM
+        6NvFDHwEIQGc65wov3QyGrxQJw==
+X-Google-Smtp-Source: ABdhPJwOBhGWC1kgQAgUC91RYOw+S+vXLwM4y9Gt97e90Ego3+evTcRVb3XquuNwtQgwfox2xLJQnA==
+X-Received: by 2002:a17:90a:ae15:: with SMTP id t21mr1310706pjq.91.1603171735306;
+        Mon, 19 Oct 2020 22:28:55 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id a4sm496798pgl.51.2020.10.19.22.06.01
+        by smtp.gmail.com with ESMTPSA id f15sm701964pfk.21.2020.10.19.22.28.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Oct 2020 22:06:02 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 10:35:57 +0530
+        Mon, 19 Oct 2020 22:28:54 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 10:58:52 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     ulf.hansson@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>, nks@flawful.org,
-        georgi.djakov@linaro.org, Stephan Gerhold <stephan@gerhold.net>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
- -EPROBE_DEFER
-Message-ID: <20201020050557.a3b2nk33eeyxnvl2@vireshk-i7>
-References: <20201015180555.gacdzkofpibkdn2e@bogus>
- <20201016042434.org6ibdqsqbzcdww@vireshk-i7>
- <20201016060021.sotk72u4hioctg7o@bogus>
- <20201016111222.lvakbmjhlrocpogt@bogus>
- <20201019045827.kl6qnx6gidhzjkrs@vireshk-i7>
- <20201019091723.GA12087@bogus>
- <20201019092411.b3znjxebay3puq2j@vireshk-i7>
- <20201019101241.GB12908@bogus>
- <20201019103535.ksp5ackoihamam4g@vireshk-i7>
- <20201019141007.GA6358@bogus>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH] opp: Don't always remove static OPPs in
+ _of_add_opp_table_v1()
+Message-ID: <20201020052852.bt4jx3hd4dlncwdk@vireshk-i7>
+References: <2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org>
+ <AM6PR04MB496659599D41F6B88036420680020@AM6PR04MB4966.eurprd04.prod.outlook.com>
+ <20201015043103.m6ghom52sqssh24z@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201019141007.GA6358@bogus>
+In-Reply-To: <20201015043103.m6ghom52sqssh24z@vireshk-i7>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-10-20, 15:10, Sudeep Holla wrote:
-> On Mon, Oct 19, 2020 at 04:05:35PM +0530, Viresh Kumar wrote:
-> > On 19-10-20, 11:12, Sudeep Holla wrote:
-> > > Yes it has clocks property but used by SCMI(for CPUFreq/DevFreq) and not
-> > > by any clock provider driver. E.g. the issue you will see if "clocks"
-> > > property is used instead of "qcom,freq-domain" on Qcom parts.
+On 15-10-20, 10:01, Viresh Kumar wrote:
+> On 15-10-20, 02:35, Aisheng Dong wrote:
+> > Hi Viresh
 > > 
-> > Okay, I understand. But what I still don't understand is why it fails
-> > for you. You have a clocks property in DT for the CPU, the OPP core
-> > tries to get it and will get deferred-probed, which will try probing
-> > at a later point of time and it shall work then. Isn't it ?
-> >
+> > Thanks for the quick fix.
+> > 
+> > > From: Viresh Kumar <viresh.kumar@linaro.org>
+> > > Sent: Wednesday, October 14, 2020 12:26 PM
+> > > 
+> > > The patch missed returning 0 early in case of success and hence the static OPPs
+> > > got removed by mistake. Fix it.
+> > > 
+> > > Fixes: 90d46d71cce2 ("opp: Handle multiple calls for same OPP table in
+> > > _of_add_opp_table_v1()")
+> > > Reported-by: Aisheng Dong <aisheng.dong@nxp.com>
+> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > 
+> > Tested-by: Dong Aisheng <aisheng.dong@nxp.com>
 > 
-> Nope unfortunately. We don't have clock provider, so clk_get will
-> never succeed and always return -EPROBE_DEFER.
+> Thanks.
+> 
+> Rafael: Please apply this one directly for 5.10-rc. Thanks.
 
-Now this is really bad, you have a fake clocks property, how is the
-OPP core supposed to know it ? Damn.
+Rafael: Ping.
 
 -- 
 viresh
