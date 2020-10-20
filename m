@@ -2,136 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F192931BD
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 01:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C28293240
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Oct 2020 02:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388895AbgJSXFv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Oct 2020 19:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S2389308AbgJTAPr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Oct 2020 20:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727822AbgJSXFu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 19:05:50 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40E8C0613E0
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id n6so17447ioc.12
-        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
+        with ESMTP id S2389250AbgJTAPr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Oct 2020 20:15:47 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6FFC0613D1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 17:15:47 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id r9so59053uat.12
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 17:15:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
-        b=R0THCPfeT+NjRv5n7wRuWr3+iQQVH5mYQugrcFEorv7jMlZOJpq4gWO8x2sltRZ1S3
-         8+uXkfK+0xraFRPc7RLEyC+L1Eqn+lwfgcQ60rCu3Ir6T0iqCUlHxkXPI8IxQxljNihW
-         MxA7dERE+Fo0B6yhfEPLGm6gbjuMrGvt0ee7i4ozPAa6C0OwTV1SJBaz+sj8rzyyiIix
-         DQ1LhxNguLsVQ2r9xWcmCur9QDHoeimXQtC/UVpN+4Yl8O9ZbpYKUwlrKFZtzYHwjpgZ
-         iC+kREvCZvwgmOBCIm7DmgxG6/6ncKrp6QDCnbxkp/qIzrhuMyauJsg53LWTp//HSslk
-         z+3Q==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TvgIaHB+zCRTE3U91pAvk2x32he6j0EtU+nDKoz+k7U=;
+        b=PpeMbkQhz05ujwOQNQu3xw5hmxLoObi5SwbQFxn2FnIXekypEeK8pjmLw9OudD4EXa
+         5eZllPJpPpSxhGySXcyub3oaO7um3h4dAIbaPXjDjlwmERqWUEO/AQ6dx+iZHdtTZbMT
+         e/L/W3AV9PPYMqKqQbPRjAW0bmluBzyyEL6eA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
-        b=is+JNtlFfHDNpl+P/qjnzwjtnCWAHgunnEpcaltb1qba7yIkZ2pADUsOmnv5FG+K03
-         Z1G5Y2/6btfCiQzCWdzUxe2IFasgKr/+QaxxyaqPqR8nDnE58LvzbJ4CXdbBnYB7a9Kz
-         0yunaV3au2T8IVlhKOolbQeD3hX4LmNZwSwRW4cjECpqSZVuEw6d7mD4RTM9l7PKgKL4
-         WFsZ+5yeRvNuIvRqOP2ZDmK28EZKDKOMLHr54tUE9xK6ovlI8aI9xgDvphURMDqYXvZy
-         R3SBnXXX99P/z1UAj4tGDPX93OzJihGh4RKvjcdesXGcFaRIWjhr8aNazymYF22XBQQr
-         /o1g==
-X-Gm-Message-State: AOAM532u08mMnSdHNYtGrKb0iCAg3ufT6rFozdbed206B8xSC9p+qnkJ
-        5HnFNG5dIesYxnmRBKWEfk4Mew==
-X-Google-Smtp-Source: ABdhPJwE/qhLAedndnNRaUrUDMs331Onaq8Iz+VDEVRJN+4h4B5ckC67pNXDnvS9MRF/DxLJjNlnIQ==
-X-Received: by 2002:a6b:5019:: with SMTP id e25mr44377iob.123.1603148748578;
-        Mon, 19 Oct 2020 16:05:48 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id u8sm7938ilm.36.2020.10.19.16.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 16:05:47 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kUeDq-002hRf-LL; Mon, 19 Oct 2020 20:05:46 -0300
-Date:   Mon, 19 Oct 2020 20:05:46 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        George Burgess <gbiv@google.com>
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-Message-ID: <20201019230546.GH36674@ziepe.ca>
-References: <20201017160928.12698-1-trix@redhat.com>
- <20201018054332.GB593954@kroah.com>
- <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TvgIaHB+zCRTE3U91pAvk2x32he6j0EtU+nDKoz+k7U=;
+        b=H436+CKQTkkwKlcxBT3vupAXYjs/KcEGVKVLJn9i1hbW0Wl16lxkr6Ji4IroUQjQDc
+         eT+fDvHaWftDdR4aObqDZHYWmbRIWvStX0KmajHhDgVwaVh0ic48aRTaqqu6PZTSGhpu
+         T145TYeAHEV8jo4Ph8B5VpX1/dweo2gxJhGntWqTQSNvb7Qw4ZJmHbLkS4lzwqH6dd/8
+         UPrwE9qiuT+30KjHrm4oFFOuFI9+EHvlQzgyO4VkWy+wKBrlqdpCENyvSwdgJ58LUr/m
+         8AM/76fVUaeylvkDPZfknNtZKVHPhWC+4oAEkdI6w+jVqyHJjXumEYWhlP5sq03G/cz8
+         rYhg==
+X-Gm-Message-State: AOAM533P/EaICV7e83HAgYkd+YzFCnb+cRhRhhCi/Hxn85Fz1/MLuu24
+        bToJt80DEK9rDoZGS7fk0GEdtRVZHZCIPw==
+X-Google-Smtp-Source: ABdhPJxp+bT3GQEnkMVR1CJiWzbxWssf3YbNBlAjmcOX3zTCbxtvYDftDyosqagwJENqk5gOV5q++Q==
+X-Received: by 2002:ab0:668a:: with SMTP id a10mr59853uan.108.1603152946396;
+        Mon, 19 Oct 2020 17:15:46 -0700 (PDT)
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
+        by smtp.gmail.com with ESMTPSA id s131sm41096vkb.17.2020.10.19.17.15.44
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Oct 2020 17:15:45 -0700 (PDT)
+Received: by mail-ua1-f42.google.com with SMTP id x26so76924uau.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Oct 2020 17:15:44 -0700 (PDT)
+X-Received: by 2002:a9f:31ce:: with SMTP id w14mr67335uad.104.1603152943957;
+ Mon, 19 Oct 2020 17:15:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+References: <20201019140601.3047-1-lukasz.luba@arm.com>
+In-Reply-To: <20201019140601.3047-1-lukasz.luba@arm.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 19 Oct 2020 17:15:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UYeo_rWBDRu-53Aw2OeY1NCgCuUJkocRM8xL+OCbJDug@mail.gmail.com>
+Message-ID: <CAD=FV=UYeo_rWBDRu-53Aw2OeY1NCgCuUJkocRM8xL+OCbJDug@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Clarify abstract scale usage for power values in
+ Energy Model, EAS and IPA
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        morten.rasmussen@arm.com, Quentin Perret <qperret@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 12:42:15PM -0700, Nick Desaulniers wrote:
-> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > >
-> > > This is a upcoming change to clean up a new warning treewide.
-> > > I am wondering if the change could be one mega patch (see below) or
-> > > normal patch per file about 100 patches or somewhere half way by collecting
-> > > early acks.
-> >
-> > Please break it up into one-patch-per-subsystem, like normal, and get it
-> > merged that way.
-> >
-> > Sending us a patch, without even a diffstat to review, isn't going to
-> > get you very far...
-> 
-> Tom,
-> If you're able to automate this cleanup, I suggest checking in a
-> script that can be run on a directory.  Then for each subsystem you
-> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
->  Then others can help you drive the tree wide cleanup.  Then we can
-> enable -Wunreachable-code-break either by default, or W=2 right now
-> might be a good idea.
+Hi,
 
-I remember using clang-modernize in the past to fix issues very
-similar to this, if clang machinery can generate the warning, can't
-something like clang-tidy directly generate the patch?
+On Mon, Oct 19, 2020 at 7:06 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi all,
+>
+> The Energy Model supports power values expressed in an abstract scale.
+> This has an impact on Intelligent Power Allocation (IPA) and should be
+> documented properly. Kernel sub-systems like EAS, IPA and DTPM
+> (new comming PowerCap framework) would use the new flag to capture
+> potential miss-configuration where the devices have registered different
+> power scales, thus cannot operate together.
+>
+> There was a discussion below v2 of this patch series, which might help
+> you to get context of these changes [2].
+>
+> The agreed approach is to have the DT as a source of power values expressed
+> always in milli-Watts and the only way to submit with abstract scale values
+> is via the em_dev_register_perf_domain() API.
+>
+> Changes:
+> v3:
+> - added boolean flag to struct em_perf_domain and registration function
+>   indicating if EM holds real power values in milli-Watts (suggested by
+>   Daniel and aggreed with Quentin)
+> - updated documentation regarding this new flag
+> - dropped DT binding change for 'sustainable-power'
+> - added more maintainers on CC (due to patch 1/4 touching different things)
+> v2 [2]:
+> - updated sustainable power section in IPA documentation
+> - updated DT binding for the 'sustainable-power'
+> v1 [1]:
+> - simple documenation update with new 'abstract scale' in EAS, EM, IPA
+>
+> Regards,
+> Lukasz Luba
+>
+> [1] https://lore.kernel.org/linux-doc/20200929121610.16060-1-lukasz.luba@arm.com/
+> [2] https://lore.kernel.org/lkml/20201002114426.31277-1-lukasz.luba@arm.com/
+>
+> Lukasz Luba (4):
+>   PM / EM: Add a flag indicating units of power values in Energy Model
+>   docs: Clarify abstract scale usage for power values in Energy Model
+>   PM / EM: update the comments related to power scale
+>   docs: power: Update Energy Model with new flag indicating power scale
+>
+>  .../driver-api/thermal/power_allocator.rst    | 13 +++++++-
+>  Documentation/power/energy-model.rst          | 30 +++++++++++++++----
+>  Documentation/scheduler/sched-energy.rst      |  5 ++++
+>  drivers/cpufreq/scmi-cpufreq.c                |  3 +-
+>  drivers/opp/of.c                              |  2 +-
+>  include/linux/energy_model.h                  | 20 ++++++++-----
+>  kernel/power/energy_model.c                   | 26 ++++++++++++++--
+>  7 files changed, 81 insertions(+), 18 deletions(-)
 
-You can send me a patch for drivers/infiniband/* as well
+While I don't feel like I have enough skin in the game to make any
+demands, I'm definitely not a huge fan of this series still.  I am a
+fan of documenting reality, but (to me) trying to mix stuff like this
+is just going to be adding needless complexity.  From where I'm
+standing, it's a lot more of a pain to specify these types of numbers
+in the firmware than it is to specify them in the device tree.  They
+are harder to customize per board, harder to spin, and harder to
+specify constraints for everything in the system (all heat generators,
+all cooling devices, etc).  ...and since we already have a way to
+specify this type of thing in the device tree and that's super easy
+for people to do, we're going to end up with weird mixes / matches of
+numbers coming from different locations and now we've got to figure
+out which numbers we can use when and which to ignore.  Ick.
 
-Thanks,
-Jason
+In my opinion the only way to allow for mixing and matching the
+bogoWatts and real Watts would be to actually have units and the
+ability to provide a conversion factor somewhere.  Presumably that
+might give you a chance of mixing and matching if someone wants to
+provide some stuff in device tree and get other stuff from the
+firmware.  Heck, I guess you could even magically figure out a
+conversion factor if someone provides device tree numbers for
+something that was already registered in SCMI, assuming all the SCMI
+numbers are consistent with each other...
+
+-Doug
+
+
+
+-Doug
