@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3232952CD
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 21:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E782952D1
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 21:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409606AbgJUTOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 15:14:38 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63870 "EHLO
+        id S2504802AbgJUTOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 15:14:35 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:50086 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504797AbgJUTOg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 15:14:36 -0400
+        with ESMTP id S2409606AbgJUTOe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 15:14:34 -0400
 Received: from 89-77-60-66.dynamic.chello.pl (89.77.60.66) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.491)
- id 030494657aca0941; Wed, 21 Oct 2020 21:14:32 +0200
+ id 4e9c949d8a5aba96; Wed, 21 Oct 2020 21:14:31 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
@@ -21,9 +21,9 @@ Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Lukas Wunner <lukas@wunner.de>,
         Saravana Kannan <saravanak@google.com>,
         Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 1/3] PM: runtime: Drop runtime PM references to supplier on link removal
-Date:   Wed, 21 Oct 2020 21:12:15 +0200
-Message-ID: <1682736.0MbBAd5gSP@kreacher>
+Subject: [PATCH 2/3] PM: runtime: Drop pm_runtime_clean_up_links()
+Date:   Wed, 21 Oct 2020 21:13:10 +0200
+Message-ID: <1930592.Uf7JNTNZRN@kreacher>
 In-Reply-To: <6543936.FbWAdBN1tG@kreacher>
 References: <6543936.FbWAdBN1tG@kreacher>
 MIME-Version: 1.0
@@ -35,105 +35,105 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-While removing a device link, drop the supplier device's runtime PM
-usage counter as many times as needed to drop all of the runtime PM
-references to it from the consumer in addition to dropping the
-consumer's link count.
+After commit d12544fb2aa9 ("PM: runtime: Remove link state checks in
+rpm_get/put_supplier()") nothing prevents the consumer device's
+runtime PM from acquiring additional references to the supplier
+device after pm_runtime_clean_up_links() has run (or even while it
+is running), so calling this function from __device_release_driver()
+may be pointless (or even harmful).
 
-Fixes: baa8809f6097 ("PM / runtime: Optimize the use of device links")
+Moreover, it ignores stateless device links, so the runtime PM
+handling of managed and stateless device links is inconsistent
+because of it, so better get rid of it entirely.
+
+Fixes: d12544fb2aa9 ("PM: runtime: Remove link state checks in rpm_get/put_supplier()")
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Cc: 5.1+ <stable@vger.kernel.org> # 5.1+
 ---
- drivers/base/core.c          |    6 ++----
- drivers/base/power/runtime.c |   21 ++++++++++++++++++++-
- include/linux/pm_runtime.h   |    4 ++--
- 3 files changed, 24 insertions(+), 7 deletions(-)
+ drivers/base/dd.c            |    1 -
+ drivers/base/power/runtime.c |   36 ------------------------------------
+ include/linux/pm_runtime.h   |    2 --
+ 3 files changed, 39 deletions(-)
 
+Index: linux-pm/drivers/base/dd.c
+===================================================================
+--- linux-pm.orig/drivers/base/dd.c
++++ linux-pm/drivers/base/dd.c
+@@ -1133,7 +1133,6 @@ static void __device_release_driver(stru
+ 		}
+ 
+ 		pm_runtime_get_sync(dev);
+-		pm_runtime_clean_up_links(dev);
+ 
+ 		driver_sysfs_remove(dev);
+ 
 Index: linux-pm/drivers/base/power/runtime.c
 ===================================================================
 --- linux-pm.orig/drivers/base/power/runtime.c
 +++ linux-pm/drivers/base/power/runtime.c
-@@ -1729,7 +1729,7 @@ void pm_runtime_new_link(struct device *
- 	spin_unlock_irq(&dev->power.lock);
+@@ -1643,42 +1643,6 @@ void pm_runtime_remove(struct device *de
  }
  
--void pm_runtime_drop_link(struct device *dev)
-+static void pm_runtime_drop_link_count(struct device *dev)
- {
- 	spin_lock_irq(&dev->power.lock);
- 	WARN_ON(dev->power.links_count == 0);
-@@ -1737,6 +1737,25 @@ void pm_runtime_drop_link(struct device
- 	spin_unlock_irq(&dev->power.lock);
- }
- 
-+/**
-+ * pm_runtime_drop_link - Prepare for device link removal.
-+ * @link: Device link going away.
-+ *
-+ * Drop the link count of the consumer end of @link and decrement the supplier
-+ * device's runtime PM usage counter as many times as needed to drop all of the
-+ * PM runtime reference to it from the consumer.
-+ */
-+void pm_runtime_drop_link(struct device_link *link)
-+{
-+	if (!(link->flags & DL_FLAG_PM_RUNTIME))
-+		return;
-+
-+	pm_runtime_drop_link_count(link->consumer);
-+
-+	while (refcount_dec_not_one(&link->rpm_active))
-+		pm_runtime_put(link->supplier);
-+}
-+
- static bool pm_runtime_need_not_resume(struct device *dev)
- {
- 	return atomic_read(&dev->power.usage_count) <= 1 &&
+ /**
+- * pm_runtime_clean_up_links - Prepare links to consumers for driver removal.
+- * @dev: Device whose driver is going to be removed.
+- *
+- * Check links from this device to any consumers and if any of them have active
+- * runtime PM references to the device, drop the usage counter of the device
+- * (as many times as needed).
+- *
+- * Links with the DL_FLAG_MANAGED flag unset are ignored.
+- *
+- * Since the device is guaranteed to be runtime-active at the point this is
+- * called, nothing else needs to be done here.
+- *
+- * Moreover, this is called after device_links_busy() has returned 'false', so
+- * the status of each link is guaranteed to be DL_STATE_SUPPLIER_UNBIND and
+- * therefore rpm_active can't be manipulated concurrently.
+- */
+-void pm_runtime_clean_up_links(struct device *dev)
+-{
+-	struct device_link *link;
+-	int idx;
+-
+-	idx = device_links_read_lock();
+-
+-	list_for_each_entry_rcu(link, &dev->links.consumers, s_node,
+-				device_links_read_lock_held()) {
+-		if (!(link->flags & DL_FLAG_MANAGED))
+-			continue;
+-
+-		while (refcount_dec_not_one(&link->rpm_active))
+-			pm_runtime_put_noidle(dev);
+-	}
+-
+-	device_links_read_unlock(idx);
+-}
+-
+-/**
+  * pm_runtime_get_suppliers - Resume and reference-count supplier devices.
+  * @dev: Consumer device.
+  */
 Index: linux-pm/include/linux/pm_runtime.h
 ===================================================================
 --- linux-pm.orig/include/linux/pm_runtime.h
 +++ linux-pm/include/linux/pm_runtime.h
-@@ -58,7 +58,7 @@ extern void pm_runtime_clean_up_links(st
+@@ -54,7 +54,6 @@ extern u64 pm_runtime_autosuspend_expira
+ extern void pm_runtime_update_max_time_suspended(struct device *dev,
+ 						 s64 delta_ns);
+ extern void pm_runtime_set_memalloc_noio(struct device *dev, bool enable);
+-extern void pm_runtime_clean_up_links(struct device *dev);
  extern void pm_runtime_get_suppliers(struct device *dev);
  extern void pm_runtime_put_suppliers(struct device *dev);
  extern void pm_runtime_new_link(struct device *dev);
--extern void pm_runtime_drop_link(struct device *dev);
-+extern void pm_runtime_drop_link(struct device_link *link);
- 
- /**
-  * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
-@@ -280,7 +280,7 @@ static inline void pm_runtime_clean_up_l
+@@ -276,7 +275,6 @@ static inline u64 pm_runtime_autosuspend
+ 				struct device *dev) { return 0; }
+ static inline void pm_runtime_set_memalloc_noio(struct device *dev,
+ 						bool enable){}
+-static inline void pm_runtime_clean_up_links(struct device *dev) {}
  static inline void pm_runtime_get_suppliers(struct device *dev) {}
  static inline void pm_runtime_put_suppliers(struct device *dev) {}
  static inline void pm_runtime_new_link(struct device *dev) {}
--static inline void pm_runtime_drop_link(struct device *dev) {}
-+static inline void pm_runtime_drop_link(struct device_link *link) {}
- 
- #endif /* !CONFIG_PM */
- 
-Index: linux-pm/drivers/base/core.c
-===================================================================
---- linux-pm.orig/drivers/base/core.c
-+++ linux-pm/drivers/base/core.c
-@@ -763,8 +763,7 @@ static void __device_link_del(struct kre
- 	dev_dbg(link->consumer, "Dropping the link to %s\n",
- 		dev_name(link->supplier));
- 
--	if (link->flags & DL_FLAG_PM_RUNTIME)
--		pm_runtime_drop_link(link->consumer);
-+	pm_runtime_drop_link(link);
- 
- 	list_del_rcu(&link->s_node);
- 	list_del_rcu(&link->c_node);
-@@ -778,8 +777,7 @@ static void __device_link_del(struct kre
- 	dev_info(link->consumer, "Dropping the link to %s\n",
- 		 dev_name(link->supplier));
- 
--	if (link->flags & DL_FLAG_PM_RUNTIME)
--		pm_runtime_drop_link(link->consumer);
-+	pm_runtime_drop_link(link);
- 
- 	list_del(&link->s_node);
- 	list_del(&link->c_node);
 
 
 
