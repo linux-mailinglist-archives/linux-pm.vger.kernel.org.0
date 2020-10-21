@@ -2,121 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1574294E57
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 16:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7BB294E43
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 16:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442640AbgJUOQF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 10:16:05 -0400
-Received: from atl4mhfb03.myregisteredsite.com ([209.17.115.119]:53314 "EHLO
-        atl4mhfb03.myregisteredsite.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2408411AbgJUOQE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 10:16:04 -0400
-X-Greylist: delayed 306 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Oct 2020 10:16:03 EDT
-Received: from jax4mhob22.registeredsite.com (jax4mhob22.registeredsite.com [64.69.218.110])
-        by atl4mhfb03.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id 09LEAvFi020929
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 10:10:57 -0400
-Received: from mailpod.hostingplatform.com ([10.30.71.204])
-        by jax4mhob22.registeredsite.com (8.14.4/8.14.4) with ESMTP id 09LEAsfm028023
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 10:10:54 -0400
-Received: (qmail 5719 invoked by uid 0); 21 Oct 2020 14:10:54 -0000
-X-TCPREMOTEIP: 83.128.90.119
-X-Authenticated-UID: mike@milosoftware.com
-Received: from unknown (HELO phenom.domain?not?set.invalid) (mike@milosoftware.com@83.128.90.119)
-  by 0 with ESMTPA; 21 Oct 2020 14:10:54 -0000
-From:   Mike Looijmans <mike.looijmans@topic.nl>
-To:     sre@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Looijmans <mike.looijmans@topic.nl>
-Subject: [PATCH] dt-bindings: power/supply: Add ltc4162-l-charger
-Date:   Wed, 21 Oct 2020 16:10:30 +0200
-Message-Id: <20201021141030.27751-1-mike.looijmans@topic.nl>
-X-Mailer: git-send-email 2.17.1
+        id S2443280AbgJUOJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 10:09:58 -0400
+Received: from mx4.veeam.com ([104.41.138.86]:45980 "EHLO mx4.veeam.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2440751AbgJUOJ6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 21 Oct 2020 10:09:58 -0400
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.0.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.veeam.com (Postfix) with ESMTPS id 255F68B1B6;
+        Wed, 21 Oct 2020 17:09:55 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com; s=mx4;
+        t=1603289395; bh=S6/ARzVD8H7/67HYgZs8YGKPZVCfzESpZ3pgvBKiAGg=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
+        b=VeV/DnbLBfCV6NCAbN2AZTuCJpbMCyv+ggraoRGqdsZhB0jEcmcbc8m1qVhHsuD2X
+         k314WdS65AVHt3oiOE0eEeoP9ctoZ6/gfDgwwokbcRqQkjfKkJvdZUXGt36y3XYVYz
+         bSP8IrlYgxS0pjvb9WPL4EZbNOIn04eC8KV9r/b4=
+Received: from veeam.com (172.24.14.5) by prgmbx01.amust.local (172.24.0.171)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2; Wed, 21 Oct 2020
+ 16:09:53 +0200
+Date:   Wed, 21 Oct 2020 17:10:44 +0300
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+To:     Hannes Reinecke <hare@suse.de>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "darrick.wong@oracle.com" <darrick.wong@oracle.com>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "koct9i@gmail.com" <koct9i@gmail.com>,
+        "damien.lemoal@wdc.com" <damien.lemoal@wdc.com>,
+        "steve@sk2.org" <steve@sk2.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 0/2] block layer filter and block device snapshot module
+Message-ID: <20201021141044.GF20749@veeam.com>
+References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+ <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
+X-Originating-IP: [172.24.14.5]
+X-ClientProxiedBy: prgmbx01.amust.local (172.24.0.171) To prgmbx01.amust.local
+ (172.24.0.171)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29C604D26A677566
+X-Veeam-MMEX: True
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for the LTC4162-L Li-Ion battery charger. The driver allows
-reading back telemetry and to set some charging options like the input
-current limit.
+The 10/21/2020 16:31, Hannes Reinecke wrote:
+> I do understand where you are coming from, but then we already have a 
+> dm-snap which does exactly what you want to achieve.
+> Of course, that would require a reconfiguration of the storage stack on 
+> the machine, which is not always possible (or desired).
 
-This adds the devicetree bindings.
+Yes, reconfiguring the storage stack on a machine is almost impossible.
 
-Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
----
- .../bindings/power/supply/ltc4162-l.yaml      | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+> 
+> What I _could_ imagine would be a 'dm-intercept' thingie, which 
+> redirects the current submit_bio() function for any block device, and 
+> re-routes that to a linear device-mapper device pointing back to the 
+> original block device.
+> 
+> That way you could attach it to basically any block device, _and_ can 
+> use the existing device-mapper functionality to do fancy stuff once the 
+> submit_io() callback has been re-routed.
+> 
+> And it also would help in other scenarios, too; with such a 
+> functionality we could seamlessly clone devices without having to move 
+> the whole setup to device-mapper first.
 
-diff --git a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-new file mode 100644
-index 000000000000..a23dd6f3fae0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) 2020 Topic Embedded Products
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/power/supply/ltc4162-l.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Linear Technology (Analog Devices) LTC4162-L Charger
-+
-+maintainers:
-+  - Mike Looijmans <mike.looijmans@topic.nl>
-+
-+description: |
-+  The LTC ® 4162-L is an advanced monolithic synchronous step-down switching
-+  battery charger and PowerPath (TM) manager that seamlessly manages power
-+  distribution between input sources such as wall adapters, backplanes, solar
-+  panels, etc., and a rechargeable Lithium-Ion/Polymer battery.
-+
-+  Specifications about the charger can be found at:
-+    https://www.analog.com/en/products/ltc4162-s.html
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lltc,ltc4162-l
-+
-+  reg:
-+    maxItems: 1
-+    description: I2C address of the charger.
-+
-+  lltc,rsnsb:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Battery sense resistor in milli Ohm.
-+    minimum: 1
-+
-+  lltc,rsnsi:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Input current sense resistor in milli Ohm.
-+    minimum: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - lltc,rsnsb
-+  - lltc,rsnsi
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c0 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      charger: battery-charger@68 {
-+              compatible = "lltc,ltc4162-l";
-+              reg =  <0x68>;
-+              lltc,rsnsb = <10>;
-+              lltc,rsnsi = <16>;
-+      };
-+    };
+Hm... 
+Did I understand correctly that the filter itself can be left approximately
+as it is, but the blk-snap module can be replaced with 'dm-intercept',
+which would use the re-route mechanism from the dm?
+I think I may be able to implement it, if you describe your idea in more
+detail.
+
+
 -- 
-2.17.1
-
+Sergei Shtepa
+Veeam Software developer.
