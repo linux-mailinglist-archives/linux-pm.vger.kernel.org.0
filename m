@@ -2,34 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80957294BAB
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 13:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4ED0294BE4
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 13:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441925AbgJULPL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 07:15:11 -0400
-Received: from mx4.veeam.com ([104.41.138.86]:43548 "EHLO mx4.veeam.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410622AbgJULPJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 21 Oct 2020 07:15:09 -0400
-Received: from mail.veeam.com (spbmbx01.amust.local [172.17.17.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx4.veeam.com (Postfix) with ESMTPS id EABE6897F6;
-        Wed, 21 Oct 2020 14:15:04 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com; s=mx4;
-        t=1603278905; bh=N8h1eQSrAq99HPEtyM6BB2zVpJlELnewpRvhCbmIWg8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
-        b=J7l2nPmPgQ3+NtzyjsDswFT4EL2ccUF1DN0D2J1KfzxygUgBbVhHcK0KiRQ8Q+V/6
-         KC/Pd96uBtdio9IQNueanRxv1rESVaecIkV8l8ImrZxq+xWWmB4broU3y45Ul5S82q
-         K2EBYYbfSJz43xB9cYDQtHeEo0RBMQiavsVAv00Q=
-Received: from veeam.com (172.24.14.5) by spbmbx01.amust.local (172.17.17.171)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.595.3; Wed, 21 Oct 2020
- 14:15:02 +0300
-Date:   Wed, 21 Oct 2020 14:15:51 +0300
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+        id S2442038AbgJULo4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 07:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439593AbgJULoz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 07:44:55 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B383EC0613CE;
+        Wed, 21 Oct 2020 04:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8zzsgfeCz+OvMf8zlEZunmz93FbN8Y4rF8K/uFWA5ks=; b=QGd9o9rBa2iW7Cyr2v7NAiwDn8
+        0Et+wmPKEP4cW4o7FgHtSsDY6es0NhSFUbxGZAbLK59bexfbkGxsMpCbQen6TaoNpLDcdQsevt0VU
+        H4AGXhHPvO3YZr+wsmik1x6wQTgzJ5eGaa5IGNq/lqRd7ErRe8XAlFx4DV0uaUX92bZH8/aXToY7O
+        k2JfovW8cwvr2tg6YmnVsNfvVSe0yuwilN3JKm50avUs+I2c2xhL+LbswIPmKm3d7oxIaYGVOxtMs
+        4A1gqTSPAVbV5JaQzGfjKC2b6vexUcL6Vl6BoDkedhL5rc5p+SaPBT23PJ2QUhYzC3R+IwUev6MWW
+        a6JfcM+A==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kVCXm-0002kB-L9; Wed, 21 Oct 2020 11:44:38 +0000
+Date:   Wed, 21 Oct 2020 12:44:38 +0100
+From:   Matthew Wilcox <willy@infradead.org>
 To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+Cc:     Sergei Shtepa <sergei.shtepa@veeam.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
         "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
         "hch@infradead.org" <hch@infradead.org>,
         "darrick.wong@oracle.com" <darrick.wong@oracle.com>,
@@ -51,41 +52,37 @@ CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH 2/2] blk-snap - snapshots and change-tracking for block
- devices
-Message-ID: <20201021111551.GD20749@veeam.com>
+Subject: Re: [PATCH 1/2] Block layer filter - second version
+Message-ID: <20201021114438.GK20115@casper.infradead.org>
 References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
- <1603271049-20681-3-git-send-email-sergei.shtepa@veeam.com>
- <BL0PR04MB65142D9F391FE8777F096EF5E71C0@BL0PR04MB6514.namprd04.prod.outlook.com>
+ <1603271049-20681-2-git-send-email-sergei.shtepa@veeam.com>
+ <BL0PR04MB65141320C7BF75B7142CA30CE71C0@BL0PR04MB6514.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BL0PR04MB65142D9F391FE8777F096EF5E71C0@BL0PR04MB6514.namprd04.prod.outlook.com>
-X-Originating-IP: [172.24.14.5]
-X-ClientProxiedBy: spbmbx02.amust.local (172.17.17.172) To
- spbmbx01.amust.local (172.17.17.171)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A295605D26A677560
-X-Veeam-MMEX: True
+In-Reply-To: <BL0PR04MB65141320C7BF75B7142CA30CE71C0@BL0PR04MB6514.namprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> And this is a 8600+ lines patch.
-> Can you split this into manageable pieces ?
+On Wed, Oct 21, 2020 at 09:21:36AM +0000, Damien Le Moal wrote:
+> > + * submit_bio_direct - submit a bio to the block device layer for I/O
+> > + * bypass filter.
+> > + * @bio:  The bio describing the location in memory and on the device.
+> >   *
+> > + * Description:
 
-Yes, the module was quite large. But I think it's not good to show
-the elephant in parts. 
-https://en.wikipedia.org/wiki/Blind_men_and_an_elephant
+You don't need this line.
 
-> I do not think anybody will review such a huge patch.
+> > + *    This is a version of submit_bio() that shall only be used for I/O
+> > + *    that cannot be intercepted by block layer filters.
+> > + *    All file systems and other upper level users of the block layer
+> > + *    should use submit_bio() instead.
+> > + *    Use this function to access the swap partition and directly access
+> > + *    the block device file.
 
-Yes, it will be a lot of work. But I hope that the code architecture
-and splitting entities into separate files will help.
+I don't understand why O_DIRECT gets to bypass the block filter.  Nor do
+I understand why anybody would place a block filter on the swap device.
+But if somebody did place a filter on the swap device, why should swap
+be able to bypass the filter?
 
-If someone can advise how to divide a module into a chain of patches,
-I will be happy. I do not dare to divide it without losing meaning.
-
--- 
-Sergei Shtepa
-Veeam Software developer.
