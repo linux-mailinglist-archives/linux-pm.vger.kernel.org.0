@@ -2,94 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F03532948E1
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 09:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6DE2948F1
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 09:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440937AbgJUH1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 03:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S2408270AbgJUHed (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 03:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440932AbgJUH1D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 03:27:03 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94413C0613CE;
-        Wed, 21 Oct 2020 00:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LfLKDr228zeIZDnUVRJzSctBjN1bRXJI0iFBMRj3SFM=; b=O1vbu6Y8L2ik3RVQZ6Iwl/WUE+
-        gTS6+IGAhOkPC0mBg9IJjOUCB9mt0HZSHNtmweq0DCSUiCWu+8G+7RZ/sW+tYYuidPQebo30jWcO3
-        7drIqDR7L9R2JjSxYWRN/g3TwM5GtgaNL7kNz++9/wdG3UOWH5reuEXNfUU6MaGaNEqlnGuz4sGkW
-        TcsnIlm4zFv1wX4Gjsbm1hQ/ZNpsJGqxXrrSsDHwhIEn9mkgT39ObZwPG0TNDMsf20qA2Be26gcZI
-        LeIKg5j0J6Rmq28p/e82QgNjbGG0att1k9ZfnW4ujKVdV1/FzewpLyXJoUzQYuCrIEf/83j4UlvaS
-        n9b6lJyQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kV8Vm-0000uV-0X; Wed, 21 Oct 2020 07:26:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 40E39304D28;
-        Wed, 21 Oct 2020 09:26:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 247B6203CC499; Wed, 21 Oct 2020 09:26:12 +0200 (CEST)
-Date:   Wed, 21 Oct 2020 09:26:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Redha Gouicem <redha.gouicem@gmail.com>
-Cc:     julien.sopena@lip6.fr, julia.lawall@inria.fr,
-        gilles.muller@inria.fr, carverdamien@gmail.com,
-        jean-pierre.lozi@oracle.com, baptiste.lepers@sydney.edu.au,
-        nicolas.palix@univ-grenoble-alpes.fr,
-        willy.zwaenepoel@sydney.edu.au,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
+        with ESMTP id S2408228AbgJUHed (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 03:34:33 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9879C0613D4
+        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 00:34:32 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id az3so707072pjb.4
+        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 00:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=fPlK2iJZuWNSVaRZPV6Xl5e0rIsxttsntniiCED68Zc=;
+        b=hbiRX9dnbCCOOlMz53DPhowFpm+qalU5e+U6iP5x+JVk1WjmS4Ysfvq5jrULk5x6hz
+         QrsUXEYAFUegrW8UVPuqz4ZsPPbdakpK3eEiPKk8+R3bdfQjas6n3AlwSUUUOcogXc/8
+         imct2la7/8R6aYsNdJnnY58gT+5j9ejdRa3tjuVYBQycMg2Up+JXM1LmB/WgyuUQI/LA
+         K405fgDeNcNSugmaInyXUT46fLkAnRe7PfAFdm109pP7VXw/pQaOe0zRzxNd/xyrjVeF
+         DUMgba0zlFVc6SxnQ9cFgnEO82eqFNsHW2D7YMvSdBE9oX2ftsq0ZM9Yz/XrfU78LSQ3
+         mYSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fPlK2iJZuWNSVaRZPV6Xl5e0rIsxttsntniiCED68Zc=;
+        b=c7OWqQezstS0bFYAU7+4fY1zK9AcCr/N/T26TxKCIHqXRf1woFfO1ejsh7LsBv/Xe1
+         7GTQ01IT/03PVXTVwmnuQ3RMJqBR7v/fT0uOBD/53Pxu0opcA2qNPMfN9Qz6eKCSjjjA
+         ZUQkMgR6QLnq/qodqsZiw8tBfG2z/DGBGQePG2STJIIUwnGriMxFV9wBi2P3eK4oGQxq
+         IWKxHcP1oUTUBDNazNa8MUrqLAbRAW5MLEo1i3aOBRvIE+kIcjNoV3SyitFlLRjokUUl
+         fPq4R9wOAKs6S/0PBAoG66g1P767Qow83wqE9wN7uno1K1bz+rz2eclFpn6BuOqUUl+H
+         N53w==
+X-Gm-Message-State: AOAM531oU3y109uARbA885P6KcfTwp3M7UgN/pydohxEG9md9+qK+QsF
+        bVuoc0jicvjGkOcxPhie1rYORw==
+X-Google-Smtp-Source: ABdhPJyDDeskv393Ac7lgDT9GWLFsB6GLtycYLuAScps5KJrZ6EDbYeWOP54iJHoYCgrlcQK1H/xUQ==
+X-Received: by 2002:a17:902:684b:b029:d5:a3a0:3b47 with SMTP id f11-20020a170902684bb02900d5a3a03b47mr2016920pln.76.1603265672387;
+        Wed, 21 Oct 2020 00:34:32 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id x19sm169608pjk.25.2020.10.21.00.34.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 21 Oct 2020 00:34:31 -0700 (PDT)
+Date:   Wed, 21 Oct 2020 13:04:29 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     rnayak@codeaurora.org
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrey Ignatov <rdna@fb.com>,
-        "Guilherme G. Piccoli" <gpiccoli@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/3] sched: delayed thread migration
-Message-ID: <20201021072612.GV2628@hirez.programming.kicks-ass.net>
-References: <20201020154445.119701-1-redha.gouicem@gmail.com>
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 8/8] qcom-geni-se: remove has_opp_table
+Message-ID: <20201021073429.akspqkj2i5td7r7c@vireshk-i7>
+References: <cover.1598594714.git.viresh.kumar@linaro.org>
+ <7e28e6f93f463ffbe91b2a5c18b82e7123500f44.1598594714.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201020154445.119701-1-redha.gouicem@gmail.com>
+In-Reply-To: <7e28e6f93f463ffbe91b2a5c18b82e7123500f44.1598594714.git.viresh.kumar@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 05:44:38PM +0200, Redha Gouicem wrote:
+On 28-08-20, 11:37, Viresh Kumar wrote:
+> has_opp_table isn't used anymore, remove it.
 > 
-> The first patch of the series is not specific to scheduling. It allows us
-> (or anyone else) to use the cpufreq infrastructure at a different sampling
-> rate without compromising the cpufreq subsystem and applications that
-> depend on it.
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
+> ---
+> V2: No changes.
+> ---
+>  include/linux/qcom-geni-se.h | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+> index 8f385fbe5a0e..02d1417c8ecf 100644
+> --- a/include/linux/qcom-geni-se.h
+> +++ b/include/linux/qcom-geni-se.h
+> @@ -48,7 +48,6 @@ struct geni_icc_path {
+>   * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
+>   * @icc_paths:		Array of ICC paths for SE
+>   * @opp_table:		Pointer to the OPP table
+> - * @has_opp_table:	Specifies if the SE has an OPP table
+>   */
+>  struct geni_se {
+>  	void __iomem *base;
+> @@ -59,7 +58,6 @@ struct geni_se {
+>  	unsigned long *clk_perf_tbl;
+>  	struct geni_icc_path icc_paths[3];
+>  	struct opp_table *opp_table;
+> -	bool has_opp_table;
+>  };
+>  
+>  /* Common SE registers */
 
-It's also completely redudant as the scheduler already reads aperf/mperf
-on every tick. Clearly you didn't do your homework ;-)
+Rajendra,
 
-> The main idea behind this patch series is to bring to light the frequency
-> inversion problem that will become more and more prominent with new CPUs
-> that feature per-core DVFS. The solution proposed is a first idea for
-> solving this problem that still needs to be tested across more CPUs and
-> with more applications.
+This patch depended on following patches which are part of Linus's master now:
 
-Which is why schedutil (the only cpufreq gov anybody should be using) is
-integrated with the scheduler and closes the loop and tells the CPU
-about the expected load.
+7d568edff5cb spi: spi-geni-qcom: Unconditionally call dev_pm_opp_of_remove_table()
+c7ac46dac744 tty: serial: qcom_geni_serial: Unconditionally call dev_pm_opp_of_remove_table()
 
+Who is going to merge this one ? Should I ask Greg or you can take it ?
+
+-- 
+viresh
