@@ -2,69 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E532946D2
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 05:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD322946F1
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 05:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406790AbgJUDEy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Oct 2020 23:04:54 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:37502 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2406694AbgJUDEy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Oct 2020 23:04:54 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id A26D780450BD7FB833D0;
-        Wed, 21 Oct 2020 11:04:51 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 21 Oct 2020 11:04:46 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <niklas.soderlund@ragnatech.se>, <rui.zhang@intel.com>,
-        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] thermal: replace spin_lock_irqsave by spin_lock in hard IRQ
-Date:   Wed, 21 Oct 2020 11:05:30 +0800
-Message-ID: <1603249530-25218-1-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        id S2411742AbgJUD1k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Oct 2020 23:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411737AbgJUD1k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Oct 2020 23:27:40 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D9FC0613CE
+        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 20:27:39 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id p25so441620vsq.4
+        for <linux-pm@vger.kernel.org>; Tue, 20 Oct 2020 20:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=okDKMzXzCtX+DL70PlkyYgGodwergNlDE9kGKTPNIKg=;
+        b=jelfM9YyqCKcnDtniLjUFPu6VhMOAsfQOqqWSfu0zlFEjfKhE7JnIz/kRKKRoK2VJv
+         Xw8SL0BTy6z2ymLtcBHN8Gl8opJuePohe1HySszT+qFcfjdRZHkNizRExSD9rKGs++br
+         pFjvyn6iF/NQ2MrM4Ps9lF31Hb3CHtu2q5iGw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=okDKMzXzCtX+DL70PlkyYgGodwergNlDE9kGKTPNIKg=;
+        b=IR4DE9uzmo4gZrNKx+p09NvJr0wLh+YNSUKhgp90zkrsIl39VP53Yux40/Qb2CUOqf
+         7gaNuLGOcEjG0a2QVi4XFG4nAmUEOBa37Lhza+yVefXaPmYTWR2bpGS4OaVbUs6fwbHT
+         fRN6kiosfSGnFnio9WB3gXovP1uSGEqB557b8tnS/7yL9wL4JCwU4QQJXKl+XK8RLXze
+         zMfYXBgMQSLgOoqSAdM4EZxQQdsyMOOrahk4x7ucRwkCt5VAKlksZp3kGlnBc93IG15D
+         gP+9BM7ieaHboltLiphVkKv349VpmyDGv23NI06UxfKas4uXR2HlFgxaRkWj2PcjQ++w
+         /x+A==
+X-Gm-Message-State: AOAM532MA1wH17du3klTt8KEvxIWOV/9Xv/GlZqoioC5Y6VPRFvNWND/
+        s0NjJeX5QfSv0PAFG2bCu7jVa6FKb8W+OS0OypDhCQ==
+X-Google-Smtp-Source: ABdhPJyHqwzVn8t+z+oInKgq5Xr4Q5Fhgb86BH/r8Q454Y6wqjeLrz2gjPJeUiRzPK+mZ8tcCv03sbCwCtelDtxopN4=
+X-Received: by 2002:a67:2c4c:: with SMTP id s73mr448412vss.53.1603250858758;
+ Tue, 20 Oct 2020 20:27:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+References: <20201019223257.261223-1-abhishekpandit@chromium.org>
+ <20201019153232.1.I797f9874972a07fc381fe586b6748ce71c7b1fda@changeid> <20201020055738.GD3437534@kroah.com>
+In-Reply-To: <20201020055738.GD3437534@kroah.com>
+From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date:   Tue, 20 Oct 2020 20:27:27 -0700
+Message-ID: <CANFp7mXd=spL6PAL1cGrdZYBHu4A5uqJhFnu3Fmg9FmmFu6JJw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kobject: Don't emit change events if not in sysfs
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The code has been in a irq-disabled context since it is hard IRQ. There
-is no necessity to do it again.
+Hi Greg,
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
----
- drivers/thermal/rcar_thermal.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+I was debugging without a live repro and I was told this patch
+improved behavior but it's only by chance (someone bisected a Dell
+D6000 dock's displayport issue to this commit and this change seemed
+to help; udev logs later shows that's not the case). I took another
+look at device_init_wakeup and I can see that
+device_set_wakeup_capable does indeed check for device_is_registered
+before adding the wakeup attributes so the ordering of events I
+suspected cannot occur.
 
-diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-index 5c2a13b..6ae757d 100644
---- a/drivers/thermal/rcar_thermal.c
-+++ b/drivers/thermal/rcar_thermal.c
-@@ -409,16 +409,15 @@ static irqreturn_t rcar_thermal_irq(int irq, void *data)
- {
- 	struct rcar_thermal_common *common = data;
- 	struct rcar_thermal_priv *priv;
--	unsigned long flags;
- 	u32 status, mask;
- 
--	spin_lock_irqsave(&common->lock, flags);
-+	spin_lock(&common->lock);
- 
- 	mask	= rcar_thermal_common_read(common, INTMSK);
- 	status	= rcar_thermal_common_read(common, STR);
- 	rcar_thermal_common_write(common, STR, 0x000F0F0F & mask);
- 
--	spin_unlock_irqrestore(&common->lock, flags);
-+	spin_unlock(&common->lock);
- 
- 	status = status & ~mask;
- 
--- 
-2.7.4
+Thanks for pushing back Greg. It made me take a deeper look at an
+assumption I hadn't challenged. Please consider this patch abandoned.
 
+Abhishek
+
+On Mon, Oct 19, 2020 at 10:56 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Oct 19, 2020 at 03:32:57PM -0700, Abhishek Pandit-Subedi wrote:
+> > Add a check to make sure the kobj is created and in sysfs before sending
+> > a change event notification. Otherwise, udev rules that depend on the
+> > change notification may find that the path that changed doesn't actually
+> > exist.
+>
+> Why is the user of the kobject trying to emit a uevent before it is
+> registered?  Shouldn't we fix the root problem here instead?  Otherwise
+> the event is still "gone", the caller will not know what to do about it.
+>
+> Please fix the root problem here.
+>
+> thanks,
+>
+> greg k-h
