@@ -2,128 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BF4294EBF
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 16:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1B7294F91
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 17:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443595AbgJUOfI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 10:35:08 -0400
-Received: from mx4.veeam.com ([104.41.138.86]:46256 "EHLO mx4.veeam.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2443592AbgJUOfH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 21 Oct 2020 10:35:07 -0400
-Received: from mail.veeam.com (prgmbx01.amust.local [172.24.0.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx4.veeam.com (Postfix) with ESMTPS id 29CA78A77D;
-        Wed, 21 Oct 2020 17:35:04 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com; s=mx4;
-        t=1603290904; bh=gcs9fDGrugmEFnHD7BVk3TKsrIQsLRHT9hgdToOOQuI=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
-        b=W3XiTq17/EjMVJayE5rGdsC29XtujNHnsX7S2+TuMTBKQwGsHfaTM6Ahtdk/thl47
-         GskMaiU5eQDILnl6aTJnSfY8+VIAqFn1Qz+uuGKwU2w3NTGpxT1b8fiOfm5p451Ss8
-         RuKh+SJAXrlHpeoEUPjx6l6iyYBr/gc4MF2QujA4=
-Received: from veeam.com (172.24.14.5) by prgmbx01.amust.local (172.24.0.171)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2; Wed, 21 Oct 2020
- 16:35:02 +0200
-Date:   Wed, 21 Oct 2020 17:35:53 +0300
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "darrick.wong@oracle.com" <darrick.wong@oracle.com>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        "ming.lei@redhat.com" <ming.lei@redhat.com>,
-        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
-        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "osandov@fb.com" <osandov@fb.com>,
-        "koct9i@gmail.com" <koct9i@gmail.com>,
-        "steve@sk2.org" <steve@sk2.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
+        id S2501915AbgJUPJf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 11:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2501914AbgJUPJf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 11:09:35 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B712C0613CE;
+        Wed, 21 Oct 2020 08:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=JogALXxUhOTRDSLNlL38sulkhzXdXhR1YKEuIv/wTTQ=; b=UfbClxFM2J/bWwfotALuJETGVH
+        jn8HBocgzQdLffV6pdJAjLEEVYVrCgiZp8xPR1xHVEAsmLizuXFdCJV6YENInuttJbaeaYHlk22OO
+        UBzPF5mjIIafZPLgqPibLYQXfFmtbAltRpVavsaBA0EKU6MBZRMkgn09O7FG5flBpXeNUynkBAzl8
+        68XHs+y4SpbfEPAWnsBp6TfEt+s1cCo9baXPi2IMqg6ZrL9pV0XgPVeDlIY4pHLPYF5p1mAUsG7vA
+        1fuaJE1u7TrB8IsQbSu+Ev6Vvcyqcv9LzNj24oJqDQNrRbiMZZyv9KSBXuRQ9V5j9AXV+S0xixArw
+        7yW/feRw==;
+Received: from [2601:1c0:6280:3f0::507c]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kVFjz-0003Y7-MR; Wed, 21 Oct 2020 15:09:27 +0000
 Subject: Re: [PATCH 1/2] Block layer filter - second version
-Message-ID: <20201021143553.GG20749@veeam.com>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
+        viro@zeniv.linux.org.uk, hch@infradead.org,
+        darrick.wong@oracle.com, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, rjw@rjwysocki.net,
+        len.brown@intel.com, pavel@ucw.cz, akpm@linux-foundation.org,
+        johannes.thumshirn@wdc.com, ming.lei@redhat.com, jack@suse.cz,
+        tj@kernel.org, gustavo@embeddedor.com, bvanassche@acm.org,
+        osandov@fb.com, koct9i@gmail.com, damien.lemoal@wdc.com,
+        steve@sk2.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org
 References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
  <1603271049-20681-2-git-send-email-sergei.shtepa@veeam.com>
- <BL0PR04MB65141320C7BF75B7142CA30CE71C0@BL0PR04MB6514.namprd04.prod.outlook.com>
- <20201021114438.GK20115@casper.infradead.org>
- <20201021125555.GE20749@veeam.com>
- <20201021130753.GM20115@casper.infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <7bd31238-0c7c-ed6f-d0b9-680fcaa54513@infradead.org>
+Date:   Wed, 21 Oct 2020 08:09:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20201021130753.GM20115@casper.infradead.org>
-X-Originating-IP: [172.24.14.5]
-X-ClientProxiedBy: prgmbx02.amust.local (172.24.0.172) To prgmbx01.amust.local
- (172.24.0.171)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29C604D26A677566
-X-Veeam-MMEX: True
+In-Reply-To: <1603271049-20681-2-git-send-email-sergei.shtepa@veeam.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 10/21/2020 16:07, Matthew Wilcox wrote:
-> On Wed, Oct 21, 2020 at 03:55:55PM +0300, Sergei Shtepa wrote:
-> > The 10/21/2020 14:44, Matthew Wilcox wrote:
-> > > I don't understand why O_DIRECT gets to bypass the block filter.  Nor do
-> > > I understand why anybody would place a block filter on the swap device.
-> > > But if somebody did place a filter on the swap device, why should swap
-> > > be able to bypass the filter?
-> > 
-> > Yes, intercepting the swap partition is absurd. But we can't guarantee
-> > that the filter won't intercept swap.
-> > 
-> > Swap operation is related to the memory allocation logic. If a swap on
-> > the block device are accessed during memory allocation from filter,
-> > a deadlock occurs. We can allow filters to occasionally shoot off their
-> > feet, especially under high load. But I think it's better not to do it.
-> 
-> We already have logic to prevent this in Linux.  Filters need to
-> call memalloc_noio_save() while they might cause swap to happen and
-> memalloc_noio_restore() once it's safe for them to cause swap again.
+On 10/21/20 2:04 AM, Sergei Shtepa wrote:
+> diff --git a/block/Kconfig b/block/Kconfig
+> index bbad5e8bbffe..a308801b4376 100644
+> --- a/block/Kconfig
+> +++ b/block/Kconfig
+> @@ -204,6 +204,17 @@ config BLK_INLINE_ENCRYPTION_FALLBACK
+>  	  by falling back to the kernel crypto API when inline
+>  	  encryption hardware is not present.
+>  
+> +config BLK_FILTER
+> +	bool "Enable support for block layer filters"
+> +	default y
 
-Yes, I looked at this function, it can really be useful for the filter.
-Then I don't need to enter the submit_bio_direct() function and the wait
-loop associated with the queue polling function blk_mq_poll() will have
-to be rewritten.
+Drop the default y. We don't add modules to a default build without
+some tough justification.
 
-> 
-> > "directly access" - it is not O_DIRECT. This means (I think) direct
-> > reading from the device file, like "dd if=/dev/sda1".
-> > As for intercepting direct reading, I don't know how to do the right thing.
-> > 
-> > The problem here is that in fs/block_dev.c in function __blkdev_direct_IO()
-> > uses the qc - value returned by the submit_bio() function.
-> > This value is used below when calling 
-> > blk_poll(bdev_get_queue(dev), qc, true).
-> > The filter cannot return a meaningful value of the blk_qc_t type when
-> > intercepting a request, because at that time it does not know which queue
-> > the request will fall into.
-> > 
-> > If function submit_bio() will always return BLK_QC_T_NONE - I think the
-> > algorithm of the __blk dev_direct_IO() will not work correctly.
-> > If we need to intercept direct access to a block device, we need to at
-> > least redo the __blkdev_direct_IO function, getting rid of blk_pool.
-> > I'm not sure it's necessary yet.
-> 
-> This isn't part of the block layer that I'm familiar with, so I can't
-> help solve this problem, but allowing O_DIRECT to bypass the block filter
-> is a hole that needs to be fixed before these patches can be considered.
+> +	depends on MODULES
+> +	help
+> +	  Enabling this lets third-party kernel modules intercept
 
-I think there is no such problem, but I will check, of course.
+	                lets loadable kernel modules intercept
+
+> +	  bio requests for any block device. This allows them to implement
+> +	  changed block tracking and snapshots without any reconfiguration of
+> +	  the existing setup. For example, this option allows snapshotting of
+> +	  a block device without adding it to LVM.
+
 
 -- 
-Sergei Shtepa
-Veeam Software developer.
+~Randy
+
