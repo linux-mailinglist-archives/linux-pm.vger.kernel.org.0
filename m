@@ -2,112 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E11A294AF4
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 11:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98547294AFC
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 12:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731276AbgJUJ7j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 05:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441528AbgJUJ7i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 05:59:38 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26681C0613D4
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 02:59:37 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 19so1164382pge.12
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 02:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6g5Wjf/Nb7mrOf2N+gasC/3n4iYiNKVe8hMPUVCsdXk=;
-        b=pl4L5uLrIG2AC2pOMAF9iYUtxRJeC0QvSwINA5kD4cRVPjkl8rzyz4Bw27kVKJWNdW
-         GUQ9YWiMl1kRjgcqsmt9EJJv09BuzyDGKjfTbHrt1v6iq2yx4HvnLf5+mF4cJXq/5NBI
-         8hGr/ZJT1FuuQaemP2XsVNkWUSidqwFasE6hHexJH+oKOL6TBdl71NNW/yRK3SJOIrMg
-         pj4kgs0BrV45Xep3q2jxNgmGSF9/2mpjl34aEJYM8hUavdbOGuQphR67Nx+cxY3p8Ufn
-         HTLtVkUQDiWq+PJSs8zDAN04r8lKId6xRlFdefu6LNA1knxqjmibq1Jzz47mScDYjuZy
-         lIgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6g5Wjf/Nb7mrOf2N+gasC/3n4iYiNKVe8hMPUVCsdXk=;
-        b=T9SU2gYUFu+uD7oWIRCeONT+b/i3h/nGg/csfOewhlCCgiYdQVPqMPjA2t3IBTGeTX
-         TXiW4emF3lSxVhD7/ThiaEw/9SS0yC6MXWFOGvBdNDL9D5eiWQX/abcp4OC6k0iTsD4D
-         SPHih1sPNph6lcFdw5wCnZENY2/vTlzy2VTKspToNs/UP57okQiKNLxb0D10DesAB4gp
-         RmLvBpKyYeZIDZ50s36Fs+MFCdDQlmgHW+fD7N9c9Vygosx1MOyGq9Tn1+TfEAYNX/XB
-         YeuhJj9CzkmYFetVHOGILpZKmaKcLoTYM108xao/Zuizq4+RrxOPmbn50UKJtfwwWnGR
-         g07g==
-X-Gm-Message-State: AOAM532g3x4FkjECnqfqbWX6mXt/7Nvh9d5KalZMa7xVJJRzLLwOjxUQ
-        HNow3pcWw2A4RZigEjVANsBF
-X-Google-Smtp-Source: ABdhPJxP2Kn+MEpvl705bs5Z93XJfav12KiJJnx4b8wd07fJsxZAqpSHT86pHcQuv/MG0pqtM3Oopg==
-X-Received: by 2002:a63:1357:: with SMTP id 23mr2628992pgt.13.1603274376376;
-        Wed, 21 Oct 2020 02:59:36 -0700 (PDT)
-Received: from Mani-XPS-13-9360 ([2409:4072:70e:2a27:314a:6d22:ec47:a603])
-        by smtp.gmail.com with ESMTPSA id 198sm1673121pfy.41.2020.10.21.02.59.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 21 Oct 2020 02:59:35 -0700 (PDT)
-Date:   Wed, 21 Oct 2020 15:29:16 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Hector Yuan <hector.yuan@mediatek.com>
-Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: cpus: Document
- 'qcom,freq-domain' property
-Message-ID: <20201021095916.GA3334@Mani-XPS-13-9360>
-References: <20201020153944.18047-1-manivannan.sadhasivam@linaro.org>
- <1603247803.20224.5.camel@mtkswgap22>
+        id S2441641AbgJUKAq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 06:00:46 -0400
+Received: from mx4.veeam.com ([104.41.138.86]:42144 "EHLO mx4.veeam.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2409323AbgJUKAq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 21 Oct 2020 06:00:46 -0400
+Received: from mail.veeam.com (spbmbx01.amust.local [172.17.17.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.veeam.com (Postfix) with ESMTPS id 181608A785;
+        Wed, 21 Oct 2020 13:00:43 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com; s=mx4;
+        t=1603274443; bh=mUDQL7MG1scyFSQ0a9pyxTVI6LvdRs8mu9vhMjIp5BA=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
+        b=C23hn96+ZA4EBt3/VYBOTpzXQzD8tcwqS6E0abaBi/XPXMnly4pog8QybPaBZRItI
+         IkAlomgIGuw5ehdil8CcHH54yyHHMyf4tHWdhoRP1oEmTn9Vm3IlcOgOT7K7o+lWSl
+         RilRxDz8BpJahoGW4BtThhWSXLO1v31QNnpmnRhs=
+Received: from veeam.com (172.24.14.5) by spbmbx01.amust.local (172.17.17.171)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.595.3; Wed, 21 Oct 2020
+ 13:00:39 +0300
+Date:   Wed, 21 Oct 2020 13:01:26 +0300
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "darrick.wong@oracle.com" <darrick.wong@oracle.com>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "koct9i@gmail.com" <koct9i@gmail.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "steve@sk2.org" <steve@sk2.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 1/2] Block layer filter - second version
+Message-ID: <20201021100126.GB20749@veeam.com>
+References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+ <1603271049-20681-2-git-send-email-sergei.shtepa@veeam.com>
+ <SN4PR0401MB3598185077055334ADE1BB159B1C0@SN4PR0401MB3598.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <1603247803.20224.5.camel@mtkswgap22>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <SN4PR0401MB3598185077055334ADE1BB159B1C0@SN4PR0401MB3598.namprd04.prod.outlook.com>
+X-Originating-IP: [172.24.14.5]
+X-ClientProxiedBy: spbmbx02.amust.local (172.17.17.172) To
+ spbmbx01.amust.local (172.17.17.171)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A295605D26A677560
+X-Veeam-MMEX: True
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On Wed, Oct 21, 2020 at 10:36:43AM +0800, Hector Yuan wrote:
-> Hi, Manivannan
+The 10/21/2020 12:14, Johannes Thumshirn wrote:
+> On 21/10/2020 11:04, Sergei Shtepa wrote:
+> > +	help
+> > +	  Enabling this lets third-party kernel modules intercept
+> > +	  bio requests for any block device. This allows them to implement
 > 
-> On Tue, 2020-10-20 at 21:09 +0530, Manivannan Sadhasivam wrote:
-> > Add devicetree documentation for 'qcom,freq-domain' property specific
-> > to Qualcomm CPUs. This property is used to reference the CPUFREQ node
-> > along with Domain ID (0/1).
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-> > index 1222bf1831fa..f40564bf004f 100644
-> > --- a/Documentation/devicetree/bindings/arm/cpus.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-> > @@ -290,6 +290,12 @@ properties:
-> >  
-> >        * arm/msm/qcom,kpss-acc.txt
-> >  
-> > +  qcom,freq-domain:
-> Do you mind to change "qcom, freq-domain" to common naming? or drop the
-> prefix. So that we can use this CPU node and map it to each freq-domain.
-> Thanks a lot. 
-
-I can do that but did the domain value match for other platforms as well?
-
-Thanks,
-Mani
-
+> The "third-party kernel modules" part sounds a bit worrisome to me. Especially
+> as this functionality is based on EXPORT_SYMBOL()s without the GPL suffix.
 > 
-> > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > +    description: |
-> > +      CPUs supporting freq-domain must set their "qcom,freq-domain" property
-> > +      with phandle to a cpufreq_hw node followed by the Domain ID(0/1).
-> > +
-> >    rockchip,pmu:
-> >      $ref: '/schemas/types.yaml#/definitions/phandle'
-> >      description: |
+> I read it as a "allow a proprietary module to mess with bios", which is a big 
+> no-no to me.
 > 
+> Not providing any sort of changelog doesn't help much either.
+> 
+> Thanks,
+> 	Johannes
+> 
+
+I think the words "third-party" are is not necessary.
+In my opinion, creating proprietary kernel modules for Linux is an empty idea.
+
+EXPORT_SYMBOL() -> EXPORT_SYMBOL_GPL() - no problem.
+
+-- 
+Sergei Shtepa
+Veeam Software developer.
