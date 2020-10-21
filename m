@@ -2,92 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7122948D3
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 09:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03532948E1
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 09:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440896AbgJUHYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 03:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S2440937AbgJUH1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 03:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440893AbgJUHYJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 03:24:09 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26BC0613D5
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 00:24:09 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 10so960613pfp.5
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 00:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hAIhzFswDyObHC/AccJ2pW9tYMVZUmTRll6IsakeHDI=;
-        b=hcxqhkvAd7gaUVg+ADZjC/g5t7FunCEWj40dk9Jkh/xjioI52ZXAkwo5BMXN3dd6bK
-         5yXuvLzPNM3xRKnqdyMdj4t+47mqUiHukE7zp03beKQSUIMlvPx4UIwK8I+FHjqcmJK+
-         m/BFHJXQmFjXQ8bMAZqWLhKkQs9XMJMwLfK9KLRTPTTK0VqGNT1ILV7h8O1faqdo/jo4
-         RnbVTYrqOhJJX40NnBh57Kvpk11HcrFZljb+h+jDOuMIAQLRZDKUntg+d0RwJGn2AWEH
-         05nApZQVycKIsoa+R52Nh1RncFPKJRVeAHd/N+wiBZk7rXT5ryOvdRuVzz3Kc2MSGxVM
-         o+vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hAIhzFswDyObHC/AccJ2pW9tYMVZUmTRll6IsakeHDI=;
-        b=D3klKUuIc6VqyDVcUz5u9fEsUUCIOTAQQI1b8VimSzvi6js3oFXl8laiOm9trC05Cu
-         dyJ51zGT3tHtloFC5qN1by7p1SC2RC6zw5c/1FaSyl+s1U9XkmRR6j5xa6oZP26RybXq
-         cYbLmvq25Vdx/ZQje10pBJhhwKzooOFly1qIZn8303Wqv/d3k1jrZeYLmiWH1Mu0H7dr
-         z5+naKZTvzLb0d33c6bzOtXIsfn7TD5EvMarlKPfWvzwmXgl3MHhm7VmytlHYZvMjbpo
-         02vsPSeQa4tUtumNGjVXZqf0z4T1IbrMJGrfBUsmuzFprF7DXkEwLUvOuoiMla3UyZlg
-         XldA==
-X-Gm-Message-State: AOAM530uEfXzyCtlMmjCmoGivc5xAttRJAx/VnRkfAYB1yr7z/3u5TKo
-        sEKdmCkduwsBoCJpzk4Rv/DdAg==
-X-Google-Smtp-Source: ABdhPJxdvf151N9thd6CsPj2u4ESktngUMo7t9TYxraGbFVI19jZ698HL0h3xJRccblV6DfAzwc+Ng==
-X-Received: by 2002:aa7:84c6:0:b029:155:d56e:5191 with SMTP id x6-20020aa784c60000b0290155d56e5191mr2068267pfn.41.1603265047189;
-        Wed, 21 Oct 2020 00:24:07 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id o2sm1377845pgg.3.2020.10.21.00.24.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 21 Oct 2020 00:24:06 -0700 (PDT)
-Date:   Wed, 21 Oct 2020 12:54:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     rnayak@codeaurora.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>
-Cc:     linux-pm@vger.kernel.org,
+        with ESMTP id S2440932AbgJUH1D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 03:27:03 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94413C0613CE;
+        Wed, 21 Oct 2020 00:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LfLKDr228zeIZDnUVRJzSctBjN1bRXJI0iFBMRj3SFM=; b=O1vbu6Y8L2ik3RVQZ6Iwl/WUE+
+        gTS6+IGAhOkPC0mBg9IJjOUCB9mt0HZSHNtmweq0DCSUiCWu+8G+7RZ/sW+tYYuidPQebo30jWcO3
+        7drIqDR7L9R2JjSxYWRN/g3TwM5GtgaNL7kNz++9/wdG3UOWH5reuEXNfUU6MaGaNEqlnGuz4sGkW
+        TcsnIlm4zFv1wX4Gjsbm1hQ/ZNpsJGqxXrrSsDHwhIEn9mkgT39ObZwPG0TNDMsf20qA2Be26gcZI
+        LeIKg5j0J6Rmq28p/e82QgNjbGG0att1k9ZfnW4ujKVdV1/FzewpLyXJoUzQYuCrIEf/83j4UlvaS
+        n9b6lJyQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kV8Vm-0000uV-0X; Wed, 21 Oct 2020 07:26:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 40E39304D28;
+        Wed, 21 Oct 2020 09:26:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 247B6203CC499; Wed, 21 Oct 2020 09:26:12 +0200 (CEST)
+Date:   Wed, 21 Oct 2020 09:26:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Redha Gouicem <redha.gouicem@gmail.com>
+Cc:     julien.sopena@lip6.fr, julia.lawall@inria.fr,
+        gilles.muller@inria.fr, carverdamien@gmail.com,
+        jean-pierre.lozi@oracle.com, baptiste.lepers@sydney.edu.au,
+        nicolas.palix@univ-grenoble-alpes.fr,
+        willy.zwaenepoel@sydney.edu.au,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/8] drm/msm: Unconditionally call
- dev_pm_opp_of_remove_table()
-Message-ID: <20201021072404.y43tjzd2ehclrejp@vireshk-i7>
-References: <cover.1598594714.git.viresh.kumar@linaro.org>
- <6e4110032f8711e8bb0acbeccfe66dec3b09d5c1.1598594714.git.viresh.kumar@linaro.org>
- <20201005062633.ejpehkpeuwksrx3e@vireshk-i7>
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrey Ignatov <rdna@fb.com>,
+        "Guilherme G. Piccoli" <gpiccoli@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/3] sched: delayed thread migration
+Message-ID: <20201021072612.GV2628@hirez.programming.kicks-ass.net>
+References: <20201020154445.119701-1-redha.gouicem@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201005062633.ejpehkpeuwksrx3e@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201020154445.119701-1-redha.gouicem@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-10-20, 11:56, Viresh Kumar wrote:
-> On 28-08-20, 11:37, Viresh Kumar wrote:
-> > dev_pm_opp_of_remove_table() doesn't report any errors when it fails to
-> > find the OPP table with error -ENODEV (i.e. OPP table not present for
-> > the device). And we can call dev_pm_opp_of_remove_table()
-> > unconditionally here.
-> > 
-> > While at it, also create a label to put clkname.
-> > 
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+On Tue, Oct 20, 2020 at 05:44:38PM +0200, Redha Gouicem wrote:
 > 
-> Can someone please apply this and the other drm patch (2/8) ?
+> The first patch of the series is not specific to scheduling. It allows us
+> (or anyone else) to use the cpufreq infrastructure at a different sampling
+> rate without compromising the cpufreq subsystem and applications that
+> depend on it.
 
-Rob/Rajendra, can someone please have a look at these patches ?
+It's also completely redudant as the scheduler already reads aperf/mperf
+on every tick. Clearly you didn't do your homework ;-)
 
--- 
-viresh
+> The main idea behind this patch series is to bring to light the frequency
+> inversion problem that will become more and more prominent with new CPUs
+> that feature per-core DVFS. The solution proposed is a first idea for
+> solving this problem that still needs to be tested across more CPUs and
+> with more applications.
+
+Which is why schedutil (the only cpufreq gov anybody should be using) is
+integrated with the scheduler and closes the loop and tells the CPU
+about the expected load.
+
