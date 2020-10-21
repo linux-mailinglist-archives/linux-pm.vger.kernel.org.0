@@ -2,266 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AA2294D86
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 15:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1574294E57
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 16:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441645AbgJUNbv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 09:31:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54310 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438814AbgJUNbu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 21 Oct 2020 09:31:50 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 239A1AD12;
-        Wed, 21 Oct 2020 13:31:48 +0000 (UTC)
-Subject: Re: [PATCH 0/2] block layer filter and block device snapshot module
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
-        viro@zeniv.linux.org.uk, hch@infradead.org,
-        darrick.wong@oracle.com, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, rjw@rjwysocki.net,
-        len.brown@intel.com, pavel@ucw.cz, akpm@linux-foundation.org,
-        johannes.thumshirn@wdc.com, ming.lei@redhat.com, jack@suse.cz,
-        tj@kernel.org, gustavo@embeddedor.com, bvanassche@acm.org,
-        osandov@fb.com, koct9i@gmail.com, damien.lemoal@wdc.com,
-        steve@sk2.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org
-References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
-Date:   Wed, 21 Oct 2020 15:31:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S2442640AbgJUOQF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 10:16:05 -0400
+Received: from atl4mhfb03.myregisteredsite.com ([209.17.115.119]:53314 "EHLO
+        atl4mhfb03.myregisteredsite.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2408411AbgJUOQE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 10:16:04 -0400
+X-Greylist: delayed 306 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Oct 2020 10:16:03 EDT
+Received: from jax4mhob22.registeredsite.com (jax4mhob22.registeredsite.com [64.69.218.110])
+        by atl4mhfb03.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id 09LEAvFi020929
+        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 10:10:57 -0400
+Received: from mailpod.hostingplatform.com ([10.30.71.204])
+        by jax4mhob22.registeredsite.com (8.14.4/8.14.4) with ESMTP id 09LEAsfm028023
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)
+        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 10:10:54 -0400
+Received: (qmail 5719 invoked by uid 0); 21 Oct 2020 14:10:54 -0000
+X-TCPREMOTEIP: 83.128.90.119
+X-Authenticated-UID: mike@milosoftware.com
+Received: from unknown (HELO phenom.domain?not?set.invalid) (mike@milosoftware.com@83.128.90.119)
+  by 0 with ESMTPA; 21 Oct 2020 14:10:54 -0000
+From:   Mike Looijmans <mike.looijmans@topic.nl>
+To:     sre@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Looijmans <mike.looijmans@topic.nl>
+Subject: [PATCH] dt-bindings: power/supply: Add ltc4162-l-charger
+Date:   Wed, 21 Oct 2020 16:10:30 +0200
+Message-Id: <20201021141030.27751-1-mike.looijmans@topic.nl>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/21/20 11:04 AM, Sergei Shtepa wrote:
-> Hello everyone! Requesting for your comments and suggestions.
-> 
-> # blk-filter
-> 
-> Block layer filter allows to intercept BIO requests to a block device.
-> 
-> Interception is performed at the very beginning of the BIO request
-> processing, and therefore does not affect the operation of the request
-> processing queue. This also makes it possible to intercept requests from
-> a specific block device, rather than from the entire disk.
-> 
-> The logic of the submit_bio function has been changed - since the
-> function execution results are not processed anywhere (except for swap
-> and direct-io) the function won't return a value anymore.
-> 
-> Now the submit_bio_direct() function is called whenever the result of
-> the blk_qc_t function is required. submit_bio_direct() is not
-> intercepted by the block layer filter. This is logical for swap and
-> direct-io.
-> 
-> Block layer filter allows you to enable and disable the filter driver on
-> the fly. When a new block device is added, the filter driver can start
-> filtering this device. When you delete a device, the filter can remove
-> its own filter.
-> 
-> The idea of multiple altitudes had to be abandoned in order to simplify
-> implementation and make it more reliable. Different filter drivers can
-> work simultaneously, but each on its own block device.
-> 
-> # blk-snap
-> 
-> We propose a new kernel module - blk-snap. This module implements
-> snapshot and changed block tracking functionality. It is intended to
-> create backup copies of any block devices without usage of device mapper.
-> Snapshots are temporary and are destroyed after the backup process has
-> finished. Changed block tracking allows for incremental and differential
-> backup copies.
-> 
-> blk-snap uses block layer filter. Block layer filter provides a callback
-> to intercept bio-requests. If a block device disappears for whatever
-> reason, send a synchronous request to remove the device from filtering.
-> 
-> blk-snap kernel module is a product of a deep refactoring of the
-> out-of-tree kernel veeamsnap kernel module
-> (https://github.com/veeam/veeamsnap/):
-> * all conditional compilation branches that served for the purpose of
->    compatibility with older kernels have been removed;
-> * linux kernel code style has been applied;
-> * blk-snap mostly takes advantage of the existing kernel code instead of
->    reinventing the wheel;
-> * all redundant code (such as persistent cbt and snapstore collector)
->    has been removed.
-> 
-> Several important things are still have to be done:
-> * refactor the module interface for interaction with a user-space code -
->    it is already clear that the implementation of some calls can be
->    improved.
-> 
-> Your feedback would be greatly appreciated!
-> 
-> Sergei Shtepa (2):
->    Block layer filter - second version
->    blk-snap - snapshots and change-tracking for block devices
-> 
->   block/Kconfig                               |  11 +
->   block/Makefile                              |   1 +
->   block/blk-core.c                            |  52 +-
->   block/blk-filter-internal.h                 |  29 +
->   block/blk-filter.c                          | 286 ++++++
->   block/partitions/core.c                     |  14 +-
->   drivers/block/Kconfig                       |   2 +
->   drivers/block/Makefile                      |   1 +
->   drivers/block/blk-snap/Kconfig              |  24 +
->   drivers/block/blk-snap/Makefile             |  28 +
->   drivers/block/blk-snap/big_buffer.c         | 193 ++++
->   drivers/block/blk-snap/big_buffer.h         |  24 +
->   drivers/block/blk-snap/blk-snap-ctl.h       | 190 ++++
->   drivers/block/blk-snap/blk_deferred.c       | 566 +++++++++++
->   drivers/block/blk-snap/blk_deferred.h       |  67 ++
->   drivers/block/blk-snap/blk_descr_file.c     |  82 ++
->   drivers/block/blk-snap/blk_descr_file.h     |  26 +
->   drivers/block/blk-snap/blk_descr_mem.c      |  66 ++
->   drivers/block/blk-snap/blk_descr_mem.h      |  14 +
->   drivers/block/blk-snap/blk_descr_multidev.c |  86 ++
->   drivers/block/blk-snap/blk_descr_multidev.h |  25 +
->   drivers/block/blk-snap/blk_descr_pool.c     | 190 ++++
->   drivers/block/blk-snap/blk_descr_pool.h     |  38 +
->   drivers/block/blk-snap/blk_redirect.c       | 507 ++++++++++
->   drivers/block/blk-snap/blk_redirect.h       |  73 ++
->   drivers/block/blk-snap/blk_util.c           |  33 +
->   drivers/block/blk-snap/blk_util.h           |  33 +
->   drivers/block/blk-snap/cbt_map.c            | 210 +++++
->   drivers/block/blk-snap/cbt_map.h            |  62 ++
->   drivers/block/blk-snap/common.h             |  31 +
->   drivers/block/blk-snap/ctrl_fops.c          | 691 ++++++++++++++
->   drivers/block/blk-snap/ctrl_fops.h          |  19 +
->   drivers/block/blk-snap/ctrl_pipe.c          | 562 +++++++++++
->   drivers/block/blk-snap/ctrl_pipe.h          |  34 +
->   drivers/block/blk-snap/ctrl_sysfs.c         |  73 ++
->   drivers/block/blk-snap/ctrl_sysfs.h         |   5 +
->   drivers/block/blk-snap/defer_io.c           | 397 ++++++++
->   drivers/block/blk-snap/defer_io.h           |  39 +
->   drivers/block/blk-snap/main.c               |  82 ++
->   drivers/block/blk-snap/params.c             |  58 ++
->   drivers/block/blk-snap/params.h             |  29 +
->   drivers/block/blk-snap/rangevector.c        |  85 ++
->   drivers/block/blk-snap/rangevector.h        |  31 +
->   drivers/block/blk-snap/snapimage.c          | 982 ++++++++++++++++++++
->   drivers/block/blk-snap/snapimage.h          |  16 +
->   drivers/block/blk-snap/snapshot.c           | 225 +++++
->   drivers/block/blk-snap/snapshot.h           |  17 +
->   drivers/block/blk-snap/snapstore.c          | 929 ++++++++++++++++++
->   drivers/block/blk-snap/snapstore.h          |  68 ++
->   drivers/block/blk-snap/snapstore_device.c   | 532 +++++++++++
->   drivers/block/blk-snap/snapstore_device.h   |  63 ++
->   drivers/block/blk-snap/snapstore_file.c     |  52 ++
->   drivers/block/blk-snap/snapstore_file.h     |  15 +
->   drivers/block/blk-snap/snapstore_mem.c      |  91 ++
->   drivers/block/blk-snap/snapstore_mem.h      |  20 +
->   drivers/block/blk-snap/snapstore_multidev.c | 118 +++
->   drivers/block/blk-snap/snapstore_multidev.h |  22 +
->   drivers/block/blk-snap/tracker.c            | 449 +++++++++
->   drivers/block/blk-snap/tracker.h            |  38 +
->   drivers/block/blk-snap/tracking.c           | 270 ++++++
->   drivers/block/blk-snap/tracking.h           |  13 +
->   drivers/block/blk-snap/version.h            |   7 +
->   fs/block_dev.c                              |   6 +-
->   fs/direct-io.c                              |   2 +-
->   fs/iomap/direct-io.c                        |   2 +-
->   include/linux/bio.h                         |   4 +-
->   include/linux/blk-filter.h                  |  76 ++
->   include/linux/genhd.h                       |   8 +-
->   kernel/power/swap.c                         |   2 +-
->   mm/page_io.c                                |   4 +-
->   70 files changed, 9074 insertions(+), 26 deletions(-)
->   create mode 100644 block/blk-filter-internal.h
->   create mode 100644 block/blk-filter.c
->   create mode 100644 drivers/block/blk-snap/Kconfig
->   create mode 100644 drivers/block/blk-snap/Makefile
->   create mode 100644 drivers/block/blk-snap/big_buffer.c
->   create mode 100644 drivers/block/blk-snap/big_buffer.h
->   create mode 100644 drivers/block/blk-snap/blk-snap-ctl.h
->   create mode 100644 drivers/block/blk-snap/blk_deferred.c
->   create mode 100644 drivers/block/blk-snap/blk_deferred.h
->   create mode 100644 drivers/block/blk-snap/blk_descr_file.c
->   create mode 100644 drivers/block/blk-snap/blk_descr_file.h
->   create mode 100644 drivers/block/blk-snap/blk_descr_mem.c
->   create mode 100644 drivers/block/blk-snap/blk_descr_mem.h
->   create mode 100644 drivers/block/blk-snap/blk_descr_multidev.c
->   create mode 100644 drivers/block/blk-snap/blk_descr_multidev.h
->   create mode 100644 drivers/block/blk-snap/blk_descr_pool.c
->   create mode 100644 drivers/block/blk-snap/blk_descr_pool.h
->   create mode 100644 drivers/block/blk-snap/blk_redirect.c
->   create mode 100644 drivers/block/blk-snap/blk_redirect.h
->   create mode 100644 drivers/block/blk-snap/blk_util.c
->   create mode 100644 drivers/block/blk-snap/blk_util.h
->   create mode 100644 drivers/block/blk-snap/cbt_map.c
->   create mode 100644 drivers/block/blk-snap/cbt_map.h
->   create mode 100644 drivers/block/blk-snap/common.h
->   create mode 100644 drivers/block/blk-snap/ctrl_fops.c
->   create mode 100644 drivers/block/blk-snap/ctrl_fops.h
->   create mode 100644 drivers/block/blk-snap/ctrl_pipe.c
->   create mode 100644 drivers/block/blk-snap/ctrl_pipe.h
->   create mode 100644 drivers/block/blk-snap/ctrl_sysfs.c
->   create mode 100644 drivers/block/blk-snap/ctrl_sysfs.h
->   create mode 100644 drivers/block/blk-snap/defer_io.c
->   create mode 100644 drivers/block/blk-snap/defer_io.h
->   create mode 100644 drivers/block/blk-snap/main.c
->   create mode 100644 drivers/block/blk-snap/params.c
->   create mode 100644 drivers/block/blk-snap/params.h
->   create mode 100644 drivers/block/blk-snap/rangevector.c
->   create mode 100644 drivers/block/blk-snap/rangevector.h
->   create mode 100644 drivers/block/blk-snap/snapimage.c
->   create mode 100644 drivers/block/blk-snap/snapimage.h
->   create mode 100644 drivers/block/blk-snap/snapshot.c
->   create mode 100644 drivers/block/blk-snap/snapshot.h
->   create mode 100644 drivers/block/blk-snap/snapstore.c
->   create mode 100644 drivers/block/blk-snap/snapstore.h
->   create mode 100644 drivers/block/blk-snap/snapstore_device.c
->   create mode 100644 drivers/block/blk-snap/snapstore_device.h
->   create mode 100644 drivers/block/blk-snap/snapstore_file.c
->   create mode 100644 drivers/block/blk-snap/snapstore_file.h
->   create mode 100644 drivers/block/blk-snap/snapstore_mem.c
->   create mode 100644 drivers/block/blk-snap/snapstore_mem.h
->   create mode 100644 drivers/block/blk-snap/snapstore_multidev.c
->   create mode 100644 drivers/block/blk-snap/snapstore_multidev.h
->   create mode 100644 drivers/block/blk-snap/tracker.c
->   create mode 100644 drivers/block/blk-snap/tracker.h
->   create mode 100644 drivers/block/blk-snap/tracking.c
->   create mode 100644 drivers/block/blk-snap/tracking.h
->   create mode 100644 drivers/block/blk-snap/version.h
->   create mode 100644 include/linux/blk-filter.h
-> 
-> --
-> 2.20.1
-> 
-I do understand where you are coming from, but then we already have a 
-dm-snap which does exactly what you want to achieve.
-Of course, that would require a reconfiguration of the storage stack on 
-the machine, which is not always possible (or desired).
+Add support for the LTC4162-L Li-Ion battery charger. The driver allows
+reading back telemetry and to set some charging options like the input
+current limit.
 
-What I _could_ imagine would be a 'dm-intercept' thingie, which 
-redirects the current submit_bio() function for any block device, and 
-re-routes that to a linear device-mapper device pointing back to the 
-original block device.
+This adds the devicetree bindings.
 
-That way you could attach it to basically any block device, _and_ can 
-use the existing device-mapper functionality to do fancy stuff once the 
-submit_io() callback has been re-routed.
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+---
+ .../bindings/power/supply/ltc4162-l.yaml      | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
 
-And it also would help in other scenarios, too; with such a 
-functionality we could seamlessly clone devices without having to move 
-the whole setup to device-mapper first.
-
-Cheers,
-
-Hannes
+diff --git a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+new file mode 100644
+index 000000000000..a23dd6f3fae0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) 2020 Topic Embedded Products
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/ltc4162-l.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Linear Technology (Analog Devices) LTC4162-L Charger
++
++maintainers:
++  - Mike Looijmans <mike.looijmans@topic.nl>
++
++description: |
++  The LTC ® 4162-L is an advanced monolithic synchronous step-down switching
++  battery charger and PowerPath (TM) manager that seamlessly manages power
++  distribution between input sources such as wall adapters, backplanes, solar
++  panels, etc., and a rechargeable Lithium-Ion/Polymer battery.
++
++  Specifications about the charger can be found at:
++    https://www.analog.com/en/products/ltc4162-s.html
++
++properties:
++  compatible:
++    enum:
++      - lltc,ltc4162-l
++
++  reg:
++    maxItems: 1
++    description: I2C address of the charger.
++
++  lltc,rsnsb:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Battery sense resistor in milli Ohm.
++    minimum: 1
++
++  lltc,rsnsi:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Input current sense resistor in milli Ohm.
++    minimum: 1
++
++required:
++  - compatible
++  - reg
++  - lltc,rsnsb
++  - lltc,rsnsi
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      charger: battery-charger@68 {
++              compatible = "lltc,ltc4162-l";
++              reg =  <0x68>;
++              lltc,rsnsb = <10>;
++              lltc,rsnsi = <16>;
++      };
++    };
 -- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+2.17.1
+
