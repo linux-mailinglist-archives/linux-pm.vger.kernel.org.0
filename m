@@ -2,123 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A6E294B61
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 12:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAD1294B75
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Oct 2020 12:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410108AbgJUKm2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Oct 2020 06:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S2439020AbgJUKul (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Oct 2020 06:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410106AbgJUKm1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 06:42:27 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8763FC0613CE
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 03:42:27 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id d19so943620vso.10
-        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 03:42:27 -0700 (PDT)
+        with ESMTP id S2439013AbgJUKul (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Oct 2020 06:50:41 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE657C0613CF
+        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 03:50:40 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id d23so1018472pll.7
+        for <linux-pm@vger.kernel.org>; Wed, 21 Oct 2020 03:50:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m8fjyCMsI9nFBeCqIwV1iEyYXSiVeftxbO94d8CtzXE=;
-        b=PTapo8jy6Ae3JV1/RCwNsoO/B4HSzgR2WFdrZOG7LoWPeHmvOnLckWKrGqdQAMtLFH
-         wnfIbo8Lc2iVr1y6cdaap15/fVo5klVlnW3S5GUFrvf0IVMAu9HacTV6Wkb2h1cwYnOa
-         d9/FrZpSK1lZU/2RUvBhbCawgY4S2rF1FVAPKDePUjR6xB4AcJqDJgcYZC3ZnwgdfdVP
-         N336sZQa7y1Ju3J6vmb8yENPMeTVHQcmQL8/1gtg8Gt5uxqzVktodli+hbVNDly+s+Tg
-         thJr4HFMdWL+bAHi3rP2+/VavoY66vswkcUI0VQKtBcFB0ka9eBv+prXQjwNh3YvE4u9
-         Ts+g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=z1ROSdysWAJRA35AhGES/43NRpXVq6YDaJOz7zl7nL8=;
+        b=w9jC/C5ogypGG2B4CHyrIKLiagWGjJugRQu6KmvufLSpIJmf6uviAuPsQimJcsygWy
+         aO2hQ/4vFZjPo/PXF0CCYPQ5lxPB6DlokTEK4DWWokxVd43Fak9M3m1kaEHOxNB5ID1U
+         017H9CQfaQ2gmp4maSOT/Rkq7peo9+QycbvGsmxkmrrRPmDgb3XJt/4NK0ub0lP4MwKk
+         rO+ZRJmZTKAEpDaIBJyNviGP7cxH/ZjFO5Xe2aoCjUAFWIxeZCXFzy40LTiXyFgpBuMj
+         fYs5i2W0ECR/j/Agl43miVh2mhxycJZkd6vTVyMk8VBxvFW4hVtulqK1KMJ5UJE+Xj2P
+         K5/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m8fjyCMsI9nFBeCqIwV1iEyYXSiVeftxbO94d8CtzXE=;
-        b=ZmmhcXATPf1v77yp94WhXeuDanBlzCtUWbGhtNf6oZRei8G4fvN9ps55mIEN1ue8+5
-         2UYzMLJxQe1KElVoBB4fmWVVckCFE9uvvHHGLbuHIHnLw9xA9FSW7HT8M0MvqMv8NwgH
-         hGYZLvlw0BTxoF1wmsY/os5MNsTRK2qu0U/Tr+0KORMNlP3WkuwdKfMWyogvGCcGl687
-         8osFZdxI1paezH0hb570xO4lXFCw5tKHJepShULLMygP+3kAtU9aJtx+nMonx45zOtTL
-         dy2gQkVMBtIrYRXbe/olk+cdLCpFu+Z5fgwqPk4I0228sYXfrPRp4DNdshS1iWjrSJF6
-         pj/w==
-X-Gm-Message-State: AOAM532QwFIjJndf4fCi3XEB9WHT6dwkHUIbiDkKkhsRgMl4LKGhEbbN
-        aVVRLtrICXTMh8VqPJYgSfLl2UvUTDvM72NR1w1/fA==
-X-Google-Smtp-Source: ABdhPJxeCF1pGQwmovXMGq1o2nbJ0oUiM7BGAZTxh+XknVV1A8LkQWQBbvmTiMJItHR8SZ56y2py7hSMil0ItowFGc0=
-X-Received: by 2002:a67:6b07:: with SMTP id g7mr1185517vsc.48.1603276946613;
- Wed, 21 Oct 2020 03:42:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=z1ROSdysWAJRA35AhGES/43NRpXVq6YDaJOz7zl7nL8=;
+        b=eEh9LGDNCRiWd31jkkDeJwaDpq7oqWRGpsoUB8Si06JWeBNQp/XnjbPkcjpcusZUU3
+         ARdqfpk7jBuh4LVs6aabpH5bKgxoYn2vRhyOdg4Ke3vDdc43AxWmbJ4PzUf3tyUfVCVz
+         qvosqT67zVQi0uKxgcvk5yWkS2X1OVtVCJ0QiiQ8VspPdqkVq4xbjtavUhY4rHcNqZm/
+         J000e9bkVvgnDXq4FWV3YxCk2AXDy0uZVK95N77hcz59l67FLPnjSOxAGgr1MxhO5Em0
+         /MtMX7xWpV1mvp6oPWUBorDY0bwoiyuAWqnj6mQ1er8yvd40O2ha7/en8CUfbXOHjiiZ
+         3nnw==
+X-Gm-Message-State: AOAM533RhIN2PsPvjTFOQkmZIvlkXvvZFdyGk/z0aQ2ckxQhzwbb4ZKY
+        9/lIWkzolTNs69R6tjR4FrJYlA==
+X-Google-Smtp-Source: ABdhPJxwgr3r5rDb2EwR7ApDlfOTIHsXkLRSCBwfkQlQC2nu8iBeNlICjuUksRIYaFtg91h3GN0GUA==
+X-Received: by 2002:a17:902:d896:b029:d2:288e:bafc with SMTP id b22-20020a170902d896b02900d2288ebafcmr3097921plz.43.1603277440281;
+        Wed, 21 Oct 2020 03:50:40 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id e21sm2018906pfl.22.2020.10.21.03.50.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 21 Oct 2020 03:50:39 -0700 (PDT)
+Date:   Wed, 21 Oct 2020 16:20:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Hector Yuan <hector.yuan@mediatek.com>, rjw@rjwysocki.net,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: arm: cpus: Document
+ 'qcom,freq-domain' property
+Message-ID: <20201021105037.vrqgmvbxxhccch33@vireshk-i7>
+References: <20201020153944.18047-1-manivannan.sadhasivam@linaro.org>
+ <1603247803.20224.5.camel@mtkswgap22>
+ <20201021095916.GA3334@Mani-XPS-13-9360>
 MIME-Version: 1.0
-References: <20201006160516.319830-1-ulf.hansson@linaro.org>
- <CAJZ5v0iNQ51C5WYUy-ZhzpFGMLxSAVV8=xxYBfMX9ia6FOpg1Q@mail.gmail.com>
- <CAPDyKFrLTsYWVhR03hQgRJGGEkmTk5etGR5RcKgMW+Nj60+vhQ@mail.gmail.com> <CAJZ5v0i6CeUy4aQnyMmNyAHfdunWbbB2TsQwtX4QwNwYk+71jg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i6CeUy4aQnyMmNyAHfdunWbbB2TsQwtX4QwNwYk+71jg@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 21 Oct 2020 12:41:50 +0200
-Message-ID: <CAPDyKFq4sym1V7EjEE4RArrtpBtXi2w1iCVLhNYgPEo4guCqiA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] power: avs: Move drivers to the soc directories and
- drop avs
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Nishanth Menon <nm@ti.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Tony Lindgren <tony@atomide.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201021095916.GA3334@Mani-XPS-13-9360>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 16 Oct 2020 at 18:30, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Oct 7, 2020 at 5:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > + Arnd
-> >
-> > On Wed, 7 Oct 2020 at 17:09, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Tue, Oct 6, 2020 at 6:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > >
-> > > > The avs drivers in drivers/power/avs/* are all SoC specific drivers that
-> > > > doesn't share any code. Instead they are located in a directory, mostly to keep
-> > > > similar functionality together. From a maintenance point of view, it makes
-> > > > better sense to collect SoC specific drivers like these, into the SoC specific
-> > > > directories.
-> > > >
-> > > > Therefore, this series moves the drivers, one by one - and in the end, it
-> > > > deletes the empty avs directory.
-> > > >
-> > > > It seems best to me, if this can be funneled via Rafael's linux-pm tree. Then
-> > > > when going forward, each driver should be managed through the SoC maintainer's
-> > > > trees.
-> > >
-> > > That's fine by me.
-> > >
-> > > I'd like to get an ACK from the arm-soc side on this, though.
-> >
-> > I have looped in Arnd, to get his opinion on this.
-> >
-> > Although, I think the people on cc already send pull requests to the
-> > arm-soc maintainers (or perhaps it was these people you were referring
-> > to), so just awaiting their acks should be fine, I guess.
->
-> OK
->
-> For now, I've taken patches [2-3/4] that have been ACKed.
->
-> When the [1/4] is ACKed, I'll take it too and apply the last one.
+On 21-10-20, 15:29, Manivannan Sadhasivam wrote:
+> Hi,
+> 
+> On Wed, Oct 21, 2020 at 10:36:43AM +0800, Hector Yuan wrote:
+> > Hi, Manivannan
+> > 
+> > On Tue, 2020-10-20 at 21:09 +0530, Manivannan Sadhasivam wrote:
+> > > Add devicetree documentation for 'qcom,freq-domain' property specific
+> > > to Qualcomm CPUs. This property is used to reference the CPUFREQ node
+> > > along with Domain ID (0/1).
+> > > 
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+> > > index 1222bf1831fa..f40564bf004f 100644
+> > > --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+> > > +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+> > > @@ -290,6 +290,12 @@ properties:
+> > >  
+> > >        * arm/msm/qcom,kpss-acc.txt
+> > >  
+> > > +  qcom,freq-domain:
+> > Do you mind to change "qcom, freq-domain" to common naming? or drop the
+> > prefix. So that we can use this CPU node and map it to each freq-domain.
+> > Thanks a lot. 
+> 
+> I can do that but did the domain value match for other platforms as well?
 
-Patch 1/4 has been acked now as well, so I think the remaining part of
-this series is ready to go.
+I am not sure if you can. The code needs to be backward compatible so it can
+support all devices shipped with older bootloaders and latest kernels. And so
+changing the bindings isn't a good idea normally.
 
-However, I noticed that Stephen Rothwell reported some merge conflicts
-for arm-soc in linux-next. Quite trivial to resolve, though. Perhaps
-an option to consider is to send this as material for v5.10-rc1 (or
-maybe rc2) to avoid further conflicts during this release cycle? Just
-an idea..
+> 
+> > 
+> > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> > > +    description: |
+> > > +      CPUs supporting freq-domain must set their "qcom,freq-domain" property
+> > > +      with phandle to a cpufreq_hw node followed by the Domain ID(0/1).
+> > > +
+> > >    rockchip,pmu:
+> > >      $ref: '/schemas/types.yaml#/definitions/phandle'
+> > >      description: |
+> > 
 
-Kind regards
-Uffe
+-- 
+viresh
