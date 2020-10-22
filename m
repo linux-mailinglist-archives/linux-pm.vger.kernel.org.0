@@ -2,141 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260E5296450
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 19:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787CD2964B6
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 20:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S368666AbgJVR74 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 13:59:56 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:41794 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504374AbgJVR7z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 13:59:55 -0400
-Received: by mail-oo1-f67.google.com with SMTP id n2so557571ooo.8;
-        Thu, 22 Oct 2020 10:59:54 -0700 (PDT)
+        id S369719AbgJVSfQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 14:35:16 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:42208 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S368258AbgJVSfQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 14:35:16 -0400
+Received: by mail-pf1-f193.google.com with SMTP id x13so1675919pfa.9;
+        Thu, 22 Oct 2020 11:35:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lBB6Akes8L8je/MlcV0jvER5QOo/7ixN2ULx0PgA70w=;
-        b=WL0GaNgwt7BDr9xWrqOy5ZMgZK391KEnoPV8gsLtG872frqofJDU1N2kMaDVOVw7iy
-         e4iTqKus3sJGDqjdYubHBlYac9/vvEMgpFqLnyOBJJoC+CviccRytNOTT3JK+PqwO/aj
-         yZJ4pKOFrjg540ychuysDhlejRRS0nEH7JcPY9XOaklFpf/8CcWuMrPolMsMuOQZgCRr
-         nSjnJ5LBAQGNgo1JiW3T7Te68pTgQuDVbF1kwCN5qwp8GRKxrO/t9fBTEMwx8ZSPDTbH
-         7wHlCM1nxa9nqwWdCtvYoVErv+jm+MfnJzHIhZ1/SZXrDIxFjD3iNhA5uLfF03kxG8Fw
-         hTWQ==
-X-Gm-Message-State: AOAM530vv6SI1iaLWWEfH38breZ1VShWr8ku2MAXswdvhAFf/0jYixrw
-        iHCkOOeOxXBME2YxWLCNAxFUJeXD9RFv2ZCRrZ4=
-X-Google-Smtp-Source: ABdhPJxNM+8Sd/29ieJXvaIiWFkJhcvV+ua3fK3Puj70TxMcR0d3dfyt6JAFV6a0/ihwwZ76iQA4OOwwq7BsBy+Iu8s=
-X-Received: by 2002:a4a:5d84:: with SMTP id w126mr2796476ooa.1.1603389594117;
- Thu, 22 Oct 2020 10:59:54 -0700 (PDT)
+        bh=1XI2Q+0LJ+MrF6PTdb/vTI0hg1qM7/BgdBxfc/cQLFU=;
+        b=KfvJzwfxn7jq43862MSUDXsjHVLQiDL2XxoZJGmoXONgP4vY3GlCA5FN+8DrSsW8wB
+         9SmbJi6W4JdS5zP5MzYogQw2PEMOlYdeKT6+WY0h01gtWfYbQhRjLOx0oc5r/8kiEOLp
+         4eIQiBAyv4wvJfpI6+JS713/r5xD54+18A2io2LjdPOKLQCw3Xa5BGWDUkjlj5m5F1SR
+         raWFqZtJq/rlWV3AqoLz7KXLZypGdBl3h/vciJMketksAu0hImF/F4e3OxebTToubG+f
+         1/VAmkFB1GxeNxg75NKaDKeoIUGinxz/SKDwgRSkrGuq/Xq3oIYt2o+5il5uSpTq1j7G
+         cmcQ==
+X-Gm-Message-State: AOAM53173u/AwlX54c+Hsy6e5BJ0qGFyF8+wWy5WJICweLZmcvJ93i1Y
+        hO+KLdQJP5Q3SwhAmQL9TxmqQ9iFEr7O+8FtCOE=
+X-Google-Smtp-Source: ABdhPJz36fkFyGr3qzw17+AgK9oYpIzBshcfChZVSHFTISPy8X4z6IdPGqE/7nwcLSyFF6/1DoPxCQ5X7a4DVfLIwnM=
+X-Received: by 2002:a63:a546:: with SMTP id r6mr3310324pgu.160.1603391713825;
+ Thu, 22 Oct 2020 11:35:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr>
- <34115486.YmRjPRKJaA@kreacher> <20201022120213.GG2611@hirez.programming.kicks-ass.net>
- <1790766.jaFeG3T87Z@kreacher> <20201022122949.GW2628@hirez.programming.kicks-ass.net>
- <20201022145250.GK32041@suse.de> <6606e5f4-3f66-5844-da02-5b11e1464be6@canonical.com>
- <20201022151200.GC92942@lorien.usersys.redhat.com> <20201022163509.GM32041@suse.de>
-In-Reply-To: <20201022163509.GM32041@suse.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Oct 2020 19:59:43 +0200
-Message-ID: <CAJZ5v0he839sJNh0xjmvLqzuE7X27PgJKxtSV8giZh004E7pXw@mail.gmail.com>
-Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle core
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     Phil Auld <pauld@redhat.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Ingo Molnar <mingo@redhat.com>,
-        kernel-janitors@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Gilles Muller <Gilles.Muller@inria.fr>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>
+References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+In-Reply-To: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+From:   Mike Snitzer <snitzer@redhat.com>
+Date:   Thu, 22 Oct 2020 14:35:02 -0400
+Message-ID: <CAMM=eLfTf2f2Me7f5tpL5DEGgKsqaFaAS0qTDVpLAYrwR5Jf5g@mail.gmail.com>
+Subject: Re: [PATCH 0/2] block layer filter and block device snapshot module
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>, rjw@rjwysocki.net,
+        len.brown@intel.com, Pavel Machek <pavel@ucw.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        johannes.thumshirn@wdc.com, Ming Lei <ming.lei@redhat.com>,
+        Jan Kara <jack@suse.cz>, Tejun Heo <tj@kernel.org>,
+        gustavo@embeddedor.com, Bart Van Assche <bvanassche@acm.org>,
+        osandov@fb.com, koct9i@gmail.com,
+        Damien Le Moal <damien.lemoal@wdc.com>, steve@sk2.org,
+        linux-block <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        device-mapper development <dm-devel@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 6:35 PM Mel Gorman <mgorman@suse.de> wrote:
+On Wed, Oct 21, 2020 at 5:04 AM Sergei Shtepa <sergei.shtepa@veeam.com> wrote:
 >
-> On Thu, Oct 22, 2020 at 11:12:00AM -0400, Phil Auld wrote:
-> > > > AFAIK, not quite (added Giovanni as he has been paying more attention).
-> > > > Schedutil has improved since it was merged but not to the extent where
-> > > > it is a drop-in replacement. The standard it needs to meet is that
-> > > > it is at least equivalent to powersave (in intel_pstate language)
-> > > > or ondemand (acpi_cpufreq) and within a reasonable percentage of the
-> > > > performance governor. Defaulting to performance is a) giving up and b)
-> > > > the performance governor is not a universal win. There are some questions
-> > > > currently on whether schedutil is good enough when HWP is not available.
-> > > > There was some evidence (I don't have the data, Giovanni was looking into
-> > > > it) that HWP was a requirement to make schedutil work well. That is a
-> > > > hazard in itself because someone could test on the latest gen Intel CPU
-> > > > and conclude everything is fine and miss that Intel-specific technology
-> > > > is needed to make it work well while throwing everyone else under a bus.
-> > > > Giovanni knows a lot more than I do about this, I could be wrong or
-> > > > forgetting things.
-> > > >
-> > > > For distros, switching to schedutil by default would be nice because
-> > > > frequency selection state would follow the task instead of being per-cpu
-> > > > and we could stop worrying about different HWP implementations but it's
-> > > > not at the point where the switch is advisable. I would expect hard data
-> > > > before switching the default and still would strongly advise having a
-> > > > period of time where we can fall back when someone inevitably finds a
-> > > > new corner case or exception.
-> > >
-> > > ..and it would be really useful for distros to know when the hard data
-> > > is available so that they can make an informed decision when to move to
-> > > schedutil.
-> > >
-> >
-> > I think distros are on the hook to generate that hard data themselves
-> > with which to make such a decision.  I don't expect it to be done by
-> > someone else.
-> >
+> Hello everyone! Requesting for your comments and suggestions.
 >
-> Yep, distros are on the hook. When I said "I would expect hard data",
-> it was in the knowledge that for openSUSE/SLE, we (as in SUSE) would be
-> generating said data and making a call based on it. I'd be surprised if
-> Phil was not thinking along the same lines.
+> # blk-filter
 >
-> > > > For reference, SLUB had the same problem for years. It was switched
-> > > > on by default in the kernel config but it was a long time before
-> > > > SLUB was generally equivalent to SLAB in terms of performance. Block
-> > > > multiqueue also had vaguely similar issues before the default changes
-> > > > and a period of time before it was removed removed (example whinging mail
-> > > > https://lore.kernel.org/lkml/20170803085115.r2jfz2lofy5spfdb@techsingularity.net/)
-> > > > It's schedutil's turn :P
-> > > >
-> > >
-> >
-> > Agreed. I'd like the option to switch back if we make the default change.
-> > It's on the table and I'd like to be able to go that way.
-> >
+> Block layer filter allows to intercept BIO requests to a block device.
 >
-> Yep. It sounds chicken, but it's a useful safety net and a reasonable
-> way to deprecate a feature. It's also useful for bug creation -- User X
-> running whatever found that schedutil is worse than the old governor and
-> had to temporarily switch back. Repeat until complaining stops and then
-> tear out the old stuff.
+> Interception is performed at the very beginning of the BIO request
+> processing, and therefore does not affect the operation of the request
+> processing queue. This also makes it possible to intercept requests from
+> a specific block device, rather than from the entire disk.
 >
-> When/if there is a patch setting schedutil as the default, cc suitable
-> distro people (Giovanni and myself for openSUSE).
+> The logic of the submit_bio function has been changed - since the
+> function execution results are not processed anywhere (except for swap
+> and direct-io) the function won't return a value anymore.
 
-So for the record, Giovanni was on the CC list of the "cpufreq:
-intel_pstate: Use passive mode by default without HWP" patch that this
-discussion resulted from (and which kind of belongs to the above
-category).
+Your desire to switch to a void return comes exactly when I've noticed
+we need it.
 
-> Other distros assuming they're watching can nominate their own victim.
+->submit_bio's blk_qc_t return is the cookie assigned by blk-mq.  Up
+to this point we haven't actually used it for bio-based devices but it
+seems clear we'll soon need for bio-based IO polling support.
 
-But no other victims had been nominated at that time.
+Just today, I've been auditing drivers/md/dm.c with an eye toward
+properly handling the blk_qc_t return (or lack thereof) from various
+DM methods.
+
+It could easily be that __submit_bio_noacct and __submit_bio_noacct_mq
+will be updated to do something meaningful with the returned cookie
+(or that DM will) to facilitate proper IO polling.
+
+Mike
