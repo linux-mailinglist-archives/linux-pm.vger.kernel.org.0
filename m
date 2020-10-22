@@ -2,158 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63147295B81
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 11:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951E6295C24
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 11:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505092AbgJVJQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 05:16:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46698 "EHLO mail.kernel.org"
+        id S2895899AbgJVJn0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 05:43:26 -0400
+Received: from mx2.veeam.com ([64.129.123.6]:60718 "EHLO mx2.veeam.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439287AbgJVJQa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 22 Oct 2020 05:16:30 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        id S2895914AbgJVJn0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Oct 2020 05:43:26 -0400
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.0.171])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 815DF222E9;
-        Thu, 22 Oct 2020 09:16:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603358189;
-        bh=X7YWORMLc3boOQq34ADkP+iYUcQE1Vh/uDhPZqf73qQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CrM04kOaVq8sTalX12dV9GaiVMgkvOmX3B/t8dotno/NSgRFKLaBQy+nL/oghZ4Ew
-         QI3+S8SHJFQFFS306CczTQKDtJK761qJo3K8bEel8L5vmPggy+EiMTNwQtQwvpwUzw
-         U6l5B8tde9Muu7CBJ+L1SteLRNUQBjZo4KlVTBQ4=
-Date:   Thu, 22 Oct 2020 11:17:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][v2] PM / sysfs: Expose suspend resume driver flags in
- sysfs
-Message-ID: <20201022091707.GA1485535@kroah.com>
-References: <20201022085244.1860-1-yu.c.chen@intel.com>
+        by mx2.veeam.com (Postfix) with ESMTPS id 2AB83413F2;
+        Thu, 22 Oct 2020 05:43:21 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com; s=mx2;
+        t=1603359801; bh=URjUPvv4BF0KAk65rVnV3rB7ijtCMnz1I7O/6wLzuXQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
+        b=oQQKDYEmamFH8Ys0kCLf7ywAyZM/wz8lHMKZxHCl8WudkvvaT2RFL89vccmfn1BCh
+         BQIIafd7dyM1Xj67jFQVOk0/701HowZTS335k21tL80eefEELrNesD2rDmQIVVBM0H
+         VNfsPHYwKyMOGvUNgJCnpwjvMSeRh8DnllIA7/To=
+Received: from veeam.com (172.24.14.5) by prgmbx01.amust.local (172.24.0.171)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2; Thu, 22 Oct 2020
+ 11:43:19 +0200
+Date:   Thu, 22 Oct 2020 12:44:02 +0300
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+To:     Hannes Reinecke <hare@suse.de>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "darrick.wong@oracle.com" <darrick.wong@oracle.com>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "koct9i@gmail.com" <koct9i@gmail.com>,
+        "damien.lemoal@wdc.com" <damien.lemoal@wdc.com>,
+        "steve@sk2.org" <steve@sk2.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 0/2] block layer filter and block device snapshot module
+Message-ID: <20201022094402.GA21466@veeam.com>
+References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+ <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
+ <20201021141044.GF20749@veeam.com>
+ <ca8eaa40-b422-2272-1fd9-1d0a354c42bf@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20201022085244.1860-1-yu.c.chen@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ca8eaa40-b422-2272-1fd9-1d0a354c42bf@suse.de>
+X-Originating-IP: [172.24.14.5]
+X-ClientProxiedBy: prgmbx01.amust.local (172.24.0.171) To prgmbx01.amust.local
+ (172.24.0.171)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29C604D26A677460
+X-Veeam-MMEX: True
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 04:52:44PM +0800, Chen Yu wrote:
-> Currently there are 4 driver flags to control system suspend/resume
-> behavior: DPM_FLAG_NO_DIRECT_COMPLETE, DPM_FLAG_SMART_PREPARE,
-> DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME. Make these flags
-> visible in sysfs as read-only to get a brief understanding of the
-> expected behavior of each device during suspend/resume, so as to
-> facilitate suspend/resume debugging/tuning.
+The 10/22/2020 08:58, Hannes Reinecke wrote:
+> On 10/21/20 4:10 PM, Sergei Shtepa wrote:
+> > The 10/21/2020 16:31, Hannes Reinecke wrote:
+> >> I do understand where you are coming from, but then we already have a
+> >> dm-snap which does exactly what you want to achieve.
+> >> Of course, that would require a reconfiguration of the storage stack on
+> >> the machine, which is not always possible (or desired).
+> > 
+> > Yes, reconfiguring the storage stack on a machine is almost impossible.
+> > 
+> >>
+> >> What I _could_ imagine would be a 'dm-intercept' thingie, which
+> >> redirects the current submit_bio() function for any block device, and
+> >> re-routes that to a linear device-mapper device pointing back to the
+> >> original block device.
+> >>
+> >> That way you could attach it to basically any block device, _and_ can
+> >> use the existing device-mapper functionality to do fancy stuff once the
+> >> submit_io() callback has been re-routed.
+> >>
+> >> And it also would help in other scenarios, too; with such a
+> >> functionality we could seamlessly clone devices without having to move
+> >> the whole setup to device-mapper first.
+> > 
+> > Hm...
+> > Did I understand correctly that the filter itself can be left approximately
+> > as it is, but the blk-snap module can be replaced with 'dm-intercept',
+> > which would use the re-route mechanism from the dm?
+> > I think I may be able to implement it, if you describe your idea in more
+> > detail.
+> > 
+> > 
+> Actually, once we have an dm-intercept, why do you need the block-layer 
+> filter at all?
+>  From you initial description the block-layer filter was implemented 
+> such that blk-snap could work; but if we have dm-intercept (and with it 
+> the ability to use device-mapper functionality even for normal block 
+> devices) there wouldn't be any need for the block-layer filter, no?
+
+Maybe, but the problem is that I can't imagine how to implement
+dm-intercept yet. 
+How to use dm to implement interception without changing the stack
+of block devices. We'll have to make a hook somewhere, isn`t it?
+
 > 
-> For example:
-> /sys/devices/pci0000:00/0000:00:15.1/power/driver_flags:4
-> (DPM_FLAG_SMART_SUSPEND)
+> Cheers,
 > 
-> /sys/devices/pci0000:00/0000:00:07.3/power/driver_flags:5
-> (DPM_FLAG_NO_DIRECT_COMPLETE | DPM_FLAG_SMART_SUSPEND)
-> 
-> Acked-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
-> v2: Adding description in Documentation/ABI/testing/sysfs-devices-power
->     according to Greg's suggestion.
-> --
->  Documentation/ABI/testing/sysfs-devices-power | 11 +++++++
->  drivers/base/power/sysfs.c                    | 29 ++++++++++++++++++-
->  2 files changed, 39 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
-> index 1763e64dd152..8ea68639ab3a 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-power
-> +++ b/Documentation/ABI/testing/sysfs-devices-power
-> @@ -269,3 +269,14 @@ Description:
->  		the current runtime PM status of the device, which may be
->  		"suspended", "suspending", "resuming", "active", "error" (fatal
->  		error), or "unsupported" (runtime PM is disabled).
-> +
-> +What:		/sys/devices/.../power/driver_flags
-> +Date:		October 2020
-> +Contact:	Chen Yu <yu.c.chen@intel.com>
-> +Description:
-> +		The /sys/devices/.../driver_flags attribute contains the driver
-> +		flags to control system suspend/resume. The flag is a combination
-> +		of DPM_FLAG_NO_DIRECT_COMPLETE, DPM_FLAG_SMART_PREPARE,
-> +		DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME, or 0 if the
-> +		driver has not set any flag. This attribute is read-only. If
-> +		CONFIG_PM_ADVANCED_DEBUG is not set this attribute is empty.
+> Hannes
+> -- 
+> Dr. Hannes Reinecke                Kernel Storage Architect
+> hare@suse.de                              +49 911 74053 688
+> SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
 
-You are now exporting random internal kernel values to userspace, so
-they are now going to become a userspace API value that you must ensure
-works for the next 20+ years.
-
-Are you _SURE_ you want to do this?  What is this velue being exported
-going to show you?  Who is going to use it?  For what?
-
-And if you are going to export it to userspace, you need to actually
-give userspace the values so that it knows what they are, by moving them
-to a uapi file.
-
-And if you do that, you need to name them a lot better...
-
-> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> index a1474fb67db9..48313a1040a5 100644
-> --- a/drivers/base/power/sysfs.c
-> +++ b/drivers/base/power/sysfs.c
-> @@ -607,6 +607,13 @@ static ssize_t async_store(struct device *dev, struct device_attribute *attr,
->  
->  static DEVICE_ATTR_RW(async);
->  
-> +static ssize_t driver_flags_show(struct device *dev,
-> +				 struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%x\n", dev->power.driver_flags);
-> +}
-> +static DEVICE_ATTR_RO(driver_flags);
-> +
->  #endif /* CONFIG_PM_SLEEP */
->  #endif /* CONFIG_PM_ADVANCED_DEBUG */
->  
-> @@ -691,6 +698,20 @@ static const struct attribute_group pm_qos_flags_attr_group = {
->  	.attrs	= pm_qos_flags_attrs,
->  };
->  
-> +static struct attribute *pm_driver_flags_attrs[] = {
-> +#ifdef CONFIG_PM_ADVANCED_DEBUG
-> +#ifdef CONFIG_PM_SLEEP
-> +	&dev_attr_driver_flags.attr,
-> +#endif
-> +#endif
-
-As this is for debugging only, why is it in sysfs and not debugfs?
-
-
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group pm_driver_flags_attr_group = {
-> +	.name	= power_group_name,
-> +	.attrs	= pm_driver_flags_attrs,
-> +};
-> +
->  int dpm_sysfs_add(struct device *dev)
->  {
->  	int rc;
-> @@ -719,11 +740,17 @@ int dpm_sysfs_add(struct device *dev)
->  		if (rc)
->  			goto err_wakeup;
->  	}
-> -	rc = pm_wakeup_source_sysfs_add(dev);
-> +	rc = sysfs_merge_group(&dev->kobj, &pm_driver_flags_attr_group);
-
-Ick, really?  Why not make it part of the other attribute group?  Why
-make it a stand-alone one?  This feels like extra uneeded work if you
-really are going to do this.
-
-thanks,
-
-greg k-h
+-- 
+Sergei Shtepa
+Veeam Software developer.
