@@ -2,114 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 993C1296017
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 15:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6913E296032
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 15:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2900176AbgJVNfi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 09:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2900175AbgJVNfi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 09:35:38 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD01C0613CE;
-        Thu, 22 Oct 2020 06:35:38 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id j18so1157885pfa.0;
-        Thu, 22 Oct 2020 06:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9gfZHvr4tYCEuJzv16muggEgqQv0baFD2IqnGr4EwZE=;
-        b=Sy0WHXYE5EAqZEmVVi5mWCPjNa8APLF6OWMK3Pd5LvlLKQoQr1NDz/TMM7+T2JnrYe
-         PMQWPmkA1Oub1cwaXYdaPUrCmprM0pbPKvmllNlpVbecMLZfZcc/j6Yv0B0ldA8wCZR5
-         YRzbw3DYjsQF1TWUi5XwUGaSEMpJLi5En5dLy3dHow1Fh+fnZTSXz/UTeoAoQZA0Hc+5
-         TpHcSn/7D8ZsJK2Fs1DXCnU0AVjdeNy31xZWkagtABiGhVZDt/1KS3HOEShLUq5gMrwE
-         qN0weaeM/hNqpKMOrQYZac43KqEAdT/Ua97xyxqwsJJ+1UFq5jrdadcUN1WNhKFv7ssA
-         6LEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9gfZHvr4tYCEuJzv16muggEgqQv0baFD2IqnGr4EwZE=;
-        b=hVeBPUafC0j91JsAfLylr9P1MHRDPUF2b9Qr5SGyWok5m4/1JduJzP2gjJ8akNttaR
-         sewrIHhXF7wZ6IRE03w4huoqxfZiILkhU+HbkyHq9O/brxOLjFGXZkDFiKTzesRdSqJg
-         6I1+hI8S6TNU/jMrW2NMxrqYmYjDwUN+5kR5zcwBLHL1n0CUw65Q1VDWjvfmlXHHNy/H
-         3KFxPrZpB829vHb3wXithw+9airPn7Nr0hVm94eKJR+Kc8lhDIXfW6MXgIAQjjepkcoF
-         b8I7mbk3KAJQbvzr64n1afQ3uIxvKTFaDFh5jwAcZrWNS36MkCoKyILRP4e2p5ni2lBN
-         srtA==
-X-Gm-Message-State: AOAM532gk37P2fPJxrKSzNfPlA5EifpgI5Fz+rMwYeIhl8LZGNc/uog1
-        sH/YK/ryb+OA2pAOHzOH/M1SlsPAr8+aNITk/1U=
-X-Google-Smtp-Source: ABdhPJzNJFtrmbGl1XLXoavPUiPLSJnIh7S6Oj3BXAYLaSAMDXn4m24EIX0C+YYpbPk+/3F05pCLzx0hd71aoK+/E3U=
-X-Received: by 2002:a63:f908:: with SMTP id h8mr2330629pgi.203.1603373736383;
- Thu, 22 Oct 2020 06:35:36 -0700 (PDT)
+        id S2444531AbgJVNkl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 09:40:41 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:53746 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2437595AbgJVNkk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Oct 2020 09:40:40 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 9CE98CCD67AE021F82B3;
+        Thu, 22 Oct 2020 21:40:37 +0800 (CST)
+Received: from [127.0.0.1] (10.74.219.194) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Thu, 22 Oct 2020
+ 21:40:35 +0800
+Subject: Re: [PATCH 3/3] PM: runtime: Resume the device earlier in
+ __device_release_driver()
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <6543936.FbWAdBN1tG@kreacher> <1708806.S9fAqql2gf@kreacher>
+CC:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Saravana Kannan <saravanak@google.com>
+From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <e9466a28-5c6a-f88a-51ab-547ecc21e5d0@hisilicon.com>
+Date:   Thu, 22 Oct 2020 21:40:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-References: <20201022085244.1860-1-yu.c.chen@intel.com>
-In-Reply-To: <20201022085244.1860-1-yu.c.chen@intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 22 Oct 2020 16:36:25 +0300
-Message-ID: <CAHp75Vf52m78FNKgTQ8c_y6UNaR91ANZh296tg6nz+reEv0DEg@mail.gmail.com>
-Subject: Re: [PATCH][v2] PM / sysfs: Expose suspend resume driver flags in sysfs
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1708806.S9fAqql2gf@kreacher>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.74.219.194]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 12:24 PM Chen Yu <yu.c.chen@intel.com> wrote:
+Hi Rafael,
+
+在 2020/10/22 3:14, Rafael J. Wysocki 写道:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> Currently there are 4 driver flags to control system suspend/resume
-> behavior: DPM_FLAG_NO_DIRECT_COMPLETE, DPM_FLAG_SMART_PREPARE,
-> DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME. Make these flags
-> visible in sysfs as read-only to get a brief understanding of the
-> expected behavior of each device during suspend/resume, so as to
-> facilitate suspend/resume debugging/tuning.
+> Since the device is resumed from runtime-suspend in
+> __device_release_driver() anyway, it is better to do that before
+> looking for busy managed device links from it to consumers, because
+> if there are any, device_links_unbind_consumers() will be called
+> and it will cause the consumer devices' drivers to unbind, so the
+> consumer devices will be runtime-resumed.  In turn, resuming each
+> consumer device will cause the supplier to be resumed and when the
+> runtime PM references from the given consumer to it are dropped, it
+> may be suspended.  Then, the runtime-resume of the next consumer
+> will cause the supplier to resume again and so on.
 >
-> For example:
-> /sys/devices/pci0000:00/0000:00:15.1/power/driver_flags:4
-> (DPM_FLAG_SMART_SUSPEND)
+> Update the code accordingly.
 >
-> /sys/devices/pci0000:00/0000:00:07.3/power/driver_flags:5
-> (DPM_FLAG_NO_DIRECT_COMPLETE | DPM_FLAG_SMART_SUSPEND)
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Fixes: 9ed9895370ae ("driver core: Functional dependencies tracking support")
+> Cc: All applicable <stable@vger.kernel.org> # All applicable
+> ---
+>   drivers/base/dd.c |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> Index: linux-pm/drivers/base/dd.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/dd.c
+> +++ linux-pm/drivers/base/dd.c
+> @@ -1117,6 +1117,8 @@ static void __device_release_driver(stru
+>   
+>   	drv = dev->driver;
+>   	if (drv) {
+> +		pm_runtime_get_sync(dev);
+> +
+>   		while (device_links_busy(dev)) {
+>   			__device_driver_unlock(dev, parent);
+>   
+> @@ -1132,8 +1134,6 @@ static void __device_release_driver(stru
 
-...
+pm_runtime_put_sync() is required to be called if existed from here.
 
-> +What:          /sys/devices/.../power/driver_flags
-> +Date:          October 2020
-> +Contact:       Chen Yu <yu.c.chen@intel.com>
-> +Description:
-> +               The /sys/devices/.../driver_flags attribute contains the driver
-> +               flags to control system suspend/resume. The flag is a combination
-> +               of DPM_FLAG_NO_DIRECT_COMPLETE, DPM_FLAG_SMART_PREPARE,
-> +               DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME, or 0 if the
-> +               driver has not set any flag.
+>   				return;
+>   		}
+>   
+> -		pm_runtime_get_sync(dev);
+> -
+>   		driver_sysfs_remove(dev);
+>   
+>   		if (dev->bus)
+>
+>
+>
+>
+> .
+>
 
-> This attribute is read-only. If
-> +               CONFIG_PM_ADVANCED_DEBUG is not set this attribute is empty.
 
-Which makes me wonder why we even expose this if the above is not set.
-
-...
-
-> +static struct attribute *pm_driver_flags_attrs[] = {
-> +#ifdef CONFIG_PM_ADVANCED_DEBUG
-> +#ifdef CONFIG_PM_SLEEP
-> +       &dev_attr_driver_flags.attr,
-> +#endif
-> +#endif
-
-> +       NULL,
-
-No comma here, please. I think I commented on this internally.
-
-> +};
-
--- 
-With Best Regards,
-Andy Shevchenko
