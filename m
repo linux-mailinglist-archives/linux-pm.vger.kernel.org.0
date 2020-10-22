@@ -2,65 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB3B29584D
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 08:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2EE2958C0
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 09:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503519AbgJVGX1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 02:23:27 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:40389 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2503508AbgJVGX1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 02:23:27 -0400
-X-UUID: 14e3fc6cc1f14dea82c5c74ad970b620-20201022
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=/vJ1k/CvUjLCTTWs6xEGCY+dakvbAFTCMIhNiUr7NTo=;
-        b=SDvkG+yEmdWAXQuTQPGcxBlenMnAEjrGKN2jpDwlfEFiqOn3UDEv1dE3iavCxUbJT8kpBEPH9JZdTZJwoHEMMX27dvV8lpyv3R/1PkwAedjDpGAICKwNLXWjG3ewdpv512JnJRG4CC212O5rBeVoh7lJe8AVP7mguiLVhJ24cxA=;
-X-UUID: 14e3fc6cc1f14dea82c5c74ad970b620-20201022
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <claude.yen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 980784132; Thu, 22 Oct 2020 14:18:14 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 22 Oct 2020 14:18:13 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 22 Oct 2020 14:18:13 +0800
-From:   Claude Yen <claude.yen@mediatek.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        id S2504821AbgJVHCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 03:02:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:49140 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2504817AbgJVHCa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Oct 2020 03:02:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84D70D6E;
+        Thu, 22 Oct 2020 00:02:29 -0700 (PDT)
+Received: from bogus (unknown [10.57.22.167])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 581C13F66B;
+        Thu, 22 Oct 2020 00:02:27 -0700 (PDT)
+Date:   Thu, 22 Oct 2020 08:02:19 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Claude Yen <claude.yen@mediatek.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-        <claude.yen@mediatek.com>
-Subject: [PATCH] PM / s2idle: Export s2idle_set_ops
-Date:   Thu, 22 Oct 2020 14:17:48 +0800
-Message-ID: <20201022061748.13730-2-claude.yen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201022061748.13730-1-claude.yen@mediatek.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>, wsd_upstream@mediatek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] PM / s2idle: Export s2idle_set_ops
+Message-ID: <20201022070154.hqvksoj4nss3er2e@bogus>
 References: <20201022061748.13730-1-claude.yen@mediatek.com>
+ <20201022061748.13730-2-claude.yen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201022061748.13730-2-claude.yen@mediatek.com>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-QXMgc3VzcGVuZF9zZXRfb3BzIGlzIGV4cG9ydGVkIGluIGNvbW1pdCBhNWU0ZmQ4NzgzYTINCigi
-UE0gLyBTdXNwZW5kOiBFeHBvcnQgc3VzcGVuZF9zZXRfb3BzLCBzdXNwZW5kX3ZhbGlkX29ubHlf
-bWVtIiksDQpleHBvcnRpbmcgczJpZGxlX3NldF9vcHMgdG8gbWFrZSBrZXJuZWwgbW9kdWxlIHNl
-dHVwIHMyaWRsZSBvcHMgdG9vLg0KDQpJbiB0aGlzIHdheSwga2VybmVsIG1vZHVsZSBjYW4gaG9v
-ayBwbGF0Zm9ybSBzdXNwZW5kDQpmdW5jdGlvbnMgcmVnYXJkbGVzcyBvZiBTdXNwZW5kLXRvLVJh
-bShTMlIpIG9yDQpTdXNwZW5kLXRvLUlkbGUoUzJJKQ0KDQpTaWduZWQtb2ZmLWJ5OiBDbGF1ZGUg
-WWVuIDxjbGF1ZGUueWVuQG1lZGlhdGVrLmNvbT4NCi0tLQ0KIGtlcm5lbC9wb3dlci9zdXNwZW5k
-LmMgfCAxICsNCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCg0KZGlmZiAtLWdpdCBh
-L2tlcm5lbC9wb3dlci9zdXNwZW5kLmMgYi9rZXJuZWwvcG93ZXIvc3VzcGVuZC5jDQppbmRleCA4
-YjFiYjVlZTdlNWQuLjBkYzNlODM0NDMxOCAxMDA2NDQNCi0tLSBhL2tlcm5lbC9wb3dlci9zdXNw
-ZW5kLmMNCisrKyBiL2tlcm5lbC9wb3dlci9zdXNwZW5kLmMNCkBAIC03OSw2ICs3OSw3IEBAIHZv
-aWQgczJpZGxlX3NldF9vcHMoY29uc3Qgc3RydWN0IHBsYXRmb3JtX3MyaWRsZV9vcHMgKm9wcykN
-CiAJczJpZGxlX29wcyA9IG9wczsNCiAJdW5sb2NrX3N5c3RlbV9zbGVlcCgpOw0KIH0NCitFWFBP
-UlRfU1lNQk9MX0dQTChzMmlkbGVfc2V0X29wcyk7DQogDQogc3RhdGljIHZvaWQgczJpZGxlX2Jl
-Z2luKHZvaWQpDQogew0KLS0gDQoyLjE4LjANCg==
+On Thu, Oct 22, 2020 at 02:17:48PM +0800, Claude Yen wrote:
+> As suspend_set_ops is exported in commit a5e4fd8783a2
+> ("PM / Suspend: Export suspend_set_ops, suspend_valid_only_mem"),
+> exporting s2idle_set_ops to make kernel module setup s2idle ops too.
+> 
+> In this way, kernel module can hook platform suspend
+> functions regardless of Suspend-to-Ram(S2R) or
+> Suspend-to-Idle(S2I)
+>
 
+If this is for arm64 platform, then NACK. You must use PSCI and it will
+set the ops and it can't be module.
+
+-- 
+Regards,
+Sudeep
