@@ -2,139 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8243029617D
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 17:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCC8296186
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 17:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S368446AbgJVPMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 11:12:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:26378 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S368357AbgJVPMS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 11:12:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603379536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uDlJvVtWMlPWw+lQx90tQ7kEfUNHvkpfYYWbomFbvhA=;
-        b=QacrUXZGTFkmWMLriwhtv9Xp3reNIXmA+Mip6T76HeNKWBRbZfG+SGSKdSp6nrNda1wAkk
-        O3XDu4ag9sqoxBgaXo1dtn70S20a5IvDLdGfJDEDit+Yk88ODhMbcWkDz5btxz0dOU0EYN
-        /D2eyG0Hf158yRdDwRGW2Y4IsV7awHM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-584-nYS15yLeNbO5z0Blf0cGTA-1; Thu, 22 Oct 2020 11:12:13 -0400
-X-MC-Unique: nYS15yLeNbO5z0Blf0cGTA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 108C41882FA1;
-        Thu, 22 Oct 2020 15:12:11 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (ovpn-113-70.phx2.redhat.com [10.3.113.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4253C55776;
-        Thu, 22 Oct 2020 15:12:02 +0000 (UTC)
-Date:   Thu, 22 Oct 2020 11:12:00 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Colin Ian King <colin.king@canonical.com>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Ingo Molnar <mingo@redhat.com>,
-        kernel-janitors@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Gilles Muller <Gilles.Muller@inria.fr>,
-        srinivas.pandruvada@linux.intel.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>
-Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle core
-Message-ID: <20201022151200.GC92942@lorien.usersys.redhat.com>
-References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr>
- <34115486.YmRjPRKJaA@kreacher>
- <20201022120213.GG2611@hirez.programming.kicks-ass.net>
- <1790766.jaFeG3T87Z@kreacher>
- <20201022122949.GW2628@hirez.programming.kicks-ass.net>
- <20201022145250.GK32041@suse.de>
- <6606e5f4-3f66-5844-da02-5b11e1464be6@canonical.com>
+        id S2509936AbgJVPPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 11:15:22 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:59410 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2509904AbgJVPPW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 11:15:22 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09MF4mnk016525;
+        Thu, 22 Oct 2020 15:14:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=nLO8sRXFYpUQiwJEfuTU4CZ+g0g8h2RhbpdmgN5Y+ZI=;
+ b=Lgfj/QcigNg8QFu6Y2BR/yBjN7jQxSJ+R2uX2FPIQz5G7kTbNftMK0zuZfQ5p5Bg3H8t
+ mZpBMAT8LRgmn3uOpk2x5f3U+PWoHuEd7bebPEaTTEVE4s+E4fQ11S4g0aIAJ7srVV9T
+ eZ3LRQQSlcH8L6kpvZHCjbHTsT1bPW6wIaqM7jicrDu+xi5T0gMQ9DC/iXmMry+Xrc+s
+ vAQhfbIkQ61tzxH/hI9+1FpldlF9IYounWQZeiWzRLgK3KjH206xJvmZKWziWFQQq0zB
+ JlOe8hbBK1SevVExweNF5I9lXsiFkUgF78RjdIZnR4/wFxcDiaD9garniIo0Ko8cISeu Tg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 34ak16psv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 22 Oct 2020 15:14:30 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09MF1HY3176840;
+        Thu, 22 Oct 2020 15:14:29 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 348ahyvxma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Oct 2020 15:14:29 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09MFELTb031437;
+        Thu, 22 Oct 2020 15:14:21 GMT
+Received: from localhost (/67.169.218.210)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 22 Oct 2020 08:14:20 -0700
+Date:   Thu, 22 Oct 2020 08:14:18 -0700
+From:   "Darrick J. Wong" <darrick.wong@oracle.com>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "koct9i@gmail.com" <koct9i@gmail.com>,
+        "steve@sk2.org" <steve@sk2.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 0/2] block layer filter and block device snapshot module
+Message-ID: <20201022151418.GR9832@magnolia>
+References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+ <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
+ <20201021141044.GF20749@veeam.com>
+ <ca8eaa40-b422-2272-1fd9-1d0a354c42bf@suse.de>
+ <20201022094402.GA21466@veeam.com>
+ <BL0PR04MB6514AC1B1FF313E6A14D122CE71D0@BL0PR04MB6514.namprd04.prod.outlook.com>
+ <20201022135213.GB21466@veeam.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6606e5f4-3f66-5844-da02-5b11e1464be6@canonical.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <20201022135213.GB21466@veeam.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9781 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 suspectscore=1
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010220103
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9781 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 clxscore=1011 malwarescore=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010220103
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 03:58:13PM +0100 Colin Ian King wrote:
-> On 22/10/2020 15:52, Mel Gorman wrote:
-> > On Thu, Oct 22, 2020 at 02:29:49PM +0200, Peter Zijlstra wrote:
-> >> On Thu, Oct 22, 2020 at 02:19:29PM +0200, Rafael J. Wysocki wrote:
-> >>>> However I do want to retire ondemand, conservative and also very much
-> >>>> intel_pstate/active mode.
-> >>>
-> >>> I agree in general, but IMO it would not be prudent to do that without making
-> >>> schedutil provide the same level of performance in all of the relevant use
-> >>> cases.
-> >>
-> >> Agreed; I though to have understood we were there already.
+On Thu, Oct 22, 2020 at 04:52:13PM +0300, Sergei Shtepa wrote:
+> The 10/22/2020 13:28, Damien Le Moal wrote:
+> > On 2020/10/22 18:43, Sergei Shtepa wrote:
+> > > 
+> > > Maybe, but the problem is that I can't imagine how to implement
+> > > dm-intercept yet. 
+> > > How to use dm to implement interception without changing the stack
+> > > of block devices. We'll have to make a hook somewhere, isn`t it?
 > > 
-> > AFAIK, not quite (added Giovanni as he has been paying more attention).
-> > Schedutil has improved since it was merged but not to the extent where
-> > it is a drop-in replacement. The standard it needs to meet is that
-> > it is at least equivalent to powersave (in intel_pstate language)
-> > or ondemand (acpi_cpufreq) and within a reasonable percentage of the
-> > performance governor. Defaulting to performance is a) giving up and b)
-> > the performance governor is not a universal win. There are some questions
-> > currently on whether schedutil is good enough when HWP is not available.
-> > There was some evidence (I don't have the data, Giovanni was looking into
-> > it) that HWP was a requirement to make schedutil work well. That is a
-> > hazard in itself because someone could test on the latest gen Intel CPU
-> > and conclude everything is fine and miss that Intel-specific technology
-> > is needed to make it work well while throwing everyone else under a bus.
-> > Giovanni knows a lot more than I do about this, I could be wrong or
-> > forgetting things.
+> > Once your dm-intercept target driver is inserted with "dmsetup" or any user land
+> > tool you implement using libdevicemapper, the "hooks" will naturally be in place
+> > since the dm infrastructure already does that: all submitted BIOs will be passed
+> > to dm-intercept through the "map" operation defined in the target_type
+> > descriptor. It is then that driver job to execute the BIOs as it sees fit.
 > > 
-> > For distros, switching to schedutil by default would be nice because
-> > frequency selection state would follow the task instead of being per-cpu
-> > and we could stop worrying about different HWP implementations but it's
-> > not at the point where the switch is advisable. I would expect hard data
-> > before switching the default and still would strongly advise having a
-> > period of time where we can fall back when someone inevitably finds a
-> > new corner case or exception.
-> 
-> ..and it would be really useful for distros to know when the hard data
-> is available so that they can make an informed decision when to move to
-> schedutil.
->
-
-I think distros are on the hook to generate that hard data themselves
-with which to make such a decision.  I don't expect it to be done by
-someone else. 
-
-> > 
-> > For reference, SLUB had the same problem for years. It was switched
-> > on by default in the kernel config but it was a long time before
-> > SLUB was generally equivalent to SLAB in terms of performance. Block
-> > multiqueue also had vaguely similar issues before the default changes
-> > and a period of time before it was removed removed (example whinging mail
-> > https://lore.kernel.org/lkml/20170803085115.r2jfz2lofy5spfdb@techsingularity.net/)
-> > It's schedutil's turn :P
+> > Look at simple device mappers like dm-linear or dm-flakey for hints of how
+> > things work (driver/md/dm-linear.c). More complex dm drivers like dm-crypt,
+> > dm-writecache or dm-thin can give you hints about more features of device mapper.
+> > Functions such as __map_bio() in drivers/md/dm.c are the core of DM and show
+> > what happens to BIOs depending on the the return value of the map operation.
+> > dm_submit_bio() and __split_and_process_bio() is the entry points for BIO
+> > processing in DM.
 > > 
 > 
+> Is there something I don't understand? Please correct me.
+> 
+> Let me remind that by the condition of the problem, we can't change
+> the configuration of the block device stack.
+> 
+> Let's imagine this configuration: /root mount point on ext filesystem
+> on /dev/sda1.
+> +---------------+
+> |               |
+> |  /root        |
+> |               |
+> +---------------+
+> |               |
+> | EXT FS        |
+> |               |
+> +---------------+
+> |               |
+> | block layer   |
+> |               |
+> | sda queue     |
+> |               |
+> +---------------+
+> |               |
+> | scsi driver   |
+> |               |
+> +---------------+
+> 
+> We need to add change block tracking (CBT) and snapshot functionality for
+> incremental backup.
+> 
+> With the DM we need to change the block device stack. Add device /dev/sda1
+> to LVM Volume group, create logical volume, change /etc/fstab and reboot.
+> 
+> The new scheme will look like this:
+> +---------------+
+> |               |
+> |  /root        |
+> |               |
+> +---------------+
+> |               |
+> | EXT FS        |
+> |               |
+> +---------------+
+> |               |
+> | LV-root       |
+> |               |
+> +------------------+
+> |                  |
+> | dm-cbt & dm-snap |
+> |                  |
+> +------------------+
+> |               |
+> | sda queue     |
+> |               |
+> +---------------+
+> |               |
+> | scsi driver   |
+> |               |
+> +---------------+
+> 
+> But I cannot change block device stack. And so I propose a scheme with
+> interception.
+> +---------------+
+> |               |
+> |  /root        |
+> |               |
+> +---------------+
+> |               |
+> | EXT FS        |
+> |               |
+> +---------------+   +-----------------+
+> |  |            |   |                 |
+> |  | blk-filter |-> | cbt & snapshot  |
+> |  |            |<- |                 |
+> |  +------------+   +-----------------+
+> |               |
+> | sda blk queue |
+> |               |
+> +---------------+
+> |               |
+> | scsi driver   |
+> |               |
+> +---------------+
+> 
+> Perhaps I can make "cbt & snapshot" inside the DM, but without interception
+> in any case, it will not work. Isn't that right?
 
-Agreed. I'd like the option to switch back if we make the default change.
-It's on the table and I'd like to be able to go that way. 
+Stupid question: Why don't you change the block layer to make it
+possible to insert device mapper devices after the blockdev has been set
+up?
 
-Cheers,
-Phil
+--D
 
--- 
-
+> 
+> -- 
+> Sergei Shtepa
+> Veeam Software developer.
