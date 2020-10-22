@@ -2,105 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 107E9295D81
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 13:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60977295DAB
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 13:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502961AbgJVLjZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 07:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438250AbgJVLjY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 07:39:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BF5C0613CE;
-        Thu, 22 Oct 2020 04:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2E3kMNYpFQGPJuJs5up4gmdkpzSi7nO8NUmiDPeWiQQ=; b=CW73PwlR38lmWk+q+2+HFhgQuz
-        +yjEknYiNUpUp3NUKo0e64Urvvc2QZgBrozVyCHtXYFuJzT4hVRy5iJ0OFpwM7/03CP1JSH3/3iYP
-        wRGy00lrmbp8eG6Mw1e66eJxxR6ghHhHCOzksHvRMXiRf2LxS9wmLx/P+eOvQW/AyMmDQjQa+R+tW
-        LVpurff96NnOsac7Wi/ijogF4zymdv9CeU0d1ATNDA4CeB4j1C4QV1DJ8I9W1sjFxcGFQBrYkgBEQ
-        82W6koSkl6OZFyMSdxkjzHjcBMBIT/RMv5fXEcP29Dw1LW8u3j+Modv+PO1cls1vGR3BF+vE/vyAX
-        MMbEjYiQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kVYw3-0006KQ-UF; Thu, 22 Oct 2020 11:39:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 404F730377D;
-        Thu, 22 Oct 2020 13:39:09 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 28F02203CC4B2; Thu, 22 Oct 2020 13:39:09 +0200 (CEST)
-Date:   Thu, 22 Oct 2020 13:39:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-Message-ID: <20201022113909.GE2611@hirez.programming.kicks-ass.net>
-References: <cover.1594707424.git.viresh.kumar@linaro.org>
- <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
- <20200716115605.GR10769@hirez.programming.kicks-ass.net>
- <20201022083255.37xl3lffwk5qo6uk@vireshk-i7>
- <20201022090523.GV2628@hirez.programming.kicks-ass.net>
- <20201022110656.gaphjv2tzhj4f5y6@vireshk-i7>
+        id S2502959AbgJVLpr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 07:45:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:55238 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2502778AbgJVLpr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Oct 2020 07:45:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D0D8D6E;
+        Thu, 22 Oct 2020 04:45:46 -0700 (PDT)
+Received: from [10.57.20.67] (unknown [10.57.20.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 933593F66B;
+        Thu, 22 Oct 2020 04:45:43 -0700 (PDT)
+Subject: Re: [PATCH 2/5] thermal: devfreq_cooling: get a copy of device status
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        orjan.eide@arm.com, robh@kernel.org,
+        alyssa.rosenzweig@collabora.com, steven.price@arm.com,
+        airlied@linux.ie, daniel@ffwll.ch
+References: <20200921122007.29610-1-lukasz.luba@arm.com>
+ <20200921122007.29610-3-lukasz.luba@arm.com>
+ <199bf0e0-88b3-1908-c291-92c85bfe06b1@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <4ac3b6b0-0e3f-3971-78e6-362c367f8c30@arm.com>
+Date:   Thu, 22 Oct 2020 12:45:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201022110656.gaphjv2tzhj4f5y6@vireshk-i7>
+In-Reply-To: <199bf0e0-88b3-1908-c291-92c85bfe06b1@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 04:36:56PM +0530, Viresh Kumar wrote:
-> On 22-10-20, 11:05, Peter Zijlstra wrote:
-> > On Thu, Oct 22, 2020 at 02:02:55PM +0530, Viresh Kumar wrote:
-> > > One of the issues I see with this is that schedutil may not be
-> > > available in all configurations and it is still absolutely fine to
-> > > using the suggested helper to get the energy numbers in such cases, so
-> > > we shouldn't really make it scheutil dependent.
-> > 
-> > The only constraint on schedutil is SMP I think; aside from that it
-> > should/could always be available.
-> > 
-> > Given the trainwreck here:
-> > 
-> >   20201022071145.GM2628@hirez.programming.kicks-ass.net
-> > 
-> > (you're on Cc), I'm starting to lean more and more towards making it
-> > unconditionally available (when SMP).
-> > 
-> > Anybody forcing it off either sets performance (in which case we don't
-> > care about energy usage anyway)
-> 
-> I agree.
-> 
-> > or they select one of the old (broken)
-> > ondemand/conservative things and I don't give a crap.
-> 
-> The other kernel layers, for example cpufreq-cooling in question here,
-> don't really need to bother with the governor in use and should be
-> able to get the energy numbers anyway. So for me, the energy number
-> that the cpufreq-cooling stuff gets should be same irrespective of the
-> governor in use, schedutil or ondemand.
-> 
-> Having said that, schedutil really doesn't need to install the
-> fallback (which you suggested earlier), rather the scheduler core can
-> do that directly with cpufreq core and schedutil can also use the same
-> fallback mechanism maybe ? And so we can avoid the exporting of stuff
-> that way.
+Hi Daniel,
 
-I suppose that could work, yes. It's a bit weird to have two
-interactions with cpufreq, once through a governor and once outside it,
-but I suppose I can live with that.
+On 10/14/20 3:34 PM, Daniel Lezcano wrote:
+> On 21/09/2020 14:20, Lukasz Luba wrote:
+>> Devfreq cooling needs to now the correct status of the device in order
+>> to operate. Do not rely on Devfreq last_status which might be a stale data
+>> and get more up-to-date values of the load.
+>>
+>> Devfreq framework can change the device status in the background. To
+>> mitigate this situation make a copy of the status structure and use it
+>> for internal calculations.
+>>
+>> In addition this patch adds normalization function, which also makes sure
+>> that whatever data comes from the device, it is in a sane range.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/devfreq_cooling.c | 52 +++++++++++++++++++++++++------
+>>   1 file changed, 43 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+>> index 7063ccb7b86d..cf045bd4d16b 100644
+>> --- a/drivers/thermal/devfreq_cooling.c
+>> +++ b/drivers/thermal/devfreq_cooling.c
+>> @@ -227,6 +227,24 @@ static inline unsigned long get_total_power(struct devfreq_cooling_device *dfc,
+>>   							       voltage);
+>>   }
+>>   
+>> +static void _normalize_load(struct devfreq_dev_status *status)
+>> +{
+>> +	/* Make some space if needed */
+>> +	if (status->busy_time > 0xffff) {
+>> +		status->busy_time >>= 10;
+>> +		status->total_time >>= 10;
+>> +	}
+>> +
+>> +	if (status->busy_time > status->total_time)
+>> +		status->busy_time = status->total_time;
+>> +
+>> +	status->busy_time *= 100;
+>> +	status->busy_time /= status->total_time ? : 1;
+>> +
+>> +	/* Avoid division by 0 */
+>> +	status->busy_time = status->busy_time ? : 1;
+>> +	status->total_time = 100;
+>> +}
+> 
+> Not sure that works if the devfreq governor is not on-demand.
+> 
+> Is it possible to use the energy model directly in devfreq to compute
+> the energy consumption given the state transitions since the last reading ?
+
+This change is actually trying to create a safety net for what we do.
+
+In the original code we take the last_state directly:
+-	struct devfreq_dev_status *status = &df->last_status;
+
+Then we simply multiply by 'busy_time' and div by 'total_time',
+without checks... The values might be huge or zero, etc.
+The _normalize_load() introduces this safety.
+
+Apart from that, just simply taking a pointer to &df->last_status does
+not protect us from:
+- working on a struct which might be modified at the same time in
+   background - not safe
+- that struct might not be updated by long time, because devfreq
+   didn't check it for a long (there are two polling modes in devfreq)
+
+So taking a mutex and then a trigger the device status check and
+make a copy of newest data. It is more safe.
+
+I think this can be treated as a fix, not a feature.
+
+> 
+> The power will be read directly from devfreq which will return:
+> 
+> nrj + (current_power * (jiffies - last_update)) / (jiffies - last_update)
+> 
+> The devfreq cooling device driver would result in a much simpler code, no?
+
+This is something that I would like to address after the EM changes are
+merged. It would be the next step, how to estimate the power by taking
+into consideration more information. This patch series just tries to
+make it possible to use EM. The model improvements would be next.
+
+Thank you Daniel for your review.
+
+Regards,
+Lukasz
