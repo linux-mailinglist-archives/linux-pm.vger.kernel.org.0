@@ -2,105 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4AE2960C4
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 16:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F7729612C
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 16:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2900748AbgJVOQh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 22 Oct 2020 10:16:37 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46431 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2443913AbgJVOQh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 10:16:37 -0400
-Received: by mail-oi1-f196.google.com with SMTP id l4so1836639oii.13;
-        Thu, 22 Oct 2020 07:16:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VmqFptAKOhB1kwEn7QNAQ1eEtfGRIzRebrKouxM4Uzo=;
-        b=Ry3XC5BfnDaBUKmmQN+gJhiUy5BF6QGArnbJYivjXt0T1TqJY85stkTERZtcqlPq0B
-         0OimRCQli9JtWayF6r9UmWoq0NRWpYIczSCuVDZaokWPQPVdFxvOTmtmFJ7fFI9/4Ssx
-         8DKSl4kNErzmUziZ4esEPJ6rm8lAGa9Pc5aO96LWB4vus2KneRaqFLenANGCduy1sTh4
-         2kTsXakchQb4r9GmbxbblAUnPctYmrmUnNLpLGcQFpFP4N1yoZjqjCrj5gCbIyJv4X/f
-         IPPaxuyoWr3OYJM8An+R6tHMPJTqnaKs/Cn8EbcFnGljyyaX8ayMBGMCFK3Z8entjd6O
-         OOiA==
-X-Gm-Message-State: AOAM533PUmIqMDGE/axFeoVek1mFs7KSIkZtOp9zm6ZVL4+72LXtKM00
-        ld25Dfun9LyDr9Gim9I0lMiw7smjUl6F675azk3ovuF5
-X-Google-Smtp-Source: ABdhPJw+W2JnimijRswZBSSGyu+7MSACzddlHGMXLjsXwuqMfI9UeuRBsd0CGkqiM1oAzX++nPq9MqBcWSyMRZfFuqA=
-X-Received: by 2002:aca:724a:: with SMTP id p71mr1680623oic.157.1603376195959;
- Thu, 22 Oct 2020 07:16:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <6543936.FbWAdBN1tG@kreacher> <1708806.S9fAqql2gf@kreacher> <e9466a28-5c6a-f88a-51ab-547ecc21e5d0@hisilicon.com>
-In-Reply-To: <e9466a28-5c6a-f88a-51ab-547ecc21e5d0@hisilicon.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Oct 2020 16:16:25 +0200
-Message-ID: <CAJZ5v0hdWtUyDFBJpXH5tkFUtRF4y7P6SvcepEA24H1K4dy+iQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] PM: runtime: Resume the device earlier in __device_release_driver()
-To:     "chenxiang (M)" <chenxiang66@hisilicon.com>
+        id S368255AbgJVOw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 10:52:58 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59006 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S368214AbgJVOwz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Oct 2020 10:52:55 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 70227AE0D;
+        Thu, 22 Oct 2020 14:52:53 +0000 (UTC)
+Date:   Thu, 22 Oct 2020 15:52:50 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giovanni Gherdovich <ggherdovich@suse.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Ingo Molnar <mingo@redhat.com>,
+        kernel-janitors@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Gilles Muller <Gilles.Muller@inria.fr>,
+        srinivas.pandruvada@linux.intel.com,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Saravana Kannan <saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Len Brown <len.brown@intel.com>
+Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle core
+Message-ID: <20201022145250.GK32041@suse.de>
+References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr>
+ <34115486.YmRjPRKJaA@kreacher>
+ <20201022120213.GG2611@hirez.programming.kicks-ass.net>
+ <1790766.jaFeG3T87Z@kreacher>
+ <20201022122949.GW2628@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20201022122949.GW2628@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 3:40 PM chenxiang (M) <chenxiang66@hisilicon.com> wrote:
->
-> Hi Rafael,
->
-> 在 2020/10/22 3:14, Rafael J. Wysocki 写道:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Since the device is resumed from runtime-suspend in
-> > __device_release_driver() anyway, it is better to do that before
-> > looking for busy managed device links from it to consumers, because
-> > if there are any, device_links_unbind_consumers() will be called
-> > and it will cause the consumer devices' drivers to unbind, so the
-> > consumer devices will be runtime-resumed.  In turn, resuming each
-> > consumer device will cause the supplier to be resumed and when the
-> > runtime PM references from the given consumer to it are dropped, it
-> > may be suspended.  Then, the runtime-resume of the next consumer
-> > will cause the supplier to resume again and so on.
-> >
-> > Update the code accordingly.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Fixes: 9ed9895370ae ("driver core: Functional dependencies tracking support")
-> > Cc: All applicable <stable@vger.kernel.org> # All applicable
-> > ---
-> >   drivers/base/dd.c |    4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > Index: linux-pm/drivers/base/dd.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/base/dd.c
-> > +++ linux-pm/drivers/base/dd.c
-> > @@ -1117,6 +1117,8 @@ static void __device_release_driver(stru
-> >
-> >       drv = dev->driver;
-> >       if (drv) {
-> > +             pm_runtime_get_sync(dev);
-> > +
-> >               while (device_links_busy(dev)) {
-> >                       __device_driver_unlock(dev, parent);
-> >
-> > @@ -1132,8 +1134,6 @@ static void __device_release_driver(stru
->
-> pm_runtime_put_sync() is required to be called if existed from here.
->
-> >                               return;
+On Thu, Oct 22, 2020 at 02:29:49PM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 22, 2020 at 02:19:29PM +0200, Rafael J. Wysocki wrote:
+> > > However I do want to retire ondemand, conservative and also very much
+> > > intel_pstate/active mode.
+> > 
+> > I agree in general, but IMO it would not be prudent to do that without making
+> > schedutil provide the same level of performance in all of the relevant use
+> > cases.
+> 
+> Agreed; I though to have understood we were there already.
 
-Right, I overlooked this, thanks!
+AFAIK, not quite (added Giovanni as he has been paying more attention).
+Schedutil has improved since it was merged but not to the extent where
+it is a drop-in replacement. The standard it needs to meet is that
+it is at least equivalent to powersave (in intel_pstate language)
+or ondemand (acpi_cpufreq) and within a reasonable percentage of the
+performance governor. Defaulting to performance is a) giving up and b)
+the performance governor is not a universal win. There are some questions
+currently on whether schedutil is good enough when HWP is not available.
+There was some evidence (I don't have the data, Giovanni was looking into
+it) that HWP was a requirement to make schedutil work well. That is a
+hazard in itself because someone could test on the latest gen Intel CPU
+and conclude everything is fine and miss that Intel-specific technology
+is needed to make it work well while throwing everyone else under a bus.
+Giovanni knows a lot more than I do about this, I could be wrong or
+forgetting things.
 
-> >               }
-> >
-> > -             pm_runtime_get_sync(dev);
-> > -
-> >               driver_sysfs_remove(dev);
-> >
-> >               if (dev->bus)
+For distros, switching to schedutil by default would be nice because
+frequency selection state would follow the task instead of being per-cpu
+and we could stop worrying about different HWP implementations but it's
+not at the point where the switch is advisable. I would expect hard data
+before switching the default and still would strongly advise having a
+period of time where we can fall back when someone inevitably finds a
+new corner case or exception.
+
+For reference, SLUB had the same problem for years. It was switched
+on by default in the kernel config but it was a long time before
+SLUB was generally equivalent to SLAB in terms of performance. Block
+multiqueue also had vaguely similar issues before the default changes
+and a period of time before it was removed removed (example whinging mail
+https://lore.kernel.org/lkml/20170803085115.r2jfz2lofy5spfdb@techsingularity.net/)
+It's schedutil's turn :P
+
+-- 
+Mel Gorman
+SUSE Labs
