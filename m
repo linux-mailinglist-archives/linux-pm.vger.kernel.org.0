@@ -2,236 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7A8295D57
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 13:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BE6295D5F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 13:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2444538AbgJVL0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 07:26:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:54892 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2444501AbgJVL0q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 22 Oct 2020 07:26:46 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96FBED6E;
-        Thu, 22 Oct 2020 04:26:45 -0700 (PDT)
-Received: from [10.57.20.67] (unknown [10.57.20.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4262F3F66B;
-        Thu, 22 Oct 2020 04:26:43 -0700 (PDT)
-Subject: Re: [PATCH 4/5] thermal: devfreq_cooling: remove old power model and
- use EM
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amit.kucheria@verdurent.com,
-        airlied@linux.ie, daniel.lezcano@linaro.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, rui.zhang@intel.com,
-        orjan.eide@arm.com
-References: <20200921122007.29610-1-lukasz.luba@arm.com>
- <20200921122007.29610-5-lukasz.luba@arm.com> <20201007151225.GB15063@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <4929dcfa-9ab0-52fa-8426-50cda52eb8dc@arm.com>
-Date:   Thu, 22 Oct 2020 12:26:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2897281AbgJVLaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 07:30:14 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:46170 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2897279AbgJVLaO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 07:30:14 -0400
+Received: by mail-oi1-f194.google.com with SMTP id l4so1317449oii.13;
+        Thu, 22 Oct 2020 04:30:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bSTQnfiSle/G+ffgc8i4ByrbO0fkKL6UxU71VpX5YJ8=;
+        b=ds+qGKtgrCbAWUTqNkl2Gxc8OsausYHphOjmhzpDY8Q9MMWhqa69+KM6Pu4pUJVx4q
+         GirBOoKqM/nQ6jLLnPAnfrkcD+9H5Df+4AWkAp7xTdykiXEk9vQO2RZazNW4RoFaGCMT
+         2RRLqjL7cyAVjns7RAZervrdAaDhPgfktqDS/pPR3vsGZva1zYwp81uvKZ9PnPnV0ZBx
+         GtXTsgzh1rxjNNZh9TMIi5LsGEoc+LZLZ1P9YAYE1HFTf4DZsqMVkqNx5e4p4hFH8VsU
+         AFunl/qDS8Tq14tIm1NNqZD4mmS8W2fercJYOAwJ+Tzt+54+ubOvWA+fmWjKYoH9Lano
+         v7Zg==
+X-Gm-Message-State: AOAM533i0erLywOzULRFhlI6zpArRbc7IFCBVyZyfDmTp8XLFpkQ5sBi
+        CqgqFwlHu/3LXutorjEcdYawWDurog7vlYargfY=
+X-Google-Smtp-Source: ABdhPJxRmGkFBRfkGyPi/jnbKKfFCsIXYN1lA9uQTdfPAdka3Duz9P7XiYzkQubpycT4mdAZWsjvWfmKydeMXgb56YM=
+X-Received: by 2002:aca:fd52:: with SMTP id b79mr1227163oii.69.1603366212247;
+ Thu, 22 Oct 2020 04:30:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201007151225.GB15063@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1594707424.git.viresh.kumar@linaro.org> <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
+ <20200716115605.GR10769@hirez.programming.kicks-ass.net> <20201022083255.37xl3lffwk5qo6uk@vireshk-i7>
+ <20201022090523.GV2628@hirez.programming.kicks-ass.net> <20201022110656.gaphjv2tzhj4f5y6@vireshk-i7>
+In-Reply-To: <20201022110656.gaphjv2tzhj4f5y6@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Oct 2020 13:30:01 +0200
+Message-ID: <CAJZ5v0jZC=UwW9L+KB3pugsTL9P1tZmvQ-sVMV-udn7+L_gEeA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Oct 22, 2020 at 1:07 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 22-10-20, 11:05, Peter Zijlstra wrote:
+> > On Thu, Oct 22, 2020 at 02:02:55PM +0530, Viresh Kumar wrote:
+> > > One of the issues I see with this is that schedutil may not be
+> > > available in all configurations and it is still absolutely fine to
+> > > using the suggested helper to get the energy numbers in such cases, so
+> > > we shouldn't really make it scheutil dependent.
+> >
+> > The only constraint on schedutil is SMP I think; aside from that it
+> > should/could always be available.
+> >
+> > Given the trainwreck here:
+> >
+> >   20201022071145.GM2628@hirez.programming.kicks-ass.net
+> >
+> > (you're on Cc), I'm starting to lean more and more towards making it
+> > unconditionally available (when SMP).
+> >
+> > Anybody forcing it off either sets performance (in which case we don't
+> > care about energy usage anyway)
+>
+> I agree.
 
+That's not really the case, though.
 
-On 10/7/20 4:12 PM, Ionela Voinescu wrote:
-> Hi Lukasz,
-> 
-> On Monday 21 Sep 2020 at 13:20:06 (+0100), Lukasz Luba wrote:
-> [..]
->>   /**
->> - * freq_get_state() - get the cooling state corresponding to a frequency
->> + * freq_get_state() - get the performance index corresponding to a frequency
-> 
-> If we change the meaning of the return value, I think the function needs
-> a name change as well.
-> 
-> Also, we do treat this as a cooling state when we do validation and
-> compare it to THERMAL_CSTATE_INVALID,  but it's not actually a cooling
-> state (it's max_state - state). It does create confusion if we name
-> "state" both a performance index and a cooling state.
-> 
-> Given that the only user is devfreq_cooling_get_requested_power(),
-> might be good to collapse freq_get_state() in that function and rename
-> the "state" variable in there to "em_perf_idx".
+Many people use intel_pstate in the active mode with HWP enabled too.
 
-I will have a look into this.
+Arguably, that doesn't need to compute the effective utilization, so I
+guess it is not relevant for the discussion here, but it is not
+negligible in general.
 
-> 
->>    * @dfc:	Pointer to devfreq cooling device
->> - * @freq:	frequency in Hz
->> + * @freq:	frequency in kHz
->>    *
->> - * Return: the cooling state associated with the @freq, or
->> + * Return: the performance index associated with the @freq, or
->>    * THERMAL_CSTATE_INVALID if it wasn't found.
->>    */
->>   static unsigned long
->> @@ -128,8 +130,8 @@ freq_get_state(struct devfreq_cooling_device *dfc, unsigned long freq)
->>   {
->>   	int i;
->>   
->> -	for (i = 0; i < dfc->freq_table_size; i++) {
->> -		if (dfc->freq_table[i] == freq)
->> +	for (i = 0; i <= dfc->max_state; i++) {
->> +		if (dfc->em->table[i].frequency == freq)
->>   			return i;
->>   	}
->>   
->> @@ -164,71 +166,15 @@ static unsigned long get_voltage(struct devfreq *df, unsigned long freq)
->>   	return voltage;
->>   }
->>   
->> -/**
->> - * get_static_power() - calculate the static power
->> - * @dfc:	Pointer to devfreq cooling device
->> - * @freq:	Frequency in Hz
->> - *
->> - * Calculate the static power in milliwatts using the supplied
->> - * get_static_power().  The current voltage is calculated using the
->> - * OPP library.  If no get_static_power() was supplied, assume the
->> - * static power is negligible.
->> - */
->> -static unsigned long
->> -get_static_power(struct devfreq_cooling_device *dfc, unsigned long freq)
->> +static void dfc_em_get_requested_power(struct em_perf_domain *em,
->> +				       struct devfreq_dev_status *status,
->> +				       u32 *power, int em_perf_idx)
-> 
-> Is there a reason for not directly returning the power value in this
-> function? Also, this only does a few arithmetic operations and it's only
-> called in one place. Is it worth to have this in a separate function?
+> > or they select one of the old (broken)
+> > ondemand/conservative things and I don't give a crap.
+>
+> The other kernel layers, for example cpufreq-cooling in question here,
+> don't really need to bother with the governor in use and should be
+> able to get the energy numbers anyway. So for me, the energy number
+> that the cpufreq-cooling stuff gets should be same irrespective of the
+> governor in use, schedutil or ondemand.
+>
+> Having said that, schedutil really doesn't need to install the
+> fallback (which you suggested earlier), rather the scheduler core can
+> do that directly with cpufreq core and schedutil can also use the same
+> fallback mechanism maybe ? And so we can avoid the exporting of stuff
+> that way.
 
-Good question, maybe I will just put this code where it's called.
-
-> 
-> [..]
->> @@ -345,11 +279,8 @@ static int devfreq_cooling_power2state(struct thermal_cooling_device *cdev,
->>   	struct devfreq_cooling_device *dfc = cdev->devdata;
->>   	struct devfreq *df = dfc->devfreq;
->>   	struct devfreq_dev_status status;
->> -	unsigned long busy_time;
->> +	u32 est_power = power;
-> 
-> Nit: You could use power directly and remove est_power as well.
-> 
->>   	unsigned long freq;
->> -	s32 dyn_power;
->> -	u32 static_power;
->> -	s32 est_power;
->>   	int i;
->>   
->>   	mutex_lock(&df->lock);
->> @@ -358,31 +289,26 @@ static int devfreq_cooling_power2state(struct thermal_cooling_device *cdev,
->>   
->>   	freq = status.current_frequency;
->>   
->> -	if (dfc->power_ops->get_real_power) {
->> +	if (dfc->power_ops && dfc->power_ops->get_real_power) {
->>   		/* Scale for resource utilization */
->>   		est_power = power * dfc->res_util;
->>   		est_power /= SCALE_ERROR_MITIGATION;
->>   	} else {
->> -		static_power = get_static_power(dfc, freq);
->> -
->> -		dyn_power = power - static_power;
->> -		dyn_power = dyn_power > 0 ? dyn_power : 0;
->> -
->> -		/* Scale dynamic power for utilization */
->> -		busy_time = status.busy_time ?: 1;
->> -		est_power = (dyn_power * status.total_time) / busy_time;
->> +		_normalize_load(&status);
->> +		est_power *= status.total_time;
->> +		est_power /= status.busy_time;
->>   	}
->>   
->>   	/*
->>   	 * Find the first cooling state that is within the power
->> -	 * budget for dynamic power.
->> +	 * budget. The EM power table is sorted ascending.
->>   	 */
->> -	for (i = 0; i < dfc->freq_table_size - 1; i++)
->> -		if (est_power >= dfc->power_table[i])
->> +	for (i = dfc->max_state; i > 0; i--)
->> +		if (est_power >= dfc->em->table[i].power)
->>   			break;
->>   
->> -	*state = i;
->> -	dfc->capped_state = i;
->> +	*state = dfc->max_state - i;
->> +	dfc->capped_state = *state;
->>   	trace_thermal_power_devfreq_limit(cdev, freq, *state, power);
->>   	return 0;
->>   }
-> [..]
->>   /**
->> @@ -503,7 +381,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
->>   	struct thermal_cooling_device *cdev;
->>   	struct devfreq_cooling_device *dfc;
->>   	char dev_name[THERMAL_NAME_LENGTH];
->> -	int err;
->> +	int err, num_opps;
->>   
->>   	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
->>   	if (!dfc)
->> @@ -511,28 +389,45 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
->>   
->>   	dfc->devfreq = df;
->>   
->> -	if (dfc_power) {
->> -		dfc->power_ops = dfc_power;
->> -
->> +	dfc->em = em_pd_get(df->dev.parent);
->> +	if (dfc->em) {
->>   		devfreq_cooling_ops.get_requested_power =
->>   			devfreq_cooling_get_requested_power;
->>   		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
->>   		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
->> +
->> +		dfc->power_ops = dfc_power;
->> +
->> +		num_opps = em_pd_nr_perf_states(dfc->em);
->> +	} else {
->> +		/* Backward compatibility for drivers which do not use IPA */
->> +		dev_dbg(df->dev.parent, "missing EM for cooling device\n");
->> +
->> +		num_opps = dev_pm_opp_get_opp_count(df->dev.parent);
->> +
->> +		err = devfreq_cooling_gen_tables(dfc, num_opps);
->> +		if (err)
->> +			goto free_dfc;
->>   	}
->>   
->> -	err = devfreq_cooling_gen_tables(dfc);
->> -	if (err)
->> +	if (num_opps <= 0) {
->> +		err = -EINVAL;
->>   		goto free_dfc;
->> +	}
->> +
->> +	/* max_state is an index, not a counter */
-> 
-> Nit: Might be more clear to replace "index" with cooling state. Then
-> knowledge about cooling states would make this more clear.
-
-Similar comment is in cpufreq_cooling.c. The 'index' here means the last
-valid index in the array.
-
-Thank you for the review comments for all patches.
-
-Regards,
-Lukasz
-
-> 
-> Regards,
-> Ionela.
-> 
+I like this better than the fallback idea TBH.
