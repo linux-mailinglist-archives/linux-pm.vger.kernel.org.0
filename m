@@ -2,88 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80897295E03
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 14:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491C4295E39
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 14:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897868AbgJVMHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 08:07:52 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:42088 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2897863AbgJVMHu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 08:07:50 -0400
-Received: by mail-oi1-f195.google.com with SMTP id 16so1432072oix.9;
-        Thu, 22 Oct 2020 05:07:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rsWpUgmKiK1iTffkYnIeKuIs/1+05Y0WxWiqciGePpU=;
-        b=q9uE8/FeCFyEpVUfe8sbIMZKDd72yw/qFdOzyBpPpkj5yrHHtOusGJXTY4nlXihPYH
-         2KIBlWkFP5QpeqN9hwuJb8QB1i5NqP6cHWlxTHhb/M/dZ2kc5swKln1ExlTSC/ZVT774
-         qhPGsQc3xJcaH0ev4N05cj+qnVjQiMPeqCzMzlbzbZ1HeF10LkmSSIb8yLi2Lc2wjsxr
-         1MQC87gsBQTckjW72FAkGiJX0o4n4kK/Sva+iAe4EIdyyGzLvQ8ECm/1UEmWglUvBjSB
-         OfAxfUDtJOHxIrLkwBcEEPM/3FxWvkX3MlmlirguTb/up4K1NsY7IwoUk6OZnr7Wlr4I
-         CyZg==
-X-Gm-Message-State: AOAM530Sw2H90iEtO7tibbND6PkmAikXw/leSviRx+caciI7GVXnTHze
-        q68AVhjw/4AavUUsTIW0o3NALq+xDOFBXaYtISg=
-X-Google-Smtp-Source: ABdhPJwYKUSR87064DuZyOBUHttXjyy/bJD6aPomrsK++Z1bvXnvv86RsKwSzLufomfAgxgNxXJ4r4Dla2wRN25orNs=
-X-Received: by 2002:aca:fd52:: with SMTP id b79mr1327660oii.69.1603368469292;
- Thu, 22 Oct 2020 05:07:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1594707424.git.viresh.kumar@linaro.org> <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
- <20200716115605.GR10769@hirez.programming.kicks-ass.net> <20201022083255.37xl3lffwk5qo6uk@vireshk-i7>
- <20201022090523.GV2628@hirez.programming.kicks-ass.net> <20201022110656.gaphjv2tzhj4f5y6@vireshk-i7>
- <CAJZ5v0jZC=UwW9L+KB3pugsTL9P1tZmvQ-sVMV-udn7+L_gEeA@mail.gmail.com> <20201022115752.GF2611@hirez.programming.kicks-ass.net>
-In-Reply-To: <20201022115752.GF2611@hirez.programming.kicks-ass.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Oct 2020 14:07:38 +0200
-Message-ID: <CAJZ5v0hTCzQWV8NBNdQPcKbgKyU79yRyVb=sDBiDv87cab-YCw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
+        id S2898036AbgJVMTd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 08:19:33 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:49940 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2898032AbgJVMTc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 08:19:32 -0400
+Received: from 89-64-87-167.dynamic.chello.pl (89.64.87.167) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.491)
+ id 61321c92bea3245f; Thu, 22 Oct 2020 14:19:30 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        kernel-janitors@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Gilles Muller <Gilles.Muller@inria.fr>,
+        srinivas.pandruvada@linux.intel.com,
         Linux PM <linux-pm@vger.kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Len Brown <len.brown@intel.com>
+Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle core
+Date:   Thu, 22 Oct 2020 14:19:29 +0200
+Message-ID: <1790766.jaFeG3T87Z@kreacher>
+In-Reply-To: <20201022120213.GG2611@hirez.programming.kicks-ass.net>
+References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr> <34115486.YmRjPRKJaA@kreacher> <20201022120213.GG2611@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 1:58 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Oct 22, 2020 at 01:30:01PM +0200, Rafael J. Wysocki wrote:
->
-> > Many people use intel_pstate in the active mode with HWP enabled too.
->
-> We now have HWP-passive supported, afaict. So we should discourage that.
+[CC linux-pm and Len]
 
-Which is kind of hard, because plain HWP does better in some cases,
-especially performance-focused.
+On Thursday, October 22, 2020 2:02:13 PM CEST Peter Zijlstra wrote:
+> On Thu, Oct 22, 2020 at 01:45:25PM +0200, Rafael J. Wysocki wrote:
+> > On Thursday, October 22, 2020 12:47:03 PM CEST Viresh Kumar wrote:
+> > > On 22-10-20, 09:11, Peter Zijlstra wrote:
+> > > > Well, but we need to do something to force people onto schedutil,
+> > > > otherwise we'll get more crap like this thread.
+> > > > 
+> > > > Can we take the choice away? Only let Kconfig select which governors are
+> > > > available and then set the default ourselves? I mean, the end goal being
+> > > > to not have selectable governors at all, this seems like a good step
+> > > > anyway.
+> > > 
+> > > Just to clarify and complete the point a bit here, the users can still
+> > > pass the default governor from cmdline using
+> > > cpufreq.default_governor=, which will take precedence over the one the
+> > > below code is playing with. And later once the kernel is up, they can
+> > > still choose a different governor from userspace.
+> > 
+> > Right.
+> > 
+> > Also some people simply set "performance" as the default governor and then
+> > don't touch cpufreq otherwise (the idea is to get everything to the max
+> > freq right away and stay in that mode forever).  This still needs to be
+> > possible IMO.
+> 
+> Performance/powersave make sense to keep.
+> 
+> However I do want to retire ondemand, conservative and also very much
+> intel_pstate/active mode.
 
-I am still not sure why this is the case given how the passive mode
-with HWP enabled is implemented, but that's what Srinivas sees in his
-tests.
+I agree in general, but IMO it would not be prudent to do that without making
+schedutil provide the same level of performance in all of the relevant use
+cases.
 
-> That is; I'll care less and less about people not using schedutil as
-> time goes on.
->
-> > Arguably, that doesn't need to compute the effective utilization, so I
-> > guess it is not relevant for the discussion here, but it is not
-> > negligible in general.
->
-> Why not? cpufreq-cooling should still be able to throttle the system by
-> setting HWP.Highest_Performance no?
+> I also have very little sympathy for userspace.
 
-Well, in theory, but it is not used on x86 AFAICS.
+That I completely agree with.
 
-> In which case it still needs an energy estimate.
+> We should start by making it hard to use them and eventually just delete
+> them outright.
+
+Right, but see above: IMO step 0 should be to ensure that schedutil is a viable
+replacement for all users.
+
+
+
