@@ -2,125 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811872962B7
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 18:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FE1296309
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 18:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2901807AbgJVQfO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 12:35:14 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54042 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2901805AbgJVQfO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 22 Oct 2020 12:35:14 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C4E63AC23;
-        Thu, 22 Oct 2020 16:35:12 +0000 (UTC)
-Date:   Thu, 22 Oct 2020 17:35:10 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     Colin Ian King <colin.king@canonical.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Ingo Molnar <mingo@redhat.com>,
-        kernel-janitors@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Gilles Muller <Gilles.Muller@inria.fr>,
-        srinivas.pandruvada@linux.intel.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>
-Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle core
-Message-ID: <20201022163509.GM32041@suse.de>
-References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr>
- <34115486.YmRjPRKJaA@kreacher>
- <20201022120213.GG2611@hirez.programming.kicks-ass.net>
- <1790766.jaFeG3T87Z@kreacher>
- <20201022122949.GW2628@hirez.programming.kicks-ass.net>
- <20201022145250.GK32041@suse.de>
- <6606e5f4-3f66-5844-da02-5b11e1464be6@canonical.com>
- <20201022151200.GC92942@lorien.usersys.redhat.com>
+        id S2898049AbgJVQsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 12:48:38 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:36207 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2898044AbgJVQsi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 12:48:38 -0400
+Received: by mail-oi1-f193.google.com with SMTP id u17so2426887oie.3;
+        Thu, 22 Oct 2020 09:48:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lvu53nwOmKW1a9CIVBFMcps6EWS89y5EclPDxC9nmh0=;
+        b=AWISSvatpQRlrh3PzPaZPP6b1DWGwzTfz93WZnRJCK5PgkRczrCac4MDrPLwtjarc7
+         tlJiIdUjOWVEzdv6g5jMhP/7mTyhOg4Xlo7xudlYOj3vGdH9twPaUydOHWxJWfmZXT0Y
+         4T81UbXKLhj+Pr+vzPe8TPo9p/PXbPj4SaCusshStz6KQU/KXsxGHRWD36FxLi+gzj1H
+         HJX/T58NzLoHIGuRLSwG8WpgW0Jd/MIiTSiQUhek4RvlFSiv5FMO5EaWl9c+0mcXbQ0Z
+         o7iy8FJgOkJ/VzDv0RkfY+hA9N1jiJI9RGfv5B/q0H6MBMOZP7sro8wq967EVLegP7Ap
+         PNoA==
+X-Gm-Message-State: AOAM530U9pLQBVJi7Qu7sMaWPm0VJJ12EGprSMusd/Kcfxhi8hwXX+h5
+        Bpv4z46AASMi5K9RK2GqRKyUhd/Vz5UH518TkuU=
+X-Google-Smtp-Source: ABdhPJxhcIWseF3yHvWk8TdYgm957ZVABMLlalztBBNEBhcFWBGwcc0wbNMHAd+rBk4ySn8nYVYklgvsrFCkcQAIc8o=
+X-Received: by 2002:aca:fd52:: with SMTP id b79mr2204257oii.69.1603385317918;
+ Thu, 22 Oct 2020 09:48:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20201022151200.GC92942@lorien.usersys.redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20201019200330.16629-1-trix@redhat.com>
+In-Reply-To: <20201019200330.16629-1-trix@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Oct 2020 18:48:26 +0200
+Message-ID: <CAJZ5v0ifnZb4p+EBeYdggVm_VB54fX-HaMJX7vgkY0UnHJOEYg@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: remove unneeded break
+To:     trix@redhat.com
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 11:12:00AM -0400, Phil Auld wrote:
-> > > AFAIK, not quite (added Giovanni as he has been paying more attention).
-> > > Schedutil has improved since it was merged but not to the extent where
-> > > it is a drop-in replacement. The standard it needs to meet is that
-> > > it is at least equivalent to powersave (in intel_pstate language)
-> > > or ondemand (acpi_cpufreq) and within a reasonable percentage of the
-> > > performance governor. Defaulting to performance is a) giving up and b)
-> > > the performance governor is not a universal win. There are some questions
-> > > currently on whether schedutil is good enough when HWP is not available.
-> > > There was some evidence (I don't have the data, Giovanni was looking into
-> > > it) that HWP was a requirement to make schedutil work well. That is a
-> > > hazard in itself because someone could test on the latest gen Intel CPU
-> > > and conclude everything is fine and miss that Intel-specific technology
-> > > is needed to make it work well while throwing everyone else under a bus.
-> > > Giovanni knows a lot more than I do about this, I could be wrong or
-> > > forgetting things.
-> > > 
-> > > For distros, switching to schedutil by default would be nice because
-> > > frequency selection state would follow the task instead of being per-cpu
-> > > and we could stop worrying about different HWP implementations but it's
-> > > not at the point where the switch is advisable. I would expect hard data
-> > > before switching the default and still would strongly advise having a
-> > > period of time where we can fall back when someone inevitably finds a
-> > > new corner case or exception.
-> > 
-> > ..and it would be really useful for distros to know when the hard data
-> > is available so that they can make an informed decision when to move to
-> > schedutil.
-> >
-> 
-> I think distros are on the hook to generate that hard data themselves
-> with which to make such a decision.  I don't expect it to be done by
-> someone else. 
-> 
+On Mon, Oct 19, 2020 at 10:03 PM <trix@redhat.com> wrote:
+>
+> From: Tom Rix <trix@redhat.com>
+>
+> A break is not needed if it is preceded by a return
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/base/power/main.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 205a06752ca9..c7ac49042cee 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -363,7 +363,6 @@ static pm_callback_t pm_op(const struct dev_pm_ops *ops, pm_message_t state)
+>         case PM_EVENT_THAW:
+>         case PM_EVENT_RECOVER:
+>                 return ops->thaw;
+> -               break;
+>         case PM_EVENT_RESTORE:
+>                 return ops->restore;
+>  #endif /* CONFIG_HIBERNATE_CALLBACKS */
+> --
 
-Yep, distros are on the hook. When I said "I would expect hard data",
-it was in the knowledge that for openSUSE/SLE, we (as in SUSE) would be
-generating said data and making a call based on it. I'd be surprised if
-Phil was not thinking along the same lines.
-
-> > > For reference, SLUB had the same problem for years. It was switched
-> > > on by default in the kernel config but it was a long time before
-> > > SLUB was generally equivalent to SLAB in terms of performance. Block
-> > > multiqueue also had vaguely similar issues before the default changes
-> > > and a period of time before it was removed removed (example whinging mail
-> > > https://lore.kernel.org/lkml/20170803085115.r2jfz2lofy5spfdb@techsingularity.net/)
-> > > It's schedutil's turn :P
-> > > 
-> > 
-> 
-> Agreed. I'd like the option to switch back if we make the default change.
-> It's on the table and I'd like to be able to go that way. 
-> 
-
-Yep. It sounds chicken, but it's a useful safety net and a reasonable
-way to deprecate a feature. It's also useful for bug creation -- User X
-running whatever found that schedutil is worse than the old governor and
-had to temporarily switch back. Repeat until complaining stops and then
-tear out the old stuff.
-
-When/if there is a patch setting schedutil as the default, cc suitable
-distro people (Giovanni and myself for openSUSE). Other distros assuming
-they're watching can nominate their own victim.
-
--- 
-Mel Gorman
-SUSE Labs
+Applied as 5.10-rc material with edits in the subject and changelog, thanks!
