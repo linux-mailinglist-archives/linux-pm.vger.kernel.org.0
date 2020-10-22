@@ -2,84 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2AA29581A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 07:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9202295829
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 07:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2508058AbgJVFtR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 01:49:17 -0400
-Received: from mga04.intel.com ([192.55.52.120]:11633 "EHLO mga04.intel.com"
+        id S2503103AbgJVF61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 01:58:27 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59080 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2508056AbgJVFtR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 22 Oct 2020 01:49:17 -0400
-IronPort-SDR: awULbn5bN84PHblpUU1bT4InUmMPRpuOKHNETT38cHZ36kr5bOngsjeGn85yao9feeZfdDEtoO
- LYBkIoX9cE5Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9781"; a="164883297"
-X-IronPort-AV: E=Sophos;i="5.77,403,1596524400"; 
-   d="scan'208";a="164883297"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2020 22:49:17 -0700
-IronPort-SDR: QaQM5PLoJt5HoYm0mvpsC1Nn+HcHHSLkEXRwVVy5YOAl+a1ibjroc5hFHX1vZuGjzguUapQYOY
- D5QYRezgvHQg==
-X-IronPort-AV: E=Sophos;i="5.77,403,1596524400"; 
-   d="scan'208";a="533814761"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2020 22:49:15 -0700
-Date:   Thu, 22 Oct 2020 13:51:37 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM / sysfs: Expose suspend resume driver flags in sysfs
-Message-ID: <20201022055137.GA29165@chenyu-office.sh.intel.com>
-References: <20201022032324.25308-1-yu.c.chen@intel.com>
- <20201022053143.GB6523@kroah.com>
+        id S2409361AbgJVF61 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Oct 2020 01:58:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 15CBCAC55;
+        Thu, 22 Oct 2020 05:58:25 +0000 (UTC)
+Subject: Re: [PATCH 0/2] block layer filter and block device snapshot module
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "darrick.wong@oracle.com" <darrick.wong@oracle.com>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "koct9i@gmail.com" <koct9i@gmail.com>,
+        "damien.lemoal@wdc.com" <damien.lemoal@wdc.com>,
+        "steve@sk2.org" <steve@sk2.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+ <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
+ <20201021141044.GF20749@veeam.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <ca8eaa40-b422-2272-1fd9-1d0a354c42bf@suse.de>
+Date:   Thu, 22 Oct 2020 07:58:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201022053143.GB6523@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201021141044.GF20749@veeam.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
-thanks for taking a look at this.
-On Thu, Oct 22, 2020 at 07:31:43AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Oct 22, 2020 at 11:23:24AM +0800, Chen Yu wrote:
-> > Currently there are 4 driver flags to control system suspend/resume
-> > behavior: DPM_FLAG_NO_DIRECT_COMPLETE, DPM_FLAG_SMART_PREPARE,
-> > DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME. Make these flags
-> > visible in sysfs as read-only to get a brief understanding of the
-> > expected behavior of each device during suspend/resume, so as to
-> > facilitate suspend/resume debugging/tuning.
-> > 
-> > For example:
-> > /sys/devices/pci0000:00/0000:00:15.1/power/driver_flags:4
-> > (DPM_FLAG_SMART_SUSPEND)
-> > 
-> > /sys/devices/pci0000:00/0000:00:07.3/power/driver_flags:5
-> > (DPM_FLAG_NO_DIRECT_COMPLETE | DPM_FLAG_SMART_SUSPEND)
-> > 
-> > Acked-by: Len Brown <len.brown@intel.com>
-> > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> > ---
-> >  drivers/base/power/sysfs.c | 29 ++++++++++++++++++++++++++++-
-> >  1 file changed, 28 insertions(+), 1 deletion(-)
+On 10/21/20 4:10 PM, Sergei Shtepa wrote:
+> The 10/21/2020 16:31, Hannes Reinecke wrote:
+>> I do understand where you are coming from, but then we already have a
+>> dm-snap which does exactly what you want to achieve.
+>> Of course, that would require a reconfiguration of the storage stack on
+>> the machine, which is not always possible (or desired).
 > 
-> There is no Documentataion/ABI/ entry for your new file, which makes
-> this patch impossible to properly review by anyone, and prevents it from
-> being able to be accepted.
+> Yes, reconfiguring the storage stack on a machine is almost impossible.
 > 
-> Please fix.
+>>
+>> What I _could_ imagine would be a 'dm-intercept' thingie, which
+>> redirects the current submit_bio() function for any block device, and
+>> re-routes that to a linear device-mapper device pointing back to the
+>> original block device.
+>>
+>> That way you could attach it to basically any block device, _and_ can
+>> use the existing device-mapper functionality to do fancy stuff once the
+>> submit_io() callback has been re-routed.
+>>
+>> And it also would help in other scenarios, too; with such a
+>> functionality we could seamlessly clone devices without having to move
+>> the whole setup to device-mapper first.
 > 
-Okay, will add the entry in the document.
+> Hm...
+> Did I understand correctly that the filter itself can be left approximately
+> as it is, but the blk-snap module can be replaced with 'dm-intercept',
+> which would use the re-route mechanism from the dm?
+> I think I may be able to implement it, if you describe your idea in more
+> detail.
+> 
+> 
+Actually, once we have an dm-intercept, why do you need the block-layer 
+filter at all?
+ From you initial description the block-layer filter was implemented 
+such that blk-snap could work; but if we have dm-intercept (and with it 
+the ability to use device-mapper functionality even for normal block 
+devices) there wouldn't be any need for the block-layer filter, no?
 
-thanks,
-Chenyu
-> thanks,
-> 
-> greg k-h
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
