@@ -2,85 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89470295D08
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 12:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C11295D2A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 13:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502777AbgJVK6C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 06:58:02 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:57721 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2502541AbgJVK6C (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 22 Oct 2020 06:58:02 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1603364282; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=+kg1VPF2Fza8qxQeMDG70QVmpH0siyDmx5l4aqZHJb4=; b=xgBRkbmsSpeqyS58jLPBzYkjeqOelidBdZH3G/DtKM4wyEKc5FdbJZEGb6FcLOpM39lH9vT3
- ypXlTGVmfvAGVOey0k8gb6yBkZZPTo5bEtNtAv0PnIUz7P5Meo81rKMSQjKFbt9nI67a2Q4M
- aS32A5kujGjz//nElWDxUcL8HbQ=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5f9165b9d63768e57bcc4fe2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 22 Oct 2020 10:58:01
- GMT
-Sender: akashast=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B02EBC433FE; Thu, 22 Oct 2020 10:58:00 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.1.100] (unknown [47.9.142.219])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D801FC433C9;
-        Thu, 22 Oct 2020 10:57:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D801FC433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH] interconnect: qcom: Ensure that the floor bandwidth value
- is enforced
-To:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org
-Cc:     mdtipton@codeaurora.org, saravanak@google.com,
-        bjorn.andersson@linaro.org, linux-kernel@vger.kernel.org
-References: <20201021155938.9223-1-georgi.djakov@linaro.org>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <7af4f43a-ca05-14a5-0183-2ded0e66b87a@codeaurora.org>
-Date:   Thu, 22 Oct 2020 16:27:47 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S2896977AbgJVLHA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 07:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2896965AbgJVLG7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 07:06:59 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FC9C0613CF
+        for <linux-pm@vger.kernel.org>; Thu, 22 Oct 2020 04:06:59 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id s22so720061pga.9
+        for <linux-pm@vger.kernel.org>; Thu, 22 Oct 2020 04:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5F1P3cDyZZfB+5wQAJZN/bSRRcbsJk9yH9Mp8FnRfG0=;
+        b=KtCmAvWUglFJkVFnOpbKc+tedHFB8GWLzyy5Pf2YNN/ltIPGpeE8VV3Ezrjnf6MtIV
+         Iw4YsvNEjCjJ/OfyB5p3R99DTyqL8uYJRhtq4+teGl6/7a0rL1YIDTb5zMHpu9uUcipF
+         6JdheIPbQRh2Bw6KUfUrHXrpyZaFQYVP5LvGejO9lqEsy/eRPGt0KsURP9/q+NolQXTi
+         diBLTSbgB+kw+mgQ9Pfi6wRP7eec4Lce/cOInisWYBqnWovam16o1mQTRtwPTVxY3t03
+         amLoYsvpP5RAv7CpiC3bYM8aSUIQOIAjof7yIO8+Rx+9hduyEbCUSfk9rskNrfQyrgr1
+         OLxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5F1P3cDyZZfB+5wQAJZN/bSRRcbsJk9yH9Mp8FnRfG0=;
+        b=j4puLmLWHcWW6NPawJ38tttPJWuzKCv9aB52PlmeRB2ZXBNo4tKcFtPLTZG4EDjyAc
+         UOaSu1kgpq3mV33ECKr5h6AvsqWXWKIfwvZk703JktdcT7c0bwq0Uo2cRYWmh1kfjSnx
+         MRlPFbx3eOw44csWj9RH+8n5bwF/TnGfXQjL4bN5P2JoullMG+5nwo+uHrUg0rv1sbH+
+         dAE0PoIFLQzrk87Ocdmobn9M4/VPegpBlBwSh6rKDiwsVILZYpB2F6wU6QIsx2AnV2Y9
+         5FTkQeOMaooZA2Bv6UUqQSBKk36NMfiCp9CPSFw9Pz0792r8v9x/HRr0C07gvrxZjILo
+         bghg==
+X-Gm-Message-State: AOAM531vAWfDIPP30PyD95JOe+VhYLdN80PP3vjIjxPA74JKiAj/WEkG
+        HnFSOlFPFB30vWUFMbap284/zg==
+X-Google-Smtp-Source: ABdhPJwe/yxHcXuREOavhKWa2LijXwU7OHCva5pj9T8tlFVE8ZZKFk9++TWqYSyj+47QdqGv+rSW8w==
+X-Received: by 2002:a62:7609:0:b029:152:b31e:6aed with SMTP id r9-20020a6276090000b0290152b31e6aedmr2031340pfc.10.1603364819189;
+        Thu, 22 Oct 2020 04:06:59 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id u2sm1944980pgf.63.2020.10.22.04.06.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 22 Oct 2020 04:06:58 -0700 (PDT)
+Date:   Thu, 22 Oct 2020 16:36:56 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com
+Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
+Message-ID: <20201022110656.gaphjv2tzhj4f5y6@vireshk-i7>
+References: <cover.1594707424.git.viresh.kumar@linaro.org>
+ <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
+ <20200716115605.GR10769@hirez.programming.kicks-ass.net>
+ <20201022083255.37xl3lffwk5qo6uk@vireshk-i7>
+ <20201022090523.GV2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20201021155938.9223-1-georgi.djakov@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201022090523.GV2628@hirez.programming.kicks-ass.net>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 22-10-20, 11:05, Peter Zijlstra wrote:
+> On Thu, Oct 22, 2020 at 02:02:55PM +0530, Viresh Kumar wrote:
+> > One of the issues I see with this is that schedutil may not be
+> > available in all configurations and it is still absolutely fine to
+> > using the suggested helper to get the energy numbers in such cases, so
+> > we shouldn't really make it scheutil dependent.
+> 
+> The only constraint on schedutil is SMP I think; aside from that it
+> should/could always be available.
+> 
+> Given the trainwreck here:
+> 
+>   20201022071145.GM2628@hirez.programming.kicks-ass.net
+> 
+> (you're on Cc), I'm starting to lean more and more towards making it
+> unconditionally available (when SMP).
+> 
+> Anybody forcing it off either sets performance (in which case we don't
+> care about energy usage anyway)
 
-On 10/21/2020 9:29 PM, Georgi Djakov wrote:
-> Take into account the initial bandwidth from the framework and update
-> the internal sum and max values before committing if needed. This will
-> ensure that the floor bandwidth values are enforced until the providers
-> get into sync state.
->
-> Fixes: 7d3b0b0d8184 ("interconnect: qcom: Use icc_sync_state")
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+I agree.
 
-Thanks Georgi,
-I removed proxy ICC BW votes for earlycon driver "qcom_geni" introduced by patch [1], trogdor chromium board booted up fine, which use to crash without this patch.
+> or they select one of the old (broken)
+> ondemand/conservative things and I don't give a crap.
 
-https://patchwork.kernel.org/project/linux-arm-msm/patch/1592908737-7068-3-git-send-email-akashast@codeaurora.org/ [1]
+The other kernel layers, for example cpufreq-cooling in question here,
+don't really need to bother with the governor in use and should be
+able to get the energy numbers anyway. So for me, the energy number
+that the cpufreq-cooling stuff gets should be same irrespective of the
+governor in use, schedutil or ondemand.
 
-Tested-by: Akash Asthana <akashast@codeaurora.org>
->   
+Having said that, schedutil really doesn't need to install the
+fallback (which you suggested earlier), rather the scheduler core can
+do that directly with cpufreq core and schedutil can also use the same
+fallback mechanism maybe ? And so we can avoid the exporting of stuff
+that way.
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
-
+viresh
