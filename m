@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8E42965C9
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 22:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD5E2965DD
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 22:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503605AbgJVUKt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 16:10:49 -0400
-Received: from de-smtp-delivery-102.mimecast.com ([51.163.158.102]:35035 "EHLO
+        id S367994AbgJVUQL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 16:16:11 -0400
+Received: from de-smtp-delivery-102.mimecast.com ([62.140.7.102]:22285 "EHLO
         de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2503973AbgJVUKs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 16:10:48 -0400
+        by vger.kernel.org with ESMTP id S367982AbgJVUQK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 16:16:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1603397443;
+        t=1603397767;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=g9E4aiLkBkGBG1hlHOtSRBRwKWXmXuuLsvRYzl5LgBQ=;
-        b=ALEJGvj7wDFWojFDCeMCn+DvYH6yjVdNuicEBKUi//TGDoL5Z/LzX423MOyC58kOo9jlMW
-        WKayADZriVkXfIpRP+G3n7GqXDEjsXgK7KNcPGw1HoBTD6VUksSkrzdgkb0iAzPxrs1fnl
-        yJo0624i+swORAR7qHCPkumClhMA7gM=
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com
- (mail-am5eur03lp2050.outbound.protection.outlook.com [104.47.8.50]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- de-mta-33-nl4vWBCMMPiC44PRBx_v7A-1; Thu, 22 Oct 2020 22:10:41 +0200
-X-MC-Unique: nl4vWBCMMPiC44PRBx_v7A-1
+        bh=khqhyXkq9FqrDhR0zj2Ls/cxizFuEQpsBpag30NOVtc=;
+        b=eZdN77CL3kM3edHIc66La6vLYNtBSfB9Y7yRIVY2Kg1XEgS5r2pXsFsukeMkqn8Xh6vo43
+        /Xuf5/vCjPnScl9hA8AiNL/DRb+axLYR34d4Zl3A+NbHyv63Uc48BiOV/d4rdqlfaAEsad
+        W42Ey7fp7HH0rXOeH+zv35+xcW3+z28=
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com
+ (mail-vi1eur05lp2177.outbound.protection.outlook.com [104.47.17.177])
+ (Using TLS) by relay.mimecast.com with ESMTP id
+ de-mta-28-G_C3Rag-MzOlVVjC17dc9g-1; Thu, 22 Oct 2020 22:16:05 +0200
+X-MC-Unique: G_C3Rag-MzOlVVjC17dc9g-1
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kko2idL1G7hyVps4VqcUEB9cJGNfzdvDizuEMgLmy6eZ8soaIVpkJ001oqueR4oFNpZ4yntN8onfKB2r5IQ227tGjRpsQJnTtG0IN99dZ/SfvyBP7UhgYURCZB6bzii264E8JEeBAJPXtD0pxoLePsXbgOcii6NcOpUHB69W0CyQxetDY8O0bjQRRHl7tklL7vYM7D0UR8CMHdyBaOgPgKJdbpVetog3T787JwQosLwPsrh77R9Ri6LyQCOBMrMD3YBqOqK0Qjk/SfmeTkNknWcCn9/9OUdKEZYIzAE93xlXr0A13wkeDZ2Qqk4uYqxMx8/6I3rcPXMvaHmK5M9OMw==
+ b=Js9TlemXgJ93qHlFLw7Sc9BcBagHlO1rUGMGYft0gMKU2EEHVTWqRKNgHgmPPndx92+iVAu8Sl81Yn8Rj5BZCxpx+LXvo4+3qhT7RTHN35/2MXwAPEv3VDKBuRgB65ymMNN4qoFQFC75I0F/ltAql403aky9YI0fWGCoN6lMqzWnM3hvXbEVsJeD2bv9rmlWX+JRJkrkn11X1FR5whYs34dGag62jVu5C/OF/6QBkl3y/y918sWvDygU/u/cN8TcKnoSp8Cjr4AQz9dolEcXHuJkguyu+1sJF5agQkCESXIFnwFEzcZ/ssyivqcZDFOlLv+ZLFBjHS/Idyg4gXn55g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g9E4aiLkBkGBG1hlHOtSRBRwKWXmXuuLsvRYzl5LgBQ=;
- b=im5jvjk0GiB119Y/hLhHUk0ibdJ2+j2MPPhD2XBrJ0SmBheJIQWqSfRpoZg06B57OVYzSDfl0fszfELMOaiEuNgS8oKCl7QIcXcPoLz5bqjreuflDId05yx+UbWx9CKh/yaB8uKM/YjEJNmcxgc//8lOWzaScaIujPAcxTVL824qfp5k5INz1ueEeqt8z4g3AB1R+t7Fa5QGYBCRWppgIe/EXPynZSmuxlz3mVeriCxSMou2W+jsv/hHNROTJgkAdwTVjYupmIST6Am0tArEfofXwn8gEFNo6IqonqEX1ilf88sU+Mkq/dIG/P6mxmn9HWc3FEyM9k+Z98K7bez+Bw==
+ bh=khqhyXkq9FqrDhR0zj2Ls/cxizFuEQpsBpag30NOVtc=;
+ b=IalCLXzET8N6Fc3zBOH/Ibv2Ltu4omLPJv8APTddXy/HE0/6oypwfqg2XoFL48lllMrCuKSrcvOZYj8rKIULmpWaN0+3M8E4HC5qSuj73nXlilwW+WNvlBum0q0q8G5zyr37J0Fu7t6bQEB0PfIOuHnqY1/bJZ2bLphKDIxKkJSuRr7koglKKqR3un1ZnWmzBBGxkSiRtgY7WsEabz7Fkgdhy4wo57BKhhknsJj9N9vzfU5Xwrn48NkvgVHiL3BmxJV6M9jx4WkfN8zaYHl0HEKoJVxkEOea9C88OHSmSMSiKZssjlZz7wqvErii8RpaYlhhRCEef10JDtNgy+aEmQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 Authentication-Results: infradead.org; dkim=none (message not signed)
  header.d=none;infradead.org; dmarc=none action=none header.from=suse.com;
 Received: from AM0PR04MB4530.eurprd04.prod.outlook.com (2603:10a6:208:70::28)
- by AM0PR04MB4017.eurprd04.prod.outlook.com (2603:10a6:208:5b::31) with
+ by AM9PR04MB7715.eurprd04.prod.outlook.com (2603:10a6:20b:285::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.27; Thu, 22 Oct
- 2020 20:10:39 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Thu, 22 Oct
+ 2020 20:16:03 +0000
 Received: from AM0PR04MB4530.eurprd04.prod.outlook.com
  ([fe80::29a3:4b8b:de0:7f3c]) by AM0PR04MB4530.eurprd04.prod.outlook.com
  ([fe80::29a3:4b8b:de0:7f3c%7]) with mapi id 15.20.3477.028; Thu, 22 Oct 2020
- 20:10:39 +0000
-Message-ID: <1603397435.16275.45.camel@suse.com>
+ 20:16:03 +0000
+Message-ID: <1603397760.16275.49.camel@suse.com>
 Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle
  core
 From:   Giovanni Gherdovich <ggherdovich@suse.com>
@@ -70,8 +70,8 @@ Cc:     Mel Gorman <mgorman@suse.de>,
         srinivas.pandruvada@linux.intel.com,
         Linux PM <linux-pm@vger.kernel.org>,
         Len Brown <len.brown@intel.com>
-Date:   Thu, 22 Oct 2020 22:10:35 +0200
-In-Reply-To: <20201022152514.GJ2611@hirez.programming.kicks-ass.net>
+Date:   Thu, 22 Oct 2020 22:16:00 +0200
+In-Reply-To: <1603397435.16275.45.camel@suse.com>
 References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr>
          <34115486.YmRjPRKJaA@kreacher>
          <20201022120213.GG2611@hirez.programming.kicks-ass.net>
@@ -79,208 +79,52 @@ References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr>
          <20201022122949.GW2628@hirez.programming.kicks-ass.net>
          <20201022145250.GK32041@suse.de>
          <20201022152514.GJ2611@hirez.programming.kicks-ass.net>
+         <1603397435.16275.45.camel@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [2a02:830a:b003:a100:70cf:f004:73cb:aa82]
-X-ClientProxiedBy: AM4PR0202CA0020.eurprd02.prod.outlook.com
- (2603:10a6:200:89::30) To AM0PR04MB4530.eurprd04.prod.outlook.com
+X-ClientProxiedBy: FR2P281CA0023.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:14::10) To AM0PR04MB4530.eurprd04.prod.outlook.com
  (2603:10a6:208:70::28)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:830a:b003:a100:70cf:f004:73cb:aa82] (2a02:830a:b003:a100:70cf:f004:73cb:aa82) by AM4PR0202CA0020.eurprd02.prod.outlook.com (2603:10a6:200:89::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.22 via Frontend Transport; Thu, 22 Oct 2020 20:10:37 +0000
+Received: from [IPv6:2a02:830a:b003:a100:70cf:f004:73cb:aa82] (2a02:830a:b003:a100:70cf:f004:73cb:aa82) by FR2P281CA0023.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:14::10) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.9 via Frontend Transport; Thu, 22 Oct 2020 20:16:02 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3acce817-01cf-41d9-6275-08d876c68b3f
-X-MS-TrafficTypeDiagnostic: AM0PR04MB4017:
-X-Microsoft-Antispam-PRVS: <AM0PR04MB4017FE278E815DC65B8428AB931D0@AM0PR04MB4017.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Office365-Filtering-Correlation-Id: 0dc93f86-705b-4632-4853-08d876c74ce4
+X-MS-TrafficTypeDiagnostic: AM9PR04MB7715:
+X-Microsoft-Antispam-PRVS: <AM9PR04MB7715559EFE9F1042902AB141931D0@AM9PR04MB7715.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LiiKbfXpWd8jBk9Z8W9m7CBVQ/Td91RkWonsqAYN9KFWXoZMeNOaCymDtE46+N6jSCqRLDmcLCnWJ9uJbBKVDPhgOdUrKQmqfpRBZ96Im9ymRAdE8FM0vQTJ+mxZljfAakD2McfqHR5NerPAaQMDhtGcE1AhzcwuAapB2oPby/+1fwI0wEYAw7wnz2vZsSv8qJMM27fujotsGV1yNbbJm7aezh/xQnuKKWwwiPPv7ZIKj/h7dih6UyzI4end2MgWlRq9F7eNXHQyppIL/NKJHgkjwEJ3zv6fKmlGhLQFzP9kerSf25MS8bVgxhdyo7Zy9xP+Hhjlu9B03zVlICwu4QkTDg+jqJy+9sv9ct+lUPJCQvti5nq+zTzYNVRX0ZYIeLik09RSHxmGq3bUk2uXmFU+7dCt2X5Gbprds/5d3PJE2Iij2SlsELZfI8jnVokJv+cp3B5cZHnCTNZOIGAAeg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4530.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(396003)(346002)(366004)(39860400002)(110136005)(54906003)(8936002)(6486002)(478600001)(186003)(103116003)(16526019)(966005)(316002)(8676002)(52116002)(36756003)(5660300002)(7416002)(4326008)(2906002)(2616005)(66476007)(83380400001)(66946007)(66556008)(99106002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: fZcOr7JCOOSua1DGvLzmy23bIQHdI9KjH28sD8lrZFdDLAnJSPMInNGWU9ZiDP8SSNdHbDB+cKd3DhcLz8dwDeHMnIqctAtzXtRfEgXk1DVsdRo4bcq8LcQ5iaagw/efHzMCClQz0akEl+ZeqxjjX9bO2IEqwg1Zz4k/R6vQTW950CYLQq5H4Bm9fQ63bOJIAjItcF/tMRfOPf8TmVGzB18Qaufe3IXJ+HFFVvjEW7S3xWWKIPdpg+13J8MAHpnbi3UvcsPQagVIsyTyStGPuSsW957vLBBf9vBQu/rfw5k3SYo2AZwTZFhUs2SJlGG66etADGomISJ0TB/3iGiOrg52i7/J079zEIJouIANBDfNHjH2NUyXMU1hg8JwYWwV1u+LYnoMzW2MfWrCf1EMCuKL40VNp+Epf4QSHwlsZ9BgRn773Yegf/ptMDE6UUgaWTp/4HflTtc9uumt7A8NrNIwXLfdPi9DfODKANFTRPcp77dvHJpI/IGk2w9on51SSky+tAKt4bCvMM6r0P+D2kng971wa/nwjEKyXUdKMPCyTC2Z0FZL62BGD5RPmB34QAMN0OHZCRQTnSlEanO4HarPJpwiVDvAq+0AXRlSROhiNBp6OM1dm9ecBaEH3g0Mpw8DORGCXx6F4O1Fk5X+tGqoPEOz5LPYPediDkiH/Aqk1w2o7DCa/8eY6OEOY1AH3Q+wGl9hkpx+Xcl5AgPmgg==
+X-Microsoft-Antispam-Message-Info: 0Tgg31TVRApzqCqIQOpUmqaUO1zblvW9O3VMgMvQ4DykivcYRwLu6oL/zXRQ1Pn4pHT6a1xkBE10XHDPFdagH9zKHiPt6wEKeu6BJQY75xny8BeyNpxkRTNY2Nrq5KQRpggnqv1eiCwNAf5r13ix1sVMSmm+cDwd/nDZhIkFgldupTkESNP9muM99v5XwLYWZrhSR6l5TKqiLsW5aAQXn1JjSkFO22xIrIqqLXUvSmDD5cSKlBURYPntXdXt9Xnre5w6Yio7JPWzFW9Xp1E5Pnb1azrEhsTQmkP2FmWGZ8jwN3ThlUXSoJZpBg6nk1e0ETLOLxkQ7wcQaJ3OXMvOIrTJ6adY2KPQA4Awvb4YlsYo4jfyaISpBPAU6rXAhhbT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4530.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(346002)(366004)(376002)(136003)(39860400002)(66946007)(8936002)(54906003)(6486002)(16526019)(478600001)(316002)(110136005)(4744005)(66556008)(103116003)(186003)(7416002)(66476007)(52116002)(4001150100001)(83380400001)(2906002)(5660300002)(4326008)(36756003)(8676002)(2616005)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: HehTq9JYz/ctr75T/XlbC4yp83FRRcxfREKgcHm5ZQ8TOoV2JNUsRltgyJCyEyXbek0KYZzEIt67er2WiBheD6SA2unrzDgI47a2xTgOqfoXa5cKUmBN6rtU12mGpT6BbgPZk6dP+PrfueysnKnr4iwdKqdVQ2CTK606lNTxqRhWLStyDyFOkfpBwmwxLQk5st7urEZQ4j03e2BYZvH7l4HQ3bcPjPatPaMjlgC9AwCHRpAYqAZkF7XLAWYPtV2Npj0Q5xwJ4DuosLSe8lHAd48FXIRXRzu6Drkbvkp29E05aeU8sEWa/OOrn7HJ9t+4GAZhlWdv/oSXtVu3pcGqNixsUlxWSi4Px4sNN6xHk9bEPWyLxEyR8ESkUk3EjNygbZO42Wh5fK5LbFq3HPE0tzAwMUtxz8LOSwL0SqEPSFfqgcVaMTOGpn0LHg9Y7qoBtyT5YUD7DHa+iA598LIgwKgRkzEg4adyfDSHhwTqIYebQxKEVsf3ZE8l4TFSkQls+O6ruUJciPfBe05Wu2BrCez9nUFE7LxllXZWSTR0bKhCQUpyJRf3hVDLnHUQ8B1uX87deWYk2tlURZVxJn38eaMA8L648mAuzRzr4jQLzKRhFLrCTaYxPQPqqqZDMPRjT2xO1LuN/QpnfaMM0WH+OCbiGr07G7nsNsNNRGdbWJtR67kxdCdY8dr9HakbzQp4Kct/QFxlA0lgXedWv9nVUw==
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3acce817-01cf-41d9-6275-08d876c68b3f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0dc93f86-705b-4632-4853-08d876c74ce4
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4530.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2020 20:10:38.9361
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2020 20:16:03.5112
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AhbgDDIPVHa0VaH1kU9+GwREC6BcOnUzYCSDPQ0heBSFlIdG+qAa0lIyuD7vBLa7yhIB/OOmQ0375vHfIF4K3IupBVonRAVRMo7dWAku6sA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4017
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2gUReJ0U3HcuitVWfgnFP/nC3EiuoaRcSGXkFfXAzMJRtmE/8oWOu2fdN6oxBX/aAjK1s5YWqFp4A8vhk4OpAcYwnoE0PC1vRDJuDh+e8ec=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7715
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Peter, Rafael,
+On Thu, 2020-10-22 at 22:10 +0200, Giovanni Gherdovich wrote:
+> [...]
+> To read the tables:
+> 
+> Tilde (~) means the result is the same as baseline (or, the ratio is close
+> to 1). The double asterisk (**) is a visual aid and means the result is
+> worse than baseline (higher or lower depending on the case).
 
-back in August I tested a v5.8 kernel adding Rafael's patches from v5.9 that
-make schedutil and HWP works together, i.e. f6ebbcf08f37 ("cpufreq: intel_pstate:
-Implement passive mode with HWP enabled").
-
-The main point I took from the exercise is that tbench (network benchmark
-in localhost) is problematic for schedutil and only with HWP (thanks to
-Rafael's patch above) it reaches the throughput of the other governors.
-When HWP isn't available, the penalty is 5-10% and I need to understand if
-the cause is something that can affect other applications too (or just a
-quirk of this test).
-
-I ran this campaign this summer when Rafal CC'ed me to f6ebbcf08f37
-("cpufreq: intel_pstate: Implement passive mode with HWP enabled"),
-I didn't reply as the patch was a win anyways (my bad, I should have posted
-the positive results). The regression of tbench with schedutil w/o HWP,
-that went unnoticed for long, got the best of my attention.
-
-Other remarks
-
-* on gitsource (running the git unit test suite, measures elapsed time)
-  schedutil is a lot better than Intel's powersave but not as good as the
-  performance governor.
-
-* for the AMD EPYC machines we haven't yet implemented frequency invariant
-  accounting, which might explain why schedutil looses to ondemand on all
-  the benchmarks.
-
-* on dbench (filesystem, measures latency) and kernbench (kernel compilation),
-  sugov is as good as the Intel performance governor. You can add or remove
-  HWP (to either sugov or perfgov), it doesn't make a difference. Intel's
-  powersave in general trails behind.
-
-* generally my main concern is performance, not power efficiency, but I was
-  a little disappointed to see schedutil being just as efficient as
-  perfgov (the performance-per-watt ratios): there are even a few cases
-  where (on tbench) the performance governor is both faster and more
-  efficient. From previous conversations with Rafael I recall that
-  switching frequency has an energy cost, so it could be that schedutil
-  switches too often to amortize it. I haven't checked.
-
-To read the tables:
-
-Tilde (~) means the result is the same as baseline (or, the ratio is close
-to 1). The double asterisk (**) is a visual aid and means the result is
-worse than baseline (higher or lower depending on the case).
-
-For an overview of the possible configurations (intel_psate passive,
-active, HWP on/off etc) I made the diagram at
-https://beta.suse.com/private/ggherdovich/cpufreq/x86-cpufreq.png
-
-1) INTEL, HWP-CAPABLE MACHINES
-2) INTEL, NON-HWP-CAPABLE MACHINES
-3) AMD EPYC
-
-1) INTEL, HWP-CAPABLE MACHINES:
-
-64x_SKYLAKE_NUMA: Intel Skylake SP, 32 cores / 64 threads, NUMA, SATA SSD storage
-------------------------------------------------------------------------------
-            sugov-HWP   sugov-no-HWP   powersave-HWP   perfgov-HWP   better if
-------------------------------------------------------------------------------
-                                  PERFORMANCE RATIOS
-tbench        1.00        0.68           ~               1.03**        higher
-dbench        1.00        ~              1.03            ~             lower
-kernbench     1.00        ~              1.11            ~             lower
-gitsource     1.00        1.03           2.26            0.82**        lower
-------------------------------------------------------------------------------
-                             PERFORMANCE-PER-WATT RATIOS
-tbench        1.00        0.74           ~               ~             higher
-dbench        1.00        ~              ~               ~             higher
-kernbench     1.00        ~              0.96            ~             higher
-gitsource     1.00        0.96           0.45            1.15**        higher
-
-
-8x_SKYLAKE_UMA: Intel Skylake (client), 4 cores / 8 threads, UMA, SATA SSD storage
-------------------------------------------------------------------------------
-            sugov-HWP   sugov-no-HWP   powersave-HWP   perfgov-HWP   better if
-------------------------------------------------------------------------------
-                                  PERFORMANCE RATIOS
-tbench        1.00        0.91           ~               ~             higher
-dbench        1.00        ~              ~               ~             lower
-kernbench     1.00        ~              ~               ~             lower
-gitsource     1.00        1.04           1.77            ~             lower
-------------------------------------------------------------------------------
-                             PERFORMANCE-PER-WATT RATIOS
-tbench        1.00        0.95           ~               ~             higher
-dbench        1.00        ~              ~               ~             higher
-kernbench     1.00        ~              ~               ~             higher
-gitsource     1.00        ~              0.74            ~             higher
-
-
-8x_COFFEELAKE_UMA: Intel Coffee Lake, 4 cores / 8 threads, UMA, NVMe SSD storage
----------------------------------------------------------------
-            sugov-HWP   powersave-HWP   perfgov-HWP   better if
----------------------------------------------------------------
-                        PERFORMANCE RATIOS
-tbench        1.00        ~               ~             higher
-dbench        1.00        1.12            ~             lower
-kernbench     1.00        ~               ~             lower
-gitsource     1.00        2.05            ~             lower
----------------------------------------------------------------
-                    PERFORMANCE-PER-WATT RATIOS
-tbench        1.00        ~               ~             higher
-dbench        1.00        1.80**          ~             higher
-kernbench     1.00        ~               ~             higher
-gitsource     1.00        1.52**          ~             higher
-
-
-2) INTEL, NON-HWP-CAPABLE MACHINES:
-
-80x_BROADWELL_NUMA: Intel Broadwell EP, 40 cores / 80 threads, NUMA, SATA SSD storage
----------------------------------------------------------------
-              sugov     powersave       perfgov       better if
----------------------------------------------------------------
-                        PERFORMANCE RATIOS
-tbench        1.00        1.11**          1.10**        higher
-dbench        1.00        1.10            ~             lower
-kernbench     1.00        1.10            ~             lower
-gitsource     1.00        2.27            0.95**        lower
----------------------------------------------------------------
-                    PERFORMANCE-PER-WATT RATIOS
-tbench        1.00         1.05**         1.04**        higher
-dbench        1.00         1.24**         0.95          higher
-kernbench     1.00         ~              ~             higher
-gitsource     1.00         0.86           1.04**        higher
-
-
-48x_HASWELL_NUMA: Intel Haswell EP, 24 cores / 48 threads, NUMA, HDD storage
----------------------------------------------------------------
-              sugov     powersave       perfgov       better if
----------------------------------------------------------------
-                        PERFORMANCE RATIOS
-tbench        1.00         1.25**         1.27**        higher
-dbench        1.00         1.17           ~             lower
-kernbench     1.00         1.04           ~             lower
-gitsource     1.00         1.54           0.79**        lower
----------------------------------------------------------------
-                    PERFORMANCE-PER-WATT RATIOS
-tbench        1.00         1.18**         1.11**        higher
-dbench        1.00         1.25**         ~             higher
-kernbench     1.00         1.04**         0.97          higher
-gitsource     1.00         0.77           ~             higher
-
-
-3) AMD EPYC:
-
-256x_ROME_NUMA: AMD Rome , 128 cores / 256 threads, NUMA, SATA SSD storage
----------------------------------------------------------------
-              sugov      ondemand       perfgov       better if
----------------------------------------------------------------
-                        PERFORMANCE RATIOS
-tbench        1.00         1.11**       1.58**          higher
-dbench        1.00         0.44**       0.40**          lower
-kernbench     1.00         ~            0.91**          lower
-gitsource     1.00         0.96**       0.65**          lower
-
-
-128x_NAPLES_NUMA: AMD Naples , 64 cores / 128 threads, NUMA, SATA SSD storage
----------------------------------------------------------------
-              sugov      ondemand       perfgov       better if
----------------------------------------------------------------
-                        PERFORMANCE RATIOS
-tbench        1.00         1.10**       1.19**          higher
-dbench        1.00         1.05         0.95**          lower
-kernbench     1.00         ~            0.95**          lower
-gitsource     1.00         0.93**       0.55**          lower
+Ouch, the opposite. Double asterisk (**) is where the result is better
+than baseline, and schedutil needs improvement.
 
 
 Giovanni
