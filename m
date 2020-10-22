@@ -2,116 +2,316 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C11295D2A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 13:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D66C295D41
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 13:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896977AbgJVLHA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 07:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2896965AbgJVLG7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 07:06:59 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FC9C0613CF
-        for <linux-pm@vger.kernel.org>; Thu, 22 Oct 2020 04:06:59 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id s22so720061pga.9
-        for <linux-pm@vger.kernel.org>; Thu, 22 Oct 2020 04:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5F1P3cDyZZfB+5wQAJZN/bSRRcbsJk9yH9Mp8FnRfG0=;
-        b=KtCmAvWUglFJkVFnOpbKc+tedHFB8GWLzyy5Pf2YNN/ltIPGpeE8VV3Ezrjnf6MtIV
-         Iw4YsvNEjCjJ/OfyB5p3R99DTyqL8uYJRhtq4+teGl6/7a0rL1YIDTb5zMHpu9uUcipF
-         6JdheIPbQRh2Bw6KUfUrHXrpyZaFQYVP5LvGejO9lqEsy/eRPGt0KsURP9/q+NolQXTi
-         diBLTSbgB+kw+mgQ9Pfi6wRP7eec4Lce/cOInisWYBqnWovam16o1mQTRtwPTVxY3t03
-         amLoYsvpP5RAv7CpiC3bYM8aSUIQOIAjof7yIO8+Rx+9hduyEbCUSfk9rskNrfQyrgr1
-         OLxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5F1P3cDyZZfB+5wQAJZN/bSRRcbsJk9yH9Mp8FnRfG0=;
-        b=j4puLmLWHcWW6NPawJ38tttPJWuzKCv9aB52PlmeRB2ZXBNo4tKcFtPLTZG4EDjyAc
-         UOaSu1kgpq3mV33ECKr5h6AvsqWXWKIfwvZk703JktdcT7c0bwq0Uo2cRYWmh1kfjSnx
-         MRlPFbx3eOw44csWj9RH+8n5bwF/TnGfXQjL4bN5P2JoullMG+5nwo+uHrUg0rv1sbH+
-         dAE0PoIFLQzrk87Ocdmobn9M4/VPegpBlBwSh6rKDiwsVILZYpB2F6wU6QIsx2AnV2Y9
-         5FTkQeOMaooZA2Bv6UUqQSBKk36NMfiCp9CPSFw9Pz0792r8v9x/HRr0C07gvrxZjILo
-         bghg==
-X-Gm-Message-State: AOAM531vAWfDIPP30PyD95JOe+VhYLdN80PP3vjIjxPA74JKiAj/WEkG
-        HnFSOlFPFB30vWUFMbap284/zg==
-X-Google-Smtp-Source: ABdhPJwe/yxHcXuREOavhKWa2LijXwU7OHCva5pj9T8tlFVE8ZZKFk9++TWqYSyj+47QdqGv+rSW8w==
-X-Received: by 2002:a62:7609:0:b029:152:b31e:6aed with SMTP id r9-20020a6276090000b0290152b31e6aedmr2031340pfc.10.1603364819189;
-        Thu, 22 Oct 2020 04:06:59 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id u2sm1944980pgf.63.2020.10.22.04.06.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Oct 2020 04:06:58 -0700 (PDT)
-Date:   Thu, 22 Oct 2020 16:36:56 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-Message-ID: <20201022110656.gaphjv2tzhj4f5y6@vireshk-i7>
-References: <cover.1594707424.git.viresh.kumar@linaro.org>
- <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
- <20200716115605.GR10769@hirez.programming.kicks-ass.net>
- <20201022083255.37xl3lffwk5qo6uk@vireshk-i7>
- <20201022090523.GV2628@hirez.programming.kicks-ass.net>
+        id S2502655AbgJVLRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 07:17:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:54654 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2502650AbgJVLRi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 22 Oct 2020 07:17:38 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EF76D6E;
+        Thu, 22 Oct 2020 04:17:36 -0700 (PDT)
+Received: from [10.57.20.67] (unknown [10.57.20.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 341953F66B;
+        Thu, 22 Oct 2020 04:17:34 -0700 (PDT)
+Subject: Re: [PATCH 3/5] thermal: devfreq_cooling: add new registration
+ functions with Energy Model
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amit.kucheria@verdurent.com,
+        airlied@linux.ie, daniel.lezcano@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, rui.zhang@intel.com,
+        orjan.eide@arm.com
+References: <20200921122007.29610-1-lukasz.luba@arm.com>
+ <20200921122007.29610-4-lukasz.luba@arm.com> <20201007120746.GA15063@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <71cfae58-8ea5-c591-455b-d84420d8412a@arm.com>
+Date:   Thu, 22 Oct 2020 12:17:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201022090523.GV2628@hirez.programming.kicks-ass.net>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201007120746.GA15063@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-10-20, 11:05, Peter Zijlstra wrote:
-> On Thu, Oct 22, 2020 at 02:02:55PM +0530, Viresh Kumar wrote:
-> > One of the issues I see with this is that schedutil may not be
-> > available in all configurations and it is still absolutely fine to
-> > using the suggested helper to get the energy numbers in such cases, so
-> > we shouldn't really make it scheutil dependent.
-> 
-> The only constraint on schedutil is SMP I think; aside from that it
-> should/could always be available.
-> 
-> Given the trainwreck here:
-> 
->   20201022071145.GM2628@hirez.programming.kicks-ass.net
-> 
-> (you're on Cc), I'm starting to lean more and more towards making it
-> unconditionally available (when SMP).
-> 
-> Anybody forcing it off either sets performance (in which case we don't
-> care about energy usage anyway)
 
-I agree.
 
-> or they select one of the old (broken)
-> ondemand/conservative things and I don't give a crap.
+On 10/7/20 1:07 PM, Ionela Voinescu wrote:
+> Hi Lukasz,
+> 
+> On Monday 21 Sep 2020 at 13:20:05 (+0100), Lukasz Luba wrote:
+>> The Energy Model (EM) framework supports devices such as Devfreq. Create
+>> new registration functions which automatically register EM for the thermal
+>> devfreq_cooling devices. This patch prepares the code for coming changes
+>> which are going to replace old power model with the new EM.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/devfreq_cooling.c | 99 ++++++++++++++++++++++++++++++-
+>>   include/linux/devfreq_cooling.h   | 22 +++++++
+>>   2 files changed, 120 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+>> index cf045bd4d16b..7e091e795284 100644
+>> --- a/drivers/thermal/devfreq_cooling.c
+>> +++ b/drivers/thermal/devfreq_cooling.c
+>> @@ -50,6 +50,8 @@ static DEFINE_IDA(devfreq_ida);
+>>    * @capped_state:	index to cooling state with in dynamic power budget
+>>    * @req_max_freq:	PM QoS request for limiting the maximum frequency
+>>    *			of the devfreq device.
+>> + * @em:		Energy Model which represents the associated Devfreq device
+>                                       ^^^^^^^^^^^^^^^^
+> 				     for
 
-The other kernel layers, for example cpufreq-cooling in question here,
-don't really need to bother with the governor in use and should be
-able to get the energy numbers anyway. So for me, the energy number
-that the cpufreq-cooling stuff gets should be same irrespective of the
-governor in use, schedutil or ondemand.
+I will change it.
 
-Having said that, schedutil really doesn't need to install the
-fallback (which you suggested earlier), rather the scheduler core can
-do that directly with cpufreq core and schedutil can also use the same
-fallback mechanism maybe ? And so we can avoid the exporting of stuff
-that way.
+>> + * @em_registered:	Devfreq cooling registered the EM and should free it.
+>>    */
+>>   struct devfreq_cooling_device {
+>>   	int id;
+>> @@ -63,6 +65,8 @@ struct devfreq_cooling_device {
+>>   	u32 res_util;
+>>   	int capped_state;
+>>   	struct dev_pm_qos_request req_max_freq;
+>> +	struct em_perf_domain *em;
+>> +	bool em_registered;
+>>   };
+>>   
+>>   static int devfreq_cooling_get_max_state(struct thermal_cooling_device *cdev,
+>> @@ -586,22 +590,115 @@ struct thermal_cooling_device *devfreq_cooling_register(struct devfreq *df)
+>>   }
+>>   EXPORT_SYMBOL_GPL(devfreq_cooling_register);
+>>   
+>> +/**
+>> + * devfreq_cooling_em_register_power() - Register devfreq cooling device with
+>> + *		power information and attempt to register Energy Model (EM)
+> 
+> It took me a while to understand the differences between devfreq
+> register functions and it left me with a nagging feeling that we don't
+> need all of them. Also, looking over the cpufreq cooling devices, they
+> keep their registering interfaces quite simple.
 
--- 
-viresh
+This was discussed in previous series, related to EM core changes.
+It was requested to have a helper registration function which would
+create EM automatically.
+
+> 
+> With the functions added by this patch, the devfreq cooling devices will have:
+>   - old:
+>         of_devfreq_cooling_register_power
+>         of_devfreq_cooling_register
+>         devfreq_cooling_register
+>         devfreq_cooling_unregister
+>   - new:
+>         devfreq_cooling_em_register_power
+>         devfreq_cooling_em_register
+> 
+> My question is whether we actually need the two new
+> devfreq_cooling_em_register_power() and devfreq_cooling_em_register()?
+
+It is just for consistency, with older scheme. It is only a wrapper, one
+line, with default NULL. This scheme is common in thermal and some other
+frameworks.
+
+> 
+> The power_ops and the em are dependent on one another, so could we
+> extend the of_devfreq_cooling_register_power() to do the additional em
+> registration. We only need a way to pass the em_cb and I think that
+> could fit nicely in devfreq_cooling_power.
+
+No, they aren't 'dependent on one another'. The EM usage doesn't depend
+on presence of power_ops. Drivers might not support power_ops, but want
+the framework still use EM and do power estimation.
+
+> 
+> To be noted that I've reviewed these interfaces in the context of the
+> final state of devfreq_cooling.c, after the changes in 4/5.
+> 
+>> + * @df:		Pointer to devfreq device.
+>> + * @dfc_power:	Pointer to devfreq_cooling_power.
+>> + * @em_cb:	Callback functions providing the data of the EM
+>> + *
+>> + * Register a devfreq cooling device and attempt to register Energy Model. The
+>> + * available OPPs must be registered for the device.
+>> + *
+>> + * If @dfc_power is provided, the cooling device is registered with the
+>> + * power extensions. If @em_cb is provided it will be called for each OPP to
+>> + * calculate power value and cost. If @em_cb is not provided then simple Energy
+>> + * Model is going to be used, which requires "dynamic-power-coefficient" a
+>> + * devicetree property.
+>> + */
+>> +struct thermal_cooling_device *
+>> +devfreq_cooling_em_register_power(struct devfreq *df,
+>> +				  struct devfreq_cooling_power *dfc_power,
+>> +				  struct em_data_callback *em_cb)
+>> +{
+>> +	struct thermal_cooling_device *cdev;
+>> +	struct devfreq_cooling_device *dfc;
+>> +	struct device_node *np = NULL;
+>> +	struct device *dev;
+>> +	int nr_opp, ret;
+>> +
+>> +	if (IS_ERR_OR_NULL(df))
+>> +		return ERR_PTR(-EINVAL);
+>> +
+>> +	dev = df->dev.parent;
+>> +
+>> +	if (em_cb) {
+>> +		nr_opp = dev_pm_opp_get_opp_count(dev);
+>> +		if (nr_opp <= 0) {
+>> +			dev_err(dev, "No valid OPPs found\n");
+>> +			return ERR_PTR(-EINVAL);
+>> +		}
+>> +
+>> +		ret = em_dev_register_perf_domain(dev, nr_opp, em_cb, NULL);
+>> +	} else {
+>> +		ret = dev_pm_opp_of_register_em(dev, NULL);
+>> +	}
+>> +
+>> +	if (ret)
+>> +		dev_warn(dev, "Unable to register EM for devfreq cooling device (%d)\n",
+>> +			 ret);
+>> +
+>> +	if (dev->of_node)
+>> +		np = of_node_get(dev->of_node);
+>> +
+>> +	cdev = of_devfreq_cooling_register_power(np, df, dfc_power);
+>> +
+>> +	if (np)
+>> +		of_node_put(np);
+>> +
+>> +	if (IS_ERR_OR_NULL(cdev)) {
+>> +		if (!ret)
+>> +			em_dev_unregister_perf_domain(dev);
+>> +	} else {
+>> +		dfc = cdev->devdata;
+>> +		dfc->em_registered = !ret;
+>> +	}
+>> +
+>> +	return cdev;
+>> +}
+>> +EXPORT_SYMBOL_GPL(devfreq_cooling_em_register_power);
+>> +
+>> +/**
+>> + * devfreq_cooling_em_register() - Register devfreq cooling device together
+>> + *				with Energy Model.
+>> + * @df:		Pointer to devfreq device.
+>> + * @em_cb:	Callback functions providing the data of the Energy Model
+>> + *
+>> + * This function attempts to register Energy Model for devfreq device and then
+>> + * register the devfreq cooling device.
+>> + */
+>> +struct thermal_cooling_device *
+>> +devfreq_cooling_em_register(struct devfreq *df, struct em_data_callback *em_cb)
+>> +{
+>> +	return devfreq_cooling_em_register_power(df, NULL, em_cb);
+>> +}
+>> +EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+>> +
+>>   /**
+>>    * devfreq_cooling_unregister() - Unregister devfreq cooling device.
+>>    * @cdev: Pointer to devfreq cooling device to unregister.
+>> + *
+>> + * Unregisters devfreq cooling device and related Energy Model if it was
+>> + * present.
+>>    */
+>>   void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>>   {
+>>   	struct devfreq_cooling_device *dfc;
+>> +	struct device *dev;
+>>   
+>> -	if (!cdev)
+>> +	if (IS_ERR_OR_NULL(cdev))
+>>   		return;
+>>   
+>>   	dfc = cdev->devdata;
+>> +	dev = dfc->devfreq->dev.parent;
+>>   
+>>   	thermal_cooling_device_unregister(dfc->cdev);
+>>   	ida_simple_remove(&devfreq_ida, dfc->id);
+>>   	dev_pm_qos_remove_request(&dfc->req_max_freq);
+>> +
+>> +	if (dfc->em_registered)
+>> +		em_dev_unregister_perf_domain(dev);
+> 
+> Nit: Isn't it enough to check if dev->em_pd != NULL to be able to
+> unregister the perf_domain? That would remove the need for
+> dfc->em_registered.
+
+The devfreq cooling may only unregister the EM if it has registered it.
+If any other code did the registration, it should unregister when it
+finished using it.
+
+> 
+> I suppose one could say that's using implementation details on how the
+> EM is built and stored and we should not rely on it, so it's up to you
+> if you want to change it.
+> 
+> Kind regards,
+> Ionela.
+> 
+>> +
+>>   	kfree(dfc->power_table);
+>>   	kfree(dfc->freq_table);
+>>   
+>> diff --git a/include/linux/devfreq_cooling.h b/include/linux/devfreq_cooling.h
+>> index 9df2dfca68dd..19868fb922f1 100644
+>> --- a/include/linux/devfreq_cooling.h
+>> +++ b/include/linux/devfreq_cooling.h
+>> @@ -11,6 +11,7 @@
+>>   #define __DEVFREQ_COOLING_H__
+>>   
+>>   #include <linux/devfreq.h>
+>> +#include <linux/energy_model.h>
+>>   #include <linux/thermal.h>
+>>   
+>>   
+>> @@ -65,6 +66,13 @@ struct thermal_cooling_device *
+>>   of_devfreq_cooling_register(struct device_node *np, struct devfreq *df);
+>>   struct thermal_cooling_device *devfreq_cooling_register(struct devfreq *df);
+>>   void devfreq_cooling_unregister(struct thermal_cooling_device *dfc);
+>> +struct thermal_cooling_device *
+>> +devfreq_cooling_em_register_power(struct devfreq *df,
+>> +				  struct devfreq_cooling_power *dfc_power,
+>> +				  struct em_data_callback *em_cb);
+>> +struct thermal_cooling_device *
+>> +devfreq_cooling_em_register(struct devfreq *df,
+>> +			    struct em_data_callback *em_cb);
+>>   
+>>   #else /* !CONFIG_DEVFREQ_THERMAL */
+>>   
+>> @@ -87,6 +95,20 @@ devfreq_cooling_register(struct devfreq *df)
+>>   	return ERR_PTR(-EINVAL);
+>>   }
+>>   
+>> +static inline struct thermal_cooling_device *
+>> +devfreq_cooling_em_register_power(struct devfreq *df,
+>> +				  struct devfreq_cooling_power *dfc_power,
+>> +				  struct em_data_callback *em_cb)
+>> +{
+>> +	return ERR_PTR(-EINVAL);
+>> +}
+>> +
+>> +static inline struct thermal_cooling_device *
+>> +devfreq_cooling_em_register(struct devfreq *df,	struct em_data_callback *em_cb)
+>> +{
+>> +	return ERR_PTR(-EINVAL);
+>> +}
+>> +
+>>   static inline void
+>>   devfreq_cooling_unregister(struct thermal_cooling_device *dfc)
+>>   {
+>> -- 
+>> 2.17.1
+>>
+>> _______________________________________________
+>> dri-devel mailing list
+>> dri-devel@lists.freedesktop.org
+>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
