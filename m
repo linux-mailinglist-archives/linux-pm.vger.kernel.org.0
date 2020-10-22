@@ -2,50 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6A62961F2
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 17:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46B229624F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 18:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S368822AbgJVPzj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 11:55:39 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46622 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S368710AbgJVPzj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 11:55:39 -0400
-Received: by mail-oi1-f196.google.com with SMTP id l4so2196178oii.13;
-        Thu, 22 Oct 2020 08:55:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WWO3IQz78ceChK0zK3nyCefCsWEQdrrDKBxsqj0an60=;
-        b=TiPwXLSZIOh1z/sxACbb7TpQynxLy//M1+ZIBgYTKmQse9veMarIu9sw+vZ1Pk9oao
-         AEtlPHPpo6EltIE78gFX2ag+y3WvqIJAhTMovczFEiVkBxeGLjSZM0p6aRvB7u6RyrAv
-         Rx9T9vGFZeYBRdMEv58B08APJkDw4mrvls+JCA7A69Ha9ze4FUCcunXk4Vo4IEymTmKx
-         DrJ42F1KGmyqAQFRKQ12M66zwzee2Jm1ExbIXtMT+Wy53B2eHlWJKHlwfZKNCTVJKH3p
-         +d3qbH21g0iSJMYNfSpTclBr+SyiRmCrg4mLrdozpDrmumifXwblYPO49GzOAMou9Mj2
-         dgkg==
-X-Gm-Message-State: AOAM530dtzhJOVdODfZVqcD8bnluhiegLj4y1W/tUdFUQfehmw7Hw3lg
-        csNQL+xsXI1+DoWh0k5Zbvs7Dy8VKrgKhiGiw8A=
-X-Google-Smtp-Source: ABdhPJx3LsO/I9oXAh+bfL7w6snnZhYs+BQDpxz7rtv6Z2IapOmG+qwXykVw+OcH6ZoN7TPhJT6oiqkoFtOh16u0kgo=
-X-Received: by 2002:aca:724a:: with SMTP id p71mr1988454oic.157.1603382138228;
- Thu, 22 Oct 2020 08:55:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr>
- <34115486.YmRjPRKJaA@kreacher> <20201022120213.GG2611@hirez.programming.kicks-ass.net>
- <1790766.jaFeG3T87Z@kreacher> <20201022122949.GW2628@hirez.programming.kicks-ass.net>
- <20201022145250.GK32041@suse.de> <20201022152514.GJ2611@hirez.programming.kicks-ass.net>
-In-Reply-To: <20201022152514.GJ2611@hirez.programming.kicks-ass.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Oct 2020 17:55:27 +0200
-Message-ID: <CAJZ5v0hcUq1F4mXDtg9=Co90o-DwtZAN7_bMZfesgM6aoZ+aCg@mail.gmail.com>
-Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle core
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        id S2508795AbgJVQBX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Oct 2020 12:01:23 -0400
+Received: from mailrelay4-3.pub.mailoutpod1-cph3.one.com ([46.30.212.13]:19407
+        "EHLO mailrelay4-3.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2507643AbgJVQBX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 12:01:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lechevalier.se; s=20191106;
+        h=content-transfer-encoding:content-type:mime-version:subject:references:
+         in-reply-to:message-id:cc:to:from:date:from;
+        bh=XRec2U5eYGvILEmLb+y88PRCaN5teKnHukURga4/B+k=;
+        b=Ao5/OEbE7FDGb3RZCsiPIywHCoKzQuXvOsrjtf+kvGRB/VGJE7DuLjORhMGHnzCGIsPka3kvB7VLo
+         kCTV1DkCXdNcH6y3M41jFA018P94ybVlpfHXkV047ShinzMGBKdBd2v8gmKBbCDenTIWuWArWIHevS
+         3pv+DjvhH4MO8H+iz3hJUipXYM7N6WaOVsi1rTOc77/+JTELtCpHeFdRd6XKQQCfokpp01iKkLgz5G
+         ddiCqJ5TtFmscdACO7HZgY70It3M+Mu6UNbtKNw5ppGVOjCJkuGRyJ/1vMlgt7AaBFCGY6rvZ8PJb/
+         eDT75u4i4JAXDibrdjxTfnEBVPesOBw==
+X-HalOne-Cookie: 2816d18605ed82bcd4258802d7e8eb9d56193e05
+X-HalOne-ID: 92fca5d1-147d-11eb-bb75-d0431ea8bb10
+Received: from [192.168.0.126] (h-131-138.a357.priv.bahnhof.se [81.170.131.138])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 92fca5d1-147d-11eb-bb75-d0431ea8bb10;
+        Thu, 22 Oct 2020 15:45:16 +0000 (UTC)
+Date:   Thu, 22 Oct 2020 17:45:11 +0200 (GMT+02:00)
+From:   A L <mail@lechevalier.se>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         Julia Lawall <julia.lawall@inria.fr>,
-        Ingo Molnar <mingo@redhat.com>,
+        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
         kernel-janitors@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
@@ -53,77 +41,69 @@ Cc:     Mel Gorman <mgorman@suse.de>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ben Segall <bsegall@google.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
         Valentin Schneider <valentin.schneider@arm.com>,
         Gilles Muller <Gilles.Muller@inria.fr>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        srinivas.pandruvada@linux.intel.com,
         Linux PM <linux-pm@vger.kernel.org>,
         Len Brown <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <c232b2.c086afce.17550fc4644@lechevalier.se>
+In-Reply-To: <20201022122949.GW2628@hirez.programming.kicks-ass.net>
+References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr> <34115486.YmRjPRKJaA@kreacher> <20201022120213.GG2611@hirez.programming.kicks-ass.net> <1790766.jaFeG3T87Z@kreacher> <20201022122949.GW2628@hirez.programming.kicks-ass.net>
+Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle
+ core
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: R2Mail2
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 5:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Oct 22, 2020 at 03:52:50PM +0100, Mel Gorman wrote:
->
-> > There are some questions
-> > currently on whether schedutil is good enough when HWP is not available.
->
-> Srinivas and Rafael will know better, but Intel does run a lot of tests
-> and IIRC it was found that schedutil was on-par for !HWP. That was the
-> basis for commit:
->
->   33aa46f252c7 ("cpufreq: intel_pstate: Use passive mode by default without HWP")
->
-> But now it turns out that commit results in running intel_pstate-passive
-> on ondemand, which is quite horrible.
 
-It doesn't in general.  AFAICS this happens only if "ondemand" was
-selected as the default governor in the old kernel config, which
-should not be the common case.
 
-But I do agree that this needs to be avoided.
+---- From: Peter Zijlstra <peterz@infradead.org> -- Sent: 2020-10-22 - 14:2=
+9 ----
 
-> > There was some evidence (I don't have the data, Giovanni was looking into
-> > it) that HWP was a requirement to make schedutil work well.
->
-> That seems to be the question; Rafael just said the opposite.
+> On Thu, Oct 22, 2020 at 02:19:29PM +0200, Rafael J. Wysocki wrote:
+>> > However I do want to retire ondemand, conservative and also very much
+>> > intel_pstate/active mode.
+>>=20
+>> I agree in general, but IMO it would not be prudent to do that without m=
+aking
+>> schedutil provide the same level of performance in all of the relevant u=
+se
+>> cases.
+>=20
+> Agreed; I though to have understood we were there already.
 
-I'm not aware of any data like that.
+Hi,=20
 
-HWP should not be required and it should always be possible to make an
-HWP system run without HWP (except for those with exotic BIOS
-configs).  However, schedutil should work without HWP as well as (or
-better than) the "ondemand" and "conservative" governors on top of the
-same driver (whatever it is) and it should work as well as (or better
-than) "raw" HWP (so to speak) on top of intel_pstate in the passive
-mode with HWP enabled (before 5.9 it couldn't work in that
-configuration at all and now it can do that, which I guess may be
-regarded as an improvement).
 
-> > For distros, switching to schedutil by default would be nice because
-> > frequency selection state would follow the task instead of being per-cpu
-> > and we could stop worrying about different HWP implementations but it's
->
-> s/HWP/cpufreq-governors/ ? But yes.
+Currently schedutil does not populate all stats like ondemand does, which c=
+an be a problem for some monitoring software.=20
 
-Well, different HWP implementations in different processor generations
-may be a concern as well in general.
+On my AMD 3000G CPU with kernel-5.9.1:
 
-> > not at the point where the switch is advisable. I would expect hard data
-> > before switching the default and still would strongly advise having a
-> > period of time where we can fall back when someone inevitably finds a
-> > new corner case or exception.
->
-> Which is why I advocated to make it 'difficult' to use the old ones and
-> only later remove them.
 
-Slightly less convenient may be sufficient IMV.
+grep. /sys/devices/system/cpu/cpufreq/policy0/stats/*
 
-> > For reference, SLUB had the same problem for years. It was switched
-> > on by default in the kernel config but it was a long time before
-> > SLUB was generally equivalent to SLAB in terms of performance.
->
-> I remember :-)
+With ondemand:
+time_in_state:3900000 145179
+time_in_state:1600000 9588482
+total_trans:177565
+trans_table:   From  :    To
+trans_table:         :   3900000   1600000
+trans_table:  3900000:         0     88783
+trans_table:  1600000:     88782         0
+
+With schedutil only two file exists:
+reset:<empty>
+total_trans:216609=20
+
+
+I'd really like to have these stats populated with schedutil, if that's pos=
+sible.
+
+Thanks.=20
+
