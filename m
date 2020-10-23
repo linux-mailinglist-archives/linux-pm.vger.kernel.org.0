@@ -2,568 +2,726 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CB9296C88
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 12:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B39296CE0
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 12:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S461849AbgJWKMz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Oct 2020 06:12:55 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:54473 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S461948AbgJWKMy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 06:12:54 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20201023101250epoutp0462ba6ebbd81c4989eb18fa5a1f0f2dc2~Al28SP7wS2695326953epoutp04O
-        for <linux-pm@vger.kernel.org>; Fri, 23 Oct 2020 10:12:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20201023101250epoutp0462ba6ebbd81c4989eb18fa5a1f0f2dc2~Al28SP7wS2695326953epoutp04O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1603447970;
-        bh=6gXrFAPQsjO5xq6j5mn2SaU5gNy4LLhcIjmZy2Fgfvo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XfB5vA2w5cYOiWhF/GE3VY3gFN89JjjyRSiK3Cd2lwk4M7O8ZTXjGNSdxaP6TqbXU
-         HH//yEosj/cNXgDVaVwlnMNxRemRxUP5RMDsfDssn2rHu8t8kRdtufBI8DXwEroRND
-         LpORWhfj5+YSfKqYWXGMkgn5455TB7BexfqrJWqI=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20201023101250epcas1p2e2e208e5764ee1a2e4926bb77fc34389~Al27y4HPi1811318113epcas1p2s;
-        Fri, 23 Oct 2020 10:12:50 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4CHg5q33yZzMqYlh; Fri, 23 Oct
-        2020 10:12:47 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B2.B1.09577.F9CA29F5; Fri, 23 Oct 2020 19:12:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20201023101247epcas1p14b14dc1be24842daac1dc7bd229d4570~Al249SKB61547715477epcas1p1t;
-        Fri, 23 Oct 2020 10:12:47 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201023101247epsmtrp227052476d5f86bf27247a5200bcfb85d~Al248RZVs0815808158epsmtrp2J;
-        Fri, 23 Oct 2020 10:12:47 +0000 (GMT)
-X-AuditID: b6c32a39-bfdff70000002569-86-5f92ac9ff7c3
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B0.F9.08745.E9CA29F5; Fri, 23 Oct 2020 19:12:46 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201023101246epsmtip2684d7471894e929f7ddc85f646e1750e~Al24nHIbc2824028240epsmtip23;
-        Fri, 23 Oct 2020 10:12:46 +0000 (GMT)
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     digetx@gmail.com, lukasz.luba@arm.com,
-        enric.balletbo@collabora.com, hl@rock-chips.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, abel.vesa@nxp.com,
-        k.konieczny@samsung.com, b.zolnierkie@samsung.com,
-        cw00.choi@samsung.com, chanwoo@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-Subject: [PATCH v5 2/2] PM / devfreq: Add governor attribute flag for
- specifc sysfs nodes
-Date:   Fri, 23 Oct 2020 19:26:32 +0900
-Message-Id: <20201023102632.740-3-cw00.choi@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201023102632.740-1-cw00.choi@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmnu78NZPiDW4vFLFYdukoo8XGGetZ
-        LSbeuMJicf3Lc1aL1R8fM1qsuX2I0eLHhlPMFi2zFrFYLPg0g9XibNMbdovLu+awWXzuPcJo
-        0fllFpvFwqYWdovbjSvYLH7umsfiIOCxZt4aRo8dd5cweuycdZfdY9OqTjaP3uZ3bB4b3+1g
-        8vg7az+LR9+WVYwenzfJBXBGZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynk
-        Jeam2iq5+AToumXmAP2hpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySmwLNArTswt
-        Ls1L10vOz7UyNDAwMgUqTMjOuHjoAFPBmfqKDzd/szYwTkjrYuTkkBAwkdhxYx1bFyMXh5DA
-        DkaJ3w9OMEM4nxgl/r5cBuV8ZpTYe+s4C0zLr2PtLBCJXYwSncs/sEM4XxgltvybyA5SxSag
-        JbH/xQ2gwRwcIgKREs0nBUFqmAV2MEnsbr7ICBIXFoiWmL00GKScRUBV4sTi5UwgYV4BC4mT
-        Z40gdslLrN5wgBnE5hSwlHhzZBLYXgmBtRwSey9tZYYocpHYuriREcIWlnh1fAs7hC0l8fnd
-        XjYIu1pi5ckjbBDNHUB37r/ACpEwlti/dDLYYmYBTYn1u/QhwooSO3/PBZvJLMAn8e5rDytI
-        iYQAr0RHmxBEibLE5Qd3mSBsSYnF7Z1sECUeErsmxYCEhQR6GCUO/SyewCg3C2H+AkbGVYxi
-        qQXFuempxYYFpsjxtYkRnEq1LHcwTn/7Qe8QIxMH4yFGCQ5mJRHe3eoT44V4UxIrq1KL8uOL
-        SnNSiw8xmgKDbiKzlGhyPjCZ55XEG5oaGRsbW5gYmpkaGiqJ8/7R7ogXEkhPLEnNTk0tSC2C
-        6WPi4JRqYOILK72w9/FJvp7KUK4Fl0+rHpsbsXb2TKGJYv7eU0rmWt3OZ1X98ah9qa+BKeui
-        Zr7IY96Sn8/aKdsrzTbKWtbZwxgnLZ8n814rbXNG0NyNsdzfc/eZnJ+7/JfB+bnBfyo6GLY/
-        faxS9ODGP9Xw2LuGEes5AmVuNaxKC9tYbhFizcWTL7OpdO2dhKn7z8y0tmz7ldc44ZvFXE7t
-        CRP+GfXm9andaU+TkV/ydsLnrwG8ZZe7/krZ//ytJ+lkzysdpJLUc0pAjse0T9rJ6VTFkzWT
-        A6c7l61OVdDLKjQ8/sfEqtW737pl6YbXDHwh9y2PiIfpTX7aKV23y+lqtdmXbdZHl2x2Dq99
-        KL2TSz1fiaU4I9FQi7moOBEATd5M0y4EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOLMWRmVeSWpSXmKPExsWy7bCSvO68NZPiDSbfMbNYdukoo8XGGetZ
-        LSbeuMJicf3Lc1aL1R8fM1qsuX2I0eLHhlPMFi2zFrFYLPg0g9XibNMbdovLu+awWXzuPcJo
-        0fllFpvFwqYWdovbjSvYLH7umsfiIOCxZt4aRo8dd5cweuycdZfdY9OqTjaP3uZ3bB4b3+1g
-        8vg7az+LR9+WVYwenzfJBXBGcdmkpOZklqUW6dslcGVcPHSAqeBMfcWHm79ZGxgnpHUxcnJI
-        CJhI/DrWztLFyMUhJLCDUaJh5lomiISkxLSLR5m7GDmAbGGJw4eLIWo+MUoc7jvKDlLDJqAl
-        sf/FDTYQW0QgWmLxx4/MIEXMAieYJFZ/2QU2SFggUmLSu8WsIDaLgKrEicXLmUCG8gpYSJw8
-        awSxS15i9YYDzCA2p4ClxJsjk1hAbCGgkvu92xknMPItYGRYxSiZWlCcm55bbFhglJdarlec
-        mFtcmpeul5yfu4kRHPZaWjsY96z6oHeIkYmD8RCjBAezkgjvbvWJ8UK8KYmVValF+fFFpTmp
-        xYcYpTlYlMR5v85aGCckkJ5YkpqdmlqQWgSTZeLglGpgsgkIv2ypt9Xuu4f1L9FtN04rSFzY
-        tHWd5hPl3Eu22xtveRf+YZnCsdCbWyriAu+Rtb+Z8y4cy5C2ufzEIkfkavStE3uzGtKmMak3
-        MUgeann75azPGv+pddM5cgs+8IvKGXX9kplrOD2ENdX1/8GFF6/xr/Y+om7v856xKX/17/T1
-        rGJ1swtEH8x6dff138h9xyYYrDLZm7bCUjdQ3kEjIfvkIYbVvYZLAmekLfAPsprFtyRl/XJv
-        08l3i41meEyVt4gSnfCV+7hRdX6z791DaaV73d+m5R/quzS1Smta/p3ruydrb/1umrlO6km0
-        4Guul75LPvoKLbepyJQMdetJ2v3+ynK/2D1aeq9e5ta+UGIpzkg01GIuKk4EAMhD8e3qAgAA
-X-CMS-MailID: 20201023101247epcas1p14b14dc1be24842daac1dc7bd229d4570
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201023101247epcas1p14b14dc1be24842daac1dc7bd229d4570
-References: <20201023102632.740-1-cw00.choi@samsung.com>
-        <CGME20201023101247epcas1p14b14dc1be24842daac1dc7bd229d4570@epcas1p1.samsung.com>
+        id S462242AbgJWK3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 06:29:37 -0400
+Received: from foss.arm.com ([217.140.110.172]:48772 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S462218AbgJWK3h (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 23 Oct 2020 06:29:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7345931B;
+        Fri, 23 Oct 2020 03:29:35 -0700 (PDT)
+Received: from [10.57.14.27] (unknown [10.57.14.27])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 336173F66E;
+        Fri, 23 Oct 2020 03:29:33 -0700 (PDT)
+Subject: Re: [PATCH 3/4] powercap/drivers/dtpm: Add API for dynamic thermal
+ power management
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
+ <20201006122024.14539-4-daniel.lezcano@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <4484e771-9011-0928-e961-cd3a53be55e9@arm.com>
+Date:   Fri, 23 Oct 2020 11:29:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20201006122024.14539-4-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DEVFREQ supports the default governors like performance, simple_ondemand and
-also allows the devfreq driver to add their own governor like tegra30-devfreq.c
-according to their requirement. In result, some sysfs attributes are useful
-or not useful. Prior to that the user can access all sysfs attributes
-regardless of the available attributes.
+Hi Daniel,
 
-So, clarify the access permission of sysfs attributes according to governor.
-When adding the devfreq governor, can specify the available attribute
-information by using DEVFREQ_GOV_ATTR_* constant variable. The user can
-read or write the sysfs attributes in accordance to the specified attributes.
 
-When adding the governor, can add the following attributes
-according to the governor feature.
+On 10/6/20 1:20 PM, Daniel Lezcano wrote:
+> On the embedded world, the complexity of the SoC leads to an
+> increasing number of hotspots which need to be monitored and mitigated
+> as a whole in order to prevent the temperature to go above the
+> normative and legally stated 'skin temperature'.
+> 
+> Another aspect is to sustain the performance for a given power budget,
+> for example virtual reality where the user can feel dizziness if the
+> GPU performance is capped while a big CPU is processing something
+> else. Or reduce the battery charging because the dissipated power is
+> too high compared with the power consumed by other devices.
+> 
+> The userspace is the most adequate place to dynamically act on the
+> different devices by limiting their power given an application
+> profile: it has the knowledge of the platform.
+> 
+> These userspace daemons are in charge of the Dynamic Thermal Power
+> Management (DTPM).
+> 
+> Nowadays, the dtpm daemons are abusing the thermal framework as they
+> act on the cooling device state to force a specific and arbitraty
+> state without taking care of the governor decisions. Given the closed
+> loop of some governors that can confuse the logic or directly enter in
+> a decision conflict.
+> 
+> As the number of cooling device support is limited today to the CPU
+> and the GPU, the dtpm daemons have little control on the power
+> dissipation of the system. The out of tree solutions are hacking
+> around here and there in the drivers, in the frameworks to have
+> control on the devices. The common solution is to declare them as
+> cooling devices.
+> 
+> There is no unification of the power limitation unit, opaque states
+> are used.
+> 
+> This patch provides a way to create a hierarchy of constraints using
+> the powercap framework. The devices which are registered as power
+> limit-able devices are represented in this hierarchy as a tree. They
+> are linked together with intermediate nodes which are just there to
+> propagate the constraint to the children.
+> 
+> The leaves of the tree are the real devices, the intermediate nodes
+> are virtual, aggregating the children constraints and power
+> characteristics.
+> 
+> Each node have a weight on a 2^10 basis, in order to reflect the
+> percentage of power distribution of the children's node. This
+> percentage is used to dispatch the power limit to the children.
+> 
+> The weight is computed against the max power of the siblings.
+> 
+> This simple approach allows to do a fair distribution of the power
+> limit.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/powercap/Kconfig          |   6 +
+>   drivers/powercap/Makefile         |   1 +
+>   drivers/powercap/dtpm.c           | 430 ++++++++++++++++++++++++++++++
+>   include/asm-generic/vmlinux.lds.h |  11 +
+>   include/linux/dtpm.h              |  73 +++++
+>   5 files changed, 521 insertions(+)
+>   create mode 100644 drivers/powercap/dtpm.c
+>   create mode 100644 include/linux/dtpm.h
+> 
+> diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+> index ebc4d4578339..777cf60300b8 100644
+> --- a/drivers/powercap/Kconfig
+> +++ b/drivers/powercap/Kconfig
+> @@ -43,4 +43,10 @@ config IDLE_INJECT
+>   	  CPUs for power capping. Idle period can be injected
+>   	  synchronously on a set of specified CPUs or alternatively
+>   	  on a per CPU basis.
+> +
+> +config DTPM
+> +	bool "Power capping for dynamic thermal power management"
 
-[Definition for speific sysfs attributes]
-- DEVFREQ_GOV_ATTR_POLLING_INTERVAL to update polling interval for timer.
-  : /sys/class/devfreq/[devfreq dev name]/polling_interval
-- DEVFREQ_GOV_ATTR_TIMER to change the type of timer on either deferrable
-  or dealyed timer.
-  : /sys/class/devfreq/[devfreq dev name]/timer
+Maybe starting with capital letters: Dynamic Thermal Power Management?
 
-And all devfreq governors have to support the following common attributes.
-The common attributes are added to devfreq class by default.
-- governor
-- available_governors
-- available_frequencies
-- cur_freq
-- target_freq
-- min_freq
-- max_freq
-- trans_stat
+> +	help
+> +	  This enables support for the power capping for the dynamic
+> +	  thermal management userspace engine.
+>   endif
+> diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
+> index 7255c94ec61c..6482ac52054d 100644
+> --- a/drivers/powercap/Makefile
+> +++ b/drivers/powercap/Makefile
+> @@ -1,4 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_DTPM) += dtpm.o
+>   obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
+>   obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
+>   obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
+> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+> new file mode 100644
+> index 000000000000..6df1e51a2c1c
+> --- /dev/null
+> +++ b/drivers/powercap/dtpm.c
+> @@ -0,0 +1,430 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright 2020 Linaro Limited
+> + *
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> + *
+> + * The powercap based Dynamic Thermal Power Management framework
+> + * provides to the userspace a consistent API to set the power limit
+> + * on some devices.
+> + *
+> + * DTPM defines the functions to create a tree of constraints. Each
+> + * parent node is a virtual description of the aggregation of the
+> + * children. It propagates the constraints set at its level to its
+> + * children and collect the children power infomation. The leaves of
 
-[Table of governor attribute flags for devfreq governors]
-------------------------------------------------------------------------------
-                      | simple    | perfor | power | user | passive | tegra30
-		      | ondemand  | mance  | save  | space|         |
-------------------------------------------------------------------------------
-governor              | O         | O      | O     | O    | O       | O
-available_governors   | O         | O      | O     | O    | O       | O
-available_frequencies | O         | O      | O     | O    | O       | O
-cur_freq              | O         | O      | O     | O    | O       | O
-target_freq           | O         | O      | O     | O    | O       | O
-min_freq              | O         | O      | O     | O    | O       | O
-max_freq              | O         | O      | O     | O    | O       | O
-trans_stat            | O         | O      | O     | O    | O       | O
-                      --------------------------------------------------------
-polling_interval      | O         | X      | X     | X    | X       | O
-timer                 | O         | X      | X     | X    | X       | X
-------------------------------------------------------------------------------
+s/infomation/information/
 
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- Documentation/ABI/testing/sysfs-class-devfreq |  54 +++---
- drivers/devfreq/devfreq.c                     | 160 ++++++++++++------
- drivers/devfreq/governor.h                    |  12 ++
- drivers/devfreq/governor_simpleondemand.c     |   2 +
- drivers/devfreq/tegra30-devfreq.c             |   1 +
- 5 files changed, 157 insertions(+), 72 deletions(-)
+> + * the tree are the real devices which have the ability to get their
+> + * current power consumption and set their power limit.
+> + */
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/dtpm.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/powercap.h>
+> +#include <linux/slab.h>
+> +#include <linux/spinlock.h>
+> +
+> +static const char *constraint_name[] = {
+> +	"Instantaneous power constraint",
+> +};
+> +
+> +static struct powercap_control_type *pct;
+> +static struct dtpm *root;
 
-diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
-index deefffb3bbe4..67af3f31e17c 100644
---- a/Documentation/ABI/testing/sysfs-class-devfreq
-+++ b/Documentation/ABI/testing/sysfs-class-devfreq
-@@ -37,20 +37,6 @@ Description:
- 		The /sys/class/devfreq/.../target_freq shows the next governor
- 		predicted target frequency of the corresponding devfreq object.
- 
--What:		/sys/class/devfreq/.../polling_interval
--Date:		September 2011
--Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
--Description:
--		The /sys/class/devfreq/.../polling_interval shows and sets
--		the requested polling interval of the corresponding devfreq
--		object. The values are represented in ms. If the value is
--		less than 1 jiffy, it is considered to be 0, which means
--		no polling. This value is meaningless if the governor is
--		not polling; thus. If the governor is not using
--		devfreq-provided central polling
--		(/sys/class/devfreq/.../central_polling is 0), this value
--		may be useless.
--
- What:		/sys/class/devfreq/.../trans_stat
- Date:		October 2012
- Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
-@@ -65,14 +51,6 @@ Description:
- 		as following:
- 			echo 0 > /sys/class/devfreq/.../trans_stat
- 
--What:		/sys/class/devfreq/.../userspace/set_freq
--Date:		September 2011
--Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
--Description:
--		The /sys/class/devfreq/.../userspace/set_freq shows and
--		sets the requested frequency for the devfreq object if
--		userspace governor is in effect.
--
- What:		/sys/class/devfreq/.../available_frequencies
- Date:		October 2012
- Contact:	Nishanth Menon <nm@ti.com>
-@@ -109,6 +87,35 @@ Description:
- 		The max_freq overrides min_freq because max_freq may be
- 		used to throttle devices to avoid overheating.
- 
-+What:		/sys/class/devfreq/.../polling_interval
-+Date:		September 2011
-+Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
-+Description:
-+		The /sys/class/devfreq/.../polling_interval shows and sets
-+		the requested polling interval of the corresponding devfreq
-+		object. The values are represented in ms. If the value is
-+		less than 1 jiffy, it is considered to be 0, which means
-+		no polling. This value is meaningless if the governor is
-+		not polling; thus. If the governor is not using
-+		devfreq-provided central polling
-+		(/sys/class/devfreq/.../central_polling is 0), this value
-+		may be useless.
-+
-+		A list of governors that support the node:
-+		- simple_ondmenad
-+		- tegra_actmon
-+
-+What:		/sys/class/devfreq/.../userspace/set_freq
-+Date:		September 2011
-+Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
-+Description:
-+		The /sys/class/devfreq/.../userspace/set_freq shows and
-+		sets the requested frequency for the devfreq object if
-+		userspace governor is in effect.
-+
-+		A list of governors that support the node:
-+		- userspace
-+
- What:		/sys/class/devfreq/.../timer
- Date:		July 2020
- Contact:	Chanwoo Choi <cw00.choi@samsung.com>
-@@ -120,3 +127,6 @@ Description:
- 		as following:
- 			echo deferrable > /sys/class/devfreq/.../timer
- 			echo delayed > /sys/class/devfreq/.../timer
-+
-+		A list of governors that support the node:
-+		- simple_ondemand
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index a862acfe987e..f6c55cf498ed 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -32,6 +32,7 @@
- #include <trace/events/devfreq.h>
- 
- #define IS_SUPPORTED_FLAG(f, name) ((f & DEVFREQ_GOV_FLAG_##name) ? true : false)
-+#define IS_SUPPORTED_ATTR(f, name) ((f & DEVFREQ_GOV_ATTR_##name) ? true : false)
- #define HZ_PER_KHZ	1000
- 
- static struct class *devfreq_class;
-@@ -760,6 +761,11 @@ static void devfreq_dev_release(struct device *dev)
- 	kfree(devfreq);
- }
- 
-+static void create_sysfs_files(struct devfreq *devfreq,
-+				const struct devfreq_governor *gov);
-+static void remove_sysfs_files(struct devfreq *devfreq,
-+				const struct devfreq_governor *gov);
-+
- /**
-  * devfreq_add_device() - Add devfreq feature to the device
-  * @dev:	the device to add devfreq feature.
-@@ -909,6 +915,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 		goto err_init;
- 	}
- 
-+	create_sysfs_files(devfreq, governor);
-+
- 	devfreq->governor = governor;
- 	err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
- 						NULL);
-@@ -947,9 +955,12 @@ int devfreq_remove_device(struct devfreq *devfreq)
- 	if (!devfreq)
- 		return -EINVAL;
- 
--	if (devfreq->governor)
-+	if (devfreq->governor) {
- 		devfreq->governor->event_handler(devfreq,
- 						 DEVFREQ_GOV_STOP, NULL);
-+		remove_sysfs_files(devfreq, devfreq->governor);
-+	}
-+
- 	device_unregister(&devfreq->dev);
- 
- 	return 0;
-@@ -1378,13 +1389,22 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
- 		goto out;
- 	}
- 
-+	/*
-+	 * Stop the current governor and remove the specific sysfs files
-+	 * which depend on current governor.
-+	 */
- 	ret = df->governor->event_handler(df, DEVFREQ_GOV_STOP, NULL);
- 	if (ret) {
- 		dev_warn(dev, "%s: Governor %s not stopped(%d)\n",
- 			 __func__, df->governor->name, ret);
- 		goto out;
- 	}
-+	remove_sysfs_files(df, df->governor);
- 
-+	/*
-+	 * Start the new governor and create the specific sysfs files
-+	 * which depend on new governor.
-+	 */
- 	prev_governor = df->governor;
- 	df->governor = governor;
- 	strncpy(df->governor_name, governor->name, DEVFREQ_NAME_LEN);
-@@ -1392,6 +1412,8 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
- 	if (ret) {
- 		dev_warn(dev, "%s: Governor %s not started(%d)\n",
- 			 __func__, df->governor->name, ret);
-+
-+		/* Restore previous governor */
- 		df->governor = prev_governor;
- 		strncpy(df->governor_name, prev_governor->name,
- 			DEVFREQ_NAME_LEN);
-@@ -1401,8 +1423,13 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
- 				"%s: reverting to Governor %s failed (%d)\n",
- 				__func__, df->governor_name, ret);
- 			df->governor = NULL;
-+			goto out;
- 		}
-+		create_sysfs_files(df, df->governor);
-+		goto out;
- 	}
-+	create_sysfs_files(df, df->governor);
-+
- out:
- 	mutex_unlock(&devfreq_list_lock);
- 
-@@ -1484,39 +1511,6 @@ static ssize_t target_freq_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(target_freq);
- 
--static ssize_t polling_interval_show(struct device *dev,
--				     struct device_attribute *attr, char *buf)
--{
--	struct devfreq *df = to_devfreq(dev);
--
--	if (!df->profile)
--		return -EINVAL;
--
--	return sprintf(buf, "%d\n", df->profile->polling_ms);
--}
--
--static ssize_t polling_interval_store(struct device *dev,
--				      struct device_attribute *attr,
--				      const char *buf, size_t count)
--{
--	struct devfreq *df = to_devfreq(dev);
--	unsigned int value;
--	int ret;
--
--	if (!df->governor)
--		return -EINVAL;
--
--	ret = sscanf(buf, "%u", &value);
--	if (ret != 1)
--		return -EINVAL;
--
--	df->governor->event_handler(df, DEVFREQ_GOV_UPDATE_INTERVAL, &value);
--	ret = count;
--
--	return ret;
--}
--static DEVICE_ATTR_RW(polling_interval);
--
- static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
- 			      const char *buf, size_t count)
- {
-@@ -1724,6 +1718,53 @@ static ssize_t trans_stat_store(struct device *dev,
- }
- static DEVICE_ATTR_RW(trans_stat);
- 
-+static struct attribute *devfreq_attrs[] = {
-+	&dev_attr_name.attr,
-+	&dev_attr_governor.attr,
-+	&dev_attr_available_governors.attr,
-+	&dev_attr_cur_freq.attr,
-+	&dev_attr_available_frequencies.attr,
-+	&dev_attr_target_freq.attr,
-+	&dev_attr_min_freq.attr,
-+	&dev_attr_max_freq.attr,
-+	&dev_attr_trans_stat.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(devfreq);
-+
-+static ssize_t polling_interval_show(struct device *dev,
-+				     struct device_attribute *attr, char *buf)
-+{
-+	struct devfreq *df = to_devfreq(dev);
-+
-+	if (!df->profile)
-+		return -EINVAL;
-+
-+	return sprintf(buf, "%d\n", df->profile->polling_ms);
-+}
-+
-+static ssize_t polling_interval_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf, size_t count)
-+{
-+	struct devfreq *df = to_devfreq(dev);
-+	unsigned int value;
-+	int ret;
-+
-+	if (!df->governor)
-+		return -EINVAL;
-+
-+	ret = sscanf(buf, "%u", &value);
-+	if (ret != 1)
-+		return -EINVAL;
-+
-+	df->governor->event_handler(df, DEVFREQ_GOV_UPDATE_INTERVAL, &value);
-+	ret = count;
-+
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(polling_interval);
-+
- static ssize_t timer_show(struct device *dev,
- 			     struct device_attribute *attr, char *buf)
- {
-@@ -1787,21 +1828,36 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RW(timer);
- 
--static struct attribute *devfreq_attrs[] = {
--	&dev_attr_name.attr,
--	&dev_attr_governor.attr,
--	&dev_attr_available_governors.attr,
--	&dev_attr_cur_freq.attr,
--	&dev_attr_available_frequencies.attr,
--	&dev_attr_target_freq.attr,
--	&dev_attr_polling_interval.attr,
--	&dev_attr_min_freq.attr,
--	&dev_attr_max_freq.attr,
--	&dev_attr_trans_stat.attr,
--	&dev_attr_timer.attr,
--	NULL,
--};
--ATTRIBUTE_GROUPS(devfreq);
-+#define CREATE_SYSFS_FILE(df, name)					\
-+{									\
-+	int ret;							\
-+	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_##name.attr);	\
-+	if (ret < 0) {							\
-+		dev_warn(&df->dev,					\
-+			"Unable to create attr(%s)\n", "##name");	\
-+	}								\
-+}									\
-+
-+/* Create the specific sysfs files which depend on each governor. */
-+static void create_sysfs_files(struct devfreq *devfreq,
-+				const struct devfreq_governor *gov)
-+{
-+	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-+		CREATE_SYSFS_FILE(devfreq, polling_interval);
-+	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-+		CREATE_SYSFS_FILE(devfreq, timer);
-+}
-+
-+/* Remove the specific sysfs files which depend on each governor. */
-+static void remove_sysfs_files(struct devfreq *devfreq,
-+				const struct devfreq_governor *gov)
-+{
-+	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-+		sysfs_remove_file(&devfreq->dev.kobj,
-+				&dev_attr_polling_interval.attr);
-+	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-+		sysfs_remove_file(&devfreq->dev.kobj, &dev_attr_timer.attr);
-+}
- 
- /**
-  * devfreq_summary_show() - Show the summary of the devfreq devices
-@@ -1858,8 +1914,12 @@ static int devfreq_summary_show(struct seq_file *s, void *data)
- 		mutex_lock(&devfreq->lock);
- 		cur_freq = devfreq->previous_freq;
- 		get_freq_range(devfreq, &min_freq, &max_freq);
--		polling_ms = devfreq->profile->polling_ms;
- 		timer = devfreq->profile->timer;
-+
-+		if (IS_SUPPORTED_ATTR(devfreq->governor->attrs, POLLING_INTERVAL))
-+			polling_ms = devfreq->profile->polling_ms;
-+		else
-+			polling_ms = 0;
- 		mutex_unlock(&devfreq->lock);
- 
- 		seq_printf(s,
-diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-index 7dbb110a869e..df413b851bb2 100644
---- a/drivers/devfreq/governor.h
-+++ b/drivers/devfreq/governor.h
-@@ -35,10 +35,21 @@
- #define DEVFREQ_GOV_FLAG_IMMUTABLE			BIT(0)
- #define DEVFREQ_GOV_FLAG_IRQ_DRIVEN			BIT(1)
- 
-+/*
-+ * Definition of governor attribute flags except for common sysfs attributes
-+ * - DEVFREQ_GOV_ATTR_POLLING_INTERVAL
-+ *   : Indicate polling_interal sysfs attribute
-+ * - DEVFREQ_GOV_ATTR_TIMER
-+ *   : Indicate timer sysfs attribute
-+ */
-+#define DEVFREQ_GOV_ATTR_POLLING_INTERVAL		BIT(0)
-+#define DEVFREQ_GOV_ATTR_TIMER				BIT(1)
-+
- /**
-  * struct devfreq_governor - Devfreq policy governor
-  * @node:		list node - contains registered devfreq governors
-  * @name:		Governor's name
-+ * @attrs:		Governor's sysfs attribute flags
-  * @flags:		Governor's feature flags
-  * @get_target_freq:	Returns desired operating frequency for the device.
-  *			Basically, get_target_freq will run
-@@ -57,6 +68,7 @@ struct devfreq_governor {
- 	struct list_head node;
- 
- 	const char name[DEVFREQ_NAME_LEN];
-+	const u64 attrs;
- 	const u64 flags;
- 	int (*get_target_freq)(struct devfreq *this, unsigned long *freq);
- 	int (*event_handler)(struct devfreq *devfreq,
-diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-index 1b314e1df028..d57b82a2b570 100644
---- a/drivers/devfreq/governor_simpleondemand.c
-+++ b/drivers/devfreq/governor_simpleondemand.c
-@@ -117,6 +117,8 @@ static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
- 
- static struct devfreq_governor devfreq_simple_ondemand = {
- 	.name = DEVFREQ_GOV_SIMPLE_ONDEMAND,
-+	.attrs = DEVFREQ_GOV_ATTR_POLLING_INTERVAL
-+		| DEVFREQ_GOV_ATTR_TIMER,
- 	.get_target_freq = devfreq_simple_ondemand_func,
- 	.event_handler = devfreq_simple_ondemand_handler,
- };
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index faa1aecf2a31..8f5b60bef336 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -765,6 +765,7 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
- 
- static struct devfreq_governor tegra_devfreq_governor = {
- 	.name = "tegra_actmon",
-+	.attrs = DEVFREQ_GOV_ATTR_POLLING_INTERVAL,
- 	.flags = DEVFREQ_GOV_FLAG_IMMUTABLE
- 		| DEVFREQ_GOV_FLAG_IRQ_DRIVEN,
- 	.get_target_freq = tegra_governor_get_target,
--- 
-2.17.1
+I wonder if it safe to have the tree without a global lock for it, like
+mutex tree_lock ?
+I have put some comments below when the code traverses the tree.
 
+> +
+> +static int get_time_window_us(struct powercap_zone *pcz, int cid, u64 *window)
+> +{
+> +	return -ENOSYS;
+> +}
+> +
+> +static int set_time_window_us(struct powercap_zone *pcz, int cid, u64 window)
+> +{
+> +	return -ENOSYS;
+> +}
+> +
+> +static int get_max_power_range_uw(struct powercap_zone *pcz, u64 *max_power_uw)
+> +{
+> +	struct dtpm *dtpm = to_dtpm(pcz);
+> +
+> +	spin_lock(&dtpm->lock);
+> +	*max_power_uw = dtpm->power_max - dtpm->power_min;
+> +	spin_unlock(&dtpm->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int get_children_power_uw(struct powercap_zone *pcz, u64 *power_uw)
+> +{
+> +	struct dtpm *dtpm = to_dtpm(pcz);
+> +	struct dtpm *child;
+> +	u64 power;
+> +	int ret = 0;
+> +
+> +	*power_uw = 0;
+> +
+> +	spin_lock(&dtpm->lock);
+> +	list_for_each_entry(child, &dtpm->children, sibling) {
+> +		ret = child->zone.ops->get_power_uw(&child->zone, &power);
+> +		if (ret)
+> +			break;
+> +		*power_uw += power;
+> +	}
+> +	spin_unlock(&dtpm->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static void __dtpm_rebalance_weight(struct dtpm *dtpm)
+> +{
+> +	struct dtpm *child;
+> +
+> +	spin_lock(&dtpm->lock);
+> +	list_for_each_entry(child, &dtpm->children, sibling) {
+> +
+> +		pr_debug("Setting weight '%d' for '%s'\n",
+> +			 child->weight, child->zone.name);
+> +
+> +		child->weight = DIV_ROUND_CLOSEST(child->power_max * 1024,
+> +						  dtpm->power_max);
+> +
+> +		__dtpm_rebalance_weight(child);
+> +	}
+> +	spin_unlock(&dtpm->lock);
+> +}
+> +
+> +static void dtpm_rebalance_weight(void)
+> +{
+> +	__dtpm_rebalance_weight(root);
+> +}
+> +
+> +static void dtpm_sub_power(struct dtpm *dtpm)
+> +{
+> +	struct dtpm *parent = dtpm->parent;
+> +
+> +	while (parent) {
+
+I am not sure if it is safe for a corner case when the
+nodes are removing from bottom to top. We don't hold a tree
+lock, so these two (above line and below) operations might
+be split/preempted and 'parent' freed before taking the lock.
+Is it possible? (Note: I might missed something like double
+locking using this local node spinlock).
+
+> +		spin_lock(&parent->lock);
+> +		parent->power_min -= dtpm->power_min;
+> +		parent->power_max -= dtpm->power_max;
+> +		spin_unlock(&parent->lock);
+> +		parent = parent->parent;
+> +	}
+> +
+> +	dtpm_rebalance_weight();
+> +}
+> +
+> +static void dtpm_add_power(struct dtpm *dtpm)
+> +{
+> +	struct dtpm *parent = dtpm->parent;
+> +
+> +	while (parent) {
+
+Similar here?
+
+> +		spin_lock(&parent->lock);
+> +		parent->power_min += dtpm->power_min;
+> +		parent->power_max += dtpm->power_max;
+> +		spin_unlock(&parent->lock);
+> +		parent = parent->parent;
+> +	}
+> +
+> +	dtpm_rebalance_weight();
+> +}
+> +
+> +/**
+> + * dtpm_update_power - Update the power on the dtpm
+> + * @dtpm: a pointer to a dtpm structure to update
+> + * @power_min: a u64 representing the new power_min value
+> + * @power_max: a u64 representing the new power_max value
+> + *
+> + * Function to update the power values of the dtpm node specified in
+> + * parameter. These new values will be propagated to the tree.
+> + *
+> + * Return: zero on success, -EINVAL if the values are inconsistent
+> + */
+> +int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max)
+> +{
+> +	if (power_min == dtpm->power_min && power_max == dtpm->power_max)
+> +		return 0;
+> +
+> +	if (power_max < power_min)
+> +		return -EINVAL;
+> +
+> +	dtpm_sub_power(dtpm);
+> +	spin_lock(&dtpm->lock);
+> +	dtpm->power_min = power_min;
+> +	dtpm->power_max = power_max;
+> +	spin_unlock(&dtpm->lock);
+> +	dtpm_add_power(dtpm);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * dtpm_release_zone - Cleanup when the node is released
+> + * @pcz: a pointer to a powercap_zone structure
+> + *
+> + * Do some housecleaning and update the weight on the tree. The
+> + * release will be denied if the node has children. This function must
+> + * be called by the specific release callback of the different
+> + * backends.
+> + *
+> + * Return: 0 on success, -EBUSY if there are children
+> + */
+> +int dtpm_release_zone(struct powercap_zone *pcz)
+> +{
+> +	struct dtpm *dtpm = to_dtpm(pcz);
+> +	struct dtpm *parent = dtpm->parent;
+> +
+
+I would lock the whole tree, just to play safe.
+What do you think?
+
+> +	if (!list_empty(&dtpm->children))
+> +		return -EBUSY;
+> +
+> +	if (parent) {
+> +		spin_lock(&parent->lock);
+> +		list_del(&dtpm->sibling);
+> +		spin_unlock(&parent->lock);
+> +	}
+> +
+> +	dtpm_sub_power(dtpm);
+> +
+> +	kfree(dtpm);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Set the power limit on the nodes, the power limit is distributed
+> + * given the weight of the children.
+> + */
+> +static int set_children_power_limit(struct powercap_zone *pcz, int cid,
+> +				    u64 power_limit)
+> +{
+> +	struct dtpm *dtpm = to_dtpm(pcz);
+> +	struct dtpm *child;
+> +	u64 power;
+> +	int ret = 0;
+> +
+> +	/*
+> +	 * Don't allow values outside of the power range previously
+> +	 * set when initiliazing the power numbers.
+> +	 */
+> +	power_limit = clamp_val(power_limit, dtpm->power_min, dtpm->power_max);
+> +
+> +	spin_lock(&dtpm->lock);
+> +	list_for_each_entry(child, &dtpm->children, sibling) {
+> +
+> +		/*
+> +		 * Integer division rounding will inevitably lead to a
+> +		 * different max value when set several times. In
+> +		 * order to restore the initial value, we force the
+> +		 * child's max power every time if the constraint is
+> +		 * removed by setting a value greater or equal to the
+> +		 * max power.
+> +		 */
+> +		if (power_limit == dtpm->power_max)
+> +			power = child->power_max;
+> +		else
+> +			power = DIV_ROUND_CLOSEST(
+> +				power_limit * child->weight, 1024);
+> +
+> +		pr_debug("Setting power limit for '%s': %llu uW\n",
+> +			 child->zone.name, power);
+> +
+> +		ret = child->zone.constraints->ops->set_power_limit_uw(
+> +			&child->zone, cid, power);
+> +		if (ret)
+> +			break;
+> +	}
+> +	spin_unlock(&dtpm->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int get_children_power_limit(struct powercap_zone *pcz, int cid,
+> +				    u64 *power_limit)
+> +{
+> +	struct dtpm *dtpm = to_dtpm(pcz);
+> +	struct dtpm *child;
+> +	u64 power;
+> +	int ret = 0;
+> +
+> +	*power_limit = 0;
+> +
+> +	spin_lock(&dtpm->lock);
+> +	list_for_each_entry(child, &dtpm->children, sibling) {
+> +		ret = child->zone.constraints->ops->get_power_limit_uw(
+> +			&child->zone, cid, &power);
+> +		if (ret)
+> +			break;
+> +		*power_limit += power;
+> +	}
+> +	spin_unlock(&dtpm->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static const char *get_constraint_name(struct powercap_zone *pcz, int cid)
+> +{
+> +	return constraint_name[cid];
+> +}
+> +
+> +static int get_max_power_uw(struct powercap_zone *pcz, int id, u64 *max_power)
+> +{
+> +	struct dtpm *dtpm = to_dtpm(pcz);
+> +
+> +	spin_lock(&dtpm->lock);
+> +	*max_power = dtpm->power_max;
+> +	spin_unlock(&dtpm->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct powercap_zone_constraint_ops constraint_ops = {
+> +	.set_power_limit_uw = set_children_power_limit,
+> +	.get_power_limit_uw = get_children_power_limit,
+> +	.set_time_window_us = set_time_window_us,
+> +	.get_time_window_us = get_time_window_us,
+> +	.get_max_power_uw = get_max_power_uw,
+> +	.get_name = get_constraint_name,
+> +};
+> +
+> +static struct powercap_zone_ops zone_ops = {
+> +	.get_max_power_range_uw = get_max_power_range_uw,
+> +	.get_power_uw = get_children_power_uw,
+> +	.release = dtpm_release_zone,
+> +};
+> +
+> +/**
+> + * dtpm_alloc - Allocate and initialize a dtpm struct
+> + * @name: a string specifying the name of the node
+> + *
+> + * Return: a struct dtpm pointer, NULL in case of error
+> + */
+> +struct dtpm *dtpm_alloc(void)
+> +{
+> +	struct dtpm *dtpm;
+> +
+> +	dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
+> +	if (dtpm) {
+> +		INIT_LIST_HEAD(&dtpm->children);
+> +		INIT_LIST_HEAD(&dtpm->sibling);
+> +		spin_lock_init(&dtpm->lock);
+
+Why do we use spinlock and not mutex?
+
+> +		dtpm->weight = 1024;
+> +	}
+> +
+> +	return dtpm;
+> +}
+> +
+> +/**
+> + * dtpm_unregister - Unregister a dtpm node from the hierarchy tree
+> + * @dtpm: a pointer to a dtpm structure corresponding to the node to be removed
+> + *
+> + * Call the underlying powercap unregister function. That will call
+> + * the release callback of the powercap zone.
+> + */
+> +void dtpm_unregister(struct dtpm *dtpm)
+> +{
+> +	powercap_unregister_zone(pct, &dtpm->zone);
+> +}
+> +
+> +/**
+> + * dtpm_register - Register a dtpm node in the hierarchy tree
+> + * @name: a string specifying the name of the node
+> + * @dtpm: a pointer to a dtpm structure corresponding to the new node
+> + * @parent: a pointer to a dtpm structure corresponding to the parent node
+> + * @ops: a pointer to a powercap_zone_ops structure
+> + * @nr_constraints: a integer giving the number of constraints supported
+> + * @const_ops: a pointer to a powercap_zone_constraint_ops structure
+> + *
+> + * Create a dtpm node in the tree. If no parent is specified, the node
+> + * is the root node of the hierarchy. If the root node already exists,
+> + * then the registration will fail. The powercap controller must be
+> + * initialized before calling this function.
+> + *
+> + * The dtpm structure must be initialized with the power numbers
+> + * before calling this function.
+> + *
+> + * Return: zero on success, a negative value in case of error:
+> + *  -EAGAIN: the function is called before the framework is initialized.
+> + *  -EBUSY: the root node is already inserted
+> + *  -EINVAL: there is no root node yet and @parent is specified
+> + *   Other negative values are reported back from the powercap framework
+> + */
+> +int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
+> +		  struct powercap_zone_ops *ops, int nr_constraints,
+> +		  struct powercap_zone_constraint_ops *const_ops)
+> +{
+> +	struct powercap_zone *pcz;
+> +
+> +	if (!pct)
+> +		return -EAGAIN;
+> +
+> +	if (root && !parent)
+> +		return -EBUSY;
+> +
+> +	if (!root && parent)
+> +		return -EINVAL;
+> +
+> +	const_ops->get_name = get_constraint_name;
+> +	const_ops->get_max_power_uw = get_max_power_uw;
+> +	const_ops->set_time_window_us = set_time_window_us;
+> +	const_ops->get_time_window_us = get_time_window_us;
+> +
+> +	ops->get_max_power_range_uw = get_max_power_range_uw;
+> +
+> +	pcz = powercap_register_zone(&dtpm->zone, pct, name,
+> +				     parent ? &parent->zone : NULL,
+> +				     ops, nr_constraints, const_ops);
+> +	if (IS_ERR(pcz))
+> +		return PTR_ERR(pcz);
+> +
+> +	if (parent) {
+> +		spin_lock(&parent->lock);
+> +		list_add_tail(&dtpm->sibling, &parent->children);
+> +		spin_unlock(&parent->lock);
+> +		dtpm->parent = parent;
+> +	} else {
+> +		root = dtpm;
+> +	}
+> +
+> +	dtpm_add_power(dtpm);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * dtpm_register_parent - Register a intermediate node in the tree
+> + * @name: a string specifying the name of the node
+> + * @dtpm: a pointer to a dtpm structure corresponding to the new node
+> + * @parent: a pointer to a dtpm structure corresponding parent's new node
+> + *
+> + * The function will add an intermediate node corresponding to a
+> + * parent to more nodes. Its purpose is to aggregate the children
+> + * characteristics and dispatch the constraints. If the @parent
+> + * parameter is NULL, then this node becomes the root node of the tree
+> + * if there is no root node yet.
+> + *
+> + * Return: zero on success, a negative value in case of error:
+> + *  -EAGAIN: the function is called before the framework is initialized.
+> + *  -EBUSY: the root node is already inserted
+> + *  -EINVAL: there is not root node yet and @parent is specified
+> + *   Other negative values are reported back from the powercap framework
+> + */
+> +int dtpm_register_parent(const char *name, struct dtpm *dtpm,
+> +			 struct dtpm *parent)
+> +{
+> +	return dtpm_register(name, dtpm, parent, &zone_ops,
+> +			     MAX_DTPM_CONSTRAINTS, &constraint_ops);
+> +}
+> +
+> +static int __init dtpm_init(void)
+> +{
+> +	struct dtpm_descr **dtpm_descr;
+> +
+> +	pct = powercap_register_control_type(NULL, "dtpm", NULL);
+> +	if (!pct) {
+> +		pr_err("Failed to register control type\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	for_each_dtpm_table(dtpm_descr)
+> +		(*dtpm_descr)->init(*dtpm_descr);
+
+We don't check the returned value here. It is required that the
+devices should already be up and running (like cpufreq).
+But if for some reason the init() failed, maybe it's worth to add a
+field inside the dtpm_desc or dtpm struct like 'bool ready' ?
+It could be retried to init later.
+
+> +
+> +	return 0;
+> +}
+> +late_initcall(dtpm_init);
+
+The framework would start operating at late boot. We don't control
+the thermal/power issues in earier stages.
+Although, at this late stage all other things like cpufreq should be
+ready, so the ->init() on them is likely to success.
+
+Regards,
+Lukasz
+
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index 5430febd34be..29b30976ea02 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -315,6 +315,16 @@
+>   #define THERMAL_TABLE(name)
+>   #endif
+>   
+> +#ifdef CONFIG_DTPM
+> +#define DTPM_TABLE()							\
+> +	. = ALIGN(8);							\
+> +	__dtpm_table = .;						\
+> +	KEEP(*(__dtpm_table))						\
+> +	__dtpm_table_end = .;
+> +#else
+> +#define DTPM_TABLE()
+> +#endif
+> +
+>   #define KERNEL_DTB()							\
+>   	STRUCT_ALIGN();							\
+>   	__dtb_start = .;						\
+> @@ -715,6 +725,7 @@
+>   	ACPI_PROBE_TABLE(irqchip)					\
+>   	ACPI_PROBE_TABLE(timer)						\
+>   	THERMAL_TABLE(governor)						\
+> +	DTPM_TABLE()							\
+>   	EARLYCON_TABLE()						\
+>   	LSM_TABLE()							\
+>   	EARLY_LSM_TABLE()
+> diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
+> new file mode 100644
+> index 000000000000..6696bdcfdb87
+> --- /dev/null
+> +++ b/include/linux/dtpm.h
+> @@ -0,0 +1,73 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2020 Linaro Ltd
+> + *
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> + */
+> +#ifndef ___DTPM_H__
+> +#define ___DTPM_H__
+> +
+> +#include <linux/of.h>
+> +#include <linux/powercap.h>
+> +
+> +#define MAX_DTPM_DESCR 8
+> +#define MAX_DTPM_CONSTRAINTS 1
+> +
+> +struct dtpm {
+> +	struct powercap_zone zone;
+> +	struct dtpm *parent;
+> +	struct list_head sibling;
+> +	struct list_head children;
+> +	spinlock_t lock;
+> +	u64 power_limit;
+> +	u64 power_max;
+> +	u64 power_min;
+> +	int weight;
+> +	void *private;
+> +};
+> +
+> +struct dtpm_descr;
+> +
+> +typedef int (*dtpm_init_t)(struct dtpm_descr *);
+> +
+> +struct dtpm_descr {
+> +	struct dtpm *parent;
+> +	const char *name;
+> +	dtpm_init_t init;
+> +};
+> +
+> +/* Init section thermal table */
+> +extern struct dtpm_descr *__dtpm_table[];
+> +extern struct dtpm_descr *__dtpm_table_end[];
+> +
+> +#define DTPM_TABLE_ENTRY(name)			\
+> +	static typeof(name) *__dtpm_table_entry_##name	\
+> +	__used __section(__dtpm_table) = &name
+> +
+> +#define DTPM_DECLARE(name)	DTPM_TABLE_ENTRY(name)
+> +
+> +#define for_each_dtpm_table(__dtpm)	\
+> +	for (__dtpm = __dtpm_table;	\
+> +	     __dtpm < __dtpm_table_end;	\
+> +	     __dtpm++)
+> +
+> +static inline struct dtpm *to_dtpm(struct powercap_zone *zone)
+> +{
+> +	return container_of(zone, struct dtpm, zone);
+> +}
+> +
+> +int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max);
+> +
+> +int dtpm_release_zone(struct powercap_zone *pcz);
+> +
+> +struct dtpm *dtpm_alloc(void);
+> +
+> +void dtpm_unregister(struct dtpm *dtpm);
+> +
+> +int dtpm_register_parent(const char *name, struct dtpm *dtpm,
+> +			 struct dtpm *parent);
+> +
+> +int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
+> +		  struct powercap_zone_ops *ops, int nr_constraints,
+> +		  struct powercap_zone_constraint_ops *const_ops);
+> +#endif
+> 
