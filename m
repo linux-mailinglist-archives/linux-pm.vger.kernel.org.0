@@ -2,102 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A400D29726A
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 17:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174DA297358
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 18:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S465926AbgJWPgk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Oct 2020 11:36:40 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:49018 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S462626AbgJWPgk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 11:36:40 -0400
-Received: from 89-64-88-190.dynamic.chello.pl (89.64.88.190) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.491)
- id caedd8ec897095a1; Fri, 23 Oct 2020 17:36:38 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 4/4] cpufreq: schedutil: Always call drvier if need_freq_update is set
-Date:   Fri, 23 Oct 2020 17:36:05 +0200
-Message-ID: <1905098.zDJocX6404@kreacher>
-In-Reply-To: <2183878.gTFULuzKx9@kreacher>
-References: <2183878.gTFULuzKx9@kreacher>
+        id S373871AbgJWQPD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 12:15:03 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41027 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S373787AbgJWQPD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 12:15:03 -0400
+Received: by mail-oi1-f196.google.com with SMTP id k65so1878184oih.8;
+        Fri, 23 Oct 2020 09:15:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FvCVkpNgTNIbURGGw2woJK1FfE+oLd1yKdhTrG3ufOA=;
+        b=h0LnVm6q0HlSKbfuDE+sESMByzZ2Y+8A63A4ZRmnyXKVODjPkGDhprJ3KHZZFxQcyC
+         XFHIQ0Rij7Hu3/kJBn9l9Kp4s2Yz2AaBdqe/7t2kyYVUWP/43mSm8djtsZ1QdxLN17bY
+         8wtNl+4oc/BoXaW3X1btGQUhrLYv30mEVEWGBByplQksqUxuuvNXlBzuW8X4gH4d9i2X
+         ndUfcbcweRWb1rKgpXHh33gPJjuUZN/544LOujBf6+7FoTleUIvWpyfC9zscd2qaBNoO
+         0cB6TmQaprzgTsm1JE1yL8NKWmQ/2RAt/WcSq90ZUgHpa//RGQAUKgvVK5bTlQ86e2Ui
+         nE3w==
+X-Gm-Message-State: AOAM530Yd+CN9kGvJkea7lTYvYmRqp5LNOyjJAXet9zn4D7cAbK6E+VA
+        BWKPs2/ram7CG6MZieGosNnZkJtWpw==
+X-Google-Smtp-Source: ABdhPJyYeCMsL52JQAqym6VgKty0inwrQaF/J8jiig+S215ihWN6sR4ZPDJA9lEOshnTKG5zylY9Vg==
+X-Received: by 2002:aca:ab54:: with SMTP id u81mr2114700oie.90.1603469702099;
+        Fri, 23 Oct 2020 09:15:02 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b139sm558165oii.19.2020.10.23.09.15.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Oct 2020 09:15:01 -0700 (PDT)
+Received: (nullmailer pid 2801225 invoked by uid 1000);
+        Fri, 23 Oct 2020 16:15:00 -0000
+Date:   Fri, 23 Oct 2020 11:15:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>
+Cc:     devicetree@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-pm@vger.kernel.org, Dave Gerlach <d-gerlach@ti.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        wsd_upstream@mediatek.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH v1 3/6] dt-bindings: cpufreq: add bindings for MediaTek
+ cpufreq HW
+Message-ID: <20201023161500.GA2800310@bogus>
+References: <1603441493-18554-1-git-send-email-hector.yuan@mediatek.com>
+ <1603441493-18554-4-git-send-email-hector.yuan@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1603441493-18554-4-git-send-email-hector.yuan@mediatek.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Because sugov_update_next_freq() may skip a frequency update even if
-the need_freq_update flag has been set for the policy at hand, policy
-limits updates may not take effect as expected.
-
-For example, if the intel_pstate driver operates in the passive mode
-with HWP enabled, it needs to update the HWP min and max limits when
-the policy min and max limits change, respectively, but that may not
-happen if the target frequency does not change along with the limit
-at hand.  In particular, if the policy min is changed first, causing
-the target frequency to be adjusted to it, and the policy max limit
-is changed later to the same value, the HWP max limit will not be
-updated to follow it as expected, because the target frequency is
-still equal to the policy min limit and it will not change until
-that limit is updated.
-
-To address this issue, modify get_next_freq() to clear
-need_freq_update only if the CPUFREQ_NEED_UPDATE_LIMITS flag is
-not set for the cpufreq driver in use (and it should be set for all
-potentially affected drivers) and make sugov_update_next_freq()
-check need_freq_update and continue when it is set regardless of
-whether or not the new target frequency is equal to the old one.
-
-Fixes: f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive mode with HWP enabled")
-Reported-by: Zhang Rui <rui.zhang@intel.com>
-Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-New patch in v2.
-
----
- kernel/sched/cpufreq_schedutil.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-Index: linux-pm/kernel/sched/cpufreq_schedutil.c
-===================================================================
---- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
-+++ linux-pm/kernel/sched/cpufreq_schedutil.c
-@@ -102,11 +102,12 @@ static bool sugov_should_update_freq(str
- static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
- 				   unsigned int next_freq)
- {
--	if (sg_policy->next_freq == next_freq)
-+	if (sg_policy->next_freq == next_freq && !sg_policy->need_freq_update)
- 		return false;
- 
- 	sg_policy->next_freq = next_freq;
- 	sg_policy->last_freq_update_time = time;
-+	sg_policy->need_freq_update = false;
- 
- 	return true;
- }
-@@ -164,7 +165,10 @@ static unsigned int get_next_freq(struct
- 	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
- 		return sg_policy->next_freq;
- 
--	sg_policy->need_freq_update = false;
-+	if (sg_policy->need_freq_update)
-+		sg_policy->need_freq_update =
-+			cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-+
- 	sg_policy->cached_raw_freq = freq;
- 	return cpufreq_driver_resolve_freq(policy, freq);
- }
+On Fri, 23 Oct 2020 16:24:50 +0800, Hector Yuan wrote:
+> From: "Hector.Yuan" <hector.yuan@mediatek.com>
+> 
+> Add devicetree bindings for MediaTek HW driver.
+> 
+> Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |   46 ++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+> 
 
 
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml:46:1: [warning] too many blank lines (4 > 1) (empty-lines)
+
+dtschema/dtc warnings/errors:
+
+
+See https://patchwork.ozlabs.org/patch/1386572
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
