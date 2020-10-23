@@ -2,246 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B33296CBA
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 12:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB2F296C86
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 12:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S462123AbgJWKUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Oct 2020 06:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S462042AbgJWKUh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 06:20:37 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEECC0613CE
-        for <linux-pm@vger.kernel.org>; Fri, 23 Oct 2020 03:20:36 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id 19so853249pge.12
-        for <linux-pm@vger.kernel.org>; Fri, 23 Oct 2020 03:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OJn3vpKHjyunPy1SpVU44rpe3v+8KsE7bamMpHnJEfA=;
-        b=sIRCbRdSslsypUJlXwkdywfbkFkaAOLp9J96punFZJpgC5lsWEp0u0DG3J5MMFe2nD
-         GTePe7hitMrf2Yk6GiU5vGkICySqd0oGgNRcyKV1P7Uj/9gMqqb2X+YbGjIlXxWKihAN
-         MOMYBWzrRydc7VXE7e6lr15QezFLpDq0VsDFA6/PTWlDNCqQftdUwR/azTjzW6Sv19pg
-         p2GrFOqCY94O8uEkWTVSW0qYZHqnHu3FGMK71vNzfaSzI3SotwR8HXwn/lKeNlmvKTo+
-         htT4QvC0Pgx9zJjsivM8ptJ1LHrF1CSCk6aR/IsjqRTaGR+921monB3JpkNkJIq9sC3f
-         wR4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OJn3vpKHjyunPy1SpVU44rpe3v+8KsE7bamMpHnJEfA=;
-        b=BSF0r8169CoE5I7xOfSs4ch5PsOcqhYb3mTJQqQ3SpIQwUwEK2WSZofM+MH1huYgzf
-         Y3EhZwJY7sSajrZBhlFQX5ysSXN6JIXUJRL6g9avtdP6Qg5sWo+QJWVJ8gtUgIkhUvwx
-         pRfsQEgTHe+lU/WApHjHw0lhgBib1okYUJ+ZaVF1VUj5/pgNHQuM4lRJBJCae6UIOQJa
-         vP/FVx3lqBs/IOKfjPVsJ3W/rKmkdeRMc/Vs27EmAseGsUbLPWNBNs7bql4t1sJarkHm
-         7KBldwkwq+sRZi5mqNDgBVbnb13LRKl3s+aLkIoC0insk+CNQpkPZr68sqLuDutecjKK
-         RGvg==
-X-Gm-Message-State: AOAM531qhSHhw98FFhc4cJpODPOw+G2ioFbjQ/QKL+8vFOMa/Gs1UJ8F
-        aD5DV0S251wtqzIwquu8BSrW1Q==
-X-Google-Smtp-Source: ABdhPJxCu5+eJ1PQLkD5WlGnkCCv328uYZldZ4WXNbQc5PMfBye1LisAbvKLs3GXRZqOu1ygYFjt5w==
-X-Received: by 2002:a63:4f26:: with SMTP id d38mr1467103pgb.34.1603448435552;
-        Fri, 23 Oct 2020 03:20:35 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id x2sm1614531pfc.133.2020.10.23.03.20.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Oct 2020 03:20:34 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
-Subject: [PATCH V2 2/2] thermal: cpufreq_cooling: Reuse sched_cpu_util()
-Date:   Fri, 23 Oct 2020 15:50:21 +0530
-Message-Id: <11e7c7dcb07ae258fa02e187c9697252f3835466.1603448113.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
-In-Reply-To: <cover.1603448113.git.viresh.kumar@linaro.org>
-References: <cover.1603448113.git.viresh.kumar@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S461952AbgJWKMy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 06:12:54 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:51484 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S461902AbgJWKMy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 06:12:54 -0400
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201023101250epoutp019bd1f16e01c558c9ce95942e8a153099~Al28CF0-m3202432024epoutp01c
+        for <linux-pm@vger.kernel.org>; Fri, 23 Oct 2020 10:12:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201023101250epoutp019bd1f16e01c558c9ce95942e8a153099~Al28CF0-m3202432024epoutp01c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1603447970;
+        bh=jX41VGP/VWJGCpMgSRB6Vy5h2OQbvXYT6fvLe8xXPrA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=fTa/Lm4f+2mgzsziUTMd8Z1PwJDCixd88rshI8Q8o78rWPNTy14DtF6aojoPAj6GS
+         WlU/bk8Tzf2EJRSINZIwN3ksM6T5N5JPN6sNbovbXVNBavk75ncfcw9JwK3/Jz8M5W
+         dLwIVrRBrq5DfVH9TkhHHMZqfmdQVwktxkobbEcA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20201023101249epcas1p4c63a3ba3415f6ed0c1b14492dcd77504~Al27Ukof02134021340epcas1p41;
+        Fri, 23 Oct 2020 10:12:49 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4CHg5q1fqWzMqYkZ; Fri, 23 Oct
+        2020 10:12:47 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        91.B1.09577.F9CA29F5; Fri, 23 Oct 2020 19:12:47 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20201023101246epcas1p126bb1157eb75f972786758ef1e2f6e0c~Al24llWmc2589625896epcas1p1M;
+        Fri, 23 Oct 2020 10:12:46 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201023101246epsmtrp11886ab4476c2da84e9778c64179fda21~Al24knLu-0544405444epsmtrp1t;
+        Fri, 23 Oct 2020 10:12:46 +0000 (GMT)
+X-AuditID: b6c32a39-c13ff70000002569-85-5f92ac9f7a66
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8E.E9.08745.E9CA29F5; Fri, 23 Oct 2020 19:12:46 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20201023101246epsmtip2aefab9230fce6deb5e744410ba06159d~Al24VVNeu3177131771epsmtip2l;
+        Fri, 23 Oct 2020 10:12:46 +0000 (GMT)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Cc:     digetx@gmail.com, lukasz.luba@arm.com,
+        enric.balletbo@collabora.com, hl@rock-chips.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, abel.vesa@nxp.com,
+        k.konieczny@samsung.com, b.zolnierkie@samsung.com,
+        cw00.choi@samsung.com, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
+Subject: [PATCH v5 0/2] PM / devfreq: Add governor feature and attribute
+ flag
+Date:   Fri, 23 Oct 2020 19:26:30 +0900
+Message-Id: <20201023102632.740-1-cw00.choi@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjk+LIzCtJLcpLzFFi42LZdlhTT3f+mknxBle7OS2WXTrKaLFxxnpW
+        i4k3rrBYXP/ynNVi9cfHjBZrbh9itPix4RSzRcusRSwWCz7NYLU42/SG3eLyrjlsFp97jzBa
+        dH6ZxWaxsKmF3eJ24wo2i5+75rE4CHismbeG0WPH3SWMHjtn3WX32LSqk82jt/kdm8fGdzuY
+        PP7O2s/i0bdlFaPH501yAZxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5
+        ibmptkouPgG6bpk5QH8oKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgosC/SKE3OL
+        S/PS9ZLzc60MDQyMTIEKE7IzOtYJFOyXqzj54hJLA+N20S5GTg4JAROJP0uXMHYxcnEICexg
+        lDj5bisTSEJI4BOjxKWWYojEZ0aJZROnMcJ0HL+xmRkisYtR4tXER0AdHEDOF0aJjzIgNWwC
+        WhL7X9xgAwmLCERKNJ8UBClnFtjBJLG7+SLYHGEBf4lzd1ayg9gsAqoSBx7cYwWxeQUsJM5e
+        uc8OsUteYvWGA2C7JASmckj8vv2eCSLhItH0aiuULSzx6vgWqAYpiZf9bVB2tcTKk0fYIJo7
+        GCW27L/ACpEwlti/dDLY0cwCmhLrd+lDhBUldv6eC3YcswCfxLuvPawgJRICvBIdbUIQJcoS
+        lx/chVorKbG4vZMNwvaQ+Hx0Ijsk4GIlfjW+ZZnAKDsLYcECRsZVjGKpBcW56anFhgWmyFG0
+        iRGcMLUsdzBOf/tB7xAjEwfjIUYJDmYlEd7d6hPjhXhTEiurUovy44tKc1KLDzGaAgNsIrOU
+        aHI+MGXnlcQbmhoZGxtbmBiamRoaKonz/tHuiBcSSE8sSc1OTS1ILYLpY+LglGpg8t93PlVD
+        6+PxpUH9rBfU7VlCG0vyFl9aH9MRu03rnuzHyLz19fVrb+zbd5DbfM8W1TTtiY9r398yCrBV
+        jnzbe37V6ajHztZLQ7Tldzp7sRpUnmVp1LdKPPujeKGacNEGpWoWg7bdK++Xzm15Vfbu4sRb
+        asZ8MxymZk3bV6b+aYqf7n+ZTw9W2QsKOW6V3dJovb2kWKKx5V/2xXr3w2fj2pSqxApuzZl7
+        9PXsw8l3dCaIv+WMPXzjSWrm0afrqqaHCO983jIjacmqDRayyvezdi86Nntzb7nSsu83AyXu
+        3684LrMy837dygi3zDx2+a3nmldk7/J98Pyty99tc+ZMKuoO6Gtx+n78XZnA/6ZVU5RYijMS
+        DbWYi4oTAWr3LiIhBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPLMWRmVeSWpSXmKPExsWy7bCSvO68NZPiDbr/KVssu3SU0WLjjPWs
+        FhNvXGGxuP7lOavF6o+PGS3W3D7EaPFjwylmi5ZZi1gsFnyawWpxtukNu8XlXXPYLD73HmG0
+        6Pwyi81iYVMLu8XtxhVsFj93zWNxEPBYM28No8eOu0sYPXbOusvusWlVJ5tHb/M7No+N73Yw
+        efydtZ/Fo2/LKkaPz5vkAjijuGxSUnMyy1KL9O0SuDI61gkU7JerOPniEksD43bRLkZODgkB
+        E4njNzYzdzFycQgJ7GCUeHdmFiNEQlJi2sWjQAkOIFtY4vDhYoiaT4wSC37eYgWpYRPQktj/
+        4gYbiC0iEC2x+ONHsEHMAieYJFZ/2cUEkhAW8JV4fPsTC4jNIqAqceDBPbBmXgELibNX7rND
+        LJOXWL3hAPMERp4FjAyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGCw1hLawfjnlUf
+        9A4xMnEwHmKU4GBWEuHdrT4xXog3JbGyKrUoP76oNCe1+BCjNAeLkjjv11kL44QE0hNLUrNT
+        UwtSi2CyTBycUg1MBRtO2r09seZoxv7t0+Piv64Qaas4svJ//76oj1O4FwRUXXD6YzPr/aW9
+        Ke5ey7uY71yzZbzdJXk/4FHjmmwOn4Ny2w4GHs42fzirN+rQn33v0/5uN5T6ryov6HUoyeRQ
+        65bADfe1r2283PaG/1dcofCT0533FwWuOtd36HGXwQ6zoJiyA5N/Gc54ySKn9zLlot6PdT8+
+        r4q3uHzPtsT/KP/mZ+aKO47P8ZPfIiixTCVmlviHrdwMaWuD1L+q8J6bavFT+kqZncai/JP/
+        C+NyZ05NXv6R17uxoTJDZFbNzkzXiTtT1HdZvXXfztOyzO2R1Jkbu/g/izrlv6p1DZyx7EP9
+        hru3za0LwxjzPgmL8iixFGckGmoxFxUnAgBWj9lN0gIAAA==
+X-CMS-MailID: 20201023101246epcas1p126bb1157eb75f972786758ef1e2f6e0c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20201023101246epcas1p126bb1157eb75f972786758ef1e2f6e0c
+References: <CGME20201023101246epcas1p126bb1157eb75f972786758ef1e2f6e0c@epcas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Several parts of the kernel are already using the effective CPU
-utilization (as seen by the scheduler) to get the current load on the
-CPU, do the same here instead of depending on the idle time of the CPU,
-which isn't that accurate comparatively.
+Each devfreq governor can have the different sysfs attributes and features.
+In order to provide the only available sysfs attribute to user-space,
+add governor attribute flag with DEVFREQ_GOV_ATTR_[attribute name] defintion.
 
-Note that, this (and CPU frequency scaling in general) doesn't work that
-well with idle injection as that is done from rt threads and is counted
-as load while it tries to do quite the opposite. That should be solved
-separately though.
+Also, each governor is able to have the specific flag in order to
+support specific feature with DEVFREQ_GOV_FLAG_[feature name] defintion
+like immutable governor.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/thermal/cpufreq_cooling.c | 70 +++++++------------------------
- 1 file changed, 16 insertions(+), 54 deletions(-)
+According to each governor, can initiate the governor feature and attribute
+flags.
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index cc2959f22f01..1315e4d4758b 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -19,6 +19,7 @@
- #include <linux/idr.h>
- #include <linux/pm_opp.h>
- #include <linux/pm_qos.h>
-+#include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/thermal.h>
- 
-@@ -38,16 +39,6 @@
-  *	...
-  */
- 
--/**
-- * struct time_in_idle - Idle time stats
-- * @time: previous reading of the absolute time that this cpu was idle
-- * @timestamp: wall time of the last invocation of get_cpu_idle_time_us()
-- */
--struct time_in_idle {
--	u64 time;
--	u64 timestamp;
--};
--
- /**
-  * struct cpufreq_cooling_device - data for cooling device with cpufreq
-  * @id: unique integer value corresponding to each cpufreq_cooling_device
-@@ -62,7 +53,6 @@ struct time_in_idle {
-  *	registered cooling device.
-  * @policy: cpufreq policy.
-  * @node: list_head to link all cpufreq_cooling_device together.
-- * @idle_time: idle time stats
-  * @qos_req: PM QoS contraint to apply
-  *
-  * This structure is required for keeping information of each registered
-@@ -76,7 +66,6 @@ struct cpufreq_cooling_device {
- 	struct em_perf_domain *em;
- 	struct cpufreq_policy *policy;
- 	struct list_head node;
--	struct time_in_idle *idle_time;
- 	struct freq_qos_request qos_req;
- };
- 
-@@ -132,34 +121,18 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- }
- 
- /**
-- * get_load() - get load for a cpu since last updated
-- * @cpufreq_cdev:	&struct cpufreq_cooling_device for this cpu
-+ * get_load() - get current load for a cpu
-  * @cpu:	cpu number
-- * @cpu_idx:	index of the cpu in time_in_idle*
-  *
-- * Return: The average load of cpu @cpu in percentage since this
-- * function was last called.
-+ * Return: The current load of cpu @cpu in percentage.
-  */
--static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
--		    int cpu_idx)
-+static u32 get_load(int cpu)
- {
--	u32 load;
--	u64 now, now_idle, delta_time, delta_idle;
--	struct time_in_idle *idle_time = &cpufreq_cdev->idle_time[cpu_idx];
--
--	now_idle = get_cpu_idle_time(cpu, &now, 0);
--	delta_idle = now_idle - idle_time->time;
--	delta_time = now - idle_time->timestamp;
-+	unsigned long max = arch_scale_cpu_capacity(cpu);
-+	unsigned long util;
- 
--	if (delta_time <= delta_idle)
--		load = 0;
--	else
--		load = div64_u64(100 * (delta_time - delta_idle), delta_time);
--
--	idle_time->time = now_idle;
--	idle_time->timestamp = now;
--
--	return load;
-+	util = sched_cpu_util(cpu, ENERGY_UTIL, max);
-+	return (util * 100) / max;
- }
- 
- /**
-@@ -191,13 +164,12 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
-  * Instead, we calculate the current power on the assumption that the
-  * immediate future will look like the immediate past.
-  *
-- * We use the current frequency and the average load since this
-- * function was last called.  In reality, there could have been
-- * multiple opps since this function was last called and that affects
-- * the load calculation.  While it's not perfectly accurate, this
-- * simplification is good enough and works.  REVISIT this, as more
-- * complex code may be needed if experiments show that it's not
-- * accurate enough.
-+ * We use the current frequency and the current load.  In reality,
-+ * there could have been multiple opps since this function was last
-+ * called and that affects the load calculation.  While it's not
-+ * perfectly accurate, this simplification is good enough and works.
-+ * REVISIT this, as more complex code may be needed if experiments show
-+ * that it's not accurate enough.
-  *
-  * Return: 0 on success, -E* if getting the static power failed.
-  */
-@@ -223,7 +195,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
- 		u32 load;
- 
- 		if (cpu_online(cpu))
--			load = get_load(cpufreq_cdev, cpu, i);
-+			load = get_load(cpu);
- 		else
- 			load = 0;
- 
-@@ -517,13 +489,6 @@ __cpufreq_cooling_register(struct device_node *np,
- 
- 	cpufreq_cdev->policy = policy;
- 	num_cpus = cpumask_weight(policy->related_cpus);
--	cpufreq_cdev->idle_time = kcalloc(num_cpus,
--					 sizeof(*cpufreq_cdev->idle_time),
--					 GFP_KERNEL);
--	if (!cpufreq_cdev->idle_time) {
--		cdev = ERR_PTR(-ENOMEM);
--		goto free_cdev;
--	}
- 
- 	/* max_level is an index, not a counter */
- 	cpufreq_cdev->max_level = i - 1;
-@@ -531,7 +496,7 @@ __cpufreq_cooling_register(struct device_node *np,
- 	ret = ida_simple_get(&cpufreq_ida, 0, 0, GFP_KERNEL);
- 	if (ret < 0) {
- 		cdev = ERR_PTR(ret);
--		goto free_idle_time;
-+		goto free_cdev;
- 	}
- 	cpufreq_cdev->id = ret;
- 
-@@ -580,8 +545,6 @@ __cpufreq_cooling_register(struct device_node *np,
- 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
- remove_ida:
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
--free_idle_time:
--	kfree(cpufreq_cdev->idle_time);
- free_cdev:
- 	kfree(cpufreq_cdev);
- 	return cdev;
-@@ -674,7 +637,6 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 	thermal_cooling_device_unregister(cdev);
- 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
--	kfree(cpufreq_cdev->idle_time);
- 	kfree(cpufreq_cdev);
- }
- EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
+[Common sysfs attributes for devfreq class]
+And all devfreq governors have to support the following common attributes.
+The common attributes are added to devfreq class by default.
+- governor
+- available_governors
+- available_frequencies
+- cur_freq
+- target_freq
+- min_freq
+- max_freq
+- trans_stat
+
+[Definition for governor attribute flag]
+- DEVFREQ_GOV_ATTR_POLLING_INTERVAL to update polling interval for timer.
+  : /sys/class/devfreq/[devfreq dev name]/polling_interval
+- DEVFREQ_GOV_ATTR_TIMER to change the type of timer on either deferrable
+  or dealyed timer.
+  : /sys/class/devfreq/[devfreq dev name]/timer
+
+[Definition for governor feature flag]
+- DEVFREQ_GOV_FLAG_IMMUTABLE
+  : If immutable flag is set, governor is never changeable to other governors.
+- DEVFREQ_GOV_FLAG_IRQ_DRIVEN
+  : Devfreq core won't schedule polling work for this governor if value is set.
+
+[Table of governor attribute flags for evfreq governors]
+-----------------------------------------------------------------------------
+                      | simple    | perfor | power | user | passive | tegra30
+		      | ondemand  | mance  | save  | space|         |
+------------------------------------------------------------------------------
+governor              | O         | O      | O     | O    | O       | O
+available_governors   | O         | O      | O     | O    | O       | O
+available_frequencies | O         | O      | O     | O    | O       | O
+cur_freq              | O         | O      | O     | O    | O       | O
+target_freq           | O         | O      | O     | O    | O       | O
+min_freq              | O         | O      | O     | O    | O       | O
+max_freq              | O         | O      | O     | O    | O       | O
+trans_stat            | O         | O      | O     | O    | O       | O
+------------------------------------------------------------------------------
+polling_interval      | O         | X      | X     | X    | X       | O
+timer                 | O         | X      | X     | X    | X       | X
+------------------------------------------------------------------------------
+immutable             | X         | X      | X     | X    | O       | O
+interrupt_driven      | X(polling)| X      | X     | X    | X       | O (irq)
+------------------------------------------------------------------------------
+
+Changes from v4:
+- Rename from 'attr' to 'attrs'
+- Restore the variable name in governor_store because it is enought to explain
+the previous or new governor with detailed comments instead of variable name
+changes.
+
+Changes from v3:
+- Fix typo
+- Rename from 'flag' to 'flags'
+- Add more exception handling code and add comments on governor_store()
+
+Changes from v2:
+- Hide unsupported sysfs node to user-space instead of checking the permission
+of sysfs node.
+
+
+
+Chanwoo Choi (2):
+  PM / devfreq: Add governor feature flag
+  PM / devfreq: Add governor attribute flag for specifc sysfs nodes
+
+ Documentation/ABI/testing/sysfs-class-devfreq |  54 ++---
+ drivers/devfreq/devfreq.c                     | 185 ++++++++++++------
+ drivers/devfreq/governor.h                    |  30 ++-
+ drivers/devfreq/governor_passive.c            |   2 +-
+ drivers/devfreq/governor_simpleondemand.c     |   2 +
+ drivers/devfreq/tegra30-devfreq.c             |   5 +-
+ 6 files changed, 186 insertions(+), 92 deletions(-)
+
 -- 
-2.25.0.rc1.19.g042ed3e048af
+2.17.1
 
