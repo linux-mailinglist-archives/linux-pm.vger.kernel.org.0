@@ -2,139 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5246296611
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Oct 2020 22:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A09296924
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 06:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2901257AbgJVUjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Oct 2020 16:39:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27074 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S371724AbgJVUjb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Oct 2020 16:39:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603399170;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6Es6PtacViKqb4jQqg5gw1aMx5VJx45xwSoGJuNjLWg=;
-        b=Ior1q17y+hc6lmWPcJ1XGsLp6cjaaxLLTF8vFy7pgXjdtk2NcFKvsOvS8sTnkIolhU6IzB
-        cVFjaL6ZwVTBABOob3nTiU50XwTDgG0sJYl+Iufmcc4Ikxsap6HyQN7frjmQEoL4/UAGSi
-        iEOjELQ12OV3RWrtvqs2dFFUVeCpWuk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-569-ryZ9fepCPgylb0QODfouhA-1; Thu, 22 Oct 2020 16:39:27 -0400
-X-MC-Unique: ryZ9fepCPgylb0QODfouhA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A6FA1006CA9;
-        Thu, 22 Oct 2020 20:39:24 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (ovpn-113-70.phx2.redhat.com [10.3.113.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 24C9660BFA;
-        Thu, 22 Oct 2020 20:39:15 +0000 (UTC)
-Date:   Thu, 22 Oct 2020 16:39:13 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Ingo Molnar <mingo@redhat.com>,
-        kernel-janitors@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Gilles Muller <Gilles.Muller@inria.fr>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>
-Subject: Re: default cpufreq gov, was: [PATCH] sched/fair: check for idle core
-Message-ID: <20201022203913.GJ92942@lorien.usersys.redhat.com>
-References: <34115486.YmRjPRKJaA@kreacher>
- <20201022120213.GG2611@hirez.programming.kicks-ass.net>
- <1790766.jaFeG3T87Z@kreacher>
- <20201022122949.GW2628@hirez.programming.kicks-ass.net>
- <20201022145250.GK32041@suse.de>
- <6606e5f4-3f66-5844-da02-5b11e1464be6@canonical.com>
- <20201022151200.GC92942@lorien.usersys.redhat.com>
- <20201022163509.GM32041@suse.de>
- <CAJZ5v0he839sJNh0xjmvLqzuE7X27PgJKxtSV8giZh004E7pXw@mail.gmail.com>
- <20201022203255.GN32041@suse.de>
+        id S370404AbgJWEdt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 00:33:49 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:33656 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S370397AbgJWEdt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 00:33:49 -0400
+X-UUID: c36bf2c4ea2b47e18a74213bd0824673-20201023
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=5YtfPoYxtZBRSyiC2VkB5O7C49n+8i4TSqxu4hkRUGI=;
+        b=F8PBq/T06NrljqSOBDL8tVx3WwPGZAyqftd/B0gkcCTyelBzeQJxKg0cMMktF5lXImbV5T7jq+umyY0zdkNa2+sRNLMQ372yXQNjw+tyH119OSdGfPtBjlJY89s2YLmG9JiDV0pbALOI2qNcnhNBJBXZTfNxxhiu2lFHM896u2c=;
+X-UUID: c36bf2c4ea2b47e18a74213bd0824673-20201023
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <claude.yen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 646458932; Fri, 23 Oct 2020 12:28:29 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 23 Oct 2020 12:28:20 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 23 Oct 2020 12:28:20 +0800
+Message-ID: <1603427300.7573.6.camel@mtkswgap22>
+Subject: Re: [PATCH] PM / s2idle: Export s2idle_set_ops
+From:   claude yen <claude.yen@mediatek.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <wsd_upstream@mediatek.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 23 Oct 2020 12:28:20 +0800
+In-Reply-To: <20201022070154.hqvksoj4nss3er2e@bogus>
+References: <20201022061748.13730-1-claude.yen@mediatek.com>
+         <20201022061748.13730-2-claude.yen@mediatek.com>
+         <20201022070154.hqvksoj4nss3er2e@bogus>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201022203255.GN32041@suse.de>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-TM-SNTS-SMTP: 029A931861513CD54378A52D951671A7F8FC70A8B55464CB36672ECEF508EE072000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 09:32:55PM +0100 Mel Gorman wrote:
-> On Thu, Oct 22, 2020 at 07:59:43PM +0200, Rafael J. Wysocki wrote:
-> > > > Agreed. I'd like the option to switch back if we make the default change.
-> > > > It's on the table and I'd like to be able to go that way.
-> > > >
-> > >
-> > > Yep. It sounds chicken, but it's a useful safety net and a reasonable
-> > > way to deprecate a feature. It's also useful for bug creation -- User X
-> > > running whatever found that schedutil is worse than the old governor and
-> > > had to temporarily switch back. Repeat until complaining stops and then
-> > > tear out the old stuff.
-> > >
-> > > When/if there is a patch setting schedutil as the default, cc suitable
-> > > distro people (Giovanni and myself for openSUSE).
-> > 
-> > So for the record, Giovanni was on the CC list of the "cpufreq:
-> > intel_pstate: Use passive mode by default without HWP" patch that this
-> > discussion resulted from (and which kind of belongs to the above
-> > category).
-> > 
-> 
-> Oh I know, I did not mean to suggest that you did not. He made people
-> aware that this was going to be coming down the line and has been looking
-> into the "what if schedutil was the default" question.  AFAIK, it's still
-> a work-in-progress and I don't know all the specifics but he knows more
-> than I do on the topic. I only know enough that if we flipped the switch
-> tomorrow that we could be plagued with google searches suggesting it be
-> turned off again just like there is still broken advice out there about
-> disabling intel_pstate for usually the wrong reasons.
-> 
-> The passive patch was a clear flag that the intent is that schedutil will
-> be the default at some unknown point in the future. That point is now a
-> bit closer and this thread could have encouraged a premature change of
-> the default resulting in unfair finger pointing at one company's test
-> team. If at least two distos check it out and it still goes wrong, at
-> least there will be shared blame :/
-> 
-> > > Other distros assuming they're watching can nominate their own victim.
-> > 
-> > But no other victims had been nominated at that time.
-> 
-> We have one, possibly two if Phil agrees. That's better than zero or
-> unfairly placing the full responsibility on the Intel guys that have been
-> testing it out.
->
-
-Yes. I agree and we (RHEL) are planning to test this soon. I'll try to get
-to it.  You can certainly CC me, please, athough I also try to watch for this
-sort of thing on list. 
-
-
-Cheers,
-Phil
-
-> -- 
-> Mel Gorman
-> SUSE Labs
-> 
-
--- 
+T24gVGh1LCAyMDIwLTEwLTIyIGF0IDA4OjAyICswMTAwLCBTdWRlZXAgSG9sbGEgd3JvdGU6DQo+
+IE9uIFRodSwgT2N0IDIyLCAyMDIwIGF0IDAyOjE3OjQ4UE0gKzA4MDAsIENsYXVkZSBZZW4gd3Jv
+dGU6DQo+ID4gQXMgc3VzcGVuZF9zZXRfb3BzIGlzIGV4cG9ydGVkIGluIGNvbW1pdCBhNWU0ZmQ4
+NzgzYTINCj4gPiAoIlBNIC8gU3VzcGVuZDogRXhwb3J0IHN1c3BlbmRfc2V0X29wcywgc3VzcGVu
+ZF92YWxpZF9vbmx5X21lbSIpLA0KPiA+IGV4cG9ydGluZyBzMmlkbGVfc2V0X29wcyB0byBtYWtl
+IGtlcm5lbCBtb2R1bGUgc2V0dXAgczJpZGxlIG9wcyB0b28uDQo+ID4gDQo+ID4gSW4gdGhpcyB3
+YXksIGtlcm5lbCBtb2R1bGUgY2FuIGhvb2sgcGxhdGZvcm0gc3VzcGVuZA0KPiA+IGZ1bmN0aW9u
+cyByZWdhcmRsZXNzIG9mIFN1c3BlbmQtdG8tUmFtKFMyUikgb3INCj4gPiBTdXNwZW5kLXRvLUlk
+bGUoUzJJKQ0KPiA+DQo+IA0KPiBJZiB0aGlzIGlzIGZvciBhcm02NCBwbGF0Zm9ybSwgdGhlbiBO
+QUNLLiBZb3UgbXVzdCB1c2UgUFNDSSBhbmQgaXQgd2lsbA0KPiBzZXQgdGhlIG9wcyBhbmQgaXQg
+Y2FuJ3QgYmUgbW9kdWxlLg0KPiANCg0KUFNDSSB1c2VzIHN1c3BlbmRfc2V0X29wcyBpbnN0ZWFk
+LiBBbmQgc3VzcGVuZF9zZXRfb3BzIGhhcyBiZWVuDQpleHBvcnRlZCB5ZWFycyBhZ28uDQoNClN1
+c3BlbmQtdG9fSWRsZShTMkkpIGlzIGFub3RoZXIgc3VzcGVuZCBtZXRob2Qgc3VwcG9ydGVkIGJ5
+IGxpbnV4DQprZXJuZWwuIFRoZSBjb3JyZXNwb25kaW5nIHMyaWRsZV9vcHMgY2FuIGJlIGhvb2tl
+ZCBieSBzMmlkbGVfc2V0X29wcw0KYnkgdW5kZXJseWluZyBwbGF0Zm9ybXMuICBGb3IgZXhhbXBs
+ZSwgUzJJIGlzIG5vdyBpbnRyb2R1Y2VkIGludG8NCk1lZGlhdGVrIFNvQyBwbGF0Zm9ybXMuIEJl
+c2lkZXMsIHBvd2VyIG1hbmFnZW1lbnQgZHJpdmVyIGlzIGJ1aWx0IGFzDQprZXJuZWwgbW9kdWxl
+Lg0KDQpNb2JpbGUgcGxhdGZvcm1zIGFyZSBub3cgY2FsbCBmb3Iga2VybmVsIGRyaXZlcnMgdG8g
+YmUga2VybmVsIG1vZHVsZXMuDQpUaGlzIGNvdWxkIGhlbHAgZHJpdmVycyBlYXNpZXIgdG8gbWln
+cmF0ZSB0byBuZXdlciBsaW51eCBrZXJuZWwuDQpSZWY6IGh0dHBzOi8vbGludXhwbHVtYmVyc2Nv
+bmYub3JnL2V2ZW50LzcvY29udHJpYnV0aW9ucy83OTAvDQoNClJlZ2FyZHMsDQpDbGF1ZGUgDQo=
 
