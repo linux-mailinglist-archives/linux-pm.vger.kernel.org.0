@@ -2,36 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A5F296B2C
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 10:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE9F296B36
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 10:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S460544AbgJWIZN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Oct 2020 04:25:13 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:54300 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S460536AbgJWIZL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 04:25:11 -0400
-X-UUID: 3d526c3e86174cb295d6d5aed979d2f1-20201023
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UBtQH+OlTScmb/PO4fc+5+GucCo+qd6V6KQVG2XIAsg=;
-        b=REqEq5DQ71HR+x0jqq323w4bhNpSCgR/FnagOYs23UJ6OyYaEw5GzQRbfjPCTGVPGuNBG8qV1BT8Sj2E+SK9Nkk3z6NhfZyiXlAwSv6GtoFvMdDHbyrZ6lIBXZO/1Yp2pHJ6QvibHFBTKwC17sqZICzsE55mzTdzmaPa12vrz1Y=;
-X-UUID: 3d526c3e86174cb295d6d5aed979d2f1-20201023
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 695823342; Fri, 23 Oct 2020 16:25:01 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 23 Oct 2020 16:24:59 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 23 Oct 2020 16:24:59 +0800
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        id S460442AbgJWI2X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 04:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S375408AbgJWI2W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 04:28:22 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BF2C0613D2
+        for <linux-pm@vger.kernel.org>; Fri, 23 Oct 2020 01:28:20 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id 10so601113pfp.5
+        for <linux-pm@vger.kernel.org>; Fri, 23 Oct 2020 01:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=k3izNw2v4kNCe5ZYNTvutZlOv2UH0+nHDbicjBlj9uc=;
+        b=yHoBttqE8x2QU44UU+LHl0eobVXFlsWymmVm6pqR/fZHusFGBfUaYXrA7WGWL+MLPf
+         Dtn6AR4OggQNEJjozxBZPnrYiIw8OgcOJuxm+TmvgzTBw78eO7imUQa+L17yz3kAF7ft
+         mI98t1g1ACkbXM0ORjMdJI8v2/FmHd7hHUZnB/l52gEm5OFFCoVqgPI7P/3sKbq4Kn2Y
+         52f54SbVZJBz7/90/SQ8EoVDfQ0enXW9cz7cA1QhvfdO0hMd6NQZfOH0ohoJyzFRQl3r
+         G+N10wq0zSXYWvqSDLRMU/OP61sz19DOa04Jg3g35J/iRvtKcA1TUgB/YvJyNFzO1GSR
+         1KjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=k3izNw2v4kNCe5ZYNTvutZlOv2UH0+nHDbicjBlj9uc=;
+        b=NxtdIR8KnIGrXLyvpqo737ZnmuKbVOUm/Ph7r5WKbPH+AT/bhVvc8CiBgvrorjQXmX
+         Tca27+coxW1W/iH7+dUvymYlkTOsIR3QoVYBjoVlu59Vi2OaZpjTzVCF6zMwYyk/UjM5
+         /iG+faxVFbdXf40q1gSi69F45ca+gwwWa01enqGAajdf+Eoj3cVCvKkyevt7PSDwPaF3
+         cAuKx3s+Wu6ip/ElpGMytdF+i17o+3ybDsKu7Uey5ck8oaC69SsppSQXN/MUhssExvGG
+         fY+LiCjQQ/pvbiFw7WJUlpeB9WfKOopBfZtDnVLPGbEHIPKAR7e6Rl+d9isSv/NPtZyd
+         u0/A==
+X-Gm-Message-State: AOAM531McsvYrLzfZE9er24Pyo/+xBYUA/Y1fnP8tIYpbEGZufTM4FDy
+        Q9rcrSzF+/8fMKZdkY22k2QtzA==
+X-Google-Smtp-Source: ABdhPJwb3LtHbAXZ4Y7kg/mbb8L8VUhbg+LQwboJKeaKfya4Ves9OchlGmy9cpZTCjepfVo+4bxWRw==
+X-Received: by 2002:a17:90a:c28d:: with SMTP id f13mr1195647pjt.145.1603441700402;
+        Fri, 23 Oct 2020 01:28:20 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id l82sm1266118pfd.102.2020.10.23.01.28.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 23 Oct 2020 01:28:19 -0700 (PDT)
+Date:   Fri, 23 Oct 2020 13:58:17 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
         Maxime Ripard <mripard@kernel.org>,
         Santosh Shilimkar <ssantosh@kernel.org>,
         Amit Kucheria <amit.kucheria@linaro.org>,
@@ -41,38 +63,34 @@ To:     <linux-mediatek@lists.infradead.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        <devicetree@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
-        <hector.yuan@mediatek.com>
-Subject: [PATCH v1 6/6] cpufreq: mediatek-hw: Add cooling dev flag
-Date:   Fri, 23 Oct 2020 16:24:53 +0800
-Message-ID: <1603441493-18554-7-git-send-email-hector.yuan@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1603441493-18554-1-git-send-email-hector.yuan@mediatek.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsd_upstream@mediatek.com
+Subject: Re: [PATCH v1] cpufreq: mediatek-hw: Add support for Mediatek
+ cpufreq HW driver
+Message-ID: <20201023082817.5vp4cvi2lmpaozcn@vireshk-i7>
 References: <1603441493-18554-1-git-send-email-hector.yuan@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1603441493-18554-1-git-send-email-hector.yuan@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RnJvbTogIkhlY3Rvci5ZdWFuIiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0KDQpBZGQgY29v
-bGluZyBkZXZpY2UgZmxhZyBmb3IgdGhlcm1hbCB0aHJvdHRsZQ0KDQpTaWduZWQtb2ZmLWJ5OiBI
-ZWN0b3IuWXVhbiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy9jcHVm
-cmVxL21lZGlhdGVrLWNwdWZyZXEtaHcuYyB8ICAgIDMgKystDQogMSBmaWxlIGNoYW5nZWQsIDIg
-aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcHVm
-cmVxL21lZGlhdGVrLWNwdWZyZXEtaHcuYyBiL2RyaXZlcnMvY3B1ZnJlcS9tZWRpYXRlay1jcHVm
-cmVxLWh3LmMNCmluZGV4IDE1ZmJhMjAuLjY2NWYyMjBmIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9j
-cHVmcmVxL21lZGlhdGVrLWNwdWZyZXEtaHcuYw0KKysrIGIvZHJpdmVycy9jcHVmcmVxL21lZGlh
-dGVrLWNwdWZyZXEtaHcuYw0KQEAgLTE2NSw3ICsxNjUsOCBAQCBzdGF0aWMgaW50IG10a19jcHVm
-cmVxX2h3X2NwdV9leGl0KHN0cnVjdCBjcHVmcmVxX3BvbGljeSAqcG9saWN5KQ0KIA0KIHN0YXRp
-YyBzdHJ1Y3QgY3B1ZnJlcV9kcml2ZXIgY3B1ZnJlcV9tdGtfaHdfZHJpdmVyID0gew0KIAkuZmxh
-Z3MJCT0gQ1BVRlJFUV9TVElDS1kgfCBDUFVGUkVRX05FRURfSU5JVElBTF9GUkVRX0NIRUNLIHwN
-Ci0JCQkgIENQVUZSRVFfSEFWRV9HT1ZFUk5PUl9QRVJfUE9MSUNZLA0KKwkJCSAgQ1BVRlJFUV9I
-QVZFX0dPVkVSTk9SX1BFUl9QT0xJQ1kgfA0KKwkJCSAgQ1BVRlJFUV9JU19DT09MSU5HX0RFViwN
-CiAJLnZlcmlmeQkJPSBjcHVmcmVxX2dlbmVyaWNfZnJlcXVlbmN5X3RhYmxlX3ZlcmlmeSwNCiAJ
-LnRhcmdldF9pbmRleAk9IG10a19jcHVmcmVxX2h3X3RhcmdldF9pbmRleCwNCiAJLmdldAkJPSBt
-dGtfY3B1ZnJlcV9od19nZXQsDQotLSANCjEuNy45LjUNCg==
+On 23-10-20, 16:24, Hector Yuan wrote:
+> This patchset includes 6 patches and depends on the MT6779 DTS patch[1] submitted by Hanks Chen.
+> The first 3 patches are for CPUFREQ HW driver and device tree binding, which are already sent before separately [2][3]. For binding part, I add a new patch to add property in cpu schema.
+> Besides, we add three more patches including EM power table, SVS CPU initialize, and cooling device.
 
+And even after so many versions of these you chose to name this V1. It
+is very difficult for reviewers to find time to review your stuff, and
+they expect some sort of summary from you on what exactly changed from
+last version and you also need to name the current version currently.
+
+This should have been V8 and you should have added a "V7->V8 diff:"
+section here, naming all the changes you did. Please send that as
+reply to this email, so I can see what really changed.
+
+-- 
+viresh
