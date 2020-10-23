@@ -2,82 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6089E2971E9
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 17:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179E2297215
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 17:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S465529AbgJWPGy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 23 Oct 2020 11:06:54 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:50356 "EHLO
+        id S465671AbgJWPQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 11:16:00 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:46646 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S465544AbgJWPGy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 11:06:54 -0400
+        with ESMTP id S461811AbgJWPP7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 11:15:59 -0400
 Received: from 89-64-88-190.dynamic.chello.pl (89.64.88.190) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.491)
- id e7860b8843c45b1e; Fri, 23 Oct 2020 17:06:52 +0200
+ id a4d8527cdf27f5d6; Fri, 23 Oct 2020 17:15:57 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "chenxiang (M)" <chenxiang66@hisilicon.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Julia Lawall <julia.lawall@inria.fr>
+Cc:     Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        kernel-janitors@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Gilles Muller <Gilles.Muller@inria.fr>,
+        srinivas.pandruvada@linux.intel.com,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [PATCH 0/3] PM: runtime: Fixes related to device links management
-Date:   Fri, 23 Oct 2020 17:06:51 +0200
-Message-ID: <3725593.WVS78bcaU2@kreacher>
-In-Reply-To: <7ebacb82-dc0c-3938-660d-52810607ac00@hisilicon.com>
-References: <6543936.FbWAdBN1tG@kreacher> <7ebacb82-dc0c-3938-660d-52810607ac00@hisilicon.com>
+        Len Brown <len.brown@intel.com>
+Subject: [PATCH v2] cpufreq: Avoid configuring old governors as default with intel_pstate
+Date:   Fri, 23 Oct 2020 17:15:56 +0200
+Message-ID: <9382251.a2nkXps1mP@kreacher>
+In-Reply-To: <8312288.dAKoTdFk2S@kreacher>
+References: <1603211879-1064-1-git-send-email-Julia.Lawall@inria.fr> <20201022120213.GG2611@hirez.programming.kicks-ass.net> <8312288.dAKoTdFk2S@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, October 23, 2020 5:50:04 AM CEST chenxiang (M) wrote:
-> Hi Rafael,
-> 
-> 在 2020/10/22 3:10, Rafael J. Wysocki 写道:
-> > Hi Greg & all,
-> >
-> > Commit d12544fb2aa9 ("PM: runtime: Remove link state checks in
-> > rpm_get/put_supplier()") merged recently introduced a weakness
-> > in the handling of device links in the runtime PM framework that
-> > may be confusing and even harmful.
-> >
-> > Namely, the checks removed by that commit prevented PM-runtime from
-> > getting or dropping references to the supplier device whose driver
-> > was going away via its links to consumers, which specifically allowed
-> > the pm_runtime_clean_up_links() called from __device_release_driver()
-> > to run without interfering with runtime suspend/resume of consumer
-> > devices (which still might happen even though the drivers had been
-> > unbound from them by that time).
-> >
-> > After the above commit, calling pm_runtime_clean_up_links() from
-> > __device_release_driver() makes a little sense and it may be interfering
-> > destructively with regular PM-runtime suspend/resume control flows, so
-> > it needs to be either fixed or dropped altogether.  I prefer the latter,
-> > because among other things this removes an arbitrary difference in the
-> > handling of managed device links with respect to the stateless ones,
-> > so patch [2/3] is doing just that.
-> >
-> > However, in some rare cases pm_runtime_clean_up_links() may help to clean
-> > up leftover PM-runtime references, so if that function goes away, they
-> > need to be cleaned up elsewhere.  That's why patch [1/3] modifies
-> > __device_link_del() to drop them upon device link removal (which also
-> > needs to be done for stateless device links and that's why I'm regarding
-> > this patch as a fix).
-> >
-> > Finally, to avoid pointless overhead related to suspending and resuming
-> > the target device for multiple times in a row in __device_release_driver(),
-> > it is better to resume it upfront before checking its links to consumers,
-> > which is done by patch [3/3].
-> 
-> 
-> I have tested the patchset, and it solves my reported issue, so please 
-> feel free to add :
-> Tested-by: Xiang Chen <chenxiang66@hisilicon.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thank you!
+Commit 33aa46f252c7 ("cpufreq: intel_pstate: Use passive mode by
+default without HWP") was meant to cause intel_pstate to be used
+in the passive mode with the schedutil governor on top of it, but
+it missed the case in which either "ondemand" or "conservative"
+was selected as the default governor in the existing kernel config,
+in which case the previous old governor configuration would be used,
+causing the default legacy governor to be used on top of intel_pstate
+instead of schedutil.
+
+Address this by preventing "ondemand" and "conservative" from being
+configured as the default cpufreq governor in the case when schedutil
+is the default choice for the default governor setting.
+
+[Note that the default cpufreq governor can still be set via the
+ kernel command line if need be and that choice is not limited,
+ so if anyone really wants to use one of the legacy governors by
+ default, it can be achieved this way.]
+
+Fixes: 33aa46f252c7 ("cpufreq: intel_pstate: Use passive mode by default without HWP")
+Reported-by: Julia Lawall <julia.lawall@inria.fr>
+Cc: 5.8+ <stable@vger.kernel.org> # 5.8+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+The v2 addresses a review comment from Viresh regarding of the expression format
+and adds a missing Reported-by for Julia.
+
+---
+ drivers/cpufreq/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
+
+Index: linux-pm/drivers/cpufreq/Kconfig
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/Kconfig
++++ linux-pm/drivers/cpufreq/Kconfig
+@@ -71,6 +71,7 @@ config CPU_FREQ_DEFAULT_GOV_USERSPACE
+ 
+ config CPU_FREQ_DEFAULT_GOV_ONDEMAND
+ 	bool "ondemand"
++	depends on !(X86_INTEL_PSTATE && SMP)
+ 	select CPU_FREQ_GOV_ONDEMAND
+ 	select CPU_FREQ_GOV_PERFORMANCE
+ 	help
+@@ -83,6 +84,7 @@ config CPU_FREQ_DEFAULT_GOV_ONDEMAND
+ 
+ config CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
+ 	bool "conservative"
++	depends on !(X86_INTEL_PSTATE && SMP)
+ 	select CPU_FREQ_GOV_CONSERVATIVE
+ 	select CPU_FREQ_GOV_PERFORMANCE
+ 	help
 
 
 
