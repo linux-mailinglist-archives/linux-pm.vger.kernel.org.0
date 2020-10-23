@@ -2,118 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C37296D5E
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 13:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB515296D63
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 13:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S462750AbgJWLIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Oct 2020 07:08:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:49534 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S462703AbgJWLIp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Oct 2020 07:08:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D0B7113E;
-        Fri, 23 Oct 2020 04:08:44 -0700 (PDT)
-Received: from [10.57.14.27] (unknown [10.57.14.27])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A0F43F66B;
-        Fri, 23 Oct 2020 04:08:40 -0700 (PDT)
-Subject: Re: [PATCH V2 1/2] sched/core: Rename and move schedutil_cpu_util()
- to core.c
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        linux-pm@vger.kernel.org
-References: <cover.1603448113.git.viresh.kumar@linaro.org>
- <80c66f55ac7f04b3ecd4ebf12d69d86c89480fa7.1603448113.git.viresh.kumar@linaro.org>
- <20201023103407.GK2594@hirez.programming.kicks-ass.net>
- <20201023105452.aivb5o6dws76evc3@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <f3ab8761-4507-90e9-54f4-e6843863aa89@arm.com>
-Date:   Fri, 23 Oct 2020 12:08:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S462782AbgJWLNW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 07:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S462757AbgJWLNV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 07:13:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23D3C0613CE;
+        Fri, 23 Oct 2020 04:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L5+0ZOmshEWGRjYQbZQfyKQ/jkbENBN4GZDIbl9am3E=; b=Ie9QJ2wqfW+8LSUdxH/tSg8hAa
+        8C2mIC2GrZ8PI1MXKvN9BsfRilt8jYdEkGxyFOfAVDvy6Td3hQ9uBq6ez/h9E2ABxawDSJiOLHdJI
+        LsZGNhEw0cC/ka2DrAdzFFZOie+px6AWbWK1jzCBTuyNuGJIbDc7Ua0tb1SKyYrwGa4R7W5BG1jO8
+        lxiEoi4nFgMohtN2CS2nX2Xcq7PIeN+Dvq+4Kp4WllzbqLpZqVP7tQsfMfzuy3e8gjTCMhW6FI+3k
+        4bz8a/7pem0jnI9l+DNScgPNKZTBfOKlV0f3hYQ2enHlqjYNexs64ubBaoTEtoMg6kzVaSt0292L4
+        yhh0jICQ==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kVv09-0005sV-5b; Fri, 23 Oct 2020 11:12:53 +0000
+Date:   Fri, 23 Oct 2020 12:12:53 +0100
+From:   "hch@infradead.org" <hch@infradead.org>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     "hch@infradead.org" <hch@infradead.org>,
+        Mike Snitzer <snitzer@redhat.com>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "steve@sk2.org" <steve@sk2.org>,
+        "osandov@fb.com" <osandov@fb.com>,
+        Alasdair G Kergon <agk@redhat.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        Sergei Shtepa <sergei.shtepa@veeam.com>,
+        "koct9i@gmail.com" <koct9i@gmail.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [dm-devel] [PATCH 0/2] block layer filter and block device
+ snapshot module
+Message-ID: <20201023111253.GA22468@infradead.org>
+References: <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
+ <20201021141044.GF20749@veeam.com>
+ <ca8eaa40-b422-2272-1fd9-1d0a354c42bf@suse.de>
+ <20201022094402.GA21466@veeam.com>
+ <BL0PR04MB6514AC1B1FF313E6A14D122CE71D0@BL0PR04MB6514.namprd04.prod.outlook.com>
+ <20201022135213.GB21466@veeam.com>
+ <20201022151418.GR9832@magnolia>
+ <CAMM=eLfO_L-ZzcGmpPpHroznnSOq_KEWignFoM09h7Am9yE83g@mail.gmail.com>
+ <20201023091346.GA25115@infradead.org>
+ <d50062cd-929d-c8ff-5851-4e1d517dc4cb@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <20201023105452.aivb5o6dws76evc3@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d50062cd-929d-c8ff-5851-4e1d517dc4cb@suse.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 10/23/20 11:54 AM, Viresh Kumar wrote:
-> On 23-10-20, 12:34, Peter Zijlstra wrote:
->> On Fri, Oct 23, 2020 at 03:50:20PM +0530, Viresh Kumar wrote:
->>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>> index d2003a7d5ab5..369ff54d11d4 100644
->>> --- a/kernel/sched/core.c
->>> +++ b/kernel/sched/core.c
->>> @@ -5117,6 +5117,119 @@ struct task_struct *idle_task(int cpu)
->>>   	return cpu_rq(cpu)->idle;
->>>   }
->>>   
->>> +/*
->>> + * This function computes an effective utilization for the given CPU, to be
->>> + * used for frequency selection given the linear relation: f = u * f_max.
->>> + *
->>> + * The scheduler tracks the following metrics:
->>> + *
->>> + *   cpu_util_{cfs,rt,dl,irq}()
->>> + *   cpu_bw_dl()
->>> + *
->>> + * Where the cfs,rt and dl util numbers are tracked with the same metric and
->>> + * synchronized windows and are thus directly comparable.
->>> + *
->>> + * The cfs,rt,dl utilization are the running times measured with rq->clock_task
->>> + * which excludes things like IRQ and steal-time. These latter are then accrued
->>> + * in the irq utilization.
->>> + *
->>> + * The DL bandwidth number otoh is not a measured metric but a value computed
->>> + * based on the task model parameters and gives the minimal utilization
->>> + * required to meet deadlines.
->>> + */
->>> +unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
->>> +				 unsigned long max, enum cpu_util_type type,
->>> +				 struct task_struct *p)
->>> +{
->> 	...
->>> +}
->>> +
->>> +unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
->>> +			     unsigned long max)
->>> +{
->>> +	return effective_cpu_util(cpu, cpu_util_cfs(cpu_rq(cpu)), max, type,
->>> +				  NULL);
->>> +}
->>
->> Shouldn't all that be: #ifdef CONFIG_SMP ?
+On Fri, Oct 23, 2020 at 12:31:05PM +0200, Hannes Reinecke wrote:
+> My thoughts went more into the direction of hooking into ->submit_bio,
+> seeing that it's a NULL pointer for most (all?) block drivers.
 > 
-> I didn't realize that these matrices are only available in case of SMP
-> and that's why schedutil isn't available for !SMP. I wonder what we
-> should be doing in cpufreq_cooling now ? Make it depend on SMP ? Or
-> calculate load the traditional way (the stuff I just removed) for !SMP
-> case ?
+> But sure, I'll check how the interposer approach would turn out.
 
-IMO the !SMP can leave with the old design, so keeping two
-implementations under #ifdef CONFIG_SMP is fair I would say in this
-case.
-
-There are popular platforms !SMP (BeagleBone, RPi1, RPiZero) but I
-haven't heard anyone was using IPA on them.
-
-Regards,
-Lukasz
-
-> 
-> :)
-> 
+submit_bio is owned by the underlying device, and for a good reason
+stored in a const struct..
