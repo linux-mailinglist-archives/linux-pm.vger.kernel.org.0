@@ -2,96 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D66C296BCA
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 11:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B33296BE0
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Oct 2020 11:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S461136AbgJWJJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Oct 2020 05:09:09 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:60690 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S461115AbgJWJJJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 05:09:09 -0400
-X-UUID: a1011b1453ba4d83ae8b7df3dcf87bfb-20201023
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=3WEtnopcYNnyU+ht9FURWd9kEIt+fKwHVmbbqq2fROE=;
-        b=SNh8NghRDD4dZy3Pf5pYL3djNfNuXM5M04TxUc3z6YPZ2JRGTSKqD6iogAZutUIZQg0P6a9QbQdDRU9DbXBQb46RVL45qK1b3scDyZz1fnpQe3XNmDgEc06wim56yWzP8fvdFG5AhmNFLViBBirNuKBso/d7NPaXWIXEXWpEr4s=;
-X-UUID: a1011b1453ba4d83ae8b7df3dcf87bfb-20201023
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1431867585; Fri, 23 Oct 2020 17:09:02 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 23 Oct 2020 17:09:00 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 23 Oct 2020 17:09:00 +0800
-Message-ID: <1603444138.20224.19.camel@mtkswgap22>
-Subject: Re: [PATCH v1] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wsd_upstream@mediatek.com>
-Date:   Fri, 23 Oct 2020 17:08:58 +0800
-In-Reply-To: <20201023082817.5vp4cvi2lmpaozcn@vireshk-i7>
-References: <1603441493-18554-1-git-send-email-hector.yuan@mediatek.com>
-         <20201023082817.5vp4cvi2lmpaozcn@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S461220AbgJWJOM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Oct 2020 05:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S461183AbgJWJOL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Oct 2020 05:14:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C989C0613CE;
+        Fri, 23 Oct 2020 02:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Bc/Tl7QrHQ8TS00H9eZHX8HpJf7gnLju80W3+dBio3s=; b=lHd/Y1XEta78XOwzEbRgq/UpU2
+        A73VJLFqdMTxta2mKEIuA4xhXip9HWuId1knbAKvRkldwoW/HCUVhiDtojltIj8JcsLhWqCrMVJVu
+        TWggv/tZBG2rywCZT9hxTZ1KWViMWFeX+/1jN8Q4GJNcQl/5tO1GpHlomoV7+s5pg4/GoXkBAHxXl
+        N9bvOBR1/3BgkmHsIoiihX/L2LKkryJc3oI7y7muTeVt4v66HZE/jkji3cbb6myWrMgnKFX/EW0HI
+        3FYEGvf4D5QnGxvF83oZCyFuAF/SKnjGgp9x4wtd8xSoAh69Cgmt+1sg259JZHpXkc0NkMJbJafpJ
+        P8zwFb2Q==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kVt8s-0006xU-8j; Fri, 23 Oct 2020 09:13:46 +0000
+Date:   Fri, 23 Oct 2020 10:13:46 +0100
+From:   "hch@infradead.org" <hch@infradead.org>
+To:     Mike Snitzer <snitzer@redhat.com>
+Cc:     "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Sergei Shtepa <sergei.shtepa@veeam.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "koct9i@gmail.com" <koct9i@gmail.com>,
+        "steve@sk2.org" <steve@sk2.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        Alasdair G Kergon <agk@redhat.com>
+Subject: Re: [PATCH 0/2] block layer filter and block device snapshot module
+Message-ID: <20201023091346.GA25115@infradead.org>
+References: <1603271049-20681-1-git-send-email-sergei.shtepa@veeam.com>
+ <71926887-5707-04a5-78a2-ffa2ee32bd68@suse.de>
+ <20201021141044.GF20749@veeam.com>
+ <ca8eaa40-b422-2272-1fd9-1d0a354c42bf@suse.de>
+ <20201022094402.GA21466@veeam.com>
+ <BL0PR04MB6514AC1B1FF313E6A14D122CE71D0@BL0PR04MB6514.namprd04.prod.outlook.com>
+ <20201022135213.GB21466@veeam.com>
+ <20201022151418.GR9832@magnolia>
+ <CAMM=eLfO_L-ZzcGmpPpHroznnSOq_KEWignFoM09h7Am9yE83g@mail.gmail.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: BFAEE2C64C5F4F78B9D894AC69314D171E959363740E77E7C149C17B814AB9BB2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMM=eLfO_L-ZzcGmpPpHroznnSOq_KEWignFoM09h7Am9yE83g@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTEwLTIzIGF0IDEzOjU4ICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+
-IE9uIDIzLTEwLTIwLCAxNjoyNCwgSGVjdG9yIFl1YW4gd3JvdGU6DQo+ID4gVGhpcyBwYXRjaHNl
-dCBpbmNsdWRlcyA2IHBhdGNoZXMgYW5kIGRlcGVuZHMgb24gdGhlIE1UNjc3OSBEVFMgcGF0Y2hb
-MV0gc3VibWl0dGVkIGJ5IEhhbmtzIENoZW4uDQo+ID4gVGhlIGZpcnN0IDMgcGF0Y2hlcyBhcmUg
-Zm9yIENQVUZSRVEgSFcgZHJpdmVyIGFuZCBkZXZpY2UgdHJlZSBiaW5kaW5nLCB3aGljaCBhcmUg
-YWxyZWFkeSBzZW50IGJlZm9yZSBzZXBhcmF0ZWx5IFsyXVszXS4gRm9yIGJpbmRpbmcgcGFydCwg
-SSBhZGQgYSBuZXcgcGF0Y2ggdG8gYWRkIHByb3BlcnR5IGluIGNwdSBzY2hlbWEuDQo+ID4gQmVz
-aWRlcywgd2UgYWRkIHRocmVlIG1vcmUgcGF0Y2hlcyBpbmNsdWRpbmcgRU0gcG93ZXIgdGFibGUs
-IFNWUyBDUFUgaW5pdGlhbGl6ZSwgYW5kIGNvb2xpbmcgZGV2aWNlLg0KPiANCj4gQW5kIGV2ZW4g
-YWZ0ZXIgc28gbWFueSB2ZXJzaW9ucyBvZiB0aGVzZSB5b3UgY2hvc2UgdG8gbmFtZSB0aGlzIFYx
-LiBJdA0KPiBpcyB2ZXJ5IGRpZmZpY3VsdCBmb3IgcmV2aWV3ZXJzIHRvIGZpbmQgdGltZSB0byBy
-ZXZpZXcgeW91ciBzdHVmZiwgYW5kDQo+IHRoZXkgZXhwZWN0IHNvbWUgc29ydCBvZiBzdW1tYXJ5
-IGZyb20geW91IG9uIHdoYXQgZXhhY3RseSBjaGFuZ2VkIGZyb20NCj4gbGFzdCB2ZXJzaW9uIGFu
-ZCB5b3UgYWxzbyBuZWVkIHRvIG5hbWUgdGhlIGN1cnJlbnQgdmVyc2lvbiBjdXJyZW50bHkuDQo+
-IA0KPiBUaGlzIHNob3VsZCBoYXZlIGJlZW4gVjggYW5kIHlvdSBzaG91bGQgaGF2ZSBhZGRlZCBh
-ICJWNy0+VjggZGlmZjoiDQo+IHNlY3Rpb24gaGVyZSwgbmFtaW5nIGFsbCB0aGUgY2hhbmdlcyB5
-b3UgZGlkLiBQbGVhc2Ugc2VuZCB0aGF0IGFzDQo+IHJlcGx5IHRvIHRoaXMgZW1haWwsIHNvIEkg
-Y2FuIHNlZSB3aGF0IHJlYWxseSBjaGFuZ2VkLg0KPiANCkhpLCBWaXJlc2gNCg0KU29ycnkgZm9y
-IHlvdXIgaW5jb252ZW5pZW5jZS4NCiMxfiMzIGlzIGZvciBjcHVmcmVxIGRyaXZlciB3ZSBoYXZl
-IHJldmlld2VkIGFuZCB0aGUgYmluZGluZ3Mgd2hpY2gNCnNlcGFyYXRlIGZyZXEgZG9tYWluIHRv
-IENQVSBzY2hlbWEuVGhlcmUgaXMgbm8gY2hhbmdlIGZvciB0aGUgZHJpdmVyDQppdHNlbGYuDQog
-IDEuIGNwdWZyZXE6IG1lZGlhdGVrLWh3OiBBZGQgc3VwcG9ydCBmb3IgQ1BVRlJFUSBIVw0KICAy
-LiBkdC1iaW5kaW5nczogYXJtOiBjcHVzOiBEb2N1bWVudCAnbXRrLGZyZXEtZG9tYWluJyBwcm9w
-ZXJ0eQ0KICAzLiBkdC1iaW5kaW5nczogY3B1ZnJlcTogYWRkIGJpbmRpbmdzIGZvciBNZWRpYVRl
-ayBjcHVmcmVxIEhXDQoNCiM0fiM2IGlzIGZvciBvdGhlciBDUFUgZmVhdHVyZXMsIGkuZS4gU1ZT
-IFsxXQ0KICA0LiBjcHVmcmVxOiBtZWRpYXRlay1odzogcmVnaXN0ZXIgRU0gcG93ZXIgdGFibGUN
-CiAgNS4gY3B1ZnJlcTogbWVkaWF0ZWstaHc6IEFkZCBTVlMgQ1BVIGluaXRpYWxpemF0aW9uDQog
-IDYuIGNwdWZyZXE6IG1lZGlhdGVrLWh3OiBBZGQgY29vbGluZyBkZXYgZmxhZw0KDQpJIHN1cHBv
-c2VkIHRoYXQgaXQgY291bGQgYmUgbW9yZSBjbGVhbiB0byBzZXBhcmF0ZSAjNH4jNiBpbiBhbm90
-aGVyDQpwYXRjaHNldC5NYXkgSSBrbm93IGlzIGl0IG9rYXkgdG8geW91PyBPciBJIHNob3VsZCBt
-ZXJnZSBhbGwgb2YgY2hhbmdlcw0KaW50byB2OCBsaWtlIHlvdSBtZW50aW9uZWQ/IFRoYW5rIHlv
-dS4NCg0KWzFdDQpodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3QvbGludXgtbWVk
-aWF0ZWsvcGF0Y2gvMjAxOTA5MDYxMDA1MTQuMzA4MDMtNC1yb2dlci5sdSU0MG1lZGlhdGVrLmNv
-bS8NCg==
+On Thu, Oct 22, 2020 at 01:54:16PM -0400, Mike Snitzer wrote:
+> On Thu, Oct 22, 2020 at 11:14 AM Darrick J. Wong
+> > Stupid question: Why don't you change the block layer to make it
+> > possible to insert device mapper devices after the blockdev has been set
+> > up?
+> 
+> Not a stupid question.  Definitely something that us DM developers
+> have wanted to do for a while.  Devil is in the details but it is the
+> right way forward.
+> 
 
+Yes, I think that is the right thing to do.  And I don't think it should
+be all that hard.  All we'd need in the I/O path is something like the
+pseudo-patch below, which will allow the interposer driver to resubmit
+bios using submit_bio_noacct as long as the driver sets BIO_INTERPOSED.
+
+diff --git a/block/blk-core.c b/block/blk-core.c
+index ac00d2fa4eb48d..3f6f1eb565e0a8 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -1051,6 +1051,9 @@ blk_qc_t submit_bio_noacct(struct bio *bio)
+ 		return BLK_QC_T_NONE;
+ 	}
+ 
++	if (blk_has_interposer(bio->bi_disk) &&
++	    !(bio->bi_flags & BIO_INTERPOSED))
++		return __submit_bio_interposed(bio);
+ 	if (!bio->bi_disk->fops->submit_bio)
+ 		return __submit_bio_noacct_mq(bio);
+ 	return __submit_bio_noacct(bio);
