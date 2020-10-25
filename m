@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC922983DE
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 020F029846D
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1419198AbgJYWRz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1419194AbgJYWRz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Sun, 25 Oct 2020 18:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1419143AbgJYWRw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:17:52 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80075C061755;
-        Sun, 25 Oct 2020 15:17:51 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id i2so7711615ljg.4;
-        Sun, 25 Oct 2020 15:17:51 -0700 (PDT)
+        with ESMTP id S1419189AbgJYWRx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:17:53 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E99C0613CE;
+        Sun, 25 Oct 2020 15:17:52 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id l28so9411383lfp.10;
+        Sun, 25 Oct 2020 15:17:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=S8WUsWu+WDkJcn4CeG8tWfLig6GMVsRbCZOtSjwc5GA=;
-        b=uOiJ83Ab/HUSvRlO5J2M7nAN56/Fkm/YLCjuQB4FNn+rI+eMKxxQgtnWzeuzRAq5tA
-         rCTGY4mOJNfJXFlA+6mOUNR8kMdxGsMO5HywGojjtkkVjnsJyLBd/2n/nu/IG3iEqJd8
-         VISEJp5k89hHlTwknTwfEIyAMDJdI6J0vKMj0rjdpnaAkYVIyzsWmbsPQuKoniJ4ZHY/
-         ybS1wcn+Ij2OFA5opFnvWFb5Gitg7bjREx50SnbwWo4/mfn6M7byfKlAec3fw7bRftO8
-         3X6HdhQQDxu/NM4r8lzUNr86Q/usHhVhhQ8sUaN9eKUDuiyTW3KQaBER6yrr8zGdyqvG
-         S6Qg==
+        bh=XxBDmQPM1u3TxsC8gvQqVBRZUJtQqbbcwOXSeprhG3U=;
+        b=pMuTcykNw3g9kYCpJ7OFz9qPr2VLTMUmlxgpJ1q6B+Ai4QzKza1brA2TxVsV3t3ywn
+         pFOq5EcA6p+7ktWe1yLarZtj1dGRBOs8oDIb3eVD2CSYzbNW9L+wTMHRsdSsyLegSssp
+         K9p79pyZq/dqu4DyqjRrAxb5jVL0tgxfyLk7e+WYTd0dSDoTsRwUh2oTZ3eGf0LYo/Em
+         6GrUQGdIRxCi/ttEGpZ64bJY7pyoH8fMMdAe5yjsQu2o3QFuOG/KPBELiXgArLxCvTDY
+         srhAzu5vxqZVzmfYRiZVnoQ7x14Oh4r7rPKsm34Oopf+J5G1qHuNvvopB77xWfcr3vzs
+         Vcuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=S8WUsWu+WDkJcn4CeG8tWfLig6GMVsRbCZOtSjwc5GA=;
-        b=M7rH4R9oQ+pyROuohmjrKzTYVPIcgB4JwxspUVQSISAadJShV+5m1sny01YaGmZ2cO
-         ZqtITob/LcQHcRGAvn3KLgBLcQU63zJDqGu8hsnRTyHc6nHjuqgaUnxbZg0pYOlbMO9U
-         2W5IwX6XTQkG5VgzPnDPWukBhQDRWbPpA5T3Wt8CRoAlmyBty7dRp2XehlMwhb555dHe
-         bzAz9uR9AF+TM+zHqqiChPyE+bhUFgyjCfL/j1t1bISuIaXfeor49yH38MSl2JNu/T0y
-         W78najQy7r/DNrtHsPjYjXGYQ0YNeujPBpSyWFK9nx2zMfOrfPc2zsiDOOH5HQVElzLh
-         jKdw==
-X-Gm-Message-State: AOAM530Lav3HHZ6kFJhXbLfoKl2EY8lQMsiHK70wUTZLym5K8+lfI2eP
-        xpxRXOns93rqOAnSSFBdjTU=
-X-Google-Smtp-Source: ABdhPJwHKIyuwDeTFmyp2q3zTLbU7HZciLx18JOBVb3ayyd5qKamxiFgAe+YEQNLOvbrCHzupiN4jA==
-X-Received: by 2002:a05:651c:1307:: with SMTP id u7mr4495342lja.39.1603664270018;
-        Sun, 25 Oct 2020 15:17:50 -0700 (PDT)
+        bh=XxBDmQPM1u3TxsC8gvQqVBRZUJtQqbbcwOXSeprhG3U=;
+        b=VEfig5Qr1m0yKHvNr3cU1RFsuibopyIEe7LJKvDgtyJVHIFOv3lfMHgyAVPOSE1ukj
+         vP8iVEXjhHWrHFD/eMaLukR3JKAQOWbtBI57xMsXixGJk7ag639Hal6lEd3R7b4IXFC/
+         9wLKN4X2BaEIjA0k6DdbJnfi8nQ2z0QMB48IDEP+uiSyCp1/ORKEEcIvbh9iA0DsUc+M
+         bao/O04l21inuTYSoB57AYjlex44UK4IIypJTUE9iR37q2FO6Fm8j6Av+Cc2840Zpa3Q
+         sNB5gr4u6sp3zfyYMhCEjqGum/8JhSgfn27XQBZ6gMNLjSu97II8nhb6eFM7A6XXGPC9
+         ukxQ==
+X-Gm-Message-State: AOAM530cmBsNsug/7snUez4myIuJuQVE6mHBTa4rc4C85KKhRbiraIcI
+        K1W+aclPJp2C5mxM/zLezzk=
+X-Google-Smtp-Source: ABdhPJzneogPL95UN/cBtkWY5gKTrzlU3UHPgIt2MzqCBff5HU8piBWYDzFE7VGhxY92HYijisvZNQ==
+X-Received: by 2002:a05:6512:3455:: with SMTP id j21mr4440799lfr.135.1603664271160;
+        Sun, 25 Oct 2020 15:17:51 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
-        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.17.48
+        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.17.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2020 15:17:49 -0700 (PDT)
+        Sun, 25 Oct 2020 15:17:50 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v6 01/52] clk: tegra: Export Tegra20 EMC kernel symbols
-Date:   Mon, 26 Oct 2020 01:16:44 +0300
-Message-Id: <20201025221735.3062-2-digetx@gmail.com>
+Subject: [PATCH v6 02/52] soc/tegra: fuse: Export tegra_read_ram_code()
+Date:   Mon, 26 Oct 2020 01:16:45 +0300
+Message-Id: <20201025221735.3062-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201025221735.3062-1-digetx@gmail.com>
 References: <20201025221735.3062-1-digetx@gmail.com>
@@ -78,39 +78,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We're going to modularize Tegra EMC drivers and some of the EMC clk driver
-symbols need to be exported, let's export them.
+The tegra_read_ram_code() is used by EMC drivers and we're going to make
+these driver modular, hence this function needs to be exported.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/clk/tegra/clk-tegra20-emc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/soc/tegra/fuse/tegra-apbmisc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/tegra/clk-tegra20-emc.c b/drivers/clk/tegra/clk-tegra20-emc.c
-index 03bf0009a33c..dd74b8543bf1 100644
---- a/drivers/clk/tegra/clk-tegra20-emc.c
-+++ b/drivers/clk/tegra/clk-tegra20-emc.c
-@@ -13,6 +13,7 @@
- #include <linux/clk-provider.h>
- #include <linux/clk/tegra.h>
- #include <linux/err.h>
+diff --git a/drivers/soc/tegra/fuse/tegra-apbmisc.c b/drivers/soc/tegra/fuse/tegra-apbmisc.c
+index cee207d10024..590c862538d0 100644
+--- a/drivers/soc/tegra/fuse/tegra-apbmisc.c
++++ b/drivers/soc/tegra/fuse/tegra-apbmisc.c
+@@ -3,6 +3,7 @@
+  * Copyright (c) 2014, NVIDIA CORPORATION.  All rights reserved.
+  */
+ 
 +#include <linux/export.h>
- #include <linux/io.h>
  #include <linux/kernel.h>
- #include <linux/slab.h>
-@@ -235,6 +236,7 @@ void tegra20_clk_set_emc_round_callback(tegra20_clk_emc_round_cb *round_cb,
- 		emc->cb_arg = cb_arg;
- 	}
- }
-+EXPORT_SYMBOL_GPL(tegra20_clk_set_emc_round_callback);
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+@@ -90,6 +91,7 @@ u32 tegra_read_ram_code(void)
  
- bool tegra20_clk_emc_driver_available(struct clk_hw *emc_hw)
- {
-@@ -291,3 +293,4 @@ int tegra20_clk_prepare_emc_mc_same_freq(struct clk *emc_clk, bool same)
- 
- 	return 0;
+ 	return straps >> PMC_STRAPPING_OPT_A_RAM_CODE_SHIFT;
  }
-+EXPORT_SYMBOL_GPL(tegra20_clk_prepare_emc_mc_same_freq);
++EXPORT_SYMBOL_GPL(tegra_read_ram_code);
+ 
+ static const struct of_device_id apbmisc_match[] __initconst = {
+ 	{ .compatible = "nvidia,tegra20-apbmisc", },
 -- 
 2.27.0
 
