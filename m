@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 653DC2983E6
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 380AC2984A3
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1419233AbgJYWSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Oct 2020 18:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
+        id S1418881AbgJYWWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Oct 2020 18:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1419223AbgJYWSA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:18:00 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF47C061755;
-        Sun, 25 Oct 2020 15:17:59 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id y16so7733259ljk.1;
-        Sun, 25 Oct 2020 15:17:59 -0700 (PDT)
+        with ESMTP id S1419228AbgJYWSC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:18:02 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A097C0613CE;
+        Sun, 25 Oct 2020 15:18:00 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id 134so6685589ljj.3;
+        Sun, 25 Oct 2020 15:18:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0740cGeDLzxAAo2TlTDiFrIsS1dz3vXBgXp/Zr3nT0c=;
-        b=ttfvcCvbOafUKmL4941gOnJUcNMZQnIWFg3j0/UPwjrDMICvY7cEhW95qBrNz8UGpu
-         +7S51ZsnZuiiS2MJobt6Gidz/RSA2Xw4xYuH9oM3Q2Jy6N7/n2E2An9iYblptzyLDHHM
-         ME/EIOlOUgL7PCU7x3KSWu/5zl1pA5jBEVwtgIEaV7vx55u6rxNwC2SLFA+6UUxEPFM7
-         e0ilSLR9ZYsXyOJT2J12p/uRnT5+Z5og4pJ55/CRKcvrGoqCldL9Y+zd3gQYYA1BTcRq
-         ezgAwFmkocimIX/DZC9HT/DcgBpt9PDn0it2Aux+kBf1UTRX770yjJ+HZ5RsIV/YmoRq
-         Pg1g==
+        bh=13zJHfR9di8Ydxi+LOybO5H+JCALzXt2g6wK8WiSzjg=;
+        b=pi1Sw4iTWdKb3u7G44iN1Cn4RgCnmCKT4Cn7nwd/pzgIhehiAyjKgeZwn8hOqMufC8
+         CcxG1AvW1OXc8hMCB/mf069RbwynyIxk3cOnZ75TphnMCqGtMzFr/NNpChu5WHdesqom
+         VhoC1QhuKhGgPdVxdSGEc8pSq3os1bBpgOhCmkiL88VH4/TZEDZEkRAzyvN863grCoSk
+         jpDODAyRwNcgM374p9+B1XSbDcwgCy42J3AAwmxe1CIz0M+WiTIxWrLkH8+CodCNeY5r
+         MH2CAsIMLGx9S+gGicsKZFzrbhyoK4ZNA1rqvRGkz2tIIeOahH6TZNfUeyLasZtTUJ5e
+         sO/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0740cGeDLzxAAo2TlTDiFrIsS1dz3vXBgXp/Zr3nT0c=;
-        b=YFFiLemzTQkWy/UydNgiWWPl+M1QA40D2+xRRIfKO0A4yIyLVWmf5q7JPcUlP9luSH
-         /YnHSeWioyzlm8tru5riBIAvaK1HJ1EgEzPPz+Kz4/G23pYKOw7wd45xiS2wVaZ0I2ft
-         kZmBRC7ZsSxD8ds25vT0oCS4cTIZg4HNonptFSjsl9YiZFz1Jqf1+IbNisVpzcY6Sb99
-         r7fOJzvhYL6a9IyCqXNcgn74tRVWT6FQfP/uGqg2A0GRnQZxYfWBt+3sWEa1IYteO1Yn
-         tqBIAV2PQxU4++iwm2sWcMT3GPabJDr4+NYEsH4/EDnmF07OhFC35cx2QAMPnt0BlGL5
-         /v1w==
-X-Gm-Message-State: AOAM53200/mCC+OTJayRcl0FFRAMZ4/S7MCSO2QZcmlmHFdWbPHLt3bx
-        8+fV0+qH2VkuQ291Ueszfg0=
-X-Google-Smtp-Source: ABdhPJxloaTwFeklwsY/+5Ju68thV+F7bYpTG2xFtB2QPPixyhirfXN8cys+UbWW0w4n6gI9Gs5AlQ==
-X-Received: by 2002:a2e:9450:: with SMTP id o16mr198285ljh.296.1603664277969;
-        Sun, 25 Oct 2020 15:17:57 -0700 (PDT)
+        bh=13zJHfR9di8Ydxi+LOybO5H+JCALzXt2g6wK8WiSzjg=;
+        b=LM3B79STDmj4aTbizZIiTQQbqbF1igLmpYRdkYbEOtDkn5faUeyay3ICVpYzgprsvm
+         jp5OwH/ulehLFZbd9Ifd8fEl8YUzlwsboR8zIxxtnAy33T0VWt8FUgs68xJJRHOHFeNj
+         LsavvWqQe5tGTQlPIVDG2+CcOfWOz1xzxvaspu/AhzknPJDRWxdh/PqK6+1XLc+RGs15
+         8kygk9Z+UXiM7gKN2Sa6eBgymQWnVkyty8s3rJyL03KsPdrFEk3PmassPcU/i/65MTMO
+         mes9z+TcV2ApuKEVplsSx4PEKJw7aBQ6w0qpvZdCnntvPj6BS2lbme7PJV37NVkJ3wQh
+         mkDQ==
+X-Gm-Message-State: AOAM530X1LDKCf2Bu0pDGiB4Xobw1bvgdzgS0sAMaJj8GgQZwQoCwqpN
+        aML7j4fGzWdPAT6K3uejl7/FnSFS9DI=
+X-Google-Smtp-Source: ABdhPJwBZUmmqpaGlJ6JyqCamZD1xU0AZutTv50uc7sLPs/Uo7oOfST7uP7der6j6DDav/QMe22Plg==
+X-Received: by 2002:a2e:8956:: with SMTP id b22mr4864460ljk.428.1603664279071;
+        Sun, 25 Oct 2020 15:17:59 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
-        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.17.56
+        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.17.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2020 15:17:57 -0700 (PDT)
+        Sun, 25 Oct 2020 15:17:58 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v6 08/52] dt-bindings: memory: tegra20: emc: Document mfd-simple compatible and statistics sub-device
-Date:   Mon, 26 Oct 2020 01:16:51 +0300
-Message-Id: <20201025221735.3062-9-digetx@gmail.com>
+Subject: [PATCH v6 09/52] dt-bindings: memory: tegra30: mc: Document new interconnect property
+Date:   Mon, 26 Oct 2020 01:16:52 +0300
+Message-Id: <20201025221735.3062-10-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201025221735.3062-1-digetx@gmail.com>
 References: <20201025221735.3062-1-digetx@gmail.com>
@@ -78,102 +78,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-External Memory Controller can gather various hardware statistics that
-are intended to be used for debugging purposes and for dynamic frequency
-scaling of memory bus.
+Memory controller is interconnected with memory clients and with the
+External Memory Controller. Document new interconnect property which
+turns memory controller into interconnect provider.
 
-Document the new mfd-simple compatible and EMC statistics sub-device.
-The subdev contains EMC DFS OPP table and interconnect paths to be used
-for dynamic scaling of system's memory bandwidth based on EMC utilization
-statistics.
-
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../memory-controllers/nvidia,tegra20-emc.txt | 43 +++++++++++++++++--
- 1 file changed, 40 insertions(+), 3 deletions(-)
+ .../bindings/memory-controllers/nvidia,tegra30-mc.yaml       | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-index 8d09b228ac42..382aabcd6952 100644
---- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-+++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-@@ -4,7 +4,7 @@ Properties:
- - name : Should be emc
- - #address-cells : Should be 1
- - #size-cells : Should be 0
--- compatible : Should contain "nvidia,tegra20-emc".
-+- compatible : Should contain "nvidia,tegra20-emc" and "simple-mfd".
- - reg : Offset and length of the register set for the device
- - nvidia,use-ram-code : If present, the sub-nodes will be addressed
-   and chosen using the ramcode board selector. If omitted, only one
-@@ -17,7 +17,8 @@ Properties:
- - core-supply: Phandle of voltage regulator of the SoC "core" power domain.
- - operating-points-v2: See ../bindings/opp/opp.txt for details.
+diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml
+index 84fd57bcf0dc..5436e6d420bc 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml
+@@ -57,6 +57,9 @@ properties:
+   "#iommu-cells":
+     const: 1
  
--Child device nodes describe the memory settings for different configurations and clock rates.
-+Child device nodes describe the memory settings for different configurations and clock rates,
-+as well as EMC activity statistics collection sub-device.
++  "#interconnect-cells":
++    const: 1
++
+ patternProperties:
+   "^emc-timings-[0-9]+$":
+     type: object
+@@ -120,6 +123,7 @@ required:
+   - clock-names
+   - "#reset-cells"
+   - "#iommu-cells"
++  - "#interconnect-cells"
  
- Example:
+ additionalProperties: false
  
-@@ -31,17 +32,34 @@ Example:
- 		...
- 	};
+@@ -135,6 +139,7 @@ examples:
  
-+	emc_bw_dfs_opp_table: emc_opp_table1 {
-+		compatible = "operating-points-v2";
-+
-+		opp@36000000 {
-+			opp-hz = /bits/ 64 <36000000>;
-+			opp-peak-kBps = <144000>;
-+		};
-+		...
-+	};
-+
- 	memory-controller@7000f400 {
- 		#address-cells = < 1 >;
- 		#size-cells = < 0 >;
- 		#interconnect-cells = < 0 >;
--		compatible = "nvidia,tegra20-emc";
-+		compatible = "nvidia,tegra20-emc", "simple-mfd";
- 		reg = <0x7000f400 0x400>;
- 		interrupts = <0 78 0x04>;
- 		clocks = <&tegra_car TEGRA20_CLK_EMC>;
- 		nvidia,memory-controller = <&mc>;
- 		core-supply = <&core_vdd_reg>;
- 		operating-points-v2 = <&emc_icc_dvfs_opp_table>;
-+
-+		emc-stats {
-+			compatible = "nvidia,tegra20-emc-statistics";
-+			operating-points-v2 = <&emc_bw_dfs_opp_table>;
-+			interconnects = <&mc TEGRA20_MC_MPCORER &emc>;
-+			interconnect-names = "cpu";
-+		};
- 	}
+         #iommu-cells = <1>;
+         #reset-cells = <1>;
++        #interconnect-cells = <1>;
  
- 
-@@ -120,3 +138,22 @@ Properties:
- 						 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- 						 0 0 0 0 >;
- 		};
-+
-+
-+
-+Embedded Memory Controller statistics gathering sub-device
-+
-+EMC statistics subdev gathers information about hardware utilization
-+which is intended to be used for debugging purposes and for dynamic
-+frequency scaling based on the collected stats.
-+
-+Properties:
-+- name : Should be emc-stats.
-+- compatible : Should contain "nvidia,tegra20-emc-statistics".
-+- operating-points-v2: See ../bindings/opp/opp.txt for details.
-+- interconnects: Should contain entries for memory clients sitting on
-+                 MC->EMC memory interconnect path.
-+- interconnect-names: Should include name of the interconnect path for each
-+                      interconnect entry. Consult TRM documentation for
-+                      information about available memory clients, see MEMORY
-+                      CONTROLLER section.
+         emc-timings-1 {
+             nvidia,ram-code = <1>;
 -- 
 2.27.0
 
