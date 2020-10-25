@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37B229843B
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A272983F8
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1419637AbgJYWUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Oct 2020 18:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S1419330AbgJYWSb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Oct 2020 18:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1419322AbgJYWS2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:18:28 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC59C061755;
-        Sun, 25 Oct 2020 15:18:27 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id l28so9412360lfp.10;
-        Sun, 25 Oct 2020 15:18:27 -0700 (PDT)
+        with ESMTP id S1419326AbgJYWS3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:18:29 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7BFC061755;
+        Sun, 25 Oct 2020 15:18:28 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id b1so9400734lfp.11;
+        Sun, 25 Oct 2020 15:18:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=X/quYQuLiS9Hb/X2/ZpOD2OYlalLEdAaOFzDl7YFvnY=;
-        b=tSnTLcTshFavkM04kXkNFDVHYKJtnpeKpa7tkn15Z1udSp/kaBFvx0bsMkEjTZeBuc
-         fFWsKPNJK9tI6FXrpNELsRBreg4IZ8u9jIE15kbDd8s3ntZmdrspoDs8r3cdR3LJNLYW
-         JPU9N8ej3/IwL+4faHYhKe3IcmEsxeNV9UJznzLphC7mYSq3l0SFzKzxWKSmwE7CM5gG
-         xCQha4fClGhabyikadLmJ4fn1F7kY5MJCfS3z8fBhD2V1CsLKW/n02UNESLIB8QueKCn
-         FkNWbOJ+19xqRRgLrqBNby9PMdBmtyf9pRjIBnVmR8i9Bu8fPyQphjIw+7YCoqv6YiYB
-         A+FA==
+        bh=Fg4He703fmuSrlVAk0wJsvaFKAB74pGCCwxOoopIZEI=;
+        b=VHEUlUYQ3XWj/2jC60Lr+VJjNgxo+pNKDO0JPR3z+WLZtsgVdYcM5RybqQaEoh988G
+         /qTG5bBtU4uflVAnLbI6pcVQIS6t+0SjL0hJklMEz7xvVJyoJ9i4rbGxP9b6qX+NZOgH
+         8a4VBert2XPVYEjKOv4z1y5Y54h4BwZ5OTT00RkVRKnkZgYqFocpof5zWvYhs+3ERofF
+         jfOs7gvKJXoCCeiyGpvq2SxSo7sydDyevCF0CMo8wLAOa1jl7aJGX8AjqdaL/SA5vzk2
+         InDFnV1NHEdEuoH9NnZDIl3UYfS/YSn59Bpzj3KMKBAlYP+7Pqr9Q6yIGC2btjhlRCPe
+         JRkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X/quYQuLiS9Hb/X2/ZpOD2OYlalLEdAaOFzDl7YFvnY=;
-        b=I56tBUo2FEe7VDoi9a+KB+a0tHGwVLvnwgAtH5Zw9gcxrZyo4/5DwoESEFAYDLOPZ0
-         jIW5j66nvSe0sJs7upQ15RaQgZTj/KDSuqJX4Xwn+Cnr+c615EafkRwRyyE47Scwl93h
-         W1znh9DI6pQvVJHfV7Mz7wV3ndFz32K1Qz63RwPhsfxqTLrZyRag4va5EEQqXJe4efxp
-         gA2ty3wZ/3CUOGyzgAEKZcxkl7mSQYJ2Xfql5k045hdTdpajBIl1Qm5cSYikEM/xHusO
-         KQaG/iBf/xFH47+1JBME/KLdYdOgYbyLQ2h3UEzNoXqLFCLVLfw5M4xRm3CPnBReIIuj
-         /qKw==
-X-Gm-Message-State: AOAM533SsILzXviybBK3rfUeAB6SWB1mHAjCLp6AH9idVgq74BjlfOyM
-        01wJNIneGxu6aFP7zrAH12k=
-X-Google-Smtp-Source: ABdhPJx+i71TknzNwqoL99JxK+aNLt6kLSn/1+n9rduIIE1PlkhrSAzFB9aPyTMT2ZrXb9bfGburbg==
-X-Received: by 2002:a05:6512:3248:: with SMTP id c8mr3925961lfr.156.1603664306087;
-        Sun, 25 Oct 2020 15:18:26 -0700 (PDT)
+        bh=Fg4He703fmuSrlVAk0wJsvaFKAB74pGCCwxOoopIZEI=;
+        b=dN2gzB47usMnbNDREJelhzDe/QmjQFWBM2WFC9LEcKXlJBaSMPuGz6rl2c8eltANWq
+         b/50RJx2sQZcpZSw12KgQi3P+zSQwptz6aIH7RR8ay3aR/3gKtfo9Ut3ydRegcWPWU+u
+         2bdwBvT3k6B6yibaFiZ+xOtFtHidQlCQMRxmCehDYSsGCEDkB6SQuyxik6O5EcPmmYBU
+         QJ2dNJxESZ6T1IuPcfML+7IldrkkskfB+CEI4MwtOLVXWm9X3fwdA/7iRvvx4dgIBbLW
+         MI9MAkwB0nqpw3HO6BRsLDo6QJ1popV8i2P7Y3fLtb1tJqXqUyDA3VZwjUBaRT6JFr5Z
+         pCcg==
+X-Gm-Message-State: AOAM531fq7s7Ojz06fIt5qlfmIq0wPibGW61rTrjJ/i8OBNuiA1udxLc
+        MTI4kD5LwXxWpuKE5MoXxsc=
+X-Google-Smtp-Source: ABdhPJzYfunjZPDkuX1/Kipa8zC3KL4U82okU9J+6tg24AZPLn3QS6zIBqTDxPsmgKCQLGng8iK+dA==
+X-Received: by 2002:a05:6512:2029:: with SMTP id s9mr3782053lfs.273.1603664307205;
+        Sun, 25 Oct 2020 15:18:27 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
-        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.18.25
+        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.18.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2020 15:18:25 -0700 (PDT)
+        Sun, 25 Oct 2020 15:18:26 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v6 33/52] memory: tegra20: Support interconnect framework
-Date:   Mon, 26 Oct 2020 01:17:16 +0300
-Message-Id: <20201025221735.3062-34-digetx@gmail.com>
+Subject: [PATCH v6 34/52] memory: tegra20-emc: Don't parse emc-stats node
+Date:   Mon, 26 Oct 2020 01:17:17 +0300
+Message-Id: <20201025221735.3062-35-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201025221735.3062-1-digetx@gmail.com>
 References: <20201025221735.3062-1-digetx@gmail.com>
@@ -78,341 +78,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now Internal and External Memory Controllers are memory interconnection
-providers. This allows us to use interconnect API for tuning of memory
-configuration. EMC driver now supports OPPs and DVFS.
+EMC device-tree node now contains new emc-stats sub-node which needs to
+be skipped when timing nodes are parsed by EMC driver, otherwise driver
+will try to parse the emc-stats as a timing node and will error out.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/memory/tegra/Kconfig       |   3 +-
- drivers/memory/tegra/mc.h          |  12 ++
- drivers/memory/tegra/tegra20-emc.c | 176 +++++++++++++++++++++++++++++
- drivers/memory/tegra/tegra20.c     |  34 ++++++
- 4 files changed, 224 insertions(+), 1 deletion(-)
+ drivers/memory/tegra/tegra20-emc.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/memory/tegra/Kconfig b/drivers/memory/tegra/Kconfig
-index ff426747cd7d..ac3dfe155505 100644
---- a/drivers/memory/tegra/Kconfig
-+++ b/drivers/memory/tegra/Kconfig
-@@ -11,7 +11,8 @@ config TEGRA_MC
- config TEGRA20_EMC
- 	tristate "NVIDIA Tegra20 External Memory Controller driver"
- 	default y
--	depends on ARCH_TEGRA_2x_SOC
-+	depends on TEGRA_MC && ARCH_TEGRA_2x_SOC
-+	select PM_OPP
- 	help
- 	  This driver is for the External Memory Controller (EMC) found on
- 	  Tegra20 chips. The EMC controls the external DRAM on the board.
-diff --git a/drivers/memory/tegra/mc.h b/drivers/memory/tegra/mc.h
-index abeb6a2cc36a..531fb4fb7b17 100644
---- a/drivers/memory/tegra/mc.h
-+++ b/drivers/memory/tegra/mc.h
-@@ -78,6 +78,18 @@
- 
- #define MC_TIMING_UPDATE				BIT(0)
- 
-+static inline u32 tegra_mc_scale_percents(u64 val, unsigned int percents)
-+{
-+	val = val * percents;
-+	do_div(val, 100);
-+
-+	/*
-+	 * High freq + high boosting percent + large polling interval are
-+	 * resulting in integer overflow when watermarks are calculated.
-+	 */
-+	return min_t(u64, val, U32_MAX);
-+}
-+
- static inline u32 mc_readl(struct tegra_mc *mc, unsigned long offset)
- {
- 	return readl_relaxed(mc->regs + offset);
 diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/tegra20-emc.c
-index 34085e26dced..69ccb3fe5b0b 100644
+index 69ccb3fe5b0b..27242659dfd6 100644
 --- a/drivers/memory/tegra/tegra20-emc.c
 +++ b/drivers/memory/tegra/tegra20-emc.c
-@@ -9,6 +9,7 @@
- #include <linux/clk/tegra.h>
- #include <linux/debugfs.h>
- #include <linux/err.h>
-+#include <linux/interconnect-provider.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
-@@ -16,11 +17,15 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+#include <linux/slab.h>
- #include <linux/sort.h>
- #include <linux/types.h>
+@@ -349,7 +349,10 @@ static int tegra_emc_load_timings_from_dt(struct tegra_emc *emc,
+ 	int child_count;
+ 	int err;
  
- #include <soc/tegra/fuse.h>
- 
-+#include "mc.h"
+-	child_count = of_get_child_count(node);
++	child = of_find_node_by_name(node, "emc-stats");
++	of_node_put(child);
 +
- #define EMC_INTSTATUS				0x000
- #define EMC_INTMASK				0x004
- #define EMC_DBG					0x008
-@@ -144,6 +149,9 @@ struct emc_timing {
++	child_count = of_get_child_count(node) - (child ? 1 : 0);
+ 	if (!child_count) {
+ 		dev_err(emc->dev, "no memory timings in DT node: %pOF\n", node);
+ 		return -EINVAL;
+@@ -364,6 +367,9 @@ static int tegra_emc_load_timings_from_dt(struct tegra_emc *emc,
+ 	timing = emc->timings;
  
- struct tegra_emc {
- 	struct device *dev;
-+	struct tegra_mc *mc;
-+	struct opp_table *opp_table;
-+	struct icc_provider provider;
- 	struct notifier_block clk_nb;
- 	struct clk *clk;
- 	void __iomem *regs;
-@@ -658,6 +666,166 @@ static void tegra_emc_debugfs_init(struct tegra_emc *emc)
- 			    emc, &tegra_emc_debug_max_rate_fops);
- }
- 
-+static inline struct tegra_emc *
-+to_tegra_emc_provider(struct icc_provider *provider)
-+{
-+	return container_of(provider, struct tegra_emc, provider);
-+}
-+
-+static struct icc_node_data *
-+emc_of_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+{
-+	struct icc_provider *provider = data;
-+	struct icc_node_data *ndata;
-+	struct icc_node *node;
-+
-+	/* External Memory is the only possible ICC route */
-+	list_for_each_entry(node, &provider->nodes, node_list) {
-+		if (node->id != TEGRA_ICC_EMEM)
+ 	for_each_child_of_node(node, child) {
++		if (of_device_is_compatible(child, "nvidia,tegra20-emc-statistics"))
 +			continue;
 +
-+		ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
-+		if (!ndata)
-+			return ERR_PTR(-ENOMEM);
+ 		err = load_one_timing_from_dt(emc, timing++, child);
+ 		if (err) {
+ 			of_node_put(child);
+@@ -391,7 +397,11 @@ tegra_emc_find_node_by_ram_code(struct device *dev)
+ 	u32 value, ram_code;
+ 	int err;
+ 
+-	if (of_get_child_count(dev->of_node) == 0) {
++	/* old device-trees don't have emc-stats node */
++	np = of_find_node_by_name(dev->of_node, "emc-stats");
++	of_node_put(np);
 +
-+		/*
-+		 * SRC and DST nodes should have matching TAG in order to have
-+		 * it set by default for a requested path.
-+		 */
-+		ndata->tag = TEGRA_MC_ICC_TAG_ISO;
-+		ndata->node = node;
-+
-+		return ndata;
-+	}
-+
-+	return ERR_PTR(-EINVAL);
-+}
-+
-+static int emc_icc_set(struct icc_node *src, struct icc_node *dst)
-+{
-+	struct tegra_emc *emc = to_tegra_emc_provider(dst->provider);
-+	unsigned long long peak_bw = icc_units_to_bps(dst->peak_bw);
-+	unsigned long long avg_bw = icc_units_to_bps(dst->avg_bw);
-+	unsigned long long rate = max(avg_bw, peak_bw);
-+	unsigned int dram_data_bus_width_bytes = 4;
-+	long rounded_rate;
-+	int err;
-+
-+	/*
-+	 * Tegra20 EMC runs on x2 clock rate of SDRAM bus because DDR data
-+	 * is sampled on both clock edges. This means that EMC clock rate
-+	 * equals to the peak data rate.
-+	 */
-+	do_div(rate, dram_data_bus_width_bytes);
-+	rate = min_t(u64, rate, U32_MAX);
-+
-+	rounded_rate = emc_round_rate(rate, 0, U32_MAX, emc);
-+	if (rounded_rate < 0)
-+		return rounded_rate;
-+
-+	err = dev_pm_opp_set_rate(emc->dev, rounded_rate);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static int tegra_emc_interconnect_init(struct tegra_emc *emc)
-+{
-+	const struct tegra_mc_soc *soc;
-+	struct icc_node *node;
-+	int err;
-+
-+	emc->mc = devm_tegra_get_memory_controller(emc->dev);
-+	if (IS_ERR(emc->mc))
-+		return PTR_ERR(emc->mc);
-+
-+	soc = emc->mc->soc;
-+
-+	emc->provider.dev = emc->dev;
-+	emc->provider.set = emc_icc_set;
-+	emc->provider.data = &emc->provider;
-+	emc->provider.aggregate = soc->icc_ops->aggregate;
-+	emc->provider.xlate_extended = emc_of_icc_xlate_extended;
-+
-+	err = icc_provider_add(&emc->provider);
-+	if (err)
-+		goto err_msg;
-+
-+	/* create External Memory Controller node */
-+	node = icc_node_create(TEGRA_ICC_EMC);
-+	err = PTR_ERR_OR_ZERO(node);
-+	if (err)
-+		goto del_provider;
-+
-+	node->name = "External Memory Controller";
-+	icc_node_add(node, &emc->provider);
-+
-+	/* link External Memory Controller to External Memory (DRAM) */
-+	err = icc_link_create(node, TEGRA_ICC_EMEM);
-+	if (err)
-+		goto remove_nodes;
-+
-+	/* create External Memory node */
-+	node = icc_node_create(TEGRA_ICC_EMEM);
-+	err = PTR_ERR_OR_ZERO(node);
-+	if (err)
-+		goto remove_nodes;
-+
-+	node->name = "External Memory (DRAM)";
-+	icc_node_add(node, &emc->provider);
-+
-+	return 0;
-+
-+remove_nodes:
-+	icc_nodes_remove(&emc->provider);
-+del_provider:
-+	icc_provider_del(&emc->provider);
-+err_msg:
-+	dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
-+
-+	return err;
-+}
-+
-+static int tegra_emc_opp_table_init(struct tegra_emc *emc)
-+{
-+	const char *rname = "core";
-+	int err;
-+
-+	/*
-+	 * Legacy device-trees don't have OPP table and EMC driver isn't
-+	 * useful in this case.
-+	 */
-+	if (!device_property_present(emc->dev, "operating-points-v2")) {
-+		dev_err(emc->dev, "OPP table not found\n");
-+		dev_err(emc->dev, "please update your device tree\n");
-+		return -ENODEV;
-+	}
-+
-+	/* voltage scaling is optional */
-+	if (device_property_present(emc->dev, "core-supply"))
-+		emc->opp_table = dev_pm_opp_set_regulators(emc->dev, &rname, 1);
-+	else
-+		emc->opp_table = dev_pm_opp_get_opp_table(emc->dev);
-+
-+	if (IS_ERR(emc->opp_table))
-+		return dev_err_probe(emc->dev, PTR_ERR(emc->opp_table),
-+				     "failed to prepare OPP table\n");
-+
-+	err = dev_pm_opp_of_add_table(emc->dev);
-+	if (err) {
-+		dev_err(emc->dev, "failed to add OPP table: %d\n", err);
-+		goto put_table;
-+	}
-+
-+	return 0;
-+
-+put_table:
-+	dev_pm_opp_put_opp_table(emc->opp_table);
-+
-+	return err;
-+}
-+
- static int tegra_emc_probe(struct platform_device *pdev)
- {
- 	struct device_node *np;
-@@ -717,8 +885,13 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 		goto unset_cb;
++	if (of_get_child_count(dev->of_node) == (np ? 1 : 0)) {
+ 		dev_info(dev, "device-tree doesn't have memory timings\n");
+ 		return NULL;
  	}
- 
-+	err = tegra_emc_opp_table_init(emc);
-+	if (err)
-+		goto unreg_notifier;
-+
- 	platform_set_drvdata(pdev, emc);
- 	tegra_emc_debugfs_init(emc);
-+	tegra_emc_interconnect_init(emc);
- 
- 	/*
- 	 * Don't allow the kernel module to be unloaded. Unloading adds some
-@@ -729,6 +902,8 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+unreg_notifier:
-+	clk_notifier_unregister(emc->clk, &emc->clk_nb);
- unset_cb:
- 	tegra20_clk_set_emc_round_callback(NULL, NULL);
- 
-@@ -747,6 +922,7 @@ static struct platform_driver tegra_emc_driver = {
- 		.name = "tegra20-emc",
- 		.of_match_table = tegra_emc_of_match,
- 		.suppress_bind_attrs = true,
-+		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(tegra_emc_driver);
-diff --git a/drivers/memory/tegra/tegra20.c b/drivers/memory/tegra/tegra20.c
-index a8098bff91d9..5127e8e8250f 100644
---- a/drivers/memory/tegra/tegra20.c
-+++ b/drivers/memory/tegra/tegra20.c
-@@ -280,6 +280,39 @@ static const struct tegra_mc_reset_ops tegra20_mc_reset_ops = {
- 	.reset_status = tegra20_mc_reset_status,
- };
- 
-+static int tegra20_mc_icc_set(struct icc_node *src, struct icc_node *dst)
-+{
-+	/*
-+	 * Technically, it should be possible to tune arbitration knobs here,
-+	 * but the default values are known to work well on all devices.
-+	 * Hence nothing to do here so far.
-+	 */
-+	return 0;
-+}
-+
-+static int tegra20_mc_icc_aggreate(struct icc_node *node, u32 tag, u32 avg_bw,
-+				   u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-+{
-+	/*
-+	 * ISO clients need to reserve extra bandwidth up-front because
-+	 * there could high bandwidth pressure during initial fulling-up
-+	 * of the client's FIFO buffers. Secondly, we need to take into
-+	 * account impurities of the memory subsystem.
-+	 */
-+	if (tag == TEGRA_MC_ICC_TAG_ISO)
-+		peak_bw = tegra_mc_scale_percents(peak_bw, 300);
-+
-+	*agg_avg += avg_bw;
-+	*agg_peak = max(*agg_peak, peak_bw);
-+
-+	return 0;
-+}
-+
-+static const struct tegra_mc_icc_ops tegra20_mc_icc_ops = {
-+	.aggregate = tegra20_mc_icc_aggreate,
-+	.set = tegra20_mc_icc_set,
-+};
-+
- const struct tegra_mc_soc tegra20_mc_soc = {
- 	.clients = tegra20_mc_clients,
- 	.num_clients = ARRAY_SIZE(tegra20_mc_clients),
-@@ -290,4 +323,5 @@ const struct tegra_mc_soc tegra20_mc_soc = {
- 	.reset_ops = &tegra20_mc_reset_ops,
- 	.resets = tegra20_mc_resets,
- 	.num_resets = ARRAY_SIZE(tegra20_mc_resets),
-+	.icc_ops = &tegra20_mc_icc_ops,
- };
 -- 
 2.27.0
 
