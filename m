@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 296D72983FE
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5246B29844C
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 23:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1419376AbgJYWSs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Oct 2020 18:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S1419650AbgJYWUp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Oct 2020 18:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1419365AbgJYWSn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:18:43 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FD2C0613CE;
-        Sun, 25 Oct 2020 15:18:43 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id l2so9444770lfk.0;
-        Sun, 25 Oct 2020 15:18:43 -0700 (PDT)
+        with ESMTP id S1419367AbgJYWSp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 18:18:45 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C46C061755;
+        Sun, 25 Oct 2020 15:18:44 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id d24so7706438ljg.10;
+        Sun, 25 Oct 2020 15:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1PH48KfFXPwOSFrtxH/nqQ6/PkMkkNmgzsjXGDZ87+I=;
-        b=NU8o04tLt1lEwiomFhKoT9cvrlR4P/69J4LCKbKBeOq8ftqqFhtH/wKXbuKi+IREf+
-         PbE/lmPcNo3gCjHGaWDSZX4LEcIv1u3oG2PQqB3X1KW3pR92MMZ8rYE9u9gxmWXoEDIS
-         /Rdfeh4QSXZxtV5Rp1E029mhH56g9IAgUI1nozGp5tos2vVxy7iaTJlKn3V7I1ZDJK+W
-         iZ5IWBC77EqAxZ8XzcHeHMJT32SVAGwMgKwkbI9+MSx/1L15bQm3JGdSXVDFBCBYndAx
-         rbeUE+H9T+xIgto1QwDRnY0eE2kySXok2xwho32fMe3VvEzNs53FKm+1Mrtke21+FmKf
-         Dotw==
+        bh=L79iwZ0bcQ/bYNErMnkgdiSpet8EKxInzRHfHgz6Aeo=;
+        b=vC9RCqqWoD5ylqvyoLyxFpJB5u2HDtHdyu+50U7XHzOuSK9/gZXYFL7FYDuL3WnDaH
+         WbJxl76boqcFWLlCC1PjES5SGW+5fc1xNIK94gpfvi/rXyGTRhl0/7JYfTiDRe+7nt8E
+         emUPbPNdX71A/J8LcRbIH/5c9WQxGlS7yEN0p/q/bJ5or978wHMTHaX8b6msuGA0zijw
+         YCViEYBPuCks8n6SmqUGX+cmARPRHVevxDQJUbkkWzCzcfdb1wks2DBj2Z0hKLZJAhgX
+         XyDyzNTi1FKWQMesk33U5DcqraGGaIbJR+WsTf9Y623ZOqten1Q4OcnHwnamB/poKsWs
+         hVLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1PH48KfFXPwOSFrtxH/nqQ6/PkMkkNmgzsjXGDZ87+I=;
-        b=boXkhWCmx/79JoKrAsmyDi7uCOIpJPx+bkVNHCGEKpmP3r1ZMnjAsH6zHEW0Lr5Pup
-         Xroc1wXYZYoxeVUocgPFYIJrhpXIsuN5mSMzihzWH2jx9g3JWW2zzl3dGPVrTedcA4od
-         TRCJw8v0dzRogihq+9Wsy2xFOX2KMNXpYqgTKxwgsGaUIhDXc0yNLwaRyHnmX+vst56O
-         uBQvknsHKDlt4+oAirtmP9i3dcYoEjb4e8uzOOLfvuoEQK15SnBS8loO4FYyxnst7Z6z
-         3zniIXJBrNbPGhdWQOglBWoW979kbQBInBPWjvyysbUmxrdvQolJnHADXIEZVksvejiA
-         IwmQ==
-X-Gm-Message-State: AOAM532h6EvLrm9/K7zjLwLdJL36N6B/xULpkm/pztI2gIhgwdHuVxcd
-        9ht3Ann66tHtb3xeyNSP/ktTHAlpUqQ=
-X-Google-Smtp-Source: ABdhPJyCump6Q8GEh7VpGfsg/snta/sTN25f5fywvrLs7iGoc5nw2s4PlMJvhieIjbEaatJQrUpZTQ==
-X-Received: by 2002:a19:957:: with SMTP id 84mr3699671lfj.342.1603664321823;
-        Sun, 25 Oct 2020 15:18:41 -0700 (PDT)
+        bh=L79iwZ0bcQ/bYNErMnkgdiSpet8EKxInzRHfHgz6Aeo=;
+        b=K6Ki+lHqAmuTcF0UcQyOnZfD/lEI5sS4epjZsdw1VWZ3imW9UJao/B2fkLALiIyUB5
+         CI/uaINpvg6kIR5CB3dSiTzqSepimMfGfDnxyZPAIn80Y3ARhXQMzets9nWLiXY0Em8Y
+         2VTok+Zerfyf2WOcKqW2eP7wyflURTwHkKGOUY73KCaLN5tS+RvYe4wo2kkNyjrWZk7T
+         mbUKL2uQ8XdjypgjcbtZcm2+eIKHZfTZMMqL0Y5DwWAPxoEkFh2DM8vAQvgf4mV6JVRz
+         y6BIGgPP/CmXeCF2Vt/VoBJO9x9Vh+m1Eu+b50zMO9Ok4V6JJH17cm6UPNkJlBbcpk83
+         QJSg==
+X-Gm-Message-State: AOAM530qbeM+gvURhoMLMXmJoT0faYVk44zRrArANezSNOhwIW4U1Oxw
+        bvlBdLvaZ001YwNqQH23byI=
+X-Google-Smtp-Source: ABdhPJwu8jgCsNIcFJ3FXu51zCJDEosGMUATemWh5TEorgxVddy3uWItefq/iD1WNFrVWVQctfRMfg==
+X-Received: by 2002:a2e:910a:: with SMTP id m10mr4817770ljg.385.1603664323005;
+        Sun, 25 Oct 2020 15:18:43 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
-        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.18.40
+        by smtp.gmail.com with ESMTPSA id k13sm932423ljh.136.2020.10.25.15.18.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2020 15:18:41 -0700 (PDT)
+        Sun, 25 Oct 2020 15:18:42 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v6 47/52] PM / devfreq: tegra20: Silence deferred probe error
-Date:   Mon, 26 Oct 2020 01:17:30 +0300
-Message-Id: <20201025221735.3062-48-digetx@gmail.com>
+Subject: [PATCH v6 48/52] PM / devfreq: tegra20: Relax Kconfig dependency
+Date:   Mon, 26 Oct 2020 01:17:31 +0300
+Message-Id: <20201025221735.3062-49-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201025221735.3062-1-digetx@gmail.com>
 References: <20201025221735.3062-1-digetx@gmail.com>
@@ -78,36 +78,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tegra EMC driver was turned into a regular kernel driver, meaning that it
-could be compiled as a loadable kernel module now. Hence EMC clock isn't
-guaranteed to be available and clk_get("emc") may return -EPROBE_DEFER.
-Let's silence the deferred probe error.
+The Tegra EMC driver now could be compiled as a loadable kernel module.
+Currently devfreq driver depends on the EMC/MC drivers in Kconfig, and
+thus, devfreq is forced to be a kernel module if EMC is compiled as a
+module. This build dependency could be relaxed since devfreq driver
+checks MC/EMC presence on probe, allowing kernel configuration where
+devfreq is a built-in driver and EMC driver is a loadable module.
+This change puts Tegra20 devfreq Kconfig entry on a par with the Tegra30
+devfreq entry.
 
 Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra20-devfreq.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/devfreq/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/devfreq/tegra20-devfreq.c b/drivers/devfreq/tegra20-devfreq.c
-index ff82bac9ee4e..fd801534771d 100644
---- a/drivers/devfreq/tegra20-devfreq.c
-+++ b/drivers/devfreq/tegra20-devfreq.c
-@@ -141,11 +141,9 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index 37dc40d1fcfb..0ee36ae2fa79 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -123,7 +123,7 @@ config ARM_TEGRA_DEVFREQ
  
- 	/* EMC is a system-critical clock that is always enabled */
- 	tegra->emc_clock = devm_clk_get(&pdev->dev, "emc");
--	if (IS_ERR(tegra->emc_clock)) {
--		err = PTR_ERR(tegra->emc_clock);
--		dev_err(&pdev->dev, "failed to get emc clock: %d\n", err);
--		return err;
--	}
-+	if (IS_ERR(tegra->emc_clock))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(tegra->emc_clock),
-+				     "failed to get emc clock\n");
- 
- 	tegra->regs = mc->regs;
- 
+ config ARM_TEGRA20_DEVFREQ
+ 	tristate "NVIDIA Tegra20 DEVFREQ Driver"
+-	depends on (TEGRA_MC && TEGRA20_EMC) || COMPILE_TEST
++	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
+ 	depends on COMMON_CLK
+ 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+ 	help
 -- 
 2.27.0
 
