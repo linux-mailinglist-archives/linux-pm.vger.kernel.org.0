@@ -2,226 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589E429813C
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 11:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D304C298284
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Oct 2020 17:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1415147AbgJYKRL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Oct 2020 06:17:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1415025AbgJYKRI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 25 Oct 2020 06:17:08 -0400
-Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9F56222E7;
-        Sun, 25 Oct 2020 10:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603621028;
-        bh=fWqEsJtW6nrMdKfFuKO5wuXLJZv2B2YzQewNgbwL7B8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SR8LIdsytMJiBsEIqd/48utNGr6/cEpmB56s7maJKJDxF5jenH22OuAMSr1Hko8CU
-         krTJIE6TiUnuurhqX6zq1fjGl9QemuQldFXoP8JOAjlu5EQH1SEazXj1Hf97EJNSiy
-         cUpUrE2Dxdv7Jv0a4uIe0NxGHiXi4NtFQFLEtB4w=
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Subject: [PATCH 4/4] arch, mm: make kernel_page_present() always available
-Date:   Sun, 25 Oct 2020 12:15:55 +0200
-Message-Id: <20201025101555.3057-5-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201025101555.3057-1-rppt@kernel.org>
-References: <20201025101555.3057-1-rppt@kernel.org>
+        id S1417170AbgJYQ3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Oct 2020 12:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1417168AbgJYQ3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 12:29:36 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD49C0613CE;
+        Sun, 25 Oct 2020 09:29:35 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id p15so7176503ljj.8;
+        Sun, 25 Oct 2020 09:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8qSpxaySb+J1nC02XHO83Se4mRnezoN9KgwHpLD2zmI=;
+        b=Se1LaPaznM5k8d7fvgW7bMX2O7jJtPZOeH1M+gU3n+lvA3do5YnINdA+Kyj52tf5yq
+         /X0zDLr0nBFVOHtoHdEwwUgBu1KaAkLCciSJVUf/I2usoDkdPVq0Fx6lC4KzwhnyehwW
+         /fbFJeJyanUYbL5/Ea1Js0iqXDZXvqotGxLrLhyZk3s4sdTBGVjdJxYmHI97FYEeacKu
+         vRlkDDvOlZjO/YXQcduOPfWI9OY/1Kv87UxML8+m+fld9i5D6zRs74O4xgEHSEH6fk1i
+         IpEPfoOQwhjcScOoshTdsN5dl9RNjSjcGODptIB8YyQcLTET/H3j0hip+DNjPVYwBopm
+         GKRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8qSpxaySb+J1nC02XHO83Se4mRnezoN9KgwHpLD2zmI=;
+        b=m7Q3qflOBLO6OF2SZyJskTd4uIWM9CrFZzkb+zU4SuG+nUX7CKnajAKy3qqxDeK3aG
+         TdgJqNnbYpSooe16SHszwS3X8JxMWL8bg0yhvgzENuaLvO1l4lBK6MInKvKR/sCwf16Y
+         t6VCdnUuzveWY7Kzlhe1XiG3SZg/xLX5eMLBb5TXDW2iNF4oT9Kzrn2iWcZpB1ZSDpSs
+         YcXJ2D3rkcUpN3DIeGkD0MPGswqD4YB5ED0cBWVqF6v1wRYYnthoG0ORsCCjK5sByq0H
+         ihIBWHvnYYcIS8tpuyGV3aG3NM4e2Weh9ctpFV7KjlJSEr+frEg24t73tRb1EV1PUg3d
+         PdcQ==
+X-Gm-Message-State: AOAM531Iu7yhrgBbAw8IhoGv6T5swhZ2MX7MNHpzcSWWrSJyMXooL5hW
+        oa/kqhXjFKF9ctWuJlwEExE=
+X-Google-Smtp-Source: ABdhPJzzBC72dXIfQIn/FfwS/F0oDDauNBKMlkBBoHJ4W/XNOFPgiqlHxNd1rp03tpCABMF60Xjthg==
+X-Received: by 2002:a2e:864c:: with SMTP id i12mr3978701ljj.396.1603643374287;
+        Sun, 25 Oct 2020 09:29:34 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
+        by smtp.googlemail.com with ESMTPSA id v3sm769788lfa.211.2020.10.25.09.29.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Oct 2020 09:29:33 -0700 (PDT)
+Subject: Re: [PATCH v5 1/2] PM / devfreq: Add governor feature flag
+To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Cc:     lukasz.luba@arm.com, enric.balletbo@collabora.com,
+        hl@rock-chips.com, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        abel.vesa@nxp.com, k.konieczny@samsung.com,
+        b.zolnierkie@samsung.com, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
+References: <20201023102632.740-1-cw00.choi@samsung.com>
+ <CGME20201023101246epcas1p423f0444201300830fd63f33748dd8952@epcas1p4.samsung.com>
+ <20201023102632.740-2-cw00.choi@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <622cd840-0b09-e377-fbff-dd3e8ef0ff4e@gmail.com>
+Date:   Sun, 25 Oct 2020 19:29:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20201023102632.740-2-cw00.choi@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+23.10.2020 13:26, Chanwoo Choi пишет:
+> The devfreq governor is able to have the specific flag as follows
+> in order to implement the specific feature. For example, devfreq allows
+> user to change the governors on runtime via sysfs interface.
+> But, if devfreq device uses 'passive' governor, don't allow user to change
+> the governor. For this case, define the DEVFREQ_GOV_FLAG_IMMUTABLE
+> and set it to flag of passive governor.
+> 
+> [Definition for governor flag]
+> - DEVFREQ_GOV_FLAG_IMMUTABLE
+>   : If immutable flag is set, governor is never changeable to other governors.
+> - DEVFREQ_GOV_FLAG_IRQ_DRIVEN
+>   : Devfreq core won't schedule polling work for this governor if value is set.
+> 
+> [Table of governor flag for devfreq governors]
+> ------------------------------------------------------------------------------
+>                       | simple    | perfor | power | user | passive | tegra30
+> 		      | ondemand  | mance  | save  | space|         |
+> ------------------------------------------------------------------------------
+> immutable             | X         | X      | X     | X    | O       | O
+> interrupt_driven      | X(polling)| X      | X     | X    | X       | O (irq)
+> ------------------------------------------------------------------------------
+> 
+> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+> ---
 
-For architectures that enable ARCH_HAS_SET_MEMORY having the ability to
-verify that a page is mapped in the kernel direct map can be useful
-regardless of hibernation.
-
-Add RISC-V implementation of kernel_page_present() and update its forward
-declarations and stubs to be a part of set_memory API.
-
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- arch/arm64/include/asm/cacheflush.h |  1 +
- arch/riscv/include/asm/set_memory.h |  1 +
- arch/riscv/mm/pageattr.c            | 29 +++++++++++++++++++++++++++++
- arch/x86/include/asm/set_memory.h   |  1 +
- arch/x86/mm/pat/set_memory.c        |  2 --
- include/linux/mm.h                  |  7 -------
- include/linux/set_memory.h          |  5 +++++
- 7 files changed, 37 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm64/include/asm/cacheflush.h b/arch/arm64/include/asm/cacheflush.h
-index 9384fd8fc13c..45217f21f1fe 100644
---- a/arch/arm64/include/asm/cacheflush.h
-+++ b/arch/arm64/include/asm/cacheflush.h
-@@ -140,6 +140,7 @@ int set_memory_valid(unsigned long addr, int numpages, int enable);
- 
- int set_direct_map_invalid_noflush(struct page *page);
- int set_direct_map_default_noflush(struct page *page);
-+bool kernel_page_present(struct page *page);
- 
- #include <asm-generic/cacheflush.h>
- 
-diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm/set_memory.h
-index 4c5bae7ca01c..d690b08dff2a 100644
---- a/arch/riscv/include/asm/set_memory.h
-+++ b/arch/riscv/include/asm/set_memory.h
-@@ -24,6 +24,7 @@ static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
- 
- int set_direct_map_invalid_noflush(struct page *page);
- int set_direct_map_default_noflush(struct page *page);
-+bool kernel_page_present(struct page *page);
- 
- #endif /* __ASSEMBLY__ */
- 
-diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
-index 321b09d2e2ea..87ba5a68bbb8 100644
---- a/arch/riscv/mm/pageattr.c
-+++ b/arch/riscv/mm/pageattr.c
-@@ -198,3 +198,32 @@ void __kernel_map_pages(struct page *page, int numpages, int enable)
- 			     __pgprot(0), __pgprot(_PAGE_PRESENT));
- }
- #endif
-+
-+bool kernel_page_present(struct page *page)
-+{
-+	unsigned long addr = (unsigned long)page_address(page);
-+	pgd_t *pgd;
-+	pud_t *pud;
-+	p4d_t *p4d;
-+	pmd_t *pmd;
-+	pte_t *pte;
-+
-+	pgd = pgd_offset_k(addr);
-+	if (!pgd_present(*pgd))
-+		return false;
-+
-+	p4d = p4d_offset(pgd, addr);
-+	if (!p4d_present(*p4d))
-+		return false;
-+
-+	pud = pud_offset(p4d, addr);
-+	if (!pud_present(*pud))
-+		return false;
-+
-+	pmd = pmd_offset(pud, addr);
-+	if (!pmd_present(*pmd))
-+		return false;
-+
-+	pte = pte_offset_kernel(pmd, addr);
-+	return pte_present(*pte);
-+}
-diff --git a/arch/x86/include/asm/set_memory.h b/arch/x86/include/asm/set_memory.h
-index 5948218f35c5..4352f08bfbb5 100644
---- a/arch/x86/include/asm/set_memory.h
-+++ b/arch/x86/include/asm/set_memory.h
-@@ -82,6 +82,7 @@ int set_pages_rw(struct page *page, int numpages);
- 
- int set_direct_map_invalid_noflush(struct page *page);
- int set_direct_map_default_noflush(struct page *page);
-+bool kernel_page_present(struct page *page);
- 
- extern int kernel_set_to_readonly;
- 
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 7f248fc45317..16f878c26667 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2228,7 +2228,6 @@ void __kernel_map_pages(struct page *page, int numpages, int enable)
- }
- #endif /* CONFIG_DEBUG_PAGEALLOC */
- 
--#ifdef CONFIG_HIBERNATION
- bool kernel_page_present(struct page *page)
- {
- 	unsigned int level;
-@@ -2240,7 +2239,6 @@ bool kernel_page_present(struct page *page)
- 	pte = lookup_address((unsigned long)page_address(page), &level);
- 	return (pte_val(*pte) & _PAGE_PRESENT);
- }
--#endif /* CONFIG_HIBERNATION */
- 
- int __init kernel_map_pages_in_pgd(pgd_t *pgd, u64 pfn, unsigned long address,
- 				   unsigned numpages, unsigned long page_flags)
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index ab0ef6bd351d..44b82f22e76a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2937,16 +2937,9 @@ static inline void debug_pagealloc_map_pages(struct page *page,
- 	if (debug_pagealloc_enabled_static())
- 		__kernel_map_pages(page, numpages, enable);
- }
--
--#ifdef CONFIG_HIBERNATION
--extern bool kernel_page_present(struct page *page);
--#endif	/* CONFIG_HIBERNATION */
- #else	/* CONFIG_DEBUG_PAGEALLOC */
- static inline void debug_pagealloc_map_pages(struct page *page,
- 					     int numpages, int enable) {}
--#ifdef CONFIG_HIBERNATION
--static inline bool kernel_page_present(struct page *page) { return true; }
--#endif	/* CONFIG_HIBERNATION */
- #endif	/* CONFIG_DEBUG_PAGEALLOC */
- 
- #ifdef __HAVE_ARCH_GATE_AREA
-diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
-index 860e0f843c12..fe1aa4e54680 100644
---- a/include/linux/set_memory.h
-+++ b/include/linux/set_memory.h
-@@ -23,6 +23,11 @@ static inline int set_direct_map_default_noflush(struct page *page)
- {
- 	return 0;
- }
-+
-+static inline bool kernel_page_present(struct page *page)
-+{
-+	return true;
-+}
- #endif
- 
- #ifndef set_mce_nospec
--- 
-2.28.0
-
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Tested-by: Dmitry Osipenko <digetx@gmail.com>
