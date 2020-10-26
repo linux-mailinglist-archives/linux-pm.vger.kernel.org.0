@@ -2,190 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EFF299431
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 18:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 676AD2994CE
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 19:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1788330AbgJZRpT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 13:45:19 -0400
-Received: from mail1.bemta24.messagelabs.com ([67.219.250.4]:46198 "EHLO
-        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2437239AbgJZRpS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 13:45:18 -0400
-Received: from [100.112.131.148] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-4.bemta.az-a.us-west-2.aws.symcld.net id 10/91-27161-A2B079F5; Mon, 26 Oct 2020 17:45:14 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAKsWRWlGSWpSXmKPExsWS8eIhj64W9/R
-  4g4lLVSz2X5ew6FpoYLHw/ilWi6/fbrNbvDk+ncli+b5+RovLu+awWXzuPcJo0dTZBGR1TGax
-  WL3nBbMDt8ekmTOYPXbOusvu8WvbGhaPzSu0POadDPR4v+8qm8fnTXIB7FGsmXlJ+RUJrBl73
-  /5mKpiuVfHswjO2Bsazyl2MXBxCAv8ZJU7u+MgG4bxhlJj57wZzFyMnB5uAtsSWLb+AEhwcIg
-  IyEh/WeoKEmQX2Mkns+JsCYgsLJEjsuXmHFcRmEVCVuPp4F5jNK2Aj8fTQJzBbQkBe4mnvcrC
-  RnEA1Z7oes4DYQgIqEvcfLGGDqBeUODnzCQvEfHmJ5q2zmSFsCYmDL14wg5wgIaAg8eAKM8TI
-  BIllL+8wT2AUmIWkexaS7llIuhcwMq9iNE8qykzPKMlNzMzRNTQw0DU0NNI1NDbUNTPRS6zST
-  dQrLdYtTy0u0TXSSywv1iuuzE3OSdHLSy3ZxAiMqJSCZocdjLvffNA7xCjJwaQkyjuFa3q8EF
-  9SfkplRmJxRnxRaU5q8SFGGQ4OJQlePpCcYFFqempFWmYOMLph0hIcPEoivDUgad7igsTc4sx
-  0iNQpRkUpcd6LnEAJAZBERmkeXBssoVxilJUS5mVkYGAQ4ilILcrNLEGVf8UozsGoJMw7A2Q8
-  T2ZeCdz0V0CLmYAWt1VMAVlckoiQkmpg2i1yc9czexXttSpW52epKOsZrGa//5mFJ+367odTH
-  566K99VqzMnyeMLT56TcbVsXeTmRF/D4wqSj1jDI+dZnxU4GPflfrbE8bwZ/YeY+g+1z/T8Gf
-  2jVzza5dIHq8Pf77oULpEULjj5Yont/F8takffZSmKeaQyTK/qb5mwT+9t32G2SsU9U5zL1Xe
-  ffiP3LK1EY5fXzjvBmdVbj//fZ8eacUF4pu4ljrzd89zi+Sp/fvDbtryuR8ln63pb0aj2T0bL
-  2ZM69uZMEtnDGHP78e8Ldr75N17I5vhl3AtbdCj71Rfbl6vOhqTvXxzs+FVTdG2utmecg+H7K
-  6VHc0tO/f+q1Onzs2L6prqlWvUHlFiKMxINtZiLihMB1+rsrqMDAAA=
-X-Env-Sender: markpearson@lenovo.com
-X-Msg-Ref: server-14.tower-326.messagelabs.com!1603734313!14205!1
-X-Originating-IP: [104.232.225.12]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.60.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 26498 invoked from network); 26 Oct 2020 17:45:14 -0000
-Received: from unknown (HELO lenovo.com) (104.232.225.12)
-  by server-14.tower-326.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 26 Oct 2020 17:45:14 -0000
-Received: from reswpmail04.lenovo.com (unknown [10.62.32.23])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by Forcepoint Email with ESMTPS id 1CF99C1806C424018A59;
-        Mon, 26 Oct 2020 13:45:13 -0400 (EDT)
-Received: from localhost.localdomain.com (10.64.83.193) by
- reswpmail04.lenovo.com (10.62.32.23) with Microsoft SMTP Server
+        id S1783342AbgJZSFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 14:05:36 -0400
+Received: from mga06.intel.com ([134.134.136.31]:15657 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1783309AbgJZSFg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 26 Oct 2020 14:05:36 -0400
+IronPort-SDR: 3AxumLLRrTCqUjBm4k7XOxMdeuoKjeU8v79+I11zMxzOaB7IOcks9Crds32AhPErmRVvMKrrSu
+ /1lxVM+WjvVw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="229599245"
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="229599245"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 11:05:35 -0700
+IronPort-SDR: Uc8K+VFVZ93aVM/70+ctVCa853/stfzAFxIAPyYpUo5uk2WnhoTIb5snEL1Sv8PyU2Z6/3gbmM
+ Wks/iF1281vw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="349992430"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga008.jf.intel.com with ESMTP; 26 Oct 2020 11:05:35 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 26 Oct 2020 11:05:34 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 26 Oct 2020 11:05:34 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Mon, 26 Oct 2020 11:05:34 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2044.4; Mon, 26 Oct 2020 10:45:09 -0700
-From:   Mark Pearson <markpearson@lenovo.com>
-To:     <markpearson@lenovo.com>
-CC:     <dvhart@infradead.org>, <mgross@linux.intel.com>,
-        <mario.limonciello@dell.com>, <eliadevito@gmail.com>,
-        <hadess@hadess.net>, <bberg@redhat.com>,
-        <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH] [RFC] Documentation: Add documentation for new platform_profile sysfs attribute
-Date:   Mon, 26 Oct 2020 13:44:44 -0400
-Message-ID: <20201026174444.866545-1-markpearson@lenovo.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <markpearson@lenovo.com>
-References: <markpearson@lenovo.com>
+ 15.1.1713.5; Mon, 26 Oct 2020 11:05:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dtvjJ1BfbAxGwy8/BIXUTBnOWEa+Sb1xd3bT23USlqbYSJnJ1fMoDe5JkmeRdafXD3l2l5a8nm/0hjCaz7bBZ/JVVtfso6sLMrN+PQCnz8c2kk0hFnBolhFdQoeHMTnYG9G1xsRNcExnlbymrJsiGg/hHJ/amBOpd00CM2dH7kxNeImzlXxGE5ieCUrHBS0m0sWyTQqXe0d2CQoZh+CPwu2vdNl8tX88Vdk6pOawDHP0l07YlrIeb2jE4vAx86JQF1FDxJCVFT0pti9Iy8CdIeQnYY9ljR75BkyRBw2MNQ9P40woBt4DYXIuxXPuQZPJ4j78q3SGOg90i7WOKge00Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pI9SKFxZvC9/fJMUywS0/LT7gv1p6aMQH877Grvd/0Q=;
+ b=LPwvjbIXl3L0TPRnC+uP5vycj8P2NKiNL3oZMQXhB6qQE7RYivjibIBkZ7l2Gf712OOr36PWob0nQSj1fs/PPyRQpULX4pZClkXBSl6GtuPst2TGgxqHPorjT40dXdqdoy0gczubGMNk9E6docx7YPzK93Pu0TxNmaZmAAG2RWLyiek4us8AyuxMh5+fnNHpsU4CynY/7DRoucWWHUB++W9rP1+2uXdwO6mbT1tZswm49oE3is3b8jhSyxAxGwl4+/wWFsJo/uYV1jr9Jjxh1TzVAIhTBNHcbLuK4sMlVuoP8Xlb7ZFHZB7ID1C3EbFdDlCDgrF6VHExq51wj6UMEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pI9SKFxZvC9/fJMUywS0/LT7gv1p6aMQH877Grvd/0Q=;
+ b=UbYscDRFf13GafA72jxAfFhbWgsANwlb6qLyXctmu4QYM8hqNQgaggPIpfbkYMj5FwmCr8RHlw+jfGkddvRbUVFVjguQayZJvU3n7jeCSbq0NLm6mXMbzwdK0jlwQI92L6phrSjZnqNf0imFLFxFQaAi9qXJUxb7hiCEgv59sMo=
+Received: from SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17)
+ by SA2PR11MB4956.namprd11.prod.outlook.com (2603:10b6:806:112::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.29; Mon, 26 Oct
+ 2020 18:05:31 +0000
+Received: from SN6PR11MB3184.namprd11.prod.outlook.com
+ ([fe80::b901:8e07:4340:6704]) by SN6PR11MB3184.namprd11.prod.outlook.com
+ ([fe80::b901:8e07:4340:6704%7]) with mapi id 15.20.3477.028; Mon, 26 Oct 2020
+ 18:05:31 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "rppt@kernel.org" <rppt@kernel.org>
+CC:     "david@redhat.com" <david@redhat.com>,
+        "cl@linux.com" <cl@linux.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "bp@alien8.de" <bp@alien8.de>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
+Subject: Re: [PATCH 0/4] arch, mm: improve robustness of direct map
+ manipulation
+Thread-Topic: [PATCH 0/4] arch, mm: improve robustness of direct map
+ manipulation
+Thread-Index: AQHWqrf3SYgZeORHqEa1kMKSitw9UKmpFReAgACDwgCAAJbiAA==
+Date:   Mon, 26 Oct 2020 18:05:30 +0000
+Message-ID: <a0212b073b3b2f62c3dbf1bf398f03fa402997be.camel@intel.com>
+References: <20201025101555.3057-1-rppt@kernel.org>
+         <ae82f905a0092adb7e0f0ac206335c1883b3170f.camel@intel.com>
+         <20201026090526.GA1154158@kernel.org>
+In-Reply-To: <20201026090526.GA1154158@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.30.1 (3.30.1-1.fc29) 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [134.134.137.79]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 757383ae-c314-4130-c79f-08d879d9ba6c
+x-ms-traffictypediagnostic: SA2PR11MB4956:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SA2PR11MB4956DFBF6DC6124E41B60183C9190@SA2PR11MB4956.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8gugbyRvXc1FrYJthS1/KT7bV9ujecCUln/j9Asi874O5De+jDJCp3Mg3Mqc08gZS0nrTjv/qATfmpl8zNTGEngCbaKVGgbQJ5ZhvZ2dUnKTxr9mVHf8eJoYvhK2CTtV9ymJtfnUdpePeecN0j1nn7fDuQ+HRo5CirpCXUlVplqx3HbimIxVrh3ha2TTweL0gsLxP4OGYdfut1gzM49h0aNEM/VJxflWtswXo3PgJcPxBU5SdD2J4NO1AYOtapw/sFmIJU6TzyYAavyvL/UsdLdTvvAJUWG3AaqUcOMohZY3liD3aZwdM6ook6jPtoDN4i41E6feO/szdnDABEkNRg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3184.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(366004)(396003)(346002)(39860400002)(66476007)(66556008)(66946007)(186003)(83380400001)(91956017)(478600001)(316002)(66446008)(26005)(54906003)(2616005)(6486002)(6506007)(71200400001)(64756008)(36756003)(7416002)(6916009)(6512007)(4001150100001)(76116006)(4326008)(5660300002)(2906002)(8936002)(7406005)(86362001)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: u6Y97UyC5dfZkZY5bjEaYRgqOLONgvzb75mSLbCRug2w34dlOkPVpWXAFRiUyj5/JhyOA8CdqditoYx2UpExek/EwoHuyCHm6pXa11HyKW0Iwrvn4WTdcyjxTGPp0JydnYay1YuM4KeCWP4oZkLNdPAHdJEKyO+9AeF8O3aGJdwgWCdbVKxCkQH00EBITNQ0fkWjy5NXbv5aRBylNRwxAVQi8Y3jIIcgOaYOYCIavDG8yvxhhLKl8cGzGtMOaZ8jxTKx9P/V5yH/NAaTZZNsfyujOOleHpMqSCI8kbP5Ib0t/zA1GHBJLISsbQqFBNePoabJY+b2R3aIQVhtVCXCiuDwwAZ3aa4MuSVsj07gFxJFNAUn+F0UOLsWTnGgu1slyYv31/3hk8RaqpGavo4pYBhYGxFWLXjNY6QCN5j25D2BGir2uLsxcBgb3H5cmp75vK2S+ryQelvPVVB9oNBdTuEN4weAzsln+Wmb0MtxpllxgNX7SaYHqfrEjm3GnUj4HlYpmfN2gJMzNwgm6PRwZbEmVkasPdDl8by9Odj3WFSbc+t6jTBeztaPELdB9nPVArb1ymjAw8EzjQzPCHYBhPYiRvBsKclOdktUKtRYsiw1yZpib006Czp+Hz2eLCJteLsO7E/g1NgPdh4p8yGcIg==
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D9F6DE933B80F84DA6EA9C88BA9B05F4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.64.83.193]
-X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
- reswpmail04.lenovo.com (10.62.32.23)
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3184.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 757383ae-c314-4130-c79f-08d879d9ba6c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2020 18:05:31.3661
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xQ2kBQXNfq1dLhyfcQFZ9pWdMDNoCDpS79wzzMNDV7orkFmVpIWFnNkhKC/mogzdcrAO8ema/BYkJl5wo7vwxWaAVJI62zFOIC1a/BojB1E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4956
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
-
-On modern systems the platform performance, temperature, fan and other
-hardware related characteristics are often dynamically configurable. The
-profile is often automatically adjusted to the load by somei
-automatic-mechanism (which may very well live outside the kernel).
-
-These auto platform-adjustment mechanisms often can be configured with
-one of several 'platform-profiles', with either a bias towards low-power
-consumption or towards performance (and higher power consumption and
-thermals).
-
-Introduce a new platform_profile sysfs API which offers a generic API for
-selecting the performance-profile of these automatic-mechanisms.
-
-Co-developed-by: Mark Pearson <markpearson@lenovo.com>
-Signed-off-by: Mark Pearson <markpearson@lenovo.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- .../ABI/testing/sysfs-platform_profile        | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-platform_profile
-
-diff --git a/Documentation/ABI/testing/sysfs-platform_profile b/Documentation/ABI/testing/sysfs-platform_profile
-new file mode 100644
-index 000000000000..37cb6275946c
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-platform_profile
-@@ -0,0 +1,85 @@
-+Platform-profile selection (e.g. /sys/firmware/acpi/platform_profile)
-+
-+On modern systems the platform performance, temperature, fan and other
-+hardware related characteristics are often dynamically configurable. The
-+profile is often automatically adjusted to the load by some
-+automatic-mechanism (which may very well live outside the kernel).
-+
-+These auto platform-adjustment mechanisms often can be configured with
-+one of several 'platform-profiles', with either a bias towards low-power
-+consumption or towards performance (and higher power consumption and
-+thermals).
-+
-+The purpose of the platform_profile attribute is to offer a generic sysfs
-+API for selecting the platform-profile of these automatic-mechanisms.
-+
-+Note that this API is only for selecting the platform-profile, it is
-+NOT a goal of this API to allow monitoring the resulting performance
-+characteristics. Monitoring performance is best done with device/vendor
-+specific tools such as e.g. turbostat.
-+
-+Specifically when selecting a high-performance profile the actual achieved
-+performance may be limited by various factors such as: the heat generated
-+by other components, room temperature, free air flow at the bottom of a
-+laptop, etc. It is explicitly NOT a goal of this API to let userspace know
-+about any sub-optimal conditions which are impeding reaching the requested
-+performance level.
-+
-+Since numbers are a rather meaningless way to describe platform-profiles
-+this API uses strings to describe the various profiles. To make sure that
-+userspace gets a consistent experience when using this API this API
-+document defines a fixed set of profile-names. Drivers *must* map their
-+internal profile representation/names onto this fixed set.
-+
-+If for some reason there is no good match when mapping then a new profile-name
-+may be added. Drivers which wish to introduce new profile-names must:
-+1. Have very good reasons to do so.
-+2. Add the new profile-name to this document, so that future drivers which also
-+   have a similar problem can use the same new. Usually new profile-names will
-+   be added to the "extra profile-names" section of this document. But in some
-+   cases the set of standard profile-names may be extended.
-+
-+What:		/sys/firmware/acpi/platform_profile_choices
-+Date:		October 2020
-+Contact:	Hans de Goede <hdegoede@redhat.com>
-+Description:
-+		Reading this file gives a space separated list of profiles
-+		supported for this device.
-+
-+		Drivers must use the following standard profile-names whenever
-+		possible:
-+
-+		low-power:		Emphasises low power consumption
-+		quiet:			Offers quieter operation (lower fan
-+					speed but with higher performance and
-+					temperatures then seen in low-power
-+		balanced:		Balance between low power consumption
-+					and performance
-+		performance:		Emphasises performance (and may lead to
-+					higher temperatures and fan speeds)
-+
-+		Userspace may expect drivers to offer at least several of these
-+		standard profile-names! If none of the above are a good match
-+		for some of the drivers profiles, then drivers may use one of
-+		these extra profile-names:
-+		<reserved for future use>
-+
-+What:		/sys/firmware/acpi/platform_profile
-+Date:		October 2020
-+Contact:	Hans de Goede <hdegoede@redhat.com>
-+Description:
-+		Reading this file gives the current selected profile for this
-+		device. Writing this file with one of the strings from
-+		available_profiles changes the profile to the new value.
-+
-+		Reading this file may also return "custom". This is intended for
-+		drivers which have and export multiple knobs. Such drivers may
-+		very well still want to offer a set of profiles for easy of use
-+		and to be able to offer a consistent standard API (this API) to
-+		userspace for configuring their performance. The "custom" value
-+		is intended for when ai user has directly configured the knobs
-+		(through e.g. some advanced control-panel for a GPU) and the
-+		knob values do not match any of the presets represented by the
-+		platform-profiles. In this case writing this file will
-+		override the modifications and restore the selected presets.
-+
--- 
-2.28.0
-
+T24gTW9uLCAyMDIwLTEwLTI2IGF0IDExOjA1ICswMjAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
+PiBPbiBNb24sIE9jdCAyNiwgMjAyMCBhdCAwMToxMzo1MkFNICswMDAwLCBFZGdlY29tYmUsIFJp
+Y2sgUCB3cm90ZToNCj4gPiBPbiBTdW4sIDIwMjAtMTAtMjUgYXQgMTI6MTUgKzAyMDAsIE1pa2Ug
+UmFwb3BvcnQgd3JvdGU6DQo+ID4gPiBJbmRlZWQsIGZvciBhcmNoaXRlY3R1cmVzIHRoYXQgZGVm
+aW5lDQo+ID4gPiBDT05GSUdfQVJDSF9IQVNfU0VUX0RJUkVDVF9NQVANCj4gPiA+IGl0IGlzDQo+
+ID4gPiBwb3NzaWJsZSB0aGF0IF9fa2VybmVsX21hcF9wYWdlcygpIHdvdWxkIGZhaWwsIGJ1dCBz
+aW5jZSB0aGlzDQo+ID4gPiBmdW5jdGlvbiBpcw0KPiA+ID4gdm9pZCwgdGhlIGZhaWx1cmUgd2ls
+bCBnbyB1bm5vdGljZWQuDQo+ID4gDQo+ID4gQ291bGQgeW91IGVsYWJvcmF0ZSBvbiBob3cgdGhp
+cyBjb3VsZCBoYXBwZW4/IERvIHlvdSBtZWFuIGR1cmluZw0KPiA+IHJ1bnRpbWUgdG9kYXkgb3Ig
+aWYgc29tZXRoaW5nIG5ldyB3YXMgaW50cm9kdWNlZD8NCj4gDQo+IEEgZmFpbHVyZSBpbl9fa2Vy
+bmVsX21hcF9wYWdlcygpIG1heSBoYXBwZW4gdG9kYXkuIEZvciBpbnN0YW5jZSwgb24NCj4geDg2
+DQo+IGlmIHRoZSBrZXJuZWwgaXMgYnVpbHQgd2l0aCBERUJVR19QQUdFQUxMT0MuDQo+IA0KPiAg
+ICAgICAgIF9fa2VybmVsX21hcF9wYWdlcyhwYWdlLCAxLCAwKTsNCj4gDQo+IHdpbGwgbmVlZCB0
+byBzcGxpdCwgc2F5LCAyTSBwYWdlIGFuZCBkdXJpbmcgdGhlIHNwbGl0IGFuIGFsbG9jYXRpb24N
+Cj4gb2YNCj4gcGFnZSB0YWJsZSBjb3VsZCBmYWlsLg0KDQpPbiB4ODYgYXQgbGVhc3QsIERFQlVH
+X1BBR0VBTExPQyBleHBlY3RzIHRvIG5ldmVyIGhhdmUgdG8gYnJlYWsgYSBwYWdlDQpvbiB0aGUg
+ZGlyZWN0IG1hcCBhbmQgZXZlbiBkaXNhYmxlcyBsb2NraW5nIGluIGNwYSBiZWNhdXNlIGl0IGFz
+c3VtZXMNCnRoaXMuIElmIHRoaXMgaXMgaGFwcGVuaW5nIHNvbWVob3cgYW55d2F5IHRoZW4gd2Ug
+c2hvdWxkIHByb2JhYmx5IGZpeA0KdGhhdC4gRXZlbiBpZiBpdCdzIGEgZGVidWcgZmVhdHVyZSwg
+aXQgd2lsbCBub3QgYmUgYXMgdXNlZnVsIGlmIGl0IGlzDQpjYXVzaW5nIGl0cyBvd24gY3Jhc2hl
+cy4NCg0KSSdtIHN0aWxsIHdvbmRlcmluZyBpZiB0aGVyZSBpcyBzb21ldGhpbmcgSSdtIG1pc3Np
+bmcgaGVyZS4gSXQgc2VlbXMNCmxpa2UgeW91IGFyZSBzYXlpbmcgdGhlcmUgaXMgYSBidWcgaW4g
+c29tZSBhcmNoJ3MsIHNvIGxldCdzIGFkZCBhIFdBUk4NCmluIGNyb3NzLWFyY2ggY29kZSB0byBs
+b2cgaXQgYXMgaXQgY3Jhc2hlcy4gQSB3YXJuIGFuZCBtYWtpbmcgdGhpbmdzDQpjbGVhcmVyIHNl
+ZW0gbGlrZSBnb29kIGlkZWFzLCBidXQgaWYgdGhlcmUgaXMgYSBidWcgd2Ugc2hvdWxkIGZpeCBp
+dC4NClRoZSBjb2RlIGFyb3VuZCB0aGUgY2FsbGVycyBzdGlsbCBmdW5jdGlvbmFsbHkgYXNzdW1l
+IHJlLW1hcHBpbmcgY2FuJ3QNCmZhaWwuDQoNCj4gQ3VycmVudGx5LCB0aGUgb25seSB1c2VyIG9m
+IF9fa2VybmVsX21hcF9wYWdlcygpIG91dHNpZGUNCj4gREVCVUdfUEFHRUFMTE9DDQo+IGlzIGhp
+YmVybmF0aW9uLCBidXQgSSB0aGluayBpdCB3b3VsZCBiZSBzYWZlciB0byBlbnRpcmVseSBwcmV2
+ZW50DQo+IHVzYWdlDQo+IG9mIF9fa2VybmVsX21hcF9wYWdlcygpIHdoZW4gREVCVUdfUEFHRUFM
+TE9DPW4uDQoNCkkgdG90YWxseSBhZ3JlZSBpdCdzIGVycm9yIHByb25lIEZXSVcuIE9uIHg4Niwg
+bXkgbWVudGFsIG1vZGVsIG9mIGhvdw0KaXQgaXMgc3VwcG9zZWQgdG8gd29yayBpczogSWYgYSBw
+YWdlIGlzIDRrIGFuZCBOUCBpdCBjYW5ub3QgZmFpbCB0byBiZQ0KcmVtYXBwZWQuIHNldF9kaXJl
+Y3RfbWFwX2ludmFsaWRfbm9mbHVzaCgpIHNob3VsZCByZXN1bHQgaW4gNGsgTlANCnBhZ2VzLCBh
+bmQgREVCVUdfUEFHRUFMTE9DIHNob3VsZCByZXN1bHQgaW4gYWxsIDRrIHBhZ2VzIG9uIHRoZSBk
+aXJlY3QNCm1hcC4gQXJlIHlvdSBzZWVpbmcgdGhpcyB2aW9sYXRlZCBvciBkbyBJIGhhdmUgd3Jv
+bmcgYXNzdW1wdGlvbnM/DQoNCkJleW9uZCB3aGF0ZXZlciB5b3UgYXJlIHNlZWluZywgZm9yIHRo
+ZSBsYXR0ZXIgY2FzZSBvZiBuZXcgdGhpbmdzDQpnZXR0aW5nIGludHJvZHVjZWQgdG8gYW4gaW50
+ZXJmYWNlIHdpdGggaGlkZGVuIGRlcGVuZGVuY2llcy4uLiBBbm90aGVyDQplZGdlIGNhc2UgY291
+bGQgYmUgYSBuZXcgY2FsbGVyIHRvIHNldF9tZW1vcnlfbnAoKSBjb3VsZCByZXN1bHQgaW4NCmxh
+cmdlIE5QIHBhZ2VzLiBOb25lIG9mIHRoZSBjYWxsZXJzIHRvZGF5IHNob3VsZCBjYXVzZSB0aGlz
+IEFGQUlDVCwgYnV0DQppdCdzIG5vdCBncmVhdCB0byByZWx5IG9uIHRoZSBjYWxsZXJzIHRvIGtu
+b3cgdGhlc2UgZGV0YWlscy4NCg0KDQo=
