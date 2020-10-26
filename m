@@ -2,162 +2,261 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4302985CF
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 04:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21D92985D1
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 04:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1421731AbgJZDFF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Oct 2020 23:05:05 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:14088 "EHLO
+        id S1420847AbgJZDGm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Oct 2020 23:06:42 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:14859 "EHLO
         mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1421721AbgJZDFE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 23:05:04 -0400
+        with ESMTP id S2389741AbgJZDGl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Oct 2020 23:06:41 -0400
 Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201026030459epoutp02db82ac8353ea864f0ae8173ba00ad3e3~Ba9O6FlJb2777227772epoutp02P
-        for <linux-pm@vger.kernel.org>; Mon, 26 Oct 2020 03:04:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201026030459epoutp02db82ac8353ea864f0ae8173ba00ad3e3~Ba9O6FlJb2777227772epoutp02P
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201026030635epoutp02f6b2b68bbbfd1eb6fe44ae18500164ef~Ba_oqjstk2915329153epoutp020
+        for <linux-pm@vger.kernel.org>; Mon, 26 Oct 2020 03:06:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201026030635epoutp02f6b2b68bbbfd1eb6fe44ae18500164ef~Ba_oqjstk2915329153epoutp020
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1603681499;
-        bh=rAZaAtl0r+2j3+7h7buuCLddDxaE+Tu5embt/8DbLeM=;
+        s=mail20170921; t=1603681595;
+        bh=wshxurGjF4X118ZbuS6qWV5Ory9u21tA8EzJswY6c68=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=c1tQLd+9imhZcPg8IUNDv1t6aZvlMYch4tcQj8xStqRSQUwqMTn5H+etHhcldZkwW
-         rQgVAXEWmW8udwpWp0F+N48R7jpgCLZicrtXo3Qsy9UsPef+ryc2G8XvXpt292EF8S
-         /9X+tYByjw4DjPM6sY6X+vXCMhWde7UA8AoL3VrI=
+        b=E29IzhaFjKI2EoNYzUuL28jCGP4vgDnUay945/Xza7wJLcA6l1JsUCjirKbZBExnQ
+         s0UYJTAELFqJOCLWfyZcizhpjWa7PSqTrZFLepvnwEgN0hEFjAbL5+/stopmEzQvcC
+         7PQ0VpqzdbJpRipTIFpVCdUyCfN7Y5voxZKNjvnM=
 Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20201026030458epcas1p4a73df2f922afcf80e796270b60e333c5~Ba9OLNylC3146231462epcas1p4G;
-        Mon, 26 Oct 2020 03:04:58 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4CKKSm13GxzMqYkV; Mon, 26 Oct
-        2020 03:04:56 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20201026030634epcas1p2ae6b4f34b798e61229536d71f06f1024~Ba_n50p0C2543625436epcas1p2b;
+        Mon, 26 Oct 2020 03:06:34 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.155]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4CKKVd0NB5zMqYkX; Mon, 26 Oct
+        2020 03:06:33 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
         epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8A.60.09543.7DC369F5; Mon, 26 Oct 2020 12:04:56 +0900 (KST)
+        46.C0.09543.83D369F5; Mon, 26 Oct 2020 12:06:32 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20201026030455epcas1p160c95fac388080dbadb353ae61526110~Ba9LjnbOE3236632366epcas1p1-;
-        Mon, 26 Oct 2020 03:04:55 +0000 (GMT)
+        20201026030632epcas1p1a69153f0e0dc68396dc55956181478f9~Ba_lpZ6Sz2198521985epcas1p1Q;
+        Mon, 26 Oct 2020 03:06:32 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201026030455epsmtrp279ae4c0cd9936ee26a3e60a6795033fb~Ba9LipXCr3214132141epsmtrp2Z;
-        Mon, 26 Oct 2020 03:04:55 +0000 (GMT)
-X-AuditID: b6c32a35-35dff70000002547-ff-5f963cd75e98
+        20201026030632epsmtrp2e8b46e412780524c82533be26517ab00~Ba_lovkWb0067800678epsmtrp2f;
+        Mon, 26 Oct 2020 03:06:32 +0000 (GMT)
+X-AuditID: b6c32a35-35dff70000002547-14-5f963d383ac5
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6D.D6.08745.7DC369F5; Mon, 26 Oct 2020 12:04:55 +0900 (KST)
+        FA.07.08745.83D369F5; Mon, 26 Oct 2020 12:06:32 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201026030455epsmtip2303f08a45d26ce44df9d951ca26fc758~Ba9LPreLg1892518925epsmtip2F;
-        Mon, 26 Oct 2020 03:04:55 +0000 (GMT)
-Subject: Re: [PATCH v6 48/52] PM / devfreq: tegra20: Relax Kconfig
- dependency
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
+        20201026030632epsmtip2a51aef72e5220768e043d0799a309a8c~Ba_lYwxlA2421824218epsmtip2P;
+        Mon, 26 Oct 2020 03:06:32 +0000 (GMT)
+Subject: Re: [PATCH v2] PM / devfreq: Remove redundant governor_name from
+ struct devfreq
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     chanwoo@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <c38862ec-cca5-39c8-25b2-327cbd0bd6a8@samsung.com>
-Date:   Mon, 26 Oct 2020 12:18:45 +0900
+Message-ID: <98da4fe9-5b3b-1bb7-a35d-1083a8032f1e@samsung.com>
+Date:   Mon, 26 Oct 2020 12:20:21 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20201025221735.3062-49-digetx@gmail.com>
+In-Reply-To: <20201023103215.24647-1-cw00.choi@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te1BUVRz23Lt79y62eVtRT2QFl4rhvSvsckBwrFhnVSjSGaeaZFvhthDs
-        Y3YhezATKhCPNJEBYVsewlC2sIgroTAgtqwJziAG4YBAbKJMJS7GRoEyFMvFif++33e+7/x+
-        33mQuPA+4UWmajIYvUaZThMenNZu/+Dg4egyhaj2Jo6cs/e4qNp+g4sa/pwE6Oe5GQKd7rQS
-        KMdYy0H9/c089P29Rgz1HZ3mocF2E4Fcx+0AFfxlJNBP12Vo9MhZAp2ylALUN7UX5XbaeWjp
-        1nkOWmiv4qALjh+JnZ7ymeFcnrzNOM6TD9xYxOVWcwEhH7vVQcgniq5h8uPHnIT8RIsZyF3W
-        FxL476ZFpzDKZEbvzWiStMmpGlUMvXe/4nWFRCoSB4sjUQTtrVGqmRg6Ni4heFdq+nIy2vsj
-        ZXrmMpWgNBjo0B3Rem1mBuOdojVkxNCMLjldF6kLMSjVhkyNKiRJq44Si0TbJMvC99NSznVk
-        47rLHh/fvuqTDexkIeCTkAqH1qs2rBB4kELqEoATo49wtpgF0FLxiGALF4D366p5TyzGScuq
-        qh1A06m8VdUMgHe6fsXcqo3Um9Ay1bSi8qRGOPDbs0uEewGnygEc6/B1Y4IKgF2/Da/wGygf
-        ODQ/CQoBSQqoHXC00sdNc6iX4UKRY0WyiToAe1tzgBsLqGdgb8VdjhvzKSl0zpZx2e23wNt3
-        qzEWvwgvPjCtzACpr/lworMZZyPEwp6ReS6LN8I/rrWsRvOCLmcnweLP4He9doI15wPY0nVz
-        1RAGu+pLMPegOOUPz7WHsrQPbHtcCdjGT0Pn3JdctwRSApifJ2QlvnDQMY6x+FlY90UBcRLQ
-        xjVxjGsiGNdEMP7frAZwzGAzozOoVYxBrBOvvW0rWHn1AZJLoPjBwxAbwEhgA5DEaU+BaWup
-        QihIVn7yKaPXKvSZ6YzBBiTLB1yMe21K0i5/G02GQizZFhYWhsLFUolYTG8RLAbmK4SUSpnB
-        pDGMjtE/8WEk3ysbs6w/4kfuidjt83neYPlg/VeHA49tn/owsNsBDvp5LkR5jo2/2lltXmc7
-        akdthYcsPbxp37dal/rqyhp/74m/WNz/Tu4/Akd3zZnpMO91pqmt9ExQVBYvbo4Iiv83kRsx
-        61/xXOOhxeutw9KDivfiYuplCxHPA1H3/De+RknD34mV55NiTUV8mfptV1WdLGv4hF/R5ssV
-        hOoHbCRRVfPU+IHDkXiDWZDmsEVzH6uvDJXvL5PmxLtETREDV6wlzvDT0qELo4sDu/jzbzTV
-        Phzdt71UHsI1/hJ9BntNK9Tc6WlzJI5EfbDenKXfU1de1dxxUvbK+Ev7sFDRzmC/oJJUslFG
-        cwwpSnEArjco/wMe+SWifgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02RbUhTURjHObvXu7vB2s0tPGlouxDaUCupOB9s+aW4akEZRaRms24W+TLu
-        Mk0K7EV8WdqSMrtNTQmqlWhmljZT3MyyzPIt01JzGWptpWUomOV1BH77nf//+T3Ph0Ni7t24
-        J3k08TjLJWrjaUKK11hpn4B3wQUxa3Pa1cg5OeKGSmyv3dDdCTtAXVPfCXS1vopA5/kyHLW3
-        V4rRw5F7ItR29psYddaZCPQz1wZQ9i+eQG9bt6D+M7cJlF9+BaC2L+Eoo94mRnM993E0U1eM
-        owdDz4gQJfO9N0PM1PIfxUzH61mMqTJnE8yHHgvBDBpaREzuOSfB5FWbAfOzynuHZJ80+BAb
-        f/QEy63RHJAeqbCkY7qn0tS+ZlU6sJE5QEJCaj3k7eVYDpCS7tRjAPu+mghXsRwWvG2eL8h5
-        VkCrVe+acQA4OZZPCLmC2g4nrgcIuZL6iMP86T5CeGBUIYCzlffFLqMawMxLA0DYSlBq2DDa
-        u3BBTqlg97QdCJtklAb2F6mEGKdWwRnD0MLIMmoPrL1pFwkso5bCF9c+4wJLqI3QOVngJjBG
-        +cLZ4g7MxR6w73OJyMU+8JHDhBmBgl+k84sUfpHCL1JuANwMlrM6fUJcgn6dLiiRTQnUaxP0
-        yYlxgQeTEqrAws+r1Y+BxfwjsAmISNAEIInRSplpxZUYd9kh7ck0lkuK4ZLjWX0T8CJx2kM2
-        xZfud6fitMfZYyyrY7n/rYiUeKaL5KIW41iLv1z8V9IoXrk760JD6NfONb+X9A6k9Md6hHtG
-        hdRoVow3e8sx2ra6ZrLeWaE7fMeybYbTmTd1vzml6qLNl8beh94qT12rMGQ5B60RbGvYhrGT
-        Dqv/sahmv2L+l6pwpAHKNI7p591xhgP9s2G3vIaKox10xTPlZilWHWF8aK8xquseRConOl7l
-        Ac2umNLgbGeYl3Y0ZLVi+GKor7rrRFHQuJ/cL409PdxWFvTyT9ntLy+Tyk8np7WG6Gy2fEtk
-        LPdq0DurMe2Jc/hpiinzILavZO5weGQu/Vu2/x1m2BlAVn6yosapgWimOsJkVFzeuyk1Yiv3
-        ROFP4/oj2nVqjNNr/wG0H1tAaAMAAA==
-X-CMS-MailID: 20201026030455epcas1p160c95fac388080dbadb353ae61526110
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkk+LIzCtJLcpLzFFi42LZdlhTX9fCdlq8wYvF1hYTb1xhsTjb9Ibd
+        4vKuOWwWn3uPMFrcblzB5sDqsWlVJ5tH35ZVjB6fN8kFMEdl22SkJqakFimk5iXnp2Tmpdsq
+        eQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYArVRSKEvMKQUKBSQWFyvp29kU5ZeWpCpk
+        5BeX2CqlFqTkFFgW6BUn5haX5qXrJefnWhkaGBiZAhUmZGdc2buAseCEYcWUKVsZGxhnanQx
+        cnJICJhILH3+nr2LkYtDSGAHo8Tl9b9ZQRJCAp8YJX7drIJIfGaUOHKvkamLkQOs48KsJIj4
+        LkaJlqXtTBDOe0aJOVs/sIN0CwtESTQcXghmiwhYSZz+38EMYjMLeEssfruaEcRmE9CS2P/i
+        BhuIzS+gKHH1x2OwOK+AncT+74/ArmARUJVYdvkOC4gtKhAmcXJbC1SNoMTJmU9YQA7iFLCW
+        2Li1FGK8uMStJ/OZIGx5ie1v5zBDfPmXXWJHUy2E7SLx5VYTK4QtLPHq+BZ2CFtK4vO7vWwQ
+        drXEypNH2ED+khDoYJTYsv8CVIOxxP6lk8EBwSygKbF+lz5EWFFi5++5jBB7+STefe1hhYQV
+        r0RHmxBEibLE5Qd3mSBsSYnF7Z1sExiVZiF5ZhaSD2Yh+WAWwrIFjCyrGMVSC4pz01OLDQsM
+        kaN6EyM4LWqZ7mCc+PaD3iFGJg7GQ4wSHMxKIrxzZKbGC/GmJFZWpRblxxeV5qQWH2I0BQbv
+        RGYp0eR8YGLOK4k3NDUyNja2MDE0MzU0VBLn/aPdES8kkJ5YkpqdmlqQWgTTx8TBKdXAdKN9
+        d1z6l5/HG0T0S2s8NTK7hX2rXV8ZaIvmWXEoakuufPvB/9dxdf14EUvx3/E6msp6Fn8zDZdH
+        LfeasVzZfZmk6lx1bYnjDPHrb5u7/dn1xqh4gqBkn0kT17vEKZej5s3okP/l1OljHhbi4TDl
+        s/myZv6uW24+dXN3Wy3vi9Ou3L376+eTR+o2pBY0nprBti3UmC29y2VxYkj1r3Uq5xW/y23Q
+        qn/xM66Tzd1AUK8qniHG+MGmJZNnWp/745vbYbuZedsGu/O9rqpeARP+Lrk28cJNmQ8vdl+8
+        ez4qVXDiwwiH3COhTQcMCv4LOyr+O2T4d/uRHbnHjnBMZVwSY55UduLgoz/bP24o2q2nxFKc
+        kWioxVxUnAgAIWr2whQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLLMWRmVeSWpSXmKPExsWy7bCSvK6F7bR4g9vXxC0m3rjCYnG26Q27
+        xeVdc9gsPvceYbS43biCzYHVY9OqTjaPvi2rGD0+b5ILYI7isklJzcksSy3St0vgyriydwFj
+        wQnDiilTtjI2MM7U6GLk4JAQMJG4MCupi5GLQ0hgB6PEkbPzGLsYOYHikhLTLh5lhqgRljh8
+        uBii5i2jxKYte9lAaoQFoiQaDi9kB7FFBKwkTv/vYAaxmQW8JRa/Xc0I0dDHKPHz/E8mkASb
+        gJbE/hc3wJr5BRQlrv54DLaMV8BOYv/3R6wgNouAqsSyy3dYQGxRgTCJnUseM0HUCEqcnPmE
+        BeQgTgFriY1bSyF2qUv8mXcJaq+4xK0n85kgbHmJ7W/nME9gFJ6FpHsWkpZZSFpmIWlZwMiy
+        ilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjOEa0tHYw7ln1Qe8QIxMH4yFGCQ5mJRHe
+        OTJT44V4UxIrq1KL8uOLSnNSiw8xSnOwKInzfp21ME5IID2xJDU7NbUgtQgmy8TBKdXApJFw
+        va23x0Dc/9T61XqSO63PpEo8OMaU+fYeQ8DZ3n9HyluDOjK0N/p48kbKcb76bP5gavO0/3ql
+        q0z3Jelea36Q6Vn95lGxR9SNFRZOa781iz3ad3f7rD8X9j3xW5hc1Xrogvb1Eh2VA3Mlde0O
+        f7jpP29J043Tc/N2RupvjC6Jm6f9qGdvW5Pt1+kbfOqN7sr48RrlaBxYYXJw67SH5t/y2kru
+        cpe7yyj8/PTcRphZVFbKf1Hxq+df7B/KSyanH+bR2Kc1+b2G6KtL6y+eXZfxSvcng/5quSCF
+        j++OdXHNM5nHKRSy905b9mufVb8DPn8UZNo+2SMtpevOgvNOomfm8v3w59cpmSO/XrHxjhJL
+        cUaioRZzUXEiANEFi5gAAwAA
+X-CMS-MailID: 20201026030632epcas1p1a69153f0e0dc68396dc55956181478f9
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201025222141epcas1p3561566981daa20ed096227f0e4a26b98
-References: <20201025221735.3062-1-digetx@gmail.com>
-        <CGME20201025222141epcas1p3561566981daa20ed096227f0e4a26b98@epcas1p3.samsung.com>
-        <20201025221735.3062-49-digetx@gmail.com>
+X-CMS-RootMailID: 20201023101830epcas1p446aee869d0211a62f68cdf616b6203ed
+References: <CGME20201023101830epcas1p446aee869d0211a62f68cdf616b6203ed@epcas1p4.samsung.com>
+        <20201023103215.24647-1-cw00.choi@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/26/20 7:17 AM, Dmitry Osipenko wrote:
-> The Tegra EMC driver now could be compiled as a loadable kernel module.
-> Currently devfreq driver depends on the EMC/MC drivers in Kconfig, and
-> thus, devfreq is forced to be a kernel module if EMC is compiled as a
-> module. This build dependency could be relaxed since devfreq driver
-> checks MC/EMC presence on probe, allowing kernel configuration where
-> devfreq is a built-in driver and EMC driver is a loadable module.
-> This change puts Tegra20 devfreq Kconfig entry on a par with the Tegra30
-> devfreq entry.
+On 10/23/20 7:32 PM, Chanwoo Choi wrote:
+> The devfreq structure instance contains the governor_name and a governor
+> instance. When need to show the governor name, better to use the name
+> of devfreq_governor structure. So, governor_name variable in struct devfreq
+> is a redundant and unneeded variable. Remove the redundant governor_name
+> of struct devfreq and then use the name of devfreq_governor instance.
 > 
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 > ---
->  drivers/devfreq/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes from v1:
+> - Rebase it on "[PATCH v5 0/2] PM / devfreq: Add governor feature and attribute flag"
 > 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index 37dc40d1fcfb..0ee36ae2fa79 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -123,7 +123,7 @@ config ARM_TEGRA_DEVFREQ
+>  drivers/devfreq/devfreq.c  | 18 +++++++-----------
+>  drivers/devfreq/governor.h |  2 ++
+>  include/linux/devfreq.h    |  4 ----
+>  3 files changed, 9 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index f6c55cf498ed..74f71588ace5 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -811,7 +811,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	devfreq->dev.release = devfreq_dev_release;
+>  	INIT_LIST_HEAD(&devfreq->node);
+>  	devfreq->profile = profile;
+> -	strscpy(devfreq->governor_name, governor_name, DEVFREQ_NAME_LEN);
+>  	devfreq->previous_freq = profile->initial_freq;
+>  	devfreq->last_status.current_frequency = profile->initial_freq;
+>  	devfreq->data = data;
+> @@ -907,7 +906,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
 >  
->  config ARM_TEGRA20_DEVFREQ
->  	tristate "NVIDIA Tegra20 DEVFREQ Driver"
-> -	depends on (TEGRA_MC && TEGRA20_EMC) || COMPILE_TEST
-> +	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
->  	depends on COMMON_CLK
->  	select DEVFREQ_GOV_SIMPLE_ONDEMAND
->  	help
+>  	mutex_lock(&devfreq_list_lock);
+>  
+> -	governor = try_then_request_governor(devfreq->governor_name);
+> +	governor = try_then_request_governor(governor_name);
+>  	if (IS_ERR(governor)) {
+>  		dev_err(dev, "%s: Unable to find governor for the device\n",
+>  			__func__);
+> @@ -1250,7 +1249,7 @@ int devfreq_add_governor(struct devfreq_governor *governor)
+>  		int ret = 0;
+>  		struct device *dev = devfreq->dev.parent;
+>  
+> -		if (!strncmp(devfreq->governor_name, governor->name,
+> +		if (!strncmp(devfreq->governor->name, governor->name,
+>  			     DEVFREQ_NAME_LEN)) {
+>  			/* The following should never occur */
+>  			if (devfreq->governor) {
+> @@ -1312,7 +1311,7 @@ int devfreq_remove_governor(struct devfreq_governor *governor)
+>  		int ret;
+>  		struct device *dev = devfreq->dev.parent;
+>  
+> -		if (!strncmp(devfreq->governor_name, governor->name,
+> +		if (!strncmp(devfreq->governor->name, governor->name,
+>  			     DEVFREQ_NAME_LEN)) {
+>  			/* we should have a devfreq governor! */
+>  			if (!devfreq->governor) {
+> @@ -1407,7 +1406,6 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
+>  	 */
+>  	prev_governor = df->governor;
+>  	df->governor = governor;
+> -	strncpy(df->governor_name, governor->name, DEVFREQ_NAME_LEN);
+>  	ret = df->governor->event_handler(df, DEVFREQ_GOV_START, NULL);
+>  	if (ret) {
+>  		dev_warn(dev, "%s: Governor %s not started(%d)\n",
+> @@ -1415,13 +1413,11 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
+>  
+>  		/* Restore previous governor */
+>  		df->governor = prev_governor;
+> -		strncpy(df->governor_name, prev_governor->name,
+> -			DEVFREQ_NAME_LEN);
+>  		ret = df->governor->event_handler(df, DEVFREQ_GOV_START, NULL);
+>  		if (ret) {
+>  			dev_err(dev,
+>  				"%s: reverting to Governor %s failed (%d)\n",
+> -				__func__, df->governor_name, ret);
+> +				__func__, prev_governor->name, ret);
+>  			df->governor = NULL;
+>  			goto out;
+>  		}
+> @@ -1457,7 +1453,7 @@ static ssize_t available_governors_show(struct device *d,
+>  	 */
+>  	if (IS_SUPPORTED_FLAG(df->governor->flags, IMMUTABLE)) {
+>  		count = scnprintf(&buf[count], DEVFREQ_NAME_LEN,
+> -				  "%s ", df->governor_name);
+> +				  "%s ", df->governor->name);
+>  	/*
+>  	 * The devfreq device shows the registered governor except for
+>  	 * immutable governors such as passive governor .
+> @@ -1900,7 +1896,7 @@ static int devfreq_summary_show(struct seq_file *s, void *data)
+>  
+>  	list_for_each_entry_reverse(devfreq, &devfreq_list, node) {
+>  #if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
+> -		if (!strncmp(devfreq->governor_name, DEVFREQ_GOV_PASSIVE,
+> +		if (!strncmp(devfreq->governor->name, DEVFREQ_GOV_PASSIVE,
+>  							DEVFREQ_NAME_LEN)) {
+>  			struct devfreq_passive_data *data = devfreq->data;
+>  
+> @@ -1926,7 +1922,7 @@ static int devfreq_summary_show(struct seq_file *s, void *data)
+>  			"%-30s %-30s %-15s %-10s %10d %12ld %12ld %12ld\n",
+>  			dev_name(&devfreq->dev),
+>  			p_devfreq ? dev_name(&p_devfreq->dev) : "null",
+> -			devfreq->governor_name,
+> +			devfreq->governor->name,
+>  			polling_ms ? timer_name[timer] : "null",
+>  			polling_ms,
+>  			cur_freq,
+> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+> index df413b851bb2..2a52f97b542d 100644
+> --- a/drivers/devfreq/governor.h
+> +++ b/drivers/devfreq/governor.h
+> @@ -13,6 +13,8 @@
+>  
+>  #include <linux/devfreq.h>
+>  
+> +#define DEVFREQ_NAME_LEN			16
+> +
+>  #define to_devfreq(DEV)	container_of((DEV), struct devfreq, dev)
+>  
+>  /* Devfreq events */
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index 2f4a74efa6be..82156721f459 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -15,8 +15,6 @@
+>  #include <linux/pm_opp.h>
+>  #include <linux/pm_qos.h>
+>  
+> -#define DEVFREQ_NAME_LEN 16
+> -
+>  /* DEVFREQ governor name */
+>  #define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simple_ondemand"
+>  #define DEVFREQ_GOV_PERFORMANCE		"performance"
+> @@ -139,7 +137,6 @@ struct devfreq_stats {
+>   *		using devfreq.
+>   * @profile:	device-specific devfreq profile
+>   * @governor:	method how to choose frequency based on the usage.
+> - * @governor_name:	devfreq governor name for use with this devfreq
+>   * @nb:		notifier block used to notify devfreq object that it should
+>   *		reevaluate operable frequencies. Devfreq users may use
+>   *		devfreq.nb to the corresponding register notifier call chain.
+> @@ -176,7 +173,6 @@ struct devfreq {
+>  	struct device dev;
+>  	struct devfreq_dev_profile *profile;
+>  	const struct devfreq_governor *governor;
+> -	char governor_name[DEVFREQ_NAME_LEN];
+>  	struct notifier_block nb;
+>  	struct delayed_work work;
+>  
 > 
 
 Applied it.
