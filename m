@@ -2,79 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B252988A4
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 09:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D8729890F
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 10:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1770420AbgJZIkj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 04:40:39 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:42736 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1746866AbgJZIki (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 04:40:38 -0400
-Received: by mail-ed1-f68.google.com with SMTP id v19so8382237edx.9;
-        Mon, 26 Oct 2020 01:40:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fPY3YUMaHx0SYLGgmZyNAyMNlSCq8nr0Au+mUxZwASo=;
-        b=V35cQF6bQXl6Tjm1KvJ2BH2QIJJxZWHCJcbPlvTlqsVrHGibEDS5Ay+8/qd7CSXMxX
-         aDa8Sfs7s96wBPMYgUCF6ZtuAYnxOIIMPjGIP7BtNKp0L6l74y6VLN3gC+IJozh3XZLb
-         L+UEnv8rJDdp05l5y2GwT6XxWCYDBnpsl1l1FherPwWGAa9IJqqVxkjbYNDBlXn/OgXR
-         e9VoF7dFba3gfToAdc4BO2gtmRUZ7rLZGd1nupaHDmFEYYgGPjzZwIp5ywwYHh0donDj
-         5mvWFgr8SZl8h7aA0xtHhwbglLdh/yxeU3OInwpMCjXgpZ5N5YukfbtSJlfikvt3ijhZ
-         QbAw==
-X-Gm-Message-State: AOAM531bWDXia5tRD3uKOL8jPeHe/fXvnI3vswP8NpdSYRETlGFvFatf
-        GTbT5w1z2GDRmsunG+u+dC4zVayPe3w=
-X-Google-Smtp-Source: ABdhPJzMNFAPm/G/FPe2T5GfoWx+hZWCWuIsNulsXqm9QWpIwDSzI0aXCpKKCmaS2zzfu6KxDgxn0A==
-X-Received: by 2002:a50:8f61:: with SMTP id 88mr14969192edy.175.1603701634845;
-        Mon, 26 Oct 2020 01:40:34 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id u10sm5306057ejh.54.2020.10.26.01.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 01:40:33 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 09:40:31 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: More whitespace clean-ups in schema files
-Message-ID: <20201026084031.GA7466@kozik-lap>
-References: <20201023192258.3126047-1-robh@kernel.org>
+        id S1772545AbgJZJFp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 05:05:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58514 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390998AbgJZJFo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 26 Oct 2020 05:05:44 -0400
+Received: from kernel.org (unknown [87.70.96.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F28122242;
+        Mon, 26 Oct 2020 09:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603703144;
+        bh=qV1j3o8b5aO+jtdBDoJyX5701vJJcUPPuK5bWgUroMs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n6pQeRtZ1dQZQwNLzcRvocBVxWOThQ2A3ohdsbB1ku0q9Z1z2DOVNvIaiR/xbrSRK
+         5zQtm2aEbLsKv3mU1aC9GYppS4t99gNCuK2wQoR74ofGRKXtqAOsYTKvXA+WFU2Lid
+         njOARSpftIz0V7Pd9Gh+IjN51p6qFKYl2MBmmm2s=
+Date:   Mon, 26 Oct 2020 11:05:26 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "cl@linux.com" <cl@linux.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
+Subject: Re: [PATCH 0/4] arch, mm: improve robustness of direct map
+ manipulation
+Message-ID: <20201026090526.GA1154158@kernel.org>
+References: <20201025101555.3057-1-rppt@kernel.org>
+ <ae82f905a0092adb7e0f0ac206335c1883b3170f.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201023192258.3126047-1-robh@kernel.org>
+In-Reply-To: <ae82f905a0092adb7e0f0ac206335c1883b3170f.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 02:22:58PM -0500, Rob Herring wrote:
-> Clean-up incorrect indentation, extra spaces, and missing EOF newline in
-> schema files. Most of the clean-ups are for list indentation which
-> should always be 2 spaces more than the preceding keyword.
+On Mon, Oct 26, 2020 at 01:13:52AM +0000, Edgecombe, Rick P wrote:
+> On Sun, 2020-10-25 at 12:15 +0200, Mike Rapoport wrote:
+> > Indeed, for architectures that define CONFIG_ARCH_HAS_SET_DIRECT_MAP
+> > it is
+> > possible that __kernel_map_pages() would fail, but since this
+> > function is
+> > void, the failure will go unnoticed.
 > 
-> Found with yamllint (now integrated into the checks).
-> 
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Could you elaborate on how this could happen? Do you mean during
+> runtime today or if something new was introduced?
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+A failure in__kernel_map_pages() may happen today. For instance, on x86
+if the kernel is built with DEBUG_PAGEALLOC.
 
-Best regards,
-Krzysztof
+	__kernel_map_pages(page, 1, 0);
+
+will need to split, say, 2M page and during the split an allocation of
+page table could fail.
+
+Currently, the only user of __kernel_map_pages() outside DEBUG_PAGEALLOC
+is hibernation, but I think it would be safer to entirely prevent usage
+of __kernel_map_pages() when DEBUG_PAGEALLOC=n.
+
+-- 
+Sincerely yours,
+Mike.
