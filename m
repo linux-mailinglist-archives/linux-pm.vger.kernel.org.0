@@ -2,182 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D65B298C79
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 12:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0745298D1E
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 13:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1774550AbgJZLz4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 07:55:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:45516 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1768314AbgJZLz4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 07:55:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603713354;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8HQyHiJi8lNhKdgT87H/9jAZEMb+E8WQwouLjsaWes=;
-        b=abfek0DkJ9K/P0nDYXmnjxG2/m9H6CLkQlqyZpYFnsOOmqmzfexcLDsRNiJ9SVZPIU5ZZP
-        TZWFa0dFc49RW5nDg+cf0zxfTYK/25xbOQYK6GwQ5WJd7GnLG359gW4WjQeb6KnIQeV5yM
-        wFWzBcxBYprAq1wHu1VOl851X9kV3DM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-312-fdjIXLUsORWYQaL3CV17Hw-1; Mon, 26 Oct 2020 07:55:52 -0400
-X-MC-Unique: fdjIXLUsORWYQaL3CV17Hw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B28548049D9;
-        Mon, 26 Oct 2020 11:55:46 +0000 (UTC)
-Received: from [10.36.113.62] (ovpn-113-62.ams2.redhat.com [10.36.113.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 451C56EF58;
-        Mon, 26 Oct 2020 11:55:38 +0000 (UTC)
-Subject: Re: [PATCH 1/4] mm: introduce debug_pagealloc_map_pages() helper
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20201025101555.3057-1-rppt@kernel.org>
- <20201025101555.3057-2-rppt@kernel.org>
- <8720c067-7dc5-2b02-918b-e54dd642bfd6@redhat.com>
- <20201026115443.GF1154158@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <67e342cd-5ac4-4ba5-77f7-946c9415534e@redhat.com>
-Date:   Mon, 26 Oct 2020 12:55:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1775547AbgJZMt5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 08:49:57 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:35440 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1775402AbgJZMtz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 08:49:55 -0400
+Received: by mail-oi1-f196.google.com with SMTP id w191so10363204oif.2;
+        Mon, 26 Oct 2020 05:49:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oAb942PkprtooTAkcphjHuX+nYeTcTWj5DRWfq1D+/8=;
+        b=Fx6+ilX6zNcVEWQN8GzHs7PNSN/U6Ek3Mx9Rf6K5EDSvm+vRCY9B8JSNm0Qtw3l1GK
+         eAtasA91pHu53a7Gia4e250hXe7fNk7b6kSb2iHnPyMk1Ic6N4cmFLqyyGloKYtH9B5A
+         4tLCTTcjSrQLXpxuIz/ZXiSCAKiiN9OpYHnE0GVkCKTVJH7XBkUWXxhmyghJ/ejN8/qK
+         1CqelbDtDymm5nXUV7z41rFYeGsCK6N1SZ71JsdDIA3KFYGc6B4tjrvZ7wrgmC975vMB
+         aPtIn9yt0pBTur3XMFiTgWp4H5CIqxDvfLctkqfGjtHVhQ31XfITOdjrIWXeTt9Z/HJ+
+         TPcA==
+X-Gm-Message-State: AOAM532NG6N60Q2vakqk/pRk6yGguszYbzLzWMn8QnxUv3Pft7YiZxh/
+        dlB4fGVR5NXPgl7/yn+LKQ==
+X-Google-Smtp-Source: ABdhPJyw8X8wHgRmnVOj73HYL5Yt/7SSSmhyblzN5O3WGOsS2MFEvEEq1YMx197Ky6/S+smUlunNeA==
+X-Received: by 2002:aca:4e4b:: with SMTP id c72mr969519oib.96.1603716594205;
+        Mon, 26 Oct 2020 05:49:54 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b8sm3824400oov.29.2020.10.26.05.49.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2020 05:49:53 -0700 (PDT)
+Received: (nullmailer pid 4167734 invoked by uid 1000);
+        Mon, 26 Oct 2020 12:49:52 -0000
+Date:   Mon, 26 Oct 2020 07:49:52 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        dri-devel@lists.freedesktop.org, Mikko Perttunen <cyndis@kapsi.fi>,
+        devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-tegra@vger.kernel.org,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Subject: Re: [PATCH v6 12/52] dt-bindings: memory: tegra124: mc: Document new
+ interconnect property
+Message-ID: <20201026124952.GA4166359@bogus>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-13-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201026115443.GF1154158@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201025221735.3062-13-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26.10.20 12:54, Mike Rapoport wrote:
-> On Mon, Oct 26, 2020 at 12:05:13PM +0100, David Hildenbrand wrote:
->> On 25.10.20 11:15, Mike Rapoport wrote:
->>> From: Mike Rapoport <rppt@linux.ibm.com>
->>>
->>> When CONFIG_DEBUG_PAGEALLOC is enabled, it unmaps pages from the
->>> kernel direct mapping after free_pages(). The pages than need to be
->>> mapped back before they could be used. Theese mapping operations use 
->>> __kernel_map_pages() guarded with with debug_pagealloc_enabled().
->>>
->>> The only place that calls __kernel_map_pages() without checking
->>> whether DEBUG_PAGEALLOC is enabled is the hibernation code that
->>> presumes availability of this function when ARCH_HAS_SET_DIRECT_MAP
->>> is set. Still, on arm64, __kernel_map_pages() will bail out when
->>> DEBUG_PAGEALLOC is not enabled but set_direct_map_invalid_noflush()
->>> may render some pages not present in the direct map and hibernation
->>> code won't be able to save such pages.
->>>
->>> To make page allocation debugging and hibernation interaction more
->>> robust, the dependency on DEBUG_PAGEALLOC or ARCH_HAS_SET_DIRECT_MAP
->>> has to be made more explicit.
->>>
->>> Start with combining the guard condition and the call to 
->>> __kernel_map_pages() into a single debug_pagealloc_map_pages()
->>> function to emphasize that __kernel_map_pages() should not be called
->>> without DEBUG_PAGEALLOC and use this new function to map/unmap pages
->>> when page allocation debug is enabled.
->>>
->>> As the only remaining user of kernel_map_pages() is the hibernation
->>> code, mode that function into kernel/power/snapshot.c closer to a
->>> caller.
->>
->> s/mode/move/
->>
->>>
->>> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com> --- 
->>> include/linux/mm.h      | 16 +++++++--------- kernel/power/snapshot.c
->>> | 11 +++++++++++ mm/memory_hotplug.c     |  3 +-- mm/page_alloc.c
->>> |  6 ++---- mm/slab.c               |  8 +++----- 5 files changed, 24
->>> insertions(+), 20 deletions(-)
->>>
->>> diff --git a/include/linux/mm.h b/include/linux/mm.h index
->>> ef360fe70aaf..14e397f3752c 100644 --- a/include/linux/mm.h +++
->>> b/include/linux/mm.h @@ -2927,21 +2927,19 @@ static inline bool
->>> debug_pagealloc_enabled_static(void) #if
->>> defined(CONFIG_DEBUG_PAGEALLOC) ||
->>> defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP) extern void
->>> __kernel_map_pages(struct page *page, int numpages, int enable);
->>>
->>> -/* - * When called in DEBUG_PAGEALLOC context, the call should most
->>> likely be - * guarded by debug_pagealloc_enabled() or
->>> debug_pagealloc_enabled_static() - */ -static inline void 
->>> -kernel_map_pages(struct page *page, int numpages, int enable) 
->>> +static inline void debug_pagealloc_map_pages(struct page *page, +
->>> int numpages, int enable) { -	__kernel_map_pages(page, numpages,
->>> enable); +	if (debug_pagealloc_enabled_static()) +
->>> __kernel_map_pages(page, numpages, enable); } + #ifdef
->>> CONFIG_HIBERNATION extern bool kernel_page_present(struct page
->>> *page); #endif	/* CONFIG_HIBERNATION */ #else	/*
->>> CONFIG_DEBUG_PAGEALLOC || CONFIG_ARCH_HAS_SET_DIRECT_MAP */ -static
->>> inline void -kernel_map_pages(struct page *page, int numpages, int
->>> enable) {} +static inline void debug_pagealloc_map_pages(struct page
->>> *page, +					     int numpages, int enable) {} #ifdef
->>> CONFIG_HIBERNATION static inline bool kernel_page_present(struct page
->>> *page) { return true; } #endif	/* CONFIG_HIBERNATION */ diff --git
->>> a/kernel/power/snapshot.c b/kernel/power/snapshot.c index
->>> 46b1804c1ddf..fa499466f645 100644 --- a/kernel/power/snapshot.c +++
->>> b/kernel/power/snapshot.c @@ -76,6 +76,17 @@ static inline void
->>> hibernate_restore_protect_page(void *page_address) {} static inline
->>> void hibernate_restore_unprotect_page(void *page_address) {} #endif
->>> /* CONFIG_STRICT_KERNEL_RWX  && CONFIG_ARCH_HAS_SET_MEMORY */
->>>
->>> +#if defined(CONFIG_DEBUG_PAGEALLOC) ||
->>> defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP) +static inline void 
->>> +kernel_map_pages(struct page *page, int numpages, int enable) +{ +
->>> __kernel_map_pages(page, numpages, enable); +} +#else +static inline
->>> void +kernel_map_pages(struct page *page, int numpages, int enable)
->>> {} +#endif +
->>
->> That change should go into a separate patch.
->  
-> Hmm, I beleive you refer to moving kernel_map_pages() to snapshot.c,
-> right?
-
-Sorry, yes!
+On Mon, 26 Oct 2020 01:16:55 +0300, Dmitry Osipenko wrote:
+> Memory controller is interconnected with memory clients and with the
+> External Memory Controller. Document new interconnect property which
+> turns memory controller into interconnect provider.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../bindings/memory-controllers/nvidia,tegra124-mc.yaml      | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
 
--- 
-Thanks,
+My bot found errors running 'make dt_binding_check' on your patch:
 
-David / dhildenb
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.example.dt.yaml: memory-controller@70019000: '#interconnect-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-mc.yaml
+
+
+See https://patchwork.ozlabs.org/patch/1387321
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
