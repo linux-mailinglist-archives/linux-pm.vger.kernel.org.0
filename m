@@ -2,72 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18521298A44
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 11:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD75298B53
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 12:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1768434AbgJZKUn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 06:20:43 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:65460 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1768190AbgJZKUn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 06:20:43 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 09QAGZU2007483;
-        Mon, 26 Oct 2020 05:20:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=lkYlli3OMljai2JtkMwxmqFfOi6BNmDtsvof4JQOCZA=;
- b=khzBKqeg/FqD/A73fGDr+fubPuyfLzptTVNl3i4wbpObRQO7CHk2n2dwmuztoK4PmLE9
- 1QKAeohO4TxgNX04hz+8EgZKzqF1ZrZlX2ogCpCuS61f/vpHFoZwrHUk9IOklabkuVvy
- ExY55d0nO8AZrCjwxlpHQeGVS/13vUO4GkKlZbT3Kh6C90kD5271Y5e+B1CYFU72rOkB
- D6SrS6m6w+kui8uDug5siTVTz7P31Q1cajhUFQYLIjKcM8wkeaufFmp1nJ22OpasX3u8
- KwjuQ/NI3MglYw67omnnto9FouD5YYiNnYq5l3gZRh46Ygz8ifK54H5HLFno5KUNME6n uQ== 
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 34chp1jnw0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 26 Oct 2020 05:20:39 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 26 Oct
- 2020 10:20:37 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
- Transport; Mon, 26 Oct 2020 10:20:37 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 675762C1;
-        Mon, 26 Oct 2020 10:20:37 +0000 (UTC)
-Date:   Mon, 26 Oct 2020 10:20:37 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <trix@redhat.com>
-CC:     <sre@kernel.org>, <patches@opensource.cirrus.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] power: remove unneeded break
-Message-ID: <20201026102037.GC10899@ediswmail.ad.cirrus.com>
-References: <20201019185937.7012-1-trix@redhat.com>
+        id S1769091AbgJZLFh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 07:05:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22901 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1773081AbgJZLFh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 07:05:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603710335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uR3SoUQ38JQhR3FzkH7b6r+ChPHdaTScYhjRwjs5L+4=;
+        b=HlpA2vaWkks1DzlbhXHM5sNLLcmX9dG1Pwhi+ravy6rRl5hUvqozaIbZhnQB766Hlsda18
+        KxXPS3lad0m25HgEyRgcMMAv9IJjDkzL4ga6WxPH77/fU7SRcCMA16ep7sUqygbS1n3nJk
+        7md1Mprb4TBOVDrePmogd+bEQvJsu7w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-301-pGgOFeOzOUSKAoeWEvAb1w-1; Mon, 26 Oct 2020 07:05:30 -0400
+X-MC-Unique: pGgOFeOzOUSKAoeWEvAb1w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 87FB0101F7B0;
+        Mon, 26 Oct 2020 11:05:25 +0000 (UTC)
+Received: from [10.36.113.62] (ovpn-113-62.ams2.redhat.com [10.36.113.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 00EE61043269;
+        Mon, 26 Oct 2020 11:05:14 +0000 (UTC)
+Subject: Re: [PATCH 1/4] mm: introduce debug_pagealloc_map_pages() helper
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Lameter <cl@linux.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <len.brown@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org
+References: <20201025101555.3057-1-rppt@kernel.org>
+ <20201025101555.3057-2-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <8720c067-7dc5-2b02-918b-e54dd642bfd6@redhat.com>
+Date:   Mon, 26 Oct 2020 12:05:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201019185937.7012-1-trix@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 suspectscore=1 priorityscore=1501 mlxlogscore=705
- mlxscore=0 spamscore=0 clxscore=1011 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010260073
+In-Reply-To: <20201025101555.3057-2-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 11:59:37AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On 25.10.20 11:15, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> A break is not needed if it is preceded by a goto
+> When CONFIG_DEBUG_PAGEALLOC is enabled, it unmaps pages from the
+> kernel direct mapping after free_pages(). The pages than need to be
+> mapped back before they could be used. Theese mapping operations use 
+> __kernel_map_pages() guarded with with debug_pagealloc_enabled().
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
+> The only place that calls __kernel_map_pages() without checking
+> whether DEBUG_PAGEALLOC is enabled is the hibernation code that
+> presumes availability of this function when ARCH_HAS_SET_DIRECT_MAP
+> is set. Still, on arm64, __kernel_map_pages() will bail out when
+> DEBUG_PAGEALLOC is not enabled but set_direct_map_invalid_noflush()
+> may render some pages not present in the direct map and hibernation
+> code won't be able to save such pages.
+> 
+> To make page allocation debugging and hibernation interaction more
+> robust, the dependency on DEBUG_PAGEALLOC or ARCH_HAS_SET_DIRECT_MAP
+> has to be made more explicit.
+> 
+> Start with combining the guard condition and the call to 
+> __kernel_map_pages() into a single debug_pagealloc_map_pages()
+> function to emphasize that __kernel_map_pages() should not be called
+> without DEBUG_PAGEALLOC and use this new function to map/unmap pages
+> when page allocation debug is enabled.
+> 
+> As the only remaining user of kernel_map_pages() is the hibernation
+> code, mode that function into kernel/power/snapshot.c closer to a
+> caller.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+s/mode/move/
 
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com> --- 
+> include/linux/mm.h      | 16 +++++++--------- kernel/power/snapshot.c
+> | 11 +++++++++++ mm/memory_hotplug.c     |  3 +-- mm/page_alloc.c
+> |  6 ++---- mm/slab.c               |  8 +++----- 5 files changed, 24
+> insertions(+), 20 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h index
+> ef360fe70aaf..14e397f3752c 100644 --- a/include/linux/mm.h +++
+> b/include/linux/mm.h @@ -2927,21 +2927,19 @@ static inline bool
+> debug_pagealloc_enabled_static(void) #if
+> defined(CONFIG_DEBUG_PAGEALLOC) ||
+> defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP) extern void
+> __kernel_map_pages(struct page *page, int numpages, int enable);
+> 
+> -/* - * When called in DEBUG_PAGEALLOC context, the call should most
+> likely be - * guarded by debug_pagealloc_enabled() or
+> debug_pagealloc_enabled_static() - */ -static inline void 
+> -kernel_map_pages(struct page *page, int numpages, int enable) 
+> +static inline void debug_pagealloc_map_pages(struct page *page, +
+> int numpages, int enable) { -	__kernel_map_pages(page, numpages,
+> enable); +	if (debug_pagealloc_enabled_static()) +
+> __kernel_map_pages(page, numpages, enable); } + #ifdef
+> CONFIG_HIBERNATION extern bool kernel_page_present(struct page
+> *page); #endif	/* CONFIG_HIBERNATION */ #else	/*
+> CONFIG_DEBUG_PAGEALLOC || CONFIG_ARCH_HAS_SET_DIRECT_MAP */ -static
+> inline void -kernel_map_pages(struct page *page, int numpages, int
+> enable) {} +static inline void debug_pagealloc_map_pages(struct page
+> *page, +					     int numpages, int enable) {} #ifdef
+> CONFIG_HIBERNATION static inline bool kernel_page_present(struct page
+> *page) { return true; } #endif	/* CONFIG_HIBERNATION */ diff --git
+> a/kernel/power/snapshot.c b/kernel/power/snapshot.c index
+> 46b1804c1ddf..fa499466f645 100644 --- a/kernel/power/snapshot.c +++
+> b/kernel/power/snapshot.c @@ -76,6 +76,17 @@ static inline void
+> hibernate_restore_protect_page(void *page_address) {} static inline
+> void hibernate_restore_unprotect_page(void *page_address) {} #endif
+> /* CONFIG_STRICT_KERNEL_RWX  && CONFIG_ARCH_HAS_SET_MEMORY */
+> 
+> +#if defined(CONFIG_DEBUG_PAGEALLOC) ||
+> defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP) +static inline void 
+> +kernel_map_pages(struct page *page, int numpages, int enable) +{ +
+> __kernel_map_pages(page, numpages, enable); +} +#else +static inline
+> void +kernel_map_pages(struct page *page, int numpages, int enable)
+> {} +#endif +
+
+That change should go into a separate patch.
+
+
+For the debug_pagealloc_map_pages() parts
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+
+-- 
 Thanks,
-Charles
+
+David / dhildenb
+
