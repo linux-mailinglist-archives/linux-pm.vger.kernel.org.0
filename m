@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2097299B58
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 00:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC4929A02A
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 01:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408963AbgJZXug (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 19:50:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50192 "EHLO mail.kernel.org"
+        id S2442511AbgJ0A0s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 20:26:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409142AbgJZXuf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:50:35 -0400
+        id S2410070AbgJZXx0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:53:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2CA5A20872;
-        Mon, 26 Oct 2020 23:50:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF4D420770;
+        Mon, 26 Oct 2020 23:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756234;
-        bh=WNpDCz6GEJtJzyBdSTxEG6+fLp1ZJ7VVzTxNq8Y0yEw=;
+        s=default; t=1603756405;
+        bh=ZWgRwuEvYiS7hPKLY3kpwcl1I7Msip/q8JSi+nhLDfc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UXkiXokxdPBBSqgnmrR/fHN6MY1YaQAfeVvPE/7RO2PX+8NqfZvT/bPBd2++1VZpe
-         W8qx0xzajKocdM7gUdo22X5CMPNhoTn8M8iAM8Tm/4vdMRnNCbpHfLs/pflKGipKiN
-         GC41CkOyMCK4wcAXqVTpjf3PChuZLnwSH7ACnDT0=
+        b=MNEV4NsvbmpyiwCxVbyAkic4/Q/NMezX+UMOMnXjB499Ubk7trz1aE1HTanEk3enB
+         ZETtLookUyX5dmDoyW0WpsbxlE/xOwJzSSFSV7e8TXOyGYv6OhSkz+iizlUYiBzExV
+         GfjqVzwwAeCK7KALnUTK5FlXc5pAQIgzivTmd6uw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alain Volmat <avolmat@me.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 072/147] cpufreq: sti-cpufreq: add stih418 support
-Date:   Mon, 26 Oct 2020 19:47:50 -0400
-Message-Id: <20201026234905.1022767-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 064/132] cpufreq: sti-cpufreq: add stih418 support
+Date:   Mon, 26 Oct 2020 19:50:56 -0400
+Message-Id: <20201026235205.1023962-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026234905.1022767-1-sashal@kernel.org>
-References: <20201026234905.1022767-1-sashal@kernel.org>
+In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
+References: <20201026235205.1023962-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,7 +58,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
-index a5ad96d29adca..4ac6fb23792a0 100644
+index 8f16bbb164b84..2855b7878a204 100644
 --- a/drivers/cpufreq/sti-cpufreq.c
 +++ b/drivers/cpufreq/sti-cpufreq.c
 @@ -141,7 +141,8 @@ static const struct reg_field sti_stih407_dvfs_regfields[DVFS_MAX_REGFIELDS] = {
