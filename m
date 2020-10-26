@@ -2,194 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD82F299095
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 16:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EFF299431
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Oct 2020 18:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1783122AbgJZPIw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 11:08:52 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:46780 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1783097AbgJZPIw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 11:08:52 -0400
-Received: by mail-ej1-f66.google.com with SMTP id t25so14030158ejd.13;
-        Mon, 26 Oct 2020 08:08:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5iSdu1PXK0XmR2WnB9STaXKJ3YlzmlR/0SoXDLvMrSM=;
-        b=mB4u5aGvm1i76+ojEE9SAzVpwgrIMVQaBFh/xptJuKzHNkjQada1ROqUjX6U40OxB1
-         D+m52xn4M9rVIKR9fP6FcC4UtFjXRGjQKNmoJBUSjVplb+GPoHEMpq0XTTYQjyrq7VVy
-         XHJrJS6+zNiS3g3xybjthqNvbima5OG9P6/XuI3VGoTedDZTT5HDO4Ou1nh+VhvlVMro
-         Pomsq48+4U9wnfM5258+8T5xc8hMpvyNHHsC2iQqza14ODWE5oUQw9hyiagVzG7mAQw/
-         tJ4s5icB4iwj/xooOlHoFmfT5q26d7A0m2kKg4cZmsZtWTA2vctJMzcRGE1WKTXpymzq
-         NSyQ==
-X-Gm-Message-State: AOAM531sjv6fBKdb2qUPdNaBo1vL5Hkl7qiOnuDjNhjzuM+tLOMmk45o
-        Q3X3lZI2qonT6XYlN04gTRg=
-X-Google-Smtp-Source: ABdhPJzjOQyo/e3kBWa/0LWJrvv9aB0EgvPcyQ0RaOH16AfjnowP+uij6FgtMEz6bs/a8mLsEfLJ3Q==
-X-Received: by 2002:a17:906:8401:: with SMTP id n1mr15669965ejx.215.1603724929210;
-        Mon, 26 Oct 2020 08:08:49 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id d24sm5360000edq.34.2020.10.26.08.08.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 08:08:48 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 16:08:45 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 00/52] Introduce memory interconnect for NVIDIA Tegra
- SoCs
-Message-ID: <20201026150845.GA87050@kozik-lap>
-References: <20201025221735.3062-1-digetx@gmail.com>
+        id S1788330AbgJZRpT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 13:45:19 -0400
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.4]:46198 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2437239AbgJZRpS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 13:45:18 -0400
+Received: from [100.112.131.148] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-4.bemta.az-a.us-west-2.aws.symcld.net id 10/91-27161-A2B079F5; Mon, 26 Oct 2020 17:45:14 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAKsWRWlGSWpSXmKPExsWS8eIhj64W9/R
+  4g4lLVSz2X5ew6FpoYLHw/ilWi6/fbrNbvDk+ncli+b5+RovLu+awWXzuPcJo0dTZBGR1TGax
+  WL3nBbMDt8ekmTOYPXbOusvu8WvbGhaPzSu0POadDPR4v+8qm8fnTXIB7FGsmXlJ+RUJrBl73
+  /5mKpiuVfHswjO2Bsazyl2MXBxCAv8ZJU7u+MgG4bxhlJj57wZzFyMnB5uAtsSWLb+AEhwcIg
+  IyEh/WeoKEmQX2Mkns+JsCYgsLJEjsuXmHFcRmEVCVuPp4F5jNK2Aj8fTQJzBbQkBe4mnvcrC
+  RnEA1Z7oes4DYQgIqEvcfLGGDqBeUODnzCQvEfHmJ5q2zmSFsCYmDL14wg5wgIaAg8eAKM8TI
+  BIllL+8wT2AUmIWkexaS7llIuhcwMq9iNE8qykzPKMlNzMzRNTQw0DU0NNI1NDbUNTPRS6zST
+  dQrLdYtTy0u0TXSSywv1iuuzE3OSdHLSy3ZxAiMqJSCZocdjLvffNA7xCjJwaQkyjuFa3q8EF
+  9SfkplRmJxRnxRaU5q8SFGGQ4OJQlePpCcYFFqempFWmYOMLph0hIcPEoivDUgad7igsTc4sx
+  0iNQpRkUpcd6LnEAJAZBERmkeXBssoVxilJUS5mVkYGAQ4ilILcrNLEGVf8UozsGoJMw7A2Q8
+  T2ZeCdz0V0CLmYAWt1VMAVlckoiQkmpg2i1yc9czexXttSpW52epKOsZrGa//5mFJ+367odTH
+  566K99VqzMnyeMLT56TcbVsXeTmRF/D4wqSj1jDI+dZnxU4GPflfrbE8bwZ/YeY+g+1z/T8Gf
+  2jVzza5dIHq8Pf77oULpEULjj5Yont/F8takffZSmKeaQyTK/qb5mwT+9t32G2SsU9U5zL1Xe
+  ffiP3LK1EY5fXzjvBmdVbj//fZ8eacUF4pu4ljrzd89zi+Sp/fvDbtryuR8ln63pb0aj2T0bL
+  2ZM69uZMEtnDGHP78e8Ldr75N17I5vhl3AtbdCj71Rfbl6vOhqTvXxzs+FVTdG2utmecg+H7K
+  6VHc0tO/f+q1Onzs2L6prqlWvUHlFiKMxINtZiLihMB1+rsrqMDAAA=
+X-Env-Sender: markpearson@lenovo.com
+X-Msg-Ref: server-14.tower-326.messagelabs.com!1603734313!14205!1
+X-Originating-IP: [104.232.225.12]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.60.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 26498 invoked from network); 26 Oct 2020 17:45:14 -0000
+Received: from unknown (HELO lenovo.com) (104.232.225.12)
+  by server-14.tower-326.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 26 Oct 2020 17:45:14 -0000
+Received: from reswpmail04.lenovo.com (unknown [10.62.32.23])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by Forcepoint Email with ESMTPS id 1CF99C1806C424018A59;
+        Mon, 26 Oct 2020 13:45:13 -0400 (EDT)
+Received: from localhost.localdomain.com (10.64.83.193) by
+ reswpmail04.lenovo.com (10.62.32.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2044.4; Mon, 26 Oct 2020 10:45:09 -0700
+From:   Mark Pearson <markpearson@lenovo.com>
+To:     <markpearson@lenovo.com>
+CC:     <dvhart@infradead.org>, <mgross@linux.intel.com>,
+        <mario.limonciello@dell.com>, <eliadevito@gmail.com>,
+        <hadess@hadess.net>, <bberg@redhat.com>,
+        <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH] [RFC] Documentation: Add documentation for new platform_profile sysfs attribute
+Date:   Mon, 26 Oct 2020 13:44:44 -0400
+Message-ID: <20201026174444.866545-1-markpearson@lenovo.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <markpearson@lenovo.com>
+References: <markpearson@lenovo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-1-digetx@gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.64.83.193]
+X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
+ reswpmail04.lenovo.com (10.62.32.23)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 01:16:43AM +0300, Dmitry Osipenko wrote:
-> Hello,
-> 
-> This series brings initial support for memory interconnect to Tegra20,
-> Tegra30 and Tegra124 SoCs.
-> 
-> For the starter only display controllers and devfreq devices are getting
-> interconnect API support, others could be supported later on. The display
-> controllers have the biggest demand for interconnect API right now because
-> dynamic memory frequency scaling can't be done safely without taking into
-> account bandwidth requirement from the displays. In particular this series
-> fixes distorted display output on T30 Ouya and T124 TK1 devices.
+From: Hans de Goede <hdegoede@redhat.com>
 
-Hi,
+On modern systems the platform performance, temperature, fan and other
+hardware related characteristics are often dynamically configurable. The
+profile is often automatically adjusted to the load by somei
+automatic-mechanism (which may very well live outside the kernel).
 
-You introduced in v6 multiple new patches. Could you describe the
-dependencies, if any?
+These auto platform-adjustment mechanisms often can be configured with
+one of several 'platform-profiles', with either a bias towards low-power
+consumption or towards performance (and higher power consumption and
+thermals).
 
-Best regards,
-Krzysztof
+Introduce a new platform_profile sysfs API which offers a generic API for
+selecting the performance-profile of these automatic-mechanisms.
 
-> Changelog:
-> 
-> v6: - This series was massively reworked in comparison to v5, most of the
->       patches that previously got r-b need a new round of a review (!).
-> 
->     - Added missed clk-rounding to the set() callback of EMC ICC providers.
->       Now clk_set_min_rate() doesn't error out on rate overflow.
-> 
->     - Now peak bandwidth is properly taken into account by the set() callback
->       of EMC ICC providers.
-> 
->     - EMC runs at 2x of the DRAM bus only on Tegra20, this now taken in account
->       properly by the EMC ICC set() callbacks.
-> 
->     - ICC drivers use new icc_sync_state() and xlate_extended().
-> 
->     - ICC drivers support new TEGRA_MC_ICC_TAG_ISO for ICC paths, which
->       conveys to ICC driver that memory path uses isochronous transfers.
-> 
->     - Added support for memory latency scaling to Tegra30 ICC provider.
->       It's required for fixing display FIFO underflows on T30.
-> 
->     - Added basic interconnect support to Tegra124 drivers.
-> 
->     - Tegra20/30/124 EMC drivers now support voltage scaling using generic
->       OPP API.
-> 
->     - The display bandwidth management is reworked and improved. It now
->       supports both bandwidth and latency allocations. The nv-display is
->       now also taken into account properly, i.e. it's kept untouched.
->       The extra bandwidth reservation required for ISO clients is moved
->       from DC driver to the ICC drivers.
-> 
->     - Dropped patch that tuned T20 display controller memory client because
->       turned out that it kills ~30% of memory bandwidth. It should be possible
->       to support client tuning, but it's too complicated for now.
-> 
->     - Corrected display's cursor and winb-vfilter ICC clients.
->       The winb-vfilter was erroneously used in place of cursor's client
->       in device-trees.
-> 
->     - Added devm_tegra_get_memory_controller() and switched drivers to
->       use it.
-> 
->     - Device-tree OPP tables are now supported by memory and devfreq
->       drivers.
-> 
->     - Tegra20-devfeq driver is reworked and now uses EMC-stats instead
->       of IMC-stats (which are nearly identical modules) because previously
->       I failed to understand how EMC-stats work and succeeded this time,
->       thinking that it simply doesn't work. This removes a bit icky dependency
->       on using both EMC and MC drivers simultaneously by the devfreq driver.
-> 
->     - Tegra20-devfeq driver now is a sub-device of the EMC, it also now uses
->       interconnect API for driving memory bandwidth.
-> 
->     - Tegra30-devfreq got interconnect support.
-> 
->     - Devfreq patches now use dev_err_probe(), which was suggested by
->       Chanwoo Choi.
-> 
->     - Added acks from Chanwoo Choi and Rob Herring to the reviewed and
->       unchanged patches.
-> 
->     - Added tested-by from Peter Geis and Nicolas Chauvet, who tested this
->       series on Ouya and TK1 devices, reporting that it fixes display
->       corruption on these devices which happened due to insufficient memory
->       bandwidth.
-> 
->     - Added patches to fix T20 EMC registers size.
-> 
->     - Fixed missing LA entry for PTC in the Tegra MC drivers.
-> 
->     - New and updated patches in v6:
-> 
->         dt-bindings: memory: tegra20: emc: Correct registers range in example
->         dt-bindings: memory: tegra20: emc: Document nvidia,memory-controller property
->         dt-bindings: memory: tegra20: emc: Document OPP table and voltage regulator
->         dt-bindings: memory: tegra20: emc: Document mfd-simple compatible and statistics sub-device
->         dt-bindings: memory: tegra30: emc: Document OPP table and voltage regulator
->         dt-bindings: memory: tegra124: mc: Document new interconnect property
->         dt-bindings: memory: tegra124: emc: Document new interconnect property
->         dt-bindings: memory: tegra124: emc: Document OPP table and voltage regulator
->         dt-bindings: tegra30-actmon: Document OPP and interconnect properties
->         dt-bindings: memory: tegra124: Add memory client IDs
->         ARM: tegra: Correct EMC registers size in Tegra20 device-tree
->         ARM: tegra: Add interconnect properties to Tegra124 device-tree
->         ARM: tegra: Add nvidia,memory-controller phandle to Tegra20 EMC device-tree
->         ARM: tegra: Add DVFS properties to Tegra20 EMC device-tree node
->         ARM: tegra: Add DVFS properties to Tegra30 EMC and ACTMON device-tree nodes
->         ARM: tegra: Add DVFS properties to Tegra124 EMC and ACTMON device-tree nodes
->         memory: tegra: Add and use devm_tegra_get_memory_controller()
->         memory: tegra-mc: Add interconnect framework
->         memory: tegra20: Support interconnect framework
->         memory: tegra20-emc: Skip parsing of emc-stats DT sub-node
->         memory: tegra: Add missing latency allowness entry for Page Table Cache
->         memory: tegra: Add FIFO sizes to Tegra30 memory clients
->         memory: tegra30: Support interconnect framework
->         memory: tegra124-emc: Make driver modular
->         memory: tegra124: Support interconnect framework
->         memory: tegra: Remove superfluous error messages around platform_get_irq()
->         drm/tegra: dc: Support memory bandwidth management
->         drm/tegra: dc: Extend debug stats with total number of events
->         PM / devfreq: tegra20: Convert to EMC_STAT driver, support interconnect and device-tree
->         PM / devfreq: tegra30: Support interconnect and OPPs from device-tree
->         PM / devfreq: tegra30: Separate configurations per-SoC generation
->         opp: Put interconnect paths outside of opp_table_lock
+Co-developed-by: Mark Pearson <markpearson@lenovo.com>
+Signed-off-by: Mark Pearson <markpearson@lenovo.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ .../ABI/testing/sysfs-platform_profile        | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform_profile
+
+diff --git a/Documentation/ABI/testing/sysfs-platform_profile b/Documentation/ABI/testing/sysfs-platform_profile
+new file mode 100644
+index 000000000000..37cb6275946c
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-platform_profile
+@@ -0,0 +1,85 @@
++Platform-profile selection (e.g. /sys/firmware/acpi/platform_profile)
++
++On modern systems the platform performance, temperature, fan and other
++hardware related characteristics are often dynamically configurable. The
++profile is often automatically adjusted to the load by some
++automatic-mechanism (which may very well live outside the kernel).
++
++These auto platform-adjustment mechanisms often can be configured with
++one of several 'platform-profiles', with either a bias towards low-power
++consumption or towards performance (and higher power consumption and
++thermals).
++
++The purpose of the platform_profile attribute is to offer a generic sysfs
++API for selecting the platform-profile of these automatic-mechanisms.
++
++Note that this API is only for selecting the platform-profile, it is
++NOT a goal of this API to allow monitoring the resulting performance
++characteristics. Monitoring performance is best done with device/vendor
++specific tools such as e.g. turbostat.
++
++Specifically when selecting a high-performance profile the actual achieved
++performance may be limited by various factors such as: the heat generated
++by other components, room temperature, free air flow at the bottom of a
++laptop, etc. It is explicitly NOT a goal of this API to let userspace know
++about any sub-optimal conditions which are impeding reaching the requested
++performance level.
++
++Since numbers are a rather meaningless way to describe platform-profiles
++this API uses strings to describe the various profiles. To make sure that
++userspace gets a consistent experience when using this API this API
++document defines a fixed set of profile-names. Drivers *must* map their
++internal profile representation/names onto this fixed set.
++
++If for some reason there is no good match when mapping then a new profile-name
++may be added. Drivers which wish to introduce new profile-names must:
++1. Have very good reasons to do so.
++2. Add the new profile-name to this document, so that future drivers which also
++   have a similar problem can use the same new. Usually new profile-names will
++   be added to the "extra profile-names" section of this document. But in some
++   cases the set of standard profile-names may be extended.
++
++What:		/sys/firmware/acpi/platform_profile_choices
++Date:		October 2020
++Contact:	Hans de Goede <hdegoede@redhat.com>
++Description:
++		Reading this file gives a space separated list of profiles
++		supported for this device.
++
++		Drivers must use the following standard profile-names whenever
++		possible:
++
++		low-power:		Emphasises low power consumption
++		quiet:			Offers quieter operation (lower fan
++					speed but with higher performance and
++					temperatures then seen in low-power
++		balanced:		Balance between low power consumption
++					and performance
++		performance:		Emphasises performance (and may lead to
++					higher temperatures and fan speeds)
++
++		Userspace may expect drivers to offer at least several of these
++		standard profile-names! If none of the above are a good match
++		for some of the drivers profiles, then drivers may use one of
++		these extra profile-names:
++		<reserved for future use>
++
++What:		/sys/firmware/acpi/platform_profile
++Date:		October 2020
++Contact:	Hans de Goede <hdegoede@redhat.com>
++Description:
++		Reading this file gives the current selected profile for this
++		device. Writing this file with one of the strings from
++		available_profiles changes the profile to the new value.
++
++		Reading this file may also return "custom". This is intended for
++		drivers which have and export multiple knobs. Such drivers may
++		very well still want to offer a set of profiles for easy of use
++		and to be able to offer a consistent standard API (this API) to
++		userspace for configuring their performance. The "custom" value
++		is intended for when ai user has directly configured the knobs
++		(through e.g. some advanced control-panel for a GPU) and the
++		knob values do not match any of the presets represented by the
++		platform-profiles. In this case writing this file will
++		override the modifications and restore the selected presets.
++
+-- 
+2.28.0
+
