@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC3F29A0E9
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 01:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104A029A078
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 01:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409142AbgJZXvH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 19:51:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51342 "EHLO mail.kernel.org"
+        id S2442761AbgJ0A33 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 20:29:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55148 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409308AbgJZXvH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:51:07 -0400
+        id S2409751AbgJZXwe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:52:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AABCB21BE5;
-        Mon, 26 Oct 2020 23:51:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7308020882;
+        Mon, 26 Oct 2020 23:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756266;
-        bh=CrB6/OrwiBYznvNDffIExnezDMuDC+LEIk22ZuZdcIE=;
+        s=default; t=1603756354;
+        bh=GRixFSpiw1tw+lcB5/guVEWzQeTkh79E3i7FivRHcxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xfC6mpCoDStY8v4UzkSXHNjJkOheVWGBUyNK8P9XW2ATzGOogRmQpTlQyCWJMJGfu
-         Ryjojms0O6pggmOXKaKvW/Fd17Nj99yyvUVf03MSss1Ar10Z9XM0vz02eV9DGymtNV
-         WiFpgI9c5ObBj0yWS2AR16XQiXHX0NK3CFFwrsqA=
+        b=XepFGlKkHVqoubkHDpjz1vcjRF5G70Ir4z3PvKmevRNuGNV5VrwDxNE7S7KSBI3wM
+         GxcTFLDbh4AS7UbgQYQMxzlJOoBH4gWLczS4Mta4TkyjDM2BrWt3+y+a808PH8yFdf
+         XLaA4UceWk17HTtSY9Zbj43L6fyiY9NunE5f5VbU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 099/147] power: supply: test_power: add missing newlines when printing parameters by sysfs
-Date:   Mon, 26 Oct 2020 19:48:17 -0400
-Message-Id: <20201026234905.1022767-99-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 024/132] power: supply: bq27xxx: report "not charging" on all types
+Date:   Mon, 26 Oct 2020 19:50:16 -0400
+Message-Id: <20201026235205.1023962-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026234905.1022767-1-sashal@kernel.org>
-References: <20201026234905.1022767-1-sashal@kernel.org>
+In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
+References: <20201026235205.1023962-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,81 +42,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 
-[ Upstream commit c07fa6c1631333f02750cf59f22b615d768b4d8f ]
+[ Upstream commit 7bf738ba110722b63e9dc8af760d3fb2aef25593 ]
 
-When I cat some module parameters by sysfs, it displays as follows.
-It's better to add a newline for easy reading.
+Commit 6f24ff97e323 ("power: supply: bq27xxx_battery: Add the
+BQ27Z561 Battery monitor") and commit d74534c27775 ("power:
+bq27xxx_battery: Add support for additional bq27xxx family devices")
+added support for new device types by copying most of the code and
+adding necessary quirks.
 
-root@syzkaller:~# cd /sys/module/test_power/parameters/
-root@syzkaller:/sys/module/test_power/parameters# cat ac_online
-onroot@syzkaller:/sys/module/test_power/parameters# cat battery_present
-trueroot@syzkaller:/sys/module/test_power/parameters# cat battery_health
-goodroot@syzkaller:/sys/module/test_power/parameters# cat battery_status
-dischargingroot@syzkaller:/sys/module/test_power/parameters# cat battery_technology
-LIONroot@syzkaller:/sys/module/test_power/parameters# cat usb_online
-onroot@syzkaller:/sys/module/test_power/parameters#
+However they did not copy the code in bq27xxx_battery_status()
+responsible for returning POWER_SUPPLY_STATUS_NOT_CHARGING.
 
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Unify the bq27xxx_battery_status() so for all types when charger is
+supplied, it will return "not charging" status.
+
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/test_power.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/power/supply/bq27xxx_battery.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 04acd76bbaa12..4895ee5e63a9a 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -353,6 +353,7 @@ static int param_set_ac_online(const char *key, const struct kernel_param *kp)
- static int param_get_ac_online(char *buffer, const struct kernel_param *kp)
- {
- 	strcpy(buffer, map_get_key(map_ac_online, ac_online, "unknown"));
-+	strcat(buffer, "\n");
- 	return strlen(buffer);
- }
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 942c92127b6d5..6b6a507a401ba 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1678,8 +1678,6 @@ static int bq27xxx_battery_status(struct bq27xxx_device_info *di,
+ 			status = POWER_SUPPLY_STATUS_FULL;
+ 		else if (di->cache.flags & BQ27000_FLAG_CHGS)
+ 			status = POWER_SUPPLY_STATUS_CHARGING;
+-		else if (power_supply_am_i_supplied(di->bat) > 0)
+-			status = POWER_SUPPLY_STATUS_NOT_CHARGING;
+ 		else
+ 			status = POWER_SUPPLY_STATUS_DISCHARGING;
+ 	} else {
+@@ -1691,6 +1689,10 @@ static int bq27xxx_battery_status(struct bq27xxx_device_info *di,
+ 			status = POWER_SUPPLY_STATUS_CHARGING;
+ 	}
  
-@@ -366,6 +367,7 @@ static int param_set_usb_online(const char *key, const struct kernel_param *kp)
- static int param_get_usb_online(char *buffer, const struct kernel_param *kp)
- {
- 	strcpy(buffer, map_get_key(map_ac_online, usb_online, "unknown"));
-+	strcat(buffer, "\n");
- 	return strlen(buffer);
- }
++	if ((status == POWER_SUPPLY_STATUS_DISCHARGING) &&
++	    (power_supply_am_i_supplied(di->bat) > 0))
++		status = POWER_SUPPLY_STATUS_NOT_CHARGING;
++
+ 	val->intval = status;
  
-@@ -380,6 +382,7 @@ static int param_set_battery_status(const char *key,
- static int param_get_battery_status(char *buffer, const struct kernel_param *kp)
- {
- 	strcpy(buffer, map_get_key(map_status, battery_status, "unknown"));
-+	strcat(buffer, "\n");
- 	return strlen(buffer);
- }
- 
-@@ -394,6 +397,7 @@ static int param_set_battery_health(const char *key,
- static int param_get_battery_health(char *buffer, const struct kernel_param *kp)
- {
- 	strcpy(buffer, map_get_key(map_health, battery_health, "unknown"));
-+	strcat(buffer, "\n");
- 	return strlen(buffer);
- }
- 
-@@ -409,6 +413,7 @@ static int param_get_battery_present(char *buffer,
- 					const struct kernel_param *kp)
- {
- 	strcpy(buffer, map_get_key(map_present, battery_present, "unknown"));
-+	strcat(buffer, "\n");
- 	return strlen(buffer);
- }
- 
-@@ -426,6 +431,7 @@ static int param_get_battery_technology(char *buffer,
- {
- 	strcpy(buffer,
- 		map_get_key(map_technology, battery_technology, "unknown"));
-+	strcat(buffer, "\n");
- 	return strlen(buffer);
- }
- 
+ 	return 0;
 -- 
 2.25.1
 
