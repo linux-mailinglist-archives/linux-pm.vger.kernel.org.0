@@ -2,173 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F8329A3D9
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 06:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A6529A488
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 07:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505726AbgJ0FKR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 01:10:17 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:52368 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505725AbgJ0FKR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 01:10:17 -0400
-Received: by mail-pj1-f65.google.com with SMTP id o1so160602pjt.2
-        for <linux-pm@vger.kernel.org>; Mon, 26 Oct 2020 22:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RQEP5hZqG2K6tNEaxMR+sF9wkLrep88WEdk8ACgqhWM=;
-        b=OeplTnTZ8cios1tUcJtmxMxW/XjtujPrVbRNVQkBWUo4Vm/OisXbot5tqg0LhW7HKR
-         CRS6gMNiU0N8Fvs7b8uedyYRTq64pVs9n9m4CmfPdOrVH24s1utC/sk0EfpFXKn+DsNT
-         9VqIkZYIiSIM0UZfHkKrgoK4TyD9wD270321/i+TDSXRvB0f4CGZPfhQaNfCbpQBMyeB
-         wtiDnlZ1Ruq4hB6OB8CxVDQpxy5GfEbwFlzqmI6NP5rukik+NpHmD+aiDe21PclM9aag
-         78s984K5fddIvkYrh4dRtcAZfews6H8YgME97CBLV3XsML64ABIWydNoC/7knVQ82P9E
-         1WGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RQEP5hZqG2K6tNEaxMR+sF9wkLrep88WEdk8ACgqhWM=;
-        b=Rp0V1cW4uaJCZI+RjVMW5iLSeLXkNZWSabkCHkwOTB/Ql1B8gu2FSLNlx/jBU4W1ph
-         kR8Qgzv+fQ9f+HX4rwDIWtc5nxycmtCVRbyiuw3HQ2djLIJu9D+Tkq3weNAiBtlJiIqq
-         f+xuy2FM0ul8t3hfCTzKGkJoK0FdzDzH2rMdSvIxi0jHnPML7juqdI9zY7q5wkad1ka3
-         bLJg8/KKpSyCKR/vN++UH5XYNh35ln3gjP9o5XT83ffjD/8c3zVvGJ10J4DFsNjJM1mE
-         /9/z8drliq4tmgSt/OKE6CtXflb8/9Am/wFL8P+KeVjH2rkgk8hapwXyUlegtJRtdOEI
-         NZ2g==
-X-Gm-Message-State: AOAM533xYJ/Vvyjkh1mSnKUgY1IRx1sr1c07LSqeUQtP9IJTAINwJ4Fg
-        uMx3BJJFoxGF3Z0SOpN0FIIz0Q==
-X-Google-Smtp-Source: ABdhPJw9l/c3Wv/MhYdUbVpRNKWIf4C4NW8ScWjU3o6CL+b7zdCKwHqnNirDSxp55Qgd4nrtwV6jvQ==
-X-Received: by 2002:a17:90a:8906:: with SMTP id u6mr427458pjn.35.1603775416396;
-        Mon, 26 Oct 2020 22:10:16 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id i21sm379783pgh.2.2020.10.26.22.10.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 26 Oct 2020 22:10:15 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 10:40:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 46/52] opp: Put interconnect paths outside of
- opp_table_lock
-Message-ID: <20201027051013.5gr4s3wuuwxsd7ax@vireshk-i7>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-47-digetx@gmail.com>
+        id S2506372AbgJ0GRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 02:17:40 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:12529 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2506370AbgJ0GQo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 02:16:44 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f97bb500001>; Mon, 26 Oct 2020 23:16:48 -0700
+Received: from [10.41.23.128] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 27 Oct
+ 2020 06:16:35 +0000
+Subject: Re: [PATCH v3] cpufreq: tegra194: get consistent cpuinfo_cur_freq
+To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <sudeep.holla@arm.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <bbasu@nvidia.com>, <ksitaraman@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <1602668171-30104-1-git-send-email-sumitg@nvidia.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+Message-ID: <c56983dc-dc45-3e8c-a67c-14d7d09464ae@nvidia.com>
+Date:   Tue, 27 Oct 2020 11:46:32 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-47-digetx@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <1602668171-30104-1-git-send-email-sumitg@nvidia.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1603779408; bh=PSwb9HY4aIa9iuFeUy5QFj8uQLyn9S18ol0gggwXYSg=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=NQPLmfKYlD+gOsPyciOmtSmQjlaUg2BCr/+H+HY7EVf3r0XFJAvDepq0Cux0+eJsy
+         rMDKxVSgskB5qkD+JyXr8f5FRxE1qB2w7Z7u6EcpbRsMxK2xCOR5VKQlzXvU3zQN9Q
+         UxJczm+fdWxKORoQS7Yxzfji9smoYOm1mIhVw0EkTzQOraL/bnE2DwTqyLKKD0g9Go
+         kW6clUd6G5CgkHBBmmxRXUK2N73PueiUz3s5elHA8aL15+9rF0lhFtw147I3hmhph6
+         7oJuv9HjuL9cnvBpFt8xZdswL71vVlXtl9wzUCOCvgQRNhC4Ltj5BGEwyi5BDXaDpP
+         fewBa7AAjUCrg==
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-10-20, 01:17, Dmitry Osipenko wrote:
-> This patch fixes lockup which happens when OPP table is released if
-> interconnect provider uses OPP in the icc_provider->set() callback
-> and bandwidth of the ICC path is set to 0 by the ICC core when path
-> is released. The icc_put() doesn't need the opp_table_lock protection,
-> hence let's move it outside of the lock in order to resolve the problem.
+Ping.
+
 > 
-> In particular this fixes tegra-devfreq driver lockup on trying to unload
-> the driver module. The devfreq driver uses OPP-bandwidth API and its ICC
-> provider also uses OPP for DVFS, hence they both take same opp_table_lock
-> when OPP table of the devfreq is released.
+> Frequency returned by 'cpuinfo_cur_freq' using counters is not fixed
+> and keeps changing slightly. This change returns a consistent value
+> from freq_table. If the reconstructed frequency has acceptable delta
+> from the last written value, then return the frequency corresponding
+> to the last written ndiv value from freq_table. Otherwise, print a
+> warning and return the reconstructed freq.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 > ---
->  drivers/opp/core.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 2483e765318a..1134df360fe0 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1187,12 +1187,6 @@ static void _opp_table_kref_release(struct kref *kref)
->  	if (!IS_ERR(opp_table->clk))
->  		clk_put(opp_table->clk);
->  
-> -	if (opp_table->paths) {
-> -		for (i = 0; i < opp_table->path_count; i++)
-> -			icc_put(opp_table->paths[i]);
-> -		kfree(opp_table->paths);
-> -	}
+> Sending only this patch as other patch not required after the change
+> to convert 'pr_warn' to 'pr_info' in cpufreq core for unlisted freq.
+> Changelog
+> v1[2] -> v3:
+> - Removed unwanted checks for cpu_online and max cluster number
+> - Used WARN_ON_ONCE to avoid print flooding.
+> 
+> v1[1] -> v2:
+> - Minor changes to improve comments and reduce debug prints.
+> - Get freq table from cluster specific data instead of policy.
+> 
+> [2] https://marc.info/?l=linux-tegra&m=160216218511280&w=2
+> [1] https://marc.info/?l=linux-arm-kernel&m=160028821117535&w=2
+> 
+>   drivers/cpufreq/tegra194-cpufreq.c | 62 ++++++++++++++++++++++++++++++++------
+>   1 file changed, 53 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> index e1d931c..7901587 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -180,9 +180,61 @@ static unsigned int tegra194_get_speed_common(u32 cpu, u32 delay)
+>          return (rate_mhz * KHZ); /* in KHz */
+>   }
+> 
+> +static void get_cpu_ndiv(void *ndiv)
+> +{
+> +       u64 ndiv_val;
+> +
+> +       asm volatile("mrs %0, s3_0_c15_c0_4" : "=r" (ndiv_val) : );
+> +
+> +       *(u64 *)ndiv = ndiv_val;
+> +}
+> +
+> +static void set_cpu_ndiv(void *data)
+> +{
+> +       struct cpufreq_frequency_table *tbl = data;
+> +       u64 ndiv_val = (u64)tbl->driver_data;
+> +
+> +       asm volatile("msr s3_0_c15_c0_4, %0" : : "r" (ndiv_val));
+> +}
+> +
+>   static unsigned int tegra194_get_speed(u32 cpu)
+>   {
+> -       return tegra194_get_speed_common(cpu, US_DELAY);
+> +       struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
+> +       struct cpufreq_frequency_table *pos;
+> +       unsigned int rate;
+> +       u64 ndiv;
+> +       int ret;
+> +       u32 cl;
+> +
+> +       smp_call_function_single(cpu, get_cpu_cluster, &cl, true);
+> +
+> +       /* reconstruct actual cpu freq using counters */
+> +       rate = tegra194_get_speed_common(cpu, US_DELAY);
+> +
+> +       /* get last written ndiv value */
+> +       ret = smp_call_function_single(cpu, get_cpu_ndiv, &ndiv, true);
+> +       if (WARN_ON_ONCE(ret))
+> +               return rate;
+> +
+> +       /*
+> +        * If the reconstructed frequency has acceptable delta from
+> +        * the last written value, then return freq corresponding
+> +        * to the last written ndiv value from freq_table. This is
+> +        * done to return consistent value.
+> +        */
+> +       cpufreq_for_each_valid_entry(pos, data->tables[cl]) {
+> +               if (pos->driver_data != ndiv)
+> +                       continue;
+> +
+> +               if (abs(pos->frequency - rate) > 115200) {
+> +                       pr_warn("cpufreq: cpu%d,cur:%u,set:%u,set ndiv:%llu\n",
+> +                               cpu, rate, pos->frequency, ndiv);
+> +               } else {
+> +                       rate = pos->frequency;
+> +               }
+> +               break;
+> +       }
+> +       return rate;
+>   }
+> 
+>   static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+> @@ -209,14 +261,6 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>          return 0;
+>   }
+> 
+> -static void set_cpu_ndiv(void *data)
+> -{
+> -       struct cpufreq_frequency_table *tbl = data;
+> -       u64 ndiv_val = (u64)tbl->driver_data;
 > -
->  	WARN_ON(!list_empty(&opp_table->opp_list));
->  
->  	list_for_each_entry_safe(opp_dev, temp, &opp_table->dev_list, node) {
-> @@ -1209,9 +1203,22 @@ static void _opp_table_kref_release(struct kref *kref)
->  	mutex_destroy(&opp_table->genpd_virt_dev_lock);
->  	mutex_destroy(&opp_table->lock);
->  	list_del(&opp_table->node);
-> -	kfree(opp_table);
->  
->  	mutex_unlock(&opp_table_lock);
-> +
-> +	/*
-> +	 * Interconnect provider may use OPP too, hence icc_put() needs to be
-> +	 * invoked outside of the opp_table_lock in order to prevent nested
-> +	 * locking which happens when bandwidth of the ICC path is set to 0
-> +	 * by ICC core on release of the path.
-> +	 */
-> +	if (opp_table->paths) {
-> +		for (i = 0; i < opp_table->path_count; i++)
-> +			icc_put(opp_table->paths[i]);
-> +		kfree(opp_table->paths);
-> +	}
-> +
-> +	kfree(opp_table);
->  }
-
-Never make such _fixes_ part of such a big patchset. Always send them
-separately.
-
-Having said that, I already have a patch with me which shall fix it for you as
-well:
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 4ac4e7ce6b8b..0e0a5269dc82 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1181,6 +1181,10 @@ static void _opp_table_kref_release(struct kref *kref)
-        struct opp_device *opp_dev, *temp;
-        int i;
- 
-+       /* Drop the lock as soon as we can */
-+       list_del(&opp_table->node);
-+       mutex_unlock(&opp_table_lock);
-+
-        _of_clear_opp_table(opp_table);
- 
-        /* Release clk */
-@@ -1208,10 +1212,7 @@ static void _opp_table_kref_release(struct kref *kref)
- 
-        mutex_destroy(&opp_table->genpd_virt_dev_lock);
-        mutex_destroy(&opp_table->lock);
--       list_del(&opp_table->node);
-        kfree(opp_table);
--
--       mutex_unlock(&opp_table_lock);
- }
- 
- void dev_pm_opp_put_opp_table(struct opp_table *opp_table)
-
-
--- 
-viresh
+> -       asm volatile("msr s3_0_c15_c0_4, %0" : : "r" (ndiv_val));
+> -}
+> -
+>   static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
+>                                         unsigned int index)
+>   {
+> --
+> 2.7.4
+> 
