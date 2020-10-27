@@ -2,143 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FC829AD64
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 14:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5AE29AD6B
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 14:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441405AbgJ0NeZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 09:34:25 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42569 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440836AbgJ0NeY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 09:34:24 -0400
-Received: by mail-lf1-f67.google.com with SMTP id a7so2310316lfk.9
-        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 06:34:22 -0700 (PDT)
+        id S1752283AbgJ0Nfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 09:35:36 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:46380 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752272AbgJ0Nfg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 09:35:36 -0400
+Received: by mail-ej1-f66.google.com with SMTP id t25so2218884ejd.13;
+        Tue, 27 Oct 2020 06:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JAxz3t4fxRdi4fBrSczBijxW7IcL4iyhHcw3bRrRmLw=;
-        b=J3OTYPQGLdwij21je0sEVctrBbG7wqE5SAWr+YIemQQz8wMKxqxq68sCkVMgoF+X5E
-         k1KXl5Y5xHx6B2VMdj+ZAKXgm+c05jn+T7f+bxvX0XbVcfDNaCLCwGtGRc1mhY8sdL7B
-         deoTGftQyXvY4/IThktVL+8k0D+QlPX4oLg/6bQ1k31A6x1abIoCQ3bN2fNuMkTOPUWX
-         gJ8L8CwkC+N2awxcuN2V4jFhyEN8ny8r7yGaFBL9gmAJzoNs2ZGPfkRYxpyUWl8Lr9oD
-         jKnjSAmzAvE9AsQHIG+GDk7rrxvp4VSm3bGfBDR0ABHrslJ2wpWPhfe8Ff3OxMFKI6dP
-         Aquw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8mQg3nh3RaesRS2P5WKkQKj2n7Sdjc0/yYomgGjrqio=;
+        b=iNNryRd2nlTyxGTMh11x7reba8pbjJ8oqfWUoqPdnRReHWdK6LUDGWM37tgyyDiv2N
+         nmVRPh2dnjwsreFvaLadAUa4r0NXafbS0cJjVn0CEAGJx4eOdW2Em5ss8a12y8JZMB+4
+         /S/Yln/enOzx6L1kmudHZ1nv+NQ9o1lPA0rJg7590Wn4H6Qss8bLjEmxtM5fCCN7o9Wf
+         sHUahJRhBp6VZkCtCdUFCawRCFuthVnlM3P4VIhf4F3UwSrkUf7OXKU35ikqReEa9EaX
+         qKd2NASh2NmgCn+6hfZM55WiAUQ7wBFXG4WsqUWSa9XEE9JWgDuJLG4bQJJSkp7p7s2S
+         JfOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JAxz3t4fxRdi4fBrSczBijxW7IcL4iyhHcw3bRrRmLw=;
-        b=dsrOS+ipLnB2nMmkVIvQiybKKqqSByLxSl0wsNiEtevmWN2/YELhchn5yWS0g2/ARy
-         U8I2uAly6UnBrDVTunGGFHGhOdUK+kxGOfeeCMM/qoi3bz81z3LBp8mddUr3qKHBhBHl
-         ZXVTnUAJ5T5mhZoNRaOcgEzfJp6KDK+2VX24hnQ/6+HkKNKxG1YtZEcXcDWKWst6huDI
-         DdMKlnIZUrVS00ETGeZ4R7RsWyrLVN3deZ12JvsChkkwLsEqareXcZfCTBbIYG1QigUL
-         IY8N1T3weI1HOfsc/CHeKw+Xa2z5ihbWOa73Najs8oxVz7eN49y7Xt30NMXcXUOC4oxr
-         1gjQ==
-X-Gm-Message-State: AOAM530RljFELl2Bx/K7iRBo2QI2FJc58fUhjiuFbYtYTnSj4jBo1b2O
-        nDdFfxPkj0rmzgenJDor3F123xbzawVuWnPH
-X-Google-Smtp-Source: ABdhPJy4o/zTSw/4MM1ARupNXKXTQiw9HE0oBDrsRrk+ShztW9TYEfxMcGFdNpsv2IN93ut29I41cA==
-X-Received: by 2002:ac2:4551:: with SMTP id j17mr841782lfm.411.1603805661693;
-        Tue, 27 Oct 2020 06:34:21 -0700 (PDT)
-Received: from eriador.lan ([188.162.64.248])
-        by smtp.gmail.com with ESMTPSA id 26sm182448ljg.30.2020.10.27.06.34.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8mQg3nh3RaesRS2P5WKkQKj2n7Sdjc0/yYomgGjrqio=;
+        b=DR98hxxTxDEYd7wFPoqFfELoL2kOdlZeDdVd20p4ZKl2p1ybiUwFX0pO+aN7kqVAip
+         XLbB/Im6FTZNxfqwbbAGRYgtMfKXs3u00N/K1XyTLEB8W0p9IwppR9FuBhAeTJdbbHUt
+         gt+zSyTcMKIRFsBmPkoBm4EdVUyJ1u4Uo9VxwlnS1cNoO1ciA0y22haNVXA86U5168F/
+         WjOy0cFagMCLUx67L09luT/i7fUNa0pYvormWcINnlawI8gdhePE/8EhZoVW3+u2YvB6
+         dH9iulXpqCHrjui14euqCpWcHqbjrQm99YscVqj00/5E9LfLXNvN4xChgWW9MfwrzC6/
+         cQvw==
+X-Gm-Message-State: AOAM530OH7xtpqH+VDXHaVeQlS16qddENbqROKXI9VNWLzs9WOpa+nSR
+        YaQTg5e9N17/DfBkgIRNdFg=
+X-Google-Smtp-Source: ABdhPJyOS2GplJQHwJKYItyPwxlHn7uJ1Z/j8baAH8JyKjiTKLXB69/Mh3ufO4PujfYg/8EqfgktPw==
+X-Received: by 2002:a17:906:c095:: with SMTP id f21mr2593939ejz.108.1603805733846;
+        Tue, 27 Oct 2020 06:35:33 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id 6sm1054545ejv.49.2020.10.27.06.35.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 06:34:20 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Tue, 27 Oct 2020 06:35:32 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 14:35:31 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2] interconnect: qcom: use icc_sync state for sm8[12]50
-Date:   Tue, 27 Oct 2020 16:34:18 +0300
-Message-Id: <20201027133418.976687-1-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.28.0
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 28/52] memory: tegra: Add and use
+ devm_tegra_get_memory_controller()
+Message-ID: <20201027133531.GI1822510@ulmo>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-29-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oxV4ZoPwBLqAyY+a"
+Content-Disposition: inline
+In-Reply-To: <20201025221735.3062-29-digetx@gmail.com>
+User-Agent: Mutt/1.14.7 (2020-08-29)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In addition to the rest of Qcom interconnect drivers use icc_sync_state
-for SM8150/SM8250 interconnect drivers to notify the interconnect
-framework when all consumers are probed and there is no need to keep the
-bandwidth set to maximum anymore.
 
-Also move the BCM initialization before creating the nodes to set the
-max bandwidth in hardware for the initialization/probing stage.
+--oxV4ZoPwBLqAyY+a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Fixes: 7d3b0b0d8184 ("interconnect: qcom: Use icc_sync_state")
----
- drivers/interconnect/qcom/sm8150.c | 7 ++++---
- drivers/interconnect/qcom/sm8250.c | 7 ++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+On Mon, Oct 26, 2020 at 01:17:11AM +0300, Dmitry Osipenko wrote:
+> Multiple Tegra drivers need to retrieve Memory Controller and there is
+> duplication of the retrieval code among the drivers. This patch removes
+> the duplication and fixes put_device() which was missed in the duplicated
+> code.
+>=20
+> EMC drivers now use new common devm_tegra_get_memory_controller() helper
+> instead of opencoding the MC retrieval.
+>=20
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/memory/tegra/mc.c                | 48 ++++++++++++++++++++++++
+>  drivers/memory/tegra/tegra124-emc.c      | 18 ++-------
+>  drivers/memory/tegra/tegra210-emc-core.c | 39 +++++--------------
+>  drivers/memory/tegra/tegra30-emc.c       | 18 ++-------
+>  include/soc/tegra/mc.h                   | 10 +++++
+>  5 files changed, 74 insertions(+), 59 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
-index 9218efed04a0..c76b2c7f9b10 100644
---- a/drivers/interconnect/qcom/sm8150.c
-+++ b/drivers/interconnect/qcom/sm8150.c
-@@ -551,6 +551,9 @@ static int qnoc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	for (i = 0; i < qp->num_bcms; i++)
-+		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
-+
- 	for (i = 0; i < num_nodes; i++) {
- 		size_t j;
- 
-@@ -574,9 +577,6 @@ static int qnoc_probe(struct platform_device *pdev)
- 	}
- 	data->num_nodes = num_nodes;
- 
--	for (i = 0; i < qp->num_bcms; i++)
--		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
--
- 	platform_set_drvdata(pdev, qp);
- 
- 	return 0;
-@@ -627,6 +627,7 @@ static struct platform_driver qnoc_driver = {
- 	.driver = {
- 		.name = "qnoc-sm8150",
- 		.of_match_table = qnoc_of_match,
-+		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(qnoc_driver);
-diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
-index 9b58946f7898..cc558fec74e3 100644
---- a/drivers/interconnect/qcom/sm8250.c
-+++ b/drivers/interconnect/qcom/sm8250.c
-@@ -567,6 +567,9 @@ static int qnoc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	for (i = 0; i < qp->num_bcms; i++)
-+		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
-+
- 	for (i = 0; i < num_nodes; i++) {
- 		size_t j;
- 
-@@ -590,9 +593,6 @@ static int qnoc_probe(struct platform_device *pdev)
- 	}
- 	data->num_nodes = num_nodes;
- 
--	for (i = 0; i < qp->num_bcms; i++)
--		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
--
- 	platform_set_drvdata(pdev, qp);
- 
- 	return 0;
-@@ -643,6 +643,7 @@ static struct platform_driver qnoc_driver = {
- 	.driver = {
- 		.name = "qnoc-sm8250",
- 		.of_match_table = qnoc_of_match,
-+		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(qnoc_driver);
--- 
-2.28.0
+Acked-by: Thierry Reding <treding@nvidia.com>
 
+--oxV4ZoPwBLqAyY+a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+YIiMACgkQ3SOs138+
+s6Hfiw//dsmnyOi26C1B542Xl69Kt0RSahaqPgCob+RFtXhq//XjyEuLvOvQAjRe
+lxz5ae9bOY4g4M2xwaGEoD+itgWFP0Ls+bvD5nbLBGnO1Z+oHWlKyGx2qzJveXOj
+qP+dJHaaIyBO49MBznLzuWCOiP/lXB32WBNU3i/qsxh9S/7X7q3ihqYqezzrUMfh
+Gdhsfj+EWMF5w7ZlXv9WoiR0ZSdmqDTJTuE3JDs/r0olxRtN/wb0PRzAaYo1qyiv
+7YRNvSzCDWeap4l0SH+i/Yndul783XqNtZAjEb0oS/wzCiH+szPJNhcozS/2TI+D
+Xza9bOPLxiY0GcngyhUQb/z6Z3PfdODVP6tHfFjOKzHnwyh9/XqgyZIzl8dKsk73
+n9aYJUmv3cFU9fqqNFf3hjpcwjXIYk1FimqFTrvoC6emwsMjwEu7qARmWqpyIDEA
+bMTabxLAnzBW1Q/ftB8K1MK4h24B1jLGG6BfQDwW272+zbRkVP5fI5bhAKn85X1s
+npFW3cCKehnIAuxgLIob/RxLcu0T6U5TBD7yqyiuL79WqlW8xpN1oKLirEuToWFi
+0XxaYBzC4vWO/5CGlSkbxlfBXNDscHte/b/Rany9br+SuiWFybW3a/IirgDSEzUh
+fiH8r5or8XwD6rXR5Qy7IhBmJOYserCHHQk0AGmwMUhfBHPgXRw=
+=Gbon
+-----END PGP SIGNATURE-----
+
+--oxV4ZoPwBLqAyY+a--
