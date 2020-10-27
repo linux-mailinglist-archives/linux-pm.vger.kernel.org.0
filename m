@@ -2,97 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B4929A79E
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 10:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0AF29A7A1
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 10:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443650AbgJ0JSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 05:18:11 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:46330 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394889AbgJ0JSL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 05:18:11 -0400
-Received: by mail-ed1-f66.google.com with SMTP id 33so627079edq.13;
-        Tue, 27 Oct 2020 02:18:09 -0700 (PDT)
+        id S2408231AbgJ0JTU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 05:19:20 -0400
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:36849 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387859AbgJ0JTT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 05:19:19 -0400
+Received: by mail-wr1-f44.google.com with SMTP id x7so1029134wrl.3;
+        Tue, 27 Oct 2020 02:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+OOfjhuhTD9zQyQKa367WJYfNXLO5sju7NGsP+LncHg=;
+        b=EfibJUiWTOmw1OAgBReOF9qT+M2VDkU6Smvd2+iVxdSy8OqnMwJOpi4J107Dex99oB
+         NX2UvZ3g5Xi0/X2lDsPc6wQ1pKzR3ayklDOAebOb2Rr+v0XZR2jYXQ7Lj3pqATLIBPz+
+         +PsLmjLmuUmttB3vSWSnPpS7P9ZqNJEeww7k1LgTIFebFEEd2INV5i7BQwZNfmo5ZS+6
+         VZnsW8802co1MNN9M9da9w31SZL2bbNifHmw+3c3B47Qvd1T6zXHTe6H4ovRxygNjS2E
+         oKORkS2dRnJfhu6sG4FuGYOLym6BoQnrdzmWDuu42DCfG7q2h1PxZoz2pFm63+PhMpgQ
+         zRhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HAb5s57kc6FoxJJ5M7USdfq0o0bKGmCp0q9T2Pfs8tQ=;
-        b=TXaO1+VHX5OYgJfTIhS05eodj40obeRzhzC1QtUfXFLmiUnWiQwlmTDyMYopDsMQSd
-         N8IJ+lWZQf40616gYv4hROK7s8Ptj0Rfs08mKECtZJ5vqQhsy4pojhlhG3iQfR16vT6o
-         PZaF/XejckNiJ+RL+PRYcLtjxVyQ+rHCImWuXcPvJ8zVLqgNiksAzG2Z1p1+LltB/yej
-         Ean6rkNntx345vog4kWwtiy/Yxu06/onjRhAcp45SBX1LkSJYXmgfXx7PJAL2migP8jQ
-         uMnw46mqmTf6gQk2MHC8sTeD6yFk/lz+hz3tTeNQlvtASTx9WikAVCefac/WprXyJUze
-         n3XQ==
-X-Gm-Message-State: AOAM530YxVEjrFr0Eth5QYggBryPGXlzNVMK8JHmCcHAUsd+65xA5XpA
-        HiduxsDTtBW4YVTRGL0ROBU=
-X-Google-Smtp-Source: ABdhPJzOLthwFj6nDtDIvhLVvFPoESLoUtoRlDAuM65L24KRPnOdjwxWM9Zp5eXDz2i7noU2UuMTag==
-X-Received: by 2002:a05:6402:135a:: with SMTP id y26mr1207604edw.114.1603790288831;
-        Tue, 27 Oct 2020 02:18:08 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id v18sm658320ejj.10.2020.10.27.02.18.06
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+OOfjhuhTD9zQyQKa367WJYfNXLO5sju7NGsP+LncHg=;
+        b=AY+bh08/HZeNVM9AZnXA2EUtSHn4kbZtEgoCXntERf+DKD9DzAbrcDjaK6Xd5D6cVt
+         0+xMUwko3+bpi0hCmFo3ECqHAyiQeqxa8BORWgYR2Itmw5W0Kw3rGtg10v7ecHmXlw/9
+         iygXUDSKZbr5rmBdG1YvmJjuZZ3SCPzx5KXGELL02gxAk+bsSoYmMt0L5qbXGFUzSBkd
+         Cj7CxL5kwU9pOCLTN8OCgJ6sWQoz3WxgmMO0B0HR0z9MpaP8qVZDfFH/ZEm4QN9a5dbT
+         D313XbtnfETyHXJIY31oD4TkcEiRicvcAzQ+pm8pWYAEa+4Nk7KOOnBDd8GHj5ER87wp
+         2apQ==
+X-Gm-Message-State: AOAM5333t4gFsC02AE7ZrVxCnhjFeyj5uuqowqrarYeOjnOB9iu6K/8o
+        ESKMdebICysuE9S2MVOHocw=
+X-Google-Smtp-Source: ABdhPJzelJGygDhpfTD4K7Y5hLTcBYoUOdTRtidWUuS8SAfNUXBwHVLsL+KZ9XT82ccJOtlkNRfYjg==
+X-Received: by 2002:adf:d84e:: with SMTP id k14mr1745123wrl.251.1603790355966;
+        Tue, 27 Oct 2020 02:19:15 -0700 (PDT)
+Received: from pce.localnet (host-80-117-125-178.pool80117.interbusiness.it. [80.117.125.178])
+        by smtp.gmail.com with ESMTPSA id x10sm1160524wrp.62.2020.10.27.02.19.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 02:18:07 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 10:18:05 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 25/52] ARM: tegra: Add DVFS properties to Tegra20 EMC
- device-tree node
-Message-ID: <20201027091805.GC10762@kozik-lap>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-26-digetx@gmail.com>
+        Tue, 27 Oct 2020 02:19:15 -0700 (PDT)
+From:   Elia Devito <eliadevito@gmail.com>
+To:     Mark Pearson <markpearson@lenovo.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     dvhart@infradead.org, mgross@linux.intel.com,
+        mario.limonciello@dell.com, hadess@hadess.net, bberg@redhat.com,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [External] Re: [PATCH] [RFC] Documentation: Add documentation for new platform_profile sysfs attribute
+Date:   Tue, 27 Oct 2020 10:19:12 +0100
+Message-ID: <12633630.uLZWGnKmhe@pce>
+In-Reply-To: <1fbaf1fa-47c6-afe7-ca9e-41b3ad6a4556@redhat.com>
+References: <markpearson@lenovo.com> <ef9b93a0-636f-9b96-9d5b-fee1e5738af7@lenovo.com> <1fbaf1fa-47c6-afe7-ca9e-41b3ad6a4556@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-26-digetx@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 01:17:08AM +0300, Dmitry Osipenko wrote:
-> Add EMC OPP DVFS/DFS tables and emc-stats subdev that will be used for
-> dynamic memory bandwidth scaling, while EMC itself will perform voltage
-> scaling. Update board device-trees with optional EMC core supply and
-> remove unsupported OPPs.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../boot/dts/tegra20-acer-a500-picasso.dts    |  12 ++
->  arch/arm/boot/dts/tegra20-colibri.dtsi        |   8 +
->  arch/arm/boot/dts/tegra20-paz00.dts           |  10 +
->  .../arm/boot/dts/tegra20-peripherals-opp.dtsi | 181 ++++++++++++++++++
->  arch/arm/boot/dts/tegra20.dtsi                |  12 +-
->  5 files changed, 222 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/tegra20-peripherals-opp.dtsi
-> 
-> diff --git a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-> index a0b829738e8f..f5c1591c8ea8 100644
-> --- a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-> +++ b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-> @@ -1058,9 +1058,21 @@ map0 {
->  		};
->  	};
->  
-> +	emc_opp_table0 {
+Hi to all,
 
-All node names with hyphens -. Not underscores.
+In data marted=EC 27 ottobre 2020 08:54:44 CET, Hans de Goede ha scritto:
+> Hi,
+>=20
+> On 10/26/20 8:55 PM, Mark Pearson wrote:
+> > Thanks Hans
+> >=20
+> > On 26/10/2020 14:33, Hans de Goede wrote:
+> >> Hi Mark,
+> >>=20
+> >> Thank you for this new version.
+> >>=20
+> >> On 10/26/20 6:44 PM, Mark Pearson wrote:
+> >>> From: Hans de Goede <hdegoede@redhat.com>
+> >=20
+> > <snip>
+> >=20
+> >>> +
+> >>> +If for some reason there is no good match when mapping then a new
+> >>> profile-name +may be added. Drivers which wish to introduce new
+> >>> profile-names must: +1. Have very good reasons to do so.
+> >>> +2. Add the new profile-name to this document, so that future drivers
+> >>> which also +   have a similar problem can use the same new.
+> >>=20
+> >> s/same new/same name/
+> >=20
+> > I've read this document so many times...I'm not sure how I missed that
+> > one. Thanks.>=20
+> >>> + Usually new profile-names will
+> >>> +   be added to the "extra profile-names" section of this document. B=
+ut
+> >>> in some +   cases the set of standard profile-names may be extended.
+> >>=20
+> >> With the change from a more generic API to this new one more targeted
+> >> towards DPTF I would drop this part.
+> >=20
+> > OK - I have some questions then related to this change, below
+> >=20
+> >>> +
+> >>> +What:        /sys/firmware/acpi/platform_profile_choices
+> >>> +Date:        October 2020
+> >>> +Contact:    Hans de Goede <hdegoede@redhat.com>
+> >>> +Description:
+> >>> +        Reading this file gives a space separated list of profiles
+> >>> +        supported for this device.
+> >>> +
+> >>> +        Drivers must use the following standard profile-names whenev=
+er
+> >>> +        possible:
+> >>> +
+> >>> +        low-power:        Emphasises low power consumption
+> >>> +        quiet:            Offers quieter operation (lower fan
+> >>> +                    speed but with higher performance and
+> >>> +                    temperatures then seen in low-power
+> >>=20
+> >> I think the description here is a bit too specific, this may cause
+> >> userspace to have expectations which are not necessary true. I would
+> >> describe this as just:
+> >>=20
+> >>         quiet:            Emphasises quieter operation
+> >=20
+> > Agreed. I'll update
+> >=20
+> >>> +        balanced:        Balance between low power consumption
+> >>> +                    and performance
+> >>> +        performance:        Emphasises performance (and may lead to
+> >>> +                    higher temperatures and fan speeds)
+> >>> +
+> >>> +        Userspace may expect drivers to offer at least several of th=
+ese
+> >>> +        standard profile-names! If none of the above are a good match
+> >>> +        for some of the drivers profiles, then drivers may use one of
+> >>> +        these extra profile-names:
+> >>> +        <reserved for future use>
+> >>> +
+> >=20
+> > If we remove the extra profile-names section above then I think it shou=
+ld
+> > be removed here too. If someone wants to add a new 'mode' then it would
+> > be added to the list of 'standard names', and becomes a new option.
+> > Wanted to check I'm not missing something important.
+> You are completely right, any references to an extra profile-names section
+> should be removed here too. I did intend to add that it should be removed
+> here too, but I forgot.
+>=20
+> >>> +What:        /sys/firmware/acpi/platform_profile
+> >>> +Date:        October 2020
+> >>> +Contact:    Hans de Goede <hdegoede@redhat.com>
+> >>> +Description:
+> >>> +        Reading this file gives the current selected profile for this
+> >>> +        device. Writing this file with one of the strings from
+> >>> +        available_profiles changes the profile to the new value.
+> >>=20
+> >> The part about custom profiles below may be dropped. That was intended
+> >> for use with e.g. GPUs but since this now strictly is a system-level
+> >> profile API, the part below can be dropped now.
+> >=20
+> > Agreed
+> >=20
+> >>> +
+> >>> +        Reading this file may also return "custom". This is intended
+> >>> for
+> >>> +        drivers which have and export multiple knobs. Such drivers m=
+ay
+> >>> +        very well still want to offer a set of profiles for easy of =
+use
+> >>> +        and to be able to offer a consistent standard API (this API)=
+ to
+> >>> +        userspace for configuring their performance. The "custom" va=
+lue
+> >>> +        is intended for when ai user has directly configured the kno=
+bs
+> >>> +        (through e.g. some advanced control-panel for a GPU) and the
+> >>> +        knob values do not match any of the presets represented by t=
+he
+> >>> +        platform-profiles. In this case writing this file will
+> >>> +        override the modifications and restore the selected presets.
+> >>> +
+> >>=20
+> >> Regards,
+> >>=20
+> >> Hans
+> >=20
+> > Thanks!
+> > mark
+>=20
+> Regards,
+>=20
+> Hans
 
-Best regards,
-Krzysztof
+This look good,
+only thing is that hp-wmi driver need a cool profile (Emphasises the comput=
+er=20
+cool to touch), if you can add it would be perfect.
+
+Regards
+Elia
+
+
+
