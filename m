@@ -2,123 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABED29CA4C
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 21:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CBB29CA82
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 21:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2902327AbgJ0Uhe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 16:37:34 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:41253 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2900490AbgJ0Uhd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 16:37:33 -0400
-Received: by mail-lf1-f67.google.com with SMTP id 126so4035630lfi.8;
-        Tue, 27 Oct 2020 13:37:31 -0700 (PDT)
+        id S2439548AbgJ0UmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 16:42:03 -0400
+Received: from mail-pf1-f172.google.com ([209.85.210.172]:37848 "EHLO
+        mail-pf1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436598AbgJ0UmC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 16:42:02 -0400
+Received: by mail-pf1-f172.google.com with SMTP id 126so1610302pfu.4
+        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 13:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7rp8OgTEAWtuKJtMNiLhS1/R8myCG5UhnRurxGX0itc=;
-        b=pEIfSei7bmZJp5rQNKjGJ1YAY4mj3MLEzP+ie3m0TBYOMLJH4G156rMIn85hVZgEC1
-         azFPSR5gMLIbusPBB46uAK6oGubJ+1BkF77NXjCWGLnWAkNoBt02Urav3PHU/+4KC4Eb
-         RnFp8H2pMwIzgCZYTHrP7GCG38Zc3IcYNEioxWgveaZAkVvFlJ5FapUc8FwkCMm/CKmK
-         DHObifrr0wVW9tWM2qhI31qxKy3JhBeXM4lxJ7uTP6oz2+cQSJojV8p/CJTvl55n2yEA
-         VeUheDR5E3sWn9aD/Tg5eEUkYSq/CeJ5tgW4k9h/t74Ag3xpXjjNcHkbray3nX03mPt0
-         1umw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=gfTcI+Fg1Sm2oQH4JINxga6/qEMhy5UvO+PRUiYqtfw=;
+        b=x4qAvteKEJn0THUk0Ka6ju/7sZRZkoAxNNZqrAlXHDT3Ic7e34DwShuuo4kJCXsbn3
+         H7IIyO6fbCkjKSkKYBrHYLFC93kPU+duEimMxYrPog+/NmuRsa0gMQbz5zMkT+WoAJ8R
+         UP0hj8Js+EJHutNSphNJ8/70VMZyNfiEdZhgUxa3wrQMLV2z0sjpIC/pc13Y/1tvcrG2
+         YICPxStP4ChPEG8zBYmghCAGDCJL8fr/A1fkOFXsylLcyLxpDQbcsrr03MQyIkiI4Bfq
+         pZ3hBwGM9NyGKQqEZXJunbQsvBpB71QBaCTS6mmCv2OSeBrVwdcAhMpOqjC14qn+IeZB
+         T68w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7rp8OgTEAWtuKJtMNiLhS1/R8myCG5UhnRurxGX0itc=;
-        b=bruO25l9MQOnFtYT+0XWoLBEwj0/xVqahmCjaSWyZzlTkCI10dT5dPxP3vqcNtliv9
-         Ozw2s02BKHZ1jY9XGfXe2ILmxvIurHtGh113umbkNrUzmglr6Fqk3FP/zGnmoD7eIEQV
-         faXJkNi5gV6rfEAoTAsKRg/ug97tc9U6q4kUqwtXu3NVRmkFt5hiawkcDeYAPcOPPg/9
-         N689WO+xmx6LXHWQaEwDms+pTD0O3huegL051vqk9mnJyaACcojDnthGCGPXIbsiwrcd
-         84yueCwApfCqTKvbMo4BlIdW1WHEdZWO/FgvE+mUWFWta4VNjA+EKDBlgBT849FpADSq
-         6+Ww==
-X-Gm-Message-State: AOAM531ZAaySDrSMZ4qs5pXUf82iwC3yXzAdcVr6IP99J7V5lNGykaJV
-        RbYxMZbjkBFA8E7BOH40gJiMkywJErU=
-X-Google-Smtp-Source: ABdhPJym33W/chgtCjkXL4iuOZZNtixcgyiRRX4KlkNwIlFRpM3sMfAYENyAfUzTcy1uJQku22By8A==
-X-Received: by 2002:ac2:5207:: with SMTP id a7mr1416790lfl.56.1603831050126;
-        Tue, 27 Oct 2020 13:37:30 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
-        by smtp.googlemail.com with ESMTPSA id l20sm162128lfc.274.2020.10.27.13.37.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 13:37:29 -0700 (PDT)
-Subject: Re: [PATCH v6 04/52] dt-bindings: memory: tegra20: emc: Document
- nvidia,memory-controller property
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-5-digetx@gmail.com> <20201027085417.GD4244@kozik-lap>
- <54191034-dcb9-7cab-333b-5bb2553f0ed1@gmail.com>
- <20201027193039.GA140636@kozik-lap>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <90df8e53-6dec-f75f-5f82-539cb0f72583@gmail.com>
-Date:   Tue, 27 Oct 2020 23:37:28 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=gfTcI+Fg1Sm2oQH4JINxga6/qEMhy5UvO+PRUiYqtfw=;
+        b=Z2iV01i/lGf1TxptBTdoom6edGHZzxzbhIFbjJIDa6MMJdwOQD3OGibKfiePjJ6Aof
+         h5dIqgkhGA3ahZeLrR+1Y6uTWiMvzjQ2jWAGMRwZAmh1eHpzLsKDudxeLM1rA4hJNEU2
+         OaXGLdkb2zJ1X2tHIwQVKVt8rtD3ASVmnkFXuUwkR9JsN5Ylt8W4H27XLnd72XhjtXvm
+         p6bPJmTwQC7v1BL1POeInAIiah99LT8U0BDLQQlt0fQT9XDryy9a7GpafxXezw2eXy00
+         vfzP1eo47NGS+dGYIw9tLLSA8Q4vVl9ihNMAuS32a1gzkfGatoGMbg+2pm384X+IrlpD
+         UtgQ==
+X-Gm-Message-State: AOAM531VAr3KvKpA1WieD62/xo5TH0eZ6fF8OCDXJizBUofOFIvf5mEy
+        3bh1C5U+qrz+uZcKKbJaKz4RoZmtQ+h/fA==
+X-Google-Smtp-Source: ABdhPJy0VfUoaSvNTgHz+35EV+w5qhYM6B2Nw6o2zWiMh5JKPjsijQLizZhJ+4P/rOLS97W1dqRt3Q==
+X-Received: by 2002:a62:502:0:b029:15f:c777:8bb3 with SMTP id 2-20020a6205020000b029015fc7778bb3mr3877517pff.18.1603831321615;
+        Tue, 27 Oct 2020 13:42:01 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 15sm3001991pgs.52.2020.10.27.13.42.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 13:42:00 -0700 (PDT)
+Message-ID: <5f988618.1c69fb81.9f9f9.5b44@mx.google.com>
+Date:   Tue, 27 Oct 2020 13:42:00 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20201027193039.GA140636@kozik-lap>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.10-rc1-4-ge213cd8f175c
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 122 runs,
+ 2 regressions (v5.10-rc1-4-ge213cd8f175c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-27.10.2020 22:30, Krzysztof Kozlowski пишет:
-> On Tue, Oct 27, 2020 at 10:17:19PM +0300, Dmitry Osipenko wrote:
->> 27.10.2020 11:54, Krzysztof Kozlowski пишет:
->>> On Mon, Oct 26, 2020 at 01:16:47AM +0300, Dmitry Osipenko wrote:
->>>> Tegra20 External Memory Controller talks to DRAM chips and it needs to be
->>>> reprogrammed when memory frequency changes. Tegra Memory Controller sits
->>>> behind EMC and these controllers are tightly coupled. This patch adds the
->>>> new phandle property which allows to properly express connection of EMC
->>>> and MC hardware in a device-tree, it also put the Tegra20 EMC binding on
->>>> par with Tegra30+ EMC bindings, which is handy to have.
->>>>
->>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>>> ---
->>>>  .../bindings/memory-controllers/nvidia,tegra20-emc.txt          | 2 ++
->>>>  1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
->>>> index 567cffd37f3f..1b0d4417aad8 100644
->>>> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
->>>> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
->>>> @@ -12,6 +12,7 @@ Properties:
->>>>    irrespective of ram-code configuration.
->>>>  - interrupts : Should contain EMC General interrupt.
->>>>  - clocks : Should contain EMC clock.
->>>> +- nvidia,memory-controller : Phandle of the Memory Controller node.
->>>
->>> It looks like you adding a required property which is an ABI break.
->> The T20 EMC driver is unused so far in upstream and it will become used
->> only once this series is applied. Hence it's fine to change the ABI.
-> 
-> The ABI is not about upstream, but downstream. There are no other
-> upstreams using this ABI. Unless you have in mind that existing T20 EMC
-> driver was a noop, doing absolutely nothing, therefore there is no
-> breakage of any other users?
+pm/testing baseline: 122 runs, 2 regressions (v5.10-rc1-4-ge213cd8f175c)
 
-The T20 EMC driver was a 100% noop for now. It's safe to change the ABI.
+Regressions Summary
+-------------------
 
-The T30/124 EMC drivers have users, but these are unsafe drivers (with
-the known issues) until this series is applied.
+platform        | arch  | lab           | compiler | defconfig          | r=
+egressions
+----------------+-------+---------------+----------+--------------------+--=
+----------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 1=
+          =
+
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
+          =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
+1-4-ge213cd8f175c/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.10-rc1-4-ge213cd8f175c
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      e213cd8f175c811034bc766ac37bcb5b3cf83a22 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig          | r=
+egressions
+----------------+-------+---------------+----------+--------------------+--=
+----------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 1=
+          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f987c390ccec78214381016
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
+8f175c/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
+8f175c/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f987c390ccec782=
+1438101b
+        new failure (last pass: v5.9-rc8-160-g91e0225c546b)
+        4 lines
+
+    2020-10-27 19:57:09.495000+00:00  Connected to bcm2837-rpi-3-b console =
+[channel connected] (~$quit to exit)
+    2020-10-27 19:57:09.495000+00:00  (user:khilman) is already connected
+    2020-10-27 19:57:25.566000+00:00  =00
+    2020-10-27 19:57:25.566000+00:00  =
+
+    2020-10-27 19:57:25.567000+00:00  U-Boot 2018.11 (Dec 04 2018 - 10:54:3=
+2 -0800)
+    2020-10-27 19:57:25.567000+00:00  =
+
+    2020-10-27 19:57:25.567000+00:00  DRAM:  948 MiB
+    2020-10-27 19:57:25.582000+00:00  RPI 3 Model B (0xa02082)
+    2020-10-27 19:57:25.669000+00:00  MMC:   mmc@7e202000: 0, sdhci@7e30000=
+0: 1
+    2020-10-27 19:57:25.702000+00:00  Loading Environment from FAT... *** W=
+arning - bad CRC, using default environment =
+
+    ... (396 line(s) more)  =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig          | r=
+egressions
+----------------+-------+---------------+----------+--------------------+--=
+----------
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
+          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f987b6dcc6a49e774381080
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
+8f175c/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
+8f175c/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f987b6dcc6a49e=
+774381086
+        failing since 69 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
+l: v5.9-rc1-4-g1f08d51cd57f)
+        60 lines
+
+    2020-10-27 19:56:23.367000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c802
+    2020-10-27 19:56:23.375000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c803
+    2020-10-27 19:56:23.383000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c804
+    2020-10-27 19:56:23.387000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c805
+    2020-10-27 19:56:23.391000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c806
+    2020-10-27 19:56:23.399000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c807
+    2020-10-27 19:56:23.403000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c808
+    2020-10-27 19:56:23.411000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c809
+    2020-10-27 19:56:23.415000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c80a
+    2020-10-27 19:56:23.423000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c80b =
+
+    ... (49 line(s) more)  =
+
+ =20
