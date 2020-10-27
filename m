@@ -2,148 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA5229A6E9
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3469929A6ED
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2509340AbgJ0ItT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 04:49:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50878 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2509336AbgJ0ItR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 27 Oct 2020 04:49:17 -0400
-Received: from kernel.org (unknown [87.70.96.83])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 817B6207DE;
-        Tue, 27 Oct 2020 08:49:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603788557;
-        bh=vqvHVfwUem4JOBq/WXsfNE79L5Iz5nEhnMlkJj2ElFU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cob/039dcWnn8OjH5If0m1K0e5hz+wi7uaTqafHhMC0w6AKDJ7mof/L9QVAWjAi5m
-         AzwVpAcX/G3bIeFGz/QZ6LDXFrWjC3A32wjsC/UaCx/T35y4jeNZtg1G5OqKcQamFp
-         mFhuBk5Uhn3ItuoN/wmMtQFg0IPWtBPQaAK5nUZY=
-Date:   Tue, 27 Oct 2020 10:49:02 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "cl@linux.com" <cl@linux.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "bp@alien8.de" <bp@alien8.de>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
-Subject: Re: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages
- in the direct map
-Message-ID: <20201027084902.GH1154158@kernel.org>
-References: <20201025101555.3057-1-rppt@kernel.org>
- <20201025101555.3057-3-rppt@kernel.org>
- <f20900a403bea9eb3f0814128e5ea46f6580f5a5.camel@intel.com>
- <20201026091554.GB1154158@kernel.org>
- <a28d8248057e7dc01716764da9edfd666722ff62.camel@intel.com>
+        id S2509470AbgJ0Iuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 04:50:40 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:44278 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2509350AbgJ0Iu0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 04:50:26 -0400
+Received: by mail-wr1-f68.google.com with SMTP id t9so882074wrq.11
+        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 01:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7To5fR7Q9UAxOnsymTWEk2T2/isEIEenNe0vcod1MTQ=;
+        b=FrVGJAASwgGOHLjXsVS+TDlkp2LPHGEzVqVnlxcTjSD/cr6nN5p7or5UypZO6DinI6
+         A8By5nb9orQHmknCoIS7/rVHrTn1/1O/TCZxGA15rZ3drA8crrQEd5Y7MP5XcOF9A6i7
+         13+dhBlEA4TVsjMhCjwNYEmfMaXJSuHVHqmbuRplFQ8b5qDI+ffJ+AaGoGHLYUFuXWkW
+         asWgirT7AhBXnV59TcXJJ8EHqi2N7OydsrDG1qmkPgsbfD3pkXGHepUiUowN8PUqthat
+         +GYZwye0qXh/u1xBzGoTbXMLrOQYiJP1EXlMpQChn9MUAfxETVk+Jlu84RJh84528TW5
+         sxmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7To5fR7Q9UAxOnsymTWEk2T2/isEIEenNe0vcod1MTQ=;
+        b=j+o7oRXRiwCqfLXOCF9maOkdmzHoA/lTRrIMzRbR/jBh/DXQdOzSNuEWNU5RXeDGcg
+         H/uHJtX34wVld+zoZlkT1uCWaM5cRmam9dBse2gRr4blAb6Knqos3Ke8C82HuAQwP4FR
+         WK6xh7+Q2fJLq+unRsTyfEhC/GHnL5gtok462w2ucgAV930keCinbXyvogKdFbCf+C4H
+         G3CmnJCwBmSjTYtWa7RivBJCuf2pIOw0dIPnDzg7YM+bEbzUI2helminmOH474p/CRBr
+         WgOyt2oF72VTu+B8S+Jo582XBQJ9GKttE93yxE1qisLwND73d9oREw6GvZH+xJ9iq8FZ
+         qGzw==
+X-Gm-Message-State: AOAM531YARCjWRub6GevRL4/1csjyVsNquvKgf5RIVksvtCjzBNGoJCj
+        YDOK4Jj8kGgx+xd6OkmjD0Q5Gg==
+X-Google-Smtp-Source: ABdhPJzPfN26xhtrp7ZCg5xkLG2vH8Zt33AKBxdQuOt3lywV6PI43r3anfW88dN/8XCOlUjPjlvJ3w==
+X-Received: by 2002:adf:81e5:: with SMTP id 92mr1469248wra.411.1603788623417;
+        Tue, 27 Oct 2020 01:50:23 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451? ([2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451])
+        by smtp.googlemail.com with ESMTPSA id 71sm1124828wrm.20.2020.10.27.01.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 01:50:22 -0700 (PDT)
+Subject: Re: [PATCH v2] drivers/thermal: optimize the for circle to run a bit
+ fast
+To:     Bernard Zhao <bernard@vivo.com>, Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com
+References: <20201027013743.62392-1-bernard@vivo.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <15cc88a3-9a96-c7a8-a9e0-375578de4305@linaro.org>
+Date:   Tue, 27 Oct 2020 09:50:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a28d8248057e7dc01716764da9edfd666722ff62.camel@intel.com>
+In-Reply-To: <20201027013743.62392-1-bernard@vivo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 06:57:32PM +0000, Edgecombe, Rick P wrote:
-> On Mon, 2020-10-26 at 11:15 +0200, Mike Rapoport wrote:
-> > On Mon, Oct 26, 2020 at 12:38:32AM +0000, Edgecombe, Rick P wrote:
-> > > On Sun, 2020-10-25 at 12:15 +0200, Mike Rapoport wrote:
-> > > > From: Mike Rapoport <rppt@linux.ibm.com>
-> > > > 
-> > > > When DEBUG_PAGEALLOC or ARCH_HAS_SET_DIRECT_MAP is enabled a page
-> > > > may
-> > > > be
-> > > > not present in the direct map and has to be explicitly mapped
-> > > > before
-> > > > it
-> > > > could be copied.
-> > > > 
-> > > > On arm64 it is possible that a page would be removed from the
-> > > > direct
-> > > > map
-> > > > using set_direct_map_invalid_noflush() but __kernel_map_pages()
-> > > > will
-> > > > refuse
-> > > > to map this page back if DEBUG_PAGEALLOC is disabled.
-> > > 
-> > > It looks to me that arm64 __kernel_map_pages() will still attempt
-> > > to
-> > > map it if rodata_full is true, how does this happen?
-> > 
-> > Unless I misread the code, arm64 requires both rodata_full and
-> > debug_pagealloc_enabled() to be true for __kernel_map_pages() to do
-> > anything.
-> > But rodata_full condition applies to set_direct_map_*_noflush() as
-> > well,
-> > so with !rodata_full the linear map won't be ever changed.
+On 27/10/2020 02:37, Bernard Zhao wrote:
+> Function thermal_zone_device_register, in the for circle, if the
+> first if branch set the count bit in tz->trips_disabled, there is
+> no need to set in the other if branch again.
+> This change is to make the code run a bit fast and readable.
 > 
-> Hmm, looks to me that __kernel_map_pages() will only skip it if both
-> debug pagealloc and rodata_full are false.
+> Signed-off-by: Bernard Zhao <bernard@vivo.com>
 > 
-> But now I'm wondering if maybe we could simplify things by just moving
-> the hibernate unmapped page logic off of the direct map. On x86,
-> text_poke() used to use this reserved fixmap pte thing that it could
-> rely on to remap memory with. If hibernate had some separate pte for
-> remapping like that, then we could not have any direct map restrictions
-> caused by it/kernel_map_pages(), and it wouldn't have to worry about
-> relying on anything else.
+> Changes since V1:
+> *make the code more clear and readable
+> 
+> Link for V1:
+> *https://lore.kernel.org/patchwork/patch/1324507/
 
-Well, there is map_kernel_range() that can be used by hibernation as
-there is no requirement for particular virtual address, but that would
-be quite costly if done for every page.
+When adding a changelog, add it after the signed off separated with a
+'---' symbol. So when commiting the patch, the changelog is discarded.
 
-Maybe we can do somthing like
-
-	if (kernel_page_present(s_page)) {
-		do_copy_page(dst, page_address(s_page));
-	} else {
-		map_kernel_range_noflush(page_address(page), PAGE_SIZE,
-					 PROT_READ, &page);
-		do_copy_page(dst, page_address(s_page));
-		unmap_kernel_range_noflush(page_address(page), PAGE_SIZE);
-	}
-
-But it seems that a prerequisite for changing the way a page is mapped
-in safe_copy_page() would be to teach hibernation that a mapping here
-may fail.
 
 -- 
-Sincerely yours,
-Mike.
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
