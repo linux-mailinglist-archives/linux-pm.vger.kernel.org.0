@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE0829CA3A
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 21:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABED29CA4C
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 21:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S372943AbgJ0Ubh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 16:31:37 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45726 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440994AbgJ0Ubg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 16:31:36 -0400
-Received: by mail-lf1-f65.google.com with SMTP id r127so3986399lff.12;
-        Tue, 27 Oct 2020 13:31:34 -0700 (PDT)
+        id S2902327AbgJ0Uhe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 16:37:34 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:41253 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2900490AbgJ0Uhd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 16:37:33 -0400
+Received: by mail-lf1-f67.google.com with SMTP id 126so4035630lfi.8;
+        Tue, 27 Oct 2020 13:37:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jZzHJ/7NeZExgsunyfO6ZfY1UAlL8FX3D4MJN37d8Kc=;
-        b=dkprteH6MJaH2lEYyvuiY+KFy1bIfXVr/+v/dDO8RFt3TYQ15nqUdlrvqtbXlnuQyU
-         hk44qbAj7JL7Zj25MKFgvK6wgde3kiQ1Z0XMr2LsTIzLhk6saIQhQ+aIOQslZ0S0Fz99
-         Za4L6dgwZsJcGS2ZjIuR4y7JnESEokI6oynHLfsIFpncmk6UEia54Vj3A3ry3Gw9Z/Ts
-         iKvVpE/D5/o2kLVRlSseU9x7YpdSXu693y1+NJetFFM+hfg/msVOYo9hrOU6GtiJgYxL
-         sjbLmbv03VCbo4NmaDEcnCjDMlbt0KkGKjVxVINaWeGfJjwUdHvTPcT1UilN+vIJvte5
-         jLjw==
+        bh=7rp8OgTEAWtuKJtMNiLhS1/R8myCG5UhnRurxGX0itc=;
+        b=pEIfSei7bmZJp5rQNKjGJ1YAY4mj3MLEzP+ie3m0TBYOMLJH4G156rMIn85hVZgEC1
+         azFPSR5gMLIbusPBB46uAK6oGubJ+1BkF77NXjCWGLnWAkNoBt02Urav3PHU/+4KC4Eb
+         RnFp8H2pMwIzgCZYTHrP7GCG38Zc3IcYNEioxWgveaZAkVvFlJ5FapUc8FwkCMm/CKmK
+         DHObifrr0wVW9tWM2qhI31qxKy3JhBeXM4lxJ7uTP6oz2+cQSJojV8p/CJTvl55n2yEA
+         VeUheDR5E3sWn9aD/Tg5eEUkYSq/CeJ5tgW4k9h/t74Ag3xpXjjNcHkbray3nX03mPt0
+         1umw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=jZzHJ/7NeZExgsunyfO6ZfY1UAlL8FX3D4MJN37d8Kc=;
-        b=oo/g0YeBkk6Wp7SVb0jbb2CXGnGV6M3DAIstfcJz6dBxV6E9yy9rxHOTq0CXYxOCcw
-         uvaVbwYNF57td9Sxe4JbOkdIUJAML/zXymFW8sTuQea/lOPow8NfXAORbijt9+IA1wHm
-         n/rTYc4Baltj3ENQSUqF3xw4Mktx59asq6RwSlGwXW3hcrjrluz2BFvRbAlHDtomoIC/
-         fapmaOXjyj26nJephZeMvzH/yODn9BL/MjFBBTxMIUdWM2qB2kutORHTafB4PUSlBwrJ
-         J5VUvCmwTny1L3S7gHAh11z/V3tUKtLe+yHNIB4kz5A4+anEE00SeO8/bH2jcEQq3YZu
-         qh1A==
-X-Gm-Message-State: AOAM532cz/13MY819E4ngV9YwoGtcdK4CDzTd8qpeV/zbNmsuQ1iTZJI
-        h8mHS/cDR2KQqo3/LVo9JqZ6r4MlsKs=
-X-Google-Smtp-Source: ABdhPJzNMj0LN6XhsMz5QH8AiE+1a+5eBjRU9XoZxefttcRzYbvUWa8NQCOCaELsI3+Laoc3yuReuw==
-X-Received: by 2002:a19:cc8f:: with SMTP id c137mr1496095lfg.476.1603830693398;
-        Tue, 27 Oct 2020 13:31:33 -0700 (PDT)
+        bh=7rp8OgTEAWtuKJtMNiLhS1/R8myCG5UhnRurxGX0itc=;
+        b=bruO25l9MQOnFtYT+0XWoLBEwj0/xVqahmCjaSWyZzlTkCI10dT5dPxP3vqcNtliv9
+         Ozw2s02BKHZ1jY9XGfXe2ILmxvIurHtGh113umbkNrUzmglr6Fqk3FP/zGnmoD7eIEQV
+         faXJkNi5gV6rfEAoTAsKRg/ug97tc9U6q4kUqwtXu3NVRmkFt5hiawkcDeYAPcOPPg/9
+         N689WO+xmx6LXHWQaEwDms+pTD0O3huegL051vqk9mnJyaACcojDnthGCGPXIbsiwrcd
+         84yueCwApfCqTKvbMo4BlIdW1WHEdZWO/FgvE+mUWFWta4VNjA+EKDBlgBT849FpADSq
+         6+Ww==
+X-Gm-Message-State: AOAM531ZAaySDrSMZ4qs5pXUf82iwC3yXzAdcVr6IP99J7V5lNGykaJV
+        RbYxMZbjkBFA8E7BOH40gJiMkywJErU=
+X-Google-Smtp-Source: ABdhPJym33W/chgtCjkXL4iuOZZNtixcgyiRRX4KlkNwIlFRpM3sMfAYENyAfUzTcy1uJQku22By8A==
+X-Received: by 2002:ac2:5207:: with SMTP id a7mr1416790lfl.56.1603831050126;
+        Tue, 27 Oct 2020 13:37:30 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
-        by smtp.googlemail.com with ESMTPSA id m26sm284461lfq.296.2020.10.27.13.31.31
+        by smtp.googlemail.com with ESMTPSA id l20sm162128lfc.274.2020.10.27.13.37.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 13:31:32 -0700 (PDT)
-Subject: Re: [PATCH v6 00/52] Introduce memory interconnect for NVIDIA Tegra
- SoCs
+        Tue, 27 Oct 2020 13:37:29 -0700 (PDT)
+Subject: Re: [PATCH v6 04/52] dt-bindings: memory: tegra20: emc: Document
+ nvidia,memory-controller property
 To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -58,6 +57,7 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Mikko Perttunen <cyndis@kapsi.fi>,
         Viresh Kumar <vireshk@kernel.org>,
         Peter Geis <pgwipeout@gmail.com>,
@@ -66,16 +66,16 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
 References: <20201025221735.3062-1-digetx@gmail.com>
- <20201026150845.GA87050@kozik-lap>
- <48a5cfdd-c170-f6d3-001a-2d343ecb2c5e@gmail.com>
- <20201027085253.GC4244@kozik-lap>
+ <20201025221735.3062-5-digetx@gmail.com> <20201027085417.GD4244@kozik-lap>
+ <54191034-dcb9-7cab-333b-5bb2553f0ed1@gmail.com>
+ <20201027193039.GA140636@kozik-lap>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <42d78289-3438-88a2-ed7a-a8a15c5ea938@gmail.com>
-Date:   Tue, 27 Oct 2020 23:31:31 +0300
+Message-ID: <90df8e53-6dec-f75f-5f82-539cb0f72583@gmail.com>
+Date:   Tue, 27 Oct 2020 23:37:28 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201027085253.GC4244@kozik-lap>
+In-Reply-To: <20201027193039.GA140636@kozik-lap>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -83,60 +83,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-27.10.2020 11:52, Krzysztof Kozlowski пишет:
-> On Mon, Oct 26, 2020 at 10:14:10PM +0300, Dmitry Osipenko wrote:
->> 26.10.2020 18:08, Krzysztof Kozlowski пишет:
->>> On Mon, Oct 26, 2020 at 01:16:43AM +0300, Dmitry Osipenko wrote:
->>>> Hello,
+27.10.2020 22:30, Krzysztof Kozlowski пишет:
+> On Tue, Oct 27, 2020 at 10:17:19PM +0300, Dmitry Osipenko wrote:
+>> 27.10.2020 11:54, Krzysztof Kozlowski пишет:
+>>> On Mon, Oct 26, 2020 at 01:16:47AM +0300, Dmitry Osipenko wrote:
+>>>> Tegra20 External Memory Controller talks to DRAM chips and it needs to be
+>>>> reprogrammed when memory frequency changes. Tegra Memory Controller sits
+>>>> behind EMC and these controllers are tightly coupled. This patch adds the
+>>>> new phandle property which allows to properly express connection of EMC
+>>>> and MC hardware in a device-tree, it also put the Tegra20 EMC binding on
+>>>> par with Tegra30+ EMC bindings, which is handy to have.
 >>>>
->>>> This series brings initial support for memory interconnect to Tegra20,
->>>> Tegra30 and Tegra124 SoCs.
+>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>> ---
+>>>>  .../bindings/memory-controllers/nvidia,tegra20-emc.txt          | 2 ++
+>>>>  1 file changed, 2 insertions(+)
 >>>>
->>>> For the starter only display controllers and devfreq devices are getting
->>>> interconnect API support, others could be supported later on. The display
->>>> controllers have the biggest demand for interconnect API right now because
->>>> dynamic memory frequency scaling can't be done safely without taking into
->>>> account bandwidth requirement from the displays. In particular this series
->>>> fixes distorted display output on T30 Ouya and T124 TK1 devices.
+>>>> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+>>>> index 567cffd37f3f..1b0d4417aad8 100644
+>>>> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+>>>> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+>>>> @@ -12,6 +12,7 @@ Properties:
+>>>>    irrespective of ram-code configuration.
+>>>>  - interrupts : Should contain EMC General interrupt.
+>>>>  - clocks : Should contain EMC clock.
+>>>> +- nvidia,memory-controller : Phandle of the Memory Controller node.
 >>>
->>> Hi,
->>>
->>> You introduced in v6 multiple new patches. Could you describe the
->>> dependencies, if any?
->>
->> Hello,
->>
->> The v6 dropped some older patches and replaced them with the new
->> patches. Previously I wanted to postpone the more complex changes for
->> later times, like supporting OPP tables and DVFS, but then the review
->> started to take more time than was expected and there was enough time to
->> complete those features.
->>
->> There are five basic sets of patches:
->>
->> 	1. DT bindings
->> 	2. DT changes
->> 	3. SoC, clk and memory
->> 	4. devfreq
->> 	5. DRM
->>
->> Each set could be applied separately.
->>
->> Memory patches have a build dependency on the SoC and clk patches.
->>
->> The "tegra-mc: Add interconnect framework" and "Add and use
->> devm_tegra_get_memory_controller()" are the root build dependencies for
->> all memory/ patches. Other patches are grouped per SoC generation
->> (Tegra20/30/124), patches within a SoC-gen group are interdependent.
->>
->> I suppose the best variant would be to merge the whole series via
->> tegra-tree in order to preserve logical order of the patches. Although,
->> merging each set of patches separately also should be okay to do.
+>>> It looks like you adding a required property which is an ABI break.
+>> The T20 EMC driver is unused so far in upstream and it will become used
+>> only once this series is applied. Hence it's fine to change the ABI.
 > 
-> Thanks for explanation. I already have three patches for Tegra MC (and
-> probably two more will be respun) so this might be conflict-prone. The
-> easiest in such case is to provide me soc and clk patches on the branch,
-> so I could keep all Tegra MC together.
+> The ABI is not about upstream, but downstream. There are no other
+> upstreams using this ABI. Unless you have in mind that existing T20 EMC
+> driver was a noop, doing absolutely nothing, therefore there is no
+> breakage of any other users?
 
-Okay, but those T210 patches don't touch the same code, neither same
-source files. For now there should be no merge conflicts.
+The T20 EMC driver was a 100% noop for now. It's safe to change the ABI.
+
+The T30/124 EMC drivers have users, but these are unsafe drivers (with
+the known issues) until this series is applied.
