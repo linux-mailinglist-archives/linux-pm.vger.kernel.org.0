@@ -2,147 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E11FB29A39A
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 05:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F8329A3D9
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 06:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443707AbgJ0E0E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 00:26:04 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:38561 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2443683AbgJ0E0E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 00:26:04 -0400
-Received: by mail-pj1-f68.google.com with SMTP id gi3so111407pjb.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 Oct 2020 21:26:03 -0700 (PDT)
+        id S2505726AbgJ0FKR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 01:10:17 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:52368 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2505725AbgJ0FKR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 01:10:17 -0400
+Received: by mail-pj1-f65.google.com with SMTP id o1so160602pjt.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 Oct 2020 22:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=q8a1R7APHXz6ZL6IXaQsICKfgqyJPeRktgCx//C+/Ss=;
-        b=KL+NuJfe1pirzhrR+nfUoyaxO2yXPH1uQXQPaV5UwSxCeRIhuE79ubRUDClresUNw4
-         S2EyapN9q7kGcOkjPIo2kAcI6/9l8TSMph5lrpsgX3XdISyzG5UFd6xrpfJfqTxjDoXX
-         z8NDBKaqg0zqjTLnDyzrH1QIXIkUH2BdOpzTQTNrzyIhqNSqrdPr1907a4IzDUlJ3bkV
-         Rx1IRL27ZvGfJS3bXAjyoHEF3hS9eOMA2zFOqUVENhekPsr7MK/WySJ8rcLugCo4beUL
-         kNrlbI/92UBdNqKs4amVQ/BZWWznuBzGmmEJHkp8p0SFZZEaRztZz+rr5Rwq9PXYTxvn
-         kRGw==
+        bh=RQEP5hZqG2K6tNEaxMR+sF9wkLrep88WEdk8ACgqhWM=;
+        b=OeplTnTZ8cios1tUcJtmxMxW/XjtujPrVbRNVQkBWUo4Vm/OisXbot5tqg0LhW7HKR
+         CRS6gMNiU0N8Fvs7b8uedyYRTq64pVs9n9m4CmfPdOrVH24s1utC/sk0EfpFXKn+DsNT
+         9VqIkZYIiSIM0UZfHkKrgoK4TyD9wD270321/i+TDSXRvB0f4CGZPfhQaNfCbpQBMyeB
+         wtiDnlZ1Ruq4hB6OB8CxVDQpxy5GfEbwFlzqmI6NP5rukik+NpHmD+aiDe21PclM9aag
+         78s984K5fddIvkYrh4dRtcAZfews6H8YgME97CBLV3XsML64ABIWydNoC/7knVQ82P9E
+         1WGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=q8a1R7APHXz6ZL6IXaQsICKfgqyJPeRktgCx//C+/Ss=;
-        b=copsFbfSC1RDBU9uwuwedidXzYW/UrHl0N9LeL01XesFx8sQrcsE6OaMD75FPfnwJs
-         2G7B8MgACJW39f51gulTNYg46dOs2GGoJnGASG/frsLukhONf7jh5h4g0sUlaknqo+jf
-         x8vLjfgRxp02k05BJy458Yfm/nsqavadfuEerCsC+VccGe7yaYURLYPTFdhd011eisIi
-         0eU4+sMbDct5a3/e8uFtu0/HMmFL0/FBxKA8XD3Qe6d1/FkczSMA1KAeo8DluOy/tCvK
-         MsXcNB3Hbtu363b2uTX8FCj833dMVK5fQGN20eegIXHPCz9nHzF9NJGo0CgwvArFjWFy
-         6wEQ==
-X-Gm-Message-State: AOAM533E9KLq3J5aQvnogMylKD5jj28uleY56LeTPpE1wK72N0LOqiR2
-        TDECjCo01vLo89EogXncAlc0yg==
-X-Google-Smtp-Source: ABdhPJyZSrthlQUhdkUr5Xtk/g+rLCqfqrp9PuiJWMQMH4v/m2TkanY+50e2zHzy5+6QSVRWIY/8Qg==
-X-Received: by 2002:a17:902:d706:b029:d5:dde6:f56 with SMTP id w6-20020a170902d706b02900d5dde60f56mr634056ply.26.1603772763043;
-        Mon, 26 Oct 2020 21:26:03 -0700 (PDT)
+        bh=RQEP5hZqG2K6tNEaxMR+sF9wkLrep88WEdk8ACgqhWM=;
+        b=Rp0V1cW4uaJCZI+RjVMW5iLSeLXkNZWSabkCHkwOTB/Ql1B8gu2FSLNlx/jBU4W1ph
+         kR8Qgzv+fQ9f+HX4rwDIWtc5nxycmtCVRbyiuw3HQ2djLIJu9D+Tkq3weNAiBtlJiIqq
+         f+xuy2FM0ul8t3hfCTzKGkJoK0FdzDzH2rMdSvIxi0jHnPML7juqdI9zY7q5wkad1ka3
+         bLJg8/KKpSyCKR/vN++UH5XYNh35ln3gjP9o5XT83ffjD/8c3zVvGJ10J4DFsNjJM1mE
+         /9/z8drliq4tmgSt/OKE6CtXflb8/9Am/wFL8P+KeVjH2rkgk8hapwXyUlegtJRtdOEI
+         NZ2g==
+X-Gm-Message-State: AOAM533xYJ/Vvyjkh1mSnKUgY1IRx1sr1c07LSqeUQtP9IJTAINwJ4Fg
+        uMx3BJJFoxGF3Z0SOpN0FIIz0Q==
+X-Google-Smtp-Source: ABdhPJw9l/c3Wv/MhYdUbVpRNKWIf4C4NW8ScWjU3o6CL+b7zdCKwHqnNirDSxp55Qgd4nrtwV6jvQ==
+X-Received: by 2002:a17:90a:8906:: with SMTP id u6mr427458pjn.35.1603775416396;
+        Mon, 26 Oct 2020 22:10:16 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id y3sm325813pfn.167.2020.10.26.21.26.00
+        by smtp.gmail.com with ESMTPSA id i21sm379783pgh.2.2020.10.26.22.10.14
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 26 Oct 2020 21:26:01 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 09:55:59 +0530
+        Mon, 26 Oct 2020 22:10:15 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 10:40:13 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v2 4/4] cpufreq: schedutil: Always call drvier if
- need_freq_update is set
-Message-ID: <20201027042559.hang4fnpyfd6yqu4@vireshk-i7>
-References: <2183878.gTFULuzKx9@kreacher>
- <1905098.zDJocX6404@kreacher>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 46/52] opp: Put interconnect paths outside of
+ opp_table_lock
+Message-ID: <20201027051013.5gr4s3wuuwxsd7ax@vireshk-i7>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-47-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1905098.zDJocX6404@kreacher>
+In-Reply-To: <20201025221735.3062-47-digetx@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Spelling mistake in $subject (driver)
-
-On 23-10-20, 17:36, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 26-10-20, 01:17, Dmitry Osipenko wrote:
+> This patch fixes lockup which happens when OPP table is released if
+> interconnect provider uses OPP in the icc_provider->set() callback
+> and bandwidth of the ICC path is set to 0 by the ICC core when path
+> is released. The icc_put() doesn't need the opp_table_lock protection,
+> hence let's move it outside of the lock in order to resolve the problem.
 > 
-> Because sugov_update_next_freq() may skip a frequency update even if
-> the need_freq_update flag has been set for the policy at hand, policy
-> limits updates may not take effect as expected.
+> In particular this fixes tegra-devfreq driver lockup on trying to unload
+> the driver module. The devfreq driver uses OPP-bandwidth API and its ICC
+> provider also uses OPP for DVFS, hence they both take same opp_table_lock
+> when OPP table of the devfreq is released.
 > 
-> For example, if the intel_pstate driver operates in the passive mode
-> with HWP enabled, it needs to update the HWP min and max limits when
-> the policy min and max limits change, respectively, but that may not
-> happen if the target frequency does not change along with the limit
-> at hand.  In particular, if the policy min is changed first, causing
-> the target frequency to be adjusted to it, and the policy max limit
-> is changed later to the same value, the HWP max limit will not be
-> updated to follow it as expected, because the target frequency is
-> still equal to the policy min limit and it will not change until
-> that limit is updated.
-> 
-> To address this issue, modify get_next_freq() to clear
-> need_freq_update only if the CPUFREQ_NEED_UPDATE_LIMITS flag is
-> not set for the cpufreq driver in use (and it should be set for all
-> potentially affected drivers) and make sugov_update_next_freq()
-> check need_freq_update and continue when it is set regardless of
-> whether or not the new target frequency is equal to the old one.
-> 
-> Fixes: f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive mode with HWP enabled")
-> Reported-by: Zhang Rui <rui.zhang@intel.com>
-> Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
+>  drivers/opp/core.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
 > 
-> New patch in v2.
-> 
-> ---
->  kernel/sched/cpufreq_schedutil.c |    8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> Index: linux-pm/kernel/sched/cpufreq_schedutil.c
-> ===================================================================
-> --- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
-> +++ linux-pm/kernel/sched/cpufreq_schedutil.c
-> @@ -102,11 +102,12 @@ static bool sugov_should_update_freq(str
->  static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
->  				   unsigned int next_freq)
->  {
-> -	if (sg_policy->next_freq == next_freq)
-> +	if (sg_policy->next_freq == next_freq && !sg_policy->need_freq_update)
->  		return false;
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 2483e765318a..1134df360fe0 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1187,12 +1187,6 @@ static void _opp_table_kref_release(struct kref *kref)
+>  	if (!IS_ERR(opp_table->clk))
+>  		clk_put(opp_table->clk);
 >  
->  	sg_policy->next_freq = next_freq;
->  	sg_policy->last_freq_update_time = time;
-> +	sg_policy->need_freq_update = false;
+> -	if (opp_table->paths) {
+> -		for (i = 0; i < opp_table->path_count; i++)
+> -			icc_put(opp_table->paths[i]);
+> -		kfree(opp_table->paths);
+> -	}
+> -
+>  	WARN_ON(!list_empty(&opp_table->opp_list));
 >  
->  	return true;
->  }
-> @@ -164,7 +165,10 @@ static unsigned int get_next_freq(struct
->  	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
->  		return sg_policy->next_freq;
+>  	list_for_each_entry_safe(opp_dev, temp, &opp_table->dev_list, node) {
+> @@ -1209,9 +1203,22 @@ static void _opp_table_kref_release(struct kref *kref)
+>  	mutex_destroy(&opp_table->genpd_virt_dev_lock);
+>  	mutex_destroy(&opp_table->lock);
+>  	list_del(&opp_table->node);
+> -	kfree(opp_table);
 >  
-> -	sg_policy->need_freq_update = false;
-> +	if (sg_policy->need_freq_update)
-> +		sg_policy->need_freq_update =
-> +			cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+>  	mutex_unlock(&opp_table_lock);
 > +
+> +	/*
+> +	 * Interconnect provider may use OPP too, hence icc_put() needs to be
+> +	 * invoked outside of the opp_table_lock in order to prevent nested
+> +	 * locking which happens when bandwidth of the ICC path is set to 0
+> +	 * by ICC core on release of the path.
+> +	 */
+> +	if (opp_table->paths) {
+> +		for (i = 0; i < opp_table->path_count; i++)
+> +			icc_put(opp_table->paths[i]);
+> +		kfree(opp_table->paths);
+> +	}
+> +
+> +	kfree(opp_table);
+>  }
 
-The behavior here is a bit different from what we did in cpufreq.c. In cpufreq
-core we are _always_ allowing the call to reach the driver's target() routine,
-but here we do it only if limits have changed. Wonder if we should have similar
-behavior here as well ?
+Never make such _fixes_ part of such a big patchset. Always send them
+separately.
 
-Over that the code here can be rewritten a bit like:
+Having said that, I already have a patch with me which shall fix it for you as
+well:
 
-	if (sg_policy->need_freq_update)
-                sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-        else if (freq == sg_policy->cached_raw_freq)
-		return sg_policy->next_freq;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 4ac4e7ce6b8b..0e0a5269dc82 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1181,6 +1181,10 @@ static void _opp_table_kref_release(struct kref *kref)
+        struct opp_device *opp_dev, *temp;
+        int i;
+ 
++       /* Drop the lock as soon as we can */
++       list_del(&opp_table->node);
++       mutex_unlock(&opp_table_lock);
++
+        _of_clear_opp_table(opp_table);
+ 
+        /* Release clk */
+@@ -1208,10 +1212,7 @@ static void _opp_table_kref_release(struct kref *kref)
+ 
+        mutex_destroy(&opp_table->genpd_virt_dev_lock);
+        mutex_destroy(&opp_table->lock);
+-       list_del(&opp_table->node);
+        kfree(opp_table);
+-
+-       mutex_unlock(&opp_table_lock);
+ }
+ 
+ void dev_pm_opp_put_opp_table(struct opp_table *opp_table)
+
 
 -- 
 viresh
