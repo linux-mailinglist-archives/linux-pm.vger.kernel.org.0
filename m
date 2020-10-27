@@ -2,87 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4624629A966
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 11:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AFD29A984
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 11:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897912AbgJ0KUA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 06:20:00 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:55966 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2897796AbgJ0KTu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 06:19:50 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a72so802694wme.5
-        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 03:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pZ4tF9Q35IB/PKnNsjsCcJxf1aDEpdznaVzDYuv50v0=;
-        b=C/n8t7qiHHIkKH6qBlW/WOBQPU58wfsvqwRg3TcTxZVnfjMweZXACSUeQ2Yr0SJona
-         bdgxQpS37set3XzGvi8D9HYTSw1RmWWModldxM0e+cGehXYXRU3K1mTjOK4kL6y6nXo5
-         /axUIi8EVPPR1jt57T2cmyeoVG/atnjZdaO6/010kCwExM5C4qTg8Gv2OwtoRDRI/Wxn
-         BmXfJXcLVV6OgliOWyqFM9J+HmGm+kg7QrCtLylTtWhX7bp2PpYVCEtkQbYr2pOTj/vX
-         hOgbmlhiz1rrdO/0zg6f1qwltCzISSTi3Q6IV68wglD4tuMZOCdDa7vWfcS9uy2c4oGG
-         wz9g==
+        id S2898003AbgJ0KZN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 06:25:13 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:36791 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437932AbgJ0KZM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 06:25:12 -0400
+Received: by mail-ej1-f66.google.com with SMTP id w27so1456087ejb.3;
+        Tue, 27 Oct 2020 03:25:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pZ4tF9Q35IB/PKnNsjsCcJxf1aDEpdznaVzDYuv50v0=;
-        b=WVKBqywBToaV4Z+GWQKKPeXjyy21Uct9/MSG9ZOi1bDrRllSrKkCTz0mQcm5+LdznX
-         +lEl2YEjRNv0sb1XNZyVQqEa6OY7O+oY/FGns7DTrSOu1iwx1or+pEWInqvfS1RDTulQ
-         4HfRFefmhwVyApuGfY8ICXQhZ32+iWZkULqLjkb918vS+KbKygORfeCCaR9mpSvX4nED
-         jGR00nU7aI5Qfx7udoAd0+t2Z5Hbgaj2wyvHQy+647wbwg9b/pltKjWKdROreHJ5zpvU
-         8YSR6R5O6ZgoARNDPULv/MzZxqTtyuHekOVhMiPx3Khn+xn2pJPq5xFN3XHoSRyFuXeC
-         3toQ==
-X-Gm-Message-State: AOAM533P4T8VwnAdJdGr2VfapisPZRG9eNbTSzHqbmhbGYS5y/kPtU5+
-        21ZPTGZynobmtUZhPoRJHoKOTA==
-X-Google-Smtp-Source: ABdhPJzce/1cq7vO5et/wMCpGxoUY58Gq/wHtjsAUhmiTgM1W35aRGvgZYGxLwfJWRUAVClAG3qCoA==
-X-Received: by 2002:a7b:c8da:: with SMTP id f26mr1911316wml.178.1603793987905;
-        Tue, 27 Oct 2020 03:19:47 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451? ([2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451])
-        by smtp.googlemail.com with ESMTPSA id l16sm1472264wrx.5.2020.10.27.03.19.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 03:19:47 -0700 (PDT)
-Subject: Re: [PATCH 1/3] dt-bindings: thermal: mediatek: make resets property
- optional
-To:     Fabien Parent <fparent@baylibre.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com
-References: <20201021164231.3029956-1-fparent@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <d8a5ce64-04da-7a4a-bcb9-1cc25cea42db@linaro.org>
-Date:   Tue, 27 Oct 2020 11:19:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ylNf2aSrBKpAGk/XmG8j77J1836YfOHwLDEKrBDhhto=;
+        b=NuKxOtcoZKhMi/J7Bot2LzRHZtsIY2tGA0BrI6LMNM65U4R1IqMebM9shwg8F5t9EO
+         9Ir1sOXB1QXLHxyPQlKLRBnKtyG9nawGJR+PadH6RE0AniM2hakKmfDW5N5jMY3kcviF
+         mfOVQccNZaOdkw3rzqy7mFLXjCh0wLnb9LyVpnpjl7CaIgEcbJB2FjR3d1bgZuSUU17v
+         rg+gknmK0bjcGc6gIuzW4Hkhc1Z0/KywBeMvzUmoyiWIGOPb+Tq221SehO3oXm/9opbL
+         r/MLwO1418C2YTiM+JOkUcovvnDUmpWD41z1hXjtK0Mnmldwjk+I+3hbIgkJIVOO762w
+         xO7Q==
+X-Gm-Message-State: AOAM530bW5sa6rcrzlz1oOICU00c9s/tYrX2p5utioi/S5B4XN/F3QcU
+        dT+SFvplZSClrvm1RpX/yFs=
+X-Google-Smtp-Source: ABdhPJyTiWvQkB0SHAsJaXsSdNHED7COpFBG6lf+CNCt8imIyB1mFelDwWrl3AGCqa/XD9EaDgO3wg==
+X-Received: by 2002:a17:906:3bc7:: with SMTP id v7mr1586575ejf.245.1603794310498;
+        Tue, 27 Oct 2020 03:25:10 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.184])
+        by smtp.googlemail.com with ESMTPSA id yw17sm747674ejb.97.2020.10.27.03.25.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 03:25:09 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 11:25:06 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 13/52] dt-bindings: memory: tegra124: emc: Document
+ new interconnect property
+Message-ID: <20201027102506.GB17089@kozik-lap>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-14-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201021164231.3029956-1-fparent@baylibre.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20201025221735.3062-14-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/10/2020 18:42, Fabien Parent wrote:
-> MT8516 Thermal IP does not support reset. Make the resets property
-> optional in order to be able to support MT8516 SoC.
+On Mon, Oct 26, 2020 at 01:16:56AM +0300, Dmitry Osipenko wrote:
+> External memory controller is interconnected with memory controller and
+> with external memory. Document new interconnect property which turns
+> External Memory Controller into interconnect provider.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
+>  .../bindings/memory-controllers/nvidia,tegra124-emc.yaml   | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
+> index 278549f9e051..ac00832ceac1 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
+> @@ -29,6 +29,9 @@ properties:
+>      items:
+>        - const: emc
+>  
+> +  "#interconnect-cells":
+> +    const: 0
+> +
+>    nvidia,memory-controller:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+> @@ -327,6 +330,7 @@ required:
+>    - clocks
+>    - clock-names
+>    - nvidia,memory-controller
+> +  - "#interconnect-cells"
 
-Applied, thanks
+Another required property, what about all existing users of this binding?
 
+>  
+>  additionalProperties: false
+>  
+> @@ -345,6 +349,7 @@ examples:
+>  
+>          #iommu-cells = <1>;
+>          #reset-cells = <1>;
+> +        #interconnect-cells = <1>;
 
+You meant '0'?
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
