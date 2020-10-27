@@ -2,118 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B2F29ADF9
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 14:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7566A29B46C
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 16:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502165AbgJ0Nwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 09:52:50 -0400
-Received: from mail-ej1-f65.google.com ([209.85.218.65]:33459 "EHLO
-        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502073AbgJ0Nwu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 09:52:50 -0400
-Received: by mail-ej1-f65.google.com with SMTP id c15so2379359ejs.0;
-        Tue, 27 Oct 2020 06:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4TbXysDqnndpTRF/Rd6isqCmc40s+e6qp/SrBCZya6s=;
-        b=lwyXkbi/gj/HS/sa5ZvZZHWv3isYpIbQNCIWPd3kHp+iv2FtJXwPzAWNcRkUkXvTR8
-         44f1TqgS3Bs2rpkI/0wLJ2Hk71+L3Ar+JX0euHhazOZZfsbBQ0jh4qOrYqZ/IYKprYMR
-         7okL77/0uwXZTkRMwLFRhEHaeE4cEimNfoZ9ZS7H4rHZ5JsJPCXkilBuRfW52+VM3PNz
-         J1cjxhhE3KHS/kc2JF9LiI3m5pFs/I1nntfqvyb8FZOpg/Wn4MwGD/eevDCR7ofLKqo2
-         FY65HzvyUMidkVgJ7hv67tNZM4C41gC/ZJABYJOtFp+NDZvtzNotneRZEPMNdKEaw6wc
-         HRYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4TbXysDqnndpTRF/Rd6isqCmc40s+e6qp/SrBCZya6s=;
-        b=eusKnF3RfVzOdDZEdQy/47MbFChfMi16kwh+A/mZVcnRFQ/AZucH7vWwebN4eeXYce
-         dzg1yUQ3nonBXRlw6g2vgLa0mBAXPAGWeV4mgRxS7WA74Q7XsF4pYbirJx+HmI5qNLZf
-         WPC3cPrWzDzQEe4LbEbvSo7GrBRwF8cRqGx35GKAkbx9se/TGiASbTTDtd930yfKJ8DI
-         +HnIpTLXwJfkO6KkpuihrC+cSuxQFyrUrknaR+zU1BrdrSZOUcE5c0pNJpSaI5rU3qWS
-         lZEr+4gT+Jk8gztjJWy3SFaRiXwGZilI2UretY19MObxcfbXQZcuVW2PyzgfnxE3D9MP
-         kV0A==
-X-Gm-Message-State: AOAM530GiXgN4DKptb3RpB+vIiN5PoiwfeDFbh8blWpwacaMHEDOZ2iu
-        PhQNK1JEBvjSE1HRAKcHTZI=
-X-Google-Smtp-Source: ABdhPJw+wS4M5IdvdBE+C5XCShNKfDZ8hVzHzxdKtDgQPwv8S1CiMKIe82JbF1rjlL+EXlOuu+VahA==
-X-Received: by 2002:a17:906:f8d2:: with SMTP id lh18mr2599173ejb.457.1603806767898;
-        Tue, 27 Oct 2020 06:52:47 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id rs18sm1096635ejb.69.2020.10.27.06.52.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 06:52:46 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 14:52:44 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 32/52] memory: tegra20-emc: Continue probing if
- timings are missing in device-tree
-Message-ID: <20201027135244.GM1822510@ulmo>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-33-digetx@gmail.com>
+        id S1789323AbgJ0PBy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 11:01:54 -0400
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.116]:43674 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1789270AbgJ0PBx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 11:01:53 -0400
+Received: from [100.112.135.1] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-5.bemta.az-b.us-west-2.aws.symcld.net id 70/E8-42875-956389F5; Tue, 27 Oct 2020 15:01:45 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFKsWRWlGSWpSXmKPExsWS8eIhr66p2Yx
+  4g9uzFS32X5ew6FpoYLHw/ilWi6/fbrNbvDk+ncli+b5+RovLu+awWXzuPcJo0dTZBGR1TGax
+  WL3nBbMDt8ekmTOYPXbOusvu8WvbGhaPzSu0POadDPR4v+8qm8fnTXIB7FGsmXlJ+RUJrBkLN
+  mxlKTjCU9H/p421gfEvZxcjF4eQwH9GiZZvt1kgnBeMEnNvN7J3MbJzCAuUSBxM6mLk5BAR8J
+  Y4vnUFWAkzSH3vlilsIAkhgS4mif2b6kFsNgFtiS1bfoHFeQVsJZ4deswCYrMIqEqsO/KVGcQ
+  WFQiX6LixgwmiRlDi5MwnYDWcAnYSb7edZwexmQUsJGbOP88IYYtL3HoynwnClpdo3jobbI6E
+  gILEncM32CHsBIllL+8wT2AUnIVk7Cwko2YhGTULyagFjCyrGC2SijLTM0pyEzNzdA0NDHQND
+  Y10DY1NdA3NTPQSq3ST9EqLdctTi0t0jfQSy4v1iitzk3NS9PJSSzYxAqMwpaBtyQ7GXW8+6B
+  1ilORgUhLlXb9rerwQX1J+SmVGYnFGfFFpTmrxIUYZDg4lCd4DJjPihQSLUtNTK9Iyc4AJASY
+  twcGjJMK7DyTNW1yQmFucmQ6ROsWoKCXOq2UKlBAASWSU5sG1wZLQJUZZKWFeRgYGBiGegtSi
+  3MwSVPlXjOIcjErCvJUg43ky80rgpr8CWswEtLitYgrI4pJEhJRUA1O+14vVawqXPjhWk7JlX
+  eYOfbeUMnNe2RU+/gwHpx+tyl20/+IPMyvtlDifV2E2oQ351R/Xr8z58nzP2+ybj8w6f9zVnL
+  PQqDXq33pfkRM7XmQbn1P/9euZ7wfPrN9Xbgdc2mj95EDQ1CtZiqwrdf3s9941VV3SYbrB4VN
+  bzPkw+V0/viZEs99OfFJRJf58ldp67/wFc2MfO/tr/8la59V67+zXDanmLH/ez1Qp6clxvSZx
+  V+Hp0q1Xsv4cPmr6NdW4NG3yv2tBQTkHXU7wp/tZNHgpiN41fbl/z6ngaZt/TuDdqJx52Lydd
+  19nYHyQRpm4Bdffuxczb2a/ezPv7a9lXk+572yO3ukb/PEIb4mtEktxRqKhFnNRcSIABCslsr
+  0DAAA=
+X-Env-Sender: markpearson@lenovo.com
+X-Msg-Ref: server-26.tower-355.messagelabs.com!1603810868!1936!1
+X-Originating-IP: [104.232.225.13]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.60.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 22287 invoked from network); 27 Oct 2020 15:01:09 -0000
+Received: from unknown (HELO lenovo.com) (104.232.225.13)
+  by server-26.tower-355.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Oct 2020 15:01:09 -0000
+Received: from reswpmail04.lenovo.com (unknown [10.62.32.23])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by Forcepoint Email with ESMTPS id 165E9F4B40D3F6AD8445;
+        Tue, 27 Oct 2020 11:01:08 -0400 (EDT)
+Received: from localhost.localdomain (10.46.59.124) by reswpmail04.lenovo.com
+ (10.62.32.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2044.4; Tue, 27 Oct
+ 2020 08:01:06 -0700
+Subject: Re: [External] Re: [PATCH] [RFC] Documentation: Add documentation for
+ new platform_profile sysfs attribute
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Elia Devito <eliadevito@gmail.com>
+CC:     <dvhart@infradead.org>, <mgross@linux.intel.com>,
+        <mario.limonciello@dell.com>, <hadess@hadess.net>,
+        <bberg@redhat.com>, <linux-pm@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <markpearson@lenovo.com>
+ <ef9b93a0-636f-9b96-9d5b-fee1e5738af7@lenovo.com>
+ <1fbaf1fa-47c6-afe7-ca9e-41b3ad6a4556@redhat.com> <12633630.uLZWGnKmhe@pce>
+ <1bddcede-5e12-6089-8920-26dd5f534b44@lenovo.com>
+ <255af791-e456-7299-d355-fe4f3cea7d63@redhat.com>
+From:   Mark Pearson <markpearson@lenovo.com>
+Message-ID: <c40d0916-a61b-3376-fedd-de815f501827@lenovo.com>
+Date:   Tue, 27 Oct 2020 11:01:04 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OQhbRXNHSL5w/5po"
-Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-33-digetx@gmail.com>
-User-Agent: Mutt/1.14.7 (2020-08-29)
+In-Reply-To: <255af791-e456-7299-d355-fe4f3cea7d63@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.46.59.124]
+X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
+ reswpmail04.lenovo.com (10.62.32.23)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---OQhbRXNHSL5w/5po
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Oct 26, 2020 at 01:17:15AM +0300, Dmitry Osipenko wrote:
-> EMC driver will become mandatory after turning it into interconnect
-> provider because interconnect users, like display controller driver, will
-> fail to probe using newer device-trees that have interconnect properties.
-> Thus make EMC driver to probe even if timings are missing in device-tree.
+On 27/10/2020 09:41, Hans de Goede wrote:
+> Hi Mark,
+> 
+> On 10/27/20 1:28 PM, Mark Pearson wrote:
+>> Hi Elia
+>>
+>> On 27/10/2020 05:19, Elia Devito wrote:
+>>> Hi to all,
+>>>
+>>> In data martedì 27 ottobre 2020 08:54:44 CET, Hans de Goede ha scritto:
+<snip>
+>>>
+>>> This look good,
+>>> only thing is that hp-wmi driver need a cool profile (Emphasises the computer
+>>> cool to touch), if you can add it would be perfect.
+>>>
+>>> Regards
+>>> Elia
+>>>
+>>>
+>>>
+>> Is low-power is different to cool? I figured low-power was going to be cool so combined them.
+>> I could call it low-power-cool if that helps? It seems a little clunky but not too bad. I'm sure the user space folks can put sunglasses on it or something ;)
+> 
+> IIRC we already had this discussion, cool means cool-to-touch, so could be done by
+> e.g. extra aggressive ramping up of the fans, so this is not necessarily the same
+> as low-power.
+> 
+> Yes this is all somewhat confusing. Luckily (for us kernel folks) we have already
+> sorta decided to just use the profile-names from the vendors more or less as is and
+> leave figuring this out further to userspace.
+> 
+> The reason to use the enum + try to have a fixed list of choices is to try and
+> limit the proliferation of profile-names to keep things somewhat manageable.
+> 
+> But as I discussed previously with Elia (*) we really need all 3 of low-power
+> cool and quiet.
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> *) I was coming at this discussion from the same angle you (Mark) are
+> 
+OK, I can add a cool option.
 
-Does it really have to be mandatory? Sounds like that's going to make it
-unnecessarily complicated to merge all of this. Is it complicated to
-make interconnect support optional in consumer drivers?
+I'll get that out later today (unless Elia corrects me :))
 
-Thierry
-
---OQhbRXNHSL5w/5po
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+YJiwACgkQ3SOs138+
-s6H3wA/9G28Ray4Bi6twkE9N7+h/sNEt+7YPAHJDE7CAIf9/VJ6pbfqyZFWHTH++
-/R5TsxsZlomEwSgf41l2E82KzNVLiJ0uRA2aKSS7J+S7navlOQHB2iHA4Mt2L+wm
-z2l48XHXTeN8HT/RZoaPK+ud5dShtzJkyrQ7Iuije9XY2f7EaSogO1be3P6lQTpJ
-L5tf04hyF0l9obliNMBD1kip6SHt/XLVo/Vdkl95GZz4Utu9XNGOBdkQ0jib8DGB
-VTc/qWdeJUlxQBABfFXBGYXoS5x8xkOe0C1ftx+i1fiJpQ4z7QAaHKb6i/h5E4t3
-D1iTraACToaw2f5Rcidkjandfmw2UxeNh1i3Q9eLDFwZhNTnBsXKez2oajbgDDHJ
-3RQZXzm57261eInfCxv1NTLk1TwefZdC6fHMFya/1d71uxpxrKaZOiqI9R/2V35c
-Qu3Bxgktem+U8dVHrsNZwfaXPIafdyPU+SCczsLFNaIerh4HVFan9Pf3ygTb5835
-WMms77JprRuy8oDnApuK2Tx5tRBf1ETy7ATUxIs40dNTQuVj7VT5biBr97LwRyKM
-4O1+PPLbS256d9z7komAWyF1q/gJUCdQRLtaD3HL6WQdFZmZZABv8S5tclu71lPn
-o8htSjXOmi7ZPGn/ipBe0RMBK42ehXK0f2gysAj+YhzVWqva1JU=
-=XJw5
------END PGP SIGNATURE-----
-
---OQhbRXNHSL5w/5po--
+Thanks all
+Mark
