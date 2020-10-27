@@ -2,97 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C0429C559
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 19:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0648B29C604
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 19:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1825046AbgJ0SHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 14:07:52 -0400
-Received: from foss.arm.com ([217.140.110.172]:49586 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1825042AbgJ0SHu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 27 Oct 2020 14:07:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C45815AB;
-        Tue, 27 Oct 2020 11:07:50 -0700 (PDT)
-Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 64E6D3F66E;
-        Tue, 27 Oct 2020 11:07:48 -0700 (PDT)
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org
-Cc:     dietmar.eggemann@arm.com, qperret@google.com,
-        valentin.schneider@arm.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ionela.voinescu@arm.com
-Subject: [PATCH RESEND v2 3/3] sched/topology: condition EAS enablement on FIE support
-Date:   Tue, 27 Oct 2020 18:07:13 +0000
-Message-Id: <20201027180713.7642-4-ionela.voinescu@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201027180713.7642-1-ionela.voinescu@arm.com>
-References: <20201027180713.7642-1-ionela.voinescu@arm.com>
+        id S1825617AbgJ0SMD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 14:12:03 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:41144 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1825610AbgJ0SMB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 14:12:01 -0400
+Received: by mail-ej1-f66.google.com with SMTP id s15so3561428ejf.8;
+        Tue, 27 Oct 2020 11:11:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=X+QwCJaXCPvUM/NJPq7e7lq/Xt5tTU8EStNpjKh1NUA=;
+        b=hQCVs6p0LKbTCY7DsTZRnffqeCThDRKsG5kMgr17NA+33i+s71KRCBQePPTg2SjNFd
+         C8Nr3swnguyyrqutB7zZZxrDDCJjC+1IwRYSJ3lTc3mW9KDS5rvaaG9mdnH+Gn+9ddkA
+         6VepBD8lN6lWuz+UHmhNquWZlPMwH3kdq/lXqxhGWw4ydd70+iWmZrDsxLJ+IH62ztPl
+         F232IhDGaraBW4IQNckvHZQu1+I7bVrea/YplgyLNVDKjtSaovQzQG6adBnHTqI3odgK
+         SFmhcVqccWA0ZYpAskg4cSEf3RAmGsfgEEOB67JgAiK6ZwZR/t/wpfqqh4bWYXl5YBeM
+         1aKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=X+QwCJaXCPvUM/NJPq7e7lq/Xt5tTU8EStNpjKh1NUA=;
+        b=YW+eda6CEZRraqk8ytQp1Mpz5A6ZY4ulohRx3KEd8htkgosIrrRb0god7zdQtahS8h
+         KB8oDL9omkw2AIm9gRADXS5a8S+kIn1S2ftZdarjROj8nUJl+Qi224m4d6/OLPlocvUS
+         4HyrLZXtGNfyhTfMD7+61bC4r/JgmrYpmUbfY0T/WdA3KWAybGmsYRlSa1+K9xV4FZ9A
+         Qc/gV/gr2h6xJekNygjm50XgSCYqh1yfHwrZEqSDUZ/pcxY1rJCpRRK0E7MVE5r9KQAY
+         8LW1T660AC7MbjQIvIdXFWexd9IaeNyvTP33bbJUzeWPxv6qgVZ+RAhxsEeWVqJfzoq/
+         3aoQ==
+X-Gm-Message-State: AOAM531zuEdyx2u1NA/GDuxiFlB+YrGEc9J10LPtaMW4lf8NDWeoKUnd
+        8xx4x+lp5Qb9qxzkDmLFu2Y=
+X-Google-Smtp-Source: ABdhPJweJPF6eEu3UsJ7mwptZ0e/+bndw18/+QzcId2TT5lSkFzF+bGSph4EwFUdqwBV1XJg0WZLjQ==
+X-Received: by 2002:a17:906:e103:: with SMTP id gj3mr3564877ejb.442.1603822318747;
+        Tue, 27 Oct 2020 11:11:58 -0700 (PDT)
+Received: from pce.localnet (host-95-249-217-124.retail.telecomitalia.it. [95.249.217.124])
+        by smtp.gmail.com with ESMTPSA id g8sm1472472ejp.73.2020.10.27.11.11.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 11:11:58 -0700 (PDT)
+From:   Elia Devito <eliadevito@gmail.com>
+To:     markpearson@lenovo.com, Mark Pearson <markpearson@lenovo.com>
+Cc:     dvhart@infradead.org, mgross@linux.intel.com,
+        mario.limonciello@dell.com, hadess@hadess.net, bberg@redhat.com,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH] Documentation: Add documentation for new platform_profile sysfs attribute
+Date:   Tue, 27 Oct 2020 19:11:55 +0100
+Message-ID: <2177500.ElGaqSPkdT@pce>
+In-Reply-To: <20201027164219.868839-1-markpearson@lenovo.com>
+References: <markpearson@lenovo.com> <20201027164219.868839-1-markpearson@lenovo.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In order to make accurate predictions across CPUs and for all performance
-states, Energy Aware Scheduling (EAS) needs frequency-invariant load
-tracking signals.
+Hi to all,
 
-EAS task placement aims to minimize energy consumption, and does so in
-part by limiting the search space to only CPUs with the highest spare
-capacity (CPU capacity - CPU utilization) in their performance domain.
-Those candidates are the placement choices that will keep frequency at
-its lowest possible and therefore save the most energy.
+In data marted=EC 27 ottobre 2020 17:42:19 CET, Mark Pearson ha scritto:
+> From: Hans de Goede <hdegoede@redhat.com>
+>=20
+> On modern systems the platform performance, temperature, fan and other
+> hardware related characteristics are often dynamically configurable. The
+> profile is often automatically adjusted to the load by somei
+> automatic-mechanism (which may very well live outside the kernel).
+>=20
+> These auto platform-adjustment mechanisms often can be configured with
+> one of several 'platform-profiles', with either a bias towards low-power
+> consumption or towards performance (and higher power consumption and
+> thermals).
+>=20
+> Introduce a new platform_profile sysfs API which offers a generic API for
+> selecting the performance-profile of these automatic-mechanisms.
+>=20
+> Co-developed-by: Mark Pearson <markpearson@lenovo.com>
+> Signed-off-by: Mark Pearson <markpearson@lenovo.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+> Changes in V1:
+>  - Moved from RFC to proposed patch
+>  - Added cool profile as requested
+>  - removed extra-profiles as no longer relevant
+>=20
+>  .../ABI/testing/sysfs-platform_profile        | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-platform_profile
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-platform_profile
+> b/Documentation/ABI/testing/sysfs-platform_profile new file mode 100644
+> index 000000000000..240bd3d7532b
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-platform_profile
+> @@ -0,0 +1,66 @@
+> +Platform-profile selection (e.g. /sys/firmware/acpi/platform_profile)
+> +
+> +On modern systems the platform performance, temperature, fan and other
+> +hardware related characteristics are often dynamically configurable. The
+> +profile is often automatically adjusted to the load by some
+> +automatic-mechanism (which may very well live outside the kernel).
+> +
+> +These auto platform-adjustment mechanisms often can be configured with
+> +one of several 'platform-profiles', with either a bias towards low-power
+> +consumption or towards performance (and higher power consumption and
+> +thermals).
+> +
+> +The purpose of the platform_profile attribute is to offer a generic sysfs
+> +API for selecting the platform-profile of these automatic-mechanisms.
+> +
+> +Note that this API is only for selecting the platform-profile, it is
+> +NOT a goal of this API to allow monitoring the resulting performance
+> +characteristics. Monitoring performance is best done with device/vendor
+> +specific tools such as e.g. turbostat.
+> +
+> +Specifically when selecting a high-performance profile the actual achiev=
+ed
+> +performance may be limited by various factors such as: the heat generated
+> +by other components, room temperature, free air flow at the bottom of a
+> +laptop, etc. It is explicitly NOT a goal of this API to let userspace kn=
+ow
+> +about any sub-optimal conditions which are impeding reaching the request=
+ed
+> +performance level.
+> +
+> +Since numbers are a rather meaningless way to describe platform-profiles
+> +this API uses strings to describe the various profiles. To make sure that
+> +userspace gets a consistent experience when using this API this API
+> +document defines a fixed set of profile-names. Drivers *must* map their
+> +internal profile representation/names onto this fixed set.
+> +
+> +If for some reason there is no good match when mapping then a new
+> profile-name +may be added. Drivers which wish to introduce new
+> profile-names must: +1. Have very good reasons to do so.
+> +2. Add the new profile-name to this document, so that future drivers whi=
+ch
+> also +   have a similar problem can use the same name.
+> +
+> +What:		/sys/firmware/acpi/platform_profile_choices
+> +Date:		October 2020
+> +Contact:	Hans de Goede <hdegoede@redhat.com>
+> +Description:
+> +		Reading this file gives a space separated list of profiles
+> +		supported for this device.
+> +
+> +		Drivers must use the following standard profile-names:
+> +
+> +		low-power:		Emphasises low power consumption
+> +		cool:			Emphasises cooler=20
+operation
+> +		quiet:			Emphasises quieter=20
+operation
+> +		balanced:		Balance between low power=20
+consumption
+> +					and performance
+> +		performance:		Emphasises performance=20
+(and may lead to
+> +					higher temperatures and=20
+fan speeds)
+> +
+> +		Userspace may expect drivers to offer at least several of=20
+these
+> +		standard profile-names.
+> +
+> +What:		/sys/firmware/acpi/platform_profile
+> +Date:		October 2020
+> +Contact:	Hans de Goede <hdegoede@redhat.com>
+> +Description:
+> +		Reading this file gives the current selected profile for=20
+this
+> +		device. Writing this file with one of the strings from
+> +		available_profiles changes the profile to the new value.
+> --
+> 2.28.0
 
-But without frequency invariance, a CPU's utilization is relative to the
-CPU's current performance level, and not relative to its maximum
-performance level, which determines its capacity. As a result, it will
-fail to correctly indicate any potential spare capacity obtained by an
-increase in a CPU's performance level. Therefore, a non-invariant
-utilization signal would render the EAS task placement logic invalid.
+=46rom my perspective now is perfect, thanks to all for the work.
 
-Now that we properly report support for the Frequency Invariance Engine
-(FIE) through arch_scale_freq_invariant() for arm and arm64 systems,
-while also ensuring a re-evaluation of the EAS use conditions for
-possible invariance status change, we can assert this is the case when
-initializing EAS. Warn and bail out otherwise.
+Regards
+Elia
 
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Suggested-by: Quentin Perret <qperret@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- kernel/sched/topology.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 270bafb73506..5a1580ef1264 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -328,6 +328,7 @@ static void sched_energy_set(bool has_eas)
-  *    3. no SMT is detected.
-  *    4. the EM complexity is low enough to keep scheduling overheads low;
-  *    5. schedutil is driving the frequency of all CPUs of the rd;
-+ *    6. frequency invariance support is present;
-  *
-  * The complexity of the Energy Model is defined as:
-  *
-@@ -376,6 +377,14 @@ static bool build_perf_domains(const struct cpumask *cpu_map)
- 		goto free;
- 	}
- 
-+	if (!arch_scale_freq_invariant()) {
-+		if (sched_debug()) {
-+			pr_warn("rd %*pbl: Disabling EAS: frequency-invariant load tracking not yet supported",
-+				cpumask_pr_args(cpu_map));
-+		}
-+		goto free;
-+	}
-+
- 	for_each_cpu(i, cpu_map) {
- 		/* Skip already covered CPUs. */
- 		if (find_pd(pd, i))
--- 
-2.17.1
 
