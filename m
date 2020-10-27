@@ -2,93 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C619529A70C
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A50329A718
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2509550AbgJ0Iyy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 04:54:54 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:41827 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2509545AbgJ0Iyy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 04:54:54 -0400
-Received: by mail-wr1-f65.google.com with SMTP id s9so914221wro.8
-        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 01:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YlMgE4ppo7MlVQWfq5CEJGy3SNLKHCbh9joy1n3UStg=;
-        b=m0KVs/9yZ8OKFotOH/qrqzH0gTb83r9uYRcXbBtFWL9gTbMDm1+qwna4OX/Cs264gd
-         yPNXo4soQfhoi3XIdGNsQ4gLuVVAF8HsmBJTQdCYgg3c8oLMjaOXPcL+HAqFWB2y0O9I
-         vewiTkzY7MZmbbGZda0k1IM/NmBa2srAT4jbJVW9pwZzw2269/7heqtJrOInMeNaiXcp
-         9BSoy6/o1NPomhDffBfWzikSisc1lCttQxn2gUDxW/PWImq4GNh5e3qFxQIIO57dEb7k
-         XEoT+8qhlFquWP/mFUtF8GufxfJhg6cDPd/S8aq9veeWZVP/8iXOAc5B1gTuUQcotJir
-         ZX7w==
+        id S2509562AbgJ0Iz5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 04:55:57 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:37755 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2509566AbgJ0Izy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 04:55:54 -0400
+Received: by mail-ed1-f67.google.com with SMTP id o18so595020edq.4;
+        Tue, 27 Oct 2020 01:55:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YlMgE4ppo7MlVQWfq5CEJGy3SNLKHCbh9joy1n3UStg=;
-        b=jRtO/IZQemMIGGbBN6o0c8AbFQ1LlyKklyLM3vLS0UA0KiHFe6av1xfR0kS27cyKK0
-         recGguZFb/c3kFeZI9p0nGDedDEWkmDlgUsaaeVdtsBIBVkneYzq1+WzVgj+CBeTJ9wU
-         aC4N/7Wl//dfDTss+jwn5LR4PENw+4DzmZX7caOcmysKZtZ+S4Et92RSaafQXYTNYpEj
-         6gIU9MhplvSQ9gVr6ge8aEmgntW4odEpZeVnicsJ6zW2Gs7Jy9gNUDKqTKruVDbIwy4K
-         k8dlNg36zJhSE76/uedDl7aabrhDN3rHFA/NuBTwv55o9q4mShs7r26d9jq+1DnGkBz1
-         nArg==
-X-Gm-Message-State: AOAM532n33/n4GN+xw5fHpmhjdpnrebP6dYUtB8uh58TTtUdAMIGqA0b
-        cFgwAXd88m2wrXb2ooTEaQDhMg==
-X-Google-Smtp-Source: ABdhPJypWtJn/cuPU7mPyxPMd2RFbt2QsX7vI7Bl4AedIthAYHyvrkDB+hjzcxJ3WhE1L/Aa1ixx7w==
-X-Received: by 2002:adf:edcf:: with SMTP id v15mr1423257wro.291.1603788892011;
-        Tue, 27 Oct 2020 01:54:52 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451? ([2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451])
-        by smtp.googlemail.com with ESMTPSA id c1sm1130197wru.49.2020.10.27.01.54.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 01:54:51 -0700 (PDT)
-Subject: Re: [PATCH v2] drivers/thermal: optimize the for circle to run a bit
- fast
-To:     Bernard Zhao <bernard@vivo.com>, Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-References: <20201027013743.62392-1-bernard@vivo.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <f35cd499-aedd-7286-98bf-68fbaa270a44@linaro.org>
-Date:   Tue, 27 Oct 2020 09:54:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8h35Fp3KGPJbdlP2u/VcAhTjbKZxy2MlAj+dFH66N4U=;
+        b=TSpZ0Z00gtkghy1O2yiP6rZ3ZObnGsb7OEnnR9YyqECzjPZb7Ggz30Ja3LelLRbFcB
+         lYlR/qxu6A63jRdUKSVTiVhJub0238e8ruvkR+xbI0EbfIfOjt4dVjRyaDsLwyOZEjkN
+         +tMFFS3v9qrNdH35eB9HSvd1Y0OFqdOMw+5eYWtJ263wTMhfm8SOr34CdZCfYHxniIlf
+         I8bWU+9fxaqiEWGAMJ1c37/E1Yuf75zF3zReJvq0KWnQa9ToREypfFCnunLc+YOaWra+
+         Zor78c7MJ8IuFrm4L5tZYm/JCuzTW1SpEY+H3LBYeNKf1gYBPI2B0L75oYmnxE/CgE7m
+         kDkg==
+X-Gm-Message-State: AOAM532YVAvYHAyntYsjhh/sDijd8TgO15dZpMkdeRKkkjjOiMWBBxm3
+        glQNkbM5UDK9uXyR6ka7rb0=
+X-Google-Smtp-Source: ABdhPJyxkG4tQYebevVwUfr5tpTrVVR5vWiNFfd4BicVUd+tfnGH6GSr02QqZUC9VLRFzIbgcKMDXA==
+X-Received: by 2002:aa7:c6d9:: with SMTP id b25mr1071873eds.27.1603788952482;
+        Tue, 27 Oct 2020 01:55:52 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.184])
+        by smtp.googlemail.com with ESMTPSA id d11sm506794eds.83.2020.10.27.01.55.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 01:55:51 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 09:55:48 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 05/52] dt-bindings: memory: tegra20: mc: Document new
+ interconnect property
+Message-ID: <20201027085548.GE4244@kozik-lap>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-6-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201027013743.62392-1-bernard@vivo.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20201025221735.3062-6-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/10/2020 02:37, Bernard Zhao wrote:
-> Function thermal_zone_device_register, in the for circle, if the
-> first if branch set the count bit in tz->trips_disabled, there is
-> no need to set in the other if branch again.
-> This change is to make the code run a bit fast and readable.
+On Mon, Oct 26, 2020 at 01:16:48AM +0300, Dmitry Osipenko wrote:
+> Memory controller is interconnected with memory clients and with the
+> External Memory Controller. Document new interconnect property which
+> turns memory controller into interconnect provider.
 > 
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> 
-> Changes since V1:
-> *make the code more clear and readable
-> 
-> Link for V1:
-> *https://lore.kernel.org/patchwork/patch/1324507/
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
+>  .../bindings/memory-controllers/nvidia,tegra20-mc.txt          | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
+> index e55328237df4..739b7c6f2e26 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
+> @@ -16,6 +16,8 @@ Required properties:
+>    IOMMU specifier needed to encode an address. GART supports only a single
+>    address space that is shared by all devices, therefore no additional
+>    information needed for the address encoding.
+> +- #interconnect-cells : Should be 1. This cell represents memory client.
+> +  The assignments may be found in header file <dt-bindings/memory/tegra20-mc.h>.
 
-Applied with the patch description massaged.
+This is a list of required properties so you break the ABI. All existing
+DTBs will be affected.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=testing&id=37b2539e63d6570c9ee51b1d48bdecb334df367d
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
