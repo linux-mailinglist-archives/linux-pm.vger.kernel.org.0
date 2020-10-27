@@ -2,175 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7BA29CACD
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 21:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0C329CB09
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 22:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S373449AbgJ0U5D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 16:57:03 -0400
-Received: from mail-pl1-f169.google.com ([209.85.214.169]:42231 "EHLO
-        mail-pl1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S373448AbgJ0U5C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 16:57:02 -0400
-Received: by mail-pl1-f169.google.com with SMTP id t22so1403447plr.9
-        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 13:57:00 -0700 (PDT)
+        id S1832128AbgJ0VMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 17:12:06 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:41178 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2501973AbgJ0VMG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 17:12:06 -0400
+Received: by mail-lj1-f193.google.com with SMTP id p15so3391112ljj.8;
+        Tue, 27 Oct 2020 14:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=itpcimRmJKRMZOn8SG7l1v6GPY+0t+qoFe2Yj0QZkAw=;
-        b=w1fg81BI+9OHmnEN2m4DQ6vV8L7MxKo/6FA3S6eDhOwaEXRX1Vm7aVGeXlYbWQ2GIo
-         YLHL9jhnKCSlAqRaXi73igW1cpdIH3p98CBGeScuNgjPuW+0BJVyXHfoFpnteBI0eyDA
-         TM/LzYAVVGCG+iANKX4J9E6r9LgyZ0WkPQ8P9R455jhBl5SLlqR0OjzUZnbf8S/Tc99e
-         P5l1Q2KVGk0xzVd6ZYKTIS+Vem46bw3wkQrjN+efFzWrpANGHzRIeK4+kGyMHNivJ4dB
-         emoEn2+CRuNXPWENNK8GHKQjJfOd81W8deVobakipSUHdgWRTxFM7ZqKZ8Qdw4Azkk5d
-         QZIA==
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xx452EybhZY/Be3m6ZPFyPAZdRMh+EqfNW2ocWqJUkQ=;
+        b=D6Wr3oaM9cb6BAmiXy3RkDD4ypsh2yfV8mv0vEtF5pP1za3dGFHgk3xtjw87AkfiqN
+         omzwflvsg5c3541QMlIKkoHT4+D1FIZ2bFGO7nnh7r16tMFPnPouySY0KiZ5B+0yFUzW
+         jAwlJz05zfj7nRFVKSs2LqKL7Xkxs0q+w55fq+OEbWp6C83f1YUR5Z4sd8rvoQQiatgt
+         sRSC/upzBI+sqHvANT1BPo8HtPkXVjBRc9jwm4rpY3tOGQdLsf0lLSaQL1PLASU1v8qu
+         hGfPJkzaUUUVklWeOsK5NV5iT6rRLnCqvMy6tGpA+sbqkn6kkN5iOmAaLWkzt5cdR3/q
+         /WpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=itpcimRmJKRMZOn8SG7l1v6GPY+0t+qoFe2Yj0QZkAw=;
-        b=O7Z2pYeXEpnro84ue9RKrAt+EDU4OC3wnS6L2kXHPSJW2dN8zjl/cqv7KVj7Am+Bda
-         mEj/iDI8IxZWMdLDmtQwaHwclyQEIzu21W7hne8zthsGwJQu+6cHv67bC2fOon92LzyS
-         FayFzQRpJlrwiHsNjV+GUhhOFmtjAbqslFFHF0YGlVVtjfyj7CSknYeTZLX8gYge67P5
-         QS2HREWEoqT/44YxVzAVMYurqYfkM+YPKuQeO5DhpUCc9qb3DtKDfEx5qWiQhY91LtLG
-         RfppOkpwn8uJhJYjezes5cby9vwNxxJ0RMnyBC2GZQuopTYWyV3VnC4/AATcrC/UyAWi
-         8qgQ==
-X-Gm-Message-State: AOAM531W0LFtcC+wylIOgmdJb0+WYvkuuiziKola/bap1cGQu8Ld7DCz
-        bqwLiQDkTsf1RxmSzPx6v9a3xw==
-X-Google-Smtp-Source: ABdhPJxTvqvxosH5aON4IcSzRPcaDl/2UGNaPLjhPMdSRExsHB50hc8DUXxhCfM/8EVqeRF4QwL6sw==
-X-Received: by 2002:a17:902:bc43:b029:d6:711c:1a77 with SMTP id t3-20020a170902bc43b02900d6711c1a77mr53860plz.43.1603832220616;
-        Tue, 27 Oct 2020 13:57:00 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id b17sm3076128pgb.94.2020.10.27.13.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 13:56:59 -0700 (PDT)
-Message-ID: <5f98899b.1c69fb81.131f9.5b9c@mx.google.com>
-Date:   Tue, 27 Oct 2020 13:56:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xx452EybhZY/Be3m6ZPFyPAZdRMh+EqfNW2ocWqJUkQ=;
+        b=PtAJfyoJHnWE2jZgaC9V9pbcKZMKpbfXSMGq5/mTUisH5l2m9zPGTtPo0f23LR/rTo
+         /k++nAyjR5HSFfqcKtjuWyyc3g9RSL8KGfIwwjWExm+DboEu0UiFfuUmeqEaSw3UrZVc
+         T9EaMIYH742dKJ3B7Ii0AUqUa2c9hab5DxIG3GiadMiltjQkgOT2uuFVJ2vR/ousl3qO
+         D+hRy0mviLpB2Kj013JriS4FrbwwZljySZpRPp7lWz/i3ees1HeiHeGqXYU8PzvZVH1S
+         Ad5XwGeq3fVY1Nli8no5Fw3sWvHRNbav36sW8lCt88sUS02ZVNkRmBurM4+DTVq+PfMZ
+         gCCw==
+X-Gm-Message-State: AOAM5320kx+BqcBWRUILprcglmsjYW+6ewipODSgDJPCEsoKsAtW+xKO
+        ooRw6xWLs4HhWE/PdegV2nPEG1F/ZGs=
+X-Google-Smtp-Source: ABdhPJwv14XNGp2zM2xoLnCiq9kknsnE1yraNpyVdtEy7elcpP9cB4Kgv07q0csNDEYeh5IGZ093Gg==
+X-Received: by 2002:a05:651c:1291:: with SMTP id 17mr1768187ljc.52.1603833122475;
+        Tue, 27 Oct 2020 14:12:02 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
+        by smtp.googlemail.com with ESMTPSA id i139sm292785lfi.276.2020.10.27.14.12.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 14:12:01 -0700 (PDT)
+Subject: Re: [PATCH v6 33/52] memory: tegra20: Support interconnect framework
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-34-digetx@gmail.com> <20201027141152.GN1822510@ulmo>
+ <713bf4eb-dc5b-9c4b-4ab4-23b36ba4fab1@gmail.com>
+Message-ID: <4ff5d718-5e05-fc11-9795-7c3fef4525d3@gmail.com>
+Date:   Wed, 28 Oct 2020 00:12:00 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.10-rc1-4-ge213cd8f175c
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 6 runs, 2 regressions (v5.10-rc1-4-ge213cd8f175c)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <713bf4eb-dc5b-9c4b-4ab4-23b36ba4fab1@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 2 regressions (v5.10-rc1-4-ge213cd8f175c)
+27.10.2020 23:22, Dmitry Osipenko пишет:
+...
+>>> +
+>>> +	*agg_avg += avg_bw;
+>>> +	*agg_peak = max(*agg_peak, peak_bw);
+>>
+>> I'm not very familiar with ICC, but shouldn't the aggregated peak value
+>> be the sum of the current aggregated peak and the new peak bandwidth?
+>> Currently you're selecting the maximum peak bandwidth across all
+>> clients, so isn't that going to be too small if for whatever reason
+>> multiple clients need peak bandwidth at the same time?
 
-Regressions Summary
--------------------
+The current variant with max-peak selection should be okay since it
+takes into account the competing ISO bandwidths of other devices by
+overestimating the bandwidth.
 
-platform         | arch  | lab           | compiler | defconfig | regressio=
-ns
------------------+-------+---------------+----------+-----------+----------=
---
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig | 1        =
-  =
-
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig | 1        =
-  =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
-1-4-ge213cd8f175c/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.10-rc1-4-ge213cd8f175c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      e213cd8f175c811034bc766ac37bcb5b3cf83a22 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig | regressio=
-ns
------------------+-------+---------------+----------+-----------+----------=
---
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig | 1        =
-  =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f987d39a756a5a443381079
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
-8f175c/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
-8f175c/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-1022.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f987d39a756a5a44338107a
-        failing since 69 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
-l: v5.9-rc1-4-g1f08d51cd57f) =
-
- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig | regressio=
-ns
------------------+-------+---------------+----------+-----------+----------=
---
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig | 1        =
-  =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f987def63c2fa2169381012
-
-  Results:     11 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
-8f175c/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-4-ge213cd=
-8f175c/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-1022.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.rtcwake-mem-6: https://kernelci.org/test/case/id/5f987def63c2fa21=
-6938101a
-        new failure (last pass: v5.9-rc8-160-g91e0225c546b)
-
-    2020-10-27 20:02:36.483000+00:00  rtcwake: wakeup from \"mem\" using rt=
-c0 at Tue Oct 27 18:47:28 2020
-    2020-10-27 20:02:36.497000+00:00  <6>[   31.165207] PM: suspend entry (=
-deep)
-    2020-10-27 20:02:36.513000+00:00  <6>[   31.180048] Filesystems sync: 0=
-.000 seconds
-    2020-10-27 20:02:36.531000+00:00  <6>[   31.193679] Freezing user space=
- processes ... (elapsed 0.001 seconds) done.
-    2020-10-27 20:02:36.541000+00:00  <6>[   31.209983] OOM killer disabled.
-    2020-10-27 20:02:36.558000+00:00  <6>[   31.220157] Freezing remaining =
-freezable tasks ... (elapsed 0.001 seconds) done.
-    2020-10-27 20:02:36.572000+00:00  <6>[   31.236085] printk: Suspending =
-console(s) (use no_console_suspend to debug)
-    2020-10-27 20:02:43.108000+00:00  =EF=BF=BD=00=00<3>[   31.837416] mwif=
-iex_pcie 0000:01:00.0: adapter is not valid
-    2020-10-27 20:02:43.120000+00:00  <6>[   32.054180] Disabling non-boot =
-CPUs ...
-    2020-10-27 20:02:43.133000+00:00  <4>[   32.054630] IRQ 25: no longer a=
-ffine to CPU1 =
-
-    ... (63 line(s) more)  =
-
- =20
+For now we have only display ISO clients and it won't be a problem to
+tune the algorithm later on if it won't work well for other ISO clients.
