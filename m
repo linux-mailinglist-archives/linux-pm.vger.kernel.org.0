@@ -2,176 +2,217 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA25B29BD93
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 17:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E1B29BDA3
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 17:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1811852AbgJ0Qmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 12:42:52 -0400
-Received: from mail1.bemta24.messagelabs.com ([67.219.250.116]:24365 "EHLO
-        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1811836AbgJ0Qmu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 12:42:50 -0400
-Received: from [100.112.135.1] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-5.bemta.az-b.us-west-2.aws.symcld.net id 06/B9-42875-70E489F5; Tue, 27 Oct 2020 16:42:47 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplleJIrShJLcpLzFFi42JJl3vFpsvuNyP
-  eYMFWUYv91yUsuhYaWCy8f4rV4uu32+wWb45PZ7JYvq+f0eLyrjlsFp97jzBaNHU2AVkdk1ks
-  Vu95wezA7TFp5gxmj52z7rJ7/Nq2hsVj8wotj3knAz3e77vK5vF5k1wAexRrZl5SfkUCa8aZs
-  5IFX5UqFt7KamB8ItvFyMUhJPCfUeLZ8cWMXYycQM4bRomXG4tAbDYBbYktW36xdTFycIgIyE
-  h8WOsJEmYW2MskseNvCogtLBAl8f1JDwuIzSKgKvFt2142EJtXwEbi0KxnYCMlBOQlnvYuZwa
-  xOYFqznQ9ZoFYpSJx/8ESqHpBiZMzn7BAzJeXaN46mxnClpA4+OIFM8QcBYlvd78xQdgJEste
-  3mGewCgwC0n7LCTts5C0L2BkXsVollSUmZ5RkpuYmaNraGCga2hopGtobKRroZdYpZukV1qsW
-  55aXKJrpJdYXqxXXJmbnJOil5dasokRGEspBS0cOxgPv/6gd4hRkoNJSZR3iceMeCG+pPyUyo
-  zE4oz4otKc1OJDjDIcHEoSvNo+QDnBotT01Iq0zBxgXMOkJTh4lER4J4KkeYsLEnOLM9MhUqc
-  YFaXEedeDJARAEhmleXBtsFRyiVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5Iw73uQKTyZeSVw
-  018BLWYCWtxWMQVkcUkiQkqqgcn59Gm9FSua+vveO7mYvo+/91DQvyVvwZTpfzdl/X74vu/vr
-  Orgx6mu6+pPy37e3RMQuXj73KVfHi3dXrA2ZbHR5mlJz84//3krcR/7jC1PD15u3K5boKJ5Me
-  Dt0nPXplsozH9WMslVuZt9ckdOgO2NS+ImqQcebKqcnsE2w1xJbM5m17Cj8615Drkff6GUFVh
-  4efKqlVz9+huuMczfV/coQyPy+ppXU2bPU883U8na5tHQ9G3Ts2W/qx7l+keazb+b5lSZ7xv+
-  Iz1Xx1sgMGOn16Uz+otM3gt+XVlf8P7bPkapCdk5V3e/f8grV+sQHige5vFvsUSE5dqwhF0tK
-  1j177qv3PM04lVuKZPn5CUiSizFGYmGWsxFxYkA1pxFwqADAAA=
-X-Env-Sender: markpearson@lenovo.com
-X-Msg-Ref: server-3.tower-355.messagelabs.com!1603816965!7460!1
-X-Originating-IP: [103.30.234.6]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.60.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 16068 invoked from network); 27 Oct 2020 16:42:47 -0000
-Received: from unknown (HELO lenovo.com) (103.30.234.6)
-  by server-3.tower-355.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Oct 2020 16:42:47 -0000
-Received: from reswpmail04.lenovo.com (unknown [10.62.32.23])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by Forcepoint Email with ESMTPS id 7B7A14184040F8AEE639;
-        Wed, 28 Oct 2020 00:42:42 +0800 (CST)
-Received: from localhost.localdomain.com (10.64.85.148) by
- reswpmail04.lenovo.com (10.62.32.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2044.4; Tue, 27 Oct 2020 09:42:37 -0700
-From:   Mark Pearson <markpearson@lenovo.com>
-To:     <markpearson@lenovo.com>
-CC:     <dvhart@infradead.org>, <mgross@linux.intel.com>,
-        <mario.limonciello@dell.com>, <eliadevito@gmail.com>,
-        <hadess@hadess.net>, <bberg@redhat.com>,
-        <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH] Documentation: Add documentation for new platform_profile sysfs attribute
-Date:   Tue, 27 Oct 2020 12:42:19 -0400
-Message-ID: <20201027164219.868839-1-markpearson@lenovo.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <markpearson@lenovo.com>
-References: <markpearson@lenovo.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.64.85.148]
-X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
- reswpmail04.lenovo.com (10.62.32.23)
+        id S1811882AbgJ0Qn1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 12:43:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54469 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1811878AbgJ0QnT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 12:43:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603816997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=mj6uaiHROCag3uZJ/gHJroorYDnXKuN4EyYRFIYPu8Y=;
+        b=iMWK/9udZzW6xrAGHscjJXdgSKzRvPSDOpFhpewEulwue0luZDWR/Ryv1JtcRbdtckAno/
+        8gCre/qcu5loxPOISVxTx/Px6r/O5Yh9WbP8UDElywsNUWAGOrXct/LtPnIVtJFCBwfPv0
+        dL2+ox3hVo2/V3PWm26kL+Qs4OpFesk=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-355-cSCqIF0hN-CvuvJVoNPtGQ-1; Tue, 27 Oct 2020 12:43:14 -0400
+X-MC-Unique: cSCqIF0hN-CvuvJVoNPtGQ-1
+Received: by mail-oi1-f200.google.com with SMTP id e82so941389oia.15
+        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 09:43:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mj6uaiHROCag3uZJ/gHJroorYDnXKuN4EyYRFIYPu8Y=;
+        b=sfpiSqMhBht2tWA9oS4EUomTnCQ0B1+s7Ln3oivu5yzkdhkEW4j3FgcHoCEj3SYbCh
+         f+lTdcrZ8m/tbqbpi8Gidab+fsb0UkJqFeQTtmIwj5Nq228KOdC8PV77ybtuz11FI4lR
+         OBC1fA53op/Mksdw33KP7nAy+JaQU7R6+JmYockrKCr/chQbyVG7kO9btYHKbzvf4Ot6
+         7dYaaHh0vEiYQqPo9/M2lEgFcQeFd6eW0njTq00rkOU6qsmbEpgIZ3Ig3BuuuYie/zhK
+         ylX9/3HyBQNA7FpUVuyrECSOjavFVXzKxI/LMn0AzZpPKm2vwiQ9lFHUAfWKE+xX4Dnv
+         OUWQ==
+X-Gm-Message-State: AOAM532lsroAnk66/XiYf43bXGFnEONxOkonCYhhggY8EDes6743VyJW
+        D9jJv+CNsYUdpzGyzy9VqD0tYONt0TYNdT8kEJDMffjp9yA9b7quyxD+D/0knunLTrhNliY4skk
+        dBZJ8dWo/vL6tWNeQNU8=
+X-Received: by 2002:aca:ef03:: with SMTP id n3mr2048463oih.67.1603816993830;
+        Tue, 27 Oct 2020 09:43:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw7y1eCX7WfRNi9tkZnfLpiDio1qtG9FKTpwYlLMD9SlPYp6FIE57BquNUx5oTk2cs+UUc+WA==
+X-Received: by 2002:aca:ef03:: with SMTP id n3mr2048435oih.67.1603816993577;
+        Tue, 27 Oct 2020 09:43:13 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id l89sm90968otc.6.2020.10.27.09.43.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 09:43:12 -0700 (PDT)
+From:   trix@redhat.com
+To:     linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Cc:     linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        qat-linux@intel.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        =?UTF-8?q?=EF=BB=BFFrom=20=3A=20Tom=20Rix?= <trix@redhat.com>
+Subject: Subject: [RFC] clang tooling cleanups
+Date:   Tue, 27 Oct 2020 09:42:55 -0700
+Message-Id: <20201027164255.1573301-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+This rfc will describe
+An upcoming treewide cleanup.
+How clang tooling was used to programatically do the clean up.
+Solicit opinions on how to generally use clang tooling.
 
-On modern systems the platform performance, temperature, fan and other
-hardware related characteristics are often dynamically configurable. The
-profile is often automatically adjusted to the load by somei
-automatic-mechanism (which may very well live outside the kernel).
+The clang warning -Wextra-semi-stmt produces about 10k warnings.
+Reviewing these, a subset of semicolon after a switch looks safe to
+fix all the time.  An example problem
 
-These auto platform-adjustment mechanisms often can be configured with
-one of several 'platform-profiles', with either a bias towards low-power
-consumption or towards performance (and higher power consumption and
-thermals).
+void foo(int a) {
+     switch(a) {
+     	       case 1:
+	       ...
+     }; <--- extra semicolon
+}
 
-Introduce a new platform_profile sysfs API which offers a generic API for
-selecting the performance-profile of these automatic-mechanisms.
+Treewide, there are about 100 problems in 50 files for x86_64 allyesconfig.
+These fixes will be the upcoming cleanup.
 
-Co-developed-by: Mark Pearson <markpearson@lenovo.com>
-Signed-off-by: Mark Pearson <markpearson@lenovo.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in V1:
- - Moved from RFC to proposed patch
- - Added cool profile as requested
- - removed extra-profiles as no longer relevant
+clang already supports fixing this problem. Add to your command line
 
- .../ABI/testing/sysfs-platform_profile        | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-platform_profile
+  clang -c -Wextra-semi-stmt -Xclang -fixit foo.c
 
-diff --git a/Documentation/ABI/testing/sysfs-platform_profile b/Documentation/ABI/testing/sysfs-platform_profile
-new file mode 100644
-index 000000000000..240bd3d7532b
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-platform_profile
-@@ -0,0 +1,66 @@
-+Platform-profile selection (e.g. /sys/firmware/acpi/platform_profile)
-+
-+On modern systems the platform performance, temperature, fan and other
-+hardware related characteristics are often dynamically configurable. The
-+profile is often automatically adjusted to the load by some
-+automatic-mechanism (which may very well live outside the kernel).
-+
-+These auto platform-adjustment mechanisms often can be configured with
-+one of several 'platform-profiles', with either a bias towards low-power
-+consumption or towards performance (and higher power consumption and
-+thermals).
-+
-+The purpose of the platform_profile attribute is to offer a generic sysfs
-+API for selecting the platform-profile of these automatic-mechanisms.
-+
-+Note that this API is only for selecting the platform-profile, it is
-+NOT a goal of this API to allow monitoring the resulting performance
-+characteristics. Monitoring performance is best done with device/vendor
-+specific tools such as e.g. turbostat.
-+
-+Specifically when selecting a high-performance profile the actual achieved
-+performance may be limited by various factors such as: the heat generated
-+by other components, room temperature, free air flow at the bottom of a
-+laptop, etc. It is explicitly NOT a goal of this API to let userspace know
-+about any sub-optimal conditions which are impeding reaching the requested
-+performance level.
-+
-+Since numbers are a rather meaningless way to describe platform-profiles
-+this API uses strings to describe the various profiles. To make sure that
-+userspace gets a consistent experience when using this API this API
-+document defines a fixed set of profile-names. Drivers *must* map their
-+internal profile representation/names onto this fixed set.
-+
-+If for some reason there is no good match when mapping then a new profile-name
-+may be added. Drivers which wish to introduce new profile-names must:
-+1. Have very good reasons to do so.
-+2. Add the new profile-name to this document, so that future drivers which also
-+   have a similar problem can use the same name.
-+
-+What:		/sys/firmware/acpi/platform_profile_choices
-+Date:		October 2020
-+Contact:	Hans de Goede <hdegoede@redhat.com>
-+Description:
-+		Reading this file gives a space separated list of profiles
-+		supported for this device.
-+
-+		Drivers must use the following standard profile-names:
-+
-+		low-power:		Emphasises low power consumption
-+		cool:			Emphasises cooler operation
-+		quiet:			Emphasises quieter operation
-+		balanced:		Balance between low power consumption
-+					and performance
-+		performance:		Emphasises performance (and may lead to
-+					higher temperatures and fan speeds)
-+
-+		Userspace may expect drivers to offer at least several of these
-+		standard profile-names.
-+
-+What:		/sys/firmware/acpi/platform_profile
-+Date:		October 2020
-+Contact:	Hans de Goede <hdegoede@redhat.com>
-+Description:
-+		Reading this file gives the current selected profile for this
-+		device. Writing this file with one of the strings from
-+		available_profiles changes the profile to the new value.
--- 
-2.28.0
+  foo.c:8:3: warning: empty expression statement has no effect;
+    remove unnecessary ';' to silence this warning [-Wextra-semi-stmt]
+        };
+         ^
+  foo.c:8:3: note: FIX-IT applied suggested code changes
+  1 warning generated.
+
+The big problem is using this treewide is it will fix all 10k problems.
+10k changes to analyze and upstream is not practical.
+
+Another problem is the generic fixer only removes the semicolon.
+So empty lines with some tabs need to be manually cleaned.
+
+What is needed is a more precise fixer.
+
+Enter clang-tidy.
+https://clang.llvm.org/extra/clang-tidy/
+
+Already part of the static checker infrastructure, invoke on the clang
+build with
+  make clang-tidy
+
+It is only a matter of coding up a specific checker for the cleanup.
+Upstream this is review is happening here
+https://reviews.llvm.org/D90180
+
+The development of a checker/fixer is
+Start with a reproducer
+
+void foo (int a) {
+  switch (a) {};
+}
+
+Generate the abstract syntax tree (AST)
+
+  clang -Xclang -ast-dump foo.c
+
+`-FunctionDecl 
+  |-ParmVarDecl 
+  `-CompoundStmt 
+    |-SwitchStmt 
+    | |-ImplicitCastExpr
+    | | `-DeclRefExpr
+    | `-CompoundStmt
+    `-NullStmt
+
+Write a matcher to get you most of the way
+
+void SwitchSemiCheck::registerMatchers(MatchFinder *Finder) {
+  Finder->addMatcher(
+      compoundStmt(has(switchStmt().bind("switch"))).bind("comp"), this);
+}
+
+The 'bind' method is important, it allows a string to be associated
+with a node in the AST.  In this case these are
+
+`-FunctionDecl 
+  |-ParmVarDecl 
+  `-CompoundStmt <-------- comp
+    |-SwitchStmt <-------- switch
+    | |-ImplicitCastExpr
+    | | `-DeclRefExpr
+    | `-CompoundStmt
+    `-NullStmt
+
+When a match is made the 'check' method will be called.
+
+  void SwitchSemiCheck::check(const MatchFinder::MatchResult &Result) {
+    auto *C = Result.Nodes.getNodeAs<CompoundStmt>("comp");
+    auto *S = Result.Nodes.getNodeAs<SwitchStmt>("switch");
+
+This is where the string in the bind calls are changed to nodes
+
+`-FunctionDecl 
+  |-ParmVarDecl 
+  `-CompoundStmt <-------- comp, C
+    |-SwitchStmt <-------- switch, S
+    | |-ImplicitCastExpr
+    | | `-DeclRefExpr
+    | `-CompoundStmt
+    `-NullStmt <---------- looking for N
+
+And then more logic to find the NullStmt
+
+  auto Current = C->body_begin();
+  auto Next = Current;
+  Next++;
+  while (Next != C->body_end()) {
+    if (*Current == S) {
+      if (const auto *N = dyn_cast<NullStmt>(*Next)) {
+
+When it is found, a warning is printed and a FixItHint is proposed.
+
+  auto H = FixItHint::CreateReplacement(
+    SourceRange(S->getBody()->getEndLoc(), N->getSemiLoc()), "}");
+  diag(N->getSemiLoc(), "unneeded semicolon") << H;
+
+This fixit replaces from the end of switch to the semicolon with a
+'}'.  Because the end of the switch is '}' this has the effect of
+removing all the whitespace as well as the semicolon.
+
+Because of the checker's placement in clang-tidy existing linuxkernel
+checkers, all that was needed to fix the tree was to add a '-fix'to the
+build's clang-tidy call.
+
+I am looking for opinions on what we want to do specifically with
+cleanups and generally about other source-to-source programmatic
+changes to the code base.
+
+For cleanups, I think we need a new toplevel target
+
+clang-tidy-fix
+
+And an explicit list of fixers that have a very high (100%?) fix rate.
+
+Ideally a bot should make the changes, but a bot could also nag folks.
+Is there interest in a bot making the changes? Does one already exist?
+
+The general source-to-source is a bit blue sky.  Ex/ could automagicly
+refactor api, outline similar cut-n-pasted functions etc. Anything on
+someone's wishlist you want to try out ?
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 
