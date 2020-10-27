@@ -2,237 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FA429A9C2
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 11:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F091929AA7D
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 12:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2898419AbgJ0Kft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 06:35:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47538 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2436765AbgJ0KfK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 06:35:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603794908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mItxCBan+TvaBtPLdVv1EhvNXUYWm/o0gLWrN7AxXiw=;
-        b=KRhW0OlS0Fw2T2XXJJZVQ//F4zP6agsct13D8CqGPMYhIZRkVRGVYnwjGCPmxUxDvcmHDJ
-        i0W3eF2DkT4vl9m29pKa3Dwmko1IHM39D4dXcYQxwEpUiAjdljJVXqU7CdFy6h1cUcrSHF
-        4SF0SjawxSucNJuDO0FAIm/z6i0Y7eo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-374-_KBJoZ_2O0m-D6GuxbEDNA-1; Tue, 27 Oct 2020 06:35:04 -0400
-X-MC-Unique: _KBJoZ_2O0m-D6GuxbEDNA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C24CF64093;
-        Tue, 27 Oct 2020 10:34:58 +0000 (UTC)
-Received: from [10.36.113.185] (ovpn-113-185.ams2.redhat.com [10.36.113.185])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BBB1A5C1BD;
-        Tue, 27 Oct 2020 10:34:50 +0000 (UTC)
-Subject: Re: [PATCH 0/4] arch, mm: improve robustness of direct map
- manipulation
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "cl@linux.com" <cl@linux.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "bp@alien8.de" <bp@alien8.de>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
-References: <20201025101555.3057-1-rppt@kernel.org>
- <ae82f905a0092adb7e0f0ac206335c1883b3170f.camel@intel.com>
- <20201026090526.GA1154158@kernel.org>
- <a0212b073b3b2f62c3dbf1bf398f03fa402997be.camel@intel.com>
- <20201027083816.GG1154158@kernel.org>
- <e5fc62b6-f644-4ed5-de5b-ffd8337861e4@redhat.com>
- <20201027094714.GI1154158@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <14aee5c8-09d5-7dc2-7d61-d2d44521c5e3@redhat.com>
-Date:   Tue, 27 Oct 2020 11:34:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S460281AbgJ0LYt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 07:24:49 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51837 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S460304AbgJ0LYt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 07:24:49 -0400
+Received: by mail-wm1-f66.google.com with SMTP id v5so1011381wmh.1
+        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 04:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=n8WNjYrMb3DPWlB1OQ69cZHkYLIkDIqyYLruRZBHgeA=;
+        b=GJq/YRZWWUSkhv7p/j+DQm0bIUYVCBAc9XDOU6zD8hbUYwphLwWfLdIJE422/whcB2
+         jooKwNaLNRTGT0AO2jF/DL7vBAD6OGQxUlkuOIj3iPtKDDCf/+oVGdGwgdJs/MphoCJV
+         mJsxdvVBA2wosfw2xYPZ3+pIBpGiM76v/E1NDGKDNXk8PFyKOKsL91+yMd7LDoPklyxt
+         ycFaGFQJfrCRJ735cT7L8T6+Hpe+MOxbbBDMSK7zV2QSTBfqtQ/41IJcLQhPQWJYst5c
+         4Bl9zbm9M5n3/H5cvXCfd6OEvc/Yk5jwPvhQudhvQzD+aNbv3LsAe8BH3+Wg8C6BZ/dG
+         9LJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=n8WNjYrMb3DPWlB1OQ69cZHkYLIkDIqyYLruRZBHgeA=;
+        b=oDVligJjtsnrrwJxfYuzpl2Aox5qjw/NbifEfn9wZ8X7mWWvgsHAQ5DhP1GHm8hcdY
+         W4vT8+v8BIl5vQhLkgrIqxtmTduQmf/jpnoGCLOMAUHnvElQHvT5FNz7TRxCV9bIsWGo
+         w8L3irY6+mz42BsdlLkJh3p8hHbWdI50dAIfAXXmU2FGgt02kOYTPjg9O1vu/g2TRkBa
+         9uRYUNO8OUfyT4LxI+vM3VsTUZOAiPpMhbuuQfmmUpaPPdS2ac9GkpLlpqyAq1+Kjzq0
+         46HqsjgG44SCyiiLFEwv7DdYg3kRvJUGmpbGCJEiez6u5jkqQLN92mAWJmAcKuCjXx3S
+         GBpQ==
+X-Gm-Message-State: AOAM530PaUyva64xfzQfOwzXTaSJ04WAI20gj+tC2Kz8litk+eboRRAl
+        AVrrzi52ikvfiBCZW6FpUvQqvm8h86Sa9A==
+X-Google-Smtp-Source: ABdhPJxjXh5q7eYJJ+zLXze3N5EZow4mKmya9fN23+aiNtrejYqjmNLgrA92OldULQai49YB9PnS/g==
+X-Received: by 2002:a1c:9c41:: with SMTP id f62mr2146938wme.23.1603797884371;
+        Tue, 27 Oct 2020 04:24:44 -0700 (PDT)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id z6sm1720345wrm.33.2020.10.27.04.24.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 04:24:43 -0700 (PDT)
+Subject: Re: [PATCH] interconnect: qcom: use icc_sync state for sm8[12]50
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20201027102731.951421-1-dmitry.baryshkov@linaro.org>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <20047ef9-c84e-2923-f878-5f29dc3dda2a@linaro.org>
+Date:   Tue, 27 Oct 2020 13:24:41 +0200
 MIME-Version: 1.0
-In-Reply-To: <20201027094714.GI1154158@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201027102731.951421-1-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27.10.20 10:47, Mike Rapoport wrote:
-> On Tue, Oct 27, 2020 at 09:46:35AM +0100, David Hildenbrand wrote:
->> On 27.10.20 09:38, Mike Rapoport wrote:
->>> On Mon, Oct 26, 2020 at 06:05:30PM +0000, Edgecombe, Rick P wrote:
->>>> On Mon, 2020-10-26 at 11:05 +0200, Mike Rapoport wrote:
->>>>> On Mon, Oct 26, 2020 at 01:13:52AM +0000, Edgecombe, Rick P wrote:
->>>>>> On Sun, 2020-10-25 at 12:15 +0200, Mike Rapoport wrote:
->>>>>>> Indeed, for architectures that define
->>>>>>> CONFIG_ARCH_HAS_SET_DIRECT_MAP
->>>>>>> it is
->>>>>>> possible that __kernel_map_pages() would fail, but since this
->>>>>>> function is
->>>>>>> void, the failure will go unnoticed.
->>>>>>
->>>>>> Could you elaborate on how this could happen? Do you mean during
->>>>>> runtime today or if something new was introduced?
->>>>>
->>>>> A failure in__kernel_map_pages() may happen today. For instance, on
->>>>> x86
->>>>> if the kernel is built with DEBUG_PAGEALLOC.
->>>>>
->>>>>           __kernel_map_pages(page, 1, 0);
->>>>>
->>>>> will need to split, say, 2M page and during the split an allocation
->>>>> of
->>>>> page table could fail.
->>>>
->>>> On x86 at least, DEBUG_PAGEALLOC expects to never have to break a page
->>>> on the direct map and even disables locking in cpa because it assumes
->>>> this. If this is happening somehow anyway then we should probably fix
->>>> that. Even if it's a debug feature, it will not be as useful if it is
->>>> causing its own crashes.
->>>>
->>>> I'm still wondering if there is something I'm missing here. It seems
->>>> like you are saying there is a bug in some arch's, so let's add a WARN
->>>> in cross-arch code to log it as it crashes. A warn and making things
->>>> clearer seem like good ideas, but if there is a bug we should fix it.
->>>> The code around the callers still functionally assume re-mapping can't
->>>> fail.
->>>
->>> Oh, I've meant x86 kernel *without* DEBUG_PAGEALLOC, and indeed the call
->>> that unmaps pages back in safe_copy_page will just reset a 4K page to
->>> NP because whatever made it NP at the first place already did the split.
->>>
->>> Still, on arm64 with DEBUG_PAGEALLOC=n there is a possibility of a race
->>> between map/unmap dance in __vunmap() and safe_copy_page() that may
->>> cause access to unmapped memory:
->>>
->>> __vunmap()
->>>       vm_remove_mappings()
->>>           set_direct_map_invalid()
->>> 					safe_copy_page()	
->>> 					    __kernel_map_pages()
->>> 					    	return
->>> 					    do_copy_page() -> fault
->>> 					   	
->>> This is a theoretical bug, but it is still not nice :) 							
->>>
->>>>> Currently, the only user of __kernel_map_pages() outside
->>>>> DEBUG_PAGEALLOC
->>>>> is hibernation, but I think it would be safer to entirely prevent
->>>>> usage
->>>>> of __kernel_map_pages() when DEBUG_PAGEALLOC=n.
->>>>
->>>> I totally agree it's error prone FWIW. On x86, my mental model of how
->>>> it is supposed to work is: If a page is 4k and NP it cannot fail to be
->>>> remapped. set_direct_map_invalid_noflush() should result in 4k NP
->>>> pages, and DEBUG_PAGEALLOC should result in all 4k pages on the direct
->>>> map. Are you seeing this violated or do I have wrong assumptions?
->>>
->>> You are right, there is a set of assumptions about the remapping of the
->>> direct map pages that make it all work, at least on x86.
->>> But this is very subtle and it's not easy to wrap one's head around
->>> this.
->>>
->>> That's why putting __kernel_map_pages() out of "common" use and
->>> keep it only for DEBUG_PAGEALLOC would make things clearer.
->>>
->>>> Beyond whatever you are seeing, for the latter case of new things
->>>> getting introduced to an interface with hidden dependencies... Another
->>>> edge case could be a new caller to set_memory_np() could result in
->>>> large NP pages. None of the callers today should cause this AFAICT, but
->>>> it's not great to rely on the callers to know these details.
->>> A caller of set_memory_*() or set_direct_map_*() should expect a failure
->>> and be ready for that. So adding a WARN to safe_copy_page() is the first
->>> step in that direction :)
->>>
->>
->> I am probably missing something important, but why are we saving/restoring
->> the content of pages that were explicitly removed from the identity mapping
->> such that nobody will access them?
->>
->> Pages that are not allocated should contain garbage or be zero
->> (init_on_free). That should be easy to handle without ever reading the page
->> content.
-> 
-> I'm not familiar with hibernation to say anything smart here, but the
-> help text of DEBUG_PAGEALLOC in Kconfig says:
-> 
-> 	... this option cannot be enabled in combination with
-> 	hibernation as that would result in incorrect warnings of memory
-> 	corruption after a resume because free pages are not saved to
-> 	the suspend image.
-> 
-> Probably you are right and free pages need to be handled differently,
-> but it does not seem the case now.
-> 
->> The other user seems to be vm_remove_mappings(), where we only *temporarily*
->> remove the mapping - while hibernating, that code shouldn't be active
->> anymore I guess - or we could protect it from happening.
-> 
-> Hmm, I _think_ vm_remove_mappings() shouldn't be active while
-> hibernating, but I'm not 100% sure.
-> 
->> As I expressed in another mail, secretmem pages should rather not be saved
->> when hibernating - hibernation should be rather be disabled.
-> 
-> Agree.
-> 
->> What am I missing?
-> 
-> I think I miscommunicated the purpose of this set, which was to hide
-> __kernel_map_pages() under DEBUG_PAGEALLOC and make hibernation use
-> set_direct_map_*() explictly without major rework of free pages handling
-> during hibernation.
-> 
-> Does it help?
-> 
+Hi Dmitry,
 
-Heh, as always, once you touch questionable code, people will beg for 
-proper cleanups instead :)
+Thanks for the patch!
 
+On 10/27/20 12:27, Dmitry Baryshkov wrote:
+> In addition to the rest of Qcom interconnect drivers use icc_sync_state
+> for SM8150/SM8250 interconnect drivers to notify the interconnect
+> framework when all consumers are probed and there is no need to keep the
+> bandwidth set to maximum anymore.
 
--- 
+Should we add Fixes: tag?
+
 Thanks,
+Georgi
 
-David / dhildenb
-
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/interconnect/qcom/sm8150.c | 1 +
+>  drivers/interconnect/qcom/sm8250.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
+> index 9218efed04a0..30fb6567fe19 100644
+> --- a/drivers/interconnect/qcom/sm8150.c
+> +++ b/drivers/interconnect/qcom/sm8150.c
+> @@ -627,6 +627,7 @@ static struct platform_driver qnoc_driver = {
+>  	.driver = {
+>  		.name = "qnoc-sm8150",
+>  		.of_match_table = qnoc_of_match,
+> +		.sync_state = icc_sync_state,
+>  	},
+>  };
+>  module_platform_driver(qnoc_driver);
+> diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
+> index 9b58946f7898..49c5ee2e70f0 100644
+> --- a/drivers/interconnect/qcom/sm8250.c
+> +++ b/drivers/interconnect/qcom/sm8250.c
+> @@ -643,6 +643,7 @@ static struct platform_driver qnoc_driver = {
+>  	.driver = {
+>  		.name = "qnoc-sm8250",
+>  		.of_match_table = qnoc_of_match,
+> +		.sync_state = icc_sync_state,
+>  	},
+>  };
+>  module_platform_driver(qnoc_driver);
+> 
