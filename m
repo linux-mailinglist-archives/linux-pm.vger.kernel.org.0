@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D3E29ADEE
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 14:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B2F29ADF9
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 14:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1752804AbgJ0Nu5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 09:50:57 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:46402 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752802AbgJ0Nu4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 09:50:56 -0400
-Received: by mail-ed1-f65.google.com with SMTP id 33so1485176edq.13;
-        Tue, 27 Oct 2020 06:50:54 -0700 (PDT)
+        id S2502165AbgJ0Nwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 09:52:50 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:33459 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502073AbgJ0Nwu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 09:52:50 -0400
+Received: by mail-ej1-f65.google.com with SMTP id c15so2379359ejs.0;
+        Tue, 27 Oct 2020 06:52:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=UpTv+N44qmDZNKSKOpBL1gv18cc8KZ331d2Wj1p0YQg=;
-        b=iVBDSqXPbyhMom5M/1h/9OcQTUUSnjymUB4Hbi7C7uMD/QVVeedzxVl2zLQa4ESuR9
-         gdsutuRaBNgvI0Hwfwndoil8xPNV2vDfT5jcPE8fanTz0J1XvfVP0MfF/kMdV4tH6MCn
-         iO9xdNfMEX41DdMg2t0HvKjNjBvzi1WnJubsffwjg+NyFtfH9q3ZsHw+tHAMAcaIghLH
-         VNgDS2enn8MUaA+nOhVH+mU6Map5nA6SoyNr5cAKK6hdjwr63AglMPcnhU5QbeXyUWPg
-         yzKckeFV2spRM2FHSK7C47aAfkbmRN0RgBDEDeRFY9YdYrhm/p4QVskIzctUV8UIymWS
-         GeTQ==
+        bh=4TbXysDqnndpTRF/Rd6isqCmc40s+e6qp/SrBCZya6s=;
+        b=lwyXkbi/gj/HS/sa5ZvZZHWv3isYpIbQNCIWPd3kHp+iv2FtJXwPzAWNcRkUkXvTR8
+         44f1TqgS3Bs2rpkI/0wLJ2Hk71+L3Ar+JX0euHhazOZZfsbBQ0jh4qOrYqZ/IYKprYMR
+         7okL77/0uwXZTkRMwLFRhEHaeE4cEimNfoZ9ZS7H4rHZ5JsJPCXkilBuRfW52+VM3PNz
+         J1cjxhhE3KHS/kc2JF9LiI3m5pFs/I1nntfqvyb8FZOpg/Wn4MwGD/eevDCR7ofLKqo2
+         FY65HzvyUMidkVgJ7hv67tNZM4C41gC/ZJABYJOtFp+NDZvtzNotneRZEPMNdKEaw6wc
+         HRYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UpTv+N44qmDZNKSKOpBL1gv18cc8KZ331d2Wj1p0YQg=;
-        b=m7aEw4PLKUX/737rj1WV7YjizA7/lwifh+KOSSgOFdPnG137dGyX7VjqS3BJJR1gr7
-         PIS1Ia3SlPiQwXPV22Z51QlGO9AiZGRtW5kAAMazeDZcQlu7OO4Q2q3Q4E75NAyJCNma
-         UhqrFeKRtpQj3iFPBjy+UjuUuJMNCBXyAav+ULsk332zk4YwO12z6Pk607DZ/roRQZbc
-         ZqekfgWD30oDyT9PhZHH2Xj4mWS9MbT2gfxgpj6tetMuCRM8/bNmNpbJ2aVUl6NS2KNu
-         VJyCKE/SPXNOHCa6KvfDaWyZm1UlzEnzYMNkg29kL4ewJgblN4tW2CqU/1KoCO4pSXA3
-         aaWA==
-X-Gm-Message-State: AOAM530kWhVj18wve5wthui3v7gmHuHNaXe21NR6+wDYRE8oMr+QKWMj
-        6vpaiAz5uxVeSna67AspH0o=
-X-Google-Smtp-Source: ABdhPJzoug3kqXmwuIlVZWpSCnC1WqKifa1HHV8r4AwHgTv48ReSSRME9k3xx42F9bEE4Xx6QKYLwQ==
-X-Received: by 2002:a50:9ec6:: with SMTP id a64mr2283115edf.382.1603806653958;
-        Tue, 27 Oct 2020 06:50:53 -0700 (PDT)
+        bh=4TbXysDqnndpTRF/Rd6isqCmc40s+e6qp/SrBCZya6s=;
+        b=eusKnF3RfVzOdDZEdQy/47MbFChfMi16kwh+A/mZVcnRFQ/AZucH7vWwebN4eeXYce
+         dzg1yUQ3nonBXRlw6g2vgLa0mBAXPAGWeV4mgRxS7WA74Q7XsF4pYbirJx+HmI5qNLZf
+         WPC3cPrWzDzQEe4LbEbvSo7GrBRwF8cRqGx35GKAkbx9se/TGiASbTTDtd930yfKJ8DI
+         +HnIpTLXwJfkO6KkpuihrC+cSuxQFyrUrknaR+zU1BrdrSZOUcE5c0pNJpSaI5rU3qWS
+         lZEr+4gT+Jk8gztjJWy3SFaRiXwGZilI2UretY19MObxcfbXQZcuVW2PyzgfnxE3D9MP
+         kV0A==
+X-Gm-Message-State: AOAM530GiXgN4DKptb3RpB+vIiN5PoiwfeDFbh8blWpwacaMHEDOZ2iu
+        PhQNK1JEBvjSE1HRAKcHTZI=
+X-Google-Smtp-Source: ABdhPJw+wS4M5IdvdBE+C5XCShNKfDZ8hVzHzxdKtDgQPwv8S1CiMKIe82JbF1rjlL+EXlOuu+VahA==
+X-Received: by 2002:a17:906:f8d2:: with SMTP id lh18mr2599173ejb.457.1603806767898;
+        Tue, 27 Oct 2020 06:52:47 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id b8sm999899edv.20.2020.10.27.06.50.52
+        by smtp.gmail.com with ESMTPSA id rs18sm1096635ejb.69.2020.10.27.06.52.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 06:50:52 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 14:50:51 +0100
+        Tue, 27 Oct 2020 06:52:46 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 14:52:44 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -64,61 +64,56 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 31/52] memory: tegra20-emc: Use
- devm_platform_ioremap_resource()
-Message-ID: <20201027135051.GL1822510@ulmo>
+Subject: Re: [PATCH v6 32/52] memory: tegra20-emc: Continue probing if
+ timings are missing in device-tree
+Message-ID: <20201027135244.GM1822510@ulmo>
 References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-32-digetx@gmail.com>
+ <20201025221735.3062-33-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fDERRRNgB4on1jOB"
+        protocol="application/pgp-signature"; boundary="OQhbRXNHSL5w/5po"
 Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-32-digetx@gmail.com>
+In-Reply-To: <20201025221735.3062-33-digetx@gmail.com>
 User-Agent: Mutt/1.14.7 (2020-08-29)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---fDERRRNgB4on1jOB
+--OQhbRXNHSL5w/5po
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 26, 2020 at 01:17:14AM +0300, Dmitry Osipenko wrote:
-> Use devm_platform_ioremap_resource() helper which makes code a bit
-> cleaner.
->=20
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/memory/tegra/tegra20-emc.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+On Mon, Oct 26, 2020 at 01:17:15AM +0300, Dmitry Osipenko wrote:
+> EMC driver will become mandatory after turning it into interconnect
+> provider because interconnect users, like display controller driver, will
+> fail to probe using newer device-trees that have interconnect properties.
+> Thus make EMC driver to probe even if timings are missing in device-tree.
 
-I'm not a fan of this helper, to be honest, because I think all the
-churn that we've seen with the conversions isn't really worth the 1 or 2
-lines that it saves, but hey, looks like this is pretty broadly
-accepted, so if Krzysztof likes it:
+Does it really have to be mandatory? Sounds like that's going to make it
+unnecessarily complicated to merge all of this. Is it complicated to
+make interconnect support optional in consumer drivers?
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Thierry
 
---fDERRRNgB4on1jOB
+--OQhbRXNHSL5w/5po
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+YJbsACgkQ3SOs138+
-s6G9URAAtj7PIBjSjv1nses5GEAWNmBaiDfGSjpiLUkmRQdPi+MiY6E8ka3TCPaQ
-Ekhqca6aM48b4MSYkHBvSpuECG8SZMrpXTofBh11pu4OaydcdUUASsgySz/x6ARu
-zK+qwwSxvPvtq6a4YYcbts0aJu4y0Gk9Sw4zXjMl0mvuB03J0yTYlWgJuFGNv92K
-gGqj4cUqhkHR3WcJ9rmv7wgYo78DfNhYvM0Ux5EemnRiGpzWljNDYpTVwPaK/vlT
-D9WcDj3EZpxi/hwCZLy8IsIhamHoM+BZGtkuXh77BNqz1zpKLCj+YuC4pg4D6+ux
-UN3UmGNW5HK7HIc2eqMOXd7srzlQZc9jYyt0VSxYeukp5/KYCwVHhVT2zL1ryxfK
-lVnWEu1SMM4+pRFLRWvgHUoTsfA0QW//fFdvB8x0nH1mEO0LLKFrnY4ariB1j9/a
-wpcwTfKlSTw75KeK2sjOIQFZsVtlorIqPhRyS57fqPstxeoVfDQ8n6z+OjuZ6TWQ
-Br5RGkUloMKCM0f92oWT0oPJCFUrkNFrMrXdETQ3Y0vcHQeJaER36h8ddCxB0PJt
-fEOT+057askejUvy4Tx+xXPw4zfxPBUZcZq4b2n6VRfAojW66mC+rv7Y1FHVSAbo
-aU/pmuqSUPw4Z8eNVQe7ZHQjHvHVulA8PmLWXvCMfjlJBhErFf4=
-=ihq2
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+YJiwACgkQ3SOs138+
+s6H3wA/9G28Ray4Bi6twkE9N7+h/sNEt+7YPAHJDE7CAIf9/VJ6pbfqyZFWHTH++
+/R5TsxsZlomEwSgf41l2E82KzNVLiJ0uRA2aKSS7J+S7navlOQHB2iHA4Mt2L+wm
+z2l48XHXTeN8HT/RZoaPK+ud5dShtzJkyrQ7Iuije9XY2f7EaSogO1be3P6lQTpJ
+L5tf04hyF0l9obliNMBD1kip6SHt/XLVo/Vdkl95GZz4Utu9XNGOBdkQ0jib8DGB
+VTc/qWdeJUlxQBABfFXBGYXoS5x8xkOe0C1ftx+i1fiJpQ4z7QAaHKb6i/h5E4t3
+D1iTraACToaw2f5Rcidkjandfmw2UxeNh1i3Q9eLDFwZhNTnBsXKez2oajbgDDHJ
+3RQZXzm57261eInfCxv1NTLk1TwefZdC6fHMFya/1d71uxpxrKaZOiqI9R/2V35c
+Qu3Bxgktem+U8dVHrsNZwfaXPIafdyPU+SCczsLFNaIerh4HVFan9Pf3ygTb5835
+WMms77JprRuy8oDnApuK2Tx5tRBf1ETy7ATUxIs40dNTQuVj7VT5biBr97LwRyKM
+4O1+PPLbS256d9z7komAWyF1q/gJUCdQRLtaD3HL6WQdFZmZZABv8S5tclu71lPn
+o8htSjXOmi7ZPGn/ipBe0RMBK42ehXK0f2gysAj+YhzVWqva1JU=
+=XJw5
 -----END PGP SIGNATURE-----
 
---fDERRRNgB4on1jOB--
+--OQhbRXNHSL5w/5po--
