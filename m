@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A50329A718
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9F329A71C
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2509562AbgJ0Iz5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 04:55:57 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:37755 "EHLO
+        id S2895152AbgJ0I50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 04:57:26 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:46986 "EHLO
         mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2509566AbgJ0Izy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 04:55:54 -0400
-Received: by mail-ed1-f67.google.com with SMTP id o18so595020edq.4;
-        Tue, 27 Oct 2020 01:55:53 -0700 (PDT)
+        with ESMTP id S2403964AbgJ0I5Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 04:57:25 -0400
+Received: by mail-ed1-f67.google.com with SMTP id 33so566859edq.13;
+        Tue, 27 Oct 2020 01:57:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=8h35Fp3KGPJbdlP2u/VcAhTjbKZxy2MlAj+dFH66N4U=;
-        b=TSpZ0Z00gtkghy1O2yiP6rZ3ZObnGsb7OEnnR9YyqECzjPZb7Ggz30Ja3LelLRbFcB
-         lYlR/qxu6A63jRdUKSVTiVhJub0238e8ruvkR+xbI0EbfIfOjt4dVjRyaDsLwyOZEjkN
-         +tMFFS3v9qrNdH35eB9HSvd1Y0OFqdOMw+5eYWtJ263wTMhfm8SOr34CdZCfYHxniIlf
-         I8bWU+9fxaqiEWGAMJ1c37/E1Yuf75zF3zReJvq0KWnQa9ToREypfFCnunLc+YOaWra+
-         Zor78c7MJ8IuFrm4L5tZYm/JCuzTW1SpEY+H3LBYeNKf1gYBPI2B0L75oYmnxE/CgE7m
-         kDkg==
-X-Gm-Message-State: AOAM532YVAvYHAyntYsjhh/sDijd8TgO15dZpMkdeRKkkjjOiMWBBxm3
-        glQNkbM5UDK9uXyR6ka7rb0=
-X-Google-Smtp-Source: ABdhPJyxkG4tQYebevVwUfr5tpTrVVR5vWiNFfd4BicVUd+tfnGH6GSr02QqZUC9VLRFzIbgcKMDXA==
-X-Received: by 2002:aa7:c6d9:: with SMTP id b25mr1071873eds.27.1603788952482;
-        Tue, 27 Oct 2020 01:55:52 -0700 (PDT)
+        bh=lUl+o/7xg/oQWEkHSv+Sd9NIOES//4+6SIoc9etOZOE=;
+        b=ewjrfUK42fl1cMbQSWi+3pykGSpcsDzHOq1JNmfQeLsw4yidi0UyZdaEpkorQ/4aqg
+         2fyJbYFLmTNbhBlE9t6Z1r7fzBlkPu+qbcUG5090Uq6cGOEu1t3juHMVzPdJwl5z2EgC
+         01fcj6ScqxKKDkOTGXrsJ/15ACgURLRkOhRT4qLaznkusl3CPLhbdeeEccRS+iRauPSY
+         Ste/mQQ/yClkY9LBEafq6XkaPNke5Snl0Np4TSQC3fG0S3jbuvwmI6itq1ecOjnLmvHM
+         BciNg0D84cDI4YI/lmtsFZl+ioBTT6omHtC9smHfb7qKSCXISBlWWmnbCC+mLadkEK/9
+         x2iw==
+X-Gm-Message-State: AOAM530k1lezHR2/Erib0YNzQaXG6St5gPt/S9xpI/0KmW9dOLzWOUkm
+        XTZpHVV9JoWntSBWvQCNL5M=
+X-Google-Smtp-Source: ABdhPJz1HXUDOFZ/JUJ/wbYV21cxZO30liKh11vnxTXHeeuT2qryjv96syz//4EvKya3F2LDe8npww==
+X-Received: by 2002:aa7:c792:: with SMTP id n18mr1099285eds.209.1603789041727;
+        Tue, 27 Oct 2020 01:57:21 -0700 (PDT)
 Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id d11sm506794eds.83.2020.10.27.01.55.50
+        by smtp.googlemail.com with ESMTPSA id hb6sm591383ejb.65.2020.10.27.01.57.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 01:55:51 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 09:55:48 +0100
+        Tue, 27 Oct 2020 01:57:20 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 09:57:18 +0100
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
@@ -53,43 +53,75 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 05/52] dt-bindings: memory: tegra20: mc: Document new
- interconnect property
-Message-ID: <20201027085548.GE4244@kozik-lap>
+Subject: Re: [PATCH v6 07/52] dt-bindings: memory: tegra20: emc: Document OPP
+ table and voltage regulator
+Message-ID: <20201027085718.GF4244@kozik-lap>
 References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-6-digetx@gmail.com>
+ <20201025221735.3062-8-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-6-digetx@gmail.com>
+In-Reply-To: <20201025221735.3062-8-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 01:16:48AM +0300, Dmitry Osipenko wrote:
-> Memory controller is interconnected with memory clients and with the
-> External Memory Controller. Document new interconnect property which
-> turns memory controller into interconnect provider.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../bindings/memory-controllers/nvidia,tegra20-mc.txt          | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
-> index e55328237df4..739b7c6f2e26 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
-> @@ -16,6 +16,8 @@ Required properties:
->    IOMMU specifier needed to encode an address. GART supports only a single
->    address space that is shared by all devices, therefore no additional
->    information needed for the address encoding.
-> +- #interconnect-cells : Should be 1. This cell represents memory client.
-> +  The assignments may be found in header file <dt-bindings/memory/tegra20-mc.h>.
+On Mon, Oct 26, 2020 at 01:16:50AM +0300, Dmitry Osipenko wrote:
+> The SoC core voltage can't be changed without taking into account the
+> clock rate of External Memory Controller. Document OPP table that will
+> be used for dynamic voltage frequency scaling, taking into account EMC
+> voltage requirement. Document optional core voltage regulator, which is
+> optional because some boards may have a fixed core regulator and still
+> frequency scaling may be desired to have.
 
-This is a list of required properties so you break the ABI. All existing
-DTBs will be affected.
+You need to document that property is optional in the binding.
 
 Best regards,
 Krzysztof
+
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../memory-controllers/nvidia,tegra20-emc.txt      | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> index 0a53adc6ccba..8d09b228ac42 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> @@ -14,11 +14,23 @@ Properties:
+>  - clocks : Should contain EMC clock.
+>  - nvidia,memory-controller : Phandle of the Memory Controller node.
+>  - #interconnect-cells : Should be 0.
+> +- core-supply: Phandle of voltage regulator of the SoC "core" power domain.
+> +- operating-points-v2: See ../bindings/opp/opp.txt for details.
+>  
+>  Child device nodes describe the memory settings for different configurations and clock rates.
+>  
+>  Example:
+>  
+> +	emc_icc_dvfs_opp_table: emc_opp_table0 {
+> +		compatible = "operating-points-v2";
+> +
+> +		opp@36000000 {
+> +			opp-microvolt = <950000 950000 1300000>;
+> +			opp-hz = /bits/ 64 <36000000>;
+> +		};
+> +		...
+> +	};
+> +
+>  	memory-controller@7000f400 {
+>  		#address-cells = < 1 >;
+>  		#size-cells = < 0 >;
+> @@ -28,6 +40,8 @@ Example:
+>  		interrupts = <0 78 0x04>;
+>  		clocks = <&tegra_car TEGRA20_CLK_EMC>;
+>  		nvidia,memory-controller = <&mc>;
+> +		core-supply = <&core_vdd_reg>;
+> +		operating-points-v2 = <&emc_icc_dvfs_opp_table>;
+>  	}
+>  
+>  
+> -- 
+> 2.27.0
+> 
