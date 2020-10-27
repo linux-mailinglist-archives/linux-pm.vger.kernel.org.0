@@ -2,64 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570B029A2EB
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 04:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9D729A2ED
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 04:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436870AbgJ0DGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Oct 2020 23:06:19 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41927 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436825AbgJ0DGS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 23:06:18 -0400
-Received: by mail-pl1-f195.google.com with SMTP id w11so9941pll.8
-        for <linux-pm@vger.kernel.org>; Mon, 26 Oct 2020 20:06:18 -0700 (PDT)
+        id S2436983AbgJ0DGj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Oct 2020 23:06:39 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:53591 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436963AbgJ0DGj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Oct 2020 23:06:39 -0400
+Received: by mail-pj1-f67.google.com with SMTP id g16so33684pjv.3
+        for <linux-pm@vger.kernel.org>; Mon, 26 Oct 2020 20:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=bZ+poZHp6tJl3tkG9P7E99WJ8ANGR1+a+nENYn33bgI=;
-        b=NhoiMmlVAe54UlUm+JfQ/Ch6ew2TOAVX65QWMTqB8RoWfd/T2uPciyd3smue0kS4za
-         tif2V5WAeghAiEyt3CmJyQQzhuSLYHmWN01ThQVvZxmlYdrpKawhzqTnQsz+GCq5WWGX
-         DTYlX9HCAsOwzzQpJOrGmfZLOa9UpNIRzga4DoD7zxMQhh9L1K+yVTV6bpQ3+GUT9lhM
-         7zi4F6a335BDLpXNksaVtcLy884ba6883kUAyj/aJfxIbOVXPbDsBh1N3JwsvZzwsLV1
-         eTtLbKbjtRSUnAWK1BkAIDqo9kmkxmLkXCAGAUzyTqjYvhOqfiGGSVeCyrdr8FrSV/NT
-         7rkQ==
+        bh=hQGNSG6H63pNMqU9sqlYyAvudn7TgOWia7TrZnYgCGA=;
+        b=dslmTjfTyW/nmJjmrd21DA5VZKLPsSKSKJ/TS/vNkxy8txy30oHZga1/qwbm5ZRUJ9
+         EljbDC769ItR4eOBQKI6WaJp9Ifixi+ipqvmQd9N7JZHF3iGlllrgagDD8SiDBJXb5YY
+         tkr4Z/QpDSPWE7qotli6QTHiN2Vf6ltGrmdevTGdDY3YUwpm/Jv2QGW7L93A5iG7WONx
+         ZoURF997b1/SZ/5g0zO7mQPBkTtjlqcxOz8DdkLpiB0TEoxa5SSMLde6Zd1iWR7r5/Rs
+         /lrEvEKZokC3LicmO+tuoKUoIqL761daXgaWFqSQo/+AJ2cJ067t+yam/5+nEEKrTTsW
+         Y18g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bZ+poZHp6tJl3tkG9P7E99WJ8ANGR1+a+nENYn33bgI=;
-        b=IycENZCHyi3uT3z69L+lcvLdnkrlHRRGefVPN5adPEIzARERtHrcFt0EC8bNqQtuwt
-         cbFsVH9Vhd8zVp+hHJ9EkqrAE1sXkt9tSdhVTHprjg53sGB8qUyfiQ5lVk1x1nb3tfN6
-         h6fK91CNhhvAFpfpcHqWSy02MT5IjN0rt1whpUGHSnWiRcp3+zDBbBhf1CTJJNKZNn4W
-         F9ArzDVNMszMtBhw+GajXCp0dmeoU49XV9/QG0U2nZ1+D9NI4KfK4mIBEWgSPek6sW2B
-         HMMRlwaEUBmjPJ7QMO9QE56S3+Fsd8WK6J+EUIVMNeVAGytyuT1vt0JF8x1t5Cd8Je+J
-         KyIg==
-X-Gm-Message-State: AOAM530DrTN1tvB8aGsGa2NA2kX52mZYKGTACEwFscWF0SyfxuPvQnGz
-        56ah3QWSh0EtyNABSlZQ0usl6w==
-X-Google-Smtp-Source: ABdhPJxHD0CMz7aeVmarlZKwxd0aVgM8BFWLORz79ZP9Qjb7ulIDCckETspbqwaQiT+Xo7+lv1ztiQ==
-X-Received: by 2002:a17:90a:8906:: with SMTP id u6mr60867pjn.35.1603767978154;
-        Mon, 26 Oct 2020 20:06:18 -0700 (PDT)
+        bh=hQGNSG6H63pNMqU9sqlYyAvudn7TgOWia7TrZnYgCGA=;
+        b=BXAbkLJ1F9jLKijHoBmZlm9U12ro45jDlsUKulFdJC6O0PTSTbZAgOx0q3YFpB0cig
+         7ccEmxdYJI11LQJdbJNqeOojdjmFWiUjuwojk3yWu0oXqtHt3tCc0t7N17MGxGD1SERi
+         GARk3q5yBMHxi0KK4wSF1UuBDO96Luq9OjIpl07kc1l/+4ANRdmW+cAsrpNAPz7ZCBPI
+         FQA6vOpRLXF1Jkr6SejVJDGwmud6qN7V6knzIAz21o4UfnqYT2aZGvdftCTZGX+yXOg3
+         VyNMO0+wPAej6lDKzwbLAVF5htfJiTCIAMv/nsf+PPwA4QPGXoLKIrUiBvAzURtHU/DI
+         2M/g==
+X-Gm-Message-State: AOAM533cP8aPF4AWsZss6JPzQqyzAKgWnvKthS17Aur0y2VjqaufF5Hn
+        KiMQ8oeaUxLGYm6N94238CPdqQ==
+X-Google-Smtp-Source: ABdhPJxmI18b3xQLuztAsQzdI8nq6vUTPQp1BThreBSLFp9R0jAkKOkabmOSba/IXkWG0uDscuv9uQ==
+X-Received: by 2002:a17:902:c24b:b029:d3:f3e6:1915 with SMTP id 11-20020a170902c24bb02900d3f3e61915mr317961plg.56.1603767998331;
+        Mon, 26 Oct 2020 20:06:38 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id i21sm20124pgh.2.2020.10.26.20.06.17
+        by smtp.gmail.com with ESMTPSA id 17sm165872pfj.49.2020.10.26.20.06.37
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 26 Oct 2020 20:06:17 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 08:36:15 +0530
+        Mon, 26 Oct 2020 20:06:37 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 08:36:36 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v2 1/4] cpufreq: Introduce CPUFREQ_NEED_UPDATE_LIMITS
- driver flag
-Message-ID: <20201027030615.oasrkjpa6ejwrmdp@vireshk-i7>
+Subject: Re: [PATCH v2 2/4] cpufreq: intel_pstate: Avoid missing HWP max
+ updates in passive mode
+Message-ID: <20201027030636.hvqllxkarjvb5wnn@vireshk-i7>
 References: <2183878.gTFULuzKx9@kreacher>
- <1673796.UrKzctInAk@kreacher>
+ <3212190.yEXfVNHMLB@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1673796.UrKzctInAk@kreacher>
+In-Reply-To: <3212190.yEXfVNHMLB@kreacher>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -68,79 +68,76 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 23-10-20, 17:35, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Generally, a cpufreq driver may need to update some internal upper
-> and lower frequency boundaries on policy max and min changes,
-> respectively, but currently this does not work if the target
-> frequency does not change along with the policy limit.
+> If the cpufreq policy max limit is changed when intel_pstate operates
+> in the passive mode with HWP enabled and the "powersave" governor is
+> used on top of it, the HWP max limit is not updated as appropriate.
 > 
-> Namely, if the target frequency does not change along with the
-> policy min or max, the "target_freq == policy->cur" check in
-> __cpufreq_driver_target() prevents driver callbacks from being
-> invoked and they do not even have a chance to update the
-> corresponding internal boundary.
+> Namely, in the "powersave" governor case, the target P-state
+> is always equal to the policy min limit, so if the latter does
+> not change, intel_cpufreq_adjust_hwp() is not invoked to update
+> the HWP Request MSR due to the "target_pstate != old_pstate" check
+> in intel_cpufreq_update_pstate(), so the HWP max limit is not
+> updated as a result.
 > 
-> This particularly affects the "powersave" and "performance"
-> governors that always set the target frequency to one of the
-> policy limits and it never changes when the other limit is updated.
+> Also, if the CPUFREQ_NEED_UPDATE_LIMITS flag is not set for the
+> driver and the target frequency does not change along with the
+> policy max limit, the "target_freq == policy->cur" check in
+> __cpufreq_driver_target() prevents the driver's ->target() callback
+> from being invoked at all, so the HWP max limit is not updated.
 > 
-> To allow cpufreq the drivers needing to update internal frequency
-> boundaries on policy limits changes to avoid this issue, introduce
-> a new driver flag, CPUFREQ_NEED_UPDATE_LIMITS, that (when set) will
-> neutralize the check mentioned above.
+> To prevent that occurring, set the CPUFREQ_NEED_UPDATE_LIMITS flag
+> in the intel_cpufreq driver structure if HWP is enabled and modify
+> intel_cpufreq_update_pstate() to do the "target_pstate != old_pstate"
+> check only in the non-HWP case and let intel_cpufreq_adjust_hwp()
+> always run in the HWP case (it will update HWP Request only if the
+> cached value of the register is different from the new one including
+> the limits, so if neither the target P-state value nor the max limit
+> changes, the register write will still be avoided).
 > 
+> Fixes: f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive mode with HWP enabled")
+> Reported-by: Zhang Rui <rui.zhang@intel.com>
+> Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
 > 
-> New patch in v2.
+> The v2 is just the intel_pstate changes (without the core changes) and setting
+> the new flag.
 > 
 > ---
->  drivers/cpufreq/cpufreq.c |    3 ++-
->  include/linux/cpufreq.h   |   10 +++++++++-
->  2 files changed, 11 insertions(+), 2 deletions(-)
+>  drivers/cpufreq/intel_pstate.c |   13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
 > 
-> Index: linux-pm/include/linux/cpufreq.h
+> Index: linux-pm/drivers/cpufreq/intel_pstate.c
 > ===================================================================
-> --- linux-pm.orig/include/linux/cpufreq.h
-> +++ linux-pm/include/linux/cpufreq.h
-> @@ -297,7 +297,7 @@ __ATTR(_name, 0644, show_##_name, store_
+> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> @@ -2550,14 +2550,12 @@ static int intel_cpufreq_update_pstate(s
+>  	int old_pstate = cpu->pstate.current_pstate;
 >  
->  struct cpufreq_driver {
->  	char		name[CPUFREQ_NAME_LEN];
-> -	u8		flags;
-> +	u16		flags;
->  	void		*driver_data;
+>  	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+> -	if (target_pstate != old_pstate) {
+> +	if (hwp_active) {
+> +		intel_cpufreq_adjust_hwp(cpu, target_pstate, fast_switch);
+> +		cpu->pstate.current_pstate = target_pstate;
+> +	} else if (target_pstate != old_pstate) {
+> +		intel_cpufreq_adjust_perf_ctl(cpu, target_pstate, fast_switch);
+>  		cpu->pstate.current_pstate = target_pstate;
+> -		if (hwp_active)
+> -			intel_cpufreq_adjust_hwp(cpu, target_pstate,
+> -						 fast_switch);
+> -		else
+> -			intel_cpufreq_adjust_perf_ctl(cpu, target_pstate,
+> -						      fast_switch);
+>  	}
 >  
->  	/* needed by all drivers */
-> @@ -417,6 +417,14 @@ struct cpufreq_driver {
->   */
->  #define CPUFREQ_IS_COOLING_DEV			BIT(7)
->  
-> +/*
-> + * Set by drivers that need to update internale upper and lower boundaries along
-> + * with the target frequency and so the core and governors should also invoke
-> + * the diver if the target frequency does not change, but the policy min or max
-> + * may have changed.
-> + */
-> +#define CPUFREQ_NEED_UPDATE_LIMITS		BIT(8)
-> +
->  int cpufreq_register_driver(struct cpufreq_driver *driver_data);
->  int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
->  
-> Index: linux-pm/drivers/cpufreq/cpufreq.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/cpufreq.c
-> +++ linux-pm/drivers/cpufreq/cpufreq.c
-> @@ -2191,7 +2191,8 @@ int __cpufreq_driver_target(struct cpufr
->  	 * exactly same freq is called again and so we can save on few function
->  	 * calls.
->  	 */
-> -	if (target_freq == policy->cur)
-> +	if (target_freq == policy->cur &&
-> +	    !(cpufreq_driver->flags & CPUFREQ_NEED_UPDATE_LIMITS))
-
-I was wondering if the same change should be made in the target_index part as we
-do this kind of check again ? But then I thought that since we know there are no
-users of that right now, why bother :)
+>  	intel_cpufreq_trace(cpu, fast_switch ? INTEL_PSTATE_TRACE_FAST_SWITCH :
+> @@ -3014,6 +3012,7 @@ static int __init intel_pstate_init(void
+>  			hwp_mode_bdw = id->driver_data;
+>  			intel_pstate.attr = hwp_cpufreq_attrs;
+>  			intel_cpufreq.attr = hwp_cpufreq_attrs;
+> +			intel_cpufreq.flags |= CPUFREQ_NEED_UPDATE_LIMITS;
+>  			if (!default_driver)
+>  				default_driver = &intel_pstate;
 
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
