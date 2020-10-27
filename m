@@ -2,108 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4EC029A5EF
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 08:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343BF29A635
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2508493AbgJ0H5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 03:57:14 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39785 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2508483AbgJ0H5N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 03:57:13 -0400
-Received: by mail-pl1-f195.google.com with SMTP id x23so333096plr.6
-        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 00:57:12 -0700 (PDT)
+        id S2894496AbgJ0IIL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 04:08:11 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:35853 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392391AbgJ0IIF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 04:08:05 -0400
+Received: by mail-pl1-f194.google.com with SMTP id r10so352549plx.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 01:08:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WTGC2OTITxlQLtj5zM0pFSoVah1I+fME0Bx3VBUu+Yo=;
-        b=JP1L/hqgpYoepOQ3ejAHcxMgOon16s5amlaf/SsSxdhvw982pStR+nZXKSo5OA2n1s
-         H/c7cg+12r/pMF0SkpABvySTyVfTsrB20jVhtU96QhPOQfH1j/QRSWO10Zqmu2qYa1UI
-         nX2jozFMAEfQFUbinMh2s9Y50XMv+S9qPCh2lnmWqq4WxfWzySBDDFmDfODOTbKYBgYr
-         p+j+Cy2YcU0Z24CoAeKAC28TKgBQ1d92ZrWdDRZTw5TDHPhgsqzW86LmaoCU96J1Lh4t
-         fdEgIqXkwtPvQ4qyrZwDAeIp1Ok3ME6HjZI4qqXaE/rq8NTBydolaxbpcqQlkra0cbSi
-         xHsQ==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=spAX6twQPkh1Ij5Vpvmv0UCnkaB7pdjOtwOnngoJyRY=;
+        b=OS4cz0Yof35kjz/q8C/Q6zY5YbN1ZhVmXqUgujYzY0bx+ID1RYEjBmQPG5aFw8eaBg
+         a8MLmxkEai51mP+G9akHKBQFnWOEhthTyVhVZvZ7glceq1oktZp/NU0VJEDKCCM26i4/
+         sxPZYZCSaXWxda5eF4XhIPkELxhiUGqHCQamxCF2Nn4SoL5gJ6DTcpRe+dxTpYwSRzKT
+         5MSezUjBdHR/8Obl+As4B3UZlPx9A+R6eWmCMgEhvWXPT8rs6vKTdeUYX4WFlazMiGvl
+         A/F+rfGm9aDgCh028lxbvMItbz82r9WnkCJjvqYpj6OSWBn7xX1m0OQvzvREeKmgd2m0
+         DTiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WTGC2OTITxlQLtj5zM0pFSoVah1I+fME0Bx3VBUu+Yo=;
-        b=LtZ0YRRaC3gTb1pnmOwswpeNZNmt0r8OHHXXT39ZCSczsRPl0AGsQZ0VX8DmVRbV9C
-         outTdzhyHqf44RdTWEdQO9hNqAO60+3XHGr/Y8T6XNO5M4qH16v/1q1gUPmGZlAWr0Ki
-         rgCEpxJFeuFWnXi8gqw3z1j6WNQ6FPP6Zh5KZgp0+8cVithEBBP+JEmNSyS9BNSKxK2s
-         3yxx1d9rpRXMngJxhgyD1cICyyY5KAyAgiSd0EMS2ImREabgOaVcKOm9DIsIFAWm/BT9
-         9CW1+VlL+Bbxzxg83jg45oaD3KUV9sqMmNJkS2gRHmflvJvGc2qgYTwum7Pyu2V+Q3yI
-         YVIQ==
-X-Gm-Message-State: AOAM533NKTS9x3NrPL/PH2tbUe714zeJ91DTlLivRf4qOUmG+OoJRc+B
-        f4tRiJMNQbMHuV7Eja8E97RVxg==
-X-Google-Smtp-Source: ABdhPJwd354cCqeKi4ljRpmFshygrJuB4B086tJCKwr85zi67cGcxWbK7tBwaL8IV0iw93wYVTqRVw==
-X-Received: by 2002:a17:90a:d082:: with SMTP id k2mr905742pju.195.1603785431787;
-        Tue, 27 Oct 2020 00:57:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=spAX6twQPkh1Ij5Vpvmv0UCnkaB7pdjOtwOnngoJyRY=;
+        b=lWxOeVUyxYbxO8ZpKtNqLNFktJeBSicBlE7dH8yUdDzNZLCwO/Pgi+fIl36g/LppgL
+         fO3w29IXEGMiJ5/rk/4yNeyrph/cldd8wYA4hHQdh14fd4OP1nqwuGtWEE3Ic6F//ptT
+         ImnNOwTFNGD0xX9DwGuU0KBwcfUxUL2D5cYfNf2TX7p49nnZNKix9UAOV44pZM2Moxqe
+         XnWnwOAhBVG372fmdWhCW9wbT1+qlkbKrzEmWVsc89EhPVPXvWQDrVvHTZoVjS6jmTM2
+         Kv/xJuNq/4QiWE2Gcjwvyf/sVGi4tUft33wrmFa7yzXYhRR9EtzQQHtZ0J0ktfYbbPeU
+         TzQA==
+X-Gm-Message-State: AOAM532UUBVhV9hdksb6s8tbi4d7wmvLKW0uUqnxT/8QxXxXNqDMaa5c
+        CGEQK+e/b9HnrEwDf4Z+FfxswA==
+X-Google-Smtp-Source: ABdhPJzp6B76tD8EAX+x+ayGz1Z7YCB7ykmKq0AqUd7XrBy/oHLNLiaHhhpqki3MOetec7aDsTbLsw==
+X-Received: by 2002:a17:902:b613:b029:d6:38a2:5244 with SMTP id b19-20020a170902b613b02900d638a25244mr1404971pls.14.1603786084427;
+        Tue, 27 Oct 2020 01:08:04 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id m13sm976201pjr.30.2020.10.27.00.57.10
+        by smtp.gmail.com with ESMTPSA id t129sm1265614pfc.140.2020.10.27.01.08.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Oct 2020 00:57:11 -0700 (PDT)
+        Tue, 27 Oct 2020 01:08:03 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 13:38:01 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Reduce the size of critical section in _opp_table_kref_release()
-Date:   Tue, 27 Oct 2020 13:27:06 +0530
-Message-Id: <e0df59de670b48a923246fae1f972317b84b2764.1603785323.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] OPP fixes for 5.10-rc2
+Message-ID: <20201027080801.ztqiud2zcbg4bwr5@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a lot of stuff here which can be done outside of the big
-opp_table_lock, do that. This helps avoiding few circular dependency
-lockdeps around debugfs and interconnects.
+Hi Rafael,
 
-Reported-by: Rob Clark <robdclark@gmail.com>
-Reported-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Rob: I know this only fixes the issue partially for you and I am still
-looking into that. I just wanted to get this merged in early as this
-fixes lockdep for other users as well.
+This pull request contains following fixes:
 
- drivers/opp/core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+- Don't remove the static OPPs erroneously.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 4ac4e7ce6b8b..0e0a5269dc82 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1181,6 +1181,10 @@ static void _opp_table_kref_release(struct kref *kref)
- 	struct opp_device *opp_dev, *temp;
- 	int i;
- 
-+	/* Drop the lock as soon as we can */
-+	list_del(&opp_table->node);
-+	mutex_unlock(&opp_table_lock);
-+
- 	_of_clear_opp_table(opp_table);
- 
- 	/* Release clk */
-@@ -1208,10 +1212,7 @@ static void _opp_table_kref_release(struct kref *kref)
- 
- 	mutex_destroy(&opp_table->genpd_virt_dev_lock);
- 	mutex_destroy(&opp_table->lock);
--	list_del(&opp_table->node);
- 	kfree(opp_table);
--
--	mutex_unlock(&opp_table_lock);
- }
- 
- void dev_pm_opp_put_opp_table(struct opp_table *opp_table)
+- Check for the right condition before making an early exit.
+
+- Avoid a lockdep by reducing the size of the critical section.
+
+-------------------------8<-------------------------
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/fixes
+
+for you to fetch changes up to e0df59de670b48a923246fae1f972317b84b2764:
+
+  opp: Reduce the size of critical section in _opp_table_kref_release() (2020-10-27 13:21:03 +0530)
+
+----------------------------------------------------------------
+Viresh Kumar (3):
+      opp: Don't always remove static OPPs in _of_add_opp_table_v1()
+      opp: Fix early exit from dev_pm_opp_register_set_opp_helper()
+      opp: Reduce the size of critical section in _opp_table_kref_release()
+
+ drivers/opp/core.c | 9 +++++----
+ drivers/opp/of.c   | 2 ++
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
 -- 
-2.25.0.rc1.19.g042ed3e048af
-
+viresh
