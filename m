@@ -2,52 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A13AB29C8CE
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 20:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D9029C8ED
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 20:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S372114AbgJ0TZz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 15:25:55 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39616 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409860AbgJ0TYT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 15:24:19 -0400
-Received: by mail-lj1-f193.google.com with SMTP id m16so3098349ljo.6;
-        Tue, 27 Oct 2020 12:24:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=teL4BWb/Ty3//gGMcFWg0CBXJ+qn3TO36Ic9xGZcykU=;
-        b=LXDwnZLSSzHdk+0NS518g92nqSNo92zjKQB6eO3qPuniQf2f7O3xLfJ3OkwiXb0xzI
-         /TbIM/0Hp/SwGeByMcE5EXZJDL5EB8hG2tb/SY1WkahU0aJ52oMgfA1ObZZJ9dP8fB4D
-         8v0QS3qMbQ/j6FmS//hcjBm5bbYokHuj4kl7w++OtQrKa9C0z/5P6jt9gjYmT8uufARH
-         w30YEyWUOqP+1eMG4G1OZY2v/mJdwAToDE7z9OHzFd2OCY14YvP5peSAjskcluq8PDpo
-         m+k5opVMl0bfiDDCnVhVW5Vz4IoBc/RPnio/7abM1vXHZ0wmut3M/DyIQgV310/dspSm
-         xmuw==
+        id S1830010AbgJ0Tap convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 27 Oct 2020 15:30:45 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:45100 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1830015AbgJ0Tap (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 15:30:45 -0400
+Received: by mail-ed1-f66.google.com with SMTP id dg9so2643928edb.12;
+        Tue, 27 Oct 2020 12:30:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=teL4BWb/Ty3//gGMcFWg0CBXJ+qn3TO36Ic9xGZcykU=;
-        b=amtwM5xBevXJAbpuTxL5GAG5TxtCjQfilfJ/tBkycKtfyfEZw7K4D618CHZgC80SvP
-         uY4Dl1jMDAfRFZl7M4RV9Frjz28HoYSCck5Ohc8sOeYdLbnjGt62WwT+UCoLWNIF+N00
-         PshB96z5Hmm1eR64X3RkfaIW3WYRj13OlEKD7X98mkLvm4EfUHLPZ+uuugehWGEukbW8
-         eXukM31kr4Cei34J8ct3iHDw4sENrAerO8qDBgKblIKwDOEWUh+ghJY+7TSCzNkQh3K9
-         BPNhj68ecx45DUc+XdCSLNy2Aq3OqzpaBk2SH4ozi4BcbzB6oE1KWuuuPobQQy7FRNAC
-         H4ZA==
-X-Gm-Message-State: AOAM532zmk4xFXar6OfTphXBrD4tl14idDz58DrlRFFBktBZ4aMDSFHR
-        rnKsYqYFzuosYF8/baxe2KHubC5wEBc=
-X-Google-Smtp-Source: ABdhPJzv2GoyZYU0TkuY3fjjB785+SF5G9Tj2p+DBHVKtHtdt6RjSyJ489SMNygpON3ydMV1RVDEXg==
-X-Received: by 2002:a2e:3816:: with SMTP id f22mr1620510lja.214.1603826655898;
-        Tue, 27 Oct 2020 12:24:15 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-186.dynamic.spd-mgts.ru. [109.252.193.186])
-        by smtp.googlemail.com with ESMTPSA id w139sm267282lff.163.2020.10.27.12.24.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 12:24:15 -0700 (PDT)
-Subject: Re: [PATCH v6 28/52] memory: tegra: Add and use
- devm_tegra_get_memory_controller()
-To:     Krzysztof Kozlowski <krzk@kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RBb2W6vnvr8BZ3JPOSPoABcC6/USapoO19wplu4GSWk=;
+        b=lul+G3Ugz0pTOYAfoBoiOXduTzTI2SRlj9Cfcgol4qrfvTyDWaJ7DI3iAJyyV8xzbu
+         SbN2RdZgJZZkirLeVJehXfHS77Vh/4YG6bg5Y0EXRN5aTo549VgqpzpsKpYAwVWPfhqO
+         hk3EIv1zVoOotaBiDVdnZIA2bUCNoAXiOUNW2iIlYqZUl1SzRnlFRlClaIYTZ/TDpJp3
+         yR35hfxiqWwq/CBeeViDvgz3vcNUyfefZCZy6SfITwgYH6fjUYCiobhwiM63eT7DInNz
+         BX8tqWwYAvigE8ZTnlBLp3hN0NZRhJq24D5Kck+J4f/75HNBuZxYEkN4FkmlmRYqehbX
+         I1PQ==
+X-Gm-Message-State: AOAM533aItwOF1wQcfBGXVPf3GJxpKJJ/PA3cIYnL3olqrthbe2gzZdP
+        mrbvB1vuvvrYwCsvZybqVc/mn+Em1pV+vFI3
+X-Google-Smtp-Source: ABdhPJyZ/rq/EC6GsN4s/PCybZFKTFwJikds6RvGuu7wY5AqoMWIc9Vxh43XdGRJGg8dsyUGVp5G3w==
+X-Received: by 2002:a05:6402:1b1e:: with SMTP id by30mr3972107edb.369.1603827042919;
+        Tue, 27 Oct 2020 12:30:42 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.184])
+        by smtp.googlemail.com with ESMTPSA id s12sm1518324edu.28.2020.10.27.12.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 12:30:41 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 20:30:39 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
@@ -65,68 +54,56 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 04/52] dt-bindings: memory: tegra20: emc: Document
+ nvidia,memory-controller property
+Message-ID: <20201027193039.GA140636@kozik-lap>
 References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-29-digetx@gmail.com> <20201027094210.GD10762@kozik-lap>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a9effe32-3272-7df9-08e5-da293b1854a9@gmail.com>
-Date:   Tue, 27 Oct 2020 22:24:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20201025221735.3062-5-digetx@gmail.com>
+ <20201027085417.GD4244@kozik-lap>
+ <54191034-dcb9-7cab-333b-5bb2553f0ed1@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201027094210.GD10762@kozik-lap>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <54191034-dcb9-7cab-333b-5bb2553f0ed1@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-27.10.2020 12:42, Krzysztof Kozlowski пишет:
-> On Mon, Oct 26, 2020 at 01:17:11AM +0300, Dmitry Osipenko wrote:
->> Multiple Tegra drivers need to retrieve Memory Controller and there is
->> duplication of the retrieval code among the drivers. This patch removes
->> the duplication and fixes put_device() which was missed in the duplicated
->> code.
->>
->> EMC drivers now use new common devm_tegra_get_memory_controller() helper
->> instead of opencoding the MC retrieval.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/memory/tegra/mc.c                | 48 ++++++++++++++++++++++++
->>  drivers/memory/tegra/tegra124-emc.c      | 18 ++-------
->>  drivers/memory/tegra/tegra210-emc-core.c | 39 +++++--------------
->>  drivers/memory/tegra/tegra30-emc.c       | 18 ++-------
->>  include/soc/tegra/mc.h                   | 10 +++++
->>  5 files changed, 74 insertions(+), 59 deletions(-)
->>
->> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
->> index ec8403557ed4..12ea2c79205a 100644
->> --- a/drivers/memory/tegra/mc.c
->> +++ b/drivers/memory/tegra/mc.c
->> @@ -42,6 +42,54 @@ static const struct of_device_id tegra_mc_of_match[] = {
->>  };
->>  MODULE_DEVICE_TABLE(of, tegra_mc_of_match);
->>  
->> +static void tegra_mc_devm_action_put_device(void *data)
->> +{
->> +	struct tegra_mc *mc = data;
->> +
->> +	put_device(mc->dev);
->> +}
->> +
->> +/**
->> + * devm_tegra_get_memory_controller() - get Tegra Memory Controller handle
->> + * @dev: device pointer for the consumer device
->> + *
->> + * This function will search for the Memory Controller node in a device-tree
->> + * and retrieve the Memory Controller handle.
->> + *
->> + * Return: ERR_PTR() on error or a valid pointer to a struct tegra_mc.
->> + */
->> +struct tegra_mc *devm_tegra_get_memory_controller(struct device *dev)
-> 
-> Usually 'get' is a suffix (for example in clk, gpiod, iio, led), so:
-> devm_tegra_memory_controller_get()
+On Tue, Oct 27, 2020 at 10:17:19PM +0300, Dmitry Osipenko wrote:
+> 27.10.2020 11:54, Krzysztof Kozlowski пишет:
+> > On Mon, Oct 26, 2020 at 01:16:47AM +0300, Dmitry Osipenko wrote:
+> >> Tegra20 External Memory Controller talks to DRAM chips and it needs to be
+> >> reprogrammed when memory frequency changes. Tegra Memory Controller sits
+> >> behind EMC and these controllers are tightly coupled. This patch adds the
+> >> new phandle property which allows to properly express connection of EMC
+> >> and MC hardware in a device-tree, it also put the Tegra20 EMC binding on
+> >> par with Tegra30+ EMC bindings, which is handy to have.
+> >>
+> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >> ---
+> >>  .../bindings/memory-controllers/nvidia,tegra20-emc.txt          | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> >> index 567cffd37f3f..1b0d4417aad8 100644
+> >> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> >> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> >> @@ -12,6 +12,7 @@ Properties:
+> >>    irrespective of ram-code configuration.
+> >>  - interrupts : Should contain EMC General interrupt.
+> >>  - clocks : Should contain EMC clock.
+> >> +- nvidia,memory-controller : Phandle of the Memory Controller node.
+> > 
+> > It looks like you adding a required property which is an ABI break.
+> The T20 EMC driver is unused so far in upstream and it will become used
+> only once this series is applied. Hence it's fine to change the ABI.
 
-Alright, I'll rename it in v7.
+The ABI is not about upstream, but downstream. There are no other
+upstreams using this ABI. Unless you have in mind that existing T20 EMC
+driver was a noop, doing absolutely nothing, therefore there is no
+breakage of any other users?
+
+Best regards,
+Krzysztof
+
