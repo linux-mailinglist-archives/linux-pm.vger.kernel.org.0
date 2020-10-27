@@ -2,143 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D6629A6DC
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865F729A6E0
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 09:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2444472AbgJ0IrI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 04:47:08 -0400
-Received: from mga01.intel.com ([192.55.52.88]:49696 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395489AbgJ0IrH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 27 Oct 2020 04:47:07 -0400
-IronPort-SDR: AzEJ2m8Q/gXlzkLPlsfi8IR2T66Hfn/vze5I/L2abBytfbkOyzMVOK2HQlQv8Uep5flw+dJNWO
- T+n8bnJ9Wq8w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="185785440"
-X-IronPort-AV: E=Sophos;i="5.77,423,1596524400"; 
-   d="scan'208";a="185785440"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 01:47:07 -0700
-IronPort-SDR: pkB0yZgBu4yrbBvF/VdPfd24RDOD1EXaLC5jcnqqXO/+KplfTJP5kBgA7CuGBvMx435HyxF/GG
- LFHOthsbjGpw==
-X-IronPort-AV: E=Sophos;i="5.77,423,1596524400"; 
-   d="scan'208";a="525812017"
-Received: from zzhao15-mobl1.ccr.corp.intel.com ([10.255.30.125])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 01:47:05 -0700
-Message-ID: <c4ee77a4c25788a4b65b6e081c61d4ac1933c08f.camel@intel.com>
-Subject: Re: [PATCH v2 2/4] cpufreq: intel_pstate: Avoid missing HWP max
- updates in passive mode
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Date:   Tue, 27 Oct 2020 16:47:02 +0800
-In-Reply-To: <3212190.yEXfVNHMLB@kreacher>
-References: <2183878.gTFULuzKx9@kreacher> <3212190.yEXfVNHMLB@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S2406256AbgJ0Irm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 04:47:42 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:41736 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2509288AbgJ0Irk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 04:47:40 -0400
+Received: by mail-wr1-f66.google.com with SMTP id s9so890451wro.8
+        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 01:47:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BwW+REPlxIwDJltL1navo4FmuG7WENsYC7PlrzbSxJs=;
+        b=eG8/V8c4DVEAApf+O6xuEHJuWqrBl7sD1H6CeCVvGqST338OffYoR9+YT8k67V833I
+         v/mhib1IagL7stWz8z8tRZqh1xmoM9t9ZI+dtWJVg6YFNwOilaqzUHszv0ExQq+gKLj+
+         9N8VIA90R9egKfcC852pvEP9ufftvZEJbbCWN6rygVpjiqPEFB9GNXm5TZI/zXG4SFFS
+         4bnQy71Gm/XjvOGoFKumvWIaDA67gU6QZETAjHlxnSmPgvFsgwKBOZlRnRxmmKIEh/AW
+         lYcyxpKeQq67bQtQynNWWuqDbDug2weONj2sZfwdl/D9b9UJ1i5q6guurrnIBPhxvL+b
+         +ZhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BwW+REPlxIwDJltL1navo4FmuG7WENsYC7PlrzbSxJs=;
+        b=VSWjT4emxnTC9X6o3XK52p2yGN2dKsaB+TSVtrZeDm0FUIu1/FgHQBLH9w10iVVdAX
+         GQJQCevlk4gTLXuT/VRgurOHDd5qqg7xZ/0UJbSeHctuqlauR/zpkPfEHVvrga6XwhUO
+         2nfTqrA05dBhmNvnjZ4WLI7h5cELqNrPAtGpguRkp1v8H12h90gbHIzKEuI5+4wiD/5l
+         k4vAdsJAvygaD/8Pz3sAjF9MZJVT81iMIPB2zuFry5zXvkkiu2OsmAtO9yhIGBZWq1rx
+         JDSqGHEPhRcz2DZQKWxOQu23SqW1oWMGeerueJc+/U0Re6Cp3wvwLPzxhfk5Fe8w1ZxG
+         pTHA==
+X-Gm-Message-State: AOAM53206V03rAKsUQlTSWBtHzhy4e+XYubJrefwgLIA9mvRh8SVboN/
+        iDfzhpppkpvJMFkz+0NOai4/GA==
+X-Google-Smtp-Source: ABdhPJwSIGoGMoYqh7BO/6yTHOnstNyNB842j06yL1OCf7s5uOAGBDuuLE5nNs6cULv8A6+iw+NiNA==
+X-Received: by 2002:adf:f3d2:: with SMTP id g18mr1440994wrp.367.1603788456978;
+        Tue, 27 Oct 2020 01:47:36 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451? ([2a01:e34:ed2f:f020:6cbc:1a3:aabd:d451])
+        by smtp.googlemail.com with ESMTPSA id m4sm1187778wrr.47.2020.10.27.01.47.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 01:47:36 -0700 (PDT)
+Subject: Re: [Resend][PATCH] drivers/thermal: optimize the for circle to run a
+ bit fast
+To:     Bernard <bernard@vivo.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>, Amit Kucheria <amitk@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        opensource.kernel@vivo.com
+References: <ALoAaQDvDY5SjUaRtOCYw4ro.3.1603761577319.Hmail.bernard@vivo.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <bb585318-cdf8-e220-30bb-427239da0a5a@linaro.org>
+Date:   Tue, 27 Oct 2020 09:47:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <ALoAaQDvDY5SjUaRtOCYw4ro.3.1603761577319.Hmail.bernard@vivo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2020-10-23 at 17:35 +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 27/10/2020 02:19, Bernard wrote:
 > 
-> If the cpufreq policy max limit is changed when intel_pstate operates
-> in the passive mode with HWP enabled and the "powersave" governor is
-> used on top of it, the HWP max limit is not updated as appropriate.
+> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Date: 2020-10-27 02:35:18
+> To:  Bernard <bernard@vivo.com>,Zhang Rui <rui.zhang@intel.com>,Amit Kucheria <amitk@kernel.org>,linux-pm@vger.kernel.org,linux-kernel@vger.kernel.org
+> Cc:  opensource.kernel@vivo.com
+> Subject: Re: [Resend][PATCH] drivers/thermal: optimize the for circle to run a bit fast>On 26/10/2020 02:49, Bernard wrote:
+>>> Function thermal_zone_device_register, in the for circle, if the
+>>> first if branch set the count bit in tz->trips_disabled, there is
+>>> no need to set in the other if branch again.
+>>> This change is to make the code run a bit fast and readable.
+>>>
+>>> Signed-off-by: Bernard Zhao <bernard@vivo.com>
+>>> ---
+>>>  drivers/thermal/thermal_core.c | 8 ++++++--
+>>>  1 file changed, 6 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>>> index c6d74bc1c90b..03577794eea3 100644
+>>> --- a/drivers/thermal/thermal_core.c
+>>> +++ b/drivers/thermal/thermal_core.c
+>>> @@ -1446,10 +1446,14 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>>>  		goto release_device;
+>>>  
+>>>  	for (count = 0; count < trips; count++) {
+>>> -		if (tz->ops->get_trip_type(tz, count, &trip_type))
+>>> +		if (tz->ops->get_trip_type(tz, count, &trip_type)) {
+>>>  			set_bit(count, &tz->trips_disabled);
+>>> -		if (tz->ops->get_trip_temp(tz, count, &trip_temp))
+>>> +			continue;
+>>> +		}
+>>> +		if (tz->ops->get_trip_temp(tz, count, &trip_temp)) {
+>>>  			set_bit(count, &tz->trips_disabled);
+>>> +			continue;
+>>> +		}
+>>>  		/* Check for bogus trip points */
+>>>  		if (trip_temp == 0)
+>>>  			set_bit(count, &tz->trips_disabled);
+>>
+>>
+>> What about ?
+>> 	if (tz->ops->get_trip_type(tz, count, &trip_type) ||
+>> 		tz->ops->get_trip_temp(tz, count, &trip_temp) ||
+>> 		!trip_temp)
+>> 		set_bit(count, &tz->trips_disabled);
+>>
 > 
-> Namely, in the "powersave" governor case, the target P-state
-> is always equal to the policy min limit, so if the latter does
-> not change, intel_cpufreq_adjust_hwp() is not invoked to update
-> the HWP Request MSR due to the "target_pstate != old_pstate" check
-> in intel_cpufreq_update_pstate(), so the HWP max limit is not
-> updated as a result.
+> Hi
 > 
-> Also, if the CPUFREQ_NEED_UPDATE_LIMITS flag is not set for the
-> driver and the target frequency does not change along with the
-> policy max limit, the "target_freq == policy->cur" check in
-> __cpufreq_driver_target() prevents the driver's ->target() callback
-> from being invoked at all, so the HWP max limit is not updated.
-> 
-> To prevent that occurring, set the CPUFREQ_NEED_UPDATE_LIMITS flag
-> in the intel_cpufreq driver structure if HWP is enabled and modify
-> intel_cpufreq_update_pstate() to do the "target_pstate != old_pstate"
-> check only in the non-HWP case and let intel_cpufreq_adjust_hwp()
-> always run in the HWP case (it will update HWP Request only if the
-> cached value of the register is different from the new one including
-> the limits, so if neither the target P-state value nor the max limit
-> changes, the register write will still be avoided).
-> 
-> Fixes: f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive mode
-> with HWP enabled")
-> Reported-by: Zhang Rui <rui.zhang@intel.com>
-> Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>   Sure, I will resubmit this patch, thanks!
 
-I have confirmed that the problem is gone with this patch series
-applied.
-The HWP register is updated after changing the scaling_max_freq sysfs
-attribute, with powersave governor.
+Please, take the opportunity to fix the author name to be the same as
+the signed-off-by.
 
-Tested-by: Zhang Rui <rui.zhang@intel.com>
+Thanks
 
-thanks,
-rui
-> ---
-> 
-> The v2 is just the intel_pstate changes (without the core changes)
-> and setting
-> the new flag.
-> 
-> ---
->  drivers/cpufreq/intel_pstate.c |   13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -2550,14 +2550,12 @@ static int intel_cpufreq_update_pstate(s
->  	int old_pstate = cpu->pstate.current_pstate;
->  
->  	target_pstate = intel_pstate_prepare_request(cpu,
-> target_pstate);
-> -	if (target_pstate != old_pstate) {
-> +	if (hwp_active) {
-> +		intel_cpufreq_adjust_hwp(cpu, target_pstate,
-> fast_switch);
-> +		cpu->pstate.current_pstate = target_pstate;
-> +	} else if (target_pstate != old_pstate) {
-> +		intel_cpufreq_adjust_perf_ctl(cpu, target_pstate,
-> fast_switch);
->  		cpu->pstate.current_pstate = target_pstate;
-> -		if (hwp_active)
-> -			intel_cpufreq_adjust_hwp(cpu, target_pstate,
-> -						 fast_switch);
-> -		else
-> -			intel_cpufreq_adjust_perf_ctl(cpu,
-> target_pstate,
-> -						      fast_switch);
->  	}
->  
->  	intel_cpufreq_trace(cpu, fast_switch ?
-> INTEL_PSTATE_TRACE_FAST_SWITCH :
-> @@ -3014,6 +3012,7 @@ static int __init intel_pstate_init(void
->  			hwp_mode_bdw = id->driver_data;
->  			intel_pstate.attr = hwp_cpufreq_attrs;
->  			intel_cpufreq.attr = hwp_cpufreq_attrs;
-> +			intel_cpufreq.flags |=
-> CPUFREQ_NEED_UPDATE_LIMITS;
->  			if (!default_driver)
->  				default_driver = &intel_pstate;
->  
-> 
-> 
-> 
+  -- Daniel
 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
