@@ -2,175 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5646329A576
+	by mail.lfdr.de (Postfix) with ESMTP id C458629A577
 	for <lists+linux-pm@lfdr.de>; Tue, 27 Oct 2020 08:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729550AbgJ0HYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Oct 2020 03:24:50 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:44251 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2507575AbgJ0HYt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 03:24:49 -0400
-Received: by mail-qk1-f202.google.com with SMTP id v186so228341qkb.11
-        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 00:24:47 -0700 (PDT)
+        id S2507592AbgJ0HZG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Oct 2020 03:25:06 -0400
+Received: from mail-yb1-f202.google.com ([209.85.219.202]:41056 "EHLO
+        mail-yb1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2507589AbgJ0HZF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Oct 2020 03:25:05 -0400
+Received: by mail-yb1-f202.google.com with SMTP id c9so480927ybs.8
+        for <linux-pm@vger.kernel.org>; Tue, 27 Oct 2020 00:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=v17o19+YnU8WUH8fPM9zqxvAIBUHHC5coCCN3OqBEHM=;
-        b=oynU9DwRJ9SluUXFN93bnlTTy4ymlqK0CqOE1YOo3JTPeszIdnlN6uROW3ufaGCZWp
-         t9Gk06jLjG2UyVr/TdJ3Kui3cu1OJ6pQpf4Q8wr6KFj7YCsTpAoYh9WGaVyZcbQP3v1+
-         soecEoocP15De+14llSRA/Ilgt/ZVhzXvHigbuSbkgaHcMYoXwo3EZMCZD95mQJMHmer
-         Wt4/6/p9EJWH/JBRCi9L9jJFUxkYOEahKwaaiXqTNQxizwMiApYXFIOopzh8ENW6iVaE
-         tQu6zzA3vQ97fwbNNvaouMtH20xsxs4izoXn0b8MQjzvp/NygQvytF4n9223/pI0oWir
-         jSCg==
+        bh=6rOIjCU41RmBcOLQKBev/ecK/YxKmDMIy5ABsxdSYCE=;
+        b=QrX7cXKrWwhToRwCILi0aJLfIUraRa7nc85z1nt+jfZWEBJ05TVAqrwtwoFfuEbTzJ
+         dHEJIAmqmW0vI1ezGGRXxmwgUTJSvxLj3EG7JgaCHzu3ryA/vG60/geB33kNOakoipyL
+         FcrN9CPKwRJzXRCM2O/rIUaF0kX4viQCXDhCQ5ZhPo4CSuDvjMZ1hkR6c9eGhCO48VO6
+         43qaZAn0QnNGDCBBzDl3jlGZ3C8q44/yripuJIqcXI2/2Ezy6qvG1gJEoYNqpbtwICLa
+         wFWZNt9Xe7w5p1CuCEYX3MOfE9FAWII7fhepQTeDIYTiv5ja6Z86obJJxCZZZcf+kVGB
+         dvGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=v17o19+YnU8WUH8fPM9zqxvAIBUHHC5coCCN3OqBEHM=;
-        b=H+VuiFdQwiOOlrQhHnI1upmsayueFibEI4sEOV3oFeUuXcoeH2eQ4GG4+t5AaQzbkT
-         MR7ooyYbEcgNVV2Z1PAJD4Va1r7OuhRl3W0by0CNp8EpwQQMcz3VtbBqhSiNKZUHIq2v
-         r8eoylJ38B2CEzKvIqdGfZlJBRrJ+Gtk8RNYn7LcJWOaqWR47J0T73Xag76dY5tl7QUV
-         Wtggn0uUy7q9qRvbdJWVrDF2mHta7NZBQ8PQ/3zS8i7Q6hGq5qOWgwRGQg7dqVg9L3Nw
-         /1y5VWQ7WjsvjO5urpeumDpOcSTSLwL5zv6utyHrRnc0EDt0pDYvV2fNO1I4VjE/Nu48
-         waUQ==
-X-Gm-Message-State: AOAM530DT43cuiisiuwLvGttm8+xT+T4J5S4zyEa+OJxU2iMF/9ROV1w
-        J8eNq34XTB5aDiAfczwRjGqa62TrKEZyAHdi
-X-Google-Smtp-Source: ABdhPJyF+hUvH4GmtPOfeUj659ZHaxF7w2Z2JhfKgSbpggQryH0vXyTKRJHrl7GCPDq2BzhskMUe3bCjnwhF/BHn
+        bh=6rOIjCU41RmBcOLQKBev/ecK/YxKmDMIy5ABsxdSYCE=;
+        b=KG6rEes8v8NNn6RUg26qYPAicgF2753/cy5vNnfQL0BR9pJjHkgxM/x5+TMZ18HaxQ
+         vU3INc9J4UZ7JnjZire9QeHNVVoXgGZNtDwY7e1nRK2sufBqErxtB2xbyY8LnsXXNJBF
+         rplmjgwv3EN+g3rB67BlF5JD7JEEnAg2x1FugJm/ko/rA1YC7hdwN/THpC3vp6KqIUvt
+         GBM65sC/cyl741VZfblO8O+TdP27gDqz+LrnOxEBdOuS1cO7gwihHmsQVz1dvmV3Oroh
+         RYXivxXlKPjo+MPudZSgiLI6xa06Mh8vW8cKRYleLNDJjs39j2CvRwioe6q9XQnHJq9X
+         eVVA==
+X-Gm-Message-State: AOAM531fOoSPecqRzlXMGKQHTwr+EJ19AhZL4+D+CTyZ1JX9ZgL3YCaO
+        pWcJYvE3hKFJQ4OefzaG9GJ5imU/Ey7kuw+U
+X-Google-Smtp-Source: ABdhPJxGQbOMLGXGj3UgCL6+1wWQWGlw+40OKZUZ688ahZtZZ3L7CpQeNb49i6nF0XZafiTvD/wCOxoPjxL/x+9A
 Sender: "victording via sendgmr" <victording@victording.syd.corp.google.com>
 X-Received: from victording.syd.corp.google.com ([2401:fa00:9:14:f693:9fff:fef4:fa73])
- (user=victording job=sendgmr) by 2002:a0c:e054:: with SMTP id
- y20mr1204435qvk.30.1603783487096; Tue, 27 Oct 2020 00:24:47 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 07:23:55 +0000
+ (user=victording job=sendgmr) by 2002:a25:bd0c:: with SMTP id
+ f12mr1215275ybk.3.1603783504108; Tue, 27 Oct 2020 00:25:04 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 07:23:56 +0000
 In-Reply-To: <20201027072358.13725-1-victording@google.com>
-Message-Id: <20201027072358.13725-3-victording@google.com>
+Message-Id: <20201027072358.13725-4-victording@google.com>
 Mime-Version: 1.0
 References: <20201027072358.13725-1-victording@google.com>
 X-Mailer: git-send-email 2.29.0.rc2.309.g374f81d7ae-goog
-Subject: [PATCH v3 2/4] powercap/intel_rapl_msr: Convert rapl_msr_priv into pointer
+Subject: [PATCH v3 3/4] powercap: Add AMD Fam17h RAPL support
 From:   Victor Ding <victording@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Kim Phillips <kim.phillips@amd.com>,
         Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
         Victor Ding <victording@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch changes the static struct rapl_msr_priv to a pointer to allow
-using a different set of RAPL MSR interface, preparing for supporting AMD's
-RAPL MSR interface.
+This patch enables AMD Fam17h RAPL support for the power capping
+framework. The support is as per AMD Fam17h Model31h (Zen2) and
+model 00-ffh (Zen1) PPR.
 
-No functional changes.
+Tested by comparing the results of following two sysfs entries and the
+values directly read from corresponding MSRs via /dev/cpu/[x]/msr:
+  /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
+  /sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj
+
 Signed-off-by: Victor Ding <victording@google.com>
 Acked-by: Kim Phillips <kim.phillips@amd.com>
 
 
 ---
 
-(no changes since v2)
+Changes in v3:
+By Victor Ding <victording@google.com>
+ - Rebased to the latest code.
+ - Created a new rapl_defaults for AMD CPUs.
+ - Removed redundant setting to zeros.
+ - Stopped using the fake power limit domain 1.
 
 Changes in v2:
 By Kim Phillips <kim.phillips@amd.com>:
  - Added Kim's Acked-by.
  - Added Daniel Lezcano to Cc.
- - (No code changes).
+ - (No code change).
 
- drivers/powercap/intel_rapl_msr.c | 33 +++++++++++++++++--------------
- 1 file changed, 18 insertions(+), 15 deletions(-)
+ arch/x86/include/asm/msr-index.h     |  1 +
+ drivers/powercap/intel_rapl_common.c |  6 ++++++
+ drivers/powercap/intel_rapl_msr.c    | 20 +++++++++++++++++++-
+ 3 files changed, 26 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 21917e134ad4..c36a083c8ec0 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -327,6 +327,7 @@
+ #define MSR_PP1_POLICY			0x00000642
+ 
+ #define MSR_AMD_RAPL_POWER_UNIT		0xc0010299
++#define MSR_AMD_CORE_ENERGY_STATUS		0xc001029a
+ #define MSR_AMD_PKG_ENERGY_STATUS	0xc001029b
+ 
+ /* Config TDP MSRs */
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 0b2830efc574..bedd780bed12 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1011,6 +1011,10 @@ static const struct rapl_defaults rapl_defaults_cht = {
+ 	.compute_time_window = rapl_compute_time_window_atom,
+ };
+ 
++static const struct rapl_defaults rapl_defaults_amd = {
++	.check_unit = rapl_check_unit_core,
++};
++
+ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE_X,	&rapl_defaults_core),
+@@ -1061,6 +1065,8 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&rapl_defaults_hsw_server),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&rapl_defaults_hsw_server),
++
++	X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_amd),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
 diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index 1646808d354c..a819b3b89b2f 100644
+index a819b3b89b2f..78213d4b5b16 100644
 --- a/drivers/powercap/intel_rapl_msr.c
 +++ b/drivers/powercap/intel_rapl_msr.c
-@@ -31,7 +31,9 @@
- #define MSR_VR_CURRENT_CONFIG		0x00000601
+@@ -49,6 +49,14 @@ static struct rapl_if_priv rapl_msr_priv_intel = {
+ 	.limits[RAPL_DOMAIN_PLATFORM] = 2,
+ };
  
- /* private data for RAPL MSR Interface */
--static struct rapl_if_priv rapl_msr_priv = {
-+static struct rapl_if_priv *rapl_msr_priv;
++static struct rapl_if_priv rapl_msr_priv_amd = {
++	.reg_unit = MSR_AMD_RAPL_POWER_UNIT,
++	.regs[RAPL_DOMAIN_PACKAGE] = {
++		0, MSR_AMD_PKG_ENERGY_STATUS, 0, 0, 0 },
++	.regs[RAPL_DOMAIN_PP0] = {
++		0, MSR_AMD_CORE_ENERGY_STATUS, 0, 0, 0 },
++};
 +
-+static struct rapl_if_priv rapl_msr_priv_intel = {
- 	.reg_unit = MSR_RAPL_POWER_UNIT,
- 	.regs[RAPL_DOMAIN_PACKAGE] = {
- 		MSR_PKG_POWER_LIMIT, MSR_PKG_ENERGY_STATUS, MSR_PKG_PERF_STATUS, 0, MSR_PKG_POWER_INFO },
-@@ -58,9 +60,9 @@ static int rapl_cpu_online(unsigned int cpu)
- {
- 	struct rapl_package *rp;
- 
--	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
-+	rp = rapl_find_package_domain(cpu, rapl_msr_priv);
- 	if (!rp) {
--		rp = rapl_add_package(cpu, &rapl_msr_priv);
-+		rp = rapl_add_package(cpu, rapl_msr_priv);
- 		if (IS_ERR(rp))
- 			return PTR_ERR(rp);
- 	}
-@@ -73,7 +75,7 @@ static int rapl_cpu_down_prep(unsigned int cpu)
- 	struct rapl_package *rp;
- 	int lead_cpu;
- 
--	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
-+	rp = rapl_find_package_domain(cpu, rapl_msr_priv);
- 	if (!rp)
- 		return 0;
- 
-@@ -136,40 +138,41 @@ static int rapl_msr_probe(struct platform_device *pdev)
+ /* Handles CPU hotplug on multi-socket systems.
+  * If a CPU goes online as the first CPU of the physical package
+  * we add the RAPL package to the system. Similarly, when the last
+@@ -138,7 +146,17 @@ static int rapl_msr_probe(struct platform_device *pdev)
  	const struct x86_cpu_id *id = x86_match_cpu(pl4_support_ids);
  	int ret;
  
--	rapl_msr_priv.read_raw = rapl_msr_read_raw;
--	rapl_msr_priv.write_raw = rapl_msr_write_raw;
-+	rapl_msr_priv = &rapl_msr_priv_intel;
-+	rapl_msr_priv->read_raw = rapl_msr_read_raw;
-+	rapl_msr_priv->write_raw = rapl_msr_write_raw;
- 
- 	if (id) {
--		rapl_msr_priv.limits[RAPL_DOMAIN_PACKAGE] = 3;
--		rapl_msr_priv.regs[RAPL_DOMAIN_PACKAGE][RAPL_DOMAIN_REG_PL4] =
-+		rapl_msr_priv->limits[RAPL_DOMAIN_PACKAGE] = 3;
-+		rapl_msr_priv->regs[RAPL_DOMAIN_PACKAGE][RAPL_DOMAIN_REG_PL4] =
- 			MSR_VR_CURRENT_CONFIG;
- 		pr_info("PL4 support detected.\n");
- 	}
- 
--	rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
--	if (IS_ERR(rapl_msr_priv.control_type)) {
-+	rapl_msr_priv->control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
-+	if (IS_ERR(rapl_msr_priv->control_type)) {
- 		pr_debug("failed to register powercap control_type.\n");
--		return PTR_ERR(rapl_msr_priv.control_type);
-+		return PTR_ERR(rapl_msr_priv->control_type);
- 	}
- 
- 	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "powercap/rapl:online",
- 				rapl_cpu_online, rapl_cpu_down_prep);
- 	if (ret < 0)
- 		goto out;
--	rapl_msr_priv.pcap_rapl_online = ret;
-+	rapl_msr_priv->pcap_rapl_online = ret;
- 
- 	return 0;
- 
- out:
- 	if (ret)
--		powercap_unregister_control_type(rapl_msr_priv.control_type);
-+		powercap_unregister_control_type(rapl_msr_priv->control_type);
- 	return ret;
- }
- 
- static int rapl_msr_remove(struct platform_device *pdev)
- {
--	cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
--	powercap_unregister_control_type(rapl_msr_priv.control_type);
-+	cpuhp_remove_state(rapl_msr_priv->pcap_rapl_online);
-+	powercap_unregister_control_type(rapl_msr_priv->control_type);
- 	return 0;
- }
+-	rapl_msr_priv = &rapl_msr_priv_intel;
++	switch (boot_cpu_data.x86_vendor) {
++	case X86_VENDOR_INTEL:
++		rapl_msr_priv = &rapl_msr_priv_intel;
++		break;
++	case X86_VENDOR_AMD:
++		rapl_msr_priv = &rapl_msr_priv_amd;
++		break;
++	default:
++		pr_err("intel-rapl does not support CPU vendor %d\n", boot_cpu_data.x86_vendor);
++		return -ENODEV;
++	}
+ 	rapl_msr_priv->read_raw = rapl_msr_read_raw;
+ 	rapl_msr_priv->write_raw = rapl_msr_write_raw;
  
 -- 
 2.29.0.rc2.309.g374f81d7ae-goog
