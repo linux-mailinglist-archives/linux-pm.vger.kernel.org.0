@@ -2,188 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E68829DEAF
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD20229DD14
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390965AbgJ2A4E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 20:56:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60532 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731637AbgJ1WRh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:37 -0400
-Received: from kernel.org (unknown [87.70.96.83])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 51BD32469B;
-        Wed, 28 Oct 2020 09:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603878129;
-        bh=TeNt5NA/mgWkbLu1J6Mmn4AZrBqZNOgXaAyr5KmIXdc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BAxhPNm00YmUvqZ3itxYhYio6fYAnJQ499wadwVQA1K0WvG4XS19jLvpQ8+eKhIIU
-         s5CNhtP486uh5zhqaz0QS5SyAvIRcDNWo3SzSu4cxxTrXJkuMWq5HghyPFcy1dXFKg
-         Hhf6FJq+WSim8L2T+mmNr/hWPUmxbWsHsyI76+WI=
-Date:   Wed, 28 Oct 2020 11:41:56 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "cl@linux.com" <cl@linux.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "bp@alien8.de" <bp@alien8.de>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
-Subject: Re: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages
- in the direct map
-Message-ID: <20201028094156.GD1428094@kernel.org>
-References: <20201025101555.3057-1-rppt@kernel.org>
- <20201025101555.3057-3-rppt@kernel.org>
- <f20900a403bea9eb3f0814128e5ea46f6580f5a5.camel@intel.com>
- <20201026091554.GB1154158@kernel.org>
- <a28d8248057e7dc01716764da9edfd666722ff62.camel@intel.com>
- <20201027084902.GH1154158@kernel.org>
- <ce66dcf2bbc17d40bcbe752868edb13976b3f1bb.camel@intel.com>
+        id S1731971AbgJ1WTb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 18:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732298AbgJ1WTI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:19:08 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428B0C0613CF;
+        Wed, 28 Oct 2020 15:19:08 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id 9so1220518oir.5;
+        Wed, 28 Oct 2020 15:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding:content-language:thread-index;
+        bh=8gD3IH+hSkcxH7JoFBlZOoX1Uk//wUlm/rCuVf3b+ZY=;
+        b=t4eDpGE8fOJ2x7pHsHI1Lwb6CoP15JbT4+6J9JLPYBHT213DQLdXwfJJAByDnWHKmU
+         eLz8ofY8VjbD8KOhkA6shUlJRwUTEildECKqGZqfUrYNNwH6tvPLiWfnlEFSfEseHLnQ
+         XqFVpxVY7iZiSWH6hipf0DGfUVRZHPuyVvgn0u42Lv2PqJoqU6oBzNA+whfYCIQib2jR
+         La+kAPRKwReRWRLU7z76U/DSjBj6orjRCVCInYOWMw8gnUYlrSHpO99qrCqWE8K+/hcN
+         fAqoHaHugjPZKUHoAVOh3rEpNNZ+PtqHq0l+zn1bgfcHNvU9FxJVXlPI/icLqgqvCWWy
+         yIgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding:content-language:thread-index;
+        bh=8gD3IH+hSkcxH7JoFBlZOoX1Uk//wUlm/rCuVf3b+ZY=;
+        b=EGG1FMkV6s4sKBp0vrFJkBge8Z8X2QoINpkCdiFQX4wPP55kn0NQoJaeSwLbxYGdi1
+         KutCOxuIvNdHEtVflgQmHlg9rxqCqqjl4Px913/g//zphmvVvAs0DjUJr4Vww8Ddg1ye
+         XMM7YPS3XT1Gshwh4Zv5TE+j9a+CCcacMQKzPuRx1XdRLJyJ5d2mnTENtiKrNLvuFYRU
+         NJxjLRHJcbAnI8gZlcphq6UfvGH1E/wxFXyr/beMl/jkC6Vs9tM1qJmPsvNTeXmXQvqd
+         wnIPgGMxkEPzJaRZZ2bT7d/6PWHQ+yjTeUIE3MYDZIi84UXaSCrHOVlEa3hz8qPvJCLO
+         /s5g==
+X-Gm-Message-State: AOAM5311/2iQ9J4OHxx7N+GtuatPBOcmYN908ecxpoUvnnO/zrK3oqV+
+        MKiSWyGotiy5JeYvStibpXyKembiVZrwzA==
+X-Google-Smtp-Source: ABdhPJyfaUZjoPdWS2g6YX+5xrIC6bs+XolLYXJRtUogH9yuc6bDOJdNQogE6nBk+8p835EwKdP8bA==
+X-Received: by 2002:a17:90b:58e:: with SMTP id t14mr6400791pjz.53.1603883017573;
+        Wed, 28 Oct 2020 04:03:37 -0700 (PDT)
+Received: from DESKTOPIUKEMQD ([209.9.72.215])
+        by smtp.gmail.com with ESMTPSA id h10sm5011813pgj.69.2020.10.28.04.03.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Oct 2020 04:03:36 -0700 (PDT)
+From:   "zhuguangqing83" <zhuguangqing83@gmail.com>
+To:     "'Viresh Kumar'" <viresh.kumar@linaro.org>
+Cc:     <rjw@rjwysocki.net>, <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'zhuguangqing'" <zhuguangqing@xiaomi.com>
+Subject: Re: [PATCH] cpufreq: schedutil: set sg_policy->next_freq to the final cpufreq
+Date:   Wed, 28 Oct 2020 19:03:31 +0800
+Message-ID: <083a01d6ad19$fbdfbca0$f39f35e0$@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce66dcf2bbc17d40bcbe752868edb13976b3f1bb.camel@intel.com>
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AdatGYlWbcNW7k9ySme9xhkhSbUCiw==
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 10:44:21PM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2020-10-27 at 10:49 +0200, Mike Rapoport wrote:
-> > On Mon, Oct 26, 2020 at 06:57:32PM +0000, Edgecombe, Rick P wrote:
-> > > On Mon, 2020-10-26 at 11:15 +0200, Mike Rapoport wrote:
-> > > > On Mon, Oct 26, 2020 at 12:38:32AM +0000, Edgecombe, Rick P
-> > > > wrote:
-> > > > > On Sun, 2020-10-25 at 12:15 +0200, Mike Rapoport wrote:
-> > > > > > From: Mike Rapoport <rppt@linux.ibm.com>
-> > > > > > 
-> > > > > > When DEBUG_PAGEALLOC or ARCH_HAS_SET_DIRECT_MAP is enabled a
-> > > > > > page
-> > > > > > may
-> > > > > > be
-> > > > > > not present in the direct map and has to be explicitly mapped
-> > > > > > before
-> > > > > > it
-> > > > > > could be copied.
-> > > > > > 
-> > > > > > On arm64 it is possible that a page would be removed from the
-> > > > > > direct
-> > > > > > map
-> > > > > > using set_direct_map_invalid_noflush() but
-> > > > > > __kernel_map_pages()
-> > > > > > will
-> > > > > > refuse
-> > > > > > to map this page back if DEBUG_PAGEALLOC is disabled.
-> > > > > 
-> > > > > It looks to me that arm64 __kernel_map_pages() will still
-> > > > > attempt
-> > > > > to
-> > > > > map it if rodata_full is true, how does this happen?
-> > > > 
-> > > > Unless I misread the code, arm64 requires both rodata_full and
-> > > > debug_pagealloc_enabled() to be true for __kernel_map_pages() to
-> > > > do
-> > > > anything.
-> > > > But rodata_full condition applies to set_direct_map_*_noflush()
-> > > > as
-> > > > well,
-> > > > so with !rodata_full the linear map won't be ever changed.
-> > > 
-> > > Hmm, looks to me that __kernel_map_pages() will only skip it if
-> > > both
-> > > debug pagealloc and rodata_full are false.
-> > > 
-> > > But now I'm wondering if maybe we could simplify things by just
-> > > moving
-> > > the hibernate unmapped page logic off of the direct map. On x86,
-> > > text_poke() used to use this reserved fixmap pte thing that it
-> > > could
-> > > rely on to remap memory with. If hibernate had some separate pte
-> > > for
-> > > remapping like that, then we could not have any direct map
-> > > restrictions
-> > > caused by it/kernel_map_pages(), and it wouldn't have to worry
-> > > about
-> > > relying on anything else.
-> > 
-> > Well, there is map_kernel_range() that can be used by hibernation as
-> > there is no requirement for particular virtual address, but that
-> > would
-> > be quite costly if done for every page.
-> > 
-> > Maybe we can do somthing like
-> > 
-> > 	if (kernel_page_present(s_page)) {
-> > 		do_copy_page(dst, page_address(s_page));
-> > 	} else {
-> > 		map_kernel_range_noflush(page_address(page), PAGE_SIZE,
-> > 					 PROT_READ, &page);
-> > 		do_copy_page(dst, page_address(s_page));
-> > 		unmap_kernel_range_noflush(page_address(page),
-> > PAGE_SIZE);
-> > 	}
-> > 
-> > But it seems that a prerequisite for changing the way a page is
-> > mapped
-> > in safe_copy_page() would be to teach hibernation that a mapping here
-> > may fail.
-> > 
-> Yea that is what I meant, the direct map could still be used for mapped
-> pages.
+ 
+> On 27-10-20, 19:54, zhuguangqing83@gmail.com wrote:
+> > From: zhuguangqing <zhuguangqing@xiaomi.com>
+> >
+> > In the following code path, next_freq is clamped between policy->min
+> > and policy->max twice in functions cpufreq_driver_resolve_freq() and
+> > cpufreq_driver_fast_switch(). For there is no update_lock in the code
+> > path, policy->min and policy->max may be modified (one or more times),
+> > so sg_policy->next_freq updated in function sugov_update_next_freq()
+> > may be not the final cpufreq.
 > 
-> But for the unmapped case it could have a pre-setup 4k pte for some non
-> direct map address. Then just change the pte to point to any unmapped
-> direct map page that was encountered. The point would be to give
-> hibernate some 4k pte of its own to manipulate so that it can't fail.
+> Understood until here, but not sure I followed everything after that.
 > 
-> Yet another option would be have hibernate_map_page() just map large
-> pages if it finds them.
+> > Next time when we use
+> > "if (sg_policy->next_freq == next_freq)" to judge whether to update
+> > next_freq, we may get a wrong result.
+> >
+> > -> sugov_update_single()
+> >   -> get_next_freq()
+> >     -> cpufreq_driver_resolve_freq()
+> >   -> sugov_fast_switch()
+> >     -> sugov_update_next_freq()
+> >     -> cpufreq_driver_fast_switch()
+> >
+> > For example, at first sg_policy->next_freq is 1 GHz, but the final
+> > cpufreq is 1.2 GHz because policy->min is modified to 1.2 GHz when
+> > we reached cpufreq_driver_fast_switch(). Then next time, policy->min
+> > is changed before we reached cpufreq_driver_resolve_freq() and (assume)
+> > next_freq is 1 GHz, we find "if (sg_policy->next_freq == next_freq)" is
+> > satisfied so we don't change the cpufreq. Actually we should change
+> > the cpufreq to 1.0 GHz this time.
 > 
-> So we could teach hibernate to handle mapping failures, OR we could
-> change it so it doesn't rely on direct map page sizes in order to
-> succeed. The latter seems better to me since there isn't a reason why
-> it should have to fail and the resulting logic might be simpler. Both
-> seem like improvements in robustness though.
+> FWIW, whenever policy->min/max gets changed, sg_policy->limits_changed
+> gets set to true by sugov_limits() and the next time schedutil
+> callback gets called from the scheduler, we will fix the frequency.
+> 
+> And so there shouldn't be any issue here, unless I am missing
+> something.
 
-That's correct, but as the purpose of this series is to prevent usage of
-__kernel_map_pages() outside DEBUG_PAGALLOC, for now I'm going to update this
-patch changelog and add a comment to hibernate_map_page().
+Thanks for your comments. Maybe my description was not clear before.
 
--- 
-Sincerely yours,
-Mike.
+If I understand correctly, when policy->min/max get changed in the time
+Window between get_next_freq() and sugov_fast_switch(), to be more
+precise between cpufreq_driver_resolve_freq() and
+cpufreq_driver_fast_switch(), the issue may happen.
+
+For example, the first time schedutil callback gets called from the
+scheduler, we reached get_next_freq() and calculate the next_freq,
+suppose next_freq is 1.0 GHz, then sg_policy->next_freq is updated
+to 1.0 GHz in sugov_update_next_freq(). If policy->min/max get
+change right now, suppose policy->min is changed to 1.2 GHz, 
+then the final next_freq is 1.2 GHz for there is another clamp
+between policy->min and policy->max in cpufreq_driver_fast_switch().
+Then sg_policy->next_freq(1.0 GHz) is not the final next_freq(1.2 GHz).
+
+The second time schedutil callback gets called from the scheduler, there
+are two issues:
+(1) Suppose policy->min is still 1.2 GHz, we reached get_next_freq() and
+calculate the next_freq, because sg_policy->limits_changed gets set to
+true by sugov_limits() and there is a clamp between policy->min and
+policy->max, so this time next_freq will be greater than or equal to 1.2
+GHz, suppose next_freq is also 1.2 GHz. Now next_freq is 1.2 GHz and
+sg_policy->next_freq is 1.0 GHz,  then we find
+"if (sg_policy->next_freq == next_freq)" is not satisfied and we call
+cpufreq driver to change the cpufreq to 1.2 GHz. Actually it's already
+1.2 GHz, it's not necessary to change this time.
+
+(2) Suppose policy->min was changed again to 1.0 GHz before, we reached
+get_next_freq() and calculate the next_freq, suppose next_freq is also
+1.0 GHz. Now next_freq is 1.0 GHz and sg_policy->next_freq is also 1.0 GHz,
+then we find "if (sg_policy->next_freq == next_freq)" is satisfied and we
+don't change the cpufreq. Actually we should change the cpufreq to 1.0 GHz
+this time.
+
+> 
+> --
+> viresh
+
