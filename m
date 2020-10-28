@@ -2,85 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF48F29D95F
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12DF29D976
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389659AbgJ1Www (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 18:52:52 -0400
-Received: from leibniz.telenet-ops.be ([195.130.137.77]:56812 "EHLO
-        leibniz.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389655AbgJ1Wv6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:51:58 -0400
-X-Greylist: delayed 4199 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Oct 2020 18:51:57 EDT
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by leibniz.telenet-ops.be (Postfix) with ESMTPS id 4CLkR13wFdzMqwlG
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 10:53:17 +0100 (CET)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by xavier.telenet-ops.be with bizsmtp
-        id lMtG2300W4C55Sk01MtGMp; Wed, 28 Oct 2020 10:53:17 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kXi8q-000lf0-Hq; Wed, 28 Oct 2020 10:53:16 +0100
-Date:   Wed, 28 Oct 2020 10:53:16 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
+        id S2389726AbgJ1Wyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 18:54:50 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:16472 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733260AbgJ1Wyq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:54:46 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f9964a70001>; Wed, 28 Oct 2020 05:31:35 -0700
+Received: from [10.26.45.122] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 28 Oct
+ 2020 12:31:30 +0000
+Subject: Re: [PATCH V2] cpufreq: tegra186: Fix initial frequency
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] opp: Don't always remove static OPPs in
- _of_add_opp_table_v1()
-In-Reply-To: <2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org>
-Message-ID: <alpine.DEB.2.22.394.2010281050200.183010@ramsan.of.borg>
-References: <2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20200824145907.331899-1-jonathanh@nvidia.com>
+ <20200825055003.qfsuktsv7cyouxei@vireshk-i7>
+ <09ac354e-a55b-5300-12ae-3f24c8f8b193@nvidia.com>
+ <20201016040700.wzfegk7hmabxgpff@vireshk-i7>
+ <9c37db70-9406-8005-3478-dc4a5e94c566@nvidia.com>
+ <c6ab92fe-e5ea-4568-6457-7a28c8496114@nvidia.com>
+ <20201028041152.733tkghz4vnqz2io@vireshk-i7>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <382ba642-dbea-c36a-0c71-6e91ccb7b775@nvidia.com>
+Date:   Wed, 28 Oct 2020 12:31:28 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+In-Reply-To: <20201028041152.733tkghz4vnqz2io@vireshk-i7>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1603888295; bh=WzzOaEYzIzsUI3cCl2d2uX4B6nM/EI/XkOk1VFdax78=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=Qitm16SUB86mjL+1uY8ctmLnjoeRyRtQ7q3QyhEocvw1dN2ObM8q4aqz+9Wky2kl2
+         DGwT+i5qqMWzB+LlDtkjFxwn86PfWN2tk8GCtyx8yRqIza+j6Ki4f1mZoUHZ2oqVtU
+         x2LcYeP1AG1x9lByZlAfYdpzuFaaivHUwVnj4cOlsSZwrlHFiTCBI5fBNiIJleIOdc
+         XbUZRui/wbJ7eqK2khGoaqy3E3bQYUQZl7jBVF/2km4aH5xemVDJAhcqA5barRBTHd
+         N6DB/GSWllOm6FooPVtMx5+qlPA7WyIs1G6TSjKtsWR3wjGWAwOYZn5L00Qk9/WeIf
+         PUFmVIB3jarYw==
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
- 	Hi Viresh,
 
-On Wed, 14 Oct 2020, Viresh Kumar wrote:
-> The patch missed returning 0 early in case of success and hence the
-> static OPPs got removed by mistake. Fix it.
->
-> Fixes: 90d46d71cce2 ("opp: Handle multiple calls for same OPP table in _of_add_opp_table_v1()")
-> Reported-by: Aisheng Dong <aisheng.dong@nxp.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-This revives cpufreq on R-Car Gen2, and fixes a later s2ram regression
-in commit dc279ac6e5b4e06e ("cpufreq: dt: Refactor initialization to
-handle probe deferral properly"), where the PMIC is accessesed while
-the I2C controller is still suspended.
+On 28/10/2020 04:11, Viresh Kumar wrote:
+> On 26-10-20, 12:57, Jon Hunter wrote:
+>> Thinking about this some more, what are your thoughts on making the
+>> following change? 
+>>
+>> Basically, if the driver sets the CPUFREQ_NEED_INITIAL_FREQ_CHECK,
+> 
+> This flag only means that the platform would like the core to check
+> the currently programmed frequency and get it in sync with the table.
 
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Yes exactly.
 
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -944,6 +944,8 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
-> 		nr -= 2;
-> 	}
->
-> +	return 0;
-> +
-> remove_static_opp:
-> 	_opp_remove_all_static(opp_table);
->
-> -- 
-> 2.25.0.rc1.19.g042ed3e048af
+>> then I wonder if we should not fail if the frequency return by
+>>> get() is not known.
+> 
+> When do we fail if the frequency isn't known ? That's the case where
+> we try to set it to one from the table.
 
-Gr{oetje,eeting}s,
+Currently, if the frequency is not known, we fail right before we do the
+initial frequency check [0].
 
- 						Geert
+> But (looking at your change), ->get() can't really return 0. We depend
+> on it to get us the exact frequency the hardware is programmed at
+> instead of reading a cached value in the software.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Actually it can and it does currently. Note in tegra186_cpufreq_get()
+the variable 'freq' is initialised to 0, and if no match is found, then
+it returns 0. This is what happens currently on some Tegra186 boards.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+>>> This would fix the problem I see on Tegra186
+>> where the initial boot frequency may not be in the frequency table.
+> 
+> With current mainline, what's the problem you see now ? Sorry I missed
+> track of it a bit :)
+
+No problem, this has been an on-going saga now for sometime.
+
+Cheers
+Jon
+
+[0]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/cpufreq/cpufreq.c#n1429
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/cpufreq/tegra186-cpufreq.c#n95
+
+-- 
+nvpublic
