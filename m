@@ -2,99 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A218E29DE75
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 189A229DD26
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbgJ1WS4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 18:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S1730207AbgJ2AfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 20:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732284AbgJ1WSv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:18:51 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DF9C0613CF
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:18:51 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id w21so620954pfc.7
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:18:51 -0700 (PDT)
+        with ESMTP id S1730113AbgJ2AfS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 20:35:18 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A28C0613D1
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 17:35:18 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id f4so591744vsk.7
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 17:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=cfgFzKKhNnMi/GMVV82Uo8k8bscPVazRnoozeWTLycw=;
-        b=rS+WVklmfAY6KhDUrbki4jt4B18LTB6p22yrLLmnk1UDDko9AbIk1TGEZWZlhqIivC
-         zCU/ojARnMEbsZz7jLseoKhAWaCVUBiQBqiG10bmzVWXbEJeO5wddw/YKCkvJZrQ5cDL
-         64XYdYSl6oBTARNV2zP0QvbVXEb3SNrX5EznPJZK+sPRpxJ2iiAmR6VCPX/nVsNfr3b2
-         gA01p83XGuwkO/GQqc7TsoG4aedAnPeq+5XK+Mi0Aqy9CKyq7U7WchIYEap71a6n2oZ9
-         0KVdoQpuYBvGradBQMMXowW1jSaXt3ejdLogjwP4DwIJhD+DNJOE1N59Xkx+E1WTiINF
-         YXZQ==
+        bh=eWYH94BORZv4ozup4OC59HMYznaFyiTGBncXRcc6tuM=;
+        b=YXgUXHApiqcAnVatjPnEi407J7W2aEza7kXEObfTTVd4VTsEZwUSGbitW4GzZ44reN
+         HL52RtVoffqrmmiRa+J70ZoM0IBk8HwhDGtbpoJosVs+5haUvB6Bf7mQiSB3rZAgcOki
+         RMbhDoTHDUm0PK+fgKRoV2b5Qd7NkcKwkQB3tDXHJ59EbjLL2S3nzrbIm0eBy3ag3kSs
+         C6WC8KlnfhJ7qRGM3u15oVHwr0039EAlAbRtfkWqsuPEeXVWkUhHyokqVdAzCjydisum
+         qapHgHsBv9KYGQexSIGxivUrVR0j7yNmiNHhrA6QR9mdKUIvw66PVHpD3nM/I9arppu0
+         7Qzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cfgFzKKhNnMi/GMVV82Uo8k8bscPVazRnoozeWTLycw=;
-        b=j0oaPDfH/HwhMRTn0s+r+RPJmuJ/+9REWJv01scrVBJRuo/jBFK/rW47uTIrZi9YNt
-         ulPSjHBoixkxBAJ8N+Y8rNjpIFXBghLKZVgaLLpwTCY7fGOV0up4w4FN1ePf6gLcrPXk
-         Gp5+ateF4ZoKnuUHC5BoFnM5wKa+Bt5/EA2/V8We6xPBmYV0hrvd/EdUYEZTf9X/JBoe
-         hLvlJK+LOcf12anHnS+kr2HHRP9BjoVoxEcfKgRWrsjCn12zz5H4Njx2CAhztcUnIQlw
-         Pg34Ai/ALlFuw0z8B4lO1jTKY1qFJjIxxjio3c4RTbV/61swRqQdQKsmjSnfe6Y9ii2k
-         j3mQ==
-X-Gm-Message-State: AOAM531mipkvqVeKzu7jt39q1B1ruZSCee8R+0ZP2dXG69Uquc0WeVa2
-        RsTbhTT66LuqF7Cr5ZRvqUyOhopHEKb9eA==
-X-Google-Smtp-Source: ABdhPJxEyfjVX+9NzhgMjwDCbve9fGqcrs+hg+9fV5pCpQ6gtYvRjQy7s5mLW87vm46wmiqhAncEaQ==
-X-Received: by 2002:a17:902:8341:b029:d4:e3fa:e464 with SMTP id z1-20020a1709028341b02900d4e3fae464mr5788637pln.66.1603858318187;
-        Tue, 27 Oct 2020 21:11:58 -0700 (PDT)
+        bh=eWYH94BORZv4ozup4OC59HMYznaFyiTGBncXRcc6tuM=;
+        b=JkX/BlHCjRlK+uGLwB8fyC6Vx8z6Qfwvkl6G2mQZyF90yQtZwREPa25lSoYH+1ZKja
+         garsDf+rTtVcE2kP9sWz3aZsIGxcY7IvVmUexlR/JCyx4SfMzLDSzgSfJx0VAu2H4uYr
+         DZuN26tCQ88GdyLDyHxRFIo20jKIAFP4cr29YQOMexOQ7qmXIsr8MloxLpRigISu7HC1
+         eRFm+W06CG4/AjyXSUJkrrL9V8PMHUAssJW/qIUpShkS/JICeCK+uYHEZTx8hqRlP4Xc
+         Mqrq9JSek4CPqqftRnd5wEkHj52BZLMqF908zZ7NW3QNIjf72nFhq0ZUII8cgJ+pFBQl
+         6f2Q==
+X-Gm-Message-State: AOAM533W00WfaeD//fcZBcuPTiNXgb5dYRgedz0TyZcEk4LgkB3hVSri
+        L5gxMtCESuu6XOCIhKmUEPVT673yUFrDow==
+X-Google-Smtp-Source: ABdhPJy32sza5hlY9q9DusherzKtC59C8yPszw9dBZkXd2Ch6JlZ9EJGtRX781Qk5m0PYnI6dFRCzg==
+X-Received: by 2002:aa7:9095:0:b029:164:75c4:5d15 with SMTP id i21-20020aa790950000b029016475c45d15mr578656pfa.49.1603864199760;
+        Tue, 27 Oct 2020 22:49:59 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id u194sm2753541pfc.176.2020.10.27.21.11.54
+        by smtp.gmail.com with ESMTPSA id v79sm4207978pfc.197.2020.10.27.22.49.58
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Oct 2020 21:11:54 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 09:41:52 +0530
+        Tue, 27 Oct 2020 22:49:59 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 11:19:57 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] cpufreq: tegra186: Fix initial frequency
-Message-ID: <20201028041152.733tkghz4vnqz2io@vireshk-i7>
-References: <20200824145907.331899-1-jonathanh@nvidia.com>
- <20200825055003.qfsuktsv7cyouxei@vireshk-i7>
- <09ac354e-a55b-5300-12ae-3f24c8f8b193@nvidia.com>
- <20201016040700.wzfegk7hmabxgpff@vireshk-i7>
- <9c37db70-9406-8005-3478-dc4a5e94c566@nvidia.com>
- <c6ab92fe-e5ea-4568-6457-7a28c8496114@nvidia.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH V2 1/2] sched/core: Rename and move schedutil_cpu_util()
+ to core.c
+Message-ID: <20201028054957.vr47r3wd3zjycten@vireshk-i7>
+References: <cover.1603448113.git.viresh.kumar@linaro.org>
+ <80c66f55ac7f04b3ecd4ebf12d69d86c89480fa7.1603448113.git.viresh.kumar@linaro.org>
+ <20201023103407.GK2594@hirez.programming.kicks-ass.net>
+ <20201023105452.aivb5o6dws76evc3@vireshk-i7>
+ <CAKfTPtBgqiR1zaoqL_q_sMNnXYrzZczTeE1TMF+WR6knHFjGRw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c6ab92fe-e5ea-4568-6457-7a28c8496114@nvidia.com>
+In-Reply-To: <CAKfTPtBgqiR1zaoqL_q_sMNnXYrzZczTeE1TMF+WR6knHFjGRw@mail.gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-10-20, 12:57, Jon Hunter wrote:
-> Thinking about this some more, what are your thoughts on making the
-> following change? 
+On 23-10-20, 14:34, Vincent Guittot wrote:
+> Maybe it's time to make sched_util and pelt available for !SMP too.
 > 
-> Basically, if the driver sets the CPUFREQ_NEED_INITIAL_FREQ_CHECK,
+> With util_est and uclamp, I can see some benefits for !SMP compare to ondemand
 
-This flag only means that the platform would like the core to check
-the currently programmed frequency and get it in sync with the table.
-
-> then I wonder if we should not fail if the frequency return by
-> >get() is not known.
-
-When do we fail if the frequency isn't known ? That's the case where
-we try to set it to one from the table.
-
-But (looking at your change), ->get() can't really return 0. We depend
-on it to get us the exact frequency the hardware is programmed at
-instead of reading a cached value in the software.
-
-> >This would fix the problem I see on Tegra186
-> where the initial boot frequency may not be in the frequency table.
-
-With current mainline, what's the problem you see now ? Sorry I missed
-track of it a bit :)
+That's a decision you guys (sched maintainers) need to make :)
 
 -- 
 viresh
