@@ -2,134 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD67929DA4F
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 00:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535D229DAE8
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 00:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727422AbgJ1XS6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 28 Oct 2020 19:18:58 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:34090 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728198AbgJ1XRk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 19:17:40 -0400
-Received: by mail-lj1-f193.google.com with SMTP id y16so1110040ljk.1;
-        Wed, 28 Oct 2020 16:17:38 -0700 (PDT)
+        id S1725940AbgJ1Xil (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 19:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390567AbgJ1Xhj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 19:37:39 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912C0C0613CF
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 16:37:39 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id y14so751060pfp.13
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 16:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HOLVJZragnogI83AL7H7xsw1FRW50J26vaXwlw6VSvU=;
+        b=wAW/Rjf4En10sBEiY4jdkSvsj0xci8ukot36BnsZw/HtdrZJfLGQq3I/1tEqnlGtLy
+         YCjdYHuEa9i/IDF7Wh1+XVhCwxwMr4sMHTL5yMsgzJV+0eDJ6pWYVLH20Yr5xX4AlLzM
+         bClcW1MTKolJaQ15A2uPD9zA2SJo+dG7lB3+SMeX3F/l0Aephv7jEf7L+ghfWCyAgEWI
+         Kt3GqycLa+0BxJIcTG8ZYvJEOZpjhuqWLzKLlLhkTbSrXOjX/XIy1Nhb8RiVDSYx2den
+         CqKsxAZeGekYMWnCfZjR6DX6i7h0xzalwXjYfOkdKBrkTvlvWF3D/IjW4ENfA1t9JpcY
+         Yctw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=tOzGuUmz353raLqizP2rvx4LkjDP5IM9PyiPt5zQsck=;
-        b=jJtONSraL9jOMQSXwzrVOBF8qBnjdokxiP0xkykvx0UoBzDRKwhb5PZqWjHWdDVB9C
-         YuS00hM/NBYa8WzAtn5OmO97bw0/3sFsEbDxz5/QGPv3wLuq3iURn1cNiVxpELI3VZAP
-         YJI1EU4LjrnssbayFL/hxOJ+NVDcjw2xHqE+AoH4CTMD4DjdSuzqyg4D2Ism4/FNzOb1
-         Ysauw1RtbTsqvGr3A2WMa/RM8Zmjysq5rVe8PkZuwJBAbirBZ7OFTqA90gnd3v+PAQBe
-         xsw9XdSsX2ldssGidVfijOHBhKlCvW6Um/lAJVrnPtzro6bfxFb0BTEbBMWnemBA1VUx
-         LejA==
-X-Gm-Message-State: AOAM531j2wsgBjkMEHbaK601HeE2rQSGG2m6PHbxm6D1SGdzcMFoOvoV
-        Ag4t4w6bV2DyA6UbXxZExyW/PPOxq+Crdg==
-X-Google-Smtp-Source: ABdhPJx7uTojdx8c4uChsolOHCfdvqUlE8lbp5QLK2dcQNvxdYAlOS/eER5VjqNvSaVQADiGzYDahA==
-X-Received: by 2002:a17:906:52d5:: with SMTP id w21mr8600918ejn.501.1603899329605;
-        Wed, 28 Oct 2020 08:35:29 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id e2sm3163675edn.30.2020.10.28.08.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 08:35:27 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 16:35:25 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 04/52] dt-bindings: memory: tegra20: emc: Document
- nvidia,memory-controller property
-Message-ID: <20201028153525.GA133954@kozik-lap>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-5-digetx@gmail.com>
- <20201027085417.GD4244@kozik-lap>
- <54191034-dcb9-7cab-333b-5bb2553f0ed1@gmail.com>
- <20201027193039.GA140636@kozik-lap>
- <20201028152303.GA4041470@bogus>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HOLVJZragnogI83AL7H7xsw1FRW50J26vaXwlw6VSvU=;
+        b=KwuKrI+Vhrp113II7lRCPvlHxsA2j3PQQMqNFAVMAZv8KDhNUG4QD88EILmRlbCi/q
+         LNCduY6GDB49ExG7G4nASsiIFQIAbyAS0wOWTE11dVYg7/S+8Tw33hIZd4KK36u4cjTo
+         0/k9uYFLApUPb/GVCVi4e7q0iDot/46529CeQmx/qx0TU6xuyIQEAtZlywctPnFzZ5Iy
+         Hu0qc4GZKhA1HpoH2NhcQgJv0aEPEN402bKal+xX9WK8lU5U755fxajgKk4EQ2ppa5+L
+         oLOnjsF0lDU2nunPCemep2fAEFqW6W8EovGEasVfbKf+5nNGeWYKpRkNTlgqQcpC+NV9
+         29gw==
+X-Gm-Message-State: AOAM5335ZS5iZsu2iebZAODbuA5gK7+8HSFxdX78wdbQ0dNSY8EQHH0e
+        A9h09sF/A30T67n25Kli0UWU3vYQxWKMvQ==
+X-Google-Smtp-Source: ABdhPJx2eljw7UcU0BCI0KQNkHipnmVzz2C1K9PAWVmK+t/4Y9zrp3nrvO1yv7RFXzMNRpax0Rcj1A==
+X-Received: by 2002:a63:4086:: with SMTP id n128mr4829611pga.387.1603865325897;
+        Tue, 27 Oct 2020 23:08:45 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id ge6sm3868281pjb.29.2020.10.27.23.08.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 27 Oct 2020 23:08:45 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 11:38:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Fabien Parent <fparent@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, matthias.bgg@gmail.com, rjw@rjwysocki.net
+Subject: Re: [PATCH 1/2] cpufreq: mediatek: Add support for mt8167
+Message-ID: <20201028060843.wlfjuyk5nnou7pfb@vireshk-i7>
+References: <20201013092709.3336709-1-fparent@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201028152303.GA4041470@bogus>
+In-Reply-To: <20201013092709.3336709-1-fparent@baylibre.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 10:23:03AM -0500, Rob Herring wrote:
-> On Tue, Oct 27, 2020 at 08:30:39PM +0100, Krzysztof Kozlowski wrote:
-> > On Tue, Oct 27, 2020 at 10:17:19PM +0300, Dmitry Osipenko wrote:
-> > > 27.10.2020 11:54, Krzysztof Kozlowski пишет:
-> > > > On Mon, Oct 26, 2020 at 01:16:47AM +0300, Dmitry Osipenko wrote:
-> > > >> Tegra20 External Memory Controller talks to DRAM chips and it needs to be
-> > > >> reprogrammed when memory frequency changes. Tegra Memory Controller sits
-> > > >> behind EMC and these controllers are tightly coupled. This patch adds the
-> > > >> new phandle property which allows to properly express connection of EMC
-> > > >> and MC hardware in a device-tree, it also put the Tegra20 EMC binding on
-> > > >> par with Tegra30+ EMC bindings, which is handy to have.
-> > > >>
-> > > >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > > >> ---
-> > > >>  .../bindings/memory-controllers/nvidia,tegra20-emc.txt          | 2 ++
-> > > >>  1 file changed, 2 insertions(+)
-> > > >>
-> > > >> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-> > > >> index 567cffd37f3f..1b0d4417aad8 100644
-> > > >> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-> > > >> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-> > > >> @@ -12,6 +12,7 @@ Properties:
-> > > >>    irrespective of ram-code configuration.
-> > > >>  - interrupts : Should contain EMC General interrupt.
-> > > >>  - clocks : Should contain EMC clock.
-> > > >> +- nvidia,memory-controller : Phandle of the Memory Controller node.
-> > > > 
-> > > > It looks like you adding a required property which is an ABI break.
-> > > The T20 EMC driver is unused so far in upstream and it will become used
-> > > only once this series is applied. Hence it's fine to change the ABI.
-> > 
-> > The ABI is not about upstream, but downstream. 
+On 13-10-20, 11:27, Fabien Parent wrote:
+> Add compatible string for mediatek mt8167
 > 
-> "If it's not upstream, it doesn't exist."
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  drivers/cpufreq/mediatek-cpufreq.c   | 1 +
+>  2 files changed, 2 insertions(+)
 > 
-> Though we do have to account for out of tree users where the DT is not 
-> in tree, but upstream drivers are used. Downstream as in vendor kernels 
-> typically has loads of other crap.
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 7d01df7bfa6c..b8d48ed37156 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -119,6 +119,7 @@ static const struct of_device_id blacklist[] __initconst = {
+>  	{ .compatible = "mediatek,mt2712", },
+>  	{ .compatible = "mediatek,mt7622", },
+>  	{ .compatible = "mediatek,mt7623", },
+> +	{ .compatible = "mediatek,mt8167", },
+>  	{ .compatible = "mediatek,mt817x", },
+>  	{ .compatible = "mediatek,mt8173", },
+>  	{ .compatible = "mediatek,mt8176", },
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 7d1212c9b7c8..c09bff86bb9b 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -532,6 +532,7 @@ static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+>  	{ .compatible = "mediatek,mt2712", },
+>  	{ .compatible = "mediatek,mt7622", },
+>  	{ .compatible = "mediatek,mt7623", },
+> +	{ .compatible = "mediatek,mt8167", },
+>  	{ .compatible = "mediatek,mt817x", },
+>  	{ .compatible = "mediatek,mt8173", },
+>  	{ .compatible = "mediatek,mt8176", },
 
-That's the case I am referring to. Maybe not in case of Tegra, but
-multiple other designs are quite popular in industrial uses and their
-DTSes were not upstreamed.
+Applied. Thanks.
 
-This is anyway different case, as Dmitry explained - nothing got broken
-because not much was working before around this.
-
-> 
-> > There are no other
-> > upstreams using this ABI. Unless you have in mind that existing T20 EMC
-> > driver was a noop, doing absolutely nothing, therefore there is no
-> > breakage of any other users?
-> 
-> ABI breaks are ultimately up to the platform maintainers to decide.
-
-Cool! That reshapes significantly my existing point of view, especially
-about discussions on Exynos bindings (long time ago). Thanks for
-clarification.
-
-Best regards,
-Krzysztof
-
+-- 
+viresh
