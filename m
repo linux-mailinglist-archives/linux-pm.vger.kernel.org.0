@@ -2,192 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB7929DECE
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3482529DC95
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391001AbgJ2A4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 20:56:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60508 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731622AbgJ1WRg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:36 -0400
-Received: from kernel.org (unknown [87.70.96.83])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A1702470A;
-        Wed, 28 Oct 2020 12:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603887744;
-        bh=Lr1BM+VW6ajXZ7BXxVkd5/Y50jW7UBQ7IyfJE4pxvbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1im01t3jg6XLnQ4t88jFGyjzvs+ZIk4/rFUDH74Y7mcgp2hP2qxTFC8UySBuUYtE9
-         u6gUgHROWu15mNV2JA7LSO7BQZVSuhi5Y33PU4pj91Fm+m4ekLRfSEgCkjbLtBEgrv
-         IAOdJsmH151mptkBB/WbzhQhvbykxlMVYr1bucrs=
-Date:   Wed, 28 Oct 2020 14:22:09 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "cl@linux.com" <cl@linux.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "bp@alien8.de" <bp@alien8.de>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
-Subject: Re: [PATCH 0/4] arch, mm: improve robustness of direct map
- manipulation
-Message-ID: <20201028122209.GH1428094@kernel.org>
-References: <20201025101555.3057-1-rppt@kernel.org>
- <ae82f905a0092adb7e0f0ac206335c1883b3170f.camel@intel.com>
- <20201026090526.GA1154158@kernel.org>
- <a0212b073b3b2f62c3dbf1bf398f03fa402997be.camel@intel.com>
- <20201027083816.GG1154158@kernel.org>
- <e5fc62b6-f644-4ed5-de5b-ffd8337861e4@redhat.com>
- <20201028110945.GE1428094@kernel.org>
- <5805fdd9-14e5-141c-773b-c46d2da57258@redhat.com>
+        id S1728139AbgJ2AbP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 20:31:15 -0400
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:39222 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387979AbgJ1Wbx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:31:53 -0400
+Received: by mail-yb1-f193.google.com with SMTP id 67so523104ybt.6;
+        Wed, 28 Oct 2020 15:31:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tEpfJA/Z9AKrEVaajdL+QptYcnQ05daCxtJhgSiGjgE=;
+        b=l9XoN6LYNC3x9xUohLGeJpFhQMXfNr78IAG9g/xgCeXfXelGdJ1YuxaU+fF8PVQ7O0
+         YY15sOOW8xDPUeszMqr/18+OmcNwNsfBqCMDcBH6MyOaKV1jhk/bh3uCDjX3Ir/kmoDv
+         w5BhDeeVLJ/i9awUuvu2PwIeiTda9+PJJWqpWwSFk2hjhgmfYlyXJW1Tr9FkR+iIWdQV
+         3pol5fOp+/YCp3mhpoHBDnICoAxtvGFhwGGFRSzKrIRoKpAILEjL4wEi85xKBDJntFwB
+         ONi8GjKqLScCDzE2ixcngT8kdm7laU9gDLvGS76lLXFoVG+blFnOCQ314Wnp1+FGr2jP
+         IjUQ==
+X-Gm-Message-State: AOAM53370wLcSDgRvL9MqFLCkOR+guyhgtjlXUcPXnqTIEvEW5oxcmjr
+        ijVE78JFnQvjqA7kSjQLNnuDLfieCg==
+X-Google-Smtp-Source: ABdhPJzMI0qpyEpldPp5Skmtq0XN2ZPZ/0VkR6YRCtR8HrbN2dO6boMbO257rWxdkY/LpYL4aX72Pg==
+X-Received: by 2002:a05:6830:1c62:: with SMTP id s2mr5192386otg.177.1603898192374;
+        Wed, 28 Oct 2020 08:16:32 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h135sm2598822oib.23.2020.10.28.08.16.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 08:16:30 -0700 (PDT)
+Received: (nullmailer pid 4041362 invoked by uid 1000);
+        Wed, 28 Oct 2020 15:16:29 -0000
+Date:   Wed, 28 Oct 2020 10:16:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v6 03/52] dt-bindings: memory: tegra20: emc: Correct
+ registers range in example
+Message-ID: <20201028151629.GA4041307@bogus>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-4-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5805fdd9-14e5-141c-773b-c46d2da57258@redhat.com>
+In-Reply-To: <20201025221735.3062-4-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 12:17:35PM +0100, David Hildenbrand wrote:
-> On 28.10.20 12:09, Mike Rapoport wrote:
-> > On Tue, Oct 27, 2020 at 09:46:35AM +0100, David Hildenbrand wrote:
-> > > On 27.10.20 09:38, Mike Rapoport wrote:
-> > > > On Mon, Oct 26, 2020 at 06:05:30PM +0000, Edgecombe, Rick P wrote:
-> > > > 
-> > > > > Beyond whatever you are seeing, for the latter case of new things
-> > > > > getting introduced to an interface with hidden dependencies... Another
-> > > > > edge case could be a new caller to set_memory_np() could result in
-> > > > > large NP pages. None of the callers today should cause this AFAICT, but
-> > > > > it's not great to rely on the callers to know these details.
-> > 
-> > > > A caller of set_memory_*() or set_direct_map_*() should expect a failure
-> > > > and be ready for that. So adding a WARN to safe_copy_page() is the first
-> > > > step in that direction :)
-> > > > 
-> > > 
-> > > I am probably missing something important, but why are we saving/restoring
-> > > the content of pages that were explicitly removed from the identity mapping
-> > > such that nobody will access them?
-> > 
-> > Actually, we should not be saving/restoring free pages during
-> > hibernation as there are several calls to mark_free_pages() that should
-> > exclude the free pages from the snapshot. I've tried to find why the fix
-> > that maps/unmaps a page to save it was required at the first place, but
-> > I could not find bug reports.
-> > 
-> > The closest I've got is an email from Rafael that asked to update
-> > "hibernate: handle DEBUG_PAGEALLOC" patch:
-> > 
-> > https://lore.kernel.org/linux-pm/200802200133.44098.rjw@sisk.pl/
-> > 
-> > Could it be that safe_copy_page() tries to workaround a non-existent
-> > problem?
-> > 
+On Mon, 26 Oct 2020 01:16:46 +0300, Dmitry Osipenko wrote:
+> There is superfluous zero in the registers base address and registers
+> size should be twice bigger.
 > 
-> Clould be! Also see
-> 
-> https://lkml.kernel.org/r/38de5bb0-5559-d069-0ce0-daec66ef2746@suse.cz
-> 
-> which restores free page content based on more kernel parameters, not based
-> on the original content.
-
-Ah, after looking at it now I've run kernel with DEBUG_PAGEALLOC=y and
-CONFIG_INIT_ON_FREE_DEFAULT_ON=y and restore crahsed nicely.
-
-[   27.210093] PM: Image successfully loaded
-[   27.226709] Disabling non-boot CPUs ...                                      
-[   27.231208] smpboot: CPU 1 is now offline                                    
-[   27.363926] kvm-clock: cpu 0, msr 5c889001, primary cpu clock, resume        
-[   27.363995] BUG: unable to handle page fault for address: ffff9f7a40108000   
-[   27.367996] #PF: supervisor write access in kernel mode                      
-[   27.369558] #PF: error_code(0x0002) - not-present page                       
-[   27.371098] PGD 5ca01067 P4D 5ca01067 PUD 5ca02067 PMD 5ca03067 PTE 800ffffff
-fef7060                                                                         
-[   27.373421] Oops: 0002 [#1] SMP DEBUG_PAGEALLOC PTI                          
-[   27.374905] CPU: 0 PID: 1200 Comm: bash Not tainted 5.10.0-rc1 #5            
-[   27.376700] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.14
-.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014                                 
-[   27.379879] RIP: 0010:clear_page_rep+0x7/0x10          
-[   27.381218] Code: e8 be 88 75 00 44 89 e2 48 89 ee 48 89 df e8 60 ff ff ff c6
- 03 00 5b 5d 41 5c c3 cc cc cc cc cc cc cc cc b9 00 02 00 00 31 c0 <f3> 48 ab c3
- 0f 1f 44 00 00 31 c0 b9 40 00 00 00 66 0f 1f 84 00 00                          
-[   27.386457] RSP: 0018:ffffb6838046be08 EFLAGS: 00010046                      
-[   27.388011] RAX: 0000000000000000 RBX: ffff9f7a487c0ec0 RCX: 0000000000000200
-[   27.390082] RDX: ffff9f7a4c788000 RSI: 0000000000000000 RDI: ffff9f7a40108000
-[   27.392138] RBP: ffffffff8629c860 R08: 0000000000000000 R09: 0000000000000007
-[   27.394205] R10: 0000000000000004 R11: ffffb6838046bbf8 R12: 0000000000000000
-[   27.396271] R13: ffff9f7a419a62a0 R14: 0000000000000005 R15: ffff9f7a484f4da0
-[   27.398334] FS:  00007fe0c3f6a700(0000) GS:ffff9f7abf800000(0000) knlGS:0000000000000000                                                                     
-[   27.400717] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                
-[   27.402432] CR2: ffff9f7a40108000 CR3: 000000000859a001 CR4: 0000000000060ef0
-[   27.404485] Call Trace:                                                      
-[   27.405326]  clear_free_pages+0xf5/0x150                                     
-[   27.406568]  hibernation_snapshot+0x390/0x3d0                                
-[   27.407908]  hibernate+0xdb/0x240                                            
-[   27.408978]  state_store+0xd7/0xe0                                           
-[   27.410078]  kernfs_fop_write+0x10e/0x1a0                                    
-[   27.411333]  vfs_write+0xbb/0x210                                            
-[   27.412423]  ksys_write+0x9c/0xd0                      
-[   27.413488]  do_syscall_64+0x33/0x40                                         
-[   27.414636]  entry_SYSCALL_64_after_hwframe+0x44/0xa9                        
-[   27.416150] RIP: 0033:0x7fe0c364e380                                         
- 66 0f 1f 44 00 00 83 3d c9 23 2d 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0
- ff ff 73 31 c3 48 83 ec 08 e8 fe dd 01 00 48 89 04 24
-[   27.422500] RSP: 002b:00007ffeb64bd0c8 EFLAGS: 00000246 ORIG_RAX: 00000000000
-00001
-[   27.424724] RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007fe0c364e380
-[   27.426761] RDX: 0000000000000005 RSI: 0000000001eb6408 RDI: 0000000000000001
-[   27.428791] RBP: 0000000001eb6408 R08: 00007fe0c391d780 R09: 00007fe0c3f6a700
-[   27.430863] R10: 0000000000000004 R11: 0000000000000246 R12: 0000000000000005
-[   27.432920] R13: 0000000000000001 R14: 00007fe0c391c620 R15: 0000000000000000
-[   27.434989] Modules linked in:
-[   27.436004] CR2: ffff9f7a40108000
-[   27.437075] ---[ end trace 424c466bcd2bfcad ]---
-
-
-
-> -- 
-> Thanks,
-> 
-> David / dhildenb
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../bindings/memory-controllers/nvidia,tegra20-emc.txt          | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
--- 
-Sincerely yours,
-Mike.
+Acked-by: Rob Herring <robh@kernel.org>
