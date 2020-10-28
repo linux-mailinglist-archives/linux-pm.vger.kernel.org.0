@@ -2,175 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD4929DFCB
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 02:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA28429E123
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 02:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731326AbgJ2BE3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 21:04:29 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40036 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729465AbgJ1WGQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:06:16 -0400
-Received: by mail-oi1-f196.google.com with SMTP id m128so1173923oig.7;
-        Wed, 28 Oct 2020 15:06:15 -0700 (PDT)
+        id S1728860AbgJ2Bxq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 21:53:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20308 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728684AbgJ1V5Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:57:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603922242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7H6fn0sflmDKqkVqjVyUYl4il+uaeJMTU2fENiZAfKY=;
+        b=IlxD5ZvqfCZoDxG9JOCWsutMIdqX+kmawcmefVRWlopzX12/hJ78op/prNT3vZY5pIyX+5
+        tky7C/SbEdEBuUy3MbTcdqdV7+voJK3eetmSEPHfvAAbpRlPr2dJm9JXJNKUVL6eprbkdb
+        DnrzHXDpTOVCc/qk0sEQcvU10y8QHcc=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-170-CyUJpHcqM9e7ODdPglUyww-1; Wed, 28 Oct 2020 07:54:44 -0400
+X-MC-Unique: CyUJpHcqM9e7ODdPglUyww-1
+Received: by mail-ej1-f70.google.com with SMTP id p18so2060004ejl.14
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 04:54:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C6fODSQ4vr9/XMdY27bSNaiMwe4c2CZ3zY9crW4kgXQ=;
-        b=giofxv4nCdl9rEPf+VGNNkX/x9gpPIykurn5Pf4IcN2WjrYVxfn1KX65CLar3kDq+l
-         JVFeh1R9YyeWGlOLnqrB3FvqSytHgt4Hy5QWPVg7Y0lOSOD7xpyTo3818mnuwV+aqExj
-         CStrD/ZQGl6A/ZIhJKEmkKEfVfFSc/ahn5CXXgGGoBwgYIaxYMWYD4XxUH/K7D0sxPcF
-         tfUNMRc+xYB04T7Te2JnbDxCLmMM1aqEsruUTWvHe3Yn2GW9Vbf+25FAIZmmwlBFISdj
-         sHOgAnLHK2DUT9T0Z+VUjFim/5G+HHGGU4V6pvqoUJFQ+NuELBJGnpC00JfxqGk2jf2T
-         LyXQ==
-X-Gm-Message-State: AOAM530DQLZc5aVEDcKQhDgmX6hqUlTxwtxQuH2EKEROsAxjOOwU/BFK
-        fTSaXS9+Q75pOYRLB6EofCstx1bRqQ==
-X-Google-Smtp-Source: ABdhPJzrQ/sPPiQh1XWKgR+EAUUZ9HS2ocEuKqdVfGw3aS3RICzkEg8FJnv6OaOSMDEQcXRlXFSJlA==
-X-Received: by 2002:a05:6808:198:: with SMTP id w24mr5539933oic.69.1603898917913;
-        Wed, 28 Oct 2020 08:28:37 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s20sm307873oof.39.2020.10.28.08.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 08:28:37 -0700 (PDT)
-Received: (nullmailer pid 4057539 invoked by uid 1000);
-        Wed, 28 Oct 2020 15:28:35 -0000
-Date:   Wed, 28 Oct 2020 10:28:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 08/52] dt-bindings: memory: tegra20: emc: Document
- mfd-simple compatible and statistics sub-device
-Message-ID: <20201028152835.GB4051913@bogus>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-9-digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7H6fn0sflmDKqkVqjVyUYl4il+uaeJMTU2fENiZAfKY=;
+        b=UZNuWuLdHzyLGqz3SXvLagysjSxuiG+WIvpxrlpRe7UFZZAoIeEeVJGiU2WjWLF2+c
+         pacz/kBr4hFWBL3D9zTtQKZFpKJJoIbYEAeJdPEpwDT6CjC8+kpVGT9RSTqUqYPuOFhf
+         AEzSH46UVi4P4awPaxLNqsRqo+4rGUSRtAaQtRNvDqU6q1/FXUUPQqLxJg8qRtT95LSH
+         yBb9GzlwdpgRE5gKyQ44nkY1kWAKIh0SyWGMIblqtRNjBIhwmCwEAMSTj95XMW90ERjH
+         E6dnyRZhFX1idjT+3jn6I+pLgOInqGQzRbwPyAvBV3CYrHs81Zqvw73RA6KwDKfcu5EQ
+         sIiw==
+X-Gm-Message-State: AOAM530eWVyrUHhyt4/h2UVBFfAXE1rHn6OLaMnjnar23txC9WV0HNB3
+        kGXA1m9/ErLml41GruTjJOpWUD8Pu/ujcL04iWwzxSqIHB8ql2bXSGzBPeBxOfC3M4X1/rx0pLJ
+        hkGjdiGPiQVBzLwJtHVU=
+X-Received: by 2002:a17:906:3290:: with SMTP id 16mr7055822ejw.308.1603886082962;
+        Wed, 28 Oct 2020 04:54:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyki7zPz1WgRhVvswcqc8DYrUa2nHa46FuIilVQLasUTTavgZEBiFJ8BDY2RERDV8wGBbiebg==
+X-Received: by 2002:a17:906:3290:: with SMTP id 16mr7055799ejw.308.1603886082717;
+        Wed, 28 Oct 2020 04:54:42 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
+        by smtp.gmail.com with ESMTPSA id r3sm2768715edw.42.2020.10.28.04.54.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Oct 2020 04:54:42 -0700 (PDT)
+Subject: Re: [PATCH] Documentation: Add documentation for new platform_profile
+ sysfs attribute
+To:     Mark Pearson <markpearson@lenovo.com>
+Cc:     dvhart@infradead.org, mgross@linux.intel.com,
+        mario.limonciello@dell.com, eliadevito@gmail.com,
+        hadess@hadess.net, bberg@redhat.com, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <markpearson@lenovo.com>
+ <20201027164219.868839-1-markpearson@lenovo.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <8749d17c-4d0b-5c29-a8c9-4a6704b422d6@redhat.com>
+Date:   Wed, 28 Oct 2020 12:54:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-9-digetx@gmail.com>
+In-Reply-To: <20201027164219.868839-1-markpearson@lenovo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 01:16:51AM +0300, Dmitry Osipenko wrote:
-> External Memory Controller can gather various hardware statistics that
-> are intended to be used for debugging purposes and for dynamic frequency
-> scaling of memory bus.
+Hi,
+
+A few minor nitpicks below, mostly stuff which I missed before, sorry.
+
+I suggest you make v2 part of the series where you actually add the
+drivers/acpi/... and the thinkpad_acpi.c bits to implement this.
+
+On 10/27/20 5:42 PM, Mark Pearson wrote:
+> From: Hans de Goede <hdegoede@redhat.com>
 > 
-> Document the new mfd-simple compatible and EMC statistics sub-device.
+> On modern systems the platform performance, temperature, fan and other
+> hardware related characteristics are often dynamically configurable. The
+> profile is often automatically adjusted to the load by somei
 
-It's simple-mfd.
+s/somei/some/
 
-That should only be used if the child has no dependencies on the parent 
-node (and driver).
-
-> The subdev contains EMC DFS OPP table and interconnect paths to be used
-> for dynamic scaling of system's memory bandwidth based on EMC utilization
-> statistics.
+> automatic-mechanism (which may very well live outside the kernel).
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> These auto platform-adjustment mechanisms often can be configured with
+> one of several 'platform-profiles', with either a bias towards low-power
+> consumption or towards performance (and higher power consumption and
+> thermals).
+
+I think it is better to also drop the " (and higher power consumption and
+thermals)" bit here (and below) like you did for the cool and quiet parts.
+
+Regards,
+
+Hans
+
+> Introduce a new platform_profile sysfs API which offers a generic API for
+> selecting the performance-profile of these automatic-mechanisms.
+> 
+> Co-developed-by: Mark Pearson <markpearson@lenovo.com>
+> Signed-off-by: Mark Pearson <markpearson@lenovo.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  .../memory-controllers/nvidia,tegra20-emc.txt | 43 +++++++++++++++++--
->  1 file changed, 40 insertions(+), 3 deletions(-)
+> Changes in V1:
+>  - Moved from RFC to proposed patch
+>  - Added cool profile as requested
+>  - removed extra-profiles as no longer relevant
 > 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-> index 8d09b228ac42..382aabcd6952 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
-> @@ -4,7 +4,7 @@ Properties:
->  - name : Should be emc
->  - #address-cells : Should be 1
->  - #size-cells : Should be 0
-> -- compatible : Should contain "nvidia,tegra20-emc".
-> +- compatible : Should contain "nvidia,tegra20-emc" and "simple-mfd".
->  - reg : Offset and length of the register set for the device
->  - nvidia,use-ram-code : If present, the sub-nodes will be addressed
->    and chosen using the ramcode board selector. If omitted, only one
-> @@ -17,7 +17,8 @@ Properties:
->  - core-supply: Phandle of voltage regulator of the SoC "core" power domain.
->  - operating-points-v2: See ../bindings/opp/opp.txt for details.
->  
-> -Child device nodes describe the memory settings for different configurations and clock rates.
-> +Child device nodes describe the memory settings for different configurations and clock rates,
-> +as well as EMC activity statistics collection sub-device.
->  
->  Example:
->  
-> @@ -31,17 +32,34 @@ Example:
->  		...
->  	};
->  
-> +	emc_bw_dfs_opp_table: emc_opp_table1 {
-> +		compatible = "operating-points-v2";
-> +
-> +		opp@36000000 {
-> +			opp-hz = /bits/ 64 <36000000>;
-> +			opp-peak-kBps = <144000>;
-> +		};
-> +		...
-> +	};
-> +
->  	memory-controller@7000f400 {
->  		#address-cells = < 1 >;
->  		#size-cells = < 0 >;
->  		#interconnect-cells = < 0 >;
-> -		compatible = "nvidia,tegra20-emc";
-> +		compatible = "nvidia,tegra20-emc", "simple-mfd";
->  		reg = <0x7000f400 0x400>;
->  		interrupts = <0 78 0x04>;
->  		clocks = <&tegra_car TEGRA20_CLK_EMC>;
->  		nvidia,memory-controller = <&mc>;
->  		core-supply = <&core_vdd_reg>;
->  		operating-points-v2 = <&emc_icc_dvfs_opp_table>;
-> +
-> +		emc-stats {
-> +			compatible = "nvidia,tegra20-emc-statistics";
-> +			operating-points-v2 = <&emc_bw_dfs_opp_table>;
-> +			interconnects = <&mc TEGRA20_MC_MPCORER &emc>;
-> +			interconnect-names = "cpu";
-> +		};
->  	}
->  
->  
-> @@ -120,3 +138,22 @@ Properties:
->  						 0 0 0 0 0 0 0 0 0 0 0 0 0 0
->  						 0 0 0 0 >;
->  		};
-> +
-> +
-> +
-> +Embedded Memory Controller statistics gathering sub-device
-> +
-> +EMC statistics subdev gathers information about hardware utilization
-> +which is intended to be used for debugging purposes and for dynamic
-> +frequency scaling based on the collected stats.
-> +
-> +Properties:
-> +- name : Should be emc-stats.
-> +- compatible : Should contain "nvidia,tegra20-emc-statistics".
-> +- operating-points-v2: See ../bindings/opp/opp.txt for details.
-> +- interconnects: Should contain entries for memory clients sitting on
-> +                 MC->EMC memory interconnect path.
-> +- interconnect-names: Should include name of the interconnect path for each
-> +                      interconnect entry. Consult TRM documentation for
-> +                      information about available memory clients, see MEMORY
-> +                      CONTROLLER section.
-> -- 
-> 2.27.0
+>  .../ABI/testing/sysfs-platform_profile        | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-platform_profile
 > 
+> diff --git a/Documentation/ABI/testing/sysfs-platform_profile b/Documentation/ABI/testing/sysfs-platform_profile
+> new file mode 100644
+> index 000000000000..240bd3d7532b
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-platform_profile
+> @@ -0,0 +1,66 @@
+> +Platform-profile selection (e.g. /sys/firmware/acpi/platform_profile)
+> +
+> +On modern systems the platform performance, temperature, fan and other
+> +hardware related characteristics are often dynamically configurable. The
+> +profile is often automatically adjusted to the load by some
+> +automatic-mechanism (which may very well live outside the kernel).
+> +
+> +These auto platform-adjustment mechanisms often can be configured with
+> +one of several 'platform-profiles', with either a bias towards low-power
+> +consumption or towards performance (and higher power consumption and
+> +thermals).
+> +
+> +The purpose of the platform_profile attribute is to offer a generic sysfs
+> +API for selecting the platform-profile of these automatic-mechanisms.
+> +
+> +Note that this API is only for selecting the platform-profile, it is
+> +NOT a goal of this API to allow monitoring the resulting performance
+> +characteristics. Monitoring performance is best done with device/vendor
+> +specific tools such as e.g. turbostat.
+> +
+> +Specifically when selecting a high-performance profile the actual achieved
+> +performance may be limited by various factors such as: the heat generated
+> +by other components, room temperature, free air flow at the bottom of a
+> +laptop, etc. It is explicitly NOT a goal of this API to let userspace know
+> +about any sub-optimal conditions which are impeding reaching the requested
+> +performance level.
+> +
+> +Since numbers are a rather meaningless way to describe platform-profiles
+> +this API uses strings to describe the various profiles. To make sure that
+> +userspace gets a consistent experience when using this API this API
+> +document defines a fixed set of profile-names. Drivers *must* map their
+> +internal profile representation/names onto this fixed set.
+> +
+> +If for some reason there is no good match when mapping then a new profile-name
+> +may be added. Drivers which wish to introduce new profile-names must:
+> +1. Have very good reasons to do so.
+> +2. Add the new profile-name to this document, so that future drivers which also
+> +   have a similar problem can use the same name.
+> +
+> +What:		/sys/firmware/acpi/platform_profile_choices
+> +Date:		October 2020
+> +Contact:	Hans de Goede <hdegoede@redhat.com>
+> +Description:
+> +		Reading this file gives a space separated list of profiles
+> +		supported for this device.
+> +
+> +		Drivers must use the following standard profile-names:
+> +
+> +		low-power:		Emphasises low power consumption
+> +		cool:			Emphasises cooler operation
+> +		quiet:			Emphasises quieter operation
+> +		balanced:		Balance between low power consumption
+> +					and performance
+> +		performance:		Emphasises performance (and may lead to
+> +					higher temperatures and fan speeds)
+> +
+> +		Userspace may expect drivers to offer at least several of these
+> +		standard profile-names.
+> +
+> +What:		/sys/firmware/acpi/platform_profile
+> +Date:		October 2020
+> +Contact:	Hans de Goede <hdegoede@redhat.com>
+> +Description:
+> +		Reading this file gives the current selected profile for this
+> +		device. Writing this file with one of the strings from
+> +		available_profiles changes the profile to the new value.
+> 
+
