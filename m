@@ -2,174 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2566029D3CE
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 22:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580A029D3DC
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 22:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727559AbgJ1Vq7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 17:46:59 -0400
-Received: from mga12.intel.com ([192.55.52.136]:56070 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727591AbgJ1Vqw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:46:52 -0400
-IronPort-SDR: RFMmhQ9BjrL5rOFJsf/SR8bw/8O3wayXr14ITFTtXOAiiM3nQI3nk2I5oiTRpsbP9ImsNy1Yek
- s3RWdfRr1r9w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9788"; a="147621066"
-X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
-   d="scan'208";a="147621066"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2020 14:15:41 -0700
-IronPort-SDR: gtxxgM7N+xzhVMbZb4ZlUx7yJyo24qrJipNYJQTRA2Wvm5a7usoSj1q3M2YWM3r9xQ5lKbqV1q
- 4vhc2nYCdbAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
-   d="scan'208";a="350743016"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga008.jf.intel.com with ESMTP; 28 Oct 2020 14:15:41 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 28 Oct 2020 14:15:41 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Wed, 28 Oct 2020 14:15:41 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Wed, 28 Oct 2020 14:15:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=naKT6xdjpEwEJA3sxk3yHS0jrS9werBjDLEOe3dU8mUC+vFdYW2+azxUrriFxqyFbMMpYlha98nRyv4CMac2gjywvxFJ7WTLbXKtkUjf4IvrtnBptnSxJjOn49/uLngChecGNdhZs8shVSXOAwy0XvfN6NYOftHFlXAZKCjtnZvI//0v0LJCKpY2I7VfefAL/1y9RGWz19Jtqokokp509riHdJ8mBPblHTFq4zAhL7+p/DLy/QoeX3L8zYj8oBggCzO/W53nyFJS57I2pCD1ONeAqnjRNn89tAUO+9tErdImFsnVRIB4nBU5nWpyLF62YCVJusTv9sEQrNKjKJTsjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rjndY2lYTfTdjTw8DdB0/klY+dGykydX7sBoy2Bru9A=;
- b=mqg2fID2oqgNaHfgwliDfSnrTnVq6p1eCrhfHEi81Lut2tfzgBPy8m5o62uu3httxWZiOGoGaIZXyycvgeHHX4L4G75hbn5hpxaalwzRMs5lNO7Xjc9gcshDsKmRITlL1h0O/oOBj/AFolM5nTkgFt6EGTDKkwL11EEwC5PxM88dvq1f25VqfamXhfl5LR14K3wyD0mGqW84JIhXnRcDZk7CQODi/jTYiMasf3mFaWJyRPeXGnCsbmcrhBOgYWyT0isKCDN1Br8mCiB+dOmI5tkd7SQ2viPFkr0LJIsK/QslxnRXorUforv8AyxIO3ddygCr4TUK5hmZpxs3LqcBNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rjndY2lYTfTdjTw8DdB0/klY+dGykydX7sBoy2Bru9A=;
- b=RldddwmxQygxC52mi5QuDfOFMM7cUNsr2HVeBQFjPIzBtZgtCDaIP6gWal9RdEnw1mal8aJzD7ZBPSymSizi7yMoIQ9bezdz1nin6Gl+E8/okLm5AJ/U3B03pOigbpAX+RmHS36romkY3WVvfLV6fFBwOXEn3V6ZhNt4N7oa0SA=
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17)
- by SN6PR11MB3280.namprd11.prod.outlook.com (2603:10b6:805:bb::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.20; Wed, 28 Oct
- 2020 21:15:38 +0000
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::b901:8e07:4340:6704]) by SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::b901:8e07:4340:6704%7]) with mapi id 15.20.3477.028; Wed, 28 Oct 2020
- 21:15:38 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "rppt@kernel.org" <rppt@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC:     "david@redhat.com" <david@redhat.com>,
-        "cl@linux.com" <cl@linux.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
-Subject: Re: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages in
- the direct map
-Thread-Topic: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages
- in the direct map
-Thread-Index: AQHWqrf6LRJhAvsqzE2DP+hB1ynbOKmtiYWA
-Date:   Wed, 28 Oct 2020 21:15:38 +0000
-Message-ID: <3b4b2b3559bd3dc68adcddf99415bae57152cb6b.camel@intel.com>
-References: <20201025101555.3057-1-rppt@kernel.org>
-         <20201025101555.3057-3-rppt@kernel.org>
-In-Reply-To: <20201025101555.3057-3-rppt@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.30.1 (3.30.1-1.fc29) 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
-x-originating-ip: [134.134.137.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 96bb975e-2509-469a-dcd9-08d87b869e7b
-x-ms-traffictypediagnostic: SN6PR11MB3280:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN6PR11MB3280D14DB862EF38BB86EEE1C9170@SN6PR11MB3280.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vxRQYMBT+wNP4IwGhgFILe3n5aZvgwKXdHnC7hfcwzY8hJXisEz+U5TZFRNLFQ5hFr9aLfk80cB+ty+6N0dakPJuEpFLHF+ezpLDwP6Cf4hI2PTyqpTwGISUZ2imwUOFuhPpakvV0WSxqwxuOfs0alovc4YsAxrT86pumb7jqb4fXODlWF88U2QBhB6tJ+4lVaPG3AZ5dTMtc6wz/Sr8YPNyLBWrCltG7HOctONX1fIDU3XUcyIjSy4QIWt5pg6ZCfRoPqlsHLAfHnrRrxb1H3lU3/mbLJqfho5eoKsQKBLBWpwGFvmYaP7AtVgy0Goc9RmOR5AGCHs7z9NahW9s+Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3184.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(396003)(136003)(366004)(346002)(76116006)(7406005)(91956017)(36756003)(7416002)(6506007)(6486002)(83380400001)(86362001)(2616005)(2906002)(4001150100001)(186003)(6512007)(71200400001)(64756008)(4326008)(54906003)(8936002)(316002)(4744005)(66556008)(66476007)(5660300002)(8676002)(26005)(478600001)(66446008)(110136005)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: kCUbV3gAcUCX1YObZMPYByBb1wLvIhoX2RnJI4Gonw08TfaKjAueXfxIFAO6CdPfQpjxec47NMZYQ4zS4gXYOuU36yNPPfmOskmsD+GTVjr9xuGDXQ0uoAw26Arb3hK4ftZBYOaKs//PFQv16tXSGkYjr7wna4ZMXwwoLCxnNMr/2zHi/guO/Bnhw620P7JQP4B435O6g0G9rhAket7WSYjKVCjkcfQgB4KeTGSUCYP+K5/GxwWJO0/+fsw1jATb1c107ZgyGD2IO0WyN/+Xi0DsY/11iv3g3yNdJCTEVvTjh2LE0izTR1/ynV4LGGemVTBLvmHh6G8BYx8DN4J9B4zLk2BZrzOfpD5Ah/4iRNgbx/akVy/LBIH7IcRQA4gSaU2tM/d7sXFKLsnbV0c4HNsukSjrwwlnUs//iQ7TjKhhvCnHgD8b0xoTrSff/TrYAgEdwp5FtunLhvH8Llx0n//0fxVogmh2MbY/fj/SS2lsfiAKNgj4eWzaduZNaYktad8GT/wwamS8UC5UEC2hcXFK4KCjMSVkJRh9igsvfdVR87e3dVk8gph3s7ZZF41RJVxyplHXlM32dwcuXq3Xh90S3x/Mip9QcxA8riMxAVdF1xrx6chpXhn4U/erdk7TXHA3hwkI6Ui8PpSiwpSUiw==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CAF0959967EBF445A06BE79466629D75@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727694AbgJ1Vr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 17:47:26 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:44178 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727690AbgJ1VrY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:47:24 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09SLlENC060082;
+        Wed, 28 Oct 2020 16:47:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1603921634;
+        bh=h/7TUYm8pFIf/Hkg1xDYYuruG/43UdD7rQyzE5uDz/A=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=aLtikgMJOgSPhqZxbEHAf+kYRnkEu7pygc+1fCOpenlJBmN2tgMVFbEqbhcCQ4tpn
+         Fr/rdbL/7Uv08tuHOIIenom/F3fpSlSGXl4mMiz5p6BbG/c/mnFGGOIkxwEltYT4E3
+         Vy9Ie6vXSsWSK/4J6w6P5nTPTPZdEQl1W0UySJV4=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09SLlEvE124545
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 28 Oct 2020 16:47:14 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 28
+ Oct 2020 16:47:13 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 28 Oct 2020 16:47:14 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09SLlD3k115294;
+        Wed, 28 Oct 2020 16:47:13 -0500
+Date:   Wed, 28 Oct 2020 16:47:13 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vireshk@kernel.org>,
+        <robh+dt@kernel.org>, <sboyd@kernel.org>, <rafael@kernel.org>,
+        <sudeep.holla@arm.com>, <daniel.lezcano@linaro.org>,
+        <Dietmar.Eggemann@arm.com>
+Subject: Re: [PATCH 1/4] dt-bindings: opp: Introduce opp-sustainable bindings
+Message-ID: <20201028214713.zttk47qtua5jhieo@pureness>
+References: <20201028140847.1018-1-lukasz.luba@arm.com>
+ <20201028140847.1018-2-lukasz.luba@arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3184.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96bb975e-2509-469a-dcd9-08d87b869e7b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 21:15:38.6557
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /9aQoHtg1DLalfWBo37yiD5QdwvCp27cYz444ezwEcRbr4c9AbdANp7KtHAQUhEheH7ZO6hcQGXjo+702UBz/jUmQRaMObIf6tnKcryR3ME=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3280
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20201028140847.1018-2-lukasz.luba@arm.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gU3VuLCAyMDIwLTEwLTI1IGF0IDEyOjE1ICswMjAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
-PiArICAgICAgIGlmIChJU19FTkFCTEVEKENPTkZJR19BUkNIX0hBU19TRVRfRElSRUNUX01BUCkp
-IHsNCj4gKyAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcgYWRkciA9ICh1bnNpZ25lZA0KPiBs
-b25nKXBhZ2VfYWRkcmVzcyhwYWdlKTsNCj4gKyAgICAgICAgICAgICAgIGludCByZXQ7DQo+ICsN
-Cj4gKyAgICAgICAgICAgICAgIGlmIChlbmFibGUpDQo+ICsgICAgICAgICAgICAgICAgICAgICAg
-IHJldCA9IHNldF9kaXJlY3RfbWFwX2RlZmF1bHRfbm9mbHVzaChwYWdlKTsNCj4gKyAgICAgICAg
-ICAgICAgIGVsc2UNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gc2V0X2RpcmVjdF9t
-YXBfaW52YWxpZF9ub2ZsdXNoKHBhZ2UpOw0KPiArDQo+ICsgICAgICAgICAgICAgICBpZiAoV0FS
-Tl9PTihyZXQpKQ0KPiArICAgICAgICAgICAgICAgICAgICAgICByZXR1cm47DQo+ICsNCj4gKyAg
-ICAgICAgICAgICAgIGZsdXNoX3RsYl9rZXJuZWxfcmFuZ2UoYWRkciwgYWRkciArIFBBR0VfU0la
-RSk7DQo+ICsgICAgICAgfSBlbHNlIHsNCj4gKyAgICAgICAgICAgICAgIGRlYnVnX3BhZ2VhbGxv
-Y19tYXBfcGFnZXMocGFnZSwgMSwgZW5hYmxlKTsNCj4gKyAgICAgICB9DQoNCkxvb2tpbmcgYXQg
-dGhlIGFybSBzaWRlIGFnYWluLCBJIHRoaW5rIHRoaXMgbWlnaHQgYWN0dWFsbHkgaW50cm9kdWNl
-IGENCnJlZ3Jlc3Npb24gZm9yIHRoZSBhcm0vaGliZXJuYXRlL0RFQlVHX1BBR0VBTExPQyBjb21i
-by4NCg0KVW5saWtlIF9fa2VybmVsX21hcF9wYWdlcygpLCBpdCBsb29rcyBsaWtlIGFybSdzIGNw
-YSB3aWxsIGFsd2F5cyBiYWlsDQppbiB0aGUgc2V0X2RpcmVjdF9tYXBfKCkgZnVuY3Rpb25zIGlm
-IHJvZGF0YV9mdWxsIGlzIGZhbHNlLiBTbyBpZg0Kcm9kYXRhX2Z1bGwgd2FzIGRpc2FibGVkIGJ1
-dCBkZWJ1ZyBwYWdlIGFsbG9jIGlzIG9uLCB0aGVuIHRoaXMgd291bGQNCm5vdyBza2lwIHJlbWFw
-cGluZyB0aGUgcGFnZXMuIEkgZ3Vlc3MgdGhlIHNpZ25pZmljYW5jZSBkZXBlbmRzIG9uDQp3aGV0
-aGVyIGhpYmVybmF0ZSBjb3VsZCBhY3R1YWxseSB0cnkgdG8gc2F2ZSBhbnkgREVCVUdfUEFHRUFM
-TE9DDQp1bm1hcHBlZCBwYWdlcy4gTG9va3MgbGlrZSBpdCB0byBtZSB0aG91Z2guDQoNCg==
+On 14:08-20201028, Lukasz Luba wrote:
+> Add opp-sustainable as an additional property in the OPP node to describe
+> the sustainable performance level of the device. This will help to
+> estimate the sustainable performance of the whole system.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  Documentation/devicetree/bindings/opp/opp.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
+> index 9847dfeeffcb..cd01028de305 100644
+> --- a/Documentation/devicetree/bindings/opp/opp.txt
+> +++ b/Documentation/devicetree/bindings/opp/opp.txt
+> @@ -154,6 +154,10 @@ Optional properties:
+>  - opp-suspend: Marks the OPP to be used during device suspend. If multiple OPPs
+>    in the table have this, the OPP with highest opp-hz will be used.
+>  
+> +- opp-sustainable: Marks the OPP as sustainable. This property can be used for
+> +  estimating sustainable performance of the whole system. If multiple OPPs in
+> +  the table have this, the OPP with highest opp-hz will be used.
+
+
+By "sustainable", do you mean sustainable across Process, Voltage and
+Temperature corners upto the max rated operational Power-ON hours
+without IDLE state being achieved on the processor?
+
+OR do you mean to leave it up to interpretation?
+> +
+>  - opp-supported-hw: This property allows a platform to enable only a subset of
+>    the OPPs from the larger set present in the OPP table, based on the current
+>    version of the hardware (already known to the operating system).
+> -- 
+> 2.17.1
+> 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
