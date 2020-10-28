@@ -2,92 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 380B229DABD
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 00:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C41BF29D9DC
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 00:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390440AbgJ1X3E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 19:29:04 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:38212 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390456AbgJ1X27 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 19:28:59 -0400
-Received: by mail-oi1-f196.google.com with SMTP id 9so1386093oir.5;
-        Wed, 28 Oct 2020 16:28:58 -0700 (PDT)
+        id S2390111AbgJ1XE0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 19:04:26 -0400
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:39777 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732874AbgJ1XD6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 19:03:58 -0400
+Received: by mail-yb1-f196.google.com with SMTP id 67so580086ybt.6;
+        Wed, 28 Oct 2020 16:03:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=po6rWvf724844GvfQdAQJ9iq1eJb6p+ZDm6wv8whpKk=;
-        b=E5xxqK6y7A79J3A2gp3w3+vTOfQiOMxi6t5bTg7TpDNMz7tnwQw9NDm5ocCy8R9Qon
-         dVbxELWxqe0cs3lWe84efB6XhBt186vQeUul0ze6wwqW0AUGqprrSMJmcGIIdk3y1/R7
-         hn/NdDx/dQ7c3Cx+y0ayvqK1vMqTNIVRXf0NKTNDZafSGBzFfuHO4jGv8fs6VnfV/U5U
-         gC2tAzWHQpqxfp5xwGyVOHPgvXWTkkj8DuZVEDe/LrfOYsgWk+JDV4AvG+AKtYFPRmwk
-         yKwMKipu3dSf8O2M5ozM+Dtapg+CJ6BtxfL9qs+z8pczZiDmOzKMo9QM/6EdTYHlFwjU
-         sZOA==
-X-Gm-Message-State: AOAM531sm5KZhZpkpivhBe26LFj6sI3V0Yz7yT01b9aZ6LH3kjB77wst
-        J7/wTD9QFr3IdIyKApxtCO0ocRDXZQ==
-X-Google-Smtp-Source: ABdhPJyEh7pfMoCDgab0DcqZOZs2B3jYAs6qTKZm/Uw5JJr14+poImxFufG/tuafS8zONyupbh4GOQ==
-X-Received: by 2002:a05:6808:4d3:: with SMTP id a19mr5186027oie.10.1603896170982;
-        Wed, 28 Oct 2020 07:42:50 -0700 (PDT)
+        bh=d2bISq6eLdcKMjNlJcKgIH+JW7IlvZPJABIB1hmk538=;
+        b=Rr+N2aWWFilsMpaK/q/YSaQ0VLQ4L9nAcxY/2dhS8sq455eRRFs1Z/GvsAjN1/Jn1w
+         burA/5KTg7SOl074bw8Y1uv/hD+La0PFrwh+6QDnNaYSQsTVP+vz5XcdptPyxHODQO7l
+         44OrbOfqBPLg7I2gRKkcKoXYDf+FKLLqkAEOibbpRthtWNHdqGhrVVYB2N8aqHf1jGcD
+         4JvhG+KXWl9cTGK6e+NJq4fLHq26N508LW7l5anNJse5g1e36qVnfC5gPSbZTCDfZmAr
+         vPgvFQOQvxm1kdPcaabcVZVv4VCoXo7HFHPNYv4Cve1y4Lrm4JXrp8rJi8XO6EoKc39o
+         J5pg==
+X-Gm-Message-State: AOAM533IjHbJkoIFNDugzmE4Pv0USREtzbPOW+pdJzfElIbOSsVC5NAA
+        H3ezkLIqjjQug2F5EuCJZ8DpI+pylw==
+X-Google-Smtp-Source: ABdhPJxePufEKBxPy5ldMaGUPclbtmQjjTrYKwN9UnqPeafBvzPio38FSAsVM02kNVp5/lFXZ+YOiw==
+X-Received: by 2002:a9d:6aca:: with SMTP id m10mr5654973otq.282.1603899015746;
+        Wed, 28 Oct 2020 08:30:15 -0700 (PDT)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 61sm2196489otc.9.2020.10.28.07.42.50
+        by smtp.gmail.com with ESMTPSA id x14sm2656085ooo.43.2020.10.28.08.30.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 07:42:50 -0700 (PDT)
-Received: (nullmailer pid 3992502 invoked by uid 1000);
-        Wed, 28 Oct 2020 14:42:49 -0000
-Date:   Wed, 28 Oct 2020 09:42:49 -0500
+        Wed, 28 Oct 2020 08:30:14 -0700 (PDT)
+Received: (nullmailer pid 4059892 invoked by uid 1000);
+        Wed, 28 Oct 2020 15:30:13 -0000
+Date:   Wed, 28 Oct 2020 10:30:13 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: power/supply: Add ltc4162-l-charger
-Message-ID: <20201028144249.GA3992062@bogus>
-References: <20201027070938.10157-1-mike.looijmans@topic.nl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        dri-devel@lists.freedesktop.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        linux-tegra@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>
+Subject: Re: [PATCH v6 14/52] dt-bindings: memory: tegra124: emc: Document
+ OPP table and voltage regulator
+Message-ID: <20201028153013.GA4059862@bogus>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-15-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201027070938.10157-1-mike.looijmans@topic.nl>
+In-Reply-To: <20201025221735.3062-15-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 27 Oct 2020 08:09:38 +0100, Mike Looijmans wrote:
-> Add support for the LTC4162-L Li-Ion battery charger. The driver allows
-> reading back telemetry and to set some charging options like the input
-> current limit.
+On Mon, 26 Oct 2020 01:16:57 +0300, Dmitry Osipenko wrote:
+> Document new OPP table and voltage regulator properties which are needed
+> for supporting dynamic voltage-frequency scaling of the memory controller.
+> Some boards may have a fixed core voltage regulator, hence it's optional
+> because frequency scaling still may be desired.
 > 
-> This adds the devicetree bindings.
-> 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
-> v2: Use microohms, add lltc,cell-count
-> 
->  .../bindings/power/supply/ltc4162-l.yaml      | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+>  .../memory-controllers/nvidia,tegra124-emc.yaml       | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/ltc4162-l.example.dt.yaml: battery-charger@68: 'lltc,rsnsb', 'lltc,rsnsi' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-
-
-See https://patchwork.ozlabs.org/patch/1388291
-
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Reviewed-by: Rob Herring <robh@kernel.org>
