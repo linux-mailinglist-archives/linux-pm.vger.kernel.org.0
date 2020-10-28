@@ -2,236 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DD629E1C8
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 03:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F11E29E1DB
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 03:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbgJ1Vsd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 17:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727826AbgJ1Vs0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:48:26 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE758C0613D1
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 14:48:26 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id b12so291840plr.4
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 14:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=3+FSVhYlJ6B/jHAupqQ6MojArU0FUMiXORXXRXS0hw8=;
-        b=eJjtYDc6O0DJ2+9ytk4ghhFEhUJ/pgE9Wd0bVJAurqopo1skNwFk/M/cqGvKzF+ES8
-         z52uTpZms1P2pRpFmQFetMvJQZSLfr0SnzjpTHwsmLC7+Lyip6j60idhtmD+9dzobkgN
-         ItBPpw0B1BkSUu9Mx6rbrmam81ULUXM4oSOKPuB2EgV/VuxLOLHwB4owlRduAuGvy25U
-         g8TCc60mm1X/O8IERKYaYSaTEL8hO3sVMZhVxvxEKq431cL14HEYJN3UTZsxzFUsn72r
-         zAtIVI1wafTSHrKlXsEJjY+ABNAVbtpfA2cE15w/Ig3oV5CG3OJBeXRUbBiYfG/xnndk
-         mVZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=3+FSVhYlJ6B/jHAupqQ6MojArU0FUMiXORXXRXS0hw8=;
-        b=eyzV2KfIpj7h8v4AfYPdpgfCh9CV3GEhnexYMNJTxp/5T3bEYsyP5fMA8z30PJcPy5
-         FKAb7mYM2qOkuNI2B7y3kfL066R15gBQIqpwiKjApFgVfoekbtmxQf6qvredJ4VsHc70
-         avzTbFQJFj0XTx7EsfPeH2hqkLuORzFeYiEsqmizJXXhKbXUqWchKtnoMbf/lgw+NEAb
-         tv7Suzz36TJezp9/kj4O7DoAh8I7WHzX48pER6Co3bQIskcQlF/hUDCEx2sDGr4JGyRA
-         33HEXjeusgLVv6rCsiQNmKx56PyDQyvapVnlVgbRueUogUed+fptErudt22e5bEDi4/j
-         Cg+Q==
-X-Gm-Message-State: AOAM532SR2vRX1gGntMKSSyQfyMO93k+oiQb0KCze5BQAJ89QTmUsd/3
-        LTeBe4c4ckgQ148EdcKsxwn0BhZWZRGwCA==
-X-Google-Smtp-Source: ABdhPJyepq/FyxwaHlVAPJztiyOHbye8RvQ4vZOUFJ0ohMvVA1rfz7tIumePHE2zpTvbmousvLcXzA==
-X-Received: by 2002:a17:902:10a:b029:d2:6379:ab8a with SMTP id 10-20020a170902010ab02900d26379ab8amr365038plb.66.1603911381664;
-        Wed, 28 Oct 2020 11:56:21 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 38sm107425pgx.43.2020.10.28.11.56.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 11:56:20 -0700 (PDT)
-Message-ID: <5f99bed4.1c69fb81.93419.0478@mx.google.com>
-Date:   Wed, 28 Oct 2020 11:56:20 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1725907AbgJ2CEN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 22:04:13 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:37841 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727200AbgJ1Vkx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:40:53 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 83137391;
+        Wed, 28 Oct 2020 16:21:04 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 28 Oct 2020 16:21:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=tvzO3u8ximtfLtetGoZ5bDtCG8K
+        Ex2uEX5PE3riL5Qk=; b=WkQAm15t2lksX7079w98tgwTTHYXSK8s5zvDlxnWeNA
+        NZQFKvfLYHtnqKLNlxS5Dt4VxIP6SOeFchT/4lhUOFzGtX8x3YSzLZH/6lgichWb
+        xunO8bmyDP+JspqMUFpOgNUVw+tfn7Uwh//37qQu2zobVANVlY455T4+xbSQ4nz8
+        Pi+VUhVLXxhUyCzdCvfs4k+rcoXxyUEWLuSmD1J6yNKBQ21KOh0DA4NvwG/4eyej
+        gE3WGfte1f3yCUs4OjpNspOiCS0Hy8PRKJLRPhfPBABekx8KyFxOkD7mPXpt/UX5
+        gcFXBBe2uPvoQ/WU4asEBz3zZDCji6iGVU0RYeKNOtw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=tvzO3u
+        8ximtfLtetGoZ5bDtCG8KEx2uEX5PE3riL5Qk=; b=TjLzXiLb7C1bP3dFxc/hKW
+        h2PFDvJmKJYBkKhtoz+/KDkpleQKtEzRQty8zi6yfU+uqSmBthb4smnyVuMyW8oK
+        00AH3F7peSOm1vAWymoWUHnSpYS8XgrCU/h5PO+OxyEyEwUNkVHbo6eTPS53dLgq
+        dr9gw/zQCrf4TN7hDPYLa6pl8VKsvGjnYKBURx4p+Hz0ftygSRLpN5+iqsrKlMZK
+        9FttsRgoP52hTfmbUjwFhhSuBfobsLyF6zSDRgCYh7A6k8hCsOV/O5WRGtG5hDgd
+        C/MEcdaePSmpwAXibGgyiaXERxza8SEO8+QR5oMvDBOVTUiMIOWmqOgNUivKnOew
+        ==
+X-ME-Sender: <xms:r9KZX73JeYVFZ87lpHjwYA4xFkrkXjgP7RV73X4xpy2zKvPh_LNOyw>
+    <xme:r9KZX6HPTGir2nxcIHbIeUfjZYCsMaDFOIQoKrmyqSgN-4P-f1i3rYfJ4mGLt1KqH
+    1xCXxxzsZrqNzj3aw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrledvgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughrvghs
+    ucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrfgrth
+    htvghrnhepgfffveetveffudeluefhleegudektdevtedthedtgeevudffveegieejfeff
+    feeunecuffhomhgrihhnpegrtghkrdhpihhnghenucfkphepieejrdduiedtrddvudejrd
+    dvhedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
+    rghnughrvghssegrnhgrrhgriigvlhdruggv
+X-ME-Proxy: <xmx:r9KZX75lC2kG_Xjifgy_0QyjmGCIX-pD5_N9bJp3BPZHDMY3s02eiQ>
+    <xmx:r9KZXw1yTsu0i1lcW6upjw6yENe-jBC3Zeo1CUsvZ9c2dxyeZ-YDxg>
+    <xmx:r9KZX-EBHrFqjn05BnXCcD9plHeMeDFYCSnKbBgqRRtS7koUxGkQGA>
+    <xmx:sNKZXzQKWTmxqDtIOVKsD-0UBDMuS2UMhLlcmjIDge97OwnCqcoKyA>
+Received: from intern.anarazel.de (c-67-160-217-250.hsd1.ca.comcast.net [67.160.217.250])
+        by mail.messagingengine.com (Postfix) with ESMTPA id DD76B3064686;
+        Wed, 28 Oct 2020 16:21:02 -0400 (EDT)
+Date:   Wed, 28 Oct 2020 13:21:01 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Tushar Dave <tushar.n.dave@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: intel_pch_thermal: Add PCI ids for Lewisburg
+ PCH.
+Message-ID: <20201028202101.2m2jp3tfa6mh3brz@alap3.anarazel.de>
+References: <20200115184415.1726953-1-andres@anarazel.de>
+ <2a5e9df32e2df27297149a577512f6b1557de241.camel@linux.intel.com>
+ <20200116184250.qlvc3ilx2b42czqk@alap3.anarazel.de>
+ <2de70e961f24592d2d157b8586526df2eaf0ae6e.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.10-rc1-19-gd1cd1a35b7d5
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 117 runs,
- 3 regressions (v5.10-rc1-19-gd1cd1a35b7d5)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2de70e961f24592d2d157b8586526df2eaf0ae6e.camel@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 117 runs, 3 regressions (v5.10-rc1-19-gd1cd1a35b7d5)
+Hi,
 
-Regressions Summary
--------------------
+On 2020-01-16 11:41:34 -0800, Srinivas Pandruvada wrote:
+> On Thu, 2020-01-16 at 10:42 -0800, Andres Freund wrote:
+> > Hi,
+> > 
+> > On 2020-01-16 05:53:13 -0800, Srinivas Pandruvada wrote:
+> > > On Wed, 2020-01-15 at 10:44 -0800, Andres Freund wrote:
+> > > > I noticed that I couldn't read the PCH temperature on my
+> > > > workstation
+> > > > (C620 series chipset, w/ 2x Xeon Gold 5215 CPUs) directly, but
+> > > > had to
+> > > > go
+> > > > through IPMI. Looking at the data sheet, it looks to me like the
+> > > > existing intel PCH thermal driver should work without changes for
+> > > > Lewisburg.
+> > > Does the temperature reading match with what you read via IPMI?
+> > 
+> > It does:
+> > 
+> > root@awork3:~# ipmitool sdr|grep ^PCH
+> > PCH Temp         | 58 degrees C      | ok
+> > 
+> > andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/type
+> > pch_lewisburg
+> > andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
+> > 58000
+> > 
+> > And if I generate some load, it rises for both:
+> > root@awork3:~# ipmitool sdr|grep ^PCH
+> > PCH Temp         | 60 degrees C      | ok
+> > andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
+> > 60000
+> > 
+> Thanks for the test.
+> 
+> Rui can add his ACK.
 
-platform        | arch  | lab           | compiler | defconfig          | r=
-egressions
-----------------+-------+---------------+----------+--------------------+--=
-----------
-bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 1=
-          =
+Ping? Looks like this got lost somewhere?
 
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig          | 1=
-          =
+Greetings,
 
-panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
-          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
-1-19-gd1cd1a35b7d5/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.10-rc1-19-gd1cd1a35b7d5
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      d1cd1a35b7d5e318b69f75237ca91f6b0eebfa27 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig          | r=
-egressions
-----------------+-------+---------------+----------+--------------------+--=
-----------
-bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 1=
-          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f99b02ef0eeaeeb3a381021
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-19-gd1cd1=
-a35b7d5/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-19-gd1cd1=
-a35b7d5/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f99b02ef0eeaeeb=
-3a381026
-        failing since 0 day (last pass: v5.9-rc8-160-g91e0225c546b, first f=
-ail: v5.10-rc1-4-ge213cd8f175c)
-        2 lines
-
-    2020-10-28 17:51:36.617000+00:00  Connected to bcm2837-rpi-3-b console =
-[channel connected] (~$quit to exit)
-    2020-10-28 17:51:36.620000+00:00  (user:khilman) is already connected
-    2020-10-28 17:51:52.265000+00:00  =00
-    2020-10-28 17:51:52.266000+00:00  =
-
-    2020-10-28 17:51:52.266000+00:00  U-Boot 2018.11 (Dec 04 2018 - 10:54:3=
-2 -0800)
-    2020-10-28 17:51:52.266000+00:00  =
-
-    2020-10-28 17:51:52.266000+00:00  DRAM:  948 MiB
-    2020-10-28 17:51:52.281000+00:00  RPI 3 Model B (0xa02082)
-    2020-10-28 17:51:52.369000+00:00  MMC:   mmc@7e202000: 0, sdhci@7e30000=
-0: 1
-    2020-10-28 17:51:52.401000+00:00  Loading Environment from FAT... *** W=
-arning - bad CRC, using default environment =
-
-    ... (383 line(s) more)  =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig          | r=
-egressions
-----------------+-------+---------------+----------+--------------------+--=
-----------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig          | 1=
-          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f99b0edb67db2241e381018
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-19-gd1cd1=
-a35b7d5/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-19-gd1cd1=
-a35b7d5/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f99b0edb67db2241e381=
-019
-        new failure (last pass: v5.10-rc1-4-ge213cd8f175c) =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig          | r=
-egressions
-----------------+-------+---------------+----------+--------------------+--=
-----------
-panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 1=
-          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f99b698c113ec7b62381018
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-19-gd1cd1=
-a35b7d5/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-19-gd1cd1=
-a35b7d5/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f99b698c113ec7=
-b6238101e
-        failing since 69 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
-l: v5.9-rc1-4-g1f08d51cd57f)
-        60 lines
-
-    2020-10-28 18:21:06.594000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c802
-    2020-10-28 18:21:06.599000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c803
-    2020-10-28 18:21:06.605000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c804
-    2020-10-28 18:21:06.611000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c805
-    2020-10-28 18:21:06.617000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c806
-    2020-10-28 18:21:06.623000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c807
-    2020-10-28 18:21:06.629000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c808
-    2020-10-28 18:21:06.635000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c809
-    2020-10-28 18:21:06.641000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c80a
-    2020-10-28 18:21:06.647000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper/0  pfn:9c80b =
-
-    ... (49 line(s) more)  =
-
- =20
+Andres Freund
