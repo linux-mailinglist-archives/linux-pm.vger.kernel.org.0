@@ -2,83 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BBF29D625
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C83A29D7AA
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730766AbgJ1WL4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 18:11:56 -0400
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:35661 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730760AbgJ1WLz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:11:55 -0400
-Received: by mail-yb1-f195.google.com with SMTP id m188so504089ybf.2;
-        Wed, 28 Oct 2020 15:11:54 -0700 (PDT)
+        id S1733023AbgJ1WZ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 18:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732935AbgJ1WZo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:25:44 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A0DC0613CF
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:25:44 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id w25so435012vsk.9
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=EqOGNgE9WW0hrYEzgqgI3sT6nrO+744/k+/HNuwRgBQ=;
+        b=ZIXKHQrPLo/vu+fCaMw4w25P3q1sw1n88Nu+8inRgWDwQEgrJ4vxU1wEQFraBG8dU7
+         5UevqPsQcjUGHG6DvBqDkc/cxkWoxYa2y/1TdwNLdelQtTQO02VaRXEJvPluChU7goMs
+         Um3rALmFyg4mfhoToSdeyqS6uqd3L73TKxVjGela+sq1D1pDD1Vd+q4xU2zOPKW6Gq5+
+         RBO9ewiJl2em69+GwrJ1Sk6beugesleTYUltr9++E/HsN5dba3r8xNJt0mhtdjj/WLeX
+         ig/E/jbOqQEZioWdX2RqgaVYJ+bD6yju3yvKOBueai3025SBhUcT04uTWrR2zjkdfS+E
+         GNhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T8MLPXzg2SZx9c5xJhUu8LnS9OjmrbIOKKCNscuh58o=;
-        b=HOXi0BWmmQuKMoTzj0yDIlJF6ZWhxNG4O12J5pdvyoobkGFfTWm8mvkPSs72NN53nD
-         MU6xAziewhZwQX682lWYaD7umS/oshawRcoeGVCE2jSUiASeL9dHN6CdYEDo82Hezxu2
-         BwbvabQo8cERzT8xiA37gq1DKp1iz6GB8zy+I/mCZpgeeNEXtd36Ic1UoKPz9tpiMA1R
-         ibarWJaZUT7vysKoW6zDIFpZ6nEZZ95yd4M6hqqXWNv5H1VefXQQP7dUkrPRHXzrJwNJ
-         hGFp+LiUhmrUgKsHiQh6qYTQxRt+JxPRlwzoP2oDLvxlCcPjIC52x97mLn4nEeF+40Vi
-         2cvQ==
-X-Gm-Message-State: AOAM5327QgqUKDQ9ITSWjmo3N0yLNydIxxYgUZKehtLe45oKGfCeG0AM
-        OOFW3w3YNNck6T4GcmVUGdUFxR3GGw==
-X-Google-Smtp-Source: ABdhPJz7reJgOyNPbR/RoD8e8RtXXbZyuobF3ZC3HQeIbo0bO8WjCWxfxCDoSnL/csJ+nowSt3xcZA==
-X-Received: by 2002:a9d:6307:: with SMTP id q7mr5698617otk.218.1603898611758;
-        Wed, 28 Oct 2020 08:23:31 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id f18sm2703272oos.19.2020.10.28.08.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 08:23:31 -0700 (PDT)
-Received: (nullmailer pid 4050728 invoked by uid 1000);
-        Wed, 28 Oct 2020 15:23:29 -0000
-Date:   Wed, 28 Oct 2020 10:23:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>
-Subject: Re: [PATCH v6 04/52] dt-bindings: memory: tegra20: emc: Document
- nvidia, memory-controller property
-Message-ID: <20201028152329.GA4050679@bogus>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-5-digetx@gmail.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EqOGNgE9WW0hrYEzgqgI3sT6nrO+744/k+/HNuwRgBQ=;
+        b=TzSlneyfjCNYGGCCimjJFlpvvwyKpS7NYfZv0ozdGBXjNsdvMTDn8J/RgQQD/BbOKw
+         ESs/rX8x+OGn887HpCon7DdyRg9KYx/WVbwb5KwCbY5+iW527uqskx4K8ufsjuXW1rMY
+         /4T507Aiu6CTjFRlcnJJ5c8Ca1vQ385phIlnR3SsEKFpm3Wdv/whNMfbLZkdujNZTvVO
+         +8BsZnsbq0Gx0me2FcXzphbO+fFCGyyfBWmkvPf8zrO4LdgSxh0ut6n13ms3PWFqYrev
+         Y7MC7PBjt7DKIVbxrtDUG4LRvKDTpV9jEvvr8DlGnnT42qWd4Bpt8lRDhCejNLgyNU+c
+         sYcA==
+X-Gm-Message-State: AOAM533YNX0TKJ3/nz96IA0ixpxV3sjQY1y6ytcyFtXt32rMfgAA5yhB
+        dvgoSFvsb9lEwn+XjH2TutwRDYZVBYtFuQ==
+X-Google-Smtp-Source: ABdhPJywy/ga60IcwttPdRHFJcWFGFtaDf05nbvaK244IuijPHjbk9Zoz8Mxk9rC7dAGM1m9ZGraNg==
+X-Received: by 2002:a62:aa0f:0:b029:162:ecc2:4d44 with SMTP id e15-20020a62aa0f0000b0290162ecc24d44mr8419846pff.52.1603899319799;
+        Wed, 28 Oct 2020 08:35:19 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id z4sm20pjn.0.2020.10.28.08.35.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Oct 2020 08:35:18 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 21:05:16 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     zhuguangqing83 <zhuguangqing83@gmail.com>
+Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        'zhuguangqing' <zhuguangqing@xiaomi.com>
+Subject: Re: [PATCH] cpufreq: schedutil: set sg_policy->next_freq to the
+ final cpufreq
+Message-ID: <20201028153516.5aimftwtjbqgayqc@vireshk-i7>
+References: <083a01d6ad19$fbdfbca0$f39f35e0$@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-5-digetx@gmail.com>
+In-Reply-To: <083a01d6ad19$fbdfbca0$f39f35e0$@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 26 Oct 2020 01:16:47 +0300, Dmitry Osipenko wrote:
-> Tegra20 External Memory Controller talks to DRAM chips and it needs to be
-> reprogrammed when memory frequency changes. Tegra Memory Controller sits
-> behind EMC and these controllers are tightly coupled. This patch adds the
-> new phandle property which allows to properly express connection of EMC
-> and MC hardware in a device-tree, it also put the Tegra20 EMC binding on
-> par with Tegra30+ EMC bindings, which is handy to have.
+On 28-10-20, 19:03, zhuguangqing83 wrote:
+> Thanks for your comments. Maybe my description was not clear before.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../bindings/memory-controllers/nvidia,tegra20-emc.txt          | 2 ++
->  1 file changed, 2 insertions(+)
+> If I understand correctly, when policy->min/max get changed in the time
+> Window between get_next_freq() and sugov_fast_switch(), to be more
+> precise between cpufreq_driver_resolve_freq() and
+> cpufreq_driver_fast_switch(), the issue may happen.
 > 
+> For example, the first time schedutil callback gets called from the
+> scheduler, we reached get_next_freq() and calculate the next_freq,
+> suppose next_freq is 1.0 GHz, then sg_policy->next_freq is updated
+> to 1.0 GHz in sugov_update_next_freq(). If policy->min/max get
+> change right now, suppose policy->min is changed to 1.2 GHz, 
+> then the final next_freq is 1.2 GHz for there is another clamp
+> between policy->min and policy->max in cpufreq_driver_fast_switch().
+> Then sg_policy->next_freq(1.0 GHz) is not the final next_freq(1.2 GHz).
+> 
+> The second time schedutil callback gets called from the scheduler, there
+> are two issues:
+> (1) Suppose policy->min is still 1.2 GHz, we reached get_next_freq() and
+> calculate the next_freq, because sg_policy->limits_changed gets set to
+> true by sugov_limits() and there is a clamp between policy->min and
+> policy->max, so this time next_freq will be greater than or equal to 1.2
+> GHz, suppose next_freq is also 1.2 GHz. Now next_freq is 1.2 GHz and
+> sg_policy->next_freq is 1.0 GHz,  then we find
+> "if (sg_policy->next_freq == next_freq)" is not satisfied and we call
+> cpufreq driver to change the cpufreq to 1.2 GHz. Actually it's already
+> 1.2 GHz, it's not necessary to change this time.
 
-Acked-by: Rob Herring <robh@kernel.org>
+This isn't that bad, but ...
+
+> (2) Suppose policy->min was changed again to 1.0 GHz before, we reached
+> get_next_freq() and calculate the next_freq, suppose next_freq is also
+> 1.0 GHz. Now next_freq is 1.0 GHz and sg_policy->next_freq is also 1.0 GHz,
+> then we find "if (sg_policy->next_freq == next_freq)" is satisfied and we
+> don't change the cpufreq. Actually we should change the cpufreq to 1.0 GHz
+> this time.
+
+This is a real problem we can get into. What about this diff instead ?
+
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 0c5c61a095f6..bf7800e853d3 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -105,7 +105,6 @@ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+        if (sg_policy->next_freq == next_freq)
+                return false;
+ 
+-       sg_policy->next_freq = next_freq;
+        sg_policy->last_freq_update_time = time;
+ 
+        return true;
+@@ -115,7 +114,7 @@ static void sugov_fast_switch(struct sugov_policy *sg_policy, u64 time,
+                              unsigned int next_freq)
+ {
+        if (sugov_update_next_freq(sg_policy, time, next_freq))
+-               cpufreq_driver_fast_switch(sg_policy->policy, next_freq);
++               sg_policy->next_freq = cpufreq_driver_fast_switch(sg_policy->policy, next_freq);
+ }
+ 
+ static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
+@@ -124,6 +123,7 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
+        if (!sugov_update_next_freq(sg_policy, time, next_freq))
+                return;
+ 
++       sg_policy->next_freq = next_freq;
+        if (!sg_policy->work_in_progress) {
+                sg_policy->work_in_progress = true;
+                irq_work_queue(&sg_policy->irq_work);
+
+-- 
+viresh
