@@ -2,84 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 326CB29DBF9
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D6429DC03
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 01:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733099AbgJ1Wq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 18:46:27 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:39256 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389132AbgJ1Wq1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:46:27 -0400
-Received: by mail-oi1-f194.google.com with SMTP id u127so1276251oib.6;
-        Wed, 28 Oct 2020 15:46:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6CzfvnivIEtvj6xKXXqKUjstXdtKoBRAAdit4qN1a2I=;
-        b=TANWwb/Q46eeKQrzUUvsUW5/Wyh401T0N3Ntu7e77muax5MRoSgOhHEBA0pxzS9dK+
-         YhOWRsp9ghpY+8RBoSbmjcH9f6/LzX4qJa4hneI/YR/QR9t+lY1xVwnyBtQdAXejK1mQ
-         xBy7RKYl1DOCSgyjkAtN/1GmzUqOyWpAI5AgtN0lBnjQQn0gkpBoWhv/Nt95NnDhXiCL
-         efpEqCcKQk2JdIz1LtIlNDRIVBsDEy2KPrqC8/OSkEtapnvijPHo1VVF8Q1HaxSMA4iQ
-         DK0eLANuK9KE9qKD5dGfvKLiQTpeQ6sdvkVyaiFFRI/PTBl4jB5fzC5CxNK4abL7LxBR
-         koKQ==
-X-Gm-Message-State: AOAM532/h0OyBvvQbMknI0Q6wEKR1pLREOjUZR32K8jYYPWE3akwYCBA
-        t1Jollp86F+8rzW+BFnelSDDRI0X7A==
-X-Google-Smtp-Source: ABdhPJxE9oU+7OVIoCWc40SC7yS+EHHKpQBId3YfoudCOvuyyuURrzX+lBd6EBrH1r3aDJcLC8qKgw==
-X-Received: by 2002:aca:bfc2:: with SMTP id p185mr5868175oif.60.1603899057838;
-        Wed, 28 Oct 2020 08:30:57 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h14sm2078172otl.0.2020.10.28.08.30.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 08:30:57 -0700 (PDT)
-Received: (nullmailer pid 4060952 invoked by uid 1000);
-        Wed, 28 Oct 2020 15:30:56 -0000
-Date:   Wed, 28 Oct 2020 10:30:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        id S1730713AbgJ2AS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 20:18:59 -0400
+Received: from newton.telenet-ops.be ([195.130.132.45]:33722 "EHLO
+        newton.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731804AbgJ1WpU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:45:20 -0400
+X-Greylist: delayed 4199 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Oct 2020 18:45:19 EDT
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by newton.telenet-ops.be (Postfix) with ESMTPS id 4CLt293WF3zMqtjD
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 16:35:45 +0100 (CET)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by laurent.telenet-ops.be with bizsmtp
+        id lTbj2300a4C55Sk01Tbj7o; Wed, 28 Oct 2020 16:35:45 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kXnUF-000pP4-F7; Wed, 28 Oct 2020 16:35:43 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kXnUF-007HhG-1D; Wed, 28 Oct 2020 16:35:43 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        dri-devel@lists.freedesktop.org, Viresh Kumar <vireshk@kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>
-Subject: Re: [PATCH v6 15/52] dt-bindings: tegra30-actmon: Document OPP and
- interconnect properties
-Message-ID: <20201028153056.GA4060899@bogus>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-16-digetx@gmail.com>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3] dt-bindings: thermal: rcar-thermal: Improve schema validation
+Date:   Wed, 28 Oct 2020 16:35:41 +0100
+Message-Id: <20201028153541.1736279-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201025221735.3062-16-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 26 Oct 2020 01:16:58 +0300, Dmitry Osipenko wrote:
-> Document EMC DFS OPP table and interconnect paths that will be used
-> for scaling of system's memory bandwidth based on memory utilization
-> statistics. Previously ACTMON was supposed to drive EMC clock rate
-> directly, but now it should do it using interconnect framework in order
-> to support shared voltage scaling in addition to the frequency scaling.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../arm/tegra/nvidia,tegra30-actmon.txt       | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
+  - Factor out common required properties,
+  - "interrupts", "clocks", and "power-domains" are required on R-Mobile
+    APE6, too,
+  - Invert logic to simplify descriptions.
 
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
+---
+v3:
+  - Rebase on top of commit 5be478f9c24fbdf8 ("dt-bindings: Another
+    round of adding missing 'additionalProperties'"),
+
+v2:
+  - Add Reviewed-by.
+---
+ .../bindings/thermal/rcar-thermal.yaml        | 48 +++++++++++--------
+ 1 file changed, 29 insertions(+), 19 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+index 7e9557ac0e4a011c..927de79ab4b56e37 100644
+--- a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+@@ -62,25 +62,35 @@ properties:
+   "#thermal-sensor-cells":
+     const: 0
+ 
+-if:
+-  properties:
+-    compatible:
+-      contains:
+-        enum:
+-          - renesas,thermal-r8a73a4 # R-Mobile APE6
+-          - renesas,thermal-r8a7779 # R-Car H1
+-then:
+-  required:
+-    - compatible
+-    - reg
+-else:
+-  required:
+-    - compatible
+-    - reg
+-    - interrupts
+-    - clocks
+-    - power-domains
+-    - resets
++required:
++  - compatible
++  - reg
++
++allOf:
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - renesas,thermal-r8a73a4 # R-Mobile APE6
++                - renesas,thermal-r8a7779 # R-Car H1
++    then:
++      required:
++        - resets
++        - '#thermal-sensor-cells'
++
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: renesas,thermal-r8a7779 # R-Car H1
++    then:
++      required:
++        - interrupts
++        - clocks
++        - power-domains
+ 
+ additionalProperties: false
+ 
+-- 
+2.25.1
+
