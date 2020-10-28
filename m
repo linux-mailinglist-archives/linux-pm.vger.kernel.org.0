@@ -2,215 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5BE29D447
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 22:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6511129D4EE
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 22:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728084AbgJ1Vux (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 17:50:53 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:51889 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728078AbgJ1Vuv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:50:51 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 828AA5C010C;
-        Wed, 28 Oct 2020 09:51:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 28 Oct 2020 09:51:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=XEi3b/ikOzRZVpcIsCkFHJrCB0T
-        T9mRX4XPqsjVQReA=; b=fb7A58dUoMME0Qr6F9aQlgZriS/wrT+3poHSDO6y647
-        JTBlMKVm7YbjpZpjHhumIwdng77By3lkD/Kit1AhYkSU5R4ygqtdbPDmRwrw6Ob/
-        bLsURf4AHlaimAdwovgdk/a+XfwqCkgccJGa3AWFqSKL+RKq8j2l+Np5tRCxROZ3
-        MB7OtZgz3/dkkwbZ5KQFvXzS7afMVzSrAsYJQQxjJubQDuFCjuvTQUFtPx86RL6i
-        8ulfh3E+ApUMtx0MbEkVeeMHqUKPZOuCAFrp6dKDaMNFSIVQwgA79NF4xnoD/T/H
-        AQv0jwO8bNdEUmH0bdApHeZavQXuYPcHvJN6DGze3jQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=XEi3b/
-        ikOzRZVpcIsCkFHJrCB0TT9mRX4XPqsjVQReA=; b=Cb5ujczzgyomEnKfYrlyOX
-        j7j5g8idPNdVYE4podVHeADBdkjjfNsQkY1Aw3eTOr4/DdiJuWCyCCL1iUe0m7ob
-        0P3q9IZcVOjIfuhhQu/lInwu3zY+idQDDRrto12R5rSFLymr8QaqPrT+Y7a8/sVs
-        jV1bRcFfRaWaTDx3hbMpy9TLbKvuqgigb5Ao1QV7iYnhwCsMXGzS3M1cWpt19aKf
-        rLJM8eXT6xR/ORj3BvcH+q97sLOEI5k54a+bwoJMnHRdV7rYJFO/panrliniUoBl
-        E7uO7Pj6CYyhqNK7+Kh5vsVOp+4Xs7em097359eOkQPa1p4rKyO8ZYmiuXzhpdUA
-        ==
-X-ME-Sender: <xms:U3eZXzbiXxIssPOos5U_6u1h3e0iVOtYKy3B7o7pzxV-5gvOLJHCbg>
-    <xme:U3eZXybxzZ0FwymzrmCBjv1dGiFcSgw2lg7k8GSpcTKpO_giGXE7mlOPxS3j5eQcc
-    7Ms_9DkCW_L7l3cwxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrledugdehiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:U3eZX18pwHGczpU3JJfeabsIIQDr3yPTahGofD8VPmpM-jfjsypzVA>
-    <xmx:U3eZX5pjdN4rNg2LQyPLC8aiJ9W3t9EF4S6BjstCvc0MgoqiwMYo3Q>
-    <xmx:U3eZX-qIRuO4WL6h53oAkUaLc2-U6FiNkUZMukBiZNge-AwL54ReOg>
-    <xmx:VneZX-IQziRa6JmkEOZSGe0xbJHKNqjYxDCSvcqUythnZmmcuBnghA>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id E44E3328005D;
-        Wed, 28 Oct 2020 09:51:14 -0400 (EDT)
-Date:   Wed, 28 Oct 2020 14:51:13 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org, wens@csie.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal: sun8i: Use bitmap API instead of open code
-Message-ID: <20201028135113.tpuofnv2eyaiqjc5@gilmour.lan>
-References: <20201019115836.13982-1-frank@allwinnertech.com>
+        id S1728494AbgJ1Vzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 17:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726108AbgJ1Vzm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:55:42 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6286C0613CF
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 14:55:42 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id u127so1150249oib.6
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 14:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2lMQ52opYyBFO/8867Rc9HWGhmmRhbhGzcJErb4OtTk=;
+        b=fI0t4BxySPIKVYRDW0X9AXX9OUIVJ0i/IcCj1u6CvQF8PsgvfX6iDVVZmT+L5OwIWk
+         yoG+215nSPpM6CL47027i0uDqhuClzPHJLJTFYPqlBePyix501UL4sg5W6uJnBEPSzdv
+         QNbm3DYpW3acKN2JX9MeWEj/i94spl3Ekzj7+7YyXHo+dqPM9Hvo1UrUTsX+lXrbfyKm
+         IHr/sYrZ/nPuU7uHWl30RPPs9gNvhpqSbtdmdKUo8eS1IPHYkkrcmNk6ZSb9X7efUEiT
+         xdBg/+u/V5As2OXPt81jOWeTwHpGsJXhVirjF3ESdAcqadsGDH2/w4KWEDWhW6SqEHvo
+         l3mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2lMQ52opYyBFO/8867Rc9HWGhmmRhbhGzcJErb4OtTk=;
+        b=hdNDYXJHOgO4q2c1r1LjaAD3/Bmcq7bVHuzw6tvJLSA39OXFbDA1slGTdxBrvKdyCU
+         thzA32GSVh3Wa1U7Ae8E7WejIe88YANfjtIplJhFR1it5rI1Pe0Tyle5VxeGIcUuFVHb
+         wBtO/u1TkuXsA8C7rrygoVTSIXqk5Hsz4i/aRu3PYoHGDVTdE0eAOQ7M48k7tongLRkN
+         XIzma1zpIi+EPXTrkyfRbMP0fwxPx47AgisvF6qz3yDawMCkZu0seUKTNybiDLHWFOB4
+         8BDy/CXOPT5R2mutKKb8adNdKZTxT+yOsLdqFqEYF7hZ++/iyvcXwBlbeuK2BrETeu4P
+         GENg==
+X-Gm-Message-State: AOAM532WakedIvpOx75eowHPSW2RKIAeCpX3X39R0f0CUCo/olxJoKG7
+        CyqCaPCQ8uhx3Hg+73H0IIFz1JT56su6qg==
+X-Google-Smtp-Source: ABdhPJwieZLKERYh5i+WcdYFNjnB1YDi1rMC2Wk3oXGFuwXvXKqEySiv1P8w4btQ05XHTYrpVhRGQQ==
+X-Received: by 2002:a17:90a:1f07:: with SMTP id u7mr7452262pja.69.1603896848198;
+        Wed, 28 Oct 2020 07:54:08 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id 63sm6317614pfv.25.2020.10.28.07.54.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Oct 2020 07:54:07 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 20:24:05 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] opp: fix bad error check logic in the opp helper register
+Message-ID: <20201028145405.ucfepzt6xoxro6fi@vireshk-i7>
+References: <20201028141357.10345-1-t-kristo@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6recr47zk4glx63l"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201019115836.13982-1-frank@allwinnertech.com>
+In-Reply-To: <20201028141357.10345-1-t-kristo@ti.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---6recr47zk4glx63l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Frank,
-
-On Mon, Oct 19, 2020 at 07:58:36PM +0800, Frank Lee wrote:
-> From: Yangtao Li <frank@allwinnertech.com>
->=20
-> Thw bitmap_* API is the standard way to access data in the bitfield.
->=20
-> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+On 28-10-20, 16:13, Tero Kristo wrote:
+> The error check is incorrectly negated causing the helper to never
+> register anything. This causes platforms that depend on this
+> functionality to fail always with any cpufreq transition, and at least
+> TI DRA7 based platforms fail to boot completely due to warning message
+> flood from _generic_set_opp_regulator complaining about multiple
+> regulators not being supported.
+> 
+> Fixes: dd461cd9183f ("opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER")
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
 > ---
->  drivers/thermal/sun8i_thermal.c | 35 +++++++++++++++++----------------
->  1 file changed, 18 insertions(+), 17 deletions(-)
->=20
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_ther=
-mal.c
-> index f8b13071a6f4..f2e4a4f18101 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -8,6 +8,7 @@
->   * Based on the work of Josef Gajdusek <atx@atx.name>
->   */
-> =20
-> +#include <linux/bitmap.h>
->  #include <linux/clk.h>
->  #include <linux/device.h>
->  #include <linux/interrupt.h>
-> @@ -74,7 +75,7 @@ struct ths_thermal_chip {
->  	int		(*calibrate)(struct ths_device *tmdev,
->  				     u16 *caldata, int callen);
->  	int		(*init)(struct ths_device *tmdev);
-> -	int             (*irq_ack)(struct ths_device *tmdev);
-> +	void		(*irq_ack)(struct ths_device *tmdev);
->  	int		(*calc_temp)(struct ths_device *tmdev,
->  				     int id, int reg);
->  };
-> @@ -82,6 +83,7 @@ struct ths_thermal_chip {
->  struct ths_device {
->  	const struct ths_thermal_chip		*chip;
->  	struct device				*dev;
-> +	DECLARE_BITMAP(irq_bitmap, MAX_SENSOR_NUM);
->  	struct regmap				*regmap;
->  	struct reset_control			*reset;
->  	struct clk				*bus_clk;
-> @@ -146,9 +148,11 @@ static const struct regmap_config config =3D {
->  	.max_register =3D 0xfc,
->  };
-> =20
-> -static int sun8i_h3_irq_ack(struct ths_device *tmdev)
-> +static void sun8i_h3_irq_ack(struct ths_device *tmdev)
->  {
-> -	int i, state, ret =3D 0;
-> +	int i, state;
-> +
-> +	bitmap_zero(tmdev->irq_bitmap, tmdev->chip->sensor_num);
-> =20
->  	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
-> =20
-> @@ -156,16 +160,16 @@ static int sun8i_h3_irq_ack(struct ths_device *tmde=
-v)
->  		if (state & SUN8I_THS_DATA_IRQ_STS(i)) {
->  			regmap_write(tmdev->regmap, SUN8I_THS_IS,
->  				     SUN8I_THS_DATA_IRQ_STS(i));
-> -			ret |=3D BIT(i);
-> +			bitmap_set(tmdev->irq_bitmap, i, 1);
->  		}
->  	}
-> -
-> -	return ret;
->  }
-> =20
-> -static int sun50i_h6_irq_ack(struct ths_device *tmdev)
-> +static void sun50i_h6_irq_ack(struct ths_device *tmdev)
->  {
-> -	int i, state, ret =3D 0;
-> +	int i, state;
-> +
-> +	bitmap_zero(tmdev->irq_bitmap, tmdev->chip->sensor_num);
-> =20
->  	regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
-> =20
-> @@ -173,24 +177,21 @@ static int sun50i_h6_irq_ack(struct ths_device *tmd=
-ev)
->  		if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
->  			regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
->  				     SUN50I_H6_THS_DATA_IRQ_STS(i));
-> -			ret |=3D BIT(i);
-> +			bitmap_set(tmdev->irq_bitmap, i, 1);
->  		}
->  	}
-> -
-> -	return ret;
+>  drivers/opp/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 2483e765318a..4ac4e7ce6b8b 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1930,7 +1930,7 @@ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+>  		return ERR_PTR(-EINVAL);
+>  
+>  	opp_table = dev_pm_opp_get_opp_table(dev);
+> -	if (!IS_ERR(opp_table))
+> +	if (IS_ERR(opp_table))
+>  		return opp_table;
+>  
+>  	/* This should be called before OPPs are initialized */
 
-The bitfield of the acked interrupts is mostly something internal to the
-handler, so I'm not really convinced about sharing that through the
-global structure.
+A similar fix is already pushed in linux-next for this.
 
-With that being said...
-
->  }
-> =20
->  static irqreturn_t sun8i_irq_thread(int irq, void *data)
->  {
->  	struct ths_device *tmdev =3D data;
-> -	int i, state;
-> +	int i;
-> =20
-> -	state =3D tmdev->chip->irq_ack(tmdev);
-> +	tmdev->chip->irq_ack(tmdev);
-> =20
-> -	for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
-> -		if (state & BIT(i))
-> -			thermal_zone_device_update(tmdev->sensor[i].tzd,
-> -						   THERMAL_EVENT_UNSPECIFIED);
-> +	for_each_set_bit(i, tmdev->irq_bitmap, tmdev->chip->sensor_num) {
-> +		thermal_zone_device_update(tmdev->sensor[i].tzd,
-> +					   THERMAL_EVENT_UNSPECIFIED);
-
-=2E. for_each_set_bit is definitely cleaner and more readable.
-
-Since it can operate on any unsigned long pointer, maybe we can just
-make irq_ack return an unsigned long, and iterate over it here?
-
-Maxime
-
---6recr47zk4glx63l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5l3UQAKCRDj7w1vZxhR
-xQEKAP48BfIcj9Q8gxnE2YBEXYyU7tgQIfISkMi7dzn50h8wbwEA3yd3/OWl142x
-5IZCV0EeZJVQ8kBG4+H8a/zJLoh7dgM=
-=1WKP
------END PGP SIGNATURE-----
-
---6recr47zk4glx63l--
+-- 
+viresh
