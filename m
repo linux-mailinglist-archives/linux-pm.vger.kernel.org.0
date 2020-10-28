@@ -2,110 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B3E29D4D9
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 22:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5BE29D447
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 22:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728447AbgJ1VzJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 17:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728464AbgJ1VzJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:55:09 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF1C0613CF
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 14:55:09 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id c11so1008456iln.9
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 14:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oUQGYHl6fL0itz3RWijtbqZBDnCCvlTy72hHOJX7pSU=;
-        b=wnl6oBn/Zw2KFaEIcPW+DYoJ9y6mSCx1bVJxZNJVS8dmkAv8U2yzrNU2SFR+/J5ZoI
-         qLH21UEmwAqmSsLU6Fq4UKGDLHhOWBgDt36ptPjUbm6quVeflh/e5YH8n3MCqDw72/3f
-         ZZh6gCQmzLpXxhm6Hku3R0CXNSBwi2nb81p8pauc7WFhrkAuoaAz2IjXVgOY+aKYfbQn
-         m4Acp4WRhR8UFnibB71sCTgW/sgIHJZRXMrSRDZSdpxPL3I9/RH/AmBs5XM3HK7YY1oR
-         XrGindx3PneZp60ijEP/JNl1BIrI04ZTN/nVFq1hqvrd5q+QN6SsA8AFH45BdXre49SJ
-         4Ymw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oUQGYHl6fL0itz3RWijtbqZBDnCCvlTy72hHOJX7pSU=;
-        b=sr0Xv3V+M+xxre8C0mWMZdx4psRm3T0lciomIM7sG/F8cKuUDx4vfW0chDDWSNURC4
-         sd1CxP7Oa1a7U6+s0rV9w/laUOERYkEWpCV2YwWZy4gOuZghQTajpvxWZf4on71P9b16
-         khcDa7zkMdfTgaL5s8yolsf1DAuJV8ncq4/ZXxM6v1lu1UWWy5w3iaNdTAYawzNZmojV
-         luJGGwzKfDrJ9178wSN3cBWwjKNjcSh5UaorYyXARnSmdPl+x4+ryMz333ZqxGjRAyMw
-         a1+mT7/gu+Wo0Mj6WZlFkVz/ed9eyxxMCCuxBzAD/aEJjFdT5NAgXcLRDd3F8XylCxxx
-         koMA==
-X-Gm-Message-State: AOAM531+LO4/bsHV9jnlHVflZ27WiYivOSSSjYJcwZTlNcxQmtlUQccZ
-        GHebFQ2B5sGLG179tmOl8gsDnPT+4ii2mA==
-X-Google-Smtp-Source: ABdhPJzhs5ftHX5k7BVSVR6ZAGDS0bIZvFqJD54c6guw3/I+nlMW2C5NSqlFji45AE+WjYTD8+7SXw==
-X-Received: by 2002:a63:4d0b:: with SMTP id a11mr5168634pgb.296.1603873311277;
-        Wed, 28 Oct 2020 01:21:51 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id k1sm1225956pgn.66.2020.10.28.01.21.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 28 Oct 2020 01:21:50 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 13:51:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     zhuguangqing83@gmail.com
-Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhuguangqing <zhuguangqing@xiaomi.com>
-Subject: Re: [PATCH] cpufreq: schedutil: set sg_policy->next_freq to the
- final cpufreq
-Message-ID: <20201028082148.zkvcqau4p6xcihoq@vireshk-i7>
-References: <20201027115459.19318-1-zhuguangqing83@gmail.com>
+        id S1728084AbgJ1Vux (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 17:50:53 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:51889 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728078AbgJ1Vuv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:50:51 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 828AA5C010C;
+        Wed, 28 Oct 2020 09:51:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 28 Oct 2020 09:51:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=XEi3b/ikOzRZVpcIsCkFHJrCB0T
+        T9mRX4XPqsjVQReA=; b=fb7A58dUoMME0Qr6F9aQlgZriS/wrT+3poHSDO6y647
+        JTBlMKVm7YbjpZpjHhumIwdng77By3lkD/Kit1AhYkSU5R4ygqtdbPDmRwrw6Ob/
+        bLsURf4AHlaimAdwovgdk/a+XfwqCkgccJGa3AWFqSKL+RKq8j2l+Np5tRCxROZ3
+        MB7OtZgz3/dkkwbZ5KQFvXzS7afMVzSrAsYJQQxjJubQDuFCjuvTQUFtPx86RL6i
+        8ulfh3E+ApUMtx0MbEkVeeMHqUKPZOuCAFrp6dKDaMNFSIVQwgA79NF4xnoD/T/H
+        AQv0jwO8bNdEUmH0bdApHeZavQXuYPcHvJN6DGze3jQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=XEi3b/
+        ikOzRZVpcIsCkFHJrCB0TT9mRX4XPqsjVQReA=; b=Cb5ujczzgyomEnKfYrlyOX
+        j7j5g8idPNdVYE4podVHeADBdkjjfNsQkY1Aw3eTOr4/DdiJuWCyCCL1iUe0m7ob
+        0P3q9IZcVOjIfuhhQu/lInwu3zY+idQDDRrto12R5rSFLymr8QaqPrT+Y7a8/sVs
+        jV1bRcFfRaWaTDx3hbMpy9TLbKvuqgigb5Ao1QV7iYnhwCsMXGzS3M1cWpt19aKf
+        rLJM8eXT6xR/ORj3BvcH+q97sLOEI5k54a+bwoJMnHRdV7rYJFO/panrliniUoBl
+        E7uO7Pj6CYyhqNK7+Kh5vsVOp+4Xs7em097359eOkQPa1p4rKyO8ZYmiuXzhpdUA
+        ==
+X-ME-Sender: <xms:U3eZXzbiXxIssPOos5U_6u1h3e0iVOtYKy3B7o7pzxV-5gvOLJHCbg>
+    <xme:U3eZXybxzZ0FwymzrmCBjv1dGiFcSgw2lg7k8GSpcTKpO_giGXE7mlOPxS3j5eQcc
+    7Ms_9DkCW_L7l3cwxQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrledugdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:U3eZX18pwHGczpU3JJfeabsIIQDr3yPTahGofD8VPmpM-jfjsypzVA>
+    <xmx:U3eZX5pjdN4rNg2LQyPLC8aiJ9W3t9EF4S6BjstCvc0MgoqiwMYo3Q>
+    <xmx:U3eZX-qIRuO4WL6h53oAkUaLc2-U6FiNkUZMukBiZNge-AwL54ReOg>
+    <xmx:VneZX-IQziRa6JmkEOZSGe0xbJHKNqjYxDCSvcqUythnZmmcuBnghA>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id E44E3328005D;
+        Wed, 28 Oct 2020 09:51:14 -0400 (EDT)
+Date:   Wed, 28 Oct 2020 14:51:13 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org, wens@csie.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: sun8i: Use bitmap API instead of open code
+Message-ID: <20201028135113.tpuofnv2eyaiqjc5@gilmour.lan>
+References: <20201019115836.13982-1-frank@allwinnertech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6recr47zk4glx63l"
 Content-Disposition: inline
-In-Reply-To: <20201027115459.19318-1-zhuguangqing83@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201019115836.13982-1-frank@allwinnertech.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-10-20, 19:54, zhuguangqing83@gmail.com wrote:
-> From: zhuguangqing <zhuguangqing@xiaomi.com>
-> 
-> In the following code path, next_freq is clamped between policy->min
-> and policy->max twice in functions cpufreq_driver_resolve_freq() and
-> cpufreq_driver_fast_switch(). For there is no update_lock in the code
-> path, policy->min and policy->max may be modified (one or more times),
-> so sg_policy->next_freq updated in function sugov_update_next_freq()
-> may be not the final cpufreq.
 
-Understood until here, but not sure I followed everything after that.
+--6recr47zk4glx63l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Next time when we use
-> "if (sg_policy->next_freq == next_freq)" to judge whether to update
-> next_freq, we may get a wrong result.
-> 
-> -> sugov_update_single()
->   -> get_next_freq()
->     -> cpufreq_driver_resolve_freq()
->   -> sugov_fast_switch()
->     -> sugov_update_next_freq()
->     -> cpufreq_driver_fast_switch()
-> 
-> For example, at first sg_policy->next_freq is 1 GHz, but the final
-> cpufreq is 1.2 GHz because policy->min is modified to 1.2 GHz when
-> we reached cpufreq_driver_fast_switch(). Then next time, policy->min
-> is changed before we reached cpufreq_driver_resolve_freq() and (assume)
-> next_freq is 1 GHz, we find "if (sg_policy->next_freq == next_freq)" is
-> satisfied so we don't change the cpufreq. Actually we should change
-> the cpufreq to 1.0 GHz this time.
+Hi Frank,
 
-FWIW, whenever policy->min/max gets changed, sg_policy->limits_changed
-gets set to true by sugov_limits() and the next time schedutil
-callback gets called from the scheduler, we will fix the frequency.
+On Mon, Oct 19, 2020 at 07:58:36PM +0800, Frank Lee wrote:
+> From: Yangtao Li <frank@allwinnertech.com>
+>=20
+> Thw bitmap_* API is the standard way to access data in the bitfield.
+>=20
+> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+> ---
+>  drivers/thermal/sun8i_thermal.c | 35 +++++++++++++++++----------------
+>  1 file changed, 18 insertions(+), 17 deletions(-)
+>=20
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_ther=
+mal.c
+> index f8b13071a6f4..f2e4a4f18101 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -8,6 +8,7 @@
+>   * Based on the work of Josef Gajdusek <atx@atx.name>
+>   */
+> =20
+> +#include <linux/bitmap.h>
+>  #include <linux/clk.h>
+>  #include <linux/device.h>
+>  #include <linux/interrupt.h>
+> @@ -74,7 +75,7 @@ struct ths_thermal_chip {
+>  	int		(*calibrate)(struct ths_device *tmdev,
+>  				     u16 *caldata, int callen);
+>  	int		(*init)(struct ths_device *tmdev);
+> -	int             (*irq_ack)(struct ths_device *tmdev);
+> +	void		(*irq_ack)(struct ths_device *tmdev);
+>  	int		(*calc_temp)(struct ths_device *tmdev,
+>  				     int id, int reg);
+>  };
+> @@ -82,6 +83,7 @@ struct ths_thermal_chip {
+>  struct ths_device {
+>  	const struct ths_thermal_chip		*chip;
+>  	struct device				*dev;
+> +	DECLARE_BITMAP(irq_bitmap, MAX_SENSOR_NUM);
+>  	struct regmap				*regmap;
+>  	struct reset_control			*reset;
+>  	struct clk				*bus_clk;
+> @@ -146,9 +148,11 @@ static const struct regmap_config config =3D {
+>  	.max_register =3D 0xfc,
+>  };
+> =20
+> -static int sun8i_h3_irq_ack(struct ths_device *tmdev)
+> +static void sun8i_h3_irq_ack(struct ths_device *tmdev)
+>  {
+> -	int i, state, ret =3D 0;
+> +	int i, state;
+> +
+> +	bitmap_zero(tmdev->irq_bitmap, tmdev->chip->sensor_num);
+> =20
+>  	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
+> =20
+> @@ -156,16 +160,16 @@ static int sun8i_h3_irq_ack(struct ths_device *tmde=
+v)
+>  		if (state & SUN8I_THS_DATA_IRQ_STS(i)) {
+>  			regmap_write(tmdev->regmap, SUN8I_THS_IS,
+>  				     SUN8I_THS_DATA_IRQ_STS(i));
+> -			ret |=3D BIT(i);
+> +			bitmap_set(tmdev->irq_bitmap, i, 1);
+>  		}
+>  	}
+> -
+> -	return ret;
+>  }
+> =20
+> -static int sun50i_h6_irq_ack(struct ths_device *tmdev)
+> +static void sun50i_h6_irq_ack(struct ths_device *tmdev)
+>  {
+> -	int i, state, ret =3D 0;
+> +	int i, state;
+> +
+> +	bitmap_zero(tmdev->irq_bitmap, tmdev->chip->sensor_num);
+> =20
+>  	regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
+> =20
+> @@ -173,24 +177,21 @@ static int sun50i_h6_irq_ack(struct ths_device *tmd=
+ev)
+>  		if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
+>  			regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
+>  				     SUN50I_H6_THS_DATA_IRQ_STS(i));
+> -			ret |=3D BIT(i);
+> +			bitmap_set(tmdev->irq_bitmap, i, 1);
+>  		}
+>  	}
+> -
+> -	return ret;
 
-And so there shouldn't be any issue here, unless I am missing
-something.
+The bitfield of the acked interrupts is mostly something internal to the
+handler, so I'm not really convinced about sharing that through the
+global structure.
 
--- 
-viresh
+With that being said...
+
+>  }
+> =20
+>  static irqreturn_t sun8i_irq_thread(int irq, void *data)
+>  {
+>  	struct ths_device *tmdev =3D data;
+> -	int i, state;
+> +	int i;
+> =20
+> -	state =3D tmdev->chip->irq_ack(tmdev);
+> +	tmdev->chip->irq_ack(tmdev);
+> =20
+> -	for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
+> -		if (state & BIT(i))
+> -			thermal_zone_device_update(tmdev->sensor[i].tzd,
+> -						   THERMAL_EVENT_UNSPECIFIED);
+> +	for_each_set_bit(i, tmdev->irq_bitmap, tmdev->chip->sensor_num) {
+> +		thermal_zone_device_update(tmdev->sensor[i].tzd,
+> +					   THERMAL_EVENT_UNSPECIFIED);
+
+=2E. for_each_set_bit is definitely cleaner and more readable.
+
+Since it can operate on any unsigned long pointer, maybe we can just
+make irq_ack return an unsigned long, and iterate over it here?
+
+Maxime
+
+--6recr47zk4glx63l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5l3UQAKCRDj7w1vZxhR
+xQEKAP48BfIcj9Q8gxnE2YBEXYyU7tgQIfISkMi7dzn50h8wbwEA3yd3/OWl142x
+5IZCV0EeZJVQ8kBG4+H8a/zJLoh7dgM=
+=1WKP
+-----END PGP SIGNATURE-----
+
+--6recr47zk4glx63l--
