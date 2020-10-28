@@ -2,112 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072F529D970
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF48F29D95F
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389758AbgJ1WzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 18:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389780AbgJ1WzP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:55:15 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B866AC0613D1
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:55:14 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id k27so1271375oij.11
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:55:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=KfnjVkSYavUZpAOuFxYL10A68Gk+riZcuOkpLm+UKsQ=;
-        b=orPttfCJNvUzyey7uOGV6qbycVKTL/tawKuMW0R4tXOU76W3N/0abqCNmDOmSmvRKN
-         L2JU10SN8to5CTiFxG5wFlRZ+x6UlUgMbOG7N/pua3fxvZBZCJS+EYHvE8FzLHr3047a
-         IusQdNKndPmJTL/Pn2PASNVNzQizL4HKrr9h8Sa4s9vTWSzUv1vWxJlLWL7qBwiNZZH0
-         NL3jimF1eAupDw4lp9obwTBpfo4tAMxacCG2xG9Ai03ir7HEjMODGsb6q1L4ESlUir48
-         MW4RzbQapeOS637/B5YLbaa26ZNLRjDyIkCnrRdrCVaqLf/6SiGLh23zR+zTIGWZ/xQI
-         LDIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KfnjVkSYavUZpAOuFxYL10A68Gk+riZcuOkpLm+UKsQ=;
-        b=OLvdQhxVPAXz1OIegW3tE4A9J7PV7VVtEtsY2K5KHO6gmipbmV6BufVQ8mFw2o2lTm
-         rk0sAxQsLYBwnrB3uTt8nYGRzfXp5TrWQI8AuQd/BaymZirMbnBzSO9ZDA1robF8ViBG
-         D9sz2yCqWL93jr7WoZHan20hgcF4bhDJWsjGGaU8YBz0//1uXNh76jca9UmI8KZVZRIr
-         xwtV5JkMYkgo1rAVfvl5u1M7pHZmeGNGk6Gj70ig8xH01HId+ZUWkupJo43wlMywQJlJ
-         MoC3rrfXN8jKebWHWuKvLdp27RBvjKsMOiXKVvcgJPLjbhQ1cFQ0btWNmE1Zb8y4Z45f
-         hJFA==
-X-Gm-Message-State: AOAM5301UHz+V/KzX+9lzhWIoOgSWvnnDYIkzctK9vDVU9BXjmuOZN5m
-        bZkx4JyAr42m9g1DDk58Ty/rzq/NEDglSQ==
-X-Google-Smtp-Source: ABdhPJyMbjsKNL+0AaYE+74jjeyJZn6dVKEnUKfModkHmF8ww8t+Tpr9o99iUojODmy3PW8gk7wIdw==
-X-Received: by 2002:a17:90a:2c41:: with SMTP id p1mr4749376pjm.129.1603857999683;
-        Tue, 27 Oct 2020 21:06:39 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id q35sm3548111pja.28.2020.10.27.21.06.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Oct 2020 21:06:38 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 09:36:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     ulf.hansson@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S2389659AbgJ1Www (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 18:52:52 -0400
+Received: from leibniz.telenet-ops.be ([195.130.137.77]:56812 "EHLO
+        leibniz.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389655AbgJ1Wv6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:51:58 -0400
+X-Greylist: delayed 4199 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Oct 2020 18:51:57 EDT
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by leibniz.telenet-ops.be (Postfix) with ESMTPS id 4CLkR13wFdzMqwlG
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 10:53:17 +0100 (CET)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by xavier.telenet-ops.be with bizsmtp
+        id lMtG2300W4C55Sk01MtGMp; Wed, 28 Oct 2020 10:53:17 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kXi8q-000lf0-Hq; Wed, 28 Oct 2020 10:53:16 +0100
+Date:   Wed, 28 Oct 2020 10:53:16 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nks@flawful.org, georgi.djakov@linaro.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V2 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
- -EPROBE_DEFER
-Message-ID: <20201028040637.26kw2qk7digel6yb@vireshk-i7>
-References: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
- <20201027222428.GA125472@roeck-us.net>
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] opp: Don't always remove static OPPs in
+ _of_add_opp_table_v1()
+In-Reply-To: <2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org>
+Message-ID: <alpine.DEB.2.22.394.2010281050200.183010@ramsan.of.borg>
+References: <2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201027222428.GA125472@roeck-us.net>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-10-20, 15:24, Guenter Roeck wrote:
-> Trying again through different e-mail provider. My previous e-mail
-> got stuck in spam filters. Apologies if this is received multiple
-> times.
+ 	Hi Viresh,
 
-I received only once :)
+On Wed, 14 Oct 2020, Viresh Kumar wrote:
+> The patch missed returning 0 early in case of success and hence the
+> static OPPs got removed by mistake. Fix it.
+>
+> Fixes: 90d46d71cce2 ("opp: Handle multiple calls for same OPP table in _of_add_opp_table_v1()")
+> Reported-by: Aisheng Dong <aisheng.dong@nxp.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> On Mon, Aug 24, 2020 at 02:39:32PM +0530, Viresh Kumar wrote:
-> > From: Stephan Gerhold <stephan@gerhold.net>
-> > 
-> [ ... ]
+This revives cpufreq on R-Car Gen2, and fixes a later s2ram regression
+in commit dc279ac6e5b4e06e ("cpufreq: dt: Refactor initialization to
+handle probe deferral properly"), where the PMIC is accessesed while
+the I2C controller is still suspended.
 
-You removed way too much and this lost the context. Keeping the
-routine's prototype line would have been useful.
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> >  
-> >  	opp_table = dev_pm_opp_get_opp_table(dev);
-> > -	if (!opp_table)
-> > -		return ERR_PTR(-ENOMEM);
-> > +	if (!IS_ERR(opp_table))
-> > +		return opp_table;
-> 
-> This should have been
-> 
-> 	if (IS_ERR(opp_table))
-> 		return opp_table;
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -944,6 +944,8 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+> 		nr -= 2;
+> 	}
+>
+> +	return 0;
+> +
+> remove_static_opp:
+> 	_opp_remove_all_static(opp_table);
+>
+> -- 
+> 2.25.0.rc1.19.g042ed3e048af
 
-I believe this is the delta from dev_pm_opp_register_set_opp_helper()
-?
+Gr{oetje,eeting}s,
 
-A proper fix is already pushed in linux-next for this yesterday.
+ 						Geert
 
--- 
-viresh
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
