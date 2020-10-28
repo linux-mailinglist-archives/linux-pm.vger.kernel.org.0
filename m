@@ -2,120 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F11E29E1DB
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 03:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95F029E318
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 03:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725907AbgJ2CEN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 22:04:13 -0400
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:37841 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727200AbgJ1Vkx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:40:53 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 83137391;
-        Wed, 28 Oct 2020 16:21:04 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 28 Oct 2020 16:21:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=tvzO3u8ximtfLtetGoZ5bDtCG8K
-        Ex2uEX5PE3riL5Qk=; b=WkQAm15t2lksX7079w98tgwTTHYXSK8s5zvDlxnWeNA
-        NZQFKvfLYHtnqKLNlxS5Dt4VxIP6SOeFchT/4lhUOFzGtX8x3YSzLZH/6lgichWb
-        xunO8bmyDP+JspqMUFpOgNUVw+tfn7Uwh//37qQu2zobVANVlY455T4+xbSQ4nz8
-        Pi+VUhVLXxhUyCzdCvfs4k+rcoXxyUEWLuSmD1J6yNKBQ21KOh0DA4NvwG/4eyej
-        gE3WGfte1f3yCUs4OjpNspOiCS0Hy8PRKJLRPhfPBABekx8KyFxOkD7mPXpt/UX5
-        gcFXBBe2uPvoQ/WU4asEBz3zZDCji6iGVU0RYeKNOtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=tvzO3u
-        8ximtfLtetGoZ5bDtCG8KEx2uEX5PE3riL5Qk=; b=TjLzXiLb7C1bP3dFxc/hKW
-        h2PFDvJmKJYBkKhtoz+/KDkpleQKtEzRQty8zi6yfU+uqSmBthb4smnyVuMyW8oK
-        00AH3F7peSOm1vAWymoWUHnSpYS8XgrCU/h5PO+OxyEyEwUNkVHbo6eTPS53dLgq
-        dr9gw/zQCrf4TN7hDPYLa6pl8VKsvGjnYKBURx4p+Hz0ftygSRLpN5+iqsrKlMZK
-        9FttsRgoP52hTfmbUjwFhhSuBfobsLyF6zSDRgCYh7A6k8hCsOV/O5WRGtG5hDgd
-        C/MEcdaePSmpwAXibGgyiaXERxza8SEO8+QR5oMvDBOVTUiMIOWmqOgNUivKnOew
-        ==
-X-ME-Sender: <xms:r9KZX73JeYVFZ87lpHjwYA4xFkrkXjgP7RV73X4xpy2zKvPh_LNOyw>
-    <xme:r9KZX6HPTGir2nxcIHbIeUfjZYCsMaDFOIQoKrmyqSgN-4P-f1i3rYfJ4mGLt1KqH
-    1xCXxxzsZrqNzj3aw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrledvgddtudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughrvghs
-    ucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrfgrth
-    htvghrnhepgfffveetveffudeluefhleegudektdevtedthedtgeevudffveegieejfeff
-    feeunecuffhomhgrihhnpegrtghkrdhpihhnghenucfkphepieejrdduiedtrddvudejrd
-    dvhedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    rghnughrvghssegrnhgrrhgriigvlhdruggv
-X-ME-Proxy: <xmx:r9KZX75lC2kG_Xjifgy_0QyjmGCIX-pD5_N9bJp3BPZHDMY3s02eiQ>
-    <xmx:r9KZXw1yTsu0i1lcW6upjw6yENe-jBC3Zeo1CUsvZ9c2dxyeZ-YDxg>
-    <xmx:r9KZX-EBHrFqjn05BnXCcD9plHeMeDFYCSnKbBgqRRtS7koUxGkQGA>
-    <xmx:sNKZXzQKWTmxqDtIOVKsD-0UBDMuS2UMhLlcmjIDge97OwnCqcoKyA>
-Received: from intern.anarazel.de (c-67-160-217-250.hsd1.ca.comcast.net [67.160.217.250])
-        by mail.messagingengine.com (Postfix) with ESMTPA id DD76B3064686;
-        Wed, 28 Oct 2020 16:21:02 -0400 (EDT)
-Date:   Wed, 28 Oct 2020 13:21:01 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Tushar Dave <tushar.n.dave@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        id S1726342AbgJ2CpP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 22:45:15 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41902 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726292AbgJ1Vdq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 17:33:46 -0400
+Received: by mail-pl1-f194.google.com with SMTP id w11so263505pll.8
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 14:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ga41Dk2QacbKUO1YmiFrIf/2peZltx835W/Ep/5bjyc=;
+        b=V2UvMKa69Dkdlem1AtciSVKbnKgZHxoLYKyM36cS8g454HVB1sZ2g1cONlPQFsqPWd
+         z4dzoaVMins4+W+OLP2sCd/V8WupCpMR1oov3g/8gnfraEWGLTQZ+63o7xZ+1DTNzbTB
+         BYBDyl8vB4h9zuEu9OUiyIQpUsIxhmv59Kflz4+hHFVAaJeXAqBrcOmrKqfeUMEKU1wa
+         aJlDM+UmUeY/MXZuBjEnCRXvwmbONVnHqJiC5dlyPAasqETggbN5h8pb9cY6TsWhAxVD
+         ct1owktyl9qc1+OV/TQYndakKL/j5WX+ppLaLkqhQJEhax3X3IYq1xxA6yTQUv1Tu4bU
+         PJaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ga41Dk2QacbKUO1YmiFrIf/2peZltx835W/Ep/5bjyc=;
+        b=J3bDrM2szPMldKVyRO7glxlV6R3dne8ywYMk3mXOR7/2cxrs01lhPb8B8ffWXaT9r5
+         xNcFUMaY1dOxNyMkF7QCpwymqK7g7nIPkVDL4jaKG6ti86doHfF5ihA6Zdb8ADDLr20K
+         G1Xatcr4hS49dYJFfUFAcjhwC/QVVy73IKB33O/yzPq4zEWPtfzfyIQ81EJEPvY7AkAc
+         PA7wt8J/BFLz3OziGnAjwDA7okfA+rEgrsVMV7SdioErWFJIQrBX+aGsl8NseX3lGwqp
+         0LSTvMcep0vtS2tQ62qy4rXKutjIvAjQjiQ2NIKQz3Be3DenePAAO0TsVTqfz9H29ckT
+         n4yA==
+X-Gm-Message-State: AOAM531gN+8j/9U0XIEUlagu6w7orTATvPp15MW9loaoFm0Ex8HhxQbA
+        4kckC8Q7pKwI9df+2UA6wYSnypDmXJQJ7A==
+X-Google-Smtp-Source: ABdhPJzOkofgCy3dGatAOxX6/apbFXN+EiNmpdS3vtsh9nYwED3wGgQeA+C+6AltBhq+k97WRPD4LA==
+X-Received: by 2002:a17:902:be06:b029:d3:e6c5:52a0 with SMTP id r6-20020a170902be06b02900d3e6c552a0mr7560107pls.77.1603896749260;
+        Wed, 28 Oct 2020 07:52:29 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id a3sm4561471pfa.126.2020.10.28.07.52.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Oct 2020 07:52:28 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 20:22:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal: intel_pch_thermal: Add PCI ids for Lewisburg
- PCH.
-Message-ID: <20201028202101.2m2jp3tfa6mh3brz@alap3.anarazel.de>
-References: <20200115184415.1726953-1-andres@anarazel.de>
- <2a5e9df32e2df27297149a577512f6b1557de241.camel@linux.intel.com>
- <20200116184250.qlvc3ilx2b42czqk@alap3.anarazel.de>
- <2de70e961f24592d2d157b8586526df2eaf0ae6e.camel@linux.intel.com>
+Subject: Re: [PATCH V2] cpufreq: tegra186: Fix initial frequency
+Message-ID: <20201028145226.5fzl6ryxbkwyxdmz@vireshk-i7>
+References: <20200824145907.331899-1-jonathanh@nvidia.com>
+ <20200825055003.qfsuktsv7cyouxei@vireshk-i7>
+ <09ac354e-a55b-5300-12ae-3f24c8f8b193@nvidia.com>
+ <20201016040700.wzfegk7hmabxgpff@vireshk-i7>
+ <9c37db70-9406-8005-3478-dc4a5e94c566@nvidia.com>
+ <c6ab92fe-e5ea-4568-6457-7a28c8496114@nvidia.com>
+ <20201028041152.733tkghz4vnqz2io@vireshk-i7>
+ <382ba642-dbea-c36a-0c71-6e91ccb7b775@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2de70e961f24592d2d157b8586526df2eaf0ae6e.camel@linux.intel.com>
+In-Reply-To: <382ba642-dbea-c36a-0c71-6e91ccb7b775@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 2020-01-16 11:41:34 -0800, Srinivas Pandruvada wrote:
-> On Thu, 2020-01-16 at 10:42 -0800, Andres Freund wrote:
-> > Hi,
-> > 
-> > On 2020-01-16 05:53:13 -0800, Srinivas Pandruvada wrote:
-> > > On Wed, 2020-01-15 at 10:44 -0800, Andres Freund wrote:
-> > > > I noticed that I couldn't read the PCH temperature on my
-> > > > workstation
-> > > > (C620 series chipset, w/ 2x Xeon Gold 5215 CPUs) directly, but
-> > > > had to
-> > > > go
-> > > > through IPMI. Looking at the data sheet, it looks to me like the
-> > > > existing intel PCH thermal driver should work without changes for
-> > > > Lewisburg.
-> > > Does the temperature reading match with what you read via IPMI?
-> > 
-> > It does:
-> > 
-> > root@awork3:~# ipmitool sdr|grep ^PCH
-> > PCH Temp         | 58 degrees C      | ok
-> > 
-> > andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/type
-> > pch_lewisburg
-> > andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
-> > 58000
-> > 
-> > And if I generate some load, it rises for both:
-> > root@awork3:~# ipmitool sdr|grep ^PCH
-> > PCH Temp         | 60 degrees C      | ok
-> > andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
-> > 60000
-> > 
-> Thanks for the test.
+On 28-10-20, 12:31, Jon Hunter wrote:
+> On 28/10/2020 04:11, Viresh Kumar wrote:
+> > When do we fail if the frequency isn't known ? That's the case where
+> > we try to set it to one from the table.
 > 
-> Rui can add his ACK.
+> Currently, if the frequency is not known, we fail right before we do the
+> initial frequency check [0].
 
-Ping? Looks like this got lost somewhere?
+Right, so the frequency returned there is 0. By unknown I assumed that
+you are talking about the case where the frequency isn't found in the
+table.
 
-Greetings,
+> > But (looking at your change), ->get() can't really return 0. We depend
+> > on it to get us the exact frequency the hardware is programmed at
+> > instead of reading a cached value in the software.
+> 
+> Actually it can and it does currently. Note in tegra186_cpufreq_get()
+> the variable 'freq' is initialised to 0, and if no match is found, then
+> it returns 0. This is what happens currently on some Tegra186 boards.
 
-Andres Freund
+Then there is a problem with the implementation of this helper in your
+case. This shouldn't try to go compare the value read from the
+register with the table, rather convert that directly to a meaningful
+frequency. Its like reading registers and then doing some computations
+with the values read with the parent PLLs frequency. Something like
+what you will normally do in the implementation of clk_get_rate().
+
+-- 
+viresh
