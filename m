@@ -2,107 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A12DF29D976
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D32A29D8F5
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389726AbgJ1Wyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 18:54:50 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:16472 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733260AbgJ1Wyq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:54:46 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f9964a70001>; Wed, 28 Oct 2020 05:31:35 -0700
-Received: from [10.26.45.122] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 28 Oct
- 2020 12:31:30 +0000
-Subject: Re: [PATCH V2] cpufreq: tegra186: Fix initial frequency
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        id S2389013AbgJ1WkZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 18:40:25 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:37475 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388994AbgJ1Wjr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:39:47 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m22so659757ots.4;
+        Wed, 28 Oct 2020 15:39:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=o6EwXQBfcMS/8hppO1O8Dg2kVJUq26B2UJyAmaDjbzk=;
+        b=sRd22aRNw6zB6w/gluvROBwovTKpgYdsfCTCx/XJI8t+aLYXKHUchELoq+O5iqicEx
+         B3lmmug5j/oQmHOgyR+4/EAJjkhmfhdIMsHp/6Qi3oLmGBh0ojWzA3YKviFFAP1a04v/
+         7rcLJC8RsnISJzeCghZWLhB6iAzqprh88lNEBiTyxQ2chWIZJgVP/zpT1eeDuZ70wxVQ
+         PtqDbYH8RcPaka8eqeLXYF2b5q6k6q/KDgAlJa7nG5dZClgq8jO33lxe7JJmwdRG3wnr
+         A+t4Rfe1J9ufjzfYulrUN6Af1R28k+a4OKB8df/QWV20Bgjgov+LG6Y7+nZGdt9cPqOU
+         P5+g==
+X-Gm-Message-State: AOAM533DGIIz9S5G7j0mqgcBQf66m5C+K1SShYVUAgq+UgoRMcEWrQj8
+        1GVLhzFl7nEc44X3mom8m36PEMobvw==
+X-Google-Smtp-Source: ABdhPJwj/TyDdKmqYTN4xYvs7B9zlCOZD1OUjrbHekbCo/ATjXWibtj5dLIGJwVVW7gCH9am8fXsDQ==
+X-Received: by 2002:a4a:ea4b:: with SMTP id j11mr6145795ooe.56.1603898585153;
+        Wed, 28 Oct 2020 08:23:05 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id c20sm2076568otm.49.2020.10.28.08.23.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 08:23:04 -0700 (PDT)
+Received: (nullmailer pid 4050074 invoked by uid 1000);
+        Wed, 28 Oct 2020 15:23:03 -0000
+Date:   Wed, 28 Oct 2020 10:23:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20200824145907.331899-1-jonathanh@nvidia.com>
- <20200825055003.qfsuktsv7cyouxei@vireshk-i7>
- <09ac354e-a55b-5300-12ae-3f24c8f8b193@nvidia.com>
- <20201016040700.wzfegk7hmabxgpff@vireshk-i7>
- <9c37db70-9406-8005-3478-dc4a5e94c566@nvidia.com>
- <c6ab92fe-e5ea-4568-6457-7a28c8496114@nvidia.com>
- <20201028041152.733tkghz4vnqz2io@vireshk-i7>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <382ba642-dbea-c36a-0c71-6e91ccb7b775@nvidia.com>
-Date:   Wed, 28 Oct 2020 12:31:28 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 04/52] dt-bindings: memory: tegra20: emc: Document
+ nvidia,memory-controller property
+Message-ID: <20201028152303.GA4041470@bogus>
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-5-digetx@gmail.com>
+ <20201027085417.GD4244@kozik-lap>
+ <54191034-dcb9-7cab-333b-5bb2553f0ed1@gmail.com>
+ <20201027193039.GA140636@kozik-lap>
 MIME-Version: 1.0
-In-Reply-To: <20201028041152.733tkghz4vnqz2io@vireshk-i7>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1603888295; bh=WzzOaEYzIzsUI3cCl2d2uX4B6nM/EI/XkOk1VFdax78=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=Qitm16SUB86mjL+1uY8ctmLnjoeRyRtQ7q3QyhEocvw1dN2ObM8q4aqz+9Wky2kl2
-         DGwT+i5qqMWzB+LlDtkjFxwn86PfWN2tk8GCtyx8yRqIza+j6Ki4f1mZoUHZ2oqVtU
-         x2LcYeP1AG1x9lByZlAfYdpzuFaaivHUwVnj4cOlsSZwrlHFiTCBI5fBNiIJleIOdc
-         XbUZRui/wbJ7eqK2khGoaqy3E3bQYUQZl7jBVF/2km4aH5xemVDJAhcqA5barRBTHd
-         N6DB/GSWllOm6FooPVtMx5+qlPA7WyIs1G6TSjKtsWR3wjGWAwOYZn5L00Qk9/WeIf
-         PUFmVIB3jarYw==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201027193039.GA140636@kozik-lap>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 28/10/2020 04:11, Viresh Kumar wrote:
-> On 26-10-20, 12:57, Jon Hunter wrote:
->> Thinking about this some more, what are your thoughts on making the
->> following change? 
->>
->> Basically, if the driver sets the CPUFREQ_NEED_INITIAL_FREQ_CHECK,
+On Tue, Oct 27, 2020 at 08:30:39PM +0100, Krzysztof Kozlowski wrote:
+> On Tue, Oct 27, 2020 at 10:17:19PM +0300, Dmitry Osipenko wrote:
+> > 27.10.2020 11:54, Krzysztof Kozlowski пишет:
+> > > On Mon, Oct 26, 2020 at 01:16:47AM +0300, Dmitry Osipenko wrote:
+> > >> Tegra20 External Memory Controller talks to DRAM chips and it needs to be
+> > >> reprogrammed when memory frequency changes. Tegra Memory Controller sits
+> > >> behind EMC and these controllers are tightly coupled. This patch adds the
+> > >> new phandle property which allows to properly express connection of EMC
+> > >> and MC hardware in a device-tree, it also put the Tegra20 EMC binding on
+> > >> par with Tegra30+ EMC bindings, which is handy to have.
+> > >>
+> > >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> > >> ---
+> > >>  .../bindings/memory-controllers/nvidia,tegra20-emc.txt          | 2 ++
+> > >>  1 file changed, 2 insertions(+)
+> > >>
+> > >> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> > >> index 567cffd37f3f..1b0d4417aad8 100644
+> > >> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> > >> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-emc.txt
+> > >> @@ -12,6 +12,7 @@ Properties:
+> > >>    irrespective of ram-code configuration.
+> > >>  - interrupts : Should contain EMC General interrupt.
+> > >>  - clocks : Should contain EMC clock.
+> > >> +- nvidia,memory-controller : Phandle of the Memory Controller node.
+> > > 
+> > > It looks like you adding a required property which is an ABI break.
+> > The T20 EMC driver is unused so far in upstream and it will become used
+> > only once this series is applied. Hence it's fine to change the ABI.
 > 
-> This flag only means that the platform would like the core to check
-> the currently programmed frequency and get it in sync with the table.
+> The ABI is not about upstream, but downstream. 
 
-Yes exactly.
+"If it's not upstream, it doesn't exist."
 
->> then I wonder if we should not fail if the frequency return by
->>> get() is not known.
-> 
-> When do we fail if the frequency isn't known ? That's the case where
-> we try to set it to one from the table.
+Though we do have to account for out of tree users where the DT is not 
+in tree, but upstream drivers are used. Downstream as in vendor kernels 
+typically has loads of other crap.
 
-Currently, if the frequency is not known, we fail right before we do the
-initial frequency check [0].
+> There are no other
+> upstreams using this ABI. Unless you have in mind that existing T20 EMC
+> driver was a noop, doing absolutely nothing, therefore there is no
+> breakage of any other users?
 
-> But (looking at your change), ->get() can't really return 0. We depend
-> on it to get us the exact frequency the hardware is programmed at
-> instead of reading a cached value in the software.
+ABI breaks are ultimately up to the platform maintainers to decide.
 
-Actually it can and it does currently. Note in tegra186_cpufreq_get()
-the variable 'freq' is initialised to 0, and if no match is found, then
-it returns 0. This is what happens currently on some Tegra186 boards.
-
->>> This would fix the problem I see on Tegra186
->> where the initial boot frequency may not be in the frequency table.
-> 
-> With current mainline, what's the problem you see now ? Sorry I missed
-> track of it a bit :)
-
-No problem, this has been an on-going saga now for sometime.
-
-Cheers
-Jon
-
-[0]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/cpufreq/cpufreq.c#n1429
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/cpufreq/tegra186-cpufreq.c#n95
-
--- 
-nvpublic
+Rob
