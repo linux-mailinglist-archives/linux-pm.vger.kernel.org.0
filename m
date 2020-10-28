@@ -2,128 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8023229DA08
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 00:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B7629DA99
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 00:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731936AbgJ1XKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Oct 2020 19:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725817AbgJ1XJH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 19:09:07 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7595CC0613CF
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 16:09:07 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id b19so391355pld.0
-        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 16:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=q3HZdrGNxCI/rwL2bJs+sG1c4DmY7gX64VUv8zPGJp0=;
-        b=w3iZHgADd5v9U6zAOB8D+M8MEqnphniRW2Jy/fJCVN1kcqPClAO4LvMLqXOn07ZoLx
-         ghyYw4tbLkd4ZLpFJ5yYzeB2FBTJQOSqLMu+eu0MDJFJ1PQQMIkmn0b06suSVU6pNGV6
-         uV39iGdCd3/RgcBjaecMILewDPwDqHInv8BvhYSJukEtH5w8pUdZPPy3QYGUUlq8TXYX
-         hViJ47ZuJPB3vTAc/INXSEvHVjOHsgy8am405mFyVp6YQXoavgdc2s31XtRWYPbONypI
-         78PXWgfQYCOgG1JQeffggPKb8W+MjeWpY6LcpiSzsV3ffNOzQEzvrZzoRDJygvKe4ngM
-         kzKw==
+        id S2390362AbgJ1XZ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 19:25:57 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36241 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390287AbgJ1XZh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 19:25:37 -0400
+Received: by mail-oi1-f195.google.com with SMTP id y186so1389869oia.3;
+        Wed, 28 Oct 2020 16:25:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=q3HZdrGNxCI/rwL2bJs+sG1c4DmY7gX64VUv8zPGJp0=;
-        b=b4ai0yfU3xQEvYr69z7Pz/GDIyMGRrvzw0BTWEhTh8JgD8IUdXaXj4410cXSUh79GH
-         jNbnRR3AnuFkgiXahjZ9HdavfrdqV/vZZwh69/aFM/FTOSAk1MejYdnfpCgaRpr6cXRB
-         rXH8DmIpvBr624NEeE4Yq6AdxaQ4GxrrgF6qlBrpbFsBTsO7Yvh//wv3DF7+r6I/cA/q
-         UJg0ryLTPOduS/DnGTOSb9BbYL20HGZyWvxeDjSnNwBcHdGlMFFvBV+Al3c+9L3U67ND
-         SCGsDkcBpKyK3xt+DqcxMmW/U9L38AU29AKwXkso9w4EcYLrxPAR5S0EnLjijSP8fM0M
-         UL9Q==
-X-Gm-Message-State: AOAM531+lbHyC83bROXypKrwtikQxDmWikWMSK2BFxyM7pZ1Uy+F4p33
-        RctalN4jGEvlGdGLrK3WyPZ1l+w5k8B1iQ==
-X-Google-Smtp-Source: ABdhPJx3bloTJFrm0fb9VkDA3VdvEPdnyGyj3MWhkAqG7wE90ovxnS/KcE9dbBFeor/v06ApPv/DnQ==
-X-Received: by 2002:a05:6a00:2cf:b029:160:c0c:a95c with SMTP id b15-20020a056a0002cfb02901600c0ca95cmr5587882pft.76.1603857803605;
-        Tue, 27 Oct 2020 21:03:23 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id kk14sm3187829pjb.47.2020.10.27.21.03.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Oct 2020 21:03:22 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 09:33:20 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 46/52] opp: Put interconnect paths outside of
- opp_table_lock
-Message-ID: <20201028040320.4nobxzudy3fuwmms@vireshk-i7>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-47-digetx@gmail.com>
- <20201027051013.5gr4s3wuuwxsd7ax@vireshk-i7>
- <44169d24-4afc-5388-788f-d1e8263fc627@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WRqdyxaHVERacl4jf/075/U1BNHD64QQhedn3+Sdi/8=;
+        b=Pb/rR75SIF+nwxRlmSbuUBwghXPIVLP3kqE+fwaRhW2TM9kCgWPGBHqIf9OtXtWn/a
+         22ZmW2KTl/85e49X1vy3W6nZUO9SavD4XgdihogxwFYXi/fN+xCY83box/Jfo67c1jGH
+         v7K4ev3WDBiQELzjwg+EW1WY78lEKI9CsslEJkckXeVh5QbxT5i9B5X7/rchK2PrAUvJ
+         9Cpsl7V1Yd3UxDtZE4MFU1O+d9cjHh10AOS01YmSuXe2848K7Q6drsrgSFUCAHufYywu
+         5G2onKErn+wHwxZbnuOADaVoAWWFH8NGw9Lt5fhow4V6kzhhmgc1+KvEM17gQyrolboU
+         qKjw==
+X-Gm-Message-State: AOAM530NFWvoVhhaDqaOwBIZMVku1sCTAHLYpOSij6jeKo0+hqTKvmOO
+        RCxtyZtErk2p6nNCYEjnxoeHQvgXv9WGrMN0b6Bu0CgEs84JLg==
+X-Google-Smtp-Source: ABdhPJyXYiynuJcGVEVWbMjMQv17WJ9Bdi5zI7Wuu0SiRqN/fHDXAy41dVJBMeByjeXKfMb+nbbdqdgyyPIFu/7hCdI=
+X-Received: by 2002:aca:c490:: with SMTP id u138mr4696584oif.54.1603878596951;
+ Wed, 28 Oct 2020 02:49:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <44169d24-4afc-5388-788f-d1e8263fc627@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
+ <f75c61f193f396608d592ae2a9938264d582c038.1598260050.git.viresh.kumar@linaro.org>
+ <CAMuHMdXLQKN5n58NvOp43vhc3ryLXWurBSsmcW9Q=oW502PYOQ@mail.gmail.com>
+ <20201013095613.mbgmjwzojg5wxmau@vireshk-i7> <CAMuHMdVAJdHVMtK3Sc4sJiJGAwz1J4dKODBFcNzgstaktyKkOw@mail.gmail.com>
+ <20201016050347.ers54itzmxgijzsy@vireshk-i7> <CAMuHMdUUzoFxbJts3gVC7i5A5daa_TYzKdrGEHho=3a1eeC_ww@mail.gmail.com>
+ <20201016080730.h7u3jmlyjbyhqn3t@vireshk-i7> <CAMuHMdV1pnE===53_8r596G=9ktw-UMqD3N=T_F34Yk9aw9wWA@mail.gmail.com>
+ <20201028054829.42zckdtwvj67tcfl@vireshk-i7>
+In-Reply-To: <20201028054829.42zckdtwvj67tcfl@vireshk-i7>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 28 Oct 2020 10:49:45 +0100
+Message-ID: <CAMuHMdXnfG8riHYsd9PYSHTDvJ11zQ27y_JJh_9+obUxxLen0g@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] cpufreq: dt: Refactor initialization to handle
+ probe deferral properly
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        nks@flawful.org, Georgi Djakov <georgi.djakov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-10-20, 23:26, Dmitry Osipenko wrote:
-> 27.10.2020 08:10, Viresh Kumar пишет:
-> > On 26-10-20, 01:17, Dmitry Osipenko wrote:
-> >> This patch fixes lockup which happens when OPP table is released if
-> >> interconnect provider uses OPP in the icc_provider->set() callback
-> >> and bandwidth of the ICC path is set to 0 by the ICC core when path
-> >> is released. The icc_put() doesn't need the opp_table_lock protection,
-> >> hence let's move it outside of the lock in order to resolve the problem.
-> >>
-> >> In particular this fixes tegra-devfreq driver lockup on trying to unload
-> >> the driver module. The devfreq driver uses OPP-bandwidth API and its ICC
-> >> provider also uses OPP for DVFS, hence they both take same opp_table_lock
-> >> when OPP table of the devfreq is released.
-> >>
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> ...
-> > 
-> > Never make such _fixes_ part of such a big patchset. Always send them
-> > separately.
-> 
-> Perhaps it's not obvious from the commit description that this patch
-> doesn't fix any known problems of the current mainline kernel and it's
-> needed only for the new patches.
+Hi Viresh,
 
-No, I understood that we started getting the warning now only after
-some other patches of yours. Nevertheless, it should be considered as
-a fix only as that generated lockdep because of locking placement. And
-so sending such stuff separately is better as that allows people to
-apply it fast.
+On Wed, Oct 28, 2020 at 6:48 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> On 27-10-20, 17:29, Geert Uytterhoeven wrote:
+> > On plain v5.9, with #define DEBUG and a few extra debug prints
+> > added, I get:
+> >
+> >     cpufreq_dt: cpufreq_init:164: policy->cpu = 0
+> >     cpufreq_dt: cpufreq_init:165: policy->cpus = 0
+> >     cpufreq_dt: cpufreq_init:166: policy->related_cpus =
+> >     cpufreq_dt: cpufreq_init:167: policy->real_cpus =
+> >     cpu cpu0: dev_pm_opp_of_get_sharing_cpus: Couldn't find opp node.
+> >     of: dev_pm_opp_of_cpumask_add_table:1049
+> >     of: dev_pm_opp_of_cpumask_add_table:1054: cpu 0
+> >     cpu cpu0: dev_pm_opp_of_add_table:954
+> >     cpu cpu0: dev_pm_opp_of_add_table:956:
+> > dev_pm_opp_get_opp_table_indexed() returned (ptrval)
+> >     cpu cpu0: _of_add_opp_table_v1:891
+> >     cpu cpu0: _of_add_opp_table_v1:893: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: _of_add_opp_table_v1:909: 6 entries
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 6
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 6
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 6
+> >     cpu cpu0: Couldn't find proper 'dynamic-power-coefficient' in DT
+> >     cpu cpu0: Couldn't register Energy Model -22
+> >
+> > This happens quite late in the boot sequence, long after cpu1 has been
+> > brought online.
+> > So it finds the v1 opp table for cpu0, which has 6 entries.
+> > The last two messages should be harmless, right?
+>
+> Yes.
+>
+> > So you say cpufreq is not working? How can I verify that?
+>
+> I said it because your earlier logs showed that we defered probed
+> again or the count was 0 and we failed. Something like that.
+>
+> Give output of this to verify if cpufreq is working or not:
+>
+> grep . /sys/devices/system/cpu/cpufreq/policy*/*
+>
+> This will be empty if there is no cpufreq.
 
-> > Having said that, I already have a patch with me which shall fix it for you as
-> > well:
-> 
-> I see that yours fix is already applied, thanks!
+/sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0 1
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:1500000
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:300000
+/sys/devices/system/cpu/cpufreq/policy0/related_cpus:0 1
+/sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies:375000
+750000 937500 1125000 1312500 1500000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conservative
+ondemand userspace powersave performance schedutil
+/sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_driver:cpufreq-dt
+/sys/devices/system/cpu/cpufreq/policy0/scaling_governor:schedutil
+/sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:1500000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
 
-I hope it worked for you. Thanks.
+So it works in v5.9, but not in v5.10-rc1.
 
--- 
-viresh
+Bisection says it was broken by commit 90d46d71cce279d8 ("opp: Handle
+multiple calls for same OPP table in _of_add_opp_table_v1()").
+
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 0
+> >     cpu cpu0: OPP table can't be empty
+> >
+> > Wait, _get_opp_count() returns 0?
+>
+> Does this fix it for you as well ?
+>
+> https://lore.kernel.org/lkml/2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org/
+
+Thanks, it does. I had arrived at the same conclusion after bisection.
+
+> I didn't point you to this earlier as your logs said something else.
+
+All my logs said _get_opp_count() returns 0.
+
+> > During s2ram, v5.10-rc1, it redoes most of the above, incl. touching the
+> > PMIC, which it shouldn't due in this phase of system resume:
+> >
+> >     Disabling non-boot CPUs ...
+> >     Enabling non-boot CPUs ...
+> >     cpufreq_dt: cpufreq_init:112: policy->cpu = 1
+> >     cpufreq_dt: cpufreq_init:113: policy->cpus = 1
+> >     cpufreq_dt: cpufreq_init:114: policy->related_cpus =
+> >     cpufreq_dt: cpufreq_init:115: policy->real_cpus =
+> >     of: dev_pm_opp_of_cpumask_add_table:1075
+> >     of: dev_pm_opp_of_cpumask_add_table:1080: cpu 0
+> >     cpu cpu0: dev_pm_opp_of_add_table:980
+> >     cpu cpu0: dev_pm_opp_of_add_table:982:
+> > dev_pm_opp_get_opp_table_indexed() returned f680980b
+> >     cpu cpu0: _of_add_opp_table_v1:914
+> >     cpu cpu0: _of_add_opp_table_v1:916: _find_opp_table() returned a4afd426
+> >     cpu cpu0: _of_add_opp_table_v1:937: 6 entries
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >
+> > The i2c controller is suspended, this could go boom...
+> >
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     of: dev_pm_opp_of_cpumask_add_table:1080: cpu 1
+> >     cpu cpu1: dev_pm_opp_of_add_table:980
+> >     cpu cpu1: dev_pm_opp_of_add_table:982:
+> > dev_pm_opp_get_opp_table_indexed() returned f680980b
+> >     cpu cpu1: _of_add_opp_table_v1:914
+> >     cpu cpu1: _of_add_opp_table_v1:916: _find_opp_table() returned 9087c76d
+> >     cpu cpu1: _of_add_opp_table_v1:937: 6 entries
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned f680980b
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 0
+> >     cpu cpu0: OPP table can't be empty
+> >     CPU1 is up
+>
+> Lets make the normal boot work first and see about this later.
+
+This is also fixed by your patch: the PMIC is no longer accessed while
+suspended.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
