@@ -2,93 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1287429D5E2
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072F529D970
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Oct 2020 23:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730334AbgJ1WJc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 28 Oct 2020 18:09:32 -0400
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:32804 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728604AbgJ1WJ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:09:29 -0400
-Received: by mail-lf1-f50.google.com with SMTP id l2so814986lfk.0;
-        Wed, 28 Oct 2020 15:09:27 -0700 (PDT)
+        id S2389758AbgJ1WzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Oct 2020 18:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389780AbgJ1WzP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Oct 2020 18:55:15 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B866AC0613D1
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:55:14 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id k27so1271375oij.11
+        for <linux-pm@vger.kernel.org>; Wed, 28 Oct 2020 15:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KfnjVkSYavUZpAOuFxYL10A68Gk+riZcuOkpLm+UKsQ=;
+        b=orPttfCJNvUzyey7uOGV6qbycVKTL/tawKuMW0R4tXOU76W3N/0abqCNmDOmSmvRKN
+         L2JU10SN8to5CTiFxG5wFlRZ+x6UlUgMbOG7N/pua3fxvZBZCJS+EYHvE8FzLHr3047a
+         IusQdNKndPmJTL/Pn2PASNVNzQizL4HKrr9h8Sa4s9vTWSzUv1vWxJlLWL7qBwiNZZH0
+         NL3jimF1eAupDw4lp9obwTBpfo4tAMxacCG2xG9Ai03ir7HEjMODGsb6q1L4ESlUir48
+         MW4RzbQapeOS637/B5YLbaa26ZNLRjDyIkCnrRdrCVaqLf/6SiGLh23zR+zTIGWZ/xQI
+         LDIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vP95c5G5AiWt8jFAMoFHGwxXSql0kCQrJ9xpkPgq6gg=;
-        b=HUEdEcL9oWOFN5GZBxdIaZuS75HZc1SpYh+XPYjnnLFtT7U0bcCPzpa2vlhwDxDdgk
-         yvYmhzdZIGzCPDQKugnJKn3R6erxAIXZYB6L5asjmhG+CNN3o8TOjW+DK110SCBYvO94
-         Thd+bpYWL74XjThcUosC0busfnRzkPQC+MmY97PSEALfA758uf2gLrKzegXjCSZbvZKL
-         NI2/QBv5TVO2dB3fn0j8dZuoTkBLj5rE1VI1e3Kf6UDmj3dBUyhbM8JfOl3jY7YWVotv
-         SI9tuug6nOZPt+NM8OhLG6cVNwMHV452ldJaNOcksWdHTvSwVTS1VZInkVyrTQI8AkIy
-         P2Gg==
-X-Gm-Message-State: AOAM5334bepW508TC6pThlk8737l4d4hm0IKTe5aplq3YlflMwF8IDXg
-        FOMUWXzU1pDtlsM3JnuAXfN8th22ngJeOQ==
-X-Google-Smtp-Source: ABdhPJyHdwuuiwRcW53qYzu6ELBzFaASak8bZZ7cUJm7qaJ+2lCiPhJEUbxJ3cDKZqX83Q9tfRG3aQ==
-X-Received: by 2002:a05:6402:134c:: with SMTP id y12mr460552edw.344.1603913305471;
-        Wed, 28 Oct 2020 12:28:25 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id p1sm261722ejd.33.2020.10.28.12.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 12:28:23 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 20:28:21 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 41/52] memory: tegra124-emc: Use
- devm_platform_ioremap_resource()
-Message-ID: <20201028192821.GB170285@kozik-lap>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-42-digetx@gmail.com>
- <20201027102707.GC17089@kozik-lap>
- <d79e4972-acf9-f889-50b8-f0829a0e8e08@gmail.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KfnjVkSYavUZpAOuFxYL10A68Gk+riZcuOkpLm+UKsQ=;
+        b=OLvdQhxVPAXz1OIegW3tE4A9J7PV7VVtEtsY2K5KHO6gmipbmV6BufVQ8mFw2o2lTm
+         rk0sAxQsLYBwnrB3uTt8nYGRzfXp5TrWQI8AuQd/BaymZirMbnBzSO9ZDA1robF8ViBG
+         D9sz2yCqWL93jr7WoZHan20hgcF4bhDJWsjGGaU8YBz0//1uXNh76jca9UmI8KZVZRIr
+         xwtV5JkMYkgo1rAVfvl5u1M7pHZmeGNGk6Gj70ig8xH01HId+ZUWkupJo43wlMywQJlJ
+         MoC3rrfXN8jKebWHWuKvLdp27RBvjKsMOiXKVvcgJPLjbhQ1cFQ0btWNmE1Zb8y4Z45f
+         hJFA==
+X-Gm-Message-State: AOAM5301UHz+V/KzX+9lzhWIoOgSWvnnDYIkzctK9vDVU9BXjmuOZN5m
+        bZkx4JyAr42m9g1DDk58Ty/rzq/NEDglSQ==
+X-Google-Smtp-Source: ABdhPJyMbjsKNL+0AaYE+74jjeyJZn6dVKEnUKfModkHmF8ww8t+Tpr9o99iUojODmy3PW8gk7wIdw==
+X-Received: by 2002:a17:90a:2c41:: with SMTP id p1mr4749376pjm.129.1603857999683;
+        Tue, 27 Oct 2020 21:06:39 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id q35sm3548111pja.28.2020.10.27.21.06.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 27 Oct 2020 21:06:38 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 09:36:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     ulf.hansson@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nks@flawful.org, georgi.djakov@linaro.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH V2 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
+ -EPROBE_DEFER
+Message-ID: <20201028040637.26kw2qk7digel6yb@vireshk-i7>
+References: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
+ <20201027222428.GA125472@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <d79e4972-acf9-f889-50b8-f0829a0e8e08@gmail.com>
+In-Reply-To: <20201027222428.GA125472@roeck-us.net>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 11:30:31PM +0300, Dmitry Osipenko wrote:
-> 27.10.2020 13:27, Krzysztof Kozlowski пишет:
-> > On Mon, Oct 26, 2020 at 01:17:24AM +0300, Dmitry Osipenko wrote:
-> >> Use devm_platform_ioremap_resource() helper which makes code a bit
-> >> cleaner.
+On 27-10-20, 15:24, Guenter Roeck wrote:
+> Trying again through different e-mail provider. My previous e-mail
+> got stuck in spam filters. Apologies if this is received multiple
+> times.
+
+I received only once :)
+
+> On Mon, Aug 24, 2020 at 02:39:32PM +0530, Viresh Kumar wrote:
+> > From: Stephan Gerhold <stephan@gerhold.net>
 > > 
-> > Such cleanups (and few other in this patchset) should be at beginning of
-> > patchset or even as part of a separate one.  I think there is not much
-> > stopping anyone from applying these... except that you put them in the
-> > middle of big dependency.
+> [ ... ]
+
+You removed way too much and this lost the context. Keeping the
+routine's prototype line would have been useful.
+
+> >  
+> >  	opp_table = dev_pm_opp_get_opp_table(dev);
+> > -	if (!opp_table)
+> > -		return ERR_PTR(-ENOMEM);
+> > +	if (!IS_ERR(opp_table))
+> > +		return opp_table;
 > 
-> Some of these cleanup patches can't be applied separately without a need
-> to make a rebase. I think it should be more preferred to have all the
-> patches within a single series.
+> This should have been
 > 
-> I'll try to reorder the patches in v7 if this will ease the review, thanks.
+> 	if (IS_ERR(opp_table))
+> 		return opp_table;
 
-If feasible, that would be good. Thanks.
+I believe this is the delta from dev_pm_opp_register_set_opp_helper()
+?
 
-Best regards,
-Krzysztof
+A proper fix is already pushed in linux-next for this yesterday.
 
+-- 
+viresh
