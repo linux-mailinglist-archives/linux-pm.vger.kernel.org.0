@@ -2,95 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BDE29E552
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 08:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D1529E547
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 08:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732317AbgJ2H4Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 03:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731046AbgJ2HyA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 03:54:00 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85495C0613D5
-        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 00:53:59 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id j5so911624plk.7
-        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 00:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=E4sw3w4XrFVZNMUzdJHDOom34bhUJxhQlbaLUHYjXdc=;
-        b=DueEfr9al3mveAf2AlVsQ0gR2DKDGYDGjJTa0Vii6mWcNYhaeuLtqbkKodyHlYjQBC
-         3BkwpMOYAF1qGKSWmfmH5C9hNOyQB37RutYwOag1LIV02vP1Fnc4pOroCN4BlxMAiW1u
-         uePwv1krkhgMji5LJ5wadtnxysvC7OEana+RnLwkSYJvtYXRwdtktRzph/UO6mPREpSg
-         nJT1Eh5iW9m7MjTz7w8MUz9hPdlcQo72rGEQLbOCyQLy6qGy93f6nw3Nn63xq+0+EJEg
-         0H5Z3k3xakc8lSEy1IH1CH0WYfPWlJ4s51zs0iRC6tXg80TDdalS9EwzNFbFLAbsQEnw
-         aneg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=E4sw3w4XrFVZNMUzdJHDOom34bhUJxhQlbaLUHYjXdc=;
-        b=fK9Dzx9Jv5TQ+KiD8LKlXqm2Q3IQ/W5ehNe5hg/FgHXJcEdjPPKzAlgj+6F01l04An
-         v97QDdFFZHr7gqDVZDG9cPj23rWXGnoQF4yvczUFIWR3GRbhb1zmWuH+TBj13A2RCdPV
-         MR17cCknf7NVeeZ22321iQ+xz0/rplIMixwNYGYhU4jNnLyW4xJxmwRvDLsTjV6KuKEZ
-         tPGduqDuvmWonfVmP+UOUTFku5VZfycao0dV+sRsyPEjDRYbFk3vuk7ZF5TbzLMXTf7+
-         5Dc2FlJkXSyv6qIhYRvHdlNcqzZ9uhQVbs9i0r6stjI37ZWNNVF3346wsKmBqFa1nIA6
-         fUlg==
-X-Gm-Message-State: AOAM531mutXu8FWBUpax+W+X4Gp1Ay+GAhpVdqAbkkWCbAydXxMzmZD1
-        W3U45eb3Smqekep0MBQm15WrCY+MXyiIzQ==
-X-Google-Smtp-Source: ABdhPJxF27cGr7hvK/3UclnQsFJtoKHen+ck4vMPY0s5Ag+bdkxLWyKYRfRldLFwf1iay6yosmyI3g==
-X-Received: by 2002:a17:902:8215:b029:d5:f299:8b11 with SMTP id x21-20020a1709028215b02900d5f2998b11mr2876637pln.39.1603958039058;
-        Thu, 29 Oct 2020 00:53:59 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id t129sm1995388pfc.140.2020.10.29.00.53.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 29 Oct 2020 00:53:58 -0700 (PDT)
-Date:   Thu, 29 Oct 2020 13:23:56 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vireshk@kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
-        nm@ti.com, rafael@kernel.org, sudeep.holla@arm.com,
-        daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com
-Subject: Re: [PATCH 0/4] Add sustainable OPP concept
-Message-ID: <20201029075356.rruej6jlerhfa4oy@vireshk-i7>
-References: <20201028140847.1018-1-lukasz.luba@arm.com>
- <20201029074057.6ugmwyzna52x3oli@vireshk-i7>
+        id S1731722AbgJ2Hz4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 03:55:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56062 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731531AbgJ2Hyb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 29 Oct 2020 03:54:31 -0400
+Received: from kernel.org (unknown [87.70.96.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E3F1620EDD;
+        Thu, 29 Oct 2020 07:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603958070;
+        bh=5V9raRTAO8xn/TWxASurP3gs711BOhAaxxP12fBIpug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=smkJOo6ejvJldTmaaqqEFjGX6LWRb76WicHCvCBcrN9qOMMNByoTCZCyPYd8JouA6
+         FsHRDDeFim9xIzvbeq0FyT0w7eXPAkBTo6qZkKSqULTgH8mtDPy6sKAI1NlM6RXbk0
+         gkAxCVUoVSgKd/P/vRphpHr37cKvq2I6Usohfbtc=
+Date:   Thu, 29 Oct 2020 09:54:16 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "cl@linux.com" <cl@linux.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
+Subject: Re: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages
+ in the direct map
+Message-ID: <20201029075416.GJ1428094@kernel.org>
+References: <20201025101555.3057-1-rppt@kernel.org>
+ <20201025101555.3057-3-rppt@kernel.org>
+ <3b4b2b3559bd3dc68adcddf99415bae57152cb6b.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201029074057.6ugmwyzna52x3oli@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <3b4b2b3559bd3dc68adcddf99415bae57152cb6b.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-10-20, 13:10, Viresh Kumar wrote:
-> On 28-10-20, 14:08, Lukasz Luba wrote:
-> > Hi all,
-> > 
-> > This patch set introduces a concept of sustainable OPP, which then can be used
-> > by kernel frameworks or governors for estimating system sustainable system
-> > state. This kind of estimation is done e.g. in thermal governor Intelligent
-> > Power Allocation (IPA), which calculates sustainable power of the whole system
-> > and then derives some coefficients for internal algorithm.
-> > 
-> > The patch set introduces a new DT bindings 'opp-sustainable', with parsing
-> > code. It also adds a function (in patch 3/4) which allows device drivers to set
-> > directly the sustainable OPP. This is helpful when the device drivers populate
-> > the OPP table by themself (example in patch 4/4).
-> > 
+On Wed, Oct 28, 2020 at 09:15:38PM +0000, Edgecombe, Rick P wrote:
+> On Sun, 2020-10-25 at 12:15 +0200, Mike Rapoport wrote:
+> > +       if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
+> > +               unsigned long addr = (unsigned
+> > long)page_address(page);
+> > +               int ret;
+> > +
+> > +               if (enable)
+> > +                       ret = set_direct_map_default_noflush(page);
+> > +               else
+> > +                       ret = set_direct_map_invalid_noflush(page);
+> > +
+> > +               if (WARN_ON(ret))
+> > +                       return;
+> > +
+> > +               flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> > +       } else {
+> > +               debug_pagealloc_map_pages(page, 1, enable);
+> > +       }
 > 
-> Can we please have some more information about this ? What does the
-> sustainable OPP mean ? How will platform guys know or learn about this
-> ? How we are going to use it finally ? What does it have to do with
-> temperature of the SoC or the thermal affects, etc.
+> Looking at the arm side again, I think this might actually introduce a
+> regression for the arm/hibernate/DEBUG_PAGEALLOC combo.
+> 
+> Unlike __kernel_map_pages(), it looks like arm's cpa will always bail
+> in the set_direct_map_() functions if rodata_full is false.
+>
+> So if rodata_full was disabled but debug page alloc is on, then this
+> would now skip remapping the pages. I guess the significance depends
+> on whether hibernate could actually try to save any DEBUG_PAGEALLOC
+> unmapped pages. Looks like it to me though.
+ 
+__kernel_map_pages() on arm64 will also bail out if rodata_full is
+false:
 
-And that we need a real user of this first if it is ever going to be
-merged.
+void __kernel_map_pages(struct page *page, int numpages, int enable)
+{
+	if (!debug_pagealloc_enabled() && !rodata_full)
+		return;
+
+	set_memory_valid((unsigned long)page_address(page), numpages, enable);
+}
+
+So using set_direct_map() to map back pages removed from the direct map
+with __kernel_map_pages() seems safe to me.
 
 -- 
-viresh
+Sincerely yours,
+Mike.
