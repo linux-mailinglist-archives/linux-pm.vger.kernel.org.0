@@ -2,110 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD5F29F702
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 22:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD04529F732
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 22:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725769AbgJ2Viq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 17:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S1725747AbgJ2Vxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 17:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbgJ2Vip (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 17:38:45 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB17C0613CF
-        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 14:38:45 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id c11so4606233iln.9
-        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 14:38:45 -0700 (PDT)
+        with ESMTP id S1725372AbgJ2Vxt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 17:53:49 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C88FC0613CF
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 14:53:48 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id x23so1959177plr.6
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 14:53:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EKe0JHOwCecKuAjkjMsnJIi75X/TchLoPWYf5BJqFJc=;
-        b=ZQ39XwpWUNJe8NW3KoyvnAbECXCSATyqLgvcqrLpYj/kIDIPlOBi9fTaMntMJyMI7A
-         YPQ3gUHr694j02xA7ohmTFSY+rdYpeWdQDx680pOMq68fQLCUK5Dy7hxCpIqbIZciqMO
-         H8tGJ17IqenLb68NYiVVPQCPPUjmPA2UU16xg=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Eu418Sk3GF2+EEHmdSqcqxo0CrhCdsoqi3Jj66IAvjE=;
+        b=NcxwHTtLQiBYbhwLrzI2E2zpCEFanRcTyeAJxOU8hCccjxOK9rkdwvxxmCLQ4zvknA
+         mQVNkkg6baUyGWzfBt6o7UIfeSmZpklbIi0/nG9nifhIh+OGO3by5OKDNgUPsTrrgvte
+         3rSotrC7oe/uI917z85pnEw/4RIm60xChdkaFwv0jP2n6LPnnx1Gxy18ehiIXrSYOXFh
+         n/s++fchWAUviclR+AmekCVU9UftBzFh9X3NENSs65ax+bZvslmTDIPhi2iQh4+woq6J
+         5V7kSqj8zi72z6NANABO1MMTT1v5i0keql0qH3Zez0TzvYkz5IoFrE9svBZ9ZoXHajfG
+         cczA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EKe0JHOwCecKuAjkjMsnJIi75X/TchLoPWYf5BJqFJc=;
-        b=Rxn+kckMZFJCqhbMkXUYMRhTK7q/oQQtHTupZ6Sm5VZaocIUVWmEdEx/huHLcF82Xd
-         dpX6v82SSAM4KFGJL7Etyk3zMtuR3duaKmcruGvoVLjAEZlRD1wzxCR17+aR7/j/pMCq
-         uHmIi+9sTc4nRNBeNs7p2ZwgXbXF0zbOdaWjemuzXsrQYi1hTvuIfXaZdxZ0HzcMJUwa
-         hfoeoLs+JzTCFqQBeTl/eGGrlqxCDc0O31QGgE60jYvwVWppuPcXQw11UCkcVBezMf0Z
-         1SfKoIR6DfyV8udSEKuZsXhR/fpL6yW0f/DEZyxJoiFp4BbAiD2bVK1vifldVqcXk5Bw
-         fIuw==
-X-Gm-Message-State: AOAM530vZH0WZinbKLDTMdSezfvwRdnxuL6U1DQgbHgSP36YO5T0w452
-        hs4MNGeVYO1O0J4hF9LE7OQ0sHWX/DIlgQ==
-X-Google-Smtp-Source: ABdhPJyIKKyr1RQ/foRBDKa42NKnbq4cRv7/IYbKyYjCLY5Dwe3mPE59xYB7kyc1g3jgTT5Tpx222g==
-X-Received: by 2002:a92:41cf:: with SMTP id o198mr5013495ila.262.1604007524840;
-        Thu, 29 Oct 2020 14:38:44 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id k8sm3294272ilh.8.2020.10.29.14.38.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2020 14:38:44 -0700 (PDT)
-Subject: Re: [PATCH 1/4] tools/power/cpupower: Read energy_perf_bias from
- sysfs
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     X86 ML <x86@kernel.org>, Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201015144603.27933-1-bp@alien8.de>
- <20201015144603.27933-2-bp@alien8.de>
- <7806e3c0-f435-18a0-c50d-eee3f1f7fccf@linuxfoundation.org>
- <20201016083754.GB8483@zn.tnic>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ca53e90a-f4eb-5007-a137-62729e3d74f0@linuxfoundation.org>
-Date:   Thu, 29 Oct 2020 15:38:43 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Eu418Sk3GF2+EEHmdSqcqxo0CrhCdsoqi3Jj66IAvjE=;
+        b=J/7WWeSvA27h4IvrHZ3Q0bYAm4GejA2wA04uIx/uS4B1nqKnTIMGmx99nU0JI41AD1
+         TXrcnJJhCEVhKEf/NR1Ootv+961zS21W3MC9hozl6g4b1NWTT0BxOnJ4Lz2gAQPtjMlR
+         YhBe2T9ZB7y4t7gzVwFyxMb5v9QPS4pTh96AF50DwubqCZFhs65zpmABIt5yEgD1W3sJ
+         hX8l2pKt15UHvvujM76Qx11/5CTw6KXgZNuacRCwTdEgZTIxOLXe/1FLUO8gV9LBgjH8
+         GMh2idNGJ4DNUfaFVcpQDi7uLgKSzVF//roL1g/1D9OdDZUKQ3PF0HT0xH7/DRxcJJv6
+         8kAw==
+X-Gm-Message-State: AOAM532Qqnaar9ezNH913GAC7WDdVlvBLNIMY2Fe0Sp3LyYCZUXJzjKO
+        ZQfs09xe/ONCL4L842ZFROqokBZuqEsoRQ==
+X-Google-Smtp-Source: ABdhPJz1G7NY5+ETwG7sm2KXLIJC/doafw4pXTWqJFoi2RSSg45owqzMRcO5V0fVuIMnb11SaMIkRw==
+X-Received: by 2002:a17:902:bc82:b029:d6:4ee5:87d0 with SMTP id bb2-20020a170902bc82b02900d64ee587d0mr5852337plb.40.1604008428014;
+        Thu, 29 Oct 2020 14:53:48 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id i14sm3769682pfd.38.2020.10.29.14.53.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2020 14:53:47 -0700 (PDT)
+Message-ID: <5f9b39eb.1c69fb81.944de.9143@mx.google.com>
+Date:   Thu, 29 Oct 2020 14:53:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20201016083754.GB8483@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.10-rc1-24-g5e00eb5f6209
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 120 runs,
+ 1 regressions (v5.10-rc1-24-g5e00eb5f6209)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/16/20 2:37 AM, Borislav Petkov wrote:
-> On Thu, Oct 15, 2020 at 11:49:32AM -0600, Shuah Khan wrote:
->> Is there a reason to move "int fd"?
-> 
-Sorry for a late response.
+pm/testing baseline: 120 runs, 1 regressions (v5.10-rc1-24-g5e00eb5f6209)
 
-Okay. Looked odd since it didn't need changing.
+Regressions Summary
+-------------------
 
-> Habit from tip - we sort function-local variables in a reverse fir tree
-> order. And since I'm adding cpupower_write_sysfs(), I made them look
-> consistent.
-> 
->>> +	numwritten = write(fd, buf, buflen - 1);
->>> +	if (numwritten < 1) {
->>> +		perror("write failed");
->>
->> Please add filename to the error message
-> 
-> 	perror(path);
-> 
-> or do you want me to build a string with an error message and filename?
+platform | arch | lab           | compiler | defconfig          | regressio=
+ns
+---------+------+---------------+----------+--------------------+----------=
+--
+panda    | arm  | lab-collabora | gcc-8    | multi_v7_defconfig | 1        =
+  =
 
-Right. It will be great if you can add filename to the message.
-> 
->> Please add return check for snprintf, please add a define for
->> "cpu%u/power/energy_perf_bias" since it is hardcoded in
->> read/write functions.
-> 
-> None of the other snprintf() calls in cpupower do that. Nothing checks
-> snprintf() retval and the last part of the sysfs path is a naked string.
-> 
-> Why is this different?
-> 
 
-All of the other ones should be changed as such. Why add more?
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
+1-24-g5e00eb5f6209/plan/baseline/
 
-thanks,
--- Shuah
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.10-rc1-24-g5e00eb5f6209
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      5e00eb5f62091ac1f78776b876efe2a09a9263a2 =
 
+
+
+Test Regressions
+---------------- =
+
+
+
+platform | arch | lab           | compiler | defconfig          | regressio=
+ns
+---------+------+---------------+----------+--------------------+----------=
+--
+panda    | arm  | lab-collabora | gcc-8    | multi_v7_defconfig | 1        =
+  =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f9b2fc3978596f65a381044
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc1-24-g5e00e=
+b5f6209/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc1-24-g5e00e=
+b5f6209/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f9b2fc3978596f=
+65a38104a
+        failing since 71 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
+l: v5.9-rc1-4-g1f08d51cd57f)
+        60 lines
+
+    2020-10-29 21:10:19.657000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c802
+    2020-10-29 21:10:19.663000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c803
+    2020-10-29 21:10:19.669000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c804
+    2020-10-29 21:10:19.675000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c805
+    2020-10-29 21:10:19.681000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c806
+    2020-10-29 21:10:19.687000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c807
+    2020-10-29 21:10:19.693000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c808
+    2020-10-29 21:10:19.698000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c809
+    2020-10-29 21:10:19.705000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c80a
+    2020-10-29 21:10:19.711000+00:00  kern  :alert : BUG: Bad page state in=
+ process swapper/0  pfn:9c80b =
+
+    ... (49 line(s) more)  =
+
+ =20
