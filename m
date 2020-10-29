@@ -2,305 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A9E29EEBB
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 15:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE4D29F046
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 16:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727832AbgJ2Ota (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 10:49:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58772 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725782AbgJ2Ota (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Oct 2020 10:49:30 -0400
-Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 029F1206E3;
-        Thu, 29 Oct 2020 14:49:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603982968;
-        bh=1M8zHKAHm8tfB8AOV5kFGjQ5L8HBiwt2lqvdGfEDgxQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VwKBRazZTJNx5ayevPifAIJt6BcELHVSflPv1Pz3hhkIRLQu/hpqVx9zq6UOPHYwi
-         1Cr/eBqf+UTruLweRPs1uluGBSsUp8XS5oIZwMoDI9YYtGpTUHifWPeFkCnRe78Q3+
-         9acepxXtiAj1lspr5f5lKQxsgHU3+k3h2anx8nNM=
-Date:   Thu, 29 Oct 2020 14:49:12 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Javier =?UTF-8?B?R29uesOhbGV6?= <javier@javigon.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bruno Meneguele <bmeneg@redhat.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Juergen Gross <jgross@suse.com>,
-        Konstantin Khlebnikov <koct9i@gmail.com>,
-        Kranthi Kuntala <kranthi.kuntala@intel.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Len Brown <lenb@kernel.org>,
-        Leonid Maksymchuk <leonmaxx@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Orson Zhai <orsonzhai@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Peter Rosin <peda@axentia.se>, Petr Mladek <pmladek@suse.com>,
-        Philippe Bergheaud <felix@linux.ibm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        netdev@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH 20/33] docs: ABI: testing: make the files compatible
- with ReST output
-Message-ID: <20201029144912.3c0a239b@archlinux>
-In-Reply-To: <4ebaaa0320101479e392ce2db4b62e24fdf15ef1.1603893146.git.mchehab+huawei@kernel.org>
-References: <cover.1603893146.git.mchehab+huawei@kernel.org>
-        <4ebaaa0320101479e392ce2db4b62e24fdf15ef1.1603893146.git.mchehab+huawei@kernel.org>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728316AbgJ2PkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 11:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728112AbgJ2PkM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 11:40:12 -0400
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EE4C0613D2
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 08:40:12 -0700 (PDT)
+Received: by mail-vk1-xa44.google.com with SMTP id z10so804169vkn.0
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 08:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2PMHyXzjLDVufRa8llaIrw5zRwzBKgxCN4FbP7BnEq4=;
+        b=P/lP5sQLk86gvHr/EOl7JEAHhbrjf9ZAKB+VtrTxgzscmNq+bid4ufB7kd6fMviv/T
+         UvYhLTKMfuIxZhqeFP/RG8xw8oy1+uFSZy6oG4+hhma964i/elIzVv+QKJJjRH9+h0Nf
+         sasD8bU8GhS1TI9LHvOqF5glI/RA+wY8sbkhg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2PMHyXzjLDVufRa8llaIrw5zRwzBKgxCN4FbP7BnEq4=;
+        b=jhBjymNp76ItGWU3XOECZzWow6hM/WhAtIfQ8Eg4WFQTzh87EUr7ef3axd7LFBsqJH
+         gidXQuM9r23d77RjTGCkiB3AgX4HeAFcwJ2ApVqqnP73S3ZrOZuEsowCWJaz1IGXHD2g
+         vgJkWpO5xUqJgYm6mrH6OfNaCcdObYMv/uBiw6/8Nwn1dGvynxBpByEzHJLmK6t2aRP1
+         f9cPeo+BiaZ8H9pTRNaN4TViyGvm5kVcSVlV8fkD5BqPX7kM4a3Z4nWXQjfjMVj3BQZt
+         CZXT/6zsVv4QHgyHWgb43ulybIf5v8wLUt7wdP2147Mhp5RG16CAdIFrfl+9KV4Y3fQr
+         jCzw==
+X-Gm-Message-State: AOAM530s448Zl0a17uB6R927RShB+sBLZKiYa0EhLuaXb2n2EycVzjnV
+        KxaRYQv3wTS2G6yoxvrU+eOTorxeBPAbmg==
+X-Google-Smtp-Source: ABdhPJw+wPNVSiSDX1ufGtsUS5LZQe2jbqc3R5nNIhlAT3ldRgE/EHKV2rN/LDPJ6VbFqA7b3JO4FQ==
+X-Received: by 2002:a1f:a791:: with SMTP id q139mr3614923vke.25.1603986010502;
+        Thu, 29 Oct 2020 08:40:10 -0700 (PDT)
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
+        by smtp.gmail.com with ESMTPSA id u133sm364432vku.4.2020.10.29.08.40.08
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2020 08:40:09 -0700 (PDT)
+Received: by mail-vs1-f44.google.com with SMTP id y78so1757409vsy.6
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 08:40:08 -0700 (PDT)
+X-Received: by 2002:a67:b405:: with SMTP id x5mr3619420vsl.4.1603986008362;
+ Thu, 29 Oct 2020 08:40:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20201019140601.3047-1-lukasz.luba@arm.com> <CAD=FV=UYeo_rWBDRu-53Aw2OeY1NCgCuUJkocRM8xL+OCbJDug@mail.gmail.com>
+ <62430cb9-eaab-b215-0eec-d35d3c625406@arm.com>
+In-Reply-To: <62430cb9-eaab-b215-0eec-d35d3c625406@arm.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 29 Oct 2020 08:39:56 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VA=tYzvb2-WQOJz7UGq-459R4+6xfuPQ-h-iMCKPP9vQ@mail.gmail.com>
+Message-ID: <CAD=FV=VA=tYzvb2-WQOJz7UGq-459R4+6xfuPQ-h-iMCKPP9vQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Clarify abstract scale usage for power values in
+ Energy Model, EAS and IPA
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        morten.rasmussen@arm.com, Quentin Perret <qperret@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 28 Oct 2020 15:23:18 +0100
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+Hi,
 
-> From: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> 
-> Some files over there won't parse well by Sphinx.
-> 
-> Fix them.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+On Thu, Oct 29, 2020 at 5:37 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> On 10/20/20 1:15 AM, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Mon, Oct 19, 2020 at 7:06 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >> Hi all,
+> >>
+> >> The Energy Model supports power values expressed in an abstract scale.
+> >> This has an impact on Intelligent Power Allocation (IPA) and should be
+> >> documented properly. Kernel sub-systems like EAS, IPA and DTPM
+> >> (new comming PowerCap framework) would use the new flag to capture
+> >> potential miss-configuration where the devices have registered different
+> >> power scales, thus cannot operate together.
+> >>
+> >> There was a discussion below v2 of this patch series, which might help
+> >> you to get context of these changes [2].
+> >>
+> >> The agreed approach is to have the DT as a source of power values expressed
+> >> always in milli-Watts and the only way to submit with abstract scale values
+> >> is via the em_dev_register_perf_domain() API.
+> >>
+> >> Changes:
+> >> v3:
+> >> - added boolean flag to struct em_perf_domain and registration function
+> >>    indicating if EM holds real power values in milli-Watts (suggested by
+> >>    Daniel and aggreed with Quentin)
+> >> - updated documentation regarding this new flag
+> >> - dropped DT binding change for 'sustainable-power'
+> >> - added more maintainers on CC (due to patch 1/4 touching different things)
+> >> v2 [2]:
+> >> - updated sustainable power section in IPA documentation
+> >> - updated DT binding for the 'sustainable-power'
+> >> v1 [1]:
+> >> - simple documenation update with new 'abstract scale' in EAS, EM, IPA
+> >>
+> >> Regards,
+> >> Lukasz Luba
+> >>
+> >> [1] https://lore.kernel.org/linux-doc/20200929121610.16060-1-lukasz.luba@arm.com/
+> >> [2] https://lore.kernel.org/lkml/20201002114426.31277-1-lukasz.luba@arm.com/
+> >>
+> >> Lukasz Luba (4):
+> >>    PM / EM: Add a flag indicating units of power values in Energy Model
+> >>    docs: Clarify abstract scale usage for power values in Energy Model
+> >>    PM / EM: update the comments related to power scale
+> >>    docs: power: Update Energy Model with new flag indicating power scale
+> >>
+> >>   .../driver-api/thermal/power_allocator.rst    | 13 +++++++-
+> >>   Documentation/power/energy-model.rst          | 30 +++++++++++++++----
+> >>   Documentation/scheduler/sched-energy.rst      |  5 ++++
+> >>   drivers/cpufreq/scmi-cpufreq.c                |  3 +-
+> >>   drivers/opp/of.c                              |  2 +-
+> >>   include/linux/energy_model.h                  | 20 ++++++++-----
+> >>   kernel/power/energy_model.c                   | 26 ++++++++++++++--
+> >>   7 files changed, 81 insertions(+), 18 deletions(-)
+> >
+> > While I don't feel like I have enough skin in the game to make any
+> > demands, I'm definitely not a huge fan of this series still.  I am a
+> > fan of documenting reality, but (to me) trying to mix stuff like this
+> > is just going to be adding needless complexity.  From where I'm
+> > standing, it's a lot more of a pain to specify these types of numbers
+> > in the firmware than it is to specify them in the device tree.  They
+>
+> When you have SCMI, you receive power values from FW directly, not using
+> DT.
+>
+> > are harder to customize per board, harder to spin, and harder to
+> > specify constraints for everything in the system (all heat generators,
+> > all cooling devices, etc).  ...and since we already have a way to
+> > specify this type of thing in the device tree and that's super easy
+> > for people to do, we're going to end up with weird mixes / matches of
+> > numbers coming from different locations and now we've got to figure
+> > out which numbers we can use when and which to ignore.  Ick.
+>
+> This is not that bad as you described. When you have SCMI and FW
+> all your perf domains should be aligned to the same scale.
+> In example, you have 4 little CPU, 3 big CPUs, 1 super big CPU,
+> 1 GPU, 1 DSP. For all of them the SCMI get_power callback should return
+> consistent values. You don't have to specify anything else or rev-eng.
+> Then a client like EAS would use those values from CPUs to estimate
+> energy and this works fine. Another client: IPA, which would use
+> all of them and also works fine.
 
-Query below...  I'm going to guess a rebase issue?
+I guess I'm confused.  When using SCMI and FW, are there already code
+paths to get the board-specific "sustainable-power" from SCMI and FW?
 
-Other than that
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # for IIO
+I know that "sustainable-power" is not truly necessary.  IIRC some of
+the code assumes that the lowest power state of all components must be
+sustainable and uses that.  However, though this makes the code work,
+it's far from ideal.  I don't want to accept a mediocre solution here.
+
+In any case, I'm saying that even if "sustainable-power" can come from
+firmware, it's not as ideal of a place for it to live.  Maybe my
+experience on Chromebooks is different from the rest of upstream, but
+it's generally quite easy to adjust the device tree for a board and
+much harder to convince firmware folks to put a board-specific table
+of values.
 
 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-timer-stm32 b/Documentation/ABI/testing/sysfs-bus-iio-timer-stm32
-> index b7259234ad70..a10a4de3e5fe 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-iio-timer-stm32
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio-timer-stm32
-> @@ -3,67 +3,85 @@ KernelVersion:	4.11
->  Contact:	benjamin.gaignard@st.com
->  Description:
->  		Reading returns the list possible master modes which are:
-> -		- "reset"     :	The UG bit from the TIMx_EGR register is
-> +
-> +
-> +		- "reset"
-> +				The UG bit from the TIMx_EGR register is
->  				used as trigger output (TRGO).
-> -		- "enable"    : The Counter Enable signal CNT_EN is used
-> +		- "enable"
-> +				The Counter Enable signal CNT_EN is used
->  				as trigger output.
-> -		- "update"    : The update event is selected as trigger output.
-> +		- "update"
-> +				The update event is selected as trigger output.
->  				For instance a master timer can then be used
->  				as a prescaler for a slave timer.
-> -		- "compare_pulse" : The trigger output send a positive pulse
-> -				    when the CC1IF flag is to be set.
-> -		- "OC1REF"    : OC1REF signal is used as trigger output.
-> -		- "OC2REF"    : OC2REF signal is used as trigger output.
-> -		- "OC3REF"    : OC3REF signal is used as trigger output.
-> -		- "OC4REF"    : OC4REF signal is used as trigger output.
-> +		- "compare_pulse"
-> +				The trigger output send a positive pulse
-> +				when the CC1IF flag is to be set.
-> +		- "OC1REF"
-> +				OC1REF signal is used as trigger output.
-> +		- "OC2REF"
-> +				OC2REF signal is used as trigger output.
-> +		- "OC3REF"
-> +				OC3REF signal is used as trigger output.
-> +		- "OC4REF"
-> +				OC4REF signal is used as trigger output.
-> +
->  		Additional modes (on TRGO2 only):
-> -		- "OC5REF"    : OC5REF signal is used as trigger output.
-> -		- "OC6REF"    : OC6REF signal is used as trigger output.
-> +
-> +		- "OC5REF"
-> +				OC5REF signal is used as trigger output.
-> +		- "OC6REF"
-> +				OC6REF signal is used as trigger output.
->  		- "compare_pulse_OC4REF":
-> -		  OC4REF rising or falling edges generate pulses.
-> +				OC4REF rising or falling edges generate pulses.
->  		- "compare_pulse_OC6REF":
-> -		  OC6REF rising or falling edges generate pulses.
-> +				OC6REF rising or falling edges generate pulses.
->  		- "compare_pulse_OC4REF_r_or_OC6REF_r":
-> -		  OC4REF or OC6REF rising edges generate pulses.
-> +				OC4REF or OC6REF rising edges generate pulses.
->  		- "compare_pulse_OC4REF_r_or_OC6REF_f":
-> -		  OC4REF rising or OC6REF falling edges generate pulses.
-> +				OC4REF rising or OC6REF falling edges generate
-> +				pulses.
->  		- "compare_pulse_OC5REF_r_or_OC6REF_r":
-> -		  OC5REF or OC6REF rising edges generate pulses.
-> +				OC5REF or OC6REF rising edges generate pulses.
->  		- "compare_pulse_OC5REF_r_or_OC6REF_f":
-> -		  OC5REF rising or OC6REF falling edges generate pulses.
-> +				OC5REF rising or OC6REF falling edges generate
-> +				pulses.
->  
-> -		+-----------+   +-------------+            +---------+
-> -		| Prescaler +-> | Counter     |        +-> | Master  | TRGO(2)
-> -		+-----------+   +--+--------+-+        |-> | Control +-->
-> -		                   |        |          ||  +---------+
-> -		                +--v--------+-+ OCxREF ||  +---------+
-> -		                | Chx compare +----------> | Output  | ChX
-> -		                +-----------+-+         |  | Control +-->
-> -		                      .     |           |  +---------+
-> -		                      .     |           |    .
-> -		                +-----------v-+ OC6REF  |    .
-> -		                | Ch6 compare +---------+>
-> -		                +-------------+
-> +		::
->  
-> -		Example with: "compare_pulse_OC4REF_r_or_OC6REF_r":
-> +		  +-----------+   +-------------+            +---------+
-> +		  | Prescaler +-> | Counter     |        +-> | Master  | TRGO(2)
-> +		  +-----------+   +--+--------+-+        |-> | Control +-->
-> +		                     |        |          ||  +---------+
-> +		                  +--v--------+-+ OCxREF ||  +---------+
-> +		                  | Chx compare +----------> | Output  | ChX
-> +		                  +-----------+-+         |  | Control +-->
-> +		                        .     |           |  +---------+
-> +		                        .     |           |    .
-> +		                  +-----------v-+ OC6REF  |    .
-> +		                  | Ch6 compare +---------+>
-> +		                  +-------------+
->  
-> -		                X
-> -		              X   X
-> -		            X .   . X
-> -		          X   .   .   X
-> -		        X     .   .     X
-> -		count X .     .   .     . X
-> -		        .     .   .     .
-> -		        .     .   .     .
-> -		        +---------------+
-> -		OC4REF  |     .   .     |
-> -		      +-+     .   .     +-+
-> -		        .     +---+     .
-> -		OC6REF  .     |   |     .
-> -		      +-------+   +-------+
-> -		        +-+   +-+
-> -		TRGO2   | |   | |
-> -		      +-+ +---+ +---------+
-> +		Example with: "compare_pulse_OC4REF_r_or_OC6REF_r"::
-> +
-> +		                  X
-> +		                X   X
-> +		              X .   . X
-> +		            X   .   .   X
-> +		          X     .   .     X
-> +		  count X .     .   .     . X
-> +		          .     .   .     .
-> +		          .     .   .     .
-> +		          +---------------+
-> +		  OC4REF  |     .   .     |
-> +		        +-+     .   .     +-+
-> +		          .     +---+     .
-> +		  OC6REF  .     |   |     .
-> +		        +-------+   +-------+
-> +		          +-+   +-+
-> +		  TRGO2   | |   | |
-> +		        +-+ +---+ +---------+
->  
->  What:		/sys/bus/iio/devices/triggerX/master_mode
->  KernelVersion:	4.11
-> @@ -91,6 +109,30 @@ Description:
->  		When counting down the counter start from preset value
->  		and fire event when reach 0.
->  
+> > In my opinion the only way to allow for mixing and matching the
+> > bogoWatts and real Watts would be to actually have units and the
+> > ability to provide a conversion factor somewhere.  Presumably that
+> > might give you a chance of mixing and matching if someone wants to
+> > provide some stuff in device tree and get other stuff from the
+> > firmware.  Heck, I guess you could even magically figure out a
+> > conversion factor if someone provides device tree numbers for
+> > something that was already registered in SCMI, assuming all the SCMI
+> > numbers are consistent with each other...
+>
+> What you demand here is another code path, just to support revers
+> engineered power values for SCMI devices, which are stored in DT.
+> Then the SCMI protocol code and drivers should take them into account
+> and abandon standard implementation and use these values to provide
+> 'hacked' power numbers to EM. Am I right?
+> It is not going to happen.
 
-Where did these come from?
+Quite honestly, all I want to be able to do is to provide a
+board-specific "sustainable-power" and have it match with the
+power-coefficients.  Thus:
 
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available
-> +KernelVersion:	4.12
-> +Contact:	benjamin.gaignard@st.com
-> +Description:
-> +		Reading returns the list possible quadrature modes.
-> +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_count0_quadrature_mode
-> +KernelVersion:	4.12
-> +Contact:	benjamin.gaignard@st.com
-> +Description:
-> +		Configure the device counter quadrature modes:
-> +
-> +		channel_A:
-> +			Encoder A input servers as the count input and B as
-> +			the UP/DOWN direction control input.
-> +
-> +		channel_B:
-> +			Encoder B input serves as the count input and A as
-> +			the UP/DOWN direction control input.
-> +
-> +		quadrature:
-> +			Encoder A and B inputs are mixed to get direction
-> +			and count with a scale of 0.25.
-> +
->  What:		/sys/bus/iio/devices/iio:deviceX/in_count_enable_mode_available
->  KernelVersion:	4.12
->  Contact:	benjamin.gaignard@st.com
-> @@ -104,6 +146,7 @@ Description:
->  		Configure the device counter enable modes, in all case
->  		counting direction is set by in_count0_count_direction
->  		attribute and the counter is clocked by the internal clock.
-> +
->  		always:
->  			Counter is always ON.
->  
+* If device tree accepted abstract scale, we'd be done and I'd shut
+up.  ...but Rob has made it quite clear that this is a no-go.
+
+* If it was super easy to add all these values into firmware for a
+board and we could totally remove these from the device tree, I'd
+grumble a bit about firmware being a terrible place for this but at
+least we'd have a solution and we'd be done and I'd shut up.  NOTE: I
+don't know ATF terribly well, but I'd guess that this needs to go
+there?  Presumably part of this is convincing firmware folks to add
+this board-specific value there...
+
+-Doug
