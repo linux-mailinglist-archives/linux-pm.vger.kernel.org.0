@@ -2,96 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FA529E9FA
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 12:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F1629EA37
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 12:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727106AbgJ2LFa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 07:05:30 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:52892 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726815AbgJ2LFa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 07:05:30 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09SFS63u018155;
-        Wed, 28 Oct 2020 10:28:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1603898886;
-        bh=7Y8IMlS8Rjtuh3Bt1F7fB0E0fJme1LZMMGNHEg4TuLg=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=DVdwOLiQSHX8V2LbMdZpX1FpOyCsAW5KZ3ASa9hYMNNop9pOupI2YuvIMR/56/qqX
-         E/ur3zV5VA5hCtC7sTzPB5F5nxCZTC5ZwuDJn3Tr8bfQvFESJgsjsaEE+F/NKteV2F
-         dQ8hCFXxrMxuqYxkyTiPKMZ852rn/jEosvs7tzZI=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09SFS6qn039511
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Oct 2020 10:28:06 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 28
- Oct 2020 10:28:06 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 28 Oct 2020 10:28:06 -0500
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09SFS47m046337;
-        Wed, 28 Oct 2020 10:28:04 -0500
-Subject: Re: [PATCH] opp: fix bad error check logic in the opp helper register
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20201028141357.10345-1-t-kristo@ti.com>
- <20201028145405.ucfepzt6xoxro6fi@vireshk-i7>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <febd30f4-62b4-ad9c-9cd9-09841af140bf@ti.com>
-Date:   Wed, 28 Oct 2020 17:28:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1725805AbgJ2LMt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 07:12:49 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:41710 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726789AbgJ2LMt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 07:12:49 -0400
+Received: from 89-64-89-121.dynamic.chello.pl (89.64.89.121) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.491)
+ id 1a55d32a351296d0; Thu, 29 Oct 2020 12:12:47 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v2.2 4/4] cpufreq: schedutil: Always call driver if CPUFREQ_NEED_UPDATE_LIMITS is set
+Date:   Thu, 29 Oct 2020 12:12:46 +0100
+Message-ID: <4720046.CcxZZ2xs9j@kreacher>
+In-Reply-To: <1905098.zDJocX6404@kreacher>
+References: <2183878.gTFULuzKx9@kreacher> <1905098.zDJocX6404@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20201028145405.ucfepzt6xoxro6fi@vireshk-i7>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/10/2020 16:54, Viresh Kumar wrote:
-> On 28-10-20, 16:13, Tero Kristo wrote:
->> The error check is incorrectly negated causing the helper to never
->> register anything. This causes platforms that depend on this
->> functionality to fail always with any cpufreq transition, and at least
->> TI DRA7 based platforms fail to boot completely due to warning message
->> flood from _generic_set_opp_regulator complaining about multiple
->> regulators not being supported.
->>
->> Fixes: dd461cd9183f ("opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER")
->> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->> ---
->>   drivers/opp/core.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
->> index 2483e765318a..4ac4e7ce6b8b 100644
->> --- a/drivers/opp/core.c
->> +++ b/drivers/opp/core.c
->> @@ -1930,7 +1930,7 @@ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
->>   		return ERR_PTR(-EINVAL);
->>   
->>   	opp_table = dev_pm_opp_get_opp_table(dev);
->> -	if (!IS_ERR(opp_table))
->> +	if (IS_ERR(opp_table))
->>   		return opp_table;
->>   
->>   	/* This should be called before OPPs are initialized */
-> 
-> A similar fix is already pushed in linux-next for this.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Ah ok, good to hear. Just checked linux-next and I see the fix also, 
-sorry for the noise.
+Because sugov_update_next_freq() may skip a frequency update even if
+the need_freq_update flag has been set for the policy at hand, policy
+limits updates may not take effect as expected.
 
--Tero
+For example, if the intel_pstate driver operates in the passive mode
+with HWP enabled, it needs to update the HWP min and max limits when
+the policy min and max limits change, respectively, but that may not
+happen if the target frequency does not change along with the limit
+at hand.  In particular, if the policy min is changed first, causing
+the target frequency to be adjusted to it, and the policy max limit
+is changed later to the same value, the HWP max limit will not be
+updated to follow it as expected, because the target frequency is
+still equal to the policy min limit and it will not change until
+that limit is updated.
 
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+To address this issue, modify get_next_freq() to let the driver
+callback run if the CPUFREQ_NEED_UPDATE_LIMITS cpufreq driver flag
+is set regardless of whether or not the new frequency to set is
+equal to the previous one.
+
+Fixes: f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive mode with HWP enabled")
+Reported-by: Zhang Rui <rui.zhang@intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Cc: 5.9+ <stable@vger.kernel.org> # 5.9+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v2.1 -> v2.2:
+   * Instead of updating need_freq_update if CPUFREQ_NEED_UPDATE_LIMITS is set
+     in get_next_freq() and checking it again in sugov_update_next_freq(),
+     check CPUFREQ_NEED_UPDATE_LIMITS directly in sugov_update_next_freq().
+   * Update the subject.
+
+v2 -> v2.1:
+   * Fix typo in the subject.
+   * Make get_next_freq() and sugov_update_next_freq() ignore the
+     sg_policy->next_freq == next_freq case when CPUFREQ_NEED_UPDATE_LIMITS
+     is set for the driver.
+   * Add Tested-by from Rui (this version lets the driver callback run more
+     often than the v2, so the behavior in the Rui's case doesn't change).
+
+---
+ kernel/sched/cpufreq_schedutil.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+Index: linux-pm/kernel/sched/cpufreq_schedutil.c
+===================================================================
+--- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
++++ linux-pm/kernel/sched/cpufreq_schedutil.c
+@@ -102,7 +102,8 @@ static bool sugov_should_update_freq(str
+ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+ 				   unsigned int next_freq)
+ {
+-	if (sg_policy->next_freq == next_freq)
++	if (sg_policy->next_freq == next_freq &&
++	    !cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS))
+ 		return false;
+ 
+ 	sg_policy->next_freq = next_freq;
+@@ -161,7 +162,8 @@ static unsigned int get_next_freq(struct
+ 
+ 	freq = map_util_freq(util, freq, max);
+ 
+-	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
++	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update &&
++	    !cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS))
+ 		return sg_policy->next_freq;
+ 
+ 	sg_policy->need_freq_update = false;
+
+
+
+
