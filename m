@@ -2,116 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B58929E7B9
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 10:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D4929E7EB
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 10:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbgJ2JrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 05:47:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36309 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726830AbgJ2JrA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 05:47:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603964819;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v4juQfAx3LxBzTcqekjK+MOSoDZx1NTXS/wKZYQGOXo=;
-        b=bZ+EizmdusBAs9eMH+VnmStqKP35hI/ftRtfIeluz455oHtItu6RJd8Oi1cdUUPLgM1rN/
-        XxSFgu/Ds25Zv/JbJgKsRfFQXPl7gHZu2QVnjUNJhvxAP96gUj72ZwMfoSTxJQAkZzyzlk
-        bGRNxWNADx/dxFV6VQvfCaWk415L+uA=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-172-hkdN7Ma0NdClriaqKiTC3A-1; Thu, 29 Oct 2020 05:46:56 -0400
-X-MC-Unique: hkdN7Ma0NdClriaqKiTC3A-1
-Received: by mail-ed1-f69.google.com with SMTP id cb27so944809edb.11
-        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 02:46:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v4juQfAx3LxBzTcqekjK+MOSoDZx1NTXS/wKZYQGOXo=;
-        b=bnvoQ7wzpYoPY9wPi9PoH1Il6ab+4bppI2Q0RThdGnSoBAhgHZ1hBNwWKHqyXfowJ2
-         996mPBl0Me6LrN7V7FE+b3WmuTC86si0Vh6Xd2EvpfBYHIeLfFdvTyVr9ZvZX6kEgCRm
-         4c6jvDz298uf/HKoGNaGVXZZSQ0RlxIX6RJnOtmxRNM+1eAts6nmre9lG5olUtZjAx0T
-         9hRfZysomijlUXVcfWUoK22skomkhydW204CPqYNR/iE7CtB6TkGz6mv8YNOUPdwsNb3
-         6QtCyek4CmU/iSDbk7JXXMtYzDiDBXMmZ4hf2cxB8xsnA7EKNWZDqU/L89Xz6lukLYwV
-         kw+Q==
-X-Gm-Message-State: AOAM531v2lc04GMWd/RmBJaQRwxeGQ24hq37EkFrIL/3qnIT2QjJI/Ib
-        lZ/Riebj1XmXSSCDGQQxAqMtOB3VFt73MsjZbXbj4YBXxCMEx1QD24UHjrh4KOmsqNy7D4PVjLd
-        sZ6Fw0hoGcMSJeCAln+0=
-X-Received: by 2002:a05:6402:1691:: with SMTP id a17mr2984354edv.264.1603964800377;
-        Thu, 29 Oct 2020 02:46:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzKE7w0otUI+gbsHiZO1jXP8ILglLHS0/NREeyAFavkgmdFK4zjz2UD5PtGB/B2pPdy0w21NQ==
-X-Received: by 2002:a05:6402:1691:: with SMTP id a17mr2984338edv.264.1603964800185;
-        Thu, 29 Oct 2020 02:46:40 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
-        by smtp.gmail.com with ESMTPSA id p20sm1140405ejd.78.2020.10.29.02.46.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2020 02:46:39 -0700 (PDT)
-Subject: Re: [External] Re: [PATCH] Documentation: Add documentation for new
- platform_profile sysfs attribute
-To:     Mark Pearson <markpearson@lenovo.com>,
-        Bastien Nocera <hadess@hadess.net>
-Cc:     dvhart@infradead.org, mgross@linux.intel.com,
-        mario.limonciello@dell.com, eliadevito@gmail.com, bberg@redhat.com,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <markpearson@lenovo.com>
- <20201027164219.868839-1-markpearson@lenovo.com>
- <5ca1ae238b23a611b8a490c244fd93cdcc36ef79.camel@hadess.net>
- <d5f0bcba-5366-87da-d199-a85d59ba6c1c@redhat.com>
- <b3e61ee4-3fca-ce06-2216-977586baae4e@lenovo.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <ebeec472-3310-c560-e8bf-2b33c480333b@redhat.com>
-Date:   Thu, 29 Oct 2020 10:46:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1726286AbgJ2J4N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 05:56:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:58096 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725779AbgJ2J4N (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 29 Oct 2020 05:56:13 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BD84139F;
+        Thu, 29 Oct 2020 02:56:12 -0700 (PDT)
+Received: from [10.57.13.20] (unknown [10.57.13.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3AEB43F66E;
+        Thu, 29 Oct 2020 02:56:08 -0700 (PDT)
+Subject: Re: [PATCH 0/4] Add sustainable OPP concept
+To:     Viresh Kumar <viresh.kumar@linaro.org>, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        vireshk@kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
+        nm@ti.com, rafael@kernel.org, sudeep.holla@arm.com,
+        daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com
+References: <20201028140847.1018-1-lukasz.luba@arm.com>
+ <20201029074057.6ugmwyzna52x3oli@vireshk-i7>
+ <20201029075356.rruej6jlerhfa4oy@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <228fa1b3-bbd3-6941-fd4b-06581016d839@arm.com>
+Date:   Thu, 29 Oct 2020 09:56:07 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <b3e61ee4-3fca-ce06-2216-977586baae4e@lenovo.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20201029075356.rruej6jlerhfa4oy@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On 10/29/20 1:55 AM, Mark Pearson wrote:
-> Thanks Hans and Bastien,
+
+On 10/29/20 7:53 AM, Viresh Kumar wrote:
+> On 29-10-20, 13:10, Viresh Kumar wrote:
+>> On 28-10-20, 14:08, Lukasz Luba wrote:
+>>> Hi all,
+>>>
+>>> This patch set introduces a concept of sustainable OPP, which then can be used
+>>> by kernel frameworks or governors for estimating system sustainable system
+>>> state. This kind of estimation is done e.g. in thermal governor Intelligent
+>>> Power Allocation (IPA), which calculates sustainable power of the whole system
+>>> and then derives some coefficients for internal algorithm.
+>>>
+>>> The patch set introduces a new DT bindings 'opp-sustainable', with parsing
+>>> code. It also adds a function (in patch 3/4) which allows device drivers to set
+>>> directly the sustainable OPP. This is helpful when the device drivers populate
+>>> the OPP table by themself (example in patch 4/4).
+>>>
+>>
+>> Can we please have some more information about this ? What does the
+>> sustainable OPP mean ? How will platform guys know or learn about this
+>> ? How we are going to use it finally ? What does it have to do with
+>> temperature of the SoC or the thermal affects, etc.
+
+There were discussions about Energy Model (EM), scale of values (mW or
+abstract scale) and relation to EAS and IPA. You can find quite long
+discussion below v2 [1] (there is also v3 send after agreement [2]).
+We have in thermal DT binding: 'sustainable-power' expressed in mW,
+which is used by IPA, but it would not support bogoWatts.
+The sustainable power is used for estimation of internal coefficients
+(also for power budget), which I am trying to change to work with
+'abstract scale' [3][4].
+
+This would allow to estimate sustainable power of the system based on
+CPUs, GPU opp-sustainable points, where we don't have
+'sustainable-power' or devices using bogoWatts.
+
 > 
-> On 28/10/2020 13:23, Hans de Goede wrote:
+> And that we need a real user of this first if it is ever going to be
+> merged.
+> 
 
-<big snip>
-
->>> Is there another file which explains whether those sysfs value will
->>> contain a trailing linefeed?
->>
->> sysfs APIs are typically created so that they can be used from the shell,
->> so on read a newline will be added. On write a newline at the end
->> typically is allowed, but ignored. There are even special helper functions
->> to deal with properly ignoring the newline on write.
->>
->> Regards,
->>
->> Hans
->>
->>
-> OK - does that need to actually be specified here? Or is that just something I keep in mind for the implementation?
-
-IMHO it does not belong in the sysfs API docs for the platform_profile
-stuff. But I guess it would be good to document it somewhere in some
-generic syfs API rules/expectations document (with a note that their
-might be exceptions).
-
-Ideally we would already have such a file somewhere, but I don't know
-if we do (I did not look). So if you feel like it (and such a file does
-not exist yet) then I guess a patch adding such a doc file would be good.
+IPA would be the first user of this in combination with scmi-cpufreq.c,
+which can feed 'abstract scale' in to EM.
+Currently IPA takes lowest allowed OPPs into account for this estimation
+which is not optimal. This marked OPPs would make estimation a lot
+better.
 
 Regards,
+Lukasz
 
-Hans
 
+[1] https://lore.kernel.org/lkml/20201002114426.31277-1-lukasz.luba@arm.com/
+[2] https://lore.kernel.org/lkml/20201019140601.3047-1-lukasz.luba@arm.com/
+[3] 
+https://lore.kernel.org/linux-pm/5f682bbb-b250-49e6-dbb7-aea522a58595@arm.com/
+[4] https://lore.kernel.org/lkml/20201009135850.14727-1-lukasz.luba@arm.com/
