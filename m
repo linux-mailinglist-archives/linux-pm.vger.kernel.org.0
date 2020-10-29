@@ -2,63 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3BD29EE1B
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 15:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952BA29EE73
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 15:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbgJ2OXa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 10:23:30 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:42195 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgJ2OWf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 10:22:35 -0400
-X-Originating-IP: 82.255.60.242
-Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id A47666000A;
-        Thu, 29 Oct 2020 14:21:43 +0000 (UTC)
-Message-ID: <fb95dc5b8d9cee5a66759adc268e284cb1f1a3bd.camel@hadess.net>
-Subject: Re: [External] Re: [PATCH] Documentation: Add documentation for new
- platform_profile sysfs attribute
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Pearson <markpearson@lenovo.com>
-Cc:     dvhart@infradead.org, mgross@linux.intel.com,
-        mario.limonciello@dell.com, eliadevito@gmail.com, bberg@redhat.com,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 29 Oct 2020 15:21:43 +0100
-In-Reply-To: <ebeec472-3310-c560-e8bf-2b33c480333b@redhat.com>
-References: <markpearson@lenovo.com>
-         <20201027164219.868839-1-markpearson@lenovo.com>
-         <5ca1ae238b23a611b8a490c244fd93cdcc36ef79.camel@hadess.net>
-         <d5f0bcba-5366-87da-d199-a85d59ba6c1c@redhat.com>
-         <b3e61ee4-3fca-ce06-2216-977586baae4e@lenovo.com>
-         <ebeec472-3310-c560-e8bf-2b33c480333b@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
+        id S1727708AbgJ2Oig (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 10:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726309AbgJ2Oig (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 10:38:36 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7E8C0613CF;
+        Thu, 29 Oct 2020 07:38:34 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id d24so3316897ljg.10;
+        Thu, 29 Oct 2020 07:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=d1DuLRj2t9CrdcFPAV+RDrnwxMQi4NyG9Fig4kzBo/A=;
+        b=hucQM0uztlXYbkOG9ozcieEjMyVpqihbCyTybwx2ayktw13ry50aJrmXI4vZnEHYMy
+         9XHMbpOQcFExEVr6brmkmbq/BdsPOpWlFr4KGjJXExoESXB3xhRYA/k/hrTY2B+By9XB
+         0Sr54M5ihRsTOf9K7gS65Q/lrvWh5neZAlDdEWBTjzVKvZS/5OzJmQDES0NlJkBNFGv+
+         KhkeqeP+m3czM0pg64RJb6MkNKWzCBxKTXrGCR4QUCflg5ea3UdLldrXL9/XOFkbYAYC
+         n0CFQL3oaZlWAGCcnZ1pGYwnqRgQsH+HuW8/k0Dc9zuEk8D591LqHLsxrUVTuqJMgt0/
+         aZRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=d1DuLRj2t9CrdcFPAV+RDrnwxMQi4NyG9Fig4kzBo/A=;
+        b=B+G8oTLRjIbSrN8MrpXti/iVepyFs0YCAGAIxfVaG457jRxqvkEFag5SaCZ1qDsMqI
+         L75KT/+Oz+Su0tvx19cXyZUptQXPf++d4eiA93WLYlJyCNczISdWdf1o2+nhiMTp8p96
+         6LrkPp6ShxCW8/9DCquJzwE8veb7egjSZv2gX8kTWQlQk3E+dGG5IbqwyLdPgtn5bMbD
+         L4l6OceSeUHm/HSISSyLAZx4YKxFvuk+6zbH+RjPmWwc8J/g2UUAHBS83r0QwkOllC+H
+         t506cqWFNP6lS6yE432wOZBStCxBiLr3syeUDr5Qp7aFf+0wgNAsKU7NnqEkIcP57wLO
+         zYDw==
+X-Gm-Message-State: AOAM531Ll1m5Cx28cbCCgDtVYa8iG2r1EVNEgX4OaR6lhxFaNOiGj+Ws
+        rO7UA+QWjE3HWeFQv0TV98jtkVfVRu0=
+X-Google-Smtp-Source: ABdhPJwLvKZRG273pl6geG/4MT2scAZlYVd2FaCiop8nrQBqM2oe1kFDKiB/ZYhbTjTnnz7HQ0dn+A==
+X-Received: by 2002:a2e:9cc1:: with SMTP id g1mr1255760ljj.386.1603982312747;
+        Thu, 29 Oct 2020 07:38:32 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-177.dynamic.spd-mgts.ru. [109.252.193.177])
+        by smtp.googlemail.com with ESMTPSA id 80sm299382lff.61.2020.10.29.07.38.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2020 07:38:32 -0700 (PDT)
+Subject: Re: [PATCH] opp: Reduce the size of critical section in
+ _opp_table_kref_release()
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org
+References: <e0df59de670b48a923246fae1f972317b84b2764.1603785323.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <db13643d-9dbd-8e76-ed9d-01d8db6a0c37@gmail.com>
+Date:   Thu, 29 Oct 2020 17:38:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <e0df59de670b48a923246fae1f972317b84b2764.1603785323.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2020-10-29 at 10:46 +0100, Hans de Goede wrote:
-> <
-> <snip>
-
-> IMHO it does not belong in the sysfs API docs for the
-> platform_profile
-> stuff. But I guess it would be good to document it somewhere in some
-> generic syfs API rules/expectations document (with a note that their
-> might be exceptions).
+27.10.2020 10:57, Viresh Kumar пишет:
+> There is a lot of stuff here which can be done outside of the big
+> opp_table_lock, do that. This helps avoiding few circular dependency
+> lockdeps around debugfs and interconnects.
 > 
-> Ideally we would already have such a file somewhere, but I don't know
-> if we do (I did not look). So if you feel like it (and such a file
-> does
-> not exist yet) then I guess a patch adding such a doc file would be
-> good.
+> Reported-by: Rob Clark <robdclark@gmail.com>
+> Reported-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> Rob: I know this only fixes the issue partially for you and I am still
+> looking into that. I just wanted to get this merged in early as this
+> fixes lockdep for other users as well.
+> 
+>  drivers/opp/core.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 4ac4e7ce6b8b..0e0a5269dc82 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1181,6 +1181,10 @@ static void _opp_table_kref_release(struct kref *kref)
+>  	struct opp_device *opp_dev, *temp;
+>  	int i;
+>  
+> +	/* Drop the lock as soon as we can */
+> +	list_del(&opp_table->node);
+> +	mutex_unlock(&opp_table_lock);
+> +
+>  	_of_clear_opp_table(opp_table);
+>  
+>  	/* Release clk */
+> @@ -1208,10 +1212,7 @@ static void _opp_table_kref_release(struct kref *kref)
+>  
+>  	mutex_destroy(&opp_table->genpd_virt_dev_lock);
+>  	mutex_destroy(&opp_table->lock);
+> -	list_del(&opp_table->node);
+>  	kfree(opp_table);
+> -
+> -	mutex_unlock(&opp_table_lock);
+>  }
+>  
+>  void dev_pm_opp_put_opp_table(struct opp_table *opp_table)
+> 
 
-I don't know enough about the helpers and the code around it to know
-whether documenting this would be needed, but I'm fine with knowing
-that we're not breaking new ground here.
+Fixes the NVIDIA Tegra devfreq driver lockup using WIP ICC patches, thanks.
 
+Tested-by: Dmitry Osipenko <digetx@gmail.com>
