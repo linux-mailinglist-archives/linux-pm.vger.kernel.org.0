@@ -2,63 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 106E729F8E6
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 00:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A3529F8FE
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 00:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgJ2XLY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 19:11:24 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:49656 "EHLO mail.skyhub.de"
+        id S1725790AbgJ2XTV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 19:19:21 -0400
+Received: from mga12.intel.com ([192.55.52.136]:10711 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725372AbgJ2XLX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Oct 2020 19:11:23 -0400
-Received: from zn.tnic (p200300ec2f0ce900b7c12963b584fd72.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:e900:b7c1:2963:b584:fd72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EE19C1EC0258;
-        Fri, 30 Oct 2020 00:11:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1604013082;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=koqRWZmo0e5vtCu9n2okG5w+NCun2XvjE+ynY2NDFTo=;
-        b=Tng99f1xnIXhDLMhQYqYej0lMYHojGpbM0FXsH8zevIe+6rSq5bYSHYQuAlCprRXSvXGrl
-        XqdXnzgTJNzvj5Ye/9wZ4iZy3Sw9ORKg3w1mkSbn7BTmeDYyafLOS4fPY4K/v+1mHKwGp7
-        vNyay3oV2Cumj6CViMn8mq9G/8JPEAk=
-Date:   Fri, 30 Oct 2020 00:11:13 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     X86 ML <x86@kernel.org>, Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] tools/power/cpupower: Read energy_perf_bias from
- sysfs
-Message-ID: <20201029231113.GG31903@zn.tnic>
-References: <20201015144603.27933-1-bp@alien8.de>
- <20201015144603.27933-2-bp@alien8.de>
- <7806e3c0-f435-18a0-c50d-eee3f1f7fccf@linuxfoundation.org>
- <20201016083754.GB8483@zn.tnic>
- <ca53e90a-f4eb-5007-a137-62729e3d74f0@linuxfoundation.org>
- <20201029215929.GF31903@zn.tnic>
- <e0d61fa5-03b9-1761-1578-f4fb5ce54d96@linuxfoundation.org>
+        id S1725769AbgJ2XTU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 29 Oct 2020 19:19:20 -0400
+IronPort-SDR: 80toZSoDl/uJjAQTMmZ4GMF36A9vd1MIcK4MR0NEDbJgqiq3/ExvLvaRd8iIbHY/VAxMCo+kHE
+ hqx5vnREqc3g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9789"; a="147812938"
+X-IronPort-AV: E=Sophos;i="5.77,431,1596524400"; 
+   d="scan'208";a="147812938"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2020 16:19:20 -0700
+IronPort-SDR: EacVCkt+Idgux8T4QRvqC2LMmznM5Ir3X8oA6NfvJL0wKj6klWjU+RQkjfw91fepr7Z6yScah7
+ rVmIJkdsu4eg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,431,1596524400"; 
+   d="scan'208";a="361665180"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Oct 2020 16:19:20 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 29 Oct 2020 16:19:20 -0700
+Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 29 Oct 2020 16:19:19 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Thu, 29 Oct 2020 16:19:19 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.1713.5; Thu, 29 Oct 2020 16:19:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DbQH/NrgqaX5kmQOZ/Xq+ZRb+8ln/I9hK7r6pVi0aS/+2pJk1bdF5QNtm+XFxD9no6kDeZV4EQ4WZOBhWq1+C7wf0cB2yWGSOwzebQGf3QGz0OzSk8+C/yH2EU2hkWOqlx64TtFOm4+lKFQygb0kYz/a+gaNR7+/wn6sEHakQps6QlsSAqaIkk7cK2XhUkK7KFeNDyablCPtpdbiKaBJPtt7X+0qICHq6qX9j5rr3NL2Z5wktZNZ3OVoj2uJuKAu8RPLjXoup207APV6q7Z8PLqPmE+k5VZBPeyP5kRDylgg9S6msjkb3mvwDHvU2+srT6LSWsM6fZarfJiV3w1raw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vlkKRLsjXRaHph13IEtdL+fwzUtGJxn0yGzCa4w0aVk=;
+ b=MUGZRjmjMNuBm3+ARIyIKugGHVq/t7Sb+pFexPEMAy4paCErbr50dxVmvbDow0gQUsZspPx1/2U+jFoBt8k3hwBPORixH5sR9+6DAQ8IsfE3q37skCR3vZTTSV10uzsHnf1cdN6H75K3rhoOtCedjVVxuRnos/PVaM2FJPzXyshdTYwqmJMif6SermJrUgOaYQnl1r5NSba6eMwj/qTjrLAqKAd+fnst9gIAfMBf8wmPI8YakluTn1km43uJRZne/xwe/Q48lUDL/8yPnNP9sYsMEOIPB66bMoBGaH22Byr5oyT9MjNK2o7I/4UX1OYy0hiKRrxzfN+ArH79BagCFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vlkKRLsjXRaHph13IEtdL+fwzUtGJxn0yGzCa4w0aVk=;
+ b=sHYtkacOjt3LFvR9Pc4YdnBzPAVMrCEGaOoYT2ZV6YM4vRDf3C8tedmx4KrAqKglWC5ZyrNx5G+N8CHbCPeqcCQahok9UHWTbtWgy8FHv6dMDuErAzzmDvCWpCD9t4o9ovOPBUay743zafYSmTPJb01chYTVqpbu7SpxH1aUd/k=
+Received: from SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17)
+ by SA2PR11MB5082.namprd11.prod.outlook.com (2603:10b6:806:115::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.19; Thu, 29 Oct
+ 2020 23:19:18 +0000
+Received: from SN6PR11MB3184.namprd11.prod.outlook.com
+ ([fe80::b901:8e07:4340:6704]) by SN6PR11MB3184.namprd11.prod.outlook.com
+ ([fe80::b901:8e07:4340:6704%7]) with mapi id 15.20.3477.028; Thu, 29 Oct 2020
+ 23:19:18 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "rppt@kernel.org" <rppt@kernel.org>
+CC:     "david@redhat.com" <david@redhat.com>,
+        "cl@linux.com" <cl@linux.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "bp@alien8.de" <bp@alien8.de>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
+Subject: Re: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages in
+ the direct map
+Thread-Topic: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages
+ in the direct map
+Thread-Index: AQHWqrf6LRJhAvsqzE2DP+hB1ynbOKmtiYWAgACycACAAQJvAA==
+Date:   Thu, 29 Oct 2020 23:19:18 +0000
+Message-ID: <604554805defb03d158c09aba4b5cced3416a7fb.camel@intel.com>
+References: <20201025101555.3057-1-rppt@kernel.org>
+         <20201025101555.3057-3-rppt@kernel.org>
+         <3b4b2b3559bd3dc68adcddf99415bae57152cb6b.camel@intel.com>
+         <20201029075416.GJ1428094@kernel.org>
+In-Reply-To: <20201029075416.GJ1428094@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.30.1 (3.30.1-1.fc29) 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.55.54.40]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7b7bebee-1e29-4c9c-7598-08d87c610f9d
+x-ms-traffictypediagnostic: SA2PR11MB5082:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SA2PR11MB50828EBA8F73327589D59CA8C9140@SA2PR11MB5082.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UgzqgZYeU8jfSl1RANTSDQVihV2tNzmYTaoRyWHKVnYvN1TpEpoTiRweZgwrTyADA/0EiNOKvqhPYlSerPNMa8zqLysQcbWgO8Uc8XkEKlFb7cTiz/7fQ7aSn2lAro8E01C3ccBoGKrZiBKXJ1h6d0wHDwvu48fEH97otaumd5A9S5P+fcFF59NzDFA8NEepzKL74vcGUdRnQiTBVEs7X73BskSpoLeKeFQBlUgjrqKqQ+I2zZpjE/idOjAfB9OankgHYeVBnGfQZGAIvASdYBziAczns/dAoUHSJahluC+VEul24cigmmjiaoXDcUNXOr0xF8I7bZ8PIsxYmvrbMA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3184.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(39860400002)(376002)(396003)(136003)(66556008)(66476007)(64756008)(4326008)(4001150100001)(36756003)(86362001)(2616005)(26005)(5660300002)(6916009)(8676002)(316002)(66446008)(76116006)(6506007)(91956017)(186003)(71200400001)(6486002)(478600001)(7416002)(8936002)(7406005)(2906002)(66946007)(6512007)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: qpQYqLLAon6LEwZNKLf4AJoZIsa5wxWDCF2POHArhqq2sq0RAoft4XlpAAj3tXijW3TRCXkMnq6Q4pGPabqXlke4WaF/L0OoZUcxo37QkQICPzfK+sH6tN5bySuFYunrXiGYCD9mpmSFKLvjrRWuFS1sWgU6RFQpskC4Jqp0hqPqMxnH0c/+7bCp8iQzjOr+/spmSCsMiN72buLP93ri9slBRVy+Xgy8Tj15HV11todUxUGqd0tuIxEjdlGPgnUDCOWCSiBRttiQ55fopfmsUzMKwDg9wSJRfe+33Pv/rg8XxszxNvl8ry9wK+a76rqmxqBjdKGpgqUX0Y++avBcOCoVbyf8WlmSCBmc1WRd9SU1ECGwr4VEgxkStmIfBUwX4/fRBTEwJZQNrikMz/5cgPtp52W6DHHLMb+8NlGJUmmPs6Bqd5hksKQXr4f5tpxkyrtqt7CFjuoxG6K8mBGss0PlQmZqt4WxqfD+ltHzKVXCEYr3Mby/ixDfZJG29utf45p27F0bv/9WiHvSomx8vCuqnLXb13yjSyN54tkBVoLb6Awzg+aWcGCf7EPJqiuOp0V+OoxjE2d0mRwYXrL8RaQchOrFND0P28/O1D2w4EuLFTY+D+8pAj9zaZmqbO1unoZfOAhPGNaBCn/gT2xE+w==
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <11D21EDBF291D74CA174712AD209EB75@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e0d61fa5-03b9-1761-1578-f4fb5ce54d96@linuxfoundation.org>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3184.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b7bebee-1e29-4c9c-7598-08d87c610f9d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2020 23:19:18.7375
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: S68+5zl9Am2ZgVcrJ/pW6AKc6OUcFGZR0mmKsMuUgDr667MV1ftgnOIEAjIt9PWAiwy3DII5co5NazSo7PXSDuMpAnCYXlBH0vmkUxaOZ8E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5082
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 04:32:43PM -0600, Shuah Khan wrote:
-> if (numwritten < 1) {
-> +        perror("write failed");
-> 
-> Please add filename to the error message.
-
-Yes, you said so already and will do that in the next version.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+T24gVGh1LCAyMDIwLTEwLTI5IGF0IDA5OjU0ICswMjAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
+PiBfX2tlcm5lbF9tYXBfcGFnZXMoKSBvbiBhcm02NCB3aWxsIGFsc28gYmFpbCBvdXQgaWYgcm9k
+YXRhX2Z1bGwgaXMNCj4gZmFsc2U6DQo+IHZvaWQgX19rZXJuZWxfbWFwX3BhZ2VzKHN0cnVjdCBw
+YWdlICpwYWdlLCBpbnQgbnVtcGFnZXMsIGludCBlbmFibGUpDQo+IHsNCj4gICAgICAgICBpZiAo
+IWRlYnVnX3BhZ2VhbGxvY19lbmFibGVkKCkgJiYgIXJvZGF0YV9mdWxsKQ0KPiAgICAgICAgICAg
+ICAgICAgcmV0dXJuOw0KPiANCj4gICAgICAgICBzZXRfbWVtb3J5X3ZhbGlkKCh1bnNpZ25lZCBs
+b25nKXBhZ2VfYWRkcmVzcyhwYWdlKSwgbnVtcGFnZXMsDQo+IGVuYWJsZSk7DQo+IH0NCj4gDQo+
+IFNvIHVzaW5nIHNldF9kaXJlY3RfbWFwKCkgdG8gbWFwIGJhY2sgcGFnZXMgcmVtb3ZlZCBmcm9t
+IHRoZSBkaXJlY3QNCj4gbWFwDQo+IHdpdGggX19rZXJuZWxfbWFwX3BhZ2VzKCkgc2VlbXMgc2Fm
+ZSB0byBtZS4NCg0KSGVoLCBvbmUgb2YgdXMgbXVzdCBoYXZlIHNvbWUgc2ltcGxlIGJvb2xlYW4g
+ZXJyb3IgaW4gb3VyIGhlYWQuIEkgaG9wZQ0KaXRzIG5vdCBtZSEgOikgSSdsbCB0cnkgb24gbW9y
+ZSB0aW1lLg0KDQpfX2tlcm5lbF9tYXBfcGFnZXMoKSB3aWxsIGJhaWwgb3V0IGlmIHJvZGF0YV9m
+dWxsIGlzIGZhbHNlICoqQU5EKioNCmRlYnVnIHBhZ2UgYWxsb2MgaXMgb2ZmLiBTbyBpdCB3aWxs
+IG9ubHkgYmFpbCB1bmRlciBjb25kaXRpb25zIHdoZXJlDQp0aGVyZSBjb3VsZCBiZSBub3RoaW5n
+IHVubWFwcGVkIG9uIHRoZSBkaXJlY3QgbWFwLg0KDQpFcXVpdmFsZW50IGxvZ2ljIHdvdWxkIGJl
+Og0KCWlmICghKGRlYnVnX3BhZ2VhbGxvY19lbmFibGVkKCkgfHwgcm9kYXRhX2Z1bGwpKQ0KCQly
+ZXR1cm47DQoNCk9yOg0KCWlmIChkZWJ1Z19wYWdlYWxsb2NfZW5hYmxlZCgpIHx8IHJvZGF0YV9m
+dWxsKQ0KCQlzZXRfbWVtb3J5X3ZhbGlkKGJsYWgpDQoNClNvIGlmIGVpdGhlciBpcyBvbiwgdGhl
+IGV4aXN0aW5nIGNvZGUgd2lsbCB0cnkgdG8gcmUtbWFwLiBCdXQgdGhlDQpzZXRfZGlyZWN0X21h
+cF8oKSdzIHdpbGwgb25seSB3b3JrIGlmIHJvZGF0YV9mdWxsIGlzIG9uLiBTbyBzd2l0Y2hpbmcN
+CmhpYmVybmF0ZSB0byBzZXRfZGlyZWN0X21hcCgpIHdpbGwgY2F1c2UgdGhlIHJlbWFwIHRvIGJl
+IG1pc3NlZCBmb3IgdGhlDQpkZWJ1ZyBwYWdlIGFsbG9jIGNhc2UsIHdpdGggIXJvZGF0YV9mdWxs
+Lg0KDQpJdCBhbHNvIGJyZWFrcyBub3JtYWwgZGVidWcgcGFnZSBhbGxvYyB1c2FnZSB3aXRoICFy
+b2RhdGFfZnVsbCBmb3INCnNpbWlsYXIgcmVhc29ucyBhZnRlciBwYXRjaCAzLiBUaGUgcGFnZXMg
+d291bGQgbmV2ZXIgZ2V0IHVubWFwcGVkLg0KDQoNCg==
