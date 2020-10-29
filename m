@@ -2,146 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F39429E72B
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 10:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B58929E7B9
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 10:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbgJ2JYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 05:24:06 -0400
-Received: from foss.arm.com ([217.140.110.172]:57062 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725803AbgJ2JYG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Oct 2020 05:24:06 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7349D139F;
-        Thu, 29 Oct 2020 02:24:05 -0700 (PDT)
-Received: from [10.57.13.20] (unknown [10.57.13.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03BAD3F719;
-        Thu, 29 Oct 2020 02:24:03 -0700 (PDT)
-Subject: Re: [PATCH v3 2/2] thermal: power allocator: change how estimation
- code is called
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     amitk@kernel.org, Dietmar.Eggemann@arm.com, ionela.voinescu@arm.com
-References: <20201009135850.14727-1-lukasz.luba@arm.com>
- <20201009135850.14727-3-lukasz.luba@arm.com>
- <371617d1-fb1c-8e7b-0a50-e3ea07a1f825@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <38aa72f6-25fd-b7a5-07c0-9db7f0233479@arm.com>
-Date:   Thu, 29 Oct 2020 09:24:01 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726920AbgJ2JrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 05:47:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36309 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726830AbgJ2JrA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 05:47:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603964819;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v4juQfAx3LxBzTcqekjK+MOSoDZx1NTXS/wKZYQGOXo=;
+        b=bZ+EizmdusBAs9eMH+VnmStqKP35hI/ftRtfIeluz455oHtItu6RJd8Oi1cdUUPLgM1rN/
+        XxSFgu/Ds25Zv/JbJgKsRfFQXPl7gHZu2QVnjUNJhvxAP96gUj72ZwMfoSTxJQAkZzyzlk
+        bGRNxWNADx/dxFV6VQvfCaWk415L+uA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-172-hkdN7Ma0NdClriaqKiTC3A-1; Thu, 29 Oct 2020 05:46:56 -0400
+X-MC-Unique: hkdN7Ma0NdClriaqKiTC3A-1
+Received: by mail-ed1-f69.google.com with SMTP id cb27so944809edb.11
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 02:46:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=v4juQfAx3LxBzTcqekjK+MOSoDZx1NTXS/wKZYQGOXo=;
+        b=bnvoQ7wzpYoPY9wPi9PoH1Il6ab+4bppI2Q0RThdGnSoBAhgHZ1hBNwWKHqyXfowJ2
+         996mPBl0Me6LrN7V7FE+b3WmuTC86si0Vh6Xd2EvpfBYHIeLfFdvTyVr9ZvZX6kEgCRm
+         4c6jvDz298uf/HKoGNaGVXZZSQ0RlxIX6RJnOtmxRNM+1eAts6nmre9lG5olUtZjAx0T
+         9hRfZysomijlUXVcfWUoK22skomkhydW204CPqYNR/iE7CtB6TkGz6mv8YNOUPdwsNb3
+         6QtCyek4CmU/iSDbk7JXXMtYzDiDBXMmZ4hf2cxB8xsnA7EKNWZDqU/L89Xz6lukLYwV
+         kw+Q==
+X-Gm-Message-State: AOAM531v2lc04GMWd/RmBJaQRwxeGQ24hq37EkFrIL/3qnIT2QjJI/Ib
+        lZ/Riebj1XmXSSCDGQQxAqMtOB3VFt73MsjZbXbj4YBXxCMEx1QD24UHjrh4KOmsqNy7D4PVjLd
+        sZ6Fw0hoGcMSJeCAln+0=
+X-Received: by 2002:a05:6402:1691:: with SMTP id a17mr2984354edv.264.1603964800377;
+        Thu, 29 Oct 2020 02:46:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzKE7w0otUI+gbsHiZO1jXP8ILglLHS0/NREeyAFavkgmdFK4zjz2UD5PtGB/B2pPdy0w21NQ==
+X-Received: by 2002:a05:6402:1691:: with SMTP id a17mr2984338edv.264.1603964800185;
+        Thu, 29 Oct 2020 02:46:40 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
+        by smtp.gmail.com with ESMTPSA id p20sm1140405ejd.78.2020.10.29.02.46.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2020 02:46:39 -0700 (PDT)
+Subject: Re: [External] Re: [PATCH] Documentation: Add documentation for new
+ platform_profile sysfs attribute
+To:     Mark Pearson <markpearson@lenovo.com>,
+        Bastien Nocera <hadess@hadess.net>
+Cc:     dvhart@infradead.org, mgross@linux.intel.com,
+        mario.limonciello@dell.com, eliadevito@gmail.com, bberg@redhat.com,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <markpearson@lenovo.com>
+ <20201027164219.868839-1-markpearson@lenovo.com>
+ <5ca1ae238b23a611b8a490c244fd93cdcc36ef79.camel@hadess.net>
+ <d5f0bcba-5366-87da-d199-a85d59ba6c1c@redhat.com>
+ <b3e61ee4-3fca-ce06-2216-977586baae4e@lenovo.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <ebeec472-3310-c560-e8bf-2b33c480333b@redhat.com>
+Date:   Thu, 29 Oct 2020 10:46:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-In-Reply-To: <371617d1-fb1c-8e7b-0a50-e3ea07a1f825@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <b3e61ee4-3fca-ce06-2216-977586baae4e@lenovo.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi,
 
-On 10/13/20 5:41 PM, Daniel Lezcano wrote:
-> On 09/10/2020 15:58, Lukasz Luba wrote:
->> The sustainable power value might come from the Device Tree or can be
->> estimated in run time. There is no need to estimate every time when the
->> governor is called and temperature is high. Instead, store the estimated
->> value and make it available via standard sysfs interface so it can be
->> checked from the user-space. Re-invoke the estimation only in case the
->> sustainable power was set to 0. Apart from that the PID coefficients
->> are not going to be force updated thus can better handle sysfs settings.
+On 10/29/20 1:55 AM, Mark Pearson wrote:
+> Thanks Hans and Bastien,
+> 
+> On 28/10/2020 13:23, Hans de Goede wrote:
+
+<big snip>
+
+>>> Is there another file which explains whether those sysfs value will
+>>> contain a trailing linefeed?
 >>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
-> 
-> [ ... ]
-> 
->> -static void estimate_pid_constants(struct thermal_zone_device *tz,
->> -				   u32 sustainable_power, int trip_switch_on,
->> -				   int control_temp, bool force)
->> +static void estimate_tzp_constants(struct thermal_zone_device *tz,
->> +				   int trip_switch_on, int control_temp)
->>   {
->> -	int ret;
->> -	int switch_on_temp;
->>   	u32 temperature_threshold;
->> +	int switch_on_temp;
->> +	bool force = false;
->> +	int ret;
->>   	s32 k_i;
->>   
->> +	if (!tz->tzp->sustainable_power) {
->> +		tz->tzp->sustainable_power = estimate_sustainable_power(tz);
->> +		force = true;
->> +		dev_info(&tz->device, "power_allocator: estimating sust. power and PID constants\n");
->> +	}
->> +
->>   	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
->>   	if (ret)
->>   		switch_on_temp = 0;
->>   
->>   	temperature_threshold = control_temp - switch_on_temp;
->>   	/*
->> -	 * estimate_pid_constants() tries to find appropriate default
->> +	 * estimate_tzp_constants() tries to find appropriate default
->>   	 * values for thermal zones that don't provide them. If a
->>   	 * system integrator has configured a thermal zone with two
->>   	 * passive trip points at the same temperature, that person
->> @@ -151,11 +151,11 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
->>   		return;
->>   
->>   	if (!tz->tzp->k_po || force)
->> -		tz->tzp->k_po = int_to_frac(sustainable_power) /
->> +		tz->tzp->k_po = int_to_frac(tz->tzp->sustainable_power) /
->>   			temperature_threshold;
->>   
->>   	if (!tz->tzp->k_pu || force)
->> -		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
->> +		tz->tzp->k_pu = int_to_frac(2 * tz->tzp->sustainable_power) /
->>   			temperature_threshold;
->>   
->>   	if (!tz->tzp->k_i || force) {
->> @@ -193,19 +193,13 @@ static u32 pid_controller(struct thermal_zone_device *tz,
->>   {
->>   	s64 p, i, d, power_range;
->>   	s32 err, max_power_frac;
->> -	u32 sustainable_power;
->>   	struct power_allocator_params *params = tz->governor_data;
->>   
->>   	max_power_frac = int_to_frac(max_allocatable_power);
->>   
->> -	if (tz->tzp->sustainable_power) {
->> -		sustainable_power = tz->tzp->sustainable_power;
->> -	} else {
->> -		sustainable_power = estimate_sustainable_power(tz);
->> -		estimate_pid_constants(tz, sustainable_power,
->> -				       params->trip_switch_on, control_temp,
->> -				       true);
->> -	}
->> +	if (!tz->tzp->sustainable_power)
->> +		estimate_tzp_constants(tz, params->trip_switch_on,
->> +				       control_temp);
-> 
-> The changes in this patch are appropriate and make sense but they are
-> not done at the right place.
-> 
-> estimate_tzp_constants() must be called when sustainable_power is
-> updated via DT/init or sysfs.
-> 
-> Keeping a function to estimate the sustainable power and another one to
-> estimate the k_* separated would be more clear.
-> 
-> Actually the confusion is coming from when the pid constants are
-> computed, I suggest moving the initialization of k_* out of this
-> function and killing the 'force' test.
-> 
-> 
-> [ ... ]
-> 
-> 
+>> sysfs APIs are typically created so that they can be used from the shell,
+>> so on read a newline will be added. On write a newline at the end
+>> typically is allowed, but ignored. There are even special helper functions
+>> to deal with properly ignoring the newline on write.
+>>
+>> Regards,
+>>
+>> Hans
+>>
+>>
+> OK - does that need to actually be specified here? Or is that just something I keep in mind for the implementation?
 
-Thank you for the review. I will re-write the patch
-and address your suggestion.
+IMHO it does not belong in the sysfs API docs for the platform_profile
+stuff. But I guess it would be good to document it somewhere in some
+generic syfs API rules/expectations document (with a note that their
+might be exceptions).
+
+Ideally we would already have such a file somewhere, but I don't know
+if we do (I did not look). So if you feel like it (and such a file does
+not exist yet) then I guess a patch adding such a doc file would be good.
 
 Regards,
-Lukasz
+
+Hans
+
