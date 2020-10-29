@@ -2,258 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE0F29EA6D
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 12:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B4829EA73
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Oct 2020 12:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbgJ2LZu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Oct 2020 07:25:50 -0400
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:42719 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgJ2LZt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 07:25:49 -0400
-Received: by mail-oi1-f179.google.com with SMTP id c72so2802492oig.9;
-        Thu, 29 Oct 2020 04:25:48 -0700 (PDT)
+        id S1727008AbgJ2L0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Oct 2020 07:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbgJ2L03 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Oct 2020 07:26:29 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8777AC0613D2
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 04:26:27 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id x13so2068816pfa.9
+        for <linux-pm@vger.kernel.org>; Thu, 29 Oct 2020 04:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=khkMOr7THRvGQFJeYkxJ0/lSpk8ERoKlhcPz/3RiD+4=;
+        b=eDVfOXu2fTM+NF4r6AwbHzmwFZ27VzLcPHb1NlE1UOGHdfuoNzZArXJuFTWy7WjpOZ
+         U4SknfcioVkD9XPMlFORuZqfGmDCIdBC6jE5XhrakwWkYKVk8/WBtpLdsOrnid19Txke
+         EQl/iCFP+i5hoYlUe7paIP8GUP18RzLF8ca8p/CZZbovon1UpCOaLEU+altH3wKZvagF
+         /NwBgBqP0tgPriGqKEL2o+39PHMw1CEGE41MwXiLGq3LXGePdwFT9996ROPSh63ymVHw
+         84zc6InAsWvsHMtc4hBT87qKV/H+ByZZNvk5DiQIkOXQBqNsQg/5GdEXL3oIe9CczdMO
+         k6pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QchY1rQBO8CSFd113tzUKvOK8asotum72xA9lUDpzIc=;
-        b=gNiWdrMZrCfKPlbBzNxTLTeu4oLjUy288fTNywiUgx2OzsjOHBRGYyPItpfOvnMkAv
-         kNbZw4GBEv2jfBwUNlKVoeN+75qv6Pyd+WRL1qXo1HMYiHgOcxIylSsF/zuorxzuFnXp
-         uJb9RqwSMhZ0IjYwlPzk85v4nULcDnY/xy2cRcfC35PZtGExhYZ5TrZoodIvken9KRiw
-         /AUa0Qo8RtSC3Le579QzI7zQ4LLoGOThx2msgOe1IuPn33YbcKW9vpZJr0QbisVid+pS
-         r8esAIcBJufnp3lRGgBo4fRr1CPTZ9x4kPKfq6Mo9qeoMf6yZ+84uXqghIfT1rbUZXAq
-         T7Bg==
-X-Gm-Message-State: AOAM532qnV+8YrXSZA3m7TYMHU5Q9N13+uL8B5VWe0dyXV+FriXfEo0l
-        xUSZHxZjgO2R5dC90nwB3FHZUK8VwRIAtKkct0Q=
-X-Google-Smtp-Source: ABdhPJx9CE4uF1ccjyYAqyCw3qpTvRqSxQHalV2jVP/wHFIrcYNGtma055Xz40efk5OWLEfk3yCow3a8TC21dbC/jA8=
-X-Received: by 2002:aca:4c86:: with SMTP id z128mr2634681oia.71.1603970748463;
- Thu, 29 Oct 2020 04:25:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=khkMOr7THRvGQFJeYkxJ0/lSpk8ERoKlhcPz/3RiD+4=;
+        b=ry8hMqV4s0EUHI9nF44IqUsuncZdGJKDxLBLCPGveL1P9R42xxKyDqM/VQK4LGbq1r
+         C1Ud4elGpbymeY7aH0cJeurvhjtDvZB1AKIHJijzUu6TYkgY7xzRjxD47ewK5W4sWGbE
+         CMEHkE45wCeuwcjiYYW/4v5yZsE15aToLa7oVosju8O4AzUkXFNMv57OtdBhdhkEuVQy
+         p+x245ijv6fsnZ7thRzHNamVk/Ni4dPdZPbXo57Y0TuzNdX8igYOIyYtEwKaCf0m0Pp2
+         StlcFddLdcE5UZ3/bE3C81V65icf1Os35RADRNm2WBh082sSn3V4axXP71epPux0vtP2
+         G9Yg==
+X-Gm-Message-State: AOAM530ejs8F0w5X1CXjq6/uAbuEiG5f62gemk+PL74elCZsJwVoToxJ
+        Wv64pVC1bg8OY+T5YSGRxIwZIA==
+X-Google-Smtp-Source: ABdhPJxLnEVbXPMNfvAkhFJjXaEB7qnMK0EZlPyqE5kN3ZRrBE+rA62Y1fQbQxaH2CwUCUx6tPO30w==
+X-Received: by 2002:aa7:8bd7:0:b029:160:9db:d8bc with SMTP id s23-20020aa78bd70000b029016009dbd8bcmr4019961pfd.69.1603970787031;
+        Thu, 29 Oct 2020 04:26:27 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id u124sm2799091pfc.21.2020.10.29.04.26.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Oct 2020 04:26:26 -0700 (PDT)
+Date:   Thu, 29 Oct 2020 16:56:24 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     zhuguangqing83 <zhuguangqing83@gmail.com>
+Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        'zhuguangqing' <zhuguangqing@xiaomi.com>
+Subject: Re: [PATCH] cpufreq: schedutil: set sg_policy->next_freq to the
+ final cpufreq
+Message-ID: <20201029112624.zvl6yh7fgqautzry@vireshk-i7>
+References: <004001d6ade5$0f8dde00$2ea99a00$@gmail.com>
 MIME-Version: 1.0
-References: <markpearson@lenovo.com> <20201027164219.868839-1-markpearson@lenovo.com>
- <5ca1ae238b23a611b8a490c244fd93cdcc36ef79.camel@hadess.net>
-In-Reply-To: <5ca1ae238b23a611b8a490c244fd93cdcc36ef79.camel@hadess.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Oct 2020 12:25:37 +0100
-Message-ID: <CAJZ5v0hUzsCS0dZbT4RRQ31DgTiuCOmyCcJMji_DbU19ghaOdA@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: Add documentation for new platform_profile
- sysfs attribute
-To:     Bastien Nocera <hadess@hadess.net>,
-        Mark Pearson <markpearson@lenovo.com>
-Cc:     Darren Hart <dvhart@infradead.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Elia Devito <eliadevito@gmail.com>,
-        Benjamin Berg <bberg@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <004001d6ade5$0f8dde00$2ea99a00$@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 2:53 AM Bastien Nocera <hadess@hadess.net> wrote:
->
-> Hey Hans, Mark,
->
-> On Tue, 2020-10-27 at 12:42 -0400, Mark Pearson wrote:
-> > From: Hans de Goede <hdegoede@redhat.com>
-> >
-> > On modern systems the platform performance, temperature, fan and
-> > other
-> > hardware related characteristics are often dynamically configurable.
-> > The
-> > profile is often automatically adjusted to the load by somei
-> > automatic-mechanism (which may very well live outside the kernel).
-> >
-> > These auto platform-adjustment mechanisms often can be configured
-> > with
-> > one of several 'platform-profiles', with either a bias towards low-
-> > power
+On 29-10-20, 19:17, zhuguangqing83 wrote:
+> I think your patch is ok for tackling this problem.
 
-Strictly speaking, power is a rate, so it cannot be consumed.
+Great.
 
-So I would say "low-power operation" here.
-
-> Can you please make sure to quote 'platform-profile' and 'profile-name'
-> this way all through the document? They're not existing words, and
-> quoting them shows that they're attribute names, rather than English.
->
-> > consumption or towards performance (and higher power consumption and
-
-And analogously here.
-
-> > thermals).
->
-> s/thermal/temperature/
-
-Right.
-
-> "A thermal" is something else (it's seasonal underwear for me ;)
->
-> > Introduce a new platform_profile sysfs API which offers a generic API
-> > for
-> > selecting the performance-profile of these automatic-mechanisms.
-> >
-> > Co-developed-by: Mark Pearson <markpearson@lenovo.com>
-> > Signed-off-by: Mark Pearson <markpearson@lenovo.com>
-> > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> > ---
-> > Changes in V1:
-> >  - Moved from RFC to proposed patch
-> >  - Added cool profile as requested
-> >  - removed extra-profiles as no longer relevant
-> >
-> >  .../ABI/testing/sysfs-platform_profile        | 66
-> > +++++++++++++++++++
-> >  1 file changed, 66 insertions(+)
-> >  create mode 100644 Documentation/ABI/testing/sysfs-platform_profile
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-platform_profile
-> > b/Documentation/ABI/testing/sysfs-platform_profile
-> > new file mode 100644
-> > index 000000000000..240bd3d7532b
-> > --- /dev/null
-> > +++ b/Documentation/ABI/testing/sysfs-platform_profile
-> > @@ -0,0 +1,66 @@
-> > +Platform-profile selection (e.g.
-> > /sys/firmware/acpi/platform_profile)
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index 0c5c61a095f6..8991cc31b011 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -121,13 +121,8 @@ static void sugov_fast_switch(struct sugov_policy *sg_policy, u64 time,
+> >  static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
+> >                                   unsigned int next_freq)
+> >  {
+> > -       if (!sugov_update_next_freq(sg_policy, time, next_freq))
+> > -               return;
+> > -
+> > -       if (!sg_policy->work_in_progress) {
+> > -               sg_policy->work_in_progress = true;
+> > +       if (sugov_update_next_freq(sg_policy, time, next_freq))
+> >                 irq_work_queue(&sg_policy->irq_work);
+> > -       }
+> >  }
+> > 
+> >  /**
+> > @@ -159,6 +154,15 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+> >         unsigned int freq = arch_scale_freq_invariant() ?
+> >                                 policy->cpuinfo.max_freq : policy->cur;
+> > 
+> > +       /*
+> > +        * The previous frequency update didn't go as we expected it to be. Lets
+> > +        * start again to make sure we don't miss any updates.
+> > +        */
+> > +       if (unlikely(policy->cur != sg_policy->next_freq)) {
+> > +               sg_policy->next_freq = 0;
+> > +               sg_policy->cached_raw_freq = 0;
+> > +       }
 > > +
-> > +On modern systems the platform performance, temperature, fan and
-> > other
-> > +hardware related characteristics are often dynamically configurable.
-> > The
-> > +profile is often automatically adjusted to the load by some
-> > +automatic-mechanism (which may very well live outside the kernel).
+> >         freq = map_util_freq(util, freq, max);
+> > 
+> >         if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
+> > @@ -337,8 +341,14 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+> > 
+> >         ignore_dl_rate_limit(sg_cpu, sg_policy);
+> > 
+> > +       if (!sg_policy->policy->fast_switch_enabled) {
+> > +               raw_spin_lock(&sg_policy->update_lock);
+> > +               if (sg_policy->work_in_progress)
+> > +                       goto unlock;
+> > +       }
 > > +
-> > +These auto platform-adjustment mechanisms often can be configured
-> > with
-> > +one of several 'platform-profiles', with either a bias towards low-
-> > power
-> > +consumption or towards performance (and higher power consumption and
-> > +thermals).
-> > +
-> > +The purpose of the platform_profile attribute is to offer a generic
-> > sysfs
-> > +API for selecting the platform-profile of these automatic-
-> > mechanisms.
-> > +
-> > +Note that this API is only for selecting the platform-profile, it is
-> > +NOT a goal of this API to allow monitoring the resulting performance
-> > +characteristics. Monitoring performance is best done with
-> > device/vendor
-> > +specific tools such as e.g. turbostat.
-> > +
-> > +Specifically when selecting a high-performance profile the actual
-> > achieved
-> > +performance may be limited by various factors such as: the heat
-> > generated
-> > +by other components, room temperature, free air flow at the bottom
-> > of a
-> > +laptop, etc. It is explicitly NOT a goal of this API to let
-> > userspace know
-> > +about any sub-optimal conditions which are impeding reaching the
-> > requested
-> > +performance level.
-> > +
-> > +Since numbers are a rather meaningless way to describe platform-
-> > profiles
->
-> It's not meaningless, but rather ambiguous. For a range of 1 to 5, is 1
-> high performance, and 5 low power, or vice-versa?
+> 
+> Maybe it's better to bring the following code before the code above.
+>          if (!sugov_should_update_freq(sg_policy, time))
+>                return;
 
-It just is not useful. :-)
+Maybe not. We want to avoid everything in case a freq-update is on the
+way elsewhere as there are other flags we are touching in
+sugov_should_update_freq().
 
-> > +this API uses strings to describe the various profiles. To make sure
-> > that
-> > +userspace gets a consistent experience when using this API this API
->
-> you can remove "when using this API".
->
-> > +document defines a fixed set of profile-names. Drivers *must* map
-> > their
-> > +internal profile representation/names onto this fixed set.
-> > +
-> > +If for some reason there is no good match when mapping then a new
-> > profile-name
-> > +may be added.
->
-> "for some reason" can be removed.
+I will send a proper patch for this shortly. It would be helpful if
+you can give it a go and provide your tested-by.
 
-Right.
-
-> >  Drivers which wish to introduce new profile-names must:
-> > +1. Have very good reasons to do so.
->
-> "1. Explain why the existing 'profile-names' cannot be used"
->
-> > +2. Add the new profile-name to this document, so that future drivers
-> > which also
-> > +   have a similar problem can use the same name.
->
-> "2. Add the new 'profile-name' to the documentation so that other
-> drivers can use it, as well as user-space knowing clearly what
-> behaviour the 'profile-name' corresponds to"
->
-> > +
-> > +What:          /sys/firmware/acpi/platform_profile_choices
-> > +Date:          October 2020
-> > +Contact:       Hans de Goede <hdegoede@redhat.com>
-> > +Description:
-> > +               Reading this file gives a space separated list of
-> > profiles
-> > +               supported for this device.
->
-> "This file contains a space-separated list of profiles..."
->
-> > +
-> > +               Drivers must use the following standard profile-
-> > names:
-> > +
-> > +               low-power:              Emphasises low power
-> > consumption
-
-Let's be precise, so "low-power operation", please (see above for the reason).
-
-> > +               cool:                   Emphasises cooler operation
-> > +               quiet:                  Emphasises quieter operation
-> > +               balanced:               Balance between low power
-> > consumption
-
-And same here and analogously everywhere.
-
-> > +                                       and performance
-> > +               performance:            Emphasises performance (and
-> > may lead to
-> > +                                       higher temperatures and fan
-> > speeds)
->
-> I'd replace "Emphasises" with either "Focus on" or the US English
-> spelling of "Emphasizes".
->
-> > +               Userspace may expect drivers to offer at least
-> > several of these
-> > +               standard profile-names.
->
-> Replce "at least several" with "more than one".
->
-> > +
-> > +What:          /sys/firmware/acpi/platform_profile
-> > +Date:          October 2020
-> > +Contact:       Hans de Goede <hdegoede@redhat.com>
-> > +Description:
-> > +               Reading this file gives the current selected profile
-> > for this
-> > +               device. Writing this file with one of the strings
-> > from
-> > +               available_profiles changes the profile to the new
-> > value.
->
-> Is there another file which explains whether those sysfs value will
-> contain a trailing linefeed?
->
-> Cheers
->
+-- 
+viresh
