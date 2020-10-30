@@ -2,99 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F20202A04AD
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 12:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC702A0550
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 13:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbgJ3Lr7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Oct 2020 07:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
+        id S1726078AbgJ3M1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Oct 2020 08:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726259AbgJ3Lr5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 07:47:57 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C725C0613D4
-        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 04:47:56 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id p22so2570343wmg.3
-        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 04:47:56 -0700 (PDT)
+        with ESMTP id S1726110AbgJ3M07 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 08:26:59 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2D9C0613D4
+        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 05:26:28 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id v19so1726616lji.5
+        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 05:26:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/VyNGryLroT7qe3Pp9ybD5lnQfay5phLuhwNvbxhxYo=;
-        b=WAUf3+d2JVTc2U3d/Gv0nJozocu951OOswUcD4xo4Epo9ZKRp2kywPmcI5+AU5Ugsz
-         UBdOx//W7jjKZser0nHrjrHeBnt9qZTzPXTgOViuENyjBKVk+UCwFV57rong8tik9US7
-         0vdI2MSbFnECyd+W32GDQdbCNM11iHJ49aIL7Pp96UzJg+rlbr9sVViA8uDktOwXOBtP
-         t6KE1+BfjVuNIPaaqymUGIbXvZiljCwXch95AOP8EgnaOYgWxtDwowi+CBmV9S6/jWhk
-         BHliUO4ci5VZ6iOI1sdxImSGdGpY8Pj588LX7bsBsdAQGIRtl7CfWi7FfQNO6XdkXx5q
-         spfg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N9vyRXhA7QUm04cJ+c+59yrdZeMSNND2vqWl4Gn+l6k=;
+        b=tAejCbiAXF71AYcGV24Wj8x6RE5rgUofsSSFRnLKzAi5AueGwryTjbPXQEOqDhgH1+
+         l+IltCn02h9JluuUqywKU0gW81L87cb0oZv9r1ppNHhVeRYrHFmJ9RNG9WB9qtHLuIzL
+         NGqfRGJLCQlMJFYKXpTynqRivwRQh07HHwqy3MNBQ3amJq04QeWLzfJXDq3TYHhauYla
+         Qyh/M4L82Ziq2vD6QE8E/+a8yaXMjthaAQ6DnLtolISDCKw9Xl+YFq7Ug6grSu6SVxv5
+         VPnGCN8gPVEKGvqC4uTgykWw7C75JKJupZJuwwunAWo3AsvkaDmn9pu01x/M5UrFp6ph
+         DTfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/VyNGryLroT7qe3Pp9ybD5lnQfay5phLuhwNvbxhxYo=;
-        b=FHZzltEnpvWw1fHe9C/UxV5afL3hqTSQz3Dr9bWWs/l/fA1BYBnpakGGx1NF6ziqX0
-         nKEKmPQVLI4LQzAyykkRoOQtyJ4B6Jg86S3o6C+n+f4ykgFy7S9hUTtHKQvfW9dMVz5O
-         nXE0nUEsKqDD7vWqIi4DLdE/+m8NRqnBIBcJ6Z907v1SqWdTKW1E3BF43tENIAT/azT1
-         n+vH8zT3l+wKVUveEeYgEpBvaXQAi09DqMXtTuIV/i5iS6qfO7izG9DHaQw9B/AJ2YM2
-         toAvfX36M5SuEHcuwBofB+5yIkyh9G/MxgRove0WTRTwAwRgSUIvcvVj8O2foDB1KqZ7
-         TMIw==
-X-Gm-Message-State: AOAM532pVOVej29to2XV5zCw76kb9f86NOq5ZHlxsCHi8WcVc58zvcnt
-        RP7Q60z3DorRheuE18AhkQkShA==
-X-Google-Smtp-Source: ABdhPJzQqqcHNKkLNiq+QHTNOQAjhnt7BUATOLJhivtj8XRz7DO7X6ixIJae+JIM1g8qdueVyZWT1g==
-X-Received: by 2002:a1c:2905:: with SMTP id p5mr2242342wmp.187.1604058474636;
-        Fri, 30 Oct 2020 04:47:54 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:f693:9fff:fef4:a7ef])
-        by smtp.gmail.com with ESMTPSA id g8sm4434811wma.36.2020.10.30.04.47.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N9vyRXhA7QUm04cJ+c+59yrdZeMSNND2vqWl4Gn+l6k=;
+        b=XjKiGAZzSp9JH0xG5mgkuGhn9oddXH7OVZgUpx/LqysrcBJCwTmHvW3TI6nEuaEyYH
+         G0ASl0LZ5IVOe2AlrOM58GMQN1PMKyfpJuWsXCpfppt+h58RXc/dujChfuA7OvAblb/y
+         DlaN9dxOvD7ILeHyYN97crr8qfLH3AKmJfCqEFeFsmz623wQ3Dy/8xeY9giRGW8lYB49
+         E/jfVpaY6YNzhATm8nNEu2RlDQk/xaLkzYZsaXsUD66FdukgmI3ETdXEBjkyWbcBxfoc
+         6XZUsZCZcoLE3PW+7UJoigj9EMlkVC/A6kTX8Xs8qYV5E2jBGGMobS6ZHrAWxlE1xBSt
+         +0xQ==
+X-Gm-Message-State: AOAM5334lPrVCn0jS8zLMS6A6+bJ6hTs1ogWPCj8ToKbrxTtUII34Gur
+        eQnr/SVoshmkEBGDTM44fF0Khw==
+X-Google-Smtp-Source: ABdhPJx2hs7Z9Qr3bxl/VBChbReY60gqaRepCs+a1l4yKy2NHrOK0P7XvYFQA/58VjvQs/6L0H72dw==
+X-Received: by 2002:a2e:7d06:: with SMTP id y6mr894160ljc.431.1604060786808;
+        Fri, 30 Oct 2020 05:26:26 -0700 (PDT)
+Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
+        by smtp.gmail.com with ESMTPSA id i6sm218684lfl.7.2020.10.30.05.26.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 04:47:53 -0700 (PDT)
-Date:   Fri, 30 Oct 2020 11:47:50 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vireshk@kernel.org, robh+dt@kernel.org, nm@ti.com,
-        rafael@kernel.org, sboyd@kernel.org, daniel.lezcano@linaro.org,
-        sudeep.holla@arm.com, Dietmar.Eggemann@arm.com
-Subject: Re: [PATCH 2/4] OPP: Add support for parsing the 'opp-sustainable'
- property
-Message-ID: <20201030114750.GA636720@google.com>
-References: <20201028140847.1018-1-lukasz.luba@arm.com>
- <20201028140847.1018-3-lukasz.luba@arm.com>
+        Fri, 30 Oct 2020 05:26:26 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Anish Kumar <anish198519851985@gmail.com>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH] power: supply: generic-adc-battery: Use GPIO descriptors
+Date:   Fri, 30 Oct 2020 13:24:24 +0100
+Message-Id: <20201030122424.85686-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201028140847.1018-3-lukasz.luba@arm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+This driver uses platform data to pass GPIO lines using the
+deprecated global GPIO numbers. There are no in-tree users
+of this platform data.
 
-On Wednesday 28 Oct 2020 at 14:08:45 (+0000), Lukasz Luba wrote:
-> +unsigned long dev_pm_opp_get_sustainable_opp_freq(struct device *dev)
-> +{
-> +	struct opp_table *opp_table;
-> +	unsigned long freq = 0;
-> +
-> +	opp_table = _find_opp_table(dev);
-> +	if (IS_ERR(opp_table))
-> +		return 0;
-> +
-> +	if (opp_table->sustainable_opp && opp_table->sustainable_opp->available)
-> +		freq = dev_pm_opp_get_freq(opp_table->sustainable_opp);
-> +
-> +	dev_pm_opp_put_opp_table(opp_table);
-> +
-> +	return freq;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_opp_get_sustainable_opp_freq);
+Any out-of-tree or coming users of this driver can easily be
+migrated to use machine descriptor tables as described in
+Documentation/driver-api/gpio/board.rst
+section "platform data".
 
-I'm guessing this is what IPA will use to find out what the sustainable
-frequency is right?
+Cc: Anish Kumar <anish198519851985@gmail.com>
+Cc: H. Nikolaus Schaller <hns@goldelico.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/power/supply/generic-adc-battery.c | 31 ++++++++--------------
+ include/linux/power/generic-adc-battery.h  |  4 ---
+ 2 files changed, 11 insertions(+), 24 deletions(-)
 
-Is PM_OPP the right place for that? It feels odd IPA will get the EM
-from one place, which includes the performance state, and the sustained
-OPP from another. Should we move that to PM_EM instead?
+diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
+index caa829738ef7..0032069fbc2b 100644
+--- a/drivers/power/supply/generic-adc-battery.c
++++ b/drivers/power/supply/generic-adc-battery.c
+@@ -12,7 +12,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/err.h>
+ #include <linux/timer.h>
+ #include <linux/jiffies.h>
+@@ -52,6 +52,7 @@ struct gab {
+ 	int	level;
+ 	int	status;
+ 	bool cable_plugged;
++	struct gpio_desc *charge_finished;
+ };
+ 
+ static struct gab *to_generic_bat(struct power_supply *psy)
+@@ -91,13 +92,9 @@ static const enum power_supply_property gab_dyn_props[] = {
+ 
+ static bool gab_charge_finished(struct gab *adc_bat)
+ {
+-	struct gab_platform_data *pdata = adc_bat->pdata;
+-	bool ret = gpio_get_value(pdata->gpio_charge_finished);
+-	bool inv = pdata->gpio_inverted;
+-
+-	if (!gpio_is_valid(pdata->gpio_charge_finished))
++	if (!adc_bat->charge_finished)
+ 		return false;
+-	return ret ^ inv;
++	return gpiod_get_value(adc_bat->charge_finished);
+ }
+ 
+ static int gab_get_status(struct gab *adc_bat)
+@@ -327,18 +324,17 @@ static int gab_probe(struct platform_device *pdev)
+ 
+ 	INIT_DELAYED_WORK(&adc_bat->bat_work, gab_work);
+ 
+-	if (gpio_is_valid(pdata->gpio_charge_finished)) {
++	adc_bat->charge_finished = devm_gpiod_get_optional(&pdev->dev,
++							   "charged", GPIOD_IN);
++	if (adc_bat->charge_finished) {
+ 		int irq;
+-		ret = gpio_request(pdata->gpio_charge_finished, "charged");
+-		if (ret)
+-			goto gpio_req_fail;
+ 
+-		irq = gpio_to_irq(pdata->gpio_charge_finished);
++		irq = gpiod_to_irq(adc_bat->charge_finished);
+ 		ret = request_any_context_irq(irq, gab_charged,
+ 				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+ 				"battery charged", adc_bat);
+ 		if (ret < 0)
+-			goto err_gpio;
++			goto gpio_req_fail;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, adc_bat);
+@@ -348,8 +344,6 @@ static int gab_probe(struct platform_device *pdev)
+ 			msecs_to_jiffies(0));
+ 	return 0;
+ 
+-err_gpio:
+-	gpio_free(pdata->gpio_charge_finished);
+ gpio_req_fail:
+ 	power_supply_unregister(adc_bat->psy);
+ err_reg_fail:
+@@ -367,14 +361,11 @@ static int gab_remove(struct platform_device *pdev)
+ {
+ 	int chan;
+ 	struct gab *adc_bat = platform_get_drvdata(pdev);
+-	struct gab_platform_data *pdata = adc_bat->pdata;
+ 
+ 	power_supply_unregister(adc_bat->psy);
+ 
+-	if (gpio_is_valid(pdata->gpio_charge_finished)) {
+-		free_irq(gpio_to_irq(pdata->gpio_charge_finished), adc_bat);
+-		gpio_free(pdata->gpio_charge_finished);
+-	}
++	if (adc_bat->charge_finished)
++		free_irq(gpiod_to_irq(adc_bat->charge_finished), adc_bat);
+ 
+ 	for (chan = 0; chan < ARRAY_SIZE(gab_chan_name); chan++) {
+ 		if (adc_bat->channel[chan])
+diff --git a/include/linux/power/generic-adc-battery.h b/include/linux/power/generic-adc-battery.h
+index 40f9c7628f7b..c68cbf34cd34 100644
+--- a/include/linux/power/generic-adc-battery.h
++++ b/include/linux/power/generic-adc-battery.h
+@@ -11,16 +11,12 @@
+  * @battery_info:         recommended structure to specify static power supply
+  *			   parameters
+  * @cal_charge:           calculate charge level.
+- * @gpio_charge_finished: gpio for the charger.
+- * @gpio_inverted:        Should be 1 if the GPIO is active low otherwise 0
+  * @jitter_delay:         delay required after the interrupt to check battery
+  *			  status.Default set is 10ms.
+  */
+ struct gab_platform_data {
+ 	struct power_supply_info battery_info;
+ 	int	(*cal_charge)(long value);
+-	int	gpio_charge_finished;
+-	bool	gpio_inverted;
+ 	int     jitter_delay;
+ };
+ 
+-- 
+2.26.2
 
-Thanks,
-Quentin
