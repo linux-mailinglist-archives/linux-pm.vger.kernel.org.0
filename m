@@ -2,123 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15B42A0599
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 13:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAA22A05D4
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 13:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbgJ3Mks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Oct 2020 08:40:48 -0400
-Received: from foss.arm.com ([217.140.110.172]:33650 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726277AbgJ3Mks (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 30 Oct 2020 08:40:48 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FCFA1063;
-        Fri, 30 Oct 2020 05:40:47 -0700 (PDT)
-Received: from [10.57.13.192] (unknown [10.57.13.192])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7143C3F68F;
-        Fri, 30 Oct 2020 05:40:44 -0700 (PDT)
-Subject: Re: [PATCH 0/4] Add sustainable OPP concept
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com, rafael@kernel.org,
-        sudeep.holla@arm.com, daniel.lezcano@linaro.org,
-        Dietmar.Eggemann@arm.com
-References: <20201028140847.1018-1-lukasz.luba@arm.com>
- <20201029074057.6ugmwyzna52x3oli@vireshk-i7>
- <20201029075356.rruej6jlerhfa4oy@vireshk-i7>
- <228fa1b3-bbd3-6941-fd4b-06581016d839@arm.com>
- <20201030082937.xgjmko2ohwhkt6f5@vireshk-i7>
- <a0a6db69-fc3e-c39f-7586-5ac3227b746e@arm.com>
- <20201030095248.abej6h5wphud2ihb@vireshk-i7>
- <757fe3b1-745f-2656-fe21-c7b39f123a25@arm.com>
- <20201030111751.i7zdsi7ruzmnyxk6@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <468065c6-d604-5691-cddf-3eca20035bba@arm.com>
-Date:   Fri, 30 Oct 2020 12:40:42 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726487AbgJ3Mwm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Oct 2020 08:52:42 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:60541 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726486AbgJ3Mwj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 08:52:39 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20201030125226euoutp027efb1f10039203b497138fcee76b6215~CxjSz_dMV0138901389euoutp02B
+        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 12:52:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20201030125226euoutp027efb1f10039203b497138fcee76b6215~CxjSz_dMV0138901389euoutp02B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1604062346;
+        bh=MdlvHCkxwzi+Lsf2RfNJVwa956ltLv5/RWj75/qo/FE=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=AvmcHun+FctARQpNrpwj/JFTy2IwQ9QWiPu+wN2v4RRV8KEZ5UCYbecISUgxNSjCD
+         H5FyVjr7LNc08Wp4V7cszC/0+Fm2WX61oIWLVckbrO/grJQX4cOh87m7YD6Yo/2BOE
+         mOIQ4BIPG0vrbfZyUlkP6uQOlHuVMZVWVn1KcE90=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20201030125221eucas1p27a2700d748fcc8df9d07b68d896f0bef~CxjN5n8Sp0094600946eucas1p2U;
+        Fri, 30 Oct 2020 12:52:21 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 1C.0F.05997.58C0C9F5; Fri, 30
+        Oct 2020 12:52:21 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776~CxjNY-tNp2028320283eucas1p1N;
+        Fri, 30 Oct 2020 12:52:21 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201030125221eusmtrp1efe6517d0b0af8eebcec72b24d0b7f36~CxjNYN3lx0172901729eusmtrp1R;
+        Fri, 30 Oct 2020 12:52:21 +0000 (GMT)
+X-AuditID: cbfec7f4-65dff7000000176d-69-5f9c0c85ab82
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id AD.27.06017.48C0C9F5; Fri, 30
+        Oct 2020 12:52:21 +0000 (GMT)
+Received: from AMDC3061.digital.local (unknown [106.120.51.75]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20201030125220eusmtip21f5a277f5158bd2cbe3dc9f27e1e57cc~CxjMp7mGY1363513635eusmtip2V;
+        Fri, 30 Oct 2020 12:52:20 +0000 (GMT)
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+To:     georgi.djakov@linaro.org, cw00.choi@samsung.com, krzk@kernel.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        a.swigon@samsung.com, myungjoo.ham@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        s.nawrocki@samsung.com
+Subject: [PATCH v7 0/6] Exynos: Simple QoS for exynos-bus using interconnect
+Date:   Fri, 30 Oct 2020 13:51:43 +0100
+Message-Id: <20201030125149.8227-1-s.nawrocki@samsung.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20201030111751.i7zdsi7ruzmnyxk6@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0iTYRTHffZe9ipNX6fgyTJrXivSLD88VuQMP4yyKCgIycvSF5V0yqZm
+        QWENtbyj1KZ5LUJdhJdMxUsXtYaZDlLSnDkLtWZGlBZUYjlfLb/9/uec/7nAYQjxS8qZiVMk
+        c0qFPF5C25Atz38admVsKIvYPVTsjU0VGQg3auspPLLwgcKVvYMUHv7+hcaariYaF5kKSWww
+        NAjxUHsZjefzehHWGh4J8P3et0JsvFJL44yuXiHumcuisLbYTEtZWZPuOi0bf91Jy0w5eoEs
+        v1mHZPNNW45ToTYHorn4uFRO6Xsw0ia2prUEJQ27p82N6Oh0NOCSjawZYP0hZ7yBzEY2jJit
+        RVCe/QbxYgFB3fMbFC/mEXycKqDWLD2jWQI+UYOgxmAk/lkmNXqBpYpm/SDvWT6ysCMbDJnT
+        FaSFCfa9ANSVhIUd2BDQlo0JLUyyHvBpcHKFRew+KH3ah/hprnCv4QnBx+2hr2RqtY8rqB/e
+        WhkM7AshjFfnLpuZZREMxuoo3usAs/pmIc+bob84l+Tr1QhyO4xCXhQiMOmrVqfth/HBX7Sl
+        EcFuh/p2Xz4cBOaiKxTf3xZGP9vzO9hCUYuG4MMiuJYp5qvd4bdOI+DZGXKm/pA8y6BgaGJl
+        HTEbBkvlZagQbS1dd1npustK/+9QhQgdcuJSVAkxnGqPgjvvo5InqFIUMT5RiQlNaPnH+pf0
+        C22offFsN2IZJNkgkrreihBT8lTVhYRuBAwhcRQdGugPF4ui5RcucsrECGVKPKfqRpsYUuIk
+        2nvbHCZmY+TJ3DmOS+KUa1kBY+2cjtqvXh6a9QxWS03SE3lenAI6G8LHUmZsvaze/WibDpVr
+        T9lttIo9eibEjH8f+xowIe077OZ8ujHNbTEw2niz7uRUoPtdott8aUIkmGYevIL0DpRcXhh5
+        xMPQZadhKv23ZXrfkXB2377sDMp4rA5Y8oh1DHjpP1NxqVXr4xKQ6CkhVbFyvx2EUiX/CwiX
+        GbRfAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRmVeSWpSXmKPExsVy+t/xe7qtPHPiDe67Wdyf18posXHGelaL
+        61+es1rMP3KO1eLK1/dsFtP3bmKzmHR/AovF+fMb2C0u75rDZvG59wijxYzz+5gs1h65y25x
+        u3EFm0Xr3iPsFofftLNazJj8ks1BwGPTqk42jzvX9rB53O8+zuTRt2UVo8fnTXIBrFF6NkX5
+        pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6Gcu3z2QsuKJS
+        8eb6KrYGxrOyXYycHBICJhKHb7QzdTFycQgJLGWU+LtrInsXIwdQQkpifosSRI2wxJ9rXWwQ
+        NZ8YJa7sessOkmATMJToPdrHCGKLCHhInGpdywpSxCzwgUli7YNesISwgI/EjDm3wBpYBFQl
+        Xp97AGbzClhJzDp4khFig7zE6g0HmCHighInZz5hATmCWUBdYv08IZAwM1BJ89bZzBMY+Wch
+        qZqFUDULSdUCRuZVjCKppcW56bnFRnrFibnFpXnpesn5uZsYgZG27djPLTsYu94FH2IU4GBU
+        4uF1kJ8dL8SaWFZcmXuIUYKDWUmE1+ns6Tgh3pTEyqrUovz4otKc1OJDjKZAL0xklhJNzgcm
+        gbySeENTQ3MLS0NzY3NjMwslcd4OgYMxQgLpiSWp2ampBalFMH1MHJxSDYxuy6+yBDtudC9s
+        KuJ/ajv9u+3Oy442iZeC3zvMW9FlLfZnTo1jzc4GGxtljiCj7XwFE+UVXS/4+J15MWHbaweL
+        +euZHY55zZkv+JShQvK6Xfu20D8ZLyZzWnzMEmr/x/jeiN0k83/i31lijxfaltuW6apGzZ05
+        MXp32uu7eluYnI21U/UFG5RYijMSDbWYi4oTAbQHyB/KAgAA
+X-CMS-MailID: 20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776
+References: <CGME20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+This patchset adds interconnect API support for the Exynos SoC "samsung,
+exynos-bus" compatible devices, which already have their corresponding
+exynos-bus driver in the devfreq subsystem.  Complementing the devfreq
+driver with an interconnect functionality allows to ensure the QoS
+requirements of devices accessing the system memory (e.g. video processing
+devices) are fulfilled and aallows to avoid issues like the one discussed
+in thread [1].
 
-On 10/30/20 11:17 AM, Viresh Kumar wrote:
-> On 30-10-20, 10:56, Lukasz Luba wrote:
->> IPA tries to do that, even dynamically when e.g. GPU is supper busy
->> in 3D games (~2000W) or almost idle showing 2D home screen.
->> It tries to find highest 'sustainable' frequencies for the devices,
->> at that various workloads and temp. But it needs some coefficients to
->> start, which have big impact on the algorithm. It could slow down IPA a
->> lot, when those coefficients are calculated based on lowest OPPs.
-> 
-> I see. So when you say it slows down IPA, what does that really mean ?
-> IPA isn't performing that accurately during the initial period of
-> booting (any time estimate here) ? Does it work fine after a time
-> duration? Or will it suffer for ever ?
+This patch series adds implementation of the interconnect provider per each
+"samsung,exynos-bus" compatible DT node, with one interconnect node per
+provider.  The interconnect code which was previously added as a part of
+the devfreq driver has been converted to a separate platform driver.
+In the devfreq a corresponding virtual child platform device is registered.
+Integration of devfreq and interconnect frameworks is achieved through
+the PM QoS API.
 
-The coefficients would stay 'forever', which determine the temp rising
-slope, until someone change them via sysfs (the: k_po, k_pu, k_i,
-sustainable_power).
+A sample interconnect consumer for exynos-mixer is added in patches 5/6,
+6/6, it is currently added only for exynos4412 and allows to address the
+mixer DMA underrun error issues [1].
 
-> 
-> And maybe you shouldn't start with the lowest OPPs while you calculate
-> these coefficients dynamically ? Maybe start from the middle ? As the
-> sustainable OPP would be something there only or maybe a bit higher
-> only. But yeah, I don't have any idea about how those coefficients are
-> calculated so this idea can be simply ignored as well :)
-> 
->> My backup plan was to add a flag into EM em_perf_state, extend SCMI perf
->> exposing the 'sustained_freq_khz' to scmi-cpufreq, which would set that
->> field after registering EM. IPA depends on EM, so should be OK.
-> 
-> I think at this point (considering the limited number of users (only
-> IPA) and providers (only SCMI)), it would be better that way only
-> instead of updating the OPP framework. Of course we can revisit that
-> if we ever feel that we need a better placeholder for it.
+Changes since v6:
+ - the interconnect consumer DT bindings are now used to describe dependencies
+   of the interconnects (samsung,exynos-bus nodes),
+ - bus-width property replaced with samsung,data-clk-ratio,
+ - adaptation to recent changes in the interconnect code
+   (of_icc_get_from_provider(), icc_node_add()).
 
-OK, sounds good.
+The series has been tested on Odroid U3 board. It is based on v5.10-rc1.
 
-> 
->>> So only SCMI based platforms will be able to use this stuff ? That's
->>> very limited, isn't it ? I think we should still try to make it better
->>> for everyone by making the software smarter. It has so much data, the
->>> OPPs, the power it will consume (based on microvolt property?), the
->>> heat we produce from that (from thermal framework), etc. Perhaps
->>> building this information continuously at runtime based on when and
->>> how we hit the trip points ? So we know which is the right frequency
->>> where we can refrain from hitting the trip points.
->>
->> IPA works in this way.
-> 
-> Nice, that's what I thought as well but then got a bit confused with
-> your patchset.
-> 
->>> But may be I am asking too much :(
->>>
->>
->> When you asked for user of this, I gave you instantly. This is one is
->> more difficult. I am still not there with IPA tests in LISA. I have some
->> out-of-tree kernel driver for testing, which also need polishing before
->> can be used with LISA. Then proper workloads with results processing.
->> EM for devfreq cooling devices. Then decent 'hot' board running
->> preferably mainline kernel.
->> What you requested is on my list, but it needs more work, which
->> won't be ready over night.
-> 
-> I can understand what you are trying to do here. And this surely
-> requires a lot of effort.
-> 
-
-Thank you Viresh for your opinion.
-I will take the EM approach, please ignore this patch set.
-
+--
 Regards,
-Lukasz
+Sylwester
+
+
+Changes since v5:
+ - addition of "bus-width: DT property, which specifies data width
+   of the interconnect bus (patches 1...2/6),
+ - addition of synchronization of the interconnect bandwidth setting
+   with VSYNC (patch 6/6).
+
+Changes since v3 [4] (v4 skipped to align with patchset [1]), detailed
+changes are listed in each patch:
+ - conversion to a separate interconnect (platform) driver,
+ - an update of the DT binding documenting new optional properties:
+   #interconnect-cells, samsung,interconnect-parent in "samsung,exynos-bus"
+   nodes,
+ - new DT properties added to the SoC, rather than to the board specific
+   files.
+
+Changes since v2 [5]:
+ - Use icc_std_aggregate().
+ - Implement a different modification of apply_constraints() in
+   drivers/interconnect/core.c (patch 03).
+ - Use 'exynos,interconnect-parent-node' in the DT instead of
+   'devfreq'/'parent', depending on the bus.
+ - Rebase on DT patches that deprecate the 'devfreq' DT property.
+ - Improve error handling, including freeing generated IDs on failure.
+ - Remove exynos_bus_icc_connect() and add exynos_bus_icc_get_parent().
+
+Changes since v1 [6]:
+ - Rebase on coupled regulators patches.
+ - Use dev_pm_qos_*() API instead of overriding frequency in
+   exynos_bus_target().
+ - Use IDR for node ID allocation.
+ - Reverse order of multiplication and division in
+   mixer_set_memory_bandwidth() (patch 07) to avoid integer overflow.
+
+
+References:
+[1] https://patchwork.kernel.org/patch/10861757/ (original issue)
+[2] https://www.spinics.net/lists/linux-samsung-soc/msg70014.html
+[3] https://www.spinics.net/lists/arm-kernel/msg810722.html
+[4] https://lore.kernel.org/linux-pm/20191220115653.6487-1-a.swigon@samsung.com
+[5] https://patchwork.kernel.org/cover/11054417/ (v1 of this RFC)
+[6] https://patchwork.kernel.org/cover/11152595/ (v2 of this RFC)
+
+
+Artur Świgoń (1):
+  ARM: dts: exynos: Add interconnects to Exynos4412 mixer
+
+Sylwester Nawrocki (5):
+  dt-bindings: devfreq: Add documentation for the interconnect
+    properties
+  interconnect: Add generic interconnect driver for Exynos SoCs
+  PM / devfreq: exynos-bus: Add registration of interconnect child
+    device
+  ARM: dts: exynos: Add interconnect properties to Exynos4412 bus nodes
+  drm: exynos: mixer: Add interconnect support
+
+ .../devicetree/bindings/devfreq/exynos-bus.txt     |  68 ++++++-
+ arch/arm/boot/dts/exynos4412.dtsi                  |   7 +
+ drivers/devfreq/exynos-bus.c                       |  17 ++
+ drivers/gpu/drm/exynos/exynos_mixer.c              | 146 ++++++++++++++-
+ drivers/interconnect/Kconfig                       |   1 +
+ drivers/interconnect/Makefile                      |   1 +
+ drivers/interconnect/exynos/Kconfig                |   6 +
+ drivers/interconnect/exynos/Makefile               |   4 +
+ drivers/interconnect/exynos/exynos.c               | 198 +++++++++++++++++++++
+ 9 files changed, 438 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/interconnect/exynos/Kconfig
+ create mode 100644 drivers/interconnect/exynos/Makefile
+ create mode 100644 drivers/interconnect/exynos/exynos.c
+
+--
+2.7.4
+
