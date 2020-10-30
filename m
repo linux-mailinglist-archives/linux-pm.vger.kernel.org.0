@@ -2,169 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FF52A025F
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 11:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6B82A0373
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 11:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726610AbgJ3KJw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Oct 2020 06:09:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48572 "EHLO mail.kernel.org"
+        id S1726386AbgJ3K4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Oct 2020 06:56:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:59650 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726482AbgJ3KJt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 30 Oct 2020 06:09:49 -0400
-Received: from coco.lan (unknown [95.90.213.187])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D913322210;
-        Fri, 30 Oct 2020 10:09:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604052587;
-        bh=nY70Min4E7MUGYz9J7zA0EKOEj/k9pNAzXLi2/4ZMkk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UNBtt1Tx2c8WK/B9Q0efliEgvZY5yYooQin4TVgBsznntS8ZFwkniWxmzY7RzT79m
-         oK9xtt1aioR8FC0aS3pTXQ0Xn3bEUZCk6NmIqh/YY+rYfGes9W0TlZNagZzinCUs9H
-         0mgCmN5om/0DWDTaU4Jmu0IJpLLZxtrFVkEu873I=
-Date:   Fri, 30 Oct 2020 11:09:25 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Fabrice Gasnier <fabrice.gasnier@st.com>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Javier =?UTF-8?B?R29uesOhbGV6?= <javier@javigon.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bruno Meneguele <bmeneg@redhat.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Konstantin Khlebnikov <koct9i@gmail.com>,
-        Kranthi Kuntala <kranthi.kuntala@intel.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Len Brown <lenb@kernel.org>,
-        Leonid Maksymchuk <leonmaxx@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Orson Zhai <orsonzhai@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Peter Rosin <peda@axentia.se>, Petr Mladek <pmladek@suse.com>,
-        Philippe Bergheaud <felix@linux.ibm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        <linux-acpi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-pm@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-usb@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <netdev@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 20/39] docs: ABI: testing: make the files compatible
- with ReST output
-Message-ID: <20201030110925.3e09d59e@coco.lan>
-In-Reply-To: <5326488b-4185-9d67-fc09-79b911fbb3b8@st.com>
-References: <cover.1604042072.git.mchehab+huawei@kernel.org>
-        <58cf3c2d611e0197fb215652719ebd82ca2658db.1604042072.git.mchehab+huawei@kernel.org>
-        <5326488b-4185-9d67-fc09-79b911fbb3b8@st.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1725993AbgJ3K4g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 30 Oct 2020 06:56:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62A87139F;
+        Fri, 30 Oct 2020 03:56:35 -0700 (PDT)
+Received: from [10.57.13.192] (unknown [10.57.13.192])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A0EC3F719;
+        Fri, 30 Oct 2020 03:56:32 -0700 (PDT)
+Subject: Re: [PATCH 0/4] Add sustainable OPP concept
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com, rafael@kernel.org,
+        sudeep.holla@arm.com, daniel.lezcano@linaro.org,
+        Dietmar.Eggemann@arm.com
+References: <20201028140847.1018-1-lukasz.luba@arm.com>
+ <20201029074057.6ugmwyzna52x3oli@vireshk-i7>
+ <20201029075356.rruej6jlerhfa4oy@vireshk-i7>
+ <228fa1b3-bbd3-6941-fd4b-06581016d839@arm.com>
+ <20201030082937.xgjmko2ohwhkt6f5@vireshk-i7>
+ <a0a6db69-fc3e-c39f-7586-5ac3227b746e@arm.com>
+ <20201030095248.abej6h5wphud2ihb@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <757fe3b1-745f-2656-fe21-c7b39f123a25@arm.com>
+Date:   Fri, 30 Oct 2020 10:56:30 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20201030095248.abej6h5wphud2ihb@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Em Fri, 30 Oct 2020 10:19:12 +0100
-Fabrice Gasnier <fabrice.gasnier@st.com> escreveu:
 
-> Hi Mauro,
+
+On 10/30/20 9:52 AM, Viresh Kumar wrote:
+> On 30-10-20, 09:19, Lukasz Luba wrote:
+>> How about dropping the DT binding, but just adding this new field into
+>> dev_pm_opp? There will be no DT parsing code, just the get/set
+>> functions, which will be used in SCMI patch 4/4 and in IPA?
+>> That would not require to change any DT bindings.
+>   
+>> I see. Just for your information SCMI supports 'Sustained Performance'
+>>   expressed in kHz.
 > 
-> [...]
+> Even that doesn't sound great (but then I don't have any background of
+> why that was added there). The problem is not about how do we get this
+> data into the kernel (from DT or firmware), but why is it even
+> required. I really feel that software can find the sustainable OPP by
+> itself (which can keep changing).
+
+IPA tries to do that, even dynamically when e.g. GPU is supper busy
+in 3D games (~2000W) or almost idle showing 2D home screen.
+It tries to find highest 'sustainable' frequencies for the devices,
+at that various workloads and temp. But it needs some coefficients to
+start, which have big impact on the algorithm. It could slow down IPA a
+lot, when those coefficients are calculated based on lowest OPPs.
+
+
 > 
-> >  
-> > +What:		/sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available
-> > +KernelVersion:	4.12
-> > +Contact:	benjamin.gaignard@st.com
-> > +Description:
-> > +		Reading returns the list possible quadrature modes.
-> > +
-> > +What:		/sys/bus/iio/devices/iio:deviceX/in_count0_quadrature_mode
-> > +KernelVersion:	4.12
-> > +Contact:	benjamin.gaignard@st.com
-> > +Description:
-> > +		Configure the device counter quadrature modes:
-> > +
-> > +		channel_A:
-> > +			Encoder A input servers as the count input and B as
-> > +			the UP/DOWN direction control input.
-> > +
-> > +		channel_B:
-> > +			Encoder B input serves as the count input and A as
-> > +			the UP/DOWN direction control input.
-> > +
-> > +		quadrature:
-> > +			Encoder A and B inputs are mixed to get direction
-> > +			and count with a scale of 0.25.
-> > +  
+> About moving it into the OPP core, I am open to getting something
+> added there if it is really useful and if the OPP core is the best
+> suited place to keep such data. Though I am not sure of that for this
+> field right now.
+> 
+> Is it ever going to be used by anyone else apart from IPA ? If not,
+> what about adding a helper in IPA to set sustainable-freq for a device
+> ?
+
+My backup plan was to add a flag into EM em_perf_state, extend SCMI perf
+exposing the 'sustained_freq_khz' to scmi-cpufreq, which would set that
+field after registering EM. IPA depends on EM, so should be OK.
+
+> 
+> So only SCMI based platforms will be able to use this stuff ? That's
+
+I don't know who would also use it in future. I just presented you
+current user of this, as you asked.
+
+> very limited, isn't it ? I think we should still try to make it better
+> for everyone by making the software smarter. It has so much data, the
+> OPPs, the power it will consume (based on microvolt property?), the
+> heat we produce from that (from thermal framework), etc. Perhaps
+> building this information continuously at runtime based on when and
+> how we hit the trip points ? So we know which is the right frequency
+> where we can refrain from hitting the trip points.
+
+IPA works in this way.
+
+> 
+> But may be I am asking too much :(
 > 
 
-Hi Fabrice,
+When you asked for user of this, I gave you instantly. This is one is
+more difficult. I am still not there with IPA tests in LISA. I have some
+out-of-tree kernel driver for testing, which also need polishing before
+can be used with LISA. Then proper workloads with results processing.
+EM for devfreq cooling devices. Then decent 'hot' board running
+preferably mainline kernel.
+What you requested is on my list, but it needs more work, which
+won't be ready over night.
 
-> I just noticed that since Jonathan question in v1.
-> 
-> Above ABI has been moved in the past as discussed in [1]. You can take a
-> look at:
-> b299d00 IIO: stm32: Remove quadrature related functions from trigger driver
-> 
-> Could you please remove the above chunk ?
-> 
-> With that, for the stm32 part:
-> Acked-by: Fabrice Gasnier <fabrice.gasnier@st.com>
-
-
-Hmm... probably those were re-introduced due to a rebase. This
-series were originally written about 1,5 years ago.
-
-I'll drop those hunks.
-
-Thanks!
-Mauro
+Regards,
+Lukasz
