@@ -2,96 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6DC2A0B9A
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 17:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DD32A0B80
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 17:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbgJ3Qqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Oct 2020 12:46:38 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44171 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbgJ3Qqh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 12:46:37 -0400
-Received: by mail-ot1-f68.google.com with SMTP id m26so6076010otk.11;
-        Fri, 30 Oct 2020 09:46:37 -0700 (PDT)
+        id S1727273AbgJ3QnK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Oct 2020 12:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727263AbgJ3QnH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 12:43:07 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AF3C0613D9
+        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 09:43:05 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id a20so7013988ilk.13
+        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 09:43:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NZmqGfCg08N6iXx9q7TVWlSnhQqIDOwOjzOwbvXDxjI=;
+        b=INVfZz/fkvsZivy8jdRFY4jjuumPUnT03fIMmAZxhr2j3OQtTxmqWeMui9FFLMvZFz
+         QB2ePhBsJkuNysGjMHbU9DiLLxlLmss4JFzjBmUNAkJoiiGzYBFH/upOKm0AUQMizu+W
+         okAB9PgkVOM5lyq7RfM3eZWziu4Lw6xFmIPsA3WEdWrepzCLkMsPGFysW4PIdG4Ix46W
+         ABDHiqA089OjzR7YGXqWWnY73UPmGi5ssu5dObic6I8EipSHtDNSFTIEabkYZFtOUw53
+         gKZFvyCe8mIA4cQPQ5Ji/NguzzOPrnGBpJ5jXdtWnz2BLO+k8PETRjkg1JznRZelvTOY
+         uyUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zdHn4Bghzba5wOelTeZ6mhUplKqje06p67vbKsYURC0=;
-        b=cFMBnFtwUKvmqXAdDDDbjD190ZucouS1+crWbSRnVgI3b/fHLOvFIW4kudTNuZ1TW+
-         zH4gB56F4bOiD3duQX0L08rd86k0PoOjL2JrJtYVtz+BYQPWbZsM33gEYUYqh70oKFn7
-         p7TkqXxq+9h/8B3w38mBNt64C7pf2++2t863VEkFa7RbEFV3w0jW4y38q/D4n5iYj9bv
-         lfH50ltOEzuactU0zTXgNuFR2Bi0KqA7hxo7b1ZdUib+UZajdFvz/CXD2wZImdaYSgYx
-         e0SMI+cmoHlg5Sgg1Ow+37TZDuwlTGdQ9rVqtya3uHBAk+P5PKq+wpvkqMzyfJMdAr/m
-         APtw==
-X-Gm-Message-State: AOAM532jN4UOomxjj8K/3WXDwcUWkFsJt+gwR0Iphposk5a0N9X1pJ8x
-        dHt7FIR/ftxTeE6sitK4vQbbEgCf0MAEAjGhFuFCXReXie4=
-X-Google-Smtp-Source: ABdhPJxQnyAvlfHtIgYhFfMOUC6BuhMQiwnFHpToclGQhxGMD4Ajfu4gnrgfD0oPO2jq5IWpmVzD470Ajv8wMlhEutc=
-X-Received: by 2002:a4a:e80b:: with SMTP id b11mr2575066oob.1.1604075920719;
- Fri, 30 Oct 2020 09:38:40 -0700 (PDT)
+        bh=NZmqGfCg08N6iXx9q7TVWlSnhQqIDOwOjzOwbvXDxjI=;
+        b=amL5eJdNUE+d6OkU9scXZ/KHV463OUelMNrnMvebWFeWj+4QLUhUSyBT0/A1aHmJeq
+         lKngcc1929tKUbbbyQuGQXdA2ys+7CMi4paC3eIh7g7YHOxy1Vpz7JJJghKeoNQrgFPj
+         Zx3uhJbJYJOLB9q+2ZWzKuOumRpP81QIoY0bQZpHnMYuhtdmvSUemGpoY9IiuIglWpnL
+         vkmyekERpofgH+nPcEL2O1iwXkL6EP2p0NlCWPTadQuOFQAl8EYrWXtpDhBQowIP263G
+         Mpwa6d9ScSdM0KxSMEXUZ6fvlvlnGkaW/CaKAfWYNARU1M/Ovgg1rlh+Kqnt7lTAwqAR
+         6eTA==
+X-Gm-Message-State: AOAM531UQ6b749k257fExyAdJBObYB1XypDbT4UhHME2sVGtZODQuA3a
+        jnWM/RJbA/k6uIgA5/3f+E6zuGGhbXRJdfl+6IGiBA==
+X-Google-Smtp-Source: ABdhPJwYf7SWuKIRh8xsBOBodbVLmuU+KCM1QaVpZsez95JZOYKTbDYung3PLxm+lfmttII+vBXdnzsUUs8NHjrseg0=
+X-Received: by 2002:a92:6403:: with SMTP id y3mr2528711ilb.72.1604076184121;
+ Fri, 30 Oct 2020 09:43:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <6543936.FbWAdBN1tG@kreacher>
-In-Reply-To: <6543936.FbWAdBN1tG@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Oct 2020 17:38:29 +0100
-Message-ID: <CAJZ5v0hRMcsdGVOHCfeK4_k81L+PJSNq80kx1BpwDBs+WtgqpA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] PM: runtime: Fixes related to device links management
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
+References: <cover.1604042072.git.mchehab+huawei@kernel.org> <5bc78e5b68ed1e9e39135173857cb2e753be868f.1604042072.git.mchehab+huawei@kernel.org>
+In-Reply-To: <5bc78e5b68ed1e9e39135173857cb2e753be868f.1604042072.git.mchehab+huawei@kernel.org>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Fri, 30 Oct 2020 10:42:53 -0600
+Message-ID: <CANLsYkxc2uzA57Hg5OX31JOx08JCZfynzebjABv=6H01796xGA@mail.gmail.com>
+Subject: Re: [PATCH v2 31/39] docs: ABI: cleanup several ABI documents
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <marek.behun@nic.cz>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        =?UTF-8?Q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Chao Yu <chao@kernel.org>,
+        Christian Gromm <christian.gromm@microchip.com>,
+        Colin Cross <ccross@android.com>, Dan Murphy <dmurphy@ti.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Danil Kipnis <danil.kipnis@cloud.ionos.com>,
+        David Sterba <dsterba@suse.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Jonas Meurer <jonas@freesources.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Khlebnikov <koct9i@gmail.com>,
+        Kranthi Kuntala <kranthi.kuntala@intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>, Len Brown <lenb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Oleh Kravchenko <oleg@kaa.org.ua>, Pavel Machek <pavel@ucw.cz>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Roman Sudarikov <roman.sudarikov@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>,
         Saravana Kannan <saravanak@google.com>,
-        Xiang Chen <chenxiang66@hisilicon.com>
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stefan Achatz <erazor_de@users.sourceforge.net>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>, Tony Luck <tony.luck@intel.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        Wu Hao <hao.wu@intel.com>, ceph-devel@vger.kernel.org,
+        Coresight ML <coresight@lists.linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-f2fs-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-iio@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
+On Fri, 30 Oct 2020 at 01:41, Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> There are some ABI documents that, while they don't generate
+> any warnings, they have issues when parsed by get_abi.pl script
+> on its output result.
+>
+> Address them, in order to provide a clean output.
+>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> #for IIO
+> Reviewed-by: Tom Rix <trix@redhat.com> # for fpga-manager
+> Reviewed-By: Kajol Jain<kjain@linux.ibm.com> # for sysfs-bus-event_source-devices-hv_gpci and sysfs-bus-event_source-devices-hv_24x7
+> Acked-by: Oded Gabbay <oded.gabbay@gmail.com> # for Habanalabs
+> Acked-by: Vaibhav Jain <vaibhav@linux.ibm.com> # for sysfs-bus-papr-pmem
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
 
-On Wed, Oct 21, 2020 at 9:14 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> Hi Greg & all,
->
-> Commit d12544fb2aa9 ("PM: runtime: Remove link state checks in
-> rpm_get/put_supplier()") merged recently introduced a weakness
-> in the handling of device links in the runtime PM framework that
-> may be confusing and even harmful.
->
-> Namely, the checks removed by that commit prevented PM-runtime from
-> getting or dropping references to the supplier device whose driver
-> was going away via its links to consumers, which specifically allowed
-> the pm_runtime_clean_up_links() called from __device_release_driver()
-> to run without interfering with runtime suspend/resume of consumer
-> devices (which still might happen even though the drivers had been
-> unbound from them by that time).
->
-> After the above commit, calling pm_runtime_clean_up_links() from
-> __device_release_driver() makes a little sense and it may be interfering
-> destructively with regular PM-runtime suspend/resume control flows, so
-> it needs to be either fixed or dropped altogether.  I prefer the latter,
-> because among other things this removes an arbitrary difference in the
-> handling of managed device links with respect to the stateless ones,
-> so patch [2/3] is doing just that.
->
-> However, in some rare cases pm_runtime_clean_up_links() may help to clean
-> up leftover PM-runtime references, so if that function goes away, they
-> need to be cleaned up elsewhere.  That's why patch [1/3] modifies
-> __device_link_del() to drop them upon device link removal (which also
-> needs to be done for stateless device links and that's why I'm regarding
-> this patch as a fix).
->
-> Finally, to avoid pointless overhead related to suspending and resuming
-> the target device for multiple times in a row in __device_release_driver(),
-> it is better to resume it upfront before checking its links to consumers,
-> which is done by patch [3/3].
->
-> While this series touches the driver core, it really is mostly related to
-> runtime PM, so I can apply it if that's OK.
+>  .../testing/sysfs-bus-coresight-devices-etb10 |   5 +-
 
-Any concerns regarding this series?
+For the CoreSight part:
 
-If not, I'd like to queue it up for -rc3, because the current behavior
-in there is quite confusing (or worse).
-
-Cheers!
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
