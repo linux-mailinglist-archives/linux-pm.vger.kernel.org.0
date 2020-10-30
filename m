@@ -2,425 +2,1021 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6AD2A0803
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 15:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954EF2A081A
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 15:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgJ3OgG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Oct 2020 10:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726760AbgJ3OgF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 10:36:05 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CD9C0613D2
-        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 07:36:05 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id v19so2187763lji.5
-        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 07:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9K65f9R7PTuDuyM+CIyONzu4pEQkMT//FT88XevfA+c=;
-        b=L7y4DMXN0B1ZNgiYqga7c0Lu1v90yEMyyc8eYSFjsis/D0/FQtljgUqg5BoQ1exY93
-         wyPz25TmMHrg+5OnkK4AmeFuMrGg4w3Fd2dPIMCQ4bEnndGsQD3ZmsP27PMFV2KE2ar/
-         cU/KjtH85R+Pzr33lp/c2Xid8I8g30bKp5SFD7/9A+9lNTN761W3wkAVUZwYJZqCdUEo
-         EU3WBrUk71hh5ZzF+uQAj7TgOYINqbjFCgBc4gNiGR7xuoxBdEUVRL2dvfOKKMr2BqGT
-         VQZ9pJbapvBikDATFDgRhOB1BPN1pi0W8iNplRi31WK0/RgawQoGIvhkLeKIySzSd9e9
-         uIfQ==
+        id S1726596AbgJ3OjU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 30 Oct 2020 10:39:20 -0400
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:38773 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbgJ3OjT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 10:39:19 -0400
+Received: by mail-oi1-f173.google.com with SMTP id 9so6857456oir.5;
+        Fri, 30 Oct 2020 07:39:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9K65f9R7PTuDuyM+CIyONzu4pEQkMT//FT88XevfA+c=;
-        b=gHhUkoGRIjTwsjhv+jrTCzJbIb+D5inOM4DZH+Bjj2aJOBtOqS5lwwb+B574LbB6B+
-         u9UUOoc4bUTocYfcorZuJzvaYB+y3o3n7jqnm3N/Sh8c6OdqGuWYCqzkwKxWk6m0IBuo
-         QIZA7P985vIb9VxsnrQfdX4kYKWYoZQy7voamcHCqie30WhniL5xuakirE+emM7vYYgK
-         Lyjsv2AS8y1PQBJ4cFdiU2I3o2g+eKIucyWKDb0YJa+X1lDHY1jJI+MGtJEUt1lxsj0M
-         dv1vtsNA+uUYjMY9F3/G6rYDFwvs0HLZLEqDw3q916pgzoPfzd4NLoqFaqHMUmCua6cc
-         9hvg==
-X-Gm-Message-State: AOAM5323IVuM+6IxZHk0os7IDyfmxr06rQozq2QDVcaVUTgOtbHpE5eF
-        Reh07Th/+yUsS1nw53KzMDgbwA==
-X-Google-Smtp-Source: ABdhPJwRNc013d8FQzm/rd4tNBdu8OtG83L/XDQ/jvRzitAhB1OMp2klOEmoKrfCR5YO0C2Tb93a7w==
-X-Received: by 2002:a05:651c:291:: with SMTP id b17mr1153188ljo.34.1604068563947;
-        Fri, 30 Oct 2020 07:36:03 -0700 (PDT)
-Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id j10sm636262lfe.156.2020.10.30.07.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 07:36:03 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
-Subject: [PATCH] power: supply: collie_battery: Convert to GPIO descriptors
-Date:   Fri, 30 Oct 2020 15:34:01 +0100
-Message-Id: <20201030143401.141288-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.26.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CQ4kOqMNBFKb/sf1rrFWyvX7qCQgrBczWFfGxdlwTNI=;
+        b=Eu7C8SRO5tWmstwrwiQABDZL6RL2pKrhPeM8g3rqPxKwZqO/X8fNlPzK6RxEqqw/p+
+         nrNblPyYHyLy7NY57dJi6YEFCU4qy41odcV4J6Dlx6dX8ThpTXAMBja3zWkHx4t+Rf7U
+         MavTimqhoVDEEQBz2ayonND6K9P4bkcw3a79cUq4QMTixvw4q6oJwRoY+uLm6wJer8zC
+         MDzMGfPRQvALa/Dbj+p9tyKKcCzhCJHrGznoxzzAHiJC4TX50N2DqN+tgzUat8tvWZJk
+         aLlt5BUvCFvvVb+pVGUpfzpLVXjuuWJFg0UylnGonmqHaToOYVmxeHxctM/VAhBy2qth
+         KrLA==
+X-Gm-Message-State: AOAM5301o8XpGF28iQfwus1Ct3fdM63GJ8SiJY3Eq1Ot/pQG0kV0lVPN
+        pV+Xzk0n1yOuonE603s7Lx+wIzVxhfB/0D0Pzhk=
+X-Google-Smtp-Source: ABdhPJycVrRW5Mk2wh/N2KprihBz5nvFtbfXjXKmoMiV73Bw53gjjS73fK+o6jkxDfogG7ydMZv0RlM8xNJBvcHN/uA=
+X-Received: by 2002:aca:724a:: with SMTP id p71mr1797443oic.157.1604068755332;
+ Fri, 30 Oct 2020 07:39:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1604042072.git.mchehab+huawei@kernel.org> <55a89f423cf122982c462d257722e44d6ece4b36.1604042072.git.mchehab+huawei@kernel.org>
+In-Reply-To: <55a89f423cf122982c462d257722e44d6ece4b36.1604042072.git.mchehab+huawei@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Oct 2020 15:39:03 +0100
+Message-ID: <CAJZ5v0gxmeRMaJeZ=SvLc-kS_aC2TqdTRObuwrYJFoqBdQ+y-w@mail.gmail.com>
+Subject: Re: [PATCH v2 28/39] docs: ABI: fix syntax to be parsed using ReST notation
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Akira Shimahara <akira215corp@gmail.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Christian Gromm <christian.gromm@microchip.com>,
+        Danil Kipnis <danil.kipnis@cloud.ionos.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Ivan Zaentsev <ivan.zaentsev@wirenboard.ru>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kamil Konieczny <k.konieczny@samsung.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Luwei Kang <luwei.kang@intel.com>,
+        Marek Behun <marek.behun@nic.cz>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Philippe Bergheaud <felix@linux.ibm.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Richard Gong <richard.gong@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Tejas Patel <tejas.patel@xilinx.com>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This converts the Collie battery driver to use GPIO descriptors.
-We use a mixture of 3 GPIOs defined in the machine and 3
-GPIOs requested directly from the ucb1x00 chip.
+On Fri, Oct 30, 2020 at 8:41 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> There are a number of new changes at the ABI files that cause
+> them to produce warnings when generating ABI output.
+>
+> Fix them.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  .../ABI/stable/sysfs-driver-firmware-zynqmp   | 62 ++++++++-----
+>  Documentation/ABI/testing/debugfs-moxtet      | 28 ++++--
+>  .../ABI/testing/debugfs-turris-mox-rwtm       |  6 +-
+>  .../sysfs-bus-event_source-devices-dfl_fme    | 14 +--
+>  Documentation/ABI/testing/sysfs-bus-most      |  6 +-
+>  Documentation/ABI/testing/sysfs-class-devfreq |  6 +-
+>  Documentation/ABI/testing/sysfs-class-ocxl    | 14 +--
+>  .../ABI/testing/sysfs-class-power-wilco       | 18 ++--
+>  .../ABI/testing/sysfs-class-rnbd-client       | 93 ++++++++++---------
+>  .../ABI/testing/sysfs-class-rtrs-client       | 23 +++--
+>  .../sysfs-devices-platform-stratix10-rsu      | 10 ++
+>  .../ABI/testing/sysfs-driver-w1_therm         | 75 ++++++++++-----
+>  .../ABI/testing/sysfs-platform-dfl-fme        | 14 ++-
+>  Documentation/ABI/testing/sysfs-platform-dptf | 11 ++-
 
-Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-Cc: Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/mach-sa1100/collie.c         |  21 ++++
- drivers/power/supply/collie_battery.c | 151 +++++++++++++++++++-------
- 2 files changed, 130 insertions(+), 42 deletions(-)
+For the DPTF part
 
-diff --git a/arch/arm/mach-sa1100/collie.c b/arch/arm/mach-sa1100/collie.c
-index bd3a52fd09ce..d4e89a02c8c8 100644
---- a/arch/arm/mach-sa1100/collie.c
-+++ b/arch/arm/mach-sa1100/collie.c
-@@ -98,6 +98,26 @@ static struct mcp_plat_data collie_mcp_data = {
- 	.codec_pdata	= &collie_ucb1x00_data,
- };
- 
-+/* Battery management GPIOs */
-+static struct gpiod_lookup_table collie_battery_gpiod_table = {
-+	/* the MCP codec mcp0 has the ucb1x00 as attached device */
-+	.dev_id = "ucb1x00",
-+	.table = {
-+		/* This is found on the main GPIO on the SA1100 */
-+		GPIO_LOOKUP("gpio", COLLIE_GPIO_CO,
-+			    "main battery full", GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP("gpio", COLLIE_GPIO_MAIN_BAT_LOW,
-+			    "main battery low", GPIO_ACTIVE_HIGH),
-+		/*
-+		 * This is GPIO 0 on the Scoop expander, which is registered
-+		 * from common/scoop.c with this gpio chip label.
-+		 */
-+		GPIO_LOOKUP("sharp-scoop", 0,
-+			    "main charge on", GPIO_ACTIVE_HIGH),
-+		{ },
-+	},
-+};
-+
- static int collie_ir_startup(struct device *dev)
- {
- 	int rc = gpio_request(COLLIE_GPIO_IR_ON, "IrDA");
-@@ -395,6 +415,7 @@ static void __init collie_init(void)
- 	platform_scoop_config = &collie_pcmcia_config;
- 
- 	gpiod_add_lookup_table(&collie_power_gpiod_table);
-+	gpiod_add_lookup_table(&collie_battery_gpiod_table);
- 
- 	ret = platform_add_devices(devices, ARRAY_SIZE(devices));
- 	if (ret) {
-diff --git a/drivers/power/supply/collie_battery.c b/drivers/power/supply/collie_battery.c
-index cbd588e9e233..7fb9b549f2de 100644
---- a/drivers/power/supply/collie_battery.c
-+++ b/drivers/power/supply/collie_battery.c
-@@ -12,7 +12,9 @@
- #include <linux/delay.h>
- #include <linux/spinlock.h>
- #include <linux/interrupt.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/gpio/machine.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/mfd/ucb1x00.h>
- 
- #include <asm/mach/sharpsl_param.h>
-@@ -31,18 +33,18 @@ struct collie_bat {
- 	struct mutex work_lock; /* protects data */
- 
- 	bool (*is_present)(struct collie_bat *bat);
--	int gpio_full;
--	int gpio_charge_on;
-+	struct gpio_desc *gpio_full;
-+	struct gpio_desc *gpio_charge_on;
- 
- 	int technology;
- 
--	int gpio_bat;
-+	struct gpio_desc *gpio_bat;
- 	int adc_bat;
- 	int adc_bat_divider;
- 	int bat_max;
- 	int bat_min;
- 
--	int gpio_temp;
-+	struct gpio_desc *gpio_temp;
- 	int adc_temp;
- 	int adc_temp_divider;
- };
-@@ -53,15 +55,15 @@ static unsigned long collie_read_bat(struct collie_bat *bat)
- {
- 	unsigned long value = 0;
- 
--	if (bat->gpio_bat < 0 || bat->adc_bat < 0)
-+	if (!bat->gpio_bat || bat->adc_bat < 0)
- 		return 0;
- 	mutex_lock(&bat_lock);
--	gpio_set_value(bat->gpio_bat, 1);
-+	gpiod_set_value(bat->gpio_bat, 1);
- 	msleep(5);
- 	ucb1x00_adc_enable(ucb);
- 	value = ucb1x00_adc_read(ucb, bat->adc_bat, UCB_SYNC);
- 	ucb1x00_adc_disable(ucb);
--	gpio_set_value(bat->gpio_bat, 0);
-+	gpiod_set_value(bat->gpio_bat, 0);
- 	mutex_unlock(&bat_lock);
- 	value = value * 1000000 / bat->adc_bat_divider;
- 
-@@ -71,16 +73,16 @@ static unsigned long collie_read_bat(struct collie_bat *bat)
- static unsigned long collie_read_temp(struct collie_bat *bat)
- {
- 	unsigned long value = 0;
--	if (bat->gpio_temp < 0 || bat->adc_temp < 0)
-+	if (!bat->gpio_temp || bat->adc_temp < 0)
- 		return 0;
- 
- 	mutex_lock(&bat_lock);
--	gpio_set_value(bat->gpio_temp, 1);
-+	gpiod_set_value(bat->gpio_temp, 1);
- 	msleep(5);
- 	ucb1x00_adc_enable(ucb);
- 	value = ucb1x00_adc_read(ucb, bat->adc_temp, UCB_SYNC);
- 	ucb1x00_adc_disable(ucb);
--	gpio_set_value(bat->gpio_temp, 0);
-+	gpiod_set_value(bat->gpio_temp, 0);
- 	mutex_unlock(&bat_lock);
- 
- 	value = value * 10000 / bat->adc_temp_divider;
-@@ -162,23 +164,23 @@ static void collie_bat_update(struct collie_bat *bat)
- 		bat->full_chrg = -1;
- 	} else if (power_supply_am_i_supplied(psy)) {
- 		if (bat->status == POWER_SUPPLY_STATUS_DISCHARGING) {
--			gpio_set_value(bat->gpio_charge_on, 1);
-+			gpiod_set_value(bat->gpio_charge_on, 1);
- 			mdelay(15);
- 		}
- 
--		if (gpio_get_value(bat->gpio_full)) {
-+		if (gpiod_get_value(bat->gpio_full)) {
- 			if (old == POWER_SUPPLY_STATUS_CHARGING ||
- 					bat->full_chrg == -1)
- 				bat->full_chrg = collie_read_bat(bat);
- 
--			gpio_set_value(bat->gpio_charge_on, 0);
-+			gpiod_set_value(bat->gpio_charge_on, 0);
- 			bat->status = POWER_SUPPLY_STATUS_FULL;
- 		} else {
--			gpio_set_value(bat->gpio_charge_on, 1);
-+			gpiod_set_value(bat->gpio_charge_on, 1);
- 			bat->status = POWER_SUPPLY_STATUS_CHARGING;
- 		}
- 	} else {
--		gpio_set_value(bat->gpio_charge_on, 0);
-+		gpiod_set_value(bat->gpio_charge_on, 0);
- 		bat->status = POWER_SUPPLY_STATUS_DISCHARGING;
- 	}
- 
-@@ -230,18 +232,18 @@ static struct collie_bat collie_bat_main = {
- 	.full_chrg = -1,
- 	.psy = NULL,
- 
--	.gpio_full = COLLIE_GPIO_CO,
--	.gpio_charge_on = COLLIE_GPIO_CHARGE_ON,
-+	.gpio_full = NULL,
-+	.gpio_charge_on = NULL,
- 
- 	.technology = POWER_SUPPLY_TECHNOLOGY_LIPO,
- 
--	.gpio_bat = COLLIE_GPIO_MBAT_ON,
-+	.gpio_bat = NULL,
- 	.adc_bat = UCB_ADC_INP_AD1,
- 	.adc_bat_divider = 155,
- 	.bat_max = 4310000,
- 	.bat_min = 1551 * 1000000 / 414,
- 
--	.gpio_temp = COLLIE_GPIO_TMP_ON,
-+	.gpio_temp = NULL,
- 	.adc_temp = UCB_ADC_INP_AD0,
- 	.adc_temp_divider = 10000,
- };
-@@ -260,30 +262,24 @@ static struct collie_bat collie_bat_bu = {
- 	.full_chrg = -1,
- 	.psy = NULL,
- 
--	.gpio_full = -1,
--	.gpio_charge_on = -1,
-+	.gpio_full = NULL,
-+	.gpio_charge_on = NULL,
- 
- 	.technology = POWER_SUPPLY_TECHNOLOGY_LiMn,
- 
--	.gpio_bat = COLLIE_GPIO_BBAT_ON,
-+	.gpio_bat = NULL,
- 	.adc_bat = UCB_ADC_INP_AD1,
- 	.adc_bat_divider = 155,
- 	.bat_max = 3000000,
- 	.bat_min = 1900000,
- 
--	.gpio_temp = -1,
-+	.gpio_temp = NULL,
- 	.adc_temp = -1,
- 	.adc_temp_divider = -1,
- };
- 
--static struct gpio collie_batt_gpios[] = {
--	{ COLLIE_GPIO_CO,	    GPIOF_IN,		"main battery full" },
--	{ COLLIE_GPIO_MAIN_BAT_LOW, GPIOF_IN,		"main battery low" },
--	{ COLLIE_GPIO_CHARGE_ON,    GPIOF_OUT_INIT_LOW,	"main charge on" },
--	{ COLLIE_GPIO_MBAT_ON,	    GPIOF_OUT_INIT_LOW,	"main battery" },
--	{ COLLIE_GPIO_TMP_ON,	    GPIOF_OUT_INIT_LOW,	"main battery temp" },
--	{ COLLIE_GPIO_BBAT_ON,	    GPIOF_OUT_INIT_LOW,	"backup battery" },
--};
-+/* Obtained but unused GPIO */
-+static struct gpio_desc *collie_mbat_low;
- 
- #ifdef CONFIG_PM
- static int wakeup_enabled;
-@@ -295,7 +291,7 @@ static int collie_bat_suspend(struct ucb1x00_dev *dev)
- 
- 	if (device_may_wakeup(&dev->ucb->dev) &&
- 	    collie_bat_main.status == POWER_SUPPLY_STATUS_CHARGING)
--		wakeup_enabled = !enable_irq_wake(gpio_to_irq(COLLIE_GPIO_CO));
-+		wakeup_enabled = !enable_irq_wake(gpiod_to_irq(collie_bat_main.gpio_full));
- 	else
- 		wakeup_enabled = 0;
- 
-@@ -305,7 +301,7 @@ static int collie_bat_suspend(struct ucb1x00_dev *dev)
- static int collie_bat_resume(struct ucb1x00_dev *dev)
- {
- 	if (wakeup_enabled)
--		disable_irq_wake(gpio_to_irq(COLLIE_GPIO_CO));
-+		disable_irq_wake(gpiod_to_irq(collie_bat_main.gpio_full));
- 
- 	/* things may have changed while we were away */
- 	schedule_work(&bat_work);
-@@ -320,16 +316,71 @@ static int collie_bat_probe(struct ucb1x00_dev *dev)
- {
- 	int ret;
- 	struct power_supply_config psy_main_cfg = {}, psy_bu_cfg = {};
-+	struct gpio_chip *gc = &dev->ucb->gpio;
- 
- 	if (!machine_is_collie())
- 		return -ENODEV;
- 
- 	ucb = dev->ucb;
- 
--	ret = gpio_request_array(collie_batt_gpios,
--				 ARRAY_SIZE(collie_batt_gpios));
--	if (ret)
--		return ret;
-+	/* Obtain all the main battery GPIOs */
-+	collie_bat_main.gpio_full = gpiod_get(&dev->ucb->dev,
-+					      "main battery full",
-+					      GPIOD_IN);
-+	if (IS_ERR(collie_bat_main.gpio_full))
-+		return PTR_ERR(collie_bat_main.gpio_full);
-+
-+	collie_mbat_low = gpiod_get(&dev->ucb->dev,
-+				    "main battery low",
-+				    GPIOD_IN);
-+	if (IS_ERR(collie_mbat_low)) {
-+		ret = PTR_ERR(collie_mbat_low);
-+		goto err_put_gpio_full;
-+	}
-+
-+	collie_bat_main.gpio_charge_on = gpiod_get(&dev->ucb->dev,
-+						   "main charge on",
-+						   GPIOD_OUT_LOW);
-+	if (IS_ERR(collie_bat_main.gpio_charge_on)) {
-+		ret = PTR_ERR(collie_bat_main.gpio_charge_on);
-+		goto err_put_mbat_low;
-+	}
-+
-+	/* COLLIE_GPIO_MBAT_ON = GPIO 7 on the UCB (TC35143) */
-+	collie_bat_main.gpio_bat = gpiochip_request_own_desc(gc,
-+						7,
-+						"main battery",
-+						GPIO_ACTIVE_HIGH,
-+						GPIOD_OUT_LOW);
-+	if (IS_ERR(collie_bat_main.gpio_bat)) {
-+		ret = PTR_ERR(collie_bat_main.gpio_bat);
-+		goto err_put_gpio_charge_on;
-+	}
-+
-+	/* COLLIE_GPIO_TMP_ON = GPIO 9 on the UCB (TC35143) */
-+	collie_bat_main.gpio_temp = gpiochip_request_own_desc(gc,
-+						9,
-+						"main battery temp",
-+						GPIO_ACTIVE_HIGH,
-+						GPIOD_OUT_LOW);
-+	if (IS_ERR(collie_bat_main.gpio_temp)) {
-+		ret = PTR_ERR(collie_bat_main.gpio_temp);
-+		goto err_free_gpio_bat;
-+	}
-+
-+	/*
-+	 * Obtain the backup battery COLLIE_GPIO_BBAT_ON which is
-+	 * GPIO 8 on the UCB (TC35143)
-+	 */
-+	collie_bat_bu.gpio_bat = gpiochip_request_own_desc(gc,
-+						8,
-+						"backup battery",
-+						GPIO_ACTIVE_HIGH,
-+						GPIOD_OUT_LOW);
-+	if (IS_ERR(collie_bat_bu.gpio_bat)) {
-+		ret = PTR_ERR(collie_bat_bu.gpio_bat);
-+		goto err_free_gpio_temp;
-+	}
- 
- 	mutex_init(&collie_bat_main.work_lock);
- 
-@@ -370,27 +421,43 @@ static int collie_bat_probe(struct ucb1x00_dev *dev)
- err_psy_reg_bu:
- 	power_supply_unregister(collie_bat_main.psy);
- err_psy_reg_main:
--
- 	/* see comment in collie_bat_remove */
- 	cancel_work_sync(&bat_work);
--	gpio_free_array(collie_batt_gpios, ARRAY_SIZE(collie_batt_gpios));
-+	gpiochip_free_own_desc(collie_bat_bu.gpio_bat);
-+err_free_gpio_temp:
-+	gpiochip_free_own_desc(collie_bat_main.gpio_temp);
-+err_free_gpio_bat:
-+	gpiochip_free_own_desc(collie_bat_main.gpio_bat);
-+err_put_gpio_charge_on:
-+	gpiod_put(collie_bat_main.gpio_charge_on);
-+err_put_mbat_low:
-+	gpiod_put(collie_mbat_low);
-+err_put_gpio_full:
-+	gpiod_put(collie_bat_main.gpio_full);
-+
- 	return ret;
- }
- 
- static void collie_bat_remove(struct ucb1x00_dev *dev)
- {
- 	free_irq(gpio_to_irq(COLLIE_GPIO_CO), &collie_bat_main);
--
- 	power_supply_unregister(collie_bat_bu.psy);
- 	power_supply_unregister(collie_bat_main.psy);
- 
-+	/* These are obtained from the machine */
-+	gpiod_put(collie_bat_main.gpio_full);
-+	gpiod_put(collie_mbat_low);
-+	gpiod_put(collie_bat_main.gpio_charge_on);
-+	/* These are directly from the UCB so let's free them */
-+	gpiochip_free_own_desc(collie_bat_main.gpio_bat);
-+	gpiochip_free_own_desc(collie_bat_main.gpio_temp);
-+	gpiochip_free_own_desc(collie_bat_bu.gpio_bat);
- 	/*
- 	 * Now cancel the bat_work.  We won't get any more schedules,
- 	 * since all sources (isr and external_power_changed) are
- 	 * unregistered now.
- 	 */
- 	cancel_work_sync(&bat_work);
--	gpio_free_array(collie_batt_gpios, ARRAY_SIZE(collie_batt_gpios));
- }
- 
- static struct ucb1x00_driver collie_bat_driver = {
--- 
-2.26.2
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
+>  .../sysfs-platform-intel-wmi-sbl-fw-update    |  1 +
+>  .../testing/sysfs-platform-mellanox-bootctl   | 50 ++++++----
+>  .../ABI/testing/sysfs-platform-wilco-ec       |  1 +
+>  17 files changed, 271 insertions(+), 161 deletions(-)
+>
+> diff --git a/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp b/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
+> index 00fa04c76ff3..f5724bb5b462 100644
+> --- a/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
+> +++ b/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
+> @@ -12,13 +12,15 @@ Description:
+>                 resets. Three registers are used by the FSBL and
+>                 other Xilinx software products: GLOBAL_GEN_STORAGE{4:6}.
+>
+> -               Usage:
+> -               # cat /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+> -               # echo <value> > /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+> +               Usage::
+>
+> -               Example:
+> -               # cat /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+> -               # echo 0x1234ABCD > /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+> +                   # cat /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+> +                   # echo <value> > /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+> +
+> +               Example::
+> +
+> +                   # cat /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+> +                   # echo 0x1234ABCD > /sys/devices/platform/firmware\:zynqmp-firmware/ggs0
+>
+>  Users:         Xilinx
+>
+> @@ -39,13 +41,15 @@ Description:
+>                 software products: PERS_GLOB_GEN_STORAGE{4:7}.
+>                 Register is reset only by a POR reset.
+>
+> -               Usage:
+> -               # cat /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+> -               # echo <value> > /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+> +               Usage::
+>
+> -               Example:
+> -               # cat /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+> -               # echo 0x1234ABCD > /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+> +                   # cat /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+> +                   # echo <value> > /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+> +
+> +               Example::
+> +
+> +                   # cat /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+> +                   # echo 0x1234ABCD > /sys/devices/platform/firmware\:zynqmp-firmware/pggs0
+>
+>  Users:         Xilinx
+>
+> @@ -61,23 +65,28 @@ Description:
+>
+>                 Following are available shutdown scopes(subtypes):
+>
+> -               subsystem:      Only the APU along with all of its peripherals
+> +               subsystem:
+> +                               Only the APU along with all of its peripherals
+>                                 not used by other processing units will be
+>                                 shut down. This may result in the FPD power
+>                                 domain being shut down provided that no other
+>                                 processing unit uses FPD peripherals or DRAM.
+> -               ps_only:        The complete PS will be shut down, including the
+> +               ps_only:
+> +                               The complete PS will be shut down, including the
+>                                 RPU, PMU, etc.  Only the PL domain (FPGA)
+>                                 remains untouched.
+> -               system:         The complete system/device is shut down.
+> +               system:
+> +                               The complete system/device is shut down.
+>
+> -               Usage:
+> -               # cat /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+> -               # echo <scope> > /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+> +               Usage::
+>
+> -               Example:
+> -               # cat /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+> -               # echo "subsystem" > /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+> +                   # cat /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+> +                   # echo <scope> > /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+> +
+> +               Example::
+> +
+> +                   # cat /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+> +                   # echo "subsystem" > /sys/devices/platform/firmware\:zynqmp-firmware/shutdown_scope
+>
+>  Users:         Xilinx
+>
+> @@ -94,10 +103,13 @@ Description:
+>                 system restart.
+>
+>                 Usage:
+> -               Set healthy bit
+> -               # echo 1 > /sys/devices/platform/firmware\:zynqmp-firmware/health_status
+>
+> -               Unset healthy bit
+> -               # echo 0 > /sys/devices/platform/firmware\:zynqmp-firmware/health_status
+> +               Set healthy bit::
+> +
+> +                   # echo 1 > /sys/devices/platform/firmware\:zynqmp-firmware/health_status
+> +
+> +               Unset healthy bit::
+> +
+> +                   # echo 0 > /sys/devices/platform/firmware\:zynqmp-firmware/health_status
+>
+>  Users:         Xilinx
+> diff --git a/Documentation/ABI/testing/debugfs-moxtet b/Documentation/ABI/testing/debugfs-moxtet
+> index 67b1717794d8..15dfaecb2892 100644
+> --- a/Documentation/ABI/testing/debugfs-moxtet
+> +++ b/Documentation/ABI/testing/debugfs-moxtet
+> @@ -5,10 +5,16 @@ Contact:      Marek Behún <marek.behun@nic.cz>
+>  Description:   (R) Read input from the shift registers, in hexadecimal.
+>                 Returns N+1 bytes, where N is the number of Moxtet connected
+>                 modules. The first byte is from the CPU board itself.
+> -               Example: 101214
+> -                        10: CPU board with SD card
+> -                        12: 2 = PCIe module, 1 = IRQ not active
+> -                        14: 4 = Peridot module, 1 = IRQ not active
+> +
+> +               Example::
+> +
+> +                       101214
+> +
+> +               ==  =======================================
+> +               10  CPU board with SD card
+> +               12  2 = PCIe module, 1 = IRQ not active
+> +               14  4 = Peridot module, 1 = IRQ not active
+> +               ==  =======================================
+>
+>  What:          /sys/kernel/debug/moxtet/output
+>  Date:          March 2019
+> @@ -17,7 +23,13 @@ Contact:     Marek Behún <marek.behun@nic.cz>
+>  Description:   (RW) Read last written value to the shift registers, in
+>                 hexadecimal, or write values to the shift registers, also
+>                 in hexadecimal.
+> -               Example: 0102
+> -                        01: 01 was last written, or is to be written, to the
+> -                            first module's shift register
+> -                        02: the same for second module
+> +
+> +               Example::
+> +
+> +                   0102
+> +
+> +               ==  ================================================
+> +               01  01 was last written, or is to be written, to the
+> +                   first module's shift register
+> +               02  the same for second module
+> +               ==  ================================================
+> diff --git a/Documentation/ABI/testing/debugfs-turris-mox-rwtm b/Documentation/ABI/testing/debugfs-turris-mox-rwtm
+> index 2b3255ee68fd..c8f7dadd591c 100644
+> --- a/Documentation/ABI/testing/debugfs-turris-mox-rwtm
+> +++ b/Documentation/ABI/testing/debugfs-turris-mox-rwtm
+> @@ -2,8 +2,10 @@ What:          /sys/kernel/debug/turris-mox-rwtm/do_sign
+>  Date:          Jun 2020
+>  KernelVersion: 5.8
+>  Contact:       Marek Behún <marek.behun@nic.cz>
+> -Description:   (W) Message to sign with the ECDSA private key stored in
+> +Description:   (W)
+> +                   Message to sign with the ECDSA private key stored in
+>                     device's OTP. The message must be exactly 64 bytes (since
+>                     this is intended for SHA-512 hashes).
+> -               (R) The resulting signature, 136 bytes. This contains the R and
+> +               (R)
+> +                   The resulting signature, 136 bytes. This contains the R and
+>                     S values of the ECDSA signature, both in big-endian format.
+> diff --git a/Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme b/Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme
+> index c9278a3b3df1..63a32ddcb95e 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme
+> +++ b/Documentation/ABI/testing/sysfs-bus-event_source-devices-dfl_fme
+> @@ -8,13 +8,13 @@ Description:  Read-only. Attribute group to describe the magic bits
+>
+>                 Each attribute under this group defines a bit range of the
+>                 perf_event_attr.config. All supported attributes are listed
+> -               below.
+> +               below::
+>
+>                     event  = "config:0-11"  - event ID
+>                     evtype = "config:12-15" - event type
+>                     portid = "config:16-23" - event source
+>
+> -               For example,
+> +               For example::
+>
+>                     fab_mmio_read = "event=0x06,evtype=0x02,portid=0xff"
+>
+> @@ -40,11 +40,11 @@ Description:        Read-only. Attribute group to describe performance monitoring
+>
+>                 All supported performance monitoring events are listed below.
+>
+> -               Basic events (evtype=0x00)
+> +               Basic events (evtype=0x00)::
+>
+>                     clock = "event=0x00,evtype=0x00,portid=0xff"
+>
+> -               Cache events (evtype=0x01)
+> +               Cache events (evtype=0x01)::
+>
+>                     cache_read_hit      = "event=0x00,evtype=0x01,portid=0xff"
+>                     cache_read_miss     = "event=0x01,evtype=0x01,portid=0xff"
+> @@ -59,7 +59,7 @@ Description:  Read-only. Attribute group to describe performance monitoring
+>                     cache_rx_req_stall  = "event=0x09,evtype=0x01,portid=0xff"
+>                     cache_eviction      = "event=0x0a,evtype=0x01,portid=0xff"
+>
+> -               Fabric events (evtype=0x02)
+> +               Fabric events (evtype=0x02)::
+>
+>                     fab_pcie0_read       = "event=0x00,evtype=0x02,portid=0xff"
+>                     fab_pcie0_write      = "event=0x01,evtype=0x02,portid=0xff"
+> @@ -78,7 +78,7 @@ Description:  Read-only. Attribute group to describe performance monitoring
+>                     fab_port_mmio_read   = "event=0x06,evtype=0x02,portid=?"
+>                     fab_port_mmio_write  = "event=0x07,evtype=0x02,portid=?"
+>
+> -               VTD events (evtype=0x03)
+> +               VTD events (evtype=0x03)::
+>
+>                     vtd_port_read_transaction  = "event=0x00,evtype=0x03,portid=?"
+>                     vtd_port_write_transaction = "event=0x01,evtype=0x03,portid=?"
+> @@ -88,7 +88,7 @@ Description:  Read-only. Attribute group to describe performance monitoring
+>                     vtd_port_devtlb_2m_fill    = "event=0x05,evtype=0x03,portid=?"
+>                     vtd_port_devtlb_1g_fill    = "event=0x06,evtype=0x03,portid=?"
+>
+> -               VTD SIP events (evtype=0x04)
+> +               VTD SIP events (evtype=0x04)::
+>
+>                     vtd_sip_iotlb_4k_hit  = "event=0x00,evtype=0x04,portid=0xff"
+>                     vtd_sip_iotlb_2m_hit  = "event=0x01,evtype=0x04,portid=0xff"
+> diff --git a/Documentation/ABI/testing/sysfs-bus-most b/Documentation/ABI/testing/sysfs-bus-most
+> index ec0a603d804b..38cc03e408e7 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-most
+> +++ b/Documentation/ABI/testing/sysfs-bus-most
+> @@ -235,7 +235,8 @@ KernelVersion:      4.15
+>  Contact:       Christian Gromm <christian.gromm@microchip.com>
+>  Description:
+>                 This is to read back the configured direction of the channel.
+> -               The following strings will be accepted:
+> +               The following strings will be accepted::
+> +
+>                         'tx',
+>                         'rx'
+>  Users:
+> @@ -246,7 +247,8 @@ KernelVersion:      4.15
+>  Contact:       Christian Gromm <christian.gromm@microchip.com>
+>  Description:
+>                 This is to read back the configured data type of the channel.
+> -               The following strings will be accepted:
+> +               The following strings will be accepted::
+> +
+>                         'control',
+>                         'async',
+>                         'sync',
+> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
+> index 67af3f31e17c..386bc230a33d 100644
+> --- a/Documentation/ABI/testing/sysfs-class-devfreq
+> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
+> @@ -48,7 +48,8 @@ Description:
+>                 driver should provide the list of available frequencies
+>                 with its profile. If need to reset the statistics of devfreq
+>                 behavior on a specific device, enter 0(zero) to 'trans_stat'
+> -               as following:
+> +               as following::
+> +
+>                         echo 0 > /sys/class/devfreq/.../trans_stat
+>
+>  What:          /sys/class/devfreq/.../available_frequencies
+> @@ -124,7 +125,8 @@ Description:
+>                 This work timer is used by devfreq workqueue in order to
+>                 monitor the device status such as utilization. The user
+>                 can change the work timer on runtime according to their demand
+> -               as following:
+> +               as following::
+> +
+>                         echo deferrable > /sys/class/devfreq/.../timer
+>                         echo delayed > /sys/class/devfreq/.../timer
+>
+> diff --git a/Documentation/ABI/testing/sysfs-class-ocxl b/Documentation/ABI/testing/sysfs-class-ocxl
+> index bf33f4fda58f..847a7edc3113 100644
+> --- a/Documentation/ABI/testing/sysfs-class-ocxl
+> +++ b/Documentation/ABI/testing/sysfs-class-ocxl
+> @@ -13,8 +13,8 @@ Description:  read only
+>                 where:
+>
+>                         ====    ===============================================
+> -                       n:      number of currently active contexts, for debug
+> -                       max:    maximum number of contexts supported by the AFU
+> +                       n       number of currently active contexts, for debug
+> +                       max     maximum number of contexts supported by the AFU
+>                         ====    ===============================================
+>
+>  What:          /sys/class/ocxl/<afu name>/pp_mmio_size
+> @@ -43,7 +43,9 @@ Contact:      linuxppc-dev@lists.ozlabs.org
+>  Description:   read/write
+>                 Control whether the FPGA is reloaded on a link reset. Enabled
+>                 through a vendor-specific logic block on the FPGA.
+> -                       0       Do not reload FPGA image from flash
+> -                       1       Reload FPGA image from flash
+> -                       unavailable
+> -                               The device does not support this capability
+> +
+> +                       ===========  ===========================================
+> +                       0            Do not reload FPGA image from flash
+> +                       1            Reload FPGA image from flash
+> +                       unavailable  The device does not support this capability
+> +                       ===========  ===========================================
+> diff --git a/Documentation/ABI/testing/sysfs-class-power-wilco b/Documentation/ABI/testing/sysfs-class-power-wilco
+> index 84fde1d0ada0..82af180fcaab 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power-wilco
+> +++ b/Documentation/ABI/testing/sysfs-class-power-wilco
+> @@ -4,17 +4,23 @@ KernelVersion:        5.2
+>  Description:
+>                 What charging algorithm to use:
+>
+> -               Standard: Fully charges battery at a standard rate.
+> -               Adaptive: Battery settings adaptively optimized based on
+> +               Standard:
+> +                       Fully charges battery at a standard rate.
+> +               Adaptive:
+> +                       Battery settings adaptively optimized based on
+>                         typical battery usage pattern.
+> -               Fast: Battery charges over a shorter period.
+> -               Trickle: Extends battery lifespan, intended for users who
+> +               Fast:
+> +                       Battery charges over a shorter period.
+> +               Trickle:
+> +                       Extends battery lifespan, intended for users who
+>                         primarily use their Chromebook while connected to AC.
+> -               Custom: A low and high threshold percentage is specified.
+> +               Custom:
+> +                       A low and high threshold percentage is specified.
+>                         Charging begins when level drops below
+>                         charge_control_start_threshold, and ceases when
+>                         level is above charge_control_end_threshold.
+> -               Long Life: Customized charge rate for last longer battery life.
+> +               Long Life:
+> +                       Customized charge rate for last longer battery life.
+>                         On Wilco device this mode is pre-configured in the factory
+>                         through EC's private PID. Swiching to a different mode will
+>                         be denied by Wilco EC when Long Life mode is enabled.
+> diff --git a/Documentation/ABI/testing/sysfs-class-rnbd-client b/Documentation/ABI/testing/sysfs-class-rnbd-client
+> index c084f203b41e..00c0286733d4 100644
+> --- a/Documentation/ABI/testing/sysfs-class-rnbd-client
+> +++ b/Documentation/ABI/testing/sysfs-class-rnbd-client
+> @@ -5,62 +5,70 @@ Contact:      Jack Wang <jinpu.wang@cloud.ionos.com> Danil Kipnis <danil.kipnis@cloud
+>  Description:   Provide information about RNBD-client.
+>                 All sysfs files that are not read-only provide the usage information on read:
+>
+> -               Example:
+> -               # cat /sys/class/rnbd-client/ctl/map_device
+> +               Example::
+>
+> -               > Usage: echo "sessname=<name of the rtrs session> path=<[srcaddr,]dstaddr>
+> -               > [path=<[srcaddr,]dstaddr>] device_path=<full path on remote side>
+> -               > [access_mode=<ro|rw|migration>] > map_device
+> -               >
+> -               > addr ::= [ ip:<ipv4> | ip:<ipv6> | gid:<gid> ]
+> +                   # cat /sys/class/rnbd-client/ctl/map_device
+> +
+> +                   > Usage: echo "sessname=<name of the rtrs session> path=<[srcaddr,]dstaddr>
+> +                   > [path=<[srcaddr,]dstaddr>] device_path=<full path on remote side>
+> +                   > [access_mode=<ro|rw|migration>] > map_device
+> +                   >
+> +                   > addr ::= [ ip:<ipv4> | ip:<ipv6> | gid:<gid> ]
+>
+>  What:          /sys/class/rnbd-client/ctl/map_device
+>  Date:          Feb 2020
+>  KernelVersion: 5.7
+>  Contact:       Jack Wang <jinpu.wang@cloud.ionos.com> Danil Kipnis <danil.kipnis@cloud.ionos.com>
+> -Description:   Expected format is the following:
+> +Description:   Expected format is the following::
+>
+> -               sessname=<name of the rtrs session>
+> -               path=<[srcaddr,]dstaddr> [path=<[srcaddr,]dstaddr> ...]
+> -               device_path=<full path on remote side>
+> -               [access_mode=<ro|rw|migration>]
+> +                   sessname=<name of the rtrs session>
+> +                   path=<[srcaddr,]dstaddr> [path=<[srcaddr,]dstaddr> ...]
+> +                   device_path=<full path on remote side>
+> +                   [access_mode=<ro|rw|migration>]
+>
+>                 Where:
+>
+> -               sessname: accepts a string not bigger than 256 chars, which identifies
+> -               a given session on the client and on the server.
+> -               I.e. "clt_hostname-srv_hostname" could be a natural choice.
+> +               sessname:
+> +                   accepts a string not bigger than 256 chars, which identifies
+> +                   a given session on the client and on the server.
+> +                   I.e. "clt_hostname-srv_hostname" could be a natural choice.
+>
+> -               path:     describes a connection between the client and the server by
+> -               specifying destination and, when required, the source address.
+> -               The addresses are to be provided in the following format:
+> +               path:
+> +                   describes a connection between the client and the server by
+> +                   specifying destination and, when required, the source address.
+> +                   The addresses are to be provided in the following format::
+>
+> -               ip:<IPv6>
+> -               ip:<IPv4>
+> -               gid:<GID>
+> +                       ip:<IPv6>
+> +                       ip:<IPv4>
+> +                       gid:<GID>
+>
+> -               for example:
+> +               for example::
+> +
+> +                   path=ip:10.0.0.66
+>
+> -               path=ip:10.0.0.66
+>                 The single addr is treated as the destination.
+>                 The connection will be established to this server from any client IP address.
+>
+> -               path=ip:10.0.0.66,ip:10.0.1.66
+> +               ::
+> +
+> +                   path=ip:10.0.0.66,ip:10.0.1.66
+> +
+>                 First addr is the source address and the second is the destination.
+>
+>                 If multiple "path=" options are specified multiple connection
+>                 will be established and data will be sent according to
+>                 the selected multipath policy (see RTRS mp_policy sysfs entry description).
+>
+> -               device_path: Path to the block device on the server side. Path is specified
+> -               relative to the directory on server side configured in the
+> -               'dev_search_path' module parameter of the rnbd_server.
+> -               The rnbd_server prepends the <device_path> received from client
+> -               with <dev_search_path> and tries to open the
+> -               <dev_search_path>/<device_path> block device.  On success,
+> -               a /dev/rnbd<N> device file, a /sys/block/rnbd_client/rnbd<N>/
+> -               directory and an entry in /sys/class/rnbd-client/ctl/devices
+> -               will be created.
+> +               device_path:
+> +                   Path to the block device on the server side. Path is specified
+> +                   relative to the directory on server side configured in the
+> +                   'dev_search_path' module parameter of the rnbd_server.
+> +                   The rnbd_server prepends the <device_path> received from client
+> +                   with <dev_search_path> and tries to open the
+> +                   <dev_search_path>/<device_path> block device.  On success,
+> +                   a /dev/rnbd<N> device file, a /sys/block/rnbd_client/rnbd<N>/
+> +                   directory and an entry in /sys/class/rnbd-client/ctl/devices
+> +                   will be created.
+>
+>                 If 'dev_search_path' contains '%SESSNAME%', then each session can
+>                 have different devices namespace, e.g. server was configured with
+> @@ -68,11 +76,12 @@ Description:        Expected format is the following:
+>                 client has this string "sessname=blya device_path=sda", then server
+>                 will try to open: /run/rnbd-devs/blya/sda.
+>
+> -               access_mode: the access_mode parameter specifies if the device is to be
+> -               mapped as "ro" read-only or "rw" read-write. The server allows
+> -               a device to be exported in rw mode only once. The "migration"
+> -               access mode has to be specified if a second mapping in read-write
+> -               mode is desired.
+> +               access_mode:
+> +                   the access_mode parameter specifies if the device is to be
+> +                   mapped as "ro" read-only or "rw" read-write. The server allows
+> +                   a device to be exported in rw mode only once. The "migration"
+> +                   access mode has to be specified if a second mapping in read-write
+> +                   mode is desired.
+>
+>                 By default "rw" is used.
+>
+> @@ -91,7 +100,7 @@ Description: Expected format is the following:
+>                 is the same as the device name.  By extracting the last part of the
+>                 path the path to the device /dev/<dev-name> can be build.
+>
+> -               o /dev/block/$(cat /sys/class/rnbd-client/ctl/devices/<device_id>/dev)
+> +               * /dev/block/$(cat /sys/class/rnbd-client/ctl/devices/<device_id>/dev)
+>
+>                 How to find the <device_id> of the device is described on the next
+>                 section.
+> @@ -106,6 +115,6 @@ Description:        For each device mapped on the client a new symbolic link is created
+>                 The <device_id> of each device is created as follows:
+>
+>                 - If the 'device_path' provided during mapping contains slashes ("/"),
+> -               they are replaced by exclamation mark ("!") and used as as the
+> -               <device_id>. Otherwise, the <device_id> will be the same as the
+> -               "device_path" provided.
+> +                 they are replaced by exclamation mark ("!") and used as as the
+> +                 <device_id>. Otherwise, the <device_id> will be the same as the
+> +                 "device_path" provided.
+> diff --git a/Documentation/ABI/testing/sysfs-class-rtrs-client b/Documentation/ABI/testing/sysfs-class-rtrs-client
+> index e7e718db8941..0f7165aab251 100644
+> --- a/Documentation/ABI/testing/sysfs-class-rtrs-client
+> +++ b/Documentation/ABI/testing/sysfs-class-rtrs-client
+> @@ -10,10 +10,10 @@ Date:               Feb 2020
+>  KernelVersion: 5.7
+>  Contact:       Jack Wang <jinpu.wang@cloud.ionos.com> Danil Kipnis <danil.kipnis@cloud.ionos.com>
+>  Description:   RW, adds a new path (connection) to an existing session. Expected format is the
+> -               following:
+> +               following::
+>
+> -               <[source addr,]destination addr>
+> -               *addr ::= [ ip:<ipv4|ipv6> | gid:<gid> ]
+> +                   <[source addr,]destination addr>
+> +                   *addr ::= [ ip:<ipv4|ipv6> | gid:<gid> ]
+>
+>  What:          /sys/class/rtrs-client/<session-name>/max_reconnect_attempts
+>  Date:          Feb 2020
+> @@ -29,10 +29,10 @@ Contact:    Jack Wang <jinpu.wang@cloud.ionos.com> Danil Kipnis <danil.kipnis@cloud
+>  Description:   Multipath policy specifies which path should be selected on each IO:
+>
+>                 round-robin (0):
+> -               select path in per CPU round-robin manner.
+> +                   select path in per CPU round-robin manner.
+>
+>                 min-inflight (1):
+> -               select path with minimum inflights.
+> +                   select path with minimum inflights.
+>
+>  What:          /sys/class/rtrs-client/<session-name>/paths/
+>  Date:          Feb 2020
+> @@ -109,8 +109,11 @@ Description:       RTRS expects that each HCA IRQ is pinned to a separate CPU. If it's
+>                 not the case, the processing of an I/O response could be processed on a
+>                 different CPU than where it was originally submitted.  This file shows
+>                 how many interrupts where generated on a non expected CPU.
+> -               "from:" is the CPU on which the IRQ was expected, but not generated.
+> -               "to:" is the CPU on which the IRQ was generated, but not expected.
+> +
+> +               "from:"
+> +                   is the CPU on which the IRQ was expected, but not generated.
+> +               "to:"
+> +                   is the CPU on which the IRQ was generated, but not expected.
+>
+>  What:          /sys/class/rtrs-client/<session-name>/paths/<src@dst>/stats/reconnects
+>  Date:          Feb 2020
+> @@ -125,7 +128,7 @@ Date:               Feb 2020
+>  KernelVersion: 5.7
+>  Contact:       Jack Wang <jinpu.wang@cloud.ionos.com> Danil Kipnis <danil.kipnis@cloud.ionos.com>
+>  Description:   Contains statistics regarding rdma operations and inflight operations.
+> -               The output consists of 6 values:
+> +               The output consists of 6 values::
+>
+> -               <read-count> <read-total-size> <write-count> <write-total-size> \
+> -               <inflights> <failovered>
+> +                   <read-count> <read-total-size> <write-count> \
+> +                   <write-total-size> <inflights> <failovered>
+> diff --git a/Documentation/ABI/testing/sysfs-devices-platform-stratix10-rsu b/Documentation/ABI/testing/sysfs-devices-platform-stratix10-rsu
+> index a8daceb4a956..ee253b033280 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-platform-stratix10-rsu
+> +++ b/Documentation/ABI/testing/sysfs-devices-platform-stratix10-rsu
+> @@ -102,6 +102,8 @@ Description:
+>                 b[15:0]
+>                         inform firmware the current software execution
+>                         stage.
+> +
+> +                       ==      ===========================================
+>                         0       the first stage bootloader didn't run or
+>                                 didn't reach the point of launching second
+>                                 stage bootloader.
+> @@ -111,21 +113,29 @@ Description:
+>                         2       both first and second stage bootloader ran
+>                                 and the operating system launch was
+>                                 attempted.
+> +                       ==      ===========================================
+>
+>                 b[16]
+> +                       ==      ===========================================
+>                         1       firmware to reset current image retry
+>                                 counter.
+>                         0       no action.
+> +                       ==      ===========================================
+>
+>                 b[17]
+> +                       ==      ===========================================
+>                         1       firmware to clear RSU log
+>                         0       no action.
+> +                       ==      ===========================================
+>
+>                 b[18]
+>                         this is negative logic
+> +
+> +                       ==      ===========================================
+>                         1       no action
+>                         0       firmware record the notify code defined
+>                                 in b[15:0].
+> +                       ==      ===========================================
+>
+>  What:          /sys/devices/platform/stratix10-rsu.0/dcmf0
+>  Date:          June 2020
+> diff --git a/Documentation/ABI/testing/sysfs-driver-w1_therm b/Documentation/ABI/testing/sysfs-driver-w1_therm
+> index 8873bbb075cb..6a37dc33ffdb 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-w1_therm
+> +++ b/Documentation/ABI/testing/sysfs-driver-w1_therm
+> @@ -22,8 +22,10 @@ Description:
+>                 device data to its embedded EEPROM, either restore data
+>                 embedded in device EEPROM. Be aware that devices support
+>                 limited EEPROM writing cycles (typical 50k)
+> +
+>                         * 'save': save device RAM to EEPROM
+>                         * 'restore': restore EEPROM data in device RAM
+> +
+>  Users:         any user space application which wants to communicate with
+>                 w1_term device
+>
+> @@ -33,9 +35,11 @@ Date:                May 2020
+>  Contact:       Akira Shimahara <akira215corp@gmail.com>
+>  Description:
+>                 (RO) return the power status by asking the device
+> +
+>                         * '0': device parasite powered
+>                         * '1': device externally powered
+>                         * '-xx': xx is kernel error when reading power status
+> +
+>  Users:         any user space application which wants to communicate with
+>                 w1_term device
+>
+> @@ -49,10 +53,12 @@ Description:
+>                 will be changed only in device RAM, so it will be cleared when
+>                 power is lost. Trigger a 'save' to EEPROM command to keep
+>                 values after power-on. Read or write are :
+> +
+>                         * '9..14': device resolution in bit
+> -                       or resolution to set in bit
+> +                         or resolution to set in bit
+>                         * '-xx': xx is kernel error when reading the resolution
+>                         * Anything else: do nothing
+> +
+>                 Some DS18B20 clones are fixed in 12-bit resolution, so the
+>                 actual resolution is read back from the chip and verified. Error
+>                 is reported if the results differ.
+> @@ -65,16 +71,18 @@ Date:               May 2020
+>  Contact:       Akira Shimahara <akira215corp@gmail.com>
+>  Description:
+>                 (RO) return the temperature in 1/1000 degC.
+> +
+>                         * If a bulk read has been triggered, it will directly
+> -                       return the temperature computed when the bulk read
+> -                       occurred, if available. If not yet available, nothing
+> -                       is returned (a debug kernel message is sent), you
+> -                       should retry later on.
+> +                         return the temperature computed when the bulk read
+> +                         occurred, if available. If not yet available, nothing
+> +                         is returned (a debug kernel message is sent), you
+> +                         should retry later on.
+>                         * If no bulk read has been triggered, it will trigger
+> -                       a conversion and send the result. Note that the
+> -                       conversion duration depend on the resolution (if
+> -                       device support this feature). It takes 94ms in 9bits
+> -                       resolution, 750ms for 12bits.
+> +                         a conversion and send the result. Note that the
+> +                         conversion duration depend on the resolution (if
+> +                         device support this feature). It takes 94ms in 9bits
+> +                         resolution, 750ms for 12bits.
+> +
+>  Users:         any user space application which wants to communicate with
+>                 w1_term device
+>
+> @@ -86,12 +94,14 @@ Description:
+>                 (RW) return the temperature in 1/1000 degC.
+>                 *read*: return 2 lines with the hexa output data sent on the
+>                 bus, return the CRC check and temperature in 1/1000 degC
+> -               *write* :
+> +               *write*:
+> +
+>                         * '0' : save the 2 or 3 bytes to the device EEPROM
+> -                       (i.e. TH, TL and config register)
+> +                         (i.e. TH, TL and config register)
+>                         * '9..14' : set the device resolution in RAM
+> -                       (if supported)
+> +                         (if supported)
+>                         * Anything else: do nothing
+> +
+>                 refer to Documentation/w1/slaves/w1_therm.rst for detailed
+>                 information.
+>  Users:         any user space application which wants to communicate with
+> @@ -103,14 +113,21 @@ Date:             May 2020
+>  Contact:       Akira Shimahara <akira215corp@gmail.com>
+>  Description:
+>                 (RW) trigger a bulk read conversion. read the status
+> +
+>                 *read*:
+> -                       * '-1': conversion in progress on at least 1 sensor
+> -                       * '1' : conversion complete but at least one sensor
+> +                       * '-1':
+> +                               conversion in progress on at least 1 sensor
+> +                       * '1' :
+> +                               conversion complete but at least one sensor
+>                                 value has not been read yet
+> -                       * '0' : no bulk operation. Reading temperature will
+> +                       * '0' :
+> +                               no bulk operation. Reading temperature will
+>                                 trigger a conversion on each device
+> -               *write*: 'trigger': trigger a bulk read on all supporting
+> +
+> +               *write*:
+> +                       'trigger': trigger a bulk read on all supporting
+>                         devices on the bus
+> +
+>                 Note that if a bulk read is sent but one sensor is not read
+>                 immediately, the next access to temperature on this device
+>                 will return the temperature measured at the time of issue
+> @@ -128,14 +145,19 @@ Description:
+>                 reset to default (datasheet) conversion time for a new
+>                 resolution.
+>
+> -               *read*: Actual conversion time in milliseconds. *write*:
+> -                       '0': Set the default conversion time from the datasheet.
+> -                       '1': Measure and set the conversion time. Make a single
+> +               *read*:
+> +                       Actual conversion time in milliseconds.
+> +
+> +               *write*:
+> +                       * '0':
+> +                            Set the default conversion time from the datasheet.
+> +                       * '1':
+> +                            Measure and set the conversion time. Make a single
+>                              temperature conversion, measure an actual value.
+>                              Increase it by 20% for temperature range. A new
+>                              conversion time can be obtained by reading this
+>                              same attribute.
+> -                       other positive value:
+> +                       * other positive value:
+>                              Set the conversion time in milliseconds.
+>
+>  Users:         An application using the w1_term device
+> @@ -148,16 +170,21 @@ Description:
+>                 (RW) Control optional driver settings.
+>                 Bit masks to read/write (bitwise OR):
+>
+> -                1: Enable check for conversion success. If byte 6 of
+> +               == ============================================================
+> +                 1 Enable check for conversion success. If byte 6 of
+>                     scratchpad memory is 0xC after conversion, and
+>                     temperature reads 85.00 (powerup value) or 127.94
+>                     (insufficient power) - return a conversion error.
+>
+> -                2: Enable poll for conversion completion. Generate read cycles
+> +                2  Enable poll for conversion completion. Generate read cycles
+>                     after the conversion start and wait for 1's. In parasite
+>                     power mode this feature is not available.
+> +               == ============================================================
+>
+> -               *read*:  Currently selected features.
+> -               *write*: Select features.
+> +               *read*:
+> +                   Currently selected features.
+> +
+> +               *write*:
+> +                   Select features.
+>
+>  Users:         An application using the w1_term device
+> diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme b/Documentation/ABI/testing/sysfs-platform-dfl-fme
+> index 3683cb1cdc3d..d6ab34e81b9b 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
+> +++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
+> @@ -113,8 +113,11 @@ KernelVersion:     5.5
+>  Contact:       Wu Hao <hao.wu@intel.com>
+>  Description:   Read-Only. Read this file to get the name of hwmon device, it
+>                 supports values:
+> -                   'dfl_fme_thermal' - thermal hwmon device name
+> -                   'dfl_fme_power'   - power hwmon device name
+> +
+> +               =================  =========================
+> +               'dfl_fme_thermal'  thermal hwmon device name
+> +               'dfl_fme_power'    power hwmon device name
+> +               =================  =========================
+>
+>  What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
+>  Date:          October 2019
+> @@ -169,8 +172,11 @@ KernelVersion:     5.5
+>  Contact:       Wu Hao <hao.wu@intel.com>
+>  Description:   Read-Only. Read this file to get the policy of hardware threshold1
+>                 (see 'temp1_max'). It only supports two values (policies):
+> -                   0 - AP2 state (90% throttling)
+> -                   1 - AP1 state (50% throttling)
+> +
+> +               ==  ==========================
+> +                0  AP2 state (90% throttling)
+> +                1  AP1 state (50% throttling)
+> +               ==  ==========================
+>
+>  What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_input
+>  Date:          October 2019
+> diff --git a/Documentation/ABI/testing/sysfs-platform-dptf b/Documentation/ABI/testing/sysfs-platform-dptf
+> index 2cbc660d163b..141834342a4d 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-dptf
+> +++ b/Documentation/ABI/testing/sysfs-platform-dptf
+> @@ -27,12 +27,15 @@ KernelVersion:      v4.10
+>  Contact:       linux-acpi@vger.kernel.org
+>  Description:
+>                 (RO) Display the platform power source
+> +
+> +               ========= ============================
+>                 bits[3:0] Current power source
+> -                       0x00 = DC
+> -                       0x01 = AC
+> -                       0x02 = USB
+> -                       0x03 = Wireless Charger
+> +                         - 0x00 = DC
+> +                         - 0x01 = AC
+> +                         - 0x02 = USB
+> +                         - 0x03 = Wireless Charger
+>                 bits[7:4] Power source sequence number
+> +               ========= ============================
+>
+>  What:          /sys/bus/platform/devices/INT3407:00/dptf_power/battery_steady_power
+>  Date:          Jul, 2016
+> diff --git a/Documentation/ABI/testing/sysfs-platform-intel-wmi-sbl-fw-update b/Documentation/ABI/testing/sysfs-platform-intel-wmi-sbl-fw-update
+> index 5aa618987cad..02ae1e9bbfc8 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-intel-wmi-sbl-fw-update
+> +++ b/Documentation/ABI/testing/sysfs-platform-intel-wmi-sbl-fw-update
+> @@ -8,5 +8,6 @@ Description:
+>                 of 0 and userspace can signal SBL to update firmware,
+>                 on next reboot, by writing a value of 1.
+>                 There are two available states:
+> +
+>                     * 0 -> Skip firmware update while rebooting
+>                     * 1 -> Attempt firmware update on next reboot
+> diff --git a/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl b/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
+> index 401d202f478b..e79ca22e2f45 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
+> +++ b/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
+> @@ -5,10 +5,13 @@ Contact:      "Liming Sun <lsun@mellanox.com>"
+>  Description:
+>                 The Life-cycle state of the SoC, which could be one of the
+>                 following values.
+> -                 Production - Production state and can be updated to secure
+> -                 GA Secured - Secure chip and not able to change state
+> -                 GA Non-Secured - Non-Secure chip and not able to change state
+> -                 RMA - Return Merchandise Authorization
+> +
+> +               ==============  =============================================
+> +               Production      Production state and can be updated to secure
+> +               GA Secured      Secure chip and not able to change state
+> +               GA Non-Secured  Non-Secure chip and not able to change state
+> +               RMA             Return Merchandise Authorization
+> +               ==============  =============================================
+>
+>  What:          /sys/bus/platform/devices/MLNXBF04:00/post_reset_wdog
+>  Date:          Oct 2019
+> @@ -25,10 +28,13 @@ KernelVersion:      5.5
+>  Contact:       "Liming Sun <lsun@mellanox.com>"
+>  Description:
+>                 The source of the boot stream for the next reset. It could be
+> -               one of the following values.
+> -                 external - boot from external source (USB or PCIe)
+> -                 emmc - boot from the onchip eMMC
+> -                 emmc_legacy - boot from the onchip eMMC in legacy (slow) mode
+> +               one of the following values:
+> +
+> +               ===========  ===============================================
+> +               external     boot from external source (USB or PCIe)
+> +               emmc         boot from the onchip eMMC
+> +               emmc_legacy  boot from the onchip eMMC in legacy (slow) mode
+> +               ===========  ===============================================
+>
+>  What:          /sys/bus/platform/devices/MLNXBF04:00/second_reset_action
+>  Date:          Oct 2019
+> @@ -38,11 +44,14 @@ Description:
+>                 Update the source of the boot stream after next reset. It could
+>                 be one of the following values and will be applied after next
+>                 reset.
+> -                 external - boot from external source (USB or PCIe)
+> -                 emmc - boot from the onchip eMMC
+> -                 emmc_legacy - boot from the onchip eMMC in legacy (slow) mode
+> -                 swap_emmc - swap the primary / secondary boot partition
+> -                 none - cancel the action
+> +
+> +               ===========  ===============================================
+> +               external     boot from external source (USB or PCIe)
+> +               emmc         boot from the onchip eMMC
+> +               emmc_legacy  boot from the onchip eMMC in legacy (slow) mode
+> +               swap_emmc    swap the primary / secondary boot partition
+> +               none         cancel the action
+> +               ===========  ===============================================
+>
+>  What:          /sys/bus/platform/devices/MLNXBF04:00/secure_boot_fuse_state
+>  Date:          Oct 2019
+> @@ -50,9 +59,12 @@ KernelVersion:       5.5
+>  Contact:       "Liming Sun <lsun@mellanox.com>"
+>  Description:
+>                 The state of eFuse versions with the following values.
+> -                 InUse - burnt, valid and currently in use
+> -                 Used - burnt and valid
+> -                 Free - not burnt and free to use
+> -                 Skipped - not burnt but not free (skipped)
+> -                 Wasted - burnt and invalid
+> -                 Invalid - not burnt but marked as valid (error state).
+> +
+> +               =======  ===============================================
+> +               InUse    burnt, valid and currently in use
+> +               Used     burnt and valid
+> +               Free     not burnt and free to use
+> +               Skipped  not burnt but not free (skipped)
+> +               Wasted   burnt and invalid
+> +               Invalid  not burnt but marked as valid (error state).
+> +               =======  ===============================================
+> diff --git a/Documentation/ABI/testing/sysfs-platform-wilco-ec b/Documentation/ABI/testing/sysfs-platform-wilco-ec
+> index 5f60b184a5a5..4439d0644091 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-wilco-ec
+> +++ b/Documentation/ABI/testing/sysfs-platform-wilco-ec
+> @@ -39,6 +39,7 @@ Description:
+>                 which affects charging via the special USB PowerShare port
+>                 (marked with a small lightning bolt or battery icon) when in
+>                 low power states:
+> +
+>                 - In S0, the port will always provide power.
+>                 - In S0ix, if usb_charge is enabled, then power will be
+>                   supplied to the port when on AC or if battery is > 50%.
+> --
+> 2.26.2
+>
