@@ -2,114 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 780B52A0400
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 12:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 977462A0414
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 12:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbgJ3LVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Oct 2020 07:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S1726095AbgJ3L2H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Oct 2020 07:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726351AbgJ3LVL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 07:21:11 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642D8C0613D2
-        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 04:21:11 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id a9so6011365wrg.12
-        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 04:21:11 -0700 (PDT)
+        with ESMTP id S1725834AbgJ3L2G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 07:28:06 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99C3C0613D2
+        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 04:28:06 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id e15so5004317pfh.6
+        for <linux-pm@vger.kernel.org>; Fri, 30 Oct 2020 04:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PY8VY7Lg2r+nNtn/aiXnf3Ry80P2IGhr1b0m3sFi9DQ=;
-        b=EifaV15jGWbv+xrYmi8PHuSMmiSPUIpOec8jdquckPbYszwXuOdaGWCDJ5fa3SMld+
-         p7XY+v9sBhQ2TC69nFqrtW0kTzjUZh7uqP6z/YYMh6kWHO6PGBkLbjJ1C81JkgymScfp
-         GzwfYqu0ycoicLJOHxHwvW03x5ViT6IaGYfGhx/6rpolX9Qjd4CNBV5w0UM1LK3qT8G6
-         9EmDoQgnhMASbEVNr7Sa0aDEN0/Dzp3PXkVYgnx5SB4lARH0jSLoX05QZcJKlWPVlAHJ
-         3buujft3D3dt60h8ts0XscmcLp5jftXxT3b/5+jwwuX36c27xwxlKiYdPNB/UCsP8a+T
-         W5KA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=hxTRuwuwoz+yNxAP/6AWKELjPIZFSOzk04+9b9KVhAk=;
+        b=LrI15tSUqq1g/++IsXJr71dx/QBn6k6L9Fbp9JFRnnkpYtM3Mid6lAljpFwTjKxdFI
+         ryCb6zAG9h7WLR7zUbyXvcU3iMVHkzhzegveXZLDM94k/zDC5eyP1DvXuZN96JhsL9f7
+         FunARwjR38C8GhD/kf3V0y6EhoXB0bNklTa+fQhbyvKaC+uo4hjasdJZRF6szEGoCoKb
+         8lv1tO1aJdagIeVJpagB1zliwoXnLf9rigebiVErrPDhYBrbZdBdnBNmqwR5GD5iCKmy
+         MQ8VS8FmeZybzY45j7a/cF3rThP0ZxGN5FQrEa7gI9BQh/8mhwYyvcZ8AWu52g8LiFEr
+         ttuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PY8VY7Lg2r+nNtn/aiXnf3Ry80P2IGhr1b0m3sFi9DQ=;
-        b=OOtLHBr8Ee2YSLG4F9650w4akIFE+sT7O56JLXbbXXB/O3kGbWpFn0nukGaS0kj+OW
-         OaA69IDlHIzK7Q3H0cNKIil/tF4aStGiFDt41kcZruJrFiCWuvR+YNT0zoDyYS0iFhzA
-         /Agr9meS7ngnt3fuirJFcf5f+PlddH3c93Djr5RU7mrLB1PjEPtdSDkUH+39kesCoYr+
-         B+WZkE2Z8TTwP7In/JXnvHvsT8la5MLsop9Jtp3h1VEC/9zVH2sgYZdmp7eO3glAvhJ5
-         caM1uGFnyS0et4t46eUyjJ/4zRv+Gs3gOn9DvlqBKmnD+LOhuLcjfqmfGAYTFG0SOKd4
-         l41A==
-X-Gm-Message-State: AOAM530rwpmAldFr0+cbqzabOpdIJkjXAVlYxLZ04KL5RdAmClcnaTrr
-        D5hO2cbG930upCCiwFi5Aafeam1fgrYhlQ==
-X-Google-Smtp-Source: ABdhPJyYoG+Ufe4d6bH2/5AFGxInIECDMe61KRfWD5Evy7c+I7WSrVQJlVzvyO4uOU08BvV1rZtXXw==
-X-Received: by 2002:a5d:4747:: with SMTP id o7mr2544785wrs.423.1604056870033;
-        Fri, 30 Oct 2020 04:21:10 -0700 (PDT)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id d20sm10716237wra.38.2020.10.30.04.21.08
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=hxTRuwuwoz+yNxAP/6AWKELjPIZFSOzk04+9b9KVhAk=;
+        b=uV/BVU+V8cPOmdG9RlI29LbOHzaBIEoAihw7BlP0shuscJOr45+sfr6/MYZEzn1s/D
+         1bDZ4ZJnY3EaeFk3Q7+w5leNgrCY71lbuNS4tt3F6bwk1EwOdQvbmZ9JYdVgegJ7Zf7q
+         9D5FizwEeFc9A43ubzp7EcLlZExDA+rSR3xNJmx01CNydD4CG/G76z0oAuAFOV0Z2F4L
+         snWVTtyMHOmDM7R24VyoivweZxvWRAwaBCPcOKubB9mnrGG+Vmllzte1NZZQLe8yajZM
+         GoIMYpF+gQhCYgIT+i1Wnct7ivvA1m8N8TZaoK97tAYNfeK1OF7poqlGicnrT5HjTz5b
+         MT2w==
+X-Gm-Message-State: AOAM533ybktJtWafrQcWrWcc+4Aj4zGwwkxuLX+qipCaZOLIFT0xQffm
+        BEhC9x/xnLxnfH7K8c3SFeTsrA==
+X-Google-Smtp-Source: ABdhPJwwggNEsnZknRY5cUfKVjS9yEm36sJPzqX9ONPiz7bO+HrPfpDp5q8F40r8hZSSop3cFhXPWA==
+X-Received: by 2002:a17:90a:7bc5:: with SMTP id d5mr2184292pjl.99.1604057286210;
+        Fri, 30 Oct 2020 04:28:06 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id 15sm5321549pgs.52.2020.10.30.04.28.04
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 30 Oct 2020 04:21:09 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        georgi.djakov@linaro.org
-Subject: [GIT PULL] interconnect fixes for 5.10
-Date:   Fri, 30 Oct 2020 13:21:10 +0200
-Message-Id: <20201030112110.2362-1-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.28.0
+        Fri, 30 Oct 2020 04:28:05 -0700 (PDT)
+Date:   Fri, 30 Oct 2020 16:58:02 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Frank Lee <tiny.windzz@gmail.com>
+Cc:     Frank Lee <frank@allwinnertech.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, jcrouse@codeaurora.org,
+        eric@anholt.net, kholk11@gmail.com, emil.velikov@collabora.com,
+        gustavoars@kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 2/3] opp: Add devres wrapper for dev_pm_opp_set_prop_name
+Message-ID: <20201030112802.bptlthpxl2qvbvr6@vireshk-i7>
+References: <20201012135517.19468-1-frank@allwinnertech.com>
+ <20201012135517.19468-3-frank@allwinnertech.com>
+ <20201028102942.zc5hgqpo2bfrn6in@vireshk-i7>
+ <CAEExFWvNgK2wbvmxZjsJR4g-VBq=ggsBLew77rzmNdkpqTRuDA@mail.gmail.com>
+ <20201028144628.qm2t2hbzmouqkciy@vireshk-i7>
+ <CAEExFWtYrT3psuLC0fd7cX2GrmPaYxqZK65OLUv+2s97ehz97g@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEExFWtYrT3psuLC0fd7cX2GrmPaYxqZK65OLUv+2s97ehz97g@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Greg,
+On 30-10-20, 19:19, Frank Lee wrote:
+> GPU is also a relatively large number of opp consumers.
 
-Here is a pull request with interconnect fixes for 5.10-rc. Please
-take them into char-misc-linus when possible. All patches have been
-in linux-next with no reported issues.
+I was talking about the number of files or locations from which this
+routine (the devm_* variant) is going to get called. And it is one
+right now. And I don't see if any of the other callers are going to
+use it for now.
 
-Thanks,
-Georgi
+> Most of the time, the dev_pm_opp_set_* functions will only be set once.
 
-The following changes since commit 86d6e5793e0fa3a510cff466894d0d3051fd716e:
+Right.
 
-  interconnect: imx: simplify the return expression of imx_icc_unregister (2020-09-21 11:15:02 +0300)
+> If don't need the driver to dynamically manage and release the opp, it
+> may be OK？
 
-are available in the Git repository at:
+Every call to dev_pm_opp_set_supported_hw() increases the ref count of
+the OPP table and if it isn't balanced with a call to
+dev_pm_opp_put_supported_hw(), then the OPP table will never get
+freed. So if the driver is a module and ends up creating an OPP table
+every time, then this will lead to leakage.
 
-  https://git.linaro.org/people/georgi.djakov/linux.git tags/icc-5.10-rc2
+The best way to fix this is by calling dev_pm_opp_put_supported_hw()
+from the right place and then we are good.
 
-for you to fetch changes up to fce52ad3483281930dc9215a68d69837f219f889:
-
-  interconnect: qcom: use icc_sync state for sm8[12]50 (2020-10-27 16:01:22 +0200)
-
-----------------------------------------------------------------
-interconnect fixes for v5.10
-
-This contains one core fix and a few driver fixes.
-- Fix the core to perform also aggregation when setting the initial
-  bandwidth with sync_state.
-- Fixes in some drivers to make sure the correct sequence is used for
-  initialization when we use sync_state.
-- Fix in the sdm845 driver to prevent a board hang that was hit when
-  bandwidth scaling for display and multimedia was enabled.
-
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-
-----------------------------------------------------------------
-Dmitry Baryshkov (1):
-      interconnect: qcom: use icc_sync state for sm8[12]50
-
-Georgi Djakov (5):
-      interconnect: qcom: sdm845: Enable keepalive for the MM1 BCM
-      interconnect: Aggregate before setting initial bandwidth
-      interconnect: qcom: sdm845: Init BCMs before creating the nodes
-      interconnect: qcom: sc7180: Init BCMs before creating the nodes
-      interconnect: qcom: Ensure that the floor bandwidth value is enforced
-
- drivers/interconnect/core.c          | 3 +++
- drivers/interconnect/qcom/icc-rpmh.c | 7 +++++++
- drivers/interconnect/qcom/sc7180.c   | 6 +++---
- drivers/interconnect/qcom/sdm845.c   | 8 ++++----
- drivers/interconnect/qcom/sm8150.c   | 7 ++++---
- drivers/interconnect/qcom/sm8250.c   | 7 ++++---
- 6 files changed, 25 insertions(+), 13 deletions(-)
+-- 
+viresh
