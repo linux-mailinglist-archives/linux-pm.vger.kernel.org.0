@@ -2,118 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6B82A0373
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 11:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E59F2A03CD
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Oct 2020 12:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgJ3K4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Oct 2020 06:56:36 -0400
-Received: from foss.arm.com ([217.140.110.172]:59650 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbgJ3K4g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 30 Oct 2020 06:56:36 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62A87139F;
-        Fri, 30 Oct 2020 03:56:35 -0700 (PDT)
-Received: from [10.57.13.192] (unknown [10.57.13.192])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A0EC3F719;
-        Fri, 30 Oct 2020 03:56:32 -0700 (PDT)
-Subject: Re: [PATCH 0/4] Add sustainable OPP concept
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com, rafael@kernel.org,
-        sudeep.holla@arm.com, daniel.lezcano@linaro.org,
-        Dietmar.Eggemann@arm.com
-References: <20201028140847.1018-1-lukasz.luba@arm.com>
- <20201029074057.6ugmwyzna52x3oli@vireshk-i7>
- <20201029075356.rruej6jlerhfa4oy@vireshk-i7>
- <228fa1b3-bbd3-6941-fd4b-06581016d839@arm.com>
- <20201030082937.xgjmko2ohwhkt6f5@vireshk-i7>
- <a0a6db69-fc3e-c39f-7586-5ac3227b746e@arm.com>
- <20201030095248.abej6h5wphud2ihb@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <757fe3b1-745f-2656-fe21-c7b39f123a25@arm.com>
-Date:   Fri, 30 Oct 2020 10:56:30 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726351AbgJ3LMy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Oct 2020 07:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgJ3LMw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Oct 2020 07:12:52 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B3FC0613D2;
+        Fri, 30 Oct 2020 04:11:55 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id x20so6129335ilj.8;
+        Fri, 30 Oct 2020 04:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZV0ThIiPZfP1J2R9nyVt8QkuejC8cSVT80sCSgcOxz0=;
+        b=frLzaxmwhGcVkXjbtKiS94LkaEgTCIqs5lcLgp7qud2oXWRlC0QKI3bu8As+Qe/3+/
+         YswYlbhwudFEROgXLO0RidFvUATOBI7jk1lDLjY+whOmmq9Wr466RzZ5uuDqGV3FbAQG
+         l5ts/Dwn0MzkC2R6n6o7hulkK9e/L4r9462cvEbQnmU+Vp4izCFhUSz5rYUeyvvecom/
+         skR+qlhyOuiRDMt/6fAEhtpRAkvua7TqwnEmsCShc8NHMqgmHLM3NnLpiiyehNei+OWa
+         WZsv0NfFfxPPWvhOiranGCdFjTSZKT7qkP3ITLJ8wRX/70+d0XR4v07v323ob3Nx/pYz
+         m4IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZV0ThIiPZfP1J2R9nyVt8QkuejC8cSVT80sCSgcOxz0=;
+        b=JAHhXcjY+bpshnbwfRMrp/+oTiVji4VSyq64Gpk+BCp9iRc/Sk3DrPeEuWFueDJBD8
+         CbbqlJUq5/Tn+ktyohulyYBO9JsUEOAIVqBIEp2BosfSAThtjdRRnm1heolp6W7ppLGG
+         5ypWoN75ClhN9R95q45gLjfuN4Hk5/8iSynysaJKcz1HeGijSaoa716OnKOlTvlbGqHr
+         v0zwht3duKg50haXgEZKOd9clDVCbhStkn3hvHrd542cXZXQu5Le60Nk3kEEI/8LlLvN
+         c2bEfQYrjgevzJTvQ5lCX2k/OOSUQK0YbwZ13dSAE1vpy+lQGSJ43lrESGD+qXqGGgkm
+         DhYA==
+X-Gm-Message-State: AOAM531XuU18pk3UhSTd3DSUbzeg3sTTlipOkMRIzP6GZ6L31V7pbs5N
+        ZGcAOFXXyrEW1zxrl49zkOD3lGR+9vLedjYd1K0=
+X-Google-Smtp-Source: ABdhPJzTddVFvGcRMfdnfgtj3RhHYeI8lzSbPQsDbDZuu+e8Z0f5KxtsaoxhCUlFTZHA3Ubj6PmYhDwWjpnLL1nJZe4=
+X-Received: by 2002:a92:4442:: with SMTP id a2mr1368452ilm.220.1604056315371;
+ Fri, 30 Oct 2020 04:11:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201030095248.abej6h5wphud2ihb@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1604042072.git.mchehab+huawei@kernel.org> <5bc78e5b68ed1e9e39135173857cb2e753be868f.1604042072.git.mchehab+huawei@kernel.org>
+In-Reply-To: <5bc78e5b68ed1e9e39135173857cb2e753be868f.1604042072.git.mchehab+huawei@kernel.org>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Fri, 30 Oct 2020 12:11:54 +0100
+Message-ID: <CAOi1vP-gKLw7shFy5rUeH6Z14hr_B9fW0epaRyuw45tg4EuCcQ@mail.gmail.com>
+Subject: Re: [PATCH v2 31/39] docs: ABI: cleanup several ABI documents
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <marek.behun@nic.cz>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        =?UTF-8?Q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Chao Yu <chao@kernel.org>,
+        Christian Gromm <christian.gromm@microchip.com>,
+        Colin Cross <ccross@android.com>, Dan Murphy <dmurphy@ti.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Danil Kipnis <danil.kipnis@cloud.ionos.com>,
+        David Sterba <dsterba@suse.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Jonas Meurer <jonas@freesources.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Khlebnikov <koct9i@gmail.com>,
+        Kranthi Kuntala <kranthi.kuntala@intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>, Len Brown <lenb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Oleh Kravchenko <oleg@kaa.org.ua>, Pavel Machek <pavel@ucw.cz>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Roman Sudarikov <roman.sudarikov@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stefan Achatz <erazor_de@users.sourceforge.net>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>, Tony Luck <tony.luck@intel.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        Wu Hao <hao.wu@intel.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        coresight@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-iio@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linuxppc-dev@lists.ozlabs.org, netdev <netdev@vger.kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Oct 30, 2020 at 8:41 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> There are some ABI documents that, while they don't generate
+> any warnings, they have issues when parsed by get_abi.pl script
+> on its output result.
+>
+> Address them, in order to provide a clean output.
+>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> #for IIO
+> Reviewed-by: Tom Rix <trix@redhat.com> # for fpga-manager
+> Reviewed-By: Kajol Jain<kjain@linux.ibm.com> # for sysfs-bus-event_source-devices-hv_gpci and sysfs-bus-event_source-devices-hv_24x7
+> Acked-by: Oded Gabbay <oded.gabbay@gmail.com> # for Habanalabs
+> Acked-by: Vaibhav Jain <vaibhav@linux.ibm.com> # for sysfs-bus-papr-pmem
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+>
+> [...]
+>
+>  Documentation/ABI/testing/sysfs-bus-rbd       |  37 ++-
 
+Acked-by: Ilya Dryomov <idryomov@gmail.com> # for rbd
 
-On 10/30/20 9:52 AM, Viresh Kumar wrote:
-> On 30-10-20, 09:19, Lukasz Luba wrote:
->> How about dropping the DT binding, but just adding this new field into
->> dev_pm_opp? There will be no DT parsing code, just the get/set
->> functions, which will be used in SCMI patch 4/4 and in IPA?
->> That would not require to change any DT bindings.
->   
->> I see. Just for your information SCMI supports 'Sustained Performance'
->>   expressed in kHz.
-> 
-> Even that doesn't sound great (but then I don't have any background of
-> why that was added there). The problem is not about how do we get this
-> data into the kernel (from DT or firmware), but why is it even
-> required. I really feel that software can find the sustainable OPP by
-> itself (which can keep changing).
+Thanks,
 
-IPA tries to do that, even dynamically when e.g. GPU is supper busy
-in 3D games (~2000W) or almost idle showing 2D home screen.
-It tries to find highest 'sustainable' frequencies for the devices,
-at that various workloads and temp. But it needs some coefficients to
-start, which have big impact on the algorithm. It could slow down IPA a
-lot, when those coefficients are calculated based on lowest OPPs.
-
-
-> 
-> About moving it into the OPP core, I am open to getting something
-> added there if it is really useful and if the OPP core is the best
-> suited place to keep such data. Though I am not sure of that for this
-> field right now.
-> 
-> Is it ever going to be used by anyone else apart from IPA ? If not,
-> what about adding a helper in IPA to set sustainable-freq for a device
-> ?
-
-My backup plan was to add a flag into EM em_perf_state, extend SCMI perf
-exposing the 'sustained_freq_khz' to scmi-cpufreq, which would set that
-field after registering EM. IPA depends on EM, so should be OK.
-
-> 
-> So only SCMI based platforms will be able to use this stuff ? That's
-
-I don't know who would also use it in future. I just presented you
-current user of this, as you asked.
-
-> very limited, isn't it ? I think we should still try to make it better
-> for everyone by making the software smarter. It has so much data, the
-> OPPs, the power it will consume (based on microvolt property?), the
-> heat we produce from that (from thermal framework), etc. Perhaps
-> building this information continuously at runtime based on when and
-> how we hit the trip points ? So we know which is the right frequency
-> where we can refrain from hitting the trip points.
-
-IPA works in this way.
-
-> 
-> But may be I am asking too much :(
-> 
-
-When you asked for user of this, I gave you instantly. This is one is
-more difficult. I am still not there with IPA tests in LISA. I have some
-out-of-tree kernel driver for testing, which also need polishing before
-can be used with LISA. Then proper workloads with results processing.
-EM for devfreq cooling devices. Then decent 'hot' board running
-preferably mainline kernel.
-What you requested is on my list, but it needs more work, which
-won't be ready over night.
-
-Regards,
-Lukasz
+                Ilya
