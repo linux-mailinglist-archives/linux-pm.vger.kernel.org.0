@@ -2,119 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB512A1773
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Oct 2020 13:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC942A1A54
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Oct 2020 20:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbgJaMrW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sat, 31 Oct 2020 08:47:22 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33696 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgJaMrW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Oct 2020 08:47:22 -0400
-Received: by mail-wr1-f65.google.com with SMTP id b8so9354247wrn.0;
-        Sat, 31 Oct 2020 05:47:20 -0700 (PDT)
+        id S1726723AbgJaTxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 31 Oct 2020 15:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725786AbgJaTxV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Oct 2020 15:53:21 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C58C0617A6;
+        Sat, 31 Oct 2020 12:53:19 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id 126so12221941lfi.8;
+        Sat, 31 Oct 2020 12:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qpW1o+C0PRJ741Jc61rIE1EzSh2oPyJa/Lhh/MjTIEo=;
+        b=kCemvOV/aVgs6jzTk5xs0VLzBdyFrvm75owovIK/xkL6tbC05uav9344WusR7z8ETN
+         suCnr8DigbChM6vHGGn+ppIjhVtviHN4bAvhea/cXJkagsVr2CxVaF7odhorhnb4Q36B
+         BQjYm6NjAl0I3ZEkyhkpo4MYmDrHFMDYkvYCWd9sER/94ftd4VgEuRS46AYN3HdHFO+S
+         tqwd1bRl/QJaUMrXp2RZMaBXFtO58oWvlSmrkAm4mVfuuIrzLF3LU9oY2B2u3YHr/FhD
+         oWbALHqgegg27LIAs7xx8Zb1oYanYNM0St1C8i32EAUAtm0fDKovMHgoNLH2CZESUMyu
+         k7qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=+gL7Op3KIBpBphNR+C9mEgS569nJZM4vxaFbpSVbwWo=;
-        b=e1CO85PondYAc5m6el2DSQmEwZHO1oDLOLBz2z5xYIEvTaNlbZ/CPoYjgfysCqqqJ7
-         61kFMUF/ravAji82JG9Apl+8HPUcN4PuIGtaRW8HsC6DDM2+edjTRBZHNONm381itmcP
-         JfkumnSZXSUtGrjw8Y6DJWOLOhXjFYAkeGqAahxxRa2hZcroXfDS9E5u3RUvVvqC7c4V
-         s/ER6xw9t1rkyDrxpN/C7M2z6Kro1LN4Ql1OUhQMB0Ii6oYDAUBaQNQi/Yo7A5pEmIZG
-         jxCByusNC3LIcUKK1dbfjT9eq9fSbumzao4zV07OLbEvxWTxEO8fSMEG6HgXV37kQhDu
-         iufA==
-X-Gm-Message-State: AOAM530LJ7dgTN4fqmdAwTxWCFJ4FfW2fXM+/v9GsIdWtYnWTnO0QYJP
-        Ycy+4Joa7NMiT9pnBNJoma8=
-X-Google-Smtp-Source: ABdhPJw1A1ifmpqW7/JFaic2H98/NtqftCnqT8ZvJegvWDAd8dPgFRVj/GRP3niiuT1wpM0cIHmxrA==
-X-Received: by 2002:adf:9204:: with SMTP id 4mr1764068wrj.241.1604148440070;
-        Sat, 31 Oct 2020 05:47:20 -0700 (PDT)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id 4sm14367078wrp.58.2020.10.31.05.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2020 05:47:18 -0700 (PDT)
-Date:   Sat, 31 Oct 2020 13:47:17 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        a.swigon@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v7 6/6] drm: exynos: mixer: Add interconnect support
-Message-ID: <20201031124717.GE9399@kozik-lap>
-References: <20201030125149.8227-1-s.nawrocki@samsung.com>
- <CGME20201030125308eucas1p14ae969ae1d5549d422c478aa54d3311e@eucas1p1.samsung.com>
- <20201030125149.8227-7-s.nawrocki@samsung.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qpW1o+C0PRJ741Jc61rIE1EzSh2oPyJa/Lhh/MjTIEo=;
+        b=OBpTo1F4fiutnakq4kV8BTm6ap60B/4IlIyhg6pYlqj1M8npMXOcIc78l4YuO1GL3I
+         V3KXtMaptWsOnm8aGQ++cOGIqcu5gKveJZrw7fm5KGX659dK+IHMwVx9vd7nYZTY5CqW
+         6jST3T7jkihzHJ8hKBlnT/36zngsrPF1JTO46rhTKpLcFQaE5PLsCvG0ZB7GTyUyJpUc
+         AINP4STM8GsTx+4wqilPaWl1Lx/hCUEDOOfydgJnCCTQPR5InfPyeRPaDIJcLowPO+TE
+         8RcfUFpiwSYHAnm1b3010wPcEUM2FQo4x5v9E60/PJnklt25EhFOBArSMAtdCTH+GWrS
+         ae0w==
+X-Gm-Message-State: AOAM530ZA0WyOqiwW4FJ10KM1p6eL0GRyYb0QwmqM9JUCvfvsSAKxe4B
+        L9A4584lwalozM/zfE7wMaJW2WiiQ0c=
+X-Google-Smtp-Source: ABdhPJx51n5KkA8mPRxesb87WniYbQs0YGofYfpwH6xFE7VSriWHy/j/UxCjN08agE3mbG5oAIkFaw==
+X-Received: by 2002:a19:7009:: with SMTP id h9mr3365454lfc.201.1604173997919;
+        Sat, 31 Oct 2020 12:53:17 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-177.dynamic.spd-mgts.ru. [109.252.193.177])
+        by smtp.googlemail.com with ESMTPSA id d16sm926813lfm.55.2020.10.31.12.53.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 31 Oct 2020 12:53:17 -0700 (PDT)
+Subject: Re: [PATCH v6 08/52] dt-bindings: memory: tegra20: emc: Document
+ mfd-simple compatible and statistics sub-device
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20201025221735.3062-1-digetx@gmail.com>
+ <20201025221735.3062-9-digetx@gmail.com> <20201027090212.GG4244@kozik-lap>
+ <1cce314a-1eab-61c9-099d-54f987b03761@gmail.com>
+ <20201027194457.GD140636@kozik-lap>
+ <ae06bd70-93f5-abe8-64d9-e5e991cd8ff8@gmail.com>
+ <20201028152632.GA4051913@bogus>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <a2e7109c-1a31-2b5d-fd1b-b572c654ba82@gmail.com>
+Date:   Sat, 31 Oct 2020 22:53:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20201028152632.GA4051913@bogus>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201030125149.8227-7-s.nawrocki@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 01:51:49PM +0100, Sylwester Nawrocki wrote:
-> This patch adds interconnect support to exynos-mixer. The mixer works
-> the same as before when CONFIG_INTERCONNECT is 'n'.
+28.10.2020 18:26, Rob Herring пишет:
+> On Tue, Oct 27, 2020 at 11:18:34PM +0300, Dmitry Osipenko wrote:
+>> 27.10.2020 22:44, Krzysztof Kozlowski пишет:
+>>> On Tue, Oct 27, 2020 at 10:22:19PM +0300, Dmitry Osipenko wrote:
+>>>> 27.10.2020 12:02, Krzysztof Kozlowski пишет:
+>>>>>> @@ -31,17 +32,34 @@ Example:
+>>>>>>  		...
+>>>>>>  	};
+>>>>>>  
+>>>>>> +	emc_bw_dfs_opp_table: emc_opp_table1 {
+>>>>> Hyphens for node name.
+>>>>
+>>>> We already use underscores for the Tegra CPU OPP table.
+>>>>
+>>>> https://elixir.bootlin.com/linux/v5.10-rc1/source/arch/arm/boot/dts/tegra20-cpu-opp.dtsi#L4
+>>>>
+>>>> What makes you think that hyphens will be a better choice? Is it a
+>>>> documented naming convention?
+>>>
+>>> Unfortunately that's the source of confusion also for me because
+>>> Devicetree spec mentions both of them (and does not specify preferences).
+>>>
+>>> The choice of dashes/hyphens comes now explicitly from all dtschema
+>>> files.  Previously, the documentation were emails from Rob. :)
+>>
+>> Okay, I'll change it in v7. So far I haven't seen warnings about it from
+>> the schema-checker.
 > 
-> For proper operation of the video mixer block we need to ensure the
-> interconnect busses like DMC or LEFTBUS provide enough bandwidth so
-> as to avoid DMA buffer underruns in the mixer block. I.e we need to
-> prevent those busses from operating in low perfomance OPPs when
-> the mixer is running.
-> In this patch the bus bandwidth request is done through the interconnect
-> API, the bandwidth value is calculated from selected DRM mode, i.e.
-> video plane width, height, refresh rate and pixel format.
+> dtc with W=2 will warn.
 > 
-> The bandwidth setting is synchronized with VSYNC when we are switching
-> to lower bandwidth. This is required to ensure enough bandwidth for
-> the device since new settings are normally being applied in the hardware
-> synchronously with VSYNC.
-> 
-> Co-developed-by: Artur Świgoń <a.swigon@samsung.com>
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> ---
-> Changes for v7:
->  - fixed incorrect setting of the ICC bandwidth when the mixer is
->    disabled, now the bandwidth is set explicitly to 0 in such case.
-> 
-> Changes for v6:
->  - the icc_set_bw() call is now only done when calculated value for
->    a crtc changes, this avoids unnecessary calls per each video frame
->  - added synchronization of the interconnect bandwidth setting with
->    the mixer VSYNC in order to avoid buffer underflow when we lower
->    the interconnect bandwidth when the hardware still operates with
->    previous mode settings that require higher bandwidth. This fixed
->    IOMMU faults observed e.g. during switching from two planes to
->    a single plane operation.
-> 
-> Changes for v5:
->  - renamed soc_path variable to icc_path
-> ---
->  drivers/gpu/drm/exynos/exynos_mixer.c | 146 ++++++++++++++++++++++++++++++++--
->  1 file changed, 138 insertions(+), 8 deletions(-)
+> The bigger issue is the name should be generic.
 
-
-[...]
-
-> @@ -1223,19 +1330,33 @@ static int mixer_probe(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	const struct mixer_drv_data *drv;
->  	struct mixer_context *ctx;
-> +	struct icc_path *path;
->  	int ret;
->  
-> +	/*
-> +	 * Returns NULL if CONFIG_INTERCONNECT is disabled.
-
-You could add here:
-or if "interconnects" property does not exist.
-
-Best regards,
-Krzysztof
+Indeed, thanks. I'll correct the name.
