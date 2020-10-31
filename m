@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 582792A1735
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Oct 2020 13:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 477A42A1746
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Oct 2020 13:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbgJaMMG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sat, 31 Oct 2020 08:12:06 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:35420 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726928AbgJaMMF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Oct 2020 08:12:05 -0400
-Received: by mail-wm1-f68.google.com with SMTP id h22so5193695wmb.0;
-        Sat, 31 Oct 2020 05:12:03 -0700 (PDT)
+        id S1727180AbgJaMRx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sat, 31 Oct 2020 08:17:53 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:40829 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726935AbgJaMRx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Oct 2020 08:17:53 -0400
+Received: by mail-wm1-f65.google.com with SMTP id k18so5173096wmj.5;
+        Sat, 31 Oct 2020 05:17:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=NA2mk2ojzZgcrMT2zOu7idEhtXsilJ2RZg5gFMOuQu0=;
-        b=npSi9acScqv3T750caVXhbrrpeBcNbaDmcCPzjn/buViDm4NOh3WSx3OedyPncQdN3
-         1jptu0k+ln1VOLKLLhUP4RrDmW/0r2bBWC6rDp+fG41f+cspvbbvRnDrcOVFopEPSey/
-         FtT3UUkQftb7wK+KyQU80ndxwHSg9FWp1LnyuPG6T5tFTot4rMPbUUB2ihFZ10H+ZcUR
-         z5xJ+bAMxE51EFal0mn5B3SSdgLmhPZUHcRzpc880YppfjHjKjK/y6YCWQWZi/aQGXDp
-         wOnGgKGUjLT34PQ2vfzPtNAng335GPToTRyjfbegX7/AYHlxT371fe092LUZHjCVYOD+
-         0Dgg==
-X-Gm-Message-State: AOAM531BHDyCVflpaw6QBEfRUZ+IxXz0wI0w/o9cqZ84WBQB6Gt/K1Uo
-        UERJ2zs712yU8+CRPyYsFEIoyPkoWeN+tQ==
-X-Google-Smtp-Source: ABdhPJzxJPowOvxVIGz2k7PdLFq9XdeI2/pqi8+tEqW8uyXw33OGR632eyR2MsZ3cnVcMWXiIVpgvg==
-X-Received: by 2002:a1c:750b:: with SMTP id o11mr8099208wmc.32.1604146322961;
-        Sat, 31 Oct 2020 05:12:02 -0700 (PDT)
+        bh=WKzF1aaYbnVmrdWhOCJIvuCVQXHEwFndydQ7LCQLM48=;
+        b=uMrXN3jhJacu5R/EzUuTLunep6fgZSHIlfPz/e7IPwkaCwsQjQJmA3ZEHUXd8XkXF1
+         Nd53PpnRSVmBCkO4PhrsiJ2r9pDo/e4voDtvB5f8dZp/VWNf6//M5r7m+q/fyLADDTv9
+         vWpllHbmDrXDE7WgHPS/6Y00JjYa0CqYb0b0asvZnUE1jW4fv4GkNLi79rHDE57mQjZh
+         /vBcaj+TUIlVS1A5/aZwTxT4F4p/6dGVpazggZiDPTAE9zzdvBX7xslRLWvUAdW3V/t9
+         sT6MzVvuPQsqBQpvStpxm2g+wgtk9Wpd9aRdWvY4jDrufPWmQkj1ySPCkgoZBXJp7OJr
+         ZHcQ==
+X-Gm-Message-State: AOAM530y3wsuLAaiV2zrxzcb4q2C0ltIUo/p2X986SWmOOuk9e15sdks
+        cjYEL6kSVInr2IVKtEj+f426W+WcGlXzGg==
+X-Google-Smtp-Source: ABdhPJxtVxlOWJenfMblp90f/+WbEdzV8cTky1eQNG/79J3aKlrJViN3Ma99nExe5hJCGVj0D/9hNw==
+X-Received: by 2002:a1c:4b0c:: with SMTP id y12mr2090447wma.91.1604146670479;
+        Sat, 31 Oct 2020 05:17:50 -0700 (PDT)
 Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id m8sm14272394wrw.17.2020.10.31.05.12.01
+        by smtp.googlemail.com with ESMTPSA id r18sm15981833wrj.50.2020.10.31.05.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2020 05:12:01 -0700 (PDT)
-Date:   Sat, 31 Oct 2020 13:12:00 +0100
+        Sat, 31 Oct 2020 05:17:49 -0700 (PDT)
+Date:   Sat, 31 Oct 2020 13:17:47 +0100
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
 Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
@@ -44,49 +44,88 @@ Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
         b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v7 1/6] dt-bindings: devfreq: Add documentation for the
- interconnect properties
-Message-ID: <20201031121200.GA9399@kozik-lap>
+Subject: Re: [PATCH v7 2/6] interconnect: Add generic interconnect driver for
+ Exynos SoCs
+Message-ID: <20201031121747.GB9399@kozik-lap>
 References: <20201030125149.8227-1-s.nawrocki@samsung.com>
- <CGME20201030125257eucas1p29c6b018cfcdda337b2b3d2a496f0c830@eucas1p2.samsung.com>
- <20201030125149.8227-2-s.nawrocki@samsung.com>
+ <CGME20201030125301eucas1p218b0e654cb4c826b05280f28836da8d9@eucas1p2.samsung.com>
+ <20201030125149.8227-3-s.nawrocki@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201030125149.8227-2-s.nawrocki@samsung.com>
+In-Reply-To: <20201030125149.8227-3-s.nawrocki@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 01:51:44PM +0100, Sylwester Nawrocki wrote:
-> Add documentation for new optional properties in the exynos bus nodes:
-> interconnects, #interconnect-cells, samsung,data-clock-ratio.
-> These properties allow to specify the SoC interconnect structure which
-> then allows the interconnect consumer devices to request specific
-> bandwidth requirements.
+On Fri, Oct 30, 2020 at 01:51:45PM +0100, Sylwester Nawrocki wrote:
+> This patch adds a generic interconnect driver for Exynos SoCs in order
+> to provide interconnect functionality for each "samsung,exynos-bus"
+> compatible device.
+> 
+> The SoC topology is a graph (or more specifically, a tree) and its
+> edges are specified using the 'samsung,interconnect-parent' in the
+> DT. Due to unspecified relative probing order, -EPROBE_DEFER may be
+> propagated to ensure that the parent is probed before its children.
+> 
+> Each bus is now an interconnect provider and an interconnect node as
+> well (cf. Documentation/interconnect/interconnect.rst), i.e. every bus
+> registers itself as a node. Node IDs are not hardcoded but rather
+> assigned dynamically at runtime. This approach allows for using this
+> driver with various Exynos SoCs.
+> 
+> Frequencies requested via the interconnect API for a given node are
+> propagated to devfreq using dev_pm_qos_update_request(). Please note
+> that it is not an error when CONFIG_INTERCONNECT is 'n', in which
+> case all interconnect API functions are no-op.
+> 
+> The bus-width DT property is to determine the interconnect data
+> width and traslate requested bandwidth to clock frequency for each
+> bus.
 > 
 > Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
 > Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 > ---
 > Changes for v7:
->  - bus-width property replaced with samsung,data-clock-ratio,
->  - the interconnect consumer bindings used instead of vendor specific
->    properties
+>  - adjusted to the DT property changes: "interconnects" instead
+>    of "samsung,interconnect-parent", "samsung,data-clk-ratio"
+>    instead of "bus-width",
+>  - adaptation to of_icc_get_from_provider() function changes
+>    in v5.10-rc1.
 > 
 > Changes for v6:
->  - added dts example of bus hierarchy definition and the interconnect
->    consumer,
->  - added new bus-width property.
+>  - corrected of_node dereferencing in exynos_icc_get_parent()
+>    function,
+>  - corrected initialization of icc_node->name so as to avoid
+>    direct of_node->name dereferencing,
+>  - added parsing of bus-width DT property.
 > 
 > Changes for v5:
->  - exynos,interconnect-parent-node renamed to samsung,interconnect-parent
-> ---
->  .../devicetree/bindings/devfreq/exynos-bus.txt     | 68 +++++++++++++++++++++-
->  1 file changed, 66 insertions(+), 2 deletions(-)
+>  - adjust to renamed exynos,interconnect-parent-node property,
+>  - use automatically generated platform device id as the interconect
+>    node id instead of a now unavailable devfreq->id field,
+>  - add icc_ prefix to some variables to make the code more self-commenting,
+>  - use icc_nodes_remove() instead of icc_node_del() + icc_node_destroy(),
+>  - adjust to exynos,interconnect-parent-node property rename to
+>    samsung,interconnect-parent,
+>  - converted to a separate platform driver in drivers/interconnect.
 > 
+> ---
+>  drivers/interconnect/Kconfig         |   1 +
+>  drivers/interconnect/Makefile        |   1 +
+>  drivers/interconnect/exynos/Kconfig  |   6 ++
+>  drivers/interconnect/exynos/Makefile |   4 +
+>  drivers/interconnect/exynos/exynos.c | 198 +++++++++++++++++++++++++++++++++++
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+How about naming the directory as "samsung"? I don't expect interconnect
+drivers for the old Samsung S3C or S5P platforms, but it would be
+consisteny with other names (memory, clk, pinctrl).
+
+How about adding separate maintainers entry for the driver with you and
+Artur (if he still works on this)?
 
 Best regards,
 Krzysztof
+
+
