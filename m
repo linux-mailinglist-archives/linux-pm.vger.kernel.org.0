@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC272A1772
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Oct 2020 13:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB512A1773
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Oct 2020 13:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbgJaMoV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sat, 31 Oct 2020 08:44:21 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:37741 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727041AbgJaMoV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Oct 2020 08:44:21 -0400
-Received: by mail-wr1-f68.google.com with SMTP id w1so9328187wrm.4;
-        Sat, 31 Oct 2020 05:44:19 -0700 (PDT)
+        id S1727126AbgJaMrW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sat, 31 Oct 2020 08:47:22 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33696 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgJaMrW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Oct 2020 08:47:22 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b8so9354247wrn.0;
+        Sat, 31 Oct 2020 05:47:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=IR5TWVh/PM8cmgKLWET7kM8jaE+hyDMzn6+0+c1GNUE=;
-        b=uEHRyHktTMuihdxCQx0JhBDEh5PmzgYWmpSUikTBDyHs5+SEgkEDfRkJfl0sD7Vlsg
-         flH/apOGXYURvZYRlsR5AZv6+MH4f7FueQbXqNF0nlcGYMz2lvNpBHXAqSg85berCpkR
-         HVziUmyP2tmKRuHzaH2DjaExAiio5jPXyuU4Q33d0oNRt4eX4bSfNvD1ahFiOWKMpssY
-         cSSerj24BL1I/5MGkd2Kcs8USrMOUlVSFsAeYxur4CI46FUfRUi3VoX94UQeKcxetLqp
-         uPmHrFBRFXXYLmC5K7ziIGy7wD7KDn5tbQRYlvfj/zAWMSMX9zKdGIAXjZkpr8a8VLG0
-         YjZg==
-X-Gm-Message-State: AOAM532BYvkvNTk6dDMFU6iAFvknrFwhLyc9yaIIBUbTDbAItFoErNcq
-        8G6mQNf5RuyUmaagmfUlm9I=
-X-Google-Smtp-Source: ABdhPJyNFPLhOwZHLatq0yb281uqv5It6hSSKp564zq6To39BLY7zNY0fFgwUyWFccY2+oiiolmIFw==
-X-Received: by 2002:adf:ef02:: with SMTP id e2mr8755737wro.381.1604148258750;
-        Sat, 31 Oct 2020 05:44:18 -0700 (PDT)
+        bh=+gL7Op3KIBpBphNR+C9mEgS569nJZM4vxaFbpSVbwWo=;
+        b=e1CO85PondYAc5m6el2DSQmEwZHO1oDLOLBz2z5xYIEvTaNlbZ/CPoYjgfysCqqqJ7
+         61kFMUF/ravAji82JG9Apl+8HPUcN4PuIGtaRW8HsC6DDM2+edjTRBZHNONm381itmcP
+         JfkumnSZXSUtGrjw8Y6DJWOLOhXjFYAkeGqAahxxRa2hZcroXfDS9E5u3RUvVvqC7c4V
+         s/ER6xw9t1rkyDrxpN/C7M2z6Kro1LN4Ql1OUhQMB0Ii6oYDAUBaQNQi/Yo7A5pEmIZG
+         jxCByusNC3LIcUKK1dbfjT9eq9fSbumzao4zV07OLbEvxWTxEO8fSMEG6HgXV37kQhDu
+         iufA==
+X-Gm-Message-State: AOAM530LJ7dgTN4fqmdAwTxWCFJ4FfW2fXM+/v9GsIdWtYnWTnO0QYJP
+        Ycy+4Joa7NMiT9pnBNJoma8=
+X-Google-Smtp-Source: ABdhPJw1A1ifmpqW7/JFaic2H98/NtqftCnqT8ZvJegvWDAd8dPgFRVj/GRP3niiuT1wpM0cIHmxrA==
+X-Received: by 2002:adf:9204:: with SMTP id 4mr1764068wrj.241.1604148440070;
+        Sat, 31 Oct 2020 05:47:20 -0700 (PDT)
 Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id g14sm14745459wrx.22.2020.10.31.05.44.16
+        by smtp.googlemail.com with ESMTPSA id 4sm14367078wrp.58.2020.10.31.05.47.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2020 05:44:16 -0700 (PDT)
-Date:   Sat, 31 Oct 2020 13:44:15 +0100
+        Sat, 31 Oct 2020 05:47:18 -0700 (PDT)
+Date:   Sat, 31 Oct 2020 13:47:17 +0100
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
 Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
@@ -45,7 +45,7 @@ Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org
 Subject: Re: [PATCH v7 6/6] drm: exynos: mixer: Add interconnect support
-Message-ID: <20201031124415.GD9399@kozik-lap>
+Message-ID: <20201031124717.GE9399@kozik-lap>
 References: <20201030125149.8227-1-s.nawrocki@samsung.com>
  <CGME20201030125308eucas1p14ae969ae1d5549d422c478aa54d3311e@eucas1p1.samsung.com>
  <20201030125149.8227-7-s.nawrocki@samsung.com>
@@ -99,9 +99,22 @@ On Fri, Oct 30, 2020 at 01:51:49PM +0100, Sylwester Nawrocki wrote:
 > ---
 >  drivers/gpu/drm/exynos/exynos_mixer.c | 146 ++++++++++++++++++++++++++++++++--
 >  1 file changed, 138 insertions(+), 8 deletions(-)
-> 
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+[...]
+
+> @@ -1223,19 +1330,33 @@ static int mixer_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	const struct mixer_drv_data *drv;
+>  	struct mixer_context *ctx;
+> +	struct icc_path *path;
+>  	int ret;
+>  
+> +	/*
+> +	 * Returns NULL if CONFIG_INTERCONNECT is disabled.
+
+You could add here:
+or if "interconnects" property does not exist.
 
 Best regards,
 Krzysztof
