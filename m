@@ -2,112 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DD72A1F57
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Nov 2020 16:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52272A1FCC
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Nov 2020 18:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgKAP6f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Nov 2020 10:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726730AbgKAP6e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Nov 2020 10:58:34 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058E4C0617A6;
-        Sun,  1 Nov 2020 07:58:32 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id v19so7348200lji.5;
-        Sun, 01 Nov 2020 07:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=9w5lqe/JTQMl14qtp1wqbV1q8PlicycEi9x7TwQ3O4I=;
-        b=SrzcyTOQk7M4NCVfGsoyDQqZ6rFb3eZJcZzNQdiSNUT7txNNGhlL0NpT0+LOVda3Ih
-         MiBUFAFrziuKtC1hCr5a+CEaEWrzgJICLO3UevGr9h71XEutrEV0cHH5XzfUCoDohH8E
-         a45GiU+47GmYSJC5/FJSPBiNPS+BW+zygQuK/B9e8hXqfmnzMvhGZiFF4GdJVXlS3tet
-         OXIAqAP/N5ThaauVK3L4z2MuyLnqwYL3XMOTewX8A7/1Tid7b0erQsFJ9lqKusNF0R4a
-         YPiOTsbHK0dGj8R7DKeLodHLpNxXs+/ktqgRnbQMasDwrSlX/7YSgiQGBPol/B0k4Ama
-         wPZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=9w5lqe/JTQMl14qtp1wqbV1q8PlicycEi9x7TwQ3O4I=;
-        b=sb0Ckl4xj/v6BieRMsyQH/o4DzJcIhqVWb5qBdtZ7SL5I8aHnrHBMpFfFGE/ud0c0+
-         8jgsZ876eRmnN5KcDOSpZWZt2Ugsz2RJrYC1cI3nh92upfT3OvLCGPPOYdpUZOHO8Ufj
-         osWjjlyGex3kBNIWONAqLSEJLxB8Aucg5dnGL7StcUFi872ckD/Ku/gNMi2CyTQgPgJc
-         +5KMljdfb7aJpf9VP3YNYY2ATg9pDKJFbFgK79Xeo3vMuCXBXxIoz7wz/62IViqBern4
-         Czj/WoM3x0PdoESSUdXtuJWWx7KO4Lh5KfivCnzECRmppVwbAcfk4+YPhY5+37Z8lAJJ
-         9hWg==
-X-Gm-Message-State: AOAM530VU73UhycfC+o6WxqrzJPmFKjttqem7WhT9sWaCFrlfLfmwJ3A
-        1rpWoXe3Adj/ux5xJnFGdKyHbBOFM4hi1ZC8qFE=
-X-Google-Smtp-Source: ABdhPJxWcrG0gmpm+NAN1BZS7Iw6tgZ8ick38nOYLMklui1fLFdUIqBpA2BV8e/ASXPN+5HRZr3OVEYaeMhtvt6PCqE=
-X-Received: by 2002:a2e:681a:: with SMTP id c26mr5169187lja.56.1604246311413;
- Sun, 01 Nov 2020 07:58:31 -0800 (PST)
+        id S1726938AbgKARCc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Nov 2020 12:02:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726790AbgKARCb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 1 Nov 2020 12:02:31 -0500
+Received: from kernel.org (unknown [87.71.17.26])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 420992074F;
+        Sun,  1 Nov 2020 17:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604250150;
+        bh=HP+ZQ6Ps8oAsoYLOvWAk4ExSXyhayG0jX2yWoBMUttE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bxsex5hsLdBiTg92b0MNJxCbBPD+lO6NtdRjasPNMfUBXD6k5B0KcdxvFVYiQIEmX
+         Bjfz+dfRQJnD6lyaCaBO97eSNhn6o7BX84zyBBhpcPltXScqdjcB1tCqstPvndRKPK
+         MacevoYxMeN6oYR+VtqyVfF6MF53cPKygLmGPOBs=
+Date:   Sun, 1 Nov 2020 19:02:17 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "cl@linux.com" <cl@linux.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "borntraeger@de.ibm.com" <borntraeger@de.ibm.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "bp@alien8.de" <bp@alien8.de>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>
+Subject: Re: [PATCH 2/4] PM: hibernate: improve robustness of mapping pages
+ in the direct map
+Message-ID: <20201101170217.GD14628@kernel.org>
+References: <20201025101555.3057-1-rppt@kernel.org>
+ <20201025101555.3057-3-rppt@kernel.org>
+ <3b4b2b3559bd3dc68adcddf99415bae57152cb6b.camel@intel.com>
+ <20201029075416.GJ1428094@kernel.org>
+ <604554805defb03d158c09aba4b5cced3416a7fb.camel@intel.com>
 MIME-Version: 1.0
-References: <20201025221735.3062-1-digetx@gmail.com> <20201025221735.3062-52-digetx@gmail.com>
- <CAGTfZH1PV4r-pD=zTKD71nQb5+UobJKa5mBv-Nb2ZgSubkscjA@mail.gmail.com>
- <2ebd184c-60e8-19e2-9965-19481ced1c70@gmail.com> <CAGTfZH0=6R02euOR3JHgA0iLq5++Yvp3Z_wBCEs7bzkfuorEFQ@mail.gmail.com>
- <5f5a22b1-4d01-5698-1bca-6bcc66c55e6f@gmail.com>
-In-Reply-To: <5f5a22b1-4d01-5698-1bca-6bcc66c55e6f@gmail.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Mon, 2 Nov 2020 00:57:55 +0900
-Message-ID: <CAGTfZH3s-1cROd3_X2weBs6i1irgJQJZP+8G+rj9p3KZMUu2vQ@mail.gmail.com>
-Subject: Re: [PATCH v6 51/52] PM / devfreq: tegra30: Support interconnect and
- OPPs from device-tree
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <604554805defb03d158c09aba4b5cced3416a7fb.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 2, 2020 at 12:49 AM Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 01.11.2020 18:44, Chanwoo Choi =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> OPP core will try to grab the clock reference for the table and it may
-> >> cause EPROBE_DEFER. Although, it shouldn't happen here because we have
-> >> devm_clk_get() before the get_opp_table(), hence seems the deferred
-> >> probe indeed shouldn't happen in this case.
-> > It is my missing point. If there, you're right.
-> > Could you provide the code point to check the clock reference on the OP=
-P core?
->
-> Please see it here:
->
-> https://elixir.bootlin.com/linux/v5.10-rc1/source/drivers/opp/core.c#L110=
-1
+On Thu, Oct 29, 2020 at 11:19:18PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2020-10-29 at 09:54 +0200, Mike Rapoport wrote:
+> > __kernel_map_pages() on arm64 will also bail out if rodata_full is
+> > false:
+> > void __kernel_map_pages(struct page *page, int numpages, int enable)
+> > {
+> >         if (!debug_pagealloc_enabled() && !rodata_full)
+> >                 return;
+> > 
+> >         set_memory_valid((unsigned long)page_address(page), numpages,
+> > enable);
+> > }
+> > 
+> > So using set_direct_map() to map back pages removed from the direct
+> > map
+> > with __kernel_map_pages() seems safe to me.
+> 
+> Heh, one of us must have some simple boolean error in our head. I hope
+> its not me! :) I'll try on more time.
 
-Thanks. It seems that if device tree node contains the any node,
-it is not EPROBE_DEFER because of just using "clk_get(dev, NULL)".
+Well, then it's me :)
+You are right, I misread this and I could not understand why
+!rodata_full bothers you.
 
-The patch[1] used the 'dev_err_probe' for getting the "emc" clock.
-Do you need to check it more?
+> __kernel_map_pages() will bail out if rodata_full is false **AND**
+> debug page alloc is off. So it will only bail under conditions where
+> there could be nothing unmapped on the direct map.
+> 
+> Equivalent logic would be:
+> 	if (!(debug_pagealloc_enabled() || rodata_full))
+> 		return;
+> 
+> Or:
+> 	if (debug_pagealloc_enabled() || rodata_full)
+> 		set_memory_valid(blah)
+> 
+> So if either is on, the existing code will try to re-map. But the
+> set_direct_map_()'s will only work if rodata_full is on. So switching
+> hibernate to set_direct_map() will cause the remap to be missed for the
+> debug page alloc case, with !rodata_full.
+> 
+> It also breaks normal debug page alloc usage with !rodata_full for
+> similar reasons after patch 3. The pages would never get unmapped.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commi=
-t/?h=3Ddevfreq-next&id=3D09d56d92ad25b58113f4ec677e9b1ac1e2c3072b
+I've updated the patches, there should be no regression now.
 
-
---=20
-Best Regards,
-Chanwoo Choi
+-- 
+Sincerely yours,
+Mike.
