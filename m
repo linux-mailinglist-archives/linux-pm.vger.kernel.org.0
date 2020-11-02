@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BDF2A2A49
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 13:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD81D2A2A4B
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 13:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728632AbgKBMB7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Nov 2020 07:01:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:58570 "EHLO foss.arm.com"
+        id S1728685AbgKBMCD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Nov 2020 07:02:03 -0500
+Received: from foss.arm.com ([217.140.110.172]:58586 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728623AbgKBMB7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Nov 2020 07:01:59 -0500
+        id S1728631AbgKBMCD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Nov 2020 07:02:03 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9CE830E;
-        Mon,  2 Nov 2020 04:01:58 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 341E030E;
+        Mon,  2 Nov 2020 04:02:02 -0800 (PST)
 Received: from ubuntu.arm.com (unknown [10.57.53.184])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5FF6A3F66E;
-        Mon,  2 Nov 2020 04:01:56 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DF3683F66E;
+        Mon,  2 Nov 2020 04:01:59 -0800 (PST)
 From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
@@ -25,9 +25,9 @@ To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         daniel.lezcano@linaro.org
 Cc:     morten.rasmussen@arm.com, chris.redpath@arm.com,
         nicola.mazzucato@arm.com
-Subject: [PATCH v3 1/3] dt-bindings/opp: Update documentation for opp-shared
-Date:   Mon,  2 Nov 2020 12:01:13 +0000
-Message-Id: <20201102120115.29993-2-nicola.mazzucato@arm.com>
+Subject: [PATCH v3 2/3] opp/of: Allow empty opp-table with opp-shared
+Date:   Mon,  2 Nov 2020 12:01:14 +0000
+Message-Id: <20201102120115.29993-3-nicola.mazzucato@arm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201102120115.29993-1-nicola.mazzucato@arm.com>
 References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
@@ -37,89 +37,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the optional property opp-shared is used within an opp table
-to tell that a set of devices share their clock/voltage lines (and the
-opp points).
-It is therefore possible to use an empty opp table to convey only that
-information, useful in situations where the opp points are provided via
-other means (hardware. firmware, etc).
+The opp binding now allows to have an empty opp table and shared-opp to
+merely describe a hw connection among devices (f/v lines).
 
-Update the documentation to remark this additional case and provide an
-example.
+When initialising an opp table, allow such case by:
+- treating some errors as warnings
+- do not mark empty tables as shared
+- don't fail on empty table
 
 Signed-off-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
 ---
- Documentation/devicetree/bindings/opp/opp.txt | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ drivers/opp/of.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
-index 9847dfeeffcb..a5f1f993eab9 100644
---- a/Documentation/devicetree/bindings/opp/opp.txt
-+++ b/Documentation/devicetree/bindings/opp/opp.txt
-@@ -72,6 +72,9 @@ Optional properties:
-   switch their DVFS state together, i.e. they share clock/voltage/current lines.
-   Missing property means devices have independent clock/voltage/current lines,
-   but they share OPP tables.
-+  This optional property can be used without any OPP nodes when its only purpose
-+  is to describe a dependency of clock/voltage/current lines among a set of
-+  devices.
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 874b58756220..b0230490bb31 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -157,6 +157,11 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
+ /*
+  * Populate all devices and opp tables which are part of "required-opps" list.
+  * Checking only the first OPP node should be enough.
++ *
++ * Corner case: empty opp table and opp-shared found. In this case we set
++ * unconditionally the opp table access to exclusive, as the opp-shared property
++ * is used purely to describe hw connections. Such information will be retrieved
++ * via dev_pm_opp_of_get_sharing_cpus().
+  */
+ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 					     struct device *dev,
+@@ -169,7 +174,9 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 	/* Traversing the first OPP node is all we need */
+ 	np = of_get_next_available_child(opp_np, NULL);
+ 	if (!np) {
+-		dev_err(dev, "Empty OPP table\n");
++		dev_warn(dev, "Empty OPP table\n");
++
++		opp_table->shared_opp = OPP_TABLE_ACCESS_EXCLUSIVE;
+ 		return;
+ 	}
  
- - status: Marks the OPP table enabled/disabled.
+@@ -377,7 +384,9 @@ int dev_pm_opp_of_find_icc_paths(struct device *dev,
+ 	struct icc_path **paths;
  
-@@ -568,3 +571,53 @@ Example 6: opp-microvolt-<name>, opp-microamp-<name>:
- 		};
- 	};
- };
-+
-+Example 7: Single cluster Quad-core ARM cortex A53, OPP points from firmware,
-+distinct clock controls but two sets of clock/voltage/current lines.
-+
-+/ {
-+	cpus {
-+		#address-cells = <2>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0 0x100>;
-+			next-level-cache = <&A53_L2>;
-+			clocks = <&dvfs_controller 0>;
-+			operating-points-v2 = <&cpu_opp0_table>;
-+		};
-+		cpu@1 {
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0 0x101>;
-+			next-level-cache = <&A53_L2>;
-+			clocks = <&dvfs_controller 1>;
-+			operating-points-v2 = <&cpu_opp0_table>;
-+		};
-+		cpu@2 {
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0 0x102>;
-+			next-level-cache = <&A53_L2>;
-+			clocks = <&dvfs_controller 2>;
-+			operating-points-v2 = <&cpu_opp1_table>;
-+		};
-+		cpu@3 {
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0 0x103>;
-+			next-level-cache = <&A53_L2>;
-+			clocks = <&dvfs_controller 3>;
-+			operating-points-v2 = <&cpu_opp1_table>;
-+		};
-+
-+	};
-+
-+	cpu_opp0_table: opp0_table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+	};
-+
-+	cpu_opp1_table: opp1_table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+	};
-+};
+ 	ret = _bandwidth_supported(dev, opp_table);
+-	if (ret <= 0)
++	if (ret == -EINVAL)
++		return 0; /* Empty OPP table is a valid corner-case, let's not fail */
++	else if (ret <= 0)
+ 		return ret;
+ 
+ 	ret = 0;
 -- 
 2.27.0
 
