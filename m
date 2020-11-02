@@ -2,62 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D95C72A22E8
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 03:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E832A230D
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 03:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727450AbgKBCMA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Nov 2020 21:12:00 -0500
-Received: from mail-m17613.qiye.163.com ([59.111.176.13]:7021 "EHLO
+        id S1727555AbgKBCba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Nov 2020 21:31:30 -0500
+Received: from mail-m17613.qiye.163.com ([59.111.176.13]:29473 "EHLO
         mail-m17613.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbgKBCMA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Nov 2020 21:12:00 -0500
-Received: from ubuntu.localdomain (unknown [58.213.83.157])
-        by mail-m17613.qiye.163.com (Hmail) with ESMTPA id CE486482B20;
-        Mon,  2 Nov 2020 10:11:57 +0800 (CST)
+        with ESMTP id S1727445AbgKBCba (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Nov 2020 21:31:30 -0500
+Received: from ubuntu.localdomain (unknown [58.213.83.156])
+        by mail-m17613.qiye.163.com (Hmail) with ESMTPA id 762C8482A58;
+        Mon,  2 Nov 2020 10:31:27 +0800 (CST)
 From:   Bernard Zhao <bernard@vivo.com>
 To:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     opensource.kernel@vivo.com, Bernard Zhao <bernard@vivo.com>
-Subject: [PATCH] drivers/thermal: fix potential memleak in error branch
-Date:   Sun,  1 Nov 2020 18:11:48 -0800
-Message-Id: <20201102021149.3047-1-bernard@vivo.com>
+Subject: [PATCH] drivers/thermal: cleanup coding style a bit
+Date:   Sun,  1 Nov 2020 18:31:21 -0800
+Message-Id: <20201102023121.3312-1-bernard@vivo.com>
 X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZSBoYSU8YTR9LGUwYVkpNS09JQ0hKSkNLSEpVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        oVCBIfWUFZSB1ISE8eTUJLQxlNVkpNS09JQ09JQ0xNSU1VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
         FZT0tIVUpKS0hKQ1VLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ky46Kww*Cz8pHSEPLR0UAjID
-        LywwCUlVSlVKTUtPSUNISkpDT0xCVTMWGhIXVRkeCRUaCR87DRINFFUYFBZFWVdZEgtZQVlOQ1VJ
-        SkhVQ0hVSk5MWVdZCAFZQUpNQ0g3Bg++
-X-HM-Tid: 0a7586b9b19593bakuwsce486482b20
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PDo6EAw5Kz8aGSFDLDJINjc0
+        TU1PCTBVSlVKTUtPSUNPSUNDS0JCVTMWGhIXVRkeCRUaCR87DRINFFUYFBZFWVdZEgtZQVlOQ1VJ
+        SkhVQ0hVSk5NWVdZCAFZQUpNQ043Bg++
+X-HM-Tid: 0a7586cb8a5b93bakuws762c8482a58
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Function __thermal_cooling_device_register, when device_register
-failed, cdev is not free after error value return, this may
-bring in potential memleak.
+Function thermal_add_hwmon_sysfs, hwmon will be NULL when
+new_hwmon_device = 0, so there is no need to check, kfree will
+handle NULL point.
 
 Signed-off-by: Bernard Zhao <bernard@vivo.com>
 ---
- drivers/thermal/thermal_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/thermal_hwmon.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 3d1e0033bf3e..e4bee15dfa1f 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1125,6 +1125,7 @@ __thermal_cooling_device_register(struct device_node *np,
- 	if (result) {
- 		ida_simple_remove(&thermal_cdev_ida, cdev->id);
- 		put_device(&cdev->device);
-+		kfree(cdev);
- 		return ERR_PTR(result);
- 	}
+diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+index 8b92e00ff236..ad03262cca56 100644
+--- a/drivers/thermal/thermal_hwmon.c
++++ b/drivers/thermal/thermal_hwmon.c
+@@ -206,8 +206,7 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
+ 	if (new_hwmon_device)
+ 		hwmon_device_unregister(hwmon->device);
+  free_mem:
+-	if (new_hwmon_device)
+-		kfree(hwmon);
++	kfree(hwmon);
  
+ 	return result;
+ }
 -- 
 2.29.0
 
