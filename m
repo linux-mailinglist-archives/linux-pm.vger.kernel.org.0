@@ -2,109 +2,336 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DADD2A34E8
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 21:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D842A3751
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 00:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgKBUIb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Nov 2020 15:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S1726140AbgKBXuv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Nov 2020 18:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727227AbgKBUI2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 15:08:28 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CB8C0617A6;
-        Mon,  2 Nov 2020 12:08:28 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id m16so16408725ljo.6;
-        Mon, 02 Nov 2020 12:08:28 -0800 (PST)
+        with ESMTP id S1725841AbgKBXuv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 18:50:51 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD8C061A47
+        for <linux-pm@vger.kernel.org>; Mon,  2 Nov 2020 15:50:49 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id f9so19789092lfq.2
+        for <linux-pm@vger.kernel.org>; Mon, 02 Nov 2020 15:50:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Hka4cKqpDMPFWpJt8TYHJB5ZlWozslgjk/byOs/Vz6Q=;
-        b=lIKs4+aJlWuxFicaenX76Fiz0DWMW6nUw7wC+zfMn0PaBYMsKo2zYOP8nG8l3RoEH8
-         J5J2Phmj83ZVB4hVVzqWHBDR6giS4zsN51Bs1rqw8UpAPN/6LWvditv7rEFBphh0cyI3
-         mKo69CaTCMaaAQKgTMDDfGtB+bWEnFIWgq2s/oT75QBIuS1E0Gclwy7ErdoFkzucOYNk
-         QY12ShXYL2dpGTnkHkUBEuqC5rxgpDCAGgryRA1CAcXhwq6aEFIQQnglHMwbUTo1wTUD
-         6I88siB1KZ5vbyZdQ61YCChaBKm7wlpl4f/+XM9/SXWFMSUeOu5mX2Q25F09pDLTvCdh
-         zZ/Q==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pRhVAyGxamkXMTZVwBvqaH1guNz2K3S+XuNI42B/nPk=;
+        b=qaI7B3njeyPGT52AKe4jbsXQJKF5Sumuem5E62IJYk2x8Wa0oELLhwKALZHw0byg8P
+         TwmsomD2d2Sv5ilz9vxnqBojV7YvLfmY9NT8CR93nrw7oKDY1SamYFVqA0FaumQHXfcQ
+         rJ5FhOBc3J/s9ayUoT/4d+MbASpv1wyecxWpG23j5TzSeSSMWlR6u6ACuLQyx824dvEl
+         eEZaXDltgwl3LFePSOY/tGQMcFNbrdrlfnOJB4UBo/z2s9C3o+9YvQAUv7hN+velRDUu
+         XHAVIQ8ojQRZ97u9wa8A8KkX04EyMk+ptWoJSnmto7tn2t+PCi1mEp0VDX+xPjbPi9n/
+         WrYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Hka4cKqpDMPFWpJt8TYHJB5ZlWozslgjk/byOs/Vz6Q=;
-        b=GcuFFfnLfYADoCwE5WWknvQWJj4LOPcjkBCUO6F4ZexTmOCJm5bVnp6UdpHS3WvQLm
-         FtobyaQBdr1MFfL4Ew/V3r/4s4E7Xl7DAn5AEGWXzcx0ldMPhCIUxBDJhk7jIZju7cR2
-         si256ogdMxmmhJgGNIb+90TcYeHbwjX1QlWj9CrylfhZ5OaGrwtWylRvxcIyDK/DiGOa
-         efUZjSqAXJFSXcx5Kcof5G7pV3knJAh7kkOonc0aktn1gpwiIlVz7pW/QG93aOBIejyi
-         X2VF2KrJ2RIrDA/ZuYxjbLOQe0ZSjE9zA0MsdYzEXA0yTMTJCsJ3/tdoCfVXKMPDWXNb
-         dffA==
-X-Gm-Message-State: AOAM533Ha+1IFURWOE+b/qc0bo3envDX1ZDh/0Bj5Z+jgZYuCL+N/Crz
-        EYseJKjyx1S7sQsCkx3O6bCXZjcJgFQ=
-X-Google-Smtp-Source: ABdhPJwu9+601VtSHx9RG6K454vM9jL+o3J7hQ/5XYw2V8eE5tjRxvEHJyNtJxSvrhytwkDkKtlzXw==
-X-Received: by 2002:a2e:98c2:: with SMTP id s2mr6789352ljj.339.1604347706478;
-        Mon, 02 Nov 2020 12:08:26 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-177.dynamic.spd-mgts.ru. [109.252.193.177])
-        by smtp.googlemail.com with ESMTPSA id c4sm2657571lfm.294.2020.11.02.12.08.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2020 12:08:25 -0800 (PST)
-Subject: Re: [PATCH v6 49/52] PM / devfreq: tegra20: Convert to EMC_STAT
- driver, support interconnect and device-tree
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     cwchoi00@gmail.com
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <20201025221735.3062-1-digetx@gmail.com>
- <20201025221735.3062-50-digetx@gmail.com>
- <CAGTfZH0KxyZYLZ_AgM7Lr+4s35kaWJp1AenpZ-o_FRLCCHC+6A@mail.gmail.com>
- <0ffa84f6-625e-807c-e9af-7a67f0fe48e7@gmail.com>
-Message-ID: <bff3bf4a-8111-7c96-92f6-46343d85be0d@gmail.com>
-Date:   Mon, 2 Nov 2020 23:08:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        bh=pRhVAyGxamkXMTZVwBvqaH1guNz2K3S+XuNI42B/nPk=;
+        b=rKdrFTy7aWzAeUjpklNQDH5pjN/Xrn++SZ7kUL7BZiqh/vXVHNd5HwNqnmy9sGZrBh
+         +mUIvL298WX5m+aIg9lNVwN6QJHztMWDuNEGAugzz2hOCQfsbYGm4HQC/2GXe8p8bzcZ
+         Miq+oqzZOz9xkhdPix64EqHVrV6ndjgnCtKpe3bIdE27o7rGslNy92icAWfXhg1rX38n
+         RuMD37aUQhTLU5LQoiK24g6wMZ5ZQ0LHZvXiQebmy9D/wBh4kZ0oADVP9ABro9p1MQ26
+         ubbsQfU8njM7+w3bqLcfqu+Z2V4iYG7IWzw0up17uBeqpuzgLCtPv0LtvZ95bkuoppJq
+         nUBQ==
+X-Gm-Message-State: AOAM533tWtxBKii63sOTidOEjA3r5pTSq6Bxyf1iDik4vvIFWwOIvwsv
+        f/zK9eD1Su6dFXsQncHKu7atgQ==
+X-Google-Smtp-Source: ABdhPJzcmnKoAu5O1rHAbuP8IUyrLFn85G4ut17ogJSuDEFLxBer1UEBE1TszBvd909Jsbq2CDMIkw==
+X-Received: by 2002:ac2:5b52:: with SMTP id i18mr7017461lfp.227.1604361047733;
+        Mon, 02 Nov 2020 15:50:47 -0800 (PST)
+Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
+        by smtp.gmail.com with ESMTPSA id v9sm2894410lfb.203.2020.11.02.15.50.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2020 15:50:47 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Sergiy Kibrik <sakib@darkstar.site>
+Subject: [PATCH] power: supply: s3c-adc-battery: Convert to GPIO descriptors
+Date:   Tue,  3 Nov 2020 00:48:44 +0100
+Message-Id: <20201102234844.322939-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <0ffa84f6-625e-807c-e9af-7a67f0fe48e7@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-01.11.2020 17:12, Dmitry Osipenko пишет:
-...
-> We will probably move the Tegra20 EMC_STAT devfreq driver into the
-> memory driver and remove the older IMC_STAT driver in v7, like it was
-> suggested by Thierry Reding. This will be a much less invasive code change.
-> 
->> Also, if you want to get more responsiveness, you could use delayed timer
->> instead of deferrable timer by editing the devfreq_dev_profile structure.
-> 
-> Thanks, I'll try the deferrable timer.
+This converts the S3C ADC battery to use GPIO descriptors
+instead of a global GPIO number for the charging completed
+GPIO. Using the pattern from the GPIO charger we name this
+GPIO line "charge-status" in the board file.
 
-I took a brief look at the delayed timer and I think the deferrable
-timer should be more a preferred option because this devfreq drive is
-more an assistance for the optimal bandwidth selection and it will be
-more preferred to keep system idling whenever possible.
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: Sergiy Kibrik <sakib@darkstar.site>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ arch/arm/mach-s3c/mach-h1940.c         | 12 +++++-
+ arch/arm/mach-s3c/mach-rx1950.c        | 11 ++++-
+ drivers/power/supply/s3c_adc_battery.c | 57 +++++++++++++-------------
+ include/linux/s3c_adc_battery.h        |  3 --
+ 4 files changed, 49 insertions(+), 34 deletions(-)
 
-My primary concern is the initial performance lag in a case of
-multimedia applications. But this will be resolved by hooking up
-performance voting to all drivers, once we will get around to it.
+diff --git a/arch/arm/mach-s3c/mach-h1940.c b/arch/arm/mach-s3c/mach-h1940.c
+index 53d51aa83200..8a43ed1c4c4d 100644
+--- a/arch/arm/mach-s3c/mach-h1940.c
++++ b/arch/arm/mach-s3c/mach-h1940.c
+@@ -297,6 +297,15 @@ static const struct s3c_adc_bat_thresh bat_lut_acin[] = {
+ 	{ .volt = 3841, .cur = 0, .level = 0},
+ };
+ 
++static struct gpiod_lookup_table h1940_bat_gpio_table = {
++	.dev_id = "s3c-adc-battery",
++	.table = {
++		/* Charge status S3C2410_GPF(3) */
++		GPIO_LOOKUP("GPIOF", 3, "charge-status", GPIO_ACTIVE_LOW),
++		{ },
++	},
++};
++
+ static int h1940_bat_init(void)
+ {
+ 	int ret;
+@@ -330,8 +339,6 @@ static struct s3c_adc_bat_pdata h1940_bat_cfg = {
+ 	.exit = h1940_bat_exit,
+ 	.enable_charger = h1940_enable_charger,
+ 	.disable_charger = h1940_disable_charger,
+-	.gpio_charge_finished = S3C2410_GPF(3),
+-	.gpio_inverted = 1,
+ 	.lut_noac = bat_lut_noac,
+ 	.lut_noac_cnt = ARRAY_SIZE(bat_lut_noac),
+ 	.lut_acin = bat_lut_acin,
+@@ -720,6 +727,7 @@ static void __init h1940_init(void)
+ 	s3c24xx_fb_set_platdata(&h1940_fb_info);
+ 	gpiod_add_lookup_table(&h1940_mmc_gpio_table);
+ 	gpiod_add_lookup_table(&h1940_audio_gpio_table);
++	gpiod_add_lookup_table(&h1940_bat_gpio_table);
+ 	/* Configure the I2S pins (GPE0...GPE4) in correct mode */
+ 	s3c_gpio_cfgall_range(S3C2410_GPE(0), 5, S3C_GPIO_SFN(2),
+ 			      S3C_GPIO_PULL_NONE);
+diff --git a/arch/arm/mach-s3c/mach-rx1950.c b/arch/arm/mach-s3c/mach-rx1950.c
+index b9758f0a9a14..6e19add158a9 100644
+--- a/arch/arm/mach-s3c/mach-rx1950.c
++++ b/arch/arm/mach-s3c/mach-rx1950.c
+@@ -206,6 +206,15 @@ static const struct s3c_adc_bat_thresh bat_lut_acin[] = {
+ 	{ .volt = 3820, .cur = 0, .level = 0},
+ };
+ 
++static struct gpiod_lookup_table rx1950_bat_gpio_table = {
++	.dev_id = "s3c-adc-battery",
++	.table = {
++		/* Charge status S3C2410_GPF(3) */
++		GPIO_LOOKUP("GPIOF", 3, "charge-status", GPIO_ACTIVE_HIGH),
++		{ },
++	},
++};
++
+ static int rx1950_bat_init(void)
+ {
+ 	int ret;
+@@ -331,7 +340,6 @@ static struct s3c_adc_bat_pdata rx1950_bat_cfg = {
+ 	.exit = rx1950_bat_exit,
+ 	.enable_charger = rx1950_enable_charger,
+ 	.disable_charger = rx1950_disable_charger,
+-	.gpio_charge_finished = S3C2410_GPF(3),
+ 	.lut_noac = bat_lut_noac,
+ 	.lut_noac_cnt = ARRAY_SIZE(bat_lut_noac),
+ 	.lut_acin = bat_lut_acin,
+@@ -840,6 +848,7 @@ static void __init rx1950_init_machine(void)
+ 
+ 	pwm_add_table(rx1950_pwm_lookup, ARRAY_SIZE(rx1950_pwm_lookup));
+ 	gpiod_add_lookup_table(&rx1950_audio_gpio_table);
++	gpiod_add_lookup_table(&rx1950_bat_gpio_table);
+ 	/* Configure the I2S pins (GPE0...GPE4) in correct mode */
+ 	s3c_gpio_cfgall_range(S3C2410_GPE(0), 5, S3C_GPIO_SFN(2),
+ 			      S3C_GPIO_PULL_NONE);
+diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/supply/s3c_adc_battery.c
+index 60b7f41ab063..a2addc24ee8b 100644
+--- a/drivers/power/supply/s3c_adc_battery.c
++++ b/drivers/power/supply/s3c_adc_battery.c
+@@ -13,7 +13,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/leds.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/err.h>
+ #include <linux/timer.h>
+ #include <linux/jiffies.h>
+@@ -31,6 +31,7 @@ struct s3c_adc_bat {
+ 	struct power_supply		*psy;
+ 	struct s3c_adc_client		*client;
+ 	struct s3c_adc_bat_pdata	*pdata;
++	struct gpio_desc		*charge_finished;
+ 	int				volt_value;
+ 	int				cur_value;
+ 	unsigned int			timestamp;
+@@ -132,9 +133,7 @@ static int calc_full_volt(int volt_val, int cur_val, int impedance)
+ 
+ static int charge_finished(struct s3c_adc_bat *bat)
+ {
+-	return bat->pdata->gpio_inverted ?
+-		!gpio_get_value(bat->pdata->gpio_charge_finished) :
+-		gpio_get_value(bat->pdata->gpio_charge_finished);
++	return gpiod_get_value(bat->charge_finished);
+ }
+ 
+ static int s3c_adc_bat_get_property(struct power_supply *psy,
+@@ -169,7 +168,7 @@ static int s3c_adc_bat_get_property(struct power_supply *psy,
+ 	}
+ 
+ 	if (bat->cable_plugged &&
+-		((bat->pdata->gpio_charge_finished < 0) ||
++		(!bat->charge_finished ||
+ 		!charge_finished(bat))) {
+ 		lut = bat->pdata->lut_acin;
+ 		lut_size = bat->pdata->lut_acin_cnt;
+@@ -206,7 +205,7 @@ static int s3c_adc_bat_get_property(struct power_supply *psy,
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+-		if (bat->pdata->gpio_charge_finished < 0)
++		if (!bat->charge_finished)
+ 			val->intval = bat->level == 100000 ?
+ 				POWER_SUPPLY_STATUS_FULL : bat->status;
+ 		else
+@@ -265,7 +264,7 @@ static void s3c_adc_bat_work(struct work_struct *work)
+ 			bat->status = POWER_SUPPLY_STATUS_DISCHARGING;
+ 		}
+ 	} else {
+-		if ((bat->pdata->gpio_charge_finished >= 0) && is_plugged) {
++		if (bat->charge_finished && is_plugged) {
+ 			is_charged = charge_finished(&main_bat);
+ 			if (is_charged) {
+ 				if (bat->pdata->disable_charger)
+@@ -294,6 +293,7 @@ static int s3c_adc_bat_probe(struct platform_device *pdev)
+ 	struct s3c_adc_client	*client;
+ 	struct s3c_adc_bat_pdata *pdata = pdev->dev.platform_data;
+ 	struct power_supply_config psy_cfg = {};
++	struct gpio_desc *gpiod;
+ 	int ret;
+ 
+ 	client = s3c_adc_register(pdev, NULL, NULL, 0);
+@@ -304,8 +304,17 @@ static int s3c_adc_bat_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, client);
+ 
++	gpiod = devm_gpiod_get_optional(&pdev->dev, "charge-status", GPIOD_IN);
++	if (IS_ERR(gpiod)) {
++		/* Could be probe deferral etc */
++		ret = PTR_ERR(gpiod);
++		dev_err(&pdev->dev, "no GPIO %d\n", ret);
++		return ret;
++	}
++
+ 	main_bat.client = client;
+ 	main_bat.pdata = pdata;
++	main_bat.charge_finished = gpiod;
+ 	main_bat.volt_value = -1;
+ 	main_bat.cur_value = -1;
+ 	main_bat.cable_plugged = 0;
+@@ -323,6 +332,7 @@ static int s3c_adc_bat_probe(struct platform_device *pdev)
+ 
+ 		backup_bat.client = client;
+ 		backup_bat.pdata = pdev->dev.platform_data;
++		backup_bat.charge_finished = gpiod;
+ 		backup_bat.volt_value = -1;
+ 		backup_bat.psy = power_supply_register(&pdev->dev,
+ 						       &backup_bat_desc,
+@@ -335,12 +345,8 @@ static int s3c_adc_bat_probe(struct platform_device *pdev)
+ 
+ 	INIT_DELAYED_WORK(&bat_work, s3c_adc_bat_work);
+ 
+-	if (pdata->gpio_charge_finished >= 0) {
+-		ret = gpio_request(pdata->gpio_charge_finished, "charged");
+-		if (ret)
+-			goto err_gpio;
+-
+-		ret = request_irq(gpio_to_irq(pdata->gpio_charge_finished),
++	if (gpiod) {
++		ret = request_irq(gpiod_to_irq(gpiod),
+ 				s3c_adc_bat_charged,
+ 				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+ 				"battery charged", NULL);
+@@ -364,12 +370,9 @@ static int s3c_adc_bat_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_platform:
+-	if (pdata->gpio_charge_finished >= 0)
+-		free_irq(gpio_to_irq(pdata->gpio_charge_finished), NULL);
++	if (gpiod)
++		free_irq(gpiod_to_irq(gpiod), NULL);
+ err_irq:
+-	if (pdata->gpio_charge_finished >= 0)
+-		gpio_free(pdata->gpio_charge_finished);
+-err_gpio:
+ 	if (pdata->backup_volt_mult)
+ 		power_supply_unregister(backup_bat.psy);
+ err_reg_backup:
+@@ -389,10 +392,8 @@ static int s3c_adc_bat_remove(struct platform_device *pdev)
+ 
+ 	s3c_adc_release(client);
+ 
+-	if (pdata->gpio_charge_finished >= 0) {
+-		free_irq(gpio_to_irq(pdata->gpio_charge_finished), NULL);
+-		gpio_free(pdata->gpio_charge_finished);
+-	}
++	if (main_bat.charge_finished)
++		free_irq(gpiod_to_irq(main_bat.charge_finished), NULL);
+ 
+ 	cancel_delayed_work(&bat_work);
+ 
+@@ -408,12 +409,12 @@ static int s3c_adc_bat_suspend(struct platform_device *pdev,
+ {
+ 	struct s3c_adc_bat_pdata *pdata = pdev->dev.platform_data;
+ 
+-	if (pdata->gpio_charge_finished >= 0) {
++	if (main_bat.charge_finished) {
+ 		if (device_may_wakeup(&pdev->dev))
+ 			enable_irq_wake(
+-				gpio_to_irq(pdata->gpio_charge_finished));
++				gpiod_to_irq(main_bat.charge_finished));
+ 		else {
+-			disable_irq(gpio_to_irq(pdata->gpio_charge_finished));
++			disable_irq(gpiod_to_irq(main_bat.charge_finished));
+ 			main_bat.pdata->disable_charger();
+ 		}
+ 	}
+@@ -425,12 +426,12 @@ static int s3c_adc_bat_resume(struct platform_device *pdev)
+ {
+ 	struct s3c_adc_bat_pdata *pdata = pdev->dev.platform_data;
+ 
+-	if (pdata->gpio_charge_finished >= 0) {
++	if (main_bat.charge_finished) {
+ 		if (device_may_wakeup(&pdev->dev))
+ 			disable_irq_wake(
+-				gpio_to_irq(pdata->gpio_charge_finished));
++				gpiod_to_irq(main_bat.charge_finished));
+ 		else
+-			enable_irq(gpio_to_irq(pdata->gpio_charge_finished));
++			enable_irq(gpiod_to_irq(main_bat.charge_finished));
+ 	}
+ 
+ 	/* Schedule timer to check current status */
+diff --git a/include/linux/s3c_adc_battery.h b/include/linux/s3c_adc_battery.h
+index 833871dcf6fd..57f982c375f8 100644
+--- a/include/linux/s3c_adc_battery.h
++++ b/include/linux/s3c_adc_battery.h
+@@ -14,9 +14,6 @@ struct s3c_adc_bat_pdata {
+ 	void (*enable_charger)(void);
+ 	void (*disable_charger)(void);
+ 
+-	int gpio_charge_finished;
+-	int gpio_inverted;
+-
+ 	const struct s3c_adc_bat_thresh *lut_noac;
+ 	unsigned int lut_noac_cnt;
+ 	const struct s3c_adc_bat_thresh *lut_acin;
+-- 
+2.26.2
+
