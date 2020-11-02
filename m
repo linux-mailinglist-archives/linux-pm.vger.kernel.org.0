@@ -2,96 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8418F2A3170
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 18:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB4E2A3200
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 18:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727820AbgKBRYS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Nov 2020 12:24:18 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:44654 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727786AbgKBRYR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 12:24:17 -0500
-Received: by mail-ot1-f66.google.com with SMTP id m26so13292126otk.11;
-        Mon, 02 Nov 2020 09:24:16 -0800 (PST)
+        id S1725848AbgKBRt5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Nov 2020 12:49:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725824AbgKBRt5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 12:49:57 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33676C061A48
+        for <linux-pm@vger.kernel.org>; Mon,  2 Nov 2020 09:49:57 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id x16so16030180ljh.2
+        for <linux-pm@vger.kernel.org>; Mon, 02 Nov 2020 09:49:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NRD84/ne18IE0hT03lsb66bab982FuGq6Gl9WYSoal4=;
+        b=i8ZvvguMhFQvhTx+6nzimaIKFEqvNVCw1Nypy+BwhgzcVrTYE7PrPHin21H4e3+HfG
+         rG6aH5YK/0NALsHsoXxEo2hQcDr5Cx7A7FIK1K+Ljb3KZIxguUkLxwXkR2IF9Cu2rI3Q
+         Fo61NldwOGa7jCcdhSE86JYfKX1poQr70klRiwjr6R7avR81MUQW8LNMMqopEvMT619f
+         32S4su0Qx6eV4hXMUc5+DplSOjsuoLH7RXzgIrkAYSf4m0BrLzG8RKjqXklnjxOfeGi+
+         NkFKDPL+8EFZZBS4JKN2M7uswLc37dPfXXvvOqhGMGQWXu4YFrR+eKz8tLn9sOgKJRwJ
+         URbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q/YrpkethS2j8QO8IRcDofvaDwCjqPfhR/1+7qq4d7g=;
-        b=VJbU5PspvFOJCZMEvv9/Wpj4EOSekJjPuVkIurBnnRH03tn3SXiSUgk1eS2ifnvD3E
-         NMeBWRxkMZh9ONrZgk2QRk26OfsPO8SXczsUv7/+ays+BLF6OkXoKFg1cx9ZN9Ib2rdT
-         HvoVkuMw9cQwRrMnKEOrjCo4B9KxSzG+bOBQ5vwNV080xmrFiUlbprUB1JcHeGF7H1Om
-         /i9bwdl4u+eJ7Df+nW2hDIkqwquzZyoWPvDEXHxbpleK96x9fTTgevBoEqUHyvNGkqiA
-         k07SJIEUZ2ip3qu9qgArXGyzSws9tSTCmkfGS9cRT2VLokgbBA3WMOyyc2ktWfOqJdk0
-         Sb3Q==
-X-Gm-Message-State: AOAM533csCNvq/DsOyfL+PgKk3DobzRdQsrLTpSUJm0iqvR70v9VdOVP
-        pvcqcP8iiW9kKrLJTJGVlwX3CwESrg==
-X-Google-Smtp-Source: ABdhPJwjW84PZr6f6lPf4Z5p1grRTiYxv8VWUSIiLv5E/2IYXyIn7VH4L1wDxKMe6J/5TbpaLMqwAQ==
-X-Received: by 2002:a9d:21c5:: with SMTP id s63mr13031908otb.171.1604337856583;
-        Mon, 02 Nov 2020 09:24:16 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id d26sm3746977otp.3.2020.11.02.09.24.15
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NRD84/ne18IE0hT03lsb66bab982FuGq6Gl9WYSoal4=;
+        b=OqpAp9hJGUPIR95S5KqGuKElzmCv31fCHpV8hwPQJd5jT4nWLnBNT0aA+nIBmsn4Do
+         36TsEtB0+eDjhvKcrYxX9/N4vRsTog5bh6lU1UVk/brKFjwvKpFNS6h8F8ijqp5BVjEr
+         eP3ew98LATKERPkpcpnHp78amp3YgwyQ1vtpD89wUO0fVDN0MEZcaoL/ZIwTL9xqJ1mT
+         7klW8YUC/F/TNsV/CJj0SPI/wbcE3Qb90k7kUwXhB5w1XU+d0m+XxUNpwQqQvk2mcU+b
+         wpx3vM/C5hwYdxgng+4gAvzXqY2iOesBdCJrcHbU7JhAvMQJQe7/UD6xgP//D+NMkjlO
+         LFEA==
+X-Gm-Message-State: AOAM53056bqZppzbXXgbSrCSC7hS4wplYioC6/oBP3btKcb0Bd+rxAy/
+        iTtiRshT0pxkUueWbRVMpxYWlw==
+X-Google-Smtp-Source: ABdhPJwFjPERtQiqcdGssb9PmEtpPtYbHIN8+7XRTiGv9PU6t9Nn0DYnkiil6KeNbv65GhAHLcPGVA==
+X-Received: by 2002:a2e:7016:: with SMTP id l22mr6716623ljc.466.1604339395537;
+        Mon, 02 Nov 2020 09:49:55 -0800 (PST)
+Received: from eriador.lan ([94.25.229.254])
+        by smtp.gmail.com with ESMTPSA id r7sm2516163lfc.206.2020.11.02.09.49.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 09:24:15 -0800 (PST)
-Received: (nullmailer pid 4076630 invoked by uid 1000);
-        Mon, 02 Nov 2020 17:24:15 -0000
-Date:   Mon, 2 Nov 2020 11:24:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: power/supply: Add ltc4162-l-charger
-Message-ID: <20201102172415.GA4074876@bogus>
-References: <20201102092039.16520-1-mike.looijmans@topic.nl>
+        Mon, 02 Nov 2020 09:49:54 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jishnu Prakash <jprakash@qti.qualcomm.com>
+Subject: [PATCH v9 00/15] qcom: pm8150: add support for thermal monitoring
+Date:   Mon,  2 Nov 2020 20:49:35 +0300
+Message-Id: <20201102174950.1148498-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201102092039.16520-1-mike.looijmans@topic.nl>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 02 Nov 2020 10:20:39 +0100, Mike Looijmans wrote:
-> Add support for the LTC4162-L Li-Ion battery charger. The driver allows
-> reading back telemetry and to set some charging options like the input
-> current limit.
-> 
-> This adds the devicetree bindings.
-> 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-> ---
-> v2: Use microohms, add lltc,cell-count
-> v3: Fix example dts to match description
-> resent, previous patch mail bounced
-> 
->  .../bindings/power/supply/ltc4162-l.yaml      | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> 
+This patch serie adds support for thermal monitoring block on Qualcomm's
+PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
+to support thermal zones provided by this thermal monitoring block.
+Unlike the rest of PMIC thermal senses, these thermal zones describe
+particular thermistors, which differ between from board to board.
 
+Changes since v8:
+ - Simplified qcom_vadc_map_voltage_temp() code by removing ascending
+   tables support
+ - Simplified qcom-vadc-common volt/temp mapping code
+ - Implement suggestions by Matthias Kaehlcke: message formatting,
+   rewrite comments, remove unused variable initialization.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Changes since v7:
+ - Move qcom-vadc-common.h header to include/linux/iio/adc/ dir.
+ - Use explicit sizeof(var) instead of hand-coding 1 when accessing
+   adc-tm registers.
+ - Remove buffer read from adc_tm5_init().
+ - Remove extra on-stack var from adc_tm5_get_temp().
+ - Minor formatting changes as suggested Daniel.
 
-yamllint warnings/errors:
+Changes since v6:
+ - Added include <linux/bitfield.h> as noted by Jishnu Prakash.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/ltc4162-l.example.dt.yaml: battery-charger@68: 'lltc,rsnsb' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/ltc4162-l.example.dt.yaml: battery-charger@68: 'lltc,rsnsi' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+Changes since v5:
+ - Reworked DT bindings:
+   * Removed qcom,adc-channel, instead it is parsed from io-channels
+   * Renamed qcom,hw-settle-time to include -us suffix
+ - Re-added monitor enabling which got lost during refactored. Noted by
+   Jishnu Prakash.
+ - Use threaded IRQ handler as susggested by Jishnu.
 
+Changes since v4:
+ - Added kernel-doc comments to ADC-TM structures
+ - Used several sizeof(buf) instead of hand-conding register size
 
-See https://patchwork.ozlabs.org/patch/1392005
+Changes since v3:
+ - Fix DT description to spell "thermal monitoring" instead of just TM
+ - Fix warnings in DT example
+ - Add EXPORT_SYMBOL_GPL(of_iio_channel_get_by_name)
+ - Fixed whitespace chanes in qcom-vadc-common.c
+ - Removed error message if IIO chanel get returns -EPROBE_DEFER
 
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
+Changes since v2:
+ - IIO: export of_iio_channel_get_by_name() function
+ - dt-bindings: move individual io-channels to each thermal monitoring
+   channel rather than listing them all in device node
+ - added fallback defaults to of_device_get_match_data calls in
+   qcom-spmi-adc5 and qcom-spmi-adc-tm5 drivers
+ - minor typo fixes
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Changes since v1:
+ - Introduce fixp_linear_interpolate() by Craig Tatlor
+ - Lots of syntax/whitespace changes
+ - Cleaned up register definitions per Jonathan's suggestion
+ - Implemented most of the suggestions from Bjorn's and Jonathan's
+   review
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
 
