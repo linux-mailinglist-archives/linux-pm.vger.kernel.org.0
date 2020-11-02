@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BEF2A30B9
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 18:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B964A2A30C4
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 18:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727144AbgKBRBZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Nov 2020 12:01:25 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:42654 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726613AbgKBRBZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 12:01:25 -0500
-Received: by mail-oi1-f193.google.com with SMTP id w145so9681877oie.9;
-        Mon, 02 Nov 2020 09:01:24 -0800 (PST)
+        id S1727229AbgKBRD1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Nov 2020 12:03:27 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:37968 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727144AbgKBRD0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 12:03:26 -0500
+Received: by mail-ot1-f67.google.com with SMTP id b2so13238870ots.5;
+        Mon, 02 Nov 2020 09:03:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nNtvSGgBt1giOW8HJR7XmcvKgmZDcMXf9oOzUI8ztVc=;
-        b=EpvFBM0wBdJulMScFRwMj6PCMb6K32EtnXO7EODoxbHnaVZ5f9+oMIJCcyma/jyfbO
-         ycnSLRxrm3HL/96sw1WiKCZZD7+s2oLu9t8CVOY71gtnVtSBSXPkkZF+dODBae0lQXAt
-         xxT+Jn9xjlX7VwaSwxhNJGOS+d6AIEDL61u4GJd8nmcymSFFKkuf2aZlRml+acFdmzzb
-         lfZ6GRdLHtix6UjscfhDJOYvGx8x9TGFDJz/CMQ5ITPN25hGIBkqH+b59cbKY3U2SKN0
-         GFjFDihsfrelgGc7P+CvOe+nd8cyuD1uAWclK0GFXcn/zwpzM997GJmW/mMGhyTxncoc
-         eoYg==
-X-Gm-Message-State: AOAM530cUVw2qzkVjjv95sUaA6rtCug3RDt5Og6CdlaCiP8ON0gR3qy3
-        6zmjO03bh0AcQ426nzJkD/LcTGtup1mnJLPyh9Q=
-X-Google-Smtp-Source: ABdhPJyqrOmkuzKv1JL2iXlctFyhVbD00NcAIFQ+jUAbwIcFDj1EJbEnTgx7mvaTB16Zo78zZaKDW1rEzREIK/2CeMY=
-X-Received: by 2002:a54:478f:: with SMTP id o15mr2564481oic.71.1604336484467;
- Mon, 02 Nov 2020 09:01:24 -0800 (PST)
+        bh=gxBlEaVfdyoDCLmLXJGwLjL48itHuyNtFBGRaznxNrY=;
+        b=kUJnWY+63meqXcJAaJN+cJXIwib40qOw0v1uEUt+3jQe5Rexa/9fRPXHd1pUlgkPsD
+         mp5VPnlzd0JIDs8jiqgG13ngrxurjObdB56+MEopH/lerT90RrEpd1pGTcho566tiTks
+         XSwDK+FRPwFnAvJnb1mZxP4xn3O5ShQLPLEvOPaznh5DHuaKqJt8sXjyzpt5yXe8fzS9
+         rw/4v3WnQ6pqLSAvZXH3d2un9OWGWOGjAwoYxE6jEEdymeUZctyKtS8qnIoCuOYESNJf
+         yhfAT9hfRbqtsoCw2Akx5PSx4gHRNi5lMIVpV2vhZl5nOLCLXy4jdvdJCF8fl9U4PfvC
+         lqyw==
+X-Gm-Message-State: AOAM532SMnt7QUoGnSFQtjxohHEHZgM1Zp11PaDYRZmnSBsPsEh1/xZD
+        pZ5ZW+qFaUcuDDtHCvyXD7JNbybAkVT71BEh4BM=
+X-Google-Smtp-Source: ABdhPJw3ExOcLDLQFHftTad29tbUtNQs4yRHMzOmn6nOJtsUJM9e0YNVeSV2V7+ob9CCIZeKFPd9BgCvfZ/uRPaSz/8=
+X-Received: by 2002:a9d:311:: with SMTP id 17mr994965otv.260.1604336604825;
+ Mon, 02 Nov 2020 09:03:24 -0800 (PST)
 MIME-Version: 1.0
-References: <1604137168-29502-1-git-send-email-Julia.Lawall@inria.fr>
-In-Reply-To: <1604137168-29502-1-git-send-email-Julia.Lawall@inria.fr>
+References: <1604137179-29537-1-git-send-email-Julia.Lawall@inria.fr>
+In-Reply-To: <1604137179-29537-1-git-send-email-Julia.Lawall@inria.fr>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 2 Nov 2020 18:01:13 +0100
-Message-ID: <CAJZ5v0gRAjO=mL5mLs10DPZ8WapnS08yM6W6hRq63FXpg4dn8Q@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: PM: correct typo
+Date:   Mon, 2 Nov 2020 18:03:13 +0100
+Message-ID: <CAJZ5v0hvrF+X-PUsyEuFYUnsDHEop9DteDje-bemS5yWyLoFOQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: PM: correct path name
 To:     Julia Lawall <Julia.Lawall@inria.fr>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -50,7 +50,7 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Sat, Oct 31, 2020 at 11:23 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
 >
-> cerainly -> certainly
+> cpu/ is needed before cpu<N>/
 >
 > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 >
@@ -59,16 +59,17 @@ On Sat, Oct 31, 2020 at 11:23 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
-> index 37940a0584ec..a26a94bc0071 100644
+> index 37940a0584ec..26a9d648b88c 100644
 > --- a/Documentation/admin-guide/pm/cpuidle.rst
 > +++ b/Documentation/admin-guide/pm/cpuidle.rst
-> @@ -494,7 +494,7 @@ object corresponding to it, as follows:
->         residency.
+> @@ -478,7 +478,7 @@ order to ask the hardware to enter that state.  Also, for each
+>  statistics of the given idle state.  That information is exposed by the kernel
+>  via ``sysfs``.
 >
->  ``below``
-> -       Total number of times this idle state had been asked for, but cerainly
-> +       Total number of times this idle state had been asked for, but certainly
->         a deeper idle state would have been a better match for the observed idle
->         duration.
+> -For each CPU in the system, there is a :file:`/sys/devices/system/cpu<N>/cpuidle/`
+> +For each CPU in the system, there is a :file:`/sys/devices/system/cpu/cpu<N>/cpuidle/`
+>  directory in ``sysfs``, where the number ``<N>`` is assigned to the given
+>  CPU at the initialization time.  That directory contains a set of subdirectories
+>  called :file:`state0`, :file:`state1` and so on, up to the number of idle state
 
-Applied as 5.10-rc material, thanks!
+Applied as 5,10-rc material, thanks!
