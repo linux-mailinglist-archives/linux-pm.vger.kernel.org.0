@@ -2,88 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E322A2C29
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 14:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF8C2A2CD7
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 15:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbgKBNzH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Nov 2020 08:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725791AbgKBNyz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 08:54:55 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25053C0617A6
-        for <linux-pm@vger.kernel.org>; Mon,  2 Nov 2020 05:54:55 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id e2so9586018wme.1
-        for <linux-pm@vger.kernel.org>; Mon, 02 Nov 2020 05:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HSJ3s4kk78CsixfcMhylaTOQInqHbcM0PNqhAJpk4PE=;
-        b=vGSl9SXiVHPlEeKwXPuJ+kqLGdcCNTo32UXEgPV6SG/4765tTSjI2XccTyhH463SR9
-         X8WdheAFoGwThNeBZ/iHvH5rD8CKfQZbkTllsKe5hmGcTsSKZ1yqK57hdfh97SRSfc2S
-         xTxOI7YThT0jVW3jA6wkBMGHVOI8vDSDeb0hajPli/tuYw6YzIJPiJfaqpCoyeWdYneJ
-         /UFXt5emdxCPw06+vrb2w+8vcWCDBRx6K1PV2u6VXX+8PSHF99vME9IXJFAWQTlvzr6a
-         /SA1CC+mqWKfImAXziaKUIgIBbhQu0ACrv27R8d/dPBohYxxHFWfmOSIJFs5toRcfga9
-         KXbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HSJ3s4kk78CsixfcMhylaTOQInqHbcM0PNqhAJpk4PE=;
-        b=lR2b5rZOiTdwR7gwK9vSh/TbJgpr5J68zCMaDVonjq2tae3aoZVtlpWXqa1U/3iOzN
-         zIMCSrvBTYZ6pCMTjeNSZAZLPq4osXEP/yfbI3nNK2kmA8Jq33/0AymiJfjycavuc2It
-         RfEPOVh+MEcc5EFWQEQ4h60lv0/guT14LDriQGUXXUfIJ+XYCNAwAi2Q+crmt1BjOPBq
-         wqEPq5ddD9/IdSPWSPSyRShCanZGfFTrMVprfyDXNmUTRHo4JrpQLyxIxIxtqJxPp+Mp
-         Gl+4tF3XESZFVwgC6HPHIcHDVRtAm3YGHVnTg4rDRboTWznaRXGf2YGyTnp3nik18URk
-         zutw==
-X-Gm-Message-State: AOAM533npKGQEVFjmE9H1Y0RqpE2F6T/v46aBuvQQFqvsofGW848nwc8
-        GybytDesI8pGAtu53OfB11od2A==
-X-Google-Smtp-Source: ABdhPJx8/+oUahdkx2/ilxjGC/UEmOEiYmXb73w90eteOw4p5SnvEC4gSXTCGgVhR0HS7Cxwj0r2WA==
-X-Received: by 2002:a1c:6a0d:: with SMTP id f13mr3686427wmc.172.1604325293729;
-        Mon, 02 Nov 2020 05:54:53 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:210:f693:9fff:fef4:a7ef])
-        by smtp.gmail.com with ESMTPSA id r18sm24511552wrj.50.2020.11.02.05.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 05:54:53 -0800 (PST)
-Date:   Mon, 2 Nov 2020 13:54:49 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, daniel.lezcano@linaro.org,
-        robh+dt@kernel.org, amitk@kernel.org, corbet@lwn.net,
-        Dietmar.Eggemann@arm.com, morten.rasmussen@arm.com,
-        dianders@chromium.org, mka@chromium.org, rnayak@codeaurora.org,
-        rafael@kernel.org, sudeep.holla@arm.com, viresh.kumar@linaro.org,
-        sboyd@kernel.org, nm@ti.com
-Subject: Re: [PATCH v3 0/4] Clarify abstract scale usage for power values in
- Energy Model, EAS and IPA
-Message-ID: <20201102135449.GE2221764@google.com>
-References: <20201019140601.3047-1-lukasz.luba@arm.com>
- <d3c64655-dc31-73dc-8483-bf5805a9d389@arm.com>
+        id S1725914AbgKBO0A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Nov 2020 09:26:00 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:7402 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbgKBOWy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 09:22:54 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CPw9W581Lz72J1;
+        Mon,  2 Nov 2020 22:22:39 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Mon, 2 Nov 2020
+ 22:22:37 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>
+Subject: [PATCH] power: supply: bq24190_charger: fix reference leak
+Date:   Mon, 2 Nov 2020 22:33:21 +0800
+Message-ID: <20201102143321.143443-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.26.0.106.g9fadedd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3c64655-dc31-73dc-8483-bf5805a9d389@arm.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday 02 Nov 2020 at 08:54:38 (+0000), Lukasz Luba wrote:
-> Gentle ping to Quentin and Daniel for sharing opinion on this patch set.
-> If you are OK, then I could use this as a base for next work.
+pm_runtime_get_sync will increment pm usage counter even it
+failed. Forgetting to call pm_runtime_put_noidle will result
+in reference leak in callers(bq24190_sysfs_show,
+bq24190_charger_get_property, bq24190_charger_set_property,
+bq24190_battery_get_property, bq24190_battery_set_property),
+so we should fix it.
 
-One or two small nits, but overall this LGTM. Thanks Lukasz.
+Fixes: f385e6e2a1532 ("power: bq24190_charger: Use PM runtime autosuspend")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+---
+ drivers/power/supply/bq24190_charger.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-> As you probably know I am working also on 'sustainable power' estimation
-> which could be used when there is no DT value but it comes from FW.
-> That would meet requirement from Doug, when the DT cannot be used,
-> but we have sustainable levels from FW [1].
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index d14186525e1e..845af0f44c02 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -448,8 +448,10 @@ static ssize_t bq24190_sysfs_show(struct device *dev,
+ 		return -EINVAL;
+ 
+ 	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(bdi->dev);
+ 		return ret;
++	}
+ 
+ 	ret = bq24190_read_mask(bdi, info->reg, info->mask, info->shift, &v);
+ 	if (ret)
+@@ -1077,8 +1079,10 @@ static int bq24190_charger_get_property(struct power_supply *psy,
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+ 	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(bdi->dev);
+ 		return ret;
++	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+@@ -1149,8 +1153,10 @@ static int bq24190_charger_set_property(struct power_supply *psy,
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+ 	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(bdi->dev);
+ 		return ret;
++	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_ONLINE:
+@@ -1410,8 +1416,10 @@ static int bq24190_battery_get_property(struct power_supply *psy,
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+ 	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(bdi->dev);
+ 		return ret;
++	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+@@ -1456,8 +1464,10 @@ static int bq24190_battery_set_property(struct power_supply *psy,
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+ 	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(bdi->dev);
+ 		return ret;
++	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_ONLINE:
+-- 
+2.17.1
 
-Cool, and also, I'd be happy to hear from Doug if passing the sustained
-power via sysfs is good enough for his use-case in the meantime?
-
-Thanks,
-Quentin
