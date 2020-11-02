@@ -2,166 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2E62A23CE
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 05:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBFA2A23D2
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Nov 2020 05:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727767AbgKBEnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Nov 2020 23:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S1727690AbgKBEqk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Nov 2020 23:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727727AbgKBEnQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Nov 2020 23:43:16 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3445CC061A04
-        for <linux-pm@vger.kernel.org>; Sun,  1 Nov 2020 20:43:16 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id n16so9694064pgv.13
-        for <linux-pm@vger.kernel.org>; Sun, 01 Nov 2020 20:43:16 -0800 (PST)
+        with ESMTP id S1727620AbgKBEqk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Nov 2020 23:46:40 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4422FC0617A6
+        for <linux-pm@vger.kernel.org>; Sun,  1 Nov 2020 20:46:40 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id o129so10020066pfb.1
+        for <linux-pm@vger.kernel.org>; Sun, 01 Nov 2020 20:46:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=srks28iO1gRpgZNbb5QK/SCn40SAhZrPX4c/7fjgLFw=;
-        b=ub+qiSgSbfLn/SnED3PuPrLhmyL3iqBvzfQlSF6LEuubARqPGjU1EmwDT+CDViGRn3
-         vYweN7kq/UsFjLrUSYgoylXCBBbmu3Dsq1+JRYCYuvclcvBjaoWto+WJmOoyCotvGsGD
-         Nua1Jbwl2lg4SycCfIUVR81iMH27j2fz6AINkdxhrZOUJpGyWnbSl2Q4sM2LPFeTeVqa
-         opZzMqO6BHppw16XNgtJ6fOOBCb0Cj4hUU94aWB/IvLoXRdpgwe6Xk2lsYTODdeCpWbp
-         tq8jblB9dPPcKkE8k4x85piEWR3z7+uJMueoYzFqSj6JyOjiSXMdtLIQSyHRv5OXJvSZ
-         t0Qg==
+        bh=AQ3iOk8BoCoi2iqvb/hLP0oQvCh6DVO14yrJFe2O1m8=;
+        b=eJFCRZDh+rqxFEmeiJqlTNffj8ChdNtV8mn2K3wgSiJ8wB1OgUKZMeMn4+jaFHRJ7C
+         phGn87B91MscIk3ErGbRRKHJsOZJi7JUSJ+nyIvGIUjjMVCPnbxMEuv3UHYKdlAsX15Y
+         1iibyJr7WiD4mqp0/rEaFZ3G+Xyk/qipW6qRGlZtkWVDY/iOqpQ6wDaPGND5POthHPrM
+         Lt8Q/TTyfdQIAJccOk0BYdVF0KN31Ox9c7O/+Rw+clocGf+ZgrH450x0ySoUV2CaETa8
+         217wsGhoZQoDGYkwVyGSEZjRA34FhN8jYv4QjSJgUQmN+XF65DVt7v+ryKYBhx8e+KaJ
+         P/VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=srks28iO1gRpgZNbb5QK/SCn40SAhZrPX4c/7fjgLFw=;
-        b=lJvOA+F4ouQB2K19BqVwjttd56hrECDgoQxSQIKIsavBsHIylcUkrJSEIwZB+zGz1s
-         HEaY46YYz9Wzr4RKyNeOhyQfbbVfiVFm6x9+43UmyS4uzlEhju4CnGgjnweTMakPfjDc
-         TZB93IDrs9U7HAnHqzovLqmWIlPiVc6V+9cm6RuU3tnN1bcsUc2c0eUm1RCo/pK99yuN
-         GnR3cHaZ8BrkmlGpEfwFB5MEy/TPoAGkJ07zKv9shsui2lS/mpIQcSX9mO3jdTZzkyaX
-         /oNLkf2JjRStbGIekHI1ZWmzZZrQh6woFBs41n0af0HX2sSQ2jXeOvddi6oZk+TNPACF
-         D2cQ==
-X-Gm-Message-State: AOAM533k6ZwQwPC6s9UI6HR/j9VeDo9/1AqnVFCdnGBdN7QupTL6aCNx
-        XKSWti/BzLDyn87Ua4kFdzyUdg==
-X-Google-Smtp-Source: ABdhPJzB0gXN96d2Cn26PfuyUNHTdRvWXx2RkTUfk896bSkcgYtqKXoBjXilU5ZKHVPR0IeRPc9DzQ==
-X-Received: by 2002:a62:55c6:0:b029:160:1c33:a0f7 with SMTP id j189-20020a6255c60000b02901601c33a0f7mr20050354pfb.35.1604292195495;
-        Sun, 01 Nov 2020 20:43:15 -0800 (PST)
+        bh=AQ3iOk8BoCoi2iqvb/hLP0oQvCh6DVO14yrJFe2O1m8=;
+        b=QOkeiph3fpqsq3XoSvS7LLidQgsGCIjjkN0zq8LQnvitSVOlWopWhDCkeoHhQGdheV
+         Qovc2uip86Qy+ajroWEPhemM4w6rtWyX0CTkKNO71rdCk85GF2gnddpriBoKk+8sbBNB
+         ugVyya/afLY8Mv0yAm278kY875vI4d2nsCralE6BuspO+8y54BaR61eykhT6SYbn/vsb
+         ATvI0Lq2DVDEPHWUna/do06EDqpf8xiebcyB1EFoyRANfwIgoxY8eFQ7wQ9Q7pIHS7Bb
+         B+s0yF3ErH+N4yblSj2EN7M8/u1JZCRXc9eQhQIN4sw3dXK5eHhhpSkkQDNOkoOlenm9
+         Liow==
+X-Gm-Message-State: AOAM532LqSTz7LbhO3xOJb3/bRX483dzKFr3MFSco0Yl61gTNt4O0coj
+        q/rSNOdWJ9BD8RnTYZQqW1FbMQ==
+X-Google-Smtp-Source: ABdhPJz3jcatIWWoon+TrrMLm8fQmtiU5y1+YWus4gi+3rBSHZR2HWHip7D9EadzNqdtUsKN8bQShA==
+X-Received: by 2002:a62:3782:0:b029:15d:2c3e:ca14 with SMTP id e124-20020a6237820000b029015d2c3eca14mr20170899pfa.38.1604292399735;
+        Sun, 01 Nov 2020 20:46:39 -0800 (PST)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id r19sm10162020pjo.23.2020.11.01.20.43.14
+        by smtp.gmail.com with ESMTPSA id t15sm12401285pfq.201.2020.11.01.20.46.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 01 Nov 2020 20:43:14 -0800 (PST)
-Date:   Mon, 2 Nov 2020 10:13:12 +0530
+        Sun, 01 Nov 2020 20:46:38 -0800 (PST)
+Date:   Mon, 2 Nov 2020 10:16:36 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        zhuguangqing <zhuguangqing@xiaomi.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: schedutil: Don't skip freq update if
- need_freq_update is set
-Message-ID: <20201102044312.4oxgfsmx3v5raq6d@vireshk-i7>
-References: <2954009.kBar6x9KXa@kreacher>
- <207ae817a778d79a99c30cb48f2ea1f527416519.1604042421.git.viresh.kumar@linaro.org>
- <CAJZ5v0j2uoaUdSr1-OonPkR6QapjOm4RE2Ya=LBpV1KDrLF3gw@mail.gmail.com>
- <CAJZ5v0gURd-dcAWj0KdmodM3MfU_DQ_HEiX-CCcd+fHpRikSyA@mail.gmail.com>
+To:     Qinglang Miao <miaoqinglang@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: mediatek: add missing
+ platform_driver_unregister() on error in mtk_cpufreq_driver_init
+Message-ID: <20201102044636.2hwblwjxrfll6w5h@vireshk-i7>
+References: <20201031011854.137261-1-miaoqinglang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gURd-dcAWj0KdmodM3MfU_DQ_HEiX-CCcd+fHpRikSyA@mail.gmail.com>
+In-Reply-To: <20201031011854.137261-1-miaoqinglang@huawei.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-10-20, 16:23, Rafael J. Wysocki wrote:
-> On Fri, Oct 30, 2020 at 4:07 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Fri, Oct 30, 2020 at 8:31 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > The cpufreq policy's frequency limits (min/max) can get changed at any
-> > > point of time, while schedutil is trying to update the next frequency.
-> > > Though the schedutil governor has necessary locking and support in place
-> > > to make sure we don't miss any of those updates, there is a corner case
-> > > where the governor will find that the CPU is already running at the
-> > > desired frequency and so may skip an update.
-> > >
-> > > For example, consider that the CPU can run at 1 GHz, 1.2 GHz and 1.4 GHz
-> > > and is running at 1 GHz currently. Schedutil tries to update the
-> > > frequency to 1.2 GHz, during this time the policy limits get changed as
-> > > policy->min = 1.4 GHz. As schedutil (and cpufreq core) does clamp the
-> > > frequency at various instances, we will eventually set the frequency to
-> > > 1.4 GHz, while we will save 1.2 GHz in sg_policy->next_freq.
-> > >
-> > > Now lets say the policy limits get changed back at this time with
-> > > policy->min as 1 GHz. The next time schedutil is invoked by the
-> > > scheduler, we will reevaluate the next frequency (because
-> > > need_freq_update will get set due to limits change event) and lets say
-> > > we want to set the frequency to 1.2 GHz again. At this point
-> > > sugov_update_next_freq() will find the next_freq == current_freq and
-> > > will abort the update, while the CPU actually runs at 1.4 GHz.
-> > >
-> > > Until now need_freq_update was used as a flag to indicate that the
-> > > policy's frequency limits have changed, and that we should consider the
-> > > new limits while reevaluating the next frequency.
-> > >
-> > > This patch fixes the above mentioned issue by extending the purpose of
-> > > the need_freq_update flag. If this flag is set now, the schedutil
-> > > governor will not try to abort a frequency change even if next_freq ==
-> > > current_freq.
-> > >
-> > > As similar behavior is required in the case of
-> > > CPUFREQ_NEED_UPDATE_LIMITS flag as well, need_freq_update will never be
-> > > set to false if that flag is set for the driver.
-> > >
-> > > We also don't need to consider the need_freq_update flag in
-> > > sugov_update_single() anymore to handle the special case of busy CPU, as
-> > > we won't abort a frequency update anymore.
-> > >
-> > > Reported-by: zhuguangqing <zhuguangqing@xiaomi.com>
-> > > Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Thanks for following my suggestion!
-> >
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > ---
-> > >  kernel/sched/cpufreq_schedutil.c | 22 ++++++++++------------
-> > >  1 file changed, 10 insertions(+), 12 deletions(-)
-> > >
-> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > index c03a5775d019..c6861be02c86 100644
-> > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > @@ -102,9 +102,12 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
-> > >  static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
-> > >                                    unsigned int next_freq)
-> > >  {
-> > > -       if (sg_policy->next_freq == next_freq &&
-> > > -           !cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS))
-> > > -               return false;
-> > > +       if (!sg_policy->need_freq_update) {
-> > > +               if (sg_policy->next_freq == next_freq)
-> > > +                       return false;
-> > > +       } else if (!cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS)) {
-> > > +               sg_policy->need_freq_update = false;
+On 31-10-20, 09:18, Qinglang Miao wrote:
+> Add the missing platform_driver_unregister() before return from
+> mtk_cpufreq_driver_init in the error handling case when failed
+> to register mtk-cpufreq platform device
 > 
-> One nit, though.
+> Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> This can be changed into
-> 
-> } else {
->       sg_policy->need_freq_update =
-> cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-> }
-> 
-> to save a branch and because need_freq_update is there in the cache
-> already, this should be a fast update.
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 7d1212c9b..c03c76a0c 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -572,6 +572,7 @@ static int __init mtk_cpufreq_driver_init(void)
+>  	pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
+>  	if (IS_ERR(pdev)) {
+>  		pr_err("failed to register mtk-cpufreq platform device\n");
+> +		platform_driver_unregister(&mtk_cpufreq_platdrv);
+>  		return PTR_ERR(pdev);
+>  	}
 
-Nice.
+Applied. Thanks.
 
 -- 
 viresh
