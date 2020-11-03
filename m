@@ -2,116 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7592A4185
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 11:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E82E2A41A8
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 11:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbgKCKSp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Nov 2020 05:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727443AbgKCKSp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 05:18:45 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0307DC061A47
-        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 02:18:45 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id g12so13313818pgm.8
-        for <linux-pm@vger.kernel.org>; Tue, 03 Nov 2020 02:18:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RDvIF1kZN3zkD9reaN+0hjZqAnDKGT3mu11oH7z1rZk=;
-        b=PYTAA4VBZtkOuiu4/lJH4sroVfYs6hhDXEyDjaVkp+KyFgq0urkK2Ubb30zNlx8Oti
-         K0summB5erxd87h+VVC+TZq4BYZG9RwQvMi5Vi4GJtFmk9SSK1WGKxbtLfTT87IivJG+
-         L9mmAidaYcL3F5U7dVcibiCFP6nDDJFHG1klxFNfNkR4jp8v0kumZI50tM2dR/Rk/Pkw
-         3HVUlaOcUnopie+l77L5CIJgTF+fGp1GjAkRYJlGRMd4T5951xT8jfMefBXCrdNKZeYD
-         aL5K0kLZXhzRYTH8R9DYi7Ktk6CYAnp+39Is0zM3VA7rI07hWh7PHYyL66ZWOle0gfX3
-         FMKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RDvIF1kZN3zkD9reaN+0hjZqAnDKGT3mu11oH7z1rZk=;
-        b=YAakcpBMWBzN2g0TFUISSs3McgmPuxj9umWeRf0uZHVsgeL+zGSmQ5p3/DeQ/lLMJm
-         gVDnrotzlr6wqwsUBBTOlQ/W/4K2lDvNrEF1QZwnv8aonSv2c6oFpzP/z/n3rwElB8Dx
-         z2n5XRcUrQAn/WEgVd4wXDziR5mWJMTl4dlf2IXHI8EXiNeKyMhAm/BeIleaQ6vRD9gk
-         8ZakBjCKhh+MgCCK18Ybt5u+jNtxtMuKXilr3T9heav/uxCWCBrnCaECC6xKX9vzt5GZ
-         SkC7YCDVTX5dX6dnOCX57WSQj89b+vXl/QS34SrWKKISAyUIbWd06F95pLWB964hQ5pC
-         88tA==
-X-Gm-Message-State: AOAM532j2Q7vAnvQY7li7bNuhuEUtRBRVLZ3UVhw0XKelM8F6bcEV9Nq
-        +5zGjjpbe7sI8BXDeSoIQIBO0Q==
-X-Google-Smtp-Source: ABdhPJxO0ESwD10DRaRp6mZGFi5A0HOVTZllk0/QnJsx0OHhMdLIKz1G6UqPZbN3gfC4m6LEl4xk1w==
-X-Received: by 2002:a17:90a:7e4:: with SMTP id m91mr3222563pjm.47.1604398724518;
-        Tue, 03 Nov 2020 02:18:44 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id n27sm10247445pfq.59.2020.11.03.02.18.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Nov 2020 02:18:43 -0800 (PST)
-Date:   Tue, 3 Nov 2020 15:48:40 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
-        vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
-        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
-        chris.redpath@arm.com
-Subject: Re: [PATCH v3 0/3] CPUFreq: Add support for cpu performance
- dependencies
-Message-ID: <20201103101840.yrgwmcjrnjn7n5q6@vireshk-i7>
-References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+        id S1726690AbgKCKXq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Nov 2020 05:23:46 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:62497 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727836AbgKCKXl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 05:23:41 -0500
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201103102338epoutp02cd341170e0b591fb552f11f9423cd895~D_GgexQEA1636616366epoutp02M
+        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 10:23:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201103102338epoutp02cd341170e0b591fb552f11f9423cd895~D_GgexQEA1636616366epoutp02M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1604399018;
+        bh=yNLUz3jizowRTL7wf4IGq96hb2BwdVZKZgn7GTUJYXg=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=uqE7nDUtn86immrJVe4/sqJ2sZA0+o+QIzEVdjH/A8gcVYp0MlKkVJfj5Re9kogRW
+         L3jFTT8U8mX4lp9bpz1+bJ0R6sFoOl+rlqER30rLKrAoj4Zo0XcU3B4ZwgGS6Jrf1d
+         +Xta5Z8N2tDH06erGskK3osyUBQLUmI17o/9EWdo=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20201103102337epcas1p15072d25469b65e9ffb91e29d9d44fcdb~D_GfhA_0B1444314443epcas1p1X;
+        Tue,  3 Nov 2020 10:23:37 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4CQQqC0Y1szMqYkY; Tue,  3 Nov
+        2020 10:23:35 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        82.E9.09582.6AF21AF5; Tue,  3 Nov 2020 19:23:34 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20201103102334epcas1p30384668d332edd34996621c926bb2156~D_GccntK11025510255epcas1p37;
+        Tue,  3 Nov 2020 10:23:34 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201103102334epsmtrp191fe0a26389ee27d162477b8c1012545~D_Gcbq0bk0607306073epsmtrp1P;
+        Tue,  3 Nov 2020 10:23:34 +0000 (GMT)
+X-AuditID: b6c32a37-899ff7000000256e-77-5fa12fa604ec
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        98.4A.13470.5AF21AF5; Tue,  3 Nov 2020 19:23:33 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201103102333epsmtip14c24f37990d3c1bed96130a3743c384f~D_GcGu6cX3010030100epsmtip1L;
+        Tue,  3 Nov 2020 10:23:33 +0000 (GMT)
+Subject: Re: [PATCH v7 0/6] Exynos: Simple QoS for exynos-bus using
+ interconnect
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     krzk@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        a.swigon@samsung.com, myungjoo.ham@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <d036412f-4a5a-3f30-1ede-ba191f4f0dd6@samsung.com>
+Date:   Tue, 3 Nov 2020 19:37:31 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201102120115.29993-1-nicola.mazzucato@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <fae047dd-2564-61be-a185-ceb6f89d3e07@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAJsWRmVeSWpSXmKPExsWy7bCmnu4y/YXxBp/321jcn9fKaLFxxnpW
+        i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xeVdc9gsPvceYbSYcX4fk8XaI3fZLW43rmCz
+        aN17hN3i8Jt2VosZk1+yOfB7bFrVyeZx59oeNo/73ceZPPq2rGL0+LxJLoA1KtsmIzUxJbVI
+        ITUvOT8lMy/dVsk7ON453tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB+hcJYWyxJxSoFBAYnGx
+        kr6dTVF+aUmqQkZ+cYmtUmpBSk6BZYFecWJucWleul5yfq6VoYGBkSlQYUJ2xocFs5kK7olV
+        TF/cwtbAOF2oi5GTQ0LARGLNhFPsILaQwA5GiSWNsl2MXED2J0aJj1e2M0IkvjFKLNxnBdOw
+        d9oxdoiivYwSN162skA47xklJnybyApSJSwQJLF2YjtYt4hAtETHuaesIEXMAjeZJB6tuscG
+        kmAT0JLY/+IGmM0voChx9cdjsAZeATuJ3++ug9ksAioSF/r+MIPYogJhEie3tUDVCEqcnPmE
+        BcTmFLCXOH5sD1icWUBc4taT+UwQtrzE9rdzmEEWSwhc4ZDoXfGGGeIHF4nXa78xQdjCEq+O
+        b2GHsKUkXva3QdnVEitPHmGDaO5glNiy/wIrRMJYYv/SyUDNHEAbNCXW79KHCCtK7Pw9F+oI
+        Pol3X3tYQUokBHglOtqgYa0scfnBXai1khKL2zvZJjAqzULyziwkL8xC8sIshGULGFlWMYql
+        FhTnpqcWGxYYI8f2JkZwUtYy38E47e0HvUOMTByMhxglOJiVRHhrIufFC/GmJFZWpRblxxeV
+        5qQWH2I0BQbwRGYp0eR8YF7IK4k3NDUyNja2MDE0MzU0VBLn/aPdES8kkJ5YkpqdmlqQWgTT
+        x8TBKdXANNUxsjbef/uc9m2rUiPn/libvmrKff1nnjdfNNqv6Yz8qskrPeOOc6r06dOFirPV
+        axz9I3Uczsw/w92+lfvS8dU18x0aorZ2HI7ilDffPFvoffNT6RPstk0B+yNXBGtNed9/UMTp
+        C/PHJ4+ebs0O5r14kicyINO8snLJy2VNb7bI7dfNOrV9yt4F1r82bfOb6eh/iDcl7mzPsaOz
+        8idd13OZI3qEJawlg5v1X2D/DJYr7u6nZB5+T4zYcGVFQ09UxLGVaybsNPy+ufFExIPt3yqM
+        frou7Fpln1j+Mdlg2s+7ETf28xzaKdkkfXR9I0fAW+03DbeubGksTG3uY+QXuXtR6fKlh5vW
+        b3Vxs3GqOqrEUpyRaKjFXFScCADJ9x1fUwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWy7bCSnO5S/YXxBk86zSzuz2tltNg4Yz2r
+        xfwj51gtrnx9z2Yxfe8mNotJ9yewWJw/v4Hd4vKuOWwWn3uPMFrMOL+PyWLtkbvsFrcbV7BZ
+        tO49wm5x+E07q8WMyS/ZHPg9Nq3qZPO4c20Pm8f97uNMHn1bVjF6fN4kF8AaxWWTkpqTWZZa
+        pG+XwJXxYcFspoJ7YhXTF7ewNTBOF+pi5OSQEDCR2DvtGHsXIxeHkMBuRomzS36xQyQkJaZd
+        PMrcxcgBZAtLHD5cDFHzllFi5tPnjCA1wgJBEmsntoPZIgLREgvOrWcGsZkFbjJJXNziAdHw
+        kEniz5+/YAk2AS2J/S9usIHY/AKKEld/PAZr5hWwk/j97jqYzSKgInGh7w9YvahAmMTOJY+Z
+        IGoEJU7OfMICYnMK2EscP7aHEWKZusSfeZegFotL3HoynwnClpfY/nYO8wRG4VlI2mchaZmF
+        pGUWkpYFjCyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGC41NLcwfj9lUf9A4xMnEw
+        HmKU4GBWEuGtiZwXL8SbklhZlVqUH19UmpNafIhRmoNFSZz3RuHCOCGB9MSS1OzU1ILUIpgs
+        EwenVAOT2o6Vmx+2nlPc+v3m+vVXD89iMyp5e9gkgik4fc+Xz7laNxY4svZ56v22lcyetc+h
+        7vhNDS/mGpa7S3XWLnR/vkAk5WAb176UrgMLqpk+ht8O3sNXPFX9qMJ392rBwAYvfbZDy3Ul
+        tGdlqcm7KXYV/Y1+rZZXLHjjlsy+qC/vrKOv2zPxXk3r4pVeY7mW04NVNUj/2c2ji9OZm3un
+        L+d6svezbEpTeLi3bISw93U5JyN1r7BuwabbnD7Hnuxz0bh67txGpce1Suf41/yLXNkYbit3
+        VjbonkO23ME/pjL1Uk/K7Ay3PX96gy+y4DKnvsyd3YsLD2V4y22RvqexZ3uK4PIdKTu3s978
+        OvnPsvVKLMUZiYZazEXFiQDb11UlPgMAAA==
+X-CMS-MailID: 20201103102334epcas1p30384668d332edd34996621c926bb2156
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776
+References: <CGME20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776@eucas1p1.samsung.com>
+        <20201030125149.8227-1-s.nawrocki@samsung.com>
+        <b586c2b7-9ca1-e641-b70c-27493ffd05e0@samsung.com>
+        <9285e2d4-f2fa-92f2-ba25-832f32f77d78@linaro.org>
+        <3e3038da-d5de-7ea9-9cb9-082ce63af91d@samsung.com>
+        <fae047dd-2564-61be-a185-ceb6f89d3e07@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-11-20, 12:01, Nicola Mazzucato wrote:
-> Hi All,
+Hi Sylwester,
+
+On 11/3/20 7:12 PM, Sylwester Nawrocki wrote:
+> Hi Chanwoo, Georgi
 > 
-> In this V3 posting I have replaced the new dt-binding with minor changes/
-> improvements for opp (since we are now using opp tables instead).
-> The RFC still stands on how to make this info available to sw consumers.
+> On 03.11.2020 09:53, Chanwoo Choi wrote:
+>> On 11/3/20 5:29 PM, Georgi Djakov wrote:
+>>> On 11/3/20 09:54, Chanwoo Choi wrote:
 > 
-> In the RFC, I am proposing a simple addition of a performance dependencies
-> cpumask in CPUFreq core and an example of how drivers and consumers would
-> make use of it.
-> I also propose an alternative approach, which does not require changes in
-> CPUFreq core, but - possibly - in all the consumers.
+>>>> When I tested this patchset on Odroid-U3,
+>>>> After setting 0 bps by interconnect[1][2],
+>>>> the frequency of devfreq devs sustain the high frequency
+>>>> according to the pm qos request.
+>>>>
+>>>> So, I try to find the cause of this situation.
+>>>> In result, it seems that interconnect exynos driver
+>>>> updates the pm qos request to devfreq device
+>>>> during the kernel booting. Do you know why the exynos
+>>>> interconnect driver request the pm qos during probe
+>>>> without the mixer request?
+>>>
+>>> That's probably because of the sync_state support, that was introduced
+>>> recently. The icc_sync_state callback needs to be added to the driver
+>>> (i just left a comment on that patch), and then check again if it works.
+>>>
+>>> The idea of the sync_state is that there could be multiple users of a
+>>> path and we must wait for all consumers to tell their bandwidth needs.
+>>> Otherwise the first consumer may lower the bandwidth or disable a path
+>>> needed for another consumer (driver), which has not probed yet. So we
+>>> maintain a floor bandwidth until everyone has probed. By default the floor
+>>> bandwidth is INT_MAX, but can be overridden by implementing the get_bw()
+>>> callback.
 > 
-> This is to support systems where exposed cpu performance controls are more
-> fine-grained that the platform's ability to scale cpus independently.
+> Thanks for detailed explanation Georgi.
+> 
+>> Thanks for guide. I tested it with your comment of patch2.
+>> It is well working without problem as I mentioned previously.
+>>
+>> I caught the reset operation of PM QoS requested from interconnect
+>> on kernel log. In result, after completed the kernel booting,
+>> there is no pm qos request if hdmi cable is not connected.
+> 
+> Thanks for the bug report Chanwoo, it's related to the sync_state
+> feature as you guys already figured out.  I had to reorder some code 
+> in the interconnect driver probe() to avoid some issues, 
+> i.e. to register PM QoS request before icc_node_add() call but 
+> I forgot to check initial state of the bus frequencies.
+> 
+> I thought the get_bw implementation might be needed but the default
+> behaviour seems fine, the PM QoS derived bus frequencies will be 
+> clamped in the devfreq to valid OPP values.
+> 
+> Chanwoo, in order to set the bandwidth to 0 we could also just blank 
+> the display. Below are some of the commands I use for testing.
+> 
+> # blank display (disable the mixer entirely)
+> echo 4 > /sys/devices/platform/exynos-drm/graphics/fb0/blank
+> 
+> # unblank display
+> echo 0 > /sys/devices/platform/exynos-drm/graphics/fb0/blank
+> 
+> # modetest with 2 planes (higher bandwidth test)
+> ./modetest -s 47:1920x1080 -P 45:1920x1080 -v
+> 
 
-I was talking to Vincent about what you are doing here and we got a
-bit confused and so here are few questions that we had:
-
-- Based on my previous understanding, you don't want software
-  coordination of frequencies (which is done by cpufreq today), but
-  want the hardware to do that and so you want per-cpu cpufreq
-  policies.
-
-- What's the real benefit of hardware coordination ? Want to make sure
-  I fully understand that.
-
-- Because of hardware co-ordination of otherwise co-ordinated CPUs,
-  few things break. Thermal and EAS are some of the examples and so
-  you are trying to fix them here by proving them the missing
-  information again.
-
-- One other thing that breaks with this is freq-invariance in the
-  scheduler, as the scheduler won't see the real frequencies the
-  various CPUs are running at. Most of the hardware we have today
-  doesn't have counters, like AMUs, not sure if all future ones based
-  on SCMI will have that too, so how are they gong to be fixed ?
-
-  And if we even have to fix this (freq invariance), what's hardware
-  coordination giving us that makes all this worth it ?
-
-Sorry about the long list :)
+Thanks for the test guide.
 
 -- 
-viresh
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
