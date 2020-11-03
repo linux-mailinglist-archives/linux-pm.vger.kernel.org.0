@@ -2,141 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A072A4867
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 15:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F3C2A48FF
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 16:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgKCOje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Nov 2020 09:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S1728274AbgKCPHo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Nov 2020 10:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727895AbgKCOjS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 09:39:18 -0500
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A6EC0617A6
-        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 06:39:17 -0800 (PST)
-Received: by mail-lj1-x244.google.com with SMTP id 23so19256506ljv.7
-        for <linux-pm@vger.kernel.org>; Tue, 03 Nov 2020 06:39:17 -0800 (PST)
+        with ESMTP id S1727986AbgKCPGi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 10:06:38 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FEFC0613D1
+        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 07:06:38 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id p15so19435751ljj.8
+        for <linux-pm@vger.kernel.org>; Tue, 03 Nov 2020 07:06:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=M/CcLnAggfPJTPHCvJqAFAyQXrrFbGX8RqEWGTOIlRk=;
-        b=tYRtCsCJ97u7yAlrOFN203Mpt9jz/EvbuW4V+3hipSUNsR5M8ZDqWsq7efoMiN9R5c
-         nhVCnARjFr5alomHWUrG2S/QRxbOVwaEaiSQTgeF0uEgCJ7a2rbupEC/g2AUeshC9i6C
-         wIKR126viYncqhHiZROMnSmO9imaid0rNJepyxM6rr8Apn+RPbJ3qWs7P+ZnHrSgvOWA
-         QcXHZrEHzXM4SVCDzBK7zqXcUTu3T+G1dUvHRbLGUKs/I2DIfrL0bitkL+B4SCLYpFfX
-         lHpCGqsodauH4LxSQSOtDBLKGW1a7DHfcCp5nbfeol5ZCBBoivuqpYvLjRQisIJ68BoF
-         UMSA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BHDCMDlrohCTOGKYaepJhi6rvYrdThrY2212XNgPaeY=;
+        b=fxurON8U1PBvzdJCjnx9ILqK1/xymSmnN35yPhW0CEKttBN9cJlXfQZg4AUkni8lR2
+         K2tXwEUMCsKjiKJ35eJ6DfFeCSM/iuwXx3j8AfQdRda6+1MnWFsX+b/fisUa/emw7xmb
+         zZTCBdi7MVast91cJTk+LQwP0MI2vr/fYlov1xLWAWOet+eBBR+4rdteP5Z15Qu57YR7
+         7Eh0xNz5/8nriJHRBy7clB3j7gTYcYVpP8Di9IfXByXl3zjensM4BsA9iy1k2UQOzaHK
+         ncki+98Yw+M9pvaUSJIcRruWPRceSFlLfjO30WUsBShPtF3ePrqDtxqyGGLfqliQdcIu
+         3jzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M/CcLnAggfPJTPHCvJqAFAyQXrrFbGX8RqEWGTOIlRk=;
-        b=SaaiVsTVNaNso9bPwKeR7IEYfNyCGB8JPtQljhyexie6u2ZTRNBK/cyKPV1bkYiwA1
-         eBEe5Mr18x+cd1EuPZ7FP6ZdQW1CIqNabBfIQM074GB/LNhT6BHtegClZ0zI4LjvaUHn
-         eeUt/LK065HBcuDh8DqJAaymhLjRNPnESl9Vif3IklCfa5Bz95s6iKIhfmcbnOA9NKyn
-         s5JEAprh095avOhmWc2WzvFRYqV9V6W/Z2oKqpRQxIjHLBqrBOuwDY6THXDM+odgPHQK
-         X93ZiGVqF5+8kHqVo5xfnMTUVhP4WcytxLfJ8ZT42JRzf4WVUMcF2ezfuDNOO6eJFLkS
-         w9OQ==
-X-Gm-Message-State: AOAM530ceXnvNwV5yGThoFSHtvNedJd35cVnP+MndyyV+GDLvyWagYxD
-        YEtNR2lG82hOpbuv+/T+63Tytg==
-X-Google-Smtp-Source: ABdhPJz+L8qrHCJkzOuQS8/wvO1dQM/ksNE/UzgTA6Cx0Ac2GRFSZ5fX6eoakfcdH0CZnI4/h7s3ng==
-X-Received: by 2002:a2e:879a:: with SMTP id n26mr9115208lji.347.1604414356208;
-        Tue, 03 Nov 2020 06:39:16 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id g27sm4334360ljl.91.2020.11.03.06.39.15
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BHDCMDlrohCTOGKYaepJhi6rvYrdThrY2212XNgPaeY=;
+        b=oX7I0jxXi2nE33rmKOQf3tNgoIrBi/EKeM+ynXG5wYPgTiaxbBoDo+EGk5wKZ3j/HW
+         HFEiNwnWG5oM1uToL6mHesnJvNCmLgsrX5kmckcp9fgsi1ZYg61e6+HHaC7iYlt09Uuc
+         4r5e6xxGpJ8Cn/9aQUiLvsCIcAhQiGYE8d7/FGfpDHWncOKq62kedDXWlRF6pKh16BlX
+         zLtWO+ojtmYJcuh+M+FgxKdMPTJS9n8BfiDzxRnN+zw9iAZbKYCqKPuPUvjkHU98om8K
+         6Bgt9l/QqzAymkPt+j8NACpu3YaYID+SMHJQiScO8eylB1IFzsEygdfiRHhkleKMUBUO
+         m34Q==
+X-Gm-Message-State: AOAM533dp1eSMAd3eHzd4Zn8xy0al6XQXWX5pa/MRpu+ZQGl/1yT3X0P
+        ypDZDi3lrCXKFTcJScFtmgCW4g==
+X-Google-Smtp-Source: ABdhPJyAi7WkrEXPhC//lnMhPjRF9atgaYLSoQOGdckgfwbyqw9DkLp0Jcks3aAvvPIMRjC3GSa9zg==
+X-Received: by 2002:a2e:8787:: with SMTP id n7mr9228040lji.111.1604415995742;
+        Tue, 03 Nov 2020 07:06:35 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-131-134.NA.cust.bahnhof.se. [155.4.131.134])
+        by smtp.gmail.com with ESMTPSA id a25sm3522169lfo.141.2020.11.03.07.06.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 06:39:15 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 65F1510231C; Tue,  3 Nov 2020 17:39:16 +0300 (+03)
-Date:   Tue, 3 Nov 2020 17:39:16 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v3 2/4] PM: hibernate: make direct map manipulations more
- explicit
-Message-ID: <20201103143916.otz2o4h2dlmewn3h@box>
-References: <20201101170815.9795-1-rppt@kernel.org>
- <20201101170815.9795-3-rppt@kernel.org>
- <20201103110816.t6a3ebtgcm7mfogy@box>
- <20201103121350.GI4879@kernel.org>
+        Tue, 03 Nov 2020 07:06:34 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        linux-pm@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/3] cpuidle: psci: Enable s2idle when using PSCI OSI
+Date:   Tue,  3 Nov 2020 16:06:24 +0100
+Message-Id: <20201103150627.233438-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201103121350.GI4879@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 02:13:50PM +0200, Mike Rapoport wrote:
-> On Tue, Nov 03, 2020 at 02:08:16PM +0300, Kirill A. Shutemov wrote:
-> > On Sun, Nov 01, 2020 at 07:08:13PM +0200, Mike Rapoport wrote:
-> > > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> > > index 46b1804c1ddf..054c8cce4236 100644
-> > > --- a/kernel/power/snapshot.c
-> > > +++ b/kernel/power/snapshot.c
-> > > @@ -76,6 +76,32 @@ static inline void hibernate_restore_protect_page(void *page_address) {}
-> > >  static inline void hibernate_restore_unprotect_page(void *page_address) {}
-> > >  #endif /* CONFIG_STRICT_KERNEL_RWX  && CONFIG_ARCH_HAS_SET_MEMORY */
-> > >  
-> > > +static inline void hibernate_map_page(struct page *page, int enable)
-> > > +{
-> > > +	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
-> > > +		unsigned long addr = (unsigned long)page_address(page);
-> > > +		int ret;
-> > > +
-> > > +		/*
-> > > +		 * This should not fail because remapping a page here means
-> > > +		 * that we only update protection bits in an existing PTE.
-> > > +		 * It is still worth to have WARN_ON() here if something
-> > > +		 * changes and this will no longer be the case.
-> > > +		 */
-> > > +		if (enable)
-> > > +			ret = set_direct_map_default_noflush(page);
-> > > +		else
-> > > +			ret = set_direct_map_invalid_noflush(page);
-> > > +
-> > > +		if (WARN_ON(ret))
-> > 
-> > _ONCE?
-> 
-> I've changed it to pr_warn() after David said people enable panic on
-> warn in production kernels.
+Changes in v2:
+	- See changelog for each patch.
 
-pr_warn_once()? :P
+When using PSCI OSI together with the PM domain topology, the domain idle
+states becomes selected via calls to pm_runtime_put_sync_suspend(). This works
+fine for the regular idle path, but not for system wide suspend-to-idle.
+
+This problem is because runtime PM gets disabled by the PM core, during system
+wide suspend. In this small series, these issues are being fixed.
+
+Kind regards
+Ulf Hansson
+
+Ulf Hansson (3):
+  PM: domains: Rename pm_genpd_syscore_poweroff|poweron()
+  PM: domains: Enable dev_pm_genpd_suspend|resume() for suspend-to-idle
+  cpuidle: psci: Enable suspend-to-idle for PSCI OSI mode
+
+ drivers/base/power/domain.c           | 51 ++++++++++++++++++---------
+ drivers/clocksource/sh_cmt.c          |  8 ++---
+ drivers/clocksource/sh_mtu2.c         |  4 +--
+ drivers/clocksource/sh_tmu.c          |  8 ++---
+ drivers/cpuidle/cpuidle-psci-domain.c |  2 ++
+ drivers/cpuidle/cpuidle-psci.c        | 34 +++++++++++++++---
+ include/linux/pm_domain.h             |  8 ++---
+ 7 files changed, 81 insertions(+), 34 deletions(-)
 
 -- 
- Kirill A. Shutemov
+2.25.1
+
