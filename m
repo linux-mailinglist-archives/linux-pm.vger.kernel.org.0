@@ -2,125 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 679062A37FF
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 01:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CEB2A3A3E
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 03:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726042AbgKCAsR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Nov 2020 19:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726018AbgKCAsQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 19:48:16 -0500
-Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994C7C0617A6
-        for <linux-pm@vger.kernel.org>; Mon,  2 Nov 2020 16:48:16 -0800 (PST)
-Received: by mail-vk1-xa41.google.com with SMTP id i62so3362708vkb.7
-        for <linux-pm@vger.kernel.org>; Mon, 02 Nov 2020 16:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=inHX6bFfbXo/rqCNZibX/SoGds+Oh6m2ZoC9dpKySuk=;
-        b=cIBtkV3rfYlpJdRmlM5S5gzfFC3gEqaAv+xn3S/pWzIBl/UZeMNKdLEc9zbYw3XzmT
-         SnfKp5pu0dJOr+/aK2AYfwcPdDbM6Vni0GB33DXOVAWpzF3nwTuZHzHfxG4O7ANp9J90
-         w9HGKNSxw1+Zd1sfs4sY/NnfNlJjtzPwDIxmQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=inHX6bFfbXo/rqCNZibX/SoGds+Oh6m2ZoC9dpKySuk=;
-        b=UU0I9Nk5Q4Ij9ZW+MMgtOKyQuM9ZX7voQYrezS97xQuWWMRcPOfhHDgUvJ/48Da0Zp
-         CLB8uJ2UvQTh5N+D55qubMH3tkjzwk62A7WYIV3bLt+wJyxFDV1QEemp9hp3vJyDT+jW
-         Ks2si8bSrgCJ2tTxQ3elAQ5XB93mshOhkc2MvJs56zGXwAHl0rP+dEGul7H/v9CMZrUl
-         NFQlVpsbe6+w1ooR1uR7aPEowJ7DPeEgtvJYQGrxq143u0iQbJ8EiStI5b/2BsJ5+FkX
-         45q5b7xxROSalzVgD80MxyBOLQCmiTKrHeNP+cniXlepCuX0iEWs/sL8UOZ6aHeDypYZ
-         OzYA==
-X-Gm-Message-State: AOAM5330ItvEH3LHQSnt0x8o0X9DhWNJrHXZGeMJUKzBLMd0zlC6SLVu
-        JuZC8uDNyM9kVs+weK6Wo6uk8/1dKlzuXA==
-X-Google-Smtp-Source: ABdhPJx8OdXY9+v/sbEbB4u+whYFBD6CjuEHM5CG7ALPy3lFIxgkO1qzvexcYpSECCe8GwlydCtGMA==
-X-Received: by 2002:a1f:1242:: with SMTP id 63mr14624074vks.8.1604364495501;
-        Mon, 02 Nov 2020 16:48:15 -0800 (PST)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id r12sm681264vkl.10.2020.11.02.16.48.15
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2020 16:48:15 -0800 (PST)
-Received: by mail-vs1-f50.google.com with SMTP id b3so8543874vsc.5
-        for <linux-pm@vger.kernel.org>; Mon, 02 Nov 2020 16:48:15 -0800 (PST)
-X-Received: by 2002:a67:ef98:: with SMTP id r24mr2239428vsp.37.1604364137278;
- Mon, 02 Nov 2020 16:42:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20201019140601.3047-1-lukasz.luba@arm.com> <d3c64655-dc31-73dc-8483-bf5805a9d389@arm.com>
- <20201102135449.GE2221764@google.com>
-In-Reply-To: <20201102135449.GE2221764@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 2 Nov 2020 16:41:57 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VDCbWU4ukYwJUsTKMfEz9+55rmdLL1a39JWcPzjUmZCQ@mail.gmail.com>
-Message-ID: <CAD=FV=VDCbWU4ukYwJUsTKMfEz9+55rmdLL1a39JWcPzjUmZCQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Clarify abstract scale usage for power values in
- Energy Model, EAS and IPA
-To:     Quentin Perret <qperret@google.com>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S1726212AbgKCCI6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Nov 2020 21:08:58 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:38129 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbgKCCI4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Nov 2020 21:08:56 -0500
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20201103020852epoutp0348431a02260334b9293657d84c079ee4~D3Who54tC0470504705epoutp03R
+        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 02:08:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20201103020852epoutp0348431a02260334b9293657d84c079ee4~D3Who54tC0470504705epoutp03R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1604369332;
+        bh=MFuZlfb/Yn1FfDXGe9nnnS1LaE1d3HqlFqTNLWzKXtQ=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=CJihPDzySQyauHEF3YXWgGmeizM0KrqlnK6pBZ1JsZ4PMUoklju5445YtsFPKNGgi
+         w/edSsEWMNxETNU5LlAZoHxRcg6auV4cRCOwxKolGf24+hbfpSDhwyQdUG9wZeDUs/
+         b9l4U+bV4Pbc4kKqYZ/pacuY03259vVp6YNG1DMw=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20201103020852epcas1p29e1f632a9e5f1609e8e29b88e395b492~D3Wg9BiC12965429654epcas1p23;
+        Tue,  3 Nov 2020 02:08:52 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4CQCrK3zz1zMqYmB; Tue,  3 Nov
+        2020 02:08:49 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        97.20.09582.6ABB0AF5; Tue,  3 Nov 2020 11:08:38 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20201103020838epcas1p4496f5796cb600465f05b19c1ebce1098~D3WUBQ4TJ1044310443epcas1p4E;
+        Tue,  3 Nov 2020 02:08:38 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20201103020838epsmtrp2f3a72ca2f9749d3e5bfed43c02794da4~D3WUAV_0X2405724057epsmtrp2A;
+        Tue,  3 Nov 2020 02:08:38 +0000 (GMT)
+X-AuditID: b6c32a37-899ff7000000256e-ff-5fa0bba68383
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.C7.08745.5ABB0AF5; Tue,  3 Nov 2020 11:08:38 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201103020837epsmtip17f8c1cb8b99ebd7ff1794daf1912910d~D3WTkkBsw2593625936epsmtip1g;
+        Tue,  3 Nov 2020 02:08:37 +0000 (GMT)
+Subject: Re: [PATCH v6 49/52] PM / devfreq: tegra20: Convert to EMC_STAT
+ driver, support interconnect and device-tree
+To:     Dmitry Osipenko <digetx@gmail.com>, cwchoi00@gmail.com
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
-        morten.rasmussen@arm.com, Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        devicetree <devicetree@vger.kernel.org>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <7ee7e7bb-6c0d-dfd1-f00d-a718c06d7479@samsung.com>
+Date:   Tue, 3 Nov 2020 11:22:35 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
+MIME-Version: 1.0
+In-Reply-To: <bff3bf4a-8111-7c96-92f6-46343d85be0d@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLJsWRmVeSWpSXmKPExsWy7bCmge6y3QviDWbu1rd4dlTb4t2np6wW
+        84+cY7VY/fExo8WVr+/ZLKbv3cRm0TJrEYvF+fMb2C22Pl3DZHG26Q27xeVdc9gsPvceYbTo
+        /DKLzeLiKVeL240r2CwmrZ3KaHH2mbdF694j7Bb/rm1ksfi5ax6LxeYHx9gcRD3e32hl99g5
+        6y67x6Vzf5g9Nq3qZPO4c20Pm8f97uNMHr3N79g8+rasYvT4vEkugDMq2yYjNTEltUghNS85
+        PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6DslhbLEnFKgUEBicbGSvp1N
+        UX5pSapCRn5xia1SakFKToFlgV5xYm5xaV66XnJ+rpWhgYGRKVBhQnbGlwU5BZM4KzZ+ms3c
+        wLiUvYuRk0NCwERi6tsvbF2MXBxCAjsYJZ5Me8QC4XxilJg3ZwZYlZDAZ0aJCSc0YDpmHDzG
+        ClG0i1Hi6dJt7BDOe0aJiQdXMoFUCQuUS5ybuYURxBYRsJL49QqiiFmgmU1i9ZUtzCAJNgEt
+        if0vbrCB2PwCihJXfzwGa+AVsJN4cO0KkM3BwSKgIrFiZy5IWFQgTOLkthaoEkGJkzOfsIDY
+        nAK2EifXLwG7lFlAXOLWk/lMELa8RPPW2cwQV8/nlDh+2ALCdpF4P+UxC4QtLPHq+BZoWEhJ
+        fH63lw3CrpZYefIIOFwkBDoYJbbsv8AKkTCW2L90MhPIbcwCmhLrd+lDhBUldv6eywixl0/i
+        3dceVpASCQFeiY42IYgSZYnLD+4yQdiSEovbO9kmMCrNQvLNLCQfzELywSyEZQsYWVYxiqUW
+        FOempxYbFhgjx/UmRnC61zLfwTjt7Qe9Q4xMHIyHGCU4mJVEeGsi58UL8aYkVlalFuXHF5Xm
+        pBYfYjQFBu9EZinR5HxgxskriTc0NTI2NrYwMTQzNTRUEuf9o90RLySQnliSmp2aWpBaBNPH
+        xMEp1cB06GqHZUbc528e/v9W1WUdzePrlY+dMDVh69pYtYqQ5O2RyyR2P56R+8RQoDtQ+uTm
+        VruvnFOnLstiXmdiYJXJ6qQmpnebb9/nFR8WPloy71cB8+47u3XUCn1sS0U/dO89abjblfl4
+        kTr3otkZ2voei0qT5+4wfMS/7Y3UhFP/e5sXLLlV4d1v63b0sESP0bTaDVs1T3lLLrn9KusD
+        t87VzO8r18+OW6X38WumJJP21rL1zlWWzsVfz/GeqHmv9pXLXeblhoBEc9PCZUpbM8+3enjL
+        fyh+f91dVWDmGfeblR3P2+SeCQtbef5U/etWfnu1ws+gEHuePhu3E6eZ5xXdtLw/uXphzqRQ
+        eYUbt4KUWIozEg21mIuKEwHlsQPXgAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJIsWRmVeSWpSXmKPExsWy7bCSnO6y3QviDXZMYbZ4dlTb4t2np6wW
+        84+cY7VY/fExo8WVr+/ZLKbv3cRm0TJrEYvF+fMb2C22Pl3DZHG26Q27xeVdc9gsPvceYbTo
+        /DKLzeLiKVeL240r2CwmrZ3KaHH2mbdF694j7Bb/rm1ksfi5ax6LxeYHx9gcRD3e32hl99g5
+        6y67x6Vzf5g9Nq3qZPO4c20Pm8f97uNMHr3N79g8+rasYvT4vEkugDOKyyYlNSezLLVI3y6B
+        K+PLgpyCSZwVGz/NZm5gXMrexcjJISFgIjHj4DHWLkYuDiGBHYwSixefZoFISEpMu3iUuYuR
+        A8gWljh8uBii5i2jxNmtT5hAaoQFyiXOzdzCCGKLCFhJ/Hq1jR2kiFmgk03i3ooGFoiOh0wS
+        LXc3g61jE9CS2P/iBhuIzS+gKHH1x2Owbl4BO4kH164wgmxjEVCRWLEzFyQsKhAmsXPJYyaI
+        EkGJkzOfgB3HKWArcXL9ErCRzALqEn/mXWKGsMUlbj2ZzwRhy0s0b53NPIFReBaS9llIWmYh
+        aZmFpGUBI8sqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95PzcTYzg2NfS2sG4Z9UHvUOMTByM
+        hxglOJiVRHhrIufFC/GmJFZWpRblxxeV5qQWH2KU5mBREuf9OmthnJBAemJJanZqakFqEUyW
+        iYNTqoFJrNssde/O+z2xW4I4o9esXq29aCrj73f/OkMeOopZTw+38G1p/Rob4ungGVdwcsfh
+        BU5H/Q/GMjLeXeAz8//3xxttmDJX/+laKJnnHHL1zpLFnbaCi8Laf9VIXnv6K9Yk5V6x6+nf
+        jKaGJyMVDhZW/NSJ+7+arWXBRqfes3/jOU+9yTJa+XSye0do5mfBpV/SvWbGfJ71+EHb7rrg
+        9Wxac4QkWyxuSK2/YN6Szsd7d2FLo23Vp4aDho9chPKXlLF4x99svc3mMetZa9S95SvfH5HQ
+        sFV6L+Y5uUdq27tp547XP2mc67Tb7dVWo8ZbkUul9mwI9Zp4XMhmoXD2pN97rIJyzreXL1J6
+        d8Pmbj2vEktxRqKhFnNRcSIAXdvuBWwDAAA=
+X-CMS-MailID: 20201103020838epcas1p4496f5796cb600465f05b19c1ebce1098
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20201102200839epcas1p30a5235333319f7affbe0f0c814ec3308
+References: <20201025221735.3062-1-digetx@gmail.com>
+        <20201025221735.3062-50-digetx@gmail.com>
+        <CAGTfZH0KxyZYLZ_AgM7Lr+4s35kaWJp1AenpZ-o_FRLCCHC+6A@mail.gmail.com>
+        <0ffa84f6-625e-807c-e9af-7a67f0fe48e7@gmail.com>
+        <CGME20201102200839epcas1p30a5235333319f7affbe0f0c814ec3308@epcas1p3.samsung.com>
+        <bff3bf4a-8111-7c96-92f6-46343d85be0d@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 11/3/20 5:08 AM, Dmitry Osipenko wrote:
+> 01.11.2020 17:12, Dmitry Osipenko пишет:
+> ...
+>> We will probably move the Tegra20 EMC_STAT devfreq driver into the
+>> memory driver and remove the older IMC_STAT driver in v7, like it was
+>> suggested by Thierry Reding. This will be a much less invasive code change.
+>>
+>>> Also, if you want to get more responsiveness, you could use delayed timer
+>>> instead of deferrable timer by editing the devfreq_dev_profile structure.
+>>
+>> Thanks, I'll try the deferrable timer.
+> 
+> I took a brief look at the delayed timer and I think the deferrable
+> timer should be more a preferred option because this devfreq drive is
+> more an assistance for the optimal bandwidth selection and it will be
+> more preferred to keep system idling whenever possible.
+> 
+> My primary concern is the initial performance lag in a case of
+> multimedia applications. But this will be resolved by hooking up
+> performance voting to all drivers, once we will get around to it.
 
-On Mon, Nov 2, 2020 at 5:54 AM Quentin Perret <qperret@google.com> wrote:
->
-> On Monday 02 Nov 2020 at 08:54:38 (+0000), Lukasz Luba wrote:
-> > Gentle ping to Quentin and Daniel for sharing opinion on this patch set.
-> > If you are OK, then I could use this as a base for next work.
->
-> One or two small nits, but overall this LGTM. Thanks Lukasz.
->
-> > As you probably know I am working also on 'sustainable power' estimation
-> > which could be used when there is no DT value but it comes from FW.
-> > That would meet requirement from Doug, when the DT cannot be used,
-> > but we have sustainable levels from FW [1].
->
-> Cool, and also, I'd be happy to hear from Doug if passing the sustained
-> power via sysfs is good enough for his use-case in the meantime?
-
-It does sound like sysfs could be made to work for us, but it's
-definitely a workaround.  If the normal way to set these values was
-through sysfs then it would be fine, but I think most people expect
-that these values are just setup properly by the kernel.  That means
-anyone using our board with a different userspace (someone running
-upstream on it) would need to figure out what mechanism they were
-going to use to program them.  There's very little advantage here
-compared to a downstream patch that just violates official upstream
-policy by putting something bogoWatts based in the device tree.
-
-My current plan of record (which I don't love) is basically:
-
-1. Before devices are in consumer's hands, accept bogoWatts numbers in
-our downstream kernel.
-
-2. Once devices are in consumers hands, run the script I sent out to
-generate some numbers and post them upstream.
-
-If, at some point, there's a better solution then I'll switch to it,
-but until then that seems workable even if it makes me grumpy.
+OK. You can choice the type of timer on both probe
+and via sysfs file on the runtime.
 
 
--Doug
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
