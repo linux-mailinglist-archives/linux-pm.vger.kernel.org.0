@@ -2,174 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AABA12A4160
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 11:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7592A4185
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 11:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727742AbgKCKM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Nov 2020 05:12:28 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:35907 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728116AbgKCKM0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 05:12:26 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20201103101215euoutp01e860c3f68c9101cce45b4f47333a6be8~D98kTCz670555205552euoutp019
-        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 10:12:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20201103101215euoutp01e860c3f68c9101cce45b4f47333a6be8~D98kTCz670555205552euoutp019
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1604398335;
-        bh=5Cdq8D2ei6pRrjUOz42dMBnPyD6ZsklGTpQ1TtT+q1o=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=SkHZQCzzNUQNkiZrSagzqgUxt4McYA1qYLqUMoePJBIYp9Y74Lmz8lWi2YeuUrm1W
-         auea03BI04ahYE24S9jgEHH7KchE3p6KcqPP2ZK048zDfh0ae3u8OinyWGxBxeIBUY
-         IAJ7Msr+eXAyi/4E9n6qtdWIbWlWue3uGEqy0VBE=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20201103101209eucas1p15ff1f5cf6e9c9270b98490150386ef29~D98fU4_q51674616746eucas1p10;
-        Tue,  3 Nov 2020 10:12:09 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 26.8E.06318.9FC21AF5; Tue,  3
-        Nov 2020 10:12:09 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201103101209eucas1p21ea6a9fb64035a234fbc1ab20d158965~D98e735R60829208292eucas1p2I;
-        Tue,  3 Nov 2020 10:12:09 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201103101209eusmtrp20905f1a34835ff86c743a9694198ff74~D98e65u2c1429214292eusmtrp2O;
-        Tue,  3 Nov 2020 10:12:09 +0000 (GMT)
-X-AuditID: cbfec7f5-371ff700000018ae-81-5fa12cf9c424
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id D3.B4.06017.9FC21AF5; Tue,  3
-        Nov 2020 10:12:09 +0000 (GMT)
-Received: from [106.210.123.115] (unknown [106.210.123.115]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201103101208eusmtip27a23e0e196183e82444d49262ca4d057~D98d7GS0c0801308013eusmtip2X;
-        Tue,  3 Nov 2020 10:12:08 +0000 (GMT)
-Subject: Re: [PATCH v7 0/6] Exynos: Simple QoS for exynos-bus using
- interconnect
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     krzk@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
-        a.swigon@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-Message-ID: <fae047dd-2564-61be-a185-ceb6f89d3e07@samsung.com>
-Date:   Tue, 3 Nov 2020 11:12:07 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.12.1
+        id S1726312AbgKCKSp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Nov 2020 05:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727443AbgKCKSp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 05:18:45 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0307DC061A47
+        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 02:18:45 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id g12so13313818pgm.8
+        for <linux-pm@vger.kernel.org>; Tue, 03 Nov 2020 02:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RDvIF1kZN3zkD9reaN+0hjZqAnDKGT3mu11oH7z1rZk=;
+        b=PYTAA4VBZtkOuiu4/lJH4sroVfYs6hhDXEyDjaVkp+KyFgq0urkK2Ubb30zNlx8Oti
+         K0summB5erxd87h+VVC+TZq4BYZG9RwQvMi5Vi4GJtFmk9SSK1WGKxbtLfTT87IivJG+
+         L9mmAidaYcL3F5U7dVcibiCFP6nDDJFHG1klxFNfNkR4jp8v0kumZI50tM2dR/Rk/Pkw
+         3HVUlaOcUnopie+l77L5CIJgTF+fGp1GjAkRYJlGRMd4T5951xT8jfMefBXCrdNKZeYD
+         aL5K0kLZXhzRYTH8R9DYi7Ktk6CYAnp+39Is0zM3VA7rI07hWh7PHYyL66ZWOle0gfX3
+         FMKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RDvIF1kZN3zkD9reaN+0hjZqAnDKGT3mu11oH7z1rZk=;
+        b=YAakcpBMWBzN2g0TFUISSs3McgmPuxj9umWeRf0uZHVsgeL+zGSmQ5p3/DeQ/lLMJm
+         gVDnrotzlr6wqwsUBBTOlQ/W/4K2lDvNrEF1QZwnv8aonSv2c6oFpzP/z/n3rwElB8Dx
+         z2n5XRcUrQAn/WEgVd4wXDziR5mWJMTl4dlf2IXHI8EXiNeKyMhAm/BeIleaQ6vRD9gk
+         8ZakBjCKhh+MgCCK18Ybt5u+jNtxtMuKXilr3T9heav/uxCWCBrnCaECC6xKX9vzt5GZ
+         SkC7YCDVTX5dX6dnOCX57WSQj89b+vXl/QS34SrWKKISAyUIbWd06F95pLWB964hQ5pC
+         88tA==
+X-Gm-Message-State: AOAM532j2Q7vAnvQY7li7bNuhuEUtRBRVLZ3UVhw0XKelM8F6bcEV9Nq
+        +5zGjjpbe7sI8BXDeSoIQIBO0Q==
+X-Google-Smtp-Source: ABdhPJxO0ESwD10DRaRp6mZGFi5A0HOVTZllk0/QnJsx0OHhMdLIKz1G6UqPZbN3gfC4m6LEl4xk1w==
+X-Received: by 2002:a17:90a:7e4:: with SMTP id m91mr3222563pjm.47.1604398724518;
+        Tue, 03 Nov 2020 02:18:44 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id n27sm10247445pfq.59.2020.11.03.02.18.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Nov 2020 02:18:43 -0800 (PST)
+Date:   Tue, 3 Nov 2020 15:48:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
+        vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
+        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
+        chris.redpath@arm.com
+Subject: Re: [PATCH v3 0/3] CPUFreq: Add support for cpu performance
+ dependencies
+Message-ID: <20201103101840.yrgwmcjrnjn7n5q6@vireshk-i7>
+References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <3e3038da-d5de-7ea9-9cb9-082ce63af91d@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf0zMYRzH99z3Z+l4HNZnCdstjJW0Yl9jJMxtZszKH22Vi68y3WV3XcQ/
-        d/mRfroy7tyaYqN2W0u3nF91yHFiOnMmKiUdykrSSVHSt29N/73en8/7eT6f97OHJWQeKog9
-        pM7gNWplmpz2J+1PRtxhI6FXklYPPV3DdVw+jbgaczXFNfu+UFyZs4niXv/spzlTvY3mSjqM
-        JOd232A4z91SmhssdCLO7HZIuCrne4ZrNVTS3Ol6J8OZz/fQ0XMUNmsurWh7U0crOvJdEkVR
-        rRUpBm2Ld1Px/hsO8GmHMnlN+MZ9/qk/uh7QR3IWHGvPvsjo0QjOQ34s4Cjo/N4qyUP+rAxX
-        IujKvs+Iwofg2rMxUhSDCN705kmmj3gffJs6UoHAkltAiWIAgf5mNyO45uE9UFWcgwSej2Ph
-        1XDT5FUEfieBj9Z2WmjQOAIKHxdNmqR4IzSbWkiBSRwChjEzJfACnAjGmlOk6JkLjZe8E8yy
-        fngTZFcuE8oEDoQWb5lE5CVwq6+UEDcdYMBhWC7yVui1vGREngdfXbVTHAzjd8om0wA+iaDg
-        XisjCiOCDlc5El3roa3pNy0MJvAKqL4bLpY3Q0+JgRLKgGfD27654g6zocRuIsSyFM6ekYnu
-        EPhjNU09YhDke8dJI5JbZgSzzEhjmZHG8n9uOSKtKJDXaVUpvDZSzR9dpVWqtDp1yqr96Sob
-        mvhqz/+6ft5GjtHkBoRZJA+QRvPlSTJKmanNUjUgYAn5fGnMi+eJMukBZdZxXpOepNGl8doG
-        tJAl5YHSyKs9CTKcoszgD/P8EV4z3ZWwfkF6VPGr+OqcTl98+Go9s05Tum1s7efoE2xIVPnR
-        JR7Xduf1Ie/eRb7ROL/OmOBdxb+diXFhUelfYz7VBCTvjD3XuGP38KOcbrs63xP6oXuL62HY
-        0pX3e3wFdQm/1n9WJQW0BEfM6kr11Pdx49uGdukumHVG3hQaHpq/eGtjv+OgXe8YlpPaVGXE
-        SkKjVf4Db3rfPmYDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMIsWRmVeSWpSXmKPExsVy+t/xe7o/dRbGG7yZI21xf14ro8XGGetZ
-        La5/ec5qMf/IOVaLK1/fs1lM37uJzWLS/QksFufPb2C3uLxrDpvF594jjBYzzu9jslh75C67
-        xe3GFWwWrXuPsFvMmPySzYHfY9OqTjaPO9f2sHnc7z7O5NG3ZRWjx+dNcgGsUXo2RfmlJakK
-        GfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZnx4fYCtoF6241zSN
-        vYHxp0AXIyeHhICJxJMD75i6GLk4hASWMkr8arnD1sXIAZSQkpjfogRRIyzx51oXG4gtJPCe
-        UWL/iwwQW1ggSGLtxHZGEFtEIETi6L/LrCA2s8BNJomLWzwgZq5hkpi36jNYgk3AUKL3aB9Y
-        A6+AncT16bdYQGwWARWJxr8zwGpEBeIkfkzsZYOoEZQ4OfMJC8g9nAL2Ek0r1CDmq0v8mXeJ
-        GcIWl7j1ZD4ThC0vsf3tHOYJjEKzkHTPQtIyC0nLLCQtCxhZVjGKpJYW56bnFhvpFSfmFpfm
-        pesl5+duYgRG8LZjP7fsYOx6F3yIUYCDUYmH1yF1QbwQa2JZcWXuIUYJDmYlEV6ns6fjhHhT
-        EiurUovy44tKc1KLDzGaAv02kVlKNDkfmFzySuINTQ3NLSwNzY3Njc0slMR5OwQOxggJpCeW
-        pGanphakFsH0MXFwSjUwyq491PV7/vnuowekD8xidrCLvjzn7cwXnsq/nxQF3dCRL/NzWewe
-        nMZ6rNn4xzLh3KDI8o+84ZuOnKpnyp7xS9SCQVVi2+lDs5YIOjx46cxnxTXXQ81Pk/9M1d7D
-        5r6cDRq/azsq3dQTj99659C8bd6S3tQK9Xr9zXsOGkdU7Hom9OIw65V6JZbijERDLeai4kQA
-        JM4m4/YCAAA=
-X-CMS-MailID: 20201103101209eucas1p21ea6a9fb64035a234fbc1ab20d158965
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776
-References: <CGME20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776@eucas1p1.samsung.com>
-        <20201030125149.8227-1-s.nawrocki@samsung.com>
-        <b586c2b7-9ca1-e641-b70c-27493ffd05e0@samsung.com>
-        <9285e2d4-f2fa-92f2-ba25-832f32f77d78@linaro.org>
-        <3e3038da-d5de-7ea9-9cb9-082ce63af91d@samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo, Georgi
-
-On 03.11.2020 09:53, Chanwoo Choi wrote:
-> On 11/3/20 5:29 PM, Georgi Djakov wrote:
->> On 11/3/20 09:54, Chanwoo Choi wrote:
-
->>> When I tested this patchset on Odroid-U3,
->>> After setting 0 bps by interconnect[1][2],
->>> the frequency of devfreq devs sustain the high frequency
->>> according to the pm qos request.
->>>
->>> So, I try to find the cause of this situation.
->>> In result, it seems that interconnect exynos driver
->>> updates the pm qos request to devfreq device
->>> during the kernel booting. Do you know why the exynos
->>> interconnect driver request the pm qos during probe
->>> without the mixer request?
->>
->> That's probably because of the sync_state support, that was introduced
->> recently. The icc_sync_state callback needs to be added to the driver
->> (i just left a comment on that patch), and then check again if it works.
->>
->> The idea of the sync_state is that there could be multiple users of a
->> path and we must wait for all consumers to tell their bandwidth needs.
->> Otherwise the first consumer may lower the bandwidth or disable a path
->> needed for another consumer (driver), which has not probed yet. So we
->> maintain a floor bandwidth until everyone has probed. By default the floor
->> bandwidth is INT_MAX, but can be overridden by implementing the get_bw()
->> callback.
-
-Thanks for detailed explanation Georgi.
-
-> Thanks for guide. I tested it with your comment of patch2.
-> It is well working without problem as I mentioned previously.
+On 02-11-20, 12:01, Nicola Mazzucato wrote:
+> Hi All,
 > 
-> I caught the reset operation of PM QoS requested from interconnect
-> on kernel log. In result, after completed the kernel booting,
-> there is no pm qos request if hdmi cable is not connected.
+> In this V3 posting I have replaced the new dt-binding with minor changes/
+> improvements for opp (since we are now using opp tables instead).
+> The RFC still stands on how to make this info available to sw consumers.
+> 
+> In the RFC, I am proposing a simple addition of a performance dependencies
+> cpumask in CPUFreq core and an example of how drivers and consumers would
+> make use of it.
+> I also propose an alternative approach, which does not require changes in
+> CPUFreq core, but - possibly - in all the consumers.
+> 
+> This is to support systems where exposed cpu performance controls are more
+> fine-grained that the platform's ability to scale cpus independently.
 
-Thanks for the bug report Chanwoo, it's related to the sync_state
-feature as you guys already figured out.  I had to reorder some code 
-in the interconnect driver probe() to avoid some issues, 
-i.e. to register PM QoS request before icc_node_add() call but 
-I forgot to check initial state of the bus frequencies.
+I was talking to Vincent about what you are doing here and we got a
+bit confused and so here are few questions that we had:
 
-I thought the get_bw implementation might be needed but the default
-behaviour seems fine, the PM QoS derived bus frequencies will be 
-clamped in the devfreq to valid OPP values.
+- Based on my previous understanding, you don't want software
+  coordination of frequencies (which is done by cpufreq today), but
+  want the hardware to do that and so you want per-cpu cpufreq
+  policies.
 
-Chanwoo, in order to set the bandwidth to 0 we could also just blank 
-the display. Below are some of the commands I use for testing.
+- What's the real benefit of hardware coordination ? Want to make sure
+  I fully understand that.
 
-# blank display (disable the mixer entirely)
-echo 4 > /sys/devices/platform/exynos-drm/graphics/fb0/blank
+- Because of hardware co-ordination of otherwise co-ordinated CPUs,
+  few things break. Thermal and EAS are some of the examples and so
+  you are trying to fix them here by proving them the missing
+  information again.
 
-# unblank display
-echo 0 > /sys/devices/platform/exynos-drm/graphics/fb0/blank
+- One other thing that breaks with this is freq-invariance in the
+  scheduler, as the scheduler won't see the real frequencies the
+  various CPUs are running at. Most of the hardware we have today
+  doesn't have counters, like AMUs, not sure if all future ones based
+  on SCMI will have that too, so how are they gong to be fixed ?
 
-# modetest with 2 planes (higher bandwidth test)
-./modetest -s 47:1920x1080 -P 45:1920x1080 -v
+  And if we even have to fix this (freq invariance), what's hardware
+  coordination giving us that makes all this worth it ?
+
+Sorry about the long list :)
 
 -- 
-Regards,
-Sylwester
+viresh
