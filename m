@@ -2,240 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EE62A4C53
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 18:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B94C2A4CE1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 18:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727901AbgKCRJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Nov 2020 12:09:22 -0500
-Received: from mga17.intel.com ([192.55.52.151]:51592 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726581AbgKCRJW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 3 Nov 2020 12:09:22 -0500
-IronPort-SDR: /NXuTpJz37Bcd4VwxsaGTHBuZqOzv0klhObPogXe7v5yp08T/tghQfmmlCt1Ph/wWALiIVLHcQ
- tNfOHLTZlkKw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9794"; a="148944292"
-X-IronPort-AV: E=Sophos;i="5.77,448,1596524400"; 
-   d="scan'208";a="148944292"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2020 09:09:21 -0800
-IronPort-SDR: QBgN52aJ8NSjE3cDykUTFW06oTXj2QCrqtGrUeMars9+dcy1iM1xzCt+yU4CPiEH6TtyEzbSvt
- FerZK7p9UYCw==
-X-IronPort-AV: E=Sophos;i="5.77,448,1596524400"; 
-   d="scan'208";a="363102781"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.209.1.131])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2020 09:09:19 -0800
-Message-ID: <f7562a2492aa83afa8a3a511428ed1959b8e8c72.camel@linux.intel.com>
-Subject: Re: [PATCH v3 3/4] powercap: Add AMD Fam17h RAPL support
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Victor Ding <victording@google.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>, linux-pm@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        x86@kernel.org
-Date:   Tue, 03 Nov 2020 09:09:18 -0800
-In-Reply-To: <CANqTbdaB8Mv+ij2rdprC_=JUt49A_V12-T5TbyidNktah575rw@mail.gmail.com>
-References: <20201027072358.13725-1-victording@google.com>
-         <20201027072358.13725-4-victording@google.com>
-         <82f3070691438d3f651d2e5e5fb5499131cdbd15.camel@intel.com>
-         <CANqTbdaB8Mv+ij2rdprC_=JUt49A_V12-T5TbyidNktah575rw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1728387AbgKCRbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Nov 2020 12:31:00 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:33386 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726581AbgKCRa7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 12:30:59 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20201103173048euoutp02f75e5d3e0e2fffe61bc402cc24f97682~ED7efw5I01976319763euoutp02k
+        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 17:30:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20201103173048euoutp02f75e5d3e0e2fffe61bc402cc24f97682~ED7efw5I01976319763euoutp02k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1604424648;
+        bh=FvqSgYlnEFpwlpU+wYR8aeZGcpfordNaAzo8m3V9k1Y=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=e0Q0PFxldGQ5t3CCW7L+/5kKEm5g5LqgGrimRz22zkEC9Mv1WUdsBJ5zkRhTSjHQN
+         TtHkcfFltoKLwwGdVVWsYvk9UE5E9RpLX81BCBLejALIO22uaeqj5DnIHr+joRmXSR
+         39OlHnyjkiwoev8XsOnoyMrPTyo/GbuIAcuvRDY8=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20201103173042eucas1p11d5610d3ebc068bbe49607afd374e33e~ED7ZSVmqO0494704947eucas1p18;
+        Tue,  3 Nov 2020 17:30:42 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id D0.CD.05997.2C391AF5; Tue,  3
+        Nov 2020 17:30:42 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20201103173042eucas1p2035478a24d6104b5782214d89e1fffd2~ED7Y5y9Zt0590405904eucas1p2J;
+        Tue,  3 Nov 2020 17:30:42 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20201103173042eusmtrp2412383902ac65b5e457be582d2c19af7~ED7Y5FUaq2312523125eusmtrp2j;
+        Tue,  3 Nov 2020 17:30:42 +0000 (GMT)
+X-AuditID: cbfec7f4-677ff7000000176d-c9-5fa193c2218e
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id E8.C7.06314.2C391AF5; Tue,  3
+        Nov 2020 17:30:42 +0000 (GMT)
+Received: from [106.210.123.115] (unknown [106.210.123.115]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201103173041eusmtip1884fcdf07c829fed3a1c237954131935~ED7XtsfOD1391313913eusmtip1F;
+        Tue,  3 Nov 2020 17:30:41 +0000 (GMT)
+Subject: Re: [PATCH v7 2/6] interconnect: Add generic interconnect driver
+ for Exynos SoCs
+To:     cwchoi00@gmail.com
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <9081148f-5ed4-97a3-84a9-4ea3eb157b73@samsung.com>
+Date:   Tue, 3 Nov 2020 18:30:40 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.12.1
 MIME-Version: 1.0
+In-Reply-To: <CAGTfZH3seoTUd68pq+RCSs9BfnmkUaeoipML=85aUPyvcWZ6fw@mail.gmail.com>
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA03SfUhTURQA8O7e29tmzZ7T2kFDcRiUomaGPErMInBQ0Af9EUbazIdabsqe
+        mhaRMee3JgrOhukKIhuKKaI5P8Axm2VqWpikMsVRKonKlvhRmttT8r/fveece86By8dEo1xP
+        fpIijVYqZMkSwgVvfb82FGiseBF74vNIGGWpUSOqqaqRS32z/+RSP3oDqFrTIJf6+nuRoDRd
+        zQQ1NPSWR30xVBOUrcSEqKqhbg7VYJrkUeNP6ghK3WXiUVUVc0TkQWm7dpInbdYXENKJ0U5C
+        aikyc6SlLXoktTV7XyGiXcLj6eSkDFoZHHHbJbFrqQBL7dqfuaxZ4GSjekEhEvCBPAXDlk7k
+        sIisQzDWLmdtR9C+hRUil23bEPwa03F3CzT5+Tw28BpB0V/9TtYyAvvwDObIcidvwnSFwWkP
+        8jC0VVqRIwkjN3FYNeQ5+xFkCJT0ljotJCOgbmOa4zBO+kH5RDfu8CEyBsqacnA2xw0+PLM6
+        LSCvwpv5PKcxUgzfrbUc1j7QtlDtnAjINR6MVU7i7NwXoEKlQqzdYd7cwmN9BLbaHcWOAhWC
+        4o5xHnsoQ2Ax63YqzsDE4DpRiPjbLY5DoyHYQSDPwYjpGEtXGFtwY2dwhfJWDcZeCyE/V8S+
+        4Qcbeg2HtScUWbfwMiTR7tlMu2cb7Z5ttP/b6hCuR2I6nZEn0MxJBX0/iJHJmXRFQtCdFHkz
+        2v5t/Ztm+ztk+BNnRCQfSQ4II2ldrIgry2Cy5EYEfEziITw/0B8jEsbLsh7QypRYZXoyzRiR
+        Fx+XiIWhL+duicgEWRp9j6ZTaeVulMMXeGajhIc5i30+hhbPlKnis7ZQIxb4uMbDPqPySlcq
+        1JcyVa711/vXOzL1I3FRPasd488brklCWtOii3r2zQas9PkuLJE6dV0YFTZrm7KPJnoP2AM8
+        knz1wxdFi1nGT0+jHl2+y0nRCl9FhByN+5gbu+nvusL4hQdor6j9025YTou9JTiTKAvxx5SM
+        7B+rFaUcaQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJIsWRmVeSWpSXmKPExsVy+t/xu7qHJi+MN1i8UM7i/rxWRouNM9az
+        Wlz/8pzV4tlRbYv5R86xWlz5+p7NYvreTWwW589vYLe4vGsOm8Xn3iOMFjPO72OyWHvkLrvF
+        7cYVbBate4+wW8yY/JLNgd9j56y77B6bVnWyedy5tofN4373cSaPvi2rGD0+b5ILYIvSsynK
+        Ly1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy9j7oZO5YC93
+        xcfpb5kaGNdwdjFyckgImEhM7+hg72Lk4hASWMoosaf1G0sXIwdQQkpifosSRI2wxJ9rXWwQ
+        Ne8ZJZ58uw5WIywQLTH1gyNIjYiAmMT2aU8YQWqYBVpYJW6feMEE0fCBSWLtjX5WkCo2AUOJ
+        3qN9jCA2r4CdxIrfD5lAbBYBFYlJd/axgNiiAnESPyb2skHUCEqcnPkELM4pECix8lU7mM0s
+        oC7xZ94lZghbXOLWk/lMELa8xPa3c5gnMArNQtI+C0nLLCQts5C0LGBkWcUoklpanJueW2yo
+        V5yYW1yal66XnJ+7iREYzduO/dy8g/HSxuBDjAIcjEo8vA6pC+KFWBPLiitzDzFKcDArifA6
+        nT0dJ8SbklhZlVqUH19UmpNafIjRFOi5icxSosn5wESTVxJvaGpobmFpaG5sbmxmoSTO2yFw
+        MEZIID2xJDU7NbUgtQimj4mDU6qBcZbX0orpmRZaKTuYy/U3fVNjf/aUS1Hz7+PpvxMyYrpm
+        XL146Laon9UkHhvjpcy7OzkfNFy+eWtSbYHFwSjRwmzVhdzsjFcazYMiBNil7nm8y0tOMEy3
+        1skyYf5icCLxTbzH1eNLvu9ru7/saV7jnUaWfyeFTZZ13p4lEr+O6+wKX/3f3/snKbEUZyQa
+        ajEXFScCAHCh7nv8AgAA
+X-CMS-MailID: 20201103173042eucas1p2035478a24d6104b5782214d89e1fffd2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20201030125301eucas1p218b0e654cb4c826b05280f28836da8d9
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20201030125301eucas1p218b0e654cb4c826b05280f28836da8d9
+References: <20201030125149.8227-1-s.nawrocki@samsung.com>
+        <CGME20201030125301eucas1p218b0e654cb4c826b05280f28836da8d9@eucas1p2.samsung.com>
+        <20201030125149.8227-3-s.nawrocki@samsung.com>
+        <88af4e53-6c7a-c2e6-ad28-a9d6bb5bf623@samsung.com>
+        <6cc9a2f8-9d9a-68b7-9f47-e16fefb18d88@samsung.com>
+        <CAGTfZH3seoTUd68pq+RCSs9BfnmkUaeoipML=85aUPyvcWZ6fw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2020-11-03 at 17:10 +1100, Victor Ding wrote:
-> On Mon, Nov 2, 2020 at 12:39 PM Zhang Rui <rui.zhang@intel.com>
-> wrote:
-> > On Tue, 2020-10-27 at 07:23 +0000, Victor Ding wrote:
-> > > This patch enables AMD Fam17h RAPL support for the power capping
-> > > framework. The support is as per AMD Fam17h Model31h (Zen2) and
-> > > model 00-ffh (Zen1) PPR.
-> > > 
-> > > Tested by comparing the results of following two sysfs entries
-> > > and
-> > > the
-> > > values directly read from corresponding MSRs via
-> > > /dev/cpu/[x]/msr:
-> > >   /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
-> > >   /sys/class/powercap/intel-rapl/intel-rapl:0/intel-
-> > > rapl:0:0/energy_uj
+On 03.11.2020 15:12, Chanwoo Choi wrote:
+>>> I have a question about exynos_icc_get_parent().
+>>> As I checked, this function returns the only one icc_node
+>>> as parent node. But, bus_display dt node in the exynos4412.dtsi
+>>> specifies the two interconnect node as following with bus_leftbus, bus_dmc,
+>>>
+>>> When I checked the return value of exynos_icc_get_parent()
+>>> during probing for bus_display device, exynos_icc_get_parent() function
+>>> only returns 'bus_leftbus' icc_node. Do you need to add two phandle
+>>> of icc node?
+>> Yes, as we use the interconnect consumer bindings we need to specify a path,
+>> i.e. a <initiator, target> pair. When the provider node initializes it will
+>> link itself to that path. Currently the provider driver uses just the first
+>> phandle.
 
-Is this for just energy reporting? No capping of power?
+> As I knew, the interconnect consumer bindings use the two phandles
+> in the interconnect core as you commented. But, in case of this,
+> even if add two phandles with interconnect consuming binding style,
+> the exynos interconnect driver only uses the first phandle.
+> 
+> Instead, I think we better explain this case into a dt-binding
+> document for users.
 
-Thanks,
-Srinivas
+Fair enough, I'll try to improve the description, do you perhaps have 
+any suggestions?
 
+The DT binding reflects how the hardware structure looks like and the
+fact that the driver currently uses only one of the phandles could be
+considered an implementation detail.
 
-> > > 
-> > > Signed-off-by: Victor Ding <victording@google.com>
-> > > Acked-by: Kim Phillips <kim.phillips@amd.com>
-> > > 
-> > > 
-> > > ---
-> > > 
-> > > Changes in v3:
-> > > By Victor Ding <victording@google.com>
-> > >  - Rebased to the latest code.
-> > >  - Created a new rapl_defaults for AMD CPUs.
-> > >  - Removed redundant setting to zeros.
-> > >  - Stopped using the fake power limit domain 1.
-> > > 
-> > > Changes in v2:
-> > > By Kim Phillips <kim.phillips@amd.com>:
-> > >  - Added Kim's Acked-by.
-> > >  - Added Daniel Lezcano to Cc.
-> > >  - (No code change).
-> > > 
-> > >  arch/x86/include/asm/msr-index.h     |  1 +
-> > >  drivers/powercap/intel_rapl_common.c |  6 ++++++
-> > >  drivers/powercap/intel_rapl_msr.c    | 20 +++++++++++++++++++-
-> > >  3 files changed, 26 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/include/asm/msr-index.h
-> > > b/arch/x86/include/asm/msr-index.h
-> > > index 21917e134ad4..c36a083c8ec0 100644
-> > > --- a/arch/x86/include/asm/msr-index.h
-> > > +++ b/arch/x86/include/asm/msr-index.h
-> > > @@ -327,6 +327,7 @@
-> > >  #define MSR_PP1_POLICY                       0x00000642
-> > > 
-> > >  #define MSR_AMD_RAPL_POWER_UNIT              0xc0010299
-> > > +#define MSR_AMD_CORE_ENERGY_STATUS           0xc001029a
-> > >  #define MSR_AMD_PKG_ENERGY_STATUS    0xc001029b
-> > > 
-> > >  /* Config TDP MSRs */
-> > > diff --git a/drivers/powercap/intel_rapl_common.c
-> > > b/drivers/powercap/intel_rapl_common.c
-> > > index 0b2830efc574..bedd780bed12 100644
-> > > --- a/drivers/powercap/intel_rapl_common.c
-> > > +++ b/drivers/powercap/intel_rapl_common.c
-> > > @@ -1011,6 +1011,10 @@ static const struct rapl_defaults
-> > > rapl_defaults_cht = {
-> > >       .compute_time_window = rapl_compute_time_window_atom,
-> > >  };
-> > > 
-> > > +static const struct rapl_defaults rapl_defaults_amd = {
-> > > +     .check_unit = rapl_check_unit_core,
-> > > +};
-> > > +
-> > 
-> > why do we need power_unit and time_unit if we only want to expose
-> > the
-> > energy counter?
-> AMD's Power Unit MSR provides identical information as Intel's,
-> including
-> time units, power units, and energy status units. By reusing the
-> check unit
-> method, we could avoid code duplication as well as easing future
-> enhance-
-> ment when AMD starts to support power limits.
-> > Plus, in rapl_init_domains(), PL1 is enabled for every RAPL Domain
-> > blindly, I'm not sure how this is handled on the AMD CPUs.
-> > Is PL1 invalidated by rapl_detect_powerlimit()? or is it still
-> > registered as a valid constraint into powercap sysfs I/F?
-> AMD's CORE_ENERGY_STAT MSR is like Intel's PP0_ENERGY_STATUS;
-> therefore, PL1 also always exists on AMD. rapl_detect_powerlimit()
-> correctly
-> markes the domain as monitoring-only after finding power limit MSRs
-> do not
-> exist.
-> > Currently, the code makes the assumption that there is only on
-> > power
-> > limit if priv->limits[domain_id] not set, we probably need to
-> > change
-> > this if we want to support RAPL domains with no power limit.
-> The existing code already supports RAPL domains with no power limit:
-> PL1 is
-> enabled when there is zero or one power limit,
-> rapl_detect_powerlimit() will then
-> mark if PL1 is monitoring-only if power limit MSRs do not exist. Both
-> AMD's RAPL
-> domains are monitoring-only and are correctly marked and handled.
-> > thanks,
-> > rui
-> > >  static const struct x86_cpu_id rapl_ids[] __initconst = {
-> > >       X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE,         &rapl_defau
-> > > lt
-> > > s_core),
-> > >       X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE_X,       &rapl_defau
-> > > lts_core),
-> > > @@ -1061,6 +1065,8 @@ static const struct x86_cpu_id rapl_ids[]
-> > > __initconst = {
-> > > 
-> > >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &rapl_defau
-> > > lts_hsw_se
-> > > rver),
-> > >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &rapl_defau
-> > > lts_hsw_se
-> > > rver),
-> > > +
-> > > +     X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_amd),
-> > >       {}
-> > >  };
-> > >  MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
-> > > diff --git a/drivers/powercap/intel_rapl_msr.c
-> > > b/drivers/powercap/intel_rapl_msr.c
-> > > index a819b3b89b2f..78213d4b5b16 100644
-> > > --- a/drivers/powercap/intel_rapl_msr.c
-> > > +++ b/drivers/powercap/intel_rapl_msr.c
-> > > @@ -49,6 +49,14 @@ static struct rapl_if_priv rapl_msr_priv_intel
-> > > = {
-> > >       .limits[RAPL_DOMAIN_PLATFORM] = 2,
-> > >  };
-> > > 
-> > > +static struct rapl_if_priv rapl_msr_priv_amd = {
-> > > +     .reg_unit = MSR_AMD_RAPL_POWER_UNIT,
-> > > +     .regs[RAPL_DOMAIN_PACKAGE] = {
-> > > +             0, MSR_AMD_PKG_ENERGY_STATUS, 0, 0, 0 },
-> > > +     .regs[RAPL_DOMAIN_PP0] = {
-> > > +             0, MSR_AMD_CORE_ENERGY_STATUS, 0, 0, 0 },
-> > > +};
-> > > +
-> > >  /* Handles CPU hotplug on multi-socket systems.
-> > >   * If a CPU goes online as the first CPU of the physical package
-> > >   * we add the RAPL package to the system. Similarly, when the
-> > > last
-> > > @@ -138,7 +146,17 @@ static int rapl_msr_probe(struct
-> > > platform_device
-> > > *pdev)
-> > >       const struct x86_cpu_id *id =
-> > > x86_match_cpu(pl4_support_ids);
-> > >       int ret;
-> > > 
-> > > -     rapl_msr_priv = &rapl_msr_priv_intel;
-> > > +     switch (boot_cpu_data.x86_vendor) {
-> > > +     case X86_VENDOR_INTEL:
-> > > +             rapl_msr_priv = &rapl_msr_priv_intel;
-> > > +             break;
-> > > +     case X86_VENDOR_AMD:
-> > > +             rapl_msr_priv = &rapl_msr_priv_amd;
-> > > +             break;
-> > > +     default:
-> > > +             pr_err("intel-rapl does not support CPU vendor
-> > > %d\n",
-> > > boot_cpu_data.x86_vendor);
-> > > +             return -ENODEV;
-> > > +     }
-> > >       rapl_msr_priv->read_raw = rapl_msr_read_raw;
-> > >       rapl_msr_priv->write_raw = rapl_msr_write_raw;
-> > > 
-> Best regards,
-> Victor Ding
-
+-- 
+Regards,
+Sylwester
