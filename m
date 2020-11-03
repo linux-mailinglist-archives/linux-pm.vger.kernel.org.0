@@ -2,309 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 836AA2A3DD4
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 08:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C86A2A3E5A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 09:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgKCHkX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Nov 2020 02:40:23 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:29805 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727917AbgKCHkW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 02:40:22 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201103074019epoutp01ce2fc4fe1a1544bc546b7b4217cedc2d~D736KotuW2940029400epoutp01T
-        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 07:40:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201103074019epoutp01ce2fc4fe1a1544bc546b7b4217cedc2d~D736KotuW2940029400epoutp01T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1604389219;
-        bh=CpF6fCF9Ej0ij/j844g6OegZ8bzLWvldVIAiixTTzuk=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=kYwMd2kYj/NbacFbm14RcKCzzulfYCis7n5bXogy/ZLAsveI3oplGEKbP9UsGBY2c
-         qlnUjl9NzIukhMTFIKLYJg8lraTESoyVu4OR271Kd7NZhdTLpl0NhlLXHY1Hg7ud+v
-         Tx+Hav5vyQeWqHo80aNvFOBayNiT5ON8KfoQCwiU=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20201103074017epcas1p1b207204cd37afa270e8a46facd41e4be~D734TStBW0499404994epcas1p1u;
-        Tue,  3 Nov 2020 07:40:17 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4CQMBk4HnTzMqYkZ; Tue,  3 Nov
-        2020 07:40:14 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4C.E5.09582.E5901AF5; Tue,  3 Nov 2020 16:40:14 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20201103074012epcas1p1b0711cfde3b20238de9aaf0b1db41551~D730ZK_l_2387723877epcas1p1L;
-        Tue,  3 Nov 2020 07:40:12 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201103074012epsmtrp1a6ff7644cedb15b2e7b251b8f1a27e0e~D730YVpGB1889518895epsmtrp1c;
-        Tue,  3 Nov 2020 07:40:12 +0000 (GMT)
-X-AuditID: b6c32a37-e2fb8a800000256e-78-5fa1095e8fbd
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D8.28.13470.C5901AF5; Tue,  3 Nov 2020 16:40:12 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20201103074012epsmtip1a2909f0f02ca079f4e5362d7a0f3512f~D73z96PRA0898008980epsmtip1p;
-        Tue,  3 Nov 2020 07:40:12 +0000 (GMT)
-Subject: Re: [PATCH v7 0/6] Exynos: Simple QoS for exynos-bus using
- interconnect
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        georgi.djakov@linaro.org, krzk@kernel.org
+        id S1725988AbgKCILC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Nov 2020 03:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725968AbgKCILB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 03:11:01 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EEBC061A47
+        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 00:11:01 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id k18so11827781wmj.5
+        for <linux-pm@vger.kernel.org>; Tue, 03 Nov 2020 00:11:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IdpvY3vnaHaD1F97XwauJjhuWBuAAnyJbZWUZsOfYIU=;
+        b=o/lYcogsCxglhqmUdOWe0mVbuMYgm+696ln9cDs0FwKWIQToTKL+VTH57ieU/ATbYG
+         WVorhWY5rLIFydEs2Cc9bHf/ORwndSoLCL3b9Z8y6u3vZLohzRq8BGKj/n74RlX9ILVP
+         HHcP2wpFHpjVD8TAQy1ysGwNxbB0AVGXGPUoXiUtA7hI6FzjVZjIopfHsrUl3eh+uw8y
+         MnokL/RLQRmtnKMxfrANV6K6/hqjnSn15XsjqnXpPGDpdirZCWKYpZhkT2xHr8E7zuh4
+         +/Mpe0crtfFnLK7qHBhT7bm9xpL1ptDV1IkmMkgvD8WdrDzqqHrRbRc+bYGm1pBM8EIT
+         yPIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IdpvY3vnaHaD1F97XwauJjhuWBuAAnyJbZWUZsOfYIU=;
+        b=OA6yRFEF1FZ6n9jGkcuZn6gi0/oj3bx9vFyDe8zgX1hJpCd/6WjCIGCcCXUT30qdM1
+         My0FyrjtmkMDlx9it3MDEhtDbzSIfOl4W/eE1vuxR3MoVRtIvjinITNwfo5sGh6LPc0U
+         VOG3a6eg1BIwXFjHdgxuG05qNvwVlJQoVJJR4oKluXHOd3yztdkfB6JNtP9/6WEt87RS
+         zChLIx43dQ3EDqsbHgG7JWHjIeu3Who49KdCs+Y5+irNVyNOWLYCweFDIG8ZC3cZgvrU
+         5CGANcHGxSMQbot2lHWfdpi5PmAmLj3UAH7qYwtXMz34QAtiHDwMzxdhpl8KtKaxaoBg
+         NjdA==
+X-Gm-Message-State: AOAM531Gtd07vamaLqIGWfMV/2aprJvMzoaF1T9Sh4RDIWr4mlJb6HrA
+        R/YfU+6I8pdUJKtdmC3sV8QQhA==
+X-Google-Smtp-Source: ABdhPJznyfH5Fysxc+b+rJCGR0FORQrMIC5CSZyZl0VHqCzJY5ZMpqAAP02BQlCEerKUyIxg4RHemg==
+X-Received: by 2002:a1c:b346:: with SMTP id c67mr2181585wmf.60.1604391059673;
+        Tue, 03 Nov 2020 00:10:59 -0800 (PST)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id h7sm25054331wrt.45.2020.11.03.00.10.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Nov 2020 00:10:59 -0800 (PST)
+Subject: Re: [PATCH v7 2/6] interconnect: Add generic interconnect driver for
+ Exynos SoCs
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>, cw00.choi@samsung.com,
+        krzk@kernel.org
 Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
         a.swigon@samsung.com, myungjoo.ham@samsung.com,
         inki.dae@samsung.com, sw0312.kim@samsung.com,
         b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <b586c2b7-9ca1-e641-b70c-27493ffd05e0@samsung.com>
-Date:   Tue, 3 Nov 2020 16:54:10 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+References: <20201030125149.8227-1-s.nawrocki@samsung.com>
+ <CGME20201030125301eucas1p218b0e654cb4c826b05280f28836da8d9@eucas1p2.samsung.com>
+ <20201030125149.8227-3-s.nawrocki@samsung.com>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <2f243097-7b8c-9b39-989d-a36d226ecd23@linaro.org>
+Date:   Tue, 3 Nov 2020 10:11:00 +0200
 MIME-Version: 1.0
-In-Reply-To: <20201030125149.8227-1-s.nawrocki@samsung.com>
+In-Reply-To: <20201030125149.8227-3-s.nawrocki@samsung.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPJsWRmVeSWpSXmKPExsWy7bCmnm4c58J4g0Odihb357UyWmycsZ7V
-        Yv6Rc6wWV76+Z7OYvncTm8Wk+xNYLM6f38BucXnXHDaLz71HGC1mnN/HZLH2yF12i9uNK9gs
-        WvceYbc4/Kad1WLG5JdsDvwem1Z1snncubaHzeN+93Emj74tqxg9Pm+SC2CNyrbJSE1MSS1S
-        SM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpXSaEsMacUKBSQWFys
-        pG9nU5RfWpKqkJFfXGKrlFqQklNgWaBXnJhbXJqXrpecn2tlaGBgZApUmJCdsebxIuaCbR4V
-        CxZ+YGtgbDPuYuTkkBAwkZixdjJbFyMXh5DADkaJPYfXskI4nxglJn35DpX5xijx+MscRpiW
-        RX/+QlXtZZSYc/orE4TznlFi3+wfbCBVwgJBEmsntgN1cHCICMRIrH8XARJmFjjBJHHkjiCI
-        zSagJbH/xQ2wcn4BRYmrPx6DLeAVsJM4secBE0gri4CKxJ1JtiBhUYEwiZPbWqBKBCVOznzC
-        AmJzClhLdHXeYIIYLy5x68l8KFteonnrbGaQ0yQEbnBIvD20hQniAReJNYtOs0LYwhKvjm9h
-        h7ClJF72t0HZ1RIrTx5hg2juYJTYsv8CVIOxxP6lk8GOYxbQlFi/Sx8irCix8/dcRojFfBLv
-        vvawgpRICPBKdLQJQZQoS1x+cBfqBEmJxe2dbBMYlWYheWcWkhdmIXlhFsKyBYwsqxjFUguK
-        c9NTiw0LjJEjexMjOCVrme9gnPb2g94hRiYOxkOMEhzMSiK8NZHz4oV4UxIrq1KL8uOLSnNS
-        iw8xmgLDdyKzlGhyPjAr5JXEG5oaGRsbW5gYmpkaGiqJ8/7R7ogXEkhPLEnNTk0tSC2C6WPi
-        4JRqYLp1OfzSuhWqtz+curU5h0U/VSsh9mSgXsHDT7EMO7hzb1in53w7t+hC9lodlfYt598l
-        svrO0vtjHKlscZGph22N5FUX4eQ1Qqwe7Oa2aawWclcf1yZ1Tz93/+oquUP3NzdFy2vwRj8r
-        jitp6Ob5srT4ompr7V2R6Debr9jO5vM3S8ws+u/gXWjuzXBrtn8c04sboq3HH3C92z7tSONz
-        eYXQZ793Mt7bUWl5Rb7OtH0787S0jjdRJREqFyNvq2tGb5D83e33RuHJvC2PdnSpflqQf/9z
-        f91rh4JrncwyD/Pfp4osaEi8P+H0jZ7rbSHbmvj6TAU5zfZVXUhoqd7wg5GhY2XY98/OT98V
-        uXV8UmIpzkg01GIuKk4EAFo40gBSBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWy7bCSnG4M58J4g7e3NCzuz2tltNg4Yz2r
-        xfwj51gtrnx9z2Yxfe8mNotJ9yewWJw/v4Hd4vKuOWwWn3uPMFrMOL+PyWLtkbvsFrcbV7BZ
-        tO49wm5x+E07q8WMyS/ZHPg9Nq3qZPO4c20Pm8f97uNMHn1bVjF6fN4kF8AaxWWTkpqTWZZa
-        pG+XwJWx5vEi5oJtHhULFn5ga2BsM+5i5OSQEDCRWPTnL2sXIxeHkMBuRokPB9pYIRKSEtMu
-        HmXuYuQAsoUlDh8uhqh5yyixrOcjI0iNsECQxNqJ7WC2iECMxKnJs1hAipgFTjBJfFz1gAmi
-        o49RYnvXHhaQKjYBLYn9L26wgdj8AooSV388BuvmFbCTOLEHpIGDg0VAReLOJFuQsKhAmMTO
-        JY+ZIEoEJU7OfAI2hlPAWqKr8wZYnFlAXeLPvEvMELa4xK0n86Hi8hLNW2czT2AUnoWkfRaS
-        lllIWmYhaVnAyLKKUTK1oDg3PbfYsMAwL7Vcrzgxt7g0L10vOT93EyM4PrU0dzBuX/VB7xAj
-        EwfjIUYJDmYlEd6ayHnxQrwpiZVVqUX58UWlOanFhxilOViUxHlvFC6MExJITyxJzU5NLUgt
-        gskycXBKNTCxcn+a6BVo+bN+JrPiXdGrX7cc3qUx5X5e6EzLsNNMxw5Jn/dalafSuLdhXktI
-        ybs7lSL/VrU9L5ufbld9IOQP74/Y2C2z89nOPrsz625i1tbZkwsuz22Ocj93efmtEmMji+ll
-        lb1a658nsj35su5bLFfJ8wzR0uI3i6OiV5tEdM/+c917se4ehj0/l/LfVY9sybuvs7Z26S6z
-        my+3l5hMbZg2d+/U03tcTYX8fi+qnMZQu+nBK0km+1+xmgLmEZ6eHjXt1ptW6oU4tpXtP8nC
-        ppMs6/f9bMLtfFvn6adkBUrEU9zjt39bOu8n52aupm81jydybVG+5LitlrvBaeqao2JfDhZu
-        kp4mMPPKu3XmSizFGYmGWsxFxYkAafLqjT4DAAA=
-X-CMS-MailID: 20201103074012epcas1p1b0711cfde3b20238de9aaf0b1db41551
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776
-References: <CGME20201030125221eucas1p14e525f75c4b8dadae04144ce7684d776@eucas1p1.samsung.com>
-        <20201030125149.8227-1-s.nawrocki@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Sylwester,
 
-When I tested this patchset on Odroid-U3,
-After setting 0 bps by interconnect[1][2],
-the frequency of devfreq devs sustain the high frequency
-according to the pm qos request.
+Thank you for refreshing the patchset!
 
-So, I try to find the cause of this situation.
-In result, it seems that interconnect exynos driver
-updates the pm qos request to devfreq device
-during the kernel booting. Do you know why the exynos
-interconnect driver request the pm qos during probe
-without the mixer request?
-
-PS. The passive governor has a bug related to PM_QOS interface.
-So, I posted the patch[4].
-
-
-[1] interconnect_graph
-root@localhost:~# cat /sys/kernel/debug/interconnect/interconnect_graph 
-digraph {
-        rankdir = LR
-        node [shape = record]
-        subgraph cluster_1 {
-                label = "soc:bus_dmc"
-                "2:bus_dmc" [label="2:bus_dmc
-                        |avg_bw=0kBps
-                        |peak_bw=0kBps"]
-        }
-        subgraph cluster_2 {
-                label = "soc:bus_leftbus"
-                "3:bus_leftbus" [label="3:bus_leftbus
-                        |avg_bw=0kBps
-                        |peak_bw=0kBps"]
-        }
-        subgraph cluster_3 {
-                label = "soc:bus_display"
-                "4:bus_display" [label="4:bus_display
-                        |avg_bw=0kBps
-                        |peak_bw=0kBps"]
-        }
-        "3:bus_leftbus" -> "2:bus_dmc"
-        "4:bus_display" -> "3:bus_leftbus"
-
-
-[2] interconnect_summary
-root@localhost:~# cat /sys/kernel/debug/interconnect/interconnect_summary 
- node                                  tag          avg         peak
---------------------------------------------------------------------
-bus_dmc                                               0            0
-  12c10000.mixer                         0            0            0
-bus_leftbus                                           0            0
-  12c10000.mixer                         0            0            0
-bus_display                                           0            0
-  12c10000.mixer                         0            0            0
-
-
-[3] devfreq_summary
-root@localhost:~# cat /sys/kernel/debug/devfreq/devfreq_summary 
-dev                            parent_dev                     governor        timer      polling_ms  cur_freq_Hz  min_freq_Hz  max_freq_Hz
------------------------------- ------------------------------ --------------- ---------- ---------- ------------ ------------ ------------
-soc:bus_dmc                    null                           simple_ondemand deferrable         50    400000000    400000000    400000000
-soc:bus_acp                    soc:bus_dmc                    passive         null                0    267000000    100000000    267000000
-soc:bus_c2c                    soc:bus_dmc                    passive         null                0    400000000    100000000    400000000
-soc:bus_leftbus                null                           simple_ondemand deferrable         50    200000000    200000000    200000000
-soc:bus_rightbus               soc:bus_leftbus                passive         null                0    200000000    100000000    200000000
-soc:bus_display                soc:bus_leftbus                passive         null                0    200000000    200000000    200000000
-soc:bus_fsys                   soc:bus_leftbus                passive         null                0    134000000    100000000    134000000
-soc:bus_peri                   soc:bus_leftbus                passive         null                0    100000000     50000000    100000000
-soc:bus_mfc                    soc:bus_leftbus                passive         null                0    200000000    100000000    200000000
-
-
-[4] PM / devfreq: passive: Update frequency when start governor
-https://patchwork.kernel.org/project/linux-pm/patch/20201103070646.18687-1-cw00.choi@samsung.com/
-
-
-On 10/30/20 9:51 PM, Sylwester Nawrocki wrote:
+On 10/30/20 14:51, Sylwester Nawrocki wrote:
+> This patch adds a generic interconnect driver for Exynos SoCs in order
+> to provide interconnect functionality for each "samsung,exynos-bus"
+> compatible device.
 > 
-> This patchset adds interconnect API support for the Exynos SoC "samsung,
-> exynos-bus" compatible devices, which already have their corresponding
-> exynos-bus driver in the devfreq subsystem.  Complementing the devfreq
-> driver with an interconnect functionality allows to ensure the QoS
-> requirements of devices accessing the system memory (e.g. video processing
-> devices) are fulfilled and aallows to avoid issues like the one discussed
-> in thread [1].
+> The SoC topology is a graph (or more specifically, a tree) and its
+> edges are specified using the 'samsung,interconnect-parent' in the
+> DT. Due to unspecified relative probing order, -EPROBE_DEFER may be
+> propagated to ensure that the parent is probed before its children.
 > 
-> This patch series adds implementation of the interconnect provider per each
-> "samsung,exynos-bus" compatible DT node, with one interconnect node per
-> provider.  The interconnect code which was previously added as a part of
-> the devfreq driver has been converted to a separate platform driver.
-> In the devfreq a corresponding virtual child platform device is registered.
-> Integration of devfreq and interconnect frameworks is achieved through
-> the PM QoS API.
+> Each bus is now an interconnect provider and an interconnect node as
+> well (cf. Documentation/interconnect/interconnect.rst), i.e. every bus
+> registers itself as a node. Node IDs are not hardcoded but rather
+> assigned dynamically at runtime. This approach allows for using this
+> driver with various Exynos SoCs.
 > 
-> A sample interconnect consumer for exynos-mixer is added in patches 5/6,
-> 6/6, it is currently added only for exynos4412 and allows to address the
-> mixer DMA underrun error issues [1].
+> Frequencies requested via the interconnect API for a given node are
+> propagated to devfreq using dev_pm_qos_update_request(). Please note
+> that it is not an error when CONFIG_INTERCONNECT is 'n', in which
+> case all interconnect API functions are no-op.
 > 
-> Changes since v6:
->  - the interconnect consumer DT bindings are now used to describe dependencies
->    of the interconnects (samsung,exynos-bus nodes),
->  - bus-width property replaced with samsung,data-clk-ratio,
->  - adaptation to recent changes in the interconnect code
->    (of_icc_get_from_provider(), icc_node_add()).
+> The bus-width DT property is to determine the interconnect data
+> width and traslate requested bandwidth to clock frequency for each
+> bus.
 > 
-> The series has been tested on Odroid U3 board. It is based on v5.10-rc1.
+> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> ---
+> Changes for v7:
+>  - adjusted to the DT property changes: "interconnects" instead
+>    of "samsung,interconnect-parent", "samsung,data-clk-ratio"
+>    instead of "bus-width",
+>  - adaptation to of_icc_get_from_provider() function changes
+>    in v5.10-rc1.
 > 
-> --
-> Regards,
-> Sylwester
+> Changes for v6:
+>  - corrected of_node dereferencing in exynos_icc_get_parent()
+>    function,
+>  - corrected initialization of icc_node->name so as to avoid
+>    direct of_node->name dereferencing,
+>  - added parsing of bus-width DT property.
 > 
+> Changes for v5:
+>  - adjust to renamed exynos,interconnect-parent-node property,
+>  - use automatically generated platform device id as the interconect
+>    node id instead of a now unavailable devfreq->id field,
+>  - add icc_ prefix to some variables to make the code more self-commenting,
+>  - use icc_nodes_remove() instead of icc_node_del() + icc_node_destroy(),
+>  - adjust to exynos,interconnect-parent-node property rename to
+>    samsung,interconnect-parent,
+>  - converted to a separate platform driver in drivers/interconnect.
 > 
-> Changes since v5:
->  - addition of "bus-width: DT property, which specifies data width
->    of the interconnect bus (patches 1...2/6),
->  - addition of synchronization of the interconnect bandwidth setting
->    with VSYNC (patch 6/6).
-> 
-> Changes since v3 [4] (v4 skipped to align with patchset [1]), detailed
-> changes are listed in each patch:
->  - conversion to a separate interconnect (platform) driver,
->  - an update of the DT binding documenting new optional properties:
->    #interconnect-cells, samsung,interconnect-parent in "samsung,exynos-bus"
->    nodes,
->  - new DT properties added to the SoC, rather than to the board specific
->    files.
-> 
-> Changes since v2 [5]:
->  - Use icc_std_aggregate().
->  - Implement a different modification of apply_constraints() in
->    drivers/interconnect/core.c (patch 03).
->  - Use 'exynos,interconnect-parent-node' in the DT instead of
->    'devfreq'/'parent', depending on the bus.
->  - Rebase on DT patches that deprecate the 'devfreq' DT property.
->  - Improve error handling, including freeing generated IDs on failure.
->  - Remove exynos_bus_icc_connect() and add exynos_bus_icc_get_parent().
-> 
-> Changes since v1 [6]:
->  - Rebase on coupled regulators patches.
->  - Use dev_pm_qos_*() API instead of overriding frequency in
->    exynos_bus_target().
->  - Use IDR for node ID allocation.
->  - Reverse order of multiplication and division in
->    mixer_set_memory_bandwidth() (patch 07) to avoid integer overflow.
-> 
-> 
-> References:
-> [1] https://patchwork.kernel.org/patch/10861757/ (original issue)
-> [2] https://protect2.fireeye.com/v1/url?k=383efc40-67a5c559-383f770f-000babff3793-a505fcd0b7477e5e&q=1&e=ad8ffb9f-f90b-49a7-a3df-2ab066a8c4ee&u=https%3A%2F%2Fwww.spinics.net%2Flists%2Flinux-samsung-soc%2Fmsg70014.html
-> [3] https://protect2.fireeye.com/v1/url?k=13f0c488-4c6bfd91-13f14fc7-000babff3793-98a59bf1c5c6f1fb&q=1&e=ad8ffb9f-f90b-49a7-a3df-2ab066a8c4ee&u=https%3A%2F%2Fwww.spinics.net%2Flists%2Farm-kernel%2Fmsg810722.html
-> [4] https://lore.kernel.org/linux-pm/20191220115653.6487-1-a.swigon@samsung.com
-> [5] https://patchwork.kernel.org/cover/11054417/ (v1 of this RFC)
-> [6] https://patchwork.kernel.org/cover/11152595/ (v2 of this RFC)
-> 
-> 
-> Artur Świgoń (1):
->   ARM: dts: exynos: Add interconnects to Exynos4412 mixer
-> 
-> Sylwester Nawrocki (5):
->   dt-bindings: devfreq: Add documentation for the interconnect
->     properties
->   interconnect: Add generic interconnect driver for Exynos SoCs
->   PM / devfreq: exynos-bus: Add registration of interconnect child
->     device
->   ARM: dts: exynos: Add interconnect properties to Exynos4412 bus nodes
->   drm: exynos: mixer: Add interconnect support
-> 
->  .../devicetree/bindings/devfreq/exynos-bus.txt     |  68 ++++++-
->  arch/arm/boot/dts/exynos4412.dtsi                  |   7 +
->  drivers/devfreq/exynos-bus.c                       |  17 ++
->  drivers/gpu/drm/exynos/exynos_mixer.c              | 146 ++++++++++++++-
->  drivers/interconnect/Kconfig                       |   1 +
->  drivers/interconnect/Makefile                      |   1 +
->  drivers/interconnect/exynos/Kconfig                |   6 +
->  drivers/interconnect/exynos/Makefile               |   4 +
->  drivers/interconnect/exynos/exynos.c               | 198 +++++++++++++++++++++
->  9 files changed, 438 insertions(+), 10 deletions(-)
+> ---
+>  drivers/interconnect/Kconfig         |   1 +
+>  drivers/interconnect/Makefile        |   1 +
+>  drivers/interconnect/exynos/Kconfig  |   6 ++
+>  drivers/interconnect/exynos/Makefile |   4 +
+>  drivers/interconnect/exynos/exynos.c | 198 +++++++++++++++++++++++++++++++++++
+>  5 files changed, 210 insertions(+)
 >  create mode 100644 drivers/interconnect/exynos/Kconfig
 >  create mode 100644 drivers/interconnect/exynos/Makefile
 >  create mode 100644 drivers/interconnect/exynos/exynos.c
 > 
-> --
-> 2.7.4
-> 
-> 
-> 
+[..]
+> +
+> +static struct platform_driver exynos_generic_icc_driver = {
+> +	.driver = {
+> +		.name = "exynos-generic-icc",
 
+I think that you will need this:
+		.sync_state = icc_sync_state,
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Thanks,
+Georgi
+
+> +	},
+> +	.probe = exynos_generic_icc_probe,
+> +	.remove = exynos_generic_icc_remove,
+> +};
+> +module_platform_driver(exynos_generic_icc_driver);
+> +
+> +MODULE_DESCRIPTION("Exynos generic interconnect driver");
+> +MODULE_AUTHOR("Artur Świgoń <a.swigon@samsung.com>");
+> +MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:exynos-generic-icc");
+> 
