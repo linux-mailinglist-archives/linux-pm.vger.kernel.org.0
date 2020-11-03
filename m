@@ -2,198 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8FD2A41F3
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 11:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5A72A43BB
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Nov 2020 12:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728090AbgKCKbc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Nov 2020 05:31:32 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:10457 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728104AbgKCKbX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 05:31:23 -0500
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201103103119epoutp0241be89f829ed0e4658a51b475491db95~D_NOBSE_o2276322763epoutp02n
-        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 10:31:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201103103119epoutp0241be89f829ed0e4658a51b475491db95~D_NOBSE_o2276322763epoutp02n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1604399479;
-        bh=FW4v5Qk+v0rEB3R/uVy5H75voYSsQhwx6F256sIO5Vk=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Cb1guEW6V/c1PPxGlW5E7v0b4qZ80+fL9lUMb4Ue0Mc8uxvDHq9p1XLneWOzFQpKZ
-         Rj0dIhnvbQXO8WCgU4MjAdUaSRqmLUZw0b3JikmxFxmX4EGDTGP1psEvLA072vjkmb
-         nBBO2it2hRWcBJRi8LGlxwgCBeObrXWmvXRzOAPY=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20201103103118epcas1p2dff3d380e9e3f7a5aafb8effa2c4eb95~D_NNaz_HY1937119371epcas1p29;
-        Tue,  3 Nov 2020 10:31:18 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4CQR042j80zMqYkY; Tue,  3 Nov
-        2020 10:31:16 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DD.1B.09577.47131AF5; Tue,  3 Nov 2020 19:31:16 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20201103103115epcas1p43681a136582c659db56bcb9d13b5af35~D_NKbm0cU1841018410epcas1p4v;
-        Tue,  3 Nov 2020 10:31:15 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201103103115epsmtrp214d83039b80e993159fa9bf99aa08989~D_NKavn-Y2534225342epsmtrp2R;
-        Tue,  3 Nov 2020 10:31:15 +0000 (GMT)
-X-AuditID: b6c32a39-c13ff70000002569-55-5fa1317465aa
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A5.5B.08745.37131AF5; Tue,  3 Nov 2020 19:31:15 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201103103115epsmtip22f3e2821c707d5a32a84c9c4b3114954~D_NKHX9DZ0628706287epsmtip21;
-        Tue,  3 Nov 2020 10:31:15 +0000 (GMT)
-Subject: Re: [PATCH v7 3/6] PM / devfreq: exynos-bus: Add registration of
- interconnect child device
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        georgi.djakov@linaro.org, krzk@kernel.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        a.swigon@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <522dd3d8-7c76-92c6-ab1e-7e04797b3e9f@samsung.com>
-Date:   Tue, 3 Nov 2020 19:45:13 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1727812AbgKCLIT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Nov 2020 06:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727911AbgKCLIS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Nov 2020 06:08:18 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69934C061A48
+        for <linux-pm@vger.kernel.org>; Tue,  3 Nov 2020 03:08:18 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id l2so21639352lfk.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Nov 2020 03:08:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0sEXlBoxnDPWC0PSImx6b45EW/XdSxvl0dskuufPCkM=;
+        b=DDGsed/rnR9bezm8l99j+eaiR9Ng8+VD49bJiK1NAcb13ryZua3eiHNJkEUJYM7q4q
+         zCCEua4OxygsHhj1XVYFclEnvfs8dtk8HZUq1aa2fKeCC1ivOtLxqOefmDgSGp9oFlOr
+         hAWnMoFYPcy6/inHtPYp6y+Ll+sbonCF0KjG6nyml+YxQJr6IbSjcrdNbOQkutO8NxkL
+         FEkF/0STPopqzOAi1pVyuF642sMpo4gqoXWfJTZgyjNsKfE0QyHjFu93yXEkV6QK5fCs
+         LXCWy6h56hyXQaKhqHUvZP6L632PtDIPp/Z07qwJ3b4T1YdUnIRaKCRJ/6v0LV3pGdBe
+         QkXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0sEXlBoxnDPWC0PSImx6b45EW/XdSxvl0dskuufPCkM=;
+        b=NZkAgrwE4Mt31o0dY/A3Cvwj/hqaJtVNci8K8F0Yiro0LlJmAYS3xAxy1qz1rnrPit
+         rrHAzFUygEp3Zjg/lHTjZnUKQBGLxn8tz9AT6YnVV3lVVhbHkk+5BTu2X8xaY9cjpQxq
+         Xan+oJuXsGFaTiUWF80uOcYskEePKFwj+8AOWEc/7fWNaS1IwON5Ziq8VCXPSrWulohX
+         2zhVKtY9cHoSHRd4tMVUfVFWKh2rCyr3X/6ddzqOPZgnxSLY2AfqbJInafntd2XrGWLH
+         nu3akv9fUXw0a7Lw2vgIPNhRfaDOFjpms8RuKtI0M9t1i2EsOwBxZBi96+KchZL9M5B7
+         nyMQ==
+X-Gm-Message-State: AOAM530UJRORXq7CGLXTbw7OQhEWO/+k1JisJCFs7ZHqDFd5WCJWrTtA
+        3cCqYT/puLmdnG/QNe8tXguswg==
+X-Google-Smtp-Source: ABdhPJzAyrukqGQuCxp2/NOEVoOC9ZkivmVdXf94z98OJ3dGsVtTaaSEH+8Z/YJLbxgkwYbzErDtUQ==
+X-Received: by 2002:a19:c187:: with SMTP id r129mr8047701lff.533.1604401696649;
+        Tue, 03 Nov 2020 03:08:16 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id w9sm4094835ljh.95.2020.11.03.03.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2020 03:08:15 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id B845910231C; Tue,  3 Nov 2020 14:08:16 +0300 (+03)
+Date:   Tue, 3 Nov 2020 14:08:16 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Lameter <cl@linux.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Len Brown <len.brown@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v3 2/4] PM: hibernate: make direct map manipulations more
+ explicit
+Message-ID: <20201103110816.t6a3ebtgcm7mfogy@box>
+References: <20201101170815.9795-1-rppt@kernel.org>
+ <20201101170815.9795-3-rppt@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201030125149.8227-4-s.nawrocki@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLJsWRmVeSWpSXmKPExsWy7bCmgW6J4cJ4g+Z/Ahb357UyWmycsZ7V
-        Yv6Rc6wWV76+Z7OYvncTm8Wk+xNYLM6f38BucXnXHDaLz71HGC1mnN/HZLH2yF12i9uNK9gs
-        WvceYbc4/Kad1WLG5JdsDvwem1Z1snncubaHzeN+93Emj74tqxg9Pm+SC2CNyrbJSE1MSS1S
-        SM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpXSaEsMacUKBSQWFys
-        pG9nU5RfWpKqkJFfXGKrlFqQklNgWaBXnJhbXJqXrpecn2tlaGBgZApUmJCd8fbBVsaCE8IV
-        PU+mMjcwHufvYuTkkBAwkVj4djpbFyMXh5DADkaJXS/+QzmfGCVuLpjCBOF8ZpT4tu89excj
-        B1hL8087iPguRonmNZegit4zSty+tIQNZK6wQKrE0undjCANIgIxEuvfRYCEmQVOMEkcuSMI
-        YrMJaEnsf3EDrJxfQFHi6o/HYOW8AnYSL1fkgZgsAioSE3/6gVSICoRJnNzWwghi8woISpyc
-        +YQFxOYUsJY4ve4vO8R0cYlbT+YzQdjyEtvfzmEGuUxC4AaHxNLnbcwQH7tI9G+YyAZhC0u8
-        Or6FHcKWkvj8bi9UvFpi5ckjbBDNHYwSW/ZfYIVIGEvsXzqZCeQ4ZgFNifW79CHCihI7f89l
-        hFjMJ/Huaw8rJKh4JTrahCBKlCUuP7jLBGFLSixu72SbwKg0C8k7s5C8MAvJC7MQli1gZFnF
-        KJZaUJybnlpsWGCKHNWbGMHpWMtyB+P0tx/0DjEycTAeYpTgYFYS4a2JnBcvxJuSWFmVWpQf
-        X1Sak1p8iNEUGL4TmaVEk/OBGSGvJN7Q1MjY2NjCxNDM1NBQSZz3j3ZHvJBAemJJanZqakFq
-        EUwfEwenVAOT/8FbWdv2r773ueorl8/O3+77ak8tUq0vvMez8PkETmOO4I7vNrVx0XG7957r
-        m3BF/nzjvZ16U1dsUnWT9lqUXeMYOE1DsOzVwTUvFlwV6y/kNHs+MfSt07TrTY7GmyQfH0zj
-        eCxT7R3CdH3XTN/qoxPSlZV06/NvBa5yT1yWy1rqt02ks91X7riIV5LYi9W7w7bvvyJXYdYv
-        lLzvJWviv13fZJRzUzTOt/QeWq79U07vVkjkmtfTTWJua66y4epwZi5iv3qWPXVeWNKfwGrB
-        U4sSU814zqbMjuObppzD7TpJqrX/9NL5h42Orvk660XR3pe/7x/SOuDY9rQiJ6934SOWi+Yr
-        TV5NDzjls9NaiaU4I9FQi7moOBEAdgb88lAEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSvG6x4cJ4g92nVC3uz2tltNg4Yz2r
-        xfwj51gtrnx9z2Yxfe8mNotJ9yewWJw/v4Hd4vKuOWwWn3uPMFrMOL+PyWLtkbvsFrcbV7BZ
-        tO49wm5x+E07q8WMyS/ZHPg9Nq3qZPO4c20Pm8f97uNMHn1bVjF6fN4kF8AaxWWTkpqTWZZa
-        pG+XwJXx9sFWxoITwhU9T6YyNzAe5+9i5OCQEDCRaP5p18XIxSEksINRYu+k++xdjJxAcUmJ
-        aRePMkPUCEscPlwMUfOWUeLkzhNsIDXCAqkSS6d3M4LYIgIxEqcmz2IBKWIWOMEk8XHVAyaI
-        jv2MEh/X7gerYhPQktj/4gZYN7+AosTVH48ZQTbwCthJvFyRB2KyCKhITPzpB1IhKhAmsXPJ
-        YyYQm1dAUOLkzCcsIDangLXE6XV/we5kFlCX+DPvEjOELS5x68l8JghbXmL72znMExiFZyFp
-        n4WkZRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOTS2tHYx7Vn3Q
-        O8TIxMF4iFGCg1lJhLcmcl68EG9KYmVValF+fFFpTmrxIUZpDhYlcd6vsxbGCQmkJ5akZqem
-        FqQWwWSZODilGpjmVYT9Xn06KjNK1XR5z0dRe2Obo9M5PQUShU7PnGr8ctNjtwjdv3MKk4w+
-        alwx+NztdVOHZzrz/h1cDDKr+41v/antlRKN6fbsXviu0C7ZeEECB0+326GlEm07z5x0N533
-        k+NGu9jfBQVRu7J2bBBq4ftz77jXUaWNRnNdMx+fF/nvUTnfWEyE+UKStf/m/oNmE16f/b/2
-        0ILvml2ya6smRkcL3Vxp0ynwnHXG25rMU79UymY38+4+kNijLOiQ+u7hdB27tyeeHdGamTgl
-        uOjds7kJlaGtF9XPsV7YrsTk8FJkvmDu+VUZ97WrzhnUVkbY/hSsFiiykhV40TTJKjZQ/Y/u
-        FzG2uMI7WU19q5VYijMSDbWYi4oTAYw9etM8AwAA
-X-CMS-MailID: 20201103103115epcas1p43681a136582c659db56bcb9d13b5af35
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201030125303eucas1p14a9de4111ffafc1870527abdea0994c9
-References: <20201030125149.8227-1-s.nawrocki@samsung.com>
-        <CGME20201030125303eucas1p14a9de4111ffafc1870527abdea0994c9@eucas1p1.samsung.com>
-        <20201030125149.8227-4-s.nawrocki@samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201101170815.9795-3-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sylwester,
-
-On 10/30/20 9:51 PM, Sylwester Nawrocki wrote:
-> This patch adds registration of a child platform device for the exynos
-> interconnect driver. It is assumed that the interconnect provider will
-> only be needed when #interconnect-cells property is present in the bus
-> DT node, hence the child device will be created only when such a property
-> is present.
-> 
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> ---
-> Changes for v7, v6:
->  - none.
-> 
-> Changes for v5:
->  - new patch.
-> ---
->  drivers/devfreq/exynos-bus.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-
-We don't need to  add 'select INTERCONNECT_EXYNOS' in Kconfig?
-Do you want to remain it as optional according to user?
-
-> 
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index 1e684a4..ee300ee 100644
-> --- a/drivers/devfreq/exynos-bus.c
-> +++ b/drivers/devfreq/exynos-bus.c
-> @@ -24,6 +24,7 @@
+On Sun, Nov 01, 2020 at 07:08:13PM +0200, Mike Rapoport wrote:
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 46b1804c1ddf..054c8cce4236 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -76,6 +76,32 @@ static inline void hibernate_restore_protect_page(void *page_address) {}
+>  static inline void hibernate_restore_unprotect_page(void *page_address) {}
+>  #endif /* CONFIG_STRICT_KERNEL_RWX  && CONFIG_ARCH_HAS_SET_MEMORY */
 >  
->  struct exynos_bus {
->  	struct device *dev;
-> +	struct platform_device *icc_pdev;
->  
->  	struct devfreq *devfreq;
->  	struct devfreq_event_dev **edev;
-> @@ -156,6 +157,8 @@ static void exynos_bus_exit(struct device *dev)
->  	if (ret < 0)
->  		dev_warn(dev, "failed to disable the devfreq-event devices\n");
->  
-> +	platform_device_unregister(bus->icc_pdev);
+> +static inline void hibernate_map_page(struct page *page, int enable)
+> +{
+> +	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
+> +		unsigned long addr = (unsigned long)page_address(page);
+> +		int ret;
 > +
->  	dev_pm_opp_of_remove_table(dev);
->  	clk_disable_unprepare(bus->clk);
->  	if (bus->opp_table) {
-> @@ -168,6 +171,8 @@ static void exynos_bus_passive_exit(struct device *dev)
->  {
->  	struct exynos_bus *bus = dev_get_drvdata(dev);
->  
-> +	platform_device_unregister(bus->icc_pdev);
+> +		/*
+> +		 * This should not fail because remapping a page here means
+> +		 * that we only update protection bits in an existing PTE.
+> +		 * It is still worth to have WARN_ON() here if something
+> +		 * changes and this will no longer be the case.
+> +		 */
+> +		if (enable)
+> +			ret = set_direct_map_default_noflush(page);
+> +		else
+> +			ret = set_direct_map_invalid_noflush(page);
 > +
->  	dev_pm_opp_of_remove_table(dev);
->  	clk_disable_unprepare(bus->clk);
->  }
-> @@ -432,6 +437,18 @@ static int exynos_bus_probe(struct platform_device *pdev)
->  	if (ret < 0)
->  		goto err;
->  
-> +	/* Create child platform device for the interconnect provider */
-> +	if (of_get_property(dev->of_node, "#interconnect-cells", NULL)) {
-> +		    bus->icc_pdev = platform_device_register_data(
-> +						dev, "exynos-generic-icc",
-> +						PLATFORM_DEVID_AUTO, NULL, 0);
+> +		if (WARN_ON(ret))
+
+_ONCE?
+> +			return;
 > +
-> +		    if (IS_ERR(bus->icc_pdev)) {
-> +			    ret = PTR_ERR(bus->icc_pdev);
-> +			    goto err;
-> +		    }
+> +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> +	} else {
+> +		debug_pagealloc_map_pages(page, 1, enable);
 > +	}
+> +}
 > +
->  	max_state = bus->devfreq->profile->max_state;
->  	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
->  	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
-> 
-
+>  static int swsusp_page_is_free(struct page *);
+>  static void swsusp_set_page_forbidden(struct page *);
+>  static void swsusp_unset_page_forbidden(struct page *);
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+ Kirill A. Shutemov
