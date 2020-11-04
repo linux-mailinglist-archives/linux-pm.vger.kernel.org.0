@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C0A2A6ACB
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB34F2A6ACE
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731540AbgKDQt6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 11:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S1731281AbgKDQw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 11:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731533AbgKDQt5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:49:57 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA4CC0613D3;
-        Wed,  4 Nov 2020 08:49:56 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id l28so27978649lfp.10;
-        Wed, 04 Nov 2020 08:49:56 -0800 (PST)
+        with ESMTP id S1731541AbgKDQt6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:49:58 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2360FC0613D3;
+        Wed,  4 Nov 2020 08:49:58 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id v19so18769127lji.5;
+        Wed, 04 Nov 2020 08:49:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qXc6alv2GyhB3hhhLZedHDIUdftmQRoQ6V9Gv1leNe8=;
-        b=Af0j9cQyYfqwGbLNFMo8DQIbaHxPcvuBSdMbyhlOHUzt5ONJ9XckN8qb/gJe8W0Kax
-         8dqF6rNmTRvckvxhSt5vUrX9Fz5POWuCbXtXka2MhNt4wm0+lj2gJk7ZaFPlxGEVw2jh
-         t/2wgt+iBONe4r/ISY4f2E4A6CvXXg7FotjG8H8XZI6DrKz7iiIte2dowE9Y2KEyZA7a
-         8e4kFZjJRTS2mANq/Grexnd1PzuveBBsFv8E35PY/EmpiNLwIXUrMPX05yVBLYFCEN/J
-         9VUUGVugNuyC7Z8tKrS4DtpEWHjTiwHX5DxHTVSrVrgBGoTzscatoKUltYZRN3M60QSc
-         s+Pg==
+        bh=zMjVAb/o+piDt6czNf33ZOuiJhcOMgOALVgnOUvCv+Q=;
+        b=J5T6DekOX2/mStRW2kN+A42EuaML774sXiKphiTQpyCZB1Q3Z1tK4AuJa7JZJggCLP
+         18BrszdwXTp7Xl+6S8EcJAO2jHjHh3OpTjVPeizFtXT1zuF0N0xHfGMATTxdM+hC7CLk
+         9NZFOJ/kSMJYvsO2csoCvgZQJ60jCU65GVRtqn68Z25XSyZkIXdOojKqdSJiw+JCT6ZN
+         1uJyN5ztkmMEs+zsajEeYKjuXs0ezL2Y5/k5oj7I3RMdkXjWSlGcI6mvzSDddjqj6olh
+         gVwvdfnuQCFNEZ3RIu0QStI2kH/4Y99S5yOCgCnpYgWChGrncAAdR4MZggy02TgTsERE
+         /D3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qXc6alv2GyhB3hhhLZedHDIUdftmQRoQ6V9Gv1leNe8=;
-        b=CpTIGKPDE/eUWpfvyT4JuEy0RtmAyoI59fNs5sf2VVJd4ckSNiENH8o6XFSeFeFZpL
-         wK5/VH2cSrjat3Ym4zjDr5FMnXHXCITeVYsCXFgEt9uGot7uD4DdUwQE5OXvvY4BejFW
-         WzrdNkwV1rE6agvEneekvE4wWRdNFQz5wsgsNEr4KF69x7J1/XXdz5h9PFbLW5l2YWdl
-         eLciXfL7MunE8YtA7TctwR+7wwhGFhCecIM786mpeetYdjPwIFaCwYGGtcHDMB5oxBvd
-         rXI8/6T58cUBmozB9dzwlcrb4r0ZZwTeSnObIAv7M6a7iaX0E4/BfoZODWZbw9lrksOe
-         Vm9g==
-X-Gm-Message-State: AOAM531fnkibHlb0Y4RmcvWw9F0CS7cO7fTPno4jE7PW06j7sJHUTj3v
-        DZ+vniT0mxz7EQuO3WwKJs8=
-X-Google-Smtp-Source: ABdhPJzbvyLORoXyQj3/KlGwtfFDf00kuQbn6UHu0zwxqEPLW3MMMC/l9l2xEy8HWSLg8WtRXbvnjA==
-X-Received: by 2002:a19:441:: with SMTP id 62mr9370540lfe.304.1604508595182;
-        Wed, 04 Nov 2020 08:49:55 -0800 (PST)
+        bh=zMjVAb/o+piDt6czNf33ZOuiJhcOMgOALVgnOUvCv+Q=;
+        b=bz55iilDmCfcPUXXfe28YCER44sMKFe7wmhYEE294RM3mGd5t2M4StgBpjtP1iPz7K
+         lE/EzJEK3mDhGHM/QNVAE9Igqh5NYcH1y2Z0ZzsTOEvMZL0Nd7WjNRheMsQjwlUN/uCZ
+         0DaWRD/Sb2Rj15pMSd/EvETNeVDP8KQ/XKJcCfyuZ+MkqzNbPOriRm7nWFfA0G4Lnt2Z
+         GW3zCcoje65QseFEKZKhuQW0nRgwdbjWn/yZgNqzewVNAqVZxjYnBaUgc33XDzd2gx44
+         a7eK1mOLuI5h/bC48BVQIQvBdb7nD5/bSAn9JqpTspi6yDWhynQIrt4v690ah7HGE5LE
+         8rlA==
+X-Gm-Message-State: AOAM5339OgBuyKc9hrxm0VXKIuf90KKkg//yxebuUJ2wWKwIUD1XBW1n
+        Lo4c9VA12YoBwSy9qEdnHnY=
+X-Google-Smtp-Source: ABdhPJz2HGD4TXgSItk7Rtigv8YIrUYlQARDbDYB5TdVTsgs37ssyr908bh9eWipG2f7efdAPz6+/g==
+X-Received: by 2002:a05:651c:234:: with SMTP id z20mr11824370ljn.337.1604508596400;
+        Wed, 04 Nov 2020 08:49:56 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.49.54
+        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.49.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 08:49:54 -0800 (PST)
+        Wed, 04 Nov 2020 08:49:55 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v7 21/47] ARM: tegra: Add interconnect properties to Tegra20 device-tree
-Date:   Wed,  4 Nov 2020 19:48:57 +0300
-Message-Id: <20201104164923.21238-22-digetx@gmail.com>
+Subject: [PATCH v7 22/47] ARM: tegra: Add interconnect properties to Tegra30 device-tree
+Date:   Wed,  4 Nov 2020 19:48:58 +0300
+Message-Id: <20201104164923.21238-23-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201104164923.21238-1-digetx@gmail.com>
 References: <20201104164923.21238-1-digetx@gmail.com>
@@ -84,22 +84,22 @@ interconnection.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra20.dtsi | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/tegra30.dtsi | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index 9347f7789245..2e1304493f7d 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -111,6 +111,17 @@ dc@54200000 {
+diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
+index aeae8c092d41..2caf6cc6f4b1 100644
+--- a/arch/arm/boot/dts/tegra30.dtsi
++++ b/arch/arm/boot/dts/tegra30.dtsi
+@@ -210,6 +210,17 @@ dc@54200000 {
  
  			nvidia,head = <0>;
  
-+			interconnects = <&mc TEGRA20_MC_DISPLAY0A &emc>,
-+					<&mc TEGRA20_MC_DISPLAY0B &emc>,
-+					<&mc TEGRA20_MC_DISPLAY1B &emc>,
-+					<&mc TEGRA20_MC_DISPLAY0C &emc>,
-+					<&mc TEGRA20_MC_DISPLAYHC &emc>;
++			interconnects = <&mc TEGRA30_MC_DISPLAY0A &emc>,
++					<&mc TEGRA30_MC_DISPLAY0B &emc>,
++					<&mc TEGRA30_MC_DISPLAY1B &emc>,
++					<&mc TEGRA30_MC_DISPLAY0C &emc>,
++					<&mc TEGRA30_MC_DISPLAYHC &emc>;
 +			interconnect-names = "wina",
 +					     "winb",
 +					     "winb-vfilter",
@@ -109,15 +109,15 @@ index 9347f7789245..2e1304493f7d 100644
  			rgb {
  				status = "disabled";
  			};
-@@ -128,6 +139,17 @@ dc@54240000 {
+@@ -229,6 +240,17 @@ dc@54240000 {
  
  			nvidia,head = <1>;
  
-+			interconnects = <&mc TEGRA20_MC_DISPLAY0AB &emc>,
-+					<&mc TEGRA20_MC_DISPLAY0BB &emc>,
-+					<&mc TEGRA20_MC_DISPLAY1BB &emc>,
-+					<&mc TEGRA20_MC_DISPLAY0CB &emc>,
-+					<&mc TEGRA20_MC_DISPLAYHCB &emc>;
++			interconnects = <&mc TEGRA30_MC_DISPLAY0AB &emc>,
++					<&mc TEGRA30_MC_DISPLAY0BB &emc>,
++					<&mc TEGRA30_MC_DISPLAY1BB &emc>,
++					<&mc TEGRA30_MC_DISPLAY0CB &emc>,
++					<&mc TEGRA30_MC_DISPLAYHCB &emc>;
 +			interconnect-names = "wina",
 +					     "winb",
 +					     "winb-vfilter",
@@ -127,21 +127,22 @@ index 9347f7789245..2e1304493f7d 100644
  			rgb {
  				status = "disabled";
  			};
-@@ -630,15 +652,17 @@ mc: memory-controller@7000f000 {
- 		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+@@ -748,15 +770,18 @@ mc: memory-controller@7000f000 {
+ 
+ 		#iommu-cells = <1>;
  		#reset-cells = <1>;
- 		#iommu-cells = <0>;
 +		#interconnect-cells = <1>;
  	};
  
 -	memory-controller@7000f400 {
 +	emc: memory-controller@7000f400 {
- 		compatible = "nvidia,tegra20-emc";
+ 		compatible = "nvidia,tegra30-emc";
  		reg = <0x7000f400 0x400>;
  		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&tegra_car TEGRA20_CLK_EMC>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+ 		clocks = <&tegra_car TEGRA30_CLK_EMC>;
+ 
+ 		nvidia,memory-controller = <&mc>;
++
 +		#interconnect-cells = <0>;
  	};
  
