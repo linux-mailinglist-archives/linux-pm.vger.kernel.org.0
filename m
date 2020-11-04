@@ -2,201 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1742A6C45
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 18:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822C02A6C57
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730710AbgKDR52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 12:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbgKDR52 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 12:57:28 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E8CC0613D3
-        for <linux-pm@vger.kernel.org>; Wed,  4 Nov 2020 09:57:27 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id h6so17223611pgk.4
-        for <linux-pm@vger.kernel.org>; Wed, 04 Nov 2020 09:57:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=9NoFBfMk7jrF2SbQ7l3eyoS+hkqUCNV3Y/o2ZppZVhY=;
-        b=ekcPjs6sUpt8aXFvo7UcH40/dnOj6cFcxAfE2cNJ8gwmuV24Dq+qabpUPQehoGf3fJ
-         3lkTa09LxpDgIlZSi7uTynXFW0VlVFWGRfMksklakgJLg+DkYzLopzl4LQcf6nVhCqpj
-         P4FD/QMcR4imLe62l+FW77B3SgY80JEvnRpjDEnlU0N4Bv19Wz6K1VEq21gx6UqqUpoa
-         nIlYAwl6kMLM63U6DoGN8bo6WyeQs+3S9ZD1RLeghQ/MwB66nu8jT+tlcmuIKlsJ0fSU
-         lPzwhwVmycKMW6dpeuBwm2+Jduh/KJajlAonA2KHwjWlVHK7+UyFkF8BpoHvvcOKrr6y
-         yZTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=9NoFBfMk7jrF2SbQ7l3eyoS+hkqUCNV3Y/o2ZppZVhY=;
-        b=aEYOJ8/rmQpwqaZ0zCEcvq8hKsZ/+yKjMLqRD+ZfgwsnqIe0hQ5sL2fphxAcpg13/1
-         +BY2ll0J+55k4EFR+bdqHZG+4vLtpj+iKpUNMjqPDT8RRfEQtochVPZBUaMlKpL19MED
-         SMvlTYz+sdQIfZjy+j5GLRcu7UMhHicmGx33djaHNdnk+fCfDvduzHyPtxpFgls6zp+M
-         DYPPJI0gfST673YHu0QTF2h6ZJviLORpy0XVebz0CWnqasuJ1MJw0UC7ppLS3Z85+aff
-         233gzuvziqvlLTA1QtRX5R7rlsgDnJ8GqqMCXm8XP0DrvqCZuDC2ym/YLOZujZb5clIE
-         i5vQ==
-X-Gm-Message-State: AOAM533zt0036o1pPpK8nGC1DTDfsOtLhMQF/yGJgVDaQQLHIC8X6c5q
-        cknW/0isbWA62Fl12xCzCB48nw==
-X-Google-Smtp-Source: ABdhPJxRqBReiaW/wOYRHnyljlK55/xQTnIObZtZ7SZyQXGBooE50Z7FUApkwjpGVqxwjKkFP06SDg==
-X-Received: by 2002:a63:1c45:: with SMTP id c5mr18427908pgm.357.1604512646735;
-        Wed, 04 Nov 2020 09:57:26 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id v191sm3047497pfc.19.2020.11.04.09.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 09:57:25 -0800 (PST)
-Message-ID: <5fa2eb85.1c69fb81.2ea89.73a1@mx.google.com>
-Date:   Wed, 04 Nov 2020 09:57:25 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1732175AbgKDSCZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 13:02:25 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40058 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726608AbgKDSCY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Nov 2020 13:02:24 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 46661AC2F;
+        Wed,  4 Nov 2020 18:02:22 +0000 (UTC)
+Subject: Re: [PATCH v4 3/4] arch, mm: restore dependency of
+ __kernel_map_pages() of DEBUG_PAGEALLOC
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Lameter <cl@linux.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <len.brown@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org
+References: <20201103162057.22916-1-rppt@kernel.org>
+ <20201103162057.22916-4-rppt@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Message-ID: <f9c1dc66-fc60-db4d-9670-0271adb2ed07@suse.cz>
+Date:   Wed, 4 Nov 2020 19:02:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.10-rc2-15-gdddc237beebb
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 11 warnings (v5.10-rc2-15-gdddc237beebb)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20201103162057.22916-4-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.10-rc2-15-g=
-dddc237beebb)
+On 11/3/20 5:20 PM, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-10-rc2-15-gdddc237beebb/
+Subject should have "on DEBUG_PAGEALLOC" ?
 
-Tree: pm
-Branch: testing
-Git Describe: v5.10-rc2-15-gdddc237beebb
-Git Commit: dddc237beebb79a67a6e2cc18b6a0a29a3a7a89c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+> The design of DEBUG_PAGEALLOC presumes that __kernel_map_pages() must never
+> fail. With this assumption is wouldn't be safe to allow general usage of
+> this function.
+> 
+> Moreover, some architectures that implement __kernel_map_pages() have this
+> function guarded by #ifdef DEBUG_PAGEALLOC and some refuse to map/unmap
+> pages when page allocation debugging is disabled at runtime.
+> 
+> As all the users of __kernel_map_pages() were converted to use
+> debug_pagealloc_map_pages() it is safe to make it available only when
+> DEBUG_PAGEALLOC is set.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> ---
+>   arch/Kconfig                     |  3 +++
+>   arch/arm64/Kconfig               |  4 +---
+>   arch/arm64/mm/pageattr.c         |  8 ++++++--
+>   arch/powerpc/Kconfig             |  5 +----
+>   arch/riscv/Kconfig               |  4 +---
+>   arch/riscv/include/asm/pgtable.h |  2 --
+>   arch/riscv/mm/pageattr.c         |  2 ++
+>   arch/s390/Kconfig                |  4 +---
+>   arch/sparc/Kconfig               |  4 +---
+>   arch/x86/Kconfig                 |  4 +---
+>   arch/x86/mm/pat/set_memory.c     |  2 ++
+>   include/linux/mm.h               | 10 +++++++---
+>   12 files changed, 26 insertions(+), 26 deletions(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 56b6ccc0e32d..56d4752b6db6 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1028,6 +1028,9 @@ config HAVE_STATIC_CALL_INLINE
+>   	bool
+>   	depends on HAVE_STATIC_CALL
+>   
+> +config ARCH_SUPPORTS_DEBUG_PAGEALLOC
+> +	bool
+> +
+>   source "kernel/gcov/Kconfig"
+>   
+>   source "scripts/gcc-plugins/Kconfig"
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 1d466addb078..a932810cfd90 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -71,6 +71,7 @@ config ARM64
+>   	select ARCH_USE_QUEUED_RWLOCKS
+>   	select ARCH_USE_QUEUED_SPINLOCKS
+>   	select ARCH_USE_SYM_ANNOTATIONS
+> +	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+>   	select ARCH_SUPPORTS_MEMORY_FAILURE
+>   	select ARCH_SUPPORTS_SHADOW_CALL_STACK if CC_HAVE_SHADOW_CALL_STACK
+>   	select ARCH_SUPPORTS_ATOMIC_RMW
+> @@ -1025,9 +1026,6 @@ config HOLES_IN_ZONE
+>   
+>   source "kernel/Kconfig.hz"
+>   
+> -config ARCH_SUPPORTS_DEBUG_PAGEALLOC
+> -	def_bool y
+> -
+>   config ARCH_SPARSEMEM_ENABLE
+>   	def_bool y
+>   	select SPARSEMEM_VMEMMAP_ENABLE
+> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+> index 1b94f5b82654..439325532be1 100644
+> --- a/arch/arm64/mm/pageattr.c
+> +++ b/arch/arm64/mm/pageattr.c
+> @@ -155,7 +155,7 @@ int set_direct_map_invalid_noflush(struct page *page)
+>   		.clear_mask = __pgprot(PTE_VALID),
+>   	};
+>   
+> -	if (!rodata_full)
+> +	if (!debug_pagealloc_enabled() && !rodata_full)
+>   		return 0;
+>   
+>   	return apply_to_page_range(&init_mm,
+> @@ -170,7 +170,7 @@ int set_direct_map_default_noflush(struct page *page)
+>   		.clear_mask = __pgprot(PTE_RDONLY),
+>   	};
+>   
+> -	if (!rodata_full)
+> +	if (!debug_pagealloc_enabled() && !rodata_full)
+>   		return 0;
+>   
+>   	return apply_to_page_range(&init_mm,
 
-Warnings Detected:
-
-arc:
-
-arm64:
-    defconfig (gcc-8): 8 warnings
-
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #size-cells (1) differs from / (2)
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #address-cells (1) differs from / (2)
-    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #size-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #address-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
-SPI bus
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
-or SPI bus
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
-smatches
-
-Warnings:
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
-I bus
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
-us
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+I don't understand these two hunks. Previous patch calls this for hibernation 
+when CONFIG_ARCH_HAS_SET_DIRECT_MAP, which is true for arm64. Why suddenly this 
+starts to depend on debug_pagealloc_enabled()?
