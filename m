@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F1E2A6A7A
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE73D2A6A75
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731614AbgKDQu7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 11:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S1731764AbgKDQu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 11:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731737AbgKDQu1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:50:27 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659B1C0613D3;
-        Wed,  4 Nov 2020 08:50:27 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id x6so23723780ljd.3;
-        Wed, 04 Nov 2020 08:50:27 -0800 (PST)
+        with ESMTP id S1731394AbgKDQu3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:50:29 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93701C0613D3;
+        Wed,  4 Nov 2020 08:50:28 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id 184so28007700lfd.6;
+        Wed, 04 Nov 2020 08:50:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0iEwaTGjBhhhYbqhEB674AFJTwQ7XfjZia90rQHHnqQ=;
-        b=RaOKVsHl0zQ706fDUOJ4r3MY+qrWEFTCtfEgOzBQc4TFtDZLWSLDIdWoTn/DhShhX4
-         UpB2hqZc5X3ZwOWK7leoEm9cuuL/a9L8c+4axgQ3oOYk1vPHTF4qruUm52QwS1efJkvA
-         Q0DINB6hbWYv9Bj57TeeZwSWZRw+ibVe8oqF2WUozTZR9FaH/0tob/gYIXHXBD6EaIiI
-         HWSY9bRwSb5BQdHJT65GH1+Fwi1ITzWLREmAUEJZ5raO6WRMEPSiRl0LRFR9lgXFIUwZ
-         jwMrAmq5ZK2gnKN2JiB8vt1ZorV08LOT06nZQz8d8VOH9sChFmKuO2z5rKLcWx4KSZca
-         lOOw==
+        bh=b5Mpwu67cQNHRR5N5SNOJe1Sf8BNTrrvxX1GPMBXc1U=;
+        b=RcQmuOBB/6rmApTNVVKSwARv49el9DyJUkc1LudjWC8cL/PDm2uCrez5EyHwBuTU1f
+         77iq3bawqXiSwottfW2uUG/wFREu/F3R0l5A6uUJFNuNkD312FVuV9ieHxon91IwqMSn
+         +B/g7FB+6gVEGuWlV8lfUxp1W1HSWZGMu4WSQMvbp9m4eBoNdOrU3jrqJX3/9zK9gk3L
+         5soSN5fteEyBGqQaWpL1vz4xN+G/cauUXKUt+kAshf1Dz2CmeD3MSXx55bduBTZxLp4m
+         b+r863US4hm2Kc5sEUpqH7aSlHO6/OeMafpzUOblCJprNyDwrX1TQdPgnZIz1Fg5g1/u
+         3soQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0iEwaTGjBhhhYbqhEB674AFJTwQ7XfjZia90rQHHnqQ=;
-        b=RPi+Ia6OeRIWmoJsQL0XeIgGKe+LeinYCterar3L9iqpE7NxQbds7fiM2DSc7Ina7u
-         ws38cIojR7Pt3AsfQJgb7MqcJVaJ3wH3/PpJaVsa2J09BHDFUDaLuBZDROO8dbu7eDUc
-         Bevk58aZTaXWaYs4IzhhAEI74fOxz6MGgm456yILd1JNbadG6RF49JOuTSpEYaRMUKxf
-         BGP/euL8rVSATif/NuMrrVwY6zo03Jdszb3Q63aVwatkPYiEm4vUIjI0chjNnEHNKycY
-         sHWYlogsfv3gYsOpXHEsRJo/o5Z4YMP5d7XRU3He102WJGU1MHwzO3ZP24d7Ex2XGQIV
-         oCMg==
-X-Gm-Message-State: AOAM530FllejDVojV001fQmqeXcX6LSIrMjGNKxnMD/MIImwPuwXOncG
-        y6GWUJEVfchXM/uHmgQR2ZY=
-X-Google-Smtp-Source: ABdhPJzi8UyuzGks82q4fzvpFQNvhcIrq5nuS+hMmVa6Y/MRKXlWqjSwqjZ6sMPrylaY5AUN02CHbw==
-X-Received: by 2002:a2e:b0c7:: with SMTP id g7mr10368958ljl.433.1604508625829;
-        Wed, 04 Nov 2020 08:50:25 -0800 (PST)
+        bh=b5Mpwu67cQNHRR5N5SNOJe1Sf8BNTrrvxX1GPMBXc1U=;
+        b=K/UZdqtPOhqW7SjA3HFNIp3tKq+2ST5lLqlHw38MSNXEEUgMWkHgjrjwpqdPSqvneB
+         ZgbYkXHRoI8kADrToolspb47CafftIC6TlIoDBhKXWxXjagaEqHc5izXcWXH4ZvpkLXE
+         wU7+xbKRzcak+Hzu8ZSfVZPsG+4YKl7ifm/lCAJEjULecP/v9P0rBCjCU8Ci0/NvwSVc
+         wA23uWRx9UplZ5xhzyRskmxkfaQQKSacDGH7jh8LcgXQH3FYj7acvHKgLKM64aZi1ow1
+         M0Tcmoo3FTc6SpyRULdDWelfTaMREjiFTiR3u7RTk2gg+bmnPsxk3d1XBXl2GaEpf0RV
+         KVPA==
+X-Gm-Message-State: AOAM531PG2PssNA31tjBc/o0Rv9sQEAn7boYP4VVaMgAzk1Mjn3RZeHj
+        o51RyasJMntjZdF0+mPlF/U=
+X-Google-Smtp-Source: ABdhPJzgyMkoZvXelNNiQ5WW3g9nKzmMc+hBHlRZfAwq3bbJN8mltrIx4XriQKTaFG1J31fCabxSQw==
+X-Received: by 2002:a05:6512:1109:: with SMTP id l9mr1948170lfg.251.1604508626992;
+        Wed, 04 Nov 2020 08:50:26 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.50.24
+        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.50.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 08:50:25 -0800 (PST)
+        Wed, 04 Nov 2020 08:50:26 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v7 46/47] PM / devfreq: tegra30: Separate configurations per-SoC generation
-Date:   Wed,  4 Nov 2020 19:49:22 +0300
-Message-Id: <20201104164923.21238-47-digetx@gmail.com>
+Subject: [PATCH v7 47/47] PM / devfreq: tegra20: Deprecate in a favor of emc-stat based driver
+Date:   Wed,  4 Nov 2020 19:49:23 +0300
+Message-Id: <20201104164923.21238-48-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201104164923.21238-1-digetx@gmail.com>
 References: <20201104164923.21238-1-digetx@gmail.com>
@@ -78,168 +78,270 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Previously we were using count-weight of the T124 for T30 in order to
-get EMC clock rate that was reasonable for T30. In fact the count-weight
-should be x2 times smaller on T30, but then devfreq was producing a bit
-too low EMC clock rate for ISO memory clients, like display controller
-for example.
+Remove tegra20-devfreq in order to replace it with a EMC_STAT based
+devfreq driver. Previously we were going to use MC_STAT based
+tegra20-devfreq driver because EMC_STAT wasn't working properly, but
+now that problem is resolved. This resolves complications imposed by
+the removed driver since it was depending on both EMC and MC drivers
+simultaneously.
 
-Now both Tegra ACTMON and Tegra DRM display drivers support interconnect
-framework and display driver tells to ICC what a minimum memory bandwidth
-is needed, preventing FIFO underflows. Thus, now we can use a proper
-count-weight value for Tegra30 and MC_ALL device config needs a bit more
-aggressive boosting.
-
-Add a separate ACTMON driver configuration that is specific to Tegra30.
-
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Tested-by: Nicolas Chauvet <kwizart@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 68 ++++++++++++++++++++++++-------
- 1 file changed, 54 insertions(+), 14 deletions(-)
+ drivers/devfreq/Kconfig           |  10 --
+ drivers/devfreq/Makefile          |   1 -
+ drivers/devfreq/tegra20-devfreq.c | 210 ------------------------------
+ 3 files changed, 221 deletions(-)
+ delete mode 100644 drivers/devfreq/tegra20-devfreq.c
 
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 4db027ca17e1..aaa22077815c 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -57,13 +57,6 @@
- #define ACTMON_BELOW_WMARK_WINDOW				3
- #define ACTMON_BOOST_FREQ_STEP					16000
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index 0ee36ae2fa79..00704efe6398 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -121,16 +121,6 @@ config ARM_TEGRA_DEVFREQ
+ 	  It reads ACTMON counters of memory controllers and adjusts the
+ 	  operating frequencies and voltages with OPP support.
  
--/*
-- * Activity counter is incremented every 256 memory transactions, and each
-- * transaction takes 4 EMC clocks for Tegra124; So the COUNT_WEIGHT is
-- * 4 * 256 = 1024.
-- */
--#define ACTMON_COUNT_WEIGHT					0x400
+-config ARM_TEGRA20_DEVFREQ
+-	tristate "NVIDIA Tegra20 DEVFREQ Driver"
+-	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
+-	depends on COMMON_CLK
+-	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+-	help
+-	  This adds the DEVFREQ driver for the Tegra20 family of SoCs.
+-	  It reads Memory Controller counters and adjusts the operating
+-	  frequencies and voltages with OPP support.
 -
- /*
-  * ACTMON_AVERAGE_WINDOW_LOG2: default value for @DEV_CTRL_K_VAL, which
-  * translates to 2 ^ (K_VAL + 1). ex: 2 ^ (6 + 1) = 128
-@@ -111,7 +104,7 @@ enum tegra_actmon_device {
- 	MCCPU,
- };
+ config ARM_RK3399_DMC_DEVFREQ
+ 	tristate "ARM RK3399 DMC DEVFREQ Driver"
+ 	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
+diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
+index 3ca1ad0ecb97..a16333ea7034 100644
+--- a/drivers/devfreq/Makefile
++++ b/drivers/devfreq/Makefile
+@@ -13,7 +13,6 @@ obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
+ obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
+ obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
+ obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
+-obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
  
--static const struct tegra_devfreq_device_config actmon_device_configs[] = {
-+static const struct tegra_devfreq_device_config tegra124_device_configs[] = {
- 	{
- 		/* MCALL: All memory accesses (including from the CPUs) */
- 		.offset = 0x1c0,
-@@ -133,6 +126,28 @@ static const struct tegra_devfreq_device_config actmon_device_configs[] = {
- 	},
- };
- 
-+static const struct tegra_devfreq_device_config tegra30_device_configs[] = {
-+	{
-+		/* MCALL: All memory accesses (including from the CPUs) */
-+		.offset = 0x1c0,
-+		.irq_mask = 1 << 26,
-+		.boost_up_coeff = 200,
-+		.boost_down_coeff = 50,
-+		.boost_up_threshold = 20,
-+		.boost_down_threshold = 10,
-+	},
-+	{
-+		/* MCCPU: memory accesses from the CPUs */
-+		.offset = 0x200,
-+		.irq_mask = 1 << 25,
-+		.boost_up_coeff = 800,
-+		.boost_down_coeff = 40,
-+		.boost_up_threshold = 27,
-+		.boost_down_threshold = 10,
-+		.avg_dependency_threshold = 16000, /* 16MHz in kHz units */
-+	},
-+};
-+
- /**
-  * struct tegra_devfreq_device - state specific to an ACTMON device
-  *
-@@ -155,6 +170,12 @@ struct tegra_devfreq_device {
- 	unsigned long target_freq;
- };
- 
-+struct tegra_devfreq_soc_data {
-+	const struct tegra_devfreq_device_config *configs;
-+	/* Weight value for count measurements */
-+	unsigned int count_weight;
-+};
-+
- struct tegra_devfreq {
- 	struct devfreq		*devfreq;
- 	struct opp_table	*opp_table;
-@@ -171,11 +192,13 @@ struct tegra_devfreq {
- 	struct delayed_work	cpufreq_update_work;
- 	struct notifier_block	cpu_rate_change_nb;
- 
--	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
-+	struct tegra_devfreq_device devices[2];
- 
- 	unsigned int		irq;
- 
- 	bool			started;
-+
-+	const struct tegra_devfreq_soc_data *soc;
- };
- 
- struct tegra_actmon_emc_ratio {
-@@ -488,7 +511,7 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
- 	tegra_devfreq_update_avg_wmark(tegra, dev);
- 	tegra_devfreq_update_wmark(tegra, dev);
- 
--	device_writel(dev, ACTMON_COUNT_WEIGHT, ACTMON_DEV_COUNT_WEIGHT);
-+	device_writel(dev, tegra->soc->count_weight, ACTMON_DEV_COUNT_WEIGHT);
- 	device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS);
- 
- 	val |= ACTMON_DEV_CTRL_ENB_PERIODIC;
-@@ -787,6 +810,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	if (!tegra)
- 		return -ENOMEM;
- 
-+	tegra->soc = of_device_get_match_data(&pdev->dev);
-+
- 	tegra->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(tegra->regs))
- 		return PTR_ERR(tegra->regs);
-@@ -866,9 +891,9 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 
- 	tegra->max_freq = rate / KHZ;
- 
--	for (i = 0; i < ARRAY_SIZE(actmon_device_configs); i++) {
-+	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++) {
- 		dev = tegra->devices + i;
--		dev->config = actmon_device_configs + i;
-+		dev->config = tegra->soc->configs + i;
- 		dev->regs = tegra->regs + dev->config->offset;
- 	}
- 
-@@ -933,9 +958,24 @@ static int tegra_devfreq_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct tegra_devfreq_soc_data tegra124_soc = {
-+	.configs = tegra124_device_configs,
-+
-+	/*
-+	 * Activity counter is incremented every 256 memory transactions,
-+	 * and each transaction takes 4 EMC clocks.
-+	 */
-+	.count_weight = 4 * 256,
-+};
-+
-+static const struct tegra_devfreq_soc_data tegra30_soc = {
-+	.configs = tegra30_device_configs,
-+	.count_weight = 2 * 256,
-+};
-+
- static const struct of_device_id tegra_devfreq_of_match[] = {
--	{ .compatible = "nvidia,tegra30-actmon" },
--	{ .compatible = "nvidia,tegra124-actmon" },
-+	{ .compatible = "nvidia,tegra30-actmon",  .data = &tegra30_soc, },
-+	{ .compatible = "nvidia,tegra124-actmon", .data = &tegra124_soc, },
- 	{ },
- };
- 
+ # DEVFREQ Event Drivers
+ obj-$(CONFIG_PM_DEVFREQ_EVENT)		+= event/
+diff --git a/drivers/devfreq/tegra20-devfreq.c b/drivers/devfreq/tegra20-devfreq.c
+deleted file mode 100644
+index fd801534771d..000000000000
+--- a/drivers/devfreq/tegra20-devfreq.c
++++ /dev/null
+@@ -1,210 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * NVIDIA Tegra20 devfreq driver
+- *
+- * Copyright (C) 2019 GRATE-DRIVER project
+- */
+-
+-#include <linux/clk.h>
+-#include <linux/devfreq.h>
+-#include <linux/io.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/of_device.h>
+-#include <linux/platform_device.h>
+-#include <linux/pm_opp.h>
+-#include <linux/slab.h>
+-
+-#include <soc/tegra/mc.h>
+-
+-#include "governor.h"
+-
+-#define MC_STAT_CONTROL				0x90
+-#define MC_STAT_EMC_CLOCK_LIMIT			0xa0
+-#define MC_STAT_EMC_CLOCKS			0xa4
+-#define MC_STAT_EMC_CONTROL			0xa8
+-#define MC_STAT_EMC_COUNT			0xb8
+-
+-#define EMC_GATHER_CLEAR			(1 << 8)
+-#define EMC_GATHER_ENABLE			(3 << 8)
+-
+-struct tegra_devfreq {
+-	struct devfreq *devfreq;
+-	struct clk *emc_clock;
+-	void __iomem *regs;
+-};
+-
+-static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
+-				u32 flags)
+-{
+-	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
+-	struct devfreq *devfreq = tegra->devfreq;
+-	struct dev_pm_opp *opp;
+-	unsigned long rate;
+-	int err;
+-
+-	opp = devfreq_recommended_opp(dev, freq, flags);
+-	if (IS_ERR(opp))
+-		return PTR_ERR(opp);
+-
+-	rate = dev_pm_opp_get_freq(opp);
+-	dev_pm_opp_put(opp);
+-
+-	err = clk_set_min_rate(tegra->emc_clock, rate);
+-	if (err)
+-		return err;
+-
+-	err = clk_set_rate(tegra->emc_clock, 0);
+-	if (err)
+-		goto restore_min_rate;
+-
+-	return 0;
+-
+-restore_min_rate:
+-	clk_set_min_rate(tegra->emc_clock, devfreq->previous_freq);
+-
+-	return err;
+-}
+-
+-static int tegra_devfreq_get_dev_status(struct device *dev,
+-					struct devfreq_dev_status *stat)
+-{
+-	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
+-
+-	/*
+-	 * EMC_COUNT returns number of memory events, that number is lower
+-	 * than the number of clocks. Conversion ratio of 1/8 results in a
+-	 * bit higher bandwidth than actually needed, it is good enough for
+-	 * the time being because drivers don't support requesting minimum
+-	 * needed memory bandwidth yet.
+-	 *
+-	 * TODO: adjust the ratio value once relevant drivers will support
+-	 * memory bandwidth management.
+-	 */
+-	stat->busy_time = readl_relaxed(tegra->regs + MC_STAT_EMC_COUNT);
+-	stat->total_time = readl_relaxed(tegra->regs + MC_STAT_EMC_CLOCKS) / 8;
+-	stat->current_frequency = clk_get_rate(tegra->emc_clock);
+-
+-	writel_relaxed(EMC_GATHER_CLEAR, tegra->regs + MC_STAT_CONTROL);
+-	writel_relaxed(EMC_GATHER_ENABLE, tegra->regs + MC_STAT_CONTROL);
+-
+-	return 0;
+-}
+-
+-static struct devfreq_dev_profile tegra_devfreq_profile = {
+-	.polling_ms	= 500,
+-	.target		= tegra_devfreq_target,
+-	.get_dev_status	= tegra_devfreq_get_dev_status,
+-};
+-
+-static struct tegra_mc *tegra_get_memory_controller(void)
+-{
+-	struct platform_device *pdev;
+-	struct device_node *np;
+-	struct tegra_mc *mc;
+-
+-	np = of_find_compatible_node(NULL, NULL, "nvidia,tegra20-mc-gart");
+-	if (!np)
+-		return ERR_PTR(-ENOENT);
+-
+-	pdev = of_find_device_by_node(np);
+-	of_node_put(np);
+-	if (!pdev)
+-		return ERR_PTR(-ENODEV);
+-
+-	mc = platform_get_drvdata(pdev);
+-	if (!mc)
+-		return ERR_PTR(-EPROBE_DEFER);
+-
+-	return mc;
+-}
+-
+-static int tegra_devfreq_probe(struct platform_device *pdev)
+-{
+-	struct tegra_devfreq *tegra;
+-	struct tegra_mc *mc;
+-	unsigned long max_rate;
+-	unsigned long rate;
+-	int err;
+-
+-	mc = tegra_get_memory_controller();
+-	if (IS_ERR(mc)) {
+-		err = PTR_ERR(mc);
+-		dev_err(&pdev->dev, "failed to get memory controller: %d\n",
+-			err);
+-		return err;
+-	}
+-
+-	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+-	if (!tegra)
+-		return -ENOMEM;
+-
+-	/* EMC is a system-critical clock that is always enabled */
+-	tegra->emc_clock = devm_clk_get(&pdev->dev, "emc");
+-	if (IS_ERR(tegra->emc_clock))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(tegra->emc_clock),
+-				     "failed to get emc clock\n");
+-
+-	tegra->regs = mc->regs;
+-
+-	max_rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
+-
+-	for (rate = 0; rate <= max_rate; rate++) {
+-		rate = clk_round_rate(tegra->emc_clock, rate);
+-
+-		err = dev_pm_opp_add(&pdev->dev, rate, 0);
+-		if (err) {
+-			dev_err(&pdev->dev, "failed to add opp: %d\n", err);
+-			goto remove_opps;
+-		}
+-	}
+-
+-	/*
+-	 * Reset statistic gathers state, select global bandwidth for the
+-	 * statistics collection mode and set clocks counter saturation
+-	 * limit to maximum.
+-	 */
+-	writel_relaxed(0x00000000, tegra->regs + MC_STAT_CONTROL);
+-	writel_relaxed(0x00000000, tegra->regs + MC_STAT_EMC_CONTROL);
+-	writel_relaxed(0xffffffff, tegra->regs + MC_STAT_EMC_CLOCK_LIMIT);
+-
+-	platform_set_drvdata(pdev, tegra);
+-
+-	tegra->devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+-					    DEVFREQ_GOV_SIMPLE_ONDEMAND, NULL);
+-	if (IS_ERR(tegra->devfreq)) {
+-		err = PTR_ERR(tegra->devfreq);
+-		goto remove_opps;
+-	}
+-
+-	return 0;
+-
+-remove_opps:
+-	dev_pm_opp_remove_all_dynamic(&pdev->dev);
+-
+-	return err;
+-}
+-
+-static int tegra_devfreq_remove(struct platform_device *pdev)
+-{
+-	struct tegra_devfreq *tegra = platform_get_drvdata(pdev);
+-
+-	devfreq_remove_device(tegra->devfreq);
+-	dev_pm_opp_remove_all_dynamic(&pdev->dev);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver tegra_devfreq_driver = {
+-	.probe		= tegra_devfreq_probe,
+-	.remove		= tegra_devfreq_remove,
+-	.driver		= {
+-		.name	= "tegra20-devfreq",
+-	},
+-};
+-module_platform_driver(tegra_devfreq_driver);
+-
+-MODULE_ALIAS("platform:tegra20-devfreq");
+-MODULE_AUTHOR("Dmitry Osipenko <digetx@gmail.com>");
+-MODULE_DESCRIPTION("NVIDIA Tegra20 devfreq driver");
+-MODULE_LICENSE("GPL v2");
 -- 
 2.27.0
 
