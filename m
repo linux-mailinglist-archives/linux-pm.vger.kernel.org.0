@@ -2,168 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C02A6C57
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609C82A6C5B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732175AbgKDSCZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 13:02:25 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40058 "EHLO mx2.suse.de"
+        id S1732189AbgKDSCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 13:02:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:41350 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726608AbgKDSCY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Nov 2020 13:02:24 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 46661AC2F;
-        Wed,  4 Nov 2020 18:02:22 +0000 (UTC)
-Subject: Re: [PATCH v4 3/4] arch, mm: restore dependency of
- __kernel_map_pages() of DEBUG_PAGEALLOC
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20201103162057.22916-1-rppt@kernel.org>
- <20201103162057.22916-4-rppt@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Message-ID: <f9c1dc66-fc60-db4d-9670-0271adb2ed07@suse.cz>
-Date:   Wed, 4 Nov 2020 19:02:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726608AbgKDSCz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Nov 2020 13:02:55 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AD34106F;
+        Wed,  4 Nov 2020 10:02:54 -0800 (PST)
+Received: from [10.57.56.213] (unknown [10.57.56.213])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C01E03F718;
+        Wed,  4 Nov 2020 10:02:51 -0800 (PST)
+Subject: Re: [PATCH v3 0/3] CPUFreq: Add support for cpu performance
+ dependencies
+To:     Viresh Kumar <viresh.kumar@linaro.org>, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
+        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
+        chris.redpath@arm.com, Ionela Voinescu <Ionela.Voinescu@arm.com>
+References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+ <20201103101840.yrgwmcjrnjn7n5q6@vireshk-i7>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <87558fa9-a4c6-38c9-bcc5-f736c0229f56@arm.com>
+Date:   Wed, 4 Nov 2020 18:04:30 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20201103162057.22916-4-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201103101840.yrgwmcjrnjn7n5q6@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/3/20 5:20 PM, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+Hi Viresh, thanks for looking into this.
 
-Subject should have "on DEBUG_PAGEALLOC" ?
+On 11/3/20 10:18 AM, Viresh Kumar wrote:
+> On 02-11-20, 12:01, Nicola Mazzucato wrote:
+>> Hi All,
+>>
+>> In this V3 posting I have replaced the new dt-binding with minor changes/
+>> improvements for opp (since we are now using opp tables instead).
+>> The RFC still stands on how to make this info available to sw consumers.
+>>
+>> In the RFC, I am proposing a simple addition of a performance dependencies
+>> cpumask in CPUFreq core and an example of how drivers and consumers would
+>> make use of it.
+>> I also propose an alternative approach, which does not require changes in
+>> CPUFreq core, but - possibly - in all the consumers.
+>>
+>> This is to support systems where exposed cpu performance controls are more
+>> fine-grained that the platform's ability to scale cpus independently.
+> 
+> I was talking to Vincent about what you are doing here and we got a
+> bit confused and so here are few questions that we had:
+> 
+> - Based on my previous understanding, you don't want software
+>   coordination of frequencies (which is done by cpufreq today), but
+>   want the hardware to do that and so you want per-cpu cpufreq
+>   policies.
 
-> The design of DEBUG_PAGEALLOC presumes that __kernel_map_pages() must never
-> fail. With this assumption is wouldn't be safe to allow general usage of
-> this function.
-> 
-> Moreover, some architectures that implement __kernel_map_pages() have this
-> function guarded by #ifdef DEBUG_PAGEALLOC and some refuse to map/unmap
-> pages when page allocation debugging is disabled at runtime.
-> 
-> As all the users of __kernel_map_pages() were converted to use
-> debug_pagealloc_map_pages() it is safe to make it available only when
-> DEBUG_PAGEALLOC is set.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->   arch/Kconfig                     |  3 +++
->   arch/arm64/Kconfig               |  4 +---
->   arch/arm64/mm/pageattr.c         |  8 ++++++--
->   arch/powerpc/Kconfig             |  5 +----
->   arch/riscv/Kconfig               |  4 +---
->   arch/riscv/include/asm/pgtable.h |  2 --
->   arch/riscv/mm/pageattr.c         |  2 ++
->   arch/s390/Kconfig                |  4 +---
->   arch/sparc/Kconfig               |  4 +---
->   arch/x86/Kconfig                 |  4 +---
->   arch/x86/mm/pat/set_memory.c     |  2 ++
->   include/linux/mm.h               | 10 +++++++---
->   12 files changed, 26 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 56b6ccc0e32d..56d4752b6db6 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -1028,6 +1028,9 @@ config HAVE_STATIC_CALL_INLINE
->   	bool
->   	depends on HAVE_STATIC_CALL
->   
-> +config ARCH_SUPPORTS_DEBUG_PAGEALLOC
-> +	bool
-> +
->   source "kernel/gcov/Kconfig"
->   
->   source "scripts/gcc-plugins/Kconfig"
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 1d466addb078..a932810cfd90 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -71,6 +71,7 @@ config ARM64
->   	select ARCH_USE_QUEUED_RWLOCKS
->   	select ARCH_USE_QUEUED_SPINLOCKS
->   	select ARCH_USE_SYM_ANNOTATIONS
-> +	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
->   	select ARCH_SUPPORTS_MEMORY_FAILURE
->   	select ARCH_SUPPORTS_SHADOW_CALL_STACK if CC_HAVE_SHADOW_CALL_STACK
->   	select ARCH_SUPPORTS_ATOMIC_RMW
-> @@ -1025,9 +1026,6 @@ config HOLES_IN_ZONE
->   
->   source "kernel/Kconfig.hz"
->   
-> -config ARCH_SUPPORTS_DEBUG_PAGEALLOC
-> -	def_bool y
-> -
->   config ARCH_SPARSEMEM_ENABLE
->   	def_bool y
->   	select SPARSEMEM_VMEMMAP_ENABLE
-> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
-> index 1b94f5b82654..439325532be1 100644
-> --- a/arch/arm64/mm/pageattr.c
-> +++ b/arch/arm64/mm/pageattr.c
-> @@ -155,7 +155,7 @@ int set_direct_map_invalid_noflush(struct page *page)
->   		.clear_mask = __pgprot(PTE_VALID),
->   	};
->   
-> -	if (!rodata_full)
-> +	if (!debug_pagealloc_enabled() && !rodata_full)
->   		return 0;
->   
->   	return apply_to_page_range(&init_mm,
-> @@ -170,7 +170,7 @@ int set_direct_map_default_noflush(struct page *page)
->   		.clear_mask = __pgprot(PTE_RDONLY),
->   	};
->   
-> -	if (!rodata_full)
-> +	if (!debug_pagealloc_enabled() && !rodata_full)
->   		return 0;
->   
->   	return apply_to_page_range(&init_mm,
+Correct. And this has been done for quite some time in some platforms.
 
-I don't understand these two hunks. Previous patch calls this for hibernation 
-when CONFIG_ARCH_HAS_SET_DIRECT_MAP, which is true for arm64. Why suddenly this 
-starts to depend on debug_pagealloc_enabled()?
+> 
+> - What's the real benefit of hardware coordination ? Want to make sure
+>   I fully understand that.
+
+The hardware coordination that is coming out by having per-cpu cpufreq policies
+is not new, and works just fine in most of the systems.
+
+The benefit of having per-cpu controls is that the firmware will take care of
+the performance of the entire system. It is purely a delegation to firmware for
+the performance optimizations.
+
+> 
+> - Because of hardware co-ordination of otherwise co-ordinated CPUs,
+>   few things break. Thermal and EAS are some of the examples and so
+>   you are trying to fix them here by proving them the missing
+>   information again.
+
+Correct. And for this I have proposed two ways.
+
+> 
+> - One other thing that breaks with this is freq-invariance in the
+>   scheduler, as the scheduler won't see the real frequencies the
+>   various CPUs are running at. Most of the hardware we have today
+>   doesn't have counters, like AMUs, not sure if all future ones based
+>   on SCMI will have that too, so how are they gong to be fixed ?
+> 
+
+Correct. freq-invariance without counters is trying to do its best based on the
+information it has available. It definitely relies on the knowledge of the v/f
+domains to work at its best so I think in the case of per-cpu it will follow the
+same approach as others being affected (EAS, thermal).
+
+>   And if we even have to fix this (freq invariance), what's hardware
+>   coordination giving us that makes all this worth it ?
+
+I suppose this is more a generic question for all the platforms running with h/w
+coordination, but for our case is that the f/w will take care of the performance
+optimizations for us :)
+
+> 
+> Sorry about the long list :)
+
+No problem at all. Thank you for your time on this and I hope I have made bits
+clearer.
+
+Nicola
+
+> 
