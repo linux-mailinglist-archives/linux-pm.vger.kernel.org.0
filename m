@@ -2,188 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D222A6BE7
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 18:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B74F2A6C3C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 18:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730965AbgKDRkc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 12:40:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48702 "EHLO mx2.suse.de"
+        id S1728607AbgKDRxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 12:53:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:41210 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728052AbgKDRkc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Nov 2020 12:40:32 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D157CAC92;
-        Wed,  4 Nov 2020 17:40:29 +0000 (UTC)
-Subject: Re: [PATCH v4 2/4] PM: hibernate: make direct map manipulations more
- explicit
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-References: <20201103162057.22916-1-rppt@kernel.org>
- <20201103162057.22916-3-rppt@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Message-ID: <9a0780b4-35f8-0ded-c473-d8ab4a26ade5@suse.cz>
-Date:   Wed, 4 Nov 2020 18:40:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726152AbgKDRxB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Nov 2020 12:53:01 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16965139F;
+        Wed,  4 Nov 2020 09:53:00 -0800 (PST)
+Received: from [192.168.0.11] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01BAC3F718;
+        Wed,  4 Nov 2020 09:52:57 -0800 (PST)
+Subject: Re: [PATCH v3 2/3] opp/of: Allow empty opp-table with opp-shared
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
+        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
+        chris.redpath@arm.com
+References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+ <20201102120115.29993-3-nicola.mazzucato@arm.com>
+ <20201103050141.kiuyotzt4brisch7@vireshk-i7>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <9f442724-df13-d582-717d-535cc9c9c9f1@arm.com>
+Date:   Wed, 4 Nov 2020 17:54:31 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20201103162057.22916-3-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201103050141.kiuyotzt4brisch7@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/3/20 5:20 PM, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> When DEBUG_PAGEALLOC or ARCH_HAS_SET_DIRECT_MAP is enabled a page may be
-> not present in the direct map and has to be explicitly mapped before it
-> could be copied.
-> 
-> Introduce hibernate_map_page() that will explicitly use
-> set_direct_map_{default,invalid}_noflush() for ARCH_HAS_SET_DIRECT_MAP case
-> and debug_pagealloc_map_pages() for DEBUG_PAGEALLOC case.
-> 
-> The remapping of the pages in safe_copy_page() presumes that it only
-> changes protection bits in an existing PTE and so it is safe to ignore
-> return value of set_direct_map_{default,invalid}_noflush().
-> 
-> Still, add a pr_warn() so that future changes in set_memory APIs will not
-> silently break hibernation.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Hi Viresh, thanks for looking into this.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-The bool param is a bit more acceptable here, being a private API. But if 
-debug_pagealloc_map_pages() becomes split, then it might be easier to split this 
-one too...
-
-> ---
->   include/linux/mm.h      | 12 ------------
->   kernel/power/snapshot.c | 32 ++++++++++++++++++++++++++++++--
->   2 files changed, 30 insertions(+), 14 deletions(-)
+On 11/3/20 5:01 AM, Viresh Kumar wrote:
+> On 02-11-20, 12:01, Nicola Mazzucato wrote:
+>> The opp binding now allows to have an empty opp table and shared-opp to
+>> merely describe a hw connection among devices (f/v lines).
+>>
+>> When initialising an opp table, allow such case by:
+>> - treating some errors as warnings
+>> - do not mark empty tables as shared
+>> - don't fail on empty table
+>>
+>> Signed-off-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
+>> ---
+>>  drivers/opp/of.c | 13 +++++++++++--
+>>  1 file changed, 11 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+>> index 874b58756220..b0230490bb31 100644
+>> --- a/drivers/opp/of.c
+>> +++ b/drivers/opp/of.c
+>> @@ -157,6 +157,11 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
+>>  /*
+>>   * Populate all devices and opp tables which are part of "required-opps" list.
+>>   * Checking only the first OPP node should be enough.
+>> + *
+>> + * Corner case: empty opp table and opp-shared found. In this case we set
+>> + * unconditionally the opp table access to exclusive, as the opp-shared property
+>> + * is used purely to describe hw connections. Such information will be retrieved
+>> + * via dev_pm_opp_of_get_sharing_cpus().
+>>   */
+>>  static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+>>  					     struct device *dev,
+>> @@ -169,7 +174,9 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+>>  	/* Traversing the first OPP node is all we need */
+>>  	np = of_get_next_available_child(opp_np, NULL);
+>>  	if (!np) {
+>> -		dev_err(dev, "Empty OPP table\n");
+>> +		dev_warn(dev, "Empty OPP table\n");
+>> +
+>> +		opp_table->shared_opp = OPP_TABLE_ACCESS_EXCLUSIVE;
 > 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 1fc0609056dc..14e397f3752c 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2927,16 +2927,6 @@ static inline bool debug_pagealloc_enabled_static(void)
->   #if defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP)
->   extern void __kernel_map_pages(struct page *page, int numpages, int enable);
->   
-> -/*
-> - * When called in DEBUG_PAGEALLOC context, the call should most likely be
-> - * guarded by debug_pagealloc_enabled() or debug_pagealloc_enabled_static()
-> - */
-> -static inline void
-> -kernel_map_pages(struct page *page, int numpages, int enable)
-> -{
-> -	__kernel_map_pages(page, numpages, enable);
-> -}
-> -
->   static inline void debug_pagealloc_map_pages(struct page *page,
->   					     int numpages, int enable)
->   {
-> @@ -2948,8 +2938,6 @@ static inline void debug_pagealloc_map_pages(struct page *page,
->   extern bool kernel_page_present(struct page *page);
->   #endif	/* CONFIG_HIBERNATION */
->   #else	/* CONFIG_DEBUG_PAGEALLOC || CONFIG_ARCH_HAS_SET_DIRECT_MAP */
-> -static inline void
-> -kernel_map_pages(struct page *page, int numpages, int enable) {}
->   static inline void debug_pagealloc_map_pages(struct page *page,
->   					     int numpages, int enable) {}
->   #ifdef CONFIG_HIBERNATION
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index 46b1804c1ddf..57d54b9d84bb 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -76,6 +76,34 @@ static inline void hibernate_restore_protect_page(void *page_address) {}
->   static inline void hibernate_restore_unprotect_page(void *page_address) {}
->   #endif /* CONFIG_STRICT_KERNEL_RWX  && CONFIG_ARCH_HAS_SET_MEMORY */
->   
-> +static inline void hibernate_map_page(struct page *page, int enable)
-> +{
-> +	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
-> +		unsigned long addr = (unsigned long)page_address(page);
-> +		int ret;
-> +
-> +		/*
-> +		 * This should not fail because remapping a page here means
-> +		 * that we only update protection bits in an existing PTE.
-> +		 * It is still worth to have a warning here if something
-> +		 * changes and this will no longer be the case.
-> +		 */
-> +		if (enable)
-> +			ret = set_direct_map_default_noflush(page);
-> +		else
-> +			ret = set_direct_map_invalid_noflush(page);
-> +
-> +		if (ret) {
-> +			pr_warn_once("Failed to remap page\n");
-> +			return;
-> +		}
-> +
-> +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> +	} else {
-> +		debug_pagealloc_map_pages(page, 1, enable);
-> +	}
-> +}
-> +
->   static int swsusp_page_is_free(struct page *);
->   static void swsusp_set_page_forbidden(struct page *);
->   static void swsusp_unset_page_forbidden(struct page *);
-> @@ -1355,9 +1383,9 @@ static void safe_copy_page(void *dst, struct page *s_page)
->   	if (kernel_page_present(s_page)) {
->   		do_copy_page(dst, page_address(s_page));
->   	} else {
-> -		kernel_map_pages(s_page, 1, 1);
-> +		hibernate_map_page(s_page, 1);
->   		do_copy_page(dst, page_address(s_page));
-> -		kernel_map_pages(s_page, 1, 0);
-> +		hibernate_map_page(s_page, 0);
->   	}
->   }
->   
-> 
+> I am not sure I understand the reasoning behind this.
 
+Initially I thought to place a comment right there but I ended up with an
+explanation of this case at the top of this function (the corner-case). It
+probably also needs more details..
+Basically, on this case - empty opp table & opp-shared - we limit the scope of
+opp-shared to *only* tell us about hw description, and not marking the opp
+points as shared, since they are not present in DT. It would be the equivalent
+of describing that devices share clock/voltage lines, but we can't tell anything
+about opp points cause they are not there (in DT).
+OTOH If we don't set shared_opp to OPP_TABLE_ACCESS_EXCLUSIVE for that specific
+case, we won't be able to add opps for the remaining cpus as the opp core
+will find the opps as duplicated. This is a corner case, really.
+
+Please let me know if it's not clear.
+
+Many thanks
+Nicola
+
+> 
+>>  		return;
+>>  	}
+>>  
+>> @@ -377,7 +384,9 @@ int dev_pm_opp_of_find_icc_paths(struct device *dev,
+>>  	struct icc_path **paths;
+>>  
+>>  	ret = _bandwidth_supported(dev, opp_table);
+>> -	if (ret <= 0)
+>> +	if (ret == -EINVAL)
+>> +		return 0; /* Empty OPP table is a valid corner-case, let's not fail */
+>> +	else if (ret <= 0)
+>>  		return ret;
+>>  
+>>  	ret = 0;
+>> -- 
+>> 2.27.0
+> 
