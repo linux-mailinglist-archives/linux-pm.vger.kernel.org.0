@@ -2,101 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EA22A6CB6
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369712A6D3E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732392AbgKDScd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 13:32:33 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:43778 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726225AbgKDScd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 13:32:33 -0500
-Received: by mail-oi1-f193.google.com with SMTP id t143so11603017oif.10;
-        Wed, 04 Nov 2020 10:32:32 -0800 (PST)
+        id S1731787AbgKDS4O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 13:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728675AbgKDS4O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 13:56:14 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B14C0613D3
+        for <linux-pm@vger.kernel.org>; Wed,  4 Nov 2020 10:56:12 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 62so10057890pgg.12
+        for <linux-pm@vger.kernel.org>; Wed, 04 Nov 2020 10:56:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=5frHk8W4TX0vBPgk9ieAak19zZ8nMFl+vS8CXX8qUAc=;
+        b=Tyxa3OZ8oFuSDYomHUR8HLwuxB3ZB0ygJQZfqKXtNJsQKj/ijlDYVelzqenUz9gf1q
+         MUQi2rvt+lzL2oP5enfqluiyPXT+T72hS72DACeUBGolosebnNR3k1Fexd5HFKwHaYHs
+         kZPgYwipMxL0lF3sC8OndayvmqMAGA6volP9m6sSqj0Intf8xw8OEpX53uQ1iiuj4WfJ
+         8wfei5dyd6VayPC1oZw7R2iYi/gxkT2TkYuqX0X14hcne57L9RpIJ92HVq6NsuQpNHO7
+         SynSAvnZHQ8dcaoza8JmrxYEKLtCFpKX0Yqp2Hy1SCErnizOl27147ER8vGIpQ/h/KZQ
+         5Tdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=300YdLoIyeU5aKbjDs5NItaT9gZ3hFeS1uekqV/d+mE=;
-        b=lJz+ApwpFPB/ZFGP4Ow623yQs0rTz5MTV0XtOWYhY52Jhh9fK/FkjCrvf8UIkwZj0m
-         ZSpfETPabnE4XhYegurQZqo1d40hD8PlDzdZO/ZKYhZ6370Fk4lKnGOn0zW4c604sCG3
-         QvtZvT+gif01NA6kRUVZbQsjNZ1kwI/TiQDeJBIqECy7axwmeyqpexkm7ndG33wuXfc3
-         f1CGN1zzqmKOQ7CvP5Lan2IdsI+gN+LMsdgtbjUHBZey/l2Oeo5w8VApRCswT/+rL84N
-         RPiyK7aqC3ccHK96thMZtaPlZKRYpeWIL3xZfn7RZ/nr5MjXa1VqUtlerXAx900SbkGD
-         FJKA==
-X-Gm-Message-State: AOAM5329EzHAmzIcxZEjQsbUXN6m7lIUHMqJzqrVP3U9rgDVM+0TdQw4
-        y6iFsnGCduVIQVFl0ruohw==
-X-Google-Smtp-Source: ABdhPJz00/M3IYCTJO7Dw9Ou6hkev6/Azqgqrw4W1uP4oowWgcUZhKw5HlKN1f6jORePrZDPRCm0jw==
-X-Received: by 2002:aca:d445:: with SMTP id l66mr3175334oig.37.1604514752242;
-        Wed, 04 Nov 2020 10:32:32 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h7sm722359ool.34.2020.11.04.10.32.31
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=5frHk8W4TX0vBPgk9ieAak19zZ8nMFl+vS8CXX8qUAc=;
+        b=X4HnQ97A+r2K0m7EX041WsgJvQHxoTobXJvx8CBpg35eftMtVNP787u992tdn7imCB
+         0azDYzWGr4aGT7CVtvlS1tBE4fVmvlHjUdG8EzhD9FdHP/CU1nkm04JpYJJJl6h6vMI5
+         IfMor00x3Xd72G4ULij0SgOZE2DKEC22AmoKdeokjmBJ8jBRqEgNk9rJMQBsXIGZ9RDQ
+         8oaq965rotdyy+cbYIKxlDX1JPADPYTDGw7aZnXLSO4qj1FRMlnuR3fiLnO/7WEL7+fL
+         GFjH4QFM49TztfrO06t7Yz/HlcfBlSC96h1n7xX/nJK5KSiSrDsBCarFv45pP+nMYZXy
+         tMtg==
+X-Gm-Message-State: AOAM530Qk3GZ+lS6mYBgr59Wadvz6NTVevtiiSQ2gHcMb7lOFH4PNbaf
+        xnBT81A/MQrTSQH0eiuBh1pE1Q==
+X-Google-Smtp-Source: ABdhPJy+aZYSnstGd9tg+8Iip8vH+7+0GdEhD/4XarX0J7YWAYtkVT+0bBD0ZbIzB4EeJLiaS+E6ow==
+X-Received: by 2002:a65:4b81:: with SMTP id t1mr6581395pgq.263.1604516171108;
+        Wed, 04 Nov 2020 10:56:11 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z206sm2745980pfc.3.2020.11.04.10.56.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 10:32:31 -0800 (PST)
-Received: (nullmailer pid 3915209 invoked by uid 1000);
-        Wed, 04 Nov 2020 18:32:30 -0000
-Date:   Wed, 4 Nov 2020 12:32:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jishnu Prakash <jprakash@qti.qualcomm.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Andy Gross <agross@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-iio@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v9 01/15] dt-bindings: thermal: qcom: add adc-thermal
- monitor bindings
-Message-ID: <20201104183230.GB3913864@bogus>
-References: <20201102174950.1148498-1-dmitry.baryshkov@linaro.org>
- <20201102174950.1148498-2-dmitry.baryshkov@linaro.org>
+        Wed, 04 Nov 2020 10:56:10 -0800 (PST)
+Message-ID: <5fa2f94a.1c69fb81.ce782.53e8@mx.google.com>
+Date:   Wed, 04 Nov 2020 10:56:10 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201102174950.1148498-2-dmitry.baryshkov@linaro.org>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.10-rc2-15-gdddc237beebb
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: testing
+Subject: pm/testing sleep: 3 runs, 1 regressions (v5.10-rc2-15-gdddc237beebb)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 02 Nov 2020 20:49:36 +0300, Dmitry Baryshkov wrote:
-> Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
-> close counterpart of VADC part of those PMICs.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 154 ++++++++++++++++++
->  1 file changed, 154 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> 
+pm/testing sleep: 3 runs, 1 regressions (v5.10-rc2-15-gdddc237beebb)
+
+Regressions Summary
+-------------------
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
 
 
-My bot found errors running 'make dt_binding_check' on your patch:
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
+2-15-gdddc237beebb/plan/sleep/
 
-yamllint warnings/errors:
+  Test:     sleep
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.10-rc2-15-gdddc237beebb
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      dddc237beebb79a67a6e2cc18b6a0a29a3a7a89c =
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dt.yaml: adc@3100: 'io-channels' is a dependency of 'io-channel-ranges'
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/iio/iio-consumer.yaml
 
 
-See https://patchwork.ozlabs.org/patch/1392425
+Test Regressions
+---------------- =
 
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
 
-pip3 install dtschema --upgrade
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
 
-Please check and re-submit.
 
+  Details:     https://kernelci.org/test/plan/id/5fa2ecee2f325a49d2fb5309
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc2-15-gdddc2=
+37beebb/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc2-15-gdddc2=
+37beebb/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+1022.0/arm64/rootfs.cpio.gz =
+
+
+
+  * sleep.login: https://kernelci.org/test/case/id/5fa2ecee2f325a49d2fb530a
+        failing since 76 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
+l: v5.9-rc1-4-g1f08d51cd57f) =
+
+ =20
