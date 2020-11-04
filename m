@@ -2,346 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE73D2A6A75
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822B22A6BCE
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 18:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731764AbgKDQu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 11:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731394AbgKDQu3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:50:29 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93701C0613D3;
-        Wed,  4 Nov 2020 08:50:28 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id 184so28007700lfd.6;
-        Wed, 04 Nov 2020 08:50:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=b5Mpwu67cQNHRR5N5SNOJe1Sf8BNTrrvxX1GPMBXc1U=;
-        b=RcQmuOBB/6rmApTNVVKSwARv49el9DyJUkc1LudjWC8cL/PDm2uCrez5EyHwBuTU1f
-         77iq3bawqXiSwottfW2uUG/wFREu/F3R0l5A6uUJFNuNkD312FVuV9ieHxon91IwqMSn
-         +B/g7FB+6gVEGuWlV8lfUxp1W1HSWZGMu4WSQMvbp9m4eBoNdOrU3jrqJX3/9zK9gk3L
-         5soSN5fteEyBGqQaWpL1vz4xN+G/cauUXKUt+kAshf1Dz2CmeD3MSXx55bduBTZxLp4m
-         b+r863US4hm2Kc5sEUpqH7aSlHO6/OeMafpzUOblCJprNyDwrX1TQdPgnZIz1Fg5g1/u
-         3soQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=b5Mpwu67cQNHRR5N5SNOJe1Sf8BNTrrvxX1GPMBXc1U=;
-        b=K/UZdqtPOhqW7SjA3HFNIp3tKq+2ST5lLqlHw38MSNXEEUgMWkHgjrjwpqdPSqvneB
-         ZgbYkXHRoI8kADrToolspb47CafftIC6TlIoDBhKXWxXjagaEqHc5izXcWXH4ZvpkLXE
-         wU7+xbKRzcak+Hzu8ZSfVZPsG+4YKl7ifm/lCAJEjULecP/v9P0rBCjCU8Ci0/NvwSVc
-         wA23uWRx9UplZ5xhzyRskmxkfaQQKSacDGH7jh8LcgXQH3FYj7acvHKgLKM64aZi1ow1
-         M0Tcmoo3FTc6SpyRULdDWelfTaMREjiFTiR3u7RTk2gg+bmnPsxk3d1XBXl2GaEpf0RV
-         KVPA==
-X-Gm-Message-State: AOAM531PG2PssNA31tjBc/o0Rv9sQEAn7boYP4VVaMgAzk1Mjn3RZeHj
-        o51RyasJMntjZdF0+mPlF/U=
-X-Google-Smtp-Source: ABdhPJzgyMkoZvXelNNiQ5WW3g9nKzmMc+hBHlRZfAwq3bbJN8mltrIx4XriQKTaFG1J31fCabxSQw==
-X-Received: by 2002:a05:6512:1109:: with SMTP id l9mr1948170lfg.251.1604508626992;
-        Wed, 04 Nov 2020 08:50:26 -0800 (PST)
-Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 08:50:26 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v7 47/47] PM / devfreq: tegra20: Deprecate in a favor of emc-stat based driver
-Date:   Wed,  4 Nov 2020 19:49:23 +0300
-Message-Id: <20201104164923.21238-48-digetx@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201104164923.21238-1-digetx@gmail.com>
-References: <20201104164923.21238-1-digetx@gmail.com>
+        id S1728305AbgKDRfz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 12:35:55 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45490 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729162AbgKDRfz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Nov 2020 12:35:55 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 03279AD64;
+        Wed,  4 Nov 2020 17:35:53 +0000 (UTC)
+Subject: Re: [PATCH v4 1/4] mm: introduce debug_pagealloc_map_pages() helper
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Lameter <cl@linux.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <len.brown@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org
+References: <20201103162057.22916-1-rppt@kernel.org>
+ <20201103162057.22916-2-rppt@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Message-ID: <971e9638-2395-daf4-d19e-fe3cf5d34b98@suse.cz>
+Date:   Wed, 4 Nov 2020 18:35:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201103162057.22916-2-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Remove tegra20-devfreq in order to replace it with a EMC_STAT based
-devfreq driver. Previously we were going to use MC_STAT based
-tegra20-devfreq driver because EMC_STAT wasn't working properly, but
-now that problem is resolved. This resolves complications imposed by
-the removed driver since it was depending on both EMC and MC drivers
-simultaneously.
+On 11/3/20 5:20 PM, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> When CONFIG_DEBUG_PAGEALLOC is enabled, it unmaps pages from the kernel
+> direct mapping after free_pages(). The pages than need to be mapped back
+> before they could be used. Theese mapping operations use
+> __kernel_map_pages() guarded with with debug_pagealloc_enabled().
+> 
+> The only place that calls __kernel_map_pages() without checking whether
+> DEBUG_PAGEALLOC is enabled is the hibernation code that presumes
+> availability of this function when ARCH_HAS_SET_DIRECT_MAP is set.
+> Still, on arm64, __kernel_map_pages() will bail out when DEBUG_PAGEALLOC is
+> not enabled but set_direct_map_invalid_noflush() may render some pages not
+> present in the direct map and hibernation code won't be able to save such
+> pages.
+> 
+> To make page allocation debugging and hibernation interaction more robust,
+> the dependency on DEBUG_PAGEALLOC or ARCH_HAS_SET_DIRECT_MAP has to be made
+> more explicit.
+> 
+> Start with combining the guard condition and the call to
+> __kernel_map_pages() into a single debug_pagealloc_map_pages() function to
+> emphasize that __kernel_map_pages() should not be called without
+> DEBUG_PAGEALLOC and use this new function to map/unmap pages when page
+> allocation debug is enabled.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/devfreq/Kconfig           |  10 --
- drivers/devfreq/Makefile          |   1 -
- drivers/devfreq/tegra20-devfreq.c | 210 ------------------------------
- 3 files changed, 221 deletions(-)
- delete mode 100644 drivers/devfreq/tegra20-devfreq.c
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 0ee36ae2fa79..00704efe6398 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -121,16 +121,6 @@ config ARM_TEGRA_DEVFREQ
- 	  It reads ACTMON counters of memory controllers and adjusts the
- 	  operating frequencies and voltages with OPP support.
- 
--config ARM_TEGRA20_DEVFREQ
--	tristate "NVIDIA Tegra20 DEVFREQ Driver"
--	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
--	depends on COMMON_CLK
--	select DEVFREQ_GOV_SIMPLE_ONDEMAND
--	help
--	  This adds the DEVFREQ driver for the Tegra20 family of SoCs.
--	  It reads Memory Controller counters and adjusts the operating
--	  frequencies and voltages with OPP support.
--
- config ARM_RK3399_DMC_DEVFREQ
- 	tristate "ARM RK3399 DMC DEVFREQ Driver"
- 	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
-diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-index 3ca1ad0ecb97..a16333ea7034 100644
---- a/drivers/devfreq/Makefile
-+++ b/drivers/devfreq/Makefile
-@@ -13,7 +13,6 @@ obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
- obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
- obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
- obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
--obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
- 
- # DEVFREQ Event Drivers
- obj-$(CONFIG_PM_DEVFREQ_EVENT)		+= event/
-diff --git a/drivers/devfreq/tegra20-devfreq.c b/drivers/devfreq/tegra20-devfreq.c
-deleted file mode 100644
-index fd801534771d..000000000000
---- a/drivers/devfreq/tegra20-devfreq.c
-+++ /dev/null
-@@ -1,210 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * NVIDIA Tegra20 devfreq driver
-- *
-- * Copyright (C) 2019 GRATE-DRIVER project
-- */
--
--#include <linux/clk.h>
--#include <linux/devfreq.h>
--#include <linux/io.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/of_device.h>
--#include <linux/platform_device.h>
--#include <linux/pm_opp.h>
--#include <linux/slab.h>
--
--#include <soc/tegra/mc.h>
--
--#include "governor.h"
--
--#define MC_STAT_CONTROL				0x90
--#define MC_STAT_EMC_CLOCK_LIMIT			0xa0
--#define MC_STAT_EMC_CLOCKS			0xa4
--#define MC_STAT_EMC_CONTROL			0xa8
--#define MC_STAT_EMC_COUNT			0xb8
--
--#define EMC_GATHER_CLEAR			(1 << 8)
--#define EMC_GATHER_ENABLE			(3 << 8)
--
--struct tegra_devfreq {
--	struct devfreq *devfreq;
--	struct clk *emc_clock;
--	void __iomem *regs;
--};
--
--static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
--				u32 flags)
--{
--	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
--	struct devfreq *devfreq = tegra->devfreq;
--	struct dev_pm_opp *opp;
--	unsigned long rate;
--	int err;
--
--	opp = devfreq_recommended_opp(dev, freq, flags);
--	if (IS_ERR(opp))
--		return PTR_ERR(opp);
--
--	rate = dev_pm_opp_get_freq(opp);
--	dev_pm_opp_put(opp);
--
--	err = clk_set_min_rate(tegra->emc_clock, rate);
--	if (err)
--		return err;
--
--	err = clk_set_rate(tegra->emc_clock, 0);
--	if (err)
--		goto restore_min_rate;
--
--	return 0;
--
--restore_min_rate:
--	clk_set_min_rate(tegra->emc_clock, devfreq->previous_freq);
--
--	return err;
--}
--
--static int tegra_devfreq_get_dev_status(struct device *dev,
--					struct devfreq_dev_status *stat)
--{
--	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
--
--	/*
--	 * EMC_COUNT returns number of memory events, that number is lower
--	 * than the number of clocks. Conversion ratio of 1/8 results in a
--	 * bit higher bandwidth than actually needed, it is good enough for
--	 * the time being because drivers don't support requesting minimum
--	 * needed memory bandwidth yet.
--	 *
--	 * TODO: adjust the ratio value once relevant drivers will support
--	 * memory bandwidth management.
--	 */
--	stat->busy_time = readl_relaxed(tegra->regs + MC_STAT_EMC_COUNT);
--	stat->total_time = readl_relaxed(tegra->regs + MC_STAT_EMC_CLOCKS) / 8;
--	stat->current_frequency = clk_get_rate(tegra->emc_clock);
--
--	writel_relaxed(EMC_GATHER_CLEAR, tegra->regs + MC_STAT_CONTROL);
--	writel_relaxed(EMC_GATHER_ENABLE, tegra->regs + MC_STAT_CONTROL);
--
--	return 0;
--}
--
--static struct devfreq_dev_profile tegra_devfreq_profile = {
--	.polling_ms	= 500,
--	.target		= tegra_devfreq_target,
--	.get_dev_status	= tegra_devfreq_get_dev_status,
--};
--
--static struct tegra_mc *tegra_get_memory_controller(void)
--{
--	struct platform_device *pdev;
--	struct device_node *np;
--	struct tegra_mc *mc;
--
--	np = of_find_compatible_node(NULL, NULL, "nvidia,tegra20-mc-gart");
--	if (!np)
--		return ERR_PTR(-ENOENT);
--
--	pdev = of_find_device_by_node(np);
--	of_node_put(np);
--	if (!pdev)
--		return ERR_PTR(-ENODEV);
--
--	mc = platform_get_drvdata(pdev);
--	if (!mc)
--		return ERR_PTR(-EPROBE_DEFER);
--
--	return mc;
--}
--
--static int tegra_devfreq_probe(struct platform_device *pdev)
--{
--	struct tegra_devfreq *tegra;
--	struct tegra_mc *mc;
--	unsigned long max_rate;
--	unsigned long rate;
--	int err;
--
--	mc = tegra_get_memory_controller();
--	if (IS_ERR(mc)) {
--		err = PTR_ERR(mc);
--		dev_err(&pdev->dev, "failed to get memory controller: %d\n",
--			err);
--		return err;
--	}
--
--	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
--	if (!tegra)
--		return -ENOMEM;
--
--	/* EMC is a system-critical clock that is always enabled */
--	tegra->emc_clock = devm_clk_get(&pdev->dev, "emc");
--	if (IS_ERR(tegra->emc_clock))
--		return dev_err_probe(&pdev->dev, PTR_ERR(tegra->emc_clock),
--				     "failed to get emc clock\n");
--
--	tegra->regs = mc->regs;
--
--	max_rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
--
--	for (rate = 0; rate <= max_rate; rate++) {
--		rate = clk_round_rate(tegra->emc_clock, rate);
--
--		err = dev_pm_opp_add(&pdev->dev, rate, 0);
--		if (err) {
--			dev_err(&pdev->dev, "failed to add opp: %d\n", err);
--			goto remove_opps;
--		}
--	}
--
--	/*
--	 * Reset statistic gathers state, select global bandwidth for the
--	 * statistics collection mode and set clocks counter saturation
--	 * limit to maximum.
--	 */
--	writel_relaxed(0x00000000, tegra->regs + MC_STAT_CONTROL);
--	writel_relaxed(0x00000000, tegra->regs + MC_STAT_EMC_CONTROL);
--	writel_relaxed(0xffffffff, tegra->regs + MC_STAT_EMC_CLOCK_LIMIT);
--
--	platform_set_drvdata(pdev, tegra);
--
--	tegra->devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
--					    DEVFREQ_GOV_SIMPLE_ONDEMAND, NULL);
--	if (IS_ERR(tegra->devfreq)) {
--		err = PTR_ERR(tegra->devfreq);
--		goto remove_opps;
--	}
--
--	return 0;
--
--remove_opps:
--	dev_pm_opp_remove_all_dynamic(&pdev->dev);
--
--	return err;
--}
--
--static int tegra_devfreq_remove(struct platform_device *pdev)
--{
--	struct tegra_devfreq *tegra = platform_get_drvdata(pdev);
--
--	devfreq_remove_device(tegra->devfreq);
--	dev_pm_opp_remove_all_dynamic(&pdev->dev);
--
--	return 0;
--}
--
--static struct platform_driver tegra_devfreq_driver = {
--	.probe		= tegra_devfreq_probe,
--	.remove		= tegra_devfreq_remove,
--	.driver		= {
--		.name	= "tegra20-devfreq",
--	},
--};
--module_platform_driver(tegra_devfreq_driver);
--
--MODULE_ALIAS("platform:tegra20-devfreq");
--MODULE_AUTHOR("Dmitry Osipenko <digetx@gmail.com>");
--MODULE_DESCRIPTION("NVIDIA Tegra20 devfreq driver");
--MODULE_LICENSE("GPL v2");
--- 
-2.27.0
+But, the "enable" param is hideous. I would rather have map and unmap variants 
+(and just did the same split for page poisoning) and this seems to be a good 
+opportunity. If David didn't propose it already, I'm surprised ;)
+
+> ---
+>   include/linux/mm.h  | 10 ++++++++++
+>   mm/memory_hotplug.c |  3 +--
+>   mm/page_alloc.c     |  6 ++----
+>   mm/slab.c           |  8 +++-----
+>   4 files changed, 16 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index ef360fe70aaf..1fc0609056dc 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2936,12 +2936,22 @@ kernel_map_pages(struct page *page, int numpages, int enable)
+>   {
+>   	__kernel_map_pages(page, numpages, enable);
+>   }
+> +
+> +static inline void debug_pagealloc_map_pages(struct page *page,
+> +					     int numpages, int enable)
+> +{
+> +	if (debug_pagealloc_enabled_static())
+> +		__kernel_map_pages(page, numpages, enable);
+> +}
+> +
+>   #ifdef CONFIG_HIBERNATION
+>   extern bool kernel_page_present(struct page *page);
+>   #endif	/* CONFIG_HIBERNATION */
+>   #else	/* CONFIG_DEBUG_PAGEALLOC || CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+>   static inline void
+>   kernel_map_pages(struct page *page, int numpages, int enable) {}
+> +static inline void debug_pagealloc_map_pages(struct page *page,
+> +					     int numpages, int enable) {}
+>   #ifdef CONFIG_HIBERNATION
+>   static inline bool kernel_page_present(struct page *page) { return true; }
+>   #endif	/* CONFIG_HIBERNATION */
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index b44d4c7ba73b..e2b6043a4428 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -614,8 +614,7 @@ void generic_online_page(struct page *page, unsigned int order)
+>   	 * so we should map it first. This is better than introducing a special
+>   	 * case in page freeing fast path.
+>   	 */
+> -	if (debug_pagealloc_enabled_static())
+> -		kernel_map_pages(page, 1 << order, 1);
+> +	debug_pagealloc_map_pages(page, 1 << order, 1);
+>   	__free_pages_core(page, order);
+>   	totalram_pages_add(1UL << order);
+>   #ifdef CONFIG_HIGHMEM
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 23f5066bd4a5..9a66a1ff9193 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1272,8 +1272,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+>   	 */
+>   	arch_free_page(page, order);
+>   
+> -	if (debug_pagealloc_enabled_static())
+> -		kernel_map_pages(page, 1 << order, 0);
+> +	debug_pagealloc_map_pages(page, 1 << order, 0);
+>   
+>   	kasan_free_nondeferred_pages(page, order);
+>   
+> @@ -2270,8 +2269,7 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+>   	set_page_refcounted(page);
+>   
+>   	arch_alloc_page(page, order);
+> -	if (debug_pagealloc_enabled_static())
+> -		kernel_map_pages(page, 1 << order, 1);
+> +	debug_pagealloc_map_pages(page, 1 << order, 1);
+>   	kasan_alloc_pages(page, order);
+>   	kernel_poison_pages(page, 1 << order, 1);
+>   	set_page_owner(page, order, gfp_flags);
+> diff --git a/mm/slab.c b/mm/slab.c
+> index b1113561b98b..340db0ce74c4 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -1431,10 +1431,8 @@ static bool is_debug_pagealloc_cache(struct kmem_cache *cachep)
+>   #ifdef CONFIG_DEBUG_PAGEALLOC
+>   static void slab_kernel_map(struct kmem_cache *cachep, void *objp, int map)
+>   {
+> -	if (!is_debug_pagealloc_cache(cachep))
+> -		return;
+> -
+> -	kernel_map_pages(virt_to_page(objp), cachep->size / PAGE_SIZE, map);
+> +	debug_pagealloc_map_pages(virt_to_page(objp),
+> +				  cachep->size / PAGE_SIZE, map);
+>   }
+>   
+>   #else
+> @@ -2062,7 +2060,7 @@ int __kmem_cache_create(struct kmem_cache *cachep, slab_flags_t flags)
+>   
+>   #if DEBUG
+>   	/*
+> -	 * If we're going to use the generic kernel_map_pages()
+> +	 * If we're going to use the generic debug_pagealloc_map_pages()
+>   	 * poisoning, then it's going to smash the contents of
+>   	 * the redzone and userword anyhow, so switch them off.
+>   	 */
+> 
 
