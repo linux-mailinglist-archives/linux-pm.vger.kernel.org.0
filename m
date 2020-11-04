@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8CB2A6ADE
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C0A2A6ACB
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731481AbgKDQxG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 11:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S1731540AbgKDQt6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 11:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731525AbgKDQtz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:49:55 -0500
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DBAC0613D3;
-        Wed,  4 Nov 2020 08:49:55 -0800 (PST)
-Received: by mail-lj1-x244.google.com with SMTP id m8so17654200ljj.0;
-        Wed, 04 Nov 2020 08:49:55 -0800 (PST)
+        with ESMTP id S1731533AbgKDQt5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:49:57 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA4CC0613D3;
+        Wed,  4 Nov 2020 08:49:56 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id l28so27978649lfp.10;
+        Wed, 04 Nov 2020 08:49:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZqzEltuN5moc9KsPy66tWe+lPEJWveWVX7/N9Iczqdg=;
-        b=o4UnBK9ibQLU6a5PeuY3NJhfuI78mBN5N5b3ypqcs9Iq8a69jE87KBp/h5euFrzrMO
-         8TTvjki2JeoiExtYHNfLOjrOm1PFy9hEdPGL7sigDc0KRXaG6wwWy3Vpc0m15WWY7dnR
-         H5psVV7PaxohhErmm/PRDRxLixxoobSj515fy+X7zhQ6OT7UZ3dR3BWOtg88EiA4CZ4i
-         pENxKZNq5rIL5mZ5rBUoEEpWJFovi04W2bd6nzt14hTAjKkH881oey9Nkhgrhnz6SYWc
-         N3BqWVM8SyTodXb5pIFXyPRHSx72OJhpfc8UEaS1gBj8vAlW+E3skWiuk75+MdI+vMJ8
-         Yfkw==
+        bh=qXc6alv2GyhB3hhhLZedHDIUdftmQRoQ6V9Gv1leNe8=;
+        b=Af0j9cQyYfqwGbLNFMo8DQIbaHxPcvuBSdMbyhlOHUzt5ONJ9XckN8qb/gJe8W0Kax
+         8dqF6rNmTRvckvxhSt5vUrX9Fz5POWuCbXtXka2MhNt4wm0+lj2gJk7ZaFPlxGEVw2jh
+         t/2wgt+iBONe4r/ISY4f2E4A6CvXXg7FotjG8H8XZI6DrKz7iiIte2dowE9Y2KEyZA7a
+         8e4kFZjJRTS2mANq/Grexnd1PzuveBBsFv8E35PY/EmpiNLwIXUrMPX05yVBLYFCEN/J
+         9VUUGVugNuyC7Z8tKrS4DtpEWHjTiwHX5DxHTVSrVrgBGoTzscatoKUltYZRN3M60QSc
+         s+Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZqzEltuN5moc9KsPy66tWe+lPEJWveWVX7/N9Iczqdg=;
-        b=iBbOGUpeH6JFu7eJ4ot+JMro1Bn9k+RbB+/vb5XC8Y+zXs1IAFLQ2YlyST5CpOdhAB
-         TdoITgPyTpoXfzryBevCpfeywxm1wRAXWwZgMqKjl8GNoD35fxsLq6XMC6eJrg1AwiKb
-         8ub8L1hohEnbzTyxkxkz2+h4HyyorXDJwCMuBfqsJgNv8UPCTObIQ+raneW4C5//hWKO
-         xdzoFagpqxwF4bCv3OylkpuEDd0ZbVObZDFPfconplT0HDqxykFA+RVqkS8WRlpy3vK2
-         ho5cYHXs9Axvfsjv5pVHS6s4CCTaFYeWmUib676N8mTgFkzE7/A+xHy7q0+lp79Y7ubx
-         keOg==
-X-Gm-Message-State: AOAM531mYF68gxvqfpqSJmLh66kuxugvE7hYafGPuly0c/Sd2XiYHhk1
-        Mryl/0NJBZzc2jVtRBqKddI=
-X-Google-Smtp-Source: ABdhPJyeX5Yfln+dusfWz3xKWppTsZIg6ArEcqN8glIFOwU51Lb09IzPCh9OsQa4/GpcEkLlbHZ3RA==
-X-Received: by 2002:a05:651c:291:: with SMTP id b17mr10424595ljo.34.1604508594027;
-        Wed, 04 Nov 2020 08:49:54 -0800 (PST)
+        bh=qXc6alv2GyhB3hhhLZedHDIUdftmQRoQ6V9Gv1leNe8=;
+        b=CpTIGKPDE/eUWpfvyT4JuEy0RtmAyoI59fNs5sf2VVJd4ckSNiENH8o6XFSeFeFZpL
+         wK5/VH2cSrjat3Ym4zjDr5FMnXHXCITeVYsCXFgEt9uGot7uD4DdUwQE5OXvvY4BejFW
+         WzrdNkwV1rE6agvEneekvE4wWRdNFQz5wsgsNEr4KF69x7J1/XXdz5h9PFbLW5l2YWdl
+         eLciXfL7MunE8YtA7TctwR+7wwhGFhCecIM786mpeetYdjPwIFaCwYGGtcHDMB5oxBvd
+         rXI8/6T58cUBmozB9dzwlcrb4r0ZZwTeSnObIAv7M6a7iaX0E4/BfoZODWZbw9lrksOe
+         Vm9g==
+X-Gm-Message-State: AOAM531fnkibHlb0Y4RmcvWw9F0CS7cO7fTPno4jE7PW06j7sJHUTj3v
+        DZ+vniT0mxz7EQuO3WwKJs8=
+X-Google-Smtp-Source: ABdhPJzbvyLORoXyQj3/KlGwtfFDf00kuQbn6UHu0zwxqEPLW3MMMC/l9l2xEy8HWSLg8WtRXbvnjA==
+X-Received: by 2002:a19:441:: with SMTP id 62mr9370540lfe.304.1604508595182;
+        Wed, 04 Nov 2020 08:49:55 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.49.52
+        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.49.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 08:49:53 -0800 (PST)
+        Wed, 04 Nov 2020 08:49:54 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v7 20/47] ARM: tegra: Correct EMC registers size in Tegra20 device-tree
-Date:   Wed,  4 Nov 2020 19:48:56 +0300
-Message-Id: <20201104164923.21238-21-digetx@gmail.com>
+Subject: [PATCH v7 21/47] ARM: tegra: Add interconnect properties to Tegra20 device-tree
+Date:   Wed,  4 Nov 2020 19:48:57 +0300
+Message-Id: <20201104164923.21238-22-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201104164923.21238-1-digetx@gmail.com>
 References: <20201104164923.21238-1-digetx@gmail.com>
@@ -78,27 +78,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix the size of Tegra20 EMC registers, which should be twice bigger.
+Add interconnect properties to the Memory Controller, External Memory
+Controller and the Display Controller nodes in order to describe hardware
+interconnection.
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra20.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/tegra20.dtsi | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index 72a4211a618f..9347f7789245 100644
+index 9347f7789245..2e1304493f7d 100644
 --- a/arch/arm/boot/dts/tegra20.dtsi
 +++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -634,7 +634,7 @@ mc: memory-controller@7000f000 {
+@@ -111,6 +111,17 @@ dc@54200000 {
  
- 	memory-controller@7000f400 {
+ 			nvidia,head = <0>;
+ 
++			interconnects = <&mc TEGRA20_MC_DISPLAY0A &emc>,
++					<&mc TEGRA20_MC_DISPLAY0B &emc>,
++					<&mc TEGRA20_MC_DISPLAY1B &emc>,
++					<&mc TEGRA20_MC_DISPLAY0C &emc>,
++					<&mc TEGRA20_MC_DISPLAYHC &emc>;
++			interconnect-names = "wina",
++					     "winb",
++					     "winb-vfilter",
++					     "winc",
++					     "cursor";
++
+ 			rgb {
+ 				status = "disabled";
+ 			};
+@@ -128,6 +139,17 @@ dc@54240000 {
+ 
+ 			nvidia,head = <1>;
+ 
++			interconnects = <&mc TEGRA20_MC_DISPLAY0AB &emc>,
++					<&mc TEGRA20_MC_DISPLAY0BB &emc>,
++					<&mc TEGRA20_MC_DISPLAY1BB &emc>,
++					<&mc TEGRA20_MC_DISPLAY0CB &emc>,
++					<&mc TEGRA20_MC_DISPLAYHCB &emc>;
++			interconnect-names = "wina",
++					     "winb",
++					     "winb-vfilter",
++					     "winc",
++					     "cursor";
++
+ 			rgb {
+ 				status = "disabled";
+ 			};
+@@ -630,15 +652,17 @@ mc: memory-controller@7000f000 {
+ 		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+ 		#reset-cells = <1>;
+ 		#iommu-cells = <0>;
++		#interconnect-cells = <1>;
+ 	};
+ 
+-	memory-controller@7000f400 {
++	emc: memory-controller@7000f400 {
  		compatible = "nvidia,tegra20-emc";
--		reg = <0x7000f400 0x200>;
-+		reg = <0x7000f400 0x400>;
+ 		reg = <0x7000f400 0x400>;
  		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
  		clocks = <&tegra_car TEGRA20_CLK_EMC>;
  		#address-cells = <1>;
+ 		#size-cells = <0>;
++		#interconnect-cells = <0>;
+ 	};
+ 
+ 	fuse@7000f800 {
 -- 
 2.27.0
 
