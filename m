@@ -2,120 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 609C82A6C5B
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EA22A6CB6
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732189AbgKDSCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 13:02:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:41350 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726608AbgKDSCz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Nov 2020 13:02:55 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AD34106F;
-        Wed,  4 Nov 2020 10:02:54 -0800 (PST)
-Received: from [10.57.56.213] (unknown [10.57.56.213])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C01E03F718;
-        Wed,  4 Nov 2020 10:02:51 -0800 (PST)
-Subject: Re: [PATCH v3 0/3] CPUFreq: Add support for cpu performance
- dependencies
-To:     Viresh Kumar <viresh.kumar@linaro.org>, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
-        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
-        chris.redpath@arm.com, Ionela Voinescu <Ionela.Voinescu@arm.com>
-References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
- <20201103101840.yrgwmcjrnjn7n5q6@vireshk-i7>
-From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
-Message-ID: <87558fa9-a4c6-38c9-bcc5-f736c0229f56@arm.com>
-Date:   Wed, 4 Nov 2020 18:04:30 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1732392AbgKDScd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 13:32:33 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:43778 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726225AbgKDScd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 13:32:33 -0500
+Received: by mail-oi1-f193.google.com with SMTP id t143so11603017oif.10;
+        Wed, 04 Nov 2020 10:32:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=300YdLoIyeU5aKbjDs5NItaT9gZ3hFeS1uekqV/d+mE=;
+        b=lJz+ApwpFPB/ZFGP4Ow623yQs0rTz5MTV0XtOWYhY52Jhh9fK/FkjCrvf8UIkwZj0m
+         ZSpfETPabnE4XhYegurQZqo1d40hD8PlDzdZO/ZKYhZ6370Fk4lKnGOn0zW4c604sCG3
+         QvtZvT+gif01NA6kRUVZbQsjNZ1kwI/TiQDeJBIqECy7axwmeyqpexkm7ndG33wuXfc3
+         f1CGN1zzqmKOQ7CvP5Lan2IdsI+gN+LMsdgtbjUHBZey/l2Oeo5w8VApRCswT/+rL84N
+         RPiyK7aqC3ccHK96thMZtaPlZKRYpeWIL3xZfn7RZ/nr5MjXa1VqUtlerXAx900SbkGD
+         FJKA==
+X-Gm-Message-State: AOAM5329EzHAmzIcxZEjQsbUXN6m7lIUHMqJzqrVP3U9rgDVM+0TdQw4
+        y6iFsnGCduVIQVFl0ruohw==
+X-Google-Smtp-Source: ABdhPJz00/M3IYCTJO7Dw9Ou6hkev6/Azqgqrw4W1uP4oowWgcUZhKw5HlKN1f6jORePrZDPRCm0jw==
+X-Received: by 2002:aca:d445:: with SMTP id l66mr3175334oig.37.1604514752242;
+        Wed, 04 Nov 2020 10:32:32 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h7sm722359ool.34.2020.11.04.10.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 10:32:31 -0800 (PST)
+Received: (nullmailer pid 3915209 invoked by uid 1000);
+        Wed, 04 Nov 2020 18:32:30 -0000
+Date:   Wed, 4 Nov 2020 12:32:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Jishnu Prakash <jprakash@qti.qualcomm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Andy Gross <agross@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-iio@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v9 01/15] dt-bindings: thermal: qcom: add adc-thermal
+ monitor bindings
+Message-ID: <20201104183230.GB3913864@bogus>
+References: <20201102174950.1148498-1-dmitry.baryshkov@linaro.org>
+ <20201102174950.1148498-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20201103101840.yrgwmcjrnjn7n5q6@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201102174950.1148498-2-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh, thanks for looking into this.
-
-On 11/3/20 10:18 AM, Viresh Kumar wrote:
-> On 02-11-20, 12:01, Nicola Mazzucato wrote:
->> Hi All,
->>
->> In this V3 posting I have replaced the new dt-binding with minor changes/
->> improvements for opp (since we are now using opp tables instead).
->> The RFC still stands on how to make this info available to sw consumers.
->>
->> In the RFC, I am proposing a simple addition of a performance dependencies
->> cpumask in CPUFreq core and an example of how drivers and consumers would
->> make use of it.
->> I also propose an alternative approach, which does not require changes in
->> CPUFreq core, but - possibly - in all the consumers.
->>
->> This is to support systems where exposed cpu performance controls are more
->> fine-grained that the platform's ability to scale cpus independently.
+On Mon, 02 Nov 2020 20:49:36 +0300, Dmitry Baryshkov wrote:
+> Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
+> close counterpart of VADC part of those PMICs.
 > 
-> I was talking to Vincent about what you are doing here and we got a
-> bit confused and so here are few questions that we had:
-> 
-> - Based on my previous understanding, you don't want software
->   coordination of frequencies (which is done by cpufreq today), but
->   want the hardware to do that and so you want per-cpu cpufreq
->   policies.
-
-Correct. And this has been done for quite some time in some platforms.
-
-> 
-> - What's the real benefit of hardware coordination ? Want to make sure
->   I fully understand that.
-
-The hardware coordination that is coming out by having per-cpu cpufreq policies
-is not new, and works just fine in most of the systems.
-
-The benefit of having per-cpu controls is that the firmware will take care of
-the performance of the entire system. It is purely a delegation to firmware for
-the performance optimizations.
-
-> 
-> - Because of hardware co-ordination of otherwise co-ordinated CPUs,
->   few things break. Thermal and EAS are some of the examples and so
->   you are trying to fix them here by proving them the missing
->   information again.
-
-Correct. And for this I have proposed two ways.
-
-> 
-> - One other thing that breaks with this is freq-invariance in the
->   scheduler, as the scheduler won't see the real frequencies the
->   various CPUs are running at. Most of the hardware we have today
->   doesn't have counters, like AMUs, not sure if all future ones based
->   on SCMI will have that too, so how are they gong to be fixed ?
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 154 ++++++++++++++++++
+>  1 file changed, 154 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
 > 
 
-Correct. freq-invariance without counters is trying to do its best based on the
-information it has available. It definitely relies on the knowledge of the v/f
-domains to work at its best so I think in the case of per-cpu it will follow the
-same approach as others being affected (EAS, thermal).
 
->   And if we even have to fix this (freq invariance), what's hardware
->   coordination giving us that makes all this worth it ?
+My bot found errors running 'make dt_binding_check' on your patch:
 
-I suppose this is more a generic question for all the platforms running with h/w
-coordination, but for our case is that the f/w will take care of the performance
-optimizations for us :)
+yamllint warnings/errors:
 
-> 
-> Sorry about the long list :)
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dt.yaml: adc@3100: 'io-channels' is a dependency of 'io-channel-ranges'
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/iio/iio-consumer.yaml
 
-No problem at all. Thank you for your time on this and I hope I have made bits
-clearer.
 
-Nicola
+See https://patchwork.ozlabs.org/patch/1392425
 
-> 
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
