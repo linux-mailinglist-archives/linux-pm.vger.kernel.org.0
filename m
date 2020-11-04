@@ -2,117 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 369712A6D3E
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 19:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B300A2A6ED5
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 21:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731787AbgKDS4O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 13:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        id S1732118AbgKDUeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 15:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728675AbgKDS4O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 13:56:14 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B14C0613D3
-        for <linux-pm@vger.kernel.org>; Wed,  4 Nov 2020 10:56:12 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 62so10057890pgg.12
-        for <linux-pm@vger.kernel.org>; Wed, 04 Nov 2020 10:56:12 -0800 (PST)
+        with ESMTP id S1728607AbgKDUeT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 15:34:19 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF53C0613D3;
+        Wed,  4 Nov 2020 12:34:18 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id 184so28913162lfd.6;
+        Wed, 04 Nov 2020 12:34:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=5frHk8W4TX0vBPgk9ieAak19zZ8nMFl+vS8CXX8qUAc=;
-        b=Tyxa3OZ8oFuSDYomHUR8HLwuxB3ZB0ygJQZfqKXtNJsQKj/ijlDYVelzqenUz9gf1q
-         MUQi2rvt+lzL2oP5enfqluiyPXT+T72hS72DACeUBGolosebnNR3k1Fexd5HFKwHaYHs
-         kZPgYwipMxL0lF3sC8OndayvmqMAGA6volP9m6sSqj0Intf8xw8OEpX53uQ1iiuj4WfJ
-         8wfei5dyd6VayPC1oZw7R2iYi/gxkT2TkYuqX0X14hcne57L9RpIJ92HVq6NsuQpNHO7
-         SynSAvnZHQ8dcaoza8JmrxYEKLtCFpKX0Yqp2Hy1SCErnizOl27147ER8vGIpQ/h/KZQ
-         5Tdw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/0mitIGetUGfuuO4VScfLcyzD4ue3QtNkT908OKoYnY=;
+        b=fd5ouJ4+u2b/v1cNp08C5IZeNh8UNObZ9G5gda+RSLQVT2Z8nIfmTrnx5jKEG9q++C
+         Vr+jNeV5T4twoBYbHlcFVMgxoRi+kGMHeH1Ha9IfbPzeNyUu4Dskwb5PPV3bJ+oNWxY+
+         LJKrvs3FpF9c5sCch2v7KogZbQHxyXb81kSDuWHVSY6A8AyEaTw/vsC2Z+OxKf41QK7B
+         GVdl74YnhBefgGTaMq81TU+qgXuoVoFPHg50Phycws4p9+nhga2fF7Ju6yi8bMP5UeGj
+         dadQtaND9A/Diz8p47qYIeKtB4KwHLUK0dLY8foCOLbwB2lHbdnk3lI/eEmyf1DDcKYe
+         YDrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=5frHk8W4TX0vBPgk9ieAak19zZ8nMFl+vS8CXX8qUAc=;
-        b=X4HnQ97A+r2K0m7EX041WsgJvQHxoTobXJvx8CBpg35eftMtVNP787u992tdn7imCB
-         0azDYzWGr4aGT7CVtvlS1tBE4fVmvlHjUdG8EzhD9FdHP/CU1nkm04JpYJJJl6h6vMI5
-         IfMor00x3Xd72G4ULij0SgOZE2DKEC22AmoKdeokjmBJ8jBRqEgNk9rJMQBsXIGZ9RDQ
-         8oaq965rotdyy+cbYIKxlDX1JPADPYTDGw7aZnXLSO4qj1FRMlnuR3fiLnO/7WEL7+fL
-         GFjH4QFM49TztfrO06t7Yz/HlcfBlSC96h1n7xX/nJK5KSiSrDsBCarFv45pP+nMYZXy
-         tMtg==
-X-Gm-Message-State: AOAM530Qk3GZ+lS6mYBgr59Wadvz6NTVevtiiSQ2gHcMb7lOFH4PNbaf
-        xnBT81A/MQrTSQH0eiuBh1pE1Q==
-X-Google-Smtp-Source: ABdhPJy+aZYSnstGd9tg+8Iip8vH+7+0GdEhD/4XarX0J7YWAYtkVT+0bBD0ZbIzB4EeJLiaS+E6ow==
-X-Received: by 2002:a65:4b81:: with SMTP id t1mr6581395pgq.263.1604516171108;
-        Wed, 04 Nov 2020 10:56:11 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z206sm2745980pfc.3.2020.11.04.10.56.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/0mitIGetUGfuuO4VScfLcyzD4ue3QtNkT908OKoYnY=;
+        b=gla9HHxiytntyYyBgduYqqOncHx/aOrfVUfVd/eOiS9AcXxDoHsM4IqRPVccB8M2O7
+         YMMR7K4uTEtHsUwsZiAovMqJKqzgq83XTsKqJJD24GBqjOQkHy6wCyPRnZv8iMMVBx5m
+         JOJVNLkAxNRYln1dD/stwKFinsEG4ObJ6ew81/HpzYz9YElQiMfHp0AA4EOL+xRB0WcB
+         5Ma5h81AhARGNa0Ld18oxkXQGj9WqUvkdAc9aKh5PeEoVp2UWvWNgxeCGyFZbOsFrHDM
+         0yEYQYuTRfwPXLsfKSE1IkbDugqNwbHZ1Ep3ZWBa38LTvLnidks7Zcx6SJjMu0+afPm3
+         /e7w==
+X-Gm-Message-State: AOAM5337C3sxFzRjedc7Deowv4dqoHPuiHGth3y+XaerAdz+nNjkWgii
+        YPndLxbrSPnfqj0Y27XCOKo=
+X-Google-Smtp-Source: ABdhPJzKX/6wU0RqPpkY/32d3YiyYJIXCCOvwfbfeiW8IJ0CDJZ+fdPpDkOiaUjKGSP14GU5aU9MKA==
+X-Received: by 2002:a19:8741:: with SMTP id j62mr337990lfd.449.1604522057422;
+        Wed, 04 Nov 2020 12:34:17 -0800 (PST)
+Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
+        by smtp.gmail.com with ESMTPSA id u22sm615084ljk.45.2020.11.04.12.34.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 10:56:10 -0800 (PST)
-Message-ID: <5fa2f94a.1c69fb81.ce782.53e8@mx.google.com>
-Date:   Wed, 04 Nov 2020 10:56:10 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 04 Nov 2020 12:34:16 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dan Murphy <dmurphy@ti.com>, Sebastian Reichel <sre@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] Introduce Embedded Controller driver for Acer A500
+Date:   Wed,  4 Nov 2020 23:33:59 +0300
+Message-Id: <20201104203403.24937-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.10-rc2-15-gdddc237beebb
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 3 runs, 1 regressions (v5.10-rc2-15-gdddc237beebb)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 3 runs, 1 regressions (v5.10-rc2-15-gdddc237beebb)
+Hello!
 
-Regressions Summary
--------------------
+This series adds support for the Embedded Controller which is found on
+Acer Iconia Tab A500 (Android tablet device).
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+The Embedded Controller is ENE KB930 and it's running firmware customized
+for the A500. The firmware interface may be reused by some other sibling
+Acer tablets, although none of those tablets are supported in upstream yet.
+
+Changelog:
+
+v5: - No changes. Re-sending again in order to check whether dtschema-bot
+      warning is resolved now, which didn't happen in v4 because bot used
+      older 5.9 kernel code base instead of 5.10.
+
+v4: - No code changes. Added r-b from Rob Herring and Sebastian Reichel.
+      Re-sending for 5.11.
+
+    - The v3 of LED driver was applied by Pavel Machek and already presents
+      in v5.10 kernel.
+
+v3: - Rebased on a recent linux-next. Fixed new merge conflict and dropped
+      "regmap: Use flexible sleep" patch because it's already applied.
+
+v2: - Factored out KB930 device-tree binding into a separate file, like it
+      was suggested by Lubomir Rintel.
+
+    - Switched to use regmap API like it was suggested by Lubomir Rintel.
+
+    - Added patch "regmap: Use flexible sleep" which allows not to hog
+      CPU while LED is switching state.
+
+    - Corrected MODULE_LICENSE to use "GPL" in all patches.
+
+    - Corrected MFD driver Kconfig entry like it was suggested by
+      Lubomir Rintel, it now depends on I2C.
+
+    - Switched to use I2C probe_new() in the MFD driver.
+
+    - Renamed the global pm_off variable, like it was suggested by
+      Lubomir Rintel and Lee Jones.
+
+    - Dropped serial number from the battery driver because I realized
+      that it's not a battery serial, but a device serial.
+
+    - Battery driver now uses dev_err_probe(), like it was suggested by
+      Sebastian Reichel.
+
+    - Dropped legacy LED_ON usage from the LED driver and renamed the
+      LEDs, like it was suggested by Pavel Machek. I also checked whether
+      LED-name customization via device-tree could be needed by other
+      potentially compatible devices and it shouldn't be needed, anyways it
+      won't be difficult to extend the code even if I'm wrong.
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
-2-15-gdddc237beebb/plan/sleep/
+Dmitry Osipenko (4):
+  dt-bindings: mfd: Add ENE KB930 Embedded Controller binding
+  mfd: Add driver for Embedded Controller found on Acer Iconia Tab A500
+  power: supply: Add battery gauge driver for Acer Iconia Tab A500
+  ARM: tegra: acer-a500: Add Embedded Controller
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.10-rc2-15-gdddc237beebb
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      dddc237beebb79a67a6e2cc18b6a0a29a3a7a89c =
+ .../devicetree/bindings/mfd/ene-kb930.yaml    |  66 ++++
+ .../boot/dts/tegra20-acer-a500-picasso.dts    |  17 +
+ drivers/mfd/Kconfig                           |  12 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/acer-ec-a500.c                    | 203 ++++++++++++
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/acer_a500_battery.c      | 297 ++++++++++++++++++
+ 8 files changed, 603 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+ create mode 100644 drivers/mfd/acer-ec-a500.c
+ create mode 100644 drivers/power/supply/acer_a500_battery.c
 
+-- 
+2.27.0
 
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fa2ecee2f325a49d2fb5309
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc2-15-gdddc2=
-37beebb/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc2-15-gdddc2=
-37beebb/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-1022.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5fa2ecee2f325a49d2fb530a
-        failing since 76 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
-l: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
