@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B30C2A6A7F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F1E2A6A7A
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Nov 2020 17:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731367AbgKDQvM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 11:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S1731614AbgKDQu7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 11:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731723AbgKDQu0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:50:26 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2678FC0613D3;
-        Wed,  4 Nov 2020 08:50:26 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id h6so28024486lfj.3;
-        Wed, 04 Nov 2020 08:50:26 -0800 (PST)
+        with ESMTP id S1731737AbgKDQu1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 11:50:27 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659B1C0613D3;
+        Wed,  4 Nov 2020 08:50:27 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id x6so23723780ljd.3;
+        Wed, 04 Nov 2020 08:50:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mbYLixKAKMh01u2kjS61AwjX8itdjctHpznoDrWxbbw=;
-        b=k52noqyAvvAq8ManCN0BMbmq87pyAcvZNen2rsj6tJpkRaItqSC/7vFIN5mpiTQ79r
-         vz/GGKaFwbFOOqywvyLfyW3XorZLqJnskOXiwUiegVB9VboQc2b67VmjesrpMFFI7ol1
-         iR4T6oTGan5a4ljuvE0MM8RiWNoz/UFOkx0DO9MG2bSRGeIASfmVvco4ErQBPfHpa/GX
-         KpRBB2kD8DD4mDh56cfLiCBRz92DCxvPiMqUDK0nJClk3jseGji03Py0tNpoMd9fhe9V
-         nUGO0g7/N6OsB6gkpfYdA7kMeJI8OYiRLHsnw1XDlZjl22PkbYADlbi6SeROYlfD8bK2
-         qKXg==
+        bh=0iEwaTGjBhhhYbqhEB674AFJTwQ7XfjZia90rQHHnqQ=;
+        b=RaOKVsHl0zQ706fDUOJ4r3MY+qrWEFTCtfEgOzBQc4TFtDZLWSLDIdWoTn/DhShhX4
+         UpB2hqZc5X3ZwOWK7leoEm9cuuL/a9L8c+4axgQ3oOYk1vPHTF4qruUm52QwS1efJkvA
+         Q0DINB6hbWYv9Bj57TeeZwSWZRw+ibVe8oqF2WUozTZR9FaH/0tob/gYIXHXBD6EaIiI
+         HWSY9bRwSb5BQdHJT65GH1+Fwi1ITzWLREmAUEJZ5raO6WRMEPSiRl0LRFR9lgXFIUwZ
+         jwMrAmq5ZK2gnKN2JiB8vt1ZorV08LOT06nZQz8d8VOH9sChFmKuO2z5rKLcWx4KSZca
+         lOOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mbYLixKAKMh01u2kjS61AwjX8itdjctHpznoDrWxbbw=;
-        b=oQU68QCPyZtp8e1TnQyy5O0A72jdyp03BQpD8WNDLNPG413k7YG04l79/7fkHoQkn6
-         AvRSr4UTq1T0gS3XyEZE7hCQyxvhc32Nmow1A+wVKTgfh/cNFhXUpKrLLZgEZskj5gL/
-         NJCbnYNKpWhG/uZn/GTtdb7sVcc7m7IFxCNQ36Eq6ry5zbxrKbPoTyB1e1WptkZn+FYW
-         GNICRTIL40TrJvN8aWgqY6FgKe8ftxArtrPTxE0xGfoQ+2hmUDvk3Q2o0CZHLVP/1sco
-         X5OgAc6swrAo8SsUGgaY8W0j8I//VXq7VnJG1XC/f5WKg/snWEFZ4b649jW1KPm5B138
-         bsQg==
-X-Gm-Message-State: AOAM530sNCs8rPZfDUdcb2yubvMOexMo/Y48DofxHgeLylJR5BLblSA3
-        PwTErlZttZfEQOMCVjC3n2I=
-X-Google-Smtp-Source: ABdhPJxkcY4Zv+2j1nCRhM0A7S9j0DyXmGdVYXojshDsYWTvQbccdEztcR0un4e5qtRem8AabGP4OQ==
-X-Received: by 2002:ac2:592f:: with SMTP id v15mr6583677lfi.512.1604508624645;
-        Wed, 04 Nov 2020 08:50:24 -0800 (PST)
+        bh=0iEwaTGjBhhhYbqhEB674AFJTwQ7XfjZia90rQHHnqQ=;
+        b=RPi+Ia6OeRIWmoJsQL0XeIgGKe+LeinYCterar3L9iqpE7NxQbds7fiM2DSc7Ina7u
+         ws38cIojR7Pt3AsfQJgb7MqcJVaJ3wH3/PpJaVsa2J09BHDFUDaLuBZDROO8dbu7eDUc
+         Bevk58aZTaXWaYs4IzhhAEI74fOxz6MGgm456yILd1JNbadG6RF49JOuTSpEYaRMUKxf
+         BGP/euL8rVSATif/NuMrrVwY6zo03Jdszb3Q63aVwatkPYiEm4vUIjI0chjNnEHNKycY
+         sHWYlogsfv3gYsOpXHEsRJo/o5Z4YMP5d7XRU3He102WJGU1MHwzO3ZP24d7Ex2XGQIV
+         oCMg==
+X-Gm-Message-State: AOAM530FllejDVojV001fQmqeXcX6LSIrMjGNKxnMD/MIImwPuwXOncG
+        y6GWUJEVfchXM/uHmgQR2ZY=
+X-Google-Smtp-Source: ABdhPJzi8UyuzGks82q4fzvpFQNvhcIrq5nuS+hMmVa6Y/MRKXlWqjSwqjZ6sMPrylaY5AUN02CHbw==
+X-Received: by 2002:a2e:b0c7:: with SMTP id g7mr10368958ljl.433.1604508625829;
+        Wed, 04 Nov 2020 08:50:25 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.50.23
+        by smtp.gmail.com with ESMTPSA id m2sm454587lfo.25.2020.11.04.08.50.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 08:50:24 -0800 (PST)
+        Wed, 04 Nov 2020 08:50:25 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v7 45/47] PM / devfreq: tegra30: Support interconnect and OPPs from device-tree
-Date:   Wed,  4 Nov 2020 19:49:21 +0300
-Message-Id: <20201104164923.21238-46-digetx@gmail.com>
+Subject: [PATCH v7 46/47] PM / devfreq: tegra30: Separate configurations per-SoC generation
+Date:   Wed,  4 Nov 2020 19:49:22 +0300
+Message-Id: <20201104164923.21238-47-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201104164923.21238-1-digetx@gmail.com>
 References: <20201104164923.21238-1-digetx@gmail.com>
@@ -78,221 +78,167 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch moves ACTMON driver away from generating OPP table by itself,
-transitioning it to use the table which comes from device-tree. This
-change breaks compatibility with older device-trees in order to bring
-support for the interconnect framework to the driver. This is a mandatory
-change which needs to be done in order to implement interconnect-based
-memory DVFS. Users of legacy device-trees will get a message telling that
-theirs DT needs to be upgraded. Now ACTMON issues memory bandwidth request
-using dev_pm_opp_set_bw(), instead of driving EMC clock rate directly.
+Previously we were using count-weight of the T124 for T30 in order to
+get EMC clock rate that was reasonable for T30. In fact the count-weight
+should be x2 times smaller on T30, but then devfreq was producing a bit
+too low EMC clock rate for ISO memory clients, like display controller
+for example.
+
+Now both Tegra ACTMON and Tegra DRM display drivers support interconnect
+framework and display driver tells to ICC what a minimum memory bandwidth
+is needed, preventing FIFO underflows. Thus, now we can use a proper
+count-weight value for Tegra30 and MC_ALL device config needs a bit more
+aggressive boosting.
+
+Add a separate ACTMON driver configuration that is specific to Tegra30.
 
 Tested-by: Peter Geis <pgwipeout@gmail.com>
 Tested-by: Nicolas Chauvet <kwizart@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 96 +++++++++++++++++--------------
- 1 file changed, 54 insertions(+), 42 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 68 ++++++++++++++++++++++++-------
+ 1 file changed, 54 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 38cc0d014738..4db027ca17e1 100644
+index 4db027ca17e1..aaa22077815c 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -19,6 +19,8 @@
- #include <linux/reset.h>
- #include <linux/workqueue.h>
+@@ -57,13 +57,6 @@
+ #define ACTMON_BELOW_WMARK_WINDOW				3
+ #define ACTMON_BOOST_FREQ_STEP					16000
  
-+#include <soc/tegra/fuse.h>
+-/*
+- * Activity counter is incremented every 256 memory transactions, and each
+- * transaction takes 4 EMC clocks for Tegra124; So the COUNT_WEIGHT is
+- * 4 * 256 = 1024.
+- */
+-#define ACTMON_COUNT_WEIGHT					0x400
+-
+ /*
+  * ACTMON_AVERAGE_WINDOW_LOG2: default value for @DEV_CTRL_K_VAL, which
+  * translates to 2 ^ (K_VAL + 1). ex: 2 ^ (6 + 1) = 128
+@@ -111,7 +104,7 @@ enum tegra_actmon_device {
+ 	MCCPU,
+ };
+ 
+-static const struct tegra_devfreq_device_config actmon_device_configs[] = {
++static const struct tegra_devfreq_device_config tegra124_device_configs[] = {
+ 	{
+ 		/* MCALL: All memory accesses (including from the CPUs) */
+ 		.offset = 0x1c0,
+@@ -133,6 +126,28 @@ static const struct tegra_devfreq_device_config actmon_device_configs[] = {
+ 	},
+ };
+ 
++static const struct tegra_devfreq_device_config tegra30_device_configs[] = {
++	{
++		/* MCALL: All memory accesses (including from the CPUs) */
++		.offset = 0x1c0,
++		.irq_mask = 1 << 26,
++		.boost_up_coeff = 200,
++		.boost_down_coeff = 50,
++		.boost_up_threshold = 20,
++		.boost_down_threshold = 10,
++	},
++	{
++		/* MCCPU: memory accesses from the CPUs */
++		.offset = 0x200,
++		.irq_mask = 1 << 25,
++		.boost_up_coeff = 800,
++		.boost_down_coeff = 40,
++		.boost_up_threshold = 27,
++		.boost_down_threshold = 10,
++		.avg_dependency_threshold = 16000, /* 16MHz in kHz units */
++	},
++};
 +
- #include "governor.h"
+ /**
+  * struct tegra_devfreq_device - state specific to an ACTMON device
+  *
+@@ -155,6 +170,12 @@ struct tegra_devfreq_device {
+ 	unsigned long target_freq;
+ };
  
- #define ACTMON_GLB_STATUS					0x0
-@@ -155,6 +157,7 @@ struct tegra_devfreq_device {
- 
++struct tegra_devfreq_soc_data {
++	const struct tegra_devfreq_device_config *configs;
++	/* Weight value for count measurements */
++	unsigned int count_weight;
++};
++
  struct tegra_devfreq {
  	struct devfreq		*devfreq;
-+	struct opp_table	*opp_table;
+ 	struct opp_table	*opp_table;
+@@ -171,11 +192,13 @@ struct tegra_devfreq {
+ 	struct delayed_work	cpufreq_update_work;
+ 	struct notifier_block	cpu_rate_change_nb;
  
- 	struct reset_control	*reset;
- 	struct clk		*clock;
-@@ -612,34 +615,19 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
- static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
- 				u32 flags)
- {
--	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
--	struct devfreq *devfreq = tegra->devfreq;
- 	struct dev_pm_opp *opp;
--	unsigned long rate;
--	int err;
-+	int ret;
+-	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
++	struct tegra_devfreq_device devices[2];
  
- 	opp = devfreq_recommended_opp(dev, freq, flags);
- 	if (IS_ERR(opp)) {
- 		dev_err(dev, "Failed to find opp for %lu Hz\n", *freq);
- 		return PTR_ERR(opp);
- 	}
--	rate = dev_pm_opp_get_freq(opp);
--	dev_pm_opp_put(opp);
--
--	err = clk_set_min_rate(tegra->emc_clock, rate * KHZ);
--	if (err)
--		return err;
--
--	err = clk_set_rate(tegra->emc_clock, 0);
--	if (err)
--		goto restore_min_rate;
--
--	return 0;
+ 	unsigned int		irq;
  
--restore_min_rate:
--	clk_set_min_rate(tegra->emc_clock, devfreq->previous_freq);
-+	ret = dev_pm_opp_set_bw(dev, opp);
-+	dev_pm_opp_put(opp);
- 
--	return err;
-+	return ret;
- }
- 
- static int tegra_devfreq_get_dev_status(struct device *dev,
-@@ -655,7 +643,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
- 	stat->private_data = tegra;
- 
- 	/* The below are to be used by the other governors */
--	stat->current_frequency = cur_freq;
-+	stat->current_frequency = cur_freq * KHZ;
- 
- 	actmon_dev = &tegra->devices[MCALL];
- 
-@@ -705,7 +693,12 @@ static int tegra_governor_get_target(struct devfreq *devfreq,
- 		target_freq = max(target_freq, dev->target_freq);
- 	}
- 
--	*freq = target_freq;
-+	/*
-+	 * tegra-devfreq driver operates with KHz units, while OPP table
-+	 * entries use Hz units. Hence we need to convert the units for the
-+	 * devfreq core.
-+	 */
-+	*freq = target_freq * KHZ;
- 
- 	return 0;
- }
-@@ -774,13 +767,22 @@ static struct devfreq_governor tegra_devfreq_governor = {
- 
- static int tegra_devfreq_probe(struct platform_device *pdev)
- {
-+	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
- 	struct tegra_devfreq_device *dev;
- 	struct tegra_devfreq *tegra;
-+	struct opp_table *opp_table;
- 	struct devfreq *devfreq;
- 	unsigned int i;
- 	long rate;
- 	int err;
- 
-+	/* legacy device-trees don't have OPP table and must be updated */
-+	if (!device_property_present(&pdev->dev, "operating-points-v2")) {
-+		dev_err(&pdev->dev,
-+			"OPP table not found, please update your device tree\n");
-+		return -ENODEV;
-+	}
+ 	bool			started;
 +
- 	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
++	const struct tegra_devfreq_soc_data *soc;
+ };
+ 
+ struct tegra_actmon_emc_ratio {
+@@ -488,7 +511,7 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+ 	tegra_devfreq_update_avg_wmark(tegra, dev);
+ 	tegra_devfreq_update_wmark(tegra, dev);
+ 
+-	device_writel(dev, ACTMON_COUNT_WEIGHT, ACTMON_DEV_COUNT_WEIGHT);
++	device_writel(dev, tegra->soc->count_weight, ACTMON_DEV_COUNT_WEIGHT);
+ 	device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS);
+ 
+ 	val |= ACTMON_DEV_CTRL_ENB_PERIODIC;
+@@ -787,6 +810,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
  	if (!tegra)
  		return -ENOMEM;
-@@ -822,11 +824,31 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 		return err;
- 	}
  
-+	tegra->opp_table = dev_pm_opp_get_opp_table(&pdev->dev);
-+	err = PTR_ERR_OR_ZERO(tegra->opp_table);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to prepare OPP table: %d\n", err);
-+		return err;
-+	}
++	tegra->soc = of_device_get_match_data(&pdev->dev);
 +
-+	opp_table = dev_pm_opp_set_supported_hw(&pdev->dev, &hw_version, 1);
-+	err = PTR_ERR_OR_ZERO(opp_table);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to set supported HW: %d\n", err);
-+		goto put_table;
-+	}
-+
-+	err = dev_pm_opp_of_add_table(&pdev->dev);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to add OPP table: %d\n", err);
-+		goto put_hw;
-+	}
-+
- 	err = clk_prepare_enable(tegra->clock);
- 	if (err) {
- 		dev_err(&pdev->dev,
- 			"Failed to prepare and enable ACTMON clock\n");
--		return err;
-+		goto remove_table;
- 	}
+ 	tegra->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(tegra->regs))
+ 		return PTR_ERR(tegra->regs);
+@@ -866,9 +891,9 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
  
- 	err = reset_control_reset(tegra->reset);
-@@ -850,23 +872,6 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 	tegra->max_freq = rate / KHZ;
+ 
+-	for (i = 0; i < ARRAY_SIZE(actmon_device_configs); i++) {
++	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++) {
+ 		dev = tegra->devices + i;
+-		dev->config = actmon_device_configs + i;
++		dev->config = tegra->soc->configs + i;
  		dev->regs = tegra->regs + dev->config->offset;
  	}
  
--	for (rate = 0; rate <= tegra->max_freq * KHZ; rate++) {
--		rate = clk_round_rate(tegra->emc_clock, rate);
--
--		if (rate < 0) {
--			dev_err(&pdev->dev,
--				"Failed to round clock rate: %ld\n", rate);
--			err = rate;
--			goto remove_opps;
--		}
--
--		err = dev_pm_opp_add(&pdev->dev, rate / KHZ, 0);
--		if (err) {
--			dev_err(&pdev->dev, "Failed to add OPP: %d\n", err);
--			goto remove_opps;
--		}
--	}
--
- 	platform_set_drvdata(pdev, tegra);
- 
- 	tegra->clk_rate_change_nb.notifier_call = tegra_actmon_clk_notify_cb;
-@@ -882,7 +887,6 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	}
- 
- 	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
--	tegra_devfreq_profile.initial_freq /= KHZ;
- 
- 	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
- 				     "tegra_actmon", NULL);
-@@ -902,6 +906,12 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	reset_control_reset(tegra->reset);
- disable_clk:
- 	clk_disable_unprepare(tegra->clock);
-+remove_table:
-+	dev_pm_opp_of_remove_table(&pdev->dev);
-+put_hw:
-+	dev_pm_opp_put_supported_hw(tegra->opp_table);
-+put_table:
-+	dev_pm_opp_put_opp_table(tegra->opp_table);
- 
- 	return err;
- }
-@@ -913,11 +923,13 @@ static int tegra_devfreq_remove(struct platform_device *pdev)
- 	devfreq_remove_device(tegra->devfreq);
- 	devfreq_remove_governor(&tegra_devfreq_governor);
- 
--	dev_pm_opp_remove_all_dynamic(&pdev->dev);
--
- 	reset_control_reset(tegra->reset);
- 	clk_disable_unprepare(tegra->clock);
- 
-+	dev_pm_opp_of_remove_table(&pdev->dev);
-+	dev_pm_opp_put_supported_hw(tegra->opp_table);
-+	dev_pm_opp_put_opp_table(tegra->opp_table);
-+
+@@ -933,9 +958,24 @@ static int tegra_devfreq_remove(struct platform_device *pdev)
  	return 0;
  }
+ 
++static const struct tegra_devfreq_soc_data tegra124_soc = {
++	.configs = tegra124_device_configs,
++
++	/*
++	 * Activity counter is incremented every 256 memory transactions,
++	 * and each transaction takes 4 EMC clocks.
++	 */
++	.count_weight = 4 * 256,
++};
++
++static const struct tegra_devfreq_soc_data tegra30_soc = {
++	.configs = tegra30_device_configs,
++	.count_weight = 2 * 256,
++};
++
+ static const struct of_device_id tegra_devfreq_of_match[] = {
+-	{ .compatible = "nvidia,tegra30-actmon" },
+-	{ .compatible = "nvidia,tegra124-actmon" },
++	{ .compatible = "nvidia,tegra30-actmon",  .data = &tegra30_soc, },
++	{ .compatible = "nvidia,tegra124-actmon", .data = &tegra124_soc, },
+ 	{ },
+ };
  
 -- 
 2.27.0
