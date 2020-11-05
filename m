@@ -2,241 +2,355 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237A62A7534
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 03:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BB32A7538
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 03:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726152AbgKECHJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 21:07:09 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:35930 "EHLO
+        id S1730345AbgKECIX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 21:08:23 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:36677 "EHLO
         mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731989AbgKECHI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 21:07:08 -0500
+        with ESMTP id S1727678AbgKECIX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 21:08:23 -0500
 Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201105020705epoutp01f5fe25a6cc696d75d6736cebf2d149ee~Eenh1tOc22881028810epoutp01L
-        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 02:07:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201105020705epoutp01f5fe25a6cc696d75d6736cebf2d149ee~Eenh1tOc22881028810epoutp01L
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201105020820epoutp011dde54e6bc096f2d962e2cbd093baf51~Eeon__HRE3080930809epoutp01V
+        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 02:08:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201105020820epoutp011dde54e6bc096f2d962e2cbd093baf51~Eeon__HRE3080930809epoutp01V
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1604542025;
-        bh=pitRzO3m19arHuQUPX0y+i+VT7w1wenaW8mQl65pPLI=;
+        s=mail20170921; t=1604542100;
+        bh=UY5wyEA/7KgFYm+m/uCeoRFsAFIDrkQp2oymQvesjQA=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ZnYyi6HlcoRoeXo6cgd+jVw/DmmCVVjWzEwMaJYtOZvoaykWxWZmy0RbRIvoNJ0CA
-         Y83daiqu35cASGMmUA5Lu3tepmK9b0VJm2Ty2Cc8nGtKOWessVCJO7XlpjRCkIeDcY
-         EqCvJoe3XabKn7IL1aYAueZV+glGljaL9pPyNgpA=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20201105020704epcas1p37659b49e474f028357aa1ef1865eae99~EenhMMSWf2487524875epcas1p3C;
-        Thu,  5 Nov 2020 02:07:04 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.155]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4CRRjL26wJzMqYm4; Thu,  5 Nov
-        2020 02:07:02 +0000 (GMT)
+        b=vbV8R9gmw+dvJ5A384o8gUVKG5srI24IqiuMhgcsAP3tV0hzwisiToTrkZ2B6hIGl
+         TfqsALVtJeiqlw7p2giBQrBrD/r2tbGB7c24u0/choqPaLsHSPTCB6RP1bo1oLzRql
+         OwvpCs6hvGtY5bt2sHlU7FELM8dQ4x5IjhdbzB1Q=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20201105020819epcas1p16e9763cec9b873ef77f71ebfd11a4916~EeonTK8rf1663216632epcas1p1C;
+        Thu,  5 Nov 2020 02:08:19 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.158]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4CRRkm1GDkzMqYkk; Thu,  5 Nov
+        2020 02:08:16 +0000 (GMT)
 Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
         epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F7.7B.63458.34E53AF5; Thu,  5 Nov 2020 11:07:00 +0900 (KST)
+        75.DB.63458.09E53AF5; Thu,  5 Nov 2020 11:08:16 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20201105020659epcas1p1785d0bdc28b3a4356b966b51199d11cd~Eencory1m2178921789epcas1p1p;
-        Thu,  5 Nov 2020 02:06:59 +0000 (GMT)
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20201105020815epcas1p34067ce27ad5804aba8a81f02c248c6d0~Eeojmm-Rb3016230162epcas1p3H;
+        Thu,  5 Nov 2020 02:08:15 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201105020659epsmtrp284cd9b1d6af1b871615e708170057f0f~Eencnr0tL1423014230epsmtrp2A;
-        Thu,  5 Nov 2020 02:06:59 +0000 (GMT)
-X-AuditID: b6c32a36-6dfff7000000f7e2-b9-5fa35e43739c
+        20201105020815epsmtrp262fd973894180f9788b62b2bed700708~Eeojlh2Oh1460114601epsmtrp2w;
+        Thu,  5 Nov 2020 02:08:15 +0000 (GMT)
+X-AuditID: b6c32a36-6c9ff7000000f7e2-df-5fa35e909926
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2D.5F.13470.34E53AF5; Thu,  5 Nov 2020 11:06:59 +0900 (KST)
+        0A.7F.13470.F8E53AF5; Thu,  5 Nov 2020 11:08:15 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201105020659epsmtip2cf6e0d069b227ae5a5976ab4d7d2d2e0~EencPG1Tl0697506975epsmtip2i;
-        Thu,  5 Nov 2020 02:06:59 +0000 (GMT)
-Subject: Re: [PATCH v8 0/7] Exynos: Simple QoS for exynos-bus using
- interconnect
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        georgi.djakov@linaro.org, krzk@kernel.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        a.swigon@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
+        20201105020815epsmtip257077db3170ec4ccf3fbd16ad851e68a~EeojGdeeV1081810818epsmtip2_;
+        Thu,  5 Nov 2020 02:08:15 +0000 (GMT)
+Subject: Re: [PATCH v7 45/47] PM / devfreq: tegra30: Support interconnect
+ and OPPs from device-tree
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <25228d5e-4bc3-2e61-6bd5-43e66ae82244@samsung.com>
-Date:   Thu, 5 Nov 2020 11:20:55 +0900
+Message-ID: <2b907334-9ddf-654a-2add-891b0dcaa8ad@samsung.com>
+Date:   Thu, 5 Nov 2020 11:22:11 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20201104103657.18007-1-s.nawrocki@samsung.com>
+In-Reply-To: <20201104164923.21238-46-digetx@gmail.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBJsWRmVeSWpSXmKPExsWy7bCmvq5L3OJ4g+nXmSzuz2tltNg4Yz2r
-        xfwj51gtrnx9z2Yxfe8mNotJ9yewWJw/v4HdYtPja6wWl3fNYbP43HuE0WLG+X1MFmuP3GW3
-        uN24gs2ide8RdovDb9pZLWZMfsnmIOCxaVUnm8eda3vYPO53H2fy2Lyk3qNvyypGj8+b5ALY
-        orJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4DuVlIo
-        S8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUWBboFSfmFpfmpesl5+daGRoYGJkCFSZk
-        Z1z5cJy54JB2xcFnyg2M25W6GDk5JARMJJp3LGXrYuTiEBLYwSixp7ODCcL5xChxrvMFO4Tz
-        jVHi6J1lrDAtl5auZ4FI7GWUeHj8MyOE855R4tfjD0wgVcICQRLtL88AtXNwiAjESKx/FwFS
-        wyzwgUni/6uHYDVsAloS+1/cYAOx+QUUJa7+eMwIYvMK2Ek8P/CDDaSXRUBF4vr/ApCwqECY
-        xMltLVAlghInZz5hAbE5BWwkLn5uZgexmQXEJW49mc8EYctLNG+dzQyyV0LgCYfE+nu9bBAf
-        uEi07FrPCGELS7w6voUdwpaS+PxuL1RNtcTKk0fYIJo7GCW27L8A9b6xxP6lk5lAjmMW0JRY
-        v0sfIqwosfP3XEaIxXwS7772sIKUSAjwSnS0CUGUKEtcfnCXCcKWlFjc3sk2gVFpFpJ3ZiF5
-        YRaSF2YhLFvAyLKKUSy1oDg3PbXYsMAIObI3MYKTtJbZDsZJbz/oHWJk4mA8xCjBwawkwnvB
-        b1G8EG9KYmVValF+fFFpTmrxIUZTYPhOZJYSTc4H5om8knhDUyNjY2MLE0MzU0NDJXHeP9od
-        8UIC6YklqdmpqQWpRTB9TBycUg1MKeeCCvhF0uoVEgKr57mdYt5aGqH84euWOG4dl62H5wU+
-        CWWV9LpgXyzh2P3pevbMH/nGDzpf3z6/rvpnXVNLplV16nZV82dLwq/umbM++8f/pEv9V8p2
-        6M82/GX6Z3v051Vhoj6rmB7tuyu+OO3FV7cZzVzd30U1ZvjNfKm3TOz0U4ZEkyNLVx/rtLkR
-        3Lr70aWr610juCUrb6yVn2C+uiR9w1vxRbMUmEUcXCYKivgcy7ITfvn3ZGy59RG7IsFlPcXy
-        gS8qGPg8rK+evbxm6XX9DXrnnlxIsX301aXT54mfrFzm1YVyO38fZNFdG/tdQfPf7+tZeQKx
-        NSrKed/P6ySuaH8U8n3t8hVGoQ7ySizFGYmGWsxFxYkAGLBAg1sEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMIsWRmVeSWpSXmKPExsWy7bCSvK5z3OJ4g8PdAhb357UyWmycsZ7V
-        Yv6Rc6wWV76+Z7OYvncTm8Wk+xNYLM6f38BusenxNVaLy7vmsFl87j3CaDHj/D4mi7VH7rJb
-        3G5cwWbRuvcIu8XhN+2sFjMmv2RzEPDYtKqTzePOtT1sHve7jzN5bF5S79G3ZRWjx+dNcgFs
-        UVw2Kak5mWWpRfp2CVwZVz4cZy44pF1x8JlyA+N2pS5GTg4JAROJS0vXs3QxcnEICexmlFh7
-        opcFIiEpMe3iUeYuRg4gW1ji8OFiiJq3jBLb22awgdQICwRJtL88ww5iiwjESJyaPAtsELPA
-        ByaJQ3M7GSE6+hklbr5fzApSxSagJbH/xQ2wbn4BRYmrPx4zgti8AnYSzw/8YAPZxiKgInH9
-        fwFIWFQgTGLnksdMECWCEidnPgE7jlPARuLi52awxcwC6hJ/5l1ihrDFJW49mc8EYctLNG+d
-        zTyBUXgWkvZZSFpmIWmZhaRlASPLKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M4HjV
-        0tzBuH3VB71DjEwcjIcYJTiYlUR4L/gtihfiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6NwYZyQ
-        QHpiSWp2ampBahFMlomDU6qBKUj2S8hy1z97TXTyrt8QKOd7J//siKxukYtHnXaIaPTsLytL
-        lJ1/zE59uDmsxKNp4fFrQuy3Ncy+lT1j1/ascDyR2vL7qyrLspyZIqGHZ4V9+2g92TrkxSWO
-        pddn7U/jr6+UZLrgM+vA/cU/G4wqug83/eScsrZ2geruSdV7fef7/wvcqrOb3zX/84KvKs6q
-        Im8s+tVK5nF9mbxj5WKzSx6LmvRMowykpzzwYlxo9v7ocpbPC5SfxWQcm1bw7VeHyc7wfH/u
-        hJrvP8ND5K9fyytU2sM8O/9qCKPalOpp957Nr31qsP1KT6C6QdeGjswaVqsP6gbJVeovyzMD
-        lx0pObPRQM/e1l1pxwHmloRoJZbijERDLeai4kQA7yQn5EYDAAA=
-X-CMS-MailID: 20201105020659epcas1p1785d0bdc28b3a4356b966b51199d11cd
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TaVBTVxidm7y8JA60jxjDLW0Vnh0HsSxhvbaE2oKSooNpmTotP0zfwBOQ
+        bJMH2H0gLixWqhRFU5RNlMWlBERhYHBYyhABKWqEVkY7BMcKJBSKgqI04eGUf+d+53z33PPd
+        ewVc0TjuIUjRpNF6DaUi8VVYY8dGf9+juyuUAWUmHrJNj/FQSWc/D9X+MwrQ7Vk7jopaTTg6
+        YCzH0M2bv/LRlbELHNRnmOCjW83FOJo50glQ7r9GHP1u3or+zKrCUcHF4wD1PdyODrZ28tFL
+        Sx2G5pvPYKj+wW/4FrHcPnSQL28yjvDlg/0LXLmpJheX37O04PL7h7s58iP7bbg8v6EGyGdM
+        axXC+NTwZJpKpPWetCZBm5iiSZKR2+OUkcqQ0ACpr3QzCiM9NZSalpFROxS+21JUjmSkZwal
+        SneUFBTDkP4R4Xptehrtmaxl0mQkrUtU6Tbr/BhKzaRrkvwStOr3pAEBgSEO4ZepyYuj03xd
+        H/rKbNiXCSp884BQAIlgOG8+wckDqwQi4hqAswW1PCchIqYBzLLGs8QTAKuH83ivOq4Pdi13
+        tAI4ZcjnsQs7gPX9fy+pVhM0vFP4gu8kxMQwBs9XvcSdBJc4CeC9lvVOjBM+sO3R0FL9dcIL
+        3pkbBU7sSkTA7JN2zIkx4h1obZ1e0qwhdsGexgPLGjfYc8q6pBESYdA2nLm8vzv8w1rCYfE6
+        eHWymOs8BCR+EcIbl/owNkMUnKgb5rN4NXzc3bCMPeCMrRVn8bewuqcTZ5tzAGxoG1geQBBs
+        q/zZ4SBwOGyEl5v92bIXbHp+GrDGr0Hb7I88pwQSrjDnkIiVrIe3HoxwWPwGrMjOxY8C0rgi
+        jnFFBOOKCMb/zUoBVgMktI5RJ9GMVBe48rZNYOnV+4ReAwWTU37tgCMA7QAKuKTYdSC2XCly
+        TaS+/obWa5X6dBXNtIMQx4CPcT3WJGgd30aTppSGBAYFBaFgaWiIVEq6uy5sylGKiCQqjU6l
+        aR2tf9XHEQg9MjkuCq/ArGmV58hHc7SbJPbup3BMsqNXrJ07LSn7Kwa/IQtXlH7Pp0WL0VYD
+        knkPqM8O5j2bj3n2qOWnTYJ2brfIWlS2K8aSkXvYrXcy6s299eUPj2e7fLC2sTBHElek67pQ
+        92Ebx9tyxh5xrlkn0zcFx9yv7L/bw1weOWWKHqLH8/frMyLnYie2JXW/Vdkt7Fow7Owq/rj+
+        9mJJuMZ8aYv70339n8W1W84lVNlrRE9iiy2x0utl2T+QpWEbWmpdOva+W5/fJJ69OC4eB4e0
+        U4ovXvRqvbM/8Tecfb4V29DxdvKV6KJj5hOFjeU98ZLP46g9j6uvmt+PVO8ufBpQZvtu3R4S
+        Y5IpqQ9Xz1D/AciK5WV+BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOIsWRmVeSWpSXmKPExsWy7bCSvG5/3OJ4gzmzZCzefXrKajH/yDlW
+        i9UfHzNaXPn6ns1i+t5NbBYtsxaxWJw/v4HdYuvTNUwWZ5vesFtc3jWHzeJz7xFGi84vs9gs
+        Lp5ytbjduILNYtLaqYwWZ595W7TuPcJu8e/aRhaLn7vmsVhsfnCMzUHE4/2NVnaPnbPusntc
+        OveH2WPTqk42jzvX9rB53O8+zuTR2/yOzaNvyypGj8+b5AI4o7hsUlJzMstSi/TtErgy/j/+
+        xF5w1qLiVFN5A+Ni3S5GTg4JAROJA5eOMnUxcnEICexmlGjtvcYOkZCUmHbxKHMXIweQLSxx
+        +HAxRM1bRonX876xgdQIC6RKnF/QwQKSEBG4yyIx6cctNhCHWWAGo8SfDRvZIVq2MUrsftDL
+        CtLCJqAlsf/FDbB2fgFFias/HjOC2LwCdhLtM96zgNgsAioST/Z+AqsRFQiT2LnkMRNEjaDE
+        yZlPwGo4Bcwl3t1sAKthFlCX+DPvEjOELS5x68l8JghbXmL72znMExiFZyFpn4WkZRaSlllI
+        WhYwsqxilEwtKM5Nzy02LDDMSy3XK07MLS7NS9dLzs/dxAiOey3NHYzbV33QO8TIxMF4iFGC
+        g1lJhPeC36J4Id6UxMqq1KL8+KLSnNTiQ4zSHCxK4rw3ChfGCQmkJ5akZqemFqQWwWSZODil
+        Gpha1DM56gLVT7b6Prh9OPfQ3c9slb9iWQqaXPO/hnRxnFWvP//YfkngU22nTfdPtwUdLO3s
+        Ne31DE6ft87ExuWhAcvzwOuvSm66hL79ElTI+MnzyOGXCzg7/CR/B/2fPVFtqdx3G7Fn8q9b
+        ks6FKP5tbbh8oDvmmmZqpveV9Va3q73v6/O8Vv2wr2BJQzm30I960w061Usypihvrrb/3fO7
+        pPnP2utmj+++nX2D+aVzcXvRD1kHZsOtwpt2/LvrY8l4xkWqfVOh+LGSjMa+6nlzFj8ofS3x
+        ZlZh+fHJXM9M5f1ObP3afDB3vo+iXRNHE/sbsZlfPsgqiU5an/thz1O3eKkzy/uEn/ta3fi2
+        dp0SS3FGoqEWc1FxIgDiON65agMAAA==
+X-CMS-MailID: 20201105020815epcas1p34067ce27ad5804aba8a81f02c248c6d0
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201104103713eucas1p2d21b6f936aa18725ae4b4878f3be0a8e
-References: <CGME20201104103713eucas1p2d21b6f936aa18725ae4b4878f3be0a8e@eucas1p2.samsung.com>
-        <20201104103657.18007-1-s.nawrocki@samsung.com>
+X-CMS-RootMailID: 20201104165124epcas1p3fb886cc56ef8601329e9a76b7c403317
+References: <20201104164923.21238-1-digetx@gmail.com>
+        <CGME20201104165124epcas1p3fb886cc56ef8601329e9a76b7c403317@epcas1p3.samsung.com>
+        <20201104164923.21238-46-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sylwester,
+Hi Dmitry,
 
-On 11/4/20 7:36 PM, Sylwester Nawrocki wrote:
-> This patchset adds interconnect API support for the Exynos SoC "samsung,
-> exynos-bus" compatible devices, which already have their corresponding
-> exynos-bus driver in the devfreq subsystem.  Complementing the devfreq
-> driver with an interconnect functionality allows to ensure the QoS
-> requirements of devices accessing the system memory (e.g. video processing
-> devices) are fulfilled and aallows to avoid issues like the one discussed
-> in thread [1].
+On 11/5/20 1:49 AM, Dmitry Osipenko wrote:
+> This patch moves ACTMON driver away from generating OPP table by itself,
+> transitioning it to use the table which comes from device-tree. This
+> change breaks compatibility with older device-trees in order to bring
+> support for the interconnect framework to the driver. This is a mandatory
+> change which needs to be done in order to implement interconnect-based
+> memory DVFS. Users of legacy device-trees will get a message telling that
+> theirs DT needs to be upgraded. Now ACTMON issues memory bandwidth request
+> using dev_pm_opp_set_bw(), instead of driving EMC clock rate directly.
 > 
-> This patch series adds implementation of the interconnect provider per each
-> "samsung,exynos-bus" compatible DT node, with one interconnect node per
-> provider.  The interconnect code which was previously added as a part of
-> the devfreq driver has been converted to a separate platform driver.
-> In the devfreq a corresponding virtual child platform device is registered.
-> Integration of devfreq and interconnect frameworks is achieved through
-> the PM QoS API.
+> Tested-by: Peter Geis <pgwipeout@gmail.com>
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/devfreq/tegra30-devfreq.c | 96 +++++++++++++++++--------------
+>  1 file changed, 54 insertions(+), 42 deletions(-)
 > 
-> A sample interconnect consumer for exynos-mixer is added in patches 6/7,
-> 7/7, it is currently added only for exynos4412 and allows to address the
-> mixer DMA underrun error issues [1].
-> 
-> Changes since v7:
->  - drivers/interconnect/exynos renamed to drivers/interconnect/samsung,
->  - added INTERCONNECT_SAMSUNG Kconfig symbol,
->  - added missing driver sync_state callback,
->  - improved the DT binding description,
->  - added a patch adding maintainers entry,
->  - updated comment in patch 7/7, typo fix (patch 1/7).
-> 
-> The series has been tested on Odroid U3 board. It is based on v5.10-rc1.
-> 
-> --
-> Regards,
-> Sylwester
-> 
-> Changes since v6:
->  - the interconnect consumer DT bindings are now used to describe dependencies
->    of the interconnects (samsung,exynos-bus nodes),
->  - bus-width property replaced with samsung,data-clk-ratio,
->  - adaptation to recent changes in the interconnect code
->    (of_icc_get_from_provider(), icc_node_add()).
-> 
-> Changes since v5:
->  - addition of "bus-width: DT property, which specifies data width
->    of the interconnect bus (patches 1...2/6),
->  - addition of synchronization of the interconnect bandwidth setting
->    with VSYNC (patch 6/6).
-> 
-> Changes since v3 [4] (v4 skipped to align with patchset [1]), detailed
-> changes are listed in patches:
->  - conversion to a separate interconnect (platform) driver,
->  - an update of the DT binding documenting new optional properties:
->    #interconnect-cells, samsung,interconnect-parent in "samsung,exynos-bus"
->    nodes,
->  - new DT properties added to the SoC, rather than to the board specific
->    files.
-> 
-> Changes since v2 [5]:
->  - Use icc_std_aggregate().
->  - Implement a different modification of apply_constraints() in
->    drivers/interconnect/core.c (patch 03).
->  - Use 'exynos,interconnect-parent-node' in the DT instead of
->    'devfreq'/'parent', depending on the bus.
->  - Rebase on DT patches that deprecate the 'devfreq' DT property.
->  - Improve error handling, including freeing generated IDs on failure.
->  - Remove exynos_bus_icc_connect() and add exynos_bus_icc_get_parent().
-> 
-> Changes since v1 [6]:
->  - Rebase on coupled regulators patches.
->  - Use dev_pm_qos_*() API instead of overriding frequency in
->    exynos_bus_target().
->  - Use IDR for node ID allocation.
->  - Reverse order of multiplication and division in
->    mixer_set_memory_bandwidth() (patch 07) to avoid integer overflow.
-> 
-> 
-> References:
-> [1] https://patchwork.kernel.org/patch/10861757/ (original issue)
-> [2] https://www.spinics.net/lists/linux-samsung-soc/msg70014.html
-> [3] https://www.spinics.net/lists/arm-kernel/msg810722.html
-> [4] https://lore.kernel.org/linux-pm/20191220115653.6487-1-a.swigon@samsung.com
-> [5] https://patchwork.kernel.org/cover/11054417/ (v1 of this RFC)
-> [6] https://patchwork.kernel.org/cover/11152595/ (v2 of this RFC)
-> 
-> 
-> Artur Świgoń (1):
->   ARM: dts: exynos: Add interconnects to Exynos4412 mixer
-> 
-> Sylwester Nawrocki (6):
->   dt-bindings: devfreq: Add documentation for the interconnect
->     properties
->   interconnect: Add generic interconnect driver for Exynos SoCs
->   MAINTAINERS: Add entry for Samsung interconnect drivers
->   PM / devfreq: exynos-bus: Add registration of interconnect child
->     device
->   ARM: dts: exynos: Add interconnect properties to Exynos4412 bus nodes
->   drm: exynos: mixer: Add interconnect support
-> 
->  .../devicetree/bindings/devfreq/exynos-bus.txt     |  71 +++++++-
->  MAINTAINERS                                        |   7 +
->  arch/arm/boot/dts/exynos4412.dtsi                  |   7 +
->  drivers/devfreq/exynos-bus.c                       |  17 ++
->  drivers/gpu/drm/exynos/exynos_mixer.c              | 146 ++++++++++++++-
->  drivers/interconnect/Kconfig                       |   1 +
->  drivers/interconnect/Makefile                      |   1 +
->  drivers/interconnect/samsung/Kconfig               |  13 ++
->  drivers/interconnect/samsung/Makefile              |   4 +
->  drivers/interconnect/samsung/exynos.c              | 199 +++++++++++++++++++++
->  10 files changed, 456 insertions(+), 10 deletions(-)
->  create mode 100644 drivers/interconnect/samsung/Kconfig
->  create mode 100644 drivers/interconnect/samsung/Makefile
->  create mode 100644 drivers/interconnect/samsung/exynos.c
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index 38cc0d014738..4db027ca17e1 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -19,6 +19,8 @@
+>  #include <linux/reset.h>
+>  #include <linux/workqueue.h>
+>  
+> +#include <soc/tegra/fuse.h>
+> +
+>  #include "governor.h"
+>  
+>  #define ACTMON_GLB_STATUS					0x0
+> @@ -155,6 +157,7 @@ struct tegra_devfreq_device {
+>  
+>  struct tegra_devfreq {
+>  	struct devfreq		*devfreq;
+> +	struct opp_table	*opp_table;
+>  
+>  	struct reset_control	*reset;
+>  	struct clk		*clock;
+> @@ -612,34 +615,19 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
+>  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
+>  				u32 flags)
+>  {
+> -	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
+> -	struct devfreq *devfreq = tegra->devfreq;
+>  	struct dev_pm_opp *opp;
+> -	unsigned long rate;
+> -	int err;
+> +	int ret;
+>  
+>  	opp = devfreq_recommended_opp(dev, freq, flags);
+>  	if (IS_ERR(opp)) {
+>  		dev_err(dev, "Failed to find opp for %lu Hz\n", *freq);
+>  		return PTR_ERR(opp);
+>  	}
+> -	rate = dev_pm_opp_get_freq(opp);
+> -	dev_pm_opp_put(opp);
+> -
+> -	err = clk_set_min_rate(tegra->emc_clock, rate * KHZ);
+> -	if (err)
+> -		return err;
+> -
+> -	err = clk_set_rate(tegra->emc_clock, 0);
+> -	if (err)
+> -		goto restore_min_rate;
+> -
+> -	return 0;
+>  
+> -restore_min_rate:
+> -	clk_set_min_rate(tegra->emc_clock, devfreq->previous_freq);
+> +	ret = dev_pm_opp_set_bw(dev, opp);
+> +	dev_pm_opp_put(opp);
+>  
+> -	return err;
+> +	return ret;
+>  }
+>  
+>  static int tegra_devfreq_get_dev_status(struct device *dev,
+> @@ -655,7 +643,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
+>  	stat->private_data = tegra;
+>  
+>  	/* The below are to be used by the other governors */
+> -	stat->current_frequency = cur_freq;
+> +	stat->current_frequency = cur_freq * KHZ;
+>  
+>  	actmon_dev = &tegra->devices[MCALL];
+>  
+> @@ -705,7 +693,12 @@ static int tegra_governor_get_target(struct devfreq *devfreq,
+>  		target_freq = max(target_freq, dev->target_freq);
+>  	}
+>  
+> -	*freq = target_freq;
+> +	/*
+> +	 * tegra-devfreq driver operates with KHz units, while OPP table
+> +	 * entries use Hz units. Hence we need to convert the units for the
+> +	 * devfreq core.
+> +	 */
+> +	*freq = target_freq * KHZ;
+>  
+>  	return 0;
+>  }
+> @@ -774,13 +767,22 @@ static struct devfreq_governor tegra_devfreq_governor = {
+>  
+>  static int tegra_devfreq_probe(struct platform_device *pdev)
+>  {
+> +	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+>  	struct tegra_devfreq_device *dev;
+>  	struct tegra_devfreq *tegra;
+> +	struct opp_table *opp_table;
+>  	struct devfreq *devfreq;
+>  	unsigned int i;
+>  	long rate;
+>  	int err;
+>  
+> +	/* legacy device-trees don't have OPP table and must be updated */
+> +	if (!device_property_present(&pdev->dev, "operating-points-v2")) {
+> +		dev_err(&pdev->dev,
+> +			"OPP table not found, please update your device tree\n");
+> +		return -ENODEV;
+> +	}
+> +
+>  	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+>  	if (!tegra)
+>  		return -ENOMEM;
+> @@ -822,11 +824,31 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  		return err;
+>  	}
+>  
+> +	tegra->opp_table = dev_pm_opp_get_opp_table(&pdev->dev);
+> +	err = PTR_ERR_OR_ZERO(tegra->opp_table);
+> +	if (err) {
+> +		dev_err(&pdev->dev, "Failed to prepare OPP table: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	opp_table = dev_pm_opp_set_supported_hw(&pdev->dev, &hw_version, 1);
+> +	err = PTR_ERR_OR_ZERO(opp_table);
+> +	if (err) {
+> +		dev_err(&pdev->dev, "Failed to set supported HW: %d\n", err);
+> +		goto put_table;
+> +	}
+> +
+> +	err = dev_pm_opp_of_add_table(&pdev->dev);
+> +	if (err) {
+> +		dev_err(&pdev->dev, "Failed to add OPP table: %d\n", err);
+> +		goto put_hw;
+> +	}
+> +
+>  	err = clk_prepare_enable(tegra->clock);
+>  	if (err) {
+>  		dev_err(&pdev->dev,
+>  			"Failed to prepare and enable ACTMON clock\n");
+> -		return err;
+> +		goto remove_table;
+>  	}
+>  
+>  	err = reset_control_reset(tegra->reset);
+> @@ -850,23 +872,6 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  		dev->regs = tegra->regs + dev->config->offset;
+>  	}
+>  
+> -	for (rate = 0; rate <= tegra->max_freq * KHZ; rate++) {
+> -		rate = clk_round_rate(tegra->emc_clock, rate);
+> -
+> -		if (rate < 0) {
+> -			dev_err(&pdev->dev,
+> -				"Failed to round clock rate: %ld\n", rate);
+> -			err = rate;
+> -			goto remove_opps;
+> -		}
+> -
+> -		err = dev_pm_opp_add(&pdev->dev, rate / KHZ, 0);
+> -		if (err) {
+> -			dev_err(&pdev->dev, "Failed to add OPP: %d\n", err);
+> -			goto remove_opps;
+> -		}
+> -	}
+> -
+>  	platform_set_drvdata(pdev, tegra);
+>  
+>  	tegra->clk_rate_change_nb.notifier_call = tegra_actmon_clk_notify_cb;
+> @@ -882,7 +887,6 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
+> -	tegra_devfreq_profile.initial_freq /= KHZ;
+>  
+>  	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+>  				     "tegra_actmon", NULL);
+> @@ -902,6 +906,12 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	reset_control_reset(tegra->reset);
+>  disable_clk:
+>  	clk_disable_unprepare(tegra->clock);
+> +remove_table:
+> +	dev_pm_opp_of_remove_table(&pdev->dev);
+> +put_hw:
+> +	dev_pm_opp_put_supported_hw(tegra->opp_table);
+> +put_table:
+> +	dev_pm_opp_put_opp_table(tegra->opp_table);
+>  
+>  	return err;
+>  }
+> @@ -913,11 +923,13 @@ static int tegra_devfreq_remove(struct platform_device *pdev)
+>  	devfreq_remove_device(tegra->devfreq);
+>  	devfreq_remove_governor(&tegra_devfreq_governor);
+>  
+> -	dev_pm_opp_remove_all_dynamic(&pdev->dev);
+> -
+>  	reset_control_reset(tegra->reset);
+>  	clk_disable_unprepare(tegra->clock);
+>  
+> +	dev_pm_opp_of_remove_table(&pdev->dev);
+> +	dev_pm_opp_put_supported_hw(tegra->opp_table);
+> +	dev_pm_opp_put_opp_table(tegra->opp_table);
+> +
+>  	return 0;
+>  }
+>  
 > 
 
-I tested it. It is well working. Thanks.
-
-Tested-by: Chanwoo Choi <cw00.choi@samsung.com>
-
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
 -- 
 Best Regards,
