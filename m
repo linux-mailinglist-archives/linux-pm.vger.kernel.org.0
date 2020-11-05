@@ -2,67 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A1E2A7C6D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 11:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484012A7CCD
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 12:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728975AbgKEK4j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Nov 2020 05:56:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:57398 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726400AbgKEK4j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 5 Nov 2020 05:56:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D0C9F142F;
-        Thu,  5 Nov 2020 02:56:38 -0800 (PST)
-Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A4363F66E;
-        Thu,  5 Nov 2020 02:56:35 -0800 (PST)
-Date:   Thu, 5 Nov 2020 11:56:33 +0100
-From:   Morten Rasmussen <morten.rasmussen@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        amitk@kernel.org, corbet@lwn.net, daniel.lezcano@linaro.org,
-        Dietmar.Eggemann@arm.com, qperret@google.com,
-        dianders@chromium.org, mka@chromium.org, rnayak@codeaurora.org,
-        rafael@kernel.org, sudeep.holla@arm.com, viresh.kumar@linaro.org,
-        sboyd@kernel.org, nm@ti.com
-Subject: Re: [PATCH v4 1/4] PM / EM: Add a flag indicating units of power
- values in Energy Model
-Message-ID: <20201105105633.GB8237@e123083-lin>
-References: <20201103090600.29053-1-lukasz.luba@arm.com>
- <20201103090600.29053-2-lukasz.luba@arm.com>
- <20201105091759.GA8237@e123083-lin>
- <876ca521-1576-63c5-9af5-b000f52cc17b@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <876ca521-1576-63c5-9af5-b000f52cc17b@arm.com>
+        id S1726874AbgKELTu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Nov 2020 06:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbgKELTt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Nov 2020 06:19:49 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969C0C0613CF;
+        Thu,  5 Nov 2020 03:19:49 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id f38so1232293pgm.2;
+        Thu, 05 Nov 2020 03:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=6LlDxVopvTXrZYYwDpHLRIcnyqCk1QP6hWaB4YmXDAA=;
+        b=GioMw7Qm8dt/8OrRBSfFZcZij1xGKpijpxDX/rNUGH2jXMCEFlGKkOO/9VZm7Q7OpV
+         vf1jlPButpWSR/f3tQKeNnyeaO7VIKVvmHBYLszKQiEI9FUw8UCxbH5HkuQZ5G7NG8RC
+         zacmnv1IZi4ZSmIGH1t9ryoc5bz4pmSpOdOqwajgY3vB8O6EnFBL3+I7Cm/L8RIoUWoN
+         0l9k54AnhZS3EYqnLD0Mg+HTa3fJIh3GgaOyHJEKbiImvD0KLA0TBIuH+1Hu1R4ZGbuh
+         y5/KGn97iLlFyuh9vUcVNhM7c4ACKW1DkTajPJgyXSZ/bl6cfre1WqMKeNvjT3At7+At
+         Imow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=6LlDxVopvTXrZYYwDpHLRIcnyqCk1QP6hWaB4YmXDAA=;
+        b=mY4S0yvdv+pynggv75c+QYEWTeljlu0/7akX91uO2m/hnXZAC13N5LL1kn29TXsTIz
+         PIQH+TwgwGNVRxpBrZlsWmUl1tTplNK0FOw5o1TkHfBkNMFEHS10gRWAgShNHQvsj+AR
+         p7NFxKbC5QpxVso5zhyWjiGWBn42Z+VQqUG0Zh3lVdjwKwtiuaLLZ3Q6nDOK9PFwixQC
+         qIfh+IGbiIKVo9f8jZq83PZPLkXoiNjKU8w81BJ+FEPPPxlLaqfMGSZg2IRpV9tjwlSp
+         4ki/ACFQQlkdB/uv0MRijEwWLJAflfSDHcL/TYXXEmO6vREE2fSzIQK3vcHnIsb6snvO
+         uk6w==
+X-Gm-Message-State: AOAM531xzzograKMCIqhjvIccVR/YFC7KOuJ9edeBL+RaCGSnSAa7gq9
+        bR9EHCAWoy/zXrM/BkKH4IU=
+X-Google-Smtp-Source: ABdhPJwk+TpXZaS0XUcMx81Tj+dEYl+/2uiSGrGIMLNt42cLWXgtYqMJfpmDk6AZgW2BP1FCGDs9Zg==
+X-Received: by 2002:a17:90a:f2cd:: with SMTP id gt13mr1956116pjb.179.1604575189185;
+        Thu, 05 Nov 2020 03:19:49 -0800 (PST)
+Received: from mi-OptiPlex-7060.mioffice.cn ([209.9.72.215])
+        by smtp.gmail.com with ESMTPSA id n64sm2203486pfn.134.2020.11.05.03.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 03:19:48 -0800 (PST)
+From:   zhuguangqing83@gmail.com
+To:     amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, javi.merino@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuguangqing <zhuguangqing@xiaomi.com>
+Subject: [PATCH] thermal/drivers/cpufreq_cooling: Update cpufreq_state only if state has changed
+Date:   Thu,  5 Nov 2020 19:19:14 +0800
+Message-Id: <20201105111914.9324-1-zhuguangqing83@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 10:09:05AM +0000, Lukasz Luba wrote:
-> 
-> 
-> On 11/5/20 9:18 AM, Morten Rasmussen wrote:
-> > On Tue, Nov 03, 2020 at 09:05:57AM +0000, Lukasz Luba wrote:
-> > > @@ -79,7 +82,8 @@ struct em_data_callback {
-> > >   struct em_perf_domain *em_cpu_get(int cpu);
-> > >   struct em_perf_domain *em_pd_get(struct device *dev);
-> > >   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
-> > > -				struct em_data_callback *cb, cpumask_t *span);
-> > > +				struct em_data_callback *cb, cpumask_t *spani,
-> > 
-> > "spani" looks like a typo?
-> > 
-> 
-> Good catch, yes, the vim 'i'.
-> 
-> Thank you Morten. I will resend this patch when you don't
-> find other issues in the rest of patches.
+From: zhuguangqing <zhuguangqing@xiaomi.com>
 
-The rest of the series looks okay to me.
+If state has not changed successfully and we updated cpufreq_state,
+next time when the new state is equal to cpufreq_state (not changed
+successfully last time), we will return directly and miss a
+freq_qos_update_request() that should have been.
 
-Morten
+Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
+---
+ drivers/thermal/cpufreq_cooling.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index cc2959f22f01..00dc26c33899 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -438,13 +438,12 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+ 	if (cpufreq_cdev->cpufreq_state == state)
+ 		return 0;
+ 
+-	cpufreq_cdev->cpufreq_state = state;
+-
+ 	frequency = get_state_freq(cpufreq_cdev, state);
+ 
+ 	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
+ 
+ 	if (ret > 0) {
++		cpufreq_cdev->cpufreq_state = state;
+ 		cpus = cpufreq_cdev->policy->cpus;
+ 		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
+ 		capacity = frequency * max_capacity;
+-- 
+2.17.1
+
