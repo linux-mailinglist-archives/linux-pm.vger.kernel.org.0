@@ -2,105 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4232A7F6E
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 14:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58612A7FB6
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 14:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgKENGH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Nov 2020 08:06:07 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34016 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgKENGH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Nov 2020 08:06:07 -0500
-Received: by mail-ot1-f68.google.com with SMTP id j14so1341872ots.1;
-        Thu, 05 Nov 2020 05:06:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kdZgb+k5dRx1eb1k/ksppuSD/98WX1sN0LMVhJbD6Rg=;
-        b=t23ZMnXX6xGpHg8GrvX18snEhLrzgFK0OrkIc4XZBGnT4l+/dqQVCvVoqTGr8utLDX
-         +F7O9wXlNlGsesxv5CwIB+auYfc7x7Jm6fw5SA+UtQ/8qEuKtspc2OHvNTCbzjMmFchv
-         JOhjMCy3zz39B5HbAvbUt0ImNcgvijJmdA0yVej8L6BGD+Mo0BILmtW/4RDuUEfUf9yf
-         rKRAIOLEsKvcuOuwauKzlb2lcwYqDbM5tUJPIhqKm6POjb93fp00Xj8HYHVi+X+6Mq7F
-         qyPSXBOphxnGBBA5lzK/8iAZ3m9e1tUscGtOQFbcCM3gAMoJ5r1eIUoSLj5Bqlbw186h
-         5KXQ==
-X-Gm-Message-State: AOAM531yW9nAsEpKtbmCVhrvlBN7uRNkTP0j794yXj5qrB7zxdr0LTo2
-        JI25782e1VDwy3HZVWc3wWxiPA/aSIEs5B/0ZKY=
-X-Google-Smtp-Source: ABdhPJzGcgK8kFkkRHcPJ7R6ZpgkZtLzu91vcYrqBSfeZKyD8GzRT5vpOuDGy5iawjTvnTj4D9+iz428w+vKigRUah8=
-X-Received: by 2002:a9d:222f:: with SMTP id o44mr1627406ota.321.1604581566378;
- Thu, 05 Nov 2020 05:06:06 -0800 (PST)
+        id S1725468AbgKENc5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Nov 2020 08:32:57 -0500
+Received: from mout.gmx.net ([212.227.17.21]:33151 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726874AbgKENc5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Nov 2020 08:32:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1604583172;
+        bh=WXWqVPBjfnkHgVdtqc5dpKUrZCQoFGqzf6HcefboL6A=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=ltizhNKw2TpjPCiO5ZzXgJLYCSEg3GLYaVXCregAcLaKOHbTJTP2Jfjd1vJ2zNP3i
+         gdFfLn6k7CesLgZOfpHBeZr0paQTcSaBNTdSjtTHhDSUjK34qYkxoCnrBqcQgakfaj
+         JO1lLKpVXyiQs1we/JS4bLEwQ9zzAqjmFGsCEEDs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530.fritz.box ([92.116.156.55]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MpDJX-1jzL6h1Ahr-00qgWE; Thu, 05
+ Nov 2020 14:32:52 +0100
+Date:   Thu, 5 Nov 2020 14:32:50 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: reset: Use printk format symbol resolver
+Message-ID: <20201105133250.GA26205@ls3530.fritz.box>
 MIME-Version: 1.0
-References: <20201105125524.4409-1-ionela.voinescu@arm.com> <20201105125524.4409-9-ionela.voinescu@arm.com>
-In-Reply-To: <20201105125524.4409-9-ionela.voinescu@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 5 Nov 2020 14:05:55 +0100
-Message-ID: <CAJZ5v0hheK3WrpKFXDUF1A4D9wt8ro3KJ73wqNwxn9DJyrt6zw@mail.gmail.com>
-Subject: Re: [PATCH 8/8] acpi: fix NONE coordination for domain mapping failure
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:S0kLow3uJ4eZPClWFH/wfLiJn+vLhrXnvk9I2mmBzSlSYvNvLQh
+ qzUd0IGY8sRGvy0fo6SnPvNiRx3ijPK/3HIbKyNfiRCsK9lQZr+GIea7ixvjSYWwyve7lYi
+ cIuSmJwV8z6N5lAZcJA+0s6KtezATpTYDVXQRWXKX6queMztzkuOzgXHZZoHekZ0q+BtPxt
+ Px5b1Vg8tUslOglcuzcwQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oDPAsaUk6aw=:y7CFXBLNOvYYmSTJDZuyZ0
+ +b13BklFuX7SyIjA/dU3lLzS7ruybY9NKY3XJAtXVMQPm/dkiYUzzRdqLmU0HKlmSlZa2GWLr
+ ekoZxVfHKbwI9jOK8Cf1Nca7s3soM8kBEOLt03s4+dbzNb0yMZu7ut+4n8na7ij2qg/9UzCrv
+ pnRtA9kTcK19ljps/qN7Fq+/WJeJrz1l5K9SRSTbeEt46fwYkGhJJRBCQFCm2UeuHFLA747ED
+ PUEF/okTr/+QFQUzZa6mqofYHgo6yKyouHGXAFgGgbcfpziz8JJA9n5VJS8sLIEV/JOPY49mQ
+ KqXLtw7n9o3TZls86myOk9gKMJ0Jkp/AQoOU90FDtZ2bbgGPS2p98nVcSTcP0QZ1/gfneF+i6
+ tpdrQ8ibmUWwNoq+f1wU0wbMbKDz1R1nFxxRl+ZH8c3ZgA/BsFykqvR9GKG8sS37UNrw3W5rl
+ 3UomUp5BOwh58LKTOBZxV3IcCW7cMDIOj7h7b3aRamhKntCxeUu9dsK+fmI2uw1qLobkyxd+3
+ d5i73LIjNu0vjtZUjooC6ohWRVwhJSFUTKgE9RW3hK7JlrAA4KDuObT55YdiOYeTMV6hiIp5D
+ UIfzO9CqcyjpRENdl3tljhgPrDE53LXo9/uL0h4KdiFhCMGjyeul6sGQTplz3bW0SJF7ptMxf
+ ETwxiw5QrSV7TJQ1UNOi87b1nSBi2tbPNJXeRhyBm0V3YvnZzceCkqPUvLMDTc8cQXp7vluiK
+ dar+0ONrFkayG3jm357jYfwBqeHzAHVWStXqMJxaK9bYVokfQMN5//pvSQdCS4B5nFCltv0WA
+ 3IFL7KhHtGP3o9irLnnNgvAeZ1Q1LPu1h+54qqcx0klLUqaKDvaEqj7uQ0EmBhlsfIhznH2fr
+ te16iohuRluJ5eYgPUaQ==
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 5, 2020 at 1:57 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
->
-> For errors parsing the _PSD domains, a separate domain is returned for
-> each CPU in the failed _PSD domain with no coordination (as per previous
-> comment). But contrary to the intention, the code was setting
-> CPUFREQ_SHARED_TYPE_ALL as coordination type.
->
-> Change shared_type to CPUFREQ_SHARED_TYPE_NONE in case of errors parsing
-> the domain information. The function still return the error and the caller
-> is free to bail out the domain initialisation altogether in that case.
->
-> Given that both functions return domains with a single CPU, this change
-> does not affect the functionality, but clarifies the intention.
+Instead of looking up a symbol name by hand, use the %ps printk format
+specifier.
 
-Is this related to any other patches in the series?
+Signed-off-by: Helge Deller <deller@gmx.de>
 
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/acpi/cppc_acpi.c         | 2 +-
->  drivers/acpi/processor_perflib.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 75e36b909ae6..e1e46cc66eeb 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -477,7 +477,7 @@ int acpi_get_psd_map(unsigned int cpu, struct psd_data *domain)
->         /* Assume no coordination on any error parsing domain info */
->         cpumask_clear(domain->shared_cpu_map);
->         cpumask_set_cpu(cpu, domain->shared_cpu_map);
-> -       domain->shared_type = CPUFREQ_SHARED_TYPE_ALL;
-> +       domain->shared_type = CPUFREQ_SHARED_TYPE_NONE;
->
->         return -EFAULT;
->  }
-> diff --git a/drivers/acpi/processor_perflib.c b/drivers/acpi/processor_perflib.c
-> index 5909e8fa4013..5ce638537791 100644
-> --- a/drivers/acpi/processor_perflib.c
-> +++ b/drivers/acpi/processor_perflib.c
-> @@ -710,7 +710,7 @@ int acpi_processor_preregister_performance(
->                 if (retval) {
->                         cpumask_clear(pr->performance->shared_cpu_map);
->                         cpumask_set_cpu(i, pr->performance->shared_cpu_map);
-> -                       pr->performance->shared_type = CPUFREQ_SHARED_TYPE_ALL;
-> +                       pr->performance->shared_type = CPUFREQ_SHARED_TYPE_NONE;
->                 }
->                 pr->performance = NULL; /* Will be set for real in register */
->         }
-> --
-> 2.17.1
->
+diff --git a/drivers/power/reset/qnap-poweroff.c b/drivers/power/reset/qna=
+p-poweroff.c
+index 52b7dc61d870..0ddf7f25f7b8 100644
+=2D-- a/drivers/power/reset/qnap-poweroff.c
++++ b/drivers/power/reset/qnap-poweroff.c
+@@ -14,7 +14,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/serial_reg.h>
+-#include <linux/kallsyms.h>
+ #include <linux/of.h>
+ #include <linux/io.h>
+ #include <linux/clk.h>
+@@ -75,7 +74,6 @@ static int qnap_power_off_probe(struct platform_device *=
+pdev)
+ 	struct device_node *np =3D pdev->dev.of_node;
+ 	struct resource *res;
+ 	struct clk *clk;
+-	char symname[KSYM_NAME_LEN];
+
+ 	const struct of_device_id *match =3D
+ 		of_match_node(qnap_power_off_of_match_table, np);
+@@ -104,10 +102,8 @@ static int qnap_power_off_probe(struct platform_devic=
+e *pdev)
+
+ 	/* Check that nothing else has already setup a handler */
+ 	if (pm_power_off) {
+-		lookup_symbol_name((ulong)pm_power_off, symname);
+-		dev_err(&pdev->dev,
+-			"pm_power_off already claimed %p %s",
+-			pm_power_off, symname);
++		dev_err(&pdev->dev, "pm_power_off already claimed for %ps",
++			pm_power_off);
+ 		return -EBUSY;
+ 	}
+ 	pm_power_off =3D qnap_power_off;
+diff --git a/drivers/power/reset/syscon-poweroff.c b/drivers/power/reset/s=
+yscon-poweroff.c
+index 4d6923b102b6..ed58bdf41e27 100644
+=2D-- a/drivers/power/reset/syscon-poweroff.c
++++ b/drivers/power/reset/syscon-poweroff.c
+@@ -6,7 +6,6 @@
+  * Author: Moritz Fischer <moritz.fischer@ettus.com>
+  */
+
+-#include <linux/kallsyms.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/notifier.h>
+@@ -34,7 +33,6 @@ static void syscon_poweroff(void)
+
+ static int syscon_poweroff_probe(struct platform_device *pdev)
+ {
+-	char symname[KSYM_NAME_LEN];
+ 	int mask_err, value_err;
+
+ 	map =3D syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "regmap");
+@@ -65,10 +63,8 @@ static int syscon_poweroff_probe(struct platform_device=
+ *pdev)
+ 	}
+
+ 	if (pm_power_off) {
+-		lookup_symbol_name((ulong)pm_power_off, symname);
+-		dev_err(&pdev->dev,
+-		"pm_power_off already claimed %p %s",
+-		pm_power_off, symname);
++		dev_err(&pdev->dev, "pm_power_off already claimed for %ps",
++			pm_power_off);
+ 		return -EBUSY;
+ 	}
+
