@@ -2,83 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0F72A878B
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 20:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6169D2A87FC
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 21:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731994AbgKETtJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Nov 2020 14:49:09 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36226 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726729AbgKETtI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Nov 2020 14:49:08 -0500
-Received: by mail-oi1-f196.google.com with SMTP id d9so2941171oib.3;
-        Thu, 05 Nov 2020 11:49:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tuYnC0Mxw2GdN/5/fc/SmXazs0VaaXHxAARa6Xjy2i4=;
-        b=N1dRJ6WGhSg4r5ZssOC4wKkY67YhxCnYgIdeeXCtIAwWKh8ey/6vk7FTqPTCjVe+y7
-         r1gzCj5AIVE83aZGEUxDrsVSu+nTk69fg8P5Lv4Udt0OvZDJ1tgk7WPq7GNnrBS+AnCt
-         u+gtbdHb+ad0gpLXt97HVg/WhDy9QqPRbShHIOH/KLB0d2GKfXv9AK9+yBuSNgaGETcU
-         y+aGAXGLAsUFivNDdFr2qg9dwxnS9bRt8xltrQ37RGWSSrmbRpaE1kRAVW8R9x3NQuwP
-         2S79H/Q8F9xW5EOLxpzrfI/EnJ2AUHElSaL7oJ3egaKF11xbACdcaCiohyMkYCelMp6H
-         EVcw==
-X-Gm-Message-State: AOAM532xa5hO6CJT2Lg7C/9THoNWsZy9SySSI7jUv/Gxs41k2u/5sD0i
-        QQ0VCu4O1CYrnjSwR3Gqo35lE2lntg==
-X-Google-Smtp-Source: ABdhPJw9mjGnbmwktu6jycYe4A4nLF1h99xyWADN6/gYWECKdz4nU/5g+w8IKI9+KbNGXxZinSDljQ==
-X-Received: by 2002:aca:bad4:: with SMTP id k203mr713838oif.16.1604605747683;
-        Thu, 05 Nov 2020 11:49:07 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 132sm592345oid.54.2020.11.05.11.49.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 11:49:07 -0800 (PST)
-Received: (nullmailer pid 1701587 invoked by uid 1000);
-        Thu, 05 Nov 2020 19:49:05 -0000
-Date:   Thu, 5 Nov 2020 13:49:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     linux-tegra@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-pm@vger.kernel.org, Kyungmin Park <kyungmin.park@samsung.com>
-Subject: Re: [PATCH v7 12/47] dt-bindings: memory: tegra124: mc: Document new
- interconnect property
-Message-ID: <20201105194905.GA1701518@bogus>
-References: <20201104164923.21238-1-digetx@gmail.com>
- <20201104164923.21238-13-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201104164923.21238-13-digetx@gmail.com>
+        id S1732136AbgKEUWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Nov 2020 15:22:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726801AbgKEUVV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Nov 2020 15:21:21 -0500
+Subject: Re: [GIT PULL] Power management fixes for v5.10-rc3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604607680;
+        bh=hyUUykc7EpmKI4gE/dd2hKfUvqo6+V38JIdpZuBFG7A=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=B0kyrkFA4qzuGAJbPi0Fj47vvwdqdjg2XB3QqmQCH0cqDXCJG1VQ8/tZE4aPr+f6t
+         3ArZLvwK66TQxfMcipgh0No5hNolrUGrjRjfeCctM8fUCEJ7Ekb7TFjbAz7MbPtT4u
+         a3fIrI3FFuKYU0LavJ+7eegD+dJd8Wi265jSk23Q=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0jgoa3kLeVsZz8Ac8bkzsFdiMerwvRtCxqk9y4ABoK_6A@mail.gmail.com>
+References: <CAJZ5v0jgoa3kLeVsZz8Ac8bkzsFdiMerwvRtCxqk9y4ABoK_6A@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0jgoa3kLeVsZz8Ac8bkzsFdiMerwvRtCxqk9y4ABoK_6A@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.10-rc3
+X-PR-Tracked-Commit-Id: 8c14577df4cd5c6d8b799bdfb3a0e94923f17d50
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f786dfa3745b92f2fa91e0a0b9f3509907111d96
+Message-Id: <160460768062.18865.409966236744321405.pr-tracker-bot@kernel.org>
+Date:   Thu, 05 Nov 2020 20:21:20 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 04 Nov 2020 19:48:48 +0300, Dmitry Osipenko wrote:
-> Memory controller is interconnected with memory clients and with the
-> External Memory Controller. Document new interconnect property which
-> turns memory controller into interconnect provider.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../bindings/memory-controllers/nvidia,tegra124-emc.yaml     | 1 +
->  .../bindings/memory-controllers/nvidia,tegra124-mc.yaml      | 5 +++++
->  2 files changed, 6 insertions(+)
-> 
+The pull request you sent on Thu, 5 Nov 2020 15:20:22 +0100:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.10-rc3
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f786dfa3745b92f2fa91e0a0b9f3509907111d96
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
