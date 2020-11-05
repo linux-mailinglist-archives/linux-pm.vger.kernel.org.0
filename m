@@ -2,308 +2,314 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7870A2A754F
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 03:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A2F2A763F
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 04:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731327AbgKECQr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Nov 2020 21:16:47 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:37206 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730903AbgKECQq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 21:16:46 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201105021641epoutp028fa83fe3754169327aa245d3fbc1ce18~Eev6dKMXE1479114791epoutp02f
-        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 02:16:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201105021641epoutp028fa83fe3754169327aa245d3fbc1ce18~Eev6dKMXE1479114791epoutp02f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1604542601;
-        bh=jNvW1QYRp55tS9iML16rKRdyc1jSws940X+qvg5l9sU=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=imiHgJQcSbLBhwreovbY4886e3vZr5lWRc94I3QHEd03V6ZFKGnat3Oc1jrEO1PlT
-         6L9lPkyW8UZv0zRLMJJmxbRqjx3PqKAMlAj9lFqvuidLykNzFFXs8pr8qQGt26ObbC
-         MBTHpOzLGjIa3WXSoVN43ihoGtODw3NsthLVKSFE=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20201105021640epcas1p48c5712936d8c8b5338d6357ddce4e8b6~Eev56-kB90090400904epcas1p4W;
-        Thu,  5 Nov 2020 02:16:40 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4CRRwP742nzMqYm0; Thu,  5 Nov
-        2020 02:16:37 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        00.AF.09582.48063AF5; Thu,  5 Nov 2020 11:16:36 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20201105021636epcas1p4ac5ca3b02c51ef248a64c1c659484362~Eev142zY03066930669epcas1p4B;
-        Thu,  5 Nov 2020 02:16:36 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201105021636epsmtrp158daa64df16c9d5766645cf7677d3e0a~Eev135Wog0600806008epsmtrp1M;
-        Thu,  5 Nov 2020 02:16:36 +0000 (GMT)
-X-AuditID: b6c32a37-899ff7000000256e-ed-5fa36084dc06
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C6.90.08745.48063AF5; Thu,  5 Nov 2020 11:16:36 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201105021635epsmtip2f5833d1c0346068df99822f88e5ea2f6~Eev1gCREa1768217682epsmtip2K;
-        Thu,  5 Nov 2020 02:16:35 +0000 (GMT)
-Subject: Re: [PATCH v7 36/47] memory: tegra20-emc: Add devfreq support
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <95e289fc-210c-1f8d-1b24-36e33ce96deb@samsung.com>
-Date:   Thu, 5 Nov 2020 11:30:32 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1726843AbgKEDyD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Nov 2020 22:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726688AbgKEDyD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Nov 2020 22:54:03 -0500
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C63DC0613D1
+        for <linux-pm@vger.kernel.org>; Wed,  4 Nov 2020 19:54:02 -0800 (PST)
+Received: by mail-lj1-x243.google.com with SMTP id 2so53190ljj.13
+        for <linux-pm@vger.kernel.org>; Wed, 04 Nov 2020 19:54:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5cD7WRhyFc21EEKY+kx+SdU9jEH6DjvQDLQmufvUMvs=;
+        b=W8c1rY5JG02HuEUh6AtFWfmgaxNbuTncNCZzbzjYfziKOo6KWWju1V8bsm+Z3Wh+LD
+         vu0zVF0h1VoslFNBAdTt/0M2N7sk96QBF3ZPTErhhYB1yul0RREFCG6VaBjwLnALTKLj
+         ll+zIlQDvYMSc2Z8Ucd7lzK0nsrQxHWUIUlIdXSGQn727d5B57QMUaMBrcG1SXkPk8eq
+         l1RckwBJWZhReAi/BBCKc8koy3pC1ypoOBewUUwp86IHvS2Rvh5ViNctPHZMsIQV0u0x
+         BEhQ6qOWFhqH8QXPi2eSJzrokPJb7Lb+uZgUa3cqxPssCJGoYZLRSxdw5b+k9XbQp1qh
+         TnBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5cD7WRhyFc21EEKY+kx+SdU9jEH6DjvQDLQmufvUMvs=;
+        b=XoqwtS8vaO1EvaSLAiu1Zo0Nn1t+c+eHVJ3Y6zMD/2ek30MWleYVT2mQF8XyxMPnrq
+         CQ+z1/ALEJsOHGqU1rEnKDABts9IvcUt90D+tSyUf5C72YKd9TMW3Hvng/izPkEMLHY8
+         jBluvCU6DDbiK5GysEtL5cWWGJn1VkE4fP7bvqttBjRol4t4gGqKO0A52thrxWkjoabM
+         rNqbCvDZQw1NgH/x22WwwPu8EXLEONvF5mqPrOT+S0R+GHhTDX7HBpSqxToM5BX0v53I
+         hGxKwtcXZtZfkhZTWUpqyOOqrAjowqVAPLgG5isfWd+SpjPhabPCSPIeV1YzktheQqoe
+         hxBA==
+X-Gm-Message-State: AOAM530eYBCUa9ELf2oALGrf0RcXVrlz3Ap5Z0xKSZnbLbKHBnLmDZBD
+        1WebQp6ag/V9dsF7RYvI94qWNvPjeqn3fVcd3BZV5A==
+X-Google-Smtp-Source: ABdhPJygGvHrtvSnA8MfoSXvSCcASSlpVYy09YruJxK3LNShwHUfMA2W7GcR1lvgvev/rpHjfMvbJGQBRxXymtD5FjA=
+X-Received: by 2002:a2e:9a98:: with SMTP id p24mr131633lji.418.1604548441013;
+ Wed, 04 Nov 2020 19:54:01 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201104164923.21238-37-digetx@gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLJsWRmVeSWpSXmKPExsWy7bCmrm5LwuJ4g+WT1S3efXrKajH/yDlW
-        i9UfHzNaXPn6ns1i+t5NbBYtsxaxWJw/v4HdYuvTNUwWZ5vesFtc3jWHzeJz7xFGi84vs9gs
-        Lp5ytbjduILNYtLaqYwWZ595W7TuPcJu8e/aRhaLn7vmsVhsfnCMzUHE4/2NVnaPnbPusntc
-        OveH2WPTqk42jzvX9rB53O8+zuTR2/yOzaNvyypGj8+b5AI4o7JtMlITU1KLFFLzkvNTMvPS
-        bZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4A+U1IoS8wpBQoFJBYXK+nb2RTll5ak
-        KmTkF5fYKqUWpOQUWBboFSfmFpfmpesl5+daGRoYGJkCFSZkZ0z6to+p4IdexcIzSxgbGD+r
-        djFyckgImEg8at/B2MXIxSEksINR4tGWs6wQzidGiffbzrNAOJ+BnF8tTDAt+xofQ1XtYpTY
-        uHwJM4TznlFi1ckWRpAqYQE3iU0n5zGBJEQEbrJILF/xjw0kwSwwg1Hizh5lEJtNQEti/4sb
-        YHF+AUWJqz8egzXzCthJTHt9GizOIqAi0TL7AJgtKhAmcXJbC1SNoMTJmU9YQGxOAXOJe7PP
-        M0PMF5e49WQ+E4QtL7H97Ryw6yQEZnNKnPt/GeoHF4m9D3ZD2cISr45vYYewpSRe9rdB2dUS
-        K08eYYNo7mCU2LL/AitEwlhi/9LJQM0cQBs0Jdbv0ocIK0rs/D2XEWIxn8S7rz2sICUSArwS
-        HW1CECXKEpcf3IVaKymxuL2TbQKj0iwk78xC8sIsJC/MQli2gJFlFaNYakFxbnpqsWGBMXJ8
-        b2IEp3st8x2M095+0DvEyMTBeIhRgoNZSYT3gt+ieCHelMTKqtSi/Pii0pzU4kOMpsAAnsgs
-        JZqcD8w4eSXxhqZGxsbGFiaGZqaGhkrivH+0O+KFBNITS1KzU1MLUotg+pg4OKUamK77/zew
-        vvZte1iL8mPGx5HvbRh0zprbT3f45V56oy563tFNy+8xOv6fOV0usERfpuNCXw+zTPuG3rQb
-        HCx/TU68/uCRavWZbafez4sfZaoci088m/o+cMFxpw2dsr/VGq/O7JtzzjczbUb/n6v6hesy
-        Pii9UTg+s0ms4azCvcQzB8UKrx2e2isre+jh9H3dG/ZuEGCZ+JDfi6dKYGF+wzz7pgmuL9J6
-        2i9bVzbmB3+xnTk5Vuzkr8X9nVysf89E7g/ouVoqaCEivNUpWefabtloxWPHtgi53d66/8eO
-        jfV7ZdTVbZYEnOY52dKo+MNhyYSZB+el19dybvR6maDT/Klb8eqccwr5y63Ez1p93qrEUpyR
-        aKjFXFScCADQiVqvgAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsWy7bCSvG5LwuJ4g0+dvBbvPj1ltZh/5Byr
-        xeqPjxktrnx9z2Yxfe8mNouWWYtYLM6f38BusfXpGiaLs01v2C0u75rDZvG59wijReeXWWwW
-        F0+5WtxuXMFmMWntVEaLs8+8LVr3HmG3+HdtI4vFz13zWCw2PzjG5iDi8f5GK7vHzll32T0u
-        nfvD7LFpVSebx51re9g87ncfZ/LobX7H5tG3ZRWjx+dNcgGcUVw2Kak5mWWpRfp2CVwZk77t
-        Yyr4oVex8MwSxgbGz6pdjJwcEgImEvsaH7N2MXJxCAnsYJS4+7iJDSIhKTHt4lHmLkYOIFtY
-        4vDhYoiat4wSB/tnM4HUCAu4SWw6OY8JJCEicJdFYtKPW2wgDrPADEaJPxs2skO0bGOU6Po8
-        H2wsm4CWxP4XN8BsfgFFias/HjOC2LwCdhLTXp8Gi7MIqEi0zD4AZosKhEnsXPKYCaJGUOLk
-        zCcsIDangLnEvdnnmUFsZgF1iT/zLkHZ4hK3nsxngrDlJba/ncM8gVF4FpL2WUhaZiFpmYWk
-        ZQEjyypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjODI19Lawbhn1Qe9Q4xMHIyHGCU4
-        mJVEeC/4LYoX4k1JrKxKLcqPLyrNSS0+xCjNwaIkzvt11sI4IYH0xJLU7NTUgtQimCwTB6dU
-        A1Pb09c/+28tN5oyUdM8QpLd//W0idcnL22c/OL7iXBn9w/Km4PPyS5Kubx1sXSz1dzrCtnH
-        rlrwH755M/u0gkC6mouKrkvW5c2nBFMStFhSM9YdSmDjTdR+lsB1wvquTOGG77ce31sR/sBI
-        5/3E3RnFL0u9N/i9+e26y9R3AbvDvCWuQeXfBGsCU27I+ipflQt+JfNOwrif75TyBLlnXXyl
-        5Tr/f8vcipfzknaKVjjZ4nO+LajoX8gCr3dOz7xm8vjompy5vWimfVFKuubTSceVJ2cHn05d
-        VNDOJp+0acWvHk7tdZt5rk/4uv/EsmdPne676V+dP9NK4Z+b+nq3kCLdBsYpT3WjjL4sP3xY
-        9Y8SS3FGoqEWc1FxIgCnJdkEawMAAA==
-X-CMS-MailID: 20201105021636epcas1p4ac5ca3b02c51ef248a64c1c659484362
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201104165200epcas1p1c8f692fa2d5a01c01e4f8aca55462fb2
-References: <20201104164923.21238-1-digetx@gmail.com>
-        <CGME20201104165200epcas1p1c8f692fa2d5a01c01e4f8aca55462fb2@epcas1p1.samsung.com>
-        <20201104164923.21238-37-digetx@gmail.com>
+References: <20201027072358.13725-1-victording@google.com> <20201027072358.13725-4-victording@google.com>
+ <82f3070691438d3f651d2e5e5fb5499131cdbd15.camel@intel.com>
+ <CANqTbdaB8Mv+ij2rdprC_=JUt49A_V12-T5TbyidNktah575rw@mail.gmail.com>
+ <f7562a2492aa83afa8a3a511428ed1959b8e8c72.camel@linux.intel.com>
+ <CANqTbdaePLt-kYdihFzZ1Bjns=OfKwWxiYp5-JwfONm7Ujqi+Q@mail.gmail.com> <180b54c84179429af3f09ff38e92e642928a2fdb.camel@linux.intel.com>
+In-Reply-To: <180b54c84179429af3f09ff38e92e642928a2fdb.camel@linux.intel.com>
+From:   Victor Ding <victording@google.com>
+Date:   Thu, 5 Nov 2020 14:53:24 +1100
+Message-ID: <CANqTbdafN+NekRN3oO35o-7DXvu1p_9SwH_XVkw1DmbgSk9y6w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] powercap: Add AMD Fam17h RAPL support
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>, linux-pm@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/5/20 1:49 AM, Dmitry Osipenko wrote:
-> Add devfreq support to the Tegra20 EMC driver. Memory utilization
-> statistics will be periodically polled from the memory controller and
-> appropriate minimum clock rate will be selected by the devfreq governor.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/memory/tegra/Kconfig       |  2 +
->  drivers/memory/tegra/tegra20-emc.c | 92 ++++++++++++++++++++++++++++++
->  2 files changed, 94 insertions(+)
-> 
-> diff --git a/drivers/memory/tegra/Kconfig b/drivers/memory/tegra/Kconfig
-> index ac3dfe155505..76e9a3b10839 100644
-> --- a/drivers/memory/tegra/Kconfig
-> +++ b/drivers/memory/tegra/Kconfig
-> @@ -12,6 +12,8 @@ config TEGRA20_EMC
->  	tristate "NVIDIA Tegra20 External Memory Controller driver"
->  	default y
->  	depends on TEGRA_MC && ARCH_TEGRA_2x_SOC
-> +	select DEVFREQ_GOV_SIMPLE_ONDEMAND
-> +	select PM_DEVFREQ
->  	select PM_OPP
-
-nitpick. If you select PM_DEVFREQ, don't need to select 'PM_OPP'
-bacause PM_DEVFREQ use OPP as mandatory with 'select PM_OPP' in Kconfig.
-
-
->  	help
->  	  This driver is for the External Memory Controller (EMC) found on
-> diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/tegra20-emc.c
-> index 5e10aa97809f..9946b957bb01 100644
-> --- a/drivers/memory/tegra/tegra20-emc.c
-> +++ b/drivers/memory/tegra/tegra20-emc.c
-> @@ -8,6 +8,7 @@
->  #include <linux/clk.h>
->  #include <linux/clk/tegra.h>
->  #include <linux/debugfs.h>
-> +#include <linux/devfreq.h>
->  #include <linux/err.h>
->  #include <linux/interconnect-provider.h>
->  #include <linux/interrupt.h>
-> @@ -102,6 +103,10 @@
->  
->  #define EMC_FBIO_CFG5_DRAM_WIDTH_X16		BIT(4)
->  
-> +#define EMC_PWR_GATHER_CLEAR			(1 << 8)
-> +#define EMC_PWR_GATHER_DISABLE			(2 << 8)
-> +#define EMC_PWR_GATHER_ENABLE			(3 << 8)
-> +
->  static const u16 emc_timing_registers[] = {
->  	EMC_RC,
->  	EMC_RFC,
-> @@ -157,6 +162,7 @@ struct emc_timing {
->  };
->  
->  enum emc_rate_request_type {
-> +	EMC_RATE_DEVFREQ,
->  	EMC_RATE_DEBUG,
->  	EMC_RATE_ICC,
->  	EMC_RATE_TYPE_MAX,
-> @@ -193,6 +199,9 @@ struct tegra_emc {
->  
->  	/* protect shared rate-change code path */
->  	struct mutex rate_lock;
-> +
-> +	struct devfreq_simple_ondemand_data ondemand_data;
-> +	struct devfreq *devfreq;
->  };
->  
->  static irqreturn_t tegra_emc_isr(int irq, void *data)
-> @@ -952,6 +961,88 @@ static int tegra_emc_opp_table_init(struct tegra_emc *emc)
->  	return err;
->  }
->  
-> +static int tegra_emc_devfreq_target(struct device *dev, unsigned long *freq,
-> +				    u32 flags)
-> +{
-> +	struct tegra_emc *emc = dev_get_drvdata(dev);
-> +	struct dev_pm_opp *opp;
-> +	unsigned long rate;
-> +
-> +	opp = devfreq_recommended_opp(dev, freq, flags);
-> +	if (IS_ERR(opp)) {
-> +		dev_err(dev, "failed to find opp for %lu Hz\n", *freq);
-> +		return PTR_ERR(opp);
-> +	}
-> +
-> +	rate = dev_pm_opp_get_freq(opp);
-> +	dev_pm_opp_put(opp);
-> +
-> +	return emc_set_min_rate(emc, rate, EMC_RATE_DEVFREQ);
-> +}
-> +
-> +static int tegra_emc_devfreq_get_dev_status(struct device *dev,
-> +					    struct devfreq_dev_status *stat)
-> +{
-> +	struct tegra_emc *emc = dev_get_drvdata(dev);
-> +
-> +	/* freeze counters */
-> +	writel_relaxed(EMC_PWR_GATHER_DISABLE, emc->regs + EMC_STAT_CONTROL);
-> +
-> +	/*
-> +	 * busy_time:  number of clocks EMC request was accepted
-> +	 * total_time: number of clocks PWR_GATHER control was set to ENABLE
-> +	 */
-> +	stat->busy_time = readl_relaxed(emc->regs + EMC_STAT_PWR_COUNT);
-> +	stat->total_time = readl_relaxed(emc->regs + EMC_STAT_PWR_CLOCKS);
-> +	stat->current_frequency = clk_get_rate(emc->clk);
-> +
-> +	/* clear counters and restart */
-> +	writel_relaxed(EMC_PWR_GATHER_CLEAR, emc->regs + EMC_STAT_CONTROL);
-> +	writel_relaxed(EMC_PWR_GATHER_ENABLE, emc->regs + EMC_STAT_CONTROL);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct devfreq_dev_profile tegra_emc_devfreq_profile = {
-> +	.polling_ms	= 30,
-> +	.target		= tegra_emc_devfreq_target,
-> +	.get_dev_status	= tegra_emc_devfreq_get_dev_status,
-> +};
-> +
-> +static int tegra_emc_devfreq_init(struct tegra_emc *emc)
-> +{
-> +	int err;
-> +
-> +	/*
-> +	 * PWR_COUNT is 1/2 of PWR_CLOCKS at max, and thus, the up-threshold
-> +	 * should be less than 50.  Secondly, multiple active memory clients
-> +	 * may cause over 20% of lost clock cycles due to stalls caused by
-> +	 * competing memory accesses.  This means that threshold should be
-> +	 * set to a less than 30 in order to have a properly working governor.
-> +	 */
-> +	emc->ondemand_data.upthreshold = 20;
-> +
-> +	/*
-> +	 * Reset statistic gathers state, select global bandwidth for the
-> +	 * statistics collection mode and set clocks counter saturation
-> +	 * limit to maximum.
-> +	 */
-> +	writel_relaxed(0x00000000, emc->regs + EMC_STAT_CONTROL);
-> +	writel_relaxed(0x00000000, emc->regs + EMC_STAT_LLMC_CONTROL);
-> +	writel_relaxed(0xffffffff, emc->regs + EMC_STAT_PWR_CLOCK_LIMIT);
-> +
-> +	emc->devfreq = devfreq_add_device(emc->dev, &tegra_emc_devfreq_profile,
-> +					  DEVFREQ_GOV_SIMPLE_ONDEMAND,
-> +					  &emc->ondemand_data);
-
-Do you want to use 'devfreq_add_device' instead of
-'devm_devfreq_add_device()'? If you have to use 'devfreq_add_device'
-due to some reason, you need to call 'devfreq_remove_device' on exit.
-
-> +	if (IS_ERR(emc->devfreq)) {
-> +		err = PTR_ERR(emc->devfreq);
-> +		dev_err(emc->dev, "failed to initialize devfreq: %d", err);
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int tegra_emc_probe(struct platform_device *pdev)
->  {
->  	struct device_node *np;
-> @@ -1019,6 +1110,7 @@ static int tegra_emc_probe(struct platform_device *pdev)
->  	tegra_emc_rate_requests_init(emc);
->  	tegra_emc_debugfs_init(emc);
->  	tegra_emc_interconnect_init(emc);
-> +	tegra_emc_devfreq_init(emc);
->  
->  	/*
->  	 * Don't allow the kernel module to be unloaded. Unloading adds some
-> 
-
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+On Wed, Nov 4, 2020 at 1:17 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Wed, 2020-11-04 at 12:43 +1100, Victor Ding wrote:
+> > On Wed, Nov 4, 2020 at 4:09 AM Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > On Tue, 2020-11-03 at 17:10 +1100, Victor Ding wrote:
+> > > > On Mon, Nov 2, 2020 at 12:39 PM Zhang Rui <rui.zhang@intel.com>
+> > > > wrote:
+> > > > > On Tue, 2020-10-27 at 07:23 +0000, Victor Ding wrote:
+> > > > > > This patch enables AMD Fam17h RAPL support for the power
+> > > > > > capping
+> > > > > > framework. The support is as per AMD Fam17h Model31h (Zen2)
+> > > > > > and
+> > > > > > model 00-ffh (Zen1) PPR.
+> > > > > >
+> > > > > > Tested by comparing the results of following two sysfs
+> > > > > > entries
+> > > > > > and
+> > > > > > the
+> > > > > > values directly read from corresponding MSRs via
+> > > > > > /dev/cpu/[x]/msr:
+> > > > > >   /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
+> > > > > >   /sys/class/powercap/intel-rapl/intel-rapl:0/intel-
+> > > > > > rapl:0:0/energy_uj
+> > >
+> > > Is this for just energy reporting? No capping of power?
+> > Correct, the hardware does not support capping of power.
+> I wonder if there is no capping, is this the right interface?
+> Do you have specific user space, which cares about this?
+We have tools that previously developed to measure energy status
+on Intel via the powercap interface. Powercap is the only interface
+allowing reading RAPL energy counters without requiring MSR access
+privileges. We want to use these tools on AMD with minimal modifications.
+I believe the powercap interface should support these counters,
+regardless of the use cases, mainly for two reasons:
+1. Powercap interface already supports monitoring-only power domains,
+e.g. power limit is locked by BIOS or the (Intel) CPU does not expose an
+MSR for certain power domains. The latter is the exact situation on AMD;
+2. As AMD has partially introduced the equivalent of Intel's RAPL, we
+should leverage this opportunity to reduce the divergence in the APIs. i.e.
+OS as a hardware abstraction layer should allow users to use the same
+set of APIs to access RAPL features if it issupported on both Intel and AMD.
+In this specific case, if users can query for Intel's RAPL counters via
+powercap, they should be able to do so as well for AMD's.
+>
+> I think these counters are already exposed via hwmon sysf.
+Yes, they were introduced early this year. However, it is not the same as
+the counters exposed via powercap interface: powercap exposes the
+actual value of the energy counters while hwmon adds an accumulation
+layer on top.
+In addition, I don't think Intel's RAPL counters are exposed via hwmon;
+therefore: 1. existing fine grade power monitoring tools are not based on
+hwmon; 2. new tools cannot query the same set of counters via the same
+API so that they have to actively maintain two sets of logic.
+>
+> Thanks,
+> Srinivas
+>
+> > > Thanks,
+> > > Srinivas
+> > >
+> > >
+> > > > > > Signed-off-by: Victor Ding <victording@google.com>
+> > > > > > Acked-by: Kim Phillips <kim.phillips@amd.com>
+> > > > > >
+> > > > > >
+> > > > > > ---
+> > > > > >
+> > > > > > Changes in v3:
+> > > > > > By Victor Ding <victording@google.com>
+> > > > > >  - Rebased to the latest code.
+> > > > > >  - Created a new rapl_defaults for AMD CPUs.
+> > > > > >  - Removed redundant setting to zeros.
+> > > > > >  - Stopped using the fake power limit domain 1.
+> > > > > >
+> > > > > > Changes in v2:
+> > > > > > By Kim Phillips <kim.phillips@amd.com>:
+> > > > > >  - Added Kim's Acked-by.
+> > > > > >  - Added Daniel Lezcano to Cc.
+> > > > > >  - (No code change).
+> > > > > >
+> > > > > >  arch/x86/include/asm/msr-index.h     |  1 +
+> > > > > >  drivers/powercap/intel_rapl_common.c |  6 ++++++
+> > > > > >  drivers/powercap/intel_rapl_msr.c    | 20
+> > > > > > +++++++++++++++++++-
+> > > > > >  3 files changed, 26 insertions(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/arch/x86/include/asm/msr-index.h
+> > > > > > b/arch/x86/include/asm/msr-index.h
+> > > > > > index 21917e134ad4..c36a083c8ec0 100644
+> > > > > > --- a/arch/x86/include/asm/msr-index.h
+> > > > > > +++ b/arch/x86/include/asm/msr-index.h
+> > > > > > @@ -327,6 +327,7 @@
+> > > > > >  #define MSR_PP1_POLICY                       0x00000642
+> > > > > >
+> > > > > >  #define MSR_AMD_RAPL_POWER_UNIT              0xc0010299
+> > > > > > +#define MSR_AMD_CORE_ENERGY_STATUS           0xc001029a
+> > > > > >  #define MSR_AMD_PKG_ENERGY_STATUS    0xc001029b
+> > > > > >
+> > > > > >  /* Config TDP MSRs */
+> > > > > > diff --git a/drivers/powercap/intel_rapl_common.c
+> > > > > > b/drivers/powercap/intel_rapl_common.c
+> > > > > > index 0b2830efc574..bedd780bed12 100644
+> > > > > > --- a/drivers/powercap/intel_rapl_common.c
+> > > > > > +++ b/drivers/powercap/intel_rapl_common.c
+> > > > > > @@ -1011,6 +1011,10 @@ static const struct rapl_defaults
+> > > > > > rapl_defaults_cht = {
+> > > > > >       .compute_time_window = rapl_compute_time_window_atom,
+> > > > > >  };
+> > > > > >
+> > > > > > +static const struct rapl_defaults rapl_defaults_amd = {
+> > > > > > +     .check_unit = rapl_check_unit_core,
+> > > > > > +};
+> > > > > > +
+> > > > >
+> > > > > why do we need power_unit and time_unit if we only want to
+> > > > > expose
+> > > > > the
+> > > > > energy counter?
+> > > > AMD's Power Unit MSR provides identical information as Intel's,
+> > > > including
+> > > > time units, power units, and energy status units. By reusing the
+> > > > check unit
+> > > > method, we could avoid code duplication as well as easing future
+> > > > enhance-
+> > > > ment when AMD starts to support power limits.
+> > > > > Plus, in rapl_init_domains(), PL1 is enabled for every RAPL
+> > > > > Domain
+> > > > > blindly, I'm not sure how this is handled on the AMD CPUs.
+> > > > > Is PL1 invalidated by rapl_detect_powerlimit()? or is it still
+> > > > > registered as a valid constraint into powercap sysfs I/F?
+> > > > AMD's CORE_ENERGY_STAT MSR is like Intel's PP0_ENERGY_STATUS;
+> > > > therefore, PL1 also always exists on AMD.
+> > > > rapl_detect_powerlimit()
+> > > > correctly
+> > > > markes the domain as monitoring-only after finding power limit
+> > > > MSRs
+> > > > do not
+> > > > exist.
+> > > > > Currently, the code makes the assumption that there is only on
+> > > > > power
+> > > > > limit if priv->limits[domain_id] not set, we probably need to
+> > > > > change
+> > > > > this if we want to support RAPL domains with no power limit.
+> > > > The existing code already supports RAPL domains with no power
+> > > > limit:
+> > > > PL1 is
+> > > > enabled when there is zero or one power limit,
+> > > > rapl_detect_powerlimit() will then
+> > > > mark if PL1 is monitoring-only if power limit MSRs do not exist.
+> > > > Both
+> > > > AMD's RAPL
+> > > > domains are monitoring-only and are correctly marked and handled.
+> > > > > thanks,
+> > > > > rui
+> > > > > >  static const struct x86_cpu_id rapl_ids[] __initconst = {
+> > > > > >       X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE,         &rapl_d
+> > > > > > efau
+> > > > > > lt
+> > > > > > s_core),
+> > > > > >       X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE_X,       &rapl_d
+> > > > > > efau
+> > > > > > lts_core),
+> > > > > > @@ -1061,6 +1065,8 @@ static const struct x86_cpu_id
+> > > > > > rapl_ids[]
+> > > > > > __initconst = {
+> > > > > >
+> > > > > >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &rapl_d
+> > > > > > efau
+> > > > > > lts_hsw_se
+> > > > > > rver),
+> > > > > >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &rapl_d
+> > > > > > efau
+> > > > > > lts_hsw_se
+> > > > > > rver),
+> > > > > > +
+> > > > > > +     X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_amd),
+> > > > > >       {}
+> > > > > >  };
+> > > > > >  MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
+> > > > > > diff --git a/drivers/powercap/intel_rapl_msr.c
+> > > > > > b/drivers/powercap/intel_rapl_msr.c
+> > > > > > index a819b3b89b2f..78213d4b5b16 100644
+> > > > > > --- a/drivers/powercap/intel_rapl_msr.c
+> > > > > > +++ b/drivers/powercap/intel_rapl_msr.c
+> > > > > > @@ -49,6 +49,14 @@ static struct rapl_if_priv
+> > > > > > rapl_msr_priv_intel
+> > > > > > = {
+> > > > > >       .limits[RAPL_DOMAIN_PLATFORM] = 2,
+> > > > > >  };
+> > > > > >
+> > > > > > +static struct rapl_if_priv rapl_msr_priv_amd = {
+> > > > > > +     .reg_unit = MSR_AMD_RAPL_POWER_UNIT,
+> > > > > > +     .regs[RAPL_DOMAIN_PACKAGE] = {
+> > > > > > +             0, MSR_AMD_PKG_ENERGY_STATUS, 0, 0, 0 },
+> > > > > > +     .regs[RAPL_DOMAIN_PP0] = {
+> > > > > > +             0, MSR_AMD_CORE_ENERGY_STATUS, 0, 0, 0 },
+> > > > > > +};
+> > > > > > +
+> > > > > >  /* Handles CPU hotplug on multi-socket systems.
+> > > > > >   * If a CPU goes online as the first CPU of the physical
+> > > > > > package
+> > > > > >   * we add the RAPL package to the system. Similarly, when
+> > > > > > the
+> > > > > > last
+> > > > > > @@ -138,7 +146,17 @@ static int rapl_msr_probe(struct
+> > > > > > platform_device
+> > > > > > *pdev)
+> > > > > >       const struct x86_cpu_id *id =
+> > > > > > x86_match_cpu(pl4_support_ids);
+> > > > > >       int ret;
+> > > > > >
+> > > > > > -     rapl_msr_priv = &rapl_msr_priv_intel;
+> > > > > > +     switch (boot_cpu_data.x86_vendor) {
+> > > > > > +     case X86_VENDOR_INTEL:
+> > > > > > +             rapl_msr_priv = &rapl_msr_priv_intel;
+> > > > > > +             break;
+> > > > > > +     case X86_VENDOR_AMD:
+> > > > > > +             rapl_msr_priv = &rapl_msr_priv_amd;
+> > > > > > +             break;
+> > > > > > +     default:
+> > > > > > +             pr_err("intel-rapl does not support CPU vendor
+> > > > > > %d\n",
+> > > > > > boot_cpu_data.x86_vendor);
+> > > > > > +             return -ENODEV;
+> > > > > > +     }
+> > > > > >       rapl_msr_priv->read_raw = rapl_msr_read_raw;
+> > > > > >       rapl_msr_priv->write_raw = rapl_msr_write_raw;
+> > > > > >
+> > > > Best regards,
+> > > > Victor Ding
+> > Best regards,
+> > Victor Ding
+>
+Best regards,
+Victor Ding
