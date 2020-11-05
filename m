@@ -2,128 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A884B2A7D3F
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 12:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711432A7D0D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 12:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729113AbgKELhp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Nov 2020 06:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730382AbgKELey (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Nov 2020 06:34:54 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AC2C0613CF
-        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 03:34:53 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id w14so1341794wrs.9
-        for <linux-pm@vger.kernel.org>; Thu, 05 Nov 2020 03:34:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cmA911j1PA5rQEtu+2qgyW5r4PKGKN0v18j0iAtPX8A=;
-        b=dksTi42d3P5XqRJKwuAYbMySrRQ2rsJhcDSLN1KEag0O3OScl72x+N37GM6rKQ+QSG
-         RbGpklDb8WtY5jqFtV9DyH5BONe+6QPSyTPd+dy49JjsGiSVe0eC6jBj+DEx5MIpUiGC
-         VBTmk/FO06W9gmACoB1le/pm8UO+4WkN+8vH5rIedPYb6IbeO6SNo65sYuUsgchxlvzH
-         WFzvSWzRLKT1hZJHe82M8VNLbOQJItfE1keyyz6HDICxkYCN6c1oO+fz3UuBxyGduGvk
-         n+QWB4wjcB9XpEXgauVK7q5DilZhmx8UHQ56LCVvPMTsVmUrVnIAcsHHkqh5/cTm3/9B
-         KtTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cmA911j1PA5rQEtu+2qgyW5r4PKGKN0v18j0iAtPX8A=;
-        b=e6x/sk+4NALsWs7vuAvjBjqCdaY0IO4YJq/HKBLlUEX5oAIh/4KXdv0Pm2Qxt4A5P+
-         Uquu9H+CoSFoE+mslm9VJ67dhwBPSV1MesY970cAeC2I9MaSa9rDPyb0/7YCmwYzhhZG
-         Vbu7csKaez5u5tmN2Ir/2Vj+B5dbTWQqYgd0dfTSv/uSuDxw41jstaaPMn+AbanQUDq8
-         3WGxSdz8CLmrUiw3GDb9e1OiTAKuFfWj7w9WcR9WZOzcZd2IEWwxOr/VG67VKNJ9BVo3
-         zgZX96CMU9ddPzoiX125L96x4w0B7tSsFL86gn4uoF9iki0xKLIIEpCqwn4msqO4TViy
-         gdag==
-X-Gm-Message-State: AOAM531sBWmQbMr/XbT41YbCkFQySpgX+L7uHSod8Ik9mkNyVa2SuGG7
-        lSOTXhfd2NmPYypm+dRO64zXbA==
-X-Google-Smtp-Source: ABdhPJyqCVI2yT0sKA5lcM5jmRQT5Pg3GVU37ZdR7ozNbZ2aBXkXolrWJ9Pq+KaAMiJyA2wRwVYU+Q==
-X-Received: by 2002:adf:e388:: with SMTP id e8mr2371381wrm.65.1604576092286;
-        Thu, 05 Nov 2020 03:34:52 -0800 (PST)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-142-252.adsl.proxad.net. [82.252.142.252])
-        by smtp.googlemail.com with ESMTPSA id v123sm2271907wme.7.2020.11.05.03.34.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2020 03:34:51 -0800 (PST)
-Subject: Re: [PATCH] thermal: Rearrange thermal_zone_device_set_polling()
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <c024f35421c67d7b1a3a20bc280fb5131ce6db43.1604567599.git.viresh.kumar@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <ce85bf38-c77c-c8f9-0bd6-f7c598078e7a@linaro.org>
-Date:   Thu, 5 Nov 2020 12:32:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730344AbgKELd5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Nov 2020 06:33:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54232 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730342AbgKELdz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Nov 2020 06:33:55 -0500
+Received: from kernel.org (unknown [2.55.183.164])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B88CD2078E;
+        Thu,  5 Nov 2020 11:33:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604576034;
+        bh=XF8AFYO6bCr4yR/xfLGLwsLQBboi2XjYzZ3lYdi07mQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O5NamY7Z8bpeRF5e27pgfGmymIeBQK9j8XG2gMXDjk8aw+eMLitnhVpAzHAcLwHhk
+         Sau6clNChqmtpHyfG8qukI1nlUaCTcmwOyX21+Rglf3ECyVc+/suIMbLHw9rP9no/V
+         w2/7NKEKvUcFmM9Q4PjHmX+gHCO2wRPhSdhuvRyw=
+Date:   Thu, 5 Nov 2020 13:33:33 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Lameter <cl@linux.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <len.brown@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v4 2/4] PM: hibernate: make direct map manipulations more
+ explicit
+Message-ID: <20201105113333.GY4879@kernel.org>
+References: <20201103162057.22916-1-rppt@kernel.org>
+ <20201103162057.22916-3-rppt@kernel.org>
+ <9a0780b4-35f8-0ded-c473-d8ab4a26ade5@suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <c024f35421c67d7b1a3a20bc280fb5131ce6db43.1604567599.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a0780b4-35f8-0ded-c473-d8ab4a26ade5@suse.cz>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/11/2020 10:13, Viresh Kumar wrote:
-> Rearrange thermal_zone_device_set_polling() to make it more readable and
-> reduce duplicate code.
+On Wed, Nov 04, 2020 at 06:40:28PM +0100, Vlastimil Babka wrote:
+> On 11/3/20 5:20 PM, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > When DEBUG_PAGEALLOC or ARCH_HAS_SET_DIRECT_MAP is enabled a page may be
+> > not present in the direct map and has to be explicitly mapped before it
+> > could be copied.
+> > 
+> > Introduce hibernate_map_page() that will explicitly use
+> > set_direct_map_{default,invalid}_noflush() for ARCH_HAS_SET_DIRECT_MAP case
+> > and debug_pagealloc_map_pages() for DEBUG_PAGEALLOC case.
+> > 
+> > The remapping of the pages in safe_copy_page() presumes that it only
+> > changes protection bits in an existing PTE and so it is safe to ignore
+> > return value of set_direct_map_{default,invalid}_noflush().
+> > 
+> > Still, add a pr_warn() so that future changes in set_memory APIs will not
+> > silently break hibernation.
+> > 
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Reviewed-by: David Hildenbrand <david@redhat.com>
+> > Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-
-Hi Viresh,
-
-I have a series where this function is reworked and conflicts with your
-changes. The delay is converted into jiffies at init time and no
-conversion happen in this function anymore.
-
-Do you mind if we discard this patch ?
-
-
->  drivers/thermal/thermal_core.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
 > 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index c6d74bc1c90b..7dfab370a369 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -291,16 +291,17 @@ static int __init thermal_register_governors(void)
->  static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
->  					    int delay)
->  {
-> -	if (delay > 1000)
-> -		mod_delayed_work(system_freezable_power_efficient_wq,
-> -				 &tz->poll_queue,
-> -				 round_jiffies(msecs_to_jiffies(delay)));
-> -	else if (delay)
-> +	if (delay) {
-> +		int time = msecs_to_jiffies(delay);
-> +
-> +		if (delay > 1000)
-> +			time = round_jiffies(time);
-> +
->  		mod_delayed_work(system_freezable_power_efficient_wq,
-> -				 &tz->poll_queue,
-> -				 msecs_to_jiffies(delay));
-> -	else
-> +				 &tz->poll_queue, time);
-> +	} else {
->  		cancel_delayed_work(&tz->poll_queue);
-> +	}
->  }
->  
->  static inline bool should_stop_polling(struct thermal_zone_device *tz)
-> 
+> The bool param is a bit more acceptable here, being a private API. But if
+> debug_pagealloc_map_pages() becomes split, then it might be easier to split
+> this one too...
 
+Let's split here as well.
+
+> > ---
+> >   include/linux/mm.h      | 12 ------------
+> >   kernel/power/snapshot.c | 32 ++++++++++++++++++++++++++++++--
+> >   2 files changed, 30 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 1fc0609056dc..14e397f3752c 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -2927,16 +2927,6 @@ static inline bool debug_pagealloc_enabled_static(void)
+> >   #if defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP)
+> >   extern void __kernel_map_pages(struct page *page, int numpages, int enable);
+> > -/*
+> > - * When called in DEBUG_PAGEALLOC context, the call should most likely be
+> > - * guarded by debug_pagealloc_enabled() or debug_pagealloc_enabled_static()
+> > - */
+> > -static inline void
+> > -kernel_map_pages(struct page *page, int numpages, int enable)
+> > -{
+> > -	__kernel_map_pages(page, numpages, enable);
+> > -}
+> > -
+> >   static inline void debug_pagealloc_map_pages(struct page *page,
+> >   					     int numpages, int enable)
+> >   {
+> > @@ -2948,8 +2938,6 @@ static inline void debug_pagealloc_map_pages(struct page *page,
+> >   extern bool kernel_page_present(struct page *page);
+> >   #endif	/* CONFIG_HIBERNATION */
+> >   #else	/* CONFIG_DEBUG_PAGEALLOC || CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+> > -static inline void
+> > -kernel_map_pages(struct page *page, int numpages, int enable) {}
+> >   static inline void debug_pagealloc_map_pages(struct page *page,
+> >   					     int numpages, int enable) {}
+> >   #ifdef CONFIG_HIBERNATION
+> > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> > index 46b1804c1ddf..57d54b9d84bb 100644
+> > --- a/kernel/power/snapshot.c
+> > +++ b/kernel/power/snapshot.c
+> > @@ -76,6 +76,34 @@ static inline void hibernate_restore_protect_page(void *page_address) {}
+> >   static inline void hibernate_restore_unprotect_page(void *page_address) {}
+> >   #endif /* CONFIG_STRICT_KERNEL_RWX  && CONFIG_ARCH_HAS_SET_MEMORY */
+> > +static inline void hibernate_map_page(struct page *page, int enable)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
+> > +		unsigned long addr = (unsigned long)page_address(page);
+> > +		int ret;
+> > +
+> > +		/*
+> > +		 * This should not fail because remapping a page here means
+> > +		 * that we only update protection bits in an existing PTE.
+> > +		 * It is still worth to have a warning here if something
+> > +		 * changes and this will no longer be the case.
+> > +		 */
+> > +		if (enable)
+> > +			ret = set_direct_map_default_noflush(page);
+> > +		else
+> > +			ret = set_direct_map_invalid_noflush(page);
+> > +
+> > +		if (ret) {
+> > +			pr_warn_once("Failed to remap page\n");
+> > +			return;
+> > +		}
+> > +
+> > +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> > +	} else {
+> > +		debug_pagealloc_map_pages(page, 1, enable);
+> > +	}
+> > +}
+> > +
+> >   static int swsusp_page_is_free(struct page *);
+> >   static void swsusp_set_page_forbidden(struct page *);
+> >   static void swsusp_unset_page_forbidden(struct page *);
+> > @@ -1355,9 +1383,9 @@ static void safe_copy_page(void *dst, struct page *s_page)
+> >   	if (kernel_page_present(s_page)) {
+> >   		do_copy_page(dst, page_address(s_page));
+> >   	} else {
+> > -		kernel_map_pages(s_page, 1, 1);
+> > +		hibernate_map_page(s_page, 1);
+> >   		do_copy_page(dst, page_address(s_page));
+> > -		kernel_map_pages(s_page, 1, 0);
+> > +		hibernate_map_page(s_page, 0);
+> >   	}
+> >   }
+> > 
+> 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Sincerely yours,
+Mike.
