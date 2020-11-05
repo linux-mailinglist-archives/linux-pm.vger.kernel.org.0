@@ -2,118 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3292A8240
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 16:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52952A828B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Nov 2020 16:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730871AbgKEPd2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Nov 2020 10:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730660AbgKEPd1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Nov 2020 10:33:27 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8FFC0613CF
-        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 07:33:27 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id h62so2014673wme.3
-        for <linux-pm@vger.kernel.org>; Thu, 05 Nov 2020 07:33:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xhrjppuUR0U0zAdxI1i2VBSzdI0X93cvA2RDgoE5I/A=;
-        b=zxZc3zaO6v6Ddh1V6Q4ZxA1WVv4sNQLzg41jV4okODDkGaLnh8Aq6DFsKM3pugZP8a
-         N+yoonk4CK+3CPMqlQwutZPy1lRYYeuCjgCIfrBJXEVCzDgYIJV2crfu/S94tUSV8noG
-         6d5xv/IYcYMq/ChWrWBPEq6oT6cTzgvkwyPgTrLQxhMV8nCS7kW1SqP7tkJKD8rrYrnv
-         r5z8VfRXYix/lE9/ftDshpoq2ib1DqkbHjWEZyARa0eAt5sQRIzYec9LMbxcPHPd37kl
-         Nq0zpHJhu1X5yVL0t4020ZfYn4bxSA3mamOgeajxDqfGBh44DGR69y2uOFuSplSXfNNv
-         QAsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xhrjppuUR0U0zAdxI1i2VBSzdI0X93cvA2RDgoE5I/A=;
-        b=qiZtURVpQC+98ULUgGlbbvp0MHH2NAYgqxTaHP2XEmBETRLa4ZPC25TSYVcjahGxuo
-         Cqadlp68JnQqIGOcFzHNARM3YwEpDn71L5X2If7LFt8wLKjz1XrHl3DLVcgGbGTrsgRp
-         NdV9Z4a2WE0p83qVzfScvbtSoWsTDhLOZucd3JczyrvZFMWu8kF3ITOvgOSueP06K+oT
-         9arz+oWYohM7k9UBUrN5gVz+o5MBTv59xmOf1C5fiejQBLKgoAyaM9bK8Pc8LftDW6h/
-         Ng029NUh3hWpO2r2Zs2JIPdX2a7qF+FcPHPAMTI2mazuSq8DkmVOCQenQQ2nayWqPF8K
-         c8OQ==
-X-Gm-Message-State: AOAM532Tj0YrplOrAy1UMY3NiwVQXlNl1bmwujQ5RSS47hc00+RuxQ1W
-        aEIwbF96Z2k/GPWsaIPfUbnNFA==
-X-Google-Smtp-Source: ABdhPJwrFY8AfEYapEVmWWqIKBxWdMhOheQYqFNnfrUWlekcEp5NQpECShJOrCNQ+4pvQY6zwY4q6g==
-X-Received: by 2002:a7b:ce0e:: with SMTP id m14mr3494256wmc.17.1604590405844;
-        Thu, 05 Nov 2020 07:33:25 -0800 (PST)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-142-252.adsl.proxad.net. [82.252.142.252])
-        by smtp.googlemail.com with ESMTPSA id s202sm2809098wme.39.2020.11.05.07.33.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2020 07:33:25 -0800 (PST)
-Subject: Re: [PATCH 1/5] cpuidle: Remove pointless stub
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20201015144431.9979-1-daniel.lezcano@linaro.org>
- <CAJZ5v0gPYXhqP4CF+ep3tE7ov5zza0FW9_9cuDsiqznUX8CTCQ@mail.gmail.com>
- <8fef63ad-a081-e543-0c18-3797f3aaf1be@linaro.org>
- <CAJZ5v0g9d+Y2gGXaXiAiCFjJ=VmdCq+HBCkke4TbKqKkyXrsDw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <91e5b5ad-12e8-70a3-d476-f1d7ad734bb0@linaro.org>
-Date:   Thu, 5 Nov 2020 16:31:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1731089AbgKEPqP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Nov 2020 10:46:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:35914 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730721AbgKEPqP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Nov 2020 10:46:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A71C14BF;
+        Thu,  5 Nov 2020 07:46:14 -0800 (PST)
+Received: from localhost (unknown [10.1.198.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1CA483F718;
+        Thu,  5 Nov 2020 07:46:14 -0800 (PST)
+Date:   Thu, 5 Nov 2020 15:46:12 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Chris Redpath <chris.redpath@arm.com>
+Subject: Re: [PATCH v3 0/3] CPUFreq: Add support for cpu performance
+ dependencies
+Message-ID: <20201105154612.GA17891@arm.com>
+References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+ <20201103101840.yrgwmcjrnjn7n5q6@vireshk-i7>
+ <87558fa9-a4c6-38c9-bcc5-f736c0229f56@arm.com>
+ <CAKfTPtDvDqHjSFCmjc_D_8Tx0kosBneDxmDZRpG6XkgAnWE3nw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0g9d+Y2gGXaXiAiCFjJ=VmdCq+HBCkke4TbKqKkyXrsDw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtDvDqHjSFCmjc_D_8Tx0kosBneDxmDZRpG6XkgAnWE3nw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi guys,
 
-Hi Rafael,
-
-On 05/11/2020 15:14, Rafael J. Wysocki wrote:
-
-[ ... ]
-
->> [ ... ]
->>
->>> Applied (this patch alone) as 5.10-rc material with some minor edits
->>> in the changelog, thanks!
->>
->> Does it mean you disagree the other patches? Or are you waiting for more
->> comments?
+On Thursday 05 Nov 2020 at 15:25:53 (+0100), Vincent Guittot wrote:
+[..]
+> > > - Because of hardware co-ordination of otherwise co-ordinated CPUs,
+> > >   few things break. Thermal and EAS are some of the examples and so
+> > >   you are trying to fix them here by proving them the missing
+> > >   information again.
+> >
+> > Correct. And for this I have proposed two ways.
+> >
+> > >
+> > > - One other thing that breaks with this is freq-invariance in the
+> > >   scheduler, as the scheduler won't see the real frequencies the
+> > >   various CPUs are running at. Most of the hardware we have today
+> > >   doesn't have counters, like AMUs, not sure if all future ones based
+> > >   on SCMI will have that too, so how are they gong to be fixed ?
+> > >
+> >
+> > Correct. freq-invariance without counters is trying to do its best based on the
+> > information it has available. It definitely relies on the knowledge of the v/f
+> > domains to work at its best so I think in the case of per-cpu it will follow the
+> > same approach as others being affected (EAS, thermal).
 > 
-> Actually, both.
+> As frequency invariance has same problem as EAS and Thermal it would
+> be good to see the solution as part of this proposal like EAS and
+> Thermal
 > 
-> My primary concern regarding the modularization of cpuidle governors
-> is that they really belong to the core kernel.  They access the
-> internals thereof and the behavior of the idle loop in general depends
-> on what they do.
-> 
-> OTOH IMV a potential benefit resulting from allowing them to be
-> modular is very small, at least from the mainline perspective.
-> 
-> IOW this case is very similar to the modularization of the schedutil
-> cpufreq governor which we decided not to do for similar reasons.
 
-Yes, I recall this discussion.
+I think I was waiting for a consensus on patch 3/3, although I believe the
+discussion at [1] tended towards option 2: "each driver to store
+internally the performance dependencies and let the driver directly
+provide the correct cpumask for any consumer."
+The alternative was option 1: "add a new dependent_cpus cpumaks in
+cpufreq_policy", as Nicola mentioned in the commit message for 3/3.
 
-The purpose is to be more consistent with the governors in the other
-frameworks which can be module. But as you mentioned it, the benefit is
-small, so I'm fine to drop the series.
+If the choice is clear, I'm happy to take the FIE fixes in a separate
+set.
 
-Thanks
+Thanks,
+Ionela.
 
-  -- Daniel
+[1] https://lore.kernel.org/linux-arm-kernel/20200924095347.32148-3-nicola.mazzucato@arm.com/
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> >
+> > >   And if we even have to fix this (freq invariance), what's hardware
+> > >   coordination giving us that makes all this worth it ?
+> >
+> > I suppose this is more a generic question for all the platforms running with h/w
+> > coordination, but for our case is that the f/w will take care of the performance
+> > optimizations for us :)
+> >
+> > >
+> > > Sorry about the long list :)
+> >
+> > No problem at all. Thank you for your time on this and I hope I have made bits
+> > clearer.
+> >
+> > Nicola
+> >
+> > >
