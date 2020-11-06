@@ -2,115 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A42C2A927D
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 10:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625502A92EB
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 10:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbgKFJZs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 04:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725924AbgKFJZs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 04:25:48 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB8EC0613D2
-        for <linux-pm@vger.kernel.org>; Fri,  6 Nov 2020 01:25:48 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id q10so796711pfn.0
-        for <linux-pm@vger.kernel.org>; Fri, 06 Nov 2020 01:25:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RJ6te3ObHVnElBaSFwGNPPBac7krO/8OzGYULw7Qx98=;
-        b=XJ0VBIj7n/TNvivjTiFO2gl3zVbYjfnbWLt0sDNjhMX0SuSVXi+l6Zk5qlm1WTTBqq
-         ZeNzqpTeyloDaD4lnN42MFAbn160deOuXSa3H9O48AxVsyc6vhZNQy0cl7FuIcmIugqr
-         f9HK39X+AySWn2pEp9ZWDzzdXunuYpxKbiNNjsSg5QP8MPlwwOz/gGKT1DuSapSlgGl4
-         GMbcBx6/UYTk8qMLm4J9GvpBi8IpNTpci3sc9JgoIAaSu5XTBuFUEvvq/+ILQAzpykcS
-         QrI9APHgiOAv6v2tJC1FSmzWJoXqaAT32uHFqLVPMQlbT7EGwthj0sMjx8S51r/Gv/ep
-         wtKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RJ6te3ObHVnElBaSFwGNPPBac7krO/8OzGYULw7Qx98=;
-        b=D7Fcg8jawhE9sCTcrreQQvt0DyDxoxtmei61b/WwUL8OP1aYMHiMrtF0czevSW1KYw
-         lTw6Cun03kVi7SE6ou0m4mGon4ucNnv1gsgk+zqdEj8aNJXTexj7QJfK2m1cQw/GImlg
-         hAxBHP/OT92DFUPvHBu3jpP5WWlpWncbc3/Ek6/0If/r5s71CdOUN4xaooELO5tdfhiM
-         MgbEqh1tdqTCQ4SbKX5Eaw9cmCvmssozppsERz/T+4xg0AZnftTux3bpPw4Pvpa8g7P/
-         IK05E2BHHoVQY2zkUbRwoN4DHLGMOtDzFF91WRYfGuLI+Z6fGobaJR4K8EQd1wq5pb7l
-         rCBQ==
-X-Gm-Message-State: AOAM531OPGL0C9E2U4CYa4cvNiIHRe9dC/ZGqx0ShQKlSk527KEOyFd+
-        oc8/VaxPKLH8mqSPko0W8+oUHA==
-X-Google-Smtp-Source: ABdhPJz3XKub0XpZWCPKgN83lov2zPfROr1OuCkJt6Yz/rVIq3RO5XmJdbLmI8Pwc9ew4RaKAI8adA==
-X-Received: by 2002:a17:90b:1106:: with SMTP id gi6mr1627653pjb.70.1604654747918;
-        Fri, 06 Nov 2020 01:25:47 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id 17sm1360293pfu.160.2020.11.06.01.25.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Nov 2020 01:25:47 -0800 (PST)
-Date:   Fri, 6 Nov 2020 14:55:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     zhuguangqing83@gmail.com
-Cc:     amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        javi.merino@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhuguangqing <zhuguangqing@xiaomi.com>,
-        "v5 . 4+" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] thermal/drivers/cpufreq_cooling: Update cpufreq_state
- only if state has changed
-Message-ID: <20201106092545.2elo5o73ku3wj73b@vireshk-i7>
-References: <20201106092243.15574-1-zhuguangqing83@gmail.com>
-MIME-Version: 1.0
+        id S1726732AbgKFJje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 04:39:34 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.81]:17766 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbgKFJje (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 04:39:34 -0500
+X-Greylist: delayed 708 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Nov 2020 04:39:31 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604655569;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=j7aESjc/0bRrad+V3tWZYuZSAW5B8PRQvt1oCyac5Qs=;
+        b=lxorR4S1r3uhi/6ogAaC/kZLW1TJ5koWxds00O+7TVOkq89VYRQoI43R0nSDitXhGG
+        8gMmLJimcc1W7GA91js2bwyE6dn9Ved0vUeUW3TLfenHgpLvwx7SqJ+Ai37EAp8mBpgD
+        k4zFROtD0EWtoxGlnnF1LV1CFLORscUeVELregyQnbGGCQh/QV2x1Pvv1xH48ONm4XS8
+        3w2xtXRpvmgvyfl7kpX0AAA+PEg3OBHGtkGr/X/f7+QhrxZO2AZrwptbCRke62n7opEl
+        nzZayPzY7QKRrSS0KKHks0byEqA2EffuQAJDlqnKuRzvt4dMJ9zUx38YrJeDHkZnhdh2
+        UEDQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlSYXA4JMOs="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 47.3.3 DYNA|AUTH)
+        with ESMTPSA id d04888wA69RR0PU
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Fri, 6 Nov 2020 10:27:27 +0100 (CET)
+Subject: Re: [Letux-kernel] [REGRESSION] opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201106092243.15574-1-zhuguangqing83@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20201106085810.ubo3cikbg33x76lt@vireshk-i7>
+Date:   Fri, 6 Nov 2020 10:27:26 +0100
+Cc:     Andreas Kemnade <andreas@kemnade.info>, vireshk@kernel.org,
+        nm@ti.com, ulf.hansson@linaro.org, stephan@gerhold.net,
+        khilman@kernel.org, sboyd@kernel.org, linux-pm@vger.kernel.org,
+        rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <1600E1F6-2819-4858-9843-B29264F4C2E6@goldelico.com>
+References: <20201106001018.02200778@aktux> <20201106041441.uuz5vrtqeyn6ijdv@vireshk-i7> <8728D936-6583-407F-96CF-92AE95AAECDF@goldelico.com> <20201106085810.ubo3cikbg33x76lt@vireshk-i7>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+X-Mailer: Apple Mail (2.3124)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06-11-20, 17:22, zhuguangqing83@gmail.com wrote:
-> From: Zhuguangqing <zhuguangqing@xiaomi.com>
-> 
-> If state has not changed successfully and we updated cpufreq_state,
-> next time when the new state is equal to cpufreq_state (not changed
-> successfully last time), we will return directly and miss a
-> freq_qos_update_request() that should have been.
-> 
-> Fixes: 5130802ddbb1 ("thermal: cpu_cooling: Switch to QoS requests for freq limits")
-> Cc: v5.4+ <stable@vger.kernel.org> # v5.4+
-> Signed-off-by: Zhuguangqing <zhuguangqing@xiaomi.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> v2:
->   - Add Fixes: 5130802ddbb1 in log.
->   - Add Cc: v5.4+ <stable@vger.kernel.org> # v5.4+ in log.
->   - Add Acked-by: Viresh Kumar <viresh.kumar@linaro.org> in log.
->   - Delete an extra blank line.
-> ---
->  drivers/thermal/cpufreq_cooling.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index cc2959f22f01..612f063c1cfc 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -438,13 +438,11 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
->  	if (cpufreq_cdev->cpufreq_state == state)
->  		return 0;
->  
-> -	cpufreq_cdev->cpufreq_state = state;
-> -
->  	frequency = get_state_freq(cpufreq_cdev, state);
->  
->  	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
-> -
->  	if (ret > 0) {
-> +		cpufreq_cdev->cpufreq_state = state;
->  		cpus = cpufreq_cdev->policy->cpus;
->  		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
->  		capacity = frequency * max_capacity;
+Hi,
 
-Thanks Zhuguangqing.
+> Am 06.11.2020 um 09:58 schrieb Viresh Kumar <viresh.kumar@linaro.org>:
+>=20
+> On 06-11-20, 09:44, H. Nikolaus Schaller wrote:
+>>=20
+>>> Am 06.11.2020 um 05:14 schrieb Viresh Kumar =
+<viresh.kumar@linaro.org>:
+>>>=20
+>>> On 06-11-20, 00:10, Andreas Kemnade wrote:
+>>>> Hi,
+>>>>=20
+>>>> On the GTA04 (DM3730, devicetree omap3-gta04*) I get my console =
+flooded
+>>>> up with the following:
+>>>> [   24.517211] cpu cpu0: multiple regulators are not supported
+>>>> [   24.523040] cpufreq: __target_index: Failed to change cpu =
+frequency: -22
+>>>> [   24.537231] ------------[ cut here ]------------
+>>>> [   24.542083] WARNING: CPU: 0 PID: 5 at drivers/opp/core.c:678 =
+dev_pm_opp_set_rate+0x23c/0x494
+>>>> [   24.551086] Modules linked in: usb_f_ecm g_ether usb_f_rndis =
+u_ether libcomposite configfs phy_twl4030_usb omap2430 musb_hdrc overlay
+>>>> [   24.563842] CPU: 0 PID: 5 Comm: kworker/0:0 Tainted: G        W  =
+       5.9.0-rc1-00008-g629238068eb9 #14
+>>>> [   24.573852] Hardware name: Generic OMAP36xx (Flattened Device =
+Tree)
+>>>> [   24.580413] Workqueue: events dbs_work_handler
+>>>> [   24.585083] [<c010e6b4>] (unwind_backtrace) from [<c010a194>] =
+(show_stack+0x10/0x14)
+>>>> [   24.593200] [<c010a194>] (show_stack) from [<c0464ad0>] =
+(dump_stack+0x8c/0xac)
+>>>> [   24.600769] [<c0464ad0>] (dump_stack) from [<c01276a8>] =
+(__warn+0xcc/0xe4)
+>>>> [   24.608001] [<c01276a8>] (__warn) from [<c0127a3c>] =
+(warn_slowpath_fmt+0x74/0xa0)
+>>>> [   24.615844] [<c0127a3c>] (warn_slowpath_fmt) from [<c06364ac>] =
+(dev_pm_opp_set_rate+0x23c/0x494)
+>>>> [   24.625061] [<c06364ac>] (dev_pm_opp_set_rate) from [<c063ec08>] =
+(set_target+0x2c/0x4c)
+>>>> [   24.633453] [<c063ec08>] (set_target) from [<c063a950>] =
+(__cpufreq_driver_target+0x190/0x22c)
+>>>> [   24.642395] [<c063a950>] (__cpufreq_driver_target) from =
+[<c063d4e0>] (od_dbs_update+0xcc/0x158)
+>>>> [   24.651489] [<c063d4e0>] (od_dbs_update) from [<c063e090>] =
+(dbs_work_handler+0x2c/0x54)
+>>>> [   24.659881] [<c063e090>] (dbs_work_handler) from [<c013f71c>] =
+(process_one_work+0x210/0x358)
+>>>> [   24.668731] [<c013f71c>] (process_one_work) from [<c0140014>] =
+(worker_thread+0x22c/0x2d0)
+>>>> [   24.677307] [<c0140014>] (worker_thread) from [<c0144eac>] =
+(kthread+0x140/0x14c)
+>>>> [   24.685058] [<c0144eac>] (kthread) from [<c0100148>] =
+(ret_from_fork+0x14/0x2c)
+>>>> [   24.692626] Exception stack(0xde4b7fb0 to 0xde4b7ff8)
+>>>> [   24.697906] 7fa0:                                     00000000 =
+00000000 00000000 00000000
+>>>> [   24.706481] 7fc0: 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000 00000000
+>>>> [   24.715057] 7fe0: 00000000 00000000 00000000 00000000 00000013 =
+00000000
+>>>> [   24.722198] ---[ end trace 038b3f231fae6f81 ]---
+>>>>=20
+>>>> endlessly after the $subject commit. Any hints?
+>>>=20
+>>> The fix for this has been in linux-next for a couple of days and it
+>>> made it to linus/master yesterday.
+>>>=20
+>>> 47efcbcb340ic opp: Fix early exit from =
+dev_pm_opp_register_set_opp_helper()
+>=20
+> I think I may have accidentally pasted the wrong commit here. This is
+> the one which must have fixed it for you.
+>=20
+> commit 1f6620f87006 ("opp: Don't always remove static OPPs in =
+_of_add_opp_table_v1()")
 
--- 
-viresh
+Well, I did a cross-check and git revert 47efcbcb340 made the problem =
+come back.
+Maybe both patches are good and the first one hides the missing second =
+one.
+
+What I haven't checked is if all opps are available now. I just looked =
+for the omap to boot.
+
+>=20
+>=20
+>> Seems to fix our problems on gta04 (OMAP3).
+>> Otherwise we would have found that v5.10-rc3 magically solves it :)
+>=20
+> I assume you just ran linus's/master, otherwise the patch I shared
+> earlier won't have fixed the issue :)
+
+Yes, we just test with v5.10-rc2 and wait for -rc3 to come in some days.
+
+>=20
+>> Interestingly it did not affect OMAP5.
+>=20
+> Based on the DT I saw for omap5, it does use OPPv1 and so it shouldn't
+> have worked as well. It may be worth checking why it didn't get
+> affected earlier.
+>=20
+> You can see the populated OPPs for a platform with this:
+>=20
+> ls /sys/kernel/debug/opp/cpu*/*
+>=20
+> You shall see some difference with and without this patch. Or it may
+> be the case that you are adding dynamic OPPs with dev_pm_opp_add() and
+> so even after removing the static ones, it worked (though I wasn't
+> able to find that in the code).
+
+Ah, now as you tell this I remember that the last test on omap5 did not
+have any cpufreq info output. Although it did boot to login:.
+
+So I did not see a common reason in these quite different symptoms.
+
+I am sure that with -rc3 omap3 & omap5 will be ok again and I'll take a
+special look at it when testing other things.
+
+BR and thanks,
+Nikolaus
+
