@@ -2,107 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B63A2A9336
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 10:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8FD2A9428
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 11:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbgKFJrh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 04:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S1726974AbgKFKZr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 05:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726973AbgKFJrg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 04:47:36 -0500
-Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63034C0613D2
-        for <linux-pm@vger.kernel.org>; Fri,  6 Nov 2020 01:47:36 -0800 (PST)
-Received: by mail-vk1-xa44.google.com with SMTP id p201so109661vke.11
-        for <linux-pm@vger.kernel.org>; Fri, 06 Nov 2020 01:47:36 -0800 (PST)
+        with ESMTP id S1726758AbgKFKZr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 05:25:47 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C13C0613CF;
+        Fri,  6 Nov 2020 02:25:46 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id e7so889466pfn.12;
+        Fri, 06 Nov 2020 02:25:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=23W4y+M6abuLudmZYHb5EuUWkPwY6lV1mseRyEhWEi8=;
-        b=mCza6PKGULKR3KSLVi71jaHeGa6jbvf6eXzzXIBvNZeyIvCsGCa0s69whdIqeCnP5h
-         mBXASZSIMWro685Lrr3eqyNcGTqYWXcWrkmSjeghCw/RZcqBPaXJs2pxzzmkC37gHMRK
-         3JrHTfZywnCyf11o6Inei30zBTKv+nQNQGq04ubzXiaWxwoQfGdqG00g1CqlJGsB/BCy
-         SF+PPXvk4D69igY9N+Jk/R+pI2iIYDoA5XrYnZBYwQnr9ejxhUSjMb4vvY7rT7KHcnbY
-         27llEWNDyIS8qOTbGquBtsENdCDqQCx6NlIdaaRmBu5bYBGDhw2TSMH51pVRSps4IBkw
-         RIYA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=FLfHJOXQm1uej3hFUFpWXlA26tRNkCfwwdzbi5ScsSQ=;
+        b=boAnYnnlhauGDB9+l9QIEa/OGeuCUKGw0IVSxJN9gJdIC6hpZjnMNyZCqrt7ZNMHQH
+         JNLfY5fx2T/HPrDCz7hd+ifKm7zIUt7eLpf1GeGmHdQCmvp7eBQuMHrPlqoki1NVuCsu
+         lT0WnCkWIf5pvZ9cMAKm5dfsThtHn3sU0jxdWx8Hvkfd02p8fPuDhZZIK3O5pw+Q4nig
+         a6NqUtyUFW8iEL0JyBqyZzoVC/Eh8EpvDNTrbsCTv1yP5enjlX2tjuTndCnznUfvhuv+
+         Uic8zjjG78/Bka3OyV1IXZxlKLcO6E9PDLXdOWJGPfdm2XnenJjENK5yOKW/lAK3Bjhd
+         etSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=23W4y+M6abuLudmZYHb5EuUWkPwY6lV1mseRyEhWEi8=;
-        b=TEll9jmbA/MpDjcm4Fvi9ddijsdDlWUGNClYX1rNRmtM3ra4sDVwv7xAnrbdvLDztl
-         mUvqJM3CrVtOXvVzghFf9FWIcZda0TqzM0pm51ruf2utjQhDloDmdHFEwcy1XkSoyECE
-         lWnCv4ZVnab2BpgKWpoFhLYl2gHOrahoAeOS7w0qU6cgM5bldzpjbpnDPEXCGAQPNQVw
-         QeWnOm3FUxxdekbi1KB+0/8nM5HN77X7Wh9FPJh7nGkPC4aIxOlAuI9jROlla3TVv4h7
-         7evabTypMtVqwFtjfPI06hHOdxPYL4reidP/WXNSe0MbLDMC30YzqjVvTERf2+sJP0zY
-         FP3g==
-X-Gm-Message-State: AOAM531JXSSLgli8lYZxwAGjrMYX/mfGPdRcPQjFbN/CoEIoRo315UrS
-        6vw56SDwsRpghXZGRG9IJXD0wRo6hnamIUXnQt9+ddOnJGw=
-X-Google-Smtp-Source: ABdhPJyXTD4HNdZV3wzzfqQ8t69K2mMISGmdEjWNlqIkWraZz4pfH1N3k25yw1yNuJKt+bmqGH3xyqLHf33qIXEIte0=
-X-Received: by 2002:a1f:9682:: with SMTP id y124mr465715vkd.6.1604656055569;
- Fri, 06 Nov 2020 01:47:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20201106073358.8379-1-patrice.chotard@st.com>
-In-Reply-To: <20201106073358.8379-1-patrice.chotard@st.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 6 Nov 2020 10:46:58 +0100
-Message-ID: <CAPDyKFq94tpotN9P=pgBx+=deYQWzAYfFQWO3ejPOqAMN3PN=Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] PM: Add dev_wakeup_path() helper
-To:     Patrice CHOTARD <patrice.chotard@st.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Erwan Le Ray <erwan.leray@st.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        amelie.delaunay@st.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FLfHJOXQm1uej3hFUFpWXlA26tRNkCfwwdzbi5ScsSQ=;
+        b=ghrmwFxnRMhpG535Dp+/zat4DUUU2HdThflPW1aL9XxCzgb7YaJ62tQwDkmL33KS4T
+         6GNjKZHui+uXQdjBoVqApUtFmHemHNe0SroyFXAIyCueqOfMh+LSoVFiSKaBC4qAISTH
+         67YoeLCUeOgsAqmPykIFwJEM6R9Ny4oQUsgkdoay6KRxUdPRCHiDGzaoHVYYupfeXx8V
+         r0bKuplKNX2UuMd4ffjc8EjID8wV5fxsoYmG8J3mIuqfIEixZwZAve6zTMu8/FSbkLLs
+         WrITSvoi6eZSnnOUyEb7SgBvSQ/NtiZWunPt+QJGgp6jWpJnyCNmTVnTA1qERIHjaabD
+         VGAA==
+X-Gm-Message-State: AOAM531RC/2GYLrafbPXoIN7fgeze0+NB6p71MUSoBlW8h/ppzi5aImM
+        n5tcz5OcWuItikYpC5+6sIE=
+X-Google-Smtp-Source: ABdhPJyLnNz9MpjtBAmV2AxZf7EJzZAtleTlmjqsR3z/9TVuGk5DSmdR9uWoBTFar7lvtqlLVgMuNQ==
+X-Received: by 2002:aa7:8287:0:b029:142:2501:39ec with SMTP id s7-20020aa782870000b0290142250139ecmr1228237pfm.59.1604658345723;
+        Fri, 06 Nov 2020 02:25:45 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:57a:6823:8ab3:4b5d:4c53:f39b])
+        by smtp.gmail.com with ESMTPSA id g3sm1260633pgl.55.2020.11.06.02.25.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 Nov 2020 02:25:45 -0800 (PST)
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+To:     sre@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        gene_chen@richtek.com, Wilma.Wu@mediatek.com,
+        shufan_lee@richtek.com, cy_huang@richtek.com,
+        benjamin.chao@mediatek.com
+Subject: [PATCH v6 0/11] mfd: mt6360: Merge different sub-devices I2C read/write
+Date:   Fri,  6 Nov 2020 17:53:41 +0800
+Message-Id: <1604656432-10215-1-git-send-email-gene.chen.richtek@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 6 Nov 2020 at 08:34, <patrice.chotard@st.com> wrote:
->
-> From: Patrice Chotard <patrice.chotard@st.com>
->
-> Add dev_wakeup_path() helper to avoid to spread
-> dev->power.wakeup_path test in drivers.
->
-> Cc: amelie.delaunay@st.com,
->     erwan_leray@st.com,
->     fabrice.gasnier@st.com,
->     alexandre.torgue@st.com,
->     alain.volmat@st.com,
->     pierre-yves.mordret@st.com
->
-> *** BLURB HERE ***
+This patch series merge different sub-device I2C read/write into one Regmap and
+fix coding style for well-organized.
 
-:-)
+Gene Chen (11)
+  mfd: mt6360: Rearrange include file
+  mfd: mt6360: Remove redundant brackets around raw numbers
+  mfd: mt6360: Indicate sub-dev compatible name by using
+  mfd: mt6360: Combine mt6360 pmic/ldo resources into mt6360
+  mfd: mt6360: Rename mt6360_pmu_data by mt6360_ddata
+  mfd: mt6360: Rename mt6360_pmu by mt6360
+  mfd: mt6360: Remove handle_post_irq callback function
+  mfd: mt6360: Fix flow which is used to check ic exist
+  mfd: mt6360: Merge header file into driver and remove unuse register define
+  mfd: mt6360: Merge different sub-devices I2C read/write
+  mfd: mt6360: Remove MT6360 regulator of_compatible
 
->
-> Patrice Chotard (4):
->   PM / wakeup: Add dev_wakeup_path() helper
->   PM: domains: Make usage of device_wakeup_path() helper
->   PM: core: Make usage of device_wakeup_path() helper
->   i2c: stm32f7: Make usage of dev_wakeup_path() helper
->
->  drivers/base/power/domain.c      |  4 ++--
->  drivers/base/power/main.c        |  4 ++--
->  drivers/i2c/busses/i2c-stm32f7.c |  4 ++--
->  include/linux/pm_wakeup.h        | 10 ++++++++++
->  4 files changed, 16 insertions(+), 6 deletions(-)
->
-> --
-> 2.17.1
->
+ b/drivers/mfd/Kconfig       |    1 
+ b/drivers/mfd/mt6360-core.c |  555 +++++++++++++++++++++++++++++---------------
+ include/linux/mfd/mt6360.h  |  240 -------------------
+ 3 files changed, 377 insertions(+), 419 deletions(-)
 
-For the series:
+changelogs between v2 & v3
+- Replace mt6360_data to mt6360_ddata
+- Split I2C read/write to regmap driver
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+changelogs between v3 & v4
+- Merge back mt6360 regmap driver to MFD driver
 
-Kind regards
-Uffe
+changelogs between v4 & v5
+- use devm_regmap_init
+- define crc calculation magic number
+
+changelogs between v5 & v6
+- Remove unrelated change
+- Remove regulator device of_compatible
+
