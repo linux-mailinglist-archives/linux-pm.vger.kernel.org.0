@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EED2A9C7C
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 19:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6932A9C81
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 19:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728015AbgKFSjC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 13:39:02 -0500
-Received: from mail-ej1-f65.google.com ([209.85.218.65]:47081 "EHLO
-        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727996AbgKFSjC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 13:39:02 -0500
-Received: by mail-ej1-f65.google.com with SMTP id w13so3257903eju.13;
-        Fri, 06 Nov 2020 10:39:00 -0800 (PST)
+        id S1727257AbgKFSjU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 13:39:20 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:36035 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727897AbgKFSjU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 13:39:20 -0500
+Received: by mail-ed1-f67.google.com with SMTP id o20so2279259eds.3;
+        Fri, 06 Nov 2020 10:39:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=kS8UGMj8u7kmdp82DQZoU8AThXuv2qMeUIUJVXpPFg0=;
-        b=e94JVBAn3RPDu0XaCx44MTmp0UNZPDcPx/dGqF6jtBtKQZyQKFQxh+3/XLy48vMswl
-         0fJp06vJVvV3P/de+Z/rh7v/yeI+6WyoWypLxIaHx+wnL7D38nzldwgTSBtJYzcwN52b
-         43lzsubK5ez8f5QEWW3itz31PKgUiP6+gsVKhBZX3khEOmf9YxKnAPC07TP8bzT9AKfn
-         1cDFcxadfWeSBhk/gTcKod/J8T4qKJ2kf4rHoyK22QsnYuaQuK5lAtlaM0hhLSpECjvP
-         yxOwLT2wb6QAzu05LBY7YlBzDeuQp09iY9S4bfweMdYGKUe7YHjVMc2QICOuAwPQ3jAj
-         dlSg==
-X-Gm-Message-State: AOAM531vyh8Msvu9X7w8p4f/mkYbmYVHTz+OlknA0sQSDBX1dlwbUn3B
-        jwoUqDX9N4pRac+98o28/lQ=
-X-Google-Smtp-Source: ABdhPJzcC1h3f6tV7eDIDeRR9kukru5SAGG3SVamlaZS7gKvC+aj5wNwyPVX1PaEI66NBMNPgbM//g==
-X-Received: by 2002:a17:906:7f10:: with SMTP id d16mr3376737ejr.104.1604687940019;
-        Fri, 06 Nov 2020 10:39:00 -0800 (PST)
+        bh=u98Rgpeb4Nt49mc0QG8eEb+MB+Za9caOVTHP5k1gxr0=;
+        b=GNZqdZUQZJnyRCmM2ScQAoKrXjtpoL56yijpPQAVR3EJZhFLU0kAksC4UR49zhM0ry
+         61P5HebHFhbdnuEsi2E7GqO1nB4hjhuWx1jZUkIhPx6VcSoSzpcJxPQQbpFz85o2e8Ti
+         H5GpxY39vQiNd3yMJs+eQNfWtpfl9tiimRjsFe1LJCveoNsH6S9CdAvQ/KiCwMmuby6y
+         FGEubsOOk4CfkZ7h2fwRatU7LOVrm3st0MkhFvDUENQ22K6EuLkNrtRR7tFr5JPyuG2u
+         4AbO3oD+tCS8JNqJu55OySecxt3U7p2wAs8wjOvDXxPMH+xj/jmXhCRoitXHEN8Jg6ST
+         jlAQ==
+X-Gm-Message-State: AOAM533yRlytOemkfrZA9VqtRu+hOdYp5VZ7Me0XX4+9SKvQta5dCsyZ
+        U4YIgwlFYG2gGJuzrpvETxg=
+X-Google-Smtp-Source: ABdhPJxFr3F7asxGB0TOnmt+HUoticWJ2aCBZMi5JRtZ1kzSkCobKCu6kfaAs8KEsD4jnGtxvOiVsw==
+X-Received: by 2002:a05:6402:559:: with SMTP id i25mr3576305edx.128.1604687957598;
+        Fri, 06 Nov 2020 10:39:17 -0800 (PST)
 Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id l8sm1545278ejr.106.2020.11.06.10.38.58
+        by smtp.googlemail.com with ESMTPSA id j20sm1588358edt.4.2020.11.06.10.39.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 10:38:59 -0800 (PST)
-Date:   Fri, 6 Nov 2020 19:38:57 +0100
+        Fri, 06 Nov 2020 10:39:16 -0800 (PST)
+Date:   Fri, 6 Nov 2020 19:39:14 +0100
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
@@ -53,27 +53,27 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 18/47] dt-bindings: memory: tegra30: Add memory client
- IDs
-Message-ID: <20201106183857.GR65086@kozik-lap>
+Subject: Re: [PATCH v7 19/47] dt-bindings: memory: tegra124: Add memory
+ client IDs
+Message-ID: <20201106183914.GS65086@kozik-lap>
 References: <20201104164923.21238-1-digetx@gmail.com>
- <20201104164923.21238-19-digetx@gmail.com>
+ <20201104164923.21238-20-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201104164923.21238-19-digetx@gmail.com>
+In-Reply-To: <20201104164923.21238-20-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 07:48:54PM +0300, Dmitry Osipenko wrote:
+On Wed, Nov 04, 2020 at 07:48:55PM +0300, Dmitry Osipenko wrote:
 > Each memory client has unique hardware ID, add these IDs.
 > 
-> Acked-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  include/dt-bindings/memory/tegra30-mc.h | 67 +++++++++++++++++++++++++
->  1 file changed, 67 insertions(+)
+>  include/dt-bindings/memory/tegra124-mc.h | 68 ++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
 
 Thanks, applied.
 
