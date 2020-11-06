@@ -2,66 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A88D42A8FEB
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 08:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1A32A8FEE
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 08:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgKFHFc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 02:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S1726487AbgKFHFf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 02:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726504AbgKFHFb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 02:05:31 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5AC0613CF
-        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 23:05:31 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id 62so210478pgg.12
-        for <linux-pm@vger.kernel.org>; Thu, 05 Nov 2020 23:05:31 -0800 (PST)
+        with ESMTP id S1726375AbgKFHFe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 02:05:34 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63246C0613D2
+        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 23:05:34 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id u4so221993pgr.9
+        for <linux-pm@vger.kernel.org>; Thu, 05 Nov 2020 23:05:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bPLnUhtQ+dxcmE2HZpN7gVFh2Ut9iquGsDOuyt2kO74=;
-        b=u0KpNSdRcvSh+32Vu+x4+8GMjysg6sJiq7B/sGt8ogBO1oSA3jDOLGPpCS1Gd/cAFD
-         0OoWP2xdGgLxyacl2f604zjp6ou/DJEvb7GsBBpwq9GNFyEr3i+ft0RYetIgg368pllK
-         qyubNricG/aQ37BkTkdxMVIeklBhhk4gfbKt/nnOVGD2VLBE5cY+RfniKlVMt6O4Kl0r
-         p9IiJ+DagxIgUTl/1hWMRHfS/mjHy0xK3Md8d+d/W0zZG7OHXDgiICyfm20dMruPyqVX
-         5WJgMqWlFH64yHnPunk3djYTru3nfLWKkINRmr900FWq7VLdrUbBXAU5cT2iJp2VraFm
-         pyBg==
+        bh=ehPUCc4BBH4w6xwbXHXZ9YzZ1LHDSwHspwqvBRHLfG8=;
+        b=o5Zr52H5GnqwIwaEUT6XGHpZ+Rk+X0IvKQ47cS0hprikNcIhQd95tQWJJ9xoEnMC6a
+         qq0CgW4B20Qmt6WOLolyORfkDV888lAdzgcGn74AVqm+Knjd7N42MMbPeXXOyU1tL0J4
+         7GWqIJq+ACgU+jrTV5fuw+yggsYOAd9L/MAjYtgC1nzSfvtVI2U9LNiyJN2qZeqPGwJT
+         kTg9vCMFltVucT2XqAblwjqtX1+OttYzVhENqzJfjyUNCk5Q0u9WKxarQa1qqwrWbPQC
+         AB8UTDeC1bGUO/Eya7Tey2URIlSqyJuMquf4COHmuHqW+TX8lkHBRXwAhDKO1VIf9w9g
+         W0UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bPLnUhtQ+dxcmE2HZpN7gVFh2Ut9iquGsDOuyt2kO74=;
-        b=i1vmXdIRV32puojD5/5uoRGuGUr0TNxM1QdneK7SqqUHWWpy9TaqCjkoy9qCJd1igU
-         4fbYM8IH5tyvsbI5Xk7b/akoH/eIVS6O9PNcZP3fq9aU3xKTRfUent+ptz2N/u4RvUMy
-         Hefymzu3yK4jKdJkoEMFDUHcFXdiSIHIyn/9EZKCxDkzvcA/5hQ6GoM55B90a1IjUbAf
-         swilVKhX9lLSRBavAB1d+6o5w5NoRCzepb4E17TxQI3Po/RQHUwKoWPdnnD664RclnjJ
-         q02lYOS4+fokOzRtqpDSl05LVRf6Ua8EI/B4CBHxJJrTDTTjxRTV5T7hmrj+lzXoE2l6
-         uUXg==
-X-Gm-Message-State: AOAM530KWEZtMEpwB4f8/xsqKs5eGRvRSaXpI0OIBiovPnj5Z9lH3HFJ
-        MKnCaj++F5ryGLQNLu62dG5xuw==
-X-Google-Smtp-Source: ABdhPJyBtb/um3G88EzMU4Kq9QyIxQlTChGUKgp2/W1s9MAQ5iKpigRZ0JWM11UwJXEolvoibo//FA==
-X-Received: by 2002:aa7:9ac7:0:b029:18b:36d2:784b with SMTP id x7-20020aa79ac70000b029018b36d2784bmr825878pfp.20.1604646331033;
-        Thu, 05 Nov 2020 23:05:31 -0800 (PST)
+        bh=ehPUCc4BBH4w6xwbXHXZ9YzZ1LHDSwHspwqvBRHLfG8=;
+        b=BKKtHiICIDzjgQ8N3Tyyqk8PWlcWlFweT6vuyA1YtWKu/e7ZKlNLZNlrzNlnFumSP9
+         DJQOp8tzU5mnS1TW03fTEojNpWep531jhwQwx1vlR4KoccdsfPytusvRemzqsdMShB7R
+         nO9Qa0kyUVmSf6ZhEMCGk4duMjiJIm1xjz9nBchHQrAkLxHvTph0fOwfErtqcKSKfOlz
+         kqC5yAHO+gKXAx1MhfjQ8fveC84gg0m5JcqK/APkxskEEu0mOBmEZZ/A4P8NP4PWKS38
+         ix8luWEp8Z6GWzWGfn0sukEXTdMy8UCXewCCOugZ4JzxObPWTpvZEoIyVjmVkhw/sdYp
+         4wPA==
+X-Gm-Message-State: AOAM530DnBLFPPclN4St9lwgPExG0X8W82PZqd+CvQbHRr0wNgjeJ4SA
+        Jp2cXK/dA/JXufLHD7koYlgyKA==
+X-Google-Smtp-Source: ABdhPJxV4aG+pPSqQiArJqkvpC3VHdnMlXqz893y069PmwZUjFiCvQoM0e21aZD+0OKoStOt+zy0BQ==
+X-Received: by 2002:a63:1212:: with SMTP id h18mr621177pgl.196.1604646333997;
+        Thu, 05 Nov 2020 23:05:33 -0800 (PST)
 Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id 16sm779560pfp.163.2020.11.05.23.05.30
+        by smtp.gmail.com with ESMTPSA id m6sm793084pfa.61.2020.11.05.23.05.33
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Nov 2020 23:05:30 -0800 (PST)
+        Thu, 05 Nov 2020 23:05:33 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
+To:     Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        digetx@gmail.com, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/7] devfreq: exynos: dev_pm_opp_put_*() accepts NULL argument
-Date:   Fri,  6 Nov 2020 12:33:24 +0530
-Message-Id: <b3c936d862b8c81ab568f38bd7acc438cb7efac8.1604646059.git.viresh.kumar@linaro.org>
+        digetx@gmail.com, dri-devel@lists.freedesktop.org,
+        lima@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 5/7] drm/lima: dev_pm_opp_put_*() accepts NULL argument
+Date:   Fri,  6 Nov 2020 12:33:25 +0530
+Message-Id: <2518c14df2f16cc3c4fee35499895a32513c174b.1604646059.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 In-Reply-To: <cover.1604646059.git.viresh.kumar@linaro.org>
 References: <cover.1604646059.git.viresh.kumar@linaro.org>
@@ -76,39 +73,33 @@ there is no need for us to carry the extra check. Drop them.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/devfreq/exynos-bus.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/lima/lima_devfreq.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index 1e684a448c9e..143fd58ec3dc 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -158,10 +158,8 @@ static void exynos_bus_exit(struct device *dev)
+diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
+index bbe02817721b..e7b7b8dfd792 100644
+--- a/drivers/gpu/drm/lima/lima_devfreq.c
++++ b/drivers/gpu/drm/lima/lima_devfreq.c
+@@ -110,15 +110,10 @@ void lima_devfreq_fini(struct lima_device *ldev)
+ 		devfreq->opp_of_table_added = false;
+ 	}
  
- 	dev_pm_opp_of_remove_table(dev);
- 	clk_disable_unprepare(bus->clk);
--	if (bus->opp_table) {
--		dev_pm_opp_put_regulators(bus->opp_table);
--		bus->opp_table = NULL;
+-	if (devfreq->regulators_opp_table) {
+-		dev_pm_opp_put_regulators(devfreq->regulators_opp_table);
+-		devfreq->regulators_opp_table = NULL;
 -	}
-+	dev_pm_opp_put_regulators(bus->opp_table);
-+	bus->opp_table = NULL;
+-
+-	if (devfreq->clkname_opp_table) {
+-		dev_pm_opp_put_clkname(devfreq->clkname_opp_table);
+-		devfreq->clkname_opp_table = NULL;
+-	}
++	dev_pm_opp_put_regulators(devfreq->regulators_opp_table);
++	dev_pm_opp_put_clkname(devfreq->clkname_opp_table);
++	devfreq->regulators_opp_table = NULL;
++	devfreq->clkname_opp_table = NULL;
  }
  
- static void exynos_bus_passive_exit(struct device *dev)
-@@ -444,10 +442,8 @@ static int exynos_bus_probe(struct platform_device *pdev)
- 	dev_pm_opp_of_remove_table(dev);
- 	clk_disable_unprepare(bus->clk);
- err_reg:
--	if (!passive) {
--		dev_pm_opp_put_regulators(bus->opp_table);
--		bus->opp_table = NULL;
--	}
-+	dev_pm_opp_put_regulators(bus->opp_table);
-+	bus->opp_table = NULL;
- 
- 	return ret;
- }
+ int lima_devfreq_init(struct lima_device *ldev)
 -- 
 2.25.0.rc1.19.g042ed3e048af
 
