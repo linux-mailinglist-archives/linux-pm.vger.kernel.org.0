@@ -2,99 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 662612A906B
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 08:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A131D2A909F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 08:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgKFHeR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 02:34:17 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:56246 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726121AbgKFHeQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 02:34:16 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A67WAXQ024861;
-        Fri, 6 Nov 2020 08:34:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=inRp6hPiIockC5nS3L+IsnkrSlcfoBjiyTAc2cHofEM=;
- b=e3xbnbEsdALKCaLVYR0ePYxAKiq/CS9GP9aC5E6L2v1pKb7p7OHLuD2geGnpSqc0OxLz
- F1opHCYdcCuiECzxL3CmTfrm8zUZqX6Ecn7SRXd9VK29bdPCfN3pKeRtDWoGM8Ng9OWM
- 34GTLIDytrSS1Zz3neDHr7tyWL+jU39Md1wuINXWTC1lZ2z2P13GLasPcYgDmMUfbGbJ
- PURIZVjDlFElxPoNKw2xBIuvksvW/JfueZQnfZx2pdyjk6dURmv4T4smW4s4QwKf/CL1
- 6KHARCRHZiIJY3A7KrxblNAYdJ7ME09hlMIjlmyOhJIsD0ypGf/Tq9mhJY+fUdFISz59 DA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34h00etmnb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Nov 2020 08:34:10 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 57333100038;
-        Fri,  6 Nov 2020 08:34:10 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4D087226678;
-        Fri,  6 Nov 2020 08:34:10 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Nov 2020 08:34:09
- +0100
-From:   <patrice.chotard@st.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>
-CC:     <patrice.chotard@st.com>, Erwan Le Ray <erwan.leray@st.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        <amelie.delaunay@st.com>, <erwan_leray@st.com>,
-        <alain.volmat@st.com>
-Subject: [PATCH v1 4/4] i2c: stm32f7: Make usage of dev_wakeup_path() helper
-Date:   Fri, 6 Nov 2020 08:33:58 +0100
-Message-ID: <20201106073358.8379-5-patrice.chotard@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201106073358.8379-1-patrice.chotard@st.com>
-References: <20201106073358.8379-1-patrice.chotard@st.com>
+        id S1726242AbgKFHoN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 02:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726198AbgKFHoL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 02:44:11 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5300AC0613D2
+        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 23:44:10 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id w4so280341pgg.13
+        for <linux-pm@vger.kernel.org>; Thu, 05 Nov 2020 23:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7al+1KQqygBh8yCBrLUsOyumU9ROiq9Kbq3Xdf1DwkI=;
+        b=Ri+pKNwiEc4VOv9Umm81GO4nHRH7HLV5YiyZ1xQkLUsqSMUimOj9rj7rjtFs//oSwZ
+         6EsJPly3lYAoTT5HxSk1I5b1K8mXIYjF8o6MeTnWhlC39CSzjx8lBiKzhbehWp/RnXeo
+         Z4Hp2ReIrx4CkRSzRU3NcrxXRtw5wFiYI4/rGHNo5tX9QfOMwYvdVqM/DtR8EnPqX8CQ
+         oXiK6CaaRWuDbrj5FQ+iOUBBFpNL8/GY/w7xVoXg/nFl7SpXNyqaUU3gMx2EWJGg5FAG
+         Y0N684pi4u72xegcHFxrw0CBwH3+8prRy33JphiUFFE8vylR7EsF7Rsx5KendNfL6gQO
+         i8Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7al+1KQqygBh8yCBrLUsOyumU9ROiq9Kbq3Xdf1DwkI=;
+        b=gBq7nsocMUnSY/ve4L45KFeDRFYIqHikW1uJR0W88nGaqBkAMwf06l8PvKccxtIgyX
+         kVO64um07LfDI0hB9Wjt8m6NwajhOtn9n2UnRU6bLsb/HKz177tmKCs5QQJoyD9OspRo
+         hUmqY3GnfNLWaeIgVnOLYyByRyNL1wnooZS7iaGHuB+TunF1DenC57zT/lXJJ9rw/Tok
+         1rPhmiMeMwUMEc4NdP31rlQMhpF4WjeiBibfmyc1UHUCeD3g7BtRD+AJ6/S7kFow7ffi
+         T4QE8/BtELUVaCFmN3H5z0temsVev7fja23Ou/2jL03Ps/Rdzj/mF3EIvow8wx2dr3TU
+         d9+g==
+X-Gm-Message-State: AOAM530ADKTLxHl9WYi/WdUwZWitywXr/KWBwi19XgAsfD5NzG6b5gou
+        sgPF4v3JhXrfQYnPkxEr1SCqgw==
+X-Google-Smtp-Source: ABdhPJzetVB2Ryqy60ff9qy7r8GiFsYJPhXFNO7OS/cEP4u2veL2hZrIuWB6ZmT8IfQRHQGqzlYr0g==
+X-Received: by 2002:a17:90a:db48:: with SMTP id u8mr1095994pjx.93.1604648649876;
+        Thu, 05 Nov 2020 23:44:09 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id m23sm679169pgk.84.2020.11.05.23.44.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Nov 2020 23:44:08 -0800 (PST)
+Date:   Fri, 6 Nov 2020 13:14:06 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     zhuguangqing83@gmail.com
+Cc:     amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        javi.merino@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuguangqing <zhuguangqing@xiaomi.com>
+Subject: Re: [PATCH] thermal/drivers/cpufreq_cooling: Update cpufreq_state
+ only if state has changed
+Message-ID: <20201106074406.vykfapy7xstmqk4h@vireshk-i7>
+References: <20201105111914.9324-1-zhuguangqing83@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG7NODE2.st.com (10.75.127.20) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-06_02:2020-11-05,2020-11-06 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201105111914.9324-1-zhuguangqing83@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@st.com>
+On 05-11-20, 19:19, zhuguangqing83@gmail.com wrote:
+> From: zhuguangqing <zhuguangqing@xiaomi.com>
 
-Make usage of dev_wakeup_path() helper.
+Maybe fix your name in your email client or git config? It should be
+Zhuguangqing (with first letter in CAPITAL) and maybe add a second
+name also (surname) in case you want/have it.
 
-Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> If state has not changed successfully and we updated cpufreq_state,
+> next time when the new state is equal to cpufreq_state (not changed
+> successfully last time), we will return directly and miss a
+> freq_qos_update_request() that should have been.
+> 
+> Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index f41f51a176a1..9aa8e65b511e 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -2322,7 +2322,7 @@ static int stm32f7_i2c_suspend(struct device *dev)
- 
- 	i2c_mark_adapter_suspended(&i2c_dev->adap);
- 
--	if (!device_may_wakeup(dev) && !dev->power.wakeup_path) {
-+	if (!device_may_wakeup(dev) && !device_wakeup_path(dev)) {
- 		ret = stm32f7_i2c_regs_backup(i2c_dev);
- 		if (ret < 0) {
- 			i2c_mark_adapter_resumed(&i2c_dev->adap);
-@@ -2341,7 +2341,7 @@ static int stm32f7_i2c_resume(struct device *dev)
- 	struct stm32f7_i2c_dev *i2c_dev = dev_get_drvdata(dev);
- 	int ret;
- 
--	if (!device_may_wakeup(dev) && !dev->power.wakeup_path) {
-+	if (!device_may_wakeup(dev) && !device_wakeup_path(dev)) {
- 		ret = pm_runtime_force_resume(dev);
- 		if (ret < 0)
- 			return ret;
+Please find and add below details as well, they are helpful in fixing
+the stable kernels.
+
+Fixes: 5130802ddbb1 ("thermal: cpu_cooling: Switch to QoS requests for freq limits")
+Cc: v5.4+ <stable@vger.kernel.org> # v5.4+
+
+> ---
+>  drivers/thermal/cpufreq_cooling.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index cc2959f22f01..00dc26c33899 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -438,13 +438,12 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+>  	if (cpufreq_cdev->cpufreq_state == state)
+>  		return 0;
+>  
+> -	cpufreq_cdev->cpufreq_state = state;
+> -
+>  	frequency = get_state_freq(cpufreq_cdev, state);
+>  
+>  	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
+>  
+
+Now that you are going to resend it anyways, drop this blank line as
+well and mention that in the commit log.
+
+>  	if (ret > 0) {
+> +		cpufreq_cdev->cpufreq_state = state;
+>  		cpus = cpufreq_cdev->policy->cpus;
+>  		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
+>  		capacity = frequency * max_capacity;
+
+Good catch Zhuguangqing. Thanks.
+
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
 -- 
-2.17.1
-
+viresh
