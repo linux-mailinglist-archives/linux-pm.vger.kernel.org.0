@@ -2,207 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A992A9491
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 11:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EDB2A94D4
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 11:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727171AbgKFKjt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 05:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S1726702AbgKFKzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 05:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727146AbgKFKjs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 05:39:48 -0500
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDE8C0613D2
-        for <linux-pm@vger.kernel.org>; Fri,  6 Nov 2020 02:39:48 -0800 (PST)
-Received: by mail-vs1-xe43.google.com with SMTP id f7so393915vsh.10
-        for <linux-pm@vger.kernel.org>; Fri, 06 Nov 2020 02:39:48 -0800 (PST)
+        with ESMTP id S1726317AbgKFKzS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 05:55:18 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9C4C0613CF
+        for <linux-pm@vger.kernel.org>; Fri,  6 Nov 2020 02:55:17 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id 1so500748ple.2
+        for <linux-pm@vger.kernel.org>; Fri, 06 Nov 2020 02:55:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0LfqbFVQDf6EnKMtM2PNGP+fMgWiqJYrhuyrC9aGMG0=;
-        b=Cn2FkJpPTwrScEBFP30KmR+ETYrdD8nqf3x0CR71mlDkB4y4y6gIHcwT3ZztSbJo+G
-         rtY0jbK/4OeoFy7GNlca3ZyqajC86XuArno5O2bv4txDNs6kYwIdCpd89ncbLw4Jwx8b
-         H7BfHfXVug9QIobm+rS6noOyXDdrzJVelFJJBwGl6pwh8vA8uJ/YLStxGDJoLW3Ih6ug
-         jdVPeNH0DvkT+BWeLf8eCxH++yirPopFQ/pg9MhSqR6qo0HG1ttke1qvaGoqK3o+6erc
-         7sFC83bhEERz3eH1wR1xnG/ZDGd9exD0su5iaY9KsSbH2nas5lPKxJk7Fi7J7V0Ev3vE
-         wYSg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=b/EXZYeChCIs1m40/OogMCYwnFfXBPrTLz46deLiJcA=;
+        b=XE3WmDim8YAmqM4wMueP497yfYpq4mZKBuDgqPG/tLQgt6JSE0/4rnF/ynwrUFUtoD
+         PQ5xhlF+SNe+ddNm3uq1E+sW+nc5eCrwv24/wQzXUILasKZByU53yrycLJmEBB9oErna
+         IYdADsb7pse/R6UfvZYps8Y7FrZP9cIMsDW9gF4LvQH0kmFTCXYT0ESV4wOshPeby7tV
+         R23mChkPhLJr78HSEuhX9xsyg0sxLwNhU4i7N1Ru1R4slkqFpd+Rz4K/Z7wssYvRnHbp
+         U7T6XYHccwRJkqgoN0hfDBue85ZLX2awle9liKb/q4YQ+f7QZcdeIA4Vp5wWI2RDbduO
+         cOmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0LfqbFVQDf6EnKMtM2PNGP+fMgWiqJYrhuyrC9aGMG0=;
-        b=HkHWzGljRudem+kFKGguvCilf/06SwhBSafyI6vNzvPg/uBD8IccIFqFUljeol0tyU
-         xQ4n1FfqKwFpCgJpnBBUDs+Z/6EIVkgk7e5vuTwoQ2guQFIIfoo21Mfs6RBRdUk/TrTn
-         L8Ye9vwbkshGAeybKSg2QjNf0cW2EXxQymCCiHGC8r8Pa/3sI3Eru/WC3AcDU/Cpk5XD
-         kZ1E4nq4R9+j/HKJ3qjSEDhVhGYreqt2h94PrQg/ZUXxCfPWA5dxm1N/SWEQ2jWlWdou
-         /4TkXBo48YbAXeDVoKQKT1PCPgW2uPIipNBjv/DlfEGOnQSR80JsJPDIPuwwP2Zm3BQp
-         IyXQ==
-X-Gm-Message-State: AOAM531ZEHxe63OhtpSAXNBZHYt+xyWneLVPfgqRlWLZsjEYxRVHrYNz
-        BISJRdIVYRf4T9tTLr9Op49MTfytYDxTom310kUE5g==
-X-Google-Smtp-Source: ABdhPJwrrFjUmTEUgSw8KM5zff+kHxaTrTuy1pzw1Z5kVj4qG2MA9Af7aUi7pmz3zMyJk2E8QE6UlKcxpK/Mv0DkSZU=
-X-Received: by 2002:a67:3256:: with SMTP id y83mr522273vsy.48.1604659187176;
- Fri, 06 Nov 2020 02:39:47 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=b/EXZYeChCIs1m40/OogMCYwnFfXBPrTLz46deLiJcA=;
+        b=iK9jr6YLsJOtT2HOZ7QSHYx1IopZO+IVtYc5CKFc/LUOl96bzuFuTwVX2yQRsgDSDQ
+         ConPvi1zNR+FW3J3JiowMOqP8Y65cHMZHR7dFITajM+dJlJega+6ENpuAUEkpcxg+sZr
+         lQjvgKJMlo/t7Ry29u2nawdLKTMxp9+CD55wQLMgFwIABZxVmbcmVbgu/9+QDO3/UtmK
+         nPeRarj3y82ovJb9JzLO5XDlzg+c+vkjR0vOF5+eN8J9y+38/u9tQrjAPkYlyrvYCbo4
+         yKP4kMFhzTTTMqu1evyhQ+WaT+HyLVB+2CEvB+3kqWc+CmUgNpWkT34FXn+peBFGqOBQ
+         Vm4A==
+X-Gm-Message-State: AOAM530hhQD5Oa7hLLlm9kxmucirCrGzPwA8LHoTPAihv1mNVfYHiCoW
+        VtGvBlmoToKpKM+LD1wsoQz/Xg==
+X-Google-Smtp-Source: ABdhPJwLCX4MA/OOHdhLU3UIDCLaYzo+IJOWbKzfu+djgm7NfBe6J0VuY+WxKlwV8jfW74rAFh9prA==
+X-Received: by 2002:a17:902:7c12:b029:d6:ed57:fe13 with SMTP id x18-20020a1709027c12b02900d6ed57fe13mr1373599pll.59.1604660117422;
+        Fri, 06 Nov 2020 02:55:17 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id y124sm1641133pfy.28.2020.11.06.02.55.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 Nov 2020 02:55:16 -0800 (PST)
+Date:   Fri, 6 Nov 2020 16:25:14 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
+        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
+        chris.redpath@arm.com
+Subject: Re: [PATCH v3 3/3] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201106105514.bhtdklyhn7goml64@vireshk-i7>
+References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+ <20201102120115.29993-4-nicola.mazzucato@arm.com>
+ <20201106092020.za3oxg7gutzc3y2b@vireshk-i7>
+ <0a334a73-45ef-58ff-7dfd-9df6f4ff290a@arm.com>
 MIME-Version: 1.0
-References: <20201020180413.32225-1-ilina@codeaurora.org> <20201020180413.32225-2-ilina@codeaurora.org>
-In-Reply-To: <20201020180413.32225-2-ilina@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 6 Nov 2020 11:39:10 +0100
-Message-ID: <CAPDyKFoJkPYG4Qc4gbX6uW7vr1OJm7hXfznU+oSs2kvqSjufUw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] PM / domains: inform PM domain of a device's next wakeup
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a334a73-45ef-58ff-7dfd-9df6f4ff290a@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 20 Oct 2020 at 20:04, Lina Iyer <ilina@codeaurora.org> wrote:
->
-> Some devices may have a predictable interrupt pattern while executing
-> usecases. An example would be the VSYNC interrupt associated with
-> display devices. A 60 Hz display could cause a interrupt every 16 ms. If
-> the device were in a PM domain, the domain would need to be powered up
-> for device to resume and handle the interrupt.
->
-> Entering a domain idle state saves power, only if the residency of the
-> idle state is met. Without knowing the idle duration of the domain, the
-> governor would just choose the deepest idle state that matches the QoS
-> requirements. The domain might be powered off just as the device is
-> expecting to wake up. If devices could inform PM frameworks of their
-> next event, the parent PM domain's idle duration can be determined.
->
-> So let's add the pm_genpd_set_next_wake() API for the device to notify
+On 06-11-20, 10:37, Lukasz Luba wrote:
+> Good question.
+> 
+> How about a different interface for those cpufreq drivers?
+> That new registration API would allow to specify the cpumask.
+> Or rely on EM cpumask: em_span_cpus(em)
+> 
+> Currently we have two ways to register cooling device:
+> 1. when the cpufreq driver set a flag CPUFREQ_IS_COOLING_DEV, the core
+> will register cooling device
+> 2. cpufreq driver can explicitly call the registration function:
+> cpufreq_cooling_register() with 'policy' as argument
+> 
+> That would need substantial change to the cpufreq cooling code, from
+> policy oriented to custom driver's cpumask (like EM registration).
 
-/s/pm_genpd_set_next_wake/dev_pm_genpd_set_next_wakeup
+I am even wondering if we should really make that change. Why do we
+need the combined load of the CPUs to be sent back to the IPA governor
+? Why shouldn't they all do that (they == cdev) ?
 
-Also, please don't use the word "notifiy", but rather "inform" or
-similar - to not confuse things with the kernel notifiers.
+This is a bit confusing to me, sorry about that. The cpufreq governors
+take a look at all the CPUs utilization and set the frequency based on
+the highest utilization (and not the total util).
 
-There are some more examples below in the patch where "notify" is
-used, please have a look at those as well.
+While in this case we present the total load of the CPUs to the IPA
+(based on the current frequency of the CPUs), in response to which it
+tells us the frequency at which all the CPUs of the policy can run at
+(I am not even sure if it is the right thing to do as the CPUs have
+different loads). And how do we fit this dependent_cpus thing into
+this.
 
-> PM domains of the impending wakeup. This information will be the domain
-> governor to determine the best idle state given the wakeup.
->
-> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+Sorry, I am not sure what's the right way of doing thing here.
 
-Other than the nitpicks above, this looks good to me:
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-> ---
-> Changes in v4:
->         - Use PM domain data to store next_wakeup
->         - Drop runtime PM documentation
-> Changes in v3:
->         - Fix unwanted change
-> Changes in v2:
->         - Update documentation
->         - Remove runtime PM enabled check
->         - Update commit text
-> ---
->  drivers/base/power/domain.c | 36 ++++++++++++++++++++++++++++++++++++
->  include/linux/pm_domain.h   |  8 ++++++++
->  2 files changed, 44 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 743268996336..34b90e77e0cd 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -408,6 +408,41 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
->
-> +/**
-> + * dev_pm_genpd_set_next_wakeup - Notify PM framework of an impending wakeup.
-> + *
-> + * @dev: Device to handle
-> + * @next: impending interrupt/wakeup for the device
-> + *
-> + * Allow devices to inform of the next wakeup. But, if the domain were already
-> + * powered off, we will not wakeup the domain to recompute it's idle duration.
-> + */
-> +int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
-> +{
-> +       struct generic_pm_domain *genpd;
-> +       struct generic_pm_domain_data *gpd_data;
-> +       int ret = -EINVAL;
-> +
-> +       genpd = dev_to_genpd_safe(dev);
-> +       if (!genpd)
-> +               return -ENODEV;
-> +
-> +       if (WARN_ON(!dev->power.subsys_data ||
-> +                   !dev->power.subsys_data->domain_data))
-> +               return ret;
-> +
-> +       genpd_lock(genpd);
-> +       gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
-> +       if (ktime_before(ktime_get(), next)) {
-> +               gpd_data->next_wakeup = next;
-> +               ret = 0;
-> +       }
-> +       genpd_unlock(genpd);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_genpd_set_next_wakeup);
-> +
->  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->  {
->         unsigned int state_idx = genpd->state_idx;
-> @@ -1431,6 +1466,7 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev)
->         gpd_data->td.constraint_changed = true;
->         gpd_data->td.effective_constraint_ns = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
->         gpd_data->nb.notifier_call = genpd_dev_pm_qos_notifier;
-> +       gpd_data->next_wakeup = KTIME_MAX;
->
->         spin_lock_irq(&dev->power.lock);
->
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 1ad0ec481416..e00c77b1efd8 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -9,6 +9,7 @@
->  #define _LINUX_PM_DOMAIN_H
->
->  #include <linux/device.h>
-> +#include <linux/ktime.h>
->  #include <linux/mutex.h>
->  #include <linux/pm.h>
->  #include <linux/err.h>
-> @@ -191,6 +192,7 @@ struct generic_pm_domain_data {
->         struct notifier_block *power_nb;
->         int cpu;
->         unsigned int performance_state;
-> +       ktime_t next_wakeup;
->         void *data;
->  };
->
-> @@ -217,6 +219,7 @@ int pm_genpd_remove(struct generic_pm_domain *genpd);
->  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
->  int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
->  int dev_pm_genpd_remove_notifier(struct device *dev);
-> +int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
->
->  extern struct dev_power_governor simple_qos_governor;
->  extern struct dev_power_governor pm_domain_always_on_gov;
-> @@ -275,6 +278,11 @@ static inline int dev_pm_genpd_remove_notifier(struct device *dev)
->         return -ENOTSUPP;
->  }
->
-> +static inline int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
-> +{
-> +       return -ENOTSUPP;
-> +}
-> +
->  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
->  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
->  #endif
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+-- 
+viresh
