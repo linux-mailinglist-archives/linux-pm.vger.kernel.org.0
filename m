@@ -2,141 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3252A8C59
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 02:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FEA2A8E20
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 05:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730895AbgKFB6H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Nov 2020 20:58:07 -0500
-Received: from cmta19.telus.net ([209.171.16.92]:57709 "EHLO cmta19.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730862AbgKFB6H (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 5 Nov 2020 20:58:07 -0500
-Received: from dougxps ([173.180.45.3])
-        by cmsmtp with SMTP
-        id aqt0kwPg7dLkEaqt1kZKc4; Thu, 05 Nov 2020 18:49:57 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1604627397; bh=EQ2VgUbGgV+uFwLbFWhleNcbVstRS/kO5xtYuUuBq24=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=YK1ZmjXW5mhpM+I0VP6mno26vEh3v016ESNf5CQhoPBNDclhNCxwvPUaA+fGenvNl
-         adS2nDJTZA95HanowQ0AsUG3mTaYDUTKwGO0DSHyF0/sFdiGVr4/RCxxjKxjSmGqO+
-         a1Tp767cLvRZUiKq6NEn20ubsopYSxrhMc+6iQGIwFwurAr4F5f+fs0S0KL9xacm8w
-         2h5u6RGWbW03BQi6PUCZCxNiyi81LYsNV/BDI8svtCS4RFpLb5qtzrAI5VypmyQ62O
-         6z6X/6VGReTjHTG6alMn58ZHA6sjwWaZpXqxAl/atDMq4s+BDvo6kTr6Vd+mVY1UkL
-         +7OpSr5YQn+xw==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.4 cv=WPm64lgR c=1 sm=1 tr=0 ts=5fa4abc5
- a=ZeVyObKPoMU90SgYCeSZ1g==:117 a=ZeVyObKPoMU90SgYCeSZ1g==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
- a=gu6fZOg2AAAA:8 a=8THPvSkuJoZwLrQ9cBcA:9 a=CjuIK1q_8ugA:10 a=-FEs8UIgK8oA:10
- a=NWVoK91CQyQA:10 a=2RSlZUUhi9gRBrsHwhhZ:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Zhang Rui'" <rui.zhang@intel.com>,
-        "'LKML'" <linux-kernel@vger.kernel.org>
-References: <7417968.Ghue05m4RV@kreacher> <2233690.N3OVLkotou@kreacher>
-In-Reply-To: <2233690.N3OVLkotou@kreacher>
-Subject: RE: [PATCH 1/2] cpufreq: Introduce target min and max frequency hints
-Date:   Thu, 5 Nov 2020 17:49:53 -0800
-Message-ID: <001b01d6b3df$21165940$63430bc0$@net>
+        id S1726007AbgKFEOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Nov 2020 23:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726001AbgKFEOt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Nov 2020 23:14:49 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F938C0613CF
+        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 20:14:48 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id p4so77331plr.1
+        for <linux-pm@vger.kernel.org>; Thu, 05 Nov 2020 20:14:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=yo3AW3Al21SU/5tsHqsd5ykrA2rze4CjwWzLUbsw78k=;
+        b=suixD1TtCdQB6b0br0QxOvj74GH2MPhsxmA04eVKHkV9MLXcQ9E87ob1nDb/ZF8Pfy
+         spDPe/8bfSKj0wy1hWCjVf8KzCfbcqEZZSjM0mM2xUidXJ0isM7luLEV6oK0vSD9PHdM
+         qoSeBNf7xR7BISYqfABAynzTirWqFJ367b9gG+ZAuH/YB+b/LtyF6yJ+6XncGmYUpNUD
+         9uOlKb4PQA3UsL/f6Xh8wQ/jstlaaLt79gNkt9K4v+i6Rx5p1gdX14SF/0JZtP4AAW+Y
+         msvJA3OWuSHluJpM6ReblkRkxNs0Jg1HL2dyRam7lDBilfEv4ekA1JnRXqKhCDjENI0n
+         HXlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=yo3AW3Al21SU/5tsHqsd5ykrA2rze4CjwWzLUbsw78k=;
+        b=gn2GhYLxr5hUAuHnhxylcs9Qro6jMAfmdFo2CYlmHCQnN4f9smF4ZXSnuhK3APFrk4
+         C84JzIjNrvxSGWrmfAxKLAWRMiqvsghApXMqnG/EDaMNmXIrpvkI0SBZTzQU3QEUnUxP
+         jUtfXTt4ZGQ0jytSTeGuvU+qh8h5RJSWShH2tylHLnc90IEIH6MikttmBUl2BR71bZdc
+         tEgslJdHkgaj+JDQxps8+cxTcsW4jWq7OlQ5ZNa7DfKfcOF8hKKi3mzTY5F3oss1BIZL
+         HxWEX2tPq/mqyVcbGsHcmZSMo7D7FwTzd6wJiDxf2Mc4OgXWKM1hClMbDU9B/bbvCmgl
+         FnVw==
+X-Gm-Message-State: AOAM533WV7KnOfMld7WC+xCVOssEDyjblj3fZAUf0HRvVP/wWzML/qzp
+        5Yhyd/oZD4RULV8z+w1ksOWfr62O9NRWFg==
+X-Google-Smtp-Source: ABdhPJz7Wzvu7Y2qs31wP/ioFNTCrcydLd+O+8Qt+NDYekXpmGTSjIL5tD8R9SW/WiDzKfMsziDBpA==
+X-Received: by 2002:a17:902:7487:b029:d6:c03b:bce4 with SMTP id h7-20020a1709027487b02900d6c03bbce4mr178476pll.36.1604636087566;
+        Thu, 05 Nov 2020 20:14:47 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id b185sm4082621pgc.68.2020.11.05.20.14.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Nov 2020 20:14:46 -0800 (PST)
+Date:   Fri, 6 Nov 2020 09:44:41 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     stephan@gerhold.net, rjw@rjwysocki.net, khilman@kernel.org,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, letux-kernel@openphoenux.org
+Subject: Re: [REGRESSION] opp: Allow dev_pm_opp_get_opp_table() to return
+ -EPROBE_DEFER
+Message-ID: <20201106041441.uuz5vrtqeyn6ijdv@vireshk-i7>
+References: <20201106001018.02200778@aktux>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdazoQzOa64DtwxHQV2ivz0yvkdgTgAM4bQw
-X-CMAE-Envelope: MS4xfOnrGS/Thze5mEGyKkwj5SyTIuz7k6xioMBYgNxOS3r1kTiTTBoQHV/3fPgx5sDCTVmwN5AqW+TL2VAoRyjciQd389sWRFRcFPfuXto90COudkUsNIQB
- vWfHuai3mED8GwYSRWjD0E8wrb15q/bOUnvyb9D+A/3dOOxe1zRdLI7prRMmG4MXEB9GtbqquDdm7B4N7ifyfAeWX7yJxvgwDOj51M4f6DwSCqxcgslXJ5RD
- PdNvvTWhZSSiZPleL+BQp2s+tSY4eCvDVSaWhdn8sweclJA8mL/dEQxZ31lradvz5aOjac+CSnvqHFHctWcTF14X7rr1iU8dLqdY9W2b8TwioxLiQjlg9DCv
- q0R5+k50wfsIicLcLqICdWrKMt8YedaItQHEHZFMkzvlWfuhBKI=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201106001018.02200778@aktux>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael:
-
-Thank you for this patch set.
-
-I can not get the patch to apply.
-I was trying on top on 5.10-rc2, and have been unable to determine
-what other patches might need to be applied first.
-
-On 2020.11.05 10:24 Rafael J. Wysocki wrote:
-
-...
-
+On 06-11-20, 00:10, Andreas Kemnade wrote:
+> Hi,
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/cpufreq.c             |    3 +++
->  drivers/cpufreq/cpufreq_performance.c |    4 ++++
->  drivers/cpufreq/cpufreq_powersave.c   |    4 ++++
->  include/linux/cpufreq.h               |   16 ++++++++++++++++
-
-I do not understand why this part says to look for 16
-differences, but I can only find 2.
-
->  4 files changed, 27 insertions(+)
+> On the GTA04 (DM3730, devicetree omap3-gta04*) I get my console flooded
+> up with the following:
+> [   24.517211] cpu cpu0: multiple regulators are not supported
+> [   24.523040] cpufreq: __target_index: Failed to change cpu frequency: -22
+> [   24.537231] ------------[ cut here ]------------
+> [   24.542083] WARNING: CPU: 0 PID: 5 at drivers/opp/core.c:678 dev_pm_opp_set_rate+0x23c/0x494
+> [   24.551086] Modules linked in: usb_f_ecm g_ether usb_f_rndis u_ether libcomposite configfs phy_twl4030_usb omap2430 musb_hdrc overlay
+> [   24.563842] CPU: 0 PID: 5 Comm: kworker/0:0 Tainted: G        W         5.9.0-rc1-00008-g629238068eb9 #14
+> [   24.573852] Hardware name: Generic OMAP36xx (Flattened Device Tree)
+> [   24.580413] Workqueue: events dbs_work_handler
+> [   24.585083] [<c010e6b4>] (unwind_backtrace) from [<c010a194>] (show_stack+0x10/0x14)
+> [   24.593200] [<c010a194>] (show_stack) from [<c0464ad0>] (dump_stack+0x8c/0xac)
+> [   24.600769] [<c0464ad0>] (dump_stack) from [<c01276a8>] (__warn+0xcc/0xe4)
+> [   24.608001] [<c01276a8>] (__warn) from [<c0127a3c>] (warn_slowpath_fmt+0x74/0xa0)
+> [   24.615844] [<c0127a3c>] (warn_slowpath_fmt) from [<c06364ac>] (dev_pm_opp_set_rate+0x23c/0x494)
+> [   24.625061] [<c06364ac>] (dev_pm_opp_set_rate) from [<c063ec08>] (set_target+0x2c/0x4c)
+> [   24.633453] [<c063ec08>] (set_target) from [<c063a950>] (__cpufreq_driver_target+0x190/0x22c)
+> [   24.642395] [<c063a950>] (__cpufreq_driver_target) from [<c063d4e0>] (od_dbs_update+0xcc/0x158)
+> [   24.651489] [<c063d4e0>] (od_dbs_update) from [<c063e090>] (dbs_work_handler+0x2c/0x54)
+> [   24.659881] [<c063e090>] (dbs_work_handler) from [<c013f71c>] (process_one_work+0x210/0x358)
+> [   24.668731] [<c013f71c>] (process_one_work) from [<c0140014>] (worker_thread+0x22c/0x2d0)
+> [   24.677307] [<c0140014>] (worker_thread) from [<c0144eac>] (kthread+0x140/0x14c)
+> [   24.685058] [<c0144eac>] (kthread) from [<c0100148>] (ret_from_fork+0x14/0x2c)
+> [   24.692626] Exception stack(0xde4b7fb0 to 0xde4b7ff8)
+> [   24.697906] 7fa0:                                     00000000 00000000 00000000 00000000
+> [   24.706481] 7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> [   24.715057] 7fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [   24.722198] ---[ end trace 038b3f231fae6f81 ]---
 > 
-> Index: linux-pm/include/linux/cpufreq.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/cpufreq.h
-> +++ linux-pm/include/linux/cpufreq.h
-> @@ -63,6 +63,8 @@ struct cpufreq_policy {
-> 
->  	unsigned int		min;    /* in kHz */
->  	unsigned int		max;    /* in kHz */
-> +	unsigned int		target_min; /* in kHz */
-> +	unsigned int		target_max; /* in kHz */
->  	unsigned int		cur;    /* in kHz, only needed if cpufreq
->  					 * governors are used */
->  	unsigned int		suspend_freq; /* freq to set during suspend */
-> Index: linux-pm/drivers/cpufreq/cpufreq.c
+> endlessly after the $subject commit. Any hints?
 
-...
+The fix for this has been in linux-next for a couple of days and it
+made it to linus/master yesterday.
 
-Anyway, I edited the patch, deleting the include/linux/cpufreq.h part,
-then it applied, as did patch 2 of 2.
-I edited include/linux/cpufreq.h manually.
+47efcbcb340c opp: Fix early exit from dev_pm_opp_register_set_opp_helper()
 
-Issues with the powersave governor reported in [1] and [2]
-are fixed. Relevant part quoted and updated below:
-
-> In early September Doug wrote:
->> powersave governor:
->> acpi-cpufreq: good
->> intel_cpufreq hwp: bad
-
-Now good, with this patch set.
-
->> intel_cpufreq no hwp: good
-
-...
-
-> For the powersave governor, this is what we have now:
-> 
-> intel_cpufreq hwp == intel_pstate hwp
-> intel_cpufreq no hwp == acpi-cpufreq == always minimum freq
-> intel_pstate no hwp ~= acpi-cpufreq/ondemand
-
-...
-
-> My expectation was/is:
-> 
-> intel_cpufreq hwp == intel_cpufreq no hwp == acpi-cpufreq == always minimum freq
-
-And this is what we now have, with this patch set.
-
-> intel_pstate no hwp ~= acpi-cpufreq/ondemand
-> intel_pstate hwp == Unique. Say, extremely course version of ondemand.
-
-[1] https://marc.info/?l=linux-pm&m=159769839401767&w=2
-[2] https://marc.info/?l=linux-pm&m=159943780220923&w=2
-
-... Doug
-
-
+-- 
+viresh
