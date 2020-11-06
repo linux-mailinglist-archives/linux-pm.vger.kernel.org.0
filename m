@@ -2,179 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2012A9062
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 08:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C724D2A90A4
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 08:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbgKFHct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 02:32:49 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:34919 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgKFHct (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 02:32:49 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20201106073245epoutp037c656d13e1874bde0f62709001aa7527~E2tKzOyan0691606916epoutp03J
-        for <linux-pm@vger.kernel.org>; Fri,  6 Nov 2020 07:32:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20201106073245epoutp037c656d13e1874bde0f62709001aa7527~E2tKzOyan0691606916epoutp03J
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1604647965;
-        bh=0rqql/AnqaWWFy6qtLaVabfXJuNsw9cGFDeNJQrDOTw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=fsiX54DgkD0thFq+ImsmSob1QeibpnV4oVSiWYfQM3XimG1r1tulE6Jh6ExLWh56D
-         8AGCanTX92Ct2mvwcBM/Czbzh6NhKHaUMBL9bcV5CnMpQg5F5VFIRaQ7zHYeCPETAf
-         nGtrPiNQLEEbzXQEDwKOEbtlF61JvitkHX3S6Wuo=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20201106073245epcas1p41cb8e38f46cdfa549158483dd5aa9df9~E2tKVC5kj1825318253epcas1p4p;
-        Fri,  6 Nov 2020 07:32:45 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4CSBtf1ZzCzMqYkj; Fri,  6 Nov
-        2020 07:32:42 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AA.E0.02418.A1CF4AF5; Fri,  6 Nov 2020 16:32:42 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201106073241epcas1p26fb32e0cbc18e23748709a0a87cbf7ca~E2tGq9S7u0911509115epcas1p2a;
-        Fri,  6 Nov 2020 07:32:41 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201106073241epsmtrp19b95df712872920039be7386e4b31a4d~E2tGqGa-j0161001610epsmtrp19;
-        Fri,  6 Nov 2020 07:32:41 +0000 (GMT)
-X-AuditID: b6c32a35-c23ff70000010972-cc-5fa4fc1a1a1f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7F.02.08745.91CF4AF5; Fri,  6 Nov 2020 16:32:41 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201106073240epsmtip2f2a656110a246d25728aaad680ff40f8~E2tGUJICs2203622036epsmtip2z;
-        Fri,  6 Nov 2020 07:32:40 +0000 (GMT)
-Subject: Re: [PATCH 4/7] devfreq: exynos: dev_pm_opp_put_*() accepts NULL
- argument
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        id S1725848AbgKFHq6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 02:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbgKFHq6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 02:46:58 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9FBC0613D3
+        for <linux-pm@vger.kernel.org>; Thu,  5 Nov 2020 23:46:58 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id t22so281428plr.9
+        for <linux-pm@vger.kernel.org>; Thu, 05 Nov 2020 23:46:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=O+nSJ1dUMKTzMHcRiv+jEKZyI0VMUKMfKAIHBsRy+j8=;
+        b=kBcevyRxvEfAwJNzJ4iM3BV++zYAPL5sWPRSIK5NU22puWSvm4kOX9usvmv5flKF7G
+         0AQJrbkeegxjhpfTlNF/3PQ5iNPf3rYBIXRI/dj7Il/ZVRRItGMRuEn4OVGN1nF7i0xT
+         HNKxIUXgM2R41wISpT7dZPC0qrXlq47XQ/QxFcchZa4emmEn0a9Xq6+fCvUdcqTCR4gy
+         erDEkRZn4u8vDyMY3fYdqXfcEiLzJOepohCQsh6E81qheA57/p640UAnKynkL11kd9HE
+         r1N+pLoapNRO+mSlIZ819bDqVUPlIjJ9RMWPUuxUOj+vYgLkU9jJceu6XSyFeFytAzm3
+         n8YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=O+nSJ1dUMKTzMHcRiv+jEKZyI0VMUKMfKAIHBsRy+j8=;
+        b=GO4DpKe30Ar5Eib7Qoq26C4El2nX6iRagdTtOaABGPl0BzJftULKQGQ5t0zWe1yMZa
+         69gB7s0juZRU2vplGs0T+5hlWjicDLWcEGTsIOQ4k00Z9jzP26cGQedW/1Uk2siyv1sC
+         X+5ymoLFZ5xuIfwmwQBgaS87FtdSXYleWm9+P/nQ/kL6F9Cr/SCMfTI9yDr+rOdvg10g
+         hBf666KUza/b/fk3jzIsDxSpqaV88BSZHHSFrYb+RAsnA1XBSOeHpsBij4Q0ZW31WBnP
+         uoVVBtzSfVoRG0mJxnykgjgSE9NDTMjedyg1WrMJi1T54PrBWn6UDmBJGUliFZWMRxlS
+         1zAw==
+X-Gm-Message-State: AOAM533d72DCi0GHb+Hi0ds8SDnWpxThb15GLpT1VVmXHxc45f1GfYkp
+        MaP4Z0x+iRVCImxz1WGC/BI6qQ==
+X-Google-Smtp-Source: ABdhPJxaHM2ScKefdHxO0aiQSp5dkZ3oSGeXt0F+XsARWIMNWVebQTp5RbmyQVuGD/3eDFyS0/QTMg==
+X-Received: by 2002:a17:902:b7c4:b029:d6:855a:df2c with SMTP id v4-20020a170902b7c4b02900d6855adf2cmr728458plz.26.1604648817934;
+        Thu, 05 Nov 2020 23:46:57 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id ck4sm1264075pjb.50.2020.11.05.23.46.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Nov 2020 23:46:57 -0800 (PST)
+Date:   Fri, 6 Nov 2020 13:16:55 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         digetx@gmail.com, linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Organization: Samsung Electronics
-Message-ID: <4b13f82c-fa2a-939f-e26f-e8fc4d34d567@samsung.com>
-Date:   Fri, 6 Nov 2020 16:46:35 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <a2f9dbba-1c07-8b60-fda5-737843be92e0@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJJsWRmVeSWpSXmKPExsWy7bCmrq7UnyXxBrNvclis/viY0aL/8Wtm
-        i/PnN7BbnG16w26x6fE1VovLu+awWXzuPcJoMeP8PiaL240r2Cze/DjLZHHm9CVWi3/XNrJY
-        dBz5xmyx8auHA5/Hzll32T02repk87hzbQ+bx+Yl9R5brrazePRtWcXocfzGdiaPz5vkAjii
-        sm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgM5WUihL
-        zCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BRYFugVJ+YWl+al6yXn51oZGhgYmQIVJmRn
-        NB1ew1awg7fiWt9DxgbGFu4uRk4OCQETiakz97B2MXJxCAnsYJQ4cvE7G0hCSOATo8Sn6/kQ
-        ic+MEo8XLmKC6bg4ZSYrRNEuRoklvyogit4zSix+uZIFJCEsECLR8P4omM0moCWx/8UNNpAi
-        EYETjBKz+r8xgTjMAmuYJPrXvAYbyy+gKHH1x2NGEJtXwE7i/971YHewCKhI3D0/G2ySqECY
-        xMltLVA1ghInZz4Bi3MK2EtM+NXGDmIzC4hL3HoynwnClpfY/nYOM8gyCYE3HBLXJv1khvjB
-        ReLn2T6of4QlXh3fwg5hS0m87G+DsqslVp48wgbR3MEosWX/BVaIhLHE/qWTgZo5gDZoSqzf
-        pQ8RVpTY+XsuI8RiPol3X3tYQUokBHglOtqEIEqUJS4/uAu1VlJicXsn2wRGpVlI3pmF5IVZ
-        SF6YhbBsASPLKkax1ILi3PTUYsMCQ+To3sQITtNapjsYJ779oHeIkYmD8RCjBAezkgjvBb9F
-        8UK8KYmVValF+fFFpTmpxYcYTYEBPJFZSjQ5H5gp8kriDU2NjI2NLUwMzUwNDZXEef9od8QL
-        CaQnlqRmp6YWpBbB9DFxcEo1MFU8Oxp67jmv7w23iisLTmu3Po4Kfutg8U3p7j3Fr203JUIs
-        17p+MzsnxJvjWGPeNCvMKe9wvrTawa4LDgqeXzT+Mf3Xm2bxwSur4LkZl2GW/ozv+f+F/mnM
-        S1016frdNzb89hzeC7iSjfxvRzB1mjacW1sQaCRjYVe9Pn7TPRu1aIOuLcwbPqxZ8K576mnH
-        wv63/3bN0T/Jv1v2i0r1gpvRD59Zpp/76LKk7FrdhQKWn6W/zhv+M//wQz3hyuzT6i8Sotft
-        /X6ksHrHxYBjr9QLA6QERA0VFBwsrsiuWj2b5yWrQdOx9zYCDbmGFhWW7N7fdf4YKT/Yv8Ka
-        U/TXRNHinrcfjI1eLixNDFOxUGIpzkg01GIuKk4EABRlZD5cBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCIsWRmVeSWpSXmKPExsWy7bCSvK7knyXxBuc6OC1Wf3zMaNH/+DWz
-        xfnzG9gtzja9YbfY9Pgaq8XlXXPYLD73HmG0mHF+H5PF7cYVbBZvfpxlsjhz+hKrxb9rG1ks
-        Oo58Y7bY+NXDgc9j56y77B6bVnWyedy5tofNY/OSeo8tV9tZPPq2rGL0OH5jO5PH501yARxR
-        XDYpqTmZZalF+nYJXBlNh9ewFezgrbjW95CxgbGFu4uRk0NCwETi4pSZrF2MXBxCAjsYJR7+
-        PMcEkZCUmHbxKHMXIweQLSxx+HAxRM1bRonZd3czgtQIC4RINLw/ygJiswloSex/cYMNpEhE
-        4BSjxM0X/ewgDrPAGiaJK6cWsIFUCQlMZ5K4/0saxOYXUJS4+uMx2CReATuJ/3vXg9WwCKhI
-        3D0/G2yqqECYxM4lj5kgagQlTs58AhbnFLCXmPCrjR3EZhZQl/gz7xIzhC0ucevJfCYIW15i
-        +9s5zBMYhWchaZ+FpGUWkpZZSFoWMLKsYpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P3cQI
-        jlgtrR2Me1Z90DvEyMTBeIhRgoNZSYT3gt+ieCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8X2ct
-        jBMSSE8sSc1OTS1ILYLJMnFwSjUwLSu/eLdwbpnln2kTavM2MT6fETjX4tGnpowrQp0TZZ5F
-        lOfMiZmbvGjqnJMGpz8uui/NsZ9xcffxhVffOuRLbtzR8iyw/efxCXKfttiHJysznONkXtiY
-        KWLr6LVP5dzaX4dOHNmROS2wyfZQnWPO7Z8aUY8e8ZjfrOip5H/8wXl+9b5TG9OE3HPF+iOP
-        PVNJ3pOZetHS+U+60YLc4mU7n6zUmL6Ts2iiy5T/uaGc+rOWCn2+sV38tqJBn+FpjU9qbxZU
-        Jx+wF7aYf9h8PXfDAs4v811mOceLF7uc7Jhsq/jgusW7/gNyNy+tm7Zh7dYjW4rYHSayRU67
-        effryTc3pHYeWhOsIXScRXmtjXJW2RolluKMREMt5qLiRAAs0NusRwMAAA==
-X-CMS-MailID: 20201106073241epcas1p26fb32e0cbc18e23748709a0a87cbf7ca
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201106070533epcas1p480406659e38528d1263641612fcff8bb
+Subject: Re: [PATCH 4/7] devfreq: exynos: dev_pm_opp_put_*() accepts NULL
+ argument
+Message-ID: <20201106074655.dt6lfy5ozovpnghe@vireshk-i7>
 References: <cover.1604646059.git.viresh.kumar@linaro.org>
-        <CGME20201106070533epcas1p480406659e38528d1263641612fcff8bb@epcas1p4.samsung.com>
-        <b3c936d862b8c81ab568f38bd7acc438cb7efac8.1604646059.git.viresh.kumar@linaro.org>
-        <a2f9dbba-1c07-8b60-fda5-737843be92e0@samsung.com>
+ <CGME20201106070533epcas1p480406659e38528d1263641612fcff8bb@epcas1p4.samsung.com>
+ <b3c936d862b8c81ab568f38bd7acc438cb7efac8.1604646059.git.viresh.kumar@linaro.org>
+ <a2f9dbba-1c07-8b60-fda5-737843be92e0@samsung.com>
+ <4b13f82c-fa2a-939f-e26f-e8fc4d34d567@samsung.com>
+ <5a9625bc-9e40-fb18-b111-9cd797943af3@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a9625bc-9e40-fb18-b111-9cd797943af3@samsung.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/6/20 4:42 PM, Chanwoo Choi wrote:
-> Hi Viresh,
+On 06-11-20, 16:48, Chanwoo Choi wrote:
+> On 11/6/20 4:46 PM, Chanwoo Choi wrote:
+> > It seems that this patch depends on first patch.
+> > So, need to be merged to one git repository.
+> > 
+> > Instead of applying it to devfreq.git,
+> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> > 
 > 
-> On 11/6/20 4:03 PM, Viresh Kumar wrote:
->> The dev_pm_opp_put_*() APIs now accepts a NULL opp_table pointer and so
->> there is no need for us to carry the extra check. Drop them.
->>
->> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
->> ---
->>  drivers/devfreq/exynos-bus.c | 12 ++++--------
->>  1 file changed, 4 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->> index 1e684a448c9e..143fd58ec3dc 100644
->> --- a/drivers/devfreq/exynos-bus.c
->> +++ b/drivers/devfreq/exynos-bus.c
->> @@ -158,10 +158,8 @@ static void exynos_bus_exit(struct device *dev)
->>  
->>  	dev_pm_opp_of_remove_table(dev);
->>  	clk_disable_unprepare(bus->clk);
->> -	if (bus->opp_table) {
->> -		dev_pm_opp_put_regulators(bus->opp_table);
->> -		bus->opp_table = NULL;
->> -	}
->> +	dev_pm_opp_put_regulators(bus->opp_table);
->> +	bus->opp_table = NULL;
->>  }
->>  
->>  static void exynos_bus_passive_exit(struct device *dev)
->> @@ -444,10 +442,8 @@ static int exynos_bus_probe(struct platform_device *pdev)
->>  	dev_pm_opp_of_remove_table(dev);
->>  	clk_disable_unprepare(bus->clk);
->>  err_reg:
->> -	if (!passive) {
->> -		dev_pm_opp_put_regulators(bus->opp_table);
->> -		bus->opp_table = NULL;
->> -	}
->> +	dev_pm_opp_put_regulators(bus->opp_table);
->> +	bus->opp_table = NULL;
->>  
->>  	return ret;
->>  }
->>
-> 
-> Applied it. Thanks.
-> 
+> Also, need to add 'PM /' prefix to patch title 
+> in order to keep the same format with already merged devfreq patches.
+> - 'PM / devfreq: exynos: dev_pm_opp_put_*() accepts NULL argument'
 
-It seems that this patch depends on first patch.
-So, need to be merged to one git repository.
-
-Instead of applying it to devfreq.git,
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Done, thanks.
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+viresh
