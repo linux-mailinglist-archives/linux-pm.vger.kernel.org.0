@@ -2,145 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F522A91E0
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 09:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B312A9260
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Nov 2020 10:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgKFI6O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Nov 2020 03:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S1726345AbgKFJUe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Nov 2020 04:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726543AbgKFI6O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 03:58:14 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E32C0613D3
-        for <linux-pm@vger.kernel.org>; Fri,  6 Nov 2020 00:58:14 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id u4so431597pgr.9
-        for <linux-pm@vger.kernel.org>; Fri, 06 Nov 2020 00:58:13 -0800 (PST)
+        with ESMTP id S1725924AbgKFJUd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Nov 2020 04:20:33 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4EBC0613CF
+        for <linux-pm@vger.kernel.org>; Fri,  6 Nov 2020 01:20:33 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id x13so752135pfa.9
+        for <linux-pm@vger.kernel.org>; Fri, 06 Nov 2020 01:20:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=ht7beKQxIAbpTk+2MJgr9NYeCh/cHuggGDrae3UpH/0=;
-        b=YBGGYWCYtBr/7OVDKg9RemOUh0t1O1mOFQv6yrW1AhI0RpUC/Xr4s7t/ll71+nsh08
-         K6qdCN9M/Sb7lAfHvtwDpyrzJEpxXRwe/DQOlCw7eJ07GdQOf1az3u5dbNjY0FYz+QSk
-         aJ8PmUIYSEnIf1106wDb93KkUrS5jzkW4vno0rCSNJ4ctXAJyov1SA06oK05eqJ1YKAm
-         /1lmuzwYr8QrhpzeBmVeTNaBQPiLWWyetykD6XJq2YeMlzdT23q//evi86RtIZ1OzzPO
-         v396v/RotM0Pi5CYnPvKb2JPiG/NfJD1z6EZwaipAfsyZaRXpoT1VATdZNJsJaLipeX9
-         mmkw==
+        bh=o8uFcVKje4kv+RGQbC1+Di2p0kqZQdZRyJXvb9yfszI=;
+        b=Zo46DEmkqJXg2ONVmV7MPYuDSINCYRNJKcahQ33Zg+IcFOcg+lu1DP5wDQk1KC5MZr
+         YQ9tDm410E0LrIe7lGXHW/t0PyfyTHad3w8yu7hj8zMOJBlbzPoI/YHs5bgKf6bcODsU
+         hlAUSlCrONQOsU05d7+2mZxORNu/JRNguiMRANQQ2kdOLt6kxG9Rm9u2y8WvG4asnpgj
+         vBsGf4CLT/AITZza3UDP8F6blDt1pz2pjcOMEiWl1yNj2lGZCV1lPfusdcu/QRVJHATP
+         J8Bag4/eqwNiceJoEXSo1isob3PyOLkqGlgpIXDHqAqVZVkhnjVkvT5S4akFldscFpeC
+         16JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ht7beKQxIAbpTk+2MJgr9NYeCh/cHuggGDrae3UpH/0=;
-        b=L8rMIE25+b5m/R2/bh0YDJnJXGEfV15bMzDkhHGKY81vtuvoj0Qc4UL8MRLifFQQJK
-         XzAR1AkVQIJbZy88TInZ/3fkgffdz/Z4HPDCxODXEOxRo4i3EYUf93Ot+49JbPbEq2EG
-         0lN11RW9+TDCAW3qgUIEWCwjsBmeA9tX4Gx2ixiZPc9FhauhRNZjfe616ZK4pSNbAdnX
-         AtpL2a5QWEhHtAW4OgU1F1qbHOMVAHcUYuTyR4wu53jt+NGP/ayHy59t60xgcveogxnn
-         ebbi28chXYGK597LHFIulnNMCkkPriAafpyX6gpc3SH2ci+vYw5dCFKmmfwiZZ4DJVjQ
-         dJfg==
-X-Gm-Message-State: AOAM530qWVg4jhgpXrKGVXAB85h3oVbcRonYpxjNsoYFIMNuZ8uDNVZv
-        dS9KivVrmOYzeRGJ25zTrsJAWw==
-X-Google-Smtp-Source: ABdhPJxVsk4tykFJuEalPMZNi9h0aaWjzDL5DOmhzvK58wHu2Wa5avcxVDnO2k+RgOKRqLLoUIKdVg==
-X-Received: by 2002:a17:90b:4a10:: with SMTP id kk16mr1431011pjb.77.1604653093346;
-        Fri, 06 Nov 2020 00:58:13 -0800 (PST)
+        bh=o8uFcVKje4kv+RGQbC1+Di2p0kqZQdZRyJXvb9yfszI=;
+        b=Q9+khOp5X6HUt+lE9rt+QGIEe6xzUw5dXyoKcYxEpSzAn3apmhibJ7HvD5nT48kK7/
+         UsRqOBtS2j4jN9jGtrxBV7OrgH3IxDirdwY20HQuHiMBGeM/t6aHtmtUGi/VDwXjX4cs
+         TMZfoZ8FV4z6D/c0DTn2kRLZUwkdSg8c6JFmYcjfIHyT/rbW0DpXLoO924LVqVwWiMTw
+         U3by7V0iNQlUa4OObsDeX1Ntt184Z07660Q8WQYQvb/RqXcasFyRAI2oq9GEg6BMAXns
+         WMnTK7ENgctJuRnV2YlyRJRb6D92JR6PNEgNXJyW1bFEMFuAfwNIRpYW647B5jd0Tpkv
+         V5pA==
+X-Gm-Message-State: AOAM531IiU6iLd/fX86kJr9iCHkY+KYWu8FuI3iTDzmXOo5cpnOoFEwz
+        i2iLcckKQFjE2dxb0u9+yvlLiw==
+X-Google-Smtp-Source: ABdhPJzR8+V8THDr+L0oS5ftjQ06bl0btESASGt/pHIKZV9BSbI/wAdu5iu+3PBZhWIHPCib1LCIWA==
+X-Received: by 2002:a62:a11a:0:b029:18a:df9e:f537 with SMTP id b26-20020a62a11a0000b029018adf9ef537mr1145546pff.29.1604654432830;
+        Fri, 06 Nov 2020 01:20:32 -0800 (PST)
 Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id z21sm1221365pfa.158.2020.11.06.00.58.12
+        by smtp.gmail.com with ESMTPSA id e6sm1088952pgn.9.2020.11.06.01.20.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Nov 2020 00:58:12 -0800 (PST)
-Date:   Fri, 6 Nov 2020 14:28:10 +0530
+        Fri, 06 Nov 2020 01:20:32 -0800 (PST)
+Date:   Fri, 6 Nov 2020 14:50:20 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Andreas Kemnade <andreas@kemnade.info>, vireshk@kernel.org,
-        nm@ti.com, ulf.hansson@linaro.org, stephan@gerhold.net,
-        khilman@kernel.org, sboyd@kernel.org, linux-pm@vger.kernel.org,
-        rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Subject: Re: [Letux-kernel] [REGRESSION] opp: Allow
- dev_pm_opp_get_opp_table() to return -EPROBE_DEFER
-Message-ID: <20201106085810.ubo3cikbg33x76lt@vireshk-i7>
-References: <20201106001018.02200778@aktux>
- <20201106041441.uuz5vrtqeyn6ijdv@vireshk-i7>
- <8728D936-6583-407F-96CF-92AE95AAECDF@goldelico.com>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
+        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
+        chris.redpath@arm.com
+Subject: Re: [PATCH v3 3/3] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201106092020.za3oxg7gutzc3y2b@vireshk-i7>
+References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+ <20201102120115.29993-4-nicola.mazzucato@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8728D936-6583-407F-96CF-92AE95AAECDF@goldelico.com>
+In-Reply-To: <20201102120115.29993-4-nicola.mazzucato@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06-11-20, 09:44, H. Nikolaus Schaller wrote:
+On 02-11-20, 12:01, Nicola Mazzucato wrote:
+> This is a continuation of the previous v2, where we focused mostly on the
+> dt binding.
 > 
-> > Am 06.11.2020 um 05:14 schrieb Viresh Kumar <viresh.kumar@linaro.org>:
-> > 
-> > On 06-11-20, 00:10, Andreas Kemnade wrote:
-> >> Hi,
-> >> 
-> >> On the GTA04 (DM3730, devicetree omap3-gta04*) I get my console flooded
-> >> up with the following:
-> >> [   24.517211] cpu cpu0: multiple regulators are not supported
-> >> [   24.523040] cpufreq: __target_index: Failed to change cpu frequency: -22
-> >> [   24.537231] ------------[ cut here ]------------
-> >> [   24.542083] WARNING: CPU: 0 PID: 5 at drivers/opp/core.c:678 dev_pm_opp_set_rate+0x23c/0x494
-> >> [   24.551086] Modules linked in: usb_f_ecm g_ether usb_f_rndis u_ether libcomposite configfs phy_twl4030_usb omap2430 musb_hdrc overlay
-> >> [   24.563842] CPU: 0 PID: 5 Comm: kworker/0:0 Tainted: G        W         5.9.0-rc1-00008-g629238068eb9 #14
-> >> [   24.573852] Hardware name: Generic OMAP36xx (Flattened Device Tree)
-> >> [   24.580413] Workqueue: events dbs_work_handler
-> >> [   24.585083] [<c010e6b4>] (unwind_backtrace) from [<c010a194>] (show_stack+0x10/0x14)
-> >> [   24.593200] [<c010a194>] (show_stack) from [<c0464ad0>] (dump_stack+0x8c/0xac)
-> >> [   24.600769] [<c0464ad0>] (dump_stack) from [<c01276a8>] (__warn+0xcc/0xe4)
-> >> [   24.608001] [<c01276a8>] (__warn) from [<c0127a3c>] (warn_slowpath_fmt+0x74/0xa0)
-> >> [   24.615844] [<c0127a3c>] (warn_slowpath_fmt) from [<c06364ac>] (dev_pm_opp_set_rate+0x23c/0x494)
-> >> [   24.625061] [<c06364ac>] (dev_pm_opp_set_rate) from [<c063ec08>] (set_target+0x2c/0x4c)
-> >> [   24.633453] [<c063ec08>] (set_target) from [<c063a950>] (__cpufreq_driver_target+0x190/0x22c)
-> >> [   24.642395] [<c063a950>] (__cpufreq_driver_target) from [<c063d4e0>] (od_dbs_update+0xcc/0x158)
-> >> [   24.651489] [<c063d4e0>] (od_dbs_update) from [<c063e090>] (dbs_work_handler+0x2c/0x54)
-> >> [   24.659881] [<c063e090>] (dbs_work_handler) from [<c013f71c>] (process_one_work+0x210/0x358)
-> >> [   24.668731] [<c013f71c>] (process_one_work) from [<c0140014>] (worker_thread+0x22c/0x2d0)
-> >> [   24.677307] [<c0140014>] (worker_thread) from [<c0144eac>] (kthread+0x140/0x14c)
-> >> [   24.685058] [<c0144eac>] (kthread) from [<c0100148>] (ret_from_fork+0x14/0x2c)
-> >> [   24.692626] Exception stack(0xde4b7fb0 to 0xde4b7ff8)
-> >> [   24.697906] 7fa0:                                     00000000 00000000 00000000 00000000
-> >> [   24.706481] 7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> >> [   24.715057] 7fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> >> [   24.722198] ---[ end trace 038b3f231fae6f81 ]---
-> >> 
-> >> endlessly after the $subject commit. Any hints?
-> > 
-> > The fix for this has been in linux-next for a couple of days and it
-> > made it to linus/master yesterday.
-> > 
-> > 47efcbcb340ic opp: Fix early exit from dev_pm_opp_register_set_opp_helper()
+> I am seeking some feedback/comments on the following two approaches.
+> 
+> Intro:
+> We have seen that in a system where performance control and hardware
+> description do not match (i.e. per-cpu), we still need the information of
+> how the v/f lines are shared among the cpus. We call this information
+> "performance dependencies".
+> We got this info through the opp-shared (the previous 2 patches aim for
+> that).
+> 
+> Problem:
+> How do we share such info (retrieved from a cpufreq driver) to other
+> consumers that rely on it? I have two proposals.
 
-I think I may have accidentally pasted the wrong commit here. This is
-the one which must have fixed it for you.
+I haven't really stop thinking about what and how we should solve
+this, but I have few concerns first.
 
-commit 1f6620f87006 ("opp: Don't always remove static OPPs in _of_add_opp_table_v1()")
+> 2) drivers/thermal/cpufreq_cooling: Replace related_cpus with dependent_cpus
 
+I am not sure if I understand completely on how this is going to be
+modified/work.
 
-> Seems to fix our problems on gta04 (OMAP3).
-> Otherwise we would have found that v5.10-rc3 magically solves it :)
+The only use of related_cpus in the cooling driver is in the helper
+cdev->get_requested_power(), where we need to find the total power
+being consumed by devices controlled by the cooling device. Right ?
 
-I assume you just ran linus's/master, otherwise the patch I shared
-earlier won't have fixed the issue :)
+Now the cooling devices today are very closely related to the cpufreq
+policy, the registration function itself takes a cpufreq policy as an
+argument.
 
-> Interestingly it did not affect OMAP5.
+Consider that you have an octa-core platform and all the CPUs are
+dependent on each other. With your suggested changes and hw control,
+we will have different cpufreq policies for each CPU. And so we will
+have a cooling device, cdev, for each CPU as well. When the IPA
+governor calls cdev->get_requested_power(), why should we ever bother
+to traverse the list of dependent_cpus and not related_cpus only ?
 
-Based on the DT I saw for omap5, it does use OPPv1 and so it shouldn't
-have worked as well. It may be worth checking why it didn't get
-affected earlier.
-
-You can see the populated OPPs for a platform with this:
-
-ls /sys/kernel/debug/opp/cpu*/*
-
-You shall see some difference with and without this patch. Or it may
-be the case that you are adding dynamic OPPs with dev_pm_opp_add() and
-so even after removing the static ones, it worked (though I wasn't
-able to find that in the code).
+Otherwise the same CPU will have its load contributed to the power of
+8 cooling devices.
 
 -- 
 viresh
