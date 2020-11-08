@@ -2,126 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 205862AAA53
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Nov 2020 10:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053642AAC02
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Nov 2020 16:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726607AbgKHJ1n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 Nov 2020 04:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726206AbgKHJ1l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Nov 2020 04:27:41 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10BDC0613CF;
-        Sun,  8 Nov 2020 01:27:39 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id 74so7963057lfo.5;
-        Sun, 08 Nov 2020 01:27:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i1P0sLZeM+9gDyjPoTyis2g+fl//04kPmhTkJ+3czYA=;
-        b=UqK5bERtp2v+yTvMC5jRbEfNBo5l5ORhw4fYQH3uG4DXzJf1sIhf5tKwQEE0E/XPd7
-         oYOgX6254K3o11XkPHVd9HkLTHBYhjOqylwICMJQoybp6d7V4lF6ctpX3yM3ZBiAa8GE
-         A6zS4vUPP4B5gtKxhDkeaiJ5BUL4teWBnUYtMv1xiFqmstX4vny6k72UmLxwCRGkT1a3
-         7636WNxPazPHFUvIItvuC99um2or6hl36M/ekxkMRYi/yHqaH4RHd1vKyqTmnbEz5ai+
-         6N8HmvFpP7avlcgbNdzehrKWLPh4xsPDfN2tthhWVvxB8xhRKq21RbDVOLK/4UZ18iiy
-         gRSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i1P0sLZeM+9gDyjPoTyis2g+fl//04kPmhTkJ+3czYA=;
-        b=VUjiPXP+6XmO++Y15js4jxKml2rkW+L3QiLCNqc/ljQKxeDqrBNPY89+4hpa6W+vEe
-         rHuf0HmP9VDyVz/gFuXyqTP8QrSng06zKU80/MuFd+ptTx0sPX2Jofsv/ctVXmoRVs6q
-         umoukpCNUy0uAIx7ZJl4YdkFcPqeV0leLOgLrCYUWyWM/x5ztDgmoRF1295ITUkzlhGS
-         0tXHj5KYIompwpg8ieG8ldpH5y6cgMahm3A1CbFyH563JHwNybJb/MWHlVHYoMTs5fs0
-         Vf73ellV8MKfga9re+m1U05gDoqu/vARxWHNERhcbw09mDO2G7rw1hxA7/rCYbCe9LGu
-         bITw==
-X-Gm-Message-State: AOAM530xbdNcIRN05BgPVhyTXQkXx8KiyNCoDWGZPdfeXvlCEQCni/0/
-        nxsuH2+jgEIzJMk49yhV9KPpfP8MyYMRpmWsXETv8v110hY5K1B/FxM=
-X-Google-Smtp-Source: ABdhPJz+eYZs6yF27eiSlSfqVuWEyhjpnJUQRL/KNZ6Ic6mddjScsMsSQmZ2ncLhaGdBBkuybz+dB1uSKbiUbM01ZYg=
-X-Received: by 2002:a19:54e:: with SMTP id 75mr1988866lff.396.1604827658153;
- Sun, 08 Nov 2020 01:27:38 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1604646059.git.viresh.kumar@linaro.org> <86e6dfb0b929e525b568d80e5e852f14487d9b94.1604646059.git.viresh.kumar@linaro.org>
-In-Reply-To: <86e6dfb0b929e525b568d80e5e852f14487d9b94.1604646059.git.viresh.kumar@linaro.org>
-From:   Ilia Lin <ilia.lin@gmail.com>
-Date:   Sun, 8 Nov 2020 11:27:26 +0200
-Message-ID: <CA+5LGR2dEk2cGm0maSUWVG2x-t33TWvd8=2UVqmmN+BWwB=CgQ@mail.gmail.com>
-Subject: Re: [PATCH 3/7] cpufreq: qcom-cpufreq-nvmem: dev_pm_opp_put_*()
- accepts NULL argument
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        id S1728143AbgKHPwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Nov 2020 10:52:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54580 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726814AbgKHPwU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 8 Nov 2020 10:52:20 -0500
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2319920B1F;
+        Sun,  8 Nov 2020 15:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604850739;
+        bh=Uk7+qbF070biGWY7S0qa+YFj/roh4zH+JTWLkehmpK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W8WKSn+NGyF5bfG7mqPhjfAlBAWYztiwckdEqC6ZRtbOURJ4KZ/gmYqpyFPUXcV6f
+         /JueawVO0JF3A3okuAQOcuVRFmJn44vY3jiGQtBBY5TkJhiY69jaI4It+uasoTI/+/
+         p4oIAjpAWOZNMR3KM+BaZVLFwnZykeJwKsZwCSkA=
+Date:   Sun, 8 Nov 2020 15:52:13 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jishnu Prakash <jprakash@qti.qualcomm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "open list:QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096" 
-        <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        digetx@gmail.com,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Amit Kucheria <amitk@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Andy Gross <agross@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-iio@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v9 01/15] dt-bindings: thermal: qcom: add adc-thermal
+ monitor bindings
+Message-ID: <20201108155213.1c91e3b9@archlinux>
+In-Reply-To: <20201104183230.GB3913864@bogus>
+References: <20201102174950.1148498-1-dmitry.baryshkov@linaro.org>
+        <20201102174950.1148498-2-dmitry.baryshkov@linaro.org>
+        <20201104183230.GB3913864@bogus>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reviewed-by: Ilia Lin <ilia.lin@kernel.org>
+On Wed, 4 Nov 2020 12:32:30 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-On Fri, Nov 6, 2020 at 9:05 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> The dev_pm_opp_put_*() APIs now accepts a NULL opp_table pointer and so
-> there is no need for us to carry the extra checks. Drop them.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 15 ++++++---------
->  1 file changed, 6 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index d06b37822c3d..747d602f221e 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -397,19 +397,19 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
->
->  free_genpd_opp:
->         for_each_possible_cpu(cpu) {
-> -               if (IS_ERR_OR_NULL(drv->genpd_opp_tables[cpu]))
-> +               if (IS_ERR(drv->genpd_opp_tables[cpu]))
->                         break;
->                 dev_pm_opp_detach_genpd(drv->genpd_opp_tables[cpu]);
->         }
->         kfree(drv->genpd_opp_tables);
->  free_opp:
->         for_each_possible_cpu(cpu) {
-> -               if (IS_ERR_OR_NULL(drv->names_opp_tables[cpu]))
-> +               if (IS_ERR(drv->names_opp_tables[cpu]))
->                         break;
->                 dev_pm_opp_put_prop_name(drv->names_opp_tables[cpu]);
->         }
->         for_each_possible_cpu(cpu) {
-> -               if (IS_ERR_OR_NULL(drv->hw_opp_tables[cpu]))
-> +               if (IS_ERR(drv->hw_opp_tables[cpu]))
->                         break;
->                 dev_pm_opp_put_supported_hw(drv->hw_opp_tables[cpu]);
->         }
-> @@ -430,12 +430,9 @@ static int qcom_cpufreq_remove(struct platform_device *pdev)
->         platform_device_unregister(cpufreq_dt_pdev);
->
->         for_each_possible_cpu(cpu) {
-> -               if (drv->names_opp_tables[cpu])
-> -                       dev_pm_opp_put_supported_hw(drv->names_opp_tables[cpu]);
-> -               if (drv->hw_opp_tables[cpu])
-> -                       dev_pm_opp_put_supported_hw(drv->hw_opp_tables[cpu]);
-> -               if (drv->genpd_opp_tables[cpu])
-> -                       dev_pm_opp_detach_genpd(drv->genpd_opp_tables[cpu]);
-> +               dev_pm_opp_put_supported_hw(drv->names_opp_tables[cpu]);
-> +               dev_pm_opp_put_supported_hw(drv->hw_opp_tables[cpu]);
-> +               dev_pm_opp_detach_genpd(drv->genpd_opp_tables[cpu]);
->         }
->
->         kfree(drv->names_opp_tables);
-> --
-> 2.25.0.rc1.19.g042ed3e048af
->
+> On Mon, 02 Nov 2020 20:49:36 +0300, Dmitry Baryshkov wrote:
+> > Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
+> > close counterpart of VADC part of those PMICs.
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+
+Ah, this got picked up by the additions I made to dt-schema the other day.
+
+So there are a few existing places where io-channel-ranges is miss provided
+in dtsi files for io-channel providers (it's being ignored in most the places
+it is specified!)
+
+What it means is that the child nodes may use io-channel entries of their parent.
+Hence it should only be specified on the consumer side.
+Here we don't actually need it for the consumer either as the io-channels
+entry is in the child node, not the parent.
+
+I'm kind of assuming that I'll eventually do the immutable branch for this
+series. If so I can clean this up whilst applying if everything else is fine
+with v9.
+
+Thanks,
+
+Jonathan
+
+
+> > ---
+> >  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 154 ++++++++++++++++++
+> >  1 file changed, 154 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> >   
+> 
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dt.yaml: adc@3100: 'io-channels' is a dependency of 'io-channel-ranges'
+> 	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/iio/iio-consumer.yaml
+> 
+> 
+> See https://patchwork.ozlabs.org/patch/1392425
+> 
+> The base for the patch is generally the last rc1. Any dependencies
+> should be noted.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 
+
