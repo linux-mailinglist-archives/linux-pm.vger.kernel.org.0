@@ -2,70 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A622AAA4D
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Nov 2020 10:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205862AAA53
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Nov 2020 10:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgKHJZj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 Nov 2020 04:25:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51886 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726099AbgKHJZh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 8 Nov 2020 04:25:37 -0500
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0D0720719;
-        Sun,  8 Nov 2020 09:25:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604827536;
-        bh=0Re+BH04OjvQtiodOP0PAVO/kqbxE/PMUbtENeeHUCU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=T8aftoYJoOfJoY2D59wtyqCFPrcSPDuCqBe6z9Y88z18itxLZYrLQQoUiySYprX/w
-         CeltL21788RGxrGqCPGHjUWJsuUW/aiyLgkfQF5xQteJWVIw4gGxwp93kbsT47/9ed
-         KFVVrs14i0T/haKa/knwEHH/Xo7Crf9KJaPhdmXY=
-Received: by mail-lj1-f171.google.com with SMTP id r17so693827ljg.5;
-        Sun, 08 Nov 2020 01:25:35 -0800 (PST)
-X-Gm-Message-State: AOAM5335wt3uT3SLq365qpcyGeMWT4K9imATGHktiEFQSWv9lqgxs+Pk
-        re73Q0gs2V+w/MHHyiwkoNSjw5m3HQY3g0MvC+g=
-X-Google-Smtp-Source: ABdhPJyddR8brDR4uTwLcrWRTsQ0eYz6SRGBrDUoAv5c7VKMt2AwiBlznvTTelNyXgQ/X1oyJ30XbCrkOlR4o4w9iyo=
-X-Received: by 2002:a2e:b536:: with SMTP id z22mr4077018ljm.177.1604827534166;
- Sun, 08 Nov 2020 01:25:34 -0800 (PST)
+        id S1726607AbgKHJ1n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Nov 2020 04:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726206AbgKHJ1l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Nov 2020 04:27:41 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10BDC0613CF;
+        Sun,  8 Nov 2020 01:27:39 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id 74so7963057lfo.5;
+        Sun, 08 Nov 2020 01:27:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i1P0sLZeM+9gDyjPoTyis2g+fl//04kPmhTkJ+3czYA=;
+        b=UqK5bERtp2v+yTvMC5jRbEfNBo5l5ORhw4fYQH3uG4DXzJf1sIhf5tKwQEE0E/XPd7
+         oYOgX6254K3o11XkPHVd9HkLTHBYhjOqylwICMJQoybp6d7V4lF6ctpX3yM3ZBiAa8GE
+         A6zS4vUPP4B5gtKxhDkeaiJ5BUL4teWBnUYtMv1xiFqmstX4vny6k72UmLxwCRGkT1a3
+         7636WNxPazPHFUvIItvuC99um2or6hl36M/ekxkMRYi/yHqaH4RHd1vKyqTmnbEz5ai+
+         6N8HmvFpP7avlcgbNdzehrKWLPh4xsPDfN2tthhWVvxB8xhRKq21RbDVOLK/4UZ18iiy
+         gRSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i1P0sLZeM+9gDyjPoTyis2g+fl//04kPmhTkJ+3czYA=;
+        b=VUjiPXP+6XmO++Y15js4jxKml2rkW+L3QiLCNqc/ljQKxeDqrBNPY89+4hpa6W+vEe
+         rHuf0HmP9VDyVz/gFuXyqTP8QrSng06zKU80/MuFd+ptTx0sPX2Jofsv/ctVXmoRVs6q
+         umoukpCNUy0uAIx7ZJl4YdkFcPqeV0leLOgLrCYUWyWM/x5ztDgmoRF1295ITUkzlhGS
+         0tXHj5KYIompwpg8ieG8ldpH5y6cgMahm3A1CbFyH563JHwNybJb/MWHlVHYoMTs5fs0
+         Vf73ellV8MKfga9re+m1U05gDoqu/vARxWHNERhcbw09mDO2G7rw1hxA7/rCYbCe9LGu
+         bITw==
+X-Gm-Message-State: AOAM530xbdNcIRN05BgPVhyTXQkXx8KiyNCoDWGZPdfeXvlCEQCni/0/
+        nxsuH2+jgEIzJMk49yhV9KPpfP8MyYMRpmWsXETv8v110hY5K1B/FxM=
+X-Google-Smtp-Source: ABdhPJz+eYZs6yF27eiSlSfqVuWEyhjpnJUQRL/KNZ6Ic6mddjScsMsSQmZ2ncLhaGdBBkuybz+dB1uSKbiUbM01ZYg=
+X-Received: by 2002:a19:54e:: with SMTP id 75mr1988866lff.396.1604827658153;
+ Sun, 08 Nov 2020 01:27:38 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1604646059.git.viresh.kumar@linaro.org>
-In-Reply-To: <cover.1604646059.git.viresh.kumar@linaro.org>
-From:   Ilia Lin <ilia.lin@kernel.org>
-Date:   Sun, 8 Nov 2020 11:25:22 +0200
-X-Gmail-Original-Message-ID: <CA+5LGR0UwGUeXPw3Jbd7=VkY7fY_rKV_YjLpWV4GbHnvP23Ejg@mail.gmail.com>
-Message-ID: <CA+5LGR0UwGUeXPw3Jbd7=VkY7fY_rKV_YjLpWV4GbHnvP23Ejg@mail.gmail.com>
-Subject: Re: [PATCH 0/7] opp: Allow dev_pm_opp_put_*() APIs to accept NULL opp_table
+References: <cover.1604646059.git.viresh.kumar@linaro.org> <86e6dfb0b929e525b568d80e5e852f14487d9b94.1604646059.git.viresh.kumar@linaro.org>
+In-Reply-To: <86e6dfb0b929e525b568d80e5e852f14487d9b94.1604646059.git.viresh.kumar@linaro.org>
+From:   Ilia Lin <ilia.lin@gmail.com>
+Date:   Sun, 8 Nov 2020 11:27:26 +0200
+Message-ID: <CA+5LGR2dEk2cGm0maSUWVG2x-t33TWvd8=2UVqmmN+BWwB=CgQ@mail.gmail.com>
+Subject: Re: [PATCH 3/7] cpufreq: qcom-cpufreq-nvmem: dev_pm_opp_put_*()
+ accepts NULL argument
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Andy Gross <agross@kernel.org>,
+Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Qiang Yu <yuq825@gmail.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Viresh Kumar <vireshk@kernel.org>,
         "open list:QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096" 
         <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>, digetx@gmail.com,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        digetx@gmail.com,
         "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -73,36 +69,59 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Reviewed-by: Ilia Lin <ilia.lin@kernel.org>
 
-
 On Fri, Nov 6, 2020 at 9:05 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Hello,
+> The dev_pm_opp_put_*() APIs now accepts a NULL opp_table pointer and so
+> there is no need for us to carry the extra checks. Drop them.
 >
-> This patchset updates the dev_pm_opp_put_*() helpers to accept a NULL
-> pointer for the OPP table, in order to allow the callers to drop the
-> unnecessary checks they had to carry.
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
 >
-> All these must get merged upstream through the OPP tree as there is a
-> hard dependency on the first patch here. Thanks.
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index d06b37822c3d..747d602f221e 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -397,19 +397,19 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
 >
-> Viresh Kumar (7):
->   opp: Allow dev_pm_opp_put_*() APIs to accept NULL opp_table
->   cpufreq: dt: dev_pm_opp_put_regulators() accepts NULL argument
->   cpufreq: qcom-cpufreq-nvmem: dev_pm_opp_put_*() accepts NULL argument
->   devfreq: exynos: dev_pm_opp_put_*() accepts NULL argument
->   drm/lima: dev_pm_opp_put_*() accepts NULL argument
->   drm/panfrost: dev_pm_opp_put_*() accepts NULL argument
->   media: venus: dev_pm_opp_put_*() accepts NULL argument
+>  free_genpd_opp:
+>         for_each_possible_cpu(cpu) {
+> -               if (IS_ERR_OR_NULL(drv->genpd_opp_tables[cpu]))
+> +               if (IS_ERR(drv->genpd_opp_tables[cpu]))
+>                         break;
+>                 dev_pm_opp_detach_genpd(drv->genpd_opp_tables[cpu]);
+>         }
+>         kfree(drv->genpd_opp_tables);
+>  free_opp:
+>         for_each_possible_cpu(cpu) {
+> -               if (IS_ERR_OR_NULL(drv->names_opp_tables[cpu]))
+> +               if (IS_ERR(drv->names_opp_tables[cpu]))
+>                         break;
+>                 dev_pm_opp_put_prop_name(drv->names_opp_tables[cpu]);
+>         }
+>         for_each_possible_cpu(cpu) {
+> -               if (IS_ERR_OR_NULL(drv->hw_opp_tables[cpu]))
+> +               if (IS_ERR(drv->hw_opp_tables[cpu]))
+>                         break;
+>                 dev_pm_opp_put_supported_hw(drv->hw_opp_tables[cpu]);
+>         }
+> @@ -430,12 +430,9 @@ static int qcom_cpufreq_remove(struct platform_device *pdev)
+>         platform_device_unregister(cpufreq_dt_pdev);
 >
->  drivers/cpufreq/cpufreq-dt.c                   |  6 ++----
->  drivers/cpufreq/qcom-cpufreq-nvmem.c           | 15 ++++++---------
->  drivers/devfreq/exynos-bus.c                   | 12 ++++--------
->  drivers/gpu/drm/lima/lima_devfreq.c            | 13 ++++---------
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c    |  6 ++----
->  drivers/media/platform/qcom/venus/pm_helpers.c |  3 +--
->  drivers/opp/core.c                             | 18 ++++++++++++++++++
->  7 files changed, 37 insertions(+), 36 deletions(-)
+>         for_each_possible_cpu(cpu) {
+> -               if (drv->names_opp_tables[cpu])
+> -                       dev_pm_opp_put_supported_hw(drv->names_opp_tables[cpu]);
+> -               if (drv->hw_opp_tables[cpu])
+> -                       dev_pm_opp_put_supported_hw(drv->hw_opp_tables[cpu]);
+> -               if (drv->genpd_opp_tables[cpu])
+> -                       dev_pm_opp_detach_genpd(drv->genpd_opp_tables[cpu]);
+> +               dev_pm_opp_put_supported_hw(drv->names_opp_tables[cpu]);
+> +               dev_pm_opp_put_supported_hw(drv->hw_opp_tables[cpu]);
+> +               dev_pm_opp_detach_genpd(drv->genpd_opp_tables[cpu]);
+>         }
 >
+>         kfree(drv->names_opp_tables);
 > --
 > 2.25.0.rc1.19.g042ed3e048af
 >
