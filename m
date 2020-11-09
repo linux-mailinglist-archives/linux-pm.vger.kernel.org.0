@@ -2,120 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8112E2AB72E
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 12:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0838C2AB755
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 12:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729856AbgKILdy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 06:33:54 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54204 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729891AbgKILdy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 9 Nov 2020 06:33:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2BA62ABF4;
-        Mon,  9 Nov 2020 11:33:51 +0000 (UTC)
-Subject: Re: [PATCH v5 1/5] mm: introduce debug_pagealloc_{map,unmap}_pages()
- helpers
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20201108065758.1815-1-rppt@kernel.org>
- <20201108065758.1815-2-rppt@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Message-ID: <4bd5ae2b-4fc6-73dc-b83b-e71826990946@suse.cz>
-Date:   Mon, 9 Nov 2020 12:33:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1729650AbgKILkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 06:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729544AbgKILkb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 06:40:31 -0500
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD86FC0613D3
+        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 03:40:30 -0800 (PST)
+Received: by mail-vs1-xe42.google.com with SMTP id y73so4750534vsc.5
+        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 03:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tFAREBOaPb8fFLHS5EKBoT6wmZvpmmlQ3mX9b3XT+6Y=;
+        b=ShlgI3kBoDqrUXjBkcgL6ICYr4iudLXeUnk8gSzBhvAzC/SmTX8E2z2VGsv6ERuCEB
+         +8e0Bs2cYn2l0zugI2WNRkx7hgFlCNNnRHgCFkrnXxjgDbDtywhtQA1fYuyjx5tNje94
+         RYy4RJqWZOcDxc2Nik6bIIyRIdtB+1ImM+T/zeYempqQ1DA1fovshciKCWfnlQLqxO83
+         rWakpY3Ix6d9XbBO5mOoScbxyTCW/ibSb1LFZxbYxwEz6e6yo/yHpuDjQDwJguU4RPsC
+         56sQ/P8GebHqJTEHnO71BVPZ2McYNvxNwqLf5TDuC9zX9B2qwKwL+KiwLB9UY4qhdBzz
+         MGZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tFAREBOaPb8fFLHS5EKBoT6wmZvpmmlQ3mX9b3XT+6Y=;
+        b=PzH+qPTDHlrNF08jwIKvkmwcTXZu7HXZ4hGvduHBfyCOqEfjFRMbHqzRN2Xst40Tys
+         Lhh/yALHcWtjZur9jFAJSZQrFPVlNIomzX9ZAlBAIPZlgtADfCvf2zFDy7zZ0Unpsblk
+         G5zXzAly+IZX57j1YVxBVlHA3mSMpyCdGmmAFIkq+o1wbPkvbuTpz2MlMTTrUH3627lF
+         avV3C5UlEa8eKrsrfCkhmf86dp8gz3QKFBo2KNFTIlHSsgDPBonlisvlxoLL2mDwa5EK
+         6Sed6xUnxreM71dFiQ3PGWKXSDzXwrGUJxbEsapIc6cGRPq2C6Wj9Ef/7vAjd6Oyodj/
+         w4jg==
+X-Gm-Message-State: AOAM532oQBXjrnxm1hbUsV2EbJOq5+IWyEESQ+WzlGZXvNy6dGh+dQdI
+        JPlaYQIVDWDFw3V+Ps+XI0GMcqNNaZuQzInWG96cVA==
+X-Google-Smtp-Source: ABdhPJx4hcYU29RKim6YQ2dljXsMGiAvoGgxIm0ILZrHWvgrDc051LUDUJNM8ZwrzOiSgvpIiNzbl2J5VIdrHj7mW54=
+X-Received: by 2002:a05:6102:30a7:: with SMTP id y7mr7333356vsd.55.1604922029871;
+ Mon, 09 Nov 2020 03:40:29 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201108065758.1815-2-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201106164903.3906-1-ilina@codeaurora.org>
+In-Reply-To: <20201106164903.3906-1-ilina@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 9 Nov 2020 12:39:53 +0100
+Message-ID: <CAPDyKFqvoAjNVJ6e8r3+tDKkq49h6tev6MPoQ1fHZu9FoOU6Nw@mail.gmail.com>
+Subject: Re: [PATCH] PM / Domains: replace -ENOTSUPP with -EOPNOTSUPP
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/8/20 7:57 AM, Mike Rapoport wrote:
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -1428,21 +1428,19 @@ static bool is_debug_pagealloc_cache(struct kmem_cache *cachep)
->   	return false;
->   }
->   
-> -#ifdef CONFIG_DEBUG_PAGEALLOC
->   static void slab_kernel_map(struct kmem_cache *cachep, void *objp, int map)
->   {
->   	if (!is_debug_pagealloc_cache(cachep))
->   		return;
+On Fri, 6 Nov 2020 at 17:49, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> While submitting a patch to add next_wakeup, checkpatch reported this -
+>
+> WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+> +       return -ENOTSUPP;
+>
+> Address the above warning in other functions in pm_domain.h.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
 
-Hmm, I didn't notice earlier, sorry.
-The is_debug_pagealloc_cache() above includes a debug_pagealloc_enabled_static() 
-check, so it should be fine to use
-__kernel_map_pages() directly below. Otherwise we generate two static key checks 
-for the same key needlessly.
+I assume you have looked at callers of these functions too, to make
+sure they don't explicitly look at -ENOTSUPP?
 
->   
-> -	kernel_map_pages(virt_to_page(objp), cachep->size / PAGE_SIZE, map);
-> +	if (map)
-> +		debug_pagealloc_map_pages(virt_to_page(objp),
-> +					  cachep->size / PAGE_SIZE);
-> +	else
-> +		debug_pagealloc_unmap_pages(virt_to_page(objp),
-> +					    cachep->size / PAGE_SIZE);
->   }
->   
-> -#else
-> -static inline void slab_kernel_map(struct kmem_cache *cachep, void *objp,
-> -				int map) {}
-> -
-> -#endif
-> -
->   static void poison_obj(struct kmem_cache *cachep, void *addr, unsigned char val)
->   {
->   	int size = cachep->object_size;
-> @@ -2062,7 +2060,7 @@ int __kmem_cache_create(struct kmem_cache *cachep, slab_flags_t flags)
->   
->   #if DEBUG
->   	/*
-> -	 * If we're going to use the generic kernel_map_pages()
-> +	 * If we're going to use the generic debug_pagealloc_map_pages()
->   	 * poisoning, then it's going to smash the contents of
->   	 * the redzone and userword anyhow, so switch them off.
->   	 */
-> 
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+Kind regards
+Uffe
+
+> ---
+>  include/linux/pm_domain.h | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 49982cd58bfd..e390388e6c17 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -259,24 +259,24 @@ static inline int pm_genpd_init(struct generic_pm_domain *genpd,
+>  }
+>  static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
+>  {
+> -       return -ENOTSUPP;
+> +       return -EOPNOTSUPP;
+>  }
+>
+>  static inline int dev_pm_genpd_set_performance_state(struct device *dev,
+>                                                      unsigned int state)
+>  {
+> -       return -ENOTSUPP;
+> +       return -EOPNOTSUPP;
+>  }
+>
+>  static inline int dev_pm_genpd_add_notifier(struct device *dev,
+>                                             struct notifier_block *nb)
+>  {
+> -       return -ENOTSUPP;
+> +       return -EOPNOTSUPP;
+>  }
+>
+>  static inline int dev_pm_genpd_remove_notifier(struct device *dev)
+>  {
+> -       return -ENOTSUPP;
+> +       return -EOPNOTSUPP;
+>  }
+>
+>  static inline int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+> @@ -334,13 +334,13 @@ struct device *genpd_dev_pm_attach_by_name(struct device *dev,
+>  static inline int of_genpd_add_provider_simple(struct device_node *np,
+>                                         struct generic_pm_domain *genpd)
+>  {
+> -       return -ENOTSUPP;
+> +       return -EOPNOTSUPP;
+>  }
+>
+>  static inline int of_genpd_add_provider_onecell(struct device_node *np,
+>                                         struct genpd_onecell_data *data)
+>  {
+> -       return -ENOTSUPP;
+> +       return -EOPNOTSUPP;
+>  }
+>
+>  static inline void of_genpd_del_provider(struct device_node *np) {}
+> @@ -396,7 +396,7 @@ static inline struct device *genpd_dev_pm_attach_by_name(struct device *dev,
+>  static inline
+>  struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+>  {
+> -       return ERR_PTR(-ENOTSUPP);
+> +       return ERR_PTR(-EOPNOTSUPP);
+>  }
+>  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
+>
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
