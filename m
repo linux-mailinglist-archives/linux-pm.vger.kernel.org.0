@@ -2,76 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DE52AAEAE
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 02:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFBF2AAFDA
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 04:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728993AbgKIBTS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 Nov 2020 20:19:18 -0500
-Received: from mo-csw1514.securemx.jp ([210.130.202.153]:60870 "EHLO
-        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727979AbgKIBTS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Nov 2020 20:19:18 -0500
-Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 0A91Itv4020729; Mon, 9 Nov 2020 10:18:55 +0900
-X-Iguazu-Qid: 34trFI5eBnsfcuv5BC
-X-Iguazu-QSIG: v=2; s=0; t=1604884735; q=34trFI5eBnsfcuv5BC; m=fASxfKb7gMfbRWGtZyCx9j9NW3GRwWaYhWoTAptrXKU=
-Received: from imx12.toshiba.co.jp (imx12.toshiba.co.jp [61.202.160.132])
-        by relay.securemx.jp (mx-mr1513) id 0A91IrBI012852;
-        Mon, 9 Nov 2020 10:18:53 +0900
-Received: from enc02.toshiba.co.jp ([61.202.160.51])
-        by imx12.toshiba.co.jp  with ESMTP id 0A91Ir2B008158;
-        Mon, 9 Nov 2020 10:18:53 +0900 (JST)
-Received: from hop101.toshiba.co.jp ([133.199.85.107])
-        by enc02.toshiba.co.jp  with ESMTP id 0A91Iq9M022229;
-        Mon, 9 Nov 2020 10:18:52 +0900
-From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v5] cper, apei, mce: Pass x86 CPER through the MCA handling chain
-References: <20201103164952.5126-1-Smita.KoralahalliChannabasappa@amd.com>
-        <87a6vv9hch.fsf@kokedama.swc.toshiba.co.jp>
-        <20201106120950.GC14914@zn.tnic>
-Date:   Mon, 09 Nov 2020 10:18:46 +0900
-In-Reply-To: <20201106120950.GC14914@zn.tnic> (Borislav Petkov's message of
-        "Fri, 6 Nov 2020 13:09:50 +0100")
-X-TSB-HOP: ON
-Message-ID: <874klz9vk9.fsf@kokedama.swc.toshiba.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1729025AbgKIDVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Nov 2020 22:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728191AbgKIDVZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Nov 2020 22:21:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69AD6C0613CF;
+        Sun,  8 Nov 2020 19:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=9ccmp8c2bM7yoQL9161bvYGYwR+a7M197QPEnd7pBS8=; b=sMcA3xodBofJCZFcVjN+CXOwGD
+        3UMUWvK7TnT5vvv3P12VZi29eJ40OTnWoEv+GnCBVO6WPQbWqsIQxfn2ebL7QSXYddlSb+mGiCmWZ
+        nhUOWQVFRppWLbiL7YSNz6mtD+uxXeRI6uMCyx5myzYA8Mzo16Iaoz3yUsHY4nA1NUF1V1e6bJMhd
+        Lp+Dh5YpCyflbGyThrOnDxJNN9OEH6AW6Xnq4aPpOCqFb10l5C9kzGD7m1FDi1t7jMxgf1eAxFIHs
+        ZQb8r/JJsRsGUoMYS++aje65p13oYrLmu5/1lwv2lEXAcnXG8CE46CJ4u/gsSUrzI6SH2lQOimRn8
+        i6eIO7og==;
+Received: from [2601:1c0:6280:3f0::64ec] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kbxk9-0003It-9p; Mon, 09 Nov 2020 03:21:22 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Taniya Das <tdas@codeaurora.org>, linux-next@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH -next v2] clk: pm_clock: provide stubs for pm_clk_runtime_suspend/_resume
+Date:   Sun,  8 Nov 2020 19:21:15 -0800
+Message-Id: <20201109032115.10610-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Borislav Petkov <bp@alien8.de> writes:
+Add stubs for pm_clk_runtime_suspend() and pm_clk_runtime_resume()
+to fix build errors when CONFIG_PM and CONFIG_PM_CLK are not enabled.
 
-> On Fri, Nov 06, 2020 at 02:36:46PM +0900, Punit Agrawal wrote:
->> > diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
->> > index 2531de49f56c..438ed9eff6d0 100644
->> > --- a/drivers/firmware/efi/cper-x86.c
->> > +++ b/drivers/firmware/efi/cper-x86.c
->> > @@ -2,6 +2,7 @@
->> >  // Copyright (C) 2018, Advanced Micro Devices, Inc.
->> >  
->> >  #include <linux/cper.h>
->> > +#include <linux/acpi.h>
->> 
->> Did you mean to include <asm/acpi.h>?
->
-> Why?
+Fixes these build errors:
 
-Because arch_apei_report_x86_error() used in the patch is defined
-there. The indirect include works but pulls in additional definitions
-not needed by the patch.
+../drivers/clk/qcom/camcc-sc7180.c: In function ‘cam_cc_sc7180_probe’:
+../drivers/clk/qcom/camcc-sc7180.c:1672:8: error: implicit declaration of function ‘pm_clk_runtime_resume’; did you mean ‘pm_runtime_resume’? [-Werror=implicit-function-declaration]
+  ret = pm_clk_runtime_resume(&pdev->dev);
+        ^~~~~~~~~~~~~~~~~~~~~
+../drivers/clk/qcom/camcc-sc7180.c:1681:3: error: implicit declaration of function ‘pm_clk_runtime_suspend’; did you mean ‘pm_runtime_suspend’? [-Werror=implicit-function-declaration]
+   pm_clk_runtime_suspend(&pdev->dev);
+   ^~~~~~~~~~~~~~~~~~~~~~
 
-Do you prefer the more generic include?
+Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller driver for SC7180")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: linux-pm@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: Taniya Das <tdas@codeaurora.org>
+Cc: linux-next@vger.kernel.org
+Cc: Nathan Chancellor <natechancellor@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+v2: move the function stubs to be inside the #else (for !CONFIG_PM)
+    as suggested by Nathan to fix another build error
 
-Thanks,
-Punit
+ include/linux/pm_clock.h |    8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+--- linux-next-20201106.orig/include/linux/pm_clock.h
++++ linux-next-20201106/include/linux/pm_clock.h
+@@ -27,6 +27,14 @@ extern int pm_clk_runtime_resume(struct
+ 	.runtime_resume = pm_clk_runtime_resume,
+ #else
+ #define USE_PM_CLK_RUNTIME_OPS
++static inline int pm_clk_runtime_suspend(struct device *dev)
++{
++	return 0;
++}
++static inline int pm_clk_runtime_resume(struct device *dev)
++{
++	return 0;
++}
+ #endif
+ 
+ #ifdef CONFIG_PM_CLK
