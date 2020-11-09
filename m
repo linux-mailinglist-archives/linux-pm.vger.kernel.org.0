@@ -2,145 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0838C2AB755
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 12:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DED2AB762
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 12:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729650AbgKILkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 06:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729544AbgKILkb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 06:40:31 -0500
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD86FC0613D3
-        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 03:40:30 -0800 (PST)
-Received: by mail-vs1-xe42.google.com with SMTP id y73so4750534vsc.5
-        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 03:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tFAREBOaPb8fFLHS5EKBoT6wmZvpmmlQ3mX9b3XT+6Y=;
-        b=ShlgI3kBoDqrUXjBkcgL6ICYr4iudLXeUnk8gSzBhvAzC/SmTX8E2z2VGsv6ERuCEB
-         +8e0Bs2cYn2l0zugI2WNRkx7hgFlCNNnRHgCFkrnXxjgDbDtywhtQA1fYuyjx5tNje94
-         RYy4RJqWZOcDxc2Nik6bIIyRIdtB+1ImM+T/zeYempqQ1DA1fovshciKCWfnlQLqxO83
-         rWakpY3Ix6d9XbBO5mOoScbxyTCW/ibSb1LFZxbYxwEz6e6yo/yHpuDjQDwJguU4RPsC
-         56sQ/P8GebHqJTEHnO71BVPZ2McYNvxNwqLf5TDuC9zX9B2qwKwL+KiwLB9UY4qhdBzz
-         MGZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tFAREBOaPb8fFLHS5EKBoT6wmZvpmmlQ3mX9b3XT+6Y=;
-        b=PzH+qPTDHlrNF08jwIKvkmwcTXZu7HXZ4hGvduHBfyCOqEfjFRMbHqzRN2Xst40Tys
-         Lhh/yALHcWtjZur9jFAJSZQrFPVlNIomzX9ZAlBAIPZlgtADfCvf2zFDy7zZ0Unpsblk
-         G5zXzAly+IZX57j1YVxBVlHA3mSMpyCdGmmAFIkq+o1wbPkvbuTpz2MlMTTrUH3627lF
-         avV3C5UlEa8eKrsrfCkhmf86dp8gz3QKFBo2KNFTIlHSsgDPBonlisvlxoLL2mDwa5EK
-         6Sed6xUnxreM71dFiQ3PGWKXSDzXwrGUJxbEsapIc6cGRPq2C6Wj9Ef/7vAjd6Oyodj/
-         w4jg==
-X-Gm-Message-State: AOAM532oQBXjrnxm1hbUsV2EbJOq5+IWyEESQ+WzlGZXvNy6dGh+dQdI
-        JPlaYQIVDWDFw3V+Ps+XI0GMcqNNaZuQzInWG96cVA==
-X-Google-Smtp-Source: ABdhPJx4hcYU29RKim6YQ2dljXsMGiAvoGgxIm0ILZrHWvgrDc051LUDUJNM8ZwrzOiSgvpIiNzbl2J5VIdrHj7mW54=
-X-Received: by 2002:a05:6102:30a7:: with SMTP id y7mr7333356vsd.55.1604922029871;
- Mon, 09 Nov 2020 03:40:29 -0800 (PST)
+        id S1727826AbgKILnS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 06:43:18 -0500
+Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:43025 "EHLO
+        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727311AbgKILnS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 06:43:18 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436321|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.119563-0.00233504-0.878102;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.IuVCLW3_1604922186;
+Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.IuVCLW3_1604922186)
+          by smtp.aliyun-inc.com(10.147.44.129);
+          Mon, 09 Nov 2020 19:43:12 +0800
+From:   Frank Lee <frank@allwinnertech.com>
+To:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org, mripard@kernel.org,
+        wens@csie.org
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank@allwinnertech.com>
+Subject: [PATCH] thermal: sun8i: Use bitmap API instead of open code
+Date:   Mon,  9 Nov 2020 19:43:02 +0800
+Message-Id: <20201109114302.22740-1-frank@allwinnertech.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20201106164903.3906-1-ilina@codeaurora.org>
-In-Reply-To: <20201106164903.3906-1-ilina@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 9 Nov 2020 12:39:53 +0100
-Message-ID: <CAPDyKFqvoAjNVJ6e8r3+tDKkq49h6tev6MPoQ1fHZu9FoOU6Nw@mail.gmail.com>
-Subject: Re: [PATCH] PM / Domains: replace -ENOTSUPP with -EOPNOTSUPP
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 6 Nov 2020 at 17:49, Lina Iyer <ilina@codeaurora.org> wrote:
->
-> While submitting a patch to add next_wakeup, checkpatch reported this -
->
-> WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-> +       return -ENOTSUPP;
->
-> Address the above warning in other functions in pm_domain.h.
->
-> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+From: Yangtao Li <frank@allwinnertech.com>
 
-I assume you have looked at callers of these functions too, to make
-sure they don't explicitly look at -ENOTSUPP?
+The bitmap_* API is the standard way to access data in the bitfield.
+So convert irq_ack to return an unsigned long, and make things to use
+bitmap API.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+---
+v2:
+Make irq_ack to return an unsigned long
+---
+ drivers/thermal/sun8i_thermal.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
 
-Kind regards
-Uffe
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index f8b13071a6f4..8c80bd06dd9f 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -8,6 +8,7 @@
+  * Based on the work of Josef Gajdusek <atx@atx.name>
+  */
+ 
++#include <linux/bitmap.h>
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/interrupt.h>
+@@ -74,7 +75,7 @@ struct ths_thermal_chip {
+ 	int		(*calibrate)(struct ths_device *tmdev,
+ 				     u16 *caldata, int callen);
+ 	int		(*init)(struct ths_device *tmdev);
+-	int             (*irq_ack)(struct ths_device *tmdev);
++	unsigned long	(*irq_ack)(struct ths_device *tmdev);
+ 	int		(*calc_temp)(struct ths_device *tmdev,
+ 				     int id, int reg);
+ };
+@@ -146,9 +147,10 @@ static const struct regmap_config config = {
+ 	.max_register = 0xfc,
+ };
+ 
+-static int sun8i_h3_irq_ack(struct ths_device *tmdev)
++static unsigned long sun8i_h3_irq_ack(struct ths_device *tmdev)
+ {
+-	int i, state, ret = 0;
++	unsigned long irq_bitmap = 0;
++	int i, state;
+ 
+ 	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
+ 
+@@ -156,16 +158,17 @@ static int sun8i_h3_irq_ack(struct ths_device *tmdev)
+ 		if (state & SUN8I_THS_DATA_IRQ_STS(i)) {
+ 			regmap_write(tmdev->regmap, SUN8I_THS_IS,
+ 				     SUN8I_THS_DATA_IRQ_STS(i));
+-			ret |= BIT(i);
++			bitmap_set(&irq_bitmap, i, 1);
+ 		}
+ 	}
+ 
+-	return ret;
++	return irq_bitmap;
+ }
+ 
+-static int sun50i_h6_irq_ack(struct ths_device *tmdev)
++static unsigned long sun50i_h6_irq_ack(struct ths_device *tmdev)
+ {
+-	int i, state, ret = 0;
++	unsigned long irq_bitmap = 0;
++	int i, state;
+ 
+ 	regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
+ 
+@@ -173,24 +176,22 @@ static int sun50i_h6_irq_ack(struct ths_device *tmdev)
+ 		if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
+ 			regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
+ 				     SUN50I_H6_THS_DATA_IRQ_STS(i));
+-			ret |= BIT(i);
++			bitmap_set(&irq_bitmap, i, 1);
+ 		}
+ 	}
+ 
+-	return ret;
++	return irq_bitmap;
+ }
+ 
+ static irqreturn_t sun8i_irq_thread(int irq, void *data)
+ {
+ 	struct ths_device *tmdev = data;
+-	int i, state;
+-
+-	state = tmdev->chip->irq_ack(tmdev);
++	unsigned long irq_bitmap = tmdev->chip->irq_ack(tmdev);
++	int i;
+ 
+-	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+-		if (state & BIT(i))
+-			thermal_zone_device_update(tmdev->sensor[i].tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
++	for_each_set_bit(i, &irq_bitmap, tmdev->chip->sensor_num) {
++		thermal_zone_device_update(tmdev->sensor[i].tzd,
++					   THERMAL_EVENT_UNSPECIFIED);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+-- 
+2.28.0
 
-> ---
->  include/linux/pm_domain.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 49982cd58bfd..e390388e6c17 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -259,24 +259,24 @@ static inline int pm_genpd_init(struct generic_pm_domain *genpd,
->  }
->  static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
->  {
-> -       return -ENOTSUPP;
-> +       return -EOPNOTSUPP;
->  }
->
->  static inline int dev_pm_genpd_set_performance_state(struct device *dev,
->                                                      unsigned int state)
->  {
-> -       return -ENOTSUPP;
-> +       return -EOPNOTSUPP;
->  }
->
->  static inline int dev_pm_genpd_add_notifier(struct device *dev,
->                                             struct notifier_block *nb)
->  {
-> -       return -ENOTSUPP;
-> +       return -EOPNOTSUPP;
->  }
->
->  static inline int dev_pm_genpd_remove_notifier(struct device *dev)
->  {
-> -       return -ENOTSUPP;
-> +       return -EOPNOTSUPP;
->  }
->
->  static inline int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
-> @@ -334,13 +334,13 @@ struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->  static inline int of_genpd_add_provider_simple(struct device_node *np,
->                                         struct generic_pm_domain *genpd)
->  {
-> -       return -ENOTSUPP;
-> +       return -EOPNOTSUPP;
->  }
->
->  static inline int of_genpd_add_provider_onecell(struct device_node *np,
->                                         struct genpd_onecell_data *data)
->  {
-> -       return -ENOTSUPP;
-> +       return -EOPNOTSUPP;
->  }
->
->  static inline void of_genpd_del_provider(struct device_node *np) {}
-> @@ -396,7 +396,7 @@ static inline struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->  static inline
->  struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
->  {
-> -       return ERR_PTR(-ENOTSUPP);
-> +       return ERR_PTR(-EOPNOTSUPP);
->  }
->  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
->
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
