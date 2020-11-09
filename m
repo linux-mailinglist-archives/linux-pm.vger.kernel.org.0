@@ -2,129 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66052ABEF1
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 15:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28CD2ABF4B
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 16:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731266AbgKIOmC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 09:42:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56442 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729454AbgKIOmC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 9 Nov 2020 09:42:02 -0500
-Received: from kernel.org (unknown [77.125.7.142])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D215206E3;
-        Mon,  9 Nov 2020 14:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604932922;
-        bh=XyH/OGSoZtwKFi7Dr6r4PbxrZ95WCPZt6ITMBGRDbT8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AACidaKdvM9fjww+sp/aLxSmuCgmX5y5VInfhx0TIj5OjJteJpSMpOU9k+cy2ANao
-         bPCbw8OTl+tQ2hkhXviYnObTrxDMTytkrEn70tTATzIjRMFL7twkjoJg60mbELrRtH
-         jrhu4hO9i4CTCZoHNJYPLc9KZT9JgGfbJFGI+3OU=
-Date:   Mon, 9 Nov 2020 16:41:48 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v5 1/5] mm: introduce debug_pagealloc_{map,unmap}_pages()
- helpers
-Message-ID: <20201109144148.GE301837@kernel.org>
-References: <20201108065758.1815-1-rppt@kernel.org>
- <20201108065758.1815-2-rppt@kernel.org>
- <4bd5ae2b-4fc6-73dc-b83b-e71826990946@suse.cz>
+        id S1730949AbgKIPAj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 10:00:39 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7504 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729905AbgKIPAi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 10:00:38 -0500
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CVDgr5VCDzhfN2;
+        Mon,  9 Nov 2020 23:00:24 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Mon, 9 Nov 2020
+ 23:00:27 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <rjw@rjwysocki.net>, <fugang.duan@nxp.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH v2 0/2] Fix usage counter leak by adding a general sync ops
+Date:   Mon, 9 Nov 2020 23:04:14 +0800
+Message-ID: <20201109150416.1877878-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4bd5ae2b-4fc6-73dc-b83b-e71826990946@suse.cz>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 09, 2020 at 12:33:46PM +0100, Vlastimil Babka wrote:
-> On 11/8/20 7:57 AM, Mike Rapoport wrote:
-> > --- a/mm/slab.c
-> > +++ b/mm/slab.c
-> > @@ -1428,21 +1428,19 @@ static bool is_debug_pagealloc_cache(struct kmem_cache *cachep)
-> >   	return false;
-> >   }
-> > -#ifdef CONFIG_DEBUG_PAGEALLOC
-> >   static void slab_kernel_map(struct kmem_cache *cachep, void *objp, int map)
-> >   {
-> >   	if (!is_debug_pagealloc_cache(cachep))
-> >   		return;
-> 
-> Hmm, I didn't notice earlier, sorry.
-> The is_debug_pagealloc_cache() above includes a
-> debug_pagealloc_enabled_static() check, so it should be fine to use
-> __kernel_map_pages() directly below. Otherwise we generate two static key
-> checks for the same key needlessly.
+In many case, we need to check return value of pm_runtime_get_sync,
+but it brings a trouble to the usage counter processing. Many callers
+forget to decrease the usage counter when it failed. It has been
+discussed a lot[0][1]. So we add a function to deal with the usage
+counter for better coding and view. Then, we replace pm_runtime_get_sync
+with it in fec_main.c
 
-Ok, I'll revert slab changes.
+Zhang Qilong (2):
+  PM: runtime: Add a general runtime get sync operation to deal with
+    usage counter
+  net: fec: Fix reference count leak in fec series ops
 
-> > -	kernel_map_pages(virt_to_page(objp), cachep->size / PAGE_SIZE, map);
-> > +	if (map)
-> > +		debug_pagealloc_map_pages(virt_to_page(objp),
-> > +					  cachep->size / PAGE_SIZE);
-> > +	else
-> > +		debug_pagealloc_unmap_pages(virt_to_page(objp),
-> > +					    cachep->size / PAGE_SIZE);
-> >   }
-> > -#else
-> > -static inline void slab_kernel_map(struct kmem_cache *cachep, void *objp,
-> > -				int map) {}
-> > -
-> > -#endif
-> > -
-> >   static void poison_obj(struct kmem_cache *cachep, void *addr, unsigned char val)
-> >   {
-> >   	int size = cachep->object_size;
-> > @@ -2062,7 +2060,7 @@ int __kmem_cache_create(struct kmem_cache *cachep, slab_flags_t flags)
-> >   #if DEBUG
-> >   	/*
-> > -	 * If we're going to use the generic kernel_map_pages()
-> > +	 * If we're going to use the generic debug_pagealloc_map_pages()
-> >   	 * poisoning, then it's going to smash the contents of
-> >   	 * the redzone and userword anyhow, so switch them off.
-> >   	 */
-> > 
-> 
+ drivers/net/ethernet/freescale/fec_main.c | 12 ++++-----
+ include/linux/pm_runtime.h                | 30 +++++++++++++++++++++++
+ 2 files changed, 35 insertions(+), 7 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.25.4
+
