@@ -2,189 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E69CF2AC548
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 20:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755602AC57C
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 20:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730348AbgKIToH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 14:44:07 -0500
-Received: from mail-02.mail-europe.com ([51.89.119.103]:47406 "EHLO
-        mail-02.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729336AbgKIToH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 14:44:07 -0500
-Date:   Mon, 09 Nov 2020 19:43:55 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1604951042;
-        bh=SFT4XaVfOyn6BnIvM53a+fBVoR87Tr9aFi2bP37+tOc=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=vnOtMncWPL5Sk5Dtq9CDqnhYneLwnE5VSN3HHlQu3YWUzC/7DjiKM5ZGpHNyrIrng
-         R9dQYVEqwp+YDi+vpPHjEHJoLu2R+ZQn1aD+uxf15y6siU1OMb0csl4XUVukxx0KFQ
-         Xh+tj2R5sE9VqTvS6cXRfpfFEoUSSlBoX7zCQHDI=
-To:     Sebastian Reichel <sre@kernel.org>
-From:   Timon Baetz <timon.baetz@protonmail.com>
-Cc:     Timon Baetz <timon.baetz@protonmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Timon Baetz <timon.baetz@protonmail.com>
-Subject: [PATCH 3/3] power: supply: max8997-charger: Improve getting charger status
-Message-ID: <20201109194251.562203-3-timon.baetz@protonmail.com>
-In-Reply-To: <20201109194251.562203-1-timon.baetz@protonmail.com>
-References: <20201109194251.562203-1-timon.baetz@protonmail.com>
+        id S1729493AbgKITxR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 14:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727070AbgKITxR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 14:53:17 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3373C0613CF
+        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 11:53:16 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id f38so8060239pgm.2
+        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 11:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Rl7eBlnmZpK2cD0Shz9S2eJYMOyeJto4FyLWzkYueQI=;
+        b=Mk4jNNVUi3pBCOqYNuFfs1XPw8/G3kQvCZWs2NAFVK+GVZRT0UXsQg2xpKGrZi6THB
+         xf4uWy2GzcvD1TdLoQ27UOu5lop44wzEBcpOZ3tqWVIa/gH1empRUN0tzuPjcVnJepMT
+         nHyAa2QwhHt1MyFTmrP6YyKKTqebCPZAsbpU1gTPdis65Yq2yxT32lo72mAy2RGGx3QZ
+         cQxd/BRAYa4BOHXlNAL2EfrWQCoIkYsMmzHnLkBn3eLYVWEH1+lK2fpnUNmsezVJ/fa4
+         7mQsbZ7BvAkxiWhIg2W1faALtEIYl+MZSYhdW/tsysREzcDeqZ9WcGwEZGJh1R05HUbX
+         /4bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Rl7eBlnmZpK2cD0Shz9S2eJYMOyeJto4FyLWzkYueQI=;
+        b=K/3C4EKu9gZ+LIS57/xsocfJKCebjxAZgrEw6NBMmivq7aiglYlG2q+yU2YzdeVojY
+         qDwI5BuGPE09EyNJCXx3hvW6oRNPdzDcePWQlNye4xEM+Bg9Y3uhhjV3/FswIzPvoEQi
+         UUX4siAZYYNAgBK79rKz05N/gIMCsoaXhrPXkNBQqPagYuIKOoeNYASyRuU1uCwudl6n
+         A4Tj/ax0D+1OzxzbuS9slgt6ibrCa9cDBPRHOITXiZG8wYcxd4JBoJkqnVxzStzRcGFQ
+         ic96n9nQ03pHRQZFUwN+jynKAk3/a4tdNVVOfH3dRSkPxmvXvt6cXbd7Z8jZTGUpOWuB
+         oVgQ==
+X-Gm-Message-State: AOAM531CRfqKoHviUjLUdytajPkJFP95u+NgSQZdNVuCY85UJyVVqreO
+        IKGgeiRPD/lhqSjokvYsdGfEfA==
+X-Google-Smtp-Source: ABdhPJzf77SvsSnT5IYwA+kI4HTEFe1Xc5LZYNRY5PVrFkJ1VOi0mHoZPtqLjLGWQuEdszzLaTnIZg==
+X-Received: by 2002:a17:90a:1da6:: with SMTP id v35mr886318pjv.31.1604951596488;
+        Mon, 09 Nov 2020 11:53:16 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e10sm12923273pfl.162.2020.11.09.11.53.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2020 11:53:15 -0800 (PST)
+Message-ID: <5fa99e2b.1c69fb81.a6839.bd7e@mx.google.com>
+Date:   Mon, 09 Nov 2020 11:53:15 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.10-rc3-14-g103ceda28388
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 11 warnings (v5.10-rc3-14-g103ceda28388)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Detect charging and discharging state. Ported from downstream Samsung
-Galaxy S2 (i9100) kernel fork.
+pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.10-rc3-14-g=
+103ceda28388)
 
-Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+10-rc3-14-g103ceda28388/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.10-rc3-14-g103ceda28388
+Git Commit: 103ceda2838877c8a62f904e886f7ca11a3bb1c1
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
 ---
- drivers/power/supply/max8997_charger.c | 52 +++++++++++++++++---------
- 1 file changed, 35 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/=
-max8997_charger.c
-index 8fccd58dac67..1947af25879a 100644
---- a/drivers/power/supply/max8997_charger.c
-+++ b/drivers/power/supply/max8997_charger.c
-@@ -13,6 +13,20 @@
- #include <linux/mfd/max8997.h>
- #include <linux/mfd/max8997-private.h>
-=20
-+/* MAX8997_REG_STATUS4 */
-+#define DCINOK_SHIFT=09=091
-+#define DCINOK_MASK=09=09(1 << DCINOK_SHIFT)
-+#define DETBAT_SHIFT=09=092
-+#define DETBAT_MASK=09=09(1 << DETBAT_SHIFT)
-+
-+/* MAX8997_REG_MBCCTRL1 */
-+#define TFCH_SHIFT=09=094
-+#define TFCH_MASK=09=09(7 << TFCH_SHIFT)
-+
-+/* MAX8997_REG_MBCCTRL5 */
-+#define ITOPOFF_SHIFT=09=090
-+#define ITOPOFF_MASK=09=09(0xF << ITOPOFF_SHIFT)
-+
- struct charger_data {
- =09struct device *dev;
- =09struct max8997_dev *iodev;
-@@ -20,7 +34,7 @@ struct charger_data {
- };
-=20
- static enum power_supply_property max8997_battery_props[] =3D {
--=09POWER_SUPPLY_PROP_STATUS, /* "FULL" or "NOT FULL" only. */
-+=09POWER_SUPPLY_PROP_STATUS, /* "FULL", "CHARGING" or "DISCHARGING". */
- =09POWER_SUPPLY_PROP_PRESENT, /* the presence of battery */
- =09POWER_SUPPLY_PROP_ONLINE, /* charger is active or not */
- };
-@@ -43,6 +57,10 @@ static int max8997_battery_get_property(struct power_sup=
-ply *psy,
- =09=09=09return ret;
- =09=09if ((reg & (1 << 0)) =3D=3D 0x1)
- =09=09=09val->intval =3D POWER_SUPPLY_STATUS_FULL;
-+=09=09else if ((reg & DCINOK_MASK))
-+=09=09=09val->intval =3D POWER_SUPPLY_STATUS_CHARGING;
-+=09=09else
-+=09=09=09val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
-=20
- =09=09break;
- =09case POWER_SUPPLY_PROP_PRESENT:
-@@ -50,7 +68,7 @@ static int max8997_battery_get_property(struct power_supp=
-ly *psy,
- =09=09ret =3D max8997_read_reg(i2c, MAX8997_REG_STATUS4, &reg);
- =09=09if (ret)
- =09=09=09return ret;
--=09=09if ((reg & (1 << 2)) =3D=3D 0x0)
-+=09=09if ((reg & DETBAT_MASK) =3D=3D 0x0)
- =09=09=09val->intval =3D 1;
-=20
- =09=09break;
-@@ -59,8 +77,7 @@ static int max8997_battery_get_property(struct power_supp=
-ly *psy,
- =09=09ret =3D max8997_read_reg(i2c, MAX8997_REG_STATUS4, &reg);
- =09=09if (ret)
- =09=09=09return ret;
--=09=09/* DCINOK */
--=09=09if (reg & (1 << 1))
-+=09=09if (reg & DCINOK_MASK)
- =09=09=09val->intval =3D 1;
-=20
- =09=09break;
-@@ -84,11 +101,14 @@ static int max8997_battery_probe(struct platform_devic=
-e *pdev)
- =09int ret =3D 0;
- =09struct charger_data *charger;
- =09struct max8997_dev *iodev =3D dev_get_drvdata(pdev->dev.parent);
-+=09struct i2c_client *i2c =3D iodev->i2c;
- =09struct max8997_platform_data *pdata =3D iodev->pdata;
- =09struct power_supply_config psy_cfg =3D {};
-=20
--=09if (!pdata)
-+=09if (!pdata) {
-+=09=09dev_err(&pdev->dev, "No platform data supplied.\n");
- =09=09return -EINVAL;
-+=09}
-=20
- =09if (pdata->eoc_mA) {
- =09=09int val =3D (pdata->eoc_mA - 50) / 10;
-@@ -97,30 +117,29 @@ static int max8997_battery_probe(struct platform_devic=
-e *pdev)
- =09=09if (val > 0xf)
- =09=09=09val =3D 0xf;
-=20
--=09=09ret =3D max8997_update_reg(iodev->i2c,
--=09=09=09=09MAX8997_REG_MBCCTRL5, val, 0xf);
-+=09=09ret =3D max8997_update_reg(i2c, MAX8997_REG_MBCCTRL5,
-+=09=09=09=09val << ITOPOFF_SHIFT, ITOPOFF_MASK);
- =09=09if (ret < 0) {
- =09=09=09dev_err(&pdev->dev, "Cannot use i2c bus.\n");
- =09=09=09return ret;
- =09=09}
- =09}
--
- =09switch (pdata->timeout) {
- =09case 5:
--=09=09ret =3D max8997_update_reg(iodev->i2c, MAX8997_REG_MBCCTRL1,
--=09=09=09=090x2 << 4, 0x7 << 4);
-+=09=09ret =3D max8997_update_reg(i2c, MAX8997_REG_MBCCTRL1,
-+=09=09=09=090x2 << TFCH_SHIFT, TFCH_MASK);
- =09=09break;
- =09case 6:
--=09=09ret =3D max8997_update_reg(iodev->i2c, MAX8997_REG_MBCCTRL1,
--=09=09=09=090x3 << 4, 0x7 << 4);
-+=09=09ret =3D max8997_update_reg(i2c, MAX8997_REG_MBCCTRL1,
-+=09=09=09=090x3 << TFCH_SHIFT, TFCH_MASK);
- =09=09break;
- =09case 7:
--=09=09ret =3D max8997_update_reg(iodev->i2c, MAX8997_REG_MBCCTRL1,
--=09=09=09=090x4 << 4, 0x7 << 4);
-+=09=09ret =3D max8997_update_reg(i2c, MAX8997_REG_MBCCTRL1,
-+=09=09=09=090x4 << TFCH_SHIFT, TFCH_MASK);
- =09=09break;
- =09case 0:
--=09=09ret =3D max8997_update_reg(iodev->i2c, MAX8997_REG_MBCCTRL1,
--=09=09=09=090x7 << 4, 0x7 << 4);
-+=09=09ret =3D max8997_update_reg(i2c, MAX8997_REG_MBCCTRL1,
-+=09=09=09=090x7 << TFCH_SHIFT, TFCH_MASK);
- =09=09break;
- =09default:
- =09=09dev_err(&pdev->dev, "incorrect timeout value (%d)\n",
-@@ -138,7 +157,6 @@ static int max8997_battery_probe(struct platform_device=
- *pdev)
-=20
- =09platform_set_drvdata(pdev, charger);
-=20
--
- =09charger->dev =3D &pdev->dev;
- =09charger->iodev =3D iodev;
-=20
---=20
-2.25.1
-
-
+For more info write to <info@kernelci.org>
