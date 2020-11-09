@@ -2,108 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC462ABF49
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 16:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70462ABFB8
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 16:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730449AbgKIPAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 10:00:36 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7505 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729899AbgKIPAf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 10:00:35 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CVDgr53Fkzhf9l;
-        Mon,  9 Nov 2020 23:00:24 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Mon, 9 Nov 2020
- 23:00:28 +0800
-From:   Zhang Qilong <zhangqilong3@huawei.com>
-To:     <rjw@rjwysocki.net>, <fugang.duan@nxp.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH v2 2/2] net: fec: Fix reference count leak in fec series ops
-Date:   Mon, 9 Nov 2020 23:04:16 +0800
-Message-ID: <20201109150416.1877878-3-zhangqilong3@huawei.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201109150416.1877878-1-zhangqilong3@huawei.com>
-References: <20201109150416.1877878-1-zhangqilong3@huawei.com>
+        id S1729289AbgKIPU5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 10:20:57 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37404 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727077AbgKIPU4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 10:20:56 -0500
+Received: by mail-ot1-f66.google.com with SMTP id l36so9264469ota.4;
+        Mon, 09 Nov 2020 07:20:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CdGO/90kcr4f31GvGdKRgTjSScpvfcOUI5SEBiL1EOA=;
+        b=crwL3KcLBR18efgVSCR5SEqF+HF6tPLoG1uQk/bb+zdrehr7DOtGNHJSL071armlqT
+         6xl20J7gSvRCLnZnT5s4WxVgvcVJlbnPrYDV0jISRBMCSTfj1AWAoNLO25GcL60CmiG3
+         +fy4fcQQP3XrukFJ4Bt2hR3ckizh+HEQOil9EHkmDsn2IU9ccIBM2SlECoabCHUj6fWc
+         5Q37sGonVSgZ7rtNIaLf0XnM/88fkt7PL0niBADhsuGRAw/YY0bUvnV3xPcrnnxZ0PTx
+         dYG6IJeC3kgut4UQ/wDfR7d1/z2fKZAedkFrWbQvdeuNwa3yU4aqSp07rBMWzvybyxpY
+         poWQ==
+X-Gm-Message-State: AOAM531HMOYxtP+Kcs2LHoruI3QerO3OmsVR33zT8vj+85Qpdpia8lej
+        7AJmd97/w6F592cvVxScr9IEcZAmGTJI4iHHMW/hH9Et
+X-Google-Smtp-Source: ABdhPJw70Qaea5loILHHnrwzHV1xU4x41jwgxIGZggvhcZrO8OGG4v1QzFpHW/n9zj+yJ2XTC+irnNGUXr3C1IVwSCg=
+X-Received: by 2002:a9d:171a:: with SMTP id i26mr11257116ota.260.1604935255974;
+ Mon, 09 Nov 2020 07:20:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-CFilter-Loop: Reflected
+References: <20201109150416.1877878-1-zhangqilong3@huawei.com> <20201109150416.1877878-2-zhangqilong3@huawei.com>
+In-Reply-To: <20201109150416.1877878-2-zhangqilong3@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 9 Nov 2020 16:20:44 +0100
+Message-ID: <CAJZ5v0gGG4FeVfrFOYe1+axv78yh9vA4FAOsbLughbsQosP9-w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PM: runtime: Add a general runtime get sync
+ operation to deal with usage counter
+To:     Zhang Qilong <zhangqilong3@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, fugang.duan@nxp.com,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm_runtime_get_sync() will increment pm usage at first and it will
-resume the device later. If runtime of the device has error or
-device is in inaccessible state(or other error state), resume
-operation will fail. If we do not call put operation to decrease
-the reference, it will result in reference count leak. Moreover,
-this device cannot enter the idle state and always stay busy or other
-non-idle state later. So we fixed it by replacing it with
-pm_runtime_general_get.
+On Mon, Nov 9, 2020 at 4:00 PM Zhang Qilong <zhangqilong3@huawei.com> wrote:
+>
+> In many case, we need to check return value of pm_runtime_get_sync, but
+> it brings a trouble to the usage counter processing. Many callers forget
+> to decrease the usage counter when it failed. It has been discussed a
+> lot[0][1]. So we add a function to deal with the usage counter for better
+> coding.
+>
+> [0]https://lkml.org/lkml/2020/6/14/88
+> [1]https://patchwork.ozlabs.org/project/linux-tegra/patch/20200520095148.10995-1-dinghao.liu@zju.edu.cn/
+> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+> ---
+>  include/linux/pm_runtime.h | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 4b708f4e8eed..6549ce764400 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -386,6 +386,36 @@ static inline int pm_runtime_get_sync(struct device *dev)
+>         return __pm_runtime_resume(dev, RPM_GET_PUT);
+>  }
+>
+> +/**
+> + * pm_runtime_general_get - Bump up usage counter of a device and resume it.
+> + * @dev: Target device.
+> + *
+> + * Increase runtime PM usage counter of @dev first, and carry out runtime-resume
+> + * of it synchronously. If __pm_runtime_resume return negative value(device is in
+> + * error state), we to need decrease the usage counter before it return. If
+> + * __pm_runtime_resume return positive value, it means the runtime of device has
+> + * already been in active state, and we let the new wrapper return zero instead.
+> + *
+> + * The possible return values of this function is zero or negative value.
+> + * zero:
+> + *    - it means resume succeeed or runtime of device has already been active, the
+> + *      runtime PM usage counter of @dev remains incremented.
+> + * negative:
+> + *    - it means failure and the runtime PM usage counter of @dev has been balanced.
 
-Fixes: 8fff755e9f8d0 ("net: fec: Ensure clocks are enabled while using mdio bus")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+The kerneldoc above is kind of noisy and it is hard to figure out what
+the helper really does from it.
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index d7919555250d..695720f8263f 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1808,7 +1808,7 @@ static int fec_enet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
- 	int ret = 0, frame_start, frame_addr, frame_op;
- 	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_general_get(dev);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1867,11 +1867,9 @@ static int fec_enet_mdio_write(struct mii_bus *bus, int mii_id, int regnum,
- 	int ret, frame_start, frame_addr;
- 	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_general_get(dev);
- 	if (ret < 0)
- 		return ret;
--	else
--		ret = 0;
- 
- 	if (is_c45) {
- 		frame_start = FEC_MMFR_ST_C45;
-@@ -2275,7 +2273,7 @@ static void fec_enet_get_regs(struct net_device *ndev,
- 	u32 i, off;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_general_get(dev);
- 	if (ret < 0)
- 		return;
- 
-@@ -2976,7 +2974,7 @@ fec_enet_open(struct net_device *ndev)
- 	int ret;
- 	bool reset_again;
- 
--	ret = pm_runtime_get_sync(&fep->pdev->dev);
-+	ret = pm_runtime_general_get(&fep->pdev->dev);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -3770,7 +3768,7 @@ fec_drv_remove(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_general_get(&pdev->dev);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.25.4
+You could basically say something like "Resume @dev synchronously and
+if that is successful, increment its runtime PM usage counter.  Return
+0 if the runtime PM usage counter of @dev has been incremented or a
+negative error code otherwise."
 
+> + */
+> +static inline int pm_runtime_general_get(struct device *dev)
+
+What about pm_runtime_resume_and_get()?
+
+> +{
+> +       int ret = 0;
+
+This extra initialization is not necessary.
+
+You can initialize ret to the __pm_runtime_resume() return value right away.
+
+> +
+> +       ret = __pm_runtime_resume(dev, RPM_GET_PUT);
+> +       if (ret < 0) {
+> +               pm_runtime_put_noidle(dev);
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  /**
+>   * pm_runtime_put - Drop device usage counter and queue up "idle check" if 0.
+>   * @dev: Target device.
+> --
