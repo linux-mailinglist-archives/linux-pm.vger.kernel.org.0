@@ -2,424 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED6F2AB130
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 07:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515642AB179
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 07:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728951AbgKIGU7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 01:20:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65532 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728904AbgKIGU6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 01:20:58 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A961IRp063334;
-        Mon, 9 Nov 2020 01:20:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id; s=pp1;
- bh=bf5GaV+SF2oWHYvy20N152fznf2lKcXSZpy5TiJBLTY=;
- b=D2dRMjcAHwSAn+joWPwUv+RSmgHs1EZ3ud+pnFQmgSB+2bVlyen40jQG5h55Cm87OVF0
- A+MAzRl6bXs7dnX9wN9LIWqtzo/iun0gVF8DBfSFZzwaty12buIZl5UEDVAj0ahfMRhr
- 9wtxjW9t9YH0dQeVuVSoEsR4J8SehawFhnwfxUAk8paHRP6LPWSMJBE9kIk2wYmgHwZ9
- rnTfC7NO5+LC+KcKPu5gqOq+Lfb/SI5PgZEbKyTqN+/NV54X+Feofh+hvMCI827HuIO9
- uxT2viTMd5ZmkaR1HnUVN9tyBBdyyjw41IAuo3CBbbcMOT8bNTz78dAF960m2LKvSNHW kA== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34nrevtn7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Nov 2020 01:20:46 -0500
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A968WxL001888;
-        Mon, 9 Nov 2020 06:20:45 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 34nk77rv7a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Nov 2020 06:20:44 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A96Kg9822741492
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Nov 2020 06:20:42 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B0B9A4060;
-        Mon,  9 Nov 2020 06:20:42 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48115A4062;
-        Mon,  9 Nov 2020 06:20:41 +0000 (GMT)
-Received: from bostonp9.aus.stglabs.ibm.com (unknown [9.3.23.179])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Nov 2020 06:20:41 +0000 (GMT)
-From:   Abhishek Goel <huntbag@linux.vnet.ibm.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, mpe@ellerman.id.au,
-        ego@linux.vnet.ibm.com, Nathan.Fontenot@amd.com,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>
-Subject: [RFC v3] cpuidle : Add support for pseudo-cpuidle driver
-Date:   Mon,  9 Nov 2020 00:16:12 -0600
-Message-Id: <20201109061612.150441-1-huntbag@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.17.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-09_01:2020-11-05,2020-11-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 spamscore=0 mlxlogscore=999 phishscore=0
- bulkscore=0 suspectscore=0 clxscore=1011 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011090034
+        id S1729588AbgKIG5p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 01:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728873AbgKIG5p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 01:57:45 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1E7C0613D4
+        for <linux-pm@vger.kernel.org>; Sun,  8 Nov 2020 22:57:45 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id f21so4264939plr.5
+        for <linux-pm@vger.kernel.org>; Sun, 08 Nov 2020 22:57:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KF1/cMn6ow1Nl4dL4x6qzs3WxXHhYa+fonGftd0XHGk=;
+        b=zXLhGIo6SEIUKcewyE6ufIb64yJVWCABNtTkBYh7d4D4TvYXa540vr/vFWmzrxVxyb
+         wlC0XFXCqonycWbXTsMVO+x3Py2FcLnChddb3OLJ3dHSS1jUaozYWj2h74tMNky805Uw
+         lOObM4byt6gHew/oAXo1GSDjAxHmOjPTe/D30uCZl/Rji4N4RWJH1n0EHvS0LMlTTY5e
+         h6iD19z5V/2lsqIBMxCuPE3/J0o1IoJNinBcoUQtFEtYKl05r24H3x0kFQ1yWbb1jdi0
+         XyOkkwP7iOzCyo84BvoARxMew7Flcf1qG2gciFljzZc+UgbEDc3bSwkFZxCi307NPWcH
+         +zpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KF1/cMn6ow1Nl4dL4x6qzs3WxXHhYa+fonGftd0XHGk=;
+        b=eED5IsAcxZbHqdabVa1MDRO0S+4MDWOkitVAdsnGI6lVbDrTV7lDkjSp9hdNw94Muv
+         u9NOFbgbi3WSGOA//Pm3j58hlNaNZZj0AC6BzCcXXMv0VwSbQEXdGxLLA3YZOHGmLHrz
+         GHoGum5EXEnIE2ustJz/wX/0Q1uMHwIuCLEHyCHOLAg/JUcvyuis6jPjndLEo4J6BHVD
+         sl7sanQm6/0fhd0r5xb8ILdfBjVrKTMK7OQQ1EMUVMFUe/1CfkOI+D/d5ibn5BCw6EQE
+         8x3pGp2QzIMP4/6PDWOtwRgVF8BSQ1gdH6FRK5Bu7BfbfYIbGJ/FLJWgduI6+stEIE5s
+         6w1Q==
+X-Gm-Message-State: AOAM5300q8VX+uWgjE0qiujkvwjnbJc/HYW7dG3W1+IfHi2WAZAESxfK
+        HjQ0S+jkOvafJGUimP8msLFlNw==
+X-Google-Smtp-Source: ABdhPJw+XEDLwRGrEJmvpdHPokEDmxTA6uwQTvouoJ2/owTVyISLQ9AuM70t0bW5X57j8Gwmgr9IJA==
+X-Received: by 2002:a17:902:6bc8:b029:d6:d9d:f28c with SMTP id m8-20020a1709026bc8b02900d60d9df28cmr11217116plt.17.1604905065103;
+        Sun, 08 Nov 2020 22:57:45 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id d9sm3157998pfn.191.2020.11.08.22.57.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 08 Nov 2020 22:57:43 -0800 (PST)
+Date:   Mon, 9 Nov 2020 12:27:42 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
+        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
+        chris.redpath@arm.com
+Subject: Re: [PATCH v3 3/3] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201109065742.22czfgyjhsjmkytf@vireshk-i7>
+References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
+ <20201102120115.29993-4-nicola.mazzucato@arm.com>
+ <20201106092020.za3oxg7gutzc3y2b@vireshk-i7>
+ <0a334a73-45ef-58ff-7dfd-9df6f4ff290a@arm.com>
+ <20201106105514.bhtdklyhn7goml64@vireshk-i7>
+ <7f73bcd6-0f06-4ef0-7f02-0751e6c4d94b@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f73bcd6-0f06-4ef0-7f02-0751e6c4d94b@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This option adds support for a testing cpuidle driver, which allows
-user to define custom idle states with their respective latencies and
-residencies. This is useful for testing the behaviour of governors on
-customized set of idle states.
+On 06-11-20, 11:14, Lukasz Luba wrote:
+> I also had similar doubts, because if we make frequency requests
+> independently for each CPU, why not having N cooling devs, which
+> will set independently QoS max freq for them...
+> 
+> What convinced me:
+> EAS and FIE would know the 'real' frequency of the cluster, IPA
+> can use it also and have only one cooling device per cluster.
+> 
+> We would like to keep this old style 'one cooling device per cpuset'.
+> I don't have strong opinion and if it would appear that there are
+> some errors in freq estimation for cluster, then maybe it does make
+> more sense to have cdev per CPU...
 
-This can be used as of now by specifying a customized set of cpuidle
-states in the driver by the user. Will add the capability of this
-driver to be used as a module in subsequent patches.
+Let me rephrase my question. What is it that doesn't work _correctly_
+with cdev per cpufreq policy in your case? What doesn't work well if
+the thermal stuff keeps looking at only the related_cpus thing and not
+the cpu-perf-dependencies thing?
 
-Original idea and discussion for this patch can be found at:
-https://lkml.org/lkml/2019/12/17/655
-
-Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
----
-
- v1->v2 : Changes adapted from reviews of Randy, Dan and Nathan.
-	  There was a divergence from expected behaviour of idle loop
-	  in v1. That has been fixed.
- v2->v3 : Added simulated latency while entering into idle states.
-
- drivers/cpuidle/Kconfig        |   9 +
- drivers/cpuidle/Makefile       |   1 +
- drivers/cpuidle/cpuidle-test.c | 289 +++++++++++++++++++++++++++++++++
- 3 files changed, 299 insertions(+)
- create mode 100644 drivers/cpuidle/cpuidle-test.c
-
-diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-index c0aeedd66f02..1a0f227d61d6 100644
---- a/drivers/cpuidle/Kconfig
-+++ b/drivers/cpuidle/Kconfig
-@@ -71,6 +71,15 @@ config HALTPOLL_CPUIDLE
- 	 before halting in the guest (more efficient than polling in the
- 	 host via halt_poll_ns for some scenarios).
- 
-+config TEST_CPUIDLE
-+	tristate "cpuidle test driver"
-+	default n
-+	help
-+	  This option enables a testing cpuidle driver, which allows the user
-+	  to define custom idle states with their respective latencies & residencies.
-+	  This is useful for testing the behaviour of governors on different
-+	  sets of idle states.
-+
- endif
- 
- config ARCH_NEEDS_CPU_IDLE_COUPLED
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index f07800cbb43f..68ea7dc257b5 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -8,6 +8,7 @@ obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
- obj-$(CONFIG_DT_IDLE_STATES)		  += dt_idle_states.o
- obj-$(CONFIG_ARCH_HAS_CPU_RELAX)	  += poll_state.o
- obj-$(CONFIG_HALTPOLL_CPUIDLE)		  += cpuidle-haltpoll.o
-+obj-$(CONFIG_TEST_CPUIDLE)		  += cpuidle-test.o
- 
- ##################################################################################
- # ARM SoC drivers
-diff --git a/drivers/cpuidle/cpuidle-test.c b/drivers/cpuidle/cpuidle-test.c
-new file mode 100644
-index 000000000000..17ffce11cafc
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-test.c
-@@ -0,0 +1,289 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  cpuidle-test - Test driver for cpuidle.
-+ *
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/moduleparam.h>
-+#include <linux/cpuidle.h>
-+#include <linux/cpu.h>
-+#include <linux/module.h>
-+#include <linux/sched/idle.h>
-+#include <linux/sched/clock.h>
-+#include <linux/sched/idle.h>
-+
-+#define CPUIDLE_STATE_MAX	10
-+#define MAX_PARAM_LENGTH	100
-+
-+static unsigned int nr_states = 4;
-+static unsigned int sim_type = 1;
-+static char name[MAX_PARAM_LENGTH];
-+static char latency_us[MAX_PARAM_LENGTH];
-+static char residency_us[MAX_PARAM_LENGTH];
-+
-+
-+module_param(nr_states, uint, 0644);
-+module_param(sim_type, uint, 0644);
-+module_param_string(name, name, MAX_PARAM_LENGTH, 0644);
-+module_param_string(latency_us, latency_us, MAX_PARAM_LENGTH, 0644);
-+module_param_string(residency_us, residency_us, MAX_PARAM_LENGTH, 0644);
-+
-+static struct cpuidle_driver test_cpuidle_driver = {
-+	.name		= "test_cpuidle",
-+	.owner		= THIS_MODULE,
-+};
-+
-+static struct cpuidle_state *cpuidle_state_table __read_mostly;
-+
-+static struct cpuidle_device __percpu *test_cpuidle_devices;
-+static enum cpuhp_state test_hp_idlestate;
-+
-+
-+static int __cpuidle idle_loop(struct cpuidle_device *dev,
-+				struct cpuidle_driver *drv,
-+				int index)
-+{
-+	u64 time_start;
-+
-+	local_irq_enable();
-+
-+	time_start = local_clock();
-+	/*
-+	 * Simulating entry latency into idle state.
-+	 */
-+	while (local_clock() - time_start < drv->states[index].exit_latency) {
-+	}
-+
-+	if (!current_set_polling_and_test()) {
-+		while (!need_resched())
-+			cpu_relax();
-+	}
-+
-+	time_start = local_clock();
-+	/*
-+	 * Simulating exit latency from idle state.
-+	 */
-+	while (local_clock() - time_start < drv->states[index].exit_latency) {
-+	}
-+
-+	current_clr_polling();
-+
-+	return index;
-+}
-+
-+	/*
-+	 * Defining user specified custome set of idle states.
-+	 */
-+static struct cpuidle_state cpuidle_states[CPUIDLE_STATE_MAX] = {
-+	{	.name = "snooze",
-+		.exit_latency = 0,
-+		.target_residency = 0,
-+		.enter = idle_loop },
-+};
-+
-+static struct cpuidle_state cpuidle_states_ppc[] = {
-+	{	.name = "snooze",
-+		.exit_latency = 0,
-+		.target_residency = 0,
-+		.enter = idle_loop },
-+	{
-+		.name = "stop0",
-+		.exit_latency = 2,
-+		.target_residency = 20,
-+		.enter = idle_loop },
-+	{
-+		.name = "stop1",
-+		.exit_latency = 5,
-+		.target_residency = 50,
-+		.enter = idle_loop },
-+	{
-+		.name = "stop2",
-+		.exit_latency = 10,
-+		.target_residency = 100,
-+		.enter = idle_loop },
-+};
-+
-+static struct cpuidle_state cpuidle_states_intel[] = {
-+	{	.name = "poll",
-+		.exit_latency = 0,
-+		.target_residency = 0,
-+		.enter = idle_loop },
-+	{
-+		.name = "c1",
-+		.exit_latency = 2,
-+		.target_residency = 2,
-+		.enter = idle_loop },
-+	{
-+		.name = "c1e",
-+		.exit_latency = 10,
-+		.target_residency = 20,
-+		.enter = idle_loop },
-+	{
-+		.name = "c3",
-+		.exit_latency = 80,
-+		.target_residency = 211,
-+		.enter = idle_loop },
-+};
-+
-+static int cpuidle_cpu_online(unsigned int cpu)
-+{
-+	struct cpuidle_device *dev;
-+
-+	dev = per_cpu_ptr(test_cpuidle_devices, cpu);
-+	if (!dev->registered) {
-+		dev->cpu = cpu;
-+		if (cpuidle_register_device(dev)) {
-+			pr_notice("cpuidle_register_device %d failed!\n", cpu);
-+			return -EIO;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int cpuidle_cpu_dead(unsigned int cpu)
-+{
-+	struct cpuidle_device *dev;
-+
-+	dev = per_cpu_ptr(test_cpuidle_devices, cpu);
-+	if (dev->registered)
-+		cpuidle_unregister_device(dev);
-+
-+	return 0;
-+}
-+
-+static int cpuidle_driver_init(void)
-+{
-+	int idle_state;
-+	struct cpuidle_driver *drv = &test_cpuidle_driver;
-+
-+	drv->state_count = 0;
-+
-+	for (idle_state = 0; idle_state < nr_states; ++idle_state) {
-+		/* Is the state not enabled? */
-+		if (cpuidle_state_table[idle_state].enter == NULL)
-+			continue;
-+
-+		drv->states[drv->state_count] =	/* structure copy */
-+			cpuidle_state_table[idle_state];
-+
-+		drv->state_count += 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int add_cpuidle_states(void)
-+{
-+	/* Parse the module param and initialize the idle states here
-+	 * in cpuidle_state_table.
-+	 */
-+	char *this_param;
-+	char *input_name = name;
-+	char *input_res = residency_us;
-+	char *input_lat = latency_us;
-+	int index = 1;
-+	long temp;
-+	int rc;
-+
-+	switch (sim_type) {
-+	case 1:
-+		cpuidle_state_table = cpuidle_states_ppc;
-+		return 0;
-+	case 2:
-+		cpuidle_state_table = cpuidle_states_intel;
-+		return 0;
-+	case 3:
-+		break;
-+	default:
-+		pr_warn("Sim value out of bound\n");
-+		break;
-+	}
-+
-+	if (strnlen(input_name, MAX_PARAM_LENGTH)) {
-+		while ((this_param = strsep(&input_name, ",")) && index <= nr_states) {
-+			strcpy(cpuidle_states[index].name, this_param);
-+			cpuidle_states[index].enter = idle_loop;
-+			index++;
-+		}
-+	}
-+
-+	if (strnlen(input_res, MAX_PARAM_LENGTH)) {
-+		index = 1;
-+		while ((this_param = strsep(&input_res, ",")) && index <= nr_states) {
-+			rc = kstrtol(this_param, 10, &temp);
-+			cpuidle_states[index].target_residency = temp;
-+			index++;
-+		}
-+	}
-+
-+	if (strnlen(input_lat, MAX_PARAM_LENGTH)) {
-+		index = 1;
-+		while ((this_param = strsep(&input_lat, ",")) && index <= nr_states) {
-+			rc = kstrtol(this_param, 10, &temp);
-+			cpuidle_states[index].exit_latency = temp;
-+			index++;
-+		}
-+	}
-+
-+	cpuidle_state_table = cpuidle_states;
-+	return nr_states;
-+}
-+
-+static void test_cpuidle_uninit(void)
-+{
-+	if (test_hp_idlestate)
-+		cpuhp_remove_state(test_hp_idlestate);
-+	cpuidle_unregister_driver(&test_cpuidle_driver);
-+
-+	free_percpu(test_cpuidle_devices);
-+	test_cpuidle_devices = NULL;
-+}
-+
-+static int __init test_cpuidle_init(void)
-+{
-+	int retval;
-+
-+	add_cpuidle_states();
-+	cpuidle_driver_init();
-+	retval = cpuidle_register(&test_cpuidle_driver, NULL);
-+	if (retval) {
-+		printk(KERN_DEBUG "Registration of test driver failed.\n");
-+		return retval;
-+	}
-+
-+	test_cpuidle_devices = alloc_percpu(struct cpuidle_device);
-+	if (test_cpuidle_devices == NULL) {
-+		cpuidle_unregister_driver(&test_cpuidle_driver);
-+		return -ENOMEM;
-+	}
-+
-+	retval = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-+					   "cpuidle/powernv:online",
-+					   cpuidle_cpu_online,
-+					   cpuidle_cpu_dead);
-+
-+	if (retval < 0) {
-+		test_cpuidle_uninit();
-+	} else {
-+		test_hp_idlestate = retval;
-+		retval = 0;
-+	}
-+
-+	return retval;
-+}
-+
-+static void __exit test_cpuidle_exit(void)
-+{
-+	test_cpuidle_uninit();
-+}
-+
-+module_init(test_cpuidle_init);
-+module_exit(test_cpuidle_exit);
-+MODULE_DESCRIPTION("Test Cpuidle Driver");
-+MODULE_AUTHOR("Abhishek Goel");
-+MODULE_LICENSE("GPL");
-+
 -- 
-2.17.1
-
+viresh
