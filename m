@@ -2,68 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE702AB76C
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 12:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D274F2AB775
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 12:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgKILpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 06:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727311AbgKILpd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 06:45:33 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511D9C0613CF;
-        Mon,  9 Nov 2020 03:45:33 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id i19so11783753ejx.9;
-        Mon, 09 Nov 2020 03:45:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/yXwjxlb/R7fLQTrA52Uzwgs+Ty2nvGfWq3imMItftg=;
-        b=sXCfZVwQ9VfdI69jCYsqb4Loblfu7TmKvK/dXCkUYWck7Ue6XxVHJQZ9tX9PlxM9DE
-         acZsLxIEKrQFT2KAdjhC0hfA8Lvxr7UbG51F/2s3KFPzo6fXZKQFh4l8c38GcpvumKTB
-         MClpAVD5I8GdOA87/ixOGFmaGACAlqvbuW/0eCOqOLD3iW6+mrA1eFgCFXMNSLUd6hVb
-         UtRULTvGG5J6xLtWBjCrILOkljfIViQbWKkVlHirjehRYSgqu7eX6HM+zRdbtoWrpGLQ
-         4Du8R1bkAFWY49yJniV4HAzT0QYjWUv9V2og5l2KWwnA26jZ+WT6uA7cgS52Ka49hNNy
-         sn4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/yXwjxlb/R7fLQTrA52Uzwgs+Ty2nvGfWq3imMItftg=;
-        b=ald9y/cndfs5cTjFgCNFCxXsfZL9qIouraC/m6/UtKB3KYnpVd7rjApbsh2rokARNP
-         WWWT7RsB1yLpX1kj/4IKL2x7hrRe5Fe4ur5LXugXpVXykVhrmM6tym0JpBvtphKszDw3
-         cAevGydKUDOy/yDoIqFu8tpXsR/RqnKVZ9WV8rC+N55YFlDKFm8+RcitaVRi8uICnhC4
-         w4q4vM/6ybi5n+cuwDtVhIafAhBwkjixAWL8SiU1emchazUdiSu2879u0xNGZlIdYGdp
-         vzaez0ZSS25RQVXhob4hhc/rcWlyk+RLfUMyedeEIJfdTwWbNs5XpTc/3RoMEirC77mA
-         wvRg==
-X-Gm-Message-State: AOAM530MTz/LMD/FQqUj9O/Cw8WeWLP28WJECeSvU8EDIP8w0IuX9hLf
-        naCy6VxEk8BUMXyt/SxVA3ZNR4RYmMGVD7TFqgg=
-X-Google-Smtp-Source: ABdhPJz6oMyKZ0dKqB4kDi4EbIy/POPWmbRO06zSRQ1WsUqKbtpGr0zDiz6D545tVpcxd+DEzUuepQN/zqg1Hx6EGFw=
-X-Received: by 2002:a17:906:a186:: with SMTP id s6mr15116271ejy.193.1604922332070;
- Mon, 09 Nov 2020 03:45:32 -0800 (PST)
+        id S1729493AbgKILqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 06:46:44 -0500
+Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:43987 "EHLO
+        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727774AbgKILqo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 06:46:44 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436324|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.119563-0.00233504-0.878102;FP=10095001690009343397|2|2|8|0|-1|-1|-1;HT=ay29a033018047187;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.IuV3ekO_1604922387;
+Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.IuV3ekO_1604922387)
+          by smtp.aliyun-inc.com(10.147.41.187);
+          Mon, 09 Nov 2020 19:46:37 +0800
+From:   Frank Lee <frank@allwinnertech.com>
+To:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org, mripard@kernel.org,
+        wens@csie.org
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank@allwinnertech.com>
+Subject: [PATCH v2] thermal: sun8i: Use bitmap API instead of open code
+Date:   Mon,  9 Nov 2020 19:46:24 +0800
+Message-Id: <20201109114624.23035-1-frank@allwinnertech.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20201109114302.22740-1-frank@allwinnertech.com>
-In-Reply-To: <20201109114302.22740-1-frank@allwinnertech.com>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Mon, 9 Nov 2020 19:45:21 +0800
-Message-ID: <CAEExFWvXrKS_Ge1vBJoQZFzFn-qv4jpP7Rpp0xkgyAaVWtoRww@mail.gmail.com>
-Subject: Re: [PATCH] thermal: sun8i: Use bitmap API instead of open code
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I forgot to add "V2", I will resend.
+From: Yangtao Li <frank@allwinnertech.com>
 
-Yangtao
+The bitmap_* API is the standard way to access data in the bitfield.
+So convert irq_ack to return an unsigned long, and make things to use
+bitmap API.
+
+Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+---
+v2:
+Make irq_ack to return an unsigned long
+---
+ drivers/thermal/sun8i_thermal.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index f8b13071a6f4..8c80bd06dd9f 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -8,6 +8,7 @@
+  * Based on the work of Josef Gajdusek <atx@atx.name>
+  */
+ 
++#include <linux/bitmap.h>
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/interrupt.h>
+@@ -74,7 +75,7 @@ struct ths_thermal_chip {
+ 	int		(*calibrate)(struct ths_device *tmdev,
+ 				     u16 *caldata, int callen);
+ 	int		(*init)(struct ths_device *tmdev);
+-	int             (*irq_ack)(struct ths_device *tmdev);
++	unsigned long	(*irq_ack)(struct ths_device *tmdev);
+ 	int		(*calc_temp)(struct ths_device *tmdev,
+ 				     int id, int reg);
+ };
+@@ -146,9 +147,10 @@ static const struct regmap_config config = {
+ 	.max_register = 0xfc,
+ };
+ 
+-static int sun8i_h3_irq_ack(struct ths_device *tmdev)
++static unsigned long sun8i_h3_irq_ack(struct ths_device *tmdev)
+ {
+-	int i, state, ret = 0;
++	unsigned long irq_bitmap = 0;
++	int i, state;
+ 
+ 	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
+ 
+@@ -156,16 +158,17 @@ static int sun8i_h3_irq_ack(struct ths_device *tmdev)
+ 		if (state & SUN8I_THS_DATA_IRQ_STS(i)) {
+ 			regmap_write(tmdev->regmap, SUN8I_THS_IS,
+ 				     SUN8I_THS_DATA_IRQ_STS(i));
+-			ret |= BIT(i);
++			bitmap_set(&irq_bitmap, i, 1);
+ 		}
+ 	}
+ 
+-	return ret;
++	return irq_bitmap;
+ }
+ 
+-static int sun50i_h6_irq_ack(struct ths_device *tmdev)
++static unsigned long sun50i_h6_irq_ack(struct ths_device *tmdev)
+ {
+-	int i, state, ret = 0;
++	unsigned long irq_bitmap = 0;
++	int i, state;
+ 
+ 	regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
+ 
+@@ -173,24 +176,22 @@ static int sun50i_h6_irq_ack(struct ths_device *tmdev)
+ 		if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
+ 			regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
+ 				     SUN50I_H6_THS_DATA_IRQ_STS(i));
+-			ret |= BIT(i);
++			bitmap_set(&irq_bitmap, i, 1);
+ 		}
+ 	}
+ 
+-	return ret;
++	return irq_bitmap;
+ }
+ 
+ static irqreturn_t sun8i_irq_thread(int irq, void *data)
+ {
+ 	struct ths_device *tmdev = data;
+-	int i, state;
+-
+-	state = tmdev->chip->irq_ack(tmdev);
++	unsigned long irq_bitmap = tmdev->chip->irq_ack(tmdev);
++	int i;
+ 
+-	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+-		if (state & BIT(i))
+-			thermal_zone_device_update(tmdev->sensor[i].tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
++	for_each_set_bit(i, &irq_bitmap, tmdev->chip->sensor_num) {
++		thermal_zone_device_update(tmdev->sensor[i].tzd,
++					   THERMAL_EVENT_UNSPECIFIED);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+-- 
+2.28.0
+
