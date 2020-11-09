@@ -2,84 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBD82ABE71
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 15:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1E12ABE7A
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 15:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730041AbgKIOSP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 9 Nov 2020 09:18:15 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:36606 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729776AbgKIOSP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 09:18:15 -0500
-Received: by mail-ot1-f66.google.com with SMTP id 32so9045669otm.3;
-        Mon, 09 Nov 2020 06:18:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VPDRH1c3QIWZAvuOlt82daB4gdbQvXFejkuuDmKSKgE=;
-        b=U3OWKMTCLXb2nzcRDeON06qLOyyXL0QWQBbeoep9YJJ1OEtVPi+f1yi8HBxCiMWCvh
-         p3+LHGH6miKdmyr8lcREr+qRzQXJUH8ao9U76q/ahwtCSzenTVI4eaUJC2tfKvSJizxw
-         Azd5IuDvNnbo5hKgO9jNetlpbqtr2FD/6P0FB9dI+IRTmMG8KKf4K8T5vgU01OZB6h/L
-         ROg7T/QG7Y1FZV8JkbxXV7fQ/99Ytfo6ueQHno09WdFtLtLQF1QSx6sC6NXssMIabh3N
-         LYmU5Z0Alz++QAN1+zqR788ocv+Zx8U/xzJDUlaffa/ScA8ICm6ZH5O7p2h6BID/OMYM
-         kkTg==
-X-Gm-Message-State: AOAM532P8qbmT3Qm06iN1FmatxjolXgYfyx3ozsj8OZbQxjaRwStCsNe
-        ku9XIulW8NgjNq7kPWvtR/FUd3m+d66pbnC4k/M=
-X-Google-Smtp-Source: ABdhPJwQU/OV8+ocELllAUlHF8+PDa5M7twEyVegLfZDobgJr59vN4RrllLBHCXrI44X+weTf3h7GXgCz7mpKj2XNfg=
-X-Received: by 2002:a9d:16f:: with SMTP id 102mr11184607otu.206.1604931493992;
- Mon, 09 Nov 2020 06:18:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20201103151139.29690-1-pali@kernel.org>
-In-Reply-To: <20201103151139.29690-1-pali@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 9 Nov 2020 15:18:03 +0100
-Message-ID: <CAJZ5v0gxRHUt7dij7zFomXxmCEPVxiTEv+qu8kZESbsE3A+bBQ@mail.gmail.com>
-Subject: Re: [PATCH 0/9] cpufreq: Add missing modalias for tristate drivers
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S1730197AbgKIOUE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 09:20:04 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:3657 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729776AbgKIOUD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 09:20:03 -0500
+Received: from DGGEMM403-HUB.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4CVCn34zBVzXl3j;
+        Mon,  9 Nov 2020 22:19:51 +0800 (CST)
+Received: from dggema758-chm.china.huawei.com (10.1.198.200) by
+ DGGEMM403-HUB.china.huawei.com (10.3.20.211) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Mon, 9 Nov 2020 22:19:57 +0800
+Received: from dggema755-chm.china.huawei.com (10.1.198.197) by
+ dggema758-chm.china.huawei.com (10.1.198.200) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Mon, 9 Nov 2020 22:19:56 +0800
+Received: from dggema755-chm.china.huawei.com ([10.1.198.197]) by
+ dggema755-chm.china.huawei.com ([10.1.198.197]) with mapi id 15.01.1913.007;
+ Mon, 9 Nov 2020 22:19:56 +0800
+From:   zhangqilong <zhangqilong3@huawei.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "fugang.duan@nxp.com" <fugang.duan@nxp.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        netdev <netdev@vger.kernel.org>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggMS8yXSBQTTogcnVudGltZTogQWRkIGEgZ2VuZXJh?=
+ =?utf-8?B?bCBydW50aW1lIGdldCBzeW5jIG9wZXJhdGlvbiB0byBkZWFsIHdpdGggdXNh?=
+ =?utf-8?Q?ge_counter?=
+Thread-Topic: [PATCH 1/2] PM: runtime: Add a general runtime get sync
+ operation to deal with usage counter
+Thread-Index: AQHWtphPrqJtWpRvSU6cZd2kwaKEi6m/yHOA//98uoCAAIaQcP//hDAAgACH0AA=
+Date:   Mon, 9 Nov 2020 14:19:56 +0000
+Message-ID: <0f736cff81274310a3dd7c174af4ede4@huawei.com>
+References: <20201109080938.4174745-1-zhangqilong3@huawei.com>
+ <20201109080938.4174745-2-zhangqilong3@huawei.com>
+ <CAJZ5v0gZp_R60FN+ZrKmEn+m0F4yjt_MB+N8uGG=fxKUnZdknQ@mail.gmail.com>
+ <d05e3d35a68e41e2ac36acfcd577ad47@huawei.com>
+ <CAJZ5v0hpNNAyRuQyMbOE2Lwer_uJbC0uTpnpCBpPNTv54_fxRg@mail.gmail.com>
+ <bf9325b7c3e04691a215fb16a133d536@huawei.com>
+ <CAJZ5v0ggJCFqqmFVGmxEf2MRckLU6GsF=V=cnzfveyOqOMfVZg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ggJCFqqmFVGmxEf2MRckLU6GsF=V=cnzfveyOqOMfVZg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.179.28]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 3, 2020 at 4:14 PM Pali Rohár <pali@kernel.org> wrote:
->
-> Some of cpufreq drivers are tristate, can be compiled as modules, but do
-> not have defined modalias for automatic loading. This patch series add
-> for all those cpufreq drivers missing MODULE_DEVICE_TABLE macro, based
-> on OF definitions, or MODULE_ALIAS for platform drivers.
->
-> MODULE_DEVICE_TABLE is not explictily added only for speedstep-centrino,
-> speedstep-ich and speedstep-smi drivers as it was removed in commit
-> b11d77fa300d9 ("cpufreq: Convert to new X86 CPU match macros").
->
-> Pali Rohár (9):
->   cpufreq: ap806: Add missing MODULE_DEVICE_TABLE
->   cpufreq: highbank: Add missing MODULE_DEVICE_TABLE
->   cpufreq: mediatek: Add missing MODULE_DEVICE_TABLE
->   cpufreq: qcom: Add missing MODULE_DEVICE_TABLE
->   cpufreq: st: Add missing MODULE_DEVICE_TABLE
->   cpufreq: sun50i: Add missing MODULE_DEVICE_TABLE
->   cpufreq: loongson1: Add missing MODULE_ALIAS
->   cpufreq: scpi: Add missing MODULE_ALIAS
->   cpufreq: vexpress-spc: Add missing MODULE_ALIAS
->
->  drivers/cpufreq/armada-8k-cpufreq.c    | 6 ++++++
->  drivers/cpufreq/highbank-cpufreq.c     | 7 +++++++
->  drivers/cpufreq/loongson1-cpufreq.c    | 1 +
->  drivers/cpufreq/mediatek-cpufreq.c     | 1 +
->  drivers/cpufreq/qcom-cpufreq-nvmem.c   | 1 +
->  drivers/cpufreq/scpi-cpufreq.c         | 1 +
->  drivers/cpufreq/sti-cpufreq.c          | 7 +++++++
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 1 +
->  drivers/cpufreq/vexpress-spc-cpufreq.c | 1 +
->  9 files changed, 26 insertions(+)
->
-> --
-
-Viresh, any comments?
+PiBPbiBNb24sIE5vdiA5LCAyMDIwIGF0IDI6NDYgUE0gemhhbmdxaWxvbmcgPHpoYW5ncWlsb25n
+M0BodWF3ZWkuY29tPg0KPiB3cm90ZToNCj4gPg0KPiA+IEhpLA0KPiA+DQo+ID4gPg0KPiA+ID4g
+T24gTW9uLCBOb3YgOSwgMjAyMCBhdCAyOjI0IFBNIHpoYW5ncWlsb25nIDx6aGFuZ3FpbG9uZzNA
+aHVhd2VpLmNvbT4NCj4gPiA+IHdyb3RlOg0KPiA+ID4gPg0KPiA+ID4gPiBIaQ0KPiA+ID4gPiA+
+DQo+ID4gPiA+ID4gT24gTW9uLCBOb3YgOSwgMjAyMCBhdCA5OjA1IEFNIFpoYW5nIFFpbG9uZw0K
+PiA+ID4gPiA+IDx6aGFuZ3FpbG9uZzNAaHVhd2VpLmNvbT4NCj4gPiA+ID4gPiB3cm90ZToNCj4g
+PiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBJbiBtYW55IGNhc2UsIHdlIG5lZWQgdG8gY2hlY2sgcmV0
+dXJuIHZhbHVlIG9mDQo+ID4gPiA+ID4gPiBwbV9ydW50aW1lX2dldF9zeW5jLCBidXQgaXQgYnJp
+bmdzIGEgdHJvdWJsZSB0byB0aGUgdXNhZ2UNCj4gPiA+ID4gPiA+IGNvdW50ZXIgcHJvY2Vzc2lu
+Zy4gTWFueSBjYWxsZXJzIGZvcmdldCB0byBkZWNyZWFzZSB0aGUgdXNhZ2UNCj4gPiA+ID4gPiA+
+IGNvdW50ZXIgd2hlbiBpdCBmYWlsZWQuIEl0IGhhcyBiZWVuIGRpc2N1c3NlZCBhIGxvdFswXVsx
+XS4gU28NCj4gPiA+ID4gPiA+IHdlIGFkZCBhIGZ1bmN0aW9uIHRvIGRlYWwgd2l0aCB0aGUgdXNh
+Z2UgY291bnRlciBmb3IgYmV0dGVyIGNvZGluZy4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBb
+MF1odHRwczovL2xrbWwub3JnL2xrbWwvMjAyMC82LzE0Lzg4DQo+ID4gPiA+ID4gPiBbMV1odHRw
+czovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvbGludXgtdGVncmEvcGF0Y2gvMjAyMA0K
+PiA+ID4gPiA+ID4gMDUyMA0KPiA+ID4gPiA+ID4gMDk1MSA0OC4xMDk5NS0xLWRpbmdoYW8ubGl1
+QHpqdS5lZHUuY24vDQo+ID4gPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBaaGFuZyBRaWxvbmcgPHpo
+YW5ncWlsb25nM0BodWF3ZWkuY29tPg0KPiA+ID4gPiA+ID4gLS0tDQo+ID4gPiA+ID4gPiAgaW5j
+bHVkZS9saW51eC9wbV9ydW50aW1lLmggfCAzMg0KPiA+ID4gKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysNCj4gPiA+ID4gPiA+ICAxIGZpbGUgY2hhbmdlZCwgMzIgaW5zZXJ0aW9ucygr
+KQ0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3Bt
+X3J1bnRpbWUuaA0KPiA+ID4gPiA+ID4gYi9pbmNsdWRlL2xpbnV4L3BtX3J1bnRpbWUuaCBpbmRl
+eCA0YjcwOGY0ZThlZWQuLjJiMGFmNWIxZGZmZA0KPiA+ID4gPiA+ID4gMTAwNjQ0DQo+ID4gPiA+
+ID4gPiAtLS0gYS9pbmNsdWRlL2xpbnV4L3BtX3J1bnRpbWUuaA0KPiA+ID4gPiA+ID4gKysrIGIv
+aW5jbHVkZS9saW51eC9wbV9ydW50aW1lLmgNCj4gPiA+ID4gPiA+IEBAIC0zODYsNiArMzg2LDM4
+IEBAIHN0YXRpYyBpbmxpbmUgaW50DQo+ID4gPiA+ID4gPiBwbV9ydW50aW1lX2dldF9zeW5jKHN0
+cnVjdCBkZXZpY2UNCj4gPiA+ID4gPiAqZGV2KQ0KPiA+ID4gPiA+ID4gICAgICAgICByZXR1cm4g
+X19wbV9ydW50aW1lX3Jlc3VtZShkZXYsIFJQTV9HRVRfUFVUKTsgIH0NCj4gPiA+ID4gPiA+DQo+
+ID4gPiA+ID4gPiArLyoqDQo+ID4gPiA+ID4gPiArICogZ2VuZV9wbV9ydW50aW1lX2dldF9zeW5j
+IC0gQnVtcCB1cCB1c2FnZSBjb3VudGVyIG9mIGENCj4gPiA+ID4gPiA+ICtkZXZpY2UgYW5kDQo+
+ID4gPiA+ID4gcmVzdW1lIGl0Lg0KPiA+ID4gPiA+ID4gKyAqIEBkZXY6IFRhcmdldCBkZXZpY2Uu
+DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBUaGUgZm9yY2UgYXJndW1lbnQgaXMgbm90IGRvY3VtZW50
+ZWQuDQo+ID4gPiA+DQo+ID4gPiA+ICgxKSBHb29kIGNhdGNoLCBJIHdpbGwgYWRkIGl0IGluIG5l
+eHQgdmVyc2lvbi4NCj4gPiA+ID4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gKyAqDQo+ID4gPiA+
+ID4gPiArICogSW5jcmVhc2UgcnVudGltZSBQTSB1c2FnZSBjb3VudGVyIG9mIEBkZXYgZmlyc3Qs
+IGFuZCBjYXJyeQ0KPiA+ID4gPiA+ID4gKyBvdXQgcnVudGltZS1yZXN1bWUNCj4gPiA+ID4gPiA+
+ICsgKiBvZiBpdCBzeW5jaHJvbm91c2x5LiBJZiBfX3BtX3J1bnRpbWVfcmVzdW1lIHJldHVybg0K
+PiA+ID4gPiA+ID4gKyBuZWdhdGl2ZSB2YWx1ZShkZXZpY2UgaXMgaW4NCj4gPiA+ID4gPiA+ICsg
+KiBlcnJvciBzdGF0ZSkgb3IgcmV0dXJuIHBvc2l0aXZlIHZhbHVlKHRoZSBydW50aW1lIG9mDQo+
+ID4gPiA+ID4gPiArIGRldmljZSBpcyBhbHJlYWR5IGFjdGl2ZSkNCj4gPiA+ID4gPiA+ICsgKiB3
+aXRoIGZvcmNlIGlzIHRydWUsIGl0IG5lZWQgZGVjcmVhc2UgdGhlIHVzYWdlIGNvdW50ZXIgb2YN
+Cj4gPiA+ID4gPiA+ICsgdGhlIGRldmljZSB3aGVuDQo+ID4gPiA+ID4gPiArICogcmV0dXJuLg0K
+PiA+ID4gPiA+ID4gKyAqDQo+ID4gPiA+ID4gPiArICogVGhlIHBvc3NpYmxlIHJldHVybiB2YWx1
+ZXMgb2YgdGhpcyBmdW5jdGlvbiBpcyB6ZXJvIG9yIG5lZ2F0aXZlIHZhbHVlLg0KPiA+ID4gPiA+
+ID4gKyAqIHplcm86DQo+ID4gPiA+ID4gPiArICogICAgLSBpdCBtZWFucyBzdWNjZXNzIGFuZCB0
+aGUgc3RhdHVzIHdpbGwgc3RvcmUgdGhlIHJlc3VtZQ0KPiBvcGVyYXRpb24NCj4gPiA+ID4gPiBz
+dGF0dXMNCj4gPiA+ID4gPiA+ICsgKiAgICAgIGlmIG5lZWRlZCwgdGhlIHJ1bnRpbWUgUE0gdXNh
+Z2UgY291bnRlciBvZiBAZGV2IHJlbWFpbnMNCj4gPiA+ID4gPiBpbmNyZW1lbnRlZC4NCj4gPiA+
+ID4gPiA+ICsgKiBuZWdhdGl2ZToNCj4gPiA+ID4gPiA+ICsgKiAgICAtIGl0IG1lYW5zIGZhaWx1
+cmUgYW5kIHRoZSBydW50aW1lIFBNIHVzYWdlIGNvdW50ZXIgb2YgQGRldg0KPiBoYXMNCj4gPiA+
+ID4gPiBiZWVuDQo+ID4gPiA+ID4gPiArICogICAgICBkZWNyZWFzZWQuDQo+ID4gPiA+ID4gPiAr
+ICogcG9zaXRpdmU6DQo+ID4gPiA+ID4gPiArICogICAgLSBpdCBtZWFucyB0aGUgcnVudGltZSBv
+ZiB0aGUgZGV2aWNlIGlzIGFscmVhZHkgYWN0aXZlIGJlZm9yZQ0KPiB0aGF0Lg0KPiA+ID4gSWYN
+Cj4gPiA+ID4gPiA+ICsgKiAgICAgIGNhbGxlciBzZXQgZm9yY2UgdG8gdHJ1ZSwgd2Ugc3RpbGwg
+bmVlZCB0byBkZWNyZWFzZSB0aGUgdXNhZ2UNCj4gPiA+ID4gPiBjb3VudGVyLg0KPiA+ID4gPiA+
+DQo+ID4gPiA+ID4gV2h5IGlzIHRoaXMgbmVlZGVkPw0KPiA+ID4gPg0KPiA+ID4gPiAoMikgSWYg
+Y2FsbGVyIHNldCBmb3JjZSwgaXQgbWVhbnMgY2FsbGVyIHdpbGwgcmV0dXJuIGV2ZW4gdGhlDQo+
+ID4gPiA+IGRldmljZSBoYXMgYWxyZWFkeSBiZWVuIGFjdGl2ZSAoX19wbV9ydW50aW1lX3Jlc3Vt
+ZSByZXR1cm4NCj4gPiA+ID4gcG9zaXRpdmUgdmFsdWUpIGFmdGVyIGNhbGxpbmcgZ2VuZV9wbV9y
+dW50aW1lX2dldF9zeW5jLCB3ZSBzdGlsbA0KPiA+ID4gPiBuZWVkIHRvIGRlY3JlYXNlIHRoZQ0K
+PiA+ID4gdXNhZ2UgY291bnQuDQo+ID4gPg0KPiA+ID4gQnV0IHdobyBuZWVkcyB0aGlzPw0KPiA+
+ID4NCj4gPiA+IEkgZG9uJ3QgdGhpbmsgdGhhdCBpdCBpcyBhIGdvb2QgaWRlYSB0byBjb21wbGlj
+YXRlIHRoZSBBUEkgdGhpcyB3YXkuDQo+ID4NCj4gPiBUaGUgY2FsbGVycyBsaWtlOg0KPiA+IHJl
+dCA9IHBtX3J1bnRpbWVfZ2V0X3N5bmMoZGV2KTsNCj4gPiBpZiAocmV0KSB7DQo+ID4gICAgICAg
+ICAuLi4NCj4gPiAgICAgICAgIHJldHVybiAoeHh4KTsNCj4gPiB9DQo+IA0KPiBXaGljaCBpc24n
+dCBjb3JyZWN0IHJlYWxseSwgaXMgaXQ/DQo+IA0KPiBJZiByZXQgaXMgZ3JlYXRlciB0aGFuIDAs
+IHRoZSBlcnJvciBzaG91bGQgbm90IGJlIHJldHVybmVkIGluIHRoZSBmaXJzdCBwbGFjZSwgc28N
+Cj4geW91IG1heSB3YW50IHRoZSBuZXcgd3JhcHBlciB0byByZXR1cm4gemVybyBpbiB0aGF0IGNh
+c2UgaW5zdGVhZC4NCg0KSSBnZXQgeW91ciBpZGVhLg0KDQo+IA0KPiA+IGRyaXZlcnMvc3BpL3Nw
+aS1pbWctc3BmaS5jOjczNCBpbWdfc3BmaV9yZXN1bWUoKSB3YXJuOg0KPiA+IHBtX3J1bnRpbWVf
+Z2V0X3N5bmMoKSBhbHNvIHJldHVybnMgMSBvbiBzdWNjZXNzDQo+ID4gZHJpdmVycy9tZmQvYXJp
+em9uYS1jb3JlLmM6NDkgYXJpem9uYV9jbGszMmtfZW5hYmxlKCkgd2FybjoNCj4gPiBwbV9ydW50
+aW1lX2dldF9zeW5jKCkgYWxzbyByZXR1cm5zIDEgb24gc3VjY2Vzcw0KPiA+IGRyaXZlcnMvdXNi
+L2R3YzMvZHdjMy1wY2kuYzoyMTIgZHdjM19wY2lfcmVzdW1lX3dvcmsoKSB3YXJuOg0KPiA+IHBt
+X3J1bnRpbWVfZ2V0X3N5bmMoKSBhbHNvIHJldHVybnMgMSBvbiBzdWNjZXNzDQo+ID4gZHJpdmVy
+cy9pbnB1dC9rZXlib2FyZC9vbWFwNC1rZXlwYWQuYzoyNzkgb21hcDRfa2V5cGFkX3Byb2JlKCkg
+d2FybjoNCj4gPiBwbV9ydW50aW1lX2dldF9zeW5jKCkgYWxzbyByZXR1cm5zIDEgb24gc3VjY2Vz
+cw0KPiA+IGRyaXZlcnMvZ3B1L2RybS92YzQvdmM0X2RzaS5jOjgzOSB2YzRfZHNpX2VuY29kZXJf
+ZW5hYmxlKCkgd2FybjoNCj4gPiBwbV9ydW50aW1lX2dldF9zeW5jKCkgYWxzbyByZXR1cm5zIDEg
+b24gc3VjY2Vzcw0KPiA+IGRyaXZlcnMvZ3B1L2RybS9pOTE1L3NlbGZ0ZXN0cy9tb2NrX2dlbV9k
+ZXZpY2UuYzoxNTcgbW9ja19nZW1fZGV2aWNlKCkNCj4gPiB3YXJuOiAncG1fcnVudGltZV9nZXRf
+c3luYygmcGRldi0+ZGV2KScgcmV0dXJucyBwb3NpdGl2ZSBhbmQgbmVnYXRpdmUNCj4gPiBkcml2
+ZXJzL3dhdGNoZG9nL3J0aV93ZHQuYzoyMzAgcnRpX3dkdF9wcm9iZSgpIHdhcm46DQo+ID4gcG1f
+cnVudGltZV9nZXRfc3luYygpIGFsc28gcmV0dXJucyAxIG9uIHN1Y2Nlc3MNCj4gPiBkcml2ZXJz
+L21lZGlhL3BsYXRmb3JtL2V4eW5vczQtaXMvbWlwaS1jc2lzLmM6NTEzIHM1cGNzaXNfc19zdHJl
+YW0oKQ0KPiA+IHdhcm46IHBtX3J1bnRpbWVfZ2V0X3N5bmMoKSBhbHNvIHJldHVybnMgMSBvbiBz
+dWNjZXNzDQo+ID4gZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstdmNvZGVjL210a192Y29kZWNf
+ZGVjX3BtLmM6ODkNCj4gPiBtdGtfdmNvZGVjX2RlY19wd19vbigpIHdhcm46IHBtX3J1bnRpbWVf
+Z2V0X3N5bmMoKSBhbHNvIHJldHVybnMgMSBvbg0KPiA+IHN1Y2Nlc3MNCj4gPiBkcml2ZXJzL21l
+ZGlhL3BsYXRmb3JtL3RpLXZwZS9jYWwuYzo3OTQgY2FsX3Byb2JlKCkgd2FybjoNCj4gPiBwbV9y
+dW50aW1lX2dldF9zeW5jKCkgYWxzbyByZXR1cm5zIDEgb24gc3VjY2Vzcw0KPiA+IGRyaXZlcnMv
+bWVkaWEvcGxhdGZvcm0vdGktdnBlL3ZwZS5jOjI0NzggdnBlX3J1bnRpbWVfZ2V0KCkgd2FybjoN
+Cj4gPiBwbV9ydW50aW1lX2dldF9zeW5jKCkgYWxzbyByZXR1cm5zIDEgb24gc3VjY2Vzcw0KPiA+
+IGRyaXZlcnMvbWVkaWEvaTJjL3NtaWFwcC9zbWlhcHAtY29yZS5jOjE1Mjkgc21pYXBwX3BtX2dl
+dF9pbml0KCkgd2FybjoNCj4gPiBwbV9ydW50aW1lX2dldF9zeW5jKCkgYWxzbyByZXR1cm5zIDEg
+b24gc3VjY2VzcyAuLi4NCj4gPiB0aGV5IG5lZWQgaXQgdG8gc2ltcGxpZnkgdGhlIGZ1bmN0aW9u
+Lg0KPiA+DQo+ID4gSWYgd2Ugb25seSB3YW50IHRvIHNpbXBsaWZ5IGxpa2UNCj4gPiByZXQgPSBw
+bV9ydW50aW1lX2dldF9zeW5jKGRldik7DQo+ID4gaWYgKHJldCA8IDApIHsNCj4gPiAgICAgICAg
+IC4uLg0KPiA+ICAgICAgICAgUmV0dXJuICh4eHgpDQo+ID4gfQ0KPiA+IFRoZSBwYXJhbWV0ZXIg
+Zm9yY2UgY291bGQgYmUgcmVtb3ZlZC4NCj4gDQo+IFdoaWNoIGlzIGV4YWN0bHkgbXkgcG9pbnQu
+DQoNCk9LLCBJIHJlLWNvZGUgaXQgbmV4dCB2ZXJzaW9uLg0KDQpUaGFua3MsDQpaaGFuZw0K
