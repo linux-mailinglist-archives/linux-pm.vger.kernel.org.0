@@ -2,159 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4862ABFDD
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 16:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4932AC03B
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 16:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729940AbgKIPaR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 10:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        id S1727303AbgKIPuX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 10:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729843AbgKIPaR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 10:30:17 -0500
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAC2C0613D3
-        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 07:30:17 -0800 (PST)
-Received: by mail-vk1-xa43.google.com with SMTP id o73so1963369vka.5
-        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 07:30:17 -0800 (PST)
+        with ESMTP id S1726410AbgKIPuX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 10:50:23 -0500
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51953C0613CF
+        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 07:50:23 -0800 (PST)
+Received: by mail-vk1-xa41.google.com with SMTP id n189so1989231vkb.3
+        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 07:50:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=M+/E+3pWQ696926wYOSOu+bLQd4b14UrxIqzuR57QCk=;
-        b=Y7FHb3h9pNwbtyCeUHJMYOGd1kylu109bHFSmoKbbzwnR0H20Qi45N0wRVxQGj+T4r
-         QDaK1majviaZ6Pm8PCfnP0x/kcMaeZloyLjtVlFUZxFCgfbgIbvbfWlvohlCLdQrAz8E
-         +PUaB39LLrLOgn0QYKncNt0JOMWa9R/2Qz6RXh7OWBfQuwVMYn5upcXdmhOAolHP76B3
-         Ryc/WoQmxyEOgMuoNzLKPpvpGRHTlf5JLcThC53HRBgTH5ovS5kG8auRQx9KFo3y05O3
-         CrVB8IQJlYw+NshYaCX1caYo5v+ic1QubEYxEE8H5TxyZck3tV2+dZG2BZ51BuEcJf4j
-         3GkA==
+        bh=L51XkjqpivDL+gi7hdK0mHKvFEWiUWHhaavhkjK/7JU=;
+        b=s86ENdjB9rhqpZoOQ8WWqBcdYrSX1vetoclGIZsHeD49HUNoyWPcsE3zXlb4Ae0eeY
+         lRZIrlJXJLjhNss47OPpcaibknEDzA6Ag9MqZEoq9DZoAed/D/yybS/RtrzMxKUav3Ir
+         dXPrpr9UEqiLaeSs+SJku2M96DsLkC3pgUU4xqWLYyKFI9KJ2rL4Kwe/9jbZh5AdUL4b
+         roSese/e8cR+yTfwE0bFAFoACk3jvYEynL+bnITfe5mI1xUrbjuJtdLSTXcsbvOCCh53
+         /lWCb7nJmJ81+4NWW3kn6hyc/z8LmxeqjjwY/eHhYc9Y02OJjfYcYAb9GWDv48nWMQ8K
+         K+cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M+/E+3pWQ696926wYOSOu+bLQd4b14UrxIqzuR57QCk=;
-        b=H3GCCOH1NbnyRuL/yivgGiokjBlPQaWB7Zr8y/VbE55F6VytxOaYopU7grpcMkN0iU
-         zxK4zCYyL+XEv37g8d7WcLrmVLJVVG2Fh6BQ/DjQiqKL6acPYYLqhdO3yZn17pTQFNlN
-         B6uEG12NMExEs7gMj3m8zTWcFeM+KjEUfQ9IGJQAjFamj+zPmuItB3InhN/u3UZQhZnq
-         iWsJMfyaYRWCENgwY6yCP5zOExZlEOXFL08NRRJ2H25qmsd+Wbnhq9unuQdzd5Y2dXto
-         PoMoAEoCcSxYT51NBhhzg7UhREEzpvUEYuQarLSo4JGREF1isdOK35igvHNgo7iMtPx/
-         4nIQ==
-X-Gm-Message-State: AOAM530w+kXLZvnwymbsIOjTQ5+jVSuJEOUKDiZ+8LzigNItCBJP7iJf
-        V4AdKRwnZJ6/E4guIwCxje9vRhfMOC1TmMfzeBYnIrvNFdjLIg==
-X-Google-Smtp-Source: ABdhPJwOYuAL5qYB+YXBqskN5dnj208vR24eR8qsH13zoEvn5jSx+wxvB1Q618avdnEGH5+HeEVneVIJbtywc3y6npk=
-X-Received: by 2002:a1f:8f48:: with SMTP id r69mr3157688vkd.6.1604935816203;
- Mon, 09 Nov 2020 07:30:16 -0800 (PST)
+        bh=L51XkjqpivDL+gi7hdK0mHKvFEWiUWHhaavhkjK/7JU=;
+        b=idPbTCMv+edpXBNa6pgkNNefYLJfp4glKyrBXuZoXDk7yNs5gXwp/j732HTM6vI4Tr
+         PiHO5wsx6S01HlE/xlY9SoK4jY+sAzxb+RRe+w3VvuMriNZVJuTdhkreSeHHcwDptQ9S
+         76eBPdSwCKTup4LpYi7jY90AC4bu76uPfhUKOTbWYfTHJ34ORJHTV+/5noYgc/a0lD8e
+         uug94dFNZxyyirxqRa10OZvWRmJh/z/u+m8eUNhA0EjxM3K87DQqtnNJ2+z9lzWFTrYb
+         UCLQFcHCdOlsJaeJt4d8jGmyAmvJ8Z+s1FKQbclCHyQBboCKyYobqMW82vDPF8kCP47A
+         lGYg==
+X-Gm-Message-State: AOAM530Dj72ftPOrp8tNkrDtFA41nqkJ5VgtmkUpARQBo2E8D63FGnoP
+        c9H2BnDzKQ2mvnBbTT657Bz0jmYpWsA+lMYd0wQFqA==
+X-Google-Smtp-Source: ABdhPJxXb6HXDuIXp7atH8WtlH14Ds4SLH9UNRivXFJAdlbKA6NSKdHmA03ggD7MLlBBqev5AyCx8q9UtTTEouBmAbA=
+X-Received: by 2002:a1f:9682:: with SMTP id y124mr7471961vkd.6.1604937022457;
+ Mon, 09 Nov 2020 07:50:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20201106164903.3906-1-ilina@codeaurora.org> <CAPDyKFqvoAjNVJ6e8r3+tDKkq49h6tev6MPoQ1fHZu9FoOU6Nw@mail.gmail.com>
- <X6lfGVD2rJGF85+c@codeaurora.org>
-In-Reply-To: <X6lfGVD2rJGF85+c@codeaurora.org>
+References: <20201109150416.1877878-1-zhangqilong3@huawei.com>
+ <20201109150416.1877878-2-zhangqilong3@huawei.com> <CAJZ5v0gGG4FeVfrFOYe1+axv78yh9vA4FAOsbLughbsQosP9-w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gGG4FeVfrFOYe1+axv78yh9vA4FAOsbLughbsQosP9-w@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 9 Nov 2020 16:29:38 +0100
-Message-ID: <CAPDyKFqL9iGjS++i_MUStBxW7=oL4zRv5MJ3OmhY+TB_SRrm=Q@mail.gmail.com>
-Subject: Re: [PATCH] PM / Domains: replace -ENOTSUPP with -EOPNOTSUPP
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+Date:   Mon, 9 Nov 2020 16:49:45 +0100
+Message-ID: <CAPDyKFr-XCAWKQiN29s-=XusqqPSqumK9wZVePT+5C7J43BKqA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PM: runtime: Add a general runtime get sync
+ operation to deal with usage counter
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Zhang Qilong <zhangqilong3@huawei.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 9 Nov 2020 at 16:24, Lina Iyer <ilina@codeaurora.org> wrote:
+On Mon, 9 Nov 2020 at 16:20, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On Mon, Nov 09 2020 at 04:40 -0700, Ulf Hansson wrote:
-> >On Fri, 6 Nov 2020 at 17:49, Lina Iyer <ilina@codeaurora.org> wrote:
-> >>
-> >> While submitting a patch to add next_wakeup, checkpatch reported this -
-> >>
-> >> WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-> >> +       return -ENOTSUPP;
-> >>
-> >> Address the above warning in other functions in pm_domain.h.
-> >>
-> >> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> On Mon, Nov 9, 2020 at 4:00 PM Zhang Qilong <zhangqilong3@huawei.com> wrote:
 > >
-> >I assume you have looked at callers of these functions too, to make
-> >sure they don't explicitly look at -ENOTSUPP?
+> > In many case, we need to check return value of pm_runtime_get_sync, but
+> > it brings a trouble to the usage counter processing. Many callers forget
+> > to decrease the usage counter when it failed. It has been discussed a
+> > lot[0][1]. So we add a function to deal with the usage counter for better
+> > coding.
 > >
-> Yes, the first level callers at least. Most of them seem to return from
-> probe calls etc. Is there a nice way to make sure the second level
-> functions and the callers of those are not using -ENOTSUPP return from
-> these functions.
+> > [0]https://lkml.org/lkml/2020/6/14/88
+> > [1]https://patchwork.ozlabs.org/project/linux-tegra/patch/20200520095148.10995-1-dinghao.liu@zju.edu.cn/
+> > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+> > ---
+> >  include/linux/pm_runtime.h | 30 ++++++++++++++++++++++++++++++
+> >  1 file changed, 30 insertions(+)
+> >
+> > diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> > index 4b708f4e8eed..6549ce764400 100644
+> > --- a/include/linux/pm_runtime.h
+> > +++ b/include/linux/pm_runtime.h
+> > @@ -386,6 +386,36 @@ static inline int pm_runtime_get_sync(struct device *dev)
+> >         return __pm_runtime_resume(dev, RPM_GET_PUT);
+> >  }
+> >
+> > +/**
+> > + * pm_runtime_general_get - Bump up usage counter of a device and resume it.
+> > + * @dev: Target device.
+> > + *
+> > + * Increase runtime PM usage counter of @dev first, and carry out runtime-resume
+> > + * of it synchronously. If __pm_runtime_resume return negative value(device is in
+> > + * error state), we to need decrease the usage counter before it return. If
+> > + * __pm_runtime_resume return positive value, it means the runtime of device has
+> > + * already been in active state, and we let the new wrapper return zero instead.
+> > + *
+> > + * The possible return values of this function is zero or negative value.
+> > + * zero:
+> > + *    - it means resume succeeed or runtime of device has already been active, the
+> > + *      runtime PM usage counter of @dev remains incremented.
+> > + * negative:
+> > + *    - it means failure and the runtime PM usage counter of @dev has been balanced.
+>
+> The kerneldoc above is kind of noisy and it is hard to figure out what
+> the helper really does from it.
+>
+> You could basically say something like "Resume @dev synchronously and
+> if that is successful, increment its runtime PM usage counter.  Return
+> 0 if the runtime PM usage counter of @dev has been incremented or a
+> negative error code otherwise."
+>
+> > + */
+> > +static inline int pm_runtime_general_get(struct device *dev)
+>
+> What about pm_runtime_resume_and_get()?
 
-Good question. But I can't think of one (besides code inspection) -
-unless you have a running system.
+We already have pm_runtime_get_if_active() - so perhaps
+pm_runtime_get_if_suspended() could be an option as well?
 
 >
-> >Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Anyway, let's give this a try and see what happens!
+> > +{
+> > +       int ret = 0;
+>
+> This extra initialization is not necessary.
+>
+> You can initialize ret to the __pm_runtime_resume() return value right away.
+>
+> > +
+> > +       ret = __pm_runtime_resume(dev, RPM_GET_PUT);
+> > +       if (ret < 0) {
+> > +               pm_runtime_put_noidle(dev);
+> > +               return ret;
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  /**
+> >   * pm_runtime_put - Drop device usage counter and queue up "idle check" if 0.
+> >   * @dev: Target device.
+> > --
 
 Kind regards
 Uffe
-
---
-> >>  1 file changed, 7 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> >> index 49982cd58bfd..e390388e6c17 100644
-> >> --- a/include/linux/pm_domain.h
-> >> +++ b/include/linux/pm_domain.h
-> >> @@ -259,24 +259,24 @@ static inline int pm_genpd_init(struct generic_pm_domain *genpd,
-> >>  }
-> >>  static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
-> >>  {
-> >> -       return -ENOTSUPP;
-> >> +       return -EOPNOTSUPP;
-> >>  }
-> >>
-> >>  static inline int dev_pm_genpd_set_performance_state(struct device *dev,
-> >>                                                      unsigned int state)
-> >>  {
-> >> -       return -ENOTSUPP;
-> >> +       return -EOPNOTSUPP;
-> >>  }
-> >>
-> >>  static inline int dev_pm_genpd_add_notifier(struct device *dev,
-> >>                                             struct notifier_block *nb)
-> >>  {
-> >> -       return -ENOTSUPP;
-> >> +       return -EOPNOTSUPP;
-> >>  }
-> >>
-> >>  static inline int dev_pm_genpd_remove_notifier(struct device *dev)
-> >>  {
-> >> -       return -ENOTSUPP;
-> >> +       return -EOPNOTSUPP;
-> >>  }
-> >>
-> >>  static inline int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
-> >> @@ -334,13 +334,13 @@ struct device *genpd_dev_pm_attach_by_name(struct device *dev,
-> >>  static inline int of_genpd_add_provider_simple(struct device_node *np,
-> >>                                         struct generic_pm_domain *genpd)
-> >>  {
-> >> -       return -ENOTSUPP;
-> >> +       return -EOPNOTSUPP;
-> >>  }
-> >>
-> >>  static inline int of_genpd_add_provider_onecell(struct device_node *np,
-> >>                                         struct genpd_onecell_data *data)
-> >>  {
-> >> -       return -ENOTSUPP;
-> >> +       return -EOPNOTSUPP;
-> >>  }
-> >>
-> >>  static inline void of_genpd_del_provider(struct device_node *np) {}
-> >> @@ -396,7 +396,7 @@ static inline struct device *genpd_dev_pm_attach_by_name(struct device *dev,
-> >>  static inline
-> >>  struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
-> >>  {
-> >> -       return ERR_PTR(-ENOTSUPP);
-> >> +       return ERR_PTR(-EOPNOTSUPP);
-> >>  }
-> >>  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
-> >>
-> >> --
-> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> >> a Linux Foundation Collaborative Project
-> >>
