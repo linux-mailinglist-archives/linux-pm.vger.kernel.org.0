@@ -2,104 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1B72AB225
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 09:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143802AB362
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 10:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729092AbgKIIF7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 03:05:59 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:7435 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729730AbgKIIF7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 03:05:59 -0500
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CV3TT05hBz73nD;
-        Mon,  9 Nov 2020 16:05:49 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Mon, 9 Nov 2020
- 16:05:50 +0800
-From:   Zhang Qilong <zhangqilong3@huawei.com>
-To:     <rjw@rjwysocki.net>, <fugang.duan@nxp.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH 2/2] net: fec: Fix reference count leak in fec series ops
-Date:   Mon, 9 Nov 2020 16:09:38 +0800
-Message-ID: <20201109080938.4174745-3-zhangqilong3@huawei.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201109080938.4174745-1-zhangqilong3@huawei.com>
-References: <20201109080938.4174745-1-zhangqilong3@huawei.com>
+        id S1728385AbgKIJRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 04:17:45 -0500
+Received: from foss.arm.com ([217.140.110.172]:35880 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726482AbgKIJRo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Nov 2020 04:17:44 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 425E91042;
+        Mon,  9 Nov 2020 01:17:44 -0800 (PST)
+Received: from [192.168.1.179] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ED713F718;
+        Mon,  9 Nov 2020 01:17:42 -0800 (PST)
+Subject: Re: [PATCH 6/7] drm/panfrost: dev_pm_opp_put_*() accepts NULL
+ argument
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        digetx@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1604646059.git.viresh.kumar@linaro.org>
+ <43be6d118201f9feb70fb030390fddce0852ab0b.1604646059.git.viresh.kumar@linaro.org>
+From:   Steven Price <steven.price@arm.com>
+Message-ID: <8f59b818-306e-05e2-3a0a-8351098b1bbb@arm.com>
+Date:   Mon, 9 Nov 2020 09:17:47 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-CFilter-Loop: Reflected
+In-Reply-To: <43be6d118201f9feb70fb030390fddce0852ab0b.1604646059.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm_runtime_get_sync() will increment pm usage at first and it will
-resume the device later. If runtime of the device has error or
-device is in inaccessible state(or other error state), resume
-operation will fail. If we do not call put operation to decrease
-the reference, it will result in reference count leak. Moreover,
-this device cannot enter the idle state and always stay busy or other
-non-idle state later. So we fixed it by replacing it with
-gene_pm_runtime_get_sync.
+On 06/11/2020 07:03, Viresh Kumar wrote:
+> The dev_pm_opp_put_*() APIs now accepts a NULL opp_table pointer and so
+> there is no need for us to carry the extra check. Drop them.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Fixes: 8fff755e9f8d0 ("net: fec: Ensure clocks are enabled while using mdio bus")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Reviewed-by: Steven Price <steven.price@arm.com>
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index d7919555250d..f3f632bf3676 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1808,7 +1808,7 @@ static int fec_enet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
- 	int ret = 0, frame_start, frame_addr, frame_op;
- 	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = gene_pm_runtime_get_sync(dev, false);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1867,7 +1867,7 @@ static int fec_enet_mdio_write(struct mii_bus *bus, int mii_id, int regnum,
- 	int ret, frame_start, frame_addr;
- 	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = gene_pm_runtime_get_sync(dev, false);
- 	if (ret < 0)
- 		return ret;
- 	else
-@@ -2275,7 +2275,7 @@ static void fec_enet_get_regs(struct net_device *ndev,
- 	u32 i, off;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = gene_pm_runtime_get_sync(dev, false);
- 	if (ret < 0)
- 		return;
- 
-@@ -2976,7 +2976,7 @@ fec_enet_open(struct net_device *ndev)
- 	int ret;
- 	bool reset_again;
- 
--	ret = pm_runtime_get_sync(&fep->pdev->dev);
-+	ret = gene_pm_runtime_get_sync(&fep->pdev->dev, false);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -3770,7 +3770,7 @@ fec_drv_remove(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(&pdev->dev);
-+	ret = gene_pm_runtime_get_sync(&pdev->dev, false);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.25.4
+> ---
+>   drivers/gpu/drm/panfrost/panfrost_devfreq.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> index 8ab025d0035f..97b5abc7c188 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> @@ -170,10 +170,8 @@ void panfrost_devfreq_fini(struct panfrost_device *pfdev)
+>   		pfdevfreq->opp_of_table_added = false;
+>   	}
+>   
+> -	if (pfdevfreq->regulators_opp_table) {
+> -		dev_pm_opp_put_regulators(pfdevfreq->regulators_opp_table);
+> -		pfdevfreq->regulators_opp_table = NULL;
+> -	}
+> +	dev_pm_opp_put_regulators(pfdevfreq->regulators_opp_table);
+> +	pfdevfreq->regulators_opp_table = NULL;
+>   }
+>   
+>   void panfrost_devfreq_resume(struct panfrost_device *pfdev)
+> 
 
