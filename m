@@ -2,201 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EC52AC43A
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 19:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B1B2AC494
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 20:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729491AbgKIS4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 13:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729302AbgKIS4g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 13:56:36 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96204C0613CF
-        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 10:56:36 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id x13so8995414pfa.9
-        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 10:56:36 -0800 (PST)
+        id S1730205AbgKITFZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 14:05:25 -0500
+Received: from mail-dm6nam11on2041.outbound.protection.outlook.com ([40.107.223.41]:42625
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727303AbgKITFZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Nov 2020 14:05:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hFFrp1vPtZShqiPX0HO9HzjNz+q4gE+bepqhx3Keuxm/rtCfJJbiYzBA0suV0mppDms8YhbmxJzw0roy2Sq6D2jgmBGgghjNMPQlMeSTEbDeGPoIM+EdzbOdPWwBOIPSPqL8z8NBEh3MX4QKhj2Jqdb61aqtllVD6pvP/M6xSCrUXb6uf26IsFFPMeeq2wFsumSWs/MdUtawbg/Ebpoz9W9TrTv+KWrjbetVPXqSGYyIn/ae1R0m2FRnoI/CaYf3yFEvnGAmH8bCTUMRJmp8kcxEwypVMmJw4WXHAPK7k5nesiEuTiYz4TbrWBH91BdnqgBTe0NFGswmAOOwxqX7gQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WeAXrI/FXDPgaOwJCTbrr8i7cGeH6XpsCPb3Bp/W+5s=;
+ b=AgPp0XSQlNszZGfu2ehQwAsXgxDKpgeHhGgiEpI4J/yrigNNcT1JmI4qNvWjEipl6akhkbQXPnwCFZ/vEQIXlnTXIG/RtMv3du3KkiFDpWAGvURPAQxy/XHR9tQi86OwpHV34LLPUeMLKZDb0orLXeuxRRCbC5NbR+/3ZLj3wUdZ0LRFCJaFg9eiy8wi1tLMyAm0s3h7EfiOQMYXFXQ6F0hlg6uxx0d6NJbssxdVREckp1RcCOvbR8bXQ5wnKBD3y6iIBVaNl4BmJblB0LGmgUgAkO/PNlD1f5hrAgRAzTrRDDvzGxJB2qsZm66G/sTycwuH7zr/SH7Lnz0gbxb8TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=qX2vn1LSWFzjAneGCNLPa4OdzJDsTk8YrzJIgHNX+Pw=;
-        b=awKQttPbKjeIvCvXMccpzkMzLUMJDT3vo3+ikKpoYChCWsWPBYVKB5YeiX4SrrdUrB
-         rQpGjllmfao10Cbj8jbCE1g0be5TKp09KeY8rqrnOnwcZ7wlQ28svx7n1Zy+edKaV+pQ
-         eKIKXwDsT/5i3ULyey/KUFMtPXmAnpNGDXjK4bhdTI/0usxGf+ty8981bdGWLBhFFSxT
-         d7wQizTdUw9eJY7NcO5UCMRMpaXsWWhxwtmAn9uHjhEFZrIAzMkYAVm2GwyUTFaETZ+8
-         0CG64yW1IsvQr8QrEsED18sD2fnOHiy6ZAUWz5jANQ/HNsFU8CmNbWRKgWAT25A3NTTI
-         ERtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=qX2vn1LSWFzjAneGCNLPa4OdzJDsTk8YrzJIgHNX+Pw=;
-        b=TXRtb400kofP/PaNSvojc5m7XmgUBDIG16nvSuW4Wj6yDwcz2l8OgskT0egKRTUDSe
-         4bDFwofc1uSxZ8d/Af9hCLtNXQpIDxKlvLNv7Wgy5C2aru1D2vGDZvacEp6BY6Bve/Am
-         LFMH0L3Bawu672xdiwsd6XiqGViR4QOIrF0Oz87jDDqQ4InWuWtYxLZNlesPqwf/+Ibr
-         HI0qZ4I1PHmGFbQJyMW6xei8m07kkjQkywML/+6EiU0jfdIdN9OqkUZtYSKHklwFfjH/
-         c0AWC4UULW8V2p6CW88twgXiMqVA5PuaIkPAja3OAYXoiJKvjAeKLgvMACHABkJ2Gwr5
-         Buog==
-X-Gm-Message-State: AOAM532I7JEC5klQ6pRrCHWkG4kCVtzrqfVbZivrh5SLRXkAuWsU/Mi4
-        kYlmCyW0QDjA0+XC7K6vZci0it7QrgmhFA==
-X-Google-Smtp-Source: ABdhPJzWK67JLL8QfTioyVZA8Ffuj/HuVkgE6G9vnpEPo53XS1R0/VuZoghVyhClgjmez1wYxd0/9g==
-X-Received: by 2002:a63:486:: with SMTP id 128mr8898271pge.200.1604948195862;
-        Mon, 09 Nov 2020 10:56:35 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m21sm11920320pfa.58.2020.11.09.10.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 10:56:35 -0800 (PST)
-Message-ID: <5fa990e3.1c69fb81.f6e4e.9c09@mx.google.com>
-Date:   Mon, 09 Nov 2020 10:56:35 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WeAXrI/FXDPgaOwJCTbrr8i7cGeH6XpsCPb3Bp/W+5s=;
+ b=fmHtbFqjGvQPi7BZOMeLe7BGIpq/32shOsrIJTNfgY+4/hwLPapEemgr7+enfb/fU8G4RV+vf6KdQxJVVSZEAg3XZLrNsH1lxPSnsPPVyXVNQm700nic9ALvGmq797+XmmQueXFRooNMcD1XeiZElpQRQMO9A7grLNp/k3v+UlM=
+Authentication-Results: amd.com; dkim=none (message not signed)
+ header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2685.namprd12.prod.outlook.com (2603:10b6:805:67::33)
+ by SN1PR12MB2415.namprd12.prod.outlook.com (2603:10b6:802:26::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.25; Mon, 9 Nov
+ 2020 19:05:22 +0000
+Received: from SN6PR12MB2685.namprd12.prod.outlook.com
+ ([fe80::a160:c63e:b49a:8f9a]) by SN6PR12MB2685.namprd12.prod.outlook.com
+ ([fe80::a160:c63e:b49a:8f9a%3]) with mapi id 15.20.3541.024; Mon, 9 Nov 2020
+ 19:05:22 +0000
+Subject: Re: [PATCH v5] cper, apei, mce: Pass x86 CPER through the MCA
+ handling chain
+To:     Punit Agrawal <punit1.agrawal@toshiba.co.jp>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+References: <20201103164952.5126-1-Smita.KoralahalliChannabasappa@amd.com>
+ <87a6vv9hch.fsf@kokedama.swc.toshiba.co.jp> <20201106120950.GC14914@zn.tnic>
+ <874klz9vk9.fsf@kokedama.swc.toshiba.co.jp>
+From:   Smita Koralahalli Channabasappa <skoralah@amd.com>
+Message-ID: <982e0243-b144-f8b6-d69d-45af94ed8bb9@amd.com>
+Date:   Mon, 9 Nov 2020 13:05:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.1
+In-Reply-To: <874klz9vk9.fsf@kokedama.swc.toshiba.co.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [2603:8080:1807:186d:2d3f:50b3:ce8f:b4ef]
+X-ClientProxiedBy: SN2PR01CA0046.prod.exchangelabs.com (2603:10b6:800::14) To
+ SN6PR12MB2685.namprd12.prod.outlook.com (2603:10b6:805:67::33)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.10-rc3-7-g7c5e6f73cac0
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 11 warnings (v5.10-rc3-7-g7c5e6f73cac0)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2603:8080:1807:186d:2d3f:50b3:ce8f:b4ef] (2603:8080:1807:186d:2d3f:50b3:ce8f:b4ef) by SN2PR01CA0046.prod.exchangelabs.com (2603:10b6:800::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Mon, 9 Nov 2020 19:05:21 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 2a821bfc-c0d2-4c93-24e2-08d884e26839
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2415:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SN1PR12MB24157EF4AC140D28079F9AFB90EA0@SN1PR12MB2415.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KvR4KlSmRFMytTwDqwDayHfN+LfFvafZa2Q1+ibPH3x070igjUC6r35h3Y/5RP8s2LMrvCVPFrduH8qhdcaOBb3ezsHWoYDB39f8ootV0ivR0JZbIuwV8q7Dp+b7kk9+L4+PhKUilxcRAmqwK0TPWWaIZF5Gl/76d2tkKwnE6TAtqnU9ITDHLJ1JkOXnYj1/VxHZqBsTYq5KH8aw5qFlw6wIhZFfxT2umA0TuTj1V5Lfh2uObjr0ttDcfoHsA3smQ05sACJJma2vaqHkVR9cVzXcrGIgdlu/I0iztTv9te+Maec061Iv9Nc7rvwUZtzEAG+3Z7JDbTe420SFc3BUX705LrSdvbkit+AoD+I5eMlPksnTcsIXJFIQmD44rI9y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(346002)(136003)(396003)(39860400002)(16526019)(186003)(4326008)(8676002)(36756003)(66476007)(8936002)(2906002)(66556008)(66946007)(52116002)(316002)(54906003)(110136005)(2616005)(31696002)(53546011)(5660300002)(6486002)(478600001)(31686004)(7416002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?cGNBZkFPSmNDUkUxVkp1Y1FjRjNUTjUwVWdhQlI3WUR6Ykt5blhHa3pHQ3JV?=
+ =?utf-8?B?WDJVL2VTeFFWdW91R0hGMm90S3pXUVFuVGt5QTlyV2t1WmgrQ0luMkNRU05B?=
+ =?utf-8?B?Rnd0My94VitHVDk0c2duTVBJUWh2SlY3N3pDQ1ptWEIwWmcwdUJpMENjeWlM?=
+ =?utf-8?B?QktzdE9SbGthdVVMbTNOZXhLZEhVUzVlVDBsMDQ0TkM2MFJSdUhTeGRrZTRh?=
+ =?utf-8?B?RDh4TjBPSU1sWXQzMHR4dW9UMlUzSGdNVVBDM3RWTm1OMDZaV1cvckwyL2Qw?=
+ =?utf-8?B?dGRkSE5RT1lLbHdEa1hHbUowNjcwc2FYVGprZGFpY0MvKzdjOWlNbHp1dU1F?=
+ =?utf-8?B?bHJ5UTNVUUtLK2tpVVFxcWVzK0o3V04rNURyL1lvRW9weWxqUDFFNmdsSXZr?=
+ =?utf-8?B?MU1iSlE4UStXL28wWVppQWNjRHVPNDNmRVhkYUs2bTRZSGdJK1RvNDBlaGhq?=
+ =?utf-8?B?NjU0azMvYytCVm5LdWlXcGNVWFRucCs3TFZ2ZUh4dzU3bVUvM08yQzFQbS9l?=
+ =?utf-8?B?R2V0OGdtZ0s0bjBQVUR6TG1iVG94L0JMaHZ1UzZWM3U4ekRndDBFaVA3cFlT?=
+ =?utf-8?B?UUQvS29FWldFV3ZEaHk1UkpLa0RHNUJFaTlQQmVFQWVTcGpUamgrOHE3TW5l?=
+ =?utf-8?B?djZ2dEVFazZsd2VLWmdSVFRraC85bUY0TUEyN0ZYbzRCOHVsaHRtY01adWcv?=
+ =?utf-8?B?L2xOTFhOMFYrNmRaVisyaTcxWWJFZkpSbUFGQ0tUSy84VFA4Zy9WM2J0cjZi?=
+ =?utf-8?B?T09iK01vSmFZMlJIT1FESm1CZFQxbmhXSlRrRERROE4zYmMzVFgwTHovNnJY?=
+ =?utf-8?B?K3hqa3BqODlKUVJod2lrQTNtNmNHQWlzRldVN2tRVE1ua21pWXk5QkhwZjls?=
+ =?utf-8?B?RVdsbnk1U3BzOGtiTnRXTGN1WlZILzljaUhodlBMaFRXa1VkSDBhWUMzQWd2?=
+ =?utf-8?B?bkN5WHVsRjM2bFhTYktmem16Wk04WmszQkUyVVVoc25iakc4bUMxMGltN2l0?=
+ =?utf-8?B?SEU3d1F3NVBDMGsrMjlza09MbFl0eGRWQjhIRWEvbWEyNmJGSW5FWjhCV3U2?=
+ =?utf-8?B?WTgySnR0Q05qbnFMU2lxbzJ4NXBVK3FKUEY1bnhVUFZwSVpzeW1hMk82eFFQ?=
+ =?utf-8?B?eUhYV3VxREdEUXhpbnMvSUhiRWppOUIzWnVjQ25MaEJEYWkxSmRYVkk3NE9O?=
+ =?utf-8?B?SnJXa3BXVnUyclZwVkVJZ0VxYU9maE51M1hGOWFuYXNEdU5JRmhRWnVlS2tr?=
+ =?utf-8?B?VndNRThyWEJOdG9IbENwUzBkOVFLV2F1OG9ka0hFRytwZmQwZz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a821bfc-c0d2-4c93-24e2-08d884e26839
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2020 19:05:22.1024
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oQ4DpLAI7qhlVPaDcIplV4MFp/wTkI7lbfPmqPJDqCoat86GyMu9O0UmRxWjc1vODPbn7RN2f2be78zqn1IZ8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2415
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.10-rc3-7-g7=
-c5e6f73cac0)
+On 11/8/20 7:18 PM, Punit Agrawal wrote:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-10-rc3-7-g7c5e6f73cac0/
+> Borislav Petkov <bp@alien8.de> writes:
+>
+>> On Fri, Nov 06, 2020 at 02:36:46PM +0900, Punit Agrawal wrote:
+>>>> diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
+>>>> index 2531de49f56c..438ed9eff6d0 100644
+>>>> --- a/drivers/firmware/efi/cper-x86.c
+>>>> +++ b/drivers/firmware/efi/cper-x86.c
+>>>> @@ -2,6 +2,7 @@
+>>>>   // Copyright (C) 2018, Advanced Micro Devices, Inc.
+>>>>   
+>>>>   #include <linux/cper.h>
+>>>> +#include <linux/acpi.h>
+>>> Did you mean to include <asm/acpi.h>?
+>> Why?
+> Because arch_apei_report_x86_error() used in the patch is defined
+> there. The indirect include works but pulls in additional definitions
+> not needed by the patch.
+>
+> Do you prefer the more generic include?
 
-Tree: pm
-Branch: testing
-Git Describe: v5.10-rc3-7-g7c5e6f73cac0
-Git Commit: 7c5e6f73cac0c06e727d07879d6c3c00b1010377
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Okay.
 
-Warnings Detected:
+I agree, it's generally a good practice to avoid pulling up additional
+definitions. I had this when I made the declaration in generic header
+file and may be I did not consider it changing initially as my build
+didn't break after moving the declaration from generic header to arch
+specific header file.
 
-arc:
+I will take care henceforth and make the changes as required.
 
-arm64:
-    defconfig (gcc-8): 8 warnings
+Thanks,
 
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #size-cells (1) differs from / (2)
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #address-cells (1) differs from / (2)
-    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #size-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #address-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
-SPI bus
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
-or SPI bus
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
-smatches
-
-Warnings:
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
-I bus
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
-us
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
