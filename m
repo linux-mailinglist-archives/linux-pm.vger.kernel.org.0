@@ -2,141 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8069D2AB832
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 13:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5732AB84E
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 13:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729574AbgKIM1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 07:27:35 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46368 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727774AbgKIM1f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 07:27:35 -0500
-Received: by mail-ot1-f65.google.com with SMTP id g19so8684852otp.13;
-        Mon, 09 Nov 2020 04:27:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gJxFbDvRRCnc/4vPtEw0yIcsdM8RBDOf2GintUurPj8=;
-        b=UAVux4ciTPd1SeKAyalTNxhhg3RRkRU0XA0/T2k6Ghfbcv8i0kCkCp1o4jwHGcgmpX
-         t/aIhGG5IkwH6RK7NZZa5JccDZyffFGg8fvtTEAMUGIEf+0Heuh2AIMXVu9lXDwB0UAT
-         BhuOzkRAo3FgVQG6SiUsTc/2LKy92yb1LyyYekJuCbzljTR/E1ynOr2zsqy84vMQAITU
-         PhaTJ4YK6cKqICMJmBDkau5R6Divwaj7rknH4XPb6/OTO/4Ihk5S/rrHO32upQrH3/48
-         HS/CD+XPKILISSKW8hYWXPLnMuE8q1TO0OVS5TzQABviaXQvYarwaVSiUU4nwgXbz0vG
-         arXg==
-X-Gm-Message-State: AOAM533TUCar/ol9kbw/8f7cZmvnyMh17mLLQlV1TWGYDQmyZv2HQjG7
-        5Ym/fJsnqyuCV7e8tQqGix4OdaqtU1uo+i88XOQ=
-X-Google-Smtp-Source: ABdhPJwE/fbnK2oev/xyYEbPnm7sDAdEc49nsBi9NXsE2ViWsBZmwaotGaEh4n6A1fzAL2ZLV/WKc6d3H97dwWnlKls=
-X-Received: by 2002:a9d:171a:: with SMTP id i26mr10658144ota.260.1604924854832;
- Mon, 09 Nov 2020 04:27:34 -0800 (PST)
-MIME-Version: 1.0
-References: <7417968.Ghue05m4RV@kreacher> <2233690.N3OVLkotou@kreacher>
- <20201106100712.u336gbtblaxr2cit@vireshk-i7> <CAJZ5v0gT07K-oPa0=f8+Fq6tevqZJ8iWYjtf9YDNUJw1GJEBBA@mail.gmail.com>
- <20201109043912.7zvfhi42yhr7goy4@vireshk-i7>
-In-Reply-To: <20201109043912.7zvfhi42yhr7goy4@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 9 Nov 2020 13:27:18 +0100
-Message-ID: <CAJZ5v0jEbKEj5OTwrr9y3HXmoSETvicu5FMyzbSY2hDaEOK2QQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: Introduce target min and max frequency hints
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        id S1729045AbgKIMeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 07:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729243AbgKIMeW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 07:34:22 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2EEC0613CF;
+        Mon,  9 Nov 2020 04:34:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DwDvxv7WLb7DK+KemO72iTYuMK2pG/etdrz51DTPEF0=; b=QxVbTOuA/n7a37SnWclYr3N0Ug
+        yXUd1batHmKaLkwRSK2tLisODgZKHzM2nm0XtE+MMRZ3k4/tRCvQ6q2i7z9Z3WHNoVGqphsheYol/
+        hkITLN65MF8qW1cpXrbiEsjr4OJCe2eXbYkGc1UdrllsFeKi39MPaKOgpTYlV/XkC6RCy8PnEMokn
+        0/dgQN7/wk5REx8ofrLbrC7zwUpAZBnjWVJ/Y809YAjX/IAoB+fo9SsNEl5z95r3Cn+50+ZWkYNpw
+        cIrDT0h3AkDciyF23fHAF8azXMKHCGf9uhuPRfriYR7J604lKJ73pdyFrI/t5Ml2SdXboMafR7y3u
+        HxOzLJVg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kc6NF-0003hq-Ik; Mon, 09 Nov 2020 12:34:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46080301324;
+        Mon,  9 Nov 2020 13:34:16 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2AF76203E2240; Mon,  9 Nov 2020 13:34:16 +0100 (CET)
+Date:   Mon, 9 Nov 2020 13:34:16 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Lina Iyer <ilina@codeaurora.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH 4/5] cpuidle: governor: Export the needed symbols
+Message-ID: <20201109123416.GO2594@hirez.programming.kicks-ass.net>
+References: <20201015144431.9979-1-daniel.lezcano@linaro.org>
+ <20201015144431.9979-4-daniel.lezcano@linaro.org>
+ <CAJZ5v0i-1eZ+j_6C83qs1-q1FSw0Yx96yQyy0KQBvDxX6KF=3w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i-1eZ+j_6C83qs1-q1FSw0Yx96yQyy0KQBvDxX6KF=3w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 5:39 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 06-11-20, 18:02, Rafael J. Wysocki wrote:
-> > On Fri, Nov 6, 2020 at 11:07 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > On 05-11-20, 19:23, Rafael J. Wysocki wrote:
-> > > > Index: linux-pm/include/linux/cpufreq.h
-> > > > ===================================================================
-> > > > --- linux-pm.orig/include/linux/cpufreq.h
-> > > > +++ linux-pm/include/linux/cpufreq.h
-> > > > @@ -63,6 +63,8 @@ struct cpufreq_policy {
-> > > >
-> > > >       unsigned int            min;    /* in kHz */
-> > > >       unsigned int            max;    /* in kHz */
-> > > > +     unsigned int            target_min; /* in kHz */
-> > > > +     unsigned int            target_max; /* in kHz */
-> > > >       unsigned int            cur;    /* in kHz, only needed if cpufreq
-> > > >                                        * governors are used */
-> > > >       unsigned int            suspend_freq; /* freq to set during suspend */
-> > >
-> > > Rafael, honestly speaking I didn't like this patch very much.
-> >
-> > So what's the concern, specifically?
-> >
-> > > We need to fix a very specific problem with the intel-pstate driver when it is
-> > > used with powersave/performance governor to make sure the hard limits
-> > > are enforced. And this is something which no one else may face as
-> > > well.
-> >
-> > Well, I predict that the CPPC driver will face this problem too at one point.
-> >
-> > As well as any other driver which doesn't select OPPs directly for
-> > that matter, at least to some extent (note that intel_pstate in the
-> > "passive" mode without HWP has it too, but since there is no way to
-> > enforce the target max in that case, it is not relevant).
-> >
-> > > What about doing something like this instead in the intel_pstate
-> > > driver only to get this fixed ?
-> > >
-> > >         if (!strcmp(policy->governor->name, "powersave") ||
-> > >             !strcmp(policy->governor->name, "performance"))
-> > >                 hard-limit-to-be-enforced;
-> > >
-> > > This would be a much simpler and contained approach IMHO.
-> >
-> > I obviously prefer to do it the way I did in this series, because it
-> > is more general and it is based on the governor telling the driver
-> > what is needed instead of the driver trying to figure out what the
-> > governor is and guessing what may be needed because of that.
-> >
-> > But if you have a very specific technical concern regarding my
-> > approach, I can do it the other way too.
->
-> I was concerned about adding those fields in the policy structure, but
-> I get that you want to do it in a more generic way.
->
-> What about adding a field name "fixed" (or something else) in the
-> governor's structure which tells us that the frequency is fixed and
-> must be honored by the driver.
+On Thu, Nov 05, 2020 at 03:04:10PM +0100, Rafael J. Wysocki wrote:
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index 2d95dc3f4644..ceba61bb364d 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -3838,6 +3838,7 @@ unsigned long nr_iowait_cpu(int cpu)
+> >  {
+> >         return atomic_read(&cpu_rq(cpu)->nr_iowait);
+> >  }
+> > +EXPORT_SYMBOL_GPL(nr_iowait_cpu);
+> 
+> Hmm.  See below.
 
-That would work for powersave/performance and it would suffice for the
-time being, so let me try to implement that.
+Did anyone read the comment above this function? It's garbage, it should
+be deleted, not made available to a wider audience.
 
-Still, there is a more general problem related to that which is how to
-prevent the perf control in the hardware from going beyond certain
-limits, possibly narrower than the policy min and max.
+> >  /*
+> >   * IO-wait accounting, and how its mostly bollocks (on SMP).
+> > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> > index f0199a4ba1ad..537716124d46 100644
+> > --- a/kernel/time/tick-sched.c
+> > +++ b/kernel/time/tick-sched.c
+> > @@ -500,12 +500,19 @@ static int __init setup_tick_nohz(char *str)
+> >
+> >  __setup("nohz=", setup_tick_nohz);
+> >
+> > +bool tick_nohz_is_enabled(void)
+> > +{
+> > +       return tick_nohz_enabled;
+> > +}
+> > +EXPORT_SYMBOL_GPL(tick_nohz_is_enabled);
+> > +
+> >  bool tick_nohz_tick_stopped(void)
+> >  {
+> >         struct tick_sched *ts = this_cpu_ptr(&tick_cpu_sched);
+> >
+> >         return ts->tick_stopped;
+> >  }
+> > +EXPORT_SYMBOL_GPL(tick_nohz_tick_stopped);
+> >
+> >  bool tick_nohz_tick_stopped_cpu(int cpu)
+> >  {
+> > @@ -1066,6 +1073,7 @@ bool tick_nohz_idle_got_tick(void)
+> >         }
+> >         return false;
+> >  }
+> > +EXPORT_SYMBOL_GPL(tick_nohz_idle_got_tick);
+> >
+> >  /**
+> >   * tick_nohz_get_next_hrtimer - return the next expiration time for the hrtimer
+> > @@ -1117,6 +1125,7 @@ ktime_t tick_nohz_get_sleep_length(ktime_t *delta_next)
+> >
+> >         return ktime_sub(next_event, now);
+> >  }
+> > +EXPORT_SYMBOL_GPL(tick_nohz_get_sleep_length);
+> 
+> Peter please correct me if I'm mistaken, but IMV the above are core
+> kernel internals and they should not be accessible to random modular
+> stuff.
 
-For example, the kernel may need to reserve some capacity for deadline
-tasks or similar, or when there is a min utilization clamp in place,
-and it would be good to have a way to let the HW know that it should
-not reduce the available capacity below a certain boundary, even
-though that may appear to be the right thing to do to it. [This is
-kind of addressed by intel_pstate by setting the HWP floor to the
-target frequency requested by the governor, but that is suboptimal,
-because it generally causes too much capacity to be reserved which
-costs energy.]
-
-Analogously, the kernel may not want the HW to increase capacity too
-much when it knows that doing so would not increase the amount of work
-done or when the work being done is not urgent (like when there is a
-max utilization clamp in place),  [This last issue is particularly
-visible in some GPU-related workloads where the processor sees
-conditions for ramping up a "one-core turbo" frequency very high, but
-this is a mistake, because it doesn't cause work to be done any
-faster, since the task doing the work is in fact periodic and it does
-the same amount of work in every period regardless of how fast the CPU
-doing it runs.]
-
-So while the powersave/performance case can be addressed in a simpler
-way, the need for a more general approach is still there.
+Yeah,... making this available seems unfortunate. Also, I don't really
+see the point, why do we want the idle governors as modules? On the
+cpufreq side we're trying to move away from modules and multiple
+governors.
