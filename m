@@ -2,186 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D51FE2AC11B
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 17:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EEA2AC13E
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 17:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730313AbgKIQkf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 11:40:35 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42276 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729776AbgKIQkf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 11:40:35 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 30so3786982otx.9;
-        Mon, 09 Nov 2020 08:40:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V/wrbP3vQWzmUgoqRj6aFJMOxS3RXcz9eW421aagNCw=;
-        b=LE+ymb9ARxXmGiTZH559YeSQFyJWHJhVk9udTnHtcFqWXHmE0zuznWJslxLvGPWJ+W
-         B9JUFMchK+nLKHKOzukHGyvs/kX0OAlABgpp/YTXqcPB4eALbbH9uwS30zU5QnrtK/cj
-         WfIl/QH1hgPrYNvsqqFYsRFpOD5TS58GedtnBgf+ku/t3jQ+2p3HvZDdsfjvaHuNT5Xo
-         qp6Vzu2hqNZqueDtrDmj3IB+G1LfzmFKt/njzWBZ2WPUrMA74XH1jZqKs64H7DY3vgPM
-         0L8yOZfqWiM4iR4TVLo4zs+4CtcND13DsrMrvgpU9kVbjsW3OAYOAqc7ZUgfN2lsCS7E
-         IQWQ==
-X-Gm-Message-State: AOAM5320BX8eqrtbFumakjrWzSpfWmq7nuUa+hFtvITDGtRhlIP3Cv3j
-        AyTYAz2OwnIGilXzOM9Mf0KS1UAp9yjX4UZgcBQ=
-X-Google-Smtp-Source: ABdhPJwTiFMjqbmI3S4BMe3ERJGohfVfAC1eGoTu3tyeScESU40h4yBUQMy75bZRfR/gJ8os2dapvZYr9vU0/4aS4t0=
-X-Received: by 2002:a9d:171a:: with SMTP id i26mr11511210ota.260.1604940034033;
- Mon, 09 Nov 2020 08:40:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20201109150416.1877878-1-zhangqilong3@huawei.com>
- <20201109150416.1877878-2-zhangqilong3@huawei.com> <CAJZ5v0gGG4FeVfrFOYe1+axv78yh9vA4FAOsbLughbsQosP9-w@mail.gmail.com>
- <5acb71f82f144a35b2a5c6bcd73af5a8@huawei.com> <CAJZ5v0g1uzLEUA7uC8QwfFK6TU2=Ngcwcp35bfUwVg-WoTXprg@mail.gmail.com>
- <446df7a9d66f4eb08f5971fba7dca1db@huawei.com>
-In-Reply-To: <446df7a9d66f4eb08f5971fba7dca1db@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 9 Nov 2020 17:40:23 +0100
-Message-ID: <CAJZ5v0gD7y7ip3xbJngc0VfR+EwP3ZpBdXO+L_OR3ay2fG6eKA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PM: runtime: Add a general runtime get sync
- operation to deal with usage counter
-To:     zhangqilong <zhangqilong3@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        id S1730450AbgKIQsH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 11:48:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54586 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730419AbgKIQsH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Nov 2020 11:48:07 -0500
+Received: from kernel.org (unknown [77.125.7.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7C3EA2074F;
+        Mon,  9 Nov 2020 16:47:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604940486;
+        bh=6rn/Is9/mb71Cx8T5OixcswhdKR8Yw8hRoo0YqfjdsY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2PklhGFO1GSLbrkd4w7eR0OQVXIC9bB/NRFuu0yXJ2cad3g2XWFGm5qY1CfZsxWEJ
+         hIEGvV7DG50YSNEMxKxpw57WvEfw0aU7JllVonG+2csYY0gr4DIxzUIPf5drKxbhRb
+         AQb1wGfM13MfcFzy1XYj4m6UEF/itQaci+zuEFqA=
+Date:   Mon, 9 Nov 2020 18:47:52 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Lameter <cl@linux.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <len.brown@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "fugang.duan@nxp.com" <fugang.duan@nxp.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 0/4] arch, mm: improve robustness of direct map
+ manipulation
+Message-ID: <20201109164752.GF301837@kernel.org>
+References: <20201109162415.13764-1-rppt@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201109162415.13764-1-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 5:15 PM zhangqilong <zhangqilong3@huawei.com> wrote:
->
-> Hi
->
-> >
-> > On Mon, Nov 9, 2020 at 4:50 PM zhangqilong <zhangqilong3@huawei.com>
-> > wrote:
-> > >
-> > > > operation to deal with usage counter
-> > > >
-> > > > On Mon, Nov 9, 2020 at 4:00 PM Zhang Qilong
-> > > > <zhangqilong3@huawei.com>
-> > > > wrote:
-> > > > >
-> > > > > In many case, we need to check return value of
-> > > > > pm_runtime_get_sync, but it brings a trouble to the usage counter
-> > > > > processing. Many callers forget to decrease the usage counter when
-> > > > > it failed. It has been discussed a lot[0][1]. So we add a function
-> > > > > to deal with the usage counter for better coding.
-> > > > >
-> > > > > [0]https://lkml.org/lkml/2020/6/14/88
-> > > > > [1]https://patchwork.ozlabs.org/project/linux-tegra/patch/20200520
-> > > > > 0951 48.10995-1-dinghao.liu@zju.edu.cn/
-> > > > > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-> > > > > ---
-> > > > >  include/linux/pm_runtime.h | 30 ++++++++++++++++++++++++++++++
-> > > > >  1 file changed, 30 insertions(+)
-> > > > >
-> > > > > diff --git a/include/linux/pm_runtime.h
-> > > > > b/include/linux/pm_runtime.h index 4b708f4e8eed..6549ce764400
-> > > > > 100644
-> > > > > --- a/include/linux/pm_runtime.h
-> > > > > +++ b/include/linux/pm_runtime.h
-> > > > > @@ -386,6 +386,36 @@ static inline int pm_runtime_get_sync(struct
-> > > > > device
-> > > > *dev)
-> > > > >         return __pm_runtime_resume(dev, RPM_GET_PUT);  }
-> > > > >
-> > > > > +/**
-> > > > > + * pm_runtime_general_get - Bump up usage counter of a device and
-> > > > resume it.
-> > > > > + * @dev: Target device.
-> > > > > + *
-> > > > > + * Increase runtime PM usage counter of @dev first, and carry out
-> > > > > +runtime-resume
-> > > > > + * of it synchronously. If __pm_runtime_resume return negative
-> > > > > +value(device is in
-> > > > > + * error state), we to need decrease the usage counter before it
-> > > > > +return. If
-> > > > > + * __pm_runtime_resume return positive value, it means the
-> > > > > +runtime of device has
-> > > > > + * already been in active state, and we let the new wrapper
-> > > > > +return zero
-> > > > instead.
-> > > > > + *
-> > > > > + * The possible return values of this function is zero or negative value.
-> > > > > + * zero:
-> > > > > + *    - it means resume succeeed or runtime of device has already been
-> > > > active, the
-> > > > > + *      runtime PM usage counter of @dev remains incremented.
-> > > > > + * negative:
-> > > > > + *    - it means failure and the runtime PM usage counter of @dev has
-> > > > been balanced.
-> > > >
-> > > > The kerneldoc above is kind of noisy and it is hard to figure out
-> > > > what the helper really does from it.
-> > > >
-> > > > You could basically say something like "Resume @dev synchronously
-> > > > and if that is successful, increment its runtime PM usage counter.
-> > > > Return
-> > > > 0 if the runtime PM usage counter of @dev has been incremented or a
-> > > > negative error code otherwise."
-> > > >
-> > >
-> > > How about the following description.
-> > > /**
-> > > 390  * pm_runtime_general_get - Bump up usage counter of a device and
-> > resume it.
-> > > 391  * @dev: Target device.
-> > > 392  *
-> > > 393  * Increase runtime PM usage counter of @dev first, and carry out
-> > > runtime-resume
-> > > 394  * of it synchronously. If __pm_runtime_resume return negative
-> > > value(device is in
-> > > 395  * error state), we to need decrease the usage counter before it
-> > > return. If
-> > > 396  * __pm_runtime_resume return positive value, it means the runtime
-> > > of device has
-> > > 397  * already been in active state, and we let the new wrapper return zero
-> > instead.
-> > > 398  *
-> >
-> > If you add the paragraph below, the one above becomes redundant IMV.
-> >
-> > > 399  * Resume @dev synchronously and if that is successful, and
-> > > increment its runtime
-> >
-> > "Resume @dev synchronously and if that is successful, increment its runtime"
-> >
-> > (drop the extra "and").
-> >
-> > > 400  * PM usage counter if it turn out to equal to 0. The runtime PM
-> > > usage counter of
-> >
-> > The "if it turn out to equal to 0" phrase is redundant (and the grammar in it is
-> > incorrect).
-> >
-> > > 401  * @dev has been incremented or a negative error code otherwise.
-> > > 402  */
-> >
-> > Why don't you use what I said verbatim?
->
-> I had misunderstand just now, sorry for that. The description is as follows:
-> 389 /**
-> 390  * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
-> 391  * @dev: Target device.
-> 392  *
-> 393  * Resume @dev synchronously if that is successful, increment its runtime PM
+Oops, this one has some rebase errors, I'll send v7 soon.
+Sorry for the noise.
 
-"Resume @dev synchronously and if that is successful, increment its runtime PM"
+On Mon, Nov 09, 2020 at 06:24:11PM +0200, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Hi,
+> 
+> During recent discussion about KVM protected memory, David raised a concern
+> about usage of __kernel_map_pages() outside of DEBUG_PAGEALLOC scope [1].
+> 
+> Indeed, for architectures that define CONFIG_ARCH_HAS_SET_DIRECT_MAP it is
+> possible that __kernel_map_pages() would fail, but since this function is
+> void, the failure will go unnoticed.
+> 
+> Moreover, there's lack of consistency of __kernel_map_pages() semantics
+> across architectures as some guard this function with
+> #ifdef DEBUG_PAGEALLOC, some refuse to update the direct map if page
+> allocation debugging is disabled at run time and some allow modifying the
+> direct map regardless of DEBUG_PAGEALLOC settings.
+> 
+> This set straightens this out by restoring dependency of
+> __kernel_map_pages() on DEBUG_PAGEALLOC and updating the call sites
+> accordingly. 
+> 
+> Since currently the only user of __kernel_map_pages() outside
+> DEBUG_PAGEALLOC is hibernation, it is updated to make direct map accesses
+> there more explicit.
+> 
+> [1] https://lore.kernel.org/lkml/2759b4bf-e1e3-d006-7d86-78a40348269d@redhat.com
+> 
+> v6 changes:
+> * revert slab changes to avoid redundant check of static key
+> 
+> v5 changes:
+> * use pairs of _map()/_unmap() functions instead of _map(..., int enable) as
+>   Vlastimil suggested
+> https://lore.kernel.org/lkml/20201108065758.1815-1-rppt@kernel.org
+> 
+> v4 changes:
+> * s/WARN_ON/pr_warn_once/ per David and Kirill
+> * rebase on v5.10-rc2
+> * add Acked/Reviewed tags
+> https://lore.kernel.org/lkml/20201103162057.22916-1-rppt@kernel.org
+> 
+> v3 changes:
+> * update arm64 changes to avoid regression, per Rick's comments
+> * fix bisectability
+> https://lore.kernel.org/lkml/20201101170815.9795-1-rppt@kernel.org
+> 
+> v2 changes:
+> * Rephrase patch 2 changelog to better describe the change intentions and
+> implications
+> * Move removal of kernel_map_pages() from patch 1 to patch 2, per David
+> https://lore.kernel.org/lkml/20201029161902.19272-1-rppt@kernel.org
+> 
+> v1:
+> https://lore.kernel.org/lkml/20201025101555.3057-1-rppt@kernel.org
+> 
+> Mike Rapoport (4):
+>   mm: introduce debug_pagealloc_{map,unmap}_pages() helpers
+>   PM: hibernate: make direct map manipulations more explicit
+>   arch, mm: restore dependency of __kernel_map_pages() on DEBUG_PAGEALLOC
+>   arch, mm: make kernel_page_present() always available
+> 
+>  arch/Kconfig                        |  3 +++
+>  arch/arm64/Kconfig                  |  4 +--
+>  arch/arm64/include/asm/cacheflush.h |  1 +
+>  arch/arm64/mm/pageattr.c            |  6 +++--
+>  arch/powerpc/Kconfig                |  5 +---
+>  arch/riscv/Kconfig                  |  4 +--
+>  arch/riscv/include/asm/pgtable.h    |  2 --
+>  arch/riscv/include/asm/set_memory.h |  1 +
+>  arch/riscv/mm/pageattr.c            | 31 ++++++++++++++++++++++
+>  arch/s390/Kconfig                   |  4 +--
+>  arch/sparc/Kconfig                  |  4 +--
+>  arch/x86/Kconfig                    |  4 +--
+>  arch/x86/include/asm/set_memory.h   |  1 +
+>  arch/x86/mm/pat/set_memory.c        |  4 +--
+>  include/linux/mm.h                  | 40 ++++++++++++++---------------
+>  include/linux/set_memory.h          |  5 ++++
+>  kernel/power/snapshot.c             | 38 +++++++++++++++++++++++++--
+>  mm/memory_hotplug.c                 |  3 +--
+>  mm/page_alloc.c                     |  6 ++---
+>  19 files changed, 113 insertions(+), 53 deletions(-)
+> 
+> -- 
+> 2.28.0
+> 
 
-(missing "and").
-
-> 394  * usage counter.  Return 0 if the runtime PM usage counter of @dev has been
-> 395  * incremented or a negative error code otherwise.
-> 396  */
->
-> Do you think it's OK?
-
-Apart from the above typo, yes it is.
-
-Thanks!
+-- 
+Sincerely yours,
+Mike.
