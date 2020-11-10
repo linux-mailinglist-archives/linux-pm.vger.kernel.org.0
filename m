@@ -2,106 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B0D2ADF3B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 20:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56612ADF92
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 20:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730542AbgKJTYr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 14:24:47 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34336 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730174AbgKJTYq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 14:24:46 -0500
-Received: by mail-oi1-f193.google.com with SMTP id w188so10139598oib.1;
-        Tue, 10 Nov 2020 11:24:46 -0800 (PST)
+        id S1732179AbgKJTck (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 14:32:40 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:44932 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731874AbgKJTcd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 14:32:33 -0500
+Received: by mail-oi1-f195.google.com with SMTP id t16so15693723oie.11;
+        Tue, 10 Nov 2020 11:32:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OLtE3tMLtSi7n/B5JdK1WUUhcUXhkUtvrXORbwS49TA=;
-        b=bgucE2we1Wd5XigjrbxI1U67DgG841AOTkbBDeog4fDS5VbU3i5xp9GjL7VWNYIeyV
-         BkzogVGV/3wkJx1ooO7obnMASqcwIPPDF9dov8J7VcV23b8MuOmMkU39SYExd/gcrI2/
-         aMca8Y3bwAWrZjbMTFLIzEnXMr4X5AS7jdeaoBW7+z+xbJbkoOfeMuaAfctn1zn+uQBm
-         oTnxalpEGmD1afiZsZcjElcLNrwoE1dH6O634wMn5ejyCHvE0bYkH0v6nADryQGAIUIf
-         aKdtct+3DfRos/S7NudPgD0Nih9QdRQS5PukwU6bfvMBq55gY1cUNs/J55STvnqWnc0l
-         cDtQ==
-X-Gm-Message-State: AOAM532qLsWoUUq/TwPd3b4NMvfV90+7f91cmapceelc6CoYcJJFNcKJ
-        nPC7QDUDjO9n5KoTcX50onskH3panliRLa/FOvg=
-X-Google-Smtp-Source: ABdhPJxdZHo4CBPYqOpn21InSDy8dHnAf5BesVSE5u+A0tvobtpe0S9pEGJFI8Zfpm+iEvQmTMbru4tk6fNYC9qxq0U=
-X-Received: by 2002:aca:1c0b:: with SMTP id c11mr421390oic.71.1605036285623;
- Tue, 10 Nov 2020 11:24:45 -0800 (PST)
+        bh=zjN4V2HIi7t5V1yE5EQ/0Tonc9lqELoKPGUr8UGft1A=;
+        b=Enw4R6mJDWrZmSE99fqUhtP0/pLk2c7dBc4mZXEoVuvAB/6OxP61Hp2aE+1vaeDKFY
+         rM7rb9wYRMmLvcGlIBDd3KEGpUDbvLqGt3mGI5VSsHakAu3qUWa3IJodP2iqDVfBhduT
+         CF1o7vk0IySZwH5vGsYNVOs82utOSMlKn02AYQlmFyRU44wuEyHsf7gqyg2TyY95rVo3
+         xWGCBWhDYa4gh7xyjjjS10i4dc5AqOj7Fua5iHETh0wgSsOYLJbHTEKQYiJZycfYehyv
+         FWWuE/bbdFWKJ4iPAPdX2SzK4ZwkoJqlINXKtdZl74epXdBI/cRsDHMGlaDx4z/iH581
+         iUPQ==
+X-Gm-Message-State: AOAM533Qa1o4x7ZC0qEqWC8IzoUmgWFvJ4M3kaiso8sMsJf9ApKNsBbh
+        h2/5qY9J2AEw7X70Cj1lWHm3z/gGJLoNkdsH7p0=
+X-Google-Smtp-Source: ABdhPJwfZG2tPHJgdaIakKbL1+cVFhfUETa9QStHz8A6yQ1aKSW3znTuh3CMGkAWBFZ9ov+Mv7hn61/NclBkv4xn6iM=
+X-Received: by 2002:aca:1c0b:: with SMTP id c11mr440766oic.71.1605036752777;
+ Tue, 10 Nov 2020 11:32:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20201027072358.13725-1-victording@google.com>
-In-Reply-To: <20201027072358.13725-1-victording@google.com>
+References: <20201103090600.29053-1-lukasz.luba@arm.com> <9382ea70-cc50-7b78-f5de-716678bdefbf@arm.com>
+In-Reply-To: <9382ea70-cc50-7b78-f5de-716678bdefbf@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Nov 2020 20:24:34 +0100
-Message-ID: <CAJZ5v0h8m-rUxqo5hVGDrm+Rm_0nEwN1yQCeKQVE5AbbR2GXFA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] powercap: Enable RAPL for AMD Fam17h and Fam19h
-To:     Victor Ding <victording@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+Date:   Tue, 10 Nov 2020 20:32:21 +0100
+Message-ID: <CAJZ5v0iS2jFvqiddjTDFpXq0gcNrrKML6raQOq=S4boZZC_V5Q@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Clarify abstract scale usage for power values in
+ Energy Model, EAS and IPA
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Quentin Perret <qperret@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Nayak, Rajendra" <rnayak@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 8:24 AM Victor Ding <victording@google.com> wrote:
+On Wed, Nov 4, 2020 at 11:58 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> This patch series adds support for AMD Fam17h RAPL counters. As per
-> AMD PPR, Fam17h and Fam19h support RAPL counters to monitor power
-> usage. The RAPL counter operates as with Intel RAPL. Therefore, it is
-> beneficial to re-use existing framework for Intel, especially to
-> allow existing tools to seamlessly run on AMD.
+> Hi Rafael,
 >
-> From the user's point view, this series enables the following two sysfs
-> entry on AMD Fam17h or Fam19h:
->   /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
->   /sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj
+> On 11/3/20 9:05 AM, Lukasz Luba wrote:
+> > Hi all,
+> >
+> > The Energy Model supports power values expressed in an abstract scale.
+> > This has an impact on Intelligent Power Allocation (IPA) and should be
+> > documented properly. Kernel sub-systems like EAS, IPA and DTPM
+> > (new comming PowerCap framework) would use the new flag to capture
+> > potential miss-configuration where the devices have registered different
+> > power scales, thus cannot operate together.
+> >
+> > There was a discussion below v2 of this patch series, which might help
+> > you to get context of these changes [2].
+> >
+> > The agreed approach is to have the DT as a source of power values expressed
+> > always in milli-Watts and the only way to submit with abstract scale values
+> > is via the em_dev_register_perf_domain() API.
+> >
+> > Changes:
+> > v4:
+> > - change bool to int type for 'miliwatts' in struct em_perf_domain
+> >    (suggested by Quentin)
+> > - removed one sentence from patch 2/4 in IPA doc power_allocator.rst
+> >    (suggested by Quentin)
+> > - added reviewed-by from Quentin to 1/4, 3/4, 4/4 patches
 >
-> Changes in v3:
-> By Victor Ding <victording@google.com>
->  - Rebased to the latest code.
->  - Created a new rapl_defaults for AMD CPUs.
->  - Removed redundant setting to zeros.
->  - Stopped using the fake power limit domain 1.
+> There was no major objections in the v3 and this v4 just addressed
+> minor comments. The important discussions mostly happen in v2.
 >
-> Changes in v2:
-> By Kim Phillips <kim.phillips@amd.com>
-> - Added the Fam19h patch to the end of the series
-> - Added my Acked-by
-> - Added Daniel Lezcano to Cc
-> - (linux-pm was already on Cc)
-> - (No code changes)
->
-> Kim Phillips (1):
->   powercap: Add AMD Fam19h RAPL support
->
-> Victor Ding (3):
->   x86/msr-index: sort AMD RAPL MSRs by address
->   powercap/intel_rapl_msr: Convert rapl_msr_priv into pointer
->   powercap: Add AMD Fam17h RAPL support
->
->  arch/x86/include/asm/msr-index.h     |  3 +-
->  drivers/powercap/intel_rapl_common.c |  7 ++++
->  drivers/powercap/intel_rapl_msr.c    | 51 ++++++++++++++++++++--------
->  3 files changed, 45 insertions(+), 16 deletions(-)
->
-> --
+> Could you take the patches via your tree, please?
 
-All patches applied as 5.11 material (which some minor edits in the
-changelogs), thanks!
+Applied as 5.11 material, thanks!
