@@ -2,114 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A36AE2AD307
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 11:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409E72AD447
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 12:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729518AbgKJKCk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 05:02:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42392 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727098AbgKJKCk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 05:02:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605002559;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yDregu+IjBgmVX/QBgcALAud6U3Yyo4UVoHSI5mURRk=;
-        b=QFu0L5IQlJC4/TOvLbZwncMWuAYLW6kYXxamNXbKk2bUVkNcyrpTbWDz0xDcMi390NwdIO
-        dtt+B9eV9nHZPMsyXhyEc6LpKzMYi59GUB6CozUUQdpCHzXVZCl/s3kduVfLRHzqqtMcQJ
-        gE7OW1FlPAwrjjIWZ0tVABvI6HjK1Ss=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-457-hfNa44UoMDa7ZaTnX3vi-g-1; Tue, 10 Nov 2020 05:02:35 -0500
-X-MC-Unique: hfNa44UoMDa7ZaTnX3vi-g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5BF1186DD47;
-        Tue, 10 Nov 2020 10:02:29 +0000 (UTC)
-Received: from [10.36.114.232] (ovpn-114-232.ams2.redhat.com [10.36.114.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0A77F5C1C4;
-        Tue, 10 Nov 2020 10:02:19 +0000 (UTC)
-Subject: Re: [PATCH v7 4/4] arch, mm: make kernel_page_present() always
- available
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <len.brown@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>, Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20201109192128.960-1-rppt@kernel.org>
- <20201109192128.960-5-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <01b18dfb-2650-f70a-8e0a-a062d96e1849@redhat.com>
-Date:   Tue, 10 Nov 2020 11:02:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726721AbgKJLB0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 06:01:26 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:46164 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726280AbgKJLB0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 06:01:26 -0500
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 0EFFE3B63DD;
+        Tue, 10 Nov 2020 10:57:32 +0000 (UTC)
+X-Originating-IP: 82.255.60.242
+Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 6DCC2C0004;
+        Tue, 10 Nov 2020 10:57:08 +0000 (UTC)
+Message-ID: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
+Subject: How to enable auto-suspend by default
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Linux PM <linux-pm@vger.kernel.org>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@dell.com>
+Date:   Tue, 10 Nov 2020 11:57:07 +0100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
 MIME-Version: 1.0
-In-Reply-To: <20201109192128.960-5-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09.11.20 20:21, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> For architectures that enable ARCH_HAS_SET_MEMORY having the ability to
-> verify that a page is mapped in the kernel direct map can be useful
-> regardless of hibernation.
-> 
-> Add RISC-V implementation of kernel_page_present(), update its forward
-> declarations and stubs to be a part of set_memory API and remove ugly
-> ifdefery in inlcude/linux/mm.h around current declarations of
-> kernel_page_present().
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Hey,
 
+systemd has been shipping this script to enable auto-suspend on a
+number of USB and PCI devices:
+https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspend_rules.py
 
-Acked-by: David Hildenbrand <david@redhat.com>
+The problem here is twofold. First, the list of devices is updated from
+ChromeOS, and the original list obviously won't be updated by ChromeOS
+developers unless a device listed exists in a ChromeBook computer,
+which means a number of devices that do support autosuspend aren't
+listed.
 
--- 
-Thanks,
+The other problem is that this list needs to exist at all, and that it
+doesn't seem possible for device driver developers (at various levels
+of the stack) to opt-in to auto-suspend when all the variants of the
+device (or at least detectable ones) support auto-suspend.
 
-David / dhildenb
+So the question is: how can we make it easier for device drivers to
+implicitly allow autosuspend *unless they opt-out*, especially for
+frameworks where the device's transport layer isn't directly available
+(eg. HID devices)?
+
+If that can't be done in the kernel drivers directly, would it be
+possible for the kernel to ship with a somewhat canonical list that
+systemd (or its replacement on other "Linuxes") could use to generate
+those user-space quirks?
+
+Ideally, for example, all new "iwlwifi" or all tested "iwlwifi" devices
+should have autosuspend enabled by the developers adding support for
+them, as in the script above, rather than downstreams (systemd upstream
+included) having to chase new PCI IDs.
+
+Cheers
 
