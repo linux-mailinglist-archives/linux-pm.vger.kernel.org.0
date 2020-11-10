@@ -2,172 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3A12AD6E9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 13:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A862AD6FC
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 13:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730392AbgKJMzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 07:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730368AbgKJMzu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 07:55:50 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3DDC0613CF
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 04:55:50 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id a3so1576218wmb.5
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 04:55:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Nv2Iddcxs1d2PfbeIZnN3SiLsasGHglATCG+tB07IsI=;
-        b=WIVjv45X5toRFfkJ1lSrT0YVSLDS40EsO3c19JdIRRJXhJJiPh5wHBhSzMa0sZkU3M
-         NN3kAzPgxlBGxobUZP1kN8kVJw6Kq/GqGFXT6CIjCr99S4nB1qziNbvIDZakx/CwB+Gv
-         OMeqbOntEMQl0liun1n0Du7Hbbkt5pZKZkmo5Y+y7YIY1iAOvJ7lCNhPJ4nEt+UJwSJ9
-         XbiHr8IRj+oCHJurlLL4waYuCZt9Nsada1DDlNpOPgb4VcwW9jbVnR/y6WgtiENSNww/
-         ZzQQ1OW6gOXj0eUbkT3YnQa82ilMVNzOCOkvQD0dKszIoVYqsVn4IFo9qPk29tkCWGHZ
-         ruhg==
+        id S1729908AbgKJM74 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 07:59:56 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:36187 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726462AbgKJM7z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 07:59:55 -0500
+Received: by mail-ot1-f68.google.com with SMTP id n89so1169714otn.3;
+        Tue, 10 Nov 2020 04:59:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Nv2Iddcxs1d2PfbeIZnN3SiLsasGHglATCG+tB07IsI=;
-        b=uOanXVgAfJ9VBTozck1OmuZf/0cqj326gvnaDggRq1KibUMDM4Lhf9eilSMU28fvDt
-         NKO+RMB81HL0Dm2sGuJQ1C8M9cunwtdwVWgjurFWzCrtteVoLf06L+jzE85j1RGi5LaK
-         yUDOzQVVV9DihjTlfWdurIrZ5NT3fizBhzdvdIb+eTWCoJmJfsgfVlJIkZbOD10N7V1n
-         cX8GCuSWyOt2UzyF28wSNSnF7LPKEbAlDf4cWPZMiATFAS/tutLO7GHOkDJWLiibIzwV
-         H457pLzzjtyT2OA9dSGI9zwuf5GyB/ZDC5JWwAzY9raqs3SUyDKi1bfdag8lzeIy+NvQ
-         13QQ==
-X-Gm-Message-State: AOAM53114y3ayF4Vja+ZNlCynMmi5gkq+zPtc+ftFdCh9XyK/4Xsimaa
-        m5saAojqVZzRBXu+44r0/Xnr3w==
-X-Google-Smtp-Source: ABdhPJwO00jWObsmAMNaE0hP33ILrN87kQ+KfLYdT2MJbty3Uht3B979tZpO1RurYxLHmQeuwnJKQw==
-X-Received: by 2002:a1c:9d02:: with SMTP id g2mr4804119wme.110.1605012949305;
-        Tue, 10 Nov 2020 04:55:49 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:1087:e960:613c:926b? ([2a01:e34:ed2f:f020:1087:e960:613c:926b])
-        by smtp.googlemail.com with ESMTPSA id k20sm977440wmi.15.2020.11.10.04.55.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2020 04:55:48 -0800 (PST)
-Subject: Re: [PATCH 3/4] powercap/drivers/dtpm: Add API for dynamic thermal
- power management
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
- <20201006122024.14539-4-daniel.lezcano@linaro.org>
- <8fea0109-30d4-7d67-ffeb-8e588a4dadc3@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <6c018f8e-41b9-55bc-4d47-d2104cabfb86@linaro.org>
-Date:   Tue, 10 Nov 2020 13:55:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nQJTAdZ1adBsQ8C+kbyZpy76IwyPcxh02MnCTX/G32M=;
+        b=eUoq5h7WdKBQY9bZOt/rWgaNknaR+NAds5bAB+mEB9Uy9h1FjgXPZsjTiaBaoW7NIf
+         vkFkmo9iL0D4vrSe0RQv2rR0NZWR2ipUADo5O9b5giv5bL+pmLLqnw05J9SHbx7NuqHu
+         T98RymeYRVrYTIrzOHF3A4ulcKbrUt8zqgTg46aELBanYiASoP2yG8oizQQ28lVC517I
+         wuaFuOkreXFNCfu0cWWzqzImRCRD1hMq5FlzJlZIibj00lZEmgrdVUYvO1OjviJuk/7J
+         ma0knsaVLYwzlwuKLNYnAXP7XSiMkylJdp+MiXLRYrQVhuTZx/aNC0c8ZHsyMDJniZ9B
+         WpwA==
+X-Gm-Message-State: AOAM530K9HoCRyKTErOlrPKu52kio8mE3M2qAogWXqpzL5FuOhA90Z+9
+        kKUfRk6s9z99bUHeo0s/Og+4oE/1XYHos12Zw28TBzqW
+X-Google-Smtp-Source: ABdhPJzUgNv59oHa/4ibKbYfwMT74tdKKWstSZKGVCl5k3qih2inBZhq4GNYsjklXLUcM6g/NQIwrNANvQvhHyZtIq4=
+X-Received: by 2002:a9d:16f:: with SMTP id 102mr14776795otu.206.1605013195114;
+ Tue, 10 Nov 2020 04:59:55 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <8fea0109-30d4-7d67-ffeb-8e588a4dadc3@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <0e0fb542b6f6b26944cb2cf356041348aeac95f6.1605006378.git.viresh.kumar@linaro.org>
+In-Reply-To: <0e0fb542b6f6b26944cb2cf356041348aeac95f6.1605006378.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 Nov 2020 13:59:42 +0100
+Message-ID: <CAJZ5v0hqxzE3c6Nz7f=23OBYPA7z-pJaSwk9JGTFTr1SYDFubg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: stats: Switch to ktime and msec instead of
+ jiffies and usertime
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Renninger <trenn@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Nov 10, 2020 at 12:07 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> The cpufreq and thermal core, both provide sysfs statistics to help
+> userspace learn about the behavior of frequencies and cooling states.
+>
+> This is how they look:
+>
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:208000 11
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:432000 147
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:729000 1600
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:960000 879
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 399
+>
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state0 4097
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state1 8932
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state2 15868
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state3 1384
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state4 103
+>
+> Here, state0 of thermal corresponds to the highest frequency of the CPU,
+> i.e. 1200000 and state4 to the lowest one.
+>
+> While both of these try to show similar kind of data (which can still be
+> very much different from each other), the values looked different (by a
+> factor of 10, i.e. thermal's time_in_state is almost 10 times that of
+> cpufreq time_in_state).
+>
+> This comes from the fact that cpufreq core displays the time in usertime
+> units (10 ms).
+>
+> It would be better if both the frameworks displayed times in the same
+> unit as the users may need to correlate between them and different
+> scales just make it awkward. And the choice of thermal core for that
+> (msec) seems to be a better choice as it is easier to read.
+>
+> The thermal core also does the stats calculations using ktime, which is
+> much more accurate as compared to jiffies used by cpufreq core.
+>
+> This patch updates the cpufreq core to use ktime for the internal
+> calculations and changes the units of time_in_state to msec.
 
-Hi Lukasz,
+Well, this may confuse user space using the stats today.
 
-thanks for the review
+>
+> The results look like this after this commit:
+>
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:208000 13
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:432000 790
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:729000 12492
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:960000 13259
+> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 3830
+>
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state0 3888
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state1 13432
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state2 12336
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state3 740
+> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state4 0
+>
+> FWIW, tools/power/cpupower/ does consume the time_in_state values from
+> the sysfs files but it is independent of the unit of the time and didn't
+> require an update.
 
-On 10/11/2020 10:59, Lukasz Luba wrote:
-
-[ ... ]
-
->> +/* Init section thermal table */
->> +extern struct dtpm_descr *__dtpm_table[];
->> +extern struct dtpm_descr *__dtpm_table_end[];
->> +
->> +#define DTPM_TABLE_ENTRY(name)            \
->> +    static typeof(name) *__dtpm_table_entry_##name    \
->> +    __used __section(__dtpm_table) = &name
-> 
-> I had to change the section name to string, to pass compilation:
-> __used __section("__dtpm_table") = &name
-> I don't know if it's my compiler or configuration.
-
-Actually, it is:
-
-commit 33def8498fdde180023444b08e12b72a9efed41d
-Author: Joe Perches <joe@perches.com>
-Date:   Wed Oct 21 19:36:07 2020 -0700
-
-    treewide: Convert macro and uses of __section(foo) to __section("foo")
-
-Your change is correct, I've noticed it a few days ago when rebasing the
-series.
-
-> I've tried to register this DTPM in scmi-cpufreq.c with macro
-> proposed in patch 4/4 commit message, but I might missed some
-> important includes there...
-> 
->> +
->> +#define DTPM_DECLARE(name)    DTPM_TABLE_ENTRY(name)
->> +
->> +#define for_each_dtpm_table(__dtpm)    \
->> +    for (__dtpm = __dtpm_table;    \
->> +         __dtpm < __dtpm_table_end;    \
->> +         __dtpm++)
->> +
->> +static inline struct dtpm *to_dtpm(struct powercap_zone *zone)
->> +{
->> +    return container_of(zone, struct dtpm, zone);
->> +}
->> +
->> +int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max);
->> +
->> +int dtpm_release_zone(struct powercap_zone *pcz);
->> +
->> +struct dtpm *dtpm_alloc(void);
->> +
->> +void dtpm_unregister(struct dtpm *dtpm);
->> +
->> +int dtpm_register_parent(const char *name, struct dtpm *dtpm,
->> +             struct dtpm *parent);
->> +
->> +int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm
->> *parent,
->> +          struct powercap_zone_ops *ops, int nr_constraints,
->> +          struct powercap_zone_constraint_ops *const_ops);
->> +#endif
->>
-> 
-> Minor comment. This new framework deserves more debug prints, especially
-> in registration/unregistration paths. I had to put some, to test it.
-> But it can be done later as well, after it gets into mainline.
-
-Ok, I will add some debug traces.
-
-> I have also run different hotplug stress tests to check this tree
-> locking. The userspace process constantly reading these values, while
-> the last CPU in the cluster was going on/off and node was detaching.
-> I haven't seen any problems, but the tree wasn't so deep.
-> Everything was calculated properly, no error, null pointers, etc.
-
-Great! thank you very much for this test
-
-> Apart from the spelling minor issues and the long constraint name, LGTM
-> 
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Thanks for the review
-
-  -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+But whoever uses cpupower may be confused.
