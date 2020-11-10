@@ -2,89 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9168E2ACD84
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 05:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908CD2ACF4F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 07:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732850AbgKJDys (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 22:54:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55798 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732823AbgKJDyr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:54:47 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0588F208FE;
-        Tue, 10 Nov 2020 03:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980486;
-        bh=YfigFUwLDE86NFgJVQhKTDRJqq/XbrY0D+5UH8FsDhE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bQoQGfX5fO4v65EF8MfqNiZ0WaZucGQ+U1Un1b0AN4+SpRqu8rH03Ukqf7HtobShk
-         umhq1VVXY4VOPBDc1y5dFORuGA5eVx7KEi8gpA+AV/SWgME16OfIPYhMPCdYViExzv
-         h1a9odRsnlR4uVDTUIjyZ30THNc4Z5fiNX92e158=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 04/42] opp: Reduce the size of critical section in _opp_table_kref_release()
-Date:   Mon,  9 Nov 2020 22:54:02 -0500
-Message-Id: <20201110035440.424258-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201110035440.424258-1-sashal@kernel.org>
-References: <20201110035440.424258-1-sashal@kernel.org>
+        id S1731671AbgKJGAS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 01:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbgKJGAS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 01:00:18 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D3FC0613CF
+        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 22:00:16 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id y7so10390890pfq.11
+        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 22:00:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KDx2B4hZpAG764hhcEv9LFAc6BWtFPcicOIsLFcauaw=;
+        b=tsqahKrwfx/e/+y/DNCtY9VaNtexdXLJGXElmxQL5/5ZhXEUtwhp+6dkmhOrtnixcC
+         m8MccBlOu+5RNBaLF0N0/F5AoUAUhhG5Cx3oEqk3F8iSp3kSu/zlubAnJZPRq+mF1ERn
+         rnTek6wjkOfOVlscRwFXNOw4i+5M9rrA8TyaQfjJCeujdpMIASkxv2k4c+cXpzgHcyfD
+         gNApjdUc7fk2Pifta84sPyeVu2fCna13BiUlXNuf0N9pIogVUZI7HFA27EA7AUUSOUkU
+         FWtfDPKcTvRDm0ilpZyOTW1itArlBw/eBe7xW1nWRui7G2d8Tm1a9jodLS1F/D1W39BC
+         bTsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KDx2B4hZpAG764hhcEv9LFAc6BWtFPcicOIsLFcauaw=;
+        b=uS84GqSNDcmzlKjHtArG9MpsfnzhkWV/XHT2ueqjtF0z33uVDWgK8oknwRFvyRQRFN
+         dBOYBtrIpo5KtQIWBNiPmOpEsN/zasv1SIlKDszjNIHH8QclYXh0nicv+Lpzr90WF8bd
+         OSfL8o8NZn1opdEgXXegDS5sLoZLoHLF7lWx119AlFncnvGyduGBCrftIUFURpW2qNB9
+         9Pa6qWtiPe0udXE8bA+K78pjsPUegf1i9ZLK7lrNld2tYyTEuF+95NbYm3t1u6W4OPM8
+         XTVlssDQ5lo4ysskJiuguOTJ1DUUU5fgMH8S0cQLqkbqmfBbIXAK4Z8XuxjPeX1LgPq/
+         dytQ==
+X-Gm-Message-State: AOAM531TFKmw+fpfvtaO5H7JlD5ZjcicqSSYhCR76A0/ChWy8vth961s
+        oNp1Z1AHdRrXMWozi1YGAm7WOXqHn4Gj0w==
+X-Google-Smtp-Source: ABdhPJxL3oUMXFxl0mQqs8XW33/I1S0fXpLP41GOu0VakQmg4kPBDMM+v2LXrhz96xGzGbjv9dpb1Q==
+X-Received: by 2002:a17:90a:4a85:: with SMTP id f5mr3435168pjh.216.1604988015916;
+        Mon, 09 Nov 2020 22:00:15 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id a3sm17890pfd.58.2020.11.09.22.00.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 09 Nov 2020 22:00:14 -0800 (PST)
+Date:   Tue, 10 Nov 2020 11:30:11 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        digetx@gmail.com, Stephan Gerhold <stephan@gerhold.net>,
+        linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH 1/2] cpufreq: dt: Don't (ab)use
+ dev_pm_opp_get_opp_table() to create OPP table
+Message-ID: <20201110060011.7unghpidbzobqhq7@vireshk-i7>
+References: <684ff01900180c0a40ec307dacc673b24eab593b.1604643714.git.viresh.kumar@linaro.org>
+ <CGME20201109124218eucas1p1b8948a9bf2cf107b17b500b1603905e8@eucas1p1.samsung.com>
+ <2924bddd-d237-aa57-abb1-a67723770e97@samsung.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2924bddd-d237-aa57-abb1-a67723770e97@samsung.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Viresh Kumar <viresh.kumar@linaro.org>
+On 09-11-20, 13:42, Marek Szyprowski wrote:
+> This patch landed in linux next-20201109 as commit e8f7703f8fe5 
+> ("cpufreq: dt: Don't (ab)use dev_pm_opp_get_opp_table() to create OPP 
+> table"). Sadly it causes regression on some Samsung Exynos based boards:
+> 
+> 8<--- cut here ---
+> Unable to handle kernel paging request at virtual address ffffff37
+> pgd = (ptrval)
+> [ffffff37] *pgd=4ffff841, *pte=00000000, *ppte=00000000
+> Internal error: Oops: 27 [#1] PREEMPT SMP ARM
+> Modules linked in:
+> usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.10.0-rc1-00007-ge8f7703f8fe5 
+> #1908
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> PC is at dev_pm_opp_put_regulators+0x8/0xf0
+> LR is at dt_cpufreq_probe+0x19c/0x3fc
 
-[ Upstream commit e0df59de670b48a923246fae1f972317b84b2764 ]
+Does this fix it for you ?
 
-There is a lot of stuff here which can be done outside of the big
-opp_table_lock, do that. This helps avoiding few circular dependency
-lockdeps around debugfs and interconnects.
-
-Reported-by: Rob Clark <robdclark@gmail.com>
-Reported-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/opp/core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 8867bab72e171..088c93dc0085c 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1046,6 +1046,10 @@ static void _opp_table_kref_release(struct kref *kref)
- 	struct opp_table *opp_table = container_of(kref, struct opp_table, kref);
- 	struct opp_device *opp_dev, *temp;
+diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
+index 66b3db5efb53..5aa3d4e3140d 100644
+--- a/drivers/cpufreq/cpufreq-dt.c
++++ b/drivers/cpufreq/cpufreq-dt.c
+@@ -228,7 +228,7 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
+                        if (ret != -EPROBE_DEFER)
+                                dev_err(cpu_dev, "failed to set regulators: %d\n",
+                                        ret);
+-                       goto out;
++                       goto free_cpumask;
+                }
+        }
  
-+	/* Drop the lock as soon as we can */
-+	list_del(&opp_table->node);
-+	mutex_unlock(&opp_table_lock);
-+
- 	_of_clear_opp_table(opp_table);
- 
- 	/* Release clk */
-@@ -1067,10 +1071,7 @@ static void _opp_table_kref_release(struct kref *kref)
- 
- 	mutex_destroy(&opp_table->genpd_virt_dev_lock);
- 	mutex_destroy(&opp_table->lock);
--	list_del(&opp_table->node);
- 	kfree(opp_table);
--
--	mutex_unlock(&opp_table_lock);
+@@ -293,6 +293,7 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
+                dev_pm_opp_of_cpumask_remove_table(priv->cpus);
+        if (priv->opp_table)
+                dev_pm_opp_put_regulators(priv->opp_table);
++free_cpumask:
+        free_cpumask_var(priv->cpus);
+        return ret;
  }
- 
- void dev_pm_opp_put_opp_table(struct opp_table *opp_table)
--- 
-2.27.0
 
+
+-- 
+viresh
