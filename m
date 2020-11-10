@@ -2,95 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75162AE1C8
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 22:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92B22AE1F1
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 22:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726706AbgKJVar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 16:30:47 -0500
-Received: from ozlabs.org ([203.11.71.1]:60323 "EHLO ozlabs.org"
+        id S1730894AbgKJVjG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 16:39:06 -0500
+Received: from cmta16.telus.net ([209.171.16.89]:45881 "EHLO cmta16.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726462AbgKJVar (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Nov 2020 16:30:47 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CW1Hj6KSpz9s1l;
-        Wed, 11 Nov 2020 08:30:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1605043844;
-        bh=TJeJa2tzl/LdHql1YVlaGWX2j/CQDqQ6INQTnj8ggfs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZbUzZQG5JxqA4YV2SZahiUdI30dQMP46KvpEnPXtnZuHo7c3Wmkj9UxrqV+O0dnT7
-         cQ0+a8HzLl4dfnEszsH88S5ZHS/K+rLjiHLq123sZjNSopUXTKkabrwhVwPh9ds+fS
-         BnRBnR/KVURwzmnZuGyDARkPM+ayvTsijevOQtdZ2lZVT03DHZ7biZbQb5mHTbUqvm
-         LPAitB4Q3+UaTUW/xAbbsGuGcR2MrXOEoePekFqZ+ZxBdDsdRZl9k/5KG+X6ljgbqv
-         SwrUhJeusEjFAWaMUcltq019Izb3B3eRgg+5EjJvqmn+WUI7rQpnbnzu7b36BFO4RG
-         ZYMJxwcwP6L6A==
-Date:   Wed, 11 Nov 2020 08:30:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH -next v2] clk: pm_clock: provide stubs for
- pm_clk_runtime_suspend/_resume
-Message-ID: <20201111083041.698a561c@canb.auug.org.au>
-In-Reply-To: <CAJZ5v0jhJcL6uJw_Cm02SeUMff_s1L-mKzX3haAyejcCkKihNg@mail.gmail.com>
-References: <20201109032115.10610-1-rdunlap@infradead.org>
-        <CAJZ5v0jhJcL6uJw_Cm02SeUMff_s1L-mKzX3haAyejcCkKihNg@mail.gmail.com>
+        id S1726467AbgKJVhH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Nov 2020 16:37:07 -0500
+Received: from dougxps ([173.180.45.3])
+        by cmsmtp with SMTP
+        id cbK1kTpijRYCLcbK2kWwMz; Tue, 10 Nov 2020 14:37:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1605044224; bh=6RjS39imp4A53kCw78FIMCvUMdoDh1IXVgnkUAf3UMg=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=T1z9fXpqwau1NgKWRAOiyB6Jic4n6eTuEhjfajeNFNnsNIpSL6z8jdS8TWAffHbo0
+         X2nMsgeAOKfnyXU2Ewy49CcCiNWCY4qyA49zxNbGFfXRfR5w6nseFSYISaZXPzAzVr
+         LKblQPFZ3ikvoVhAjX9Qif3Nrh/ewGIUHEzm1ltFkpCqpXcmXrGcpWglDuY5IidxI8
+         eiS8YbNtnRe74M7cE9sR1A3/DyKOjygZuc7lUTSTgSIB0TYpkfn+3xPQIoBo3gb8M/
+         /tlCBuFRZ7EiGtAFpMd2DMcQQAcpOqpbAqiMZ0OQARDTpUa/lTBjphzbjlmZbzVm6g
+         4r7EgtmuEkfeQ==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.4 cv=ReVVt3hv c=1 sm=1 tr=0 ts=5fab0800
+ a=ZeVyObKPoMU90SgYCeSZ1g==:117 a=ZeVyObKPoMU90SgYCeSZ1g==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=acWEPiQgkH2VWHeUEa0A:9
+ a=CjuIK1q_8ugA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Zhang Rui'" <rui.zhang@intel.com>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>
+References: <13269660.K2JYd4sGFX@kreacher> <11312387.r5AVKgp8zO@kreacher>
+In-Reply-To: <11312387.r5AVKgp8zO@kreacher>
+Subject: RE: [PATCH v3 0/4] cpufreq: intel_pstate: Handle powersave governor correctly in the passive mode with HWP
+Date:   Tue, 10 Nov 2020 13:37:00 -0800
+Message-ID: <000d01d6b7a9$a1abdf80$e5039e80$@net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NNkr73WnZd2Rjkw1MfDcr59";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: Ada3huWgkL5djedHQomhtWyn688yUAAH3TGw
+X-CMAE-Envelope: MS4xfLVijRtsDugUe7KJYTX4tlRXrQiAD2LZuGJtWUE4edhXcSDDU8MwGOxBF9r2xHeamcjZQEm5oq7cEedqNVNzzq9nKj3Q9BoVkia2PU1DiFKS51N9eWUz
+ dZnlpkCCMVUAisZO8mAIyf3VcZ7hUdXVy/RXJVzjkoK5yOrMLHaxA1PTnP8KaVLmKFDN2WMGlKsO5U69GbV+spCJYnfYRxqNti5+HreC3GsNfe3ut3icCEjy
+ MIDCC1G3xg7OBwETGleeAJYfNGss/A/v0r3G6RiIHqZWSeI5AffnVQDI2weh40yhl9wzLXxrrsmNJh79xZvSQ/P5fQ73lY5FxfggjFAArSpUrjrsNlz4uAa7
+ K9cDJMJWfZan+ac35aQWelmglUJyDYzAWvbIuIs1rP3IFn3vbEw=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---Sig_/NNkr73WnZd2Rjkw1MfDcr59
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2020.11.10 09:22 Rafael J. Wysocki wrote:
+> On Monday, November 9, 2020 5:49:49 PM CET Rafael J. Wysocki wrote:
+>>
+>> Even after the changes made very recently, the handling of the powersave
+>> governor is not exactly as expected when intel_pstate operates in the
+>> "passive" mode with HWP enabled.
+>>
+>> Namely, in that case HWP is not limited to the policy min frequency, but it
+>> can scale the frequency up to the policy max limit and it cannot be constrained
+>> currently, because there are no provisions for that in the framework.
+>>
+>> To address that, patches [1-3/4] add a new governor flag to indicate that this
+>> governor wants the target frequency to be set to the exact value passed to the
+>> driver, if possible, and change the powersave and performance governors to have
+>> that flag set.
+>>
+>> The last patch makes intel_pstate take that flag into account when programming
+>> the HWP Request MSR.
+> 
+> The v3 simply uses different names for the new governor flags.
 
-Hi Rafael,
+Thank you.
 
-On Tue, 10 Nov 2020 18:43:04 +0100 "Rafael J. Wysocki" <rafael@kernel.org> =
-wrote:
->
-> > Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller dri=
-ver for SC7180")
->
-> Applied to the PM tree as 5.10-rc material, thanks!
+I tested v2, with positive results, as reported for v1. I do not have time to
+re-test v3.
 
-The problem is that the commit that this one fixes is in the clk tree
-not the pm tree, so this patch needs to (also) be in the clk tree to
-reduced bisect problems.
+My input is to also default this flag to be set for the userspace and ondemand governors.
 
---=20
-Cheers,
-Stephen Rothwell
+userspace: I tested with and without this flag set, and the flag is needed if
+the user expects the scaling_setspeed to be enforced.
+Disclaimer: I don't normally actually use the userspace governor.
 
---Sig_/NNkr73WnZd2Rjkw1MfDcr59
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ondemand: from my tests, the ondemand response more closely mimics acpi-ondemand with the flag set.
+Power consumption has been better for the limited testing done.
+However, it is also a function of work/sleep frequency for periodic workflows and a function of
+INTEL_CPUFREQ_TRANSITION_DELAY_HWP. I am saying that my ability to support the suggestion to default
+to setting the flag is a little weak.
 
------BEGIN PGP SIGNATURE-----
+... Doug
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+rBoEACgkQAVBC80lX
-0GwywQf9EPeARXiMnQ41GV1QHYfOW3ZwJizOxCI/b26sjpnk/cfkaeiA5TXMezh/
-zkM/7hdYitLquso9XO4M+ODlgSuiHEwSOwmw+yVb5RlFwezkg07J1xbSnm5kyNyz
-bm/72cvGjhP3R3GWTV7a7OI+i92efj7Hlpcml9Qu91tMxQNEkM++ABPlDa5eP2uF
-BatuzT6k0dSj5VmwH+HmPSZTPK+TEVFs9hKC2oq70Yk0CO5G8YGwlpdnnZ/urd1o
-8UpRQOjggfx6WjJ/5oZtV2kXf5GiPB0/Zdwvgrfvd124xWZbxgufCK0oc0BRfHqn
-Gm/tC8bKMwzRprhfWiteI2/3OdkvSw==
-=2ZHS
------END PGP SIGNATURE-----
 
---Sig_/NNkr73WnZd2Rjkw1MfDcr59--
