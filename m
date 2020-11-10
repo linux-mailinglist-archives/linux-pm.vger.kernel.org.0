@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBC42ADDDC
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 19:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833D82ADDE1
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 19:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgKJSMA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 10 Nov 2020 13:12:00 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:42432 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbgKJSMA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 13:12:00 -0500
-Received: by mail-ed1-f66.google.com with SMTP id v22so3419705edt.9;
-        Tue, 10 Nov 2020 10:11:59 -0800 (PST)
+        id S1726688AbgKJSMd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 10 Nov 2020 13:12:33 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:39572 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbgKJSMd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 13:12:33 -0500
+Received: by mail-ed1-f67.google.com with SMTP id e18so13790552edy.6;
+        Tue, 10 Nov 2020 10:12:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=ObZ+uatBT5aV3E0Ee3Zvvp2n0wcTHU9I6h5xLp1wh8Y=;
-        b=n/WTFtmykjcIqILh0ycRB9SG0w5VY1LQx9tbAWOoKWLL6B6WSam5zWuX6GBb0vlk+4
-         vcxKNHWA0hEasYzMDX0Vafjs4Xe4CBpIwHQEihFEn82qzlIrAY2CDP4d5nVf3gU661ub
-         J6E43rS57TqnD0sbTf1ObnZPOaElLyAdjdrECgYRTXithU8kXLbCYL6pztzRyjFB5Qfa
-         3dXss+fTfLI/KTP6Asu9Pj2CuIA/j8qYktnwh2Jhd2l3UIcy1YK9dwvCv+OQsdihcc3T
-         hhE8Oxb1yIa5GpsyQi39VfOlhlkY6cPwLNncoTc6LQok4+FQFGssi1YVZsMUGLq+oGFQ
-         8gjg==
-X-Gm-Message-State: AOAM531jzq/8G6h9EWsZLv2zqXAHk3bTM/IQeGO+yS5rYMu1zDwuV7zE
-        L+zUOlqnoKUlJaB09OJ/d9vqqZLrst8=
-X-Google-Smtp-Source: ABdhPJwH9rjo7WFDRce3ZY6Wa0VD4LphG89cjoxx/d+KTfqVHXT4euGN+saA+HjI7WjxqocCsmFDRA==
-X-Received: by 2002:aa7:c546:: with SMTP id s6mr609076edr.114.1605031918334;
-        Tue, 10 Nov 2020 10:11:58 -0800 (PST)
+        bh=zVEeBWH4boLoYPklqBLn+QKdlMMMbgHaDTwk4KlhWWs=;
+        b=Z9hARbWhZOyPxhAdwvsC7Wo0jj977GDqtwsv6oUkZE3LtQZtlTNvnZUo9icufccOw0
+         sjBzlWhW3T/fKpZE3EpXO2k5V1Q55OW6lfzfPjfixCH2GvBWqnuy2OlIQyey/K4ZOSRb
+         0rjNGUNQbcfM/5SJzoyvzdaMU9OjZfQr+IYOGSQMKsw0nJl6FNzx+xdvYivQ+lQOQcS1
+         cxLL0pTFXHDbTpAGu63vf5iO0nZDnLSZu50h1oVY5OkfL3qg9lyt5udDlj+uU8kealq2
+         /vWUkd/d3ePQnEhMCDsAX8aIJTGVALnzJriOC477TszN4P9/UgsNsDJV0jDrNSNAjIKN
+         VxCA==
+X-Gm-Message-State: AOAM5305VZOvoYlzjgSJjowAk0QbR/BawV38Qf3yYaduCW9BHQsgEi+5
+        UNgJLHxeo5AA3pJvbeVlFBE=
+X-Google-Smtp-Source: ABdhPJxgbiurBs3VssnS4U50mTvuqR5WeodLBeUgTpzriGzhl6pyvF7kFoWZWHNfMdQRwfXTVx9n2Q==
+X-Received: by 2002:aa7:c546:: with SMTP id s6mr611498edr.114.1605031949981;
+        Tue, 10 Nov 2020 10:12:29 -0800 (PST)
 Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id rn28sm11065161ejb.22.2020.11.10.10.11.56
+        by smtp.googlemail.com with ESMTPSA id qx6sm7768963ejb.10.2020.11.10.10.12.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2020 10:11:57 -0800 (PST)
-Date:   Tue, 10 Nov 2020 19:11:55 +0100
+        Tue, 10 Nov 2020 10:12:28 -0800 (PST)
+Date:   Tue, 10 Nov 2020 19:12:27 +0100
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
 Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
@@ -45,53 +45,39 @@ Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 5/7] ARM: dts: exynos: Add interconnect properties to
- Exynos4412 bus nodes
-Message-ID: <20201110181155.GA18447@kozik-lap>
+Subject: Re: [PATCH v8 6/7] ARM: dts: exynos: Add interconnects to Exynos4412
+ mixer
+Message-ID: <20201110181227.GA23147@kozik-lap>
 References: <20201104103657.18007-1-s.nawrocki@samsung.com>
- <CGME20201104103726eucas1p248b51b25f5ee42898bf03e9cb2229c5d@eucas1p2.samsung.com>
- <20201104103657.18007-6-s.nawrocki@samsung.com>
+ <CGME20201104103728eucas1p2f671f29ed9eb06d4c6c991b073be092e@eucas1p2.samsung.com>
+ <20201104103657.18007-7-s.nawrocki@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201104103657.18007-6-s.nawrocki@samsung.com>
+In-Reply-To: <20201104103657.18007-7-s.nawrocki@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 11:36:55AM +0100, Sylwester Nawrocki wrote:
-> This patch adds the following properties for Exynos4412 interconnect
-> bus nodes:
->  - interconnects: to declare connections between nodes in order to
->    guarantee PM QoS requirements between nodes,
->  - #interconnect-cells: required by the interconnect framework,
->  - samsung,data-clk-ratio: which allows to specify minimum data clock
->    frequency corresponding to requested bandwidth for each bus.
+On Wed, Nov 04, 2020 at 11:36:56AM +0100, Sylwester Nawrocki wrote:
+> From: Artur Świgoń <a.swigon@samsung.com>
 > 
-> Note that #interconnect-cells is always zero and node IDs are not
-> hardcoded anywhere.
+> This patch adds an 'interconnects' property to Exynos4412 DTS in order to
+> declare the interconnect path used by the mixer. Please note that the
+> 'interconnect-names' property is not needed when there is only one path in
+> 'interconnects', in which case calling of_icc_get() with a NULL name simply
+> returns the right path.
 > 
+> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 > Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
 > Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 > ---
-> Changes for v8:
+> Changes for v8...v5:
 >  - none.
-> 
-> Changes for v7:
->  - adjusted to the DT property changes: "interconnects" instead
->    of "samsung,interconnect-parent", "samsung,data-clk-ratio"
->    instead of "bus-width".
-> 
-> Changes for v6:
->  - added bus-width property in bus_dmc node.
-> 
-> Changes for v5:
->  - adjust to renamed exynos,interconnect-parent-node property,
->  - add properties in common exynos4412.dtsi file rather than
->    in Odroid specific odroid4412-odroid-common.dtsi.
 > ---
->  arch/arm/boot/dts/exynos4412.dtsi | 6 ++++++
+>  arch/arm/boot/dts/exynos4412.dtsi | 1 +
+>  1 file changed, 1 insertion(+)
 
 Thanks, applied with Chanwoo's tags.
 
