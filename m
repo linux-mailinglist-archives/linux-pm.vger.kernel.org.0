@@ -2,85 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 833D82ADDE1
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 19:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0256A2ADE13
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 19:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726688AbgKJSMd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 10 Nov 2020 13:12:33 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:39572 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbgKJSMd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 13:12:33 -0500
-Received: by mail-ed1-f67.google.com with SMTP id e18so13790552edy.6;
-        Tue, 10 Nov 2020 10:12:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=zVEeBWH4boLoYPklqBLn+QKdlMMMbgHaDTwk4KlhWWs=;
-        b=Z9hARbWhZOyPxhAdwvsC7Wo0jj977GDqtwsv6oUkZE3LtQZtlTNvnZUo9icufccOw0
-         sjBzlWhW3T/fKpZE3EpXO2k5V1Q55OW6lfzfPjfixCH2GvBWqnuy2OlIQyey/K4ZOSRb
-         0rjNGUNQbcfM/5SJzoyvzdaMU9OjZfQr+IYOGSQMKsw0nJl6FNzx+xdvYivQ+lQOQcS1
-         cxLL0pTFXHDbTpAGu63vf5iO0nZDnLSZu50h1oVY5OkfL3qg9lyt5udDlj+uU8kealq2
-         /vWUkd/d3ePQnEhMCDsAX8aIJTGVALnzJriOC477TszN4P9/UgsNsDJV0jDrNSNAjIKN
-         VxCA==
-X-Gm-Message-State: AOAM5305VZOvoYlzjgSJjowAk0QbR/BawV38Qf3yYaduCW9BHQsgEi+5
-        UNgJLHxeo5AA3pJvbeVlFBE=
-X-Google-Smtp-Source: ABdhPJxgbiurBs3VssnS4U50mTvuqR5WeodLBeUgTpzriGzhl6pyvF7kFoWZWHNfMdQRwfXTVx9n2Q==
-X-Received: by 2002:aa7:c546:: with SMTP id s6mr611498edr.114.1605031949981;
-        Tue, 10 Nov 2020 10:12:29 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id qx6sm7768963ejb.10.2020.11.10.10.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2020 10:12:28 -0800 (PST)
-Date:   Tue, 10 Nov 2020 19:12:27 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        a.swigon@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 6/7] ARM: dts: exynos: Add interconnects to Exynos4412
- mixer
-Message-ID: <20201110181227.GA23147@kozik-lap>
-References: <20201104103657.18007-1-s.nawrocki@samsung.com>
- <CGME20201104103728eucas1p2f671f29ed9eb06d4c6c991b073be092e@eucas1p2.samsung.com>
- <20201104103657.18007-7-s.nawrocki@samsung.com>
+        id S1730938AbgKJST0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 13:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbgKJSTZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 13:19:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D6EC0613CF;
+        Tue, 10 Nov 2020 10:19:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Ct6aE0Bm8FKKbzyR0cHse7bKKnoXTwBFYl7S9+AHa7M=; b=RFBBplucvygNQ6kLC7amRs2zQ2
+        jtuZiTjE7qGN10yc9ZPOrch35q8ioF7bOSvZrVS3CaHAbmRER2RiMQ05VaJEbNKHvh/5BR0O541V2
+        Gca/C1mlMqiRD0ABv+Mep2UJ4C1tdOAmjsGmAFXtgHMbf/ZnmKYTa/b/tE++H7sZr3i6NPxdJiFLc
+        zZXogcHmMGNFpI3oq7mSneRkgpFUNihyVjwMuW9UXJ6iN7LW82vA/iOo7qS8rBiRYbxtO9DblFakc
+        GUdAR8qdE3T1a6EbsoAshklApxvl/ps5eNoUhe4tNlZDdG1fN96lpd4jIJXkVB/fkaHCdXIfsK4xm
+        +2iXQ7/A==;
+Received: from [2601:1c0:6280:3f0::662d]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kcYES-0001S3-4s; Tue, 10 Nov 2020 18:19:04 +0000
+Subject: Re: Duplicated ABI entries - Was: Re: [PATCH v2 20/39] docs: ABI:
+ testing: make the files compatible with ReST output
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?UTF-8?Q?Javier_Gonz=c3=a1lez?= <javier@javigon.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Dan Murphy <dmurphy@ti.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Juergen Gross <jgross@suse.com>,
+        Konstantin Khlebnikov <koct9i@gmail.com>,
+        Kranthi Kuntala <kranthi.kuntala@intel.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Len Brown <lenb@kernel.org>,
+        Leonid Maksymchuk <leonmaxx@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Orson Zhai <orsonzhai@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Peter Rosin <peda@axentia.se>, Petr Mladek <pmladek@suse.com>,
+        Philippe Bergheaud <felix@linux.ibm.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        netdev@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <cover.1604042072.git.mchehab+huawei@kernel.org>
+ <58cf3c2d611e0197fb215652719ebd82ca2658db.1604042072.git.mchehab+huawei@kernel.org>
+ <5326488b-4185-9d67-fc09-79b911fbb3b8@st.com>
+ <20201030110925.3e09d59e@coco.lan>
+ <cb586ea3-b6e6-4e48-2344-2bd641e5323f@st.com>
+ <20201102124641.GA881895@kroah.com> <20201102154250.45bee17f@coco.lan>
+ <20201108165621.4d0da3f4@archlinux> <20201110082658.2edc1ab5@coco.lan>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <aa855d9a-4fc6-2b64-b6b7-69409af3f9d0@infradead.org>
+Date:   Tue, 10 Nov 2020 10:18:48 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <20201110082658.2edc1ab5@coco.lan>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201104103657.18007-7-s.nawrocki@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 11:36:56AM +0100, Sylwester Nawrocki wrote:
-> From: Artur Świgoń <a.swigon@samsung.com>
+On 11/9/20 11:26 PM, Mauro Carvalho Chehab wrote:
+> Hi Jonathan,
 > 
-> This patch adds an 'interconnects' property to Exynos4412 DTS in order to
-> declare the interconnect path used by the mixer. Please note that the
-> 'interconnect-names' property is not needed when there is only one path in
-> 'interconnects', in which case calling of_icc_get() with a NULL name simply
-> returns the right path.
+> Let's view ABI from the PoV of a system admin that doesn't know
+> yet about a certain ABI symbol.
 > 
-> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> ---
-> Changes for v8...v5:
->  - none.
-> ---
->  arch/arm/boot/dts/exynos4412.dtsi | 1 +
->  1 file changed, 1 insertion(+)
+> He'll try to seek for the symbol, more likely using the HTML 
+> documentation. Only very senior system admins might try to take
+> a look at the Kernel.
 
-Thanks, applied with Chanwoo's tags.
+FWIW, I think that the likely search methods are $search_engine
+and 'grep'.
 
-Best regards,
-Krzysztof
+Have a good few days off.
+
+-- 
+~Randy
 
