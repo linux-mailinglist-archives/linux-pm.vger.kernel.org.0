@@ -2,268 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B752AD46F
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 12:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B93A2AD478
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 12:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729183AbgKJLHn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 06:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbgKJLHn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 06:07:43 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707C1C0613D1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 03:07:43 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id r186so9872825pgr.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 03:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dxnc/wj2TvGDBxmyx5Nf+xxtQWZ4ImyGwOdGSdt4B2U=;
-        b=eTzewguEpa+CGdbUOfXmyzQCrTmpUuGJbRjlbYm85CVMLnUnbQ4bw9Pp22L8ZEMlD3
-         gt4Fo6Db47692OZi6grP2eicQfyl1TXeRBCa0UxOSX7FmDOmGvQfdtiG7rHfuQ/9W6Nx
-         BQhLqDyNa/Zmyad5BXXGGZN/T932PHp2Yi4y9/yTlTsR4kVxpKXmfrSk8IWCjhcPAGug
-         d+ESQJswqC9bsLIoZOqENQrC4kApXFRUT512haWhNFkt26d3RGQ3gorEBxOCCNClH395
-         p+ayBJDde87H3jszRWCat+eO71rYbqHJ1BbCoKseEKdu7rgbFzYGiuA2CNEJdIe4v22I
-         fJuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dxnc/wj2TvGDBxmyx5Nf+xxtQWZ4ImyGwOdGSdt4B2U=;
-        b=remGU7eSrJQcvkpt0RlgdYo3pJBu9yHBmk1xlak+AKWE2TZqH5nHBDHKt3HoZOhGeK
-         5Mhzh2Iph1Xd6QzGyQiuI3hlPzaVB7AnOJN3SDhx8AFCpqvAexprKX54Xu0bfC4KZ459
-         lemJMCuS3KYTfK38YMGQ6s3Xb4F5oKOjdboi8mJdGmuATi5oJEEBWX2URMRYAzI2kqw/
-         wfehG9tYvOCfU1rXBy7eiC8KxbXPt5BCpyTK5KrwDzKEVlkGZRaSjkKkavIhA6srNOXm
-         OE8KeSe6Q/kh6BOj3xJFV41UikFWXQLtQw3jCbGC9OMXNHRKpUhhByECXnx5v3MrzU+K
-         uDFw==
-X-Gm-Message-State: AOAM530oN8CgV1/qdidMuvDSWt4BhyNq84UTgkbz0iyoT0f6pGS5SqG2
-        2YuiP5ylSsaXKmg8OQC+umwOHA==
-X-Google-Smtp-Source: ABdhPJzZXVRi0OA3SRAxu13+f8iFR1G3KJDXK02qXXuKDDHpx7t0ifqak6cH99ZQmwKGtkW6fKY5ww==
-X-Received: by 2002:a17:90a:d590:: with SMTP id v16mr4517353pju.88.1605006462913;
-        Tue, 10 Nov 2020 03:07:42 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id b67sm14296322pfa.151.2020.11.10.03.07.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Nov 2020 03:07:41 -0800 (PST)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: stats: Switch to ktime and msec instead of jiffies and usertime
-Date:   Tue, 10 Nov 2020 16:37:37 +0530
-Message-Id: <0e0fb542b6f6b26944cb2cf356041348aeac95f6.1605006378.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        id S1726428AbgKJLKt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 06:10:49 -0500
+Received: from foss.arm.com ([217.140.110.172]:54036 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726152AbgKJLKt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Nov 2020 06:10:49 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CE3D12FC;
+        Tue, 10 Nov 2020 03:10:48 -0800 (PST)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 56A0C3F6CF;
+        Tue, 10 Nov 2020 03:10:47 -0800 (PST)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH] cpufreq: scmi: Fix OPP addition failure with a dummy clock provider
+Date:   Tue, 10 Nov 2020 11:10:40 +0000
+Message-Id: <20201110111040.280231-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpufreq and thermal core, both provide sysfs statistics to help
-userspace learn about the behavior of frequencies and cooling states.
+Commit dd461cd9183f ("opp: Allow dev_pm_opp_get_opp_table() to return
+-EPROBE_DEFER") handles -EPROBE_DEFER for the clock/interconnects within
+_allocate_opp_table() which is called from dev_pm_opp_add and it
+now propagates the error back to the caller.
 
-This is how they look:
+SCMI performance domain re-used clock bindings to keep it simple. However
+with the above mentioned change, if clock property is present in a device
+node, opps fails to get added with below errors until clk_get succeeds.
 
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:208000 11
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:432000 147
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:729000 1600
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:960000 879
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 399
+ cpu0: failed to add opp 450000000Hz
+ cpu0: failed to add opps to the device
+ ....(errors on cpu1-cpu4)
+ cpu5: failed to add opp 450000000Hz
+ cpu5: failed to add opps to the device
 
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state0 4097
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state1 8932
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state2 15868
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state3 1384
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state4 103
+So, in order to fix the issue, we need to register dummy clock provider.
+With the dummy clock provider, clk_get returns NULL(no errors!), then opp
+core proceeds to add OPPs for the CPUs.
 
-Here, state0 of thermal corresponds to the highest frequency of the CPU,
-i.e. 1200000 and state4 to the lowest one.
-
-While both of these try to show similar kind of data (which can still be
-very much different from each other), the values looked different (by a
-factor of 10, i.e. thermal's time_in_state is almost 10 times that of
-cpufreq time_in_state).
-
-This comes from the fact that cpufreq core displays the time in usertime
-units (10 ms).
-
-It would be better if both the frameworks displayed times in the same
-unit as the users may need to correlate between them and different
-scales just make it awkward. And the choice of thermal core for that
-(msec) seems to be a better choice as it is easier to read.
-
-The thermal core also does the stats calculations using ktime, which is
-much more accurate as compared to jiffies used by cpufreq core.
-
-This patch updates the cpufreq core to use ktime for the internal
-calculations and changes the units of time_in_state to msec.
-
-The results look like this after this commit:
-
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:208000 13
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:432000 790
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:729000 12492
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:960000 13259
-/sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 3830
-
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state0 3888
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state1 13432
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state2 12336
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state3 740
-/sys/class/thermal/cooling_device0/stats/time_in_state_ms:state4 0
-
-FWIW, tools/power/cpupower/ does consume the time_in_state values from
-the sysfs files but it is independent of the unit of the time and didn't
-require an update.
-
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Fixes: dd461cd9183f ("opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER")
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- Documentation/cpu-freq/cpufreq-stats.rst |  5 +--
- drivers/cpufreq/cpufreq_stats.c          | 47 +++++++++++++-----------
- 2 files changed, 28 insertions(+), 24 deletions(-)
+ drivers/cpufreq/scmi-cpufreq.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/cpu-freq/cpufreq-stats.rst b/Documentation/cpu-freq/cpufreq-stats.rst
-index 9ad695b1c7db..9f94012a882f 100644
---- a/Documentation/cpu-freq/cpufreq-stats.rst
-+++ b/Documentation/cpu-freq/cpufreq-stats.rst
-@@ -64,9 +64,8 @@ need for a reboot.
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index e855e8612a67..78318508a6d6 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -8,6 +8,7 @@
  
- This gives the amount of time spent in each of the frequencies supported by
- this CPU. The cat output will have "<frequency> <time>" pair in each line, which
--will mean this CPU spent <time> usertime units of time at <frequency>. Output
--will have one line for each of the supported frequencies. usertime units here
--is 10mS (similar to other time exported in /proc).
-+will mean this CPU spent <time> msec of time at <frequency>. Output will have
-+one line for each of the supported frequencies.
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- ::
- 
-diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-index 6cd5c8ab5d49..e054ada291e7 100644
---- a/drivers/cpufreq/cpufreq_stats.c
-+++ b/drivers/cpufreq/cpufreq_stats.c
-@@ -14,35 +14,38 @@
- 
- struct cpufreq_stats {
- 	unsigned int total_trans;
--	unsigned long long last_time;
-+	ktime_t last_time;
- 	unsigned int max_state;
- 	unsigned int state_num;
- 	unsigned int last_index;
--	u64 *time_in_state;
-+	ktime_t *time_in_state;
- 	unsigned int *freq_table;
- 	unsigned int *trans_table;
- 
- 	/* Deferred reset */
- 	unsigned int reset_pending;
--	unsigned long long reset_time;
-+	ktime_t reset_time;
- };
- 
--static void cpufreq_stats_update(struct cpufreq_stats *stats,
--				 unsigned long long time)
-+static void cpufreq_stats_update(struct cpufreq_stats *stats, ktime_t time)
++#include <linux/clk-provider.h>
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+ #include <linux/cpumask.h>
+@@ -228,12 +229,17 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
+ static int scmi_cpufreq_probe(struct scmi_device *sdev)
  {
--	unsigned long long cur_time = get_jiffies_64();
-+	ktime_t cur_time = ktime_get(), delta;
+ 	int ret;
++	struct device *dev = &sdev->dev;
  
--	stats->time_in_state[stats->last_index] += cur_time - time;
-+	delta = ktime_sub(cur_time, time);
-+	stats->time_in_state[stats->last_index] =
-+		ktime_add(stats->time_in_state[stats->last_index], delta);
- 	stats->last_time = cur_time;
- }
+ 	handle = sdev->handle;
  
- static void cpufreq_stats_reset_table(struct cpufreq_stats *stats)
- {
--	unsigned int count = stats->max_state;
-+	unsigned int count = stats->max_state, i;
+ 	if (!handle || !handle->perf_ops)
+ 		return -ENODEV;
+ 
++	/* dummy clock provider as needed by OPP if clocks property is used */
++	if (of_find_property(dev->of_node, "#clock-cells", NULL))
++		devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
 +
-+	for (i = 0; i < count; i++)
-+		stats->time_in_state[i] = ktime_set(0, 0);
- 
--	memset(stats->time_in_state, 0, count * sizeof(u64));
- 	memset(stats->trans_table, 0, count * count * sizeof(int));
--	stats->last_time = get_jiffies_64();
-+	stats->last_time = ktime_get();
- 	stats->total_trans = 0;
- 
- 	/* Adjust for the time elapsed since reset was requested */
-@@ -70,7 +73,7 @@ static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
- {
- 	struct cpufreq_stats *stats = policy->stats;
- 	bool pending = READ_ONCE(stats->reset_pending);
--	unsigned long long time;
-+	ktime_t time, now = ktime_get(), delta;
- 	ssize_t len = 0;
- 	int i;
- 
-@@ -82,18 +85,20 @@ static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
- 				 * before the reset_pending read above.
- 				 */
- 				smp_rmb();
--				time = get_jiffies_64() - READ_ONCE(stats->reset_time);
-+				time = ktime_sub(now, READ_ONCE(stats->reset_time));
- 			} else {
--				time = 0;
-+				time = ktime_set(0, 0);;
- 			}
- 		} else {
- 			time = stats->time_in_state[i];
--			if (i == stats->last_index)
--				time += get_jiffies_64() - stats->last_time;
-+			if (i == stats->last_index) {
-+				delta = ktime_sub(now, stats->last_time);
-+				time = ktime_add(delta, time);
-+			}
- 		}
- 
- 		len += sprintf(buf + len, "%u %llu\n", stats->freq_table[i],
--			       jiffies_64_to_clock_t(time));
-+			       ktime_to_ms(time));
- 	}
- 	return len;
- }
-@@ -109,7 +114,7 @@ static ssize_t store_reset(struct cpufreq_policy *policy, const char *buf,
- 	 * Defer resetting of stats to cpufreq_stats_record_transition() to
- 	 * avoid races.
- 	 */
--	WRITE_ONCE(stats->reset_time, get_jiffies_64());
-+	WRITE_ONCE(stats->reset_time, ktime_get());
- 	/*
- 	 * The memory barrier below is to prevent the readers of reset_time from
- 	 * seeing a stale or partially updated value.
-@@ -228,9 +233,9 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
- 	if (!stats)
- 		return;
- 
--	alloc_size = count * sizeof(int) + count * sizeof(u64);
--
--	alloc_size += count * count * sizeof(int);
-+	alloc_size = count * sizeof(*stats->time_in_state);
-+	alloc_size += count * sizeof(*stats->freq_table);
-+	alloc_size += count * count * sizeof(*stats->trans_table);
- 
- 	/* Allocate memory for time_in_state/freq_table/trans_table in one go */
- 	stats->time_in_state = kzalloc(alloc_size, GFP_KERNEL);
-@@ -249,7 +254,7 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
- 			stats->freq_table[i++] = pos->frequency;
- 
- 	stats->state_num = i;
--	stats->last_time = get_jiffies_64();
-+	stats->last_time = ktime_get();
- 	stats->last_index = freq_table_get_index(stats, policy->cur);
- 
- 	policy->stats = stats;
+ 	ret = cpufreq_register_driver(&scmi_cpufreq_driver);
+ 	if (ret) {
+ 		dev_err(&sdev->dev, "%s: registering cpufreq failed, err: %d\n",
 -- 
-2.25.0.rc1.19.g042ed3e048af
+2.25.1
 
