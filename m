@@ -2,56 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EEC2AE05A
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 20:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B19372AE069
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 21:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731085AbgKJTzs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 14:55:48 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:57211 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730618AbgKJTzs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 14:55:48 -0500
-Received: from callcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 0AAJtbdJ011310
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Nov 2020 14:55:37 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id D5FA3420107; Tue, 10 Nov 2020 14:55:36 -0500 (EST)
-Date:   Tue, 10 Nov 2020 14:55:36 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: How to enable auto-suspend by default
-Message-ID: <20201110195536.GD2951190@mit.edu>
-References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
- <X6p6ubTOoMPUPPXi@kroah.com>
- <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
- <X6rLUDuG0N98jz18@kroah.com>
- <DM6PR19MB2636460E97BD5E47957BB43AFAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
- <X6rVT6IXHYQpqjic@kroah.com>
- <DM6PR19MB263696FE5FA50F344B559488FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
+        id S1731373AbgKJUFe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 15:05:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53080 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726462AbgKJUFd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Nov 2020 15:05:33 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 5BAD6AB93;
+        Tue, 10 Nov 2020 20:05:32 +0000 (UTC)
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Pu Wen <puwen@hygon.cn>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Doug Smythies <dsmythies@telus.net>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: [PATCH v3 0/3] Add support for frequency invariance to AMD EPYC Zen2
+Date:   Tue, 10 Nov 2020 21:05:16 +0100
+Message-Id: <20201110200519.18180-1-ggherdovich@suse.cz>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR19MB263696FE5FA50F344B559488FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-One note...  I'll double check, but on my XPS 13 9380, as I recall, I
-have to manually disable autosuspend on all of the XHCI controllers
-and internal hubs after running "powertop --auto-tune", or else any
-external mouse attached to said USB device will be dead to the world
-for 2-3 seconds if the autosuspend timeout has kicked in, which was
-***super*** annoying.
+v2 at https://lore.kernel.org/lkml/20201110183054.15883-1-ggherdovich@suse.cz/
 
-						- Ted
+Changes wrt v2:
+
+- "code golf" on the function function init_freq_invariance_cppc().
+  Make better use of the "secondary" argument to init_freq_invariance(),
+  which was introduced at b56e7d45e807 ("x86, sched: Don't enable static key
+  when starting secondary CPUs") to deal with CPU hotplug.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cover Letter from v2:
+
+v1 at https://lore.kernel.org/lkml/20201110083936.31994-1-ggherdovich@suse.cz/
+
+Changes wrt v1:
+
+- made initialization safe under CPU hotplug.
+  The function init_freq_invariance_cppc now lets only the first caller
+  into init_freq_invariance().
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cover Letter from v1:
+
+This series adds support for frequency invariant accounting on AMD EPYC Zen2
+(aka "Rome"). The first patch by Nathan lays out the foundation by querying
+ACPI infrastructure for the max boost frequency of the system. Specifically,
+this value is available via the CPPC machinery; the previous EPYC generation,
+namely Zen aka "Naples", doesn't implement that and frequency invariance won't
+be supported.
+
+The second patch sets the estimate for freq_max to be the midpoint between
+max_boost and max_P, as that works slightly better in practice.
+
+A side effect of this series is to provide, with the invariant schedutil
+governor, a suitable baseline to evaluate a (still work-in-progress)
+CPPC-based cpufreq driver for the AMD platform (see
+https://lore.kernel.org/lkml/cover.1562781484.git.Janakarajan.Natarajan@amd.com
+if/when it will resubmitted.
+
+
+Giovanni Gherdovich (2):
+  x86, sched: Use midpoint of max_boost and max_P for frequency
+    invariance on AMD EPYC
+  x86: Print ratio freq_max/freq_base used in frequency invariance
+    calculations
+
+Nathan Fontenot (1):
+  x86, sched: Calculate frequency invariance for AMD systems
+
+ arch/x86/include/asm/topology.h |  8 ++++
+ arch/x86/kernel/smpboot.c       | 79 ++++++++++++++++++++++++++++++---
+ drivers/acpi/cppc_acpi.c        |  3 ++
+ 3 files changed, 85 insertions(+), 5 deletions(-)
+
+-- 
+2.26.2
+
