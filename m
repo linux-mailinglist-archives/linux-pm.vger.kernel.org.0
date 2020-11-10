@@ -2,722 +2,270 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C2F2AD2F7
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 10:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D5A2AD302
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 11:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbgKJJ7w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 04:59:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:52984 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726428AbgKJJ7t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Nov 2020 04:59:49 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD557D6E;
-        Tue, 10 Nov 2020 01:59:47 -0800 (PST)
-Received: from [10.57.21.178] (unknown [10.57.21.178])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 93D623F6CF;
-        Tue, 10 Nov 2020 01:59:45 -0800 (PST)
-Subject: Re: [PATCH 3/4] powercap/drivers/dtpm: Add API for dynamic thermal
- power management
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
- <20201006122024.14539-4-daniel.lezcano@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <8fea0109-30d4-7d67-ffeb-8e588a4dadc3@arm.com>
-Date:   Tue, 10 Nov 2020 09:59:42 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727107AbgKJKCM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 05:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729630AbgKJKCK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 05:02:10 -0500
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9789DC0613D1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 02:02:10 -0800 (PST)
+Received: by mail-vs1-xe44.google.com with SMTP id x11so6683336vsx.12
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 02:02:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BiQJcafFBQ88xHQcupBP8gBbAXirHmQbPXsm0C0soPA=;
+        b=swGXh4YgskAoYgS+bFvYCOedUrJ59J3k6RjlZ51NvY/vID1Np11aGdRB5P4illh34r
+         HrfyV/0gB3Wc2zoRo+6I9KbIkWcMDmw4WwxuF0aV9rZjyfNEmICkMZ0mSGQEmJvlViEE
+         gZa26atagGogNvTaEplTO7x08/+M/qOn7y1Qc2YCF0XTPLvkQefk1geWNW6nx96nk30g
+         RPpTlGbFrh4S66ln2atq6H2DwOuIHDDwyQ1Laqgkb2daJeDClcU3kpHxJIMUdWgdAj26
+         gyi+hqQTG59BNuxM5Q2C3pL7uhd5wH/S/pK97kMZcS+pUr2vECw1aeYH0GPUmXqY3PZ9
+         tkIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BiQJcafFBQ88xHQcupBP8gBbAXirHmQbPXsm0C0soPA=;
+        b=OSUijV2HLuv9X2XtR3n+jocQvtaDfKaOjV2ZbjrwC4JJDA7EHb7o1JZOZMg4uTshZT
+         MTA/2gawPWX0tLKpj4wPCL/rAy+K7+nhdoTIKjHEv07ipUj5R6BcCy+yRM1oTsSeszO6
+         bXEyGskPsFwLVUPWSxG9SC6Ftc6rKUH7+3QxtQBx6Ef7/WvvXQdud1iHyH8uk9yyue60
+         xPnLZAMEjpyJ+hcqNrAcQil/6oBjMJry38aq7/RjNJcg3bTLnLQ5B7wBB6i433EYI5CI
+         t/yprPYypsqTHoNF5YfByB83lNaPAMk0sq41DZTU1ks8WxfDh19ak6rVZk/+TjW2ziNw
+         xsig==
+X-Gm-Message-State: AOAM531QtcLzRAgWVUwojVWn7dianUJOvCDsS/0Dc4FkOXpHroUKLXlL
+        nUCvbafirgpFix3S6dTG4wVM2Eafan+JDnT3nQNZRuR0Al1C2wEO
+X-Google-Smtp-Source: ABdhPJzpW7ANGH4Bj5CGi0nKYo81ZP/qeLT1maxK3GX8rS2j5Nul7J9iXVR9Zh3D+Xb0H3ZnifDkxnH6BuclLxBEOZ4=
+X-Received: by 2002:a67:310d:: with SMTP id x13mr11216949vsx.19.1605002529404;
+ Tue, 10 Nov 2020 02:02:09 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201006122024.14539-4-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201106164811.3698-1-ilina@codeaurora.org> <20201106164811.3698-3-ilina@codeaurora.org>
+ <CAPDyKFrv-3USmNLR3gjgaTEuTrWuYZjs3qCtnjxSOWqrxv5qsA@mail.gmail.com> <X6l/OcHG37HzgFL8@codeaurora.org>
+In-Reply-To: <X6l/OcHG37HzgFL8@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 10 Nov 2020 11:01:32 +0100
+Message-ID: <CAPDyKFr8fdbMM1nsx-RZcMVtveJUP3p38z=HkL1T2C=QgM3gkQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PM / Domains: use device's next wakeup to
+ determine domain idle state
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Mon, 9 Nov 2020 at 18:41, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> On Mon, Nov 09 2020 at 08:27 -0700, Ulf Hansson wrote:
+> >On Fri, 6 Nov 2020 at 17:48, Lina Iyer <ilina@codeaurora.org> wrote:
+> >>
+> [...]
+> >> +static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
+> >> +{
+> >> +       ktime_t domain_wakeup = KTIME_MAX;
+> >> +       ktime_t next_wakeup;
+> >> +       struct pm_domain_data *pdd;
+> >> +       struct gpd_link *link;
+> >> +
+> >> +       /* Find the earliest wakeup for all devices in the domain */
+> >> +       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+> >> +               next_wakeup = to_gpd_data(pdd)->next_wakeup;
+> >> +               if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
+> >> +                       if (ktime_before(next_wakeup, domain_wakeup))
+> >> +                               domain_wakeup = next_wakeup;
+> >
+> >If it turns out that one of the device's next_wakeup is before "now",
+> >leading to ktime_before() above returns true - then I think you should
+> >bail out, no?
+> >
+> >At least, we shouldn't just continue and ignore this case, right?
+> >
+> No, that could be a very common case. Drivers are not expected to clean
+> up the next wakeup by setting it to KTIME_MAX. The best we can do is
+> to make a choice with the valid information we have. This will also map
+> to the current behavior. Say if all next wakeup information provided to
+> the devices were in the past, we would be no worse (or better) than what
+> we do without this change.
 
-I've experimented with the patch set and went through the code again.
-It looks good, only a few minor comments.
+Well, I don't quite agree (at least not yet), but let me elaborate, as
+I think we can do better without having to add complexity.
 
-On 10/6/20 1:20 PM, Daniel Lezcano wrote:
-> On the embedded world, the complexity of the SoC leads to an
-> increasing number of hotspots which need to be monitored and mitigated
-> as a whole in order to prevent the temperature to go above the
-> normative and legally stated 'skin temperature'.
-> 
-> Another aspect is to sustain the performance for a given power budget,
-> for example virtual reality where the user can feel dizziness if the
-> GPU performance is capped while a big CPU is processing something
-> else. Or reduce the battery charging because the dissipated power is
-> too high compared with the power consumed by other devices.
-> 
-> The userspace is the most adequate place to dynamically act on the
-> different devices by limiting their power given an application
-> profile: it has the knowledge of the platform.
-> 
-> These userspace daemons are in charge of the Dynamic Thermal Power
-> Management (DTPM).
-> 
-> Nowadays, the dtpm daemons are abusing the thermal framework as they
-> act on the cooling device state to force a specific and arbitraty
+Normally, I don't think a driver needs to clean up its device's next
+wakeup in between the remote wakeups, instead it should just set a new
+value.
 
-s/arbitraty/arbitrary/
+That's because, even if the driver acts to a remote wakeup or deals
+with a request entering a queue, the driver needs to runtime resume
+its device during this period. This prevents genpd from power off the
+PM domain, hence also the genpd governor from potentially looking at
+"invalid" wakeup information for its attached devices.
 
-> state without taking care of the governor decisions. Given the closed
-> loop of some governors that can confuse the logic or directly enter in
-> a decision conflict.
-> 
-> As the number of cooling device support is limited today to the CPU
-> and the GPU, the dtpm daemons have little control on the power
-> dissipation of the system. The out of tree solutions are hacking
-> around here and there in the drivers, in the frameworks to have
-> control on the devices. The common solution is to declare them as
-> cooling devices.
-> 
-> There is no unification of the power limitation unit, opaque states
-> are used.
-> 
-> This patch provides a way to create a hierarchy of constraints using
-> the powercap framework. The devices which are registered as power
-> limit-able devices are represented in this hierarchy as a tree. They
-> are linked together with intermediate nodes which are just there to
-> propagate the constraint to the children.
-> 
-> The leaves of the tree are the real devices, the intermediate nodes
-> are virtual, aggregating the children constraints and power
-> characteristics.
-> 
-> Each node have a weight on a 2^10 basis, in order to reflect the
-> percentage of power distribution of the children's node. This
-> percentage is used to dispatch the power limit to the children.
-> 
-> The weight is computed against the max power of the siblings.
-> 
-> This simple approach allows to do a fair distribution of the power
-> limit.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/powercap/Kconfig          |   6 +
->   drivers/powercap/Makefile         |   1 +
->   drivers/powercap/dtpm.c           | 430 ++++++++++++++++++++++++++++++
->   include/asm-generic/vmlinux.lds.h |  11 +
->   include/linux/dtpm.h              |  73 +++++
->   5 files changed, 521 insertions(+)
->   create mode 100644 drivers/powercap/dtpm.c
->   create mode 100644 include/linux/dtpm.h
-> 
-> diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-> index ebc4d4578339..777cf60300b8 100644
-> --- a/drivers/powercap/Kconfig
-> +++ b/drivers/powercap/Kconfig
-> @@ -43,4 +43,10 @@ config IDLE_INJECT
->   	  CPUs for power capping. Idle period can be injected
->   	  synchronously on a set of specified CPUs or alternatively
->   	  on a per CPU basis.
-> +
-> +config DTPM
-> +	bool "Power capping for dynamic thermal power management"
-> +	help
-> +	  This enables support for the power capping for the dynamic
-> +	  thermal management userspace engine.
->   endif
-> diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
-> index 7255c94ec61c..6482ac52054d 100644
-> --- a/drivers/powercap/Makefile
-> +++ b/drivers/powercap/Makefile
-> @@ -1,4 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_DTPM) += dtpm.o
->   obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
->   obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
->   obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
-> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> new file mode 100644
-> index 000000000000..6df1e51a2c1c
-> --- /dev/null
-> +++ b/drivers/powercap/dtpm.c
-> @@ -0,0 +1,430 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2020 Linaro Limited
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + *
-> + * The powercap based Dynamic Thermal Power Management framework
-> + * provides to the userspace a consistent API to set the power limit
-> + * on some devices.
-> + *
-> + * DTPM defines the functions to create a tree of constraints. Each
-> + * parent node is a virtual description of the aggregation of the
-> + * children. It propagates the constraints set at its level to its
-> + * children and collect the children power infomation. The leaves of
-> + * the tree are the real devices which have the ability to get their
-> + * current power consumption and set their power limit.
-> + */
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/dtpm.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/powercap.h>
-> +#include <linux/slab.h>
-> +#include <linux/spinlock.h>
-> +
-> +static const char *constraint_name[] = {
-> +	"Instantaneous power constraint",
+Of course, I assume there are situations, where a driver actually
+needs to do a clean up of its device's next wakeup, but that should be
+less frequent and likely when a remote wakeup is disabled (for
+whatever reason).
 
-Quite long name, max is 30, we would lose new line [1].
+>
+> >> +       }
+> >> +
+> >> +       /* Then find the earliest wakeup of from all the child domains */
+> >> +       list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> >> +               next_wakeup = link->child->next_wakeup;
+> >> +               if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
+> >> +                       if (ktime_before(next_wakeup, domain_wakeup))
+> >> +                               domain_wakeup = next_wakeup;
+> >> +       }
+> >> +
+> >> +       genpd->next_wakeup = domain_wakeup;
+> >> +}
+> >> +
+> >> +static bool next_wakeup_allows_state(struct generic_pm_domain *genpd,
+> >> +                                    unsigned int state, ktime_t now)
+> >> +{
+> >> +       ktime_t domain_wakeup = genpd->next_wakeup;
+> >> +       s64 idle_time_ns, min_sleep_ns;
+> >> +
+> >> +       min_sleep_ns = genpd->states[state].power_off_latency_ns +
+> >> +                      genpd->states[state].power_on_latency_ns +
+> >> +                      genpd->states[state].residency_ns;
+> >> +
+> >
+> >I don't think you should include the power_on_latency_ns here.
+> >
+> >The validation isn't about QoS constraints, but whether we can meet
+> >the residency time to make it worth entering the state, from an energy
+> >point of view. Right?
+> >
+> Fair point. I will remove the power_on_latency_ns.
+>
+> >> +       idle_time_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
+> >> +
+> >> +       return idle_time_ns >= min_sleep_ns;
+> >> +}
+> >> +
+> >>  static bool __default_power_down_ok(struct dev_pm_domain *pd,
+> >>                                      unsigned int state)
+> >>  {
+> >> @@ -209,8 +250,34 @@ static bool __default_power_down_ok(struct dev_pm_domain *pd,
+> >>  static bool default_power_down_ok(struct dev_pm_domain *pd)
+> >>  {
+> >>         struct generic_pm_domain *genpd = pd_to_genpd(pd);
+> >> +       int state_idx = genpd->state_count - 1;
+> >> +       ktime_t now = ktime_get();
+> >>         struct gpd_link *link;
+> >>
+> >> +       /*
+> >> +        * Find the next wakeup from devices that can determine their own wakeup
+> >> +        * to find when the domain would wakeup and do it for every device down
+> >> +        * the hierarchy. It is not worth while to sleep if the state's residency
+> >> +        * cannot be met.
+> >> +        */
+> >> +       update_domain_next_wakeup(genpd, now);
+> >> +       if (genpd->next_wakeup != KTIME_MAX) {
+> >> +               /* Let's find out the deepest domain idle state, the devices prefer */
+> >> +               while (state_idx >= 0) {
+> >> +                       if (next_wakeup_allows_state(genpd, state_idx, now)) {
+> >> +                               genpd->max_off_time_changed = true;
+> >> +                               break;
+> >> +                       }
+> >> +                       state_idx--;
+> >> +               }
+> >> +
+> >> +               if (state_idx < 0) {
+> >> +                       state_idx = 0;
+> >> +                       genpd->cached_power_down_ok = false;
+> >> +                       goto done;
+> >> +               }
+> >> +       }
+> >> +
+> >
+> >The above would introduce unnecessary overhead, as it may become
+> >executed in cases when it's not needed.
+> >
+> >For example, there's no point doing the above, if the domain doesn't
+> >specify residency values for its idle states.
+> >
+> We would still need to ensure that the next wakeup is after the
+> power_off_latency, if specified.
 
-> +};
-> +
-> +static struct powercap_control_type *pct;
-> +static struct dtpm *root;
-> +
-> +static int get_time_window_us(struct powercap_zone *pcz, int cid, u64 *window)
-> +{
-> +	return -ENOSYS;
-> +}
-> +
-> +static int set_time_window_us(struct powercap_zone *pcz, int cid, u64 window)
-> +{
-> +	return -ENOSYS;
-> +}
-> +
-> +static int get_max_power_range_uw(struct powercap_zone *pcz, u64 *max_power_uw)
-> +{
-> +	struct dtpm *dtpm = to_dtpm(pcz);
-> +
-> +	spin_lock(&dtpm->lock);
-> +	*max_power_uw = dtpm->power_max - dtpm->power_min;
-> +	spin_unlock(&dtpm->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int get_children_power_uw(struct powercap_zone *pcz, u64 *power_uw)
-> +{
-> +	struct dtpm *dtpm = to_dtpm(pcz);
-> +	struct dtpm *child;
-> +	u64 power;
-> +	int ret = 0;
-> +
-> +	*power_uw = 0;
-> +
-> +	spin_lock(&dtpm->lock);
-> +	list_for_each_entry(child, &dtpm->children, sibling) {
-> +		ret = child->zone.ops->get_power_uw(&child->zone, &power);
-> +		if (ret)
-> +			break;
-> +		*power_uw += power;
-> +	}
-> +	spin_unlock(&dtpm->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static void __dtpm_rebalance_weight(struct dtpm *dtpm)
-> +{
-> +	struct dtpm *child;
-> +
-> +	spin_lock(&dtpm->lock);
-> +	list_for_each_entry(child, &dtpm->children, sibling) {
-> +
-> +		pr_debug("Setting weight '%d' for '%s'\n",
-> +			 child->weight, child->zone.name);
-> +
-> +		child->weight = DIV_ROUND_CLOSEST(child->power_max * 1024,
-> +						  dtpm->power_max);
-> +
-> +		__dtpm_rebalance_weight(child);
-> +	}
-> +	spin_unlock(&dtpm->lock);
-> +}
-> +
-> +static void dtpm_rebalance_weight(void)
-> +{
-> +	__dtpm_rebalance_weight(root);
-> +}
-> +
-> +static void dtpm_sub_power(struct dtpm *dtpm)
-> +{
-> +	struct dtpm *parent = dtpm->parent;
-> +
-> +	while (parent) {
-> +		spin_lock(&parent->lock);
-> +		parent->power_min -= dtpm->power_min;
-> +		parent->power_max -= dtpm->power_max;
-> +		spin_unlock(&parent->lock);
-> +		parent = parent->parent;
-> +	}
-> +
-> +	dtpm_rebalance_weight();
-> +}
-> +
-> +static void dtpm_add_power(struct dtpm *dtpm)
-> +{
-> +	struct dtpm *parent = dtpm->parent;
-> +
-> +	while (parent) {
-> +		spin_lock(&parent->lock);
-> +		parent->power_min += dtpm->power_min;
-> +		parent->power_max += dtpm->power_max;
-> +		spin_unlock(&parent->lock);
-> +		parent = parent->parent;
-> +	}
-> +
-> +	dtpm_rebalance_weight();
-> +}
-> +
-> +/**
-> + * dtpm_update_power - Update the power on the dtpm
-> + * @dtpm: a pointer to a dtpm structure to update
-> + * @power_min: a u64 representing the new power_min value
-> + * @power_max: a u64 representing the new power_max value
-> + *
-> + * Function to update the power values of the dtpm node specified in
-> + * parameter. These new values will be propagated to the tree.
-> + *
-> + * Return: zero on success, -EINVAL if the values are inconsistent
-> + */
-> +int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max)
-> +{
-> +	if (power_min == dtpm->power_min && power_max == dtpm->power_max)
-> +		return 0;
-> +
-> +	if (power_max < power_min)
-> +		return -EINVAL;
-> +
-> +	dtpm_sub_power(dtpm);
-> +	spin_lock(&dtpm->lock);
-> +	dtpm->power_min = power_min;
-> +	dtpm->power_max = power_max;
-> +	spin_unlock(&dtpm->lock);
-> +	dtpm_add_power(dtpm);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * dtpm_release_zone - Cleanup when the node is released
-> + * @pcz: a pointer to a powercap_zone structure
-> + *
-> + * Do some housecleaning and update the weight on the tree. The
-> + * release will be denied if the node has children. This function must
-> + * be called by the specific release callback of the different
-> + * backends.
-> + *
-> + * Return: 0 on success, -EBUSY if there are children
-> + */
-> +int dtpm_release_zone(struct powercap_zone *pcz)
-> +{
-> +	struct dtpm *dtpm = to_dtpm(pcz);
-> +	struct dtpm *parent = dtpm->parent;
-> +
-> +	if (!list_empty(&dtpm->children))
-> +		return -EBUSY;
-> +
-> +	if (parent) {
-> +		spin_lock(&parent->lock);
-> +		list_del(&dtpm->sibling);
-> +		spin_unlock(&parent->lock);
-> +	}
-> +
-> +	dtpm_sub_power(dtpm);
-> +
-> +	kfree(dtpm);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Set the power limit on the nodes, the power limit is distributed
-> + * given the weight of the children.
-> + */
-> +static int set_children_power_limit(struct powercap_zone *pcz, int cid,
-> +				    u64 power_limit)
-> +{
-> +	struct dtpm *dtpm = to_dtpm(pcz);
-> +	struct dtpm *child;
-> +	u64 power;
-> +	int ret = 0;
-> +
-> +	/*
-> +	 * Don't allow values outside of the power range previously
-> +	 * set when initiliazing the power numbers.
+Good point! Although, I would rather avoid adding the overhead, unless
+the residency is specified. Do you see a problem with this approach?
 
-s/initiliazing/initializing
+Another option is to add a new governor, but if possible, I would like
+to avoid that.
 
-> +	 */
-> +	power_limit = clamp_val(power_limit, dtpm->power_min, dtpm->power_max);
-> +
-> +	spin_lock(&dtpm->lock);
-> +	list_for_each_entry(child, &dtpm->children, sibling) {
-> +
-> +		/*
-> +		 * Integer division rounding will inevitably lead to a
-> +		 * different max value when set several times. In
-> +		 * order to restore the initial value, we force the
-> +		 * child's max power every time if the constraint is
-> +		 * removed by setting a value greater or equal to the
-> +		 * max power.
-> +		 */
-> +		if (power_limit == dtpm->power_max)
-> +			power = child->power_max;
-> +		else
-> +			power = DIV_ROUND_CLOSEST(
-> +				power_limit * child->weight, 1024);
-> +
-> +		pr_debug("Setting power limit for '%s': %llu uW\n",
-> +			 child->zone.name, power);
-> +
-> +		ret = child->zone.constraints->ops->set_power_limit_uw(
-> +			&child->zone, cid, power);
-> +		if (ret)
-> +			break;
-> +	}
-> +	spin_unlock(&dtpm->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int get_children_power_limit(struct powercap_zone *pcz, int cid,
-> +				    u64 *power_limit)
-> +{
-> +	struct dtpm *dtpm = to_dtpm(pcz);
-> +	struct dtpm *child;
-> +	u64 power;
-> +	int ret = 0;
-> +
-> +	*power_limit = 0;
-> +
-> +	spin_lock(&dtpm->lock);
-> +	list_for_each_entry(child, &dtpm->children, sibling) {
-> +		ret = child->zone.constraints->ops->get_power_limit_uw(
-> +			&child->zone, cid, &power);
-> +		if (ret)
-> +			break;
-> +		*power_limit += power;
-> +	}
-> +	spin_unlock(&dtpm->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static const char *get_constraint_name(struct powercap_zone *pcz, int cid)
-> +{
-> +	return constraint_name[cid];
-> +}
-> +
-> +static int get_max_power_uw(struct powercap_zone *pcz, int id, u64 *max_power)
-> +{
-> +	struct dtpm *dtpm = to_dtpm(pcz);
-> +
-> +	spin_lock(&dtpm->lock);
-> +	*max_power = dtpm->power_max;
-> +	spin_unlock(&dtpm->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct powercap_zone_constraint_ops constraint_ops = {
-> +	.set_power_limit_uw = set_children_power_limit,
-> +	.get_power_limit_uw = get_children_power_limit,
-> +	.set_time_window_us = set_time_window_us,
-> +	.get_time_window_us = get_time_window_us,
-> +	.get_max_power_uw = get_max_power_uw,
-> +	.get_name = get_constraint_name,
-> +};
-> +
-> +static struct powercap_zone_ops zone_ops = {
-> +	.get_max_power_range_uw = get_max_power_range_uw,
-> +	.get_power_uw = get_children_power_uw,
-> +	.release = dtpm_release_zone,
-> +};
-> +
-> +/**
-> + * dtpm_alloc - Allocate and initialize a dtpm struct
-> + * @name: a string specifying the name of the node
-> + *
-> + * Return: a struct dtpm pointer, NULL in case of error
-> + */
-> +struct dtpm *dtpm_alloc(void)
-> +{
-> +	struct dtpm *dtpm;
-> +
-> +	dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
-> +	if (dtpm) {
-> +		INIT_LIST_HEAD(&dtpm->children);
-> +		INIT_LIST_HEAD(&dtpm->sibling);
-> +		spin_lock_init(&dtpm->lock);
-> +		dtpm->weight = 1024;
-> +	}
-> +
-> +	return dtpm;
-> +}
-> +
-> +/**
-> + * dtpm_unregister - Unregister a dtpm node from the hierarchy tree
-> + * @dtpm: a pointer to a dtpm structure corresponding to the node to be removed
-> + *
-> + * Call the underlying powercap unregister function. That will call
-> + * the release callback of the powercap zone.
-> + */
-> +void dtpm_unregister(struct dtpm *dtpm)
-> +{
-> +	powercap_unregister_zone(pct, &dtpm->zone);
-> +}
-> +
-> +/**
-> + * dtpm_register - Register a dtpm node in the hierarchy tree
-> + * @name: a string specifying the name of the node
-> + * @dtpm: a pointer to a dtpm structure corresponding to the new node
-> + * @parent: a pointer to a dtpm structure corresponding to the parent node
-> + * @ops: a pointer to a powercap_zone_ops structure
-> + * @nr_constraints: a integer giving the number of constraints supported
-> + * @const_ops: a pointer to a powercap_zone_constraint_ops structure
-> + *
-> + * Create a dtpm node in the tree. If no parent is specified, the node
-> + * is the root node of the hierarchy. If the root node already exists,
-> + * then the registration will fail. The powercap controller must be
-> + * initialized before calling this function.
-> + *
-> + * The dtpm structure must be initialized with the power numbers
-> + * before calling this function.
-> + *
-> + * Return: zero on success, a negative value in case of error:
-> + *  -EAGAIN: the function is called before the framework is initialized.
-> + *  -EBUSY: the root node is already inserted
-> + *  -EINVAL: there is no root node yet and @parent is specified
-> + *   Other negative values are reported back from the powercap framework
-> + */
-> +int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
-> +		  struct powercap_zone_ops *ops, int nr_constraints,
-> +		  struct powercap_zone_constraint_ops *const_ops)
-> +{
-> +	struct powercap_zone *pcz;
-> +
-> +	if (!pct)
-> +		return -EAGAIN;
-> +
-> +	if (root && !parent)
-> +		return -EBUSY;
-> +
-> +	if (!root && parent)
-> +		return -EINVAL;
-> +
-> +	const_ops->get_name = get_constraint_name;
-> +	const_ops->get_max_power_uw = get_max_power_uw;
-> +	const_ops->set_time_window_us = set_time_window_us;
-> +	const_ops->get_time_window_us = get_time_window_us;
-> +
-> +	ops->get_max_power_range_uw = get_max_power_range_uw;
-> +
-> +	pcz = powercap_register_zone(&dtpm->zone, pct, name,
-> +				     parent ? &parent->zone : NULL,
-> +				     ops, nr_constraints, const_ops);
-> +	if (IS_ERR(pcz))
-> +		return PTR_ERR(pcz);
-> +
-> +	if (parent) {
-> +		spin_lock(&parent->lock);
-> +		list_add_tail(&dtpm->sibling, &parent->children);
-> +		spin_unlock(&parent->lock);
-> +		dtpm->parent = parent;
-> +	} else {
-> +		root = dtpm;
-> +	}
-> +
-> +	dtpm_add_power(dtpm);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * dtpm_register_parent - Register a intermediate node in the tree
-> + * @name: a string specifying the name of the node
-> + * @dtpm: a pointer to a dtpm structure corresponding to the new node
-> + * @parent: a pointer to a dtpm structure corresponding parent's new node
-> + *
-> + * The function will add an intermediate node corresponding to a
-> + * parent to more nodes. Its purpose is to aggregate the children
-> + * characteristics and dispatch the constraints. If the @parent
-> + * parameter is NULL, then this node becomes the root node of the tree
-> + * if there is no root node yet.
-> + *
-> + * Return: zero on success, a negative value in case of error:
-> + *  -EAGAIN: the function is called before the framework is initialized.
-> + *  -EBUSY: the root node is already inserted
-> + *  -EINVAL: there is not root node yet and @parent is specified
-> + *   Other negative values are reported back from the powercap framework
-> + */
-> +int dtpm_register_parent(const char *name, struct dtpm *dtpm,
-> +			 struct dtpm *parent)
-> +{
-> +	return dtpm_register(name, dtpm, parent, &zone_ops,
-> +			     MAX_DTPM_CONSTRAINTS, &constraint_ops);
-> +}
-> +
-> +static int __init dtpm_init(void)
-> +{
-> +	struct dtpm_descr **dtpm_descr;
-> +
-> +	pct = powercap_register_control_type(NULL, "dtpm", NULL);
-> +	if (!pct) {
-> +		pr_err("Failed to register control type\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	for_each_dtpm_table(dtpm_descr)
-> +		(*dtpm_descr)->init(*dtpm_descr);
-> +
-> +	return 0;
-> +}
-> +late_initcall(dtpm_init);
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 5430febd34be..29b30976ea02 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -315,6 +315,16 @@
->   #define THERMAL_TABLE(name)
->   #endif
->   
-> +#ifdef CONFIG_DTPM
-> +#define DTPM_TABLE()							\
-> +	. = ALIGN(8);							\
-> +	__dtpm_table = .;						\
-> +	KEEP(*(__dtpm_table))						\
-> +	__dtpm_table_end = .;
-> +#else
-> +#define DTPM_TABLE()
-> +#endif
-> +
->   #define KERNEL_DTB()							\
->   	STRUCT_ALIGN();							\
->   	__dtb_start = .;						\
-> @@ -715,6 +725,7 @@
->   	ACPI_PROBE_TABLE(irqchip)					\
->   	ACPI_PROBE_TABLE(timer)						\
->   	THERMAL_TABLE(governor)						\
-> +	DTPM_TABLE()							\
->   	EARLYCON_TABLE()						\
->   	LSM_TABLE()							\
->   	EARLY_LSM_TABLE()
-> diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
-> new file mode 100644
-> index 000000000000..6696bdcfdb87
-> --- /dev/null
-> +++ b/include/linux/dtpm.h
-> @@ -0,0 +1,73 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2020 Linaro Ltd
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + */
-> +#ifndef ___DTPM_H__
-> +#define ___DTPM_H__
-> +
-> +#include <linux/of.h>
-> +#include <linux/powercap.h>
-> +
-> +#define MAX_DTPM_DESCR 8
-> +#define MAX_DTPM_CONSTRAINTS 1
-> +
-> +struct dtpm {
-> +	struct powercap_zone zone;
-> +	struct dtpm *parent;
-> +	struct list_head sibling;
-> +	struct list_head children;
-> +	spinlock_t lock;
-> +	u64 power_limit;
-> +	u64 power_max;
-> +	u64 power_min;
-> +	int weight;
-> +	void *private;
-> +};
-> +
-> +struct dtpm_descr;
-> +
-> +typedef int (*dtpm_init_t)(struct dtpm_descr *);
-> +
-> +struct dtpm_descr {
-> +	struct dtpm *parent;
-> +	const char *name;
-> +	dtpm_init_t init;
-> +};
-> +
-> +/* Init section thermal table */
-> +extern struct dtpm_descr *__dtpm_table[];
-> +extern struct dtpm_descr *__dtpm_table_end[];
-> +
-> +#define DTPM_TABLE_ENTRY(name)			\
-> +	static typeof(name) *__dtpm_table_entry_##name	\
-> +	__used __section(__dtpm_table) = &name
+>
+> >Additionally, we don't need to recompute the domain's next wakup,
+> >unless a device has got a new next_wakeup value set for it. In this
+> >case, we can just select a state based upon an previously computed
+> >value, thus avoiding the recomputation.
+> >
+> If the domain's next wakeup was in the past, then using our previously
+> computed state may be incorrect.
 
-I had to change the section name to string, to pass compilation:
-__used __section("__dtpm_table") = &name
-I don't know if it's my compiler or configuration.
+I am not saying you should use the previously computed *idlestate*,
+but the previously computed next wakeup.
 
-I've tried to register this DTPM in scmi-cpufreq.c with macro
-proposed in patch 4/4 commit message, but I might missed some
-important includes there...
+>
+> >>         if (!genpd->max_off_time_changed) {
+> >>                 genpd->state_idx = genpd->cached_power_down_state_idx;
+> >>                 return genpd->cached_power_down_ok;
+> >> @@ -228,17 +295,21 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
+> >>         genpd->max_off_time_ns = -1;
+> >>         genpd->max_off_time_changed = false;
+> >>         genpd->cached_power_down_ok = true;
+> >> -       genpd->state_idx = genpd->state_count - 1;
+> >>
+> >> -       /* Find a state to power down to, starting from the deepest. */
+> >> -       while (!__default_power_down_ok(pd, genpd->state_idx)) {
+> >> -               if (genpd->state_idx == 0) {
+> >> +       /*
+> >> +        * Find a state to power down to, starting from the state
+> >> +        * determined by the next wakeup.
+> >> +        */
+> >> +       while (!__default_power_down_ok(pd, state_idx)) {
+> >> +               if (state_idx == 0) {
+> >>                         genpd->cached_power_down_ok = false;
+> >>                         break;
+> >>                 }
+> >> -               genpd->state_idx--;
+> >> +               state_idx--;
+> >>         }
+> >>
+> >> +done:
+> >> +       genpd->state_idx = state_idx;
+> >>         genpd->cached_power_down_state_idx = genpd->state_idx;
+> >>         return genpd->cached_power_down_ok;
+> >>  }
+> >
+> >Another thing to consider for the above changes, is that the
+> >cpu_power_down_ok() calls into default_power_down_ok().
+> >
+> >Even if I am fine with the approach taken in $subject patch, I think
+> >it's important to try to keep the path a slim as possible as it's also
+> >executed in the CPU idlepath.
+> Wouldn't this be called only the last CPU is powering down and only if
+> the domain is ready to power down?
+>
+> >For example, $subject change means also
+> >that we end up calling ktime_get() twice in the same path, introducing
+> >unnecessary overhead. We can do better and avoid that by restructuring
+> >the code a bit, don't you think?
+> >
+> Hmmm, we could. I will submit a follow on patch to reorganize the code
+> so the ktime_get() would be called only once for either of the
+> power_down_ok callbacks.
 
-> +
-> +#define DTPM_DECLARE(name)	DTPM_TABLE_ENTRY(name)
-> +
-> +#define for_each_dtpm_table(__dtpm)	\
-> +	for (__dtpm = __dtpm_table;	\
-> +	     __dtpm < __dtpm_table_end;	\
-> +	     __dtpm++)
-> +
-> +static inline struct dtpm *to_dtpm(struct powercap_zone *zone)
-> +{
-> +	return container_of(zone, struct dtpm, zone);
-> +}
-> +
-> +int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max);
-> +
-> +int dtpm_release_zone(struct powercap_zone *pcz);
-> +
-> +struct dtpm *dtpm_alloc(void);
-> +
-> +void dtpm_unregister(struct dtpm *dtpm);
-> +
-> +int dtpm_register_parent(const char *name, struct dtpm *dtpm,
-> +			 struct dtpm *parent);
-> +
-> +int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
-> +		  struct powercap_zone_ops *ops, int nr_constraints,
-> +		  struct powercap_zone_constraint_ops *const_ops);
-> +#endif
-> 
+If possible, I would rather make it part of the series. Just fold in
+some "rework" patch before extending the governor, that should be
+possible I think.
 
-Minor comment. This new framework deserves more debug prints, especially
-in registration/unregistration paths. I had to put some, to test it.
-But it can be done later as well, after it gets into mainline.
-
-I have also run different hotplug stress tests to check this tree
-locking. The userspace process constantly reading these values, while
-the last CPU in the cluster was going on/off and node was detaching.
-I haven't seen any problems, but the tree wasn't so deep.
-Everything was calculated properly, no error, null pointers, etc.
-
-Apart from the spelling minor issues and the long constraint name, LGTM
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Tested-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Regards,
-Lukasz
-
-[1] 
-https://lore.kernel.org/linux-pm/20201109172452.6923-1-lukasz.luba@arm.com/
+Kind regards
+Uffe
