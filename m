@@ -2,253 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 509482AD55E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 12:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1382AD66F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 13:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbgKJLgT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 06:36:19 -0500
-Received: from foss.arm.com ([217.140.110.172]:54418 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726152AbgKJLgS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Nov 2020 06:36:18 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA8721396;
-        Tue, 10 Nov 2020 03:36:17 -0800 (PST)
-Received: from [10.57.21.178] (unknown [10.57.21.178])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 990B03F6CF;
-        Tue, 10 Nov 2020 03:36:15 -0800 (PST)
-Subject: Re: [PATCH] cpufreq: stats: Switch to ktime and msec instead of
- jiffies and usertime
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <0e0fb542b6f6b26944cb2cf356041348aeac95f6.1605006378.git.viresh.kumar@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <5860b346-4eab-4018-87e4-a6313115fa2d@arm.com>
-Date:   Tue, 10 Nov 2020 11:36:13 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728478AbgKJMgQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 07:36:16 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:44306 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbgKJMgQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 07:36:16 -0500
+Received: by mail-ot1-f67.google.com with SMTP id f16so12293504otl.11;
+        Tue, 10 Nov 2020 04:36:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w5f5uEO3r6sI5bF7NOkmG8gXoj1KbzEchukRim9NVXM=;
+        b=jaFeMUIw3NIFMwCF8v6Yl5DQrDw/E0j6r19qdN7/g/lhVYyAI8EOGm+Jkj1HLa78/7
+         yhyF6uInIWWeCI88jtvbeX0no98QN1+/6Lgx2xQhpGVgYgTFDNNq+c7bqpmWRSltKU7M
+         qeW6pK8dTRzdVzsFf14QohqNj3yCeqrHjVXSkGm7RTcQhzvMhIOIdHgc8QLyTHI5Dc6A
+         +a2p5mvuG3sFDSF0HUl5pKziWfsPkDaHax7oeDCd8dS+yUjwUwOiSxVr89hB262nGvCe
+         nQaj/LXNLxuGnTdwzPTQETWpPGUl/LHPuJj/qYO4BNgDQVMDEQojzIlGnfD3ZtTcTDYI
+         QrnA==
+X-Gm-Message-State: AOAM5333+K893422dRdRb3uc+6o3mRmcW8Caz93J9G0kVQLCEwHSx+ov
+        DY8AM7CyYZuotywkHtQBabMb2JyPxw0ZwhTzq3w=
+X-Google-Smtp-Source: ABdhPJw7mPJnbOdO+7/bFNde1IAr06+jLWsQGqCoGogkClkKskzCXz49C20taI6hoTbLByE+OR4kS9he0j9Nwm6qQN4=
+X-Received: by 2002:a9d:222f:: with SMTP id o44mr14179002ota.321.1605011775337;
+ Tue, 10 Nov 2020 04:36:15 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <0e0fb542b6f6b26944cb2cf356041348aeac95f6.1605006378.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <13269660.K2JYd4sGFX@kreacher> <1876249.M1ZxxmeKtZ@kreacher> <20201110024126.v4yxai5hpguj5p5b@vireshk-i7>
+In-Reply-To: <20201110024126.v4yxai5hpguj5p5b@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 Nov 2020 13:36:02 +0100
+Message-ID: <CAJZ5v0jkdF7_JKBA0R0kvhzv-ZaLr3m9MS1g_D=vs3ZObv1VVw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] cpufreq: Introduce governor flags
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Nov 10, 2020 at 3:41 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 09-11-20, 17:51, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > A new cpufreq governor flag will be added subsequently, so replace
+> > the bool dynamic_switching fleid in struct cpufreq_governor with a
+> > flags field and introduce CPUFREQ_GOV_FLAG_DYN_SWITCH to set for
+> > the "dynamic switching" governors instead of it.
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c          |    2 +-
+> >  drivers/cpufreq/cpufreq_governor.h |    2 +-
+> >  include/linux/cpufreq.h            |    9 +++++++--
+> >  kernel/sched/cpufreq_schedutil.c   |    2 +-
+> >  4 files changed, 10 insertions(+), 5 deletions(-)
+> >
+> > Index: linux-pm/drivers/cpufreq/cpufreq.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/cpufreq/cpufreq.c
+> > +++ linux-pm/drivers/cpufreq/cpufreq.c
+> > @@ -2254,7 +2254,7 @@ static int cpufreq_init_governor(struct
+> >               return -EINVAL;
+> >
+> >       /* Platform doesn't want dynamic frequency switching ? */
+> > -     if (policy->governor->dynamic_switching &&
+>
+> I completely forgot that we had something like this :)
+>
+> > +     if (policy->governor->flags & CPUFREQ_GOV_FLAG_DYN_SWITCH &&
+> >           cpufreq_driver->flags & CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING) {
+> >               struct cpufreq_governor *gov = cpufreq_fallback_governor();
+> >
+> > Index: linux-pm/drivers/cpufreq/cpufreq_governor.h
+> > ===================================================================
+> > --- linux-pm.orig/drivers/cpufreq/cpufreq_governor.h
+> > +++ linux-pm/drivers/cpufreq/cpufreq_governor.h
+> > @@ -156,7 +156,7 @@ void cpufreq_dbs_governor_limits(struct
+> >  #define CPUFREQ_DBS_GOVERNOR_INITIALIZER(_name_)                     \
+> >       {                                                               \
+> >               .name = _name_,                                         \
+> > -             .dynamic_switching = true,                              \
+> > +             .flags = CPUFREQ_GOV_FLAG_DYN_SWITCH,                   \
+> >               .owner = THIS_MODULE,                                   \
+> >               .init = cpufreq_dbs_governor_init,                      \
+> >               .exit = cpufreq_dbs_governor_exit,                      \
+> > Index: linux-pm/include/linux/cpufreq.h
+> > ===================================================================
+> > --- linux-pm.orig/include/linux/cpufreq.h
+> > +++ linux-pm/include/linux/cpufreq.h
+> > @@ -565,12 +565,17 @@ struct cpufreq_governor {
+> >                                        char *buf);
+> >       int     (*store_setspeed)       (struct cpufreq_policy *policy,
+> >                                        unsigned int freq);
+> > -     /* For governors which change frequency dynamically by themselves */
+> > -     bool                    dynamic_switching;
+> >       struct list_head        governor_list;
+> >       struct module           *owner;
+> > +     u8                      flags;
+> >  };
+> >
+> > +/* Governor flags */
+> > +
+> > +/* For governors which change frequency dynamically by themselves */
+> > +#define CPUFREQ_GOV_FLAG_DYN_SWITCH  BIT(0)
+>
+> Maybe just drop the FLAG_ part as we don't use it for other cpufreq related
+> flags as well. That will also give us space to write DYN as DYNAMIC (it may be
+> better as we use the full name in CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING).
 
+OK, I'll rename the flag (and the new one too).
 
-On 11/10/20 11:07 AM, Viresh Kumar wrote:
-> The cpufreq and thermal core, both provide sysfs statistics to help
-> userspace learn about the behavior of frequencies and cooling states.
-> 
-> This is how they look:
-> 
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:208000 11
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:432000 147
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:729000 1600
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:960000 879
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 399
-> 
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state0 4097
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state1 8932
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state2 15868
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state3 1384
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state4 103
-> 
-> Here, state0 of thermal corresponds to the highest frequency of the CPU,
-> i.e. 1200000 and state4 to the lowest one.
-> 
-> While both of these try to show similar kind of data (which can still be
-> very much different from each other), the values looked different (by a
-> factor of 10, i.e. thermal's time_in_state is almost 10 times that of
-> cpufreq time_in_state).
-> 
-> This comes from the fact that cpufreq core displays the time in usertime
-> units (10 ms).
-> 
-> It would be better if both the frameworks displayed times in the same
-> unit as the users may need to correlate between them and different
-> scales just make it awkward. And the choice of thermal core for that
-> (msec) seems to be a better choice as it is easier to read.
-> 
-> The thermal core also does the stats calculations using ktime, which is
-> much more accurate as compared to jiffies used by cpufreq core.
-> 
-> This patch updates the cpufreq core to use ktime for the internal
-> calculations and changes the units of time_in_state to msec.
-> 
-> The results look like this after this commit:
-> 
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:208000 13
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:432000 790
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:729000 12492
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:960000 13259
-> /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 3830
-> 
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state0 3888
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state1 13432
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state2 12336
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state3 740
-> /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state4 0
-> 
-> FWIW, tools/power/cpupower/ does consume the time_in_state values from
-> the sysfs files but it is independent of the unit of the time and didn't
-> require an update.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   Documentation/cpu-freq/cpufreq-stats.rst |  5 +--
->   drivers/cpufreq/cpufreq_stats.c          | 47 +++++++++++++-----------
->   2 files changed, 28 insertions(+), 24 deletions(-)
-> 
-> diff --git a/Documentation/cpu-freq/cpufreq-stats.rst b/Documentation/cpu-freq/cpufreq-stats.rst
-> index 9ad695b1c7db..9f94012a882f 100644
-> --- a/Documentation/cpu-freq/cpufreq-stats.rst
-> +++ b/Documentation/cpu-freq/cpufreq-stats.rst
-> @@ -64,9 +64,8 @@ need for a reboot.
->   
->   This gives the amount of time spent in each of the frequencies supported by
->   this CPU. The cat output will have "<frequency> <time>" pair in each line, which
-> -will mean this CPU spent <time> usertime units of time at <frequency>. Output
-> -will have one line for each of the supported frequencies. usertime units here
-> -is 10mS (similar to other time exported in /proc).
-> +will mean this CPU spent <time> msec of time at <frequency>. Output will have
-> +one line for each of the supported frequencies.
->   
->   ::
->   
-> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-> index 6cd5c8ab5d49..e054ada291e7 100644
-> --- a/drivers/cpufreq/cpufreq_stats.c
-> +++ b/drivers/cpufreq/cpufreq_stats.c
-> @@ -14,35 +14,38 @@
->   
->   struct cpufreq_stats {
->   	unsigned int total_trans;
-> -	unsigned long long last_time;
-> +	ktime_t last_time;
->   	unsigned int max_state;
->   	unsigned int state_num;
->   	unsigned int last_index;
-> -	u64 *time_in_state;
-> +	ktime_t *time_in_state;
->   	unsigned int *freq_table;
->   	unsigned int *trans_table;
->   
->   	/* Deferred reset */
->   	unsigned int reset_pending;
-> -	unsigned long long reset_time;
-> +	ktime_t reset_time;
->   };
->   
-> -static void cpufreq_stats_update(struct cpufreq_stats *stats,
-> -				 unsigned long long time)
-> +static void cpufreq_stats_update(struct cpufreq_stats *stats, ktime_t time)
->   {
-> -	unsigned long long cur_time = get_jiffies_64();
-> +	ktime_t cur_time = ktime_get(), delta;
->   
-> -	stats->time_in_state[stats->last_index] += cur_time - time;
-> +	delta = ktime_sub(cur_time, time);
-> +	stats->time_in_state[stats->last_index] =
-> +		ktime_add(stats->time_in_state[stats->last_index], delta);
->   	stats->last_time = cur_time;
->   }
->   
->   static void cpufreq_stats_reset_table(struct cpufreq_stats *stats)
->   {
-> -	unsigned int count = stats->max_state;
-> +	unsigned int count = stats->max_state, i;
-> +
-> +	for (i = 0; i < count; i++)
-> +		stats->time_in_state[i] = ktime_set(0, 0);
->   
-> -	memset(stats->time_in_state, 0, count * sizeof(u64));
->   	memset(stats->trans_table, 0, count * count * sizeof(int));
-> -	stats->last_time = get_jiffies_64();
-> +	stats->last_time = ktime_get();
->   	stats->total_trans = 0;
->   
->   	/* Adjust for the time elapsed since reset was requested */
-> @@ -70,7 +73,7 @@ static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
->   {
->   	struct cpufreq_stats *stats = policy->stats;
->   	bool pending = READ_ONCE(stats->reset_pending);
-> -	unsigned long long time;
-> +	ktime_t time, now = ktime_get(), delta;
->   	ssize_t len = 0;
->   	int i;
->   
-> @@ -82,18 +85,20 @@ static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
->   				 * before the reset_pending read above.
->   				 */
->   				smp_rmb();
-> -				time = get_jiffies_64() - READ_ONCE(stats->reset_time);
-> +				time = ktime_sub(now, READ_ONCE(stats->reset_time));
->   			} else {
-> -				time = 0;
-> +				time = ktime_set(0, 0);;
->   			}
->   		} else {
->   			time = stats->time_in_state[i];
-> -			if (i == stats->last_index)
-> -				time += get_jiffies_64() - stats->last_time;
-> +			if (i == stats->last_index) {
-> +				delta = ktime_sub(now, stats->last_time);
-> +				time = ktime_add(delta, time);
-> +			}
->   		}
->   
->   		len += sprintf(buf + len, "%u %llu\n", stats->freq_table[i],
-> -			       jiffies_64_to_clock_t(time));
-> +			       ktime_to_ms(time));
->   	}
->   	return len;
->   }
-> @@ -109,7 +114,7 @@ static ssize_t store_reset(struct cpufreq_policy *policy, const char *buf,
->   	 * Defer resetting of stats to cpufreq_stats_record_transition() to
->   	 * avoid races.
->   	 */
-> -	WRITE_ONCE(stats->reset_time, get_jiffies_64());
-> +	WRITE_ONCE(stats->reset_time, ktime_get());
->   	/*
->   	 * The memory barrier below is to prevent the readers of reset_time from
->   	 * seeing a stale or partially updated value.
-> @@ -228,9 +233,9 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
->   	if (!stats)
->   		return;
->   
-> -	alloc_size = count * sizeof(int) + count * sizeof(u64);
-> -
-> -	alloc_size += count * count * sizeof(int);
-> +	alloc_size = count * sizeof(*stats->time_in_state);
-> +	alloc_size += count * sizeof(*stats->freq_table);
-> +	alloc_size += count * count * sizeof(*stats->trans_table);
->   
->   	/* Allocate memory for time_in_state/freq_table/trans_table in one go */
->   	stats->time_in_state = kzalloc(alloc_size, GFP_KERNEL);
-> @@ -249,7 +254,7 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
->   			stats->freq_table[i++] = pos->frequency;
->   
->   	stats->state_num = i;
-> -	stats->last_time = get_jiffies_64();
-> +	stats->last_time = ktime_get();
->   	stats->last_index = freq_table_get_index(stats, policy->cur);
->   
->   	policy->stats = stats;
-> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I am not sure if these ktime_get() are not too heavy in the code path
-visited by the scheduler.
-
-How about local_clock()?
-It's used in ./drivers/cpuidle/cpuidle.c to do similar accounting.
-
-Regards,
-Lukasz
+Thanks!
