@@ -2,95 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C342AD8B9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 15:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23E62AD988
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 15:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730511AbgKJO0P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 09:26:15 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34943 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730059AbgKJO0P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 09:26:15 -0500
-Received: by mail-oi1-f196.google.com with SMTP id c80so14507637oib.2;
-        Tue, 10 Nov 2020 06:26:14 -0800 (PST)
+        id S1730432AbgKJO7U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 09:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726721AbgKJO7U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 09:59:20 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F4FC0613CF
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 06:59:19 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id 19so1747934wmf.1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 06:59:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IdLgaRbW4nEaCIcc+Kl+IljF0AKQ9c4kOuJIqFJ4XQQ=;
+        b=zE6BW1MXgSBPi6HFNs/bFM9mV0opihuPEMpa9blC8mLW9qOpazn6K8JS6h6SKf5yGf
+         3Yj98J4V2XWwhBvmIMaKmSna1vqKdzE2M9Qi6xn2YCI9p40INPY6PCi9OB/zwvAxyccj
+         YmvQwGTzk/Y4PQ25QOHWw3o8bWOAWv/3DY7XTW8j/yfIt1dUdzOUIGJ5j5YAj8yr+YD4
+         /sm6TJACtN5T1Qd67KPUbFoanilicnmzf4ZoS8Olc0OFazxEjAXXvbDji5FRHJmygO5v
+         8poTXkB8Eej+YMMI1ufXUdvN/J+iYDadMpcjnsqHbeN83gIZuym17+K5VYtJgQA2PwVF
+         RGTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=I6eINwgPGvryXHeca8G+4NRiZwWs6cwo0lxUCGUsnnM=;
-        b=PDirRAStIMa4VK87ur1eXW+HxdYLTp3veN5PPtGWpTaeFKqJ8DSCP9RlrmN427wTmL
-         i+xNUO0vZNro8rE8nB4LUSrSzNL8oJ7kEnjFtMSzxxIlTdcYAZlrEdZbMIbaiBF+Nvji
-         N+aisTLlQ0RuwkcV5Vqd4sdKIj3Dp8DShbXie+uH+UF2LTGMVCtsPyWARwOIxaadAFRn
-         4GGvMOK1y6B385Jmf5HQWhEb8ld8EJ6skFLbP48yjRnCplWXIqfyStweXvx3wvekcczT
-         I9kIJjks60qp3QUgvJW9iQZ4Gm9t9k7B/JUXddIIiMfMHwPZ0zwhmth1OIMMjS/Wa/S8
-         9UWQ==
-X-Gm-Message-State: AOAM533T0gnDGq7UbhcrQZDzJg2bSuDaJry2Tsp0jIltZcIkRBl81oON
-        wv1z3o4qXGJ+Q3ZisO/DMw==
-X-Google-Smtp-Source: ABdhPJxmEBz2DgpgaTJfUBpq6k0kGF8zZgE3ZaEHQ0GkfG/X/Rq/tzCx9MOVxL5mhsN1tNj0erLv8A==
-X-Received: by 2002:aca:ea54:: with SMTP id i81mr2775381oih.48.1605018374555;
-        Tue, 10 Nov 2020 06:26:14 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 33sm3265678otr.25.2020.11.10.06.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2020 06:26:13 -0800 (PST)
-Received: (nullmailer pid 3120474 invoked by uid 1000);
-        Tue, 10 Nov 2020 14:26:12 -0000
-Date:   Tue, 10 Nov 2020 08:26:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     krzk@kernel.org, sw0312.kim@samsung.com, myungjoo.ham@samsung.com,
-        devicetree@vger.kernel.org, georgi.djakov@linaro.org,
-        dri-devel@lists.freedesktop.org, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
-        a.swigon@samsung.com
-Subject: Re: [PATCH v8 1/7] dt-bindings: devfreq: Add documentation for the
- interconnect properties
-Message-ID: <20201110142612.GA3120426@bogus>
-References: <20201104103657.18007-1-s.nawrocki@samsung.com>
- <CGME20201104103718eucas1p1c103f1a96499b03c72e5457ac2542c3d@eucas1p1.samsung.com>
- <20201104103657.18007-2-s.nawrocki@samsung.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IdLgaRbW4nEaCIcc+Kl+IljF0AKQ9c4kOuJIqFJ4XQQ=;
+        b=hXp7CcWIYYTnyUBbDETN9m4/mPxcVFz9CrXw9UPwPaELHE78qO/ST4vR4bb38Ll35w
+         EC+P8894Kzr90ah/SuGZsIbMRSL1G1kmREg8FkUclN7G7ijx9tmEVzEUcfPFX6cxCtXA
+         M6pqVxXOgHaNLlvvxo4XyEHppdt8/VWdahb7EBCIPGQkMtXhKLyzTXkrxluvw0dRId3m
+         wWpEebOLjUs0Jye1OUAjz2tf8o3D3zYbF4fcSUrjrZ+bDGD/oIETdLP++idGp8zFuddK
+         6c6ypSvVmJlUHUpPKV/nqk5Ms4nd4padLb/jriym3po7XQ2oloyB+woWe4wdG4+qjXR1
+         sDRg==
+X-Gm-Message-State: AOAM53096MQ7l62s/elPr24ZQnUc6wGU2Nnb5PWf/uILdBpRY/HxZs2v
+        ieEd/N9MuCXw63Jq+hZzQ05wYw==
+X-Google-Smtp-Source: ABdhPJxMjHi9px4ve94r4lzwF0KBkof3AuKcVHvqTov0sVXZfIVWNNeQSwqEOMtZQc+y6NiObyT9uA==
+X-Received: by 2002:a1c:dc43:: with SMTP id t64mr37525wmg.93.1605020358599;
+        Tue, 10 Nov 2020 06:59:18 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:1087:e960:613c:926b? ([2a01:e34:ed2f:f020:1087:e960:613c:926b])
+        by smtp.googlemail.com with ESMTPSA id v67sm3381795wma.17.2020.11.10.06.59.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2020 06:59:17 -0800 (PST)
+Subject: Re: [PATCH 3/4] powercap/drivers/dtpm: Add API for dynamic thermal
+ power management
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
+ <20201006122024.14539-4-daniel.lezcano@linaro.org>
+ <8fea0109-30d4-7d67-ffeb-8e588a4dadc3@arm.com>
+ <313a92c5-3c45-616f-1fe8-9837721f9889@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <2495f9b8-327d-bf92-a159-ac3202d30ee0@linaro.org>
+Date:   Tue, 10 Nov 2020 15:59:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <313a92c5-3c45-616f-1fe8-9837721f9889@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201104103657.18007-2-s.nawrocki@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 04 Nov 2020 11:36:51 +0100, Sylwester Nawrocki wrote:
-> Add documentation for new optional properties in the exynos bus nodes:
-> interconnects, #interconnect-cells, samsung,data-clock-ratio.
-> These properties allow to specify the SoC interconnect structure which
-> then allows the interconnect consumer devices to request specific
-> bandwidth requirements.
+On 10/11/2020 12:05, Lukasz Luba wrote:
 > 
-> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> ---
-> Changes for v8:
->  - updated description of the interconnects property,
->  - fixed typo in samsung,data-clk-ratio property description.
-> 
-> Changes for v7:
->  - bus-width property replaced with samsung,data-clock-ratio,
->  - the interconnect consumer bindings used instead of vendor specific
->    properties
-> 
-> Changes for v6:
->  - added dts example of bus hierarchy definition and the interconnect
->    consumer,
->  - added new bus-width property.
-> 
-> Changes for v5:
->  - exynos,interconnect-parent-node renamed to samsung,interconnect-parent
-> ---
->  .../devicetree/bindings/devfreq/exynos-bus.txt     | 71 +++++++++++++++++++++-
->  1 file changed, 69 insertions(+), 2 deletions(-)
-> 
+> Actually I've found one issue when I have been trying to clean
+> my testing branch with modified scmi-cpufreq.c.
 
-Acked-by: Rob Herring <robh@kernel.org>
+IMO, those errors are not the dtpm framework fault but the scmi-cpufreq.
+
+You should add a component in the drivers/powercap which does the glue
+between the scmi-cpufreq and the dtpm. No stub will be needed in this
+case as the component will depend on CONFIG_DTPM.
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
