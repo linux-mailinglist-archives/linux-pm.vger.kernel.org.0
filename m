@@ -2,114 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EC32ADEA5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 19:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BE42ADF2D
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 20:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731142AbgKJSp2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 13:45:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49622 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726307AbgKJSp2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Nov 2020 13:45:28 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 8ABCCABD1;
-        Tue, 10 Nov 2020 18:45:26 +0000 (UTC)
-Message-ID: <1605033925.14855.15.camel@suse.cz>
-Subject: Re: [PATCH 1/3] x86, sched: Calculate frequency invariance for AMD
- systems
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jon Grimm <Jon.Grimm@amd.com>,
-        Nathan Fontenot <Nathan.Fontenot@amd.com>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Pu Wen <puwen@hygon.cn>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Doug Smythies <dsmythies@telus.net>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Date:   Tue, 10 Nov 2020 19:45:25 +0100
-In-Reply-To: <20201110094956.GZ2594@hirez.programming.kicks-ass.net>
-References: <20201110083936.31994-1-ggherdovich@suse.cz>
-         <20201110083936.31994-2-ggherdovich@suse.cz>
-         <20201110094956.GZ2594@hirez.programming.kicks-ass.net>
+        id S1726467AbgKJTUH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 14:20:07 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39334 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbgKJTUG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 14:20:06 -0500
+Received: by mail-oi1-f195.google.com with SMTP id u127so15681133oib.6;
+        Tue, 10 Nov 2020 11:20:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NmKu8LmdNLL1UMVcN4Ruc1hGIKWMS8ijmGz0Gw6BRyk=;
+        b=Ck4EFHLsgyR/K6QRcLhwjBoaUsjDrhOT/JwAPzeBiLITVJ4JRs7MCOtuigN5ab7QMX
+         vVpwZHHvogHOr9tSwYSWWlODQlc1FLvhutjtuw26dki0E/IS8Opk/Ygue1qmQh6mnBGv
+         ArIw+Kw54izD6Pq1uTQfqBBfKsgjFs58AOEMfhRqQbW2V07U5JGrLQfRMkgqs77ufE4M
+         HxN59GMFeyFbur7ilaGBlvKh/GgfQn/2csa6AiIY0ZBzZVv6gU5AgHEG4t6M7iXQrhH5
+         Czaoj3g5jg7Q3RgDJuEc/HDCg+JPsrPlBn/8IBEHcmyrii0R2hsTdGtEeNf7eXnBesQ8
+         IpuQ==
+X-Gm-Message-State: AOAM531vUNWyzZOqM15Utq5hxbmAoTQovolhmtiVA41RpMb6tDANgWd/
+        ho5LXshrndZFYTHctKJIccZHUgROCblwP+mJc+E=
+X-Google-Smtp-Source: ABdhPJxd1294o5myWUuqyAs3fbilZq4p8E/a0uJsGTnJKCGFxayUamF0ey+Gt7H1RHuNnILipL7Ypes/T51yPwAyMnQ=
+X-Received: by 2002:aca:cf4b:: with SMTP id f72mr387905oig.157.1605036005779;
+ Tue, 10 Nov 2020 11:20:05 -0800 (PST)
+MIME-Version: 1.0
+References: <20201109172452.6923-1-lukasz.luba@arm.com>
+In-Reply-To: <20201109172452.6923-1-lukasz.luba@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 Nov 2020 20:19:54 +0100
+Message-ID: <CAJZ5v0gQj8cNHgXkgwGeNcegAmP2xxqPQXz1kGNqFFDDCgfX_w@mail.gmail.com>
+Subject: Re: [PATCH] powercap: Adjust printing the constraint name with new line
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2020-11-10 at 10:49 +0100, Peter Zijlstra wrote:
-> On Tue, Nov 10, 2020 at 09:39:34AM +0100, Giovanni Gherdovich wrote:
-> 
-> > +#ifdef CONFIG_ACPI
-> > +void init_freq_invariance_cppc(void)
-> > +{
-> > +	init_freq_invariance(false, true);
-> > +
-> > +	if (static_branch_likely(&arch_scale_freq_key))
-> > +		on_each_cpu(init_counter_refs, NULL, 0);
-> > +}
-> > +#endif
-> > +
-> >  static void disable_freq_invariance_workfn(struct work_struct *work)
-> >  {
-> >  	static_branch_disable(&arch_scale_freq_key);
-> > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> > index 7a99b19bb893..e1969ff876ff 100644
-> > --- a/drivers/acpi/cppc_acpi.c
-> > +++ b/drivers/acpi/cppc_acpi.c
-> > @@ -39,6 +39,7 @@
-> >  #include <linux/ktime.h>
-> >  #include <linux/rwsem.h>
-> >  #include <linux/wait.h>
-> > +#include <linux/topology.h>
-> >  
-> >  #include <acpi/cppc_acpi.h>
-> >  
-> > @@ -850,6 +851,10 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
-> >  		goto out_free;
-> >  	}
-> >  
-> > +	/* Only needed once, so call on CPU0 */
-> > +	if (pr->id == 0)
-> > +		init_freq_invariance_cppc();
-> > +
-> 
-> This seems broken vs lovely things like booting with maxcpus= or
-> physical hotplug where you add logical CPUs.
+On Mon, Nov 9, 2020 at 6:25 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> The constraint name has limit of size 30, which sometimes might be hit.
+> When this happens the new line might be lost. Prevent this and set the
+> new line when the name string is too long."
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/powercap/powercap_sys.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+> index f808c5fa9838..575f9fdb810e 100644
+> --- a/drivers/powercap/powercap_sys.c
+> +++ b/drivers/powercap/powercap_sys.c
+> @@ -174,6 +174,10 @@ static ssize_t show_constraint_name(struct device *dev,
+>                                                                 "%s\n", name);
+>                         buf[POWERCAP_CONSTRAINT_NAME_LEN] = '\0';
+>                         len = strlen(buf);
+> +
+> +                       /* When the 'name' is too long, don't lose new line */
+> +                       if (strlen(name) >= POWERCAP_CONSTRAINT_NAME_LEN)
+> +                               buf[POWERCAP_CONSTRAINT_NAME_LEN - 1] = '\n';
 
-Right.
+Wouldn't it be better to pass POWERCAP_CONSTRAINT_NAME_LEN - 1 to
+snprintf() above?
 
-> 
-> Given the latter hunk limits it to one invocation (is phys_id 0
-> guaranteed to exist? Can a BIOS monkey screw us over?) only to then call
-> it on all CPUs, shouldn't this be changed to let
-> acpi_cppc_processor_probe() call it for every CPU that comes online?
-
-I sent a V2 that basically does that, it just makes sure that
-"init_freq_invariance(secondary=false)" is called only once (the first CPU
-that gets there), and init_counter_refs() instead is called by all.
-
-Which makes me think, I could make better use of the "secondary" argument
-to init_freq_invariance() and trim a couple of lines from
-init_freq_invariance_cppc().
-
-
-Giovanni
-
-
-
-
-
+>                 }
+>         }
+>
+> --
