@@ -2,151 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74902ACB43
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 03:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 478C82ACB52
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 03:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729897AbgKJCsJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 21:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729874AbgKJCsJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 21:48:09 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17556C0613CF
-        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 18:48:08 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id i13so4088153pgm.9
-        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 18:48:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bp4mJcC9PMhcw5y+WqTlQnnOavYlE/Bb079QNbmAgQM=;
-        b=LHVswaHAenoYlpIexQbcoC0/+grtt9LKi1E2jo2Smg96sXIVFZrhjIPEKE3SV9911N
-         wNdc74AHhTtYGy+150UerhwqQfxU8vcLRJu7bLw9+aDfuAJ6XvR+VyLFCVCyC7TwnDI2
-         bgHUBS5bKMGP6z+rxAmpSUnS01bwNM94hdA/ZeBRvuQo462rT2enhiS6tgLaJFNCwS2H
-         inqtf9GQ6YaQESyBEqHjBuWo2dW9ThKPxMVAVBJsJNF+kpC5yYtwK/x9zQqCSpzPUO9q
-         p8v7rx03LfWYbw9YI6L+aYlbE9ii0pEk0UO/TdKj3WcupF5y+5Zu4LjlimUVPj0iwKXN
-         TCaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bp4mJcC9PMhcw5y+WqTlQnnOavYlE/Bb079QNbmAgQM=;
-        b=JU1k8bYEOgphYQW6c/AKxp+5zhGTM6F6luQW65jmdXnfvfV8ZV2t+1OmBksSbBbyji
-         TUjpGCuaCGVIXcNUEwXLG+NI1teyfN4Ng+38RgYQN2uwm4ukHae+Iev8b4Ct93eXEsTE
-         jgq7BCkRMqby+zy71auvLkVUVcljZvneezUAK1mCfSPKJzQq0RW7rPmcxvNMAbJ6LQjd
-         8zdR3WUya7di7Y1InHlM4xqlx/oEWYxqoo0GzNBwJiBL2NIZ0C0Aul8Xo/dRmz69Qocf
-         RmHsWO2QSAkhThOmKcuQ+dPBm6XOnwCXjhHbdiiI0cHGq9p7RnrX9LSJ+Omdt2pgrynC
-         Ey3w==
-X-Gm-Message-State: AOAM531m+51F8TOJWq74K5EuMxCtnaVly1HeBUIagHcU6mtuFf/JiWzl
-        JB3VV7LqGx5FhxVDCPZWVJEvAg==
-X-Google-Smtp-Source: ABdhPJwVIUbHBSxAxf+YyCqW+lxjYugM/kd0pbnjEn43+haD/CSalZJ/qLW0CpPT2viRXgsA/WVzcg==
-X-Received: by 2002:a17:90b:496:: with SMTP id bh22mr2597127pjb.120.1604976487671;
-        Mon, 09 Nov 2020 18:48:07 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id k5sm905648pjj.37.2020.11.09.18.48.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Nov 2020 18:48:06 -0800 (PST)
-Date:   Tue, 10 Nov 2020 08:18:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: Re: [PATCH v2 4/4] cpufreq: intel_pstate: Take
- CPUFREQ_GOV_FLAG_STRICT_TARGET into account
-Message-ID: <20201110024804.j6wrzq7bne7pmwzv@vireshk-i7>
-References: <13269660.K2JYd4sGFX@kreacher>
- <2345253.LYi3vV7ftd@kreacher>
+        id S1729661AbgKJCwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 21:52:18 -0500
+Received: from smtprelay0242.hostedemail.com ([216.40.44.242]:52914 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727311AbgKJCwS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 21:52:18 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id F008012CB;
+        Tue, 10 Nov 2020 02:52:13 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1261:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3870:4321:4605:5007:6117:6119:6742:6743:7652:7875:7903:8660:10004:10400:10848:11232:11658:11783:11914:12043:12048:12297:12679:12740:12895:13019:13069:13148:13230:13311:13357:13439:13894:14181:14659:14721:21080:21451:21627:21939:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: ink22_1714ef1272f1
+X-Filterd-Recvd-Size: 2439
+Received: from [192.168.0.160] (cpe-72-134-80-165.natsow.res.rr.com [72.134.80.165])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 10 Nov 2020 02:52:09 +0000 (UTC)
+Message-ID: <3c39c363690d0b46069afddc3ad09213011e5cd4.camel@perches.com>
+Subject: Re: Subject: [RFC] clang tooling cleanups
+From:   Joe Perches <joe@perches.com>
+To:     trix@redhat.com, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com, cocci <cocci@systeme.lip6.fr>
+Cc:     linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        qat-linux@intel.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Date:   Mon, 09 Nov 2020 18:52:08 -0800
+In-Reply-To: <20201027164255.1573301-1-trix@redhat.com>
+References: <20201027164255.1573301-1-trix@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2345253.LYi3vV7ftd@kreacher>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-11-20, 17:55, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, 2020-10-27 at 09:42 -0700, trix@redhat.com wrote:
+> This rfc will describe
+> An upcoming treewide cleanup.
+> How clang tooling was used to programatically do the clean up.
+> Solicit opinions on how to generally use clang tooling.
 > 
-> Make intel_pstate take the new CPUFREQ_GOV_FLAG_STRICT_TARGET
-> governor flag into account when it operates in the passive mode with
-> HWP enabled, so as to fix the "powersave" governor behavior in that
-> case (currently, HWP is allowed to scale the performance all the way
-> up to the policy max limit when the "powersave" governor is used,
-> but it should be constrained to the policy min limit then).
+> The clang warning -Wextra-semi-stmt produces about 10k warnings.
+> Reviewing these, a subset of semicolon after a switch looks safe to
+> fix all the time.  An example problem
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/intel_pstate.c |   16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+> void foo(int a) {
+>      switch(a) {
+>      	       case 1:
+> 	       ...
+>      }; <--- extra semicolon
+> }
 > 
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -2527,7 +2527,7 @@ static void intel_cpufreq_trace(struct c
->  }
->  
->  static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pstate,
-> -				     bool fast_switch)
-> +				     bool strict, bool fast_switch)
->  {
->  	u64 prev = READ_ONCE(cpu->hwp_req_cached), value = prev;
->  
-> @@ -2539,7 +2539,7 @@ static void intel_cpufreq_adjust_hwp(str
->  	 * field in it, so opportunistically update the max too if needed.
->  	 */
->  	value &= ~HWP_MAX_PERF(~0L);
-> -	value |= HWP_MAX_PERF(cpu->max_perf_ratio);
-> +	value |= HWP_MAX_PERF(strict ? target_pstate : cpu->max_perf_ratio);
->  
->  	if (value == prev)
->  		return;
-> @@ -2562,14 +2562,16 @@ static void intel_cpufreq_adjust_perf_ct
->  			      pstate_funcs.get_val(cpu, target_pstate));
->  }
->  
-> -static int intel_cpufreq_update_pstate(struct cpudata *cpu, int target_pstate,
-> -				       bool fast_switch)
-> +static int intel_cpufreq_update_pstate(struct cpufreq_policy *policy,
-> +				       int target_pstate, bool fast_switch)
->  {
-> +	struct cpudata *cpu = all_cpu_data[policy->cpu];
->  	int old_pstate = cpu->pstate.current_pstate;
->  
->  	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
->  	if (hwp_active) {
-> -		intel_cpufreq_adjust_hwp(cpu, target_pstate, fast_switch);
-> +		intel_cpufreq_adjust_hwp(cpu, target_pstate,
-> +					 policy->strict_target, fast_switch);
->  		cpu->pstate.current_pstate = target_pstate;
->  	} else if (target_pstate != old_pstate) {
->  		intel_cpufreq_adjust_perf_ctl(cpu, target_pstate, fast_switch);
-> @@ -2609,7 +2611,7 @@ static int intel_cpufreq_target(struct c
->  		break;
->  	}
->  
-> -	target_pstate = intel_cpufreq_update_pstate(cpu, target_pstate, false);
-> +	target_pstate = intel_cpufreq_update_pstate(policy, target_pstate, false);
->  
->  	freqs.new = target_pstate * cpu->pstate.scaling;
->  
-> @@ -2628,7 +2630,7 @@ static unsigned int intel_cpufreq_fast_s
->  
->  	target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
->  
-> -	target_pstate = intel_cpufreq_update_pstate(cpu, target_pstate, true);
-> +	target_pstate = intel_cpufreq_update_pstate(policy, target_pstate, true);
->  
->  	return target_pstate * cpu->pstate.scaling;
->  }
+> Treewide, there are about 100 problems in 50 files for x86_64 allyesconfig.
+> These fixes will be the upcoming cleanup.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+coccinelle already does some of these.
 
--- 
-viresh
+For instance: scripts/coccinelle/misc/semicolon.cocci
+
+Perhaps some tool coordination can be done here as
+coccinelle/checkpatch/clang/Lindent call all be used
+to do some facet or another of these cleanup issues.
+
+
+
