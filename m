@@ -2,117 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4123E2AC64F
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Nov 2020 21:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E932AC9A9
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Nov 2020 01:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729499AbgKIUwF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Nov 2020 15:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
+        id S1729336AbgKJAYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Nov 2020 19:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgKIUwF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 15:52:05 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EBEC0613CF
-        for <linux-pm@vger.kernel.org>; Mon,  9 Nov 2020 12:52:04 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id cp9so1884949plb.1
-        for <linux-pm@vger.kernel.org>; Mon, 09 Nov 2020 12:52:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=HCEygShikjcn0mo9rIjurrhdSWLZkxQTDAX5H2JQzBg=;
-        b=uqc3R/ybpsAfJWbbhmO7WXc/8gbSmxK2CUUYpwmnEXFmpBWxAmyZU6lQFpxeEKfujj
-         Scdo4la2+Q165h+rN6e1LwW22vYlvxYTetXmME2OIFwm+Q23lwpAPeWlXA6SRIAKY3xB
-         +R4aAklHnyCRSWNI22PmJpyFdddqA3X1TVb/itOZQCegHeF/oW6Hrlisyr8XFJ9InPy1
-         Vspz49LgFLNMGId0BmbjOzI6yXP3B9GApalNAuqOSD8evmrrRSybgU9Sf3KdnPSqAcg8
-         KlPaI/5f+IsefdRG0UZYltka5Gm8sXKLKODaCqJwnkDfQVJC8yvNbfg/bsuI3aFB+NPQ
-         qeCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=HCEygShikjcn0mo9rIjurrhdSWLZkxQTDAX5H2JQzBg=;
-        b=AYkXivwKmYTSI7URSlFJFjFgnnDbXylWdr3cdnZ8PHFCzYM5g2FRF9N5M9Hvd1Fsur
-         HKcFZGp5TzONzYk8CESAfphZjaZUyYeFFvLlHTadH+NII6oAyHw6qUJ2kJMiht2mKueY
-         KnN6gRokZel0AaOE/tjq1/lDWleaapz3+W14RXLRPLHwTxwOXAZPtIaFcRlbok5Zs6fk
-         ul65MsB6NldkLdUWt/zsk3xa5mipcQ2M5/fA16RPSDdMHe9pa+MCGMc5K8b+ehzIu5wG
-         d61MoZCFLz8orWvIASqizQgUw0QJVkZRDQlGxr03ssjyxMSVIYT3U1TKmJg7zxi9g6so
-         IArg==
-X-Gm-Message-State: AOAM531nEdiMNDScii+hqzgH+g6VxD8cFSLgHvvfm6R/WZ7EECtGEcIX
-        Uj9WfZ9g0BMesC4SatN/E9o7GvUrlKcePA==
-X-Google-Smtp-Source: ABdhPJxkYiVnJomrlS2hVTuuJKTq8Z23x1D9FXI4E70WNpOfgrG4s7ddUYlAAWYjh3a57iRw66HbrA==
-X-Received: by 2002:a17:902:7049:b029:d7:e413:8aba with SMTP id h9-20020a1709027049b02900d7e4138abamr4963387plt.30.1604955124565;
-        Mon, 09 Nov 2020 12:52:04 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e81sm12085920pfh.104.2020.11.09.12.52.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 12:52:03 -0800 (PST)
-Message-ID: <5fa9abf3.1c69fb81.d1be3.a010@mx.google.com>
-Date:   Mon, 09 Nov 2020 12:52:03 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1727311AbgKJAYJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Nov 2020 19:24:09 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FDBC0613CF;
+        Mon,  9 Nov 2020 16:24:08 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CVTBB2zRGz9s1l;
+        Tue, 10 Nov 2020 11:24:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1604967844;
+        bh=Ti1Sq57D7UTNDxlGQA3Kpf+FaZhQzC6sbUa6johPKzc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JBuF+yb2xdeOf2t8gWMG2cePZJBghlvK/WWGXAyhTLjpqWs2sTPCkZL/808B2/TEA
+         ftQlr3ktff3k8YsS9qs+4ApFJhzPafa/EB6u/klViBowyAI/TXSR4+RK0L3Vj36sFC
+         IfXIH5txbptUGz2Xg+dNPuA6iRPOIH77J5fy+VOStIkezpV52l9jK2oWcYF1KPlfNC
+         DdKxcK1TV+LN6ujhA0HaDR9Ql4HZo2IQXDYGTOoD10HVn+YGXRm1lVCXlbFEuQme26
+         GC2URNOP9A1FYTWT2GpWJx7aN1K+VQ7qYdgv369GjN9UxohmyENq9mUBLnCbjHvkgs
+         WvsvJqkG5//GA==
+Date:   Tue, 10 Nov 2020 11:23:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Taniya Das <tdas@codeaurora.org>, linux-next@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH -next v2] clk: pm_clock: provide stubs for
+ pm_clk_runtime_suspend/_resume
+Message-ID: <20201110112358.7534075f@canb.auug.org.au>
+In-Reply-To: <20201109032115.10610-1-rdunlap@infradead.org>
+References: <20201109032115.10610-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.10-rc3-14-g103ceda28388
-Subject: pm/testing sleep: 4 runs, 1 regressions (v5.10-rc3-14-g103ceda28388)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/kVA7201z7YABmbVZ.11D5.l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 1 regressions (v5.10-rc3-14-g103ceda28388)
+--Sig_/kVA7201z7YABmbVZ.11D5.l
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+On Sun,  8 Nov 2020 19:21:15 -0800 Randy Dunlap <rdunlap@infradead.org> wro=
+te:
+>
+> Add stubs for pm_clk_runtime_suspend() and pm_clk_runtime_resume()
+> to fix build errors when CONFIG_PM and CONFIG_PM_CLK are not enabled.
+>=20
+> Fixes these build errors:
+>=20
+> ../drivers/clk/qcom/camcc-sc7180.c: In function =E2=80=98cam_cc_sc7180_pr=
+obe=E2=80=99:
+> ../drivers/clk/qcom/camcc-sc7180.c:1672:8: error: implicit declaration of=
+ function =E2=80=98pm_clk_runtime_resume=E2=80=99; did you mean =E2=80=98pm=
+_runtime_resume=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+>   ret =3D pm_clk_runtime_resume(&pdev->dev);
+>         ^~~~~~~~~~~~~~~~~~~~~
+> ../drivers/clk/qcom/camcc-sc7180.c:1681:3: error: implicit declaration of=
+ function =E2=80=98pm_clk_runtime_suspend=E2=80=99; did you mean =E2=80=98p=
+m_runtime_suspend=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+>    pm_clk_runtime_suspend(&pdev->dev);
+>    ^~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller drive=
+r for SC7180")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: Taniya Das <tdas@codeaurora.org>
+> Cc: linux-next@vger.kernel.org
+> Cc: Nathan Chancellor <natechancellor@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+> v2: move the function stubs to be inside the #else (for !CONFIG_PM)
+>     as suggested by Nathan to fix another build error
+>=20
+>  include/linux/pm_clock.h |    8 ++++++++
+>  1 file changed, 8 insertions(+)
 
+I have added this to the merge of to clk tree in linux-next today
+(pending it being added to the clk tree itself).
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
-3-14-g103ceda28388/plan/sleep/
+--=20
+Cheers,
+Stephen Rothwell
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.10-rc3-14-g103ceda28388
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      103ceda2838877c8a62f904e886f7ca11a3bb1c1 =
+--Sig_/kVA7201z7YABmbVZ.11D5.l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+p3Z4ACgkQAVBC80lX
+0GylrggAgWLtxVpvAT6XbNbAXqfr2ATTEcubuM8h7Tueti77AlQlAh99RWqKHHAI
+lS05MrkjXe9XPYEI8kPkhph+/LSFhmRezQc6KsH7Y5E8uNZL/4k474A4Z6Cz2uE+
+SL+1M1BDRONkfD9l5cuDdqEhwHLZzgZ8vQdfus5+9RnprRMV3PtqW1FTFZUsjXBd
+H37vt4K6ZTJvgPB+7XH6+FPFBeVsqnVilx8IYK/2G12yWN7Gb4eZIUGoZbMGXzCf
+M63Gm+bpVPcuRWV/PboK/FeVUyJ8mjldjMwCjUxJPGJgVoO6gyJuFCuf2ivMoYrh
+wbU5dOw3Ka3fUA3OiTQkI3/pGv7MaA==
+=qN6g
+-----END PGP SIGNATURE-----
 
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fa99f9c3cf514c195db8854
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc3-14-g103ce=
-da28388/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc3-14-g103ce=
-da28388/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-1105.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5fa99f9c3cf514c195db8855
-        failing since 82 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
-l: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+--Sig_/kVA7201z7YABmbVZ.11D5.l--
