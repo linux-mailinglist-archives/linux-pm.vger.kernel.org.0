@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E055E2AE589
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 02:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08092AE58F
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 02:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732868AbgKKBPv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 20:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S1732717AbgKKBQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 20:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732844AbgKKBPu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 20:15:50 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE28FC0613D1;
-        Tue, 10 Nov 2020 17:15:48 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id c9so519367wml.5;
-        Tue, 10 Nov 2020 17:15:48 -0800 (PST)
+        with ESMTP id S1732861AbgKKBPv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 20:15:51 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4FDC0613D3;
+        Tue, 10 Nov 2020 17:15:50 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id r17so759153wrw.1;
+        Tue, 10 Nov 2020 17:15:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pLbRWZodAWHryje7XdgngwZooRzE7B+sWeFpLwWIFLg=;
-        b=L2nGyd1hoSYca71deEj6QrNwd1Mfe1ynvvNfAPZdbM0r3u8YjBetM0GAj0Yl8apMh2
-         ArJr0wlVHFXCXwooBpJ48JzrG+pss1VD+jcfPwqLPiPIuwYy4N+yjANNoEXQaNAsHPLh
-         ib7I/uDe9pCkid7o0VliV55R7Q4LYwc2NfPDhCSFh0KFCaAZgqyYpfqjRrj7F43esTrT
-         75SY10Eg2eJkEDzrqsp4tLAp1hRYN2nOsZNuK94+x3Ei7MbSi4ijzewbyhPpVezLia63
-         MVUrELU7H7JO1oKotzWtxKLF/MhcpbGjWd7OFx0wnWSTWuUv4602iO04zgMmX1yz5Hic
-         vZiA==
+        bh=70AwH8cNmd6w58ds7pz1XboJoFvv7hESZcajbSOVJ0Y=;
+        b=c427F4P7nuBAI/UQwiYvu+O7DzW7XS2fssHniUEdNZb7OtBothsXZtTnvGeaODMdb0
+         0OIexDzNgl8PBCaqXcZji9LtqBuX5ivbFrtiwGZ6e3PYOKZpjsDCbjj+PEU3pN1ff4IF
+         HjwSc9gvvdryoJ4dp48TDgGEwNZkeM0e/2om2P+3UKDmSPYc3ea9msD4FFj1y+Ae9wlt
+         Xf7r6hwmg1Mejy0Nl9bTAXzGmib9M0ynBVrWEqZLnuWh4rVze9yK6g8EOeSzqDRzUQsv
+         AVLBnqk2VjJnz2iTwwXpFwxxiltSTVUS47fE1yNKWiCXYzrx7eKgXa2UbRjTFwbKweH9
+         7CpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pLbRWZodAWHryje7XdgngwZooRzE7B+sWeFpLwWIFLg=;
-        b=aYZSmy2AiMOYOGXjyJT763lNXMvao2YjLdXtvOhWASErH2iE3jAln57NHmdOFxNwXd
-         OYspmBtCrFMBFMmhOvaJTSlsFb7AJXbJaPBoff2Io7E6MxGVJytaHxf+tNabBWJE9GCm
-         qj5ohEgFgdf12ShGWmTyOMENfNN4kLD5jwJ9/SU6xFgt+DWyRyC1PX8BPfMN3bHM4K73
-         bhfhQpPbkdUCdKL+oQSCy6tUL9PbmA6wedbvozGS/yc3B3IcKELX/EjxohArdvAkpYr0
-         1RRnatuC5OjlF/DCbnwiGbon55uvOR7WNNZ/FAVd/M+C9tktbE6bsodrQ0H3hNP5zgGZ
-         yt9A==
-X-Gm-Message-State: AOAM5315M0yE/8xAqgBsJS+lwqqb0UQ/BRNB8GOfUTrzZsuglTEDupPa
-        a78cEp9xO1Cat0KR3ci4HLo=
-X-Google-Smtp-Source: ABdhPJzERI9IUMPDNlGr8X9mBk7KyFjpvv1wNzeOj81e8oT8e6EKe6MSqWpz1EQDoUwz4RNFe2LdAg==
-X-Received: by 2002:a7b:cbc8:: with SMTP id n8mr936438wmi.124.1605057347455;
-        Tue, 10 Nov 2020 17:15:47 -0800 (PST)
+        bh=70AwH8cNmd6w58ds7pz1XboJoFvv7hESZcajbSOVJ0Y=;
+        b=I72qLN0wS36hxoskiW9dZQUtkuaJ199BvTW78a7eltXCTpF6aNGchQThduKu00T6B5
+         EVEb7OF8QM1bwQsiCi9CtBo9nr7gBIcuaYNDETgTvRSsWPjJWp5bl8mBqv8JEFCdkCLc
+         GKxst9hkneK3IEVpYlNIl4GVK0fnT/4QvfbHknfqi4JcxBbFcyA3yNdYmQtivkbyGcEe
+         nHm01paIvyO7THgbu3ctVjYu0nr9fZ/yxVsix01nmnm23r2bEe6i78dzerDlIloKZ/wN
+         8U5Q51R5t0jaUFWMxW+YC1DrlJetan7RTZ7HhfV6K4H9QtP+iXuTP45OvUTOPzib10p6
+         dpsA==
+X-Gm-Message-State: AOAM533TvV98I5D1/LaI2rA7MpoFXT0tl99Cdz9I6q5E5IODszzj/tIh
+        cFsyYevk1lNNtLdFmNaJUkc=
+X-Google-Smtp-Source: ABdhPJwz1Mh0V9SDzyrUU21ceD6qnKETJJkRJqebGKi9J5nanHyy0k9Qlal7/vO4D/QNpOdcfnvXUA==
+X-Received: by 2002:adf:e287:: with SMTP id v7mr27464179wri.252.1605057349373;
+        Tue, 10 Nov 2020 17:15:49 -0800 (PST)
 Received: from localhost.localdomain (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.gmail.com with ESMTPSA id g131sm564329wma.35.2020.11.10.17.15.45
+        by smtp.gmail.com with ESMTPSA id g131sm564329wma.35.2020.11.10.17.15.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2020 17:15:46 -0800 (PST)
+        Tue, 10 Nov 2020 17:15:48 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -65,9 +65,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v8 22/26] ARM: tegra: Add interconnect properties to Tegra124 device-tree
-Date:   Wed, 11 Nov 2020 04:14:52 +0300
-Message-Id: <20201111011456.7875-23-digetx@gmail.com>
+Subject: [PATCH v8 23/26] ARM: tegra: Add nvidia,memory-controller phandle to Tegra20 EMC device-tree
+Date:   Wed, 11 Nov 2020 04:14:53 +0300
+Message-Id: <20201111011456.7875-24-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201111011456.7875-1-digetx@gmail.com>
 References: <20201111011456.7875-1-digetx@gmail.com>
@@ -77,72 +77,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add interconnect properties to the Memory Controller, External Memory
-Controller and the Display Controller nodes in order to describe hardware
-interconnection.
+Add nvidia,memory-controller to the Tegra20 External Memory Controller
+node. This allows to perform a direct lookup of the Memory Controller
+instead of walking up the whole tree. This puts Tegra20 device-tree on
+par with Tegra30+.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra124.dtsi | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ arch/arm/boot/dts/tegra20.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra124.dtsi b/arch/arm/boot/dts/tegra124.dtsi
-index 64f488ba1e72..1801e30b1d3a 100644
---- a/arch/arm/boot/dts/tegra124.dtsi
-+++ b/arch/arm/boot/dts/tegra124.dtsi
-@@ -113,6 +113,19 @@ dc@54200000 {
- 			iommus = <&mc TEGRA_SWGROUP_DC>;
- 
- 			nvidia,head = <0>;
+diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
+index 2e1304493f7d..8f8ad81916e7 100644
+--- a/arch/arm/boot/dts/tegra20.dtsi
++++ b/arch/arm/boot/dts/tegra20.dtsi
+@@ -663,6 +663,8 @@ emc: memory-controller@7000f400 {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 		#interconnect-cells = <0>;
 +
-+			interconnects = <&mc TEGRA124_MC_DISPLAY0A &emc>,
-+					<&mc TEGRA124_MC_DISPLAY0B &emc>,
-+					<&mc TEGRA124_MC_DISPLAY0C &emc>,
-+					<&mc TEGRA124_MC_DISPLAYHC &emc>,
-+					<&mc TEGRA124_MC_DISPLAYD &emc>,
-+					<&mc TEGRA124_MC_DISPLAYT &emc>;
-+			interconnect-names = "wina",
-+					     "winb",
-+					     "winc",
-+					     "cursor",
-+					     "wind",
-+					     "wint";
- 		};
- 
- 		dc@54240000 {
-@@ -127,6 +140,15 @@ dc@54240000 {
- 			iommus = <&mc TEGRA_SWGROUP_DCB>;
- 
- 			nvidia,head = <1>;
-+
-+			interconnects = <&mc TEGRA124_MC_DISPLAY0AB &emc>,
-+					<&mc TEGRA124_MC_DISPLAY0BB &emc>,
-+					<&mc TEGRA124_MC_DISPLAY0CB &emc>,
-+					<&mc TEGRA124_MC_DISPLAYHCB &emc>;
-+			interconnect-names = "wina",
-+					     "winb",
-+					     "winc",
-+					     "cursor";
- 		};
- 
- 		hdmi: hdmi@54280000 {
-@@ -628,6 +650,7 @@ mc: memory-controller@70019000 {
- 
- 		#iommu-cells = <1>;
- 		#reset-cells = <1>;
-+		#interconnect-cells = <1>;
++		nvidia,memory-controller = <&mc>;
  	};
  
- 	emc: external-memory-controller@7001b000 {
-@@ -637,6 +660,8 @@ emc: external-memory-controller@7001b000 {
- 		clock-names = "emc";
- 
- 		nvidia,memory-controller = <&mc>;
-+
-+		#interconnect-cells = <0>;
- 	};
- 
- 	sata@70020000 {
+ 	fuse@7000f800 {
 -- 
 2.29.2
 
