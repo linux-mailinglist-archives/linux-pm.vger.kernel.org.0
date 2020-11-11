@@ -2,117 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7E62AE6BA
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 04:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4FF2AE777
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 05:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgKKDBc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Nov 2020 22:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S1725828AbgKKEhI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Nov 2020 23:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbgKKDBc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 22:01:32 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28244C0613D1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 19:01:31 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id z24so515876pgk.3
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 19:01:31 -0800 (PST)
+        with ESMTP id S1725860AbgKKEhH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Nov 2020 23:37:07 -0500
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096B2C0613D1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 20:37:07 -0800 (PST)
+Received: by mail-ot1-x342.google.com with SMTP id i18so1022321ots.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 20:37:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=oJH/sevW+2dGwDLXNQp1WkALkE8Odl6i+qIiTAJ26Nk=;
-        b=eSgJVqe71sb77VJcW6sY5Rb4tjgagGSJzZCDTDeZarslX3I2cP5s57ZmMyqK1LFuQV
-         soqi5eM2LkVVhTiXqiHGo2rLu0/1FwGkeXkgZNjHvzWHibN+Stcn2Gcfi0mZTuwPYEAc
-         Q/JoGc1liIvkRRhXePs0aPjfW8I32T3NMNHZoaJF5TwVEvW5HgDOEAY60u57LgyDgFiz
-         LGDwfIfnyPNvHxPI9o497qIphHC6QUr1xe7G3ejlSXoi1l3q0U0Ku6g0s6J3mf7TJOpE
-         ONtSJk9M5qB8XZqjLm9RTH3J5H0iyX98YO7S+ELyla9+ZdwAjD4liDO3nAg/0vCgOxZQ
-         rWOQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wtRRfw0GGRgIk6DDEU0mXolpp59u7naaEBZyd5qGF2U=;
+        b=xlTOkurB5YeEXxXJYwdzWWnWGVdRKFL+/QSqpRjK7kqPhjPRjtAdgOuOy7y0ajwdbY
+         q2pr8/fk7xycu/XtHoSYrXEwhaqH+VxSeRVmDpcVws/pU5YWRHVuUOomnOFtopHO8XAi
+         crw9vKedvw7QXx7NqtN12QnjtxoVu/n7yv6oPg6R6Fr1vuEJNwdRLu4M5dE2rTyrwt91
+         uN0eAHLJb/HaSHheYhpZ3wP5WEx9Xh1o3yt7HoqYBtHKB9pIUJzP/BEdw7pWqi/5nbuc
+         njil6Z6itA/BjYomU2YMYtcQlZorvkU2BvOeldM0Ru5KkZggzn97iOKTMx3Y5A8wZbCy
+         BUaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=oJH/sevW+2dGwDLXNQp1WkALkE8Odl6i+qIiTAJ26Nk=;
-        b=f7g8wspe8nIPRuuIPZusd+7CVGydEmFqwdwPZOAYayCA1IVuFbBEs54v27p+ymdTqy
-         PIYkdRWzPi93w92cL10JOvEioBUF5uFuu/CH7nJT5t/pZoqGUNpdE07dsaDF0EkjQfOz
-         DGdrNLjZdf0UD20H8NcshUJbusVh2CpsTBrMj0EK6je3NhWLuc7IuYn50S09m9mE5KLW
-         9KGJsHbuFAKzzVVlGSVNTDpOPC6xgxPhRFXbbpLhgzgLzofn1s1xzHwFEnLmxVHHg5at
-         +szHRqJf86clgt+ajj1g0mdHeuSpRh/a5Ui1nVu7eBEJ6cHC/OgC+GXj1E/4iPva7GTX
-         6dyg==
-X-Gm-Message-State: AOAM5309H7RxbBbmtIRjzkuA3XTNU+0k8VCM2ql6Rd0uc25fUqbr8jBV
-        tw7aYVK2jrNFqrCZ+/GI1rrjlA==
-X-Google-Smtp-Source: ABdhPJx0Spy1oPYSfezw8LaT7DvUG5fj3RytFu4NLazmyqxj4kLWy90zlaRuHQ4/G1kqhKBjUrLFxg==
-X-Received: by 2002:a17:90a:7522:: with SMTP id q31mr1599527pjk.158.1605063690721;
-        Tue, 10 Nov 2020 19:01:30 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t19sm360156pgv.37.2020.11.10.19.01.29
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wtRRfw0GGRgIk6DDEU0mXolpp59u7naaEBZyd5qGF2U=;
+        b=oQJtrSjcurEyYGxRTv9o8yIwGggdhHUMPMmbqg/8Bl4EtZJUydOy41X4+DRl5OOev3
+         CxfeNx4RBxEwnT8fnj3KZ7Nh1Hd9e0QFgUa1MzgcVp78lJVp4du8KfhLiMc139PwPpHo
+         7NEh7F4PRuw1lIZhBkqEtOB0aatVsFeYDMD/VM23BH7j34+Bz9hKiOiubB/oya3Yx19k
+         jhJY5BaaQAKibS/TWFcDRWGKbEj0jI2FANQhUq45pT6RbMHmhPayS5Z4On/YKi3+sDQX
+         QU4VRoYuFS9wfYhk1KlDqUpPvkK/TGsFY1GsqizuLF+iPl+av00uQq4sjFweDIXLqq+K
+         k3vA==
+X-Gm-Message-State: AOAM532+NRvATee2njM3tgDJoim3jDcW19Kbp1QF5R1wgiDsF5VmWnf1
+        r3W9KkV6tGEXCkRiqrMpQsv3XQ==
+X-Google-Smtp-Source: ABdhPJwiAIhYvzEwIJux++i3YzohINChUujNLTtyHYZqqNmnQb6ngqeDoBJonNmEpksoYLzQCmJSEw==
+X-Received: by 2002:a9d:17c5:: with SMTP id j63mr17519584otj.9.1605069426410;
+        Tue, 10 Nov 2020 20:37:06 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id e63sm4819oib.48.2020.11.10.20.37.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2020 19:01:30 -0800 (PST)
-Message-ID: <5fab540a.1c69fb81.73c59.1861@mx.google.com>
-Date:   Tue, 10 Nov 2020 19:01:30 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 Nov 2020 20:37:05 -0800 (PST)
+Date:   Tue, 10 Nov 2020 22:37:03 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, mdtipton@codeaurora.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        akashast@codeaurora.org
+Subject: Re: [PATCH 2/3] interconnect: qcom: sdm845: Add the missing nodes
+ for QUP
+Message-ID: <20201111043703.GA173948@builder.lan>
+References: <20201105135211.7160-1-georgi.djakov@linaro.org>
+ <20201105135211.7160-2-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.10-rc3-25-gfc4b18739b23
-Subject: pm/testing sleep: 3 runs, 1 regressions (v5.10-rc3-25-gfc4b18739b23)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201105135211.7160-2-georgi.djakov@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 3 runs, 1 regressions (v5.10-rc3-25-gfc4b18739b23)
+On Thu 05 Nov 07:52 CST 2020, Georgi Djakov wrote:
 
-Regressions Summary
--------------------
+> The QUP nodes are currently defined just as entries in the topology,
+> but they are not referenced by any of the NoCs. Let's fix this and
+> "attach" them to their NoCs, so that the QUP drivers are able to use
+> them as path endpoints and scale their bandwidth.
+> 
+> This is based on the information from the downstream msm-4.9 kernel.
+> 
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
-3-25-gfc4b18739b23/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.10-rc3-25-gfc4b18739b23
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      fc4b18739b234869e8ee6c499ed8b69e3281a262 =
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
 
+Georgi, would you mind if I take the series through my tree, to avoid
+conflicts in sdm845.dtsi?
 
-Test Regressions
----------------- =
+Regards,
+Bjorn
 
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fab47ac80fd86375edb8872
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc3-25-gfc4b1=
-8739b23/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc3-25-gfc4b1=
-8739b23/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-1105.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5fab47ac80fd86375edb8873
-        failing since 83 days (last pass: v5.8-107-gb72b3ea38c81, first fai=
-l: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+> ---
+>  drivers/interconnect/qcom/sdm845.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
+> index 5304aea3b058..366870150cbd 100644
+> --- a/drivers/interconnect/qcom/sdm845.c
+> +++ b/drivers/interconnect/qcom/sdm845.c
+> @@ -177,6 +177,7 @@ DEFINE_QBCM(bcm_sn15, "SN15", false, &qnm_memnoc);
+>  
+>  static struct qcom_icc_bcm *aggre1_noc_bcms[] = {
+>  	&bcm_sn9,
+> +	&bcm_qup0,
+>  };
+>  
+>  static struct qcom_icc_node *aggre1_noc_nodes[] = {
+> @@ -190,6 +191,7 @@ static struct qcom_icc_node *aggre1_noc_nodes[] = {
+>  	[SLAVE_A1NOC_SNOC] = &qns_a1noc_snoc,
+>  	[SLAVE_SERVICE_A1NOC] = &srvc_aggre1_noc,
+>  	[SLAVE_ANOC_PCIE_A1NOC_SNOC] = &qns_pcie_a1noc_snoc,
+> +	[MASTER_QUP_1] = &qhm_qup1,
+>  };
+>  
+>  static const struct qcom_icc_desc sdm845_aggre1_noc = {
+> @@ -218,6 +220,7 @@ static struct qcom_icc_node *aggre2_noc_nodes[] = {
+>  	[SLAVE_A2NOC_SNOC] = &qns_a2noc_snoc,
+>  	[SLAVE_ANOC_PCIE_SNOC] = &qns_pcie_snoc,
+>  	[SLAVE_SERVICE_A2NOC] = &srvc_aggre2_noc,
+> +	[MASTER_QUP_2] = &qhm_qup2,
+>  };
+>  
+>  static const struct qcom_icc_desc sdm845_aggre2_noc = {
