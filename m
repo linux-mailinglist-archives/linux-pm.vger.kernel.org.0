@@ -2,182 +2,247 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F832AF5B5
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 17:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D442AF6FB
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 17:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727379AbgKKQDm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Nov 2020 11:03:42 -0500
-Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:37856 "EHLO
-        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726204AbgKKQDl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 11:03:41 -0500
-Received: from pps.filterd (m0170390.ppops.net [127.0.0.1])
-        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ABG1hlB028255;
-        Wed, 11 Nov 2020 11:03:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=GnCb6aw6IYi3z43+NaWnlRB6Sp49QWSwyOmj4/e76PA=;
- b=O2p4TTOhLRcakcF7/EB4qMMuWRehinysJEDPC83DVJ7MLBKHEICvonay35bR3m38Bp7L
- eNMGOVbfIXzHTywvSDZN7gUzpcCgXNh7N85U5gUeYz6RwFMQJUqkJiux8BUOZl+iCREc
- tYzgbBGmLg8mhYgqPrpT3zwwgdEg6L55zfrC6tfQn6ts58Zuznoii2O366QJdJqBlr4J
- HPqygdR4F3PkFQWMTyWHKLKxQZZb7PnOtau49ukMv5toJMxSa+W5q+QKOWsp6UaKAju2
- FZ21mu5yQyy7kWw/rHt8aUSb6oVeCJ7b0RJbZVpnWrjC3p8OOjTA7xLfNgKh2DCn/K9+ Bg== 
-Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
-        by mx0a-00154904.pphosted.com with ESMTP id 34nqh751mn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Nov 2020 11:03:32 -0500
-Received: from pps.filterd (m0142699.ppops.net [127.0.0.1])
-        by mx0a-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ABG0uoI085488;
-        Wed, 11 Nov 2020 11:03:32 -0500
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by mx0a-00154901.pphosted.com with ESMTP id 34qvdadkvf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Nov 2020 11:03:32 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fLJHyWd/ozQy1+Fe0z19k+49EOxZUX/O2bjWvQrtUW9BnlrpCOf+/Y1Pabu9pgB2qLvn06H0QYc6ftevqVhXrYRVW8rY2Owtu3qu5VB6qWJXep9l4wwbggunJU3lzNS8ZrpGvnp23ohv7QfqBaRM+2hN8PDq3oSnZIitCwPefHOZF5IIDFh4bp7TwplQJN4xI3eANNqYlU6hkDNO3feFT6saeOHRbxuNFXRKbbCDgUeM/bHS5IkhBdFyQQLArIdkDOkCi/j/k1Sbn6Me3209+haFSdvr+/RAk2sU+3dgRvjkGZn78UhQ/G+u6aLZn9DWDaBjY+reWj0CVfGP9nsMHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GnCb6aw6IYi3z43+NaWnlRB6Sp49QWSwyOmj4/e76PA=;
- b=RFHEdUBPhIROfknbM+b9Szve17v1OVmkifba2C2iQSyV7SDyFDfpqOrKt8jQ9M3JaCSyu04q/FGz+ohMUybG0f8cRhiwvcpFjD1ed/IKhUY8K1cSqZyWIZVgkoIr4uplmrS0ApLjFhVNMsGcpBu8gqtQDgKFwMfmupRQJnOUuY4T442xrW2BrE9MDbq4LDXs6PhdXUdJw6ppp4oj6FfOxuiru02iCPezw0cNPRrEWHQgFIr6/z0z1Ibz16Eb7TPJ2Z0d3P1kE8uvtusy7RhRTDiMp/CRm7qqXxOAEX/WgfKzJt1FtKOm1hwbOas/jxYfRvvDqGjDAfMp4l2fahZI7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dell.com; dmarc=pass action=none header.from=dell.com;
- dkim=pass header.d=dell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Dell.onmicrosoft.com;
- s=selector1-Dell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GnCb6aw6IYi3z43+NaWnlRB6Sp49QWSwyOmj4/e76PA=;
- b=Xeow7651TFTm4LQmiNZMYL6fj2BQl//3MacLvR5EpL0XKZwjfASm4i6kLc+ULVVx6b7DCLKBxWFSvs+S47bd3/aPxhrv/yLQNff+2ad8mgCHUCe9tF9+AiqLUJ25klktdIjOR4vDnD1o0e2FHBZ8V6B5xc67P1YdzeoZKHVm3GQ=
-Received: from DM6PR19MB2636.namprd19.prod.outlook.com (2603:10b6:5:15f::15)
- by DM6PR19MB2331.namprd19.prod.outlook.com (2603:10b6:5:c0::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Wed, 11 Nov
- 2020 16:03:30 +0000
-Received: from DM6PR19MB2636.namprd19.prod.outlook.com
- ([fe80::a8ff:e803:ee80:e59a]) by DM6PR19MB2636.namprd19.prod.outlook.com
- ([fe80::a8ff:e803:ee80:e59a%3]) with mapi id 15.20.3541.025; Wed, 11 Nov 2020
- 16:03:30 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@dell.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Bastien Nocera <hadess@hadess.net>,
+        id S1725979AbgKKQyz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Nov 2020 11:54:55 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:30709 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726216AbgKKQyy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 11 Nov 2020 11:54:54 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1605113694; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=O6OuMly3TJfbOBSpo9PbutFIcuKKSbbn6XrVvKQNwmg=; b=PPLt2ov7gEKx5jx6/YmHS5rzKRCzV7PgUE6yKBD4Rx8rWqbNTQrGl+VauHvPaZWD/5NOqC/C
+ Nz8QxzrtxAT26gxZ8g3zxvXqZCLZDpLDBJHlLjniAi7Z201uuqwXS3En2DRgYjAr24eWhrtW
+ ft+3hyirYKBzl56lAPGPEdL7ERY=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5fac1107d6d93bf0e9431e87 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 11 Nov 2020 16:27:51
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 94E1CC433FF; Wed, 11 Nov 2020 16:27:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 85ED7C433C9;
+        Wed, 11 Nov 2020 16:27:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 85ED7C433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+Date:   Wed, 11 Nov 2020 09:27:48 -0700
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: RE: How to enable auto-suspend by default
-Thread-Topic: How to enable auto-suspend by default
-Thread-Index: AQHWt1BE6l+LjsERUU+/FRV4X0h3ganBPDeAgABA9KCAACEegIABLmAAgABL7nA=
-Date:   Wed, 11 Nov 2020 16:03:30 +0000
-Message-ID: <DM6PR19MB26366008D59FC94D384A1E3BFAE80@DM6PR19MB2636.namprd19.prod.outlook.com>
-References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
- <X6p6ubTOoMPUPPXi@kroah.com>
- <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
- <20201110172517.GC2495@lahna.fi.intel.com>
- <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
-In-Reply-To: <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2020-11-11T16:03:17.9999739Z;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_ActionId=c6e39ea5-ff39-497e-bb04-96d171951d2b;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=Dell.com;
-x-originating-ip: [76.251.167.31]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0343d4c1-c3dd-40f2-8f55-08d8865b5573
-x-ms-traffictypediagnostic: DM6PR19MB2331:
-x-microsoft-antispam-prvs: <DM6PR19MB2331FE521AC8A592CFBEEF82FAE80@DM6PR19MB2331.namprd19.prod.outlook.com>
-x-exotenant: 2khUwGVqB6N9v58KS13ncyUmMJd8q4
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BLfUbzms7DHXNVZVAXFVd6RjRF1uXAW5cjcVlYhmLQ2yYOy8NuQxVTw0wTm7sDD/7f3lGSA/BVic9cQs/7vc876AdQ0hA7aJKRCJ/PlyFwsTuwpBG3AG/lGnRX5zIVrjv31+RiM5AmXej6H2E4ubg0/zsVgB6QJqasrTlSB4yAW4DbXnkD+d5xwT5RA/16MZHzgQZ2JCSSjWVaZJXNED4DV305H1nBNEvGp1Gv/vx5MPaFC7jfizR8cVVk4CvHb5bIQvhmoxkNDCGa5os3t5DNg05kAYB6ch1YDpG1yPNSoorVlK/Ib49twSKnxG2+3TroTLhS2T+451OUYVycwXCHi+Dvxj6Lsds6SLyiliBjyL+QnfEOPpNux9WHBKLXFMB8dJC2c0edACBkcSEYe6og==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR19MB2636.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(55016002)(33656002)(64756008)(66476007)(478600001)(4326008)(8676002)(76116006)(7696005)(66446008)(8936002)(66946007)(6506007)(186003)(9686003)(316002)(2906002)(66556008)(26005)(5660300002)(54906003)(83380400001)(71200400001)(52536014)(86362001)(966005)(786003)(110136005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: lk3mthtRb+Hqj1wVLX7qr7/+tlNCYw2JnUa4KQM6LainhO26tbfO7m1D+8esTX9Dg//K47RReKLWe7HGiDFqRcyfcaj6S0JJSEJidtnEef5ljf0/caXvcx907Mg9agj0oMIYi6d0CCsp0ZqNKqEU+kWy1dswZmJtynW4PpgmBrB/LSpHKNF1x0zvN+hMg3TFVhjAf7nh4IWi6vOQqEIDzQVX3YrR8CGZSe4LEdHwvxcXX0Vk1k4VHJ+zcF0/6h6FmVZlmM753RKRaaA28SnIK8aIvO7efWRJU9Q+eFCQi5PxTq1ljVq20eUZzO2bf6LkM2ePCjIrAB1GrHvHQr8U02H6EWH4k6+BUbvH/GWHJHjnnJrHYDQ1lhvkCAWDxsVxeFHksEiRFtD18aHKFClEMdq94c2fU7evIrjRwSwkB1nbamLStg8MsFJ31K/swWP8hCnDZZu7tmOyw19IUWjlpB0CsAGMw+i9WPSjlL6262n6xUkJ3Jn8QMiHAZ1muPxz5J/n7L8AEvsLAQsMiH4ZDZWlvU+KaUktgiImZbnkM4k+7qXt/+VlnRp3zDC235GZEEMzIkja+KnEPhkIwWn9yq9yivi/7KleyYy2IDe3VjzFfyl60EuS533wL7/m4i3VIS9Zk4jBWoY/vOtUVV0Q4A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/2] PM / Domains: use device's next wakeup to
+ determine domain idle state
+Message-ID: <X6wRBLmvzztNai4y@codeaurora.org>
+References: <20201106164811.3698-1-ilina@codeaurora.org>
+ <20201106164811.3698-3-ilina@codeaurora.org>
+ <CAPDyKFrv-3USmNLR3gjgaTEuTrWuYZjs3qCtnjxSOWqrxv5qsA@mail.gmail.com>
+ <X6l/OcHG37HzgFL8@codeaurora.org>
+ <CAPDyKFr8fdbMM1nsx-RZcMVtveJUP3p38z=HkL1T2C=QgM3gkQ@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Dell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR19MB2636.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0343d4c1-c3dd-40f2-8f55-08d8865b5573
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2020 16:03:30.5458
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 945c199a-83a2-4e80-9f8c-5a91be5752dd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: v2Bti5Lu/hETpIRJaMvb77afca33UPglhcAUPux52Xm2o+Zu8KfGoaxd6Dpsc3GvYtwMDbFyQhWaEA3iX3F0BJEL9cDWwTaO1WS+wBkbAm0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR19MB2331
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-11_07:2020-11-10,2020-11-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 impostorscore=0 adultscore=0 mlxscore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 clxscore=1011 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011110094
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- mlxscore=0 adultscore=0 malwarescore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011110094
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFr8fdbMM1nsx-RZcMVtveJUP3p38z=HkL1T2C=QgM3gkQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiA+PiBHaXZlbiB3ZSdyZSBlZmZlY3RpdmVseSBlbmRpbmcgdXAgd2l0aCB0aGUgY29tYmluYXRp
-b24gb2YgcnVudGltZSBQTSB0dXJuZWQNCj4gPj4gb24gYnkgdWRldiBydWxlcywgZG8gd2UgbmVl
-ZCBzb21ldGhpbmcgbGlrZSB0aGlzIGZvciB0aGF0IElEOg0KPiA+Pg0KPiA+Pg0KPiBodHRwczov
-L2dpdGh1Yi5jb20vdG9ydmFsZHMvbGludXgvY29tbWl0LzZhN2M1MzNkNGExODU0ZjU0OTAxYTA2
-NWQ4YzY3MmU4OTA0MDANCj4gZDhhDQo+ID4+DQo+ID4+IEBNaWthIFdlc3RlcmJlcmcgc2hvdWxk
-IDgwODY6YTBlZCBiZSBxdWlya2VkIGxpa2UgdGhlIFRDU1MgeEhDSSB0b28/DQo+ID4NCj4gPiBJ
-IHRoaW5rIHRoaXMgb25lIGlzIHRoZSBUR0wgUENIIHhIQ0kuIFRoZSBxdWlyayBjdXJyZW50bHkg
-Zm9yIHhIQ0kNCj4gPiBjb250cm9sbGVycyB0aGF0IGFyZSBwYXJ0IG9mIHRoZSBUQ1NTIChUeXBl
-LUMgU3ViU3lzdGVtKSB3aGVyZSBpdCBpcw0KPiA+IGltcG9ydGFudCB0byBwdXQgYWxsIGRldmlj
-ZXMgaW50byBsb3cgcG93ZXIgbW9kZSB3aGVuZXZlciBwb3NzaWJsZSwNCj4gPiBvdGhlcndpc2Ug
-aXQga2VlcHMgdGhlIHdob2xlIGJsb2NrIG9uLg0KPiANCj4gTm90ZSB0aGF0IHRoZXJlIGFyZSBj
-dXJyZW50bHkgc29tZSBJRHMgbWlzc2luZyBmcm9tIHRoZSB4SENJcyB3aGljaA0KPiBhcmUgcGFy
-dCBvZiB0aGUgVENTUyB0b28uIEF0IGxlYXN0IHRoZSBpZCBmb3IgdGhlIHhIQ0kgaW4gdGhlIHRo
-dW5kZXJib2x0DQo+IGNvbnRyb2xsZXIgb24gdGhlIExlbm92byBUMTQgZ2VuIDEgaXMgbWlzc2lu
-Zy4gSSBzdGFydGVkIGEgZGlzY3Vzc2lvbg0KPiBhYm91dCBleHRlbmRpbmcgdGhlIGtlcm5lbCBx
-dWlyayBsaXN0IGZvciB0aGlzIHZzIHN3aXRjaGluZyB0byBod2RiDQo+IGEgd2hpbGUgYSBnbzoN
-Cj4gDQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXVzYi9iOGIyMWJhMy0wYThhLWZm
-NTQtNWUxMi0NCj4gY2Y4OTYwNjUxMDg2QHJlZGhhdC5jb20vDQo+IA0KPiBUaGUgY29uY2x1c2lv
-biBiYWNrIHRoZW4gd2FzIHRvIHN3aXRjaCB0byBod2RiLCBidXQgSSBuZXZlciBnb3QgYXJvdW5k
-IHRvDQo+IHRoaXMuDQoNCkkgZ3Vlc3MgdGhlIHByb2JsZW0gSSBzZWUgd2l0aCBzd2l0Y2hpbmcg
-dG8gYSBod2RiIGZvciB0aGlzIHR5cGUgb2YgdGhpbmcgaXMNCnRoYXQgaWYgdGhlcmUgaXMgYSAi
-YnVnIiBpbiB5b3VyIGtlcm5lbCBkcml2ZXIgYXJvdW5kIGF1dG9zdXNwZW5kIHlvdSB3aWxsDQp0
-aGVuIGJlIHBvdGVudGlhbGx5IGNhdXNpbmcgaXQgdG8gb2NjdXIgbW9yZSByZWd1bGFybHkgb24g
-YSBrZXJuZWwgdGhhdCBkaWRuJ3QNCm5lY2Vzc2FyaWx5IHBpY2sgdXAgdGhlIGZpeCBidXQgZG9l
-cyBoYXZlIHRoZSBuZXdlciBod2RiLg0KDQpJIGRvbid0IGtub3cgaG93IGNvbW1vbiB0aGF0IHdp
-bGwgcmVhbGx5IGJlIHRob3VnaC4NCg0KU2luY2UgTWlrYSBtZW50aW9uZWQgdGhlIHJlYWxseSBs
-aWdodCB1c2Vyc3BhY2Ugc2NlbmFyaW8sIHdoYXQgYWJvdXQgc2hpcHBpbmcNCnRoZSBod2RiICJ3
-aXRoIiB0aGUga2VybmVsIGluIHRyZWU/ICBUaGlzIGNvdWxkIGFsbG93IGV2aWN0aW5nIGFsbCB0
-aGVzZSBxdWlyaw0Kc2NlbmFyaW9zIGZyb20gdGhlIGtlcm5lbCBhdCB0aGUgc2FtZSB0aW1lIGFz
-IHN3aXRjaGluZyB0byBhIGh3ZGIgYW5kIGFsc28gY292ZXINCnRoZSBwcm9ibGVtIEkgc3VnZ2Vz
-dGVkIG1pZ2h0IGhhcHBlbiB3aXRoIGEgYnVnIGluIG9sZGVyIGtlcm5lbCBhbmQgbmV3ZXIgdXNl
-cnNwYWNlLg0KDQo+IA0KPiA+IFR5cGljYWxseSB3ZSBoYXZlbid0IGRvbmUgdGhhdCBmb3IgUENI
-IHNpZGUgeEhDSSBjb250cm9sbGVycyB0aG91Z2gsIGJ1dA0KPiA+IEkgZG9uJ3Qgc2VlIHdoeSBu
-b3QgaWYgaXQgd29ya3MgdGhhdCBpcy4gQWRkaW5nIE1hdGhpYXMgdG8gY29tbWVudCBtb3JlDQo+
-ID4gb24gdGhhdCBzaW5jZSBoZSBpcyB0aGUgeEhDSSBtYWludGFpbmVyLg0KPiANCj4gSWYgd2Ug
-YXJlIGFsc28gZ29pbmcgdG8gZW5hYmxlIHRoaXMgZm9yIHRoZSBub24gVENTUyBJbnRlbCBYSENJ
-IGNvbnRyb2xsZXJzLA0KPiBtYXliZSBqdXN0IHVuY29uZHRpb25hbGx5IGVuYWJsZSBpdCBmb3Ig
-YWxsIEludGVsIFhIQ0kgY29udHJvbGxlcnMsIG9yDQo+IGlmIG5lY2Vzc2FyeSBkbyBhIGRlbnkt
-bGlzdCBmb3Igc29tZSBvbGRlciBtb2RlbHMgYW5kIGVuYWJsZSBpdCBmb3IgYW55dGhpbmcNCj4g
-bm90IG9uIHRoZSBkZW55LWxpc3QgKHNvIGFsbCBuZXdlciBtb2RlbHMpLiBUaGF0IHNob3VsZCBh
-dm9pZCB0aGUgZ2FtZSBvZg0KPiB3aGFjay1hLW1vbGUgd2hpY2ggd2Ugd2lsbCBoYXZlIHdpdGgg
-dGhpcyBvdGhlcndpc2UuDQo+IA0KPiBOb3RlIHRoZSBkZW55LWxpc3QgKyBlbmFibGUgYW55dGhp
-bmcgbm90IG9uIGl0IGFwcHJvYWNoIGNvdWxkIGJlIGRvbmUNCj4gZWl0aGVyIGluIHRoZSBrZXJu
-ZWwgb3IgaW4gYSB1ZGV2LXJ1bGUgKyBod2RiIGNvbWJvLg0KPiANCj4gUmVnYXJkcywNCj4gDQo+
-IEhhbnMNCg0K
+On Tue, Nov 10 2020 at 03:02 -0700, Ulf Hansson wrote:
+>On Mon, 9 Nov 2020 at 18:41, Lina Iyer <ilina@codeaurora.org> wrote:
+>>
+>> On Mon, Nov 09 2020 at 08:27 -0700, Ulf Hansson wrote:
+>> >On Fri, 6 Nov 2020 at 17:48, Lina Iyer <ilina@codeaurora.org> wrote:
+>> >>
+>> [...]
+>> >> +static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
+>> >> +{
+>> >> +       ktime_t domain_wakeup = KTIME_MAX;
+>> >> +       ktime_t next_wakeup;
+>> >> +       struct pm_domain_data *pdd;
+>> >> +       struct gpd_link *link;
+>> >> +
+>> >> +       /* Find the earliest wakeup for all devices in the domain */
+>> >> +       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+>> >> +               next_wakeup = to_gpd_data(pdd)->next_wakeup;
+>> >> +               if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
+>> >> +                       if (ktime_before(next_wakeup, domain_wakeup))
+>> >> +                               domain_wakeup = next_wakeup;
+>> >
+>> >If it turns out that one of the device's next_wakeup is before "now",
+>> >leading to ktime_before() above returns true - then I think you should
+>> >bail out, no?
+>> >
+>> >At least, we shouldn't just continue and ignore this case, right?
+>> >
+>> No, that could be a very common case. Drivers are not expected to clean
+>> up the next wakeup by setting it to KTIME_MAX. The best we can do is
+>> to make a choice with the valid information we have. This will also map
+>> to the current behavior. Say if all next wakeup information provided to
+>> the devices were in the past, we would be no worse (or better) than what
+>> we do without this change.
+>
+>Well, I don't quite agree (at least not yet), but let me elaborate, as
+>I think we can do better without having to add complexity.
+>
+>Normally, I don't think a driver needs to clean up its device's next
+>wakeup in between the remote wakeups, instead it should just set a new
+>value.
+>
+>That's because, even if the driver acts to a remote wakeup or deals
+>with a request entering a queue, the driver needs to runtime resume
+>its device during this period. This prevents genpd from power off the
+>PM domain, hence also the genpd governor from potentially looking at
+>"invalid" wakeup information for its attached devices.
+>
+Could you elaborate a bit? Why would a remote wakeup affect the next
+wakeup. I'm afraid that I'm not getting the situation correctly.
+
+>Of course, I assume there are situations, where a driver actually
+>needs to do a clean up of its device's next wakeup, but that should be
+>less frequent and likely when a remote wakeup is disabled (for
+>whatever reason).
+>
+A common case would be that the driver does not know when the usecase is
+being turned off and therefore may not be able to set the next wakeup to
+max. If the stale value continues to exist then we may never power off
+the domain.
+
+>> >> +       /*
+>> >> +        * Find the next wakeup from devices that can determine their own wakeup
+>> >> +        * to find when the domain would wakeup and do it for every device down
+>> >> +        * the hierarchy. It is not worth while to sleep if the state's residency
+>> >> +        * cannot be met.
+>> >> +        */
+>> >> +       update_domain_next_wakeup(genpd, now);
+>> >> +       if (genpd->next_wakeup != KTIME_MAX) {
+>> >> +               /* Let's find out the deepest domain idle state, the devices prefer */
+>> >> +               while (state_idx >= 0) {
+>> >> +                       if (next_wakeup_allows_state(genpd, state_idx, now)) {
+>> >> +                               genpd->max_off_time_changed = true;
+>> >> +                               break;
+>> >> +                       }
+>> >> +                       state_idx--;
+>> >> +               }
+>> >> +
+>> >> +               if (state_idx < 0) {
+>> >> +                       state_idx = 0;
+>> >> +                       genpd->cached_power_down_ok = false;
+>> >> +                       goto done;
+>> >> +               }
+>> >> +       }
+>> >> +
+>> >
+>> >The above would introduce unnecessary overhead, as it may become
+>> >executed in cases when it's not needed.
+>> >
+>> >For example, there's no point doing the above, if the domain doesn't
+>> >specify residency values for its idle states.
+>> >
+>> We would still need to ensure that the next wakeup is after the
+>> power_off_latency, if specified.
+>
+>Good point! Although, I would rather avoid adding the overhead, unless
+>the residency is specified. Do you see a problem with this approach?
+>
+Hmmm, no strong objections. However, we still need to run through the
+states to make sure the residency is not set and have a variable track
+that. The devices wouldn't know that and would still continue to set the
+next wakeup, unless we find a way to let them know we are not using this
+feature for the domain.
+
+>Another option is to add a new governor, but if possible, I would like
+>to avoid that.
+>
+Absolutely, we should avoid that.
+
+>>
+>> >Additionally, we don't need to recompute the domain's next wakup,
+>> >unless a device has got a new next_wakeup value set for it. In this
+>> >case, we can just select a state based upon an previously computed
+>> >value, thus avoiding the recomputation.
+>> >
+>> If the domain's next wakeup was in the past, then using our previously
+>> computed state may be incorrect.
+>
+>I am not saying you should use the previously computed *idlestate*,
+>but the previously computed next wakeup.
+>
+I guess this falls into the first discussion, should be use the next
+wakeup from the past.
+
+>>
+>> >>         if (!genpd->max_off_time_changed) {
+>> >>                 genpd->state_idx = genpd->cached_power_down_state_idx;
+>> >>                 return genpd->cached_power_down_ok;
+>> >> @@ -228,17 +295,21 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
+>> >>         genpd->max_off_time_ns = -1;
+>> >>         genpd->max_off_time_changed = false;
+>> >>         genpd->cached_power_down_ok = true;
+>> >> -       genpd->state_idx = genpd->state_count - 1;
+>> >>
+>> >> -       /* Find a state to power down to, starting from the deepest. */
+>> >> -       while (!__default_power_down_ok(pd, genpd->state_idx)) {
+>> >> -               if (genpd->state_idx == 0) {
+>> >> +       /*
+>> >> +        * Find a state to power down to, starting from the state
+>> >> +        * determined by the next wakeup.
+>> >> +        */
+>> >> +       while (!__default_power_down_ok(pd, state_idx)) {
+>> >> +               if (state_idx == 0) {
+>> >>                         genpd->cached_power_down_ok = false;
+>> >>                         break;
+>> >>                 }
+>> >> -               genpd->state_idx--;
+>> >> +               state_idx--;
+>> >>         }
+>> >>
+>> >> +done:
+>> >> +       genpd->state_idx = state_idx;
+>> >>         genpd->cached_power_down_state_idx = genpd->state_idx;
+>> >>         return genpd->cached_power_down_ok;
+>> >>  }
+>> >
+>> >Another thing to consider for the above changes, is that the
+>> >cpu_power_down_ok() calls into default_power_down_ok().
+>> >
+>> >Even if I am fine with the approach taken in $subject patch, I think
+>> >it's important to try to keep the path a slim as possible as it's also
+>> >executed in the CPU idlepath.
+>> Wouldn't this be called only the last CPU is powering down and only if
+>> the domain is ready to power down?
+>>
+>> >For example, $subject change means also
+>> >that we end up calling ktime_get() twice in the same path, introducing
+>> >unnecessary overhead. We can do better and avoid that by restructuring
+>> >the code a bit, don't you think?
+>> >
+>> Hmmm, we could. I will submit a follow on patch to reorganize the code
+>> so the ktime_get() would be called only once for either of the
+>> power_down_ok callbacks.
+>
+>If possible, I would rather make it part of the series. Just fold in
+>some "rework" patch before extending the governor, that should be
+>possible I think.
+>
+Sure. Since this would affect changing the default_power_down_ok(), I
+thought a follow on patch would be appropriate.
+
+Thanks,
+Lina
