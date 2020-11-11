@@ -2,104 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0912AE894
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 07:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2FF2AE8AB
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 07:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725860AbgKKGBb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Nov 2020 01:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
+        id S1725867AbgKKGOq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Nov 2020 01:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgKKGBa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 01:01:30 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2311C0613D1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 22:01:30 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id f27so789688pgl.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 22:01:30 -0800 (PST)
+        with ESMTP id S1725468AbgKKGOq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 01:14:46 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8971EC0613D1;
+        Tue, 10 Nov 2020 22:14:44 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id e27so1621827lfn.7;
+        Tue, 10 Nov 2020 22:14:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=sElQ0UasyAxx1p9v/6PmsrVmJXS5A5b4XWEfpPsYb2c=;
-        b=AgRH2ICBEuIJ5D7uzTetuBykN7UmRfVT7tsz859NB5W/UFCLY14yHowhi9eyAxulQA
-         BY+gI662sES/BaznMeaX9fcE61kUoCbdRGQSHQlF+egh+WYtqz4KsUXc9GRTQVe8TT1I
-         yAfCPmvD0/4gI2XwatntdmbN5XxaKNI8Ug3UPFmzzxpWStyLjA2v/JWxfO5tUXqD1dlZ
-         PBlI8bJXqCu8WDJdygKQnfP6KGEIf2qEAtVmOABgNt+stLNcNoGHssGWfWD5JZR14ntZ
-         W/UvSDHVei5XNjmmOzxkQwF2se4R8FzrYpoa41vij2rq31Q5v56ZVoo4eq7WVFXaSEpM
-         euwA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lEYEjKzJU66Ij93I8jWPRFuo7Pd1or5OxSnq43v1nCk=;
+        b=u3C6K+j11FR9CFXaV+VOXGecYwd6QzEZya9r+zI3shRFCtNk2YKCxN+0npZuwEIP5C
+         y824Nl/hx8yxsqA1zs7NdnQQ4rjDBNU4CDXEzxLFmOIjQEHkbFj0vh08mhIAruNoNkjO
+         JSe6AuXggENBuikW7sMzMCwIVyV9mtMmIloNPUUfztbhK64OEhp8qhVFjdBPfwSDtzv0
+         CFx1SNiEriNpMPICEFaLSNdvh/j6gevGUy5KZA5Itd0a6X6GNXIcEkEO8JXVXlPkWTEo
+         pjW2AYh/fOcg+V51KLFlt9rZc091RaXAK5VssQMSItVKHd9NLTURjirC8byG1kwfQB4c
+         hgCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=sElQ0UasyAxx1p9v/6PmsrVmJXS5A5b4XWEfpPsYb2c=;
-        b=bFOQWGr2X7P8GzS5oNMDqLvio20XVBBZqCLvFV8CNNEPKo2U1aHPzFWAY/hq+OuKzl
-         BRa+D+wl+wzaFLgryDj3tTco8LyA7fLD4OIINlFc6Sl32EmW1SAzPd0UeSfj1bTQvdep
-         FuDftKLWZH2fBGs3nI0vNJ7VMudMdo0CMnvZH0Q4XQTNvsGHYvKoBBNUIVmgleYx8KFJ
-         5BXiWqnxycr+4ySUFQRIBdDSBujJI6BhTTjPsTXFjxISbWtYjcK0cORBRu0LRXLtL62l
-         EDWnKTyzodZsbj+Qw+RdboE942evUjy7XpUbIVKWMuBQRnsjw8FDX7MxmQF9B/k6Aqwx
-         yM/A==
-X-Gm-Message-State: AOAM532XqF04D30AbTSM4lHhgXr+DXW8zgpmVn7VEiffqBg5p3XvGb3z
-        ucAlm+quv1i4cvFNslatM3c1xA==
-X-Google-Smtp-Source: ABdhPJzRqVfTZchctw4+pUfLWVKTckJpU+KZvrJQ9LuRTyDx2mJRy0bpYJSt/F1B6CXc6Jkm2dDXiA==
-X-Received: by 2002:a63:5fc3:: with SMTP id t186mr20186444pgb.187.1605074490182;
-        Tue, 10 Nov 2020 22:01:30 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id v191sm1020905pfc.19.2020.11.10.22.01.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Nov 2020 22:01:29 -0800 (PST)
-Date:   Wed, 11 Nov 2020 11:31:27 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/9] cpufreq: Add missing modalias for tristate drivers
-Message-ID: <20201111060127.ulr63huycvqxxkha@vireshk-i7>
-References: <20201103151139.29690-1-pali@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lEYEjKzJU66Ij93I8jWPRFuo7Pd1or5OxSnq43v1nCk=;
+        b=aDAWuX5F5ejlDA2d7EN7Ygm2Dk8aEgUVnLPN4kjzIBiDwBwgMrpja6n1iAIJtYyHNj
+         CmLxc/5NkAY3tnp7RKh4nkFFXOU7SyIRzD0JMv8rt75+K18ji00OUV0LABg00hKqxOWB
+         s3hqC+ylzq138cKWnBD/F5P38sn9z9tIrS6hyP+f/1Nh7YNqoWwq15I65ZwIMjGVH5qE
+         gRZM9KkrM44+2pTZhWCj/yUcKGecadCj9Pqi7vtNXuuCrGJ2ArPGbTVYRaC1G5F1c5Tk
+         qOexjEo+WmZKLZ0WhhZHEzDNfyBLG3batB0t4jQ5e88fJRtwOgvSfy+vWFidpgHE+WOZ
+         1gKA==
+X-Gm-Message-State: AOAM532FSqu5iPQNuFHE0Rp6EWHqho+3Zm8yFABuoWgd1Z7V8a0FWF1k
+        3QrpZlhkHT6iMAylFtwq0WA=
+X-Google-Smtp-Source: ABdhPJzLehGf18xxtBKtRyrfI/6NG1g3yu2AS/fS5MEUZSbxrjK+f66FKyA/QSbiAyVs+WiZ9diPdA==
+X-Received: by 2002:a19:8854:: with SMTP id k81mr2400616lfd.195.1605075283102;
+        Tue, 10 Nov 2020 22:14:43 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id s5sm121375lfd.58.2020.11.10.22.14.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2020 22:14:42 -0800 (PST)
+Subject: Re: [PATCH v8 09/26] memory: tegra30: Support interconnect framework
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20201111011456.7875-1-digetx@gmail.com>
+ <20201111011456.7875-10-digetx@gmail.com>
+ <20201111055313.tefidnmc7f4yb3jk@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <185e9140-fdce-29ef-68c3-aa7da02b249d@gmail.com>
+Date:   Wed, 11 Nov 2020 09:14:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <20201111055313.tefidnmc7f4yb3jk@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201103151139.29690-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-11-20, 16:11, Pali Roh�r wrote:
-> Some of cpufreq drivers are tristate, can be compiled as modules, but do
-> not have defined modalias for automatic loading. This patch series add
-> for all those cpufreq drivers missing MODULE_DEVICE_TABLE macro, based
-> on OF definitions, or MODULE_ALIAS for platform drivers.
+11.11.2020 08:53, Viresh Kumar пишет:
+>> +static int tegra_emc_opp_table_init(struct tegra_emc *emc)
+>> +{
+>> +	struct opp_table *reg_opp_table = NULL, *clk_opp_table, *hw_opp_table;
+>> +	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+>> +	const char *rname = "core";
+>> +	int err;
+>> +
+>> +	/*
+>> +	 * Legacy device-trees don't have OPP table and EMC driver isn't
+>> +	 * useful in this case.
+>> +	 */
+>> +	if (!device_property_present(emc->dev, "operating-points-v2")) {
+> I don't understand why you want to check this ? The below call to
+> dev_pm_opp_of_add_table() will fail anyway and that should be good for
+> you.
 > 
-> MODULE_DEVICE_TABLE is not explictily added only for speedstep-centrino,
-> speedstep-ich and speedstep-smi drivers as it was removed in commit
-> b11d77fa300d9 ("cpufreq: Convert to new X86 CPU match macros").
-> 
-> Pali Roh�r (9):
->   cpufreq: ap806: Add missing MODULE_DEVICE_TABLE
->   cpufreq: highbank: Add missing MODULE_DEVICE_TABLE
->   cpufreq: mediatek: Add missing MODULE_DEVICE_TABLE
->   cpufreq: qcom: Add missing MODULE_DEVICE_TABLE
->   cpufreq: st: Add missing MODULE_DEVICE_TABLE
->   cpufreq: sun50i: Add missing MODULE_DEVICE_TABLE
->   cpufreq: loongson1: Add missing MODULE_ALIAS
->   cpufreq: scpi: Add missing MODULE_ALIAS
->   cpufreq: vexpress-spc: Add missing MODULE_ALIAS
-> 
->  drivers/cpufreq/armada-8k-cpufreq.c    | 6 ++++++
->  drivers/cpufreq/highbank-cpufreq.c     | 7 +++++++
->  drivers/cpufreq/loongson1-cpufreq.c    | 1 +
->  drivers/cpufreq/mediatek-cpufreq.c     | 1 +
->  drivers/cpufreq/qcom-cpufreq-nvmem.c   | 1 +
->  drivers/cpufreq/scpi-cpufreq.c         | 1 +
->  drivers/cpufreq/sti-cpufreq.c          | 7 +++++++
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 1 +
->  drivers/cpufreq/vexpress-spc-cpufreq.c | 1 +
->  9 files changed, 26 insertions(+)
 
-Applied. Thanks.
-
--- 
-viresh
+The dev_pm_opp_of_add_table() will produce a error message which doesn't
+give a clue about what's wrong, i.e. that device-tree needs to be updated.
