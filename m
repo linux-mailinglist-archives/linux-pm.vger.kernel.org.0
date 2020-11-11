@@ -2,103 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1EA2AEEB3
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 11:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345C12AEEC6
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 11:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726938AbgKKKZj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Nov 2020 05:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S1727253AbgKKKaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Nov 2020 05:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726644AbgKKKZi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 05:25:38 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2F4C0613D1;
-        Wed, 11 Nov 2020 02:25:38 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id r9so2421177lfn.11;
-        Wed, 11 Nov 2020 02:25:38 -0800 (PST)
+        with ESMTP id S1726229AbgKKKaV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 05:30:21 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18012C0613D1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 02:30:21 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id e21so1160723pgr.11
+        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 02:30:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YDPQOCu1Q0bKCPL6C42R2nt86MKzHJcXkgJe5Eo+/zI=;
-        b=nHudV4l+RFcBpr3axrfNNEScRTyu6drP6JREhMmAoVRKbdS57PvlkXk9toKfclED2s
-         5G/GJ7KJRJsFYOl4i6+hz5/nD17g2tiqobNLOl91ANza33Te94/voQb5CZ0zp8lD2BIl
-         PU7rMO+1CqahgPqwQycUOiQXXBNmJQk5SzllsR4JSzuOTWV21BW2AOMl66pxwuXjhOh/
-         Vjvfq/UE6EkhNOnrClbk3roh6SxJVnCQ9D2Ww2U+TE3x7kVzsAdfFNebF1olzKADUOvJ
-         t9JGDbP2u/DDS6t4RZ6L5CjtUW62hY2Z2f/G4Lmf7wPuz8IPXZquX5zg6jtdtLe8EzzV
-         WHIw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LqT3Xk8OKEYeP3Y8ngka+rENJ5NBnY9XjAXcGfB12DQ=;
+        b=JGYnSPTGq8Yg1Gfe2Vg6FgJkVKDerr9e1rD5mKBtXcJVZGt9Vl0Fn4KMvVEOl9U7l3
+         Fo0s9Xv/RRwuDRQFv7peQGJIgLsvY3fpQnzNEknnT/7Wn7sts4DjwX/K3Fc/eKbJ3ERg
+         QJyJRFepykd7e8nxYXeYrOclTHlDHsIluyIq7LarcjgG4MtV/HRSaAPdNJkN3PgWKTyQ
+         pMlk1aSs5dRId/4VB9E0aUhkGZE6wOBEaIsX4YScDcx+GszXPWCktmWUQJyFBA2wmevp
+         7YzEpyaTTOoJFq4s8520tfglfbOgBycwohHobkSWkiRmzgd+RgVtsfoOAyHI4yNxGE9I
+         5XBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YDPQOCu1Q0bKCPL6C42R2nt86MKzHJcXkgJe5Eo+/zI=;
-        b=m76ZrIGuZ980yAWKz1yFwTgrCiIPxwEMyEVEb17o+Ta4y/Y/bmkjAB9DOM+m/ZEzsJ
-         XKZDkMmGy4ryp5nCp8cOYROit8neLzq5xu9NxjgOMeRdw4AVrjiJgGIKSVs/pTMrgoV5
-         PlUMgLZFKfxF5XDo3nXTiJgvj5myQX+yJ85LjH/LRvXdqGhO58Gzf5WRrwAVM3ELmx4z
-         I41LRsYIk4fquZa6xg5VAnhSm/g2aQVEZ8k4VfEFgtIWoKGdJYutHA6Iaw83b3BS5Xcc
-         5RWLCtdT5Sr1mDGqmGgyQ3c2oGAZ4P5Ni6w2DAX4TKoXzTG1DbaPjN3r9lsuo3p5Kmzc
-         BxwQ==
-X-Gm-Message-State: AOAM530PAsYMwTQ+eij4Y/U+nFhhflS6JtV4d8rabMZx6d68uUtV8xUN
-        aRwxSM5mudlnEKXO6GgRfoQ=
-X-Google-Smtp-Source: ABdhPJzTv9Jyb7R3JTGhtKOKkgm12/bRzXfaFk0KiQNWX12jN9WFCPB0iS0jN9FOqsksEXFAwAJolg==
-X-Received: by 2002:ac2:53a1:: with SMTP id j1mr8775060lfh.236.1605090336653;
-        Wed, 11 Nov 2020 02:25:36 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id t13sm62578lfl.294.2020.11.11.02.25.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2020 02:25:35 -0800 (PST)
-Subject: Re: [PATCH v8 11/26] memory: tegra124-emc: Make driver modular
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20201111011456.7875-1-digetx@gmail.com>
- <20201111011456.7875-12-digetx@gmail.com> <20201111090434.GB4050@kozik-lap>
- <f44b64f5-6b08-5f1e-4f9b-a73a1705d493@gmail.com>
- <20201111092619.GD4050@kozik-lap>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a75e72b9-273a-4492-09e6-d02a5ea58482@gmail.com>
-Date:   Wed, 11 Nov 2020 13:25:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LqT3Xk8OKEYeP3Y8ngka+rENJ5NBnY9XjAXcGfB12DQ=;
+        b=g93cvDLNw2iwvsmz1CaYNVrpIvEaul4FDKK6hpwUCUGU+lV2838pbiOtsEW74HMXXs
+         M/ctePoEp1yCfBptS/WsWsD3S6Or10NpYpFVTbv6uvtCUs/M+YvjxYneFJiBxMgk8zs3
+         yNZPZ8aSR0fvLKXHgZyd4EI0UJbz27RPGf+emxvTekCoUa73Fn6+QXQqEiwDz1lqPRGC
+         i/pWNj+F4uZ0z2CO3/4Kh33vuryKqBfidu8ehpU4ubBjRJ55LAVR3w1aksRFKpV6k1YE
+         KpCOsgl8cYexDfVTW3ZMTkQhiHsnBa1dYW/XyAggT3Hg7H8E96b8lRl+f+G4buHfxwA1
+         IP5g==
+X-Gm-Message-State: AOAM531tk7ukNegq4fNhKGqogwfOGcozgNQ849W7XIhRlrj8p0cvyq91
+        Q9Zk9bTU8b17aqvzzTvjO+1zSw==
+X-Google-Smtp-Source: ABdhPJyE5XoZ/pKawPCOfGvtrw+ykbdOntJCkp5wMY0tvxnLIyuIPSpa/BcVDOcD4Q0WyCA0mGNWTA==
+X-Received: by 2002:aa7:86c9:0:b029:18b:b0c:53e5 with SMTP id h9-20020aa786c90000b029018b0b0c53e5mr22175141pfo.57.1605090620606;
+        Wed, 11 Nov 2020 02:30:20 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id q2sm2062957pfb.106.2020.11.11.02.30.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 Nov 2020 02:30:19 -0800 (PST)
+Date:   Wed, 11 Nov 2020 16:00:18 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Thomas Renninger <mail@renninger.de>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: Off-topic therml_stats - trans_table - File too large (exceeding
+ static page alloc)
+Message-ID: <20201111103018.6xixvclldfw4m3ok@vireshk-i7>
+References: <0e0fb542b6f6b26944cb2cf356041348aeac95f6.1605006378.git.viresh.kumar@linaro.org>
+ <4294133.gPUqu62deI@c100>
 MIME-Version: 1.0
-In-Reply-To: <20201111092619.GD4050@kozik-lap>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4294133.gPUqu62deI@c100>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-11.11.2020 12:26, Krzysztof Kozlowski пишет:
->> 11.11.2020 12:04, Krzysztof Kozlowski пишет:
->>>> -obj-$(CONFIG_TEGRA124_EMC)		+= clk-tegra124-emc.o
->>>> +obj-$(CONFIG_ARCH_TEGRA_124_SOC)	+= clk-tegra124-emc.o
->>>> +obj-$(CONFIG_ARCH_TEGRA_132_SOC)	+= clk-tegra124-emc.o
->>> How is it related to modularization? It looks like different issue is
->>> fixed here.
->> The CONFIG_TEGRA124_EMC now could be 'm', while the clock code must be
->> built-in. The TEGRA124 EMC driver is used by T124 and T132 SoCs.\
-> Mhmm,  the CONFIG_TEGRA124_EMC depends on ARCH_TEGRA_124_SOC so on the
-> config !ARCH_TEGRA_124_SOC && ARCH_TEGRA_132_SOC this was not
-> selected. Now it will be selected.
+On 11-11-20, 09:42, Thomas Renninger wrote:
+> Hi,
 > 
+> sorry for high-jacking this thread, it is at least related and afaik you are
+> deeper involved in this:
+> 
+> (cutting CC list)
+> 
+> Am Dienstag, 10. November 2020, 12:07:37 CET schrieb Viresh Kumar:
+> > The cpufreq and thermal core, both provide sysfs statistics to help
+> > userspace learn about the behavior of frequencies and cooling states.
+> ...
+> > /sys/class/thermal/cooling_device0/stats/time_in_state_ms:state0 4097
+> There is the trans_table for cooling devices in the same dir:
+> /sys/devices/virtual/thermal/cooling_device*/stats/trans_table
+> 
+> I recently stumbled over this in a bug report and realized that it it seem
+> to overflow rather quickly due  to static memory usage.
+> Fixing it seem to be rather complex, not sure it's worth it.
+> 
+> for device 0-3 I get:
+> cat /sys/devices/virtual/thermal/cooling_device0/stats/trans_table
+>  From  :    To
+>        : state 0  
+> state 0:       0
+> 
+> and when it seem to get interesting (device 4 and 5), I get:
 
-The driver isn't exposed on ARM64 probably because nobody bothered to do
-it so far. But it's not also the memory driver which depends on
-clk-tegra124-emc.o, it's also the main clk/tegra/clk-tegra124.c driver
-itself, which is also used by both T124/132.
+How many total states are there ? Must be really large.
+
+> cat /sys/devices/virtual/thermal/cooling_device4/stats/trans_table
+> cat: /sys/devices/virtual/thermal/cooling_device4/stats/trans_table: File too large
+> 
+> 
+> Just a heads up.
+> Maybe it's worth to touch this as well if sysfs is changed in this area anyway.
+> Afaik sysfs forbids such data like whole transition tables in one file and dynamic
+> mem alloc.
+
+Yes, but cpufreq was already in since a long time and this went in
+with the same philosophy.
+
+> Either it gets split up into
+> ../cooling_device0/stats/trans_to_1
+> ../cooling_device0/stats/trans_to_2
+
+I think yes.
+
+> or maybe this should better live in debugfs?
+
+I think I tried the debugfs way earlier but the maintainers of thermal
+asked me to do it sysfs way.
+
+-- 
+viresh
