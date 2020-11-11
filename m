@@ -2,117 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDE12AEE7B
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 11:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1EA2AEEB3
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 11:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727426AbgKKKHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Nov 2020 05:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S1726938AbgKKKZj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Nov 2020 05:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727423AbgKKKHd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 05:07:33 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABD4C0613D6
-        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 02:07:32 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id 33so1946514wrl.7
-        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 02:07:32 -0800 (PST)
+        with ESMTP id S1726644AbgKKKZi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 05:25:38 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2F4C0613D1;
+        Wed, 11 Nov 2020 02:25:38 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id r9so2421177lfn.11;
+        Wed, 11 Nov 2020 02:25:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lhNVmiGRjKtWj6Yv/r78yPNvE9PCgYoouxIq1h1Gu1E=;
-        b=eGNQ2RRHPn8cIvHZO7W4KaoAKsbVJhZjhfzPqRGC2E+OfIx30kHsq0DJcAkvBU9OMs
-         AmOLn20fUak02DJ3SAY714hKnBLIoBHRFGbLOf3BmGV1eJV0a1QB2NmhkIb1WdOU6tet
-         d1ctqz5Ryqt+fcIqWorFXkXKLV6wHQHT3Q/ZvExgP/W4txFJv8YEJ2eIzl8F1MQykxfQ
-         a0QYbpgU/9iZcJEkasGFv4rkKUjiGQd0OS98RRWTJwzFRPWpkIJNzGp+MmKSrU6pZqlH
-         9SGuT984v4MKMEaxSA7YXRZY1GAGLKGr+3vVSLLcQzVuzoMGFlrNHfHUKyjqRatLws2K
-         vCyw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YDPQOCu1Q0bKCPL6C42R2nt86MKzHJcXkgJe5Eo+/zI=;
+        b=nHudV4l+RFcBpr3axrfNNEScRTyu6drP6JREhMmAoVRKbdS57PvlkXk9toKfclED2s
+         5G/GJ7KJRJsFYOl4i6+hz5/nD17g2tiqobNLOl91ANza33Te94/voQb5CZ0zp8lD2BIl
+         PU7rMO+1CqahgPqwQycUOiQXXBNmJQk5SzllsR4JSzuOTWV21BW2AOMl66pxwuXjhOh/
+         Vjvfq/UE6EkhNOnrClbk3roh6SxJVnCQ9D2Ww2U+TE3x7kVzsAdfFNebF1olzKADUOvJ
+         t9JGDbP2u/DDS6t4RZ6L5CjtUW62hY2Z2f/G4Lmf7wPuz8IPXZquX5zg6jtdtLe8EzzV
+         WHIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=lhNVmiGRjKtWj6Yv/r78yPNvE9PCgYoouxIq1h1Gu1E=;
-        b=rFMZptdhpK9c5YVhvW/Z+XoB0ZDx6g4uQ5cim3uPCVKVGCxV7+F99sh2DrvEHXqCo+
-         tRzyUrAqbGC8wDWggfjI2bXbXS0AxWrS9Ea1c+eOG06y00YgvBLDke/R5UGN1tKe+GIK
-         sEzRLoIkJVM/2sqynaBsFQweTI5hGAaRqcH76nKGwbmo64uyalKb++q1AM0P39Z5aOXp
-         qur2PQIGNkpyYC8hd+ohBb536JBPj+FVJbaLaaqP6ORemI4jua+C5nwZzopmvq9VkBYh
-         eJBKQNDomeWozVLrQgFvBWvdjCgXmOpOB9ilya3AORUdotdImBKEt5NVxLMyM+3t2G2V
-         2Aug==
-X-Gm-Message-State: AOAM5324RrptsSBFT5QSi33C0SZ+h+5su/Y5AcPE754LdqKo3kYKtAtE
-        DwRB8b7V6beTQqWkGvJdcT4C29RtKjXc8A==
-X-Google-Smtp-Source: ABdhPJxnas6xPj4y1eZeu09nWk8hlj/K7wPTeewT4L7XHj0sLnBiCg8sq6iv413heH318CAuBmN7sg==
-X-Received: by 2002:a5d:62ca:: with SMTP id o10mr7083941wrv.422.1605089251104;
-        Wed, 11 Nov 2020 02:07:31 -0800 (PST)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id s188sm1941424wmf.45.2020.11.11.02.07.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Nov 2020 02:07:30 -0800 (PST)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org, bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        georgi.djakov@linaro.org
-Subject: [PATCH] interconnect: qcom: qcs404: Remove gpu and display nodes
-Date:   Wed, 11 Nov 2020 12:07:34 +0200
-Message-Id: <20201111100734.307-1-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.28.0
+        bh=YDPQOCu1Q0bKCPL6C42R2nt86MKzHJcXkgJe5Eo+/zI=;
+        b=m76ZrIGuZ980yAWKz1yFwTgrCiIPxwEMyEVEb17o+Ta4y/Y/bmkjAB9DOM+m/ZEzsJ
+         XKZDkMmGy4ryp5nCp8cOYROit8neLzq5xu9NxjgOMeRdw4AVrjiJgGIKSVs/pTMrgoV5
+         PlUMgLZFKfxF5XDo3nXTiJgvj5myQX+yJ85LjH/LRvXdqGhO58Gzf5WRrwAVM3ELmx4z
+         I41LRsYIk4fquZa6xg5VAnhSm/g2aQVEZ8k4VfEFgtIWoKGdJYutHA6Iaw83b3BS5Xcc
+         5RWLCtdT5Sr1mDGqmGgyQ3c2oGAZ4P5Ni6w2DAX4TKoXzTG1DbaPjN3r9lsuo3p5Kmzc
+         BxwQ==
+X-Gm-Message-State: AOAM530PAsYMwTQ+eij4Y/U+nFhhflS6JtV4d8rabMZx6d68uUtV8xUN
+        aRwxSM5mudlnEKXO6GgRfoQ=
+X-Google-Smtp-Source: ABdhPJzTv9Jyb7R3JTGhtKOKkgm12/bRzXfaFk0KiQNWX12jN9WFCPB0iS0jN9FOqsksEXFAwAJolg==
+X-Received: by 2002:ac2:53a1:: with SMTP id j1mr8775060lfh.236.1605090336653;
+        Wed, 11 Nov 2020 02:25:36 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id t13sm62578lfl.294.2020.11.11.02.25.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2020 02:25:35 -0800 (PST)
+Subject: Re: [PATCH v8 11/26] memory: tegra124-emc: Make driver modular
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20201111011456.7875-1-digetx@gmail.com>
+ <20201111011456.7875-12-digetx@gmail.com> <20201111090434.GB4050@kozik-lap>
+ <f44b64f5-6b08-5f1e-4f9b-a73a1705d493@gmail.com>
+ <20201111092619.GD4050@kozik-lap>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <a75e72b9-273a-4492-09e6-d02a5ea58482@gmail.com>
+Date:   Wed, 11 Nov 2020 13:25:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
+In-Reply-To: <20201111092619.GD4050@kozik-lap>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following errors are noticed during boot on a QCS404 board:
-[    2.926647] qcom_icc_rpm_smd_send mas 6 error -6
-[    2.934573] qcom_icc_rpm_smd_send mas 8 error -6
+11.11.2020 12:26, Krzysztof Kozlowski пишет:
+>> 11.11.2020 12:04, Krzysztof Kozlowski пишет:
+>>>> -obj-$(CONFIG_TEGRA124_EMC)		+= clk-tegra124-emc.o
+>>>> +obj-$(CONFIG_ARCH_TEGRA_124_SOC)	+= clk-tegra124-emc.o
+>>>> +obj-$(CONFIG_ARCH_TEGRA_132_SOC)	+= clk-tegra124-emc.o
+>>> How is it related to modularization? It looks like different issue is
+>>> fixed here.
+>> The CONFIG_TEGRA124_EMC now could be 'm', while the clock code must be
+>> built-in. The TEGRA124 EMC driver is used by T124 and T132 SoCs.\
+> Mhmm,  the CONFIG_TEGRA124_EMC depends on ARCH_TEGRA_124_SOC so on the
+> config !ARCH_TEGRA_124_SOC && ARCH_TEGRA_132_SOC this was not
+> selected. Now it will be selected.
+> 
 
-These errors show when we try to configure the GPU and display nodes,
-which are defined in the topology, but these hardware blocks actually
-do not exist on QCS404. According to the datasheet, GPU and display
-are only present on QCS405 and QCS407.
-
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- drivers/interconnect/qcom/qcs404.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
-index 9f992422e92f..2ed544e23ff3 100644
---- a/drivers/interconnect/qcom/qcs404.c
-+++ b/drivers/interconnect/qcom/qcs404.c
-@@ -20,8 +20,6 @@
- 
- enum {
- 	QCS404_MASTER_AMPSS_M0 = 1,
--	QCS404_MASTER_GRAPHICS_3D,
--	QCS404_MASTER_MDP_PORT0,
- 	QCS404_SNOC_BIMC_1_MAS,
- 	QCS404_MASTER_TCU_0,
- 	QCS404_MASTER_SPDM,
-@@ -156,8 +154,6 @@ struct qcom_icc_desc {
- 	}
- 
- DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
--DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, 6, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
--DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, 8, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
- DEFINE_QNODE(mas_snoc_bimc_1, QCS404_SNOC_BIMC_1_MAS, 8, 76, -1, QCS404_SLAVE_EBI_CH0);
- DEFINE_QNODE(mas_tcu_0, QCS404_MASTER_TCU_0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
- DEFINE_QNODE(mas_spdm, QCS404_MASTER_SPDM, 4, -1, -1, QCS404_PNOC_INT_3);
-@@ -231,8 +227,6 @@ DEFINE_QNODE(slv_lpass, QCS404_SLAVE_LPASS, 4, -1, -1, 0);
- 
- static struct qcom_icc_node *qcs404_bimc_nodes[] = {
- 	[MASTER_AMPSS_M0] = &mas_apps_proc,
--	[MASTER_OXILI] = &mas_oxili,
--	[MASTER_MDP_PORT0] = &mas_mdp,
- 	[MASTER_SNOC_BIMC_1] = &mas_snoc_bimc_1,
- 	[MASTER_TCU_0] = &mas_tcu_0,
- 	[SLAVE_EBI_CH0] = &slv_ebi,
-@@ -460,6 +454,9 @@ static int qnoc_probe(struct platform_device *pdev)
- 	for (i = 0; i < num_nodes; i++) {
- 		size_t j;
- 
-+		if (!qnodes[i])
-+			continue;
-+
- 		node = icc_node_create(qnodes[i]->id);
- 		if (IS_ERR(node)) {
- 			ret = PTR_ERR(node);
+The driver isn't exposed on ARM64 probably because nobody bothered to do
+it so far. But it's not also the memory driver which depends on
+clk-tegra124-emc.o, it's also the main clk/tegra/clk-tegra124.c driver
+itself, which is also used by both T124/132.
