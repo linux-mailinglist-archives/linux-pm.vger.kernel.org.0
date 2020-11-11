@@ -2,130 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6432AF315
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 15:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8BD2AF398
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 15:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727132AbgKKOIO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Nov 2020 09:08:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727123AbgKKOIL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 09:08:11 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE4EC0613D1;
-        Wed, 11 Nov 2020 06:08:11 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id a9so2311518lfh.2;
-        Wed, 11 Nov 2020 06:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LHvXV2kmqfCvFfKCOYzmtXPEAteV60xqIVKGiujdMpY=;
-        b=U9cD5jlnZqzk6ZCMmI2ELj+L2+qxFbClK/3/2fRC5UhG+8kSOaSIhEDeImnrtZ442B
-         4ehc0ZUi0WycwJd6FABCVOSUmCQIQJvaTRz3nTFEKZzMEy/GQVxE/teL37gy2EmbsnDY
-         TLoaD4KbOM1SvFQdmTdpPhb1AJF21ZfAHLLQdLQmDZGXKVdKIqYkPN8kdsy0/rt0DCqi
-         Ttv7PT+23g5FO7QLZPv8e8B5p/I38/sTTEFmOI9MddGrCIUJDDtc4x36pJ3XzktySr5F
-         TSj8SkePimEGsCznB1AcTSHmkxBEabttgzce3OGZsGXN/v7vcmZTcyDNTmGVbnFaWRG1
-         hIpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LHvXV2kmqfCvFfKCOYzmtXPEAteV60xqIVKGiujdMpY=;
-        b=PKZd6GC1N/RAgnlmGVLiQnv6nPUNL7d2bptOm8gCUIHpumFA4384WcZ1GmbK+OHl9M
-         5b+NXXkGPSSwCaGrusdyHDU/wWV0OjS3blzABHNbxP7VAVXjgr0n5vDekulU5aTdM1Ld
-         mD/345TuY2G78oU0EcGu+4q8Eug3AmJ3Zmhm8EkeynSuUSqqr9VCmzQ7KhExbZc3PKJG
-         K5c5sEVcUajDCvafgGLuUiiOyQ4kUjb16GR3ywFVWTzItSt3Pq/wtPXESoRIZWKZwCMN
-         /RYWvoFpnFoChGxifqs9ZG+ZZYYcT04xMNBHYR/QMXXVdoTpk8FY4oPr4xvysBiB0Xj6
-         ueow==
-X-Gm-Message-State: AOAM532cce6rr6CIMYXAd3MsN6PASIgmlDGuTFMkYhEr3FJhQK9hMQz/
-        DWkEFWCu7UzyVrHMcSQrRxA=
-X-Google-Smtp-Source: ABdhPJyJuXZQ+wqXZ67sRla82+eaC3FA04CxCwIzaymyQabbK1aGONYj5LMmAEiiozxq/aRiBW7laA==
-X-Received: by 2002:a19:6551:: with SMTP id c17mr5471726lfj.46.1605103689744;
-        Wed, 11 Nov 2020 06:08:09 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id 136sm232266lfb.62.2020.11.11.06.08.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2020 06:08:08 -0800 (PST)
-Subject: Re: [PATCH v8 09/26] memory: tegra30: Support interconnect framework
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20201111011456.7875-1-digetx@gmail.com>
- <20201111011456.7875-10-digetx@gmail.com>
- <20201111055313.tefidnmc7f4yb3jk@vireshk-i7>
- <185e9140-fdce-29ef-68c3-aa7da02b249d@gmail.com>
- <20201111061855.2azilyhfoxwzpoir@vireshk-i7>
- <7f5c15c6-44d2-c997-442c-8f6670794f0e@gmail.com>
- <20201111075402.y52c2zwcw74eeyko@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <406ecffe-6df5-0fbf-b608-606372ed95dc@gmail.com>
-Date:   Wed, 11 Nov 2020 17:08:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S1726556AbgKKObv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Nov 2020 09:31:51 -0500
+Received: from mga01.intel.com ([192.55.52.88]:33114 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726081AbgKKObv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 11 Nov 2020 09:31:51 -0500
+IronPort-SDR: aHq9fg0BIOu273VAnueNRIog0IS3c+N0hHAJ75gh73nMNCGzoPVmOtXTO7EUs/Dpr6ZPi6kQwc
+ Q+38XHxVcNHQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9801"; a="188133466"
+X-IronPort-AV: E=Sophos;i="5.77,469,1596524400"; 
+   d="scan'208";a="188133466"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2020 06:31:48 -0800
+IronPort-SDR: /GAd6FrjIoMAvecKIXIlQS01mub9ZzqUpUEZ60UAqJFlgUltR/WnRbSmIucFMm3JZaBYrMnNoR
+ 5IvMC625ywHQ==
+X-IronPort-AV: E=Sophos;i="5.77,469,1596524400"; 
+   d="scan'208";a="541821140"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2020 06:31:45 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 11 Nov 2020 16:31:43 +0200
+Date:   Wed, 11 Nov 2020 16:31:43 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: How to enable auto-suspend by default
+Message-ID: <20201111143143.GV2495@lahna.fi.intel.com>
+References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
+ <X6p6ubTOoMPUPPXi@kroah.com>
+ <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <20201110172517.GC2495@lahna.fi.intel.com>
+ <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20201111075402.y52c2zwcw74eeyko@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-11.11.2020 10:54, Viresh Kumar пишет:
-> On 11-11-20, 10:32, Dmitry Osipenko wrote:
->> 11.11.2020 09:18, Viresh Kumar пишет:
->>> On 11-11-20, 09:14, Dmitry Osipenko wrote:
->>>> The dev_pm_opp_of_add_table() will produce a error message which doesn't
->>>> give a clue about what's wrong, i.e. that device-tree needs to be updated.
->>>
->>> If you think that you need to print something more, then you can do
->>> that in the error message you print when dev_pm_opp_of_add_table()
->>> fails. I would suggest to drop this redundant check here.
->>>
->>
->> Please give the rationale.
+On Wed, Nov 11, 2020 at 12:27:32PM +0100, Hans de Goede wrote:
+> Hi,
 > 
-> The rationale is that the check is already performed by
-> dev_pm_opp_of_add_table() and it isn't going to add *any* benefit to
-> check it again here. Such a check for matching compatible platforms is
-> normally fine, but not for this. This is like open coding part of
-> dev_pm_opp_of_add_table(), and so is redundant. The
-> dev_pm_opp_of_add_table() helper also checks for OPPv1 bindings in the
-> DT (yes you won't be using them on your platform) and so relying on
-> that API is a better thing to do.
+> On 11/10/20 6:25 PM, Mika Westerberg wrote:
+> > On Tue, Nov 10, 2020 at 04:02:33PM +0000, Limonciello, Mario wrote:
+> >>>
+> >>> On Tue, Nov 10, 2020 at 11:57:07AM +0100, Bastien Nocera wrote:
+> >>>> Hey,
+> >>>>
+> >>>> systemd has been shipping this script to enable auto-suspend on a
+> >>>> number of USB and PCI devices:
+> >>>>
+> >>> https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspen
+> >>> d_rules.py
+> >>>>
+> >>>> The problem here is twofold. First, the list of devices is updated from
+> >>>> ChromeOS, and the original list obviously won't be updated by ChromeOS
+> >>>> developers unless a device listed exists in a ChromeBook computer,
+> >>>> which means a number of devices that do support autosuspend aren't
+> >>>> listed.
+> >>>>
+> >>>> The other problem is that this list needs to exist at all, and that it
+> >>>> doesn't seem possible for device driver developers (at various levels
+> >>>> of the stack) to opt-in to auto-suspend when all the variants of the
+> >>>> device (or at least detectable ones) support auto-suspend.
+> >>>
+> >>> A driver can say they support autosuspend today, but I think you are
+> >>> concerned about the devices that are controlled by class-compliant
+> >>> drivers, right?  And for those, no, we can't do this in the kernel as
+> >>> there are just too many broken devices out there.
+> >>>
+> >>
+> >> I guess what Bastien is getting at is for newer devices supported by class
+> >> drivers rather than having to store an allowlist in udev rules, can we set
+> >> the allowlist in the kernel instead.  Then distributions that either don't
+> >> use systemd or don't regularly update udev rules from systemd can take
+> >> advantage of better defaults on modern hardware.
+> >>
+> >> The one item that stood out to me in that rules file was 8086:a0ed.
+> >> It's listed as "Volteer XHCI", but that same device ID is actually present
+> >> in an XPS 9310 in front of me as well and used by the xhci-pci kernel module.
+> >>
+> >> Given we're effectively ending up with the combination of runtime PM turned
+> >> on by udev rules, do we need something like this for that ID:
+> >>
+> >> https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400d8a
+> >>
+> >> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
+> > 
+> > I think this one is the TGL PCH xHCI. The quirk currently for xHCI
+> > controllers that are part of the TCSS (Type-C SubSystem) where it is
+> > important to put all devices into low power mode whenever possible,
+> > otherwise it keeps the whole block on.
 > 
-> As you already said, you just wanted a better print message and so you
-> have added this check. If you really care only about the print
-> message, then you can add a print of your choice in the driver but
-> otherwise this check is not going to benefit you much I am afraid.
+> Note that there are currently some IDs missing from the xHCIs which
+> are part of the TCSS too. At least the id for the xHCI in the thunderbolt
+> controller on the Lenovo T14 gen 1 is missing. I started a discussion
+> about extending the kernel quirk list for this vs switching to hwdb
+> a while a go:
 > 
-> Having said that, this isn't the code I maintain. I need to guarantee
-> that the OPP core APIs are used properly and are not misused and so I
-> have a higher say there. But in this case all I can do is _suggest_
-> and not enforce. And as I said earlier, I suggest to drop this
-> redundant check in order to make your code better and faster.
+> https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-cf8960651086@redhat.com/
 > 
-> Thanks.
-> 
+> The conclusion back then was to switch to hwdb, but I never got around to this.
 
-I took a closer look and turned out that devm_pm_opp_of_add_table()
-silently returns -ENODEV if OPP is missing in a DT. Hence indeed it
-should be good to drop the property-check. I'll improve it in the next
-revision, thank you.
+The reason I've added these to the xHCI driver is that it works even if
+you are running some really small userspace (like busybox). Also for the
+xHCI in TCSS we know for sure that it fully supports D3cold.
+
+(The one you refer above is actually mistake from my side as I never
+ tested Alpine Ridge LP controller which I think this is).
+
+> > Typically we haven't done that for PCH side xHCI controllers though, but
+> > I don't see why not if it works that is. Adding Mathias to comment more
+> > on that since he is the xHCI maintainer.
+> 
+> If we are also going to enable this for the non TCSS Intel XHCI controllers,
+> maybe just uncondtionally enable it for all Intel XHCI controllers, or
+> if necessary do a deny-list for some older models and enable it for anything
+> not on the deny-list (so all newer models). That should avoid the game of
+> whack-a-mole which we will have with this otherwise.
+
+This is really up to Mathias to decide. I'm fine either way :)
