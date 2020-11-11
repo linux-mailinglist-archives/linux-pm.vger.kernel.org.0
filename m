@@ -2,55 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4B12AE8AF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 07:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1912F2AE8BA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 07:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725925AbgKKGPF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Nov 2020 01:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S1725955AbgKKGS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Nov 2020 01:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgKKGPF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 01:15:05 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82DFC0613D1;
-        Tue, 10 Nov 2020 22:15:04 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id l2so1675084lfk.0;
-        Tue, 10 Nov 2020 22:15:04 -0800 (PST)
+        with ESMTP id S1725984AbgKKGS6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 01:18:58 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4627CC0613D1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 22:18:58 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id cp9so456721plb.1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Nov 2020 22:18:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ueu5uW+Gs7n1BlGQ4zVO3Hsje+5ZnemXOi5VWUiWGgY=;
-        b=B77ZmpGxWBBTkp1chXDUgCnFrzSt2oMPFfzzELNlHLy/hWt7Bz40l/E7AdVmHlNAe/
-         GQiwqC350cm1FN+e4kLUYym16afqIhO6GK/gWnm4E1uE4DtGcjF1ijk4UaEUFYTuqmbV
-         oNQ9AEAdbBldaT1bkmctoSbFwT/shQLdatDwkD+6mEdbPFUpRZ2722HOYZ3jznCoT3UB
-         uLD4XTTof3/n1eAJdg8kMSxld4srAjxNUUeFJucfeffzi+sfoEw0N5ilzpuJGCsW8OSv
-         G48nZOGz8WldSdc00oOfooJ46G2iy78kbk08qlZ/PTGfME8tZfYeX5LJ2c50g0Z+NNk+
-         rWhA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=Zz+u4O/ExV+I0XfrOYfMwrWHftV4MOlXgA3EL9hIHsg=;
+        b=Pw4a1V3nK4X2DgxHAQTdRmNKbd1BmJuxzNI33tTM8sIXZTP8qajX3ww4DaPPdFo6Zs
+         5K09iJmEHBSCQeWWkFgm1Kdw94Lntwqu29hIgeB9q5TcfhzffDjNRF91zjtINBTnbBau
+         fTjqe//5KYelMUFY+/ziAiHibl5AyvjTV+nKbiI3UNVy4omo3Z0iw25Yu0f3sGCVv13Q
+         RfsqZ11ODtWL/A6yfCI8eBLJ3ndC1X9lI1YrBO+uIvqt1xHD4VEkDElC5Txxt+/arELA
+         eTxq92w5zzdCAnEdx70ezELIxdZfJQKNBEMXwxTWa1u/BMYHRGpcWR9hIm0FaCV9vG3f
+         IRbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ueu5uW+Gs7n1BlGQ4zVO3Hsje+5ZnemXOi5VWUiWGgY=;
-        b=g+jCpG7BFn9ABFkai6aH3QE7+zjg6P2fLXQIJtJjPHINrgbIezhFrsywSCacZfGeYf
-         1Cu8eav2pJzuOGmLkJy0ZpSrdm3ude+lyR83b5v+XlecjW1uaxEa1NoeWtSdUUXRwQxk
-         4M7R3KMopQh3veOPcTWAjk85Zie0KdLdqsRwVVDCjr+C7UiF6lCUel+baiwl98IzQgfs
-         xVUa8EFM6C+ftGMjm6vaIT0XjN1ljWmze+wjqqFr7LIDT+GVy2rPfa6QjeYkXwEJXiVs
-         eHgfwqj2XKgel7t0zYKEh9xmZqCctsjMoAkBncwtABRv94M/E5hu9LLKnRo81Vrdbx4G
-         9IaA==
-X-Gm-Message-State: AOAM532xtFsGhWFKUBzWUHGgevZOqKSrdHI0tQJIQU4YR9aeT5ZFvk/n
-        XBUrm+5xPFHV7Eq/hBcL++g=
-X-Google-Smtp-Source: ABdhPJxJk8T85hwOVfVjS0XWnFK0/rvXThAoaYy5jAyF+4dT/D0sNZH+aAJc7/fNjBpkY1l846JyEQ==
-X-Received: by 2002:a05:6512:34d3:: with SMTP id w19mr8452924lfr.418.1605075303375;
-        Tue, 10 Nov 2020 22:15:03 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id j19sm118257lja.100.2020.11.10.22.15.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2020 22:15:02 -0800 (PST)
-Subject: Re: [PATCH v8 02/26] memory: tegra20-emc: Use
- dev_pm_opp_set_clkname()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=Zz+u4O/ExV+I0XfrOYfMwrWHftV4MOlXgA3EL9hIHsg=;
+        b=cKWrlr0j3GshW5Z20QYzD5VYe5tRgey/F0X5FplVGTbwGJUDj9RX7/6SS8TmnZKOxI
+         T4EEOqVO4WJC2bpGZ2dQ6rGxSRMs2jWKyau1b1q0vMi+0BV1kSsc8JrF/uAJItZ7yXAg
+         wzhUTXUE4jeDcAtq54bNJM5PoweY9i6FnoSKmOoWvxW830tujkQAfcckmx7JmFymYnMF
+         jUZZYn9wmtoP2Ni+w5vkhAMEu3XEK1sxeGdCe0pqRLNQfYFv6okX7Nk2+4Z4qMN1QJ4s
+         6b3+ogSfx7xIBoIDpi+FaJNvDCW4ByaTh8W6De49Ao5p6awa1/++3o8YJIyLaSm+rIpx
+         eA4Q==
+X-Gm-Message-State: AOAM530ubk15+OWTRSqcPzggOVW5Ivie33mYtQIaKNK9Zf7RPtAfCJJQ
+        CG4pgIPgWjNt3bh9yMqpMqamTA==
+X-Google-Smtp-Source: ABdhPJx2Np21K4nEJMcurse4ukZe7jVo8P4Kg57gCpQvT0frJjcTL8LmeWw4PX37zBAzAgIYqahjpQ==
+X-Received: by 2002:a17:902:59cf:b029:d7:e216:9260 with SMTP id d15-20020a17090259cfb02900d7e2169260mr11119815plj.74.1605075537774;
+        Tue, 10 Nov 2020 22:18:57 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id j19sm1091459pfd.189.2020.11.10.22.18.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 10 Nov 2020 22:18:57 -0800 (PST)
+Date:   Wed, 11 Nov 2020 11:48:55 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
@@ -68,31 +69,47 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v8 09/26] memory: tegra30: Support interconnect framework
+Message-ID: <20201111061855.2azilyhfoxwzpoir@vireshk-i7>
 References: <20201111011456.7875-1-digetx@gmail.com>
- <20201111011456.7875-3-digetx@gmail.com>
- <20201111054541.hstqrlvtpwxxbv4m@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <dcc85e86-0660-03ce-a4df-d40dbf77e570@gmail.com>
-Date:   Wed, 11 Nov 2020 09:15:02 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20201111011456.7875-10-digetx@gmail.com>
+ <20201111055313.tefidnmc7f4yb3jk@vireshk-i7>
+ <185e9140-fdce-29ef-68c3-aa7da02b249d@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201111054541.hstqrlvtpwxxbv4m@vireshk-i7>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <185e9140-fdce-29ef-68c3-aa7da02b249d@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-11.11.2020 08:45, Viresh Kumar пишет:
->> +put_reg_table:
->> +	if (reg_opp_table)
-> This won't be required after my other patchset and yeah it is a
-> classic chicken and egg problem we have here :)
+On 11-11-20, 09:14, Dmitry Osipenko wrote:
+> 11.11.2020 08:53, Viresh Kumar пишет:
+> >> +static int tegra_emc_opp_table_init(struct tegra_emc *emc)
+> >> +{
+> >> +	struct opp_table *reg_opp_table = NULL, *clk_opp_table, *hw_opp_table;
+> >> +	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+> >> +	const char *rname = "core";
+> >> +	int err;
+> >> +
+> >> +	/*
+> >> +	 * Legacy device-trees don't have OPP table and EMC driver isn't
+> >> +	 * useful in this case.
+> >> +	 */
+> >> +	if (!device_property_present(emc->dev, "operating-points-v2")) {
+> > I don't understand why you want to check this ? The below call to
+> > dev_pm_opp_of_add_table() will fail anyway and that should be good for
+> > you.
+> > 
 > 
-> Maybe you can fix them separately in 5.11 after everything is applied.
-> 
+> The dev_pm_opp_of_add_table() will produce a error message which doesn't
+> give a clue about what's wrong, i.e. that device-tree needs to be updated.
 
-I already prepared patch in the "core voltage scaling" series that will
-remove this code.
+If you think that you need to print something more, then you can do
+that in the error message you print when dev_pm_opp_of_add_table()
+fails. I would suggest to drop this redundant check here.
+
+-- 
+viresh
