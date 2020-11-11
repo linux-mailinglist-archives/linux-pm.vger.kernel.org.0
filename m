@@ -2,128 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D36B2AEE1A
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 10:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDE12AEE7B
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Nov 2020 11:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgKKJvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Nov 2020 04:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S1727426AbgKKKHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Nov 2020 05:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726081AbgKKJvL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 04:51:11 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1477C0613D4
-        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 01:51:10 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id j5so704980plk.7
-        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 01:51:10 -0800 (PST)
+        with ESMTP id S1727423AbgKKKHd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Nov 2020 05:07:33 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABD4C0613D6
+        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 02:07:32 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id 33so1946514wrl.7
+        for <linux-pm@vger.kernel.org>; Wed, 11 Nov 2020 02:07:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HRhA/9/dWDo5po8jcoZ8JRpSSGgd2ewUSLF6VW3aj9I=;
-        b=wiBeiEDmShIVDqF3zPzEIH56Oj+TQiU3sHEjdStNgmjYioOs8x0j89pLGPE1S1pPdB
-         VnPYf6QEgtHeW3kBOyGLT/LbjWS1GdXEjrwaKdFyttpKd2dUcHKzlcyPMqOBi8KHTFcd
-         4p19jmoq2bdFj8qj0Ujm6zyf8C3ADjOGjIJsEHl93DbvVi67tnFJMpIflgki3PyUwgS3
-         7LrU75tZGlaTpPZb5sIteCiLUT0kXbddaVQAVlh25Q1Y2ZOOiiullfFxzsp7tePF8Fnk
-         YxFGcZSvK9U8UOeOfT2Jo5YvxvDfvFNcAz6BM5AwS30Yuxu49Gqj3+XgpQSooJkK5CTH
-         eHCg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lhNVmiGRjKtWj6Yv/r78yPNvE9PCgYoouxIq1h1Gu1E=;
+        b=eGNQ2RRHPn8cIvHZO7W4KaoAKsbVJhZjhfzPqRGC2E+OfIx30kHsq0DJcAkvBU9OMs
+         AmOLn20fUak02DJ3SAY714hKnBLIoBHRFGbLOf3BmGV1eJV0a1QB2NmhkIb1WdOU6tet
+         d1ctqz5Ryqt+fcIqWorFXkXKLV6wHQHT3Q/ZvExgP/W4txFJv8YEJ2eIzl8F1MQykxfQ
+         a0QYbpgU/9iZcJEkasGFv4rkKUjiGQd0OS98RRWTJwzFRPWpkIJNzGp+MmKSrU6pZqlH
+         9SGuT984v4MKMEaxSA7YXRZY1GAGLKGr+3vVSLLcQzVuzoMGFlrNHfHUKyjqRatLws2K
+         vCyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HRhA/9/dWDo5po8jcoZ8JRpSSGgd2ewUSLF6VW3aj9I=;
-        b=HbGYsYYKA2QMkVrXNXgpJ8x+/2DCquTk6Pyu3nTFs21o47Qc32NuHygwgomVBULfC9
-         ef84elrDRObOdhyEcJQ/7taT/Jxvs1taRrLlp/uxEF0SR0UuAvYpf08A6VE44iVNn44S
-         BC4mQgSafgVXol6oZ0EfJe8kz86XMJfmtyGb1ZiyL+8wy/t3wY1L022ZVHoXvlG6Jllh
-         E0in5anPp59ZpLWHnYMjwBBU0iOoEXQlD6SR+I0gbTEiKCinXLkheJpIeKjMgI8p0F5c
-         Ag60TydK1Wm9x/xbA+7LPjm61kcd+AwOTFreroPtFjBUJQgWIZziWgnOWiCAIsF5Qypf
-         RAgg==
-X-Gm-Message-State: AOAM532/N+rAyOsZdldAU0UjQn7AU9q59+GOn/JCKcAw+seD7DzDZq03
-        AjOrUR1fb2uUVravcTrUwxHwpw==
-X-Google-Smtp-Source: ABdhPJyy+YswJOhFdT8EBhMSAIQUSlQljZAOzPQtGgNfhVcb5qtVtJC22dSbp0OSqejC7zSnvQOEmg==
-X-Received: by 2002:a17:90b:1741:: with SMTP id jf1mr3047963pjb.144.1605088270466;
-        Wed, 11 Nov 2020 01:51:10 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id c3sm1863531pjv.27.2020.11.11.01.51.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lhNVmiGRjKtWj6Yv/r78yPNvE9PCgYoouxIq1h1Gu1E=;
+        b=rFMZptdhpK9c5YVhvW/Z+XoB0ZDx6g4uQ5cim3uPCVKVGCxV7+F99sh2DrvEHXqCo+
+         tRzyUrAqbGC8wDWggfjI2bXbXS0AxWrS9Ea1c+eOG06y00YgvBLDke/R5UGN1tKe+GIK
+         sEzRLoIkJVM/2sqynaBsFQweTI5hGAaRqcH76nKGwbmo64uyalKb++q1AM0P39Z5aOXp
+         qur2PQIGNkpyYC8hd+ohBb536JBPj+FVJbaLaaqP6ORemI4jua+C5nwZzopmvq9VkBYh
+         eJBKQNDomeWozVLrQgFvBWvdjCgXmOpOB9ilya3AORUdotdImBKEt5NVxLMyM+3t2G2V
+         2Aug==
+X-Gm-Message-State: AOAM5324RrptsSBFT5QSi33C0SZ+h+5su/Y5AcPE754LdqKo3kYKtAtE
+        DwRB8b7V6beTQqWkGvJdcT4C29RtKjXc8A==
+X-Google-Smtp-Source: ABdhPJxnas6xPj4y1eZeu09nWk8hlj/K7wPTeewT4L7XHj0sLnBiCg8sq6iv413heH318CAuBmN7sg==
+X-Received: by 2002:a5d:62ca:: with SMTP id o10mr7083941wrv.422.1605089251104;
+        Wed, 11 Nov 2020 02:07:31 -0800 (PST)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id s188sm1941424wmf.45.2020.11.11.02.07.29
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Nov 2020 01:51:09 -0800 (PST)
-Date:   Wed, 11 Nov 2020 15:21:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thomas Renninger <trenn@suse.de>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: stats: Switch to ktime and msec instead of
- jiffies and usertime
-Message-ID: <20201111095107.fanba37rgls536xn@vireshk-i7>
-References: <0e0fb542b6f6b26944cb2cf356041348aeac95f6.1605006378.git.viresh.kumar@linaro.org>
- <1832747.5iOEhN7m9D@c100>
- <20201111051350.qxevqcca5775h2xa@vireshk-i7>
- <2047155.4hzcE6bcFl@c100>
+        Wed, 11 Nov 2020 02:07:30 -0800 (PST)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     linux-pm@vger.kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org
+Subject: [PATCH] interconnect: qcom: qcs404: Remove gpu and display nodes
+Date:   Wed, 11 Nov 2020 12:07:34 +0200
+Message-Id: <20201111100734.307-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2047155.4hzcE6bcFl@c100>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-11-20, 09:13, Thomas Renninger wrote:
-> Am Mittwoch, 11. November 2020, 06:13:50 CET schrieb Viresh Kumar:
-> > On 10-11-20, 13:53, Thomas Renninger wrote:
-> > > Am Dienstag, 10. November 2020, 12:07:37 CET schrieb Viresh Kumar:
-> > > > The cpufreq and thermal core, both provide sysfs statistics to help
-> > > > userspace learn about the behavior of frequencies and cooling states.
-> > > > 
-> > > > This is how they look:
-> > > > /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 399
-> > > > 
-> > > > The results look like this after this commit:
-> > > > /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state:1200000 3830
-> > > 
-> > > How would userspace know whether it's ms or 10ms?
-> 
-> Again:
-> How would userspace know whether it's ms or 10ms?
+The following errors are noticed during boot on a QCS404 board:
+[    2.926647] qcom_icc_rpm_smd_send mas 6 error -6
+[    2.934573] qcom_icc_rpm_smd_send mas 8 error -6
 
-Yeah, I understand the problem you are pointing at.
+These errors show when we try to configure the GPU and display nodes,
+which are defined in the topology, but these hardware blocks actually
+do not exist on QCS404. According to the datasheet, GPU and display
+are only present on QCS405 and QCS407.
 
-> > > whatabout a new file with the same convention as cooling devices (adding ms):
-> > Keeping two files for same stuff is not great, and renaming the file
-> > breaks userspace ABI.
-> 
-> No exactly the other way around:
-> - Renaming, breaks the userspace ABI.
-> - Two files would be the super correct way to go:
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+---
+ drivers/interconnect/qcom/qcs404.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-Yes, but then this is just some stats which a very limited number of
-people should be using and so ...
-
->   - Deprecate the old file and keep the 10ms around for some years
->     ./Documentation/ABI/obsolete
->   - Add the new interface and document it in:
->    ./Documentation/ABI/testing
-> 
-> As this is about a minor cpufreq_stat debug file, it is enough if
-> you rename to:
-> > /sys/devices/system/cpu/cpufreq/policy0/stats/time_in_state_ms
-
-... I agree about this. Just rename the file accordingly. Which will
-also make sure that everyone follows that something got changed in the
-kernel.
-
-> > I already fixed this recently and stats don't appear empty for fast
-> > switch anymore.
-> 
-> Then cpufreq_stats could be a module again?
-
-No, not really. This is some code that needs to get called from
-cpufreq core, without any notifiers and as fast as possible as we may
-be in scheduler's hot path. So the module thing isn't going to work
-now.
-
--- 
-viresh
+diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+index 9f992422e92f..2ed544e23ff3 100644
+--- a/drivers/interconnect/qcom/qcs404.c
++++ b/drivers/interconnect/qcom/qcs404.c
+@@ -20,8 +20,6 @@
+ 
+ enum {
+ 	QCS404_MASTER_AMPSS_M0 = 1,
+-	QCS404_MASTER_GRAPHICS_3D,
+-	QCS404_MASTER_MDP_PORT0,
+ 	QCS404_SNOC_BIMC_1_MAS,
+ 	QCS404_MASTER_TCU_0,
+ 	QCS404_MASTER_SPDM,
+@@ -156,8 +154,6 @@ struct qcom_icc_desc {
+ 	}
+ 
+ DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+-DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, 6, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+-DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, 8, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+ DEFINE_QNODE(mas_snoc_bimc_1, QCS404_SNOC_BIMC_1_MAS, 8, 76, -1, QCS404_SLAVE_EBI_CH0);
+ DEFINE_QNODE(mas_tcu_0, QCS404_MASTER_TCU_0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+ DEFINE_QNODE(mas_spdm, QCS404_MASTER_SPDM, 4, -1, -1, QCS404_PNOC_INT_3);
+@@ -231,8 +227,6 @@ DEFINE_QNODE(slv_lpass, QCS404_SLAVE_LPASS, 4, -1, -1, 0);
+ 
+ static struct qcom_icc_node *qcs404_bimc_nodes[] = {
+ 	[MASTER_AMPSS_M0] = &mas_apps_proc,
+-	[MASTER_OXILI] = &mas_oxili,
+-	[MASTER_MDP_PORT0] = &mas_mdp,
+ 	[MASTER_SNOC_BIMC_1] = &mas_snoc_bimc_1,
+ 	[MASTER_TCU_0] = &mas_tcu_0,
+ 	[SLAVE_EBI_CH0] = &slv_ebi,
+@@ -460,6 +454,9 @@ static int qnoc_probe(struct platform_device *pdev)
+ 	for (i = 0; i < num_nodes; i++) {
+ 		size_t j;
+ 
++		if (!qnodes[i])
++			continue;
++
+ 		node = icc_node_create(qnodes[i]->id);
+ 		if (IS_ERR(node)) {
+ 			ret = PTR_ERR(node);
