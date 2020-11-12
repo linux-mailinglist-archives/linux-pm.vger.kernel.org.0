@@ -2,66 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E382B03BE
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 12:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B942B03C6
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 12:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727789AbgKLLW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 06:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S1727863AbgKLLYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Nov 2020 06:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727035AbgKLLWZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 06:22:25 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67CFC0613D1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 03:22:25 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id p22so4934222wmg.3
-        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 03:22:25 -0800 (PST)
+        with ESMTP id S1727234AbgKLLYJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 06:24:09 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5CBC0613D4
+        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 03:24:08 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id d12so5556952wrr.13
+        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 03:24:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TBhNsZQdgwb8L9O2fB8roWDMxhxwp24jJn01jx9v16I=;
-        b=fLq5eB6xzW9c5XCZ9Dg4JnnRSMdtdI+CZBnL2CzEAEuKEuS39D6ZFcEek4RjXyOFit
-         FDsjiHViAwjEIIO8c+1TwFxg0hlixayoQxpJbx43404PHsw+cZhwl2+JrkuDpeyZ/q6L
-         RuVwDShqzMYZh7BcQFtFj4U/kcqZQPp1ICr/OYZ08q8eF5JJeMecAn72mD6sPifocbmH
-         12yTSJQ22RPaY6ToOa4u+rIMJHLU8q/+wl0DVsc8wVpZO9YOviis1H9apNn8c5nV1WqM
-         DiRwbxDT39NY06+BSaKjC+L5g56SmFVxOKJKH/yAs43bDCztvdoEdJjUdR2PCQeJWwoS
-         1S9g==
+        bh=szqL77OyEVf5vlwPlO5u0pCoBC9WdDfxlvV/jS14f7E=;
+        b=W+eu3SDUj96qApW3fPXVb+xDPNnyinb5iqfjnyWgB2qExiVq0mQwKnClSWWjqkt8OZ
+         fJkNHuW70oPJ/doSMrRfRizxIy6jPW2wSlMD8toIvwPk5bh3fOAjgdTBYKG/Aus9N9t3
+         1bJoWq2anjY3zJZ1pi/FzmllzANSkW2psCgx/vfhv4AXT2YLr/yavichSFSXUCCwNrvZ
+         BHE5035iiBFf6o7siVYZHXjfPiHIdnlGvxplVVriBuEdYHoBIAItWvqRUCeFfG2E6LEa
+         boMBxnUabqFVx09Y8reV5qhqsNMi1rHBANv77VZJ8stUSMd8Y4OfMQ2Vnr292kt8GE6m
+         oE2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=TBhNsZQdgwb8L9O2fB8roWDMxhxwp24jJn01jx9v16I=;
-        b=MmVe/MMITwKdYcg7ltwuhZYXlUCzsLrfJcobOVeVQOGubhw1DXMm1GrRCQcsIkaDKQ
-         IvwJzYGs8LrePhEws7Ye0TL593PqGg++Ut/PXIGEOGChPEWapwlV7UzRr0iM5GVYO4Rl
-         KB+7XLNR9O5ThVmesTLpMaMy493ucREh2vF25DbLB5CuAUEJxmNT6f7ks79f+0w9JAn/
-         sWvdfGGYE7fwz95foMHFIW1oVnpxvTHXtA1sq9ops9yFlgJ3cHjb55+lTUeUcRXYl6aj
-         VU8LLwWgtTJfKXxICK+K0QJ0lKsDJGBClOaHuWpNWGKg7ujSZqho3GVHHIE/TGorzKI+
-         Eg/g==
-X-Gm-Message-State: AOAM533/BS9DI7PZwDG04KeDcN6WekpL7slSz/hv+kthGliW6CvMQaOO
-        V+V6IgaFzymBgUe/Eq3HoG9VMw==
-X-Google-Smtp-Source: ABdhPJwTMc42ZSo5QtIlCWsJfNkBbfVitTMYGPJhgclF1n2ZOjp9XjJdfrQd7R638dyC6QUROHA+pA==
-X-Received: by 2002:a1c:b70b:: with SMTP id h11mr9650589wmf.185.1605180144219;
-        Thu, 12 Nov 2020 03:22:24 -0800 (PST)
+        bh=szqL77OyEVf5vlwPlO5u0pCoBC9WdDfxlvV/jS14f7E=;
+        b=Z5krF4aC2HbqK4gTKxvWsZMBM6b2SW6NUNnb35LPPxJ8S+c1EHrsHsynPl5FrTgoNA
+         Njby7Sc4me4EbOTpbgSOXBU6e3LzkYYRUXt+/jL69OqQ+m4cyXWeZxcJFGqLof3osTAJ
+         Ge5vofwZ9uJL04l026IDgK+34bOHa6dWiHsoMj/Ol5kO2aztTJ2uprFo469U/MsfMPjR
+         vBmNJzf98dhfVeYoAW336WAozTlxGY+3u4fpB8Zuq9VVwa7SHAFJQAd4OcNGzVKawC93
+         8CMp7kMCPUTofKEHIORfL2z0lEqyZTV39wmBQx4vQ6gbSqQmLs2sJ0+76B+VJ/2MFb/H
+         iSCQ==
+X-Gm-Message-State: AOAM531UdrC+YLlcvddT21N9bpug9DqUFiT198EPpls3rh9Q0HxmRQZY
+        HB87kBMcIrtI5Jt0UjvAT+vCzQ==
+X-Google-Smtp-Source: ABdhPJxH7/ZKgWoWnVYh+D4j8m7LwUtdScXYKtOerDowIYHrkBFRK+sNKPZHBUWJnvIbUw7Xl+MMVw==
+X-Received: by 2002:a5d:444c:: with SMTP id x12mr23015463wrr.6.1605180247340;
+        Thu, 12 Nov 2020 03:24:07 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:6971:b700:3764:fa96? ([2a01:e34:ed2f:f020:6971:b700:3764:fa96])
-        by smtp.googlemail.com with ESMTPSA id m22sm6500180wrb.97.2020.11.12.03.22.23
+        by smtp.googlemail.com with ESMTPSA id q7sm6837706wrg.95.2020.11.12.03.24.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Nov 2020 03:22:23 -0800 (PST)
-Subject: Re: [Resend][PATCH] drivers/thermal: fix potential memleak in error
- branch
-To:     Bernard <bernard@vivo.com>, Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-References: <AOUAJQBgDcHjy8iGeDq3e4rT.1.1604995817639.Hmail.bernard@vivo.com>
+        Thu, 12 Nov 2020 03:24:06 -0800 (PST)
+Subject: Re: [PATCH v2] thermal/drivers/cpufreq_cooling: Update cpufreq_state
+ only if state has changed
+To:     zhuguangqing83@gmail.com, viresh.kumar@linaro.org,
+        amit.kachhap@gmail.com, javi.merino@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhuguangqing <zhuguangqing@xiaomi.com>,
+        "v5 . 4+" <stable@vger.kernel.org>
+References: <20201106092243.15574-1-zhuguangqing83@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <b40dc34b-85b2-4d7a-e28e-7beea4bb29f6@linaro.org>
-Date:   Thu, 12 Nov 2020 12:22:22 +0100
+Message-ID: <55b484fb-1532-e130-3b05-5a7f5e18a536@linaro.org>
+Date:   Thu, 12 Nov 2020 12:24:05 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <AOUAJQBgDcHjy8iGeDq3e4rT.1.1604995817639.Hmail.bernard@vivo.com>
+In-Reply-To: <20201106092243.15574-1-zhuguangqing83@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -69,33 +71,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/11/2020 09:10, Bernard wrote:
-> Function __thermal_cooling_device_register, when device_register
-> failed, cdev is not free after error value return, this may
-> bring in potential memleak.
+On 06/11/2020 10:22, zhuguangqing83@gmail.com wrote:
+> From: Zhuguangqing <zhuguangqing@xiaomi.com>
 > 
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
+> If state has not changed successfully and we updated cpufreq_state,
+> next time when the new state is equal to cpufreq_state (not changed
+> successfully last time), we will return directly and miss a
+> freq_qos_update_request() that should have been.
+> 
+> Fixes: 5130802ddbb1 ("thermal: cpu_cooling: Switch to QoS requests for freq limits")
+> Cc: v5.4+ <stable@vger.kernel.org> # v5.4+
+> Signed-off-by: Zhuguangqing <zhuguangqing@xiaomi.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  drivers/thermal/thermal_core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 3d1e0033bf3e..e4bee15dfa1f 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1125,6 +1125,7 @@ __thermal_cooling_device_register(struct device_node *np,
->  	if (result) {
->  		ida_simple_remove(&thermal_cdev_ida, cdev->id);
->  		put_device(&cdev->device);
-> +		kfree(cdev);
->  		return ERR_PTR(result);
->  	}
 
-Please fix the function with the proper error path and the labels.
-
-Thanks
-
-  -- Daniel
+Applied, thanks
 
 
 -- 
