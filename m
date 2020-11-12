@@ -2,39 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 577342B093A
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 16:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2512B0951
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 17:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729019AbgKLP7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 10:59:07 -0500
-Received: from mail-oo1-f68.google.com ([209.85.161.68]:37188 "EHLO
-        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729001AbgKLP7H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 10:59:07 -0500
-Received: by mail-oo1-f68.google.com with SMTP id t10so1421142oon.4;
-        Thu, 12 Nov 2020 07:59:06 -0800 (PST)
+        id S1728635AbgKLQAS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Nov 2020 11:00:18 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:36724 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728501AbgKLQAR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 11:00:17 -0500
+Received: by mail-ot1-f51.google.com with SMTP id n89so6043520otn.3;
+        Thu, 12 Nov 2020 08:00:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=DNxWM/BVH5fGeTzA5yC/21tIQu3wig2OXKcKsexOcPM=;
-        b=LX9RGWSrjOnvA2vieWb8n1O3lSqFf8rTD8lQtImO/ZMynrChlrH65lqsGepQJi0MYR
-         5kDoOZBteagFCgs5TAd0bMovBqGVOllGm3LH2rRIUF8k2yYuFFPLrEfAxtkFjtWqOujx
-         SwZQqi0JWQwIsPbxKo5beh1fETRYUTz+TRWY4BWdYyjdxJN1juwfkx1aagYDg0BZZIQJ
-         bHRFXZCQ/ArNFljy0T03zl/bAQlwjGmIzx1zpjVgrkRsiAc5Foe/T0UdcCSLluhIvgbh
-         DCJ8aSuQ2eWCP+05UbUWmXtGJKAVE4ar+/RTiW5CyaSKyWiHTh6kXLrB0ZjRhJRYZ5jm
-         4g7Q==
-X-Gm-Message-State: AOAM531kclOu600uj1mKpflTctna4NBHFmHIvwr3mxdoC4my2myoaBbK
-        vMMLhcdQI4zQTOOYjIg2M1VYgQvCIBisC9VWyx5HV+c7WSI=
-X-Google-Smtp-Source: ABdhPJxXTS9+lCz5yjnp66fQrgsPqCQgz2dEWI6XQF/I71Pth/I75Etbkbiprv1EnxABrXDlmqvWeYLSWd7jmwNf48o=
-X-Received: by 2002:a4a:e80b:: with SMTP id b11mr21288472oob.1.1605196746342;
- Thu, 12 Nov 2020 07:59:06 -0800 (PST)
+        bh=uSvbXH4CyeVHmYh9u1L91dcNlQQ8ypiS3s4LMmYrlaY=;
+        b=UvwIWEVL9ZHGV0Qx92ml/3JTn+hbhJ6UyScKmbVwIBAc8V2CxQ4QSvS907+96cz98L
+         eK6mL1eokhFhA73WA6J17k/01uHJzQtvT+pI0y0fjiYNUIXMAsFXeybqAYWfsvN/e1zR
+         kilx/DH7x6mZTnfCDR03q3vRZWUPfLmHKU/osU3w9hd2vCAGE/H5C1vC4uPAo7uyCyhs
+         6q6rjLhzPxVgmFA26EVhaVSVJkzkTfR37tWE7q7F+81TrYUXYAiotb5esXZZMoyX7stm
+         EYEWmhoBjI7B5CTKU/5sJd+4AP8jGsVmQWiJDcvXlzvzmCJXuML0zn3ymiZGs7tf9MA4
+         BHmg==
+X-Gm-Message-State: AOAM531CObqQ7HAU0uOGhOFhSr3o9yLbkmcweoiJ0qW3xhhnM4E7Wq77
+        tADO2wgu2kYApBl7orOmdNjiRAUtf0VFtZeV+J0zMuc9r/s=
+X-Google-Smtp-Source: ABdhPJy20Psdcu+jBPDIbLC8rCOwltWSLfoYyZQ8GYS92dblTRH3atiBA0Fw4oDCD6xkVQ3txe2lClxmLtFiMaY0RT0=
+X-Received: by 2002:a9d:16f:: with SMTP id 102mr23123590otu.206.1605196816463;
+ Thu, 12 Nov 2020 08:00:16 -0800 (PST)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Nov 2020 16:58:55 +0100
-Message-ID: <CAJZ5v0iypErbx8R-0wOnBOK=BNsY0HCNK13BEkdUoxsXJQ1K3g@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.10-rc4
+Date:   Thu, 12 Nov 2020 17:00:05 +0100
+Message-ID: <CAJZ5v0gNPL6kbg9f5JgZOvH7k-GLC8yrvvidwj_VCq09ie9NYg@mail.gmail.com>
+Subject: [GIT PULL] ACPI updates for v5.10-rc4
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -46,40 +47,93 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.10-rc4
+ acpi-5.10-rc4
 
-with top-most commit fcb3a1ab79904d54499db77017793ccca665eb7e
+with top-most commit 7222a8a52c9ec59affc4d6c4e2632b3e4a44cd27
 
- cpufreq: intel_pstate: Take CPUFREQ_GOV_STRICT_TARGET into account
+ Merge branches 'acpi-scan', 'acpi-misc', 'acpi-button' and 'acpi-dptf'
 
 on top of commit f8394f232b1eab649ce2df5c5f15b0e528c92091
 
  Linux 5.10-rc3
 
-to receive power management fixes for 5.10-rc4.
+to receive ACPI updates for 5.10-rc4.
 
-These make the intel_pstate driver behave as expected when it
-operates in the passive mode with HWP enabled and the "powersave"
-governor on top of it.
+These are mostly docmentation fixes and janitorial changes plus some
+new device IDs and a new quirk.
+
+Specifics:
+
+ - Fix documentation regarding GPIO properties (Andy Shevchenko).
+
+ - Fix spelling mistakes in ACPI documentation (Flavio Suligoi).
+
+ - Fix white space inconsistencies in ACPI code (Maximilian Luz).
+
+ - Fix string formatting in the ACPI Generic Event Device (GED)
+   driver (Nick Desaulniers).
+
+ - Add Intel Alder Lake device IDs to the ACPI drivers used by the
+   Dynamic Platform and Thermal Framework (Srinivas Pandruvada).
+
+ - Add lid-related DMI quirk for Medion Akoya E2228T to the ACPI
+   button driver (Hans de Goede).
 
 Thanks!
 
 
 ---------------
 
-Rafael J. Wysocki (4):
-      cpufreq: Introduce governor flags
-      cpufreq: Introduce CPUFREQ_GOV_STRICT_TARGET
-      cpufreq: Add strict_target to struct cpufreq_policy
-      cpufreq: intel_pstate: Take CPUFREQ_GOV_STRICT_TARGET into account
+Andy Shevchenko (3):
+      Documentation: firmware-guide: gpio-properties: Fix factual mistakes
+      Documentation: firmware-guide: gpio-properties: active_low only
+for GpioIo()
+      Documentation: firmware-guide: gpio-properties: Clarify initial
+output state
+
+Flavio Suligoi (1):
+      Documentation: ACPI: fix spelling mistakes
+
+Hans de Goede (1):
+      ACPI: button: Add DMI quirk for Medion Akoya E2228T
+
+John Garry (1):
+      ACPI: scan: Fix acpi_dma_configure_id() kerneldoc name
+
+Maximilian Luz (1):
+      ACPI: Fix whitespace inconsistencies
+
+Nick Desaulniers (1):
+      ACPI: GED: fix -Wformat
+
+Srinivas Pandruvada (1):
+      ACPI: DPTF: Support Alder Lake
 
 ---------------
 
- drivers/cpufreq/cpufreq.c             |  4 +++-
- drivers/cpufreq/cpufreq_governor.h    |  2 +-
- drivers/cpufreq/cpufreq_performance.c |  1 +
- drivers/cpufreq/cpufreq_powersave.c   |  1 +
- drivers/cpufreq/intel_pstate.c        | 16 +++++++++-------
- include/linux/cpufreq.h               | 18 ++++++++++++++++--
- kernel/sched/cpufreq_schedutil.c      |  2 +-
- 7 files changed, 32 insertions(+), 12 deletions(-)
+ Documentation/firmware-guide/acpi/acpi-lid.rst     |  8 ++--
+ .../firmware-guide/acpi/gpio-properties.rst        | 55 ++++++++++++++++------
+ .../firmware-guide/acpi/method-tracing.rst         |  2 +-
+ drivers/acpi/acpi_video.c                          |  6 +--
+ drivers/acpi/battery.c                             |  2 +-
+ drivers/acpi/button.c                              | 13 ++++-
+ drivers/acpi/dptf/dptf_pch_fivr.c                  |  1 +
+ drivers/acpi/dptf/dptf_power.c                     |  2 +
+ drivers/acpi/dptf/int340x_thermal.c                |  6 +++
+ drivers/acpi/event.c                               |  2 +-
+ drivers/acpi/evged.c                               |  2 +-
+ drivers/acpi/fan.c                                 |  1 +
+ drivers/acpi/internal.h                            |  2 +-
+ drivers/acpi/nfit/core.c                           | 10 ++--
+ drivers/acpi/pci_irq.c                             |  2 +-
+ drivers/acpi/pci_link.c                            | 12 ++---
+ drivers/acpi/pci_mcfg.c                            |  2 +-
+ drivers/acpi/power.c                               |  6 +--
+ drivers/acpi/processor_perflib.c                   |  6 +--
+ drivers/acpi/sbs.c                                 |  2 +-
+ drivers/acpi/sbshc.c                               |  2 +-
+ drivers/acpi/sbshc.h                               |  6 +--
+ drivers/acpi/scan.c                                |  2 +-
+ drivers/acpi/video_detect.c                        | 16 +++----
+ drivers/acpi/wakeup.c                              |  4 +-
+ 25 files changed, 110 insertions(+), 62 deletions(-)
