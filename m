@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7EC2B02E5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 11:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92D22B02EC
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 11:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728064AbgKLKkp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 05:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S1728078AbgKLKk7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Nov 2020 05:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727789AbgKLKkl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 05:40:41 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E552C0613D4;
-        Thu, 12 Nov 2020 02:40:41 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id x15so2822478pfm.9;
-        Thu, 12 Nov 2020 02:40:41 -0800 (PST)
+        with ESMTP id S1728035AbgKLKkq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 05:40:46 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE281C0613D1;
+        Thu, 12 Nov 2020 02:40:44 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id z1so2558404plo.12;
+        Thu, 12 Nov 2020 02:40:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=u+M7HYglZOp5MaUV2OK0mqyP7sVvY6YqnuX0C+YCA2s=;
-        b=puPi7mqRZSYMy2nKr89wfsbRifAOi0lyPupwgU/0yHVQy/X0nbpsG0m4rojcctuO1S
-         6YGgh6QJ38e0n6yQDR1QpjkEcn4nUFgGrdl0mryr7iUiM2n/JVgixwztdCYZvyPK/GM9
-         IiOfJZWaeRWGOcOVcnyzoOpIkEjVJSmlaOdBWkL57eO5zwI35DjjK3tLSSL1Rbp4Jq0S
-         kwab1tPpOQ0jHJMzGHB7kLj+LoHybJau+Pe1d/nBu9aqEmiAtFqb/6f+blNd6R8w/e7a
-         DOmo5hiX5fCETTmj6f5yztC7cYS3Ve4uAv4SYeTI+Tzw17CdGZmZdjeecZBrxkbtmEPy
-         TCtA==
+        bh=algkSlHd9xkfYBolwCg/NlFH/Qse31ebTNBvgmeLrlQ=;
+        b=p8bk+nmKSFWkl2/QhMWBU8QPK/uYeIgIKtq5OMDQUj2mMyQioK5Nk83g7qvV+im28+
+         bn4Abg42K2nHukiyzYR2FWxIDx2m4rlRaRaS6zEkzpsTeWYmUXYUXf+gHmX6SZgB9GF2
+         yepJ0pZZyGYbJQO06A5cKs6jUuQUu0lI0uQHPvLwSLph4X9xlqSWt4R1WUhRdUSMM0bs
+         d2dVV8JleS6d1UG/BYiwton/HxI3ytdE81WzHAN9spVyEWFsHpkPAYDX1jOpNrsFLoZW
+         mJVbg43uU/SwBlHkpM4nR9eF/OlsycnbKlZUhHY9JnrDxUuw+jLEQ+C2Aa5q9eqI0Ji4
+         zhxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=u+M7HYglZOp5MaUV2OK0mqyP7sVvY6YqnuX0C+YCA2s=;
-        b=LQmopO1+dWxegpgtuYhi6b5iVwq7pWf2gO+IXSarfQYVgPsCDku6hfujpH5we1AESw
-         6BTbIvaekLr/f371zX9VUICki78/WZj92Xzv7RZSBGPVb0XYvF36Y4qIqfIONtJAbWz+
-         niVrOHdbbbdgwkLhnJonKAs2jdvm5My8gRxPqQGapmhrQ4jT2ewGBJePYpqqr700aiI8
-         ocVfiXBJqrq5JUhetihvJbx8A/Z1qnss0HEaZJiTGIFDMRQ0xlenxVF1rkA2K5zixT/G
-         U0uxp+QykaiUBbZepGVXSElGHeb68C4GwWI4oPOiDRD8P6PE/bRS/4dT33YQVPHEUWou
-         D3yQ==
-X-Gm-Message-State: AOAM533CHAfjGRQOuPH4fER2Y7Z3d4eU7Q69Wi9XwGQTGKtLPFapqsqc
-        1BGDyjWL/nK+aTiieNAkY5k=
-X-Google-Smtp-Source: ABdhPJz5Jr5hxYDaMy3CcNOjKiLv4DZzpOLSKdQSu4fJeNhdIFcETU90ZupIbsaluM+0qO56SkwWFA==
-X-Received: by 2002:a17:90a:e28f:: with SMTP id d15mr8410309pjz.96.1605177641128;
-        Thu, 12 Nov 2020 02:40:41 -0800 (PST)
+        bh=algkSlHd9xkfYBolwCg/NlFH/Qse31ebTNBvgmeLrlQ=;
+        b=pYt5Y1RcnrWrwNlp/L5qjQ5HnN+gEqc21AUeiY7TQJJ1SKYqAwC7pkK4uKXTAKhnCn
+         7i8WnzdwitgmMLGoUtYSMz9Shy0lL2q8b21xS9IfVEuSKYBjW71L2k8FeVE2g4or5igi
+         ASfRRacIOaB0AlUeAkMLQjyO8Q5h1LP8a5DeMcua0ZU4fyT0++SPTW/6PqYiL8o5OYDX
+         dP2WyCGuyPh7+4BYi/JCbd3HFvkRRjCE+c3rU43G9zrDyszvEjXFZ7uKafHwIEic4D69
+         VdqlxPbl6t3hJhpFqHAyF9kyzk/Rqux+NKmDePYVB4T0SSjRpQUSmGVrE/L3E2yuD7gH
+         kAHg==
+X-Gm-Message-State: AOAM530t/67DbKIr5QWEI0H1856UAqHKnml/7/8vhazw39cqerRYh7TS
+        ftIVmx+saCE2hXcpfhL0I8c=
+X-Google-Smtp-Source: ABdhPJzaiS/rMlHBIj6j/OIZ7fIO3SYXFG15fig7ahQKNClWWUniD2E2NwKxev/dJVEOS1c8rPg55g==
+X-Received: by 2002:a17:902:8303:b029:d7:eb0d:2ffd with SMTP id bd3-20020a1709028303b02900d7eb0d2ffdmr519608plb.78.1605177644610;
+        Thu, 12 Nov 2020 02:40:44 -0800 (PST)
 Received: from localhost.localdomain ([2402:7500:47a:a27:cf8e:7817:51df:a883])
-        by smtp.gmail.com with ESMTPSA id mp16sm6414094pjb.13.2020.11.12.02.40.37
+        by smtp.gmail.com with ESMTPSA id mp16sm6414094pjb.13.2020.11.12.02.40.41
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 12 Nov 2020 02:40:40 -0800 (PST)
+        Thu, 12 Nov 2020 02:40:44 -0800 (PST)
 From:   Gene Chen <gene.chen.richtek@gmail.com>
 To:     sre@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         gene_chen@richtek.com, Wilma.Wu@mediatek.com,
         shufan_lee@richtek.com, cy_huang@richtek.com,
         benjamin.chao@mediatek.com
-Subject: [PATCH v7 10/11] mfd: mt6360: Merge different sub-devices I2C read/write
-Date:   Thu, 12 Nov 2020 18:39:57 +0800
-Message-Id: <1605177598-23501-11-git-send-email-gene.chen.richtek@gmail.com>
+Subject: [PATCH v7 11/11] mfd: mt6360: Remove MT6360 regulator of_compatible attribute
+Date:   Thu, 12 Nov 2020 18:39:58 +0800
+Message-Id: <1605177598-23501-12-git-send-email-gene.chen.richtek@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1605177598-23501-1-git-send-email-gene.chen.richtek@gmail.com>
 References: <1605177598-23501-1-git-send-email-gene.chen.richtek@gmail.com>
@@ -66,272 +66,28 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Gene Chen <gene_chen@richtek.com>
 
-Merge different sub-devices I2C read/write functions into one Regmap,
-because PMIC and LDO part need CRC bits for access protection.
+Remove MT6360 regulator of_compatible attribute because
+MFD device should just instantiate the platform device.
 
 Signed-off-by: Gene Chen <gene_chen@richtek.com>
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/mfd/Kconfig       |   1 +
- drivers/mfd/mt6360-core.c | 203 ++++++++++++++++++++++++++++++++++++++++------
- 2 files changed, 181 insertions(+), 23 deletions(-)
+ drivers/mfd/mt6360-core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 33df083..1dfe446 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -913,6 +913,7 @@ config MFD_MT6360
- 	select MFD_CORE
- 	select REGMAP_I2C
- 	select REGMAP_IRQ
-+	select CRC8
- 	depends on I2C
- 	help
- 	  Say Y here to enable MT6360 PMU/PMIC/LDO functional support.
 diff --git a/drivers/mfd/mt6360-core.c b/drivers/mfd/mt6360-core.c
-index 14a9927..4bcfa7f 100644
+index 4bcfa7f..3b6490c 100644
 --- a/drivers/mfd/mt6360-core.c
 +++ b/drivers/mfd/mt6360-core.c
-@@ -62,6 +62,18 @@ struct mt6360_ddata {
- 
- #define MT6360_CRC8_POLYNOMIAL		0x7
- 
-+#define MT6360_CRC_I2C_ADDR_SIZE	1
-+#define MT6360_CRC_REG_ADDR_SIZE	1
-+/* prealloca read size = i2c device addr + i2c reg addr + val ... + crc8 */
-+#define MT6360_ALLOC_READ_SIZE(_size)	(_size + 3)
-+/* prealloca write size = i2c device addr + i2c reg addr + val ... + crc8 + dummy byte */
-+#define MT6360_ALLOC_WRITE_SIZE(_size)	(_size + 4)
-+#define MT6360_CRC_PREDATA_OFFSET	(MT6360_CRC_I2C_ADDR_SIZE + MT6360_CRC_REG_ADDR_SIZE)
-+#define MT6360_CRC_CRC8_SIZE		1
-+#define MT6360_CRC_DUMMY_BYTE_SIZE	1
-+#define MT6360_REGMAP_REG_BYTE_SIZE	2
-+#define I2C_ADDR_XLATE_8BIT(_addr, _rw)	(((_addr & 0x7F) << 1) + _rw)
-+
- /* reg 0 -> 0 ~ 7 */
- #define MT6360_CHG_TREG_EVT		4
- #define MT6360_CHG_AICR_EVT		5
-@@ -266,12 +278,6 @@ static const struct regmap_irq_chip mt6360_irq_chip = {
- 	.use_ack = true,
+@@ -339,8 +339,7 @@ static const struct mfd_cell mt6360_devs[] = {
+ 		    NULL, 0, 0, "mediatek,mt6360-chg"),
+ 	OF_MFD_CELL("mt6360-led", mt6360_led_resources,
+ 		    NULL, 0, 0, "mediatek,mt6360-led"),
+-	OF_MFD_CELL("mt6360-regulator", mt6360_regulator_resources,
+-		    NULL, 0, 0, "mediatek,mt6360-regulator"),
++	MFD_CELL_RES("mt6360-regulator", mt6360_regulator_resources),
+ 	OF_MFD_CELL("mt6360-tcpc", NULL,
+ 		    NULL, 0, 0, "mediatek,mt6360-tcpc"),
  };
- 
--static const struct regmap_config mt6360_pmu_regmap_config = {
--	.reg_bits = 8,
--	.val_bits = 8,
--	.max_register = MT6360_PMU_MAXREG,
--};
--
- static const struct resource mt6360_adc_resources[] = {
- 	DEFINE_RES_IRQ_NAMED(MT6360_ADC_DONEI, "adc_donei"),
- };
-@@ -359,10 +365,160 @@ static int mt6360_check_vendor_info(struct mt6360_ddata *ddata)
- }
- 
- static const unsigned short mt6360_slave_addr[MT6360_SLAVE_MAX] = {
--	MT6360_PMU_SLAVEID,
-+	MT6360_TCPC_SLAVEID,
- 	MT6360_PMIC_SLAVEID,
- 	MT6360_LDO_SLAVEID,
--	MT6360_TCPC_SLAVEID,
-+	MT6360_PMU_SLAVEID,
-+};
-+
-+static int mt6360_xlate_pmicldo_addr(u8 *addr, int rw_size)
-+{
-+	/* Address is already in encoded [5:0] */
-+	*addr &= MT6360_ADDRESS_MASK;
-+
-+	switch (rw_size) {
-+	case 1:
-+		*addr |= MT6360_DATA_SIZE_1_BYTE;
-+		break;
-+	case 2:
-+		*addr |= MT6360_DATA_SIZE_2_BYTES;
-+		break;
-+	case 3:
-+		*addr |= MT6360_DATA_SIZE_3_BYTES;
-+		break;
-+	case 4:
-+		*addr |= MT6360_DATA_SIZE_4_BYTES;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mt6360_regmap_read(void *context, const void *reg, size_t reg_size,
-+			      void *val, size_t val_size)
-+{
-+	struct mt6360_ddata *ddata = context;
-+	u8 bank = *(u8 *)reg;
-+	u8 reg_addr = *(u8 *)(reg + 1);
-+	struct i2c_client *i2c = ddata->i2c[bank];
-+	bool crc_needed = false;
-+	u8 *buf;
-+	int buf_len = MT6360_ALLOC_READ_SIZE(val_size);
-+	int read_size = val_size;
-+	u8 crc;
-+	int ret;
-+
-+	if (bank == MT6360_SLAVE_PMIC || bank == MT6360_SLAVE_LDO) {
-+		crc_needed = true;
-+		ret = mt6360_xlate_pmicldo_addr(&reg_addr, val_size);
-+		if (ret < 0)
-+			return ret;
-+		read_size += MT6360_CRC_CRC8_SIZE;
-+	}
-+
-+	buf = kzalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	buf[0] = I2C_ADDR_XLATE_8BIT(i2c->addr, I2C_SMBUS_READ);
-+	buf[1] = reg_addr;
-+
-+	ret = i2c_smbus_read_i2c_block_data(i2c, reg_addr, read_size,
-+					    buf + MT6360_CRC_PREDATA_OFFSET);
-+	if (ret < 0)
-+		goto out;
-+	else if (ret != read_size) {
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	if (crc_needed) {
-+		crc = crc8(ddata->crc8_tbl, buf, val_size + MT6360_CRC_PREDATA_OFFSET, 0);
-+		if (crc != buf[val_size + MT6360_CRC_PREDATA_OFFSET]) {
-+			ret = -EIO;
-+			goto out;
-+		}
-+	}
-+
-+	memcpy(val, buf + MT6360_CRC_PREDATA_OFFSET, val_size);
-+out:
-+	kfree(buf);
-+	return (ret < 0) ? ret : 0;
-+}
-+
-+static int mt6360_regmap_write(void *context, const void *val, size_t val_size)
-+{
-+	struct mt6360_ddata *ddata = context;
-+	u8 bank = *(u8 *)val;
-+	u8 reg_addr = *(u8 *)(val + 1);
-+	struct i2c_client *i2c = ddata->i2c[bank];
-+	bool crc_needed = false;
-+	u8 *buf;
-+	int buf_len = MT6360_ALLOC_WRITE_SIZE(val_size);
-+	int write_size = val_size - MT6360_REGMAP_REG_BYTE_SIZE;
-+	int ret;
-+
-+	if (bank == MT6360_SLAVE_PMIC || bank == MT6360_SLAVE_LDO) {
-+		crc_needed = true;
-+		ret = mt6360_xlate_pmicldo_addr(&reg_addr, val_size - MT6360_REGMAP_REG_BYTE_SIZE);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	buf = kzalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	buf[0] = I2C_ADDR_XLATE_8BIT(i2c->addr, I2C_SMBUS_WRITE);
-+	buf[1] = reg_addr;
-+	memcpy(buf + MT6360_CRC_PREDATA_OFFSET, val + MT6360_REGMAP_REG_BYTE_SIZE, write_size);
-+
-+	if (crc_needed) {
-+		buf[val_size] = crc8(ddata->crc8_tbl, buf, val_size, 0);
-+		write_size += (MT6360_CRC_CRC8_SIZE + MT6360_CRC_DUMMY_BYTE_SIZE);
-+	}
-+
-+	ret = i2c_smbus_write_i2c_block_data(i2c, reg_addr, write_size,
-+					     buf + MT6360_CRC_PREDATA_OFFSET);
-+
-+	kfree(buf);
-+	return ret;
-+}
-+
-+static const struct regmap_bus mt6360_regmap_bus = {
-+	.read		= mt6360_regmap_read,
-+	.write		= mt6360_regmap_write,
-+
-+	/* Due to PMIC and LDO CRC access size limit */
-+	.max_raw_read	= 4,
-+	.max_raw_write	= 4,
-+};
-+
-+static bool mt6360_is_readwrite_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case MT6360_REG_TCPCSTART ... MT6360_REG_TCPCEND:
-+		fallthrough;
-+	case MT6360_REG_PMICSTART ... MT6360_REG_PMICEND:
-+		fallthrough;
-+	case MT6360_REG_LDOSTART ... MT6360_REG_LDOEND:
-+		fallthrough;
-+	case MT6360_REG_PMUSTART ... MT6360_REG_PMUEND:
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static const struct regmap_config mt6360_regmap_config = {
-+	.reg_bits		= 16,
-+	.val_bits		= 8,
-+	.reg_format_endian	= REGMAP_ENDIAN_BIG,
-+	.max_register		= MT6360_REG_PMUEND,
-+	.writeable_reg		= mt6360_is_readwrite_reg,
-+	.readable_reg		= mt6360_is_readwrite_reg,
- };
- 
- static int mt6360_probe(struct i2c_client *client)
-@@ -377,7 +533,22 @@ static int mt6360_probe(struct i2c_client *client)
- 	ddata->dev = &client->dev;
- 	i2c_set_clientdata(client, ddata);
- 
--	ddata->regmap = devm_regmap_init_i2c(client, &mt6360_pmu_regmap_config);
-+	for (i = 0; i < MT6360_SLAVE_MAX - 1; i++) {
-+		ddata->i2c[i] = devm_i2c_new_dummy_device(&client->dev,
-+							  client->adapter,
-+							  mt6360_slave_addr[i]);
-+		if (IS_ERR(ddata->i2c[i])) {
-+			dev_err(&client->dev,
-+				"Failed to get new dummy I2C device for address 0x%x",
-+				mt6360_slave_addr[i]);
-+			return PTR_ERR(ddata->i2c[i]);
-+		}
-+	}
-+	ddata->i2c[MT6360_SLAVE_MAX - 1] = client;
-+
-+	crc8_populate_msb(ddata->crc8_tbl, MT6360_CRC8_POLYNOMIAL);
-+	ddata->regmap = devm_regmap_init(ddata->dev, &mt6360_regmap_bus, ddata,
-+					 &mt6360_regmap_config);
- 	if (IS_ERR(ddata->regmap)) {
- 		dev_err(&client->dev, "Failed to register regmap\n");
- 		return PTR_ERR(ddata->regmap);
-@@ -395,20 +566,6 @@ static int mt6360_probe(struct i2c_client *client)
- 		return ret;
- 	}
- 
--	ddata->i2c[0] = client;
--	for (i = 1; i < MT6360_SLAVE_MAX; i++) {
--		ddata->i2c[i] = devm_i2c_new_dummy_device(&client->dev,
--							client->adapter,
--							mt6360_slave_addr[i]);
--		if (IS_ERR(ddata->i2c[i])) {
--			dev_err(&client->dev,
--				"Failed to get new dummy I2C device for address 0x%x",
--				mt6360_slave_addr[i]);
--			return PTR_ERR(ddata->i2c[i]);
--		}
--		i2c_set_clientdata(ddata->i2c[i], ddata);
--	}
--
- 	ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_AUTO,
- 				   mt6360_devs, ARRAY_SIZE(mt6360_devs), NULL,
- 				   0, regmap_irq_get_domain(ddata->irq_data));
 -- 
 2.7.4
 
