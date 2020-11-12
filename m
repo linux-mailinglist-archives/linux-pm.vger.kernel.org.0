@@ -2,76 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3795D2B0A39
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 17:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA7A2B0C8A
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 19:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728870AbgKLQiz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 11:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728643AbgKLQiy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 11:38:54 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92888C0613D1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 08:38:54 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id l5so7002512edq.11
-        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 08:38:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wvi9SDQpkotexOK3zTDKmEDDoudYhTa0aiFc6BJxblY=;
-        b=AIeg2+oAl6fNC/qe0Wb5iWTwMoQ3hMa9KNUse3RjC6NgcwHyZ4UGLVzcMD3s7duuDe
-         wLc5KifIGv6kHtd0yupulDpHSJn8zsuzKyP26gWN5es9sMX9YlkM2kfYyUyilBVFSwBh
-         QwSzkq26DzcJOOrC37eiju2QVaUHHq9nDjtq0Wy5EVhTHKM84VkoF0KTdjO7Oyt1+DjR
-         Sf/wG/cX76OYTHfLX81imLzJJW8vArV3+XyZXqbFUJTnNVnBkj/EpYsSev7iUxmPfrnA
-         G62LhC9FkklxjWiNxWxhRfxIbihtR7mIW3UHeRLkMhhYr8vr6teHoTmkmlRulwvCrJjP
-         h38Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wvi9SDQpkotexOK3zTDKmEDDoudYhTa0aiFc6BJxblY=;
-        b=gN/DKMFlnI3hm0YSeqvJf5/LLOmzaOrmOAtjpvTXGS2GHv0WM9qFPw76Vk7QgrHXgS
-         fZEVDXGE8V+Ne/lG4XiVB92fslgIitPssakAoFIZZZ7usaD3BgYK9T778aiQd1RV2Kt6
-         rTEqbON92qHooqO/yTnlFySXmlIjkt9hSU2/8gN04xxdi8QMGL79ac6SuTYcruxh5EDz
-         O06tz3BV5IU4RVfLIiJFq75Re3lvWpv6vBryueMPyWu81OCW7yAUMtmtHJ2Nqxd0UpbW
-         w3aLRZggQseV3j5xe4TYsxSY6a7dvxkLfbsxddjG7tDclSW84Df2GbpFB3C2i+MkjN94
-         5SbQ==
-X-Gm-Message-State: AOAM532D5CAMNLNzP46A5Qtii/iDmEg/cet16IBpW9szhjGLhSCUo8Jm
-        ZgJZ7+6SNpOthnBApSK37dvlqjAySmLkpfys7cFNtg==
-X-Google-Smtp-Source: ABdhPJwjfqH6kVZVIYuxU1tZOvGSqeOcz/sPDQwcp2FOuHVkNNaGfW8m6KqyoZsTCRnttAGEi2O7+AoWhU/AVYUyRII=
-X-Received: by 2002:aa7:d54f:: with SMTP id u15mr618477edr.239.1605199133164;
- Thu, 12 Nov 2020 08:38:53 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+G9fYu+KK=hm1AmQ78GCCgQTwsRCzyA6WHYR68ozZBzp7USiA@mail.gmail.com>
-In-Reply-To: <CA+G9fYu+KK=hm1AmQ78GCCgQTwsRCzyA6WHYR68ozZBzp7USiA@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 12 Nov 2020 22:08:41 +0530
-Message-ID: <CA+G9fYvokz+rXtQfgjHoPQGP+o+4DVOj4OPufKxVOBrCyEKXBQ@mail.gmail.com>
-Subject: Re: WARNING: CPU: 2 at kernel/workqueue.c:4762 workqueue_online_cpu
-To:     open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        linux- stable <stable@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, Tejun Heo <tj@kernel.org>,
-        jiangshanlai@gmail.com, Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
+        id S1726344AbgKLS0W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Nov 2020 13:26:22 -0500
+Received: from mx2.suse.de ([195.135.220.15]:58878 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726194AbgKLS0V (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Nov 2020 13:26:21 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 5FB75AB95;
+        Thu, 12 Nov 2020 18:26:20 +0000 (UTC)
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Pu Wen <puwen@hygon.cn>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Doug Smythies <dsmythies@telus.net>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: [PATCH v4 0/3] Add support for frequency invariance to AMD EPYC Zen2
+Date:   Thu, 12 Nov 2020 19:26:11 +0100
+Message-Id: <20201112182614.10700-1-ggherdovich@suse.cz>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 10 Nov 2020 at 13:11, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> While running CPU hotplug testing on arm64 db410c device the following
-> kernel warning
-> noticed on linux stable-rc 4.19 branch. I did not bisect this problem yet.
+v3 at https://lore.kernel.org/lkml/20201110200519.18180-1-ggherdovich@suse.cz/
 
-As per the available data the reported issue started happening from 4.19.134
-and which is happening intermittently and not found the last good commit.
+Changes wrt v3:
 
-- Naresh
+- Correct the #ifdef guard for cppc_get_perf_caps() from CONFIG_ACPI to
+  CONFIG_ACPI_CPPC_LIB (reported by "kernel test robot <lkp@intel.com>")
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cover Letter from v3:
+
+v2 at https://lore.kernel.org/lkml/20201110183054.15883-1-ggherdovich@suse.cz/
+
+Changes wrt v2:
+
+- "code golf" on the function function init_freq_invariance_cppc().
+  Make better use of the "secondary" argument to init_freq_invariance(),
+  which was introduced at b56e7d45e807 ("x86, sched: Don't enable static key
+  when starting secondary CPUs") to deal with CPU hotplug.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cover Letter from v2:
+
+v1 at https://lore.kernel.org/lkml/20201110083936.31994-1-ggherdovich@suse.cz/
+
+Changes wrt v1:
+
+- made initialization safe under CPU hotplug.
+  The function init_freq_invariance_cppc now lets only the first caller
+  into init_freq_invariance().
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cover Letter from v1:
+
+This series adds support for frequency invariant accounting on AMD EPYC Zen2
+(aka "Rome"). The first patch by Nathan lays out the foundation by querying
+ACPI infrastructure for the max boost frequency of the system. Specifically,
+this value is available via the CPPC machinery; the previous EPYC generation,
+namely Zen aka "Naples", doesn't implement that and frequency invariance won't
+be supported.
+
+The second patch sets the estimate for freq_max to be the midpoint between
+max_boost and max_P, as that works slightly better in practice.
+
+A side effect of this series is to provide, with the invariant schedutil
+governor, a suitable baseline to evaluate a (still work-in-progress)
+CPPC-based cpufreq driver for the AMD platform (see
+https://lore.kernel.org/lkml/cover.1562781484.git.Janakarajan.Natarajan@amd.com
+if/when it will resubmitted.
+
+
+Giovanni Gherdovich (2):
+  x86, sched: Use midpoint of max_boost and max_P for frequency
+    invariance on AMD EPYC
+  x86: Print ratio freq_max/freq_base used in frequency invariance
+    calculations
+
+Nathan Fontenot (1):
+  x86, sched: Calculate frequency invariance for AMD systems
+
+ arch/x86/include/asm/topology.h |  8 ++++
+ arch/x86/kernel/smpboot.c       | 79 ++++++++++++++++++++++++++++++---
+ drivers/acpi/cppc_acpi.c        |  3 ++
+ 3 files changed, 85 insertions(+), 5 deletions(-)
+
+-- 
+2.26.2
+
