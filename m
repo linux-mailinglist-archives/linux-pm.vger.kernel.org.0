@@ -2,91 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC1F2B02AA
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 11:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 557EF2B02CD
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 11:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727489AbgKLKZk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 05:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
+        id S1727035AbgKLKkG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Nov 2020 05:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726061AbgKLKZj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 05:25:39 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19912C0613D1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 02:25:38 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id b6so5413625wrt.4
-        for <linux-pm@vger.kernel.org>; Thu, 12 Nov 2020 02:25:37 -0800 (PST)
+        with ESMTP id S1726776AbgKLKkG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 05:40:06 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CF1C0613D1;
+        Thu, 12 Nov 2020 02:40:05 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id g11so2554657pll.13;
+        Thu, 12 Nov 2020 02:40:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tyAYMwBoO94zSnNWICk2qSAx2iWJtJnznqvRXYqPRaM=;
-        b=ou8ezO+5QBh5CHQdmfDvJmrv4be9fTbsMUjxsj7mkyDlUVPgtPAH+eGV/rlufCJex7
-         VBiQhFfj9TjteTwixdDfydXwH1ygMk5qPj0iColGNm2/BguyjBU7wyHqnXeGLA+bdxQQ
-         bBJ+5foNooOhzdNNd6nHc6V2DHXF+XSOrLU3KXG7dhxQA+Jz4TdnqMoVUy7GIyIAoTnW
-         zatbHOfj6nbbbes9uB/3n/AbaX/SDUgj3CTOUXkfdNdYkKJ/SvHUxWle5FE76WJ6msH/
-         1uUEbODslMu93vqf0vR5SzX0LN1hoZ0NDWp1pWXhRU8hWAwEzRizBSJNVumGXSo4PDot
-         5qDw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=A1kCd9kxhtGVEoKnBufAkxHSe9byym5wk2cdTksfgzQ=;
+        b=L/lRn3vST0A4TsCZYBx4L94+MANXkREvNi7cTkcKw8nwivywBn0AEUBpwGya/5ADOT
+         PgiTCFJDdr0KiuFAKuGMQIeHXRMf+g8LIvaO/IyEvlPjDJr9TTbzJvBOu9lw6st/W+LO
+         qZlbIvOl8+EbPlXcrIeF2iZZm4jc+ElNufRAX/H1Pf6MQOO9YS59RQyimPoGkvL815Kp
+         J7hbXrbfcqsPfR94DVUUo+glMvdnygKyxx4wSNktxs4fmTU7jxo/McAT8jiK9Pid+S1l
+         sCvam8jL8FWqcvTHzuFTGidZ/55u2VdTEtWtoT0PkCLWWcQb/fVdl0+OmeQ2nE6Dhg4r
+         kM7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tyAYMwBoO94zSnNWICk2qSAx2iWJtJnznqvRXYqPRaM=;
-        b=h0jtctRgt4hxs8S0w96y5T5WyQXwu4xQZM86Dpvc9jd7ny5r0cS+Lls0m1CNGwRISP
-         /mbNRxnwDtfiJR14mhehrKdQGzu0WtXlOMfxjDXKq/bGlHH/jItPb/P0+AXkQ3Zb+pWK
-         hI7hNJm0NsoVe+BvvM32OBTvvk1jqKtRISmPtSUDVroFXnxTlN5u5MJ5b4EmwgugNckc
-         H7TAQmlahxt22L79dAkTadyMI9L55HHFZLm54ySZ2YKnVFRW0x7ZlzCz6biZni+1PTIT
-         8lZwg1671JVz1gO3kf8cAFkbEMKIapt6nNZCSZoHX4yEb9k/PdqfX9KkVVlArdsyvX6I
-         2yow==
-X-Gm-Message-State: AOAM530AHWH/vAJm7iZsqAbIVZ+jeXZnByhQyqxkR2JX8QjHsiD04osH
-        80KE4TR3Sx7Q8O3sb5YzKdAorg==
-X-Google-Smtp-Source: ABdhPJxEcVT13aylbkpn0lYfrDMVPZoj1KzlZMPdSs2Cr12pOm5nZ6RPnxAIEb7XA1HJ0Ay3BXn8cQ==
-X-Received: by 2002:adf:dc4b:: with SMTP id m11mr33378420wrj.328.1605176736545;
-        Thu, 12 Nov 2020 02:25:36 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:6971:b700:3764:fa96? ([2a01:e34:ed2f:f020:6971:b700:3764:fa96])
-        by smtp.googlemail.com with ESMTPSA id t5sm6052882wmg.19.2020.11.12.02.25.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Nov 2020 02:25:35 -0800 (PST)
-Subject: Re: [PATCH v2] thermal: sun8i: Use bitmap API instead of open code
-To:     Frank Lee <frank@allwinnertech.com>, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, rui.zhang@intel.com, amitk@kernel.org,
-        mripard@kernel.org, wens@csie.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20201109114624.23035-1-frank@allwinnertech.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <b81ef373-4d1d-94a8-b220-3cc3c58f72b8@linaro.org>
-Date:   Thu, 12 Nov 2020 11:25:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201109114624.23035-1-frank@allwinnertech.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=A1kCd9kxhtGVEoKnBufAkxHSe9byym5wk2cdTksfgzQ=;
+        b=UoVPgoGZw96ZZJKXSY+9plLZ2/Vub22RmGq7pF4SlcwixfE0H+BoLKsotqFcQ5gIBT
+         5d+DVR3ReKPnm5Bs76hRDyE7qQF0fuJ5KUWWJrEAoCdah1TMa2Qp7lbGhYxaGZLvdMOj
+         EEsrZxueXKMSfVPOflAubw7hJfKzXYv+GM2QvK7TQY60BgL/RFPYV35riIr5FBGuSbAg
+         uRwAgQYv8fYNVqnoMjOyxyKTT7gdnmJjOT2v4jNHwQsh/GhNHSueogH6v1TagsoYavJo
+         Bchs037BFMnuEAcI4gfNoDVk0OVke0UzI0haZFy38J5Rc1s1qc1pw05+pQE9JhG20Hqe
+         cAag==
+X-Gm-Message-State: AOAM530ULP0i2Xw9sZarH70nMow+N6g6nwJpgOTEuf6Ch28zQtAUqNac
+        GElYlFOhBSbldIGX8fUpNlrAYKD+46o=
+X-Google-Smtp-Source: ABdhPJznNX8YVTi2I1uQjTgJCiLAWfcJFHeM4bA36FXxplxx7vsm7XgOnX7IIfTnOOeMxg+0bP7zCQ==
+X-Received: by 2002:a17:902:eaca:b029:d6:807e:95b8 with SMTP id p10-20020a170902eacab02900d6807e95b8mr23007860pld.33.1605177605556;
+        Thu, 12 Nov 2020 02:40:05 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:47a:a27:cf8e:7817:51df:a883])
+        by smtp.gmail.com with ESMTPSA id mp16sm6414094pjb.13.2020.11.12.02.40.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Nov 2020 02:40:05 -0800 (PST)
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+To:     sre@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        gene_chen@richtek.com, Wilma.Wu@mediatek.com,
+        shufan_lee@richtek.com, cy_huang@richtek.com,
+        benjamin.chao@mediatek.com
+Subject: [PATCH v7 0/11] mfd: mt6360: Merge different sub-devices I2C read/write
+Date:   Thu, 12 Nov 2020 18:39:47 +0800
+Message-Id: <1605177598-23501-1-git-send-email-gene.chen.richtek@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/11/2020 12:46, Frank Lee wrote:
-> From: Yangtao Li <frank@allwinnertech.com>
-> 
-> The bitmap_* API is the standard way to access data in the bitfield.
-> So convert irq_ack to return an unsigned long, and make things to use
-> bitmap API.
-> 
-> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
-> ---
-> v2:
-> Make irq_ack to return an unsigned long
-> ---
+This patch series merge different sub-device I2C read/write into one Regmap and
+fix coding style for well-organized.
 
-Applied, thanks
+Gene Chen (11)
+  mfd: mt6360: Rearrange include file
+  mfd: mt6360: Remove redundant brackets around raw numbers
+  mfd: mt6360: Indicate sub-dev compatible name by using
+  mfd: mt6360: Combine mt6360 pmic/ldo resources into mt6360
+  mfd: mt6360: Rename mt6360_pmu_data by mt6360_ddata
+  mfd: mt6360: Rename mt6360_pmu by mt6360
+  mfd: mt6360: Remove handle_post_irq callback function
+  mfd: mt6360: Fix flow which is used to check ic exist
+  mfd: mt6360: Merge header file into driver and remove unuse register define
+  mfd: mt6360: Merge different sub-devices I2C read/write
+  mfd: mt6360: Remove MT6360 regulator of_compatible
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+ b/drivers/mfd/Kconfig       |    1 
+ b/drivers/mfd/mt6360-core.c |  554 +++++++++++++++++++++++++++++---------------
+ include/linux/mfd/mt6360.h  |  240 -------------------
+ 3 files changed, 376 insertions(+), 419 deletions(-)
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+changelogs between v2 & v3
+- Replace mt6360_data to mt6360_ddata
+- Split I2C read/write to regmap driver
+
+changelogs between v3 & v4
+- Merge back mt6360 regmap driver to MFD driver
+
+changelogs between v4 & v5
+- use devm_regmap_init
+- define crc calculation magic number
+
+changelogs between v5 & v6
+- Remove unrelated change
+- Remove regulator device of_compatible
+
+changelogs between v6 & v7
+- Replace OF_MFD_CELL by MFD_CELL_RES
+
