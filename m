@@ -2,159 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A03C2B08F6
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 16:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577342B093A
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 16:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728285AbgKLPwy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 10:52:54 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38298 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728218AbgKLPwy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 10:52:54 -0500
-Received: by mail-ot1-f67.google.com with SMTP id a15so6027579otf.5;
-        Thu, 12 Nov 2020 07:52:54 -0800 (PST)
+        id S1729019AbgKLP7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Nov 2020 10:59:07 -0500
+Received: from mail-oo1-f68.google.com ([209.85.161.68]:37188 "EHLO
+        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729001AbgKLP7H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 10:59:07 -0500
+Received: by mail-oo1-f68.google.com with SMTP id t10so1421142oon.4;
+        Thu, 12 Nov 2020 07:59:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RcCNXEA6BLGo7Sfakes4HmCFZE5lkBnWWORJD7JsOa4=;
-        b=BlNfPVRtonmjj7WBWnyt2PzWzsA88tW60VXHSckQt4tHno/iBMF9SiGyCIO8xyiZiS
-         1EqiQomyhs0PnOzvXrTRBvX3S8Gqsxk0eU3NKr7+lte7kOKQmwwXiSggBQnLoei5YKrz
-         mBeWBU6L8kifbRITQnZVsbRZpgWou1WqeKfld7e0GFZpVPLnXpgzk23XeKjizfAuuCcI
-         I1CjlXQUFawEDdc8TruRzc5Qn9jD847zTXE/KKfjm2tziCmPq+1YmVpqycLybS8L85Bi
-         7D9Z/SPI2hP+Xlp25PlJIu4RJcO9gp4iRSVF1xZNMHwBrghxt+TkSaQP6/QRL/8ZzoVk
-         eFZw==
-X-Gm-Message-State: AOAM530zeGdiXi82tBzz2JANfok0zO1MVIvXqV7tjjAMGYxM9wXP8N8h
-        2GkESNNBajWctvKMudCLm+AztsgAtz6RlW5SkNc=
-X-Google-Smtp-Source: ABdhPJyL11rg82abF0YTUDzf73L5kXq6DOaUFQOy3VVDE+vlRCqjzkSv6bGydjQ3d9dHfXHSemoUTEF8BdSAUDBG+o8=
-X-Received: by 2002:a9d:16f:: with SMTP id 102mr23099589otu.206.1605196373666;
- Thu, 12 Nov 2020 07:52:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=DNxWM/BVH5fGeTzA5yC/21tIQu3wig2OXKcKsexOcPM=;
+        b=LX9RGWSrjOnvA2vieWb8n1O3lSqFf8rTD8lQtImO/ZMynrChlrH65lqsGepQJi0MYR
+         5kDoOZBteagFCgs5TAd0bMovBqGVOllGm3LH2rRIUF8k2yYuFFPLrEfAxtkFjtWqOujx
+         SwZQqi0JWQwIsPbxKo5beh1fETRYUTz+TRWY4BWdYyjdxJN1juwfkx1aagYDg0BZZIQJ
+         bHRFXZCQ/ArNFljy0T03zl/bAQlwjGmIzx1zpjVgrkRsiAc5Foe/T0UdcCSLluhIvgbh
+         DCJ8aSuQ2eWCP+05UbUWmXtGJKAVE4ar+/RTiW5CyaSKyWiHTh6kXLrB0ZjRhJRYZ5jm
+         4g7Q==
+X-Gm-Message-State: AOAM531kclOu600uj1mKpflTctna4NBHFmHIvwr3mxdoC4my2myoaBbK
+        vMMLhcdQI4zQTOOYjIg2M1VYgQvCIBisC9VWyx5HV+c7WSI=
+X-Google-Smtp-Source: ABdhPJxXTS9+lCz5yjnp66fQrgsPqCQgz2dEWI6XQF/I71Pth/I75Etbkbiprv1EnxABrXDlmqvWeYLSWd7jmwNf48o=
+X-Received: by 2002:a4a:e80b:: with SMTP id b11mr21288472oob.1.1605196746342;
+ Thu, 12 Nov 2020 07:59:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20201103152237.9853-1-vbabka@suse.cz> <20201103152237.9853-4-vbabka@suse.cz>
- <eba10537-98c0-5363-8ff6-c0e71b823e50@redhat.com> <7811e5ec-c7ae-09a9-7f90-45e14956c4c4@suse.cz>
-In-Reply-To: <7811e5ec-c7ae-09a9-7f90-45e14956c4c4@suse.cz>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Nov 2020 16:52:42 +0100
-Message-ID: <CAJZ5v0inNr=h7PsSdGgiWZO6t9nGLWagNtM=C_AnoVyw6f3m8g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] kernel/power: allow hibernation with page_poison
- sanity checking
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mateusz Nosek <mateusznosek0@gmail.com>,
-        Laura Abbott <labbott@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Thu, 12 Nov 2020 16:58:55 +0100
+Message-ID: <CAJZ5v0iypErbx8R-0wOnBOK=BNsY0HCNK13BEkdUoxsXJQ1K3g@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.10-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 3:42 PM Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> On 11/11/20 4:42 PM, David Hildenbrand wrote:
-> ...
-> >> @@ -1152,12 +1152,18 @@ void clear_free_pages(void)
-> >>      if (WARN_ON(!(free_pages_map)))
-> >>              return;
-> >>
-> >> -    if (IS_ENABLED(CONFIG_PAGE_POISONING_ZERO) || want_init_on_free()) {
-> >> +    if (page_poisoning_enabled() || want_init_on_free()) {
-> >>              memory_bm_position_reset(bm);
-> >>              pfn = memory_bm_next_pfn(bm);
-> >>              while (pfn != BM_END_OF_MAP) {
-> >> -                    if (pfn_valid(pfn))
-> >> -                            clear_highpage(pfn_to_page(pfn));
-> >> +                    if (pfn_valid(pfn)) {
-> >> +                            struct page *page = pfn_to_page(pfn);
-> >
-> > ^ empty line missing. And at least I prefer to declare all variables in
-> > the function header.
-> >
-> > I'd even suggest to move this into a separate function like
-> >
-> > clear_or_poison_free_page(struct page *page)
-> >
-> >
->
-> Ok, fixup below.
->
-> ----8<----
->  From cae1e8ccfa57c28ed1b2f5f8a47319b86cbdcfbf Mon Sep 17 00:00:00 2001
-> From: Vlastimil Babka <vbabka@suse.cz>
-> Date: Thu, 12 Nov 2020 15:33:07 +0100
-> Subject: [PATCH] kernel/power: allow hibernation with page_poison sanity
->   checking-fix
->
-> Adapt to __kernel_unpoison_pages fixup. Split out clear_or_poison_free_page()
-> per David Hildenbrand.
->
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Hi Linus,
 
-Still
+Please pull from the tag
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.10-rc4
 
-> ---
->   include/linux/mm.h      |  1 +
->   kernel/power/snapshot.c | 18 ++++++++++--------
->   2 files changed, 11 insertions(+), 8 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 861b9392b5dc..d4cfb06a611e 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2896,6 +2896,7 @@ static inline void kernel_unpoison_pages(struct page *page, int numpages)
->   #else
->   static inline bool page_poisoning_enabled(void) { return false; }
->   static inline bool page_poisoning_enabled_static(void) { return false; }
-> +static inline void __kernel_poison_pages(struct page *page, int nunmpages) { }
->   static inline void kernel_poison_pages(struct page *page, int numpages) { }
->   static inline void kernel_unpoison_pages(struct page *page, int numpages) { }
->   #endif
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index 6b1c84afa891..a3491b29c5cc 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -1144,6 +1144,14 @@ void free_basic_memory_bitmaps(void)
->         pr_debug("Basic memory bitmaps freed\n");
->   }
->
-> +static void clear_or_poison_free_page(struct page *page)
-> +{
-> +       if (page_poisoning_enabled_static())
-> +               __kernel_poison_pages(page, 1);
-> +       else if (want_init_on_free())
-> +               clear_highpage(page);
-> +}
-> +
->   void clear_or_poison_free_pages(void)
->   {
->         struct memory_bitmap *bm = free_pages_map;
-> @@ -1156,14 +1164,8 @@ void clear_or_poison_free_pages(void)
->                 memory_bm_position_reset(bm);
->                 pfn = memory_bm_next_pfn(bm);
->                 while (pfn != BM_END_OF_MAP) {
-> -                       if (pfn_valid(pfn)) {
-> -                               struct page *page = pfn_to_page(pfn);
-> -                               if (page_poisoning_enabled_static())
-> -                                       kernel_poison_pages(page, 1);
-> -                               else if (want_init_on_free())
-> -                                       clear_highpage(page);
-> -
-> -                       }
-> +                       if (pfn_valid(pfn))
-> +                               clear_or_poison_free_page(pfn_to_page(pfn));
->
->                         pfn = memory_bm_next_pfn(bm);
->                 }
-> --
-> 2.29.1
->
->
+with top-most commit fcb3a1ab79904d54499db77017793ccca665eb7e
+
+ cpufreq: intel_pstate: Take CPUFREQ_GOV_STRICT_TARGET into account
+
+on top of commit f8394f232b1eab649ce2df5c5f15b0e528c92091
+
+ Linux 5.10-rc3
+
+to receive power management fixes for 5.10-rc4.
+
+These make the intel_pstate driver behave as expected when it
+operates in the passive mode with HWP enabled and the "powersave"
+governor on top of it.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (4):
+      cpufreq: Introduce governor flags
+      cpufreq: Introduce CPUFREQ_GOV_STRICT_TARGET
+      cpufreq: Add strict_target to struct cpufreq_policy
+      cpufreq: intel_pstate: Take CPUFREQ_GOV_STRICT_TARGET into account
+
+---------------
+
+ drivers/cpufreq/cpufreq.c             |  4 +++-
+ drivers/cpufreq/cpufreq_governor.h    |  2 +-
+ drivers/cpufreq/cpufreq_performance.c |  1 +
+ drivers/cpufreq/cpufreq_powersave.c   |  1 +
+ drivers/cpufreq/intel_pstate.c        | 16 +++++++++-------
+ include/linux/cpufreq.h               | 18 ++++++++++++++++--
+ kernel/sched/cpufreq_schedutil.c      |  2 +-
+ 7 files changed, 32 insertions(+), 12 deletions(-)
