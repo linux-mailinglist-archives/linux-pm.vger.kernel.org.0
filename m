@@ -2,149 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1481A2B1918
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Nov 2020 11:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B359C2B191F
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Nov 2020 11:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbgKMKcj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Nov 2020 05:32:39 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:36471 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgKMKci (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Nov 2020 05:32:38 -0500
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20201113103226euoutp02b684b0ea331022411dbe688ccfeb5862~HCrCokzta0234502345euoutp02D
-        for <linux-pm@vger.kernel.org>; Fri, 13 Nov 2020 10:32:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20201113103226euoutp02b684b0ea331022411dbe688ccfeb5862~HCrCokzta0234502345euoutp02D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1605263546;
-        bh=K10MK5Wi8CtuwiAAfsiSsNTiWneQD6krBChUBMOq+Ro=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=cPPej3heW9SWT/gVe4Y9hV+V3hgSnFOj/DlDTQUnVlG/coWqLgqnCighIhjHfC4XY
-         rsO7x60lTn1S+BwlGXASmw4AP8hpHoe6dYWxQjH9V8gsf4ZFxFmoqPawb+8BMw9D9D
-         /Ophdx2BIk/3yj6mFNVJlRuq+1G//9V7ak6r108g=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20201113103225eucas1p2ae8c849aa41b5779a365afd09f9097ca~HCrCU9TCk3237732377eucas1p2M;
-        Fri, 13 Nov 2020 10:32:25 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id BC.2A.27958.9B06EAF5; Fri, 13
-        Nov 2020 10:32:25 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201113103225eucas1p2326d979b94a33d018c24a9f526e7a016~HCrB6nRv73235632356eucas1p2S;
-        Fri, 13 Nov 2020 10:32:25 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201113103225eusmtrp1c6d8cd6f5a767bf411c84895acc77319~HCrB5cnTl2016920169eusmtrp1d;
-        Fri, 13 Nov 2020 10:32:25 +0000 (GMT)
-X-AuditID: cbfec7f2-f15ff70000006d36-56-5fae60b9e56e
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 26.4B.21957.9B06EAF5; Fri, 13
-        Nov 2020 10:32:25 +0000 (GMT)
-Received: from [106.210.123.115] (unknown [106.210.123.115]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20201113103224eusmtip18c767fb6587650496fa0abf25e4f19ba~HCrA8TQLG2053620536eusmtip1t;
-        Fri, 13 Nov 2020 10:32:23 +0000 (GMT)
-Subject: Re: [PATCH v9 0/5] Exynos: Simple QoS for exynos-bus using
- interconnect
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>, inki.dae@samsung.com
-Cc:     krzk@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
-        a.swigon@samsung.com, myungjoo.ham@samsung.com,
-        sw0312.kim@samsung.com, b.zolnierkie@samsung.com,
-        m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-Message-ID: <6687cdd3-6e5b-f3c1-f784-33cc7c0d589a@samsung.com>
-Date:   Fri, 13 Nov 2020 11:32:23 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.12.1
+        id S1726275AbgKMKeb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Nov 2020 05:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726184AbgKMKe2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Nov 2020 05:34:28 -0500
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BB0C0613D1
+        for <linux-pm@vger.kernel.org>; Fri, 13 Nov 2020 02:34:28 -0800 (PST)
+Received: by mail-vk1-xa41.google.com with SMTP id m184so2017033vkb.9
+        for <linux-pm@vger.kernel.org>; Fri, 13 Nov 2020 02:34:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PALuAB8oVM/m0G/j2UGrrN/OBz7MMaWqElt/6b/dyFE=;
+        b=XOoELJ6mcWARstsXGUsmNAxUtzYyAhmn3p0LrYrwIfX4ZVVANvpN7eTiqCFLe4CQF1
+         ADYVZ/egyZqjAEtf3UcsleDaK5r8VENpUkUsvdpPYHul66b4cFYJ/o3x2uA/DsVjVd1b
+         mp0ikEcMIwhBtBqKzgbHzoA06R0WPM4ls95pkaK3oLEBrXtrAT76M2bHCj0oW+Wfq3bY
+         psZp/2xJZBIizcTuQP8mXq6R5++B3kMM1GIyDu0Y0UbCKLDZqxouZayWstNmmuJcXzE/
+         ioEYz7kLRvbjdV8ZeVT70O0BexBtRu1r71TlvveuypmnnvZqLnr+HDBb/9TwrHvqd7h1
+         GDtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PALuAB8oVM/m0G/j2UGrrN/OBz7MMaWqElt/6b/dyFE=;
+        b=nJn0itEckkYkqZIfl5a2CbK5qp4UynSqq0JKyvfsMh8hoe6S+XnyIiEJ607DzJMEml
+         7VLlg7I/VHnZwX5EurUNRqILC5yourRvqXaH3cJZuwKscrNGFopd0EiAr+hlCXLx4GhZ
+         oJtB+v3CpPBIhgxmd29iP8S020syzJ8/Wh3wN5NdhInk5oJJs3tSgoq0H2moVL70PMO3
+         R9FnPmadfLN2gk8rB8aJzAAp6fKK2sPYwip0DxZZ+Hb/oumQD13/qNRWQr7/usx+ckGN
+         2A66z0K94EX1S5FuxXxooqGMrgHY17PiHacVht5GUb99qhLP13xrcfGHyNgnAeV5atdY
+         HgQQ==
+X-Gm-Message-State: AOAM5323G9+HMP9cT6x/6pla7EJXxxzjRuZ1yHLtO/JnmKNpJG0J9Zor
+        mXChAOMvFdZDXl7TYtGTeO9evu1Ibu2QjmkO629zww==
+X-Google-Smtp-Source: ABdhPJyxI3qvgFgCh3w8nJ3N3pxqYhJg0jmIPKkvwU7Ca7HGf127m4ZwT5G5cD8ykpX5DVq+0rKJSnnpeorUP3WcqH0=
+X-Received: by 2002:a1f:8f48:: with SMTP id r69mr659677vkd.6.1605263667043;
+ Fri, 13 Nov 2020 02:34:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <9cb7e3a6-2a3f-8f46-2bf1-d6d8ea01613b@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAKsWRmVeSWpSXmKPExsWy7djP87o7E9bFG6w+p25xf14ro8XGGetZ
-        La5/ec5qMf/IOVaLK1/fs1lM37uJzWLS/QksFufPb2C32PT4GqvF5V1z2Cw+9x5htJhxfh+T
-        xdojd9ktbjeuYLNo3XuE3WLG5JdsDgIem1Z1snncubaHzeN+93Emj81L6j36tqxi9Pi8SS6A
-        LYrLJiU1J7MstUjfLoEr4+Cap2wFE7gqFv54xtrA2MnRxcjJISFgInFz7mT2LkYuDiGBFYwS
-        x5d/Z4JwvjBKXNjyjBHC+cwocebhWkaYlkuzTrBBJJYzSlyZtxCq5SOjxJybt1hBqoQFgiQm
-        3j/CDmKLCGRJrD0xgQWkiFngNZPE4ZvnmUASbAKGEr1H+8DG8grYSZzZcJ4NxGYRUJXY8/8l
-        WLOoQJzEhI0tLBA1ghInZz4BszkF7CVeHtgO1sssIC5x68l8JghbXmL72znMIMskBFZzSkz5
-        cJgV4m4XiZenrrJD2MISr45vgbJlJE5P7mGBaGhmlOjZfZsdwpnAKHH/+AKor60l7pz7BXQe
-        B9AKTYn1u/RBTAkBR4ndW80gTD6JG28FIW7gk5i0bTozRJhXoqNNCGKGisTvVdOZIGwpie4n
-        /1kmMCrNQvLZLCTfzELyzSyEtQsYWVYxiqeWFuempxYb5qWW6xUn5haX5qXrJefnbmIEJrrT
-        /45/2sE499VHvUOMTByMhxglOJiVRHiVHdbEC/GmJFZWpRblxxeV5qQWH2KU5mBREuddNRso
-        JZCeWJKanZpakFoEk2Xi4JRqYNKT/XJrvlheR0vqx4XtUmp8uncPiG+OWlSYfLA9qf6EtsHe
-        CJuJf1/eefBhSuYeEyVJIQFul47mj7v3bp939VHIGvagl3MDLq9TfLH7ljzfJi3hysdqs1xc
-        Ts3iYegu/mmY8MVZfcpKNz9Tj4q8b1aeaxNXx1b5e/Wyr9lnVfDx5C+b+LZtJ9ZyrE3QfKTE
-        W/+lLqhm005/hblf1a2YZFfn39kf9+Hjpor1bo9ULuQxLlhsrmWVHCwQyjnt8D8O3Vv+QkdW
-        r9gze6M4D4ckC1Pjso0TmpsatP0myVz6URy8/6aX4Js7TdWTgwVeRiy94vTxz4zSubM+J8fr
-        cpbdVtb3PxXOODn1ZxhLS/eSB0osxRmJhlrMRcWJALGYWXDjAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTURyAO/dud3fG6LZpncQsFhYo7pWzMy3rD6kVERFEL1KnXaalTna3
-        UMmyh1ELTZPQlm1JRUvMdGo2s1KZmShJD7YoRTSdmImZlkt8tLkC//vg933ncPgdEucPsALJ
-        lHQdrU1XpQoJP1bnfHtvuC2hKl5S2M9FfaY8gGpKn7CRc2qYjcz2t2z08dc4gUpeWAl0o6+Q
-        hbq7qznI+tXBRh8aywg0mW8HqLT7JYYe23s56Mt5C4HyXtg5qLR4hNhBKa0VVwllj6OJUPZd
-        a8eUtffPKQvqKoBy0hq8nzgq2qrV6HX0+mQNo9smPCZFMpFUgUSyCIVIunnL8SiZXCiO2XqC
-        Tk05TWvFMQmi5JbKISKj0C+z3O1i54KrpAFwSUhFwPfGN4QB+JF86gGArfdu4gZAegaB0HxJ
-        6HMEcNZh+OeMA+hsL2F5BwLqACzqs3O87E+dhPcGHCyvhFOjGCwrmub4CjeA1rsLmNciKCnM
-        bysAXuZRMbCrupvwMosKgU0LI4snBVBx0F2UT/iclbDj1uDibVxqOxxpblhscWoTnDW9x328
-        Gn4eNGM+XgcbxsrwQsA3LsmNSxLjksS4JLkLWBXAn9Yzaeo0RipiVGmMPl0tStKkWYFn2U9f
-        /6l9BkzfJkStACNBK4AkLvTnbdhRGc/nnVBlZdNaTbxWn0ozrUDueU8RHhiQpPH8lnRdvDRS
-        IpdGRCokckXkZuFqXv0dT0SpVTr6FE1n0Nr/HUZyA3OxWMdazkvLneggyTZJs/hz8KrnDyUZ
-        Oa6WWC1PefjiBdKlsF3H9a9cFjaXa5Yc7B/7OlacWX9py5xGNdNYtV/uvM4fsObIQkqcxSuc
-        t3flnB242FFcDZwFpdTzjlWPbEc+let7TIKa3p5Pgmfl+urEqBuxXb/XXBbPmciSLObarH1f
-        9Oj9FsVBgKiePEtSZYKj47b4lC0qbHouy91vcTPUbMDeAvWyhrqfhqQhHGveE3tkJuhj1e7s
-        QxsjZNzw+US1KyFm2cLyV7aRH7cig3de6Gyajxs+MxGqzrd9VwYPTW0Iy8lq/HalISNx41QI
-        TG6TmDsFXTNf/FHvu4lRIYtJVklDcS2j+gvpkUyDdQMAAA==
-X-CMS-MailID: 20201113103225eucas1p2326d979b94a33d018c24a9f526e7a016
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20201112141041eucas1p1a29130955afd4ec1d5d94cf17183920c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20201112141041eucas1p1a29130955afd4ec1d5d94cf17183920c
-References: <CGME20201112141041eucas1p1a29130955afd4ec1d5d94cf17183920c@eucas1p1.samsung.com>
-        <20201112140931.31139-1-s.nawrocki@samsung.com>
-        <b0a8e994-06d2-e04a-579c-40580b71f760@linaro.org>
-        <9cb7e3a6-2a3f-8f46-2bf1-d6d8ea01613b@samsung.com>
+References: <20201106164811.3698-1-ilina@codeaurora.org> <20201106164811.3698-3-ilina@codeaurora.org>
+ <CAPDyKFrv-3USmNLR3gjgaTEuTrWuYZjs3qCtnjxSOWqrxv5qsA@mail.gmail.com>
+ <X6l/OcHG37HzgFL8@codeaurora.org> <CAPDyKFr8fdbMM1nsx-RZcMVtveJUP3p38z=HkL1T2C=QgM3gkQ@mail.gmail.com>
+ <X6wRBLmvzztNai4y@codeaurora.org>
+In-Reply-To: <X6wRBLmvzztNai4y@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 13 Nov 2020 11:33:50 +0100
+Message-ID: <CAPDyKFr9gpH9Kh9=W4D7DRG8OuqBvkaWHvk8i47SToES=338cA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PM / Domains: use device's next wakeup to
+ determine domain idle state
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Georgi, Chanwoo,
+On Wed, 11 Nov 2020 at 17:51, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> On Tue, Nov 10 2020 at 03:02 -0700, Ulf Hansson wrote:
+> >On Mon, 9 Nov 2020 at 18:41, Lina Iyer <ilina@codeaurora.org> wrote:
+> >>
+> >> On Mon, Nov 09 2020 at 08:27 -0700, Ulf Hansson wrote:
+> >> >On Fri, 6 Nov 2020 at 17:48, Lina Iyer <ilina@codeaurora.org> wrote:
+> >> >>
+> >> [...]
+> >> >> +static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
+> >> >> +{
+> >> >> +       ktime_t domain_wakeup = KTIME_MAX;
+> >> >> +       ktime_t next_wakeup;
+> >> >> +       struct pm_domain_data *pdd;
+> >> >> +       struct gpd_link *link;
+> >> >> +
+> >> >> +       /* Find the earliest wakeup for all devices in the domain */
+> >> >> +       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+> >> >> +               next_wakeup = to_gpd_data(pdd)->next_wakeup;
+> >> >> +               if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
+> >> >> +                       if (ktime_before(next_wakeup, domain_wakeup))
+> >> >> +                               domain_wakeup = next_wakeup;
+> >> >
+> >> >If it turns out that one of the device's next_wakeup is before "now",
+> >> >leading to ktime_before() above returns true - then I think you should
+> >> >bail out, no?
+> >> >
+> >> >At least, we shouldn't just continue and ignore this case, right?
+> >> >
+> >> No, that could be a very common case. Drivers are not expected to clean
+> >> up the next wakeup by setting it to KTIME_MAX. The best we can do is
+> >> to make a choice with the valid information we have. This will also map
+> >> to the current behavior. Say if all next wakeup information provided to
+> >> the devices were in the past, we would be no worse (or better) than what
+> >> we do without this change.
+> >
+> >Well, I don't quite agree (at least not yet), but let me elaborate, as
+> >I think we can do better without having to add complexity.
+> >
+> >Normally, I don't think a driver needs to clean up its device's next
+> >wakeup in between the remote wakeups, instead it should just set a new
+> >value.
+> >
+> >That's because, even if the driver acts to a remote wakeup or deals
+> >with a request entering a queue, the driver needs to runtime resume
+> >its device during this period. This prevents genpd from power off the
+> >PM domain, hence also the genpd governor from potentially looking at
+> >"invalid" wakeup information for its attached devices.
+> >
+> Could you elaborate a bit? Why would a remote wakeup affect the next
+> wakeup. I'm afraid that I'm not getting the situation correctly.
 
-On 13.11.2020 10:07, Chanwoo Choi wrote:
-> On 11/13/20 5:48 PM, Georgi Djakov wrote:
->> On 11/12/20 16:09, Sylwester Nawrocki wrote:
+Let me try :-)
+
+A remote wakeup is a wakeup irq that is triggered when the device is
+in runtime suspended state.
+
+I was expecting that you would be arming a remote wakeup for the
+corresponding device that is attached to a genpd, when the use case
+becomes enabled. Additionally, to allow the driver to consume the
+wakeup irq, it needs to runtime resume its device (which means its PM
+domain via genpd must be powered on as well, if it's not on already).
+
+Therefore, during the period of when the driver consumes the wakeup
+irq, its device's PM domain remains powered on. When this is
+completed, the driver allows its device to become runtime suspended
+again. At some point before the device becomes runtime suspended, the
+driver should set a new value of the "next wakeup" for its device.
+
+>
+> >Of course, I assume there are situations, where a driver actually
+> >needs to do a clean up of its device's next wakeup, but that should be
+> >less frequent and likely when a remote wakeup is disabled (for
+> >whatever reason).
+> >
+> A common case would be that the driver does not know when the usecase is
+> being turned off and therefore may not be able to set the next wakeup to
+> max. If the stale value continues to exist then we may never power off
+> the domain.
+
+Right.
+
+But, how do you know that the use case starts and what prevents us
+from knowing that the use case has stopped?
+
+Maybe if you add a user of the new APIs, this would help me to
+understand better?
+
+>
+> >> >> +       /*
+> >> >> +        * Find the next wakeup from devices that can determine their own wakeup
+> >> >> +        * to find when the domain would wakeup and do it for every device down
+> >> >> +        * the hierarchy. It is not worth while to sleep if the state's residency
+> >> >> +        * cannot be met.
+> >> >> +        */
+> >> >> +       update_domain_next_wakeup(genpd, now);
+> >> >> +       if (genpd->next_wakeup != KTIME_MAX) {
+> >> >> +               /* Let's find out the deepest domain idle state, the devices prefer */
+> >> >> +               while (state_idx >= 0) {
+> >> >> +                       if (next_wakeup_allows_state(genpd, state_idx, now)) {
+> >> >> +                               genpd->max_off_time_changed = true;
+> >> >> +                               break;
+> >> >> +                       }
+> >> >> +                       state_idx--;
+> >> >> +               }
+> >> >> +
+> >> >> +               if (state_idx < 0) {
+> >> >> +                       state_idx = 0;
+> >> >> +                       genpd->cached_power_down_ok = false;
+> >> >> +                       goto done;
+> >> >> +               }
+> >> >> +       }
+> >> >> +
+> >> >
+> >> >The above would introduce unnecessary overhead, as it may become
+> >> >executed in cases when it's not needed.
+> >> >
+> >> >For example, there's no point doing the above, if the domain doesn't
+> >> >specify residency values for its idle states.
+> >> >
+> >> We would still need to ensure that the next wakeup is after the
+> >> power_off_latency, if specified.
+> >
+> >Good point! Although, I would rather avoid adding the overhead, unless
+> >the residency is specified. Do you see a problem with this approach?
+> >
+> Hmmm, no strong objections. However, we still need to run through the
+> states to make sure the residency is not set and have a variable track
+> that.
+
+Right.
+
+The important part is that we can do that once and not for every call
+to the governor.
+
+> The devices wouldn't know that and would still continue to set the
+> next wakeup, unless we find a way to let them know we are not using this
+> feature for the domain.
+
+Right.
+
+To allow the driver to know, we could respond with an error code from
+the new dev_pm_genpd_set_performance_state() API (from patch1), in
+case the genpd+governor doesn't support it.
+
+Would that be okay? Otherwise we will have to add a separate genpd
+API, asking explicitly if the "next wakeup" feature is supported.
+
+>
+> >Another option is to add a new governor, but if possible, I would like
+> >to avoid that.
+> >
+> Absolutely, we should avoid that.
+>
+
 [...]
->>
->> Good work Sylwester! Thank you and all the reviewers! What would be the merge
->> path for this patchset? Looks like there is no build dependency between patches.
->> Should i take just patches 2,3 or also patch 1? Chanwoo?
-> 
-> Hi Georgi,
-> 
-> If you take the patch 2,3, I'll apply patch 1,4 to devfreq.git.
 
-> Hi Sylwester,
-> First of all, thanks for your work to finish it for a long time.
-> I'm very happy about finishing this work. It is very necessary feature
-> for the QoS. Once again, thank for your work.
-
-I would also like to thank everyone for provided feedback!
-
-As far as building is concerned the patches could be applied in any
-order. I think we could also apply the drm/exynos patch in same
-merge window. There could be runtime (or git bisect) regression 
-only in case when INTERCONNECT is enabled and only (or as first)
-the dts and drm/exynos patches are applied.
-
-Hmm, maybe it's better to hold on with the drm patch, INTERCONNECT
-is disabled in arch/arm/configs/{multi_v7_defconfig, exynos_defconfig}  
-but it is enabled in arch/arm64/configs/defconfig.
-
--- 
-Regards,
-Sylwester
+Kind regards
+Uffe
