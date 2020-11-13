@@ -2,115 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CB52B121B
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Nov 2020 23:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A74B2B13F5
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Nov 2020 02:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727853AbgKLWt5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 17:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726348AbgKLWt4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 17:49:56 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC81C0613D1;
-        Thu, 12 Nov 2020 14:49:40 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id u18so10928669lfd.9;
-        Thu, 12 Nov 2020 14:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aK7+Uow12DffvZAo4NEAmVyVnXleO87WAIYyYASIccY=;
-        b=s+hrBoYajZcpg8vW5jbID66ikh/sLL9MufWJVWB1oRSIegQ0uvry+CVKlN2TJL61r4
-         v9JZ1MdFoaOiCPsbDEGqRfflAyiGw6wyY2C4gGbhWiGch7gx6sR7fwQGkDvdPa2Es/v3
-         pfPSnF/zwzIQQbcBeI5GjXIC8B50uNykm1YUjdbCmcuvBGVaePs2lMbw4YBH7cDcbe3L
-         ZeJx/QYqVlYfopHDPpTqtrG3O+/Kys45/VLZYO1jhz8Ri2H2WhUsNC6jmt/YfMqRvp2M
-         KdZ89n/Am97bIRJlFDGmZkDNU/hGwmi3s5Voky2CU3R3leg9aFUi4tkqa6bWb5bOHLn7
-         uing==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aK7+Uow12DffvZAo4NEAmVyVnXleO87WAIYyYASIccY=;
-        b=jfArDet+r2hT/Cm/NflEzwynNJ6isTHsoy3hJPfB0+Ky6ETlgRky3bZjINWXeWb0Qw
-         d94FdTtLGnBgwdTWXnSlnbCSAxeMOt3uL0GkS8WZVNGlGub0VdTflDKirNfuNueJwR9Y
-         pxFaRwUN5SiVujDf9F6pQebT4lPaTtpMP6W4wb2gfEX4QRZ02oQ7x/EkNupdV+KYqDbu
-         /vbyLuKSDpzu6LRyQkqA4U2B1ZXW+u9jQ8ZeLmdlHQMdc53C3BBz9s+ZjJz26d+Me9qe
-         a3Fa770bafKyTFEjEmhqtTMrhBW4nL4AETkIHRIDHxxlEnhfYtRbU/xG/BdoA275aE/m
-         cdjw==
-X-Gm-Message-State: AOAM530dNCqSyEEHcxvUKkajfQwfuy0B3U8mb79hbGY1humAhq8j3a8c
-        n5qA6lvWpWN6F4K7BgDA418=
-X-Google-Smtp-Source: ABdhPJw+wIotxRLnXRScqM6tMbUv9ylmiyYmTE1XRiROX6r/EknFOxcy7uxwXO6q+p5DB8COzDkFbg==
-X-Received: by 2002:a19:915:: with SMTP id 21mr683584lfj.528.1605221379469;
-        Thu, 12 Nov 2020 14:49:39 -0800 (PST)
-Received: from localhost.localdomain (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.gmail.com with ESMTPSA id z187sm1006536lfc.126.2020.11.12.14.49.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 14:49:38 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dan Murphy <dmurphy@ti.com>, Sebastian Reichel <sre@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 4/4] ARM: tegra: acer-a500: Add Embedded Controller
-Date:   Fri, 13 Nov 2020 01:49:23 +0300
-Message-Id: <20201112224923.4028-5-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201112224923.4028-1-digetx@gmail.com>
-References: <20201112224923.4028-1-digetx@gmail.com>
+        id S1726015AbgKMBlT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Nov 2020 20:41:19 -0500
+Received: from mo-csw1515.securemx.jp ([210.130.202.154]:44126 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725965AbgKMBlT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Nov 2020 20:41:19 -0500
+Received: by mo-csw.securemx.jp (mx-mo-csw1515) id 0AD1evdt031978; Fri, 13 Nov 2020 10:40:57 +0900
+X-Iguazu-Qid: 34trXZNYeNEyzvpCth
+X-Iguazu-QSIG: v=2; s=0; t=1605231656; q=34trXZNYeNEyzvpCth; m=woCVqhSyszefYnXa0h+3xqIDuJphGUkqWVHEK5sBHa8=
+Received: from imx12.toshiba.co.jp (imx12.toshiba.co.jp [61.202.160.132])
+        by relay.securemx.jp (mx-mr1513) id 0AD1etNG000808;
+        Fri, 13 Nov 2020 10:40:55 +0900
+Received: from enc02.toshiba.co.jp ([61.202.160.51])
+        by imx12.toshiba.co.jp  with ESMTP id 0AD1esrr025901;
+        Fri, 13 Nov 2020 10:40:54 +0900 (JST)
+Received: from hop101.toshiba.co.jp ([133.199.85.107])
+        by enc02.toshiba.co.jp  with ESMTP id 0AD1es0E028816;
+        Fri, 13 Nov 2020 10:40:54 +0900
+From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+To:     Smita Koralahalli Channabasappa <skoralah@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v5] cper, apei, mce: Pass x86 CPER through the MCA handling chain
+References: <20201103164952.5126-1-Smita.KoralahalliChannabasappa@amd.com>
+        <87a6vv9hch.fsf@kokedama.swc.toshiba.co.jp>
+        <20201106120950.GC14914@zn.tnic>
+        <874klz9vk9.fsf@kokedama.swc.toshiba.co.jp>
+        <982e0243-b144-f8b6-d69d-45af94ed8bb9@amd.com>
+        <651b7dba-d36a-d4db-4a0f-fd67aa9b985f@amd.com>
+Date:   Fri, 13 Nov 2020 10:40:50 +0900
+In-Reply-To: <651b7dba-d36a-d4db-4a0f-fd67aa9b985f@amd.com> (Smita Koralahalli
+        Channabasappa's message of "Wed, 11 Nov 2020 14:37:29 -0600")
+X-TSB-HOP: ON
+Message-ID: <87361e8259.fsf@kokedama.swc.toshiba.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds device-tree node for the Embedded Controller which is
-found on the Picasso board. The Embedded Controller itself is ENE KB930,
-it provides functions like battery-gauge/LED/GPIO/etc and it uses firmware
-that is specifically customized for the Acer A500 device.
+Smita Koralahalli Channabasappa <skoralah@amd.com> writes:
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> Punit,
+>
+> On 11/9/20 1:05 PM, Smita Koralahalli Channabasappa wrote:
+>
+>> On 11/8/20 7:18 PM, Punit Agrawal wrote:
+>>> Borislav Petkov <bp@alien8.de> writes:
+>>>> On Fri, Nov 06, 2020 at 02:36:46PM +0900, Punit Agrawal wrote:
+>>>>>> diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
+>>>>>> index 2531de49f56c..438ed9eff6d0 100644
+>>>>>> --- a/drivers/firmware/efi/cper-x86.c
+>>>>>> +++ b/drivers/firmware/efi/cper-x86.c
+>>>>>> @@ -2,6 +2,7 @@
+>>>>>>    // Copyright (C) 2018, Advanced Micro Devices, Inc.
+>>>>>>      #include <linux/cper.h>
+>>>>>> +#include <linux/acpi.h>
+>>>>> Did you mean to include <asm/acpi.h>?
+>>>> Why?
+>>> Because arch_apei_report_x86_error() used in the patch is defined
+>>> there. The indirect include works but pulls in additional definitions
+>>> not needed by the patch.
+>>>
+>>> Do you prefer the more generic include?
+>> I agree, it's generally a good practice to avoid pulling up additional
+>> definitions. I had this when I made the declaration in generic header
+>> file and may be I did not consider it changing initially as my build
+>> didn't break after moving the declaration from generic header to arch
+>> specific header file.
+>> I will take care henceforth and make the changes as required.
+>
+> The asm specific include throws out a warning when I run checkpatch.pl
+>
+> WARNING: Use #include <linux/acpi.h> instead of <asm/acpi.h>
+> #215: FILE: drivers/firmware/efi/cper-x86.c:5:
+> +#include <asm/acpi.h>
+>
+> Should I just keep the generic include?
 
-diff --git a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-index 5ab6872cd84c..3b9ac3324fd5 100644
---- a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-+++ b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-@@ -533,6 +533,16 @@ panel_ddc: i2c@1 {
- 			reg = <1>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-+
-+			embedded-controller@58 {
-+				compatible = "acer,a500-iconia-ec", "ene,kb930";
-+				reg = <0x58>;
-+
-+				system-power-controller;
-+
-+				monitored-battery = <&bat1010>;
-+				power-supplies = <&mains>;
-+			};
- 		};
- 	};
- 
-@@ -820,6 +830,13 @@ backlight: backlight {
- 		default-brightness-level = <20>;
- 	};
- 
-+	bat1010: battery-2s1p {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3260000>;
-+		energy-full-design-microwatt-hours = <24000000>;
-+		operating-range-celsius = <0 40>;
-+	};
-+
- 	/* PMIC has a built-in 32KHz oscillator which is used by PMC */
- 	clk32k_in: clock@0 {
- 		compatible = "fixed-clock";
--- 
-2.29.2
+Thanks for checking.
 
+I had a quick look at checkpatch to understand the reason for the
+warning. It seems to warn when "asm" includes are used when a suitable
+"linux" include exists[0].
+
+I am not convinced that the rationale for that check applies in this
+case as the function being used is indeed an architecture specific one
+but also don't feel strongly enough to object.
+
+Feel free to pick up the "Reviewed-by" tag in either case.
+
+Thanks,
+Punit
+
+[0] https://github.com/torvalds/linux/blob/master/scripts/checkpatch.pl#L5333
