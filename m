@@ -2,277 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288D72B14E1
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Nov 2020 04:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59BA2B1782
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Nov 2020 09:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726229AbgKMDvg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Nov 2020 22:51:36 -0500
-Received: from mga17.intel.com ([192.55.52.151]:21556 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726011AbgKMDvg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Nov 2020 22:51:36 -0500
-IronPort-SDR: MwouKXMVeAgg6MwQHT4f8f71tvivrWO+JfSA5T4ArSuJs2+h80QbdZl8F5gcLo2pMXN0HtnlKf
- BtXSBL2NruJA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9803"; a="150272240"
-X-IronPort-AV: E=Sophos;i="5.77,474,1596524400"; 
-   d="scan'208";a="150272240"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2020 19:51:34 -0800
-IronPort-SDR: n1nfLwoTZbywH3Z2Oo5WXtFx2iIp7bF5BbID9HcYOcX+Vfdy39/Mq1QHkWtnc6r71FzSE+Mysn
- 7WgMUMhyYuPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,474,1596524400"; 
-   d="scan'208";a="530918005"
-Received: from lkp-server02.sh.intel.com (HELO 697932c29306) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Nov 2020 19:51:32 -0800
-Received: from kbuild by 697932c29306 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kdQ7X-00003M-1F; Fri, 13 Nov 2020 03:51:31 +0000
-Date:   Fri, 13 Nov 2020 11:51:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 52d108cd060dea3403c01d460c2ffbc7eaaf4a9c
-Message-ID: <5fae02b7.TOue6GAJlIifEnop%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726207AbgKMIs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Nov 2020 03:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726249AbgKMIs2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Nov 2020 03:48:28 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2F8C0617A6
+        for <linux-pm@vger.kernel.org>; Fri, 13 Nov 2020 00:48:28 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id w24so7679485wmi.0
+        for <linux-pm@vger.kernel.org>; Fri, 13 Nov 2020 00:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OXNLGzI568pdIo9vXw49CKPhrcpuIJbWHVRFLUXXX1Y=;
+        b=bwZrPnyqZrci6UeDZHCYSnw/VAGBVtUNSBdLyiPHzVyahUbJtFeRtrWKsfz7x1ovZC
+         UQ+oxsZBvoH+DJuoPleWhP6cZq6avdm+WTq2XdD03M8pfmwUO/jDFESPF0UOHF251Gl9
+         +IRGZkIN1/j9mjevvHtj1miiXZT/z3tiS95GEByU/ZQOEBQXXf3F1sJhKqi1NnHKsBQ+
+         eWqec9XRvt62Eyjxji7JGpZvvTTVgw1vg1Im/Y8eCTIT/Yq36Yt9s6kmGhwsXZxOdeoZ
+         JG9eFG4BlZDJ+HRdYApLoI16ucmucoWr/cOvstFlBYeT3daN1gId6OWV29m02e/+6Qqj
+         7oPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OXNLGzI568pdIo9vXw49CKPhrcpuIJbWHVRFLUXXX1Y=;
+        b=kv392uwmkp8ZO1VEKfplHKakYtjS/UDeMrBkubPy6jitUy36VwxtgESSuaNszi9vUn
+         Bvtm2donFPfXPnbc0FunXVvBznTRsycpEfr2TcafXCOFOBPJuPr0W2QjzrkK/L5VMr9Z
+         bFIRs+VLwxosET98NVcK5KgWo8JE38/qBr+LwjIV9Cn2SQ2BI7wyXoRDs5kHfBfgRb++
+         N+7YAVz5wRy+DtzrZfhCmkzQ7N1mjm7LF0xVVBJtFv9vji4W6LITnQ0IQh1JiXnOhPQn
+         3IEO5/YVPFb0w1kGglh2fE5lD/Nw4yT+u1YZowMYgQNss7rav15h3J1zgg9Ud3r3xet4
+         ZOkg==
+X-Gm-Message-State: AOAM533rY4b+sLNy96s0ZSpbx/UmpGtZjF9IUI90pzHySHcDtO8QR8eE
+        R1/JNPu7B5x4EroZJ2FZJdCkWQ==
+X-Google-Smtp-Source: ABdhPJzk7D0uQ6FoaVTAbiAUaj9wWqVP2TYIpQIU2r/XVYU03ErBlQTzLEANBj+fk+mldiYFxcle5Q==
+X-Received: by 2002:a1c:6a0d:: with SMTP id f13mr1390884wmc.172.1605257307130;
+        Fri, 13 Nov 2020 00:48:27 -0800 (PST)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id p3sm3924898wrs.50.2020.11.13.00.48.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Nov 2020 00:48:26 -0800 (PST)
+Subject: Re: [PATCH v9 0/5] Exynos: Simple QoS for exynos-bus using
+ interconnect
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>, cw00.choi@samsung.com,
+        inki.dae@samsung.com
+Cc:     krzk@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        a.swigon@samsung.com, myungjoo.ham@samsung.com,
+        sw0312.kim@samsung.com, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+References: <CGME20201112141041eucas1p1a29130955afd4ec1d5d94cf17183920c@eucas1p1.samsung.com>
+ <20201112140931.31139-1-s.nawrocki@samsung.com>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <b0a8e994-06d2-e04a-579c-40580b71f760@linaro.org>
+Date:   Fri, 13 Nov 2020 10:48:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20201112140931.31139-1-s.nawrocki@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 52d108cd060dea3403c01d460c2ffbc7eaaf4a9c  Merge branch 'powercap' into linux-next
+On 11/12/20 16:09, Sylwester Nawrocki wrote:
+> 
+> This patchset adds interconnect API support for the Exynos SoC "samsung,
+> exynos-bus" compatible devices, which already have their corresponding
+> exynos-bus driver in the devfreq subsystem.  Complementing the devfreq
+> driver with an interconnect functionality allows to ensure the QoS
+> requirements of devices accessing the system memory (e.g. video processing
+> devices) are fulfilled and allows to avoid issues like the one discussed
+> in thread [1].
+> 
+> This patch series adds implementation of the interconnect provider per each
+> "samsung,exynos-bus" compatible DT node, with one interconnect node per
+> provider.  The interconnect code which was previously added as a part of
+> the devfreq driver has been converted to a separate platform driver.
+> In the devfreq a corresponding virtual child platform device is registered.
+> Integration of devfreq and interconnect frameworks is achieved through
+> the PM QoS API.
+> 
+> A sample interconnect consumer for exynos-mixer is added in patch 5/5,
+> it is currently added only for exynos4412 and allows to address the
+> mixer DMA underrun error issues [1].
 
-elapsed time: 727m
+Good work Sylwester! Thank you and all the reviewers! What would be the merge
+path for this patchset? Looks like there is no build dependency between patches.
+Should i take just patches 2,3 or also patch 1? Chanwoo?
 
-configs tested: 212
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         bcm2835_defconfig
-arm                        shmobile_defconfig
-arm                        spear6xx_defconfig
-arm                       aspeed_g5_defconfig
-ia64                        generic_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                         microdev_defconfig
-powerpc                      katmai_defconfig
-sh                   sh7770_generic_defconfig
-sh                            hp6xx_defconfig
-riscv                            allmodconfig
-powerpc                    ge_imp3a_defconfig
-sparc                               defconfig
-sparc64                          alldefconfig
-sh                        dreamcast_defconfig
-powerpc                       maple_defconfig
-openrisc                            defconfig
-powerpc                      acadia_defconfig
-sh                          rsk7201_defconfig
-mips                        workpad_defconfig
-m68k                         apollo_defconfig
-sh                ecovec24-romimage_defconfig
-riscv                            alldefconfig
-arm                          pxa3xx_defconfig
-powerpc                     pq2fads_defconfig
-m68k                         amcore_defconfig
-arm                           tegra_defconfig
-powerpc                 mpc8315_rdb_defconfig
-xtensa                         virt_defconfig
-arm                         at91_dt_defconfig
-sh                             espt_defconfig
-sparc                       sparc64_defconfig
-arm                          collie_defconfig
-mips                             allyesconfig
-sh                           se7722_defconfig
-powerpc                        warp_defconfig
-arm                  colibri_pxa270_defconfig
-arm                              alldefconfig
-arm                           h3600_defconfig
-m68k                        m5407c3_defconfig
-m68k                        mvme16x_defconfig
-sh                          rsk7203_defconfig
-mips                     loongson1b_defconfig
-arm                             mxs_defconfig
-powerpc                    mvme5100_defconfig
-sh                          sdk7786_defconfig
-mips                       bmips_be_defconfig
-powerpc                     pseries_defconfig
-mips                           rs90_defconfig
-arm                          exynos_defconfig
-m68k                           sun3_defconfig
-nds32                            alldefconfig
-powerpc64                           defconfig
-arm                       imx_v6_v7_defconfig
-arm                        cerfcube_defconfig
-m68k                        mvme147_defconfig
-powerpc                    adder875_defconfig
-powerpc                       ebony_defconfig
-xtensa                    smp_lx200_defconfig
-microblaze                      mmu_defconfig
-arm                        trizeps4_defconfig
-arc                          axs101_defconfig
-mips                           ip28_defconfig
-powerpc                     powernv_defconfig
-powerpc                     tqm8555_defconfig
-ia64                         bigsur_defconfig
-ia64                             alldefconfig
-powerpc                  mpc885_ads_defconfig
-sh                      rts7751r2d1_defconfig
-h8300                     edosk2674_defconfig
-arm                         shannon_defconfig
-powerpc                     asp8347_defconfig
-powerpc                         wii_defconfig
-sh                           sh2007_defconfig
-mips                malta_kvm_guest_defconfig
-i386                             alldefconfig
-mips                        maltaup_defconfig
-arm                         mv78xx0_defconfig
-mips                          malta_defconfig
-arm                      footbridge_defconfig
-xtensa                              defconfig
-mips                 decstation_r4k_defconfig
-arm                         nhk8815_defconfig
-arm                             pxa_defconfig
-nios2                            alldefconfig
-xtensa                    xip_kc705_defconfig
-arm                          ep93xx_defconfig
-arm                       multi_v4t_defconfig
-arm                            u300_defconfig
-c6x                        evmc6457_defconfig
-powerpc                    socrates_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                   lite5200b_defconfig
-mips                       lemote2f_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                         assabet_defconfig
-arm                          pxa168_defconfig
-microblaze                          defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                   currituck_defconfig
-powerpc                     tqm8548_defconfig
-s390                          debug_defconfig
-arm                         socfpga_defconfig
-m68k                        m5307c3_defconfig
-ia64                      gensparse_defconfig
-m68k                        stmark2_defconfig
-m68k                             alldefconfig
-powerpc                      ep88xc_defconfig
-arc                         haps_hs_defconfig
-arm                      jornada720_defconfig
-sh                               allmodconfig
-arm                           spitz_defconfig
-powerpc                      pmac32_defconfig
-arm                           viper_defconfig
-powerpc                      obs600_defconfig
-arm64                            alldefconfig
-sh                        sh7785lcr_defconfig
-arm                         orion5x_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20201112
-i386                 randconfig-a005-20201112
-i386                 randconfig-a002-20201112
-i386                 randconfig-a001-20201112
-i386                 randconfig-a003-20201112
-i386                 randconfig-a004-20201112
-i386                 randconfig-a006-20201111
-i386                 randconfig-a005-20201111
-i386                 randconfig-a002-20201111
-i386                 randconfig-a001-20201111
-i386                 randconfig-a003-20201111
-i386                 randconfig-a004-20201111
-i386                 randconfig-a006-20201113
-i386                 randconfig-a005-20201113
-i386                 randconfig-a002-20201113
-i386                 randconfig-a001-20201113
-i386                 randconfig-a003-20201113
-i386                 randconfig-a004-20201113
-x86_64               randconfig-a015-20201111
-x86_64               randconfig-a011-20201111
-x86_64               randconfig-a014-20201111
-x86_64               randconfig-a013-20201111
-x86_64               randconfig-a016-20201111
-x86_64               randconfig-a012-20201111
-i386                 randconfig-a012-20201113
-i386                 randconfig-a014-20201113
-i386                 randconfig-a016-20201113
-i386                 randconfig-a011-20201113
-i386                 randconfig-a015-20201113
-i386                 randconfig-a013-20201113
-i386                 randconfig-a012-20201111
-i386                 randconfig-a014-20201111
-i386                 randconfig-a016-20201111
-i386                 randconfig-a011-20201111
-i386                 randconfig-a015-20201111
-i386                 randconfig-a013-20201111
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a003-20201111
-x86_64               randconfig-a005-20201111
-x86_64               randconfig-a004-20201111
-x86_64               randconfig-a002-20201111
-x86_64               randconfig-a006-20201111
-x86_64               randconfig-a001-20201111
-x86_64               randconfig-a003-20201113
-x86_64               randconfig-a005-20201113
-x86_64               randconfig-a004-20201113
-x86_64               randconfig-a002-20201113
-x86_64               randconfig-a006-20201113
-x86_64               randconfig-a001-20201113
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Georgi
