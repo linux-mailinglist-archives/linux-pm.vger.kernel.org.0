@@ -2,124 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC51F2B492E
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 16:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7D82B4930
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 16:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730959AbgKPP1K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 10:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
+        id S1731164AbgKPP1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 10:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727820AbgKPP1K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 10:27:10 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C081C0613CF
-        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 07:27:10 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id k2so19162586wrx.2
-        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 07:27:09 -0800 (PST)
+        with ESMTP id S1730912AbgKPP1N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 10:27:13 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76869C0613CF
+        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 07:27:11 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id p22so24073758wmg.3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 07:27:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/nUNOFLN6IikzihRcWpgoGdh6TnItZX1uNVpsszzMXQ=;
-        b=XpH8iEeu08Fe9sEZDYnOcbXjab9a1kGi0+K3Vf7ZkwPegpg9qLfQKOhYvbxG/EvDeO
-         /KvmOdIW/ZJpRWDinTXXRTpi7ZyVTUzq/8Oui6wJ3RwUSpzPhNEpUPyrwcbaBdFyTue1
-         LKlXJEZCq5kY552c8gYHd3zYadmq0gn7oiWmCrBDRnTDcGhPyuUpG4QctH9AGLFLm3YO
-         14Xv7zIDRvds0IJuR2W4WYlrXs/o73DgDOh1Py54MHup2GdE+i33X68ygR0taw//kaiu
-         xej+e7UfwlbvBer88QzQStJ0+YPd1HC6OQu0qg+6ti8nDabxTqLnHacev3oGtuJaHryW
-         ivMg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=AN+diq6krUutxY4s1BjD5o/2cLxtj1QMMKMF7O1rYVo=;
+        b=jHKaw16f3JcgFuPOI2wbaph8tTmnALDn0khAmRDjUattsPMELsHZEeszdwoUn49Ygt
+         ywb62K5wnfWRAWHSPxljbLVvR0CKhM7faGVfdHxG/KzrkMIeHO763+hOptr5w2JHxRrb
+         8VoSAokMfLFxjM2zKnCDJ1fo8c0ZKrFKMOJDepDRi3pqMQR8WTaVJcXh07QuwnFUT/83
+         hMJB/s920zKWRyvH2BE/bHNO4O0YHrgz44uwS0t4vLV7br81HjzHs46KUHHBQZ6olvKB
+         0rQs0jGm04oV47EGxHU2rU93VXl4lwSB5PmF4YCcYTVE0sF47UrHZa5KuKklQ+4QubVB
+         lYOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/nUNOFLN6IikzihRcWpgoGdh6TnItZX1uNVpsszzMXQ=;
-        b=eTuBWspPV9Nw7Ydltr+KS86AUBKRkBjNbxEfXxWNAcF6USNymNDuVJTG+dIB/fqDVa
-         Kt4WaM+HY4hVoTuJZp9gBzlEeICfPp4JUvkSUUMt4Kyli1pdW9s6qm2FgIGwQ3Fw5lWz
-         vqJ3/iypTis4w4bx6c7CKmKnUBwdGjJFv515joW5nhusJkq2oudeMVe0fh0G/h47Q8hD
-         AFq3MXmVnLc05lTaPA1ebt29MmzmKJE79vnIOlpJ4gthZYUxdaCPooAUR83GnpSWNgbT
-         ZzP1nE4ZL5EACXY4AzhtMqwFoIho3jI+HQQHDKeXQbmI0wZrWeIJarEVF2l3G0Vu5DTO
-         8ABg==
-X-Gm-Message-State: AOAM5331Nf60e4cUKrcx9QlDGmGuXwjccBYZ/M3C/ziWNPLZlEq99psV
-        UCfCzTEGpHJIpkvyCn9B9BKxcA==
-X-Google-Smtp-Source: ABdhPJxAprY9OOmw66oSB+iId6DIhrCa8bWI+rKVkdeNdwJQavoObh/EzTKd0o2MtdyprhVHKeQ6Yg==
-X-Received: by 2002:adf:a343:: with SMTP id d3mr19990822wrb.91.1605540428664;
-        Mon, 16 Nov 2020 07:27:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=AN+diq6krUutxY4s1BjD5o/2cLxtj1QMMKMF7O1rYVo=;
+        b=iPVYCT+Z0m2wdTIJUlCkrMtkGtLIXw6cjO7PYSyb64DXkjshL0V9tYOl4IysEfA96L
+         dpvpytv/lJwRN0C+YhznfKnX3w6YPeGt16yPMLLg/MQlUKlsb/8tXhSGidj8fmb9zuhM
+         P8WksgxGSxg/8fXmj9AVIY/TcWIUCbh2mWuMG+Wa2nfYGn1Zf+uo6/yjWilbIvFonWfM
+         HZQ4Mv/qycHW9k6Z+0dhGHHiDtWMbc6Bz5NNbwJVRAnIfemBqnMCagbzaJ9Nt5zxMAIC
+         ppqOCh7e/Ecfzc/Xbs1snBgS0S9Bt7aN0N6ynWKj56jBMlw1WFW2bk6G8Z4gDyFswy1T
+         fxkg==
+X-Gm-Message-State: AOAM533AobDqvU1Anh12plucoYhV5tJBdzfK5yY+xNJq+chzKZjaJ0+S
+        +0lkOxRf4McnwgXDd7G+J5rZ5Q==
+X-Google-Smtp-Source: ABdhPJy6aHvbhszTIpGcG5YaGEh0c4mxwL33CLH0slye4X7gVGiV8ZjagFX66At4zxWvR2lsFI40pQ==
+X-Received: by 2002:a1c:ddd7:: with SMTP id u206mr15867144wmg.27.1605540430116;
+        Mon, 16 Nov 2020 07:27:10 -0800 (PST)
 Received: from localhost.localdomain (lns-bzn-59-82-252-135-240.adsl.proxad.net. [82.252.135.240])
-        by smtp.gmail.com with ESMTPSA id k20sm19930453wmi.15.2020.11.16.07.27.07
+        by smtp.gmail.com with ESMTPSA id k20sm19930453wmi.15.2020.11.16.07.27.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 07:27:07 -0800 (PST)
+        Mon, 16 Nov 2020 07:27:09 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rjw@rjwysocki.net
 Cc:     ilina@codeaurora.org, ulf.hansson@linaro.org,
         linux-pm@vger.kernel.org, lukasz.luba@arm.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         rkumbako@codeaurora.org, rui.zhang@intel.com
-Subject: [PATCH V2 0/4] powercap/dtpm: Add the DTPM framework
-Date:   Mon, 16 Nov 2020 16:26:45 +0100
-Message-Id: <20201116152649.11482-1-daniel.lezcano@linaro.org>
+Subject: [PATCH v2 1/4] units: Add Watt units
+Date:   Mon, 16 Nov 2020 16:26:46 +0100
+Message-Id: <20201116152649.11482-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201116152649.11482-1-daniel.lezcano@linaro.org>
+References: <20201116152649.11482-1-daniel.lezcano@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The density of components greatly increased the last decade bringing a
-numerous number of heating sources which are monitored by more than 20
-sensors on recent SoC. The skin temperature, which is the case
-temperature of the device, must stay below approximately 45°C in order
-to comply with the legal requirements.
+As there are the temperature units, let's add the Watt macros definition.
 
-The skin temperature is managed as a whole by an user space daemon,
-which is catching the current application profile, to allocate a power
-budget to the different components where the resulting heating effect
-will comply with the skin temperature constraint.
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+ include/linux/units.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This technique is called the Dynamic Thermal Power Management.
-
-The Linux kernel does not provide any unified interface to act on the
-power of the different devices. Currently, the thermal framework is
-changed to export artificially the performance states of different
-devices via the cooling device software component with opaque values.
-This change is done regardless of the in-kernel logic to mitigate the
-temperature. The user space daemon uses all the available knobs to act
-on the power limit and those differ from one platform to another.
-
-This series provides a Dynamic Thermal Power Management framework to
-provide an unified way to act on the power of the devices.
-
-Changelog:
- V2:
-  - Fixed indentation
-  - Fixed typos in comments
-  - Fixed missing kfree for dtpm_cpu
-  - Capitalize letters in the Kconfig description
-  - Reduced name description
-  - Stringified section name
-  - Added more debug traces in the code
-  - Removed duplicate initialization in the dtpm cpu
-
-Daniel Lezcano (4):
-  units: Add Watt units
-  Documentation/powercap/dtpm: Add documentation for dtpm
-  powercap/drivers/dtpm: Add API for dynamic thermal power management
-  powercap/drivers/dtpm: Add CPU energy model based support
-
- Documentation/power/powercap/dtpm.rst | 222 +++++++++++++
- drivers/powercap/Kconfig              |  13 +
- drivers/powercap/Makefile             |   2 +
- drivers/powercap/dtpm.c               | 436 ++++++++++++++++++++++++++
- drivers/powercap/dtpm_cpu.c           | 282 +++++++++++++++++
- include/asm-generic/vmlinux.lds.h     |  11 +
- include/linux/cpuhotplug.h            |   1 +
- include/linux/dtpm.h                  |  75 +++++
- include/linux/units.h                 |   4 +
- 9 files changed, 1046 insertions(+)
- create mode 100644 Documentation/power/powercap/dtpm.rst
- create mode 100644 drivers/powercap/dtpm.c
- create mode 100644 drivers/powercap/dtpm_cpu.c
- create mode 100644 include/linux/dtpm.h
-
+diff --git a/include/linux/units.h b/include/linux/units.h
+index aaf716364ec3..92c234e71cab 100644
+--- a/include/linux/units.h
++++ b/include/linux/units.h
+@@ -4,6 +4,10 @@
+ 
+ #include <linux/kernel.h>
+ 
++#define MILLIWATT_PER_WATT	1000L
++#define MICROWATT_PER_MILLIWATT	1000L
++#define MICROWATT_PER_WATT	1000000L
++
+ #define ABSOLUTE_ZERO_MILLICELSIUS -273150
+ 
+ static inline long milli_kelvin_to_millicelsius(long t)
 -- 
 2.17.1
 
