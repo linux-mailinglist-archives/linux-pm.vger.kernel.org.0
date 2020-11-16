@@ -2,118 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD59F2B50FD
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 20:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006692B517E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 20:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728999AbgKPTXX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 14:23:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33724 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725379AbgKPTXX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Nov 2020 14:23:23 -0500
-Received: from localhost (189.sub-72-105-114.myvzw.com [72.105.114.189])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EBB302225B;
-        Mon, 16 Nov 2020 19:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605554602;
-        bh=g0rPF891hY5n20OTuoyLNjb51WCLMjcMNMxWkW5x6r4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VIZWt/gjTQ1W6GTJzcOu2+w+1Ha5xbdud4IgZiDCWP5doSWm55i2h73+907fxRY16
-         ibe+ErD/e4baLmQZPeoImfqKuVP/mYVU4OAv/a/9SFT9FhIXpPXvWsQ1jhpbDlsaAD
-         9lyN61KTZBXdK6L+bzT8WvWOe3BJnFmsF9J6KIkI=
-Date:   Mon, 16 Nov 2020 13:23:20 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "David E. Box" <david.e.box@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <len.brown@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI: Disable PTM during suspend on Intel PCI bridges
-Message-ID: <20201116192320.GA1290192@bjorn-Precision-5520>
+        id S1730153AbgKPTsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 14:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726156AbgKPTsg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 14:48:36 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4A0C0613CF;
+        Mon, 16 Nov 2020 11:48:36 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id o24so21505655ljj.6;
+        Mon, 16 Nov 2020 11:48:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kk7qn8x4pb8QvY94Ose3MchmOrRHIg4B+dgYdR+rLis=;
+        b=IyEmGN46uxQzV9DaknZb5x4mPIaNNZ8c4Lveyr+w6oJWq4TpvrX6UcZQGVcX2tFQKh
+         EY8hORk9xCO0LLT/zQh3IVa7RqXENiDUMuq6iO40WZsGycA/HUqTQ8dxW9BFR3aAcOo4
+         zD1tRP3oA4izmC3VEzdCsYHMjLKtQjiiAXZ0p2wrJJHVU8xRfdSV2iizG6BjK5V7aKQd
+         nTDiguLBwr3x6KPHMAU8afF6oVxNcaO+bFYXoZzoC9z5Rrdx5e2wXa56zGi+SE8DFRBR
+         QHYm0RmR/ghPl/Lb2ZhJoBTdhthONDeVhw0TrOBGhiBP5q1gxz5Tt44hlZB1SPRfWeF3
+         Jb9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kk7qn8x4pb8QvY94Ose3MchmOrRHIg4B+dgYdR+rLis=;
+        b=m1yUJV8GqBz/ANJ5nN+913YjOGhM+IiutYaayaL0nzMKC1H2rZUxsOUzhv4b/qsFEZ
+         HhDEepUl/lxUP9dGfx0VfxdrhyPSdVjbUhmoYxnjv5O9/2FpPfwjDT+iP+MeIm84ovtP
+         TdzirpZDz1Wf3Be6pe+5qPFO8xHMHcnmb1vwReiN4l353pnlsbDey86wnh9HltQEFiH+
+         2QVf5om09tTKSr9yhk9P4pzUzHCbeRNTgmxZl/O1oYhWYGWrHG2ZVsDRs2pPZgCRTklW
+         EywCUOe9Zzyw5jEWFZWvdrfewBOdgP7GhtjNT03l4rN0jrttelR93v2oWGTOp/R/yH++
+         lsQg==
+X-Gm-Message-State: AOAM5332dhSsAuiK4iUf2laHGDm+Uei7bOWh6qF3QMX/zyEL0hlfN5YK
+        TElmb0EJ5dgoqGSwCmjlRzU=
+X-Google-Smtp-Source: ABdhPJzIzS3xHE6Jv4dmOYyDlUj0oHjh6PP/ui3/2L7pYz3L1FSKZpvG8omKw3Ja/UrEg5qiyeVS7Q==
+X-Received: by 2002:a2e:a17c:: with SMTP id u28mr375005ljl.453.1605556113523;
+        Mon, 16 Nov 2020 11:48:33 -0800 (PST)
+Received: from localhost.localdomain (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.gmail.com with ESMTPSA id n5sm2864286lfb.306.2020.11.16.11.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 11:48:32 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dan Murphy <dmurphy@ti.com>, Sebastian Reichel <sre@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/4] Introduce Embedded Controller driver for Acer A500
+Date:   Mon, 16 Nov 2020 22:48:23 +0300
+Message-Id: <20201116194827.28947-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gwSe=o_Ta0MR6XTn4BmHjs=ewTVJHe6OTp18ho+5h1Eg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 06:53:09PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Oct 7, 2020 at 7:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Wed, Oct 07, 2020 at 06:53:16PM +0200, Rafael J. Wysocki wrote:
-> > > On Wed, Oct 7, 2020 at 6:49 PM David E. Box <david.e.box@linux.intel.com> wrote:
-> > > >
-> > > > On Intel Platform Controller Hubs (PCH) since Cannon Lake, the Precision
-> > > > Time Measurement (PTM) capability can prevent PCIe root ports from power
-> > > > gating during suspend-to-idle, causing increased power consumption on
-> > > > systems that suspend using Low Power S0 Idle [1]. The issue is yet to be
-> > > > root caused but believed to be coming from a race condition in the suspend
-> > > > flow as the incidence rate varies for different platforms on Linux but the
-> > > > issue does not occur at all in other operating systems. For now, disable
-> > > > the feature on suspend on all Intel root ports and enable again on resume.
-> > >
-> > > IMV it should also be noted that there is no particular reason why PTM
-> > > would need to be enabled while the whole system is suspended.  At
-> > > least it doesn't seem to be particularly useful in that state.
-> >
-> > Is this a hardware erratum?  If not, and this is working as designed,
-> > it sounds like we'd need to apply this quirk to every device that
-> > supports PTM.  That's not really practical.
-> 
-> Why not?
+This series adds support for the Embedded Controller which is found on
+Acer Iconia Tab A500 (Android tablet device).
 
-My objection was that the original patch is a quirk that applies only
-to Intel devices.
+The Embedded Controller is ENE KB930 and it's running firmware customized
+for the A500. The firmware interface may be reused by some other sibling
+Acer tablets, although none of those tablets are supported in upstream yet.
 
-If this is a generic thing that should be done for *all* devices that
-support PTM, that's fine, but it should not be a quirk, and it should
-not involve a list of Vendor or Device IDs.
+Changelog:
 
-> It looks like the capability should be saved by pci_save_state() (it
-> isn't ATM, which appears to be a mistake) and restored by
-> pci_restore_state(), so if that is implemented, the saving can be
-> combined with the disabling in principle.
+v7: - Improved MFD Kconfig entry by adding explicit dependency on OF and
+      by rewording the help message, matching it to the other MFD drivers.
 
-Yup, looks like a mistake.  Maybe David can fix that at the same time
-(probably a separate patch, though).  I don't have a way to test it,
-but he probably does.
+    - Improved comments in the code by removing unnecessary comments, adding
+      necessary and rewording some others.
 
-> > The bugzilla says "there is no erratum as this does not affect
-> > Windows," but that doesn't answer the question.  What I want to know
-> > is whether this is a *hardware* defect and whether it will be fixed in
-> > future hardware.
-> 
-> I cannot answer this question, sorry.
-> 
-> ATM we only know that certain SoCs may not enter the deepest idle
-> state if PTM is enabled on some PCIe root ports during suspend.
-> 
-> Disabling PTM on those ports while suspending helps and hence the patch.
-> 
-> It doesn't appear to qualify as a "hardware defect".
-> 
-> > If it's a "wont-fix" hardware issue, we can just disable PTM
-> > completely on Intel hardware and we won't have to worry about it
-> > during suspend.
-> 
-> I'm not following the logic here, sorry again.
-> 
-> First of all, there are systems that never suspend, so why would they
-> be affected by the remedy (whatever it is)?
-> 
-> Second, it is not about the suspend failing entirely.  It's about
-> being able to make the system draw less power while suspended.
-> 
-> Generally, if someone said "I can make the system draw less power
-> while suspended if I disable PCIe feature X during suspend", would you
-> disregard that?
+    - Added expressive defines for the command opcodes.
 
-My questions were all prompted by the Intel-specific nature of the
-original patch, which suggests an ongoing maintenance burden.  If it
-can be done generically, I have no problem with it.
+    - Fixed alphabet order of the MFD driver includes.
 
-Bjorn
+    - Removed unnecessary size checks which are already done by regmap core.
+
+    - Renamed 'rmap' variable to 'regmap'.
+
+v6: - Fixed dtschema-checker warning about a wrong indentation, reported
+      by kernel bot for v5.
+
+v5: - No changes. Re-sending again in order to check whether dtschema-bot
+      warning is resolved now, which didn't happen in v4 because bot used
+      older 5.9 kernel code base instead of 5.10.
+
+v4: - No code changes. Added r-b from Rob Herring and Sebastian Reichel.
+      Re-sending for 5.11.
+
+    - The v3 of LED driver was applied by Pavel Machek and already presents
+      in v5.10 kernel.
+
+v3: - Rebased on a recent linux-next. Fixed new merge conflict and dropped
+      "regmap: Use flexible sleep" patch because it's already applied.
+
+v2: - Factored out KB930 device-tree binding into a separate file, like it
+      was suggested by Lubomir Rintel.
+
+    - Switched to use regmap API like it was suggested by Lubomir Rintel.
+
+    - Added patch "regmap: Use flexible sleep" which allows not to hog
+      CPU while LED is switching state.
+
+    - Corrected MODULE_LICENSE to use "GPL" in all patches.
+
+    - Corrected MFD driver Kconfig entry like it was suggested by
+      Lubomir Rintel, it now depends on I2C.
+
+    - Switched to use I2C probe_new() in the MFD driver.
+
+    - Renamed the global pm_off variable, like it was suggested by
+      Lubomir Rintel and Lee Jones.
+
+    - Dropped serial number from the battery driver because I realized
+      that it's not a battery serial, but a device serial.
+
+    - Battery driver now uses dev_err_probe(), like it was suggested by
+      Sebastian Reichel.
+
+    - Dropped legacy LED_ON usage from the LED driver and renamed the
+      LEDs, like it was suggested by Pavel Machek. I also checked whether
+      LED-name customization via device-tree could be needed by other
+      potentially compatible devices and it shouldn't be needed, anyways it
+      won't be difficult to extend the code even if I'm wrong.
+
+
+Dmitry Osipenko (4):
+  dt-bindings: mfd: Add ENE KB930 Embedded Controller binding
+  mfd: Add driver for Embedded Controller found on Acer Iconia Tab A500
+  power: supply: Add battery gauge driver for Acer Iconia Tab A500
+  ARM: tegra: acer-a500: Add Embedded Controller
+
+ .../devicetree/bindings/mfd/ene-kb930.yaml    |  65 ++++
+ .../boot/dts/tegra20-acer-a500-picasso.dts    |  17 +
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/acer-ec-a500.c                    | 202 ++++++++++++
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/acer_a500_battery.c      | 297 ++++++++++++++++++
+ 8 files changed, 600 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+ create mode 100644 drivers/mfd/acer-ec-a500.c
+ create mode 100644 drivers/power/supply/acer_a500_battery.c
+
+-- 
+2.29.2
+
