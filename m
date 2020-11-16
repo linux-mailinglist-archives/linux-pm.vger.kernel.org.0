@@ -2,115 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 030D72B5188
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 20:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A55CD2B5206
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 21:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730464AbgKPTsk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 14:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730270AbgKPTsj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 14:48:39 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC88EC0613CF;
-        Mon, 16 Nov 2020 11:48:38 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id r17so21500883ljg.5;
-        Mon, 16 Nov 2020 11:48:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vPNjoYNRStRNwZP0NAyFtfDW7IEy6fPv1BNAKkfHQ8M=;
-        b=PWRkUGRPFi5Tbx+qKEh9/3wx25dNdFlpMiI9uvWyXTfrA6mRGvyt5y7zRpv6V9VACh
-         OGMxWi0wgitEifNzuoovwar78dOWUowL827NPMH4PWMe+JKyqrV6L5ojdFTYQ9XfB0Ph
-         ggWI3yJ59PsXwifg/WJOrAABfe+1/YW9+IGbxLoxDy142wpBZd00wH9TfR7sRg1QUTXY
-         a6q7QBwWExb3ec/Dv6ICs/YqURlR2rG5EhAFOS5/+SzKervuimUvro1qnGp9zmQA7brD
-         jWJmg2Da/NwHhIBi4/mkJaZOnhF6F/f7DY9zB/EJBRUYcEBtBqaFL//TcnHUfyAHaKnL
-         ftmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vPNjoYNRStRNwZP0NAyFtfDW7IEy6fPv1BNAKkfHQ8M=;
-        b=SaJ6UVebr7Ku6AxxFohYUwk2T/6Yqh5dqxqvT2vW8kZbryFDG2dul78PxhPrFJN8ms
-         mQDK6d+uM+qI6sKW0lIYuCN1IhemXJgO1IMJt0zNDd0PDpWH2YCGcTQTWEcFl4Vridz9
-         PL7CxOwSMkWMpROrkKWtLp/7B3nGz+xYJgsE7SE7Bk/xZX3LsNDdPLRIXy05Rpbb4gnJ
-         63p4nU+L+ZcSPlL90p7S6eGGs5lrPE9sAy/MVqp2qzZb67jG8g/Qx+5GzNuhmdiiGzsp
-         YPJw4NPhUdqCrnggmDO6S5jLN65Pfqc68gCrP9R132oBpqC3+Xl9o+tfIAZNZO9as7pa
-         qPmw==
-X-Gm-Message-State: AOAM53051kETy185HxvslFIH/V4xHu2Y73oqcMsdvl5tPZ5WJ9i6YTR2
-        oXxJOFjdemkNtQ9B/+deKKQ=
-X-Google-Smtp-Source: ABdhPJwuOfvzBZ8yauT6UvhVmlPOY1t9vDAgwLceAF2NQgh7qqxo8hzr/SlGRLFK+MsJGyD+VqiNEQ==
-X-Received: by 2002:a05:651c:2c1:: with SMTP id f1mr348925ljo.192.1605556117444;
-        Mon, 16 Nov 2020 11:48:37 -0800 (PST)
-Received: from localhost.localdomain (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.gmail.com with ESMTPSA id n5sm2864286lfb.306.2020.11.16.11.48.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 11:48:36 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dan Murphy <dmurphy@ti.com>, Sebastian Reichel <sre@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 4/4] ARM: tegra: acer-a500: Add Embedded Controller
-Date:   Mon, 16 Nov 2020 22:48:27 +0300
-Message-Id: <20201116194827.28947-5-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201116194827.28947-1-digetx@gmail.com>
-References: <20201116194827.28947-1-digetx@gmail.com>
+        id S1731722AbgKPUIc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 15:08:32 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:43350 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726643AbgKPUIb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 15:08:31 -0500
+Date:   Mon, 16 Nov 2020 20:08:28 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1605557309;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=peDNfF+HZPUmdgkgBtUN3jkmX7nTFV65Rz6J8vjKBaA=;
+        b=aWShKzvXB+NwB7/XkI8Ai51RbYRzdJooSH7Ia2fTkLqL1ZDplMbyX13Xe/pilJ/5eUp58y
+        qQ2c+eCy7N9E/FU1ZNspH/cK7cniIamrlYxK7nMLu2ffqhZAqsAuDgby8AYAuWefmHAZjK
+        FAgfGi8AXuJynrZmU+a0hjPvA27AdqQcTlvV0/1W7lFj2ojmiyYSeG0fmD5Hps6VRsTTC6
+        dEk49GTtCJ8RPZ65HCazuPCEvEyT7mHAAwtgJgfb7ZSwd5r/9jlm0AEHnkdwZWF8XZhEWM
+        i3iXwg1RXoKtHF40j4HPDTwTTNw5YTzQFo2MaUCw1RJtfE9tuS683f1q49fn6w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1605557309;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=peDNfF+HZPUmdgkgBtUN3jkmX7nTFV65Rz6J8vjKBaA=;
+        b=XxhLiqV1nx8NpUJtzjQ2ICnONKuS4HVKIHGX7+CGQQh69pV7G+u0JKgzoHMuvU7HXeqjK5
+        rOTBRyL/I/UKa7DA==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/misc] tools/power/turbostat: Read energy_perf_bias from sysfs
+Cc:     Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
+        linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20201029190259.3476-3-bp@alien8.de>
+References: <20201029190259.3476-3-bp@alien8.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <160555730832.11244.4666731063927349137.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2.linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds device-tree node for the Embedded Controller which is
-found on the Picasso board. The Embedded Controller itself is ENE KB930,
-it provides functions like battery-gauge/LED/GPIO/etc and it uses firmware
-that is specifically customized for the Acer A500 device.
+The following commit has been merged into the x86/misc branch of tip:
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Commit-ID:     6d6501d912a9a5e1b73d7fbf419b90a8ec11ed7a
+Gitweb:        https://git.kernel.org/tip/6d6501d912a9a5e1b73d7fbf419b90a8ec11ed7a
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Thu, 15 Oct 2020 14:50:16 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 16 Nov 2020 17:42:46 +01:00
+
+tools/power/turbostat: Read energy_perf_bias from sysfs
+
+... instead of poking at the MSR directly.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Len Brown <lenb@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Link: https://lkml.kernel.org/r/20201029190259.3476-3-bp@alien8.de
 ---
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 29 +++++++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-index d9ef3857ba03..1da3bcc8003e 100644
---- a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-+++ b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-@@ -533,6 +533,16 @@ panel_ddc: i2c@1 {
- 			reg = <1>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-+
-+			embedded-controller@58 {
-+				compatible = "acer,a500-iconia-ec", "ene,kb930";
-+				reg = <0x58>;
-+
-+				system-power-controller;
-+
-+				monitored-battery = <&bat1010>;
-+				power-supplies = <&mains>;
-+			};
- 		};
- 	};
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 33b3708..0baec7e 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -1721,6 +1721,25 @@ int get_mp(int cpu, struct msr_counter *mp, unsigned long long *counterp)
+ 	return 0;
+ }
  
-@@ -820,6 +830,13 @@ backlight: backlight {
- 		default-brightness-level = <20>;
- 	};
- 
-+	bat1010: battery-2s1p {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3260000>;
-+		energy-full-design-microwatt-hours = <24000000>;
-+		operating-range-celsius = <0 40>;
-+	};
++int get_epb(int cpu)
++{
++	char path[128 + PATH_BYTES];
++	int ret, epb = -1;
++	FILE *fp;
 +
- 	/* PMIC has a built-in 32KHz oscillator which is used by PMC */
- 	clk32k_in: clock@0 {
- 		compatible = "fixed-clock";
--- 
-2.29.2
-
++	sprintf(path, "/sys/devices/system/cpu/cpu%d/power/energy_perf_bias", cpu);
++
++	fp = fopen_or_die(path, "r");
++
++	ret = fscanf(fp, "%d", &epb);
++	if (ret != 1)
++		err(1, "%s(%s)", __func__, path);
++
++	fclose(fp);
++
++	return epb;
++}
++
+ void get_apic_id(struct thread_data *t)
+ {
+ 	unsigned int eax, ebx, ecx, edx;
+@@ -3631,9 +3650,8 @@ dump_sysfs_pstate_config(void)
+  */
+ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ {
+-	unsigned long long msr;
+ 	char *epb_string;
+-	int cpu;
++	int cpu, epb;
+ 
+ 	if (!has_epb)
+ 		return 0;
+@@ -3649,10 +3667,11 @@ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 		return -1;
+ 	}
+ 
+-	if (get_msr(cpu, MSR_IA32_ENERGY_PERF_BIAS, &msr))
++	epb = get_epb(cpu);
++	if (epb < 0)
+ 		return 0;
+ 
+-	switch (msr & 0xF) {
++	switch (epb) {
+ 	case ENERGY_PERF_BIAS_PERFORMANCE:
+ 		epb_string = "performance";
+ 		break;
+@@ -3666,7 +3685,7 @@ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 		epb_string = "custom";
+ 		break;
+ 	}
+-	fprintf(outf, "cpu%d: MSR_IA32_ENERGY_PERF_BIAS: 0x%08llx (%s)\n", cpu, msr, epb_string);
++	fprintf(outf, "cpu%d: EPB: %d (%s)\n", cpu, epb, epb_string);
+ 
+ 	return 0;
+ }
