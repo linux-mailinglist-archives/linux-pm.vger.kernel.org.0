@@ -2,80 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B161C2B4B22
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 17:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B60B2B4C93
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 18:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731921AbgKPQaE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 11:30:04 -0500
-Received: from z5.mailgun.us ([104.130.96.5]:21731 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730591AbgKPQaD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Nov 2020 11:30:03 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1605544203; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=OcOxP9SoB2zIBSz04f/3dy8QWxDpqnS+1Xsbwg8a9Zg=; b=ID2QDj/734p9SOFQOU7xwEnwcNiw1W50Am3PqkgC9dgxjcfi4J4rFMCfWOuqDeuXdzjq/EOj
- 1tExce6qYgCwqjUMTYPgNLGIRgX7MY8Q6W0nl7YGShypB0ywkFwHyHwoh+jcYsnJvuMFTO7a
- TM19yF4FPAdZtzKJ9I5dKPhL//4=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 5fb2a90a07fe4e8a18ca5edd (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 16 Nov 2020 16:30:02
- GMT
-Sender: mojha=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 94930C43464; Mon, 16 Nov 2020 16:30:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from mojha-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mojha)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D57B1C433C6;
-        Mon, 16 Nov 2020 16:29:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D57B1C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=mojha@codeaurora.org
-From:   Mukesh Ojha <mojha@codeaurora.org>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
-        Mukesh Ojha <mojha@codeaurora.org>
-Subject: [PATCH] thermal: Fix NULL pointer dereference issue
-Date:   Mon, 16 Nov 2020 21:59:41 +0530
-Message-Id: <1605544181-5348-1-git-send-email-mojha@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S1732780AbgKPRWu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 12:22:50 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:58514 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731001AbgKPRWu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 12:22:50 -0500
+Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 474C63B3350
+        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 17:12:37 +0000 (UTC)
+X-Originating-IP: 91.175.115.186
+Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 3564E1BF227;
+        Mon, 16 Nov 2020 17:12:14 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        <Steen.Hegelund@microchip.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH 0/5] Improve reset for ocelot and add support for new platfrom
+Date:   Mon, 16 Nov 2020 18:11:54 +0100
+Message-Id: <20201116171159.1735315-1-gregory.clement@bootlin.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Cooling stats variable inside thermal_cooling_device_stats_update()
-can get NULL. We should add a NULL check on stat inside for sanity.
+Hello,
 
-Signed-off-by: Mukesh Ojha <mojha@codeaurora.org>
----
- drivers/thermal/thermal_sysfs.c | 3 +++
- 1 file changed, 3 insertions(+)
+This series first adds new feature to the ocelot reset driver and then
+it extends its support for 2 other MIPS based SoCs: Luton and Jaguar 2.
 
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index a6f371f..f52708f 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -754,6 +754,9 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- {
- 	struct cooling_dev_stats *stats = cdev->stats;
- 
-+	if (!stats)
-+		return;
-+
- 	spin_lock(&stats->lock);
- 
- 	if (stats->state == new_state)
+Patches 1, 2 and 4 should be merged through the reset subsystem, while
+the device tree changes in patches 3 and 5 should go through the mips
+subsystem.
+
+Gregory
+
+Gregory CLEMENT (3):
+  MIPS: dts: mscc: add reset switch property
+  power: reset: ocelot: Add support 2 othe MIPS based SoCs
+  MIPS: dts: mscc: add reset support for Luton and Jaguar2
+
+Lars Povlsen (2):
+  dt-bindings: reset: ocelot: Add documentation for
+    'microchip,reset-switch-core' property
+  power: reset: ocelot: Add support for reset switch on load time
+
+ .../bindings/power/reset/ocelot-reset.txt     |  6 ++
+ arch/mips/boot/dts/mscc/jaguar2.dtsi          |  6 ++
+ arch/mips/boot/dts/mscc/luton.dtsi            |  5 ++
+ arch/mips/boot/dts/mscc/ocelot.dtsi           |  1 +
+ drivers/power/reset/ocelot-reset.c            | 70 +++++++++++++++++--
+ 5 files changed, 83 insertions(+), 5 deletions(-)
+
 -- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center,
-Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+2.29.2
 
