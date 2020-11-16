@@ -2,56 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 657302B4DF6
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 18:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE022B4E91
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 18:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732986AbgKPRkn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 12:40:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732674AbgKPRkn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:40:43 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C78420B80;
-        Mon, 16 Nov 2020 17:40:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605548442;
-        bh=4Uv6elfOe4XJfv/8Y1N8ZGGETKRJd1j6WYW+lJKrf4g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DHPelutlJKFzz4P9BebZ/+DPupryCD9L9zH+xvZI9Wzp0ae0CnvT6CJH0Wo1uVkMs
-         4B8PknBQByRQ3abcVU89Kw5hbKSdo3yon+Fm23YYj8FVz1Lu37XulBgv0NKdwrP/3s
-         ZxxVGP98JCALNSYv1zRNG26HDTjzk3PK3CXMYyWs=
-Date:   Mon, 16 Nov 2020 09:40:41 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Zhang Qilong <zhangqilong3@huawei.com>
-Cc:     <rjw@rjwysocki.net>, <fugang.duan@nxp.com>, <davem@davemloft.net>,
-        <linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3 0/2] Fix usage counter leak by adding a general sync
- ops
-Message-ID: <20201116094041.7b6c4bc3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201110092933.3342784-1-zhangqilong3@huawei.com>
-References: <20201110092933.3342784-1-zhangqilong3@huawei.com>
+        id S1733309AbgKPRxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 12:53:21 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:43406 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732758AbgKPRxV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 12:53:21 -0500
+Received: by mail-ot1-f66.google.com with SMTP id y22so16846139oti.10;
+        Mon, 16 Nov 2020 09:53:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l7+Z3mrIb8Sp0oVQFXi8OYd9zBdaHaRXhlQ8/Dy+0xg=;
+        b=Ryru2wbXXLNUWNAzbJoowtDcA3rIoCtvzq+d6RI51iTi9x2HN6U51B8sjI8SL5C1X5
+         4RL5QcRY0gHZY4tGfn4/Ql+EcEv0ke95qdMfCLM5gc+nYXBbtjH+yWPqQIjbzyiEIrg9
+         GOWe+a2N569WEYeufSuXIYC5ykHkA+jLYD1Fo1bk7Oe4n1z5xEJ2BuWNUVOgfUT/yXjx
+         81veXU1KG626WOauEgLizN+B78Iulj5KWrMLt5/uIJjFblb4HVwiOhZtY64d8hfNd9R2
+         KgbFN7eIuvBouIGrIKGaXhN1xZOkW6nILqlbNjiVBbzn8b7YCcP/pxuelus4CzKm8POC
+         XlsQ==
+X-Gm-Message-State: AOAM532EgA8GbM0IRe/DUGQB8jJSwfxwz/O6AXthgplbzr4Owb2qFzX1
+        ttT6oBgwwmlYnhT3QJiLIA1NaSZ9pvQUU/yGs9k=
+X-Google-Smtp-Source: ABdhPJxc7w+YIJgU/sF8DM8t4ZQPGnBVp2AsN1ZOK0nspYoAfne633B/qNgtj2Qq+5bp4UroC0ZID28fsOp812JpIB4=
+X-Received: by 2002:a9d:171a:: with SMTP id i26mr345705ota.260.1605549200640;
+ Mon, 16 Nov 2020 09:53:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <CAJZ5v0gRph3UMffWqUVqTnDE149Ai-SbzmhjzZU1x=QOzAZeZA@mail.gmail.com>
+ <20201007171024.GA3252529@bjorn-Precision-5520>
+In-Reply-To: <20201007171024.GA3252529@bjorn-Precision-5520>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 16 Nov 2020 18:53:09 +0100
+Message-ID: <CAJZ5v0gwSe=o_Ta0MR6XTn4BmHjs=ewTVJHe6OTp18ho+5h1Eg@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Disable PTM during suspend on Intel PCI bridges
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "David E. Box" <david.e.box@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <len.brown@intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 10 Nov 2020 17:29:31 +0800 Zhang Qilong wrote:
-> In many case, we need to check return value of pm_runtime_get_sync,
-> but it brings a trouble to the usage counter processing. Many callers
-> forget to decrease the usage counter when it failed, which could
-> resulted in reference leak. It has been discussed a lot[0][1]. So we
-> add a function to deal with the usage counter for better coding and
-> view. Then, we replace pm_runtime_resume_and_get with it in fec_main.c
-> to avoid it.
-> 
-> [0]https://lkml.org/lkml/2020/6/14/88
-> [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
+On Wed, Oct 7, 2020 at 7:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Wed, Oct 07, 2020 at 06:53:16PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Oct 7, 2020 at 6:49 PM David E. Box <david.e.box@linux.intel.com> wrote:
+> > >
+> > > On Intel Platform Controller Hubs (PCH) since Cannon Lake, the Precision
+> > > Time Measurement (PTM) capability can prevent PCIe root ports from power
+> > > gating during suspend-to-idle, causing increased power consumption on
+> > > systems that suspend using Low Power S0 Idle [1]. The issue is yet to be
+> > > root caused but believed to be coming from a race condition in the suspend
+> > > flow as the incidence rate varies for different platforms on Linux but the
+> > > issue does not occur at all in other operating systems. For now, disable
+> > > the feature on suspend on all Intel root ports and enable again on resume.
+> >
+> > IMV it should also be noted that there is no particular reason why PTM
+> > would need to be enabled while the whole system is suspended.  At
+> > least it doesn't seem to be particularly useful in that state.
+>
+> Is this a hardware erratum?  If not, and this is working as designed,
+> it sounds like we'd need to apply this quirk to every device that
+> supports PTM.  That's not really practical.
 
-Actually, I lied, this is a fix so applying to net, not net-next.
+Why not?
 
-Thanks!
+It looks like the capability should be saved by pci_save_state() (it
+isn't ATM, which appears to be a mistake) and restored by
+pci_restore_state(), so if that is implemented, the saving can be
+combined with the disabling in principle.
+
+> The bugzilla says "there is no erratum as this does not affect
+> Windows," but that doesn't answer the question.  What I want to know
+> is whether this is a *hardware* defect and whether it will be fixed in
+> future hardware.
+
+I cannot answer this question, sorry.
+
+ATM we only know that certain SoCs may not enter the deepest idle
+state if PTM is enabled on some PCIe root ports during suspend.
+
+Disabling PTM on those ports while suspending helps and hence the patch.
+
+It doesn't appear to qualify as a "hardware defect".
+
+> If it's a "wont-fix" hardware issue, we can just disable PTM
+> completely on Intel hardware and we won't have to worry about it
+> during suspend.
+
+I'm not following the logic here, sorry again.
+
+First of all, there are systems that never suspend, so why would they
+be affected by the remedy (whatever it is)?
+
+Second, it is not about the suspend failing entirely.  It's about
+being able to make the system draw less power while suspended.
+
+Generally, if someone said "I can make the system draw less power
+while suspended if I disable PCIe feature X during suspend", would you
+disregard that?
