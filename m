@@ -2,141 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A55CD2B5206
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 21:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E242B5354
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 21:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731722AbgKPUIc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 15:08:32 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:43350 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbgKPUIb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 15:08:31 -0500
-Date:   Mon, 16 Nov 2020 20:08:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1605557309;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=peDNfF+HZPUmdgkgBtUN3jkmX7nTFV65Rz6J8vjKBaA=;
-        b=aWShKzvXB+NwB7/XkI8Ai51RbYRzdJooSH7Ia2fTkLqL1ZDplMbyX13Xe/pilJ/5eUp58y
-        qQ2c+eCy7N9E/FU1ZNspH/cK7cniIamrlYxK7nMLu2ffqhZAqsAuDgby8AYAuWefmHAZjK
-        FAgfGi8AXuJynrZmU+a0hjPvA27AdqQcTlvV0/1W7lFj2ojmiyYSeG0fmD5Hps6VRsTTC6
-        dEk49GTtCJ8RPZ65HCazuPCEvEyT7mHAAwtgJgfb7ZSwd5r/9jlm0AEHnkdwZWF8XZhEWM
-        i3iXwg1RXoKtHF40j4HPDTwTTNw5YTzQFo2MaUCw1RJtfE9tuS683f1q49fn6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1605557309;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=peDNfF+HZPUmdgkgBtUN3jkmX7nTFV65Rz6J8vjKBaA=;
-        b=XxhLiqV1nx8NpUJtzjQ2ICnONKuS4HVKIHGX7+CGQQh69pV7G+u0JKgzoHMuvU7HXeqjK5
-        rOTBRyL/I/UKa7DA==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] tools/power/turbostat: Read energy_perf_bias from sysfs
-Cc:     Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
-        linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20201029190259.3476-3-bp@alien8.de>
-References: <20201029190259.3476-3-bp@alien8.de>
+        id S1728809AbgKPU6O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 15:58:14 -0500
+Received: from mga18.intel.com ([134.134.136.126]:57947 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728581AbgKPU6O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 16 Nov 2020 15:58:14 -0500
+IronPort-SDR: NrtG71fztbwf4E8QSKUUJf7n8JOwmnFYdBQSRBG/GWGDMKjG5Kbl1dYf1L6CSO0JDMKFm+OXfi
+ FqdnVGvStT9g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="158590228"
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="158590228"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 12:58:04 -0800
+IronPort-SDR: TsyHdZolnBqi88Fug9EssBaYMqlPMT0HER7tHBOPudtNXoVVJTUr0Qq6cjIyuc4jG+K3FIWx7b
+ MPxDCVT40N9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="367631456"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Nov 2020 12:58:04 -0800
+Received: from debox1-desk1.jf.intel.com (debox1-desk1.jf.intel.com [10.7.201.137])
+        by linux.intel.com (Postfix) with ESMTP id 980AA5802E4;
+        Mon, 16 Nov 2020 12:58:04 -0800 (PST)
+Message-ID: <40579a7ed0692d535f002112b18d1bb6e25aad0e.camel@linux.intel.com>
+Subject: Re: [PATCH] PCI: Disable PTM during suspend on Intel PCI bridges
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <len.brown@intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Mon, 16 Nov 2020 12:58:04 -0800
+In-Reply-To: <20201116192320.GA1290192@bjorn-Precision-5520>
+References: <20201116192320.GA1290192@bjorn-Precision-5520>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Message-ID: <160555730832.11244.4666731063927349137.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+On Mon, 2020-11-16 at 13:23 -0600, Bjorn Helgaas wrote:
+> On Mon, Nov 16, 2020 at 06:53:09PM +0100, Rafael J. Wysocki wrote:
+> > On Wed, Oct 7, 2020 at 7:10 PM Bjorn Helgaas <helgaas@kernel.org>
+> > wrote:
+> > > On Wed, Oct 07, 2020 at 06:53:16PM +0200, Rafael J. Wysocki
+> > > wrote:
+> > > > On Wed, Oct 7, 2020 at 6:49 PM David E. Box <
+> > > > david.e.box@linux.intel.com> wrote:
+> > > > > On Intel Platform Controller Hubs (PCH) since Cannon Lake,
+> > > > > the Precision
+> > > > > Time Measurement (PTM) capability can prevent PCIe root ports
+> > > > > from power
+> > > > > gating during suspend-to-idle, causing increased power
+> > > > > consumption on
+> > > > > systems that suspend using Low Power S0 Idle [1]. The issue
+> > > > > is yet to be
+> > > > > root caused but believed to be coming from a race condition
+> > > > > in the suspend
+> > > > > flow as the incidence rate varies for different platforms on
+> > > > > Linux but the
+> > > > > issue does not occur at all in other operating systems. For
+> > > > > now, disable
+> > > > > the feature on suspend on all Intel root ports and enable
+> > > > > again on resume.
+> > > > 
+> > > > IMV it should also be noted that there is no particular reason
+> > > > why PTM
+> > > > would need to be enabled while the whole system is
+> > > > suspended.  At
+> > > > least it doesn't seem to be particularly useful in that state.
+> > > 
+> > > Is this a hardware erratum?  If not, and this is working as
+> > > designed,
+> > > it sounds like we'd need to apply this quirk to every device that
+> > > supports PTM.  That's not really practical.
+> > 
+> > Why not?
+> 
+> My objection was that the original patch is a quirk that applies only
+> to Intel devices.
+> 
+> If this is a generic thing that should be done for *all* devices that
+> support PTM, that's fine, but it should not be a quirk, and it should
+> not involve a list of Vendor or Device IDs.
+> 
+> > It looks like the capability should be saved by pci_save_state()
+> > (it
+> > isn't ATM, which appears to be a mistake) and restored by
+> > pci_restore_state(), so if that is implemented, the saving can be
+> > combined with the disabling in principle.
+> 
+> Yup, looks like a mistake.  Maybe David can fix that at the same time
+> (probably a separate patch, though).  I don't have a way to test it,
+> but he probably does.
 
-Commit-ID:     6d6501d912a9a5e1b73d7fbf419b90a8ec11ed7a
-Gitweb:        https://git.kernel.org/tip/6d6501d912a9a5e1b73d7fbf419b90a8ec11ed7a
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Thu, 15 Oct 2020 14:50:16 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 16 Nov 2020 17:42:46 +01:00
+Yes, I can test save/restore of the PTM capability and submit a patch.
 
-tools/power/turbostat: Read energy_perf_bias from sysfs
+> 
+> > > The bugzilla says "there is no erratum as this does not affect
+> > > Windows," but that doesn't answer the question.  What I want to
+> > > know
+> > > is whether this is a *hardware* defect and whether it will be
+> > > fixed in
+> > > future hardware.
+> > 
+> > I cannot answer this question, sorry.
+> > 
+> > ATM we only know that certain SoCs may not enter the deepest idle
+> > state if PTM is enabled on some PCIe root ports during suspend.
+> > 
+> > Disabling PTM on those ports while suspending helps and hence the
+> > patch.
+> > 
+> > It doesn't appear to qualify as a "hardware defect".
+> > 
+> > > If it's a "wont-fix" hardware issue, we can just disable PTM
+> > > completely on Intel hardware and we won't have to worry about it
+> > > during suspend.
+> > 
+> > I'm not following the logic here, sorry again.
+> > 
+> > First of all, there are systems that never suspend, so why would
+> > they
+> > be affected by the remedy (whatever it is)?
+> > 
+> > Second, it is not about the suspend failing entirely.  It's about
+> > being able to make the system draw less power while suspended.
+> > 
+> > Generally, if someone said "I can make the system draw less power
+> > while suspended if I disable PCIe feature X during suspend", would
+> > you
+> > disregard that?
+> 
+> My questions were all prompted by the Intel-specific nature of the
+> original patch, which suggests an ongoing maintenance burden.  If it
+> can be done generically, I have no problem with it.
 
-... instead of poking at the MSR directly.
+Okay. I'll add this to the save/restore patch then with the comment
+that it saves power on some Intel platforms.
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Len Brown <lenb@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Link: https://lkml.kernel.org/r/20201029190259.3476-3-bp@alien8.de
----
- tools/power/x86/turbostat/turbostat.c | 29 +++++++++++++++++++++-----
- 1 file changed, 24 insertions(+), 5 deletions(-)
+David
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 33b3708..0baec7e 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1721,6 +1721,25 @@ int get_mp(int cpu, struct msr_counter *mp, unsigned long long *counterp)
- 	return 0;
- }
- 
-+int get_epb(int cpu)
-+{
-+	char path[128 + PATH_BYTES];
-+	int ret, epb = -1;
-+	FILE *fp;
-+
-+	sprintf(path, "/sys/devices/system/cpu/cpu%d/power/energy_perf_bias", cpu);
-+
-+	fp = fopen_or_die(path, "r");
-+
-+	ret = fscanf(fp, "%d", &epb);
-+	if (ret != 1)
-+		err(1, "%s(%s)", __func__, path);
-+
-+	fclose(fp);
-+
-+	return epb;
-+}
-+
- void get_apic_id(struct thread_data *t)
- {
- 	unsigned int eax, ebx, ecx, edx;
-@@ -3631,9 +3650,8 @@ dump_sysfs_pstate_config(void)
-  */
- int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- {
--	unsigned long long msr;
- 	char *epb_string;
--	int cpu;
-+	int cpu, epb;
- 
- 	if (!has_epb)
- 		return 0;
-@@ -3649,10 +3667,11 @@ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 		return -1;
- 	}
- 
--	if (get_msr(cpu, MSR_IA32_ENERGY_PERF_BIAS, &msr))
-+	epb = get_epb(cpu);
-+	if (epb < 0)
- 		return 0;
- 
--	switch (msr & 0xF) {
-+	switch (epb) {
- 	case ENERGY_PERF_BIAS_PERFORMANCE:
- 		epb_string = "performance";
- 		break;
-@@ -3666,7 +3685,7 @@ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 		epb_string = "custom";
- 		break;
- 	}
--	fprintf(outf, "cpu%d: MSR_IA32_ENERGY_PERF_BIAS: 0x%08llx (%s)\n", cpu, msr, epb_string);
-+	fprintf(outf, "cpu%d: EPB: %d (%s)\n", cpu, epb, epb_string);
- 
- 	return 0;
- }
