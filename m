@@ -2,91 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED1C2B4315
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 12:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D687E2B43FA
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 13:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbgKPLn6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 06:43:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:38346 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726487AbgKPLn6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Nov 2020 06:43:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C2B6101E;
-        Mon, 16 Nov 2020 03:43:57 -0800 (PST)
-Received: from [10.57.59.112] (unknown [10.57.59.112])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E2333F70D;
-        Mon, 16 Nov 2020 03:43:55 -0800 (PST)
-Subject: Re: [PATCH v3 2/3] opp/of: Allow empty opp-table with opp-shared
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
-        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
-        chris.redpath@arm.com
-References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
- <20201102120115.29993-3-nicola.mazzucato@arm.com>
- <20201103050141.kiuyotzt4brisch7@vireshk-i7>
- <9f442724-df13-d582-717d-535cc9c9c9f1@arm.com>
- <20201105044118.k75um7gcz3ffkphc@vireshk-i7>
-From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
-Message-ID: <fead451e-329b-465c-5055-f5dadd58e056@arm.com>
-Date:   Mon, 16 Nov 2020 11:45:31 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726382AbgKPMt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 07:49:28 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:40013 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbgKPMt2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 07:49:28 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 79so15833532otc.7;
+        Mon, 16 Nov 2020 04:49:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CXcRpvGMjC9ECOCitHAoHbBvhMsiRSAzg+RNY8NgHng=;
+        b=rtybvbu7YTP3P+i3iIjSRebPWvKrP6lMO9NefcgVcCSHGVgwFpwReuquAO20cNh3mI
+         077Enz1RGNrV8UMuY2Ulzo2xCeyrhm0ZN+NLyo9enXAwNsWEqfgTjQ24HsQMj8wsGgUv
+         ZdOxh82CfSTlDOgmu21EQTCBuEBVgWp/8gA4jDVG3dx6LTrecOjMFjuejACgARXHEoEV
+         oqHelvUdWgWMxK+UCEbysYMmQQqYBWyANsP7lo0e1mU8WyEMzdyea3D8SSIxL1C6SOh9
+         i3uNEsjQYmz2NpfQvYN5eAYQN0MfTSWinYVgWbjZFPis+siFHiIVLQ6l+Xn9UzSvSQHD
+         C8NQ==
+X-Gm-Message-State: AOAM532SqE4FefgRvHFCwJq6xRGNn6g0RCTSLQ9st3HB31KjK9CLPUwP
+        3W+ydGBjCUU4kN5TDoWXtaENclfWLfY7gOP6TCA=
+X-Google-Smtp-Source: ABdhPJxpItKyRsx+HldswW89kjrf1SDWdvLupgfhlW8+FjRTxEdMt0jRYD//HDsmugNkNcVd/MOKL9/k9NNhlWt9Bms=
+X-Received: by 2002:a9d:171a:: with SMTP id i26mr10886990ota.260.1605530967368;
+ Mon, 16 Nov 2020 04:49:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201105044118.k75um7gcz3ffkphc@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201110092933.3342784-1-zhangqilong3@huawei.com> <20201110092933.3342784-2-zhangqilong3@huawei.com>
+In-Reply-To: <20201110092933.3342784-2-zhangqilong3@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 16 Nov 2020 13:49:10 +0100
+Message-ID: <CAJZ5v0hmhT4tg5hAD3jx7Xh=Ot7-jNMO0WtSS6-nz0Nw857+0w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM: runtime: Add pm_runtime_resume_and_get to deal
+ with usage counter
+To:     Zhang Qilong <zhangqilong3@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+On Tue, Nov 10, 2020 at 10:25 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
+>
+> In many case, we need to check return value of pm_runtime_get_sync, but
+> it brings a trouble to the usage counter processing. Many callers forget
+> to decrease the usage counter when it failed, which could resulted in
+> reference leak. It has been discussed a lot[0][1]. So we add a function
+> to deal with the usage counter for better coding.
+>
+> [0]https://lkml.org/lkml/2020/6/14/88
+> [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
+> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 
-sorry for being late in replying.
+Acked-by: Rafael J. Wysocki  <rafael.j.wysocki@intel.com>
 
-
-On 11/5/20 4:41 AM, Viresh Kumar wrote:
-> On 04-11-20, 17:54, Nicola Mazzucato wrote:
->> Initially I thought to place a comment right there but I ended up with an
->> explanation of this case at the top of this function (the corner-case). It
->> probably also needs more details..
-> 
-> I read it earlier as well but yeah, that wasn't good enough for me to
-> understand what you are doing.
-> 
->> Basically, on this case - empty opp table & opp-shared - we limit the scope of
->> opp-shared to *only* tell us about hw description, and not marking the opp
->> points as shared, since they are not present in DT.
-> 
-> It doesn't matter where the OPP table entries are coming from. The OPP
-> table should be marked shared if it is found to be shared.
-> 
->> It would be the equivalent
->> of describing that devices share clock/voltage lines, but we can't tell anything
->> about opp points cause they are not there (in DT).
-> 
-> Its okay, even then we should set the right flags here. It is really
-> confusing that we blindly set it as exclusive, even though it may be
-> shared.
-> 
->> OTOH If we don't set shared_opp to OPP_TABLE_ACCESS_EXCLUSIVE for that specific
->> case, we won't be able to add opps for the remaining cpus as the opp core
->> will find the opps as duplicated. This is a corner case, really.
-> 
-> Hmm, I am not sure where you fail and how but this should be set to
-> OPP_TABLE_ACCESS_EXCLUSIVE only if the OPP table isn't shared. else it
-> should be OPP_TABLE_ACCESS_SHARED.
-> 
-Thanks for providing more details around the meaning of opp-shared, much
-appreciated. I had some time to play a bit more, and yes, there is no need to
-set shared_opp to OPP_TABLE_ACCESS_EXCLUSIVE. A minimal change in the driver
-sequence would suffice.
-
-I will remove that in the V4.
-
-Many thanks,
-Nicola
+> ---
+>  include/linux/pm_runtime.h | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 4b708f4e8eed..b492ae00cc90 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -386,6 +386,27 @@ static inline int pm_runtime_get_sync(struct device *dev)
+>         return __pm_runtime_resume(dev, RPM_GET_PUT);
+>  }
+>
+> +/**
+> + * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
+> + * @dev: Target device.
+> + *
+> + * Resume @dev synchronously and if that is successful, increment its runtime
+> + * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
+> + * incremented or a negative error code otherwise.
+> + */
+> +static inline int pm_runtime_resume_and_get(struct device *dev)
+> +{
+> +       int ret;
+> +
+> +       ret = __pm_runtime_resume(dev, RPM_GET_PUT);
+> +       if (ret < 0) {
+> +               pm_runtime_put_noidle(dev);
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  /**
+>   * pm_runtime_put - Drop device usage counter and queue up "idle check" if 0.
+>   * @dev: Target device.
+> --
+> 2.25.4
+>
