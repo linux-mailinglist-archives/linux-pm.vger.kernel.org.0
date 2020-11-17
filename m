@@ -2,138 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 413132B6AF2
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 18:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251A22B6C16
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 18:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727336AbgKQQ7z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Nov 2020 11:59:55 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:38043 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727231AbgKQQ7y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 11:59:54 -0500
-Received: by mail-oi1-f194.google.com with SMTP id o25so23329137oie.5;
-        Tue, 17 Nov 2020 08:59:54 -0800 (PST)
+        id S1728187AbgKQRos (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 12:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726174AbgKQRoq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 12:44:46 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF5FC0613CF
+        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 09:44:46 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id d12so24014806wrr.13
+        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 09:44:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2KngzT5ko8rC3OE2ve8gvahOiuba+uhDRJQ9LOXl0+U=;
+        b=U26KxbAXVUUUUL1n5lEOI+uP+pQIx39CGrKbakbVvqZkamGw28UVz32cC9lesi6lRN
+         DnJF9yjA3ZI8kYVJclfFfFyDGAGn5xWyQIDffoZEVhpf0mkP1VzJ7LhYgua60W/ZollW
+         0X7rqlIdAmvayvJPqL/lS5ZN9kDohVdOqdJ8z/KNTygSOkXxahF6ek5qVzoo+dsH/k63
+         OyTe0Ly/CEP7C180c3iNgNVAgwzZLoDTs+ULga4gFfNVEhl+n1x7EaNujowpADJt5t28
+         rbi6TPAcwU+XNmiTh2JCMxQV8Niy+g60OEC7RJtuDeO3d7vL7aY0YlQ0EbTyArlm5mTF
+         1PIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sb3ebKnvqbWb9P6RANvx9VkhKnNgpXL+s67E5/WsuIo=;
-        b=uHJJ4bxqOtT4l0mKq3hG5iTWHEaAp0CPj36O8fiqImTwzVqXlsrI/CZjc5UdTqplcV
-         PvFxeGUQu4zuIvtlb6ImsUGVWOca1kZIKl7rePmz4b2nxzmB/Rj00PISE0af9S/lPOh0
-         2qxdKb00ax33YIvZjDJhsfc6fhMG4ByHWRBH9cJYShA4rJMQ1vyFbMsxizfhGW6F3Ts0
-         sWwJveZ+s3oo5pym3gEajvGcjUOEoCz9dF1Kvn8wx4qq6yhUTkhNhe8o/QdYAhTk7R/y
-         Suc+utX7ZnNU8r4usIGBP58027Dcyx/2bXtmtKy3s/+Ln2HoDno51/hHhDMdP+Y+0MEc
-         DFyQ==
-X-Gm-Message-State: AOAM533S5dUpnaSu0iGx0iXapXJsDsiU7bCklKiI0/F6nhQfEPR4tuxZ
-        0KBw7LWqscn1JApFfcPb2BuUFPIAjHzq+zfDWbw=
-X-Google-Smtp-Source: ABdhPJyiDy++olmem/k2N3oiypZ96XNV13PBBOT4OACdtIjSyHsu7cPwAmAkYb4wQk9VILXWTkXA70QqCr1Vo4GgudY=
-X-Received: by 2002:aca:cf4b:: with SMTP id f72mr3037726oig.157.1605632393546;
- Tue, 17 Nov 2020 08:59:53 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2KngzT5ko8rC3OE2ve8gvahOiuba+uhDRJQ9LOXl0+U=;
+        b=i4rSHEFKh9sIOiE/8/n3UsMeGDt/eR1RQeZ2/hQrpNB6MkhJICMAwCX2vVEe4sAE3Q
+         IMM7U+trbtjfFwh2MHJb881BNoYxU9nSnfCuK2n5lMWo/JEcoLoqxeIJxIm3COvgexH4
+         jKpxkp6OjybQvYWst5xvjvmKYN9Z+O2ew4iXTogH4vpK1z7o9WyrPbqGwfdLVlB9SsIA
+         KSABDxKajXxXUKwIM5dnLDjS+ECkk712xA7fHe0Dg0NfoKvqB/Owa/vG1jXcnKXDX9js
+         RzApmtvsrjDqZJ/wU61kydlU/P+v+OBJ2y7DQc1jvUO5Nb+fs6HYH2JfCp0OUrkgXqqG
+         7LKQ==
+X-Gm-Message-State: AOAM5333f9DQCY6/4k2hS4yMHjNbUCGz3FfDrQneOIWhPOAHUsxDK79m
+        WXknfQCSM5S2D9ow3URWEuaJXw==
+X-Google-Smtp-Source: ABdhPJxxEywh7zcSdCOpHrh5uQpARJrYhQeE0KoFgQi1md4vXIramoI6QvgWCCjx/ZqOFlHoqWGY9g==
+X-Received: by 2002:adf:ebc6:: with SMTP id v6mr597996wrn.427.1605635084716;
+        Tue, 17 Nov 2020 09:44:44 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5150:1004:6c70:8db9? ([2a01:e34:ed2f:f020:5150:1004:6c70:8db9])
+        by smtp.googlemail.com with ESMTPSA id n11sm27882644wru.38.2020.11.17.09.44.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Nov 2020 09:44:43 -0800 (PST)
+Subject: Re: [PATCH v2 4/4] powercap/drivers/dtpm: Add CPU energy model based
+ support
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rjw@rjwysocki.net, ilina@codeaurora.org, ulf.hansson@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rkumbako@codeaurora.org,
+        rui.zhang@intel.com
+References: <20201116152649.11482-1-daniel.lezcano@linaro.org>
+ <20201116152649.11482-5-daniel.lezcano@linaro.org>
+ <c467cb4d-2226-e558-e340-cd5764490078@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <6c9db999-0846-cd42-a061-c638197b5661@linaro.org>
+Date:   Tue, 17 Nov 2020 18:44:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <d6d9193249832c54fdd29656558f48914a4015dd.1605612661.git.viresh.kumar@linaro.org>
-In-Reply-To: <d6d9193249832c54fdd29656558f48914a4015dd.1605612661.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Nov 2020 17:59:42 +0100
-Message-ID: <CAJZ5v0hBdsEW6bnCP1kH+8F_st98bN=8y7+Zp166DEqdUJG8eg@mail.gmail.com>
-Subject: Re: [PATCH V2] cpufreq: stats: Use local_clock() instead of jiffies
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <c467cb4d-2226-e558-e340-cd5764490078@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 12:32 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> local_clock() has better precision and accuracy as compared to jiffies,
-> lets use it for time management in cpufreq stats.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> V2:
-> - Doesn't change the units to msec and use local_clock() instead of
->   ktime.
->
->  drivers/cpufreq/cpufreq_stats.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-> index 6cd5c8ab5d49..da717f7cd9a9 100644
-> --- a/drivers/cpufreq/cpufreq_stats.c
-> +++ b/drivers/cpufreq/cpufreq_stats.c
-> @@ -9,9 +9,9 @@
->  #include <linux/cpu.h>
->  #include <linux/cpufreq.h>
->  #include <linux/module.h>
-> +#include <linux/sched/clock.h>
->  #include <linux/slab.h>
->
-> -
->  struct cpufreq_stats {
->         unsigned int total_trans;
->         unsigned long long last_time;
-> @@ -30,7 +30,7 @@ struct cpufreq_stats {
->  static void cpufreq_stats_update(struct cpufreq_stats *stats,
->                                  unsigned long long time)
->  {
-> -       unsigned long long cur_time = get_jiffies_64();
-> +       unsigned long long cur_time = local_clock();
->
->         stats->time_in_state[stats->last_index] += cur_time - time;
->         stats->last_time = cur_time;
-> @@ -42,7 +42,7 @@ static void cpufreq_stats_reset_table(struct cpufreq_stats *stats)
->
->         memset(stats->time_in_state, 0, count * sizeof(u64));
->         memset(stats->trans_table, 0, count * count * sizeof(int));
-> -       stats->last_time = get_jiffies_64();
-> +       stats->last_time = local_clock();
->         stats->total_trans = 0;
->
->         /* Adjust for the time elapsed since reset was requested */
-> @@ -82,18 +82,18 @@ static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
->                                  * before the reset_pending read above.
->                                  */
->                                 smp_rmb();
-> -                               time = get_jiffies_64() - READ_ONCE(stats->reset_time);
-> +                               time = local_clock() - READ_ONCE(stats->reset_time);
->                         } else {
->                                 time = 0;
->                         }
->                 } else {
->                         time = stats->time_in_state[i];
->                         if (i == stats->last_index)
-> -                               time += get_jiffies_64() - stats->last_time;
-> +                               time += local_clock() - stats->last_time;
->                 }
->
->                 len += sprintf(buf + len, "%u %llu\n", stats->freq_table[i],
-> -                              jiffies_64_to_clock_t(time));
-> +                              nsec_to_clock_t(time));
->         }
->         return len;
->  }
-> @@ -109,7 +109,7 @@ static ssize_t store_reset(struct cpufreq_policy *policy, const char *buf,
->          * Defer resetting of stats to cpufreq_stats_record_transition() to
->          * avoid races.
->          */
-> -       WRITE_ONCE(stats->reset_time, get_jiffies_64());
-> +       WRITE_ONCE(stats->reset_time, local_clock());
->         /*
->          * The memory barrier below is to prevent the readers of reset_time from
->          * seeing a stale or partially updated value.
-> @@ -249,7 +249,7 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
->                         stats->freq_table[i++] = pos->frequency;
->
->         stats->state_num = i;
-> -       stats->last_time = get_jiffies_64();
-> +       stats->last_time = local_clock();
->         stats->last_index = freq_table_get_index(stats, policy->cur);
->
->         policy->stats = stats;
-> --
+On 17/11/2020 14:15, Lukasz Luba wrote:
+> Hi Daniel,
+> 
+> Only one small comment regarding the setup of 'power_limit'.
+> 
+> On 11/16/20 3:26 PM, Daniel Lezcano wrote:
+>> With the powercap dtpm controller, we are able to plug devices with
+>> power limitation features in the tree.
+>>
+>> The following patch introduces the CPU power limitation based on the
+>> energy model and the performance states.
+>>
+>> The power limitation is done at the performance domain level. If some
+>> CPUs are unplugged, the corresponding power will be subtracted from
+>> the performance domain total power.
+>>
+>> It is up to the platform to initialize the dtpm tree and add the CPU.
+>>
 
-Applied as 5.11 material, thanks!
+[ ... ]
+
+>> +
+>> +    dtpm = per_cpu(dtpm_per_cpu, cpu);
+>> +    if (dtpm)
+>> +        return power_add(dtpm, pd);
+> 
+> The dtpm->power_limit is not incremented in this path, when a new
+> CPU joins the cluster.
+> Is it correct?
+
+Yes, you are right, there is something missing here. It does not change
+the behavior of the power capping, but the value will be inconsistent in
+the tree.
+
+> Or maybe we need something like:
+> ------------------------------>8---------------------
+>         if (dtpm) {
+>                 ret = power_add(dtpm, pd);
+>                 if (!ret)
+>                         dtpm->power_limit = dtpm->power_max;
+>                 return ret;
+>         }
+> ------------------------8<---------------
+> 
+> The power_max should be updated after successful power_add().
+> It would disturb user set value in power_limit, though (described
+> below).
+> 
+> 
+>> +
+>> +    dtpm = dtpm_alloc();
+>> +    if (!dtpm)
+>> +        return -EINVAL;
+>> +
+>> +    dtpm_cpu = kzalloc(sizeof(dtpm_cpu), GFP_KERNEL);
+>> +    if (!dtpm_cpu) {
+>> +        kfree(dtpm);
+>> +        return -ENOMEM;
+>> +    }
+>> +
+>> +    dtpm->private = dtpm_cpu;
+>> +    dtpm_cpu->cpu = cpu;
+>> +
+>> +    for_each_cpu(cpu, policy->related_cpus)
+>> +        per_cpu(dtpm_per_cpu, cpu) = dtpm;
+>> +
+>> +    ret = power_add(dtpm, pd);
+>> +    if (ret)
+>> +        goto out_kfree_dtpm_cpu;
+>> +
+>> +    dtpm->power_limit = dtpm->power_max;
+> 
+> Here, the power_limit will be set only once with power_max
+> for a single CPU. I am not sure, but maybe we can simple say:
+> 
+> dtpm->power_limit = dtpm->power_max * cpumask_weight(policy->related_cpus)
+> 
+> an avoid touching it later (?)
+> 
+> Because this function can be called in runtime, when the power_limit
+> was already set by userspace, the hotpluging in/out/in... CPU shouldn't
+> change this limit.
+
+Hmm, I have to think about it because the power_limit is always less or
+equal to power_max.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
