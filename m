@@ -2,90 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AAC2B5D57
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 11:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58412B5E3B
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 12:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbgKQKzD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Nov 2020 05:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727903AbgKQKzD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 05:55:03 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C69EC0617A7
-        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 02:55:03 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id u2so10026088pls.10
-        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 02:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yZ9rf9Tu27SxIk+03VeBF6ah9AiWAmkZ8caQiD4rxC0=;
-        b=zh7REe1V6g6SzZqzuG0FgOF0qRE4Ee6PBvoJ9nkMBaOpMcAU+HPz7/NZTZkLnm3Rc5
-         jKkJq/0eUB7kt3U9gIt+7mV9oR9OmHU9Ya+8Qleu09ROuyvS6oBxA0Y8YixTXlLlpVqO
-         UEZPJPDiqQRorWZnnSllozNq0ANNQr2vrGni9ApCnT3UFRX4LUgbu/iV06cATNCB0G58
-         dpuAl/VYn5U5nxiQijpqotH4KguB+g5Gpp5O1XydkJHkCAEU4weFWZ/5R5BUkH7xGoEY
-         R5A8T+ltLnBVngWkwyU2wkE/O8Pn0hzLYFeAGFlPw1WY3ORGqmFlLlnrL1lm5umP/hC6
-         tT2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yZ9rf9Tu27SxIk+03VeBF6ah9AiWAmkZ8caQiD4rxC0=;
-        b=LY4rZP7cFzj8UX3UtHX4T3WpwNstmobFbb03v12sfdvsG60u1NH5B8J9yrGAWYGKdh
-         kHc+j2X1g4obgHK0jsOzmnYzTGT+m+tJpj449L79DXDkhCB6ebrzd7/coHe8CPYWx8kT
-         kKbK4UxbzS79KYl8eG/nyHJX0rem2JRUa32UYzS+cdg48qV1uIF7ssWIFiifOo2X1ijB
-         1bRICBxmkxI5+WUClcBNEQMytFLFCIxmI7LkJnQwgOJv25WZapanPmjLMI0kkVZXZJmZ
-         BmDUoeESl+W/kjqViuQBFJzBijzmJ2c9cvOLYQfSkNF8nP1Ta0zK3h+rR2jT/2jY45sK
-         Ak1A==
-X-Gm-Message-State: AOAM532VA7gW9TfbOj7LEJHAh043IjaJeU+dNaierqb+i1+psY5kFeqZ
-        kIUe00lCV33sbqYtrBG7ANSp2Q==
-X-Google-Smtp-Source: ABdhPJxkTetKMQ8NIopvVvYdFNalwIpPjrKHgDjIhDVA+vQxFA244sZo+bs8USWr69gtaoq2bSufHg==
-X-Received: by 2002:a17:90a:7f93:: with SMTP id m19mr3707452pjl.61.1605610502752;
-        Tue, 17 Nov 2020 02:55:02 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id e184sm20923760pfe.146.2020.11.17.02.55.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 Nov 2020 02:55:02 -0800 (PST)
-Date:   Tue, 17 Nov 2020 16:25:00 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
-        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
-        chris.redpath@arm.com
-Subject: Re: [PATCH v3 3/3] [RFC] CPUFreq: Add support for
- cpu-perf-dependencies
-Message-ID: <20201117105500.m3wwdlrsme4iiu7e@vireshk-i7>
-References: <20201102120115.29993-1-nicola.mazzucato@arm.com>
- <20201102120115.29993-4-nicola.mazzucato@arm.com>
- <20201106092020.za3oxg7gutzc3y2b@vireshk-i7>
- <0a334a73-45ef-58ff-7dfd-9df6f4ff290a@arm.com>
- <20201106105514.bhtdklyhn7goml64@vireshk-i7>
- <7f73bcd6-0f06-4ef0-7f02-0751e6c4d94b@arm.com>
- <20201109065742.22czfgyjhsjmkytf@vireshk-i7>
- <2fa8a5c0-f66d-34bc-7f1c-8462e7532e0a@arm.com>
- <20201117101128.6uapqg56arwqmm5p@vireshk-i7>
- <117c6d30-0013-7222-dedb-57e65ba84d15@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <117c6d30-0013-7222-dedb-57e65ba84d15@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1728012AbgKQL1x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 06:27:53 -0500
+Received: from mga01.intel.com ([192.55.52.88]:1082 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725355AbgKQL1x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Nov 2020 06:27:53 -0500
+IronPort-SDR: 5cLWV8aVxJr1wx73M7yifHYrpfjBzwjJ0efANfihBlp4uG8uRr3Kwz4J4rLGPHwjvl2PuTl6ne
+ P6SXBCAzxjww==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="188961214"
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="188961214"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 03:27:52 -0800
+IronPort-SDR: dG1ny2XRRY/+PJJPjr68EMmoLNYp7HC3dGGtUVrmxGNxJadnv2NJr5ZmpnPZ5JCtnw3qcgPK+G
+ 4sglLFud5/AA==
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="544009964"
+Received: from lil6-mobl1.ccr.corp.intel.com ([10.255.30.220])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 03:27:50 -0800
+Message-ID: <fd11744b16a91428303fe848ef8f72fd8f5c9a5e.camel@intel.com>
+Subject: Re: [PATCH] thermal: Fix NULL pointer dereference issue
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mukesh Ojha <mojha@codeaurora.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     amitk@kernel.org
+Date:   Tue, 17 Nov 2020 19:27:47 +0800
+In-Reply-To: <f8c436ae-0f4c-5d2e-51a8-0e856fbf8f44@linaro.org>
+References: <1605544181-5348-1-git-send-email-mojha@codeaurora.org>
+         <4e28affd89ba8a852e0fb7ace076458b3d43839a.camel@intel.com>
+         <f8c436ae-0f4c-5d2e-51a8-0e856fbf8f44@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-11-20, 10:47, Lukasz Luba wrote:
-> Fair enough. What if we come back with experiments results in future?
-> Currently we are trying to conduct experiments with Nicola on modified Juno
-> firmware and kernel)
+On Tue, 2020-11-17 at 09:57 +0100, Daniel Lezcano wrote:
+> On 17/11/2020 08:18, Zhang Rui wrote:
+> > On Mon, 2020-11-16 at 21:59 +0530, Mukesh Ojha wrote:
+> > > Cooling stats variable inside
+> > > thermal_cooling_device_stats_update()
+> > > can get NULL. We should add a NULL check on stat inside for
+> > > sanity.
+> > > 
+> > > Signed-off-by: Mukesh Ojha <mojha@codeaurora.org>
+> > > ---
+> > >  drivers/thermal/thermal_sysfs.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/drivers/thermal/thermal_sysfs.c
+> > > b/drivers/thermal/thermal_sysfs.c
+> > > index a6f371f..f52708f 100644
+> > > --- a/drivers/thermal/thermal_sysfs.c
+> > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > @@ -754,6 +754,9 @@ void
+> > > thermal_cooling_device_stats_update(struct
+> > > thermal_cooling_device *cdev,
+> > >  {
+> > >  	struct cooling_dev_stats *stats = cdev->stats;
+> > >  
+> > > +	if (!stats)
+> > > +		return;
+> > > +
+> > 
+> > May I know in which case stats can be NULL?
+> > The only possibility I can see is that cdev->ops->get_max_state()
+> > fails
+> > in cooling_device_stats_setup(), right?
+> 
+> A few lines below, the allocation could fail.
+> 
+>         stats = kzalloc(var, GFP_KERNEL);
+>         if (!stats)
+>                 return;
+> 
+> Some drivers define themselves as a cooling device state to let the
+> userspace to act on their power. The screen brightness is one example
+> with a cdev with 1024 states, the resulting stats table to be
+> allocated
+> is very big and the kzalloc is prone to fail.
+> 
+Oh, right.
+As we're not going to fix the cdev, so I think we do need this patch,
+right?
 
-Sure. If we think it improves things, why not. I just wanted to make
-sure we understand why would we go do this change now.
+thanks,
+rui
+> > thanks,
+> > rui
+> > 
+> > >  	spin_lock(&stats->lock);
+> > >  
+> > >  	if (stats->state == new_state)
+> 
+> 
 
--- 
-viresh
