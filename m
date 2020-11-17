@@ -2,213 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C37F62B673A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 15:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CB62B6822
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 16:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729217AbgKQORd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Nov 2020 09:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728971AbgKQORc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 09:17:32 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C583C0613CF;
-        Tue, 17 Nov 2020 06:17:32 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id x9so24435722ljc.7;
-        Tue, 17 Nov 2020 06:17:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=q2TfPNwbFsY7QYd8sTzRZEObhYP03ZOzna0totkapw8=;
-        b=tpbjSkvU+/U5bphneMP5zx1QauR++bqzsNpKNWwGkCa+PufVLU6GU2WjJ9CT9ETQLG
-         Qr6LmuKTCBC4gjIM9iQ45WLnY6WugGpP7V0JhxxL+f3xrcC+yT2Tc6dwG1BEPQK7Ffbq
-         2fUN+9u4h3aF5li4Lrb6Yzcbeurz6YqqGo3uq4IyMd8C5RcNn1cX5SGIiEdz38rmRftB
-         jWb011jbyhiyX0Ekj6ReRtAcUXsnnaNzHyMougSnniv5DqFm0paq7PSsVfMnDEZ6bYDr
-         hjahkG3/GVm95dt2nJFJnFel61dr9CMeRWr6cZmgn/m7peRvbeMxTm5t31eK9ckl4Oar
-         vfzA==
+        id S1730073AbgKQO7g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 09:59:36 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45561 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729164AbgKQO7f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 09:59:35 -0500
+Received: by mail-ot1-f65.google.com with SMTP id k3so19621859otp.12;
+        Tue, 17 Nov 2020 06:59:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=q2TfPNwbFsY7QYd8sTzRZEObhYP03ZOzna0totkapw8=;
-        b=MKULtg6h88rLP2SyY9DKNWk5xgsZ0AaHxKczOhN4iS3lpPQKOJVnWPUtLI6IOZi79T
-         X1EaMPKiP24E9oHfTRNzKYH9D3Cbf5Fv3yhRqcpfbC5/FdXglRV/C0AIHIz6a2BfiKVC
-         neWPcwIh+pn/n1LRWdmR0pgqu2MibryPfZF7lbKxR5U2vQgyY5k9dwNAPCe313zjA87f
-         qEGUuR0Qcl7/OBivUqXLlD6Qmlx4hFw8FU2tCbW9N76/hwtyJw6lJ9Z2ypq8c6twHXIF
-         pTMsSEpArBldOTIXe3zquGxqkv2LSg57vP4ttDORytvnCg8bts8yisFeKonId7nyYQ7u
-         eRYA==
-X-Gm-Message-State: AOAM531s+MrBy7COsYfNp9NloHKE74kIoz5QDFHCTn9DFWVcaiVuzbOM
-        69bRHPjdR3fM6Xtzc009UTE=
-X-Google-Smtp-Source: ABdhPJxSxv4CgsznF1M5m0HlswEk+5u5gaPfsgzrL0V1ke3IMer28jKI+apmnEdu3Hxzfog3p84yag==
-X-Received: by 2002:a2e:b164:: with SMTP id a4mr1931742ljm.115.1605622650853;
-        Tue, 17 Nov 2020 06:17:30 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id u12sm3170887lfm.39.2020.11.17.06.17.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Nov 2020 06:17:29 -0800 (PST)
-Subject: Re: [PATCH v9 07/17] PM / devfreq: tegra30: Support interconnect and
- OPPs from device-tree
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20201115212922.4390-1-digetx@gmail.com>
- <20201115212922.4390-8-digetx@gmail.com>
- <20201117100705.i62qr4gosvu76o22@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <956315a9-e806-3b18-6792-f01057a6c511@gmail.com>
-Date:   Tue, 17 Nov 2020 17:17:28 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cBAt+SOaJCyDloFwjlRJ/ezQ7X0Co5bocslvDWABnKo=;
+        b=b38Hd9RXoZlJrwyEifprcBNhnyPD0ueBCSmtNTHtrpIYUf0GBU2Cf0ZwzqmpOgTucs
+         f0Z9KhPUUbaIM7soZImVeHXejbYz7Rhg/sd2tQQ6KHUz5ufTKYJaoXOURzmWuZgy1j72
+         d3mf4ypWG+W4hHgH1C+hmrVolKyC7DtPW1e1sME2lxmbsMUkwKkI/zhLBxZqKIkcBU8k
+         r5qMocerDpmdVsd52IIgwFEodbJ4VKskJ/OwZNFFqfHYBNOpxN2WOj2ji5HgiQaLZzkg
+         PEq87NzINjiBssNSlyiRc6DoMjK4SzvovKQztTSgrs8gliebwRMVb0bEeJ9LfSuoGtEb
+         XDAQ==
+X-Gm-Message-State: AOAM533gA9UzEjU3st3zHnTSf7cESpoufnPzHmWSTDCEXXInu7VflEkW
+        SxeoX51tBP+zrJVx4qGCUIQ7l70qhDhwz7u2k5Q=
+X-Google-Smtp-Source: ABdhPJx/vcIT9i+JK3UjFgMS/W4kUHQudvPXg2GomkpBC9XwnCKOGTckmJw4Uop1jB6m9rP6eHUSAYKAbjESxGwpBsA=
+X-Received: by 2002:a9d:171a:: with SMTP id i26mr3450409ota.260.1605625174900;
+ Tue, 17 Nov 2020 06:59:34 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201117100705.i62qr4gosvu76o22@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20201105125524.4409-1-ionela.voinescu@arm.com>
+In-Reply-To: <20201105125524.4409-1-ionela.voinescu@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Nov 2020 15:59:24 +0100
+Message-ID: <CAJZ5v0hucue4fwGgHF5-jXRn8kSt3hORyQ7Q4-azmZ8UBijUkw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] cppc_cpufreq: fix, clarify and improve support
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-17.11.2020 13:07, Viresh Kumar пишет:
-> On 16-11-20, 00:29, Dmitry Osipenko wrote:
->> This patch moves ACTMON driver away from generating OPP table by itself,
->> transitioning it to use the table which comes from device-tree. This
->> change breaks compatibility with older device-trees in order to bring
->> support for the interconnect framework to the driver. This is a mandatory
->> change which needs to be done in order to implement interconnect-based
->> memory DVFS. Users of legacy device-trees will get a message telling that
->> theirs DT needs to be upgraded. Now ACTMON issues memory bandwidth request
->> using dev_pm_opp_set_bw(), instead of driving EMC clock rate directly.
->>
->> Tested-by: Peter Geis <pgwipeout@gmail.com>
->> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
->> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/devfreq/tegra30-devfreq.c | 86 ++++++++++++++++---------------
->>  1 file changed, 44 insertions(+), 42 deletions(-)
->>
->> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->> index 38cc0d014738..ed6d4469c8c7 100644
->> --- a/drivers/devfreq/tegra30-devfreq.c
->> +++ b/drivers/devfreq/tegra30-devfreq.c
->> @@ -19,6 +19,8 @@
->>  #include <linux/reset.h>
->>  #include <linux/workqueue.h>
->>  
->> +#include <soc/tegra/fuse.h>
->> +
->>  #include "governor.h"
->>  
->>  #define ACTMON_GLB_STATUS					0x0
->> @@ -155,6 +157,7 @@ struct tegra_devfreq_device {
->>  
->>  struct tegra_devfreq {
->>  	struct devfreq		*devfreq;
->> +	struct opp_table	*opp_table;
->>  
->>  	struct reset_control	*reset;
->>  	struct clk		*clock;
->> @@ -612,34 +615,19 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
->>  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
->>  				u32 flags)
->>  {
->> -	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
->> -	struct devfreq *devfreq = tegra->devfreq;
->>  	struct dev_pm_opp *opp;
->> -	unsigned long rate;
->> -	int err;
->> +	int ret;
->>  
->>  	opp = devfreq_recommended_opp(dev, freq, flags);
->>  	if (IS_ERR(opp)) {
->>  		dev_err(dev, "Failed to find opp for %lu Hz\n", *freq);
->>  		return PTR_ERR(opp);
->>  	}
->> -	rate = dev_pm_opp_get_freq(opp);
->> -	dev_pm_opp_put(opp);
->> -
->> -	err = clk_set_min_rate(tegra->emc_clock, rate * KHZ);
->> -	if (err)
->> -		return err;
->> -
->> -	err = clk_set_rate(tegra->emc_clock, 0);
->> -	if (err)
->> -		goto restore_min_rate;
->>  
->> -	return 0;
->> -
->> -restore_min_rate:
->> -	clk_set_min_rate(tegra->emc_clock, devfreq->previous_freq);
->> +	ret = dev_pm_opp_set_bw(dev, opp);
->> +	dev_pm_opp_put(opp);
->>  
->> -	return err;
->> +	return ret;
->>  }
->>  
->>  static int tegra_devfreq_get_dev_status(struct device *dev,
->> @@ -655,7 +643,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
->>  	stat->private_data = tegra;
->>  
->>  	/* The below are to be used by the other governors */
->> -	stat->current_frequency = cur_freq;
->> +	stat->current_frequency = cur_freq * KHZ;
->>  
->>  	actmon_dev = &tegra->devices[MCALL];
->>  
->> @@ -705,7 +693,12 @@ static int tegra_governor_get_target(struct devfreq *devfreq,
->>  		target_freq = max(target_freq, dev->target_freq);
->>  	}
->>  
->> -	*freq = target_freq;
->> +	/*
->> +	 * tegra-devfreq driver operates with KHz units, while OPP table
->> +	 * entries use Hz units. Hence we need to convert the units for the
->> +	 * devfreq core.
->> +	 */
->> +	*freq = target_freq * KHZ;
->>  
->>  	return 0;
->>  }
->> @@ -774,6 +767,7 @@ static struct devfreq_governor tegra_devfreq_governor = {
->>  
->>  static int tegra_devfreq_probe(struct platform_device *pdev)
->>  {
->> +	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
->>  	struct tegra_devfreq_device *dev;
->>  	struct tegra_devfreq *tegra;
->>  	struct devfreq *devfreq;
->> @@ -781,6 +775,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>  	long rate;
->>  	int err;
->>  
->> +	/* legacy device-trees don't have OPP table and must be updated */
->> +	if (!device_property_present(&pdev->dev, "operating-points-v2")) {
->> +		dev_err(&pdev->dev,
->> +			"OPP table not found, please update your device tree\n");
->> +		return -ENODEV;
->> +	}
->> +
-> 
-> You forgot to remove this ?
+On Thu, Nov 5, 2020 at 1:56 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+>
+> Hi guys,
+>
+> I found myself staring a bit too much at this driver in the past weeks
+> and that's likely the cause for me coming up with this series of 8
+> patches that cleans up, clarifies and reworks parts of it, as follows:
+>
+>  - patches 1-3/8: trivial clean-up and renaming with the purpose to
+>                   improve readability
+>  - patch 4/8: replace previous per-cpu data structures with lists of
+>               domains and CPUs to get more efficient storage for driver
+>               data and fix previous issues in case of CPU hotplugging,
+>               as discussed at [1].
+>  - patches 5-6/8: a few fixes and clarifications: mostly making sure
+>                   the behavior described in the comments and debug
+>                   messages matches the code and there is clear
+>                   indication of what is supported and how.
+>  - patch 7/8: use the existing freqdomains_cpus attribute to inform
+>               the user on frequency domains.
+>  - patch 8/8: acpi: replace ALL coordination with NONE coordination
+>                     when errors are find parsing the _PSD domains
+>               (as described in the comments in the code).
+>
+> Hopefully you'll find this useful for ease of maintenance and ease of
+> future development of the driver.
+>
+> This functionality was tested on a Juno platform with modified _PSD
+> tables to test the functionality for all currently supported
+> coordination types: ANY, HW, NONE.
+>
+> The current code is based on v5.10-rc2.
+>
+> Thanks,
+> Ionela.
+>
+> [1] https://lore.kernel.org/linux-pm/20200922162540.GB796@arm.com/
+>
+> Ionela Voinescu (8):
+>   cppc_cpufreq: fix misspelling, code style and readability issues
+>   cppc_cpufreq: clean up cpu, cpu_num and cpunum variable use
+>   cppc_cpufreq: simplify use of performance capabilities
+>   cppc_cpufreq: replace per-cpu structures with lists
+>   cppc_cpufreq: use policy->cpu as driver of frequency setting
+>   cppc_cpufreq: clarify support for coordination types
+>   cppc_cpufreq: expose information on frequency domains
+>   acpi: fix NONE coordination for domain mapping failure
+>
+>  .../ABI/testing/sysfs-devices-system-cpu      |   3 +-
+>  drivers/acpi/cppc_acpi.c                      | 126 +++---
+>  drivers/acpi/processor_perflib.c              |   2 +-
+>  drivers/cpufreq/cppc_cpufreq.c                | 358 +++++++++++-------
+>  include/acpi/cppc_acpi.h                      |  14 +-
+>  5 files changed, 277 insertions(+), 226 deletions(-)
+>
+> --
 
-Yes, good catch. I'm planning to replace this code with a common helper
-sometime soon, so if there won't be another reasons to make a new
-revision, then I'd prefer to keep it as-is for now.
+All patches applied as 5.11 material (with a minor subject edit in the
+last patch), thanks!
+
+In the future, though, please CC all/any ACPI-related changes to the
+linux-acpi mailing list.
