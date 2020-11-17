@@ -2,128 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE402B6A35
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 17:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832F92B6A6D
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 17:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbgKQQar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Nov 2020 11:30:47 -0500
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:44778 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727966AbgKQQap (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 11:30:45 -0500
-Received: by mail-oo1-f67.google.com with SMTP id i13so4881860oou.11;
-        Tue, 17 Nov 2020 08:30:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yNtDOoMlRwud0/aGwxo+vKx2Davbaj7vGDzBOZreU04=;
-        b=pkxWK3GALrCQRiwbA8u+FRbN3RoUmvcjZHSkSz++XFYOeByWdzkBE5dfFl5jyv6tIP
-         ty1yFnGAy7pu6WPi5Em7XHfBCe2tvyxCP4VwNIfz3a3gaUJFq9CYd2ZA37fH6Rtmwe0N
-         rZCyzuBJ7+CWZxbfU+SgNPabEDXuMigSasCI/Vbyf5NprI43GyRVIacpBKVzkRfYZWUu
-         zt6Or7DDO5+Fez7Rw/rK5h0MI9EIsdQWGhOSxVfIkU11S5ubCdhNC99HBSzmugXjigfl
-         W4/WxT/LYMtXy4R1ujQoiKgZ9gfy3Q6zW5k/Y046ZHe0U+WkG98ZDcJHSNWHvgrcOfju
-         47fw==
-X-Gm-Message-State: AOAM532xupq0iXbKVQ1hSK7tUdSzGqhunk87dn4ii18hCZp/5iaW1YBm
-        K+gGqjbLII0bEfkHKrloSxc/BxamCWURheD5H0s=
-X-Google-Smtp-Source: ABdhPJxY1duGTM+9Nf3pI9bBjViWorCvJZwv8NU776jpL1TprGwFKe+UO1Y7QovxEe/YEr80tZ7kD/s8LGCQGiQzkds=
-X-Received: by 2002:a4a:e80b:: with SMTP id b11mr3587232oob.1.1605630644535;
- Tue, 17 Nov 2020 08:30:44 -0800 (PST)
+        id S1727359AbgKQQiT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 11:38:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727010AbgKQQiT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Nov 2020 11:38:19 -0500
+Received: from localhost (189.sub-72-105-114.myvzw.com [72.105.114.189])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA0A2217A0;
+        Tue, 17 Nov 2020 16:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605631099;
+        bh=2Bs/+9brtdJ8Qim1oOERf9SEfxCTiMSLLDSQGAmSgVw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=FJgl0tcRT6TKxDjmnER5PUVWbYUBtf3WNlJCooBmiNQC7EPHXuFU+gsfAWh5vcer9
+         SvDxb90pgHzn/bVoIC+qV0f2WK9Z/lkKZOHEIA8qp3ySR7OJ8+VEgM0no0+sZ/zv5o
+         9q6GVtsUygiaMPLli/873XLwhSKeFJZF5lX+eQ5c=
+Date:   Tue, 17 Nov 2020 10:38:17 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kai Heng Feng <kai.heng.feng@canonical.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Time to re-enable Runtime PM per default for PCI devcies?
+Message-ID: <20201117163817.GA1397220@bjorn-Precision-5520>
 MIME-Version: 1.0
-References: <20201105125524.4409-1-ionela.voinescu@arm.com>
- <CAJZ5v0hucue4fwGgHF5-jXRn8kSt3hORyQ7Q4-azmZ8UBijUkw@mail.gmail.com> <20201117153241.GA730@arm.com>
-In-Reply-To: <20201117153241.GA730@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Nov 2020 17:30:33 +0100
-Message-ID: <CAJZ5v0hPdEB1wMxT90Tp9eMcseMxdZGbadMaCeYOYf1LqVXq0A@mail.gmail.com>
-Subject: Re: [PATCH 0/8] cppc_cpufreq: fix, clarify and improve support
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <79940973-b631-90f9-dbc4-9579c6000816@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 4:32 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
->
-> Hi Rafael,
->
-> On Tuesday 17 Nov 2020 at 15:59:24 (+0100), Rafael J. Wysocki wrote:
-> > On Thu, Nov 5, 2020 at 1:56 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
-> > >
-> > > Hi guys,
-> > >
-> > > I found myself staring a bit too much at this driver in the past weeks
-> > > and that's likely the cause for me coming up with this series of 8
-> > > patches that cleans up, clarifies and reworks parts of it, as follows:
-> > >
-> > >  - patches 1-3/8: trivial clean-up and renaming with the purpose to
-> > >                   improve readability
-> > >  - patch 4/8: replace previous per-cpu data structures with lists of
-> > >               domains and CPUs to get more efficient storage for driver
-> > >               data and fix previous issues in case of CPU hotplugging,
-> > >               as discussed at [1].
-> > >  - patches 5-6/8: a few fixes and clarifications: mostly making sure
-> > >                   the behavior described in the comments and debug
-> > >                   messages matches the code and there is clear
-> > >                   indication of what is supported and how.
-> > >  - patch 7/8: use the existing freqdomains_cpus attribute to inform
-> > >               the user on frequency domains.
-> > >  - patch 8/8: acpi: replace ALL coordination with NONE coordination
-> > >                     when errors are find parsing the _PSD domains
-> > >               (as described in the comments in the code).
-> > >
-> > > Hopefully you'll find this useful for ease of maintenance and ease of
-> > > future development of the driver.
-> > >
-> > > This functionality was tested on a Juno platform with modified _PSD
-> > > tables to test the functionality for all currently supported
-> > > coordination types: ANY, HW, NONE.
-> > >
-> > > The current code is based on v5.10-rc2.
-> > >
-> > > Thanks,
-> > > Ionela.
-> > >
-> > > [1] https://lore.kernel.org/linux-pm/20200922162540.GB796@arm.com/
-> > >
-> > > Ionela Voinescu (8):
-> > >   cppc_cpufreq: fix misspelling, code style and readability issues
-> > >   cppc_cpufreq: clean up cpu, cpu_num and cpunum variable use
-> > >   cppc_cpufreq: simplify use of performance capabilities
-> > >   cppc_cpufreq: replace per-cpu structures with lists
-> > >   cppc_cpufreq: use policy->cpu as driver of frequency setting
-> > >   cppc_cpufreq: clarify support for coordination types
-> > >   cppc_cpufreq: expose information on frequency domains
-> > >   acpi: fix NONE coordination for domain mapping failure
-> > >
-> > >  .../ABI/testing/sysfs-devices-system-cpu      |   3 +-
-> > >  drivers/acpi/cppc_acpi.c                      | 126 +++---
-> > >  drivers/acpi/processor_perflib.c              |   2 +-
-> > >  drivers/cpufreq/cppc_cpufreq.c                | 358 +++++++++++-------
-> > >  include/acpi/cppc_acpi.h                      |  14 +-
-> > >  5 files changed, 277 insertions(+), 226 deletions(-)
-> > >
-> > > --
-> >
-> > All patches applied as 5.11 material (with a minor subject edit in the
-> > last patch), thanks!
-> >
->
-> Patch 4/8 was not acked. I was about to push a new version in which I
-> fix the scenario that Jeremy mentioned.
+[+to Rafael, author of the commit you mentioned,
++cc Mika, Kai Heng, Lukas, linux-pm, linux-kernel]
 
-Well, it wasn't clear to me what you wanted to do about it.
+On Tue, Nov 17, 2020 at 04:56:09PM +0100, Heiner Kallweit wrote:
+> More than 10 yrs ago Runtime PM was disabled per default by bb910a7040
+> ("PCI/PM Runtime: Make runtime PM of PCI devices inactive by default").
+> 
+> Reason given: "avoid breakage on systems where ACPI-based wake-up is
+> known to fail for some devices"
+> Unfortunately the commit message doesn't mention any affected  devices
+> or systems.
+> 
+> With Runtime PM disabled e.g. the PHY on network devices may remain
+> powered up even with no cable plugged in, affecting battery lifetime
+> on mobile devices. Currently we have to rely on the respective distro
+> or user to enable Runtime PM via sysfs (echo auto > power/control).
+> Some devices work around this restriction by calling pm_runtime_allow
+> in their probe routine, even though that's not recommended by
+> https://www.kernel.org/doc/Documentation/power/pci.txt
+> 
+> Disabling Runtime PM per default seems to be a big hammer, a quirk
+> for affected devices / systems may had been better. And we still
+> have the option to disable Runtime PM for selected devices via sysfs.
+> 
+> So, to cut a long story short: Wouldn't it be time to remove this
+> restriction?
 
-> Would you like me to push that
-> as a separate patch on top of this series,
-
-Yes, please.
+I don't know the history of this, but maybe Rafael or the others can
+shed some light on it.
