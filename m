@@ -2,156 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E242B5354
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Nov 2020 21:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C282B56C7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 03:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728809AbgKPU6O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 15:58:14 -0500
-Received: from mga18.intel.com ([134.134.136.126]:57947 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728581AbgKPU6O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Nov 2020 15:58:14 -0500
-IronPort-SDR: NrtG71fztbwf4E8QSKUUJf7n8JOwmnFYdBQSRBG/GWGDMKjG5Kbl1dYf1L6CSO0JDMKFm+OXfi
- FqdnVGvStT9g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="158590228"
-X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="158590228"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 12:58:04 -0800
-IronPort-SDR: TsyHdZolnBqi88Fug9EssBaYMqlPMT0HER7tHBOPudtNXoVVJTUr0Qq6cjIyuc4jG+K3FIWx7b
- MPxDCVT40N9g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="367631456"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Nov 2020 12:58:04 -0800
-Received: from debox1-desk1.jf.intel.com (debox1-desk1.jf.intel.com [10.7.201.137])
-        by linux.intel.com (Postfix) with ESMTP id 980AA5802E4;
-        Mon, 16 Nov 2020 12:58:04 -0800 (PST)
-Message-ID: <40579a7ed0692d535f002112b18d1bb6e25aad0e.camel@linux.intel.com>
-Subject: Re: [PATCH] PCI: Disable PTM during suspend on Intel PCI bridges
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <len.brown@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Mon, 16 Nov 2020 12:58:04 -0800
-In-Reply-To: <20201116192320.GA1290192@bjorn-Precision-5520>
-References: <20201116192320.GA1290192@bjorn-Precision-5520>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1726771AbgKQCiN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 21:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726302AbgKQCiN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 21:38:13 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FB1C0613CF;
+        Mon, 16 Nov 2020 18:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=6eb2pIfy6Xdnw/Krhg5PKBjpnWNrsxoSBJPm0fWPw/w=; b=D5LP9SOnbLesrH01i4G2Sv3ueo
+        vzDyrl2xpM11BHXLLzooys63KsxJWzmJz7TTFy7t0HrWe/OC44npexsSWrVJtxrv/rLFOIoHmQ6z5
+        HlZiCgZuLxyS5b47+XCu/M9Grsp9C24v0K7ixE2Q0lJUbZO3RrhlbJCigk1NgNa4SiVjyeyATrO5E
+        uV0KYLr+WvAczfxuO7zYDWyNFC+xNuL2x9i/DfBHvEmYIf76DplnfEzQxtjfgwp1S97d6YzOVMByT
+        feI6eNvh6z1twEfPmtonVpbRzFWxz0o0Gv0alJdx+8xoc2wBDXCzoxen9WR+6VC0UU0RLdwnHfdHO
+        U2EmEJIQ==;
+Received: from [2601:1c0:6280:3f0::f32] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1keqsk-0006sO-Ef; Tue, 17 Nov 2020 02:38:10 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH -next] thermal: intel_pch_thermal: fix build for ACPI not enabled
+Date:   Mon, 16 Nov 2020 18:38:07 -0800
+Message-Id: <20201117023807.8266-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2020-11-16 at 13:23 -0600, Bjorn Helgaas wrote:
-> On Mon, Nov 16, 2020 at 06:53:09PM +0100, Rafael J. Wysocki wrote:
-> > On Wed, Oct 7, 2020 at 7:10 PM Bjorn Helgaas <helgaas@kernel.org>
-> > wrote:
-> > > On Wed, Oct 07, 2020 at 06:53:16PM +0200, Rafael J. Wysocki
-> > > wrote:
-> > > > On Wed, Oct 7, 2020 at 6:49 PM David E. Box <
-> > > > david.e.box@linux.intel.com> wrote:
-> > > > > On Intel Platform Controller Hubs (PCH) since Cannon Lake,
-> > > > > the Precision
-> > > > > Time Measurement (PTM) capability can prevent PCIe root ports
-> > > > > from power
-> > > > > gating during suspend-to-idle, causing increased power
-> > > > > consumption on
-> > > > > systems that suspend using Low Power S0 Idle [1]. The issue
-> > > > > is yet to be
-> > > > > root caused but believed to be coming from a race condition
-> > > > > in the suspend
-> > > > > flow as the incidence rate varies for different platforms on
-> > > > > Linux but the
-> > > > > issue does not occur at all in other operating systems. For
-> > > > > now, disable
-> > > > > the feature on suspend on all Intel root ports and enable
-> > > > > again on resume.
-> > > > 
-> > > > IMV it should also be noted that there is no particular reason
-> > > > why PTM
-> > > > would need to be enabled while the whole system is
-> > > > suspended.  At
-> > > > least it doesn't seem to be particularly useful in that state.
-> > > 
-> > > Is this a hardware erratum?  If not, and this is working as
-> > > designed,
-> > > it sounds like we'd need to apply this quirk to every device that
-> > > supports PTM.  That's not really practical.
-> > 
-> > Why not?
-> 
-> My objection was that the original patch is a quirk that applies only
-> to Intel devices.
-> 
-> If this is a generic thing that should be done for *all* devices that
-> support PTM, that's fine, but it should not be a quirk, and it should
-> not involve a list of Vendor or Device IDs.
-> 
-> > It looks like the capability should be saved by pci_save_state()
-> > (it
-> > isn't ATM, which appears to be a mistake) and restored by
-> > pci_restore_state(), so if that is implemented, the saving can be
-> > combined with the disabling in principle.
-> 
-> Yup, looks like a mistake.  Maybe David can fix that at the same time
-> (probably a separate patch, though).  I don't have a way to test it,
-> but he probably does.
+The reference to acpi_gbl_FADT causes a build error when ACPI is not
+enabled. Fix by making that conditional on CONFIG_ACPI.
 
-Yes, I can test save/restore of the PTM capability and submit a patch.
+../drivers/thermal/intel/intel_pch_thermal.c: In function 'pch_wpt_suspend':
+../drivers/thermal/intel/intel_pch_thermal.c:217:8: error: 'acpi_gbl_FADT' undeclared (first use in this function); did you mean 'acpi_get_type'?
+  if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0))
+        ^~~~~~~~~~~~~
 
-> 
-> > > The bugzilla says "there is no erratum as this does not affect
-> > > Windows," but that doesn't answer the question.  What I want to
-> > > know
-> > > is whether this is a *hardware* defect and whether it will be
-> > > fixed in
-> > > future hardware.
-> > 
-> > I cannot answer this question, sorry.
-> > 
-> > ATM we only know that certain SoCs may not enter the deepest idle
-> > state if PTM is enabled on some PCIe root ports during suspend.
-> > 
-> > Disabling PTM on those ports while suspending helps and hence the
-> > patch.
-> > 
-> > It doesn't appear to qualify as a "hardware defect".
-> > 
-> > > If it's a "wont-fix" hardware issue, we can just disable PTM
-> > > completely on Intel hardware and we won't have to worry about it
-> > > during suspend.
-> > 
-> > I'm not following the logic here, sorry again.
-> > 
-> > First of all, there are systems that never suspend, so why would
-> > they
-> > be affected by the remedy (whatever it is)?
-> > 
-> > Second, it is not about the suspend failing entirely.  It's about
-> > being able to make the system draw less power while suspended.
-> > 
-> > Generally, if someone said "I can make the system draw less power
-> > while suspended if I disable PCIe feature X during suspend", would
-> > you
-> > disregard that?
-> 
-> My questions were all prompted by the Intel-specific nature of the
-> original patch, which suggests an ongoing maintenance burden.  If it
-> can be done generically, I have no problem with it.
+Fixes: ef63b043ac86 ("thermal: intel: pch: fix S0ix failure due to PCH temperature above threshold")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/thermal/intel/intel_pch_thermal.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-Okay. I'll add this to the save/restore patch then with the comment
-that it saves power on some Intel platforms.
-
-David
-
+--- linux-next-20201116.orig/drivers/thermal/intel/intel_pch_thermal.c
++++ linux-next-20201116/drivers/thermal/intel/intel_pch_thermal.c
+@@ -214,8 +214,12 @@ static int pch_wpt_suspend(struct pch_th
+ 	}
+ 
+ 	/* Do not check temperature if it is not a S0ix capable platform */
++#ifdef CONFIG_ACPI
+ 	if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0))
+ 		return 0;
++#else
++	return 0;
++#endif
+ 
+ 	/* Do not check temperature if it is not s2idle */
+ 	if (pm_suspend_via_firmware())
