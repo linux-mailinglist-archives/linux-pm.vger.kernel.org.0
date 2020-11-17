@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFE32B7003
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 21:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D05082B712D
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 23:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgKQUYn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Nov 2020 15:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
+        id S1727838AbgKQWCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 17:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgKQUYm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 15:24:42 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B162C0617A6
-        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 12:24:41 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id h2so4714827wmm.0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 12:24:40 -0800 (PST)
+        with ESMTP id S1726504AbgKQWCh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 17:02:37 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBA0C0613CF;
+        Tue, 17 Nov 2020 14:02:36 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id b17so16550ljf.12;
+        Tue, 17 Nov 2020 14:02:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=uFgfIH0qmM2n17BDKaKrcq4LBODq5k4QOoezQr/yK4Q=;
-        b=vJmRBtG5Y4PKYnYzUVh08Dqvpcn/A+iQlTefDkvBSaY/otn7EDLv0dIIj3ExHDw5TK
-         DJhn0fmMls/fo3Ji04nfqYpC6VAJIrSLNF1zevXLRp+Mqs0gIX3k1ay250TfmDCvRB05
-         +OFGUIWqHJivI8tvxU/N+BXqMuYAmxnqziUr/zXER+4xntRWIfLL4Km6b98Y3TvV59GU
-         eCTzi5TRJcLVXq0HVatVqEhWOZJHM4JeETvtJEpY6E3ejXSsyHLJMnRl9ptM2VzXUngX
-         y3G3hvj79F6xHWtKigSGV3YGOmPS8F7zoviWPz5zt2J2EGLFG8jcg5kblMW5AUYS5yq7
-         YUCw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=W5om3zQzsHiBGMpHdWoQikEGL2r18KBMb1Ag+GnaG08=;
+        b=aUPTRertfb05h4PXQBp+XblhFmhkq3dYxYo19vCMmRFRwFfo3o1IW4o98iLAok03IX
+         SB7/dAIf/DxDZrSAmId3g1EI40aBDac3fFJ5YPVvSW4ZcmMmQ1/fZT7zXo9ji1tnSBH2
+         2ryoHGWBmcPCOGGdekoRik9gvEfoJIq1jigT730xbZyGcrmpeGU4NrOrXGvOplzotgE/
+         YujRyvzI7YgCBSKphSJsvHJdJaz64JVUE1DdR45WFz0QWc2ezvGHPVWoY5Lg6HFf46Nl
+         0V2nRoj5jQVYhYcul1ZHcmKsPqCQgZ5dqIGEIVHgEXRfIfsykIDOct6IpeM1FbHDQTJX
+         oN4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uFgfIH0qmM2n17BDKaKrcq4LBODq5k4QOoezQr/yK4Q=;
-        b=Uy0OuU45uQpKJz4jDkCuimLVhB8feTNsP5L2fc1qWe+jnGtTZnMgMykvKHoqAtyoAC
-         oW7Q2u4IJhqRrb80bLPeJ5YN/1f9uz7nWQOESieamhaf043E9j5IBsjtw3BgMQ6SObBS
-         0nefCqC/9E+p4Eue+ZrMvb5FFSf6b//pN/FNzuwXOaxXqVc3k8LWoTbrvHNge1prz9sL
-         TP9THLMBNi+6Eh9CRkQrM6zG7S3hUHuHwSVO0KYj4/C5xZE1LjfRx01rE2g8BSiplVJr
-         8g3MZ1r+MIFDoaf6y78G+l9+kt+F2eF0I3+lNs1xN3YV+cka159xirbR1VO3PHBmlELG
-         I5wQ==
-X-Gm-Message-State: AOAM531g0haY6q92PuVUCQpyHs+FBiLtO6nx+HVCEiSViv60pe8k/mDC
-        wh4nmcw0WCwN6kFxK0zjR2hv1w==
-X-Google-Smtp-Source: ABdhPJwcGefASVcjHgpreQsZnk+jCTM8HC7WIOgyOmgrLL/gpuFF2XEZQHvIGAjfywFtjECtmDfZ7g==
-X-Received: by 2002:a1c:2643:: with SMTP id m64mr903602wmm.28.1605644679580;
-        Tue, 17 Nov 2020 12:24:39 -0800 (PST)
-Received: from MacBook-Pro.local ([212.45.64.13])
-        by smtp.googlemail.com with ESMTPSA id m18sm27902466wru.37.2020.11.17.12.24.38
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=W5om3zQzsHiBGMpHdWoQikEGL2r18KBMb1Ag+GnaG08=;
+        b=Ue1BuOWJ5esZvC4xTAbhknFSXbd5ZEjvBF0Z0EzmHKQgLAE25nteGP60PitT7U5xtx
+         Ni30aY5XdRyyLCCu/O+8xujmhLSTUsadauTIfMhnlMCIvMHo8frwgV8A8DEMTAZmFJBz
+         tZQglRBPi8FxjI8pW2YUTvpnZAb9/QTcLmm6qqZnIkasyKMcOkxjxJWQSkPMa3zv/T4l
+         92w7keejWhlc7RZqID5OF412FqEmlrOWT+iHEmHgHnjG5Itkan8NjB+6VOC10FM9nPKe
+         HYqGCYlRUvrSi1PT53jYoQLbtw+5mAqRncx5i/auDPd2zVOMN6cSXlOmvN4h76fHcvCV
+         3iqg==
+X-Gm-Message-State: AOAM530Q/iTPEWsZaEltAKuHfYU0u5d7Uyr3uI8BYoD46z3NTII/bZgu
+        LZw8EnL0BcEwmj4QYxQ5kKE=
+X-Google-Smtp-Source: ABdhPJxGxTDDbi0d8oMMgkGSyKhMr/XNvJc72UcmGlAMm4SW4FF2fTuHTUsirRfiv8AMfkDsmlK1rg==
+X-Received: by 2002:a05:651c:30d:: with SMTP id a13mr2849268ljp.386.1605650555139;
+        Tue, 17 Nov 2020 14:02:35 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id v16sm3215544ljj.0.2020.11.17.14.02.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Nov 2020 12:24:38 -0800 (PST)
+        Tue, 17 Nov 2020 14:02:34 -0800 (PST)
 Subject: Re: [PATCH v9 01/17] memory: tegra30: Support interconnect framework
-To:     Dmitry Osipenko <digetx@gmail.com>,
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -67,66 +68,82 @@ Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 References: <20201115212922.4390-1-digetx@gmail.com>
  <20201115212922.4390-2-digetx@gmail.com>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Message-ID: <61e777d9-b730-02c6-cedf-cf0aa1a50fb8@linaro.org>
-Date:   Tue, 17 Nov 2020 22:24:37 +0200
+ <61e777d9-b730-02c6-cedf-cf0aa1a50fb8@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7e484678-43cc-e612-1017-73ed580f9840@gmail.com>
+Date:   Wed, 18 Nov 2020 01:02:33 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <20201115212922.4390-2-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <61e777d9-b730-02c6-cedf-cf0aa1a50fb8@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
-
-Thank you working on this!
-
-On 15.11.20 23:29, Dmitry Osipenko wrote:
-> Now Internal and External memory controllers are memory interconnection
-> providers. This allows us to use interconnect API for tuning of memory
-> configuration. EMC driver now supports OPPs and DVFS. MC driver now
-> supports tuning of memory arbitration latency, which needs to be done
-> for ISO memory clients, like a Display client for example.
+17.11.2020 23:24, Georgi Djakov пишет:
+> Hi Dmitry,
 > 
-> Tested-by: Peter Geis <pgwipeout@gmail.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->   drivers/memory/tegra/Kconfig       |   1 +
->   drivers/memory/tegra/tegra30-emc.c | 349 +++++++++++++++++++++++++++--
->   drivers/memory/tegra/tegra30.c     | 173 +++++++++++++-
->   3 files changed, 501 insertions(+), 22 deletions(-)
+> Thank you working on this!
 > 
-[..]> diff --git a/drivers/memory/tegra/tegra30.c 
-b/drivers/memory/tegra/tegra30.c
-> index d0314f29608d..ea849003014b 100644
-> --- a/drivers/memory/tegra/tegra30.c
-> +++ b/drivers/memory/tegra/tegra30.c
-[..]
-> +
-> +static int tegra30_mc_icc_set(struct icc_node *src, struct icc_node *dst)
-> +{
-> +	struct tegra_mc *mc = icc_provider_to_tegra_mc(src->provider);
-> +	const struct tegra_mc_client *client = &mc->soc->clients[src->id];
-> +	u64 peak_bandwidth = icc_units_to_bps(src->peak_bw);
-> +
-> +	/*
-> +	 * Skip pre-initialization that is done by icc_node_add(), which sets
-> +	 * bandwidth to maximum for all clients before drivers are loaded.
-> +	 *
-> +	 * This doesn't make sense for us because we don't have drivers for all
-> +	 * clients and it's okay to keep configuration left from bootloader
-> +	 * during boot, at least for today.
-> +	 */
-> +	if (src == dst)
-> +		return 0;
+> On 15.11.20 23:29, Dmitry Osipenko wrote:
+>> Now Internal and External memory controllers are memory interconnection
+>> providers. This allows us to use interconnect API for tuning of memory
+>> configuration. EMC driver now supports OPPs and DVFS. MC driver now
+>> supports tuning of memory arbitration latency, which needs to be done
+>> for ISO memory clients, like a Display client for example.
+>>
+>> Tested-by: Peter Geis <pgwipeout@gmail.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>   drivers/memory/tegra/Kconfig       |   1 +
+>>   drivers/memory/tegra/tegra30-emc.c | 349 +++++++++++++++++++++++++++--
+>>   drivers/memory/tegra/tegra30.c     | 173 +++++++++++++-
+>>   3 files changed, 501 insertions(+), 22 deletions(-)
+>>
+> [..]> diff --git a/drivers/memory/tegra/tegra30.c
+> b/drivers/memory/tegra/tegra30.c
+>> index d0314f29608d..ea849003014b 100644
+>> --- a/drivers/memory/tegra/tegra30.c
+>> +++ b/drivers/memory/tegra/tegra30.c
+> [..]
+>> +
+>> +static int tegra30_mc_icc_set(struct icc_node *src, struct icc_node
+>> *dst)
+>> +{
+>> +    struct tegra_mc *mc = icc_provider_to_tegra_mc(src->provider);
+>> +    const struct tegra_mc_client *client = &mc->soc->clients[src->id];
+>> +    u64 peak_bandwidth = icc_units_to_bps(src->peak_bw);
+>> +
+>> +    /*
+>> +     * Skip pre-initialization that is done by icc_node_add(), which
+>> sets
+>> +     * bandwidth to maximum for all clients before drivers are loaded.
+>> +     *
+>> +     * This doesn't make sense for us because we don't have drivers
+>> for all
+>> +     * clients and it's okay to keep configuration left from bootloader
+>> +     * during boot, at least for today.
+>> +     */
+>> +    if (src == dst)
+>> +        return 0;
+> 
+> Nit: The "proper" way to express this should be to implement the
+> .get_bw() callback to return zero as initial average/peak bandwidth.
+> I'm wondering if this will work here?
+> 
+> The rest looks good to me!
 
-Nit: The "proper" way to express this should be to implement the
-.get_bw() callback to return zero as initial average/peak bandwidth.
-I'm wondering if this will work here?
+Hello Georgi,
 
-The rest looks good to me!
+Returning zeros doesn't allow us to skip the initialization that is done
+by provider->set(node, node) in icc_node_add(). It will reconfigure
+memory latency in accordance to a zero memory bandwidth, which is wrong
+to do.
 
-Thanks,
-Georgi
+It actually should be more preferred to preset bandwidth to a maximum
+before all drivers are synced, but this should be done only once we will
+wire up all drivers to use ICC framework. For now it's safer to keep the
+default hardware configuration untouched.
