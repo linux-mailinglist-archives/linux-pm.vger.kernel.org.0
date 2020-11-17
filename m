@@ -2,96 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2AE2B58E4
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 05:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF662B5A29
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 08:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbgKQEjT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 23:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726277AbgKQEjT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 23:39:19 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317C6C0613CF
-        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 20:39:19 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id 10so16330042pfp.5
-        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 20:39:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=X1pA+cYATHLxbnvQoWSyBODyW53Jy9N3Gxz6kLP5gEI=;
-        b=HvzNQ8S1gDUyuFltnJD934r5nMNBehTIdbQiMp8K/7uDTdLPeDfe1VXp1xci3yOrKB
-         BxPilH5qT6IyfuYmxD4OH+yLGNps81haLEzHt1jbjMbjxKbfyXxb3RMALxbGAohNZI/z
-         VFbnZw38Ak0cjs9PoS/U547XUViU/Y5afjwM3R6w/7GGbiKTX4crVHecWCL+lw5CLBtE
-         RssGwWjVN77FBbgrsSLgGZkAkfmH2PqFXcErM2hVDJTqdHG4NYOImyUR8r5jnXlCl86y
-         3B9Y9W8y+eoTDhjfgYDzzbg4pI8DUKBuwJ3U+GxJXZi4CXWza9e9DG6JyGouDr2LIfhw
-         AFWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=X1pA+cYATHLxbnvQoWSyBODyW53Jy9N3Gxz6kLP5gEI=;
-        b=WTyxl4DTR9LJgNxXbWYGmev3zKF+QmCKUrakwfJVyxf7WYkfMOiq1GpM5tkMF64fYG
-         Dw9ThUZub1pXO422B3YAM5UbGLHrqiz/jWkPOPaPqFMxjF9By6UQYlaX+wy7621suZXn
-         lSo45Lm5+8QJodkV7WrismypqyyORMWY4h5nLB72X4s5lLhSlWU74KQO0U3BFF+WjU1R
-         pUxapfj3pB4o9/gqMKUjoU4ZOCWSv+wuGXIWOZyh922uO78zHAFOFWuZCdTsy3D2s6Ry
-         en8m6XNGi1pRbzsWg3rOaIInsgepj8wmj8ZVPEgBk0QfdB8bXc6DB08f7lCVpXEpLX3I
-         xNuA==
-X-Gm-Message-State: AOAM530KOpLRQuMSg3SIGsWyZL59TIACc1wsUYjhKTRgSHp52d0tkGVa
-        R8KimYscIza1+GXokQOPnIz+0A==
-X-Google-Smtp-Source: ABdhPJxlahfUgiLIQ/gJBktQ+A7ZD9CXMbrRymPLPvMx1yQFXcgCnJekcMFkYeF3S5XCyumxEYPjuA==
-X-Received: by 2002:a17:90b:4382:: with SMTP id in2mr2690594pjb.180.1605587958708;
-        Mon, 16 Nov 2020 20:39:18 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id 35sm14313863pgp.26.2020.11.16.20.39.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 16 Nov 2020 20:39:18 -0800 (PST)
-Date:   Tue, 17 Nov 2020 10:09:16 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq-arm fixes for 5.10-rc5
-Message-ID: <20201117043916.tqs5c2r36inoc2ss@vireshk-i7>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1725792AbgKQHPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 02:15:08 -0500
+Received: from mga04.intel.com ([192.55.52.120]:31188 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726802AbgKQHPH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Nov 2020 02:15:07 -0500
+IronPort-SDR: nu7tpJqvoaAbwvDHcF3Zt6CvhTGJ9RwptoI7aO62NJ9TTnXKN9X48jEPU/LRweMB+hR+qMQlIl
+ R1YFeo2cB3lw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="168298824"
+X-IronPort-AV: E=Sophos;i="5.77,484,1596524400"; 
+   d="scan'208";a="168298824"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 23:15:07 -0800
+IronPort-SDR: sR8h+o7akjT61qOtzbZd64/FD6vJBKF7clfnMi8baqWtQQzuhTDi9yyL3jKGyxSSXRaoaX7eiD
+ MYTzcLc3ZDig==
+X-IronPort-AV: E=Sophos;i="5.77,484,1596524400"; 
+   d="scan'208";a="543921746"
+Received: from lil6-mobl1.ccr.corp.intel.com ([10.255.30.220])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 23:15:04 -0800
+Message-ID: <3776af7407728bc11428d887a9a7028919218f6b.camel@intel.com>
+Subject: Re: [PATCH] thermal: Fix slab-out-of-bounds in
+ thermal_cooling_device_stats_update()
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     zhuguangqing83@gmail.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuguangqing@xiaomi.com
+Date:   Tue, 17 Nov 2020 15:15:02 +0800
+In-Reply-To: <20200915055837.498-1-zhuguangqing83@gmail.com>
+References: <20200915055837.498-1-zhuguangqing83@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Tue, 2020-09-15 at 13:58 +0800, zhuguangqing83@gmail.com wrote:
+> From: zhuguangqing <zhuguangqing@xiaomi.com>
+> 
+> In function thermal_cooling_device_stats_update(), if the input
+> parameter
+> new_state is greater or equal to stats->max_states, then it will
+> cause
+> slab-out-of-bounds error when execute the code as follows:
+> stats->trans_table[stats->state * stats->max_states + new_state]++;
+> 
+> Two functions call the function
+> thermal_cooling_device_stats_update().
+> 1. cur_state_store()
+> 2. thermal_cdev_set_cur_state()
+> Both of the two functions call cdev->ops->set_cur_state(cdev, state)
+> before thermal_cooling_device_stats_update(), if the return value is
+> not 0, then thermal_cooling_device_stats_update() will not be called.
+> So if all cdev->ops->set_cur_state(cdev, state) check validity of the
+> parameter state, then it's ok. Unfortunately, it's not now.
+> 
+> We have two methods to avoid the slab-out-of-bounds error in
+> thermal_cooling_device_stats_update().
+> 1. Check the validity of the parameter state in all
+> cdev->ops->set_cur_state(cdev, state).
+> 2. Check the validity of the parameter state in
+> thermal_cooling_device_stats_update().
+> 
+> Use method 2 in this patch. Because the modification is simple and
+> resolve the problem in the scope of "#ifdef
+> CONFIG_THERMAL_STATISTICS".
+> 
+> Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
 
-This pull request contains following changes:
+Hi, Daniel,
 
-- tegra186: Fix ->get() callback.
-- arm/scmi: Add dummy clock provider to fix failure.
+this patch is a similar fix as
 
--------------------------8<-------------------------
+https://patchwork.kernel.org/project/linux-pm/patch/20200408041917.2329-4-rui.zhang@intel.com/
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+I think we'd better take the original fix from Takashi Iwai.
+And I will refresh and submit the patches that supports dynamic cooling
+states later when I have time.
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+thanks,
+rui
+> ---
+>  drivers/thermal/thermal_sysfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal_sysfs.c
+> b/drivers/thermal/thermal_sysfs.c
+> index 8c231219e15d..9c49f744d79d 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -756,7 +756,7 @@ void thermal_cooling_device_stats_update(struct
+> thermal_cooling_device *cdev,
+>  
+>  	spin_lock(&stats->lock);
+>  
+> -	if (stats->state == new_state)
+> +	if (stats->state == new_state || new_state >= stats-
+> >max_states)
+>  		goto unlock;
+>  
+>  	update_time_in_state(stats);
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/fixes
-
-for you to fetch changes up to 8410e7f3b31e53bfa7a34c282b4313e79ed7ff8d:
-
-  cpufreq: scmi: Fix OPP addition failure with a dummy clock provider (2020-11-17 10:04:28 +0530)
-
-----------------------------------------------------------------
-Jon Hunter (1):
-      cpufreq: tegra186: Fix get frequency callback
-
-Sudeep Holla (1):
-      cpufreq: scmi: Fix OPP addition failure with a dummy clock provider
-
- drivers/cpufreq/scmi-cpufreq.c     |  6 ++++++
- drivers/cpufreq/tegra186-cpufreq.c | 33 +++++++++++++++++++++------------
- 2 files changed, 27 insertions(+), 12 deletions(-)
-
--- 
-viresh
