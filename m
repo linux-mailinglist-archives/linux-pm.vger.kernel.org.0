@@ -2,156 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D896B2B5F6E
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 13:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 958DA2B5FE5
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 14:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728255AbgKQMzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Nov 2020 07:55:11 -0500
-Received: from mail-oo1-f41.google.com ([209.85.161.41]:42336 "EHLO
-        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728015AbgKQMzK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 07:55:10 -0500
-Received: by mail-oo1-f41.google.com with SMTP id g4so4696962oom.9;
-        Tue, 17 Nov 2020 04:55:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zMMRuYViSm/P06w2h0LMNk8Q4hsk4EKGQOMKopq1p4k=;
-        b=Cp7tlgKHpAH6d4vuIOsyDlOzzK3MqqdK4Y5ILDk7JMdBVtkszA+7UpoqyEYmTpOwrT
-         aG8RzcO58rEs27M+uKenJun464PniQkwJopXRKX06YtuNIV9IBXC8HdDq4dOFxPOUSCZ
-         jKVlHW0W4yJVY4X0ng1vcBPn9rxGpqhSXLP3yIz6vvfvSymK+qp9+DhTBjuoFBfFgRNy
-         p3qH64+tuiOU6SD/2EiLbGRWipBBHCUaH3iWjou2q11Zi6OzElcMo9KCYdvNrlAiiekD
-         O1TbNAjf53UssdduOr7NvG4RrVSPFUeosmxOcNGZUdWqxika6koHwUSo+CBJFWlgf0+x
-         hSKQ==
-X-Gm-Message-State: AOAM5306TAZRcSJEdtl64u7D7aO3BjMwKWJCd0JEa4J9Ij4xgl6js6kw
-        Hc8GA3RrYAdHOB4KW/9ox5rcHlK7znj3YPJJSqI=
-X-Google-Smtp-Source: ABdhPJxUvS202AqJmumZU34scvmzfxxdpHkn/iNWaHi1XHQXOpyNx1s/T3+FHnCvkT5MiswarUhgHyAGeuxmChyNkPU=
-X-Received: by 2002:a4a:c018:: with SMTP id v24mr2872558oop.2.1605617708192;
- Tue, 17 Nov 2020 04:55:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20201116192320.GA1290192@bjorn-Precision-5520> <40579a7ed0692d535f002112b18d1bb6e25aad0e.camel@linux.intel.com>
-In-Reply-To: <40579a7ed0692d535f002112b18d1bb6e25aad0e.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Nov 2020 13:54:56 +0100
-Message-ID: <CAJZ5v0h0Y-MD3LQ_q3AO8ioBDh_jwJ9HF_hZn3nYyQud8w0fXg@mail.gmail.com>
-Subject: Re: [PATCH] PCI: Disable PTM during suspend on Intel PCI bridges
-To:     David Box <david.e.box@linux.intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <len.brown@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+        id S1728578AbgKQM5Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 07:57:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:55884 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728561AbgKQM5O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Nov 2020 07:57:14 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3E72101E;
+        Tue, 17 Nov 2020 04:57:13 -0800 (PST)
+Received: from [10.57.25.49] (unknown [10.57.25.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA57E3F719;
+        Tue, 17 Nov 2020 04:57:12 -0800 (PST)
+Subject: Re: [PATCH] powercap: Adjust printing the constraint name with new
+ line
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <20201109172452.6923-1-lukasz.luba@arm.com>
+ <CAJZ5v0gQj8cNHgXkgwGeNcegAmP2xxqPQXz1kGNqFFDDCgfX_w@mail.gmail.com>
+ <6d29b192-bad4-3abc-96fd-dfe12cc402e4@arm.com>
+ <CAJZ5v0ihFzzmcN1c-Oo2ELkJZcLhfsrQTh+Yd5bgo3yrnjZPuA@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <f937c2b9-bfeb-7978-bf15-ef620c12a15d@arm.com>
+Date:   Tue, 17 Nov 2020 12:57:10 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0ihFzzmcN1c-Oo2ELkJZcLhfsrQTh+Yd5bgo3yrnjZPuA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 9:58 PM David E. Box
-<david.e.box@linux.intel.com> wrote:
->
-> On Mon, 2020-11-16 at 13:23 -0600, Bjorn Helgaas wrote:
-> > On Mon, Nov 16, 2020 at 06:53:09PM +0100, Rafael J. Wysocki wrote:
-> > > On Wed, Oct 7, 2020 at 7:10 PM Bjorn Helgaas <helgaas@kernel.org>
-> > > wrote:
-> > > > On Wed, Oct 07, 2020 at 06:53:16PM +0200, Rafael J. Wysocki
-> > > > wrote:
-> > > > > On Wed, Oct 7, 2020 at 6:49 PM David E. Box <
-> > > > > david.e.box@linux.intel.com> wrote:
-> > > > > > On Intel Platform Controller Hubs (PCH) since Cannon Lake,
-> > > > > > the Precision
-> > > > > > Time Measurement (PTM) capability can prevent PCIe root ports
-> > > > > > from power
-> > > > > > gating during suspend-to-idle, causing increased power
-> > > > > > consumption on
-> > > > > > systems that suspend using Low Power S0 Idle [1]. The issue
-> > > > > > is yet to be
-> > > > > > root caused but believed to be coming from a race condition
-> > > > > > in the suspend
-> > > > > > flow as the incidence rate varies for different platforms on
-> > > > > > Linux but the
-> > > > > > issue does not occur at all in other operating systems. For
-> > > > > > now, disable
-> > > > > > the feature on suspend on all Intel root ports and enable
-> > > > > > again on resume.
-> > > > >
-> > > > > IMV it should also be noted that there is no particular reason
-> > > > > why PTM
-> > > > > would need to be enabled while the whole system is
-> > > > > suspended.  At
-> > > > > least it doesn't seem to be particularly useful in that state.
-> > > >
-> > > > Is this a hardware erratum?  If not, and this is working as
-> > > > designed,
-> > > > it sounds like we'd need to apply this quirk to every device that
-> > > > supports PTM.  That's not really practical.
-> > >
-> > > Why not?
-> >
-> > My objection was that the original patch is a quirk that applies only
-> > to Intel devices.
-> >
-> > If this is a generic thing that should be done for *all* devices that
-> > support PTM, that's fine, but it should not be a quirk, and it should
-> > not involve a list of Vendor or Device IDs.
-> >
-> > > It looks like the capability should be saved by pci_save_state()
-> > > (it
-> > > isn't ATM, which appears to be a mistake) and restored by
-> > > pci_restore_state(), so if that is implemented, the saving can be
-> > > combined with the disabling in principle.
-> >
-> > Yup, looks like a mistake.  Maybe David can fix that at the same time
-> > (probably a separate patch, though).  I don't have a way to test it,
-> > but he probably does.
->
-> Yes, I can test save/restore of the PTM capability and submit a patch.
->
-> >
-> > > > The bugzilla says "there is no erratum as this does not affect
-> > > > Windows," but that doesn't answer the question.  What I want to
-> > > > know
-> > > > is whether this is a *hardware* defect and whether it will be
-> > > > fixed in
-> > > > future hardware.
-> > >
-> > > I cannot answer this question, sorry.
-> > >
-> > > ATM we only know that certain SoCs may not enter the deepest idle
-> > > state if PTM is enabled on some PCIe root ports during suspend.
-> > >
-> > > Disabling PTM on those ports while suspending helps and hence the
-> > > patch.
-> > >
-> > > It doesn't appear to qualify as a "hardware defect".
-> > >
-> > > > If it's a "wont-fix" hardware issue, we can just disable PTM
-> > > > completely on Intel hardware and we won't have to worry about it
-> > > > during suspend.
-> > >
-> > > I'm not following the logic here, sorry again.
-> > >
-> > > First of all, there are systems that never suspend, so why would
-> > > they
-> > > be affected by the remedy (whatever it is)?
-> > >
-> > > Second, it is not about the suspend failing entirely.  It's about
-> > > being able to make the system draw less power while suspended.
-> > >
-> > > Generally, if someone said "I can make the system draw less power
-> > > while suspended if I disable PCIe feature X during suspend", would
-> > > you
-> > > disregard that?
-> >
-> > My questions were all prompted by the Intel-specific nature of the
-> > original patch, which suggests an ongoing maintenance burden.  If it
-> > can be done generically, I have no problem with it.
->
-> Okay. I'll add this to the save/restore patch then with the comment
-> that it saves power on some Intel platforms.
 
-I'd suggest doing two patches, then, one to save/restore the PTM
-capability and the other to add disabling it to the "save" path (with
-a comment as appropriate).
+
+On 11/17/20 12:51 PM, Rafael J. Wysocki wrote:
+> On Tue, Nov 17, 2020 at 10:22 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Rafael,
+>>
+>> On 11/10/20 7:19 PM, Rafael J. Wysocki wrote:
+>>> On Mon, Nov 9, 2020 at 6:25 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> The constraint name has limit of size 30, which sometimes might be hit.
+>>>> When this happens the new line might be lost. Prevent this and set the
+>>>> new line when the name string is too long."
+>>>>
+>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>> ---
+>>>>    drivers/powercap/powercap_sys.c | 4 ++++
+>>>>    1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+>>>> index f808c5fa9838..575f9fdb810e 100644
+>>>> --- a/drivers/powercap/powercap_sys.c
+>>>> +++ b/drivers/powercap/powercap_sys.c
+>>>> @@ -174,6 +174,10 @@ static ssize_t show_constraint_name(struct device *dev,
+>>>>                                                                   "%s\n", name);
+>>>>                           buf[POWERCAP_CONSTRAINT_NAME_LEN] = '\0';
+>>>>                           len = strlen(buf);
+>>>> +
+>>>> +                       /* When the 'name' is too long, don't lose new line */
+>>>> +                       if (strlen(name) >= POWERCAP_CONSTRAINT_NAME_LEN)
+>>>> +                               buf[POWERCAP_CONSTRAINT_NAME_LEN - 1] = '\n';
+>>>
+>>> Wouldn't it be better to pass POWERCAP_CONSTRAINT_NAME_LEN - 1 to
+>>> snprintf() above?
+>>
+>> My apologies for delay, I was on holidays.
+>>
+>> The snprintf() overwrites the '\n' in that case also.
+> 
+> The snprintf() doesn't do that AFAICS, but the next assignment
+> overwrites the newline with the zero character.
+> 
+> Anyway, it should have been POWERCAP_CONSTRAINT_NAME_LEN - 2, because
+> it needs to leave space for 2 characters, the newline and the
+> terminating zero.
+> 
+>> I've experimented with it a bit more and tried to come with a bit 'cleaner' solution.
+>>
+>> What we are looking is probably: "%.*s\n" semantic.
+>> Another solution would be:
+>> ------------------------------8<---------------------------
+>>                   if (name) {
+>> -                       snprintf(buf, POWERCAP_CONSTRAINT_NAME_LEN,
+>> -                                                               "%s\n",
+>> name);
+>> -                       buf[POWERCAP_CONSTRAINT_NAME_LEN] = '\0';
+>> +                       sprintf(buf, "%.*s\n",
+>> POWERCAP_CONSTRAINT_NAME_LEN -1,
+>> +                               name);
+>>                           len = strlen(buf);
+>>                   }
+>>
+>> ----------------------------->8----------------------------
+>>
+>> I've check this and it behaves very well.
+>>
+>> It looks cleaner and it is a used pattern in the kernel.
+>> What do you think? Is it good for v2?
+> 
+> This works for me too.
+> 
+> Thanks!
+> 
+
+Thank you for the comments. I will send the v2 then.
+
+Regards,
+Lukasz
