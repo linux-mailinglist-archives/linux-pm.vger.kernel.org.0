@@ -2,103 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9862B58BC
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 05:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4617A2B58D8
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Nov 2020 05:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727293AbgKQEP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Nov 2020 23:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S1726938AbgKQEfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Nov 2020 23:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727098AbgKQEP7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 23:15:59 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E43C0617A6
-        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 20:15:59 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id m9so5579689pgb.4
-        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 20:15:59 -0800 (PST)
+        with ESMTP id S1726338AbgKQEfg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Nov 2020 23:35:36 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36424C0613CF
+        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 20:35:36 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id b63so12713141pfg.12
+        for <linux-pm@vger.kernel.org>; Mon, 16 Nov 2020 20:35:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=5lv6RfP8qJF5zkeuOHJR2hccKAcSS2SlN9owQue64IU=;
-        b=CsMzAUSREoHBdOFlF17Kh8CLBA0AOwM7j9djxKPsNMLczyCCKIrDjqJypaW6xrc73j
-         BcQyU9ga/xqoTAQHq8b22DznzWXVX+olP97SKTMInqsim2q5A2Sc4qpEeTJcbZNCJlqN
-         gxlO8zY3VjlZOwbn4WVZt8QswZ0lbWsqCevhyd1RagEUzh+sbZs7uzqcSS4rsKp7/Bqn
-         QrJa0jxAY9duJ+c3wZqwNFs6xo8vpBfamCdHtDwrShSsHbJBIUO7BuclicfWqBzFFtQV
-         iH0WsmGLyMTQQl2sEkC0XVH1JlcacAi7bTR7E4oVbYKTunOoTQmfGG1MEn04IIagMeqQ
-         Mmfg==
+        bh=6VDC0+2ajqJZVVyTOuaiA3prDyAPpvrZ/Ex8CAmll80=;
+        b=vJwj1jcaMRQbmdLuNT6TJNpqmWCbZAeWAs3M1QOwIbKReJVSnrxiDCyvqMHyCoPt8M
+         kxso3ma/YSijf1jriqX1MeKBKGZWYdxGa/HDfPRVH6dUta5V9vx6GWazp1t2XPr7xaXU
+         oHdivBo6SVutEMK+ZQ7uaNgt5anRSeJZ6omj9iOCnrQ1y/R1ebURyp/XRxICmnSEcprh
+         znL/Z2QkHBC1yMb3KokmuFHB3Sqxonh0iMIc9euzdn+NUbXI2089NOOzPCHqJL4GXaO3
+         OD97qThXNJPeb6lI+UwTmExxb3GCWNqfv6g09Oe9z9l18xQgFGD74Cx5VkP6FJx+z7l2
+         ZS9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5lv6RfP8qJF5zkeuOHJR2hccKAcSS2SlN9owQue64IU=;
-        b=hRegrgbOjoTb3dZJVtLzF3OvaRAUVwXA26bsGU5qKAOFC3Uz0PLZ4IjEYC7eUAU+N9
-         aY4Opm9Dp+uCFDH6KmVvOTR+cVE+TMyZgaxAguPDPSqjSjpBe2ONzcaAOkNbKMTKrmIz
-         RY7Oo145f0Rl0V7eFWHe+tI0Ah0G2isHAMUbHIt3uRSBOr0YOyLouV6YIV/9/rkv2UlV
-         Bs5vP8cqCZbuMVSk1Zsf9VjgkDe/HSscpee4s1t4OBxEE03931iGSVIYvwjjInMTMX/Z
-         pNjG52cWF25tmFHGHxo7wptxV7HGAMIRp1r7ZZ8EIXdfySrlWTAcHavZ1R1aY3fFsqVA
-         lnfA==
-X-Gm-Message-State: AOAM532w0Z8HVk//QZ7tEBgAzjQx2Vl03Ki7Q82Rx5dFt8juVNJVL6LZ
-        c7p4JOHpzc+DuVt52wE9BsfWBi43QRMFTQ==
-X-Google-Smtp-Source: ABdhPJxZI7TLqwlvaZVVQPdPJ1Gdy8UhRZbKM9zVBUc3nS3eQPpIbSfErrRc2XuX/2Su3/fPCDTuOw==
-X-Received: by 2002:a62:5e06:0:b029:164:a9ca:b07e with SMTP id s6-20020a625e060000b0290164a9cab07emr16459338pfb.36.1605586558858;
-        Mon, 16 Nov 2020 20:15:58 -0800 (PST)
+        bh=6VDC0+2ajqJZVVyTOuaiA3prDyAPpvrZ/Ex8CAmll80=;
+        b=A9Rp+PQIcZxpqkMETO2AqRUN1KCOL+tpk4AJ/Rix0LriqrEVW+tYdhGSkdM5pOOdko
+         FLJ1e/+qddow1AGE4fodWia5TrXknE+lS/XQsNEOkc3q5XwEHsAmTbgG7AToyWwjd2rq
+         JwJec5GuIoTOPKJuIdySddWiv4SzNj/wKRvjQNcd/hFSCfShC1GoeqCyOiqrmBzET90t
+         osNJvSBb0PcMmaxl5kwZR8yvH+46JZQMTZcq5oh/L+lMTzTEWmt1+2n2tiXoLCI5bLq8
+         3M5WDBVJyVpA8p6y2z4/9eCfjWLRbEZEfVP1MrJLZJl+Iek9yAuKXqrE+N3hrBu08gFI
+         zJMA==
+X-Gm-Message-State: AOAM533AxuRYj56IEZ5gbSP9iZ2n5jaz1O3AvB9vP8fAg+efQWxQ904X
+        EsxSVHjNRE/VsXd332Q095j3CaPBgId9kw==
+X-Google-Smtp-Source: ABdhPJxFpUL12UsZaYOG/4N7/jGZqBwmVUrHTcPYrcRYOexabKdwuR9HtZvUWR/P/ovBzyVmyDgJhg==
+X-Received: by 2002:a17:90a:ca91:: with SMTP id y17mr2403338pjt.205.1605587735789;
+        Mon, 16 Nov 2020 20:35:35 -0800 (PST)
 Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id 131sm3889341pfw.117.2020.11.16.20.15.57
+        by smtp.gmail.com with ESMTPSA id c28sm21238459pfj.108.2020.11.16.20.35.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 16 Nov 2020 20:15:58 -0800 (PST)
-Date:   Tue, 17 Nov 2020 09:45:55 +0530
+        Mon, 16 Nov 2020 20:35:34 -0800 (PST)
+Date:   Tue, 17 Nov 2020 10:05:32 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH] cpufreq: schedutil: Simplify sugov_update_next_freq()
-Message-ID: <20201117041555.s6x7wpjpnhfq7y3m@vireshk-i7>
-References: <25503091.Kiabxektef@kreacher>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH] cpufreq: scmi: Fix OPP addition failure with a dummy
+ clock provider
+Message-ID: <20201117043532.xo2ks6zy73dujnbq@vireshk-i7>
+References: <20201110111040.280231-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <25503091.Kiabxektef@kreacher>
+In-Reply-To: <20201110111040.280231-1-sudeep.holla@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-11-20, 20:26, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 10-11-20, 11:10, Sudeep Holla wrote:
+> Commit dd461cd9183f ("opp: Allow dev_pm_opp_get_opp_table() to return
+> -EPROBE_DEFER") handles -EPROBE_DEFER for the clock/interconnects within
+> _allocate_opp_table() which is called from dev_pm_opp_add and it
+> now propagates the error back to the caller.
 > 
-> Rearrange a conditional to make it more straightforward.
+> SCMI performance domain re-used clock bindings to keep it simple. However
+> with the above mentioned change, if clock property is present in a device
+> node, opps fails to get added with below errors until clk_get succeeds.
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>  cpu0: failed to add opp 450000000Hz
+>  cpu0: failed to add opps to the device
+>  ....(errors on cpu1-cpu4)
+>  cpu5: failed to add opp 450000000Hz
+>  cpu5: failed to add opps to the device
+> 
+> So, in order to fix the issue, we need to register dummy clock provider.
+> With the dummy clock provider, clk_get returns NULL(no errors!), then opp
+> core proceeds to add OPPs for the CPUs.
+> 
+> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Fixes: dd461cd9183f ("opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER")
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 > ---
->  kernel/sched/cpufreq_schedutil.c |    8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> Index: linux-pm/kernel/sched/cpufreq_schedutil.c
-> ===================================================================
-> --- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
-> +++ linux-pm/kernel/sched/cpufreq_schedutil.c
-> @@ -102,12 +102,10 @@ static bool sugov_should_update_freq(str
->  static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
->  				   unsigned int next_freq)
->  {
-> -	if (!sg_policy->need_freq_update) {
-> -		if (sg_policy->next_freq == next_freq)
-> -			return false;
-> -	} else {
-> +	if (sg_policy->need_freq_update)
->  		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-> -	}
-> +	else if (sg_policy->next_freq == next_freq)
-> +		return false;
->  
->  	sg_policy->next_freq = next_freq;
->  	sg_policy->last_freq_update_time = time;
-> 
+>  drivers/cpufreq/scmi-cpufreq.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Applied. Thanks.
 
 -- 
 viresh
