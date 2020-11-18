@@ -2,138 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D41FA2B7D6D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 13:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947DE2B7E15
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 14:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgKRMNW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Nov 2020 07:13:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54542 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726299AbgKRMNW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Nov 2020 07:13:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605701600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=seIJSZO4a6Gn0MTD1oL0YAI60L4ED6sSQHzUCcH54s4=;
-        b=FuqIIBZyXCS1khJlUIyLrxAF1TwLml7ZThK5M8hG4EzroJueLqQnrRwGLxxSDVitlgCU7z
-        auhgE5M6nFvBMdxIDO+yO8nPw9NTLxcHCSLNkiEzACYqZtSWb/NsJ61EmFj5MFT0KqD0HU
-        qYQBcsfAYNQ+pJ5mACIbdyhoGEPnvUU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-60-vLTFWlJzPr-FyiRTPFISlw-1; Wed, 18 Nov 2020 07:13:17 -0500
-X-MC-Unique: vLTFWlJzPr-FyiRTPFISlw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D576557205;
-        Wed, 18 Nov 2020 12:13:14 +0000 (UTC)
-Received: from x1.localdomain (ovpn-114-94.ams2.redhat.com [10.36.114.94])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B2A8B1759F;
-        Wed, 18 Nov 2020 12:13:13 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: axp288_charger: Fix HP Pavilion x2 10 DMI matching
-Date:   Wed, 18 Nov 2020 13:13:12 +0100
-Message-Id: <20201118121312.11304-1-hdegoede@redhat.com>
+        id S1726348AbgKRNI7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Nov 2020 08:08:59 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:34003 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbgKRNI6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Nov 2020 08:08:58 -0500
+Received: by mail-ot1-f67.google.com with SMTP id j14so1666108ots.1;
+        Wed, 18 Nov 2020 05:08:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NWPHmRgAyAiVkWFvG/avg7cpqXdf1GRFrh8hjqMq86E=;
+        b=okEhrb7+23BdfBpE3mg/HskYTShAiiI4VSeB853UcTs5UGz+ar7ivHIwUw6DQggFKC
+         a8DBG2V1kEklANpiBQtGWwiGtSiqou37QvwMWMiovsb9plfMAWJXDedBGVg05WXhp9Ek
+         WgxCJbOSG+4x8c2vKRihCoM0iedt2KVSd8+vYb7yd1q/gu0y/lEwL7QCht6e/vaR4Umn
+         E0t9TIYCD7BqF3cgrIKNQUuprx3o058E8Zpgi/WefVujgjomAigGZCXfajQ0INaDSOB6
+         w8tZbDttPvXUVLmcHdfmkLtfZeutVoxUgyVGBBNDiSR/uDEDLzFc/OseJWmOZnB19L/B
+         xqlA==
+X-Gm-Message-State: AOAM531gG9W7Lh+dYzEAGdOxFHCCx9ftEipk1DiFYh0V/2c+1OLuKUo3
+        hXb5asMiovqeUNAbVD19vnxaeWGmHECdmyKXpZ4=
+X-Google-Smtp-Source: ABdhPJy9iny0IqrpG8MYq9o9D35sG6dk69ZBYlMT8eGqE1fZ/d1cVv/5SFn1hqFhcKnBcddc5rjGw9xNXONrNYDvMk4=
+X-Received: by 2002:a9d:222f:: with SMTP id o44mr6577141ota.321.1605704938085;
+ Wed, 18 Nov 2020 05:08:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+References: <20201106073358.8379-1-patrice.chotard@st.com>
+In-Reply-To: <20201106073358.8379-1-patrice.chotard@st.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 18 Nov 2020 14:08:46 +0100
+Message-ID: <CAJZ5v0hUnQQ2_DjjdXSE107iPNTt+dqcUxWzAH=fE4Qp7Gnnig@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] PM: Add dev_wakeup_path() helper
+To:     patrice.chotard@st.com
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Erwan Le Ray <erwan.leray@st.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        amelie.delaunay@st.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 9c80662a74cd ("power: supply: axp288_charger: Add special handling
-for HP Pavilion x2 10") added special handling for HP Pavilion x2 10
-models which use the weird combination of a Type-C connector and the
-non Type-C aware AXP288 PMIC.
+On Fri, Nov 6, 2020 at 8:34 AM <patrice.chotard@st.com> wrote:
+>
+> From: Patrice Chotard <patrice.chotard@st.com>
+>
+> Add dev_wakeup_path() helper to avoid to spread
+> dev->power.wakeup_path test in drivers.
 
-This special handling was activated by a DMI match a the product-name
-of "HP Pavilion x2 Detachable". Recently I've learned that there are
-also older "HP Pavilion x2 Detachable" models with an AXP288 PMIC +
-a micro-usb connector where we should not activate the special handling
-for the Type-C connectors.
+OK
 
-Extend the matching to also match on the DMI board-name and match on the
-2 boards (one Bay Trail based one Cherry Trail based) of which we are
-certain that they use the AXP288 + Type-C connector combination.
+> Cc: amelie.delaunay@st.com,
+>     erwan_leray@st.com,
+>     fabrice.gasnier@st.com,
+>     alexandre.torgue@st.com,
+>     alain.volmat@st.com,
+>     pierre-yves.mordret@st.com
+>
+> *** BLURB HERE ***
 
-Note the DSDT code from these older (AXP288 + micro-USB) models contains
-some AML code (which never runs under Linux) which reads the micro-USB
-connector id-pin and if it is pulled to ground, which would normally mean
-the port is in host mode!, then it sets the input-current-limit to 3A,
-it seems HP is using the micro-USB port as a charging only connector
-and identifies their own 3A capable charger though this hack which is a
-major violation of the USB specs. Note HP also hardcodes a 2A limit
-when the id-pin is not pulled to ground, which is also in violation
-of the specs.
+Hmm?
 
-I've no intention to add support for HP's hack to support 3A charging
-on these older models. By making the DMI matches for the Type-C equipped
-models workaround more tighter, these older models will be treated just
-like any other AXP288 + micro-USB equipped device and the input-current
-limit will follow the BC 1.2 spec (using the defacto standard values
-there where the BC 1.2 spec defines a range).
+> Patrice Chotard (4):
+>   PM / wakeup: Add dev_wakeup_path() helper
+>   PM: domains: Make usage of device_wakeup_path() helper
+>   PM: core: Make usage of device_wakeup_path() helper
+>   i2c: stm32f7: Make usage of dev_wakeup_path() helper
 
-Fixes: 9c80662a74cd ("power: supply: axp288_charger: Add special handling for HP Pavilion x2 10")
-BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1896924
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/power/supply/axp288_charger.c | 28 ++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
+Please fold the patches into one and add the R-by from Ulf to it.
 
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index 9d981b76c1e7..a4df1ea92386 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -548,14 +548,15 @@ static irqreturn_t axp288_charger_irq_thread_handler(int irq, void *dev)
- 
- /*
-  * The HP Pavilion x2 10 series comes in a number of variants:
-- * Bay Trail SoC    + AXP288 PMIC, DMI_BOARD_NAME: "815D"
-- * Cherry Trail SoC + AXP288 PMIC, DMI_BOARD_NAME: "813E"
-- * Cherry Trail SoC + TI PMIC,     DMI_BOARD_NAME: "827C" or "82F4"
-+ * Bay Trail SoC    + AXP288 PMIC, Micro-USB, DMI_BOARD_NAME: "8021"
-+ * Bay Trail SoC    + AXP288 PMIC, Type-C,    DMI_BOARD_NAME: "815D"
-+ * Cherry Trail SoC + AXP288 PMIC, Type-C,    DMI_BOARD_NAME: "813E"
-+ * Cherry Trail SoC + TI PMIC,     Type-C,    DMI_BOARD_NAME: "827C" or "82F4"
-  *
-- * The variants with the AXP288 PMIC are all kinds of special:
-+ * The variants with the AXP288 + Type-C connector are all kinds of special:
-  *
-- * 1. All variants use a Type-C connector which the AXP288 does not support, so
-- * when using a Type-C charger it is not recognized. Unlike most AXP288 devices,
-+ * 1. They use a Type-C connector which the AXP288 does not support, so when
-+ * using a Type-C charger it is not recognized. Unlike most AXP288 devices,
-  * this model actually has mostly working ACPI AC / Battery code, the ACPI code
-  * "solves" this by simply setting the input_current_limit to 3A.
-  * There are still some issues with the ACPI code, so we use this native driver,
-@@ -578,12 +579,17 @@ static irqreturn_t axp288_charger_irq_thread_handler(int irq, void *dev)
-  */
- static const struct dmi_system_id axp288_hp_x2_dmi_ids[] = {
- 	{
--		/*
--		 * Bay Trail model has "Hewlett-Packard" as sys_vendor, Cherry
--		 * Trail model has "HP", so we only match on product_name.
--		 */
- 		.matches = {
--			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion x2 Detachable"),
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "HP Pavilion x2 Detachable"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "815D"),
-+		},
-+	},
-+	{
-+		.matches = {
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "HP"),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "HP Pavilion x2 Detachable"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "813E"),
- 		},
- 	},
- 	{} /* Terminating entry */
--- 
-2.28.0
-
+Thanks!
