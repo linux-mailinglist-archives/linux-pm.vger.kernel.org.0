@@ -2,80 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AB22B862D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 22:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323902B8645
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 22:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgKRVAG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Nov 2020 16:00:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55830 "EHLO mail.kernel.org"
+        id S1726440AbgKRVHq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Nov 2020 16:07:46 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:42054 "EHLO m42-4.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726502AbgKRVAG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Nov 2020 16:00:06 -0500
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726340AbgKRVHq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Nov 2020 16:07:46 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1605733665; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=zaEAA7Xe0Rw95/owPckWHhoYL2cO/XrfLoPj7fTl5ao=; b=tZ5IdwiL3QeEgsWBitO4LVrE0iyzDdfJF/H5aaTUchU3kcfi2qywqNAgOTJn2ntJ08w9gDTO
+ KYM1EMO4cvu4O07//s/6MhFGHDYcFMrSsKMgv00bk87WZnlrATGc4o8Eg3WXqYBIdBsCaBeY
+ 0jWi3d8V/zShayt90J/MViaR7rs=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n09.prod.us-west-2.postgun.com with SMTP id
+ 5fb58d20a5a29b56a1ab0e1f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 18 Nov 2020 21:07:44
+ GMT
+Sender: mdtipton=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8827BC433ED; Wed, 18 Nov 2020 21:07:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.159] (ip70-179-20-127.sd.sd.cox.net [70.179.20.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 01DB9246CA;
-        Wed, 18 Nov 2020 21:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605733205;
-        bh=OiRq5n6pYwtlRHg6S3gu6kn/EVUSMv2UVgnqO2UpdH4=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=RMLhtTmGmk2wGvmHCsPi7tJxbedfqVn0u5moSprReTbj/UoMPWB/GpAV7XRROGkbm
-         YSPOexo3xa90oHw8CD+xjv7U2UVnoV2HOuSRj9w9G2zYDa7c1u0tH4LSSXncAS0fuN
-         GSggAxDgvvmOjAnlnOsDYWukxh9FJ7rD5DjCCHgA=
-Date:   Wed, 18 Nov 2020 20:59:45 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Nishanth Menon <nm@ti.com>, Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        lkft-triage@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-In-Reply-To: <20201118145009.10492-1-nm@ti.com>
-References: <20201118145009.10492-1-nm@ti.com>
-Subject: Re: [PATCH] regulator: ti-abb: Fix array out of bound read access on the first transition
-Message-Id: <160573318504.46660.3881026259686236737.b4-ty@kernel.org>
+        (Authenticated sender: mdtipton)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AD8ACC433ED;
+        Wed, 18 Nov 2020 21:07:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AD8ACC433ED
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=mdtipton@codeaurora.org
+Subject: Re: [PATCH v2] interconnect: qcom: qcs404: Remove GPU and display RPM
+ IDs
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201118111044.26056-1-georgi.djakov@linaro.org>
+From:   Mike Tipton <mdtipton@codeaurora.org>
+Message-ID: <00368490-8e55-2d21-2150-bc80f63dedf9@codeaurora.org>
+Date:   Wed, 18 Nov 2020 13:07:42 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201118111044.26056-1-georgi.djakov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 18 Nov 2020 08:50:09 -0600, Nishanth Menon wrote:
-> At the start of driver initialization, we do not know what bias
-> setting the bootloader has configured the system for and we only know
-> for certain the very first time we do a transition.
+On 11/18/2020 3:10 AM, Georgi Djakov wrote:
+> The following errors are noticed during boot on a QCS404 board:
+> [    2.926647] qcom_icc_rpm_smd_send mas 6 error -6
+> [    2.934573] qcom_icc_rpm_smd_send mas 8 error -6
 > 
-> However, since the initial value of the comparison index is -EINVAL,
-> this negative value results in an array out of bound access on the
-> very first transition.
+> These errors show when we try to configure the GPU and display nodes.
+> Since these particular nodes aren't supported on RPM and are purely
+> local, we should just change their mas_rpm_id to -1 to avoid any
+> requests being sent for these master IDs.
 > 
-> [...]
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-Applied to
+Reviewed-by: Mike Tipton <mdtipton@codeaurora.org>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[1/1] regulator: ti-abb: Fix array out of bound read access on the first transition
-      commit: 2ba546ebe0ce2af47833d8912ced9b4a579f13cb
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> ---
+> 
+> v2:
+> * Keep the nodes and just set the IDs to -1, as suggested by Mike.
+> 
+> v1: http://lore.kernel.org/r/20201111100734.307-1-georgi.djakov@linaro.org
+> 
+>   drivers/interconnect/qcom/qcs404.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+> index d4769a5ea182..9820709b43db 100644
+> --- a/drivers/interconnect/qcom/qcs404.c
+> +++ b/drivers/interconnect/qcom/qcs404.c
+> @@ -157,8 +157,8 @@ struct qcom_icc_desc {
+>   	}
+>   
+>   DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> -DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, 6, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> -DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, 8, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> +DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> +DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+>   DEFINE_QNODE(mas_snoc_bimc_1, QCS404_SNOC_BIMC_1_MAS, 8, 76, -1, QCS404_SLAVE_EBI_CH0);
+>   DEFINE_QNODE(mas_tcu_0, QCS404_MASTER_TCU_0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+>   DEFINE_QNODE(mas_spdm, QCS404_MASTER_SPDM, 4, -1, -1, QCS404_PNOC_INT_3);
+> 
