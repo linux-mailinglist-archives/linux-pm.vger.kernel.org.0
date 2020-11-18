@@ -2,139 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B1E2B7552
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 05:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2592E2B755B
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 05:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbgKREMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Nov 2020 23:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S1726575AbgKREVY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Nov 2020 23:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726558AbgKREMb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 23:12:31 -0500
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18E6C061A51
-        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 20:12:31 -0800 (PST)
-Received: by mail-oo1-xc42.google.com with SMTP id h10so82471ooi.10
-        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 20:12:31 -0800 (PST)
+        with ESMTP id S1726487AbgKREVY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Nov 2020 23:21:24 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F52C0613D4
+        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 20:21:24 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id gi3so394081pjb.3
+        for <linux-pm@vger.kernel.org>; Tue, 17 Nov 2020 20:21:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qOty3AIPBhYewFt7PpUmMM+e5nNODFbdVyWPzXIidq8=;
-        b=ftPCZdIyUTg7frD8YRIDk2i/jp0qt8qhZxBMCzHZ0ul9TqO+G121Dx5Ou1wnb0iqw4
-         hkI9e3dJXwTttyKrJPUMO7SVOmhbb3Bi7wRsk9ABlm+TH/G0sZexfnF2BX2AZN5n5nDJ
-         TpP2Vp8tfkJ+HNZL9W7R+dLECl5OQJLU2HLi5xrfwlaw8JxcbiCM/KDuwg1nGkPIkqTt
-         qXLFG0KuNXNawd08/QKYRijN/MyqZywp7CEqy8GDQtbK2EAm5Wb2iV9cJD+in1nCn3nS
-         78yW75B2kN419EvUdWEOdUCfEqWQwjgca8ycKEFZSOqeX4DqnFIpamhz9yH+0CwrJ3wb
-         5zsQ==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=k+NY9c+px1FIBEsWz6q06ZNYk3nsdUunnWrMe/Tvt0s=;
+        b=x05XYSCnX2pfVclqovwJGSApW0q+PJFqxYdSWinuurJK7+sFE1YFXh93IjbhpScjSf
+         rqMv+GlvwtGjksPFV0MS/8/gxYiW8EHujQgZuT7V0I7D6hZpfVvUxNI+mKaR3PkoYrRE
+         +wXAqhQre99DNnxOduMfN8vZtzPxssSXMGdu2X1+iC9JkDAM8/u3ylOoQS4vgrJgTLTs
+         dfJFLMWfIaChr/S+x3aWAex34L/z3rCw9RcPnJ3xLs6fLRrpdRKVyzUYg7HBXn9TWLR5
+         ZmAfdhLIHbh2/0lBPCTQ0OjhgS8ejBEBlbw6o3tp3S0CW5lkFKM6I4dVssBvTCivBTY/
+         +BnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qOty3AIPBhYewFt7PpUmMM+e5nNODFbdVyWPzXIidq8=;
-        b=F5ZuAoDDX/yiuTBbiB61R4PX+hLSpkiMeokUQNIW/VOiipA9lEGI3WtG1iNnkOKdvw
-         tU7iX922A8IpcDLN1KzKJHJkARsJL08josovYX+HFYfsmJMG/6WqxPKZtzAIpFSGDaz7
-         q0SFkp/MCQ6V1wHrlHXIfx/9Vk+krLiczzrGBdIsspYWZuOdgqNc0EQ4obNrbOlvfnp+
-         XRH9A3/0C8Bzua1hoHdekWq43UW/ijkSTnFDKwNCLHlx/+D3eTAj3CsmfvglXjRpxtEf
-         SvxbtvGxRbe3Uz+MKwhKNiR8AgRzJGxVTiHPO7ENCPX6e9u8+4y9taLNYGyXDmDjbDT3
-         e1uw==
-X-Gm-Message-State: AOAM532I3fFtauQgjL+jz/GLZdH2N4uPseRcOPqFFVlF4dXTKXrigUeu
-        DGRlygktfRkRPC18VnDfNg/1DA==
-X-Google-Smtp-Source: ABdhPJy0Er+0gl6Ev9T+ww1XOKNYDPLRCN9y2ZefS6H1tYQsIdl7eS4trHL73fO3+ha0624IZD+viw==
-X-Received: by 2002:a4a:b409:: with SMTP id y9mr5217506oon.70.1605672751118;
-        Tue, 17 Nov 2020 20:12:31 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t5sm7020940oth.16.2020.11.17.20.12.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2020 20:12:30 -0800 (PST)
-Date:   Tue, 17 Nov 2020 22:12:28 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Mike Tipton <mdtipton@codeaurora.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: qcom: qcs404: Remove gpu and display nodes
-Message-ID: <20201118041228.GG8532@builder.lan>
-References: <20201111100734.307-1-georgi.djakov@linaro.org>
- <357bd51c-7217-3e9b-ead9-a20f99c264f6@codeaurora.org>
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=k+NY9c+px1FIBEsWz6q06ZNYk3nsdUunnWrMe/Tvt0s=;
+        b=E2vVppsph8SJjjcPwwHmJKqqJs3buKHWQk5jI8Z46caSochznz9+1YaxH5Qf1I6JO9
+         lRWjlrLT2TeHAYf0JjW6dQ1b4tMjsS28yqSywxHLWxmlQFsSSh0SH3YcRvcAM7Z0KsE1
+         RxH2IZPTDO+wXmv+w5LgJZog/ot4S9pkLky9x6P/3NtJw5mVDmU3JaYxWSOmcPkDFj0K
+         0/Z+nMShUbKE8kYEryirBuDIzEBNxprWnoGTetih7PcRW82axslqUm1TrFpWGC26RUJG
+         M8BcOnyTtJdM7uA5rkU+cyv0UNgahxb2wMUY/g3Pl4s1L8PIntpcZUgRgEdBiRQSigla
+         UvZQ==
+X-Gm-Message-State: AOAM531tXeSzi3nIZyNfAmSKlm6gELhH0eocghl48JfsFzO3XMrZyavZ
+        NUsibkdbd8fVDomkYxIGCKC4zw==
+X-Google-Smtp-Source: ABdhPJwRaC+IQmmfuP8LCNaoTxzQFqRk93NVR4NjAXGOdw1Bsnc0hOD1mmfyGITGB5st8GooiDcIIw==
+X-Received: by 2002:a17:902:8506:b029:d9:6dd:45ea with SMTP id bj6-20020a1709028506b02900d906dd45eamr2824765plb.72.1605673283767;
+        Tue, 17 Nov 2020 20:21:23 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id j11sm7489631pfe.26.2020.11.17.20.21.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 Nov 2020 20:21:22 -0800 (PST)
+Date:   Wed, 18 Nov 2020 09:51:17 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v9 07/17] PM / devfreq: tegra30: Support interconnect and
+ OPPs from device-tree
+Message-ID: <20201118042117.q6nkwm7exakgfvu3@vireshk-i7>
+References: <20201115212922.4390-1-digetx@gmail.com>
+ <20201115212922.4390-8-digetx@gmail.com>
+ <20201117100705.i62qr4gosvu76o22@vireshk-i7>
+ <956315a9-e806-3b18-6792-f01057a6c511@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <357bd51c-7217-3e9b-ead9-a20f99c264f6@codeaurora.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <956315a9-e806-3b18-6792-f01057a6c511@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 17 Nov 17:16 CST 2020, Mike Tipton wrote:
-
-> On 11/11/2020 2:07 AM, Georgi Djakov wrote:
-> > The following errors are noticed during boot on a QCS404 board:
-> > [    2.926647] qcom_icc_rpm_smd_send mas 6 error -6
-> > [    2.934573] qcom_icc_rpm_smd_send mas 8 error -6
+On 17-11-20, 17:17, Dmitry Osipenko wrote:
+> 17.11.2020 13:07, Viresh Kumar пишет:
+> > On 16-11-20, 00:29, Dmitry Osipenko wrote:
+> >> This patch moves ACTMON driver away from generating OPP table by itself,
+> >> transitioning it to use the table which comes from device-tree. This
+> >> change breaks compatibility with older device-trees in order to bring
+> >> support for the interconnect framework to the driver. This is a mandatory
+> >> change which needs to be done in order to implement interconnect-based
+> >> memory DVFS. Users of legacy device-trees will get a message telling that
+> >> theirs DT needs to be upgraded. Now ACTMON issues memory bandwidth request
+> >> using dev_pm_opp_set_bw(), instead of driving EMC clock rate directly.
+> >>
+> >> Tested-by: Peter Geis <pgwipeout@gmail.com>
+> >> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+> >> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >> ---
+> >>  drivers/devfreq/tegra30-devfreq.c | 86 ++++++++++++++++---------------
+> >>  1 file changed, 44 insertions(+), 42 deletions(-)
+> >>
+> >> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> >> index 38cc0d014738..ed6d4469c8c7 100644
+> >> --- a/drivers/devfreq/tegra30-devfreq.c
+> >> +++ b/drivers/devfreq/tegra30-devfreq.c
+> >> @@ -19,6 +19,8 @@
+> >>  #include <linux/reset.h>
+> >>  #include <linux/workqueue.h>
+> >>  
+> >> +#include <soc/tegra/fuse.h>
+> >> +
+> >>  #include "governor.h"
+> >>  
+> >>  #define ACTMON_GLB_STATUS					0x0
+> >> @@ -155,6 +157,7 @@ struct tegra_devfreq_device {
+> >>  
+> >>  struct tegra_devfreq {
+> >>  	struct devfreq		*devfreq;
+> >> +	struct opp_table	*opp_table;
+> >>  
+> >>  	struct reset_control	*reset;
+> >>  	struct clk		*clock;
+> >> @@ -612,34 +615,19 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
+> >>  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
+> >>  				u32 flags)
+> >>  {
+> >> -	struct tegra_devfreq *tegra = dev_get_drvdata(dev);
+> >> -	struct devfreq *devfreq = tegra->devfreq;
+> >>  	struct dev_pm_opp *opp;
+> >> -	unsigned long rate;
+> >> -	int err;
+> >> +	int ret;
+> >>  
+> >>  	opp = devfreq_recommended_opp(dev, freq, flags);
+> >>  	if (IS_ERR(opp)) {
+> >>  		dev_err(dev, "Failed to find opp for %lu Hz\n", *freq);
+> >>  		return PTR_ERR(opp);
+> >>  	}
+> >> -	rate = dev_pm_opp_get_freq(opp);
+> >> -	dev_pm_opp_put(opp);
+> >> -
+> >> -	err = clk_set_min_rate(tegra->emc_clock, rate * KHZ);
+> >> -	if (err)
+> >> -		return err;
+> >> -
+> >> -	err = clk_set_rate(tegra->emc_clock, 0);
+> >> -	if (err)
+> >> -		goto restore_min_rate;
+> >>  
+> >> -	return 0;
+> >> -
+> >> -restore_min_rate:
+> >> -	clk_set_min_rate(tegra->emc_clock, devfreq->previous_freq);
+> >> +	ret = dev_pm_opp_set_bw(dev, opp);
+> >> +	dev_pm_opp_put(opp);
+> >>  
+> >> -	return err;
+> >> +	return ret;
+> >>  }
+> >>  
+> >>  static int tegra_devfreq_get_dev_status(struct device *dev,
+> >> @@ -655,7 +643,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
+> >>  	stat->private_data = tegra;
+> >>  
+> >>  	/* The below are to be used by the other governors */
+> >> -	stat->current_frequency = cur_freq;
+> >> +	stat->current_frequency = cur_freq * KHZ;
+> >>  
+> >>  	actmon_dev = &tegra->devices[MCALL];
+> >>  
+> >> @@ -705,7 +693,12 @@ static int tegra_governor_get_target(struct devfreq *devfreq,
+> >>  		target_freq = max(target_freq, dev->target_freq);
+> >>  	}
+> >>  
+> >> -	*freq = target_freq;
+> >> +	/*
+> >> +	 * tegra-devfreq driver operates with KHz units, while OPP table
+> >> +	 * entries use Hz units. Hence we need to convert the units for the
+> >> +	 * devfreq core.
+> >> +	 */
+> >> +	*freq = target_freq * KHZ;
+> >>  
+> >>  	return 0;
+> >>  }
+> >> @@ -774,6 +767,7 @@ static struct devfreq_governor tegra_devfreq_governor = {
+> >>  
+> >>  static int tegra_devfreq_probe(struct platform_device *pdev)
+> >>  {
+> >> +	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+> >>  	struct tegra_devfreq_device *dev;
+> >>  	struct tegra_devfreq *tegra;
+> >>  	struct devfreq *devfreq;
+> >> @@ -781,6 +775,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+> >>  	long rate;
+> >>  	int err;
+> >>  
+> >> +	/* legacy device-trees don't have OPP table and must be updated */
+> >> +	if (!device_property_present(&pdev->dev, "operating-points-v2")) {
+> >> +		dev_err(&pdev->dev,
+> >> +			"OPP table not found, please update your device tree\n");
+> >> +		return -ENODEV;
+> >> +	}
+> >> +
 > > 
-> > These errors show when we try to configure the GPU and display nodes,
-> > which are defined in the topology, but these hardware blocks actually
-> > do not exist on QCS404. According to the datasheet, GPU and display
-> > are only present on QCS405 and QCS407.
+> > You forgot to remove this ?
 > 
-> Even on QCS405/407 where GPU and display are present, you'd still get these
-> errors since these particular nodes aren't supported on RPM and are purely
-> local. Instead of removing these we should just change their mas_rpm_id to
-> -1. It's harmless to leave them in for QCS404 since they're only used for
-> path aggregation. The same code can support all variants of the QCS400
-> series. We just wouldn't expect anyone to actually vote these paths on
-> QCS404. Similar to how the gcc-qcs404 clock provider still registers the GPU
-> and MDP clocks.
-> 
+> Yes, good catch. I'm planning to replace this code with a common helper
+> sometime soon, so if there won't be another reasons to make a new
+> revision, then I'd prefer to keep it as-is for now.
 
-That would definitely be preferable and would save us from having 4 (?)
-copies of qcs40x...
+You should just replace this patch only with a version of V9.1 and you
+aren't really required to resend the whole series. And you should fix
+it before it gets merged. This isn't a formatting issue which we just
+let through. I trust you when you say that you will fix it, but this
+must be fixed now.
 
-Regards,
-Bjorn
-
-> > 
-> > Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> > ---
-> >   drivers/interconnect/qcom/qcs404.c | 9 +++------
-> >   1 file changed, 3 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
-> > index 9f992422e92f..2ed544e23ff3 100644
-> > --- a/drivers/interconnect/qcom/qcs404.c
-> > +++ b/drivers/interconnect/qcom/qcs404.c
-> > @@ -20,8 +20,6 @@
-> >   enum {
-> >   	QCS404_MASTER_AMPSS_M0 = 1,
-> > -	QCS404_MASTER_GRAPHICS_3D,
-> > -	QCS404_MASTER_MDP_PORT0,
-> >   	QCS404_SNOC_BIMC_1_MAS,
-> >   	QCS404_MASTER_TCU_0,
-> >   	QCS404_MASTER_SPDM,
-> > @@ -156,8 +154,6 @@ struct qcom_icc_desc {
-> >   	}
-> >   DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
-> > -DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, 6, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
-> > -DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, 8, -1,
-> > QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV >
-> > DEFINE_QNODE(mas_snoc_bimc_1, QCS404_SNOC_BIMC_1_MAS, 8, 76, -1,
-> QCS404_SLAVE_EBI_CH0);
-> >   DEFINE_QNODE(mas_tcu_0, QCS404_MASTER_TCU_0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
-> >   DEFINE_QNODE(mas_spdm, QCS404_MASTER_SPDM, 4, -1, -1, QCS404_PNOC_INT_3);
-> > @@ -231,8 +227,6 @@ DEFINE_QNODE(slv_lpass, QCS404_SLAVE_LPASS, 4, -1, -1, 0);
-> >   static struct qcom_icc_node *qcs404_bimc_nodes[] = {
-> >   	[MASTER_AMPSS_M0] = &mas_apps_proc,
-> > -	[MASTER_OXILI] = &mas_oxili,
-> > -	[MASTER_MDP_PORT0] = &mas_mdp,
-> >   	[MASTER_SNOC_BIMC_1] = &mas_snoc_bimc_1,
-> >   	[MASTER_TCU_0] = &mas_tcu_0,
-> >   	[SLAVE_EBI_CH0] = &slv_ebi,
-> > @@ -460,6 +454,9 @@ static int qnoc_probe(struct platform_device *pdev)
-> >   	for (i = 0; i < num_nodes; i++) {
-> >   		size_t j;
-> > +		if (!qnodes[i])
-> > +			continue;
-> > +
-> >   		node = icc_node_create(qnodes[i]->id);
-> >   		if (IS_ERR(node)) {
-> >   			ret = PTR_ERR(node);
-> > 
+-- 
+viresh
