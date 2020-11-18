@@ -2,162 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2914D2B79AD
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 09:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471B42B7BD7
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 11:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726981AbgKRI4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Nov 2020 03:56:22 -0500
-Received: from mga04.intel.com ([192.55.52.120]:26962 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726724AbgKRI4W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Nov 2020 03:56:22 -0500
-IronPort-SDR: Q66QzoPEWK8eCfQjE4B4t1XfLYGScoJeACubJ1TQjtTY/8sTDD97Qve5K9NYILAmfRT1FsIvzH
- vv1M+BbxCitQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="168514560"
-X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="168514560"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 00:56:21 -0800
-IronPort-SDR: +qqsR5XvQPWVDyJqb5LepDG9D4YKm0+C0iVe0+xcW/hqKQrqgKFI1kyzwXgLNFqcuPvZthNYUR
- 3ZIr81g5gHIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="430748751"
-Received: from lkp-server02.sh.intel.com (HELO 67996b229c47) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Nov 2020 00:56:17 -0800
-Received: from kbuild by 67996b229c47 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kfJGC-00001Q-Se; Wed, 18 Nov 2020 08:56:16 +0000
-Date:   Wed, 18 Nov 2020 16:55:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- b7eddc37f293ad0229ca31fe90d08e748f79c0ed
-Message-ID: <5fb4e176.u7YdFLqyniGkGQgE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726297AbgKRKwf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Nov 2020 05:52:35 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:33397 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726216AbgKRKwe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Nov 2020 05:52:34 -0500
+Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id ED33A240002;
+        Wed, 18 Nov 2020 10:52:32 +0000 (UTC)
+Date:   Wed, 18 Nov 2020 11:52:32 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen.Hegelund@microchip.com
+Subject: Re: [PATCH 4/5] power: reset: ocelot: Add support 2 othe MIPS based
+ SoCs
+Message-ID: <20201118105232.GE4556@piout.net>
+References: <20201116171159.1735315-1-gregory.clement@bootlin.com>
+ <20201116171159.1735315-5-gregory.clement@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20201116171159.1735315-5-gregory.clement@bootlin.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: b7eddc37f293ad0229ca31fe90d08e748f79c0ed  Merge branch 'acpi-resources' into bleeding-edge
+Hi,
 
-elapsed time: 725m
+On 16/11/2020 18:11:58+0100, Gregory CLEMENT wrote:
+> This adds reset support for Luton and Jaguar2 in the ocelot-reset
+> driver. They are both MIPS based belonging to the VvoreIII family.
+> 
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  drivers/power/reset/ocelot-reset.c | 30 +++++++++++++++++++++++++++---
+>  1 file changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/power/reset/ocelot-reset.c b/drivers/power/reset/ocelot-reset.c
+> index a203c42e99d4..0f92416f2907 100644
+> --- a/drivers/power/reset/ocelot-reset.c
+> +++ b/drivers/power/reset/ocelot-reset.c
+> @@ -29,6 +29,8 @@ struct ocelot_reset_context {
+>  	struct notifier_block restart_handler;
+>  };
+>  
+> +#define BIT_OFF_INVALID				32
+> +
+>  #define SOFT_SWC_RST  BIT(1)
+>  #define SOFT_CHIP_RST BIT(0)
+>  
+> @@ -77,9 +79,11 @@ static int ocelot_restart_handle(struct notifier_block *this,
+>  			   ctx->props->vcore_protect, 0);
+>  
+>  	/* Make the SI back to boot mode */
+> -	regmap_update_bits(ctx->cpu_ctrl, ICPU_CFG_CPU_SYSTEM_CTRL_GENERAL_CTRL,
+> -			   IF_SI_OWNER_MASK << if_si_owner_bit,
+> -			   IF_SI_OWNER_SIBM << if_si_owner_bit);
+> +	if (if_si_owner_bit != BIT_OFF_INVALID)
+> +		regmap_update_bits(ctx->cpu_ctrl,
+> +				   ICPU_CFG_CPU_SYSTEM_CTRL_GENERAL_CTRL,
+> +				   IF_SI_OWNER_MASK << if_si_owner_bit,
+> +				   IF_SI_OWNER_SIBM << if_si_owner_bit);
+>  
+>  	pr_emerg("Resetting SoC\n");
+>  
+> @@ -127,6 +131,20 @@ static int ocelot_reset_probe(struct platform_device *pdev)
+>  	return err;
+>  }
+>  
+> +static const struct reset_props reset_props_jaguar2 = {
+> +	.syscon		 = "mscc,ocelot-cpu-syscon",
+> +	.protect_reg     = 0x20,
+> +	.vcore_protect   = BIT(2),
+> +	.if_si_owner_bit = 6,
+> +};
+> +
+> +static const struct reset_props reset_props_luton = {
+> +	.syscon		 = "mscc,ocelot-cpu-syscon",
+> +	.protect_reg     = 0x20,
+> +	.vcore_protect   = BIT(2),
+> +	.if_si_owner_bit = BIT_OFF_INVALID, /* n/a */
+> +};
+> +
+>  static const struct reset_props reset_props_ocelot = {
+>  	.syscon		 = "mscc,ocelot-cpu-syscon",
+>  	.protect_reg     = 0x20,
+> @@ -143,6 +161,12 @@ static const struct reset_props reset_props_sparx5 = {
+>  
+>  static const struct of_device_id ocelot_reset_of_match[] = {
+>  	{
+> +		.compatible = "mscc,jaguar2-chip-reset",
+> +		.data = &reset_props_jaguar2
+> +	}, {
+> +		.compatible = "mscc,luton-chip-reset",
+> +		.data = &reset_props_luton
+> +	}, {
 
-configs tested: 97
-configs skipped: 2
+These compatible strings are undocumented. Else,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-s390                       zfcpdump_defconfig
-openrisc                         alldefconfig
-powerpc                 xes_mpc85xx_defconfig
-arc                         haps_hs_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                          pxa910_defconfig
-sh                           se7751_defconfig
-sh                        sh7785lcr_defconfig
-sh                           se7206_defconfig
-m68k                       m5475evb_defconfig
-c6x                                 defconfig
-mips                            ar7_defconfig
-arm                            hisi_defconfig
-arm                           viper_defconfig
-arm                         mv78xx0_defconfig
-ia64                            zx1_defconfig
-h8300                            alldefconfig
-arm                         shannon_defconfig
-h8300                       h8s-sim_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                    klondike_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                    gamecube_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20201117
-i386                 randconfig-a005-20201117
-i386                 randconfig-a001-20201117
-i386                 randconfig-a002-20201117
-i386                 randconfig-a004-20201117
-i386                 randconfig-a003-20201117
-i386                 randconfig-a012-20201117
-i386                 randconfig-a014-20201117
-i386                 randconfig-a016-20201117
-i386                 randconfig-a011-20201117
-i386                 randconfig-a015-20201117
-i386                 randconfig-a013-20201117
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+>  		.compatible = "mscc,ocelot-chip-reset",
+>  		.data = &reset_props_ocelot
+>  	}, {
+> -- 
+> 2.29.2
+> 
 
-clang tested configs:
-x86_64               randconfig-a003-20201117
-x86_64               randconfig-a005-20201117
-x86_64               randconfig-a004-20201117
-x86_64               randconfig-a002-20201117
-x86_64               randconfig-a001-20201117
-x86_64               randconfig-a006-20201117
-x86_64               randconfig-a015-20201116
-x86_64               randconfig-a011-20201116
-x86_64               randconfig-a014-20201116
-x86_64               randconfig-a013-20201116
-x86_64               randconfig-a016-20201116
-x86_64               randconfig-a012-20201116
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
