@@ -2,168 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5382B8441
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 20:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E01B2B8454
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 20:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725822AbgKRS7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Nov 2020 13:59:32 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:53634 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725772AbgKRS7c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Nov 2020 13:59:32 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AIIi84Q062088;
-        Wed, 18 Nov 2020 18:59:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=oKLa2LrlEgJC4O/fNsIc01KkHpdEzCUl7HIEy0vGQCk=;
- b=zBm4P7m1rfqAaxvPPKLfT3Ki9h/rJRWYHSM4+WCPuHkyyxSe4mv2YNS5ABl0B8Gk1pGQ
- nckLFmiKahNpjZwncUjIjeU2v8qOKOG5fg3B6NXhfbEeb6Ayse+VDcN+yaPqpNPKAp+W
- GwCYdBAKtRDjD0HrwTffhW6kG+z8heIPPH7BIJooLUBDKTSrOxZLAOAurv6PnwJ7TODY
- Go00qwfq661doEs8SgluAfo+B/Kd8PF+tf57NJGvbwn5h5mbLwWy9UOTBLQRMHFAqIWn
- HFJKbOwCPOsv1E6JNHicpUCFOgF/bER5opYqNBjEWm9/TI7o2olFJxIpvl9qH3aXT/cO cw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 34t7vn9muw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Nov 2020 18:59:25 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AIIfM5t035206;
-        Wed, 18 Nov 2020 18:59:24 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 34umd0xvgu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Nov 2020 18:59:24 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AIIxNcH011191;
-        Wed, 18 Nov 2020 18:59:23 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 18 Nov 2020 10:59:22 -0800
-Date:   Wed, 18 Nov 2020 21:59:17 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kernelfans@gmail.com
-Cc:     linux-pm@vger.kernel.org, kexec@lists.infradead.org
-Subject: [bug report] PM / reboot: Eliminate race between reboot and suspend
-Message-ID: <20201118185917.GA433776@mwanda>
+        id S1725782AbgKRTCq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Nov 2020 14:02:46 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:50702 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725772AbgKRTCp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Nov 2020 14:02:45 -0500
+Received: from 89-64-89-10.dynamic.chello.pl (89.64.89.10) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.520)
+ id 589eb52260f9054a; Wed, 18 Nov 2020 20:02:42 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH] cpufreq: Fix up several kerneldoc comments
+Date:   Wed, 18 Nov 2020 20:02:42 +0100
+Message-ID: <1739462.uCgn0Xls2p@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9809 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 mlxscore=0 phishscore=0
- spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011180130
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9809 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=3
- malwarescore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
- adultscore=0 mlxscore=0 priorityscore=1501 phishscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011180130
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Pingfan Liu,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The patch 55f2503c3b69: "PM / reboot: Eliminate race between reboot
-and suspend" from Jul 31, 2018, leads to the following static checker
-warning:
+Fix up the remaining kerneldoc comments that don't adhere to the
+expected format and clarify some of them a bit.
 
-	kernel/power/main.c:27 lock_system_sleep()
-	warn: called with lock held.  '&system_transition_mutex'
+No functional changes.
 
-kernel/reboot.c
-   345  
-   346          mutex_lock(&system_transition_mutex);
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The patch changed the code to take this lock.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/cpufreq.c |   72 +++++++++++++++++++++++-----------------------
+ 1 file changed, 36 insertions(+), 36 deletions(-)
 
-   347          switch (cmd) {
-   348          case LINUX_REBOOT_CMD_RESTART:
-   349                  kernel_restart(NULL);
-   350                  break;
-   351  
-   352          case LINUX_REBOOT_CMD_CAD_ON:
-   353                  C_A_D = 1;
-   354                  break;
-   355  
-   356          case LINUX_REBOOT_CMD_CAD_OFF:
-   357                  C_A_D = 0;
-   358                  break;
-   359  
-   360          case LINUX_REBOOT_CMD_HALT:
-   361                  kernel_halt();
-   362                  do_exit(0);
-   363                  panic("cannot halt");
-   364  
-   365          case LINUX_REBOOT_CMD_POWER_OFF:
-   366                  kernel_power_off();
-   367                  do_exit(0);
-   368                  break;
-   369  
-   370          case LINUX_REBOOT_CMD_RESTART2:
-   371                  ret = strncpy_from_user(&buffer[0], arg, sizeof(buffer) - 1);
-   372                  if (ret < 0) {
-   373                          ret = -EFAULT;
-   374                          break;
-   375                  }
-   376                  buffer[sizeof(buffer) - 1] = '\0';
-   377  
-   378                  kernel_restart(buffer);
-   379                  break;
-   380  
-   381  #ifdef CONFIG_KEXEC_CORE
-   382          case LINUX_REBOOT_CMD_KEXEC:
-   383                  ret = kernel_kexec();
-                        ^^^^^^^^^^^^^^^^^^^^
-Called with lock held.
+Index: linux-pm/drivers/cpufreq/cpufreq.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/cpufreq.c
++++ linux-pm/drivers/cpufreq/cpufreq.c
+@@ -298,8 +298,10 @@ struct cpufreq_policy *cpufreq_cpu_acqui
+  *            EXTERNALLY AFFECTING FREQUENCY CHANGES                 *
+  *********************************************************************/
+ 
+-/*
+- * adjust_jiffies - adjust the system "loops_per_jiffy"
++/**
++ * adjust_jiffies - Adjust the system "loops_per_jiffy".
++ * @val: CPUFREQ_PRECHANGE or CPUFREQ_POSTCHANGE.
++ * @ci: Frequency change information.
+  *
+  * This function alters the system "loops_per_jiffy" for the clock
+  * speed change. Note that loops_per_jiffy cannot be updated on SMP
+@@ -331,14 +333,14 @@ static void adjust_jiffies(unsigned long
+ }
+ 
+ /**
+- * cpufreq_notify_transition - Notify frequency transition and adjust_jiffies.
++ * cpufreq_notify_transition - Notify frequency transition and adjust jiffies.
+  * @policy: cpufreq policy to enable fast frequency switching for.
+  * @freqs: contain details of the frequency update.
+  * @state: set to CPUFREQ_PRECHANGE or CPUFREQ_POSTCHANGE.
+  *
+- * This function calls the transition notifiers and the "adjust_jiffies"
+- * function. It is called twice on all CPU frequency changes that have
+- * external effects.
++ * This function calls the transition notifiers and adjust_jiffies().
++ *
++ * It is called twice on all CPU frequency changes that have external effects.
+  */
+ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
+ 				      struct cpufreq_freqs *freqs,
+@@ -1646,13 +1648,12 @@ static void cpufreq_remove_dev(struct de
+ }
+ 
+ /**
+- *	cpufreq_out_of_sync - If actual and saved CPU frequency differs, we're
+- *	in deep trouble.
+- *	@policy: policy managing CPUs
+- *	@new_freq: CPU frequency the CPU actually runs at
++ * cpufreq_out_of_sync - Fix up actual and saved CPU frequency difference.
++ * @policy: Policy managing CPUs.
++ * @new_freq: New CPU frequency.
+  *
+- *	We adjust to current frequency first, and need to clean up later.
+- *	So either call to cpufreq_update_policy() or schedule handle_update()).
++ * Adjust to the current frequency first and clean up later by either calling
++ * cpufreq_update_policy(), or scheduling handle_update().
+  */
+ static void cpufreq_out_of_sync(struct cpufreq_policy *policy,
+ 				unsigned int new_freq)
+@@ -1832,7 +1833,7 @@ int cpufreq_generic_suspend(struct cpufr
+ EXPORT_SYMBOL(cpufreq_generic_suspend);
+ 
+ /**
+- * cpufreq_suspend() - Suspend CPUFreq governors
++ * cpufreq_suspend() - Suspend CPUFreq governors.
+  *
+  * Called during system wide Suspend/Hibernate cycles for suspending governors
+  * as some platforms can't change frequency after this point in suspend cycle.
+@@ -1868,7 +1869,7 @@ suspend:
+ }
+ 
+ /**
+- * cpufreq_resume() - Resume CPUFreq governors
++ * cpufreq_resume() - Resume CPUFreq governors.
+  *
+  * Called during system wide Suspend/Hibernate cycle for resuming governors that
+  * are suspended with cpufreq_suspend().
+@@ -1920,10 +1921,10 @@ bool cpufreq_driver_test_flags(u16 flags
+ }
+ 
+ /**
+- *	cpufreq_get_current_driver - return current driver's name
++ * cpufreq_get_current_driver - Return the current driver's name.
+  *
+- *	Return the name string of the currently loaded cpufreq driver
+- *	or NULL, if none.
++ * Return the name string of the currently registered cpufreq driver or NULL if
++ * none.
+  */
+ const char *cpufreq_get_current_driver(void)
+ {
+@@ -1935,10 +1936,10 @@ const char *cpufreq_get_current_driver(v
+ EXPORT_SYMBOL_GPL(cpufreq_get_current_driver);
+ 
+ /**
+- *	cpufreq_get_driver_data - return current driver data
++ * cpufreq_get_driver_data - Return current driver data.
+  *
+- *	Return the private data of the currently loaded cpufreq
+- *	driver, or NULL if no cpufreq driver is loaded.
++ * Return the private data of the currently registered cpufreq driver, or NULL
++ * if no cpufreq driver has been registered.
+  */
+ void *cpufreq_get_driver_data(void)
+ {
+@@ -1954,17 +1955,16 @@ EXPORT_SYMBOL_GPL(cpufreq_get_driver_dat
+  *********************************************************************/
+ 
+ /**
+- *	cpufreq_register_notifier - register a driver with cpufreq
+- *	@nb: notifier function to register
+- *      @list: CPUFREQ_TRANSITION_NOTIFIER or CPUFREQ_POLICY_NOTIFIER
+- *
+- *	Add a driver to one of two lists: either a list of drivers that
+- *      are notified about clock rate changes (once before and once after
+- *      the transition), or a list of drivers that are notified about
+- *      changes in cpufreq policy.
++ * cpufreq_register_notifier - Register a notifier with cpufreq.
++ * @nb: notifier function to register.
++ * @list: CPUFREQ_TRANSITION_NOTIFIER or CPUFREQ_POLICY_NOTIFIER.
++ *
++ * Add a notifier to one of two lists: either a list of notifiers that run on
++ * clock rate changes (once before and once after every transition), or a list
++ * of notifiers that ron on cpufreq policy changes.
+  *
+- *	This function may sleep, and has the same return conditions as
+- *	blocking_notifier_chain_register.
++ * This function may sleep and it has the same return values as
++ * blocking_notifier_chain_register().
+  */
+ int cpufreq_register_notifier(struct notifier_block *nb, unsigned int list)
+ {
+@@ -2001,14 +2001,14 @@ int cpufreq_register_notifier(struct not
+ EXPORT_SYMBOL(cpufreq_register_notifier);
+ 
+ /**
+- *	cpufreq_unregister_notifier - unregister a driver with cpufreq
+- *	@nb: notifier block to be unregistered
+- *	@list: CPUFREQ_TRANSITION_NOTIFIER or CPUFREQ_POLICY_NOTIFIER
++ * cpufreq_unregister_notifier - Unregister a notifier from cpufreq.
++ * @nb: notifier block to be unregistered.
++ * @list: CPUFREQ_TRANSITION_NOTIFIER or CPUFREQ_POLICY_NOTIFIER.
+  *
+- *	Remove a driver from the CPU frequency notifier list.
++ * Remove a notifier from one of the cpufreq notifier lists.
+  *
+- *	This function may sleep, and has the same return conditions as
+- *	blocking_notifier_chain_unregister.
++ * This function may sleep and it has the same return values as
++ * blocking_notifier_chain_unregister().
+  */
+ int cpufreq_unregister_notifier(struct notifier_block *nb, unsigned int list)
+ {
 
-   384                  break;
-   385  #endif
 
-But kernel_kexec() also tries to take the &system_transition_mutex so
-it will dead lock.
 
-kernel/kexec_core.c
-  1125  int kernel_kexec(void)
-  1126  {
-  1127          int error = 0;
-  1128  
-  1129          if (!mutex_trylock(&kexec_mutex))
-  1130                  return -EBUSY;
-  1131          if (!kexec_image) {
-  1132                  error = -EINVAL;
-  1133                  goto Unlock;
-  1134          }
-  1135  
-  1136  #ifdef CONFIG_KEXEC_JUMP
-  1137          if (kexec_image->preserve_context) {
-  1138                  lock_system_sleep();
-                        ^^^^^^^^^^^^^^^^^^^
-Here.
-
-  1139                  pm_prepare_console();
-  1140                  error = freeze_processes();
-  1141                  if (error) {
-  1142                          error = -EBUSY;
-  1143                          goto Restore_console;
-  1144                  }
-  1145                  suspend_console();
-  1146                  error = dpm_suspend_start(PMSG_FREEZE);
-  1147                  if (error)
-  1148                          goto Resume_console;
-  1149                  /* At this point, dpm_suspend_start() has been called,
-  1150                   * but *not* dpm_suspend_end(). We *must* call
-  1151                   * dpm_suspend_end() now.  Otherwise, drivers for
-  1152                   * some devices (e.g. interrupt controllers) become
-  1153                   * desynchronized with the actual state of the
-  1154                   * hardware at resume time, and evil weirdness ensues.
-  1155                   */
-  1156                  error = dpm_suspend_end(PMSG_FREEZE);
-  1157                  if (error)
-  1158                          goto Resume_devices;
-  1159                  error = suspend_disable_secondary_cpus();
-  1160                  if (error)
-
-regards,
-dan carpenter
