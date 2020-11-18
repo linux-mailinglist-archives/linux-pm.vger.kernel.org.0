@@ -2,159 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D892B840A
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 19:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5382B8441
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Nov 2020 20:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725879AbgKRSrP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 18 Nov 2020 13:47:15 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56798 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbgKRSrP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Nov 2020 13:47:15 -0500
-Received: from 89-64-89-10.dynamic.chello.pl (89.64.89.10) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.520)
- id 676dcfafbaedb0a8; Wed, 18 Nov 2020 19:47:12 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Andrei Popa <andreipopad@gmail.com>, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: high number of dropped packets/rx_missed_errors from 4.17 kernel
-Date:   Wed, 18 Nov 2020 19:47:12 +0100
-Message-ID: <18276301.3Z8BrWjNFq@kreacher>
-In-Reply-To: <47586104-a816-1419-13c0-b1d297289fd5@intel.com>
-References: <8EACE662-A291-4DB8-A5CB-BB0BD44B7AB0@gmail.com> <47586104-a816-1419-13c0-b1d297289fd5@intel.com>
+        id S1725822AbgKRS7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Nov 2020 13:59:32 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:53634 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725772AbgKRS7c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Nov 2020 13:59:32 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AIIi84Q062088;
+        Wed, 18 Nov 2020 18:59:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=oKLa2LrlEgJC4O/fNsIc01KkHpdEzCUl7HIEy0vGQCk=;
+ b=zBm4P7m1rfqAaxvPPKLfT3Ki9h/rJRWYHSM4+WCPuHkyyxSe4mv2YNS5ABl0B8Gk1pGQ
+ nckLFmiKahNpjZwncUjIjeU2v8qOKOG5fg3B6NXhfbEeb6Ayse+VDcN+yaPqpNPKAp+W
+ GwCYdBAKtRDjD0HrwTffhW6kG+z8heIPPH7BIJooLUBDKTSrOxZLAOAurv6PnwJ7TODY
+ Go00qwfq661doEs8SgluAfo+B/Kd8PF+tf57NJGvbwn5h5mbLwWy9UOTBLQRMHFAqIWn
+ HFJKbOwCPOsv1E6JNHicpUCFOgF/bER5opYqNBjEWm9/TI7o2olFJxIpvl9qH3aXT/cO cw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 34t7vn9muw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 18 Nov 2020 18:59:25 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AIIfM5t035206;
+        Wed, 18 Nov 2020 18:59:24 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 34umd0xvgu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Nov 2020 18:59:24 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AIIxNcH011191;
+        Wed, 18 Nov 2020 18:59:23 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 18 Nov 2020 10:59:22 -0800
+Date:   Wed, 18 Nov 2020 21:59:17 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kernelfans@gmail.com
+Cc:     linux-pm@vger.kernel.org, kexec@lists.infradead.org
+Subject: [bug report] PM / reboot: Eliminate race between reboot and suspend
+Message-ID: <20201118185917.GA433776@mwanda>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9809 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 mlxscore=0 phishscore=0
+ spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011180130
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9809 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=3
+ malwarescore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 phishscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011180130
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, November 17, 2020 7:31:29 PM CET Rafael J. Wysocki wrote:
-> On 11/16/2020 8:11 AM, Andrei Popa wrote:
-> > Hello,
-> >
-> > After an update from vmlinuz-4.15.0-106-generic to vmlinuz-5.4.0-37-generic we experience, on a  number of servers, a very high number of rx_missed_errors and dropped packets only on the uplink 10G interface. We have another 10G downlink interface with no problems.
-> >
-> > The affected servers have the following mainboards:
-> > S5520HC ver E26045-455
-> > S5520UR ver E22554-751
-> > S5520UR ver E22554-753
-> > S5000VSA
-> >
-> > On other 30 servers with similar mainboards and/or configs there are no dropped packets with vmlinuz-5.4.0-37-generic.
-> >
-> > We’ve installed vanilla 4.16 and there were no dropped packets.
-> > Vanilla 4.17 had a very high number of dropped packets like the following:
-> >
-> > root@shaper:~# cat test
-> > #!/bin/bash
-> > while true
-> > do
-> > ethtool -S ens6f1|grep "missed_errors"
-> > ifconfig ens6f1|grep RX|grep dropped
-> > sleep 1
-> > done
-> >
-> > root@shaper:~# ./test
-> >       rx_missed_errors: 2418845
-> >          RX errors 0  dropped 2418888  overruns 0  frame 0
-> >       rx_missed_errors: 2426175
-> >          RX errors 0  dropped 2426218  overruns 0  frame 0
-> >       rx_missed_errors: 2431910
-> >          RX errors 0  dropped 2431953  overruns 0  frame 0
-> >       rx_missed_errors: 2437266
-> >          RX errors 0  dropped 2437309  overruns 0  frame 0
-> >       rx_missed_errors: 2443305
-> >          RX errors 0  dropped 2443348  overruns 0  frame 0
-> >       rx_missed_errors: 2448357
-> >          RX errors 0  dropped 2448400  overruns 0  frame 0
-> >       rx_missed_errors: 2452539
-> >          RX errors 0  dropped 2452582  overruns 0  frame 0
-> >
-> > We did a git bisect and we’ve found that the following commit generates the high number of dropped packets:
-> >
-> > Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com <mailto:rafael.j.wysocki@intel.com>>
-> > Date:   Thu Apr 5 19:12:43 2018 +0200
-> >      cpuidle: menu: Avoid selecting shallow states with stopped tick
-> >      If the scheduler tick has been stopped already and the governor
-> >      selects a shallow idle state, the CPU can spend a long time in that
-> >      state if the selection is based on an inaccurate prediction of idle
-> >      time.  That effect turns out to be relevant, so it needs to be
-> >      mitigated.
-> >      To that end, modify the menu governor to discard the result of the
-> >      idle time prediction if the tick is stopped and the predicted idle
-> >      time is less than the tick period length, unless the tick timer is
-> >      going to expire soon.
-> >      Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com <mailto:rafael.j.wysocki@intel.com>>
-> >      Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org <mailto:peterz@infradead.org>>
-> > diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
-> > index 267982e471e0..1bfe03ceb236 100644
-> > --- a/drivers/cpuidle/governors/menu.c
-> > +++ b/drivers/cpuidle/governors/menu.c
-> > @@ -352,13 +352,28 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> >           */
-> >          data->predicted_us = min(data->predicted_us, expected_interval);
-> > -       /*
-> > -        * Use the performance multiplier and the user-configurable
-> > -        * latency_req to determine the maximum exit latency.
-> > -        */
-> > -       interactivity_req = data->predicted_us / performance_multiplier(nr_iowaiters, cpu_load);
-> > -       if (latency_req > interactivity_req)
-> > -               latency_req = interactivity_req;
-> 
-> The tick_nohz_tick_stopped() check may be done after the above and it 
-> may be reworked a bit.
-> 
-> I'll send a test patch to you shortly.
+Hello Pingfan Liu,
 
-The patch is appended, but please note that it has been rebased by hand and
-not tested.
+The patch 55f2503c3b69: "PM / reboot: Eliminate race between reboot
+and suspend" from Jul 31, 2018, leads to the following static checker
+warning:
 
-Please let me know if it makes any difference.
+	kernel/power/main.c:27 lock_system_sleep()
+	warn: called with lock held.  '&system_transition_mutex'
 
-And in the future please avoid pasting the entire kernel config to your
-reports, that's problematic.
+kernel/reboot.c
+   345  
+   346          mutex_lock(&system_transition_mutex);
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The patch changed the code to take this lock.
 
----
- drivers/cpuidle/governors/menu.c |   23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+   347          switch (cmd) {
+   348          case LINUX_REBOOT_CMD_RESTART:
+   349                  kernel_restart(NULL);
+   350                  break;
+   351  
+   352          case LINUX_REBOOT_CMD_CAD_ON:
+   353                  C_A_D = 1;
+   354                  break;
+   355  
+   356          case LINUX_REBOOT_CMD_CAD_OFF:
+   357                  C_A_D = 0;
+   358                  break;
+   359  
+   360          case LINUX_REBOOT_CMD_HALT:
+   361                  kernel_halt();
+   362                  do_exit(0);
+   363                  panic("cannot halt");
+   364  
+   365          case LINUX_REBOOT_CMD_POWER_OFF:
+   366                  kernel_power_off();
+   367                  do_exit(0);
+   368                  break;
+   369  
+   370          case LINUX_REBOOT_CMD_RESTART2:
+   371                  ret = strncpy_from_user(&buffer[0], arg, sizeof(buffer) - 1);
+   372                  if (ret < 0) {
+   373                          ret = -EFAULT;
+   374                          break;
+   375                  }
+   376                  buffer[sizeof(buffer) - 1] = '\0';
+   377  
+   378                  kernel_restart(buffer);
+   379                  break;
+   380  
+   381  #ifdef CONFIG_KEXEC_CORE
+   382          case LINUX_REBOOT_CMD_KEXEC:
+   383                  ret = kernel_kexec();
+                        ^^^^^^^^^^^^^^^^^^^^
+Called with lock held.
 
-Index: linux-pm/drivers/cpuidle/governors/menu.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/governors/menu.c
-+++ linux-pm/drivers/cpuidle/governors/menu.c
-@@ -308,18 +308,18 @@ static int menu_select(struct cpuidle_dr
- 				get_typical_interval(data, predicted_us)) *
- 				NSEC_PER_USEC;
- 
--	if (tick_nohz_tick_stopped()) {
--		/*
--		 * If the tick is already stopped, the cost of possible short
--		 * idle duration misprediction is much higher, because the CPU
--		 * may be stuck in a shallow idle state for a long time as a
--		 * result of it.  In that case say we might mispredict and use
--		 * the known time till the closest timer event for the idle
--		 * state selection.
--		 */
--		if (data->predicted_us < TICK_USEC)
--			data->predicted_us = min_t(unsigned int, TICK_USEC,
--						   ktime_to_us(delta_next));
-+	/*
-+	 * If the tick is already stopped, the cost of possible short idle
-+	 * duration misprediction is much higher, because the CPU may be stuck
-+	 * in a shallow idle state for a long time as a result of it.  In that
-+	 * case, say we might mispredict and use the known time till the closest
-+	 * timer event for the idle state selection, unless that event is going
-+	 * to occur within the tick time frame (in which case the CPU will be
-+	 * woken up from whatever idle state it gets into soon enough anyway).
-+	 */
-+	if (tick_nohz_tick_stopped() && data->predicted_us < TICK_USEC &&
-+	    delta_next >= TICK_NSEC) {
-+		data->predicted_us = ktime_to_us(delta_next);
- 	} else {
- 		/*
- 		 * Use the performance multiplier and the user-configurable
+   384                  break;
+   385  #endif
 
+But kernel_kexec() also tries to take the &system_transition_mutex so
+it will dead lock.
 
+kernel/kexec_core.c
+  1125  int kernel_kexec(void)
+  1126  {
+  1127          int error = 0;
+  1128  
+  1129          if (!mutex_trylock(&kexec_mutex))
+  1130                  return -EBUSY;
+  1131          if (!kexec_image) {
+  1132                  error = -EINVAL;
+  1133                  goto Unlock;
+  1134          }
+  1135  
+  1136  #ifdef CONFIG_KEXEC_JUMP
+  1137          if (kexec_image->preserve_context) {
+  1138                  lock_system_sleep();
+                        ^^^^^^^^^^^^^^^^^^^
+Here.
 
+  1139                  pm_prepare_console();
+  1140                  error = freeze_processes();
+  1141                  if (error) {
+  1142                          error = -EBUSY;
+  1143                          goto Restore_console;
+  1144                  }
+  1145                  suspend_console();
+  1146                  error = dpm_suspend_start(PMSG_FREEZE);
+  1147                  if (error)
+  1148                          goto Resume_console;
+  1149                  /* At this point, dpm_suspend_start() has been called,
+  1150                   * but *not* dpm_suspend_end(). We *must* call
+  1151                   * dpm_suspend_end() now.  Otherwise, drivers for
+  1152                   * some devices (e.g. interrupt controllers) become
+  1153                   * desynchronized with the actual state of the
+  1154                   * hardware at resume time, and evil weirdness ensues.
+  1155                   */
+  1156                  error = dpm_suspend_end(PMSG_FREEZE);
+  1157                  if (error)
+  1158                          goto Resume_devices;
+  1159                  error = suspend_disable_secondary_cpus();
+  1160                  if (error)
+
+regards,
+dan carpenter
