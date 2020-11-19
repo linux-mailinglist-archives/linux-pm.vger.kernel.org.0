@@ -2,260 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE412B8C75
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 08:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5222B8FA1
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 11:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbgKSHi0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Nov 2020 02:38:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S1726334AbgKSJ5N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Nov 2020 04:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725648AbgKSHiZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 02:38:25 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9D4C0613CF
-        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 23:38:25 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id t21so3464244pgl.3
-        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 23:38:25 -0800 (PST)
+        with ESMTP id S1727140AbgKSJ5M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 04:57:12 -0500
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCCEC0613CF
+        for <linux-pm@vger.kernel.org>; Thu, 19 Nov 2020 01:57:12 -0800 (PST)
+Received: by mail-ua1-x941.google.com with SMTP id x13so1720454uar.4
+        for <linux-pm@vger.kernel.org>; Thu, 19 Nov 2020 01:57:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oHrMQUbqDwzagP4Y2oPS+XW/6aunUOQ8w5HkGn8duRY=;
-        b=oUjbWw2jWK7s8CbG+dI6Vb3FSb781vdJfwgeSbaTKtRlOu3FgcCjvfWACtGf0Ig0bv
-         6hw9N/4aSSmPjWVYLW+LKHFCV1EF/r34gP/FzYODhBQTO2zRcv6oOvY8pq2WHYqa96js
-         dNsXgB69ecU6oug+UWWJ8LxweXgtRfWMw4w4JXjEbSNxX4bbr2WO/r9Zrr72H09qJCWZ
-         L4mtVyBrsoe5V3TNmeiAfCGHceqls+7QXfvXAAfBM0kW2WsqWT4OS/HblYu/Eyyc618e
-         lcunYNy/PSjuK6kPSPp7Xa4+eB2AEwDsQ/kGYJuQ/UcSDccsBjNVmMfmzZch5naRCEoK
-         7gEw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mhtUo5DDWR1Wj8D/VLi8cQ8orehykMaquIOMEKE59vw=;
+        b=xno0khaWrRb+B2WE5lB+NJEGpsgrt5De2fXglgPUl4KW8igRy/SFAiFsqxEsdcmeDH
+         Hmm9/0TXUafLgE3G1PYvLWdJOQIpqdJRstRoCeHmi1GiTENfgJI+WmeRbyb1gR3O9VbS
+         g9/XcyCRP4mLpFlm/m2BYrRKjubfRgm6co+jP4h0MtYDcsRgtkIGJhvseG9ZBtA6EdjA
+         l4vVW3IBjdQnaM8GzRrFkocF8uOTH06tGoDvQy+1CTlQQ6Y6DNuU/FSqtTF0qC1wVj0u
+         M44MFzstvcCLHKnIqdI+gpMDYmirKYoV+1cASFkxkBBvzBcbwLulWRXJhzS0/0+5BHuE
+         ONbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oHrMQUbqDwzagP4Y2oPS+XW/6aunUOQ8w5HkGn8duRY=;
-        b=FufMFJtUQ0/PxFKT6gvya0hl3Q6QNMlG9d3isKNzZFdqJLiiq2tBnmiURcGoeFSbOO
-         PPmYsW7uszESrjmlpsjIiVSCcIfTxw1KLABeF3g4gY29m1lKvh1p01r6EiRytlneMXiY
-         6o8DCP6pLAABEhr9dMQ+ISFetwnjavXL1fPkw5Vq7NeF3Ctu0x6crUb5GIAzDUEthoV4
-         jZUpXQbYBA3I1U3xqflPCN4sac8MrU8wL6gNEdAeojr5KqPei7pasNft+hcz97gKfdjJ
-         cii2ptZzy0IGbT7h0BQ6HeskgeFnyKBqrA7wUyDIA60P2C1jlpIeBTyRVHy0iNPP8chL
-         jWKA==
-X-Gm-Message-State: AOAM5337hxrCI3g7+mE7hD7RdzvPV121XTi2hkvtkPv9wqwrbgZw2RRj
-        VcmOIpYinWpxOQ3mQmOrC2JE5A==
-X-Google-Smtp-Source: ABdhPJx7e6rdZWHbAN1nX6uwJL8arAmZmx68HTtHZ9boVJp869RlJjcDSGgc58cdq9JtSdT/BRTaYg==
-X-Received: by 2002:aa7:8481:0:b029:18b:f647:45f7 with SMTP id u1-20020aa784810000b029018bf64745f7mr8008662pfn.58.1605771504870;
-        Wed, 18 Nov 2020 23:38:24 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id kb12sm5157016pjb.2.2020.11.18.23.38.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Nov 2020 23:38:24 -0800 (PST)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
-Subject: [PATCH V3 2/2] thermal: cpufreq_cooling: Reuse sched_cpu_util() for SMP platforms
-Date:   Thu, 19 Nov 2020 13:08:08 +0530
-Message-Id: <1fa9994395764ba19cfe6240d8b3c1ce390e8f82.1605770951.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
-In-Reply-To: <cover.1605770951.git.viresh.kumar@linaro.org>
-References: <cover.1605770951.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mhtUo5DDWR1Wj8D/VLi8cQ8orehykMaquIOMEKE59vw=;
+        b=KcA8a15F772Tv4iOoaToE5odLYNozRvIvsXPSidJuj8thZURzXwxxIeG695WGHyWNh
+         bDAJChQKPjExAWbdH8C6OUCnn+T9uZF09CmBDkyzz+H/QBCq01Lr0m0RFsZh6cmnGhUI
+         RZGxELAjxilZpk9NDo/x5xzgDJrQNZwJi6SwliQ9tbPa5HCMpG3nhyN4F0vdHrIlTOs4
+         eIhFBLnR1lDZJzgH7A7jz5bMjJLxT2G7xnnSMMma7Jepizq9Ztdw97Y9FmqQyOTRoC/G
+         GqpWx58r8FaIJjyzsTvq9beJEuCKfcFT7A+wGFpogHpML0g/l5EZwQ4jKKxo8DndlDFJ
+         uceg==
+X-Gm-Message-State: AOAM532smCwG6G9SXMhfdtuseaOPlSGK7Bp0hP2L7bKr9sBU630/g/Ue
+        yGG5Zq0yBCT13W+QTL2ogjVEdLMIw1qld5zHFpuzrw==
+X-Google-Smtp-Source: ABdhPJxdKL5Mh2DLVNMy/ooX6cemQ+T+3BnsD9Jyqpy8xDlpGLA9LXtH0AiGRi1o1WyQb+tmFYC+6RycGzwUAZ2GBBU=
+X-Received: by 2002:ab0:c12:: with SMTP id a18mr6868080uak.19.1605779831706;
+ Thu, 19 Nov 2020 01:57:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201106164811.3698-1-ilina@codeaurora.org> <20201106164811.3698-3-ilina@codeaurora.org>
+ <CAPDyKFrv-3USmNLR3gjgaTEuTrWuYZjs3qCtnjxSOWqrxv5qsA@mail.gmail.com>
+ <X6l/OcHG37HzgFL8@codeaurora.org> <CAPDyKFr8fdbMM1nsx-RZcMVtveJUP3p38z=HkL1T2C=QgM3gkQ@mail.gmail.com>
+ <X6wRBLmvzztNai4y@codeaurora.org> <CAPDyKFr9gpH9Kh9=W4D7DRG8OuqBvkaWHvk8i47SToES=338cA@mail.gmail.com>
+ <X7KhcItlnS+uuqK2@codeaurora.org>
+In-Reply-To: <X7KhcItlnS+uuqK2@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 19 Nov 2020 10:56:35 +0100
+Message-ID: <CAPDyKFpKookuX2ynBfy44kyfZq48JPaUrEHevetsyoc83=UnsA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PM / Domains: use device's next wakeup to
+ determine domain idle state
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Several parts of the kernel are already using the effective CPU
-utilization (as seen by the scheduler) to get the current load on the
-CPU, do the same here instead of depending on the idle time of the CPU,
-which isn't that accurate comparatively.
+On Mon, 16 Nov 2020 at 16:57, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> On Fri, Nov 13 2020 at 03:34 -0700, Ulf Hansson wrote:
+> >On Wed, 11 Nov 2020 at 17:51, Lina Iyer <ilina@codeaurora.org> wrote:
+> >>
+> >> On Tue, Nov 10 2020 at 03:02 -0700, Ulf Hansson wrote:
+> >> >On Mon, 9 Nov 2020 at 18:41, Lina Iyer <ilina@codeaurora.org> wrote:
+> >> >>
+> >> >> On Mon, Nov 09 2020 at 08:27 -0700, Ulf Hansson wrote:
+> >> >> >On Fri, 6 Nov 2020 at 17:48, Lina Iyer <ilina@codeaurora.org> wrote:
+> >> >> >>
+> >> >> [...]
+> >> >> >> +static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
+> >> >> >> +{
+> >> >> >> +       ktime_t domain_wakeup = KTIME_MAX;
+> >> >> >> +       ktime_t next_wakeup;
+> >> >> >> +       struct pm_domain_data *pdd;
+> >> >> >> +       struct gpd_link *link;
+> >> >> >> +
+> >> >> >> +       /* Find the earliest wakeup for all devices in the domain */
+> >> >> >> +       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+> >> >> >> +               next_wakeup = to_gpd_data(pdd)->next_wakeup;
+> >> >> >> +               if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
+> >> >> >> +                       if (ktime_before(next_wakeup, domain_wakeup))
+> >> >> >> +                               domain_wakeup = next_wakeup;
+> >> >> >
+> >> >> >If it turns out that one of the device's next_wakeup is before "now",
+> >> >> >leading to ktime_before() above returns true - then I think you should
+> >> >> >bail out, no?
+> >> >> >
+> >> >> >At least, we shouldn't just continue and ignore this case, right?
+> >> >> >
+> >> >> No, that could be a very common case. Drivers are not expected to clean
+> >> >> up the next wakeup by setting it to KTIME_MAX. The best we can do is
+> >> >> to make a choice with the valid information we have. This will also map
+> >> >> to the current behavior. Say if all next wakeup information provided to
+> >> >> the devices were in the past, we would be no worse (or better) than what
+> >> >> we do without this change.
+> >> >
+> >> >Well, I don't quite agree (at least not yet), but let me elaborate, as
+> >> >I think we can do better without having to add complexity.
+> >> >
+> >> >Normally, I don't think a driver needs to clean up its device's next
+> >> >wakeup in between the remote wakeups, instead it should just set a new
+> >> >value.
+> >> >
+> >> >That's because, even if the driver acts to a remote wakeup or deals
+> >> >with a request entering a queue, the driver needs to runtime resume
+> >> >its device during this period. This prevents genpd from power off the
+> >> >PM domain, hence also the genpd governor from potentially looking at
+> >> >"invalid" wakeup information for its attached devices.
+> >> >
+> >> Could you elaborate a bit? Why would a remote wakeup affect the next
+> >> wakeup. I'm afraid that I'm not getting the situation correctly.
+> >
+> >Let me try :-)
+> >
+> >A remote wakeup is a wakeup irq that is triggered when the device is
+> >in runtime suspended state.
+> >
+> >I was expecting that you would be arming a remote wakeup for the
+> >corresponding device that is attached to a genpd, when the use case
+> >becomes enabled. Additionally, to allow the driver to consume the
+> >wakeup irq, it needs to runtime resume its device (which means its PM
+> >domain via genpd must be powered on as well, if it's not on already).
+> >
+> >Therefore, during the period of when the driver consumes the wakeup
+> >irq, its device's PM domain remains powered on. When this is
+> >completed, the driver allows its device to become runtime suspended
+> >again. At some point before the device becomes runtime suspended, the
+> >driver should set a new value of the "next wakeup" for its device.
+> >
+> Okay, that is clear. Thanks :)
+>
+> Yes, we would expect the device to set up its next_wakeup before doing
+> runtime suspend and if the next wakeup is in the past, we would possibly
+> not have runtime suspended the device. That would keep the domain ON and
+> we would not come to this governor at all. And if we still are doing it,
+> then the device has not set the next wakeup correctly.
 
-This is also the right thing to do as it makes the cpufreq governor
-(schedutil) align better with the cpufreq_cooling driver, as the power
-requested by cpufreq_cooling governor will exactly match the next
-frequency requested by the schedutil governor since they are both using
-the same metric to calculate load.
+Correct.
 
-Note that, this (and CPU frequency scaling in general) doesn't work that
-well with idle injection as that is done from rt threads and is counted
-as load while it tries to do quite the opposite. That should be solved
-separately though.
+>
+> What you are suggesting is that, we should not power down the domain in
+> such a case. This would be a really hard problem to debug when a device
+> leaves a stale wakeup behind and we no longer power off the domain
+> because of that. Tracking that back to the device will be a monumental
+> effort. Ignoring the next wakeup though might involve a power/perf
+> penalty (no worse than today), but we would not have a difficult problem
+> to solve.
 
-This was tested on ARM Hikey6220 platform with hackbench, sysbench and
-schbench. None of them showed any regression or significant
-improvements. Schbench is the most important ones out of these as it
-creates the scenario where the utilization numbers provide a better
-estimate of the future.
+Hmm, you have a good point!
 
-Scenario 1: The CPUs were mostly idle in the previous polling window of
-the IPA governor as the tasks were sleeping and here are the details
-from traces (load is in %):
+Additionally, I guess it should be a rather seldom situation, as in
+principle the wakeup irq should have been triggered already.
 
- Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=203 load={{0x35,0x1,0x0,0x31,0x0,0x0,0x64,0x0}} dynamic_power=1339
- New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=600 load={{0x60,0x46,0x45,0x45,0x48,0x3b,0x61,0x44}} dynamic_power=3960
+That said, I am okay to stick with your suggested approach.
 
-Here, the "Old" line gives the load and requested_power (dynamic_power
-here) numbers calculated using the idle time based implementation, while
-"New" is based on the CPU utilization from scheduler.
+Although, please add a comment in the code, to make it clear that the
+behaviour is deliberate. Perhaps we should also clarify the function
+description of dev_pm_genpd_set_next_wakeup() (in patch1) to make the
+behaviour more clear for the user.
 
-As can be clearly seen, the load and requested_power numbers are simply
-incorrect in the idle time based approach and the numbers collected from
-CPU's utilization are much closer to the reality.
+>
+> >>
+> >> >Of course, I assume there are situations, where a driver actually
+> >> >needs to do a clean up of its device's next wakeup, but that should be
+> >> >less frequent and likely when a remote wakeup is disabled (for
+> >> >whatever reason).
+> >> >
+> >> A common case would be that the driver does not know when the usecase is
+> >> being turned off and therefore may not be able to set the next wakeup to
+> >> max. If the stale value continues to exist then we may never power off
+> >> the domain.
+> >
+> >Right.
+> >
+> >But, how do you know that the use case starts and what prevents us
+> >from knowing that the use case has stopped?
+> >
+> Usually, the device is made aware of the usecase when it starts, but
+> stopping the usecase might be something the device may or may not be
+> aware of.
 
-Scenario 2: The CPUs were busy in the previous polling window of the IPA
-governor:
+Okay, I see.
 
- Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=800 load={{0x64,0x64,0x64,0x64,0x64,0x64,0x64,0x64}} dynamic_power=5280
- New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=708 load={{0x4d,0x5c,0x5c,0x5b,0x5c,0x5c,0x51,0x5b}} dynamic_power=4672
+I guess this means the remote wakeup stays armed, but there are no
+longer any wakeups being triggered.
 
-As can be seen, the idle time based load is 100% for all the CPUs as it
-took only the last window into account, but in reality the CPUs aren't
-that loaded as shown by the utilization numbers.
+>
+> >Maybe if you add a user of the new APIs, this would help me to
+> >understand better?
+> >
+> I have been asking some folks, but let's see.
+>
+> [...]
+>
+> >> >> >For example, there's no point doing the above, if the domain doesn't
+> >> >> >specify residency values for its idle states.
+> >> >> >
+> >> >> We would still need to ensure that the next wakeup is after the
+> >> >> power_off_latency, if specified.
+> >> >
+> >> >Good point! Although, I would rather avoid adding the overhead, unless
+> >> >the residency is specified. Do you see a problem with this approach?
+> >> >
+> >> Hmmm, no strong objections. However, we still need to run through the
+> >> states to make sure the residency is not set and have a variable track
+> >> that.
+> >
+> >Right.
+> >
+> >The important part is that we can do that once and not for every call
+> >to the governor.
+> >
+> >> The devices wouldn't know that and would still continue to set the
+> >> next wakeup, unless we find a way to let them know we are not using this
+> >> feature for the domain.
+> >
+> >Right.
+> >
+> >To allow the driver to know, we could respond with an error code from
+> >the new dev_pm_genpd_set_performance_state() API (from patch1), in
+> >case the genpd+governor doesn't support it.
+> >
+> It would an unnecessary work everytime a next wakeup is being set to
+> iterate through the available states and figure out if the residency has
+> been set or not. We could probably hold that result in a variable when
+> we setup the genpd states. Expect the next_wake to be set from a
+> critical path or an interrupt handler, so we have to be quick.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/thermal/cpufreq_cooling.c | 68 ++++++++++++++++++++++++-------
- 1 file changed, 54 insertions(+), 14 deletions(-)
+Yes, that's the idea I had in mind.
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index cc2959f22f01..a364a2fd84b1 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -76,7 +76,9 @@ struct cpufreq_cooling_device {
- 	struct em_perf_domain *em;
- 	struct cpufreq_policy *policy;
- 	struct list_head node;
-+#ifndef CONFIG_SMP
- 	struct time_in_idle *idle_time;
-+#endif
- 	struct freq_qos_request qos_req;
- };
- 
-@@ -132,14 +134,35 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- }
- 
- /**
-- * get_load() - get load for a cpu since last updated
-- * @cpufreq_cdev:	&struct cpufreq_cooling_device for this cpu
-- * @cpu:	cpu number
-- * @cpu_idx:	index of the cpu in time_in_idle*
-+ * get_load() - get load for a cpu
-+ * @cpufreq_cdev: struct cpufreq_cooling_device for the cpu
-+ * @cpu: cpu number
-+ * @cpu_idx: index of the cpu in time_in_idle array
-  *
-  * Return: The average load of cpu @cpu in percentage since this
-  * function was last called.
-  */
-+#ifdef CONFIG_SMP
-+static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
-+		    int cpu_idx)
-+{
-+	unsigned long max = arch_scale_cpu_capacity(cpu);
-+	unsigned long util;
-+
-+	util = sched_cpu_util(cpu, ENERGY_UTIL, max);
-+	return (util * 100) / max;
-+}
-+
-+static inline int allocate_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+	return 0;
-+}
-+
-+static inline void free_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+}
-+
-+#else /* !CONFIG_SMP */
- static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
- 		    int cpu_idx)
- {
-@@ -162,6 +185,26 @@ static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
- 	return load;
- }
- 
-+static int allocate_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+	unsigned int num_cpus = cpumask_weight(cpufreq_cdev->policy->related_cpus);
-+
-+	cpufreq_cdev->idle_time = kcalloc(num_cpus,
-+					 sizeof(*cpufreq_cdev->idle_time),
-+					 GFP_KERNEL);
-+	if (!cpufreq_cdev->idle_time)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+static void free_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+	kfree(cpufreq_cdev->idle_time);
-+	cpufreq_cdev->idle_time = NULL;
-+}
-+#endif /* CONFIG_SMP */
-+
- /**
-  * get_dynamic_power() - calculate the dynamic power
-  * @cpufreq_cdev:	&cpufreq_cooling_device for this cdev
-@@ -487,7 +530,7 @@ __cpufreq_cooling_register(struct device_node *np,
- 	struct thermal_cooling_device *cdev;
- 	struct cpufreq_cooling_device *cpufreq_cdev;
- 	char dev_name[THERMAL_NAME_LENGTH];
--	unsigned int i, num_cpus;
-+	unsigned int i;
- 	struct device *dev;
- 	int ret;
- 	struct thermal_cooling_device_ops *cooling_ops;
-@@ -498,7 +541,6 @@ __cpufreq_cooling_register(struct device_node *np,
- 		return ERR_PTR(-ENODEV);
- 	}
- 
--
- 	if (IS_ERR_OR_NULL(policy)) {
- 		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
- 		return ERR_PTR(-EINVAL);
-@@ -516,12 +558,10 @@ __cpufreq_cooling_register(struct device_node *np,
- 		return ERR_PTR(-ENOMEM);
- 
- 	cpufreq_cdev->policy = policy;
--	num_cpus = cpumask_weight(policy->related_cpus);
--	cpufreq_cdev->idle_time = kcalloc(num_cpus,
--					 sizeof(*cpufreq_cdev->idle_time),
--					 GFP_KERNEL);
--	if (!cpufreq_cdev->idle_time) {
--		cdev = ERR_PTR(-ENOMEM);
-+
-+	ret = allocate_idle_time(cpufreq_cdev);
-+	if (ret) {
-+		cdev = ERR_PTR(ret);
- 		goto free_cdev;
- 	}
- 
-@@ -581,7 +621,7 @@ __cpufreq_cooling_register(struct device_node *np,
- remove_ida:
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
- free_idle_time:
--	kfree(cpufreq_cdev->idle_time);
-+	free_idle_time(cpufreq_cdev);
- free_cdev:
- 	kfree(cpufreq_cdev);
- 	return cdev;
-@@ -674,7 +714,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 	thermal_cooling_device_unregister(cdev);
- 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
--	kfree(cpufreq_cdev->idle_time);
-+	free_idle_time(cpufreq_cdev);
- 	kfree(cpufreq_cdev);
- }
- EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
--- 
-2.25.0.rc1.19.g042ed3e048af
+Maybe it's not feasible, let's see. However, for sure I am looking at
+decreasing overhead, not to increase. :-)
 
+>
+> >Would that be okay? Otherwise we will have to add a separate genpd
+> >API, asking explicitly if the "next wakeup" feature is supported.
+> >
+> Would like to avoid that as much as possible.
+
+Okay, good.
+
+Kind regards
+Uffe
