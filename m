@@ -2,132 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7509E2B9856
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 17:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7107D2B9916
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 18:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbgKSQnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Nov 2020 11:43:41 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:42320 "EHLO m42-4.mailgun.net"
+        id S1727822AbgKSRNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Nov 2020 12:13:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:35512 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728077AbgKSQnl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:43:41 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1605804220; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=xXWY11AkQl+qkoWNFqEm2VGxxmdvC3mfMPPJNFQ47Us=; b=l0cJ69SeNd3BjvWR7PIQ8t+x8vUVBppR7iEWQ8ciSaDuOdUuVt2+s889JVD7Y42HawB1fS8g
- PkgHC1bxcfUyeNPvPvh/Q4/wFpoZSu2cl4yvr2N/XTP6i353u7k3Nu3BnPAJGi4OFTOvyM8j
- QWZRfIYoHRJw/Y+Je2bysvulO+0=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 5fb6a0b6b9b39088ed4688d8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 19 Nov 2020 16:43:34
- GMT
-Sender: ilina=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 228B2C43461; Thu, 19 Nov 2020 16:43:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id F1D79C433ED;
-        Thu, 19 Nov 2020 16:43:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F1D79C433ED
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     rjw@rjwysocki.net, ulf.hansson@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Lina Iyer <ilina@codeaurora.org>
-Subject: [PATCH v2] PM / Domains: replace -ENOTSUPP with -EOPNOTSUPP
-Date:   Thu, 19 Nov 2020 09:43:25 -0700
-Message-Id: <20201119164325.9536-1-ilina@codeaurora.org>
-X-Mailer: git-send-email 2.29.2
+        id S1727513AbgKSRNb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Nov 2020 12:13:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 016C61396;
+        Thu, 19 Nov 2020 09:13:31 -0800 (PST)
+Received: from bogus (unknown [10.57.54.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 465353F718;
+        Thu, 19 Nov 2020 09:13:28 -0800 (PST)
+Date:   Thu, 19 Nov 2020 17:13:22 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Hector Yuan <hector.yuan@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsd_upstream@mediatek.com
+Subject: Re: [PATCH v8 2/3] dt-bindings: arm: cpus: Document
+ 'mediatek,freq-domain' property
+Message-ID: <20201119171322.2gxrv5h7sqwllgsv@bogus>
+References: <1603700349-5922-1-git-send-email-hector.yuan@mediatek.com>
+ <1603700349-5922-3-git-send-email-hector.yuan@mediatek.com>
+ <20201028150858.GA4029348@bogus>
+ <65a4e167-9d2c-7fcb-5373-33af5e002333@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <65a4e167-9d2c-7fcb-5373-33af5e002333@arm.com>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-While submitting a patch to add next_wakeup, checkpatch reported this -
+On Thu, Nov 19, 2020 at 03:23:20PM +0000, Lukasz Luba wrote:
+> 
+> 
+> On 10/28/20 3:08 PM, Rob Herring wrote:
+> > On Mon, Oct 26, 2020 at 04:19:08PM +0800, Hector Yuan wrote:
+> > > From: "Hector.Yuan" <hector.yuan@mediatek.com>
+> > > 
+> > > Add devicetree documentation for 'mediatek,freq-domain' property specific
+> > > to Mediatek CPUs. This property is used to reference the CPUFREQ node
+> > > along with the domain id.
+> > > 
+> > > Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
+> > > ---
+> > >   Documentation/devicetree/bindings/arm/cpus.yaml |    6 ++++++
+> > >   1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+> > > index 1222bf1..e995b26 100644
+> > > --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+> > > +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+> > > @@ -255,6 +255,12 @@ properties:
+> > >         where voltage is in V, frequency is in MHz.
+> > > +  mediatek,freq-domain:
+> > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> > > +    description:
+> > > +      CPUs supporting freq-domain must set their "mediatek,freq-domain" property
+> > > +      with phandle to a cpufreq_hw node followed by the domain id.
+> > 
+> > This needs to be a common binding shared with SCMI domains.
+> 
+> Would it be accurate to create a new binding file:
+> Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.txt
+> ?
+>
 
-WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-+       return -ENOTSUPP;
+Nope, Rob already asked to unify all such bindings and generalise it.
+Here is my attempt[1] and this must just use it or help to enhance that
+in order to make use of that binding.
 
-Address the above warning in other functions in pm_domain.h.
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Lina Iyer <ilina@codeaurora.org>
----
- include/linux/pm_domain.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 34a8784b0ad4..e55781333695 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -259,24 +259,24 @@ static inline int pm_genpd_init(struct generic_pm_domain *genpd,
- }
- static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
- {
--	return -ENOTSUPP;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int dev_pm_genpd_set_performance_state(struct device *dev,
- 						     unsigned int state)
- {
--	return -ENOTSUPP;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int dev_pm_genpd_add_notifier(struct device *dev,
- 					    struct notifier_block *nb)
- {
--	return -ENOTSUPP;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int dev_pm_genpd_remove_notifier(struct device *dev)
- {
--	return -ENOTSUPP;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
-@@ -334,13 +334,13 @@ struct device *genpd_dev_pm_attach_by_name(struct device *dev,
- static inline int of_genpd_add_provider_simple(struct device_node *np,
- 					struct generic_pm_domain *genpd)
- {
--	return -ENOTSUPP;
-+	return -EOPNOTSUPP;
- }
- 
- static inline int of_genpd_add_provider_onecell(struct device_node *np,
- 					struct genpd_onecell_data *data)
- {
--	return -ENOTSUPP;
-+	return -EOPNOTSUPP;
- }
- 
- static inline void of_genpd_del_provider(struct device_node *np) {}
-@@ -396,7 +396,7 @@ static inline struct device *genpd_dev_pm_attach_by_name(struct device *dev,
- static inline
- struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
- {
--	return ERR_PTR(-ENOTSUPP);
-+	return ERR_PTR(-EOPNOTSUPP);
- }
- #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
- 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Regards,
+Sudeep
 
+[1] https://lore.kernel.org/lkml/20201116181356.804590-1-sudeep.holla@arm.com
