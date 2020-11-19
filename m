@@ -2,237 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 400362B8B45
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 07:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60972B8BC1
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 07:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbgKSGGX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Nov 2020 01:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S1726189AbgKSGkG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Nov 2020 01:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726172AbgKSGGW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 01:06:22 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAC1C0617A7
-        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 22:06:20 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id t8so3419491pfg.8
-        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 22:06:20 -0800 (PST)
+        with ESMTP id S1725970AbgKSGkF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 01:40:05 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD196C0613CF
+        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 22:40:05 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id i13so3326542pgm.9
+        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 22:40:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IomRGRIUUKoHDndCyhGBwVfU4P/jhWiv1ig1BoI3gF8=;
-        b=s0/jCYgwS/sLeOVNCKtlEwbgmIWthbEbn7dsveVESIfChJXh/XH1X4bVE6ZNPgk+4D
-         8guC92UHS/p5N6IeEPk5noIWDovt0ShmBpLvkom+qZW3r7HCjFeMGTKWMtJ99oIU4TZi
-         6q24UBIQPIFbJP2YSMvwv/b1quVaH/Yz32kq4B+oPbnoAa3wJyCCkLnO8Jizov8DerJf
-         6DAVhB0jyF7QCVOsgmyrI2pGqpxPmct/6uUw6yz4fFWam+UEmAnN4NcYB/z5LmWq0s9v
-         HY5YlBEGFfLjfu454o9UEt52qCCNfASF59GEvTLAt97oBsM4NgLNn56v67L/9RDj6WDj
-         yAbw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TCQz/KA2hqKOOlA4bPgpxQWY3cHnJO4JZ3EX7aXtvFw=;
+        b=KNy4dSWS83T6VD0q14ZlJtRpheQDJqycKKgG0LErsdAYOJoJUlJR8ETl3s/YJ2TfrK
+         5VC5poR0aAwEFQxHuJbXN8PYDAJ6MEF26OXZeFu24AnWoZZrxuyQBTTig1inhqi224bq
+         /FMWDYOoqE3JmW9DLCR1gbcxfanCGYNg4KFqNPZfwN/oqVjTgIWkprigETIGeftI1D2h
+         gB5HlTOdQh4CFqFJQCo/QTnHgMMpK11d0vGmlAtBMOZ7ciqQSUFo6bLvMICU2eOTAQH3
+         v4M8n8loqyG7HI5er1sghVu50OuF3HVieCTjhQnDIVxbrrx2N1KiBz8jsHFSnz6KasxP
+         cVlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IomRGRIUUKoHDndCyhGBwVfU4P/jhWiv1ig1BoI3gF8=;
-        b=WHcDwiyLoluhCBwIKE2yWC6tmiAYhsVENyUcY7wG352+h6glacZD2qO2SzeWlbHX4Q
-         1r3xi6dRoN0ZTfOHUjXqx2XHJqW6pDeAw/H0xRAIk1GKW5AeChDFz5gp05rB5jJxAvPP
-         Q1dSPHsMjqlVb7FuUvUw83PpIQ3IC6k7dHgYdBwnI9T2NC6kGhpFnnA/9La4X+gwDjll
-         cMr/Zar0qr8ez0jeLIBy9/bD8r3miqhXr3uVbIi5zjPxzvImeKcqZkDmNvCN6oT2AbOC
-         auPEDR6onPu2oECRKFiLbYXtlBx8SlePUMxXv/Inbc8kExJ/8IPesJdJFEr4dTHBorBo
-         LOKg==
-X-Gm-Message-State: AOAM533sviuAyALcbgJdSM15YHg6NEBAPU2eOD7PfF+HNYZHFV2MHvo8
-        prak7SwJrU/9lKJxRhjgxMfnxT2zJAr8Fw==
-X-Google-Smtp-Source: ABdhPJx8lGHoI+b43W1nPNovzf7uF6MtzFXk5g3Cr/FR1KU1SQuPHGFgBpHN+rWP7wffBhlYnR4WjA==
-X-Received: by 2002:a63:5758:: with SMTP id h24mr11882286pgm.109.1605765980389;
-        Wed, 18 Nov 2020 22:06:20 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TCQz/KA2hqKOOlA4bPgpxQWY3cHnJO4JZ3EX7aXtvFw=;
+        b=KEyzBlFoofNNmh95iqQ2WBeSn4gTnVJCAW+IRhAc5G3mm/yqmkMeV/SIzl5+N1WTuL
+         K6vJaCbRJrBkoWbNDXmrdm1VJeDWrOiXkrLwqA/3xQi/L5NQkEK1uV45AWu9mh+3OjFR
+         w1u9GfwBfRQCM23x8N7aPEIU8cnWL+yhMrJqm04+2H7SwsLS9SY6lGb0xFCp2ws4yIyF
+         Z1GA/PgaNtGg0iGTYMaIRKt9ft44IIuMBZoWGrBsirX02wDGvaVI9K/OCoaV6Hlwcr5z
+         1EcOU+IFy8m2MaGyZReI4qS7OKem4btypTS59q0mggRMOXbh0RlRdVDm50a+FnUAmNoj
+         gICA==
+X-Gm-Message-State: AOAM530DAzzYUOcvhwBiZbQCnToIKEbk/hI7dgGxB6EgGIwpTtoLQA0F
+        HWMkFVmVplQbq793msQfRQalzA==
+X-Google-Smtp-Source: ABdhPJwrMgKHhEo1sifq6kgROK90gyHcKMGZfBb7j74eDKQYs6R7joDCoSh9SD2KOGWzFehj1TkWQA==
+X-Received: by 2002:a63:1d55:: with SMTP id d21mr11313790pgm.324.1605768005139;
+        Wed, 18 Nov 2020 22:40:05 -0800 (PST)
 Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id u6sm906769pgp.57.2020.11.18.22.06.19
+        by smtp.gmail.com with ESMTPSA id h127sm28398286pfe.16.2020.11.18.22.40.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Nov 2020 22:06:19 -0800 (PST)
+        Wed, 18 Nov 2020 22:40:04 -0800 (PST)
+Date:   Thu, 19 Nov 2020 12:10:01 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Reduce the size of critical section in _opp_kref_release()
-Date:   Thu, 19 Nov 2020 11:36:16 +0530
-Message-Id: <ed40e33c0b912abb271e5b884e4e4e518326ebe0.1605765973.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Chris Redpath <chris.redpath@arm.com>
+Subject: Re: [PATCH v3 3/3] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201119064001.45iibj3u6mx3cgu2@vireshk-i7>
+References: <20201106105514.bhtdklyhn7goml64@vireshk-i7>
+ <7f73bcd6-0f06-4ef0-7f02-0751e6c4d94b@arm.com>
+ <20201109065742.22czfgyjhsjmkytf@vireshk-i7>
+ <2fa8a5c0-f66d-34bc-7f1c-8462e7532e0a@arm.com>
+ <20201117101128.6uapqg56arwqmm5p@vireshk-i7>
+ <0858962e-3a30-d177-594b-bb8e3149dd8d@arm.com>
+ <20201117105337.vjwtig3qxpc6owmw@vireshk-i7>
+ <CAJZ5v0iRs-uxzdV4vikN1VOwGuoorkRt2uqFSvbN2kySG-6duA@mail.gmail.com>
+ <20201118044244.gbr4ujz6ilxatkde@vireshk-i7>
+ <CAJZ5v0hgmMBHEdPFm7Fhj-eQr+zh5=ZGnm7S2e0aTz3juFmGPQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hgmMBHEdPFm7Fhj-eQr+zh5=ZGnm7S2e0aTz3juFmGPQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a lot of stuff here which can be done outside of the
-opp_table->lock, do that. This helps avoiding a circular dependency
-lockdeps around debugfs.
+On 18-11-20, 13:00, Rafael J. Wysocki wrote:
+> On Wed, Nov 18, 2020 at 5:42 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 17-11-20, 14:06, Rafael J. Wysocki wrote:
+> > > Is this really a cpufreq thing, though, or is it arch stuff?  I think
+> > > the latter, because it is not necessary for anything in cpufreq.
+> > >
+> > > Yes, acpi-cpufreq happens to know this information, because it uses
+> > > processor_perflib, but the latter may as well be used by the arch
+> > > enumeration of CPUs and the freqdomain_cpus mask may be populated from
+> > > there.
+> > >
+> > > As far as cpufreq is concerned, if the interface to the hardware is
+> > > per-CPU, there is one CPU per policy and cpufreq has no business
+> > > knowing anything about the underlying hardware coordination.
+> >
+> > It won't be used by cpufreq for now at least and yes I understand your
+> > concern. I opted for this because we already have a cpufreq
+> > implementation for the same thing and it is usually better to reuse
+> > this kind of stuff instead of inventing it over.
+> 
+> Do you mean related_cpus and real_cpus?
 
-Reported-by: Rob Clark <robdclark@gmail.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 94 +++++++++++++++++++++++-----------------------
- 1 file changed, 47 insertions(+), 47 deletions(-)
+Sorry about the confusion, I meant freqdomain_cpus only.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 9d145bb99a59..4268eb359915 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1251,9 +1251,14 @@ void _opp_free(struct dev_pm_opp *opp)
- 	kfree(opp);
- }
- 
--static void _opp_kref_release(struct dev_pm_opp *opp,
--			      struct opp_table *opp_table)
-+static void _opp_kref_release(struct kref *kref)
- {
-+	struct dev_pm_opp *opp = container_of(kref, struct dev_pm_opp, kref);
-+	struct opp_table *opp_table = opp->opp_table;
-+
-+	list_del(&opp->node);
-+	mutex_unlock(&opp_table->lock);
-+
- 	/*
- 	 * Notify the changes in the availability of the operable
- 	 * frequency/voltage list.
-@@ -1261,27 +1266,9 @@ static void _opp_kref_release(struct dev_pm_opp *opp,
- 	blocking_notifier_call_chain(&opp_table->head, OPP_EVENT_REMOVE, opp);
- 	_of_opp_free_required_opps(opp_table, opp);
- 	opp_debug_remove_one(opp);
--	list_del(&opp->node);
- 	kfree(opp);
- }
- 
--static void _opp_kref_release_unlocked(struct kref *kref)
--{
--	struct dev_pm_opp *opp = container_of(kref, struct dev_pm_opp, kref);
--	struct opp_table *opp_table = opp->opp_table;
--
--	_opp_kref_release(opp, opp_table);
--}
--
--static void _opp_kref_release_locked(struct kref *kref)
--{
--	struct dev_pm_opp *opp = container_of(kref, struct dev_pm_opp, kref);
--	struct opp_table *opp_table = opp->opp_table;
--
--	_opp_kref_release(opp, opp_table);
--	mutex_unlock(&opp_table->lock);
--}
--
- void dev_pm_opp_get(struct dev_pm_opp *opp)
- {
- 	kref_get(&opp->kref);
-@@ -1289,16 +1276,10 @@ void dev_pm_opp_get(struct dev_pm_opp *opp)
- 
- void dev_pm_opp_put(struct dev_pm_opp *opp)
- {
--	kref_put_mutex(&opp->kref, _opp_kref_release_locked,
--		       &opp->opp_table->lock);
-+	kref_put_mutex(&opp->kref, _opp_kref_release, &opp->opp_table->lock);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_put);
- 
--static void dev_pm_opp_put_unlocked(struct dev_pm_opp *opp)
--{
--	kref_put(&opp->kref, _opp_kref_release_unlocked);
--}
--
- /**
-  * dev_pm_opp_remove()  - Remove an OPP from OPP table
-  * @dev:	device for which we do this operation
-@@ -1342,30 +1323,49 @@ void dev_pm_opp_remove(struct device *dev, unsigned long freq)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_remove);
- 
-+static struct dev_pm_opp *_opp_get_next(struct opp_table *opp_table,
-+					bool dynamic)
-+{
-+	struct dev_pm_opp *opp = NULL, *temp;
-+
-+	mutex_lock(&opp_table->lock);
-+	list_for_each_entry(temp, &opp_table->opp_list, node) {
-+		if (dynamic == temp->dynamic) {
-+			opp = temp;
-+			break;
-+		}
-+	}
-+
-+	mutex_unlock(&opp_table->lock);
-+	return opp;
-+}
-+
- bool _opp_remove_all_static(struct opp_table *opp_table)
- {
--	struct dev_pm_opp *opp, *tmp;
--	bool ret = true;
-+	struct dev_pm_opp *opp;
- 
- 	mutex_lock(&opp_table->lock);
- 
- 	if (!opp_table->parsed_static_opps) {
--		ret = false;
--		goto unlock;
-+		mutex_unlock(&opp_table->lock);
-+		return false;
- 	}
- 
--	if (--opp_table->parsed_static_opps)
--		goto unlock;
--
--	list_for_each_entry_safe(opp, tmp, &opp_table->opp_list, node) {
--		if (!opp->dynamic)
--			dev_pm_opp_put_unlocked(opp);
-+	if (--opp_table->parsed_static_opps) {
-+		mutex_unlock(&opp_table->lock);
-+		return true;
- 	}
- 
--unlock:
- 	mutex_unlock(&opp_table->lock);
- 
--	return ret;
-+	/*
-+	 * Can't remove the OPP from under the lock, debugfs removal needs to
-+	 * happen lock less to avoid circular dependency issues.
-+	 */
-+	while ((opp = _opp_get_next(opp_table, false)))
-+		dev_pm_opp_put(opp);
-+
-+	return true;
- }
- 
- /**
-@@ -1377,21 +1377,21 @@ bool _opp_remove_all_static(struct opp_table *opp_table)
- void dev_pm_opp_remove_all_dynamic(struct device *dev)
- {
- 	struct opp_table *opp_table;
--	struct dev_pm_opp *opp, *temp;
-+	struct dev_pm_opp *opp;
- 	int count = 0;
- 
- 	opp_table = _find_opp_table(dev);
- 	if (IS_ERR(opp_table))
- 		return;
- 
--	mutex_lock(&opp_table->lock);
--	list_for_each_entry_safe(opp, temp, &opp_table->opp_list, node) {
--		if (opp->dynamic) {
--			dev_pm_opp_put_unlocked(opp);
--			count++;
--		}
-+	/*
-+	 * Can't remove the OPP from under the lock, debugfs removal needs to
-+	 * happen lock less to avoid circular dependency issues.
-+	 */
-+	while ((opp = _opp_get_next(opp_table, true))) {
-+		dev_pm_opp_put(opp);
-+		count++;
- 	}
--	mutex_unlock(&opp_table->lock);
- 
- 	/* Drop the references taken by dev_pm_opp_add() */
- 	while (count--)
+> That's the granularity of the interface to the hardware I'm talking about.
+> 
+> Strictly speaking, it means "these CPUs share a HW interface for perf
+> control" and it need not mean "these CPUs are in the same
+> clock/voltage domain".  Specifically, it need not mean "these CPUs are
+> the only CPUs in the given clock/voltage domain".  That's what it
+> means when the control is exercised by manipulating OPPs directly, but
+> not in general.
+> 
+> In the ACPI case, for example, what the firmware tells you need not
+> reflect the HW topology in principle.  It only tells you whether or
+> not it wants you to coordinate a given group of CPUs and in what way,
+> but this may not be the whole picture from the HW perspective.  If you
+> need the latter, you need more information in general (at least you
+> need to assume that what the firmware tells you actually does reflect
+> the HW topology on the given SoC).
+> 
+> So yes, in the particular case of OPP-based perf control, cpufreq
+> happens to have the same information that is needed by the other
+> subsystems, but otherwise it may not and what I'm saying is that it
+> generally is a mistake to expect cpufreq to have that information or
+> to be able to obtain it without the help of the arch/platform code.
+> Hence, it would be a mistake to design an interface based on that
+> expectation.
+> 
+> Or looking at it from a different angle, today a cpufreq driver is
+> only required to specify the granularity of the HW interface for perf
+> control via related_cpus.  It is not required to obtain extra
+> information beyond that.  If a new mask to be populated by it is
+> added, the driver may need to do more work which is not necessary from
+> the perf control perspective.  That doesn't look particularly clean to
+> me.
+> 
+> Moreover, adding such a mask to cpufreq_policy would make the users of
+> it depend on cpufreq sort of artificially, which need not be useful
+> even.
+> 
+> IMO, the information needed by all of the subsystems in question
+> should be obtained and made available at the arch/platform level and
+> everyone who needs it should be able to access it from there,
+> including the cpufreq driver for the given platform if that's what it
+> needs to do.
+> 
+> BTW, cpuidle may need the information in question too, so why should
+> it be provided via cpufreq rather than via cpuidle?
+
+Right.
+
 -- 
-2.25.0.rc1.19.g042ed3e048af
-
+viresh
