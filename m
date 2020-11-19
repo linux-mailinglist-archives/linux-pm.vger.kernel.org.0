@@ -2,267 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88DA2B8AA3
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 05:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E87A2B8B18
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 06:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgKSEcp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Nov 2020 23:32:45 -0500
-Received: from mga05.intel.com ([192.55.52.43]:24903 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725964AbgKSEco (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Nov 2020 23:32:44 -0500
-IronPort-SDR: E5NtHAibTacElwz3mvJDadGsYUbMfGhgGwzlIWNkPRezlewUMffkri26IYUjKOGf0RzT2vkVS3
- lNhjVyWu8+7g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="255940294"
-X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
-   d="scan'208";a="255940294"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 20:32:43 -0800
-IronPort-SDR: gNAF51XrXcqAAQ9vM91+QizrRHKvgKczkkCndMsq3vw++sUAT3jhrrI2BXhKp/T3uvRdzkU8R+
- 9EoCdFccLVZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
-   d="scan'208";a="431108008"
-Received: from lkp-server01.sh.intel.com (HELO cbf10a1dd0e4) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Nov 2020 20:32:42 -0800
-Received: from kbuild by cbf10a1dd0e4 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kfbcf-00004K-Gl; Thu, 19 Nov 2020 04:32:41 +0000
-Date:   Thu, 19 Nov 2020 12:32:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- e98c22d0368879136786ad5a500791d1846ab754
-Message-ID: <5fb5f55f.shZdKr2N8+FrAMy9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725951AbgKSFpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Nov 2020 00:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725778AbgKSFpI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 00:45:08 -0500
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDE1C0613D4
+        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 21:45:07 -0800 (PST)
+Received: by mail-ot1-x344.google.com with SMTP id n89so4235914otn.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 21:45:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TMS5XxHXA8HnDyOa6csmMz3nOTPbgIfQVudWfCsAbc8=;
+        b=XUmZ6vpzDKdu2Y+mFAu1/ex/vzO6hoUr3ygepbs0LS52dQMVJhVegWLVqEmCYjNpH3
+         qUp8aSvHlGDWNVHzX1EgSs9NCDCyOVWpNv9CkpafOPA/y3J5F5/RmuLaekZAx/3f7SFM
+         sjU5qlRyPl2ekvLUzeQIq0wIjEi1OYRS3ARZGiTsoQ7Gcj3tApeZcgFa1m+sIJVGFrG8
+         IOtjJG0kEVmhL7d0ju96gpdTZtjkhnA/wQihq/mueKh+FUWo5tK6bKnFVBJQFZhyuO0w
+         87/xMLbHuOF71Fdoyya4URh+tSi4WjKpNrQqDS0qKF6+ghQAEsV2h9FAkERn0o+zNSts
+         nsPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TMS5XxHXA8HnDyOa6csmMz3nOTPbgIfQVudWfCsAbc8=;
+        b=Ofhf89TT+CiyX24sF66Txoa1pgF1Lg1wNCXdrcfQwnn9X/t4e/q/2MRBjaaqyYLeqo
+         m4l6hL08Y1XlA2+grFn5KK249QxBFshkTtGLFwpCSsDWUbCyVioCE43coK9KbWaS/nJl
+         DUmoABWOV8oS/qSyGhnXVTMp8i54VJzcDOhj2bxPZjA8L3Ni9kKFtvyCQEp/nqePfp2I
+         mQjKU/qV1UuWZFz1jHTKA8+5TFXkMsQsRB57pbkfLMG4lDTCm6CQuaBJEfEnFE45TiLQ
+         l5OxM/Q0kXZCVgDetkiakPODAgOprRGZq+9ZruDWj7YU3qdnVi0xjIXzYCi2QVTpmvNu
+         DgmA==
+X-Gm-Message-State: AOAM531nXH/jA9UrC1oYFaAC20jS8JQ+qw2a5WWDR90pMZUQ37JTymty
+        bqVe+PF6tKvwlfF+Chjq32IfKg==
+X-Google-Smtp-Source: ABdhPJxkbnksx3ECJpiTpas/HhwTtNaMLsDlS0ZGNaAQ7je71JjzdLz481CVrpobf+hZSvyNIUZykw==
+X-Received: by 2002:a9d:1b2:: with SMTP id e47mr8641928ote.45.1605764705660;
+        Wed, 18 Nov 2020 21:45:05 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id m2sm746892ots.11.2020.11.18.21.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2020 21:45:04 -0800 (PST)
+Date:   Wed, 18 Nov 2020 23:45:03 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     mdtipton@codeaurora.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] interconnect: qcom: qcs404: Remove GPU and display
+ RPM IDs
+Message-ID: <20201119054503.GK8532@builder.lan>
+References: <20201118111044.26056-1-georgi.djakov@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20201118111044.26056-1-georgi.djakov@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: e98c22d0368879136786ad5a500791d1846ab754  Merge branches 'acpi-misc' and 'acpi-resources' into linux-next
+On Wed 18 Nov 05:10 CST 2020, Georgi Djakov wrote:
 
-elapsed time: 726m
+> The following errors are noticed during boot on a QCS404 board:
+> [    2.926647] qcom_icc_rpm_smd_send mas 6 error -6
+> [    2.934573] qcom_icc_rpm_smd_send mas 8 error -6
+> 
+> These errors show when we try to configure the GPU and display nodes.
+> Since these particular nodes aren't supported on RPM and are purely
+> local, we should just change their mas_rpm_id to -1 to avoid any
+> requests being sent for these master IDs.
+> 
 
-configs tested: 202
-configs skipped: 2
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Regards,
+Bjorn
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                         ap325rxa_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                      pic32mzda_defconfig
-powerpc                      bamboo_defconfig
-powerpc                     tqm8560_defconfig
-m68k                          sun3x_defconfig
-arc                        nsim_700_defconfig
-mips                      loongson3_defconfig
-arm                           sunxi_defconfig
-nios2                               defconfig
-powerpc                    socrates_defconfig
-um                           x86_64_defconfig
-powerpc                        fsp2_defconfig
-powerpc                      ppc6xx_defconfig
-arm                            mps2_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                      arches_defconfig
-powerpc                     tqm8555_defconfig
-sh                        apsh4ad0a_defconfig
-arm                         hackkit_defconfig
-powerpc                     redwood_defconfig
-m68k                         apollo_defconfig
-mips                         bigsur_defconfig
-xtensa                           alldefconfig
-mips                        workpad_defconfig
-powerpc                 mpc8560_ads_defconfig
-powerpc                    adder875_defconfig
-sh                ecovec24-romimage_defconfig
-m68k                            mac_defconfig
-sh                           sh2007_defconfig
-sh                          polaris_defconfig
-arm                       aspeed_g5_defconfig
-arm                           stm32_defconfig
-powerpc                     sbc8548_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                         shannon_defconfig
-arc                          axs101_defconfig
-mips                         db1xxx_defconfig
-m68k                          amiga_defconfig
-arm                            zeus_defconfig
-powerpc                      ep88xc_defconfig
-arm                           sama5_defconfig
-powerpc                      cm5200_defconfig
-arm                        realview_defconfig
-s390                          debug_defconfig
-mips                            e55_defconfig
-sh                     sh7710voipgw_defconfig
-mips                 decstation_r4k_defconfig
-sh                           se7206_defconfig
-powerpc                   lite5200b_defconfig
-powerpc                          g5_defconfig
-arm                           omap1_defconfig
-arm                       versatile_defconfig
-sh                            hp6xx_defconfig
-sh                          urquell_defconfig
-powerpc                      obs600_defconfig
-arm                             mxs_defconfig
-sh                   sh7770_generic_defconfig
-powerpc                     pq2fads_defconfig
-parisc                generic-64bit_defconfig
-arm                             rpc_defconfig
-powerpc                      katmai_defconfig
-powerpc                     mpc5200_defconfig
-powerpc                 mpc8272_ads_defconfig
-m68k                           sun3_defconfig
-powerpc                    sam440ep_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                     tqm5200_defconfig
-m68k                        m5407c3_defconfig
-powerpc                     kilauea_defconfig
-arm                        clps711x_defconfig
-mips                malta_qemu_32r6_defconfig
-mips                        nlm_xlr_defconfig
-powerpc                      chrp32_defconfig
-powerpc               mpc834x_itxgp_defconfig
-c6x                         dsk6455_defconfig
-arm                         lpc32xx_defconfig
-powerpc                  iss476-smp_defconfig
-riscv                    nommu_k210_defconfig
-powerpc                    ge_imp3a_defconfig
-m68k                        mvme16x_defconfig
-sh                        sh7757lcr_defconfig
-powerpc                      pcm030_defconfig
-sparc                            allyesconfig
-powerpc                      ppc64e_defconfig
-powerpc                     skiroot_defconfig
-sh                         ecovec24_defconfig
-sh                           se7722_defconfig
-arc                        vdk_hs38_defconfig
-sh                          kfr2r09_defconfig
-arm                     am200epdkit_defconfig
-arm                           efm32_defconfig
-arm                           corgi_defconfig
-powerpc                 mpc837x_rdb_defconfig
-mips                         rt305x_defconfig
-sh                               alldefconfig
-arm                      tct_hammer_defconfig
-sh                             sh03_defconfig
-arm                         axm55xx_defconfig
-powerpc                       ebony_defconfig
-sparc                       sparc32_defconfig
-arc                                 defconfig
-riscv                    nommu_virt_defconfig
-powerpc                mpc7448_hpc2_defconfig
-mips                           ip32_defconfig
-arm                       spear13xx_defconfig
-sh                           se7705_defconfig
-arm                         cm_x300_defconfig
-sh                          r7780mp_defconfig
-arc                              alldefconfig
-powerpc                     mpc83xx_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                   motionpro_defconfig
-powerpc                         wii_defconfig
-powerpc                     kmeter1_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20201118
-x86_64               randconfig-a003-20201118
-x86_64               randconfig-a004-20201118
-x86_64               randconfig-a002-20201118
-x86_64               randconfig-a006-20201118
-x86_64               randconfig-a001-20201118
-i386                 randconfig-a006-20201119
-i386                 randconfig-a005-20201119
-i386                 randconfig-a002-20201119
-i386                 randconfig-a001-20201119
-i386                 randconfig-a003-20201119
-i386                 randconfig-a004-20201119
-i386                 randconfig-a006-20201118
-i386                 randconfig-a005-20201118
-i386                 randconfig-a002-20201118
-i386                 randconfig-a001-20201118
-i386                 randconfig-a003-20201118
-i386                 randconfig-a004-20201118
-i386                 randconfig-a012-20201118
-i386                 randconfig-a014-20201118
-i386                 randconfig-a016-20201118
-i386                 randconfig-a011-20201118
-i386                 randconfig-a013-20201118
-i386                 randconfig-a015-20201118
-i386                 randconfig-a012-20201119
-i386                 randconfig-a014-20201119
-i386                 randconfig-a016-20201119
-i386                 randconfig-a011-20201119
-i386                 randconfig-a013-20201119
-i386                 randconfig-a015-20201119
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a015-20201118
-x86_64               randconfig-a014-20201118
-x86_64               randconfig-a011-20201118
-x86_64               randconfig-a013-20201118
-x86_64               randconfig-a016-20201118
-x86_64               randconfig-a012-20201118
-x86_64               randconfig-a005-20201119
-x86_64               randconfig-a003-20201119
-x86_64               randconfig-a004-20201119
-x86_64               randconfig-a002-20201119
-x86_64               randconfig-a006-20201119
-x86_64               randconfig-a001-20201119
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+> 
+> v2:
+> * Keep the nodes and just set the IDs to -1, as suggested by Mike.
+> 
+> v1: http://lore.kernel.org/r/20201111100734.307-1-georgi.djakov@linaro.org
+> 
+>  drivers/interconnect/qcom/qcs404.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+> index d4769a5ea182..9820709b43db 100644
+> --- a/drivers/interconnect/qcom/qcs404.c
+> +++ b/drivers/interconnect/qcom/qcs404.c
+> @@ -157,8 +157,8 @@ struct qcom_icc_desc {
+>  	}
+>  
+>  DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> -DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, 6, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> -DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, 8, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> +DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+> +DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+>  DEFINE_QNODE(mas_snoc_bimc_1, QCS404_SNOC_BIMC_1_MAS, 8, 76, -1, QCS404_SLAVE_EBI_CH0);
+>  DEFINE_QNODE(mas_tcu_0, QCS404_MASTER_TCU_0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+>  DEFINE_QNODE(mas_spdm, QCS404_MASTER_SPDM, 4, -1, -1, QCS404_PNOC_INT_3);
