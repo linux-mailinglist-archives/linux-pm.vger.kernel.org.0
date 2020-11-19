@@ -2,120 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFBA2B9089
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 12:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEE62B908A
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 12:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbgKSLAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Nov 2020 06:00:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S1726785AbgKSLAi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Nov 2020 06:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbgKSLAc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 06:00:32 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F15C0613CF;
-        Thu, 19 Nov 2020 03:00:32 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id v22so5350081edt.9;
-        Thu, 19 Nov 2020 03:00:32 -0800 (PST)
+        with ESMTP id S1726316AbgKSLAh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 06:00:37 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4140C0613CF
+        for <linux-pm@vger.kernel.org>; Thu, 19 Nov 2020 03:00:35 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id d12so5886593wrr.13
+        for <linux-pm@vger.kernel.org>; Thu, 19 Nov 2020 03:00:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Av5BBTuM7evlD9VDFh0arYTaJ+OsyfG556KZW1pXB0Y=;
-        b=TiFxYI1bViNz37ZEsTLEkKJY3THx8Px85R0+qnM2hQGrayt7lfRBlVaQh7pKVY2ByR
-         hec8Phqn/3AmEmZdZsDFZ15adLWjKVvWrV/WVfY9GxIPz0etf77yD7g6BhKwAzLFig/R
-         krRauaKrbzszuL/ccEd1O/n4hX6QoHCpFHsgZFNr0wD8NmWVBM13vFYHWH7mbg4YEqJv
-         zaTM2pC9NbLdU1WrBthq0XOgGxOlgLKQcD4Vcd2t6tPWPD6kqQR48wkCXr9gQSUXnl7b
-         hoI2djvVEFF9IWhsUC3WTJTmuojU3qZcknGKqwyCmIFjMh3iQF8xbw3qmckLXLyYAnhL
-         LVHg==
+        d=linaro.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=+FzrNTcpFE9hDbVxONey2uDdLqJnkfcKNBqwstAfUjA=;
+        b=oc9IXkSAKZdgGh0nCj2FWENZoZQAVnZAFzUO91wu7J4rIJqXVbDeYRbmhnV9wbi3TX
+         a0xsXwr5ILwgOAiSWUR5QNWCJ355QgTFq8gkwm9YVhNPEnHq1/A/zuDsT/AjJnxXr2Vw
+         GSyJ64+rR74/6bZXfwcSVREK9oMg16POSwrPlkGGp8FGuY2i2Fm+IXv2Tsa7x9YWg69j
+         /V1X3y8oFr4tWnPioN7aCSfO+RKCcUj1AmTCSTecmYVb6RmCPAWHIBjOQ+YOLbgy+dmw
+         XLC+R1Xcc+JvoQZBSwxKT/SibR2zipn3EwUQ1YlvncOshQAmKyA91HFxG1aTd42T7hlb
+         0gxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Av5BBTuM7evlD9VDFh0arYTaJ+OsyfG556KZW1pXB0Y=;
-        b=pz48BvyGg313ia6iNa9GXrkEYpb++jbc9wjnUaGj2+51ivrZrW4rbvMM90+3TSbHa3
-         +ufN6OLzBNFOQ6tgLL9jzyOMAG1+Oi4uk4jmfClSititd2Aeo1binBgF0x7cNBiUA2Kk
-         tYrYloUwz2wXBeqtp1bPxHd3KGlT3Il8ylkGr3BQxoD16HoUtidHLIhckcMfSK1SUFJD
-         873G920I80AOeXs9pObVT+nUE2mMZW8OckOvO6WH9tRvj19B9KNoNBY1lim+FlxYcxbH
-         ISSNjUrovfhpGZM6aTqazcpm4ykZCJbo1eq677N6Lo/XydcnovoOc6iStFp57xIcyoLa
-         1TNg==
-X-Gm-Message-State: AOAM532igl1GYo1RjspgSKUE5NonDX5pLb2b8BinW/3JUUgXn7rsw79R
-        zzhbX3gXiw4kUYrURqbWKWyatjXzJ6WMRx1S/sU=
-X-Google-Smtp-Source: ABdhPJwN/JLb7YSmhKyM+E3M5dXfAHScFA1CNYKfSOJmfUGoTa9bYF+YAHGrJLRmY2GEjm1y8Gj+sOwI3plcEp6Rb5U=
-X-Received: by 2002:a05:6402:2365:: with SMTP id a5mr577181eda.268.1605783631085;
- Thu, 19 Nov 2020 03:00:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20200927150956.34609-1-kwizart@gmail.com>
-In-Reply-To: <20200927150956.34609-1-kwizart@gmail.com>
-From:   Nicolas Chauvet <kwizart@gmail.com>
-Date:   Thu, 19 Nov 2020 12:00:19 +0100
-Message-ID: <CABr+WTnftetrMzC8bq+=RqOxqJ9EvYsU1LEZ5bVv-OptVksbjA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] thermal: tegra: soctherm bugfixes
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=+FzrNTcpFE9hDbVxONey2uDdLqJnkfcKNBqwstAfUjA=;
+        b=Q0SoA2xoCcwY8q6yQaRSlDnIgFhqgYhXVNqMM9NhJNnXoY+ntS83H19BTdfyFayG7I
+         vcvqLpUNsgtwVXufCE2AI9Vjkad4VTRmKb1XPCRuQQ3D0aSYE5X/UAVWlwDJsJ0y3LuN
+         pNhBs2IX+xEHHECUMICJ5qkw8q/ZyMv+kCkxri8MlsslYOVsNCs6GhmJ8D2tJhfNh90Q
+         T74PuRVJdid65fjVsg4B9qT6bPuexLui4KVbMxuvZ4PPSEv0uyQm8Hj2OTEmDmzk4hmn
+         qe6VFSFzNSVv6ekn//6DWzl7iREsfdkCnrTAjPnZXF8GP9MTXxU63/V2SPezjfyDeMkD
+         ariw==
+X-Gm-Message-State: AOAM5315VsWKNHhOYiC+yTnKGNHCRQ7iKLvohF3+RnwycnYGU8P0x2NT
+        6FgEO3kLc7+8YFY7ON+geCaa3g==
+X-Google-Smtp-Source: ABdhPJyA/UJ/ti4GuYRSAsZTj6mTwwzCy2CX/kou5bCokcWDSY3BNtaV+I7WuIlcwYTqGk5Ojq/lBg==
+X-Received: by 2002:adf:f94b:: with SMTP id q11mr10027320wrr.351.1605783634533;
+        Thu, 19 Nov 2020 03:00:34 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5150:1004:6c70:8db9? ([2a01:e34:ed2f:f020:5150:1004:6c70:8db9])
+        by smtp.googlemail.com with ESMTPSA id u5sm33690784wro.56.2020.11.19.03.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Nov 2020 03:00:33 -0800 (PST)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tony Lindgren <tony@atomide.com>, Keerthy <j-keerthy@ti.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal fixes for v5.10-rc5
+Message-ID: <e1bcd711-a3bf-58aa-7efd-053fa0fe5514@linaro.org>
+Date:   Thu, 19 Nov 2020 12:00:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le dim. 27 sept. 2020 =C3=A0 17:10, Nicolas Chauvet <kwizart@gmail.com> a =
-=C3=A9crit :
->
-> When using tegra_soctherm driver on jetson-tk1, the following messages
-> can be seen:
-> from kernel: tegra_soctherm 700e2000.thermal-sensor:
->  throttle-cfg: heavy: no throt prop or invalid prop
->  soctherm: trip temperature -2147483647 forced to -127000
->  thermtrip: will shut down when cpu reaches 101000 mC
->  soctherm: trip temperature -2147483647 forced to -127000
->  thermtrip: will shut down when gpu reaches 101000 mC
->  soctherm: trip temperature -2147483647 forced to -127000
->  thermtrip: will shut down when pll reaches 103000 mC
->  throttrip: pll: missing hot temperature
->  soctherm: trip temperature -2147483647 forced to -127000
->  thermtrip: will shut down when mem reaches 101000 mC
->  throttrip: mem: missing hot temperature
->  IRQ index 1 not found
->
-> This serie fixes two errors and two warnings that are reported in dmesg
-> It was compiled and tested at runtime on jetson-tk1 only.
->
->
-> v2:
->  * Add missing tegra210 device-tree properties
->  * Add the appropriate prefix for tegra soctherm
->  * Use SoCs condition over of_compatible
->
->
-> Nicolas Chauvet (6):
->   ARM: tegra: Add missing gpu-throt-level to tegra124 soctherm
->   ARM: tegra: Add missing hot temperatures to tegra124 thermal-zones
->   arm64: tegra: Add missing hot temperatures to tegra132 thermal-zones
->   arm64: tegra: Add missing gpu-throt-level to tegra210 soctherm
->   arm64: tegra: Add missing hot temperatures to tegra210 thermal-zones
->   thermal: tegra: Avoid setting edp_irq when not relevant
->
->  arch/arm/boot/dts/tegra124.dtsi           | 11 +++++++
->  arch/arm64/boot/dts/nvidia/tegra132.dtsi  | 10 ++++++
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi  | 13 ++++++++
->  drivers/thermal/tegra/soctherm.c          | 38 +++++++++++++----------
->  drivers/thermal/tegra/soctherm.h          |  1 +
->  drivers/thermal/tegra/tegra124-soctherm.c |  1 +
->  drivers/thermal/tegra/tegra132-soctherm.c |  1 +
->  drivers/thermal/tegra/tegra210-soctherm.c |  1 +
->  8 files changed, 60 insertions(+), 16 deletions(-)
->
-> --
-> 2.25.4
+The following changes since commit f8394f232b1eab649ce2df5c5f15b0e528c92091:
 
-Hello,
-This series is still pending review.
+  Linux 5.10-rc3 (2020-11-08 16:10:16 -0800)
 
-Thierry, do you expect some reviewers from the linux-pm (Zhang, Daniel ?)
-To me it seems like tegra specific changes, so maybe a Nvidia reviewer
-is awaited ?
+are available in the Git repository at:
 
-Thanks.
+
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.10-rc5
+
+for you to fetch changes up to b98467fe96d2415836d154ecfe1cd389bf4147b5:
+
+  thermal: ti-soc-thermal: Disable the CPU PM notifier for OMAP4430
+(2020-11-12 12:30:29 +0100)
+
+----------------------------------------------------------------
+- Disable the CPU PM notifier for OMAP4430 for suspend in order to
+  prevent wrong temperature leading to a critical shutdown (Peter
+  Ujfalusi)
+
+----------------------------------------------------------------
+Peter Ujfalusi (1):
+      thermal: ti-soc-thermal: Disable the CPU PM notifier for OMAP4430
+
+ drivers/thermal/ti-soc-thermal/ti-bandgap.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
