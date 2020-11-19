@@ -2,95 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539D42B8C4D
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 08:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA472B8C71
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 08:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgKSH1h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Nov 2020 02:27:37 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:33930 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726302AbgKSH1g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 02:27:36 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AJ7O2O3032168;
-        Thu, 19 Nov 2020 08:27:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=nxAKb35TANt5smQzI/hSFX9HkvhZC4uKWxm8+ig5zZc=;
- b=vqoyPYWUu6pml9ty9eDeWJxDcjeEVpccxtxxoeorZUXe6zMdBDHETRKNkwpset7EUC+f
- 2/3k1WNEUX8JAOym1MTon/Bz5dc2arhqBMmZ+hxyLaX96xEyA0/laLOr9ONcT13Yz8UH
- bZoEFCIW5Rvk9fPadn2lgo0caLSPnocgcVuAzxlvguHIpySHMDuTz8LRyS1ri1EJt6+v
- AOzxMEZYzHxyCaG7Aso/BumEeqJLglfGOenZjkHS7YpzvTnq2nwR1MAEp1DPO4RSboIy
- f+fwqFQKkprYCz/eE73JVE5GjVp0vYxlHV1Qodkv7XaTJjQCPzkTizjnSSDETrRL+OJK xQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34t5w25fu5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Nov 2020 08:27:29 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B7CEC100034;
-        Thu, 19 Nov 2020 08:27:28 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A35E022DA6F;
-        Thu, 19 Nov 2020 08:27:28 +0100 (CET)
-Received: from SFHDAG2NODE3.st.com (10.75.127.6) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 19 Nov
- 2020 08:27:27 +0100
-Received: from SFHDAG2NODE3.st.com ([fe80::31b3:13bf:2dbe:f64c]) by
- SFHDAG2NODE3.st.com ([fe80::31b3:13bf:2dbe:f64c%20]) with mapi id
- 15.00.1473.003; Thu, 19 Nov 2020 08:27:27 +0100
-From:   Patrice CHOTARD <patrice.chotard@st.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Kevin Hilman" <khilman@kernel.org>,
-        Erwan LE RAY <erwan.leray@st.com>,
-        "Alexandre TORGUE" <alexandre.torgue@st.com>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>,
-        Pierre Yves MORDRET <pierre-yves.mordret@st.com>,
-        Amelie DELAUNAY <amelie.delaunay@st.com>
-Subject: Re: [PATCH v1 0/4] PM: Add dev_wakeup_path() helper
-Thread-Topic: [PATCH v1 0/4] PM: Add dev_wakeup_path() helper
-Thread-Index: AQHWtA81NgzAk5p2+kaegvQD/FNWL6nN3wMAgAEy+IA=
-Date:   Thu, 19 Nov 2020 07:27:27 +0000
-Message-ID: <3e9ca95b-2053-41c7-6ec8-9f97bbbb6e32@st.com>
-References: <20201106073358.8379-1-patrice.chotard@st.com>
- <CAJZ5v0hUnQQ2_DjjdXSE107iPNTt+dqcUxWzAH=fE4Qp7Gnnig@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hUnQQ2_DjjdXSE107iPNTt+dqcUxWzAH=fE4Qp7Gnnig@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.44]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <291651A206E1274195CCD02DE0C2A317@st.com>
-Content-Transfer-Encoding: base64
+        id S1726305AbgKSHiS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Nov 2020 02:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725964AbgKSHiS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Nov 2020 02:38:18 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841D7C0613CF
+        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 23:38:18 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id t8so3627820pfg.8
+        for <linux-pm@vger.kernel.org>; Wed, 18 Nov 2020 23:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FluejX8Dzg1crQFPmryHIf3eruZYIbY+9wYWfggNbDk=;
+        b=R+PKQ/gQiv0Raup9wfMhvJuZUps0i5f08XvP3gEi98krbmQPwGTWpjyezyEUwEinUr
+         l17G6Qo3rL8fLQZ7CwvyKGCWZRVRLbPvNJ/W4lh56pQeveLEYYxMhxvzudUHiTiuijzg
+         kc6ft3pwwyzimQ3B5KAQK1tgmya01imagxSXh7Ig0njJlXo7A5r8cfiEh4or8JlX58Ig
+         vP0FSxqIxqvfCXM01d2gfx4MGajzsA8JpiMozb+3X5cD1pp+jpBD5Sv9ZrF1og71SHWI
+         O65aaGx0UHPBUso8qZlr/6CIqKe8s8Dnw24vVGQZ1FNGDrMxbMP8cWWf1Pdb3y1IhNn+
+         B8BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FluejX8Dzg1crQFPmryHIf3eruZYIbY+9wYWfggNbDk=;
+        b=eWS/yNf8aIC4wVswJnfjCBuWI5ViStw9/lIjA4PbC2prEAiyI/sHKZvIURtn9DSQAJ
+         OczGXSYauD67n//ZFtnEeoV1AMW9tiAv4pQT5BuAWM4BjXWBcHj2ZUFqgoB/n6C3ilwM
+         8MeH67GIT8bhm1IK5C/nIGso36/ewQ5LQ0cwqnSU73BFIfVqN5IclU+fGrZc8xVKnNHx
+         99Z8L+QAjnOarbpZkVGFYDGqzBT1wGHpvTJMPxHl7cWqsH8ncZWxAwEcsuvY8Rm8E+eK
+         OEpZJBvQvVY7kb2aEKNd9eUuYFSMa9oybhGnbMLDegioUr2HoZoQUZ3KgqCu2iqIob3z
+         r4ZQ==
+X-Gm-Message-State: AOAM530xItxxCbGW6jHICwuUn7o5A6WB+CY9WxIoeDgTNEk+loVJ4CA8
+        5ovoStB4RTDI8lQ9KIuudxYFFuLHcORqrg==
+X-Google-Smtp-Source: ABdhPJy/mQrDdYcvQo/2iZlIimE4ldtmARO1mo9caGOr1DAL7bWd+RHz1kY77jgIDtG4l4ZeEAnpsQ==
+X-Received: by 2002:a17:90a:ae14:: with SMTP id t20mr3129691pjq.13.1605771498037;
+        Wed, 18 Nov 2020 23:38:18 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id 35sm22559004pgp.26.2020.11.18.23.38.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 18 Nov 2020 23:38:17 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
+Subject: [PATCH V3 0/2] cpufreq_cooling: Get effective CPU utilization from scheduler
+Date:   Thu, 19 Nov 2020 13:08:06 +0530
+Message-Id: <cover.1605770951.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-19_05:2020-11-17,2020-11-19 signatures=0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgUmFmYWVsDQoNCk9uIDExLzE4LzIwIDI6MDggUE0sIFJhZmFlbCBKLiBXeXNvY2tpIHdyb3Rl
-Og0KPiBPbiBGcmksIE5vdiA2LCAyMDIwIGF0IDg6MzQgQU0gPHBhdHJpY2UuY2hvdGFyZEBzdC5j
-b20+IHdyb3RlOg0KPj4gRnJvbTogUGF0cmljZSBDaG90YXJkIDxwYXRyaWNlLmNob3RhcmRAc3Qu
-Y29tPg0KPj4NCj4+IEFkZCBkZXZfd2FrZXVwX3BhdGgoKSBoZWxwZXIgdG8gYXZvaWQgdG8gc3By
-ZWFkDQo+PiBkZXYtPnBvd2VyLndha2V1cF9wYXRoIHRlc3QgaW4gZHJpdmVycy4NCj4gT0sNCj4N
-Cj4+IENjOiBhbWVsaWUuZGVsYXVuYXlAc3QuY29tLA0KPj4gICAgIGVyd2FuX2xlcmF5QHN0LmNv
-bSwNCj4+ICAgICBmYWJyaWNlLmdhc25pZXJAc3QuY29tLA0KPj4gICAgIGFsZXhhbmRyZS50b3Jn
-dWVAc3QuY29tLA0KPj4gICAgIGFsYWluLnZvbG1hdEBzdC5jb20sDQo+PiAgICAgcGllcnJlLXl2
-ZXMubW9yZHJldEBzdC5jb20NCj4+DQo+PiAqKiogQkxVUkIgSEVSRSAqKioNCj4gSG1tPw0KPg0K
-Pj4gUGF0cmljZSBDaG90YXJkICg0KToNCj4+ICAgUE0gLyB3YWtldXA6IEFkZCBkZXZfd2FrZXVw
-X3BhdGgoKSBoZWxwZXINCj4+ICAgUE06IGRvbWFpbnM6IE1ha2UgdXNhZ2Ugb2YgZGV2aWNlX3dh
-a2V1cF9wYXRoKCkgaGVscGVyDQo+PiAgIFBNOiBjb3JlOiBNYWtlIHVzYWdlIG9mIGRldmljZV93
-YWtldXBfcGF0aCgpIGhlbHBlcg0KPj4gICBpMmM6IHN0bTMyZjc6IE1ha2UgdXNhZ2Ugb2YgZGV2
-X3dha2V1cF9wYXRoKCkgaGVscGVyDQo+IFBsZWFzZSBmb2xkIHRoZSBwYXRjaGVzIGludG8gb25l
-IGFuZCBhZGQgdGhlIFItYnkgZnJvbSBVbGYgdG8gaXQuDQoNCk9LLCB0aGUgdjIgaXMgb24gdGhl
-IHdheS4NCg0KVGhhbmtzDQoNClBhdHJpY2UNCg0KPg0KPiBUaGFua3Mh
+Hi,
+
+This patchset makes the cpufreq_cooling driver reuse the CPU utilization
+metric provided by the scheduler instead of depending on idle and busy
+times of a CPU, which aren't that accurate to measure the busyness of a
+CPU for the next cycle. More details can be seen in the commit log of
+patch 2/2.
+
+V2->V3:
+- Put the scheduler helpers within ifdef CONFIG_SMP.
+- Keep both SMP and !SMP implementations in the cpufreq_cooling driver.
+- Improved commit log with testing related information.
+
+--
+Viresh
+
+Viresh Kumar (2):
+  sched/core: Rename and move schedutil_cpu_util() to core.c
+  thermal: cpufreq_cooling: Reuse sched_cpu_util() for SMP platforms
+
+ drivers/thermal/cpufreq_cooling.c |  68 ++++++++++++++----
+ include/linux/sched.h             |  21 ++++++
+ kernel/sched/core.c               | 115 +++++++++++++++++++++++++++++
+ kernel/sched/cpufreq_schedutil.c  | 116 +-----------------------------
+ kernel/sched/fair.c               |   6 +-
+ kernel/sched/sched.h              |  31 +-------
+ 6 files changed, 199 insertions(+), 158 deletions(-)
+
+
+base-commit: 3650b228f83adda7e5ee532e2b90429c03f7b9ec
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
