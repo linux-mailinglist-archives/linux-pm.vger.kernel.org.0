@@ -2,98 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7107D2B9916
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 18:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20742B99F3
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Nov 2020 18:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgKSRNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Nov 2020 12:13:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:35512 "EHLO foss.arm.com"
+        id S1729730AbgKSRqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Nov 2020 12:46:44 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:17855 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727513AbgKSRNb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 19 Nov 2020 12:13:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 016C61396;
-        Thu, 19 Nov 2020 09:13:31 -0800 (PST)
-Received: from bogus (unknown [10.57.54.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 465353F718;
-        Thu, 19 Nov 2020 09:13:28 -0800 (PST)
-Date:   Thu, 19 Nov 2020 17:13:22 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Hector Yuan <hector.yuan@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH v8 2/3] dt-bindings: arm: cpus: Document
- 'mediatek,freq-domain' property
-Message-ID: <20201119171322.2gxrv5h7sqwllgsv@bogus>
-References: <1603700349-5922-1-git-send-email-hector.yuan@mediatek.com>
- <1603700349-5922-3-git-send-email-hector.yuan@mediatek.com>
- <20201028150858.GA4029348@bogus>
- <65a4e167-9d2c-7fcb-5373-33af5e002333@arm.com>
+        id S1729344AbgKSRqo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Nov 2020 12:46:44 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1605808004; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=Rbk83JLyKBowqtyi3Q2SenfF02fWJYKIxfSgAfJdQos=; b=YCvra0UO7TZvRCYqJjkUhS60kyl4iJlhVt20DQQcrEJm674+Ua65aa8VIPIDJVs1Mxxy8M+s
+ gEsz71hHlQnEOHsJMediKFsoM16MXWEU/j9mBlaKW1/9bZ4Knm+XZq4Z7JWnuvK3MbFm8vcP
+ 88SIBu/0y/3D0ocdXY8RbIqJ6Rc=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5fb6af837f0cfa6a16e37591 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 19 Nov 2020 17:46:43
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 30969C43461; Thu, 19 Nov 2020 17:46:43 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4A729C433C6;
+        Thu, 19 Nov 2020 17:46:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4A729C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+Date:   Thu, 19 Nov 2020 10:46:41 -0700
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/2] PM / Domains: use device's next wakeup to
+ determine domain idle state
+Message-ID: <X7avgbb2AWvgwm7G@codeaurora.org>
+References: <20201106164811.3698-1-ilina@codeaurora.org>
+ <20201106164811.3698-3-ilina@codeaurora.org>
+ <CAPDyKFrv-3USmNLR3gjgaTEuTrWuYZjs3qCtnjxSOWqrxv5qsA@mail.gmail.com>
+ <X6l/OcHG37HzgFL8@codeaurora.org>
+ <CAPDyKFr8fdbMM1nsx-RZcMVtveJUP3p38z=HkL1T2C=QgM3gkQ@mail.gmail.com>
+ <X6wRBLmvzztNai4y@codeaurora.org>
+ <CAPDyKFr9gpH9Kh9=W4D7DRG8OuqBvkaWHvk8i47SToES=338cA@mail.gmail.com>
+ <X7KhcItlnS+uuqK2@codeaurora.org>
+ <CAPDyKFpKookuX2ynBfy44kyfZq48JPaUrEHevetsyoc83=UnsA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <65a4e167-9d2c-7fcb-5373-33af5e002333@arm.com>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <CAPDyKFpKookuX2ynBfy44kyfZq48JPaUrEHevetsyoc83=UnsA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 03:23:20PM +0000, Lukasz Luba wrote:
-> 
-> 
-> On 10/28/20 3:08 PM, Rob Herring wrote:
-> > On Mon, Oct 26, 2020 at 04:19:08PM +0800, Hector Yuan wrote:
-> > > From: "Hector.Yuan" <hector.yuan@mediatek.com>
-> > > 
-> > > Add devicetree documentation for 'mediatek,freq-domain' property specific
-> > > to Mediatek CPUs. This property is used to reference the CPUFREQ node
-> > > along with the domain id.
-> > > 
-> > > Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
-> > > ---
-> > >   Documentation/devicetree/bindings/arm/cpus.yaml |    6 ++++++
-> > >   1 file changed, 6 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > index 1222bf1..e995b26 100644
-> > > --- a/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > @@ -255,6 +255,12 @@ properties:
-> > >         where voltage is in V, frequency is in MHz.
-> > > +  mediatek,freq-domain:
-> > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > > +    description:
-> > > +      CPUs supporting freq-domain must set their "mediatek,freq-domain" property
-> > > +      with phandle to a cpufreq_hw node followed by the domain id.
-> > 
-> > This needs to be a common binding shared with SCMI domains.
-> 
-> Would it be accurate to create a new binding file:
-> Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.txt
-> ?
+On Thu, Nov 19 2020 at 02:57 -0700, Ulf Hansson wrote:
+>On Mon, 16 Nov 2020 at 16:57, Lina Iyer <ilina@codeaurora.org> wrote:
+>>
+>> On Fri, Nov 13 2020 at 03:34 -0700, Ulf Hansson wrote:
+>> >On Wed, 11 Nov 2020 at 17:51, Lina Iyer <ilina@codeaurora.org> wrote:
+>> >>
+>> >> On Tue, Nov 10 2020 at 03:02 -0700, Ulf Hansson wrote:
+>> >> >On Mon, 9 Nov 2020 at 18:41, Lina Iyer <ilina@codeaurora.org> wrote:
+>> >> >>
+>> >> >> On Mon, Nov 09 2020 at 08:27 -0700, Ulf Hansson wrote:
+>> >> >> >On Fri, 6 Nov 2020 at 17:48, Lina Iyer <ilina@codeaurora.org> wrote:
+>> [...]
+>>
+>> >> >> >For example, there's no point doing the above, if the domain doesn't
+>> >> >> >specify residency values for its idle states.
+>> >> >> >
+>> >> >> We would still need to ensure that the next wakeup is after the
+>> >> >> power_off_latency, if specified.
+>> >> >
+>> >> >Good point! Although, I would rather avoid adding the overhead, unless
+>> >> >the residency is specified. Do you see a problem with this approach?
+>> >> >
+>> >> Hmmm, no strong objections. However, we still need to run through the
+>> >> states to make sure the residency is not set and have a variable track
+>> >> that.
+>> >
+>> >Right.
+>> >
+>> >The important part is that we can do that once and not for every call
+>> >to the governor.
+>> >
+>> >> The devices wouldn't know that and would still continue to set the
+>> >> next wakeup, unless we find a way to let them know we are not using this
+>> >> feature for the domain.
+>> >
+>> >Right.
+>> >
+>> >To allow the driver to know, we could respond with an error code from
+>> >the new dev_pm_genpd_set_performance_state() API (from patch1), in
+>> >case the genpd+governor doesn't support it.
+>> >
+>> It would an unnecessary work everytime a next wakeup is being set to
+>> iterate through the available states and figure out if the residency has
+>> been set or not. We could probably hold that result in a variable when
+>> we setup the genpd states. Expect the next_wake to be set from a
+>> critical path or an interrupt handler, so we have to be quick.
 >
+>Yes, that's the idea I had in mind.
+>
+>Maybe it's not feasible, let's see. However, for sure I am looking at
+>decreasing overhead, not to increase. :-)
+>
+Wondering what do you think about a genpd flag for this purpose? The
+flag may be set when the genpd is initialized with idle states that have
+residency specified. In the governor, we could skip this path
+completely, if the flag is not set.
 
-Nope, Rob already asked to unify all such bindings and generalise it.
-Here is my attempt[1] and this must just use it or help to enhance that
-in order to make use of that binding.
+--Lina
 
--- 
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/lkml/20201116181356.804590-1-sudeep.holla@arm.com
+>>
+>> >Would that be okay? Otherwise we will have to add a separate genpd
+>> >API, asking explicitly if the "next wakeup" feature is supported.
+>> >
+>> Would like to avoid that as much as possible.
+>
+>Okay, good.
+>
+>Kind regards
+>Uffe
