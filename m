@@ -2,478 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AF42C1205
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 18:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A092C1222
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 18:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733246AbgKWRdI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Nov 2020 12:33:08 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38257 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730356AbgKWRdG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 12:33:06 -0500
-Received: by mail-ot1-f67.google.com with SMTP id 92so13604834otd.5;
-        Mon, 23 Nov 2020 09:33:05 -0800 (PST)
+        id S2390406AbgKWRgz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 12:36:55 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:43621 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726844AbgKWRgz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 12:36:55 -0500
+Received: by mail-oi1-f193.google.com with SMTP id t143so20508200oif.10;
+        Mon, 23 Nov 2020 09:36:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dW8bJtHGqvvxip649ajqFXNPdEQmzFPxPFDbn/4P2Sw=;
-        b=mE1DmhO6IPCn5L35QJxabucxCcQFBZOE6DT6uX/qcOxvqhxaZAmM+4jEiYVZbl7I0K
-         IApvTpLYUd6o4boKJzpQqeQJpyxcmkKjmj6mVXJmDMsO2M/aEkNv7ND9f+3eBzBBOmJk
-         meHkJ//QOKd7HGKvtNFDUPA9lXfvCe4mQErbMrWUessLAb3Jxv2cVgvDwP3S1DfaHrbt
-         Kd+HfdorzvDEZG8cssoFcG7i9aZoRiKeC7HoHT1y+wIt94OkpW4MIbOTqfRiNLTDOggq
-         QGskPcpk7r2Ro/SMFUrcysubW2zq/27IytO1HXogkFDoleKB7OX0Y0k/b5turfGswQwH
-         izcg==
-X-Gm-Message-State: AOAM533zTFG9Pm3q4Bj4KjoUrO7ASH7L3AZDFosXaPt3timb1e37h430
-        XDAhJyjJihvflEXEogYFwQRiEhTlYHIWtxrw5nw=
-X-Google-Smtp-Source: ABdhPJywh92pvu/MDhKhXCPFhoIOkQI6TBcfOBmD8rovCUYmGTY7YjDmaeMABTChuOzXiYDonz2+8KMUMHwYi468MA8=
-X-Received: by 2002:a05:6830:2385:: with SMTP id l5mr281685ots.321.1606152785014;
- Mon, 23 Nov 2020 09:33:05 -0800 (PST)
+        bh=ihfaEk8OOAQEu6DS1TpnCL04XgGFF4EmUrnN3Gl4aC8=;
+        b=eluRYhuNyNciUVPrW7cI9SHqJfjKy82I9dyl90eZ8EY9hFSp/ChKnhjy2s2Rs8JaVa
+         8HZlDXEEE/5tNO1r0bxifE9ErBABlJUFKqYUjdPOvDICbm4HSOrwr+jLGEjxBLK63J4S
+         uUlcELnzLl5dn4LJuGVG3iGfp/XBqvpdalPUWXB6zFbUvk+Fe8HGICYDcPbnKIjEl8kZ
+         VNKWUssBL4LphL/BNC9YAaRu2uWQP60yGdORuPVNWefrxK4We9b8wDD/M1ZVWGNmUmZ4
+         lDCrQOr54nNyXIyXCeHmTmdh5aAx+1CsItw74cSF7hxqxv7aXRT70SG5x7YP7qerZ+2y
+         he2A==
+X-Gm-Message-State: AOAM532lRKPYhhUdGL6mIAoptTfbPkk/wM0mR9Gy8xH20HbTZajh4eQb
+        7Uq4KPwfnhOHgV1cxYAb4Bbj45uLIwB8HoxwyFY=
+X-Google-Smtp-Source: ABdhPJzco8//TF2l7cZ1HyKSPVvOjLfv+k7LFgkSV/2yFeIABkJ+g1Pxg6rSoB3bVXfkfJJzCdmuRY0nqsonf3oNKGI=
+X-Received: by 2002:aca:5a42:: with SMTP id o63mr200888oib.69.1606153013076;
+ Mon, 23 Nov 2020 09:36:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20201105125524.4409-1-ionela.voinescu@arm.com> <20201117184920.17036-1-ionela.voinescu@arm.com>
-In-Reply-To: <20201117184920.17036-1-ionela.voinescu@arm.com>
+References: <20201119072539.5673-1-patrice.chotard@st.com>
+In-Reply-To: <20201119072539.5673-1-patrice.chotard@st.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 Nov 2020 18:32:53 +0100
-Message-ID: <CAJZ5v0h9rspagKCS7JfFS_Gx=scoYYA7gycbXEkOc29jsgDXsg@mail.gmail.com>
-Subject: Re: [PATCH] cppc_cpufreq: optimise memory allocation for HW and NONE coordination
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
+Date:   Mon, 23 Nov 2020 18:36:42 +0100
+Message-ID: <CAJZ5v0hUGt5O7zS7yRVC-3tk2fqVOYt2=bV_D0521A09p-S4-g@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: Add dev_wakeup_path() helper
+To:     patrice.chotard@st.com
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Erwan Le Ray <erwan.leray@st.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        amelie.delaunay@st.com, alain.volmat@st.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 7:50 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+On Thu, Nov 19, 2020 at 8:26 AM <patrice.chotard@st.com> wrote:
 >
-> While the current domain and cpu lists are appropriate for ALL and ANY
-> coordination types where single structures are kept for the domain and
-> CPU data, they can be inefficient for NONE and HW coordination types,
-> where domain information can end up being allocated either for a single
-> CPU or a small number of CPUs.
+> From: Patrice Chotard <patrice.chotard@st.com>
 >
-> Therefore remove the psd_data structure and maintain a single CPU list.
-> The cppc_cpudata structure will contain information about the PSD domain
-> of the CPU: the ACPI coordination type and CPU content. This does result
-> in the duplication of domain information in the cppc_cpudata structure
-> (type and map), but it is more memory efficient for all coordination
-> types, compared to allocating separate structures.
+> Add dev_wakeup_path() helper to avoid to spread
+> dev->power.wakeup_path test in drivers.
 >
-> In order to accommodate the struct list_head node in the cppc_cpudata
-> structure, the now unused cpu and cur_policy variables are removed.
->
-> This change affects all ACPI coordination types, with the greatest
-> savings obtained for HW and NONE coordination, when the number of CPUs
-> is large.
->
-> For example, on a arm64 Juno platform with 6 CPUs:
->  - (0) 0, 1, 2, 3, 4, 5 - NONE coordination
->  - (1) (0, 1, 2, 3) in PSD1, (4, 5) in PSD2 - ANY coordination
->
-> memory allocation comparison shows:
->
-> Before patch: psd_data and cppc_cpudata structures are allocated for each
->               CPU (0) or domain (1).
->
->  - (0) NONE coordination:
->     total    slack      req alloc/free  caller
->        0        0        0     0/6     _kernel_size_le_hi32+0x0xffff800008ff7958
->      768      336      432     6/0     _kernel_size_le_hi32+0x0xffff800008ff7444
->        0        0        0     0/6     _kernel_size_le_hi32+0x0xffff800008ff7990
->      768       96      672     6/0     _kernel_size_le_hi32+0x0xffff800008ff7604
->
->  - (1) ANY coordination:
->     total    slack      req alloc/free  caller
->        0        0        0     0/2     _kernel_size_le_hi32+0x0xffff800008fe7990
->      256      112      144     2/0     _kernel_size_le_hi32+0x0xffff800008fe7444
->      256       32      224     2/0     _kernel_size_le_hi32+0x0xffff800008fe7604
->        0        0        0     0/2     _kernel_size_le_hi32+0x0xffff800008fe7958
->
-> After patch: only cppc_cpudata is allocated for each CPU (0) or domain (1).
->
->  - (0) NONE coordination:
->     total    slack      req alloc/free  caller
->      768        0      768     6/0     _kernel_size_le_hi32+0x0xffff800008ffd410
->        0        0        0     0/6     _kernel_size_le_hi32+0x0xffff800008ffd274
->
->  - (1) ANY coordination:
->     total    slack      req alloc/free  caller
->      256        0      256     2/0     _kernel_size_le_hi32+0x0xffff800008fed410
->        0        0        0     0/2     _kernel_size_le_hi32+0x0xffff800008fed274
->
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
 >
-> Hi guys,
+> Changes from v1:
+>   - Fold the 4 v1 patches into one
+>   - Add Ulf's Reviewed-by
 >
-> This is an optimisation/fix for the inefficient allocation that Jeremy
-> mentioned for patch 4/8 in the series at [1]. This reverts the use of a
-> separate psd_data structure and some of the changes done in cppc_cpudata,
-> while adding the list_head needed to maintain a cpu list and removing the
-> unused cpu and cur_policy variables.
+>  drivers/base/power/domain.c      |  4 ++--
+>  drivers/base/power/main.c        |  4 ++--
+>  drivers/i2c/busses/i2c-stm32f7.c |  4 ++--
+>  include/linux/pm_wakeup.h        | 10 ++++++++++
+>  4 files changed, 16 insertions(+), 6 deletions(-)
 >
-> This patch is based on v5.10-rc4.
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 743268996336..e0894ef8457c 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -1142,7 +1142,7 @@ static int genpd_finish_suspend(struct device *dev, bool poweroff)
+>         if (ret)
+>                 return ret;
 >
-> Thanks,
-> Ionela.
->
-> [1] https://lore.kernel.org/linux-pm/20201105125524.4409-1-ionela.voinescu@arm.com/
->
->
->  drivers/acpi/cppc_acpi.c       |  20 ++---
->  drivers/cpufreq/cppc_cpufreq.c | 131 +++++++++++----------------------
->  include/acpi/cppc_acpi.h       |  15 +---
->  3 files changed, 54 insertions(+), 112 deletions(-)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index e1e46cc66eeb..4e478f751ff7 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -416,11 +416,11 @@ static int acpi_get_psd(struct cpc_desc *cpc_ptr, acpi_handle handle)
->  /**
->   * acpi_get_psd_map - Map the CPUs in the freq domain of a given cpu
->   * @cpu: Find all CPUs that share a domain with cpu.
-> - * @domain: Pointer to given domain data storage
-> + * @cpu_data: Pointer to CPU specific CPPC data including PSD info.
->   *
->   *     Return: 0 for success or negative value for err.
->   */
-> -int acpi_get_psd_map(unsigned int cpu, struct psd_data *domain)
-> +int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data)
->  {
->         struct cpc_desc *cpc_ptr, *match_cpc_ptr;
->         struct acpi_psd_package *match_pdomain;
-> @@ -436,18 +436,18 @@ int acpi_get_psd_map(unsigned int cpu, struct psd_data *domain)
->                 return -EFAULT;
->
->         pdomain = &(cpc_ptr->domain_info);
-> -       cpumask_set_cpu(cpu, domain->shared_cpu_map);
-> +       cpumask_set_cpu(cpu, cpu_data->shared_cpu_map);
->         if (pdomain->num_processors <= 1)
+> -       if (dev->power.wakeup_path && genpd_is_active_wakeup(genpd))
+> +       if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
 >                 return 0;
 >
->         /* Validate the Domain info */
->         count_target = pdomain->num_processors;
->         if (pdomain->coord_type == DOMAIN_COORD_TYPE_SW_ALL)
-> -               domain->shared_type = CPUFREQ_SHARED_TYPE_ALL;
-> +               cpu_data->shared_type = CPUFREQ_SHARED_TYPE_ALL;
->         else if (pdomain->coord_type == DOMAIN_COORD_TYPE_HW_ALL)
-> -               domain->shared_type = CPUFREQ_SHARED_TYPE_HW;
-> +               cpu_data->shared_type = CPUFREQ_SHARED_TYPE_HW;
->         else if (pdomain->coord_type == DOMAIN_COORD_TYPE_SW_ANY)
-> -               domain->shared_type = CPUFREQ_SHARED_TYPE_ANY;
-> +               cpu_data->shared_type = CPUFREQ_SHARED_TYPE_ANY;
+>         if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+> @@ -1196,7 +1196,7 @@ static int genpd_resume_noirq(struct device *dev)
+>         if (IS_ERR(genpd))
+>                 return -EINVAL;
 >
->         for_each_possible_cpu(i) {
->                 if (i == cpu)
-> @@ -468,16 +468,16 @@ int acpi_get_psd_map(unsigned int cpu, struct psd_data *domain)
->                 if (pdomain->coord_type != match_pdomain->coord_type)
->                         goto err_fault;
+> -       if (dev->power.wakeup_path && genpd_is_active_wakeup(genpd))
+> +       if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
+>                 return pm_generic_resume_noirq(dev);
 >
-> -               cpumask_set_cpu(i, domain->shared_cpu_map);
-> +               cpumask_set_cpu(i, cpu_data->shared_cpu_map);
->         }
+>         genpd_lock(genpd);
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index c7ac49042cee..921c5b2ec30a 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1359,7 +1359,7 @@ static void dpm_propagate_wakeup_to_parent(struct device *dev)
 >
->         return 0;
+>         spin_lock_irq(&parent->power.lock);
 >
->  err_fault:
->         /* Assume no coordination on any error parsing domain info */
-> -       cpumask_clear(domain->shared_cpu_map);
-> -       cpumask_set_cpu(cpu, domain->shared_cpu_map);
-> -       domain->shared_type = CPUFREQ_SHARED_TYPE_NONE;
-> +       cpumask_clear(cpu_data->shared_cpu_map);
-> +       cpumask_set_cpu(cpu, cpu_data->shared_cpu_map);
-> +       cpu_data->shared_type = CPUFREQ_SHARED_TYPE_NONE;
+> -       if (dev->power.wakeup_path && !parent->power.ignore_children)
+> +       if (device_wakeup_path(dev) && !parent->power.ignore_children)
+>                 parent->power.wakeup_path = true;
 >
->         return -EFAULT;
->  }
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index b4edeeb57d04..bb4c068601db 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -31,10 +31,11 @@
+>         spin_unlock_irq(&parent->power.lock);
+> @@ -1627,7 +1627,7 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
+>                 goto Complete;
 >
->  /*
->   * This list contains information parsed from per CPU ACPI _CPC and _PSD
-> - * structures: this is a list of domain data which in turn contains a list
-> - * of cpus with their controls and capabilities, belonging to the domain.
-> + * structures: e.g. the highest and lowest supported performance, capabilities,
-> + * desired performance, level requested etc. Depending on the share_type, not
-> + * all CPUs will have an entry in the list.
->   */
-> -static LIST_HEAD(domain_list);
-> +static LIST_HEAD(cpu_data_list);
+>         /* Avoid direct_complete to let wakeup_path propagate. */
+> -       if (device_may_wakeup(dev) || dev->power.wakeup_path)
+> +       if (device_may_wakeup(dev) || device_wakeup_path(dev))
+>                 dev->power.direct_complete = false;
 >
->  static bool boost_supported;
+>         if (dev->power.direct_complete) {
+> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+> index f41f51a176a1..9aa8e65b511e 100644
+> --- a/drivers/i2c/busses/i2c-stm32f7.c
+> +++ b/drivers/i2c/busses/i2c-stm32f7.c
+> @@ -2322,7 +2322,7 @@ static int stm32f7_i2c_suspend(struct device *dev)
 >
-> @@ -194,6 +195,12 @@ static void cppc_cpufreq_stop_cpu(struct cpufreq_policy *policy)
->         if (ret)
->                 pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
->                          caps->lowest_perf, cpu, ret);
-> +
-> +       /* Remove CPU node from list and free driver data for policy */
-> +       free_cpumask_var(cpu_data->shared_cpu_map);
-> +       list_del(&cpu_data->node);
-> +       kfree(policy->driver_data);
-> +       policy->driver_data = NULL;
->  }
+>         i2c_mark_adapter_suspended(&i2c_dev->adap);
 >
->  /*
-> @@ -239,105 +246,59 @@ static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
->  }
->  #endif
->
-> -static struct psd_data *cppc_cpufreq_get_domain(unsigned int cpu)
-> -{
-> -       struct psd_data *domain;
-> -       int ret;
-> -
-> -       list_for_each_entry(domain, &domain_list, node) {
-> -               if (cpumask_test_cpu(cpu, domain->shared_cpu_map))
-> -                       return domain;
-> -       }
-> -
-> -       domain = kzalloc(sizeof(struct psd_data), GFP_KERNEL);
-> -       if (!domain)
-> -               return NULL;
-> -       if (!zalloc_cpumask_var(&domain->shared_cpu_map, GFP_KERNEL))
-> -               goto free_domain;
-> -       INIT_LIST_HEAD(&domain->cpu_list);
-> -
-> -       ret = acpi_get_psd_map(cpu, domain);
-> -       if (ret) {
-> -               pr_err("Error parsing PSD data for CPU%d.\n", cpu);
-> -               goto free_mask;
-> -       }
-> -
-> -       list_add(&domain->node, &domain_list);
-> -
-> -       return domain;
-> -
-> -free_mask:
-> -       free_cpumask_var(domain->shared_cpu_map);
-> -free_domain:
-> -       kfree(domain);
-> -
-> -       return NULL;
-> -}
->
->  static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
->  {
->         struct cppc_cpudata *cpu_data;
-> -       struct psd_data *domain;
+> -       if (!device_may_wakeup(dev) && !dev->power.wakeup_path) {
+> +       if (!device_may_wakeup(dev) && !device_wakeup_path(dev)) {
+>                 ret = stm32f7_i2c_regs_backup(i2c_dev);
+>                 if (ret < 0) {
+>                         i2c_mark_adapter_resumed(&i2c_dev->adap);
+> @@ -2341,7 +2341,7 @@ static int stm32f7_i2c_resume(struct device *dev)
+>         struct stm32f7_i2c_dev *i2c_dev = dev_get_drvdata(dev);
 >         int ret;
 >
-> -       domain = cppc_cpufreq_get_domain(cpu);
-> -       if (!domain) {
-> -               pr_err("Error acquiring domain for CPU.\n");
-> -               return NULL;
-> -       }
-> -
-> -       list_for_each_entry(cpu_data, &domain->cpu_list, node) {
-> -               if (cpu_data->cpu == cpu)
-> -                       return cpu_data;
-> -       }
-> -
-> -       if ((domain->shared_type == CPUFREQ_SHARED_TYPE_ANY) &&
-> -           !list_empty(&domain->cpu_list))
-> -               return list_first_entry(&domain->cpu_list,
-> -                                       struct cppc_cpudata,
-> -                                       node);
-> -
->         cpu_data = kzalloc(sizeof(struct cppc_cpudata), GFP_KERNEL);
->         if (!cpu_data)
-> -               return NULL;
-> +               goto out;
+> -       if (!device_may_wakeup(dev) && !dev->power.wakeup_path) {
+> +       if (!device_may_wakeup(dev) && !device_wakeup_path(dev)) {
+>                 ret = pm_runtime_force_resume(dev);
+>                 if (ret < 0)
+>                         return ret;
+> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> index aa3da6611533..196a157456aa 100644
+> --- a/include/linux/pm_wakeup.h
+> +++ b/include/linux/pm_wakeup.h
+> @@ -84,6 +84,11 @@ static inline bool device_may_wakeup(struct device *dev)
+>         return dev->power.can_wakeup && !!dev->power.wakeup;
+>  }
+>
+> +static inline bool device_wakeup_path(struct device *dev)
+> +{
+> +       return dev->power.wakeup_path;
+> +}
 > +
-> +       if (!zalloc_cpumask_var(&cpu_data->shared_cpu_map, GFP_KERNEL))
-> +               goto free_cpu;
+>  static inline void device_set_wakeup_path(struct device *dev)
+>  {
+>         dev->power.wakeup_path = true;
+> @@ -174,6 +179,11 @@ static inline bool device_may_wakeup(struct device *dev)
+>         return dev->power.can_wakeup && dev->power.should_wakeup;
+>  }
 >
-> -       cpu_data->cpu = cpu;
-> -       cpu_data->domain = domain;
-> +       ret = acpi_get_psd_map(cpu, cpu_data);
-> +       if (ret) {
-> +               pr_debug("Err parsing CPU%d PSD data: ret:%d\n", cpu, ret);
-> +               goto free_mask;
-> +       }
->
->         ret = cppc_get_perf_caps(cpu, &cpu_data->perf_caps);
->         if (ret) {
-> -               pr_err("Err reading CPU%d perf capabilities. ret:%d\n",
-> -                       cpu, ret);
-> -               goto free;
-> +               pr_debug("Err reading CPU%d perf caps: ret:%d\n", cpu, ret);
-> +               goto free_mask;
->         }
+> +static inline bool device_wakeup_path(struct device *dev)
+> +{
+> +       return false;
+> +}
 > +
->         /* Convert the lowest and nominal freq from MHz to KHz */
->         cpu_data->perf_caps.lowest_freq *= 1000;
->         cpu_data->perf_caps.nominal_freq *= 1000;
+>  static inline void device_set_wakeup_path(struct device *dev) {}
 >
-> -       list_add(&cpu_data->node, &domain->cpu_list);
-> +       list_add(&cpu_data->node, &cpu_data_list);
->
->         return cpu_data;
-> -free:
-> -       kfree(cpu_data);
->
-> +free_mask:
-> +       free_cpumask_var(cpu_data->shared_cpu_map);
-> +free_cpu:
-> +       kfree(cpu_data);
-> +out:
->         return NULL;
->  }
->
->  static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  {
-> -       struct cppc_cpudata *cpu_data = NULL;
-> -       struct psd_data *domain = NULL;
->         unsigned int cpu = policy->cpu;
-> +       struct cppc_cpudata *cpu_data;
->         struct cppc_perf_caps *caps;
-> -       int ret = 0;
-> +       int ret;
->
->         cpu_data = cppc_cpufreq_get_cpu_data(cpu);
->         if (!cpu_data) {
-> -               pr_err("Error in acquiring _CPC/_PSD data for CPU.\n");
-> +               pr_err("Error in acquiring _CPC/_PSD data for CPU%d.\n", cpu);
->                 return -ENODEV;
->         }
-> -
-> -       domain = cpu_data->domain;
->         caps = &cpu_data->perf_caps;
->         policy->driver_data = cpu_data;
->
-> @@ -361,7 +322,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->                                                             caps->nominal_perf);
->
->         policy->transition_delay_us = cppc_cpufreq_get_transition_delay_us(cpu);
-> -       policy->shared_type = domain->shared_type;
-> +       policy->shared_type = cpu_data->shared_type;
->
->         switch (policy->shared_type) {
->         case CPUFREQ_SHARED_TYPE_HW:
-> @@ -374,7 +335,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->                  * operations will use a single cppc_cpudata structure stored
->                  * in policy->driver_data.
->                  */
-> -               cpumask_copy(policy->cpus, domain->shared_cpu_map);
-> +               cpumask_copy(policy->cpus, cpu_data->shared_cpu_map);
->                 break;
->         default:
->                 pr_info("Unsupported cpufreq CPU co-ord type: %d\n",
-> @@ -382,8 +343,6 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->                 return -EFAULT;
->         }
->
-> -       cpu_data->cur_policy = policy;
-> -
->         /*
->          * If 'highest_perf' is greater than 'nominal_perf', we assume CPU Boost
->          * is supported.
-> @@ -487,7 +446,7 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
->  {
->         struct cppc_cpudata *cpu_data = policy->driver_data;
->
-> -       return cpufreq_show_cpus(cpu_data->domain->shared_cpu_map, buf);
-> +       return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
->  }
->  cpufreq_freq_attr_ro(freqdomain_cpus);
->
-> @@ -558,38 +517,30 @@ static int __init cppc_cpufreq_init(void)
->         if (acpi_disabled)
->                 return -ENODEV;
->
-> +       INIT_LIST_HEAD(&cpu_data_list);
-> +
->         cppc_check_hisi_workaround();
->
->         return cpufreq_register_driver(&cppc_cpufreq_driver);
->  }
->
-> -static inline void free_cpu_data(struct psd_data *domain)
-> +static inline void free_cpu_data(void)
->  {
->         struct cppc_cpudata *iter, *tmp;
->
-> -       list_for_each_entry_safe(iter, tmp, &domain->cpu_list, node) {
-> +       list_for_each_entry_safe(iter, tmp, &cpu_data_list, node) {
-> +               free_cpumask_var(iter->shared_cpu_map);
->                 list_del(&iter->node);
->                 kfree(iter);
->         }
-> -}
-> -
-> -static inline void free_domain_data(void)
-> -{
-> -       struct psd_data *iter, *tmp;
->
-> -       list_for_each_entry_safe(iter, tmp, &domain_list, node) {
-> -               list_del(&iter->node);
-> -               if (!list_empty(&iter->cpu_list))
-> -                       free_cpu_data(iter);
-> -               free_cpumask_var(iter->shared_cpu_map);
-> -               kfree(iter);
-> -       }
->  }
-> +
->  static void __exit cppc_cpufreq_exit(void)
->  {
->         cpufreq_unregister_driver(&cppc_cpufreq_driver);
->
-> -       free_domain_data();
-> +       free_cpu_data();
->  }
->
->  module_exit(cppc_cpufreq_exit);
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index c0081fb6032e..dab6b3b4e315 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -122,30 +122,21 @@ struct cppc_perf_fb_ctrs {
->         u64 wraparound_time;
->  };
->
-> -/* Container of performance state domain data */
-> -struct psd_data {
-> -       struct list_head node;
-> -       unsigned int shared_type;
-> -       struct list_head cpu_list;
-> -       cpumask_var_t shared_cpu_map;
-> -};
-> -
->  /* Per CPU container for runtime CPPC management. */
->  struct cppc_cpudata {
-> -       int cpu;
->         struct list_head node;
-> -       struct psd_data *domain;
->         struct cppc_perf_caps perf_caps;
->         struct cppc_perf_ctrls perf_ctrls;
->         struct cppc_perf_fb_ctrs perf_fb_ctrs;
-> -       struct cpufreq_policy *cur_policy;
-> +       unsigned int shared_type;
-> +       cpumask_var_t shared_cpu_map;
->  };
->
->  extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
->  extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> -extern int acpi_get_psd_map(unsigned int cpu, struct psd_data *domain);
-> +extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
->  extern unsigned int cppc_get_transition_latency(int cpu);
->  extern bool cpc_ffh_supported(void);
->  extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+>  static inline void __pm_stay_awake(struct wakeup_source *ws) {}
 > --
 
-Applied as 5.11 material (on top of the previous cppc_cpufreq patches), thanks!
+Applied as 5.11 material, thanks!
