@@ -2,127 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88D42BFF28
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 05:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 917C32BFFDF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 07:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbgKWEt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Nov 2020 23:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S1728040AbgKWGRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 01:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726885AbgKWEt2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Nov 2020 23:49:28 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D63CC0613CF
-        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 20:49:28 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id 34so13093230pgp.10
-        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 20:49:28 -0800 (PST)
+        with ESMTP id S1725320AbgKWGRh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 01:17:37 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90AAC061A4C
+        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 22:17:37 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id x24so1659250pfn.6
+        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 22:17:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=3DKOd9QZU+OQ+Uxsiq+URVDTtNdfohLq7Kaal7jBrUY=;
-        b=ryraa9qM/VUQp3UH046zn7bKvZSSbM5orPtwBUUAE18p6LlCR9AVsl26i0sbJUIB5b
-         fN//IwR7zbRrDraS+HbnRY2wcAJrq+y0jaSTY97ttFNCOM1EHhuq6dHFSDCMK4E3DeyX
-         xGzUtXGD23SKKdchu89ktBW/yLSwp5j4cQqhYYxQ4+rezNi8YNyWUAe/R92fLv+ebFdK
-         2oT53lnkww6YvZi4U1r8kDLkmZkrAIKgoXxUID5YwckjvhMaq62dAhfn4S1c0bQXSbH7
-         o3s9uMzhof1NyieixGqnSHLWnj/bWKoqfWgbA3CM3e6h2QPOKgKxQoEW122SihWl9m5W
-         f1Ng==
+         :content-disposition:in-reply-to:user-agent;
+        bh=GKa7W0DjsQScUMdM+fh7P8EBsnhIK0qKVT7JJFmlduM=;
+        b=rGEfXEwlr66TrbSIzeEJ5FDjg42pe+KTbVMCt3orA1E7AS+8bNxLN7hgHnv9wZ4zRW
+         7tpleeyHmO/Mk8recctOvWkoXB3ku7K//lc6CBgJCg0vWvIt2AJaVorT8KgtJz/s6UB0
+         cpghzzT0Whp/cpSh8xdsm+7U0PDuVKeQZYtYxg7x7LSYM7de4ahGiiU9M/u1Byu8drem
+         otVZOkwRy7/W7UYjnbAxFwhn3Sd2uxThXBJZ4CVJgiBId/k4K2AClDUHlRFQFeBgjwHm
+         rOckwkbQUfwnqqyNo7jur3VrxoBOcrEAz7n+xImPhIOplX5ie4p+LdjYQX3X+I048R3F
+         +i1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=3DKOd9QZU+OQ+Uxsiq+URVDTtNdfohLq7Kaal7jBrUY=;
-        b=nWiK68o91KrSBIUQrkYhgyqARV809E3hW8vQY2y7l5im/EyZGB9RFGYewGh0z9dI/l
-         Trej3us9ViyFKc9Sll+GkfAoL8b019lvx+jQ1OHhkeK117nLf2K9u7CjvYGfFDGUKyLj
-         sykCBLbHWRKsxBlVF4YB1HrUIGEskh7nMIPxggDI5g/Fe+8IHeIGAz1C+BSAc5XteyQH
-         /OkURAyLkhk7zf9wjCdzYyyg7pSBrj+QNMZQnrJWXlIW9E9weT82Wmxbqim/JpKgRlm6
-         mfk5Lt8WEHnI0UxXWUmV+SN+yP+CS0fYC9n9Mt2liyp66s7Pk6jQa60pF+pbj1D6N2bl
-         aYaQ==
-X-Gm-Message-State: AOAM531y5K523mOeIS2GTgL5LELPt9rYNA1iVhMkQkq86RZbormat5jj
-        aypnhL8mIO0nXQPUkqa0ed+NyA==
-X-Google-Smtp-Source: ABdhPJz/l0rwQQC5wAMZv7PZ8hOTbLf/+wdy1zwNRs87SHnieS/zTSHOjI/uHQjG/DlUqa/k6s8o2A==
-X-Received: by 2002:a17:90a:8044:: with SMTP id e4mr23027728pjw.231.1606106968028;
-        Sun, 22 Nov 2020 20:49:28 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GKa7W0DjsQScUMdM+fh7P8EBsnhIK0qKVT7JJFmlduM=;
+        b=k9iDwsxAP5Tdw6m+BuganpfR+Wrq44ykiTKIUuvOt6rcLo+s4s43XrzfMFxdCMPtdE
+         AU3oiKmd1ixUjaVSawOq4VOBkGEfgCC0YfjHbIxtwohc4RKktD2vVYQ4H9/6KCnTaVmZ
+         OUsyDHCWnTkZORhKWtiipHIskL8LSboXtfHq9E55HBAGHnZdhy2MtPO9l81sDPCi8dyO
+         E7wSqLHhXl+HHID6izYwZ3pwxoCons+Fc28SFqoAkznvyD/a6Otq/lHsZTJ8JUQGpdCK
+         qAn+D5FiskfX37DvrOMnXcPH6mAEHruGpN1u4uKtuLouwIQchQwVx8rE6ZJcZUjQkRfI
+         PHAA==
+X-Gm-Message-State: AOAM532bSBJJA3yPChkXkYAJQp0lefajzb784qYzj8MEZxEUgGNBE/ub
+        Zhboh048bU7WUqa8JFcYSp4dlg==
+X-Google-Smtp-Source: ABdhPJzlkLlCQ2x4GcvUyoOExAar0nVc9jrP+KcgO26RrmOh/VDHjgc+ePCKgyNUoHpOWBv65Xzzwg==
+X-Received: by 2002:a62:52d7:0:b029:18b:7093:fb88 with SMTP id g206-20020a6252d70000b029018b7093fb88mr24458173pfb.76.1606112257122;
+        Sun, 22 Nov 2020 22:17:37 -0800 (PST)
 Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id q4sm2168776pgl.14.2020.11.22.20.49.27
+        by smtp.gmail.com with ESMTPSA id u197sm10953224pfc.127.2020.11.22.22.17.36
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 22 Nov 2020 20:49:27 -0800 (PST)
-Date:   Mon, 23 Nov 2020 10:19:20 +0530
+        Sun, 22 Nov 2020 22:17:36 -0800 (PST)
+Date:   Mon, 23 Nov 2020 11:47:34 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH] cpufreq: scmi: Fix build for !CONFIG_COMMON_CLK
-Message-ID: <20201123044920.ohr7czvictntpe4o@vireshk-i7>
-References: <20201120101252.1113298-1-sudeep.holla@arm.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v10 00/19] Introduce memory interconnect for NVIDIA Tegra
+ SoCs
+Message-ID: <20201123061734.mpmkdxzullrh52o7@vireshk-i7>
+References: <20201123002723.28463-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201120101252.1113298-1-sudeep.holla@arm.com>
+In-Reply-To: <20201123002723.28463-1-digetx@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-11-20, 10:12, Sudeep Holla wrote:
-> Commit 8410e7f3b31e ("cpufreq: scmi: Fix OPP addition failure with a
-> dummy clock provider") registers a dummy clock provider using
-> devm_of_clk_add_hw_provider. These *_hw_provider functions are defined
-> only when CONFIG_COMMON_CLK=y. One possible fix is to add the Kconfig
-> dependency, but since we plan to move away from the clock dependency
-> for scmi cpufreq, it is preferrable to avoid that.
+On 23-11-20, 03:27, Dmitry Osipenko wrote:
+> This series brings initial support for memory interconnect to Tegra20,
+> Tegra30 and Tegra124 SoCs.
 > 
-> Let us just conditionally compile out the offending call to
-> devm_of_clk_add_hw_provider. It also uses the variable 'dev' outside
-> of the #ifdef block to avoid build warning.
+> For the starter only display controllers and devfreq devices are getting
+> interconnect API support, others could be supported later on. The display
+> controllers have the biggest demand for interconnect API right now because
+> dynamic memory frequency scaling can't be done safely without taking into
+> account bandwidth requirement from the displays. In particular this series
+> fixes distorted display output on T30 Ouya and T124 TK1 devices.
 > 
-> Fixes: 8410e7f3b31e ("cpufreq: scmi: Fix OPP addition failure with a dummy clock provider")
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/cpufreq/scmi-cpufreq.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Changelog:
 > 
-> Hi Viresh,
+> v10 - In a longer run it will be much nicer if we could support EMC
+>       hardware versioning on Tegra20 and it's not late to support it now.
+>       Hence I added these new patches:
 > 
-> Addtional change to replace &sdev->dev with dev is to avoid build warning:
+>         dt-bindings: memory: tegra20: emc: Document opp-supported-hw property
+>         memory: tegra20: Support hardware versioning and clean up OPP table initialization
 > 
-> drivers/cpufreq/scmi-cpufreq.c: In function ‘scmi_cpufreq_probe’:
-> drivers/cpufreq/scmi-cpufreq.c:232:17: warning: unused variable ‘dev’ [-Wunused-variable]
-> 
-> Alternatively I can create a block and pull the variable in, but it looked
-> odd given there is possible user outside the ifdef block which I clearly
-> missed in the original patch.
-> 
-> Regards,
-> Sudeep
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index 78318508a6d6..8286205c7165 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -236,13 +236,15 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
->  	if (!handle || !handle->perf_ops)
->  		return -ENODEV;
-> 
-> +#ifdef CONFIG_COMMON_CLK
->  	/* dummy clock provider as needed by OPP if clocks property is used */
->  	if (of_find_property(dev->of_node, "#clock-cells", NULL))
->  		devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
-> +#endif
-> 
->  	ret = cpufreq_register_driver(&scmi_cpufreq_driver);
->  	if (ret) {
-> -		dev_err(&sdev->dev, "%s: registering cpufreq failed, err: %d\n",
-> +		dev_err(dev, "%s: registering cpufreq failed, err: %d\n",
->  			__func__, ret);
->  	}
-> 
+>     - Removed error message from tegra30-devfreq driver about missing OPP
+>       properties in a device-tree because EMC driver already prints that
+>       message and it uses OPP API error code instead of checking DT directly,
+>       which is a more correct way of doing that.
 
-Applied. Thanks.
+Looks good to me (from OPP APIs usage perspective). Thanks for
+continuing with this and fixing all the issues Dmitry.
 
 -- 
 viresh
