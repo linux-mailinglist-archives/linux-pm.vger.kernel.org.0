@@ -2,63 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C052C054A
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 13:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C722C054F
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 13:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729344AbgKWMOI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Nov 2020 07:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S1729356AbgKWMOZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 07:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727941AbgKWMOI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 07:14:08 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C88FC0613CF;
-        Mon, 23 Nov 2020 04:14:08 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id p12so17684453ljc.9;
-        Mon, 23 Nov 2020 04:14:08 -0800 (PST)
+        with ESMTP id S1729294AbgKWMOY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 07:14:24 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D920EC0613CF;
+        Mon, 23 Nov 2020 04:14:22 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id d17so23380878lfq.10;
+        Mon, 23 Nov 2020 04:14:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XsZCv5023Mu/1oSh+AEapg1m34NXeyOJ1unD1eIBZQw=;
-        b=aB1KYaV7QqWCZox3C1Jd1sqfwbSLXAQ3jPNeKgOhMUvcnvNB+7Eikk716UJZZdPigW
-         qnMeYDdM9c69XWEjLShh/Zve5JmHKWUaj5ItrO7NfeBpUVAEWQXflrAGCFTu8LO7ab22
-         RSB5f4WCpXTvazXHF4RBQKjRPiJu0EUP1gkgxeEhUWNhg5RBZb/aXAxnqD/JzL2wlTfM
-         alizEIHllaRJbhLpzXPaIJ/t39ndcERuS8RRSt+5Z8Ayd088t7ICseCenMYJzmaIGcHN
-         JQdsd2RXj/bbn/JMKwi0+GCi8X4j+3Xfet8lNvmwvwLixlz4aWxFEXr+moKrY9mOaJTg
-         JT9Q==
+        bh=TRhGjbX+VEiprJASwNsMJBN6MmSp2/p8ffbHFNLLsjE=;
+        b=K4daee2wLSFX05MC4H13VqAmjxeWpMxobi3uR5PHfIWNbdrgwBaSFlnfYL1dH55R/k
+         Q4OGdyP5r6mHHk5nagnfvdyFpW347yr4CP77sOfL/q+fYsSjxR07X3LDfEz3yTdD3ATS
+         MQTwsYFRCNSfgwQP00E/IHq1SDs0popuUroi2NUnsQssoGcJ3eOF2BJjOCE9zwZVn7sR
+         XutkFZyFixsUwRX7R/iV86VV4fMQPUn1lOkBeSGlP+lUgQmwtCyWceLG9Kws2FZcONzi
+         TAmvLk+APEduPsVRXNZCpkMlzp51XoyRIQTTaom1cvbRfM4+TzmPyNdSOkhFG8GgSFU2
+         MK2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=XsZCv5023Mu/1oSh+AEapg1m34NXeyOJ1unD1eIBZQw=;
-        b=C3F/Gq0pCZEUoEzaqLgCC/SqRy2e6QuUfMNmkAv1e27kup266IB6pCcqgobYV977xc
-         hgA2Q1MIgZtuVZymCsff2JVV0++9GtRnSvknOE9Q9Rsl6ildA9zdgJ3fMfzwXHheV/oh
-         xks0EFIilvJED8g5nnkOSwdA43gc7pVhyczI2fZxbDBYqcMwLdhwRcTo2+3ZpgwjQZ0+
-         ts/ViGBYh7gzToXHiLATe9xwiMqwsx8Sbz+Yay4OiXn7Fdd4ZLXKY24OwPrWFZ3Gwmyi
-         bjvkUKLiJf+cGycQczsAbGdyjulK60GYNpIYPsmaJ3fOd3ZXHX4KLzLYTaL+/ISFCmf+
-         O21Q==
-X-Gm-Message-State: AOAM532flJeyDgdP0Q+9jz4CQ661kmVQSM5HRC+zNt09KZDNRjdmxBcz
-        SZrbUxLfdf7wfnup0I0SCBA=
-X-Google-Smtp-Source: ABdhPJx4k5t4//jZKRi/ta0kUpQyFAiLJpsAYAJoaM9b+pEwu73ZR0cHXPiCx8Ola24KDGwrKRvL8w==
-X-Received: by 2002:a05:651c:299:: with SMTP id b25mr13588973ljo.16.1606133646185;
-        Mon, 23 Nov 2020 04:14:06 -0800 (PST)
+        bh=TRhGjbX+VEiprJASwNsMJBN6MmSp2/p8ffbHFNLLsjE=;
+        b=koZX/ccODYENofJgzxodA6jae7f4IbiBXWeV2kjGZIjYAaEtulQ92fIO5PZAuR9nt+
+         2YApf10O1pVVuk0lnCN2buHIhETfbtnLPuDiEfN7vcMkyOoo39sAr6+flqrFQ4TfT4Ll
+         eTsL+VRNZKNGw39BSlMjbEgrsjpzM6uCKh4KJDNBQIngoSGpyDCZ6Xfd3lZV3qLu8+YK
+         iRaCOVpB8gjnpy+5EW7EiW9doIv4PuQiaeSagBWZj2hP3cOExOI3Cu9iWsHhaS6KXiFZ
+         LP2DZ2Iu/t82Z+3c95nTpYqBRZUhhw7LziAHesApMEd782x3Ne5+GMJq35ZwtW7cJ/HD
+         AHww==
+X-Gm-Message-State: AOAM532I5I4jveYEZGi+/LNLqxS8Cy1JuvgFd8t4Yzc9GQpz2np3O8Nb
+        xRx9eUyxTLiWBKY0VFwJ/2Q=
+X-Google-Smtp-Source: ABdhPJyeUKDBnMC5w2mRg2QuoMaH6BuqaSjVArPe4axgNT1C/Ngvvfi2S1/Hfsx7UiIAQiajE51y0Q==
+X-Received: by 2002:a19:c94:: with SMTP id 142mr12360394lfm.284.1606133661420;
+        Mon, 23 Nov 2020 04:14:21 -0800 (PST)
 Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id o3sm1368332lfo.217.2020.11.23.04.14.05
+        by smtp.googlemail.com with ESMTPSA id q26sm1371522lfa.104.2020.11.23.04.14.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2020 04:14:05 -0800 (PST)
-Subject: Re: [PATCH v10 03/19] memory: tegra30: Support interconnect framework
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Mon, 23 Nov 2020 04:14:20 -0800 (PST)
+Subject: Re: [PATCH v10 09/19] PM / devfreq: tegra30: Support interconnect and
+ OPPs from device-tree
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
         Mikko Perttunen <cyndis@kapsi.fi>,
         Viresh Kumar <vireshk@kernel.org>,
         Peter Geis <pgwipeout@gmail.com>,
@@ -67,15 +68,16 @@ To:     Georgi Djakov <georgi.djakov@linaro.org>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 References: <20201123002723.28463-1-digetx@gmail.com>
- <20201123002723.28463-4-digetx@gmail.com>
- <109bc617-f7d9-8635-3db1-3f4869b32f4d@linaro.org>
+ <CGME20201123003325epcas1p1b90c7b94507a3d58053949f5395c885a@epcas1p1.samsung.com>
+ <20201123002723.28463-10-digetx@gmail.com>
+ <f8f0b254-b5d6-7951-7576-846d8f58cb13@samsung.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <cd22b4ce-b2c1-9893-5007-5dd7dc49404f@gmail.com>
-Date:   Mon, 23 Nov 2020 15:14:04 +0300
+Message-ID: <cb9ba2fd-c450-b35d-9a72-846f33e0c427@gmail.com>
+Date:   Mon, 23 Nov 2020 15:14:20 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <109bc617-f7d9-8635-3db1-3f4869b32f4d@linaro.org>
+In-Reply-To: <f8f0b254-b5d6-7951-7576-846d8f58cb13@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -83,23 +85,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-23.11.2020 09:32, Georgi Djakov пишет:
+23.11.2020 10:02, Chanwoo Choi пишет:
 > Hi Dmitry,
 > 
-> On 23.11.20 2:27, Dmitry Osipenko wrote:
->> Now Internal and External memory controllers are memory interconnection
->> providers. This allows us to use interconnect API for tuning of memory
->> configuration. EMC driver now supports OPPs and DVFS. MC driver now
->> supports tuning of memory arbitration latency, which needs to be done
->> for ISO memory clients, like a Display client for example.
+> On 11/23/20 9:27 AM, Dmitry Osipenko wrote:
+>> This patch moves ACTMON driver away from generating OPP table by itself,
+>> transitioning it to use the table which comes from device-tree. This
+>> change breaks compatibility with older device-trees and brings support
+>> for the interconnect framework to the driver. This is a mandatory change
+>> which needs to be done in order to implement interconnect-based memory
+>> DVFS, i.e. device-trees need to be updated. Now ACTMON issues a memory
+>> bandwidth requests using dev_pm_opp_set_bw() instead of driving EMC clock
+>> rate directly.
 >>
 >> Tested-by: Peter Geis <pgwipeout@gmail.com>
+>> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/devfreq/tegra30-devfreq.c | 79 +++++++++++++++----------------
+>>  1 file changed, 37 insertions(+), 42 deletions(-)
+>>
 > 
-> Acked-by: Georgi Djakov <georgi.djakov@linaro.org>
+> (snip)
+
+Hello Chanwoo,
+
+> When the patches related to icc are merged, I'll merge patch9/10.
+> Thanks for your work.
 > 
-> Thank you for the continuous work on this patchset!
 
-Hello Georgi,
-
-Thank you for reviewing the patches!
+Alright, thank you!
