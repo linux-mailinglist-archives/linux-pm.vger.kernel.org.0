@@ -2,128 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DBE2C04A1
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 12:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A5A2C0548
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 13:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728717AbgKWLeu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Nov 2020 06:34:50 -0500
-Received: from foss.arm.com ([217.140.110.172]:43448 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728689AbgKWLeu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Nov 2020 06:34:50 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF85530E;
-        Mon, 23 Nov 2020 03:34:49 -0800 (PST)
-Received: from [10.57.28.98] (unknown [10.57.28.98])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 228503F70D;
-        Mon, 23 Nov 2020 03:34:46 -0800 (PST)
-Subject: Re: [PATCH V3 2/2] thermal: cpufreq_cooling: Reuse sched_cpu_util()
- for SMP platforms
+        id S1729334AbgKWMOC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 07:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727941AbgKWMOB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 07:14:01 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3498AC0613CF;
+        Mon, 23 Nov 2020 04:14:01 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id r24so7264042lfm.8;
+        Mon, 23 Nov 2020 04:14:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DjiKfHQ2jA3vM7VGaFaknOPs7Hmg3cHuudIyVF1TtFs=;
+        b=CMfi6MciH6bpfSGoN1TGnqSBqrbvk/WZCOthEzuu9kuAVb40YeAebEnZp99bo2UFmd
+         WXhO1JkJr6Ntj7U6OlHe0/8Ra8ZfP3TULXSL2Nhg53rfU58FNNnQH9q5ZVxbl6n3mzVl
+         YrwKpxuF+/QVYrG/s2ZyNaM7PK6sVLn6o7uFmy+LriMggqgsEUpfq3u6QTa2JtXNZfbI
+         w7Y25cmZaCGAV0Ea1Ok2CrOd0mZOIychroyvv0aluwM1tQpSGFYto3uAtlV5GmE28b/G
+         q6L8xgGglgvoBt3wYGu7DtpdxIO1tycjMwR7H8f5OK/FQAZ25F/MMzYffMBMDem0Ccc3
+         ud/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DjiKfHQ2jA3vM7VGaFaknOPs7Hmg3cHuudIyVF1TtFs=;
+        b=VcVf8tVrevgjVgju0YoLDi75YiY2EKe/BFQbeLhBc6tqVQ9g9qgP8rp51nb8vgVjl1
+         HneKy2G7ku4bxrKuLOToGr1FBgYhk12tN2g30YrZCwZKmm/+b6hHxUS9OngxmIXK4JW6
+         SRsIHanoWfqdV/PcHVsnyw4PGSTYAV5zom7HDIlJmvwbxGpn8cXfW0+YDmMESLqe6Gss
+         M2UHWMe27PR/tqxq7y2mR2FC1ueSiRotqnV0UO5qdJnzj8Kjb/lpcMg3AkZcmbaLb24T
+         LiNy6zEK1Lri7O8Y+LpVRf3uPhIAftZw4LHfdovrqUsHi9AbeiQzDZqTSgNOXal74Lum
+         5D+Q==
+X-Gm-Message-State: AOAM530fM7DjkDa0rWiB5xqSp0FiwmMpb2B46fB+PvIsUtDqMGODuXYN
+        2f8R5pU/teuzKUrD7Q+Mfcg=
+X-Google-Smtp-Source: ABdhPJz3EId7FG3SbCnHwZXerIiqFBWY6qT1WhZ9hmI2Ye3Y0OmzOJDJsnE3s7GTG/1UUT7pazvjjQ==
+X-Received: by 2002:ac2:5503:: with SMTP id j3mr14199009lfk.94.1606133639740;
+        Mon, 23 Nov 2020 04:13:59 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id w15sm1366488lfn.297.2020.11.23.04.13.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2020 04:13:59 -0800 (PST)
+Subject: Re: [PATCH v10 00/19] Introduce memory interconnect for NVIDIA Tegra
+ SoCs
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        Quentin Perret <qperret@google.com>, linux-pm@vger.kernel.org
-References: <cover.1605770951.git.viresh.kumar@linaro.org>
- <1fa9994395764ba19cfe6240d8b3c1ce390e8f82.1605770951.git.viresh.kumar@linaro.org>
- <be46b60a-0304-8fe0-53cf-3c179a8fd04a@arm.com>
- <20201123104119.g46y6idk734pw7fl@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <bb7d4b51-d609-b407-4f92-d2bec8273031@arm.com>
-Date:   Mon, 23 Nov 2020 11:34:44 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20201123002723.28463-1-digetx@gmail.com>
+ <20201123061734.mpmkdxzullrh52o7@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1bfbeb36-29b3-30c2-899f-faa5b0682bd7@gmail.com>
+Date:   Mon, 23 Nov 2020 15:13:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <20201123104119.g46y6idk734pw7fl@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201123061734.mpmkdxzullrh52o7@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 11/23/20 10:41 AM, Viresh Kumar wrote:
-> On 20-11-20, 14:51, Lukasz Luba wrote:
->> On 11/19/20 7:38 AM, Viresh Kumar wrote:
->>> Scenario 1: The CPUs were mostly idle in the previous polling window of
->>> the IPA governor as the tasks were sleeping and here are the details
->>> from traces (load is in %):
->>>
->>>    Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=203 load={{0x35,0x1,0x0,0x31,0x0,0x0,0x64,0x0}} dynamic_power=1339
->>>    New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=600 load={{0x60,0x46,0x45,0x45,0x48,0x3b,0x61,0x44}} dynamic_power=3960
->>>
->>> Here, the "Old" line gives the load and requested_power (dynamic_power
->>> here) numbers calculated using the idle time based implementation, while
->>> "New" is based on the CPU utilization from scheduler.
->>>
->>> As can be clearly seen, the load and requested_power numbers are simply
->>> incorrect in the idle time based approach and the numbers collected from
->>> CPU's utilization are much closer to the reality.
+23.11.2020 09:17, Viresh Kumar пишет:
+> On 23-11-20, 03:27, Dmitry Osipenko wrote:
+>> This series brings initial support for memory interconnect to Tegra20,
+>> Tegra30 and Tegra124 SoCs.
 >>
->> It is contradicting to what you have put in 'Scenario 1' description,
->> isn't it?
-> 
-> At least I didn't think so when I wrote this and am still not sure :)
-> 
->> Frequency at 1.2GHz, 75% total_load, power 4W... I'd say if CPUs were
->> mostly idle than 1.3W would better reflect that state.
-> 
-> The CPUs were idle because the tasks were sleeping, but once the tasks
-> resume to work, we need a frequency that matches the real load of the
-> tasks. This is exactly what schedutil would ask for as well as it uses
-> the same metric and so we should be looking to ask for the same power
-> budget..
-
-Yes, agree.
-
-> 
->> What was the IPA period in your setup?
-> 
-> It is 100 ms by default, though I remember that I tried with 10 ms as
-> well.
-> 
->> It depends on your platform IPA period (e.g. 100ms) and your current
->> runqueues state (at that sampling point in time). The PELT decay/rise
->> period is different. I am not sure if you observe the system avg load
->> for last e.g. 100ms looking at these signals. Maybe IPA period is too
->> short/long and couldn't catch up with PELT signals?
->> But we won't too short averaging, since 16ms is a display tick.
+>> For the starter only display controllers and devfreq devices are getting
+>> interconnect API support, others could be supported later on. The display
+>> controllers have the biggest demand for interconnect API right now because
+>> dynamic memory frequency scaling can't be done safely without taking into
+>> account bandwidth requirement from the displays. In particular this series
+>> fixes distorted display output on T30 Ouya and T124 TK1 devices.
 >>
->> IMHO based on this result it looks like the util could lost older
->> information from the past or didn't converge yet to this low load yet.
+>> Changelog:
 >>
->>>
->>> Scenario 2: The CPUs were busy in the previous polling window of the IPA
->>> governor:
->>>
->>>    Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=800 load={{0x64,0x64,0x64,0x64,0x64,0x64,0x64,0x64}} dynamic_power=5280
->>>    New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=708 load={{0x4d,0x5c,0x5c,0x5b,0x5c,0x5c,0x51,0x5b}} dynamic_power=4672
->>>
->>> As can be seen, the idle time based load is 100% for all the CPUs as it
->>> took only the last window into account, but in reality the CPUs aren't
->>> that loaded as shown by the utilization numbers.
+>> v10 - In a longer run it will be much nicer if we could support EMC
+>>       hardware versioning on Tegra20 and it's not late to support it now.
+>>       Hence I added these new patches:
 >>
->> This is also odd. The ~88% of total_load, looks like started decaying or
->> didn't converge yet to 100% or some task vanished?
+>>         dt-bindings: memory: tegra20: emc: Document opp-supported-hw property
+>>         memory: tegra20: Support hardware versioning and clean up OPP table initialization
+>>
+>>     - Removed error message from tegra30-devfreq driver about missing OPP
+>>       properties in a device-tree because EMC driver already prints that
+>>       message and it uses OPP API error code instead of checking DT directly,
+>>       which is a more correct way of doing that.
 > 
-> They must have decayed a bit because of the idle period, so looks okay
-> that way.
+> Looks good to me (from OPP APIs usage perspective). Thanks for
+> continuing with this and fixing all the issues Dmitry.
 > 
 
-I have experimented with this new estimation and compared with real
-power meter and other models. It looks good, better than current
-mainline. I will continue experiments, but this patch LGTM and
-I will add my reviewed-by today (after finishing it).
+Hello Viresh,
 
-It would make more sense to adjust IPA period to util signal then the
-opposite. I have to play with this a bit...
-
-Regards,
-Lukasz
+Thank you for all the clarifications and for reviewing of the patches!
