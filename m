@@ -2,57 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 917C32BFFDF
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 07:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89AD2C001F
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 07:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbgKWGRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Nov 2020 01:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S1727393AbgKWGcP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 01:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725320AbgKWGRh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 01:17:37 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90AAC061A4C
-        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 22:17:37 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id x24so1659250pfn.6
-        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 22:17:37 -0800 (PST)
+        with ESMTP id S1725287AbgKWGcO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 01:32:14 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A14AC0613CF
+        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 22:32:13 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id a186so14016884wme.1
+        for <linux-pm@vger.kernel.org>; Sun, 22 Nov 2020 22:32:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GKa7W0DjsQScUMdM+fh7P8EBsnhIK0qKVT7JJFmlduM=;
-        b=rGEfXEwlr66TrbSIzeEJ5FDjg42pe+KTbVMCt3orA1E7AS+8bNxLN7hgHnv9wZ4zRW
-         7tpleeyHmO/Mk8recctOvWkoXB3ku7K//lc6CBgJCg0vWvIt2AJaVorT8KgtJz/s6UB0
-         cpghzzT0Whp/cpSh8xdsm+7U0PDuVKeQZYtYxg7x7LSYM7de4ahGiiU9M/u1Byu8drem
-         otVZOkwRy7/W7UYjnbAxFwhn3Sd2uxThXBJZ4CVJgiBId/k4K2AClDUHlRFQFeBgjwHm
-         rOckwkbQUfwnqqyNo7jur3VrxoBOcrEAz7n+xImPhIOplX5ie4p+LdjYQX3X+I048R3F
-         +i1w==
+        h=subject:to:cc:references:from:message-id:date:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=cvoVqwP9FE52rvFYms7Y+WcvtyD/16/j90QsV7N1aWk=;
+        b=xbRF9fS5clfnIPpqfycFtmWKqkeQgkcTHmz41tiQsJghMhZkvIdgBAPvw0T3BXSA4I
+         wV3Q/ntGbWkU8zpZ9heYLLMcLsHqFKKmSqoBnzkvBSDGoNJA91LlKYGzEP25u3NQF3QB
+         AivQoi1x7qkh9O1LRv+4sWnBn4SvV5o/8m90JmW7oA9ZLgw8PTzUp2epvQbGiBciQtVq
+         1nBVi64/QS2RAHBg5pyr15f/p7i1uqIms5dwWdfDdU25n9vNbp299oBH2IqkkTO0cDx1
+         UJC3P8LeWo+IqZuJLsQ8UpHhv+M2yxn7CD9mgGWviZO1w7WI2U/islls/qAJUAon2DrE
+         J/9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GKa7W0DjsQScUMdM+fh7P8EBsnhIK0qKVT7JJFmlduM=;
-        b=k9iDwsxAP5Tdw6m+BuganpfR+Wrq44ykiTKIUuvOt6rcLo+s4s43XrzfMFxdCMPtdE
-         AU3oiKmd1ixUjaVSawOq4VOBkGEfgCC0YfjHbIxtwohc4RKktD2vVYQ4H9/6KCnTaVmZ
-         OUsyDHCWnTkZORhKWtiipHIskL8LSboXtfHq9E55HBAGHnZdhy2MtPO9l81sDPCi8dyO
-         E7wSqLHhXl+HHID6izYwZ3pwxoCons+Fc28SFqoAkznvyD/a6Otq/lHsZTJ8JUQGpdCK
-         qAn+D5FiskfX37DvrOMnXcPH6mAEHruGpN1u4uKtuLouwIQchQwVx8rE6ZJcZUjQkRfI
-         PHAA==
-X-Gm-Message-State: AOAM532bSBJJA3yPChkXkYAJQp0lefajzb784qYzj8MEZxEUgGNBE/ub
-        Zhboh048bU7WUqa8JFcYSp4dlg==
-X-Google-Smtp-Source: ABdhPJzlkLlCQ2x4GcvUyoOExAar0nVc9jrP+KcgO26RrmOh/VDHjgc+ePCKgyNUoHpOWBv65Xzzwg==
-X-Received: by 2002:a62:52d7:0:b029:18b:7093:fb88 with SMTP id g206-20020a6252d70000b029018b7093fb88mr24458173pfb.76.1606112257122;
-        Sun, 22 Nov 2020 22:17:37 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id u197sm10953224pfc.127.2020.11.22.22.17.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 22 Nov 2020 22:17:36 -0800 (PST)
-Date:   Mon, 23 Nov 2020 11:47:34 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cvoVqwP9FE52rvFYms7Y+WcvtyD/16/j90QsV7N1aWk=;
+        b=M6YFEP6hf+akJ7gMIk1NKqYYcarLeXTUf2J7XqiqlPqcSgDjZQqLxqJlD2xIfbCk0y
+         +RgmaS9e6m5vhjwF8rjAasxdfJkoLOF2lc5uF+3GC4X5fmFWHnvIo1MLCfaU4bAskLN+
+         MOfnPBd24GirR/r3yDww6Retys8A9TDkigULKSn5IeOqeE9JschfUwX4OVfUWEffPn4f
+         0ZZS+l+laALMaIlZ9tIqguV6TJ3xE0+6xQOwIbqXz0I/9U6Indy3re74g1ccqinD5a1m
+         CfNOHz/wphRcLksabomn3QGa/kIP4MczqS7Ushnlo3tbjW6G5+J075A8ANm8/Nb1r7+e
+         BpYg==
+X-Gm-Message-State: AOAM533wtJZNExuKDm8ovP8VyKkltkSU6oxlesG0/gc/wyxiYWizB3kT
+        pXqdUD9F39BGgUYNlhDElzu5lg==
+X-Google-Smtp-Source: ABdhPJwTKWks2V4u6Zzj4GGmt0mUu9p9zEiVEx7S7M5Igkq/WpJwqdS3vmhU4wIkWy4oSAnhkJUiDg==
+X-Received: by 2002:a1c:9901:: with SMTP id b1mr21807743wme.18.1606113131688;
+        Sun, 22 Nov 2020 22:32:11 -0800 (PST)
+Received: from MacBook-Pro.local ([212.45.64.13])
+        by smtp.googlemail.com with ESMTPSA id a144sm15756349wmd.47.2020.11.22.22.32.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Nov 2020 22:32:10 -0800 (PST)
+Subject: Re: [PATCH v10 03/19] memory: tegra30: Support interconnect framework
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -64,49 +62,44 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Viresh Kumar <vireshk@kernel.org>,
         Peter Geis <pgwipeout@gmail.com>,
         Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v10 00/19] Introduce memory interconnect for NVIDIA Tegra
- SoCs
-Message-ID: <20201123061734.mpmkdxzullrh52o7@vireshk-i7>
 References: <20201123002723.28463-1-digetx@gmail.com>
+ <20201123002723.28463-4-digetx@gmail.com>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Message-ID: <109bc617-f7d9-8635-3db1-3f4869b32f4d@linaro.org>
+Date:   Mon, 23 Nov 2020 08:32:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201123002723.28463-1-digetx@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201123002723.28463-4-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-11-20, 03:27, Dmitry Osipenko wrote:
-> This series brings initial support for memory interconnect to Tegra20,
-> Tegra30 and Tegra124 SoCs.
-> 
-> For the starter only display controllers and devfreq devices are getting
-> interconnect API support, others could be supported later on. The display
-> controllers have the biggest demand for interconnect API right now because
-> dynamic memory frequency scaling can't be done safely without taking into
-> account bandwidth requirement from the displays. In particular this series
-> fixes distorted display output on T30 Ouya and T124 TK1 devices.
-> 
-> Changelog:
-> 
-> v10 - In a longer run it will be much nicer if we could support EMC
->       hardware versioning on Tegra20 and it's not late to support it now.
->       Hence I added these new patches:
-> 
->         dt-bindings: memory: tegra20: emc: Document opp-supported-hw property
->         memory: tegra20: Support hardware versioning and clean up OPP table initialization
-> 
->     - Removed error message from tegra30-devfreq driver about missing OPP
->       properties in a device-tree because EMC driver already prints that
->       message and it uses OPP API error code instead of checking DT directly,
->       which is a more correct way of doing that.
+Hi Dmitry,
 
-Looks good to me (from OPP APIs usage perspective). Thanks for
-continuing with this and fixing all the issues Dmitry.
+On 23.11.20 2:27, Dmitry Osipenko wrote:
+> Now Internal and External memory controllers are memory interconnection
+> providers. This allows us to use interconnect API for tuning of memory
+> configuration. EMC driver now supports OPPs and DVFS. MC driver now
+> supports tuning of memory arbitration latency, which needs to be done
+> for ISO memory clients, like a Display client for example.
+> 
+> Tested-by: Peter Geis <pgwipeout@gmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
--- 
-viresh
+Acked-by: Georgi Djakov <georgi.djakov@linaro.org>
+
+Thank you for the continuous work on this patchset!
+
+BR,
+Georgi
+
+> ---
+>   drivers/memory/tegra/Kconfig       |   1 +
+>   drivers/memory/tegra/tegra30-emc.c | 344 +++++++++++++++++++++++++++--
+>   drivers/memory/tegra/tegra30.c     | 173 ++++++++++++++-
+>   3 files changed, 496 insertions(+), 22 deletions(-)
