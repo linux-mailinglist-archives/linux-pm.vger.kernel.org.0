@@ -2,95 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 842AC2C034F
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 11:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9092C0385
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 11:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728548AbgKWK3j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Nov 2020 05:29:39 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:39040 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgKWK3i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 05:29:38 -0500
-Received: by mail-oi1-f193.google.com with SMTP id f11so19163621oij.6;
-        Mon, 23 Nov 2020 02:29:38 -0800 (PST)
+        id S1728650AbgKWKlZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 05:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726416AbgKWKlY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 05:41:24 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0829DC061A4D
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 02:41:23 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id w6so14553231pfu.1
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 02:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=W4UeX702/W/B+orq6/435ThFfL21LhW6NTckU122ScE=;
+        b=x7op+jf5m//qfxOW3YREpxBAYH/LAYSElwklnA60y/QJvCAKLz/NT5Gq5EeVdcne4X
+         wQqy39P0zj/yAmJYwWpP9zm9Ui9h2U+80q7Y7IOUfMl7u37/1+ylAp+5iTePZ15nDDgQ
+         CanlLm6DlwykU5Vj64+s0JTcVFuTHLsEqmslOsc8NtfY3Uwql+e88Hbu/jmH/FXhGFJ2
+         PpEVg9Xsgr/CGbD07d/N6FTQXuJsBjFMv7zkqIB2E9L5/NvgrECrj2re84UAr9KObFSn
+         PuJf7A85Wfznjq6lZj6cAP0K6UfaqiT/9miXA1DsJ+3+0MrDf5rXCeJsAfrBVx1dHhlG
+         wYZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GcVbJeViwjjngoPcvsp+G36iPtj3YiLKTqOwNHU7Q8A=;
-        b=VvE5RCLQKwedoSOjL6X1hGJq/1xkL28ggqZTF85aRs4nj0AaVzE2ynuhmQ5z9m3bbt
-         fzy3ulpufY+/deePYrDaREDflotraTnrqnjtoj8UcS5uQLysX3+kaqUJRsEcNUg5gvJs
-         4tpu07kitDn3w4tQZ/jUtbZo4jJR+1hUfnCEfNdrlWJWU0+X9reYWyGphF68IwZfZBCi
-         F1IuTuTz/FL5gRrUGgAoYZrYkoILJO28va4Lv50WqHTc5uOUF7vj7HJP4Pl4YdaVzuU8
-         O0pMmCnd6ffN23U74+JaUraR8E1rs6QAEGYG1x9IZ8mcJMGc6lGyYiz9uNJUl6yI2nGT
-         BGjw==
-X-Gm-Message-State: AOAM532IiVvnW5AOd4Z7D05unnImU5hyqMl7LebYoTcBgTPlI/oBtmA8
-        9Y06mn+X+Zs8ITH+efrM1CMVDn6I2pMczfiDFQU=
-X-Google-Smtp-Source: ABdhPJwCEzumdWzXpdWdcv7sOWeMlusEI6Tw9t/k9j5O5PQGadD7Jsv4C/7J9P81xS20ZaCTTJ8KTJqt1mPHAUbCZpc=
-X-Received: by 2002:aca:f15:: with SMTP id 21mr3245999oip.71.1606127377753;
- Mon, 23 Nov 2020 02:29:37 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1605770951.git.viresh.kumar@linaro.org> <a04646d277f1c93b248346db61c369cb8e7c2d02.1605770951.git.viresh.kumar@linaro.org>
- <CAJZ5v0jViXY56t5LZ-UzTuzA=tq306P0YHwGheoUk+YyTri1xg@mail.gmail.com> <20201123100455.ulpoje32hhrmskou@vireshk-i7>
-In-Reply-To: <20201123100455.ulpoje32hhrmskou@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 Nov 2020 11:29:26 +0100
-Message-ID: <CAJZ5v0gXOfTrEeu=HEeC6=JowbcaC+cdDsDyc40s1SdQJas2LQ@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] sched/core: Rename and move schedutil_cpu_util()
- to core.c
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=W4UeX702/W/B+orq6/435ThFfL21LhW6NTckU122ScE=;
+        b=ma+45LrEXKrpwBTP5r+2SOlKw9AVMTT48HE2IualaPmXFnZanGmb9fke4Q2oNAM534
+         Kyfpf7u2mFfDLpp8XllrzYo6++bIIpz0pcX4fBrk6bfMxaWDXYSkjHmvFt0rFPyeo6zm
+         7SInvzkRSKEuMelqzUddYrpNaa2UmQ035RL1IknvCF1Zd1ZuU42GNcBJ3vQcBEmeiGTH
+         SOW+oFnr+DQxnyriuvQ/bagu+kkgvqZkwjkEjGK+qllyQbEHw8mmnpn6r8tjy+UmZhiI
+         AcFRS2O+8p7iLX8FRqeFRPjW0KycMuh28YePaDTqjSJL0IeDYMQbIEyiJxn3QIddrUPb
+         69WQ==
+X-Gm-Message-State: AOAM530Q3ZMwoMzVe5oEBq0tjbWCFSuj81Vg4PGkp+OElD35RcUqHrJm
+        kCq+dZ8IMmjoPewxeOCZ6f/MyA==
+X-Google-Smtp-Source: ABdhPJwdLEHQdl8W4i1u7+hMZVMXYrB5kBrzOx5IexzNxzTI4QMz+m70VCABUQsOUqWTeKODK7DSFQ==
+X-Received: by 2002:a17:90b:50e:: with SMTP id r14mr24081521pjz.193.1606128082567;
+        Mon, 23 Nov 2020 02:41:22 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id o133sm11440537pfg.97.2020.11.23.02.41.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 23 Nov 2020 02:41:21 -0800 (PST)
+Date:   Mon, 23 Nov 2020 16:11:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        Quentin Perret <qperret@google.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH V3 2/2] thermal: cpufreq_cooling: Reuse sched_cpu_util()
+ for SMP platforms
+Message-ID: <20201123104119.g46y6idk734pw7fl@vireshk-i7>
+References: <cover.1605770951.git.viresh.kumar@linaro.org>
+ <1fa9994395764ba19cfe6240d8b3c1ce390e8f82.1605770951.git.viresh.kumar@linaro.org>
+ <be46b60a-0304-8fe0-53cf-3c179a8fd04a@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be46b60a-0304-8fe0-53cf-3c179a8fd04a@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 11:05 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 19-11-20, 13:30, Rafael J. Wysocki wrote:
-> > On Thu, Nov 19, 2020 at 8:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > There is nothing schedutil specific in schedutil_cpu_util(), move it to
-> > > core.c and rename it to sched_cpu_util(), so it can be used from other
-> > > parts of the kernel as well.
-> >
-> > The patch does more than this, though.
-> >
-> > I would do that in two patches: (1) move the function as is and (2)
-> > rename it and rearrange the users.
->
-> Sure.
->
-> > >  static unsigned long sugov_get_util(struct sugov_cpu *sg_cpu)
-> > >  {
-> > > -       struct rq *rq = cpu_rq(sg_cpu->cpu);
-> > > -       unsigned long util = cpu_util_cfs(rq);
-> > > -       unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> > > -
-> > > -       sg_cpu->max = max;
-> > > -       sg_cpu->bw_dl = cpu_bw_dl(rq);
-> > > +       sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> > > +       sg_cpu->bw_dl = cpu_bw_dl(cpu_rq(sg_cpu->cpu));
-> > >
-> > > -       return schedutil_cpu_util(sg_cpu->cpu, util, max, FREQUENCY_UTIL, NULL);
-> > > +       return sched_cpu_util(sg_cpu->cpu, FREQUENCY_UTIL, sg_cpu->max);
-> >
-> > I don't see much value in using this wrapper here TBH and it
-> > introduces an otherwise redundant cpu_rq() computation.
->
-> You want to call effective_cpu_util() here instead, right ?
+On 20-11-20, 14:51, Lukasz Luba wrote:
+> On 11/19/20 7:38 AM, Viresh Kumar wrote:
+> > Scenario 1: The CPUs were mostly idle in the previous polling window of
+> > the IPA governor as the tasks were sleeping and here are the details
+> > from traces (load is in %):
+> > 
+> >   Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=203 load={{0x35,0x1,0x0,0x31,0x0,0x0,0x64,0x0}} dynamic_power=1339
+> >   New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=600 load={{0x60,0x46,0x45,0x45,0x48,0x3b,0x61,0x44}} dynamic_power=3960
+> > 
+> > Here, the "Old" line gives the load and requested_power (dynamic_power
+> > here) numbers calculated using the idle time based implementation, while
+> > "New" is based on the CPU utilization from scheduler.
+> > 
+> > As can be clearly seen, the load and requested_power numbers are simply
+> > incorrect in the idle time based approach and the numbers collected from
+> > CPU's utilization are much closer to the reality.
+> 
+> It is contradicting to what you have put in 'Scenario 1' description,
+> isn't it?
 
-Right.
+At least I didn't think so when I wrote this and am still not sure :)
+
+> Frequency at 1.2GHz, 75% total_load, power 4W... I'd say if CPUs were
+> mostly idle than 1.3W would better reflect that state.
+
+The CPUs were idle because the tasks were sleeping, but once the tasks
+resume to work, we need a frequency that matches the real load of the
+tasks. This is exactly what schedutil would ask for as well as it uses
+the same metric and so we should be looking to ask for the same power
+budget..
+
+> What was the IPA period in your setup?
+
+It is 100 ms by default, though I remember that I tried with 10 ms as
+well.
+
+> It depends on your platform IPA period (e.g. 100ms) and your current
+> runqueues state (at that sampling point in time). The PELT decay/rise
+> period is different. I am not sure if you observe the system avg load
+> for last e.g. 100ms looking at these signals. Maybe IPA period is too
+> short/long and couldn't catch up with PELT signals?
+> But we won't too short averaging, since 16ms is a display tick.
+> 
+> IMHO based on this result it looks like the util could lost older
+> information from the past or didn't converge yet to this low load yet.
+> 
+> > 
+> > Scenario 2: The CPUs were busy in the previous polling window of the IPA
+> > governor:
+> > 
+> >   Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=800 load={{0x64,0x64,0x64,0x64,0x64,0x64,0x64,0x64}} dynamic_power=5280
+> >   New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=708 load={{0x4d,0x5c,0x5c,0x5b,0x5c,0x5c,0x51,0x5b}} dynamic_power=4672
+> > 
+> > As can be seen, the idle time based load is 100% for all the CPUs as it
+> > took only the last window into account, but in reality the CPUs aren't
+> > that loaded as shown by the utilization numbers.
+> 
+> This is also odd. The ~88% of total_load, looks like started decaying or
+> didn't converge yet to 100% or some task vanished?
+
+They must have decayed a bit because of the idle period, so looks okay
+that way.
+
+-- 
+viresh
