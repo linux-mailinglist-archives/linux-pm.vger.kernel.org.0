@@ -2,138 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBF92C0CA9
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 15:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836352C0DBF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Nov 2020 15:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729512AbgKWOC3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Nov 2020 09:02:29 -0500
-Received: from mga01.intel.com ([192.55.52.88]:63525 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729204AbgKWOC2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Nov 2020 09:02:28 -0500
-IronPort-SDR: spnnYeEfuRWBDUI0LG+hBh9748dyY9Zs2gJNM7YnxnqcRx20TbQegzJHHEXIbtEESMCFqmtWAe
- OX8PXQLYzRaw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="189883334"
-X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
-   d="scan'208";a="189883334"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 06:01:59 -0800
-IronPort-SDR: 0nGuZgGGDoe7uPQJ22Okwy+Lh8nH5FrzV4XYEELZXE3Cv1uGGQx5C7lOIdkUmsxvBNMDH8uww7
- NOERVTa4lQKg==
-X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
-   d="scan'208";a="478118454"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 06:01:55 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 23 Nov 2020 16:01:51 +0200
-Date:   Mon, 23 Nov 2020 16:01:51 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: How to enable auto-suspend by default
-Message-ID: <20201123140151.GH2495@lahna.fi.intel.com>
-References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
- <X6p6ubTOoMPUPPXi@kroah.com>
- <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
- <20201110172517.GC2495@lahna.fi.intel.com>
- <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
- <20201111143143.GV2495@lahna.fi.intel.com>
- <30aa8c96-1809-8c5f-2305-5e39fbeba434@redhat.com>
+        id S2388928AbgKWOcf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 09:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388788AbgKWOce (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 09:32:34 -0500
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66138C0613CF
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 06:32:34 -0800 (PST)
+Received: by mail-ua1-x942.google.com with SMTP id n5so4707213uao.2
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 06:32:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OgGZW3WpDuLDw5ozZE+5u59qz60QMyQHd0baZzhIOdY=;
+        b=uDQ5uZPGj1q/JbChhqx9aCaS3qRHgKQbTp+mI6Eouz/FB1nvFjhFfQqazSviWmOuNi
+         k6AW9L1f3Uqd1KrAIkBzlPQIjaET0KkCApC18XyyxG1iZa4m2/hUuzUTvnjqC6x/8XGp
+         TNVXALu4nKnUgnDr6daqWte+mvSnCmA174Z0wcDy+NjHbbjzEy6m5XBEefSpWQkpq9Zv
+         7bymDueIrRVokSxDIsOtvz2Ci+wMhDllib3xZDei66EGUUfzGRf0bZmNAGQ1J3SBQKHd
+         0+b9MNwsnB0zng8Bem71joPDnC/YvKT0RGibO3VyCq4vgp55DUvab7RpVa2KUjTP9hjo
+         r+ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OgGZW3WpDuLDw5ozZE+5u59qz60QMyQHd0baZzhIOdY=;
+        b=asHLcQsFeM9bMzTIu8kATR0qCX3op7BNGLbSpukUxT7tzd0SIngXx68cse3MqJdgL1
+         uqolqmFjO6/mvYIkRahb3VOClGKHGBL37rE5R8e6o75NYeGJKuF2Ji7vlP7ImkufX/4R
+         RLiWqaAq3MmGG62JLzkQxYLwDXTCp/q8TOzaRoIyqMUjjLXG2taLzdcp0ZiGi1B/G8Ov
+         KFPSW+snRg0Xa4Yv9aiH63c3ntsfv1UO7RQzrUmdu4KvZrOyx7GDOm2R9U7yRjOzhH00
+         CjiF1nRB8JeG5rLfdaLaiJWzNXpNjiC95h59aPyMb2w8iYW6hrccoULU1WENlvcEFo5N
+         q3ng==
+X-Gm-Message-State: AOAM532v+G2ZUXulSwQ8RJuUPXWkLglqab6cjklyv30VHlqJVVatnLUv
+        jJhPW2UZXUuH6b/LkO1QWLuoZ02XemzNMl3/s8aiCg==
+X-Google-Smtp-Source: ABdhPJxUUEeuuHWxDeiHXjQmA0ZxOSr84nq7YWX2icdEkJnskSn55gR/J2//1O4Hx4x7PB/TuoG5VIyVBvTf/npMBlI=
+X-Received: by 2002:ab0:c12:: with SMTP id a18mr17768135uak.19.1606141953595;
+ Mon, 23 Nov 2020 06:32:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30aa8c96-1809-8c5f-2305-5e39fbeba434@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <0e00f9ba-571a-23a0-7774-84f893ce6bd5@nvidia.com>
+ <CAPDyKFrxKhO0V-uTDLDV6RFQFwhjesE0zfnuBLfYs-n5bNxXtg@mail.gmail.com> <35721978-d166-c5d9-06f6-45cec0d835ad@nvidia.com>
+In-Reply-To: <35721978-d166-c5d9-06f6-45cec0d835ad@nvidia.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 23 Nov 2020 15:31:55 +0100
+Message-ID: <CAPDyKFoVQ=D96KtFnmjMh6R7=PrCvTLWqUAPAYsRrVOg2dFFTA@mail.gmail.com>
+Subject: Re: [RFC] PM Domains: Ensure the provider is resumed first
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 02:54:19PM +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 11/11/20 3:31 PM, Mika Westerberg wrote:
-> > On Wed, Nov 11, 2020 at 12:27:32PM +0100, Hans de Goede wrote:
-> >> Hi,
-> >>
-> >> On 11/10/20 6:25 PM, Mika Westerberg wrote:
-> >>> On Tue, Nov 10, 2020 at 04:02:33PM +0000, Limonciello, Mario wrote:
-> >>>>>
-> >>>>> On Tue, Nov 10, 2020 at 11:57:07AM +0100, Bastien Nocera wrote:
-> >>>>>> Hey,
-> >>>>>>
-> >>>>>> systemd has been shipping this script to enable auto-suspend on a
-> >>>>>> number of USB and PCI devices:
-> >>>>>>
-> >>>>> https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspen
-> >>>>> d_rules.py
-> >>>>>>
-> >>>>>> The problem here is twofold. First, the list of devices is updated from
-> >>>>>> ChromeOS, and the original list obviously won't be updated by ChromeOS
-> >>>>>> developers unless a device listed exists in a ChromeBook computer,
-> >>>>>> which means a number of devices that do support autosuspend aren't
-> >>>>>> listed.
-> >>>>>>
-> >>>>>> The other problem is that this list needs to exist at all, and that it
-> >>>>>> doesn't seem possible for device driver developers (at various levels
-> >>>>>> of the stack) to opt-in to auto-suspend when all the variants of the
-> >>>>>> device (or at least detectable ones) support auto-suspend.
-> >>>>>
-> >>>>> A driver can say they support autosuspend today, but I think you are
-> >>>>> concerned about the devices that are controlled by class-compliant
-> >>>>> drivers, right?  And for those, no, we can't do this in the kernel as
-> >>>>> there are just too many broken devices out there.
-> >>>>>
-> >>>>
-> >>>> I guess what Bastien is getting at is for newer devices supported by class
-> >>>> drivers rather than having to store an allowlist in udev rules, can we set
-> >>>> the allowlist in the kernel instead.  Then distributions that either don't
-> >>>> use systemd or don't regularly update udev rules from systemd can take
-> >>>> advantage of better defaults on modern hardware.
-> >>>>
-> >>>> The one item that stood out to me in that rules file was 8086:a0ed.
-> >>>> It's listed as "Volteer XHCI", but that same device ID is actually present
-> >>>> in an XPS 9310 in front of me as well and used by the xhci-pci kernel module.
-> >>>>
-> >>>> Given we're effectively ending up with the combination of runtime PM turned
-> >>>> on by udev rules, do we need something like this for that ID:
-> >>>>
-> >>>> https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400d8a
-> >>>>
-> >>>> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
-> >>>
-> >>> I think this one is the TGL PCH xHCI. The quirk currently for xHCI
-> >>> controllers that are part of the TCSS (Type-C SubSystem) where it is
-> >>> important to put all devices into low power mode whenever possible,
-> >>> otherwise it keeps the whole block on.
-> >>
-> >> Note that there are currently some IDs missing from the xHCIs which
-> >> are part of the TCSS too. At least the id for the xHCI in the thunderbolt
-> >> controller on the Lenovo T14 gen 1 is missing. I started a discussion
-> >> about extending the kernel quirk list for this vs switching to hwdb
-> >> a while a go:
-> >>
-> >> https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-cf8960651086@redhat.com/
-> >>
-> >> The conclusion back then was to switch to hwdb, but I never got around to this.
-> > 
-> > The reason I've added these to the xHCI driver is that it works even if
-> > you are running some really small userspace (like busybox). Also for the
-> > xHCI in TCSS we know for sure that it fully supports D3cold.
-> > 
-> > (The one you refer above is actually mistake from my side as I never
-> >  tested Alpine Ridge LP controller which I think this is).
-> 
-> Ok, so I'll submit a patch adding the 15c1 product-id for the
-> INTEL_ALPINE_RIDGE_LP_2C_XHCI controller to the list of ids for which we
-> set the XHCI_DEFAULT_PM_RUNTIME_ALLOW quirk. To fix the much too high
-> idle-power consumption problem on devices with this Alpine Ridge variant.
++ Saravana
 
-Thanks!
+On Mon, 23 Nov 2020 at 14:09, Jon Hunter <jonathanh@nvidia.com> wrote:
+>
+> Hi Ulf,
+>
+> On 19/11/2020 10:15, Ulf Hansson wrote:
+> > On Mon, 16 Nov 2020 at 17:17, Jon Hunter <jonathanh@nvidia.com> wrote:
+> >>
+> >> Hi all,
+> >>
+> >> We recently ran into a problem on Tegra186 where it was failing to
+> >> resume from suspend. It turned out that a driver, the Tegra ACONNECT
+> >> (drivers/bus/tegra-aconnect.c), was being resumed before the PM domain
+> >> provider, the BPMP (drivers/firmware/tegra/bpmp.c), and the Tegra
+> >> ACONNECT was trying to enable the PM domain before the provider had been
+> >> resumed.
+> >>
+> >> According to commit 4d23a5e84806 it states that 'genpd powers on the PM
+> >> domain unconditionally in the system PM resume "noirq" phase'. However,
+> >> what I don't see is anything that guarantees that the provider is
+> >> resumed before any device that requires power domains. Unless there is
+> >> something that I am missing?
+> >
+> > The genpd provider's ->power_on() callback should be invoked as soon
+> > as an attached device gets resumed via the ->resume_noirq() callback
+> > (genpd_resume_noirq). Have you verified that this is working as
+> > expected for you?
+>
+> Yes this is working as expected. The problem is that the ->power_on
+> callback for a device is occurring before the provider itself has been
+> resumed.
+
+I see.
+
+>
+> > Note that, if there is no device attached to the genpd, the
+> > ->power_on() callback may not be invoked - unless there is a child
+> > domain being powered on.
+> >
+> > From the genpd provider driver point of view - why do you need to
+> > implement system suspend/resume callbacks at all? Do you have some
+> > additional operations to run, besides those executed from the
+> > ->power_on|off() callbacks?
+>
+> The provider in this case is an embedded controller, the BPMP, and it
+> needs to be resumed [0] prior to calling the provider callbacks. I am
+> wondering if any other providers have this requirement?
+
+It seems like it should be a rather common requirement for a genpd
+provider - at least for those providers that need to run some
+additional operations at system suspend/resume.
+
+I guess the reason for this problem is that the order of how the
+devices end up in the dpm_list, doesn't fit well for your case.
+Normally, a provider should be registered prior and the consumer, as
+that would probably lead to that the provider becomes resumed first.
+
+In any case, to make sure the order becomes correct, a device link
+should be created between the genpd domain provider and the consumer
+device. As a matter of fact, this is done "automagically" during boot
+for DT based platforms, see of_link_property() in
+drivers/of/property.c.
+
+Currently these device links are created with DL_FLAG_SYNC_STATE_ONLY,
+unless the "fw_devlink" kernel command line specifies a different
+option (on == DL_FLAG_AUTOPROBE_CONSUMER). I would try to play with
+that and see how that turns out.
+
+>
+> Thanks
+> Jon
+>
+> [0]
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/firmware/tegra/bpmp.c#n797
+
+Kind regards
+Uffe
