@@ -2,132 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2CC2C2700
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 14:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8970C2C2AD6
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 16:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387881AbgKXNWo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 08:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S2387992AbgKXPGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 10:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387676AbgKXNWn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 08:22:43 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAF5C0617A6
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 05:22:43 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id 5so10681937plj.8
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 05:22:43 -0800 (PST)
+        with ESMTP id S2389435AbgKXPGe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 10:06:34 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250DEC061A4D
+        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 07:06:34 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id f16so19586116otl.11
+        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 07:06:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=e7vSOMbj0zPx6JF2lHClWTW/C5ALeNJny1X9ptSKIck=;
-        b=iDKRgxDeFw+OR0/wRVWW6JX6GHlwYO3QyaedJXmODg7EpiW4f0/pSaFqbDv2k0nQNI
-         4xhgxoYTsxgJw4TEz6+3bNP5Utc0JB3vxIPt7D6c/BiAvDPctIF7VD/LcCIHlqk/kLIY
-         U57flrzq1ayvFEmhKhpT33DUKzYt8ysf0dEEMXVMLOqsH2nfYmOzmFN+lPHJK1wZc+6X
-         muLL+AXT2mp2poh1c1o6g4nfRrkMcDNkP8mlwtszXnKnlhwc6UOyrRX/4Tym8LbPL0dA
-         B3MxB3SX4WKaC90WqD1U8/UwEjE4F9JHrJyufZavqQhE2u/o9LKFuVjmsXUHMchCjuM2
-         +mKQ==
+         :content-disposition:in-reply-to;
+        bh=M1JIh9Gvo+fVeTXrdxTsWH/t0Vo2H6hJ0sjI+YjVK2Y=;
+        b=Ugg/FqWrlzR1e5TdZeLJmsbexWvbLVVy23q00IwmNjzmrnNQeg0ucP8qcuv8lr92Ng
+         TrtV2KuEz/Kwj5njm23Ly/yw+h/gbgcACmnmHYHq6KQY879rJH9RgXY/ck6jT7B32Cu5
+         E9PZStZLp412Y88kd6u0CH+J6SGwY1dUBGCibuV1sC/sBCTvDy5OI3rKbxxTpQcYBsQt
+         ydXqanHuLunbmKNlChCEJilDjbStk7arzsdHBgg5+sq04Pr0kOjI4FxCcVUDaAXgAHfH
+         1RF7FklAuFnylDYA2BlNBemqD/BrdAr/7DNX4UEEjVGhPKKnNNDdoT+oVP8Zqz/7vusJ
+         JWrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=e7vSOMbj0zPx6JF2lHClWTW/C5ALeNJny1X9ptSKIck=;
-        b=abKhtyM53lXlU7cGoHJfpLQCsmSKHDj+qWdDxw8lW7y63zVM674xjkmx2lrwwnuxAa
-         82QKaBCiTYg8WlGgZZi/gV0gC+rQF1Bu/7ilQKRTFRFF50HoH1FGeV6GByYCdgDbE/41
-         GJ43CeyUJkVvx6PNq/SWP3PkP/N7JJG7IsnYR1G5PVrUcPJ4+igG9d8jvKlYT/S7pGtA
-         iGia2AB2IcRH4ywUjOntQ7QmuzJwOEsZVvTuN2keEtDTo06n8vP9/qordH0SOgL5SLzN
-         0jOIeIwghzXN1G3spVtTPV5g76P6kXbpQahWYfKIlPJ3184mnU0foywkDKkbjunSHpHS
-         Fo7g==
-X-Gm-Message-State: AOAM533UPdE0yw6S7GcMwmRAe1xGp0nP2Ue1KYhZPg1fMvi4IIs1QQVC
-        HryWSjbkSUrhk/g196TsgJI2vA==
-X-Google-Smtp-Source: ABdhPJyHA0Wg0ZpjEQ3r6SZZg8L+iPOxXjnLT5KWlS1QtcWXEFFKQWgFHRUKaqT+De86wD2fkDrLLg==
-X-Received: by 2002:a17:902:ff0e:b029:d6:820d:cb81 with SMTP id f14-20020a170902ff0eb02900d6820dcb81mr3970370plj.47.1606224162802;
-        Tue, 24 Nov 2020 05:22:42 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id 145sm13546299pga.11.2020.11.24.05.22.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 24 Nov 2020 05:22:41 -0800 (PST)
-Date:   Tue, 24 Nov 2020 18:52:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+         :mime-version:content-disposition:in-reply-to;
+        bh=M1JIh9Gvo+fVeTXrdxTsWH/t0Vo2H6hJ0sjI+YjVK2Y=;
+        b=e99Uff0l//Sgv+XuksGxrIqEcfKEwiiZtWXFahxK+ntrCmN1WnDJLQq2WszUfpRzF3
+         1eXYvdPizItA75dv+EkcwuQw2asGyihgdrW4sA9WEA4gHP5noclL7PtR/PHSCVv5tueR
+         azP+DWe/dABp6vxv6dapH1v2zPjweXj4tv8qxx4yYL3SP/65JvRyZfzsvj5myKvmoRG8
+         HQjiGDZGevredDOMWLQCYGVviFZFh0aPKUpOCQeOVmG9xKNUiT/rkOpt2LjKmX4rAFev
+         SbjpbLbBYOrwpfPylezkI16ED2ehRJuziQQ1DAPDOAaYmvS7hYlw2d0BdCB2DwNIQVWw
+         Edyg==
+X-Gm-Message-State: AOAM531w/NeL3HPo2yT7ol7CAVtgPUm+O7JoFLSTOWRMULLW5PTirnNx
+        6N4N4ToR5TgxhZIVOC3yM3fMxA==
+X-Google-Smtp-Source: ABdhPJyyH3zdGmckUNlYogT9rzP4dT6TW87eVwpuDgu+JLX6RMweOa/pRusXoD79T0i3fgd680etlg==
+X-Received: by 2002:a9d:3e1b:: with SMTP id a27mr3559963otd.291.1606230393458;
+        Tue, 24 Nov 2020 07:06:33 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id m2sm8791896ots.11.2020.11.24.07.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2020 07:06:32 -0800 (PST)
+Date:   Tue, 24 Nov 2020 09:06:31 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-pm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH V4 2/3] sched/core: Rename schedutil_cpu_util() and allow
- rest of the kernel to use it
-Message-ID: <20201124132239.h3kjk6pdwqeoitvb@vireshk-mac-ubuntu>
-References: <cover.1606198885.git.viresh.kumar@linaro.org>
- <9a5442b916f9667e714dd84fe4e3fc26f8bcc887.1606198885.git.viresh.kumar@linaro.org>
- <20201124091019.GA1023091@google.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>
+Subject: Re: [PATCH v2] cpuidle: arm: qcom: fix Kconfig problems
+Message-ID: <20201124150631.GL95182@builder.lan>
+References: <20201124063919.30243-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201124091019.GA1023091@google.com>
-User-Agent: NeoMutt/20170609 (1.8.3)
+In-Reply-To: <20201124063919.30243-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-11-20, 09:10, Quentin Perret wrote:
-> Hey Viresh,
-> 
-> On Tuesday 24 Nov 2020 at 11:56:15 (+0530), Viresh Kumar wrote:
-> > There is nothing schedutil specific in schedutil_cpu_util(), rename it
-> > to effective_cpu_util(). Also create and expose another wrapper
-> > sched_cpu_util() which can be used by other parts of the kernel, like
-> > thermal core (that will be done in a later commit).
-> > 
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> >  include/linux/sched.h            | 21 +++++++++++++++++++++
-> >  kernel/sched/core.c              | 11 +++++++++--
-> >  kernel/sched/cpufreq_schedutil.c |  2 +-
-> >  kernel/sched/fair.c              |  6 +++---
-> >  kernel/sched/sched.h             | 19 ++-----------------
-> >  5 files changed, 36 insertions(+), 23 deletions(-)
-> > 
-> > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > index 063cd120b459..926b944dae5e 100644
-> > --- a/include/linux/sched.h
-> > +++ b/include/linux/sched.h
-> > @@ -1926,6 +1926,27 @@ extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
-> >  #define TASK_SIZE_OF(tsk)	TASK_SIZE
-> >  #endif
-> >  
-> > +#ifdef CONFIG_SMP
-> > +/**
-> > + * enum cpu_util_type - CPU utilization type
-> > + * @FREQUENCY_UTIL:	Utilization used to select frequency
-> > + * @ENERGY_UTIL:	Utilization used during energy calculation
-> > + *
-> > + * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
-> > + * need to be aggregated differently depending on the usage made of them. This
-> > + * enum is used within sched_cpu_util() to differentiate the types of
-> > + * utilization expected by the callers, and adjust the aggregation accordingly.
-> > + */
-> > +enum cpu_util_type {
-> > +	FREQUENCY_UTIL,
-> > +	ENERGY_UTIL,
-> > +};
-> > +
-> > +/* Returns effective CPU utilization, as seen by the scheduler */
-> > +unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
-> > +			     unsigned long max);
-> 
-> Are 'type' and 'max' useful to anybody outside of kernel/sched ?
-> If not then how about we hide them, keep the cpu_util_type enum in
-> kernel/sched/sched.h and evaluate arch_scale_cpu_capacity() in
-> sched_cpu_util() directly?
+On Tue 24 Nov 00:39 CST 2020, Randy Dunlap wrote:
 
-cpufreq_cooling uses 'max' (as can be seen in the next patch).
+> The Kconfig symbol ARM_QCOM_SPM_CPUIDLE wildly selects other
+> Kconfig symbols when it should not.
+> This causes kconfig warnings and subsequent build errors,
+> as listed below, so modify this symbol's Kconfig entry to
+> constrain and tame it.
+> 
+> WARNING: unmet direct dependencies detected for QCOM_SCM
+>   Depends on [n]: ARM [=y] && HAVE_ARM_SMCCC [=n] || ARM64
+>   Selected by [y]:
+>   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
+> 
+> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+>   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+>   Selected by [y]:
+>   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
+> 
+> and
+> 
+> arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
+> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
+> arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
+> suspend.c:(.text+0x138): undefined reference to `cpu_sa110_do_suspend'
+> arm-linux-gnueabi-ld: suspend.c:(.text+0x170): undefined reference to `cpu_sa110_do_resume'
+> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-smc.o: in function `__scm_smc_do_quirk':
+> qcom_scm-smc.c:(.text+0x54): undefined reference to `__arm_smccc_smc'
+> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call':
+> qcom_scm-legacy.c:(.text+0x168): undefined reference to `__arm_smccc_smc'
+> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call_atomic':
+> qcom_scm-legacy.c:(.text+0x2e0): undefined reference to `__arm_smccc_smc'
+> 
+> Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Stephan Gerhold <stephan@gerhold.net>
+> Cc: Lina Iyer <ilina@codeaurora.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: John Stultz <john.stultz@linaro.org>
 
--- 
-viresh
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Regards,
+Bjorn
+
+> ---
+> v2: change to depends on QCOM_SCM (suggested by Bjorn)
+> 
+>  drivers/cpuidle/Kconfig.arm |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- linux-next-20201123.orig/drivers/cpuidle/Kconfig.arm
+> +++ linux-next-20201123/drivers/cpuidle/Kconfig.arm
+> @@ -108,10 +108,10 @@ config ARM_TEGRA_CPUIDLE
+>  config ARM_QCOM_SPM_CPUIDLE
+>  	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
+>  	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64
+> +	depends on QCOM_SCM
+>  	select ARM_CPU_SUSPEND
+>  	select CPU_IDLE_MULTIPLE_DRIVERS
+>  	select DT_IDLE_STATES
+> -	select QCOM_SCM
+>  	help
+>  	  Select this to enable cpuidle for Qualcomm processors.
+>  	  The Subsystem Power Manager (SPM) controls low power modes for the
