@@ -2,159 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE1F2C1DB7
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 06:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600BA2C1E2A
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 07:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729090AbgKXFqV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 00:46:21 -0500
-Received: from mga06.intel.com ([134.134.136.31]:45487 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728338AbgKXFqV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Nov 2020 00:46:21 -0500
-IronPort-SDR: tJAaf5l6SLQzqdAH9WZ3EiI7ipYOIj6Ei5RIZZ3374EfocLe75dUGYRw9a56OoIP9VtkdZ+wDf
- zv+G67cAVmyQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="233502301"
-X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
-   d="scan'208";a="233502301"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 21:46:20 -0800
-IronPort-SDR: f1L03443mLhFCE5IMa4PVemiLqXQolKijOFjbSHMpAmpoYoSdztE7+ihBet5Q5S+Ipl1QjI67q
- PNx2koYN02Ag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
-   d="scan'208";a="343043405"
-Received: from lkp-server01.sh.intel.com (HELO d32bb8956768) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Nov 2020 21:46:18 -0800
-Received: from kbuild by d32bb8956768 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1khR9e-00002W-8o; Tue, 24 Nov 2020 05:46:18 +0000
-Date:   Tue, 24 Nov 2020 13:45:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 0a94f3d0100bc7c20ce09d014a9e7dd3cc29e5c9
-Message-ID: <5fbc9e00.idUAeXu/AgjkU5Mn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729684AbgKXG0X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 01:26:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729304AbgKXG0W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 01:26:22 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BFEC0613D6
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 22:26:22 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id n137so7437088pfd.3
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 22:26:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jpZw9Iej76OYuUGFvM+oELcoTaKPmqjpkVWxqorKfuc=;
+        b=Xv/A2ULC/Ok9WfCZGQKExT+MDpPlNLIiKoRnayVzlu5cJ9+f2QTMIQZh4TnuwxFzCj
+         qMWHnMM37/b/MLGm0vSq7k9REQu9iRjh3AXlKd52WgXmjc8VgkMsdXvKStaqQ/4f9zCv
+         IhqMvmnE9Ue1kqDasiSEqMkCNS0MwJSml2pKbD9Wx7cTAGKeUST2X/6HQ/cX2o5upzwe
+         SKsSkeY3ag3dK/LgL33C3ubxgkLxNcpXmpIf3QClddFEcDLwPHSz6XolWRhUMJK3JboD
+         0AL3TrMPc74lGa7wRwncbdL1iltJFDxhaa3Q9Esi0OyDPdbeKXCfEGE/q5HQbjLjS54J
+         ZrJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jpZw9Iej76OYuUGFvM+oELcoTaKPmqjpkVWxqorKfuc=;
+        b=qtyoY1oorfCNgV94zEaiKyeSOeYdXodhZ1tGx77G7jISMHhIurohv+jhH6zcqpgi8j
+         OYs/QBX/kHvwHAT++UveIzLMEScD29MKMR5BR/u9+tpKnaa7SYqh88UpT7Z96oVLk+Jh
+         1V7lcTNjXmqfzMjNA7hpP3vKZeIG6ORoXwzCs3VhtMDJwYMlgg5HHqBVaNlKuK1YYylN
+         0oR6KRxZQFUovldjXZUqqcig8J8xHPIGTRXNXUvQdrohdUptaZMBCXDKZkJDWMwhANG5
+         ZLSZD+f07tp5DFS0uZv/BV+jKAcqhxvTkq2dXhdL66Q0LCJGXTA9tsCFxk63GXIRk7yV
+         cB9Q==
+X-Gm-Message-State: AOAM531pgDq073thtyRwBktvPQIlY0CG7iHxnZRrnPZ1341y1Wv1rOTv
+        oEM+u58zJ3bZ3qOlLN31rRiWEQ==
+X-Google-Smtp-Source: ABdhPJzSE6Krloh3zuTDK0TQPefXqGY3SdvFhb05zcIkKe8FZifbiRpzKRKf1hWkLPX/0GznUt8NMA==
+X-Received: by 2002:a63:4765:: with SMTP id w37mr2537452pgk.332.1606199182233;
+        Mon, 23 Nov 2020 22:26:22 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id 67sm4436226pfz.96.2020.11.23.22.26.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 23 Nov 2020 22:26:21 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
+Subject: [PATCH V4 0/3] cpufreq_cooling: Get effective CPU utilization from scheduler
+Date:   Tue, 24 Nov 2020 11:56:13 +0530
+Message-Id: <cover.1606198885.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 0a94f3d0100bc7c20ce09d014a9e7dd3cc29e5c9  Merge branch 'pm-domains' into bleeding-edge
+Hi,
 
-elapsed time: 720m
+This patchset makes the cpufreq_cooling driver reuse the CPU utilization
+metric provided by the scheduler instead of depending on idle and busy
+times of a CPU, which aren't that accurate to measure the busyness of a
+CPU for the next cycle. More details can be seen in the commit log of
+patch 2/2.
 
-configs tested: 94
-configs skipped: 2
+V3->V4:
+- Broke the first patch into two parts and used effective_cpu_util() in
+  schedutil (Rafael).
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+- Removed comment about idle-injection in last patch based on feedback
+  from Lukasz and added hi Reviewed-by tag.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                      tqm8xx_defconfig
-m68k                        mvme16x_defconfig
-powerpc                  storcenter_defconfig
-powerpc                      acadia_defconfig
-powerpc                     mpc512x_defconfig
-mips                        vocore2_defconfig
-mips                           ip27_defconfig
-powerpc                    mvme5100_defconfig
-arm                  colibri_pxa270_defconfig
-m68k                           sun3_defconfig
-nds32                            alldefconfig
-arm                         cm_x300_defconfig
-arm                        shmobile_defconfig
-mips                        jmr3927_defconfig
-ia64                      gensparse_defconfig
-arm                           corgi_defconfig
-powerpc                       ppc64_defconfig
-powerpc                     taishan_defconfig
-mips                           ci20_defconfig
-arc                     nsimosci_hs_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20201123
-i386                 randconfig-a003-20201123
-i386                 randconfig-a002-20201123
-i386                 randconfig-a005-20201123
-i386                 randconfig-a001-20201123
-i386                 randconfig-a006-20201123
-x86_64               randconfig-a015-20201123
-x86_64               randconfig-a011-20201123
-x86_64               randconfig-a014-20201123
-x86_64               randconfig-a016-20201123
-x86_64               randconfig-a012-20201123
-x86_64               randconfig-a013-20201123
-i386                 randconfig-a012-20201123
-i386                 randconfig-a013-20201123
-i386                 randconfig-a011-20201123
-i386                 randconfig-a016-20201123
-i386                 randconfig-a014-20201123
-i386                 randconfig-a015-20201123
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+V2->V3:
+- Put the scheduler helpers within ifdef CONFIG_SMP.
+- Keep both SMP and !SMP implementations in the cpufreq_cooling driver.
+- Improved commit log with testing related information.
 
-clang tested configs:
-x86_64               randconfig-a006-20201123
-x86_64               randconfig-a003-20201123
-x86_64               randconfig-a004-20201123
-x86_64               randconfig-a005-20201123
-x86_64               randconfig-a002-20201123
-x86_64               randconfig-a001-20201123
+--
+Viresh
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Viresh Kumar (3):
+  sched/core: Move schedutil_cpu_util() to core.c
+  sched/core: Rename schedutil_cpu_util() and allow rest of the kernel
+    to use it
+  thermal: cpufreq_cooling: Reuse sched_cpu_util() for SMP platforms
+
+ drivers/thermal/cpufreq_cooling.c |  68 ++++++++++++++----
+ include/linux/sched.h             |  21 ++++++
+ kernel/sched/core.c               | 115 ++++++++++++++++++++++++++++++
+ kernel/sched/cpufreq_schedutil.c  | 108 +---------------------------
+ kernel/sched/fair.c               |   6 +-
+ kernel/sched/sched.h              |  31 +-------
+ 6 files changed, 197 insertions(+), 152 deletions(-)
+
+
+base-commit: 3650b228f83adda7e5ee532e2b90429c03f7b9ec
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
