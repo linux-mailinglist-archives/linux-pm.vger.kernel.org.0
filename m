@@ -2,115 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E51552C1E6F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 07:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C7B2C1FC6
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 09:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729657AbgKXGja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 01:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S1730481AbgKXIVA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 03:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbgKXGj3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 01:39:29 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB16C0613CF;
-        Mon, 23 Nov 2020 22:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=zaDovUSC7gRGubGzAVUJJyjyyB8/KDzwT5j5jjzxmlw=; b=YMJyPKJAUkXWeaesG+A2aW7cF+
-        p9mjGfyHce1KZ4pyJx5IubMyw/Y9oNDverFOKbXbJcXsFmJ3Bsu5g2b6hwSJ/GQvzJVmRRrpYf88f
-        kEQyV1863VUBchW3aKcspukfYlcZLI4jKSV/9ZajbBxFYR4GO1bngBn1xNinHH37//pynePe98YCj
-        80pB41YMi2djnsZzb1Bx+3TxNHRy0wKadVTUHOMKoz7n1wcS6kaYOuXxqd7Y6L6Bj+k3kvasdwVvD
-        yt0Pn0Gc838WeNBb6MiHoHYSHNDppyaIkh6BTe5khNDCMQOPrUfZgEn1sOaHBr7C7xLRVz55NZLvK
-        Y2vZXqZA==;
-Received: from [2601:1c0:6280:3f0::cc1f] (helo=smtpauth.infradead.org)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1khRz4-0002B2-9B; Tue, 24 Nov 2020 06:39:26 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: [PATCH v2] cpuidle: arm: qcom: fix Kconfig problems
-Date:   Mon, 23 Nov 2020 22:39:19 -0800
-Message-Id: <20201124063919.30243-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        with ESMTP id S1730358AbgKXIU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 03:20:59 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BC2C0617A6
+        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 00:20:59 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id r9so21007411ioo.7
+        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 00:20:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X/x0LTb4J+x0tLkU4UfWhgC2IEt8b2Ne7z/1P9Z0zjA=;
+        b=WgmWs9slVGpefYI3u0JHnro604o3Rsq37SkQhMRrVMYlX/I0yTj+7o3zmxiXFzt/tf
+         bhnMMfKan6dMtMuDpoPKwLz+aQ/FMx/7F1N/6iAKe7b/qxjzVUSItHnJlVrjmryJ7Jax
+         zBBhZWT4nMXkonUV58hrO/c24uCLaMdPZheAg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X/x0LTb4J+x0tLkU4UfWhgC2IEt8b2Ne7z/1P9Z0zjA=;
+        b=DLhkOzjSkQ4yE3ZtiFZ2QDYTRooqmpRs+X6BbwSYRGOvuI7+rZJ7Ng0RD8uUbcL6SP
+         aTB4VHpplh/rXk687gXTyatIUW/ggJXBuC47XTt4u2T/f8kfulqvFV4OgYUzB+73+Y3v
+         rORvOjZbdpauxOl+5fl1LxNIyMRhYrEJwZTMFhH78s6kDehFf+gGs6svGX0gGJnnoRv5
+         JL0LRSEkFSdSShlrZQCJkv2LLst6k4lqLrqmqpwWyLMJ60rECf2LmmqKllXA4WcMVzI4
+         MF/IgQ3lNvgz+rU0pBgwT87OYqkAQQ/gs7pOD715cuovM7YArN/NLb9SUXsH89DEpE+n
+         gebQ==
+X-Gm-Message-State: AOAM532F4M8utzlEq5fC9h+JsnBYKnKuh4t7PhEpWhTPb1y1+QeJAa7m
+        sAL+Epi9cdR8xcpaFfGoQ2n5CNH5l7/KxhvZWZz2Bw==
+X-Google-Smtp-Source: ABdhPJwDD+cQREmdCGOOrIMuL9X8U9Zd3cwX9xY7MHPd1cZdR0F/0sSKV86O9Bh13f2qdJctm1O4CME4HC/nfxZd+EI=
+X-Received: by 2002:a05:6638:3f1:: with SMTP id s17mr3341338jaq.102.1606206059023;
+ Tue, 24 Nov 2020 00:20:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201013102358.22588-1-michael.kao@mediatek.com> <20201013102358.22588-2-michael.kao@mediatek.com>
+In-Reply-To: <20201013102358.22588-2-michael.kao@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Tue, 24 Nov 2020 16:20:33 +0800
+Message-ID: <CAJMQK-hCDH_-JZG6uBrTmbCf-HG0J4GxGj2kyeh5sgjJs5Et1g@mail.gmail.com>
+Subject: Re: [v5 1/3] arm64: dts: mt8183: add thermal zone node
+To:     Michael Kao <michael.kao@mediatek.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        srv_heupstream@mediatek.com,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Kconfig symbol ARM_QCOM_SPM_CPUIDLE wildly selects other
-Kconfig symbols when it should not.
-This causes kconfig warnings and subsequent build errors,
-as listed below, so modify this symbol's Kconfig entry to
-constrain and tame it.
+On Tue, Oct 13, 2020 at 6:24 PM Michael Kao <michael.kao@mediatek.com> wrote:
+>
+> From: "Michael.Kao" <michael.kao@mediatek.com>
+>
+> Add thermal zone node to Mediatek MT8183 dts file.
+>
+> Evaluate the thermal zone every 500ms while not cooling
+> and every 100ms when passive cooling is performed.
+>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 84 ++++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 8fed72bb35d7..1cd093cf33f3 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -430,6 +430,86 @@
+>                         status = "disabled";
+>                 };
+>
+> +               thermal: thermal@1100b000 {
+> +                       #thermal-sensor-cells = <1>;
+> +                       compatible = "mediatek,mt8183-thermal";
+> +                       reg = <0 0x1100b000 0 0x1000>;
+> +                       clocks = <&infracfg CLK_INFRA_THERM>,
+> +                                <&infracfg CLK_INFRA_AUXADC>;
+> +                       clock-names = "therm", "auxadc";
+> +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
 
-WARNING: unmet direct dependencies detected for QCOM_SCM
-  Depends on [n]: ARM [=y] && HAVE_ARM_SMCCC [=n] || ARM64
-  Selected by [y]:
-  - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
+According to binding document[1], interrupts is required.
+interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
 
-WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
-  Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
-  Selected by [y]:
-  - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
+[1] https://elixir.bootlin.com/linux/v5.10-rc3/source/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt#L18
 
-and
-
-arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
-(.text+0x68): undefined reference to `cpu_sa110_suspend_size'
-arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
-suspend.c:(.text+0x138): undefined reference to `cpu_sa110_do_suspend'
-arm-linux-gnueabi-ld: suspend.c:(.text+0x170): undefined reference to `cpu_sa110_do_resume'
-arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-smc.o: in function `__scm_smc_do_quirk':
-qcom_scm-smc.c:(.text+0x54): undefined reference to `__arm_smccc_smc'
-arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call':
-qcom_scm-legacy.c:(.text+0x168): undefined reference to `__arm_smccc_smc'
-arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call_atomic':
-qcom_scm-legacy.c:(.text+0x2e0): undefined reference to `__arm_smccc_smc'
-
-Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Stephan Gerhold <stephan@gerhold.net>
-Cc: Lina Iyer <ilina@codeaurora.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: John Stultz <john.stultz@linaro.org>
----
-v2: change to depends on QCOM_SCM (suggested by Bjorn)
-
- drivers/cpuidle/Kconfig.arm |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-next-20201123.orig/drivers/cpuidle/Kconfig.arm
-+++ linux-next-20201123/drivers/cpuidle/Kconfig.arm
-@@ -108,10 +108,10 @@ config ARM_TEGRA_CPUIDLE
- config ARM_QCOM_SPM_CPUIDLE
- 	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
- 	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64
-+	depends on QCOM_SCM
- 	select ARM_CPU_SUSPEND
- 	select CPU_IDLE_MULTIPLE_DRIVERS
- 	select DT_IDLE_STATES
--	select QCOM_SCM
- 	help
- 	  Select this to enable cpuidle for Qualcomm processors.
- 	  The Subsystem Power Manager (SPM) controls low power modes for the
+> +                       mediatek,auxadc = <&auxadc>;
+> +                       mediatek,apmixedsys = <&apmixedsys>;
+> +                       nvmem-cells = <&thermal_calibration>;
+> +                       nvmem-cell-names = "calibration-data";
+> +               };
+> +
+> +               thermal-zones {
+> +                       cpu_thermal: cpu_thermal {
+> +                               polling-delay-passive = <100>;
+> +                               polling-delay = <500>;
+> +                               thermal-sensors = <&thermal 0>;
+> +                               sustainable-power = <5000>;
+> +                       };
+> +
+> +                       /* The tzts1 ~ tzts6 don't need to polling */
+> +                       /* The tzts1 ~ tzts6 don't need to thermal throttle */
+> +
+> +                       tzts1: tzts1 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 1>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tzts2: tzts2 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 2>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tzts3: tzts3 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 3>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tzts4: tzts4 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 4>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tzts5: tzts5 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 5>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tztsABB: tztsABB {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 6>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +               };
+> +
+>                 i2c3: i2c@1100f000 {
+>                         compatible = "mediatek,mt8183-i2c";
+>                         reg = <0 0x1100f000 0 0x1000>,
+> @@ -675,6 +755,10 @@
+>                         compatible = "mediatek,mt8183-efuse",
+>                                      "mediatek,efuse";
+>                         reg = <0 0x11f10000 0 0x1000>;
+> +
+> +                       thermal_calibration: calib@180 {
+> +                               reg = <0x180 0xc>;
+> +                       };
+>                 };
+>
+>                 u3phy: usb-phy@11f40000 {
+> --
+> 2.18.0
