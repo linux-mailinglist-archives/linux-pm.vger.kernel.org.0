@@ -2,18 +2,15 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD362C2194
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAAD2C2193
 	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731422AbgKXJgp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1731421AbgKXJgp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 24 Nov 2020 04:36:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731377AbgKXJgj (ORCPT
+Received: from Galois.linutronix.de ([193.142.43.55]:41996 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731350AbgKXJgj (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:36:39 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE1CC0613D6;
-        Tue, 24 Nov 2020 01:36:39 -0800 (PST)
 Date:   Tue, 24 Nov 2020 09:36:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1606210597;
@@ -22,12 +19,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0Rr1olwPsduJoSlDBlgVnYq3Dyq3H3lG9aBuxY+YJgY=;
-        b=bdLb+GjL9GC1CQW5OxHln8M3zRyDo80syFtdrM2YSmPBS/SA9MkdGU+IodNOqBrqMQSWw8
-        8qxn9UCxYTfhOshHaEAqDU7DIfJhEGjnD7Tq0dQrPbheo4psqyN9FvFUFiN/d2boH1O8yy
-        x2BkIu/osBWeV6WwTj+PbcA3pihArBASA01rYSR3/4gyUx7a+uUVVxg2Qkw0yxHXuYK0v1
-        mduNXtnJeVcFge5GvII7NvVCwQ+Iquv8sy3dnCXV/pOuIUjX/p535ToBmGT0leVdwj1bBY
-        R9KGdJ6DTRyWSHFYif3a0ZwBVOgWBMs0WvHfpWK/7NTFwDM9dUUjzddjkzcUcw==
+        bh=fdm3FGAlcMLEBkNnWrjERcPIEQjJU8BWFQs9EJVa77E=;
+        b=TotWxl8fBvL0pa8W+LQr/yrTl8cyf5gOVC+23Tzy82UepgCR96RQKF/OnJeHqObzLhvBVp
+        DJP4Cw/2HwntFTHpGTERITKFrykkWbJWeiHwRZuVSA9IvgojWjCDL9ZXV9agInoRDXD2HW
+        HQ5vC48VXCYfaNJBcxoKkUpV9OXBgUp85vfcvOrRC3UzDHfQaLjCequls63YrDXSFTck5/
+        cW2p1+SQEtB4E/2j0XPC/myMZZ9WKSUpZfGxE+0EVif9GMLPf8Cv33k5KaHMpZLHgRWHRD
+        uq/AhqAhLk6F4aEc/Xn0m0ItqaaskNBxDkmf4pZbBiVNWaLYZsEwytvAFBGMwA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1606210597;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -35,74 +32,118 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0Rr1olwPsduJoSlDBlgVnYq3Dyq3H3lG9aBuxY+YJgY=;
-        b=/8DxIZHQdTfPgmOlNY4M+cj8zjsfowsqzqFAS8erptKFIrIMPjU8kzAfqVfyc+ZIZPThd9
-        kSxtnOehaoXvGqDg==
-From:   "thermal-bot for Zhuguangqing" <tip-bot2@linutronix.de>
+        bh=fdm3FGAlcMLEBkNnWrjERcPIEQjJU8BWFQs9EJVa77E=;
+        b=k6QErOcHw9wtlBBTOvP1BUa2/VmSC8xTgzdamkOj2gpiXSYnsHg94kqRHZnEQj8OEDns/q
+        nU83n0NWWFeYhOCQ==
+From:   "thermal-bot for Geert Uytterhoeven" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/cpufreq_cooling: Update
- cpufreq_state only if state has changed
-Cc:     "v5.4+" <stable@vger.kernel.org>,
-        Zhuguangqing <zhuguangqing@xiaomi.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+Subject: [thermal: thermal/next] dt-bindings: thermal: rcar-thermal: Improve
+ schema validation
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        niklas.soderlund@ragnatech.se,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Rob Herring <robh@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20201106092243.15574-1-zhuguangqing83@gmail.com>
-References: <20201106092243.15574-1-zhuguangqing83@gmail.com>
+In-Reply-To: <20201028153541.1736279-1-geert+renesas@glider.be>
+References: <20201028153541.1736279-1-geert+renesas@glider.be>
 MIME-Version: 1.0
-Message-ID: <160621059697.11115.16868017639431284982.tip-bot2@tip-bot2>
+Message-ID: <160621059613.11115.1192711283298552396.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     236761f19a4f373354f1dcf399b57753f1f4b871
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//236761f19a4f373354f1dcf399b57753f1f4b871
-Author:        Zhuguangqing <zhuguangqing@xiaomi.com>
-AuthorDate:    Fri, 06 Nov 2020 17:22:43 +08:00
+Commit-ID:     7cfa9770f485c03c877db4a66bbfda96df367b98
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
+git//7cfa9770f485c03c877db4a66bbfda96df367b98
+Author:        Geert Uytterhoeven <geert+renesas@glider.be>
+AuthorDate:    Wed, 28 Oct 2020 16:35:41 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 12 Nov 2020 12:23:35 +01:00
+CommitterDate: Thu, 12 Nov 2020 12:32:30 +01:00
 
-thermal/drivers/cpufreq_cooling: Update cpufreq_state only if state has changed
+dt-bindings: thermal: rcar-thermal: Improve schema validation
 
-If state has not changed successfully and we updated cpufreq_state,
-next time when the new state is equal to cpufreq_state (not changed
-successfully last time), we will return directly and miss a
-freq_qos_update_request() that should have been.
+- Factor out common required properties,
+  - "interrupts", "clocks", and "power-domains" are required on R-Mobile
+    APE6, too,
+  - Invert logic to simplify descriptions.
 
-Fixes: 5130802ddbb1 ("thermal: cpu_cooling: Switch to QoS requests for freq limits")
-Cc: v5.4+ <stable@vger.kernel.org> # v5.4+
-Signed-off-by: Zhuguangqing <zhuguangqing@xiaomi.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Niklas S=C3=B6derlund <niklas.soderlund@ragnatech.se>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20201106092243.15574-1-zhuguangqing83@gmail.com
+Link: https://lore.kernel.org/r/20201028153541.1736279-1-geert+renesas@glider=
+.be
 ---
- drivers/thermal/cpufreq_cooling.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ Documentation/devicetree/bindings/thermal/rcar-thermal.yaml | 48 ++++---
+ 1 file changed, 29 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index cc2959f..612f063 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -438,13 +438,11 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
- 	if (cpufreq_cdev->cpufreq_state == state)
- 		return 0;
- 
--	cpufreq_cdev->cpufreq_state = state;
--
- 	frequency = get_state_freq(cpufreq_cdev, state);
- 
- 	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
--
- 	if (ret > 0) {
-+		cpufreq_cdev->cpufreq_state = state;
- 		cpus = cpufreq_cdev->policy->cpus;
- 		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
- 		capacity = frequency * max_capacity;
+diff --git a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml b/Do=
+cumentation/devicetree/bindings/thermal/rcar-thermal.yaml
+index 7e9557a..927de79 100644
+--- a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+@@ -62,25 +62,35 @@ properties:
+   "#thermal-sensor-cells":
+     const: 0
+=20
+-if:
+-  properties:
+-    compatible:
+-      contains:
+-        enum:
+-          - renesas,thermal-r8a73a4 # R-Mobile APE6
+-          - renesas,thermal-r8a7779 # R-Car H1
+-then:
+-  required:
+-    - compatible
+-    - reg
+-else:
+-  required:
+-    - compatible
+-    - reg
+-    - interrupts
+-    - clocks
+-    - power-domains
+-    - resets
++required:
++  - compatible
++  - reg
++
++allOf:
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - renesas,thermal-r8a73a4 # R-Mobile APE6
++                - renesas,thermal-r8a7779 # R-Car H1
++    then:
++      required:
++        - resets
++        - '#thermal-sensor-cells'
++
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: renesas,thermal-r8a7779 # R-Car H1
++    then:
++      required:
++        - interrupts
++        - clocks
++        - power-domains
+=20
+ additionalProperties: false
+=20
