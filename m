@@ -2,147 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F852C1D1F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 05:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11892C1D2C
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 05:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbgKXEvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Nov 2020 23:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
+        id S1726765AbgKXE5C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Nov 2020 23:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725797AbgKXEvN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 23:51:13 -0500
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82438C0613CF
-        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 20:51:13 -0800 (PST)
-Received: by mail-ot1-x344.google.com with SMTP id 79so18171611otc.7
-        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 20:51:13 -0800 (PST)
+        with ESMTP id S1726330AbgKXE5B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Nov 2020 23:57:01 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A83C0613CF
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 20:57:00 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id f17so7839687pge.6
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 20:57:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IaPCaFCHuJQneePrqd68vBnsJF+MzsPrh4FvA+iHfzE=;
-        b=UpR50yOkEvNdKtEe2bzhgb4x84Cye79O1Rm1mO8+oJTdzz2XfFE2isfCJ+YRTV8U8H
-         L8PthdNJl+O1zDL68k06P0DmWk3xIt+5/YMjnL7pUlEIoiUeRLX1eiQK11qxqXbx28/a
-         OdW+4Zuq2hs70u0dgtxBdY6j5CtbDQfms2eyYV1iIP9eMBF3f6iZaZMmnsookYiXAvBa
-         SqJIiokjpkIc/l+gz2XVzK2NjH/iqpawKqHc7eGfv4JQ4MiLHA9m9DAISAgNwaxoOub7
-         VYyB0nlSfdmwTUcN01brAtYe2HY/Wce3mutxjn3KmYxgOQnzAvFnm2Y+8zZRRUm6TdD0
-         ZvTQ==
+         :content-disposition:in-reply-to:user-agent;
+        bh=ncpwistDFnipYLn+/2FKxZUn+WKeJ5fneb6uwY/MPIQ=;
+        b=GK1RxQqLnVhVj8jOqOYCtmv4YBATiByta/qF4Czg7CYzV4aaAlcHWuibeXBFnCfnB3
+         q8y2DtxRlrZblPn2jL7oB7eABBb++nnhdu92oMJ41H3wFZr4K5hlbPXF8rTryakLDU0E
+         R4ZZdLXGJ/WXMH/3JjEtTTXzJnIw7+3YJA4SJt2CmzEgqwLz3u1X3Lp2J1oLh6wT6ONT
+         dQ0SVWXoxmq3qHedEZqSEIxmyJMo7aZTOspjvLxSNj/uB2kSUz2WD55Krs0qa14SOPeI
+         bYynzPImk2G6i2AWdgx+KiTsaHjn4634ZOCDhHd5jKQSaInBSOpdCOGl0Cplea3W8s3r
+         zZIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IaPCaFCHuJQneePrqd68vBnsJF+MzsPrh4FvA+iHfzE=;
-        b=uUfb+Rp3tuh36tGek9y5Z73K26IgUBazY+zn630rD1EvvFhoHcbDaoiwrNJHTfyL6F
-         BZC7jYi4E70zZYArctEpyl0brqSTO4gad6vuoG7hozaxvoLxS2j4WoqvFWRxa9jYdpw6
-         9vXXDrgb0y83G/XYSBbfUU80MpAmHpzCpYSbh4F31NuPCXOTENYShEqmwWeLmLKUkkFv
-         r5xqfSQl5zno6PNLW5RsCVhbHQF4p/mv5AoIL4Ms5zjtoheJj6GykDbtwLFfHF5s7+bC
-         qobbU7L0xdWpg+iGAXZrgLKeZs36kiXwqKLk3M3dyzLpX/S0I9Wjf9wHe/JLTgpL+MvO
-         wCbQ==
-X-Gm-Message-State: AOAM530QRu/Obnba/OAkx87MLPNliITes7vozwuNn5Ikmyyh03MsWePJ
-        0criWibSRFnUX3zfyEOTDgHACQ==
-X-Google-Smtp-Source: ABdhPJyMRIgFMVWRa72QLRCoypAvMPvF/ocxU/Mr/PZmNprFTp5JuOmTLGZWikWWLAMT7evse/AAcA==
-X-Received: by 2002:a9d:261:: with SMTP id 88mr2045432otb.202.1606193472833;
-        Mon, 23 Nov 2020 20:51:12 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w6sm7845466otj.12.2020.11.23.20.51.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 20:51:12 -0800 (PST)
-Date:   Mon, 23 Nov 2020 22:51:10 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-pm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ncpwistDFnipYLn+/2FKxZUn+WKeJ5fneb6uwY/MPIQ=;
+        b=DSb3+sxe0QLcgOnTyn+hyjiUw524LpSQcM31/3hl9apZZEhHdqWEmAGl5G3vUZWZ07
+         0YLtnELyY/iIM/3vxIljYf482GW20eAmxX6dddDIJEFpxA192XX8PbS3BvfpguU1kqzT
+         pGcq5fpFg9vTXhmygvtWmEZ40IFJxMP0SdCmU8poYSobOLpL1Ds2amNEP3TfuNLeyRxZ
+         F8+tk1Pqi/RBv1Jqp8DVKoMwpnHQrBcVXkW2wy4/UgDk8fS5AUNKJNvPrhwIEeY2kEAQ
+         Jk7D09wBSMSY9IyXmVI/NRvdpVmP99s1etGFe/ZRdMOXy3e7dQMidr1WjOtJETNnteBp
+         +gHw==
+X-Gm-Message-State: AOAM530qTU4ZtymCUQETVS9A61CTQID0WmrBrisy1bTKzE/xlCwJJxeb
+        crMeEBc6du8r/VtJH1WOqgrtrgtYGIUU2Q==
+X-Google-Smtp-Source: ABdhPJxCpsrFYmyMKV+7dRbT97Vja8EQkjD7PAm2TZk1FVxAs7v60jrow0dq2xqS6MwSng19pVxIqg==
+X-Received: by 2002:a17:90a:1bc5:: with SMTP id r5mr2827375pjr.157.1606193819575;
+        Mon, 23 Nov 2020 20:56:59 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id d68sm12501014pfd.32.2020.11.23.20.56.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 23 Nov 2020 20:56:58 -0800 (PST)
+Date:   Tue, 24 Nov 2020 10:26:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH] cpuidle: arm: qcom: fix Kconfig problems
-Message-ID: <20201124045110.GH95182@builder.lan>
-References: <20201124013053.11502-1-rdunlap@infradead.org>
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        Quentin Perret <qperret@google.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH V3 2/2] thermal: cpufreq_cooling: Reuse sched_cpu_util()
+ for SMP platforms
+Message-ID: <20201124045653.jpkcl75mxjihovhj@vireshk-i7>
+References: <cover.1605770951.git.viresh.kumar@linaro.org>
+ <1fa9994395764ba19cfe6240d8b3c1ce390e8f82.1605770951.git.viresh.kumar@linaro.org>
+ <aefcc0e2-6c13-625a-4367-fe665330c0db@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201124013053.11502-1-rdunlap@infradead.org>
+In-Reply-To: <aefcc0e2-6c13-625a-4367-fe665330c0db@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon 23 Nov 19:30 CST 2020, Randy Dunlap wrote:
+On 23-11-20, 15:32, Lukasz Luba wrote:
+> LGTM. It has potential. We will see how far we can improve IPA with this
+> model.
+> 
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-> The Kconfig symbol ARM_QCOM_SPM_CPUIDLE wildly selects other
-> Kconfig symbols when it should not.
-> This causes kconfig warnings and subsequent build errors,
-> as listed below, so modify this symbol's Kconfig entry to
-> constrain and tame it.
-> 
-> WARNING: unmet direct dependencies detected for QCOM_SCM
->   Depends on [n]: ARM [=y] && HAVE_ARM_SMCCC [=n] || ARM64
->   Selected by [y]:
->   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
-> 
-> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
->   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
->   Selected by [y]:
->   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
-> 
-> and
-> 
-> arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
-> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
-> arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
-> suspend.c:(.text+0x138): undefined reference to `cpu_sa110_do_suspend'
-> arm-linux-gnueabi-ld: suspend.c:(.text+0x170): undefined reference to `cpu_sa110_do_resume'
-> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-smc.o: in function `__scm_smc_do_quirk':
-> qcom_scm-smc.c:(.text+0x54): undefined reference to `__arm_smccc_smc'
-> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call':
-> qcom_scm-legacy.c:(.text+0x168): undefined reference to `__arm_smccc_smc'
-> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call_atomic':
-> qcom_scm-legacy.c:(.text+0x2e0): undefined reference to `__arm_smccc_smc'
-> 
-> Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Stephan Gerhold <stephan@gerhold.net>
-> Cc: Lina Iyer <ilina@codeaurora.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/cpuidle/Kconfig.arm |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> --- linux-next-20201123.orig/drivers/cpuidle/Kconfig.arm
-> +++ linux-next-20201123/drivers/cpuidle/Kconfig.arm
-> @@ -108,10 +108,11 @@ config ARM_TEGRA_CPUIDLE
->  config ARM_QCOM_SPM_CPUIDLE
->  	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
->  	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64
-> +	depends on PM
->  	select ARM_CPU_SUSPEND
->  	select CPU_IDLE_MULTIPLE_DRIVERS
->  	select DT_IDLE_STATES
-> -	select QCOM_SCM
-> +	select QCOM_SCM if HAVE_ARM_SMCCC
+Thanks Lukasz for your review :)
 
-I presume the trigger for this error is that 'd0511b5496c0 ("firmware:
-QCOM_SCM: Allow qcom_scm driver to be loadable as a permenent module")'
-made QCOM_SCM user selectable and described the dependency on
-HAVE_ARM_SMCCC..
-
-So given that, and the fact that this driver doesn't do anything without
-QCOM_SCM, can we instead make it "depends on QCOM_SCM"? I believe it
-would inherit the dependency of HAVE_ARM_SMCCC in this case?
-
-Regards,
-Bjorn
-
->  	help
->  	  Select this to enable cpuidle for Qualcomm processors.
->  	  The Subsystem Power Manager (SPM) controls low power modes for the
+-- 
+viresh
