@@ -2,127 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F282C20EA
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EEE2C218F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730944AbgKXJK0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 04:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S1731335AbgKXJgh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 04:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728658AbgKXJKY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:10:24 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD74C0613D6
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 01:10:24 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id h21so2067970wmb.2
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 01:10:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8Mqfhh5sobw5RQvqH90O9IkiiSzC2XEiEberF8qfFS0=;
-        b=jGon3Gf+LiqEqK0gLdBoozR136wGzvXGvJ1ij5lupny+np0OE0HyWJBTWy87/gD5K1
-         gZLV7O2sXLiOlm31O//WAmiAFeJ7OkGsr4vhsQjFS6Tj9iImbtb6LOeXO9nKuZlvuHyc
-         Un0nf2CKg/nQnFtfP0XQgVisyCuBm4v1hT3LOAYM8jlITep7MkBNCJQVomyx4bF28IxB
-         kyCxRyRxfSRer5469CV96JS5f++Ro3ARnSifnf7Qmmh+u2athG7nm4zhH/pZ+W+XlQyl
-         ZTP855Lpe6gAo5Z6e3QPoVi4XYSL1gUT9X2HzaWH5IUZpZgXUtpPy0uOhFGsafET+3Ge
-         +liA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8Mqfhh5sobw5RQvqH90O9IkiiSzC2XEiEberF8qfFS0=;
-        b=sauHtnkFkVio/MvIaITl1NpwBvDpGaXtPvWhiUcLYYoRHPzHw0qPsgSZQk31eCFH6c
-         M67VQKIV1r1ELCo2m2QxLhs4KYSswKrGRB1fhYzr61n75FgxIDknzcXa41kczhqiexjc
-         onzLHVart5IzsDarMUkG1ac7iZN/Maed7N5nMFTuRBuvYXxh2vR0RgCqg1gyZ79HxLEH
-         E8Saa/AnMbuqsaFIy15JVTNn8h+Gr93e1NATEhpg+Fwt5bwpRF39/+LpvJpqxkROZ8qH
-         hQzCJQaY9wgXlXLcYFlS0y1nNa5g+OgPIutHWrAp6M42RaaDMvWYC6yPhWqje8fCKetz
-         IpiA==
-X-Gm-Message-State: AOAM530iHb3BrzdoTQQQR+/4S8umBQVCNHsyzCB4q8FpDx8oHSo6Fizs
-        Be5OLHKzdsbqEn8KxRDrP+DsfA==
-X-Google-Smtp-Source: ABdhPJzk8iYOXz1ncUa8TnoRC9Y7B1bESlx4UUXMqhszK61k1YtxO6os9+qMBFWYMWQuvTwfiJjASA==
-X-Received: by 2002:a1c:e455:: with SMTP id b82mr3221302wmh.117.1606209023093;
-        Tue, 24 Nov 2020 01:10:23 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:210:f693:9fff:fef4:a7ef])
-        by smtp.gmail.com with ESMTPSA id j4sm23646396wrn.83.2020.11.24.01.10.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2020 01:10:22 -0800 (PST)
-Date:   Tue, 24 Nov 2020 09:10:19 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH V4 2/3] sched/core: Rename schedutil_cpu_util() and allow
- rest of the kernel to use it
-Message-ID: <20201124091019.GA1023091@google.com>
-References: <cover.1606198885.git.viresh.kumar@linaro.org>
- <9a5442b916f9667e714dd84fe4e3fc26f8bcc887.1606198885.git.viresh.kumar@linaro.org>
+        with ESMTP id S1731329AbgKXJgh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:36:37 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318D0C0613D6
+        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 01:36:37 -0800 (PST)
+Date:   Tue, 24 Nov 2020 09:36:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1606210595;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wpK3ZOcc9IN3mbPVIFozPu3q/CF/W1GZ9Jktq79y/8M=;
+        b=UsmyA/WFhOseeKjKxWM6LzMuTEbDfgOtHXPQExs9cD9v6kDj5mPyVYwqA8XATz6y6scpfh
+        BqwBU/te3uViw8VP/2lcDksLVCxGCGHqF0n5viNrAHMs9/P0CTtGkRlOSM4zts6PSeeVLp
+        3OO7ROEPUBIhL3JEoSVTSPSblUOSHu5Dl6mzxYIAP+y/MQed+lupVhi5Zt4z7b5IAIHrfa
+        wHRNATEO3u8Y/8+/neL7pmhl7siLbYK4Oh4Fxiw0euUVW4I1P/wB+zs5b3aPJAM8HVTIqc
+        1Rd26ahZOowAA2vFjB438eCTAwDP65MfOZpGB4hBvl4o7wAJTl8/3QLw9+wqqA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1606210595;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wpK3ZOcc9IN3mbPVIFozPu3q/CF/W1GZ9Jktq79y/8M=;
+        b=KMSlBG2rMTSKlN7sTyn9HC+uuXqn3jjCRAGq059b1SWyrAymNAORgrQvgoJ56MnTF8frlN
+        ILOeLbKI+5lWCeBg==
+From:   "thermal-bot for Martin Blumenstingl" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal: amlogic: Add hwmon support
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20201115190658.631578-1-martin.blumenstingl@googlemail.com>
+References: <20201115190658.631578-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a5442b916f9667e714dd84fe4e3fc26f8bcc887.1606198885.git.viresh.kumar@linaro.org>
+Message-ID: <160621059356.11115.5710672427369092678.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Viresh,
+The following commit has been merged into the thermal/next branch of thermal:
 
-On Tuesday 24 Nov 2020 at 11:56:15 (+0530), Viresh Kumar wrote:
-> There is nothing schedutil specific in schedutil_cpu_util(), rename it
-> to effective_cpu_util(). Also create and expose another wrapper
-> sched_cpu_util() which can be used by other parts of the kernel, like
-> thermal core (that will be done in a later commit).
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  include/linux/sched.h            | 21 +++++++++++++++++++++
->  kernel/sched/core.c              | 11 +++++++++--
->  kernel/sched/cpufreq_schedutil.c |  2 +-
->  kernel/sched/fair.c              |  6 +++---
->  kernel/sched/sched.h             | 19 ++-----------------
->  5 files changed, 36 insertions(+), 23 deletions(-)
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 063cd120b459..926b944dae5e 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1926,6 +1926,27 @@ extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
->  #define TASK_SIZE_OF(tsk)	TASK_SIZE
->  #endif
->  
-> +#ifdef CONFIG_SMP
-> +/**
-> + * enum cpu_util_type - CPU utilization type
-> + * @FREQUENCY_UTIL:	Utilization used to select frequency
-> + * @ENERGY_UTIL:	Utilization used during energy calculation
-> + *
-> + * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
-> + * need to be aggregated differently depending on the usage made of them. This
-> + * enum is used within sched_cpu_util() to differentiate the types of
-> + * utilization expected by the callers, and adjust the aggregation accordingly.
-> + */
-> +enum cpu_util_type {
-> +	FREQUENCY_UTIL,
-> +	ENERGY_UTIL,
-> +};
-> +
-> +/* Returns effective CPU utilization, as seen by the scheduler */
-> +unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
-> +			     unsigned long max);
+Commit-ID:     cb68a8580e2086fad38597af4c60d39de8df0cde
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//cb68a8580e2086fad38597af4c60d39de8df0cde
+Author:        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+AuthorDate:    Sun, 15 Nov 2020 20:06:58 +01:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Mon, 16 Nov 2020 10:30:53 +01:00
 
-Are 'type' and 'max' useful to anybody outside of kernel/sched ?
-If not then how about we hide them, keep the cpu_util_type enum in
-kernel/sched/sched.h and evaluate arch_scale_cpu_capacity() in
-sched_cpu_util() directly?
+thermal: amlogic: Add hwmon support
 
-Thanks,
-Quentin
+Many monitoring tools read the CPU temperature using the hwmon
+interface. Expose the thermal sensors on Amlogic boards as hwmon
+devices.
+
+Without this lm_sensors' "sensors" tool does not find any temperature
+sensors. Now it prints:
+  cpu_thermal-virtual-0
+  Adapter: Virtual device
+  temp1:        +44.7 C  (crit = +110.0 C)
+
+  ddr_thermal-virtual-0
+  Adapter: Virtual device
+  temp1:        +45.9 C  (crit = +110.0 C)
+
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20201115190658.631578-1-martin.blumenstingl@googlemail.com
+---
+ drivers/thermal/amlogic_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
+index ccb1fe1..dffe3ba 100644
+--- a/drivers/thermal/amlogic_thermal.c
++++ b/drivers/thermal/amlogic_thermal.c
+@@ -29,6 +29,7 @@
+ #include <linux/thermal.h>
+ 
+ #include "thermal_core.h"
++#include "thermal_hwmon.h"
+ 
+ #define TSENSOR_CFG_REG1			0x4
+ 	#define TSENSOR_CFG_REG1_RSET_VBG	BIT(12)
+@@ -287,6 +288,9 @@ static int amlogic_thermal_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	if (devm_thermal_add_hwmon_sysfs(pdata->tzd))
++		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
++
+ 	ret = amlogic_thermal_initialize(pdata);
+ 	if (ret)
+ 		return ret;
