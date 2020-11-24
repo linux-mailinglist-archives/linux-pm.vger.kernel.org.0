@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F5F2C2190
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD362C2194
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731414AbgKXJgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 04:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        id S1731422AbgKXJgp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 04:36:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731329AbgKXJgh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:36:37 -0500
+        with ESMTP id S1731377AbgKXJgj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:36:39 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DEAC0613D6
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 01:36:37 -0800 (PST)
-Date:   Tue, 24 Nov 2020 09:36:35 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE1CC0613D6;
+        Tue, 24 Nov 2020 01:36:39 -0800 (PST)
+Date:   Tue, 24 Nov 2020 09:36:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1606210596;
+        s=2020; t=1606210597;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=u9CNCdHL9grMRHRieiIBp66qzTGOduWUa3PoySw5lQ0=;
-        b=LLHUJEdHb/2GN+0UWMJbLeov92CfXwk7C+9CoXMcfswqm5AGSs1aUYXYll0tRqZ93CXB3D
-        kbcGlA7ZIdq1zfYEDlClRLPGxD5WhJLRvU9IvfRDspBQ3CLVsaa4zY5QzrqDFhsKf6ksq6
-        DT/4NUST/M0snGNdrs0p/6HyE4hLVk/X2MXGfPbtYeNmpYDGG0VUuwQl1D3FaU2SMZZwCA
-        AvMqb4eEj7Z7Ev736UFWcbGKJ3YvM/3ATgu7E6Fi5i2REaV90I30M5tFimlKPIFDUndy6z
-        gRqi34f5npl8KQCrJaXwmrjBe+sucqfL/ppJZf4Q7AL1+xcpFuOXE9uR0vwa8A==
+        bh=0Rr1olwPsduJoSlDBlgVnYq3Dyq3H3lG9aBuxY+YJgY=;
+        b=bdLb+GjL9GC1CQW5OxHln8M3zRyDo80syFtdrM2YSmPBS/SA9MkdGU+IodNOqBrqMQSWw8
+        8qxn9UCxYTfhOshHaEAqDU7DIfJhEGjnD7Tq0dQrPbheo4psqyN9FvFUFiN/d2boH1O8yy
+        x2BkIu/osBWeV6WwTj+PbcA3pihArBASA01rYSR3/4gyUx7a+uUVVxg2Qkw0yxHXuYK0v1
+        mduNXtnJeVcFge5GvII7NvVCwQ+Iquv8sy3dnCXV/pOuIUjX/p535ToBmGT0leVdwj1bBY
+        R9KGdJ6DTRyWSHFYif3a0ZwBVOgWBMs0WvHfpWK/7NTFwDM9dUUjzddjkzcUcw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1606210596;
+        s=2020e; t=1606210597;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=u9CNCdHL9grMRHRieiIBp66qzTGOduWUa3PoySw5lQ0=;
-        b=miN6RSGVqsAlLcxfXWsNaYAWjnRHb+nU797wPeQ36gWaGo9InjS7vg015oq0VK987tOWzc
-        o7z7way4ep8v02DQ==
-From:   "thermal-bot for Viresh Kumar" <tip-bot2@linutronix.de>
+        bh=0Rr1olwPsduJoSlDBlgVnYq3Dyq3H3lG9aBuxY+YJgY=;
+        b=/8DxIZHQdTfPgmOlNY4M+cj8zjsfowsqzqFAS8erptKFIrIMPjU8kzAfqVfyc+ZIZPThd9
+        kSxtnOehaoXvGqDg==
+From:   "thermal-bot for Zhuguangqing" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] docs: thermal: time_in_state is displayed in
- msec and not usertime
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+Subject: [thermal: thermal/next] thermal/drivers/cpufreq_cooling: Update
+ cpufreq_state only if state has changed
+Cc:     "v5.4+" <stable@vger.kernel.org>,
+        Zhuguangqing <zhuguangqing@xiaomi.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: =?utf-8?q?=3Cd5461bdf9ab6b6fee7f28f538582edbb426aa077=2E16050?=
- =?utf-8?q?04905=2Egit=2Eviresh=2Ekumar=40linaro=2Eorg=3E?=
-References: =?utf-8?q?=3Cd5461bdf9ab6b6fee7f28f538582edbb426aa077=2E160500?=
- =?utf-8?q?4905=2Egit=2Eviresh=2Ekumar=40linaro=2Eorg=3E?=
+In-Reply-To: <20201106092243.15574-1-zhuguangqing83@gmail.com>
+References: <20201106092243.15574-1-zhuguangqing83@gmail.com>
 MIME-Version: 1.0
-Message-ID: <160621059529.11115.17145263247398186723.tip-bot2@tip-bot2>
+Message-ID: <160621059697.11115.16868017639431284982.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -63,36 +63,46 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     ce7c01557465e920f5bccc5878b8dec165eeb80b
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//ce7c01557465e920f5bccc5878b8dec165eeb80b
-Author:        Viresh Kumar <viresh.kumar@linaro.org>
-AuthorDate:    Tue, 10 Nov 2020 16:13:37 +05:30
+Commit-ID:     236761f19a4f373354f1dcf399b57753f1f4b871
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//236761f19a4f373354f1dcf399b57753f1f4b871
+Author:        Zhuguangqing <zhuguangqing@xiaomi.com>
+AuthorDate:    Fri, 06 Nov 2020 17:22:43 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 12 Nov 2020 12:35:02 +01:00
+CommitterDate: Thu, 12 Nov 2020 12:23:35 +01:00
 
-docs: thermal: time_in_state is displayed in msec and not usertime
+thermal/drivers/cpufreq_cooling: Update cpufreq_state only if state has changed
 
-The sysfs stats for cooling devices shows the time_in_state in msec,
-remove the unwanted usertime comment.
+If state has not changed successfully and we updated cpufreq_state,
+next time when the new state is equal to cpufreq_state (not changed
+successfully last time), we will return directly and miss a
+freq_qos_update_request() that should have been.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Fixes: 5130802ddbb1 ("thermal: cpu_cooling: Switch to QoS requests for freq limits")
+Cc: v5.4+ <stable@vger.kernel.org> # v5.4+
+Signed-off-by: Zhuguangqing <zhuguangqing@xiaomi.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/d5461bdf9ab6b6fee7f28f538582edbb426aa077.1605004905.git.viresh.kumar@linaro.org
+Link: https://lore.kernel.org/r/20201106092243.15574-1-zhuguangqing83@gmail.com
 ---
- Documentation/driver-api/thermal/sysfs-api.rst | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/thermal/cpufreq_cooling.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-index b40b1f8..e7520cb 100644
---- a/Documentation/driver-api/thermal/sysfs-api.rst
-+++ b/Documentation/driver-api/thermal/sysfs-api.rst
-@@ -654,8 +654,7 @@ stats/time_in_state_ms:
- 	The amount of time spent by the cooling device in various cooling
- 	states. The output will have "<state> <time>" pair in each line, which
- 	will mean this cooling device spent <time> msec of time at <state>.
--	Output will have one line for each of the supported states.  usertime
--	units here is 10mS (similar to other time exported in /proc).
-+	Output will have one line for each of the supported states.
- 	RO, Required
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index cc2959f..612f063 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -438,13 +438,11 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+ 	if (cpufreq_cdev->cpufreq_state == state)
+ 		return 0;
  
+-	cpufreq_cdev->cpufreq_state = state;
+-
+ 	frequency = get_state_freq(cpufreq_cdev, state);
  
+ 	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
+-
+ 	if (ret > 0) {
++		cpufreq_cdev->cpufreq_state = state;
+ 		cpus = cpufreq_cdev->policy->cpus;
+ 		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
+ 		capacity = frequency * max_capacity;
