@@ -2,51 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDED92C219D
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5971F2C219E
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731415AbgKXJgt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1731384AbgKXJgt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 24 Nov 2020 04:36:49 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:41996 "EHLO
+Received: from Galois.linutronix.de ([193.142.43.55]:42038 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731412AbgKXJgp (ORCPT
+        with ESMTP id S1731415AbgKXJgp (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:36:45 -0500
 Date:   Tue, 24 Nov 2020 09:36:42 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1606210603;
+        s=2020; t=1606210602;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XBTnKv9xGZXqUan4gxnt8PICOA0KJEV8MjfsJPWBaIM=;
-        b=Y2VbOtcuZV/mMrkpXAb3h01OEq4Q4mDlCeZUHMtLVGJDOr/6gLd3C2NXSpM3DYyxGKZ7Aj
-        xFYZl05HI93H7U4e8g2/v0afq46eiJR2JWRg8oT35WbdHuocMq8x9swCvLEupXzTNER4rT
-        WUqIe4JjxW3tnSEu9KSHfJWYYFBq0SH0XOo4DUzxESjjFTBXVgJe1rrhfDVM+KOvuBY5Nz
-        RY4glskz6t4DKRoasy+YUfep3rYn6W+ULM5LlCuY1HiwhuNVy/lhtGrDF6TDss6jcG7w5y
-        1GAElGrmvWUvEWuN+BwnxLZfWoaC7ifkc53vyVtlEjwA7G7yaNk0/LJB769xsw==
+        bh=3l4BzCI8goj/iv2JoAQsSj8xAsEOqpCy/YHg3A72i1o=;
+        b=mHtWMHumkMkdhnu8HrObZB195zweXBPlCwTxU/wjYWN/OpfBNuzrLkUZOBDHR1kvRxbGWU
+        LZpw+UrVlydZzItdW5XJC89OUwJ/BFsipO6jgaIKUpEG8PmF3mJre8DtRzf+CXt88QSuum
+        +HuAQ6YryH1x3wcAtVLwM4rHuYRftwxRGz1SiPNaYI9jiRRYgrB2zHxvqDlnf5kbDIkQY+
+        j1fFPdbqNGjjNXJUHwaLAzUzKdtK/V0RmN/vBT3Z9wqmBblmCvW9kriU2BzGJl6ScVqX+O
+        soBYJg7I/RNeDoWqPAs/agsHpHXZVc43t6JkHXZbv9B40vQZVWeoi6eeAP42cQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1606210603;
+        s=2020e; t=1606210602;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XBTnKv9xGZXqUan4gxnt8PICOA0KJEV8MjfsJPWBaIM=;
-        b=jQJQqodQiKIRlHT68dJJuvogZtfY/gif1wZqI47lwy+FFxcNkn+MoAF12yz7rhXHiifdA2
-        FSvhF3BtHrKxbKDA==
-From:   "thermal-bot for Bernard Zhao" <tip-bot2@linutronix.de>
+        bh=3l4BzCI8goj/iv2JoAQsSj8xAsEOqpCy/YHg3A72i1o=;
+        b=2VtrFOQHiR6EqLNgRA7LVRJgL6t39BSpEPkxLo8BuvWvcP/jQynUKuOHKNyMTGhE5bfnA8
+        S0CrFpcnfG848BAQ==
+From:   "thermal-bot for Tian Tao" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] drivers/thermal/core: Optimize trip points check
-Cc:     Bernard Zhao <bernard@vivo.com>,
+Subject: [thermal: thermal/next] thermal/drivers/rcar: Replace
+ spin_lock_irqsave by spin_lock in hard IRQ
+Cc:     Tian Tao <tiantao6@hisilicon.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20201027013743.62392-1-bernard@vivo.com>
-References: <20201027013743.62392-1-bernard@vivo.com>
+In-Reply-To: <1603760790-37748-1-git-send-email-tiantao6@hisilicon.com>
+References: <1603760790-37748-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
-Message-ID: <160621060274.11115.1871630758046158914.tip-bot2@tip-bot2>
+Message-ID: <160621060206.11115.3591765536623361655.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -57,47 +58,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     37b2539e63d6570c9ee51b1d48bdecb334df367d
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//37b2539e63d6570c9ee51b1d48bdecb334df367d
-Author:        Bernard Zhao <bernard@vivo.com>
-AuthorDate:    Mon, 26 Oct 2020 18:37:42 -07:00
+Commit-ID:     4eb7d0cd590d99b6010b5b87a88804cda09a85da
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//4eb7d0cd590d99b6010b5b87a88804cda09a85da
+Author:        Tian Tao <tiantao6@hisilicon.com>
+AuthorDate:    Tue, 27 Oct 2020 09:06:30 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 27 Oct 2020 09:53:19 +01:00
+CommitterDate: Tue, 27 Oct 2020 10:45:22 +01:00
 
-drivers/thermal/core: Optimize trip points check
+thermal/drivers/rcar: Replace spin_lock_irqsave by spin_lock in hard IRQ
 
-The trip points are checked one by one with multiple condition
-branches where one condition is enough to disable the trip point.
+On RT or even on mainline with 'threadirqs' on the command line all
+interrupts which are not explicitly requested with IRQF_NO_THREAD
+run their handlers in thread context. The same applies to soft interrupts.
+That means they are subject to the normal scheduler rules and no other
+code is going to acquire that lock from hard interrupt context either,
+so the irqsave() here is pointless in all cases.
 
-Merge all these conditions in a single 'OR' statement.
-
-Signed-off-by: Bernard Zhao <bernard@vivo.com>
-Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20201027013743.62392-1-bernard@vivo.com
-
-[dlezcano] Changed patch description
+Link: https://lore.kernel.org/r/1603760790-37748-1-git-send-email-tiantao6@hisilicon.com
 ---
- drivers/thermal/thermal_core.c |  9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/thermal/rcar_thermal.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 96349ba..90e38cc 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1358,12 +1358,9 @@ thermal_zone_device_register(const char *type, int trips, int mask,
- 		goto release_device;
+diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+index 5c2a13b..6ae757d 100644
+--- a/drivers/thermal/rcar_thermal.c
++++ b/drivers/thermal/rcar_thermal.c
+@@ -409,16 +409,15 @@ static irqreturn_t rcar_thermal_irq(int irq, void *data)
+ {
+ 	struct rcar_thermal_common *common = data;
+ 	struct rcar_thermal_priv *priv;
+-	unsigned long flags;
+ 	u32 status, mask;
  
- 	for (count = 0; count < trips; count++) {
--		if (tz->ops->get_trip_type(tz, count, &trip_type))
--			set_bit(count, &tz->trips_disabled);
--		if (tz->ops->get_trip_temp(tz, count, &trip_temp))
--			set_bit(count, &tz->trips_disabled);
--		/* Check for bogus trip points */
--		if (trip_temp == 0)
-+		if (tz->ops->get_trip_type(tz, count, &trip_type) ||
-+		    tz->ops->get_trip_temp(tz, count, &trip_temp) ||
-+		    !trip_temp)
- 			set_bit(count, &tz->trips_disabled);
- 	}
+-	spin_lock_irqsave(&common->lock, flags);
++	spin_lock(&common->lock);
+ 
+ 	mask	= rcar_thermal_common_read(common, INTMSK);
+ 	status	= rcar_thermal_common_read(common, STR);
+ 	rcar_thermal_common_write(common, STR, 0x000F0F0F & mask);
+ 
+-	spin_unlock_irqrestore(&common->lock, flags);
++	spin_unlock(&common->lock);
+ 
+ 	status = status & ~mask;
  
