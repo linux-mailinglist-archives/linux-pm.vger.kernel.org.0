@@ -2,143 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8970C2C2AD6
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 16:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A0E2C2B4F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 16:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387992AbgKXPGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 10:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389435AbgKXPGe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 10:06:34 -0500
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250DEC061A4D
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 07:06:34 -0800 (PST)
-Received: by mail-ot1-x343.google.com with SMTP id f16so19586116otl.11
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 07:06:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=M1JIh9Gvo+fVeTXrdxTsWH/t0Vo2H6hJ0sjI+YjVK2Y=;
-        b=Ugg/FqWrlzR1e5TdZeLJmsbexWvbLVVy23q00IwmNjzmrnNQeg0ucP8qcuv8lr92Ng
-         TrtV2KuEz/Kwj5njm23Ly/yw+h/gbgcACmnmHYHq6KQY879rJH9RgXY/ck6jT7B32Cu5
-         E9PZStZLp412Y88kd6u0CH+J6SGwY1dUBGCibuV1sC/sBCTvDy5OI3rKbxxTpQcYBsQt
-         ydXqanHuLunbmKNlChCEJilDjbStk7arzsdHBgg5+sq04Pr0kOjI4FxCcVUDaAXgAHfH
-         1RF7FklAuFnylDYA2BlNBemqD/BrdAr/7DNX4UEEjVGhPKKnNNDdoT+oVP8Zqz/7vusJ
-         JWrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M1JIh9Gvo+fVeTXrdxTsWH/t0Vo2H6hJ0sjI+YjVK2Y=;
-        b=e99Uff0l//Sgv+XuksGxrIqEcfKEwiiZtWXFahxK+ntrCmN1WnDJLQq2WszUfpRzF3
-         1eXYvdPizItA75dv+EkcwuQw2asGyihgdrW4sA9WEA4gHP5noclL7PtR/PHSCVv5tueR
-         azP+DWe/dABp6vxv6dapH1v2zPjweXj4tv8qxx4yYL3SP/65JvRyZfzsvj5myKvmoRG8
-         HQjiGDZGevredDOMWLQCYGVviFZFh0aPKUpOCQeOVmG9xKNUiT/rkOpt2LjKmX4rAFev
-         SbjpbLbBYOrwpfPylezkI16ED2ehRJuziQQ1DAPDOAaYmvS7hYlw2d0BdCB2DwNIQVWw
-         Edyg==
-X-Gm-Message-State: AOAM531w/NeL3HPo2yT7ol7CAVtgPUm+O7JoFLSTOWRMULLW5PTirnNx
-        6N4N4ToR5TgxhZIVOC3yM3fMxA==
-X-Google-Smtp-Source: ABdhPJyyH3zdGmckUNlYogT9rzP4dT6TW87eVwpuDgu+JLX6RMweOa/pRusXoD79T0i3fgd680etlg==
-X-Received: by 2002:a9d:3e1b:: with SMTP id a27mr3559963otd.291.1606230393458;
-        Tue, 24 Nov 2020 07:06:33 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id m2sm8791896ots.11.2020.11.24.07.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2020 07:06:32 -0800 (PST)
-Date:   Tue, 24 Nov 2020 09:06:31 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-pm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: Re: [PATCH v2] cpuidle: arm: qcom: fix Kconfig problems
-Message-ID: <20201124150631.GL95182@builder.lan>
-References: <20201124063919.30243-1-rdunlap@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201124063919.30243-1-rdunlap@infradead.org>
+        id S2389488AbgKXP3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 10:29:53 -0500
+Received: from mga11.intel.com ([192.55.52.93]:4560 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388503AbgKXP3x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Nov 2020 10:29:53 -0500
+IronPort-SDR: yi5RIhHXcJrDHS+gTVKFwQeJ/IrEeQJclQsqrGSb+9JytBleXU3OeqcW7wzSJhlsEOzyhNIad4
+ 1mImdnPWuM4w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9815"; a="168453629"
+X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
+   d="scan'208";a="168453629"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 07:29:52 -0800
+IronPort-SDR: fQ9I22IVv+TiwPdND4euQLiZL77uLd+BkWrMNAdcHQoR8q5461FCJzLbqRbjVYgdrDFpTOj+D3
+ JmkubIBnLlZA==
+X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
+   d="scan'208";a="546868986"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 07:29:49 -0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc:     intel-wired-lan@lists.osuosl.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH] e1000e: Assign DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME to speed up s2ram
+Date:   Tue, 24 Nov 2020 23:32:21 +0800
+Message-Id: <20201124153221.11265-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 24 Nov 00:39 CST 2020, Randy Dunlap wrote:
+The NIC is put in runtime suspend status when there is no wire connected.
+As a result, it is safe to keep this NIC in runtime suspended during s2ram
+because the system does not rely on the NIC plug event nor WOL to wake up
+the system. Unlike the s2idle, s2ram does not need to manipulate S0ix settings
+during suspend.
 
-> The Kconfig symbol ARM_QCOM_SPM_CPUIDLE wildly selects other
-> Kconfig symbols when it should not.
-> This causes kconfig warnings and subsequent build errors,
-> as listed below, so modify this symbol's Kconfig entry to
-> constrain and tame it.
-> 
-> WARNING: unmet direct dependencies detected for QCOM_SCM
->   Depends on [n]: ARM [=y] && HAVE_ARM_SMCCC [=n] || ARM64
->   Selected by [y]:
->   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
-> 
-> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
->   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
->   Selected by [y]:
->   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64
-> 
-> and
-> 
-> arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
-> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
-> arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
-> suspend.c:(.text+0x138): undefined reference to `cpu_sa110_do_suspend'
-> arm-linux-gnueabi-ld: suspend.c:(.text+0x170): undefined reference to `cpu_sa110_do_resume'
-> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-smc.o: in function `__scm_smc_do_quirk':
-> qcom_scm-smc.c:(.text+0x54): undefined reference to `__arm_smccc_smc'
-> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call':
-> qcom_scm-legacy.c:(.text+0x168): undefined reference to `__arm_smccc_smc'
-> arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call_atomic':
-> qcom_scm-legacy.c:(.text+0x2e0): undefined reference to `__arm_smccc_smc'
-> 
-> Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Stephan Gerhold <stephan@gerhold.net>
-> Cc: Lina Iyer <ilina@codeaurora.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: John Stultz <john.stultz@linaro.org>
+This patch assigns DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME
+to the e1000e driver so that the s2ram could skip the .suspend_late(),
+.suspend_noirq() and .resume_noirq() .resume_early() when possible.
+Also skip .suspend() and .resume() if dev_pm_skip_suspend() and
+dev_pm_skip_resume() return true, so as to speed up the s2ram.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+ drivers/base/power/main.c                  |  2 ++
+ drivers/net/ethernet/intel/e1000e/netdev.c | 14 +++++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-Regards,
-Bjorn
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index c7ac49042cee..9cd8abba8612 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -580,6 +580,7 @@ bool dev_pm_skip_resume(struct device *dev)
+ 
+ 	return !dev->power.must_resume;
+ }
++EXPORT_SYMBOL_GPL(dev_pm_skip_resume);
+ 
+ /**
+  * device_resume_noirq - Execute a "noirq resume" callback for given device.
+@@ -2010,3 +2011,4 @@ bool dev_pm_skip_suspend(struct device *dev)
+ 	return dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) &&
+ 		pm_runtime_status_suspended(dev);
+ }
++EXPORT_SYMBOL_GPL(dev_pm_skip_suspend);
+diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+index b30f00891c03..d79fddabc553 100644
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -6965,6 +6965,14 @@ static __maybe_unused int e1000e_pm_suspend(struct device *dev)
+ 	struct e1000_hw *hw = &adapter->hw;
+ 	int rc;
+ 
++	/* Runtime suspended means that there is no wired connection
++	 * and it has nothing to do with WOL that, we don't need to
++	 * adjust the WOL settings. So it is safe to put NIC in
++	 * runtime suspend while doing system suspend.
++	 */
++	if (dev_pm_skip_suspend(dev))
++		return 0;
++
+ 	e1000e_flush_lpic(pdev);
+ 
+ 	e1000e_pm_freeze(dev);
+@@ -6989,6 +6997,9 @@ static __maybe_unused int e1000e_pm_resume(struct device *dev)
+ 	struct e1000_hw *hw = &adapter->hw;
+ 	int rc;
+ 
++	if (dev_pm_skip_resume(dev))
++		return 0;
++
+ 	/* Introduce S0ix implementation */
+ 	if (hw->mac.type >= e1000_pch_cnp &&
+ 	    !e1000e_check_me(hw->adapter->pdev->device))
+@@ -7665,7 +7676,8 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	e1000_print_device_info(adapter);
+ 
+-	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_NO_DIRECT_COMPLETE);
++	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_NO_DIRECT_COMPLETE |
++				DPM_FLAG_SMART_SUSPEND | DPM_FLAG_MAY_SKIP_RESUME);
+ 
+ 	if (pci_dev_run_wake(pdev) && hw->mac.type < e1000_pch_cnp)
+ 		pm_runtime_put_noidle(&pdev->dev);
+-- 
+2.25.1
 
-> ---
-> v2: change to depends on QCOM_SCM (suggested by Bjorn)
-> 
->  drivers/cpuidle/Kconfig.arm |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- linux-next-20201123.orig/drivers/cpuidle/Kconfig.arm
-> +++ linux-next-20201123/drivers/cpuidle/Kconfig.arm
-> @@ -108,10 +108,10 @@ config ARM_TEGRA_CPUIDLE
->  config ARM_QCOM_SPM_CPUIDLE
->  	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
->  	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64
-> +	depends on QCOM_SCM
->  	select ARM_CPU_SUSPEND
->  	select CPU_IDLE_MULTIPLE_DRIVERS
->  	select DT_IDLE_STATES
-> -	select QCOM_SCM
->  	help
->  	  Select this to enable cpuidle for Qualcomm processors.
->  	  The Subsystem Power Manager (SPM) controls low power modes for the
