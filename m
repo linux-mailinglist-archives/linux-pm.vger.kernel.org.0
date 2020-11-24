@@ -2,19 +2,16 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EEE2C218F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F492C2191
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 10:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731335AbgKXJgh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 04:36:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731329AbgKXJgh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:36:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318D0C0613D6
-        for <linux-pm@vger.kernel.org>; Tue, 24 Nov 2020 01:36:37 -0800 (PST)
-Date:   Tue, 24 Nov 2020 09:36:33 -0000
+        id S1731329AbgKXJgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 04:36:44 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:41972 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731310AbgKXJgi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 04:36:38 -0500
+Date:   Tue, 24 Nov 2020 09:36:34 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1606210595;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -22,12 +19,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wpK3ZOcc9IN3mbPVIFozPu3q/CF/W1GZ9Jktq79y/8M=;
-        b=UsmyA/WFhOseeKjKxWM6LzMuTEbDfgOtHXPQExs9cD9v6kDj5mPyVYwqA8XATz6y6scpfh
-        BqwBU/te3uViw8VP/2lcDksLVCxGCGHqF0n5viNrAHMs9/P0CTtGkRlOSM4zts6PSeeVLp
-        3OO7ROEPUBIhL3JEoSVTSPSblUOSHu5Dl6mzxYIAP+y/MQed+lupVhi5Zt4z7b5IAIHrfa
-        wHRNATEO3u8Y/8+/neL7pmhl7siLbYK4Oh4Fxiw0euUVW4I1P/wB+zs5b3aPJAM8HVTIqc
-        1Rd26ahZOowAA2vFjB438eCTAwDP65MfOZpGB4hBvl4o7wAJTl8/3QLw9+wqqA==
+        bh=qLJtI9nAfxpQ241N7feAZU1m7Epn1p0do43IJBH+6tU=;
+        b=sy4pMokHHcaYUQMauj+dUeEbQKxSNTcsfaCr5Dn40ZDIJDPfhB3Ar1/yA+Vso3ybq0x26b
+        uLqN2oSLE1qWA3wMGf+bBZMwoyLz4Jg3pHfzH3FL0R2nv0MThZpuxr5SmAVqDKOPXpILml
+        sJbqJzhrvQ1S/LxwLZRKK4AFtG6CyCVauiRqd8PvKfPa1X3tjuuIGI4njZoiyqWpTqsttt
+        552nuFzzS3vpsEL5qrV+vr/BmDuaYZs2hW+Io9b/JpZFu2c4Uclxdapb5pM5EQ1LrxE4vP
+        ssgkdxMCouHD4EkhYmI7oM1nXtgpbVmBbz3MASUEfxXU3zptcrTe6EHlnzyylw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1606210595;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -35,22 +32,25 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wpK3ZOcc9IN3mbPVIFozPu3q/CF/W1GZ9Jktq79y/8M=;
-        b=KMSlBG2rMTSKlN7sTyn9HC+uuXqn3jjCRAGq059b1SWyrAymNAORgrQvgoJ56MnTF8frlN
-        ILOeLbKI+5lWCeBg==
-From:   "thermal-bot for Martin Blumenstingl" <tip-bot2@linutronix.de>
+        bh=qLJtI9nAfxpQ241N7feAZU1m7Epn1p0do43IJBH+6tU=;
+        b=eEZGRxdy5QQQ1XXJC2YRLenW1ZKrW8LufEZvVZr4rhp9EPvvvgqNin5Z4nb6f7lAlGgqRs
+        v5mxz6uO5FmNLnAw==
+From:   "thermal-bot for Andres Freund" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: amlogic: Add hwmon support
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20201115190658.631578-1-martin.blumenstingl@googlemail.com>
-References: <20201115190658.631578-1-martin.blumenstingl@googlemail.com>
+Subject: [thermal: thermal/next] thermal: intel_pch_thermal: Add PCI ids for
+ Lewisburg PCH.
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Tushar Dave <tushar.n.dave@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andres Freund <andres@anarazel.de>,
+        amitk@kernel.org
+In-Reply-To: <20201113204916.1144907-1-andres@anarazel.de>
+References: <20201113204916.1144907-1-andres@anarazel.de>
 MIME-Version: 1.0
-Message-ID: <160621059356.11115.5710672427369092678.tip-bot2@tip-bot2>
+Message-ID: <160621059444.11115.12415047656928422652.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,56 +61,78 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     cb68a8580e2086fad38597af4c60d39de8df0cde
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//cb68a8580e2086fad38597af4c60d39de8df0cde
-Author:        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-AuthorDate:    Sun, 15 Nov 2020 20:06:58 +01:00
+Commit-ID:     e78acf7efebff9184ad4add02b62a1f486a8cde8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//e78acf7efebff9184ad4add02b62a1f486a8cde8
+Author:        Andres Freund <andres@anarazel.de>
+AuthorDate:    Fri, 13 Nov 2020 12:49:16 -08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 16 Nov 2020 10:30:53 +01:00
+CommitterDate: Sat, 14 Nov 2020 19:44:39 +01:00
 
-thermal: amlogic: Add hwmon support
+thermal: intel_pch_thermal: Add PCI ids for Lewisburg PCH.
 
-Many monitoring tools read the CPU temperature using the hwmon
-interface. Expose the thermal sensors on Amlogic boards as hwmon
-devices.
+I noticed that I couldn't read the PCH temperature on my workstation
+(C620 series chipset, w/ 2x Xeon Gold 5215 CPUs) directly, but had to go
+through IPMI. Looking at the data sheet, it looks to me like the
+existing intel PCH thermal driver should work without changes for
+Lewisburg.
 
-Without this lm_sensors' "sensors" tool does not find any temperature
-sensors. Now it prints:
-  cpu_thermal-virtual-0
-  Adapter: Virtual device
-  temp1:        +44.7 C  (crit = +110.0 C)
+I suspect there's some other PCI IDs missing. But I hope somebody at
+Intel would have an easier time figuring that out than I...
 
-  ddr_thermal-virtual-0
-  Adapter: Virtual device
-  temp1:        +45.9 C  (crit = +110.0 C)
-
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Tushar Dave <tushar.n.dave@intel.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Link: https://lore.kernel.org/lkml/20200115184415.1726953-1-andres@anarazel.de/
+Signed-off-by: Andres Freund <andres@anarazel.de>
+Reviewed-by: Pandruvada, Srinivas <srinivas.pandruvada@linux.intel.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20201115190658.631578-1-martin.blumenstingl@googlemail.com
+Link: https://lore.kernel.org/r/20201113204916.1144907-1-andres@anarazel.de
 ---
- drivers/thermal/amlogic_thermal.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/thermal/intel/intel_pch_thermal.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
-index ccb1fe1..dffe3ba 100644
---- a/drivers/thermal/amlogic_thermal.c
-+++ b/drivers/thermal/amlogic_thermal.c
-@@ -29,6 +29,7 @@
- #include <linux/thermal.h>
+diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+index 0a9e445..32e1b28 100644
+--- a/drivers/thermal/intel/intel_pch_thermal.c
++++ b/drivers/thermal/intel/intel_pch_thermal.c
+@@ -28,6 +28,7 @@
+ #define PCH_THERMAL_DID_CNL_H	0xA379 /* CNL-H PCH */
+ #define PCH_THERMAL_DID_CNL_LP	0x02F9 /* CNL-LP PCH */
+ #define PCH_THERMAL_DID_CML_H	0X06F9 /* CML-H PCH */
++#define PCH_THERMAL_DID_LWB	0xA1B1 /* Lewisburg PCH */
  
- #include "thermal_core.h"
-+#include "thermal_hwmon.h"
+ /* Wildcat Point-LP  PCH Thermal registers */
+ #define WPT_TEMP	0x0000	/* Temperature */
+@@ -340,6 +341,7 @@ enum board_ids {
+ 	board_skl,
+ 	board_cnl,
+ 	board_cml,
++	board_lwb,
+ };
  
- #define TSENSOR_CFG_REG1			0x4
- 	#define TSENSOR_CFG_REG1_RSET_VBG	BIT(12)
-@@ -287,6 +288,9 @@ static int amlogic_thermal_probe(struct platform_device *pdev)
- 		return ret;
- 	}
+ static const struct board_info {
+@@ -365,7 +367,11 @@ static const struct board_info {
+ 	[board_cml] = {
+ 		.name = "pch_cometlake",
+ 		.ops = &pch_dev_ops_wpt,
+-	}
++	},
++	[board_lwb] = {
++		.name = "pch_lewisburg",
++		.ops = &pch_dev_ops_wpt,
++	},
+ };
  
-+	if (devm_thermal_add_hwmon_sysfs(pdata->tzd))
-+		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
-+
- 	ret = amlogic_thermal_initialize(pdata);
- 	if (ret)
- 		return ret;
+ static int intel_pch_thermal_probe(struct pci_dev *pdev,
+@@ -479,6 +485,8 @@ static const struct pci_device_id intel_pch_thermal_id[] = {
+ 		.driver_data = board_cnl, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_CML_H),
+ 		.driver_data = board_cml, },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_LWB),
++		.driver_data = board_lwb, },
+ 	{ 0, },
+ };
+ MODULE_DEVICE_TABLE(pci, intel_pch_thermal_id);
