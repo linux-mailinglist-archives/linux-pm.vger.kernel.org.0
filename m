@@ -2,67 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5495E2C1E2E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 07:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CE52C1E31
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 07:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728965AbgKXG0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 01:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S1729717AbgKXG0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 01:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729700AbgKXG0a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 01:26:30 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76D1C0613CF
-        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 22:26:29 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id n137so7437376pfd.3
-        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 22:26:29 -0800 (PST)
+        with ESMTP id S1728602AbgKXG0d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Nov 2020 01:26:33 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2A2C0613D6
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 22:26:32 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id t37so16469755pga.7
+        for <linux-pm@vger.kernel.org>; Mon, 23 Nov 2020 22:26:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qNtM0MaukWKLeykgjeC5xsgWS0X78S8oFPhzD7Rh5OM=;
-        b=qpwXt+1QC2Ho8ePpan7K4yqGgIkQru3q8ErF9OyRl0suCRvMvfeUYF328TZ/vm5BCk
-         fSmpv7eYRnbriUuEcqBUjn1WnbjO2P+6jUxSAuNnQZl6613pBpS1uH+Y5gjrwI0Wqy/n
-         s5JtLRBe9AyyqYSyfjOXx4/ECnJxovAzq37weRR+wNo903yxXgnkc9QZ2PLaeG0R/4jJ
-         dRM0bh+t31PJ5L6nAd95QDs1pQAtsx0b0Aa5umx5cPYQOlj13KCY80l5LqjRi1eZU/1D
-         6uOKCuN6PoPgnAIVQO9WKcLM3kNz1JxSPp/BQ5v8NiljQVP8xdXqqv1nBRchIU4s2SzB
-         xYLQ==
+        bh=hRaCrzFnuBpNc0a8QYnZlNCHJIyccTR5VAFFQy4r+BA=;
+        b=paWhjZUZnQ//0RZ/Caj8oKtcsdvN5eIZPQez+Xc/Po08oMl4Eab6HG2BWNifzqfZO/
+         FUxrQIFFxgssEtx6W25Q0tlx2Q1agRj1h39l5UXJGlr5L5aFhOb7BGRNYmLgTC5zL3xS
+         H2VmrsPwIuTFowdWcyE0MfZL0EhtugL7CIqtA0EPkTSiW/UYKcNnQGubSepgFahKxZsP
+         mfX4IOCU15kOkActBH2h/gNn0fRljJXBH9arVTconYLtogCQ/T0WrWdj0NRFZ4RBtlbY
+         4KK90GU3Zod3LDtsRVzMI6NI5c8OehqH1kotAiu6u4l8uQTSWUFJFrv3FQBwYC0QGpUR
+         L0eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qNtM0MaukWKLeykgjeC5xsgWS0X78S8oFPhzD7Rh5OM=;
-        b=i2G+HpyCsyk+StbCYGvqJAQAKCZx1s6VHyxlyilHlrkgKV5NpHFLqS9MT+y+BGIWqE
-         z0azSFrnUk7DJhOYgehK4QmAIOOZiV+XQ7L1YcxOBz3vfPKgeFNt5IQjrtoqHoK9FoCq
-         +4lw0FXCCXCgBfsORIIAe8JGIIdfnGwtCBkVx8sbaJ8w6FF91DPj8AvzCjid6/BJIpzc
-         SA/LJDitrIexfFk5si8VCF3dtA9KopYL5QGIE0X0sn2YvDfkAvv3c6yfaUL5TAHrANjR
-         9shXbUMktlg2TNi0GvcDWXl4qON8zkdGG5f1CuvG9kL/V2F1Zp7YR2e84qc/FcJnPK0G
-         Xf0A==
-X-Gm-Message-State: AOAM530MUGuF01KzHbcZdPFgkcLKJQwgI8Rpl+wl3YL9PYT+dIsJQjyt
-        BFcVGVSxc+go0Uu6uf9MnJojzg==
-X-Google-Smtp-Source: ABdhPJzxEMJBDlqj1uKonCyHqzmzsERUHPiWJRd6zF6oFF3FAP4i+7nkx5S0IncDxh5VEQQQjl9gqA==
-X-Received: by 2002:a17:90a:ead2:: with SMTP id ev18mr3088956pjb.91.1606199189204;
-        Mon, 23 Nov 2020 22:26:29 -0800 (PST)
+        bh=hRaCrzFnuBpNc0a8QYnZlNCHJIyccTR5VAFFQy4r+BA=;
+        b=Z012IC74hpUL1qr/Jg/3WQWEHCpnQPHGFL6Nr9GIJo+ptTw8jEoJrjS2IUdeG1a3qS
+         snBrLYtZciFS5iCf4fo4X5D4WPij8qEJOQtL/hFwir93l1KYRdLaZ8cIfSeUd/KtWJ2F
+         GCEqZGj87iwsx+1Pz21RyrJJd/RnizkW2Y2UxfPU3al0f/UZHcOO1+OqNwLln5i3HpXK
+         1VqDdW1XWk24gXZ0Sj+o6cMaJiLSxaYJZUfw+pOHse4SjQE+DJ4WXdrEQ328JeFtTs58
+         +ovpbDz1MmxNYwdVo2cjmq6Rvp7SdAZiBLJ4xJD8criuOPt6RKBWrUkgxcXQk21dpJeJ
+         8hYg==
+X-Gm-Message-State: AOAM530Wwz13LcBVJjc22kUI2eyqjuZd8maE0c1iXTIaLHTRdEcyAH55
+        79MsNK3fPbl5WlDum0rVLFIKxQ==
+X-Google-Smtp-Source: ABdhPJx3qH9sIiGjY8FHdbq9ek8+gv2OTxIu2Bg16+qa/PvTSsFYKDXilnSVHpo9V4PRw5mgb30P4w==
+X-Received: by 2002:a17:90a:4dc3:: with SMTP id r3mr3102982pjl.155.1606199192433;
+        Mon, 23 Nov 2020 22:26:32 -0800 (PST)
 Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id s26sm12632501pgv.93.2020.11.23.22.26.28
+        by smtp.gmail.com with ESMTPSA id s189sm13501865pfb.60.2020.11.23.22.26.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 23 Nov 2020 22:26:28 -0800 (PST)
+        Mon, 23 Nov 2020 22:26:31 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
         Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
-Subject: [PATCH V4 2/3] sched/core: Rename schedutil_cpu_util() and allow rest of the kernel to use it
-Date:   Tue, 24 Nov 2020 11:56:15 +0530
-Message-Id: <9a5442b916f9667e714dd84fe4e3fc26f8bcc887.1606198885.git.viresh.kumar@linaro.org>
+Subject: [PATCH V4 3/3] thermal: cpufreq_cooling: Reuse sched_cpu_util() for SMP platforms
+Date:   Tue, 24 Nov 2020 11:56:16 +0530
+Message-Id: <c0d7c796be7df6ac0102d8c2701fc6b541d2ff7d.1606198885.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 In-Reply-To: <cover.1606198885.git.viresh.kumar@linaro.org>
 References: <cover.1606198885.git.viresh.kumar@linaro.org>
@@ -72,155 +71,187 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is nothing schedutil specific in schedutil_cpu_util(), rename it
-to effective_cpu_util(). Also create and expose another wrapper
-sched_cpu_util() which can be used by other parts of the kernel, like
-thermal core (that will be done in a later commit).
+Several parts of the kernel are already using the effective CPU
+utilization (as seen by the scheduler) to get the current load on the
+CPU, do the same here instead of depending on the idle time of the CPU,
+which isn't that accurate comparatively.
 
+This is also the right thing to do as it makes the cpufreq governor
+(schedutil) align better with the cpufreq_cooling driver, as the power
+requested by cpufreq_cooling governor will exactly match the next
+frequency requested by the schedutil governor since they are both using
+the same metric to calculate load.
+
+This was tested on ARM Hikey6220 platform with hackbench, sysbench and
+schbench. None of them showed any regression or significant
+improvements. Schbench is the most important ones out of these as it
+creates the scenario where the utilization numbers provide a better
+estimate of the future.
+
+Scenario 1: The CPUs were mostly idle in the previous polling window of
+the IPA governor as the tasks were sleeping and here are the details
+from traces (load is in %):
+
+ Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=203 load={{0x35,0x1,0x0,0x31,0x0,0x0,0x64,0x0}} dynamic_power=1339
+ New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=600 load={{0x60,0x46,0x45,0x45,0x48,0x3b,0x61,0x44}} dynamic_power=3960
+
+Here, the "Old" line gives the load and requested_power (dynamic_power
+here) numbers calculated using the idle time based implementation, while
+"New" is based on the CPU utilization from scheduler.
+
+As can be clearly seen, the load and requested_power numbers are simply
+incorrect in the idle time based approach and the numbers collected from
+CPU's utilization are much closer to the reality.
+
+Scenario 2: The CPUs were busy in the previous polling window of the IPA
+governor:
+
+ Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=800 load={{0x64,0x64,0x64,0x64,0x64,0x64,0x64,0x64}} dynamic_power=5280
+ New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=708 load={{0x4d,0x5c,0x5c,0x5b,0x5c,0x5c,0x51,0x5b}} dynamic_power=4672
+
+As can be seen, the idle time based load is 100% for all the CPUs as it
+took only the last window into account, but in reality the CPUs aren't
+that loaded as shown by the utilization numbers.
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- include/linux/sched.h            | 21 +++++++++++++++++++++
- kernel/sched/core.c              | 11 +++++++++--
- kernel/sched/cpufreq_schedutil.c |  2 +-
- kernel/sched/fair.c              |  6 +++---
- kernel/sched/sched.h             | 19 ++-----------------
- 5 files changed, 36 insertions(+), 23 deletions(-)
+ drivers/thermal/cpufreq_cooling.c | 68 ++++++++++++++++++++++++-------
+ 1 file changed, 54 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 063cd120b459..926b944dae5e 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1926,6 +1926,27 @@ extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
- #define TASK_SIZE_OF(tsk)	TASK_SIZE
- #endif
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index cc2959f22f01..5aff2ac4b77f 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -76,7 +76,9 @@ struct cpufreq_cooling_device {
+ 	struct em_perf_domain *em;
+ 	struct cpufreq_policy *policy;
+ 	struct list_head node;
++#ifndef CONFIG_SMP
+ 	struct time_in_idle *idle_time;
++#endif
+ 	struct freq_qos_request qos_req;
+ };
  
+@@ -132,14 +134,35 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
+ }
+ 
+ /**
+- * get_load() - get load for a cpu since last updated
+- * @cpufreq_cdev:	&struct cpufreq_cooling_device for this cpu
+- * @cpu:	cpu number
+- * @cpu_idx:	index of the cpu in time_in_idle*
++ * get_load() - get load for a cpu
++ * @cpufreq_cdev: struct cpufreq_cooling_device for the cpu
++ * @cpu: cpu number
++ * @cpu_idx: index of the cpu in time_in_idle array
+  *
+  * Return: The average load of cpu @cpu in percentage since this
+  * function was last called.
+  */
 +#ifdef CONFIG_SMP
-+/**
-+ * enum cpu_util_type - CPU utilization type
-+ * @FREQUENCY_UTIL:	Utilization used to select frequency
-+ * @ENERGY_UTIL:	Utilization used during energy calculation
-+ *
-+ * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
-+ * need to be aggregated differently depending on the usage made of them. This
-+ * enum is used within sched_cpu_util() to differentiate the types of
-+ * utilization expected by the callers, and adjust the aggregation accordingly.
-+ */
-+enum cpu_util_type {
-+	FREQUENCY_UTIL,
-+	ENERGY_UTIL,
-+};
++static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
++		    int cpu_idx)
++{
++	unsigned long max = arch_scale_cpu_capacity(cpu);
++	unsigned long util;
 +
-+/* Returns effective CPU utilization, as seen by the scheduler */
-+unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
-+			     unsigned long max);
++	util = sched_cpu_util(cpu, ENERGY_UTIL, max);
++	return (util * 100) / max;
++}
++
++static inline int allocate_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
++{
++	return 0;
++}
++
++static inline void free_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
++{
++}
++
++#else /* !CONFIG_SMP */
+ static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
+ 		    int cpu_idx)
+ {
+@@ -162,6 +185,26 @@ static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
+ 	return load;
+ }
+ 
++static int allocate_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
++{
++	unsigned int num_cpus = cpumask_weight(cpufreq_cdev->policy->related_cpus);
++
++	cpufreq_cdev->idle_time = kcalloc(num_cpus,
++					  sizeof(*cpufreq_cdev->idle_time),
++					  GFP_KERNEL);
++	if (!cpufreq_cdev->idle_time)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static void free_idle_time(struct cpufreq_cooling_device *cpufreq_cdev)
++{
++	kfree(cpufreq_cdev->idle_time);
++	cpufreq_cdev->idle_time = NULL;
++}
 +#endif /* CONFIG_SMP */
 +
- #ifdef CONFIG_RSEQ
- 
- /*
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b81265aec4a0..845c976ccd53 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5138,8 +5138,8 @@ struct task_struct *idle_task(int cpu)
-  * based on the task model parameters and gives the minimal utilization
-  * required to meet deadlines.
-  */
--unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
--				 unsigned long max, enum schedutil_type type,
-+unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-+				 unsigned long max, enum cpu_util_type type,
- 				 struct task_struct *p)
- {
- 	unsigned long dl_util, util, irq;
-@@ -5223,6 +5223,13 @@ unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
- 
- 	return min(max, util);
- }
-+
-+unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
-+			     unsigned long max)
-+{
-+	return effective_cpu_util(cpu, cpu_util_cfs(cpu_rq(cpu)), max, type,
-+				  NULL);
-+}
- #endif /* CONFIG_SMP */
- 
  /**
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 2d44befb322b..e71627a3792b 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -178,7 +178,7 @@ static unsigned long sugov_get_util(struct sugov_cpu *sg_cpu)
- 	sg_cpu->max = max;
- 	sg_cpu->bw_dl = cpu_bw_dl(rq);
- 
--	return schedutil_cpu_util(sg_cpu->cpu, util, max, FREQUENCY_UTIL, NULL);
-+	return effective_cpu_util(sg_cpu->cpu, util, max, FREQUENCY_UTIL, NULL);
- }
- 
- /**
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 290f9e38378c..0e1c8eb7ad53 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6499,7 +6499,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 		 * is already enough to scale the EM reported power
- 		 * consumption at the (eventually clamped) cpu_capacity.
- 		 */
--		sum_util += schedutil_cpu_util(cpu, util_cfs, cpu_cap,
-+		sum_util += effective_cpu_util(cpu, util_cfs, cpu_cap,
- 					       ENERGY_UTIL, NULL);
- 
- 		/*
-@@ -6509,7 +6509,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 		 * NOTE: in case RT tasks are running, by default the
- 		 * FREQUENCY_UTIL's utilization can be max OPP.
- 		 */
--		cpu_util = schedutil_cpu_util(cpu, util_cfs, cpu_cap,
-+		cpu_util = effective_cpu_util(cpu, util_cfs, cpu_cap,
- 					      FREQUENCY_UTIL, tsk);
- 		max_util = max(max_util, cpu_util);
+  * get_dynamic_power() - calculate the dynamic power
+  * @cpufreq_cdev:	&cpufreq_cooling_device for this cdev
+@@ -487,7 +530,7 @@ __cpufreq_cooling_register(struct device_node *np,
+ 	struct thermal_cooling_device *cdev;
+ 	struct cpufreq_cooling_device *cpufreq_cdev;
+ 	char dev_name[THERMAL_NAME_LENGTH];
+-	unsigned int i, num_cpus;
++	unsigned int i;
+ 	struct device *dev;
+ 	int ret;
+ 	struct thermal_cooling_device_ops *cooling_ops;
+@@ -498,7 +541,6 @@ __cpufreq_cooling_register(struct device_node *np,
+ 		return ERR_PTR(-ENODEV);
  	}
-@@ -6607,7 +6607,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 			 * IOW, placing the task there would make the CPU
- 			 * overutilized. Take uclamp into account to see how
- 			 * much capacity we can get out of the CPU; this is
--			 * aligned with schedutil_cpu_util().
-+			 * aligned with sched_cpu_util().
- 			 */
- 			util = uclamp_rq_util_with(cpu_rq(cpu), util, p);
- 			if (!fits_capacity(util, cpu_cap))
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 0db6bcf0881f..4fab3b930ace 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2485,23 +2485,8 @@ static inline unsigned long capacity_orig_of(int cpu)
- 	return cpu_rq(cpu)->cpu_capacity_orig;
- }
  
--/**
-- * enum schedutil_type - CPU utilization type
-- * @FREQUENCY_UTIL:	Utilization used to select frequency
-- * @ENERGY_UTIL:	Utilization used during energy calculation
-- *
-- * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
-- * need to be aggregated differently depending on the usage made of them. This
-- * enum is used within schedutil_freq_util() to differentiate the types of
-- * utilization expected by the callers, and adjust the aggregation accordingly.
-- */
--enum schedutil_type {
--	FREQUENCY_UTIL,
--	ENERGY_UTIL,
--};
 -
--unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
--				 unsigned long max, enum schedutil_type type,
-+unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-+				 unsigned long max, enum cpu_util_type type,
- 				 struct task_struct *p);
+ 	if (IS_ERR_OR_NULL(policy)) {
+ 		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
+ 		return ERR_PTR(-EINVAL);
+@@ -516,12 +558,10 @@ __cpufreq_cooling_register(struct device_node *np,
+ 		return ERR_PTR(-ENOMEM);
  
- static inline unsigned long cpu_bw_dl(struct rq *rq)
+ 	cpufreq_cdev->policy = policy;
+-	num_cpus = cpumask_weight(policy->related_cpus);
+-	cpufreq_cdev->idle_time = kcalloc(num_cpus,
+-					 sizeof(*cpufreq_cdev->idle_time),
+-					 GFP_KERNEL);
+-	if (!cpufreq_cdev->idle_time) {
+-		cdev = ERR_PTR(-ENOMEM);
++
++	ret = allocate_idle_time(cpufreq_cdev);
++	if (ret) {
++		cdev = ERR_PTR(ret);
+ 		goto free_cdev;
+ 	}
+ 
+@@ -581,7 +621,7 @@ __cpufreq_cooling_register(struct device_node *np,
+ remove_ida:
+ 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
+ free_idle_time:
+-	kfree(cpufreq_cdev->idle_time);
++	free_idle_time(cpufreq_cdev);
+ free_cdev:
+ 	kfree(cpufreq_cdev);
+ 	return cdev;
+@@ -674,7 +714,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
+ 	thermal_cooling_device_unregister(cdev);
+ 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
+ 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
+-	kfree(cpufreq_cdev->idle_time);
++	free_idle_time(cpufreq_cdev);
+ 	kfree(cpufreq_cdev);
+ }
+ EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
 -- 
 2.25.0.rc1.19.g042ed3e048af
 
