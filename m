@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E8D2C22DA
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 11:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71482C22DC
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Nov 2020 11:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731524AbgKXKZV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 05:25:21 -0500
-Received: from mail-eopbgr40072.outbound.protection.outlook.com ([40.107.4.72]:29187
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        id S1731621AbgKXKZX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Nov 2020 05:25:23 -0500
+Received: from mail-eopbgr80048.outbound.protection.outlook.com ([40.107.8.48]:15428
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730944AbgKXKZU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Nov 2020 05:25:20 -0500
+        id S1731281AbgKXKZW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Nov 2020 05:25:22 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MdBmFY04EG0QV6JQ2LsnFkhM9mSjrjjVVPvolaprx5aamxH12AHc+g7nlLZ7SdT+duCrHpsAAiRLbc8k/a18333SnYSlZWjUQl/yu3b1F/Y80qYqb9+sfpCaFxiTz+Dwtn/MOVJvhgo+zwxz5QZVcOm11/3UwIe3BcvLQS/bOXIR/TMdN5xTk5lC/3Hb8bj3/hGce+rFxLLPfmSxIRcZsiuvmJqjgPQtc6K9WDlv4z5AmtZQmi3z17gcheGJ5xKglV3Gd7sb+31l3jE6eEWc/xZTinN414lTZdyiHIw11kVfNb6gNNp7Va1LK7OOS21firEc8kl72g3sf90GRfteTQ==
+ b=i9ZUZJoWoBiwMrd54vK89GM9TwO4HEcFCpKp9TmMCz61wrzHMZFg4OJi4KbUuuieyPijFvtY7hzlMfAlXKCzEDAGpFQUwrmaG1enl+odQWLy9J6rCwMlqnrg1mMpm/qGxxMC39iboZwFiDV57w7MOhVt2WQvIKq04lMu88Z2b4Ve9i/I+w3q4RtQgmQrrT8kgCOsXu+GrcfDwGY+oBjg5DfEsT/T0jqA+vdc+f8xZ0BDGdD8nVvShR5jzpK4+8v0jEdJcotkllRB8srNux4/g+KFH5epTyCcFYfPGle7/Q1Oq0J6esJcLLGYLX67jH1kN+nJGvNKlXnQ4VLQFA9haA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1ZPMYtA3ngh4NkOQ+QhFSH9OQO/KU7B5yLkdotB4vhw=;
- b=gwu4E9+g3N6kr+dmCRciY1kn0vWn9z+5vAi1Y1A6JB+342MXhWLX9MHgtqdk83Phz5E03bRkx1tri3+14bMUrYjrPY7iHgdbCdLoMUVhrjy11OHlHSVUZq70pIlLKxQU+FEDeXY3zSQtvbXOCzKkrvc0dzrk5k4Xsp5MxAe5qU/8CmC52RPJa/JMpFtjgXIAylNeL3onmYk7VY7bU6T2TSg5sosFsc/5yl4b4XFGCdVNpU/k5gCZ8MLDVnygJNNGukhbhNXL/8RNzLFuACSmC1+z5ONcTFsx7RZ4FFGDkqpfpgZEiGOJuyVoyQdwHP9ue9u9U8I5vTQadjHUlKKuuw==
+ bh=Rt+YP04b0t/9T7hIjTkFE4HBmL+T38d3Uq1xS9V3qVQ=;
+ b=e4nlLhKn/ilr7JfDK2IKLRN6ahqQZBvnApNR1YS5Xz7ruklpEN/7yIYAGrc6bMEalXmj+Dop9+vtHo23+z7zObjYvH29pKpwnECRHCA5iotrQgYCArzZyWP9MB6ZHBtOD/K+L5w4zL4RrK1xCQw+IGEgptad26pOYRbshkK/3gfF8ZQTcSoSVuW0B655kW0P2UQu1vNAaTcUvn8z0SzjaBIPnxD/DstbHIa/hEcjcjVti8Eh1Nk99mvwDMDTYRVY6vShS0LsPjmqX4jlFDZPpbBVFUVIzZwmvg/DDxb40sonvGI/tkIswVgd0+oeECXpJwwdGeBQ2vA4t+swTfAbCA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1ZPMYtA3ngh4NkOQ+QhFSH9OQO/KU7B5yLkdotB4vhw=;
- b=bSx3JCGEG20TvWbkPf2g1wZqkddDAzksux9BV0fWkWioFGJ3Addma29wx+ETITpMnHQUZwCo9bpKH1mvTDxv34eAcRApmzRiPucIEVAhPmlU214rzt47+fZS0twx34d/n6173VhbW5GElAtdQHm6+CYB3LT9Nbq3XQTTop8JywA=
+ bh=Rt+YP04b0t/9T7hIjTkFE4HBmL+T38d3Uq1xS9V3qVQ=;
+ b=gp2gF0SnBfgc5pHo7KRtmAG7bR3ZyCdxRFMQyZTPDZvC5aS68I0MjrsF5gdcRBYbevhtU7VR7GIKkCs9odyFt7tMc+1/jpE9JV/UTFfTGSUccw2Bi9VeKwRyfZSr7me9Ou480ZBeBNt/Ez4kTZa5zDRVZx8lvZBvzJE4LibNefY=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR04MB6648.eurprd04.prod.outlook.com (2603:10a6:20b:f9::22) with
+ by AM6PR0402MB3669.eurprd04.prod.outlook.com (2603:10a6:209:1a::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Tue, 24 Nov
- 2020 10:25:13 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.30; Tue, 24 Nov
+ 2020 10:25:16 +0000
 Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
  ([fe80::3cfc:a92e:75ad:ce4a]) by AM6PR04MB4966.eurprd04.prod.outlook.com
  ([fe80::3cfc:a92e:75ad:ce4a%3]) with mapi id 15.20.3564.029; Tue, 24 Nov 2020
- 10:25:13 +0000
+ 10:25:16 +0000
 From:   Dong Aisheng <aisheng.dong@nxp.com>
 To:     linux-clk@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
         sudipm.mukherjee@gmail.com, sboyd@kernel.org, shawnguo@kernel.org,
         linux-pm@vger.kernel.org, dongas86@gmail.com,
         Dong Aisheng <aisheng.dong@nxp.com>
-Subject: [PATCH 1/3] clk: imx: scu: make scu clk driver depend on scu pd
-Date:   Tue, 24 Nov 2020 18:08:00 +0800
-Message-Id: <20201124100802.22775-2-aisheng.dong@nxp.com>
+Subject: [PATCH 2/3] firmware: imx: scu-pd: export SCU PD register status
+Date:   Tue, 24 Nov 2020 18:08:01 +0800
+Message-Id: <20201124100802.22775-3-aisheng.dong@nxp.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20201124100802.22775-1-aisheng.dong@nxp.com>
 References: <20201124100802.22775-1-aisheng.dong@nxp.com>
@@ -57,63 +57,107 @@ X-ClientProxiedBy: SG2PR02CA0054.apcprd02.prod.outlook.com
  (2603:10a6:20b:2::14)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29396-OptiPlex-7040.ap.freescale.net (119.31.174.66) by SG2PR02CA0054.apcprd02.prod.outlook.com (2603:1096:4:54::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3589.20 via Frontend Transport; Tue, 24 Nov 2020 10:25:10 +0000
+Received: from b29396-OptiPlex-7040.ap.freescale.net (119.31.174.66) by SG2PR02CA0054.apcprd02.prod.outlook.com (2603:1096:4:54::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3589.20 via Frontend Transport; Tue, 24 Nov 2020 10:25:13 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 8d37aaeb-7302-4824-110e-08d890633a93
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6648:
+X-MS-Office365-Filtering-Correlation-Id: 42cb6794-8faa-42fe-55e8-08d890633c7f
+X-MS-TrafficTypeDiagnostic: AM6PR0402MB3669:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR04MB664800C688A0A44B1086C38D80FB0@AM6PR04MB6648.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
+X-Microsoft-Antispam-PRVS: <AM6PR0402MB36690ACD744C8D8B4EC62CED80FB0@AM6PR0402MB3669.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XwsWIedVO4Np09Ljn8w13fwOwD+zFtpQCLXcD6T9r8ft7IW240wgKV1SUPiNviy5dWc3EaskTwYUDO8W2CRt+UuBZz/nf6eF2LxrJ4feCM0gTT98vGNK/64lGTFK8z+hoAUEw2HvsuhjCfMQifp+SYv4X0Iw98mQkNJiIPM7S6v3XFRmIMyirU9DOEw++/XEAGCUDPGwsA5p7eWk+3Vf+aGMHTdfKPOQIL0VnZVMo9CSMTrDDVFx/myGFL5KpA2zkoqQV3oKgW39nGGfOdmmHBXgsQqkp27nm2+69rq6oUIq3uKMlPcB/iS1qWT5/ZyDCQkCknfcD1dM6jE5n+IOjg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(39860400002)(346002)(376002)(66946007)(6512007)(66476007)(186003)(26005)(83380400001)(16526019)(66556008)(6916009)(6666004)(4326008)(86362001)(36756003)(316002)(4744005)(2616005)(478600001)(2906002)(8676002)(6506007)(1076003)(5660300002)(52116002)(956004)(8936002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: iLmR6XerNDXn3vNoqDTTuYbiyZB6DD1bBEPhRCgliBwlbK0Oh9LdR5v2kt5ImdlgzIrLwaKcc39HicC0AyJmf+omkAybcb4Csv2aMryQApMZzkE45wN76OSmX9rRyO3fMjOdJIhey0zGCMbJTqLqXPSTmtXoV4RtRWNyU7gu2LI+uxxzL747CEjTA69rMn8VQ+dfDdYXzD4KYDFN8J3gJnxiduZ778JYwktrFzED0RuBmGazSoyQRrkU9kH44smowk2obVsyWFR5QbzSl7KGsp7RhylBeQY/n8Dy31jT2vXrkq+12mH8FFTxZS8nNv8G9L7Q1+DZUl7WSH0SFBJjBagR9EzMTZQqZUodeTVojtoakliEsP1vJdSGQ4NxyTCUbJ4ecA8LerSboo5RSzso2yJr5wS6TVeTMLs5jH/iRvBOMHRGDMK5/y86Ad9g4fGNQA0nWUPaBrFh7G1PFDDuoLEhCf8qOOHEwHSnlokrfjcsdqcYtzGMovwmLgF78aNba5zyMM8vMfJdca5nvy9CfMi9EH9jbUtehQvjejEQ7S9zBMV+nZmDc+s6ZXDv/LEE4ekSfzxj2XQL/cVoPG+pYhp4mnzok/AC2kA8Nq0hiGuDVBTPhWFua/pgVUM7KTmbe59swe5BVprxVkU15UE9yPks2+ku8KAku6Uicd5IvPahZd11ZTI1R2SNpN3c/2r8VYL0a2TxuobiLw32i/iOpWdOnETGt+kvkCaJFO6F/mgUoSX7piXEW+7Um8xQHzXu8jAPt2XLe6OKkBI9dkAotHOkOjN/FUiBoGQxQ60DeDS1ZGyAKw7nAAz52HaqTLaiYoUZCnYAKh1i9O0HkIRMPeVDh1YfrqTM/Jy+mhRYoKg4g2y9NjvVJ3JxT1iC638LkRFsi7JBpyC0wa/7mcC8tQ==
+X-Microsoft-Antispam-Message-Info: NpEO0Jy1nPKsP9XiK+Kk0zPMNbeRojme8DSaKk6mdvCzMq01LJnUlUMN5LlvbaxLSKNA4brdClPjhFG3m1HSOKJbHhYJabNYdidnnChH54fKZ2o3xqLOYGmfX155EET02Qzxc5I879DvgVhw6xh3PAA43GsIiErVoPdO+md9S0qChPZt1uEvFxuwog9THT8GDGfVfsnMcpepGc4EpHpUftVvO2iAZUFO+GIhuEN0C2KrmniDJvPyNer4HyzJyBpBzms3rrFNLpo6Ha1fW8T8r+EdS34oeBv025am+VwfawgHMyimZf8NVvwlFZVBybe4MIUycokew91FGMC8hVYLaUFxERdmRZk7HBMTgkj6k7Az7iUNQU70EcV13z/GvIwqSDyHK+zYJ7+ubxcMC6M97A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(36756003)(2616005)(8676002)(966005)(52116002)(6486002)(6506007)(86362001)(1076003)(8936002)(956004)(6512007)(478600001)(4326008)(316002)(186003)(6666004)(83380400001)(5660300002)(66946007)(66556008)(2906002)(6916009)(16526019)(26005)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: QVNJJmNl+A/7s8Di9x8pyiOaI8MKieIsg1MC2SF175TTWWErP8srLqmELgLJYYCdwTacKq/bzGHGS91TB+P5kIg/p6QaB9+sUuH2dDbtHlrX/rkEltg4irUMK+lGUbIkmSRwQPoyr2uwh+ETvLRjk2ZEWTWZ4tMGr/fLwGc/6z6+YkgBxKon3elFi6/wzt+ub/+5YG8ePKiLSAup6k+V3UIMrG5c8yuLavERqrrrK9bRNtpI1XLsK/XaKNzjN+lLyvawYloZMIA5LHJYoizAWx1j3Mhd6l6haK7m+orVL32FCPCqaqfTlTKDlKq8mJI1Syk0sosqyhY2fFs70IwDna4qVoOK1d6MsWFvYPpfU3ls5nGuq99istjBIuA9C+Mi0Cr1HdcBx67eoVs66S0Wm8lLDelLQQdvDE+6Or/+xaiFErpC9SjKJak/kceypxRaMAcldNcVngFjKzUSQGufYU1VyDbnqVptXoct+05Y5EWAMHPY1Q/57PUmkYqZ2T5I/BCzpgs8esA0qBURNJ95pIxlvDMh5Li+Cr12RRWfPK9+ruq0fU4vUeLh2VeX730UDDe7TYFzgMulV6oaZAPDW7C99F+WJFPLfTsc8bDv35QZ6CASWbtCUmAxEpjIx8ClOGdvf+vYMDMfuXmOjm1ifPvVax6vruQA0BgIC0QDuiJJtSG5G92Fk+PdhFIL4N2vB1DqSBO0Uv3OwpNJWWiSPTWJZXB+J7f0rk7z0+6do0YJwafcloqPY/nJeo3A2Cry38g60UVok26Vd6RlqjkiWGU3rw2S226FhrnW+JvNRIUtijzpKl8KW7SnKCljgxNpo0CKp5UmN3+Nn8SabvLTgZg2BvGwICnIa2YYcUij+QdDhOsMTDsBVAQcnqNVE1Zj73ZWhm1VtH9ZrrCCU+NeYA==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d37aaeb-7302-4824-110e-08d890633a93
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42cb6794-8faa-42fe-55e8-08d890633c7f
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2020 10:25:13.5621
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2020 10:25:16.7103
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KOG5bKujDmWdjCedZa0FQJ8roZCaqUaEYAYP8cUqqjhMMRXafaBcitQNxxJk9UfaE+qqMTKD0cYUfwIlHxsdOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6648
+X-MS-Exchange-CrossTenant-UserPrincipalName: W55KK7xc/NTouzlBRG6Xv1umAtlYVZy1Wysb6BqG26thMNMKtPDKXByVq/zQJws/iKi3LigBO8z9/Mi1GUGUWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3669
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The SCU clocks depends on SCU power domains.
+SCU clock-controller (SCU clock protocol) does not have a power domain
+property in DT, but the sub clocks registered requires power domain to
+be ready first. Export an API for SCU clk driver to query the status in
+order to support -EPROBE_DEFER properly.
 
+Link: https://lore.kernel.org/patchwork/patch/1334670/
 Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 ---
- drivers/clk/imx/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firmware/imx/scu-pd.c    | 20 +++++++++++++++++++-
+ include/linux/firmware/imx/sci.h |  6 ++++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
-index 3b393cb07295..e79375c76159 100644
---- a/drivers/clk/imx/Kconfig
-+++ b/drivers/clk/imx/Kconfig
-@@ -7,7 +7,7 @@ config MXC_CLK
- config MXC_CLK_SCU
- 	tristate "IMX SCU clock"
- 	depends on ARCH_MXC || COMPILE_TEST
--	depends on IMX_SCU && HAVE_ARM_SMCCC
-+	depends on IMX_SCU && IMX_SCU_PD && HAVE_ARM_SMCCC
+diff --git a/drivers/firmware/imx/scu-pd.c b/drivers/firmware/imx/scu-pd.c
+index 946eea292b52..53b49ef20014 100644
+--- a/drivers/firmware/imx/scu-pd.c
++++ b/drivers/firmware/imx/scu-pd.c
+@@ -86,6 +86,20 @@ struct imx_sc_pd_soc {
+ 	u8 num_ranges;
+ };
  
- config CLK_IMX1
- 	def_bool SOC_IMX1
-@@ -96,7 +96,7 @@ config CLK_IMX8MQ
- config CLK_IMX8QXP
- 	tristate "IMX8QXP SCU Clock"
- 	depends on (ARCH_MXC && ARM64) || COMPILE_TEST
--	depends on IMX_SCU && HAVE_ARM_SMCCC
-+	depends on IMX_SCU && IMX_SCU_PD && HAVE_ARM_SMCCC
- 	select MXC_CLK_SCU
- 	help
- 	  Build the driver for IMX8QXP SCU based clocks.
++bool imx_scu_pd_initialized;
++
++/*
++ * SCU clock-controller (SCU clock protocol) does not have a power domain
++ * property in DT, but the sub clocks registered requires power domain to
++ * be ready first. Export an API for SCU clk driver to query the status in
++ * order to support -EPROBE_DEFER properly.
++ */
++bool imx_scu_pd_is_initialized(void)
++{
++	return imx_scu_pd_initialized;
++}
++EXPORT_SYMBOL_GPL(imx_scu_pd_is_initialized);
++
+ static const struct imx_sc_pd_range imx8qxp_scu_pd_ranges[] = {
+ 	/* LSIO SS */
+ 	{ "pwm", IMX_SC_R_PWM_0, 8, true, 0 },
+@@ -351,7 +365,11 @@ static int imx_sc_pd_probe(struct platform_device *pdev)
+ 	if (!pd_soc)
+ 		return -ENODEV;
+ 
+-	return imx_scu_init_pm_domains(&pdev->dev, pd_soc);
++	ret = imx_scu_init_pm_domains(&pdev->dev, pd_soc);
++	if (!ret)
++		imx_scu_pd_initialized = true;
++
++	return ret;
+ }
+ 
+ static const struct of_device_id imx_sc_pd_match[] = {
+diff --git a/include/linux/firmware/imx/sci.h b/include/linux/firmware/imx/sci.h
+index 5cc63fe7e84d..0eaf00ad6305 100644
+--- a/include/linux/firmware/imx/sci.h
++++ b/include/linux/firmware/imx/sci.h
+@@ -22,6 +22,7 @@ int imx_scu_irq_register_notifier(struct notifier_block *nb);
+ int imx_scu_irq_unregister_notifier(struct notifier_block *nb);
+ int imx_scu_irq_group_enable(u8 group, u32 mask, u8 enable);
+ int imx_scu_soc_init(struct device *dev);
++bool imx_scu_pd_is_initialized(void);
+ #else
+ static inline int imx_scu_soc_init(struct device *dev)
+ {
+@@ -47,5 +48,10 @@ static inline int imx_scu_irq_group_enable(u8 group, u32 mask, u8 enable)
+ {
+ 	return -ENOTSUPP;
+ }
++
++static inline bool imx_scu_pd_is_initialized(void)
++{
++	return false;
++}
+ #endif
+ #endif /* _SC_SCI_H */
 -- 
 2.23.0
 
