@@ -2,85 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2A02C3A2F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 08:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918E02C3A7A
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 09:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728065AbgKYHeS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Nov 2020 02:34:18 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:48076 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728063AbgKYHeS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 02:34:18 -0500
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 84BFD3BAD17
-        for <linux-pm@vger.kernel.org>; Wed, 25 Nov 2020 07:20:01 +0000 (UTC)
-X-Originating-IP: 91.175.115.186
-Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
-        (Authenticated sender: gregory.clement@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 80E1C24000A;
-        Wed, 25 Nov 2020 07:19:38 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        <Steen.Hegelund@microchip.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v2 3/3] MIPS: dts: mscc: add reset support for Luton and Jaguar2
-Date:   Wed, 25 Nov 2020 08:19:20 +0100
-Message-Id: <20201125071920.126978-4-gregory.clement@bootlin.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201125071920.126978-1-gregory.clement@bootlin.com>
-References: <20201125071920.126978-1-gregory.clement@bootlin.com>
+        id S1726819AbgKYIHI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Nov 2020 03:07:08 -0500
+Received: from mga09.intel.com ([134.134.136.24]:65092 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726325AbgKYIHI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Nov 2020 03:07:08 -0500
+IronPort-SDR: 0LxcttN07aAYUtUiTtigLEC5/gAp+Rnp2NTYdQl4Vw+7WFFTURcle6pL7aauFFPoS89Ve8/vtA
+ 6Tl569TnMDyQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9815"; a="172244065"
+X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
+   d="scan'208";a="172244065"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 00:07:05 -0800
+IronPort-SDR: i8smOXMHi2IWQtJp5vzRd/iYtOun9bTO172CUBgV17TJhR9iQnXIDS5/Zc/5MhBzDdn62x/UR4
+ j3oauEfYsRoQ==
+X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
+   d="scan'208";a="332892300"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 00:07:02 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 25 Nov 2020 10:06:59 +0200
+Date:   Wed, 25 Nov 2020 10:06:59 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH v1 1/2] PM: ACPI: PCI: Drop acpi_pm_set_bridge_wakeup()
+Message-ID: <20201125080659.GB2532@lahna.fi.intel.com>
+References: <27714988.CF3CpBaniU@kreacher>
+ <2261308.G18gbxz5ee@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2261308.G18gbxz5ee@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow Luton and Jaguar2 SoCs to use reset feature by adding the reset
-node.
+On Tue, Nov 24, 2020 at 08:44:00PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The idea behind acpi_pm_set_bridge_wakeup() was to allow bridges to
+> be reference counted for wakeup enabling, because they may be enabled
+> to signal wakeup on behalf of their subordinate devices and that
+> may happen for multiple times in a row, whereas for the other devices
+> it only makes sense to enable wakeup signaling once.
+> 
+> However, this becomes problematic if the bridge itself is suspended,
+> because it is treated as a "regular" device in that case and the
+> reference counting doesn't work.
+> 
+> For instance, suppose that there are two devices below a bridge and
+> they both can signal wakeup.  Every time one of them is suspended,
+> wakeup signaling is enabled for the bridge, so when they both have
+> been suspended, the bridge's wakeup reference counter value is 2.
+> 
+> Say that the bridge is suspended subsequently and acpi_pci_wakeup()
+> is called for it.  Because the bridge can signal wakeup, that
+> function will invoke acpi_pm_set_device_wakeup() to configure it
+> and __acpi_pm_set_device_wakeup() will be called with the last
+> argument equal to 1.  This causes __acpi_device_wakeup_enable()
+> invoked by it to omit the reference counting, because the reference
+> counter of the target device (the bridge) is 2 at that time.
+> 
+> Now say that the bridge resumes and one of the device below it
+> resumes too, so the bridge's reference counter becomes 0 and
+> wakeup signaling is disabled for it, but there is still the other
+> suspended device which may need the bridge to signal wakeup on its
+> behalf and that is not going to work.
+> 
+> To address this scenario, use wakeup enable reference counting for
+> all devices, not just for bridges, so drop the last argument from
+> __acpi_device_wakeup_enable() and __acpi_pm_set_device_wakeup(),
+> which causes acpi_pm_set_device_wakeup() and
+> acpi_pm_set_bridge_wakeup() to become identical, so drop the latter
+> and use the former instead of it everywhere.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
- arch/mips/boot/dts/mscc/jaguar2.dtsi | 5 +++++
- arch/mips/boot/dts/mscc/luton.dtsi   | 5 +++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/arch/mips/boot/dts/mscc/jaguar2.dtsi b/arch/mips/boot/dts/mscc/jaguar2.dtsi
-index 42b2b0a51ddc..7032fe550277 100644
---- a/arch/mips/boot/dts/mscc/jaguar2.dtsi
-+++ b/arch/mips/boot/dts/mscc/jaguar2.dtsi
-@@ -60,6 +60,11 @@ cpu_ctrl: syscon@70000000 {
- 			reg = <0x70000000 0x2c>;
- 		};
- 
-+		reset@71010008 {
-+			compatible = "mscc,jaguar2-chip-reset";
-+			reg = <0x71010008 0x4>;
-+		};
-+
- 		intc: interrupt-controller@70000070 {
- 			compatible = "mscc,jaguar2-icpu-intr";
- 			reg = <0x70000070 0x94>;
-diff --git a/arch/mips/boot/dts/mscc/luton.dtsi b/arch/mips/boot/dts/mscc/luton.dtsi
-index 2a170b84c5a9..4a26c2874386 100644
---- a/arch/mips/boot/dts/mscc/luton.dtsi
-+++ b/arch/mips/boot/dts/mscc/luton.dtsi
-@@ -56,6 +56,11 @@ cpu_ctrl: syscon@10000000 {
- 			reg = <0x10000000 0x2c>;
- 		};
- 
-+		reset@00070090 {
-+			compatible = "mscc,luton-chip-reset";
-+			reg = <0x70090 0x4>;
-+		};
-+
- 		intc: interrupt-controller@10000084 {
- 			compatible = "mscc,luton-icpu-intr";
- 			reg = <0x10000084 0x70>;
--- 
-2.29.2
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
