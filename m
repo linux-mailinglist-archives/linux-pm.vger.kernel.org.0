@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E892C4D38
+	by mail.lfdr.de (Postfix) with ESMTP id DD4142C4D3A
 	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 03:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733069AbgKZCMb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1733062AbgKZCMb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 25 Nov 2020 21:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732838AbgKZCM2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 21:12:28 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A23FC0613D4;
-        Wed, 25 Nov 2020 18:12:28 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id k4so588104edl.0;
-        Wed, 25 Nov 2020 18:12:28 -0800 (PST)
+        with ESMTP id S1732932AbgKZCMa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 21:12:30 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D7DC0613D4;
+        Wed, 25 Nov 2020 18:12:30 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id d18so547846edt.7;
+        Wed, 25 Nov 2020 18:12:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=O0qe7oIz20vmKxuGqEFKoOxtqbsQn05TcW7sLZuS3Bs=;
-        b=N0aQDwHhQHzYRqKfp748d+z7YntGYV7ipjMrz8zV5WB1ORzQfrnI/mj4fXk+5WeGaD
-         J39vlU5abGU/1KD1JIPFPyj0y2ekQJW/D2hEPyBHRjalGHBHknhA4S14ZhWY07wGWQ/M
-         C1nFR4mdiN4PNoRRWXbG7NcI+qOFgXNkNcJeKLHuxgVPKP87yTYvdDS2b0HSjjvI9DKk
-         lkEWrUd4K2qDUwFizlwFgxCRuV+BxNYfRBtfwjOV+EJ/880KJKLSULtGGgNW8eHOGP1z
-         QRAXXiyaVO6j4VItcY66wkjAS9QdzpX1DlqNMcCsCMmhUZ5UgfMyq/q9/oicILxpPdB/
-         jOHg==
+        bh=81sqGxzuC6LNmogSg2JIcputtWB+AH0q5r5QvZXa8PQ=;
+        b=frZxwhQZl7qP0c7zff1P4P2kS/TCpZnYDeuL4NnSBOJn3WKRFmspTLf7Ca4tXDJl8w
+         curS+6eUtus+qg54evtD/+hea7f3POKCtNNrzOWSVKjpWmDElNQtCkSbFHakGm2GHv8t
+         k4Tm1opaBkmtaXHtrBl627YZlVm0qpqCNa/eH9YmEqw3YKo7hkgwwgWUZiE4yl0fEpKY
+         RffrxcfkolHNx+JL7UUTQgAjLOiZ+7EMKEm1Uqi7uARt3Soz9LeXCuxfwnqDr5kCnl7F
+         5K7eIDx3R9RJso2cUTWe+PMjCQXFZa07VK22yr2nbQp2+Xz2mMWdaKQ1LRA7j3E9CLTw
+         XnXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=O0qe7oIz20vmKxuGqEFKoOxtqbsQn05TcW7sLZuS3Bs=;
-        b=ZSgNAR7+jAKcT3hj0qaHTv/pH34MRnMMHJF7C667zQh2qV5jrmaRZo3rEJKR0qsDx/
-         a2au8XPPssUpH/MMU8KeDiSGumPdkM20ws5FlkAMFf6I1jkC+3fgIst3osmJT10vf8bR
-         f8cJ6Qu+Sij9olCDI459eF249bILBc6OpX3wCKFYFzcYcg2YX0ccKE8Ze2zNSsRBgE/r
-         1xXQ/b6qOuktQ1pzV7st23I1NSmXmsrdX9eTXy4RmyWMhqmQV8tVPBEcMiLwiTCijE+z
-         nfbAXAue6zuviZzKFsMp4wwwL7/9ukbDjX4A4LcPX2azokVatzpa1ilkvYPxm4E8ai5p
-         QrTg==
-X-Gm-Message-State: AOAM533LGfghnpgGbrz4JbTxlSUojePrXFYpQa8yN8Iyepj3czxUhr2u
-        EOK3hvYxpHRZ4pQ/HKCQDJc=
-X-Google-Smtp-Source: ABdhPJyBvkkG/E1UWL4vQBngd6UbbvfU36I65vCOb+wVVnnC5bmA29N5JVtN5Bhle8xaa2vi87DRdg==
-X-Received: by 2002:aa7:c44d:: with SMTP id n13mr529533edr.138.1606356747115;
-        Wed, 25 Nov 2020 18:12:27 -0800 (PST)
+        bh=81sqGxzuC6LNmogSg2JIcputtWB+AH0q5r5QvZXa8PQ=;
+        b=LSpqZ68EefXp/OwGJvjPwSmhzNvVJaB/MOWouk3tJJOCPzEHaGJ7rrQ5wycmL7VpEo
+         xbQs2mKz2RwW3I2IXQjPxbbDwK0BXVcNGNP3PsNmnIW/jBpSuBh/zo4py9mXRQFuq3p2
+         isWyagGKOgYX9lFF34BIxMH1B/t15yK4ZlWz41PRS/62ltMaUYBK7NdMBWAsZsHoUpdO
+         wvKe22iSSKmGrOw/zuVPhxp6R5Q/5fis5uSGCVw31cIERriwP9+WjjZyqvJJYeQqWI1O
+         47sdyqAk+6hKfzW0t4T7WbzREHjJCOCRYrbZfE96C2ggqkyZvxd0UFP+ILf0kcx+OR32
+         5T4Q==
+X-Gm-Message-State: AOAM5329mBbZCwePOeeOz+Acb7gco5wJn4K30XIPCyOUTS60b9oUrmFj
+        9E3+SMR18FSgJIzzENAtLtM=
+X-Google-Smtp-Source: ABdhPJwMOUjOf/52prfJJEGGtuS/jeOaophY3o4X5SswGyRyvEMcmmOFAf7es3Zy37GmH8woGKQEig==
+X-Received: by 2002:aa7:c6c3:: with SMTP id b3mr543116eds.84.1606356748922;
+        Wed, 25 Nov 2020 18:12:28 -0800 (PST)
 Received: from ansuel-xps20.localdomain (93-39-149-95.ip76.fastwebnet.it. [93.39.149.95])
-        by smtp.googlemail.com with ESMTPSA id d7sm417276edv.17.2020.11.25.18.12.25
+        by smtp.googlemail.com with ESMTPSA id d7sm417276edv.17.2020.11.25.18.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2020 18:12:26 -0800 (PST)
+        Wed, 25 Nov 2020 18:12:28 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Amit Kucheria <amitk@kernel.org>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
@@ -54,12 +54,12 @@ Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v7 2/8] drivers: thermal: tsens: Don't hardcode sensor slope
-Date:   Wed, 25 Nov 2020 18:48:19 +0100
-Message-Id: <20201125174826.24462-3-ansuelsmth@gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 3/8] drivers: thermal: tsens: Convert msm8960 to reg_field
+Date:   Wed, 25 Nov 2020 18:48:20 +0100
+Message-Id: <20201125174826.24462-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201125174826.24462-1-ansuelsmth@gmail.com>
 References: <20201125174826.24462-1-ansuelsmth@gmail.com>
@@ -69,30 +69,116 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Function compute_intercept_slope hardcode the sensor slope to
-SLOPE_DEFAULT. Change this and use the default value only if a slope is
-not defined. This is needed for tsens VER_0 that has a hardcoded slope
-table.
+Convert msm9860 driver to reg_field to use the init_common
+function.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/thermal/qcom/tsens.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/thermal/qcom/tsens-8960.c | 75 ++++++++++++++++++++++++++++++-
+ 1 file changed, 74 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index bda965b3ac05..80551e17cdbe 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -86,7 +86,8 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
- 			"%s: sensor%d - data_point1:%#x data_point2:%#x\n",
- 			__func__, i, p1[i], p2[i]);
+diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+index 2a28a5af209e..e383dc545bf0 100644
+--- a/drivers/thermal/qcom/tsens-8960.c
++++ b/drivers/thermal/qcom/tsens-8960.c
+@@ -51,11 +51,22 @@
+ #define MIN_LIMIT_TH		0x0
+ #define MAX_LIMIT_TH		0xff
  
--		priv->sensor[i].slope = SLOPE_DEFAULT;
-+		if (!priv->sensor[i].slope)
-+			priv->sensor[i].slope = SLOPE_DEFAULT;
- 		if (mode == TWO_PT_CALIB) {
- 			/*
- 			 * slope (m) = adc_code2 - adc_code1 (y2 - y1)/
+-#define S0_STATUS_ADDR		0x3628
+ #define INT_STATUS_ADDR		0x363c
+ #define TRDY_MASK		BIT(7)
+ #define TIMEOUT_US		100
+ 
++#define S0_STATUS_OFF		0x3628
++#define S1_STATUS_OFF		0x362c
++#define S2_STATUS_OFF		0x3630
++#define S3_STATUS_OFF		0x3634
++#define S4_STATUS_OFF		0x3638
++#define S5_STATUS_OFF		0x3664  /* Sensors 5-10 found on apq8064/msm8960 */
++#define S6_STATUS_OFF		0x3668
++#define S7_STATUS_OFF		0x366c
++#define S8_STATUS_OFF		0x3670
++#define S9_STATUS_OFF		0x3674
++#define S10_STATUS_OFF		0x3678
++
+ static int suspend_8960(struct tsens_priv *priv)
+ {
+ 	int ret;
+@@ -269,6 +280,66 @@ static int get_temp_8960(const struct tsens_sensor *s, int *temp)
+ 	return -ETIMEDOUT;
+ }
+ 
++static struct tsens_features tsens_8960_feat = {
++	.ver_major	= VER_0,
++	.crit_int	= 0,
++	.adc		= 1,
++	.srot_split	= 0,
++	.max_sensors	= 11,
++};
++
++static const struct reg_field tsens_8960_regfields[MAX_REGFIELDS] = {
++	/* ----- SROT ------ */
++	/* No VERSION information */
++
++	/* CNTL */
++	[TSENS_EN]     = REG_FIELD(CNTL_ADDR,  0, 0),
++	[TSENS_SW_RST] = REG_FIELD(CNTL_ADDR,  1, 1),
++	/* 8960 has 5 sensors, 8660 has 11, we only handle 5 */
++	[SENSOR_EN]    = REG_FIELD(CNTL_ADDR,  3, 7),
++
++	/* ----- TM ------ */
++	/* INTERRUPT ENABLE */
++	/* NO INTERRUPT ENABLE */
++
++	/* Single UPPER/LOWER TEMPERATURE THRESHOLD for all sensors */
++	[LOW_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR,  0,  7),
++	[UP_THRESH_0]    = REG_FIELD(THRESHOLD_ADDR,  8, 15),
++	[MIN_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR, 16, 23),
++	[MAX_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR, 24, 31),
++
++	/* UPPER/LOWER INTERRUPT [CLEAR/STATUS] */
++	/* 1 == clear, 0 == normal operation */
++	[LOW_INT_CLEAR_0]   = REG_FIELD(CNTL_ADDR,  9,  9),
++	[UP_INT_CLEAR_0]    = REG_FIELD(CNTL_ADDR, 10, 10),
++
++	/* NO CRITICAL INTERRUPT SUPPORT on 8960 */
++
++	/* Sn_STATUS */
++	[LAST_TEMP_0]  = REG_FIELD(S0_STATUS_OFF,  0,  7),
++	[LAST_TEMP_1]  = REG_FIELD(S1_STATUS_OFF,  0,  7),
++	[LAST_TEMP_2]  = REG_FIELD(S2_STATUS_OFF,  0,  7),
++	[LAST_TEMP_3]  = REG_FIELD(S3_STATUS_OFF,  0,  7),
++	[LAST_TEMP_4]  = REG_FIELD(S4_STATUS_OFF,  0,  7),
++	[LAST_TEMP_5]  = REG_FIELD(S5_STATUS_OFF,  0,  7),
++	[LAST_TEMP_6]  = REG_FIELD(S6_STATUS_OFF,  0,  7),
++	[LAST_TEMP_7]  = REG_FIELD(S7_STATUS_OFF,  0,  7),
++	[LAST_TEMP_8]  = REG_FIELD(S8_STATUS_OFF,  0,  7),
++	[LAST_TEMP_9]  = REG_FIELD(S9_STATUS_OFF,  0,  7),
++	[LAST_TEMP_10] = REG_FIELD(S10_STATUS_OFF, 0,  7),
++
++	/* No VALID field on 8960 */
++	/* TSENS_INT_STATUS bits: 1 == threshold violated */
++	[MIN_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 0, 0),
++	[LOWER_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 1, 1),
++	[UPPER_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 2, 2),
++	/* No CRITICAL field on 8960 */
++	[MAX_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 3, 3),
++
++	/* TRDY: 1=ready, 0=in progress */
++	[TRDY] = REG_FIELD(INT_STATUS_ADDR, 7, 7),
++};
++
+ static const struct tsens_ops ops_8960 = {
+ 	.init		= init_8960,
+ 	.calibrate	= calibrate_8960,
+@@ -282,4 +353,6 @@ static const struct tsens_ops ops_8960 = {
+ struct tsens_plat_data data_8960 = {
+ 	.num_sensors	= 11,
+ 	.ops		= &ops_8960,
++	.feat		= &tsens_8960_feat,
++	.fields		= tsens_8960_regfields,
+ };
 -- 
 2.29.2
 
