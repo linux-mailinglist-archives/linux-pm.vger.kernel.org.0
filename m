@@ -2,74 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B822C3A85
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 09:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E0E2C3BD4
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 10:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728168AbgKYIJT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Nov 2020 03:09:19 -0500
-Received: from mga14.intel.com ([192.55.52.115]:60172 "EHLO mga14.intel.com"
+        id S1726162AbgKYJSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Nov 2020 04:18:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:34394 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726788AbgKYIJT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 25 Nov 2020 03:09:19 -0500
-IronPort-SDR: SlnXGnSGkSdPCCEpHYOiEpvuLYvA0gXzSxps7l0KtTmV+7xriM3irRWbRDVh7HU5odNeUyGLbD
- 8AEbZtt3BrPg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9815"; a="171308887"
-X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
-   d="scan'208";a="171308887"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 00:09:18 -0800
-IronPort-SDR: 86ykC7dgvOHKt2RYbLrc+JeVaxAzHUL73SvgE0Ig+dHLXnxBUW3yvpM2Bxo5qmUV1elo+vb50H
- B8z52QfRh9hA==
-X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
-   d="scan'208";a="362239650"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 00:09:12 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 25 Nov 2020 10:09:10 +0200
-Date:   Wed, 25 Nov 2020 10:09:10 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v1 2/2] PM: ACPI: Refresh wakeup device power
- configuration every time
-Message-ID: <20201125080910.GC2532@lahna.fi.intel.com>
-References: <27714988.CF3CpBaniU@kreacher>
- <1717218.WU8ttdIIEu@kreacher>
+        id S1726103AbgKYJSP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Nov 2020 04:18:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31ABE106F;
+        Wed, 25 Nov 2020 01:18:15 -0800 (PST)
+Received: from [10.57.27.121] (unknown [10.57.27.121])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 455D73F70D;
+        Wed, 25 Nov 2020 01:18:13 -0800 (PST)
+Subject: Re: [PATCH 1/2] firmware: arm_scmi: Add power_scale_mw_get()
+ interface
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
+        cristian.marussi@arm.com, morten.rasmussen@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org
+References: <20201124104346.27167-1-lukasz.luba@arm.com>
+ <20201124104346.27167-2-lukasz.luba@arm.com>
+ <20201124165624.glxnmlxavq4bhppm@bogus>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <2a8a4fd0-dfb7-69a2-5bae-7b5c0d2a1e3e@arm.com>
+Date:   Wed, 25 Nov 2020 09:18:11 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1717218.WU8ttdIIEu@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20201124165624.glxnmlxavq4bhppm@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 08:46:38PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> When wakeup signaling is enabled for a bridge for the second (or every
-> next) time in a row, its existing device wakeup power configuration
-> may not match the new conditions.  For example, some devices below
-> it may have been put into low-power states and that changes the
-> device wakeup power conditions or similar.  This causes functional
-> problems to appear on some systems (for example,  because of it the
-> Thunderbolt port on Dell Precision 5550 cannot detect devices plugged
-> in after it has been suspended).
-> 
-> For this reason, modify __acpi_device_wakeup_enable() to refresh the
-> device wakeup power configuration of the target device on every
-> invocation, not just when it is called for that device first time
-> in a row.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+On 11/24/20 4:56 PM, Sudeep Holla wrote:
+> On Tue, Nov 24, 2020 at 10:43:45AM +0000, Lukasz Luba wrote:
+>> Add a new interface to the existing perf_ops and export the information
+>> about the power values scale.
+>>
+>> This would be used by the cpufreq driver and Energy Model framework to
+>> set the performance domains scale: milli-Watts or abstract scale.
+>>
+> 
+> Looks good to me. I saw this after I sent pull request this afternoon.
+> In case you want to take it via PM tree:
+> 
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> 
+
+Thank you Sudeep!
+
+Regards,
+Lukasz
+
