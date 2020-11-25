@@ -2,51 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C622C386F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 06:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6292C39F9
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 08:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726422AbgKYFU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Nov 2020 00:20:27 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:55135 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725845AbgKYFU0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 25 Nov 2020 00:20:26 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Cgq3D6M1Wz7N;
-        Wed, 25 Nov 2020 06:20:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1606281625; bh=a/ABNGQZUY2RgGIR/vdmzx0XrmZnqiHNCtmC0MrjZFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mykl1Et3yQzfukUn5nqFNlj2BSJ0GA9Cwp1c/Gn1FL7jQA8dBCAXkwHhQGVAuVrfd
-         4atSkIksYNABG3CAey/dUlq8ImlkZ9ovRO2raV/VXOxoGswEZ4vADra1+E7AMTUYOp
-         cc49WhFBBH1feyzuEQt2FmsntdzMGHG0Lz79ykj+dvAGwoEnY8x78TLfEt40kW3Z/Y
-         bM32L3blPi/yOJOjxdzK/Z155HrGpr/zcIT1GzRLgx/1UEAQxETbSLkPSxVaC0HzoT
-         sRd5BHhX2EP/qrQAM1aaqUUnVN5ObDTCB+72/C7h6cW/vFSZS7HGxURQmpG5MNSKtf
-         zMENKs9VgqFlQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.4 at mail
-Date:   Wed, 25 Nov 2020 06:20:20 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@puri.sm
-Subject: Re: [PATCH] power: bq25890: Use the correct range for IILIM register
-Message-ID: <20201125052020.GA13966@qmqm.qmqm.pl>
-References: <1780852.554hdvx4Kp@pliszka>
+        id S1727022AbgKYHTh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Nov 2020 02:19:37 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:46745 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726562AbgKYHTh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 02:19:37 -0500
+X-Originating-IP: 91.175.115.186
+Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 2F4F020004;
+        Wed, 25 Nov 2020 07:19:35 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        <Steen.Hegelund@microchip.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH v2 0/3]  Add reset support in ocelot driver for new platforms
+Date:   Wed, 25 Nov 2020 08:19:17 +0100
+Message-Id: <20201125071920.126978-1-gregory.clement@bootlin.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1780852.554hdvx4Kp@pliszka>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 04:48:05AM +0100, Sebastian Krzyszkowiak wrote:
-> I've checked bq25890, bq25892, bq25895 and bq25896 datasheets and
-> they all define IILIM to be between 100mA-3.25A with 50mA steps.
+Hello,
 
-That's what DS says, indeed. 
+This series extends reset support for 2 other MIPS based SoCs: Luton
+and Jaguar 2.
 
-Reviewed-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
+Patches 1 and 2 should be merged through the reset subsystem, while
+the device tree changes in patches 3 should go through the mips
+subsystem.
+
+In this second series I removed the microchip,reset-switch-core
+property support waiting for finding a butter solution for it.
+
+Changelog:
+
+ v1 -> v2:
+ - Add binding documentation for the 2 new SoC
+ - Fix compatible string in name device tree node
+ - Add Acked-by from Alexande
+
+Gregory
+
+Gregory CLEMENT (3):
+  dt-bindings: reset: ocelot: Add Luton and Jaguar2 support
+  power: reset: ocelot: Add support 2 other MIPS based SoCs
+  MIPS: dts: mscc: add reset support for Luton and Jaguar2
+
+ .../bindings/power/reset/ocelot-reset.txt     |  4 ++-
+ arch/mips/boot/dts/mscc/jaguar2.dtsi          |  5 ++++
+ arch/mips/boot/dts/mscc/luton.dtsi            |  5 ++++
+ drivers/power/reset/ocelot-reset.c            | 30 +++++++++++++++++--
+ 4 files changed, 40 insertions(+), 4 deletions(-)
+
+-- 
+2.29.2
+
