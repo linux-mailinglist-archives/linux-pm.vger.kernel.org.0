@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B672C4269
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 15:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1AB2C426B
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 15:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730062AbgKYOtS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Nov 2020 09:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S1730072AbgKYOtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Nov 2020 09:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730060AbgKYOtR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 09:49:17 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2940C0613D4;
-        Wed, 25 Nov 2020 06:49:17 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id w4so2602754pgg.13;
-        Wed, 25 Nov 2020 06:49:17 -0800 (PST)
+        with ESMTP id S1730060AbgKYOtV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 09:49:21 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499ECC0613D4;
+        Wed, 25 Nov 2020 06:49:21 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id r2so1225763pls.3;
+        Wed, 25 Nov 2020 06:49:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=M1I3F4x93QBnka2nDGMC5JfGYk1bQ37Bl9iSSpmaDtM=;
-        b=V6OKSBNQAvJAezd5Hag6RU+goMxEycQIFMoSvwEDmtYjQTm4niWguaDLAlkBibiR/V
-         meOjPykv6FOs3DnqRC1QTqE7M2xEHc6eXCw6pLVlKrZwdXL85Qt4CmR7p9076J6wR7YG
-         RQUnnkdBAQDle5moSc/Y3+GfSvgmc4hXU1jLZE2niBI9iXxTB8YVM0EVRnklvdgo46T9
-         LAb9pUsgjky9JeGXJhKCnteIZ+juI+LVRlkRrRDYrwaoXG+z57wCHwIFoKuVTpzZEJ5o
-         A5nSDhHUoNw6tH+SThvpHDoCaC+HBsV30hgEifYoql/vjXxhTFQMq2v6dmeZWq3fAeyP
-         bxJw==
+        bh=AIKPa1FL2cnfSTR46Lr5Q79oKqEZPubQ7TacswKWIKY=;
+        b=GVYg3xM20FqRqiKLB+pnHYwY7Og5m5L8mmEYsKuBbrpOtSSXH1IHLyeckTjRwAujBn
+         c67Ur9vcMH2Mie0E3MrpgQ/9gzeJpYRrZe27fCjvzZQyjqtg3aYY7m32WI5Fjzc2q5e6
+         4fD7Xw7oJL96BuIJ5pAq08D40uOr8Hu/3v2/lZz3cV02juIWJe9UvQdT/SWDMumOu+ez
+         X5I20Wjc/H6mdMI3yVmOdhxfpnhrLvAFKuiRf8FPFPWibkih3wjjXStBWidbvcE9zFxi
+         izpR9GsPeXQwzYrPeyP2NiQ2d5sOOF1HCi0mdAAegou9ogXaZISzjTlkLu8Fivfa6D0u
+         LfwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=M1I3F4x93QBnka2nDGMC5JfGYk1bQ37Bl9iSSpmaDtM=;
-        b=G9gcUZrCmmBpWumGAxjwWxwfbtB3VhzK78pUcdaMqzkLvYzt6p67Z8Cd8ToWYSEo3H
-         e6TWtoS3uIZqfEaOMA0/ezIQ3Sks2W3zIME6IMMQVwGuaKOoVxg8pIxKFAyuBxi236Z8
-         HoIxgTAAl5qkF30/M4hd0QePVfTnBG9gnaOqx3vBvgz6WazqV5RN0FxtX43WGAnoCtwm
-         g2vkkfOOAGSUKjuMnQHYZ03Zah9TvLw55Szl0c3bXrzX10UzC6UJlkWSSZhuhfIBbgRZ
-         tyRgIxlfW5D420COAgW12tTs5c1cyxR0QfmykgyrQxcHdBmgDAsdTU4q93LgEBYWS5ON
-         vjCQ==
-X-Gm-Message-State: AOAM531aD9NDiP2D8HjPOc+u4MvwpFp9s98OrolfIgF2NxUM+zt2LO8N
-        fn2Br0pr9GlC7Ef6C2DKmVg=
-X-Google-Smtp-Source: ABdhPJys2pndSbrJqWCmE3inBNlXC1mcUssPb95pqUUsVTS32Fiue1SiOq0yd36BjrpnyWawhAuDUg==
-X-Received: by 2002:a17:90a:e018:: with SMTP id u24mr4649278pjy.189.1606315757273;
-        Wed, 25 Nov 2020 06:49:17 -0800 (PST)
+        bh=AIKPa1FL2cnfSTR46Lr5Q79oKqEZPubQ7TacswKWIKY=;
+        b=npgQjLGFE/pzaulXJ70+polYLxrYa0AVYYnw7n1RUVxW9DAvvN6UEgZNsA9mf64c1L
+         f/Zavfi00k3J8dTpGdYofrkSKxPNmz+H100A+/EZJFrgBntNCqp/TlAGcdTH6saRzwzG
+         vhCeLjc/pjt45id1YMa2OkiLfTrCeUiuISfALm1/ueOzzCIDd4fVZwmtHUkHQ8Z7cuGP
+         2Puo8hcJEXX/IlrfLm0bQlzcrwBCkzs1WB9Hu50zGgJafMTcDsjhpHqmUDIGb0bzc/OY
+         TnkTqhLJ4EeMhAz+XiaLJyPCvpRKQv7LOny/Oy5GhdFoC1+b0Enz4P6X8cdywkwuHXNm
+         g0fQ==
+X-Gm-Message-State: AOAM532fEImrmUnPzb3SZUWRgh9NSFouZ51ZjjVBTtIsQD9XqH9dDAeN
+        KrGF56Avw216bNhRKGe2jpw=
+X-Google-Smtp-Source: ABdhPJyYy2zfmyhZSFhYhTYxi01YCv/nD705q1p/WRUWT9/V1nH3K3ts3Cf7mS9tbporYi1Yd9OuMQ==
+X-Received: by 2002:a17:902:b688:b029:d6:ad52:ffab with SMTP id c8-20020a170902b688b02900d6ad52ffabmr3480270pls.61.1606315760860;
+        Wed, 25 Nov 2020 06:49:20 -0800 (PST)
 Received: from localhost ([2405:6580:31a1:500:1ac0:4dff:fe39:5426])
-        by smtp.gmail.com with ESMTPSA id p6sm3385984pjt.13.2020.11.25.06.49.16
+        by smtp.gmail.com with ESMTPSA id 17sm2393448pfu.180.2020.11.25.06.49.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2020 06:49:16 -0800 (PST)
+        Wed, 25 Nov 2020 06:49:20 -0800 (PST)
 From:   Punit Agrawal <punitagrawal@gmail.com>
 To:     rjw@rjwysocki.net
 Cc:     Punit Agrawal <punitagrawal@gmail.com>, wei.huang2@amd.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bp@alien8.de, x86@kernel.org
-Subject: [RFC PATCH 2/4] cpufreq: acpi-cpufreq: Add processor to the ignore PSD override list
-Date:   Wed, 25 Nov 2020 23:48:45 +0900
-Message-Id: <20201125144847.3920-3-punitagrawal@gmail.com>
+        bp@alien8.de, x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: [RFC PATCH 3/4] x86/cpu: amd: Define processor families
+Date:   Wed, 25 Nov 2020 23:48:46 +0900
+Message-Id: <20201125144847.3920-4-punitagrawal@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201125144847.3920-1-punitagrawal@gmail.com>
 References: <20201125144847.3920-1-punitagrawal@gmail.com>
@@ -64,43 +65,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Booting Linux on a Zen2 based processor (family: 0x17, model: 0x60,
-stepping: 0x1) shows the following message in the logs -
+So far, the AMD processor identifier (family, models, stepping) are
+referred to by raw values making it easy to make mistakes. It is also
+harder to read and maintain. Additionally, these values are also being
+used in subsystems outside the arch code where not everybody maybe be
+as familiar with the processor identifiers.
 
-    acpi_cpufreq: overriding BIOS provided _PSD data
-
-Although commit 5368512abe08 ("acpi-cpufreq: Honor _PSD table setting
-on new AMD CPUs") indicates that the override is not required for Zen3
-onwards, it seems that domain information can be trusted even on
-certain earlier systems. Update the check, to skip the override for
-Zen2 processors known to work without the override.
+As a first step towards improving the status quo, add macros for the
+AMD processor families and propagate them through the existing
+cpu_device_id.h header used for this purpose.
 
 Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
-Cc: Wei Huang <wei.huang2@amd.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
 ---
- drivers/cpufreq/acpi-cpufreq.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/amd-family.h    | 18 ++++++++++++++++++
+ arch/x86/include/asm/cpu_device_id.h |  2 ++
+ 2 files changed, 20 insertions(+)
+ create mode 100644 arch/x86/include/asm/amd-family.h
 
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index b1e7df96d428..29f1cd93541e 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -198,8 +198,13 @@ static int override_acpi_psd(unsigned int cpu_id)
- 	if (c->x86_vendor == X86_VENDOR_AMD) {
- 		if (!check_amd_hwpstate_cpu(cpu_id))
- 			return false;
--
--		return c->x86 < 0x19;
-+		/*
-+		 * CPU's before Zen3 (except some Zen2) need the
-+		 * override.
-+		 */
-+		return (c->x86 < 0x19) &&
-+			!(c->x86 == 0x17 && c->x86_model == 0x60 &&
-+			  c->x86_stepping == 0x1);
- 	}
+diff --git a/arch/x86/include/asm/amd-family.h b/arch/x86/include/asm/amd-family.h
+new file mode 100644
+index 000000000000..dff4d13b8e74
+--- /dev/null
++++ b/arch/x86/include/asm/amd-family.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_AMD_FAMILY_H
++#define _ASM_X86_AMD_FAMILY_H
++
++#define AMD_FAM_K5			0x04
++#define AMD_FAM_K6			0x05
++#define AMD_FAM_K7			0x06
++#define AMD_FAM_K8			0x0F
++#define AMD_FAM_K10			0x10
++#define AMD_FAM_K8_K10_HYBRID		0x11
++#define AMD_FAM_LLANO			0x12
++#define AMD_FAM_BOBCAT			0x14
++#define AMD_FAM_BULLDOZER		0x15
++#define AMD_FAM_JAGUAR			0x16
++#define AMD_FAM_ZEN			0x17
++#define AMD_FAM_ZEN3			0x19
++
++#endif /* _ASM_X86_AMD_FAMILY_H */
+diff --git a/arch/x86/include/asm/cpu_device_id.h b/arch/x86/include/asm/cpu_device_id.h
+index eb8fcede9e3b..bbb48ba4c7ff 100644
+--- a/arch/x86/include/asm/cpu_device_id.h
++++ b/arch/x86/include/asm/cpu_device_id.h
+@@ -12,6 +12,8 @@
+ #include <linux/mod_devicetable.h>
+ /* Get the INTEL_FAM* model defines */
+ #include <asm/intel-family.h>
++/* Get the AMD model defines */
++#include <asm/amd-family.h>
+ /* And the X86_VENDOR_* ones */
+ #include <asm/processor.h>
  
- 	return false;
 -- 
 2.29.2
 
