@@ -2,40 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E1F2C4341
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 16:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64AC52C4398
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 16:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730779AbgKYPgs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Nov 2020 10:36:48 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39156 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730762AbgKYPgr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 10:36:47 -0500
-Received: by mail-ot1-f65.google.com with SMTP id z24so2571073oto.6;
-        Wed, 25 Nov 2020 07:36:46 -0800 (PST)
+        id S1731501AbgKYPjP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Nov 2020 10:39:15 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:33442 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731348AbgKYPjO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 10:39:14 -0500
+Received: by mail-oi1-f195.google.com with SMTP id k26so3294536oiw.0;
+        Wed, 25 Nov 2020 07:39:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QdWYEG6bO7REfLvFs+b2+Rv03aviCzC1Gj+Qcf4HxmE=;
-        b=qYNLxFGRnGAx4WbBMZdqKcO1yCxZonB7nYWCVSY/SZ/7oBL1/ZCyNJwhIbmOhibdHS
-         3RyIWbeWoytdECw+OQD0vmxCopzBsUg3voAjuMStnSWJnIaS5MJL8+rHKkEtAF85BZNv
-         EETC+ZkQ32Ymz6ayNm4rVO+EPeTWcvnM8U+Wb6tSv6pSJcSCmylrBKmJr5xwPxHjBoOO
-         NlXSqtAG2hZIzg1hZp0c0GwVWS7fn9BO6p683tjKusyNdUF2hgX/vA2F3EY4b/UIfolN
-         i4Uk1iFnTo50Odk756LGTcI+4aV6ExcI9gkDAATPVkgiayzqtuNO0Lp/mQQYYJgLwTF2
-         bi6w==
-X-Gm-Message-State: AOAM532ZPl9/p7NwKrZCFjAtFs0awjIwW656OAcWQBvVDpYgctAMmlOw
-        dmvB//3Z9symo6qndpCF0gUKkAzBhsmkrOVC2hk=
-X-Google-Smtp-Source: ABdhPJyFB8kcatLquZaRhm57RGkEio8a614ZZVcLM/xICN9Gau/Ge2wE3BIM0QhhOECIKeEBVh8tBfavTF8YISvOEy0=
-X-Received: by 2002:a05:6830:2385:: with SMTP id l5mr3177933ots.321.1606318605731;
- Wed, 25 Nov 2020 07:36:45 -0800 (PST)
+        bh=n5xSQTyUsJM93Omkz7IRjm41LBe2hmulti89Q+8iUXs=;
+        b=ABtTFa3RsfQBp8Ju1uQu2nHbV0aGhj8+8Df6jJC/bqx7stK9llVw6sBDwBcVbRVJCj
+         Iod1IidLLDPIG7f1N+WCcO9mtQSdmbKvQzHB4AO2ApyCMCYVjirY3qzE25S1OD7ozRbC
+         gCZu3Irb/78h9W+d70eT65M01VBOFRY5JpVSs1K+tSU2JHn73sU7FyzJPnaVER0Rxxr2
+         6nPK8DUtBDp04QSqvP1Zrncjo/rTDUEdEbOtGOKcqRTvwH86PgzBAW0iVpWFPz8EhDQt
+         7TonUUaz6DAyX1xcui7/ELxAzdQaV+64Ot+jSMScrlhnL1cnubTwsJmqIH8w89WqDrnp
+         V4sg==
+X-Gm-Message-State: AOAM531FblKBp4m2tIpNs84jfwVmjy5MbcX9TCY868Hrd7Nopnzb5F3l
+        X4HhsQGE/Byti6bZGS77AnZhVPzrkb4EqEWLKmc=
+X-Google-Smtp-Source: ABdhPJziNLz54izQ6PorN/fd02CYz9ZBBteVjfLTJ4T0xPBTJ5aNIs3FpFGRLIwojB7tpQIuX2j1IcgD0r0R4tePVhY=
+X-Received: by 2002:aca:da02:: with SMTP id r2mr2611827oig.157.1606318753021;
+ Wed, 25 Nov 2020 07:39:13 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1606198885.git.viresh.kumar@linaro.org> <f2eeee144a2e50540bff77d7bbe7351f154e2742.1606198885.git.viresh.kumar@linaro.org>
-In-Reply-To: <f2eeee144a2e50540bff77d7bbe7351f154e2742.1606198885.git.viresh.kumar@linaro.org>
+References: <cover.1606198885.git.viresh.kumar@linaro.org> <9a5442b916f9667e714dd84fe4e3fc26f8bcc887.1606198885.git.viresh.kumar@linaro.org>
+In-Reply-To: <9a5442b916f9667e714dd84fe4e3fc26f8bcc887.1606198885.git.viresh.kumar@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 Nov 2020 16:36:34 +0100
-Message-ID: <CAJZ5v0g=2EHGMFUWQ_4+SA6gZN-3s0KTxT9VfY+Ah30e0NfhVw@mail.gmail.com>
-Subject: Re: [PATCH V4 1/3] sched/core: Move schedutil_cpu_util() to core.c
+Date:   Wed, 25 Nov 2020 16:39:01 +0100
+Message-ID: <CAJZ5v0jp1Pana18qu_gQX9=dQZC-e4p87Q1jgh1jAqei5t7JmQ@mail.gmail.com>
+Subject: Re: [PATCH V4 2/3] sched/core: Rename schedutil_cpu_util() and allow
+ rest of the kernel to use it
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -57,294 +58,160 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Tue, Nov 24, 2020 at 7:26 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> There is nothing schedutil specific in schedutil_cpu_util(), move it to
-> core.c and define it only for CONFIG_SMP.
+> There is nothing schedutil specific in schedutil_cpu_util(), rename it
+> to effective_cpu_util(). Also create and expose another wrapper
+> sched_cpu_util() which can be used by other parts of the kernel, like
+> thermal core (that will be done in a later commit).
 >
 > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-For the schedutil part:
+For the schedutil change:
 
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 > ---
->  kernel/sched/core.c              | 108 +++++++++++++++++++++++++++++++
->  kernel/sched/cpufreq_schedutil.c | 106 ------------------------------
->  kernel/sched/sched.h             |  12 +---
->  3 files changed, 109 insertions(+), 117 deletions(-)
+>  include/linux/sched.h            | 21 +++++++++++++++++++++
+>  kernel/sched/core.c              | 11 +++++++++--
+>  kernel/sched/cpufreq_schedutil.c |  2 +-
+>  kernel/sched/fair.c              |  6 +++---
+>  kernel/sched/sched.h             | 19 ++-----------------
+>  5 files changed, 36 insertions(+), 23 deletions(-)
 >
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index d2003a7d5ab5..b81265aec4a0 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5117,6 +5117,114 @@ struct task_struct *idle_task(int cpu)
->         return cpu_rq(cpu)->idle;
->  }
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 063cd120b459..926b944dae5e 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1926,6 +1926,27 @@ extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
+>  #define TASK_SIZE_OF(tsk)      TASK_SIZE
+>  #endif
 >
 > +#ifdef CONFIG_SMP
-> +/*
-> + * This function computes an effective utilization for the given CPU, to be
-> + * used for frequency selection given the linear relation: f = u * f_max.
+> +/**
+> + * enum cpu_util_type - CPU utilization type
+> + * @FREQUENCY_UTIL:    Utilization used to select frequency
+> + * @ENERGY_UTIL:       Utilization used during energy calculation
 > + *
-> + * The scheduler tracks the following metrics:
-> + *
-> + *   cpu_util_{cfs,rt,dl,irq}()
-> + *   cpu_bw_dl()
-> + *
-> + * Where the cfs,rt and dl util numbers are tracked with the same metric and
-> + * synchronized windows and are thus directly comparable.
-> + *
-> + * The cfs,rt,dl utilization are the running times measured with rq->clock_task
-> + * which excludes things like IRQ and steal-time. These latter are then accrued
-> + * in the irq utilization.
-> + *
-> + * The DL bandwidth number otoh is not a measured metric but a value computed
-> + * based on the task model parameters and gives the minimal utilization
-> + * required to meet deadlines.
+> + * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
+> + * need to be aggregated differently depending on the usage made of them. This
+> + * enum is used within sched_cpu_util() to differentiate the types of
+> + * utilization expected by the callers, and adjust the aggregation accordingly.
 > + */
-> +unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
-> +                                unsigned long max, enum schedutil_type type,
-> +                                struct task_struct *p)
-> +{
-> +       unsigned long dl_util, util, irq;
-> +       struct rq *rq = cpu_rq(cpu);
+> +enum cpu_util_type {
+> +       FREQUENCY_UTIL,
+> +       ENERGY_UTIL,
+> +};
 > +
-> +       if (!uclamp_is_used() &&
-> +           type == FREQUENCY_UTIL && rt_rq_is_runnable(&rq->rt)) {
-> +               return max;
-> +       }
-> +
-> +       /*
-> +        * Early check to see if IRQ/steal time saturates the CPU, can be
-> +        * because of inaccuracies in how we track these -- see
-> +        * update_irq_load_avg().
-> +        */
-> +       irq = cpu_util_irq(rq);
-> +       if (unlikely(irq >= max))
-> +               return max;
-> +
-> +       /*
-> +        * Because the time spend on RT/DL tasks is visible as 'lost' time to
-> +        * CFS tasks and we use the same metric to track the effective
-> +        * utilization (PELT windows are synchronized) we can directly add them
-> +        * to obtain the CPU's actual utilization.
-> +        *
-> +        * CFS and RT utilization can be boosted or capped, depending on
-> +        * utilization clamp constraints requested by currently RUNNABLE
-> +        * tasks.
-> +        * When there are no CFS RUNNABLE tasks, clamps are released and
-> +        * frequency will be gracefully reduced with the utilization decay.
-> +        */
-> +       util = util_cfs + cpu_util_rt(rq);
-> +       if (type == FREQUENCY_UTIL)
-> +               util = uclamp_rq_util_with(rq, util, p);
-> +
-> +       dl_util = cpu_util_dl(rq);
-> +
-> +       /*
-> +        * For frequency selection we do not make cpu_util_dl() a permanent part
-> +        * of this sum because we want to use cpu_bw_dl() later on, but we need
-> +        * to check if the CFS+RT+DL sum is saturated (ie. no idle time) such
-> +        * that we select f_max when there is no idle time.
-> +        *
-> +        * NOTE: numerical errors or stop class might cause us to not quite hit
-> +        * saturation when we should -- something for later.
-> +        */
-> +       if (util + dl_util >= max)
-> +               return max;
-> +
-> +       /*
-> +        * OTOH, for energy computation we need the estimated running time, so
-> +        * include util_dl and ignore dl_bw.
-> +        */
-> +       if (type == ENERGY_UTIL)
-> +               util += dl_util;
-> +
-> +       /*
-> +        * There is still idle time; further improve the number by using the
-> +        * irq metric. Because IRQ/steal time is hidden from the task clock we
-> +        * need to scale the task numbers:
-> +        *
-> +        *              max - irq
-> +        *   U' = irq + --------- * U
-> +        *                 max
-> +        */
-> +       util = scale_irq_capacity(util, irq, max);
-> +       util += irq;
-> +
-> +       /*
-> +        * Bandwidth required by DEADLINE must always be granted while, for
-> +        * FAIR and RT, we use blocked utilization of IDLE CPUs as a mechanism
-> +        * to gracefully reduce the frequency when no tasks show up for longer
-> +        * periods of time.
-> +        *
-> +        * Ideally we would like to set bw_dl as min/guaranteed freq and util +
-> +        * bw_dl as requested freq. However, cpufreq is not yet ready for such
-> +        * an interface. So, we only do the latter for now.
-> +        */
-> +       if (type == FREQUENCY_UTIL)
-> +               util += cpu_bw_dl(rq);
-> +
-> +       return min(max, util);
-> +}
+> +/* Returns effective CPU utilization, as seen by the scheduler */
+> +unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
+> +                            unsigned long max);
 > +#endif /* CONFIG_SMP */
 > +
->  /**
->   * find_process_by_pid - find a process with a matching PID value.
->   * @pid: the pid in question.
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index e254745a82cb..2d44befb322b 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -169,112 +169,6 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
->         return cpufreq_driver_resolve_freq(policy, freq);
->  }
+>  #ifdef CONFIG_RSEQ
 >
-> -/*
-> - * This function computes an effective utilization for the given CPU, to be
-> - * used for frequency selection given the linear relation: f = u * f_max.
-> - *
-> - * The scheduler tracks the following metrics:
-> - *
-> - *   cpu_util_{cfs,rt,dl,irq}()
-> - *   cpu_bw_dl()
-> - *
-> - * Where the cfs,rt and dl util numbers are tracked with the same metric and
-> - * synchronized windows and are thus directly comparable.
-> - *
-> - * The cfs,rt,dl utilization are the running times measured with rq->clock_task
-> - * which excludes things like IRQ and steal-time. These latter are then accrued
-> - * in the irq utilization.
-> - *
-> - * The DL bandwidth number otoh is not a measured metric but a value computed
-> - * based on the task model parameters and gives the minimal utilization
-> - * required to meet deadlines.
-> - */
+>  /*
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index b81265aec4a0..845c976ccd53 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -5138,8 +5138,8 @@ struct task_struct *idle_task(int cpu)
+>   * based on the task model parameters and gives the minimal utilization
+>   * required to meet deadlines.
+>   */
 > -unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
 > -                                unsigned long max, enum schedutil_type type,
-> -                                struct task_struct *p)
-> -{
-> -       unsigned long dl_util, util, irq;
-> -       struct rq *rq = cpu_rq(cpu);
-> -
-> -       if (!uclamp_is_used() &&
-> -           type == FREQUENCY_UTIL && rt_rq_is_runnable(&rq->rt)) {
-> -               return max;
-> -       }
-> -
-> -       /*
-> -        * Early check to see if IRQ/steal time saturates the CPU, can be
-> -        * because of inaccuracies in how we track these -- see
-> -        * update_irq_load_avg().
-> -        */
-> -       irq = cpu_util_irq(rq);
-> -       if (unlikely(irq >= max))
-> -               return max;
-> -
-> -       /*
-> -        * Because the time spend on RT/DL tasks is visible as 'lost' time to
-> -        * CFS tasks and we use the same metric to track the effective
-> -        * utilization (PELT windows are synchronized) we can directly add them
-> -        * to obtain the CPU's actual utilization.
-> -        *
-> -        * CFS and RT utilization can be boosted or capped, depending on
-> -        * utilization clamp constraints requested by currently RUNNABLE
-> -        * tasks.
-> -        * When there are no CFS RUNNABLE tasks, clamps are released and
-> -        * frequency will be gracefully reduced with the utilization decay.
-> -        */
-> -       util = util_cfs + cpu_util_rt(rq);
-> -       if (type == FREQUENCY_UTIL)
-> -               util = uclamp_rq_util_with(rq, util, p);
-> -
-> -       dl_util = cpu_util_dl(rq);
-> -
-> -       /*
-> -        * For frequency selection we do not make cpu_util_dl() a permanent part
-> -        * of this sum because we want to use cpu_bw_dl() later on, but we need
-> -        * to check if the CFS+RT+DL sum is saturated (ie. no idle time) such
-> -        * that we select f_max when there is no idle time.
-> -        *
-> -        * NOTE: numerical errors or stop class might cause us to not quite hit
-> -        * saturation when we should -- something for later.
-> -        */
-> -       if (util + dl_util >= max)
-> -               return max;
-> -
-> -       /*
-> -        * OTOH, for energy computation we need the estimated running time, so
-> -        * include util_dl and ignore dl_bw.
-> -        */
-> -       if (type == ENERGY_UTIL)
-> -               util += dl_util;
-> -
-> -       /*
-> -        * There is still idle time; further improve the number by using the
-> -        * irq metric. Because IRQ/steal time is hidden from the task clock we
-> -        * need to scale the task numbers:
-> -        *
-> -        *              max - irq
-> -        *   U' = irq + --------- * U
-> -        *                 max
-> -        */
-> -       util = scale_irq_capacity(util, irq, max);
-> -       util += irq;
-> -
-> -       /*
-> -        * Bandwidth required by DEADLINE must always be granted while, for
-> -        * FAIR and RT, we use blocked utilization of IDLE CPUs as a mechanism
-> -        * to gracefully reduce the frequency when no tasks show up for longer
-> -        * periods of time.
-> -        *
-> -        * Ideally we would like to set bw_dl as min/guaranteed freq and util +
-> -        * bw_dl as requested freq. However, cpufreq is not yet ready for such
-> -        * an interface. So, we only do the latter for now.
-> -        */
-> -       if (type == FREQUENCY_UTIL)
-> -               util += cpu_bw_dl(rq);
-> -
-> -       return min(max, util);
-> -}
-> -
->  static unsigned long sugov_get_util(struct sugov_cpu *sg_cpu)
+> +unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+> +                                unsigned long max, enum cpu_util_type type,
+>                                  struct task_struct *p)
 >  {
->         struct rq *rq = cpu_rq(sg_cpu->cpu);
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index df80bfcea92e..0db6bcf0881f 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2484,7 +2484,6 @@ static inline unsigned long capacity_orig_of(int cpu)
->  {
->         return cpu_rq(cpu)->cpu_capacity_orig;
+>         unsigned long dl_util, util, irq;
+> @@ -5223,6 +5223,13 @@ unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
+>
+>         return min(max, util);
 >  }
-> -#endif
+> +
+> +unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
+> +                            unsigned long max)
+> +{
+> +       return effective_cpu_util(cpu, cpu_util_cfs(cpu_rq(cpu)), max, type,
+> +                                 NULL);
+> +}
+>  #endif /* CONFIG_SMP */
 >
 >  /**
->   * enum schedutil_type - CPU utilization type
-> @@ -2501,8 +2500,6 @@ enum schedutil_type {
->         ENERGY_UTIL,
->  };
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 2d44befb322b..e71627a3792b 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -178,7 +178,7 @@ static unsigned long sugov_get_util(struct sugov_cpu *sg_cpu)
+>         sg_cpu->max = max;
+>         sg_cpu->bw_dl = cpu_bw_dl(rq);
 >
-> -#ifdef CONFIG_CPU_FREQ_GOV_SCHEDUTIL
-> -
->  unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
->                                  unsigned long max, enum schedutil_type type,
->                                  struct task_struct *p);
-> @@ -2533,14 +2530,7 @@ static inline unsigned long cpu_util_rt(struct rq *rq)
->  {
->         return READ_ONCE(rq->avg_rt.util_avg);
+> -       return schedutil_cpu_util(sg_cpu->cpu, util, max, FREQUENCY_UTIL, NULL);
+> +       return effective_cpu_util(sg_cpu->cpu, util, max, FREQUENCY_UTIL, NULL);
 >  }
-> -#else /* CONFIG_CPU_FREQ_GOV_SCHEDUTIL */
-> -static inline unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
-> -                                unsigned long max, enum schedutil_type type,
-> -                                struct task_struct *p)
-> -{
-> -       return 0;
-> -}
-> -#endif /* CONFIG_CPU_FREQ_GOV_SCHEDUTIL */
-> +#endif
 >
->  #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
->  static inline unsigned long cpu_util_irq(struct rq *rq)
+>  /**
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 290f9e38378c..0e1c8eb7ad53 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6499,7 +6499,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+>                  * is already enough to scale the EM reported power
+>                  * consumption at the (eventually clamped) cpu_capacity.
+>                  */
+> -               sum_util += schedutil_cpu_util(cpu, util_cfs, cpu_cap,
+> +               sum_util += effective_cpu_util(cpu, util_cfs, cpu_cap,
+>                                                ENERGY_UTIL, NULL);
+>
+>                 /*
+> @@ -6509,7 +6509,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+>                  * NOTE: in case RT tasks are running, by default the
+>                  * FREQUENCY_UTIL's utilization can be max OPP.
+>                  */
+> -               cpu_util = schedutil_cpu_util(cpu, util_cfs, cpu_cap,
+> +               cpu_util = effective_cpu_util(cpu, util_cfs, cpu_cap,
+>                                               FREQUENCY_UTIL, tsk);
+>                 max_util = max(max_util, cpu_util);
+>         }
+> @@ -6607,7 +6607,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>                          * IOW, placing the task there would make the CPU
+>                          * overutilized. Take uclamp into account to see how
+>                          * much capacity we can get out of the CPU; this is
+> -                        * aligned with schedutil_cpu_util().
+> +                        * aligned with sched_cpu_util().
+>                          */
+>                         util = uclamp_rq_util_with(cpu_rq(cpu), util, p);
+>                         if (!fits_capacity(util, cpu_cap))
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 0db6bcf0881f..4fab3b930ace 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2485,23 +2485,8 @@ static inline unsigned long capacity_orig_of(int cpu)
+>         return cpu_rq(cpu)->cpu_capacity_orig;
+>  }
+>
+> -/**
+> - * enum schedutil_type - CPU utilization type
+> - * @FREQUENCY_UTIL:    Utilization used to select frequency
+> - * @ENERGY_UTIL:       Utilization used during energy calculation
+> - *
+> - * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
+> - * need to be aggregated differently depending on the usage made of them. This
+> - * enum is used within schedutil_freq_util() to differentiate the types of
+> - * utilization expected by the callers, and adjust the aggregation accordingly.
+> - */
+> -enum schedutil_type {
+> -       FREQUENCY_UTIL,
+> -       ENERGY_UTIL,
+> -};
+> -
+> -unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
+> -                                unsigned long max, enum schedutil_type type,
+> +unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+> +                                unsigned long max, enum cpu_util_type type,
+>                                  struct task_struct *p);
+>
+>  static inline unsigned long cpu_bw_dl(struct rq *rq)
 > --
 > 2.25.0.rc1.19.g042ed3e048af
 >
