@@ -2,191 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 314792C42B6
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 16:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E733F2C443C
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 16:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730142AbgKYPLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Nov 2020 10:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729640AbgKYPLi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Nov 2020 10:11:38 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C269C061A4F
-        for <linux-pm@vger.kernel.org>; Wed, 25 Nov 2020 07:11:31 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id a130so3154054oif.7
-        for <linux-pm@vger.kernel.org>; Wed, 25 Nov 2020 07:11:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KhouDFsqki7Gy7e25xqYBbfXim5cXw795bT1eo81Xzs=;
-        b=DhKi5OC8Ur4Zm2+OE+tFBLFuXfc8do+T1RzzHNu+Yog3JYYT2iwU28JYwWKu/qP8uz
-         plmqJV23D3qj1oFDX56KAJP9TsfE17RFe+hi4MQpRFAvIOWK1zxDGkykUkIDA71H/Ve+
-         Rsk6IS74+XnrhOWM9cGTKJzylovB0TXD4nI7inJjlCGKQCYfB2TIt88o3Ha8RJrCEUni
-         LUObNG0RGxeBKniI7QDu7Rh8j+Ye11zOPLJmXLUXXzc6kVpQyUYXVsUg7iWGyzx/DhOa
-         /Fo9AejZsd79AKZzl6JifI+9yJoozeEMTE00D2p44b7n6Ir2GhMlC49hdAgxjgsMga02
-         SzKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KhouDFsqki7Gy7e25xqYBbfXim5cXw795bT1eo81Xzs=;
-        b=b3Rma6koHsb03BN8sHwSXgtmrUAUUfGQSbWpzP4MJjv9lyVFiXhIksw6u86Op976US
-         McqZgEN0cj8xY6Epsqb5B46WBCNqLFZcj6C2WFYaaaHPhITliML4N3ZwfmCC1qnVIFKW
-         RTokSTmQaPnMZM4OalGFHkIqGRn38qNjEA8CSNfrhMZsnwBMK7BjxzyYzSZ+gH1yn56K
-         X2lZghvw3iujJRIx6eKeWLxEIt6VP8ImRoak6CfezBH0hrloFV0ttT0UoK4QBxEnBRmD
-         WTjm8xgZ4dP3CzskCLW/GA7AgVXKnQyMWkA2Sz/ryeeshRDg4nqEpx3fa4wNYkcMu1pf
-         1iEg==
-X-Gm-Message-State: AOAM532AX4dv4M/20SJXykOnIEGDXlbxGXlCjEFYBpqWDrzgAouZHyxu
-        4z6P6FUkH19GpxSSi3MSmmEMo3U+E2wo1N52kYP/EA==
-X-Google-Smtp-Source: ABdhPJx1C0mlZ1qHr6cS5D413otFJ7/k79MvTeKPZdG1JtfzZ4qqY9mjd3ubV4DYwBYgm4SdocaDNnM002LY6xZXrFo=
-X-Received: by 2002:aca:1110:: with SMTP id 16mr2489983oir.12.1606317089916;
- Wed, 25 Nov 2020 07:11:29 -0800 (PST)
+        id S1729153AbgKYPmL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Nov 2020 10:42:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53724 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730501AbgKYPgZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Nov 2020 10:36:25 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8966921D1A;
+        Wed, 25 Nov 2020 15:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606318584;
+        bh=RMrGW5fUW+s/0FXfRqugpnfe2Ya9KtsxGllhgvAD7i0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Aw+AJlSs8MfW4pDekDU0mEXzNzH7cz2w+yYif5/D2bTvg95jXrBcGVVT0s4Xvy597
+         rdn0c4suSfwRcH3Ry/H9HjOJGBCgfiFKFLxUGNOoCs2zT4tG2CmPfTQLULe6rUutvQ
+         HzzSt3owMP4L8S71s1nB13u/FrlD1+gHxyQZLX1Q=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 24/33] cpuidle: tegra: Annotate tegra_pm_set_cpu_in_lp2() with RCU_NONIDLE
+Date:   Wed, 25 Nov 2020 10:35:41 -0500
+Message-Id: <20201125153550.810101-24-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201125153550.810101-1-sashal@kernel.org>
+References: <20201125153550.810101-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <CAEGmHFFjV2UKm3L1G5JF6Ve47L1-aKBAGrCxN3pPX1HO9R-aUg@mail.gmail.com>
-In-Reply-To: <CAEGmHFFjV2UKm3L1G5JF6Ve47L1-aKBAGrCxN3pPX1HO9R-aUg@mail.gmail.com>
-From:   Furquan Shaikh <furquan@google.com>
-Date:   Wed, 25 Nov 2020 07:11:13 -0800
-Message-ID: <CAEGmHFHmYujYMRLxoyF8Vj4-HAWAqLwu9zCw2FJhJdgh1SKL0g@mail.gmail.com>
-Subject: Re: [RFC] ACPI PM during kernel poweroff/reboot
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Aaron Durbin <adurbin@google.com>,
-        Duncan Laurie <dlaurie@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 11:19 AM Furquan Shaikh <furquan@google.com> wrote:
->
-> On x86 Chromebooks, we have observed this issue for a long time now -
-> when the system is powered off or rebooted, ACPI PM is not invoked and
-> this results in PowerResource _OFF methods not being invoked for any
-> of the devices. The _OFF methods are invoked correctly in case of
-> suspend-to-idle (S0ix) and suspend-to-memory(S3). However, they do not
-> get invoked when `poweroff` or `reboot` are triggered.
->
-> One of the differences between suspend, hibernate and shutdown paths
-> in Linux kernel is that the shutdown path does not use the typical
-> device PM phases (prepare, freeze/suspend, poweroff) as used by
-> suspend/hibernate. Instead the shutdown path makes use of
-> .shutdown_pre() and .shutdown() callbacks.
->
-> If I understand correctly, .shutdown() has been around for a long time
-> and existed even before the PM callbacks were added. Thus,
-> pm->poweroff() and .shutdown() are supposed to be analogous and
-> consistent in the behavior. This is why runtime PM is disallowed by
-> device_shutdown() before it calls .shutdown() (i.e. to keep behavior
-> consistent for both paths). However, in practice, there are
-> differences in behavior for the pm->poweroff() and .shutdown() paths
-> since the shutdown path does not execute any PM domain operations.
->
-> Because of this difference in behavior, shutdown path never invokes
-> ACPI PM and thus the ACPI PowerResources are not turned off when the
-> system is rebooted or powered off (sleep S5). On Chromebooks, it is
-> critical to run the _OFF methods for poweroff/reboot in order to
-> ensure that the device power off sequencing requirements are met.
-> Currently, these requirements are violated which impact the
-> reliability of devices over the lifetime of the platform.
->
-> There are a few ways in which this can be addressed:
->
-> 1. Similar to the case of hibernation, a new
-> PMSG_POWEROFF/PM_EVENT_POWEROFF can be introduced to invoke device
-> power management phases using `dpm_suspend_start(PMSG_POWEROFF)` and
-> `dpm_suspend_end(PMSG_POWEROFF)`. However, as the shutdown path uses
-> the class/bus/driver .shutdown() callbacks, adding dpm phases for
-> poweroff complicates the order of operations. If the dpm phases are
-> run before .shutdown() callbacks, then it will result in the callbacks
-> accessing devices after they are powered off. If the .shutdown()
-> callbacks are run before dpm phases, then the pm->poweroff() calls are
-> made after the device shutdown is done. Since .shutdown() and
-> pm->poweroff() are supposed to be analogous, having both calls in the
-> shutdown path is not only redundant but also results in incorrect
-> behavior.
->
-> 2. Another option is to update device_shutdown() to make
-> pm_domain.poweroff calls after the class/bus/driver .shutdown() is
-> done. However, this suffers from the same problem as #1 above i.e. it
-> is redundant and creates conflicting order of operations.
->
-> 3. Third possible solution is to detach the device from the PM domain
-> after it is shutdown. Currently, device drivers perform a detach
-> operation only when the device is removed. However, in case of
-> poweroff/reboot as the device is already shutdown, detaching PM domain
-> will give it the opportunity to ensure that any power resources are
-> correctly turned off before the system shuts down.
->
-> Out of these, I think #3 makes the most sense as it does not introduce
-> any conflicting operations. I verified that the following diff results
-> in _OFF methods getting invoked in both poweroff and reboot cases:
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 94df2ba1bbed..e55d65fbb4a9 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -23,6 +23,7 @@
->  #include <linux/of_device.h>
->  #include <linux/genhd.h>
->  #include <linux/mutex.h>
-> +#include <linux/pm_domain.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/netdevice.h>
->  #include <linux/sched/signal.h>
-> @@ -3230,6 +3231,8 @@ void device_shutdown(void)
->                         dev->driver->shutdown(dev);
->                 }
->
-> +               dev_pm_domain_detach(dev, true);
-> +
->                 device_unlock(dev);
->                 if (parent)
->                         device_unlock(parent);
->
-> This was discussed on the mailing list some time back[1] in the
-> context of a different use case. However, the idea of detaching
-> devices (on any bus) from the PM domain during shutdown is important
-> to ensure correct power sequencing for the devices.
->
-> One of the concerns that was raised on the above thread was slowing
-> down the shutdown process when not needed. I think this can be handled
-> by adding a sysfs attribute to allow platforms to decide if they need
-> the ability to power off PM domains on shutdown/reboot path.
->
-> Questions that I am looking to get feedback/comments are:
->
-> 1. Is my assessment of the problem and understanding of the
-> .shutdown() and pm.poweroff() correct?
-> 2. Does the solution #3 i.e. detaching PM domain after shutting down
-> device on shutdown path makes sense?
-> 3. Are there other possible approaches to solve this problem that can
-> be explored?
-> 4. Do we still have the performance concern about the shutdown path? I
-> don=E2=80=99t think anything has changed since that thread, so this is
-> probably still true.
-> 5. Does the use of sysfs attribute make sense to let platform control
-> if it wants to detach PM domains on shutdown path?
->
-> Sorry about the long thread and thank you so much for your time!
->
-> Thanks,
-> Furquan
->
-> [1] https://lore.kernel.org/linux-pm/HE1PR04MB30046668C9F4FFAB5C07E693886=
-D0@HE1PR04MB3004.eurprd04.prod.outlook.com/T/#mbd80804857f38c66aa5e825cdd4b=
-61ba6b12317d
+From: Dmitry Osipenko <digetx@gmail.com>
 
-Hello,
+[ Upstream commit c39de538a06e76d89b7e598a71e16688009cd56c ]
 
-Gentle ping. Just wanted to check if there are any
-comments/suggestions on the proposal above or how this problem can be
-addressed. This has been one of the long standing problems impacting
-all ACPI-based Chrome OS devices.
+Annotate tegra_pm_set[clear]_cpu_in_lp2() with RCU_NONIDLE in order to
+fix lockdep warning about suspicious RCU usage of a spinlock during late
+idling phase.
 
-Thanks,
-Furquan
+ WARNING: suspicious RCU usage
+ ...
+ include/trace/events/lock.h:13 suspicious rcu_dereference_check() usage!
+ ...
+  (dump_stack) from (lock_acquire)
+  (lock_acquire) from (_raw_spin_lock)
+  (_raw_spin_lock) from (tegra_pm_set_cpu_in_lp2)
+  (tegra_pm_set_cpu_in_lp2) from (tegra_cpuidle_enter)
+  (tegra_cpuidle_enter) from (cpuidle_enter_state)
+  (cpuidle_enter_state) from (cpuidle_enter_state_coupled)
+  (cpuidle_enter_state_coupled) from (cpuidle_enter)
+  (cpuidle_enter) from (do_idle)
+ ...
+
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Reported-by: Peter Geis <pgwipeout@gmail.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/cpuidle/cpuidle-tegra.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+index e8956706a2917..191966dc8d023 100644
+--- a/drivers/cpuidle/cpuidle-tegra.c
++++ b/drivers/cpuidle/cpuidle-tegra.c
+@@ -189,7 +189,7 @@ static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+ 	}
+ 
+ 	local_fiq_disable();
+-	tegra_pm_set_cpu_in_lp2();
++	RCU_NONIDLE(tegra_pm_set_cpu_in_lp2());
+ 	cpu_pm_enter();
+ 
+ 	switch (index) {
+@@ -207,7 +207,7 @@ static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+ 	}
+ 
+ 	cpu_pm_exit();
+-	tegra_pm_clear_cpu_in_lp2();
++	RCU_NONIDLE(tegra_pm_clear_cpu_in_lp2());
+ 	local_fiq_enable();
+ 
+ 	return err ?: index;
+-- 
+2.27.0
+
