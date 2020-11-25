@@ -2,72 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A205B2C3845
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 05:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C622C386F
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Nov 2020 06:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727353AbgKYEtE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Nov 2020 23:49:04 -0500
-Received: from comms.puri.sm ([159.203.221.185]:48258 "EHLO comms.puri.sm"
+        id S1726422AbgKYFU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Nov 2020 00:20:27 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:55135 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727285AbgKYEtE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Nov 2020 23:49:04 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 0BECBE0399;
-        Tue, 24 Nov 2020 20:48:34 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id W_YMHONlpVnG; Tue, 24 Nov 2020 20:48:33 -0800 (PST)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Geordan Neukum <gneukum1@gmail.com>, linux-pm@vger.kernel.org,
+        id S1725845AbgKYFU0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Nov 2020 00:20:26 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Cgq3D6M1Wz7N;
+        Wed, 25 Nov 2020 06:20:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1606281625; bh=a/ABNGQZUY2RgGIR/vdmzx0XrmZnqiHNCtmC0MrjZFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mykl1Et3yQzfukUn5nqFNlj2BSJ0GA9Cwp1c/Gn1FL7jQA8dBCAXkwHhQGVAuVrfd
+         4atSkIksYNABG3CAey/dUlq8ImlkZ9ovRO2raV/VXOxoGswEZ4vADra1+E7AMTUYOp
+         cc49WhFBBH1feyzuEQt2FmsntdzMGHG0Lz79ykj+dvAGwoEnY8x78TLfEt40kW3Z/Y
+         bM32L3blPi/yOJOjxdzK/Z155HrGpr/zcIT1GzRLgx/1UEAQxETbSLkPSxVaC0HzoT
+         sRd5BHhX2EP/qrQAM1aaqUUnVN5ObDTCB+72/C7h6cW/vFSZS7HGxURQmpG5MNSKtf
+         zMENKs9VgqFlQ==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.4 at mail
+Date:   Wed, 25 Nov 2020 06:20:20 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@puri.sm
-Subject: [PATCH 4/4] power: max17042_battery: Export charge termination current property
-Date:   Wed, 25 Nov 2020 05:48:30 +0100
-Message-ID: <3900768.gxICSWkFWK@pliszka>
-In-Reply-To: <2264396.HPVdm0XNkV@pliszka>
-References: <2264396.HPVdm0XNkV@pliszka>
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] power: bq25890: Use the correct range for IILIM register
+Message-ID: <20201125052020.GA13966@qmqm.qmqm.pl>
+References: <1780852.554hdvx4Kp@pliszka>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1780852.554hdvx4Kp@pliszka>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The value is there, so let's export it.
+On Wed, Nov 25, 2020 at 04:48:05AM +0100, Sebastian Krzyszkowiak wrote:
+> I've checked bq25890, bq25892, bq25895 and bq25896 datasheets and
+> they all define IILIM to be between 100mA-3.25A with 50mA steps.
 
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
----
- drivers/power/supply/max17042_battery.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+That's what DS says, indeed. 
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 26f6f89eb648..79d4b5988360 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -78,6 +78,7 @@ static enum power_supply_property max17042_battery_props[] = {
- 	POWER_SUPPLY_PROP_CHARGE_FULL,
- 	POWER_SUPPLY_PROP_CHARGE_NOW,
- 	POWER_SUPPLY_PROP_CHARGE_COUNTER,
-+	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
- 	POWER_SUPPLY_PROP_TEMP,
- 	POWER_SUPPLY_PROP_TEMP_ALERT_MIN,
- 	POWER_SUPPLY_PROP_TEMP_ALERT_MAX,
-@@ -414,6 +415,14 @@ static int max17042_get_property(struct power_supply *psy,
- 			return -EINVAL;
- 		}
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-+		ret = regmap_read(map, MAX17042_ICHGTerm, &data);
-+		if (ret < 0)
-+			return ret;
-+
-+		data64 = data * 1562500ll;
-+		val->intval = div_s64(data64, chip->pdata->r_sns);
-+		break;
- 	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
- 		ret = regmap_read(map, MAX17042_TTE, &data);
- 		if (ret < 0)
--- 
-2.29.2
-
-
-
+Reviewed-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
