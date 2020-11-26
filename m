@@ -2,166 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5753D2C51C5
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 11:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5AA2C51CD
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 11:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387545AbgKZKG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 05:06:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:53512 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728268AbgKZKG5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Nov 2020 05:06:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F9B7D6E;
-        Thu, 26 Nov 2020 02:06:56 -0800 (PST)
-Received: from [10.57.29.239] (unknown [10.57.29.239])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89BC03F23F;
-        Thu, 26 Nov 2020 02:06:54 -0800 (PST)
-Subject: Re: [PATCH v3 4/4] powercap/drivers/dtpm: Add CPU energy model based
- support
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, corbet@lwn.net, ulf.hansson@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ilina@codeaurora.org, rkumbako@codeaurora.org, rui.zhang@intel.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20201123214208.11007-1-daniel.lezcano@linaro.org>
- <20201123214208.11007-5-daniel.lezcano@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <50db7265-3870-b977-6e41-b0a0ac3cdb94@arm.com>
-Date:   Thu, 26 Nov 2020 10:06:52 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1732883AbgKZKJN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 05:09:13 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:38849 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbgKZKJM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 05:09:12 -0500
+Received: by mail-lf1-f67.google.com with SMTP id s27so1709961lfp.5;
+        Thu, 26 Nov 2020 02:09:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=eW8rVlKYblufr25dJFt7P8D/4U9Fps3APdQ1oTwqjCs=;
+        b=lvnyTXi7x19r7yAZR7zs24HZLjXhI0gZqXkV78xSQdQb0n/qzXGdT2sbPROWSfyRZI
+         AOBMva13vFYAr7Ui3xVum6n8l9q37EqPiRO9GsSPKFVA4o55G6DyHAW0cK4fJPU6UPYA
+         wIIKK93jszIL0i2N1mzTKss+wJlbP08Ee7AXCXWFQm56ssuyHkWbmytWHDsfiP7TfPXp
+         6lvBOOe+QE3vyXxHptEojx7Vy3krj5uYF2V3P50JBiPVhNyXaZMlvdlQ38a6ZjqzJw5m
+         c2HguQKieRJqX/JapI9f6gLfh2X+wttVAgHzgFMcdnrqLTON+GPm53x0n9CNNsXOGwlm
+         oyQg==
+X-Gm-Message-State: AOAM530iVfxwN3sHRspu1838Vzia5H8er/stBATWZRCMRRVeyfW9VjfB
+        E0HflmEp11EZEAw7tBqtjqQ=
+X-Google-Smtp-Source: ABdhPJzkbLnKETyLBzbhFeI2tWkn6WN7SO2lO80StzAh2q1hwm1lUCT65bECHok74zGz05HahLXZVg==
+X-Received: by 2002:a05:6512:3f6:: with SMTP id n22mr1008390lfq.393.1606385348714;
+        Thu, 26 Nov 2020 02:09:08 -0800 (PST)
+Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id o17sm254173lfg.136.2020.11.26.02.09.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2020 02:09:07 -0800 (PST)
+Date:   Thu, 26 Nov 2020 12:09:01 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [RFC PATCH 0/2] power: supply: Add some fuel-gauge logic
+Message-ID: <cover.1606384967.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-In-Reply-To: <20201123214208.11007-5-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Sorry folks - I picked you as recipients just because I saw
+your name in few recent commits to power-supply (well,
+obviously Sebastian would have been picked anyways). I assumed
+you could have something to say in here. Please let me know if you
+wish to be dropped from CC if this gets any further.
 
-On 11/23/20 9:42 PM, Daniel Lezcano wrote:
-> With the powercap dtpm controller, we are able to plug devices with
-> power limitation features in the tree.
-> 
 
-[snip]
 
-> +
-> +static void pd_release(struct dtpm *dtpm)
-> +{
-> +	struct dtpm_cpu *dtpm_cpu = dtpm->private;
-> +
+power: supply: add sw-gauge for SOC estimation and CC correction
 
-Maybe it's worth to add:
-------------------->8----------------
-if (freq_qos_request_active(&dtpm_cpu->qos_req))
-	freq_qos_remove_request(&dtpm_cpu->qos_req);
--------------------8<---------------
+I have couple of ROHM PMIC drivers for devices with battery charger
+and coulomb counter in device. Some users have asked me if these
+drivers could be added upstream - and I actually think it would help
+people. While evaluating these drivers I saw they do implement
+some fuel-gauging/CC correcting logic - which might be useful for
+other similar ICs. Hence I am wondering if I should try pulling the
+logic out of IC drivers to power-supply core while leaving just IC
+specific code in drivers. This RFC is first result for pulling the
+logic out of drivers.
 
-If we are trying to unregister dtpm in error path due to freq_qos
-registration failure, a warning would be emitted from freq_qos.
+The goal of this RFC is really to clarify if I should just abandon
+this idea and keep this logic in charger-driver(s) - or if there
+already is some "de-facto" way of achieving the same (in which
+case I should again abandon this and get new direction).
 
-> +	freq_qos_remove_request(&dtpm_cpu->qos_req);
-> +	kfree(dtpm_cpu);
-> +}
+In other words, this is an early state RFC for adding some
+fuel-gauge logic to power-supply core. I would highly appreciate if
+the idea of adding _something_ like this was first discussed and
+evaluated. This RFC has only been compile-tested this far so no
+accurate reviewing or "acceptance" for this version is requested.
+The code may still have few issues here and there...  So instead of
+asking for proper code review here, I am overall asking if this
+kind of functionality would be welcome in power-supply core, and if
+yes - then I would like to get some overall direction for this.
+I am for example wondering if this should be added as a own entity
+which uses power-supply class underneath (in a way this RFC
+introduces it) - or if it should be meld in existing power-supply
+class. But there's no point in pondering this if this kind of
+functionality has no chance being accepted :)
 
-[snip]
+Is seen as potentially useful feature which should be
+in-kernel? (I think this has it's place in-kernel as HW details
+like coulomb-counter adjustment should really not be something
+user-space should care. Another reason is that few low-power
+embedded devices actually do periodical wake-up from suspend/
+other low-power states just to do CC adjustment - even though
+the wake-up costs some power. If this is ever to be supported
+by mainline kernel - then waking up the whole user-space just
+to do this CC adjustment iteration is not preferable. But that
+wake-up is not covered by this RFC, it is just one motvation
+behind putting this in-kernel - where it in my opinion would be
+better to be generic and available for all ICs than written in
+each IC specific driver).
 
-> +
-> +static int cpuhp_dtpm_cpu_online(unsigned int cpu)
-> +{
-> +	struct dtpm *dtpm;
-> +	struct dtpm_cpu *dtpm_cpu;
-> +	struct cpufreq_policy *policy;
-> +	struct em_perf_domain *pd;
-> +	char name[CPUFREQ_NAME_LEN];
-> +	int ret;
-> +
-> +	policy = cpufreq_cpu_get(cpu);
-> +
-> +	if (!policy)
-> +		return 0;
-> +
-> +	pd = em_cpu_get(cpu);
-> +	if (!pd)
-> +		return -EINVAL;
-> +
-> +	dtpm = per_cpu(dtpm_per_cpu, cpu);
-> +	if (dtpm)
-> +		return power_add(dtpm, pd);
-> +
-> +	dtpm = dtpm_alloc(&dtpm_ops);
-> +	if (!dtpm)
-> +		return -EINVAL;
-> +
-> +	dtpm_cpu = kzalloc(sizeof(dtpm_cpu), GFP_KERNEL);
-> +	if (!dtpm_cpu) {
-> +		kfree(dtpm);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	dtpm->private = dtpm_cpu;
-> +	dtpm_cpu->cpu = cpu;
-> +
-> +	for_each_cpu(cpu, policy->related_cpus)
-> +		per_cpu(dtpm_per_cpu, cpu) = dtpm;
-> +
-> +	sprintf(name, "cpu%d", dtpm_cpu->cpu);
-> +
-> +	ret = dtpm_register(name, dtpm, __parent);
-> +	if (ret)
-> +		goto out_kfree_dtpm_cpu;
-> +
-> +	ret = power_add(dtpm, pd);
-> +	if (ret)
-> +		goto out_power_sub;
+Oh, please let me know if you wish to see some more documentation,
+I can try adding something in Documentation folder too.
 
-Shouldn't we call dtpm_unregister() instead?
-The dtpm_unregister() would remove the zone, which IIUC we
-are currently missing.
+Anyways, enough of babbling for now - thanks for reading all the
+way here:)
 
-> +
-> +	ret = freq_qos_add_request(&policy->constraints,
-> +				   &dtpm_cpu->qos_req, FREQ_QOS_MAX,
-> +				   pd->table[pd->nr_perf_states - 1].frequency);
-> +	if (ret)
-> +		goto out_dtpm_unregister;
 
-Could this trigger different steps, starting from out_power_sub_v2
-below?
+Matti Vaittinen (2):
+  power: supply: add cap2ocv batinfo helper
+  power: supply: add sw-gauge for SOC estimation and CC correction
 
-> +
-> +	return 0;
-> +
-> +out_dtpm_unregister:
-> +	dtpm_unregister(dtpm);
-> +	dtpm_cpu = NULL; /* Already freed by the release ops */
-> +out_power_sub:
-> +	power_sub(dtpm, pd);
+ drivers/power/supply/Kconfig                |   8 +
+ drivers/power/supply/Makefile               |   1 +
+ drivers/power/supply/power_supply_core.c    |  51 ++
+ drivers/power/supply/power_supply_swgauge.c | 808 ++++++++++++++++++++
+ include/linux/power/sw_gauge.h              | 203 +++++
+ include/linux/power_supply.h                |  11 +
+ 6 files changed, 1082 insertions(+)
+ create mode 100644 drivers/power/supply/power_supply_swgauge.c
+ create mode 100644 include/linux/power/sw_gauge.h
 
-I would change the order of these two above into something like:
 
-out_power_sub_v2:
-	power_sub(dtpm, pd);
-out_dtpm_unregister_v2:
-	dtpm_unregister(dtpm);
-	dtpm_cpu = NULL;
+base-commit: 09162bc32c880a791c6c0668ce0745cf7958f576
+-- 
+2.25.4
 
-> +out_kfree_dtpm_cpu:
-> +	for_each_cpu(cpu, policy->related_cpus)
-> +		per_cpu(dtpm_per_cpu, cpu) = NULL;
-> +	kfree(dtpm_cpu);
-> +
-> +	return ret;
-> +}
 
-IIUC power_sub() would decrement the power and set it to 0 for that
-dtmp, then the dtpm_unregister() would also try to decrement the power,
-but by the value of 0. So it should be safe.
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-Regards,
-Lukasz
-
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
