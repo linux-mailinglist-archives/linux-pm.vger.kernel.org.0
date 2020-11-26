@@ -2,63 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DB02C53E0
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 13:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B699F2C5436
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 13:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbgKZMUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 07:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbgKZMUk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 07:20:40 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CC3C0617A7
-        for <linux-pm@vger.kernel.org>; Thu, 26 Nov 2020 04:20:40 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id g14so1896111wrm.13
-        for <linux-pm@vger.kernel.org>; Thu, 26 Nov 2020 04:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=I1UeLhK5lkQUqckNmvEUJhsql5YPBYYgHazHv8lUUUU=;
-        b=uJfDXMDZnxJTIwPzTRofjOQ6csb2iWvSHYxuSNZjQ956VRMK9y4wUe1LNnD2eadr+O
-         2BUFCHRIH1okWoDHgKaeGGcKlteYmwFI8/8rLWKeZAY5gVgKloHTfTnhpdWrMftj8h/X
-         wZz3edoQ+6WKNoIEUt9l7MGOHo9TOxUDNZ4ft1uRwVYQG+IoC9maSsxlb3UsZSSkzOGa
-         MfisXrWQo6aSqZ1TAuSn8LCru83gZreYdYvob/CsrkllRxRbqC68IMHO0WOwLTazxUaJ
-         Zs3HB4S+gpSFWV6qJjUClFxm74hpOr+hy3w9UmPh8LhBtVy/xsBqbWl9UZaoSK7zPqOu
-         QoEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=I1UeLhK5lkQUqckNmvEUJhsql5YPBYYgHazHv8lUUUU=;
-        b=GqL0dZQelGH4NNdUmCg3xzBAxx57iMCvfQ8p7BXi/tSBxuF2HI24SyZggqF9RFTVLH
-         gi/W8IzbsfA+/BwZtanWGzbv9nI1J6bOgzNHVFv2dcEE/IjR/CLVtUaYGBmS0BbwuPtZ
-         AUNwsoNS/nfcVJCHnTlEfp7RPdJSVJktOvncreUlfZdsm5RC7NH5nRofFO7ooZOmZQgO
-         tHJDhFb0ojQ8FJZiKDt+k14HmaUPsGfAeG74LkWzgsPzHZ7paEhAlYgKdPs4CAIyEc8M
-         EJ2/YqHSgyichaeCxlatJyp3KThN0bj7dJkKT3m/73Fk4MeCx1cv0UUefxRTDwV5GAI5
-         Y3Bg==
-X-Gm-Message-State: AOAM533hAv5D0yT+7A5HJXeTlajQk58MJBkzX62sly/5QwKftsaBcKFr
-        QtZqItiIL60hL6kvCwxT4d/iMQ==
-X-Google-Smtp-Source: ABdhPJyFsR5iWagJrLMSBiKU/iHYYfx3vRdcZJkFceccaNGTO2pBE7QpnOJDOLlPaApTXZUHnsN0Lg==
-X-Received: by 2002:adf:ec8a:: with SMTP id z10mr3621132wrn.113.1606393238890;
-        Thu, 26 Nov 2020 04:20:38 -0800 (PST)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id f5sm9060135wmj.17.2020.11.26.04.20.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Nov 2020 04:20:38 -0800 (PST)
-Subject: Re: [PATCH 0/5] Consolidate RPM interconnect and support to MSM8939
-To:     Jun Nie <jun.nie@linaro.org>, devicetree@vger.kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh@kernel.org
-Cc:     shawn.guo@linaro.org
-References: <20200930081645.3434-1-jun.nie@linaro.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Message-ID: <43318c75-cfe2-d219-2ea4-7a130ea5883b@linaro.org>
-Date:   Thu, 26 Nov 2020 14:20:39 +0200
+        id S2388291AbgKZMtz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 07:49:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:59850 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727372AbgKZMtz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Nov 2020 07:49:55 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE0D61478;
+        Thu, 26 Nov 2020 04:49:54 -0800 (PST)
+Received: from [10.57.29.239] (unknown [10.57.29.239])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 602163F71F;
+        Thu, 26 Nov 2020 04:49:53 -0800 (PST)
+Subject: Re: [PATCH v4 0/3] Improve the estimations in Intelligent Power
+ Allocation
+To:     daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        amitk@kernel.org, Dietmar.Eggemann@arm.com, ionela.voinescu@arm.com
+References: <20201124161025.27694-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <e953e887-0fc7-8375-9e5d-1be339f48216@arm.com>
+Date:   Thu, 26 Nov 2020 12:49:51 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200930081645.3434-1-jun.nie@linaro.org>
+In-Reply-To: <20201124161025.27694-1-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -66,14 +37,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/30/20 11:16, Jun Nie wrote:
-> This patch set split shared RPM based interconnect operation code and add
-> support to MSM8939 interconnect.
+Hi Daniel,
+
+On 11/24/20 4:10 PM, Lukasz Luba wrote:
+> Hi all,
+> 
+> The Intelligent Power Allocation (IPA) estimates the needed coefficients for
+> internal algorithm. It can also estimate the sustainable power value when the
+> DT has not provided one. Fix the 'k_i' coefficient which might be to big
+> related to the other values, when the sustainable power is in an abstract
+> scale. Do the estimation of sustainable power only once and avoid expensive
+> calculation every time the IPA is called. Do the estimation of PID constants
+> when there was user update via sysfs to sustainable power.
+> 
+> The patch set should apply on top next-20201124
+> 
+> Changes:
+> v4:
+> - added new function get_sustainable_power() which handles use cases
+>    when the value should be estimated again or simply returned
+> - added sustainable_power in the power_allocator_params to track if there
+>    was a change to sustainable_power by the user via sysfs
+> - addressed Daniel's comments that sustainable power set via sysfs should
+>    trigger PID coefficients estimation
+> - removed 'force' argument from estimate_pid_constants() and make it ready
+>    for updates due to new value for sust. power from sysfs
+> - abandoned the design from v3 with a single function responsible for
+>    estimation both sust. power and PID const. requested by Ionela
+> v3 [1]:
+> - changed estimate_pid_constants to estimate_tzp_constants and related comments
+> - estimate the PID coefficients always together with sust. power
+> - added print indicating that we are estimating sust. power and PID const.
+> - don't use local variable 'sustainable_power'
+> 
+> Regards,
+> Lukasz Luba
+> 
+> [1] https://lore.kernel.org/lkml/20201009135850.14727-1-lukasz.luba@arm.com/
+> 
+> Lukasz Luba (3):
+>    thermal: power allocator: change the 'k_i' coefficient estimation
+>    thermal: power allocator: refactor sustainable power estimation
+>    thermal: power allocator: change the 'k_*' always in
+>      estimate_pid_constants()
+> 
+>   drivers/thermal/gov_power_allocator.c | 76 +++++++++++++++++----------
+>   1 file changed, 49 insertions(+), 27 deletions(-)
 > 
 
-Hi Jun,
+Gentle ping. This is a self contained change to only power allocator
+file. It addresses also your requirement regarding sustainable_power
+changed via sysfs.
 
-Are you planning to refresh this patchset?
+Could you take it please? It should apply smoothly in your tree.
 
-Thanks,
-Georgi
+Regards,
+Lukasz
