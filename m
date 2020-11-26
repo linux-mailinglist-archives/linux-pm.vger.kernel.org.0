@@ -2,201 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA1E2C5B63
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89EF2C5B90
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404668AbgKZSD3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 13:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404665AbgKZSD3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:03:29 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A36C0613D4
-        for <linux-pm@vger.kernel.org>; Thu, 26 Nov 2020 10:03:29 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id q10so2286227pfn.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 Nov 2020 10:03:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=XAfoDnHf7/v5ik8wk3VKCzb4E6qDN446R6WEyegBiCo=;
-        b=TXN7/bBaNNvrljup0JwbkqrSpiNf+BwzQBd4/T7/edg3axa6ejEJf3NU+9mnldbbr9
-         JN0LNRy8hTcMtpy648Jb/HpCbkBWVjd8TGu3DUTNuqfu1EnZ44417mSYciDso0sc61xm
-         xujfZ6CLvw0OmwHXucCwlXhmltlULbH4h4epNvr4zKLHUdbNfeHNa4DNnuqK8vxjQZZR
-         cNKp2czjlk97rg1yildbbh0gzI7ZBjLB2dD1DmX/YimmPd9RpUGfmXK2DOrNiSwos2Ov
-         X9KWOKp/paMfU8PgMt2HtMk9NV6G5OHvsDjwAbJgPEUj7KVAdVEiykQeHO3tp9C8abbT
-         XCAg==
+        id S2404488AbgKZSGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 13:06:50 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:44466 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391576AbgKZSGu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:06:50 -0500
+Received: by mail-wr1-f66.google.com with SMTP id 64so3045505wra.11;
+        Thu, 26 Nov 2020 10:06:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=XAfoDnHf7/v5ik8wk3VKCzb4E6qDN446R6WEyegBiCo=;
-        b=s7yTmTeP6nCbWurIGGPUct82WvM9UAjk2gizKfTdK/2Oovji5LoqAIGsUdKREJvkfR
-         kHy+RFoxWyB7dT+L+E2V/Rnv5YYAdZF5rukvLTOWm8Q//9HRSir63UIbxMldLllzlH0f
-         GEsVPIdz1Am1LR1T81yBqfYMfW+T04T1qslmQdincYnfITxx2u07JJ9DSuocm0lqcvKR
-         PkCbm9x6frYM7IG4Fb1K4AJ7/6lefkJkAnDT38f4IW9gebaLiXB1bmUW0tKWQmCNbxlR
-         PCbbI+HK3XOvFEEfAN1PbdNanLFP1Ndke+f42aePUDRZbXHBBWqUnm5LQ5xo6zR1jng7
-         WnQg==
-X-Gm-Message-State: AOAM531eH4OJMtP00xh1Zuq2IoJ6BSqOC29sevdV8o9IcHaSVxkxvvFk
-        dPiEe/oMM1sDlpyq+KkGapX/yg==
-X-Google-Smtp-Source: ABdhPJyACms/g7x+rxTf/ZsGzw1aTWovZfbzTgdlTg+bn6xDJeygjbIijwPO6mF8EDmeniWjI+W3NQ==
-X-Received: by 2002:a17:90a:154a:: with SMTP id y10mr5006491pja.6.1606413806446;
-        Thu, 26 Nov 2020 10:03:26 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i29sm5123690pgb.10.2020.11.26.10.03.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1QLKFnMd0xMr/FuISvhLJSJ7sMuGt7dY11QW5pCEZlM=;
+        b=t/JeBsIPKAQIbE5npPqhfKbrOsY3lY448eZ0DyltN66XMoagQ6K73CyE+vc/k3LIJd
+         ezPlTXs6UJT9eWg1pt8GwaUzyT/rWaOHTLXMiL9X+fk35nBlFqV/SapWFU91naRUOZSZ
+         9JoFolQ2kC4JV9DIn511e6xqiBDI/NH8yOUOX7fraVndXVfiQEjFXhXwmjeJjUq74JEM
+         07ym/k9PVjVyLByDPNFxTgP6c66R0Ok3fDTtMtTlKSXF5D8axindYu9QTl0GxHdCPcb6
+         xFkIxrtTHEhnHCm+vFcwtzFDy2R9ruQTqleba++ZSDHtrdWIYAFfO4hxqg7b6kFUo4dU
+         UcuQ==
+X-Gm-Message-State: AOAM5335sdaEkEWztE0trF8Z85hnmkShuvdHWuPBONFXlOM2fO7RS1dU
+        eeSlOEUZvlCbAGMKfthdXNk=
+X-Google-Smtp-Source: ABdhPJwJIzd4XnJQtTCHV2LiRu+9UIhtQQYRHVWoL0G78pv9E0vIbZE77Fy9quW92PvulxW+y/CkuQ==
+X-Received: by 2002:adf:ec8a:: with SMTP id z10mr5467457wrn.113.1606414006586;
+        Thu, 26 Nov 2020 10:06:46 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id o5sm9374179wmh.8.2020.11.26.10.06.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2020 10:03:25 -0800 (PST)
-Message-ID: <5fbfeded.1c69fb81.ea601.c990@mx.google.com>
-Date:   Thu, 26 Nov 2020 10:03:25 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 26 Nov 2020 10:06:45 -0800 (PST)
+Date:   Thu, 26 Nov 2020 19:06:43 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 17/47] dt-bindings: memory: tegra20: Add memory client
+ IDs
+Message-ID: <20201126180643.GA18074@kozik-lap>
+References: <20201104164923.21238-1-digetx@gmail.com>
+ <20201104164923.21238-18-digetx@gmail.com>
+ <X7/lLaZJNp+Vfczk@ulmo>
+ <20201126173922.GA7048@kozik-lap>
+ <X7/tz8KwCBEgA6vi@ulmo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: pm-5.10-rc6-75-g735f7fba25ec
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 11 warnings (pm-5.10-rc6-75-g735f7fba25ec)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <X7/tz8KwCBEgA6vi@ulmo>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (pm-5.10-rc6-75=
--g735f7fba25ec)
+On Thu, Nov 26, 2020 at 07:02:55PM +0100, Thierry Reding wrote:
+> On Thu, Nov 26, 2020 at 06:39:22PM +0100, Krzysztof Kozlowski wrote:
+> > On Thu, Nov 26, 2020 at 06:26:05PM +0100, Thierry Reding wrote:
+> > > On Wed, Nov 04, 2020 at 07:48:53PM +0300, Dmitry Osipenko wrote:
+> > > > Each memory client has unique hardware ID, add these IDs.
+> > > > 
+> > > > Acked-by: Rob Herring <robh@kernel.org>
+> > > > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> > > > ---
+> > > >  include/dt-bindings/memory/tegra20-mc.h | 53 +++++++++++++++++++++++++
+> > > >  1 file changed, 53 insertions(+)
+> > > 
+> > > Is there any chance you could drop these dt-bindings include patches
+> > > (17, 18 and 19) so that I can pick them up into the Tegra tree? The
+> > > device tree changes that I was going to pick up depend on this and
+> > > fail to build if applied as-is.
+> > > 
+> > > I was looking at your linux-mem-ctrl tree and had initially thought I
+> > > could just pull in one of the branches to get these dependencies, but it
+> > > looks like the dt-bindings patches are on the for-v5.11/tegra-mc branch,
+> > > which the ARM SoC maintainers wouldn't like to see me pull in for a
+> > > dependency on device tree changes.
+> > 
+> > Partially you answered here. :) Since you should not pull my branch into
+> > a DT branch, you also should not put these include/dt-bindings patches
+> > there.  SoC guys will complain about this as well.
+> > 
+> > These patches are also needed for the driver, so if you take them, I
+> > would need them back in a pull request. SoC folks could spot it as well
+> > and point that such merge should not happen.
+> > 
+> > > If this is all fixed at this point, I'll just have to push back the
+> > > device tree changes to v5.12, or perhaps see if the ARM SoC maintainers
+> > > are willing to take a late pull request that's based on v5.11-rc1.
+> > 
+> > Yeah, that's a known problem. I asked about this Arnd and Olof in the
+> > past and got reply with two solutions:
+> > 1. Apply current version of patch without defines, just hard-coded
+> >    numbers. After merging to Linus, replace the numbers with defines.
+> > 
+> > 2. Wait with DTS till dependencies reach Linus.
+> 
+> What I've done occasionally in the past was to put these kinds of
+> patches into a separate "dt-bindings" branch that I could use to resolve
+> dependencies from device tree files. The ARM SoC maintainers never had
+> any issues with that approach.
+> 
+> I guess this is a bit of a special case, because the DT includes are
+> ultimately really a part of the device tree, so mixing them both isn't
+> problematic.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
-5.10-rc6-75-g735f7fba25ec/
+Indeed, that way could work... and no one would spot it. :) Many times
+these headers were for clock symbols so if they go via SoC/DT tree,
+merge back to clock tree could be accepted.
 
-Tree: pm
-Branch: testing
-Git Describe: pm-5.10-rc6-75-g735f7fba25ec
-Git Commit: 735f7fba25ec002ec984d45612afaa3a553fe05d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Best regards,
+Krzysztof
 
-Warnings Detected:
-
-arc:
-
-arm64:
-    defconfig (gcc-8): 8 warnings
-
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #size-cells (1) differs from / (2)
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #address-cells (1) differs from / (2)
-    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #size-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #address-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
-SPI bus
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
-or SPI bus
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
-smatches
-
-Warnings:
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
-I bus
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
-us
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
