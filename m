@@ -2,105 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E722C5743
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 15:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F64C2C57CA
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 16:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390052AbgKZOmz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 09:42:55 -0500
-Received: from mga07.intel.com ([134.134.136.100]:31376 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389991AbgKZOmz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Nov 2020 09:42:55 -0500
-IronPort-SDR: bsByHOJ4PlaGcG3BAzyjIX04kEOmTaPYaMO+tJGMtrWd3y5ImOkPAcmIMm8wnYGos5hmZOVYbK
- CU0lTbOrKQTg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="236422310"
-X-IronPort-AV: E=Sophos;i="5.78,372,1599548400"; 
-   d="scan'208";a="236422310"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2020 06:42:54 -0800
-IronPort-SDR: IpvuAOan0gOjeGeK1nz7PkafYroutIPYpgzNH1m0RxWf2UrtEi6aAEhIOiQvJ0u/xmdA3m5x7D
- GFelO//WciyA==
-X-IronPort-AV: E=Sophos;i="5.78,372,1599548400"; 
-   d="scan'208";a="547739896"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2020 06:42:51 -0800
-Date:   Thu, 26 Nov 2020 22:45:37 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Subject: Re: [PATCH] e1000e: Assign DPM_FLAG_SMART_SUSPEND and
- DPM_FLAG_MAY_SKIP_RESUME to speed up s2ram
-Message-ID: <20201126144536.GA19171@chenyu-office.sh.intel.com>
-References: <20201124153221.11265-1-yu.c.chen@intel.com>
- <8BA4D1E1-DACF-4E84-A5B8-75A7CEA65F98@canonical.com>
- <20201125103612.GA17700@chenyu-office.sh.intel.com>
- <B66CCBD9-5828-4514-AD08-C6FDF026646D@canonical.com>
- <20201126111053.GA15841@chenyu-office.sh.intel.com>
- <43247451-BA44-4958-A921-2BD0FF5FA5BA@canonical.com>
+        id S2391185AbgKZPCp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 10:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391170AbgKZPCo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 10:02:44 -0500
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46594C0617A7
+        for <linux-pm@vger.kernel.org>; Thu, 26 Nov 2020 07:02:43 -0800 (PST)
+Received: by mail-vs1-xe42.google.com with SMTP id y78so1066848vsy.6
+        for <linux-pm@vger.kernel.org>; Thu, 26 Nov 2020 07:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OqkXUBQ1i4Vmor4ADqr8LW41OTo4FFyxr1N6+Z/rA5s=;
+        b=Gh8XjXmYgT4LldSMXq+eDAAJJpw9+ajrtOclQFMjho93UopgOYSwWmMfZN88qbnn26
+         Nik7LSQ7REuIyVQ7fxRGiuZcBaqes3wRK2JQ10kCOh23GLRDycvOlg97xnzmhkugYdPV
+         KmzeHc9Pt2T9xYCjwUEWtsuN2ccRc+NKG5V7Z3uxlUSnjE7ewPM9NNJKEHuQlzJHY2Tz
+         YIE8FRx/qOeXbU4NC3VafWqKHfPkZ+VhUMmfvWJwMhwpO3QG1vPdOr2Dj2FPC0tzg36Y
+         1ztZHIegTsaPgVDT0IOSNor/yjpsbO5wPNXCpOZg6iEJbSpcplcxlVxrHP4ppCkH3FAi
+         xRxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OqkXUBQ1i4Vmor4ADqr8LW41OTo4FFyxr1N6+Z/rA5s=;
+        b=UxU9OgzZpbVHn/v3l1Wd82PS0oC5TmgmIS0FXXT+fNR6KAotjbWucAj73TfjkiGWOO
+         YND+qqQDOJd+KcPLHz+AZcQ/Vjkr0GZx7HYMrTZT2f9NACLHPH6IJqmyzOhIoQ+MLrIf
+         me2NDxXIv0kbiyWVArYZMhk5It6OXxogKWteIJ2rsnE8Qh8OKmTJUh/+x14EzYEFzWnH
+         eXO6liUviNZgy4YeHxEVAfpvZyVomypYRQFqt4dQmdB/NW/intuZCBUr6yzPZCphQKZU
+         G3iSkbk7NNDhtAK+I30zgEzID7SIG6g7xJ7PxPO34Uea4wibIFfksnABwRThtKxsDJEv
+         yNYw==
+X-Gm-Message-State: AOAM531R4sXsM+moEfW1B6BJgvdX7bBKdCPUoKqayAydbwpsr9TNhV0P
+        JCx9qMiLLAS/CtLBFZF8DjwE76nVpBtXpeTZIdf9Cw==
+X-Google-Smtp-Source: ABdhPJytKgXCtMQjzdnzBaMHgZEdsYliZUdDBrFUZSCukRRaCw2+1Wea9rb3AivqdOw/P9snQqpJZoEWty8mGhoOa9s=
+X-Received: by 2002:a67:8c44:: with SMTP id o65mr1942819vsd.55.1606402962450;
+ Thu, 26 Nov 2020 07:02:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43247451-BA44-4958-A921-2BD0FF5FA5BA@canonical.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20201124060202.776-1-ricky_wu@realtek.com> <20201124204915.GA585306@bjorn-Precision-5520>
+ <CAJZ5v0gt4aeC5S6RY2W98vmcMSs9gb_SBA8-eoq1NU3wPptL8g@mail.gmail.com>
+ <6f721ea4d5a84f45b0249b932d742367@realtek.com> <CAJZ5v0ggtd3+YEo2nERhuTeurRx5OQrvLkAz3aEMPRmEfo_Rnw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ggtd3+YEo2nERhuTeurRx5OQrvLkAz3aEMPRmEfo_Rnw@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 26 Nov 2020 16:02:05 +0100
+Message-ID: <CAPDyKFohv9qC4Sp3ffGg9z6Bj7gKq3-iubaiuZqY2121amL2Bw@mail.gmail.com>
+Subject: Re: [PATCH] misc: rtsx: rts5249 support runtime PM
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        =?UTF-8?B?5ZCz5piK5r6EIFJpY2t5?= <ricky_wu@realtek.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "vaibhavgupta40@gmail.com" <vaibhavgupta40@gmail.com>,
+        "kdlnx@doth.eu" <kdlnx@doth.eu>,
+        Doug Anderson <dianders@chromium.org>,
+        "rmfrfs@gmail.com" <rmfrfs@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 08:05:02PM +0800, Kai-Heng Feng wrote:
-> 
-> 
-> > On Nov 26, 2020, at 19:10, Chen Yu <yu.c.chen@intel.com> wrote:
-> > 
-> > On Thu, Nov 26, 2020 at 02:36:42PM +0800, Kai-Heng Feng wrote:
-> >>>> 
-> >>>> What about plugging ethernet cable and using WoL after system is suspended?
-> >>>> Commit "e1000e: Exclude device from suspend direct complete optimization" was to address that scenario.
-> > [cut]
-> >> 
-> >> I don't think this is right.
-> >> Isn't E1000_WUFC_LNKC already set for runtime suspend?
-> >> What if WoL doesn't have it set?
-> >> 
-> > After re-taking a look at your description, please let me elaborate more about the scenario.
-> > With this patch applied, and with sysfs wake up disabled, the expected behavior is:
-> > 
-> > 1. If NIC is not runtime suspended:
-> > 1.1 s2ram suspend -> wufc will be set to 0(no WoL settings), suspend(), suspend_late(), suspend_noirq()
-> > 1.2 s2ram resume  -> NIC resumes normaly
-> > 
-> > 2. If NIC is runtime suspended:
-> > 2.1 s2ram suspend -> wufc set to E1000_WUFC_LNKC, skip the subsequent suspend callbacks.
-> 
-> Is it safe to keep E1000_WUFC_LNKC enabled here?
-> 
-> From commit 6bf6be1127f7 ("e1000e: Do not wake up the system via WOL if device wakeup is disabled"):
-> 
->        /* Runtime suspend should only enable wakeup for link changes */
->        if (runtime)
->                wufc = E1000_WUFC_LNKC;
->        else if (device_may_wakeup(&pdev->dev))
->                wufc = adapter->wol;
->        else
->                wufc = 0;
-> 
-> So it has different wakeup settings for runtime suspend and system suspend, either device_may_wakeup() true or false.
-Right.
-> Or maybe e1000e devs can confirm E1000_WUFC_LNKC is a safe for system suspend?
+On Thu, 26 Nov 2020 at 15:19, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-Does 'safe' here mean waking up the system?
-For s2ram, whether the NIC can wake up the system from S3 via cable plug is platform
-(BIOS) specific. So the wufc settings here is not directly related to system wake up
-via plug event.
-thanks,
-Chenyu
+> On Thu, Nov 26, 2020 at 4:07 AM =E5=90=B3=E6=98=8A=E6=BE=84 Ricky <ricky_=
+wu@realtek.com> wrote:
+> >
+> > > -----Original Message-----
+> > > From: Rafael J. Wysocki [mailto:rafael@kernel.org]
+> > > Sent: Wednesday, November 25, 2020 10:04 PM
+> > > To: Bjorn Helgaas; =E5=90=B3=E6=98=8A=E6=BE=84 Ricky
+>
+> [cut]
+>
+> > > > > +static void rtsx_pci_rtd3_work(struct work_struct *work)
+> > > > > +{
+> > > > > +     struct delayed_work *dwork =3D to_delayed_work(work);
+> > > > > +     struct rtsx_pcr *pcr =3D container_of(dwork, struct rtsx_pc=
+r,
+> > > rtd3_work);
+> > > > > +
+> > > > > +     pcr_dbg(pcr, "--> %s\n", __func__);
+> > > > > +
+> > > > > +     while (pcr->pci->dev.power.usage_count.counter > 0) {
+> > > > > +             if (pm_runtime_active(&(pcr->pci->dev)))
+> > > > > +                     pm_runtime_put(&(pcr->pci->dev));
+> > > >
+> > > > I'm not a runtime PM expert, but this looks fishy.  AFAICT this is =
+the
+> > > > only driver in the tree that uses usage_count.counter this way, whi=
+ch
+> > > > is a pretty big hint that this needs a closer look.  Cc'd Rafael.
+> > >
+> > > You are right, this is not correct from the PM-runtime POV.
+> > >
+> > > It looks like this attempts to force the PM-runtime usage counter dow=
+n
+> > > to 0 and it's kind of hard to say why this is done (and it shouldn't
+> > > be done in the first place, because it destroys the usage counter
+> > > balance).
+> > >
+> > > Ricky, is this an attempt to work around an issue of some sort?
+> > >
+> >
+> > Thanks Bjorn and Rafael
+> > I found when we boot up, our dev pcr->pci->dev.power.usage_count.counte=
+r always is 2,
+> > Don=E2=80=99t know how to make it to 0 because we need to support D3 an=
+d run runtime_suspended callback function
+> > Is there something wrong with us to enable runtime PM?
+>
+> That is possible.
+>
+> If you want it to be enabled by default, you need to call
+> pm_runtime_allow() from the driver at probe time, in addition to
+> pm_runtime_enable(), in the first place, but that only drops one
+> reference, so question is where the other one comes from.
+
+Yes, good point.
+
+Moreover, I am wondering whether you also need to deploy support for
+runtime PM for the child device (managed by
+drivers/mmc/host/rtsx_pci_sdmmc.c driver), as to make the support
+complete.
+
+>
+> Are the pm_runtime_get*() and pm_runtime_put*() calls balanced?
+
+Perhaps have a look at how the drivers/misc/cardreader/rtsx_usb.c and
+drivers/mmc/host/rtsx_usb_sdmmc.c have implemented this could help. I
+know it's USB, but it should work quite similar in regards to runtime
+PM, I think.
+
+Kind regards
+Uffe
