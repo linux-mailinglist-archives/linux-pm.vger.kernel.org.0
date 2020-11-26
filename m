@@ -2,24 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 802D42C5C4A
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF192C5C3D
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405049AbgKZSy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 13:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405027AbgKZSy5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:54:57 -0500
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EFDC0613D4;
-        Thu, 26 Nov 2020 10:54:57 -0800 (PST)
+        id S2405068AbgKZSy7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 13:54:59 -0500
+Received: from relay07.th.seeweb.it ([5.144.164.168]:33483 "EHLO
+        relay07.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405006AbgKZSy6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:54:58 -0500
 Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E775B4062F;
-        Thu, 26 Nov 2020 19:46:36 +0100 (CET)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 53D6340635;
+        Thu, 26 Nov 2020 19:46:37 +0100 (CET)
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
 To:     linux-arm-msm@vger.kernel.org
@@ -33,9 +30,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         marijn.suijten@somainline.org, phone-devel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH 10/13] dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
-Date:   Thu, 26 Nov 2020 19:45:56 +0100
-Message-Id: <20201126184559.3052375-11-angelogioacchino.delregno@somainline.org>
+Subject: [PATCH 11/13] dt-bindings: cpufreq: Convert qcom-cpufreq-hw to YAML binding
+Date:   Thu, 26 Nov 2020 19:45:57 +0100
+Message-Id: <20201126184559.3052375-12-angelogioacchino.delregno@somainline.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201126184559.3052375-1-angelogioacchino.delregno@somainline.org>
 References: <20201126184559.3052375-1-angelogioacchino.delregno@somainline.org>
@@ -45,244 +42,394 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the bindings for the CPR3 driver to the documentation.
+Convert the qcom-cpufreq-hw documentation to YAML binding as
+qcom,cpufreq-hw.yaml.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 ---
- .../bindings/soc/qcom/qcom,cpr3.yaml          | 226 ++++++++++++++++++
- 1 file changed, 226 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+ .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 173 +---------------
+ .../bindings/cpufreq/qcom,cpufreq-hw.yaml     | 196 ++++++++++++++++++
+ 2 files changed, 197 insertions(+), 172 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+index 9299028ee712..bd4e81f6f835 100644
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+@@ -1,172 +1 @@
+-Qualcomm Technologies, Inc. CPUFREQ Bindings
+-
+-CPUFREQ HW is a hardware engine used by some Qualcomm Technologies, Inc. (QTI)
+-SoCs to manage frequency in hardware. It is capable of controlling frequency
+-for multiple clusters.
+-
+-Properties:
+-- compatible
+-	Usage:		required
+-	Value type:	<string>
+-	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss".
+-
+-- clocks
+-	Usage:		required
+-	Value type:	<phandle> From common clock binding.
+-	Definition:	clock handle for XO clock and GPLL0 clock.
+-
+-- clock-names
+-	Usage:		required
+-	Value type:	<string> From common clock binding.
+-	Definition:	must be "xo", "alternate".
+-
+-- reg
+-	Usage:		required
+-	Value type:	<prop-encoded-array>
+-	Definition:	Addresses and sizes for the memory of the HW bases in
+-			each frequency domain.
+-- reg-names
+-	Usage:		Optional
+-	Value type:	<string>
+-	Definition:	Frequency domain name i.e.
+-			"freq-domain0", "freq-domain1".
+-
+-- #freq-domain-cells:
+-	Usage:		required.
+-	Definition:	Number of cells in a freqency domain specifier.
+-
+-* Property qcom,freq-domain
+-Devices supporting freq-domain must set their "qcom,freq-domain" property with
+-phandle to a cpufreq_hw followed by the Domain ID(0/1) in the CPU DT node.
+-
+-
+-Example:
+-
+-Example 1: Dual-cluster, Quad-core per cluster. CPUs within a cluster switch
+-DCVS state together.
+-
+-/ {
+-	cpus {
+-		#address-cells = <2>;
+-		#size-cells = <0>;
+-
+-		CPU0: cpu@0 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x0>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_0>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_0: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-				L3_0: l3-cache {
+-				      compatible = "cache";
+-				};
+-			};
+-		};
+-
+-		CPU1: cpu@100 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x100>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_100>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_100: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU2: cpu@200 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x200>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_200>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_200: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU3: cpu@300 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x300>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_300>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_300: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU4: cpu@400 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x400>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_400>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_400: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU5: cpu@500 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x500>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_500>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_500: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU6: cpu@600 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x600>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_600>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_600: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU7: cpu@700 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x700>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_700>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_700: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-	};
+-
+- soc {
+-	cpufreq_hw: cpufreq@17d43000 {
+-		compatible = "qcom,cpufreq-hw";
+-		reg = <0x17d43000 0x1400>, <0x17d45800 0x1400>;
+-		reg-names = "freq-domain0", "freq-domain1";
+-
+-		clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+-		clock-names = "xo", "alternate";
+-
+-		#freq-domain-cells = <1>;
+-	};
+-}
++This file has been moved to qcom,cpufreq-hw.yaml
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml b/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
 new file mode 100644
-index 000000000000..58cd9a6e9bde
+index 000000000000..94a56317b14b
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-@@ -0,0 +1,226 @@
++++ b/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
+@@ -0,0 +1,196 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr3.yaml#"
++$id: "http://devicetree.org/schemas/cpufreq/qcom,cpufreq-hw.yaml#"
 +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: Qualcomm Core Power Reduction v3/v4/Hardened (CPR3, CPR4, CPRh)
++title: Qualcomm Technologies, Inc. CPUFREQ HW Bindings
 +
 +description: |
-+  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
-+  or other device. Each OPP of a device corresponds to a "corner" that has
-+  a range of valid voltages for a particular frequency. While the device is
-+  running at a particular frequency, CPR monitors dynamic factors such as
-+  temperature, etc. and suggests or, in the CPR-Hardened case performs,
-+  adjustments to the voltage to save power and meet silicon characteristic
-+  requirements.
++  CPUFREQ HW is a hardware engine used by some Qualcomm Technologies, Inc. (QTI)
++  SoCs to manage frequency in hardware. It is capable of controlling frequency
++  for multiple clusters.
 +
 +maintainers:
-+  - AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
++  - TBD
 +
 +properties:
 +  compatible:
 +    items:
 +      - enum:
-+          - qcom,sdm630-cprh
-+      - const: qcom,cpr3
-+      - const: qcom,cpr4
-+      - const: qcom,cprh
++          - qcom,cpufreq-hw
++          - qcom,cpufreq-hw-8998
++          - qcom,cpufreq-epss
 +
 +  reg:
-+    description: Base address and size of the CPR controller(s)
-+    minItems: 1
++    minItems: 2
++    maxItems: 2
 +
-+  interrupts:
-+    maxItems: 1
++  reg-names:
++    description:
++      Frequency domain register region for each domain.
++    items:
++      - const: "freq-domain0"
++      - const: "freq-domain1"
 +
 +  clock-names:
++    - const: xo
 +    - const: ref
 +
 +  clocks:
-+    items:
-+      - description: CPR reference clock
++    maxItems: 2
 +
-+  vdd-supply:
-+    description: Autonomous Phase Control (APC) or other power supply
-+
-+  '#power-domain-cells':
++  '#freq-domain-cells':
++    description: Number of cells in a freqency domain specifier.
 +    const: 1
 +
-+  acc-syscon:
-+    description: phandle to syscon for writing ACC settings
-+
-+  nvmem-cells:
-+    minItems: 10
-+    description: Cells containing the fuse corners and revision data
-+
-+  nvmem-cell-names:
-+    minItems: 10
-+
 +  operating-points-v2: true
++
++  qcom,freq-domain:
++    $ref: '/schemas/types.yaml#/definitions/phandle'
++    description: |
++      Devices supporting freq-domain must set their "qcom,freq-domain"
++      property with phandle to a cpufreq_hw followed by the Domain ID(0/1)
++      in the CPU DT node.
 +
 +required:
 +  - compatible
 +  - reg
 +  - clock-names
 +  - clocks
-+  - "#power-domain-cells"
-+  - nvmem-cells
-+  - nvmem-cell-names
-+  - operating-points-v2
++  - "#freq-domain-cells"
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/qcom,gcc-sdm660.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
++    // Example 1: Dual-cluster, Quad-core per cluster. CPUs within a
++    //            cluster switch DCVS state together.
++
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    #include <dt-bindings/clock/qcom,gcc-sc7180.h>
 +
 +    cpus {
 +        #address-cells = <2>;
 +        #size-cells = <0>;
 +
-+        cpu@100 {
-+            operating-points-v2 = <&cpu_gold_opp_table>;
-+            power-domains = <&apc_cprh 0>;
-+            power-domain-names = "cprh";
++        CPU0: cpu@0 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x0>;
++            enable-method = "psci";
++            next-level-cache = <&L2_0>;
++            qcom,freq-domain = <&cpufreq_hw 0>;
++            L2_0: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++                L3_0: l3-cache {
++                      compatible = "cache";
++                };
++            };
 +        };
 +
-+        cpu@0 {
-+            operating-points-v2 = <&cpu_silver_opp_table>;
-+            power-domains = <&apc_cprh 1>;
-+            power-domain-names = "cprh";
++        CPU1: cpu@100 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x100>;
++            enable-method = "psci";
++            next-level-cache = <&L2_100>;
++            qcom,freq-domain = <&cpufreq_hw 0>;
++            L2_100: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++            };
 +        };
-+    }
 +
-+    cpu_silver_opp_table: cpu-silver-opp-table {
-+        compatible = "operating-points-v2";
-+        opp-shared;
++        CPU2: cpu@200 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x200>;
++            enable-method = "psci";
++            next-level-cache = <&L2_200>;
++            qcom,freq-domain = <&cpufreq_hw 0>;
++            L2_200: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++            };
++        };
 +
-+        opp-1843200000 {
-+            opp-hz = /bits/ 64 <1843200000>;
-+            required-opps = <&cprh_opp3>;
++        CPU3: cpu@300 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x300>;
++            enable-method = "psci";
++            next-level-cache = <&L2_300>;
++            qcom,freq-domain = <&cpufreq_hw 0>;
++            L2_300: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++            };
 +        };
-+        opp-1094400000 {
-+            opp-hz = /bits/ 64 <1094400000>;
-+            required-opps = <&cprh_opp2>;
++
++        CPU4: cpu@400 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x400>;
++            enable-method = "psci";
++            next-level-cache = <&L2_400>;
++            qcom,freq-domain = <&cpufreq_hw 1>;
++            L2_400: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++            };
 +        };
-+        opp-300000000 {
-+            opp-hz = /bits/ 64 <300000000>;
-+            required-opps = <&cprh_opp1>;
++
++        CPU5: cpu@500 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x500>;
++            enable-method = "psci";
++            next-level-cache = <&L2_500>;
++            qcom,freq-domain = <&cpufreq_hw 1>;
++            L2_500: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++            };
++        };
++
++        CPU6: cpu@600 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x600>;
++            enable-method = "psci";
++            next-level-cache = <&L2_600>;
++            qcom,freq-domain = <&cpufreq_hw 1>;
++            L2_600: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++            };
++        };
++
++        CPU7: cpu@700 {
++            device_type = "cpu";
++            compatible = "qcom,kryo385";
++            reg = <0x0 0x700>;
++            enable-method = "psci";
++            next-level-cache = <&L2_700>;
++            qcom,freq-domain = <&cpufreq_hw 1>;
++            L2_700: l2-cache {
++                compatible = "cache";
++                next-level-cache = <&L3_0>;
++            };
 +        };
 +    };
 +
-+    cpu_gold_opp_table: cpu-gold-opp-table {
-+        compatible = "operating-points-v2";
-+        opp-shared;
++    soc {
++        cpufreq_hw: cpufreq@17d43000 {
++            compatible = "qcom,cpufreq-hw";
++            reg = <0x17d43000 0x1400>, <0x17d45800 0x1400>;
++            reg-names = "freq-domain0", "freq-domain1";
 +
-+        opp-2208000000 {
-+            opp-hz = /bits/ 64 <2208000000>;
-+            required-opps = <&cprh_opp3>;
-+        };
-+        opp-1113600000 {
-+            opp-hz = /bits/ 64 <1113600000>;
-+            required-opps = <&cprh_opp2>;
-+        };
-+        opp-300000000 {
-+            opp-hz = /bits/ 64 <300000000>;
-+            required-opps = <&cprh_opp1>;
-+        };
-+    };
++            clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++            clock-names = "xo", "alternate";
 +
-+    cprh_opp_table: cpr-hardened-opp-table {
-+        compatible = "operating-points-v2-qcom-level";
-+
-+        cprh_opp1: opp1 {
-+            opp-level = <1>;
-+            qcom,opp-fuse-level = <1>;
-+        };
-+        cprh_opp2: opp2 {
-+            opp-level = <2>;
-+            qcom,opp-fuse-level = <2>;
-+        };
-+        cprh_opp3: opp3 {
-+            opp-level = <3>;
-+            qcom,opp-fuse-level = <2 3>;
-+        };
-+    }
-+
-+    apc_cprh: power-controller@179c4000 {
-+        compatible = "qcom,sdm630-cprh", "qcom,cprh";
-+        reg = <0x0179c4000 0x4000>, <0x0179c8000 0x4000>;
-+        clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
-+        clock-names = "ref";
-+        assigned-clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
-+        assigned-clock-rates = <19200000>;
-+
-+        #power-domain-cells = <1>;
-+        operating-points-v2 = <&cprh_opp_table>;
-+
-+        nvmem-cells = <&cpr_efuse_speedbin>,
-+                      <&cpr_fuse_revision>,
-+                      <&cpr_quot00_perfcl>,
-+                      <&cpr_quot01_perfcl>,
-+                      <&cpr_quot02_perfcl>,
-+                      <&cpr_quot03_perfcl>,
-+                      <&cpr_quot04_perfcl>,
-+                      <&cpr_quot_offset01_perfcl>,
-+                      <&cpr_quot_offset02_perfcl>,
-+                      <&cpr_quot_offset03_perfcl>,
-+                      <&cpr_quot_offset04_perfcl>,
-+                      <&cpr_init_voltage00_perfcl>,
-+                      <&cpr_init_voltage01_perfcl>,
-+                      <&cpr_init_voltage02_perfcl>,
-+                      <&cpr_init_voltage03_perfcl>,
-+                      <&cpr_init_voltage04_perfcl>,
-+                      <&cpr_ro_sel00_perfcl>,
-+                      <&cpr_ro_sel01_perfcl>,
-+                      <&cpr_ro_sel02_perfcl>,
-+                      <&cpr_ro_sel03_perfcl>,
-+                      <&cpr_ro_sel04_perfcl>,
-+                      <&cpr_quot00_pwrcl>,
-+                      <&cpr_quot01_pwrcl>,
-+                      <&cpr_quot02_pwrcl>,
-+                      <&cpr_quot_offset01_pwrcl>,
-+                      <&cpr_quot_offset02_pwrcl>,
-+                      <&cpr_init_voltage00_pwrcl>,
-+                      <&cpr_init_voltage01_pwrcl>,
-+                      <&cpr_init_voltage02_pwrcl>,
-+                      <&cpr_ro_sel00_pwrcl>,
-+                      <&cpr_ro_sel01_pwrcl>,
-+                      <&cpr_ro_sel02_pwrcl>;
-+
-+        nvmem-cell-names = "cpr_speed_bin",
-+                           "cpr_fuse_revision",
-+                           "cpr0_quotient1",
-+                           "cpr0_quotient2",
-+                           "cpr0_quotient3",
-+                           "cpr0_quotient4",
-+                           "cpr0_quotient5",
-+                           "cpr0_quotient_offset2",
-+                           "cpr0_quotient_offset3",
-+                           "cpr0_quotient_offset4",
-+                           "cpr0_quotient_offset5",
-+                           "cpr0_init_voltage1",
-+                           "cpr0_init_voltage2",
-+                           "cpr0_init_voltage3",
-+                           "cpr0_init_voltage4",
-+                           "cpr0_init_voltage5",
-+                           "cpr0_ring_osc1",
-+                           "cpr0_ring_osc2",
-+                           "cpr0_ring_osc3",
-+                           "cpr0_ring_osc4",
-+                           "cpr0_ring_osc5",
-+                           "cpr1_quotient1",
-+                           "cpr1_quotient2",
-+                           "cpr1_quotient3",
-+                           "cpr1_quotient_offset2",
-+                           "cpr1_quotient_offset3",
-+                           "cpr1_init_voltage1",
-+                           "cpr1_init_voltage2",
-+                           "cpr1_init_voltage3",
-+                           "cpr1_ring_osc1",
-+                           "cpr1_ring_osc2",
-+                           "cpr1_ring_osc3";
++            #freq-domain-cells = <1>;
 +    };
 +...
 -- 
