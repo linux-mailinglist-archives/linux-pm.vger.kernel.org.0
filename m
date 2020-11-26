@@ -2,157 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE442C5BF7
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB802C5C42
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404074AbgKZSYz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 13:24:55 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:45237 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404028AbgKZSYy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:24:54 -0500
-Received: by mail-oi1-f193.google.com with SMTP id l206so3123504oif.12;
-        Thu, 26 Nov 2020 10:24:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0CeBIsTgv2OXbQ0s5p+qCPKhIhxADq0Kgs1y7GjU1q4=;
-        b=oQxYnmDKRXU6VKSL8zBn0z4NMdgR+k+9tmKfcBmjKGARA1eJ34m0vUGCcTSxuS74E6
-         LmlvqhbcihfMrdK/cFAto1vszfMZOOFDNeXUfle79u3cguU0CGEXgsePy6uCoZV5O/fB
-         u8cvl/vyIrw+w2eUKgVWd453JT7xi0QttadU3peodUDr17Y5E7hyssWnsHS787jkl38y
-         aPW6+aDTaiTlGOQT/ZOWSzr+LRKUoG3+8BVQUW9SdKpWEEoX1bt4ow1VXm7ohCg7zMGq
-         1lPDcurq/ry2pp6NyQH0yurrEibrq/sYGt1KtaZFzkEp3K1Ycwmr6IeZIXEHYW4pYbkm
-         IAlw==
-X-Gm-Message-State: AOAM533hn1ZO4JZzrQLJwAEvpx7cg1HnSx3Jcqi4TbtV/K7r9ac60Avr
-        GEOkDVwuIK5XiFS1n2zcbcpzNOkMJIZ8T6Y7B/c=
-X-Google-Smtp-Source: ABdhPJwcv4N4tGVYy983i4LAa/FVbm6w8IR3F/d094yK3WYkikCe4MdVrIqft1PMFfspkiTltRT3BfUEEPHd5TKaLq4=
-X-Received: by 2002:aca:5a42:: with SMTP id o63mr2762003oib.69.1606415093334;
- Thu, 26 Nov 2020 10:24:53 -0800 (PST)
+        id S2404577AbgKZSzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 13:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405005AbgKZSy7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:54:59 -0500
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865BCC061A48;
+        Thu, 26 Nov 2020 10:54:58 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B3B23405ED;
+        Thu, 26 Nov 2020 19:46:32 +0100 (CET)
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
+        jorge.ramirez-ortiz@linaro.org, broonie@kernel.org,
+        lgirdwood@gmail.com, daniel.lezcano@linaro.org, nks@flawful.org,
+        bjorn.andersson@linaro.org, agross@kernel.org, robh+dt@kernel.org,
+        viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        konrad.dybcio@somainline.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org, phone-devel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: [PATCH 00/13] Enable CPRh/3/4, CPU Scaling on various QCOM SoCs
+Date:   Thu, 26 Nov 2020 19:45:46 +0100
+Message-Id: <20201126184559.3052375-1-angelogioacchino.delregno@somainline.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20201126171824.GK3371@techsingularity.net>
-In-Reply-To: <20201126171824.GK3371@techsingularity.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 26 Nov 2020 19:24:41 +0100
-Message-ID: <CAJZ5v0hz4dBzUcvoyLoJf8Fmajws-uP3MB-_4dmzEYvMDJwEwQ@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: Allow configuration of the polling interval
- before cpuidle enters a c-state
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 6:25 PM Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> It was noted that a few workloads that idle rapidly regressed when commit
-> 36fcb4292473 ("cpuidle: use first valid target residency as poll time")
-> was merged. The workloads in question were heavy communicators that idle
-> rapidly and were impacted by the c-state exit latency as the active CPUs
-> were not polling at the time of wakeup. As they were not particularly
-> realistic workloads, it was not considered to be a major problem.
->
-> Unfortunately, a bug was then reported for a real workload in a production
-> environment that relied on large numbers of threads operating in a worker
-> pool pattern. These threads would idle for periods of time slightly
-> longer than the C1 exit latency and so incurred the c-state exit latency.
-> The application is sensitive to wakeup latency and appears to indirectly
-> rely on behaviour prior to commit on a37b969a61c1 ("cpuidle: poll_state:
-> Add time limit to poll_idle()") to poll for long enough to avoid the exit
-> latency cost.
+This patch series is definitely big.
+Yup. But it all goes together... here's why:
 
-Well, this means that it depends on the governor to mispredict short
-idle durations (so it selects "poll" over "C1" when it should select
-"C1" often enough) and on the lack of a polling limit (or a large
-enough one).
+This series implements full support for CPU scaling on *many* Qualcomm
+SoCs and partial support for the others on which the Operating State
+Manager is not present.
+Since this is a bit tangled, let's go step by step.
 
-While the latter can be kind of addressed by increasing the polling
-limit, the misprediction in the governor really isn't guaranteed to
-happen and it really is necessary to have a PM QoS request in place to
-ensure a suitable latency.
+First of all, there's the SPM: this is a component that we can find on
+very old chips, like MSM8974; there, it has been used to actually do the
+power scaling basically "on its own" - sending the cores in a specific
+sleep mode to save power.
+On the newer ones, including MSM8998, SDM630, 660 and others, it is still
+present! Though, this time, it's being used for the cluster caches and it
+has a different firmware (and maybe it's also slightly different HW),
+implementing the SAWv4.1 set and getting controlled *not by the OS* but
+by other controllers in the SoC (like the OSM).
 
-> The current behaviour favours power consumption over wakeup latency
-> and it is reasonable behaviour but it should be tunable.
+Contrary from MSM8974 and the like, this new version of the SPM just
+requires us to set the initial parameters for AVS and *nothing else*, as
+its states will be totally managed internally.
 
-Only if there is no way to cover all of the relevant use cases in a
-generally acceptable way without adding more module params etc.
+Then, hardening here we come!
+In all the new SoCs - as new as SM8150 and most probably even newer ones -
+there are also new versions of "the same old story".. and here I'm
+referring to the Core Power Reduction (CPR) block: since MSM8996 (or
+around that time frame), this block has got a sort of major change...
+which actually varies the register set and implements "threads".
+I won't go far with explaining that in this cover letter (as it's all
+explained in the commits) but, in short, here's the catch:
+CPR v3, v4 and CPR-Hardened are all based over the same register set
+and are extensions of their previous.
 
-In this particular case, it should be possible to determine a polling
-limit acceptable to everyone.
+A sort of special treatment must be given to CPR-Hardened (CPRh): this is
+the one that's present on the newest SoCs, as this is a hardened version
+of CPR4 and - in this version - it has got the ability to also get managed
+internally, along with the SAWv4.1, by the Operating State Manager (OSM).
 
-BTW, I admit that using the exit latency of the lowest enabled C-state
-was kind of arbitrary and it was based on the assumption that it would
-make more sense to try to enter C1 instead of polling for that much
-time, but C1 is an exception, because it is often artificially made
-particularly attractive to the governors (by reducing its target
-residency as much as possible).  Also making the polling limit that
-short distorts the governor statistics somewhat.
+And finally, we get to the OSM.
+This final piece appeared on MSM8998 for the first time (as far as I know),
+and it is (a sort of microcontroller?) doing the "real deal": CPU DVFS
+through a lookup table providing "corners" - or "performance states" - to
+the OS; pretty straightforward way of offloading a whole lot of tasks that
+the kernel would otherwise have to do.
 
-So the polling limit equal to the target residency of C1 really may be
-overly aggressive and something tick-based may work better in general
-(e.g. 1/8 or 1/16 of the tick period).
+And there we go with the full picture:
+- From SDM845 onwards, SAW, CPRh and OSM are getting setup by the
+  bootloader/TZ *before* booting the OS, so then all the OS has to do
+  is to request a specific performance state to the OSM hardware and
+  forget about all the rest, which is anyway protected by the hypervisor
+  (so there's no access anyway); BUT:
+- In MSM/APQ 8998, SDM/SDA 630/636/660 (and other variants), there is no
+  setup of any of these puzzle pieces, and they're also (basically) fully
+  accessible, which means that the OS must do it in order to get in the
+  same state as the newer ones and to get the entire scaling hardware to
+  start rolling.
 
-In principle, a multiple of C1 target residency could be used too.
+"Simply", that's it. Now that I've written a kilometer-long "short
+explaination" of what's going on, there's a shorter version of it:
+- On new SoCs, the bootloader sets up the entire thing
+- On old ones, the OS must do what the bootloader didn't do.
+- That's what this patch series does. :))
 
-> In theory applications could use /dev/cpu_dma_latency but not all applications
-> are aware of cpu_dma_latency. Similarly, a tool could be installed
-> that opens cpu_dma_latency for the whole system but such a tool is not
-> always available, is not always known to the sysadmin or the tool can have
-> unexpected side-effects if it tunes more than cpu_dma_latency. In practice,
-> it is more common for sysadmins to try idle=poll (which is x86 specific)
+There's also slightly more: since - as already explained - the
+CPR-Hardened is an incremental upgrade of CPR v3->v4, it was necessary
+for me to also implement support for these two versions, present in
+"another whole bunch" of Qualcomm SoCs, including MSM8953, MSM8996 and
+others, which is used to do either power reduction or complete voltage
+scaling for the CPU clusters on these old ones... and, well, also
+in 8998/630/660 along with the Hardened one... and the reason is...
+that this piece of HW is also capable of doing the same with the GPU,
+even though this is not yet implemented in this set.
 
-And really should be avoided if one cares about turbo or wants to
-avoid thermal issues.
+I didn't feel like implementing the Multimedia Subsystem (MMSS) part
+of the CPR3/4 in this patch series because, eh, it's already long enough,
+I'd say.
 
-> or try disabling c-states and hope for the best.
->
-> This patch makes it straight-forward to configure how long a CPU should
-> poll before entering a c-state.
+Perhaps, later... :)
 
-Well, IMV this is not straightforward at all.
+AngeloGioacchino Del Regno (13):
+  cpuidle: qcom_spm: Detach state machine from main SPM handling
+  soc: qcom: spm: Implement support for SAWv4.1, SDM630/660 L2 AVS
+  soc: qcom: spm: Add compatible for MSM8998 SAWv4.1 L2
+  cpufreq: blacklist SDM630/636/660 in cpufreq-dt-platdev
+  soc: qcom: cpr: Move common functions to new file
+  arm64: qcom: qcs404: Change CPR nvmem-names
+  dt-bindings: avs: cpr: Convert binding to YAML schema
+  soc: qcom: Add support for Core Power Reduction v3, v4 and Hardened
+  MAINTAINERS: Add entry for Qualcomm CPRv3/v4/Hardened driver
+  dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
+  dt-bindings: cpufreq: Convert qcom-cpufreq-hw to YAML binding
+  cpufreq: qcom-hw: Implement CPRh aware OSM programming
+  dt-bindings: cpufreq: qcom-hw: Add bindings for 8998
 
-It requires the admin to know how cpuidle works and why this
-particular polling limit is likely to be suitable for the given
-workload.  And whether or not the default polling limit should be
-changed at all.
+ .../bindings/cpufreq/cpufreq-qcom-hw.txt      |  173 +-
+ .../bindings/cpufreq/qcom,cpufreq-hw.yaml     |  219 ++
+ .../bindings/power/avs/qcom,cpr.txt           |  131 +-
+ .../bindings/soc/qcom/qcom,cpr.yaml           |  115 +
+ .../bindings/soc/qcom/qcom,cpr3.yaml          |  226 ++
+ MAINTAINERS                                   |    8 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |   26 +-
+ drivers/cpufreq/cpufreq-dt-platdev.c          |    3 +
+ drivers/cpufreq/qcom-cpufreq-hw.c             |  914 +++++-
+ drivers/cpuidle/Kconfig.arm                   |    1 +
+ drivers/cpuidle/cpuidle-qcom-spm.c            |  294 +-
+ drivers/soc/qcom/Kconfig                      |   26 +
+ drivers/soc/qcom/Makefile                     |    4 +-
+ drivers/soc/qcom/cpr-common.c                 |  382 +++
+ drivers/soc/qcom/cpr-common.h                 |  113 +
+ drivers/soc/qcom/cpr.c                        |  441 +--
+ drivers/soc/qcom/cpr3.c                       | 2474 +++++++++++++++++
+ drivers/soc/qcom/spm.c                        |  226 ++
+ include/soc/qcom/spm.h                        |   45 +
+ 19 files changed, 4824 insertions(+), 997 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+ create mode 100644 drivers/soc/qcom/cpr-common.c
+ create mode 100644 drivers/soc/qcom/cpr-common.h
+ create mode 100644 drivers/soc/qcom/cpr3.c
+ create mode 100644 drivers/soc/qcom/spm.c
+ create mode 100644 include/soc/qcom/spm.h
 
-Honestly, nobody knows that in advance (with all due respect) and this
-would cause people to try various settings at random and stick to the
-one that they feel works best for them without much understanding.
+-- 
+2.29.2
 
-> By default, there is no behaviour change.
-> At build time a decision can be made to favour performance over power
-> by default even if that potentially impacts turbo boosting for workloads
-> that are sensitive to wakeup latency. In the event the kernel default is
-> not suitable, the kernel command line can be used as a substitute for
-> implementing cpu_dma_latency support in an application or requiring an
-> additional tool to be installed.
->
-> Note that it is not expected that tuning for longer polling times will be a
-> universal win. For example, extra polling might prevent a turbo state being
-> used or prevent hyperthread resources being released to an SMT sibling.
->
-> By default, nothing has changed but here is an example of tbench4
-> comparing the default "poll based on the min cstate" vs "poll based on
-> the max cstate"
->
-> tbench4
->                           min-cstate             max-cstate
-> Hmean     1        512.88 (   0.00%)      566.74 *  10.50%*
-> Hmean     2        999.47 (   0.00%)     1090.01 *   9.06%*
-> Hmean     4       1960.83 (   0.00%)     2106.62 *   7.44%*
-> Hmean     8       3828.61 (   0.00%)     4097.93 *   7.03%*
-> Hmean     16      6899.44 (   0.00%)     7120.38 *   3.20%*
-> Hmean     32     10718.38 (   0.00%)    10672.44 *  -0.43%*
-> Hmean     64     12672.21 (   0.00%)    12608.15 *  -0.51%*
-> Hmean     128    20744.83 (   0.00%)    21147.02 *   1.94%*
-> Hmean     256    20646.60 (   0.00%)    20608.48 *  -0.18%*
-> Hmean     320    20892.89 (   0.00%)    20831.99 *  -0.29%*
-
-I'm wondering if you have similar results for "poll based on 2 x min
-cstate" (or 4 x min cstate for that matter).
