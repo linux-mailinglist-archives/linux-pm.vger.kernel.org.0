@@ -2,204 +2,242 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEC22C5D11
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 21:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F6D2C5DBA
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 23:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390665AbgKZUb5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 15:31:57 -0500
-Received: from outbound-smtp17.blacknight.com ([46.22.139.234]:44139 "EHLO
-        outbound-smtp17.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390663AbgKZUb5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 15:31:57 -0500
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp17.blacknight.com (Postfix) with ESMTPS id D170E1C43F4
-        for <linux-pm@vger.kernel.org>; Thu, 26 Nov 2020 20:31:53 +0000 (GMT)
-Received: (qmail 26680 invoked from network); 26 Nov 2020 20:31:53 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.22.4])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 26 Nov 2020 20:31:53 -0000
-Date:   Thu, 26 Nov 2020 20:31:51 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] cpuidle: Allow configuration of the polling interval
- before cpuidle enters a c-state
-Message-ID: <20201126203151.GM3371@techsingularity.net>
-References: <20201126171824.GK3371@techsingularity.net>
- <CAJZ5v0hz4dBzUcvoyLoJf8Fmajws-uP3MB-_4dmzEYvMDJwEwQ@mail.gmail.com>
+        id S2388936AbgKZWQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 17:16:00 -0500
+Received: from vsp-unauthed02.binero.net ([195.74.38.227]:19484 "EHLO
+        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388893AbgKZWQA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 17:16:00 -0500
+X-Greylist: delayed 364 seconds by postgrey-1.27 at vger.kernel.org; Thu, 26 Nov 2020 17:16:00 EST
+X-Halon-ID: afb85b74-3033-11eb-a076-005056917f90
+Authorized-sender: niklas.soderlund@fsdn.se
+Received: from bismarck.berto.se (p4fca2458.dip0.t-ipconnect.de [79.202.36.88])
+        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
+        id afb85b74-3033-11eb-a076-005056917f90;
+        Thu, 26 Nov 2020 23:06:58 +0100 (CET)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH] thermal: rcar_gen3_thermal: Do not use interrupts for normal operation
+Date:   Thu, 26 Nov 2020 23:09:23 +0100
+Message-Id: <20201126220923.3107213-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hz4dBzUcvoyLoJf8Fmajws-uP3MB-_4dmzEYvMDJwEwQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 07:24:41PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Nov 26, 2020 at 6:25 PM Mel Gorman <mgorman@techsingularity.net> wrote:
-> > It was noted that a few workloads that idle rapidly regressed when commit
-> > 36fcb4292473 ("cpuidle: use first valid target residency as poll time")
-> > was merged. The workloads in question were heavy communicators that idle
-> > rapidly and were impacted by the c-state exit latency as the active CPUs
-> > were not polling at the time of wakeup. As they were not particularly
-> > realistic workloads, it was not considered to be a major problem.
-> >
-> > Unfortunately, a bug was then reported for a real workload in a production
-> > environment that relied on large numbers of threads operating in a worker
-> > pool pattern. These threads would idle for periods of time slightly
-> > longer than the C1 exit latency and so incurred the c-state exit latency.
-> > The application is sensitive to wakeup latency and appears to indirectly
-> > rely on behaviour prior to commit on a37b969a61c1 ("cpuidle: poll_state:
-> > Add time limit to poll_idle()") to poll for long enough to avoid the exit
-> > latency cost.
-> 
-> Well, this means that it depends on the governor to mispredict short
-> idle durations (so it selects "poll" over "C1" when it should select
-> "C1" often enough) and on the lack of a polling limit (or a large
-> enough one).
-> 
+Remove the usage of interrupts for the normal temperature operation and
+depend on the polling performed by the thermal core. This is done to
+prepare to use the interrupts as they are intended to trigger once
+specific trip points are passed and not to react to temperature changes
+in the normal operational range.
 
-Potentially. I was limited to what degree the load could be analysed
-unfortunately other than noting that the polling time should have been
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
+ drivers/thermal/rcar_gen3_thermal.c | 108 +---------------------------
+ 1 file changed, 2 insertions(+), 106 deletions(-)
 
-> While the latter can be kind of addressed by increasing the polling
-> limit, the misprediction in the governor really isn't guaranteed to
-> happen and it really is necessary to have a PM QoS request in place to
-> ensure a suitable latency.
-> 
-
-Indeed, so yes, the application should be using cpu_dma_latency but not
-all of them do.
-
-> > The current behaviour favours power consumption over wakeup latency
-> > and it is reasonable behaviour but it should be tunable.
-> 
-> Only if there is no way to cover all of the relevant use cases in a
-> generally acceptable way without adding more module params etc.
-> 
-> In this particular case, it should be possible to determine a polling
-> limit acceptable to everyone.
-> 
-
-Potentially yes. cpuidle is not my strong suit but it could try being
-adaptive the polling similar to how the menu governor tries to guess
-the typical interval. Basically it would have to pick a polling internal
-between 2 and TICK_NSEC. Superficially it a task is queued before polling
-finishes, decrease the interval and increase it otherwise. That is a mess
-though because then it may be polling for ages with nothing arriving. It
-would have to start tracking when the CPU exited idle to see if polling
-is even worthwhile. That
-
-I felt that starting with anything that tried adapting the polling
-interval based on heuristics would meet higher resistance than making it
-tunable. Hence, make it tunable so at least the problem can be addressed
-when it's encountered.
-
-> BTW, I admit that using the exit latency of the lowest enabled C-state
-> was kind of arbitrary and it was based on the assumption that it would
-> make more sense to try to enter C1 instead of polling for that much
-> time, but C1 is an exception, because it is often artificially made
-> particularly attractive to the governors (by reducing its target
-> residency as much as possible).  Also making the polling limit that
-> short distorts the governor statistics somewhat.
-> 
-> So the polling limit equal to the target residency of C1 really may be
-> overly aggressive and something tick-based may work better in general
-> (e.g. 1/8 or 1/16 of the tick period).
-> 
-
-Really, tying it to the c-states at all is a little counter-intuitive
-because a task wakeup interarrival time has nothing to do with c-states.
-It just happened to have some nice numbers that were smaller than the
-tick and as you say, c1 may be artifically attractive to the governor if
-the polling interval affects target residency estimations.
-
-> In principle, a multiple of C1 target residency could be used too.
-> 
-
-Yes but then you hit the problem that C1 exit latencies can be very
-different or not even exist. A fixed scaling factor might be great on
-one machine and useless on another.
-
-> > In theory applications could use /dev/cpu_dma_latency but not all applications
-> > are aware of cpu_dma_latency. Similarly, a tool could be installed
-> > that opens cpu_dma_latency for the whole system but such a tool is not
-> > always available, is not always known to the sysadmin or the tool can have
-> > unexpected side-effects if it tunes more than cpu_dma_latency. In practice,
-> > it is more common for sysadmins to try idle=poll (which is x86 specific)
-> 
-> And really should be avoided if one cares about turbo or wants to
-> avoid thermal issues.
-> 
-
-Yes.
-
-> > or try disabling c-states and hope for the best.
-> >
-> > This patch makes it straight-forward to configure how long a CPU should
-> > poll before entering a c-state.
-> 
-> Well, IMV this is not straightforward at all.
-> 
-> It requires the admin to know how cpuidle works and why this
-> particular polling limit is likely to be suitable for the given
-> workload.  And whether or not the default polling limit should be
-> changed at all.
-> 
-
-I tried to make the parameter documentation as clear as possible so a
-decision can be made without necessarily knowing how cpuidle works. If
-they don't detect it needs to change, the'll never bother.
-
-> Honestly, nobody knows that in advance (with all due respect) and this
-> would cause people to try various settings at random and stick to the
-> one that they feel works best for them without much understanding.
-> 
-
-More than likely, yes. However, I would point out that quite a lot of
-"tuning" efforts are based on people randomly flipping tunables and hoping
-for the best.
-
-> > By default, there is no behaviour change.
-> > At build time a decision can be made to favour performance over power
-> > by default even if that potentially impacts turbo boosting for workloads
-> > that are sensitive to wakeup latency. In the event the kernel default is
-> > not suitable, the kernel command line can be used as a substitute for
-> > implementing cpu_dma_latency support in an application or requiring an
-> > additional tool to be installed.
-> >
-> > Note that it is not expected that tuning for longer polling times will be a
-> > universal win. For example, extra polling might prevent a turbo state being
-> > used or prevent hyperthread resources being released to an SMT sibling.
-> >
-> > By default, nothing has changed but here is an example of tbench4
-> > comparing the default "poll based on the min cstate" vs "poll based on
-> > the max cstate"
-> >
-> > tbench4
-> >                           min-cstate             max-cstate
-> > Hmean     1        512.88 (   0.00%)      566.74 *  10.50%*
-> > Hmean     2        999.47 (   0.00%)     1090.01 *   9.06%*
-> > Hmean     4       1960.83 (   0.00%)     2106.62 *   7.44%*
-> > Hmean     8       3828.61 (   0.00%)     4097.93 *   7.03%*
-> > Hmean     16      6899.44 (   0.00%)     7120.38 *   3.20%*
-> > Hmean     32     10718.38 (   0.00%)    10672.44 *  -0.43%*
-> > Hmean     64     12672.21 (   0.00%)    12608.15 *  -0.51%*
-> > Hmean     128    20744.83 (   0.00%)    21147.02 *   1.94%*
-> > Hmean     256    20646.60 (   0.00%)    20608.48 *  -0.18%*
-> > Hmean     320    20892.89 (   0.00%)    20831.99 *  -0.29%*
-> 
-> I'm wondering if you have similar results for "poll based on 2 x min
-> cstate" (or 4 x min cstate for that matter).
-
-Fixed value of 30 generally worked out roughly the same performance as
-picking the setting the polling interval based on the shallowest
-c-state. I did not do many experiments with different possible values as
-I felt the optimal value would be both workload and machine dependant.
-
+diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+index 0dd47dca3e771256..94f2c133a47f66b6 100644
+--- a/drivers/thermal/rcar_gen3_thermal.c
++++ b/drivers/thermal/rcar_gen3_thermal.c
+@@ -188,70 +188,10 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
+ 	return 0;
+ }
+ 
+-static int rcar_gen3_thermal_mcelsius_to_temp(struct rcar_gen3_thermal_tsc *tsc,
+-					      int mcelsius)
+-{
+-	int celsius, val;
+-
+-	celsius = DIV_ROUND_CLOSEST(mcelsius, 1000);
+-	if (celsius <= INT_FIXPT(tsc->tj_t))
+-		val = celsius * tsc->coef.a1 + tsc->coef.b1;
+-	else
+-		val = celsius * tsc->coef.a2 + tsc->coef.b2;
+-
+-	return INT_FIXPT(val);
+-}
+-
+-static int rcar_gen3_thermal_update_range(struct rcar_gen3_thermal_tsc *tsc)
+-{
+-	int temperature, low, high;
+-
+-	rcar_gen3_thermal_get_temp(tsc, &temperature);
+-
+-	low = temperature - MCELSIUS(1);
+-	high = temperature + MCELSIUS(1);
+-
+-	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP1,
+-				rcar_gen3_thermal_mcelsius_to_temp(tsc, low));
+-
+-	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP2,
+-				rcar_gen3_thermal_mcelsius_to_temp(tsc, high));
+-
+-	return 0;
+-}
+-
+ static const struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
+ 	.get_temp	= rcar_gen3_thermal_get_temp,
+ };
+ 
+-static void rcar_thermal_irq_set(struct rcar_gen3_thermal_priv *priv, bool on)
+-{
+-	unsigned int i;
+-	u32 val = on ? IRQ_TEMPD1 | IRQ_TEMP2 : 0;
+-
+-	for (i = 0; i < priv->num_tscs; i++)
+-		rcar_gen3_thermal_write(priv->tscs[i], REG_GEN3_IRQMSK, val);
+-}
+-
+-static irqreturn_t rcar_gen3_thermal_irq(int irq, void *data)
+-{
+-	struct rcar_gen3_thermal_priv *priv = data;
+-	u32 status;
+-	int i;
+-
+-	for (i = 0; i < priv->num_tscs; i++) {
+-		status = rcar_gen3_thermal_read(priv->tscs[i], REG_GEN3_IRQSTR);
+-		rcar_gen3_thermal_write(priv->tscs[i], REG_GEN3_IRQSTR, 0);
+-		if (status) {
+-			rcar_gen3_thermal_update_range(priv->tscs[i]);
+-			thermal_zone_device_update(priv->tscs[i]->zone,
+-						   THERMAL_EVENT_UNSPECIFIED);
+-		}
+-	}
+-
+-	return IRQ_HANDLED;
+-}
+-
+ static const struct soc_device_attribute r8a7795es1[] = {
+ 	{ .soc_id = "r8a7795", .revision = "ES1.*" },
+ 	{ /* sentinel */ }
+@@ -268,7 +208,6 @@ static void rcar_gen3_thermal_init_r8a7795es1(struct rcar_gen3_thermal_tsc *tsc)
+ 
+ 	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQCTL, 0x3F);
+ 	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQMSK, 0);
+-	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQEN, IRQ_TEMPD1 | IRQ_TEMP2);
+ 
+ 	rcar_gen3_thermal_write(tsc, REG_GEN3_CTSR,
+ 				CTSR_PONM | CTSR_AOUT | CTSR_THBGR | CTSR_VMEN);
+@@ -294,7 +233,6 @@ static void rcar_gen3_thermal_init(struct rcar_gen3_thermal_tsc *tsc)
+ 
+ 	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQCTL, 0);
+ 	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQMSK, 0);
+-	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQEN, IRQ_TEMPD1 | IRQ_TEMP2);
+ 
+ 	reg_val = rcar_gen3_thermal_read(tsc, REG_GEN3_THCTR);
+ 	reg_val |= THCTR_THSST;
+@@ -345,9 +283,6 @@ MODULE_DEVICE_TABLE(of, rcar_gen3_thermal_dt_ids);
+ static int rcar_gen3_thermal_remove(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct rcar_gen3_thermal_priv *priv = dev_get_drvdata(dev);
+-
+-	rcar_thermal_irq_set(priv, false);
+ 
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
+@@ -369,8 +304,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 	const int *rcar_gen3_ths_tj_1 = of_device_get_match_data(dev);
+ 	struct resource *res;
+ 	struct thermal_zone_device *zone;
+-	int ret, irq, i;
+-	char *irqname;
++	int ret, i;
+ 
+ 	/* default values if FUSEs are missing */
+ 	/* TODO: Read values from hardware on supported platforms */
+@@ -386,28 +320,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, priv);
+ 
+-	/*
+-	 * Request 2 (of the 3 possible) IRQs, the driver only needs to
+-	 * to trigger on the low and high trip points of the current
+-	 * temp window at this point.
+-	 */
+-	for (i = 0; i < 2; i++) {
+-		irq = platform_get_irq(pdev, i);
+-		if (irq < 0)
+-			return irq;
+-
+-		irqname = devm_kasprintf(dev, GFP_KERNEL, "%s:ch%d",
+-					 dev_name(dev), i);
+-		if (!irqname)
+-			return -ENOMEM;
+-
+-		ret = devm_request_threaded_irq(dev, irq, NULL,
+-						rcar_gen3_thermal_irq,
+-						IRQF_ONESHOT, irqname, priv);
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	pm_runtime_enable(dev);
+ 	pm_runtime_get_sync(dev);
+ 
+@@ -459,8 +371,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 		if (ret < 0)
+ 			goto error_unregister;
+ 
+-		rcar_gen3_thermal_update_range(tsc);
+-
+ 		dev_info(dev, "TSC%d: Loaded %d trip points\n", i, ret);
+ 	}
+ 
+@@ -471,8 +381,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 		goto error_unregister;
+ 	}
+ 
+-	rcar_thermal_irq_set(priv, true);
+-
+ 	return 0;
+ 
+ error_unregister:
+@@ -481,15 +389,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int __maybe_unused rcar_gen3_thermal_suspend(struct device *dev)
+-{
+-	struct rcar_gen3_thermal_priv *priv = dev_get_drvdata(dev);
+-
+-	rcar_thermal_irq_set(priv, false);
+-
+-	return 0;
+-}
+-
+ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
+ {
+ 	struct rcar_gen3_thermal_priv *priv = dev_get_drvdata(dev);
+@@ -499,15 +398,12 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
+ 		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
+ 
+ 		priv->thermal_init(tsc);
+-		rcar_gen3_thermal_update_range(tsc);
+ 	}
+ 
+-	rcar_thermal_irq_set(priv, true);
+-
+ 	return 0;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(rcar_gen3_thermal_pm_ops, rcar_gen3_thermal_suspend,
++static SIMPLE_DEV_PM_OPS(rcar_gen3_thermal_pm_ops, NULL,
+ 			 rcar_gen3_thermal_resume);
+ 
+ static struct platform_driver rcar_gen3_thermal_driver = {
 -- 
-Mel Gorman
-SUSE Labs
+2.29.2
+
