@@ -2,157 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435B62C4E8E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 06:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118CE2C4E97
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 07:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387878AbgKZF5z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 00:57:55 -0500
-Received: from mga02.intel.com ([134.134.136.20]:46728 "EHLO mga02.intel.com"
+        id S2387923AbgKZGLr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 01:11:47 -0500
+Received: from mga01.intel.com ([192.55.52.88]:59749 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387863AbgKZF5z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Nov 2020 00:57:55 -0500
-IronPort-SDR: fQ0LFRe8AtSbF/En5YwpJWt5N3Nj1lhK5o7GBqY0lsNRkfqoPapa9HyTv27quzUPICZ/vnAHkb
- XZa/kFri+f1Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="159288084"
+        id S2387921AbgKZGLr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Nov 2020 01:11:47 -0500
+IronPort-SDR: zZxke9gh5hAe9N2PXThhDYNbCWBmjMvkbEheF3Ay9dGNQhAubpI7a3o1lraKZMK0HizEVzC7YE
+ BEAIb9ZB88Rg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="190393962"
 X-IronPort-AV: E=Sophos;i="5.78,371,1599548400"; 
-   d="scan'208";a="159288084"
+   d="scan'208";a="190393962"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 21:57:54 -0800
-IronPort-SDR: Jv+dPjbb8uTe2YzimvesQ720722kAOF0nQ/sjfb7O6mlwawsMPlfljYXip2nwTgjFATLgX8UdB
- X7KbJ+ftrFJA==
-X-ExtLoop1: 1
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 22:11:46 -0800
+IronPort-SDR: 893mHxJcA455TipXEsGTdeKtbsvIEv85A/a3VnVVRKzSrT9NQ2hf9L9qYUn9V5JtIkB6MPEpLl
+ tgjjdMHD6MnA==
 X-IronPort-AV: E=Sophos;i="5.78,371,1599548400"; 
-   d="scan'208";a="535623205"
-Received: from lkp-server01.sh.intel.com (HELO dd79da36dde1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Nov 2020 21:57:53 -0800
-Received: from kbuild by dd79da36dde1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kiAHw-00004u-9Y; Thu, 26 Nov 2020 05:57:52 +0000
-Date:   Thu, 26 Nov 2020 13:57:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 59d584c1f534789d8d96114726c651286876b335
-Message-ID: <5fbf43c0.kdDJx/HTc1hIV0/o%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+   d="scan'208";a="547588513"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 22:11:43 -0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Kai-Heng Feng" <kai.heng.feng@canonical.com>
+Cc:     linux-pm@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH 0/2][v2] Leverage runtime suspend to speed up the s2ram on e1000e
+Date:   Thu, 26 Nov 2020 14:14:15 +0800
+Message-Id: <cover.1606370334.git.yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 59d584c1f534789d8d96114726c651286876b335  Merge branch 'acpi-resources' into bleeding-edge
+The NIC is put in runtime suspend status when there is no cable connected.
+As a result, it is safe to keep non-wakeup NIC in runtime suspended during
+s2ram because the system does not rely on the NIC plug event nor WoL to wake
+up the system. After doing this, the s2ram could speed up the suspend/resume
+process a lot.
 
-elapsed time: 723m
+Chen Yu (2):
+  e1000e: Assign DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME to
+    speed up s2ram
+  e1000e: Remove the runtime suspend restriction on CNP+
 
-configs tested: 92
-configs skipped: 2
+ drivers/base/power/main.c                  |  2 ++
+ drivers/net/ethernet/intel/e1000e/netdev.c | 21 +++++++++++++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+-- 
+2.17.1
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                         rt305x_defconfig
-openrisc                         alldefconfig
-powerpc                       ebony_defconfig
-sh                          r7785rp_defconfig
-sh                          rsk7201_defconfig
-m68k                          hp300_defconfig
-arc                        vdk_hs38_defconfig
-arm                            qcom_defconfig
-m68k                        mvme147_defconfig
-arm                            dove_defconfig
-sh                   rts7751r2dplus_defconfig
-powerpc                   motionpro_defconfig
-arc                        nsim_700_defconfig
-mips                        bcm47xx_defconfig
-arm                           sunxi_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                       holly_defconfig
-um                            kunit_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20201125
-i386                 randconfig-a003-20201125
-i386                 randconfig-a002-20201125
-i386                 randconfig-a005-20201125
-i386                 randconfig-a001-20201125
-i386                 randconfig-a006-20201125
-x86_64               randconfig-a015-20201125
-x86_64               randconfig-a011-20201125
-x86_64               randconfig-a014-20201125
-x86_64               randconfig-a016-20201125
-x86_64               randconfig-a012-20201125
-x86_64               randconfig-a013-20201125
-i386                 randconfig-a012-20201125
-i386                 randconfig-a013-20201125
-i386                 randconfig-a011-20201125
-i386                 randconfig-a016-20201125
-i386                 randconfig-a014-20201125
-i386                 randconfig-a015-20201125
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20201125
-x86_64               randconfig-a003-20201125
-x86_64               randconfig-a004-20201125
-x86_64               randconfig-a005-20201125
-x86_64               randconfig-a002-20201125
-x86_64               randconfig-a001-20201125
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
