@@ -2,128 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B89EF2C5B90
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE442C5BF7
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Nov 2020 19:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404488AbgKZSGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Nov 2020 13:06:50 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:44466 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391576AbgKZSGu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:06:50 -0500
-Received: by mail-wr1-f66.google.com with SMTP id 64so3045505wra.11;
-        Thu, 26 Nov 2020 10:06:47 -0800 (PST)
+        id S2404074AbgKZSYz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Nov 2020 13:24:55 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45237 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404028AbgKZSYy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Nov 2020 13:24:54 -0500
+Received: by mail-oi1-f193.google.com with SMTP id l206so3123504oif.12;
+        Thu, 26 Nov 2020 10:24:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1QLKFnMd0xMr/FuISvhLJSJ7sMuGt7dY11QW5pCEZlM=;
-        b=t/JeBsIPKAQIbE5npPqhfKbrOsY3lY448eZ0DyltN66XMoagQ6K73CyE+vc/k3LIJd
-         ezPlTXs6UJT9eWg1pt8GwaUzyT/rWaOHTLXMiL9X+fk35nBlFqV/SapWFU91naRUOZSZ
-         9JoFolQ2kC4JV9DIn511e6xqiBDI/NH8yOUOX7fraVndXVfiQEjFXhXwmjeJjUq74JEM
-         07ym/k9PVjVyLByDPNFxTgP6c66R0Ok3fDTtMtTlKSXF5D8axindYu9QTl0GxHdCPcb6
-         xFkIxrtTHEhnHCm+vFcwtzFDy2R9ruQTqleba++ZSDHtrdWIYAFfO4hxqg7b6kFUo4dU
-         UcuQ==
-X-Gm-Message-State: AOAM5335sdaEkEWztE0trF8Z85hnmkShuvdHWuPBONFXlOM2fO7RS1dU
-        eeSlOEUZvlCbAGMKfthdXNk=
-X-Google-Smtp-Source: ABdhPJwJIzd4XnJQtTCHV2LiRu+9UIhtQQYRHVWoL0G78pv9E0vIbZE77Fy9quW92PvulxW+y/CkuQ==
-X-Received: by 2002:adf:ec8a:: with SMTP id z10mr5467457wrn.113.1606414006586;
-        Thu, 26 Nov 2020 10:06:46 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id o5sm9374179wmh.8.2020.11.26.10.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2020 10:06:45 -0800 (PST)
-Date:   Thu, 26 Nov 2020 19:06:43 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 17/47] dt-bindings: memory: tegra20: Add memory client
- IDs
-Message-ID: <20201126180643.GA18074@kozik-lap>
-References: <20201104164923.21238-1-digetx@gmail.com>
- <20201104164923.21238-18-digetx@gmail.com>
- <X7/lLaZJNp+Vfczk@ulmo>
- <20201126173922.GA7048@kozik-lap>
- <X7/tz8KwCBEgA6vi@ulmo>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0CeBIsTgv2OXbQ0s5p+qCPKhIhxADq0Kgs1y7GjU1q4=;
+        b=oQxYnmDKRXU6VKSL8zBn0z4NMdgR+k+9tmKfcBmjKGARA1eJ34m0vUGCcTSxuS74E6
+         LmlvqhbcihfMrdK/cFAto1vszfMZOOFDNeXUfle79u3cguU0CGEXgsePy6uCoZV5O/fB
+         u8cvl/vyIrw+w2eUKgVWd453JT7xi0QttadU3peodUDr17Y5E7hyssWnsHS787jkl38y
+         aPW6+aDTaiTlGOQT/ZOWSzr+LRKUoG3+8BVQUW9SdKpWEEoX1bt4ow1VXm7ohCg7zMGq
+         1lPDcurq/ry2pp6NyQH0yurrEibrq/sYGt1KtaZFzkEp3K1Ycwmr6IeZIXEHYW4pYbkm
+         IAlw==
+X-Gm-Message-State: AOAM533hn1ZO4JZzrQLJwAEvpx7cg1HnSx3Jcqi4TbtV/K7r9ac60Avr
+        GEOkDVwuIK5XiFS1n2zcbcpzNOkMJIZ8T6Y7B/c=
+X-Google-Smtp-Source: ABdhPJwcv4N4tGVYy983i4LAa/FVbm6w8IR3F/d094yK3WYkikCe4MdVrIqft1PMFfspkiTltRT3BfUEEPHd5TKaLq4=
+X-Received: by 2002:aca:5a42:: with SMTP id o63mr2762003oib.69.1606415093334;
+ Thu, 26 Nov 2020 10:24:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <X7/tz8KwCBEgA6vi@ulmo>
+References: <20201126171824.GK3371@techsingularity.net>
+In-Reply-To: <20201126171824.GK3371@techsingularity.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 26 Nov 2020 19:24:41 +0100
+Message-ID: <CAJZ5v0hz4dBzUcvoyLoJf8Fmajws-uP3MB-_4dmzEYvMDJwEwQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Allow configuration of the polling interval
+ before cpuidle enters a c-state
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 07:02:55PM +0100, Thierry Reding wrote:
-> On Thu, Nov 26, 2020 at 06:39:22PM +0100, Krzysztof Kozlowski wrote:
-> > On Thu, Nov 26, 2020 at 06:26:05PM +0100, Thierry Reding wrote:
-> > > On Wed, Nov 04, 2020 at 07:48:53PM +0300, Dmitry Osipenko wrote:
-> > > > Each memory client has unique hardware ID, add these IDs.
-> > > > 
-> > > > Acked-by: Rob Herring <robh@kernel.org>
-> > > > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > > > ---
-> > > >  include/dt-bindings/memory/tegra20-mc.h | 53 +++++++++++++++++++++++++
-> > > >  1 file changed, 53 insertions(+)
-> > > 
-> > > Is there any chance you could drop these dt-bindings include patches
-> > > (17, 18 and 19) so that I can pick them up into the Tegra tree? The
-> > > device tree changes that I was going to pick up depend on this and
-> > > fail to build if applied as-is.
-> > > 
-> > > I was looking at your linux-mem-ctrl tree and had initially thought I
-> > > could just pull in one of the branches to get these dependencies, but it
-> > > looks like the dt-bindings patches are on the for-v5.11/tegra-mc branch,
-> > > which the ARM SoC maintainers wouldn't like to see me pull in for a
-> > > dependency on device tree changes.
-> > 
-> > Partially you answered here. :) Since you should not pull my branch into
-> > a DT branch, you also should not put these include/dt-bindings patches
-> > there.  SoC guys will complain about this as well.
-> > 
-> > These patches are also needed for the driver, so if you take them, I
-> > would need them back in a pull request. SoC folks could spot it as well
-> > and point that such merge should not happen.
-> > 
-> > > If this is all fixed at this point, I'll just have to push back the
-> > > device tree changes to v5.12, or perhaps see if the ARM SoC maintainers
-> > > are willing to take a late pull request that's based on v5.11-rc1.
-> > 
-> > Yeah, that's a known problem. I asked about this Arnd and Olof in the
-> > past and got reply with two solutions:
-> > 1. Apply current version of patch without defines, just hard-coded
-> >    numbers. After merging to Linus, replace the numbers with defines.
-> > 
-> > 2. Wait with DTS till dependencies reach Linus.
-> 
-> What I've done occasionally in the past was to put these kinds of
-> patches into a separate "dt-bindings" branch that I could use to resolve
-> dependencies from device tree files. The ARM SoC maintainers never had
-> any issues with that approach.
-> 
-> I guess this is a bit of a special case, because the DT includes are
-> ultimately really a part of the device tree, so mixing them both isn't
-> problematic.
+On Thu, Nov 26, 2020 at 6:25 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> It was noted that a few workloads that idle rapidly regressed when commit
+> 36fcb4292473 ("cpuidle: use first valid target residency as poll time")
+> was merged. The workloads in question were heavy communicators that idle
+> rapidly and were impacted by the c-state exit latency as the active CPUs
+> were not polling at the time of wakeup. As they were not particularly
+> realistic workloads, it was not considered to be a major problem.
+>
+> Unfortunately, a bug was then reported for a real workload in a production
+> environment that relied on large numbers of threads operating in a worker
+> pool pattern. These threads would idle for periods of time slightly
+> longer than the C1 exit latency and so incurred the c-state exit latency.
+> The application is sensitive to wakeup latency and appears to indirectly
+> rely on behaviour prior to commit on a37b969a61c1 ("cpuidle: poll_state:
+> Add time limit to poll_idle()") to poll for long enough to avoid the exit
+> latency cost.
 
-Indeed, that way could work... and no one would spot it. :) Many times
-these headers were for clock symbols so if they go via SoC/DT tree,
-merge back to clock tree could be accepted.
+Well, this means that it depends on the governor to mispredict short
+idle durations (so it selects "poll" over "C1" when it should select
+"C1" often enough) and on the lack of a polling limit (or a large
+enough one).
 
-Best regards,
-Krzysztof
+While the latter can be kind of addressed by increasing the polling
+limit, the misprediction in the governor really isn't guaranteed to
+happen and it really is necessary to have a PM QoS request in place to
+ensure a suitable latency.
 
+> The current behaviour favours power consumption over wakeup latency
+> and it is reasonable behaviour but it should be tunable.
+
+Only if there is no way to cover all of the relevant use cases in a
+generally acceptable way without adding more module params etc.
+
+In this particular case, it should be possible to determine a polling
+limit acceptable to everyone.
+
+BTW, I admit that using the exit latency of the lowest enabled C-state
+was kind of arbitrary and it was based on the assumption that it would
+make more sense to try to enter C1 instead of polling for that much
+time, but C1 is an exception, because it is often artificially made
+particularly attractive to the governors (by reducing its target
+residency as much as possible).  Also making the polling limit that
+short distorts the governor statistics somewhat.
+
+So the polling limit equal to the target residency of C1 really may be
+overly aggressive and something tick-based may work better in general
+(e.g. 1/8 or 1/16 of the tick period).
+
+In principle, a multiple of C1 target residency could be used too.
+
+> In theory applications could use /dev/cpu_dma_latency but not all applications
+> are aware of cpu_dma_latency. Similarly, a tool could be installed
+> that opens cpu_dma_latency for the whole system but such a tool is not
+> always available, is not always known to the sysadmin or the tool can have
+> unexpected side-effects if it tunes more than cpu_dma_latency. In practice,
+> it is more common for sysadmins to try idle=poll (which is x86 specific)
+
+And really should be avoided if one cares about turbo or wants to
+avoid thermal issues.
+
+> or try disabling c-states and hope for the best.
+>
+> This patch makes it straight-forward to configure how long a CPU should
+> poll before entering a c-state.
+
+Well, IMV this is not straightforward at all.
+
+It requires the admin to know how cpuidle works and why this
+particular polling limit is likely to be suitable for the given
+workload.  And whether or not the default polling limit should be
+changed at all.
+
+Honestly, nobody knows that in advance (with all due respect) and this
+would cause people to try various settings at random and stick to the
+one that they feel works best for them without much understanding.
+
+> By default, there is no behaviour change.
+> At build time a decision can be made to favour performance over power
+> by default even if that potentially impacts turbo boosting for workloads
+> that are sensitive to wakeup latency. In the event the kernel default is
+> not suitable, the kernel command line can be used as a substitute for
+> implementing cpu_dma_latency support in an application or requiring an
+> additional tool to be installed.
+>
+> Note that it is not expected that tuning for longer polling times will be a
+> universal win. For example, extra polling might prevent a turbo state being
+> used or prevent hyperthread resources being released to an SMT sibling.
+>
+> By default, nothing has changed but here is an example of tbench4
+> comparing the default "poll based on the min cstate" vs "poll based on
+> the max cstate"
+>
+> tbench4
+>                           min-cstate             max-cstate
+> Hmean     1        512.88 (   0.00%)      566.74 *  10.50%*
+> Hmean     2        999.47 (   0.00%)     1090.01 *   9.06%*
+> Hmean     4       1960.83 (   0.00%)     2106.62 *   7.44%*
+> Hmean     8       3828.61 (   0.00%)     4097.93 *   7.03%*
+> Hmean     16      6899.44 (   0.00%)     7120.38 *   3.20%*
+> Hmean     32     10718.38 (   0.00%)    10672.44 *  -0.43%*
+> Hmean     64     12672.21 (   0.00%)    12608.15 *  -0.51%*
+> Hmean     128    20744.83 (   0.00%)    21147.02 *   1.94%*
+> Hmean     256    20646.60 (   0.00%)    20608.48 *  -0.18%*
+> Hmean     320    20892.89 (   0.00%)    20831.99 *  -0.29%*
+
+I'm wondering if you have similar results for "poll based on 2 x min
+cstate" (or 4 x min cstate for that matter).
