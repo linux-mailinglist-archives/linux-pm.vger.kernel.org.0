@@ -2,123 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 129862C6733
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Nov 2020 14:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F562C6753
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Nov 2020 15:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730682AbgK0Nth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Nov 2020 08:49:37 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:8189 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729169AbgK0Nth (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Nov 2020 08:49:37 -0500
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CjGFD1qdRzkgSk;
-        Fri, 27 Nov 2020 21:49:04 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Fri, 27 Nov 2020
- 21:49:30 +0800
-From:   Zhang Qilong <zhangqilong3@huawei.com>
-To:     <fugang.duan@nxp.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <rjw@rjwysocki.net>, <geert@linux-m68k.org>
-CC:     <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH] PM: runtime: replace pm_runtime_resume_and_get with pm_runtime_resume_and_get_sync
-Date:   Fri, 27 Nov 2020 21:52:56 +0800
-Message-ID: <20201127135256.2065725-1-zhangqilong3@huawei.com>
-X-Mailer: git-send-email 2.25.4
+        id S1730461AbgK0N6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Nov 2020 08:58:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:42562 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730152AbgK0N6v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 27 Nov 2020 08:58:51 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C10FF1516;
+        Fri, 27 Nov 2020 05:58:50 -0800 (PST)
+Received: from [10.57.26.227] (unknown [10.57.26.227])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 197433F70D;
+        Fri, 27 Nov 2020 05:58:47 -0800 (PST)
+Subject: Re: [RFC 1/2] dt-bindings: thermal: sprd: Add virtual thermal
+ documentation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, gao.yunxiao6@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, robh+dt@kernel.org,
+        javi.merino@kernel.org
+Cc:     linux-pm@vger.kernel.org, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        orsonzhai@gmail.com, zhang.lyra@gmail.com,
+        "jeson.gao" <jeson.gao@unisoc.com>
+References: <1606466112-31584-1-git-send-email-gao.yunxiao6@gmail.com>
+ <724ddf78-483c-2cf3-441c-4885af8425a9@arm.com>
+ <1af5220c-f598-58f4-488e-fdd505477ed5@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <fc2e095f-d417-1547-4075-9ece1aeaaf4d@arm.com>
+Date:   Fri, 27 Nov 2020 13:58:46 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-CFilter-Loop: Reflected
+In-Reply-To: <1af5220c-f598-58f4-488e-fdd505477ed5@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the pm_runtime_resume_and_get, pm_runtime_resume() is
-synchronous. Caller had to look into the implementation
-to verify that a change for pm_runtime_resume_and_get[0].
-So we use pm_rauntime_resume_and_get_sync to replace it
-to avoid making the same mistake while fixing
-pm_runtime_get_sync.
 
-[0]https://lore.kernel.org/netdev/20201110092933.3342784-1-zhangqilong3@huawei.com/T/#t
-Fixes: dd8088d5a8969dc2 ("PM runtime: Add pm_runtime_resume_and_get to deal with usage counter")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 10 +++++-----
- include/linux/pm_runtime.h                |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 04f24c66cf36..6bfc46da2943 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1808,7 +1808,7 @@ static int fec_enet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
- 	int ret = 0, frame_start, frame_addr, frame_op;
- 	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
--	ret = pm_runtime_resume_and_get(dev);
-+	ret = pm_runtime_resume_and_get_sync(dev);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1867,7 +1867,7 @@ static int fec_enet_mdio_write(struct mii_bus *bus, int mii_id, int regnum,
- 	int ret, frame_start, frame_addr;
- 	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
--	ret = pm_runtime_resume_and_get(dev);
-+	ret = pm_runtime_resume_and_get_sync(dev);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -2273,7 +2273,7 @@ static void fec_enet_get_regs(struct net_device *ndev,
- 	u32 i, off;
- 	int ret;
- 
--	ret = pm_runtime_resume_and_get(dev);
-+	ret = pm_runtime_resume_and_get_sync(dev);
- 	if (ret < 0)
- 		return;
- 
-@@ -2974,7 +2974,7 @@ fec_enet_open(struct net_device *ndev)
- 	int ret;
- 	bool reset_again;
- 
--	ret = pm_runtime_resume_and_get(&fep->pdev->dev);
-+	ret = pm_runtime_resume_and_get_sync(&fep->pdev->dev);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -3768,7 +3768,7 @@ fec_drv_remove(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	int ret;
- 
--	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	ret = pm_runtime_resume_and_get_sync(&pdev->dev);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index b492ae00cc90..c83edb7473fc 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -387,14 +387,14 @@ static inline int pm_runtime_get_sync(struct device *dev)
- }
- 
- /**
-- * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
-+ * pm_runtime_resume_and_get_sync - Bump up usage counter of a device and resume it.
-  * @dev: Target device.
-  *
-  * Resume @dev synchronously and if that is successful, increment its runtime
-  * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
-  * incremented or a negative error code otherwise.
-  */
--static inline int pm_runtime_resume_and_get(struct device *dev)
-+static inline int pm_runtime_resume_and_get_sync(struct device *dev)
- {
- 	int ret;
- 
--- 
-2.25.4
+On 11/27/20 1:26 PM, Daniel Lezcano wrote:
+> 
+> Hi Lukasz,
+> 
+> On 27/11/2020 10:27, Lukasz Luba wrote:
+>>
+>>
+>> On 11/27/20 8:35 AM, gao.yunxiao6@gmail.com wrote:
+>>> From: "jeson.gao" <jeson.gao@unisoc.com>
+>>>
+>>> virtual thermal node definition description in dts file
+>>>
+>>> Signed-off-by: jeson.gao <jeson.gao@unisoc.com>
+>>> ---
+> 
+> [ ... ]
+> 
+>> It's coming back. There were attempts to solve this problem.
+>> Javi tried to solved this using hierarchical thermal zones [1].
+>> It was even agreed (IIRC during LPC) but couldn't continue. Then Eduardo
+>> was going to continue this (last message at [3]). Unfortunately,
+>> development stopped.
+>>
+>> I also have out-of-tree similar implementation for my Odroid-xu4,
+>> which does no have an 'SoC' sensor, but have CPU sensors and needs
+>> some aggregation function to get temperature.
+>>
+>> I can pick up Javi's patches and continue 'hierarchical thermal zones'
+>> approach.
+>>
+>> Javi, Daniel, Rui what do you think?
+> 
+> I already worked on the hierarchical thermal zones and my opinion is
+> that fits not really well.
+> 
+> We want to define a new feature because the thermal framework is built
+> on the 1:1 relationship between a governor and a thermal zone.
+> 
+> Practically speaking, we want to mitigate two thermal zones from one
+> governor, especially here the IPA governor.
+> 
+> The DTPM framework is being implemented to solve that by providing an
+> automatic power rebalancing between the power manageable capable devices.
+> 
+> In our case, the IPA would stick on the 'sustainable-power' resulting on
+> the aggregation of the two performance domains and set the power limit
+> on the parent node. The automatic power rebalancing will ensure maximum
+> throughput between the two performance domains instead of capping the whole.
+> 
+> 
 
+Make sense. Thank you for sharing valuable opinion.
+
+Regards,
+Lukasz
