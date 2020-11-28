@@ -2,92 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0592C7066
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Nov 2020 19:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201342C742D
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Nov 2020 23:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbgK1R5z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Nov 2020 12:57:55 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:50352 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733041AbgK1Rzz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Nov 2020 12:55:55 -0500
-Received: from 220-133-187-190.hinet-ip.hinet.net ([220.133.187.190] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kj4RB-0006Sy-2o; Sat, 28 Nov 2020 17:55:10 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] thermal: intel: intel_pch_thermal: Indicate userspace usage
-Date:   Sun, 29 Nov 2020 01:54:50 +0800
-Message-Id: <20201128175450.12456-3-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201128175450.12456-1-kai.heng.feng@canonical.com>
-References: <20201128175450.12456-1-kai.heng.feng@canonical.com>
+        id S1731661AbgK1Vts (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Nov 2020 16:49:48 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:8470 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730098AbgK1Shz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Nov 2020 13:37:55 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Cjht84KQXzhj0M;
+        Sat, 28 Nov 2020 14:49:04 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Sat, 28 Nov 2020
+ 14:49:18 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <kuba@kernel.org>, <fugang.duan@nxp.com>, <davem@davemloft.net>,
+        <rjw@rjwysocki.net>, <geert@linux-m68k.org>
+CC:     <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v2] PM: runtime: replace pm_runtime_resume_and_get with pm_runtime_resume_and_get_sync
+Date:   Sat, 28 Nov 2020 14:52:43 +0800
+Message-ID: <20201128065243.2870987-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The device isn't present under ACPI ThermalZone, and there's a dedicated
-userspace daemon for this thermal device.
+In the pm_runtime_resume_and_get, pm_runtime_resume() is
+synchronous. Caller had to look into the implementation
+to verify that a change for pm_runtime_resume_and_get [0].
+So we use pm_rauntime_resume_and_get_sync to replace it to
+avoid making the same mistake while fixing
+pm_runtime_get_sync.
 
-Let thermal core know it shouldn't handle trips to avoid surprising
-thermal shutdown.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+[0]https://lore.kernel.org/netdev/20201110092933.3342784-1-zhangqilong3@huawei.com/T/#t
+Fixes: dd8088d5a896 ("PM: runtime: Add pm_runtime_resume_and_get to deal with usage counter")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 ---
- drivers/thermal/intel/intel_pch_thermal.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+Changelog:
+v2
+- change the fixes tag.
+---
+ drivers/net/ethernet/freescale/fec_main.c | 10 +++++-----
+ include/linux/pm_runtime.h                |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
-index 3b813ebb6ca1..e55e6318d733 100644
---- a/drivers/thermal/intel/intel_pch_thermal.c
-+++ b/drivers/thermal/intel/intel_pch_thermal.c
-@@ -270,6 +270,10 @@ static struct thermal_zone_device_ops tzd_ops = {
- 	.get_trip_temp = pch_get_trip_temp,
- };
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index 04f24c66cf36..6bfc46da2943 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -1808,7 +1808,7 @@ static int fec_enet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
+ 	int ret = 0, frame_start, frame_addr, frame_op;
+ 	bool is_c45 = !!(regnum & MII_ADDR_C45);
  
-+static struct thermal_zone_params tzd_params = {
-+	.userspace = true,
-+};
-+
- enum board_ids {
- 	board_hsw,
- 	board_wpt,
-@@ -346,21 +350,16 @@ static int intel_pch_thermal_probe(struct pci_dev *pdev,
- 		goto error_cleanup;
+-	ret = pm_runtime_resume_and_get(dev);
++	ret = pm_runtime_resume_and_get_sync(dev);
+ 	if (ret < 0)
+ 		return ret;
  
- 	ptd->tzd = thermal_zone_device_register(bi->name, nr_trips, 0, ptd,
--						&tzd_ops, NULL, 0, 0);
-+						&tzd_ops, &tzd_params, 0, 0);
- 	if (IS_ERR(ptd->tzd)) {
- 		dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
- 			bi->name);
- 		err = PTR_ERR(ptd->tzd);
- 		goto error_cleanup;
- 	}
--	err = thermal_zone_device_enable(ptd->tzd);
--	if (err)
--		goto err_unregister;
+@@ -1867,7 +1867,7 @@ static int fec_enet_mdio_write(struct mii_bus *bus, int mii_id, int regnum,
+ 	int ret, frame_start, frame_addr;
+ 	bool is_c45 = !!(regnum & MII_ADDR_C45);
  
- 	return 0;
+-	ret = pm_runtime_resume_and_get(dev);
++	ret = pm_runtime_resume_and_get_sync(dev);
+ 	if (ret < 0)
+ 		return ret;
  
--err_unregister:
--	thermal_zone_device_unregister(ptd->tzd);
- error_cleanup:
- 	iounmap(ptd->hw_base);
- error_release:
+@@ -2273,7 +2273,7 @@ static void fec_enet_get_regs(struct net_device *ndev,
+ 	u32 i, off;
+ 	int ret;
+ 
+-	ret = pm_runtime_resume_and_get(dev);
++	ret = pm_runtime_resume_and_get_sync(dev);
+ 	if (ret < 0)
+ 		return;
+ 
+@@ -2974,7 +2974,7 @@ fec_enet_open(struct net_device *ndev)
+ 	int ret;
+ 	bool reset_again;
+ 
+-	ret = pm_runtime_resume_and_get(&fep->pdev->dev);
++	ret = pm_runtime_resume_and_get_sync(&fep->pdev->dev);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -3768,7 +3768,7 @@ fec_drv_remove(struct platform_device *pdev)
+ 	struct device_node *np = pdev->dev.of_node;
+ 	int ret;
+ 
+-	ret = pm_runtime_resume_and_get(&pdev->dev);
++	ret = pm_runtime_resume_and_get_sync(&pdev->dev);
+ 	if (ret < 0)
+ 		return ret;
+ 
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index b492ae00cc90..c83edb7473fc 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -387,14 +387,14 @@ static inline int pm_runtime_get_sync(struct device *dev)
+ }
+ 
+ /**
+- * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
++ * pm_runtime_resume_and_get_sync - Bump up usage counter of a device and resume it.
+  * @dev: Target device.
+  *
+  * Resume @dev synchronously and if that is successful, increment its runtime
+  * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
+  * incremented or a negative error code otherwise.
+  */
+-static inline int pm_runtime_resume_and_get(struct device *dev)
++static inline int pm_runtime_resume_and_get_sync(struct device *dev)
+ {
+ 	int ret;
+ 
 -- 
-2.29.2
+2.25.4
 
