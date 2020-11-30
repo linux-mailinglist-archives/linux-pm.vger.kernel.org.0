@@ -2,106 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E966B2C8CA6
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214A02C8CAD
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387417AbgK3SYE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 13:24:04 -0500
-Received: from m-r2.th.seeweb.it ([5.144.164.171]:44685 "EHLO
-        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727125AbgK3SYE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 13:24:04 -0500
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 2858E40266;
-        Mon, 30 Nov 2020 19:23:21 +0100 (CET)
-Subject: Re: [PATCH 11/13] dt-bindings: cpufreq: Convert qcom-cpufreq-hw to
- YAML binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     viresh.kumar@linaro.org, rjw@rjwysocki.net,
-        jorge.ramirez-ortiz@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@somainline.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ulf.hansson@linaro.org,
-        nks@flawful.org, lgirdwood@gmail.com, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org, bjorn.andersson@linaro.org,
-        phone-devel@vger.kernel.org, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org
-References: <20201126184559.3052375-1-angelogioacchino.delregno@somainline.org>
- <20201126184559.3052375-12-angelogioacchino.delregno@somainline.org>
- <20201130172305.GA2661895@robh.at.kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <9fc67c3f-4753-fe4f-ca1b-7faeee2abe7d@somainline.org>
-Date:   Mon, 30 Nov 2020 19:23:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S2388015AbgK3SYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 13:24:36 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:38077 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388112AbgK3SYg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 13:24:36 -0500
+Received: by mail-ed1-f67.google.com with SMTP id y4so17472354edy.5;
+        Mon, 30 Nov 2020 10:24:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I9ONVBtfScKIMTye82bfGQ5rddLKQrmuSaE2Zj5EgGI=;
+        b=irAHwtaB9jiuv+vG00w505UybL5aiKHDguodT6LJytjnXVtNtlwJ76oRFwituz8twK
+         WEPEW0R6JStai9TjYrNdp2xpsuZL7WgA/sRsUW7E6KdmtetiXt/tURyp4XuPYCpfqU8P
+         ABz3fqwZ6TKFKv5glz0IsRpd4miRvplFOKliaYL92niQOKVnogCK92Je/nJ75o6LYtEc
+         sNEMz1lQgDvtpgqAE+hccYt7VFx+OX87lUVhXvfxhg2GJsEIrcOSTNYgR+nbSV4wBKEi
+         l7NdNWUkryCRWIkformrHmA9jBPxXIk9IKbcrfwfUhq/CnqwW7be6khT7zadS96PwKCn
+         gSig==
+X-Gm-Message-State: AOAM533PavAV4lPijyay5l0BGiK+ve6wAtdtYgnN1skGvu5hg0laMHsG
+        kO21O1iyYd2qEoVvX0TR5WU=
+X-Google-Smtp-Source: ABdhPJwYHGbHVMApFqE392EkdKd4CbGtej8nEk3tKKJMIPVxgXA2gu998VoT05uHS0KZ4By5J9o3BA==
+X-Received: by 2002:a50:8f64:: with SMTP id 91mr23297490edy.310.1606760628069;
+        Mon, 30 Nov 2020 10:23:48 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id v18sm789274edx.30.2020.11.30.10.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 10:23:47 -0800 (PST)
+Date:   Mon, 30 Nov 2020 20:23:45 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v10 01/19] dt-bindings: memory: tegra20: emc: Document
+ opp-supported-hw property
+Message-ID: <20201130182345.GA28450@kozik-lap>
+References: <20201123002723.28463-1-digetx@gmail.com>
+ <20201123002723.28463-2-digetx@gmail.com>
+ <46b3bab7-1c2c-2f50-6e41-f411e532357b@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20201130172305.GA2661895@robh.at.kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <46b3bab7-1c2c-2f50-6e41-f411e532357b@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 30/11/20 18:23, Rob Herring ha scritto:
-> On Thu, 26 Nov 2020 19:45:57 +0100, AngeloGioacchino Del Regno wrote:
->> Convert the qcom-cpufreq-hw documentation to YAML binding as
->> qcom,cpufreq-hw.yaml.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->> ---
->>   .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 173 +---------------
->>   .../bindings/cpufreq/qcom,cpufreq-hw.yaml     | 196 ++++++++++++++++++
->>   2 files changed, 197 insertions(+), 172 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
->>
+On Mon, Nov 30, 2020 at 11:48:18AM +0200, Georgi Djakov wrote:
+> On 23.11.20 2:27, Dmitry Osipenko wrote:
+> > Document opp-supported-hw property, which is not strictly necessary to
+> > have on Tegra20, but it's very convenient to have because all other SoC
+> > core devices will use hardware versioning, and thus, it's good to maintain
+> > the consistency.
 > 
+> Hi Dmitry,
 > 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml: properties:clock-names: [{'const': 'xo'}, {'const': 'ref'}] is not of type 'object', 'boolean'
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml: maintainers:0: 'TBD' is not a 'email'
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml: ignoring, error in schema: properties: clock-names
-> warning: no schema found in file: ./Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
-> Error: Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.example.dts:150.3-151.1 syntax error
-> FATAL ERROR: Unable to parse input tree
-> make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.example.dt.yaml] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1364: dt_binding_check] Error 2
-> 
-> 
-> See https://patchwork.ozlabs.org/patch/1406857
-> 
-> The base for the patch is generally the last rc1. Any dependencies
-> should be noted.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+> I believe Krzysztof is waiting for Ack on the binding before merging
+> this patch (and the rest), but unfortunately it was not sent to the
+> DT mailing list for review.
 
-Hello!
-All the errors that you've pointed out have been fixed on both the CPR,
-CPR3 and cpufreq-hw, but before pushing a V2 of this patch series...
+Indeed I am still waiting for Rob's and Thierry's acks for this and the
+following patches.  It has been just a week so I'll give it few more
+days.
 
-Well, I have a question: the qcom-cpufreq-hw driver has no MAINTAINERS
-entry and there was no maintainer for this driver specified in the old
-txt format binding.
+Best regards,
+Krzysztof
 
-What should I write in the "maintainers" field of the YAML binding for
-this driver?
-Should I assign it to the subsystem maintainer?
-
-Thanks,
-- Angelo
