@@ -2,110 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C692C8A36
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 18:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A662C8A60
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 18:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729142AbgK3RAN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 12:00:13 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:42501 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729141AbgK3RAN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 12:00:13 -0500
-Received: by mail-io1-f66.google.com with SMTP id q137so8873448iod.9;
-        Mon, 30 Nov 2020 08:59:57 -0800 (PST)
+        id S1729094AbgK3RD4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 12:03:56 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:38390 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727936AbgK3RD4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 12:03:56 -0500
+Received: by mail-io1-f65.google.com with SMTP id y5so11443257iow.5;
+        Mon, 30 Nov 2020 09:03:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Hq1MJpvbDh7bba2e04fPTBnORo/SbAhyQcObblCnObs=;
-        b=e9nRknYpuq2gvfoe4HOKpeAZVgxHazGOwdFcyefos6U+sWdAlZcDHTwDLReNNOWGZ6
-         63OEyMBYK4F6QDkSsPBBz2SNwHwIrbeacllRsfsolPY1C1177xfCs4EZjHzYDHdQmzb7
-         1v/EyQBKdeXxRqmv/eoOQV+hnIsLQiWaVolCkIqcnQH4f1APhPP0thftpI+92KQT6fV3
-         NSwM++S7oJ1fka5RMy+Vow4dqMr0wF+XfXwlTgGWL5D3YWWNLVP+BA69c1hZSk9isfk7
-         ysaeGfHGSlO50qGY77GOVe880JwX/m4q4vXeNq+UGyV5L1w7FiCPLgAqmv3C9572koTa
-         BmJg==
-X-Gm-Message-State: AOAM532yaK3ix/uPji+Rt4DstH3KVGjghFVHQPfPDvatpjOBWzS0pRyo
-        BrEjL928AqRSut0R7anAMw==
-X-Google-Smtp-Source: ABdhPJzEFd02WNAYRRP4EaId0gS+QWu5Mv0Ty/p0+ar97FxggjqT8eC4thWRaa2uFkQA0ZhScIq8dg==
-X-Received: by 2002:a6b:ea0d:: with SMTP id m13mr15605478ioc.148.1606755571994;
-        Mon, 30 Nov 2020 08:59:31 -0800 (PST)
+        bh=ZVRcg2DyYnY2T86oR8Te89KJ9jB7+OaNC7lMLPrhpP8=;
+        b=ahmXBkPUBEU9PzW+agYRUZ498p92yF8F3lYqdX9XwtbaVVkuEdalYc03l2nK+eKt9L
+         xJ2s14a/VuBPS7DsdSe3c1MCp6kXu9ITEEAIYfZh0KL74rjbgZrfN/h6IytLT36VybOs
+         7u4xMVLn9+vRBDMaltPyniZ89Qr3fH/IrWqjv+iXk3B+ZEClLJ96l1u5nnTlXAjJVCJQ
+         QTdVvLYftHt3UBo6w94BRuTcsZsdHAQcVer8eT9lEQ9blCDUw87dBbfKsHhT1JlN40OL
+         hO3KfGS4e6GVOvMFNzsKuqt6xG5Po1UBJfAic1ksh1hf342w+OK9nOSgoTGrdJopQ9yb
+         ADnQ==
+X-Gm-Message-State: AOAM530t0+PA0vKX/pCVj4Zu5ZGBPAiiPfuSR5RPBpB6qy96u8laYSgG
+        HyQqwERvHmOsBivEVsQq+w==
+X-Google-Smtp-Source: ABdhPJyjovkgkPmew9hFyzwW0sWCRJdcvlG4zeJ8246X7c+JB13zmvU3zgYWciFKeDBC2ZGXUfxVAQ==
+X-Received: by 2002:a5e:d717:: with SMTP id v23mr12204718iom.60.1606755794761;
+        Mon, 30 Nov 2020 09:03:14 -0800 (PST)
 Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id f2sm8214670iow.4.2020.11.30.08.59.29
+        by smtp.gmail.com with ESMTPSA id t12sm8339755ilu.46.2020.11.30.09.03.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 08:59:31 -0800 (PST)
-Received: (nullmailer pid 2625316 invoked by uid 1000);
-        Mon, 30 Nov 2020 16:59:28 -0000
-Date:   Mon, 30 Nov 2020 09:59:28 -0700
+        Mon, 30 Nov 2020 09:03:13 -0800 (PST)
+Received: (nullmailer pid 2631520 invoked by uid 1000);
+        Mon, 30 Nov 2020 17:03:11 -0000
+Date:   Mon, 30 Nov 2020 10:03:11 -0700
 From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 8/8] dt-bindings: thermal: tsens: Document ipq8064
- bindings
-Message-ID: <20201130165928.GA2624688@robh.at.kernel.org>
-References: <20201125174826.24462-1-ansuelsmth@gmail.com>
- <20201125174826.24462-9-ansuelsmth@gmail.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     linux-pm@vger.kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, martin.botka@somainline.org,
+        rjw@rjwysocki.net, phone-devel@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-arm-msm@vger.kernel.org,
+        marijn.suijten@somainline.org, jorge.ramirez-ortiz@linaro.org,
+        agross@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        lgirdwood@gmail.com, nks@flawful.org, konrad.dybcio@somainline.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        broonie@kernel.org
+Subject: Re: [PATCH 07/13] dt-bindings: avs: cpr: Convert binding to YAML
+ schema
+Message-ID: <20201130170311.GA2630904@robh.at.kernel.org>
+References: <20201126184559.3052375-1-angelogioacchino.delregno@somainline.org>
+ <20201126184559.3052375-8-angelogioacchino.delregno@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201125174826.24462-9-ansuelsmth@gmail.com>
+In-Reply-To: <20201126184559.3052375-8-angelogioacchino.delregno@somainline.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Nov 2020 18:48:25 +0100, Ansuel Smith wrote:
-> Document the use of bindings used for msm8960 tsens based devices.
-> msm8960 use the same gcc regs and is set as a child of the qcom gcc.
+On Thu, 26 Nov 2020 19:45:53 +0100, AngeloGioacchino Del Regno wrote:
+> Convert the qcom,cpr.txt document to YAML schema and place it in the
+> appropriate directory, since commit a7305e684fc moves this driver
+> from power/avs to soc/qcom, but forgets to move the documentation.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > ---
->  .../bindings/thermal/qcom-tsens.yaml          | 103 ++++++++++++++----
->  1 file changed, 79 insertions(+), 24 deletions(-)
+>  .../bindings/power/avs/qcom,cpr.txt           | 131 +-----------------
+>  .../bindings/soc/qcom/qcom,cpr.yaml           | 115 +++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 117 insertions(+), 131 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
 > 
 
 
 My bot found errors running 'make dt_binding_check' on your patch:
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:25:13: [warning] wrong indentation: expected 14 but found 12 (indentation)
-./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:121:8: [error] empty value in block mapping (empty-values)
-./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:133:3: [error] syntax error: expected <block end>, but found '?' (syntax)
-./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:134:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
-./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:140:3: [warning] wrong indentation: expected 4 but found 2 (indentation)
-./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:141:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
 
 dtschema/dtc warnings/errors:
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 45, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 343, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 111, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
-  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 852, in _ruamel_yaml.CParser._compose_sequence_node
-  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-ruamel.yaml.parser.ParserError: while parsing a block collection
-  in "<unicode string>", line 101, column 3
-did not find expected '-' indicator
-  in "<unicode string>", line 133, column 3
-make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts] Error 1
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts'
-make[1]: *** Waiting for unfinished jobs....
-make[1]: *** [Documentation/devicetree/bindings/Makefile:59: Documentation/devicetree/bindings/processed-schema-examples.json] Error 123
-make: *** [Makefile:1364: dt_binding_check] Error 2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml: properties:clock-names: [{'const': 'ref'}] is not of type 'object', 'boolean'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml: ignoring, error in schema: properties: clock-names
+warning: no schema found in file: ./Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
 
 
-See https://patchwork.ozlabs.org/patch/1406385
+See https://patchwork.ozlabs.org/patch/1406855
 
 The base for the patch is generally the last rc1. Any dependencies
 should be noted.
