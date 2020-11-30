@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A95E2C8CFF
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BE62C8CFB
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388159AbgK3Sjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 13:39:51 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:64724 "EHLO
+        id S2388138AbgK3Sjs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 13:39:48 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61374 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388079AbgK3Sju (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 13:39:50 -0500
+        with ESMTP id S2388112AbgK3Sjs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 13:39:48 -0500
 Received: from 89-64-87-210.dynamic.chello.pl (89.64.87.210) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.530)
- id 1d60de8b7b518a00; Mon, 30 Nov 2020 19:39:06 +0100
+ id 6703218980216aac; Mon, 30 Nov 2020 19:39:05 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -22,9 +22,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Doug Smythies <dsmythies@telus.net>,
         Giovanni Gherdovich <ggherdovich@suse.com>
-Subject: [RFC][PATCH 1/2] cpufreq: Add special-purpose fast-switching callback for drivers
-Date:   Mon, 30 Nov 2020 19:37:01 +0100
-Message-ID: <2174134.tL5yAn4CWt@kreacher>
+Subject: [RFC][PATCH 2/2] cpufreq: intel_pstate: Implement the ->adjust_perf() callback
+Date:   Mon, 30 Nov 2020 19:37:55 +0100
+Message-ID: <9641625.O8ij7EI7nc@kreacher>
 In-Reply-To: <1817571.2o5Kk4Ohv2@kreacher>
 References: <1817571.2o5Kk4Ohv2@kreacher>
 MIME-Version: 1.0
@@ -36,217 +36,141 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-First off, some cpufreq drivers (eg. intel_pstate) can pass hints
-beyond the current target frequency to the hardware and there are no
-provisions for doing that in the cpufreq framework.  In particular,
-today the driver has to assume that it should allow the frequency to
-fall below the one requested by the governor (or the required capacity
-may not be provided) which may not be the case and which may lead to
-excessive energy usage in some scenarios.
+Make intel_pstate expose the ->adjust_perf() callback when it
+operates in the passive mode with HWP enabled which causes the
+schedutil governor to use that callback instead of ->fast_switch().
 
-Second, the hints passed by these drivers to the hardware neeed not
-be in terms of the frequency, so representing the utilization numbers
-coming from the scheduler as frequency before passing them to those
-drivers is not really useful.
+The minimum and target performance-level values passed by the
+governor to ->adjust_perf() are converted to HWP.REQ.MIN and
+HWP.REQ.DESIRED, respectively, which allows the processor to
+adjust its configuration to maximize energy-efficiency while
+providing sufficient capacity.
 
-Address the two points above by adding a special-purpose replacement
-for the ->fast_switch callback, called ->adjust_perf, allowing the
-governor to pass abstract performance level (rather than frequency)
-values for the minimum (required) and target (desired) performance
-along with the information whether or not the given CPU has been
-busy since the last update (which may allow the driver to skip the
-update in some cases).
-
-Also update the schedutil governor to use the new callback instead
-of ->fast_switch if present.
+The "busy" argument of ->adjust_perf() is used to omit updates
+that are likely to cause performance to drop below the expected
+level.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpufreq/cpufreq.c        |   41 +++++++++++++++++++++++++++++++++++++++
- include/linux/cpufreq.h          |   14 +++++++++++++
- include/linux/sched/cpufreq.h    |    5 ++++
- kernel/sched/cpufreq_schedutil.c |   40 ++++++++++++++++++++++++++------------
- 4 files changed, 88 insertions(+), 12 deletions(-)
+ drivers/cpufreq/intel_pstate.c |   77 ++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 65 insertions(+), 12 deletions(-)
 
-Index: linux-pm/include/linux/cpufreq.h
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
 ===================================================================
---- linux-pm.orig/include/linux/cpufreq.h
-+++ linux-pm/include/linux/cpufreq.h
-@@ -320,6 +320,15 @@ struct cpufreq_driver {
- 					unsigned int index);
- 	unsigned int	(*fast_switch)(struct cpufreq_policy *policy,
- 				       unsigned int target_freq);
-+	/*
-+	 * ->fast_switch() replacement for drivers that use an internal
-+	 * representation of performance levels and can pass hints other than
-+	 * the target performance level to the hardware.
-+	 */
-+	void		(*adjust_perf)(unsigned int cpu, bool busy,
-+				       unsigned long min_perf,
-+				       unsigned long target_perf,
-+				       unsigned long capacity);
- 
- 	/*
- 	 * Caches and returns the lowest driver-supported frequency greater than
-@@ -588,6 +597,11 @@ struct cpufreq_governor {
- /* Pass a target to the cpufreq driver */
- unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- 					unsigned int target_freq);
-+void cpufreq_driver_adjust_perf(unsigned int cpu, bool busy,
-+				unsigned long min_perf,
-+				unsigned long target_perf,
-+				unsigned long capacity);
-+bool cpufreq_driver_has_adjust_perf(void);
- int cpufreq_driver_target(struct cpufreq_policy *policy,
- 				 unsigned int target_freq,
- 				 unsigned int relation);
-Index: linux-pm/drivers/cpufreq/cpufreq.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/cpufreq.c
-+++ linux-pm/drivers/cpufreq/cpufreq.c
-@@ -2094,6 +2094,47 @@ unsigned int cpufreq_driver_fast_switch(
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -2526,20 +2526,19 @@ static void intel_cpufreq_trace(struct c
+ 		fp_toint(cpu->iowait_boost * 100));
  }
- EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
  
-+/**
-+ * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
-+ * @cpu: Target CPU.
-+ * @busy: Whether or not @CPU has been busy since the previous update.
-+ * @min_perf: Minimum (required) performance level (units of @capacity).
-+ * @target_perf: Terget (desired) performance level (units of @capacity).
-+ * @capacity: Capacity of the target CPU.
-+ *
-+ * Carry out a fast performance level switch of @cpu without sleeping.
-+ *
-+ * The driver's ->adjust_perf() callback invoked by this function must be
-+ * suitable for being called from within RCU-sched read-side critical sections
-+ * and it is expected to select a suitable performance level equal to or above
-+ * @min_perf and preferably equal to or below @target_perf.
-+ *
-+ * This function must not be called if policy->fast_switch_enabled is unset.
-+ *
-+ * Governors calling this function must guarantee that it will never be invoked
-+ * twice in parallel for the same CPU and that it will never be called in
-+ * parallel with either ->target() or ->target_index() or ->fast_switch() for
-+ * the same CPU.
-+ */
-+void cpufreq_driver_adjust_perf(unsigned int cpu, bool busy,
-+				 unsigned long min_perf,
-+				 unsigned long target_perf,
-+				 unsigned long capacity)
-+{
-+	cpufreq_driver->adjust_perf(cpu, busy, min_perf, target_perf, capacity);
-+}
-+
-+/**
-+ * cpufreq_driver_has_adjust_perf - Check "direct fast switch" callback.
-+ *
-+ * Return 'true' if the ->adjust_perf callback is present for the
-+ * current driver or 'false' otherwise.
-+ */
-+bool cpufreq_driver_has_adjust_perf(void)
-+{
-+	return !!cpufreq_driver->adjust_perf;
-+}
-+
- /* Must set freqs->new to intermediate frequency */
- static int __target_intermediate(struct cpufreq_policy *policy,
- 				 struct cpufreq_freqs *freqs, int index)
-Index: linux-pm/kernel/sched/cpufreq_schedutil.c
-===================================================================
---- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
-+++ linux-pm/kernel/sched/cpufreq_schedutil.c
-@@ -40,6 +40,7 @@ struct sugov_policy {
- 	struct task_struct	*thread;
- 	bool			work_in_progress;
+-static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pstate,
+-				     bool strict, bool fast_switch)
++static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 min, u32 max,
++				     u32 desired, bool fast_switch)
+ {
+ 	u64 prev = READ_ONCE(cpu->hwp_req_cached), value = prev;
  
-+	bool			direct_fast_switch;
- 	bool			limits_changed;
- 	bool			need_freq_update;
- };
-@@ -454,6 +455,25 @@ static void sugov_update_single(struct u
- 	util = sugov_get_util(sg_cpu);
- 	max = sg_cpu->max;
- 	util = sugov_iowait_apply(sg_cpu, time, util, max);
-+
-+	/*
-+	 * This code runs under rq->lock for the target CPU, so it won't run
-+	 * concurrently on two different CPUs for the same target and it is not
-+	 * necessary to acquire the lock in the fast switch case.
-+	 */
-+	if (sg_policy->direct_fast_switch) {
-+		/*
-+		 * In this case, any optimizations that can be done are up to
-+		 * the driver.
-+		 */
-+		cpufreq_driver_adjust_perf(sg_cpu->cpu,
-+					   sugov_cpu_is_busy(sg_cpu),
-+					   map_util_perf(sg_cpu->bw_dl),
-+					   map_util_perf(util), max);
-+		sg_policy->last_freq_update_time = time;
-+		return;
-+	}
-+
- 	next_f = get_next_freq(sg_policy, util, max);
- 	/*
- 	 * Do not reduce the frequency if the CPU has not been idle
-@@ -466,11 +486,6 @@ static void sugov_update_single(struct u
- 		sg_policy->cached_raw_freq = cached_freq;
- 	}
+ 	value &= ~HWP_MIN_PERF(~0L);
+-	value |= HWP_MIN_PERF(target_pstate);
++	value |= HWP_MIN_PERF(min);
  
 -	/*
--	 * This code runs under rq->lock for the target CPU, so it won't run
--	 * concurrently on two different CPUs for the same target and it is not
--	 * necessary to acquire the lock in the fast switch case.
+-	 * The entire MSR needs to be updated in order to update the HWP min
+-	 * field in it, so opportunistically update the max too if needed.
 -	 */
- 	if (sg_policy->policy->fast_switch_enabled) {
- 		sugov_fast_switch(sg_policy, time, next_f);
- 	} else {
-@@ -655,10 +670,6 @@ static int sugov_kthread_create(struct s
- 	struct cpufreq_policy *policy = sg_policy->policy;
- 	int ret;
+ 	value &= ~HWP_MAX_PERF(~0L);
+-	value |= HWP_MAX_PERF(strict ? target_pstate : cpu->max_perf_ratio);
++	value |= HWP_MAX_PERF(max);
++
++	value &= ~HWP_DESIRED_PERF(~0L);
++	value |= HWP_DESIRED_PERF(desired);
  
--	/* kthread only required for slow path */
--	if (policy->fast_switch_enabled)
--		return 0;
--
- 	kthread_init_work(&sg_policy->work, sugov_work);
- 	kthread_init_worker(&sg_policy->worker);
- 	thread = kthread_create(kthread_worker_fn, &sg_policy->worker,
-@@ -736,9 +747,14 @@ static int sugov_init(struct cpufreq_pol
- 		goto disable_fast_switch;
- 	}
+ 	if (value == prev)
+ 		return;
+@@ -2569,11 +2568,15 @@ static int intel_cpufreq_update_pstate(s
+ 	int old_pstate = cpu->pstate.current_pstate;
  
--	ret = sugov_kthread_create(sg_policy);
--	if (ret)
--		goto free_sg_policy;
-+	if (policy->fast_switch_enabled) {
-+		sg_policy->direct_fast_switch = cpufreq_driver_has_adjust_perf();
-+	} else {
-+		/* kthread only required for slow path */
-+		ret = sugov_kthread_create(sg_policy);
-+		if (ret)
-+			goto free_sg_policy;
+ 	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+-	if (hwp_active)
+-		intel_cpufreq_adjust_hwp(cpu, target_pstate,
+-					 policy->strict_target, fast_switch);
+-	else if (target_pstate != old_pstate)
++	if (hwp_active) {
++		int max_pstate = policy->strict_target ?
++				 	target_pstate : cpu->max_perf_ratio;
++
++		intel_cpufreq_adjust_hwp(cpu, target_pstate, max_pstate, 0,
++					 fast_switch);
++	} else if (target_pstate != old_pstate) {
+ 		intel_cpufreq_adjust_perf_ctl(cpu, target_pstate, fast_switch);
 +	}
  
- 	mutex_lock(&global_tunables_lock);
+ 	cpu->pstate.current_pstate = target_pstate;
  
-Index: linux-pm/include/linux/sched/cpufreq.h
-===================================================================
---- linux-pm.orig/include/linux/sched/cpufreq.h
-+++ linux-pm/include/linux/sched/cpufreq.h
-@@ -28,6 +28,11 @@ static inline unsigned long map_util_fre
- {
- 	return (freq + (freq >> 2)) * util / cap;
+@@ -2634,6 +2637,54 @@ static unsigned int intel_cpufreq_fast_s
+ 	return target_pstate * cpu->pstate.scaling;
  }
-+
-+static inline unsigned long map_util_perf(unsigned long util)
-+{
-+	return util + (util >> 2);
-+}
- #endif /* CONFIG_CPU_FREQ */
  
- #endif /* _LINUX_SCHED_CPUFREQ_H */
++static void intel_cpufreq_adjust_perf(unsigned int cpunum, bool busy,
++				      unsigned long min_perf,
++				      unsigned long target_perf,
++				      unsigned long capacity)
++{
++	struct cpudata *cpu = all_cpu_data[cpunum];
++	int old_pstate = cpu->pstate.current_pstate;
++	int cap_pstate, min_pstate, max_pstate, target_pstate;
++
++	update_turbo_state();
++	cap_pstate = global.turbo_disabled ? cpu->pstate.max_pstate :
++					     cpu->pstate.turbo_pstate;
++
++	/* Optimization: Avoid unnecessary divisions. */
++
++	target_pstate = cap_pstate;
++	if (target_perf < capacity) {
++		target_pstate = DIV_ROUND_UP(cap_pstate * target_perf, capacity);
++		/*
++		 * Do not reduce the target P-state if the CPU has been busy
++		 * recently, as the reduction is likely to be premature then.
++		 */
++		if (target_pstate < old_pstate && busy)
++			target_pstate = old_pstate;
++	}
++
++	min_pstate = cap_pstate;
++	if (min_perf < capacity)
++		min_pstate = DIV_ROUND_UP(cap_pstate * min_perf, capacity);
++
++	if (min_pstate < cpu->pstate.min_pstate)
++		min_pstate = cpu->pstate.min_pstate;
++
++	if (min_pstate < cpu->min_perf_ratio)
++		min_pstate = cpu->min_perf_ratio;
++
++	max_pstate = min(cap_pstate, cpu->max_perf_ratio);
++	if (max_pstate < min_pstate)
++		max_pstate = min_pstate;
++
++	target_pstate = clamp_t(int, target_pstate, min_pstate, max_pstate);
++
++	intel_cpufreq_adjust_hwp(cpu, min_pstate, max_pstate, target_pstate, true);
++
++	cpu->pstate.current_pstate = target_pstate;
++	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
++}
++
+ static int intel_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ {
+ 	int max_state, turbo_max, min_freq, max_freq, ret;
+@@ -3032,6 +3083,8 @@ static int __init intel_pstate_init(void
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
+ 			intel_cpufreq.attr = hwp_cpufreq_attrs;
+ 			intel_cpufreq.flags |= CPUFREQ_NEED_UPDATE_LIMITS;
++			intel_cpufreq.fast_switch = NULL;
++			intel_cpufreq.adjust_perf = intel_cpufreq_adjust_perf;
+ 			if (!default_driver)
+ 				default_driver = &intel_pstate;
+ 
 
 
 
