@@ -2,150 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 913392C8DC4
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 20:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A102C8EA6
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 21:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388288AbgK3TNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 14:13:05 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:39571 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388258AbgK3TNF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 14:13:05 -0500
-Received: by mail-oi1-f194.google.com with SMTP id f11so15370523oij.6;
-        Mon, 30 Nov 2020 11:12:49 -0800 (PST)
+        id S1728510AbgK3UEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 15:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726400AbgK3UE3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 15:04:29 -0500
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4328DC061A48;
+        Mon, 30 Nov 2020 12:03:49 -0800 (PST)
+Received: by mail-lj1-x243.google.com with SMTP id q8so10919021ljc.12;
+        Mon, 30 Nov 2020 12:03:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vEhR+Du89PZ5uHlmTZPVOeMBpk4ZhmnPvG7++GYzT48=;
+        b=nBOB4vH5fDSmMiI/v/KOP5Ztcc6gTG6ASlCRAPZhAb9QgYDhofOwwasWO/d1BRsUkk
+         Cnupc2ovJEBaBFe93fntQP+ZixTtvkH5q6FIHboY6BK87SY4WkJ9fFWtR9ZFnw1dj+Sf
+         J4ys4VkWRj+fnHA8vvebgnOgB0bML3F69nf786Y/dESEr9E6R9oVuV213MrxeuGCkMDN
+         QLcHFPwJgjO9/9+MHinqfxKIJmcmWdFOlYB5/N1bMSPckEB1yIP5Ye/GlqAwp7GiTNPU
+         NPUIIzw57SzwVWTkj5WmK1U8g4O1qfaIUQE6qimGPW4DPikyT7bO5mbHN2ckFEAqX2jQ
+         DWHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Pmtf1a4HitphENukeG8SqVWu3Y/HvkXNeG2L2oSB6Qw=;
-        b=nMSznXSQd1qyNq0QkihhWaYxaGvUF3n47tcg7PPm4EEA/dsNkkaPz6fHM5qWV0BCHX
-         zIrwgOQHN+A69OnqPmp7ozHpwHvRxnbD6B4T/h+6nsPm1V5Utpy1KRK5AU8M4auDBfZx
-         7ncV347LNqE0Wkx6fH9p3lSeYrPN+441cwSD3zMr3P3dWWvQhgyfZdm245cOWdDadD4W
-         2YHGOBrxav3ff7olXHrmkl02hMhdu2WjDeOzRpNQeBkP2ftL7klCyu9URJ1z4fIFSEB/
-         17UuOnpPjcQjbu52WB7wOzw/umN9c9+ToYMj4xHsV2uUbAOfiBkhaB+QqdJ03J1gTl0f
-         g5/Q==
-X-Gm-Message-State: AOAM5300SEwJeIfN/HpAnKz+hx87HsBExeuR3/vtjMST20iaALp150RL
-        UHdiB84PxCIdMS/oaVqlLyrq/W4k97dHdN5jg8c=
-X-Google-Smtp-Source: ABdhPJytCrnnJx3U8JlCMd8DxOc553DmUH/ROIEcNJOOJQRN0dMwydE7GTi6LPyZgwAb7k5a+BArNOMdbE+guXUymWU=
-X-Received: by 2002:aca:f15:: with SMTP id 21mr261009oip.71.1606763543910;
- Mon, 30 Nov 2020 11:12:23 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vEhR+Du89PZ5uHlmTZPVOeMBpk4ZhmnPvG7++GYzT48=;
+        b=AuzXTAJsAhKhMFVqZpJqg/hNvK9MS/9lOILWZ5UBaTc9ylg6FxQdHVGXmkXy+NHQgD
+         RiIrTC7jQqkdBteqruvjaqj3OXuDPB0fB5Myrq/CRxsK0ZUKvNwNy3PNN1wXInfixZqU
+         a17oV53tY4qcJi6zlBtkqLgmrYiVWDdT5jwzwLcxhAJPvpITF7fWdCsvyiZfnb5eGki9
+         RU58nZKBJvW5SjjzM9INCwg1dctwn3OnF4M2UwUMUN6tSffnNgvw7ZUWmi/M2a2EWyJn
+         KKTKdkhSiEOdjEPO+g2R6KTDfJLNMdOotK5CcW4Se/j9RIbOY/+i1SS9m4OftMr9/2cx
+         /Xvw==
+X-Gm-Message-State: AOAM531GlsEPj1VczE1o7RmRrwpGLHdY+9d5RpdhmGIdCN2yKEJ6juR+
+        qGOsW3Yi835jjiF117vK9+s=
+X-Google-Smtp-Source: ABdhPJwUMn+ecDX4H4n6Wk18z6ki+FFE/Gwq+LcNPFp5nQTq6WKmEZqr7eMcBen1vKLu0kYmPs69jA==
+X-Received: by 2002:a2e:b386:: with SMTP id f6mr10398273lje.320.1606766627766;
+        Mon, 30 Nov 2020 12:03:47 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id l6sm2606668lfk.150.2020.11.30.12.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 12:03:46 -0800 (PST)
+Subject: Re: [PATCH v10 01/19] dt-bindings: memory: tegra20: emc: Document
+ opp-supported-hw property
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20201123002723.28463-1-digetx@gmail.com>
+ <20201123002723.28463-2-digetx@gmail.com>
+ <46b3bab7-1c2c-2f50-6e41-f411e532357b@linaro.org>
+ <20201130182345.GA28450@kozik-lap>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4ff3fe7f-ec17-dd89-3cde-d677b3a92104@gmail.com>
+Date:   Mon, 30 Nov 2020 23:03:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-References: <20201110092933.3342784-1-zhangqilong3@huawei.com>
- <20201110092933.3342784-2-zhangqilong3@huawei.com> <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
- <CAJZ5v0hVXSgUm877iv3i=1vs1t2QFpGW=-4qTFf2WedTJBU8Zg@mail.gmail.com>
- <20201130173523.GT14465@pendragon.ideasonboard.com> <CAJZ5v0gx08RY+RjU90y222fLUq7YiO4x6PW3d9GNk4wYadzv_w@mail.gmail.com>
- <20201130185044.GZ4141@pendragon.ideasonboard.com>
-In-Reply-To: <20201130185044.GZ4141@pendragon.ideasonboard.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 30 Nov 2020 20:12:12 +0100
-Message-ID: <CAJZ5v0iALE+oSXmJ7mWGCEG7MwFptfMwa-_SS8BusMUx7C7urA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] PM: runtime: Add pm_runtime_resume_and_get to deal
- with usage counter
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Fugang Duan <fugang.duan@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201130182345.GA28450@kozik-lap>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 7:50 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Rafael,
->
-> On Mon, Nov 30, 2020 at 06:55:57PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Nov 30, 2020 at 6:35 PM Laurent Pinchart wrote:
-> > > On Mon, Nov 30, 2020 at 05:37:52PM +0100, Rafael J. Wysocki wrote:
-> > > > On Fri, Nov 27, 2020 at 11:16 AM Geert Uytterhoeven wrote:
-> > > > > On Tue, Nov 10, 2020 at 10:29 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
-> > > > > > In many case, we need to check return value of pm_runtime_get_sync, but
-> > > > > > it brings a trouble to the usage counter processing. Many callers forget
-> > > > > > to decrease the usage counter when it failed, which could resulted in
-> > > > > > reference leak. It has been discussed a lot[0][1]. So we add a function
-> > > > > > to deal with the usage counter for better coding.
-> > > > > >
-> > > > > > [0]https://lkml.org/lkml/2020/6/14/88
-> > > > > > [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
-> > > > > > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-> > > > >
-> > > > > Thanks for your patch, which is now commit dd8088d5a8969dc2 ("PM:
-> > > > > runtime: Add pm_runtime_resume_and_get to deal with usage counter") in
-> > > > > v5.10-rc5.
-> > > > >
-> > > > > > --- a/include/linux/pm_runtime.h
-> > > > > > +++ b/include/linux/pm_runtime.h
-> > > > > > @@ -386,6 +386,27 @@ static inline int pm_runtime_get_sync(struct device *dev)
-> > > > > >         return __pm_runtime_resume(dev, RPM_GET_PUT);
-> > > > > >  }
-> > > > > >
-> > > > > > +/**
-> > > > > > + * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
-> > > > > > + * @dev: Target device.
-> > > > > > + *
-> > > > > > + * Resume @dev synchronously and if that is successful, increment its runtime
-> > > > > > + * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
-> > > > > > + * incremented or a negative error code otherwise.
-> > > > > > + */
-> > > > > > +static inline int pm_runtime_resume_and_get(struct device *dev)
-> > > > >
-> > > > > Perhaps this function should be called pm_runtime_resume_and_get_sync(),
-> > > >
-> > > > No, really.
-> > > >
-> > > > I might consider calling it pm_runtime_acquire(), and adding a
-> > > > matching _release() as a pm_runtime_get() synonym for that matter, but
-> > > > not the above.
-> > >
-> > > pm_runtime_acquire() seems better to me too. Would pm_runtime_release()
-> > > would be an alias for pm_runtime_put() ?
-> >
-> > Yes.  This covers all of the use cases relevant for drivers AFAICS.
-> >
-> > > We would also likely need a pm_runtime_release_autosuspend() too then.
-> >
-> > Why would we?
-> >
-> > > But on that topic, I was wondering, is there a reason we can't select
-> > > autosuspend behaviour automatically when autosuspend is enabled ?
-> >
-> > That is the case already.
-> >
-> > pm_runtime_put() will autosuspend if enabled and the usage counter is
-> > 0, as long as ->runtime_idle() returns 0 (or is absent).
-> >
-> > pm_runtime_put_autosuspend() is an optimization allowing
-> > ->runtime_idle() to be skipped entirely, but I'm wondering how many
-> > users really need that.
->
-> Ah, I didn't know that, that's good to know. We then don't need
-> pm_runtime_release_autosuspend() (unless the optimization really makes a
-> big difference).
->
-> Should I write new drievr code with pm_runtime_put() instead of
-> pm_runtime_put_autosuspend() ?
+30.11.2020 21:23, Krzysztof Kozlowski пишет:
+> On Mon, Nov 30, 2020 at 11:48:18AM +0200, Georgi Djakov wrote:
+>> On 23.11.20 2:27, Dmitry Osipenko wrote:
+>>> Document opp-supported-hw property, which is not strictly necessary to
+>>> have on Tegra20, but it's very convenient to have because all other SoC
+>>> core devices will use hardware versioning, and thus, it's good to maintain
+>>> the consistency.
+>>
+>> Hi Dmitry,
+>>
+>> I believe Krzysztof is waiting for Ack on the binding before merging
+>> this patch (and the rest), but unfortunately it was not sent to the
+>> DT mailing list for review.
 
-If you don't have ->runtime_idle() in the driver (and in the bus type
-generally speaking, but none of them provide it IIRC),
-pm_runtime_put() is basically equivalent to
-pm_runtime_put_autosuspend() AFAICS, except for some extra checks done
-by the former.
+Good catch, thank you.
 
-Otherwise it all depends on what the ->runtime_idle() callback does,
-but it is hard to imagine a practical use case when the difference
-would be really meaningful.
+> Indeed I am still waiting for Rob's and Thierry's acks for this and the
+> following patches.  It has been just a week so I'll give it few more
+> days.
 
-> I haven't found clear guidelines on this in the documentation.
-
-Yes, that's one of the items I need to take care of.
+Rob doesn't review patches which aren't sent to the DT ML, which isn't
+cc'ed in v10 by accident. I'll make v11.
