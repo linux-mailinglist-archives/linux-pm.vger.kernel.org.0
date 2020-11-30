@@ -2,131 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 470842C8D08
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1B22C8D3F
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728772AbgK3SlN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 13:41:13 -0500
-Received: from mga04.intel.com ([192.55.52.120]:50761 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727182AbgK3SlN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Nov 2020 13:41:13 -0500
-IronPort-SDR: fHZTW5Cr+3BVT1mMo++LBjAAL2lEndh8GVZwc9V6BmyVKJ2vfrjFCh4Li+7z+PAxK+5sx6SgRo
- 3aShGJ0BgIhw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="170124485"
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="170124485"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 10:39:18 -0800
-IronPort-SDR: msdywq7HqrNzT1Hb5ew0nb3WdQsbUFcBqRZZnlMw0NTddmC3lKbUAR/NXDbqIhHPtnwNK9ZcVY
- 6UAXf2JmV+2g==
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="364356541"
-Received: from nathanhs-mobl1.amr.corp.intel.com ([10.209.72.72])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 10:39:18 -0800
-Message-ID: <f863f2e1e322a8819c660f5eefbbc4acf7522990.camel@linux.intel.com>
-Subject: Re: [PATCH 1/3] thermal: core: Add indication for userspace usage
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, amitk@kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Mon, 30 Nov 2020 10:39:17 -0800
-In-Reply-To: <D53454A1-5ED0-4B4D-B22F-8663C9970ECD@canonical.com>
-References: <20201128175450.12456-1-kai.heng.feng@canonical.com>
-         <004fe225-1009-06d8-b297-c03a4c67550f@linaro.org>
-         <860126B8-1152-4EE3-B15E-B4E45EFE879F@canonical.com>
-         <fc67ad02826fb3adfd8457e1a0baf234a8fa3fce.camel@linux.intel.com>
-         <34348B03-5E27-49A0-A704-6332BAC00758@canonical.com>
-         <585bb5d3ee5bea063795682108576c3464ba72b6.camel@linux.intel.com>
-         <D53454A1-5ED0-4B4D-B22F-8663C9970ECD@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S2387764AbgK3Svg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 13:51:36 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33080 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387735AbgK3Svf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 13:51:35 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 945EF2A4;
+        Mon, 30 Nov 2020 19:50:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1606762252;
+        bh=RYPSsiTosnAD+ZN+SZZDJFZnGttsHQTdpttar3k1Mnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RWirhkVyj5MwMV72mfJGTP+V9L424pGhwBYgkTAoDzf9bBsyTAKhIt/fW4w3izSJs
+         CG35nJz1K990Qiv/ce6p4H5bq7BbfpJGWlryRLrKY8joLg62eufWLSJOan7pJ2bk/c
+         UKbZje++dTIHVvd6PiELeLPTegrDGDF+BtidtWoY=
+Date:   Mon, 30 Nov 2020 20:50:44 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v3 1/2] PM: runtime: Add pm_runtime_resume_and_get to
+ deal with usage counter
+Message-ID: <20201130185044.GZ4141@pendragon.ideasonboard.com>
+References: <20201110092933.3342784-1-zhangqilong3@huawei.com>
+ <20201110092933.3342784-2-zhangqilong3@huawei.com>
+ <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
+ <CAJZ5v0hVXSgUm877iv3i=1vs1t2QFpGW=-4qTFf2WedTJBU8Zg@mail.gmail.com>
+ <20201130173523.GT14465@pendragon.ideasonboard.com>
+ <CAJZ5v0gx08RY+RjU90y222fLUq7YiO4x6PW3d9GNk4wYadzv_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gx08RY+RjU90y222fLUq7YiO4x6PW3d9GNk4wYadzv_w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2020-12-01 at 02:22 +0800, Kai-Heng Feng wrote:
-> > On Dec 1, 2020, at 02:13, Srinivas Pandruvada <
-> > srinivas.pandruvada@linux.intel.com> wrote:
-> 
-> [snipped] 
-> 
-> > > > What about creating an new callback
-> > > > 
-> > > > enum thermal_trip_status {
-> > > > 	THERMAL_TRIP_DISABLED = 0,
-> > > > 	THERMAL_TRIP_ENABLED,
-> > > > };
-> > > > 
-> > > > int get_trip_status(struct thermal_zone_device *, int trip,
-> > > > enum
-> > > > thermal_trip_status *state);
-> > > > 
-> > > > Then in 
-> > > > static void handle_thermal_trip(struct thermal_zone_device *tz,
-> > > > int
-> > > > trip)
-> > > > {
-> > > > 
-> > > > /* before tz->ops->get_trip_temp(tz, trip, &trip_temp); */
-> > > > if (tz->ops->get_trip_status) {
-> > > > 	enum thermal_trip_status *status;
-> > > > 
-> > > > 	if (!tz->ops->get_trip_status(tz, trip, &status)) {
-> > > > 		if (status == THERMAL_TRIP_DISABLED)
-> > > > 			return;	
-> > > > 	}
-> > > > }
-> > > > ...
-> > > > ...
-> > > > 
-> > > > }
-> > > > 
-> > > > 
-> > > > This callback will help the cases:
-> > > > - Allows drivers to selectively disable certain trips during
-> > > > init
-> > > > state
-> > > > or system resume where there can be spikes or always. int340x
-> > > > drivers
-> > > > can disable always.
-> > > 
-> > > This sounds really great. This is indeed can happen on system
-> > > resume,
-> > > before userspace process thaw.
-> > > 
-> > > > - Still give options for drivers to handle critical trip even
-> > > > if
-> > > > they
-> > > > are bound to user space governors. User space process may be
-> > > > dead,
-> > > > so
-> > > > still allow kernel to process graceful shutdown
-> > > 
-> > > To make the scenario happen, do we need a new sysfs to let
-> > > usespace
-> > > enable it with THERMAL_TRIP_ENABLED?
-> > This should be drivers call not user space.
-> 
-> Understood. So after thermal_zone_device_register(), the driver can
-> decide to what to return on get_trip_temp().
-get_trip_status()
+Hi Rafael,
 
-> Let me work on a new patch if there's no other concern.
-Better to wait for confirmation from Daniel and others.
-
-Thanks,
-Srinivas
-
+On Mon, Nov 30, 2020 at 06:55:57PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Nov 30, 2020 at 6:35 PM Laurent Pinchart wrote:
+> > On Mon, Nov 30, 2020 at 05:37:52PM +0100, Rafael J. Wysocki wrote:
+> > > On Fri, Nov 27, 2020 at 11:16 AM Geert Uytterhoeven wrote:
+> > > > On Tue, Nov 10, 2020 at 10:29 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
+> > > > > In many case, we need to check return value of pm_runtime_get_sync, but
+> > > > > it brings a trouble to the usage counter processing. Many callers forget
+> > > > > to decrease the usage counter when it failed, which could resulted in
+> > > > > reference leak. It has been discussed a lot[0][1]. So we add a function
+> > > > > to deal with the usage counter for better coding.
+> > > > >
+> > > > > [0]https://lkml.org/lkml/2020/6/14/88
+> > > > > [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
+> > > > > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+> > > >
+> > > > Thanks for your patch, which is now commit dd8088d5a8969dc2 ("PM:
+> > > > runtime: Add pm_runtime_resume_and_get to deal with usage counter") in
+> > > > v5.10-rc5.
+> > > >
+> > > > > --- a/include/linux/pm_runtime.h
+> > > > > +++ b/include/linux/pm_runtime.h
+> > > > > @@ -386,6 +386,27 @@ static inline int pm_runtime_get_sync(struct device *dev)
+> > > > >         return __pm_runtime_resume(dev, RPM_GET_PUT);
+> > > > >  }
+> > > > >
+> > > > > +/**
+> > > > > + * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
+> > > > > + * @dev: Target device.
+> > > > > + *
+> > > > > + * Resume @dev synchronously and if that is successful, increment its runtime
+> > > > > + * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
+> > > > > + * incremented or a negative error code otherwise.
+> > > > > + */
+> > > > > +static inline int pm_runtime_resume_and_get(struct device *dev)
+> > > >
+> > > > Perhaps this function should be called pm_runtime_resume_and_get_sync(),
+> > >
+> > > No, really.
+> > >
+> > > I might consider calling it pm_runtime_acquire(), and adding a
+> > > matching _release() as a pm_runtime_get() synonym for that matter, but
+> > > not the above.
+> >
+> > pm_runtime_acquire() seems better to me too. Would pm_runtime_release()
+> > would be an alias for pm_runtime_put() ?
 > 
-> Kai-Heng
+> Yes.  This covers all of the use cases relevant for drivers AFAICS.
 > 
-> > Thanks,
-> > Srinivas
+> > We would also likely need a pm_runtime_release_autosuspend() too then.
+> 
+> Why would we?
+> 
+> > But on that topic, I was wondering, is there a reason we can't select
+> > autosuspend behaviour automatically when autosuspend is enabled ?
+> 
+> That is the case already.
+> 
+> pm_runtime_put() will autosuspend if enabled and the usage counter is
+> 0, as long as ->runtime_idle() returns 0 (or is absent).
+> 
+> pm_runtime_put_autosuspend() is an optimization allowing
+> ->runtime_idle() to be skipped entirely, but I'm wondering how many
+> users really need that.
 
+Ah, I didn't know that, that's good to know. We then don't need
+pm_runtime_release_autosuspend() (unless the optimization really makes a
+big difference).
+
+Should I write new drievr code with pm_runtime_put() instead of
+pm_runtime_put_autosuspend() ? I haven't found clear guidelines on this
+in the documentation.
+
+-- 
+Regards,
+
+Laurent Pinchart
