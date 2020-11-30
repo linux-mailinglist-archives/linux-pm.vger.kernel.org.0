@@ -2,126 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C47612C83D5
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 13:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3042C8602
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 14:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729333AbgK3MEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 07:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729330AbgK3MEx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 07:04:53 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F2EC0613D3
-        for <linux-pm@vger.kernel.org>; Mon, 30 Nov 2020 04:04:13 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id a6so4712940wmc.2
-        for <linux-pm@vger.kernel.org>; Mon, 30 Nov 2020 04:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rAurpgkxedRVfbL+/ivoT0Gm+FoSm04+8ICekSUxqjA=;
-        b=bvvZ9YjF2IdZu67A8q5z5w/WaizlBDxwmMcy8V7DkKcp2ahUdK/q9fye+Z5Tl3wuWg
-         a2/pyDMMP41ue255fmxpqM7mrT/mizWhTVOxzIXaNncQ6FsaTXF1X2FAUhhxpGx7DdXL
-         bBBLH73jXbFEyPzMuylGCSnvl7Pd7C5fCptfCDbvW1rRvBcyf4cRi6+DZQJkBgpEQGn0
-         tS/MpDPakjfstvwPoHX2vdKwV4kpfZKFYCZSxnJT4HP0rmMfJWOIETwQLYYGL7VCgeO2
-         yzpFl+tFPFwiVDHIAOuuLyl+mP6Eo1R9qQB2i1WQSWNVvuKZxW5I5y4HwsB6jkpt6ggr
-         3quQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rAurpgkxedRVfbL+/ivoT0Gm+FoSm04+8ICekSUxqjA=;
-        b=hGP4vfKY6B7lMILa4hvMLCNMczmHb4eZpa7bMuQaBhFIQ6iSqRv1eznarfDCNWalRs
-         sOVBipnRONhysLcP1o6Z3az8FCuztSOTa1adNOJFwxdLXRZbIAnntRZVld4fqLrCX3fk
-         eYTDCmRFPe57D3uO4BpjU+GGTtSgdmbVLzTt1I29YL4c09RMQmfDuwXy4d3zCemQFsGW
-         epBV2VTFw4he4CLeOnaaiqj8/fB+bVK9sNsPbo639MIvgslZ3i/GbyS7ZhGSrpH8cPv1
-         csm2kGK91koQZ+B6pIhjf+BtlGzdQ1qfZ+yGfIbHCXPCGxC/HrNXWwnlX0gq50Yg1FQQ
-         NzPA==
-X-Gm-Message-State: AOAM5308qUo69uPV+18S7aYa4Fk8FrRslq0wuPbR798jCzhL/h1la5VO
-        /PWHhWnpWMIvFn7Sp0lr7ycOAHk32yYIdw==
-X-Google-Smtp-Source: ABdhPJxVIJwf4PaVb+OjoaoO13c3rxJbyPCkvFJ5alH8fTYRmZqLMLYWqsjVJK6OqX47ot0pXvxvaw==
-X-Received: by 2002:a1c:1fc4:: with SMTP id f187mr12083881wmf.107.1606737830193;
-        Mon, 30 Nov 2020 04:03:50 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:a9e1:bc04:469:f21b? ([2a01:e34:ed2f:f020:a9e1:bc04:469:f21b])
-        by smtp.googlemail.com with ESMTPSA id y6sm6956342wmg.39.2020.11.30.04.03.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Nov 2020 04:03:49 -0800 (PST)
-Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Do not use interrupts for
- normal operation
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20201126220923.3107213-1-niklas.soderlund+renesas@ragnatech.se>
- <601e00a8-12ba-da54-224f-89c448d755dc@linaro.org>
- <20201130114917.GE3323880@oden.dyn.berto.se>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <96a5db0a-a01d-f103-6b95-d645506cc711@linaro.org>
-Date:   Mon, 30 Nov 2020 13:03:48 +0100
+        id S1727328AbgK3N4E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 08:56:04 -0500
+Received: from foss.arm.com ([217.140.110.172]:55080 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727305AbgK3N4D (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Nov 2020 08:56:03 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0CDDD6E;
+        Mon, 30 Nov 2020 05:55:17 -0800 (PST)
+Received: from [192.168.178.2] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78D153F71F;
+        Mon, 30 Nov 2020 05:55:15 -0800 (PST)
+Subject: Re: [PATCH V4 2/3] sched/core: Rename schedutil_cpu_util() and allow
+ rest of the kernel to use it
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Quentin Perret <qperret@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        linux-pm@vger.kernel.org
+References: <cover.1606198885.git.viresh.kumar@linaro.org>
+ <9a5442b916f9667e714dd84fe4e3fc26f8bcc887.1606198885.git.viresh.kumar@linaro.org>
+ <20201124091019.GA1023091@google.com>
+ <20201124132239.h3kjk6pdwqeoitvb@vireshk-mac-ubuntu>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <d70ac48d-4efa-d084-60c7-cbbca6f2cf82@arm.com>
+Date:   Mon, 30 Nov 2020 14:55:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201130114917.GE3323880@oden.dyn.berto.se>
+In-Reply-To: <20201124132239.h3kjk6pdwqeoitvb@vireshk-mac-ubuntu>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/11/2020 12:49, Niklas Söderlund wrote:
-> Hi Daniel,
-> 
-> Thanks for your comments.
-> 
-> On 2020-11-30 09:15:00 +0100, Daniel Lezcano wrote:
->> On 26/11/2020 23:09, Niklas Söderlund wrote:
->>> Remove the usage of interrupts for the normal temperature operation and
->>> depend on the polling performed by the thermal core. This is done to
->>> prepare to use the interrupts as they are intended to trigger once
->>> specific trip points are passed and not to react to temperature changes
->>> in the normal operational range.
+On 24/11/2020 14:22, Viresh Kumar wrote:
+> On 24-11-20, 09:10, Quentin Perret wrote:
+>> Hey Viresh,
 >>
->> I'm not sure to understand the change. Is it not more interesting to
->> have the polling mode disabled for PM reasons and let the interrupt to
->> fire at the first trip point so the mitigation happens then with the
->> polling passive ?
+>> On Tuesday 24 Nov 2020 at 11:56:15 (+0530), Viresh Kumar wrote:
+>>> There is nothing schedutil specific in schedutil_cpu_util(), rename it
+>>> to effective_cpu_util(). Also create and expose another wrapper
+>>> sched_cpu_util() which can be used by other parts of the kernel, like
+>>> thermal core (that will be done in a later commit).
+>>>
+>>> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+>>> ---
+>>>  include/linux/sched.h            | 21 +++++++++++++++++++++
+>>>  kernel/sched/core.c              | 11 +++++++++--
+>>>  kernel/sched/cpufreq_schedutil.c |  2 +-
+>>>  kernel/sched/fair.c              |  6 +++---
+>>>  kernel/sched/sched.h             | 19 ++-----------------
+>>>  5 files changed, 36 insertions(+), 23 deletions(-)
+>>>
+>>> diff --git a/include/linux/sched.h b/include/linux/sched.h
+>>> index 063cd120b459..926b944dae5e 100644
+>>> --- a/include/linux/sched.h
+>>> +++ b/include/linux/sched.h
+>>> @@ -1926,6 +1926,27 @@ extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
+>>>  #define TASK_SIZE_OF(tsk)	TASK_SIZE
+>>>  #endif
+>>>  
+>>> +#ifdef CONFIG_SMP
+>>> +/**
+>>> + * enum cpu_util_type - CPU utilization type
+>>> + * @FREQUENCY_UTIL:	Utilization used to select frequency
+>>> + * @ENERGY_UTIL:	Utilization used during energy calculation
+>>> + *
+>>> + * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
+>>> + * need to be aggregated differently depending on the usage made of them. This
+>>> + * enum is used within sched_cpu_util() to differentiate the types of
+>>> + * utilization expected by the callers, and adjust the aggregation accordingly.
+>>> + */
+>>> +enum cpu_util_type {
+>>> +	FREQUENCY_UTIL,
+>>> +	ENERGY_UTIL,
+>>> +};
+>>> +
+>>> +/* Returns effective CPU utilization, as seen by the scheduler */
+>>> +unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
+>>> +			     unsigned long max);
+>>
+>> Are 'type' and 'max' useful to anybody outside of kernel/sched ?
+>> If not then how about we hide them, keep the cpu_util_type enum in
+>> kernel/sched/sched.h and evaluate arch_scale_cpu_capacity() in
+>> sched_cpu_util() directly?
 > 
-> I agree and this is one of two goals I have with this change, in the 
-> long run. The other is to be able support SoC models where the 
-> interrupts may not be accessible.
-> 
-> The change in this patch is to stop using the interrupts to fire as soon 
-> as the temp moves +/- 1 degree C, see rcar_gen3_thermal_update_range().  
-> When I wrote that code I had misunderstood how things should be done and 
-> thought I should use the interrupts as a substitute to the polling done 
-> by the core and generate a THERMAL_EVENT_UNSPECIFIED as soon as the temp 
-> changed, see rcar_gen3_thermal_irq().
-> 
-> The way I understand it today is that I should instead setup the 
-> interrupts to fire if the temp moves over a trip point, in my case 
-> described in DT to allow the system to be informed of this as you 
-> describe above.
-> 
-> In this firs change I'm simply removing my incorrect usage of interrupts 
-> that I in future changes will add back in an correct usage pattern while 
-> at the same time making interrupts optional to support SoCs where the 
-> may not be available.
-> 
-> Does this make sens or have I got the idea wrong?
+> cpufreq_cooling uses 'max' (as can be seen in the next patch).
 
-Ah, ok. I understand better now, thanks for the clarification.
+But the enum cpu_util_type type doesn't have to be exported outside the
+task scheduler code?
 
-The interrupt mode implementation is wrong, so you remove it and switch
-to the polling mode until the interrupt is re-implemented in the correct
-way.
+--8<--
 
-
-
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index 5aff2ac4b77f..cd9d717654a8 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -149,7 +149,7 @@ static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
+ 	unsigned long max = arch_scale_cpu_capacity(cpu);
+ 	unsigned long util;
+ 
+-	util = sched_cpu_util(cpu, ENERGY_UTIL, max);
++	util = sched_cpu_util(cpu, max);
+ 	return (util * 100) / max;
+ }
+ 
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index fcd70c075349..0511e4fb946f 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1954,24 +1954,8 @@ extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
+ #endif
+ 
+ #ifdef CONFIG_SMP
+-/**
+- * enum cpu_util_type - CPU utilization type
+- * @FREQUENCY_UTIL:	Utilization used to select frequency
+- * @ENERGY_UTIL:	Utilization used during energy calculation
+- *
+- * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
+- * need to be aggregated differently depending on the usage made of them. This
+- * enum is used within sched_cpu_util() to differentiate the types of
+- * utilization expected by the callers, and adjust the aggregation accordingly.
+- */
+-enum cpu_util_type {
+-	FREQUENCY_UTIL,
+-	ENERGY_UTIL,
+-};
+-
+ /* Returns effective CPU utilization, as seen by the scheduler */
+-unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
+-			     unsigned long max);
++unsigned long sched_cpu_util(int cpu, unsigned long max);
+ #endif /* CONFIG_SMP */
+ 
+ #ifdef CONFIG_RSEQ
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 7f20dacc2fa7..270f10e01ad2 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5757,11 +5757,10 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 	return min(max, util);
+ }
+ 
+-unsigned long sched_cpu_util(int cpu, enum cpu_util_type type,
+-			     unsigned long max)
++unsigned long sched_cpu_util(int cpu, unsigned long max)
+ {
+-	return effective_cpu_util(cpu, cpu_util_cfs(cpu_rq(cpu)), max, type,
+-				  NULL);
++	return effective_cpu_util(cpu, cpu_util_cfs(cpu_rq(cpu)), max,
++				  ENERGY_UTIL, NULL);
+ }
+ #endif /* CONFIG_SMP */
+ 
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index b7611020d5cf..a49d6c3e9147 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2561,6 +2561,21 @@ static inline unsigned long capacity_orig_of(int cpu)
+ 	return cpu_rq(cpu)->cpu_capacity_orig;
+ }
+ 
++/**
++ * enum cpu_util_type - CPU utilization type
++ * @FREQUENCY_UTIL:     Utilization used to select frequency
++ * @ENERGY_UTIL:        Utilization used during energy calculation
++ *
++ * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
++ * need to be aggregated differently depending on the usage made of them. This
++ * enum is used within sched_cpu_util() to differentiate the types of
++ * utilization expected by the callers, and adjust the aggregation accordingly.
++ */
++enum cpu_util_type {
++        FREQUENCY_UTIL,
++        ENERGY_UTIL,
++};
++
+ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 				 unsigned long max, enum cpu_util_type type,
+ 				 struct task_struct *p);
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+ 
