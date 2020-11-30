@@ -2,163 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E17332C7FBC
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 09:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8AB2C8025
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 09:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgK3IYs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 30 Nov 2020 03:24:48 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:35854 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726390AbgK3IYs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 03:24:48 -0500
-Received: from mail-pl1-f198.google.com ([209.85.214.198])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kjeTd-0006fc-T1
-        for linux-pm@vger.kernel.org; Mon, 30 Nov 2020 08:24:06 +0000
-Received: by mail-pl1-f198.google.com with SMTP id x17so7306447pll.8
-        for <linux-pm@vger.kernel.org>; Mon, 30 Nov 2020 00:24:05 -0800 (PST)
+        id S1727621AbgK3Ihb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 03:37:31 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:37358 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727258AbgK3Iha (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 03:37:30 -0500
+Received: by mail-wm1-f68.google.com with SMTP id h21so23528782wmb.2;
+        Mon, 30 Nov 2020 00:37:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=WC2KrYmZEQhS4bYbMRHeasgDxnYze36syp9Jw0G7Zl0=;
-        b=JFIuATL/bqdVrt/ieMJ4XOra6JmoRIEcVZozvztnfi00UFBA0Rvf9lWJgYx12wn45H
-         LYsZljxWBiYIkpxnEKS0lFFWYOEBK1FwEKbDxH87ZBVavY3yl+Es7noX7Qfu/nzi60qb
-         3HbPQ90sAprTNo7A0m4ot8SSPBVrqJVQfKK50U+91H/ixV1+nV5hh4QwCKi9Ua4xW5Ps
-         SIQNN/tBGU6z/3aSd1b7OBJVfw+RWf2YzIJHjMXFAfUevJdyrbSqCUa8J7AkYJOI4C0r
-         bLutb0Pn7rOqhFEE1UlylypgFkVLAcjwVmmI3neFjx0Im3XRiqt3m8GOH8Cr0Gldc8Uz
-         O8og==
-X-Gm-Message-State: AOAM533d1eEDZxS1wHRQcod+2fiRZ/S7wv2xUlXEIo+sjtQIsrsRcZYt
-        Aym5E1S1n1T38O3FtWUXyix7iTgEEeBNw7FWE727PGTG+lwchJD+X5oWrNQzxRN3Ti5G+7wwk4F
-        65tUBLqE1tG6yZKkeui4pxCC/dwIwcxxqQsja
-X-Received: by 2002:a17:90a:14e5:: with SMTP id k92mr24400246pja.169.1606724644260;
-        Mon, 30 Nov 2020 00:24:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzzpiB/Npvx890VnGQHhXB2QM0Ikm4RSl0RFlxwAF94yhlBPWrtFx1sj/qbXacJqNEkN4/TDw==
-X-Received: by 2002:a17:90a:14e5:: with SMTP id k92mr24400219pja.169.1606724643869;
-        Mon, 30 Nov 2020 00:24:03 -0800 (PST)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id y188sm15679637pfy.98.2020.11.30.00.24.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Nov 2020 00:24:03 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.20.0.2.21\))
-Subject: Re: [PATCH 1/3] thermal: core: Add indication for userspace usage
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <004fe225-1009-06d8-b297-c03a4c67550f@linaro.org>
-Date:   Mon, 30 Nov 2020 16:23:59 +0800
-Cc:     Zhang Rui <rui.zhang@intel.com>, amitk@kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <860126B8-1152-4EE3-B15E-B4E45EFE879F@canonical.com>
-References: <20201128175450.12456-1-kai.heng.feng@canonical.com>
- <004fe225-1009-06d8-b297-c03a4c67550f@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-X-Mailer: Apple Mail (2.3654.20.0.2.21)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hGLe4cToDIvo4HB3a/5ZfuG6qTk6bfRGM4GcipNY+6Q=;
+        b=k4LE2unixW68NAWpykc9oTelX+Hjqghw7abbqz9Iwr1rwVgDtfgyss8c788RxodOeh
+         5h6ldUCUXu8NKQ7SxOqD2qj3o4iAy82Of4SSe68ydkHyscDjZh9OhuX4jIxYIK7N4pth
+         E4BxaTuQe3WGPxct7R2tzv2tCPrm/kyotkwv7dh1SAZPaUcgGPbjHAcJkPeU2M2zWZXh
+         DC9KV7CE6iAXIxAmMAc0KN3gUJPhAHjWNgZlMMYKfM1DYHL0XKW6rNiR9JCIqBhf4w/C
+         0tTHDQbwRfEvpN3JfJxSYrUYh+tQOJu2RzYWvDz0z2gNN7KMg1JEWiZk8ps1kTBo5lqp
+         V9sA==
+X-Gm-Message-State: AOAM530463+3yOcmD1E2iG5/GlD/TYcPmMOoLrwpKgjJKtwflw+Co8v5
+        D9/I3PTr+JT8mAJcDbjUFhc=
+X-Google-Smtp-Source: ABdhPJyIIikaJAewDDxbe7eDP7AKT83BXDJQ2y9y2Mtw+U8S4nGzCPJAQAG2vZ+ozkayNtJFvTW3gQ==
+X-Received: by 2002:a05:600c:58e:: with SMTP id o14mr22175684wmd.47.1606725408530;
+        Mon, 30 Nov 2020 00:36:48 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id r1sm26179377wra.97.2020.11.30.00.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 00:36:47 -0800 (PST)
+Date:   Mon, 30 Nov 2020 09:36:46 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v10 00/19] Introduce memory interconnect for NVIDIA Tegra
+ SoCs
+Message-ID: <20201130083646.GA6711@kozik-lap>
+References: <CGME20201123003254epcas1p1763e1ce693d7cb8e2f20d521e701ad5f@epcas1p1.samsung.com>
+ <20201123002723.28463-1-digetx@gmail.com>
+ <d12880ba-6780-cfee-7667-3723fcad9f3a@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d12880ba-6780-cfee-7667-3723fcad9f3a@samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Nov 30, 2020 at 05:44:39PM +0900, Chanwoo Choi wrote:
+> Hi Dmitry,
+> 
+> The v5.10-rc6 was released from linus git tree.
+> Generally, I will send the pull-quest about devfreq to linux-pm.git maintainer
+> after releasing the v5.1-rc7 for the integration test on linux-pm.git.
+> 
+> The icc patches in this patch have not yet merged. If these patches
+> are not merged before v5.10-rc7, Maybe, I'll apply the devfreq patches
+> for v5.12-rc1.
 
+None of the patches here are going to be merged to Linus' in the current
+cycle. They will only go to the next so if there is dependency,
+everything will be broken and non-bisectable.
 
-> On Nov 30, 2020, at 15:57, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> 
-> 
-> [Added Srinivas]
-> 
-> On 28/11/2020 18:54, Kai-Heng Feng wrote:
->> We are seeing thermal shutdown on Intel based mobile workstations, the
->> shutdown happens during the first trip handle in
->> thermal_zone_device_register():
->> kernel: thermal thermal_zone15: critical temperature reached (101 C), shutting down
->> 
->> However, we shouldn't do a thermal shutdown here, since
->> 1) We may want to use a dedicated daemon, Intel's thermald in this case,
->> to handle thermal shutdown.
->> 
->> 2) For ACPI based system, _CRT doesn't mean shutdown unless it's inside
->> ThermalZone. ACPI Spec, 11.4.4 _CRT (Critical Temperature):
->> "... If this object it present under a device, the device’s driver
->> evaluates this object to determine the device’s critical cooling
->> temperature trip point. This value may then be used by the device’s
->> driver to program an internal device temperature sensor trip point."
->> 
->> So a "critical trip" here merely means we should take a more aggressive
->> cooling method.
-> 
-> Well, actually it is stated before:
-> 
-> "This object, when defined under a thermal zone, returns the critical
-> temperature at which OSPM must shutdown the system".
+However no such dependencies or merging requirements were mention in the
+cover letter.
 
-This means specifically for the ACPI ThermalZone in AML, e.g.:
-
-ThermalZone (TZ0) {
-....
-    Method(_CRT) { ... }
- } // end of TZ0
-
-However the device is not under any ACPI ThermalZone.
-
-> 
-> That is what does the thermal subsystem, no ?
-> 
->> So add an indication to let thermal core know it should leave thermal
->> device to userspace to handle.
-> 
-> You may want to check the 'HOT' trip point and then use the notification
-> mechanism to get notified in userspace and take action from there (eg.
-> offline some CPUs).
-
-For this particular issue we are facing, the thermal shutdown happens in thermal_zone_device_register() and userspace isn't up yet.
-
-Kai-Heng
-
-> 
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->> ---
->> drivers/thermal/thermal_core.c | 3 +++
->> include/linux/thermal.h        | 2 ++
->> 2 files changed, 5 insertions(+)
->> 
->> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->> index c6d74bc1c90b..6561e3767529 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -1477,6 +1477,9 @@ thermal_zone_device_register(const char *type, int trips, int mask,
->> 			goto unregister;
->> 	}
->> 
->> +	if (tz->tzp && tz->tzp->userspace)
->> +		thermal_zone_device_disable(tz);
->> +
->> 	mutex_lock(&thermal_list_lock);
->> 	list_add_tail(&tz->node, &thermal_tz_list);
->> 	mutex_unlock(&thermal_list_lock);
->> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index d07ea27e72a9..e8e8fac78fc8 100644
->> --- a/include/linux/thermal.h
->> +++ b/include/linux/thermal.h
->> @@ -247,6 +247,8 @@ struct thermal_zone_params {
->> 	 */
->> 	bool no_hwmon;
->> 
->> +	bool userspace;
->> +
->> 	int num_tbps;	/* Number of tbp entries */
->> 	struct thermal_bind_params *tbp;
->> 
->> 
-> 
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
 
