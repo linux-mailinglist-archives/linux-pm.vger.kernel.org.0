@@ -2,274 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B07A42C9196
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 23:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFAB2C91C5
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 00:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388677AbgK3Wvv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 17:51:51 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:53144 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388131AbgK3Wvv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Nov 2020 17:51:51 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1606776685; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=o1gOQc1/5k0lLJLcqySyZp12dZ1eIOKFqUM9lM67l/M=; b=YYa5OkE9Td90H90HgNhszcJfnAJLN1gRhciiWJsbpGHPTkROa0Hg+Y2iZsh2tnEv7rkVFHnS
- K2OE1DbxoyCDpJKnCvZqJNE1KybB3VyZnnwdNPSM49Sj19BuYGpmG1LTc6AMrxmxFpTcCICR
- Wi8OK/tGKKwQ6IHDzc7svbwSwwU=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 5fc5774b51762b1886abfb17 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 30 Nov 2020 22:50:51
- GMT
-Sender: ilina=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6A4A3C43460; Mon, 30 Nov 2020 22:50:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5360DC43462;
-        Mon, 30 Nov 2020 22:50:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5360DC43462
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     rjw@rjwysocki.net, ulf.hansson@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Lina Iyer <ilina@codeaurora.org>
-Subject: [PATCH v6 3/3] PM / Domains: use device's next wakeup to determine domain idle state
-Date:   Mon, 30 Nov 2020 15:50:39 -0700
-Message-Id: <20201130225039.15981-4-ilina@codeaurora.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201130225039.15981-1-ilina@codeaurora.org>
-References: <20201130225039.15981-1-ilina@codeaurora.org>
+        id S1728648AbgK3W6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 17:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728021AbgK3W6l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 17:58:41 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75007C0617A6;
+        Mon, 30 Nov 2020 14:57:47 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id l11so25188260lfg.0;
+        Mon, 30 Nov 2020 14:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CF4VCvT4y1MxLEN3CJpvUBs6aS1caFV9qr8mvMQWWkQ=;
+        b=d2cpPCDwNOjwJ6zcyEH2OArFryPnDeS1v1mqLxiZ+cT8m5CMXk396ihiK1Z+IbhVGH
+         1tDI2bfUXmCLyz0+wmsNpiZ8XBXhA1tumhbrUIKZiRJlzSGihfizD+UFCJu63/yAb4+K
+         rV3Zm1PIcTZyuCXFy1FHWMOmSyc7jFxs5KUvk5p4diMvitODg1SqQZUkVjyquBm3BdPC
+         N8Q2rwDqqHMfQsUGPskU3kXBiQdkLyCsLBgyldzxov3xNZ+QZpIqAjdOyAGQbGL41qm9
+         BL787np2iHPKbnFaf48ATS0ymrwLyBukH6pVmXsxfCrhm5VPqbwaZOEPhxRq3gN3bZqt
+         Bogg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CF4VCvT4y1MxLEN3CJpvUBs6aS1caFV9qr8mvMQWWkQ=;
+        b=G02Xoof0jGFFeOb5nZ8yakOyyoq2XjbDrSGtljTUTSOYrilbPvvO16JMXhKFonOjOz
+         gdF6ZT8hdRi0h2mligV8lxZEyLIPqYlP3uX6UHWjVrCHYRNvTYOhYf0UcafcCayYkJXM
+         PV4s9Cyx5VgOFLFqhmL/IJTSJe56UAUlglCpcbY0D/z7BZHSQtAqnXml4PeOvuTIbPBT
+         K50URO8BrpOg1YcL9Hv4tM+eIggEKoewwEMxZh+TNM+XE+R+Kxz2Dcm18+UBVL1SGws6
+         9/Ilb7ZI0mW2Ffve3ZA2HQTIVP1urwR5EhjM5k5LVdQDFZqWc12r5xs9nwTETFY897I/
+         6q/w==
+X-Gm-Message-State: AOAM532FHrbBcckH9/IFc+lVkxSrLRRDkLFgR/PPqvPzm1XAh9Ry4Hls
+        RurGTC+vyP4YYMliHtoEx/E=
+X-Google-Smtp-Source: ABdhPJxPQ5c3K0b2ozPSWkF7iFJ7NCtYycGijm2HoLwZV/SOV1v33DiiclIeLz/+U3dd6zS5vKhPhQ==
+X-Received: by 2002:ac2:4890:: with SMTP id x16mr10210588lfc.4.1606777066004;
+        Mon, 30 Nov 2020 14:57:46 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id p16sm2616059lfe.255.2020.11.30.14.57.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 14:57:45 -0800 (PST)
+Subject: Re: [PATCH v10 17/19] ARM: tegra: Add EMC OPP properties to Tegra20
+ device-trees
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20201123002723.28463-1-digetx@gmail.com>
+ <20201123002723.28463-18-digetx@gmail.com>
+ <60657f5e-bd30-094e-f8df-6ba69e0d6a3e@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1ed05baf-3a01-3a2b-cd79-98b356c846cf@gmail.com>
+Date:   Tue, 1 Dec 2020 01:57:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
+In-Reply-To: <60657f5e-bd30-094e-f8df-6ba69e0d6a3e@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, a PM domain's idle state is determined based on whether the
-QoS requirements are met. This may not save power, if the idle state
-residency requirements are not met.
+01.12.2020 00:17, Jon Hunter пишет:
+> Hi Dmitry,
+> 
+> On 23/11/2020 00:27, Dmitry Osipenko wrote:
+>> Add EMC OPP DVFS tables and update board device-trees by removing
+>> unsupported OPPs.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> This change is generating the following warning on Tegra20 Ventana
+> and prevents the EMC from probing ...
+> 
+> [    2.485711] tegra20-emc 7000f400.memory-controller: device-tree doesn't have memory timings
+> [    2.499386] tegra20-emc 7000f400.memory-controller: 32bit DRAM bus
+> [    2.505810] ------------[ cut here ]------------
+> [    2.510511] WARNING: CPU: 0 PID: 1 at /local/workdir/tegra/mlt-linux_next/kernel/drivers/opp/of.c:875 _of_add_opp_table_v2+0x598/0x61c
+> [    2.529746] Modules linked in:
+> [    2.540140] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.10.0-rc5-next-20201130 #1
+> [    2.554606] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+> [    2.560892] [<c011136c>] (unwind_backtrace) from [<c010bb60>] (show_stack+0x10/0x14)
+> [    2.568640] [<c010bb60>] (show_stack) from [<c0bcee54>] (dump_stack+0xc8/0xdc)
+> [    2.575866] [<c0bcee54>] (dump_stack) from [<c01235dc>] (__warn+0x104/0x108)
+> [    2.582912] [<c01235dc>] (__warn) from [<c0123690>] (warn_slowpath_fmt+0xb0/0xb8)
+> [    2.590397] [<c0123690>] (warn_slowpath_fmt) from [<c0825ad0>] (_of_add_opp_table_v2+0x598/0x61c)
+> [    2.599269] [<c0825ad0>] (_of_add_opp_table_v2) from [<c0825b90>] (dev_pm_opp_of_add_table+0x3c/0x1a0)
+> [    2.608582] [<c0825b90>] (dev_pm_opp_of_add_table) from [<c087b774>] (tegra_emc_probe+0x478/0x940)
+> [    2.617548] [<c087b774>] (tegra_emc_probe) from [<c0654398>] (platform_drv_probe+0x48/0x98)
+> [    2.625899] [<c0654398>] (platform_drv_probe) from [<c0652238>] (really_probe+0x218/0x3b8)
+> [    2.634162] [<c0652238>] (really_probe) from [<c0652540>] (driver_probe_device+0x5c/0xb4)
+> [    2.642338] [<c0652540>] (driver_probe_device) from [<c0652740>] (device_driver_attach+0x58/0x60)
+> [    2.651208] [<c0652740>] (device_driver_attach) from [<c06527c8>] (__driver_attach+0x80/0xbc)
+> [    2.659730] [<c06527c8>] (__driver_attach) from [<c0650610>] (bus_for_each_dev+0x74/0xb4)
+> [    2.667905] [<c0650610>] (bus_for_each_dev) from [<c06515f8>] (bus_add_driver+0x164/0x1e8)
+> [    2.676168] [<c06515f8>] (bus_add_driver) from [<c06532a8>] (driver_register+0x7c/0x114)
+> [    2.684259] [<c06532a8>] (driver_register) from [<c0102208>] (do_one_initcall+0x54/0x2b0)
+> [    2.692441] [<c0102208>] (do_one_initcall) from [<c10010cc>] (kernel_init_freeable+0x1a4/0x1f4)
+> [    2.701145] [<c10010cc>] (kernel_init_freeable) from [<c0bd4510>] (kernel_init+0x8/0x118)
+> [    2.709321] [<c0bd4510>] (kernel_init) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+> [    2.716885] Exception stack(0xc1501fb0 to 0xc1501ff8)
+> [    2.721933] 1fa0:                                     00000000 00000000 00000000 00000000
+> [    2.730106] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> [    2.738278] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [    2.751940] ---[ end trace 61e3b76deca27ef3 ]---
+> 
+> 
+> Cheers
+> Jon
+> 
 
-CPU PM domains use the next timer wakeup for the CPUs in the domain to
-determine the sleep duration of the domain. This is compared with the
-idle state residencies to determine the optimal idle state. For other PM
-domains, determining the sleep length is not that straight forward. But
-if the device's next_event is available, we can use that to determine
-the sleep duration of the PM domain.
+Hello Jon,
 
-Let's update the domain governor logic to check for idle state residency
-based on the next wakeup of devices as well as QoS constraints.
-
-Signed-off-by: Lina Iyer <ilina@codeaurora.org>
----
-Changes in v6:
-	- Do not include power_on_latency_ns for next_wakeup
-	  determination.
-	- Re-organize code to avoid multiple ktime_get() reads.
-	- Check genpd flag if next_wakeup is useful for the domain.
-	- Document why we ignore stale data
-Changes in v5:
-	- Minor code changes suggested by Rafel
-Changes in v4:
-	- Update to use next_wakeup from struct generic_pm_domain_data.
-Changes in v3:
-	- None
-Changes in v2:
-	- Fix state_idx type to hold negative value.
-	- Update commit text.
----
- drivers/base/power/domain_governor.c | 102 ++++++++++++++++++++++++---
- include/linux/pm_domain.h            |   1 +
- 2 files changed, 94 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-index 490ed7deb99a..2afb7fa90d5d 100644
---- a/drivers/base/power/domain_governor.c
-+++ b/drivers/base/power/domain_governor.c
-@@ -117,6 +117,55 @@ static bool default_suspend_ok(struct device *dev)
- 	return td->cached_suspend_ok;
- }
- 
-+static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
-+{
-+	ktime_t domain_wakeup = KTIME_MAX;
-+	ktime_t next_wakeup;
-+	struct pm_domain_data *pdd;
-+	struct gpd_link *link;
-+
-+	if (!genpd_may_use_next_wakeup(genpd))
-+		return;
-+
-+	/*
-+	 * Devices that have a predictable wakeup pattern, may specify
-+	 * their next wakeup. Let's find the next wakeup from all the
-+	 * devices attached to this domain and from all the sub-domains.
-+	 * It is possible that component's a next wakeup may have become
-+	 * stale when we read that here. We will ignore to ensure the domain
-+	 * is able to enter its optimal idle state.
-+	 */
-+	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-+		next_wakeup = to_gpd_data(pdd)->next_wakeup;
-+		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-+			if (ktime_before(next_wakeup, domain_wakeup))
-+				domain_wakeup = next_wakeup;
-+	}
-+
-+	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-+		next_wakeup = link->child->next_wakeup;
-+		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-+			if (ktime_before(next_wakeup, domain_wakeup))
-+				domain_wakeup = next_wakeup;
-+	}
-+
-+	genpd->next_wakeup = domain_wakeup;
-+}
-+
-+static bool next_wakeup_allows_state(struct generic_pm_domain *genpd,
-+				     unsigned int state, ktime_t now)
-+{
-+	ktime_t domain_wakeup = genpd->next_wakeup;
-+	s64 idle_time_ns, min_sleep_ns;
-+
-+	min_sleep_ns = genpd->states[state].power_off_latency_ns +
-+		       genpd->states[state].residency_ns;
-+
-+	idle_time_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
-+
-+	return idle_time_ns >= min_sleep_ns;
-+}
-+
- static bool __default_power_down_ok(struct dev_pm_domain *pd,
- 				     unsigned int state)
- {
-@@ -201,16 +250,41 @@ static bool __default_power_down_ok(struct dev_pm_domain *pd,
- }
- 
- /**
-- * default_power_down_ok - Default generic PM domain power off governor routine.
-+ * _default_power_down_ok - Default generic PM domain power off governor routine.
-  * @pd: PM domain to check.
-  *
-  * This routine must be executed under the PM domain's lock.
-  */
--static bool default_power_down_ok(struct dev_pm_domain *pd)
-+static bool _default_power_down_ok(struct dev_pm_domain *pd, ktime_t now)
- {
- 	struct generic_pm_domain *genpd = pd_to_genpd(pd);
-+	int state_idx = genpd->state_count - 1;
- 	struct gpd_link *link;
- 
-+	/*
-+	 * Find the next wakeup from devices that can determine their own wakeup
-+	 * to find when the domain would wakeup and do it for every device down
-+	 * the hierarchy. It is not worth while to sleep if the state's residency
-+	 * cannot be met.
-+	 */
-+	update_domain_next_wakeup(genpd, now);
-+	if (genpd->next_wakeup != KTIME_MAX) {
-+		/* Let's find out the deepest domain idle state, the devices prefer */
-+		while (state_idx >= 0) {
-+			if (next_wakeup_allows_state(genpd, state_idx, now)) {
-+				genpd->max_off_time_changed = true;
-+				break;
-+			}
-+			state_idx--;
-+		}
-+
-+		if (state_idx < 0) {
-+			state_idx = 0;
-+			genpd->cached_power_down_ok = false;
-+			goto done;
-+		}
-+	}
-+
- 	if (!genpd->max_off_time_changed) {
- 		genpd->state_idx = genpd->cached_power_down_state_idx;
- 		return genpd->cached_power_down_ok;
-@@ -228,21 +302,30 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
- 	genpd->max_off_time_ns = -1;
- 	genpd->max_off_time_changed = false;
- 	genpd->cached_power_down_ok = true;
--	genpd->state_idx = genpd->state_count - 1;
- 
--	/* Find a state to power down to, starting from the deepest. */
--	while (!__default_power_down_ok(pd, genpd->state_idx)) {
--		if (genpd->state_idx == 0) {
-+	/*
-+	 * Find a state to power down to, starting from the state
-+	 * determined by the next wakeup.
-+	 */
-+	while (!__default_power_down_ok(pd, state_idx)) {
-+		if (state_idx == 0) {
- 			genpd->cached_power_down_ok = false;
- 			break;
- 		}
--		genpd->state_idx--;
-+		state_idx--;
- 	}
- 
-+done:
-+	genpd->state_idx = state_idx;
- 	genpd->cached_power_down_state_idx = genpd->state_idx;
- 	return genpd->cached_power_down_ok;
- }
- 
-+static bool default_power_down_ok(struct dev_pm_domain *pd)
-+{
-+	return _default_power_down_ok(pd, ktime_get());
-+}
-+
- static bool always_on_power_down_ok(struct dev_pm_domain *domain)
- {
- 	return false;
-@@ -254,11 +337,12 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
- 	struct generic_pm_domain *genpd = pd_to_genpd(pd);
- 	struct cpuidle_device *dev;
- 	ktime_t domain_wakeup, next_hrtimer;
-+	ktime_t now = ktime_get();
- 	s64 idle_duration_ns;
- 	int cpu, i;
- 
- 	/* Validate dev PM QoS constraints. */
--	if (!default_power_down_ok(pd))
-+	if (!_default_power_down_ok(pd, now))
- 		return false;
- 
- 	if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN))
-@@ -280,7 +364,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
- 	}
- 
- 	/* The minimum idle duration is from now - until the next wakeup. */
--	idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, ktime_get()));
-+	idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
- 	if (idle_duration_ns <= 0)
- 		return false;
- 
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index cc27d3d88849..a41aea9d1c06 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -136,6 +136,7 @@ struct generic_pm_domain {
- 				     unsigned int state);
- 	struct gpd_dev_ops dev_ops;
- 	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
-+	ktime_t next_wakeup;	/* Maintained by the domain governor */
- 	bool max_off_time_changed;
- 	bool cached_power_down_ok;
- 	bool cached_power_down_state_idx;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+That is harmless and expected to happen because the patch "memory:
+tegra20: Support hardware versioning and clean up OPP table
+initialization" isn't applied yet, while Thierry already applied the DT
+patches from this v10.
