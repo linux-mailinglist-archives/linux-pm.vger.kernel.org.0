@@ -2,202 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 325FB2C8949
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 17:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2D82C89B1
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 17:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728786AbgK3QUt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 11:20:49 -0500
-Received: from mga06.intel.com ([134.134.136.31]:2829 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728777AbgK3QUt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Nov 2020 11:20:49 -0500
-IronPort-SDR: J03nhffHkvCe1Utx1HV+MCggcj6t2V/TwmNs34ZEF+NE224zoyZyzLqe2SJavGcNQUjbGQFG24
- KzGWB7jgumCg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="234266660"
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="234266660"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 08:19:07 -0800
-IronPort-SDR: L0PQRAqSGYFpiLedealhnGJT1iDVIxcyAnwZlPAtbnfjVf9M8Ws3Qt5kkSKTH887shscwIYQhI
- 2y6et7Nn7NRQ==
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="334714683"
-Received: from nathanhs-mobl1.amr.corp.intel.com ([10.209.72.72])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 08:19:07 -0800
-Message-ID: <fc67ad02826fb3adfd8457e1a0baf234a8fa3fce.camel@linux.intel.com>
-Subject: Re: [PATCH 1/3] thermal: core: Add indication for userspace usage
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>, amitk@kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Mon, 30 Nov 2020 08:19:07 -0800
-In-Reply-To: <860126B8-1152-4EE3-B15E-B4E45EFE879F@canonical.com>
-References: <20201128175450.12456-1-kai.heng.feng@canonical.com>
-         <004fe225-1009-06d8-b297-c03a4c67550f@linaro.org>
-         <860126B8-1152-4EE3-B15E-B4E45EFE879F@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1726761AbgK3Qiv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 11:38:51 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37075 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725987AbgK3Qiu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 11:38:50 -0500
+Received: by mail-ot1-f66.google.com with SMTP id l36so11889009ota.4;
+        Mon, 30 Nov 2020 08:38:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j1tOA2QFb861fJIhjPhICzbVGAPhE/EoBqZiri0QzCg=;
+        b=E5ycOzYp4Pr8szTAEiY9nbLXnJWBXMgfRlQNOoD3ZQf/WFZ1OIR9X7h6+uQLreBf9B
+         rQRp+Rh71fVaffF66R4uHfJshsZBPNgM0bjhxZS1lhoQJdlTojw+UBxXrKaNgmJbjsvv
+         dGSpY8X+Xha4zLbNGo2Plv7oQ/n3wMIV9kRHN6sWODSDEZ0pkSt+ep9hDZjH1mlo5bIn
+         HKzN8ELooraUw48gw00+H08RHHgqeDHksfW+PZHHeYFgGdLiFs0uFuw4Mp5O50/idTTJ
+         4LTA/cSv350QEKIYDshz8PfMBSxoBtsWG5KeI2OLT0DJ+Kt325rECKlwT7lFhaGekTd4
+         6dnA==
+X-Gm-Message-State: AOAM5331O44IH+Os8hWS7EGP2Ce4e8BbzisZsVyvR3VivZr9elyGDJQx
+        1D4E16mF665QqSTCb0hVpDTuKuKYhdi+ec7bHtQ=
+X-Google-Smtp-Source: ABdhPJznLsbs+YsdRJTngNu4A/VigxgyG8IVgL6HbhqIGKuRCbfCRNuXZkBgpyedGvmqROJLGv6AfG+tViE+/nXNE2k=
+X-Received: by 2002:a05:6830:2385:: with SMTP id l5mr17132783ots.321.1606754283665;
+ Mon, 30 Nov 2020 08:38:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201110092933.3342784-1-zhangqilong3@huawei.com>
+ <20201110092933.3342784-2-zhangqilong3@huawei.com> <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Nov 2020 17:37:52 +0100
+Message-ID: <CAJZ5v0hVXSgUm877iv3i=1vs1t2QFpGW=-4qTFf2WedTJBU8Zg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM: runtime: Add pm_runtime_resume_and_get to deal
+ with usage counter
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Zhang Qilong <zhangqilong3@huawei.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2020-11-30 at 16:23 +0800, Kai-Heng Feng wrote:
-> > On Nov 30, 2020, at 15:57, Daniel Lezcano <
-> > daniel.lezcano@linaro.org> wrote:
-> > 
-> > 
-> > [Added Srinivas]
-> > 
-> > On 28/11/2020 18:54, Kai-Heng Feng wrote:
-> > > We are seeing thermal shutdown on Intel based mobile
-> > > workstations, the
-> > > shutdown happens during the first trip handle in
-> > > thermal_zone_device_register():
-> > > kernel: thermal thermal_zone15: critical temperature reached (101
-> > > C), shutting down
-> > > 
-> > > However, we shouldn't do a thermal shutdown here, since
-> > > 1) We may want to use a dedicated daemon, Intel's thermald in
-> > > this case,
-> > > to handle thermal shutdown.
-> > > 
-> > > 2) For ACPI based system, _CRT doesn't mean shutdown unless it's
-> > > inside
-> > > ThermalZone. ACPI Spec, 11.4.4 _CRT (Critical Temperature):
-> > > "... If this object it present under a device, the device’s
-> > > driver
-> > > evaluates this object to determine the device’s critical cooling
-> > > temperature trip point. This value may then be used by the
-> > > device’s
-> > > driver to program an internal device temperature sensor trip
-> > > point."
-> > > 
-> > > So a "critical trip" here merely means we should take a more
-> > > aggressive
-> > > cooling method.
-> > 
-> > Well, actually it is stated before:
-> > 
-> > "This object, when defined under a thermal zone, returns the
-> > critical
-> > temperature at which OSPM must shutdown the system".
-> 
-> This means specifically for the ACPI ThermalZone in AML, e.g.:
-> 
-> ThermalZone (TZ0) {
-> ....
->     Method(_CRT) { ... }
->  } // end of TZ0
-> 
-> However the device is not under any ACPI ThermalZone.
-> 
-> > That is what does the thermal subsystem, no ?
-> > 
-> > > So add an indication to let thermal core know it should leave
-> > > thermal
-> > > device to userspace to handle.
-> > 
-> > You may want to check the 'HOT' trip point and then use the
-> > notification
-> > mechanism to get notified in userspace and take action from there
-> > (eg.
-> > offline some CPUs).
-> 
-> For this particular issue we are facing, the thermal shutdown happens
-> in thermal_zone_device_register() and userspace isn't up yet.
+On Fri, Nov 27, 2020 at 11:16 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Zhang,
+>
+> On Tue, Nov 10, 2020 at 10:29 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
+> > In many case, we need to check return value of pm_runtime_get_sync, but
+> > it brings a trouble to the usage counter processing. Many callers forget
+> > to decrease the usage counter when it failed, which could resulted in
+> > reference leak. It has been discussed a lot[0][1]. So we add a function
+> > to deal with the usage counter for better coding.
+> >
+> > [0]https://lkml.org/lkml/2020/6/14/88
+> > [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
+> > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+>
+> Thanks for your patch, which is now commit dd8088d5a8969dc2 ("PM:
+> runtime: Add pm_runtime_resume_and_get to deal with usage counter") in
+> v5.10-rc5.
+>
+> > --- a/include/linux/pm_runtime.h
+> > +++ b/include/linux/pm_runtime.h
+> > @@ -386,6 +386,27 @@ static inline int pm_runtime_get_sync(struct device *dev)
+> >         return __pm_runtime_resume(dev, RPM_GET_PUT);
+> >  }
+> >
+> > +/**
+> > + * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
+> > + * @dev: Target device.
+> > + *
+> > + * Resume @dev synchronously and if that is successful, increment its runtime
+> > + * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
+> > + * incremented or a negative error code otherwise.
+> > + */
+> > +static inline int pm_runtime_resume_and_get(struct device *dev)
+>
+> Perhaps this function should be called pm_runtime_resume_and_get_sync(),
 
-What about creating an new callback
+No, really.
 
-enum thermal_trip_status {
-	THERMAL_TRIP_DISABLED = 0,
-	THERMAL_TRIP_ENABLED,
-};
+I might consider calling it pm_runtime_acquire(), and adding a
+matching _release() as a pm_runtime_get() synonym for that matter, but
+not the above.
 
-int get_trip_status(struct thermal_zone_device *, int trip, enum
-thermal_trip_status *state);
+> to make it clear it does a synchronous get?
+>
+> I had to look into the implementation to verify that a change like
 
-Then in 
-static void handle_thermal_trip(struct thermal_zone_device *tz, int
-trip)
-{
+I'm not sure why, because the kerneldoc is unambiguous AFAICS.
 
-/* before tz->ops->get_trip_temp(tz, trip, &trip_temp); */
-if (tz->ops->get_trip_status) {
-	enum thermal_trip_status *status;
+>
+> -       ret = pm_runtime_get_sync(&pdev->dev);
+> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+>
+> in the follow-up patches is actually a valid change, maintaining
+> synchronous operation. Oh, pm_runtime_resume() is synchronous, too...
 
-	if (!tz->ops->get_trip_status(tz, trip, &status)) {
-		if (status == THERMAL_TRIP_DISABLED)
-			return;	
-	}
-}
-...
-...
-
-}
-
-
-This callback will help the cases:
-- Allows drivers to selectively disable certain trips during init state
-or system resume where there can be spikes or always. int340x drivers
-can disable always.
-- Still give options for drivers to handle critical trip even if they
-are bound to user space governors. User space process may be dead, so
-still allow kernel to process graceful shutdown
-
-Thanks,
-Srinivas
-
-> 
-> Kai-Heng
-> 
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > ---
-> > > drivers/thermal/thermal_core.c | 3 +++
-> > > include/linux/thermal.h        | 2 ++
-> > > 2 files changed, 5 insertions(+)
-> > > 
-> > > diff --git a/drivers/thermal/thermal_core.c
-> > > b/drivers/thermal/thermal_core.c
-> > > index c6d74bc1c90b..6561e3767529 100644
-> > > --- a/drivers/thermal/thermal_core.c
-> > > +++ b/drivers/thermal/thermal_core.c
-> > > @@ -1477,6 +1477,9 @@ thermal_zone_device_register(const char
-> > > *type, int trips, int mask,
-> > > 			goto unregister;
-> > > 	}
-> > > 
-> > > +	if (tz->tzp && tz->tzp->userspace)
-> > > +		thermal_zone_device_disable(tz);
-> > > +
-> > > 	mutex_lock(&thermal_list_lock);
-> > > 	list_add_tail(&tz->node, &thermal_tz_list);
-> > > 	mutex_unlock(&thermal_list_lock);
-> > > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> > > index d07ea27e72a9..e8e8fac78fc8 100644
-> > > --- a/include/linux/thermal.h
-> > > +++ b/include/linux/thermal.h
-> > > @@ -247,6 +247,8 @@ struct thermal_zone_params {
-> > > 	 */
-> > > 	bool no_hwmon;
-> > > 
-> > > +	bool userspace;
-> > > +
-> > > 	int num_tbps;	/* Number of tbp entries */
-> > > 	struct thermal_bind_params *tbp;
-> > > 
-> > > 
-> > 
-> > -- 
-> > <http://www.linaro.org/> Linaro.org │ Open source software for ARM
-> > SoCs
-> > 
-> > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> > <http://twitter.com/#!/linaroorg> Twitter |
-> > <http://www.linaro.org/linaro-blog/> Blog
-
+Yes, it is.
