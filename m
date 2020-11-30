@@ -2,122 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B307E2C8B42
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 18:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A4B2C8B4D
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 18:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387721AbgK3RgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 12:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387720AbgK3RgN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 12:36:13 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B606EC0613D2;
-        Mon, 30 Nov 2020 09:35:33 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 029ECB26;
-        Mon, 30 Nov 2020 18:35:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1606757732;
-        bh=R7OEenYHdXActne42tz0vYeapjLO4a3xipVuLSxiR3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qSfKTDM0Xyu3P8ooAxG6IgCU6jE4FlI8SWoYYEI3skkJMk/QTsV1sLCvUT/dI5CFk
-         k4K15DLe6f6LygS+0hhz++An8JM8opgoA79BzhCdro5MQ6CZUC9y1AnZECl0HkYX77
-         +ySLyPFlm9MezncBgFc/Ma5CkUsQIwwwI5whWqxk=
-Date:   Mon, 30 Nov 2020 19:35:23 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Fugang Duan <fugang.duan@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v3 1/2] PM: runtime: Add pm_runtime_resume_and_get to
- deal with usage counter
-Message-ID: <20201130173523.GT14465@pendragon.ideasonboard.com>
-References: <20201110092933.3342784-1-zhangqilong3@huawei.com>
- <20201110092933.3342784-2-zhangqilong3@huawei.com>
- <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
- <CAJZ5v0hVXSgUm877iv3i=1vs1t2QFpGW=-4qTFf2WedTJBU8Zg@mail.gmail.com>
+        id S2387750AbgK3Rg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 12:36:57 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:40487 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387637AbgK3Rg4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 12:36:56 -0500
+Received: by mail-il1-f196.google.com with SMTP id g1so12089534ilk.7;
+        Mon, 30 Nov 2020 09:36:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YuxRGNlv6QYt4AK3oJIWSaBLT8dt75Vrt5dYo5MWBhg=;
+        b=uf63ef0Yx+AG4wDCTULpHspe34X+mISGy/VIHRiP3C0JlSo/gyDpEHhiYu3DMYLEOy
+         baow4d/tqFeC6pNJU6X/ggr3djko2vUmDz4YQV37dbYbpeUoiy4FMtud43QhA7ac08zo
+         xhHKGywk2PspLdoUC6ioML0VD+XpkXrKVvAwfrQnvQpcXndlXXmtKDlhQPdN43AwepBx
+         0D5rvMgJRsqWjWrIWPB6PCLCIOx5rxiDBgATDPngE5gEWOBBKJ2lHwr2OpGHZMJQzSAc
+         AzWdm5QYBZtPbOiqRP9npiIFYUTMqboYAp+Tmv8UdntVqeAjZja6DHmLwxMR0gztBE/l
+         V5/w==
+X-Gm-Message-State: AOAM5338unJbgWvD2uku9jVpbQCdLmXAPymIXPJV8i8DwbwhfeVDYcu2
+        RYRCT8nwHtDclZjq9pa+2Q==
+X-Google-Smtp-Source: ABdhPJyo4ZN8rI5Ly+F9Z0ZjEj3ZWTEVZuPTRCBjJKgbwZEAYb38kcRggMqNsU01kSmfvhdLrMJKwg==
+X-Received: by 2002:a05:6e02:ca5:: with SMTP id 5mr18434270ilg.183.1606757775075;
+        Mon, 30 Nov 2020 09:36:15 -0800 (PST)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id q140sm7696530iod.43.2020.11.30.09.36.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 09:36:14 -0800 (PST)
+Received: (nullmailer pid 2683006 invoked by uid 1000);
+        Mon, 30 Nov 2020 17:36:11 -0000
+Date:   Mon, 30 Nov 2020 10:36:11 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     gao.yunxiao6@gmail.com
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, zhang.lyra@gmail.com,
+        "jeson.gao" <jeson.gao@unisoc.com>, orsonzhai@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, kernel-team@android.com,
+        linux-pm@vger.kernel.org, javi.merino@kernel.org,
+        daniel.lezcano@linaro.org
+Subject: Re: [RFC 1/2] dt-bindings: thermal: sprd: Add virtual thermal
+ documentation
+Message-ID: <20201130173611.GA2680517@robh.at.kernel.org>
+References: <1606466112-31584-1-git-send-email-gao.yunxiao6@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hVXSgUm877iv3i=1vs1t2QFpGW=-4qTFf2WedTJBU8Zg@mail.gmail.com>
+In-Reply-To: <1606466112-31584-1-git-send-email-gao.yunxiao6@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 05:37:52PM +0100, Rafael J. Wysocki wrote:
-> On Fri, Nov 27, 2020 at 11:16 AM Geert Uytterhoeven wrote:
-> > On Tue, Nov 10, 2020 at 10:29 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
-> > > In many case, we need to check return value of pm_runtime_get_sync, but
-> > > it brings a trouble to the usage counter processing. Many callers forget
-> > > to decrease the usage counter when it failed, which could resulted in
-> > > reference leak. It has been discussed a lot[0][1]. So we add a function
-> > > to deal with the usage counter for better coding.
-> > >
-> > > [0]https://lkml.org/lkml/2020/6/14/88
-> > > [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
-> > > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-> >
-> > Thanks for your patch, which is now commit dd8088d5a8969dc2 ("PM:
-> > runtime: Add pm_runtime_resume_and_get to deal with usage counter") in
-> > v5.10-rc5.
-> >
-> > > --- a/include/linux/pm_runtime.h
-> > > +++ b/include/linux/pm_runtime.h
-> > > @@ -386,6 +386,27 @@ static inline int pm_runtime_get_sync(struct device *dev)
-> > >         return __pm_runtime_resume(dev, RPM_GET_PUT);
-> > >  }
-> > >
-> > > +/**
-> > > + * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
-> > > + * @dev: Target device.
-> > > + *
-> > > + * Resume @dev synchronously and if that is successful, increment its runtime
-> > > + * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
-> > > + * incremented or a negative error code otherwise.
-> > > + */
-> > > +static inline int pm_runtime_resume_and_get(struct device *dev)
-> >
-> > Perhaps this function should be called pm_runtime_resume_and_get_sync(),
+On Fri, 27 Nov 2020 16:35:12 +0800, gao.yunxiao6@gmail.com wrote:
+> From: "jeson.gao" <jeson.gao@unisoc.com>
 > 
-> No, really.
+> virtual thermal node definition description in dts file
 > 
-> I might consider calling it pm_runtime_acquire(), and adding a
-> matching _release() as a pm_runtime_get() synonym for that matter, but
-> not the above.
-
-pm_runtime_acquire() seems better to me too. Would pm_runtime_release()
-would be an alias for pm_runtime_put() ?
-
-We would also likely need a pm_runtime_release_autosuspend() too then.
-But on that topic, I was wondering, is there a reason we can't select
-autosuspend behaviour automatically when autosuspend is enabled ?
-
-> > to make it clear it does a synchronous get?
-> >
-> > I had to look into the implementation to verify that a change like
+> Signed-off-by: jeson.gao <jeson.gao@unisoc.com>
+> ---
+>  .../thermal/sprd-virtual-thermal.yaml         | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.yaml
 > 
-> I'm not sure why, because the kerneldoc is unambiguous AFAICS.
-> 
-> >
-> > -       ret = pm_runtime_get_sync(&pdev->dev);
-> > +       ret = pm_runtime_resume_and_get(&pdev->dev);
-> >
-> > in the follow-up patches is actually a valid change, maintaining
-> > synchronous operation. Oh, pm_runtime_resume() is synchronous, too...
-> 
-> Yes, it is.
 
--- 
-Regards,
 
-Laurent Pinchart
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.example.dts:21.11-21: Warning (reg_format): /example-0/virtual-sensor@1:reg: property has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/sprd-virtual-thermal.example.dt.yaml: example-0: virtual-sensor@1:reg:0: [1] is too short
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
+
+
+See https://patchwork.ozlabs.org/patch/1407041
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
