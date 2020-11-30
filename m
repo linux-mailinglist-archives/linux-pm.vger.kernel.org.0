@@ -2,264 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9BF2C8DAF
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 20:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913392C8DC4
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 20:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727182AbgK3THi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 14:07:38 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:46987 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgK3THi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 14:07:38 -0500
-Received: by mail-ot1-f67.google.com with SMTP id z23so8724843oti.13;
-        Mon, 30 Nov 2020 11:07:21 -0800 (PST)
+        id S2388288AbgK3TNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 14:13:05 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:39571 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388258AbgK3TNF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 14:13:05 -0500
+Received: by mail-oi1-f194.google.com with SMTP id f11so15370523oij.6;
+        Mon, 30 Nov 2020 11:12:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=A4c0ewLuKQihDqpCI4lI9QpkIZqIdg1WpJW+IRHNH1w=;
-        b=p6orThEBqElLvkoivg/bmKWwQVY020zdBm83ixfszCkqGrSFUP4/JVcUYpK/oFecI0
-         jzlAK+G0KshWDq2h7OYW+ykvuZz+WMEHDLu/W7xqhYRhiSKGfr2C8mGS6DVB1eWWWK74
-         I6N6zoTzxB7apNGkGw48ZW5McJEoAB0xU58x1UtQFLoNv53wF2k64JqNKAx//bRaOtvk
-         wHv1OpMxWPsMy4cxIYRAFVRw6s5jWj6NKeneJwHl3OoCU/LnEcAhwHgj/BeVD13qB09y
-         Gh6cRVvnc8JRITeOeGnidWWOI52o61B4REpz/iMD71RftYuFbO8Vgr3LLpmWZE++tuK/
-         vayg==
-X-Gm-Message-State: AOAM530zCqHd+1YgB6gdWqv1wpDEbzXyRU3sHe9vRfp+XARthZe0WVaQ
-        XHhhn7UXJen4ggNFQIXjmJfL9hShvpEaAlPcDqh/YZqx
-X-Google-Smtp-Source: ABdhPJwLZ/wMFqEIaHyXCxGOtIBm+FERcwnNMKEkKUUTf6i3pI2tVTAAfp2GgUwslC24LBWAe0Olwx1M8zOiSPcO780=
-X-Received: by 2002:a9d:16f:: with SMTP id 102mr18570302otu.206.1606763215377;
- Mon, 30 Nov 2020 11:06:55 -0800 (PST)
+        bh=Pmtf1a4HitphENukeG8SqVWu3Y/HvkXNeG2L2oSB6Qw=;
+        b=nMSznXSQd1qyNq0QkihhWaYxaGvUF3n47tcg7PPm4EEA/dsNkkaPz6fHM5qWV0BCHX
+         zIrwgOQHN+A69OnqPmp7ozHpwHvRxnbD6B4T/h+6nsPm1V5Utpy1KRK5AU8M4auDBfZx
+         7ncV347LNqE0Wkx6fH9p3lSeYrPN+441cwSD3zMr3P3dWWvQhgyfZdm245cOWdDadD4W
+         2YHGOBrxav3ff7olXHrmkl02hMhdu2WjDeOzRpNQeBkP2ftL7klCyu9URJ1z4fIFSEB/
+         17UuOnpPjcQjbu52WB7wOzw/umN9c9+ToYMj4xHsV2uUbAOfiBkhaB+QqdJ03J1gTl0f
+         g5/Q==
+X-Gm-Message-State: AOAM5300SEwJeIfN/HpAnKz+hx87HsBExeuR3/vtjMST20iaALp150RL
+        UHdiB84PxCIdMS/oaVqlLyrq/W4k97dHdN5jg8c=
+X-Google-Smtp-Source: ABdhPJytCrnnJx3U8JlCMd8DxOc553DmUH/ROIEcNJOOJQRN0dMwydE7GTi6LPyZgwAb7k5a+BArNOMdbE+guXUymWU=
+X-Received: by 2002:aca:f15:: with SMTP id 21mr261009oip.71.1606763543910;
+ Mon, 30 Nov 2020 11:12:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20201130092241.GR3371@techsingularity.net>
-In-Reply-To: <20201130092241.GR3371@techsingularity.net>
+References: <20201110092933.3342784-1-zhangqilong3@huawei.com>
+ <20201110092933.3342784-2-zhangqilong3@huawei.com> <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
+ <CAJZ5v0hVXSgUm877iv3i=1vs1t2QFpGW=-4qTFf2WedTJBU8Zg@mail.gmail.com>
+ <20201130173523.GT14465@pendragon.ideasonboard.com> <CAJZ5v0gx08RY+RjU90y222fLUq7YiO4x6PW3d9GNk4wYadzv_w@mail.gmail.com>
+ <20201130185044.GZ4141@pendragon.ideasonboard.com>
+In-Reply-To: <20201130185044.GZ4141@pendragon.ideasonboard.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 30 Nov 2020 20:06:44 +0100
-Message-ID: <CAJZ5v0h-ZBUMKqP5om7h67iMTe87GUf2Bw5dJ9tQN6MKwaTWzA@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: Select polling interval based on a c-state with
- a longer target residency
-To:     Mel Gorman <mgorman@techsingularity.net>
+Date:   Mon, 30 Nov 2020 20:12:12 +0100
+Message-ID: <CAJZ5v0iALE+oSXmJ7mWGCEG7MwFptfMwa-_SS8BusMUx7C7urA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM: runtime: Add pm_runtime_resume_and_get to deal
+ with usage counter
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 10:22 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+On Mon, Nov 30, 2020 at 7:50 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
 >
-> It was noted that a few workloads that idle rapidly regressed when commit
-> 36fcb4292473 ("cpuidle: use first valid target residency as poll time")
-> was merged. The workloads in question were heavy communicators that idle
-> rapidly and were impacted by the c-state exit latency as the active CPUs
-> were not polling at the time of wakeup. As they were not particularly
-> realistic workloads, it was not considered to be a major problem.
+> Hi Rafael,
 >
-> Unfortunately, a bug was reported for a real workload in a production
-> environment that relied on large numbers of threads operating in a worker
-> pool pattern. These threads would idle for periods of time longer than the
-> C1 target residency and so incurred the c-state exit latency penalty. The
-> application is very sensitive to wakeup latency and indirectly relying
-> on behaviour prior to commit on a37b969a61c1 ("cpuidle: poll_state: Add
-> time limit to poll_idle()") to poll for long enough to avoid the exit
-> latency cost.
+> On Mon, Nov 30, 2020 at 06:55:57PM +0100, Rafael J. Wysocki wrote:
+> > On Mon, Nov 30, 2020 at 6:35 PM Laurent Pinchart wrote:
+> > > On Mon, Nov 30, 2020 at 05:37:52PM +0100, Rafael J. Wysocki wrote:
+> > > > On Fri, Nov 27, 2020 at 11:16 AM Geert Uytterhoeven wrote:
+> > > > > On Tue, Nov 10, 2020 at 10:29 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
+> > > > > > In many case, we need to check return value of pm_runtime_get_sync, but
+> > > > > > it brings a trouble to the usage counter processing. Many callers forget
+> > > > > > to decrease the usage counter when it failed, which could resulted in
+> > > > > > reference leak. It has been discussed a lot[0][1]. So we add a function
+> > > > > > to deal with the usage counter for better coding.
+> > > > > >
+> > > > > > [0]https://lkml.org/lkml/2020/6/14/88
+> > > > > > [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
+> > > > > > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+> > > > >
+> > > > > Thanks for your patch, which is now commit dd8088d5a8969dc2 ("PM:
+> > > > > runtime: Add pm_runtime_resume_and_get to deal with usage counter") in
+> > > > > v5.10-rc5.
+> > > > >
+> > > > > > --- a/include/linux/pm_runtime.h
+> > > > > > +++ b/include/linux/pm_runtime.h
+> > > > > > @@ -386,6 +386,27 @@ static inline int pm_runtime_get_sync(struct device *dev)
+> > > > > >         return __pm_runtime_resume(dev, RPM_GET_PUT);
+> > > > > >  }
+> > > > > >
+> > > > > > +/**
+> > > > > > + * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
+> > > > > > + * @dev: Target device.
+> > > > > > + *
+> > > > > > + * Resume @dev synchronously and if that is successful, increment its runtime
+> > > > > > + * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
+> > > > > > + * incremented or a negative error code otherwise.
+> > > > > > + */
+> > > > > > +static inline int pm_runtime_resume_and_get(struct device *dev)
+> > > > >
+> > > > > Perhaps this function should be called pm_runtime_resume_and_get_sync(),
+> > > >
+> > > > No, really.
+> > > >
+> > > > I might consider calling it pm_runtime_acquire(), and adding a
+> > > > matching _release() as a pm_runtime_get() synonym for that matter, but
+> > > > not the above.
+> > >
+> > > pm_runtime_acquire() seems better to me too. Would pm_runtime_release()
+> > > would be an alias for pm_runtime_put() ?
+> >
+> > Yes.  This covers all of the use cases relevant for drivers AFAICS.
+> >
+> > > We would also likely need a pm_runtime_release_autosuspend() too then.
+> >
+> > Why would we?
+> >
+> > > But on that topic, I was wondering, is there a reason we can't select
+> > > autosuspend behaviour automatically when autosuspend is enabled ?
+> >
+> > That is the case already.
+> >
+> > pm_runtime_put() will autosuspend if enabled and the usage counter is
+> > 0, as long as ->runtime_idle() returns 0 (or is absent).
+> >
+> > pm_runtime_put_autosuspend() is an optimization allowing
+> > ->runtime_idle() to be skipped entirely, but I'm wondering how many
+> > users really need that.
 >
-> The target residency of C1 is typically very short. On some x86 machines,
-> it can be as low as 2 microseconds. In poll_idle(), the clock is checked
-> every POLL_IDLE_RELAX_COUNT interations of cpu_relax() and even one
-> iteration of that loop can be over 1 microsecond so the polling interval is
-> very close to the granularity of what poll_idle() can detect. Furthermore,
-> a basic ping pong workload like perf bench pipe has a longer round-trip
-> time than the 2 microseconds meaning that the CPU will almost certainly
-> not be polling when the ping-pong completes.
+> Ah, I didn't know that, that's good to know. We then don't need
+> pm_runtime_release_autosuspend() (unless the optimization really makes a
+> big difference).
 >
-> This patch selects a polling interval based on an enabled c-state that
-> has an target residency longer than 10usec. If there is no enabled-cstate
-> then polling will be up to a TICK_NSEC/16 similar to what it was up until
-> kernel 4.20.
->
-> As an example, consider a CPU with the following c-state information from
-> an Intel CPU;
->
->         residency       exit_latency
-> C1      2               2
-> C1E     20              10
-> C3      100             33
-> C6      400             133
->
-> The polling interval selected is 20usec. If booted with
-> intel_idle.max_cstate=1 then the polling interval is 250usec as the deeper
-> c-states were not available.
->
-> On an AMD EPYC machine, the c-state information is more limited and looks
-> like
->
->         residency       exit_latency
-> C1      2               1
-> C2      800             400
->
-> The polling interval selected is 250usec. While C2 was considered, the
-> polling interval was clamped by CPUIDLE_POLL_MAX.
->
-> Note that it is not expected that polling will be a universal win. As
-> well as potentially trading power for performance, the performance is not
-> guaranteed if the extra polling prevented a turbo state being reached. The
-> patch allows the polling interval to be tuned in case a corner-case is
-> found and if a bug is filed, the tuning may advise how CPUIDLE_POLL_MIN
-> should be adjusted (e.g. optional overrides per architecture) or if a
-> different balance point than residency-exit_latency should be used.
->
-> tbench4
->                              vanilla                polling
-> Hmean     1        497.89 (   0.00%)      543.15 *   9.09%*
-> Hmean     2        975.88 (   0.00%)     1059.73 *   8.59%*
-> Hmean     4       1953.97 (   0.00%)     2081.37 *   6.52%*
-> Hmean     8       3645.76 (   0.00%)     4052.95 *  11.17%*
-> Hmean     16      6882.21 (   0.00%)     6995.93 *   1.65%*
-> Hmean     32     10752.20 (   0.00%)    10731.53 *  -0.19%*
-> Hmean     64     12875.08 (   0.00%)    12478.13 *  -3.08%*
-> Hmean     128    21500.54 (   0.00%)    21098.60 *  -1.87%*
-> Hmean     256    21253.70 (   0.00%)    21027.18 *  -1.07%*
-> Hmean     320    20813.50 (   0.00%)    20580.64 *  -1.12%*
->
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 18 +++++++++
->  drivers/cpuidle/cpuidle.c                       | 49 ++++++++++++++++++++++++-
->  2 files changed, 65 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 526d65d8573a..5b8545022564 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -719,6 +719,24 @@
->                         policy to use. This governor must be registered in the
->                         kernel before the cpufreq driver probes.
->
-> +       cpuidle.poll=
-> +                       [CPU_IDLE]
-> +                       Format: <int>
-> +                       Set the time in microseconds a CPU should poll in
-> +                       cpuidle for a new task before entering a sleep
-> +                       state. The default is determined by either the
-> +                       tick or the enabled c-state latencies. Tuning is
-> +                       not generally recommended but it may be needed
-> +                       for workloads that are both latency-sensitive
-> +                       and idling rapidly for short durations. Limiting
-> +                       c-states can be insufficient if the polling
-> +                       time is still too short, the application has no
-> +                       knowledge of /dev/cpu_dma_latency, there are
-> +                       multiple applications or the environment does
-> +                       not allow the installation of a userspace tool
-> +                       that controls cpu_dma_latency. This value may
-> +                       be ignored by the idle governor (e.g. haltpoll).
+> Should I write new drievr code with pm_runtime_put() instead of
+> pm_runtime_put_autosuspend() ?
 
-OK, we can do this, but I'd use a shorter different description here
-and a more detailed one in the admin-guide documentation.
+If you don't have ->runtime_idle() in the driver (and in the bus type
+generally speaking, but none of them provide it IIRC),
+pm_runtime_put() is basically equivalent to
+pm_runtime_put_autosuspend() AFAICS, except for some extra checks done
+by the former.
 
-Also this is about certain drivers only which support the "polling
-idle state" (the ACPI one and intel_idle only AFAICS).  So I'm not
-sure about the framework-level tunable here.
+Otherwise it all depends on what the ->runtime_idle() callback does,
+but it is hard to imagine a practical use case when the difference
+would be really meaningful.
 
-Moreover, to be precise, that value is the maximum time to do the
-polling (in one go) in the case when requesting any "physical" idle
-states is likely to hurt energy-efficiency or latency.  In particular,
-it doesn't mean that idle CPUs will do the idle polling every time.
+> I haven't found clear guidelines on this in the documentation.
 
-> +
->         cpu_init_udelay=N
->                         [X86] Delay for N microsec between assert and de-assert
->                         of APIC INIT to start processors.  This delay occurs
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 83af15f77f66..3be208e9043a 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -368,6 +368,26 @@ void cpuidle_reflect(struct cpuidle_device *dev, int index)
->                 cpuidle_curr_governor->reflect(dev, index);
->  }
->
-> +static struct kernel_param_ops poll_param_ops = {
-> +       .set =          param_set_ulong,
-> +       .get =          param_get_ulong,
-> +};
-> +
-> +/*
-> + * Min polling interval of 10usec is a guess. It is assuming that
-> + * for most users, the time for a single ping-pong workload like
-> + * perf bench pipe would generally complete within 10usec but
-> + * this is hardware dependant. Actual time can be estimated with
-> + *
-> + * perf bench sched pipe -l 10000
-> + *
-> + * Run multiple times to avoid cpufreq effects.
-> + */
-> +#define CPUIDLE_POLL_MIN 10000
-
-Well, if we consider providing this tunable, we should also make it
-possible to set it to 0, because the "no polling" use case is valid
-too (at least AFAICS).  But in the case of 0, the "polling idle state"
-should be effectively disabled, so the governors don't need to bother
-looking at it.
-
-> +#define CPUIDLE_POLL_MAX (TICK_NSEC / 16)
-> +
-> +static unsigned long __read_mostly param_poll;
-> +
->  /**
->   * cpuidle_poll_time - return amount of time to poll for,
->   * governors can override dev->poll_limit_ns if necessary
-> @@ -382,20 +402,44 @@ u64 cpuidle_poll_time(struct cpuidle_driver *drv,
->         int i;
->         u64 limit_ns;
->
-> +       BUILD_BUG_ON(CPUIDLE_POLL_MIN > CPUIDLE_POLL_MAX);
-> +
->         if (dev->poll_limit_ns)
->                 return dev->poll_limit_ns;
->
-> -       limit_ns = TICK_NSEC;
-> +       /* Use module parameter if specified */
-> +       if (param_poll) {
-> +               param_poll *= NSEC_PER_USEC;
-> +               param_poll = clamp_t(unsigned long, param_poll * NSEC_PER_USEC,
-> +                                       CPUIDLE_POLL_MIN, CPUIDLE_POLL_MAX);
-> +               limit_ns = param_poll;
-> +               goto out;
-> +       }
-> +
-> +       limit_ns = CPUIDLE_POLL_MAX;
->         for (i = 1; i < drv->state_count; i++) {
-> +               u64 state_limit;
-> +
->                 if (dev->states_usage[i].disable)
->                         continue;
->
-> -               limit_ns = drv->states[i].target_residency_ns;
-> +               state_limit = drv->states[i].target_residency_ns;
-> +               if (state_limit < CPUIDLE_POLL_MIN)
-> +                       continue;
-> +
-> +               limit_ns = min_t(u64, state_limit, CPUIDLE_POLL_MAX);
->                 break;
->         }
->
-> +out:
->         dev->poll_limit_ns = limit_ns;
->
-> +       /*
-> +        * Polling parameter reported as usec to match the values reported
-> +        * for c-cstate exit latencies in sysfs.
-> +        */
-> +       param_poll = div64_ul(dev->poll_limit_ns, NSEC_PER_USEC);
-> +
->         return dev->poll_limit_ns;
->  }
->
-> @@ -755,4 +799,5 @@ static int __init cpuidle_init(void)
->
->  module_param(off, int, 0444);
->  module_param_string(governor, param_governor, CPUIDLE_NAME_LEN, 0444);
-> +module_param_cb(poll, &poll_param_ops, &param_poll, 0444);
->  core_initcall(cpuidle_init);
+Yes, that's one of the items I need to take care of.
