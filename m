@@ -2,114 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2D82C89B1
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 17:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C692C8A36
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 18:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgK3Qiv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 11:38:51 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37075 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbgK3Qiu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 11:38:50 -0500
-Received: by mail-ot1-f66.google.com with SMTP id l36so11889009ota.4;
-        Mon, 30 Nov 2020 08:38:29 -0800 (PST)
+        id S1729142AbgK3RAN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 12:00:13 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:42501 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729141AbgK3RAN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 12:00:13 -0500
+Received: by mail-io1-f66.google.com with SMTP id q137so8873448iod.9;
+        Mon, 30 Nov 2020 08:59:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j1tOA2QFb861fJIhjPhICzbVGAPhE/EoBqZiri0QzCg=;
-        b=E5ycOzYp4Pr8szTAEiY9nbLXnJWBXMgfRlQNOoD3ZQf/WFZ1OIR9X7h6+uQLreBf9B
-         rQRp+Rh71fVaffF66R4uHfJshsZBPNgM0bjhxZS1lhoQJdlTojw+UBxXrKaNgmJbjsvv
-         dGSpY8X+Xha4zLbNGo2Plv7oQ/n3wMIV9kRHN6sWODSDEZ0pkSt+ep9hDZjH1mlo5bIn
-         HKzN8ELooraUw48gw00+H08RHHgqeDHksfW+PZHHeYFgGdLiFs0uFuw4Mp5O50/idTTJ
-         4LTA/cSv350QEKIYDshz8PfMBSxoBtsWG5KeI2OLT0DJ+Kt325rECKlwT7lFhaGekTd4
-         6dnA==
-X-Gm-Message-State: AOAM5331O44IH+Os8hWS7EGP2Ce4e8BbzisZsVyvR3VivZr9elyGDJQx
-        1D4E16mF665QqSTCb0hVpDTuKuKYhdi+ec7bHtQ=
-X-Google-Smtp-Source: ABdhPJznLsbs+YsdRJTngNu4A/VigxgyG8IVgL6HbhqIGKuRCbfCRNuXZkBgpyedGvmqROJLGv6AfG+tViE+/nXNE2k=
-X-Received: by 2002:a05:6830:2385:: with SMTP id l5mr17132783ots.321.1606754283665;
- Mon, 30 Nov 2020 08:38:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Hq1MJpvbDh7bba2e04fPTBnORo/SbAhyQcObblCnObs=;
+        b=e9nRknYpuq2gvfoe4HOKpeAZVgxHazGOwdFcyefos6U+sWdAlZcDHTwDLReNNOWGZ6
+         63OEyMBYK4F6QDkSsPBBz2SNwHwIrbeacllRsfsolPY1C1177xfCs4EZjHzYDHdQmzb7
+         1v/EyQBKdeXxRqmv/eoOQV+hnIsLQiWaVolCkIqcnQH4f1APhPP0thftpI+92KQT6fV3
+         NSwM++S7oJ1fka5RMy+Vow4dqMr0wF+XfXwlTgGWL5D3YWWNLVP+BA69c1hZSk9isfk7
+         ysaeGfHGSlO50qGY77GOVe880JwX/m4q4vXeNq+UGyV5L1w7FiCPLgAqmv3C9572koTa
+         BmJg==
+X-Gm-Message-State: AOAM532yaK3ix/uPji+Rt4DstH3KVGjghFVHQPfPDvatpjOBWzS0pRyo
+        BrEjL928AqRSut0R7anAMw==
+X-Google-Smtp-Source: ABdhPJzEFd02WNAYRRP4EaId0gS+QWu5Mv0Ty/p0+ar97FxggjqT8eC4thWRaa2uFkQA0ZhScIq8dg==
+X-Received: by 2002:a6b:ea0d:: with SMTP id m13mr15605478ioc.148.1606755571994;
+        Mon, 30 Nov 2020 08:59:31 -0800 (PST)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id f2sm8214670iow.4.2020.11.30.08.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 08:59:31 -0800 (PST)
+Received: (nullmailer pid 2625316 invoked by uid 1000);
+        Mon, 30 Nov 2020 16:59:28 -0000
+Date:   Mon, 30 Nov 2020 09:59:28 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 8/8] dt-bindings: thermal: tsens: Document ipq8064
+ bindings
+Message-ID: <20201130165928.GA2624688@robh.at.kernel.org>
+References: <20201125174826.24462-1-ansuelsmth@gmail.com>
+ <20201125174826.24462-9-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-References: <20201110092933.3342784-1-zhangqilong3@huawei.com>
- <20201110092933.3342784-2-zhangqilong3@huawei.com> <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdUH3xnAtQmmMqQDUY5O6H89uk12v6hiZXFThw9yuBAqGQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 30 Nov 2020 17:37:52 +0100
-Message-ID: <CAJZ5v0hVXSgUm877iv3i=1vs1t2QFpGW=-4qTFf2WedTJBU8Zg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] PM: runtime: Add pm_runtime_resume_and_get to deal
- with usage counter
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Zhang Qilong <zhangqilong3@huawei.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Fugang Duan <fugang.duan@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201125174826.24462-9-ansuelsmth@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 11:16 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Zhang,
->
-> On Tue, Nov 10, 2020 at 10:29 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
-> > In many case, we need to check return value of pm_runtime_get_sync, but
-> > it brings a trouble to the usage counter processing. Many callers forget
-> > to decrease the usage counter when it failed, which could resulted in
-> > reference leak. It has been discussed a lot[0][1]. So we add a function
-> > to deal with the usage counter for better coding.
-> >
-> > [0]https://lkml.org/lkml/2020/6/14/88
-> > [1]https://patchwork.ozlabs.org/project/linux-tegra/list/?series=178139
-> > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
->
-> Thanks for your patch, which is now commit dd8088d5a8969dc2 ("PM:
-> runtime: Add pm_runtime_resume_and_get to deal with usage counter") in
-> v5.10-rc5.
->
-> > --- a/include/linux/pm_runtime.h
-> > +++ b/include/linux/pm_runtime.h
-> > @@ -386,6 +386,27 @@ static inline int pm_runtime_get_sync(struct device *dev)
-> >         return __pm_runtime_resume(dev, RPM_GET_PUT);
-> >  }
-> >
-> > +/**
-> > + * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
-> > + * @dev: Target device.
-> > + *
-> > + * Resume @dev synchronously and if that is successful, increment its runtime
-> > + * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
-> > + * incremented or a negative error code otherwise.
-> > + */
-> > +static inline int pm_runtime_resume_and_get(struct device *dev)
->
-> Perhaps this function should be called pm_runtime_resume_and_get_sync(),
+On Wed, 25 Nov 2020 18:48:25 +0100, Ansuel Smith wrote:
+> Document the use of bindings used for msm8960 tsens based devices.
+> msm8960 use the same gcc regs and is set as a child of the qcom gcc.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/thermal/qcom-tsens.yaml          | 103 ++++++++++++++----
+>  1 file changed, 79 insertions(+), 24 deletions(-)
+> 
 
-No, really.
 
-I might consider calling it pm_runtime_acquire(), and adding a
-matching _release() as a pm_runtime_get() synonym for that matter, but
-not the above.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-> to make it clear it does a synchronous get?
->
-> I had to look into the implementation to verify that a change like
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:25:13: [warning] wrong indentation: expected 14 but found 12 (indentation)
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:121:8: [error] empty value in block mapping (empty-values)
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:133:3: [error] syntax error: expected <block end>, but found '?' (syntax)
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:134:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:140:3: [warning] wrong indentation: expected 4 but found 2 (indentation)
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:141:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
 
-I'm not sure why, because the kerneldoc is unambiguous AFAICS.
+dtschema/dtc warnings/errors:
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 45, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 343, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 111, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 852, in _ruamel_yaml.CParser._compose_sequence_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.parser.ParserError: while parsing a block collection
+  in "<unicode string>", line 101, column 3
+did not find expected '-' indicator
+  in "<unicode string>", line 133, column 3
+make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts] Error 1
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts'
+make[1]: *** Waiting for unfinished jobs....
+make[1]: *** [Documentation/devicetree/bindings/Makefile:59: Documentation/devicetree/bindings/processed-schema-examples.json] Error 123
+make: *** [Makefile:1364: dt_binding_check] Error 2
 
->
-> -       ret = pm_runtime_get_sync(&pdev->dev);
-> +       ret = pm_runtime_resume_and_get(&pdev->dev);
->
-> in the follow-up patches is actually a valid change, maintaining
-> synchronous operation. Oh, pm_runtime_resume() is synchronous, too...
 
-Yes, it is.
+See https://patchwork.ozlabs.org/patch/1406385
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
