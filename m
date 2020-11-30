@@ -2,81 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6A82C8625
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 15:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8EA2C86A6
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 15:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbgK3ODE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 09:03:04 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:45810 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726935AbgK3ODE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Nov 2020 09:03:04 -0500
-Received: from zn.tnic (p200300ec2f0c0400b0063e9f0046aa3d.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:400:b006:3e9f:46:aa3d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 749601EC0473;
-        Mon, 30 Nov 2020 15:02:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1606744943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=hbVilBsYbgMVMYEltX7p8R2H84M0rXfY7mrsu4hQtgI=;
-        b=pIF6MUQHFwCKW2n6rOdNkhMQyndiabB32fJyFcn+0FW1CFAjOmX6YFky3LtrZgx/ie50Xv
-        2T5kb+Dwwo1kwQzD6h5aFBAZDZzDe6PX5jsUhCKCJ3ad9/dQkjbulWyzCej0ALyOFG+UDN
-        +sSWNUD1BXc5TjEQYSHliKdftXH/loU=
-Date:   Mon, 30 Nov 2020 15:02:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Punit Agrawal <punitagrawal@gmail.com>
-Cc:     rjw@rjwysocki.net, wei.huang2@amd.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [RFC PATCH 4/4] cpufreq: acpi-cpufreq: Use identifiers for AMD
- processor family
-Message-ID: <20201130140224.GD6019@zn.tnic>
-References: <20201125144847.3920-1-punitagrawal@gmail.com>
- <20201125144847.3920-5-punitagrawal@gmail.com>
+        id S1726998AbgK3O1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 09:27:20 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:39794 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726332AbgK3O1T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 09:27:19 -0500
+Received: by mail-ot1-f67.google.com with SMTP id z24so11420298oto.6;
+        Mon, 30 Nov 2020 06:27:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Kgz7vpUpOeErTGDxAtq8lWybdzY5kh8zq+GaD4KNlg=;
+        b=YPUY/ozBasGHjzE1kVy8ORZQqWY9JRM6E+SwNUpsvBzktwoPMYXM5XK15Ubf/Kp2OC
+         eoAy7CeHwL2JTi1y3LIP/THJZP9Y9QQnBR/AXOnWMCAzG/Pf9zTwvWFzfrAUWBpayRqz
+         FPmF5usVOpldpt39tDBwhxOycTZKLZUpA4ic8EgwD0Sdx3Y9FyhjO8dYdHlholXja82N
+         6TRNj2yDbz+H0LD55x7/lkzFRzSyvy7cYehNB4SCGHOuCUTayI8dmUTaeX0QOgWbzsbu
+         wllg88eHKWGskD0fy3Ex6bWTPqJT7coaFU9AO6qiIqMAazvZyWWstYdzNsc59p8pE0dR
+         1YnQ==
+X-Gm-Message-State: AOAM532LK2JDRPAKI5TSygJmQrrKyZZYBXm0VLwsxTFXUThT9ONxrKQQ
+        dX6GzxOHtoivUsT/zufpu/eLzRZvZnJHDO3PO1WaapDo
+X-Google-Smtp-Source: ABdhPJx1bAyu5oT+zcQjk02uktjjGOsbzVEQqy6uanYfRqPDlmSEzM1l1IVBdgj6UkeA0P9dZ4SqHqwC4WBR+z+ie4Y=
+X-Received: by 2002:a9d:171a:: with SMTP id i26mr16815761ota.260.1606746398981;
+ Mon, 30 Nov 2020 06:26:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201125144847.3920-5-punitagrawal@gmail.com>
+References: <20201128065243.2870987-1-zhangqilong3@huawei.com>
+In-Reply-To: <20201128065243.2870987-1-zhangqilong3@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Nov 2020 15:26:21 +0100
+Message-ID: <CAJZ5v0ghayA4pqCY4=qbTwd6qSJ=JvZZb93SPkCtBoaaDkXQ=Q@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: runtime: replace pm_runtime_resume_and_get with pm_runtime_resume_and_get_sync
+To:     Zhang Qilong <zhangqilong3@huawei.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        David Miller <davem@davemloft.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 11:48:47PM +0900, Punit Agrawal wrote:
-> Replace the raw values for AMD processor family with recently
-> introduced identifier macros to improve code readability and
-> maintainability.
-> 
-> Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
-> ---
->  drivers/cpufreq/acpi-cpufreq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index 29f1cd93541e..d8b8300ae9e0 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -202,8 +202,8 @@ static int override_acpi_psd(unsigned int cpu_id)
->  		 * CPU's before Zen3 (except some Zen2) need the
->  		 * override.
->  		 */
-> -		return (c->x86 < 0x19) &&
-> -			!(c->x86 == 0x17 && c->x86_model == 0x60 &&
-> +		return (c->x86 < AMD_FAM_ZEN3) &&
-> +			!(c->x86 == AMD_FAM_ZEN && c->x86_model == 0x60 &&
+On Sat, Nov 28, 2020 at 11:17 PM Zhang Qilong <zhangqilong3@huawei.com> wrote:
+>
+> In the pm_runtime_resume_and_get, pm_runtime_resume() is
+> synchronous. Caller had to look into the implementation
+> to verify that a change for pm_runtime_resume_and_get [0].
 
-This is what I mean - that's Zen2 as the comment above says so having
+Well, "resume" is "sync" by definition.
 
-		c->x86 == AMD_FAM_ZEN
+> So we use pm_rauntime_resume_and_get_sync to replace it to
+> avoid making the same mistake while fixing
+> pm_runtime_get_sync.
 
-is not enough. And you have a comment above it stating which CPUs are
-matched here so I'm not sure those family defines make it any better...
+No, we are not making this change.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks!
