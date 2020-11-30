@@ -2,132 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26332C8CA1
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E966B2C8CA6
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Nov 2020 19:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729687AbgK3SXJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 30 Nov 2020 13:23:09 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:56444 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728257AbgK3SXJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 13:23:09 -0500
-Received: from mail-pg1-f197.google.com ([209.85.215.197])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kjnog-00016u-OD
-        for linux-pm@vger.kernel.org; Mon, 30 Nov 2020 18:22:26 +0000
-Received: by mail-pg1-f197.google.com with SMTP id z2so9168997pgb.23
-        for <linux-pm@vger.kernel.org>; Mon, 30 Nov 2020 10:22:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=lhVOYxI0d+RZORJDgRyHtIR+4lAzrds47IByAtB03zY=;
-        b=QtNdvjwQncJQKrD0EUvuAgoyfmIkOhtIpW7EeW4sbsE48CG3B4y7Jz51gbFzAIkRBL
-         fmxV89iC3IOZLa4WHiiXOfPL93CuEgUhNRGCccbRzOQVqpchfKlxYd2qgXSmtxV43/qn
-         Go0EKZKjL8Z7InpGeio6L/mev3q8TXrZvLl3gWGGq489tTPJmzkNDsCHtrJQ7FNAagco
-         9QS7rVzt0Sz1u+vD014ethKJmft/3MWqxR5WFtjEN/wDHv3P9OC259xcw2DiXYSZjIn0
-         9hPNGEsx/28NWILFr0CDdo8Jhkyme4bpHum+nf2xbiRcg7wq2sBxxtFUAU//nVSZKKeV
-         21OQ==
-X-Gm-Message-State: AOAM531IUnP5an7hgqMz/doMVmdVSw4EWcL/JPZ8NIZWTdg8GPsAKGsB
-        W5Hh6saBABYb3EBWA0YviXrE4TM9pZZyXUs9hN8Mkx1uwgg8w/VyL//tm4HtKWDI5IdHB9bFZXr
-        MW2beKTppS2Z2OuSrUTXkAb+CwSA3g6BsF/Vo
-X-Received: by 2002:a63:1959:: with SMTP id 25mr19141034pgz.201.1606760545463;
-        Mon, 30 Nov 2020 10:22:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwosn9nPeiMfVFf2P1X+WOoUeFTeAly+buFBMcBAfq0GLwXMcoctMTwhPt0d8ozsAnzvXR3cg==
-X-Received: by 2002:a63:1959:: with SMTP id 25mr19141009pgz.201.1606760545156;
-        Mon, 30 Nov 2020 10:22:25 -0800 (PST)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id k4sm17057312pfg.130.2020.11.30.10.22.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Nov 2020 10:22:24 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.20.0.2.21\))
-Subject: Re: [PATCH 1/3] thermal: core: Add indication for userspace usage
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <585bb5d3ee5bea063795682108576c3464ba72b6.camel@linux.intel.com>
-Date:   Tue, 1 Dec 2020 02:22:21 +0800
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, amitk@kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <D53454A1-5ED0-4B4D-B22F-8663C9970ECD@canonical.com>
-References: <20201128175450.12456-1-kai.heng.feng@canonical.com>
- <004fe225-1009-06d8-b297-c03a4c67550f@linaro.org>
- <860126B8-1152-4EE3-B15E-B4E45EFE879F@canonical.com>
- <fc67ad02826fb3adfd8457e1a0baf234a8fa3fce.camel@linux.intel.com>
- <34348B03-5E27-49A0-A704-6332BAC00758@canonical.com>
- <585bb5d3ee5bea063795682108576c3464ba72b6.camel@linux.intel.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-X-Mailer: Apple Mail (2.3654.20.0.2.21)
+        id S2387417AbgK3SYE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Nov 2020 13:24:04 -0500
+Received: from m-r2.th.seeweb.it ([5.144.164.171]:44685 "EHLO
+        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727125AbgK3SYE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Nov 2020 13:24:04 -0500
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 2858E40266;
+        Mon, 30 Nov 2020 19:23:21 +0100 (CET)
+Subject: Re: [PATCH 11/13] dt-bindings: cpufreq: Convert qcom-cpufreq-hw to
+ YAML binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        jorge.ramirez-ortiz@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@somainline.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ulf.hansson@linaro.org,
+        nks@flawful.org, lgirdwood@gmail.com, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, bjorn.andersson@linaro.org,
+        phone-devel@vger.kernel.org, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org
+References: <20201126184559.3052375-1-angelogioacchino.delregno@somainline.org>
+ <20201126184559.3052375-12-angelogioacchino.delregno@somainline.org>
+ <20201130172305.GA2661895@robh.at.kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <9fc67c3f-4753-fe4f-ca1b-7faeee2abe7d@somainline.org>
+Date:   Mon, 30 Nov 2020 19:23:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <20201130172305.GA2661895@robh.at.kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-> On Dec 1, 2020, at 02:13, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
-
-[snipped] 
-
->>> What about creating an new callback
->>> 
->>> enum thermal_trip_status {
->>> 	THERMAL_TRIP_DISABLED = 0,
->>> 	THERMAL_TRIP_ENABLED,
->>> };
->>> 
->>> int get_trip_status(struct thermal_zone_device *, int trip, enum
->>> thermal_trip_status *state);
->>> 
->>> Then in 
->>> static void handle_thermal_trip(struct thermal_zone_device *tz, int
->>> trip)
->>> {
->>> 
->>> /* before tz->ops->get_trip_temp(tz, trip, &trip_temp); */
->>> if (tz->ops->get_trip_status) {
->>> 	enum thermal_trip_status *status;
->>> 
->>> 	if (!tz->ops->get_trip_status(tz, trip, &status)) {
->>> 		if (status == THERMAL_TRIP_DISABLED)
->>> 			return;	
->>> 	}
->>> }
->>> ...
->>> ...
->>> 
->>> }
->>> 
->>> 
->>> This callback will help the cases:
->>> - Allows drivers to selectively disable certain trips during init
->>> state
->>> or system resume where there can be spikes or always. int340x
->>> drivers
->>> can disable always.
->> 
->> This sounds really great. This is indeed can happen on system resume,
->> before userspace process thaw.
->> 
->>> - Still give options for drivers to handle critical trip even if
->>> they
->>> are bound to user space governors. User space process may be dead,
->>> so
->>> still allow kernel to process graceful shutdown
->> 
->> To make the scenario happen, do we need a new sysfs to let usespace
->> enable it with THERMAL_TRIP_ENABLED?
-> This should be drivers call not user space.
-
-Understood. So after thermal_zone_device_register(), the driver can decide to what to return on get_trip_temp().
-Let me work on a new patch if there's no other concern.
-
-Kai-Heng
-
+Il 30/11/20 18:23, Rob Herring ha scritto:
+> On Thu, 26 Nov 2020 19:45:57 +0100, AngeloGioacchino Del Regno wrote:
+>> Convert the qcom-cpufreq-hw documentation to YAML binding as
+>> qcom,cpufreq-hw.yaml.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>> ---
+>>   .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 173 +---------------
+>>   .../bindings/cpufreq/qcom,cpufreq-hw.yaml     | 196 ++++++++++++++++++
+>>   2 files changed, 197 insertions(+), 172 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
+>>
 > 
-> Thanks,
-> Srinivas
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml: properties:clock-names: [{'const': 'xo'}, {'const': 'ref'}] is not of type 'object', 'boolean'
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml: maintainers:0: 'TBD' is not a 'email'
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml: ignoring, error in schema: properties: clock-names
+> warning: no schema found in file: ./Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
+> Error: Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.example.dts:150.3-151.1 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.example.dt.yaml] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1364: dt_binding_check] Error 2
+> 
+> 
+> See https://patchwork.ozlabs.org/patch/1406857
+> 
+> The base for the patch is generally the last rc1. Any dependencies
+> should be noted.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 
 
+Hello!
+All the errors that you've pointed out have been fixed on both the CPR,
+CPR3 and cpufreq-hw, but before pushing a V2 of this patch series...
+
+Well, I have a question: the qcom-cpufreq-hw driver has no MAINTAINERS
+entry and there was no maintainer for this driver specified in the old
+txt format binding.
+
+What should I write in the "maintainers" field of the YAML binding for
+this driver?
+Should I assign it to the subsystem maintainer?
+
+Thanks,
+- Angelo
