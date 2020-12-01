@@ -2,105 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E402CA6E8
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 16:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E832CA724
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 16:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390355AbgLAPXT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 10:23:19 -0500
-Received: from outbound-smtp62.blacknight.com ([46.22.136.251]:58647 "EHLO
-        outbound-smtp62.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390132AbgLAPXS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 10:23:18 -0500
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp62.blacknight.com (Postfix) with ESMTPS id 87009FABC6
-        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 15:22:26 +0000 (GMT)
-Received: (qmail 26898 invoked from network); 1 Dec 2020 15:22:26 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.22.4])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 1 Dec 2020 15:22:26 -0000
-Date:   Tue, 1 Dec 2020 15:22:24 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] cpuidle: Select polling interval based on a c-state with
- a longer target residency
-Message-ID: <20201201152224.GU3371@techsingularity.net>
-References: <20201130092241.GR3371@techsingularity.net>
- <CAJZ5v0h-ZBUMKqP5om7h67iMTe87GUf2Bw5dJ9tQN6MKwaTWzA@mail.gmail.com>
- <20201130223202.GT3371@techsingularity.net>
- <CAJZ5v0gMyMhjmFwV=j2+iu21K+upvrt0m_d-b5nFE5EfccNHjg@mail.gmail.com>
+        id S2390299AbgLAPeV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 10:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390304AbgLAPeV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 10:34:21 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA5C0617A6
+        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 07:33:40 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id g20so4358518ejb.1
+        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 07:33:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HfEmRbTUVu5buzmFymRjrzPmVpKwAUdxNZbmsbAARHI=;
+        b=zpM6mciORqM6FM9fWyXykgzZO3tN82WyO0CznE01WirlCqvzyB+NGE5sturlw191Qx
+         Xq63A6beE6QUlpwGR8Y2YKDluTLb33Ve5fE1Uc28FMlxUg54ywnsX8QPhpf1MHECTtqZ
+         ScroKkCi3TaDc25Jq20JrHOD/xCk6mneZMpeNk/pcThyqwNMh5X5EjN17rbvEZvvOhqO
+         Q+GW6ry+hLHmpavB/uFRWpWIRCSqR5An+CX7Ea1DvPduQXTsImNn/KJfEoH3ZU37N+pP
+         HN9G5K2EnscgljSpnGyrGFRRWTNDf5RxzEi+fuWqxcZrq2vWBCAipkpsHGklZeiyXvcF
+         Qwuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HfEmRbTUVu5buzmFymRjrzPmVpKwAUdxNZbmsbAARHI=;
+        b=ZeXYYy83Kl8JqzaFcTU72ZH64SlVa7H8KsnlE9GY+N4ntZNfnt38d8wzoVNAh17FCq
+         TTnrG4bvdLNcycc7bjaEcnf+zsfJCfaj5LiDRbF3Dw+ZP//Fa0V03s7j1p9NPBYcJ8eK
+         4qcCEtffm6/NZrHFkRDC/TGmq358iiJiJC2rg59rM+HBjgAY5+2CERCYiZlxarPRq2Wk
+         irIUzGbChOt0jDxO3peAxHCpUw8fTnA2sdSjhqYQnR+HWferI6F9qamg9hZFdcTAq5lt
+         RYEadb7dt5B1GsYD0hReBnYvrniPG03yeecV5OeTBfkdrgQI1Q59tN4pTMzHQmHGbEUy
+         7YBw==
+X-Gm-Message-State: AOAM532ddIyeiVJmGKxPyflBLhoaIel26mERO44+6GxtCg2+qjXOKOFU
+        gNLRLnotvv6TGil+qjmfqvsET7itXga694b8g2fvAA==
+X-Google-Smtp-Source: ABdhPJwaleYJQJJT3SsISIG12SOKNywBoidZAcD+gTb6G8zgyBFg95d1+qKFI19arkSUdTOEX+v3bvq6AXYs2hdUcY4=
+X-Received: by 2002:a17:907:b09:: with SMTP id h9mr3591194ejl.155.1606836819337;
+ Tue, 01 Dec 2020 07:33:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gMyMhjmFwV=j2+iu21K+upvrt0m_d-b5nFE5EfccNHjg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1605893641.git.syednwaris@gmail.com> <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
+In-Reply-To: <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Tue, 1 Dec 2020 16:33:28 +0100
+Message-ID: <CAMpxmJVNPWCUFnBXzDW3uJ_1Sv4rQ=M0WbKmoW4juYLUQP-ABA@mail.gmail.com>
+Subject: Re: [RESEND PATCH 3/4] gpio: xilinx: Modify bitmap_set_value() calls
+To:     Syed Nayyar Waris <syednwaris@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>, rrichter@marvell.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-arch@vger.kernel.org,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 04:08:02PM +0100, Rafael J. Wysocki wrote:
-> > > Also this is about certain drivers only which support the "polling
-> > > idle state" (the ACPI one and intel_idle only AFAICS).  So I'm not
-> > > sure about the framework-level tunable here.
-> > >
-> > > Moreover, to be precise, that value is the maximum time to do the
-> > > polling (in one go) in the case when requesting any "physical" idle
-> > > states is likely to hurt energy-efficiency or latency.  In particular,
-> > > it doesn't mean that idle CPUs will do the idle polling every time.
-> > >
-> >
-> > At first I was nodding along and thinking "sure". Then I started
-> > thinking about what the configuration space then looks like and how a
-> > user might reasonably interpret it. You were right during the review of
-> > the first version, it's a mess because it's driver specific and difficult
-> > to interpret even on a per-driver basis because there is no control of
-> > when a rescheduling event may occur.
-> 
-> Indeed.
-> 
-> > You suggest making poll=0 would be valid but that might be interpreted
-> > as being equivalent to idle=poll on x86 which is not the same thing.
-> > processor_idle and intel_idle would have understandable semantics if the
-> > parameter was maxpoll but it's not as understandable for haltpoll.
-> 
-> Well, my point was basically that if the plan was to add a boot
-> parameter to control the polling behavior, it would be prudent to also
-> allow the admin to specify that they didn't want any polling at all.
-> 
-> But frankly I was hoping to drive you away from that idea which seems
-> to have worked. :-)
-> 
+On Fri, Nov 20, 2020 at 7:46 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+>
+> Modify the bitmap_set_value() calls. bitmap_set_value()
+> now takes an extra bitmap width as second argument and the width of
+> value is now present as the fourth argument.
+>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
+> ---
+>  drivers/gpio/gpio-xilinx.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
+> index ad4ee4145db4..05dae086c4d0 100644
+> --- a/drivers/gpio/gpio-xilinx.c
+> +++ b/drivers/gpio/gpio-xilinx.c
+> @@ -151,16 +151,16 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
+>         spin_lock_irqsave(&chip->gpio_lock[0], flags);
+>         spin_lock(&chip->gpio_lock[1]);
+>
+> -       bitmap_set_value(old, state[0], 0, width[0]);
+> -       bitmap_set_value(old, state[1], width[0], width[1]);
+> +       bitmap_set_value(old, 64, state[0], width[0], 0);
+> +       bitmap_set_value(old, 64, state[1], width[1], width[0]);
+>         bitmap_replace(new, old, bits, mask, gc->ngpio);
+>
+> -       bitmap_set_value(old, state[0], 0, 32);
+> -       bitmap_set_value(old, state[1], 32, 32);
+> +       bitmap_set_value(old, 64, state[0], 32, 0);
+> +       bitmap_set_value(old, 64, state[1], 32, 32);
+>         state[0] = bitmap_get_value(new, 0, width[0]);
+>         state[1] = bitmap_get_value(new, width[0], width[1]);
+> -       bitmap_set_value(new, state[0], 0, 32);
+> -       bitmap_set_value(new, state[1], 32, 32);
+> +       bitmap_set_value(new, 64, state[0], 32, 0);
+> +       bitmap_set_value(new, 64, state[1], 32, 32);
+>         bitmap_xor(changed, old, new, 64);
+>
+>         if (((u32 *)changed)[0])
+> --
+> 2.29.0
+>
 
-Yes, it most certainly worked. Thanks for repeating yourself in a different
-way so that your concern could penetrate my thick skull :D
+This series is not bisectable because you modify the interface -
+breaking existing users - and you only fix them later. Please squash
+those changes into a single commit.
 
-> > Finally, the parameter partially ties us into the current
-> > implementation. For example, the polling loop is based on clock time but
-> > we know looking up the clock is costly in itself so it's very granular
-> > based on the magic "check every 200 loops" logic meaning we can go over
-> > the expected maxiumum polling inverval. If we ever changed that into a
-> > calibration loop to estimate the number of loops then the polling interval
-> > changes slightly even for the same parameter as we no longer depend on the
-> > granularity of calling local_clock. If we ever decided to use adaptive
-> > polling similar to haltpoll then the behaviour changes again resulting
-> > in bugs because the driver.poll parameter means something new.
-> 
-> Right.
-> 
-> > Using min_cstate was definitely a hazard because it showed up in both
-> > microbenchmarks and real workloads but you were right, lets only
-> > introduce a tunable when and if there is no other choice in the matter.
-> >
-> > So, informally the following patch is the next candidate. I'm happy to
-> > resend it as a separate mail if you prefer and think the patch is ok.
-> 
-> I actually can apply it right away, so no need to resend.
-> 
-
-Thanks very much.
-
--- 
-Mel Gorman
-SUSE Labs
+Bartosz
