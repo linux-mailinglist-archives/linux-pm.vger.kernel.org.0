@@ -2,183 +2,269 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F00DB2CA67B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 16:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2212CA6AE
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 16:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389434AbgLAPDO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 10:03:14 -0500
-Received: from foss.arm.com ([217.140.110.172]:44564 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387462AbgLAPDO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Dec 2020 10:03:14 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3ECB30E;
-        Tue,  1 Dec 2020 07:02:28 -0800 (PST)
-Received: from localhost (unknown [10.1.198.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75D6A3F575;
-        Tue,  1 Dec 2020 07:02:28 -0800 (PST)
-Date:   Tue, 1 Dec 2020 15:02:27 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amit.kucheria@verdurent.com,
-        airlied@linux.ie, daniel.lezcano@linaro.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, rui.zhang@intel.com,
-        orjan.eide@arm.com
-Subject: Re: [PATCH 3/5] thermal: devfreq_cooling: add new registration
- functions with Energy Model
-Message-ID: <20201201150227.GA29042@arm.com>
-References: <20200921122007.29610-1-lukasz.luba@arm.com>
- <20200921122007.29610-4-lukasz.luba@arm.com>
- <20201007120746.GA15063@arm.com>
- <71cfae58-8ea5-c591-455b-d84420d8412a@arm.com>
- <20201201140520.GA7206@arm.com>
- <a0b70daf-fbd8-928e-36d0-d44d5fd68ca6@arm.com>
+        id S2390053AbgLAPIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 10:08:55 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:32971 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389268AbgLAPIz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 10:08:55 -0500
+Received: by mail-ot1-f68.google.com with SMTP id n12so1947674otk.0;
+        Tue, 01 Dec 2020 07:08:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=los6TBVHUGFOLU6abZox4dFWWCfO+L91/MjJw40kkl8=;
+        b=Hr+j2GJujk6vI/0wpzkyhOq3tkJ3vmgNeeyf4uFAkikghl4/FJOWpcNkBd2WYdrA1p
+         KIHT9T+/VEUU1EeEFEjQto2G1M2XXdHcQ14A04fFL7Jc/wxbTE9XYJaJFieSE7m75dAz
+         Xs0g1da8cNCkKGYSfaPq/E9U6fmsS1m+oxtDdiOIOJBkAu3JtYD9Fcwy6ZqIvquhP70o
+         85T/frCmOzVvw/jfaVwy0PbPbLz/fTcQ4nf8pSlD6IkniniULjcQG1nO7SCkTjymvVNd
+         MWyNjZRnc5a6pxaL6+aBSdc6f6Qg4r2ZLOsxW+j2uxWVFT2E+tIYj5whsspoRKNGql8W
+         W1tA==
+X-Gm-Message-State: AOAM533jgt7ZkfSWepkz1ylF1N2mCK7sMOOSRR1N629pknIo+IYEBGCY
+        exLnBozcn3sBIVxjPoFDPTduwjRKEQZwqiry8bc=
+X-Google-Smtp-Source: ABdhPJzasLJcr6mm7QWdQ6GYqhY6AJYSmvKmprGaTNhSnJzXA25+Ss6jPLVVJUsS/q8Ml6co6ThKVP6oImndIGCCZ2U=
+X-Received: by 2002:a9d:171a:: with SMTP id i26mr2112608ota.260.1606835293523;
+ Tue, 01 Dec 2020 07:08:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0b70daf-fbd8-928e-36d0-d44d5fd68ca6@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20201130092241.GR3371@techsingularity.net> <CAJZ5v0h-ZBUMKqP5om7h67iMTe87GUf2Bw5dJ9tQN6MKwaTWzA@mail.gmail.com>
+ <20201130223202.GT3371@techsingularity.net>
+In-Reply-To: <20201130223202.GT3371@techsingularity.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Dec 2020 16:08:02 +0100
+Message-ID: <CAJZ5v0gMyMhjmFwV=j2+iu21K+upvrt0m_d-b5nFE5EfccNHjg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Select polling interval based on a c-state with
+ a longer target residency
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday 01 Dec 2020 at 14:37:58 (+0000), Lukasz Luba wrote:
-> 
-> 
-> On 12/1/20 2:05 PM, Ionela Voinescu wrote:
-> > Hi,
-> > 
-> > On Thursday 22 Oct 2020 at 12:17:31 (+0100), Lukasz Luba wrote:
-> > [..]
-> > 
-> > > > > +/**
-> > > > > + * devfreq_cooling_em_register_power() - Register devfreq cooling device with
-> > > > > + *		power information and attempt to register Energy Model (EM)
-> > > > 
-> > > > It took me a while to understand the differences between devfreq
-> > > > register functions and it left me with a nagging feeling that we don't
-> > > > need all of them. Also, looking over the cpufreq cooling devices, they
-> > > > keep their registering interfaces quite simple.
-> > > 
-> > > This was discussed in previous series, related to EM core changes.
-> > > It was requested to have a helper registration function which would
-> > > create EM automatically.
-> > > 
-> > > > 
-> > > > With the functions added by this patch, the devfreq cooling devices will have:
-> > > >    - old:
-> > > >          of_devfreq_cooling_register_power
-> > > >          of_devfreq_cooling_register
-> > > >          devfreq_cooling_register
-> > > >          devfreq_cooling_unregister
-> > > >    - new:
-> > > >          devfreq_cooling_em_register_power
-> > > >          devfreq_cooling_em_register
-> > > > 
-> > > > My question is whether we actually need the two new
-> > > > devfreq_cooling_em_register_power() and devfreq_cooling_em_register()?
-> > > 
-> > > It is just for consistency, with older scheme. It is only a wrapper, one
-> > > line, with default NULL. This scheme is common in thermal and some other
-> > > frameworks.
-> > > 
-> > > > 
-> > > > The power_ops and the em are dependent on one another, so could we
-> > > > extend the of_devfreq_cooling_register_power() to do the additional em
-> > > > registration. We only need a way to pass the em_cb and I think that
-> > > > could fit nicely in devfreq_cooling_power.
-> > > 
-> > > No, they aren't 'dependent on one another'. The EM usage doesn't depend
-> > > on presence of power_ops. Drivers might not support power_ops, but want
-> > > the framework still use EM and do power estimation.
-> > > 
-> > 
-> > Okay, wrong choice of words. There's only a one way dependency: you can't
-> > use power_ops without an em, according to
-> > of_devfreq_cooling_register_power().
-> > 
-> > Correct me if I'm wrong, but I see this as being okay as you still need
-> > an em to give you the maximum power of a device in a certain state.
-> > 
-> > With this in mind, and taking in detail the possible calls of the
-> > devfreq cooling register functions:
-> > 
-> > 1. Register devfreq cooling device with energy model.
-> >     (used in patch 5/5)
-> > 
-> >   -> devfreq_cooling_em_register()
-> >      -> devfreq_cooling_em_register_power(dfc_power = NULL, em obtained
-> >                                        through various methods)
-> >        -> of_devfreq_cooling_register_power(same as above)
-> > 
-> > 2. Register devfreq cooling device with power_ops and em:
-> >     (not used)
-> > 
-> >   -> devfreq_cooling_em_register_power(dfc_power != NULL, em obtained
-> >                                       through various methods)
-> >     -> of_devfreq_cooling_register_power(same as above)
-> > 
-> > 3. Register a devfreq cooling devices with power_ops but no em
-> >     (not used)
-> > 
-> >   -> of_devfreq_cooling_register_power(dfc_power != NULL)
-> > 
-> > 
-> > 4. Register a devfreq cooling devices without any kind of power
-> >     information (em or dfc_power/power_ops)
-> > 
-> >   -> devfreq_cooling_register() or of_devfreq_cooling_register()
-> >     -> of_devfreq_cooling_register_power(dfc_power = NULL)
-> > 
-> > 
-> > Given this, aren't we ending up with some possible calls to these
-> > registration functions that don't make sense? That is case 3, as
-> > of_devfreq_cooling_register_power() could not assign and later use
-> > power_ops without an em. For this usecase, 2 should be used instead.
-> 
-> In use case 3. you missed that the driver could registered EM by itself.
-> Maybe wanted to manage the EM internally, for various reasons. Then this
-> registration use case 3. makes sense.
-> 
+On Mon, Nov 30, 2020 at 11:32 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> On Mon, Nov 30, 2020 at 08:06:44PM +0100, Rafael J. Wysocki wrote:
+> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > > index 526d65d8573a..5b8545022564 100644
+> > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > @@ -719,6 +719,24 @@
+> > >                         policy to use. This governor must be registered in the
+> > >                         kernel before the cpufreq driver probes.
+> > >
+> > > +       cpuidle.poll=
+> > > +                       [CPU_IDLE]
+> > > +                       Format: <int>
+> > > +                       Set the time in microseconds a CPU should poll in
+> > > +                       cpuidle for a new task before entering a sleep
+> > > +                       state. The default is determined by either the
+> > > +                       tick or the enabled c-state latencies. Tuning is
+> > > +                       not generally recommended but it may be needed
+> > > +                       for workloads that are both latency-sensitive
+> > > +                       and idling rapidly for short durations. Limiting
+> > > +                       c-states can be insufficient if the polling
+> > > +                       time is still too short, the application has no
+> > > +                       knowledge of /dev/cpu_dma_latency, there are
+> > > +                       multiple applications or the environment does
+> > > +                       not allow the installation of a userspace tool
+> > > +                       that controls cpu_dma_latency. This value may
+> > > +                       be ignored by the idle governor (e.g. haltpoll).
+> >
+> > OK, we can do this, but I'd use a shorter different description here
+> > and a more detailed one in the admin-guide documentation.
+> >
+> > Also this is about certain drivers only which support the "polling
+> > idle state" (the ACPI one and intel_idle only AFAICS).  So I'm not
+> > sure about the framework-level tunable here.
+> >
+> > Moreover, to be precise, that value is the maximum time to do the
+> > polling (in one go) in the case when requesting any "physical" idle
+> > states is likely to hurt energy-efficiency or latency.  In particular,
+> > it doesn't mean that idle CPUs will do the idle polling every time.
+> >
+>
+> At first I was nodding along and thinking "sure". Then I started
+> thinking about what the configuration space then looks like and how a
+> user might reasonably interpret it. You were right during the review of
+> the first version, it's a mess because it's driver specific and difficult
+> to interpret even on a per-driver basis because there is no control of
+> when a rescheduling event may occur.
 
-Yes, the code allows it but it would be unlikely.
+Indeed.
 
-> > 
-> > Therefore, can't the same be achieved by collapsing
-> > devfreq_cooling_em_register_power() into
-> > of_devfreq_cooling_register_power()? (with the user having the
-> > possibility to provide the em callback similarly to how get_real_power()
-> > is provided - in devfreq_cooling_power).
-> > 
-> > IMO is cleaner to unify the functionality (registration and callbacks)
-> > of cooling devices with power capabilities (based on em alone or together
-> > with power_ops). Otherwise we just create confusion for users registering
-> > cooling devices not knowing which function to call.
-> 
-> I don't want to add the code from devfreq_cooling_em_register_power()
-> into the of_devfreq_cooling_register_power(), these are pretty dense
-> functions with complicated error handling paths.
-> In this shape and a few wrappers, which help users to register according
-> to their needs, it looks OK.
-> 
-> There will be always a review of the coming drivers which would like to
-> register.
-> 
+> You suggest making poll=0 would be valid but that might be interpreted
+> as being equivalent to idle=poll on x86 which is not the same thing.
+> processor_idle and intel_idle would have understandable semantics if the
+> parameter was maxpoll but it's not as understandable for haltpoll.
 
-Okay, no other arguments from my part.
+Well, my point was basically that if the plan was to add a boot
+parameter to control the polling behavior, it would be prudent to also
+allow the admin to specify that they didn't want any polling at all.
 
-I'll now take a look over v2. I just wanted to get some of these design
-choices out of the way first.
+But frankly I was hoping to drive you away from that idea which seems
+to have worked. :-)
 
-Thanks,
-Ionela.
+> Finally, the parameter partially ties us into the current
+> implementation. For example, the polling loop is based on clock time but
+> we know looking up the clock is costly in itself so it's very granular
+> based on the magic "check every 200 loops" logic meaning we can go over
+> the expected maxiumum polling inverval. If we ever changed that into a
+> calibration loop to estimate the number of loops then the polling interval
+> changes slightly even for the same parameter as we no longer depend on the
+> granularity of calling local_clock. If we ever decided to use adaptive
+> polling similar to haltpoll then the behaviour changes again resulting
+> in bugs because the driver.poll parameter means something new.
 
-> > 
-> > If this has been discussed previously and I'm missing some details,
-> > please provide some links to the discussions.
-> > 
-> > Thank you for the patience :).
-> > 
-> > Ionela.
-> > 
+Right.
+
+> Using min_cstate was definitely a hazard because it showed up in both
+> microbenchmarks and real workloads but you were right, lets only
+> introduce a tunable when and if there is no other choice in the matter.
+>
+> So, informally the following patch is the next candidate. I'm happy to
+> resend it as a separate mail if you prefer and think the patch is ok.
+
+I actually can apply it right away, so no need to resend.
+
+Many thanks for looking into this!
+
+> --8<--
+> cpuidle: Select polling interval based on a c-state with a longer target residency
+>
+> It was noted that a few workloads that idle rapidly regressed when commit
+> 36fcb4292473 ("cpuidle: use first valid target residency as poll time")
+> was merged. The workloads in question were heavy communicators that idle
+> rapidly and were impacted by the c-state exit latency as the active CPUs
+> were not polling at the time of wakeup. As they were not particularly
+> realistic workloads, it was not considered to be a major problem.
+>
+> Unfortunately, a bug was reported for a real workload in a production
+> environment that relied on large numbers of threads operating in a worker
+> pool pattern. These threads would idle for periods of time longer than the
+> C1 target residency and so incurred the c-state exit latency penalty. The
+> application is very sensitive to wakeup latency and indirectly relying
+> on behaviour prior to commit on a37b969a61c1 ("cpuidle: poll_state: Add
+> time limit to poll_idle()") to poll for long enough to avoid the exit
+> latency cost.
+>
+> The target residency of C1 is typically very short. On some x86 machines,
+> it can be as low as 2 microseconds. In poll_idle(), the clock is checked
+> every POLL_IDLE_RELAX_COUNT interations of cpu_relax() and even one
+> iteration of that loop can be over 1 microsecond so the polling interval is
+> very close to the granularity of what poll_idle() can detect. Furthermore,
+> a basic ping pong workload like perf bench pipe has a longer round-trip
+> time than the 2 microseconds meaning that the CPU will almost certainly
+> not be polling when the ping-pong completes.
+>
+> This patch selects a polling interval based on an enabled c-state that
+> has an target residency longer than 10usec. If there is no enabled-cstate
+> then polling will be up to a TICK_NSEC/16 similar to what it was up until
+> kernel 4.20. Polling for a full tick is unlikely (rescheduling event)
+> and is much longer than the existing target residencies for a deep c-state.
+>
+> As an example, consider a CPU with the following c-state information from
+> an Intel CPU;
+>
+>         residency       exit_latency
+> C1      2               2
+> C1E     20              10
+> C3      100             33
+> C6      400             133
+>
+> The polling interval selected is 20usec. If booted with
+> intel_idle.max_cstate=1 then the polling interval is 250usec as the deeper
+> c-states were not available.
+>
+> On an AMD EPYC machine, the c-state information is more limited and
+> looks like
+>
+>         residency       exit_latency
+> C1      2               1
+> C2      800             400
+>
+> The polling interval selected is 250usec. While C2 was considered, the
+> polling interval was clamped by CPUIDLE_POLL_MAX.
+>
+> Note that it is not expected that polling will be a universal win. As
+> well as potentially trading power for performance, the performance is not
+> guaranteed if the extra polling prevented a turbo state being reached.
+> Making it a tunable was considered but it's driver-specific, may be
+> overridden by a governor and is not a guaranteed polling interval making
+> it difficult to describe without knowledge of the implementation.
+>
+> tbench4
+>                              vanilla                polling
+> Hmean     1        497.89 (   0.00%)      543.15 *   9.09%*
+> Hmean     2        975.88 (   0.00%)     1059.73 *   8.59%*
+> Hmean     4       1953.97 (   0.00%)     2081.37 *   6.52%*
+> Hmean     8       3645.76 (   0.00%)     4052.95 *  11.17%*
+> Hmean     16      6882.21 (   0.00%)     6995.93 *   1.65%*
+> Hmean     32     10752.20 (   0.00%)    10731.53 *  -0.19%*
+> Hmean     64     12875.08 (   0.00%)    12478.13 *  -3.08%*
+> Hmean     128    21500.54 (   0.00%)    21098.60 *  -1.87%*
+> Hmean     256    21253.70 (   0.00%)    21027.18 *  -1.07%*
+> Hmean     320    20813.50 (   0.00%)    20580.64 *  -1.12%*
+>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> ---
+>  drivers/cpuidle/cpuidle.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 83af15f77f66..ef2ea1b12cd8 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -368,6 +368,19 @@ void cpuidle_reflect(struct cpuidle_device *dev, int index)
+>                 cpuidle_curr_governor->reflect(dev, index);
+>  }
+>
+> +/*
+> + * Min polling interval of 10usec is a guess. It is assuming that
+> + * for most users, the time for a single ping-pong workload like
+> + * perf bench pipe would generally complete within 10usec but
+> + * this is hardware dependant. Actual time can be estimated with
+> + *
+> + * perf bench sched pipe -l 10000
+> + *
+> + * Run multiple times to avoid cpufreq effects.
+> + */
+> +#define CPUIDLE_POLL_MIN 10000
+> +#define CPUIDLE_POLL_MAX (TICK_NSEC / 16)
+> +
+>  /**
+>   * cpuidle_poll_time - return amount of time to poll for,
+>   * governors can override dev->poll_limit_ns if necessary
+> @@ -382,15 +395,23 @@ u64 cpuidle_poll_time(struct cpuidle_driver *drv,
+>         int i;
+>         u64 limit_ns;
+>
+> +       BUILD_BUG_ON(CPUIDLE_POLL_MIN > CPUIDLE_POLL_MAX);
+> +
+>         if (dev->poll_limit_ns)
+>                 return dev->poll_limit_ns;
+>
+> -       limit_ns = TICK_NSEC;
+> +       limit_ns = CPUIDLE_POLL_MAX;
+>         for (i = 1; i < drv->state_count; i++) {
+> +               u64 state_limit;
+> +
+>                 if (dev->states_usage[i].disable)
+>                         continue;
+>
+> -               limit_ns = drv->states[i].target_residency_ns;
+> +               state_limit = drv->states[i].target_residency_ns;
+> +               if (state_limit < CPUIDLE_POLL_MIN)
+> +                       continue;
+> +
+> +               limit_ns = min_t(u64, state_limit, CPUIDLE_POLL_MAX);
+>                 break;
+>         }
+>
