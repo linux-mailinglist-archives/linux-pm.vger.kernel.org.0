@@ -2,124 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 157D72C9457
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 01:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2BE2C9BAA
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 10:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388163AbgLAAzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Nov 2020 19:55:21 -0500
-Received: from mga09.intel.com ([134.134.136.24]:55229 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388020AbgLAAzU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Nov 2020 19:55:20 -0500
-IronPort-SDR: INyxCOLZmr2+mXxBQCEpOL782+IItSiHSokV5pGhGV/l3l2SMjpUo6+AlkFSYtG34ewb2HEfZJ
- Zq4nBl2/45KQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="172898491"
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="172898491"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 16:54:39 -0800
-IronPort-SDR: qU0d+lB8KhXVQ255+eZHNZq/i+221phAkTJLHeRWS9bfh3ZCvz73KTaCOSPgYYluq9Xsx6x/ra
- eP6PoJ7mjCWg==
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="549332866"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 16:54:36 -0800
-Date:   Tue, 1 Dec 2020 08:57:26 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Subject: Re: [PATCH] e1000e: Assign DPM_FLAG_SMART_SUSPEND and
- DPM_FLAG_MAY_SKIP_RESUME to speed up s2ram
-Message-ID: <20201201005725.GA32155@chenyu-office.sh.intel.com>
-References: <20201124153221.11265-1-yu.c.chen@intel.com>
- <8BA4D1E1-DACF-4E84-A5B8-75A7CEA65F98@canonical.com>
- <20201125103612.GA17700@chenyu-office.sh.intel.com>
- <B66CCBD9-5828-4514-AD08-C6FDF026646D@canonical.com>
- <20201126111053.GA15841@chenyu-office.sh.intel.com>
- <43247451-BA44-4958-A921-2BD0FF5FA5BA@canonical.com>
- <20201126144536.GA19171@chenyu-office.sh.intel.com>
- <E385D730-1D0A-41B0-B6CC-CFBA7535BA1B@canonical.com>
+        id S2389787AbgLAJLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 04:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389782AbgLAJK7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 04:10:59 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CD1C0613CF
+        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 01:10:19 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id g185so3438119wmf.3
+        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 01:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:cc:references:from:subject:message-id:date:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=JjxvJ2GleejcsbyAWz/qvOrfkeToAmCJLaBzuYcwAW8=;
+        b=QSentZr0N7M4DgIznk+9d6rKD8dROFQuDUg9HOShIt+7fqQ23lxewgpjhieK/6IEJl
+         otqqznp94s1qlBHpM5LhNvN22PIiFDXiq2QyfNfQ+3zgB/K/f5btQuzf4b7BZri7IKBi
+         kvHK/l8ymmxnj9nK/VBeMWhfHkVllu98JfjjFrS0y2EIlBCnOJ4L2nJKlHBQY9WeZ0dH
+         Aqys4bKllx4ctgp08t4wFV6/Vf5lhYp2WxHkphODJpGm5GRpKEVtGfNkpnuep8oo3lKw
+         M+s0z1WFQkJEfMv5vVq191asQgMe9dN0IjiURbdNSnNIKh2bOK1LDa2DMeKAeTUMraec
+         sEng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JjxvJ2GleejcsbyAWz/qvOrfkeToAmCJLaBzuYcwAW8=;
+        b=GATs0JbVUBs/+4S8m9qEgY6k4uzSENjDK/kP5nYLQxaumYa1iBKFaGuAwtvpfFhdFj
+         21z+IXDxvAFTdExUfjCgJJ+c+ncuKLeNuHFxswoC8v+juBOBoahxQh/Cq+NeBIqI2OHg
+         l08/SqsknGersu6nU8ikDPwEjjeDwevxEiJePm44HCXZyPW1ujYtQIcTKNajdm7rp0Qd
+         p+/YYuI7tsjzb3IeZULCBBzSc3Y+a0ZUhbsadybzydHiFRwYwvkrHzRQx0bMvt4tXQa4
+         9MxTNuEA6Sc6dgId0kv40rQ4g5a0JGC6qqS9d5VAK+nss2fjJ8fIYEP8b16yYt34BKmX
+         /WVw==
+X-Gm-Message-State: AOAM532U6ORrhewJL9MJuATo/FLJUoHx9NkdWR5kZQDJLaF8CzkRoK+M
+        b9RVYNZlML5m2uQrVUkNb5xIaQ==
+X-Google-Smtp-Source: ABdhPJwM2xFBOo6ADYEHlZrEbjhM4LZmpyu5KArnauA585VR0JmlIFvfrkYcunOrB0J4QWla1QhEHA==
+X-Received: by 2002:a1c:a9c4:: with SMTP id s187mr1692886wme.116.1606813817895;
+        Tue, 01 Dec 2020 01:10:17 -0800 (PST)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id j6sm2008865wrq.38.2020.12.01.01.10.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Dec 2020 01:10:17 -0800 (PST)
+To:     Martin Kepplinger <martink@posteo.de>,
+        Leonard Crestez <cdleonard@gmail.com>, akashast@codeaurora.org,
+        Shawn Guo <shawnguo@kernel.org>, kernel@pengutronix.de
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        NXP Linux Team <linux-imx@nxp.com>
+References: <c110af2f-635a-71f5-735c-1346b7af0ef9@posteo.de>
+ <bae4ae77-4d4d-6298-0af7-1d8db7dc7afe@linaro.org>
+ <95ae2a9e-f0f7-fcfb-b113-c69286e85bad@posteo.de>
+ <fa823263-4d1d-7f5c-2b25-12d450129c46@posteo.de>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Subject: Re: question: interconnect: changes in 5.10 / imx8mq ?
+Message-ID: <a6e73aba-3dbc-51ee-f9f5-e6c32a0112c2@linaro.org>
+Date:   Tue, 1 Dec 2020 11:10:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E385D730-1D0A-41B0-B6CC-CFBA7535BA1B@canonical.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <fa823263-4d1d-7f5c-2b25-12d450129c46@posteo.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 08:20:17PM +0800, Kai-Heng Feng wrote:
-> Thanks for the confirmation. How about a different approach? 
-> Simply use direct-complete to let PM core handle the rest:
->
-Thanks for your suggestion and sorry about replying too late.
-Yes, using direct-complete could leverage pm core to do that,
-although this is a little different than my original thought
-to mainly skip the resume process. But anyway, I'll use direct
-complete and send a v3 out.
-> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-> index b30f00891c03..1d1424a20733 100644
-> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
-> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-> @@ -25,6 +25,7 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/aer.h>
->  #include <linux/prefetch.h>
-> +#include <linux/suspend.h>
->  
->  #include "e1000.h"
->  
-> @@ -6868,6 +6869,20 @@ static void e1000e_disable_aspm_locked(struct pci_dev *pdev, u16 state)
->  	__e1000e_disable_aspm(pdev, state, 1);
->  }
->  
-> +static int e1000e_pm_prepare(struct device *dev)
-> +{
-> +	return pm_runtime_suspended(dev) &&
-> +	       pm_suspend_via_firmware() &&
-> +	       !device_may_wakeup(dev);
-> +}
-device_may_wakeup() is not needed as pm core will check it anyway.
-> +
-> +static void e1000e_pm_complete(struct device *dev)
-> +{
-> +	/* Detect link change */
-> +	if (pm_runtime_suspended(dev))
-> +		pm_request_resume(dev);
-> +}
-There is no need to force resume the device, just keep it
-runtime suspended would be okay. Besides the pm core's complete()
-will restore runtime usage_count which is increased by pm core's
-prepare(), so there is no need to do that here again.
-> +
->  static int e1000e_pm_thaw(struct device *dev)
->  {
->  	struct net_device *netdev = dev_get_drvdata(dev);
-> @@ -7665,9 +7680,7 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->  
->  	e1000_print_device_info(adapter);
->  
-> -	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_NO_DIRECT_COMPLETE);
-> -
-DPM_FLAG_SMART_PREPARE must be set otherwise pci subsystem will ignore the
-.prepare() from the driver.
-> -	if (pci_dev_run_wake(pdev) && hw->mac.type < e1000_pch_cnp)
-> +	if (pci_dev_run_wake(pdev))
->  		pm_runtime_put_noidle(&pdev->dev);
->
-I would prefer to only disable runtime for cnp, in case of
-any user regressions.
+On 12/1/20 02:36, Martin Kepplinger wrote:
+> On 30.11.20 23:10, Martin Kepplinger wrote:
+>> On 30.11.20 22:18, Georgi Djakov wrote:
+>>> On 30.11.20 22:34, Martin Kepplinger wrote:
+>>>> hi,
+>>>>
+>>>> what I've used on v5.9 on imx8mq in order to hook up dram frequency to 
+>>>> interconnect (via mxsfb/lcdif) - and has worked fine - is:
+>>>>
+>>>> * add the NOC node description with "#interconnect-cells = <1>;"
+>>>> https://source.puri.sm/martin.kepplinger/linux-next/-/commit/8a6b8486a3e94e2886bde01000f9532e03d243a4 
+>>>>
+>>>> (original author is Leonard. I'll preserve authorship when submitting)
+>>>>
+>>>> * add "interconnects = <&noc IMX8MQ_ICM_LCDIF &noc IMX8MQ_ICS_DRAM>;
+>>>> " to lcdif:
+>>>> https://source.puri.sm/martin.kepplinger/linux-next/-/commit/6c4bbcdc315da01a9dc8bbda36290587ce1ed33a 
+>>>
+>>>
+>>>
+>>> [..]
+>>>>
+>>>>   node                                  tag          avg         peak
+>>>> --------------------------------------------------------------------
+>>>> NOC                                          2147483647   2147483647
+>>>>    30320000.lcd-controller                0            0            0
+>>>> DRAM                                         2147483647   2147483647
+>>>>    30320000.lcd-controller                0            0            0
+>>>> (...)
+>>>>
+>>>>
+>>>>
+>>>> what am I doing wrong on recent kernels?
+>>>
+>>> Hi Martin,
+>>> This looks related to sync_state. Please try the change below.
+>>> It would be nice to get these DT patches merged into mainline.
+>>
+>> that's the plan. I'll send them soon.
+>>
+>>>
+>>> Thanks,
+>>> Georgi
+>>>
+>>> diff --git a/drivers/interconnect/imx/imx8mq.c 
+>>> b/drivers/interconnect/imx/imx8mq.c
+>>> index ba43a15aefec..9bb951b075e9 100644
+>>> --- a/drivers/interconnect/imx/imx8mq.c
+>>> +++ b/drivers/interconnect/imx/imx8mq.c
+>>> @@ -94,6 +94,7 @@ static struct platform_driver imx8mq_icc_driver = {
+>>>       .remove = imx8mq_icc_remove,
+>>>       .driver = {
+>>>           .name = "imx8mq-interconnect",
+>>> +        .sync_state = icc_sync_state,
+>>>       },
+>>>   };
+>>
+>> that's exactly it. thanks a lot!
+>>
+>>                             martin
+> 
+> but there follows the next problem. it looks imx8m specific:
+> 
+> On the librem5-devkit where I initially tested, switching works. FYI we have the 
+> 2 frequencies:
+> https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.10-rc5/librem5__integration/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts#L283 
+> 
+> (the opp table also to be submitted to mainline soon)
+> 
+> On the Librem5 itself (different SoC revision, different frequencies available) 
+> it fails:
+> https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.10-rc5/librem5__integration/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi#L387 
+> 
+> 
+> When I "request 0" (or disable the icc path) in order to switch to 25Mhz I now get:
+> 
+> [  129.391755] imx8m-ddrc-devfreq 3d400000.memory-controller: failed to set 
+> dram_apb parent: -16
+> [  129.391959] imx8m-ddrc-devfreq 3d400000.memory-controller: ddrc failed freq 
+> switch to 25000000 from 800000000: error -16. now at 25000000
+> [  129.406133] imx8m-ddrc-devfreq 3d400000.memory-controller: failed to update 
+> frequency from PM QoS (-16)
 
-thanks,
-Chenyu
+I am not familiar with the clock tree of this platform, but it looks like -EBUSY 
+is returned when the we are trying to change the parent of the clock.
+
+> and the system hangs at this point.
+> 
+> I'm not aware of any changes we do in our tree in that area to mainline.
+> 
+> Only removing all but one frequency in the opp node, leaving only opp-800M, 
+> "works around" (not really) the error (just mentioning as a data point if that 
+> helps). I hope that's not misleading - no idea where exactly the problem lies.
+
+When there is only a single frequency, then probably we do not try to change the
+mux settings and that's why it does not hang. Maybe check the clock tree and if
+all needed clocks and branches are enabled.
+
+Thanks,
+Georgi
