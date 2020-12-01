@@ -2,171 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BC92CA194
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 12:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 802BF2CA28B
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 13:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728130AbgLALg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 06:36:28 -0500
-Received: from mout02.posteo.de ([185.67.36.66]:36367 "EHLO mout02.posteo.de"
+        id S1726840AbgLAMUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 07:20:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:41888 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730697AbgLALg2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Dec 2020 06:36:28 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 02F54240101
-        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 12:35:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1606822528; bh=RNuzN2v+xN2WGT4Vb5WR96l0+9Yt3dhLly0LH5n48z0=;
-        h=To:Cc:From:Subject:Date:From;
-        b=PHuEMAw+/2+X6Pv6xENd1NAO8AXoyzTsLVT9ItkozdQxFyfp3QQfCJM5UZQDhtz1q
-         /VD5G3HODWbQUt0K5oRuxJBqtPDISbDjU3W2l3Vdv58isa0JVjK+oM+FqFHaPqE+i5
-         oReAB4B13MXaOP7JQHSr+O8bcBEDNV+bD8aLVA5dTVTHjIcYwzOpkn6RZ5KOsW5PPR
-         HSI+TWMQKXf66OLZ939gZnCvecJKfV6zO0IqBDvcyfSOcIPqqwLE5U3CfNSL+sCycB
-         WUAFK3xKDThd0TiVAxaK9VHMvo8qgkodzBaXEfkmCzxzAH9HML5Re6afhPbc6FGLW+
-         3dsRG51pJK3hA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Clg5929S5z9rxY;
-        Tue,  1 Dec 2020 12:35:25 +0100 (CET)
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Leonard Crestez <cdleonard@gmail.com>, akashast@codeaurora.org,
-        Shawn Guo <shawnguo@kernel.org>, kernel@pengutronix.de
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "kernel@puri.sm" <kernel@puri.sm>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-References: <c110af2f-635a-71f5-735c-1346b7af0ef9@posteo.de>
- <bae4ae77-4d4d-6298-0af7-1d8db7dc7afe@linaro.org>
- <95ae2a9e-f0f7-fcfb-b113-c69286e85bad@posteo.de>
- <fa823263-4d1d-7f5c-2b25-12d450129c46@posteo.de>
- <a6e73aba-3dbc-51ee-f9f5-e6c32a0112c2@linaro.org>
-From:   Martin Kepplinger <martink@posteo.de>
-Subject: Re: question: interconnect: changes in 5.10 / imx8mq ?
-Message-ID: <a97dd90c-57d2-9e74-523f-24c9556a933a@posteo.de>
-Date:   Tue, 1 Dec 2020 12:35:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1726390AbgLAMUc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Dec 2020 07:20:32 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75F30101E;
+        Tue,  1 Dec 2020 04:19:46 -0800 (PST)
+Received: from [10.57.28.12] (unknown [10.57.28.12])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 782AF3F718;
+        Tue,  1 Dec 2020 04:19:27 -0800 (PST)
+Subject: Re: [PATCH 2/5] thermal: devfreq_cooling: get a copy of device status
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amit.kucheria@verdurent.com,
+        airlied@linux.ie, daniel.lezcano@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, rui.zhang@intel.com,
+        orjan.eide@arm.com
+References: <20200921122007.29610-1-lukasz.luba@arm.com>
+ <20200921122007.29610-3-lukasz.luba@arm.com> <20201007161120.GC15063@arm.com>
+ <76e0ef49-5898-adbb-0c54-23d5999f4907@arm.com>
+ <20201201103614.GA1908@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <2fc2031d-e38e-2a17-8667-f2fc8d4f724b@arm.com>
+Date:   Tue, 1 Dec 2020 12:19:18 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <a6e73aba-3dbc-51ee-f9f5-e6c32a0112c2@linaro.org>
+In-Reply-To: <20201201103614.GA1908@arm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01.12.20 10:10, Georgi Djakov wrote:
-> On 12/1/20 02:36, Martin Kepplinger wrote:
->> On 30.11.20 23:10, Martin Kepplinger wrote:
->>> On 30.11.20 22:18, Georgi Djakov wrote:
->>>> On 30.11.20 22:34, Martin Kepplinger wrote:
->>>>> hi,
->>>>>
->>>>> what I've used on v5.9 on imx8mq in order to hook up dram frequency 
->>>>> to interconnect (via mxsfb/lcdif) - and has worked fine - is:
->>>>>
->>>>> * add the NOC node description with "#interconnect-cells = <1>;"
->>>>> https://source.puri.sm/martin.kepplinger/linux-next/-/commit/8a6b8486a3e94e2886bde01000f9532e03d243a4 
->>>>>
->>>>> (original author is Leonard. I'll preserve authorship when submitting)
->>>>>
->>>>> * add "interconnects = <&noc IMX8MQ_ICM_LCDIF &noc IMX8MQ_ICS_DRAM>;
->>>>> " to lcdif:
->>>>> https://source.puri.sm/martin.kepplinger/linux-next/-/commit/6c4bbcdc315da01a9dc8bbda36290587ce1ed33a 
->>>>
->>>>
->>>>
->>>>
->>>> [..]
->>>>>
->>>>>   node                                  tag          avg         peak
->>>>> --------------------------------------------------------------------
->>>>> NOC                                          2147483647   2147483647
->>>>>    30320000.lcd-controller                0            0            0
->>>>> DRAM                                         2147483647   2147483647
->>>>>    30320000.lcd-controller                0            0            0
->>>>> (...)
->>>>>
->>>>>
->>>>>
->>>>> what am I doing wrong on recent kernels?
->>>>
->>>> Hi Martin,
->>>> This looks related to sync_state. Please try the change below.
->>>> It would be nice to get these DT patches merged into mainline.
->>>
->>> that's the plan. I'll send them soon.
->>>
->>>>
->>>> Thanks,
->>>> Georgi
->>>>
->>>> diff --git a/drivers/interconnect/imx/imx8mq.c 
->>>> b/drivers/interconnect/imx/imx8mq.c
->>>> index ba43a15aefec..9bb951b075e9 100644
->>>> --- a/drivers/interconnect/imx/imx8mq.c
->>>> +++ b/drivers/interconnect/imx/imx8mq.c
->>>> @@ -94,6 +94,7 @@ static struct platform_driver imx8mq_icc_driver = {
->>>>       .remove = imx8mq_icc_remove,
->>>>       .driver = {
->>>>           .name = "imx8mq-interconnect",
->>>> +        .sync_state = icc_sync_state,
->>>>       },
->>>>   };
->>>
->>> that's exactly it. thanks a lot!
->>>
->>>                             martin
->>
->> but there follows the next problem. it looks imx8m specific:
->>
->> On the librem5-devkit where I initially tested, switching works. FYI 
->> we have the 2 frequencies:
->> https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.10-rc5/librem5__integration/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts#L283 
->>
->> (the opp table also to be submitted to mainline soon)
->>
->> On the Librem5 itself (different SoC revision, different frequencies 
->> available) it fails:
->> https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.10-rc5/librem5__integration/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi#L387 
->>
->>
->> When I "request 0" (or disable the icc path) in order to switch to 
->> 25Mhz I now get:
->>
->> [  129.391755] imx8m-ddrc-devfreq 3d400000.memory-controller: failed 
->> to set dram_apb parent: -16
->> [  129.391959] imx8m-ddrc-devfreq 3d400000.memory-controller: ddrc 
->> failed freq switch to 25000000 from 800000000: error -16. now at 25000000
->> [  129.406133] imx8m-ddrc-devfreq 3d400000.memory-controller: failed 
->> to update frequency from PM QoS (-16)
-> 
-> I am not familiar with the clock tree of this platform, but it looks 
-> like -EBUSY is returned when the we are trying to change the parent of 
-> the clock.
-> 
->> and the system hangs at this point.
->>
->> I'm not aware of any changes we do in our tree in that area to mainline.
->>
->> Only removing all but one frequency in the opp node, leaving only 
->> opp-800M, "works around" (not really) the error (just mentioning as a 
->> data point if that helps). I hope that's not misleading - no idea 
->> where exactly the problem lies.
-> 
-> When there is only a single frequency, then probably we do not try to 
-> change the
-> mux settings and that's why it does not hang. Maybe check the clock tree 
-> and if
-> all needed clocks and branches are enabled.
-> 
 
-thanks for taking the time here. I don't see notable changes to the 
-clock tree compared to 5.9. Specifically, "dram_apb" where reparenting 
-fails, is running on 5.10 too.
 
-It's strange that I see this error on imx8mq-librem5 but not on 
-imx8mq-librem5-devkit.
+On 12/1/20 10:36 AM, Ionela Voinescu wrote:
+> Hi,
+> 
+> Sorry for the delay and for the noise on this older version. I first
+> want to understand the code better.
+> 
+> On Thursday 22 Oct 2020 at 11:55:28 (+0100), Lukasz Luba wrote:
+> [..]
+>>
+>>>
+>>>> +{
+>>>> +	/* Make some space if needed */
+>>>> +	if (status->busy_time > 0xffff) {
+>>>> +		status->busy_time >>= 10;
+>>>> +		status->total_time >>= 10;
+>>>> +	}
+>>>
+>>> How about removing the above code and adding here:
+>>>
+>>> status->busy_time = status->busy_time ? : 1;
+>>
+>> It's not equivalent. The code operates on raw device values, which
+>> might be big (e.g. read from counters). If it's lager than the 0xffff,
+>> it is going to be shifted to get smaller.
+>>
+> 
+> Yes, the big values are handled below through the division and by making
+> total_time = 1024. These two initial checks are only to cover the
+> possibility for busy_time and total_time being 0, or busy_time >
+> total_time.
+> 
+>>>
+>>>> +
+>>>> +	if (status->busy_time > status->total_time)
+>>>
+>>> This check would then cover the possibility that total_time is 0.
+>>>
+>>>> +		status->busy_time = status->total_time;
+>>>
+>>> But a reversal is needed here:
+>>> 		status->total_time = status->busy_time;
+>>
+>> No, I want to clamp the busy_time, which should not be bigger that
+>> total time. It could happen when we deal with 'raw' values from device
+>> counters.
+>>
+> 
+> Yes, I understand. But isn't making total_time = busy_time accomplishing
+> the same thing?
+> 
+>>>
+>>>> +
+>>>> +	status->busy_time *= 100;
+>>>> +	status->busy_time /= status->total_time ? : 1;
+>>>> +
+>>>> +	/* Avoid division by 0 */
+>>>> +	status->busy_time = status->busy_time ? : 1;
+>>>> +	status->total_time = 100;
+>>>
+>>> Then all of this code can be replaced by:
+>>>
+>>> status->busy_time = (unsigned long)div64_u64((u64)status->busy_time << 10,
+>>> 					     status->total_time);
+>>> status->total_time = 1 << 10;
+>>
+>> No, the total_time closed to 'unsigned long' would overflow.
+>>
+> 
+> I'm not sure I understand. total_time gets a value of 1024, it's not
+> itself shifted by 10.
+> 
+>>>
+>>> This way you gain some resolution to busy_time and the divisions in the
+>>> callers would just become shifts by 10.
+>>
+>>
+>> I don't want to gain more resolution here. I want to be prepare for raw
+>> (not processed yet) big values coming from driver.
+>>
+> 
+> Agreed! The higher resolution is an extra benefit. The more important
+> benefit is that, through my suggestion, you'd be replacing all future
+> divisions by shifts.
 
-thanks,
-                              martin
+You have probably missed some bits.
+I don't see benefits, you have div64_u64() which is heavy on 32bit CPUs.
+
+Then, what is the range of these values:
+busy_time [0, 1024], total_time 1024 in your case.
+These values are used for estimating power in two cases:
+1. in devfreq_cooling_get_requested_power()
+	est_power = power * busy_time / total_time
+2. in devfreq_cooling_power2state():
+	est_power = power * total_time / busy_time
+
+As you can see above, the est_power values could overflow if total_time,
+busy_time are raw values (like in old implementation). So normalize them
+into 'some' scale. That was the motivation ('scale' motivation below).
+
+In your case you cannot avoid division in 2. use case, because busy_time
+can be any value in range [0, 1024].
+We could avoid the division in 1. use case, but load in cpufreq cooling
+is also in range of [0, 100], so this devfreq cooling is aligned. I
+would like to avoid situation when someone is parsing the traces
+and these two devices present different load scale.
+
+I will think about better 'devfreq utilization' (as also Daniel
+suggested)in future, but first this EM must be in mainline and cpufreq
+cooling changes made by Viresh also there.
+But it would be more then just scale change to [0, 1024]...
+
+Regards,
+Lukasz
+
+
+> 
+> Thanks,
+> Ionela.
+> 
+>> Regards,
+>> Lukasz
+>>
+>>>
+>>> Hope it helps,
+>>> Ionela.
+>>>
