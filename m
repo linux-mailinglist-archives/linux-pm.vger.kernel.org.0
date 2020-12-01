@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD272CAA98
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 19:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE412CAB42
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 20:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389526AbgLASR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 13:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S2392283AbgLATBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 14:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388619AbgLASR3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 13:17:29 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B533C0613CF
-        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 10:16:49 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id q22so1370258pfk.12
-        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 10:16:49 -0800 (PST)
+        with ESMTP id S2392282AbgLATBU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 14:01:20 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4021DC0613CF
+        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 11:00:40 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id b10so1726009pfo.4
+        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 11:00:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=PHPt9QN/jYxGDi+7bBOYuuEohcBwZWvXhQWm7PdAUH8=;
-        b=CHDzwjNNpr7E6fCm14d86bV/h3YU8r5CLi4n574rJnJ7/Jl1//CcePieMbJQR5RBQs
-         J/BA+tNv2C+LbEI7oDScBQQuU72sPRcauu6TZhLi9p7YQ7YSBmQOBzleT251MBDqjZ3d
-         A8Sw0Wv195+7Oy+9Z2pMUk6n6CkqkKTH3mGfMWGo+mdZnI0crpSzEGYwGQw07VIvtlwp
-         F1Uy1AhfB0B4T6UehAgydxDAhZAECWZOUdSqRALW1CzpUlXbxUpUeP8IDloFM5EPv7RP
-         d3tIVbfo7HRSpqsi5qEiwRaq3OIbk/SQPTulv0dB8zcBSJ8rsZMGx74ZpGGYyJXcdrYP
-         UKqA==
+        bh=m9qmdws5NXJc8P9IC1SFFbr3nfUQwCMymUM8Kxdw1sg=;
+        b=Jps53Cy1l9+pRixXtgahZbAKZ/m9NyzlMC92Vt9OmSovXK73VudixYadEDKTasf6VP
+         hnPyvOunuN7+B63W7MG069nyClJozc2P/h/VQR4HtSotDQcnFh+9Q/ik5VYq9Xllhfj/
+         k33USRfUJTY9hh0CQahI+6xxVLii1twDmMHWVwWAKksc1MxZY4Yml2jWQDSnThsP05UG
+         tvWXigW+jpak+cO8jCuMBCZm/qdRcDUzRHQraz3hJYPj9VeMPk8NhQ/dFsIseeDIx2Bz
+         HhANISZ/pcVkZufTHqz7bq1KlUxeYtx6bo22JzYtLKnN5Q7J7C0ruP0Tc/jlPCwOPzDQ
+         M4Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=PHPt9QN/jYxGDi+7bBOYuuEohcBwZWvXhQWm7PdAUH8=;
-        b=eZyDDSuaLWXVlkZMARtrdgZ1aDzVEIFghvKSv48SiZzO9QcSmt0GFmoXA/IKDYzmg9
-         cxt7cPA41DSFxTRLZMbi+aA7WZON0M42+k055M+ghRhLMfEwcTIbAXvF/F8jlSiukyYZ
-         Vf7/CYTxqNXzbDqOruc/7SVEmcWiJouJU8RPwSd8t0k6Ime4i7wHBKqYQ40GeFvzqo4F
-         o+h9a+KWjSlhsPEhIgsbKW96jDCFw2WdwsScn4oq45yzyWeVSn7NXk8IOkQ4zm8MO0kD
-         a+0u19xc58mMCEaZFQaVWjrtDMC9bsyTizodovvMALoImZVnfxoL97z1Ox+QtTV8mvnR
-         cu1g==
-X-Gm-Message-State: AOAM530hgF20pQb4yRjLwRstspzSstW1ema25gkn3vG6Hg4rHRLdQd85
-        ZQxzSh+Mlujh1GeLh9jYZ/NWjBJQh6BmCA==
-X-Google-Smtp-Source: ABdhPJwS8vyIs6sqKvZOe7cZieQLufqVD81xSxdRjBT7YIEkVf8efOE5c0H5Rtp3AoCaiVasqee++g==
-X-Received: by 2002:aa7:90d2:0:b029:198:39d8:e5b0 with SMTP id k18-20020aa790d20000b029019839d8e5b0mr3714808pfk.1.1606846608681;
-        Tue, 01 Dec 2020 10:16:48 -0800 (PST)
+        bh=m9qmdws5NXJc8P9IC1SFFbr3nfUQwCMymUM8Kxdw1sg=;
+        b=cbkiR1NNlSXmkCgX0SsrYYkVTqr/pl2p4mCWoCgKJwotRDKJGjEhqTUm0GqRMKRnLs
+         2IRZprHFZNE8C/YHtIfefohgjVgdG5PXajC4tT6WCM3nq8wUKtq1Qj43Oo/0t/SI3R4B
+         TL395mo+ryLiyvR0ObigE4ikw5OV8NU+b7Po+kuX/g9ihiZ7/uuofinAKuNTHLFBFJbx
+         UrDSt5Ql+O/YYdO3TP7QLCGAvBSdYDSZN/M/qyuKtnP8bKt4Uuq7S8G84WaEqb94zwnK
+         dImAXnwjUzV0FT60xyYMrwqSSOAdTBwM8k/Idlwt0YnzN8X/ZOqcEGwNfs2FG+5MK/9J
+         FfbQ==
+X-Gm-Message-State: AOAM532D+3ex3wN7ki3g3AqImWxRRkLg1dJ5zeP9Ejm29koJZ/g9Iqes
+        9hDMS0XTgxr9rTi4qwEs3ZuisKSzoQa6cQ==
+X-Google-Smtp-Source: ABdhPJwTzthzwWwqQN0Ab6DjpVJ33k0VC+fIynDAQfTSLzadOXUnbs93VPEhr4eeqfUhdwzC9eDkeQ==
+X-Received: by 2002:a63:2045:: with SMTP id r5mr3573674pgm.6.1606849239775;
+        Tue, 01 Dec 2020 11:00:39 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id gz2sm412580pjb.2.2020.12.01.10.16.47
+        by smtp.gmail.com with ESMTPSA id b13sm341985pgr.59.2020.12.01.11.00.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 10:16:47 -0800 (PST)
-Message-ID: <5fc6888f.1c69fb81.d882d.0dee@mx.google.com>
-Date:   Tue, 01 Dec 2020 10:16:47 -0800 (PST)
+        Tue, 01 Dec 2020 11:00:39 -0800 (PST)
+Message-ID: <5fc692d7.1c69fb81.7847d.0c5d@mx.google.com>
+Date:   Tue, 01 Dec 2020 11:00:39 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: testing
 X-Kernelci-Tree: pm
 X-Kernelci-Kernel: v5.10-rc6-78-gc6c91db76539e
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 3 warnings (v5.10-rc6-78-gc6c91db76539e)
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 121 runs,
+ 2 regressions (v5.10-rc6-78-gc6c91db76539e)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -65,95 +65,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 3 warnings (v5.10-rc6-78-gc=
-6c91db76539e)
+pm/testing baseline: 121 runs, 2 regressions (v5.10-rc6-78-gc6c91db76539e)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-10-rc6-78-gc6c91db76539e/
+Regressions Summary
+-------------------
 
-Tree: pm
-Branch: testing
-Git Describe: v5.10-rc6-78-gc6c91db76539e
-Git Commit: c6c91db76539e729139e47085af40adf240800a4
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+platform       | arch  | lab          | compiler | defconfig | regressions
+---------------+-------+--------------+----------+-----------+------------
+imx8mp-evk     | arm64 | lab-nxp      | gcc-8    | defconfig | 1          =
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
+meson-gxm-q200 | arm64 | lab-baylibre | gcc-8    | defconfig | 1          =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
+6-78-gc6c91db76539e/plan/baseline/
 
-    1    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge)=
-: /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
-    1    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge)=
-: /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
-    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.10-rc6-78-gc6c91db76539e
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      c6c91db76539e729139e47085af40adf240800a4 =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Test Regressions
+---------------- =
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+platform       | arch  | lab          | compiler | defconfig | regressions
+---------------+-------+--------------+----------+-----------+------------
+imx8mp-evk     | arm64 | lab-nxp      | gcc-8    | defconfig | 1          =
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
+  Details:     https://kernelci.org/test/plan/id/5fc6882cd4c6b74f8ec94cc0
 
-Warnings:
-    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /so=
-c/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
-    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /so=
-c/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc6-78-gc6c91=
+db76539e/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc6-78-gc6c91=
+db76539e/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
----
-For more info write to <info@kernelci.org>
+
+  * baseline.login: https://kernelci.org/test/case/id/5fc6882cd4c6b74f8ec94=
+cc1
+        new failure (last pass: pm-5.10-rc6-75-g735f7fba25ec) =
+
+ =
+
+
+
+platform       | arch  | lab          | compiler | defconfig | regressions
+---------------+-------+--------------+----------+-----------+------------
+meson-gxm-q200 | arm64 | lab-baylibre | gcc-8    | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fc68e3818748ab6d7c94cb9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc6-78-gc6c91=
+db76539e/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxm-q200.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc6-78-gc6c91=
+db76539e/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxm-q200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fc68e3818748ab6d7c94=
+cba
+        new failure (last pass: pm-5.10-rc6-75-g735f7fba25ec) =
+
+ =20
