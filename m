@@ -2,171 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 802BF2CA28B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 13:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FB82CA2CD
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 13:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbgLAMUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 07:20:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:41888 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726390AbgLAMUc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Dec 2020 07:20:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75F30101E;
-        Tue,  1 Dec 2020 04:19:46 -0800 (PST)
-Received: from [10.57.28.12] (unknown [10.57.28.12])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 782AF3F718;
-        Tue,  1 Dec 2020 04:19:27 -0800 (PST)
-Subject: Re: [PATCH 2/5] thermal: devfreq_cooling: get a copy of device status
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amit.kucheria@verdurent.com,
-        airlied@linux.ie, daniel.lezcano@linaro.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, rui.zhang@intel.com,
-        orjan.eide@arm.com
-References: <20200921122007.29610-1-lukasz.luba@arm.com>
- <20200921122007.29610-3-lukasz.luba@arm.com> <20201007161120.GC15063@arm.com>
- <76e0ef49-5898-adbb-0c54-23d5999f4907@arm.com>
- <20201201103614.GA1908@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <2fc2031d-e38e-2a17-8667-f2fc8d4f724b@arm.com>
-Date:   Tue, 1 Dec 2020 12:19:18 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728684AbgLAMgS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 07:36:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbgLAMgR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 07:36:17 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B9CC0613CF
+        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 04:35:37 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id z7so2399867wrn.3
+        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 04:35:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=PBhvOuHrmZrmozsg5XMjYiCxFZYNQufxltK5JmbALq0=;
+        b=iELuIdiIsfbdTnon0RwdU4ViNQR1lvN5o7hq43GDB9jGHjUiYuwgu5FmAFJmelXsRu
+         CiXYq36chppJ3ZMGiNSg1gRp6W2k0/QeIhOKsyC9bnQYiVnXGE8PpdaX4sccfG0f/dnZ
+         Kk/i61rssRWKF/RKdjMYhBAgmvtpCzV1V8mktOCk+LGlmwXaZstpn9txNyQTpJeTD8tX
+         e3oTmQ0SeRL0FU+/uK4IBW1EbDiog5qPRC//HnHDFNdS3tJk7urVMuOrqoTXbWogwt6F
+         REYqrircBdTXStuh41xD2I2hQhOhB7GegJzYw3KsjCekuatSjlZ5xTYvq3tvH1P63Be5
+         Enhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=PBhvOuHrmZrmozsg5XMjYiCxFZYNQufxltK5JmbALq0=;
+        b=U4OCcxQZJr/Gj6SgRt0K8IjB2MAYjVxtOGX0JmjsF8tra7hW+UVpS4yfujrOESO2sZ
+         JAbQNfSDuHsILvBt4myUnECncjvhWdnsbQ8qBMWcyW+TyIeWDgr5MPtl2At9TJma74kY
+         3xCq02iL99qodlJglc7n3gWdRYNYVBJB3osj4zunpwpxkoZTwREYm9t0VnU0nvFsasYs
+         mIoC0gjGYgRfK4/u6SkEFY2PUjHkI0ZGQPX+eqvbQKKnt6OVJg2xFu72N9hJf7nJIVMS
+         Q1kdiDrev1Rr6nCyNM3bwRXYIKdlMlV4qEALl9YPDUm1QSWwVXeUd7ZtMkzNlWUP9OJI
+         Tyyw==
+X-Gm-Message-State: AOAM531Kh0zUY4/lxt2+z4v6xSoKbCAfB0KU6Bm9HwBgkJYkj3WgmBge
+        yQBXJepWQSgj0A5TC3niSlx8eA==
+X-Google-Smtp-Source: ABdhPJzolK1z/MwyGdNPMWGm17UWGGNNhYA+6ywXkJaIKSw6bgsLCHCx+sDsqURy9VxE+NprDyS/IQ==
+X-Received: by 2002:adf:fe90:: with SMTP id l16mr3570046wrr.194.1606826136251;
+        Tue, 01 Dec 2020 04:35:36 -0800 (PST)
+Received: from MacBook-Pro.local ([212.45.64.13])
+        by smtp.googlemail.com with ESMTPSA id l14sm2683462wmi.33.2020.12.01.04.35.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Dec 2020 04:35:35 -0800 (PST)
+Subject: Re: question: interconnect: changes in 5.10 / imx8mq ?
+To:     Martin Kepplinger <martink@posteo.de>,
+        Leonard Crestez <cdleonard@gmail.com>, akashast@codeaurora.org,
+        Shawn Guo <shawnguo@kernel.org>, kernel@pengutronix.de
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "kernel@puri.sm" <kernel@puri.sm>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+References: <c110af2f-635a-71f5-735c-1346b7af0ef9@posteo.de>
+ <bae4ae77-4d4d-6298-0af7-1d8db7dc7afe@linaro.org>
+ <95ae2a9e-f0f7-fcfb-b113-c69286e85bad@posteo.de>
+ <fa823263-4d1d-7f5c-2b25-12d450129c46@posteo.de>
+ <a6e73aba-3dbc-51ee-f9f5-e6c32a0112c2@linaro.org>
+ <a97dd90c-57d2-9e74-523f-24c9556a933a@posteo.de>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Message-ID: <d216ef41-46f0-59ff-5a9b-64c5cb80d26d@linaro.org>
+Date:   Tue, 1 Dec 2020 14:35:34 +0200
 MIME-Version: 1.0
-In-Reply-To: <20201201103614.GA1908@arm.com>
+In-Reply-To: <a97dd90c-57d2-9e74-523f-24c9556a933a@posteo.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 1.12.20 13:35, Martin Kepplinger wrote:
+> On 01.12.20 10:10, Georgi Djakov wrote:
+>> On 12/1/20 02:36, Martin Kepplinger wrote:
+>>> On 30.11.20 23:10, Martin Kepplinger wrote:
+>>>> On 30.11.20 22:18, Georgi Djakov wrote:
+>>>>> On 30.11.20 22:34, Martin Kepplinger wrote:
+[..]
+>>>
+>>> but there follows the next problem. it looks imx8m specific:
+>>>
+>>> On the librem5-devkit where I initially tested, switching works. FYI 
+>>> we have the 2 frequencies:
+>>> https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.10-rc5/librem5__integration/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts#L283 
+>>>
+>>> (the opp table also to be submitted to mainline soon)
+>>>
+>>> On the Librem5 itself (different SoC revision, different frequencies 
+>>> available) it fails:
+>>> https://source.puri.sm/martin.kepplinger/linux-next/-/blob/5.10-rc5/librem5__integration/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi#L387 
+>>>
+>>>
+>>> When I "request 0" (or disable the icc path) in order to switch to 
+>>> 25Mhz I now get:
+>>>
+>>> [  129.391755] imx8m-ddrc-devfreq 3d400000.memory-controller: failed 
+>>> to set dram_apb parent: -16
+>>> [  129.391959] imx8m-ddrc-devfreq 3d400000.memory-controller: ddrc 
+>>> failed freq switch to 25000000 from 800000000: error -16. now at 
+>>> 25000000
+>>> [  129.406133] imx8m-ddrc-devfreq 3d400000.memory-controller: failed 
+>>> to update frequency from PM QoS (-16)
+>>
+>> I am not familiar with the clock tree of this platform, but it looks 
+>> like -EBUSY is returned when the we are trying to change the parent of 
+>> the clock.
+>>
+>>> and the system hangs at this point.
+>>>
+>>> I'm not aware of any changes we do in our tree in that area to mainline.
+>>>
+>>> Only removing all but one frequency in the opp node, leaving only 
+>>> opp-800M, "works around" (not really) the error (just mentioning as a 
+>>> data point if that helps). I hope that's not misleading - no idea 
+>>> where exactly the problem lies.
+>>
+>> When there is only a single frequency, then probably we do not try to 
+>> change the
+>> mux settings and that's why it does not hang. Maybe check the clock 
+>> tree and if
+>> all needed clocks and branches are enabled.
+>>
+> 
+> thanks for taking the time here. I don't see notable changes to the 
+> clock tree compared to 5.9. Specifically, "dram_apb" where reparenting 
+> fails, is running on 5.10 too.
 
+It could be a DT change or something else.. Maybe try running git bisect
+and see if it gives any clue.
 
-On 12/1/20 10:36 AM, Ionela Voinescu wrote:
-> Hi,
-> 
-> Sorry for the delay and for the noise on this older version. I first
-> want to understand the code better.
-> 
-> On Thursday 22 Oct 2020 at 11:55:28 (+0100), Lukasz Luba wrote:
-> [..]
->>
->>>
->>>> +{
->>>> +	/* Make some space if needed */
->>>> +	if (status->busy_time > 0xffff) {
->>>> +		status->busy_time >>= 10;
->>>> +		status->total_time >>= 10;
->>>> +	}
->>>
->>> How about removing the above code and adding here:
->>>
->>> status->busy_time = status->busy_time ? : 1;
->>
->> It's not equivalent. The code operates on raw device values, which
->> might be big (e.g. read from counters). If it's lager than the 0xffff,
->> it is going to be shifted to get smaller.
->>
-> 
-> Yes, the big values are handled below through the division and by making
-> total_time = 1024. These two initial checks are only to cover the
-> possibility for busy_time and total_time being 0, or busy_time >
-> total_time.
-> 
->>>
->>>> +
->>>> +	if (status->busy_time > status->total_time)
->>>
->>> This check would then cover the possibility that total_time is 0.
->>>
->>>> +		status->busy_time = status->total_time;
->>>
->>> But a reversal is needed here:
->>> 		status->total_time = status->busy_time;
->>
->> No, I want to clamp the busy_time, which should not be bigger that
->> total time. It could happen when we deal with 'raw' values from device
->> counters.
->>
-> 
-> Yes, I understand. But isn't making total_time = busy_time accomplishing
-> the same thing?
-> 
->>>
->>>> +
->>>> +	status->busy_time *= 100;
->>>> +	status->busy_time /= status->total_time ? : 1;
->>>> +
->>>> +	/* Avoid division by 0 */
->>>> +	status->busy_time = status->busy_time ? : 1;
->>>> +	status->total_time = 100;
->>>
->>> Then all of this code can be replaced by:
->>>
->>> status->busy_time = (unsigned long)div64_u64((u64)status->busy_time << 10,
->>> 					     status->total_time);
->>> status->total_time = 1 << 10;
->>
->> No, the total_time closed to 'unsigned long' would overflow.
->>
-> 
-> I'm not sure I understand. total_time gets a value of 1024, it's not
-> itself shifted by 10.
-> 
->>>
->>> This way you gain some resolution to busy_time and the divisions in the
->>> callers would just become shifts by 10.
->>
->>
->> I don't want to gain more resolution here. I want to be prepare for raw
->> (not processed yet) big values coming from driver.
->>
-> 
-> Agreed! The higher resolution is an extra benefit. The more important
-> benefit is that, through my suggestion, you'd be replacing all future
-> divisions by shifts.
+Thanks,
+Georgi
 
-You have probably missed some bits.
-I don't see benefits, you have div64_u64() which is heavy on 32bit CPUs.
-
-Then, what is the range of these values:
-busy_time [0, 1024], total_time 1024 in your case.
-These values are used for estimating power in two cases:
-1. in devfreq_cooling_get_requested_power()
-	est_power = power * busy_time / total_time
-2. in devfreq_cooling_power2state():
-	est_power = power * total_time / busy_time
-
-As you can see above, the est_power values could overflow if total_time,
-busy_time are raw values (like in old implementation). So normalize them
-into 'some' scale. That was the motivation ('scale' motivation below).
-
-In your case you cannot avoid division in 2. use case, because busy_time
-can be any value in range [0, 1024].
-We could avoid the division in 1. use case, but load in cpufreq cooling
-is also in range of [0, 100], so this devfreq cooling is aligned. I
-would like to avoid situation when someone is parsing the traces
-and these two devices present different load scale.
-
-I will think about better 'devfreq utilization' (as also Daniel
-suggested)in future, but first this EM must be in mainline and cpufreq
-cooling changes made by Viresh also there.
-But it would be more then just scale change to [0, 1024]...
-
-Regards,
-Lukasz
-
-
-> 
-> Thanks,
-> Ionela.
-> 
->> Regards,
->> Lukasz
->>
->>>
->>> Hope it helps,
->>> Ionela.
->>>
+> It's strange that I see this error on imx8mq-librem5 but not on 
+> imx8mq-librem5-devkit.
