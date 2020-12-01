@@ -2,82 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C65DF2CA38B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 14:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2F62CA497
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 14:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727077AbgLANQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 08:16:22 -0500
-Received: from comms.puri.sm ([159.203.221.185]:37396 "EHLO comms.puri.sm"
+        id S2388251AbgLANz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 08:55:58 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:46130 "EHLO honk.sigxcpu.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725977AbgLANQW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Dec 2020 08:16:22 -0500
+        id S2388223AbgLANz6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Dec 2020 08:55:58 -0500
+X-Greylist: delayed 515 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Dec 2020 08:55:58 EST
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 9914FE0410;
-        Tue,  1 Dec 2020 05:15:11 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YGom1B7VPFvx; Tue,  1 Dec 2020 05:15:10 -0800 (PST)
-Subject: Re: [PATCH v2 7/7] arm64: defconfig: Enable interconnect for imx8mq
-To:     Georgi Djakov <georgi.djakov@linaro.org>, robh@kernel.org,
-        shawnguo@kernel.org, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, cdleonard@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com, kernel@puri.sm,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+        by honk.sigxcpu.org (Postfix) with ESMTP id 87F2AFB03;
+        Tue,  1 Dec 2020 14:46:39 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id X1ChpxCqEnvi; Tue,  1 Dec 2020 14:46:38 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 33DF04068E; Tue,  1 Dec 2020 14:46:38 +0100 (CET)
+Date:   Tue, 1 Dec 2020 14:46:38 +0100
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     robh@kernel.org, shawnguo@kernel.org, festevam@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, georgi.djakov@linaro.org,
+        cdleonard@gmail.com, kernel@pengutronix.de, linux-imx@nxp.com,
+        kernel@puri.sm, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v2 4/7] dt-bindings: mxsfb: Add interconnect bindings for
+ LCDIF path
+Message-ID: <20201201134638.GA305734@bogon.m.sigxcpu.org>
 References: <20201201123932.12312-1-martin.kepplinger@puri.sm>
- <20201201123932.12312-8-martin.kepplinger@puri.sm>
- <cb498c2c-e052-390a-c64a-2be44d1d2b42@linaro.org>
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-Message-ID: <a2c0fae4-13c5-9114-876f-bc324138e6cc@puri.sm>
-Date:   Tue, 1 Dec 2020 14:15:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
-In-Reply-To: <cb498c2c-e052-390a-c64a-2be44d1d2b42@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+ <20201201123932.12312-5-martin.kepplinger@puri.sm>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201201123932.12312-5-martin.kepplinger@puri.sm>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01.12.20 14:10, Georgi Djakov wrote:
-> On 1.12.20 14:39, Martin Kepplinger wrote:
->> Enable INTERCONNECT_IMX8MQ in order to make interconnect more widely
->> available for testing.
+Hi Martin,
+On Tue, Dec 01, 2020 at 01:39:29PM +0100, Martin Kepplinger wrote:
+> Add optional interconnect properties for the dram path requests.
 > 
-> I hope that it's not just for testing, but using it.
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>  Documentation/devicetree/bindings/display/mxsfb.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mxsfb.txt b/Documentation/devicetree/bindings/display/mxsfb.txt
+> index c985871c46b3..d494a2674290 100644
+> --- a/Documentation/devicetree/bindings/display/mxsfb.txt
+> +++ b/Documentation/devicetree/bindings/display/mxsfb.txt
+> @@ -15,6 +15,12 @@ Required properties:
+>      - "pix" for the LCDIF block clock
+>      - (MX6SX-only) "axi", "disp_axi" for the bus interface clock
+>  
+> +Optional properties:
+> +- interconnects : interconnect path specifier for LCDIF according to
+> +		Documentation/devicetree/bindings/interconnect/interconnect.txt.
+> +- interconnect-names: the name describing the interconnect path.
+> +		Should be "dram" for i.MX8MQ.
+> +
 
-sure, I just think that most people will use their own config for 
-production but that's a different story. I can rephrase.
+There's a yaml conversion by Laurentiu for mxsfb in flight:
 
-> 
->> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
->> ---
->>   arch/arm64/configs/defconfig | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
->> index 1fed16950a7c..830c26a95b3d 100644
->> --- a/arch/arm64/configs/defconfig
->> +++ b/arch/arm64/configs/defconfig
->> @@ -1023,7 +1023,8 @@ CONFIG_OPTEE=y
->>   CONFIG_MUX_MMIO=y
->>   CONFIG_SLIM_QCOM_CTRL=m
->>   CONFIG_SLIM_QCOM_NGD_CTRL=m
->> -CONFIG_INTERCONNECT=y
-> 
-> Why are you removing this line?
+    https://lore.kernel.org/dri-devel/20201007012438.27970-2-laurent.pinchart@ideasonboard.com/
 
-savedefconfig removes it. INTERCONNECT_IMX below depends on it.
+Cheers,
+ -- Guido
 
-> 
-> Thanks,
-> Georgi
-> 
->> +CONFIG_INTERCONNECT_IMX=m
->> +CONFIG_INTERCONNECT_IMX8MQ=m
->>   CONFIG_INTERCONNECT_QCOM=y
->>   CONFIG_INTERCONNECT_QCOM_MSM8916=m
->>   CONFIG_INTERCONNECT_QCOM_SDM845=m
->>
+>  Required sub-nodes:
+>    - port: The connection to an encoder chip.
+>  
+> -- 
+> 2.20.1
 > 
