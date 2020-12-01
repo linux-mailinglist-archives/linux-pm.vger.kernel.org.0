@@ -2,120 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E832CA724
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 16:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D477A2CA84E
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 17:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390299AbgLAPeV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 10:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390304AbgLAPeV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 10:34:21 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA5C0617A6
-        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 07:33:40 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id g20so4358518ejb.1
-        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 07:33:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HfEmRbTUVu5buzmFymRjrzPmVpKwAUdxNZbmsbAARHI=;
-        b=zpM6mciORqM6FM9fWyXykgzZO3tN82WyO0CznE01WirlCqvzyB+NGE5sturlw191Qx
-         Xq63A6beE6QUlpwGR8Y2YKDluTLb33Ve5fE1Uc28FMlxUg54ywnsX8QPhpf1MHECTtqZ
-         ScroKkCi3TaDc25Jq20JrHOD/xCk6mneZMpeNk/pcThyqwNMh5X5EjN17rbvEZvvOhqO
-         Q+GW6ry+hLHmpavB/uFRWpWIRCSqR5An+CX7Ea1DvPduQXTsImNn/KJfEoH3ZU37N+pP
-         HN9G5K2EnscgljSpnGyrGFRRWTNDf5RxzEi+fuWqxcZrq2vWBCAipkpsHGklZeiyXvcF
-         Qwuw==
+        id S1726515AbgLAQbB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 11:31:01 -0500
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:44507 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725885AbgLAQbA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 11:31:00 -0500
+Received: by mail-oo1-f48.google.com with SMTP id i13so532238oou.11;
+        Tue, 01 Dec 2020 08:30:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HfEmRbTUVu5buzmFymRjrzPmVpKwAUdxNZbmsbAARHI=;
-        b=ZeXYYy83Kl8JqzaFcTU72ZH64SlVa7H8KsnlE9GY+N4ntZNfnt38d8wzoVNAh17FCq
-         TTnrG4bvdLNcycc7bjaEcnf+zsfJCfaj5LiDRbF3Dw+ZP//Fa0V03s7j1p9NPBYcJ8eK
-         4qcCEtffm6/NZrHFkRDC/TGmq358iiJiJC2rg59rM+HBjgAY5+2CERCYiZlxarPRq2Wk
-         irIUzGbChOt0jDxO3peAxHCpUw8fTnA2sdSjhqYQnR+HWferI6F9qamg9hZFdcTAq5lt
-         RYEadb7dt5B1GsYD0hReBnYvrniPG03yeecV5OeTBfkdrgQI1Q59tN4pTMzHQmHGbEUy
-         7YBw==
-X-Gm-Message-State: AOAM532ddIyeiVJmGKxPyflBLhoaIel26mERO44+6GxtCg2+qjXOKOFU
-        gNLRLnotvv6TGil+qjmfqvsET7itXga694b8g2fvAA==
-X-Google-Smtp-Source: ABdhPJwaleYJQJJT3SsISIG12SOKNywBoidZAcD+gTb6G8zgyBFg95d1+qKFI19arkSUdTOEX+v3bvq6AXYs2hdUcY4=
-X-Received: by 2002:a17:907:b09:: with SMTP id h9mr3591194ejl.155.1606836819337;
- Tue, 01 Dec 2020 07:33:39 -0800 (PST)
+        bh=Mp8iWWWHPT2Pl4u80hu8E2e1qsXynxOIhIpt5M0kvuw=;
+        b=cSlqyU/2MjAR0HHoceOcAL2l5ppCqiOySiaqXY8CKgnchohx3o2MGFW1MqOUZep/pq
+         jg2nVJ1zzU5+gqXST6djCVtPxIEYCM9S9FJiEJlXRis6PGd5AYLAI7yUyv//jeArc9Yy
+         7MlTL68iMdROZes9jnRJ6DIEviP1224hTyIh9lBxMUzL33igRN3JJvJIzsMjvtIUAVzR
+         z6k6+IBKuAD0ZG6npNhikkOncV9pDSfSexF9Y4EAMaJ/CcXuvnXv5Mk5u4bqzF7Ay0S/
+         HDdgv65HNdMRTfec8SVMQbXzEaxEUBaHV7eEQT1vvwS0CFr08dpAiUl2szF8s4cQMYEf
+         FRZQ==
+X-Gm-Message-State: AOAM531AO9gVdcC/tHLJqTHbCCbd4D/uM0Z2h2jJ9yPRZGDT7xOkoET7
+        Ilaq0A4zrdMAyVaQT4hInwGUgw4f580vgm4CuzU=
+X-Google-Smtp-Source: ABdhPJxhsM5gRQOWgBECZTVf5/IPMk1HzG+wAoXHRZQf31qtr6foTaaOmxOFobYWLnpvjGDt7j3u210Bl3hjzhq+Tcc=
+X-Received: by 2002:a4a:bb07:: with SMTP id f7mr2444634oop.44.1606840214306;
+ Tue, 01 Dec 2020 08:30:14 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1605893641.git.syednwaris@gmail.com> <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
-In-Reply-To: <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Tue, 1 Dec 2020 16:33:28 +0100
-Message-ID: <CAMpxmJVNPWCUFnBXzDW3uJ_1Sv4rQ=M0WbKmoW4juYLUQP-ABA@mail.gmail.com>
-Subject: Re: [RESEND PATCH 3/4] gpio: xilinx: Modify bitmap_set_value() calls
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>, rrichter@marvell.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-arch@vger.kernel.org,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>
+References: <a3689b5f-2835-066c-dcb5-6103a0e09f89@linuxfoundation.org>
+In-Reply-To: <a3689b5f-2835-066c-dcb5-6103a0e09f89@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Dec 2020 17:30:03 +0100
+Message-ID: <CAJZ5v0j-ytbMfmq+6Y=0aOdKi2B4a-JCbOvdO=ujG0MOTphwEA@mail.gmail.com>
+Subject: Re: [GIT PULL] cpupower update for Linux 5.11-rc1
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 7:46 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+On Mon, Nov 30, 2020 at 10:47 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> Modify the bitmap_set_value() calls. bitmap_set_value()
-> now takes an extra bitmap width as second argument and the width of
-> value is now present as the fourth argument.
+> Hi Rafael,
 >
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-> ---
->  drivers/gpio/gpio-xilinx.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> Please pull the following cpupower update for Linux 5.11-rc1.
 >
-> diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> index ad4ee4145db4..05dae086c4d0 100644
-> --- a/drivers/gpio/gpio-xilinx.c
-> +++ b/drivers/gpio/gpio-xilinx.c
-> @@ -151,16 +151,16 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
->         spin_lock_irqsave(&chip->gpio_lock[0], flags);
->         spin_lock(&chip->gpio_lock[1]);
->
-> -       bitmap_set_value(old, state[0], 0, width[0]);
-> -       bitmap_set_value(old, state[1], width[0], width[1]);
-> +       bitmap_set_value(old, 64, state[0], width[0], 0);
-> +       bitmap_set_value(old, 64, state[1], width[1], width[0]);
->         bitmap_replace(new, old, bits, mask, gc->ngpio);
->
-> -       bitmap_set_value(old, state[0], 0, 32);
-> -       bitmap_set_value(old, state[1], 32, 32);
-> +       bitmap_set_value(old, 64, state[0], 32, 0);
-> +       bitmap_set_value(old, 64, state[1], 32, 32);
->         state[0] = bitmap_get_value(new, 0, width[0]);
->         state[1] = bitmap_get_value(new, width[0], width[1]);
-> -       bitmap_set_value(new, state[0], 0, 32);
-> -       bitmap_set_value(new, state[1], 32, 32);
-> +       bitmap_set_value(new, 64, state[0], 32, 0);
-> +       bitmap_set_value(new, 64, state[1], 32, 32);
->         bitmap_xor(changed, old, new, 64);
->
->         if (((u32 *)changed)[0])
-> --
-> 2.29.0
->
+> This cpupower update for Linux 5.11-rc1 consists of a change to provide
+> online and offline CPU information. This change makes it easier to keep
+> track of offline cpus whose cpuidle or cpufreq property aren't changed
+> when updates are made to online cpus.
 
-This series is not bisectable because you modify the interface -
-breaking existing users - and you only fix them later. Please squash
-those changes into a single commit.
+Pulled, thanks!
 
-Bartosz
+> Please note that there is a conflict in
+>
+> tools/power/cpupower/utils/helpers/misc.c
+>
+> between commit:
+>
+>    748f0d70087c ("cpupower: Provide online and offline CPU information")
+>
+> from the cpupower tree and commit:
+>
+>    8113ab20e850 ("tools/power/cpupower: Read energy_perf_bias from sysfs")
+>
+> from the tip tree.
+>
+> Stephen fixed it up and can carry the fix. Hope this works.
+
+Thanks for the notice!
+
+The conflict will now move to the PM tree merges I suppose.
