@@ -2,134 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7394C2C9FF0
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 11:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA79D2CA151
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 12:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729888AbgLAKhC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 05:37:02 -0500
-Received: from foss.arm.com ([217.140.110.172]:40208 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726740AbgLAKhB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Dec 2020 05:37:01 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B37D101E;
-        Tue,  1 Dec 2020 02:36:16 -0800 (PST)
-Received: from localhost (unknown [10.1.198.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECDBD3F66B;
-        Tue,  1 Dec 2020 02:36:15 -0800 (PST)
-Date:   Tue, 1 Dec 2020 10:36:14 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amit.kucheria@verdurent.com,
-        airlied@linux.ie, daniel.lezcano@linaro.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, rui.zhang@intel.com,
-        orjan.eide@arm.com
-Subject: Re: [PATCH 2/5] thermal: devfreq_cooling: get a copy of device status
-Message-ID: <20201201103614.GA1908@arm.com>
-References: <20200921122007.29610-1-lukasz.luba@arm.com>
- <20200921122007.29610-3-lukasz.luba@arm.com>
- <20201007161120.GC15063@arm.com>
- <76e0ef49-5898-adbb-0c54-23d5999f4907@arm.com>
+        id S1730553AbgLAL2C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 06:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727177AbgLAL2B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 06:28:01 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C13FC0613D2
+        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 03:27:21 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1kk3oM-0006sl-FO; Tue, 01 Dec 2020 12:27:10 +0100
+Message-ID: <34146e8424bf9fdf5865fc954ee9964612ab88dc.camel@pengutronix.de>
+Subject: Re: [PATCH 3/6] arm64: dts: imx8mq: Add interconnect for lcdif
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, robh@kernel.org,
+        shawnguo@kernel.org, festevam@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, georgi.djakov@linaro.org, cdleonard@gmail.com
+Cc:     devicetree@vger.kernel.org, kernel@puri.sm,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org
+Date:   Tue, 01 Dec 2020 12:27:08 +0100
+In-Reply-To: <20201201100124.4676-4-martin.kepplinger@puri.sm>
+References: <20201201100124.4676-1-martin.kepplinger@puri.sm>
+         <20201201100124.4676-4-martin.kepplinger@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76e0ef49-5898-adbb-0c54-23d5999f4907@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-Sorry for the delay and for the noise on this older version. I first
-want to understand the code better.
-
-On Thursday 22 Oct 2020 at 11:55:28 (+0100), Lukasz Luba wrote:
-[..]
+Am Dienstag, den 01.12.2020, 11:01 +0100 schrieb Martin Kepplinger:
+> Add interconnect ports for lcdif to set bus capabilities.
 > 
-> > 
-> > > +{
-> > > +	/* Make some space if needed */
-> > > +	if (status->busy_time > 0xffff) {
-> > > +		status->busy_time >>= 10;
-> > > +		status->total_time >>= 10;
-> > > +	}
-> > 
-> > How about removing the above code and adding here:
-> > 
-> > status->busy_time = status->busy_time ? : 1;
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mq.dtsi | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> It's not equivalent. The code operates on raw device values, which
-> might be big (e.g. read from counters). If it's lager than the 0xffff,
-> it is going to be shifted to get smaller.
-> 
-
-Yes, the big values are handled below through the division and by making
-total_time = 1024. These two initial checks are only to cover the
-possibility for busy_time and total_time being 0, or busy_time >
-total_time.
-
-> > 
-> > > +
-> > > +	if (status->busy_time > status->total_time)
-> > 
-> > This check would then cover the possibility that total_time is 0.
-> > 
-> > > +		status->busy_time = status->total_time;
-> > 
-> > But a reversal is needed here:
-> > 		status->total_time = status->busy_time;
-> 
-> No, I want to clamp the busy_time, which should not be bigger that
-> total time. It could happen when we deal with 'raw' values from device
-> counters.
-> 
-
-Yes, I understand. But isn't making total_time = busy_time accomplishing
-the same thing?
-
-> > 
-> > > +
-> > > +	status->busy_time *= 100;
-> > > +	status->busy_time /= status->total_time ? : 1;
-> > > +
-> > > +	/* Avoid division by 0 */
-> > > +	status->busy_time = status->busy_time ? : 1;
-> > > +	status->total_time = 100;
-> > 
-> > Then all of this code can be replaced by:
-> > 
-> > status->busy_time = (unsigned long)div64_u64((u64)status->busy_time << 10,
-> > 					     status->total_time);
-> > status->total_time = 1 << 10;
-> 
-> No, the total_time closed to 'unsigned long' would overflow.
-> 
-
-I'm not sure I understand. total_time gets a value of 1024, it's not
-itself shifted by 10.
-
-> > 
-> > This way you gain some resolution to busy_time and the divisions in the
-> > callers would just become shifts by 10.
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> index 244e28e54b35..7384a69ed36c 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> @@ -11,6 +11,7 @@
+>  #include "dt-bindings/input/input.h"
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/thermal/thermal.h>
+> +#include <dt-bindings/interconnect/imx8mq.h>
+>  #include "imx8mq-pinfunc.h"
+>  
 > 
 > 
-> I don't want to gain more resolution here. I want to be prepare for raw
-> (not processed yet) big values coming from driver.
->
-
-Agreed! The higher resolution is an extra benefit. The more important
-benefit is that, through my suggestion, you'd be replacing all future
-divisions by shifts.
-
-Thanks,
-Ionela.
-
-> Regards,
-> Lukasz
 > 
-> > 
-> > Hope it helps,
-> > Ionela.
-> > 
+>  / {
+> @@ -522,6 +523,8 @@
+>  						  <&clk IMX8MQ_VIDEO_PLL1>,
+>  						  <&clk IMX8MQ_VIDEO_PLL1_OUT>;
+>  				assigned-clock-rates = <0>, <0>, <0>, <594000000>;
+> +				interconnects = <&noc IMX8MQ_ICM_LCDIF &noc IMX8MQ_ICS_DRAM>;
+> +				interconnect-names = "lcdif-dram";
+
+This needs to be documented in the binding. Also I would argue that you
+can drop the lcdif prefix in the name, as it's part of the lcdif DT
+node.
+
+Regards,
+Lucas
+
+>  				status = "disabled";
+>  
+> 
+> 
+> 
+>  				port@0 {
+
+
