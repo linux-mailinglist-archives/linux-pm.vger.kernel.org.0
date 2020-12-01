@@ -2,66 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B042CA344
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 13:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25DD2CA37B
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 14:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727712AbgLAM5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 07:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
+        id S1726314AbgLANLR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 08:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727116AbgLAM53 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 07:57:29 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAD0C061A47
-        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 04:56:49 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id z7so2493732wrn.3
-        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 04:56:49 -0800 (PST)
+        with ESMTP id S1727077AbgLANLQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 08:11:16 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1268FC0613D6
+        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 05:10:36 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id r3so2554735wrt.2
+        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 05:10:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:mime-version
          :in-reply-to:content-language:content-transfer-encoding;
-        bh=fhSdydiNHIuE7kH/VZv5LNrrxvRIALi9bCyYo0cAOQ0=;
-        b=GBU61fFcIfgXME5qVa36xFJVFJmb5+EHsvpQuu7GUNrca+sC99MVJa5L3eXYGY/ue6
-         vdeiDP5CstZt8slf4x3ydVOXINeGZElSS0q8mbuRJvo6Oqwe3F/cohI9+8Dctlke5zAs
-         iBJHA+WM/dzYl8ENXWS1nAFYIlYtk9O8bO7h/hv1Gg8OJbrpYerXmC11DJn2tcMn60JM
-         R0LUj26CsIy4MI6mFnbb5TJS7rlRV/CJ0eE8mqt7lXv9PQKD+LghHjpWccgBryN6KDJ1
-         QqgwV6HnY3qwDzziY9sCwy8lwtq8pK7Xz55e2dVFbR/or3HpVdiqom+tOB5TDbf1QNKB
-         GMTg==
+        bh=tD7lW8WjSrRAwrauSTkItu7q0mgGf77gOj0uFtLmfHc=;
+        b=kidd5nkR1gcHW5NLYjMY7MiUA15JI8OL4z3O4/TU2FAOB/VULuO0Hm4tRTMRVykScE
+         PvvWilLHI3TxbdWV7k5OL7p2yxy80Ex+Gkc9geaATPtulSsV4pDoBtY7nlVKZxgD7Zc5
+         VM8ZB9clHq7RhlKr4nqkyewcwLKal9K/Kt8gncaQm+rDZ4siAKVfshlUa6JrcgGUX2X1
+         kf0qoC3Np9pZrrDfL1luK1OUfEJtpmiaB3cE9yqqVJcVIr5ISswF0AP7hFqCnFq26JWn
+         XengzQ4JH1dXIQndC6gNT/FakRwBhH/5H1vzED/DuFHRTjCvgEoXIoE34ZpHXOlIKmWf
+         Kq5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fhSdydiNHIuE7kH/VZv5LNrrxvRIALi9bCyYo0cAOQ0=;
-        b=agyF1jszSTxZ1ljn7AgNSUGk6ER+NUv5XSr+HIeom8VILX/ExQ71aCZmAamuXuVuKC
-         9bL56E59Hfne3+G+org3JByLkzk8bW6+ZH+DUoM9KSJSfJLXWavmlwlEEgBAzeHNTwdX
-         hFIdltW0VOYnbcw4ZGWzXUpAJpPl+Kbk5rJL1xDd+x1iHWLyiWvluNXoqLnnyMp2kWGy
-         YXaaIjPBeVOLytOm/tIkgYD6wzJmXG7shlhESBQHfx2AJxVmcIOjQ72G/sQj23OW8Uxu
-         MvpFqSJgLqDw2ck/dJUkMMkxm5sVNAEOvfKEhTGMHbWyUp6zsBJ5UnFzRYEn75oiTu4e
-         zxUA==
-X-Gm-Message-State: AOAM530GuF+bwjOk5PPFheXG5bjp7GYsNjG/pAUrv/mwjzgL+RqffYqI
-        m2GEi8u5lffvEttO78O1fALHzw==
-X-Google-Smtp-Source: ABdhPJzQ1k3k98QkgMHXg5Y+DER3dcc331ppnIuJxF97i7TDGLT/iMqZRO5mfpwO6uJSzeSvhQu5ow==
-X-Received: by 2002:a5d:4e87:: with SMTP id e7mr3887518wru.70.1606827408027;
-        Tue, 01 Dec 2020 04:56:48 -0800 (PST)
+        bh=tD7lW8WjSrRAwrauSTkItu7q0mgGf77gOj0uFtLmfHc=;
+        b=MMxACtnIVOGNuT7+Nw2h3Cpb9UkoENcaNaBhDcwoXsgBy0fCAl/P2lMeqxwrPgGRUB
+         r8YyIQ+I6kLB2GElmSScs4EjpiXQ0HlgwmVeofG0N6y52OooaNR7zsP6FlUj28dVb86N
+         AGatyZjVjYha4w3dSBur/UJej6PL3tTQb9JKLwoxjNE6D5Fhf2sm4iq/IpDs60GS1ddd
+         PJMVYzAxSFmdrqemAX+TSTOBkLKJPGF/LgB1Uekp3GTrRruhtaB+y8cJr7/Q/kFT6RxQ
+         HEvt0250iHTR8PemfzdsDR8UZubHaL8W/TqkOPznDZPY9jzmksSqS0sZ30gciewIGd1u
+         yGmw==
+X-Gm-Message-State: AOAM532ESQEhgUS6g8TrBfqihRMG13cqxp6FNMTrLekhaoFoE1ys7ySZ
+        6UthJDG00sBiYa6JNf/MfbPfsKfi4QziHg==
+X-Google-Smtp-Source: ABdhPJyoKaXp94oxtZFzKE6AUzgI8hcGm4c3/RCkF1rQPUlrMMoXAY1tc6etaO39l7cymIYuLnuN/A==
+X-Received: by 2002:a05:6000:45:: with SMTP id k5mr3929976wrx.108.1606828234332;
+        Tue, 01 Dec 2020 05:10:34 -0800 (PST)
 Received: from MacBook-Pro.local ([212.45.64.13])
-        by smtp.googlemail.com with ESMTPSA id t136sm2859898wmt.18.2020.12.01.04.56.46
+        by smtp.googlemail.com with ESMTPSA id o67sm3046825wmo.31.2020.12.01.05.10.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Dec 2020 04:56:47 -0800 (PST)
-Subject: Re: [PATCH v2 1/7] arm64: dts: imx8m: Add NOC nodes
+        Tue, 01 Dec 2020 05:10:33 -0800 (PST)
+Subject: Re: [PATCH v2 7/7] arm64: defconfig: Enable interconnect for imx8mq
 To:     Martin Kepplinger <martin.kepplinger@puri.sm>, robh@kernel.org,
         shawnguo@kernel.org, festevam@gmail.com, catalin.marinas@arm.com,
         will@kernel.org, cdleonard@gmail.com
 Cc:     kernel@pengutronix.de, linux-imx@nxp.com, kernel@puri.sm,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Leonard Crestez <leonard.crestez@nxp.com>
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20201201123932.12312-1-martin.kepplinger@puri.sm>
- <20201201123932.12312-2-martin.kepplinger@puri.sm>
+ <20201201123932.12312-8-martin.kepplinger@puri.sm>
 From:   Georgi Djakov <georgi.djakov@linaro.org>
-Message-ID: <4d089936-65fe-8601-73e7-0424d363b6f2@linaro.org>
-Date:   Tue, 1 Dec 2020 14:56:46 +0200
+Message-ID: <cb498c2c-e052-390a-c64a-2be44d1d2b42@linaro.org>
+Date:   Tue, 1 Dec 2020 15:10:32 +0200
 MIME-Version: 1.0
-In-Reply-To: <20201201123932.12312-2-martin.kepplinger@puri.sm>
+In-Reply-To: <20201201123932.12312-8-martin.kepplinger@puri.sm>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -69,136 +68,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Martin,
-
-Thank you for sending the patches.
-
 On 1.12.20 14:39, Martin Kepplinger wrote:
-> From: Leonard Crestez <leonard.crestez@nxp.com>
-> 
-> Add initial support for dynamic frequency scaling of main NOC.
-> 
-> Make DDRC the parent of the NOC (using passive governor) so that the
-> main NOC is automatically scaled together with DDRC by default.
-> 
-> Support for proactive scaling via interconnect will come on top.
-> 
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm> (imx8mq)
+> Enable INTERCONNECT_IMX8MQ in order to make interconnect more widely
+> available for testing.
 
-As you are sending this, i believe that it should have your signed-off 
-line (please check Documentation/process/submitting-patches.rst).
+I hope that it's not just for testing, but using it.
 
-Also please give people some time to look into this (at least 1-2 weeks) 
-before submitting a new version.
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>   arch/arm64/configs/defconfig | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 1fed16950a7c..830c26a95b3d 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -1023,7 +1023,8 @@ CONFIG_OPTEE=y
+>   CONFIG_MUX_MMIO=y
+>   CONFIG_SLIM_QCOM_CTRL=m
+>   CONFIG_SLIM_QCOM_NGD_CTRL=m
+> -CONFIG_INTERCONNECT=y
+
+Why are you removing this line?
 
 Thanks,
 Georgi
 
-> ---
->   arch/arm64/boot/dts/freescale/imx8mm.dtsi | 22 ++++++++++++++++++++++
->   arch/arm64/boot/dts/freescale/imx8mn.dtsi | 22 ++++++++++++++++++++++
->   arch/arm64/boot/dts/freescale/imx8mq.dtsi | 22 ++++++++++++++++++++++
->   3 files changed, 66 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> index c824f2615fe8..835b19f0ea42 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> @@ -921,6 +921,28 @@
->   
->   		};
->   
-> +		noc: interconnect@32700000 {
-> +			compatible = "fsl,imx8mm-noc", "fsl,imx8m-noc";
-> +			reg = <0x32700000 0x100000>;
-> +			clocks = <&clk IMX8MM_CLK_NOC>;
-> +			devfreq = <&ddrc>;
-> +			operating-points-v2 = <&noc_opp_table>;
-> +
-> +			noc_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-150M {
-> +					opp-hz = /bits/ 64 <150000000>;
-> +				};
-> +				opp-375M {
-> +					opp-hz = /bits/ 64 <375000000>;
-> +				};
-> +				opp-750M {
-> +					opp-hz = /bits/ 64 <750000000>;
-> +				};
-> +			};
-> +		};
-> +
->   		aips4: bus@32c00000 {
->   			compatible = "fsl,aips-bus", "simple-bus";
->   			reg = <0x32c00000 0x400000>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> index a06d2a6268e6..8e2d413f97d4 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> @@ -772,6 +772,28 @@
->   
->   		};
->   
-> +		noc: interconnect@32700000 {
-> +			compatible = "fsl,imx8mn-noc", "fsl,imx8m-noc";
-> +			reg = <0x32700000 0x100000>;
-> +			clocks = <&clk IMX8MN_CLK_NOC>;
-> +			devfreq = <&ddrc>;
-> +			operating-points-v2 = <&noc_opp_table>;
-> +
-> +			noc_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-100M {
-> +					opp-hz = /bits/ 64 <100000000>;
-> +				};
-> +				opp-600M {
-> +					opp-hz = /bits/ 64 <600000000>;
-> +				};
-> +				opp-800M {
-> +					opp-hz = /bits/ 64 <800000000>;
-> +				};
-> +			};
-> +		};
-> +
->   		aips4: bus@32c00000 {
->   			compatible = "fsl,aips-bus", "simple-bus";
->   			reg = <0x32c00000 0x400000>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> index a841a023e8e0..d139a46ee8ce 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> @@ -1158,6 +1158,28 @@
->   			};
->   		};
->   
-> +		noc: interconnect@32700000 {
-> +			compatible = "fsl,imx8mq-noc", "fsl,imx8m-noc";
-> +			reg = <0x32700000 0x100000>;
-> +			clocks = <&clk IMX8MQ_CLK_NOC>;
-> +			devfreq = <&ddrc>;
-> +			operating-points-v2 = <&noc_opp_table>;
-> +
-> +			noc_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-133M {
-> +					opp-hz = /bits/ 64 <133333333>;
-> +				};
-> +				opp-400M {
-> +					opp-hz = /bits/ 64 <400000000>;
-> +				};
-> +				opp-800M {
-> +					opp-hz = /bits/ 64 <800000000>;
-> +				};
-> +			};
-> +		};
-> +
->   		bus@32c00000 { /* AIPS4 */
->   			compatible = "fsl,aips-bus", "simple-bus";
->   			reg = <0x32c00000 0x400000>;
+> +CONFIG_INTERCONNECT_IMX=m
+> +CONFIG_INTERCONNECT_IMX8MQ=m
+>   CONFIG_INTERCONNECT_QCOM=y
+>   CONFIG_INTERCONNECT_QCOM_MSM8916=m
+>   CONFIG_INTERCONNECT_QCOM_SDM845=m
 > 
 
