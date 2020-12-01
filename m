@@ -2,80 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D477A2CA84E
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 17:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2382CA997
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 18:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgLAQbB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 11:31:01 -0500
-Received: from mail-oo1-f48.google.com ([209.85.161.48]:44507 "EHLO
-        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbgLAQbA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 11:31:00 -0500
-Received: by mail-oo1-f48.google.com with SMTP id i13so532238oou.11;
-        Tue, 01 Dec 2020 08:30:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mp8iWWWHPT2Pl4u80hu8E2e1qsXynxOIhIpt5M0kvuw=;
-        b=cSlqyU/2MjAR0HHoceOcAL2l5ppCqiOySiaqXY8CKgnchohx3o2MGFW1MqOUZep/pq
-         jg2nVJ1zzU5+gqXST6djCVtPxIEYCM9S9FJiEJlXRis6PGd5AYLAI7yUyv//jeArc9Yy
-         7MlTL68iMdROZes9jnRJ6DIEviP1224hTyIh9lBxMUzL33igRN3JJvJIzsMjvtIUAVzR
-         z6k6+IBKuAD0ZG6npNhikkOncV9pDSfSexF9Y4EAMaJ/CcXuvnXv5Mk5u4bqzF7Ay0S/
-         HDdgv65HNdMRTfec8SVMQbXzEaxEUBaHV7eEQT1vvwS0CFr08dpAiUl2szF8s4cQMYEf
-         FRZQ==
-X-Gm-Message-State: AOAM531AO9gVdcC/tHLJqTHbCCbd4D/uM0Z2h2jJ9yPRZGDT7xOkoET7
-        Ilaq0A4zrdMAyVaQT4hInwGUgw4f580vgm4CuzU=
-X-Google-Smtp-Source: ABdhPJxhsM5gRQOWgBECZTVf5/IPMk1HzG+wAoXHRZQf31qtr6foTaaOmxOFobYWLnpvjGDt7j3u210Bl3hjzhq+Tcc=
-X-Received: by 2002:a4a:bb07:: with SMTP id f7mr2444634oop.44.1606840214306;
- Tue, 01 Dec 2020 08:30:14 -0800 (PST)
+        id S2387998AbgLAR0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Dec 2020 12:26:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:46826 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387494AbgLAR0f (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Dec 2020 12:26:35 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F30D8101E;
+        Tue,  1 Dec 2020 09:25:49 -0800 (PST)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51BAA3F575;
+        Tue,  1 Dec 2020 09:25:48 -0800 (PST)
+References: <cover.1605770951.git.viresh.kumar@linaro.org> <1fa9994395764ba19cfe6240d8b3c1ce390e8f82.1605770951.git.viresh.kumar@linaro.org>
+User-agent: mu4e 0.9.17; emacs 26.3
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        Quentin Perret <qperret@google.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH V3 2/2] thermal: cpufreq_cooling: Reuse sched_cpu_util() for SMP platforms
+In-reply-to: <1fa9994395764ba19cfe6240d8b3c1ce390e8f82.1605770951.git.viresh.kumar@linaro.org>
+Date:   Tue, 01 Dec 2020 17:25:46 +0000
+Message-ID: <jhjzh2xtp45.mognet@arm.com>
 MIME-Version: 1.0
-References: <a3689b5f-2835-066c-dcb5-6103a0e09f89@linuxfoundation.org>
-In-Reply-To: <a3689b5f-2835-066c-dcb5-6103a0e09f89@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Dec 2020 17:30:03 +0100
-Message-ID: <CAJZ5v0j-ytbMfmq+6Y=0aOdKi2B4a-JCbOvdO=ujG0MOTphwEA@mail.gmail.com>
-Subject: Re: [GIT PULL] cpupower update for Linux 5.11-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Borislav Petkov <bp@alien8.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 10:47 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Hi Rafael,
->
-> Please pull the following cpupower update for Linux 5.11-rc1.
->
-> This cpupower update for Linux 5.11-rc1 consists of a change to provide
-> online and offline CPU information. This change makes it easier to keep
-> track of offline cpus whose cpuidle or cpufreq property aren't changed
-> when updates are made to online cpus.
 
-Pulled, thanks!
+Hi Viresh,
 
-> Please note that there is a conflict in
+On 19/11/20 07:38, Viresh Kumar wrote:
+> As can be clearly seen, the load and requested_power numbers are simply
+> incorrect in the idle time based approach and the numbers collected from
+> CPU's utilization are much closer to the reality.
 >
-> tools/power/cpupower/utils/helpers/misc.c
->
-> between commit:
->
->    748f0d70087c ("cpupower: Provide online and offline CPU information")
->
-> from the cpupower tree and commit:
->
->    8113ab20e850 ("tools/power/cpupower: Read energy_perf_bias from sysfs")
->
-> from the tip tree.
->
-> Stephen fixed it up and can carry the fix. Hope this works.
 
-Thanks for the notice!
+PELT time-scaling can make the util signals behave strangely from an
+external PoV. For instance, on a big.LITTLE system, the rq util of a LITTLE
+CPU may suddenly drop if it was stuck on a too-low OPP for some time and
+eventually reached the "right" OPP (i.e. got idle time). 
 
-The conflict will now move to the PM tree merges I suppose.
+Also, as Peter pointed out in [1], task migrations can easily confuse an
+external observer that considers util to be "an image of the recent past".
+
+This will need testing on asymmetric CPU capacity systems, IMO.
+
+[1]: https://lore.kernel.org/r/20201120075527.GB2414@hirez.programming.kicks-ass.net
+
