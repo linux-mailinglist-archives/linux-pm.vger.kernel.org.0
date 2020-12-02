@@ -2,117 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7258F2CC6B0
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 20:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EDE2CC781
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 21:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728650AbgLBTbu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Dec 2020 14:31:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726996AbgLBTbu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Dec 2020 14:31:50 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4525C0613CF
-        for <linux-pm@vger.kernel.org>; Wed,  2 Dec 2020 11:31:09 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id p21so952048pjv.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Dec 2020 11:31:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=i+4r4Zn7+uOUM3YicFpbFkAO1SNFawOXEKfVZC9eUgo=;
-        b=K+S3fPF1+HezcNZHBhsJYSNN0gV1hJD11jJoApE1d2whnxVEd4YdLO4Go/o/P5RGqO
-         e9Lpv2vso6wisG4s4WpeIwPUS63mnwZVhVBp+bq6aHmOMq4fAFRHULjm8cY6K9PrzPK0
-         u4nr78mACm0oxqBsx/10oPP4ZDvNi3HouiH0nrKb0mzWbFotZIj5yxUh6FdjDvn8Drw5
-         12/ao8j42HoxSi38bmncsw7fYZrjtzzjrrU0Zf6MqYYLZRoAAOWorTGjLYoGlpj/g0Vu
-         qZsseXR+3arpp31mVBIyLe4BFA2z2ulRpWArw1wCDEgb9XCjVoxeJ54kcpeEawbhsc+F
-         lK7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=i+4r4Zn7+uOUM3YicFpbFkAO1SNFawOXEKfVZC9eUgo=;
-        b=R6oyCYPv11wXCjyCufVnQWyzKBG7UUFGFfU1eeU+6bTVcK9cLsS19HU0MF0mawAI5T
-         bfTb3gdP0wqAiy2GInTzn/GGkTeITCUuNOQa9j4tANTXy8me8VMtdEoouICi3efhiVPc
-         a2x2NMWRHr639wxpsLIJZ8lXjE0zhYX21iSvLoeq6PopfCvsjf+WBx84gxVH3jvEcAuT
-         P1hM+7yCfKQjleU0O+ovOm3FZU+fzJ/OFqLD2yFhCi7C9rlsicT2PMoQ+fE7QZDOPsLT
-         Yyhmj9dM3+zK5JGoN2yHR3NqerMu5Ffv8Uc8bFXkeXn1HagmmwXDr2qXXE7G2DIjh6MS
-         KVcQ==
-X-Gm-Message-State: AOAM531nZSdxc3ddt/t5L3Y5pKjt7ok7uHOVa1uQG+9dro2E6mrxekIk
-        lBfAP4gHovpjmaK5pqd8hwiJ1Q==
-X-Google-Smtp-Source: ABdhPJy5G/XB2tUiDAFff51QMl5qpZRBrhzPu/XqhQ36vDQgoZycvfeRMsywk8a/pUELgeBNSamMVg==
-X-Received: by 2002:a17:90a:aa87:: with SMTP id l7mr1264902pjq.167.1606937469424;
-        Wed, 02 Dec 2020 11:31:09 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o29sm565348pfp.66.2020.12.02.11.31.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 11:31:08 -0800 (PST)
-Message-ID: <5fc7eb7c.1c69fb81.4193b.1a33@mx.google.com>
-Date:   Wed, 02 Dec 2020 11:31:08 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1728222AbgLBULM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Dec 2020 15:11:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59654 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727535AbgLBULM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Dec 2020 15:11:12 -0500
+Date:   Wed, 2 Dec 2020 14:10:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1606939831;
+        bh=i8Vnq+pvTHhHj/1IWA3etZDAb0TNeRlQer8PLomWRag=;
+        h=From:To:Cc:Subject:In-Reply-To:From;
+        b=XUGocHXmgEyD9+LeXma512Rxjr/oRoaZddwcMN6uut9D2vKacomoXW/lfh2/viOmc
+         u7jzKI0DGX8iB/YimFhyu7rg+Eh4LsHFGtaqxqMqJ1kfRlQZzEMaTw2HdcXQgQp1vT
+         4Ix+tZzvcKXO7ykBwZIa7QKEaGVtL0F6UrEQt27qinrTshhF1+ML3mu5rbvUFaiygG
+         O4Bmn9WYojEL3cV4D/KXyjJQLB3XZol06a1FMbizfoIBOZmX4XhASkyK3Ba/hqcf0C
+         9tHKfcUXM3cCobFeuY0y0EbY1weCqM+0K/MS08ttncCjSRJ7Lfydd4MnyGyQlv7UtX
+         nAj1msYc+CJIA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@dell.com>
+Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Netfin <sasha.neftin@intel.com>,
+        Aaron Brown <aaron.f.brown@intel.com>,
+        Stefan Assmann <sassmann@redhat.com>,
+        David Miller <davem@davemloft.net>, darcari@redhat.com,
+        Yijun.Shen@dell.com, Perry.Yuan@dell.com,
+        Vitaly Lifshits <vitaly.lifshits@intel.com>
+Subject: Re: [PATCH v2 1/5] e1000e: fix S0ix flow to allow S0i3.2 subset entry
+Message-ID: <20201202201029.GA1464938@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.10-rc6-87-g53bf34061bc2
-X-Kernelci-Report-Type: test
-Subject: pm/testing sleep: 7 runs, 1 regressions (v5.10-rc6-87-g53bf34061bc2)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201202161748.128938-2-mario.limonciello@dell.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 7 runs, 1 regressions (v5.10-rc6-87-g53bf34061bc2)
+On Wed, Dec 02, 2020 at 10:17:44AM -0600, Mario Limonciello wrote:
+> From: Vitaly Lifshits <vitaly.lifshits@intel.com>
+> 
+> Changed a configuration in the flows to align with
+> architecture requirements to achieve S0i3.2 substate.
 
-Regressions Summary
--------------------
+I guess this is really talking about requirements of a specific
+CPU/SOC before it will enter S0i3.2?
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+> Also fixed a typo in the previous commit 632fbd5eb5b0
+> ("e1000e: fix S0ix flows for cable connected case").
 
+Not clear what the typo was, maybe these?
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
-6-87-g53bf34061bc2/plan/sleep/
+  > -	ew32(FEXTNVM12, mac_data);
+  > +	ew32(FEXTNVM6, mac_data);
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.10-rc6-87-g53bf34061bc2
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      53bf34061bc25d8191db8c0d66104c9e7ed7f9b3 =
+  > -	ew32(FEXTNVM12, mac_data);
+  > +	ew32(FEXTNVM6, mac_data);
 
+I would probably have put typo fixes in a separate patch, especially
+since the cover letter mentions regressions related to 632fbd5eb5b0.
+Maybe the commit log for the fix should mention that it's fixing a
+regression, what the regression was, and include a Fixes: tag?  But
+not my circus.
 
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fc7df06f3ca025bdbc94ce3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc6-87-g53bf3=
-4061bc2/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc6-87-g53bf3=
-4061bc2/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-1130.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5fc7df06f3ca025bdbc94ce4
-        failing since 105 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+> Signed-off-by: Vitaly Lifshits <vitaly.lifshits@intel.com>
+> Tested-by: Aaron Brown <aaron.f.brown@intel.com>
+> Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+> ---
+>  drivers/net/ethernet/intel/e1000e/netdev.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+> index b30f00891c03..128ab6898070 100644
+> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+> @@ -6475,13 +6475,13 @@ static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
+>  
+>  	/* Ungate PGCB clock */
+>  	mac_data = er32(FEXTNVM9);
+> -	mac_data |= BIT(28);
+> +	mac_data &= ~BIT(28);
+>  	ew32(FEXTNVM9, mac_data);
+>  
+>  	/* Enable K1 off to enable mPHY Power Gating */
+>  	mac_data = er32(FEXTNVM6);
+>  	mac_data |= BIT(31);
+> -	ew32(FEXTNVM12, mac_data);
+> +	ew32(FEXTNVM6, mac_data);
+>  
+>  	/* Enable mPHY power gating for any link and speed */
+>  	mac_data = er32(FEXTNVM8);
+> @@ -6525,11 +6525,11 @@ static void e1000e_s0ix_exit_flow(struct e1000_adapter *adapter)
+>  	/* Disable K1 off */
+>  	mac_data = er32(FEXTNVM6);
+>  	mac_data &= ~BIT(31);
+> -	ew32(FEXTNVM12, mac_data);
+> +	ew32(FEXTNVM6, mac_data);
+>  
+>  	/* Disable Ungate PGCB clock */
+>  	mac_data = er32(FEXTNVM9);
+> -	mac_data &= ~BIT(28);
+> +	mac_data |= BIT(28);
+>  	ew32(FEXTNVM9, mac_data);
+>  
+>  	/* Cancel not waking from dynamic
+> -- 
+> 2.25.1
+> 
