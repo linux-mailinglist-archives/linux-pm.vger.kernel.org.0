@@ -2,217 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC182CAEF7
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Dec 2020 22:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3262CB53B
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 07:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390492AbgLAVjt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Dec 2020 16:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390380AbgLAVjq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Dec 2020 16:39:46 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D4EC0617A7
-        for <linux-pm@vger.kernel.org>; Tue,  1 Dec 2020 13:38:46 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id t9so2309324oic.2
-        for <linux-pm@vger.kernel.org>; Tue, 01 Dec 2020 13:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9SGbCKhGi2huBUmw95S0mXDfQK1a5orR6k2GE3LGlmE=;
-        b=Haszwyf/uMk7AS86p/zU0UNha6DqLHcVBpPAgQ+RfKiwbUK26DC7EwwxS0gRm+hrgY
-         9qlo9fnWAbsW585b50DrpcnK5vCeTj3nMIbXnXeDZ2wejI/yvDJEngCGV/gAI7ylKpg2
-         g0r8jB4LzkeclowFN2co0viC7ZwlDvVkkEwD24B4NQ6ZTRlkzKCMnMoXAIyU1/gHK7QB
-         4ITTesNYOMpDfpHzn4voozpE8B4aj+kPzlUEL+iD0w6/BTD6n8M/wUlewaS5LW8UN+HE
-         /uIXdsikc1t3/z7UpAekAxCjYKc7iRHAXsQqmfvWx7m76FMOkJFk7Oqo3qOlBZ11sOoT
-         KjSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9SGbCKhGi2huBUmw95S0mXDfQK1a5orR6k2GE3LGlmE=;
-        b=JZm/o6wDRG4jjkmBMLVdSNtEg5URCXKBs8zJAN9MQ7esFe3lX/OUP+8aleSer1Vvpi
-         CcayjKcnJRA7QwhpsTYQ0fRyNDE5Y4MtIouoZLVxI+uiKo5nx308iCU86Bgxj3Qb0sIJ
-         rIv5t4x05LNnhMZLBEDix5TU2y3h2qPaxC8AcpaUKJHzcSMpWGyKSP4opz0+OXGxlczZ
-         ze6VYbjvPb9khDNwUfvBnoiiH/HEfTri/8ZNMIh94NKx3Hn9/RBQMlyTsHfGyTdjEMyw
-         mvMtMpy27mFFVq/ATIMMIzjNV/sFnLjohYds7IZmb3iSjj7XV0oNBl3rmYpqQEEL9Ckt
-         FgtQ==
-X-Gm-Message-State: AOAM533MXObFuIIpwYiyh52jxtJWa+kSJe1Ww3wCZJmeCZxR9CklHYNg
-        QVLyhHEgO8qh7yVGdijQZZqBNn1wWjkQmiY2CsRpYQ==
-X-Google-Smtp-Source: ABdhPJwYstjfUJRRlBmUq7Rd6D/Ggg4PvkXLcIIe2s6yBc7QXhsFvm/Mp3rU8qiiP59Hy6rjv/gD6MbsEImLxmyoPK4=
-X-Received: by 2002:aca:bc84:: with SMTP id m126mr3078556oif.169.1606858725694;
- Tue, 01 Dec 2020 13:38:45 -0800 (PST)
+        id S1728613AbgLBGq4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Dec 2020 01:46:56 -0500
+Received: from mga05.intel.com ([192.55.52.43]:27555 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726202AbgLBGq4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Dec 2020 01:46:56 -0500
+IronPort-SDR: N/48hls0N1bnc1WgDJedV+5bX8QnLrAykec9jAs3SgZS9BCoOtjzIVxc7vGeSGteMsN36Bamys
+ OzAEXhWEKpqg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="257673490"
+X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
+   d="scan'208";a="257673490"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 22:46:13 -0800
+IronPort-SDR: lAB/oywrV93aVkgb99geDx3EqqfiOngpMFAA21NMI2ahLB/bn6rVc1PNEKq+tZuclszvkaU+j0
+ jFY1h2khbcsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
+   d="scan'208";a="537862379"
+Received: from lkp-server01.sh.intel.com (HELO 4302fe08fc2a) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Dec 2020 22:46:12 -0800
+Received: from kbuild by 4302fe08fc2a with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kkLtz-00008U-Ta; Wed, 02 Dec 2020 06:46:11 +0000
+Date:   Wed, 02 Dec 2020 14:46:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ c723722cb18c5e60ed75a8c2653fd1514aee4096
+Message-ID: <5fc7382b.9akS3bbjK1m0kF99%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CAEGmHFFjV2UKm3L1G5JF6Ve47L1-aKBAGrCxN3pPX1HO9R-aUg@mail.gmail.com>
- <CAJZ5v0hqU-qiM8ddYUT_u0Lm3RNM19gNcXye_s5v3DeCHr7mZQ@mail.gmail.com>
- <CAEGmHFFxxOxNBjut68azQ5eMh71J+ysJeX9SOak6WwNetuJnwA@mail.gmail.com>
- <CAJZ5v0j_XWiJyd4zyyuUf41WDEcu5TEo5tT7cYXi8FFqXpBzfA@mail.gmail.com> <CAEGmHFE6EfUQ-RE+sXEppOGKxPJ3i9hUSWUDPAGXDjxYm0P_kw@mail.gmail.com>
-In-Reply-To: <CAEGmHFE6EfUQ-RE+sXEppOGKxPJ3i9hUSWUDPAGXDjxYm0P_kw@mail.gmail.com>
-From:   Furquan Shaikh <furquan@google.com>
-Date:   Tue, 1 Dec 2020 13:38:27 -0800
-Message-ID: <CAEGmHFF22xg70hZ-jmL5-RnC+PZPXwsT=dHcQbh7SaEOLDpPXA@mail.gmail.com>
-Subject: Re: [RFC] ACPI PM during kernel poweroff/reboot
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Aaron Durbin <adurbin@google.com>,
-        Duncan Laurie <dlaurie@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 10:29 AM Furquan Shaikh <furquan@google.com> wrote:
->
-> On Wed, Nov 25, 2020 at 9:51 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Wed, Nov 25, 2020 at 6:43 PM Furquan Shaikh <furquan@google.com> wrote:
-> > >
-> > > On Wed, Nov 25, 2020 at 8:39 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >
-> > > > On Thu, Nov 12, 2020 at 8:19 PM Furquan Shaikh <furquan@google.com> wrote:
-> > > > >
-> > > > > On x86 Chromebooks, we have observed this issue for a long time now -
-> > > > > when the system is powered off or rebooted, ACPI PM is not invoked and
-> > > > > this results in PowerResource _OFF methods not being invoked for any
-> > > > > of the devices. The _OFF methods are invoked correctly in case of
-> > > > > suspend-to-idle (S0ix) and suspend-to-memory(S3). However, they do not
-> > > > > get invoked when `poweroff` or `reboot` are triggered.
-> > > > >
-> > > > > One of the differences between suspend, hibernate and shutdown paths
-> > > > > in Linux kernel is that the shutdown path does not use the typical
-> > > > > device PM phases (prepare, freeze/suspend, poweroff) as used by
-> > > > > suspend/hibernate. Instead the shutdown path makes use of
-> > > > > .shutdown_pre() and .shutdown() callbacks.
-> > > > >
-> > > > > If I understand correctly, .shutdown() has been around for a long time
-> > > > > and existed even before the PM callbacks were added. Thus,
-> > > > > pm->poweroff() and .shutdown() are supposed to be analogous and
-> > > > > consistent in the behavior.
-> > > >
-> > > > Well, not quite.
-> > > >
-> > > > ->shutdown() is expected to be a lightweight operation also suitable
-> > > > for kexec() and similar situations where ->poweroff() may not work.
-> > > >
-> > > > > This is why runtime PM is disallowed by
-> > > > > device_shutdown() before it calls .shutdown() (i.e. to keep behavior
-> > > > > consistent for both paths). However, in practice, there are
-> > > > > differences in behavior for the pm->poweroff() and .shutdown() paths
-> > > > > since the shutdown path does not execute any PM domain operations.
-> > > >
-> > > > That's correct.
-> > > >
-> > > > > Because of this difference in behavior, shutdown path never invokes
-> > > > > ACPI PM and thus the ACPI PowerResources are not turned off when the
-> > > > > system is rebooted or powered off (sleep S5). On Chromebooks, it is
-> > > > > critical to run the _OFF methods for poweroff/reboot in order to
-> > > > > ensure that the device power off sequencing requirements are met.
-> > > > > Currently, these requirements are violated which impact the
-> > > > > reliability of devices over the lifetime of the platform.
-> > > > >
-> > > > > There are a few ways in which this can be addressed:
-> > > > >
-> > > > > 1. Similar to the case of hibernation, a new
-> > > > > PMSG_POWEROFF/PM_EVENT_POWEROFF can be introduced to invoke device
-> > > > > power management phases using `dpm_suspend_start(PMSG_POWEROFF)` and
-> > > > > `dpm_suspend_end(PMSG_POWEROFF)`. However, as the shutdown path uses
-> > > > > the class/bus/driver .shutdown() callbacks, adding dpm phases for
-> > > > > poweroff complicates the order of operations. If the dpm phases are
-> > > > > run before .shutdown() callbacks, then it will result in the callbacks
-> > > > > accessing devices after they are powered off. If the .shutdown()
-> > > > > callbacks are run before dpm phases, then the pm->poweroff() calls are
-> > > > > made after the device shutdown is done. Since .shutdown() and
-> > > > > pm->poweroff() are supposed to be analogous, having both calls in the
-> > > > > shutdown path is not only redundant but also results in incorrect
-> > > > > behavior.
-> > > > >
-> > > > > 2. Another option is to update device_shutdown() to make
-> > > > > pm_domain.poweroff calls after the class/bus/driver .shutdown() is
-> > > > > done. However, this suffers from the same problem as #1 above i.e. it
-> > > > > is redundant and creates conflicting order of operations.
-> > > > >
-> > > > > 3. Third possible solution is to detach the device from the PM domain
-> > > > > after it is shutdown. Currently, device drivers perform a detach
-> > > > > operation only when the device is removed. However, in case of
-> > > > > poweroff/reboot as the device is already shutdown, detaching PM domain
-> > > > > will give it the opportunity to ensure that any power resources are
-> > > > > correctly turned off before the system shuts down.
-> > > >
-> > > > 4. Make Chromebooks call something like hibernation_platform_enter()
-> > > > on S5 entries (including reboot).
-> > >
-> > > Actually, Chromebooks do not support S4 and hence CONFIG_HIBERNATION.
-> >
-> > This doesn't matter.  The ->poweroff callbacks can still be used by
-> > them (of course, that part of the current hibernation support code
-> > needs to be put under a more general Kconfig option for that, but this
-> > is a technical detail).
->
-> Ah I see what you are saying. Just to be sure I understand this
-> correctly. Is this what you are thinking:
-> 1. Extract hibernation_platform_enter() and any other helpers required
-> to trigger the PM phases for shutdown into a separate unit controlled
-> by a more general Kconfig.
-> 2. Add a new Kconfig that enables support for performing PM phases
-> during the poweroff/reboot phases.
-> 3. Based on this new Kconfig selection, LINUX_REBOOT_CMD_RESTART,
-> LINUX_REBOOT_CMD_HALT, LINUX_REBOOT_CMD_POWER_OFF will be updated to
-> use the new paths instead of the current lightweight calls.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: c723722cb18c5e60ed75a8c2653fd1514aee4096  Merge branch 'acpica' into bleeding-edge
 
-I am currently exploring this approach to see how the components need
-to be organized to make use of hibernation_platform_enter by more than
-just the hibernation path. Please let me know if the above summary
-doesn't align with your suggestion.
+elapsed time: 723m
 
-Meanwhile, I have also sent out a formal patch for detaching the PM
-domain: https://lore.kernel.org/linux-acpi/20201201213019.1558738-1-furquan@google.com/T/#u
-to ensure that this addresses the issue with ACPI PM domain.
+configs tested: 93
+configs skipped: 2
 
-I will continue working on the above suggestion as well, but it might
-take some time for me to get a good understanding of the current paths
-and to cleanly implement the support for PM phases during
-poweroff/reboot cases.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
-Furquan
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+um                           x86_64_defconfig
+arc                           tb10x_defconfig
+microblaze                          defconfig
+sh                         ap325rxa_defconfig
+m68k                       m5475evb_defconfig
+c6x                                 defconfig
+powerpc                     ep8248e_defconfig
+arm                          pcm027_defconfig
+mips                           ip22_defconfig
+powerpc                        fsp2_defconfig
+powerpc                      ppc40x_defconfig
+h8300                               defconfig
+powerpc                      ppc44x_defconfig
+arm                              alldefconfig
+arm                          moxart_defconfig
+powerpc                    amigaone_defconfig
+mips                        maltaup_defconfig
+arc                              alldefconfig
+microblaze                      mmu_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20201201
+i386                 randconfig-a005-20201201
+i386                 randconfig-a001-20201201
+i386                 randconfig-a002-20201201
+i386                 randconfig-a006-20201201
+i386                 randconfig-a003-20201201
+x86_64               randconfig-a016-20201201
+x86_64               randconfig-a012-20201201
+x86_64               randconfig-a014-20201201
+x86_64               randconfig-a013-20201201
+x86_64               randconfig-a015-20201201
+x86_64               randconfig-a011-20201201
+i386                 randconfig-a014-20201201
+i386                 randconfig-a013-20201201
+i386                 randconfig-a011-20201201
+i386                 randconfig-a015-20201201
+i386                 randconfig-a012-20201201
+i386                 randconfig-a016-20201201
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
->
-> >
-> > > This is done for a number of reasons including security. Hence, I
-> > > don't think using hibernation_platform_enter() would be an option.
-> >
-> > Yes, it is an option.
-> >
-> > Having "hibernation" in the name need not mean that the given piece of
-> > code is really hibernation-specific ...
->
-> Sorry, I had misunderstood the suggestion before. I have attempted to
-> outline your proposal with some more details above.
->
-> >
-> > > >
-> > > > > Out of these, I think #3 makes the most sense as it does not introduce
-> > > > > any conflicting operations. I verified that the following diff results
-> > > > > in _OFF methods getting invoked in both poweroff and reboot cases:
-> > > >
-> > > > This won't work for PCI devices though, only for devices in the ACPI
-> > > > PM domain, so it is not sufficient in general.
-> > >
-> > > That is true. The proposed solution only handles detaching of PM
-> > > domains. I understand your point about this not working for any
-> > > devices not part of the PM domain. The issues that we have observed in
-> > > shutdown/reboot paths have been specific to ACPI power resources
-> > > controlling the sequencing to external devices.
-> >
-> > PCI devices PM can use power resources too.  For instance, this has
-> > been quite common for discrete GPUs in laptops IIRC.
->
-> Sorry about my naive question: Is the power resource not described
-> using ACPI in this case? (I haven't run into a situation with PCI
-> devices using non-ACPI power resources, so curious to understand the
-> scenario).
+clang tested configs:
+x86_64               randconfig-a004-20201201
+x86_64               randconfig-a006-20201201
+x86_64               randconfig-a001-20201201
+x86_64               randconfig-a002-20201201
+x86_64               randconfig-a005-20201201
+x86_64               randconfig-a003-20201201
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
