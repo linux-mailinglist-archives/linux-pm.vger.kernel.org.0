@@ -2,71 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E32A2CC634
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 20:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6EB2CC65E
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 20:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731014AbgLBTHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Dec 2020 14:07:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729205AbgLBTHW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Dec 2020 14:07:22 -0500
-Date:   Wed, 2 Dec 2020 11:06:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1606936002;
-        bh=gQFVrdJVQ56bQPhxt6k8c/Mna8CvNDfQ+aEYrWOOSkA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XiOfdJCEzNFPZv5+ztVK6a0v1G9kfN4XAn2ggntFK7OD3HzzlfW0ru9hr9shGDyNh
-         sUkWGUXEwOoHyRU8xgMNaYkWr25DM/0eAkQeDLpA/20DM63U5SorgRX+xnOqJY3mFR
-         Ziutb5mI7pcUJNYF/7ocXDvwYHi5pq/r79M2HMW+Vsqc0/T4NK9R3GQky+tWx8ZO1C
-         jf7ysQj0VoZBv7gTLaqvMgnb+Wd1pK92oto72yKP8oShfsRY0Wa6U4qXTHeZLx7Owo
-         Xe5AOsR1SLRfG5douB6jScqD2gomPIez0j4fIVIrD38GFYM/malFjGxbDPBLm6rc5V
-         egEIEZfjn0aDg==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Mario Limonciello <mario.limonciello@dell.com>
-Cc:     Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Sasha Netfin <sasha.neftin@intel.com>,
-        Aaron Brown <aaron.f.brown@intel.com>,
-        Stefan Assmann <sassmann@redhat.com>,
-        David Miller <davem@davemloft.net>, darcari@redhat.com,
-        Yijun.Shen@dell.com, Perry.Yuan@dell.com
-Subject: Re: [PATCH v2 0/5] Improve s0ix flows for systems i219LM
-Message-ID: <20201202110640.27269583@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-In-Reply-To: <20201202161748.128938-1-mario.limonciello@dell.com>
-References: <20201202161748.128938-1-mario.limonciello@dell.com>
+        id S1726038AbgLBTQy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Dec 2020 14:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726028AbgLBTQx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Dec 2020 14:16:53 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93416C0613CF
+        for <linux-pm@vger.kernel.org>; Wed,  2 Dec 2020 11:16:13 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id r9so1562311pjl.5
+        for <linux-pm@vger.kernel.org>; Wed, 02 Dec 2020 11:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=jIdGQRubdc8BP54pJEjKFMdWCj0dGE9iNaOEiAkUcrc=;
+        b=Y7YevLCBcFEniIuF4Mfj0I+IfEWNCuu2c0rNGvBO10C23OJs2LbLY+x9Q0L7NHO8Ya
+         0acMtJjcmGAEPTJ+HMb2UtfLYjTZxwDwfApwBPzu+rjkYHkPvvmwyNuVG250fcN+LnG0
+         6w0IEJNL79dH3qkNEmzzTDGVF6kcekg3U0NCcwg7gR1HxBa0lZs1YQ20xkXhtlXKHkcw
+         rlfbW7yB/+c1JooOgWuRexmomBVt5gA8kC0sd88rAMqVF3wups9VvVnvjRjU+3dky6XC
+         KNZMJGxnjZlAyJNj0LiswGgAW7IhGfAB5Hquk0n0Jm1pEJEEwpCT2FPLDcL4L2Ups9Ak
+         NLtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=jIdGQRubdc8BP54pJEjKFMdWCj0dGE9iNaOEiAkUcrc=;
+        b=aZhy9AS4Y7YvlsD1XIrZtoevEAA1KuSvtR3VsIdbawb7qwPs/5/vmTCWp7mNQH6dhu
+         vDHtLu53FeNCkK7XnZRNdBkos03s3dzZjfJQ3Lt+kukHoNoQEbYe+vQfNX1y2m/+FdFu
+         JuyKeryusTGg3FU94jmwGU+KWBANquHw3MDiTXRyoYOlujpLWHQbCf2SzCBCs0zCiUMs
+         WqxVWnbE4bWImaGXSCzQyfTqpW2dEi0rtnGSvJsHNvKWpy39NWZHewCS6IYGzoSzrEBU
+         QopwMPk7brgbcCQm5+LL8Lj9pTJ+sXnH8Wlc8tVwut/LabgQpOVgV0fBXCPb972rY/qy
+         sL3Q==
+X-Gm-Message-State: AOAM533bh/neUQEv5M3ilxDXV3pa1lr3bT3x249xlqfsITsTrZIFpHUo
+        bkm3P1Blphblv6hE0v8zDdP0OlUtXhsNZQ==
+X-Google-Smtp-Source: ABdhPJzRItxU7r1wt8ZYszLEy+8DnV9WV1RYZg5axAQsZV6N1pCn4KeVN9A7TBAx4IWpQ4iTe6+c+g==
+X-Received: by 2002:a17:90a:558f:: with SMTP id c15mr1224658pji.161.1606936573102;
+        Wed, 02 Dec 2020 11:16:13 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q18sm512891pfs.150.2020.12.02.11.16.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 11:16:12 -0800 (PST)
+Message-ID: <5fc7e7fc.1c69fb81.80b11.16d6@mx.google.com>
+Date:   Wed, 02 Dec 2020 11:16:12 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.10-rc6-87-g53bf34061bc2
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 123 runs,
+ 1 regressions (v5.10-rc6-87-g53bf34061bc2)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed,  2 Dec 2020 10:17:43 -0600 Mario Limonciello wrote:
-> commit e086ba2fccda ("e1000e: disable s0ix entry and exit flows for ME systems")
-> disabled s0ix flows for systems that have various incarnations of the
-> i219-LM ethernet controller.  This was done because of some regressions
-> caused by an earlier
-> commit 632fbd5eb5b0e ("e1000e: fix S0ix flows for cable connected case")
-> with i219-LM controller.
-> 
-> Performing suspend to idle with these ethernet controllers requires a properly
-> configured system.  To make enabling such systems easier, this patch
-> series allows turning on using ethtool.
-> 
-> The flows have also been confirmed to be configured correctly on Dell's Latitude
-> and Precision CML systems containing the i219-LM controller, when the kernel also
-> contains the fix for s0i3.2 entry previously submitted here:
-> https://marc.info/?l=linux-netdev&m=160677194809564&w=2
-> 
-> Patches 3 and 4 will turn the behavior on by default for Dell's CML systems.
-> Patch 5 allows accessing the value of the flags via ethtool to tell if the
-> heuristics have turned on s0ix flows, as well as for development purposes
-> to determine if a system should be added to the heuristics list.
+pm/testing baseline: 123 runs, 1 regressions (v5.10-rc6-87-g53bf34061bc2)
 
-I don't see PCI or Bjorn Helgaas CCed.
+Regressions Summary
+-------------------
 
-You can drop linux-kernel tho.
+platform   | arch  | lab     | compiler | defconfig | regressions
+-----------+-------+---------+----------+-----------+------------
+imx8mp-evk | arm64 | lab-nxp | gcc-8    | defconfig | 1          =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.10-rc=
+6-87-g53bf34061bc2/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.10-rc6-87-g53bf34061bc2
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      53bf34061bc25d8191db8c0d66104c9e7ed7f9b3 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform   | arch  | lab     | compiler | defconfig | regressions
+-----------+-------+---------+----------+-----------+------------
+imx8mp-evk | arm64 | lab-nxp | gcc-8    | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fc7dfc0ce7292cf49c94cc3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.10-rc6-87-g53bf3=
+4061bc2/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.10-rc6-87-g53bf3=
+4061bc2/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fc7dfc0ce7292cf49c94=
+cc4
+        failing since 1 day (last pass: pm-5.10-rc6-75-g735f7fba25ec, first=
+ fail: v5.10-rc6-78-gc6c91db76539e) =
+
+ =20
