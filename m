@@ -2,120 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9872CB73C
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 09:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43722CB860
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 10:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729055AbgLBIbc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Dec 2020 03:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbgLBIbc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Dec 2020 03:31:32 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9384C0613D6
-        for <linux-pm@vger.kernel.org>; Wed,  2 Dec 2020 00:30:51 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id o1so2361911wrx.7
-        for <linux-pm@vger.kernel.org>; Wed, 02 Dec 2020 00:30:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=Kv+7l2chK3BDjDnrtSuCO/Ck4S1sGg64eXnd1CzKhps=;
-        b=AKiVlBIw7lV2r7P6+t8eXrk+RruD40E4KsMsjbXCT7d4yvmZeQELxlFvPGLWzXoNyB
-         dXTIwrg8HCDixjPQHUVMZg2olQqxJqby+PVHSSp/Jdfv5H77LBui53/MjH1suRb8iTTn
-         CXWkZWpEriGODimAugLGIXasU5fN8H69SwShT775YqYA031ZTxP61XD9U7bPkMsKjdAx
-         S3djC5tqHqdMhbg4jdoVdxqEa/HYbRDzdapCYG9QtDcSV+tcP6dnmT6C6Jn93jNsCQ3Z
-         KSAjADi0Kq+vnBdecB8pqkxEJPQy6OOFrLXp10YMgnf6JWFrTPG8PeOhQg73PEtq6i4V
-         8PPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Kv+7l2chK3BDjDnrtSuCO/Ck4S1sGg64eXnd1CzKhps=;
-        b=Qx6k8lea8nylhXAuVgjHmBhG3p+tz9t/l6xRplo7Od2MbAG5Lx1UQm8SO//oQJQEim
-         J3YMX+wx6zuRTNCVlJHhDsAs06insIDxyml/XLL6trxpgCcBJNa6QQsmrGknP31K01pN
-         fTI1aIDfkw9pDXjP9ven/mkjk7hITsROTZFizo2ocQ8aTEo8RlLHxhZpdzkbmt7GAT8i
-         KigAuiLrN6DZ7LOwtESbdubTo+lTWfCPaYqrNBnOwnquB/YdUbA3mtfdSKQRLhH7lrm6
-         txZ9yT12KvvtI++zQ8VyppgkyxqprGpM5bqm16vArqqzYZaj8hYLJaSRQcGEXuBJu1Bz
-         SOmQ==
-X-Gm-Message-State: AOAM530TNsTG/neVdKLJHVMPgkcYGkG6dYBGeUsDJ9BRU6JvwD6+a7Lh
-        v/h6HS+TEzyCmSMQMkrMQyjQddsHVMMsjg==
-X-Google-Smtp-Source: ABdhPJxUCOA7Ml/qtcsFPYTWfqTbF9TcbPWFseID+uwXx3JSyoZS/hh+UxfWNTvRJS1rhae6lp9RFg==
-X-Received: by 2002:a5d:6150:: with SMTP id y16mr1867103wrt.107.1606897850296;
-        Wed, 02 Dec 2020 00:30:50 -0800 (PST)
-Received: from MacBook-Pro.local ([212.45.64.13])
-        by smtp.googlemail.com with ESMTPSA id g25sm1108762wmk.5.2020.12.02.00.30.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Dec 2020 00:30:49 -0800 (PST)
-Subject: Re: [PATCH v2 6/7] arm64: defconfig: updates for 5.10
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>, robh@kernel.org,
-        shawnguo@kernel.org, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, cdleonard@gmail.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com, kernel@puri.sm,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20201201123932.12312-1-martin.kepplinger@puri.sm>
- <20201201123932.12312-7-martin.kepplinger@puri.sm>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Message-ID: <fc53a7e0-c94a-b67a-38f3-cd5770159479@linaro.org>
-Date:   Wed, 2 Dec 2020 10:30:48 +0200
+        id S2388004AbgLBJPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Dec 2020 04:15:14 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:11486 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388089AbgLBJPN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Dec 2020 04:15:13 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fc75af90001>; Wed, 02 Dec 2020 01:14:33 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 2 Dec
+ 2020 09:14:33 +0000
+Received: from moonraker.nvidia.com (10.124.1.5) by mail.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Wed, 2 Dec 2020 09:14:31 +0000
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        Sumit Gupta <sumitg@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH 0/4] CPUFREQ clean-ups for Tegra186 and Tegra194
+Date:   Wed, 2 Dec 2020 09:14:15 +0000
+Message-ID: <20201202091419.307192-1-jonathanh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20201201123932.12312-7-martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1606900473; bh=Cv3zdglcohr3se4j7Y3iqrG1oIBfVZaDaXOOVgrL2xg=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+         X-NVConfidentiality:Content-Transfer-Encoding:Content-Type;
+        b=nlf8kOTJlM2Ks5gExs1f0VTWGmAO5JXdkDh8Qu8nhlzvfVUFzYCD/SHTci//XVt5m
+         MQFDm04kOA6THPFvYmzAYAs4Hh6H+l3MK6+VR4WVaY8wWgPsc0KJOvMYw9u9aXZ2Md
+         oQ9w2Y9LXt08DSu1DVitpr/kHyJLQ85SCrr9zxz6uQbqStvs9sMFzs0I3KB/Vg5ac5
+         8AH7RzzvcRGogckt4gNZFMfqSBOdQMU5I20kGqDdnXRG3p2CiGToUD+28Z/osWP7mx
+         eySZVypKT7H/rtTt8DrsYy2838tNdjU7rdinE0Xnn3PTiaFQXbJA68tayuyiLIngx1
+         Nro0FEXbAEdrg==
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Martin,
+This series includes some clean-ups for the Tegra186 and Tegra194
+CPUFREQ drivers.
 
-On 1.12.20 14:39, Martin Kepplinger wrote:
-> Include the defconfig updates for v5.10 that shouldn't change the
-> config itself at all.
- >
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
->   arch/arm64/configs/defconfig | 82 +++++++++++-------------------------
->   1 file changed, 24 insertions(+), 58 deletions(-)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 867cc4a5f00f..1fed16950a7c 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-[..]
->   CONFIG_INTERCONNECT=y
->   CONFIG_INTERCONNECT_QCOM=y
->   CONFIG_INTERCONNECT_QCOM_MSM8916=m
-> -CONFIG_INTERCONNECT_QCOM_OSM_L3=m
+Jon Hunter (4):
+  cpufreq: tegra186: Fix sparse 'incorrect type in assignment' warning
+  cpufreq: tegra186: Simplify cluster information lookup
+  cpufreq: tegra194: Remove unnecessary frequency calculation
+  cpufreq: tegra194: Rename tegra194_get_speed_common function
 
-Why are you removing this? Other boards are using it. I am actually
-failing to understand this patch. Maybe it was meant to be sort of
-cleanup, but such cleanups are usually done by the maintainers after
-the merge window, as they lead to multiple conflicts with other patches.
-I would suggest to just drop this patch.
+ drivers/cpufreq/tegra186-cpufreq.c | 122 +++++++++++++----------------
+ drivers/cpufreq/tegra194-cpufreq.c |  12 +--
+ 2 files changed, 57 insertions(+), 77 deletions(-)
 
-Thanks,
-Georgi
-
->   CONFIG_INTERCONNECT_QCOM_SDM845=m
->   CONFIG_INTERCONNECT_QCOM_SM8150=m
->   CONFIG_INTERCONNECT_QCOM_SM8250=m
-> @@ -1075,7 +1043,6 @@ CONFIG_CUSE=m
->   CONFIG_OVERLAY_FS=m
->   CONFIG_VFAT_FS=y
->   CONFIG_HUGETLBFS=y
-> -CONFIG_CONFIGFS_FS=y
->   CONFIG_EFIVAR_FS=y
->   CONFIG_SQUASHFS=y
->   CONFIG_NFS_FS=y
-> @@ -1098,7 +1065,6 @@ CONFIG_CRYPTO_DEV_CCREE=m
->   CONFIG_CRYPTO_DEV_HISI_SEC2=m
->   CONFIG_CRYPTO_DEV_HISI_ZIP=m
->   CONFIG_CRYPTO_DEV_HISI_HPRE=m
-> -CONFIG_CRYPTO_DEV_HISI_TRNG=m
->   CONFIG_CMA_SIZE_MBYTES=32
->   CONFIG_PRINTK_TIME=y
->   CONFIG_DEBUG_INFO=y
-> 
+--=20
+2.25.1
 
