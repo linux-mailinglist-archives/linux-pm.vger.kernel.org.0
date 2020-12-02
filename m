@@ -2,329 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB762CBE66
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 14:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8032CBF4F
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 15:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728005AbgLBNeo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Dec 2020 08:34:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:39776 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727398AbgLBNen (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Dec 2020 08:34:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E083E30E;
-        Wed,  2 Dec 2020 05:33:56 -0800 (PST)
-Received: from [10.57.0.85] (unknown [10.57.0.85])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DCB93F718;
-        Wed,  2 Dec 2020 05:33:54 -0800 (PST)
-Subject: Re: [PATCH v4 2/4] Documentation/powercap/dtpm: Add documentation for
- dtpm
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, ulf.hansson@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Ram Chandrasekar <rkumbako@codeaurora.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-References: <20201201192801.27607-1-daniel.lezcano@linaro.org>
- <20201201192801.27607-3-daniel.lezcano@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <c91e66b0-c880-93a3-3587-cae6bd6bd2c5@arm.com>
-Date:   Wed, 2 Dec 2020 13:33:52 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2388890AbgLBONs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Dec 2020 09:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388913AbgLBONp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Dec 2020 09:13:45 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D830DC0613CF;
+        Wed,  2 Dec 2020 06:13:05 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id y7so1308126pfq.11;
+        Wed, 02 Dec 2020 06:13:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:in-reply-to:references:user-agent:date
+         :message-id:mime-version;
+        bh=AqItRk7mnZdsZA6csT1tLYDrY8hNeqLdGWBbN7B9gGY=;
+        b=CDuPN3jMkzAvFsf6wKUEy7vd7dfYDs8SG6IU2Ve+YHEDOGlrx+h0NpxrHmx4Na3fI4
+         WJMloAcjfZSDb9mDOXHFFHVhEAgCaLoYr7BaMF/neXMlFXmEYsr02XAD2kHwQlrYscDm
+         70O55hzbypg7MnXzchF/3y1dvdtIU8OzGPB3YW4K2koPIPuBaOF6QOIy9FIbtjLHtuUt
+         4uEL/0L5OAWOsFNLsC9KxJPmCTHoIxSd7Syxcy4qKGuHYpAM5Hhp+AtpwC4gW0AxjgFV
+         W4+KKQYgacq9ZcVR0LqHFVjYF4eRployEIbzf+Y9n482siGTIQZpuxgpLJsQUjuJZrB1
+         F6bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :user-agent:date:message-id:mime-version;
+        bh=AqItRk7mnZdsZA6csT1tLYDrY8hNeqLdGWBbN7B9gGY=;
+        b=NqD9LLLgMmMeFSp1epfIy8+4hFWFEY3qLJ2xjGyApkVEsYnQ9CKrjSmpImEHqMmEl+
+         BfKqh2FGqCgALSZwxvHj3217URlCc3WyUqpE95lC6IpoOLiGWPnVjDyeEqlOE+OB/mrw
+         fM3immHQluSg1RyXNw2HXOoTpd4kfpSBQnuZKdMiYkb5xq1Sw1JifqrHg/xs2t967gkm
+         HWxFRksGJyfRan2FJoi4CQhx4KE711rOEEtxyokFwT/535P2L419GOgE6PUM3yEv8H/a
+         oj4Oh+VJ2vJjNQLuk43rEHY2YBL7A+GSy9FDeaLyx21f9oLiuogTbJuzv1TMfIkbz9eH
+         ++og==
+X-Gm-Message-State: AOAM530BXLGw5jhtSxpSv7QDuS50/N82/KngRTJTYNb+GJNUkECpQWa8
+        K0AAgdT7ZqnSIvZK3L8OBvc=
+X-Google-Smtp-Source: ABdhPJxMzOjHybLV+EnkqdJv9Yp2s8o0k1dUanMG3LkNfz4c+1eF+WOgszMHUR8aWjw42HDUhf3rgw==
+X-Received: by 2002:a63:283:: with SMTP id 125mr81772pgc.282.1606918385338;
+        Wed, 02 Dec 2020 06:13:05 -0800 (PST)
+Received: from localhost ([2405:6580:31a1:500:1ac0:4dff:fe39:5426])
+        by smtp.gmail.com with ESMTPSA id y19sm15637pfp.211.2020.12.02.06.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 06:13:04 -0800 (PST)
+From:   Punit Agrawal <punitagrawal@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rjw@rjwysocki.net, wei.huang2@amd.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [RFC PATCH 3/4] x86/cpu: amd: Define processor families
+In-Reply-To: <20201130140018.GC6019@zn.tnic> (Borislav Petkov's message of
+        "Mon, 30 Nov 2020 15:00:18 +0100")
+References: <20201125144847.3920-1-punitagrawal@gmail.com>
+        <20201125144847.3920-4-punitagrawal@gmail.com>
+        <20201130140018.GC6019@zn.tnic>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Wed, 02 Dec 2020 23:13:02 +0900
+Message-ID: <87pn3s2t5d.fsf@stealth>
 MIME-Version: 1.0
-In-Reply-To: <20201201192801.27607-3-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Boris,
 
-Only small issues found. The output build looks OK. The content LGTM.
+Borislav Petkov <bp@alien8.de> writes:
 
-On 12/1/20 7:27 PM, Daniel Lezcano wrote:
-> The dynamic thermal and power management is a technique to dynamically
-> adjust the power consumption of different devices in order to ensure a
-> global thermal constraint.
-> 
-> An userspace daemon is usually monitoring the temperature and the
-> power to take immediate action on the device.
-> 
-> The DTPM framework provides an unified API to userspace to act on the
-> power.
-> 
-> Document this framework.
-> 
-> Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> Cc: Lina Iyer <ilina@codeaurora.org>
-> Cc: Ram Chandrasekar <rkumbako@codeaurora.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   Documentation/power/index.rst         |   1 +
->   Documentation/power/powercap/dtpm.rst | 210 ++++++++++++++++++++++++++
->   2 files changed, 211 insertions(+)
->   create mode 100644 Documentation/power/powercap/dtpm.rst
-> 
-> diff --git a/Documentation/power/index.rst b/Documentation/power/index.rst
-> index ced8a8007434..a0f5244fb427 100644
-> --- a/Documentation/power/index.rst
-> +++ b/Documentation/power/index.rst
-> @@ -30,6 +30,7 @@ Power Management
->       userland-swsusp
->   
->       powercap/powercap
-> +    powercap/dtpm
->   
->       regulator/consumer
->       regulator/design
-> diff --git a/Documentation/power/powercap/dtpm.rst b/Documentation/power/powercap/dtpm.rst
-> new file mode 100644
-> index 000000000000..ca095ef4b887
-> --- /dev/null
-> +++ b/Documentation/power/powercap/dtpm.rst
-> @@ -0,0 +1,210 @@
+> On Wed, Nov 25, 2020 at 11:48:46PM +0900, Punit Agrawal wrote:
+>> So far, the AMD processor identifier (family, models, stepping) are
+>> referred to by raw values making it easy to make mistakes. It is also
+>> harder to read and maintain. Additionally, these values are also being
+>> used in subsystems outside the arch code where not everybody maybe be
+>> as familiar with the processor identifiers.
+>> 
+>> As a first step towards improving the status quo, add macros for the
+>> AMD processor families and propagate them through the existing
+>> cpu_device_id.h header used for this purpose.
+>> 
+>> Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: x86@kernel.org
+>> ---
+>>  arch/x86/include/asm/amd-family.h    | 18 ++++++++++++++++++
+>>  arch/x86/include/asm/cpu_device_id.h |  2 ++
+>>  2 files changed, 20 insertions(+)
+>>  create mode 100644 arch/x86/include/asm/amd-family.h
+>> 
+>> diff --git a/arch/x86/include/asm/amd-family.h b/arch/x86/include/asm/amd-family.h
+>> new file mode 100644
+>> index 000000000000..dff4d13b8e74
+>> --- /dev/null
+>> +++ b/arch/x86/include/asm/amd-family.h
+>> @@ -0,0 +1,18 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _ASM_X86_AMD_FAMILY_H
+>> +#define _ASM_X86_AMD_FAMILY_H
+>> +
+>> +#define AMD_FAM_K5			0x04
+>> +#define AMD_FAM_K6			0x05
+>> +#define AMD_FAM_K7			0x06
+>> +#define AMD_FAM_K8			0x0F
+>> +#define AMD_FAM_K10			0x10
+>
+> Fam 0x10 is Greyhound and a lot more core names. I'd let the AMD folks
+> on Cc say what they wanna call it but I don't think K10 was used
+> anywhere except outside of AMD. :)
 
-Probably missing SPDX?
+Didn't realize the core was internal only. There are a couple of
+instances where the family does shows up arch/x86/kernel/cpu/amd.c so
+atleast some of the patches did make it upstream.
 
-.. SPDX-License-Identifier: GPL-2.0-only
+>> +#define AMD_FAM_K8_K10_HYBRID		0x11
+>
+> That was called Griffin so AMD_FAM_GRIFFIN I guess. If not used anywhere
+> in the tree, no need to add the define.
 
-> +==========================================
-> +Dynamic Thermal Power Management framework
-> +==========================================
-> +
-> +On the embedded world, the complexity of the SoC leads to an
-> +increasing number of hotspots which need to be monitored and mitigated
-> +as a whole in order to prevent the temperature to go above the
-> +normative and legally stated 'skin temperature'.
-> +
-> +Another aspect is to sustain the performance for a given power budget,
-> +for example virtual reality where the user can feel dizziness if the
-> +performance is capped while a big CPU is processing something else. Or
-> +reduce the battery charging because the dissipated power is too high
-> +compared with the power consumed by other devices.
-> +
-> +The userspace is the most adequate place to dynamically act on the
+I haven't looked to deeply but there's one instance in
+arch/x86/kernel/cpu/amd.c - though I wonder if that could be re-written
+to rely on a hardware / firmware interface instead.
 
-I have compared with PowerCap description and they use 'user space'.
-I am not an expert in grammar, but maybe DTPM should also use it.
+> Same holds true for the rest of the defines - add them only when
+> they're used.
 
-> +different devices by limiting their power given an application
-> +profile: it has the knowledge of the platform.
-> +
-> +The Dynamic Thermal Power Management (DTPM) is a technique acting on
-> +the device power by limiting and/or balancing a power budget among
-> +different devices.
-> +
-> +The DTPM framework provides an unified interface to act on the
-> +device power.
-> +
-> +Overview
-> +========
-> +
-> +The DTPM framework relies on the powercap framework to create the
-> +powercap entries in the sysfs directory and implement the backend
-> +driver to do the connection with the power manageable device.
-> +
-> +The DTPM is a tree representation describing the power constraints
-> +shared between devices, not their physical positions.
-> +
-> +The nodes of the tree are a virtual description aggregating the power
-> +characteristics of the children nodes and their power limitations.
-> +
-> +The leaves of the tree are the real power manageable devices.
-> +
-> +For instance::
-> +
-> +  SoC
-> +   |
-> +   `-- pkg
-> +	|
-> +	|-- pd0 (cpu0-3)
-> +	|
-> +	`-- pd1 (cpu4-5)
-> +
-> +The pkg power will be the sum of pd0 and pd1 power numbers::
-> +
-> +  SoC (400mW - 3100mW)
-> +   |
-> +   `-- pkg (400mW - 3100mW)
-> +	|
-> +	|-- pd0 (100mW - 700mW)
-> +	|
-> +	`-- pd1 (300mW - 2400mW)
-> +
-> +When the nodes are inserted in the tree, their power characteristics are propagated to the parents::
-> +
-> +  SoC (600mW - 5900mW)
-> +   |
-> +   |-- pkg (400mW - 3100mW)
-> +   |    |
-> +   |    |-- pd0 (100mW - 700mW)
-> +   |    |
-> +   |    `-- pd1 (300mW - 2400mW)
-> +   |
-> +   `-- pd2 (200mW - 2800mW)
-> +
-> +Each node have a weight on a 2^10 basis reflecting the percentage of power consumption along the siblings::
-> +
-> +  SoC (w=1024)
-> +   |
-> +   |-- pkg (w=538)
-> +   |    |
-> +   |    |-- pd0 (w=231)
-> +   |    |
-> +   |    `-- pd1 (w=794)
-> +   |
-> +   `-- pd2 (w=486)
-> +
-> +   Note the sum of weights at the same level are equal to 1024.
+Makes sense - I will follow your suggestion in the next version.
 
-This sentence landed inside the rectangle with the tree above. Just
-pointing out, because I don't know if it was by design or not.
+>> +#define AMD_FAM_LLANO			0x12
+>> +#define AMD_FAM_BOBCAT			0x14
+>> +#define AMD_FAM_BULLDOZER		0x15
+>> +#define AMD_FAM_JAGUAR			0x16
+>> +#define AMD_FAM_ZEN			0x17
+>
+> ZEN2 is also 0x17 but different models so this is where the family
+> matching scheme doesn't work - you'd need the models too.
 
-> +
-> +When a power limitation is applied to a node, then it is distributed along the children given their weights. For example, if we set a power limitation of 3200mW at the 'SoC' root node, the resulting tree will be::
-> +
-> +  SoC (w=1024) <--- power_limit = 3200mW
-> +   |
-> +   |-- pkg (w=538) --> power_limit = 1681mW
-> +   |    |
-> +   |    |-- pd0 (w=231) --> power_limit = 378mW
-> +   |    |
-> +   |    `-- pd1 (w=794) --> power_limit = 1303mW
-> +   |
-> +   `-- pd2 (w=486) --> power_limit = 1519mW
-> +
-> +
-> +Flat description
-> +----------------
-> +
-> +A root node is created and it is the parent of all the nodes. This
-> +description is the simplest one and it is supposed to give to
-> +userspace a flat representation of all the devices supporting the
-> +power limitation without any power limitation distribution.
-> +
-> +Hierarchical description
-> +------------------------
-> +
-> +The different devices supporting the power limitation are represented
-> +hierarchically. There is one root node, all intermediate nodes are
-> +grouping the child nodes which can be intermediate nodes also or real
-> +devices.
-> +
-> +The intermediate nodes aggregate the power information and allows to
-> +set the power limit given the weight of the nodes.
-> +
-> +Userspace API
-> +=============
-> +
-> +As stated in the overview, the DTPM framework is built on top of the
-> +powercap framework. Thus the sysfs interface is the same, please refer
-> +to the powercap documentation for further details.
-> +
-> + * power_uw: Instantaneous power consumption. If the node is an
-> +   intermediate node, then the power consumption will be the sum of all
-> +   children power consumption.
-> +
-> + * max_power_range_uw: The power range resulting of the maximum power
-> +   minus the minimum power.
-> +
-> + * name: The name of the node. This is implementation dependant. Even
+Yes, I wasn't sure the best way to handle this so went with the earlier
+generation name. I think for such cases, something that looks at the
+cpuinfo_x86 structure and decides the family / generation is probably
+the way to go.
 
-s/dependant/dependent/
+> 0x18 is HYGON
 
-> +   if it is not recommended for the userspace, several nodes can have
-> +   the same name.
-> +
-> + * constraint_X_name: The name of the constraint.
-> +
-> + * constraint_X_max_power_uw: The maximum power limit to be applicable
-> +   to the node.
-> +
-> + * constraint_X_power_limit_uw: The power limit to be applied to the
-> +   node. If the value contained in constraint_X_max_power_uw is set,
-> +   the constraint will be removed.
-> +
-> + * constraint_X_time_window_us: The meaning of this file will depend
-> +   on the constraint number.
-> +
-> +Constraints
-> +-----------
-> +
-> + * Constraint 0: The power limitation is immediately applied, without
-> +   limitation in time.
-> +
-> +Kernel API
-> +==========
-> +
-> +Overview
-> +--------
-> +
-> +The DTPM framework has no power limiting backend support. It is
-> +generic and provides a set of API to let the different drivers to
-> +implement the backend part for the power limitation and create a the
+I missed this one. I'll add it to the list.
 
-s/a the/the/
+Thanks for the review and your comments. I'll wait a bit to see if
+there's any further feedback.
 
-> +power constraints tree.
-> +
-> +It is up to the platform to provide the initialization function to
-> +allocate and link the different nodes of the tree.
-> +
-> +A special macro has the role of declaring a node and the corresponding
-> +initialization function via a description structure. This one contains
-> +an optional parent field allowing to hook different devices to an
-> +already existing tree at boot time.
-> +
-> +For instance::
-> +
-> +	struct dtpm_descr my_descr = {
-> +		.name = "my_name",
-> +		.init = my_init_func,
-> +	};
-> +
-> +	DTPM_DECLARE(my_descr);
-> +
-> +The nodes of the DTPM tree are described with dtpm structure. The
-> +steps to add a new power limitable device is done in three steps:
-> +
-> + * Allocate the dtpm node
-> + * Set the power number of the dtpm node
-> + * Register the dtpm node
-> +
-> +The registration of the dtpm node is done with the powercap
-> +ops. Basically, it must implements the callbacks to get and set the
-> +power and the limit.
-> +
-> +Alternatively, if the node to be inserted is an intermediate one, then
-> +a simple function to insert it as a future parent is available.
-> +
-> +If a device has its power characteristics changing, then the tree must
-> +be updated with the new power numbers and weights.
-> +
-> +Nomenclature
-> +------------
-> +
-> + * dtpm_alloc() : Allocate and initialize a dtpm structure
-> +
-> + * dtpm_register() : Add the dtpm node to the tree
-> +
-> + * dtpm_unregister() : Remove the dtpm node from the tree
-> +
-> + * dtpm_update_power() : Update the power characteristics of the dtpm node
-> 
+Cheers,
+Punit
 
-When you fix these small issues, feel free to add:
+[...]
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Regards,
-Lukasz
