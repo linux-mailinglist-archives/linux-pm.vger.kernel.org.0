@@ -2,88 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8908D2CB86C
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 10:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2904C2CBA78
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Dec 2020 11:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387922AbgLBJPy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Dec 2020 04:15:54 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:11563 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387755AbgLBJPy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Dec 2020 04:15:54 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fc75b020000>; Wed, 02 Dec 2020 01:14:42 -0800
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 2 Dec
- 2020 09:14:42 +0000
-Received: from moonraker.nvidia.com (10.124.1.5) by mail.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Wed, 2 Dec 2020 09:14:40 +0000
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH 4/4] cpufreq: tegra194: Rename tegra194_get_speed_common function
-Date:   Wed, 2 Dec 2020 09:14:19 +0000
-Message-ID: <20201202091419.307192-5-jonathanh@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201202091419.307192-1-jonathanh@nvidia.com>
-References: <20201202091419.307192-1-jonathanh@nvidia.com>
+        id S1726999AbgLBKYB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Dec 2020 05:24:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:35382 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725885AbgLBKYA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Dec 2020 05:24:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C486F30E;
+        Wed,  2 Dec 2020 02:23:14 -0800 (PST)
+Received: from localhost (unknown [10.1.198.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 62CD93F66B;
+        Wed,  2 Dec 2020 02:23:14 -0800 (PST)
+Date:   Wed, 2 Dec 2020 10:23:12 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, daniel.lezcano@linaro.org,
+        orjan.eide@arm.com, robh@kernel.org,
+        alyssa.rosenzweig@collabora.com, steven.price@arm.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Subject: Re: [PATCH v2 1/5] thermal: devfreq_cooling: change tracing function
+ and arguments
+Message-ID: <20201202102312.GA9486@arm.com>
+References: <20201118120358.17150-1-lukasz.luba@arm.com>
+ <20201118120358.17150-2-lukasz.luba@arm.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1606900482; bh=S8sJJMoQpyzSm2gQKsnuGora2uy6mUIWNJQuzPmFQqk=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=laPZy85I7Cdd2CB8DCAOXWVuNop35dgr7a2LLpT9X056I0HfG1Q1D6pExk58J4mTZ
-         sEg7i87a28P120ORHRQhAaNrlmlWhh154yBrSWPxJV6ozwxskqYhEVslBjLnBZtFgc
-         6KtWnXY8aRbQYADy0YpjBf4adWxepYRQc7JdOrJiiy5/22CNChHZ8nqKmbe85gV5E0
-         pmwwpEzyGDlqbCWXr1dB3NDKRvz3Uc5wZwoPww/0pKuz99ORvOatPUATxGV60nswVt
-         iH85DATGzD985xc9EHD6LaSWWzeOlX+GP9VCFZU2cNhJ9Gh9jQEbZRAvaD8TMB1QMF
-         kVOQD4vLEop3w==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118120358.17150-2-lukasz.luba@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function tegra194_get_speed_common() uses hardware timers to
-calculate the current CPUFREQ and so rename this function to be
-tegra194_calculate_speed() to reflect what it does.
+On Wednesday 18 Nov 2020 at 12:03:54 (+0000), Lukasz Luba wrote:
+> Prepare for deleting the static and dynamic power calculation and clean
+> the trace function. These two fields are going to be removed in the next
+> changes.
+> 
+> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org> # for tracing code
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/thermal/devfreq_cooling.c |  3 +--
+>  include/trace/events/thermal.h    | 19 +++++++++----------
+>  2 files changed, 10 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+> index dfab49a67252..659c0143c9f0 100644
+> --- a/drivers/thermal/devfreq_cooling.c
+> +++ b/drivers/thermal/devfreq_cooling.c
+> @@ -277,8 +277,7 @@ static int devfreq_cooling_get_requested_power(struct thermal_cooling_device *cd
+>  		*power = dyn_power + static_power;
+>  	}
+>  
+> -	trace_thermal_power_devfreq_get_power(cdev, status, freq, dyn_power,
+> -					      static_power, *power);
+> +	trace_thermal_power_devfreq_get_power(cdev, status, freq, *power);
+>  
+>  	return 0;
+>  fail:
+> diff --git a/include/trace/events/thermal.h b/include/trace/events/thermal.h
+> index 135e5421f003..8a5f04888abd 100644
+> --- a/include/trace/events/thermal.h
+> +++ b/include/trace/events/thermal.h
+> @@ -153,31 +153,30 @@ TRACE_EVENT(thermal_power_cpu_limit,
+>  TRACE_EVENT(thermal_power_devfreq_get_power,
+>  	TP_PROTO(struct thermal_cooling_device *cdev,
+>  		 struct devfreq_dev_status *status, unsigned long freq,
+> -		u32 dynamic_power, u32 static_power, u32 power),
+> +		u32 power),
+>  
+> -	TP_ARGS(cdev, status,  freq, dynamic_power, static_power, power),
+> +	TP_ARGS(cdev, status,  freq, power),
+>  
+>  	TP_STRUCT__entry(
+>  		__string(type,         cdev->type    )
+>  		__field(unsigned long, freq          )
+> -		__field(u32,           load          )
+> -		__field(u32,           dynamic_power )
+> -		__field(u32,           static_power  )
+> +		__field(u32,           busy_time)
+> +		__field(u32,           total_time)
+>  		__field(u32,           power)
+>  	),
+>  
+>  	TP_fast_assign(
+>  		__assign_str(type, cdev->type);
+>  		__entry->freq = freq;
+> -		__entry->load = (100 * status->busy_time) / status->total_time;
+> -		__entry->dynamic_power = dynamic_power;
+> -		__entry->static_power = static_power;
+> +		__entry->busy_time = status->busy_time;
+> +		__entry->total_time = status->total_time;
+>  		__entry->power = power;
+>  	),
+>  
+> -	TP_printk("type=%s freq=%lu load=%u dynamic_power=%u static_power=%u power=%u",
+> +	TP_printk("type=%s freq=%lu load=%u power=%u",
+>  		__get_str(type), __entry->freq,
+> -		__entry->load, __entry->dynamic_power, __entry->static_power,
+> +		__entry->total_time == 0 ? 0 :
+> +			(100 * __entry->busy_time) / __entry->total_time,
+>  		__entry->power)
+>  );
+>  
+> -- 
+> 2.17.1
+> 
 
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
----
- drivers/cpufreq/tegra194-cpufreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
 
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-=
-cpufreq.c
-index a706ba929424..6a67f36f3b80 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -137,7 +137,7 @@ static void tegra_read_counters(struct work_struct *wor=
-k)
-  * @cpu - logical cpu whose freq to be updated
-  * Returns freq in KHz on success, 0 if cpu is offline
-  */
--static unsigned int tegra194_get_speed_common(u32 cpu)
-+static unsigned int tegra194_calculate_speed(u32 cpu)
- {
- 	struct read_counters_work read_counters_work;
- 	struct tegra_cpu_ctr c;
-@@ -206,7 +206,7 @@ static unsigned int tegra194_get_speed(u32 cpu)
- 	smp_call_function_single(cpu, get_cpu_cluster, &cl, true);
-=20
- 	/* reconstruct actual cpu freq using counters */
--	rate =3D tegra194_get_speed_common(cpu);
-+	rate =3D tegra194_calculate_speed(cpu);
-=20
- 	/* get last written ndiv value */
- 	ret =3D smp_call_function_single(cpu, get_cpu_ndiv, &ndiv, true);
---=20
-2.25.1
-
+Regards,
+Ionela.
