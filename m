@@ -2,28 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0252CE1AD
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 23:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25692CE233
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 23:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731707AbgLCWbH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Dec 2020 17:31:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55038 "EHLO mail.kernel.org"
+        id S2387740AbgLCWy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Dec 2020 17:54:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729453AbgLCWbF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Dec 2020 17:31:05 -0500
+        id S1727278AbgLCWy3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Dec 2020 17:54:29 -0500
 From:   Arnd Bergmann <arnd@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Chen Yu <yu.c.chen@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] intel_idle: fix intel_idle_state_needs_timer_stop build failure
-Date:   Thu,  3 Dec 2020 23:30:13 +0100
-Message-Id: <20201203223020.1173185-1-arnd@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Walter Lozano <walter.lozano@collabora.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Ansuel Smith <ansuelsmth@gmail.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: imx: fix NVMEM_IMX_OCOTP dependency
+Date:   Thu,  3 Dec 2020 23:53:32 +0100
+Message-Id: <20201203225344.1477350-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -33,67 +31,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The newly added function is defined inside of an #ifdef section but
-used outside, leading to a build failure:
+A driver should not 'select' drivers from another subsystem.
+If NVMEM is disabled, this one results in a warning:
 
-drivers/idle/intel_idle.c:1510:7: error: implicit declaration of function 'intel_idle_state_needs_timer_stop' [-Werror,-Wimplicit-function-declaration]
-                if (intel_idle_state_needs_timer_stop(&drv->states[drv->state_count]))
-                    ^
+WARNING: unmet direct dependencies detected for NVMEM_IMX_OCOTP
+  Depends on [n]: NVMEM [=n] && (ARCH_MXC [=y] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
+  Selected by [y]:
+  - ARM_IMX6Q_CPUFREQ [=y] && CPU_FREQ [=y] && (ARM || ARM64 [=y]) && ARCH_MXC [=y] && REGULATOR_ANATOP [=y]
 
-Move it ahead of the CONFIG_ACPI_PROCESSOR_CSTATE check.
+Change the 'select' to 'depends on' to prevent it from going wrong,
+and allow compile-testing without that driver, since it is only
+a runtime dependency.
 
-Fixes: 6e1d2bc675bd ("intel_idle: Fix intel_idle() vs tracing")
+Fixes: 2782ef34ed23 ("cpufreq: imx: Select NVMEM_IMX_OCOTP")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/idle/intel_idle.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/cpufreq/Kconfig.arm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 7ee7ffe22ae3..d79335506ecd 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1140,6 +1140,20 @@ static bool __init intel_idle_max_cstate_reached(int cstate)
- 	return false;
- }
- 
-+static bool __init intel_idle_state_needs_timer_stop(struct cpuidle_state *state)
-+{
-+	unsigned long eax = flg2MWAIT(state->flags);
-+
-+	if (boot_cpu_has(X86_FEATURE_ARAT))
-+		return false;
-+
-+	/*
-+	 * Switch over to one-shot tick broadcast if the target C-state
-+	 * is deeper than C1.
-+	 */
-+	return !!((eax >> MWAIT_SUBSTATE_SIZE) & MWAIT_CSTATE_MASK);
-+}
-+
- #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
- #include <acpi/processor.h>
- 
-@@ -1210,20 +1224,6 @@ static bool __init intel_idle_acpi_cst_extract(void)
- 	return false;
- }
- 
--static bool __init intel_idle_state_needs_timer_stop(struct cpuidle_state *state)
--{
--	unsigned long eax = flg2MWAIT(state->flags);
--
--	if (boot_cpu_has(X86_FEATURE_ARAT))
--		return false;
--
--	/*
--	 * Switch over to one-shot tick broadcast if the target C-state
--	 * is deeper than C1.
--	 */
--	return !!((eax >> MWAIT_SUBSTATE_SIZE) & MWAIT_CSTATE_MASK);
--}
--
- static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
- {
- 	int cstate, limit = min_t(int, CPUIDLE_STATE_MAX, acpi_state_table.count);
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 0732854d94ec..434ef03d2762 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -94,7 +94,7 @@ config ARM_IMX6Q_CPUFREQ
+ 	tristate "Freescale i.MX6 cpufreq support"
+ 	depends on ARCH_MXC
+ 	depends on REGULATOR_ANATOP
+-	select NVMEM_IMX_OCOTP
++	depends on NVMEM_IMX_OCOTP || COMPILE_TEST
+ 	select PM_OPP
+ 	help
+ 	  This adds cpufreq driver support for Freescale i.MX6 series SoCs.
 -- 
 2.27.0
 
