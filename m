@@ -2,70 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7242E2CCD69
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 04:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5A52CCEC8
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 06:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgLCDmh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Dec 2020 22:42:37 -0500
-Received: from mga01.intel.com ([192.55.52.88]:57474 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726734AbgLCDmg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Dec 2020 22:42:36 -0500
-IronPort-SDR: GBEn5/3SQW/WqAXIStfaeVQeoxITny9CmblOW+CQp7vBpxOOslVFBHX8OqWYxX12gxE9pm4CZ0
- gXZpeTZCXO4w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9823"; a="191353387"
-X-IronPort-AV: E=Sophos;i="5.78,388,1599548400"; 
-   d="scan'208";a="191353387"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 19:41:56 -0800
-IronPort-SDR: W79kZWISrCH+wcSWKMBeXeCvrM8VO6Ip9erwsxvSoxWbvPMzMkwbI+y5OYzZL6uzPuuTubpAB5
- y1JUfxs9S/rg==
-X-IronPort-AV: E=Sophos;i="5.78,388,1599548400"; 
-   d="scan'208";a="481807881"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 19:41:55 -0800
-Date:   Thu, 3 Dec 2020 11:44:43 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2][v2] e1000e: Assign DPM_FLAG_SMART_SUSPEND and
- DPM_FLAG_MAY_SKIP_RESUME to speed up s2ram
-Message-ID: <20201203034443.GA4385@chenyu-office.sh.intel.com>
-References: <cover.1606370334.git.yu.c.chen@intel.com>
- <ce83589757381a790153bd5947ea1f9346415102.1606370334.git.yu.c.chen@intel.com>
+        id S1728210AbgLCFqw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Dec 2020 00:46:52 -0500
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:25023 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727966AbgLCFqw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Dec 2020 00:46:52 -0500
+Date:   Thu, 03 Dec 2020 05:46:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1606974369;
+        bh=TGhD9D270psDdoXJ2XkA/M3rk2f0vppeLABuncCXu/E=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=N7WuEgaN/Yv5rTEAyVzl1y547Y8ennIuP7rS7K16+i7c/9yrZvDfOEXBgMpXHqpdz
+         Lu01nEMP878GO2jMOW0f9/fgnhJ4mwMq3Qg+IuEUrkuDvDnCqjLqxtFd9QupOYLwqt
+         JI8Qf3zualaz/p9HkFEp5K4wrlyfaUv7uTAphNF4=
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+From:   =?utf-8?Q?Timon_B=C3=A4tz?= <timon.baetz@protonmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>
+Reply-To: =?utf-8?Q?Timon_B=C3=A4tz?= <timon.baetz@protonmail.com>
+Subject: Re: [PATCH 3/3] ARM: dts: exynos: Fix charging regulator voltage and current for i9100
+Message-ID: <dDjo3R2SJ6CBCjg0YhsCPdh5JfEGhA--DHNNDqbWjVtTjZC5v7g7_523vqAzu_Ybf1Q-xfKeK47H483YQoVtpO3DI83OaR6c6mbvtC9S1Us=@protonmail.com>
+In-Reply-To: <20201202220430.GB135888@kozik-lap>
+References: <20201202203516.43053-1-timon.baetz@protonmail.com> <20201202203516.43053-3-timon.baetz@protonmail.com> <20201202220430.GB135888@kozik-lap>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce83589757381a790153bd5947ea1f9346415102.1606370334.git.yu.c.chen@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 02:14:40PM +0800, Chen Yu wrote:
-> The NIC is put in runtime suspend status when there is no cable connected.
-> As a result, it is safe to keep non-wakeup NIC in runtime suspended during
-> s2ram because the system does not rely on the NIC plug event nor WoL to wake
-> up the system. Besides that, unlike the s2idle, s2ram does not need to
-> manipulate S0ix settings during suspend.
-> 
-> This patch assigns DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME
-> to the e1000e driver so that the s2ram could skip the .suspend_late(),
-> .suspend_noirq() and .resume_noirq() .resume_early() when possible.
-> Also skip .suspend() and .resume() if dev_pm_skip_suspend() and
-> dev_pm_skip_resume() return true, so as to speed up the suspend and
-> resume during s2ram.
-> 
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
-> v2: Added test data and some commit log revise(Paul Menzel)
->     Only skip the suspend/resume if the NIC is not a wake up device specified
->     by the user(Kai-Heng Feng)
->
-Deprecated and replaced by v3.
+On Wednesday, December 2, 2020 11:04 PM, Krzysztof Kozlowski <krzk@kernel.o=
+rg> wrote:
 
-thanks,
-Chenyu
+> On Wed, Dec 02, 2020 at 09:07:28PM +0000, Timon Baetz wrote:
+>
+> > Set CHARGER current and CHARGER_CV voltage according to Galaxy S2 kerne=
+l
+> > fork.
+> >
+> > Signed-off-by: Timon Baetz timon.baetz@protonmail.com
+> >
+> > ------------------------------------------------------
+> >
+> > arch/arm/boot/dts/exynos4210-i9100.dts | 8 ++++----
+> > 1 file changed, 4 insertions(+), 4 deletions(-)
+> > diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts=
+/exynos4210-i9100.dts
+> > index 9f8d927e0d21..2700d53ea01b 100644
+> > --- a/arch/arm/boot/dts/exynos4210-i9100.dts
+> > +++ b/arch/arm/boot/dts/exynos4210-i9100.dts
+> > @@ -558,14 +558,14 @@ safe2_sreg: ESAFEOUT2 {
+> >
+> >       =09charger_reg: CHARGER {
+> >       =09=09regulator-name =3D "CHARGER";
+> >
+> >
+> > -       =09=09regulator-min-microamp =3D <60000>;
+> >
+> >
+> > -       =09=09regulator-max-microamp =3D <2580000>;
+> >
+> >
+> >
+> > -       =09=09regulator-min-microamp =3D <200000>;
+> >
+> >
+> > -       =09=09regulator-max-microamp =3D <950000>;
+> >         =09};
+> >
+> >         =09chargercv_reg: CHARGER_CV {
+> >         =09=09regulator-name =3D "CHARGER_CV";
+> >
+> >
+> >
+> > -       =09=09regulator-min-microvolt =3D <3800000>;
+> >
+> >
+> > -       =09=09regulator-max-microvolt =3D <4100000>;
+> >
+> >
+> >
+> > -       =09=09regulator-min-microvolt =3D <4200000>;
+> >
+> >
+> > -       =09=09regulator-max-microvolt =3D <4200000>;
+> >
+> >
+>
+> I am looking at my sources of Android 3.0 for GT-I9100 but I cannot find
+> charger voltages for it. Where did you find it?
+>
+> Best regards,
+> Krzysztof
+
+Thanks all the feedback Krzysztof,
+
+Voltage is set in the charger probe function of the downstream kernel fork:=
+ https://github.com/LineageOS/android_kernel_samsung_smdk4412/blob/lineage-=
+17.0/drivers/power/max8997_charger_u1.c#L390-L391
+
+Mainline uses the regulator: https://github.com/torvalds/linux/blob/master/=
+drivers/regulator/max8997-regulator.c#L418-L419
+
