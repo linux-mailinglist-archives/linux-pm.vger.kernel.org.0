@@ -2,74 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F882CD78C
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 14:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1EA2CD985
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 15:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436733AbgLCNas (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Dec 2020 08:30:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436713AbgLCNar (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Dec 2020 08:30:47 -0500
-From:   Sasha Levin <sashal@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Mike Tipton <mdtipton@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 09/23] interconnect: qcom: qcs404: Remove GPU and display RPM IDs
-Date:   Thu,  3 Dec 2020 08:29:21 -0500
-Message-Id: <20201203132935.931362-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201203132935.931362-1-sashal@kernel.org>
-References: <20201203132935.931362-1-sashal@kernel.org>
+        id S2389314AbgLCOo7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Dec 2020 09:44:59 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34797 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389190AbgLCOo6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Dec 2020 09:44:58 -0500
+Received: by mail-oi1-f196.google.com with SMTP id s18so2408764oih.1;
+        Thu, 03 Dec 2020 06:44:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UbGjEkaZE0D9a7AyFWG5aWHAuEZDZ69DNAnE5cwlxJ4=;
+        b=MMm9XfqVXbQOewTedN9LEuYBBbfmB6pdZ6nl21i6o+b4g4erQFbr2WpuAGWOnQ+NYH
+         ijL+JlWMEfxPRTx3ceBhcJsGEQg24N+zd2wiGf27qURagM+v6dmt7r6KY04BE+tMAHcU
+         0Pe8U+vjNEa51Oq0JKM8iFHUvIUA7IsJJU99dQebylteiizvCHob1QGRvP5iwPeUfXw5
+         RpKfc/A3tsfMWdcGXx9VDB/0CFdQGF7fD011W0ES2yrc483zD/uiu8epZx0yiFpgWEM6
+         NJHC5c52UWnHb2KI/HXsKGDS3wJwQilrMOLfm3TBormjBz7FANChJqJo+VcQrEZ7S+1k
+         VTfg==
+X-Gm-Message-State: AOAM530u1dLZ6WKIiozKgWXXbUGBZCCDsJi+S8qSKV7Lg0ECNzk34pA8
+        rmP4fK6QIyew4OA1F7vrumgL7ysg8KpP0z4c5GA=
+X-Google-Smtp-Source: ABdhPJxCB1f9GdvXE8F8LsYWDp/UuWVx87acnLfAlUxHfs6nA2EctCvgQWDEs0+k6q/Szn3sqGyXicrvLFdOiWSe4+Y=
+X-Received: by 2002:aca:cf4a:: with SMTP id f71mr2085846oig.157.1607006657415;
+ Thu, 03 Dec 2020 06:44:17 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <1817571.2o5Kk4Ohv2@kreacher> <2174134.tL5yAn4CWt@kreacher> <20201203124141.GP3021@hirez.programming.kicks-ass.net>
+In-Reply-To: <20201203124141.GP3021@hirez.programming.kicks-ass.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Dec 2020 15:44:04 +0100
+Message-ID: <CAJZ5v0hhsRmije05gg+Hp2maivoF7i1n33LxYWEnSxhsWV1u=A@mail.gmail.com>
+Subject: Re: [RFC][PATCH 1/2] cpufreq: Add special-purpose fast-switching
+ callback for drivers
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        Giovanni Gherdovich <ggherdovich@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Georgi Djakov <georgi.djakov@linaro.org>
+On Thu, Dec 3, 2020 at 1:42 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Nov 30, 2020 at 07:37:01PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > First off, some cpufreq drivers (eg. intel_pstate) can pass hints
+> > beyond the current target frequency to the hardware and there are no
+>
+> Everything CPPC, which is quite a bit these days.
 
-[ Upstream commit 7ab1e9117607485df977bb6e271be5c5ad649a4c ]
+Right, but that is still "some". :-) I can add it to the list of
+examples, though.
 
-The following errors are noticed during boot on a QCS404 board:
-[    2.926647] qcom_icc_rpm_smd_send mas 6 error -6
-[    2.934573] qcom_icc_rpm_smd_send mas 8 error -6
+> > +     /*
+> > +      * ->fast_switch() replacement for drivers that use an internal
+> > +      * representation of performance levels and can pass hints other than
+> > +      * the target performance level to the hardware.
+> > +      */
+> > +     void            (*adjust_perf)(unsigned int cpu, bool busy,
+> > +                                    unsigned long min_perf,
+> > +                                    unsigned long target_perf,
+> > +                                    unsigned long capacity);
+> >
+>
+> I'm not sure @busy makes sense, that's more a hack because @util had a
+> dip and should remain inside schedutil.
 
-These errors show when we try to configure the GPU and display nodes.
-Since these particular nodes aren't supported on RPM and are purely
-local, we should just change their mas_rpm_id to -1 to avoid any
-requests being sent for these master IDs.
+So I did it this way, because schedutil would need to store the old
+value of target_perf for this and intel_pstate already does that.
 
-Reviewed-by: Mike Tipton <mdtipton@codeaurora.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20201118111044.26056-1-georgi.djakov@linaro.org
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/interconnect/qcom/qcs404.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+But if a new util_hook is used in this case, the existing space in
+sg_policy may be used for that.
 
-diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
-index 8e0735a870400..3a3ce6ea65ff2 100644
---- a/drivers/interconnect/qcom/qcs404.c
-+++ b/drivers/interconnect/qcom/qcs404.c
-@@ -157,8 +157,8 @@ struct qcom_icc_desc {
- 	}
- 
- DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
--DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, 6, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
--DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, 8, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
-+DEFINE_QNODE(mas_oxili, QCS404_MASTER_GRAPHICS_3D, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
-+DEFINE_QNODE(mas_mdp, QCS404_MASTER_MDP_PORT0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
- DEFINE_QNODE(mas_snoc_bimc_1, QCS404_SNOC_BIMC_1_MAS, 8, 76, -1, QCS404_SLAVE_EBI_CH0);
- DEFINE_QNODE(mas_tcu_0, QCS404_MASTER_TCU_0, 8, -1, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
- DEFINE_QNODE(mas_spdm, QCS404_MASTER_SPDM, 4, -1, -1, QCS404_PNOC_INT_3);
--- 
-2.27.0
+> > @@ -454,6 +455,25 @@ static void sugov_update_single(struct u
+> >       util = sugov_get_util(sg_cpu);
+> >       max = sg_cpu->max;
+> >       util = sugov_iowait_apply(sg_cpu, time, util, max);
+> > +
+> > +     /*
+> > +      * This code runs under rq->lock for the target CPU, so it won't run
+> > +      * concurrently on two different CPUs for the same target and it is not
+> > +      * necessary to acquire the lock in the fast switch case.
+> > +      */
+> > +     if (sg_policy->direct_fast_switch) {
+> > +             /*
+> > +              * In this case, any optimizations that can be done are up to
+> > +              * the driver.
+> > +              */
+> > +             cpufreq_driver_adjust_perf(sg_cpu->cpu,
+> > +                                        sugov_cpu_is_busy(sg_cpu),
+> > +                                        map_util_perf(sg_cpu->bw_dl),
+> > +                                        map_util_perf(util), max);
+> > +             sg_policy->last_freq_update_time = time;
+> > +             return;
+> > +     }
+>
+> Instead of adding more branches, would it makes sense to simply set a
+> whole different util_hook in this case?
 
+Looks doable without too much code duplication.  Lemme try.
