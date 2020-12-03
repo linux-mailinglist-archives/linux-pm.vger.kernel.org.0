@@ -2,60 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE622CE23D
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 23:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DD72CE26D
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 00:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbgLCW4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Dec 2020 17:56:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59778 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725912AbgLCW4g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Dec 2020 17:56:36 -0500
-From:   Arnd Bergmann <arnd@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        id S1728636AbgLCXNQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Dec 2020 18:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728593AbgLCXNQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Dec 2020 18:13:16 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C09AC061A51;
+        Thu,  3 Dec 2020 15:12:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=LkH9yYrAqwwR4m0f5kCV5720LcGNbT3VnZkkdHwo4lo=; b=AQ4FERtumqedwUotGOZEy/Fc9G
+        /0LpOp4E6PGIdZd6NJS9UYpub+7AUlNOKfTeaD678NTcF116C44I13bTV7A+tZ3ZTIcyZYNneNCc7
+        FW2D+W5SEy9gbK1syvENhMMqhgCP32IsQ4UkTn9XaW9XYdmB7eUtG3HS76v89nMCD5k8eGFXUOR0m
+        A73XN0GvB0Tn8xuS0PkgNWdu6Go9jzp3Vif2NB5S6gEHOfBtl+2zOy0Qqj3QWcthdoJuW1N2p7dQb
+        wnquU9nOERPOXHgol1FdJpnjttLw+fRtWtJDISQ1opN8f1jPq2tIZoam1wWamlMKUs/8zSTcbmq3x
+        anbBFVBQ==;
+Received: from [2601:1c0:6280:3f0::1494]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kkxm3-0000d8-Be; Thu, 03 Dec 2020 23:12:31 +0000
+Subject: Re: [PATCH] intel_idle: fix intel_idle_state_needs_timer_stop build
+ failure
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Chen Yu <yu.c.chen@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: scmi: add COMMON_CLK dependency
-Date:   Thu,  3 Dec 2020 23:55:40 +0100
-Message-Id: <20201203225550.1478195-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.27.0
+References: <20201203223020.1173185-1-arnd@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <9f5a56dc-d558-b63b-9ebe-5b935a46ba8b@infradead.org>
+Date:   Thu, 3 Dec 2020 15:12:23 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201203223020.1173185-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 12/3/20 2:30 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The newly added function is defined inside of an #ifdef section but
+> used outside, leading to a build failure:
+> 
+> drivers/idle/intel_idle.c:1510:7: error: implicit declaration of function 'intel_idle_state_needs_timer_stop' [-Werror,-Wimplicit-function-declaration]
+>                 if (intel_idle_state_needs_timer_stop(&drv->states[drv->state_count]))
+>                     ^
+> 
+> Move it ahead of the CONFIG_ACPI_PROCESSOR_CSTATE check.
+> 
+> Fixes: 6e1d2bc675bd ("intel_idle: Fix intel_idle() vs tracing")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/idle/intel_idle.c | 28 ++++++++++++++--------------
+>  1 file changed, 14 insertions(+), 14 deletions(-)
+> 
 
-Wtihout CONFIG_COMMON_CLK, the scmi driver fails to link:
+Peter has already fixed this one.
 
-arm-linux-gnueabi-ld: drivers/cpufreq/scmi-cpufreq.o: in function `scmi_cpufreq_probe':
-scmi-cpufreq.c:(.text+0x20c): undefined reference to `devm_of_clk_add_hw_provider'
-arm-linux-gnueabi-ld: scmi-cpufreq.c:(.text+0x22c): undefined reference to `of_clk_hw_simple_get'
-
-Add a Kconfig dependency for it.
-
-Fixes: 8410e7f3b31e ("cpufreq: scmi: Fix OPP addition failure with a dummy clock provider")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/cpufreq/Kconfig.arm | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 1f73fa75b1a0..434ef03d2762 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -264,6 +264,7 @@ config ARM_SA1110_CPUFREQ
- config ARM_SCMI_CPUFREQ
- 	tristate "SCMI based CPUfreq driver"
- 	depends on ARM_SCMI_PROTOCOL || COMPILE_TEST
-+	depends on COMMON_CLK
- 	select PM_OPP
- 	help
- 	  This adds the CPUfreq driver support for ARM platforms using SCMI
+thanks.
 -- 
-2.27.0
+~Randy
 
