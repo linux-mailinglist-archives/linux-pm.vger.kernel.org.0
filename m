@@ -2,26 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C25692CE233
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 23:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE622CE23D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 23:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387740AbgLCWy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Dec 2020 17:54:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59420 "EHLO mail.kernel.org"
+        id S1726839AbgLCW4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Dec 2020 17:56:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59778 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727278AbgLCWy3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Dec 2020 17:54:29 -0500
+        id S1725912AbgLCW4g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Dec 2020 17:56:36 -0500
 From:   Arnd Bergmann <arnd@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Walter Lozano <walter.lozano@collabora.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Ansuel Smith <ansuelsmth@gmail.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: imx: fix NVMEM_IMX_OCOTP dependency
-Date:   Thu,  3 Dec 2020 23:53:32 +0100
-Message-Id: <20201203225344.1477350-1-arnd@kernel.org>
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: scmi: add COMMON_CLK dependency
+Date:   Thu,  3 Dec 2020 23:55:40 +0100
+Message-Id: <20201203225550.1478195-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -31,37 +30,32 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-A driver should not 'select' drivers from another subsystem.
-If NVMEM is disabled, this one results in a warning:
+Wtihout CONFIG_COMMON_CLK, the scmi driver fails to link:
 
-WARNING: unmet direct dependencies detected for NVMEM_IMX_OCOTP
-  Depends on [n]: NVMEM [=n] && (ARCH_MXC [=y] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
-  Selected by [y]:
-  - ARM_IMX6Q_CPUFREQ [=y] && CPU_FREQ [=y] && (ARM || ARM64 [=y]) && ARCH_MXC [=y] && REGULATOR_ANATOP [=y]
+arm-linux-gnueabi-ld: drivers/cpufreq/scmi-cpufreq.o: in function `scmi_cpufreq_probe':
+scmi-cpufreq.c:(.text+0x20c): undefined reference to `devm_of_clk_add_hw_provider'
+arm-linux-gnueabi-ld: scmi-cpufreq.c:(.text+0x22c): undefined reference to `of_clk_hw_simple_get'
 
-Change the 'select' to 'depends on' to prevent it from going wrong,
-and allow compile-testing without that driver, since it is only
-a runtime dependency.
+Add a Kconfig dependency for it.
 
-Fixes: 2782ef34ed23 ("cpufreq: imx: Select NVMEM_IMX_OCOTP")
+Fixes: 8410e7f3b31e ("cpufreq: scmi: Fix OPP addition failure with a dummy clock provider")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/cpufreq/Kconfig.arm | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cpufreq/Kconfig.arm | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 0732854d94ec..434ef03d2762 100644
+index 1f73fa75b1a0..434ef03d2762 100644
 --- a/drivers/cpufreq/Kconfig.arm
 +++ b/drivers/cpufreq/Kconfig.arm
-@@ -94,7 +94,7 @@ config ARM_IMX6Q_CPUFREQ
- 	tristate "Freescale i.MX6 cpufreq support"
- 	depends on ARCH_MXC
- 	depends on REGULATOR_ANATOP
--	select NVMEM_IMX_OCOTP
-+	depends on NVMEM_IMX_OCOTP || COMPILE_TEST
+@@ -264,6 +264,7 @@ config ARM_SA1110_CPUFREQ
+ config ARM_SCMI_CPUFREQ
+ 	tristate "SCMI based CPUfreq driver"
+ 	depends on ARM_SCMI_PROTOCOL || COMPILE_TEST
++	depends on COMMON_CLK
  	select PM_OPP
  	help
- 	  This adds cpufreq driver support for Freescale i.MX6 series SoCs.
+ 	  This adds the CPUfreq driver support for ARM platforms using SCMI
 -- 
 2.27.0
 
