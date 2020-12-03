@@ -2,126 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5A52CCEC8
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 06:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9392C2CCF1F
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 07:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbgLCFqw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Dec 2020 00:46:52 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:25023 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727966AbgLCFqw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Dec 2020 00:46:52 -0500
-Date:   Thu, 03 Dec 2020 05:46:03 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1606974369;
-        bh=TGhD9D270psDdoXJ2XkA/M3rk2f0vppeLABuncCXu/E=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=N7WuEgaN/Yv5rTEAyVzl1y547Y8ennIuP7rS7K16+i7c/9yrZvDfOEXBgMpXHqpdz
-         Lu01nEMP878GO2jMOW0f9/fgnhJ4mwMq3Qg+IuEUrkuDvDnCqjLqxtFd9QupOYLwqt
-         JI8Qf3zualaz/p9HkFEp5K4wrlyfaUv7uTAphNF4=
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-From:   =?utf-8?Q?Timon_B=C3=A4tz?= <timon.baetz@protonmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        id S1728937AbgLCG0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Dec 2020 01:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725984AbgLCG0l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Dec 2020 01:26:41 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC21C061A4E;
+        Wed,  2 Dec 2020 22:26:01 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id m9so797202pgb.4;
+        Wed, 02 Dec 2020 22:26:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=a5Hleron+HNO6OSGaVm7+jn0hTolWYgraVmhaIHqv7U=;
+        b=U+Y6zDIhpIkQd0/XkPnsWOx3ty2znoP8t4ISlhFWptNuMbr5LJSUMsW+RTtd0M4x9K
+         zkXL5+4LAq4x//bXrJWzpP34A+rpYm0BEV+gvvB+NvDg8g3Ppup7PuLwiRepugDodQb4
+         IeDv1J0rX0QSTAaUbFsT4RMfXp6C/1AdjuAe9+WX4ydwHoVVaNSpjnpDGw8TqKH/qBxj
+         SFELS12okZcCLgFwMxLX1CdG+AnoH5VLLr3bNMVPRRk2vl+KM5WV2pKelrDbtRPajdey
+         ebvLpD8CW2hjzgstxv63BBMYAENN85quML6Mb//RxXN/Yp/6f77xIF0cuNxsS15D55Ap
+         2BjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a5Hleron+HNO6OSGaVm7+jn0hTolWYgraVmhaIHqv7U=;
+        b=Q6JHKsqa17UP3L7EnspzitZ0iETOyNP96Gsg5XmdMrn8Ak3XYi5oi3rRXEZGjn8jSh
+         upDk2zen+5+5cuFojf4iKXG1Lo4Wfk2iXnKoI/6Pmsr3eSO6NcSVLhqbCY4yfKO0DR8I
+         JOnBIoZ5pO3xXXwHEMvQ5WXkZe2nwecrcjhR3ZZyuc5Om+f7eSBrAo9YgS2oULjZVIVm
+         1FIldu2pp6Augexb6anpLUBzlaZVqUYHmEKJmPfNIvmpk0at+AJgnL/BFCb14ptH7RDl
+         PXLavGBOQ87x9qXDjQgQmwpcjeEZywYosRULJvKugi+xWvfwJVuiCwiabH9aDOVmJ8rJ
+         K6cw==
+X-Gm-Message-State: AOAM533lj6WbLWetQEluhxksV25z0E/2YhN2OpII49OtdguXdyTl48nl
+        ZryiAGApu3sSKfK/u5paKeI=
+X-Google-Smtp-Source: ABdhPJx+P2i1MS4WKP5k78TX7vozpZ6k242noGJ71q6yL4YO0XpxjV8ai5M/byvI+Lbmw/bWUNXyTQ==
+X-Received: by 2002:a65:44c2:: with SMTP id g2mr1824908pgs.256.1606976760622;
+        Wed, 02 Dec 2020 22:26:00 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id 6sm495218pfb.22.2020.12.02.22.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 22:25:59 -0800 (PST)
+Date:   Wed, 2 Dec 2020 22:25:55 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
         Kukjin Kim <kgene@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>
-Reply-To: =?utf-8?Q?Timon_B=C3=A4tz?= <timon.baetz@protonmail.com>
-Subject: Re: [PATCH 3/3] ARM: dts: exynos: Fix charging regulator voltage and current for i9100
-Message-ID: <dDjo3R2SJ6CBCjg0YhsCPdh5JfEGhA--DHNNDqbWjVtTjZC5v7g7_523vqAzu_Ybf1Q-xfKeK47H483YQoVtpO3DI83OaR6c6mbvtC9S1Us=@protonmail.com>
-In-Reply-To: <20201202220430.GB135888@kozik-lap>
-References: <20201202203516.43053-1-timon.baetz@protonmail.com> <20201202203516.43053-3-timon.baetz@protonmail.com> <20201202220430.GB135888@kozik-lap>
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        kernel@collabora.com
+Subject: Re: [PATCH v4 1/7] Input: add input_device_enabled()
+Message-ID: <X8iE81mbK6NVhd0e@google.com>
+References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
+ <20200608112211.12125-1-andrzej.p@collabora.com>
+ <20200608112211.12125-2-andrzej.p@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200608112211.12125-2-andrzej.p@collabora.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, December 2, 2020 11:04 PM, Krzysztof Kozlowski <krzk@kernel.o=
-rg> wrote:
+On Mon, Jun 08, 2020 at 01:22:05PM +0200, Andrzej Pietrasiewicz wrote:
+> A helper function for drivers to decide if the device is used or not.
+> A lockdep check is introduced as inspecting ->users should be done under
+> input device's mutex.
+> 
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-> On Wed, Dec 02, 2020 at 09:07:28PM +0000, Timon Baetz wrote:
->
-> > Set CHARGER current and CHARGER_CV voltage according to Galaxy S2 kerne=
-l
-> > fork.
-> >
-> > Signed-off-by: Timon Baetz timon.baetz@protonmail.com
-> >
-> > ------------------------------------------------------
-> >
-> > arch/arm/boot/dts/exynos4210-i9100.dts | 8 ++++----
-> > 1 file changed, 4 insertions(+), 4 deletions(-)
-> > diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts=
-/exynos4210-i9100.dts
-> > index 9f8d927e0d21..2700d53ea01b 100644
-> > --- a/arch/arm/boot/dts/exynos4210-i9100.dts
-> > +++ b/arch/arm/boot/dts/exynos4210-i9100.dts
-> > @@ -558,14 +558,14 @@ safe2_sreg: ESAFEOUT2 {
-> >
-> >       =09charger_reg: CHARGER {
-> >       =09=09regulator-name =3D "CHARGER";
-> >
-> >
-> > -       =09=09regulator-min-microamp =3D <60000>;
-> >
-> >
-> > -       =09=09regulator-max-microamp =3D <2580000>;
-> >
-> >
-> >
-> > -       =09=09regulator-min-microamp =3D <200000>;
-> >
-> >
-> > -       =09=09regulator-max-microamp =3D <950000>;
-> >         =09};
-> >
-> >         =09chargercv_reg: CHARGER_CV {
-> >         =09=09regulator-name =3D "CHARGER_CV";
-> >
-> >
-> >
-> > -       =09=09regulator-min-microvolt =3D <3800000>;
-> >
-> >
-> > -       =09=09regulator-max-microvolt =3D <4100000>;
-> >
-> >
-> >
-> > -       =09=09regulator-min-microvolt =3D <4200000>;
-> >
-> >
-> > -       =09=09regulator-max-microvolt =3D <4200000>;
-> >
-> >
->
-> I am looking at my sources of Android 3.0 for GT-I9100 but I cannot find
-> charger voltages for it. Where did you find it?
->
-> Best regards,
-> Krzysztof
+Applied, thank you.
 
-Thanks all the feedback Krzysztof,
-
-Voltage is set in the charger probe function of the downstream kernel fork:=
- https://github.com/LineageOS/android_kernel_samsung_smdk4412/blob/lineage-=
-17.0/drivers/power/max8997_charger_u1.c#L390-L391
-
-Mainline uses the regulator: https://github.com/torvalds/linux/blob/master/=
-drivers/regulator/max8997-regulator.c#L418-L419
-
+-- 
+Dmitry
