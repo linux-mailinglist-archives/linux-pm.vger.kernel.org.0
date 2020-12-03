@@ -2,112 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F23F62CD4F6
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 12:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334CD2CD5AD
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Dec 2020 13:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728260AbgLCLyv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Dec 2020 06:54:51 -0500
-Received: from foss.arm.com ([217.140.110.172]:38240 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727845AbgLCLyv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Dec 2020 06:54:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7239911D4;
-        Thu,  3 Dec 2020 03:54:05 -0800 (PST)
-Received: from [192.168.178.2] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5DDC43F718;
-        Thu,  3 Dec 2020 03:54:03 -0800 (PST)
-Subject: Re: [PATCH V4 3/3] thermal: cpufreq_cooling: Reuse sched_cpu_util()
- for SMP platforms
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
-References: <cover.1606198885.git.viresh.kumar@linaro.org>
- <c0d7c796be7df6ac0102d8c2701fc6b541d2ff7d.1606198885.git.viresh.kumar@linaro.org>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <95991789-0308-76a9-735b-01ef620031b9@arm.com>
-Date:   Thu, 3 Dec 2020 12:54:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2388757AbgLCMmg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Dec 2020 07:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387998AbgLCMmf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Dec 2020 07:42:35 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952C5C061A4F;
+        Thu,  3 Dec 2020 04:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rcY1pTuzOztjgznyvJvtInjHpKkyW5kZe8ZvS4Mqiwo=; b=swl2bpoKojQhZhwjiyg7JMJngF
+        PncZValpmxIZQ5xpwjLKsGr0/y+u9btEM6ialPYA4ySFjOnc2EFkyShoIbXs+72+STp1uSCPd99Co
+        3hqjrdIjGLjqTfn52CmR/Prx8W9yE3Fi48MNrfs33S5tnBXwRzx3gyUjtwqewh85PEEu1Rd58yYA/
+        rF+6EPe3SjSPlm6/7838UQKrxW9lT89DmrX2U0AwxwtwokPBGfgBaASdCbr6M7DYmsu8K5O10me0s
+        hCMZrmo7Lhavv4GYAhJjzvOin3ChO5vv5TL15oT7cf8dRjwUnjbagMLgk67vtssawBdTpJiQu89in
+        drfBZOZA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kknvb-0004Vz-IS; Thu, 03 Dec 2020 12:41:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 80A23300DAE;
+        Thu,  3 Dec 2020 13:41:41 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6A194223615CE; Thu,  3 Dec 2020 13:41:41 +0100 (CET)
+Date:   Thu, 3 Dec 2020 13:41:41 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        Giovanni Gherdovich <ggherdovich@suse.com>
+Subject: Re: [RFC][PATCH 1/2] cpufreq: Add special-purpose fast-switching
+ callback for drivers
+Message-ID: <20201203124141.GP3021@hirez.programming.kicks-ass.net>
+References: <1817571.2o5Kk4Ohv2@kreacher>
+ <2174134.tL5yAn4CWt@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <c0d7c796be7df6ac0102d8c2701fc6b541d2ff7d.1606198885.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2174134.tL5yAn4CWt@kreacher>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/11/2020 07:26, Viresh Kumar wrote:
-> Several parts of the kernel are already using the effective CPU
-> utilization (as seen by the scheduler) to get the current load on the
-> CPU, do the same here instead of depending on the idle time of the CPU,
-> which isn't that accurate comparatively.
+On Mon, Nov 30, 2020 at 07:37:01PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> This is also the right thing to do as it makes the cpufreq governor
-> (schedutil) align better with the cpufreq_cooling driver, as the power
-> requested by cpufreq_cooling governor will exactly match the next
-> frequency requested by the schedutil governor since they are both using
-> the same metric to calculate load.
-> 
-> This was tested on ARM Hikey6220 platform with hackbench, sysbench and
-> schbench. None of them showed any regression or significant
-> improvements. Schbench is the most important ones out of these as it
-> creates the scenario where the utilization numbers provide a better
-> estimate of the future.
-> 
-> Scenario 1: The CPUs were mostly idle in the previous polling window of
-> the IPA governor as the tasks were sleeping and here are the details
-> from traces (load is in %):
-> 
->  Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=203 load={{0x35,0x1,0x0,0x31,0x0,0x0,0x64,0x0}} dynamic_power=1339
->  New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=600 load={{0x60,0x46,0x45,0x45,0x48,0x3b,0x61,0x44}} dynamic_power=3960
+> First off, some cpufreq drivers (eg. intel_pstate) can pass hints
+> beyond the current target frequency to the hardware and there are no
 
-When I ran schbench (-t 16 -r 5) on hikey960 I get multiple (~50)
-instances of ~80ms task activity phase and then ~20ms idle phase on all
-CPUs.
+Everything CPPC, which is quite a bit these days.
 
-So I assume that scenario 1 is at the beginning (but you mentioned the
-task were sleeping?) and scenario 2 is somewhere in the middle of the
-testrun?
-IMHO, the util-based approach delivers really better results at the
-beginning and at the end of the entire testrun.
-During the testrun, the util-based and the idle-based approach deliver
-similar results.
 
-It's a little bit tricky to compare test results since the IPA sampling
-rate is 100ms and the load values you get depend on how the workload
-pattern and the IPA sampling align.
+> +	/*
+> +	 * ->fast_switch() replacement for drivers that use an internal
+> +	 * representation of performance levels and can pass hints other than
+> +	 * the target performance level to the hardware.
+> +	 */
+> +	void		(*adjust_perf)(unsigned int cpu, bool busy,
+> +				       unsigned long min_perf,
+> +				       unsigned long target_perf,
+> +				       unsigned long capacity);
+>  
 
-> Here, the "Old" line gives the load and requested_power (dynamic_power
-> here) numbers calculated using the idle time based implementation, while
-> "New" is based on the CPU utilization from scheduler.
-> 
-> As can be clearly seen, the load and requested_power numbers are simply
-> incorrect in the idle time based approach and the numbers collected from
-> CPU's utilization are much closer to the reality.
+I'm not sure @busy makes sense, that's more a hack because @util had a
+dip and should remain inside schedutil.
 
-I assume the IPA sampling is done after ~50ms of the first task activity
-phase.
 
-> Scenario 2: The CPUs were busy in the previous polling window of the IPA
-> governor:
-> 
->  Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=800 load={{0x64,0x64,0x64,0x64,0x64,0x64,0x64,0x64}} dynamic_power=5280
->  New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=708 load={{0x4d,0x5c,0x5c,0x5b,0x5c,0x5c,0x51,0x5b}} dynamic_power=4672
-> 
-> As can be seen, the idle time based load is 100% for all the CPUs as it
-> took only the last window into account, but in reality the CPUs aren't
-> that loaded as shown by the utilization numbers.
+> @@ -454,6 +455,25 @@ static void sugov_update_single(struct u
+>  	util = sugov_get_util(sg_cpu);
+>  	max = sg_cpu->max;
+>  	util = sugov_iowait_apply(sg_cpu, time, util, max);
+> +
+> +	/*
+> +	 * This code runs under rq->lock for the target CPU, so it won't run
+> +	 * concurrently on two different CPUs for the same target and it is not
+> +	 * necessary to acquire the lock in the fast switch case.
+> +	 */
+> +	if (sg_policy->direct_fast_switch) {
+> +		/*
+> +		 * In this case, any optimizations that can be done are up to
+> +		 * the driver.
+> +		 */
+> +		cpufreq_driver_adjust_perf(sg_cpu->cpu,
+> +					   sugov_cpu_is_busy(sg_cpu),
+> +					   map_util_perf(sg_cpu->bw_dl),
+> +					   map_util_perf(util), max);
+> +		sg_policy->last_freq_update_time = time;
+> +		return;
+> +	}
 
-Is this an IPA sampling at the end of the ~20ms idle phase?
-
-[...]
+Instead of adding more branches, would it makes sense to simply set a
+whole different util_hook in this case?
