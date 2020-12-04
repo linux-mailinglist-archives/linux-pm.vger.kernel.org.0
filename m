@@ -2,134 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68022CF39B
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 19:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0F52CF432
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 19:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728722AbgLDSHC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Dec 2020 13:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727997AbgLDSHC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 13:07:02 -0500
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE059C061A52;
-        Fri,  4 Dec 2020 10:06:21 -0800 (PST)
-Received: by mail-vk1-xa43.google.com with SMTP id 145so1472250vky.2;
-        Fri, 04 Dec 2020 10:06:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QRr0ZNZnscQyUTRMXdBCHRyqUplZRl6ao3xQwu2hQ2c=;
-        b=SwFYmamExdBbtafEcD80BWi/4ObSmCg6tPhL99ALH+TnOB+ciAjv+wwX/Rx9Y9eC7H
-         tuadWc23kn14xUXEg1v3Ht60WGKcZwF0iTCnlZkrZJrfxEEACzjeRp7jZTIzxqBHq5Vb
-         oMmxp23xbsPtovYk43rZfQT92XRfOv9w3pId1E9p6vzwd5Xay51g6NMOPte9LtqDHhib
-         VKjHegbVtHakbwLvSDU1nwA7+/mGR8ncPyIia2HoZUuHl/VmBmNA2aX4X32ROouN61iS
-         tc/vogbnG+rOCZDSfE0WW9Uf2m8hApyPYKyC9hOKmSba1xrrIl2nzRiqoLP5gAFoA+8K
-         TPqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QRr0ZNZnscQyUTRMXdBCHRyqUplZRl6ao3xQwu2hQ2c=;
-        b=N/Mr14vcuiQNqrNITcM0DwP/QpH4N4Sgf1uswcQd9zwAuiZey9SpudPvFmUay9+n6K
-         IPo+CI5zHUHJGUwnL2OqMinRJvaoDnPjnyDh7Gn0ZWuhyb02i9+OakGnJ0/s0wDQAT6h
-         Wi9Ha3C5T8YdWiTCwXTi8kfLYOOcG1vLAD4FubQKbWV5RJdRIG/5L28FdrUDxfYciAXd
-         B/QNpTt2CjXmeFvzq3JFGO/8u14xvBsUjcogVvzyoTPtzt+LQHzoSusKISJEQTGLGKKN
-         W0qyw7nrf/faPNCMMpVD/a/yo7T/F/xNyRH/CCUsZlTAuBouz920VN/f4B10GHsraEVx
-         NZyg==
-X-Gm-Message-State: AOAM532MCR8Mj2kGRj8Bb7SqIZr5SIZdXXtZh2bg7sgPVLnaR1sQN3Zm
-        Gicuu7aJpqv/qe1o1WsL5aDr8RuFRYoYeTjfLio=
-X-Google-Smtp-Source: ABdhPJyusVJ4WEj3a2Jdt5TrXQ+w/i8ds4OcB/ET0MCxSaqFofz6EYNZnNg1a/Z82p839eKaiwoJf6wxgSL+s55Y0dg=
-X-Received: by 2002:a1f:e7c2:: with SMTP id e185mr4937438vkh.23.1607105180783;
- Fri, 04 Dec 2020 10:06:20 -0800 (PST)
+        id S1729674AbgLDShC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Dec 2020 13:37:02 -0500
+Received: from mga01.intel.com ([192.55.52.88]:61213 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729132AbgLDShC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 4 Dec 2020 13:37:02 -0500
+IronPort-SDR: Ukv6IFxCzNjYKOJWijubf2m0/GeAkSZNg5VKqWbtpHnoiW0+rPIK/SCZi7usLAM+FajlieDQrD
+ wx0fxjF9NH3w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9825"; a="191669914"
+X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
+   d="scan'208";a="191669914"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2020 10:36:19 -0800
+IronPort-SDR: sGvNlvLhYsqS2mkHrHsBQ4KK6I0iMP3Vjb+bNTBASP7GHKgs8poiYqvSw/tkoWQIAm65cBUJMo
+ hjqU33nZ3YFw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
+   d="scan'208";a="366390898"
+Received: from lkp-server02.sh.intel.com (HELO f74a175f0d75) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Dec 2020 10:36:18 -0800
+Received: from kbuild by f74a175f0d75 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1klFwH-0000K3-HR; Fri, 04 Dec 2020 18:36:17 +0000
+Date:   Sat, 05 Dec 2020 02:35:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ c35cc6e0cf0522be409eb83e6c2d7ab606627e17
+Message-ID: <5fca816f.oCDda8+ObGqjvZwR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20201017133718.31327-1-kholk11@gmail.com> <20201017133718.31327-3-kholk11@gmail.com>
- <24ad51dd-ff54-35af-a7bc-92d8cfa30c48@linaro.org>
-In-Reply-To: <24ad51dd-ff54-35af-a7bc-92d8cfa30c48@linaro.org>
-From:   AngeloGioacchino Del Regno <kholk11@gmail.com>
-Date:   Fri, 4 Dec 2020 19:06:09 +0100
-Message-ID: <CAK7fi1ZC8F57WmDg57tAS=b++ewjPcMhBXmeuM7Cjqkp-5Zu9Q@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] interconnect: qcom: Add SDM660 interconnect
- provider driver
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>, marijns95@gmail.com,
-        Konrad Dybcio <konradybcio@gmail.com>, martin.botka1@gmail.com,
-        MSM <linux-arm-msm@vger.kernel.org>, phone-devel@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il giorno mar 3 nov 2020 alle ore 17:24 Georgi Djakov
-<georgi.djakov@linaro.org> ha scritto:
->
-> On 10/17/20 16:37, kholk11@gmail.com wrote:
-> > From: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> >
-> > Introduce a driver for the Qualcomm interconnect busses found in
-> > the SDM630/SDM636/SDM660 SoCs.
-> > The topology consists of several NoCs that are controlled by a
-> > remote processor that collects the aggregated bandwidth for each
-> > master-slave pairs.
-> >
-> > On a note, these chips are managing the "bus QoS" in a "hybrid"
-> > fashion: some of the paths in the topology are managed through
-> > (and by, of course) the RPM uC, while some others are "AP Owned",
-> > meaning that the AP shall do direct writes to the appropriate
-> > QoS registers for the specific paths and ports, instead of sending
-> > an indication to the RPM and leaving the job to that one.
-> >
-> > Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> > ---
-> >  drivers/interconnect/qcom/Kconfig  |   9 +
-> >  drivers/interconnect/qcom/Makefile |   2 +
-> >  drivers/interconnect/qcom/sdm660.c | 922 +++++++++++++++++++++++++++++
-> >  3 files changed, 933 insertions(+)
-> >  create mode 100644 drivers/interconnect/qcom/sdm660.c
-> >
-> [..]> +static const struct of_device_id sdm660_noc_of_match[] = {
-> > +     { .compatible = "qcom,sdm660-a2noc", .data = &sdm660_a2noc },
-> > +     { .compatible = "qcom,sdm660-bimc", .data = &sdm660_bimc },
-> > +     { .compatible = "qcom,sdm660-cnoc", .data = &sdm660_cnoc },
-> > +     { .compatible = "qcom,sdm660-gnoc", .data = &sdm660_gnoc },
-> > +     { .compatible = "qcom,sdm660-mnoc", .data = &sdm660_mnoc },
-> > +     { .compatible = "qcom,sdm660-snoc", .data = &sdm660_snoc },
-> > +     { },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, sdm660_noc_of_match);
-> > +
-> > +static struct platform_driver sdm660_noc_driver = {
-> > +     .probe = qnoc_probe,
-> > +     .remove = qnoc_remove,
-> > +     .driver = {
-> > +             .name = "qnoc-sdm660",
-> > +             .of_match_table = sdm660_noc_of_match,
->
-> Just noticed that here we should set the sync_state callback:
->                 .sync_state = icc_sync_state,
->
-> I will fix it up before applying. Are you planning to send a patch
-> that adds the DT nodes?
->
-> Thanks,
-> Georgi
->
-I'm sorry for the extremely late reply... Anyway, yes, we have lots of
-patches that are bringing up almost the entire feature set in the
-SDM630/660 SoCs and we are waiting for them to get merged in
-before sending the DT updates.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: c35cc6e0cf0522be409eb83e6c2d7ab606627e17  Merge branch 'acpi-scan' into linux-next
 
-Cheers,
-Angelo
+elapsed time: 720m
 
-> > +     },
-> > +};
-> > +module_platform_driver(sdm660_noc_driver);
-> > +MODULE_DESCRIPTION("Qualcomm sdm660 NoC driver");
-> > +MODULE_LICENSE("GPL v2");
+configs tested: 134
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                      tqm8xx_defconfig
+h8300                       h8s-sim_defconfig
+mips                      fuloong2e_defconfig
+ia64                          tiger_defconfig
+arm                        keystone_defconfig
+powerpc                     tqm8555_defconfig
+sh                           se7721_defconfig
+arm                           efm32_defconfig
+sh                          landisk_defconfig
+csky                             alldefconfig
+xtensa                          iss_defconfig
+powerpc                      ep88xc_defconfig
+arm                         bcm2835_defconfig
+powerpc                      acadia_defconfig
+arm                         assabet_defconfig
+powerpc                     skiroot_defconfig
+powerpc                    socrates_defconfig
+um                             i386_defconfig
+powerpc                      ppc64e_defconfig
+powerpc                       eiger_defconfig
+xtensa                generic_kc705_defconfig
+sh                        edosk7760_defconfig
+arm                        mini2440_defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                      chrp32_defconfig
+sh                          urquell_defconfig
+arm                       netwinder_defconfig
+mips                            gpr_defconfig
+sh                          rsk7264_defconfig
+arm                            pleb_defconfig
+arm                         orion5x_defconfig
+powerpc                     kilauea_defconfig
+arc                          axs103_defconfig
+nds32                            alldefconfig
+powerpc                        fsp2_defconfig
+arm                          ep93xx_defconfig
+xtensa                  audio_kc705_defconfig
+sh                            hp6xx_defconfig
+arm                       omap2plus_defconfig
+c6x                         dsk6455_defconfig
+sh                        sh7785lcr_defconfig
+arc                     nsimosci_hs_defconfig
+openrisc                    or1ksim_defconfig
+arm                    vt8500_v6_v7_defconfig
+sh                           se7343_defconfig
+powerpc                     tqm8540_defconfig
+arm                           corgi_defconfig
+arm                           omap1_defconfig
+arm                        vexpress_defconfig
+sh                   rts7751r2dplus_defconfig
+m68k                            q40_defconfig
+mips                           jazz_defconfig
+sparc64                             defconfig
+mips                         db1xxx_defconfig
+powerpc                   lite5200b_defconfig
+arm                         s3c2410_defconfig
+powerpc64                        alldefconfig
+mips                       lemote2f_defconfig
+sh                     magicpanelr2_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20201204
+x86_64               randconfig-a006-20201204
+x86_64               randconfig-a002-20201204
+x86_64               randconfig-a001-20201204
+x86_64               randconfig-a005-20201204
+x86_64               randconfig-a003-20201204
+i386                 randconfig-a005-20201204
+i386                 randconfig-a001-20201204
+i386                 randconfig-a002-20201204
+i386                 randconfig-a006-20201204
+i386                 randconfig-a003-20201204
+i386                 randconfig-a004-20201204
+i386                 randconfig-a015-20201204
+i386                 randconfig-a016-20201204
+i386                 randconfig-a014-20201204
+i386                 randconfig-a013-20201204
+i386                 randconfig-a011-20201204
+i386                 randconfig-a012-20201204
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a016-20201204
+x86_64               randconfig-a012-20201204
+x86_64               randconfig-a014-20201204
+x86_64               randconfig-a013-20201204
+x86_64               randconfig-a015-20201204
+x86_64               randconfig-a011-20201204
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
