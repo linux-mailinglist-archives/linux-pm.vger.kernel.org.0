@@ -2,199 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0F52CF432
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 19:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083572CF444
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 19:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729674AbgLDShC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Dec 2020 13:37:02 -0500
-Received: from mga01.intel.com ([192.55.52.88]:61213 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729132AbgLDShC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 4 Dec 2020 13:37:02 -0500
-IronPort-SDR: Ukv6IFxCzNjYKOJWijubf2m0/GeAkSZNg5VKqWbtpHnoiW0+rPIK/SCZi7usLAM+FajlieDQrD
- wx0fxjF9NH3w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9825"; a="191669914"
-X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
-   d="scan'208";a="191669914"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2020 10:36:19 -0800
-IronPort-SDR: sGvNlvLhYsqS2mkHrHsBQ4KK6I0iMP3Vjb+bNTBASP7GHKgs8poiYqvSw/tkoWQIAm65cBUJMo
- hjqU33nZ3YFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
-   d="scan'208";a="366390898"
-Received: from lkp-server02.sh.intel.com (HELO f74a175f0d75) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Dec 2020 10:36:18 -0800
-Received: from kbuild by f74a175f0d75 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1klFwH-0000K3-HR; Fri, 04 Dec 2020 18:36:17 +0000
-Date:   Sat, 05 Dec 2020 02:35:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- c35cc6e0cf0522be409eb83e6c2d7ab606627e17
-Message-ID: <5fca816f.oCDda8+ObGqjvZwR%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1730230AbgLDSmv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Dec 2020 13:42:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729897AbgLDSmu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 13:42:50 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6574C061A53
+        for <linux-pm@vger.kernel.org>; Fri,  4 Dec 2020 10:42:04 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id z83so8152444ybz.2
+        for <linux-pm@vger.kernel.org>; Fri, 04 Dec 2020 10:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=qYqdLh2r9ds49rUYM9FZPJyUKuPOU47SmGZigVynXKs=;
+        b=Q2AMV/9A3jFEOq6M9VJy0Oqg82Ibmk8kaxkd0OnHys1ZC5ZmdBThPlK4JUqug5mTS+
+         KzP6Hn9VvcVEhNwe48pQb8iH8aIfx7ng+R1VZj+3b0VQVEKY6zTxcJlh4tp2BEAa4mqM
+         INlJ2wDN5es7SmaHswQ149yybKCocdj37OmvhUQ2fgQQQMkbvEVbMsdgAOdNw1kNY5vy
+         MX6aJwBMCg4uUg/HvL8KZ4X9F+uYJ4InfuJNUOcWv6LKDvW3WlxGMGkQd7IbR6TRx84f
+         2T3mQPUMTpC1Y5Fgx+KV0jbJVrEHTqLOe3HaVYGaewfcD6iBdsds2wot5X/e3PBGjdWc
+         gXBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=qYqdLh2r9ds49rUYM9FZPJyUKuPOU47SmGZigVynXKs=;
+        b=Vztmb+jGrF1knwtltnN17UASW8mKswrWowSW095I24La3aoNMXE2FDkKPrZjDPpRVe
+         R+HHYTIWKc+VEfDr5+GqbMDQN8OES5vKFND/eYSGpoIY83cXfvskqUn0yCCZDrQwbP9F
+         Cd9VLMrgBd6hv9NlIkoWDQjRL9QP9NZSxFtsPNua8NRjnDozFKaPK89z2TRLQ9E8phqB
+         WKLbv3gusqWDaf8CvjAIRgx2IH21xLiMQ8k3llmJtSJ4yikd+ymVm48O/aBaMCryFnVw
+         GnnegiY6DFukLGaA6QhulYeG8XQQRxZls4ppDO1SOX4ofSt4WjN1utRUvi5v1CptHjis
+         AcKQ==
+X-Gm-Message-State: AOAM531UwFKvkiZYDj9DKWQg+GMGdmY8fKQ/AkuVkRvw0jk0DNsOHGKw
+        Im9PcYeNyLkbnZ0KTxMmxpN6SRTdHkN9sg==
+X-Google-Smtp-Source: ABdhPJzaFMRnjSfkArW15w0TJtc/X1de0v4Zw7VW53oAoljTA9N9aKVmkT12EP9Tlg2JvL0CvkFvdl/o6XTL3g==
+Sender: "tstrudel via sendgmr" <tstrudel@legoland2.mtv.corp.google.com>
+X-Received: from legoland2.mtv.corp.google.com ([2620:15c:211:1:7220:84ff:fe09:fd20])
+ (user=tstrudel job=sendgmr) by 2002:a25:e758:: with SMTP id
+ e85mr7814924ybh.51.1607107323941; Fri, 04 Dec 2020 10:42:03 -0800 (PST)
+Date:   Fri,  4 Dec 2020 10:41:59 -0800
+Message-Id: <20201204184159.4043159-1-tstrudel@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+Subject: [PATCH v2] PM: domains: create debugfs nodes when adding power domains
+From:   Thierry Strudel <tstrudel@google.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thierry Strudel <tstrudel@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: c35cc6e0cf0522be409eb83e6c2d7ab606627e17  Merge branch 'acpi-scan' into linux-next
+debugfs nodes were created in genpd_debug_init alled in late_initcall
+preventing power domains registered though loadable modules to have
+a debugfs entry.
 
-elapsed time: 720m
+Create/remove debugfs nodes when the power domain is added/removed
+to/from the internal gpd_list.
 
-configs tested: 134
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                      tqm8xx_defconfig
-h8300                       h8s-sim_defconfig
-mips                      fuloong2e_defconfig
-ia64                          tiger_defconfig
-arm                        keystone_defconfig
-powerpc                     tqm8555_defconfig
-sh                           se7721_defconfig
-arm                           efm32_defconfig
-sh                          landisk_defconfig
-csky                             alldefconfig
-xtensa                          iss_defconfig
-powerpc                      ep88xc_defconfig
-arm                         bcm2835_defconfig
-powerpc                      acadia_defconfig
-arm                         assabet_defconfig
-powerpc                     skiroot_defconfig
-powerpc                    socrates_defconfig
-um                             i386_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                       eiger_defconfig
-xtensa                generic_kc705_defconfig
-sh                        edosk7760_defconfig
-arm                        mini2440_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                      chrp32_defconfig
-sh                          urquell_defconfig
-arm                       netwinder_defconfig
-mips                            gpr_defconfig
-sh                          rsk7264_defconfig
-arm                            pleb_defconfig
-arm                         orion5x_defconfig
-powerpc                     kilauea_defconfig
-arc                          axs103_defconfig
-nds32                            alldefconfig
-powerpc                        fsp2_defconfig
-arm                          ep93xx_defconfig
-xtensa                  audio_kc705_defconfig
-sh                            hp6xx_defconfig
-arm                       omap2plus_defconfig
-c6x                         dsk6455_defconfig
-sh                        sh7785lcr_defconfig
-arc                     nsimosci_hs_defconfig
-openrisc                    or1ksim_defconfig
-arm                    vt8500_v6_v7_defconfig
-sh                           se7343_defconfig
-powerpc                     tqm8540_defconfig
-arm                           corgi_defconfig
-arm                           omap1_defconfig
-arm                        vexpress_defconfig
-sh                   rts7751r2dplus_defconfig
-m68k                            q40_defconfig
-mips                           jazz_defconfig
-sparc64                             defconfig
-mips                         db1xxx_defconfig
-powerpc                   lite5200b_defconfig
-arm                         s3c2410_defconfig
-powerpc64                        alldefconfig
-mips                       lemote2f_defconfig
-sh                     magicpanelr2_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20201204
-x86_64               randconfig-a006-20201204
-x86_64               randconfig-a002-20201204
-x86_64               randconfig-a001-20201204
-x86_64               randconfig-a005-20201204
-x86_64               randconfig-a003-20201204
-i386                 randconfig-a005-20201204
-i386                 randconfig-a001-20201204
-i386                 randconfig-a002-20201204
-i386                 randconfig-a006-20201204
-i386                 randconfig-a003-20201204
-i386                 randconfig-a004-20201204
-i386                 randconfig-a015-20201204
-i386                 randconfig-a016-20201204
-i386                 randconfig-a014-20201204
-i386                 randconfig-a013-20201204
-i386                 randconfig-a011-20201204
-i386                 randconfig-a012-20201204
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a016-20201204
-x86_64               randconfig-a012-20201204
-x86_64               randconfig-a014-20201204
-x86_64               randconfig-a013-20201204
-x86_64               randconfig-a015-20201204
-x86_64               randconfig-a011-20201204
-
+Signed-off-by: Thierry Strudel <tstrudel@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v2: fix forward declaration and genpd_debugfs_dir being NULL - Ulf
+ drivers/base/power/domain.c | 83 ++++++++++++++++++++++++-------------
+ 1 file changed, 55 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 743268996336..3e40ef5cd9ab 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -24,6 +24,16 @@
+ 
+ #include "power.h"
+ 
++#ifdef CONFIG_DEBUG_FS
++#include <linux/pm.h>
++#include <linux/device.h>
++#include <linux/debugfs.h>
++#include <linux/seq_file.h>4
++#include <linux/init.h>
++#include <linux/kobject.h>
++static struct dentry *genpd_debugfs_dir;
++#endif
++
+ #define GENPD_RETRY_MAX_MS	250		/* Approximate */
+ 
+ #define GENPD_DEV_CALLBACK(genpd, type, callback, dev)		\
+@@ -1880,6 +1890,21 @@ static void genpd_lock_init(struct generic_pm_domain *genpd)
+ 	}
+ }
+ 
++#ifdef CONFIG_DEBUG_FS
++static void genpd_debug_add(struct generic_pm_domain *genpd);
++
++static void genpd_debug_remove(struct generic_pm_domain *genpd)
++{
++	struct dentry *d;
++
++	d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
++	debugfs_remove(d);
++}
++#else
++static void genpd_debug_add(struct generic_pm_domain *genpd) {}
++static void genpd_debug_remove(struct generic_pm_domain *genpd) {}
++#endif
++
+ /**
+  * pm_genpd_init - Initialize a generic I/O PM domain object.
+  * @genpd: PM domain object to initialize.
+@@ -1954,6 +1979,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+ 
+ 	mutex_lock(&gpd_list_lock);
+ 	list_add(&genpd->gpd_list_node, &gpd_list);
++	genpd_debug_add(genpd);
+ 	mutex_unlock(&gpd_list_lock);
+ 
+ 	return 0;
+@@ -1987,6 +2013,7 @@ static int genpd_remove(struct generic_pm_domain *genpd)
+ 		kfree(link);
+ 	}
+ 
++	genpd_debug_remove(genpd);
+ 	list_del(&genpd->gpd_list_node);
+ 	genpd_unlock(genpd);
+ 	cancel_work_sync(&genpd->power_off_work);
+@@ -2893,14 +2920,6 @@ core_initcall(genpd_bus_init);
+ /***        debugfs support        ***/
+ 
+ #ifdef CONFIG_DEBUG_FS
+-#include <linux/pm.h>
+-#include <linux/device.h>
+-#include <linux/debugfs.h>
+-#include <linux/seq_file.h>
+-#include <linux/init.h>
+-#include <linux/kobject.h>
+-static struct dentry *genpd_debugfs_dir;
+-
+ /*
+  * TODO: This function is a slightly modified version of rtpm_status_show
+  * from sysfs.c, so generalize it.
+@@ -3177,9 +3196,34 @@ DEFINE_SHOW_ATTRIBUTE(total_idle_time);
+ DEFINE_SHOW_ATTRIBUTE(devices);
+ DEFINE_SHOW_ATTRIBUTE(perf_state);
+ 
+-static int __init genpd_debug_init(void)
++static void genpd_debug_add(struct generic_pm_domain *genpd)
+ {
+ 	struct dentry *d;
++
++	if (!genpd_debugfs_dir)
++		return;
++
++	d = debugfs_create_dir(genpd->name, genpd_debugfs_dir);
++
++	debugfs_create_file("current_state", 0444,
++			    d, genpd, &status_fops);
++	debugfs_create_file("sub_domains", 0444,
++			    d, genpd, &sub_domains_fops);
++	debugfs_create_file("idle_states", 0444,
++			    d, genpd, &idle_states_fops);
++	debugfs_create_file("active_time", 0444,
++			    d, genpd, &active_time_fops);
++	debugfs_create_file("total_idle_time", 0444,
++			    d, genpd, &total_idle_time_fops);
++	debugfs_create_file("devices", 0444,
++			    d, genpd, &devices_fops);
++	if (genpd->set_performance_state)
++		debugfs_create_file("perf_state", 0444,
++				    d, genpd, &perf_state_fops);
++}
++
++static int __init genpd_debug_init(void)
++{
+ 	struct generic_pm_domain *genpd;
+ 
+ 	genpd_debugfs_dir = debugfs_create_dir("pm_genpd", NULL);
+@@ -3187,25 +3231,8 @@ static int __init genpd_debug_init(void)
+ 	debugfs_create_file("pm_genpd_summary", S_IRUGO, genpd_debugfs_dir,
+ 			    NULL, &summary_fops);
+ 
+-	list_for_each_entry(genpd, &gpd_list, gpd_list_node) {
+-		d = debugfs_create_dir(genpd->name, genpd_debugfs_dir);
+-
+-		debugfs_create_file("current_state", 0444,
+-				d, genpd, &status_fops);
+-		debugfs_create_file("sub_domains", 0444,
+-				d, genpd, &sub_domains_fops);
+-		debugfs_create_file("idle_states", 0444,
+-				d, genpd, &idle_states_fops);
+-		debugfs_create_file("active_time", 0444,
+-				d, genpd, &active_time_fops);
+-		debugfs_create_file("total_idle_time", 0444,
+-				d, genpd, &total_idle_time_fops);
+-		debugfs_create_file("devices", 0444,
+-				d, genpd, &devices_fops);
+-		if (genpd->set_performance_state)
+-			debugfs_create_file("perf_state", 0444,
+-					    d, genpd, &perf_state_fops);
+-	}
++	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
++		genpd_debug_add(genpd);
+ 
+ 	return 0;
+ }
+-- 
+2.29.2.576.ga3fc446d84-goog
+
