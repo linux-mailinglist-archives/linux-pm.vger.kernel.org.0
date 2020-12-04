@@ -2,127 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B31F2CF1E5
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 17:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C5A2CF1F0
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 17:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730630AbgLDQ2P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Dec 2020 11:28:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S1730451AbgLDQav (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Dec 2020 11:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730610AbgLDQ2P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 11:28:15 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739C6C0613D1;
-        Fri,  4 Dec 2020 08:27:29 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id l5so6401283edq.11;
-        Fri, 04 Dec 2020 08:27:29 -0800 (PST)
+        with ESMTP id S1725923AbgLDQau (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 11:30:50 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B4BC061A51
+        for <linux-pm@vger.kernel.org>; Fri,  4 Dec 2020 08:30:05 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id i3so487529pfd.6
+        for <linux-pm@vger.kernel.org>; Fri, 04 Dec 2020 08:30:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=T+HmOhYRAWoPzFvO+6AKczOw7jzGt+H4bxGuXLCQXoc=;
-        b=kgiRgJ4ywoZVvlEdS4dzVI217OLzYENw/cza8A9shThLkxM/Vo/JQhk1OFW+iwbf8p
-         faqrHR4b0hyVBjAlknDZRqu5bNRkd1mMhJKxJuE+31Go9GbP7LcCSSw7WMt2KQqF+jnp
-         nac4bYVxJ8GzsKoxFjCJTUGBOFwvRPzSEza0YzSseFzSvguVeQ1oOXIkKrvYZg1LRvis
-         cuP011H/Rq04vO7HYRunZBmJ7vXbGr/7Hv8gnUIC5g75DzPP/+kqMsMqs3FUJxsSm2EN
-         Na3R59zfW/HnR9eNGEzKA6RRdpSTpUCkBi6skZyrKB3QHHBeql3rinhsWPnH2THiFv/n
-         HiTg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kqQ8wemaUsbqYxxnu+QI3DUbnTFkVWHnx3ltod9bOCc=;
+        b=fWyOpSDnJe2JI7hneqbXU2DIloScZnj4gARlaGa0ybg45ELuY0ScH8l2HXWVgHTlnj
+         HosgwUd/Bpq0aaR5skfTpXh/iZQDjNkK2+CV/bQ01H5y9AOBL593SQJewl0ZVdEYr0PL
+         jCqB4JZ8rSWK2E9PsNaFOU8EqCUyPMGT5RXR8u2eE2RBnSGftVJl5PZmRDgSqqAGxORI
+         2qQDariNZJSHpdTHeCAALhHNe7wr0GVEXrwlfIGo8uaNg/KIwwKvUIoTE/J/Gw1v9Vv4
+         STTg9bwApXQrbdjfZ57COxm6Cjxre2pjLgnS/Wehv09eZm2VU7YNSR4/R8ZYGfy+CT+e
+         R5HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=T+HmOhYRAWoPzFvO+6AKczOw7jzGt+H4bxGuXLCQXoc=;
-        b=Ak6JmA7yWPZiRDMZ67edZcOxjes6dgXcvXwwpCnuYyXvciouqYRUJFJu4gpMSCvW2M
-         1FOe9IZe9nBXM00S/L4muxQ1qxYTpspkQ3AtwcuXvXdtr3Bgk4uZlqjFcdUNSFwTWDlu
-         fpaKTAXKq+UhsaEG4tbfS8caU45vp80sIbih/v83N4LQSkasqCfbw6kc2zE2pOhDwnp5
-         sEtu0s+CVq6AfXlIUlbBuNOdIBEXc1QR9cxRLHQjlm/CqCjzqCujt4btasSSIGlhPHIL
-         1M2klsyOY9kJkRm18ElacWi2mG7EDrQcYrqG89kPz2b+WEdd7EX+eGl4NUZa9Z3aspAi
-         OGxA==
-X-Gm-Message-State: AOAM531KH4YoEy6F0r2+eqkwm0ZcujXHYfxcZCu2yjPbr3BIxwW6pNqD
-        0YawIaSSDWLT9i5rmROJrIc=
-X-Google-Smtp-Source: ABdhPJz4k6hB4aIWeMlptTvr8/KtGOvqe1S5zLT5t102zABDLV44vRb0th7M+TZOofj//Zr2RU6sgw==
-X-Received: by 2002:a05:6402:746:: with SMTP id p6mr8397102edy.313.1607099248170;
-        Fri, 04 Dec 2020 08:27:28 -0800 (PST)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id b7sm3521209ejj.85.2020.12.04.08.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 08:27:26 -0800 (PST)
-Date:   Fri, 4 Dec 2020 17:27:25 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v11 03/10] memory: tegra30: Support interconnect framework
-Message-ID: <X8pjbV/gEIOp/2sM@ulmo>
-References: <20201203192439.16177-1-digetx@gmail.com>
- <20201203192439.16177-4-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kqQ8wemaUsbqYxxnu+QI3DUbnTFkVWHnx3ltod9bOCc=;
+        b=rqikTXlgk6FZE/fKOLPDSKT6a8LH1sYL2eY/HI3akRRidukQSNLpaxaNdmk8uCWSIf
+         qDhSPyvu9oazxWqjoCQoYB2SVpZW/DfoRd3HdkU2VobGcN0DyxHWmDeim04AwXSqmLfx
+         CIH4yZbOQ9L+glsJMZ87+skBu6+TkfEaPljQPkoakwAlNmpchOfI+2iWpult3M/5xsE0
+         t2qP4Y0Hplxxm7n9DRrFZf01Nu/jo2W1jSOnmILTWEjRBBIq8xFpPoSPxP6i1ldGf7Zc
+         shSjxazCsphKLQUJ3n28DmiwSzZ4O+ZSLGYI8zLTJxLSSVuMIdPq6jsShOc3hEkkhMym
+         IpiQ==
+X-Gm-Message-State: AOAM533IszW08d7MBY+3DkmdWEKsEXjqwH07IrSTSOwiRibsGP88cpza
+        AemJyz1r2qM3F5hrZrKK+zow5xLfLqYy/n5plCn2+w==
+X-Google-Smtp-Source: ABdhPJw10s9fEIyX9zOyS0QJHIlLwelmrS8QWA571EtQHByxTrDUGlsLkvNFEyuWilQhwBAdSsHJsgb6qcHh2YACh80=
+X-Received: by 2002:a62:25c7:0:b029:156:72a3:b0c0 with SMTP id
+ l190-20020a6225c70000b029015672a3b0c0mr4461020pfl.59.1607099403873; Fri, 04
+ Dec 2020 08:30:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bTHofWPXsdPAY1Vz"
-Content-Disposition: inline
-In-Reply-To: <20201203192439.16177-4-digetx@gmail.com>
-User-Agent: Mutt/2.0.2 (d9268908) (2020-11-20)
+References: <20201203233546.3482813-1-tstrudel@google.com> <CAPDyKFoH+_7QJepcPwth_EcBKuj1iU7y7i5semd1QZDsVwT0ww@mail.gmail.com>
+In-Reply-To: <CAPDyKFoH+_7QJepcPwth_EcBKuj1iU7y7i5semd1QZDsVwT0ww@mail.gmail.com>
+From:   Thierry Strudel <tstrudel@google.com>
+Date:   Fri, 4 Dec 2020 08:29:52 -0800
+Message-ID: <CAMGPabXRezPazh3PD4_sBycNtAQsi_-auu6rMP4=u74yoHJGrg@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: create debugfs nodes when adding power domains
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello Uffe,
 
---bTHofWPXsdPAY1Vz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> >
+> > +static void genpd_debug_remove(struct generic_pm_domain *genpd);
+> > +
+>
+> Please avoid these forward declarations. I think it's better to move
+> the code around.
 
-On Thu, Dec 03, 2020 at 10:24:32PM +0300, Dmitry Osipenko wrote:
-> Now Internal and External memory controllers are memory interconnection
-> providers. This allows us to use interconnect API for tuning of memory
-> configuration. EMC driver now supports OPPs and DVFS. MC driver now
-> supports tuning of memory arbitration latency, which needs to be done
-> for ISO memory clients, like a Display client for example.
->=20
-> Tested-by: Peter Geis <pgwipeout@gmail.com>
-> Acked-by: Georgi Djakov <georgi.djakov@linaro.org>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/memory/tegra/Kconfig       |   1 +
->  drivers/memory/tegra/tegra30-emc.c | 344 +++++++++++++++++++++++++++--
->  drivers/memory/tegra/tegra30.c     | 173 ++++++++++++++-
->  3 files changed, 496 insertions(+), 22 deletions(-)
+I can move up
+static void genpd_debug_remove(struct generic_pm_domain *genpd)
+but moving
+static void genpd_debug_add(struct generic_pm_domain *genpd)
+requires moving all those functions implementation:
+DEFINE_SHOW_ATTRIBUTE(summary);
+DEFINE_SHOW_ATTRIBUTE(status);
+DEFINE_SHOW_ATTRIBUTE(sub_domains);
+DEFINE_SHOW_ATTRIBUTE(idle_states);
+DEFINE_SHOW_ATTRIBUTE(active_time);
+DEFINE_SHOW_ATTRIBUTE(total_idle_time);
+DEFINE_SHOW_ATTRIBUTE(devices);
+DEFINE_SHOW_ATTRIBUTE(perf_state);
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+are you fine keeping
+static void genpd_debug_add(struct generic_pm_domain *genpd)
+as a forward declaration ?
 
---bTHofWPXsdPAY1Vz
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> >  static int genpd_remove(struct generic_pm_domain *genpd)
+> >  {
+> >         struct gpd_link *l, *link;
+> > @@ -1987,6 +1992,7 @@ static int genpd_remove(struct generic_pm_domain *genpd)
+> >                 kfree(link);
+> >         }
+> >
+> > +       genpd_debug_remove(genpd);
+> >         list_del(&genpd->gpd_list_node);
+> >         genpd_unlock(genpd);
+> >         cancel_work_sync(&genpd->power_off_work);
+> > @@ -3177,36 +3183,44 @@ DEFINE_SHOW_ATTRIBUTE(total_idle_time);
+> >  DEFINE_SHOW_ATTRIBUTE(devices);
+> >  DEFINE_SHOW_ATTRIBUTE(perf_state);
+> >
+> > -static int __init genpd_debug_init(void)
+> > +static void genpd_debug_add(struct generic_pm_domain *genpd)
+> >  {
+> >         struct dentry *d;
+> > -       struct generic_pm_domain *genpd;
+> >
+> > +       d = debugfs_create_dir(genpd->name, genpd_debugfs_dir);
+>
+> What happens if "genpd_debugfs_dir" is NULL, which will be the case
+> until the late_initcall(genpd_debug_init) has been executed!?
 
------BEGIN PGP SIGNATURE-----
+Good point, I'll return early if NULL and in
+static int __init genpd_debug_init(void)
+I'll iterate on the list to create the nodes
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl/KY20ACgkQ3SOs138+
-s6Engg//drHa8HENx4EvSwA5eoE9FKgNLKJPQdW/7BBtgBPmv0ImXomL5kKddSn5
-O6SomluwfhV8QxJZR4eiIv04ptvLC8CuKtY21mgZFLZwJRBrVYq40h+VIqt3guAd
-y5nEw3fALyFOeqOK76P80q2Qa7aLQguoPzfaa3dsDsBfnNG/CbgBj9vCL868UoB9
-3u7oEv58jd+3YYx4HhlilcoHQp9yL2S5N3PEt/9hxxVTo+k6j6Vxk5+LnUz4Afl3
-JsP4sOuwvFxWDIPoghYuaCc5dZ9qJurZ9z1SRIf6sYl/NU2t5ob+0Ec3f8X5OcuR
-6tL1vHwlZ9UbB5t+qOJDfwdPO4Lx2dcxT70lxsBimV3Jc0i2oamRDMhK5VTBlKoQ
-11GwxrrrS5uxuIr/60KA94IAptu+X98Nn9sZEJznuMZvKbBUBC6X2vJGd9WuL7uD
-rx9xU3rulWs9BsBf9Rd+LeiJFpdVIukDTerJTIDsx2x9FEVc1m5gnz/2yVkcpCdU
-AvpsRwbwO5pcl56U+fZ/EwljblwRLY3sX3mGTA7vk2PKSgigLDgB7itXStFPNR5j
-PLMih36DUjxruXDwUK9R2P4o9Uxfb+A26WwPd/o84qIHj6hJneG3kW0WioV6dnwk
-oItg/WELcMS+7DveCKW2IdpVkzJMc4PzeNqeGZxYvIbZc1BSPL4=
-=UulD
------END PGP SIGNATURE-----
+> Kind regards
+> Uffe
 
---bTHofWPXsdPAY1Vz--
+Best regards
+Thierry
