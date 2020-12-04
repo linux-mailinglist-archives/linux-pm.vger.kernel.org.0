@@ -2,133 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6E82CF6F5
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 23:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4512CF70E
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 23:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbgLDWi4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Dec 2020 17:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S1730382AbgLDWp0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Dec 2020 17:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgLDWiz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 17:38:55 -0500
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FEAC061A51;
-        Fri,  4 Dec 2020 14:38:15 -0800 (PST)
-Received: by mail-il1-x143.google.com with SMTP id g1so6648071ilk.7;
-        Fri, 04 Dec 2020 14:38:15 -0800 (PST)
+        with ESMTP id S1728734AbgLDWpZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 17:45:25 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E2DC0613D1;
+        Fri,  4 Dec 2020 14:44:45 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id p6so3947716plr.7;
+        Fri, 04 Dec 2020 14:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zfSI0BVuut11EY/18dl98BRShWbYjMNy9Mytisqq938=;
-        b=HzF35Jud24in6HdLiieS6+ZLB//zqFBLW5Cc8v5F2Ey9a+SzEU/CTBgns9+j6FdTbj
-         BigmhJ+S6UJLEoAv9VbPYcd0vol5XRk8fPTTw9Bbc+V3SM3aLScBymmSQP/IHOqDzPaN
-         bpKmTsQsSjiWY92uCSdXOoqNZMyLIrADEcP6ltW/r7480TknbM90F3bzAGNn51cuEi9M
-         /e65BCwqh1S1YezAOunYu9136HxPrm4iHYP3Z1bLifpJxGjAntC2FE2411z57A6rgncl
-         cVpy5r5orvw4+/X72ViHG4JpiFEA5SwUxJ7vaX44GelzjXthZ2gAPz8Z2GRLPMGGex1N
-         M0CA==
+        h=from:to:cc:subject:in-reply-to:references:user-agent:date
+         :message-id:mime-version;
+        bh=yuYclua/K6G1/NzZklfhnByGsvXi5uYNWph4XL2hSIs=;
+        b=jGEvaLZ55EZaXGmYyljajBzGveSvX8t6YtByTv0yzn5xEk0mNTJgF7uyHpKEzjdV/v
+         nJl3bg0njIZuBPeuyDtaVdEOBu86zM8qC7bEtrPJ6bIfDiTN6VZne6VYV/qMr7E6iY41
+         aTyrl85v6Ii0bCj5oNlOz5phachxznzAkgqCFEAyT/AzgmT3ZqSRy7vHr8rF1zaJ2UFE
+         I8i2KgFpHe+BNsy9KIZ0Fn53ocC+1KyI6hr+HrURAoDJ449GCTHkuNwFfIq/bdyE/ICy
+         bIdlux3DXZPAjIqcjNq1N08wJAE2K+ybGKzHnrkoGFWZxBGh+ewBAd986wx0iNmKIv4p
+         Jhhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zfSI0BVuut11EY/18dl98BRShWbYjMNy9Mytisqq938=;
-        b=iELrtAkDabOOGp4yBxt4Qfy5GhkAxlF3a9q4yc/lib8qs6qOrC0SaCoQm2l6XGw+U9
-         l7FVTAPJXcrIcana+W+QoanEgWPvlaYRZVHHNc9Ef58s9JKSzMM/7b2AYo2+VaRXpPjV
-         aJK2QXEwAhxXTDAdkXqPr3mFYfKgXmif0ttF5K7x0/pw1eXS0btFbE5wLh+Vnl01F8pK
-         /N3nsIguCfL9L2t7EVvLRtrW4rclSAcURGc0avUURnnVjeSk+Jg47tJ4kSNEgACYIQdP
-         V8IJjiVcANxmq23T6/81Qczl07JpnXmwkzcPECABmacX9LLQi9TGB5UpRrfQ3+wM4GTl
-         3RqA==
-X-Gm-Message-State: AOAM5323N8Zl/nwZTV5Wl09Xi8ZSsLB0aWmCKvJxiStIGvaKUBU2rioO
-        aAGcxikmBjmeA3EByYXUib61NXHIAm+7LX91T/k=
-X-Google-Smtp-Source: ABdhPJwq6XTGDVI27yEFKGhO8FLGO5z8uzKtXlTVxip2PtUxYmvG1QV2rHjit/27EVWnmcU+/bTgLUQ2mR3AuU7Tm9c=
-X-Received: by 2002:a92:730d:: with SMTP id o13mr8965445ilc.95.1607121494715;
- Fri, 04 Dec 2020 14:38:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :user-agent:date:message-id:mime-version;
+        bh=yuYclua/K6G1/NzZklfhnByGsvXi5uYNWph4XL2hSIs=;
+        b=r3dfBph2XwHycJJpcYjFFRsRsyCUJnws7PmCLPHhkuQ7IiWJVtpvSb79Xfi18G2H0P
+         aRxG2JOGV2Iyg+rTtquAviHnb+2QiGJbKsiEHS1YNL34lYnvM7SUJP4B3bY0sL8xhF2t
+         +3sfWz7qc+Vpd8J9D+uTfk+0m8/uX6Y0mj/rhpEZP2W4acdaWfe+TVr9GRyYIMZVk4aM
+         /6Ntad6NQ8l55MDg6Jly3lDRAbF0dkCvfeMsaNCkFoPQ9aLP61qws6KGWlpBqThZ61/l
+         AKS/Cq2isaiKdgnd82QOw5IItnXFuDeYdAfw6qMokU2tM7CRLcgtf15UcrYJgmPGxd8n
+         6nlg==
+X-Gm-Message-State: AOAM533ufg621CQdS9DEBHiFTRAENiY6immUR4GShOV1E4ZEszvEZc4Z
+        tgWEVDBjiaR30IlRO0AMUhg=
+X-Google-Smtp-Source: ABdhPJzobywerg8vaX5EtSuLsD9/y1ZfSYBHaXKoc9X8ALE2TfXiatvkFUNK1lvdB13oZaUEAKWGng==
+X-Received: by 2002:a17:90b:4394:: with SMTP id in20mr3377414pjb.34.1607121885363;
+        Fri, 04 Dec 2020 14:44:45 -0800 (PST)
+Received: from localhost ([2405:6580:31a1:500:1ac0:4dff:fe39:5426])
+        by smtp.gmail.com with ESMTPSA id y23sm3710809pje.41.2020.12.04.14.44.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Dec 2020 14:44:44 -0800 (PST)
+From:   Punit Agrawal <punitagrawal@gmail.com>
+To:     rjw@rjwysocki.net
+Cc:     wei.huang2@amd.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, bp@alien8.de, x86@kernel.org
+Subject: Re: [RFC PATCH 0/4] Add processor to the ignore PSD override list
+In-Reply-To: <20201125144847.3920-1-punitagrawal@gmail.com> (Punit Agrawal's
+        message of "Wed, 25 Nov 2020 23:48:43 +0900")
+References: <20201125144847.3920-1-punitagrawal@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Sat, 05 Dec 2020 07:44:41 +0900
+Message-ID: <87zh2tp4x2.fsf@stealth>
 MIME-Version: 1.0
-References: <20201204200920.133780-1-mario.limonciello@dell.com>
- <CAKgT0Uc=OxcuHbZihY3zxsxzPprJ_8vGHr=reBJFMrf=V9A5kg@mail.gmail.com> <DM6PR19MB2636B200D618A5546E7BBB57FAF10@DM6PR19MB2636.namprd19.prod.outlook.com>
-In-Reply-To: <DM6PR19MB2636B200D618A5546E7BBB57FAF10@DM6PR19MB2636.namprd19.prod.outlook.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Fri, 4 Dec 2020 14:38:03 -0800
-Message-ID: <CAKgT0UfuyrbzpDNySMmnAkqKnw9cYuEM1LhgG0QvmrY=smR-uw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] Improve s0ix flows for systems i219LM
-To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>
-Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Netfin <sasha.neftin@intel.com>,
-        Aaron Brown <aaron.f.brown@intel.com>,
-        Stefan Assmann <sassmann@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        David Arcari <darcari@redhat.com>,
-        "Shen, Yijun" <Yijun.Shen@dell.com>,
-        "Yuan, Perry" <Perry.Yuan@dell.com>,
-        "anthony.wong@canonical.com" <anthony.wong@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 4, 2020 at 2:28 PM Limonciello, Mario
-<Mario.Limonciello@dell.com> wrote:
->
-> > -----Original Message-----
-> > From: Alexander Duyck <alexander.duyck@gmail.com>
-> > Sent: Friday, December 4, 2020 15:27
-> > To: Limonciello, Mario
-> > Cc: Jeff Kirsher; Tony Nguyen; intel-wired-lan; LKML; Linux PM; Netdev; Jakub
-> > Kicinski; Sasha Netfin; Aaron Brown; Stefan Assmann; David Miller; David
-> > Arcari; Shen, Yijun; Yuan, Perry; anthony.wong@canonical.com
-> > Subject: Re: [PATCH v3 0/7] Improve s0ix flows for systems i219LM
-> >
-> >
-> > [EXTERNAL EMAIL]
-> >
-> > On Fri, Dec 4, 2020 at 12:09 PM Mario Limonciello
-> > <mario.limonciello@dell.com> wrote:
-> > >
-> > > commit e086ba2fccda ("e1000e: disable s0ix entry and exit flows for ME
-> > systems")
-> > > disabled s0ix flows for systems that have various incarnations of the
-> > > i219-LM ethernet controller.  This was done because of some regressions
-> > > caused by an earlier
-> > > commit 632fbd5eb5b0e ("e1000e: fix S0ix flows for cable connected case")
-> > > with i219-LM controller.
-> > >
-> > > Performing suspend to idle with these ethernet controllers requires a
-> > properly
-> > > configured system.  To make enabling such systems easier, this patch
-> > > series allows determining if enabled and turning on using ethtool.
-> > >
-> > > The flows have also been confirmed to be configured correctly on Dell's
-> > Latitude
-> > > and Precision CML systems containing the i219-LM controller, when the kernel
-> > also
-> > > contains the fix for s0i3.2 entry previously submitted here and now part of
-> > this
-> > > series.
-> > > https://marc.info/?l=linux-netdev&m=160677194809564&w=2
-> > >
-> > > Patches 4 through 7 will turn the behavior on by default for some of Dell's
-> > > CML and TGL systems.
-> >
-> > The patches look good to me. Just need to address the minor issue that
-> > seems to have been present prior to the introduction of this patch
-> > set.
-> >
-> > Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
->
-> Thanks for your review.  Just some operational questions - since this previously
-> existed do you want me to re-spin the series to a v4 for this, or should it be
-> a follow up after the series?
->
-> If I respin it, would you prefer that change to occur at the start or end
-> of the series?
+Hi Rafael,
 
-I don't need a respin, but if you are going to fix it you should
-probably put out the patch as something like a 8/7. If you respin it
-should happen near the start of the series as it is a bug you are
-addressing.
+Punit Agrawal <punitagrawal@gmail.com> writes:
+
+> Hi,
+>
+> While looking into Giovanni's patches to enable frequency invariance
+> on AMD systems[0], I noticed an issue with initialising frequency
+> domain information on a recent AMD APU.
+>
+> Patch 1 refactors the test to ignore firmware provided frequency
+> domain into a separate function.
+>
+> Patch 2 adds said APU (Family: 0x17, Model: 0x60, Stepping: 0x01) to
+> the list of CPUs for which the PSD override is ignored. I am not quite
+> happy with having to special case a particular CPU but also couldn't
+> find any documentation to help identify the CPUs that don't need the
+> override.
+
+Are you be OK to pick the first two patches if there are no issues?
+
+Thanks,
+Punit
+
+
+> Patch 3 and 4 are somewhat independent and a first step towards
+> improving the situation with regards to the use of raw identifiers for
+> AMD processors throughout the kernel.
+>
+> All feedback welcome.
+>
+> Thanks,
+> Punit
+>
+> [0] https://lore.kernel.org/linux-acpi/20201112182614.10700-1-ggherdovich@suse.cz/
+>
+> Punit Agrawal (4):
+>   cpufreq: acpi-cpufreq: Re-factor overriding ACPI PSD
+>   cpufreq: acpi-cpufreq: Add processor to the ignore PSD override list
+>   x86/cpu: amd: Define processor families
+>   cpufreq: acpi-cpufreq: Use identifiers for AMD processor family
+>
+>  arch/x86/include/asm/amd-family.h    | 18 ++++++++++++++++++
+>  arch/x86/include/asm/cpu_device_id.h |  2 ++
+>  drivers/cpufreq/acpi-cpufreq.c       | 24 +++++++++++++++++++++---
+>  3 files changed, 41 insertions(+), 3 deletions(-)
+>  create mode 100644 arch/x86/include/asm/amd-family.h
