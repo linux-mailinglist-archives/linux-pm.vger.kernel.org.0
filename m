@@ -2,228 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 484D12CF763
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Dec 2020 00:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA6D2CF770
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Dec 2020 00:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727363AbgLDXWI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Dec 2020 18:22:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35786 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbgLDXWI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 4 Dec 2020 18:22:08 -0500
-Date:   Fri, 4 Dec 2020 17:21:25 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607124087;
-        bh=jcN9PbMgOLCkW/eP5nH6XSM0/5/dbV78dPtpbOxyH3w=;
-        h=From:To:Cc:Subject:In-Reply-To:From;
-        b=QqgauAw1WS/afGO36xcC6AzO0lwg2sUSG5XaJj47SNxVwB45+PaMKQyXPTE1uxA2D
-         2ADrk6Hd+aNpzENCvjKpuKfjWvTDaIcuyXqRKMZiZVn55JjPa6jIFG1rh2HP1R9aRs
-         kjyT1dcfh6WUCZkjSBb7yvMA6hLuvk+YBxh8tFx9P4PwZ+d4ww5QtWSXClEQLmFb7c
-         HVjZh/rfpG6uKfoYj8jn2+8Ah4HHR5iBBMP/j6vTUG+UsPcYK147BJBxb9g9LLJzSF
-         RfkSYJkNRPiPLQd1fztTn/GP+y1oDuj4qOAApBEQbQaXopbp5PQpBfRpzu7Ry/8BtQ
-         XC7S7TNYdcRUw==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v1 1/2] PM: ACPI: PCI: Drop acpi_pm_set_bridge_wakeup()
-Message-ID: <20201204232125.GA1981160@bjorn-Precision-5520>
+        id S1727387AbgLDX2T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Dec 2020 18:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727386AbgLDX17 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 18:27:59 -0500
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A794AC0613D1
+        for <linux-pm@vger.kernel.org>; Fri,  4 Dec 2020 15:27:13 -0800 (PST)
+Received: by mail-ot1-x341.google.com with SMTP id y24so6930612otk.3
+        for <linux-pm@vger.kernel.org>; Fri, 04 Dec 2020 15:27:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zLc7/3okPvFxP0Z5cS+hPwJjhxGd6v5dEl0jnqjK1K0=;
+        b=xQwJageZbIycG4kTT8ShqMD3nUbwD7r8wUnxsVIIr+DgCBye6qng9WoGeVERzlid29
+         k/ObBybIk//OMjj5X5o6YZ0k0F4YAbF832KqRuemDPxAcGvpXGz4INpWkjsvJ/5BU8zJ
+         Qf7/ZZlvvJbUKw/nn1qkD3DgSqL7BZqwgj4xqzlmiG/PCX2A4z4QX3GYSWBzdNtfezVv
+         hbrkMNgU0Ogaga1hWbEu58REJxvLrJ/YyXTVkcispMWDJKH07SatPkBvKuiG1UyvjT6f
+         uRrkVoAcABjtKNGxhr6n3YqlTzMBrQLIw1cXMB8i991kgSJJhcPVqWsPcFOQd3eQ+uR4
+         TsIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zLc7/3okPvFxP0Z5cS+hPwJjhxGd6v5dEl0jnqjK1K0=;
+        b=q168E/WNi3DMtWIIVj7S2lnxf8UPoiVk1n7zOmYr5lve2aCnU/7o8qXfv/P6yg+hqk
+         y8sGXwYJFD7zt34XyVH0h42mgD17jWLFXtD96laQPwTHYr3c0cECQCTblyAPut/Inp5/
+         aKE2F/EY5D3wTAT1n3G4W+DgDCffn15373ARTq8mzl3ZiMkahzvr8mR1s9jnQPRRadjw
+         Ak0s+TtxozfTNlXudhG2BCO6WQuatFLADZxvJfrTDZC+TuF/rVSQmZT5+41shXcnpbZ2
+         6qbTC7UbF5gr2fr0X+a2J8iBg1prkDHix+MQfds4JG5b3OhzCg+/CqO3T9kAMoy7SE9j
+         u/Cw==
+X-Gm-Message-State: AOAM53191G8dv5yD2Yuuxn/Ia/hFYu8phmu4M2woX9unFbugGoSgQ/c7
+        jpz4gmdaqUS/yqDce1TGf0YyIQ==
+X-Google-Smtp-Source: ABdhPJx/5ojyUAiGu0IYqd4XJaPj3ZSo9l52l1eGs5DI9MrJXP8DByhPu8SeKg2BBP6DoIR4XpMftA==
+X-Received: by 2002:a9d:7401:: with SMTP id n1mr5323426otk.21.1607124433014;
+        Fri, 04 Dec 2020 15:27:13 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id k1sm949788ood.4.2020.12.04.15.27.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Dec 2020 15:27:12 -0800 (PST)
+Date:   Fri, 4 Dec 2020 17:27:10 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Evan Green <evgreen@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] interconnect: qcom: fix rpmh link failures
+Message-ID: <X8rFzqURIVHeH4SL@builder.lan>
+References: <20201204165030.3747484-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2261308.G18gbxz5ee@kreacher>
+In-Reply-To: <20201204165030.3747484-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 08:44:00PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The idea behind acpi_pm_set_bridge_wakeup() was to allow bridges to
-> be reference counted for wakeup enabling, because they may be enabled
-> to signal wakeup on behalf of their subordinate devices and that
-> may happen for multiple times in a row, whereas for the other devices
-> it only makes sense to enable wakeup signaling once.
-> 
-> However, this becomes problematic if the bridge itself is suspended,
-> because it is treated as a "regular" device in that case and the
-> reference counting doesn't work.
-> 
-> For instance, suppose that there are two devices below a bridge and
-> they both can signal wakeup.  Every time one of them is suspended,
-> wakeup signaling is enabled for the bridge, so when they both have
-> been suspended, the bridge's wakeup reference counter value is 2.
-> 
-> Say that the bridge is suspended subsequently and acpi_pci_wakeup()
-> is called for it.  Because the bridge can signal wakeup, that
-> function will invoke acpi_pm_set_device_wakeup() to configure it
-> and __acpi_pm_set_device_wakeup() will be called with the last
-> argument equal to 1.  This causes __acpi_device_wakeup_enable()
-> invoked by it to omit the reference counting, because the reference
-> counter of the target device (the bridge) is 2 at that time.
-> 
-> Now say that the bridge resumes and one of the device below it
-> resumes too, so the bridge's reference counter becomes 0 and
-> wakeup signaling is disabled for it, but there is still the other
-> suspended device which may need the bridge to signal wakeup on its
-> behalf and that is not going to work.
-> 
-> To address this scenario, use wakeup enable reference counting for
-> all devices, not just for bridges, so drop the last argument from
-> __acpi_device_wakeup_enable() and __acpi_pm_set_device_wakeup(),
-> which causes acpi_pm_set_device_wakeup() and
-> acpi_pm_set_bridge_wakeup() to become identical, so drop the latter
-> and use the former instead of it everywhere.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri 04 Dec 10:50 CST 2020, Arnd Bergmann wrote:
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> When CONFIG_COMPILE_TEST is set, it is possible to build some
+> of the interconnect drivers into the kernel while their dependencies
+> are loadable modules, which is bad:
+> 
+> arm-linux-gnueabi-ld: drivers/interconnect/qcom/bcm-voter.o: in function `qcom_icc_bcm_voter_commit':
+> (.text+0x1f8): undefined reference to `rpmh_invalidate'
+> arm-linux-gnueabi-ld: (.text+0x20c): undefined reference to `rpmh_write_batch'
+> arm-linux-gnueabi-ld: (.text+0x2b0): undefined reference to `rpmh_write_batch'
+> arm-linux-gnueabi-ld: (.text+0x2e8): undefined reference to `rpmh_write_batch'
+> arm-linux-gnueabi-ld: drivers/interconnect/qcom/icc-rpmh.o: in function `qcom_icc_bcm_init':
+> (.text+0x2ac): undefined reference to `cmd_db_read_addr'
+> arm-linux-gnueabi-ld: (.text+0x2c8): undefined reference to `cmd_db_read_aux_data'
+> 
+> The exact dependencies are a bit complicated, so split them out into a
+> hidden Kconfig symbol that all drivers can in turn depend on to get it
+> right.
+> 
+> Fixes: 976daac4a1c5 ("interconnect: qcom: Consolidate interconnect RPMh support")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Your patch looks correct to me, so:
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+
+But we're going to have to sprinkle a handful of these throughout the
+tree and we're not a lot of people who "understand" what it does (and at
+least I keep getting them wrong...)
+
+Perhaps it would be more reasonable to maintain this long term if we
+drop the possibility of compile testing these drivers independently of
+rpmh and command db? (I.e. drop the function stubs and rely on
+RPMH/COMMAND_DB to enable building under COMPILE_TEST)?
+
+
+And just to make it clear, I think we should merge your patch to fix
+v5.11; then consider to simplify this past that.
+
+Regards,
+Bjorn
 
 > ---
->  drivers/acpi/device_pm.c |   41 ++++++++++++-----------------------------
->  drivers/pci/pci-acpi.c   |    4 ++--
->  include/acpi/acpi_bus.h  |    5 -----
->  3 files changed, 14 insertions(+), 36 deletions(-)
+>  drivers/interconnect/qcom/Kconfig | 23 +++++++++++++++--------
+>  1 file changed, 15 insertions(+), 8 deletions(-)
 > 
-> Index: linux-pm/include/acpi/acpi_bus.h
-> ===================================================================
-> --- linux-pm.orig/include/acpi/acpi_bus.h
-> +++ linux-pm/include/acpi/acpi_bus.h
-> @@ -620,7 +620,6 @@ acpi_status acpi_remove_pm_notifier(stru
->  bool acpi_pm_device_can_wakeup(struct device *dev);
->  int acpi_pm_device_sleep_state(struct device *, int *, int);
->  int acpi_pm_set_device_wakeup(struct device *dev, bool enable);
-> -int acpi_pm_set_bridge_wakeup(struct device *dev, bool enable);
->  #else
->  static inline void acpi_pm_wakeup_event(struct device *dev)
->  {
-> @@ -651,10 +650,6 @@ static inline int acpi_pm_set_device_wak
->  {
->  	return -ENODEV;
->  }
-> -static inline int acpi_pm_set_bridge_wakeup(struct device *dev, bool enable)
-> -{
-> -	return -ENODEV;
-> -}
->  #endif
+> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+> index a8f93ba265f8..b3fb5b02bcf1 100644
+> --- a/drivers/interconnect/qcom/Kconfig
+> +++ b/drivers/interconnect/qcom/Kconfig
+> @@ -42,13 +42,23 @@ config INTERCONNECT_QCOM_QCS404
+>  	  This is a driver for the Qualcomm Network-on-Chip on qcs404-based
+>  	  platforms.
 >  
->  #ifdef CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT
-> Index: linux-pm/drivers/acpi/device_pm.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/device_pm.c
-> +++ linux-pm/drivers/acpi/device_pm.c
-> @@ -749,7 +749,7 @@ static void acpi_pm_notify_work_func(str
->  static DEFINE_MUTEX(acpi_wakeup_lock);
+> +config INTERCONNECT_QCOM_RPMH_POSSIBLE
+> +	tristate
+> +	default INTERCONNECT_QCOM
+> +	depends on QCOM_RPMH || (COMPILE_TEST && !QCOM_RPMH)
+> +	depends on QCOM_COMMAND_DB || (COMPILE_TEST && !QCOM_COMMAND_DB)
+> +	depends on OF || COMPILE_TEST
+> +	help
+> +	  Compile-testing RPMH drivers is possible on other platforms,
+> +	  but in order to avoid link failures, drivers must not be built-in
+> +	  when QCOM_RPMH or QCOM_COMMAND_DB are loadable modules
+> +
+>  config INTERCONNECT_QCOM_RPMH
+>  	tristate
 >  
->  static int __acpi_device_wakeup_enable(struct acpi_device *adev,
-> -				       u32 target_state, int max_count)
-> +				       u32 target_state)
->  {
->  	struct acpi_device_wakeup *wakeup = &adev->wakeup;
->  	acpi_status status;
-> @@ -757,9 +757,10 @@ static int __acpi_device_wakeup_enable(s
+>  config INTERCONNECT_QCOM_SC7180
+>  	tristate "Qualcomm SC7180 interconnect driver"
+> -	depends on INTERCONNECT_QCOM
+> -	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
+> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>  	select INTERCONNECT_QCOM_RPMH
+>  	select INTERCONNECT_QCOM_BCM_VOTER
+>  	help
+> @@ -57,8 +67,7 @@ config INTERCONNECT_QCOM_SC7180
 >  
->  	mutex_lock(&acpi_wakeup_lock);
+>  config INTERCONNECT_QCOM_SDM845
+>  	tristate "Qualcomm SDM845 interconnect driver"
+> -	depends on INTERCONNECT_QCOM
+> -	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
+> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>  	select INTERCONNECT_QCOM_RPMH
+>  	select INTERCONNECT_QCOM_BCM_VOTER
+>  	help
+> @@ -67,8 +76,7 @@ config INTERCONNECT_QCOM_SDM845
 >  
-> -	if (wakeup->enable_count >= max_count)
-> +	if (wakeup->enable_count >= INT_MAX) {
-> +		acpi_handle_info(adev->handle, "Wakeup enable count out of bounds!\n");
->  		goto out;
-> -
-> +	}
->  	if (wakeup->enable_count > 0)
->  		goto inc;
+>  config INTERCONNECT_QCOM_SM8150
+>  	tristate "Qualcomm SM8150 interconnect driver"
+> -	depends on INTERCONNECT_QCOM
+> -	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
+> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>  	select INTERCONNECT_QCOM_RPMH
+>  	select INTERCONNECT_QCOM_BCM_VOTER
+>  	help
+> @@ -77,8 +85,7 @@ config INTERCONNECT_QCOM_SM8150
 >  
-> @@ -799,7 +800,7 @@ out:
->   */
->  static int acpi_device_wakeup_enable(struct acpi_device *adev, u32 target_state)
->  {
-> -	return __acpi_device_wakeup_enable(adev, target_state, 1);
-> +	return __acpi_device_wakeup_enable(adev, target_state);
->  }
->  
->  /**
-> @@ -829,8 +830,12 @@ out:
->  	mutex_unlock(&acpi_wakeup_lock);
->  }
->  
-> -static int __acpi_pm_set_device_wakeup(struct device *dev, bool enable,
-> -				       int max_count)
-> +/**
-> + * acpi_pm_set_device_wakeup - Enable/disable remote wakeup for given device.
-> + * @dev: Device to enable/disable to generate wakeup events.
-> + * @enable: Whether to enable or disable the wakeup functionality.
-> + */
-> +int acpi_pm_set_device_wakeup(struct device *dev, bool enable)
->  {
->  	struct acpi_device *adev;
->  	int error;
-> @@ -850,37 +855,15 @@ static int __acpi_pm_set_device_wakeup(s
->  		return 0;
->  	}
->  
-> -	error = __acpi_device_wakeup_enable(adev, acpi_target_system_state(),
-> -					    max_count);
-> +	error = __acpi_device_wakeup_enable(adev, acpi_target_system_state());
->  	if (!error)
->  		dev_dbg(dev, "Wakeup enabled by ACPI\n");
->  
->  	return error;
->  }
-> -
-> -/**
-> - * acpi_pm_set_device_wakeup - Enable/disable remote wakeup for given device.
-> - * @dev: Device to enable/disable to generate wakeup events.
-> - * @enable: Whether to enable or disable the wakeup functionality.
-> - */
-> -int acpi_pm_set_device_wakeup(struct device *dev, bool enable)
-> -{
-> -	return __acpi_pm_set_device_wakeup(dev, enable, 1);
-> -}
->  EXPORT_SYMBOL_GPL(acpi_pm_set_device_wakeup);
->  
->  /**
-> - * acpi_pm_set_bridge_wakeup - Enable/disable remote wakeup for given bridge.
-> - * @dev: Bridge device to enable/disable to generate wakeup events.
-> - * @enable: Whether to enable or disable the wakeup functionality.
-> - */
-> -int acpi_pm_set_bridge_wakeup(struct device *dev, bool enable)
-> -{
-> -	return __acpi_pm_set_device_wakeup(dev, enable, INT_MAX);
-> -}
-> -EXPORT_SYMBOL_GPL(acpi_pm_set_bridge_wakeup);
-> -
-> -/**
->   * acpi_dev_pm_low_power - Put ACPI device into a low-power state.
->   * @dev: Device to put into a low-power state.
->   * @adev: ACPI device node corresponding to @dev.
-> Index: linux-pm/drivers/pci/pci-acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-acpi.c
-> +++ linux-pm/drivers/pci/pci-acpi.c
-> @@ -1060,7 +1060,7 @@ static int acpi_pci_propagate_wakeup(str
->  {
->  	while (bus->parent) {
->  		if (acpi_pm_device_can_wakeup(&bus->self->dev))
-> -			return acpi_pm_set_bridge_wakeup(&bus->self->dev, enable);
-> +			return acpi_pm_set_device_wakeup(&bus->self->dev, enable);
->  
->  		bus = bus->parent;
->  	}
-> @@ -1068,7 +1068,7 @@ static int acpi_pci_propagate_wakeup(str
->  	/* We have reached the root bus. */
->  	if (bus->bridge) {
->  		if (acpi_pm_device_can_wakeup(bus->bridge))
-> -			return acpi_pm_set_bridge_wakeup(bus->bridge, enable);
-> +			return acpi_pm_set_device_wakeup(bus->bridge, enable);
->  	}
->  	return 0;
->  }
-> 
-> 
+>  config INTERCONNECT_QCOM_SM8250
+>  	tristate "Qualcomm SM8250 interconnect driver"
+> -	depends on INTERCONNECT_QCOM
+> -	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
+> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+>  	select INTERCONNECT_QCOM_RPMH
+>  	select INTERCONNECT_QCOM_BCM_VOTER
+>  	help
+> -- 
+> 2.27.0
 > 
