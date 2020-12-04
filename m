@@ -2,112 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4512CF70E
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Dec 2020 23:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484D12CF763
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Dec 2020 00:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730382AbgLDWp0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Dec 2020 17:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728734AbgLDWpZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 17:45:25 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E2DC0613D1;
-        Fri,  4 Dec 2020 14:44:45 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id p6so3947716plr.7;
-        Fri, 04 Dec 2020 14:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:in-reply-to:references:user-agent:date
-         :message-id:mime-version;
-        bh=yuYclua/K6G1/NzZklfhnByGsvXi5uYNWph4XL2hSIs=;
-        b=jGEvaLZ55EZaXGmYyljajBzGveSvX8t6YtByTv0yzn5xEk0mNTJgF7uyHpKEzjdV/v
-         nJl3bg0njIZuBPeuyDtaVdEOBu86zM8qC7bEtrPJ6bIfDiTN6VZne6VYV/qMr7E6iY41
-         aTyrl85v6Ii0bCj5oNlOz5phachxznzAkgqCFEAyT/AzgmT3ZqSRy7vHr8rF1zaJ2UFE
-         I8i2KgFpHe+BNsy9KIZ0Fn53ocC+1KyI6hr+HrURAoDJ449GCTHkuNwFfIq/bdyE/ICy
-         bIdlux3DXZPAjIqcjNq1N08wJAE2K+ybGKzHnrkoGFWZxBGh+ewBAd986wx0iNmKIv4p
-         Jhhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
-         :user-agent:date:message-id:mime-version;
-        bh=yuYclua/K6G1/NzZklfhnByGsvXi5uYNWph4XL2hSIs=;
-        b=r3dfBph2XwHycJJpcYjFFRsRsyCUJnws7PmCLPHhkuQ7IiWJVtpvSb79Xfi18G2H0P
-         aRxG2JOGV2Iyg+rTtquAviHnb+2QiGJbKsiEHS1YNL34lYnvM7SUJP4B3bY0sL8xhF2t
-         +3sfWz7qc+Vpd8J9D+uTfk+0m8/uX6Y0mj/rhpEZP2W4acdaWfe+TVr9GRyYIMZVk4aM
-         /6Ntad6NQ8l55MDg6Jly3lDRAbF0dkCvfeMsaNCkFoPQ9aLP61qws6KGWlpBqThZ61/l
-         AKS/Cq2isaiKdgnd82QOw5IItnXFuDeYdAfw6qMokU2tM7CRLcgtf15UcrYJgmPGxd8n
-         6nlg==
-X-Gm-Message-State: AOAM533ufg621CQdS9DEBHiFTRAENiY6immUR4GShOV1E4ZEszvEZc4Z
-        tgWEVDBjiaR30IlRO0AMUhg=
-X-Google-Smtp-Source: ABdhPJzobywerg8vaX5EtSuLsD9/y1ZfSYBHaXKoc9X8ALE2TfXiatvkFUNK1lvdB13oZaUEAKWGng==
-X-Received: by 2002:a17:90b:4394:: with SMTP id in20mr3377414pjb.34.1607121885363;
-        Fri, 04 Dec 2020 14:44:45 -0800 (PST)
-Received: from localhost ([2405:6580:31a1:500:1ac0:4dff:fe39:5426])
-        by smtp.gmail.com with ESMTPSA id y23sm3710809pje.41.2020.12.04.14.44.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 14:44:44 -0800 (PST)
-From:   Punit Agrawal <punitagrawal@gmail.com>
-To:     rjw@rjwysocki.net
-Cc:     wei.huang2@amd.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, bp@alien8.de, x86@kernel.org
-Subject: Re: [RFC PATCH 0/4] Add processor to the ignore PSD override list
-In-Reply-To: <20201125144847.3920-1-punitagrawal@gmail.com> (Punit Agrawal's
-        message of "Wed, 25 Nov 2020 23:48:43 +0900")
-References: <20201125144847.3920-1-punitagrawal@gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Sat, 05 Dec 2020 07:44:41 +0900
-Message-ID: <87zh2tp4x2.fsf@stealth>
+        id S1727363AbgLDXWI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Dec 2020 18:22:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726508AbgLDXWI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 4 Dec 2020 18:22:08 -0500
+Date:   Fri, 4 Dec 2020 17:21:25 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607124087;
+        bh=jcN9PbMgOLCkW/eP5nH6XSM0/5/dbV78dPtpbOxyH3w=;
+        h=From:To:Cc:Subject:In-Reply-To:From;
+        b=QqgauAw1WS/afGO36xcC6AzO0lwg2sUSG5XaJj47SNxVwB45+PaMKQyXPTE1uxA2D
+         2ADrk6Hd+aNpzENCvjKpuKfjWvTDaIcuyXqRKMZiZVn55JjPa6jIFG1rh2HP1R9aRs
+         kjyT1dcfh6WUCZkjSBb7yvMA6hLuvk+YBxh8tFx9P4PwZ+d4ww5QtWSXClEQLmFb7c
+         HVjZh/rfpG6uKfoYj8jn2+8Ah4HHR5iBBMP/j6vTUG+UsPcYK147BJBxb9g9LLJzSF
+         RfkSYJkNRPiPLQd1fztTn/GP+y1oDuj4qOAApBEQbQaXopbp5PQpBfRpzu7Ry/8BtQ
+         XC7S7TNYdcRUw==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH v1 1/2] PM: ACPI: PCI: Drop acpi_pm_set_bridge_wakeup()
+Message-ID: <20201204232125.GA1981160@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2261308.G18gbxz5ee@kreacher>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Tue, Nov 24, 2020 at 08:44:00PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The idea behind acpi_pm_set_bridge_wakeup() was to allow bridges to
+> be reference counted for wakeup enabling, because they may be enabled
+> to signal wakeup on behalf of their subordinate devices and that
+> may happen for multiple times in a row, whereas for the other devices
+> it only makes sense to enable wakeup signaling once.
+> 
+> However, this becomes problematic if the bridge itself is suspended,
+> because it is treated as a "regular" device in that case and the
+> reference counting doesn't work.
+> 
+> For instance, suppose that there are two devices below a bridge and
+> they both can signal wakeup.  Every time one of them is suspended,
+> wakeup signaling is enabled for the bridge, so when they both have
+> been suspended, the bridge's wakeup reference counter value is 2.
+> 
+> Say that the bridge is suspended subsequently and acpi_pci_wakeup()
+> is called for it.  Because the bridge can signal wakeup, that
+> function will invoke acpi_pm_set_device_wakeup() to configure it
+> and __acpi_pm_set_device_wakeup() will be called with the last
+> argument equal to 1.  This causes __acpi_device_wakeup_enable()
+> invoked by it to omit the reference counting, because the reference
+> counter of the target device (the bridge) is 2 at that time.
+> 
+> Now say that the bridge resumes and one of the device below it
+> resumes too, so the bridge's reference counter becomes 0 and
+> wakeup signaling is disabled for it, but there is still the other
+> suspended device which may need the bridge to signal wakeup on its
+> behalf and that is not going to work.
+> 
+> To address this scenario, use wakeup enable reference counting for
+> all devices, not just for bridges, so drop the last argument from
+> __acpi_device_wakeup_enable() and __acpi_pm_set_device_wakeup(),
+> which causes acpi_pm_set_device_wakeup() and
+> acpi_pm_set_bridge_wakeup() to become identical, so drop the latter
+> and use the former instead of it everywhere.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Punit Agrawal <punitagrawal@gmail.com> writes:
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-> Hi,
->
-> While looking into Giovanni's patches to enable frequency invariance
-> on AMD systems[0], I noticed an issue with initialising frequency
-> domain information on a recent AMD APU.
->
-> Patch 1 refactors the test to ignore firmware provided frequency
-> domain into a separate function.
->
-> Patch 2 adds said APU (Family: 0x17, Model: 0x60, Stepping: 0x01) to
-> the list of CPUs for which the PSD override is ignored. I am not quite
-> happy with having to special case a particular CPU but also couldn't
-> find any documentation to help identify the CPUs that don't need the
-> override.
-
-Are you be OK to pick the first two patches if there are no issues?
-
-Thanks,
-Punit
-
-
-> Patch 3 and 4 are somewhat independent and a first step towards
-> improving the situation with regards to the use of raw identifiers for
-> AMD processors throughout the kernel.
->
-> All feedback welcome.
->
-> Thanks,
-> Punit
->
-> [0] https://lore.kernel.org/linux-acpi/20201112182614.10700-1-ggherdovich@suse.cz/
->
-> Punit Agrawal (4):
->   cpufreq: acpi-cpufreq: Re-factor overriding ACPI PSD
->   cpufreq: acpi-cpufreq: Add processor to the ignore PSD override list
->   x86/cpu: amd: Define processor families
->   cpufreq: acpi-cpufreq: Use identifiers for AMD processor family
->
->  arch/x86/include/asm/amd-family.h    | 18 ++++++++++++++++++
->  arch/x86/include/asm/cpu_device_id.h |  2 ++
->  drivers/cpufreq/acpi-cpufreq.c       | 24 +++++++++++++++++++++---
->  3 files changed, 41 insertions(+), 3 deletions(-)
->  create mode 100644 arch/x86/include/asm/amd-family.h
+> ---
+>  drivers/acpi/device_pm.c |   41 ++++++++++++-----------------------------
+>  drivers/pci/pci-acpi.c   |    4 ++--
+>  include/acpi/acpi_bus.h  |    5 -----
+>  3 files changed, 14 insertions(+), 36 deletions(-)
+> 
+> Index: linux-pm/include/acpi/acpi_bus.h
+> ===================================================================
+> --- linux-pm.orig/include/acpi/acpi_bus.h
+> +++ linux-pm/include/acpi/acpi_bus.h
+> @@ -620,7 +620,6 @@ acpi_status acpi_remove_pm_notifier(stru
+>  bool acpi_pm_device_can_wakeup(struct device *dev);
+>  int acpi_pm_device_sleep_state(struct device *, int *, int);
+>  int acpi_pm_set_device_wakeup(struct device *dev, bool enable);
+> -int acpi_pm_set_bridge_wakeup(struct device *dev, bool enable);
+>  #else
+>  static inline void acpi_pm_wakeup_event(struct device *dev)
+>  {
+> @@ -651,10 +650,6 @@ static inline int acpi_pm_set_device_wak
+>  {
+>  	return -ENODEV;
+>  }
+> -static inline int acpi_pm_set_bridge_wakeup(struct device *dev, bool enable)
+> -{
+> -	return -ENODEV;
+> -}
+>  #endif
+>  
+>  #ifdef CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT
+> Index: linux-pm/drivers/acpi/device_pm.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/device_pm.c
+> +++ linux-pm/drivers/acpi/device_pm.c
+> @@ -749,7 +749,7 @@ static void acpi_pm_notify_work_func(str
+>  static DEFINE_MUTEX(acpi_wakeup_lock);
+>  
+>  static int __acpi_device_wakeup_enable(struct acpi_device *adev,
+> -				       u32 target_state, int max_count)
+> +				       u32 target_state)
+>  {
+>  	struct acpi_device_wakeup *wakeup = &adev->wakeup;
+>  	acpi_status status;
+> @@ -757,9 +757,10 @@ static int __acpi_device_wakeup_enable(s
+>  
+>  	mutex_lock(&acpi_wakeup_lock);
+>  
+> -	if (wakeup->enable_count >= max_count)
+> +	if (wakeup->enable_count >= INT_MAX) {
+> +		acpi_handle_info(adev->handle, "Wakeup enable count out of bounds!\n");
+>  		goto out;
+> -
+> +	}
+>  	if (wakeup->enable_count > 0)
+>  		goto inc;
+>  
+> @@ -799,7 +800,7 @@ out:
+>   */
+>  static int acpi_device_wakeup_enable(struct acpi_device *adev, u32 target_state)
+>  {
+> -	return __acpi_device_wakeup_enable(adev, target_state, 1);
+> +	return __acpi_device_wakeup_enable(adev, target_state);
+>  }
+>  
+>  /**
+> @@ -829,8 +830,12 @@ out:
+>  	mutex_unlock(&acpi_wakeup_lock);
+>  }
+>  
+> -static int __acpi_pm_set_device_wakeup(struct device *dev, bool enable,
+> -				       int max_count)
+> +/**
+> + * acpi_pm_set_device_wakeup - Enable/disable remote wakeup for given device.
+> + * @dev: Device to enable/disable to generate wakeup events.
+> + * @enable: Whether to enable or disable the wakeup functionality.
+> + */
+> +int acpi_pm_set_device_wakeup(struct device *dev, bool enable)
+>  {
+>  	struct acpi_device *adev;
+>  	int error;
+> @@ -850,37 +855,15 @@ static int __acpi_pm_set_device_wakeup(s
+>  		return 0;
+>  	}
+>  
+> -	error = __acpi_device_wakeup_enable(adev, acpi_target_system_state(),
+> -					    max_count);
+> +	error = __acpi_device_wakeup_enable(adev, acpi_target_system_state());
+>  	if (!error)
+>  		dev_dbg(dev, "Wakeup enabled by ACPI\n");
+>  
+>  	return error;
+>  }
+> -
+> -/**
+> - * acpi_pm_set_device_wakeup - Enable/disable remote wakeup for given device.
+> - * @dev: Device to enable/disable to generate wakeup events.
+> - * @enable: Whether to enable or disable the wakeup functionality.
+> - */
+> -int acpi_pm_set_device_wakeup(struct device *dev, bool enable)
+> -{
+> -	return __acpi_pm_set_device_wakeup(dev, enable, 1);
+> -}
+>  EXPORT_SYMBOL_GPL(acpi_pm_set_device_wakeup);
+>  
+>  /**
+> - * acpi_pm_set_bridge_wakeup - Enable/disable remote wakeup for given bridge.
+> - * @dev: Bridge device to enable/disable to generate wakeup events.
+> - * @enable: Whether to enable or disable the wakeup functionality.
+> - */
+> -int acpi_pm_set_bridge_wakeup(struct device *dev, bool enable)
+> -{
+> -	return __acpi_pm_set_device_wakeup(dev, enable, INT_MAX);
+> -}
+> -EXPORT_SYMBOL_GPL(acpi_pm_set_bridge_wakeup);
+> -
+> -/**
+>   * acpi_dev_pm_low_power - Put ACPI device into a low-power state.
+>   * @dev: Device to put into a low-power state.
+>   * @adev: ACPI device node corresponding to @dev.
+> Index: linux-pm/drivers/pci/pci-acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/pci-acpi.c
+> +++ linux-pm/drivers/pci/pci-acpi.c
+> @@ -1060,7 +1060,7 @@ static int acpi_pci_propagate_wakeup(str
+>  {
+>  	while (bus->parent) {
+>  		if (acpi_pm_device_can_wakeup(&bus->self->dev))
+> -			return acpi_pm_set_bridge_wakeup(&bus->self->dev, enable);
+> +			return acpi_pm_set_device_wakeup(&bus->self->dev, enable);
+>  
+>  		bus = bus->parent;
+>  	}
+> @@ -1068,7 +1068,7 @@ static int acpi_pci_propagate_wakeup(str
+>  	/* We have reached the root bus. */
+>  	if (bus->bridge) {
+>  		if (acpi_pm_device_can_wakeup(bus->bridge))
+> -			return acpi_pm_set_bridge_wakeup(bus->bridge, enable);
+> +			return acpi_pm_set_device_wakeup(bus->bridge, enable);
+>  	}
+>  	return 0;
+>  }
+> 
+> 
+> 
