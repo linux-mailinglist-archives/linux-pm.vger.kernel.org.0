@@ -2,87 +2,287 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDEA2CF899
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Dec 2020 02:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA272CFA5C
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Dec 2020 08:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbgLEB0T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Dec 2020 20:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728628AbgLEB0T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Dec 2020 20:26:19 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7210C0613D1;
-        Fri,  4 Dec 2020 17:25:38 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id p21so4596066pjv.0;
-        Fri, 04 Dec 2020 17:25:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r/qs0KrUGn0HCwSUP9qTJw2ZweL4QHDPihwqXZL4hgU=;
-        b=AVcstja1ZuPPKucB5nij/cu4ed/ZhaXc/1wddhL0KbZoaRbunSLvhgtGGjf/S41IR8
-         Zip0xONb3cYPZhuN/oApgsGTNvhkoOtm/LVaD+KvGQ7ES/R8aM/JqzcZSDH7RLLvJ9ED
-         Un3a30B1qd7JhaIhD0PZJ2aIgAdFh7CU4rSqIiQbq7/uKRla0wBVKRB7V8tac4xAgm3P
-         CenahyNoRbyvNlJTVNshIXp1NkIWMVukDdqqVX0rObR7OwlOoM8W3JTJgvACTyxdWmis
-         oDZhqUMpJp++oQaKR4zIrCjjC0JMXzxL17YAiPcMzu9ZT6WkQNcQS2DUUDWLbFExoGGV
-         9b7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r/qs0KrUGn0HCwSUP9qTJw2ZweL4QHDPihwqXZL4hgU=;
-        b=GN14X3WZldbINsniHtNkvDhUUJrk6QJJ5b+ypAiq+Aee/gb4yvAuKwsjYcU8b4ToI4
-         l1sPelHIM8J0CnM+QwjblLtasoXnSMSx/VUsTbVK3QfzY7L/aQbnKa110fAvz5A0+BU6
-         U70DtEYa9F/6jrorZ+gm5Yiow4Iw3HJPBJWNv0VSDHf5Ozv26bMfFIhcbhmvoeg18KVc
-         P5kVTKkfUMPZqeeIqRPxS5wzYpI8OqWTRdheuuBAQyQ/bLoY1bmT57wwzXukGW4FcJM2
-         f1ZHX9CKFmP8YIFB3NmEkzqJlRt15M5In6wUN8sIH0nl8lm8nwR7beYrFpt48Bdhww+h
-         X14A==
-X-Gm-Message-State: AOAM531DXXHUIACc4/z2cGxRNAyAV08+ek7lyBzqAFk3b7x0HlJpqfyS
-        2GczdeP8go9Mjh3U5TnJ+z8=
-X-Google-Smtp-Source: ABdhPJxZLHd2KbqVbaEFUxWXsulEuMvZwa02EPeBAZx1L8JLJHE5/37+gO+iI7XlFw9eb8eEOXdT2Q==
-X-Received: by 2002:a17:90a:d586:: with SMTP id v6mr6627717pju.103.1607131538460;
-        Fri, 04 Dec 2020 17:25:38 -0800 (PST)
-Received: from masabert (oki-109-236-4-100.jptransit.net. [109.236.4.100])
-        by smtp.gmail.com with ESMTPSA id q23sm6207399pfg.18.2020.12.04.17.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 17:25:37 -0800 (PST)
-Received: by masabert (Postfix, from userid 1000)
-        id 4910023603B2; Sat,  5 Dec 2020 10:25:36 +0900 (JST)
-From:   Masanari Iida <standby24x7@gmail.com>
-To:     linux-kernel@vger.kernel.org, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Masanari Iida <standby24x7@gmail.com>
-Subject: [PATCH] power: supply: Fix a typo in warning message
-Date:   Sat,  5 Dec 2020 10:25:32 +0900
-Message-Id: <20201205012532.1196962-1-standby24x7@gmail.com>
-X-Mailer: git-send-email 2.25.0
+        id S1726234AbgLEH4T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Dec 2020 02:56:19 -0500
+Received: from mail-03.mail-europe.com ([91.134.188.129]:50026 "EHLO
+        mail-03.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726031AbgLEH4T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Dec 2020 02:56:19 -0500
+Date:   Sat, 05 Dec 2020 07:54:48 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1607154893;
+        bh=X0j4mtQFgNpAjhdfrY8IFnbiw0NnKjl/cjF/A1ofjds=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=Cry5CtGRNND54Tv6OfOrS23SXD05Z4I/l39fGPVeejfkDQDbsGJPIf/cFz/ZarSIi
+         258i2k5ARC66i+UMmlP94TbmzXOk7bWIOl+510lN0qYT3vb72CHmaXnf0hsVvh+8VW
+         Y2BYDa6xHQuWGjm8REAZJBNyAc223HzQeWhqKohc=
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+From:   Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Reply-To: Timon Baetz <timon.baetz@protonmail.com>
+Subject: Re: [PATCH 2/3] power: supply: max8997_charger: Set CHARGER current limit
+Message-ID: <20201205085442.6ef557fc.timon.baetz@protonmail.com>
+In-Reply-To: <20201202215057.GA135888@kozik-lap>
+References: <20201202203516.43053-1-timon.baetz@protonmail.com> <20201202203516.43053-2-timon.baetz@protonmail.com> <20201202215057.GA135888@kozik-lap>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch fix a warning messages in power_supply_sysfs.c
+On Wed, 2 Dec 2020 23:50:57 +0200, Krzysztof Kozlowski wrote:
+> On Wed, Dec 02, 2020 at 09:07:19PM +0000, Timon Baetz wrote:
+> > Register for extcon notification and set charging current depending on
+> > the detected cable type. Current values are taken from i9100 kernel
+> > fork.
+> >
+> > Enable and disable the CHARGER regulator based on extcon events and
+> > remove regulator-always-on from the device tree.
+> >
+> > Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+> > ---
+> >  arch/arm/boot/dts/exynos4210-i9100.dts |  1 -
+> >  drivers/power/supply/max8997_charger.c | 92 ++++++++++++++++++++++++++
+> >  2 files changed, 92 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts=
+/exynos4210-i9100.dts
+> > index 6d0c04d77a39..9f8d927e0d21 100644
+> > --- a/arch/arm/boot/dts/exynos4210-i9100.dts
+> > +++ b/arch/arm/boot/dts/exynos4210-i9100.dts
+> > @@ -560,7 +560,6 @@ charger_reg: CHARGER {
+> >  =09=09=09=09regulator-name =3D "CHARGER";
+> >  =09=09=09=09regulator-min-microamp =3D <60000>;
+> >  =09=09=09=09regulator-max-microamp =3D <2580000>;
+> > -=09=09=09=09regulator-always-on; =20
+>=20
+> Thanks for the patch.
+>=20
+> The DTS changes always go separately.
+>=20
+> >  =09=09=09};
+> >
+> >  =09=09=09chargercv_reg: CHARGER_CV {
+> > diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/sup=
+ply/max8997_charger.c
+> > index 1947af25879a..26cd271576ec 100644
+> > --- a/drivers/power/supply/max8997_charger.c
+> > +++ b/drivers/power/supply/max8997_charger.c
+> > @@ -6,6 +6,7 @@
+> >  //  MyungJoo Ham <myungjoo.ham@samsung.com>
+> >
+> >  #include <linux/err.h>
+> > +#include <linux/extcon.h>
+> >  #include <linux/module.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/platform_device.h>
+> > @@ -31,6 +32,12 @@ struct charger_data {
+> >  =09struct device *dev;
+> >  =09struct max8997_dev *iodev;
+> >  =09struct power_supply *battery;
+> > +=09struct regulator *reg; =20
+>=20
+> You need to include regulator consumer.h.
+>=20
+> > +=09struct { =20
+>=20
+> It makes all dereferences longer. Just add a comment that these are
+> related to the extcon.
+>=20
+> > +=09=09struct extcon_dev *edev;
+> > +=09=09struct notifier_block nb;
+> > +=09=09struct work_struct work;
+> > +=09} extcon;
+> >  };
+> >
+> >  static enum power_supply_property max8997_battery_props[] =3D {
+> > @@ -88,6 +95,63 @@ static int max8997_battery_get_property(struct power=
+_supply *psy,
+> >  =09return 0;
+> >  }
+> >
+> > +static void max8997_battery_extcon_evt_stop_work(void *data)
+> > +{
+> > +=09struct charger_data *charger =3D data;
+> > +
+> > +=09cancel_work_sync(&charger->extcon.work);
+> > +}
+> > +
+> > +static void max8997_battery_extcon_evt_worker(struct work_struct *work=
+)
+> > +{
+> > +=09struct charger_data *charger =3D
+> > +=09    container_of(work, struct charger_data, extcon.work);
+> > +=09int ret, current_limit;
+> > +=09struct extcon_dev *edev =3D charger->extcon.edev;
+> > + =20
+>=20
+> It would be useful to report the current with POWER_SUPPLY_PROP_* but
+> it is a different patch.
+>=20
+> > +=09if (extcon_get_state(edev, EXTCON_CHG_USB_SDP) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB SDP charger is connected\n");
+> > +=09=09current_limit =3D 450000;
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_DCP) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB DCP charger is connected\n");
+> > +=09=09current_limit =3D 650000;
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_FAST) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB FAST charger is connected\n");
+> > +=09=09current_limit =3D 650000;
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_SLOW) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB SLOW charger is connected\n");
+> > +=09=09current_limit =3D 650000; =20
+>=20
+> The charger provides 500 mA, so I wonder whether 650 here is correct. Is
+> it at different voltage?
+>=20
 
-Signed-off-by: Masanari Iida <standby24x7@gmail.com>
----
- drivers/power/supply/power_supply_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I was wondering about that as well but as far as I can tell
+https://github.com/krzk/linux-vendor-backup/blob/samsung/galaxy-s2-epic-4g-=
+touch-sph-d710-exynos4210-dump/drivers/misc/max8997-muic.c#L1675-L1678
+treats all 4 charger types as MUIC_CHG_TYPE_TA which ends up settings
+650 mA. Voltage doesn't seem to change in vendor kernel. =20
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index a616b9d8f43c..92dd63171193 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -402,7 +402,7 @@ void power_supply_init_attrs(struct device_type *dev_type)
- 		struct device_attribute *attr;
- 
- 		if (!power_supply_attrs[i].prop_name) {
--			pr_warn("%s: Property %d skipped because is is missing from power_supply_attrs\n",
-+			pr_warn("%s: Property %d skipped because it is missing from power_supply_attrs\n",
- 				__func__, i);
- 			sprintf(power_supply_attrs[i].attr_name, "_err_%d", i);
- 		} else {
--- 
-2.25.0
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_CDP) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB CDP charger is connected\n");
+> > +=09=09current_limit =3D 650000;
+> > +=09} else {
+> > +=09=09dev_dbg(charger->dev, "USB charger is diconnected\n");
+> > +=09=09current_limit =3D -1;
+> > +=09}
+> > +
+> > +=09if (current_limit > 0) { =20
+>=20
+> ret should be declared here.
+>=20
+> > +=09=09ret =3D regulator_set_current_limit(charger->reg, current_limit,=
+ current_limit);
+> > +=09=09if (ret)
+> > +=09=09=09dev_err(charger->dev, "failed to set current limit: %d\n", re=
+t); =20
+>=20
+> Failure of setting the current should rather disable the charging.
+>=20
+> > +=09=09ret =3D regulator_enable(charger->reg);
+> > +=09=09if (ret)
+> > +=09=09=09dev_err(charger->dev, "failed to enable regulator: %d\n", ret=
+);
+> > +=09} else { =20
+>=20
+> ret should be declared here.
+>=20
+> > +=09=09ret =3D regulator_disable(charger->reg);
+> > +=09=09if (ret)
+> > +=09=09=09dev_err(charger->dev, "failed to disable regulator: %d\n", re=
+t);
+> > +=09} =20
+>=20
+> What about top-off charging?
+>=20
+> > +}
+> > +
+> > +static int max8997_battery_extcon_evt(struct notifier_block *nb,
+> > +=09=09=09=09unsigned long event, void *param)
+> > +{
+> > +=09struct charger_data *charger =3D
+> > +=09=09container_of(nb, struct charger_data, extcon.nb);
+> > +=09schedule_work(&charger->extcon.work);
+> > +=09return NOTIFY_OK;
+> > +}
+> > +
+> >  static const struct power_supply_desc max8997_battery_desc =3D {
+> >  =09.name=09=09=3D "max8997_pmic",
+> >  =09.type=09=09=3D POWER_SUPPLY_TYPE_BATTERY,
+> > @@ -104,6 +168,7 @@ static int max8997_battery_probe(struct platform_de=
+vice *pdev)
+> >  =09struct i2c_client *i2c =3D iodev->i2c;
+> >  =09struct max8997_platform_data *pdata =3D iodev->pdata;
+> >  =09struct power_supply_config psy_cfg =3D {};
+> > +=09struct extcon_dev *edev;
+> >
+> >  =09if (!pdata) {
+> >  =09=09dev_err(&pdev->dev, "No platform data supplied.\n");
+> > @@ -151,6 +216,12 @@ static int max8997_battery_probe(struct platform_d=
+evice *pdev)
+> >  =09=09return ret;
+> >  =09}
+> >
+> > +=09edev =3D extcon_get_extcon_dev("max8997-muic"); =20
+>=20
+> Store it directly under charger->edev.
+>=20
+> > +=09if (edev =3D=3D NULL) { =20
+>=20
+> if (!edev) {
+>=20
+> > +=09=09dev_info(&pdev->dev, "extcon is not ready, probe deferred\n"); =
+=20
+>=20
+> Do not print anything on deferrals.
+>=20
+> > +=09=09return -EPROBE_DEFER;
+> > +=09}
+> > +
+> >  =09charger =3D devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
+> >  =09if (!charger)
+> >  =09=09return -ENOMEM;
+> > @@ -170,6 +241,27 @@ static int max8997_battery_probe(struct platform_d=
+evice *pdev)
+> >  =09=09return PTR_ERR(charger->battery);
+> >  =09}
+> >
+> > +=09charger->reg =3D regulator_get(&pdev->dev, "CHARGER"); =20
+>=20
+> Here and in extcon_get_extcon_dev() - you make all these devices tightly
+> coupled. It will work, but I am afraid it's easy to break later.
+>=20
+> Instead you should have a device node in DTS to which the charger could
+> bind and where the driver will find regulator supply and extcon
+> phandles (with extcon_get_edev_by_phandle() for example).
+>=20
+> > +=09if (IS_ERR(charger->reg)) {
+> > +=09=09dev_err(&pdev->dev, "couldn't get CHARGER regulator\n");
+> > +=09=09return PTR_ERR(charger->reg);
+> > +=09}
+> > +
+> > +=09INIT_WORK(&charger->extcon.work, max8997_battery_extcon_evt_worker)=
+;
+> > +=09ret =3D devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop=
+_work, charger);
+> > +=09if (ret) {
+> > +=09=09dev_err(&pdev->dev, "failed to add extcon evt stop action: %d\n"=
+, ret); =20
+>=20
+> Missing regulator_put() here and in other places. Use devm-().
+>=20
+> > +=09=09return ret;
+> > +=09}
+> > +=09charger->extcon.edev =3D edev;
+> > +=09charger->extcon.nb.notifier_call =3D max8997_battery_extcon_evt;
+> > +=09ret =3D devm_extcon_register_notifier_all(&pdev->dev, charger->extc=
+on.edev,
+> > +=09=09=09&charger->extcon.nb); =20
+>=20
+> Align the arguments with opening '('.
+>=20
+> Best regards,
+> Krzysztof
+
+
 
