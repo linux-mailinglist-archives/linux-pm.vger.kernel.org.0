@@ -2,107 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF95C2D054C
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Dec 2020 14:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C3A2D0652
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Dec 2020 18:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727423AbgLFNol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Dec 2020 08:44:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
+        id S1726641AbgLFRdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Dec 2020 12:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbgLFNok (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Dec 2020 08:44:40 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DBAC0613D1;
-        Sun,  6 Dec 2020 05:44:00 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id b73so10784397edf.13;
-        Sun, 06 Dec 2020 05:44:00 -0800 (PST)
+        with ESMTP id S1726043AbgLFRdP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Dec 2020 12:33:15 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2724BC0613D1;
+        Sun,  6 Dec 2020 09:32:35 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id i9so11117502ioo.2;
+        Sun, 06 Dec 2020 09:32:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K3LhEesmWv5BmeOieMFYtK0OjNdZwovFc4Fkys5J8eY=;
-        b=TBvCtZExc2F4bqx0+RmEfpihQd4j2OvwXLIkCn1+OFfJDl6fxUtfbz7rh1VgxjRYhX
-         M2tWwxX4MMCGPW3sSJllp67bweNps04xkRtoYSNGZQE5oy6RKn08HKs6sgDQX+NKXh2r
-         QlfpXn9+UgHePMOkVU2oXztiTfBtpYIKHii714jwzFLJEFcpCYLTHEZ/Yd/2tJVn1l90
-         V86RKa9+vb+ub+e5nbYSEdH1HUDS9u/dM2DD2GS7xYRaFTB7SJ9HzbQLdm7tMhg5dS/z
-         42CJ71+UH1GjSgEfKKFElZAFoawM8TsR/bbPd6Xo1fQIbjCcjy1b6HDc5MrOqnG/+ehT
-         60OA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7N3sBfPKm9s8YI9bZ1YGc7d1O3+NqdQ1UI3/+WPcotk=;
+        b=M45rI/m9DMfZmnJXHL7tTN30niu12r/EOAWc38VandwIYSnfEVUM1g2s2xYck7pARH
+         wZD40X4jBe/KnNOo7q99jsZPfDyPyERcf/qwdmfPPxcEvC6QWQuKRb5mts4VYAlwHM+J
+         CKtoU6Gyj7ZUqawPn6PTniKEGMhXGCp3JK6isjiY62Hk27nQT+2Zt9oe5S2E/TgWczJ7
+         /zR6bHCHfRRjDxS2JiO4EROOwDW0x2uqZ1LF4OlUTO/0E2YsLnVvEzlRXl/I1pgjyOE4
+         FWVXUDY0G6EzP9mJ2M06s6TEISJPNDdN6huCiSC02KrDYjY1bxOQXPht9J2QQ5p+PN9u
+         CWZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K3LhEesmWv5BmeOieMFYtK0OjNdZwovFc4Fkys5J8eY=;
-        b=sPdhN8Wm37JFWMWUOPS7yEexAaUTLMqR1+xbqWlrtJcG94Faf9XereZreMaMPpaotN
-         //EBXbdaAYI8bW/tprK5bFVUKKSzOgIUnFSnSUlarbwEYzXLr5zBQUaGceMn8B04Lclq
-         9ESbmkIpR+eS15Fc477pZPlri5Pu53eKfM733BB0jJQkbt3uHnsUG7hxozefK8dZZ657
-         bod/yLcgzdrsu8IDcawXrZIPnuwRgbnR3QRVqbO+0px9//hJK4UAm1CQJ7eTpaopfxOn
-         QVf6OMrY1L2P+ajB6DenMv5LrbkwzuotAcxedpjduFZPVdwD4ZdtrLJ+1PvuNtsqSxe/
-         ML+A==
-X-Gm-Message-State: AOAM533SFtv06LV2HTLkc4HOKeGfMaiSDPykLCTa/cu5xhs3mptJyr4i
-        MzYEQRgs5NX/4g64vxv88jAUy7mIjQU4xw==
-X-Google-Smtp-Source: ABdhPJzJchVLZzukVDULqSwbn/ZttMrtqlgFoo20F2MG5PcA08+ds/HNj4nzW6aw5jb+n9SzacQGqw==
-X-Received: by 2002:aa7:c1c6:: with SMTP id d6mr16024798edp.275.1607262239156;
-        Sun, 06 Dec 2020 05:43:59 -0800 (PST)
-Received: from ubuntu2004 ([188.24.159.61])
-        by smtp.gmail.com with ESMTPSA id c23sm8927929eds.88.2020.12.06.05.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Dec 2020 05:43:58 -0800 (PST)
-Date:   Sun, 6 Dec 2020 15:44:00 +0200
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 6/7] input: atc260x: Add onkey driver for ATC260x PMICs
-Message-ID: <20201206134400.GA201906@ubuntu2004>
-References: <cover.1607216141.git.cristian.ciocaltea@gmail.com>
- <fb61c36b7a8449d76767f148f2d43447294d5038.1607216141.git.cristian.ciocaltea@gmail.com>
- <X8xMTwaUYx+s1BG7@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7N3sBfPKm9s8YI9bZ1YGc7d1O3+NqdQ1UI3/+WPcotk=;
+        b=aAkIFtZYZSLRgUqMAIwXUM7QOml8M2IlMBGgekg3eIKLqzC7i88cLaRCLuP61Fn6Ml
+         puNF9KDYBFg83nus9tnviPupp5YTRDeOUOq7pBHOBrwCOczG1YzGacsFN0ITTS6Lsc0M
+         pVWAO5Wg3lAVKwv4Q0RTc6h18q5PeTHe/qruxDJ11Lz0fUQDfdQTZNGOWYwAa0yp5xp9
+         S2taH6lWT4BiqliNdOXNCafMAmwq5TNErF8SdmulSX9Xtgn5SCfVVQ8cEtwGc71X320F
+         AVeTdKJJRJB54QF0WY4Z+fF9Y6LTJxEVFf5kpkY70zEdsgi5A11qbpR6tiwMhLnvvGDG
+         GKlA==
+X-Gm-Message-State: AOAM530GwA6yNWM3k3Mh7t8CAOXp/gDcsO4WSk+eZTlevtchk/XERCML
+        qqTOe/cbxmJZ8/x2BbuDENnRwoIF6JtqkSRvTeE=
+X-Google-Smtp-Source: ABdhPJzqZCFiKiB5XjLUJArT/oiyNwwhPMWwOHxTLuiIuMINM7YzyWjxQfucl4doqDFbDLYVdSs/NdFIuXNI+AklWTs=
+X-Received: by 2002:a02:5d85:: with SMTP id w127mr16403664jaa.83.1607275954356;
+ Sun, 06 Dec 2020 09:32:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X8xMTwaUYx+s1BG7@google.com>
+References: <20201204200920.133780-1-mario.limonciello@dell.com>
+ <CAKgT0Uc=OxcuHbZihY3zxsxzPprJ_8vGHr=reBJFMrf=V9A5kg@mail.gmail.com>
+ <DM6PR19MB2636B200D618A5546E7BBB57FAF10@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <CAKgT0UfuyrbzpDNySMmnAkqKnw9cYuEM1LhgG0QvmrY=smR-uw@mail.gmail.com> <20201205154951.4dd92194@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+In-Reply-To: <20201205154951.4dd92194@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Sun, 6 Dec 2020 09:32:23 -0800
+Message-ID: <CAKgT0UcJh219bAXJtJFu7BZsh2+UVGqpLmTiX9V1utsQpPSjvA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] Improve s0ix flows for systems i219LM
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Sasha Netfin <sasha.neftin@intel.com>,
+        Aaron Brown <aaron.f.brown@intel.com>,
+        Stefan Assmann <sassmann@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        David Arcari <darcari@redhat.com>,
+        "Shen, Yijun" <Yijun.Shen@dell.com>,
+        "Yuan, Perry" <Perry.Yuan@dell.com>,
+        "anthony.wong@canonical.com" <anthony.wong@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Dec 05, 2020 at 07:13:19PM -0800, Dmitry Torokhov wrote:
-> On Sun, Dec 06, 2020 at 03:27:06AM +0200, Cristian Ciocaltea wrote:
-> > The Actions Semi ATC260x PMICs are able to manage an onkey button.
-> > This driver exposes the ATC260x onkey as an input device. It can also
-> > be configured to force a system reset on a long key-press with an
-> > adjustable duration.
-> > 
-> > The currently supported chip variants are ATC2603C and ATC2609A.
-> > 
-> > Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-> > ---
-> > Changes in v3: 
-> >  - Integrated Dmitry's review:
-> >    * Dropped the logic around the check for 'pdev->dev.of_node'
-> >    * Renamed 'ret' variable in 'atc260x_onkey_probe()' to 'error'
-> >    * Used 'dev_dbg' instead of 'dev_info' on status KEY_RESET_DISABLED
-> >    * Dropped 'input_dev->evbit[0] = BIT_MASK(EV_KEY);'
-> >    * Removed IRQF_TRIGGER_HIGH flag on 'devm_request_threaded_irq()'
-> >    * Implemented open/close to mitigate the racing issue in
-> >      'atc260x_onkey_remove()' which has been dropped now
-> >  - Removed the unnecessary driver compatibles
-> >  - Used 'reset-time-sec' property of the parent device instead of
-> >    'actions,reset-time-sec' of now obsolete and removed 'onkey' DT node
-> 
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> Please merge with the rest through MFD I suppose.
-> 
-> Thanks.
-> 
-> -- 
-> Dmitry
+On Sat, Dec 5, 2020 at 3:49 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Fri, 4 Dec 2020 14:38:03 -0800 Alexander Duyck wrote:
+> > > > The patches look good to me. Just need to address the minor issue that
+> > > > seems to have been present prior to the introduction of this patch
+> > > > set.
+> > > >
+> > > > Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+> > >
+> > > Thanks for your review.  Just some operational questions - since this previously
+> > > existed do you want me to re-spin the series to a v4 for this, or should it be
+> > > a follow up after the series?
+> > >
+> > > If I respin it, would you prefer that change to occur at the start or end
+> > > of the series?
+> >
+> > I don't need a respin, but if you are going to fix it you should
+> > probably put out the patch as something like a 8/7. If you respin it
+> > should happen near the start of the series as it is a bug you are
+> > addressing.
+>
+> Don't we need that patch to be before this series so it can be
+> back ported easily? Or is it not really a bug?
 
-Thank you, Dmitry!
+You're right. For backports it would make it easier to have the patch
+be before the changes. As far as being a bug, it is one, but it isn't
+an urgent bug as it is basically some bad exception handling so the
+likelihood of seeing it should be quite low.
