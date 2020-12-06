@@ -2,131 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB772D04CE
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Dec 2020 13:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF95C2D054C
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Dec 2020 14:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727716AbgLFMim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Dec 2020 07:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
+        id S1727423AbgLFNol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Dec 2020 08:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727395AbgLFMim (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Dec 2020 07:38:42 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2A3C0613D1
-        for <linux-pm@vger.kernel.org>; Sun,  6 Dec 2020 04:38:01 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id r3so9965200wrt.2
-        for <linux-pm@vger.kernel.org>; Sun, 06 Dec 2020 04:38:01 -0800 (PST)
+        with ESMTP id S1725767AbgLFNok (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Dec 2020 08:44:40 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DBAC0613D1;
+        Sun,  6 Dec 2020 05:44:00 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id b73so10784397edf.13;
+        Sun, 06 Dec 2020 05:44:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=XptJK1kJZCCNiHTchuzcwvQbCAcodgoNqQmzzWdVmdo=;
-        b=ouYefsCpglGL2mE8NfS9LtSfpVgVSRPlT+WOB6HdXcmKvSZok0M4GFXimO6se6kA9W
-         hodFaRZazQrAjhF6hS70NQ2WRCs7YEwxVAWfu3VsF3nlXjx33fN/cicjSFr3VVJM991A
-         d/z3kah1juL0UTPW50/bmF1PDBJxzPzRe3hTbPooPyWASejsaBz3YorhZUJJ0W81Bz8+
-         7JP9JnHo8qGugGde35nKeCFGRNrNoHaRAm0RHv3G8BLCvJ65Omx64VO8P3wP9o2zQ88L
-         jtiRrxEaO0BZonhTrxASJivO4CZORkTAR1wzdVq3ttP9udPUxSeabX6XLOILzy2IVxma
-         tDHg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=K3LhEesmWv5BmeOieMFYtK0OjNdZwovFc4Fkys5J8eY=;
+        b=TBvCtZExc2F4bqx0+RmEfpihQd4j2OvwXLIkCn1+OFfJDl6fxUtfbz7rh1VgxjRYhX
+         M2tWwxX4MMCGPW3sSJllp67bweNps04xkRtoYSNGZQE5oy6RKn08HKs6sgDQX+NKXh2r
+         QlfpXn9+UgHePMOkVU2oXztiTfBtpYIKHii714jwzFLJEFcpCYLTHEZ/Yd/2tJVn1l90
+         V86RKa9+vb+ub+e5nbYSEdH1HUDS9u/dM2DD2GS7xYRaFTB7SJ9HzbQLdm7tMhg5dS/z
+         42CJ71+UH1GjSgEfKKFElZAFoawM8TsR/bbPd6Xo1fQIbjCcjy1b6HDc5MrOqnG/+ehT
+         60OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=XptJK1kJZCCNiHTchuzcwvQbCAcodgoNqQmzzWdVmdo=;
-        b=J+cAZa28BRpHu0lxyn0naJ5sLvd14qNoAykRhihlrZWXyQciu9/jYXt1EYt34pW2k8
-         HuVL5fREPYxegdgyyjfMGXEndgjpLTQuEx/fbxp0/t1jnisFehnKn7dqJAxW5N44vhLA
-         Kzt+vo2WGy9MQJz2We4GvaCVvB6saxBogRFdAyQgl2PodT6WvCLrxsv7RFOowliL49cO
-         5PB2bwz2Xkx7SLIBor24Px6FCQfQAfL+wRFvw6iD+srHAXKwI+Fmr/5zMGhSW06Ce7uH
-         AE8HSWqBtBGrO+Hy9TDn+Q14exZBFBNu8juLuPFcR6K+nQr03l4LQ78hVqlhK3onGvcz
-         ptSg==
-X-Gm-Message-State: AOAM5311D21hHaAmn1OYaSlwLRLUb4unV1Srtgl3989YpmO9YcVZqh+s
-        xmBz/GwSMwum3W7UJ7uY5Jnn4g==
-X-Google-Smtp-Source: ABdhPJzuYUxbQn+kz7+SXM3X5IUOYUL9LT3Qb8sE1MX/h1aki0+r1TukFu6UuszlKlVhjjSUjgjSDw==
-X-Received: by 2002:a5d:4149:: with SMTP id c9mr5777775wrq.271.1607258280111;
-        Sun, 06 Dec 2020 04:38:00 -0800 (PST)
-Received: from localhost.localdomain (lns-bzn-59-82-252-158-132.adsl.proxad.net. [82.252.158.132])
-        by smtp.gmail.com with ESMTPSA id l3sm11047356wrr.89.2020.12.06.04.37.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=K3LhEesmWv5BmeOieMFYtK0OjNdZwovFc4Fkys5J8eY=;
+        b=sPdhN8Wm37JFWMWUOPS7yEexAaUTLMqR1+xbqWlrtJcG94Faf9XereZreMaMPpaotN
+         //EBXbdaAYI8bW/tprK5bFVUKKSzOgIUnFSnSUlarbwEYzXLr5zBQUaGceMn8B04Lclq
+         9ESbmkIpR+eS15Fc477pZPlri5Pu53eKfM733BB0jJQkbt3uHnsUG7hxozefK8dZZ657
+         bod/yLcgzdrsu8IDcawXrZIPnuwRgbnR3QRVqbO+0px9//hJK4UAm1CQJ7eTpaopfxOn
+         QVf6OMrY1L2P+ajB6DenMv5LrbkwzuotAcxedpjduFZPVdwD4ZdtrLJ+1PvuNtsqSxe/
+         ML+A==
+X-Gm-Message-State: AOAM533SFtv06LV2HTLkc4HOKeGfMaiSDPykLCTa/cu5xhs3mptJyr4i
+        MzYEQRgs5NX/4g64vxv88jAUy7mIjQU4xw==
+X-Google-Smtp-Source: ABdhPJzJchVLZzukVDULqSwbn/ZttMrtqlgFoo20F2MG5PcA08+ds/HNj4nzW6aw5jb+n9SzacQGqw==
+X-Received: by 2002:aa7:c1c6:: with SMTP id d6mr16024798edp.275.1607262239156;
+        Sun, 06 Dec 2020 05:43:59 -0800 (PST)
+Received: from ubuntu2004 ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id c23sm8927929eds.88.2020.12.06.05.43.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Dec 2020 04:37:59 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, Len Brown <lenb@kernel.org>
-Subject: [PATCH RFD] thermal: core: Browse the trip points in reverse order and exit
-Date:   Sun,  6 Dec 2020 13:37:53 +0100
-Message-Id: <20201206123753.28440-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Sun, 06 Dec 2020 05:43:58 -0800 (PST)
+Date:   Sun, 6 Dec 2020 15:44:00 +0200
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] input: atc260x: Add onkey driver for ATC260x PMICs
+Message-ID: <20201206134400.GA201906@ubuntu2004>
+References: <cover.1607216141.git.cristian.ciocaltea@gmail.com>
+ <fb61c36b7a8449d76767f148f2d43447294d5038.1607216141.git.cristian.ciocaltea@gmail.com>
+ <X8xMTwaUYx+s1BG7@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X8xMTwaUYx+s1BG7@google.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When reading the code it is unclear if the loop is there to handle one
-trip point or all the trip points above a certain temperature.
+On Sat, Dec 05, 2020 at 07:13:19PM -0800, Dmitry Torokhov wrote:
+> On Sun, Dec 06, 2020 at 03:27:06AM +0200, Cristian Ciocaltea wrote:
+> > The Actions Semi ATC260x PMICs are able to manage an onkey button.
+> > This driver exposes the ATC260x onkey as an input device. It can also
+> > be configured to force a system reset on a long key-press with an
+> > adjustable duration.
+> > 
+> > The currently supported chip variants are ATC2603C and ATC2609A.
+> > 
+> > Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+> > ---
+> > Changes in v3: 
+> >  - Integrated Dmitry's review:
+> >    * Dropped the logic around the check for 'pdev->dev.of_node'
+> >    * Renamed 'ret' variable in 'atc260x_onkey_probe()' to 'error'
+> >    * Used 'dev_dbg' instead of 'dev_info' on status KEY_RESET_DISABLED
+> >    * Dropped 'input_dev->evbit[0] = BIT_MASK(EV_KEY);'
+> >    * Removed IRQF_TRIGGER_HIGH flag on 'devm_request_threaded_irq()'
+> >    * Implemented open/close to mitigate the racing issue in
+> >      'atc260x_onkey_remove()' which has been dropped now
+> >  - Removed the unnecessary driver compatibles
+> >  - Used 'reset-time-sec' property of the parent device instead of
+> >    'actions,reset-time-sec' of now obsolete and removed 'onkey' DT node
+> 
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> 
+> Please merge with the rest through MFD I suppose.
+> 
+> Thanks.
+> 
+> -- 
+> Dmitry
 
-With the current code, the throttle function is called for every trip
-point crossed and it is ambiguous if that is made on purpose.
-
-Even digging into the history up to April, 16th 2015, the initial git
-import of the acpi implementation of the loop before being converted
-into a generic code, it is unclear if all trip points must be handled
-or not.
-
-When the code was intially written, was it assuming there can be only
-one passive or active trip point ?
-
-The cooling effect of the system will be very different depending on
-how this loop is considered.
-
-Even the IPA governor is filtering out multiple trip points to stick
-to one value. Was the code to accomodate with a bogus loop and based
-on the multiple non-critical trip points ?
-
-Another example: arch/arm64/boot/dts/exynos/exynos5433-tmu.dtsi
-defines 7 passive trip points, each of them mapped to the *same*
-cooling device but with different min-max states. That means the
-handle trip points loop will go through all these seven trip points
-and change the state of the cooling device seven times.
-
-On the other hand, a thermal zone can have two different cooling
-devices mapped to two trip points, shall we consider having both
-cooling devices acting together when the second trip point is crossed
-(eg. 1st trip point: cpufreq cooling device + 2nd trip point: fan), or
-the second cooling device takes over the first one ? IOW, combine the
-cooling effects or not ?
-
-Depending on the expected behavior, the loop can be done in the
-reverse order and exit after processing the highest trip point.
-
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Kukjin Kim <kgene@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Thara Gopinath <thara.gopinath@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Len Brown <lenb@kernel.org>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 9d6a7b7f8ab4..d745b62a63af 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -562,8 +562,9 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
- 
- 	tz->notify_event = event;
- 
--	for (count = 0; count < tz->trips; count++)
--		handle_thermal_trip(tz, count);
-+	for (count = tz->trips - 1; count >= 0; count--)
-+		if (handle_thermal_trip(tz, count))
-+			break;
- 
- 	monitor_thermal_zone(tz);
- }
--- 
-2.17.1
-
+Thank you, Dmitry!
