@@ -2,109 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41E82D1CF1
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 23:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953202D1D54
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 23:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbgLGWMF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 17:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S1727646AbgLGW36 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 17:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgLGWME (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 17:12:04 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AB3C061793;
-        Mon,  7 Dec 2020 14:11:24 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id f11so4915952ljn.2;
-        Mon, 07 Dec 2020 14:11:24 -0800 (PST)
+        with ESMTP id S1726346AbgLGW36 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 17:29:58 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915E1C061793
+        for <linux-pm@vger.kernel.org>; Mon,  7 Dec 2020 14:29:17 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id a9so20381500lfh.2
+        for <linux-pm@vger.kernel.org>; Mon, 07 Dec 2020 14:29:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MJm4yFBoOOG0Zxihy7qPEaeoKuVX+MClzRO8u7W5XUg=;
-        b=tbSwwhqIuNQzd6L+D2wv6DP3s10F3sQjGFbz9OZUiX32KC7DgE1gCLimps3ZYKpw1O
-         btb4gSIDwLmF8DfMaR7t1MJmpGW3up9U8Yg4lnvwjKc2f1ionNYGvK9aJqwWNCh84DzI
-         Wn2yeourqvFLQWyNQaL4qnZyP2G4GCcOOBP4a7WwMlSWL0o6WD3rO7w9x9d7F06HnH3S
-         3LTCVfnD1bicCQawdSIduxCNwCe31R3Mp6nNjJP+9Cl6TbtPvoTpDB6s8XlH+vWU7/DL
-         H+D8y86H6LXu6eMIf1FL9uRO0Nqqf6mVn9Mgfih/V4T0M3CSd6zTcQAO0PXofQPfWg+C
-         gXCA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1Z7vXIFm1nN8q1nU0Yw8i5nugjLivvO7Dp4dIDNpOHA=;
+        b=g/HD6zErfhsiIhiKVQYp++lcjqSYaA/bCArI/edpHG+Q+ocCjgIuue31lAm7xdKjKW
+         bRg8N/lWrcCFRdh9GPy2YuaVf5oisA4VP0IL3g2KMCn26MrfMLEJwB1NNXk4vOT2Oa0w
+         iSfYJSlLKveSUs0JB5ufB9N2Q2646YqdJfAjFNkmbCJJKmSzjRc28gI/14Zq6H4C30hg
+         hst1DWx//F11Kabb6Ui42ShkLmQ8wwrwyhceRph9i8LO44I5iaMc2xAMzBh91lUISqc1
+         m0Qxwizk511GTk5FbLh1MEpd7aH2dBsOGefyXpQcn1d6J37xippIUehQAN1ouVzutQmI
+         5DIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MJm4yFBoOOG0Zxihy7qPEaeoKuVX+MClzRO8u7W5XUg=;
-        b=r+Lk3SzV3im9Z1Cj4oh5Ex+SIsezMEh8i/tSP7fpthnqkNzVbdusd3fvvaaefGvpKb
-         Ra/xaoHMcN4LyWm7Eo2shdFm1DE52FbyehTcdJe77MogIiQAkxuZVPnsPZlRqDhmPEIm
-         QHlryxQTNsAERp+3bWikZzmlYHwAurFRMIKfRDSzy9BVwKUIua5Uq4p1C+K2lh3G69Zj
-         YQzGrHwQ4KC95L3Doa3qg26KVxjq2KfMRcDnb5wDSA+fdd50C+Tdf3Ix7zfYrywFrh/N
-         013gqYfIq10gpEc7RNN0i2ebOPh0eq2NaDbC5nS9rGe2a40b2p8PFO+1w5Ui/8MxNZVW
-         wJjg==
-X-Gm-Message-State: AOAM531Kk95/TQbwYmtyqXpBJjfBh5RQySogUij5U/ofTHklA6JNThG8
-        S51S8dLXp+vMwjJZbL4cbciCyAp0uLA=
-X-Google-Smtp-Source: ABdhPJwHEfUeaYEY6cBzpP/Ij0Zo7ypjRgpkG3KdpX0TNEunlTBMvM1jIpO0BRfGMx711+SK5PytMA==
-X-Received: by 2002:a2e:2a83:: with SMTP id q125mr5672403ljq.436.1607379082627;
-        Mon, 07 Dec 2020 14:11:22 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-53.dynamic.spd-mgts.ru. [109.252.192.53])
-        by smtp.googlemail.com with ESMTPSA id x25sm3062664lfn.99.2020.12.07.14.11.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Dec 2020 14:11:22 -0800 (PST)
-Subject: Re: [PATCH v11 09/10] PM / devfreq: tegra30: Support interconnect and
- OPPs from device-tree
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-References: <20201203192439.16177-1-digetx@gmail.com>
- <CGME20201203192723epcas1p372e53c3e1443b7cd3010c44faff735ec@epcas1p3.samsung.com>
- <20201203192439.16177-10-digetx@gmail.com>
- <42927892-d4a7-9368-480b-14c0d06e7116@samsung.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6ab55ef7-87bb-9f10-c262-b02430fe7d12@gmail.com>
-Date:   Tue, 8 Dec 2020 01:11:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        bh=1Z7vXIFm1nN8q1nU0Yw8i5nugjLivvO7Dp4dIDNpOHA=;
+        b=sSWOZxKFgn0b0D1Xr1Cr23+Cls6otYX/04vSt3zdoBXzcRYZM7K4UAfMcZH7kUIYIY
+         FV5/Ux9NtFXye1G8OX01AFzh7hCBbO2Te8XtpgeObHTe1ilZr+4/v2m+9zLdorVCEUhM
+         7bW7cjotrl4ZC4YyXKQ4/q1gi+4fTWJlnLxaCoIgOGvvz+se1zqW2dZiLgQGcj0KLOQQ
+         YsW4/q3mPM0ubohl6HNhdfax7aeeaREHJzGcjbiLQDoHJPF4nJDXMqrzptIlV1zk6itI
+         YvGSD99dLWIqZz2r2NFnbAM/Mrxjs7spHbG5x6at+nlfDQdQeGYnRxJDAg4zh1vQA4Bx
+         AQvQ==
+X-Gm-Message-State: AOAM531kDJPANZvPimQjamx+H4W/hTyeKzndujZIJIwzKxSF8tIk7mkM
+        aG/SVsp4WH+9WbOyxT+wOQ==
+X-Google-Smtp-Source: ABdhPJxMYfnISVrV9prkQ+yMPED5UD9XnjBMdMOrVzsaxn/j0xMmInjJsHTk1VQOZB0/xvoVZeLEUA==
+X-Received: by 2002:a19:ec09:: with SMTP id b9mr9607293lfa.178.1607380156120;
+        Mon, 07 Dec 2020 14:29:16 -0800 (PST)
+Received: from localhost.localdomain ([212.180.222.158])
+        by smtp.gmail.com with ESMTPSA id p19sm3012316lfh.82.2020.12.07.14.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Dec 2020 14:29:15 -0800 (PST)
+From:   Marek Czerski <ma.czerski@gmail.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, Marek Czerski <ma.czerski@gmail.com>
+Subject: [PATCH] power: reset: ltc2952: make trigger delay configurable
+Date:   Mon,  7 Dec 2020 23:28:29 +0100
+Message-Id: <20201207222829.13676-1-ma.czerski@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <42927892-d4a7-9368-480b-14c0d06e7116@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-07.12.2020 04:32, Chanwoo Choi пишет:
-> On 12/4/20 4:24 AM, Dmitry Osipenko wrote:
->> This patch moves ACTMON driver away from generating OPP table by itself,
->> transitioning it to use the table which comes from device-tree. This
->> change breaks compatibility with older device-trees and brings support
->> for the interconnect framework to the driver. This is a mandatory change
->> which needs to be done in order to implement interconnect-based memory
->> DVFS, i.e. device-trees need to be updated. Now ACTMON issues a memory
->> bandwidth requests using dev_pm_opp_set_bw() instead of driving EMC clock
->> rate directly.
->>
->> Tested-by: Peter Geis <pgwipeout@gmail.com>
->> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
->> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
-...
-> 
-> Applied it. Thanks for your work for a long time.
-> 
+Make trigger delay configurable through device tree with
+trigger-delay-ms property.
 
-Thank you!
+Trigger delay is the time to wait before starting shutdown
+sequence after trigger line assertion.
+Trigger delay must take into account the OFFT time configured
+with the capacitor connected to OFFT pin of the LTC2952 chip.
+Basically, the higher the capacitance connected to OFFT pin,
+the larger trigger delay must be.
+
+Signed-off-by: Marek Czerski <ma.czerski@gmail.com>
+---
+ .../devicetree/bindings/power/reset/ltc2952-poweroff.txt  | 4 ++++
+ drivers/power/reset/ltc2952-poweroff.c                    | 8 ++++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/power/reset/ltc2952-poweroff.txt b/Documentation/devicetree/bindings/power/reset/ltc2952-poweroff.txt
+index cd2d7f58a..881f15a78 100644
+--- a/Documentation/devicetree/bindings/power/reset/ltc2952-poweroff.txt
++++ b/Documentation/devicetree/bindings/power/reset/ltc2952-poweroff.txt
+@@ -17,6 +17,9 @@ Optional properties:
+ 			chip's trigger line. If this property is not set, the
+ 			trigger function is ignored and the chip is kept alive
+ 			until an explicit kill signal is received
++- trigger-delay-ms	The number of milliseconds to wait after trigger line
++			assertion before executing shut down procedure.
++			The default is 2500ms.
+ 
+ Example:
+ 
+@@ -24,6 +27,7 @@ ltc2952 {
+ 	compatible = "lltc,ltc2952";
+ 
+ 	trigger-gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
++        trigger-delay-ms = <2000>;
+ 	watchdog-gpios = <&gpio1 2 GPIO_ACTIVE_HIGH>;
+ 	kill-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+ };
+diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+index 318927938..243811541 100644
+--- a/drivers/power/reset/ltc2952-poweroff.c
++++ b/drivers/power/reset/ltc2952-poweroff.c
+@@ -55,6 +55,7 @@
+ #include <linux/mod_devicetable.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/reboot.h>
++#include <linux/of.h>
+ 
+ struct ltc2952_poweroff {
+ 	struct hrtimer timer_trigger;
+@@ -172,10 +173,17 @@ static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+ static int ltc2952_poweroff_init(struct platform_device *pdev)
+ {
+ 	int ret;
++	u32 trigger_delay_ms;
+ 	struct ltc2952_poweroff *data = platform_get_drvdata(pdev);
+ 
+ 	ltc2952_poweroff_default(data);
+ 
++	if (!of_property_read_u32(pdev->dev.of_node, "trigger-delay-ms",
++				  &trigger_delay_ms)) {
++		data->trigger_delay = ktime_set(trigger_delay_ms / MSEC_PER_SEC,
++			(trigger_delay_ms % MSEC_PER_SEC) * NSEC_PER_MSEC);
++	}
++
+ 	data->gpio_watchdog = devm_gpiod_get(&pdev->dev, "watchdog",
+ 					     GPIOD_OUT_LOW);
+ 	if (IS_ERR(data->gpio_watchdog)) {
+-- 
+2.25.1
+
