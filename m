@@ -2,171 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA862D1695
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 17:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A4C2D1719
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 18:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726938AbgLGQkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 11:40:31 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61978 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726698AbgLGQkb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 11:40:31 -0500
-Received: from 89-64-79-106.dynamic.chello.pl (89.64.79.106) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.530)
- id aa4a46705c8d1b84; Mon, 7 Dec 2020 17:39:48 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>
-Subject: [PATCH v1 4/4] cpufreq: intel_pstate: Implement the ->adjust_perf() callback
-Date:   Mon, 07 Dec 2020 17:38:58 +0100
-Message-ID: <3342398.tGQZsKHvNY@kreacher>
-In-Reply-To: <20360841.iInq7taT2Z@kreacher>
-References: <20360841.iInq7taT2Z@kreacher>
+        id S1726311AbgLGREg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 12:04:36 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:35842 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbgLGREg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 12:04:36 -0500
+Received: by mail-oi1-f194.google.com with SMTP id x16so16168591oic.3;
+        Mon, 07 Dec 2020 09:04:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=19119qT55jo1E4qrWnIhabF5L38EkieKkqJe7d3pVh4=;
+        b=h6XDpKm0p1bCQ89j4bVamFTzcD2zQoq332clhIM+R8wHIA9GNodsalF/wgOUBzhjJS
+         k2mLONLUCBCvgy7WaWrCWQ++gHmFqBmyGNKtsDpZx9V8axx76fLCKUc65r1QLC1QKB/q
+         RO9eIXH0zXfAvMNDP7RSQnRjnEuntt1zjNUwS3xKKvloNsY5sPO+9KmIq2EqLbQ0sVZa
+         9UkTdg8n5/A4AQfs5g3+QnmMj0cIvcKLJnKFdGGMWMTaKF6jxPg3G4m67AOnY3XUZ7NC
+         wQU1ZENAI7UJoJnggKbiqtaImp/ISYsSsarVsq2cFBp18j0LW4aZBd26QPEbYjmx4skd
+         aQ4A==
+X-Gm-Message-State: AOAM532FfXhn7msFSK0JnEgTRHbxHnNN3UcD2kvOYq0s95/0QxQxCrnf
+        b4aeTH2M+U8oRSJ8ugvKfQ==
+X-Google-Smtp-Source: ABdhPJyBNmiiAD7WrCmET03nS+b6iaipwxbjuAnKKBQf6mUm+C30OUOrc++vnzrLL/+G5RhWs05D6Q==
+X-Received: by 2002:aca:5711:: with SMTP id l17mr6127842oib.53.1607360635005;
+        Mon, 07 Dec 2020 09:03:55 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id m81sm3037226oib.37.2020.12.07.09.03.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Dec 2020 09:03:54 -0800 (PST)
+Received: (nullmailer pid 439974 invoked by uid 1000);
+        Mon, 07 Dec 2020 17:03:52 -0000
+Date:   Mon, 7 Dec 2020 11:03:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Kao <michael.kao@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        hsinyi@chromium.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        ethan.chang@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/3] dt-bindings: thermal: Add binding document for
+ mt6873 thermal controller
+Message-ID: <20201207170352.GA439416@robh.at.kernel.org>
+References: <20201207063127.28051-1-michael.kao@mediatek.com>
+ <20201207063127.28051-4-michael.kao@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201207063127.28051-4-michael.kao@mediatek.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Make intel_pstate expose the ->adjust_perf() callback when it
-operates in the passive mode with HWP enabled which causes the
-schedutil governor to use that callback instead of ->fast_switch().
-
-The minimum and target performance-level values passed by the
-governor to ->adjust_perf() are converted to HWP.REQ.MIN and
-HWP.REQ.DESIRED, respectively, which allows the processor to
-adjust its configuration to maximize energy-efficiency while
-providing sufficient capacity.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Changes with respect to the RFC:
- - Drop the code related to the dropped "busy" argument of
-   ->adjust_perf().
- - Update the changelog accordingly.
-
----
- drivers/cpufreq/intel_pstate.c |   70 +++++++++++++++++++++++++++++++++--------
- 1 file changed, 58 insertions(+), 12 deletions(-)
-
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -2526,20 +2526,19 @@ static void intel_cpufreq_trace(struct c
- 		fp_toint(cpu->iowait_boost * 100));
- }
- 
--static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pstate,
--				     bool strict, bool fast_switch)
-+static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 min, u32 max,
-+				     u32 desired, bool fast_switch)
- {
- 	u64 prev = READ_ONCE(cpu->hwp_req_cached), value = prev;
- 
- 	value &= ~HWP_MIN_PERF(~0L);
--	value |= HWP_MIN_PERF(target_pstate);
-+	value |= HWP_MIN_PERF(min);
- 
--	/*
--	 * The entire MSR needs to be updated in order to update the HWP min
--	 * field in it, so opportunistically update the max too if needed.
--	 */
- 	value &= ~HWP_MAX_PERF(~0L);
--	value |= HWP_MAX_PERF(strict ? target_pstate : cpu->max_perf_ratio);
-+	value |= HWP_MAX_PERF(max);
-+
-+	value &= ~HWP_DESIRED_PERF(~0L);
-+	value |= HWP_DESIRED_PERF(desired);
- 
- 	if (value == prev)
- 		return;
-@@ -2569,11 +2568,15 @@ static int intel_cpufreq_update_pstate(s
- 	int old_pstate = cpu->pstate.current_pstate;
- 
- 	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
--	if (hwp_active)
--		intel_cpufreq_adjust_hwp(cpu, target_pstate,
--					 policy->strict_target, fast_switch);
--	else if (target_pstate != old_pstate)
-+	if (hwp_active) {
-+		int max_pstate = policy->strict_target ?
-+					target_pstate : cpu->max_perf_ratio;
-+
-+		intel_cpufreq_adjust_hwp(cpu, target_pstate, max_pstate, 0,
-+					 fast_switch);
-+	} else if (target_pstate != old_pstate) {
- 		intel_cpufreq_adjust_perf_ctl(cpu, target_pstate, fast_switch);
-+	}
- 
- 	cpu->pstate.current_pstate = target_pstate;
- 
-@@ -2634,6 +2637,47 @@ static unsigned int intel_cpufreq_fast_s
- 	return target_pstate * cpu->pstate.scaling;
- }
- 
-+static void intel_cpufreq_adjust_perf(unsigned int cpunum,
-+				      unsigned long min_perf,
-+				      unsigned long target_perf,
-+				      unsigned long capacity)
-+{
-+	struct cpudata *cpu = all_cpu_data[cpunum];
-+	int old_pstate = cpu->pstate.current_pstate;
-+	int cap_pstate, min_pstate, max_pstate, target_pstate;
-+
-+	update_turbo_state();
-+	cap_pstate = global.turbo_disabled ? cpu->pstate.max_pstate :
-+					     cpu->pstate.turbo_pstate;
-+
-+	/* Optimization: Avoid unnecessary divisions. */
-+
-+	target_pstate = cap_pstate;
-+	if (target_perf < capacity)
-+		target_pstate = DIV_ROUND_UP(cap_pstate * target_perf, capacity);
-+
-+	min_pstate = cap_pstate;
-+	if (min_perf < capacity)
-+		min_pstate = DIV_ROUND_UP(cap_pstate * min_perf, capacity);
-+
-+	if (min_pstate < cpu->pstate.min_pstate)
-+		min_pstate = cpu->pstate.min_pstate;
-+
-+	if (min_pstate < cpu->min_perf_ratio)
-+		min_pstate = cpu->min_perf_ratio;
-+
-+	max_pstate = min(cap_pstate, cpu->max_perf_ratio);
-+	if (max_pstate < min_pstate)
-+		max_pstate = min_pstate;
-+
-+	target_pstate = clamp_t(int, target_pstate, min_pstate, max_pstate);
-+
-+	intel_cpufreq_adjust_hwp(cpu, min_pstate, max_pstate, target_pstate, true);
-+
-+	cpu->pstate.current_pstate = target_pstate;
-+	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
-+}
-+
- static int intel_cpufreq_cpu_init(struct cpufreq_policy *policy)
- {
- 	int max_state, turbo_max, min_freq, max_freq, ret;
-@@ -3032,6 +3076,8 @@ static int __init intel_pstate_init(void
- 			intel_pstate.attr = hwp_cpufreq_attrs;
- 			intel_cpufreq.attr = hwp_cpufreq_attrs;
- 			intel_cpufreq.flags |= CPUFREQ_NEED_UPDATE_LIMITS;
-+			intel_cpufreq.fast_switch = NULL;
-+			intel_cpufreq.adjust_perf = intel_cpufreq_adjust_perf;
- 			if (!default_driver)
- 				default_driver = &intel_pstate;
- 
+On Mon, 07 Dec 2020 14:31:27 +0800, Michael Kao wrote:
+> This patch adds binding document for mt6873 thermal controller.
+> 
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> ---
+>  .../thermal/mediatek-thermal-lvts.yaml        | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+> 
 
 
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.example.dts:21:18: fatal error: dt-bindings/clock/mt8192-clk.h: No such file or directory
+   21 |         #include <dt-bindings/clock/mt8192-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1364: dt_binding_check] Error 2
+
+
+See https://patchwork.ozlabs.org/patch/1411898
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
