@@ -2,162 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F5C2D1723
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 18:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48B92D18C7
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 19:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbgLGRIq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 12:08:46 -0500
-Received: from mail-oo1-f65.google.com ([209.85.161.65]:40904 "EHLO
-        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725822AbgLGRIp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 12:08:45 -0500
-Received: by mail-oo1-f65.google.com with SMTP id 9so678784ooy.7;
-        Mon, 07 Dec 2020 09:08:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SogwgdPzZLs7UQaCL9uSzW/XvOBxKSbmidKt0mKHBqM=;
-        b=aJx5WW/j4od1ZI/UXgIQFLm2qASM/Zs+X/uY5MhumaD91MFNDqkvd9MiesjSNeEj5I
-         Er2DBOTLVDQFtoC36B9IoK4T8E36XK8GGhpLAAOq//BwwysjF+1D0JqBhwc/uk8/STb+
-         EEJUP2CwqOjmG5k4qPBlK0RMUCmWMbQqUocW9FVZg2qEvBliE7TorbiLeNb6U1rH5Tos
-         3EU7+o5LuZFwroRVHLAQeo9z8ris+/bD0yjALGk+v6YcZ8kB/8PRPFMfmj9/bNtupvEO
-         y+CQdxduM94PgLednxPbYnQWEOxFYPtCMZRUXfavaSpp/RIEWnNGSfdHAF7s0ACNq7et
-         dmDQ==
-X-Gm-Message-State: AOAM530Y9xFUfMaI9LVU0z/oICLsfxZwpLme+2w/5dK/RZ8ft77zAjEr
-        Yo8E1vCjagBPbTxA0Igl7A==
-X-Google-Smtp-Source: ABdhPJzmdnrsrHxYVXf/qeAQGbpnlZ7/zYKbrxltqs4VunJ1rWtUE6YSlqOlmfjWhHbswR7eYMS+4w==
-X-Received: by 2002:a4a:3e42:: with SMTP id t63mr1568149oot.32.1607360878900;
-        Mon, 07 Dec 2020 09:07:58 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id k13sm2929820otl.72.2020.12.07.09.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 09:07:58 -0800 (PST)
-Received: (nullmailer pid 445307 invoked by uid 1000);
-        Mon, 07 Dec 2020 17:07:56 -0000
-Date:   Mon, 7 Dec 2020 11:07:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Kao <michael.kao@mediatek.com>
-Cc:     ethan.chang@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 3/3] dt-bindings: thermal: Add binding document for
- mt6873 thermal controller
-Message-ID: <20201207170756.GB439416@robh.at.kernel.org>
-References: <20201207063127.28051-1-michael.kao@mediatek.com>
- <20201207063127.28051-4-michael.kao@mediatek.com>
+        id S1726352AbgLGSxL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 13:53:11 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:14861 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbgLGSxL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 13:53:11 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1607367166; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=pHUWFHyylj2tSQF2E2ZynRPPGPx4mvb8MQe0e6mkGKg=;
+ b=wBcYwEgMw2+FMHdFSQ9/JJO5UmeT/tiUKdN2SDeDHIXsS6dg6qfU0enNH+dnDOFPb5Z95kkd
+ bgbYU18tCXkfiqDnCSGgfHok10gcMIsW1psLaPLP3lz31Aftwxh74ekJ9zZl/Itgb9pjD4Bq
+ M44UiKD/NAn8+DvgWzj9CY2rpsM=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
+ 5fce79ddb50fb3818af6b658 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 07 Dec 2020 18:52:13
+ GMT
+Sender: manafm=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3FD05C433CA; Mon,  7 Dec 2020 18:52:13 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: manafm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 49CFDC433C6;
+        Mon,  7 Dec 2020 18:52:12 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201207063127.28051-4-michael.kao@mediatek.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 08 Dec 2020 00:22:12 +0530
+From:   manafm@codeaurora.org
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: thermal: Add NULL pointer check before using
+ cooling device stats
+In-Reply-To: <55cd5e44-f34e-26a3-fad7-20100d429d1d@linaro.org>
+References: <1607108991-31948-1-git-send-email-manafm@codeaurora.org>
+ <55cd5e44-f34e-26a3-fad7-20100d429d1d@linaro.org>
+Message-ID: <6cbc296beb4dd28214ab009cfc10e7f9@codeaurora.org>
+X-Sender: manafm@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 07, 2020 at 02:31:27PM +0800, Michael Kao wrote:
-> This patch adds binding document for mt6873 thermal controller.
+On 2020-12-05 16:42, Daniel Lezcano wrote:
+> On 04/12/2020 20:09, Manaf Meethalavalappu Pallikunhi wrote:
+>> There is a possible chance that some cooling device stats buffer
+>> allocation fails due to very high cooling device max state value.
+>> Later cooling device update or cooling stats sysfs will try to
+>> access stats data for the same cooling device. It will lead to
+>> NULL pointer dereference issue.
+>> 
+>> Add a NULL pointer check before accessing thermal cooling device
+>> stats data. It fixes the following bug
+>> 
+>> [ 26.812833] Unable to handle kernel NULL pointer dereference at 
+>> virtual address 0000000000000004
+>> [ 27.122960] Call trace:
+>> [ 27.122963] do_raw_spin_lock+0x18/0xe8
+>> [ 27.122966] _raw_spin_lock+0x24/0x30
+>> [ 27.128157] thermal_cooling_device_stats_update+0x24/0x98
+>> [ 27.128162] cur_state_store+0x88/0xb8
+>> [ 27.128166] dev_attr_store+0x40/0x58
+>> [ 27.128169] sysfs_kf_write+0x50/0x68
+>> [ 27.133358] kernfs_fop_write+0x12c/0x1c8
+>> [ 27.133362] __vfs_write+0x54/0x160
+>> [ 27.152297] vfs_write+0xcc/0x188
+>> [ 27.157132] ksys_write+0x78/0x108
+>> [ 27.162050] ksys_write+0xf8/0x108
+>> [ 27.166968] __arm_smccc_hvc+0x158/0x4b0
+>> [ 27.166973] __arm_smccc_hvc+0x9c/0x4b0
+>> [ 27.186005] el0_svc+0x8/0xc
+>> 
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
+>> <manafm@codeaurora.org>
 > 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> ---
->  .../thermal/mediatek-thermal-lvts.yaml        | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+> The only place where it can crash is when the
+> thermal_cooling_device_stats_update() function is called.
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-> new file mode 100644
-> index 000000000000..745611718c0a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek-thermal-lvts.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek SoC LVTS thermal controller (DTS) binding
-> +
-> +maintainers:
-> +  - Yu-Chia Chang <ethan.chang@mediatek.com>, Michael Kao <michael.kao@mediatek.com>
+> The other places in show*/store* in the stats directory are 
+> inaccessible
+> as the sysfs entry is not showed up due to the
+> thermal_cooling_device_stats_setup() failing.
+> 
+> It would have been nice if the thermal_cooling_device_stats_update() 
+> was
+> not called at all but I don't see how we can do that without static 
+> keys
+> which is overkill for a degraded mode.
+> 
+> I guess having the kzallocation warning in the console output is enough
+> to warn the user the system is working without the stats for the 
+> cooling
+> device. That should not prevent the system functioning.
+> 
+> Can you resend with the check in thermal_cooling_device_stats_update() 
+> only?
+> 
+> Thanks
+> 
+>   -- Daniel
+Thanks for your review, I double checked it, yes, no need to add NULL 
+check in stats sysfs show*/store* functions.
+I will update this in V2
 
-Not the right format. 1 email per entry.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6873-lvts
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: lvts_clk
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 0
-> +
-> +required:
-> +  - "#thermal-sensor-cells"
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/thermal/thermal.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8192-clk.h>
-> +    dts: lvts@1100b000 {
-> +        compatible = "mediatek,mt6873-lvts";
-> +        reg = <0x1100b000 0x1000>;
-> +        clocks = <&infracfg CLK_INFRA_THERM>;
-> +        clock-names = "lvts_clk";
-> +        #thermal-sensor-cells = <0>;
-> +        interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +
-> +    thermal-zones {
-> +        cpu_thermal: cpu-thermal {
-> +            polling-delay-passive = <0>;
-> +            polling-delay = <0>;
-> +
-> +            thermal-sensors = <&dts>;
-> +            trips {
-> +                cpu_alert1: cpu-alert1 {
-> +                    temperature = <85000>;
-> +                    hysteresis = <0>;
-> +                    type = "passive";
-> +                };
-> +
-> +                cpu_crit: cpu-crit {
-> +                    temperature = <120000>;
-> +                    hysteresis = <0>;
-> +                    type = "critical";
-> +                };
-> +            };
-> +
-> +            cooling-maps {
-> +            };
-> +        };
-> +    };
-> +...
-> -- 
-> 2.18.0
+Thanks
+Manaf
 > 
+> 
+>> ---
+>>  drivers/thermal/thermal_sysfs.c | 18 +++++++++++++++++-
+>>  1 file changed, 17 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/thermal/thermal_sysfs.c 
+>> b/drivers/thermal/thermal_sysfs.c
+>> index 473449b..a5e4855 100644
+>> --- a/drivers/thermal/thermal_sysfs.c
+>> +++ b/drivers/thermal/thermal_sysfs.c
+>> @@ -827,6 +827,9 @@ void thermal_cooling_device_stats_update(struct 
+>> thermal_cooling_device *cdev,
+>>  {
+>>  	struct cooling_dev_stats *stats = cdev->stats;
+>> 
+>> +	if (!stats)
+>> +		return;
+>> +
+>>  	spin_lock(&stats->lock);
+>> 
+>>  	if (stats->state == new_state)
+>> @@ -848,6 +851,9 @@ static ssize_t total_trans_show(struct device 
+>> *dev,
+>>  	struct cooling_dev_stats *stats = cdev->stats;
+>>  	int ret;
+>> 
+>> +	if (!stats)
+>> +		return -ENODEV;
+>> +
+>>  	spin_lock(&stats->lock);
+>>  	ret = sprintf(buf, "%u\n", stats->total_trans);
+>>  	spin_unlock(&stats->lock);
+>> @@ -864,6 +870,9 @@ time_in_state_ms_show(struct device *dev, struct 
+>> device_attribute *attr,
+>>  	ssize_t len = 0;
+>>  	int i;
+>> 
+>> +	if (!stats)
+>> +		return -ENODEV;
+>> +
+>>  	spin_lock(&stats->lock);
+>>  	update_time_in_state(stats);
+>> 
+>> @@ -882,8 +891,12 @@ reset_store(struct device *dev, struct 
+>> device_attribute *attr, const char *buf,
+>>  {
+>>  	struct thermal_cooling_device *cdev = to_cooling_device(dev);
+>>  	struct cooling_dev_stats *stats = cdev->stats;
+>> -	int i, states = stats->max_states;
+>> +	int i, states;
+>> +
+>> +	if (!stats)
+>> +		return -ENODEV;
+>> 
+>> +	states = stats->max_states;
+>>  	spin_lock(&stats->lock);
+>> 
+>>  	stats->total_trans = 0;
+>> @@ -907,6 +920,9 @@ static ssize_t trans_table_show(struct device 
+>> *dev,
+>>  	ssize_t len = 0;
+>>  	int i, j;
+>> 
+>> +	if (!stats)
+>> +		return -ENODEV;
+>> +
+>>  	len += snprintf(buf + len, PAGE_SIZE - len, " From  :    To\n");
+>>  	len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
+>>  	for (i = 0; i < stats->max_states; i++) {
+>> 
