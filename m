@@ -2,155 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D3E2D10BA
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 13:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C210E2D120B
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 14:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725781AbgLGMlz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 07:41:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:49554 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725770AbgLGMlz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Dec 2020 07:41:55 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 420C31042;
-        Mon,  7 Dec 2020 04:41:09 -0800 (PST)
-Received: from [10.57.29.223] (unknown [10.57.29.223])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 842E63F718;
-        Mon,  7 Dec 2020 04:41:06 -0800 (PST)
-Subject: Re: [PATCH v2 2/5] thermal: devfreq_cooling: get a copy of device
- status
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, orjan.eide@arm.com, robh@kernel.org,
-        alyssa.rosenzweig@collabora.com, steven.price@arm.com,
-        airlied@linux.ie, daniel@ffwll.ch, ionela.voinescu@arm.com
-References: <20201118120358.17150-1-lukasz.luba@arm.com>
- <20201118120358.17150-3-lukasz.luba@arm.com>
- <5d4743b9-5b2f-8494-8d10-6a5fd2c0fdfd@linaro.org>
- <d9906ed8-e3bf-5e42-2e43-09071848ae48@arm.com>
- <224c6b9b-977a-d553-f22b-2056223a84bc@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <947a3afc-5dd6-892b-6987-ad81a5a96197@arm.com>
-Date:   Mon, 7 Dec 2020 12:41:04 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726874AbgLGN3f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 08:29:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56409 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726410AbgLGN3e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 08:29:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607347687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zmWE4Di/SrsoSOSW6qXuYa1KIu/jIAKq7DifFwoMfwo=;
+        b=jRXrn7CzyHYB4rYN7cyWuY8mL4Ehw0D7nnpZFNK5HSTO28hdMB+2ZnlKsxKAJZKhtHrq9x
+        txmdFwaqIjP+Mga3M1A1Ly1ZVGo1YYKzfDtLWJUshuthrd2k4wMNB1Ei+LXfme1fXgsAoM
+        eGjPwXA41RysXmG8fRHjoMOGJRxSF0M=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-220-VVoi9N4hNLmoLrBARTYZ_g-1; Mon, 07 Dec 2020 08:28:03 -0500
+X-MC-Unique: VVoi9N4hNLmoLrBARTYZ_g-1
+Received: by mail-ed1-f69.google.com with SMTP id u17so1011519edi.18
+        for <linux-pm@vger.kernel.org>; Mon, 07 Dec 2020 05:28:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zmWE4Di/SrsoSOSW6qXuYa1KIu/jIAKq7DifFwoMfwo=;
+        b=FYbvm28/SXDbP5jgNkXiSThU0irmeTVLM3WfPasMhp9tH47A4MfBVv5tzyiN5AqTDe
+         I1RFOEi33se/eWGAqw3NfJqcxFlQa8J+Rzu6+ohY0/6DPFHGP4nVY+WmwpyQ8ys0jjQQ
+         Kzl48ag0sDrkVo894Kgd8cp8CeQSaJ894v1e2UM/05v/q+f5dZVGTcqtJOFwHkP5OW7U
+         H5BxqDr5VYR1G7SL3ZXWGhyURzKCe0WpfqcMC2QCZC9aNSm/mF6trFKXzEUtTZ5iowtL
+         S+Wh/83VRWVH31Hp5WquXgn3ucBf5/StoV0swkYHku/KpkMrlxQJdDTuazAqPNv7diym
+         UQHg==
+X-Gm-Message-State: AOAM532xXtHQYgQZOXo+eeLvaCMjNkRwDFzxKvNNyHsQrCEUzVEk7oKv
+        7v2F4oAGQsN00LY3Rcg3M2tPkR4yZ15a6BSNTIdDEnh+Bjrt0HIAZuaHIaJupYH3/8DwCw/EQkF
+        8IVotrAV9m8fJukzWQGo=
+X-Received: by 2002:a17:906:22c7:: with SMTP id q7mr18854672eja.486.1607347681961;
+        Mon, 07 Dec 2020 05:28:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwEorJ0sLId/xL9w8EuO0JL3r6cc0kBtMY1HiSGC5kejytn+C5L/ToMHIPmo2of6ILKDTvCoA==
+X-Received: by 2002:a17:906:22c7:: with SMTP id q7mr18854658eja.486.1607347681764;
+        Mon, 07 Dec 2020 05:28:01 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id oq27sm3461543ejb.108.2020.12.07.05.28.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Dec 2020 05:28:01 -0800 (PST)
+Subject: Re: [PATCH v3 0/7] Improve s0ix flows for systems i219LM
+To:     Mario Limonciello <mario.limonciello@dell.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan@lists.osuosl.org
+Cc:     linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Netfin <sasha.neftin@intel.com>,
+        Aaron Brown <aaron.f.brown@intel.com>,
+        Stefan Assmann <sassmann@redhat.com>,
+        David Miller <davem@davemloft.net>, darcari@redhat.com,
+        Yijun.Shen@dell.com, Perry.Yuan@dell.com,
+        anthony.wong@canonical.com
+References: <20201204200920.133780-1-mario.limonciello@dell.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <d0f7e565-05e1-437e-4342-55eb73daa907@redhat.com>
+Date:   Mon, 7 Dec 2020 14:28:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <224c6b9b-977a-d553-f22b-2056223a84bc@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201204200920.133780-1-mario.limonciello@dell.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
+On 12/4/20 9:09 PM, Mario Limonciello wrote:
+> commit e086ba2fccda ("e1000e: disable s0ix entry and exit flows for ME systems")
+> disabled s0ix flows for systems that have various incarnations of the
+> i219-LM ethernet controller.  This was done because of some regressions
+> caused by an earlier
+> commit 632fbd5eb5b0e ("e1000e: fix S0ix flows for cable connected case")
+> with i219-LM controller.
+> 
+> Performing suspend to idle with these ethernet controllers requires a properly
+> configured system.  To make enabling such systems easier, this patch
+> series allows determining if enabled and turning on using ethtool.
+> 
+> The flows have also been confirmed to be configured correctly on Dell's Latitude
+> and Precision CML systems containing the i219-LM controller, when the kernel also
+> contains the fix for s0i3.2 entry previously submitted here and now part of this
+> series.
+> https://marc.info/?l=linux-netdev&m=160677194809564&w=2
+> 
+> Patches 4 through 7 will turn the behavior on by default for some of Dell's
+> CML and TGL systems.
 
-On 12/3/20 4:09 PM, Daniel Lezcano wrote:
-> On 03/12/2020 16:38, Lukasz Luba wrote:
->>
->>
->> On 12/3/20 1:09 PM, Daniel Lezcano wrote:
->>> On 18/11/2020 13:03, Lukasz Luba wrote:
->>>> Devfreq cooling needs to now the correct status of the device in order
->>>> to operate. Do not rely on Devfreq last_status which might be a stale
->>>> data
->>>> and get more up-to-date values of the load.
->>>>
->>>> Devfreq framework can change the device status in the background. To
->>>> mitigate this situation make a copy of the status structure and use it
->>>> for internal calculations.
->>>>
->>>> In addition this patch adds normalization function, which also makes
->>>> sure
->>>> that whatever data comes from the device, it is in a sane range.
->>>>
->>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>> ---
->>>>    drivers/thermal/devfreq_cooling.c | 52 +++++++++++++++++++++++++------
->>>>    1 file changed, 43 insertions(+), 9 deletions(-)
->>>>
->>>> diff --git a/drivers/thermal/devfreq_cooling.c
->>>> b/drivers/thermal/devfreq_cooling.c
->>>> index 659c0143c9f0..925523694462 100644
->>>> --- a/drivers/thermal/devfreq_cooling.c
->>>> +++ b/drivers/thermal/devfreq_cooling.c
->>>> @@ -227,20 +227,46 @@ static inline unsigned long
->>>> get_total_power(struct devfreq_cooling_device *dfc,
->>>>                                       voltage);
->>>>    }
->>>>    +static void _normalize_load(struct devfreq_dev_status *status)
->>>> +{
->>>> +    /* Make some space if needed */
->>>> +    if (status->busy_time > 0xffff) {
->>>> +        status->busy_time >>= 10;
->>>> +        status->total_time >>= 10;
->>>> +    }
->>>> +
->>>> +    if (status->busy_time > status->total_time)
->>>> +        status->busy_time = status->total_time;
->>>
->>> How the condition above is possible?
->>
->> They should, be checked by the driver, but I cannot trust
->> and have to check for all corner cases: (div by 0, overflow
->> one of them, etc). The busy_time and total_time are unsigned long,
->> which means 4B on 32bit machines.
->> If these values are coming from device counters, which count every
->> busy cycle and total cycles of a clock of a device running at e.g.
->> 1GHz they would overflow every ~4s.
-> 
-> I don't think it is up to this routine to check the driver is correctly
-> implemented, especially at every call to get_requested_power.
-> 
-> If the normalization ends up by doing this kind of thing, there is
-> certainly something wrong in the 'status' computation to be fixed before
-> submitting this series.
-> 
-> 
->> Normally IPA polling are 1s and 100ms, it's platform specific. But there
->> are also 'empty' periods when IPA sees temperature very low and does not
->> even call the .get_requested_power() callbacks for the cooling devices,
->> just grants max freq to all. This is problematic. I am investigating it
->> and will propose a solution for IPA soon.
->>
->> I would avoid all of this if devfreq core would have default for all
->> devices a reliable polling timer... Let me check some possibilities also
->> for this case.
-> 
-> Ok, may be create an API to compute the 'idle,busy,total times' to be
-> used by the different the devfreq drivers and then fix the overflow in
-> this common place.
+First of all thank you for working on this.
 
-Yes, I have this plan, but I have to close this patch series. To go
-forward with this, I will drop the normalization function and will keep
-only the code of safe copy of the 'status', so using busy_time and
-total_time will be safe.
+I must say though that I don't like the approach taken here very
+much.
 
-I will address this computation and normalization in different patch
-series. There might be a need of a new API as you pointed out, which
-is out-of-scope of this patch set.
+This is not so much a criticism of this series as it is a criticism
+of the earlier decision to simply disable s0ix on all devices
+with the i219-LM + and active ME.
 
-> 
->>>> +    status->busy_time *= 100;
->>>> +    status->busy_time /= status->total_time ? : 1;
->>>> +
->>>> +    /* Avoid division by 0 */
->>>> +    status->busy_time = status->busy_time ? : 1;
->>>> +    status->total_time = 100;
->>>
->>> Why not base the normalization on 1024? and use an intermediate u64.
->>
->> You are the 2nd reviewer who is asking this. I tried to keep 'load' as
->> in range [0, 100] since we also have 'load' in cpufreq cooling in this
->> range. Maybe I should switch to 1024 (Ionela was also asking for this).
-> 
-> Well it is common practice to compute normalization with 1024 because
-> the division is a bit shift and the compiler optimize the code very well
-> with that value.
-> 
+AFAIK there was a perfectly acceptable patch to workaround those
+broken devices, which increased a timeout:
+https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20200323191639.48826-1-aaron.ma@canonical.com/
 
-I will keep this 1024 in mind for the next topic series.
+That patch was nacked because it increased the resume time
+*on broken devices*.
+
+So it seems to me that we have a simple choice here:
+
+1. Longer resume time on devices with an improperly configured ME
+2. Higher power-consumption on all non-buggy devices
+
+Your patches 4-7 try to workaround 2. but IMHO those are just
+bandaids for getting the initial priorities *very* wrong.
+
+Instead of penalizing non-buggy devices with a higher power-consumption,
+we should default to penalizing the buggy devices with a higher
+resume time. And if it is decided that the higher resume time is
+a worse problem then the higher power-consumption, then there
+should be a list of broken devices and s0ix can be disabled on those.
+
+The current allow-list approach is simply never going to work well
+leading to too high power-consumption on countless devices.
+This is going to be an endless game of whack-a-mole and as
+such really is a bad idea.
+
+A deny-list for broken devices is a much better approach, esp.
+since missing devices on that list will still work fine, they
+will just have a somewhat larger resume time.
+
+So what needs to happen IMHO is:
+
+1. Merge your fix from patch 1 of this set
+2. Merge "e1000e: bump up timeout to wait when ME un-configure ULP mode"
+3. Drop the e1000e_check_me check.
+
+Then we also do not need the new "s0ix-enabled" ethertool flag
+because we do not need userspace to work-around us doing the
+wrong thing by default.
+
+Note a while ago I had access to one of the devices having suspend/resume
+issues caused by the S0ix support (a Lenovo Thinkpad X1 Carbon gen 7)
+and I can confirm that the "e1000e: bump up timeout to wait when ME
+un-configure ULP mode" patch fixes the suspend/resume problem without
+any noticeable negative side-effects.
 
 Regards,
-Lukasz
+
+Hans
+
+
+
+
+
+
+
+
+
+> 
+> Changes from v2 to v3:
+>  - Correct some grammar and spelling issues caught by Bjorn H.
+>    * s/s0ix/S0ix/ in all commit messages
+>    * Fix a typo in commit message
+>    * Fix capitalization of proper nouns
+>  - Add more pre-release systems that pass
+>  - Re-order the series to add systems only at the end of the series
+>  - Add Fixes tag to a patch in series.
+> 
+> Changes from v1 to v2:
+>  - Directly incorporate Vitaly's dependency patch in the series
+>  - Split out s0ix code into it's own file
+>  - Adjust from DMI matching to PCI subsystem vendor ID/device matching
+>  - Remove module parameter and sysfs, use ethtool flag instead.
+>  - Export s0ix flag to ethtool private flags
+>  - Include more people and lists directly in this submission chain.
+> 
+> Mario Limonciello (6):
+>   e1000e: Move all S0ix related code into its own source file
+>   e1000e: Export S0ix flags to ethtool
+>   e1000e: Add Dell's Comet Lake systems into S0ix heuristics
+>   e1000e: Add more Dell CML systems into S0ix heuristics
+>   e1000e: Add Dell TGL desktop systems into S0ix heuristics
+>   e1000e: Add another Dell TGL notebook system into S0ix heuristics
+> 
+> Vitaly Lifshits (1):
+>   e1000e: fix S0ix flow to allow S0i3.2 subset entry
+> 
+>  drivers/net/ethernet/intel/e1000e/Makefile  |   2 +-
+>  drivers/net/ethernet/intel/e1000e/e1000.h   |   4 +
+>  drivers/net/ethernet/intel/e1000e/ethtool.c |  40 +++
+>  drivers/net/ethernet/intel/e1000e/netdev.c  | 272 +----------------
+>  drivers/net/ethernet/intel/e1000e/s0ix.c    | 311 ++++++++++++++++++++
+>  5 files changed, 361 insertions(+), 268 deletions(-)
+>  create mode 100644 drivers/net/ethernet/intel/e1000e/s0ix.c
+> 
+> --
+> 2.25.1
+> 
+> 
+
