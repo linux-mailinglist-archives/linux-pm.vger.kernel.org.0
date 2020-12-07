@@ -2,271 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1976B2D0737
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Dec 2020 22:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D69BB2D08D2
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 02:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727474AbgLFU7y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Dec 2020 15:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
+        id S1728444AbgLGBVK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Dec 2020 20:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbgLFU7y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Dec 2020 15:59:54 -0500
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B367CC0613D0;
-        Sun,  6 Dec 2020 12:59:13 -0800 (PST)
-Received: by mail-io1-xd41.google.com with SMTP id q137so11388789iod.9;
-        Sun, 06 Dec 2020 12:59:13 -0800 (PST)
+        with ESMTP id S1728641AbgLGBVK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Dec 2020 20:21:10 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58A2C0613D3
+        for <linux-pm@vger.kernel.org>; Sun,  6 Dec 2020 17:20:23 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id cm17so11982645edb.4
+        for <linux-pm@vger.kernel.org>; Sun, 06 Dec 2020 17:20:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=d6BRn7qihcauXjMDGzCvXnL71Mb/VmGjXDz8MROhlHk=;
-        b=m+rm8fkK8CPvVFookoUg7lSnLJD5HvqLaOzuUKEyIW9guDx7K3wLm45UHfWwrmsdOX
-         zm/d61/jfJL7QDyQxMPfp13kVRhlEcNDmce7pV6Tu2iIZcUcLpeVR6oJCcnBOPGzwW7I
-         Z5q1F1Efpfn3wdQ902cCE+nmPK5KCj53LyNsHieHbJbHX1pAP38j9CGiVcm63KR7kmdt
-         VyePJmXIqPU4CftiNwTO3mLZIGF3aw6YgXg/+6Y+mj2Rs2OnMBgo9gdouVCT8O25v13X
-         OQ8oXrQuJ//j0744PqnV6zIXkI6ttDHZ2Gax/TlnGwXV1qMiCXFj1CBzjvhyuCpsZgtk
-         uQcQ==
+        bh=bSpze0Ktx1a78HhY8N3JUw4+cmElw0CnjsvykxTs3x0=;
+        b=iGKrqSZX3YAWdjC/ijOceS289SqjnC7RjMIpww70orwiNX3bdmHHiOwsx6de1viBoa
+         NyKzhTyb8lHRisvObhjgqnGJqazeTpH52EWtk262VV5dk1vugJXeelcYLUlXJ1l3fxAr
+         88FTIOV334hX/Z/9Xq9GzdhQXFvsCfM8C1o8tl/acgcdj0TM4IsRFe7Ay79uTgbY5SxS
+         4utTXfsF2rczDIooGdCWppIudduMvgEir/1+3XRCaNAwJYs7aZCY44TG/EBaP1qmJzd+
+         kZa3oFvQX8vhhxPt7hKBSh4xgi/jXdnMFmLxjqkfkS+5+GfBc2tzw0o5eC8y+K/vDKN6
+         uM4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=d6BRn7qihcauXjMDGzCvXnL71Mb/VmGjXDz8MROhlHk=;
-        b=hiZ/FmQXp4UdBxogYoQB8nDl545c35w1/jms9T3VHefqLVYNutchjobgqjRsyHd5eL
-         M3B+vgeaUSH9tbqtdXnsvUG4PXej0jShZx1HzU/9m3sOEJ22zYwslg5gn19zE+/7tIqm
-         vEGtXFj9SuNvXv7QsdnwMQHlGUKKompu7v7qvKVMRyE569EyFmTjvJxI5uz5rJnVKdNC
-         L3+CdM5s+k7my1T0RH6Euch3viw82Vdl50mAb2I2/Je0PHRKL6tTjDx11EaMW7Sirqfl
-         /sH/By5oDMcCdX4bQfRPN8imH4KmD9+yD3V366Cj6dirPeYUBORpyBT39OhRVI7gUYpI
-         UNZw==
-X-Gm-Message-State: AOAM532fPxkKS1w29MhWZLCRqgzvTdVTqOYHDgL3qcjvb0KnuM6JQMAn
-        xfgAH9PcvyFU+66OhC8cl37hbcwq8ANKiApiBjE=
-X-Google-Smtp-Source: ABdhPJzE54kWFUqCTS6AEHWQBP4v9lcCjLyuSTiIvnhN7o6HJIPZn0iDKhK7hYQJu2j9WmeX/FVlAMVOazhd2DeZRtk=
-X-Received: by 2002:a5d:9b97:: with SMTP id r23mr14654441iom.123.1607288352988;
- Sun, 06 Dec 2020 12:59:12 -0800 (PST)
+        bh=bSpze0Ktx1a78HhY8N3JUw4+cmElw0CnjsvykxTs3x0=;
+        b=cilGuumKNyDWIKyYMmR06bufW/oA8sME+66bn+UOTStCRn3+w4N/ARnv/yObuwgbHl
+         0Ih5q1HzMtQ70aGHxAWFrO6IOHUy5k5UVTU3XvZMTIe/DMjjwomrZEOK65YsBDk4nPYf
+         oQKMynIyU097Fy8alAi1QZJkTongjBf3lQdGHI5WOPwTHnuU15yPlu7/s50NM2utlcG5
+         qXivOy9PtnkrQBbwN3aJAxAYlyn6dqKNi/OmkCuXUiL2ruKd4xuKVs/h98Fn6zzg6ZoX
+         lvicwXAx1NbeJ4Ze62U2zpNi2KOFJ1gsx+dEM8xW65YFb8Sfp2sP+i417ktPl1jMCgkY
+         V2MQ==
+X-Gm-Message-State: AOAM532Q6g0/f8Z46dQkTdBWUnC3XWMqzzQ1hGt+C1szvOwK5D4OYKAz
+        zZ5ZwtVGmaWo6WlIx+iONxeKPwpktry1RsaHjWyy6w==
+X-Google-Smtp-Source: ABdhPJzobOYaAtrz0mVYekXANYxF4WBTuwyn5F+FgBpi+a+Bzggk4+NE2lxXKPn9ry9YRiXfW0QavF3RQSOdrXNudxE=
+X-Received: by 2002:aa7:c652:: with SMTP id z18mr17190457edr.60.1607304022539;
+ Sun, 06 Dec 2020 17:20:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20201204070901.24592-1-huangshuosheng@allwinnertech.com> <388512ba-9e2b-acad-8487-5c26a6eb101b@gmail.com>
-In-Reply-To: <388512ba-9e2b-acad-8487-5c26a6eb101b@gmail.com>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Sun, 6 Dec 2020 21:59:01 +0100
-Message-ID: <CAJiuCcf3r_ThavkXtHaRujZOthvRK2_+Esa_5BG-fk5xBN6fxQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: sun50i: add a100 cpufreq support
-To:     Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>
+References: <20201204075345.5161-1-jun.nie@linaro.org> <20201204075345.5161-2-jun.nie@linaro.org>
+ <022b3f66-ae19-79f5-c59b-0cc703a29f15@somainline.org>
+In-Reply-To: <022b3f66-ae19-79f5-c59b-0cc703a29f15@somainline.org>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Mon, 7 Dec 2020 09:20:11 +0800
+Message-ID: <CABymUCOOMdR6EJyc96pVsxKF_hwf96-09NkvW8ftec9Ez63tRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] interconnect: qcom: Consolidate interconnect RPM support
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     devicetree@vger.kernel.org,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        agross@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Shawn Guo <shawn.guo@linaro.org>, martin.botka@somainline.org,
+        marijn.suijten@somainline.org, konrad.dybcio@somainline.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Shuosheng,
-
-On Sun, 6 Dec 2020 at 21:49, Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>=
- wrote:
+AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+=E4=BA=8E2020=E5=B9=B412=E6=9C=885=E6=97=A5=E5=91=A8=E5=85=AD =E4=B8=8A=E5=
+=8D=882:04=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Hi Shuosheng,
+> Il 04/12/20 08:53, Jun Nie ha scritto:
+> > Add RPM based interconnect driver implements the set and aggregate
+> > functionalities that translates bandwidth requests into RPM messages.
+> > These modules provide a common set of functionalities for all
+> > Qualcomm RPM based interconnect providers and should help reduce code
+> > duplication when adding new providers.
+> >
+> > Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> Hello!
+> I agree, the RPM based ICC should be commonized... in any case, I think
+> that you should rebase your patch series over mine, where I am adding
+> support for SDM660 and also introducing a mechanism to set QoS, which
+> can actually be used by most platforms managing the ICC over RPM.
 >
-> On 04/12/2020 08:09, Shuosheng Huang wrote:
-> > Let's add cpufreq nvmem based for allwinner a100 soc. It's similar to h=
-6,
-> > let us use efuse_xlate to extract the differentiated part.
+> Please, check it out: https://lore.kernel.org/patchwork/patch/1322131/
 >
-> So you introduce 2 modifications here.
-> In this case it's better to have 2 patches.
-> One to introduce the efuse_xlate
-> And one to introduce the A100 support.
+> Thanks,
+> Angelo
 >
-> Regards,
-> Clement
->
-> >
-> > Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
-> > ---
-> >   drivers/cpufreq/cpufreq-dt-platdev.c   |  1 +
-> >   drivers/cpufreq/sun50i-cpufreq-nvmem.c | 81 ++++++++++++++++++++-----=
--
-> >   2 files changed, 64 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpu=
-freq-dt-platdev.c
-> > index 3776d960f405..2ebf5d9cb616 100644
-> > --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> > +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> > @@ -102,6 +102,7 @@ static const struct of_device_id whitelist[] __init=
-const =3D {
-> >    */
-> >   static const struct of_device_id blacklist[] __initconst =3D {
-> >       { .compatible =3D "allwinner,sun50i-h6", },
-> > +     { .compatible =3D "allwinner,sun50i-a100", },
-> >
-> >       { .compatible =3D "calxeda,highbank", },
-> >       { .compatible =3D "calxeda,ecx-2000", },
-> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/s=
-un50i-cpufreq-nvmem.c
-> > index 9907a165135b..044e44a763f5 100644
-> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > @@ -21,21 +21,63 @@
-> >
-> >   #define NVMEM_MASK  0x7
-> >   #define NVMEM_SHIFT 5
-> > +#define SUN50I_A100_NVMEM_MASK               0xf
-> > +#define SUN50I_A100_NVMEM_SHIFT              12
-> > +
-> > +#define SUN50I_H6_NVMEM_MASK         0x7
-> > +#define SUN50I_H6_NVMEM_SHIFT                5
-> > +
-> > +struct sunxi_cpufreq_soc_data {
-> > +     u32 (*efuse_xlate)(void *efuse);
 
-Maybe it's better to pass the speedbin_nvmem.
-And call nvmem_cell_read_u16 or nvmem_cell_read_u32 regarding the SoC.
+Angelo,
 
-But I'm not a Maintainer.
+Thanks for your contribution! It looks like a great new feature. But
+they are not
+ready for other qnoc icc drivers yet. It should not be included in
+this commonization
+patch set until someone add and test the feature for all qnoc drivers.
 
-Clement
-
-
-> > +};
-> >
-> >   static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
-> >
-> > +static u32 sun50i_a100_efuse_xlate(void *efuse)
-> > +{
-> > +     u32 efuse_value =3D (*(u16 *)efuse >> SUN50I_A100_NVMEM_SHIFT) &
-> > +                       SUN50I_A100_NVMEM_MASK;
-> > +
-> > +     switch (efuse_value) {
-> > +     case 0b100:
-> > +             return 2;
-> > +     case 0b010:
-> > +             return 1;
-> > +     default:
-> > +             return 0;
-> > +     }
-> > +}
-> > +
-> > +static u32 sun50i_h6_efuse_xlate(void *efuse)
-> > +{
-> > +     u32 efuse_value =3D (*(u32 *)efuse >> SUN50I_H6_NVMEM_SHIFT) &
-> > +                       SUN50I_H6_NVMEM_MASK;
-> > +
-> > +     /*
-> > +      * We treat unexpected efuse values as if the SoC was from
-> > +      * the slowest bin. Expected efuse values are 1-3, slowest
-> > +      * to fastest.
-> > +      */
-> > +     if (efuse_value >=3D 1 && efuse_value <=3D 3)
-> > +             return efuse_value - 1;
-> > +     else
-> > +             return 0;
-> > +}
-> > +
-> >   /**
-> >    * sun50i_cpufreq_get_efuse() - Determine speed grade from efuse valu=
-e
-> > + * @soc_data: pointer to sunxi_cpufreq_soc_data context
-> >    * @versions: Set to the value parsed from efuse
-> >    *
-> >    * Returns 0 if success.
-> >    */
-> > -static int sun50i_cpufreq_get_efuse(u32 *versions)
-> > +static int sun50i_cpufreq_get_efuse(const struct sunxi_cpufreq_soc_dat=
-a *soc_data,
-> > +                                 u32 *versions)
-> >   {
-> >       struct nvmem_cell *speedbin_nvmem;
-> >       struct device_node *np;
-> >       struct device *cpu_dev;
-> > -     u32 *speedbin, efuse_value;
-> > +     u32 *speedbin;
-> >       size_t len;
-> >       int ret;
-> >
-> > @@ -68,17 +110,7 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
-> >       if (IS_ERR(speedbin))
-> >               return PTR_ERR(speedbin);
-> >
-> > -     efuse_value =3D (*speedbin >> NVMEM_SHIFT) & NVMEM_MASK;
-> > -
-> > -     /*
-> > -      * We treat unexpected efuse values as if the SoC was from
-> > -      * the slowest bin. Expected efuse values are 1-3, slowest
-> > -      * to fastest.
-> > -      */
-> > -     if (efuse_value >=3D 1 && efuse_value <=3D 3)
-> > -             *versions =3D efuse_value - 1;
-> > -     else
-> > -             *versions =3D 0;
-> > +     *versions =3D soc_data->efuse_xlate(speedbin);
-> >
-> >       kfree(speedbin);
-> >       return 0;
-> > @@ -86,18 +118,23 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
-> >
-> >   static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
-> >   {
-> > +     const struct of_device_id *match;
-> >       struct opp_table **opp_tables;
-> >       char name[MAX_NAME_LEN];
-> >       unsigned int cpu;
-> >       u32 speed =3D 0;
-> >       int ret;
-> >
-> > +     match =3D dev_get_platdata(&pdev->dev);
-> > +     if (!match)
-> > +             return -EINVAL;
-> > +
-> >       opp_tables =3D kcalloc(num_possible_cpus(), sizeof(*opp_tables),
-> >                            GFP_KERNEL);
-> >       if (!opp_tables)
-> >               return -ENOMEM;
-> >
-> > -     ret =3D sun50i_cpufreq_get_efuse(&speed);
-> > +     ret =3D sun50i_cpufreq_get_efuse(match->data, &speed);
-> >       if (ret)
-> >               return ret;
-> >
-> > @@ -163,8 +200,17 @@ static struct platform_driver sun50i_cpufreq_drive=
-r =3D {
-> >       },
-> >   };
-> >
-> > +static const struct sunxi_cpufreq_soc_data sun50i_a100_data =3D {
-> > +     .efuse_xlate =3D sun50i_a100_efuse_xlate,
-> > +};
-> > +
-> > +static const struct sunxi_cpufreq_soc_data sun50i_h6_data =3D {
-> > +     .efuse_xlate =3D sun50i_h6_efuse_xlate,
-> > +};
-> > +
-> >   static const struct of_device_id sun50i_cpufreq_match_list[] =3D {
-> > -     { .compatible =3D "allwinner,sun50i-h6" },
-> > +     { .compatible =3D "allwinner,sun50i-h6", .data =3D &sun50i_h6_dat=
-a },
-> > +     { .compatible =3D "allwinner,sun50i-a100", .data =3D &sun50i_a100=
-_data >    {}
-> >   };
-> >
-> > @@ -198,9 +244,8 @@ static int __init sun50i_cpufreq_init(void)
-> >       if (unlikely(ret < 0))
-> >               return ret;
-> >
-> > -     sun50i_cpufreq_pdev =3D
-> > -             platform_device_register_simple("sun50i-cpufreq-nvmem",
-> > -                                             -1, NULL, 0);
-> > +     sun50i_cpufreq_pdev =3D platform_device_register_data(NULL,
-> > +             "sun50i-cpufreq-nvmem", -1, match, sizeof(*match));
-> >       ret =3D PTR_ERR_OR_ZERO(sun50i_cpufreq_pdev);
-> >       if (ret =3D=3D 0)
-> >               return 0;
-> >
+Regards,
+Jun
