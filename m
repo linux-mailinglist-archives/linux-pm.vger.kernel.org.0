@@ -2,214 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C210E2D120B
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 14:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8D22D1216
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Dec 2020 14:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgLGN3f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 08:29:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56409 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726410AbgLGN3e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 08:29:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607347687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zmWE4Di/SrsoSOSW6qXuYa1KIu/jIAKq7DifFwoMfwo=;
-        b=jRXrn7CzyHYB4rYN7cyWuY8mL4Ehw0D7nnpZFNK5HSTO28hdMB+2ZnlKsxKAJZKhtHrq9x
-        txmdFwaqIjP+Mga3M1A1Ly1ZVGo1YYKzfDtLWJUshuthrd2k4wMNB1Ei+LXfme1fXgsAoM
-        eGjPwXA41RysXmG8fRHjoMOGJRxSF0M=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-220-VVoi9N4hNLmoLrBARTYZ_g-1; Mon, 07 Dec 2020 08:28:03 -0500
-X-MC-Unique: VVoi9N4hNLmoLrBARTYZ_g-1
-Received: by mail-ed1-f69.google.com with SMTP id u17so1011519edi.18
-        for <linux-pm@vger.kernel.org>; Mon, 07 Dec 2020 05:28:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zmWE4Di/SrsoSOSW6qXuYa1KIu/jIAKq7DifFwoMfwo=;
-        b=FYbvm28/SXDbP5jgNkXiSThU0irmeTVLM3WfPasMhp9tH47A4MfBVv5tzyiN5AqTDe
-         I1RFOEi33se/eWGAqw3NfJqcxFlQa8J+Rzu6+ohY0/6DPFHGP4nVY+WmwpyQ8ys0jjQQ
-         Kzl48ag0sDrkVo894Kgd8cp8CeQSaJ894v1e2UM/05v/q+f5dZVGTcqtJOFwHkP5OW7U
-         H5BxqDr5VYR1G7SL3ZXWGhyURzKCe0WpfqcMC2QCZC9aNSm/mF6trFKXzEUtTZ5iowtL
-         S+Wh/83VRWVH31Hp5WquXgn3ucBf5/StoV0swkYHku/KpkMrlxQJdDTuazAqPNv7diym
-         UQHg==
-X-Gm-Message-State: AOAM532xXtHQYgQZOXo+eeLvaCMjNkRwDFzxKvNNyHsQrCEUzVEk7oKv
-        7v2F4oAGQsN00LY3Rcg3M2tPkR4yZ15a6BSNTIdDEnh+Bjrt0HIAZuaHIaJupYH3/8DwCw/EQkF
-        8IVotrAV9m8fJukzWQGo=
-X-Received: by 2002:a17:906:22c7:: with SMTP id q7mr18854672eja.486.1607347681961;
-        Mon, 07 Dec 2020 05:28:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwEorJ0sLId/xL9w8EuO0JL3r6cc0kBtMY1HiSGC5kejytn+C5L/ToMHIPmo2of6ILKDTvCoA==
-X-Received: by 2002:a17:906:22c7:: with SMTP id q7mr18854658eja.486.1607347681764;
-        Mon, 07 Dec 2020 05:28:01 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id oq27sm3461543ejb.108.2020.12.07.05.28.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Dec 2020 05:28:01 -0800 (PST)
-Subject: Re: [PATCH v3 0/7] Improve s0ix flows for systems i219LM
-To:     Mario Limonciello <mario.limonciello@dell.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org
-Cc:     linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Netfin <sasha.neftin@intel.com>,
-        Aaron Brown <aaron.f.brown@intel.com>,
-        Stefan Assmann <sassmann@redhat.com>,
-        David Miller <davem@davemloft.net>, darcari@redhat.com,
-        Yijun.Shen@dell.com, Perry.Yuan@dell.com,
-        anthony.wong@canonical.com
-References: <20201204200920.133780-1-mario.limonciello@dell.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <d0f7e565-05e1-437e-4342-55eb73daa907@redhat.com>
-Date:   Mon, 7 Dec 2020 14:28:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726146AbgLGNau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 08:30:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726076AbgLGNau (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Dec 2020 08:30:50 -0500
+Date:   Mon, 7 Dec 2020 13:30:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607347809;
+        bh=k2URTkzxeMwoISkkN5bsau+WynBK8IIMYqLAxO5uPHo=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EkiSBGDGIUXUBAsl7n0jcDNZQKUWTkQvfstxJ+jZf/uj5r5ILwZ5MF/FZhSJGFVMR
+         6hXL/BvhfSFTFphlMUf4b5JgAy/0+mNbxivH757hLWsEIztFfoev1iDE8d9NrvP1l8
+         MPdInRyMdID5NYfRYnvLAjogzzhLcf4Ji95p0c005MTvM6/u8agd69ffHFeZC3icxn
+         tq+4hjL/amgUD/5YJdBAvdiMZX6ovbb7Tbo6z5k3x57gaJX/XbggoCo6CZkvP1/MJ8
+         BvgdWNbinjiVMeT9buffxbIfdPC1/e6fY+179RJPXvGhj7flpzLSu5/25eS6YN2Rrv
+         jVhiefA4XYQVQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 4/7] regulator: Add regulator driver for ATC260x PMICs
+Message-ID: <20201207133003.GC5694@sirena.org.uk>
+References: <cover.1607216141.git.cristian.ciocaltea@gmail.com>
+ <f001986493a51fe591cb09a544770651bf589d35.1607216141.git.cristian.ciocaltea@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201204200920.133780-1-mario.limonciello@dell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3siQDZowHQqNOShm"
+Content-Disposition: inline
+In-Reply-To: <f001986493a51fe591cb09a544770651bf589d35.1607216141.git.cristian.ciocaltea@gmail.com>
+X-Cookie: Absinthe makes the tart grow fonder.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On 12/4/20 9:09 PM, Mario Limonciello wrote:
-> commit e086ba2fccda ("e1000e: disable s0ix entry and exit flows for ME systems")
-> disabled s0ix flows for systems that have various incarnations of the
-> i219-LM ethernet controller.  This was done because of some regressions
-> caused by an earlier
-> commit 632fbd5eb5b0e ("e1000e: fix S0ix flows for cable connected case")
-> with i219-LM controller.
-> 
-> Performing suspend to idle with these ethernet controllers requires a properly
-> configured system.  To make enabling such systems easier, this patch
-> series allows determining if enabled and turning on using ethtool.
-> 
-> The flows have also been confirmed to be configured correctly on Dell's Latitude
-> and Precision CML systems containing the i219-LM controller, when the kernel also
-> contains the fix for s0i3.2 entry previously submitted here and now part of this
-> series.
-> https://marc.info/?l=linux-netdev&m=160677194809564&w=2
-> 
-> Patches 4 through 7 will turn the behavior on by default for some of Dell's
-> CML and TGL systems.
+--3siQDZowHQqNOShm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-First of all thank you for working on this.
+On Sun, Dec 06, 2020 at 03:27:04AM +0200, Cristian Ciocaltea wrote:
 
-I must say though that I don't like the approach taken here very
-much.
+> +/*
+> + * ATC2603C notes:
+> + * - LDO8 is not documented in datasheet (v2.4), but supported
+> + *   in the vendor's driver implementation (xapp-le-kernel).
+> + * - LDO12 mentioned in datasheet is not programmable, hence not
+> + *   handled in this driver.
+> + */
 
-This is not so much a criticism of this series as it is a criticism
-of the earlier decision to simply disable s0ix on all devices
-with the i219-LM + and active ME.
+No reason not to include LDO12 here, the framework supports fixed
+regulators fine and the bindings should reflect the physical structure
+of the hardware - if something is being supplied by LDO12 on the PMIC
+then you'd expect the binding showing a connection from LDO12.
 
-AFAIK there was a perfectly acceptable patch to workaround those
-broken devices, which increased a timeout:
-https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20200323191639.48826-1-aaron.ma@canonical.com/
+--3siQDZowHQqNOShm
+Content-Type: application/pgp-signature; name="signature.asc"
 
-That patch was nacked because it increased the resume time
-*on broken devices*.
+-----BEGIN PGP SIGNATURE-----
 
-So it seems to me that we have a simple choice here:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/OLloACgkQJNaLcl1U
+h9DGdQf5AayPz6I++uKbGeHYLcff0IAmsUsjS4QBP72ZGYTA28F3UvsIbL1ACLco
+prlBF8LC5X/qWiTRWfVd5yEs5/0kHS+L3lp/HXCw665aoJz13Q4jBO6seyWC76Bd
+xNKlouA2lDrKUJ4f/Nxmi4q0F9m+b6h3AgT/kMtvrnLAp+s+3Y7WR6GGUnHBN6V+
+lQT+OjUn9DE3rqjIzZVqB6MLxBSjX/Oy0mZKz1Xn5PS2C9PY2tHY8wx07ytPE3xA
+zqNiMelOGIbE7mYKEB4Pl0b9qDXFe6OIkRgFTRdbpJyr6hiLC+XmhJojcDyUf7Zh
+y6q5jlwVCos1QC1zB8M6z4fEUm57SA==
+=yD4E
+-----END PGP SIGNATURE-----
 
-1. Longer resume time on devices with an improperly configured ME
-2. Higher power-consumption on all non-buggy devices
-
-Your patches 4-7 try to workaround 2. but IMHO those are just
-bandaids for getting the initial priorities *very* wrong.
-
-Instead of penalizing non-buggy devices with a higher power-consumption,
-we should default to penalizing the buggy devices with a higher
-resume time. And if it is decided that the higher resume time is
-a worse problem then the higher power-consumption, then there
-should be a list of broken devices and s0ix can be disabled on those.
-
-The current allow-list approach is simply never going to work well
-leading to too high power-consumption on countless devices.
-This is going to be an endless game of whack-a-mole and as
-such really is a bad idea.
-
-A deny-list for broken devices is a much better approach, esp.
-since missing devices on that list will still work fine, they
-will just have a somewhat larger resume time.
-
-So what needs to happen IMHO is:
-
-1. Merge your fix from patch 1 of this set
-2. Merge "e1000e: bump up timeout to wait when ME un-configure ULP mode"
-3. Drop the e1000e_check_me check.
-
-Then we also do not need the new "s0ix-enabled" ethertool flag
-because we do not need userspace to work-around us doing the
-wrong thing by default.
-
-Note a while ago I had access to one of the devices having suspend/resume
-issues caused by the S0ix support (a Lenovo Thinkpad X1 Carbon gen 7)
-and I can confirm that the "e1000e: bump up timeout to wait when ME
-un-configure ULP mode" patch fixes the suspend/resume problem without
-any noticeable negative side-effects.
-
-Regards,
-
-Hans
-
-
-
-
-
-
-
-
-
-> 
-> Changes from v2 to v3:
->  - Correct some grammar and spelling issues caught by Bjorn H.
->    * s/s0ix/S0ix/ in all commit messages
->    * Fix a typo in commit message
->    * Fix capitalization of proper nouns
->  - Add more pre-release systems that pass
->  - Re-order the series to add systems only at the end of the series
->  - Add Fixes tag to a patch in series.
-> 
-> Changes from v1 to v2:
->  - Directly incorporate Vitaly's dependency patch in the series
->  - Split out s0ix code into it's own file
->  - Adjust from DMI matching to PCI subsystem vendor ID/device matching
->  - Remove module parameter and sysfs, use ethtool flag instead.
->  - Export s0ix flag to ethtool private flags
->  - Include more people and lists directly in this submission chain.
-> 
-> Mario Limonciello (6):
->   e1000e: Move all S0ix related code into its own source file
->   e1000e: Export S0ix flags to ethtool
->   e1000e: Add Dell's Comet Lake systems into S0ix heuristics
->   e1000e: Add more Dell CML systems into S0ix heuristics
->   e1000e: Add Dell TGL desktop systems into S0ix heuristics
->   e1000e: Add another Dell TGL notebook system into S0ix heuristics
-> 
-> Vitaly Lifshits (1):
->   e1000e: fix S0ix flow to allow S0i3.2 subset entry
-> 
->  drivers/net/ethernet/intel/e1000e/Makefile  |   2 +-
->  drivers/net/ethernet/intel/e1000e/e1000.h   |   4 +
->  drivers/net/ethernet/intel/e1000e/ethtool.c |  40 +++
->  drivers/net/ethernet/intel/e1000e/netdev.c  | 272 +----------------
->  drivers/net/ethernet/intel/e1000e/s0ix.c    | 311 ++++++++++++++++++++
->  5 files changed, 361 insertions(+), 268 deletions(-)
->  create mode 100644 drivers/net/ethernet/intel/e1000e/s0ix.c
-> 
-> --
-> 2.25.1
-> 
-> 
-
+--3siQDZowHQqNOShm--
