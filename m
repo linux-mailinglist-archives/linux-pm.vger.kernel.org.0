@@ -2,93 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A63B2D2E16
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 16:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD3C2D2E4C
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 16:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730026AbgLHPWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 10:22:35 -0500
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:35716 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729334AbgLHPWf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 10:22:35 -0500
-Received: by mail-oo1-f67.google.com with SMTP id s1so856704oon.2;
-        Tue, 08 Dec 2020 07:22:19 -0800 (PST)
+        id S1730116AbgLHPbc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 10:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730114AbgLHPbc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 10:31:32 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9850C061749
+        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 07:30:51 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id bo9so25070482ejb.13
+        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 07:30:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bJHsD7wusQYPoSnayseCrxu6qN7hzp3QYIwsAak7I3I=;
+        b=bzJj91XMnvArriI3I1poli3kf9PSZjAHzPXbnwtMGmfHPoHARHfic9GH5/nSP6a21N
+         FE0e4E4o14IYYLgzGDOeUGxAr/H4n4rNvp9l/rNuOt1nqkLKOuG5qrvmRI6NMhIbSeOv
+         6Qhl7o2zrzyqqfkYQradnD/t6hU2VHaH02kjrhx72k2A6iqJKoNGyEfKBadcd+R0DXJc
+         d30xQrl/deFB438A12OgexfIqN7N9gGP1kVJIHUmkGsd+YEZPQ36W+9euOBd9SF5EDHQ
+         JC8PWXJM5LKf811U4haUANBlLXhAs20BYsEj3TnU29+72zG96PGpBCPc/My0MJaUdesw
+         JMZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C5Acc0ICokF2oxfe/fuyTY8R9eWUIjutjVKsOg+au2o=;
-        b=HdgtGPkBHwKnoSPaQCEJu1VYFfv0DGga8UGoqNXuucqyaqbIttMsdp0IpyvwFApCNB
-         hwLxce6yaYxQQyu73Tck0znCJCPlhrktZLu8iCyNlCOuRXsOH5+H5kdxGSTsUBA90NBG
-         mWVmLIi7gPv8Gz/njrQIXfHEdzyt29bQnaMhc2UbLPJn/1H0nNw6Zchrko/4N/RlS8HJ
-         0P6x9eFzkRl25w6LVF82ZibDNJzGux/rs+kKDeCKn8ZvHvoSSiLVe9+QTpwcSFm5BjG4
-         acDGk+qQ8X4JowGmSoNL1tX4KzQzaiSYi3qX02l7K98xBk2F5qQ1DiIl25GUl8Qw3na5
-         mwfQ==
-X-Gm-Message-State: AOAM530RIPhcGrIC4XDuX0es8z+mJ++2/SrMv5Rr4VMhPdlulPioRvr3
-        bxcglKSDkQBaHiw7KgkI4lnPJZKesg==
-X-Google-Smtp-Source: ABdhPJzkmdNmqS+dh2m97q/lOIeF2VXeYq7Y+mxyU9jm4DamaV4w8FaJVykv1l78z5kmmyM5ayvK5A==
-X-Received: by 2002:a4a:751a:: with SMTP id j26mr9483573ooc.68.1607440914338;
-        Tue, 08 Dec 2020 07:21:54 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x12sm454432oic.51.2020.12.08.07.21.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bJHsD7wusQYPoSnayseCrxu6qN7hzp3QYIwsAak7I3I=;
+        b=i7ZEyPcR4tMaouyU6/AAz+yx7Wqg+dfVch5oUFbqci87mHTmYFq4PPe11Z9H6SSvQ+
+         AMOB2qWoktf+fhprEXaAG1Led7gv2l6YigslZCfYf45ojvsKjurZu9Qolt2/zbDjg2f9
+         cOHIJJ1T+I9WxNqVkX0mU9SSHJLADLAVxppKKRXQINZuBL9Zk948kypAVd3gM+ygk3pj
+         DbfVQm9IZPKviJdTxglGwleqOtWdIlMc1BDG6L0YfkRPRa5aAchDhVjdIEv7VxqpIpdi
+         cxnR01rIlsv34QDFnkJccIFOso8EN9Px18CQhFg1LPuboY8NyOy8pMRaYZfnfQeWOYzJ
+         iixA==
+X-Gm-Message-State: AOAM530XcgDjIbWbHcKE18OesXHpfgJscrxR738HXF35tnZCqt5bMpgJ
+        ecqtaHcaByyRqwOSEOsy+oAcDM11yr/ymg==
+X-Google-Smtp-Source: ABdhPJyEdIVR5McQZGlRUMGSoMxBnErGu7+TVm5gy13H7lFhayHXkqsjZ4vtCsP1Q4frlXzHhOsLHQ==
+X-Received: by 2002:a17:906:7aca:: with SMTP id k10mr23128906ejo.215.1607441450423;
+        Tue, 08 Dec 2020 07:30:50 -0800 (PST)
+Received: from mai.imgcgcw.net ([2a01:e34:ed2f:f020:7b:3cd9:3112:fa1b])
+        by smtp.gmail.com with ESMTPSA id z9sm16233427eju.123.2020.12.08.07.30.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Dec 2020 07:21:53 -0800 (PST)
-Received: (nullmailer pid 2540461 invoked by uid 1000);
-        Tue, 08 Dec 2020 15:21:52 -0000
-Date:   Tue, 8 Dec 2020 09:21:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Klein <michael@fossekall.de>
-Cc:     Jernej Skrabec <jernej.skrabec@siol.net>, linux-pm@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] Documentation: DT: binding documentation for
- regulator-poweroff
-Message-ID: <20201208152152.GA2539955@robh.at.kernel.org>
-References: <20201128103958.q6glewhhch7vtczr@gilmour>
- <20201207142756.17819-1-michael@fossekall.de>
- <20201207142756.17819-3-michael@fossekall.de>
+        Tue, 08 Dec 2020 07:30:49 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amitk@kernel.org
+Subject: [PATCH] thermal/core: Make 'forced_passive' as obsolete candidate
+Date:   Tue,  8 Dec 2020 16:30:43 +0100
+Message-Id: <20201208153046.297456-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201207142756.17819-3-michael@fossekall.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 07 Dec 2020 15:27:55 +0100, Michael Klein wrote:
-> Add devicetree binding documentation for regulator-poweroff driver.
-> 
-> Signed-off-by: Michael Klein <michael@fossekall.de>
-> ---
->  .../power/reset/regulator-poweroff.yaml       | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
-> 
+The passive file in sysfs forces the usage of a passive trip point set
+by the userspace when a broken BIOS does not provide the mitigation
+temperature for such thermal zone. The hardware evolved a lot since
+2008 as a good thermal management is no longer an option.
 
+Linux on the other side also provides now a way to load fixed ACPI
+table via the option ACPI_TABLE_UPGRADE, so additionnal trip point
+could be added there.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Set the option obsolete and plan to remove it, so the corresponding
+code can be removed from the core code and allow more cleanups the
+thermal framework deserves.
 
-yamllint warnings/errors:
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ Documentation/ABI/obsolete/sysfs-thermal-passive | 13 +++++++++++++
+ drivers/thermal/thermal_sysfs.c                  |  2 ++
+ 2 files changed, 15 insertions(+)
+ create mode 100644 Documentation/ABI/obsolete/sysfs-thermal-passive
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/reset/regulator-poweroff.example.dt.yaml: regulator-poweroff: 'REGULATOR-supply' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/reset/regulator-poweroff.example.dt.yaml: regulator-poweroff: 'vcc-dram-supply', 'vcc1v2-supply' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
-
-
-See https://patchwork.ozlabs.org/patch/1412084
-
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/Documentation/ABI/obsolete/sysfs-thermal-passive b/Documentation/ABI/obsolete/sysfs-thermal-passive
+new file mode 100644
+index 000000000000..2510724cc165
+--- /dev/null
++++ b/Documentation/ABI/obsolete/sysfs-thermal-passive
+@@ -0,0 +1,13 @@
++What:		/sys/class/thermal/thermal_zone*/passive
++Date:		December 2008
++KernelVersion:	2.6.28
++Contact:	Daniel Lezcano <daniel.lezcano@linaro.org>
++Description:
++
++  The passive file in sysfs forces the usage of a passive trip point
++  set by the userspace when a broken BIOS does not provide the
++  mitigation temperature for such thermal zone. However, the Linux
++  kernel evolved a lot since 2008 as well as the hardware and it is
++  able to manage correctly the thermal envelope. It does also provide
++  a way to load fixed ACPI table via the option ACPI_TABLE_UPGRADE, so
++  additionnal trip point could be added there.
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 0866e949339b..578099b520b1 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -232,6 +232,8 @@ passive_store(struct device *dev, struct device_attribute *attr,
+ 	if (state && state < 1000)
+ 		return -EINVAL;
+ 
++	pr_warn("%s: Consider the 'passive' option obsolete\n", tz->type);
++
+ 	if (state && !tz->forced_passive) {
+ 		if (!tz->passive_delay)
+ 			tz->passive_delay = 1000;
+-- 
+2.25.1
 
