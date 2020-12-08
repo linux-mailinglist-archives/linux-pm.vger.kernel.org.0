@@ -2,164 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5E42D218F
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 04:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173BF2D21D9
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 05:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726028AbgLHDpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 22:45:39 -0500
-Received: from mail-mw2nam12on2087.outbound.protection.outlook.com ([40.107.244.87]:53632
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725905AbgLHDpi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Dec 2020 22:45:38 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUNEe5eIZdwn0wELo6dRayy26m6Fk9dBWpI0JerQPQY/hrbUlE++u3/4RXcUVmxeBxBt/ee1PP+bI/FZW3WThEeoM9wecQvvUVi2sHpkN7NaM7gB+W3Pi0kjPFMkUKjtkFG9CM0mbbsJ6n+kbzZAcEJI8/TceszFWUONtO0oyvmgR5Ae7Snc4W30ZQT6gwzB443Rf+U/yjnUuhRxZ33NZsHBwZiE5IgA/UBlqzr/QwPnWPpcLYwEi5R8ECeWhergh4LZlbRk6Uz9g693nRQwb/nAWYeKug+KkjJCMjRICYEwM4C9qaAG03rl0BY+VlY3XZCMfn29klMyNvtD/wISQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nG0WBYs3R4qpDLgPnVy+eEm/SltcUCRYSDfMCAj1CWU=;
- b=Xb6qeyKCRvuBRJxcK/fJRo4hwGwJ8HuEMsDDpbDJUaQXG+i87lUWEqIRq6rI073EuL/Z+8zCCAvWo3v2Nr5DQXnuVMFv8CtKZZ6VvQWfCyWWAkSpgcW3oirmQZF05bgjUNHJlxulQ+J1sHBLYCBm01Fw/c5DKTlvngusrgOqcGDjw6zYv7QdetWzn2LDdVt7qt/ib8BSZ3hdRqhlgOpirivf0RkJdqk5pCxzcYtRuMO5R1NwodtU6+fpX7FLiokep87ZMtRfmjrC1T8XibgUXPiJLf7M7/yMEomf4ET6ofp05L2x8Yk7ldBUo+nXa2eaz9x8KbvsYcj5BeZCqsmq9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nG0WBYs3R4qpDLgPnVy+eEm/SltcUCRYSDfMCAj1CWU=;
- b=xi0vkPt/BYMBALp7d6pUI2B2YuQj7Lo6bbpnwJDqjVHm/V/McxCUHQ+pSBS4i3O9vrESajISyyfQK66MM36NBeu7do3kMVPSc+4JbwPKdiKott6Nb9ajJIo/3ZEy/p5cErt802NyxMbKFyy2qjF4rmZahHhnLDbKrXtGFuGZOMw=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from CY4PR12MB1494.namprd12.prod.outlook.com (2603:10b6:910:f::22)
- by CY4PR1201MB2487.namprd12.prod.outlook.com (2603:10b6:903:d0::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.18; Tue, 8 Dec
- 2020 03:44:46 +0000
-Received: from CY4PR12MB1494.namprd12.prod.outlook.com
- ([fe80::d0ac:8fdb:1968:2818]) by CY4PR12MB1494.namprd12.prod.outlook.com
- ([fe80::d0ac:8fdb:1968:2818%6]) with mapi id 15.20.3632.017; Tue, 8 Dec 2020
- 03:44:45 +0000
-Subject: Re: [RFC PATCH 2/4] cpufreq: acpi-cpufreq: Add processor to the
- ignore PSD override list
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Punit Agrawal <punitagrawal@gmail.com>, rjw@rjwysocki.net,
-        wei.huang2@amd.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, x86@kernel.org
-References: <20201125144847.3920-1-punitagrawal@gmail.com>
- <20201125144847.3920-3-punitagrawal@gmail.com>
- <cadb5d57-5aaf-79bc-e30e-502d5e522689@amd.com>
- <20201207202610.GG20489@zn.tnic>
- <e9b4ae11-1fe3-a660-bb65-d3ba55ffcc56@amd.com>
- <20201207223057.GJ20489@zn.tnic>
-From:   Wei Huang <whuang2@amd.com>
-Message-ID: <8260faca-4a0d-8e06-c5ba-3ecdd0619e2f@amd.com>
-Date:   Mon, 7 Dec 2020 21:44:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+        id S1726416AbgLHEKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 23:10:53 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:56067 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726048AbgLHEKw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 23:10:52 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 35D31C0D;
+        Mon,  7 Dec 2020 23:10:06 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 07 Dec 2020 23:10:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        to:cc:references:from:subject:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=t
+        hPfHNvHBgBwFsdE/nnkzFCxSaj3tnRQE7Aisw/au5c=; b=nI3kvkR+hZ0kK/IGt
+        lvtnviRbpSjaXztIA68DjAJo0BP1UEa8kXrTk1lbKAxxEFUeP5DeIwRHOKZwkKuA
+        q4d0d6VYNQWjkJOBi+cDr3WegNgzfW8a649xplpCqsdxqGjYAy7rQakmak4P8UOl
+        tz5k+8URRWaTAs9tT2P8ddF1fvigelfFMTnw2Vh4k7tiqKw9VnnCDYBwbFMkszQ3
+        BRyh1xyMLByB5VA7S0IFtWYADP3+Mkef6ConjZIpCteK92gz2EHxujDA/wA6u5md
+        zDpC/C4uqWQTIhupiUlZuIcZTr+gevwdwO4q5bYBdcWDrI3jjlNyy2OFGWHYhsO0
+        JGcTA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=thPfHNvHBgBwFsdE/nnkzFCxSaj3tnRQE7Aisw/au
+        5c=; b=nXTvLnNmSah2K4sfz5H3jW7oOaks9kBKO0LkVQaw1CWk5nTU163Zmf85M
+        yEXmXG/9kSSJeZd0x229/ShlJ/I3BNj9mo5gNoBCANaPsCulYRd6ovkQa9+zJFMF
+        ZCC8UabwPTbhx0tGJn183HcyIB6e+F5RLlReec8wtBJuRGMDMjKujTraQtxTZnI6
+        o5S5iXDd1qTAgkWYo7lIU6WeHscIzH8bMTob1sMQVgN/sahaBPBJ9wh8jEcN+10u
+        kHfwqiMTwGe+YYWRCCg1pZHHG3rQvfzMMSr/71NQXgS1kVliLVXIOSi/X/HjPCFc
+        dBlzPJMJw42uUuTLDZkNf5JoXKccQ==
+X-ME-Sender: <xms:nPzOX3RBDOIK0F6oFJ-OeoGuQkQEocxE-4Rw4OG_XNtUXtIwZ1P1SA>
+    <xme:nPzOX4wy7HjNtS5cyaEs71E3B-algqMtkCVH4zKwTxriDXFeh8Y0HW0C6Whn9mZJz
+    EfnEJz396PuBBAFpg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudejhedgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepvfhfhffukffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvddttdejieduudfgffevteekffegffeguddtgfefkeduvedukeff
+    hedtfeevuedvnecukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
+    nhgurdhorhhg
+X-ME-Proxy: <xmx:nPzOX82la6ot3lC2T8ZN9GCqTtSRDA7mYZQieJivbMG9kscSA1Zq7w>
+    <xmx:nPzOX3AyqypJ9qqA7wYGo-Dp0ejI_0yxvwPTeWqkIYzHawtU0SN-zg>
+    <xmx:nPzOXwjeuNV3uqsKwlNixId-5W_pOlN2WSaz0DyCKSBfd8ChsGzH1g>
+    <xmx:nfzOX8h3N-Z_fBU6n07cqyq8XnKpVdyFBmowqYGOwSK14PH12W8BLw>
+Received: from [70.135.148.151] (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 001AB24005D;
+        Mon,  7 Dec 2020 23:10:03 -0500 (EST)
+To:     Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        tiny.windzz@gmail.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        mripard@kernel.org, wens@csie.org, jernej.skrabec@siol.net
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+References: <20201208023720.22544-1-huangshuosheng@allwinnertech.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v3 1/6] cpufreq: sun50i: add efuse_xlate to get efuse
+ version.
+Message-ID: <e0a2573d-8009-39c1-63cb-c828dfcbabef@sholland.org>
+Date:   Mon, 7 Dec 2020 22:10:03 -0600
+User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.0
-In-Reply-To: <20201207223057.GJ20489@zn.tnic>
+MIME-Version: 1.0
+In-Reply-To: <20201208023720.22544-1-huangshuosheng@allwinnertech.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [165.204.77.11]
-X-ClientProxiedBy: CH2PR07CA0017.namprd07.prod.outlook.com
- (2603:10b6:610:20::30) To CY4PR12MB1494.namprd12.prod.outlook.com
- (2603:10b6:910:f::22)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [172.31.10.205] (165.204.77.11) by CH2PR07CA0017.namprd07.prod.outlook.com (2603:10b6:610:20::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.18 via Frontend Transport; Tue, 8 Dec 2020 03:44:44 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 5e25205b-3c26-4291-7b15-08d89b2b9b06
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB2487:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB2487A748FB4570067C60ABE8CFCD0@CY4PR1201MB2487.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eEtWqKi5YTzz39nFRuzCAtHRsEDHk5OpxwDaqr7j9TXc8lrXPy3yob68M0y1QqOtybb6g6ZlzAlkRVL0ZF3Q0aiKMhPERgWeQXi1t9rtIkbgVikApIJbh0flbzU6PX+/f3RNRjyMdH+/8LopbpLEo2SyBvaSm9pB2j/ThWzBs+l+t17eCvWxg1BsEJz8WEFUIZQr6DApu4C6LqyEr4O1sDYd64iKpSjAQb9x6Uj6EaDlQEqJHxYuGWBkjdFCe0tgimKZZpuctlOSmkRBFrJgwI5Ww50KnQd+NLmgOUcQqhaRtq8zyMyBmcHFYehv9/ImfFX0FdfYPAAmjLDGB9Zu4dAcSNmCAT8VnXHVgrR41yS0jeXElZ82KBf6iV33icbjVcVDfbpP2QmWnBpu/NRMYt0UFe80EnDEkYa6/s3cNQY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1494.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(366004)(346002)(136003)(39860400002)(31696002)(4326008)(52116002)(478600001)(2616005)(6916009)(5660300002)(8936002)(16576012)(8676002)(2906002)(31686004)(956004)(186003)(316002)(83380400001)(66946007)(6486002)(66476007)(36756003)(66556008)(16526019)(26005)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ZlpuREdsMnplQVNEbnhpemhxaDRVa2EvdTJ6eDRQK2U3cHF3dllMNWpTL3lT?=
- =?utf-8?B?VUhja1dEWkZCNjVHMmxOT2dWcUtqWDZSMldsR1hMTlJkSmNNekMzd0tqN3Nn?=
- =?utf-8?B?RE1MZVNmTzhQZGZTNG9VUmFiTTFkV3ZVTHNIRWdYVjhFSTg2RVpxODczRlN0?=
- =?utf-8?B?Sks3ZkhuTldzeitMZmZQWEVRUUJaTW44Q2JzWnBINGc1MGxFeFNxMWJqR2Nq?=
- =?utf-8?B?bEQ5WDlrUGxqK1YySldOZ2grREFmODBIV21OaE5pY1dkOE9wREhGUzVBSUdD?=
- =?utf-8?B?M280SXY1cldENHVEZk9NQXpobnNIeUZjakk2S21uWWFJU3ZTSlJqOENmOWZx?=
- =?utf-8?B?VlIrZlR3Z3hQT0NKWEI4N1I0VUI1Rmhta2pZc3lid1RVWUNjL3IwUjlpaC9y?=
- =?utf-8?B?WnJMeVBrQmVkWjJSTTlBeUs2Mm1ySHJBZ3ArM2RzWDVIY0V0VUkyaVM2bllW?=
- =?utf-8?B?dXdZK1hwQmMwVnRjWkFZbFRlRE1JY2dVK3VDMVBzS1dGWkhVZzhCTE52cEU2?=
- =?utf-8?B?OWJ4K2ZLWGpFbnVtUnB6VHh3Z2NGaG95QlAvWDdwS28wL2RXVlR4WWFyY2lH?=
- =?utf-8?B?WnRrWEdOQXFCQk1FYjJBOHpwRVZyVFZoZGV4UFdNVkZmL0lxWUZLdHgyMHJS?=
- =?utf-8?B?UkQrN3FJbGZVWWQ3SFZNL3U2ZzRKM21lTC9paG42UHFpOEJDL3o2WjNvbVNN?=
- =?utf-8?B?cGFEcU9Mc2NNb1FLTUFwRnlEdWttYWJqOFprR1hyclRTTEJVMVhDMlQ1VFgy?=
- =?utf-8?B?bFdlVC9FZld1Q1ViWC82SEhCUHJVRFNoUEZJZnNhMExTWngraFdxajRYc1Qz?=
- =?utf-8?B?cFpZcC9yVmVtY29YaWVyZEdtWWhnT3A0WlVLR1BOSHVVOWR5NHNCaXFRbmdS?=
- =?utf-8?B?cEFWTlZwR0dYOHRWckw4MFVMSHJNSW8yMnN2dU82SlZoSklqMmR1ZzNHM2F2?=
- =?utf-8?B?emllSklXQVhkVTdVRC9ScFJBZzlHL0ZmZWs1SmdGM2F1Z0FxZVU5OFkveU5r?=
- =?utf-8?B?Y0o0ZzlwclhWbmRwSTZDdG1ZVlptY3crS3NkanREck1qamZLWWxUd0xWNTBY?=
- =?utf-8?B?VkdWS0haaDUxZVRSbHB0VzBGSGt6MDFTdENmaGxqNmExZVJMV29ML0xwR3pr?=
- =?utf-8?B?d0FqYlNJd0dJanJNZkcvbXlvQmM0TWVMY3ZpWlRnWjFZQmlpZ2ZzTDJ2dDFG?=
- =?utf-8?B?bHloazdiN2ZPMEVrTytjckJhM3psWnpocUQzNUhhUE14ZlNCdVZTOXNLN2lT?=
- =?utf-8?B?OTUxbUxHSWJtODJwc0h5bjhCZWczNUhLUklra1BZNjFsNFYrU2dabTBVdlBT?=
- =?utf-8?Q?KtHOqrxImO+62WWRSgEyWAJG7f4wMc7FJ0?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1494.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2020 03:44:45.8747
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e25205b-3c26-4291-7b15-08d89b2b9b06
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GqiydSXEsNVwtd+wW4SWg8xjMrxnVFk7JN81e2x1JtQSHlco2wcaba8Kk72yx8ol
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2487
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
 
+On 12/7/20 8:37 PM, Shuosheng Huang wrote:
+> It's better to use efuse_xlate to extract the differentiated part
+> regarding different SoC.
+> 
+> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+> ---
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 72 +++++++++++++++++---------
+>  1 file changed, 48 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> index 9907a165135b..da23d581a4b4 100644
+> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> @@ -22,21 +22,52 @@
+>  #define NVMEM_MASK	0x7
+>  #define NVMEM_SHIFT	5
 
-On 12/7/20 4:30 PM, Borislav Petkov wrote:
-> On Mon, Dec 07, 2020 at 04:07:52PM -0600, Wei Huang wrote:
->> I think we shouldn't override zen2 if _PSD is correct. In my opinion,
->> there are two approaches:
->>
->> * Keep override_acpi_psd()
->> Let us keep the original quirk and override_acpi_psd() function. Over
->> the time, people may want to add new CPUs to override_acpi_psd(). The
->> maintainer may declare that only CPUs >= family 17h will be fixed, to
->> avoid exploding the check-list.
->>
->> * Remove the quirk completely
->> We can completely remove commit acd316248205 ("acpi-cpufreq: Add quirk
->> to disable _PSD usage on all AMD CPUs")? I am not sure what "AMD desktop
->> boards" was referring to in the original commit message of acd316248205.
->> Maybe such machines aren't in use anymore.
-> 
-> * Third option: do not do anything. Why?
+You should remove these definitions now that you added the ones below.
 
-I am fine with this option, unless Punit can prove me that I am wrong,
-(i.e. some Zen2 is broken because of acd316248205).
+>
+> +#define SUN50I_H6_NVMEM_MASK		0x7
+> +#define SUN50I_H6_NVMEM_SHIFT		5
+> +
+> +struct sunxi_cpufreq_soc_data {
+> +	u32 (*efuse_xlate)(void *efuse);
+> +};
+> +
+>  static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
+>  
+> +static u32 sun50i_h6_efuse_xlate(struct nvmem_cell *speedbin_nvmem)
+> +{
+> +	size_t len;
+> +	u32 *speedbin;
+> +	u32 efuse_value;
+> +
+> +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+> +	if (IS_ERR(speedbin))
+> +		return PTR_ERR(speedbin);
 
+You're trying to return a negative value for an error here, but the
+return type is unsigned.
+
+> +
+> +	efuse_value = (*(u32 *)speedbin >> SUN50I_H6_NVMEM_SHIFT) &
+> +			  SUN50I_H6_NVMEM_MASK;
+> +	kfree(speedbin);
+> +	/*
+> +	 * We treat unexpected efuse values as if the SoC was from
+> +	 * the slowest bin. Expected efuse values are 1-3, slowest
+> +	 * to fastest.
+> +	 */
+> +	if (efuse_value >= 1 && efuse_value <= 3)
+> +		return efuse_value - 1;
+> +	else
+> +		return 0;
+> +}
+> +
+>  /**
+>   * sun50i_cpufreq_get_efuse() - Determine speed grade from efuse value
+> + * @soc_data: pointer to sunxi_cpufreq_soc_data context
+>   * @versions: Set to the value parsed from efuse
+>   *
+>   * Returns 0 if success.
+>   */
+> -static int sun50i_cpufreq_get_efuse(u32 *versions)
+> +static int sun50i_cpufreq_get_efuse(const struct sunxi_cpufreq_soc_data *soc_data,
+> +				    u32 *versions)
+>  {
+>  	struct nvmem_cell *speedbin_nvmem;
+>  	struct device_node *np;
+>  	struct device *cpu_dev;
+> -	u32 *speedbin, efuse_value;
+> -	size_t len;
+>  	int ret;
+>  
+>  	cpu_dev = get_cpu_device(0);
+> @@ -63,41 +94,31 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
+>  		return PTR_ERR(speedbin_nvmem);
+>  	}
+>  
+> -	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+> +	*versions = soc_data->efuse_xlate(speedbin_nvmem);
+>  	nvmem_cell_put(speedbin_nvmem);
+> -	if (IS_ERR(speedbin))
+> -		return PTR_ERR(speedbin);
+> -
+> -	efuse_value = (*speedbin >> NVMEM_SHIFT) & NVMEM_MASK;
+> -
+> -	/*
+> -	 * We treat unexpected efuse values as if the SoC was from
+> -	 * the slowest bin. Expected efuse values are 1-3, slowest
+> -	 * to fastest.
+> -	 */
+> -	if (efuse_value >= 1 && efuse_value <= 3)
+> -		*versions = efuse_value - 1;
+> -	else
+> -		*versions = 0;
+>  
+> -	kfree(speedbin);
+>  	return 0;
+
+If *versions is negative, you need to pass that error back to the caller.
+
+>  };
+>  
+>  static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
+>  {
+> +	const struct of_device_id *match;
+>  	struct opp_table **opp_tables;
+>  	char name[MAX_NAME_LEN];
+>  	unsigned int cpu;
+>  	u32 speed = 0;
+>  	int ret;
+>  
+> +	match = dev_get_platdata(&pdev->dev);
+> +	if (!match)
+> +		return -EINVAL;
+> +
+>  	opp_tables = kcalloc(num_possible_cpus(), sizeof(*opp_tables),
+>  			     GFP_KERNEL);
+>  	if (!opp_tables)
+>  		return -ENOMEM;
+>  
+> -	ret = sun50i_cpufreq_get_efuse(&speed);
+> +	ret = sun50i_cpufreq_get_efuse(match->data, &speed);
+>  	if (ret)
+>  		return ret;
+
+Since we've already decoupled the speed grade from the nvmem value, why
+not make this:
+
+	int speed;
+	...
+	speed = sun50i_cpufreq_get_efuse(match->data);
+	if (speed < 0)
+		return speed;
+
+And have sun50i_cpufreq_get_efuse return the value from efuse_xlate
+without all the pointer indirection.
+
+And this is a separate bug in the existing code, but it leaks opp_tables
+if sun50i_cpufreq_get_efuse fails. That could be fixed by moving the
+call to sun50i_cpufreq_get_efuse up.
+
+Cheers,
+Samuel
+
+>  
+> @@ -163,8 +184,12 @@ static struct platform_driver sun50i_cpufreq_driver = {
+>  	},
+>  };
+>  
+> +static const struct sunxi_cpufreq_soc_data sun50i_h6_data = {
+> +	.efuse_xlate = sun50i_h6_efuse_xlate,
+> +};
+> +
+>  static const struct of_device_id sun50i_cpufreq_match_list[] = {
+> -	{ .compatible = "allwinner,sun50i-h6" },
+> +	{ .compatible = "allwinner,sun50i-h6", .data = &sun50i_h6_data },
+>  	{}
+>  };
+>  
+> @@ -198,9 +223,8 @@ static int __init sun50i_cpufreq_init(void)
+>  	if (unlikely(ret < 0))
+>  		return ret;
+>  
+> -	sun50i_cpufreq_pdev =
+> -		platform_device_register_simple("sun50i-cpufreq-nvmem",
+> -						-1, NULL, 0);
+> +	sun50i_cpufreq_pdev = platform_device_register_data(NULL,
+> +		"sun50i-cpufreq-nvmem", -1, match, sizeof(*match));
+>  	ret = PTR_ERR_OR_ZERO(sun50i_cpufreq_pdev);
+>  	if (ret == 0)
+>  		return 0;
 > 
-> - Let sleeping dogs lie and leave the workaround acd316248205 for old
-> machines.
-> 
-> - Make a clear cut that the override is not needed from Zen3 on, i.e.,
-> your patch
-> 
->    5368512abe08 ("acpi-cpufreq: Honor _PSD table setting on new AMD CPUs")
-> 
-> 
-> Punit's commit message reads "...indicates that the override is not
-> required for Zen3 onwards, it seems that domain information can be
-> trusted even on certain earlier systems."
-> 
-> That's not nearly a justification in my book to do this on anything < Zen3.
-> 
-> This way you have a clear cut, you don't need to deal with adding any
-> more models to override_acpi_psd() and all is good.
-> 
-> Unless there's a better reason to skip the override on machines < Zen3
-> but I haven't heard any so far...
-> 
-> Thx.
-> 
+
