@@ -2,257 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 173BF2D21D9
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 05:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FFB2D21E1
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 05:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbgLHEKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 23:10:53 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:56067 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726048AbgLHEKw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 23:10:52 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 35D31C0D;
-        Mon,  7 Dec 2020 23:10:06 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 07 Dec 2020 23:10:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        to:cc:references:from:subject:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=t
-        hPfHNvHBgBwFsdE/nnkzFCxSaj3tnRQE7Aisw/au5c=; b=nI3kvkR+hZ0kK/IGt
-        lvtnviRbpSjaXztIA68DjAJo0BP1UEa8kXrTk1lbKAxxEFUeP5DeIwRHOKZwkKuA
-        q4d0d6VYNQWjkJOBi+cDr3WegNgzfW8a649xplpCqsdxqGjYAy7rQakmak4P8UOl
-        tz5k+8URRWaTAs9tT2P8ddF1fvigelfFMTnw2Vh4k7tiqKw9VnnCDYBwbFMkszQ3
-        BRyh1xyMLByB5VA7S0IFtWYADP3+Mkef6ConjZIpCteK92gz2EHxujDA/wA6u5md
-        zDpC/C4uqWQTIhupiUlZuIcZTr+gevwdwO4q5bYBdcWDrI3jjlNyy2OFGWHYhsO0
-        JGcTA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=thPfHNvHBgBwFsdE/nnkzFCxSaj3tnRQE7Aisw/au
-        5c=; b=nXTvLnNmSah2K4sfz5H3jW7oOaks9kBKO0LkVQaw1CWk5nTU163Zmf85M
-        yEXmXG/9kSSJeZd0x229/ShlJ/I3BNj9mo5gNoBCANaPsCulYRd6ovkQa9+zJFMF
-        ZCC8UabwPTbhx0tGJn183HcyIB6e+F5RLlReec8wtBJuRGMDMjKujTraQtxTZnI6
-        o5S5iXDd1qTAgkWYo7lIU6WeHscIzH8bMTob1sMQVgN/sahaBPBJ9wh8jEcN+10u
-        kHfwqiMTwGe+YYWRCCg1pZHHG3rQvfzMMSr/71NQXgS1kVliLVXIOSi/X/HjPCFc
-        dBlzPJMJw42uUuTLDZkNf5JoXKccQ==
-X-ME-Sender: <xms:nPzOX3RBDOIK0F6oFJ-OeoGuQkQEocxE-4Rw4OG_XNtUXtIwZ1P1SA>
-    <xme:nPzOX4wy7HjNtS5cyaEs71E3B-algqMtkCVH4zKwTxriDXFeh8Y0HW0C6Whn9mZJz
-    EfnEJz396PuBBAFpg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudejhedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvfhfhffukffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvddttdejieduudfgffevteekffegffeguddtgfefkeduvedukeff
-    hedtfeevuedvnecukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:nPzOX82la6ot3lC2T8ZN9GCqTtSRDA7mYZQieJivbMG9kscSA1Zq7w>
-    <xmx:nPzOX3AyqypJ9qqA7wYGo-Dp0ejI_0yxvwPTeWqkIYzHawtU0SN-zg>
-    <xmx:nPzOXwjeuNV3uqsKwlNixId-5W_pOlN2WSaz0DyCKSBfd8ChsGzH1g>
-    <xmx:nfzOX8h3N-Z_fBU6n07cqyq8XnKpVdyFBmowqYGOwSK14PH12W8BLw>
-Received: from [70.135.148.151] (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 001AB24005D;
-        Mon,  7 Dec 2020 23:10:03 -0500 (EST)
-To:     Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        tiny.windzz@gmail.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        mripard@kernel.org, wens@csie.org, jernej.skrabec@siol.net
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20201208023720.22544-1-huangshuosheng@allwinnertech.com>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v3 1/6] cpufreq: sun50i: add efuse_xlate to get efuse
- version.
-Message-ID: <e0a2573d-8009-39c1-63cb-c828dfcbabef@sholland.org>
-Date:   Mon, 7 Dec 2020 22:10:03 -0600
-User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726231AbgLHERo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 23:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726221AbgLHERo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 23:17:44 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3076C061749
+        for <linux-pm@vger.kernel.org>; Mon,  7 Dec 2020 20:17:03 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id 131so12614348pfb.9
+        for <linux-pm@vger.kernel.org>; Mon, 07 Dec 2020 20:17:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QHdvJA2HTSsKcq12ECvAFT6hATkrl/TFzJg0uMaRku0=;
+        b=YKPk34UO6uwnipQNlIBKtdQw/9xGkncAFiZryxzvH34O/VEGjEaYwyr3zstJRQ23yy
+         2d6nIPyAZaPz21F5m+W7/O9qXIU0UQjDz2ncZzh2LBOlfEHAKFTGEVYcOnI+a7Zxd7ax
+         dbsoZwoatQouMGQaIftlSidpryFdaeILezrvQeIjFP8uIdffKQJKbpbIURf3dHOM0MtH
+         0RyLIMvZkHvvRLFth5i+QTQbJPkxe8zkdskTn6ptpRb7DjXH/VJq0vsbf+bNOsM1qP2M
+         Fn8f968ZMyDnvZ/3Itqt4GKht5ji6dSFw/F4MNLEGV+E7bIybyrDipAGSf26A4Kcq5ph
+         g5QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QHdvJA2HTSsKcq12ECvAFT6hATkrl/TFzJg0uMaRku0=;
+        b=aNZh4AA383WpoKEURcp/SFlcJ0U0P7GeReyi/OZKaxfPqfuyPxgn0qRyh+to05G+YL
+         e2m20C3TE99X2i6i3XyLwt9GJGlAGRUhC2Dn2DUeG3Dj006PtmATroIdKCY8rlGX19ij
+         WjvTQEVtwM3pu9A4M8Ai1yHJ0F5sItWce0AvmuYXUI6JpNCyE3HxuvRZb/occucmvgy2
+         8XQbqL/MUqDAm80uaoF5cFYZtfg6JcWrgXNRiEqKRNuT4EFdjB9f+wuSTTBej0cxXBiF
+         r2WWXJ7dmlR6s6gBWAhmk7Uz2AXzcBMCfUbbuX9GKQjvtyCmWYe+T/KIpZSPI+bMKCnT
+         GTVg==
+X-Gm-Message-State: AOAM531E7xaxQ/xTBJUv0MJljX0TVeft8FWTwhsDOeMlJcqCzB5HZOw0
+        n5NB9LKicrgQbZb4t8NF9HO/2A==
+X-Google-Smtp-Source: ABdhPJwJUzPaDCBiYEYyn3tMURt2qiGQGs2mL3byq2uqzBnMc5ig1jS6M6TLGHIYPgvzT9y5ea3XhA==
+X-Received: by 2002:aa7:9afb:0:b029:19e:45d8:b102 with SMTP id y27-20020aa79afb0000b029019e45d8b102mr3130288pfp.48.1607401023135;
+        Mon, 07 Dec 2020 20:17:03 -0800 (PST)
+Received: from localhost ([122.172.136.109])
+        by smtp.gmail.com with ESMTPSA id w9sm13052748pfj.128.2020.12.07.20.17.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 07 Dec 2020 20:17:02 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH V5 0/3] cpufreq_cooling: Get effective CPU utilization from scheduler
+Date:   Tue,  8 Dec 2020 09:46:54 +0530
+Message-Id: <cover.1607400596.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-In-Reply-To: <20201208023720.22544-1-huangshuosheng@allwinnertech.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Hi,
 
-On 12/7/20 8:37 PM, Shuosheng Huang wrote:
-> It's better to use efuse_xlate to extract the differentiated part
-> regarding different SoC.
-> 
-> Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
-> ---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 72 +++++++++++++++++---------
->  1 file changed, 48 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index 9907a165135b..da23d581a4b4 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -22,21 +22,52 @@
->  #define NVMEM_MASK	0x7
->  #define NVMEM_SHIFT	5
+This patchset makes the cpufreq_cooling driver reuse the CPU utilization
+metric provided by the scheduler instead of depending on idle and busy
+times of a CPU, which aren't that accurate to measure the busyness of a
+CPU for the next cycle. More details can be seen in the commit logs of
+the patches.
 
-You should remove these definitions now that you added the ones below.
+V4->V5:
+- Don't export enum cpu_util_type and don't pass it as argument to
+  sched_cpu_util().
+- Fixed a build issue with !CONFIG_THERMAL_GOV_POWER_ALLOCATOR by moving
+  {allocate|free}_idle_time() out of CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+  in patch 3/3.
+- Applied Acks from Rafael.
 
->
-> +#define SUN50I_H6_NVMEM_MASK		0x7
-> +#define SUN50I_H6_NVMEM_SHIFT		5
-> +
-> +struct sunxi_cpufreq_soc_data {
-> +	u32 (*efuse_xlate)(void *efuse);
-> +};
-> +
->  static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
->  
-> +static u32 sun50i_h6_efuse_xlate(struct nvmem_cell *speedbin_nvmem)
-> +{
-> +	size_t len;
-> +	u32 *speedbin;
-> +	u32 efuse_value;
-> +
-> +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
-> +	if (IS_ERR(speedbin))
-> +		return PTR_ERR(speedbin);
+V3->V4:
+- Broke the first patch into two parts and used effective_cpu_util() in
+  schedutil (Rafael).
 
-You're trying to return a negative value for an error here, but the
-return type is unsigned.
+- Removed comment about idle-injection in last patch based on feedback
+  from Lukasz and added hi Reviewed-by tag.
 
-> +
-> +	efuse_value = (*(u32 *)speedbin >> SUN50I_H6_NVMEM_SHIFT) &
-> +			  SUN50I_H6_NVMEM_MASK;
-> +	kfree(speedbin);
-> +	/*
-> +	 * We treat unexpected efuse values as if the SoC was from
-> +	 * the slowest bin. Expected efuse values are 1-3, slowest
-> +	 * to fastest.
-> +	 */
-> +	if (efuse_value >= 1 && efuse_value <= 3)
-> +		return efuse_value - 1;
-> +	else
-> +		return 0;
-> +}
-> +
->  /**
->   * sun50i_cpufreq_get_efuse() - Determine speed grade from efuse value
-> + * @soc_data: pointer to sunxi_cpufreq_soc_data context
->   * @versions: Set to the value parsed from efuse
->   *
->   * Returns 0 if success.
->   */
-> -static int sun50i_cpufreq_get_efuse(u32 *versions)
-> +static int sun50i_cpufreq_get_efuse(const struct sunxi_cpufreq_soc_data *soc_data,
-> +				    u32 *versions)
->  {
->  	struct nvmem_cell *speedbin_nvmem;
->  	struct device_node *np;
->  	struct device *cpu_dev;
-> -	u32 *speedbin, efuse_value;
-> -	size_t len;
->  	int ret;
->  
->  	cpu_dev = get_cpu_device(0);
-> @@ -63,41 +94,31 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
->  		return PTR_ERR(speedbin_nvmem);
->  	}
->  
-> -	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
-> +	*versions = soc_data->efuse_xlate(speedbin_nvmem);
->  	nvmem_cell_put(speedbin_nvmem);
-> -	if (IS_ERR(speedbin))
-> -		return PTR_ERR(speedbin);
-> -
-> -	efuse_value = (*speedbin >> NVMEM_SHIFT) & NVMEM_MASK;
-> -
-> -	/*
-> -	 * We treat unexpected efuse values as if the SoC was from
-> -	 * the slowest bin. Expected efuse values are 1-3, slowest
-> -	 * to fastest.
-> -	 */
-> -	if (efuse_value >= 1 && efuse_value <= 3)
-> -		*versions = efuse_value - 1;
-> -	else
-> -		*versions = 0;
->  
-> -	kfree(speedbin);
->  	return 0;
+V2->V3:
+- Put the scheduler helpers within ifdef CONFIG_SMP.
+- Keep both SMP and !SMP implementations in the cpufreq_cooling driver.
+- Improved commit log with testing related information.
 
-If *versions is negative, you need to pass that error back to the caller.
+--
+Viresh
 
->  };
->  
->  static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  {
-> +	const struct of_device_id *match;
->  	struct opp_table **opp_tables;
->  	char name[MAX_NAME_LEN];
->  	unsigned int cpu;
->  	u32 speed = 0;
->  	int ret;
->  
-> +	match = dev_get_platdata(&pdev->dev);
-> +	if (!match)
-> +		return -EINVAL;
-> +
->  	opp_tables = kcalloc(num_possible_cpus(), sizeof(*opp_tables),
->  			     GFP_KERNEL);
->  	if (!opp_tables)
->  		return -ENOMEM;
->  
-> -	ret = sun50i_cpufreq_get_efuse(&speed);
-> +	ret = sun50i_cpufreq_get_efuse(match->data, &speed);
->  	if (ret)
->  		return ret;
+Viresh Kumar (3):
+  sched/core: Move schedutil_cpu_util() to core.c
+  sched/core: Rename schedutil_cpu_util() and allow rest of the kernel
+    to use it
+  thermal: cpufreq_cooling: Reuse sched_cpu_util() for SMP platforms
 
-Since we've already decoupled the speed grade from the nvmem value, why
-not make this:
+ drivers/thermal/cpufreq_cooling.c |  69 ++++++++++++++----
+ include/linux/sched.h             |   5 ++
+ kernel/sched/core.c               | 114 ++++++++++++++++++++++++++++++
+ kernel/sched/cpufreq_schedutil.c  | 108 +---------------------------
+ kernel/sched/fair.c               |   6 +-
+ kernel/sched/sched.h              |  22 ++----
+ 6 files changed, 184 insertions(+), 140 deletions(-)
 
-	int speed;
-	...
-	speed = sun50i_cpufreq_get_efuse(match->data);
-	if (speed < 0)
-		return speed;
 
-And have sun50i_cpufreq_get_efuse return the value from efuse_xlate
-without all the pointer indirection.
-
-And this is a separate bug in the existing code, but it leaks opp_tables
-if sun50i_cpufreq_get_efuse fails. That could be fixed by moving the
-call to sun50i_cpufreq_get_efuse up.
-
-Cheers,
-Samuel
-
->  
-> @@ -163,8 +184,12 @@ static struct platform_driver sun50i_cpufreq_driver = {
->  	},
->  };
->  
-> +static const struct sunxi_cpufreq_soc_data sun50i_h6_data = {
-> +	.efuse_xlate = sun50i_h6_efuse_xlate,
-> +};
-> +
->  static const struct of_device_id sun50i_cpufreq_match_list[] = {
-> -	{ .compatible = "allwinner,sun50i-h6" },
-> +	{ .compatible = "allwinner,sun50i-h6", .data = &sun50i_h6_data },
->  	{}
->  };
->  
-> @@ -198,9 +223,8 @@ static int __init sun50i_cpufreq_init(void)
->  	if (unlikely(ret < 0))
->  		return ret;
->  
-> -	sun50i_cpufreq_pdev =
-> -		platform_device_register_simple("sun50i-cpufreq-nvmem",
-> -						-1, NULL, 0);
-> +	sun50i_cpufreq_pdev = platform_device_register_data(NULL,
-> +		"sun50i-cpufreq-nvmem", -1, match, sizeof(*match));
->  	ret = PTR_ERR_OR_ZERO(sun50i_cpufreq_pdev);
->  	if (ret == 0)
->  		return 0;
-> 
+base-commit: 3650b228f83adda7e5ee532e2b90429c03f7b9ec
+-- 
+2.25.0.rc1.19.g042ed3e048af
 
