@@ -2,187 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 284782D2F3E
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 17:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD0E2D2FBD
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 17:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729846AbgLHQPv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 11:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729457AbgLHQPv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 11:15:51 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF21C0613D6;
-        Tue,  8 Dec 2020 08:15:11 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id d9so8829789iob.6;
-        Tue, 08 Dec 2020 08:15:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=oLW8xGxoanWIpJZovz5czICr17i3LTPEQIdqGA3O2h0=;
-        b=CrdkV8rVgDKbU+JWugnZu/ASTWkgGuftLg+bo5Y6wrvT9CZAL7f/Ib+cmCyVw6n9SJ
-         oWm9XKNEBDhWdBKlz/9tIIVY7jkM0EU446Hl2B2pgz+tdXjPkEuMpEEVP3+09EsGrhFy
-         39b3VWPxG08coduB0bDMIJ9QeYmgs0kkoHt2pKY4IDUvgsXTDB7usxHxluT+1BAXTMM+
-         H/EIy6prqc9OFu6LQwGoMeuH/xsCiph6igRly3nhzc5RzWaK+cS0zsgyA1NApO9F4KLy
-         3lrB4KJNmn/ORSK/xKYgtqRwlGRp5JhRe52UKnTbjX73D462/HnflLGHP/Xw3vVLrFlf
-         8Vqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oLW8xGxoanWIpJZovz5czICr17i3LTPEQIdqGA3O2h0=;
-        b=bMGOWkKZhPgW/nW9yYPVDAz8xnN7g7AQ39BVxQ9snFKnMfE7x1umMTGbpDG58VKCcJ
-         J0gLjexKcYCic+6kKpXRiPQ/ttHVS3RKeK2eh1nCnW1nk5drnjkqWCyYlKd4qb9mR2H+
-         3yDBIiJHf6VAw5Qo5Ue1c0rHvpxHQZar7oJvFo946pK0tzXprj+dA54Y9PTUkP41D21L
-         CcgloOKt5EkdWkliJh/iJcOG1Vwk1vC0zmu8TXP5jEONAGnt9GdLCUtlj4Nhl2aQBg83
-         rju/AGTzEJYipFvh9hQpiEIYw0dF6BZsDqppLShHhxIHJHI7iy2hDb44mo/2uJDGBVVl
-         PsTg==
-X-Gm-Message-State: AOAM53113vo/orrwk9Aft1huWAjxJsaByL39qtY0HzNESntpyshx75lQ
-        URks+b8KxbEjYpu5Scr3jO6OmbQKmXBcyXXrsZU=
-X-Google-Smtp-Source: ABdhPJxXeSbNnS0AeBgABRYL8Vmru53bsBrzbyhq87wFdTsv9q/V2oexnDeIfcYrjPz5NCgFr4xpx2rWyu1scvDIowQ=
-X-Received: by 2002:a5d:8344:: with SMTP id q4mr25183113ior.38.1607444110138;
- Tue, 08 Dec 2020 08:15:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20201204200920.133780-1-mario.limonciello@dell.com>
- <d0f7e565-05e1-437e-4342-55eb73daa907@redhat.com> <DM6PR19MB2636A4097B68DBB253C416D8FACE0@DM6PR19MB2636.namprd19.prod.outlook.com>
- <383daf0d-8a9b-c614-aded-6e816f530dcd@intel.com> <e7d57370-e35e-a9e6-2dd9-aa7855c15650@redhat.com>
-In-Reply-To: <e7d57370-e35e-a9e6-2dd9-aa7855c15650@redhat.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Tue, 8 Dec 2020 08:14:58 -0800
-Message-ID: <CAKgT0UebNROCeAyyg0Jf-pTfLDd-oNyu2Lo-gkZKWk=nOAYL8g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] Improve s0ix flows for systems i219LM
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Neftin, Sasha" <sasha.neftin@intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Aaron Brown <aaron.f.brown@intel.com>,
-        Stefan Assmann <sassmann@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        "darcari@redhat.com" <darcari@redhat.com>,
-        "Shen, Yijun" <Yijun.Shen@dell.com>,
-        "Yuan, Perry" <Perry.Yuan@dell.com>,
-        "anthony.wong@canonical.com" <anthony.wong@canonical.com>,
-        viltaly.lifshits@intel.com
+        id S1730162AbgLHQbs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 11:31:48 -0500
+Received: from de-smtp-delivery-102.mimecast.com ([51.163.158.102]:32948 "EHLO
+        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728602AbgLHQbs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 11:31:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1607445040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d0GJtz0zOfg3ilKmpm5pbT1rah50qJjsOnh8T+hQ2lk=;
+        b=OnnrSj4/0hoFABNZyT/rjst3e4Z+yZsw1c2eJWYf7SAYowEsp2tHi9VDQkYjg2Zl4E8f/h
+        hJPuPB1Edlbw8xxBAsc0YIpK9Eev9z21Pwv4uT6lFXZ+OMGZLm9JZP3+YL+ow7RvpJyYFV
+        njZBd6CAn4eyxQVmeXZNeF60HFHeXow=
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+ (mail-am6eur05lp2112.outbound.protection.outlook.com [104.47.18.112])
+ (Using TLS) by relay.mimecast.com with ESMTP id
+ de-mta-19-oO2uXQ7ROW26YyaIrkdVmA-1; Tue, 08 Dec 2020 17:30:38 +0100
+X-MC-Unique: oO2uXQ7ROW26YyaIrkdVmA-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UZT89CxLFJcY8Tp4yAZpRkVbsx88SBIJ//bdXG5NpgriDYC7oGkVyhZd+ukTOGR8cTjkx2VlTm4fTUxH3IoYXG+fIghdvsXth2NU0gqmqlBPdukvM9J37U8MJHi62cr965BpRJ19FDbeCLPqnpaeEQuYOsg9zaH3+dqadBP/BoF+EXDtv/kISPfWi41h9XBGuqx2leedsxQRtgG7tB8TyzfmlbpP/FHwQWMKRuP4ra7kPw+05tD1yCCulYma1wgNxwWC5ROAPg3XN3jaZ8TUYXxjoDQfUnq69/ypnUU8BHO114+ESJPNRXk15yTiyS62nRBZeGrFSskZAgFqNAcb9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d0GJtz0zOfg3ilKmpm5pbT1rah50qJjsOnh8T+hQ2lk=;
+ b=IeDqaqZMSQAkmIkxneuvaa/RHOwI2g1gkVQyM29S+hFsmFSy2qk2B5ObBmsZ4VnTYg2yCrSIGbsDdTXflejIQA44x6bwJ6j/4EhT6Jp96XTtQPv7cEWJWI7L+uQd5Afof7igTPOimcGjh1LLD7pT8KGLS86DWiV4qd26JMm4KcJYEjp2LpQON4Xvsuxp11gqbomdFlDSQoGjLsBnr8j0/0RhIwGKDBAu2vwAXiVu8Sd2ZI+zFT0NT6ODJ/5ZXKLgoRmT4pc5PbA+NDCctoxL4vBZ/kch9PMtOpUJo5yjOwoJbQ7FtZO6RN01fq5NHITG4hUbTn51tpLn2Iz+4D4BmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: rjwysocki.net; dkim=none (message not signed)
+ header.d=none;rjwysocki.net; dmarc=none action=none header.from=suse.com;
+Received: from AM0PR04MB4530.eurprd04.prod.outlook.com (2603:10a6:208:70::28)
+ by AM8PR04MB7297.eurprd04.prod.outlook.com (2603:10a6:20b:1c5::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Tue, 8 Dec
+ 2020 16:30:38 +0000
+Received: from AM0PR04MB4530.eurprd04.prod.outlook.com
+ ([fe80::797c:6e40:f893:4082]) by AM0PR04MB4530.eurprd04.prod.outlook.com
+ ([fe80::797c:6e40:f893:4082%6]) with mapi id 15.20.3654.012; Tue, 8 Dec 2020
+ 16:30:37 +0000
+Message-ID: <1607445035.2673.64.camel@suse.com>
+Subject: Re: [PATCH v1 0/4] cpufreq: Allow drivers to receive more
+ information from the governor
+From:   Giovanni Gherdovich <ggherdovich@suse.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 08 Dec 2020 17:30:35 +0100
+In-Reply-To: <20360841.iInq7taT2Z@kreacher>
+References: <20360841.iInq7taT2Z@kreacher>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.26.6 
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [195.250.132.148]
+X-ClientProxiedBy: AM0PR03CA0057.eurprd03.prod.outlook.com (2603:10a6:208::34)
+ To AM0PR04MB4530.eurprd04.prod.outlook.com (2603:10a6:208:70::28)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from linux-ni6k.dhcp.prg.suse.com (195.250.132.148) by AM0PR03CA0057.eurprd03.prod.outlook.com (2603:10a6:208::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.18 via Frontend Transport; Tue, 8 Dec 2020 16:30:37 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4a84e458-c33b-424d-8fc7-08d89b969889
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7297:
+X-Microsoft-Antispam-PRVS: <AM8PR04MB729745A48FF0EFEB8F34581093CD0@AM8PR04MB7297.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3JAZa7TyD5Ndh33bHfi0crW6C/jxWPkJltmGQEZSb2j3pY9u5LlPNKqUiVdaclmckMt2iF9u1MQ8JWzIQu2gf/+s2kr9ymZT3wwO/lDpUFjHOkqZ3tC4ZzVQ+HcU3RbYxr85GsXMPLBmIU8MscgNvVN0UpjMaH2ISaNzrh+0bHOaiIRJUqro6ZrgNZMg9lBgvPi/K8jIUYyRZUUel3/HXcAlYZeZRdf5endTO6KC54WXoXdSoUb4U6CdP+3SqMFgsnMkkdYtHo4RWTKaCUC+G7JH8SX03U0O2ydIvYWxpA9zaAuDJTbxrTbt2x40GX8/8EbWUJfI3QmOXbphmzq1VVhSUghT13OTCqMiig2ps+JIpRJXLwuJBkPWSxnNNNJRyZuaWVPiW95cWcGT8WnZsJ5hAjDCe8Xrd1khNidCK4o84C21ijJAVWxKdqsNHn6vnKusqY6kfwFkpCkCG3mJpw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4530.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(376002)(346002)(54906003)(52116002)(103116003)(4744005)(2906002)(110136005)(8676002)(36756003)(956004)(66946007)(6486002)(5660300002)(26005)(8936002)(66556008)(4326008)(2616005)(186003)(966005)(66476007)(16526019)(7696005)(508600001)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?S0E2Z25pQlZYaTJSQjhRQmFqRDAvQVdvNHNRZmowaFpTSjZvbXlxcjFiZ1dk?=
+ =?utf-8?B?YXdxbEYvNU4xT0V6bXhEZHQ2NHZFdGh4MlhQOXk2bGdLbUdIOXdoTitlcTVY?=
+ =?utf-8?B?S282ZlRrNmJkeHlmS1JlQllBSGk4VExySGJHSnlhRFVUWEV4akZreGlxVE5X?=
+ =?utf-8?B?OU5oNUd5Y0E3UkJ6ODFjUzhaWnBXY3J1anRyVnF4OEtvSlFoeEFjOEtPOXpz?=
+ =?utf-8?B?SmxFcGhiTEpCTThFNkFWWnU3Q1p2NkhtYVJ1VEZqU0dTZHpUMUdIK3huclZn?=
+ =?utf-8?B?TFZuRFVXcmJQLzd0YXZRZFA2REU3ZGdZc2Z1WlBBZjNDU3FncjcyTzFPb1Mx?=
+ =?utf-8?B?TnpMWFd6dDIxN1J2WE1nRk9nVEFtaVpvK3kxQ1J0VjZCV084QTI2eGRTaU8x?=
+ =?utf-8?B?NlFWWFRUOFdEMlBxS0tWZ0Q3SG43SEdyd1Z3cjBMcXhQbWs5aWVIUlBQSGV5?=
+ =?utf-8?B?UjRIVzZLSzJJdGROeDlpNTl5SFVPa2VuMXVQTWlKUitjTWQrUzRLbTkxVGFD?=
+ =?utf-8?B?TUQ2VmN6bnZvZ2J1YVJDb1VKd09RaUlVNXkyL0YrbGk2SFlKOXJWWDR1RHY0?=
+ =?utf-8?B?VmVDc2dVWWFFQkVSODFraVBlbE9WWDBCNkNSMjBzSUpKT3A2dWp0RUZjRVFj?=
+ =?utf-8?B?U1lSMlRsREVJSlh4S0ZXL1k3azZ3aE9mWm0xVGMrRmpPUHRGWVZWOVIyMFNT?=
+ =?utf-8?B?dlBabmwxWGFmK2d3bndOdW9TblRsNW4zZ2dsaTlLOHNDK25xWnl5VkhLenJJ?=
+ =?utf-8?B?TmJBVHFHRjFGaTJUcFl6eW45U1BpazY2NHQrb0NUVE1SNUdUeXliaUo0T1li?=
+ =?utf-8?B?OWQwLzB5VkVhME4vL0cycWJnMzFVdVZoZVJtUUFrR281UnUyMW8zQlA0dDRq?=
+ =?utf-8?B?SWFkQ3FUb1FyOGU3TC9pUi9zVGhrU0ZmcEdUWVZIOUtodlBxNWVkaHd6QVdH?=
+ =?utf-8?B?eUxZbXhzTFpNand6TExFdmozU2Z2YVFnb1l5cWJqQ0x4YzZSUE5ZMzdTT3po?=
+ =?utf-8?B?OW1HWXhkUXlTZWZjVHArVVUxK28vcVFyWnc0OHA1QVk5dHljZVRxamQvOWZR?=
+ =?utf-8?B?NGl1eEFCNEFDanRRaHJlc0NmVkVLa2pMSHM0bUoxQUUvY2w4Wk9XVWRGVDdW?=
+ =?utf-8?B?Zi9TRitmY3cwZlhCODRsalZjTkh6d3prb1p0Q0VDVDY5aUpqYk1kdjZCNHNu?=
+ =?utf-8?B?STl5RVlhazBocFNqNnRPTEJYVDVnRXdGR0IxWGh0UzBVN0ZkVWl1VHYvTVor?=
+ =?utf-8?B?M3E4Mnk2K3VWN3ZpMG5JSzJ1K0RrL2VoN1AvUWJtZ3NxSlRGcE11dGlzR2oy?=
+ =?utf-8?Q?msfbp8oKq5rYJduoOBNaqOwx0OSRAjry/x?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4530.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2020 16:30:37.7797
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a84e458-c33b-424d-8fc7-08d89b969889
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: a0FRkjW8wndOihe7NuNqmK6ZafIyVO0TwP/ni2LbbYzDaNs8hYGcD1YB7CTuJK2hl59wN4pFQrMXKvPOZtedl3/MQFTphXJA5Ty+35w8Vcg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7297
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 8, 2020 at 1:30 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
+On Mon, 2020-12-07 at 17:25 +0100, Rafael J. Wysocki wrote:
 > Hi,
->
-> On 12/8/20 6:08 AM, Neftin, Sasha wrote:
-> > On 12/7/2020 17:41, Limonciello, Mario wrote:
-> >>> First of all thank you for working on this.
-> >>>
-> >>> I must say though that I don't like the approach taken here very
-> >>> much.
-> >>>
-> >>> This is not so much a criticism of this series as it is a criticism
-> >>> of the earlier decision to simply disable s0ix on all devices
-> >>> with the i219-LM + and active ME.
-> >>
-> >> I was not happy with that decision either as it did cause regressions
-> >> on all of the "named" Comet Lake laptops that were in the market at
-> >> the time.  The "unnamed" ones are not yet released, and I don't feel
-> >> it's fair to call it a regression on "unreleased" hardware.
-> >>
-> >>>
-> >>> AFAIK there was a perfectly acceptable patch to workaround those
-> >>> broken devices, which increased a timeout:
-> >>> https://patchwork.ozlabs.org/project/intel-wired-
-> >>> lan/patch/20200323191639.48826-1-aaron.ma@canonical.com/
-> >>>
-> >>> That patch was nacked because it increased the resume time
-> >>> *on broken devices*.
-> >>>
-> > Officially CSME/ME not POR for Linux and we haven't interface to the ME=
-. Nobody can tell how long (and why) ME will hold PHY access semaphore ant =
-just increasing the resuming time (ULP configure) won't be solve the proble=
-m. This is not reliable approach.
-> > I would agree users can add ME system on their responsibilities.
->
-> It is not clear to me what you are trying to say here.
+> 
+> This is based on the RFC posted a few days ago:
+> 
+> https://lore.kernel.org/linux-pm/1817571.2o5Kk4Ohv2@kreacher/
+> 
+> The majority of the original cover letter still applies, so let me quote it
+> here:
+> [...]
 
-Based on the earlier thread you had referenced and his comment here it
-sounds like while adding time will work for most cases, it doesn't
-solve it for all cases. The problem is as a vendor you are usually
-stuck looking for a solution that will work for all cases which can
-lead to things like having to drop features because they can be
-problematic for a few cases.
+Hello Rafael,
 
-> Are you saying that you insist on keeping the e1000e_check_me check and
-> thus needlessly penalizing 100s of laptops models with higher
-> power-consumption unless these 100s of laptops are added manually
-> to an allow list for this?
->
-> I'm sorry but that is simply unacceptable, the maintenance burden
-> of that is just way too high.
+I'd like to test this patch, as I have concerns on how it performs against the
+current intel_pstate passive + HWP + schedutil (which leaves HWP.REQ.DESIRED
+untouched).
 
-Think about this the other way though. If it is enabled and there are
-cases where adding a delay doesn't resolve it then it still doesn't
-really solve the issue does it?
+I'll get results within a week. Do you mind holding back the merge until then?
 
-> Testing on the models where the timeout issue was first hit has
-> shown that increasing the timeout does actually fix it on those
-> models. Sure in theory the ME on some buggy model could hold the
-> semaphore even longer, but then the right thing would be to
-> have a deny-list for s0ix where we can add those buggy models
-> (none of which we have encountered sofar). Just like we have
-> denylist for buggy hw in other places in the kernel.
 
-This would actually have a higher maintenance burden then just
-disabling the feature. Having to individually test for and deny-list
-every one-off system with this bad configuration would be a pretty
-significant burden. That also implies somebody would have access to
-such systems and that is not normally the case. Even Intel doesn't
-have all possible systems that would include this NIC.
+Thanks!
+Giovanni Gherdovich
 
-> Maintaining an ever growing allow list for the *theoretical*
-> case of encountering a model where things do not work with
-> the increased timeout is not a workable and this not an
-> acceptable solution.
-
-I'm not a fan of the allow-list either, but it is preferable to a
-deny-list where you have to first trigger the bug before you realize
-it is there. Ideally there should be another solution in which the ME
-could somehow set a flag somewhere in the hardware to indicate that it
-is alive and the driver could read that order to determine if the ME
-is actually alive and can skip this workaround. Then this could all be
-avoided and it can be safely assumed the system is working correctly.
-
-> The initial addition of the e1000e_check_me check instead
-> of just going with the confirmed fix of bumping the timeout
-> was already highly controversial and should IMHO never have
-> been done.
-
-How big was the sample size for the "confirmed" fix? How many
-different vendors were there within the mix? The problem is while it
-may have worked for the case you encountered you cannot say with
-certainty that it worked in all cases unless you had samples of all
-the different hardware out there.
-
-> Combining this with an ever-growing allow-list on which every
-> new laptop model needs to be added separately + a new
-> "s0ix-enabled" ethertool flag, which existence is basically
-> an admission that the allow-list approach is flawed goes
-> from controversial to just plain not acceptable.
-
-I don't view this as problematic, however this is some overhead to it.
-One thing I don't know is if anyone has looked at is if the issue only
-applies to a few specific system vendors. Currently the allow-list is
-based on the subdevice ID. One thing we could look at doing is
-enabling it based on the subvendor ID in which case we could
-allow-list in large swaths of hardware with certain trusted vendors.
-The only issue is that it pulls in any future parts as well so it puts
-the onus on that manufacturer to avoid misconfiguring things in the
-future.
