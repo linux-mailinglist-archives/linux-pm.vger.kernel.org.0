@@ -2,70 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6653D2D31D3
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 19:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AAA2D31FB
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 19:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730944AbgLHSMi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 13:12:38 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40380 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730495AbgLHSMi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 13:12:38 -0500
-Received: by mail-oi1-f193.google.com with SMTP id p126so20344958oif.7;
-        Tue, 08 Dec 2020 10:12:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cwCLzsE/tJgmmJNunjALWP2lRl/HDWi24Jsjga6oelY=;
-        b=Ql95cxZLVPOJU0qIAMxf2pkjiovtATHP3WRgHi72KSgQ+bbiDRCHnv4JA8CKNJcWzx
-         SittnHu/XTlqpt29zL+1jo7oGptT8KkxfppaxnXcY8JlonuzcHFNkB+8Tf1WQ+pPgG5h
-         YjDlAn0Nyve6Ve5/EYSoPcCnzlnIeSvSsB+NNr3jgJ2p7UhorqApjQHAQHbsfTrcu0LP
-         7fvL/lwmy6lLBdxlG2Ksl0PAWVOgjHb/Jalwb0XcvdHcC22sNUv2iKMwJ79E6+V2UIeT
-         ZFOwV+xqnhHn+2B64HoEe24uLBs52PsDTzd8+37LkmivNQRmlLUA9kIHZIGvZVa2ibaA
-         vo/w==
-X-Gm-Message-State: AOAM533zS46ber84Hx/rbLJ5w4kLurRlryBZAxm0YlMYKWBTrh+IdMhG
-        We2JycEu905JWvAntJ7fvO+c76tUGw==
-X-Google-Smtp-Source: ABdhPJw0UcN/EVGDjTeY2qx4MN2AFeGn9GVguBwbcsYpNcu4JsevRGimwUvxTt+sfw31yQq1chcZTg==
-X-Received: by 2002:aca:58d7:: with SMTP id m206mr3778694oib.0.1607451117420;
-        Tue, 08 Dec 2020 10:11:57 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l5sm2813820ooo.2.2020.12.08.10.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Dec 2020 10:11:55 -0800 (PST)
-Received: (nullmailer pid 2811959 invoked by uid 1000);
-        Tue, 08 Dec 2020 18:11:54 -0000
-Date:   Tue, 8 Dec 2020 12:11:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH 1/3] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a779a0 support
-Message-ID: <20201208181154.GA2811929@robh.at.kernel.org>
-References: <20201126223028.3119044-1-niklas.soderlund+renesas@ragnatech.se>
- <20201126223028.3119044-2-niklas.soderlund+renesas@ragnatech.se>
+        id S1730495AbgLHSTc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 13:19:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49972 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730231AbgLHSTc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Dec 2020 13:19:32 -0500
+Date:   Tue, 8 Dec 2020 10:18:49 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607451531;
+        bh=rbe/rLwaT+iw+/a/kAhtCx9Bs+M3BMplKpLq931S3ik=;
+        h=From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GYeuq0TVNdvP60qxpoB8pa6y7uf4ONnRgH/64Q80F7jlM8+qeUsJC84qjSdjV1/JY
+         oicbiju9CG5bAGD++JD2DmXF3lCu8fgWwCfyWELsjRR0f0AsY3dH+CoXo/DuSbj5EY
+         lXdXDInTQDZfUF0A83qPGyzivhowMA7xSLK7k6X7hCKFVL6U5Hj6B3gqMaiFTA7LJ4
+         5kS8tDbsoWi/biWaj+W939ZAXyG5N7Fl9PCy15PoBg4Vvr2XTzRbr+7cptZ4cpfoc1
+         KfpUsNhbT6xXNK4GWjJX7HGKzFJen9oBlCO9UoBFGn43io87nvV7HEuvKnrB9BzmVT
+         xBFJfbcCbyDhg==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Mario Limonciello <Mario.Limonciello@dell.com>
+Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        David Miller <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Sasha Netfin <sasha.neftin@intel.com>,
+        Aaron Brown <aaron.f.brown@intel.com>,
+        Stefan Assmann <sassmann@redhat.com>, darcari@redhat.com,
+        Yijun.Shen@dell.com, Perry.Yuan@dell.com,
+        anthony.wong@canonical.com,
+        Vitaly Lifshits <vitaly.lifshits@intel.com>
+Subject: Re: [PATCH v3 1/7] e1000e: fix S0ix flow to allow S0i3.2 subset
+ entry
+Message-ID: <20201208101849.5a17b469@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+In-Reply-To: <354075ae-f605-eb01-4cf9-a66e4eb7b192@dell.com>
+References: <20201204200920.133780-1-mario.limonciello@dell.com>
+        <20201204200920.133780-2-mario.limonciello@dell.com>
+        <354075ae-f605-eb01-4cf9-a66e4eb7b192@dell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201126223028.3119044-2-niklas.soderlund+renesas@ragnatech.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 26 Nov 2020 23:30:26 +0100, Niklas Söderlund wrote:
-> Add support for R-Car V3U. The V3U IP differs a bit from its siblings in
-> such way that it have 4 TSC nodes and the interrupts are not routed to
-> the INTC-AP but to the ECM.
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> ---
->  .../bindings/thermal/rcar-gen3-thermal.yaml     | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
+On Tue, 8 Dec 2020 11:24:17 -0600 Mario Limonciello wrote:
+> On 12/4/20 2:09 PM, Mario Limonciello wrote:
+> > From: Vitaly Lifshits <vitaly.lifshits@intel.com>
+> >
+> > Changed a configuration in the flows to align with
+> > architecture requirements to achieve S0i3.2 substate.
+> >
+> > Also fixed a typo in the previous commit 632fbd5eb5b0
+> > ("e1000e: fix S0ix flows for cable connected case").
+> >
+> > Signed-off-by: Vitaly Lifshits <vitaly.lifshits@intel.com>
+> > Tested-by: Aaron Brown <aaron.f.brown@intel.com>
+> > Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+> > ---
+> >   drivers/net/ethernet/intel/e1000e/netdev.c | 8 ++++----
+> >   1 file changed, 4 insertions(+), 4 deletions(-) =20
+>=20
+> I realize that the series is still under discussion, but I intentionally=
+=20
+> moved this
+> patch to the front of the series so it can be pulled in even if the=20
+> others are still
+> discussed.
+>=20
+> @David Miller:
+> This particular patch is more important than the rest.=C2=A0 It actually=
+=20
+> fixes issues
+> on the non-ME i219V as well.=C2=A0 Can this one be queued up and we can k=
+eep
+> discussing the rest?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Not sure Dave will notice this discussion, best if you repost this patch
+separately. If it's a fix that should be backported to stable make sure
+you add a Fixes tag.
