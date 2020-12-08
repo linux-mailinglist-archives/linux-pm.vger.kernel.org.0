@@ -2,120 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1A52D2D54
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 15:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E80A2D2D8B
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 15:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729717AbgLHOiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 09:38:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:49930 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729570AbgLHOiP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 8 Dec 2020 09:38:15 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DB6130E;
-        Tue,  8 Dec 2020 06:37:29 -0800 (PST)
-Received: from [10.57.23.55] (unknown [10.57.23.55])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDD713F718;
-        Tue,  8 Dec 2020 06:37:27 -0800 (PST)
-Subject: Re: [PATCH] thermal/core: Emit a warning if the thermal zone is
- updated without ops
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, Thara Gopinath <thara.gopinath@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201207190530.30334-1-daniel.lezcano@linaro.org>
- <2b8ce280-cb91-fb23-d19a-00dcee2a3e5a@arm.com>
- <81e25f27-344e-f6c2-5f08-68068348f7ba@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <dd5f9f97-ab30-5bb0-1211-66d211035968@arm.com>
-Date:   Tue, 8 Dec 2020 14:37:26 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729334AbgLHOv1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 09:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726080AbgLHOv1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 09:51:27 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DA3C061749;
+        Tue,  8 Dec 2020 06:50:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sm5ylG4LyLpBWgCJ8nF1i/lYdpFR+VS2lu9SrvWQeB0=; b=Yts/GSDgA8COPDOd2yB7VQ+SZ9
+        5x0Eu8mvT2qexks4umgJwQrtdEWvoFuDco1dnZnxARWDUKA5aBbzh00UzcnTyKVCtmWfRhszm0K3j
+        EsI/3oi4F6j1G+1KqbImPy/J0Od5nTC5FOgVaDuahggm57KqEK4R4/fFUOSvGvVOxf+HwsDPuC1MQ
+        +eSzEA9i+BDWXqmLjJbxvEhxCuwdzP/0+kcZkdFJYpBV2gNaYrZtq8Qq0+Q/CYzlJdYvyNF8Y/tQy
+        4vuu92Z0niD+xkkWUwM8Erb1mR5RQOVV44k48+S+LwQF9F03/j/d3jJ48b03fSj6KCROM18eW9pac
+        jfkrWzJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kmeJt-0003IW-71; Tue, 08 Dec 2020 14:50:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8D1E6305C10;
+        Tue,  8 Dec 2020 15:50:24 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 75F4721ADBEA0; Tue,  8 Dec 2020 15:50:24 +0100 (CET)
+Date:   Tue, 8 Dec 2020 15:50:24 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        Quentin Perret <qperret@google.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V5 0/3] cpufreq_cooling: Get effective CPU utilization
+ from scheduler
+Message-ID: <20201208145024.GD2414@hirez.programming.kicks-ass.net>
+References: <cover.1607400596.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <81e25f27-344e-f6c2-5f08-68068348f7ba@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1607400596.git.viresh.kumar@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Dec 08, 2020 at 09:46:54AM +0530, Viresh Kumar wrote:
+> Viresh Kumar (3):
+>   sched/core: Move schedutil_cpu_util() to core.c
+>   sched/core: Rename schedutil_cpu_util() and allow rest of the kernel
+>     to use it
+>   thermal: cpufreq_cooling: Reuse sched_cpu_util() for SMP platforms
 
-
-On 12/8/20 1:51 PM, Daniel Lezcano wrote:
-> 
-> Hi Lukasz,
-> 
-> On 08/12/2020 10:36, Lukasz Luba wrote:
->> Hi Daniel,
-> 
-> [ ... ]
-> 
->>>      static void thermal_zone_device_init(struct thermal_zone_device *tz)
->>> @@ -553,11 +555,9 @@ void thermal_zone_device_update(struct
->>> thermal_zone_device *tz,
->>>        if (atomic_read(&in_suspend))
->>>            return;
->>>    -    if (!tz->ops->get_temp)
->>> +    if (update_temperature(tz))
->>>            return;
->>>    -    update_temperature(tz);
->>> -
->>
->> I think the patch does a bit more. Previously we continued running the
->> code below even when the thermal_zone_get_temp() returned an error (due
->> to various reasons). Now we stop and probably would not schedule next
->> polling, not calling:
->> handle_thermal_trip() and monitor_thermal_zone()
-> 
-> I agree there is a change in the behavior.
-> 
->> I would left update_temperature(tz) as it was and not check the return.
->> The function thermal_zone_get_temp() can protect itself from missing
->> tz->ops->get_temp(), so we should be safe.
->>
->> What do you think?
-> 
-> Does it make sense to handle the trip point if we are unable to read the
-> temperature?
-> 
-> The lines following the update_temperature() are:
-> 
->   - thermal_zone_set_trips() which needs a correct tz->temperature
-> 
->   - handle_thermal_trip() which needs a correct tz->temperature to
-> compare with
-> 
->   - monitor_thermal_zone() which needs a consistent tz->passive. This one
-> is updated by the governor which is in an inconsistent state because the
-> temperature is not updated.
-> 
-> The problem I see here is how the interrupt mode and the polling mode
-> are existing in the same code path.
-> 
-> The interrupt mode can call thermal_notify_framework() for critical/hot
-> trip points without being followed by a monitoring. But for the other
-> trip points, the get_temp is needed.
-
-Yes, I agree that we can bail out when there is no .get_temp() callback
-and even not schedule next polling in such case.
-But I am just not sure if we can bail out and not schedule the next
-polling, when there is .get_temp() populated and the driver returned
-an error only at that moment, e.g. indicating some internal temporary,
-issue like send queue full, so such as -EBUSY, or -EAGAIN, etc.
-The thermal_zone_get_temp() would pass the error to update_temperature()
-but we return, losing the next try. We would not check the temperature
-again.
-
-> 
-> IMHO, we should return if update_temperature() is failing.
-> 
-> Perhaps, it would make sense to simply prevent to register a thermal
-> zone if the get_temp ops is not defined.
-> 
-> AFAICS, if the interrupt mode without get_temp callback are for hot and
-> critical trip points which can be directly invoked from the sensor via a
-> specified callback, no thermal zone would be needed in this case.
-> 
-> 
-> 
+How should we go about merging this? Do I take the lot, or do we go muck
+about with topic branches?
