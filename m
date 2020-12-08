@@ -2,179 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 488A52D3422
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 21:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD6F2D346D
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 21:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729601AbgLHUaS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 15:30:18 -0500
-Received: from cmta17.telus.net ([209.171.16.90]:50436 "EHLO cmta17.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729527AbgLHUaS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 8 Dec 2020 15:30:18 -0500
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id miRZk7Fszm62rmiRakESsv; Tue, 08 Dec 2020 12:14:40 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1607454880; bh=cjeXmSSc2tCRBmt6xapT5IwcYBqI1AcxtK+LuUehyIA=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=5ZI3NdnPf1Rik4TxgG+mX/qkq1P/Z8eZoPemnHDeRjyKA/qxgNBUogcitopo05YgM
-         gYVet+DPnE2o5StkufEN28JXhqV1NYplwCjAM2KRQfPtBpQeBqZFr1tOnY4xnwEhDU
-         HYSM5DnM7Yn5F4R+IOyxqNqI2jila1n48YbEuQZX5rSUuc29/N758LrqlfluxK8HXa
-         nAddANFqjNFNl4UPIRSyhqmJufs6s1tvOfrl5Y16blCSjeZ4iiOwk1lXMEpUA4GfPT
-         CGlTXtUZ0Ox8Q2CLHEFNMcirtgBNjp0K5cWlxIvn0sF4daAJYlYC0l/y3Ozc0bFPJ8
-         Wk7Gx+3TJ91EQ==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.4 cv=D4iCltdj c=1 sm=1 tr=0 ts=5fcfd0a0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=iox4zFpeAAAA:8
- a=VwQbUJbxAAAA:8 a=gu6fZOg2AAAA:8 a=4Jbuw8ktRrBCy4-7u88A:9 a=QEXdDO2ut3YA:10
- a=-FEs8UIgK8oA:10 a=NWVoK91CQyQA:10 a=WzC6qhA0u3u7Ye7llzcV:22
- a=AjGcO6oz07-iQ99wixmX:22 a=2RSlZUUhi9gRBrsHwhhZ:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.com>
-Cc:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>
-References: <20360841.iInq7taT2Z@kreacher> <1607445035.2673.64.camel@suse.com> <CAJZ5v0j2u7MrO82+ubx01kvyhDUKo11mfyofF-TAqdSLx_i3Ng@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j2u7MrO82+ubx01kvyhDUKo11mfyofF-TAqdSLx_i3Ng@mail.gmail.com>
-Subject: RE: [PATCH v1 0/4] cpufreq: Allow drivers to receive more information from the governor
-Date:   Tue, 8 Dec 2020 11:14:36 -0800
-Message-ID: <001d01d6cd96$601c8a80$20559f80$@net>
+        id S1728068AbgLHUlY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 15:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728064AbgLHUlY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 15:41:24 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0201C0613CF
+        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 12:40:43 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id o4so13273860pgj.0
+        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 12:40:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=J12rizzNJpvDHeBDK+JooIwKeN2M6waJYpLkDHkzQgc=;
+        b=yZPn9wSKPOA4t0DXsi6A+CopXG1/dKiK9mqYDhFkIGRv66VMxL7YIZCJBBbpoeLbq0
+         xCP+OQgwUq+T96nG+gsj5+2S+pFCFnMO+zxXdBveRrFsiP5DESV8L6kEUyEJ6If5zV5m
+         2Ifm1012bTBS+px43ImT8UU0pQBxOMEMZTf+fZ64R/hmII5+P+dax825Bt9w3suU6Kb7
+         njcptB0t+y84pxU41chu6JVX1l1eT84TGblTkaQs0oI+napVYctgkDEixrxJDj9zpvqS
+         xINu8XhYMb1LWhO3HH0iRnHTT35yjOaxmqoyOhvcckQ0BTyaqJ5vjrCF4yjhALEQdpbf
+         DQdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=J12rizzNJpvDHeBDK+JooIwKeN2M6waJYpLkDHkzQgc=;
+        b=XaAxpXEGMWGK+65K17AX9/QpGhOYWC3QCIXQQN5KlODJY0LKkn6viR4mkRy3BSBFhG
+         tohIlqegmsgJawIhv0BclfF6JwBlm9rtU4ON9Snx/TYvjPVQtbQiNQJOMM35/M8pCs6G
+         r+Pti+FoW11vZ5LAzymh/ycMCePwy1p4WNmqMVMMnbj4JyQC4iR9XZO1HbD3iFD0c6aS
+         4u1dlQjXlwRwyND9FyV2WC6CC/FPM+ykBGuWm1nOy0AAVp6rVE6RKEaV+UDGX2NDwvSK
+         tTF4aVYf7QBJwupQgL3Quq8owMdTPUsmju8ee6tBvYLK8ByzTZXQX7BYKNp2vEIhSk/5
+         /s8w==
+X-Gm-Message-State: AOAM533784GJW+pRn9iTUAqibaCg2J1JGzxfJRe/hrcvjze7ApwxH9tg
+        0uDfQsUQ+fXR9OI7LvM+Nw8y0NiOsKC9Kw==
+X-Google-Smtp-Source: ABdhPJxSo+6wdMxyLS3PJfTGHeO48VKCxYNRk00cI3aurfcIU//UN6UrGTE9iDOCngFwll8mJOCvJg==
+X-Received: by 2002:a17:902:ee0b:b029:db:c808:ccef with SMTP id z11-20020a170902ee0bb02900dbc808ccefmr3336545plb.85.1607456401564;
+        Tue, 08 Dec 2020 11:40:01 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id oc13sm4104288pjb.5.2020.12.08.11.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 11:40:00 -0800 (PST)
+Message-ID: <5fcfd690.1c69fb81.da367.9073@mx.google.com>
+Date:   Tue, 08 Dec 2020 11:40:00 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdbNhYnI6l7ez4eQRjiDzyQ3pYiW9QABrdRQ
-X-CMAE-Envelope: MS4xfNLEs3/CV44UYR9bsW93NdqFMR+RW4quJlygVKVFVpB5RDrMwtMRZYFzkYB3ZHLBn1hacK2BsqpbgPEIG1PMiHSucXp7eOQ5jtb0FC6lj0ADxBMFRQ/2
- 4cktii8b1D761lCAdEwBYg+u/FaQadeq+lkzeIBvzQ6jDTlOB/q/JT+ytcRjToCCvHz+d6vUdduf+k3+/RxhEA10ZKxbbOi9t1EN1IV8K4zV7p+9QrLWvH0/
- vnNOpwGQXKsEt/43yMJPc+pnO9d/RHredhLq0yYXk7tmaMEjE8Rpb5s7SZGxddqF3U5B3Zgeq0H9GLYNmkbFQkYPMznDQA+EO6ofHOGnFRNhHDiiqBUU4j5/
- R6/nK2lL5UTWz8RFuuQrH6LE7QmgaijYbttsrEo2WsZL/zfd10pp3Z/UJjssVcjY8tN+rcclBwnW4xeehYVQa4Htd5PjvA==
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.10-rc7-92-g717f8fce803b
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 3 warnings (v5.10-rc7-92-g717f8fce803b)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020.12.08 09:14 Rafael J. Wysocki wrote: 
-> On Tue, Dec 8, 2020 at 5:31 PM Giovanni Gherdovich <ggherdovich@suse.com> wrote:
->> On Mon, 2020-12-07 at 17:25 +0100, Rafael J. Wysocki wrote:
->>> Hi,
->>>
->>> This is based on the RFC posted a few days ago:
->>>
->>> https://lore.kernel.org/linux-pm/1817571.2o5Kk4Ohv2@kreacher/
->>>
->>> The majority of the original cover letter still applies, so let me quote it
->>> here:
->>> [...]
->>
->> Hello Rafael,
->>
->> I'd like to test this patch, as I have concerns on how it performs against the
->> current intel_pstate passive + HWP + schedutil (which leaves HWP.REQ.DESIRED
->> untouched).
-> 
->The performance will be worse in some cases, which is to be expected,
+pm/testing build: 7 builds: 0 failed, 7 passed, 3 warnings (v5.10-rc7-92-g7=
+17f8fce803b)
 
-Agreed. More further below.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+10-rc7-92-g717f8fce803b/
 
->but the point here is to counter the problem that in some cases the
->frequency is excessive now.
+Tree: pm
+Branch: testing
+Git Describe: v5.10-rc7-92-g717f8fce803b
+Git Commit: 717f8fce803b9501e192fef85d508e3d592f1c16
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Agreed.
+Warnings Detected:
 
-I retested with this new version with my load sweep test,
-and my results were the pretty similar to previously reported, [1].
-If anything, there might be a perceptible difference between the RFC
-version and this version as a function of work/sleep frequency.
+arc:
 
-73 Hertz: RFC was 0.8% less power
-113 Hertz: RFC was 1.5% less power
-211 Hertz: RFC was 0.8% less power
-347 Hertz: RFC was 1.2% more power
-401 Hertz: RFC was 1.6% more power
+arm64:
 
-Of course, let us not lose site of the original gains that were in the 13 to 17% range.
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
 
-Now, for the "worse in some cases, which is to be expected" part:
+i386:
 
-At least on my system, it is most evident for some of the pipe type tests,
-where the schedutil governor has never really known what to do. This patch
-set seems to add enough of a downward bias that this version of the schedutil
-governor now behaves much like the other versions
+mips:
 
-Here is an example (no forced CPU affinity, 2 pipes):
+riscv:
 
-Legend:
-hwp: Kernel 5.10-rc6, HWP enabled; intel_cpufreq; schedutil (always)
-rjw: Kernel 5.10-rc6 + this patch set, HWP enabled; intel_cpu-freq; schedutil
-no-hwp: Kernel 5.10-rc6, HWP disabled; intel_cpu-freq; schedutil
-acpi-cpufreq (or just acpi): Kernel 5.10-rc6, HWP disabled; acpi-cpufreq; schedutil
-patch: Kernel 5.10-rc7 + the non RFC 4 patch version of this is patch set, HWP enabled; intel_cpu-freq; schedutil
-
-hwp: 3.295 uSec/loop (steady); average power: 62.78 Watts (steady); freq: 4.60GHz (steady).
-rjw: 3.6 uSec/loop (noisey) (9.3% worse); average power: 44.13 Watts (noisey); freq: ?.??GHz (noisey).
-no-hwp: 3.35 uSec/loop (noisey); average power: 59.17 Watts (noisey); freq: ?.??GHz (much less noisey).
-acpi-cpufreq: 3.4 uSec/loop (noisey); average power: 56.93 Watts (noisey); freq: ?.??GHz (less noisey).
-patch: 3.6 uSec/loop (noisey) (9.3% worse); average power: 43.36 Watts (noisey); freq: ?.??GHz (noisey).
-
-One could argue that this patch set might be driving the frequency down a little too hard in this case,
-but this is one of those difficult rotating through the CPUs cases anyhow.
-As a side note, all other governors (well, not powersave) pin the CPU frequency at max (4.6 GHz).
-
-For my version of the "Alex" pipe test (a token is passed around and around via 6 named pipes,
-with a bit of work to do per token stop)
-I get (more power = better performance):
-
-hwp: average power: 17.16 Watts (very noisey)
-rjw: average power: 3.18 (noisey)
-no-hwp: average power: 2.45 (less noisey)
-acpi-cpufreq: average power: 2.46 (less noisey)
-patch: average power: 2.47 (less noisey)
-
-The "hwp" case is misleading. It is really bouncing around at about 0.2 hertz
-and can't seem to make up its mind. If nothing else, all the other versions
-are a little more deterministic in their response.
-
-> 
->> I'll get results within a week. Do you mind holding back the merge until then?
-
-On my system that git "make test" is broken, so I can not do the high PIDs per second test that way.
-My own PIDs per second test also has issues on this computer.
-I am not sure when I'll get these type of tests working, but will try for within a week.
-
-... Doug
-
-References:
-
-[1] https://marc.info/?l=linux-kernel&m=160692480907696&w=2
-
-My tests results graphs (updated):
-Note: I have to code the web site, or I get hammered by bots.
-Note: it is .com only because it was less expensive than .org
-
-73 Hertz (10 samples per second):
-Double u double u double u dot smythies dot .com/~doug/linux/s18/hwp/k510-rc6/su73/ 
-113 Hertz (10 samples per second):
-Double u double u double u dot smythies dot .com/~doug/linux/s18/hwp/k510-rc6/su113/
-211 Hertz (10 samples per second):
-Double u double u double u dot smythies dot .com/~doug/linux/s18/hwp/k510-rc6/su211/
-347 Hertz (10 samples per second):
-Double u double u double u dot smythies dot .com/~doug/linux/s18/hwp/k510-rc6/su347/
-401 Hertz (10 samples per second):
-Double u double u double u dot smythies dot .com/~doug/linux/s18/hwp/k510-rc6/su401/
-
-Note: The below graphs are mislabelled, because I made hacker use of a tool dedicated
-to graphing, and HTML wrapping, the load sweep test. The test conditions are steady state
-operation, no variable changes.
-
-pipe-test (5 seconds per sample):
-Double u double u double u dot smythies dot .com/~doug/linux/s18/hwp/k510-rc6/pipe/
-Alex test (5 seconds per sample):
-Double u double u double u dot smythies dot .com/~doug/linux/s18/hwp/k510-rc6/alex/
+x86_64:
 
 
+Warnings summary:
+
+    1    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge)=
+: /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
+    1    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge)=
+: /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /so=
+c/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
+    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /so=
+c/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
