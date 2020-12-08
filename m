@@ -2,129 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 693402D2219
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 05:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1263E2D2244
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 05:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725917AbgLHEaI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Dec 2020 23:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S1726989AbgLHEsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Dec 2020 23:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726031AbgLHEaH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 23:30:07 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88ADC061794
-        for <linux-pm@vger.kernel.org>; Mon,  7 Dec 2020 20:29:27 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id e2so2709865pgi.5
-        for <linux-pm@vger.kernel.org>; Mon, 07 Dec 2020 20:29:27 -0800 (PST)
+        with ESMTP id S1725901AbgLHEsw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Dec 2020 23:48:52 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4637C061793
+        for <linux-pm@vger.kernel.org>; Mon,  7 Dec 2020 20:48:06 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id f9so12104129pfc.11
+        for <linux-pm@vger.kernel.org>; Mon, 07 Dec 2020 20:48:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=nwo+BCJKm7wcb2h7JzOrNJu8zdED7/Pq3+KQEiGYNC4=;
-        b=ftPp1aze2+o1I5P7qeC+WWQnUhOXYDB6WysEgSHwPTEqehGwSZ1nTTjWQTyLkuFyq2
-         Bqd0dTz41+LZYiJ7059Wn/BGrqkvGUnKyzrigWLghh9z8SlrznCkiWM8k9HbSV9MWNu3
-         FMT1LBU3JeswHBwQr539iJXFeULVSS9jodJCVFvx0zHOJjxcDNJrBXZchUj0n0SU6Dy7
-         XMD3oZKlEULVQWlzWbneoJzhTWVNRA01G8muy6btZWGXiIqvoigvYoFgmCXCs7c33y28
-         GACPaCMyvhJNKxqqpI535T8gXObq8RjiMJCTnb3TV+KH29hpkmuLyM/HUiAUZRaBOuTF
-         gDlA==
+        bh=j+a4JfEuJPj+G4wzsoHlVwRdBKRoQxlLRdwTZTqYHQo=;
+        b=lFgivkchqxY+Z3ILx+m5I4AbOsApyKCEV7/UL01AiN17xt15DXRzocH4To2uskZC1c
+         2KPNzAfAB8RTnLPPf6/xnmgbsJFI94ed4Z7UEcaUQ3+X3lSM7s9qCARTk/8DKf4wfK1o
+         8TRFopWB7XtoekvbBhg9DNiyf16PCOCvxQdYVxZXW7Qz6WCAYJAE6SEb/PHbocCQKdWQ
+         vfA4jvdH8J3arjARX3I1Fc3uzmwbdeyq1KGq0VeVaOnvXbaGKth4XN/AnOZbdMcBqxa6
+         5owlfUXlBl9YtxTeDF4VUAmsQiUP/kUuiLtjSOoCg9uzgsuTA0imYU1zYAQvNBTg1S7T
+         Jrhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nwo+BCJKm7wcb2h7JzOrNJu8zdED7/Pq3+KQEiGYNC4=;
-        b=muaUjxC1L8RSlxBs0AyiBshLsClnpexBNo42gZmXt4Rume+uPBcJsAhpsb9fGwGoYP
-         9E/ge1ZuHMwFnQk4CtjtywHNJITUqifx8GWAk8p4wKRI25/9MEfzlaRYdrbQumx4+J99
-         RhuOKuJzdb2Pt0KAPNtLoTvnbQAs6xcGAA8Hc2eJD4//8L6bfr9ACbHWi39SDnt78qjI
-         396MkTXzXoL16Lgy+SXwWs+ScnH6fFXkzy4lfL0Rzh07fUburlnqvq0Aws3E9wfmwwbj
-         7sZldZrscigMUc4phyvFi7iLmP6qH8gRahoIZkw1SiE5LA5vUHhSfiGQ+L+No2tmLu70
-         c52Q==
-X-Gm-Message-State: AOAM530PnLCI97/E+7OFv/2UD8jSBE9N4F9kLXziinlCiRpHkJZk1Qh0
-        dcrMLqEsNPkh/HfjiDkV83b1Lg==
-X-Google-Smtp-Source: ABdhPJw6cKmfJYM3CskGrGwpcWIdE9+O9nGA+xXmZktoCuvueP8ol/A7L8M41d+n06uF2Ug544ZyAA==
-X-Received: by 2002:a17:90b:187:: with SMTP id t7mr1333182pjs.191.1607401767151;
-        Mon, 07 Dec 2020 20:29:27 -0800 (PST)
+        bh=j+a4JfEuJPj+G4wzsoHlVwRdBKRoQxlLRdwTZTqYHQo=;
+        b=hRzCcn48uffMWv9L3lssksl/5t/L+NyrGZawn9lG5wA2kVCtfY2zZ+/NYAHGL31T9W
+         LJf4n/bNn7+rKss9ftm3PDLr6ssmCHUwIxRnBgc7iF12DuVbZzIJGIYKHLKGJolEJetz
+         yCVN3sJeb/jK6TKHLHnAUsyT88JnwY2aB/njJi7tK5KqTjoSiqN63SFDUPO2JvX5Hqsh
+         Uo1nSiectf/cJUdpSKDItSkPYGtewdfiPt7cHYU1CQkj/ZqHa3N9yPMDCISTX7cUJzTt
+         b+JV0to4ctu6k5m6L0wZ8nIFE+0K1MYuOWfnwxrQu9Kgad0sHvTfbjiWIcatki1ZFqAP
+         DJiA==
+X-Gm-Message-State: AOAM531OnDNekYbv1onNlsWdNg5vvkt1Ei7OSL5sawdmeJ07Iax6JPgu
+        oIpN/IrLbn7OGSFh3CL4eaD6fw==
+X-Google-Smtp-Source: ABdhPJyWymG7nJBYFow8xJNbQNgwTbl9wnPqUCrx1NSPFIYqppsL6InNpbtQXg45ieSc80LvfZWlzA==
+X-Received: by 2002:a17:90a:bb91:: with SMTP id v17mr2413112pjr.231.1607402886491;
+        Mon, 07 Dec 2020 20:48:06 -0800 (PST)
 Received: from localhost ([122.172.136.109])
-        by smtp.gmail.com with ESMTPSA id 193sm3853148pfz.36.2020.12.07.20.29.26
+        by smtp.gmail.com with ESMTPSA id 65sm15747595pfd.184.2020.12.07.20.48.05
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Dec 2020 20:29:26 -0800 (PST)
-Date:   Tue, 8 Dec 2020 09:59:24 +0530
+        Mon, 07 Dec 2020 20:48:05 -0800 (PST)
+Date:   Tue, 8 Dec 2020 10:18:03 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
-        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
-        chris.redpath@arm.com
-Subject: Re: [PATCH v4 1/4] dt-bindings/opp: Update documentation for
- opp-shared
-Message-ID: <20201208042924.kv7tqsbstoanqham@vireshk-i7>
-References: <20201202172356.10508-1-nicola.mazzucato@arm.com>
- <20201202172356.10508-2-nicola.mazzucato@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Dietmar.Eggemann@arm.com, cristian.marussi@arm.com,
+        morten.rasmussen@arm.com, rafael@kernel.org
+Subject: Re: [PATCH 0/2] SCMI performance protocol power scale interface
+Message-ID: <20201208044803.6kepfqvoz3pov4c3@vireshk-i7>
+References: <20201124104346.27167-1-lukasz.luba@arm.com>
+ <20201207071308.rm7x6ro7i4qtmm7h@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201202172356.10508-2-nicola.mazzucato@arm.com>
+In-Reply-To: <20201207071308.rm7x6ro7i4qtmm7h@vireshk-i7>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Subject should rather be:
-
-dt-bindings: opp: Allow empty OPP tables
-
-On 02-12-20, 17:23, Nicola Mazzucato wrote:
-> Currently the optional property opp-shared is used within an opp table
-> to tell that a set of devices share their clock/voltage lines (and the
-> opp points).
-> It is therefore possible to use an empty opp table to convey only that
-> information, useful in situations where the opp points are provided via
-> other means (hardware. firmware, etc).
+On 07-12-20, 12:43, Viresh Kumar wrote:
+> On 24-11-20, 10:43, Lukasz Luba wrote:
+> > Hi all,
+> > 
+> > The Energy Model (EM) supports power values expressed in an abstract scale
+> > via new API. The SCMI performance protocol provides the information about
+> > power scale. This patch set implements the needed interface and updates
+> > cpufreq driver to set the right scale in the EM.
+> > 
+> > It is based on top of patch series adding milli-Watts flag in EM [1]
+> > (next-20201124 was used as a base).
+> > 
+> > Regards,
+> > Lukasz
+> > 
+> > [1] https://lore.kernel.org/linux-pm/20201103090600.29053-1-lukasz.luba@arm.com/
+> > 
+> > Lukasz Luba (2):
+> >   firmware: arm_scmi: Add power_scale_mw_get() interface
+> >   cpufreq: arm_scmi: Discover the power scale in performance protocol
+> > 
+> >  drivers/cpufreq/scmi-cpufreq.c   | 4 +++-
+> >  drivers/firmware/arm_scmi/perf.c | 8 ++++++++
+> >  include/linux/scmi_protocol.h    | 1 +
+> >  3 files changed, 12 insertions(+), 1 deletion(-)
 > 
-> Update the documentation to remark this additional case and provide an
-> example.
-> 
-> Signed-off-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
-> ---
->  Documentation/devicetree/bindings/opp/opp.txt | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
-> index 9847dfeeffcb..a5f1f993eab9 100644
-> --- a/Documentation/devicetree/bindings/opp/opp.txt
-> +++ b/Documentation/devicetree/bindings/opp/opp.txt
-> @@ -72,6 +72,9 @@ Optional properties:
->    switch their DVFS state together, i.e. they share clock/voltage/current lines.
->    Missing property means devices have independent clock/voltage/current lines,
->    but they share OPP tables.
-> +  This optional property can be used without any OPP nodes when its only purpose
-> +  is to describe a dependency of clock/voltage/current lines among a set of
-> +  devices.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-And instead of this, we should rather update "OPP nodes:" section like
-this:
+More scmi stuff came in which I had to apply and so I applied this to
+the ARM tree.
 
-diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
-index 9847dfeeffcb..28077ce3a845 100644
---- a/Documentation/devicetree/bindings/opp/opp.txt
-+++ b/Documentation/devicetree/bindings/opp/opp.txt
-@@ -63,11 +63,13 @@ This describes the OPPs belonging to a device. This node can have following
- - compatible: Allow OPPs to express their compatibility. It should be:
-   "operating-points-v2".
- 
-+Optional properties:
- - OPP nodes: One or more OPP nodes describing voltage-current-frequency
-   combinations. Their name isn't significant but their phandle can be used to
--  reference an OPP.
-+  reference an OPP. These are mandatory except for the case where the OPP table
-+  is present only to indicate dependency between devices using the opp-shared
-+  property.
- 
--Optional properties:
- - opp-shared: Indicates that device nodes using this OPP Table Node's phandle
-   switch their DVFS state together, i.e. they share clock/voltage/current lines.
-   Missing property means devices have independent clock/voltage/current lines,
+Rafael: I had to rebase this over one of the patches from your tree,
+which was based on rc3:
+
+commit c250d50fe2ce ("PM: EM: Add a flag indicating units of power values in Energy Model")
+
+I hope you won't rebase it any further.
+
+Applied. Thanks.
 
 -- 
 viresh
