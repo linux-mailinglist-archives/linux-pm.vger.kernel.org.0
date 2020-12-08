@@ -2,161 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D41532D2B9E
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 14:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0F32D2BBE
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 14:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgLHNHL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 08:07:11 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:8240 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgLHNHL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 08:07:11 -0500
-X-Greylist: delayed 357 seconds by postgrey-1.27 at vger.kernel.org; Tue, 08 Dec 2020 08:07:09 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1607432658;
-        s=strato-dkim-0002; d=fossekall.de;
-        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Subject:Sender;
-        bh=R9pAmrtgxzHV8b9qyJZRtWA5+8mvD2n+XnerwI88DtE=;
-        b=mpBQqsCRqqRRPQtBz98b+wGCTmuTp2Sck3rby//y8k4+0YpjPLLiBs30OZghtKRxfz
-        Z50xtJllN33oemNVSimnckmOfkCeTPyvN5WWhd0n8znaed54oIHto0zXc5f5JhU82taN
-        R8cSHqwQ1yuntYOq1UJExR/NHdqG8I/4iReW1xLfcfiDTurFZOCZT+EFHQY1yM2DBzTn
-        eZgYwRJTEgqKLTCQ8WSIxI34hHcQzVcZuaSUGL4lZZ9q+8b8AIhXtlNNQq2wpY92BF6u
-        eBOlHfz9SJXLymgDe88CbhbSfvtoCgRmYfN4LxdJoqyEhH6FECd0J1+dB0eUuCFjVht1
-        rGpQ==
-X-RZG-AUTH: ":O2kGeEG7b/pS1EzgE2y7nF0STYsSLflpbjNKxx7cGrBOdI6BL9pkS3QW19mO7I+/JwRspuzJFZuRzQ=="
-X-RZG-CLASS-ID: mo00
-Received: from aerfugl
-        by smtp.strato.de (RZmta 47.6.2 AUTH)
-        with ESMTPSA id e07b38wB8CqG20m
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Tue, 8 Dec 2020 13:52:16 +0100 (CET)
-Received: from koltrast.a98shuttle.de ([192.168.1.27] helo=a98shuttle.de)
-        by aerfugl with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <michael@fossekall.de>)
-        id 1kmcTX-0006UW-Jg; Tue, 08 Dec 2020 13:52:15 +0100
-Date:   Tue, 8 Dec 2020 13:52:14 +0100
-From:   Michael Klein <michael@fossekall.de>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
+        id S1727610AbgLHNQD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 08:16:03 -0500
+Received: from foss.arm.com ([217.140.110.172]:48696 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727135AbgLHNQD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Dec 2020 08:16:03 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7181B30E;
+        Tue,  8 Dec 2020 05:15:17 -0800 (PST)
+Received: from [10.57.61.26] (unknown [10.57.61.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 295BB3F718;
+        Tue,  8 Dec 2020 05:15:15 -0800 (PST)
+Subject: Re: [PATCH v4 3/4] scmi-cpufreq: get opp_shared_cpus from opp-v2 for
+ EM
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 2/3] Documentation: DT: binding documentation for
- regulator-poweroff
-Message-ID: <20201208125214.GA2785@a98shuttle.de>
-References: <20201128103958.q6glewhhch7vtczr@gilmour>
- <20201207142756.17819-1-michael@fossekall.de>
- <20201207142756.17819-3-michael@fossekall.de>
- <20201208101358.mwxmlgqonmunb2m2@gilmour>
+        rjw@rjwysocki.net, vireshk@kernel.org, robh+dt@kernel.org,
+        sboyd@kernel.org, nm@ti.com, daniel.lezcano@linaro.org,
+        morten.rasmussen@arm.com, chris.redpath@arm.com
+References: <20201202172356.10508-1-nicola.mazzucato@arm.com>
+ <20201202172356.10508-4-nicola.mazzucato@arm.com>
+ <20201208055053.kggxw26kxtnpneua@vireshk-i7>
+ <0e4d3134-f9b2-31fa-b454-fb30265a80b5@arm.com>
+ <20201208072611.ptsqupv4y2wybs6p@vireshk-i7>
+ <20201208112008.niesjrunxq2jz3kt@bogus>
+ <1f9daaf8-e850-7c1b-7a32-71367982beaf@arm.com>
+ <20201208122222.bp3o6y3xsxo642wd@bogus>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <508c46a8-bf5a-bf29-a1df-c9a96b3de5f6@arm.com>
+Date:   Tue, 8 Dec 2020 13:17:19 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
+In-Reply-To: <20201208122222.bp3o6y3xsxo642wd@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201208101358.mwxmlgqonmunb2m2@gilmour>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks for reviewing!
+Hi All, thanks for your feedback, please see below
 
-On Tue, Dec 08, 2020 at 11:13:58AM +0100, Maxime Ripard wrote:
->On Mon, Dec 07, 2020 at 03:27:55PM +0100, Michael Klein wrote:
->> Add devicetree binding documentation for regulator-poweroff driver.
+On 12/8/20 12:22 PM, Sudeep Holla wrote:
+> On Tue, Dec 08, 2020 at 11:34:36AM +0000, Lukasz Luba wrote:
 >>
->> Signed-off-by: Michael Klein <michael@fossekall.de>
->> ---
->>  .../power/reset/regulator-poweroff.yaml       | 53 +++++++++++++++++++
->>  1 file changed, 53 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
 >>
->> diff --git a/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
->> new file mode 100644
->> index 000000000000..8c8ce6bb031a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
->> @@ -0,0 +1,53 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/reset/regulator-poweroff.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Force-disable power regulators to turn the power off.
->> +
->> +maintainers:
->> +  - Michael Klein <michael@fossekall.de>
->> +
->> +description: |
->> +  When the power-off handler is called, one more regulators are disabled
->> +  by calling regulator_force_disable(). If the power is still on and the
->> +  CPU still running after a 3000ms delay, a WARN_ON(1) is emitted.
->> +
->> +properties:
->> +  compatible:
->> +    const: "regulator-poweroff"
->> +
->> +  regulator-names:
->> +    description:
->> +      Array of regulator names
->> +    $ref: /schemas/types.yaml#/definitions/string-array
->> +
->> +  REGULATOR-supply:
->
->This should be a patternProperties
->
->> +    description:
->> +      For any REGULATOR listed in regulator-names, a phandle
->> +      to the corresponding regulator node
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +
->> +  timeout-ms:
->> +    description:
->> +      Time to wait before asserting a WARN_ON(1). If nothing is
->> +      specified, 3000 ms is used.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +
->> +required:
->> +  - compatible
->> +  - regulator-names
->> +  - REGULATOR-supply
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    regulator-poweroff {
->> +        compatible = "regulator-poweroff";
->> +        regulator-names = "vcc1v2", "vcc-dram";
->> +        vcc1v2-supply = <&reg_vcc1v2>;
->> +        vcc-dram-supply = <&reg_vcc_dram>;
->> +    };
->
->I'm not entirely sure how multiple regulators would work here. I guess
->the ordering is board/purpose sensitive. In this particular case, I
->assume that vcc1v2 would be shut down before vcc-dram?
+>> On 12/8/20 11:20 AM, Sudeep Holla wrote:
+>>> On Tue, Dec 08, 2020 at 12:56:11PM +0530, Viresh Kumar wrote:
+>>>> On 08-12-20, 07:22, Nicola Mazzucato wrote:
+>>>>> On 12/8/20 5:50 AM, Viresh Kumar wrote:
+>>>>>> On 02-12-20, 17:23, Nicola Mazzucato wrote:
+>>>>>>>   	nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
+>>>>>>>   	if (nr_opp <= 0) {
+>>>>>>> -		dev_dbg(cpu_dev, "OPP table is not ready, deferring probe\n");
+>>>>>>> -		ret = -EPROBE_DEFER;
+>>>>>>> -		goto out_free_opp;
+>>>>>>> +		ret = handle->perf_ops->device_opps_add(handle, cpu_dev);
+>>>>>>> +		if (ret) {
+>>>>>>> +			dev_warn(cpu_dev, "failed to add opps to the device\n");
+>>>>>>> +			goto out_free_cpumask;
+>>>>>>> +		}
+>>>>>>> +
+>>>>>>> +		ret = dev_pm_opp_set_sharing_cpus(cpu_dev, opp_shared_cpus);
+>>>>>>> +		if (ret) {
+>>>>>>> +			dev_err(cpu_dev, "%s: failed to mark OPPs as shared: %d\n",
+>>>>>>> +				__func__, ret);
+>>>>>>> +			goto out_free_cpumask;
+>>>>>>> +		}
+>>>>>>> +
+>>>>>>
+>>>>>> Why do we need to call above two after calling
+>>>>>> dev_pm_opp_get_opp_count() ?
+>>>>>
+>>>>> Sorry, I am not sure to understand your question here. If there are no opps for
+>>>>> a device we want to add them to it
+>>>>
+>>>> Earlier we used to call handle->perf_ops->device_opps_add() and
+>>>> dev_pm_opp_set_sharing_cpus() before calling dev_pm_opp_get_opp_count(), why is
+>>>> the order changed now ?
+>>>>
+>>>>
+>>>> I am not sure why they would be duplicated in your case. I though
+>>>> device_opps_add() is responsible for dynamically adding the OPPs here.
+>>>>
+>>>
+>>> It is because of per-CPU vs per domain drama here. Imagine a system with
+>>> 4 CPUs which the firmware puts in individual domains while they all are
+>>> in the same perf domain and hence OPP is marked shared in DT.
+>>>
+>>> Since this probe gets called for all the cpus, we need to skip adding
+>>> OPPs for the last 3(add only for 1st one and mark others as shared).
+>>> If we attempt to add OPPs on second cpu probe, it *will* shout as duplicate
+>>> OPP as we would have already marked it as shared table with the first cpu.
+>>> Am I missing anything ? I suggested this as Nicola saw OPP duplicate
+>>> warnings when he was hacking up this patch.
+>>>
+>>>>> otherwise no need as they would be duplicated.
+>>>>>> And we don't check the return value of
+>>>>>> the below call anymore, moreover we have to call it twice now.
+>>>
+>>> Yes, that looks wrong, we need to add the check for non zero values, but ....
 
-yes, the regulators are shut down from left to right.
+will add the check, thanks
 
->If so, I would expect that one regulator_force_disable is run, the CPU
->is disabled and you never get the chance to cut vcc-dram.
+>>>
+>>>>>
+>>>>> This second get_opp_count is required such that we register em with the correct
+>>>>> opp number after having added them. Without this the opp_count would not be correct.
+>>>>
+>>>
+>>> ... I have a question here. Why do you need to call
+>>>
+>>> em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, opp_shared_cpus..)
+>>>
+>>> on each CPU ? Why can't that be done once for unique opp_shared_cpus ?
 
-I assume that any relevant regulator here has enough capacitance on the 
-output that provides enough charge to disable any remaining regulators 
-(my board has 3*10µF for vcc1v2 and 1*10µF for vcc-dram). But there is 
-of course no guarantee, so I'm shutting down the most relevant (in terms 
-of current consumption) regulator first.
+I left it untouched to reduce changes, but I see your point.
 
-In any case, if it's deemed unnecessary to allow more than one regulator 
-in the driver I could remove the regulator-names property altogether and 
-reduce the DT node to:
+>>
+>> It just have to be called once, for one CPU from the mask. Otherwise for
+>> the next CPUs you should see error:
+>> "EM: exists for CPU%d"
+> 
+> OK cool, at least it is designed and expected to be used like I thought.
+> Ah, I might have seen those, but never thought it was error message ðŸ˜„ 
+> 
+>> It can happen that this print is not seen when the get_cpu_device(cpu)
+>> failed, but that would lead to investigation why CPU devices are not
+>> there yet.
+>>
+>> Nicola: have you seen that print?
+>>
+> 
+> I assume you must see that and you need to pull this inside if condition
+> to do this once for each performance domain.
 
-   regulator-poweroff {
-       compatible = "regulator-poweroff";
-       poweroff-supply = <&reg_vcc1v2>;
-   };
+I don't see that error, and that's also why I left it there. If there's already
+and em_pd for a device, EM just returns with an error that we don't check.
 
--- 
-Michael
+I agree that it makes more sense to register em for opp_shared_cpus.
+
+> 
+> --
+> Regards,
+> Sudeep
+> 
