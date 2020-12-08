@@ -2,114 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 901172D2641
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 09:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28F02D2653
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 09:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728059AbgLHIe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 03:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727849AbgLHIe2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 03:34:28 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B70DC0613D6
-        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 00:33:48 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id j1so6627401pld.3
-        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 00:33:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Gjlk/jLtNyUeazDdibe5U/NgLr5RcEOaHOigFIrgjeQ=;
-        b=OCylihwq7Lr5YIGlbD2kaf6/40QC0sTHW78aJsoFmHE03MNa1w24Gwx7iPgKqOuMiW
-         dr1Fs5D8hBgnHMLti9ou6c9x3yky5vgVa72hOXjS6nmiYup1XgMyBr6LPJJhB+t5MxUL
-         7mqR1RvunHbJ9ijFWcJQe2u+zs60a+3gWFYIb0nEkE/MbHLL0hxR9ZDTaPJqZv0fi8C8
-         jscJmQ2gm1Wmkc6gdui2bOmIehjxPsmM6yXpSACpZ7jgQ7tQJLfNjs6sFhbyjsPLK6MC
-         XjBRdR9R81z5whkK8AWEg+WDvrp5jDcl/vrjpQEkNWUYnFH37g9O39jzEvm+uJ8qEngU
-         b6xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Gjlk/jLtNyUeazDdibe5U/NgLr5RcEOaHOigFIrgjeQ=;
-        b=n7HmCC9uTLgDbOJciFmQJvYRwk61i4/rIk5hgr/qtYGc5dwOnqIDUME7xWxYmCDM6L
-         w/MkiBVXtd6NkFemEBWnnryv/ur4NDZQB9xo9Yz8FHgDyMhQCystSqwDp5g/JF1c4Hev
-         uOWA8fBXlhOY2G17zovHyjZsWNTVuTQ+jQ5CLSJUk4Gen6ZJw+R+xOQ/0t69UWlWwiic
-         YjAeatJnbAKWHrHEgkyI1T7aIBpiGY18WVny1M9LvND/0QMshdcM4bxlh8teYiNCl9j5
-         JIRLbwigPWh0qWams4yZyCOzwVlJqkNhqHkoU/fp3cU210mW9P4ZZpkYo8IPblVVAPMp
-         Rx/w==
-X-Gm-Message-State: AOAM53224ODsOHpjvIgHoLnFqp9VkONuRkxbUPWlPxVxBLFUG8jF5xff
-        tR7IigX+krsJ1ET1RsnWy1Jlbw==
-X-Google-Smtp-Source: ABdhPJzY0+766oi0+74mYEbdymuuxI+2nI3fPnl7VRjTC2pW8nnX+qsLQ4JACq+CUkg+5IvstN2a/A==
-X-Received: by 2002:a17:902:6b8c:b029:d6:d32e:4a8c with SMTP id p12-20020a1709026b8cb02900d6d32e4a8cmr20100699plk.28.1607416427728;
-        Tue, 08 Dec 2020 00:33:47 -0800 (PST)
-Received: from localhost ([122.172.136.109])
-        by smtp.gmail.com with ESMTPSA id k21sm16105066pfu.77.2020.12.08.00.33.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Dec 2020 00:33:46 -0800 (PST)
-Date:   Tue, 8 Dec 2020 14:03:44 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>
-Subject: Re: [PATCH v1 1/4] cpufreq: schedutil: Add util to struct sg_cpu
-Message-ID: <20201208083344.s67kalyxuui3ia4q@vireshk-i7>
-References: <20360841.iInq7taT2Z@kreacher>
- <2344038.BgO4qI7qUv@kreacher>
+        id S1727172AbgLHIh3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 03:37:29 -0500
+Received: from foss.arm.com ([217.140.110.172]:44960 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725208AbgLHIh2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Dec 2020 03:37:28 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3232A30E;
+        Tue,  8 Dec 2020 00:36:43 -0800 (PST)
+Received: from [10.57.1.242] (unknown [10.57.1.242])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74A4A3F68F;
+        Tue,  8 Dec 2020 00:36:41 -0800 (PST)
+Subject: Re: [PATCH 0/2] SCMI performance protocol power scale interface
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Dietmar.Eggemann@arm.com, cristian.marussi@arm.com,
+        morten.rasmussen@arm.com, rafael@kernel.org
+References: <20201124104346.27167-1-lukasz.luba@arm.com>
+ <20201207071308.rm7x6ro7i4qtmm7h@vireshk-i7>
+ <20201208044803.6kepfqvoz3pov4c3@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <82373a3d-49e4-7201-3616-10a9f0ac77c4@arm.com>
+Date:   Tue, 8 Dec 2020 08:36:39 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2344038.BgO4qI7qUv@kreacher>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201208044803.6kepfqvoz3pov4c3@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-12-20, 17:28, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Instead of passing util and max between functions while computing the
-> utilization and capacity, store the former in struct sg_cpu (along
-> with the latter and bw_dl).
-> 
-> This will allow the current utilization value to be compared with the
-> one obtained previously (which is requisite for some code changes to
-> follow this one), but also it makes the code look slightly more
-> consistent and clean.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c |   42 ++++++++++++++++++---------------------
->  1 file changed, 20 insertions(+), 22 deletions(-)
-> 
-> Index: linux-pm/kernel/sched/cpufreq_schedutil.c
-> ===================================================================
-> --- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
-> +++ linux-pm/kernel/sched/cpufreq_schedutil.c
-> @@ -53,6 +53,7 @@ struct sugov_cpu {
->  	unsigned int		iowait_boost;
->  	u64			last_update;
->  
-> +	unsigned long		util;
->  	unsigned long		bw_dl;
->  	unsigned long		max;
->  
-> @@ -276,16 +277,15 @@ unsigned long schedutil_cpu_util(int cpu
->  	return min(max, util);
->  }
->  
-> -static unsigned long sugov_get_util(struct sugov_cpu *sg_cpu)
-> +static void sugov_get_util(struct sugov_cpu *sg_cpu)
 
-Maybe name it sugov_update_util() ?
 
-Otherwise,
+On 12/8/20 4:48 AM, Viresh Kumar wrote:
+> On 07-12-20, 12:43, Viresh Kumar wrote:
+>> On 24-11-20, 10:43, Lukasz Luba wrote:
+>>> Hi all,
+>>>
+>>> The Energy Model (EM) supports power values expressed in an abstract scale
+>>> via new API. The SCMI performance protocol provides the information about
+>>> power scale. This patch set implements the needed interface and updates
+>>> cpufreq driver to set the right scale in the EM.
+>>>
+>>> It is based on top of patch series adding milli-Watts flag in EM [1]
+>>> (next-20201124 was used as a base).
+>>>
+>>> Regards,
+>>> Lukasz
+>>>
+>>> [1] https://lore.kernel.org/linux-pm/20201103090600.29053-1-lukasz.luba@arm.com/
+>>>
+>>> Lukasz Luba (2):
+>>>    firmware: arm_scmi: Add power_scale_mw_get() interface
+>>>    cpufreq: arm_scmi: Discover the power scale in performance protocol
+>>>
+>>>   drivers/cpufreq/scmi-cpufreq.c   | 4 +++-
+>>>   drivers/firmware/arm_scmi/perf.c | 8 ++++++++
+>>>   include/linux/scmi_protocol.h    | 1 +
+>>>   3 files changed, 12 insertions(+), 1 deletion(-)
+>>
+>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
+> More scmi stuff came in which I had to apply and so I applied this to
+> the ARM tree.
+> 
+> Rafael: I had to rebase this over one of the patches from your tree,
+> which was based on rc3:
+> 
+> commit c250d50fe2ce ("PM: EM: Add a flag indicating units of power values in Energy Model")
+> 
+> I hope you won't rebase it any further.
+> 
+> Applied. Thanks.
+> 
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Thank you Viresh!
 
--- 
-viresh
+Regards,
+Lukasz
