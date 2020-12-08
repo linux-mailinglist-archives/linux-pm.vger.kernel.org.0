@@ -2,77 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAEC2D30BF
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 18:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B352D30C5
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 18:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730204AbgLHROs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 12:14:48 -0500
-Received: from mail-oo1-f66.google.com ([209.85.161.66]:36016 "EHLO
-        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729374AbgLHROs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 12:14:48 -0500
-Received: by mail-oo1-f66.google.com with SMTP id j8so56689oon.3;
-        Tue, 08 Dec 2020 09:14:32 -0800 (PST)
+        id S1730695AbgLHROx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 12:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730009AbgLHROx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 12:14:53 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335EAC061793
+        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 09:14:13 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id v85so9564709oia.6
+        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 09:14:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OrTk1JTf0Tk8H0Dkw70rR48Y70ZzNOZd9pRYyN3l7qc=;
+        b=tIQ2524GlK0nHCX0ZYY0xdFCCrAMuJvFo2H0VIs9BGVY4NsN35gc+MsKDaPkEq1dN6
+         lYhMbk+hQ0saLb8M6/C5CMmksatLa1RBH1jo471y79kwSJ4rLffV4IS8Pagtp06Cbunu
+         H8NRsJxFvr0mRaGl1iXvuBE+5dlYOVyU0EbNbdeBI9LJ5MzVCozNUqoTCm4o4rQkoDjo
+         bLonRVugPYPsPdq1yb0HnL3MXaTy47jnb71Q/OuiX78f9Ab0ReLpPtDp8JUn9BngD7Qs
+         ZEsfkjH37qA+CftGSdOllMWOlKBDqe9i8QsKzeg5kR2eQq0R8ciOQkp0xGWgTCoYlA/B
+         NFCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yjn7ENoQqrYSXRLrl/wMY90f6nn1P7GX4qELPCsk/Y8=;
-        b=UmW3rj95Llnp/GCbgEuBpCxxLRDbwOwsKZE/TorI4DmPVGL46spBQShuc/MBSJ8wcL
-         f8QRyxwRTuJ5KeUJnWBWDPgtpYG4wVbA4iKmJV8J7WMW/SWblRpZKnyraYs5vsqShm4R
-         s00DuAEwG10leu7PRJsLEl5aDtYQCLce9RsxMydykoG1oNgGZUdAeER5s67szmTD5sBL
-         /Qi11PbHVRg9Wg2IsW4G14tx2G/wldN4etazEk+iUsdnfE5RjQQQwf5/uLV2LDNXouMZ
-         e76QYd33C/l3cck7cJcCgQx+uCK3AQS3siSTHXo++8B7/0XvabekiJ3qtT5TI1BZ4m8X
-         ijYA==
-X-Gm-Message-State: AOAM531CaZq9Vmqa6bhjYZTD+1XKIRWLE0a4CYEvMGO/ywsL/a8ykym9
-        /ig0zDDEf3jdBjYIoq4vkz2PFKo8SemzJusBK+XDT9+k
-X-Google-Smtp-Source: ABdhPJyJZiKtd9SkK9eAON4ljKf2z7jyUuSwud6szg2JQ/ZXGtiaB9MuLKsISoRl57PElSyUAw3KqefS3Jb8EMMPqPg=
-X-Received: by 2002:a4a:9873:: with SMTP id z48mr3338555ooi.44.1607447646975;
- Tue, 08 Dec 2020 09:14:06 -0800 (PST)
+        bh=OrTk1JTf0Tk8H0Dkw70rR48Y70ZzNOZd9pRYyN3l7qc=;
+        b=ZR0HRxE4ZJ8hjj8KxIwD7k/YV6Ih5h3R2Lt9vZ05wGxQpMlq+AOYKJ39VxTJ3mWruA
+         0juHbtxcRCqHqGBZIwn+lS5P2+qzijDefVNaIChCbqdhYr8WVlZ8bKoKSRxJANpgFIzm
+         YnRgerTvmRJGVpbAqlsk/qEvIQbJ9Qvscu4dUyAtFjeDyWtgdY6AK99lZAGUxbofqAb9
+         YXobv+jDsjobkjnyIPa9QiGnM/hyeuls6VDX9DXDmqVP5eOIAoTtWBWUNON70ACN4+yP
+         wVXSZzC163j5Sy8ek4LSNuyn555G2E/LrHC5eSmEUNJRYJf8bK85FHGumFiUgooctXbE
+         pxOA==
+X-Gm-Message-State: AOAM5313zmsKM7iDQnlQ/YWTk2S/OoHHUF9ZkQC/OKkG/1Mzrphl53JM
+        5AgxY/c8sv3baG0cPpEjLkDC/H1GgfdJSK3BduGgRA==
+X-Google-Smtp-Source: ABdhPJyTkuAAJ9aQVeM1oHOof95mLBcg/6CIM2sK7D91vZhxK+467RxQ2PT2rU6DtPBiIt1uiUZ+osvJh/KOHqtISAo=
+X-Received: by 2002:aca:b605:: with SMTP id g5mr3525309oif.177.1607447652630;
+ Tue, 08 Dec 2020 09:14:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20360841.iInq7taT2Z@kreacher> <1607445035.2673.64.camel@suse.com>
-In-Reply-To: <1607445035.2673.64.camel@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 8 Dec 2020 18:13:56 +0100
-Message-ID: <CAJZ5v0j2u7MrO82+ubx01kvyhDUKo11mfyofF-TAqdSLx_i3Ng@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] cpufreq: Allow drivers to receive more information
- from the governor
-To:     Giovanni Gherdovich <ggherdovich@suse.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Doug Smythies <dsmythies@telus.net>
+References: <20201204025509.1075506-1-dmitry.baryshkov@linaro.org>
+ <20201205170830.4d56ecb7@archlinux> <4de94396-54c7-e741-b288-3a3868515f7b@linaro.org>
+ <20201208103951.00003b3a@Huawei.com>
+In-Reply-To: <20201208103951.00003b3a@Huawei.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 8 Dec 2020 20:14:01 +0300
+Message-ID: <CAA8EJprS_Oa08xsGepeowqmrpmRH8pOYRd9yX2KEqZRsnetkzw@mail.gmail.com>
+Subject: Re: [PATCH v10 00/15] qcom: pm8150: add support for thermal monitoring
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>, linux-pm@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jishnu Prakash <jprakash@qti.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 8, 2020 at 5:31 PM Giovanni Gherdovich <ggherdovich@suse.com> wrote:
+On Tue, 8 Dec 2020 at 13:40, Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
 >
-> On Mon, 2020-12-07 at 17:25 +0100, Rafael J. Wysocki wrote:
-> > Hi,
-> >
-> > This is based on the RFC posted a few days ago:
-> >
-> > https://lore.kernel.org/linux-pm/1817571.2o5Kk4Ohv2@kreacher/
-> >
-> > The majority of the original cover letter still applies, so let me quote it
-> > here:
-> > [...]
+> On Sun, 6 Dec 2020 00:05:29 +0300
+> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
 >
-> Hello Rafael,
+> > On 05/12/2020 20:08, Jonathan Cameron wrote:
+> > > On Fri,  4 Dec 2020 05:54:54 +0300
+> > > Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > >> This patch serie adds support for thermal monitoring block on Qualcomm's
+> > >> PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
+> > >> to support thermal zones provided by this thermal monitoring block.
+> > >> Unlike the rest of PMIC thermal senses, these thermal zones describe
+> > >> particular thermistors, which differ between from board to board.
+> > >
+> > > I've just taken another look through the various IIO parts in here and
+> > > I think they are fine.
+> > >
+> > > My assumption is that given the timing this isn't going to make the merge
+> > > window now.  Hence I'll be looking to do an immutable branch based on rc1
+> > > once it's available (assuming everyone else is fine with this version).
+> >
+> > Thank you! Another option might be to merge all iio changes this cycle
+> > (if it's fine with you) and have all the rest go via respective trees in
+> > the next merge window. I'm fine with either of the options.
 >
-> I'd like to test this patch, as I have concerns on how it performs against the
-> current intel_pstate passive + HWP + schedutil (which leaves HWP.REQ.DESIRED
-> untouched).
+> Too late unfortunately. IIO routes through staging for historical reasons
+> (plus we still have about 15 drivers to move out of there - it's only been
+> about 10 years :)  Staging closes a week before merge window so IIO closes a few
+> days before staging.
+>
+> So lets stick to the immutable branch method.  Tends to make more sense in
+> the git history anyway as brings relevant code together (even if it travels
+> via multiple routes :)
 
-The performance will be worse in some cases, which is to be expected,
-but the point here is to counter the problem that in some cases the
-frequency is excessive now.
+Thank you for the explanation, the immutable branch approach works for me.
 
-> I'll get results within a week. Do you mind holding back the merge until then?
-
-Sure, the series is still under review.
+-- 
+With best wishes
+Dmitry
