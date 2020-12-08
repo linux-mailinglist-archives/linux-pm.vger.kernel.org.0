@@ -2,128 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2E72D26AD
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 09:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649BF2D26CA
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 10:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728354AbgLHIz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 03:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S1728589AbgLHJCw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 04:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728117AbgLHIz5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 03:55:57 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EE6C061749
-        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 00:55:11 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id m13so2083025ljo.11
-        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 00:55:11 -0800 (PST)
+        with ESMTP id S1728544AbgLHJCu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 04:02:50 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B8FC0613D6
+        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 01:02:10 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id w6so13308391pfu.1
+        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 01:02:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r4nPQzm9dDx2bI1IRs/zVvhtSUidTrnotzg7LEQVqZU=;
-        b=VykDxvbn47xDaFLvnvDSLFLCRWSZWLgyJHOUxPGAToQjJmmeemF/JAxrhae9jjxLlP
-         D54SRMKhsMn+HXMp7Btiw+nUylXul6sh0Fo9PQr2TgnIMoyGSjs762+2sgPw8UXxIqDW
-         CGnA0LuENp8KAZAscs51aDWa9LqOjMF/KrfyMZZMHlZRx/sZSclQl3v1oKGM7oC+Mm4o
-         MazpLK2lDGchOruOLn8zp70RVCh8Vi1OcoWqsln1bmvPvpbEIUcCtwtxxrxSKYxFrOto
-         Ts++PYYZrsJ9mfn06ZbYbbmqcA5hHPEcsF4RreUWYGK7pwX6a53+LmR65ziadKGDtZA1
-         h4Qw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ktRqOqDmJZswMN706Fqn/i+gbaCD0WDj/K5Tumy5pf8=;
+        b=NWnhwpibR5l4P5IScpYTB21X+9074Of4fyghAHH0dkZ8YXTWavMFYG4+VZMOqOeV+e
+         s1niy07dMKNB7E3xa3ndMTjOlbU7/j/gXMI0KNWgztNn1ZduvhJY+Ag5UC2mYyeJC8Ov
+         2zb2mJ0CwYh+PmnaHlHpfc2GgwuXVAvKbkUlh2nP2IrQvfUCRRh/SAWnLdESghZIXPWE
+         wwvGa9Ea8EVPl04r701B9PG9wsrIqlxSfppnJxzDkyaC7lLsVVkDSu5sHS+++D8DnKUd
+         UxTI+tH356NuzlPk82gWgJxdiWwQadGoU92NGuW+xh3iHvL4pXq6ugac+OhJ/5q2IsTk
+         Q8ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r4nPQzm9dDx2bI1IRs/zVvhtSUidTrnotzg7LEQVqZU=;
-        b=FnVd7ofxybrXJPn3OIAlN2pZe6K8BjgItcxg+AWEmYPgw6wZZLKvdAMQYcSKVIouyh
-         UYoiBfTZPvgu3W9n50ahiMtPhU5NhdaRVecFfKtcNN+W5rJZY5IUbK+L87sFt/yhMYeg
-         q1OTDV0BSzvUj+7OOn6ZNOd/6/0gYZEoIUYiIBkbgGDj4LZ4enhkIx0jptUAz06UWSUe
-         JRFcWIS9XeilCES8c6UqpQ6PeTtt4F4RNHnGF3ATsLwZ4onfWXBcoPP1/NYblVf2evNl
-         LV8v4KGfZ/zrfkxywrxZ04ka4pkNSeC9FNrgIMAVaGsOKM0ZSO4uPnu20oGtHdGYlFn1
-         PjuA==
-X-Gm-Message-State: AOAM532KKdtdkOAQGd3qUdx1gHg4KJp/DruYXxa+iHxan888FqBfmoEe
-        W7N1aA/p20BNDDQZd8jYpCCjfMLIxHYREY9eFJpILjRO2BthOg==
-X-Google-Smtp-Source: ABdhPJwOd4Czs/vCktXWMoZ/vysyXHbLKKPmOOX4HYmtW+6g0bNv/ZT5ohYkKwkChoruQsxCClIN8KPzb14CRmvrwpA=
-X-Received: by 2002:a2e:97c8:: with SMTP id m8mr9780194ljj.338.1607417710117;
- Tue, 08 Dec 2020 00:55:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ktRqOqDmJZswMN706Fqn/i+gbaCD0WDj/K5Tumy5pf8=;
+        b=KqY6KOviBQIbnHqV40bgbVvrHjamAUF3hlAnsdv3gc2wgmMVit/AdXo2wOofjsnANM
+         M87RLE936Gb3/bKzrkOt9n2Ik6Wv+YIxIprcEeKMPBriBzbFJndmoRf311KdsELIsUFb
+         hw4qrSk+47JvmMSEJWqAVeQ/PsfMskKFEFZoGvNd6Ss1irdnwiun560pidq5ihluQoP6
+         dyXpJmz4y78WrbXUSDG/l4/cQJ9voh1+3lwaKpPjNlkuF0jta5FjTw7kaEj/OY8/54HN
+         li0VLqfJY7IRhZsYwdjAZVsBz1j18VHBsVdzSnivzFjrWGiGswri1JBqtdM89WD+0CF8
+         vU9Q==
+X-Gm-Message-State: AOAM530d4b4dWCSpJnD08xWv26bMuBZ5Bm+iENk9G67SJ1LEoRuPAWZ1
+        xN8ImqfD5unT4+Kt9CJ49C8tMw==
+X-Google-Smtp-Source: ABdhPJz4zNaqsYPi7XOZsSgbeITk3JB4g2aYMPeb9a30/v9bhbdzVU1Gl7ovAbSejPTH6lhi16Hxng==
+X-Received: by 2002:a63:f915:: with SMTP id h21mr21970041pgi.389.1607418129919;
+        Tue, 08 Dec 2020 01:02:09 -0800 (PST)
+Received: from localhost ([122.172.136.109])
+        by smtp.gmail.com with ESMTPSA id u198sm1120430pgc.84.2020.12.08.01.02.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 08 Dec 2020 01:02:09 -0800 (PST)
+Date:   Tue, 8 Dec 2020 14:32:07 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Doug Smythies <dsmythies@telus.net>,
+        Giovanni Gherdovich <ggherdovich@suse.com>
+Subject: Re: [PATCH v1 3/4] cpufreq: Add special-purpose fast-switching
+ callback for drivers
+Message-ID: <20201208090207.sz4v43bwvm7yugrb@vireshk-i7>
+References: <20360841.iInq7taT2Z@kreacher>
+ <146138074.tjdImvNTH2@kreacher>
 MIME-Version: 1.0
-References: <cover.1607085199.git.matti.vaittinen@fi.rohmeurope.com> <f2866a9052bbeaa4b3795907f91974e1d18ef68e.1607085199.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <f2866a9052bbeaa4b3795907f91974e1d18ef68e.1607085199.git.matti.vaittinen@fi.rohmeurope.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Dec 2020 09:54:59 +0100
-Message-ID: <CACRpkdYjVJ9_6L2hthkoZ-G51aazxcyeHtu4EmeT8Eoo=0e=8w@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/6] power: supply: add cap2ocv batinfo helper
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Cong Pham <cpham2403@gmail.com>, rostokus@gmail.com,
-        fan.chen@mediatek.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <146138074.tjdImvNTH2@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 4, 2020 at 1:41 PM Matti Vaittinen
-<matti.vaittinen@fi.rohmeurope.com> wrote:
+On 07-12-20, 17:35, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> First off, some cpufreq drivers (eg. intel_pstate) can pass hints
+> beyond the current target frequency to the hardware and there are no
+> provisions for doing that in the cpufreq framework.  In particular,
+> today the driver has to assume that it should not allow the frequency
+> to fall below the one requested by the governor (or the required
+> capacity may not be provided) which may not be the case and which may
+> lead to excessive energy usage in some scenarios.
+> 
+> Second, the hints passed by these drivers to the hardware need not be
+> in terms of the frequency, so representing the utilization numbers
+> coming from the scheduler as frequency before passing them to those
+> drivers is not really useful.
+> 
+> Address the two points above by adding a special-purpose replacement
+> for the ->fast_switch callback, called ->adjust_perf, allowing the
+> governor to pass abstract performance level (rather than frequency)
+> values for the minimum (required) and target (desired) performance
+> along with the CPU capacity to compare them to.
+> 
+> Also update the schedutil governor to use the new callback instead
+> of ->fast_switch if present.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> Changes with respect to the RFC:
+>  - Don't pass "busy" to ->adjust_perf().
+>  - Use a special 'update_util' hook for the ->adjust_perf() case in
+>    schedutil (this still requires an additional branch because of the
+>    shared common code between this case and the "frequency" one, but
+>    IMV this version is cleaner nevertheless).
+> 
+> ---
+>  drivers/cpufreq/cpufreq.c        |   40 ++++++++++++++++++++++++++++++++
+>  include/linux/cpufreq.h          |   14 +++++++++++
+>  include/linux/sched/cpufreq.h    |    5 ++++
+>  kernel/sched/cpufreq_schedutil.c |   48 +++++++++++++++++++++++++++++++--------
+>  4 files changed, 98 insertions(+), 9 deletions(-)
+> 
+> Index: linux-pm/include/linux/cpufreq.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/cpufreq.h
+> +++ linux-pm/include/linux/cpufreq.h
+> @@ -320,6 +320,15 @@ struct cpufreq_driver {
+>  					unsigned int index);
+>  	unsigned int	(*fast_switch)(struct cpufreq_policy *policy,
+>  				       unsigned int target_freq);
+> +	/*
+> +	 * ->fast_switch() replacement for drivers that use an internal
+> +	 * representation of performance levels and can pass hints other than
+> +	 * the target performance level to the hardware.
+> +	 */
+> +	void		(*adjust_perf)(unsigned int cpu,
+> +				       unsigned long min_perf,
+> +				       unsigned long target_perf,
+> +				       unsigned long capacity);
 
-> The power-supply core supports concept of OCV (Open Circuit Voltage) =>
-> SOC (State Of Charge) conversion tables. Usually these tables are used
-> to estimate SOC based on OCV. Some systems use so called "Zero Adjust"
-> where at the near end-of-battery condition the SOC from coulomb counter
-> is used to retrieve the OCV - and OCV and VSYS difference is used to
-> re-estimate the battery capacity.
->
-> Add helper to do look-up the other-way around and also get the OCV
-> based on SOC
->
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+With this callback in place, do we still need to keep the other stuff we
+introduced recently, like CPUFREQ_NEED_UPDATE_LIMITS ?
 
-Overall a good idea!
-
-> +/**
-> + * power_supply_cap2ocv_simple() - find the battery OCV by capacity
-> + * @table: Pointer to battery OCV/CAP lookup table
-> + * @table_len: OCV/CAP table length
-> + * @cap: Current cap value
-> + *
-> + * This helper function is used to look up battery OCV according to
-> + * current capacity value from one OCV table, and the OCV table must be ordered
-> + * descending.
-> + *
-> + * Return: the battery OCV.
-> + */
-
-Spell out the abbreviations in the kerneldoc and not just the commit.
-These will be read much more than the commit message so I would
-move all the excellent info in the commit message into the kerneldoc and
-diet the commit message instead.
-
-> +int power_supply_cap2ocv_simple(struct power_supply_battery_ocv_table *table,
-> +                               int table_len, int cap)
-> +{
-> +       int i, ocv, tmp;
-> +
-> +       for (i = 0; i < table_len; i++)
-> +               if (cap > table[i].capacity)
-> +                       break;
-> +
-> +       if (i > 0 && i < table_len) {
-> +               tmp = (table[i - 1].ocv - table[i].ocv) *
-> +                     (cap - table[i].capacity);
-> +
-> +               tmp /= table[i - 1].capacity - table[i].capacity;
-> +               ocv = tmp + table[i].ocv;
-
-This is some linear interpolation right? It's not immediately evident so insert
-some comment about what is going on.
-
->  /**
->   * power_supply_ocv2cap_simple() - find the battery capacity
->   * @table: Pointer to battery OCV lookup table
-> @@ -847,6 +884,20 @@ power_supply_find_ocv2cap_table(struct power_supply_battery_info *info,
-
-I suspect this kerneldoc could be improved in the process as well.
-
-Yours,
-Linus Walleij
+-- 
+viresh
