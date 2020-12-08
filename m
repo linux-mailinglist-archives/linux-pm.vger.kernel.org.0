@@ -2,97 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7F62D2B0B
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 13:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AFD2D2B4F
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 13:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727258AbgLHMcR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 07:32:17 -0500
-Received: from foss.arm.com ([217.140.110.172]:48326 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726138AbgLHMcQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 8 Dec 2020 07:32:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEF861FB;
-        Tue,  8 Dec 2020 04:31:30 -0800 (PST)
-Received: from [192.168.178.2] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 243FD3F68F;
-        Tue,  8 Dec 2020 04:31:27 -0800 (PST)
-Subject: Re: [PATCH V4 3/3] thermal: cpufreq_cooling: Reuse sched_cpu_util()
- for SMP platforms
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        Quentin Perret <qperret@google.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
-References: <cover.1606198885.git.viresh.kumar@linaro.org>
- <c0d7c796be7df6ac0102d8c2701fc6b541d2ff7d.1606198885.git.viresh.kumar@linaro.org>
- <95991789-0308-76a9-735b-01ef620031b9@arm.com>
- <20201207121704.hpyw3ij3wvb5s7os@vireshk-i7>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <dfe2693c-8e9a-3103-2135-8c9a87be3ab1@arm.com>
-Date:   Tue, 8 Dec 2020 13:31:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729217AbgLHMof (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 07:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729187AbgLHMof (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 07:44:35 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A0BC061793;
+        Tue,  8 Dec 2020 04:43:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QDdAEsOh8knc9vEyiJ/wrX2d0Mqw0DpBXQ+d0TXNCI4=; b=ALellYQKQFkmFFL01r4mkby+ay
+        ToQoFzSlSzP5/o4sYMh/ws5VCuSjGv+lj3SLYXmZcWML/GndqjsJBHey9xIk0/zSCPc3Yh80kizR9
+        nsSwBW6PB7PpQrxcoX1F3XoVYmEe2Hnw9RY3q/Hhr5KBnBKLifd0JMD5oXdfkgJbFekyF3ECun3zI
+        G6XkprqkLMkyw4d9TbhPgR3H3w4VMLqHoqJXiOmYNnzxLbvDSwMBclVG+tGyexpEIlI0D1Chmbcvt
+        7vCE9nVB4B0WvmFvib7oxbCziWIRFjf2c80TzouelZJzos/pMNHJV/4hOloyaFhCVi1DuPDy96kcg
+        oeTz7P3g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kmcLL-0006xC-Cg; Tue, 08 Dec 2020 12:43:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 83163305C1C;
+        Tue,  8 Dec 2020 13:43:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6457A20819150; Tue,  8 Dec 2020 13:43:44 +0100 (CET)
+Date:   Tue, 8 Dec 2020 13:43:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        Giovanni Gherdovich <ggherdovich@suse.com>
+Subject: Re: [PATCH v1 4/4] cpufreq: intel_pstate: Implement the
+ ->adjust_perf() callback
+Message-ID: <20201208124344.GX2414@hirez.programming.kicks-ass.net>
+References: <20360841.iInq7taT2Z@kreacher>
+ <3342398.tGQZsKHvNY@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20201207121704.hpyw3ij3wvb5s7os@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3342398.tGQZsKHvNY@kreacher>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/12/2020 13:17, Viresh Kumar wrote:
-> On 03-12-20, 12:54, Dietmar Eggemann wrote:
->> On 24/11/2020 07:26, Viresh Kumar wrote:
+On Mon, Dec 07, 2020 at 05:38:58PM +0100, Rafael J. Wysocki wrote:
 
-[...]
+> +static void intel_cpufreq_adjust_perf(unsigned int cpunum,
+> +				      unsigned long min_perf,
+> +				      unsigned long target_perf,
+> +				      unsigned long capacity)
+> +{
+> +	struct cpudata *cpu = all_cpu_data[cpunum];
+> +	int old_pstate = cpu->pstate.current_pstate;
+> +	int cap_pstate, min_pstate, max_pstate, target_pstate;
+> +
+> +	update_turbo_state();
+> +	cap_pstate = global.turbo_disabled ? cpu->pstate.max_pstate :
+> +					     cpu->pstate.turbo_pstate;
+> +
+> +	/* Optimization: Avoid unnecessary divisions. */
+> +
+> +	target_pstate = cap_pstate;
+> +	if (target_perf < capacity)
+> +		target_pstate = DIV_ROUND_UP(cap_pstate * target_perf, capacity);
+> +
+> +	min_pstate = cap_pstate;
+> +	if (min_perf < capacity)
+> +		min_pstate = DIV_ROUND_UP(cap_pstate * min_perf, capacity);
+> +
+> +	if (min_pstate < cpu->pstate.min_pstate)
+> +		min_pstate = cpu->pstate.min_pstate;
+> +
+> +	if (min_pstate < cpu->min_perf_ratio)
+> +		min_pstate = cpu->min_perf_ratio;
+> +
+> +	max_pstate = min(cap_pstate, cpu->max_perf_ratio);
+> +	if (max_pstate < min_pstate)
+> +		max_pstate = min_pstate;
+> +
+> +	target_pstate = clamp_t(int, target_pstate, min_pstate, max_pstate);
+> +
+> +	intel_cpufreq_adjust_hwp(cpu, min_pstate, max_pstate, target_pstate, true);
 
->> When I ran schbench (-t 16 -r 5) on hikey960 I get multiple (~50)
->> instances of ~80ms task activity phase and then ~20ms idle phase on all
->> CPUs.
->>
->> So I assume that scenario 1 is at the beginning (but you mentioned the
->> task were sleeping?)
-> 
-> I am not able to find the exact values I used, but I did something
-> like this to create a scenario where the old computations shall find
-> the CPU as idle in the last IPA window:
-> 
-> - schbench -m 2 -t 4 -s 25000 -c 20000 -r 60
-> 
-> - sampling rate of IPA to 10 ms
-> 
-> With this IPA wakes up many times and finds the CPUs to have been idle
-> in the last IPA window (i.e. 10ms).
+I'm confused... HWP doesn't do pstate, yet everything here is now called
+pstate, help?
 
-Ah, this makes sense.
-
-So with this there are only 8 worker threads w/ 20ms runtime and 75ms
-period (30ms message thread time (-C) and 25 latency (-c)).
-
-So much more idle time between two invocations of the worker/message
-threads and more IPA sampling.
-
-[...]
-
->>>  Old: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=800 load={{0x64,0x64,0x64,0x64,0x64,0x64,0x64,0x64}} dynamic_power=5280
->>>  New: thermal_power_cpu_get_power: cpus=00000000,000000ff freq=1200000 total_load=708 load={{0x4d,0x5c,0x5c,0x5b,0x5c,0x5c,0x51,0x5b}} dynamic_power=4672
->>>
->>> As can be seen, the idle time based load is 100% for all the CPUs as it
->>> took only the last window into account, but in reality the CPUs aren't
->>> that loaded as shown by the utilization numbers.
->>
->> Is this an IPA sampling at the end of the ~20ms idle phase?
-> 
-> This is during the phase where the CPUs were fully busy for the last
-> period.
-
-OK.
-
+> +
+> +	cpu->pstate.current_pstate = target_pstate;
+> +	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
+> +}
