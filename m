@@ -2,140 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8337C2D26A0
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 09:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2E72D26AD
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 09:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728531AbgLHIwg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 03:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S1728354AbgLHIz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 03:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727959AbgLHIwg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 03:52:36 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3115AC061749
-        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 00:51:50 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id g18so11606969pgk.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 00:51:50 -0800 (PST)
+        with ESMTP id S1728117AbgLHIz5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 03:55:57 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EE6C061749
+        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 00:55:11 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id m13so2083025ljo.11
+        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 00:55:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4EpXoHXL4k0cYEYjbXCM3qqNNX/ao/lS1FFGU2tbAsI=;
-        b=npafHANG5pXcGj4u2NdXisvah9MRC0V7E4vMXhflCDTzfT9Qe0koYZDXIDRY6Y05mt
-         hEfBYI7dpxRFVMEvBVY9TZhBWiM3Lro1HfeWmMpoksUFutBn0sDFqAEsMV7F4Kz+LGBd
-         jqDlXEoMkuHatGoik1tgSb4zyBTj3ujruNA/Cw41TOye5EX/9m9sf3yAG9aknrsWOVX2
-         CmySvEeotBmGCZpwmOTgb9I2TtO+TLQryAryqm6YV/JA7nPOKZE1RrSieFZRqmfaf7QV
-         n3eDQJUXilGaKFbL2+MIkj7KpG2Q5YYt38+euySILQmt1Icx7qYL8ScvZSMt9HtSAVNF
-         1VmA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r4nPQzm9dDx2bI1IRs/zVvhtSUidTrnotzg7LEQVqZU=;
+        b=VykDxvbn47xDaFLvnvDSLFLCRWSZWLgyJHOUxPGAToQjJmmeemF/JAxrhae9jjxLlP
+         D54SRMKhsMn+HXMp7Btiw+nUylXul6sh0Fo9PQr2TgnIMoyGSjs762+2sgPw8UXxIqDW
+         CGnA0LuENp8KAZAscs51aDWa9LqOjMF/KrfyMZZMHlZRx/sZSclQl3v1oKGM7oC+Mm4o
+         MazpLK2lDGchOruOLn8zp70RVCh8Vi1OcoWqsln1bmvPvpbEIUcCtwtxxrxSKYxFrOto
+         Ts++PYYZrsJ9mfn06ZbYbbmqcA5hHPEcsF4RreUWYGK7pwX6a53+LmR65ziadKGDtZA1
+         h4Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4EpXoHXL4k0cYEYjbXCM3qqNNX/ao/lS1FFGU2tbAsI=;
-        b=eCxBZqizV2pz/Ip+KKowFKwSyE7Vj4OPXffZwKdgVPZ6OjrM2Kv8T8WgOugPNNf0sf
-         v0CxY7URTLZwbFzJHmlN+zqbgZHMFF7RyHECJbSW1tN+kBBfTEsXtK+xOBhip5m65eBZ
-         d/YUmifNvm2o3demXR5JGuOwXDcwfI+7ktFyygWJ67QkyEi5yJMRnOM/X3s2us9PvZQs
-         XCVZdTaP3O/IcS6wkZaKlLNwLEJ2LlSrP2j1GymweQTXDsrLUDy1iTMdGaYnVWcJYPVV
-         cu4yPugH3WbG0oNFHbHGLmTqS7X607PtyVGxVo+sx/ugOl/gDqOTpqRqHiLqEag+/Xrq
-         1piw==
-X-Gm-Message-State: AOAM530o3LuCjYrlubUGhDC9jd+TcfLEPlesfhQcnyxk1/naNRNxY2pR
-        wpr4Ynd9Z84qfPaUltnWpywdgQ==
-X-Google-Smtp-Source: ABdhPJzIUxxjW1A8LrW3wOYE5e6yVtI0yhINTYPuqVh3vPFj1BR1ngHnYCPJKiFEdfhzAJGCY1cfuQ==
-X-Received: by 2002:a17:90a:6f42:: with SMTP id d60mr3298129pjk.44.1607417509662;
-        Tue, 08 Dec 2020 00:51:49 -0800 (PST)
-Received: from localhost ([122.172.136.109])
-        by smtp.gmail.com with ESMTPSA id e29sm14173828pfj.174.2020.12.08.00.51.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Dec 2020 00:51:48 -0800 (PST)
-Date:   Tue, 8 Dec 2020 14:21:46 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        Giovanni Gherdovich <ggherdovich@suse.com>
-Subject: Re: [PATCH v1 2/4] cpufreq: schedutil: Adjust utilization instead of
- frequency
-Message-ID: <20201208085146.pzem6t3mt44xwxkm@vireshk-i7>
-References: <20360841.iInq7taT2Z@kreacher>
- <1916732.tSaCp9PeQq@kreacher>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r4nPQzm9dDx2bI1IRs/zVvhtSUidTrnotzg7LEQVqZU=;
+        b=FnVd7ofxybrXJPn3OIAlN2pZe6K8BjgItcxg+AWEmYPgw6wZZLKvdAMQYcSKVIouyh
+         UYoiBfTZPvgu3W9n50ahiMtPhU5NhdaRVecFfKtcNN+W5rJZY5IUbK+L87sFt/yhMYeg
+         q1OTDV0BSzvUj+7OOn6ZNOd/6/0gYZEoIUYiIBkbgGDj4LZ4enhkIx0jptUAz06UWSUe
+         JRFcWIS9XeilCES8c6UqpQ6PeTtt4F4RNHnGF3ATsLwZ4onfWXBcoPP1/NYblVf2evNl
+         LV8v4KGfZ/zrfkxywrxZ04ka4pkNSeC9FNrgIMAVaGsOKM0ZSO4uPnu20oGtHdGYlFn1
+         PjuA==
+X-Gm-Message-State: AOAM532KKdtdkOAQGd3qUdx1gHg4KJp/DruYXxa+iHxan888FqBfmoEe
+        W7N1aA/p20BNDDQZd8jYpCCjfMLIxHYREY9eFJpILjRO2BthOg==
+X-Google-Smtp-Source: ABdhPJwOd4Czs/vCktXWMoZ/vysyXHbLKKPmOOX4HYmtW+6g0bNv/ZT5ohYkKwkChoruQsxCClIN8KPzb14CRmvrwpA=
+X-Received: by 2002:a2e:97c8:: with SMTP id m8mr9780194ljj.338.1607417710117;
+ Tue, 08 Dec 2020 00:55:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1916732.tSaCp9PeQq@kreacher>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <cover.1607085199.git.matti.vaittinen@fi.rohmeurope.com> <f2866a9052bbeaa4b3795907f91974e1d18ef68e.1607085199.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <f2866a9052bbeaa4b3795907f91974e1d18ef68e.1607085199.git.matti.vaittinen@fi.rohmeurope.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Dec 2020 09:54:59 +0100
+Message-ID: <CACRpkdYjVJ9_6L2hthkoZ-G51aazxcyeHtu4EmeT8Eoo=0e=8w@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/6] power: supply: add cap2ocv batinfo helper
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Cong Pham <cpham2403@gmail.com>, rostokus@gmail.com,
+        fan.chen@mediatek.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-12-20, 17:29, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> When avoiding reduction of the frequency after the target CPU has
-> been busy since the previous frequency update, adjust the utilization
-> instead of adjusting the frequency, because doing so is more prudent
-> (it is done to counter a possible utilization deficit after all) and
-> it will allow some code to be shared after a subsequent change.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c |   11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> Index: linux-pm/kernel/sched/cpufreq_schedutil.c
-> ===================================================================
-> --- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
-> +++ linux-pm/kernel/sched/cpufreq_schedutil.c
-> @@ -437,7 +437,7 @@ static void sugov_update_single(struct u
->  {
->  	struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
->  	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> -	unsigned int cached_freq = sg_policy->cached_raw_freq;
-> +	unsigned long prev_util = sg_cpu->util;
->  	unsigned int next_f;
->  
->  	sugov_iowait_boost(sg_cpu, time, flags);
-> @@ -451,17 +451,14 @@ static void sugov_update_single(struct u
->  	sugov_get_util(sg_cpu);
->  	sugov_iowait_apply(sg_cpu, time);
->  
-> -	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
->  	/*
->  	 * Do not reduce the frequency if the CPU has not been idle
->  	 * recently, as the reduction is likely to be premature then.
->  	 */
-> -	if (sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
-> -		next_f = sg_policy->next_freq;
-> +	if (sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
-> +		sg_cpu->util = prev_util;
->  
-> -		/* Restore cached freq as next_freq has changed */
-> -		sg_policy->cached_raw_freq = cached_freq;
-> -	}
-> +	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
+On Fri, Dec 4, 2020 at 1:41 PM Matti Vaittinen
+<matti.vaittinen@fi.rohmeurope.com> wrote:
 
-I don't think we can replace freq comparison by util, or at least it will give
-us a different final frequency and the behavior is changed.
+> The power-supply core supports concept of OCV (Open Circuit Voltage) =>
+> SOC (State Of Charge) conversion tables. Usually these tables are used
+> to estimate SOC based on OCV. Some systems use so called "Zero Adjust"
+> where at the near end-of-battery condition the SOC from coulomb counter
+> is used to retrieve the OCV - and OCV and VSYS difference is used to
+> re-estimate the battery capacity.
+>
+> Add helper to do look-up the other-way around and also get the OCV
+> based on SOC
+>
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
-Lets take an example, lets say current freq is 1 GHz and max is 1024.
+Overall a good idea!
 
-Round 1: Lets say util is 1000
+> +/**
+> + * power_supply_cap2ocv_simple() - find the battery OCV by capacity
+> + * @table: Pointer to battery OCV/CAP lookup table
+> + * @table_len: OCV/CAP table length
+> + * @cap: Current cap value
+> + *
+> + * This helper function is used to look up battery OCV according to
+> + * current capacity value from one OCV table, and the OCV table must be ordered
+> + * descending.
+> + *
+> + * Return: the battery OCV.
+> + */
 
-next_f = 1GHz * 1.25 * 1000/1024 = 1.2 GHz
+Spell out the abbreviations in the kerneldoc and not just the commit.
+These will be read much more than the commit message so I would
+move all the excellent info in the commit message into the kerneldoc and
+diet the commit message instead.
 
-Round 2: Lets say util has come down to 900 here,
+> +int power_supply_cap2ocv_simple(struct power_supply_battery_ocv_table *table,
+> +                               int table_len, int cap)
+> +{
+> +       int i, ocv, tmp;
+> +
+> +       for (i = 0; i < table_len; i++)
+> +               if (cap > table[i].capacity)
+> +                       break;
+> +
+> +       if (i > 0 && i < table_len) {
+> +               tmp = (table[i - 1].ocv - table[i].ocv) *
+> +                     (cap - table[i].capacity);
+> +
+> +               tmp /= table[i - 1].capacity - table[i].capacity;
+> +               ocv = tmp + table[i].ocv;
 
-before the patch:
+This is some linear interpolation right? It's not immediately evident so insert
+some comment about what is going on.
 
-next_f = 1.2 GHz * 1.25 * 900/1024 = 1.31 GHz
+>  /**
+>   * power_supply_ocv2cap_simple() - find the battery capacity
+>   * @table: Pointer to battery OCV lookup table
+> @@ -847,6 +884,20 @@ power_supply_find_ocv2cap_table(struct power_supply_battery_info *info,
 
-after the patch:
+I suspect this kerneldoc could be improved in the process as well.
 
-next_f = 1.2 GHz * 1.25 * 1000/1024 = 1.45 GHz
-
-Or did I make a mistake here ?
-
--- 
-viresh
+Yours,
+Linus Walleij
