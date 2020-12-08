@@ -2,116 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B352D30C5
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 18:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02ABB2D30ED
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 18:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730695AbgLHROx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 12:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730009AbgLHROx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 12:14:53 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335EAC061793
-        for <linux-pm@vger.kernel.org>; Tue,  8 Dec 2020 09:14:13 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id v85so9564709oia.6
-        for <linux-pm@vger.kernel.org>; Tue, 08 Dec 2020 09:14:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OrTk1JTf0Tk8H0Dkw70rR48Y70ZzNOZd9pRYyN3l7qc=;
-        b=tIQ2524GlK0nHCX0ZYY0xdFCCrAMuJvFo2H0VIs9BGVY4NsN35gc+MsKDaPkEq1dN6
-         lYhMbk+hQ0saLb8M6/C5CMmksatLa1RBH1jo471y79kwSJ4rLffV4IS8Pagtp06Cbunu
-         H8NRsJxFvr0mRaGl1iXvuBE+5dlYOVyU0EbNbdeBI9LJ5MzVCozNUqoTCm4o4rQkoDjo
-         bLonRVugPYPsPdq1yb0HnL3MXaTy47jnb71Q/OuiX78f9Ab0ReLpPtDp8JUn9BngD7Qs
-         ZEsfkjH37qA+CftGSdOllMWOlKBDqe9i8QsKzeg5kR2eQq0R8ciOQkp0xGWgTCoYlA/B
-         NFCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OrTk1JTf0Tk8H0Dkw70rR48Y70ZzNOZd9pRYyN3l7qc=;
-        b=ZR0HRxE4ZJ8hjj8KxIwD7k/YV6Ih5h3R2Lt9vZ05wGxQpMlq+AOYKJ39VxTJ3mWruA
-         0juHbtxcRCqHqGBZIwn+lS5P2+qzijDefVNaIChCbqdhYr8WVlZ8bKoKSRxJANpgFIzm
-         YnRgerTvmRJGVpbAqlsk/qEvIQbJ9Qvscu4dUyAtFjeDyWtgdY6AK99lZAGUxbofqAb9
-         YXobv+jDsjobkjnyIPa9QiGnM/hyeuls6VDX9DXDmqVP5eOIAoTtWBWUNON70ACN4+yP
-         wVXSZzC163j5Sy8ek4LSNuyn555G2E/LrHC5eSmEUNJRYJf8bK85FHGumFiUgooctXbE
-         pxOA==
-X-Gm-Message-State: AOAM5313zmsKM7iDQnlQ/YWTk2S/OoHHUF9ZkQC/OKkG/1Mzrphl53JM
-        5AgxY/c8sv3baG0cPpEjLkDC/H1GgfdJSK3BduGgRA==
-X-Google-Smtp-Source: ABdhPJyTkuAAJ9aQVeM1oHOof95mLBcg/6CIM2sK7D91vZhxK+467RxQ2PT2rU6DtPBiIt1uiUZ+osvJh/KOHqtISAo=
-X-Received: by 2002:aca:b605:: with SMTP id g5mr3525309oif.177.1607447652630;
- Tue, 08 Dec 2020 09:14:12 -0800 (PST)
+        id S1729003AbgLHRZB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 12:25:01 -0500
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:42004 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728510AbgLHRZB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 12:25:01 -0500
+Received: from pps.filterd (m0170398.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B8HIRSo025200;
+        Tue, 8 Dec 2020 12:24:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=smtpout1;
+ bh=6pwVA+zAX3guBHyruQ0OaiSMpzrQ0K5rhts4w8FvW2I=;
+ b=TrMOLDOIl8QAV70dNBkGH7FZr3DXx+PLluUZpYe4+Y3p1cdTfxLwz1qJgwU6e6xZcixI
+ slLkQPXV4ITxhV4BbKBgr3yUeAHSSmyygw2hPWoPmQHy9cfB/1FhFoplwyyRvu/BzET+
+ GIIYJkadJDZ+X7NwGuHAVyMHLF+0TAK8AT4g0PCIdG3dBGf4p02NDankVkjCBGCMy+l1
+ 7+hWFgbjCgwjf9VS5dHmOY57KFzs8smFLenzkubKK9+PQAnKIyyq73UVH5cyj3AP9Kzc
+ yztUq9Wg0rINElvH3lpaRAQDMP6rKaKOfVXbvmDpYsvMdzy45yXj8p86HK6ViRevsvoT qQ== 
+Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0b-00154904.pphosted.com with ESMTP id 3587cdk8gw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Dec 2020 12:24:20 -0500
+Received: from pps.filterd (m0142693.ppops.net [127.0.0.1])
+        by mx0a-00154901.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B8HHTDf158878;
+        Tue, 8 Dec 2020 12:24:19 -0500
+Received: from ausxippc110.us.dell.com (AUSXIPPC110.us.dell.com [143.166.85.200])
+        by mx0a-00154901.pphosted.com with ESMTP id 35adafhesv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Dec 2020 12:24:18 -0500
+X-LoopCount0: from 10.173.37.130
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.78,403,1599541200"; 
+   d="scan'208";a="1017279786"
+Subject: Re: [PATCH v3 1/7] e1000e: fix S0ix flow to allow S0i3.2 subset entry
+To:     Mario Limonciello <mario.limonciello@dell.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        David Miller <davem@davemloft.net>
+Cc:     linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Netfin <sasha.neftin@intel.com>,
+        Aaron Brown <aaron.f.brown@intel.com>,
+        Stefan Assmann <sassmann@redhat.com>, darcari@redhat.com,
+        Yijun.Shen@dell.com, Perry.Yuan@dell.com,
+        anthony.wong@canonical.com,
+        Vitaly Lifshits <vitaly.lifshits@intel.com>
+References: <20201204200920.133780-1-mario.limonciello@dell.com>
+ <20201204200920.133780-2-mario.limonciello@dell.com>
+From:   Mario Limonciello <Mario.Limonciello@dell.com>
+Organization: Dell Inc.
+Message-ID: <354075ae-f605-eb01-4cf9-a66e4eb7b192@dell.com>
+Date:   Tue, 8 Dec 2020 11:24:17 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <20201204025509.1075506-1-dmitry.baryshkov@linaro.org>
- <20201205170830.4d56ecb7@archlinux> <4de94396-54c7-e741-b288-3a3868515f7b@linaro.org>
- <20201208103951.00003b3a@Huawei.com>
-In-Reply-To: <20201208103951.00003b3a@Huawei.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 8 Dec 2020 20:14:01 +0300
-Message-ID: <CAA8EJprS_Oa08xsGepeowqmrpmRH8pOYRd9yX2KEqZRsnetkzw@mail.gmail.com>
-Subject: Re: [PATCH v10 00/15] qcom: pm8150: add support for thermal monitoring
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>, linux-pm@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201204200920.133780-2-mario.limonciello@dell.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-08_14:2020-12-08,2020-12-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ clxscore=1015 spamscore=0 bulkscore=0 adultscore=0 malwarescore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012080106
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ suspectscore=0 malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012080106
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 8 Dec 2020 at 13:40, Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Sun, 6 Dec 2020 00:05:29 +0300
-> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
->
-> > On 05/12/2020 20:08, Jonathan Cameron wrote:
-> > > On Fri,  4 Dec 2020 05:54:54 +0300
-> > > Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > >> This patch serie adds support for thermal monitoring block on Qualcomm's
-> > >> PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
-> > >> to support thermal zones provided by this thermal monitoring block.
-> > >> Unlike the rest of PMIC thermal senses, these thermal zones describe
-> > >> particular thermistors, which differ between from board to board.
-> > >
-> > > I've just taken another look through the various IIO parts in here and
-> > > I think they are fine.
-> > >
-> > > My assumption is that given the timing this isn't going to make the merge
-> > > window now.  Hence I'll be looking to do an immutable branch based on rc1
-> > > once it's available (assuming everyone else is fine with this version).
-> >
-> > Thank you! Another option might be to merge all iio changes this cycle
-> > (if it's fine with you) and have all the rest go via respective trees in
-> > the next merge window. I'm fine with either of the options.
->
-> Too late unfortunately. IIO routes through staging for historical reasons
-> (plus we still have about 15 drivers to move out of there - it's only been
-> about 10 years :)  Staging closes a week before merge window so IIO closes a few
-> days before staging.
->
-> So lets stick to the immutable branch method.  Tends to make more sense in
-> the git history anyway as brings relevant code together (even if it travels
-> via multiple routes :)
 
-Thank you for the explanation, the immutable branch approach works for me.
+On 12/4/20 2:09 PM, Mario Limonciello wrote:
+> From: Vitaly Lifshits <vitaly.lifshits@intel.com>
+>
+> Changed a configuration in the flows to align with
+> architecture requirements to achieve S0i3.2 substate.
+>
+> Also fixed a typo in the previous commit 632fbd5eb5b0
+> ("e1000e: fix S0ix flows for cable connected case").
+>
+> Signed-off-by: Vitaly Lifshits <vitaly.lifshits@intel.com>
+> Tested-by: Aaron Brown <aaron.f.brown@intel.com>
+> Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+> ---
+>   drivers/net/ethernet/intel/e1000e/netdev.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 
+I realize that the series is still under discussion, but I intentionally 
+moved this
+patch to the front of the series so it can be pulled in even if the 
+others are still
+discussed.
+
+@David Miller:
+This particular patch is more important than the rest.  It actually 
+fixes issues
+on the non-ME i219V as well.  Can this one be queued up and we can keep
+discussing the rest?
+
+> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+> index b30f00891c03..128ab6898070 100644
+> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+> @@ -6475,13 +6475,13 @@ static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
+>   
+>   	/* Ungate PGCB clock */
+>   	mac_data = er32(FEXTNVM9);
+> -	mac_data |= BIT(28);
+> +	mac_data &= ~BIT(28);
+>   	ew32(FEXTNVM9, mac_data);
+>   
+>   	/* Enable K1 off to enable mPHY Power Gating */
+>   	mac_data = er32(FEXTNVM6);
+>   	mac_data |= BIT(31);
+> -	ew32(FEXTNVM12, mac_data);
+> +	ew32(FEXTNVM6, mac_data);
+>   
+>   	/* Enable mPHY power gating for any link and speed */
+>   	mac_data = er32(FEXTNVM8);
+> @@ -6525,11 +6525,11 @@ static void e1000e_s0ix_exit_flow(struct e1000_adapter *adapter)
+>   	/* Disable K1 off */
+>   	mac_data = er32(FEXTNVM6);
+>   	mac_data &= ~BIT(31);
+> -	ew32(FEXTNVM12, mac_data);
+> +	ew32(FEXTNVM6, mac_data);
+>   
+>   	/* Disable Ungate PGCB clock */
+>   	mac_data = er32(FEXTNVM9);
+> -	mac_data &= ~BIT(28);
+> +	mac_data |= BIT(28);
+>   	ew32(FEXTNVM9, mac_data);
+>   
+>   	/* Cancel not waking from dynamic
 -- 
-With best wishes
-Dmitry
+*Mario Limonciello*
+*Dell*| CPG Software Engineering
+*office*+1 512 723 0582
