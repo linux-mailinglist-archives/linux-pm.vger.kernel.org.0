@@ -2,164 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FF72D291A
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 11:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F102D2950
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Dec 2020 11:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729011AbgLHKk7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Dec 2020 05:40:59 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2220 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728884AbgLHKk6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Dec 2020 05:40:58 -0500
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CqxTv6ZD2z67DLr;
-        Tue,  8 Dec 2020 18:38:11 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 8 Dec 2020 11:40:16 +0100
-Received: from localhost (10.47.68.59) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Tue, 8 Dec 2020
- 10:40:15 +0000
-Date:   Tue, 8 Dec 2020 10:39:51 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>
-Subject: Re: [PATCH v10 00/15] qcom: pm8150: add support for thermal
- monitoring
-Message-ID: <20201208103951.00003b3a@Huawei.com>
-In-Reply-To: <4de94396-54c7-e741-b288-3a3868515f7b@linaro.org>
-References: <20201204025509.1075506-1-dmitry.baryshkov@linaro.org>
-        <20201205170830.4d56ecb7@archlinux>
-        <4de94396-54c7-e741-b288-3a3868515f7b@linaro.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S1728496AbgLHK53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Dec 2020 05:57:29 -0500
+Received: from foss.arm.com ([217.140.110.172]:47276 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726226AbgLHK53 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Dec 2020 05:57:29 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BF891FB;
+        Tue,  8 Dec 2020 02:56:43 -0800 (PST)
+Received: from [10.57.34.152] (unknown [10.57.34.152])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C6CA3F68F;
+        Tue,  8 Dec 2020 02:56:41 -0800 (PST)
+Subject: Re: [PATCH v4 3/4] scmi-cpufreq: get opp_shared_cpus from opp-v2 for
+ EM
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, nm@ti.com,
+        daniel.lezcano@linaro.org, morten.rasmussen@arm.com,
+        chris.redpath@arm.com
+References: <20201202172356.10508-1-nicola.mazzucato@arm.com>
+ <20201202172356.10508-4-nicola.mazzucato@arm.com>
+ <20201208055053.kggxw26kxtnpneua@vireshk-i7>
+ <0e4d3134-f9b2-31fa-b454-fb30265a80b5@arm.com>
+ <20201208072611.ptsqupv4y2wybs6p@vireshk-i7>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <83b8400f-8dc4-000e-d790-0bf584a75f48@arm.com>
+Date:   Tue, 8 Dec 2020 10:58:44 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+In-Reply-To: <20201208072611.ptsqupv4y2wybs6p@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.68.59]
-X-ClientProxiedBy: lhreml705-chm.china.huawei.com (10.201.108.54) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 6 Dec 2020 00:05:29 +0300
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
 
-> On 05/12/2020 20:08, Jonathan Cameron wrote:
-> > On Fri,  4 Dec 2020 05:54:54 +0300
-> > Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
-> >   
-> >> This patch serie adds support for thermal monitoring block on Qualcomm's
-> >> PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
-> >> to support thermal zones provided by this thermal monitoring block.
-> >> Unlike the rest of PMIC thermal senses, these thermal zones describe
-> >> particular thermistors, which differ between from board to board.  
-> > 
-> > I've just taken another look through the various IIO parts in here and
-> > I think they are fine.
-> > 
-> > My assumption is that given the timing this isn't going to make the merge
-> > window now.  Hence I'll be looking to do an immutable branch based on rc1
-> > once it's available (assuming everyone else is fine with this version).  
+
+On 12/8/20 7:26 AM, Viresh Kumar wrote:
+> On 08-12-20, 07:22, Nicola Mazzucato wrote:
+>> On 12/8/20 5:50 AM, Viresh Kumar wrote:
+>>> On 02-12-20, 17:23, Nicola Mazzucato wrote:
+>>>>  	nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
+>>>>  	if (nr_opp <= 0) {
+>>>> -		dev_dbg(cpu_dev, "OPP table is not ready, deferring probe\n");
+>>>> -		ret = -EPROBE_DEFER;
+>>>> -		goto out_free_opp;
+>>>> +		ret = handle->perf_ops->device_opps_add(handle, cpu_dev);
+>>>> +		if (ret) {
+>>>> +			dev_warn(cpu_dev, "failed to add opps to the device\n");
+>>>> +			goto out_free_cpumask;
+>>>> +		}
+>>>> +
+>>>> +		ret = dev_pm_opp_set_sharing_cpus(cpu_dev, opp_shared_cpus);
+>>>> +		if (ret) {
+>>>> +			dev_err(cpu_dev, "%s: failed to mark OPPs as shared: %d\n",
+>>>> +				__func__, ret);
+>>>> +			goto out_free_cpumask;
+>>>> +		}
+>>>> +
+>>>
+>>> Why do we need to call above two after calling
+>>> dev_pm_opp_get_opp_count() ?
+>>
+>> Sorry, I am not sure to understand your question here. If there are no opps for
+>> a device we want to add them to it
 > 
-> Thank you! Another option might be to merge all iio changes this cycle 
-> (if it's fine with you) and have all the rest go via respective trees in 
-> the next merge window. I'm fine with either of the options.
+> Earlier we used to call handle->perf_ops->device_opps_add() and
+> dev_pm_opp_set_sharing_cpus() before calling dev_pm_opp_get_opp_count(), why is
+> the order changed now ?
 
-Too late unfortunately. IIO routes through staging for historical reasons
-(plus we still have about 15 drivers to move out of there - it's only been
-about 10 years :)  Staging closes a week before merge window so IIO closes a few
-days before staging.
-
-So lets stick to the immutable branch method.  Tends to make more sense in
-the git history anyway as brings relevant code together (even if it travels
-via multiple routes :)
-
-Jonathan
+True. The order has changed to take into account the fact that when we have
+per-cpu + opp-shared, we don't need to add opps for devices which already have them.
 
 > 
-> > 
-> > Thanks,
-> > 
-> > Jonathan
-> >   
-> >>
-> >> Changes since v9:
-> >>   - In patch 12 add comments to the code as requested by Daniel Lezcano.
-> >>   - Change copyright comment in qcom-spmi-adc-tm5.c to clearly note
-> >>     driver history.
-> >>
-> >> Changes since v8:
-> >>   - Simplified qcom_vadc_map_voltage_temp() code by removing ascending
-> >>     tables support
-> >>   - Simplified qcom-vadc-common volt/temp mapping code
-> >>   - Implement suggestions by Matthias Kaehlcke: message formatting,
-> >>     rewrite comments, remove unused variable initialization.
-> >>
-> >> Changes since v7:
-> >>   - Move qcom-vadc-common.h header to include/linux/iio/adc/ dir.
-> >>   - Use explicit sizeof(var) instead of hand-coding 1 when accessing
-> >>     adc-tm registers.
-> >>   - Remove buffer read from adc_tm5_init().
-> >>   - Remove extra on-stack var from adc_tm5_get_temp().
-> >>   - Minor formatting changes as suggested Daniel.
-> >>
-> >> Changes since v6:
-> >>   - Added include <linux/bitfield.h> as noted by Jishnu Prakash.
-> >>
-> >> Changes since v5:
-> >>   - Reworked DT bindings:
-> >>     * Removed qcom,adc-channel, instead it is parsed from io-channels
-> >>     * Renamed qcom,hw-settle-time to include -us suffix
-> >>   - Re-added monitor enabling which got lost during refactored. Noted by
-> >>     Jishnu Prakash.
-> >>   - Use threaded IRQ handler as susggested by Jishnu.
-> >>
-> >> Changes since v4:
-> >>   - Added kernel-doc comments to ADC-TM structures
-> >>   - Used several sizeof(buf) instead of hand-conding register size
-> >>
-> >> Changes since v3:
-> >>   - Fix DT description to spell "thermal monitoring" instead of just TM
-> >>   - Fix warnings in DT example
-> >>   - Add EXPORT_SYMBOL_GPL(of_iio_channel_get_by_name)
-> >>   - Fixed whitespace chanes in qcom-vadc-common.c
-> >>   - Removed error message if IIO chanel get returns -EPROBE_DEFER
-> >>
-> >> Changes since v2:
-> >>   - IIO: export of_iio_channel_get_by_name() function
-> >>   - dt-bindings: move individual io-channels to each thermal monitoring
-> >>     channel rather than listing them all in device node
-> >>   - added fallback defaults to of_device_get_match_data calls in
-> >>     qcom-spmi-adc5 and qcom-spmi-adc-tm5 drivers
-> >>   - minor typo fixes
-> >>
-> >> Changes since v1:
-> >>   - Introduce fixp_linear_interpolate() by Craig Tatlor
-> >>   - Lots of syntax/whitespace changes
-> >>   - Cleaned up register definitions per Jonathan's suggestion
-> >>   - Implemented most of the suggestions from Bjorn's and Jonathan's
-> >>     review
-> >>
-> >>  
-> >   
+>> otherwise no need as they would be duplicated.
 > 
+> I am not sure why they would be duplicated in your case. I though
+> device_opps_add() is responsible for dynamically adding the OPPs here.
+
+In case of per-cpu + opp-shared, with the "previous order" we would try to add
+opps to a device which already has them, in fact attempting to add duplicates.
+Nothing wrong with it, but a lot of warnings are thrown.
+
+> 
+>>> And we don't check the return value of
+>>> the below call anymore, moreover we have to call it twice now.
+>>
+>> This second get_opp_count is required such that we register em with the correct
+>> opp number after having added them. Without this the opp_count would not be correct.
+> 
+> What if the count is still 0 ? What about deferred probe we were doing earlier ?
+
+My assumption is to rely on the two above to fail if there was something wrong.
+For the deferred probe, I am not sure it is still a useful case to have, but I
+will let Sudeep have his view also on this.
+
 > 
 
+Thanks Viresh, hope it's a bit more clear now.
+Nicola
