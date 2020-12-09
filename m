@@ -2,139 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CD02D44F2
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 15:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 877242D4537
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 16:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730281AbgLIO73 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 09:59:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52028 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732445AbgLIO7T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 09:59:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607525872;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hyvmSp+tD6zrj4k830kMV7NEPRw1NJvTV+d5JmE7hP4=;
-        b=XmTKLTTFZU2IjC2YRbwDSSTim39pZ/pI74OZ/X/t0JwmhhDD+N1NDnXUP8n1bNb5/wJ6Zp
-        m2OqHaY1rp3VwoITvOTpBg4FuM1ObxV86FXL2hLyyAKeQK4pC3cC6TpsESStokLNTqhw6l
-        GaXj6RkOBv07Qp4wTU/xhk9baFiE8P8=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-139-Sb3T-6e5NGyMp7ChHWiT8g-1; Wed, 09 Dec 2020 09:57:50 -0500
-X-MC-Unique: Sb3T-6e5NGyMp7ChHWiT8g-1
-Received: by mail-ed1-f72.google.com with SMTP id g8so1012336edm.7
-        for <linux-pm@vger.kernel.org>; Wed, 09 Dec 2020 06:57:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hyvmSp+tD6zrj4k830kMV7NEPRw1NJvTV+d5JmE7hP4=;
-        b=nPzGZ6Eju9aEVlgOtgkW1B0UMwoELJEPKeYPrPLP7LTM/zMMy+hGZns0f1fAsmCjYu
-         CGQrM5+sJETF7uRMxHStak/kiu0R269vCx++JVKfh6/z8zOHZ3OuqHA+GqDjtES1yniJ
-         1+pQvTnl2n5WB4DIfPaVc18k+68vg/whLMZsRoT13uAiP4NMM3CKA0YOQYUat8iMmV3Y
-         rdqRZOX1tr0/JeXFqpucArqJWTS4yHWhUBXlbxa7iCQUTPUlTKL0Spkrm3G3gi6YSfCl
-         tDf0xtj2BmRO/n2sSDaGfM+WnI+T8iFgs5BDRSXxtmrnSGub5dKG4G+uJp1Zs7iB9zMi
-         iLqQ==
-X-Gm-Message-State: AOAM531bpWJZHa9mpnU0B68oWB1ujjk6e10tM6Yznb3naCO7dSKWe8lv
-        zq+XS/nlK125hrOvmPAgcp+VWs4zkeopRlUCo2SX5mHFBwHpl3xVJJjYmrb8cBl3eYmB2QXbHhQ
-        2GeDXW6Ib+7DzfI6his4=
-X-Received: by 2002:a17:906:604e:: with SMTP id p14mr2460555ejj.515.1607525869017;
-        Wed, 09 Dec 2020 06:57:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzttPIEq+aOcToeLeA6nbckf6Na4GwXDTNW8LKuIolx74j0K+upRkpOyKN7VeMgp9c2rMYbqQ==
-X-Received: by 2002:a17:906:604e:: with SMTP id p14mr2460550ejj.515.1607525868859;
-        Wed, 09 Dec 2020 06:57:48 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id k2sm1742353ejp.6.2020.12.09.06.57.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Dec 2020 06:57:48 -0800 (PST)
-Subject: Re: [PATCH] power: supply: axp288_fuel_gauge: Add the ECS EF20EA to
- the blacklist
-To:     Chris Chiu <chiu@endlessos.org>, sre@kernel.org, wens@csie.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@endlessos.org
-References: <20201209045057.9509-1-chiu@endlessos.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <d58351aa-14a9-2ea7-ee8b-946ba28a782e@redhat.com>
-Date:   Wed, 9 Dec 2020 15:57:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726119AbgLIPTY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 10:19:24 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:31817 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728167AbgLIPTW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 10:19:22 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1607527136; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=nk2LdvOUPXoWK1/EktFM/brqUSemntfMxA6Fzq9tCOE=; b=t+TlxJ2KS4Le7RqJNoqAb+R57b3LWvMH0acnV7Kkikt2QiupseGDgNyWD1jLwIIxRk63imms
+ Iyfl5eryxe7YVQgwcjMYkJVWrTyYkK9M1VCQQ2oYrz9Hoda2JW6AWKTsHczc+zcoys/gXLo+
+ uEXlXRZTfRIwEtCoK2fVkEXgPJQ=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 5fd0eabed5b4c78a8ff87eea (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 09 Dec 2020 15:18:22
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8E2C5C43462; Wed,  9 Dec 2020 15:18:22 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DA69FC433C6;
+        Wed,  9 Dec 2020 15:18:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DA69FC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+Date:   Wed, 9 Dec 2020 08:18:19 -0700
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v6 0/3] Better domain idle from device wakeup patterns
+Message-ID: <X9Dqu1QjURikO3jM@codeaurora.org>
+References: <20201130225039.15981-1-ilina@codeaurora.org>
+ <CAJZ5v0g+nK+jV+Gy+BKEALRtsXDK0HnDbz07Nv3KPK5L3V3OKg@mail.gmail.com>
+ <CAPDyKFpD6L0r=YBEEjfjc85gx_7p5cVw20fwUxecpQp2dNU-0g@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201209045057.9509-1-chiu@endlessos.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpD6L0r=YBEEjfjc85gx_7p5cVw20fwUxecpQp2dNU-0g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Wed, Dec 09 2020 at 03:37 -0700, Ulf Hansson wrote:
+>On Tue, 8 Dec 2020 at 18:26, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Mon, Nov 30, 2020 at 11:51 PM Lina Iyer <ilina@codeaurora.org> wrote:
+>> >
+>> > Hi,
+>> >
+>> > The v5[1] of the series brought out some interesting discussions. The
+>> > most important being is it worth adding the additional expense to all PM
+>> > domains even if no wakeup pattern is available. It seems like
+>> > maintaining a domain specific flag that the governor could check is a
+>> > generic enough option. That should disable additional overhead for
+>> > domains that do not need this feature.
+>> >
+>> > Ulf suggested that we could allow wakeups only if any of the domain idle
+>> > state specifies a residency. However, we don't want to check for next
+>> > wakeup everytime the domain enters idle just because the domain
+>> > specifies an idle state with residency. This is also not desired.
+>> >
+>> > Also, if the domain checks for next wakeup, should the parent domains of
+>> > the domain also check for next wakeup? And when do we set that up? These
+>> > are questions that we don't know the answers yet. So, let's enable the
+>> > domain governor only if the domain sets up the flag or when the device
+>> > in the domain specifies the next wakeup.
+>> >
+>> > The previous post of the series explaining why this is a useful feature
+>> > is v5[1]. Please let me know what you think.
+>>
+>> Ulf had comments on the previous versions, so waiting for him to
+>> respond here, thanks!
+>
+>Yes, I will have a look, but please allow me some more time - it's a
+>busy period for me.
+>
+Thank you.
 
-On 12/9/20 5:50 AM, Chris Chiu wrote:
-> The ECS EF20EA laptop ships an AXP288 but it is actually using a
-> different, separate FG chip for AC and battery monitoring. On this
-> laptop we need to keep using the regular ACPI driver and disable the
-> AXP288 FG to avoid reporting two batteries to userspace.
-> 
-> Signed-off-by: Chris Chiu <chiu@endlessos.org>
-> ---
->  drivers/power/supply/axp288_fuel_gauge.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-> index 148eb8105803..a15c322c79ea 100644
-> --- a/drivers/power/supply/axp288_fuel_gauge.c
-> +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> @@ -739,6 +739,12 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
->  			DMI_MATCH(DMI_PRODUCT_NAME, "Z83-4"),
->  		}
->  	},
-> +	{
-> +		/* ECS EF20 */
-> +		.matches = {
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "EF20"),
-> +		},
-> +	},
->  	{}
->  };
-
-The axp288_fuel_gauge_blacklist already has the following entry:
-
-        {
-                /* ECS EF20EA */
-                .matches = {
-                        DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
-                },
-        },
-
-So is this real entry really necessary? The existing entry
-matches the quirk for this in drivers/acpi/battery.c:
-
-        {
-                /* ECS EF20EA, AXP288 PMIC but uses separate fuel-gauge */
-                .callback = battery_do_not_check_pmic_quirk,
-                .matches = {
-                        DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
-                },
-        },
-
-And the one in drivers/acpi/ac.c:
-
-        {
-                /* ECS EF20EA, AXP288 PMIC but uses separate fuel-gauge */
-                .callback = ac_do_not_check_pmic_quirk,
-                .matches = {
-                        DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
-                },
-        },
-
-So I don't think that this patch is necessary...
-
-Regards,
-
-Hans
-
-
+-- Lina
