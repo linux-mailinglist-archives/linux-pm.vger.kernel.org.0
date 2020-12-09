@@ -2,89 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B0C2D3EFE
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 10:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898122D3F6E
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 11:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbgLIJmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 04:42:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:60134 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726044AbgLIJmP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Dec 2020 04:42:15 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C3F21FB;
-        Wed,  9 Dec 2020 01:41:29 -0800 (PST)
-Received: from bogus (unknown [10.57.54.168])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B1E13F718;
-        Wed,  9 Dec 2020 01:41:26 -0800 (PST)
-Date:   Wed, 9 Dec 2020 09:41:21 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        rjw@rjwysocki.net, vireshk@kernel.org, robh+dt@kernel.org,
-        sboyd@kernel.org, nm@ti.com, daniel.lezcano@linaro.org,
-        morten.rasmussen@arm.com, chris.redpath@arm.com
-Subject: Re: [PATCH v4 3/4] scmi-cpufreq: get opp_shared_cpus from opp-v2 for
- EM
-Message-ID: <20201209094121.b6jloegdzpmcphqz@bogus>
-References: <20201202172356.10508-1-nicola.mazzucato@arm.com>
- <20201202172356.10508-4-nicola.mazzucato@arm.com>
- <20201208055053.kggxw26kxtnpneua@vireshk-i7>
- <0e4d3134-f9b2-31fa-b454-fb30265a80b5@arm.com>
- <20201208072611.ptsqupv4y2wybs6p@vireshk-i7>
- <20201208112008.niesjrunxq2jz3kt@bogus>
- <20201209054502.ajomw6glcxx5hue2@vireshk-i7>
+        id S1729637AbgLIKBc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 05:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729523AbgLIKBc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 05:01:32 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3F3C0613D6
+        for <linux-pm@vger.kernel.org>; Wed,  9 Dec 2020 02:00:51 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id q8so1524603ljc.12
+        for <linux-pm@vger.kernel.org>; Wed, 09 Dec 2020 02:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+jt+5a6oYg4MnhhkTdaCwz0B6cI+BkiaAfkU1vZvtSs=;
+        b=pbaAjZY6oqqN3zF6UVsJUNNAQmkKyA1In/7axbp1U/213/TFi0ybPgLenmKvlRKluj
+         p7Fp4CICHTs3Jod08nBkdhV9bVbIvZpjAVDEWsAiWn+M41DWaiX04oyA46tInyZ5hjfO
+         vRhbHc2/YENwYRALTIPVPLyhHsaMkQjMuAyzIxlrZmmzvV+4Pg6sIF0g0Gi2IbSaDe0j
+         KnaEN0npIwjV0l5LP19J2wIU3TGhm3Pc4jz2LIM1EqWlRUphK6xMaOjZIpo7obiuzhsf
+         rCteEQUMJIq0tEc4/mKMuX1N61EBOn0BkFvHS46hmJojP0ROPlmzG12sH2XcjA6NE6no
+         6riw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+jt+5a6oYg4MnhhkTdaCwz0B6cI+BkiaAfkU1vZvtSs=;
+        b=XJKglB1/9djxrLN6CQP1Dbg3YjQgh5oPMdU5wZ9OvwBvGPWqGp2J2o1DEksXyojc7f
+         VVlqc7bGeDKC39UdKMBsVaqB+wIHJIQcamCFNXuK6gvumVPjg4A/v5r7OiWZSRs7DM5l
+         WdU6mBmpgDPRwYSTPsuJjVSGLfGjB1w7p8MeYWHgzGBbzC6Ipel0OJ0N+wIFcXKlTtyb
+         4hGhOtqyciMhaFkmChmWa8pKyZe+INhIjBZHuEL259Jrkjwqinr2nNZov3fkkWqy6OnH
+         evh+Qw0Te2YrzvMIy5dsAgW1Iv5e6srer3AP3Nozd1+175XV986QlfYmAS2mXDxy3lAT
+         5rRQ==
+X-Gm-Message-State: AOAM533izLl9XjZWT0WYjVwZ1M6Gu5FBzfEBQX8iYypRLjhTiLIAw1XA
+        osXPIVksSQu4Jj/yHj7HjytAO+u1SCCwD6erkdFryfLgNYlEiQ==
+X-Google-Smtp-Source: ABdhPJzpScFe7jIXruafDpiNN+uih56UR1feIixVQFBcYAdxyavs7O2gudReVeE/R0xHcK6NnCdqq5a2pFP+2WOmU/E=
+X-Received: by 2002:a2e:910f:: with SMTP id m15mr719663ljg.467.1607508050158;
+ Wed, 09 Dec 2020 02:00:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201209054502.ajomw6glcxx5hue2@vireshk-i7>
-User-Agent: NeoMutt/20171215
+References: <X8pNAJq2LdPJ29w9@mwanda>
+In-Reply-To: <X8pNAJq2LdPJ29w9@mwanda>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Dec 2020 11:00:39 +0100
+Message-ID: <CACRpkdb==Xr5Ywm=BxESuwtpM45WLhDOQMBeW8qSa=PyBJR2pQ@mail.gmail.com>
+Subject: Re: [bug report] power: supply: generic-adc-battery: Use GPIO descriptors
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 11:15:02AM +0530, Viresh Kumar wrote:
-> On 08-12-20, 11:20, Sudeep Holla wrote:
-> > It is because of per-CPU vs per domain drama here. Imagine a system with
-> > 4 CPUs which the firmware puts in individual domains while they all are
-> > in the same perf domain and hence OPP is marked shared in DT.
-> >
-> > Since this probe gets called for all the cpus, we need to skip adding
-> > OPPs for the last 3(add only for 1st one and mark others as shared).
->
-> Okay and this wasn't happening before this series because the firmware
-> was only returning the current CPU from scmi_get_sharing_cpus() ?
->
-> Is this driver also used for the cases where we have multiple CPUs in
-> a policy ? Otherwise we won't be required to call
-> dev_pm_opp_set_sharing_cpus().
->
-> So I assume that we want to support both the cases here ?
->
+On Fri, Dec 4, 2020 at 3:53 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 
-Yes indeed, completely depends on what granularity firmware provides the
-performance control. It could be individual CPUs, could be pair of CPUs
-(or all the threads in the core) or subset of CPUs in the performance
-domain. The subset could be full set.
-
-> > If we attempt to add OPPs on second cpu probe, it *will* shout as duplicate
-> > OPP as we would have already marked it as shared table with the first cpu.
-> > Am I missing anything ? I suggested this as Nicola saw OPP duplicate
-> > warnings when he was hacking up this patch.
+> The patch b0327ffb133f: "power: supply: generic-adc-battery: Use GPIO
+> descriptors" from Oct 30, 2020, leads to the following static checker
+> warning:
 >
-> The common stuff (for all the CPUs) is better moved to probe() in this
-> case, instead of the ->init() callback. Otherwise it will always be
-> messy. You can initialize the OPP and cpufreq tables in probe()
-> itself, save the pointer somewhere and then just use it here in
-> ->init().
+>         drivers/power/supply/generic-adc-battery.c:97 gab_charge_finished()
+>         warn: signedness bug returning '(-4095)'
 >
-> Also do EM registration from there.
+> drivers/power/supply/generic-adc-battery.c
+>     93  static bool gab_charge_finished(struct gab *adc_bat)
+>     94  {
+>     95          if (!adc_bat->charge_finished)
+>     96                  return false;
+>     97          return gpiod_get_value(adc_bat->charge_finished);
 >
+> The gpiod_get_value() can return negative error codes so it's not
+> necessarily clear if that should translate to a true as it does now or
+> to a false...
 
-Makes sense.
+It *can* do that but in 9999 cases out of 10000 it does not. Mostly
+because it just boils down to readin a register and masking a bit
+which does not fail. This only happens in the rare circumstance that
+the GPIO is on some slow bus that lost contact with the bridged
+device (such as an I2C or SPI chip).
 
---
-Regards,
-Sudeep
+I agree it is not a perfect (in the mathematical sense) API but
+in most cases the odd case of this call returning negative is
+ignored and there are thousands of in-kernel users.
+
+If this is a real problem I would rather turn the call into a bool
+and ignore errors on the few that care to test for them than trying
+to augment all sites using this call to handle negative
+return codes.
+
+Yours,
+Linus Walleij
