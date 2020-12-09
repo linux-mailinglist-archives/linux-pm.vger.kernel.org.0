@@ -2,155 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C5C2D4614
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 16:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC6F2D467F
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 17:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbgLIP42 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 10:56:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:36524 "EHLO foss.arm.com"
+        id S1730700AbgLIQM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 11:12:27 -0500
+Received: from mga05.intel.com ([192.55.52.43]:30298 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729694AbgLIP4W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Dec 2020 10:56:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 071471FB;
-        Wed,  9 Dec 2020 07:55:36 -0800 (PST)
-Received: from [10.57.24.55] (unknown [10.57.24.55])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C20013F68F;
-        Wed,  9 Dec 2020 07:55:34 -0800 (PST)
-Subject: Re: [PATCH] thermal/core: Emit a warning if the thermal zone is
- updated without ops
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, Thara Gopinath <thara.gopinath@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201207190530.30334-1-daniel.lezcano@linaro.org>
- <2b8ce280-cb91-fb23-d19a-00dcee2a3e5a@arm.com>
- <81e25f27-344e-f6c2-5f08-68068348f7ba@linaro.org>
- <dd5f9f97-ab30-5bb0-1211-66d211035968@arm.com>
- <7dff767d-3089-584e-f77d-33018faa38ea@linaro.org>
- <90989e59-f880-93df-7fbf-74c26fa8258f@arm.com>
- <652ae54b-45aa-eef2-bf96-b4eae941ef04@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <aa40f440-7b1e-1220-1719-e396ea7390ae@arm.com>
-Date:   Wed, 9 Dec 2020 15:55:33 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730081AbgLIQM0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 9 Dec 2020 11:12:26 -0500
+IronPort-SDR: ZUZhSwBj58owCjspooXt/wBA5BfbA/5Zo7jzDbCCRD8yuKf/8x1qmLi6qT7w9B03Y87UMONLbs
+ SGKdj5DdtIPg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="258810056"
+X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
+   d="scan'208";a="258810056"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 08:10:36 -0800
+IronPort-SDR: ww9NHfQf5V6acgeqJE3kUaCu4k84aFN82QRBbyDjam1rF/czIY8BAH/SfQzx1nOkv5Rh00zvKG
+ AvFvLRlWOBhQ==
+X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
+   d="scan'208";a="542442728"
+Received: from jtholmen-mobl2.amr.corp.intel.com ([10.212.122.32])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 08:10:35 -0800
+Message-ID: <5dc6ca9bf2bcb887ca21041bad60f5e9c461df88.camel@linux.intel.com>
+Subject: Re: [PATCH 1/3] thermal: core: Add indication for userspace usage
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>, amitk@kernel.org,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Wed, 09 Dec 2020 08:10:35 -0800
+In-Reply-To: <4767b493-fa24-e294-66df-3989b72bfb01@linaro.org>
+References: <20201128175450.12456-1-kai.heng.feng@canonical.com>
+         <004fe225-1009-06d8-b297-c03a4c67550f@linaro.org>
+         <860126B8-1152-4EE3-B15E-B4E45EFE879F@canonical.com>
+         <fc67ad02826fb3adfd8457e1a0baf234a8fa3fce.camel@linux.intel.com>
+         <34348B03-5E27-49A0-A704-6332BAC00758@canonical.com>
+         <585bb5d3ee5bea063795682108576c3464ba72b6.camel@linux.intel.com>
+         <D53454A1-5ED0-4B4D-B22F-8663C9970ECD@canonical.com>
+         <f863f2e1e322a8819c660f5eefbbc4acf7522990.camel@linux.intel.com>
+         <FCFE1F21-2EC6-4D3A-8B2E-32C653816D58@canonical.com>
+         <4767b493-fa24-e294-66df-3989b72bfb01@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-In-Reply-To: <652ae54b-45aa-eef2-bf96-b4eae941ef04@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 12/9/20 12:20 PM, Daniel Lezcano wrote:
-> On 09/12/2020 11:41, Lukasz Luba wrote:
->>
->>
->> On 12/8/20 3:19 PM, Daniel Lezcano wrote:
->>> On 08/12/2020 15:37, Lukasz Luba wrote:
->>>>
->>>>
->>>> On 12/8/20 1:51 PM, Daniel Lezcano wrote:
->>>>>
->>>>> Hi Lukasz,
->>>>>
->>>>> On 08/12/2020 10:36, Lukasz Luba wrote:
->>>>>> Hi Daniel,
->>>>>
->>>>> [ ... ]
->>>>>
->>>>>>>        static void thermal_zone_device_init(struct thermal_zone_device
->>>>>>> *tz)
->>>>>>> @@ -553,11 +555,9 @@ void thermal_zone_device_update(struct
->>>>>>> thermal_zone_device *tz,
->>>>>>>          if (atomic_read(&in_suspend))
->>>>>>>              return;
->>>>>>>      -    if (!tz->ops->get_temp)
->>>>>>> +    if (update_temperature(tz))
->>>>>>>              return;
->>>>>>>      -    update_temperature(tz);
->>>>>>> -
->>>>>>
->>>>>> I think the patch does a bit more. Previously we continued running the
->>>>>> code below even when the thermal_zone_get_temp() returned an error
->>>>>> (due
->>>>>> to various reasons). Now we stop and probably would not schedule next
->>>>>> polling, not calling:
->>>>>> handle_thermal_trip() and monitor_thermal_zone()
->>>>>
->>>>> I agree there is a change in the behavior.
->>>>>
->>>>>> I would left update_temperature(tz) as it was and not check the
->>>>>> return.
->>>>>> The function thermal_zone_get_temp() can protect itself from missing
->>>>>> tz->ops->get_temp(), so we should be safe.
->>>>>>
->>>>>> What do you think?
->>>>>
->>>>> Does it make sense to handle the trip point if we are unable to read
->>>>> the
->>>>> temperature?
->>>>>
->>>>> The lines following the update_temperature() are:
->>>>>
->>>>>     - thermal_zone_set_trips() which needs a correct tz->temperature
->>>>>
->>>>>     - handle_thermal_trip() which needs a correct tz->temperature to
->>>>> compare with
->>>>>
->>>>>     - monitor_thermal_zone() which needs a consistent tz->passive.
->>>>> This one
->>>>> is updated by the governor which is in an inconsistent state because
->>>>> the
->>>>> temperature is not updated.
->>>>>
->>>>> The problem I see here is how the interrupt mode and the polling mode
->>>>> are existing in the same code path.
->>>>>
->>>>> The interrupt mode can call thermal_notify_framework() for critical/hot
->>>>> trip points without being followed by a monitoring. But for the other
->>>>> trip points, the get_temp is needed.
->>>>
->>>> Yes, I agree that we can bail out when there is no .get_temp() callback
->>>> and even not schedule next polling in such case.
->>>> But I am just not sure if we can bail out and not schedule the next
->>>> polling, when there is .get_temp() populated and the driver returned
->>>> an error only at that moment, e.g. indicating some internal temporary,
->>>> issue like send queue full, so such as -EBUSY, or -EAGAIN, etc.
->>>> The thermal_zone_get_temp() would pass the error to update_temperature()
->>>> but we return, losing the next try. We would not check the temperature
->>>> again.
->>>
->>> Hmm, right. I agree with your point.
->>>
->>> What about the following changes:
->>>
->>>    - Add the new APIs:
->>>
->>>      thermal_zone_device_critical(struct thermal_zone_device *tz);
->>>        => emergency poweroff
->>>
->>>      thermal_zone_device_hot(struct thermal_zone_device *tz);
->>>        => userspace notification
->>
->> They look promising, I have to look into the existing code.
->> When they would be called?
+On Wed, 2020-12-09 at 10:30 +0100, Daniel Lezcano wrote:
+> On 07/12/2020 06:36, Kai-Heng Feng wrote:
+> > 
+> > > On Dec 1, 2020, at 02:39, Srinivas Pandruvada <
+> > > srinivas.pandruvada@linux.intel.com> wrote:
+> > > 
+> > > On Tue, 2020-12-01 at 02:22 +0800, Kai-Heng Feng wrote:
+> > > > > On Dec 1, 2020, at 02:13, Srinivas Pandruvada <
+> > > > > srinivas.pandruvada@linux.intel.com> wrote:
+> > > > 
+> > > > [snipped] 
+> > > > 
+> > > > > > > What about creating an new callback
+> > > > > > > 
+> > > > > > > enum thermal_trip_status {
+> > > > > > > 	THERMAL_TRIP_DISABLED = 0,
+> > > > > > > 	THERMAL_TRIP_ENABLED,
+> > > > > > > };
+> > > > > > > 
+> > > > > > > int get_trip_status(struct thermal_zone_device *, int
+> > > > > > > trip,
+> > > > > > > enum
+> > > > > > > thermal_trip_status *state);
+> > > > > > > 
+> > > > > > > Then in 
+> > > > > > > static void handle_thermal_trip(struct
+> > > > > > > thermal_zone_device *tz,
+> > > > > > > int
+> > > > > > > trip)
+> > > > > > > {
+> > > > > > > 
+> > > > > > > /* before tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> > > > > > > */
+> > > > > > > if (tz->ops->get_trip_status) {
+> > > > > > > 	enum thermal_trip_status *status;
+> > > > > > > 
+> > > > > > > 	if (!tz->ops->get_trip_status(tz, trip, &status)) {
+> > > > > > > 		if (status == THERMAL_TRIP_DISABLED)
+> > > > > > > 			return;	
+> > > > > > > 	}
+> > > > > > > }
+> > > > > > > ...
+> > > > > > > ...
+> > > > > > > 
+> > > > > > > }
+> > > > > > > 
+> > > > > > > 
+> > > > > > > This callback will help the cases:
+> > > > > > > - Allows drivers to selectively disable certain trips
+> > > > > > > during
+> > > > > > > init
+> > > > > > > state
+> > > > > > > or system resume where there can be spikes or always.
+> > > > > > > int340x
+> > > > > > > drivers
+> > > > > > > can disable always.
+> > > > > > 
+> > > > > > This sounds really great. This is indeed can happen on
+> > > > > > system
+> > > > > > resume,
+> > > > > > before userspace process thaw.
+> > > > > > 
+> > > > > > > - Still give options for drivers to handle critical trip
+> > > > > > > even
+> > > > > > > if
+> > > > > > > they
+> > > > > > > are bound to user space governors. User space process may
+> > > > > > > be
+> > > > > > > dead,
+> > > > > > > so
+> > > > > > > still allow kernel to process graceful shutdown
+> > > > > > 
+> > > > > > To make the scenario happen, do we need a new sysfs to let
+> > > > > > usespace
+> > > > > > enable it with THERMAL_TRIP_ENABLED?
+> > > > > This should be drivers call not user space.
+> > > > 
+> > > > Understood. So after thermal_zone_device_register(), the driver
+> > > > can
+> > > > decide to what to return on get_trip_temp().
+> > > get_trip_status()
+> > > 
+> > > > Let me work on a new patch if there's no other concern.
+> > > Better to wait for confirmation from Daniel and others.
+> > 
+> > Daniel,
+> > 
+> > Do you like Srinivas' proposed solution?
+> > 
+> > I hope we can find a solution in upstream kernel soon.
 > 
-> They can be called directly by the driver when there is no get_temp
-> callback instead of calling thermal_zone_device_update, and by the usual
-> code path via handle_critical_trip function.
+> (just trying to figure out the full context)
 > 
-> Also that can solve the issue [1] when registering a device which is
-> already too hot [1] by adding the ops in the thermal zone.
-> 
-> [1] https://lkml.org/lkml/2020/11/28/166
-> 
+> If the device is enumerated outside of a thermal zone, the sensor
+> should
+> not register in the thermal zone no ?
 
+Other trips are fine, so sensor registry is still required for passive
+and active control. We just need to ignore critical trip. These table
+are tested by OEM on Windows, where critical trip doesn't result in
+immediate shutdown.
 
-Thank you for the link. I went through these discussions. Let me add
-some comment below your posted RFC.
+Thanks,
+Srinivas
+
+> 
+> 
+> 
 
