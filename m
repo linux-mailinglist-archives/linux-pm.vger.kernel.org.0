@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB612D4587
+	by mail.lfdr.de (Postfix) with ESMTP id 62F6C2D4586
 	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 16:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgLIPgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 10:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        id S1729377AbgLIPgW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 10:36:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726110AbgLIPgR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 10:36:17 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72632C0617A6
-        for <linux-pm@vger.kernel.org>; Wed,  9 Dec 2020 07:35:00 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id c1so2197543wrq.6
-        for <linux-pm@vger.kernel.org>; Wed, 09 Dec 2020 07:35:00 -0800 (PST)
+        with ESMTP id S1726526AbgLIPgS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 10:36:18 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266DEC0617B0
+        for <linux-pm@vger.kernel.org>; Wed,  9 Dec 2020 07:35:02 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id k14so2228717wrn.1
+        for <linux-pm@vger.kernel.org>; Wed, 09 Dec 2020 07:35:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yGhkI0Nvl2v1YOr6xjZSuObttiQ410GAIRH2LwhmlJc=;
-        b=HIV7WPtc6ODm6QVuYGg+4MlniUYOUmab4M0+KgvZTziefWPzKbXetKC6+2XxCh/QvQ
-         yFFp9VMJskrFNXe9up7lz2BfTZBEFYIERLOPdASA4UmOnKc0A5GNTUeIyvINYia65JwX
-         Arwx3Yw7nHDTwELwR6HndyRfHZgHrxTBDWrTgXXlxshFmzCgU6qRdiePdIMJgpVvXRY/
-         PXRs7AIaJc1z4PV+2GQmLrr/++ZMZnoYqG3mO+lsvOSM+0N1x7kiuMpoa5HB9o4XzdrB
-         clLbxNpZ6XGOAkwdJwnrqpPcWvVXb6q/tGhBSwLoNhjVt7OrMy95bCc9xMryxswNsUQr
-         /ACw==
+        bh=NyznDPS+potp54SZ8vXhKxNkqaQy2TwObORIS4uz01k=;
+        b=Kf+OH8cEA1M0oMUKxOimRjomrUM1OT3bBuEgBhvosuc/kv6TiUjOoaZOr0Gd+uWX8h
+         YkpSaxUv8tKgAM/4YZy52+gv6PgiEroIFcWq/gvVIW8ogML7LEDM4nEkYlah33VEVNpZ
+         4jnhvrfzxl9gG0cy4uy4mb1rMEIeNhRMaJ5uxbktDyUfDlWdh0dboCGHdf7RdNPL8dpG
+         3Tm1fSlZJ2se6iyovuQDgLXqJKAmV7A3lhrVeokhA+bK6BP4yc1XboHAYwchOpzBcx3D
+         oscTKaAKObz86YxBe6NFsNY6UgN2KcUUwFffQorz+EKHPqIJ0f2aif0wfTgm0ONaWZ1a
+         MEbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=yGhkI0Nvl2v1YOr6xjZSuObttiQ410GAIRH2LwhmlJc=;
-        b=VUrh6NZuyS1OdQgIzj3CIGrTHF9p/JmsOAPUTzRDPkOIb+QTKoFCjP0znCsP6oKT1v
-         2Xnm3HLsfjAshBhDjrkHQrQSBytUXlF2B30qelsCXbMSaV1kfslCEpFLqcHjx5C+KN/9
-         UiOwVI+6iYOcevHP7gWZJMCIlxqDHg4Mwj46iVuR3E47jAuyCxTLwAqVFlykK5BQts5a
-         NW49Sv1Pt+xMynMmJtk10oUw5EqB/V7RGmik2zy2Cc6aR1dNaU9zkDPvI/ZioAks2fDW
-         R/kCMxS5LXLTKSXMFvkf5kj4wY8+doQUKpopix+ETySutmBwNzibPWkX5CmloxMkW8uM
-         mKgA==
-X-Gm-Message-State: AOAM5322+byMUcj3uDGvQ2Vhl1p3uT6OqUbM/0rMd1UDU0LsMljoz0iZ
-        sf22se4URGf1CC0GWicqC4Ifrg==
-X-Google-Smtp-Source: ABdhPJz6gU5xD/gRysIsVm+tHKwkF8lM/5eMp/A7FEeiUsG2WSS7WGfZbSTg6zJL78GM440gEGkUqA==
-X-Received: by 2002:a5d:684b:: with SMTP id o11mr3351145wrw.157.1607528099091;
-        Wed, 09 Dec 2020 07:34:59 -0800 (PST)
+        bh=NyznDPS+potp54SZ8vXhKxNkqaQy2TwObORIS4uz01k=;
+        b=Tp/rOA95+wMCp509iC8QsAs0Y1DCplgx80DuuKRBbWIac0OoEP7v0aruqQGdzSg9qz
+         Yw7ukdvbj640D1hFCo5sPS7cdslpemrnRi9x/gRP1pl9LnGo6qP6CIx3hJ+YubHXVVLq
+         CD//mPCRmZuXHwgHSIj/vBFa3xU6ZvXW8t69/gr5exPrFlCrfNax9+Ep1YvnLDUu/iu7
+         Up54rqNruDp3420uDNrAscosP5wA6xamFTsGaD/k/RkLgnma1gAUwryVye1uCg5jTm/X
+         zcjqysoHtjq2kabhi0b/pEVOqK+0SZJ3Z0EZ/chn1e1SC+J2zlYyAVbq1pJ8JQGDzl8j
+         uetg==
+X-Gm-Message-State: AOAM530VLg8K4IWFkwbPRrn64xlIsCnL2m9Qpu3fwVk+e6FZnZ6OivEN
+        xgj05nauXKtRiIs3Zi3iYZ3MVq0VyzwY3A==
+X-Google-Smtp-Source: ABdhPJz+6pTf/2KSIDYp2SZ71j6nm5XHjV5loSbYfxsAmvSiQ2En++MeKUw+luBaGjPCiTCU8DjxBg==
+X-Received: by 2002:adf:a4cc:: with SMTP id h12mr1039614wrb.391.1607528100738;
+        Wed, 09 Dec 2020 07:35:00 -0800 (PST)
 Received: from localhost.localdomain (lns-bzn-59-82-252-158-132.adsl.proxad.net. [82.252.158.132])
-        by smtp.gmail.com with ESMTPSA id l8sm4208382wmf.35.2020.12.09.07.34.57
+        by smtp.gmail.com with ESMTPSA id l8sm4208382wmf.35.2020.12.09.07.34.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 07:34:58 -0800 (PST)
+        Wed, 09 Dec 2020 07:34:59 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         lukasz.luba@arm.com, srinivas.pandruvada@linux.intel.com,
         kai.heng.feng@canonical.com
-Subject: [PATCH RFC 3/4] thermal/drivers/acpi: Use hot and critical ops
-Date:   Wed,  9 Dec 2020 16:34:39 +0100
-Message-Id: <20201209153440.27643-3-daniel.lezcano@linaro.org>
+Subject: [PATCH RFC 4/4] thermal/core: Remove notify ops
+Date:   Wed,  9 Dec 2020 16:34:40 +0100
+Message-Id: <20201209153440.27643-4-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201209153440.27643-1-daniel.lezcano@linaro.org>
 References: <20201209153440.27643-1-daniel.lezcano@linaro.org>
@@ -61,69 +61,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The acpi driver wants to do a netlink notification in case of a hot or
-critical trip point. Implement the corresponding ops to be used for
-the thermal zone and use them instead of the notify ops.
+With the remove of the notify user in a previous patch, the ops is no
+longer needed, remove it.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/acpi/thermal.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ drivers/thermal/thermal_core.c | 3 ---
+ include/linux/thermal.h        | 2 --
+ 2 files changed, 5 deletions(-)
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 12c0ece746f0..b5e4bc9e3282 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -677,27 +677,24 @@ static int thermal_get_trend(struct thermal_zone_device *thermal,
- 	return 0;
- }
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 0366f3f076cc..8a47369f0432 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -406,9 +406,6 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
  
+ 	trace_thermal_zone_trip(tz, trip, trip_type);
+ 
+-	if (tz->ops->notify)
+-		tz->ops->notify(tz, trip, trip_type);
 -
--static int thermal_notify(struct thermal_zone_device *thermal, int trip,
--			   enum thermal_trip_type trip_type)
-+static void acpi_thermal_zone_device_hot(struct thermal_zone_device *thermal)
- {
--	u8 type = 0;
- 	struct acpi_thermal *tz = thermal->devdata;
- 
--	if (trip_type == THERMAL_TRIP_CRITICAL)
--		type = ACPI_THERMAL_NOTIFY_CRITICAL;
--	else if (trip_type == THERMAL_TRIP_HOT)
--		type = ACPI_THERMAL_NOTIFY_HOT;
--	else
--		return 0;
--
- 	acpi_bus_generate_netlink_event(tz->device->pnp.device_class,
--					dev_name(&tz->device->dev), type, 1);
-+					dev_name(&tz->device->dev),
-+					ACPI_THERMAL_NOTIFY_HOT, 1);
-+}
- 
--	if (trip_type == THERMAL_TRIP_CRITICAL && nocrt)
--		return 1;
-+static void acpi_thermal_zone_device_critical(struct thermal_zone_device *thermal)
-+{
-+	struct acpi_thermal *tz = thermal->devdata;
- 
--	return 0;
-+	acpi_bus_generate_netlink_event(tz->device->pnp.device_class,
-+					dev_name(&tz->device->dev),
-+					ACPI_THERMAL_NOTIFY_CRITICAL, 1);
-+
-+	thermal_zone_device_critical(thermal);
- }
- 
- static int acpi_thermal_cooling_device_cb(struct thermal_zone_device *thermal,
-@@ -812,7 +809,8 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
- 	.get_trip_temp = thermal_get_trip_temp,
- 	.get_crit_temp = thermal_get_crit_temp,
- 	.get_trend = thermal_get_trend,
--	.notify = thermal_notify,
-+	.hot = acpi_thermal_zone_device_hot,
-+	.critical = acpi_thermal_zone_device_critical,
+ 	if (trip_type == THERMAL_TRIP_HOT && tz->ops->hot)
+ 		tz->ops->hot(tz);
+ 	else if (trip_type == THERMAL_TRIP_CRITICAL)
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 125c8a4d52e6..7e051b4cf715 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -77,8 +77,6 @@ struct thermal_zone_device_ops {
+ 	int (*set_emul_temp) (struct thermal_zone_device *, int);
+ 	int (*get_trend) (struct thermal_zone_device *, int,
+ 			  enum thermal_trend *);
+-	int (*notify) (struct thermal_zone_device *, int,
+-		       enum thermal_trip_type);
+ 	void (*hot)(struct thermal_zone_device *);
+ 	void (*critical)(struct thermal_zone_device *);
  };
- 
- static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
 -- 
 2.17.1
 
