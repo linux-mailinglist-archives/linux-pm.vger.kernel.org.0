@@ -2,87 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D574B2D3E2D
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 10:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9406F2D3E6E
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 10:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727536AbgLIJFj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 04:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728365AbgLIJFg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 04:05:36 -0500
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA8EC0613D6
-        for <linux-pm@vger.kernel.org>; Wed,  9 Dec 2020 01:04:56 -0800 (PST)
-Received: by mail-qt1-x842.google.com with SMTP id f14so422125qto.12
-        for <linux-pm@vger.kernel.org>; Wed, 09 Dec 2020 01:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=O5Au1r0JB92szpdfLXxfIJFgMxDBXlqcxXRXrgoKoak=;
-        b=hXPxEy1Fd4ytFb8I3vUcyDQOwT5UU2UR11PuxEkEEld6y851jD8189CTdjN21qIp9G
-         /VcxJUSv1jYly8MwTikVorDbJ5qbwAu48bUyv+Ha0LQGbSx2GTklHlo53qOqTNyTyCqj
-         O/OF9o0aoopEUArxO+OS1k3CES4m5JW/lZJqiUSVkP4tFRrW1Z8XrjFdmdFr9V/plQL0
-         QwLe9qiaN2UL3MF8Yq7a2HaWnqRMTeA04Mleu1bTDPghE7uIfUcRhHvkiy2y/K3KWEtv
-         +3TdyMCuOO6aEwQIeemTMqO0rXw8DCwlGMfnwU0WTg5Gqc9XPY2BLBSqISgSuu7ZxO5q
-         ivwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=O5Au1r0JB92szpdfLXxfIJFgMxDBXlqcxXRXrgoKoak=;
-        b=cLcc+VAl2dLufFPtDCeWUjP7dRCc63jB3mkglAAlp5+J1OAiKfDnGoRbVDgTo8lNbA
-         wtAmouy6wlBdCrUtuPeGUPam40lddYTffnjQXnys5QBZgZOX5Bqe8M16d6MJI3wHOwbI
-         H9kKMIWOTJb9WVPII0f7mQaTi17Sky3lX0oTllGe8Evlf5TeQPzp2oGifxR36S0Z20ax
-         TCQ6v1k8ET9V1q42nBgRPohODUAPl91hcKNJvLt3T+yOwD+DMwMx3uxTt1hRZtULMLwk
-         M8MIaASLfyhNx/tthj2zDu33qMP/gaRNZOYyrt62lbgKxzki2oX9/YNgIeYmTZYt7uay
-         2Hsw==
-X-Gm-Message-State: AOAM533TmQ0zDFDwsOLnQIry4oAlpX/zai/lpCTdan5YJhG1l0kalqe4
-        ZsJgLruNwB+Iufh8QPzEBc3De2qLMN04wh08J6g=
-X-Google-Smtp-Source: ABdhPJwajAEZmym9kB9zCDq2Lxpok109FH0Yy6X0oi5mKO+3t8VV4PKowuSSBDm1assnE31ISQKI3+aGiq9lFHwQHCY=
-X-Received: by 2002:ac8:120d:: with SMTP id x13mr2069810qti.141.1607504695881;
- Wed, 09 Dec 2020 01:04:55 -0800 (PST)
+        id S1727505AbgLIJTU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 04:19:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:59866 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728916AbgLIJTS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 9 Dec 2020 04:19:18 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE5AF1FB;
+        Wed,  9 Dec 2020 01:18:31 -0800 (PST)
+Received: from [10.57.54.135] (unknown [10.57.54.135])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF69D3F718;
+        Wed,  9 Dec 2020 01:18:29 -0800 (PST)
+Subject: Re: [PATCH v4 3/4] scmi-cpufreq: get opp_shared_cpus from opp-v2 for
+ EM
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        rjw@rjwysocki.net, vireshk@kernel.org, robh+dt@kernel.org,
+        sboyd@kernel.org, nm@ti.com, daniel.lezcano@linaro.org,
+        morten.rasmussen@arm.com, chris.redpath@arm.com
+References: <20201202172356.10508-1-nicola.mazzucato@arm.com>
+ <20201202172356.10508-4-nicola.mazzucato@arm.com>
+ <20201208055053.kggxw26kxtnpneua@vireshk-i7>
+ <0e4d3134-f9b2-31fa-b454-fb30265a80b5@arm.com>
+ <20201208072611.ptsqupv4y2wybs6p@vireshk-i7>
+ <20201208112008.niesjrunxq2jz3kt@bogus>
+ <20201209054502.ajomw6glcxx5hue2@vireshk-i7>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <a70cfb32-1a5f-d12f-f466-321d60e58204@arm.com>
+Date:   Wed, 9 Dec 2020 09:20:33 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Sender: ifeanyiomaka1@gmail.com
-Received: by 2002:aed:3bee:0:0:0:0:0 with HTTP; Wed, 9 Dec 2020 01:04:55 -0800 (PST)
-From:   Donna Louise <donnamcinneslouise@gmail.com>
-Date:   Tue, 8 Dec 2020 21:04:55 -1200
-X-Google-Sender-Auth: AMn-JQmP9mRVThnd0pnfH6zuONY
-Message-ID: <CAO-KV1-kFgduN=ykFqcUgcOCqXZ9d4R+hiyR-5dFzpo3uMtuVQ@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201209054502.ajomw6glcxx5hue2@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello My Dear,
+Hi both,
 
- I am sending the same message to you. My names are Mrs. Donna Louise
-McInnes, a widow diagnosed with brain tumor disease which has gotten
-to a very bad stage, Please I want you to understand the most
-important reason why I am contacting you through this medium is
-because I need your sincerity and ability to carry out this
-transaction and fulfill my final wish in implementing the charitable
-investment project in your country as it requires absolute trust and
-devotion without any failure, which i believe that you will not expose
-this to anyone or betray this trust and confident that I am about to
-entrust on you for the mutual benefit of the orphans and the less
-privileges ones. I have some funds I inherited from my late husband,
-the sum of ($ 11,000,000.00) deposited with the Bank. Having known my
-present health condition, I decided to entrust this fund to you
-believing that you will utilize it the way i am going to instruct
-herein.
-It will be my pleasure to compensate you as my Investment
-Manager/Partner with 35% percent of the total money for your effort in
-handling the transaction, 5% percent for any expenses or processing
-charges fee that will involve during this process while 60% of the
-fund will be Invested into the charity project there in your country.
-Therefore I am waiting for your prompt respond, if only you are
-interested in this humanitarian project for further details of the
-transaction and execution of this charitable project for the glory and
-honor of God the merciful compassionate. Your urgent reply will be
-appreciated.
+thanks for looking into this.
 
-God bless you.
-Sincerely Sister in Christ Mrs. Donna Louise McInnes.
+On 12/9/20 5:45 AM, Viresh Kumar wrote:
+> On 08-12-20, 11:20, Sudeep Holla wrote:
+>> It is because of per-CPU vs per domain drama here. Imagine a system with
+>> 4 CPUs which the firmware puts in individual domains while they all are
+>> in the same perf domain and hence OPP is marked shared in DT.
+>>
+>> Since this probe gets called for all the cpus, we need to skip adding
+>> OPPs for the last 3(add only for 1st one and mark others as shared).
+> 
+> Okay and this wasn't happening before this series because the firmware
+> was only returning the current CPU from scmi_get_sharing_cpus() ?
+
+yes
+
+> 
+> Is this driver also used for the cases where we have multiple CPUs in
+> a policy ? Otherwise we won't be required to call
+> dev_pm_opp_set_sharing_cpus().
+> 
+> So I assume that we want to support both the cases here ?
+
+yes, we want to support existing platforms (n cpus in a policy) + the per-cpu case.
+
+> 
+>> If we attempt to add OPPs on second cpu probe, it *will* shout as duplicate
+>> OPP as we would have already marked it as shared table with the first cpu.
+>> Am I missing anything ? I suggested this as Nicola saw OPP duplicate
+>> warnings when he was hacking up this patch.
+> 
+> The common stuff (for all the CPUs) is better moved to probe() in this
+> case, instead of the ->init() callback. Otherwise it will always be
+> messy. You can initialize the OPP and cpufreq tables in probe()
+> itself, save the pointer somewhere and then just use it here in
+> ->init().
+> 
+> Also do EM registration from there.
+>
+
+ok, will rework
+
+>>>> otherwise no need as they would be duplicated.
+>>>>> And we don't check the return value of
+>>>>> the below call anymore, moreover we have to call it twice now.
+>>
+>> Yes, that looks wrong, we need to add the check for non zero values, but ....
+>>
+>>>>
+>>>> This second get_opp_count is required such that we register em with the correct
+>>>> opp number after having added them. Without this the opp_count would not be correct.
+>>>
+>>
+>> ... I have a question here. Why do you need to call
+>>
+>> em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, opp_shared_cpus..)
+>>
+>> on each CPU ? Why can't that be done once for unique opp_shared_cpus ?
+>>
+>> The whole drama of per-CPU vs perf domain is to have energy model and
+>> if feeding it opp_shared_cpus once is not sufficient, then something is
+>> wrong or simply duplicated or just not necessary IMO.
+>>
+>>> What if the count is still 0 ? What about deferred probe we were doing earlier ?
+>>
+>> OK, you made me think with that question. I think the check was original
+>> added for deferred probe but then scmi core was changed to add the cpufreq
+>> device only after everything needed is ready. So the condition must never
+>> occur now.
+> 
+> The deferred probe shall be handled in a different patch in that case.
+> 
+> Nicola, please break the patch into multiple patches, with one patch
+> dealing only with one task.
+
+Sure, I had the doubt and thanks for confirming. will do, thanks
+
+> 
+
+Cheers,
+Nicola
