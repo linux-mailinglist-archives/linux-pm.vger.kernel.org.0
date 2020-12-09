@@ -2,223 +2,516 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0962D4BFF
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 21:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FB02D4C31
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Dec 2020 21:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729360AbgLIUhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 15:37:06 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:19459 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729345AbgLIUhG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 15:37:06 -0500
-X-Greylist: delayed 114110 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Dec 2020 15:37:04 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1607546052;
-        s=strato-dkim-0002; d=fossekall.de;
-        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Subject:Sender;
-        bh=NW8oMEoZejP9UrMPWLz8vivLgh1kG3lHr/CL5F7qKGU=;
-        b=O0ZB2yySXnQ5EfKnaTpty+9h9soBE31QbSPI8csivHKVyNTaMsAe8gs4nipEusgG9l
-        GVqfu7OvDA4PAswKszFOIJbqrEu/Hr1sH4fcBoIwKP8YOobRjzZqKgu2ocS9+HfXhJci
-        ATiNlfxDiz74MNev7MoqvIVVSpMayfj4ftCSUJAVyAnRw1owbcdQPewlnC3//2ST7KzP
-        8umVu4WZA6d98RPUwktNmXOu+XOCzzZ/dBo2W2T67lDiUsAp1MPAhQJ4RZeBYCcJV6no
-        3wY5X3p0piOteXx1yEWWDb69c63pp37O8zZVlJjjFYP7Fl4e9KoYpx6Tenr/NTicknSt
-        vGhg==
-X-RZG-AUTH: ":O2kGeEG7b/pS1EzgE2y7nF0STYsSLflpbjNKxx7cGrBOdI6BL9pkS3QW19mO7I+/JwRspuzJFZuRzQ=="
-X-RZG-CLASS-ID: mo00
-Received: from aerfugl
-        by smtp.strato.de (RZmta 47.6.2 AUTH)
-        with ESMTPSA id e07b38wB9KY2Aqh
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 9 Dec 2020 21:34:02 +0100 (CET)
-Received: from koltrast.a98shuttle.de ([192.168.1.27] helo=a98shuttle.de)
-        by aerfugl with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <michael@fossekall.de>)
-        id 1kn69x-00077t-G0; Wed, 09 Dec 2020 21:34:01 +0100
-Date:   Wed, 9 Dec 2020 21:34:00 +0100
-From:   Michael Klein <michael@fossekall.de>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/3] power: reset: new driver regulator-poweroff
-Message-ID: <20201209203400.GA108307@a98shuttle.de>
-References: <20201128103958.q6glewhhch7vtczr@gilmour>
- <20201207142756.17819-1-michael@fossekall.de>
- <20201207142756.17819-2-michael@fossekall.de>
- <20201208101052.ecq2hbixxi45h4mr@gilmour>
+        id S1732424AbgLIUte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 15:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728298AbgLIUtd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 15:49:33 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7AC0613D6
+        for <linux-pm@vger.kernel.org>; Wed,  9 Dec 2020 12:48:53 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id q75so3117394wme.2
+        for <linux-pm@vger.kernel.org>; Wed, 09 Dec 2020 12:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kX7zScDbofoaTppiAVEA+NNo1io0xNrRQ/3QcrGG5ec=;
+        b=A9uvP+HBExS6gyiT3SlcOTOsi9NOHpgtK7l6D61xmzftg/6sXTd6EfTM22kRYOR88Z
+         +wgmyS8iAVGKwAkcD9w3oOVQ//sCc1O7C352gqP7Gt/MpdUsVztlAX8cpah1oHjaCHaM
+         50FvjOPgp78zt1UXMg0TrFoLyFpG/WhtnhlENWWhaFhyabyvMqbvd3nku0MHAKFUqDwo
+         tjZPqfR5fSzgvHUfaOr9cwZISV8kEZyl4rZ9HJ0psWdmnS8bY16TCW+pO6Ip7qM3XaAM
+         kEXxhH7QHKr1rsUocW9l7W+TMZE2MpI/CfFEwLe6+l1SXfBUmauwGUnEgbJWSTahY5V6
+         jwwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kX7zScDbofoaTppiAVEA+NNo1io0xNrRQ/3QcrGG5ec=;
+        b=DY/dxwKbJ3V91DXjHFuU0wBf8y0MI/joDjqze1wV7yDMh1qcZlBa4hrvFPtzwGpdhW
+         B3BCBve3K9BKokBMHKf+1+isB9BvEKxZQ0opC3MxP2SzKUXz9pqyPk+hkHEZ495CVlPI
+         LXW6p831Gcgyhx8S4MHaL93DQIe9Ke/DsQtJA/hD17MUOEMkTUlzvaBQA58VCI7pQK6f
+         hwDh92RLpDU5foqYe9GmqewPdxOswjf34qGiddtiaV/ReeQ3JfmY6y7Sege18ViFaIlV
+         smr6OnCKTZugjguTpCTCAgEL3eznEbpbDdBAM74QqrB6RCgdemDff1O2mAZTvNywmBuK
+         Zvlw==
+X-Gm-Message-State: AOAM530VzIR3lD32sP5MS9dRBXKZTRGeAbJx77AFjvxe4pNqUj7b22YM
+        wbu4CdVbHDy6A5YE3YhnV27CZ6Yd1/dHXg==
+X-Google-Smtp-Source: ABdhPJys3belKSn56cqYy0S9OIdme+S3S7hGPoaT/DgbYhL0CH8mKvvkStKs/TDzOmISfAna6ClMkw==
+X-Received: by 2002:a1c:f203:: with SMTP id s3mr4661128wmc.14.1607546931282;
+        Wed, 09 Dec 2020 12:48:51 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8cf2:3820:1fbd:70ad? ([2a01:e34:ed2f:f020:8cf2:3820:1fbd:70ad])
+        by smtp.googlemail.com with ESMTPSA id c190sm5782280wme.19.2020.12.09.12.48.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Dec 2020 12:48:50 -0800 (PST)
+Subject: Re: [PATCH 3/4] thermal: int340x: processor_thermal: Add RFIM driver
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20201126171829.945969-1-srinivas.pandruvada@linux.intel.com>
+ <20201126171829.945969-3-srinivas.pandruvada@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <8cf8cad2-688d-b290-9a13-fcf9801f9acd@linaro.org>
+Date:   Wed, 9 Dec 2020 21:48:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20201208101052.ecq2hbixxi45h4mr@gilmour>
+In-Reply-To: <20201126171829.945969-3-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 08, 2020 at 11:10:52AM +0100, Maxime Ripard wrote:
->On Mon, Dec 07, 2020 at 03:27:54PM +0100, Michael Klein wrote:
->> This driver registers a pm_power_off function to disable a set of
->> regulators defined in the devicetree to turn off the board.
->>
->> Signed-off-by: Michael Klein <michael@fossekall.de>
->> ---
->>  drivers/power/reset/Kconfig              |   7 ++
->>  drivers/power/reset/Makefile             |   1 +
->>  drivers/power/reset/regulator-poweroff.c | 107 +++++++++++++++++++++++
->>  3 files changed, 115 insertions(+)
->>  create mode 100644 drivers/power/reset/regulator-poweroff.c
->>
->> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
->> index d55b3727e00e..ae6cb7b0bd4d 100644
->> --- a/drivers/power/reset/Kconfig
->> +++ b/drivers/power/reset/Kconfig
->> @@ -177,6 +177,13 @@ config POWER_RESET_QNAP
->>
->>  	  Say Y if you have a QNAP NAS.
->>
->> +config POWER_RESET_REGULATOR
->> +	bool "Regulator subsystem power-off driver"
->> +	depends on OF && REGULATOR
->> +	help
->> +	  This driver supports turning off your board by disabling a set
->> +	  of regulators defined in the devicetree.
->> +
->>  config POWER_RESET_RESTART
->>  	bool "Restart power-off driver"
->>  	help
->> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
->> index c51eceba9ea3..9dc49d3a57ff 100644
->> --- a/drivers/power/reset/Makefile
->> +++ b/drivers/power/reset/Makefile
->> @@ -19,6 +19,7 @@ obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
->>  obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
->>  obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
->>  obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
->> +obj-$(CONFIG_POWER_RESET_REGULATOR) += regulator-poweroff.o
->>  obj-$(CONFIG_POWER_RESET_RESTART) += restart-poweroff.o
->>  obj-$(CONFIG_POWER_RESET_ST) += st-poweroff.o
->>  obj-$(CONFIG_POWER_RESET_VERSATILE) += arm-versatile-reboot.o
->> diff --git a/drivers/power/reset/regulator-poweroff.c b/drivers/power/reset/regulator-poweroff.c
->> new file mode 100644
->> index 000000000000..df2ca4fdcc49
->> --- /dev/null
->> +++ b/drivers/power/reset/regulator-poweroff.c
->> @@ -0,0 +1,107 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Force-disables a regulator to power down a device
->> + *
->> + * Michael Klein <michael@fossekall.de>
->> + *
->> + * Copyright (C) 2020 Michael Klein
->> + *
->> + * Based on the gpio-poweroff driver.
->> + */
->> +#include <linux/delay.h>
->> +#include <linux/init.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regulator/consumer.h>
->> +
->> +#define DEFAULT_TIMEOUT_MS 3000
->> +
->> +/*
->> + * Hold configuration here, cannot be more than one instance of the driver
->> + * since pm_power_off itself is global.
->> + */
->> +static struct regulator **poweroff_regulators;
->> +static u32 timeout = DEFAULT_TIMEOUT_MS;
->> +
->> +static void regulator_poweroff_do_poweroff(void)
->> +{
->> +	struct regulator **it;
->> +
->> +	if (poweroff_regulators)
->> +		for (it = poweroff_regulators; *it; ++it)
->> +			if (regulator_is_enabled(*it))
->> +				regulator_force_disable(*it);
->> +
->> +	/* give it some time */
->> +	mdelay(timeout);
->> +
->> +	WARN_ON(1);
->> +}
->> +
->> +static int regulator_poweroff_probe(struct platform_device *pdev)
->> +{
->> +	int count;
->> +	const char *name;
->> +	struct regulator **it;
->> +	struct property *prop;
->> +	struct device_node *node = pdev->dev.of_node;
->> +
->> +	/* If a pm_power_off function has already been added, leave it alone */
->> +	if (pm_power_off != NULL) {
->> +		dev_err(&pdev->dev,
->> +			"%s: pm_power_off function already registered\n",
->> +		       __func__);
->> +		return -EBUSY;
->> +	}
->> +
->> +	count = of_property_count_strings(node, "regulator-names");
->> +	if (count <= 0)
->> +		return -ENOENT;
->> +
->> +	poweroff_regulators = devm_kcalloc(&pdev->dev, count + 1,
->> +		sizeof(struct regulator *), GFP_KERNEL);
->> +
->> +	it = poweroff_regulators;
->> +	of_property_for_each_string(node, "regulator-names", prop, name) {
->> +		*it = devm_regulator_get(&pdev->dev, name);
->> +		if (IS_ERR(*it))
->> +			return PTR_ERR(*it);
->> +		it++;
->> +	}
->> +
->> +	of_property_read_u32(node, "timeout-ms", &timeout);
->> +
->> +	pm_power_off = &regulator_poweroff_do_poweroff;
->> +	return 0;
->> +}
->> +
->> +static int regulator_poweroff_remove(__maybe_unused struct platform_device *pdev)
->> +{
->> +	if (pm_power_off == &regulator_poweroff_do_poweroff)
->> +		pm_power_off = NULL;
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id of_regulator_poweroff_match[] = {
->> +	{ .compatible = "regulator-poweroff", },
->> +	{},
->> +};
->> +
->> +static struct platform_driver regulator_poweroff_driver = {
->> +	.probe = regulator_poweroff_probe,
->> +	.remove = regulator_poweroff_remove,
->> +	.driver = {
->> +		.name = "poweroff-regulator",
->> +		.of_match_table = of_regulator_poweroff_match,
->> +	},
->> +};
->> +
->> +module_platform_driver(regulator_poweroff_driver);
->
->Since this can't be compiled as a module, you can use
->module_platform_driver_probe instead.
+On 26/11/2020 18:18, Srinivas Pandruvada wrote:
+> Add support for RFIM (Radio Frequency Interference Mitigation) support
+> via processor thermal PCI device. This drivers allows adjustment of
+> FIVR (Fully Integrated Voltage Regulator) and DDR (Double Data Rate)
+> frequencies to avoid RF interference with WiFi and 5G.
+> 
+> Switching voltage regulators (VR) generate radiated EMI or RFI at the
+> fundamental frequency and its harmonics. Some harmonics may interfere
+> with very sensitive wireless receivers such as Wi-Fi and cellular that
+> are integrated into host systems like notebook PCs.  One of mitigation
+> methods is requesting SOC integrated VR (IVR) switching frequency to a
+> small % and shift away the switching noise harmonic interference from
+> radio channels.  OEM or ODMs can use the driver to control SOC IVR
+> operation within the range where it does not impact IVR performance.
+> 
+> DRAM devices of DDR IO interface and their power plane can generate EMI
+> at the data rates. Similar to IVR control mechanism, Intel offers a
+> mechanism by which DDR data rates can be changed if several conditions
+> are met: there is strong RFI interference because of DDR; CPU power
+> management has no other restriction in changing DDR data rates;
+> PC ODMs enable this feature (real time DDR RFI Mitigation referred to as
+> DDR-RFIM) for Wi-Fi from BIOS.
 
-actually no, as platform_driver_probe() does not support deferred 
-probing and the regulator might not be available during 
-regulator_poweroff_probe() yet:
+Thanks for the technical details, it is interesting.
 
-# dmesg | grep poweroff
-[    0.788135] poweroff-regulator poweroff: probe deferral not supported
+May be I missed something but how this is related to thermal?
+
+
+> This change exports two folders under /sys/bus/pci/devices/0000:00:04.0.
+> One folder "fivr" contains all attributes exposed for controling FIVR
+> features. The other folder "dvfs" contains all attributes for DDR
+> features.
+> 
+> Changes done to implement:
+> - New module for rfim interfaces
+> - Two new per processor features for DDR and FIVR
+> - Enable feature for Tiger Lake (FIVR only) and Alder Lake
+> 
+> The attributes exposed and explanation:
+> 
+> FIVR attributes
+> 
+> vco_ref_code_lo (RW): The VCO reference code is an 11-bit field and
+> controls the FIVR switching frequency. This is the 3-bit LSB field.
+> 
+> vco_ref_code_hi (RW): The VCO reference code is an 11-bit field and
+> controls the FIVR switching frequency. This is the 8-bit MSB field.
+> 
+> spread_spectrum_pct (RW): Set the FIVR spread spectrum clocking
+> percentage
+> 
+> spread_spectrum_clk_enable (RW): Enable/disable of the FIVR spread
+> spectrum clocking feature
+> 
+> rfi_vco_ref_code (RW): This field is a read only status register which
+> reflects the current FIVR switching frequency
+> 
+> fivr_fffc_rev (RW): This field indicated the revision of the FIVR HW.
+> 
+> DVFS attributes
+> 
+> rfi_restriction_run_busy (RW): Request the restriction of specific DDR
+> data rate and set this value 1. Self reset to 0 after operation.
+> 
+> rfi_restriction_err_code (RW): Values:  0 :Request is accepted, 1:Feature
+> disabled, 2: the request restricts more points than it is allowed
+> 
+> rfi_restriction_data_rate_Delta (RW): Restricted DDR data rate for RFI
+> protection: Lower Limit
+> 
+> rfi_restriction_data_rate_Base (RW): Restricted DDR data rate for RFI
+> protection: Upper Limit
+> 
+> ddr_data_rate_point_0 (RO): DDR data rate selection 1st point
+> 
+> ddr_data_rate_point_1 (RO): DDR data rate selection 2nd point
+> 
+> ddr_data_rate_point_2 (RO): DDR data rate selection 3rd point
+> 
+> ddr_data_rate_point_3 (RO): DDR data rate selection 4th point
+> 
+> rfi_disable (RW): Disable DDR rate change feature
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  .../thermal/intel/int340x_thermal/Makefile    |   1 +
+>  .../processor_thermal_device.c                |  23 +-
+>  .../processor_thermal_device.h                |   5 +
+>  .../int340x_thermal/processor_thermal_rfim.c  | 244 ++++++++++++++++++
+>  4 files changed, 270 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> 
+> diff --git a/drivers/thermal/intel/int340x_thermal/Makefile b/drivers/thermal/intel/int340x_thermal/Makefile
+> index 86e8d3c87df7..f4e2eb7d9606 100644
+> --- a/drivers/thermal/intel/int340x_thermal/Makefile
+> +++ b/drivers/thermal/intel/int340x_thermal/Makefile
+> @@ -5,5 +5,6 @@ obj-$(CONFIG_INT340X_THERMAL)	+= int3402_thermal.o
+>  obj-$(CONFIG_INT340X_THERMAL)	+= int3403_thermal.o
+>  obj-$(CONFIG_INT340X_THERMAL)	+= processor_thermal_device.o
+>  obj-$(CONFIG_PROC_THERMAL_MMIO_RAPL) += processor_thermal_rapl.o
+> +obj-$(CONFIG_INT340X_THERMAL)	+= processor_thermal_rfim.o
+>  obj-$(CONFIG_INT3406_THERMAL)	+= int3406_thermal.o
+>  obj-$(CONFIG_ACPI_THERMAL_REL)	+= acpi_thermal_rel.o
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index 589ac7deec02..b6a7358b989d 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -429,6 +429,8 @@ static int proc_thermal_mmio_add(struct pci_dev *pdev,
+>  {
+>  	int ret;
+>  
+> +	proc_priv->mmio_feature_mask = feature_mask;
+> +
+>  	if (feature_mask) {
+>  		ret = proc_thermal_set_mmio_base(pdev, proc_priv);
+>  		if (ret)
+> @@ -443,9 +445,21 @@ static int proc_thermal_mmio_add(struct pci_dev *pdev,
+>  		}
+>  	}
+>  
+> -	proc_priv->mmio_feature_mask = feature_mask;
+> +	if (feature_mask & PROC_THERMAL_FEATURE_FIVR ||
+> +	    feature_mask & PROC_THERMAL_FEATURE_DVFS) {
+> +		ret = proc_thermal_rfim_add(pdev, proc_priv);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "failed to add RFIM interface\n");
+> +			goto err_rem_rapl;
+> +		}
+> +	}
+>  
+>  	return 0;
+> +
+> +err_rem_rapl:
+> +	proc_thermal_rapl_remove();
+> +
+> +	return ret;
+>  }
+>  
+>  static void proc_thermal_mmio_remove(struct pci_dev *pdev)
+> @@ -455,6 +469,9 @@ static void proc_thermal_mmio_remove(struct pci_dev *pdev)
+>  	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_RAPL)
+>  		proc_thermal_rapl_remove();
+>  
+> +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR ||
+> +	    proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
+> +		proc_thermal_rfim_remove(pdev);
+>  }
+>  
+>  static int  proc_thermal_pci_probe(struct pci_dev *pdev,
+> @@ -566,7 +583,7 @@ static int proc_thermal_resume(struct device *dev)
+>  static SIMPLE_DEV_PM_OPS(proc_thermal_pm, NULL, proc_thermal_resume);
+>  
+>  static const struct pci_device_id proc_thermal_pci_ids[] = {
+> -	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL) },
+> +	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS) },
+>  	{ PCI_DEVICE_DATA(INTEL, BDW_THERMAL, 0) },
+>  	{ PCI_DEVICE_DATA(INTEL, BSW_THERMAL, 0) },
+>  	{ PCI_DEVICE_DATA(INTEL, BXT0_THERMAL, 0) },
+> @@ -580,7 +597,7 @@ static const struct pci_device_id proc_thermal_pci_ids[] = {
+>  	{ PCI_DEVICE_DATA(INTEL, ICL_THERMAL, PROC_THERMAL_FEATURE_RAPL) },
+>  	{ PCI_DEVICE_DATA(INTEL, JSL_THERMAL, 0) },
+>  	{ PCI_DEVICE_DATA(INTEL, SKL_THERMAL, PROC_THERMAL_FEATURE_RAPL) },
+> -	{ PCI_DEVICE_DATA(INTEL, TGL_THERMAL, PROC_THERMAL_FEATURE_RAPL) },
+> +	{ PCI_DEVICE_DATA(INTEL, TGL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR) },
+>  	{ },
+>  };
+>  
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index 45214571e00d..4bbb88f6b4a7 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -54,6 +54,8 @@ struct rapl_mmio_regs {
+>  
+>  #define PROC_THERMAL_FEATURE_NONE	0x00
+>  #define PROC_THERMAL_FEATURE_RAPL	0x01
+> +#define PROC_THERMAL_FEATURE_FIVR	0x02
+> +#define PROC_THERMAL_FEATURE_DVFS	0x04
+>  
+>  #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
+>  int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+> @@ -70,4 +72,7 @@ static void __maybe_unused proc_thermal_rapl_remove(void)
+>  }
+>  #endif
+>  
+> +int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+> +void proc_thermal_rfim_remove(struct pci_dev *pdev);
+> +
+>  #endif
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> new file mode 100644
+> index 000000000000..aef993a813e2
+> --- /dev/null
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> @@ -0,0 +1,244 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * processor thermal device RFIM control
+> + * Copyright (c) 2020, Intel Corporation.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/pci.h>
+> +#include "processor_thermal_device.h"
+> +
+> +struct mmio_reg {
+> +	int read_only;
+> +	u32 offset;
+> +	int bits;
+> +	u16 mask;
+> +	u16 shift;
+> +};
+> +
+> +/* These will represent sysfs attribute names */
+> +static const char * const fivr_strings[] = {
+> +	"vco_ref_code_lo",
+> +	"vco_ref_code_hi",
+> +	"spread_spectrum_pct",
+> +	"spread_spectrum_clk_enable",
+> +	"rfi_vco_ref_code",
+> +	"fivr_fffc_rev",
+> +	NULL
+> +};
+> +
+> +static const struct mmio_reg tgl_fivr_mmio_regs[] = {
+> +	{ 0, 0x5A18, 3, 0x7, 12}, /* vco_ref_code_lo */
+> +	{ 0, 0x5A18, 8, 0xFF, 16}, /* vco_ref_code_hi */
+> +	{ 0, 0x5A08, 8, 0xFF, 0}, /* spread_spectrum_pct */
+> +	{ 0, 0x5A08, 1, 0x1, 8}, /* spread_spectrum_clk_enable */
+> +	{ 1, 0x5A10, 12, 0xFFF, 0}, /* rfi_vco_ref_code */
+> +	{ 1, 0x5A14, 2, 0x3, 1}, /* fivr_fffc_rev */
+> +};
+> +
+> +/* These will represent sysfs attribute names */
+> +static const char * const dvfs_strings[] = {
+> +	"rfi_restriction_run_busy",
+> +	"rfi_restriction_err_code",
+> +	"rfi_restriction_data_rate",
+> +	"rfi_restriction_data_rate_base",
+> +	"ddr_data_rate_point_0",
+> +	"ddr_data_rate_point_1",
+> +	"ddr_data_rate_point_2",
+> +	"ddr_data_rate_point_3",
+> +	"rfi_disable",
+> +	NULL
+> +};
+> +
+> +static const struct mmio_reg adl_dvfs_mmio_regs[] = {
+> +	{ 0, 0x5A38, 1, 0x1, 31}, /* rfi_restriction_run_busy */
+> +	{ 0, 0x5A38, 7, 0x7F, 24}, /* rfi_restriction_err_code */
+> +	{ 0, 0x5A38, 8, 0xFF, 16}, /* rfi_restriction_data_rate */
+> +	{ 0, 0x5A38, 16, 0xFFFF, 0}, /* rfi_restriction_data_rate_base */
+> +	{ 0, 0x5A30, 10, 0x3FF, 0}, /* ddr_data_rate_point_0 */
+> +	{ 0, 0x5A30, 10, 0x3FF, 10}, /* ddr_data_rate_point_1 */
+> +	{ 0, 0x5A30, 10, 0x3FF, 20}, /* ddr_data_rate_point_2 */
+> +	{ 0, 0x5A30, 10, 0x3FF, 30}, /* ddr_data_rate_point_3 */
+> +	{ 0, 0x5A40, 1, 0x1, 0}, /* rfi_disable */
+> +};
+> +
+> +#define RFIM_SHOW(suffix, table)\
+> +static ssize_t suffix##_show(struct device *dev,\
+> +			      struct device_attribute *attr,\
+> +			      char *buf)\
+> +{\
+> +	struct proc_thermal_device *proc_priv;\
+> +	struct pci_dev *pdev = to_pci_dev(dev);\
+> +	const struct mmio_reg *mmio_regs;\
+> +	const char **match_strs;\
+> +	u32 reg_val;\
+> +	int ret;\
+> +\
+> +	proc_priv = pci_get_drvdata(pdev);\
+> +	if (table) {\
+> +		match_strs = (const char **)dvfs_strings;\
+> +		mmio_regs = adl_dvfs_mmio_regs;\
+> +	} else { \
+> +		match_strs = (const char **)fivr_strings;\
+> +		mmio_regs = tgl_fivr_mmio_regs;\
+> +	} \
+> +	\
+> +	ret = match_string(match_strs, -1, attr->attr.name);\
+> +	if (ret < 0)\
+> +		return ret;\
+> +	reg_val = readl((void __iomem *) (proc_priv->mmio_base + mmio_regs[ret].offset));\
+> +	ret = (reg_val >> mmio_regs[ret].shift) & mmio_regs[ret].mask;\
+> +	return sprintf(buf, "%u\n", ret);\
+> +}
+> +
+> +#define RFIM_STORE(suffix, table)\
+> +static ssize_t suffix##_store(struct device *dev,\
+> +			       struct device_attribute *attr,\
+> +			       const char *buf, size_t count)\
+> +{\
+> +	struct proc_thermal_device *proc_priv;\
+> +	struct pci_dev *pdev = to_pci_dev(dev);\
+> +	unsigned int input;\
+> +	const char **match_strs;\
+> +	const struct mmio_reg *mmio_regs;\
+> +	int ret, err;\
+> +	u32 reg_val;\
+> +	u32 mask;\
+> +\
+> +	proc_priv = pci_get_drvdata(pdev);\
+> +	if (table) {\
+> +		match_strs = (const char **)dvfs_strings;\
+> +		mmio_regs = adl_dvfs_mmio_regs;\
+> +	} else { \
+> +		match_strs = (const char **)fivr_strings;\
+> +		mmio_regs = tgl_fivr_mmio_regs;\
+> +	} \
+> +	\
+> +	ret = match_string(match_strs, -1, attr->attr.name);\
+> +	if (ret < 0)\
+> +		return ret;\
+> +	if (mmio_regs[ret].read_only)\
+> +		return -EPERM;\
+> +	err = kstrtouint(buf, 10, &input);\
+> +	if (err)\
+> +		return err;\
+> +	mask = GENMASK(mmio_regs[ret].shift + mmio_regs[ret].bits - 1, mmio_regs[ret].shift);\
+> +	reg_val = readl((void __iomem *) (proc_priv->mmio_base + mmio_regs[ret].offset));\
+> +	reg_val &= ~mask;\
+> +	reg_val |= (input << mmio_regs[ret].shift);\
+> +	writel(reg_val, (void __iomem *) (proc_priv->mmio_base + mmio_regs[ret].offset));\
+> +	return count;\
+> +}
+> +
+> +RFIM_SHOW(vco_ref_code_lo, 0)
+> +RFIM_SHOW(vco_ref_code_hi, 0)
+> +RFIM_SHOW(spread_spectrum_pct, 0)
+> +RFIM_SHOW(spread_spectrum_clk_enable, 0)
+> +RFIM_SHOW(rfi_vco_ref_code, 0)
+> +RFIM_SHOW(fivr_fffc_rev, 0)
+> +
+> +RFIM_STORE(vco_ref_code_lo, 0)
+> +RFIM_STORE(vco_ref_code_hi, 0)
+> +RFIM_STORE(spread_spectrum_pct, 0)
+> +RFIM_STORE(spread_spectrum_clk_enable, 0)
+> +RFIM_STORE(rfi_vco_ref_code, 0)
+> +RFIM_STORE(fivr_fffc_rev, 0)
+> +
+> +static DEVICE_ATTR_RW(vco_ref_code_lo);
+> +static DEVICE_ATTR_RW(vco_ref_code_hi);
+> +static DEVICE_ATTR_RW(spread_spectrum_pct);
+> +static DEVICE_ATTR_RW(spread_spectrum_clk_enable);
+> +static DEVICE_ATTR_RW(rfi_vco_ref_code);
+> +static DEVICE_ATTR_RW(fivr_fffc_rev);
+> +
+> +static struct attribute *fivr_attrs[] = {
+> +	&dev_attr_vco_ref_code_lo.attr,
+> +	&dev_attr_vco_ref_code_hi.attr,
+> +	&dev_attr_spread_spectrum_pct.attr,
+> +	&dev_attr_spread_spectrum_clk_enable.attr,
+> +	&dev_attr_rfi_vco_ref_code.attr,
+> +	&dev_attr_fivr_fffc_rev.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group fivr_attribute_group = {
+> +	.attrs = fivr_attrs,
+> +	.name = "fivr"
+> +};
+> +
+> +RFIM_SHOW(rfi_restriction_run_busy, 1)
+> +RFIM_SHOW(rfi_restriction_err_code, 1)
+> +RFIM_SHOW(rfi_restriction_data_rate, 1)
+> +RFIM_SHOW(ddr_data_rate_point_0, 1)
+> +RFIM_SHOW(ddr_data_rate_point_1, 1)
+> +RFIM_SHOW(ddr_data_rate_point_2, 1)
+> +RFIM_SHOW(ddr_data_rate_point_3, 1)
+> +RFIM_SHOW(rfi_disable, 1)
+> +
+> +RFIM_STORE(rfi_restriction_run_busy, 1)
+> +RFIM_STORE(rfi_restriction_err_code, 1)
+> +RFIM_STORE(rfi_restriction_data_rate, 1)
+> +RFIM_STORE(rfi_disable, 1)
+> +
+> +static DEVICE_ATTR_RW(rfi_restriction_run_busy);
+> +static DEVICE_ATTR_RW(rfi_restriction_err_code);
+> +static DEVICE_ATTR_RW(rfi_restriction_data_rate);
+> +static DEVICE_ATTR_RO(ddr_data_rate_point_0);
+> +static DEVICE_ATTR_RO(ddr_data_rate_point_1);
+> +static DEVICE_ATTR_RO(ddr_data_rate_point_2);
+> +static DEVICE_ATTR_RO(ddr_data_rate_point_3);
+> +static DEVICE_ATTR_RW(rfi_disable);
+> +
+> +static struct attribute *dvfs_attrs[] = {
+> +	&dev_attr_rfi_restriction_run_busy.attr,
+> +	&dev_attr_rfi_restriction_err_code.attr,
+> +	&dev_attr_rfi_restriction_data_rate.attr,
+> +	&dev_attr_ddr_data_rate_point_0.attr,
+> +	&dev_attr_ddr_data_rate_point_1.attr,
+> +	&dev_attr_ddr_data_rate_point_2.attr,
+> +	&dev_attr_ddr_data_rate_point_3.attr,
+> +	&dev_attr_rfi_disable.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group dvfs_attribute_group = {
+> +	.attrs = dvfs_attrs,
+> +	.name = "dvfs"
+> +};
+> +
+> +int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv)
+> +{
+> +	int ret;
+> +
+> +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
+> +		ret = sysfs_create_group(&pdev->dev.kobj, &fivr_attribute_group);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS) {
+> +		ret = sysfs_create_group(&pdev->dev.kobj, &dvfs_attribute_group);
+> +		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
+> +			sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(proc_thermal_rfim_add);
+> +
+> +void proc_thermal_rfim_remove(struct pci_dev *pdev)
+> +{
+> +	struct proc_thermal_device *proc_priv = pci_get_drvdata(pdev);
+> +
+> +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR)
+> +		sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+> +
+> +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
+> +		sysfs_remove_group(&pdev->dev.kobj, &dvfs_attribute_group);
+> +}
+> +EXPORT_SYMBOL_GPL(proc_thermal_rfim_remove);
+> +
+> +MODULE_LICENSE("GPL v2");
+> 
+
 
 -- 
-Michael
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
