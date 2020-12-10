@@ -2,14 +2,14 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B86EF2D6A2B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 22:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD8B2D6A4E
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 22:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404887AbgLJV1b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Dec 2020 16:27:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38458 "EHLO mail.kernel.org"
+        id S2404847AbgLJVmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Dec 2020 16:42:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38460 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404881AbgLJV1T (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S2404885AbgLJV1T (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Thu, 10 Dec 2020 16:27:19 -0500
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
@@ -37,9 +37,9 @@ Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
         Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Angus Ainslie <angus@akkea.ca>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 08/18] ARM: dts: exynos: correct PMIC interrupt trigger level on SMDK5250
-Date:   Thu, 10 Dec 2020 22:25:24 +0100
-Message-Id: <20201210212534.216197-8-krzk@kernel.org>
+Subject: [PATCH 09/18] ARM: dts: exynos: correct PMIC interrupt trigger level on Snow
+Date:   Thu, 10 Dec 2020 22:25:25 +0100
+Message-Id: <20201210212534.216197-9-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
 References: <20201210212534.216197-1-krzk@kernel.org>
@@ -57,25 +57,25 @@ configuration, not necessarily working for this hardware.
 Additionally, the interrupt line is shared so using level sensitive
 interrupt is here especially important to avoid races.
 
-Fixes: 47580e8d94c2 ("ARM: dts: Specify MAX77686 pmic interrupt for exynos5250-smdk5250")
+Fixes: c61248afa819 ("ARM: dts: Add max77686 RTC interrupt to cros5250-common")
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm/boot/dts/exynos5250-smdk5250.dts | 2 +-
+ arch/arm/boot/dts/exynos5250-snow-common.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
-index 8b5a79a8720c..39bbe18145cf 100644
---- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
-+++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
-@@ -134,7 +134,7 @@ max77686: pmic@9 {
+diff --git a/arch/arm/boot/dts/exynos5250-snow-common.dtsi b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+index 6635f6184051..2335c4687349 100644
+--- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
++++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+@@ -292,7 +292,7 @@ &i2c_0 {
+ 	max77686: pmic@9 {
  		compatible = "maxim,max77686";
- 		reg = <0x09>;
  		interrupt-parent = <&gpx3>;
 -		interrupts = <2 IRQ_TYPE_NONE>;
 +		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
  		pinctrl-names = "default";
  		pinctrl-0 = <&max77686_irq>;
- 		#clock-cells = <1>;
+ 		wakeup-source;
 -- 
 2.25.1
 
