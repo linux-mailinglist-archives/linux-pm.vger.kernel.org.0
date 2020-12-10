@@ -2,15 +2,15 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 505292D6A22
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 22:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916932D6A39
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 22:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404911AbgLJV1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Dec 2020 16:27:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38670 "EHLO mail.kernel.org"
+        id S2404779AbgLJVlw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Dec 2020 16:41:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404895AbgLJV1c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 10 Dec 2020 16:27:32 -0500
+        id S2404896AbgLJV1b (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Dec 2020 16:27:31 -0500
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
@@ -37,9 +37,9 @@ Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
         Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Angus Ainslie <angus@akkea.ca>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [RFC 13/18] mfd: max77686: Do not enforce (incorrect) interrupt trigger type
-Date:   Thu, 10 Dec 2020 22:25:29 +0100
-Message-Id: <20201210212534.216197-13-krzk@kernel.org>
+Subject: [RFC 14/18] rtc: max77686: Do not enforce (incorrect) interrupt trigger type
+Date:   Thu, 10 Dec 2020 22:25:30 +0100
+Message-Id: <20201210212534.216197-14-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
 References: <20201210212534.216197-1-krzk@kernel.org>
@@ -70,73 +70,24 @@ Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 This patch should wait till DTS changes are merged, as it relies on
 proper Devicetree.
 ---
- Documentation/devicetree/bindings/clock/maxim,max77686.txt | 4 ++--
- Documentation/devicetree/bindings/mfd/max77686.txt         | 2 +-
- Documentation/devicetree/bindings/regulator/max77686.txt   | 2 +-
- drivers/mfd/max77686.c                                     | 3 +--
- 4 files changed, 5 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-max77686.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/maxim,max77686.txt b/Documentation/devicetree/bindings/clock/maxim,max77686.txt
-index 3472b461ca93..c10849efb444 100644
---- a/Documentation/devicetree/bindings/clock/maxim,max77686.txt
-+++ b/Documentation/devicetree/bindings/clock/maxim,max77686.txt
-@@ -49,7 +49,7 @@ Example:
- 		max77686: max77686@9 {
- 			compatible = "maxim,max77686";
- 			interrupt-parent = <&wakeup_eint>;
--			interrupts = <26 0>;
-+			interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 			reg = <0x09>;
- 			#clock-cells = <1>;
+diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+index d51cc12114cb..eae7cb9faf1e 100644
+--- a/drivers/rtc/rtc-max77686.c
++++ b/drivers/rtc/rtc-max77686.c
+@@ -717,8 +717,8 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
  
-@@ -74,7 +74,7 @@ Example:
- 		max77802: max77802@9 {
- 			compatible = "maxim,max77802";
- 			interrupt-parent = <&wakeup_eint>;
--			interrupts = <26 0>;
-+			interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 			reg = <0x09>;
- 			#clock-cells = <1>;
- 
-diff --git a/Documentation/devicetree/bindings/mfd/max77686.txt b/Documentation/devicetree/bindings/mfd/max77686.txt
-index 42968b7144e0..4447d074894a 100644
---- a/Documentation/devicetree/bindings/mfd/max77686.txt
-+++ b/Documentation/devicetree/bindings/mfd/max77686.txt
-@@ -21,6 +21,6 @@ Example:
- 	max77686: pmic@9 {
- 		compatible = "maxim,max77686";
- 		interrupt-parent = <&wakeup_eint>;
--		interrupts = <26 0>;
-+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 		reg = <0x09>;
- 	};
-diff --git a/Documentation/devicetree/bindings/regulator/max77686.txt b/Documentation/devicetree/bindings/regulator/max77686.txt
-index e9f7578ca09a..ff3d2dec8c4b 100644
---- a/Documentation/devicetree/bindings/regulator/max77686.txt
-+++ b/Documentation/devicetree/bindings/regulator/max77686.txt
-@@ -43,7 +43,7 @@ Example:
- 	max77686: pmic@9 {
- 		compatible = "maxim,max77686";
- 		interrupt-parent = <&wakeup_eint>;
--		interrupts = <26 IRQ_TYPE_NONE>;
-+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 		reg = <0x09>;
- 
- 		voltage-regulators {
-diff --git a/drivers/mfd/max77686.c b/drivers/mfd/max77686.c
-index 2ad554b921d9..f9e12ab2bc75 100644
---- a/drivers/mfd/max77686.c
-+++ b/drivers/mfd/max77686.c
-@@ -209,8 +209,7 @@ static int max77686_i2c_probe(struct i2c_client *i2c)
- 
- 	ret = devm_regmap_add_irq_chip(&i2c->dev, max77686->regmap,
- 				       max77686->irq,
--				       IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
--				       IRQF_SHARED, 0, irq_chip,
-+				       IRQF_ONESHOT | IRQF_SHARED, 0, irq_chip,
- 				       &max77686->irq_data);
+ add_rtc_irq:
+ 	ret = regmap_add_irq_chip(info->rtc_regmap, info->rtc_irq,
+-				  IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
+-				  IRQF_SHARED, 0, info->drv_data->rtc_irq_chip,
++				  IRQF_ONESHOT | IRQF_SHARED,
++				  0, info->drv_data->rtc_irq_chip,
+ 				  &info->rtc_irq_data);
  	if (ret < 0) {
- 		dev_err(&i2c->dev, "failed to add PMIC irq chip: %d\n", ret);
+ 		dev_err(info->dev, "Failed to add RTC irq chip: %d\n", ret);
 -- 
 2.25.1
 
