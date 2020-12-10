@@ -2,133 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2662D2D5150
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 04:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DC22D5178
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 04:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729550AbgLJD0J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 22:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729543AbgLJD0H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 22:26:07 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C941DC061793
-        for <linux-pm@vger.kernel.org>; Wed,  9 Dec 2020 19:25:26 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id s21so2704301pfu.13
-        for <linux-pm@vger.kernel.org>; Wed, 09 Dec 2020 19:25:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessos.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lIp6wsYHG9KhOZfxK1gkEGI1lm/R+pKgXsDrqb0v488=;
-        b=e8f7oza94yLX3bSgrFQNu3jaD9zoDlCko8eeHhboeEGlUzUR09kTA4LWxmGbcu7Ljj
-         ymD7ygtMgxq5Pe0dV23TGjjEX/zlGxvZu5Px6jLB0zAT9rspdUMYsO9xBZ98teKbATTZ
-         5JHQm3LGV4vpzsqdZrGCefNeio/PVG50mYQDhDUw7V0fjFJqMHkScTW7SrpoIxi0k3b3
-         bAIpBJEWUoPsEdEwKbCX9hMQE+rMACjKiGkKbgWeatJnr/lcdqRj1uMU+F6npNj+OZok
-         jjH7r1tyxbsEEBSj/u0fugLYZW2Dvs5fJN++z0q1w892erkoAys/tDHPUOJ27jsHxZ7v
-         S1ng==
+        id S1729094AbgLJDhw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 22:37:52 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45248 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727348AbgLJDhv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 22:37:51 -0500
+Received: by mail-ot1-f66.google.com with SMTP id h18so3615650otq.12;
+        Wed, 09 Dec 2020 19:37:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lIp6wsYHG9KhOZfxK1gkEGI1lm/R+pKgXsDrqb0v488=;
-        b=EVJrUhtIvfTOWUDX3wiowMQE2b343Y1CPvru6790aIKQ4PEXGVppURfgMg4aitt2it
-         PSqf/jRhaK8Aa1/8JledYsD0rtu4vzZk45IN0zWFAug2lSxq5BFbTvseG/2sTqzFEadL
-         m1e/LwqkvVn3x3Rcr2SU2nYlgs5iNbMSFvuIXXhmnM93A8fZw//OkSF52D/WGKIq0swN
-         4bhe7c8/iEN74mGXB9nIsDqa93bqLbP8y6JXMdeKaLhEQLq2IIsDCXW98zE56t2cC+S/
-         bD3a3YZ8wBKxj8We8XQdnngI6oX7S13Mf+ACsPJiSWTjeFR3bTBwNFT8YU+arCi863IS
-         g27g==
-X-Gm-Message-State: AOAM532Wp3mtprNWY2jM4l7b2JG965yYWXkYjuJyMxZTQJj6SHreU/Pd
-        kZsq6Dp4ZtEhTbwIELyzypLyzK+NOwh+un1Nv+d0iQ==
-X-Google-Smtp-Source: ABdhPJwLKEnmxDK7F1N1xL76BCQ9/sFBqNCQKNBLaV6YzJiRhitNVuf/wHfdWCJNCy/6rfIrq8nw/EkpDL4jBLexe+Y=
-X-Received: by 2002:a17:90a:510e:: with SMTP id t14mr5282761pjh.159.1607570726106;
- Wed, 09 Dec 2020 19:25:26 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mzmL/cqocrUbPTVhVRwNLiqSMNifMnYmWyvL/HJKlvc=;
+        b=ajNOCR9nrqmYcZDo6AjKroQTKfa9f/B503j3sTlMk9jAoI3j7+9iyIEaBP8z3MgNdn
+         KBOvob3dfDtXKlqR5ZTs3s0IbxBcPsZ9vJWo23JxEQ+vNTZt74Q0XZNIVg/PnBAXcn6c
+         uYWNzevvkm0Boc4YuWvjOeQOMI/G+UCHDXyVdjchODkLbRT1ERUH/mUwOmKvrJ9rjjdb
+         83i7NqzqPnLpFUjdhdX2HQ7FKpwhxqSCUWwVVdv0kdZLW1u2P1wmirAoVwE1vSMIGnuS
+         m6O+MNTkOWWsITR2I/zjZbZid+mR2B54cEuTGnOrKIyOzMiixwBIrI0IuZSBEJQ5sN46
+         qEWA==
+X-Gm-Message-State: AOAM531Ki0obAtwcCWy34Z+KcWIsX3RLYQT2bir8APGNdCroaHn3Vhsi
+        JOWAfb4XEioOjDiG1oP6nA==
+X-Google-Smtp-Source: ABdhPJzEtvBU2o6Y5zBUf3Ax84L/wTQXpYXXCxobtgX7cv8FEOpg+xzasRQAncboRxY5AuPBKhbUgg==
+X-Received: by 2002:a9d:4795:: with SMTP id b21mr4419285otf.65.1607571430533;
+        Wed, 09 Dec 2020 19:37:10 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id i82sm740215oif.33.2020.12.09.19.37.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Dec 2020 19:37:09 -0800 (PST)
+Received: (nullmailer pid 1607732 invoked by uid 1000);
+        Thu, 10 Dec 2020 03:37:08 -0000
+Date:   Wed, 9 Dec 2020 21:37:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/7] dt-bindings: input: Add reset-time-sec common
+ property
+Message-ID: <20201210033708.GA1606132@robh.at.kernel.org>
+References: <cover.1607216141.git.cristian.ciocaltea@gmail.com>
+ <c08349db08db67e71cf428fe7fd53624aaa0acf8.1607216141.git.cristian.ciocaltea@gmail.com>
 MIME-Version: 1.0
-References: <20201209045057.9509-1-chiu@endlessos.org> <d58351aa-14a9-2ea7-ee8b-946ba28a782e@redhat.com>
-In-Reply-To: <d58351aa-14a9-2ea7-ee8b-946ba28a782e@redhat.com>
-From:   Chris Chiu <chiu@endlessos.org>
-Date:   Thu, 10 Dec 2020 11:25:15 +0800
-Message-ID: <CAB4CAwcwrVEoYwPaVYo_TQ-v9qqEe1DrdqgBkm+wot9ehAT+xg@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: axp288_fuel_gauge: Add the ECS EF20EA to
- the blacklist
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     sre@kernel.org, wens@csie.org, Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux@endlessos.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c08349db08db67e71cf428fe7fd53624aaa0acf8.1607216141.git.cristian.ciocaltea@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 9, 2020 at 10:57 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 12/9/20 5:50 AM, Chris Chiu wrote:
-> > The ECS EF20EA laptop ships an AXP288 but it is actually using a
-> > different, separate FG chip for AC and battery monitoring. On this
-> > laptop we need to keep using the regular ACPI driver and disable the
-> > AXP288 FG to avoid reporting two batteries to userspace.
-> >
-> > Signed-off-by: Chris Chiu <chiu@endlessos.org>
-> > ---
-> >  drivers/power/supply/axp288_fuel_gauge.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-> > index 148eb8105803..a15c322c79ea 100644
-> > --- a/drivers/power/supply/axp288_fuel_gauge.c
-> > +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> > @@ -739,6 +739,12 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
-> >                       DMI_MATCH(DMI_PRODUCT_NAME, "Z83-4"),
-> >               }
-> >       },
-> > +     {
-> > +             /* ECS EF20 */
-> > +             .matches = {
-> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "EF20"),
-> > +             },
-> > +     },
-> >       {}
-> >  };
->
-> The axp288_fuel_gauge_blacklist already has the following entry:
->
->         {
->                 /* ECS EF20EA */
->                 .matches = {
->                         DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
->                 },
->         },
->
-> So is this real entry really necessary? The existing entry
-> matches the quirk for this in drivers/acpi/battery.c:
->
->         {
->                 /* ECS EF20EA, AXP288 PMIC but uses separate fuel-gauge */
->                 .callback = battery_do_not_check_pmic_quirk,
->                 .matches = {
->                         DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
->                 },
->         },
->
-> And the one in drivers/acpi/ac.c:
->
->         {
->                 /* ECS EF20EA, AXP288 PMIC but uses separate fuel-gauge */
->                 .callback = ac_do_not_check_pmic_quirk,
->                 .matches = {
->                         DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
->                 },
->         },
->
-> So I don't think that this patch is necessary...
->
-> Regards,
->
-> Hans
->
->
+On Sun, Dec 06, 2020 at 03:27:01AM +0200, Cristian Ciocaltea wrote:
+> Add a new common property 'reset-time-sec' to be used in conjunction
+> with the devices supporting the key pressed reset feature.
+> 
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+> ---
+> Changes in v3:
+>  - This patch was not present in v2
+> 
+>  Documentation/devicetree/bindings/input/input.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/input/input.yaml b/Documentation/devicetree/bindings/input/input.yaml
+> index ab407f266bef..caba93209ae7 100644
+> --- a/Documentation/devicetree/bindings/input/input.yaml
+> +++ b/Documentation/devicetree/bindings/input/input.yaml
+> @@ -34,4 +34,11 @@ properties:
+>        specify this property.
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>  
+> +  reset-time-sec:
 
-Thanks for pointing that out. We kept this downstreamly for a long time and
-didn't notice it's already there.
+Humm, I'm pretty sure we already have something for this. Or maybe just 
+power off.
+
+> +    description:
+> +      Duration in seconds which the key should be kept pressed for device to
+> +      reset automatically. Device with key pressed reset feature can specify
+> +      this property.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+>  additionalProperties: true
+> -- 
+> 2.29.2
+> 
