@@ -2,560 +2,307 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEE52D4F4E
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 01:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F217D2D50D5
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 03:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727946AbgLJAVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Dec 2020 19:21:21 -0500
-Received: from mga02.intel.com ([134.134.136.20]:4524 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727776AbgLJAVL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Dec 2020 19:21:11 -0500
-IronPort-SDR: 3RSSkpICN96kRR/DR3cKzS8LBc/LfLCBtnMTs+cFkW2gdwIpkhM5bNQvpeSrQVDKk3vkElQrjO
- AWIHG3QIdyCQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161222532"
-X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="161222532"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 16:19:23 -0800
-IronPort-SDR: V7H6NldzDZNIK8MdInd2N9VBYoRyB5kbcGZjXiq9nCFGQhCbyZXTA2PuJ9/ANZVe8HvZ48ro+I
- JoONnRVs+3IA==
-X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="364364943"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.212.28.89])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 16:19:23 -0800
-Message-ID: <85f61d055f282b98dc98ce75a93a71c5b56939de.camel@linux.intel.com>
-Subject: Re: [PATCH 3/4] thermal: int340x: processor_thermal: Add RFIM driver
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
-        amitk@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Date:   Wed, 09 Dec 2020 16:19:22 -0800
-In-Reply-To: <8cf8cad2-688d-b290-9a13-fcf9801f9acd@linaro.org>
-References: <20201126171829.945969-1-srinivas.pandruvada@linux.intel.com>
-         <20201126171829.945969-3-srinivas.pandruvada@linux.intel.com>
-         <8cf8cad2-688d-b290-9a13-fcf9801f9acd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1728442AbgLJCZY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Dec 2020 21:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726194AbgLJCZY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Dec 2020 21:25:24 -0500
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA21C0613CF;
+        Wed,  9 Dec 2020 18:24:44 -0800 (PST)
+Received: by mail-il1-x144.google.com with SMTP id g1so3687283ilk.7;
+        Wed, 09 Dec 2020 18:24:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zWNVv4YMV2PFKpOMRhyBps+DMj5kRPCH4xGx94Vtlho=;
+        b=cW4DrQm+BE61QXvszpPHu0CXGQce0kitrA7R64qCX0NNX4gkmSqWPDjmNN+WeW4eJK
+         nrm8FIp9frb4NFcvS7iNo0aYM16F/atxfkIZGNJAU93XX6flp6Z4UliXuitHt/SBuqhp
+         uKVJrDco4DNVMmBkSpI5jdCOUoioxeROd/XF7Nok6K/y9ugSNBIVUmPTycbQfA4kenUD
+         kBLu2naj95Z4GGsg4DOjcmCxL2S41TB+eYJM63xfykzcriyMJDZnyqrMu+J+SdLY3mg2
+         UlC5KLHKjRsDMKP1CJ34ZMuMeLGQPX1eOGO5zps3/iLGjbUEA3s4ccbowrL6nAP0Jz3D
+         SBtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zWNVv4YMV2PFKpOMRhyBps+DMj5kRPCH4xGx94Vtlho=;
+        b=gM3l4DawcOWfYlHm0fRtO8rp0gv8covRvd9RujKJ4LA1eS3UKaeeojsmSdbtFBeOo6
+         hCz0pL+raNvFSEcm2T1If2i2SBC+B9GWCN0NuyGkWYilaFx2MOzHvk+23VA7+v6HhyW9
+         /Ab0VGJ0lz1Bx0j45yo0rlW7k+BHci40VOIwvteuQKwk1YjSCiogbUHpICZb3CzQUvh0
+         kndbaIoQaM7aThC3jjPo77UGaC3jkk2ZGRjf1oIoFtm3FVzI2qpFv0rptQrmoI9lxixM
+         b9RBjiFynkpQz6CKxzH5PgTntxmibvfK59R3/DAaz1Z7c7RR+PBWHzabyFO2KNfP1Axm
+         xHjw==
+X-Gm-Message-State: AOAM533PvkdrTXx1qIxNWSNu+g4qd6bxTvJd4BALaxjFItWl4nuDhN0s
+        jSvZ3GMrdPZRv3cwaTEG0RtmBtmKtiMM46bJvNQ=
+X-Google-Smtp-Source: ABdhPJz6BK/avwLjPvcSq2hE0Y95/fFKDyS0MYK9EplsEt1wIFnbj5n+rBgIeIayxexaS7i7ixJ0SSGcaGZNFLs1oE4=
+X-Received: by 2002:a92:c682:: with SMTP id o2mr7157059ilg.97.1607567083485;
+ Wed, 09 Dec 2020 18:24:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20201204200920.133780-1-mario.limonciello@dell.com>
+ <d0f7e565-05e1-437e-4342-55eb73daa907@redhat.com> <DM6PR19MB2636A4097B68DBB253C416D8FACE0@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <383daf0d-8a9b-c614-aded-6e816f530dcd@intel.com> <e7d57370-e35e-a9e6-2dd9-aa7855c15650@redhat.com>
+ <CAKgT0UebNROCeAyyg0Jf-pTfLDd-oNyu2Lo-gkZKWk=nOAYL8g@mail.gmail.com> <f02a02b7-16e7-89e9-f7ca-b6554ef5503e@redhat.com>
+In-Reply-To: <f02a02b7-16e7-89e9-f7ca-b6554ef5503e@redhat.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Wed, 9 Dec 2020 18:24:32 -0800
+Message-ID: <CAKgT0UeBuy3S2wKrU+5jwEu9w2yQpmG8Bb+HvPvFCSPuZ=Z-6Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] Improve s0ix flows for systems i219LM
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Neftin, Sasha" <sasha.neftin@intel.com>,
+        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Aaron Brown <aaron.f.brown@intel.com>,
+        Stefan Assmann <sassmann@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        "darcari@redhat.com" <darcari@redhat.com>,
+        "Shen, Yijun" <Yijun.Shen@dell.com>,
+        "Yuan, Perry" <Perry.Yuan@dell.com>,
+        "anthony.wong@canonical.com" <anthony.wong@canonical.com>,
+        viltaly.lifshits@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2020-12-09 at 21:48 +0100, Daniel Lezcano wrote:
-> On 26/11/2020 18:18, Srinivas Pandruvada wrote:
-> > Add support for RFIM (Radio Frequency Interference Mitigation)
-> > support
-> > via processor thermal PCI device. This drivers allows adjustment of
-> > FIVR (Fully Integrated Voltage Regulator) and DDR (Double Data
-> > Rate)
-> > frequencies to avoid RF interference with WiFi and 5G.
-> > 
-> > Switching voltage regulators (VR) generate radiated EMI or RFI at
-> > the
-> > fundamental frequency and its harmonics. Some harmonics may
-> > interfere
-> > with very sensitive wireless receivers such as Wi-Fi and cellular
-> > that
-> > are integrated into host systems like notebook PCs.  One of
-> > mitigation
-> > methods is requesting SOC integrated VR (IVR) switching frequency
-> > to a
-> > small % and shift away the switching noise harmonic interference
-> > from
-> > radio channels.  OEM or ODMs can use the driver to control SOC IVR
-> > operation within the range where it does not impact IVR
-> > performance.
-> > 
-> > DRAM devices of DDR IO interface and their power plane can generate
-> > EMI
-> > at the data rates. Similar to IVR control mechanism, Intel offers a
-> > mechanism by which DDR data rates can be changed if several
-> > conditions
-> > are met: there is strong RFI interference because of DDR; CPU power
-> > management has no other restriction in changing DDR data rates;
-> > PC ODMs enable this feature (real time DDR RFI Mitigation referred
-> > to as
-> > DDR-RFIM) for Wi-Fi from BIOS.
-> 
-> Thanks for the technical details, it is interesting.
-> 
-> May be I missed something but how this is related to thermal
+On Wed, Dec 9, 2020 at 6:44 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi,
+>
+> On 12/8/20 5:14 PM, Alexander Duyck wrote:
+> > On Tue, Dec 8, 2020 at 1:30 AM Hans de Goede <hdegoede@redhat.com> wrot=
+e:
+> >>
+> >> Hi,
+> >>
+> >> On 12/8/20 6:08 AM, Neftin, Sasha wrote:
+> >>> On 12/7/2020 17:41, Limonciello, Mario wrote:
+> >>>>> First of all thank you for working on this.
+> >>>>>
+> >>>>> I must say though that I don't like the approach taken here very
+> >>>>> much.
+> >>>>>
+> >>>>> This is not so much a criticism of this series as it is a criticism
+> >>>>> of the earlier decision to simply disable s0ix on all devices
+> >>>>> with the i219-LM + and active ME.
+> >>>>
+> >>>> I was not happy with that decision either as it did cause regression=
+s
+> >>>> on all of the "named" Comet Lake laptops that were in the market at
+> >>>> the time.  The "unnamed" ones are not yet released, and I don't feel
+> >>>> it's fair to call it a regression on "unreleased" hardware.
+> >>>>
+> >>>>>
+> >>>>> AFAIK there was a perfectly acceptable patch to workaround those
+> >>>>> broken devices, which increased a timeout:
+> >>>>> https://patchwork.ozlabs.org/project/intel-wired-
+> >>>>> lan/patch/20200323191639.48826-1-aaron.ma@canonical.com/
+> >>>>>
+> >>>>> That patch was nacked because it increased the resume time
+> >>>>> *on broken devices*.
+> >>>>>
+> >>> Officially CSME/ME not POR for Linux and we haven't interface to the =
+ME. Nobody can tell how long (and why) ME will hold PHY access semaphore an=
+t just increasing the resuming time (ULP configure) won't be solve the prob=
+lem. This is not reliable approach.
+> >>> I would agree users can add ME system on their responsibilities.
+> >>
+> >> It is not clear to me what you are trying to say here.
+> >
+> > Based on the earlier thread you had referenced and his comment here it
+> > sounds like while adding time will work for most cases, it doesn't
+> > solve it for all cases.
+>
+> AFAIK there are 0 documented cases where the suspend/resume issue
+> continues to be a problem after the timeout has been increased.
+>
+> If you know of actual documented cases (rather then this just being
+> a theoretical problem), then please provide links to those cases.
 
-Not directly offering thermal control but uses the thermal PCI device
-(via MMIO) as this allows optimal RF frequencies which will result in
-optimal TX power. Higher TX power consumption can result in non optimal
-die temperature. Idea is manage power before this cause issue.
+If there are such notes I wouldn't have access to them. Do we know if
+any sort of errata document has been posted for this issue by Intel?
+That would be where an explanation of the problems and the reasoning
+behind the workaround would be defined. Without that I am just
+speculating based off of what has been said here and in the other
+thread.
 
-Thanks,
-Srinivas
+> > The problem is as a vendor you are usually
+> > stuck looking for a solution that will work for all cases which can
+> > lead to things like having to drop features because they can be
+> > problematic for a few cases.
+>
+> I disagree, there will/might always be some broken corner case
+> laptop-model / hw-design out there on which a feature breaks. Simply
+> disabling all features which might cause problems in "a few cases"
+> would mean that we pretty much have to disable over half the features
+> in the kernel.
+>
+> Take for example SATA NCQ (command queing) this is know to not work
+> on some devices, up to the point of where with some buggy firmwares
+> it may cause full systems hangs and/or data-corruption. So this is
+> a much bigger problem then the "system won't suspend" issue we
+> are talking about here. Still the ATA subsys maintainers have enabled
+> this by default because it is an important feature to have and they
+> are using a deny-list to avoid enabling this on known broken hardware;
+> and yes every know and then we need to add a new model to the deny-list.
+>
+> And the same for SATA ALPM support (a power-management feature like s0ix)
+> that is enabled by default too, combined with a deny-list.
+> I'm very familiar with the ALPM case since I pushed of it being
+> enabled by default and I've done most of the maintenance work
+> of the deny-list since it was enabled by default.
+>
+> The kernel is full of this pattern, we don't disable an important
+> feature (and power-management is important) just because of this
+> causing issues in "a few cases". And again you say "a few cases"
+> but I know of 0 documented cases where this issue is still a problem
+> after bumping the timeout.
 
-> 
-> 
-> > This change exports two folders under
-> > /sys/bus/pci/devices/0000:00:04.0.
-> > One folder "fivr" contains all attributes exposed for controling
-> > FIVR
-> > features. The other folder "dvfs" contains all attributes for DDR
-> > features.
-> > 
-> > Changes done to implement:
-> > - New module for rfim interfaces
-> > - Two new per processor features for DDR and FIVR
-> > - Enable feature for Tiger Lake (FIVR only) and Alder Lake
-> > 
-> > The attributes exposed and explanation:
-> > 
-> > FIVR attributes
-> > 
-> > vco_ref_code_lo (RW): The VCO reference code is an 11-bit field and
-> > controls the FIVR switching frequency. This is the 3-bit LSB field.
-> > 
-> > vco_ref_code_hi (RW): The VCO reference code is an 11-bit field and
-> > controls the FIVR switching frequency. This is the 8-bit MSB field.
-> > 
-> > spread_spectrum_pct (RW): Set the FIVR spread spectrum clocking
-> > percentage
-> > 
-> > spread_spectrum_clk_enable (RW): Enable/disable of the FIVR spread
-> > spectrum clocking feature
-> > 
-> > rfi_vco_ref_code (RW): This field is a read only status register
-> > which
-> > reflects the current FIVR switching frequency
-> > 
-> > fivr_fffc_rev (RW): This field indicated the revision of the FIVR
-> > HW.
-> > 
-> > DVFS attributes
-> > 
-> > rfi_restriction_run_busy (RW): Request the restriction of specific
-> > DDR
-> > data rate and set this value 1. Self reset to 0 after operation.
-> > 
-> > rfi_restriction_err_code (RW): Values:  0 :Request is accepted,
-> > 1:Feature
-> > disabled, 2: the request restricts more points than it is allowed
-> > 
-> > rfi_restriction_data_rate_Delta (RW): Restricted DDR data rate for
-> > RFI
-> > protection: Lower Limit
-> > 
-> > rfi_restriction_data_rate_Base (RW): Restricted DDR data rate for
-> > RFI
-> > protection: Upper Limit
-> > 
-> > ddr_data_rate_point_0 (RO): DDR data rate selection 1st point
-> > 
-> > ddr_data_rate_point_1 (RO): DDR data rate selection 2nd point
-> > 
-> > ddr_data_rate_point_2 (RO): DDR data rate selection 3rd point
-> > 
-> > ddr_data_rate_point_3 (RO): DDR data rate selection 4th point
-> > 
-> > rfi_disable (RW): Disable DDR rate change feature
-> > 
-> > Signed-off-by: Srinivas Pandruvada <
-> > srinivas.pandruvada@linux.intel.com>
-> > ---
-> >  .../thermal/intel/int340x_thermal/Makefile    |   1 +
-> >  .../processor_thermal_device.c                |  23 +-
-> >  .../processor_thermal_device.h                |   5 +
-> >  .../int340x_thermal/processor_thermal_rfim.c  | 244
-> > ++++++++++++++++++
-> >  4 files changed, 270 insertions(+), 3 deletions(-)
-> >  create mode 100644
-> > drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> > 
-> > diff --git a/drivers/thermal/intel/int340x_thermal/Makefile
-> > b/drivers/thermal/intel/int340x_thermal/Makefile
-> > index 86e8d3c87df7..f4e2eb7d9606 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/Makefile
-> > +++ b/drivers/thermal/intel/int340x_thermal/Makefile
-> > @@ -5,5 +5,6 @@ obj-$(CONFIG_INT340X_THERMAL)	+=
-> > int3402_thermal.o
-> >  obj-$(CONFIG_INT340X_THERMAL)	+= int3403_thermal.o
-> >  obj-$(CONFIG_INT340X_THERMAL)	+= processor_thermal_device.o
-> >  obj-$(CONFIG_PROC_THERMAL_MMIO_RAPL) += processor_thermal_rapl.o
-> > +obj-$(CONFIG_INT340X_THERMAL)	+= processor_thermal_rfim.o
-> >  obj-$(CONFIG_INT3406_THERMAL)	+= int3406_thermal.o
-> >  obj-$(CONFIG_ACPI_THERMAL_REL)	+= acpi_thermal_rel.o
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> > index 589ac7deec02..b6a7358b989d 100644
-> > ---
-> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> > +++
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> > @@ -429,6 +429,8 @@ static int proc_thermal_mmio_add(struct pci_dev
-> > *pdev,
-> >  {
-> >  	int ret;
-> >  
-> > +	proc_priv->mmio_feature_mask = feature_mask;
-> > +
-> >  	if (feature_mask) {
-> >  		ret = proc_thermal_set_mmio_base(pdev, proc_priv);
-> >  		if (ret)
-> > @@ -443,9 +445,21 @@ static int proc_thermal_mmio_add(struct
-> > pci_dev *pdev,
-> >  		}
-> >  	}
-> >  
-> > -	proc_priv->mmio_feature_mask = feature_mask;
-> > +	if (feature_mask & PROC_THERMAL_FEATURE_FIVR ||
-> > +	    feature_mask & PROC_THERMAL_FEATURE_DVFS) {
-> > +		ret = proc_thermal_rfim_add(pdev, proc_priv);
-> > +		if (ret) {
-> > +			dev_err(&pdev->dev, "failed to add RFIM
-> > interface\n");
-> > +			goto err_rem_rapl;
-> > +		}
-> > +	}
-> >  
-> >  	return 0;
-> > +
-> > +err_rem_rapl:
-> > +	proc_thermal_rapl_remove();
-> > +
-> > +	return ret;
-> >  }
-> >  
-> >  static void proc_thermal_mmio_remove(struct pci_dev *pdev)
-> > @@ -455,6 +469,9 @@ static void proc_thermal_mmio_remove(struct
-> > pci_dev *pdev)
-> >  	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_RAPL)
-> >  		proc_thermal_rapl_remove();
-> >  
-> > +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR ||
-> > +	    proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
-> > +		proc_thermal_rfim_remove(pdev);
-> >  }
-> >  
-> >  static int  proc_thermal_pci_probe(struct pci_dev *pdev,
-> > @@ -566,7 +583,7 @@ static int proc_thermal_resume(struct device
-> > *dev)
-> >  static SIMPLE_DEV_PM_OPS(proc_thermal_pm, NULL,
-> > proc_thermal_resume);
-> >  
-> >  static const struct pci_device_id proc_thermal_pci_ids[] = {
-> > -	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL,
-> > PROC_THERMAL_FEATURE_RAPL) },
-> > +	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL
-> > | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS) },
-> >  	{ PCI_DEVICE_DATA(INTEL, BDW_THERMAL, 0) },
-> >  	{ PCI_DEVICE_DATA(INTEL, BSW_THERMAL, 0) },
-> >  	{ PCI_DEVICE_DATA(INTEL, BXT0_THERMAL, 0) },
-> > @@ -580,7 +597,7 @@ static const struct pci_device_id
-> > proc_thermal_pci_ids[] = {
-> >  	{ PCI_DEVICE_DATA(INTEL, ICL_THERMAL,
-> > PROC_THERMAL_FEATURE_RAPL) },
-> >  	{ PCI_DEVICE_DATA(INTEL, JSL_THERMAL, 0) },
-> >  	{ PCI_DEVICE_DATA(INTEL, SKL_THERMAL,
-> > PROC_THERMAL_FEATURE_RAPL) },
-> > -	{ PCI_DEVICE_DATA(INTEL, TGL_THERMAL,
-> > PROC_THERMAL_FEATURE_RAPL) },
-> > +	{ PCI_DEVICE_DATA(INTEL, TGL_THERMAL, PROC_THERMAL_FEATURE_RAPL
-> > | PROC_THERMAL_FEATURE_FIVR) },
-> >  	{ },
-> >  };
-> >  
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> > index 45214571e00d..4bbb88f6b4a7 100644
-> > ---
-> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> > +++
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> > @@ -54,6 +54,8 @@ struct rapl_mmio_regs {
-> >  
-> >  #define PROC_THERMAL_FEATURE_NONE	0x00
-> >  #define PROC_THERMAL_FEATURE_RAPL	0x01
-> > +#define PROC_THERMAL_FEATURE_FIVR	0x02
-> > +#define PROC_THERMAL_FEATURE_DVFS	0x04
-> >  
-> >  #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
-> >  int proc_thermal_rapl_add(struct pci_dev *pdev, struct
-> > proc_thermal_device *proc_priv);
-> > @@ -70,4 +72,7 @@ static void __maybe_unused
-> > proc_thermal_rapl_remove(void)
-> >  }
-> >  #endif
-> >  
-> > +int proc_thermal_rfim_add(struct pci_dev *pdev, struct
-> > proc_thermal_device *proc_priv);
-> > +void proc_thermal_rfim_remove(struct pci_dev *pdev);
-> > +
-> >  #endif
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> > new file mode 100644
-> > index 000000000000..aef993a813e2
-> > --- /dev/null
-> > +++
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> > @@ -0,0 +1,244 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * processor thermal device RFIM control
-> > + * Copyright (c) 2020, Intel Corporation.
-> > + */
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/pci.h>
-> > +#include "processor_thermal_device.h"
-> > +
-> > +struct mmio_reg {
-> > +	int read_only;
-> > +	u32 offset;
-> > +	int bits;
-> > +	u16 mask;
-> > +	u16 shift;
-> > +};
-> > +
-> > +/* These will represent sysfs attribute names */
-> > +static const char * const fivr_strings[] = {
-> > +	"vco_ref_code_lo",
-> > +	"vco_ref_code_hi",
-> > +	"spread_spectrum_pct",
-> > +	"spread_spectrum_clk_enable",
-> > +	"rfi_vco_ref_code",
-> > +	"fivr_fffc_rev",
-> > +	NULL
-> > +};
-> > +
-> > +static const struct mmio_reg tgl_fivr_mmio_regs[] = {
-> > +	{ 0, 0x5A18, 3, 0x7, 12}, /* vco_ref_code_lo */
-> > +	{ 0, 0x5A18, 8, 0xFF, 16}, /* vco_ref_code_hi */
-> > +	{ 0, 0x5A08, 8, 0xFF, 0}, /* spread_spectrum_pct */
-> > +	{ 0, 0x5A08, 1, 0x1, 8}, /* spread_spectrum_clk_enable */
-> > +	{ 1, 0x5A10, 12, 0xFFF, 0}, /* rfi_vco_ref_code */
-> > +	{ 1, 0x5A14, 2, 0x3, 1}, /* fivr_fffc_rev */
-> > +};
-> > +
-> > +/* These will represent sysfs attribute names */
-> > +static const char * const dvfs_strings[] = {
-> > +	"rfi_restriction_run_busy",
-> > +	"rfi_restriction_err_code",
-> > +	"rfi_restriction_data_rate",
-> > +	"rfi_restriction_data_rate_base",
-> > +	"ddr_data_rate_point_0",
-> > +	"ddr_data_rate_point_1",
-> > +	"ddr_data_rate_point_2",
-> > +	"ddr_data_rate_point_3",
-> > +	"rfi_disable",
-> > +	NULL
-> > +};
-> > +
-> > +static const struct mmio_reg adl_dvfs_mmio_regs[] = {
-> > +	{ 0, 0x5A38, 1, 0x1, 31}, /* rfi_restriction_run_busy */
-> > +	{ 0, 0x5A38, 7, 0x7F, 24}, /* rfi_restriction_err_code */
-> > +	{ 0, 0x5A38, 8, 0xFF, 16}, /* rfi_restriction_data_rate */
-> > +	{ 0, 0x5A38, 16, 0xFFFF, 0}, /* rfi_restriction_data_rate_base
-> > */
-> > +	{ 0, 0x5A30, 10, 0x3FF, 0}, /* ddr_data_rate_point_0 */
-> > +	{ 0, 0x5A30, 10, 0x3FF, 10}, /* ddr_data_rate_point_1 */
-> > +	{ 0, 0x5A30, 10, 0x3FF, 20}, /* ddr_data_rate_point_2 */
-> > +	{ 0, 0x5A30, 10, 0x3FF, 30}, /* ddr_data_rate_point_3 */
-> > +	{ 0, 0x5A40, 1, 0x1, 0}, /* rfi_disable */
-> > +};
-> > +
-> > +#define RFIM_SHOW(suffix, table)\
-> > +static ssize_t suffix##_show(struct device *dev,\
-> > +			      struct device_attribute *attr,\
-> > +			      char *buf)\
-> > +{\
-> > +	struct proc_thermal_device *proc_priv;\
-> > +	struct pci_dev *pdev = to_pci_dev(dev);\
-> > +	const struct mmio_reg *mmio_regs;\
-> > +	const char **match_strs;\
-> > +	u32 reg_val;\
-> > +	int ret;\
-> > +\
-> > +	proc_priv = pci_get_drvdata(pdev);\
-> > +	if (table) {\
-> > +		match_strs = (const char **)dvfs_strings;\
-> > +		mmio_regs = adl_dvfs_mmio_regs;\
-> > +	} else { \
-> > +		match_strs = (const char **)fivr_strings;\
-> > +		mmio_regs = tgl_fivr_mmio_regs;\
-> > +	} \
-> > +	\
-> > +	ret = match_string(match_strs, -1, attr->attr.name);\
-> > +	if (ret < 0)\
-> > +		return ret;\
-> > +	reg_val = readl((void __iomem *) (proc_priv->mmio_base +
-> > mmio_regs[ret].offset));\
-> > +	ret = (reg_val >> mmio_regs[ret].shift) & mmio_regs[ret].mask;\
-> > +	return sprintf(buf, "%u\n", ret);\
-> > +}
-> > +
-> > +#define RFIM_STORE(suffix, table)\
-> > +static ssize_t suffix##_store(struct device *dev,\
-> > +			       struct device_attribute *attr,\
-> > +			       const char *buf, size_t count)\
-> > +{\
-> > +	struct proc_thermal_device *proc_priv;\
-> > +	struct pci_dev *pdev = to_pci_dev(dev);\
-> > +	unsigned int input;\
-> > +	const char **match_strs;\
-> > +	const struct mmio_reg *mmio_regs;\
-> > +	int ret, err;\
-> > +	u32 reg_val;\
-> > +	u32 mask;\
-> > +\
-> > +	proc_priv = pci_get_drvdata(pdev);\
-> > +	if (table) {\
-> > +		match_strs = (const char **)dvfs_strings;\
-> > +		mmio_regs = adl_dvfs_mmio_regs;\
-> > +	} else { \
-> > +		match_strs = (const char **)fivr_strings;\
-> > +		mmio_regs = tgl_fivr_mmio_regs;\
-> > +	} \
-> > +	\
-> > +	ret = match_string(match_strs, -1, attr->attr.name);\
-> > +	if (ret < 0)\
-> > +		return ret;\
-> > +	if (mmio_regs[ret].read_only)\
-> > +		return -EPERM;\
-> > +	err = kstrtouint(buf, 10, &input);\
-> > +	if (err)\
-> > +		return err;\
-> > +	mask = GENMASK(mmio_regs[ret].shift + mmio_regs[ret].bits - 1,
-> > mmio_regs[ret].shift);\
-> > +	reg_val = readl((void __iomem *) (proc_priv->mmio_base +
-> > mmio_regs[ret].offset));\
-> > +	reg_val &= ~mask;\
-> > +	reg_val |= (input << mmio_regs[ret].shift);\
-> > +	writel(reg_val, (void __iomem *) (proc_priv->mmio_base +
-> > mmio_regs[ret].offset));\
-> > +	return count;\
-> > +}
-> > +
-> > +RFIM_SHOW(vco_ref_code_lo, 0)
-> > +RFIM_SHOW(vco_ref_code_hi, 0)
-> > +RFIM_SHOW(spread_spectrum_pct, 0)
-> > +RFIM_SHOW(spread_spectrum_clk_enable, 0)
-> > +RFIM_SHOW(rfi_vco_ref_code, 0)
-> > +RFIM_SHOW(fivr_fffc_rev, 0)
-> > +
-> > +RFIM_STORE(vco_ref_code_lo, 0)
-> > +RFIM_STORE(vco_ref_code_hi, 0)
-> > +RFIM_STORE(spread_spectrum_pct, 0)
-> > +RFIM_STORE(spread_spectrum_clk_enable, 0)
-> > +RFIM_STORE(rfi_vco_ref_code, 0)
-> > +RFIM_STORE(fivr_fffc_rev, 0)
-> > +
-> > +static DEVICE_ATTR_RW(vco_ref_code_lo);
-> > +static DEVICE_ATTR_RW(vco_ref_code_hi);
-> > +static DEVICE_ATTR_RW(spread_spectrum_pct);
-> > +static DEVICE_ATTR_RW(spread_spectrum_clk_enable);
-> > +static DEVICE_ATTR_RW(rfi_vco_ref_code);
-> > +static DEVICE_ATTR_RW(fivr_fffc_rev);
-> > +
-> > +static struct attribute *fivr_attrs[] = {
-> > +	&dev_attr_vco_ref_code_lo.attr,
-> > +	&dev_attr_vco_ref_code_hi.attr,
-> > +	&dev_attr_spread_spectrum_pct.attr,
-> > +	&dev_attr_spread_spectrum_clk_enable.attr,
-> > +	&dev_attr_rfi_vco_ref_code.attr,
-> > +	&dev_attr_fivr_fffc_rev.attr,
-> > +	NULL
-> > +};
-> > +
-> > +static const struct attribute_group fivr_attribute_group = {
-> > +	.attrs = fivr_attrs,
-> > +	.name = "fivr"
-> > +};
-> > +
-> > +RFIM_SHOW(rfi_restriction_run_busy, 1)
-> > +RFIM_SHOW(rfi_restriction_err_code, 1)
-> > +RFIM_SHOW(rfi_restriction_data_rate, 1)
-> > +RFIM_SHOW(ddr_data_rate_point_0, 1)
-> > +RFIM_SHOW(ddr_data_rate_point_1, 1)
-> > +RFIM_SHOW(ddr_data_rate_point_2, 1)
-> > +RFIM_SHOW(ddr_data_rate_point_3, 1)
-> > +RFIM_SHOW(rfi_disable, 1)
-> > +
-> > +RFIM_STORE(rfi_restriction_run_busy, 1)
-> > +RFIM_STORE(rfi_restriction_err_code, 1)
-> > +RFIM_STORE(rfi_restriction_data_rate, 1)
-> > +RFIM_STORE(rfi_disable, 1)
-> > +
-> > +static DEVICE_ATTR_RW(rfi_restriction_run_busy);
-> > +static DEVICE_ATTR_RW(rfi_restriction_err_code);
-> > +static DEVICE_ATTR_RW(rfi_restriction_data_rate);
-> > +static DEVICE_ATTR_RO(ddr_data_rate_point_0);
-> > +static DEVICE_ATTR_RO(ddr_data_rate_point_1);
-> > +static DEVICE_ATTR_RO(ddr_data_rate_point_2);
-> > +static DEVICE_ATTR_RO(ddr_data_rate_point_3);
-> > +static DEVICE_ATTR_RW(rfi_disable);
-> > +
-> > +static struct attribute *dvfs_attrs[] = {
-> > +	&dev_attr_rfi_restriction_run_busy.attr,
-> > +	&dev_attr_rfi_restriction_err_code.attr,
-> > +	&dev_attr_rfi_restriction_data_rate.attr,
-> > +	&dev_attr_ddr_data_rate_point_0.attr,
-> > +	&dev_attr_ddr_data_rate_point_1.attr,
-> > +	&dev_attr_ddr_data_rate_point_2.attr,
-> > +	&dev_attr_ddr_data_rate_point_3.attr,
-> > +	&dev_attr_rfi_disable.attr,
-> > +	NULL
-> > +};
-> > +
-> > +static const struct attribute_group dvfs_attribute_group = {
-> > +	.attrs = dvfs_attrs,
-> > +	.name = "dvfs"
-> > +};
-> > +
-> > +int proc_thermal_rfim_add(struct pci_dev *pdev, struct
-> > proc_thermal_device *proc_priv)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
-> > +		ret = sysfs_create_group(&pdev->dev.kobj,
-> > &fivr_attribute_group);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS) {
-> > +		ret = sysfs_create_group(&pdev->dev.kobj,
-> > &dvfs_attribute_group);
-> > +		if (ret && proc_priv->mmio_feature_mask &
-> > PROC_THERMAL_FEATURE_FIVR) {
-> > +			sysfs_remove_group(&pdev->dev.kobj,
-> > &fivr_attribute_group);
-> > +			return ret;
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(proc_thermal_rfim_add);
-> > +
-> > +void proc_thermal_rfim_remove(struct pci_dev *pdev)
-> > +{
-> > +	struct proc_thermal_device *proc_priv = pci_get_drvdata(pdev);
-> > +
-> > +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR)
-> > +		sysfs_remove_group(&pdev->dev.kobj,
-> > &fivr_attribute_group);
-> > +
-> > +	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
-> > +		sysfs_remove_group(&pdev->dev.kobj,
-> > &dvfs_attribute_group);
-> > +}
-> > +EXPORT_SYMBOL_GPL(proc_thermal_rfim_remove);
-> > +
-> > +MODULE_LICENSE("GPL v2");
-> > 
-> 
-> 
+It all comes down to who owns the maintenance in those cases. That is
+the heart of the issue.
 
+Last I knew Intel was maintaining the e1000e driver. So the decision
+to support this or not is up to them unless Dave or Jakub want to
+override. Basically the maintenance cost has to be assumed by whoever
+decides what route to go. I guess Intel for now is opting to require
+an allow-list rather than a deny-list for that reason. That way
+whoever adds a new device is on the hook to verify it works, rather
+than them having to fix things after something breaks.
+
+> >> Are you saying that you insist on keeping the e1000e_check_me check an=
+d
+> >> thus needlessly penalizing 100s of laptops models with higher
+> >> power-consumption unless these 100s of laptops are added manually
+> >> to an allow list for this?
+> >>
+> >> I'm sorry but that is simply unacceptable, the maintenance burden
+> >> of that is just way too high.
+> >
+> > Think about this the other way though. If it is enabled and there are
+> > cases where adding a delay doesn't resolve it then it still doesn't
+> > really solve the issue does it?
+>
+> Again AFAIK that is a theoretical "If it ..." and even if it is not
+> theoretical, then we can add a deny-list. Maintaining a deny list for
+> "a few cases" being broken is a lot easier then maintaining an allow
+> list for allother hardware out there.
+>
+> Let me put it this way, the allow-list will be orders of magnitude
+> longer then the deny lists. Which list would you rather manually
+> keep up2date?
+
+It all depends on the support model. An allow-list puts the onus on
+the vendors to validate their parts before they have access to the
+feature as we are seeing now from Dell. A deny-list would put the onus
+on the community and Intel as we would have to find and document the
+cases where this doesn't work. Ultimately it all comes down to who has
+to do the work.
+
+> >> Testing on the models where the timeout issue was first hit has
+> >> shown that increasing the timeout does actually fix it on those
+> >> models. Sure in theory the ME on some buggy model could hold the
+> >> semaphore even longer, but then the right thing would be to
+> >> have a deny-list for s0ix where we can add those buggy models
+> >> (none of which we have encountered sofar). Just like we have
+> >> denylist for buggy hw in other places in the kernel.
+> >
+> > This would actually have a higher maintenance burden then just
+> > disabling the feature. Having to individually test for and deny-list
+> > every one-off system with this bad configuration would be a pretty
+> > significant burden. That also implies somebody would have access to
+> > such systems and that is not normally the case. Even Intel doesn't
+> > have all possible systems that would include this NIC.
+> >
+> >> Maintaining an ever growing allow list for the *theoretical*
+> >> case of encountering a model where things do not work with
+> >> the increased timeout is not a workable and this not an
+> >> acceptable solution.
+> >
+> > I'm not a fan of the allow-list either, but it is preferable to a
+> > deny-list where you have to first trigger the bug before you realize
+> > it is there.
+>
+> IIRC, if the bug is there the system does not suspend, and the e1000e
+> driver logs an error that it is the culprit. So this is very easy to spot=
+ /
+> detect by end users when they hit it.
+>
+> Again the kernel is full of deny lists to disable some features
+> on broken hardware, with sometimes hitting the buggy/broken hw
+> scenario having much worse consequences. Yet this is how this is
+> done everywhere.
+>
+> The e1000e driver really is not all that special that it should
+> get an exception to how this is normally done.
+
+Actually allow-lists are not all that uncommon when it comes to the
+network tree. The fact is there are a number of PHYs and the like that
+are supported only by allow-list if I recall on the Intel parts.
+Basically the model depends on the issue. If you want to be able to
+test and verify something before you add support for it normally an
+allow-list is the way to go.
+
+> > Ideally there should be another solution in which the ME
+> > could somehow set a flag somewhere in the hardware to indicate that it
+> > is alive and the driver could read that order to determine if the ME
+> > is actually alive and can skip this workaround. Then this could all be
+> > avoided and it can be safely assumed the system is working correctly.
+> >
+> >> The initial addition of the e1000e_check_me check instead
+> >> of just going with the confirmed fix of bumping the timeout
+> >> was already highly controversial and should IMHO never have
+> >> been done.
+> >
+> > How big was the sample size for the "confirmed" fix? How many
+> > different vendors were there within the mix? The problem is while it
+> > may have worked for the case you encountered you cannot say with
+> > certainty that it worked in all cases unless you had samples of all
+> > the different hardware out there.
+> >
+> >> Combining this with an ever-growing allow-list on which every
+> >> new laptop model needs to be added separately + a new
+> >> "s0ix-enabled" ethertool flag, which existence is basically
+> >> an admission that the allow-list approach is flawed goes
+> >> from controversial to just plain not acceptable.
+> >
+> > I don't view this as problematic, however this is some overhead to it.
+> > One thing I don't know is if anyone has looked at is if the issue only
+> > applies to a few specific system vendors. Currently the allow-list is
+> > based on the subdevice ID. One thing we could look at doing is
+> > enabling it based on the subvendor ID in which case we could
+> > allow-list in large swaths of hardware with certain trusted vendors.
+> > The only issue is that it pulls in any future parts as well so it puts
+> > the onus on that manufacturer to avoid misconfiguring things in the
+> > future.
+>
+> If we go this route, we will likely get Dell, Lenovo (which had
+> the issue without the increased timeout) and maybe HP on the
+> allow-list, probably with a finer grained deny-list on top to
+> opt out on some models from these vendors where things turn
+> out to be buggy after all.
+>
+> This:
+>
+> 1. Still requires a deny-list on top (at least this is very likely)
+> 2. Leaves users of all but the 3 big vendors in the cold which
+> really is not a nice way to deal with this.
+
+Well the beauty about the kernel is that you are always welcome to
+submit a patch and we can debate it. I know in the case of the Intel
+10G NIC there was a patch that added a module parameter for overriding
+the PHY allow-list so that the NIC would try to enable whatever PHY
+was connected to it. Perhaps you could submit a similar patch that
+would allow your timer approach and add a warning indicating that if
+you see PHY hangs the s0ix issue may be responsible.
