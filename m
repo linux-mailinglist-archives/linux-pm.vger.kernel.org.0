@@ -2,111 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D68882D5B88
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 14:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2A72D5BB9
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 14:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387691AbgLJNXT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Dec 2020 08:23:19 -0500
-Received: from foss.arm.com ([217.140.110.172]:41484 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387816AbgLJNXJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:23:09 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CDC41FB;
-        Thu, 10 Dec 2020 05:22:23 -0800 (PST)
-Received: from [10.57.1.60] (unknown [10.57.1.60])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 97B5D3F718;
-        Thu, 10 Dec 2020 05:22:20 -0800 (PST)
-From:   Lukasz Luba <lukasz.luba@arm.com>
+        id S2387545AbgLJN2W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Dec 2020 08:28:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732028AbgLJN2W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Dec 2020 08:28:22 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EF6C0613D6
+        for <linux-pm@vger.kernel.org>; Thu, 10 Dec 2020 05:27:41 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id r7so5468991wrc.5
+        for <linux-pm@vger.kernel.org>; Thu, 10 Dec 2020 05:27:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2NP+PKYJsDPow7exxFRK74sky0Q+Dn5/x2QpUWD/y/w=;
+        b=Lwwv4gDzwfzwvBO0TABco/Arr9IrL0hEp2TOuhU/YvE8nfGngK6VplpBvilgt79Jl2
+         uCCAoTvDJNRTPGYc85XT4anSUYifttzmA2Jn6mQuvrBczZXdvs7NtrSFxzMVaOmCrgxI
+         9iHLh2WGQQz2C/kK9c1zYMM2M22RlxgxmnG8rnwFvhkbTOWdxQ66fJ/X5I0PFnOm4rHB
+         K9mjdPOGpeIvS0Xplk9a+8Z3ibF+TmKGp/XWc/sP3HWs85LSpedt6x3damNZCF26dRTF
+         yjg8hG73k64ZZZ6yRZ56pIBTF4J+8Ddm0zB1aZ0Er71asLTzVbipc5otKdKl/eaY82dT
+         MlNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2NP+PKYJsDPow7exxFRK74sky0Q+Dn5/x2QpUWD/y/w=;
+        b=WFOEIbQvVdHkSFGsLENkRuCHLx+zscwXz+rrdaN52rFo8QZBljGuc3PYmZS+ZbVSnS
+         tLLb+MXXnc0zGhj8FMk4vOcMwmKFvRiESi9iQgnZhEr3NC9Yz5ZhGdAfdGj8bueTPucs
+         cT4j1ZLuqRlQ9ZYaENOKHp+RzbZ7qLKAEf2yaDZ3djbRUT8VTi16Tq92DjdzotN1GjtT
+         W0raNWLbOtuHvohAfo5gn9XMHTizfg+sbrZjhXlWDJEKsqlCNqLVK5NKGw1JqnStRO2x
+         JK3nqWWByL6zbmIVpixzTxuhtd04XsiRGb9Nm/xWUZjV8qINUiu3AKLth58YQhOn9tbL
+         J91Q==
+X-Gm-Message-State: AOAM5325Q3SSsFIRl0Xs/LhElHisyCHZMmlbe4SfAXknb7A/3zCTmoN7
+        KTqkQlmbClYfZH6RSJ4D1YiK8qrqKmC8Ow==
+X-Google-Smtp-Source: ABdhPJye4M7FEunH3OAWlEPqendaSIuQgiNdl8g0otyEERNQIKw41jhXBKPIWax3tjyG7vmLm7nT8w==
+X-Received: by 2002:a5d:540f:: with SMTP id g15mr8280624wrv.397.1607606860594;
+        Thu, 10 Dec 2020 05:27:40 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4ea:d408:1aec:e109? ([2a01:e34:ed2f:f020:4ea:d408:1aec:e109])
+        by smtp.googlemail.com with ESMTPSA id j15sm9326990wrr.85.2020.12.10.05.27.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Dec 2020 05:27:39 -0800 (PST)
 Subject: Re: [PATCH v3 0/5] Thermal devfreq cooling improvements with Energy
  Model
-To:     daniel.lezcano@linaro.org
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         dri-devel@lists.freedesktop.org, rui.zhang@intel.com,
         amit.kucheria@verdurent.com, orjan.eide@arm.com, robh@kernel.org,
         alyssa.rosenzweig@collabora.com, steven.price@arm.com,
         airlied@linux.ie, daniel@ffwll.ch, ionela.voinescu@arm.com
 References: <20201209103016.10442-1-lukasz.luba@arm.com>
-Message-ID: <383b757b-63b0-ca81-c74c-bf2f31172bc3@arm.com>
-Date:   Thu, 10 Dec 2020 13:22:18 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ <383b757b-63b0-ca81-c74c-bf2f31172bc3@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <ec7154b7-da86-eda7-0668-9af18d2a82c9@linaro.org>
+Date:   Thu, 10 Dec 2020 14:27:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201209103016.10442-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <383b757b-63b0-ca81-c74c-bf2f31172bc3@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On 10/12/2020 14:22, Lukasz Luba wrote:
+> Hi Daniel,
 
-On 12/9/20 10:30 AM, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set is a continuation of my previous work, which aimed
-> to add Energy Model to all devices [1]. This series is a follow up
-> for the patches which got merged to v5.9-rc1. It aims to change
-> the thermal devfreq cooling and use the Energy Model instead of
-> private power table and structures. The power model is now simplified,
-> static power and dynamic power are removed. The new registration interface
-> in the patch 3/5 helps to register devfreq cooling and the EM in one call.
-> There is also small improvement, patch 2/5 is changing the way how
-> thermal gets the device status (now uses a copy) and normalize the values.
-> The last patch is here for consistency and will probably go through drm tree.
-> 
-> The patch set is based on current next-20201208, because it depends on EM
-> API change which is queued in the pm/linux-next tree as v5.11 material.
-> 
-> changes:
-> v3:
-> - dropped direct check of device status and used just a copy of 'status';
->    a separate patch set will be proposed to address this issue
-> - modified _normalize_load() and used 1024 scale to handle ms, us, ns
-> - removed 'em_registered' and called em_dev_unregister_perf_domain()
->    unconditionally, so the drivers will have to make sure the right order of
->    all unregister calls to frameworks which might use EM; this call must be last
->    one; a proper comment added
-> - removed 'em' pointer from struct devfreq_cooling_device, 'dev->em_pd' is used
-> - removed of_node_get/put(), since the code can handle it
-> - removed dfc_em_get_requested_power() (as missed to do it in v2)
-> - collected all Reviewed-by tags
-> v2 [3]:
-> - renamed freq_get_state() and related to perf_idx pattern as
->    suggested by Ionela
-> v1 [2]
-> 
-> Regards,
-> Lukasz Luba
-> 
-> [1] https://lkml.org/lkml/2020/5/11/326
-> [2] https://lore.kernel.org/linux-pm/20200921122007.29610-1-lukasz.luba@arm.com/
-> [3] https://lore.kernel.org/linux-pm/20201118120358.17150-1-lukasz.luba@arm.com/
-> 
-> Lukasz Luba (5):
->    thermal: devfreq_cooling: change tracing function and arguments
->    thermal: devfreq_cooling: use a copy of device status
->    thermal: devfreq_cooling: add new registration functions with Energy
->      Model
->    thermal: devfreq_cooling: remove old power model and use EM
->    drm/panfrost: Register devfreq cooling and attempt to add Energy Model
-> 
->   drivers/gpu/drm/panfrost/panfrost_devfreq.c |   2 +-
->   drivers/thermal/devfreq_cooling.c           | 420 ++++++++++----------
->   include/linux/devfreq_cooling.h             |  40 +-
->   include/trace/events/thermal.h              |  19 +-
->   4 files changed, 240 insertions(+), 241 deletions(-)
-> 
+[ ... ]
 
-If you consider to take it, please don't. I am going to send a v4 which
-does not have this em_dev_register_perf_domain() dependency due to API
-change. Then it could go via your thermal tree without issues.
+>> Lukasz Luba (5):
+>>    thermal: devfreq_cooling: change tracing function and arguments
+>>    thermal: devfreq_cooling: use a copy of device status
+>>    thermal: devfreq_cooling: add new registration functions with Energy
+>>      Model
+>>    thermal: devfreq_cooling: remove old power model and use EM
+>>    drm/panfrost: Register devfreq cooling and attempt to add Energy Model
+>>
+>>   drivers/gpu/drm/panfrost/panfrost_devfreq.c |   2 +-
+>>   drivers/thermal/devfreq_cooling.c           | 420 ++++++++++----------
+>>   include/linux/devfreq_cooling.h             |  40 +-
+>>   include/trace/events/thermal.h              |  19 +-
+>>   4 files changed, 240 insertions(+), 241 deletions(-)
+>>
+> 
+> If you consider to take it, please don't. 
 
-It will be a small change in the patch 3/5, which will simplify
-registration function (use only dev_pm_opp_of_register_em()) and also
-instead of two registration function, have only one (which was also
-suggested by Ionela during review).
+Ok, I'll wait for the v4
 
-Regards,
-Lukasz
+Thanks
+
+
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
