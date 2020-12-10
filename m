@@ -2,79 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDB02D6378
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 18:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D862D6372
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 18:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390924AbgLJR0H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Dec 2020 12:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388162AbgLJRYP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Dec 2020 12:24:15 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CE5C0613CF;
-        Thu, 10 Dec 2020 09:23:35 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id o5so4807865pgm.10;
-        Thu, 10 Dec 2020 09:23:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=+LIa9ilbcIDe7I5GjNGlnS7I8eoClTdzZMGkmPCk9uI=;
-        b=peqmHg5V1XarqOftCJXiXDAPDhTKsa75nNNSERs4fJKyWV6OJcYaqdN6rD1ZjUW2ia
-         4MGcJBVW+aM1TOnvEbVbPuhd/tCVxptojIfeBCsGLuDLLhBdpT3dITduQfrLUHz1aPHl
-         +WLc9x3pZrES+UnSxjTipGdJ5lRwyv63yLt69Mli+IZDx9KUTZ9CPy6e5bAVC0k2X4SA
-         7LuJ8y/oM79wT5iwUYtO2GgIQ8pGNQJrZpKsjCK39V77qwwfuhERvmI+0ZAL+MByDu2O
-         5ZhoC+za3fbpbeeYeHIF1IXpklYGUHMC/J0XoYrPUPefFm6swHq0MVqMvICWlEp6y6Fz
-         D2tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+LIa9ilbcIDe7I5GjNGlnS7I8eoClTdzZMGkmPCk9uI=;
-        b=f/XfCHwMKkth0g49eGw+7W1Eg04IEuWQaVXkch+We2rgyOyIrPKbK1KakxQ9BpQr+w
-         9DXswu+o0T8prDBQ50Mn9M0/JPkoLDNlmLJf5F+RLM+IHvBf6Z5f4GRKFdGq4b9Acqh+
-         x2H56jXQ5uCd3cDoslpqVObSQXbhSZeH3VQwu7sfq1GXvjUgZGe287cbHHUEmRRo02rR
-         s5DdgNDDkLNNp76y6x/5F2N4lvMNgwLXq6bAI9ACS/MwF2ylNHtqUwAkwAtAp0DRlLp/
-         O2sbEc1SpsiWTc2VxJazo1KvhCcejUJ+zlmK2lymxBgVLNuGZCffHDNYA3yOFqAGaGPh
-         UfkA==
-X-Gm-Message-State: AOAM532+rgXwI6RjthkSeI7pPIlE3O9OTcdO/JG8TLytSGG6pLNw0Js4
-        XamBUeib6lqMRbNFRKa+PKI=
-X-Google-Smtp-Source: ABdhPJz+sNoa4IauymiO0QPYoGU3qEZ+1oxwE2kF+OyKboio7NNBxS5o2iKbDI/RYlo6BENrQ4ErhQ==
-X-Received: by 2002:a63:ef15:: with SMTP id u21mr7606542pgh.56.1607621014536;
-        Thu, 10 Dec 2020 09:23:34 -0800 (PST)
-Received: from [10.230.29.166] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 193sm7070169pfz.36.2020.12.10.09.23.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Dec 2020 09:23:33 -0800 (PST)
-Subject: Re: [PATCH -next] thermal: broadcom: simplify the return expression
- of bcm2711_thermal_probe()
-To:     Zheng Yongjun <zhengyongjun3@huawei.com>, nsaenzjulienne@suse.de,
-        linux-pm@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20201210135432.1249-1-zhengyongjun3@huawei.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <168fadb8-85b9-3d9f-42dc-e9d7fb3ce6ec@gmail.com>
-Date:   Thu, 10 Dec 2020 09:23:32 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.5.1
+        id S2391930AbgLJRZN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Dec 2020 12:25:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:54690 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728969AbgLJRY3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Dec 2020 12:24:29 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEFC730E;
+        Thu, 10 Dec 2020 09:23:41 -0800 (PST)
+Received: from localhost (unknown [10.1.198.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F2EB3F66B;
+        Thu, 10 Dec 2020 09:23:41 -0800 (PST)
+Date:   Thu, 10 Dec 2020 17:23:40 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Mian Yousaf Kaukab <ykaukab@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mian Yousaf Kaukab <yousaf.kaukab@suse.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Petr Cervinka <pcervinka@suse.com>
+Subject: Re: [PATCH 1/2] acpi: cppc: add cpufreq device
+Message-ID: <20201210172339.GA2828@arm.com>
+References: <20201210142139.20490-1-yousaf.kaukab@suse.com>
+ <CAJZ5v0hWxLrXCS+X15hnLZ2enBsSJ0aEfnxK2kL+n9k4gkg17Q@mail.gmail.com>
+ <20201210150417.GA24136@suse.de>
+ <1916679.syIRshJoYJ@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20201210135432.1249-1-zhengyongjun3@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1916679.syIRshJoYJ@kreacher>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rafael,
 
-
-On 12/10/2020 5:54 AM, Zheng Yongjun wrote:
-> Simplify the return expression.
+On Thursday 10 Dec 2020 at 17:55:56 (+0100), Rafael J. Wysocki wrote:
+> On Thursday, December 10, 2020 4:04:40 PM CET Mian Yousaf Kaukab wrote:
+> > On Thu, Dec 10, 2020 at 03:32:09PM +0100, Rafael J. Wysocki wrote:
+> > > On Thu, Dec 10, 2020 at 3:23 PM Mian Yousaf Kaukab
+> > > <yousaf.kaukab@suse.com> wrote:
+> > > >
+> > > > Convert cppc-cpufreq driver to a platform driver (done in a separate patch)
+> > > > and add cppc-cpufreq device when acpi_cppc_processor_probe() succeeds.
+> > > 
+> > > Honestly, I prefer to drop 28f06f770454 (along with its follower)
+> > > instead of making this change.
+> > > 
+> > Even if we revert 28f06f770454 there is still one more small issue that these
+> > patches fix. Currently, ACPI_PROCESSOR_DEVICE_HID is used to load cppc-cpufreq
+> > module. In case when CPPC is disabled, some cycles will be wasted in loading
+> > cppc-cpufreq module. The module will return error from the init call though
+> > so no memory is wasted.
+> > 
+> > After converting to platform-driver, cppc-cpufreq module will only be loaded
+> > when the platform-device is available.
 > 
-> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+> Even so, that issue is low-impact AFAICS and may be addressed later and I'd
+> rather not let known breakage go into the mainline.
+> 
+> I'm going to do drop the problematic commit now and please work with Ionela
+> to produce a clean series of patches in the right order to avoid introducing
+> issues between them.
+> 
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+The following commit will be easy to drop:
+a37afa60de38  cppc_cpufreq: optimise memory allocation for HW and NONE coordination (2 weeks ago)
+
+28f06f770454  will be more difficult to drop as it's embedded in the
+series, and removing that one will produce conflicts in the patches
+that follow it:
+
+f9f5baa8b2a8  ACPI: processor: fix NONE coordination for domain mapping failure (3 weeks ago)
+cdb4ae5de6f7  cppc_cpufreq: expose information on frequency domains (3 weeks ago)
+c783a4d94848  cppc_cpufreq: clarify support for coordination types (3 weeks ago)
+3bd412fb2c7f  cppc_cpufreq: use policy->cpu as driver of frequency setting (3 weeks ago)
+28f06f770454  cppc_cpufreq: replace per-cpu structures with lists (3 weeks ago)
+bb025fb6c276  cppc_cpufreq: simplify use of performance capabilities (3 weeks ago)
+48ad8dc94032  cppc_cpufreq: clean up cpu, cpu_num and cpunum variable use (3 weeks ago)
+63087265c288  cppc_cpufreq: fix misspelling, code style and readability issues (3 weeks ago)
+
+Let me know how you want to proceed and I can either send a replacement
+series or reverts with conflicts fixed.
+
+Also, if you want you can drop all 5 (all before and including 28f06f770454),
+and I can add them again in the series that fixes the problem that Yousaf
+reported.
+
+Thanks,
+Ionela.
+
+> If that is done timely enough, it may still be possible to push those patches
+> for 5.11-rc1.
+> 
+> Thanks!
+> 
+> 
+> 
