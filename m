@@ -2,216 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EB52D549D
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 08:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6106D2D54D6
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Dec 2020 08:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732830AbgLJH3P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Dec 2020 02:29:15 -0500
-Received: from mga17.intel.com ([192.55.52.151]:47012 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729173AbgLJH3O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 10 Dec 2020 02:29:14 -0500
-IronPort-SDR: JaaGM3ieAFWsHOm7qpm3siOolGpfL3N/v0qRjOnHEcEGQysey1c1n3iT0ox0B5Q71kGHlKSwFD
- 8eEsC2w/TOeA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="154017377"
-X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="154017377"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 23:28:33 -0800
-IronPort-SDR: HiHm2X9OngANa5YEydvWi/aiI4mWpTurilx7C1vmbYbQ0xShO+xqBAAp2GuxZK+okTr1/0BaEh
- s7xuDKOG5S6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="348676826"
-Received: from lkp-server01.sh.intel.com (HELO ecc0cebe68d1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2020 23:28:32 -0800
-Received: from kbuild by ecc0cebe68d1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1knGNL-000083-J4; Thu, 10 Dec 2020 07:28:31 +0000
-Date:   Thu, 10 Dec 2020 15:27:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- a834ecc967a356eabe764b7439b3877e93822dca
-Message-ID: <5fd1cde7.Zh97nda/Vbw8g2xm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729449AbgLJHtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Dec 2020 02:49:33 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:34417 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726902AbgLJHt0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Dec 2020 02:49:26 -0500
+X-UUID: 9ae94ff7404e4182816559b456803127-20201210
+X-UUID: 9ae94ff7404e4182816559b456803127-20201210
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1193676508; Thu, 10 Dec 2020 15:48:40 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 10 Dec 2020 15:48:38 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 10 Dec 2020 15:48:38 +0800
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <wsd_upstream@mediatek.com>, <hector.yuan@mediatek.com>
+Subject: [PATCH v9] cpufreq: mediatek-hw: Add support for Mediatek cpufreq HW driver
+Date:   Thu, 10 Dec 2020 15:48:34 +0800
+Message-ID: <1607586516-6547-1-git-send-email-hector.yuan@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: a834ecc967a356eabe764b7439b3877e93822dca  Merge branches 'acpi-scan' and 'pm-em' into linux-next
+The CPUfreq HW present in some Mediatek chipsets offloads the steps necessary for changing the frequency of CPUs. 
+The driver implements the cpufreq driver interface for this hardware engine. 
+This patch depends on MT6779 DTS patchset[1] submitted by Hanks Chen.
 
-elapsed time: 721m
+From v8 to v9, there are three more modifications.
+1. Based on patchset[2], align binding with scmi for performance domain.
+2. Add the CPUFREQ fast switch function support and define DVFS latency.
+3. Based on patchser[3], add energy model API parameter for mW.
 
-configs tested: 153
-configs skipped: 3
+From v7 to v8, there are three more patches based on patchset v8[4].
+This patchset is about to register power table to Energy model for EAS and thermal usage.
+1. EM CPU power table
+- Register energy model table for EAS and thermal cooling device usage.
+- Read the coresponding LUT for power table.
+2. SVS initialization
+- The SVS(Smart Voltage Scaling) engine is a hardware which is
+  used to calculate optimized voltage values for CPU power domain.
+  DVFS driver could apply those optimized voltage values to reduce power consumption.
+- Driver will polling if HW engine is done for SVS initialization.
+  After that, driver will read power table and register it to EAS.
+- CPUs must be in power on state when doing SVS. Use pm_qos to block cpu-idle state for SVS initializing.
+3. Cooling device flag
+- Add cooling device flag for thermal
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+[1]  https://lkml.org/lkml/2020/8/4/1094
+[2]  https://lore.kernel.org/lkml/20201116181356.804590-1-sudeep.holla@arm.com/
+[3]  https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=c250d50fe2ce627ca9805d9c8ac11cbbf922a4a6
+[4]  https://lkml.org/lkml/2020/9/23/384
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                          kfr2r09_defconfig
-x86_64                           alldefconfig
-arm                     am200epdkit_defconfig
-arm                  colibri_pxa270_defconfig
-arm                          lpd270_defconfig
-powerpc                 mpc837x_mds_defconfig
-h8300                               defconfig
-xtensa                           alldefconfig
-mips                      loongson3_defconfig
-powerpc                     ppa8548_defconfig
-sh                        edosk7705_defconfig
-xtensa                generic_kc705_defconfig
-s390                             allyesconfig
-mips                         mpc30x_defconfig
-openrisc                 simple_smp_defconfig
-m68k                        stmark2_defconfig
-sh                          r7780mp_defconfig
-powerpc                   lite5200b_defconfig
-mips                           ip32_defconfig
-sh                            migor_defconfig
-powerpc                    ge_imp3a_defconfig
-arc                     haps_hs_smp_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                          malta_defconfig
-powerpc                       eiger_defconfig
-m68k                        mvme147_defconfig
-powerpc                      tqm8xx_defconfig
-arc                        vdk_hs38_defconfig
-powerpc                      walnut_defconfig
-ia64                         bigsur_defconfig
-m68k                         apollo_defconfig
-powerpc                     tqm8555_defconfig
-riscv                            allmodconfig
-m68k                        mvme16x_defconfig
-mips                        omega2p_defconfig
-ia64                        generic_defconfig
-um                             i386_defconfig
-mips                           gcw0_defconfig
-sh                           se7724_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm                           viper_defconfig
-arm                         socfpga_defconfig
-alpha                            alldefconfig
-arm                        vexpress_defconfig
-powerpc                      makalu_defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                        edosk7760_defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                          pcm027_defconfig
-mips                          ath25_defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                        oxnas_v6_defconfig
-s390                                defconfig
-arm                        spear6xx_defconfig
-arm                         s3c6400_defconfig
-mips                         db1xxx_defconfig
-mips                            ar7_defconfig
-arm                       versatile_defconfig
-powerpc                        icon_defconfig
-arc                              allyesconfig
-arm                           tegra_defconfig
-arm                        multi_v5_defconfig
-mips                          ath79_defconfig
-powerpc                 mpc8540_ads_defconfig
-sh                             shx3_defconfig
-powerpc                      pmac32_defconfig
-riscv                    nommu_k210_defconfig
-nios2                            alldefconfig
-arm                       aspeed_g5_defconfig
-powerpc                 canyonlands_defconfig
-sh                      rts7751r2d1_defconfig
-mips                         bigsur_defconfig
-mips                           xway_defconfig
-mips                         cobalt_defconfig
-mips                        nlm_xlp_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20201209
-i386                 randconfig-a005-20201209
-i386                 randconfig-a001-20201209
-i386                 randconfig-a002-20201209
-i386                 randconfig-a006-20201209
-i386                 randconfig-a003-20201209
-i386                 randconfig-a001-20201210
-i386                 randconfig-a004-20201210
-i386                 randconfig-a003-20201210
-i386                 randconfig-a002-20201210
-i386                 randconfig-a005-20201210
-i386                 randconfig-a006-20201210
-x86_64               randconfig-a016-20201209
-x86_64               randconfig-a012-20201209
-x86_64               randconfig-a013-20201209
-x86_64               randconfig-a014-20201209
-x86_64               randconfig-a015-20201209
-x86_64               randconfig-a011-20201209
-i386                 randconfig-a013-20201209
-i386                 randconfig-a014-20201209
-i386                 randconfig-a011-20201209
-i386                 randconfig-a015-20201209
-i386                 randconfig-a012-20201209
-i386                 randconfig-a016-20201209
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
 
-clang tested configs:
-x86_64               randconfig-a004-20201209
-x86_64               randconfig-a006-20201209
-x86_64               randconfig-a005-20201209
-x86_64               randconfig-a001-20201209
-x86_64               randconfig-a002-20201209
-x86_64               randconfig-a003-20201209
+Hector.Yuan (2):
+  cpufreq: mediatek-hw: Add support for CPUFREQ HW
+  dt-bindings: cpufreq: add bindings for MediaTek cpufreq HW
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |  112 ++++++
+ drivers/cpufreq/Kconfig.arm                        |   12 +
+ drivers/cpufreq/Makefile                           |    1 +
+ drivers/cpufreq/mediatek-cpufreq-hw.c              |  370 ++++++++++++++++++++
+ 4 files changed, 495 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+ create mode 100644 drivers/cpufreq/mediatek-cpufreq-hw.c
+
