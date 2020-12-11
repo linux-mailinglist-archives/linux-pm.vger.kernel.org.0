@@ -2,234 +2,269 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 410552D7107
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 08:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD99C2D71AA
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 09:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbgLKHo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Dec 2020 02:44:27 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:25947 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389127AbgLKHoY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 02:44:24 -0500
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20201211074340epoutp03ec68f7a7eda74b4f7db6553e8a5ea10e~PmbsCBRIX0577605776epoutp03K
-        for <linux-pm@vger.kernel.org>; Fri, 11 Dec 2020 07:43:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20201211074340epoutp03ec68f7a7eda74b4f7db6553e8a5ea10e~PmbsCBRIX0577605776epoutp03K
+        id S2436863AbgLKIYD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Dec 2020 03:24:03 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:39862 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436846AbgLKIXm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 03:23:42 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20201211082248euoutp01223b0ffab667998e16dd12475dea9633~Pm93IjYgv2667426674euoutp01Z;
+        Fri, 11 Dec 2020 08:22:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20201211082248euoutp01223b0ffab667998e16dd12475dea9633~Pm93IjYgv2667426674euoutp01Z
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1607672620;
-        bh=G2N39l3fVZYX0q/DnFoGPUJPUawid4RL234JBKugQks=;
-        h=To:Cc:From:Subject:Date:References:From;
-        b=Cov1WxPtHZDdcNcfg0kSUbxJttNmB7tEffMPJI2qcoT7u98VMCMyJxqy4+ghUdqkz
-         rND4zN1C5fuq+cnMrKmm5roaca4e2DBWkNy1jg1YeftNof4zVw/wN/OPeZI/yVU0Y9
-         NCM75GAdZLOnrMNf2g3VWRkXZX4g/a4b4PUeKKK8=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20201211074339epcas1p1e9512eacb7f216019127f583fae97fd3~PmbrJppib2652826528epcas1p1m;
-        Fri, 11 Dec 2020 07:43:39 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4CsjT34KTKz4x9Q1; Fri, 11 Dec
-        2020 07:43:35 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9F.AC.10463.52323DF5; Fri, 11 Dec 2020 16:43:33 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201211074332epcas1p27c7057fae84f6b6535a7bc4e89737c20~Pmbk7tL9E1787317873epcas1p2r;
-        Fri, 11 Dec 2020 07:43:32 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201211074332epsmtrp26881c68cb6ac389c53a8dbeb925c17de~Pmbk4A5kl2971629716epsmtrp2B;
-        Fri, 11 Dec 2020 07:43:32 +0000 (GMT)
-X-AuditID: b6c32a38-f11ff700000028df-a8-5fd3232574fa
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3E.37.08745.42323DF5; Fri, 11 Dec 2020 16:43:32 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201211074329epsmtip2af86aaabc4bef33c1067d94e0b2463db~PmbiKnM4m1700517005epsmtip2i;
-        Fri, 11 Dec 2020 07:43:29 +0000 (GMT)
-To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>,
-        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [GIT PULL] devfreq next for v5.11
-Organization: Samsung Electronics
-Message-ID: <56c09abc-da54-5e53-3313-3185fb84bb71@samsung.com>
-Date:   Fri, 11 Dec 2020 16:58:15 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        s=mail20170921; t=1607674968;
+        bh=EPWpPxaL1kgGyP4y1rAeD68RhW99/C5QTk2XWnaps1g=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=BFcvi7Sntxic0Qz/yiSYIPzrCMJj80D0pRsJa35lcsVuwX6w/uR/2lAnQiJ3Q5M+Y
+         huuFjjD52OiSdOWrpyG3KoW6hKlLysiZJmWlWaJtUCLizWE52E5tDqe/jImvOaAcG9
+         570Hczk8jN+jlagxXl3mQHVj2BitBELQJBcieEtQ=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20201211082248eucas1p22f70923933f5ab50cc44ebf033385af0~Pm92j1pHn2458824588eucas1p2Y;
+        Fri, 11 Dec 2020 08:22:48 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 72.48.27958.85C23DF5; Fri, 11
+        Dec 2020 08:22:48 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20201211082247eucas1p2bcbb136330cf83031d697b08dafa89b0~Pm92EC00a1636416364eucas1p22;
+        Fri, 11 Dec 2020 08:22:47 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20201211082247eusmtrp22baf72f4d261456b2730397a38aca3b9~Pm92Cvw9Z2764927649eusmtrp2V;
+        Fri, 11 Dec 2020 08:22:47 +0000 (GMT)
+X-AuditID: cbfec7f2-f15ff70000006d36-55-5fd32c585127
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1E.15.16282.75C23DF5; Fri, 11
+        Dec 2020 08:22:47 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201211082245eusmtip132375ffa3fbef40063d97e5055ac2005~Pm90JJ9H22215522155eusmtip1j;
+        Fri, 11 Dec 2020 08:22:45 +0000 (GMT)
+Subject: Re: [PATCH] Input: cyapa - do not call input_device_enabled from
+ power mode handler
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        kernel@collabora.com,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <fa0e07b1-dee7-9b44-897d-66095f2eab90@samsung.com>
+Date:   Fri, 11 Dec 2020 09:22:44 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
+        Gecko/20100101 Thunderbird/78.5.1
 MIME-Version: 1.0
+In-Reply-To: <X9MbMja+TEfbKkmJ@google.com>
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCJsWRmVeSWpSXmKPExsWy7bCmnq6q8uV4g307rC0m3rjCYnH9y3NW
-        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJyrbJ
-        SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
-        KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWaBXnJhbXJqXrpecn2tlaGBgZApUmJCd0Xrq
-        FVvBbN2KmTM7GBsYW5W7GDk5JARMJFo/T2HsYuTiEBLYwSjxu38eG4TziVHi3fK3rBDOZ0aJ
-        L9Mus8K0PHg/H6plF6PEqyPz2SGc94wSi09+YOpi5OAQEbCX6PiQCRJnFrjAJHFxUxtYN5uA
-        lsT+FzfYQGxhIPv91v/sIDa/gKLE1R+PGUFsXgE7if3dfUwgNouAqkTr60ssILaoQJjEyW0t
-        UDWCEidnPgGLMwuIS9x6Mp8JwpaX2P52DjPIYgmBn+wSe7ZNZIc420XixJkXUC8IS7w6vgUq
-        LiXx+d1eNgi7WmLlySNsEM0djBJb9l+AajCW2L90MthnzAKaEut36UOEFSV2/p7LCLGYT+Ld
-        1x5WkBIJAV6JjjYhiBJlicsP7jJB2JISi9s7oVZ5SJxavJ5pAqPiLCTvzELyziwk78xCWLyA
-        kWUVo1hqQXFuemqxYYEJcnRvYgQnTy2LHYxz337QO8TIxMF4iFGCg1lJhFeW5VK8EG9KYmVV
-        alF+fFFpTmrxIUZTYABPZJYSTc4Hpu+8knhDUyNjY2MLE0MzU0NDJXHeP9od8UIC6Yklqdmp
-        qQWpRTB9TBycUg1MptVW01NzFX71ZU7gyOhv9r2rHNc+6YaFfHpy2lZb7zs+7SaTPnvPEWNk
-        eF+wQvlp6VQp9u9zX8i++jd/WcYt0+03uNsYnxgsWxEnWZr6y9MoOlLwcMT0Sa/jHxi+2zq3
-        8NHp5qSDEmbvDJ+s/hXMFb39zrGYiaJxW37miWuEb/vd4Z8+j/9VVsCspfWRB3WMFlRyHJiY
-        VH5xpf2/baqTUz8nBrE6sYQEKK05NePP01J17t63G1dLGnBPbuxIeuojPK9cy9J5xZWmO9Un
-        VZssraddKM2975x3OcuaZb15xQ2lry/UL6yf/VzWaKuyi4D45veP1py5XXxVftk3je/N2V5H
-        RCuc+Kdw79XiYXygxFKckWioxVxUnAgAqRdCeycEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKLMWRmVeSWpSXmKPExsWy7bCSvK6K8uV4g6MnNCwm3rjCYnH9y3NW
-        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJ4rJJ
-        Sc3JLEst0rdL4MpoPfWKrWC2bsXMmR2MDYytyl2MnBwSAiYSD97PZ+xi5OIQEtjBKLG08xg7
-        REJSYtrFo8xdjBxAtrDE4cPFEDVvGSWmHJrFDhIXEbCX6PiQCRJnFrjEJLHxzA2wXjYBLYn9
-        L26wgdjCQPb7rf/B4vwCihJXfzxmBLF5Bewk9nf3MYHYLAKqEq2vL7GA2KICYRI7lzxmgqgR
-        lDg58wlYnFlAXeLPvEvMELa4xK0n85kgbHmJ7W/nME9gFJyFpGUWkpZZSFpmIWlZwMiyilEy
-        taA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjOCa0tHYw7ln1Qe8QIxMH4yFGCQ5mJRFeWZZL
-        8UK8KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwWR089Tgu
-        pN64LkqD6zz703UfDlzr+OyRrH5Ee8+vsuyXbOwzxLWU1yo7+RXsVrd+/TrYtfNfWEe/g/Xb
-        mJ6kZo5VTvOXTNYu/zL3mZSIudC9z3fzDu5e+5ilo03t+CPG5MzjUX2HeLTmsp8Wn/HR1ZYr
-        5JzPtrt5r+KaHhSkzPkg7BV7QMIw4sD8fr7wueLKETsPrbu5JLyz+Pzfkz/2TmLtu1x8/2mr
-        3OXd3Q/XXrLTmfbNwcX4q0vBO1nJymddyzTyxI4budd8X+gjfvW+cLKt9/elW2RWc/s/splT
-        rC7L/0u/eMmTx/EP3237kTp1iujRJFU/iyVK3jMavH8wPDi00a+Wv6Nn6urVm3TslViKMxIN
-        tZiLihMByjYasvgCAAA=
-X-CMS-MailID: 20201211074332epcas1p27c7057fae84f6b6535a7bc4e89737c20
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Ta1CUZRTHe/a97AItvVyMB6Vy1miEuE41nUQR1KF36oPpVBPOKG36CkyA
+        uCuoUalA4i4yXOTmLgjYBrVExELALhvEQjINDtDCBhhQCCYRLCGMCITE7kLx7XfO+Z/nnP+Z
+        eQSE80N6qyA67gwniRPHiGh7sv7WYpfvez69EQED9ykoHxshoaawmoJxQwYBbTcnELTPtpEw
+        ajoIUx0FPFC27YaiP6oQpN2VUfB7spoHqYqbJNR2XaVAnaclIXPsLwJ0q1MEdHd/ywfVtRIK
+        vmiuJEE7Ok1DRXMmAs3YLxTcaDeTIF/6ioDBBw8p6NUV0TCX0Y6gsLuZB7J5BQ1ZbbV8MF5P
+        J2BupoWChu9beFCpnyBgWXeLD7c7jRSsNGhImKhzgxyDBBZ1N0hYXUohQrzYSVMo2zisQuzl
+        5GhWqxjms3/PHmOXf0CsRi2j2VrVBbapdI7HLhTeRqxqykCxj8tySTYjxUyzNeZGHltQtIrY
+        zJWAt54+Yr/7BBcTnchJ/IPft4+qkHfS8Tne5+5p0vgXkX6HHNkJMPMy1sru0RZ2Zr5EuD/9
+        HTmyX+N5hBdalklbMIfwbGfamkpg7Vgs59nyFQjfb9oIZhHunJdRlqdcmGO4rK+ftLAr448b
+        lEvIIiKYKQfc0jzCtxRoJhDLp+XW2UImGA/2FVrzJOOJS7X5hIW3MB/gavmjdY0T/un6uPVR
+        O8YbL7SqrUwwz+GU75SEjd3wnfES60aYueqA9R1mymb0ANaXqvk2dsGTHXXr7IFXtRsNKQiP
+        dlXx17sR7k0uRDZVEB7qWrIegGC8cLXO35YOxUOVGsp2F0c8MO1kW8IR59QXELa0EF+57GxT
+        v4AVHd/8N7a1x0hkIZFikzXFJjuKTXYU/88tRaQauXEJ0thIThoYx531k4pjpQlxkX7HT8Vq
+        0NrX6Hzc8aARFU/O+hkQT4AMCAsIkavwGdIY4Sw8IT7/ESc5FSFJiOGkBrRNQIrchGrl1xHO
+        TKT4DPchx8Vzko0qT2C39SIv97D5bmyM91FBnV5SFda9X2X++c1+n5CavpHwZ5v33gkOvVDn
+        MnKEC2nTFmfkPnUetTY86Z7VkHhQudfrUJCLp/GzOmV+j0mQ8eI+utih4HPfmaBB/0NziR6/
+        nkseSl/kQ5LHdhM/CuSer1TAteEudJZIn3nV6xNR6tv00KWECbHkz+d3qU6HmwJ2Xjr9T/2e
+        dz8OWSljdmUnPXI8PFCbTYuwap/n+JjypOLHeLsnjO4p3cbQlyA8LybMW+aeEFmbGPT6UY9e
+        X9dPDalOupXf8pLa83t8jofsvOJvf9J5akSoFfRklwvY17bYvaGvjN2TzzTFGbc79m/bYQor
+        2S90Ui6LSGmUONCbkEjF/wJuvZSbiQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTVxzHd+6jvahkl4fjhG1IrlkcRAvl5Q+DKMvmbljmiHNuwU2seAPI
+        07YsYsxswKiUERAZj0J4KGgsc2qLg/J0hagEhIWXY1sN77DyWkVGCgNGwSX898k538/3/E7y
+        Y0jHqyJXJiZBKcgTZHGcaAvVvvLEtOfL3T0R3pV/usGtkRcUPCi4R8OoMZOElhsTCFotLRQM
+        9X0GU0/yCShqCYLi8bsIrgyn0zCYqiXgkuYGBfrO72nQ/mCgIGtkkoS61SkSurrui6HieikN
+        lU1VFBiGpkVwuykLgW6kn4aS1hkK1It3SBh4+Q8NPXXFIpjLbEVQ0NVEQPorjQiyW/Ri6C7M
+        IGFutpmGmsZmAqoaJkhYqnssho72bhqWa3QUTFS7QI5RDta6EgpWF9PIgx68uS+ErzVVIP5y
+        agxv0JjE/N+WE/zSI8TrtOkiXl9xka8vmyP4hYIOxFdMGWl+pTyX4jPTZkT8g5lags8vXkV8
+        1rJ32FvhkiB5YrJScI9OVCj3c8el4CORBoLExy9QIvXd+80+H3/OKzjotBAX860g9wo+KYm+
+        rW4XJeV4nhvTXRGrUMNONWIYzPph6y1CjbYwjmwlwrn6AVKN7NbO38FteSp6g53wv/1q0UZo
+        FmFzzQJhu3BiT+Dy3ueUjZ1ZL1xTtIhsIZJ9uRXrr02+ru0n8Yq+c71WxEqxetpWZcfYs8F4
+        oLdAbGOKfQ+XGfJI20jb2VP4WbvDRsQBtxWOrj9gx3rihV+060yyAbhEP0Ru8A6c9rDoNbvg
+        30dLiWzkqNmkazYpmk2KZpNShigtchaSFfFR8QofiUIWr0hOiJJEJsbr0NpK/vzYWl2L7pgt
+        EiMiGGREmCE5Z/t3qe4IR/vTspTzgjwxQp4cJyiMyH/tO9dI1+2RiWs7naCMkAZ4+0v9AgK9
+        /QMDfDkXe7/WHyMc2SiZUogVhCRB/r9HMHauKiIo9dxfR76YdL/YmPPr+7PPlz5oI3NLfxKH
+        unsd2GkxhXIvUp55pOTPHBKb5o9rXXJHxqeaw6q3NkaW/8aEDj7S/qE2DmwbHsvv9QvL6/Uw
+        fHThzAXzYd8aw+Vt8pPhboTFOjYQq/180nSoe/xr5XUf+3sOPd1lGvH0sVN3G/Y9zSCeyjjL
+        KEd/qj//YZZxrzUnq+WY69vKuMbqs28erh8ci7o5bFb0XVquD+LGVwsr5ZqKKoNv+GyO73CB
+        g+vRoxlT7BvzM/W7g5M/bl3u2BHLueMxj/kDnWSf+TvzK+eHZ7/65Iyqzm5aV++0/+AeryQm
+        W9JWFWI94naVDk1Q3Q/ZpWI4ShEtk3qScoXsP1vWUG0bBAAA
+X-CMS-MailID: 20201211082247eucas1p2bcbb136330cf83031d697b08dafa89b0
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201211074332epcas1p27c7057fae84f6b6535a7bc4e89737c20
-References: <CGME20201211074332epcas1p27c7057fae84f6b6535a7bc4e89737c20@epcas1p2.samsung.com>
+X-RootMTR: 20201207133237eucas1p26f8484944760a14e51dc7353ed33cd28
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20201207133237eucas1p26f8484944760a14e51dc7353ed33cd28
+References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
+        <20200608112211.12125-1-andrzej.p@collabora.com>
+        <20200608112211.12125-3-andrzej.p@collabora.com>
+        <CGME20201207133237eucas1p26f8484944760a14e51dc7353ed33cd28@eucas1p2.samsung.com>
+        <27ce1176-6318-45aa-4e22-3dec9f3df15d@samsung.com>
+        <9c784a23-eade-eacd-3e67-d344a5758b83@collabora.com>
+        <ad093ba3-7b17-18f3-6bb5-d8133c3da89a@samsung.com>
+        <X9BwtHs9XriwR8gL@google.com> <X9MbMja+TEfbKkmJ@google.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Rafael,
 
-This is devfreq-next pull request for v5.11-rc1. I add detailed description of
-this pull request on the following tag. Please pull devfreq with following updates.
-- tag name : devfreq-next-for-5.11
+On 11.12.2020 08:09, Dmitry Torokhov wrote:
+> Input device's user counter is supposed to be accessed only while holding
+> input->mutex.  Commit d69f0a43c677 ("Input: use input_device_enabled()")
+> recently switched cyapa to using the dedicated API and it uncovered the
+> fact that cyapa driver violated this constraint.
+>
+> This patch removes checks whether the input device is open when clearing
+> device queues when changing device's power mode as there is no harm in
+> sending input events through closed input device - the events will simply
+> be dropped by the input core.
+>
+> Note that there are more places in cyapa driver that call
+> input_device_enabled() without holding input->mutex, those are left
+> unfixed for now.
+>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>
+> Marek, could you please try this one?
 
-Best Regards,
-Chanwoo Choi
+The warning is still there:
 
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 1787 at drivers/input/input.c:2230 
+input_device_enabled+0x68/0x6c
+Modules linked in: cmac bnep mwifiex_sdio mwifiex sha256_generic 
+libsha256 sha256_arm btmrvl_sdio btmrvl cfg80211 bluetooth s5p_mfc 
+exynos_gsc v4l2_mem2mem videob
+CPU: 1 PID: 1787 Comm: rtcwake Not tainted 
+5.10.0-rc7-next-20201210-00001-g70a81f43fddf #2204
+Hardware name: Samsung Exynos (Flattened Device Tree)
+[<c0111a58>] (unwind_backtrace) from [<c010d390>] (show_stack+0x10/0x14)
+[<c010d390>] (show_stack) from [<c0b3503c>] (dump_stack+0xb4/0xd4)
+[<c0b3503c>] (dump_stack) from [<c0127428>] (__warn+0xd8/0x11c)
+[<c0127428>] (__warn) from [<c012751c>] (warn_slowpath_fmt+0xb0/0xb8)
+[<c012751c>] (warn_slowpath_fmt) from [<c07fbccc>] 
+(input_device_enabled+0x68/0x6c)
+[<c07fbccc>] (input_device_enabled) from [<c080a204>] 
+(cyapa_reinitialize+0x4c/0x154)
+[<c080a204>] (cyapa_reinitialize) from [<c080a354>] (cyapa_resume+0x48/0x98)
+[<c080a354>] (cyapa_resume) from [<c06b0230>] (dpm_run_callback+0xb0/0x3c8)
+[<c06b0230>] (dpm_run_callback) from [<c06b0604>] (device_resume+0xbc/0x260)
+[<c06b0604>] (device_resume) from [<c06b29e4>] (dpm_resume+0x14c/0x51c)
+[<c06b29e4>] (dpm_resume) from [<c06b35b8>] (dpm_resume_end+0xc/0x18)
+[<c06b35b8>] (dpm_resume_end) from [<c01a1270>] 
+(suspend_devices_and_enter+0x1b4/0xbd4)
+[<c01a1270>] (suspend_devices_and_enter) from [<c01a1fa4>] 
+(pm_suspend+0x314/0x42c)
+[<c01a1fa4>] (pm_suspend) from [<c019fe90>] (state_store+0x6c/0xc8)
+[<c019fe90>] (state_store) from [<c0388438>] (kernfs_fop_write+0x10c/0x228)
+[<c0388438>] (kernfs_fop_write) from [<c02dc3e8>] (vfs_write+0xc8/0x530)
+[<c02dc3e8>] (vfs_write) from [<c02dc98c>] (ksys_write+0x60/0xd8)
+[<c02dc98c>] (ksys_write) from [<c0100060>] (ret_fast_syscall+0x0/0x2c)
+Exception stack(0xc3923fa8 to 0xc3923ff0)
+irq event stamp: 54139
+hardirqs last  enabled at (54147): [<c01a5f20>] vprintk_emit+0x2b8/0x308
+hardirqs last disabled at (54154): [<c01a5ee4>] vprintk_emit+0x27c/0x308
+softirqs last  enabled at (50722): [<c01017a8>] __do_softirq+0x528/0x684
+softirqs last disabled at (50671): [<c0130ac8>] irq_exit+0x1ec/0x1f8
+---[ end trace 1fbefe3f239ae597 ]---
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
-
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.11
-
-for you to fetch changes up to 6a575e84f11e15078629f0d16bff2bc354a6bfc0:
-
-  PM / devfreq: tegra30: Separate configurations per-SoC generation (2020-12-07 10:25:51 +0900)
-
-----------------------------------------------------------------
-
-Update devfreq for 5.11
-
-Detailed description for this pull request:
-
-1. Update devfreq core
-- Add new devfreq_frequency tracepoint to show the frequency change
-information.
-
-- Add governor feature flag. The devfreq governor is able to
-have the specific flag in order to contain the non-common feature.
-For example, if governor contains the 'immutable' feature, don't allow
-user to change the governor via sysfs.
-
-- Add governor sysfs attribute flag for each sysfs file. Prior to that
-devfreq subsystem show the all sysfs files regardless of governor type.
-But, some sysfs fils are not supported on the specific devfreq governor.
-In order to show the only supported sysfs files according to the governor,
-clarify the access permission of sysfs attributes according to governor.
-When adding the devfreq governor, can specify the available attribute
-information by using DEVFREQ_GOV_ATTR_* constant variable. The user can
-read or write the sysfs attributes in accordance to the specified attributes.
-
-- Clean-up the code to remove the duplicate code for the devfreq tracepoint
-and to remove redundant governor_name field from struct devfreq
-
-2. Update exynos-bus.c devfreq driver
-- Add interconnect API support for the Samsung Exynos Bus Frequency driver
-of exynos-bus.c. Complementing the devfreq driver with an interconnect
-functionality allows to ensure the QoS requirements of devices accessing
-the system memory (e.g. video processing devices) are fulfilled
-and allows to avoid issues like the DMA underrun.
-
-3. Update tegra devfreq driver
-- Add interconnect support and OPP interface for tegra30-devfreq.c.
-Also, it is to guarantee the QoS requirement of some devices like
-display controller.
-
-- Move tegra20-devfreq.c from drivers/devfreq/ into driver/memory/tegra/
-in order to use the more proper monitoring feature such as EMC_STAT
-which is based in driver/memory/tegra/.
-
-- Separate the configuration information for different SoC on
-tegra30-devfrqe.c. The tegra30-devfreq.c had been supported both
-tegra30-actmon and tegra124-actmon devices. In order to use
-the more correct configuration data, separate them.
-
-- Use dev_err_probe() to handle the deferred probe error on tegra30-devfreq.c.
-
-4. Pull the request of 'Tegra SoC and clock controller changes for v5.11'
-sent by Krzysztof Kozlowski <krzk@kernel.org> in order to prevent the
-build error.
-
-----------------------------------------------------------------
-Chanwoo Choi (6):
-      trace: events: devfreq: Use fixed indentation size to improve readability
-      PM / devfreq: Unify frequency change to devfreq_update_target func
-      PM / devfreq: Add governor feature flag
-      PM / devfreq: Add governor attribute flag for specifc sysfs nodes
-      PM / devfreq: Remove redundant governor_name from struct devfreq
-      Merge tag 'tegra-soc-clk-drivers-5.11' of https://git.kernel.org/.../krzk/linux-mem-ctrl into devfreq-next
-
-Dmitry Osipenko (9):
-      PM / devfreq: tegra20: Silence deferred probe error
-      PM / devfreq: tegra20: Relax Kconfig dependency
-      PM / devfreq: tegra30: Silence deferred probe error
-      clk: tegra: Export Tegra20 EMC kernel symbols
-      soc/tegra: fuse: Export tegra_read_ram_code()
-      soc/tegra: fuse: Add stub for tegra_sku_info
-      PM / devfreq: tegra20: Deprecate in a favor of emc-stat based driver
-      PM / devfreq: tegra30: Support interconnect and OPPs from device-tree
-      PM / devfreq: tegra30: Separate configurations per-SoC generation
-
-Matthias Kaehlcke (1):
-      PM / devfreq: Add tracepoint for frequency changes
-
-Sylwester Nawrocki (2):
-      dt-bindings: devfreq: Add documentation for the interconnect properties
-      PM / devfreq: exynos-bus: Add registration of interconnect child device
-
- Documentation/ABI/testing/sysfs-class-devfreq      |  54 +++--
- .../devicetree/bindings/devfreq/exynos-bus.txt     |  71 +++++-
- MAINTAINERS                                        |   1 -
- drivers/clk/tegra/clk-tegra20-emc.c                |   3 +
- drivers/devfreq/Kconfig                            |  10 -
- drivers/devfreq/Makefile                           |   1 -
- drivers/devfreq/devfreq.c                          | 242 ++++++++++++++-------
- drivers/devfreq/exynos-bus.c                       |  17 ++
- drivers/devfreq/governor.h                         |  33 ++-
- drivers/devfreq/governor_passive.c                 |  44 +---
- drivers/devfreq/governor_simpleondemand.c          |   2 +
- drivers/devfreq/tegra20-devfreq.c                  | 212 ------------------
- drivers/devfreq/tegra30-devfreq.c                  | 159 ++++++++------
- drivers/soc/tegra/fuse/tegra-apbmisc.c             |   2 +
- include/linux/devfreq.h                            |   4 -
- include/soc/tegra/fuse.h                           |   4 +
- include/trace/events/devfreq.h                     |  30 ++-
- 17 files changed, 456 insertions(+), 433 deletions(-)
- delete mode 100644 drivers/devfreq/tegra20-devfreq.c
+>   drivers/input/mouse/cyapa_gen3.c |    5 +----
+>   drivers/input/mouse/cyapa_gen5.c |    3 +--
+>   2 files changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/input/mouse/cyapa_gen3.c b/drivers/input/mouse/cyapa_gen3.c
+> index a97f4acb6452..4a9022faf945 100644
+> --- a/drivers/input/mouse/cyapa_gen3.c
+> +++ b/drivers/input/mouse/cyapa_gen3.c
+> @@ -907,7 +907,6 @@ static u16 cyapa_get_wait_time_for_pwr_cmd(u8 pwr_mode)
+>   static int cyapa_gen3_set_power_mode(struct cyapa *cyapa, u8 power_mode,
+>   		u16 always_unused, enum cyapa_pm_stage pm_stage)
+>   {
+> -	struct input_dev *input = cyapa->input;
+>   	u8 power;
+>   	int tries;
+>   	int sleep_time;
+> @@ -953,7 +952,6 @@ static int cyapa_gen3_set_power_mode(struct cyapa *cyapa, u8 power_mode,
+>   	 * depending on the command's content.
+>   	 */
+>   	if (cyapa->operational &&
+> -	    input && input_device_enabled(input) &&
+>   	    (pm_stage == CYAPA_PM_RUNTIME_SUSPEND ||
+>   	     pm_stage == CYAPA_PM_RUNTIME_RESUME)) {
+>   		/* Try to polling in 120Hz, read may fail, just ignore it. */
+> @@ -1223,8 +1221,7 @@ static int cyapa_gen3_try_poll_handler(struct cyapa *cyapa)
+>   	    (data.finger_btn & OP_DATA_VALID) != OP_DATA_VALID)
+>   		return -EINVAL;
+>   
+> -	return cyapa_gen3_event_process(cyapa, &data);
+> -
+> +	return cyapa->input ? cyapa_gen3_event_process(cyapa, &data) : 0;
+>   }
+>   
+>   static int cyapa_gen3_initialize(struct cyapa *cyapa) { return 0; }
+> diff --git a/drivers/input/mouse/cyapa_gen5.c b/drivers/input/mouse/cyapa_gen5.c
+> index abf42f77b4c5..afc5aa4dcf47 100644
+> --- a/drivers/input/mouse/cyapa_gen5.c
+> +++ b/drivers/input/mouse/cyapa_gen5.c
+> @@ -518,8 +518,7 @@ int cyapa_empty_pip_output_data(struct cyapa *cyapa,
+>   			*len = length;
+>   			/* Response found, success. */
+>   			return 0;
+> -		} else if (cyapa->operational &&
+> -			   input && input_device_enabled(input) &&
+> +		} else if (cyapa->operational && input &&
+>   			   (pm_stage == CYAPA_PM_RUNTIME_RESUME ||
+>   			    pm_stage == CYAPA_PM_RUNTIME_SUSPEND)) {
+>   			/* Parse the data and report it if it's valid. */
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
