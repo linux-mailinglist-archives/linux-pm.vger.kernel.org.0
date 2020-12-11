@@ -2,107 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9827D2D764B
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 14:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF6A2D764C
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 14:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436618AbgLKNKh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Dec 2020 08:10:37 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:34944 "EHLO
+        id S2436586AbgLKNKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Dec 2020 08:10:24 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:34926 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436591AbgLKNKZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 08:10:25 -0500
+        with ESMTP id S2436592AbgLKNJq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 08:09:46 -0500
 Date:   Fri, 11 Dec 2020 13:09:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1607692144;
+        s=2020; t=1607692143;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wbQDcnTD3/Yh+mkn+rX3NKUH2xy+Mx6kEC2F5JYLhY0=;
-        b=yFfJNS06s59x1wlnyLiEqi4+ZfMvYgl+KRb0rD7w2jidLG6V/m2LON8z91oG2Eibs4XdEg
-        WIsqvIrt88zYtBEeZEtExiWhpa4eB1m1RkzF4JQw86qaXNzLt5CQ6MFqFLru1Eu9Nsmudo
-        UhgITfLTp9iKdshQBpzfnaMdV/5F9Fpe9GUJQwbchnrQsLEyAh10NHFvF2pzQp6ztbHmoE
-        tP4sUHBiu8hxgE3nF+XZB/A3shKXBTjx/0Q2LuLtCnDcEAZEY7LPRQ1R6vjmi79zw9A1Tc
-        FD/ZUoovnagja+SwnDa3C4dJsY+MDhy1B17bQdvW1+fJslgV8BVPqmlk37HzPw==
+        bh=VjwTtOei504S012xRWLSfHr6RA5taAIdCacZR3sWO1U=;
+        b=4qWstBEFq5M5WrZuNZf7aDwXxrgLz9yPwBJ9G96tgcVl+d3auxvEW3H7Xs7pO8hCMpRCKY
+        Co7c2V519lMR0hdJLf1LvYfLgczCpWTAs+2Kyeg2nNSoUIK8bN48F65oo7Tlvr3dIBuzU+
+        fuqYRb+QiEAQUHjxlHm4KLJSuTwScrdjBDn7Fool5f3Icq6GcgOS+cZwPvyWwcY1iBgoVk
+        jAUah/8VsCJ846AAIyTWew6JK8KEt1/xp5eoTJbi0SNr0Jb1tfmhyXJXtsAcZx359VUiI4
+        kOI6lvbUaIF7Rs2WXErMCafT4SVtuZnA2Oc/v/Mg6JeNhSLBcDlOrjZxjoh2cg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1607692144;
+        s=2020e; t=1607692143;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wbQDcnTD3/Yh+mkn+rX3NKUH2xy+Mx6kEC2F5JYLhY0=;
-        b=Pxr4KTFEOPjfoJbdq8v+0265flZw2Yz7qGS+GZfuyDJfPEUzAdNHyAD0LFQFSKE74kIrlm
-        96pNwZDTkaeifSDQ==
-From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
+        bh=VjwTtOei504S012xRWLSfHr6RA5taAIdCacZR3sWO1U=;
+        b=c6JXSGpOad9rlpQquo4ETR3ZD7KILlL12EqIAJZrFYuZ6RgCAJG5HPVhXn9ZrgT9FH9QOl
+        g+GdWRV0xWjz20DA==
+From:   thermal-bot for Niklas =?utf-8?q?S=C3=B6derlund?= 
+        <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] platform/x86/drivers/acerhdf: Use
- module_param_cb to set/get polling interval
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>, rui.zhang@intel.com,
-        amitk@kernel.org
-In-Reply-To: <20201203071738.2363701-1-daniel.lezcano@linaro.org>
-References: <20201203071738.2363701-1-daniel.lezcano@linaro.org>
+Subject: [thermal: thermal/next] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a779a0 support
+Cc:     niklas.soderlund+renesas@ragnatech.se,
+        Rob Herring <robh@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20201126223028.3119044-2-niklas.soderlund+renesas@ragnatech.se>
+References: <20201126223028.3119044-2-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
-Message-ID: <160769214407.3364.7484361663829871694.tip-bot2@tip-bot2>
+Message-ID: <160769214328.3364.9880928927756194391.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     a65181c41e57709053892832d261956afe281deb
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//a65181c41e57709053892832d261956afe281deb
-Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Thu, 03 Dec 2020 08:17:37 +01:00
+Commit-ID:     d7fdfb6541f3be88d7b4d5ad0aeba7c14548eee8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
+git//d7fdfb6541f3be88d7b4d5ad0aeba7c14548eee8
+Author:        Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
+AuthorDate:    Thu, 26 Nov 2020 23:30:26 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 07 Dec 2020 17:03:58 +01:00
+CommitterDate: Tue, 08 Dec 2020 21:16:35 +01:00
 
-platform/x86/drivers/acerhdf: Use module_param_cb to set/get polling interval
+dt-bindings: thermal: rcar-gen3-thermal: Add r8a779a0 support
 
-The module parameter can be set by using ops to get and set the
-values. The change will allow to check the correctness of the interval
-value everytime it is changed instead of checking in the get_temp
-function.
+Add support for R-Car V3U. The V3U IP differs a bit from its siblings in
+such way that it have 4 TSC nodes and the interrupts are not routed to
+the INTC-AP but to the ECM.
 
+Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Peter Kaestle <peter@piie.net>
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20201203071738.2363701-1-daniel.lezcano@linaro.org
+Link: https://lore.kernel.org/r/20201126223028.3119044-2-niklas.soderlund+ren=
+esas@ragnatech.se
 ---
- drivers/platform/x86/acerhdf.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml | 17 ++++++=
++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 44b6bfb..19fc8ff 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -84,8 +84,6 @@ static struct platform_device *acerhdf_dev;
- 
- module_param(kernelmode, uint, 0);
- MODULE_PARM_DESC(kernelmode, "Kernel mode fan control on / off");
--module_param(interval, uint, 0600);
--MODULE_PARM_DESC(interval, "Polling interval of temperature check");
- module_param(fanon, uint, 0600);
- MODULE_PARM_DESC(fanon, "Turn the fan on above this temperature");
- module_param(fanoff, uint, 0600);
-@@ -824,3 +822,11 @@ MODULE_ALIAS("dmi:*:*Acer*:pnExtensa*5420*:");
- 
- module_init(acerhdf_init);
- module_exit(acerhdf_exit);
+diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml=
+ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+index f386f2a..b33a76e 100644
+--- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+@@ -26,13 +26,16 @@ properties:
+       - renesas,r8a77961-thermal # R-Car M3-W+
+       - renesas,r8a77965-thermal # R-Car M3-N
+       - renesas,r8a77980-thermal # R-Car V3H
++      - renesas,r8a779a0-thermal # R-Car V3U
 +
-+static const struct kernel_param_ops interval_ops = {
-+	.set = param_set_uint,
-+	.get = param_get_uint,
-+};
+   reg:
+     minItems: 2
+-    maxItems: 3
++    maxItems: 4
+     items:
+       - description: TSC1 registers
+       - description: TSC2 registers
+       - description: TSC3 registers
++      - description: TSC4 registers
+=20
+   interrupts:
+     items:
+@@ -55,12 +58,22 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - interrupts
+   - clocks
+   - power-domains
+   - resets
+   - "#thermal-sensor-cells"
+=20
++if:
++  not:
++    properties:
++      compatible:
++        contains:
++          enum:
++            - renesas,r8a779a0-thermal
++then:
++  required:
++    - interrupts
 +
-+module_param_cb(interval, &interval_ops, &interval, 0600);
-+MODULE_PARM_DESC(interval, "Polling interval of temperature check");
+ additionalProperties: false
+=20
+ examples:
