@@ -2,70 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E2D2D80A4
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 22:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6342D82D0
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Dec 2020 00:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405281AbgLKVNU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Dec 2020 16:13:20 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:37452 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392323AbgLKVNH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 16:13:07 -0500
-Received: by mail-oi1-f193.google.com with SMTP id l207so11436780oib.4;
-        Fri, 11 Dec 2020 13:12:51 -0800 (PST)
+        id S2388643AbgLKXiC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Dec 2020 18:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437309AbgLKXhW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 18:37:22 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E29C0613CF;
+        Fri, 11 Dec 2020 15:36:42 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id hk16so3172179pjb.4;
+        Fri, 11 Dec 2020 15:36:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:in-reply-to:references:user-agent:date
+         :message-id:mime-version;
+        bh=MgWP9jxRB8amULVjgVJSqmEz5Q4ppHRiQaLzS/iT588=;
+        b=UR3MFTM4CQWCYCmvT32O1a+ZA7AG2qyLrJHwxP4ONPm9+MwSSztBnomol+J4gC/JzE
+         0TAFACUrFGfjA6R8nmIr2+mlekIjiQktrDWesC2QIZ8RFLUxFsQq/dAIkpV3rCwCfFCZ
+         6Zkinpqxdq5kLeX3pXVkxebQLM9S8MQdw5Mo6unIyvRyHhAu3GTVegNH6DvbcOB91put
+         LwrhCKaxMw60zNO+wdAT84rFrgV+cXcYWkvG/MHRpTGzhnH3hbYYuLYXcz1dXC5K9b/M
+         8snR0TwwKpZqN1MDYcon294WMrb2RHcGd88NxrEf4Rn7hvZM4xgKt+P3cDDviUKoomII
+         jZDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kDEarIT6QtyZ9leo9UW3n9PcaYOZGBRD8Q7A2EVH/bk=;
-        b=AE+wjKpAgFX4dk/uPSFnGjZGddJlbd35kt/n5WsuqY0x/lgVMLnAZrDkB7wgnUC0f6
-         sD/WsRTORcFsUu/uSk6A0AS2ZctjO4oLJvW9j3jLxsLXUVVo7IbT398CaBvHN74lKJqX
-         Z6guxEKXOBi/0scocf3DuLrIHvgWoNWyjpYBl/OWHN9sorrcv8eyDg8yc8vluQT6aoFQ
-         BZSB3Bd1OrUVrY1R0pOiJCCc8kVWbcvKxOmaGJDR7lSJxxqjGZt6E5Hzjpbu7n3wum16
-         EnIiUggwXYHhysebAmyKzkWYcnjWy+Z/2t4QrfoY8fPB49m5DkzLALfyj8kV+u2Ukv5Q
-         my1g==
-X-Gm-Message-State: AOAM531Ffr72aAz9mjqYquyZMpZmRw4txkIXOtVpTBJfhtwX7DC0OwFv
-        1q4CA2CTiaNs5jEBJMjvRg==
-X-Google-Smtp-Source: ABdhPJzqwk8wLvsKy9ZMUr39mu3rcViIH1BQblnHU+cgFQ7mmj3SP4h6lGTWuefOzrIYXDGsgZrdPQ==
-X-Received: by 2002:a05:6808:96:: with SMTP id s22mr3204268oic.153.1607721146017;
-        Fri, 11 Dec 2020 13:12:26 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 8sm2193586oii.45.2020.12.11.13.12.24
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :user-agent:date:message-id:mime-version;
+        bh=MgWP9jxRB8amULVjgVJSqmEz5Q4ppHRiQaLzS/iT588=;
+        b=LwkE7s6OKhgzhMcm7qxNN78d3cMTEnLNZbJX3tcUQCjY3iPjhJ+j+a8FVE4NsFnXeh
+         aB5HcdhlGHHc9Weud3xRsFJfh35sobr/e/TdaIh44r0yWhv97j1R4L3jbEouNtsyJojP
+         w00X+IP9U/bFZXt7ijwsX8AFriZKGi0HI2rRj1sBdidNFaw4incbgLCK8ajIIwWgMlcX
+         3wbI3CV6o4yYcVK2FFWzw6/RiZKbyJNhYUOVjmfmHh9IVUqyB7mADO+NXoxBUvnNecO+
+         6OlFuhhJSuu5bKMpwOrzqDdu/Tm7iaN7PtQrzXVijvHff7F2k4eNub4uNEOiQZjtArJO
+         DqLA==
+X-Gm-Message-State: AOAM532RYBEkfUwvLZ71QltUVodZi65cNgISeO7XRPDVrJuMcbWzX8AE
+        SSUYmToCL7KF8I0k1t5FWu68Q/jg1bPxeVNb
+X-Google-Smtp-Source: ABdhPJymF6gXu8+CqxK2LcoXOugpvcZ4EbDPbhweW2aRhLaxlkau3GwDXg6DnVHJOsKQUW352EPhfw==
+X-Received: by 2002:a17:902:22e:b029:d9:e591:7bd1 with SMTP id 43-20020a170902022eb02900d9e5917bd1mr13297768plc.50.1607729802347;
+        Fri, 11 Dec 2020 15:36:42 -0800 (PST)
+Received: from localhost ([2405:6580:31a1:500:1ac0:4dff:fe39:5426])
+        by smtp.gmail.com with ESMTPSA id m77sm12361409pfd.105.2020.12.11.15.36.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 13:12:24 -0800 (PST)
-Received: (nullmailer pid 953910 invoked by uid 1000);
-        Fri, 11 Dec 2020 21:12:23 -0000
-Date:   Fri, 11 Dec 2020 15:12:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Klein <michael@fossekall.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v5 2/3] Documentation: DT: binding documentation for
- regulator-poweroff
-Message-ID: <20201211211223.GA953171@robh.at.kernel.org>
-References: <20201211151445.115943-1-michael@fossekall.de>
- <20201211151445.115943-3-michael@fossekall.de>
+        Fri, 11 Dec 2020 15:36:41 -0800 (PST)
+From:   Punit Agrawal <punitagrawal@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rjw@rjwysocki.net, wei.huang2@amd.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpufreq: acpi-cpufreq: Add processor to the ignore
+ PSD override list
+In-Reply-To: <20201210230332.GH26529@zn.tnic> (Borislav Petkov's message of
+        "Fri, 11 Dec 2020 00:03:32 +0100")
+References: <20201210225640.317719-1-punitagrawal@gmail.com>
+        <20201210225640.317719-3-punitagrawal@gmail.com>
+        <20201210230332.GH26529@zn.tnic>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Sat, 12 Dec 2020 08:36:38 +0900
+Message-ID: <87360boqyh.fsf@stealth>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201211151445.115943-3-michael@fossekall.de>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 11 Dec 2020 16:14:44 +0100, Michael Klein wrote:
-> Add devicetree binding documentation for regulator-poweroff driver.
-> 
-> Signed-off-by: Michael Klein <michael@fossekall.de>
-> ---
->  .../power/reset/regulator-poweroff.yaml       | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
-> 
+Borislav Petkov <bp@alien8.de> writes:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> On Fri, Dec 11, 2020 at 07:56:40AM +0900, Punit Agrawal wrote:
+>> Booting Linux on a Zen2 based processor (family: 0x17, model: 0x60,
+>> stepping: 0x1) shows the following message in the logs -
+>> 
+>>     acpi_cpufreq: overriding BIOS provided _PSD data
+>> 
+>> Although commit 5368512abe08 ("acpi-cpufreq: Honor _PSD table setting
+>> on new AMD CPUs") indicates that the override is not required for Zen3
+>> onwards, it seems that domain information can be trusted even on
+>> certain earlier systems. Update the check, to skip the override for
+>> Zen2 processors known to work without the override.
+>> 
+>> Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
+>> Cc: Wei Huang <wei.huang2@amd.com>
+>> ---
+>>  drivers/cpufreq/acpi-cpufreq.c | 9 +++++++--
+>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> What about answers to those questions first?
+>
+> https://lkml.kernel.org/r/20201208233216.GH27920@zn.tnic
+
+Oh.. sorry I missed that mail for some reason. Let's continue
+there.
