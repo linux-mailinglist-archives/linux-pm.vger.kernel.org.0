@@ -2,112 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5892D78DB
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 16:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048662D7910
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 16:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392763AbgLKPNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Dec 2020 10:13:13 -0500
-Received: from foss.arm.com ([217.140.110.172]:34458 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392751AbgLKPMw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 11 Dec 2020 10:12:52 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35BA931B;
-        Fri, 11 Dec 2020 07:12:03 -0800 (PST)
-Received: from [10.57.25.185] (unknown [10.57.25.185])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81A923F66B;
-        Fri, 11 Dec 2020 07:12:00 -0800 (PST)
-Subject: Re: [PATCH v4 0/5] Thermal devfreq cooling improvements with Energy
- Model
-To:     daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, orjan.eide@arm.com, robh@kernel.org,
-        alyssa.rosenzweig@collabora.com, steven.price@arm.com,
-        airlied@linux.ie, daniel@ffwll.ch, ionela.voinescu@arm.com
-References: <20201210143014.24685-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <04bdcc7a-c264-ffd2-89a2-5606e59ff786@arm.com>
-Date:   Fri, 11 Dec 2020 15:11:58 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2406632AbgLKPTh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Dec 2020 10:19:37 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:13540 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437682AbgLKPTG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 10:19:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1607699768;
+        s=strato-dkim-0002; d=fossekall.de;
+        h=Message-Id:Date:Subject:Cc:To:From:From:Subject:Sender;
+        bh=NCsW77FbQ1B3gPrsvuKFRFGs+rTfq3kJjuPpOkHykKY=;
+        b=gHyX06VEezUlEoSxYyFkmFgQUQHCJYgBv7j/3d7dVuMiUJEXXKKRutgaGZjt5zKls1
+        vQYmXRWZadJzAqym7HWtE01SoG9+ct8XuXK4do99Z3Z69EY6VxgWxF0DHDD2+7voHAbA
+        sRBiyr5pAd8dU78v1QoLjihWyugK0eYmUzXRro+a3jyszjG8tEVRkwSq9SUOy9lPr7c2
+        DPb2xnb6/SpprfzmthLkkgAwjULxreFzUKkBRnHXuqldzYzrl9KYgV6WFO9QRKB5fliQ
+        eq046dfsHCm+KHBDQ5e/3J7eZvyVPDIzVtYtHsWTsacsKDC1jptVH6my+tK4bJku6OGp
+        ZOVA==
+X-RZG-AUTH: ":O2kGeEG7b/pS1EzgE2y7nF0STYsSLflpbjNKxx7cGrBOdI6BL9pkS3QW19mO7I+/JwRspuzJFZuRzQ=="
+X-RZG-CLASS-ID: mo00
+Received: from aerfugl
+        by smtp.strato.de (RZmta 47.7.1 AUTH)
+        with ESMTPSA id L0a6acwBBFG61AH
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Fri, 11 Dec 2020 16:16:06 +0100 (CET)
+Received: from koltrast.a98shuttle.de ([192.168.1.27] helo=a98shuttle.de)
+        by aerfugl with smtp (Exim 4.89)
+        (envelope-from <michael@a98shuttle.de>)
+        id 1knk8G-0005RX-4w; Fri, 11 Dec 2020 16:14:56 +0100
+Received: (nullmailer pid 116008 invoked by uid 502);
+        Fri, 11 Dec 2020 15:14:56 -0000
+From:   Michael Klein <michael@fossekall.de>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Michael Klein <michael@fossekall.de>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 0/3] BPi M2 Zero poweroff support via new regulator-poweroff driver
+Date:   Fri, 11 Dec 2020 16:14:42 +0100
+Message-Id: <20201211151445.115943-1-michael@fossekall.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20201210143014.24685-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Changes in v2:
+  - rename DT node
 
-Do you think it has chance to go to as material for v5.11?
+Changes in v3:
+  - add regulator-poweroff driver
+  - use regulator-poweroff driver instead of gpio-poweroff
 
-Regards,
-Lukasz
+Changes in v4:
+  - hardcode poweroff timeout to 3000ms, not configurable any more
+  - remove support for multiple regulators
+  - fix Documentation issues
 
+Changes in v5:
+  - rename DT property 'power-supply' -> 'cpu-supply'
 
-On 12/10/20 2:30 PM, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set is a continuation of my previous work, which aimed
-> to add Energy Model to all devices [1]. This series is a follow up
-> for the patches which got merged to v5.9-rc1. It aims to change
-> the thermal devfreq cooling and use the Energy Model instead of
-> private power table and structures. The power model is now simplified,
-> static power and dynamic power are removed. The new registration interface
-> in the patch 3/5 helps to register devfreq cooling and the EM in one call.
-> There is also small improvement, patch 2/5 is changing the way how
-> thermal gets the device status (now uses a copy) and normalize the values.
-> The last patch is here for consistency and will probably go through drm tree.
-> 
-> The patch set should apply on top of thermal/testing. It does not depend on
-> new EM API change which is queued in the pm/linux-next tree as v5.11 material.
-> Thus, could go in parallel. That was the main motiviation for this v4.
-> 
-> changes:
-> v4:
-> - patch 3/5 - removed dependency on the EM API change
-> -- removed em_dev_register_perf_domain() and just use
->     dev_pm_opp_of_register_em() which API has not changed
-> -- removed a helper registration function and renamed
->     devfreq_cooling_em_register_power() to devfreq_cooling_em_register()
->     (was actually suggested by Ionela during review)
-> -- moved energy_model.h to include in devfreq_cooling.c not .h, since
->     there is no EM structure in there anymore
-> - adjusted comments and commit messages
-> v3 [4]:
-> - dropped direct check of device status and used just a copy of 'status';
->    a separate patch set will be proposed to address this issue
-> - modified _normalize_load() and used 1024 scale to handle ms, us, ns
-> - removed 'em_registered' and called em_dev_unregister_perf_domain()
->    unconditionally, so the drivers will have to make sure the right order of
->    all unregister calls to frameworks which might use EM; this call must be last
->    one; a proper comment added
-> - removed 'em' pointer from struct devfreq_cooling_device, 'dev->em_pd' is used
-> - removed of_node_get/put(), since the code can handle it
-> - removed dfc_em_get_requested_power() (as missed to do it in v2)
-> - collected all Reviewed-by tags
-> v2 [3]:
-> - renamed freq_get_state() and related to perf_idx pattern as
->    suggested by Ionela
-> v1 [2]
-> 
-> Regards,
-> Lukasz Luba
-> 
-> Lukasz Luba (5):
->    thermal: devfreq_cooling: change tracing function and arguments
->    thermal: devfreq_cooling: use a copy of device status
->    thermal: devfreq_cooling: add new registration functions with Energy
->      Model
->    thermal: devfreq_cooling: remove old power model and use EM
->    drm/panfrost: Register devfreq cooling and attempt to add Energy Model
-> 
->   drivers/gpu/drm/panfrost/panfrost_devfreq.c |   2 +-
->   drivers/thermal/devfreq_cooling.c           | 391 +++++++++-----------
->   include/linux/devfreq_cooling.h             |  27 +-
->   include/trace/events/thermal.h              |  19 +-
->   4 files changed, 198 insertions(+), 241 deletions(-)
-> 
+Michael Klein (3):
+  power: reset: new driver regulator-poweroff
+  Documentation: DT: binding documentation for regulator-poweroff
+  ARM: dts: sun8i-h2-plus-bananapi-m2-zero: add poweroff node
+
+ .../power/reset/regulator-poweroff.yaml       | 37 +++++++++
+ .../dts/sun8i-h2-plus-bananapi-m2-zero.dts    |  5 ++
+ drivers/power/reset/Kconfig                   |  7 ++
+ drivers/power/reset/Makefile                  |  1 +
+ drivers/power/reset/regulator-poweroff.c      | 82 +++++++++++++++++++
+ 5 files changed, 132 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
+ create mode 100644 drivers/power/reset/regulator-poweroff.c
+
+-- 
+2.29.2
+
