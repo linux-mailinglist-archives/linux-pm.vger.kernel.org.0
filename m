@@ -2,174 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1472D70A1
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 08:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2D72D7112
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Dec 2020 08:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389921AbgLKHKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Dec 2020 02:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730799AbgLKHKY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 02:10:24 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548B7C0613CF;
-        Thu, 10 Dec 2020 23:09:44 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id w16so6508660pga.9;
-        Thu, 10 Dec 2020 23:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=agSZMQdvaCGV7hdnrq9aTuJTFu3GU2xvnWahrOKp2Jc=;
-        b=iaCwlxTDrUkLZaR2IE70DXZlzMvfp14eegDu7lsHhJVqA94v1rPO5Tw4Re0cXWzUs5
-         tTdmMAeE833iUuG2ImjX+nRar2krQmwfag0rFEsw5K4ZZDSsw9fPPIUx1J2XQU6rwbnH
-         Kz55ev9L7xh0UTnBPP41ch7Fo9bpfKhtijuuRjlbCoQIPm6fHPuAydEfkg/7WaDcnUw2
-         KrX/PojTaAYfFOJojhEJH0JOWh5+06NYveWE7iDEGwTmJRic5BIrac7SqUas4AAAIZYJ
-         M0gohUFiRGvu59MmoW09LRLN4qrmmTOMEwyEoyc9qQHocn+A30QS9pv/UEmoXPeSjRD6
-         JYkg==
+        id S2436818AbgLKHsn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Dec 2020 02:48:43 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:39435 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388543AbgLKHsl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 02:48:41 -0500
+Received: by mail-ed1-f67.google.com with SMTP id c7so8343856edv.6;
+        Thu, 10 Dec 2020 23:48:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=agSZMQdvaCGV7hdnrq9aTuJTFu3GU2xvnWahrOKp2Jc=;
-        b=dqWcGVMx6IB8U9g6alO7K1sU0PMOKrfe81K+1noR5utrQcHIYWRGLVmEDYq704aFgV
-         OxIAvtHeAuYlI2OS/mEk/U47vrzcJVVmw7lBK978XBwOe6bqplXKbaNuCA2FEEqCBElA
-         ATFNTQHNyPJ7cupDjc48mqAVd/pvU0rZUX8QnyaLzz3AVG45GoJbC0WayihkDEI7oaSX
-         ik3LG6RpifogWt1Nngg03d2xFNU2FtXpWWVlV9Da1Kx3dogpjH1c1nU6207u9l3pL+fQ
-         zm3TsSck8qBkTCHlY9R9Hldy0cJ/NBphlABeGl0NkbMYq0xs9oW9auTgz2For8tFUBO9
-         vAgQ==
-X-Gm-Message-State: AOAM533KvSO0UuBaJXzT/q33ms2fGMpBm16Ovc4Djj6vefd4jgHC/8PQ
-        XgEZvGH1g+Kp4/Kov6OgHss=
-X-Google-Smtp-Source: ABdhPJxv8+WMAsqzX+/A7wLGk5FIrmzTZ6C65bUsZXxoEOBEVQ55NlCjhr48qYKwqGs7+RH4FmPorQ==
-X-Received: by 2002:a63:4d5c:: with SMTP id n28mr10516947pgl.88.1607670583820;
-        Thu, 10 Dec 2020 23:09:43 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id j3sm8846830pjs.50.2020.12.10.23.09.40
+        bh=P0wPTNnTMMvMYQoXIJsxDc+GGcUdhHlmPr5EHW78xzw=;
+        b=mezpfFhm+fgbJylmhl7dWQ9OmYRZESoDJ6ZeK8aBYf9ayecJqbKvJ3KzeAY1eoHDN9
+         3wokP5Gb+LqU/vOAlClr861ILhKDcptK9Rg9mdZ9Cfmj1gWf5ZfluFILH7KDXCu76unI
+         12PN3urktFUhOTcFcEh9y2m/6TSbg/TwNH/NHjjt0WayzJt1ypXHQ/K0vCGg2MS2bVmU
+         u1SQh9Tn58bNzsT7f+MNG7oeQcxgnBKa4mdQqdNvIIm2Vw632yiQjX3tMgwjwbCrc8Xl
+         FOCM5fiRJGUogkcv+l7fz51Y0nTKultUqOipAjchhntwKrSw1jBJlpyORy6WzEAzulSg
+         UUlw==
+X-Gm-Message-State: AOAM532wnUX8gR25rqGgdkAUPJEw8hP6MXLoF/ho9VfVqcwXuTQlcBpW
+        SlL4BI/4yGxTinAPfDuWI9cj9OTMbDXxGg==
+X-Google-Smtp-Source: ABdhPJx/k/HGToQvr22UR3Xq7vPsj2TvNmpm8kE7Hr4dtKfaS9AYncLFODFCgjOBi92luTKLln+RDw==
+X-Received: by 2002:a50:e688:: with SMTP id z8mr10777681edm.129.1607672878059;
+        Thu, 10 Dec 2020 23:47:58 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id qn4sm6333309ejb.50.2020.12.10.23.47.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 23:09:43 -0800 (PST)
-Date:   Thu, 10 Dec 2020 23:09:38 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Thu, 10 Dec 2020 23:47:57 -0800 (PST)
+Date:   Fri, 11 Dec 2020 08:47:55 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Barry Song <baohua@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Nick Dyer <nick@shmanahar.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ferruh Yigit <fery@cypress.com>,
-        Sangwon Jee <jeesw@melfas.com>,
-        Peter Hutterer <peter.hutterer@redhat.com>,
-        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
-        kernel@collabora.com,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH] Input: cyapa - do not call input_device_enabled from power
- mode handler
-Message-ID: <X9MbMja+TEfbKkmJ@google.com>
-References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
- <20200608112211.12125-1-andrzej.p@collabora.com>
- <20200608112211.12125-3-andrzej.p@collabora.com>
- <CGME20201207133237eucas1p26f8484944760a14e51dc7353ed33cd28@eucas1p2.samsung.com>
- <27ce1176-6318-45aa-4e22-3dec9f3df15d@samsung.com>
- <9c784a23-eade-eacd-3e67-d344a5758b83@collabora.com>
- <ad093ba3-7b17-18f3-6bb5-d8133c3da89a@samsung.com>
- <X9BwtHs9XriwR8gL@google.com>
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Angus Ainslie <angus@akkea.ca>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [RFC 18/18] power: supply: max17040: Do not enforce (incorrect)
+ interrupt trigger type
+Message-ID: <20201211074755.GA4346@kozik-lap>
+References: <20201210212534.216197-1-krzk@kernel.org>
+ <20201210212534.216197-18-krzk@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <X9BwtHs9XriwR8gL@google.com>
+In-Reply-To: <20201210212534.216197-18-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Input device's user counter is supposed to be accessed only while holding
-input->mutex.  Commit d69f0a43c677 ("Input: use input_device_enabled()")
-recently switched cyapa to using the dedicated API and it uncovered the
-fact that cyapa driver violated this constraint.
+On Thu, Dec 10, 2020 at 10:25:34PM +0100, Krzysztof Kozlowski wrote:
+> Interrupt line can be configured on different hardware in different way,
+> even inverted.  Therefore driver should not enforce specific trigger
+> type - edge falling - but instead rely on Devicetree to configure it.
+> 
+> The Maxim 14577/77836 datasheets describe the interrupt line as active
+> low with a requirement of acknowledge from the CPU therefore the edge
+> falling is not correct.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> 
+> ---
+> 
+> This patch should wait till DTS changes are merged, as it relies on
+> proper Devicetree.
+> ---
+>  .../devicetree/bindings/power/supply/max17040_battery.txt       | 2 +-
+>  drivers/power/supply/max17040_battery.c                         | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> index c802f664b508..194eb9fe574d 100644
+> --- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> @@ -39,7 +39,7 @@ Example:
+>  		reg = <0x36>;
+>  		maxim,alert-low-soc-level = <10>;
+>  		interrupt-parent = <&gpio7>;
+> -		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+> +		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
+>  		wakeup-source;
+>  	};
+>  
+> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+> index d956c67d5155..f737de0470de 100644
+> --- a/drivers/power/supply/max17040_battery.c
+> +++ b/drivers/power/supply/max17040_battery.c
+> @@ -367,7 +367,7 @@ static int max17040_enable_alert_irq(struct max17040_chip *chip)
+>  
+>  	flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
 
-This patch removes checks whether the input device is open when clearing
-device queues when changing device's power mode as there is no harm in
-sending input events through closed input device - the events will simply
-be dropped by the input core.
+This has to be removed. I will fix it in v2.
 
-Note that there are more places in cyapa driver that call
-input_device_enabled() without holding input->mutex, those are left
-unfixed for now.
+Best regards,
+Krzysztof
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
 
-Marek, could you please try this one?
-
- drivers/input/mouse/cyapa_gen3.c |    5 +----
- drivers/input/mouse/cyapa_gen5.c |    3 +--
- 2 files changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/input/mouse/cyapa_gen3.c b/drivers/input/mouse/cyapa_gen3.c
-index a97f4acb6452..4a9022faf945 100644
---- a/drivers/input/mouse/cyapa_gen3.c
-+++ b/drivers/input/mouse/cyapa_gen3.c
-@@ -907,7 +907,6 @@ static u16 cyapa_get_wait_time_for_pwr_cmd(u8 pwr_mode)
- static int cyapa_gen3_set_power_mode(struct cyapa *cyapa, u8 power_mode,
- 		u16 always_unused, enum cyapa_pm_stage pm_stage)
- {
--	struct input_dev *input = cyapa->input;
- 	u8 power;
- 	int tries;
- 	int sleep_time;
-@@ -953,7 +952,6 @@ static int cyapa_gen3_set_power_mode(struct cyapa *cyapa, u8 power_mode,
- 	 * depending on the command's content.
- 	 */
- 	if (cyapa->operational &&
--	    input && input_device_enabled(input) &&
- 	    (pm_stage == CYAPA_PM_RUNTIME_SUSPEND ||
- 	     pm_stage == CYAPA_PM_RUNTIME_RESUME)) {
- 		/* Try to polling in 120Hz, read may fail, just ignore it. */
-@@ -1223,8 +1221,7 @@ static int cyapa_gen3_try_poll_handler(struct cyapa *cyapa)
- 	    (data.finger_btn & OP_DATA_VALID) != OP_DATA_VALID)
- 		return -EINVAL;
- 
--	return cyapa_gen3_event_process(cyapa, &data);
--
-+	return cyapa->input ? cyapa_gen3_event_process(cyapa, &data) : 0;
- }
- 
- static int cyapa_gen3_initialize(struct cyapa *cyapa) { return 0; }
-diff --git a/drivers/input/mouse/cyapa_gen5.c b/drivers/input/mouse/cyapa_gen5.c
-index abf42f77b4c5..afc5aa4dcf47 100644
---- a/drivers/input/mouse/cyapa_gen5.c
-+++ b/drivers/input/mouse/cyapa_gen5.c
-@@ -518,8 +518,7 @@ int cyapa_empty_pip_output_data(struct cyapa *cyapa,
- 			*len = length;
- 			/* Response found, success. */
- 			return 0;
--		} else if (cyapa->operational &&
--			   input && input_device_enabled(input) &&
-+		} else if (cyapa->operational && input &&
- 			   (pm_stage == CYAPA_PM_RUNTIME_RESUME ||
- 			    pm_stage == CYAPA_PM_RUNTIME_SUSPEND)) {
- 			/* Parse the data and report it if it's valid. */
+>  	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+> -					max17040_thread_handler, flags,
+> +					max17040_thread_handler, IRQF_ONESHOT,
+>  					chip->battery->desc->name, chip);
+>  
+>  	return ret;
+> -- 
+> 2.25.1
+> 
