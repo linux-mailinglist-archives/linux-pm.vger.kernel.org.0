@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C4C2D8AAA
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 00:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB6D2D8AAC
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 00:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436890AbgLLXl7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Dec 2020 18:41:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59102 "EHLO mail.kernel.org"
+        id S2439905AbgLLXm2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Dec 2020 18:42:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbgLLXl7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 12 Dec 2020 18:41:59 -0500
-Date:   Sun, 13 Dec 2020 00:41:16 +0100
+        id S1726267AbgLLXmU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 12 Dec 2020 18:42:20 -0500
+Date:   Sun, 13 Dec 2020 00:41:37 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607816478;
-        bh=6QWq4Fbv5EWiMVzfXArjywVZkwvzqc/ihW7BC3cGPZw=;
+        s=k20201202; t=1607816499;
+        bh=ld6WI/WbyYmPRfnJouXU9CfxjM3Dou47ngCdq5kAuTo=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZKZHCT1fodBHM9AI1zj/DzR8ac82ETq/u1TSCumpJSmKZ+tIT1Z22LFhlIw7p14El
-         iM9Z3+q3byFwqk9Kg+I1FZ1kKoi2FzstUjIKU/AHMUUI6yjyo08f8fWN53yLr3g/72
-         JSYGdV8CG9tDsGXf7DbmLtLUCxIDdzaICnnLF6Xp4Avg9QohmDE15ErIiakReev2K1
-         RYh6H3z4Gy4HLyV+6s9Jbno6qt4JetLF5BvkXjPKTBJvqYxEL0cnVSSBKpjujpiAcV
-         r49J/s9KEEUqwoKGwUcxE61sKQ7UzcKKTvMapTV5Ut4jhMCqXB7aSy6ZpNOx/ji+xT
-         2J+6X5B/pbiAA==
+        b=p/qq1/cUzMMwE5CNU9VJYm2X9EJpJMiNI7elHxhV7TpKOvaSFHxBhqiU4dFyY5w5T
+         Kdqx7rDxkzgLJJS9GZu+d5C312Zezu/CNCiGlLlozSZfTUJIC5iVyEaqltre51f65J
+         bxGKkxGfWhL82bDpHmzbGjA5qevRlBi9Rk52zO+RYVCkZKJy0D46skX/fkE7PC4wPF
+         QOcn3K5hY7Bqroyw6qKiZHNYBeUBemtb1n/pxJdMNnmMUT7Sj5oPrzaN7xt8JC9k+c
+         elsrwMpLlSiACRXV1wYg+201Hjl0o43/7EpplmVLUduX04npu1z5pQ+zPzxPVlwSM+
+         /wPwpJfoz2Cmw==
 From:   Sebastian Reichel <sre@kernel.org>
 To:     Michael Klein <michael@fossekall.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -30,30 +30,30 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] power: reset: new driver regulator-poweroff
-Message-ID: <20201212234116.cddx5yur7ox7itxv@earth.universe>
+Subject: Re: [PATCH v5 2/3] Documentation: DT: binding documentation for
+ regulator-poweroff
+Message-ID: <20201212234137.xnh2vtqbmxqnkj3c@earth.universe>
 References: <20201211151445.115943-1-michael@fossekall.de>
- <20201211151445.115943-2-michael@fossekall.de>
+ <20201211151445.115943-3-michael@fossekall.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bqkjnicvkmtr26ev"
+        protocol="application/pgp-signature"; boundary="erqydbu4j5uxkufn"
 Content-Disposition: inline
-In-Reply-To: <20201211151445.115943-2-michael@fossekall.de>
+In-Reply-To: <20201211151445.115943-3-michael@fossekall.de>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---bqkjnicvkmtr26ev
+--erqydbu4j5uxkufn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Dec 11, 2020 at 04:14:43PM +0100, Michael Klein wrote:
-> This driver registers a pm_power_off function to turn off the board
-> by force-disabling a devicetree-defined regulator.
+On Fri, Dec 11, 2020 at 04:14:44PM +0100, Michael Klein wrote:
+> Add devicetree binding documentation for regulator-poweroff driver.
 >=20
 > Signed-off-by: Michael Klein <michael@fossekall.de>
 > ---
@@ -62,134 +62,57 @@ Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/reset/Kconfig              |  7 ++
->  drivers/power/reset/Makefile             |  1 +
->  drivers/power/reset/regulator-poweroff.c | 82 ++++++++++++++++++++++++
->  3 files changed, 90 insertions(+)
->  create mode 100644 drivers/power/reset/regulator-poweroff.c
+>  .../power/reset/regulator-poweroff.yaml       | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/regulat=
+or-poweroff.yaml
 >=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index d55b3727e00e..b22c4fdb2561 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -177,6 +177,13 @@ config POWER_RESET_QNAP
-> =20
->  	  Say Y if you have a QNAP NAS.
-> =20
-> +config POWER_RESET_REGULATOR
-> +	bool "Regulator subsystem power-off driver"
-> +	depends on OF && REGULATOR
-> +	help
-> +	  This driver supports turning off your board by disabling a
-> +	  power regulator defined in the devicetree.
-> +
->  config POWER_RESET_RESTART
->  	bool "Restart power-off driver"
->  	help
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index c51eceba9ea3..9dc49d3a57ff 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -19,6 +19,7 @@ obj-$(CONFIG_POWER_RESET_OCELOT_RESET) +=3D ocelot-rese=
-t.o
->  obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) +=3D piix4-poweroff.o
->  obj-$(CONFIG_POWER_RESET_LTC2952) +=3D ltc2952-poweroff.o
->  obj-$(CONFIG_POWER_RESET_QNAP) +=3D qnap-poweroff.o
-> +obj-$(CONFIG_POWER_RESET_REGULATOR) +=3D regulator-poweroff.o
->  obj-$(CONFIG_POWER_RESET_RESTART) +=3D restart-poweroff.o
->  obj-$(CONFIG_POWER_RESET_ST) +=3D st-poweroff.o
->  obj-$(CONFIG_POWER_RESET_VERSATILE) +=3D arm-versatile-reboot.o
-> diff --git a/drivers/power/reset/regulator-poweroff.c b/drivers/power/res=
-et/regulator-poweroff.c
+> diff --git a/Documentation/devicetree/bindings/power/reset/regulator-powe=
+roff.yaml b/Documentation/devicetree/bindings/power/reset/regulator-powerof=
+f.yaml
 > new file mode 100644
-> index 000000000000..f697088e0ad1
+> index 000000000000..03bd1fa5a623
 > --- /dev/null
-> +++ b/drivers/power/reset/regulator-poweroff.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Force-disables a regulator to power down a device
-> + *
-> + * Michael Klein <michael@fossekall.de>
-> + *
-> + * Copyright (C) 2020 Michael Klein
-> + *
-> + * Based on the gpio-poweroff driver.
-> + */
-> +#include <linux/delay.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm.h>
-> +#include <linux/regulator/consumer.h>
+> +++ b/Documentation/devicetree/bindings/power/reset/regulator-poweroff.ya=
+ml
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/regulator-poweroff.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#define TIMEOUT_MS 3000
+> +title: Force-disable power regulator to turn the power off.
 > +
-> +/*
-> + * Hold configuration here, cannot be more than one instance of the driv=
-er
-> + * since pm_power_off itself is global.
-> + */
-> +static struct regulator *cpu_regulator;
+> +maintainers:
+> +  - Michael Klein <michael@fossekall.de>
 > +
-> +static void regulator_poweroff_do_poweroff(void)
-> +{
-> +	if (cpu_regulator && regulator_is_enabled(cpu_regulator))
-> +		regulator_force_disable(cpu_regulator);
+> +description: |
+> +  When the power-off handler is called, a power regulator is disabled by
+> +  calling regulator_force_disable(). If the power is still on and the
+> +  CPU still running after a 3000ms delay, a warning is emitted.
 > +
-> +	/* give it some time */
-> +	mdelay(TIMEOUT_MS);
+> +properties:
+> +  compatible:
+> +    const: "regulator-poweroff"
 > +
-> +	WARN_ON(1);
-> +}
+> +  cpu-supply:
+> +    description:
+> +      regulator to disable on power-down
 > +
-> +static int regulator_poweroff_probe(struct platform_device *pdev)
-> +{
-> +	/* If a pm_power_off function has already been added, leave it alone */
-> +	if (pm_power_off !=3D NULL) {
-> +		dev_err(&pdev->dev,
-> +			"%s: pm_power_off function already registered\n",
-> +			__func__);
-> +		return -EBUSY;
-> +	}
+> +required:
+> +  - compatible
+> +  - cpu-supply
 > +
-> +	cpu_regulator =3D devm_regulator_get(&pdev->dev, "cpu");
-> +	if (IS_ERR(cpu_regulator))
-> +		return PTR_ERR(cpu_regulator);
+> +additionalProperties: false
 > +
-> +	pm_power_off =3D &regulator_poweroff_do_poweroff;
-> +	return 0;
-> +}
-> +
-> +static int regulator_poweroff_remove(__maybe_unused struct platform_devi=
-ce *pdev)
-> +{
-> +	if (pm_power_off =3D=3D &regulator_poweroff_do_poweroff)
-> +		pm_power_off =3D NULL;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_regulator_poweroff_match[] =3D {
-> +	{ .compatible =3D "regulator-poweroff", },
-> +	{},
-> +};
-> +
-> +static struct platform_driver regulator_poweroff_driver =3D {
-> +	.probe =3D regulator_poweroff_probe,
-> +	.remove =3D regulator_poweroff_remove,
-> +	.driver =3D {
-> +		.name =3D "poweroff-regulator",
-> +		.of_match_table =3D of_regulator_poweroff_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(regulator_poweroff_driver);
-> +
-> +MODULE_AUTHOR("Michael Klein <michael@fossekall.de>");
-> +MODULE_DESCRIPTION("Regulator poweroff driver");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:poweroff-regulator");
+> +examples:
+> +  - |
+> +    regulator-poweroff {
+> +        compatible =3D "regulator-poweroff";
+> +        cpu-supply =3D <&reg_vcc1v2>;
+> +    };
+> +...
 > --=20
 > 2.29.2
 >=20
@@ -199,24 +122,24 @@ ce *pdev)
 > linux-arm-kernel@lists.infradead.org
 > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
---bqkjnicvkmtr26ev
+--erqydbu4j5uxkufn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl/VVRwACgkQ2O7X88g7
-+pobnQ/8DRqZP9pJQbIdOkTSWtKX6e/WJ+umvhdCGxjT2q3vfU9X0MwDtnBQzOk5
-igA02V7pduBfKRWR/V9J/4OtHvvY2iCAKRyqvnT57FEA1M9nFz21DhUpDKWEzczj
-mdR4DMM7g7OXdc0+FcbSCRqBEmatQM2N4xmLTTNmoQBWzMC04TdAPE0i12ZHQoIF
-YD7od3zfenYjg2g1C8Od2vjbIXx6tstDxRZlpaRSE1WGBHZ0g8hUjsBCWwtrJ983
-Fqs8RAj5BmkvNdJjaIzlGc+8MypzL9da9t7L+2Pnr/0W5LLEQn1nkwxzRMzGPqlf
-Nlk0kFHYXHqGzdgK1fid3zgFzHLZL1fZA14/LRrsqCwDlEwICL9cR0Jmzp1FKiPg
-o7VmHvrYiG/6rt0Gxz2Gg7Ka+S7hkWe9pjrVhkc6h62F2it0s+8eNXl+p+H7DooA
-QDb166OvIhyoEzz7RkeQ6EKmXF7qEWFoqZfKJuEa53FkhYjKsGzXD3x5C6WIpp3O
-ghCB3ZOT8BehiXG4eZ7OmZEzMdT8dBihoK2k2h3K7mvf25gvjYkJfQJ+ezJ9F5Om
-hCp3A5s7/d9TWEU9KLoC0bol17cvR+APjCexV+fn0zCUR1T1PNLqvjnz5/eG+qr/
-NU/F41U3f+XIjXmRtOudxi7MrufmVjC90WRhxzjQacrLCc5GEhE=
-=l5NK
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl/VVTEACgkQ2O7X88g7
++poXLg//Y5j/lacOZTPsiDqIHt6dE74UstQENqnz3/rgDBswnVBxSlW/85Md14/a
+j3GLRYe/fqUEO8o2t7CtMxzOQlnmFe80aCpKNfpGj50FKgt1HSaUqN+9rxRDnnhq
+IIvAP1SpdSG2X8ZP031XyRHFYdUsxo2dOJu6W1BSEXAarm0tVqR/AVKohiXuDDYV
+ILotynHjtXgHXN9onhu3s0APz5mHZCQyge/wtPshkE/+ssvbC0l8HFrd6eMarW75
+AS/J1pkQk9vnLgQBOpItUxEtGU79DHkbe+DUKe2DmKA07Q3ZPwnpq69mrJ1MN8yd
+7aO9PZ9ZIae0qUWC59ZDR0wivXLmUc2ROzwvnGfQL7bQedyLPWspE50PVtnydzGb
+9T4jAHctik2i5YnhO6NkbqGmIZueSYl5VCMBx3U+0iOg7QNP1ZiigucMOmZQBGeI
+UNamgXvss4q4izyeGqreH7UAqXmDdPD4qMVfcpgQGf7aiUfRmI0oENtobQ9S2rXq
+Gs1nLgeOUW1xnSnMwebjrzhjGCWuvT0oQPr+d/Iqv0nWN+rIk1AtxiLiNnc4LHEP
+NAznxc7QzQYDseEX4sn7O1rDGtRbJdbcZcJ4i7yXslkQCx6I9DPKhBKRyAMk+MAp
+er+UTH0mHpcuE5fk9hBT85qMletm9b6b8jGuA/d4UJ+ky4Y5WHU=
+=4jjv
 -----END PGP SIGNATURE-----
 
---bqkjnicvkmtr26ev--
+--erqydbu4j5uxkufn--
