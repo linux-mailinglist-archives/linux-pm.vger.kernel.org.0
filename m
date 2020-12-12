@@ -2,158 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E802D8312
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Dec 2020 01:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD642D836E
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Dec 2020 01:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407252AbgLKX7X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Dec 2020 18:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S2407320AbgLLAcB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Dec 2020 19:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407242AbgLKX7S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 18:59:18 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23109C0613CF
-        for <linux-pm@vger.kernel.org>; Fri, 11 Dec 2020 15:58:38 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p6so5414855plo.6
-        for <linux-pm@vger.kernel.org>; Fri, 11 Dec 2020 15:58:38 -0800 (PST)
+        with ESMTP id S2407322AbgLLAby (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Dec 2020 19:31:54 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B37FC0613D3
+        for <linux-pm@vger.kernel.org>; Fri, 11 Dec 2020 16:31:09 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id u19so11233703edx.2
+        for <linux-pm@vger.kernel.org>; Fri, 11 Dec 2020 16:31:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=QqYv805a1RU0wrswW6DIXkLD+Bs1FBzAj2tYjxGw0wU=;
-        b=ZBe3B+euEg10Yj9R15Oepc1gBC2H5a0VtstAJJ305toJj4D9+f3h+gr14ZS1zeNjpU
-         cbosNPp+IqcGwnKqm8E0gRA4ua6V6NwAKwYLeUtlJPsIfYa02KsdrgVig80Ufz2qtAcs
-         4UTIdgvGdxrCuq3ukrFo/FgAIVqLiW31XndACgBq+7n+MR5oOJA0meZwwpTdaeTN9brT
-         MGZHgtcJPVJmb/yfAUl2eOYIe15X6cKexceWyj98Fox8RcyBHn2165acmddQgqQUkntt
-         uX7NF+QeUc4vTryNhZnrL+yUInp4QJoCSnNYAjY/98oQuqelo57DXiLFf/KUFTzQQjqZ
-         aBpg==
+        d=mccsd.net; s=google;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=rD/2NWtw2v/FL1pKXoQZJqitEVR7m20lkD0fH6dFRZ8=;
+        b=IxcVd91QBrb0QRZk1//yTrSzuijPKqF9PDVeb5jvRoK4jfz47vC/LLVycsxXi3/+yY
+         TPUEw6ACx2AO1YbOaNhWBoAwOv/6rKcJbPI9TI1LCFC0B3IcN9iSh7IOzN+UYGpcVuWh
+         2UsNM1NCG8jebeBXWReEK7pr51nxEoOabLKbZM24yNGe42belsq0/lPO2YbQpIK9g4Er
+         8MsK+YwAqT8/h3Gl6NntrDcDrE3lPF+0Tj3+4Jv13t5ozAXrnrB+DwI8LGku1m/Tscmi
+         hh6KgufExgAK+Zb1fifuEElDjPTh3UuX6s0oxZF95PfOduFLgLRfa95LprlCs5IEg4yo
+         Ey6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=QqYv805a1RU0wrswW6DIXkLD+Bs1FBzAj2tYjxGw0wU=;
-        b=NCITruF+IgmX7cSMGY8cdHe1uT4pKhxfW0CFz3XnwfgCE8Zo1dcbCFyEWO2tW2tG1U
-         8wz2EubOS0yHzqhteMeo7qvaSltT79b7emtfKvmNltq6XiXw8mEmDhm0xXVK6F6nFwDX
-         Awms2NKhp9syyGOKseKeQZY0+uWPTAV9rnDUx8VAvZb7mGkxwrvrR37qECXsiYuLsE7n
-         M7gZ0x/sXffRcnxbHUa08eKTlVx7F7u6yJBeks4o1zwz9uIsE102rtK9ZFA9gkqdKiB6
-         bsNxPxtvLRq6EHUeQNWnzRabAMpSwxaRk3686QLElgLp7Vw/GzDGwI1YIV2lH93iAEk1
-         dW5A==
-X-Gm-Message-State: AOAM533LHNt3aZv5XPmA7NreCGdbMyTuJrcfMZYnpvPhYBpxP8azngGO
-        Wtql5wnq4wMOblIflhMp3RVwjg==
-X-Google-Smtp-Source: ABdhPJw7JRhrETb5goQx/qZVZwzg6axDy9xFZ2J3JnlF8Nop6E1u9ZZEyj/Z/bgsy3dUndBpFGZRxQ==
-X-Received: by 2002:a17:90a:a108:: with SMTP id s8mr15080965pjp.206.1607731117708;
-        Fri, 11 Dec 2020 15:58:37 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e2sm11061332pjv.10.2020.12.11.15.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 15:58:36 -0800 (PST)
-Message-ID: <5fd407ac.1c69fb81.dce80.530a@mx.google.com>
-Date:   Fri, 11 Dec 2020 15:58:36 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=rD/2NWtw2v/FL1pKXoQZJqitEVR7m20lkD0fH6dFRZ8=;
+        b=sihNh7hL+l40Hm6L0Ru6zWxMFW3BCWPcZ7GlYVWPSp/+2R79oxqRfdq9K8e6f5IWxv
+         3pEVyUYsV1f/cNxOeDxsgZ6ex4pBSSearKx6alVGj1+KIzCsdQcK3WM02OtMWTQsbSJ3
+         UBAmMeV1LJlUgrPQ+eF+1bjJpkKpxOij65P9L3FaxRHq0Unmb4wA8g2EsOuOKed6mfvG
+         Q068+Fq4wxaXEQfPGB6TnoXEw9SurcMnAjfPyGE53Mugg0gGiHAOfPK1z91R3+bnvM3h
+         Ltv5aWaChQvliaTJcOFLvpx1NsCDJ2tI0wYvPZeJJoCCtcbwq1jVYn1fOGj9eZNBNVCy
+         N+ZA==
+X-Gm-Message-State: AOAM530iNbEtCgkFAXl1ptAR5VQoABolp2LVu+YPuYfBF6Y8a331dZMI
+        dxrCNNd3l1nZ/xHFRs1wXWzQJVu3UyohmN97POaRnA==
+X-Google-Smtp-Source: ABdhPJy0H8Zq1+1G9dNcIZToFTW9Q3ibdyju1oblFnaKUnvLhIhbfv9nn8oiGA7nrpoe6ZIhr5Va0QSfpE6FM8NkADI=
+X-Received: by 2002:aa7:cd84:: with SMTP id x4mr13932909edv.192.1607733067703;
+ Fri, 11 Dec 2020 16:31:07 -0800 (PST)
 MIME-Version: 1.0
+Received: by 2002:a17:906:7e51:0:0:0:0 with HTTP; Fri, 11 Dec 2020 16:31:06
+ -0800 (PST)
+Reply-To: ABDERAZACK.ZEBDANI@hotmail.com
+From:   ABDERAZACK ZEBDANI <ekenned542@mccsd.net>
+Date:   Fri, 11 Dec 2020 16:31:06 -0800
+Message-ID: <CABnRa7sAxN3OTZEfOPj_O9PsX-ZojCC_4KKU80nCt0eVVe-oMg@mail.gmail.com>
+Subject: Greetings My Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.10-rc7-106-g97756044ce06
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 3 warnings (v5.10-rc7-106-g97756044ce06)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 3 warnings (v5.10-rc7-106-g=
-97756044ce06)
+Greetings My Dear Friend,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-10-rc7-106-g97756044ce06/
+Before I introduce myself, I wish to inform you that this letter is
+not a hoax mail and I urge you to treat it serious.This letter must
+come to you as a big surprise, but I believe it is only a day that
+people meet and become great friends and business partners. Please I
+want you to read this letter very carefully and I must apologize for
+barging this message into your mail box without any formal
+introduction due to the urgency and confidentiality of this business
+and I know that this message will come to you as a surprise. Please
+this is not a joke and I will not like you to joke with it ok,With due
+respect to your person and much sincerity of purpose, I make this
+contact with you as I believe that you can be of great assistance to
+me. My name is Mr.Abderazack zebdani, from Burkina Faso, West Africa.
+I work in Bank Of Africa (BOA) as telex manager, please see this as a
+confidential message and do not reveal it to another person and let me
+know whether you can be of assistance regarding my proposal below
+because it is top secret.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.10-rc7-106-g97756044ce06
-Git Commit: 97756044ce0645570f22b356174ed0c811458ca7
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+I am about to retire from active Banking service to start a new life
+but I am skeptical to reveal this particular secret to a stranger. You
+must assure me that everything will be handled confidentially because
+we are not going to suffer again in life. It has been 10 years now
+that most of the greedy African Politicians used our bank to launder
+money overseas through the help of their Political advisers. Most of
+the funds which they transferred out of the shores of Africa were gold
+and oil money that was supposed to have been used to develop the
+continent. Their Political advisers always inflated the amounts before
+transferring to foreign accounts, so I also used the opportunity to
+divert part of the funds hence I am aware that there is no official
+trace of how much was transferred as all the accounts used for such
+transfers were being closed after transfer. I acted as the Bank
+Officer to most of the politicians and when I discovered that they
+were using me to succeed in their greedy act; I also cleaned some of
+their banking records from the Bank files and no one cared to ask me
+because the money was too much for them to control. They laundered
+over $5billion Dollars during the process.
 
-Warnings Detected:
+Before I send this message to you, I have already diverted
+($10.5million Dollars) to an escrow account belonging to no one in the
+bank. The bank is anxious now to know who the beneficiary to the funds
+is because they have made a lot of profits with the funds. It is more
+than Eight years now and most of the politicians are no longer using
+our bank to transfer funds overseas. The ($10.5million Dollars) has
+been laying waste in our bank and I don=E2=80=99t want to retire from the b=
+ank
+without transferring the funds to a foreign account to enable me share
+the proceeds with the receiver (a foreigner). The money will be shared
+60% for me and 40% for you. There is no one coming to ask you about
+the funds because I secured everything. I only want you to assist me
+by providing a reliable bank account where the funds can be
+transferred.
 
-arc:
-
-arm64:
-
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    2    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge)=
-: /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
-    2    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge)=
-: /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
-    2    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /so=
-c/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
-    arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /so=
-c/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+You are not to face any difficulties or legal implications as I am
+going to handle the transfer personally. If you are capable of
+receiving the funds, do let me know immediately to enable me give you
+a detailed information on what to do. For me, I have not stolen the
+money from anyone because the other people that took the whole money
+did not face any problems. This is my chance to grab my own life
+opportunity but you must keep the details of the funds secret to avoid
+any leakages as no one in the bank knows about my plans.Please get
+back to me if you are interested and capable to handle this project, I
+shall intimate you on what to do when I hear from your confirmation
+and acceptance.If you are capable of being my trusted associate, do
+declare your consent to me I am looking forward to hear from you
+immediately for further information. Kindly reply this email (
+ABDERAZACK.ZEBDANI@HOTMAIL.COM )
+Thanks with my best regards.
+Mr.Abderazack zebdani.
+Telex Manager
+Bank Of Africa (BOA)
+Burkina Faso.
