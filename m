@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5202D861A
+	by mail.lfdr.de (Postfix) with ESMTP id 8A42C2D861B
 	for <lists+linux-pm@lfdr.de>; Sat, 12 Dec 2020 11:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438855AbgLLK6F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Dec 2020 05:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S2438848AbgLLK6J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Dec 2020 05:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438848AbgLLK6D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Dec 2020 05:58:03 -0500
+        with ESMTP id S2438853AbgLLK6E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Dec 2020 05:58:04 -0500
 Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBCCC0613D6
-        for <linux-pm@vger.kernel.org>; Sat, 12 Dec 2020 02:57:22 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id m19so17994709lfb.1
-        for <linux-pm@vger.kernel.org>; Sat, 12 Dec 2020 02:57:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DE2C061793
+        for <linux-pm@vger.kernel.org>; Sat, 12 Dec 2020 02:57:23 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id a8so17981906lfb.3
+        for <linux-pm@vger.kernel.org>; Sat, 12 Dec 2020 02:57:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=X8VThf45bOLdUfUXFvslCbuQWhXnY7v/1IVWJ78UmWc=;
-        b=ne3thSHBZBhX1g1mHi0LhgwhidmJx7TsLVTJ7y6e7x9g0FgZ+ne2qrc4G7yIT25R15
-         6HhVjm2sJiZrz20ziTN4nqNU18iuHihwVX5TKQ178wBA0tvKozjRdjq8A0tlBWTLxcSc
-         N8a54K+ZTDSaMgN0BXTKlAPbFh4oJC3L61mzeyiZ+FFHSgA/oG94Vo6eCxflE5sWfAZI
-         7V/bhW77f8vwHSeVGFeQtWccpf+HacfOa818zqdZUSwRBqZ1G1FC7uXfgrCtQz8oRifK
-         4SBIteoJXROU/mAE7ftSpbijVh8vwCQrQRxT9bQqm887aWwxE4WSSZJGYxbLGlgnWhE6
-         oZaQ==
+        bh=sWX5eE1xOf9NUniflRKOxAe5PsjQfTfWOM1x60DKsqU=;
+        b=FIDv0+pFTVraDrY/d9H67Yol4HuHm2qgwQeeEMLbAz66ji3a8JQiMdFJtaNJHcwnv0
+         9MDWlTvXMTCRKIkMJEGaW8O2YhVJAuovnAOLU20T0IKXa0TnsZNWoSVWWBlJZB2C/h4k
+         2i7wYfFZ3AFA7iHGhdX4OU+VGTJ5lT1fc5f/iQ16k0mJxqr1em46SZvhccjQr88l0YSL
+         Ym6sSPy/47A3gdtYmSqlGrYtvkvyvEz53Eo2gc7QPl0SRPMcoPZMXOR0H3XhTlAdKQ1f
+         wfbBRPXquwZc8PHL1mRwKu0cGwOMBICaIW6HqCz2omT1lPCzOusRE+UGyepQKw+poFRF
+         g/iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X8VThf45bOLdUfUXFvslCbuQWhXnY7v/1IVWJ78UmWc=;
-        b=KN0hDTaoHBJQmO2sBlNvcnEnMTxh4z/cOnf6yFSbUx5bXmQql+CtPWxSoQ0e+mAP7C
-         u4E2gwQQMuJcOnTzgohPRn3i1EPNbofYuDHPfXqDOePwLOZoNqRi+zBi6c7xvy5RzPzb
-         7CXJPmcY+A2wdzZNZAaGRBEweGt41towHLCh0HPJS0dY9dMTdjo9v6Ak7Ux+Q9RwUJpL
-         HmH3unt3csBqiJIJBTaxIRce/66fEtMoaVh2e/jby2LbvustxQoKbwmK7yxpiT0PAd5l
-         SMe8VaEI5fTnq2MNQciWJUX+bF4W/Zxixp7sDAXoCsUjJ2yVS5K+42V8kYzBGxALXngY
-         nv/w==
-X-Gm-Message-State: AOAM531PKxIDO91dBc7I30JjCjvoyxfzgnQ5zgLCDAbTonI1j2n2YFna
-        eCQ96KHGDSky+yBnOslAB35kyA==
-X-Google-Smtp-Source: ABdhPJwsnSIm5faOVz+o+LFKWRWqc6KG5+Hs2H6dxw0Rc+pGrH7DZ06IL6xsgEWm7DFf3Z9GtLNUfw==
-X-Received: by 2002:a2e:7803:: with SMTP id t3mr4611043ljc.213.1607770640749;
-        Sat, 12 Dec 2020 02:57:20 -0800 (PST)
+        bh=sWX5eE1xOf9NUniflRKOxAe5PsjQfTfWOM1x60DKsqU=;
+        b=S89aB6Vb2GO2DMiRyWsYzlMopjPb+kDDV5LB7z1Yxn9cS2mbdfLYflEEn7+J2ru0wB
+         3CEmCpH+oOJLP0t24GgyQ3YGlgFVI2s0vwQag2l3bmP6mVd7vTVLvGrHP282UhuLP2GO
+         KmfouH+1gqp9ADkfFRjXL+WCAw9GV3bc0Rfd1Xo6VZyRayoP6+wwiY/UY8hnR+RqPOse
+         QjwYjmg80ULx0IjiwCMuSeiHIzlcXYl2/rM0LsResbbTosCyVdcRWcbqs+67BlkGhxlz
+         yqbVDjz1WNBOajra5utdvXkhA29bBnfqTEdhzPUPiBJAR5M1VLil5GkomeucCMI+r17m
+         +FXg==
+X-Gm-Message-State: AOAM5317GF5KAEneLLiEg+yjWUdk3h/wK/s+8vxr9AA2Yv4A7kVZ6LQC
+        WF0Awu7++sXA8rLJr9emf78Obw==
+X-Google-Smtp-Source: ABdhPJyQWEt2hwjblVdt0srRBjVgg9abAQv5xh0+flmcknO73tK1Ytg9fXLqcAAbxNkheHOdGHwFWA==
+X-Received: by 2002:a2e:88d6:: with SMTP id a22mr6962040ljk.150.1607770642475;
+        Sat, 12 Dec 2020 02:57:22 -0800 (PST)
 Received: from localhost.bredbandsbolaget (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id j2sm490674lfe.213.2020.12.12.02.57.20
+        by smtp.gmail.com with ESMTPSA id j2sm490674lfe.213.2020.12.12.02.57.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Dec 2020 02:57:20 -0800 (PST)
+        Sat, 12 Dec 2020 02:57:22 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Marcus Cooper <codekipper@gmail.com>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 1/5] power: supply: ab8500: Use local helper
-Date:   Sat, 12 Dec 2020 11:57:08 +0100
-Message-Id: <20201212105712.2727842-2-linus.walleij@linaro.org>
+Subject: [PATCH 2/5] power: supply: ab8500: Convert to dev_pm_ops
+Date:   Sat, 12 Dec 2020 11:57:09 +0100
+Message-Id: <20201212105712.2727842-3-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201212105712.2727842-1-linus.walleij@linaro.org>
 References: <20201212105712.2727842-1-linus.walleij@linaro.org>
@@ -63,432 +63,269 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use a local "dev" helper variable to make the probe()
-code easier to read in the ab8500 subdrivers.
-
-Drop out-of-memory messages as these should come from the
-slab core.
+Switch over to using generic dev_pm_ops since these
+drivers aren't even using the special power state passed
+to the legacy call.
 
 Cc: Marcus Cooper <codekipper@gmail.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/power/supply/ab8500_btemp.c   | 37 +++++++++---------
- drivers/power/supply/ab8500_charger.c | 55 +++++++++++++--------------
- drivers/power/supply/ab8500_fg.c      | 39 +++++++++----------
- 3 files changed, 64 insertions(+), 67 deletions(-)
+ drivers/power/supply/ab8500_btemp.c    | 19 +++++++------------
+ drivers/power/supply/ab8500_charger.c  | 19 +++++++------------
+ drivers/power/supply/ab8500_fg.c       | 19 +++++++------------
+ drivers/power/supply/abx500_chargalg.c | 19 +++++++------------
+ 4 files changed, 28 insertions(+), 48 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
-index 909f0242bacb..06b4247ebc45 100644
+index 06b4247ebc45..1f8fded47b2e 100644
 --- a/drivers/power/supply/ab8500_btemp.c
 +++ b/drivers/power/supply/ab8500_btemp.c
-@@ -999,47 +999,46 @@ static int ab8500_btemp_probe(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	struct abx500_bm_data *plat = pdev->dev.platform_data;
- 	struct power_supply_config psy_cfg = {};
-+	struct device *dev = &pdev->dev;
- 	struct ab8500_btemp *di;
- 	int irq, i, ret = 0;
- 	u8 val;
+@@ -936,29 +936,23 @@ static struct ab8500_btemp_interrupts ab8500_btemp_irq[] = {
+ 	{"BTEMP_MEDIUM_HIGH", ab8500_btemp_medhigh_handler},
+ };
  
--	di = devm_kzalloc(&pdev->dev, sizeof(*di), GFP_KERNEL);
--	if (!di) {
--		dev_err(&pdev->dev, "%s no mem for ab8500_btemp\n", __func__);
-+	di = devm_kzalloc(dev, sizeof(*di), GFP_KERNEL);
-+	if (!di)
- 		return -ENOMEM;
--	}
+-#if defined(CONFIG_PM)
+-static int ab8500_btemp_resume(struct platform_device *pdev)
++static int __maybe_unused ab8500_btemp_resume(struct device *dev)
+ {
+-	struct ab8500_btemp *di = platform_get_drvdata(pdev);
++	struct ab8500_btemp *di = dev_get_drvdata(dev);
  
- 	if (!plat) {
--		dev_err(&pdev->dev, "no battery management data supplied\n");
-+		dev_err(dev, "no battery management data supplied\n");
- 		return -EINVAL;
- 	}
- 	di->bm = plat;
+ 	ab8500_btemp_periodic(di, true);
  
- 	if (np) {
--		ret = ab8500_bm_of_probe(&pdev->dev, np, di->bm);
-+		ret = ab8500_bm_of_probe(dev, np, di->bm);
- 		if (ret) {
--			dev_err(&pdev->dev, "failed to get battery information\n");
-+			dev_err(dev, "failed to get battery information\n");
- 			return ret;
- 		}
- 	}
+ 	return 0;
+ }
  
- 	/* get parent data */
--	di->dev = &pdev->dev;
-+	di->dev = dev;
- 	di->parent = dev_get_drvdata(pdev->dev.parent);
+-static int ab8500_btemp_suspend(struct platform_device *pdev,
+-	pm_message_t state)
++static int __maybe_unused ab8500_btemp_suspend(struct device *dev)
+ {
+-	struct ab8500_btemp *di = platform_get_drvdata(pdev);
++	struct ab8500_btemp *di = dev_get_drvdata(dev);
  
- 	/* Get ADC channels */
--	di->btemp_ball = devm_iio_channel_get(&pdev->dev, "btemp_ball");
-+	di->btemp_ball = devm_iio_channel_get(dev, "btemp_ball");
- 	if (IS_ERR(di->btemp_ball)) {
- 		if (PTR_ERR(di->btemp_ball) == -ENODEV)
- 			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "failed to get BTEMP BALL ADC channel\n");
-+		dev_err(dev, "failed to get BTEMP BALL ADC channel\n");
- 		return PTR_ERR(di->btemp_ball);
- 	}
--	di->bat_ctrl = devm_iio_channel_get(&pdev->dev, "bat_ctrl");
-+	di->bat_ctrl = devm_iio_channel_get(dev, "bat_ctrl");
- 	if (IS_ERR(di->bat_ctrl)) {
- 		if (PTR_ERR(di->bat_ctrl) == -ENODEV)
- 			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "failed to get BAT CTRL ADC channel\n");
-+		dev_err(dev, "failed to get BAT CTRL ADC channel\n");
- 		return PTR_ERR(di->bat_ctrl);
- 	}
+ 	ab8500_btemp_periodic(di, false);
  
-@@ -1053,7 +1052,7 @@ static int ab8500_btemp_probe(struct platform_device *pdev)
- 	di->btemp_wq =
- 		alloc_workqueue("ab8500_btemp_wq", WQ_MEM_RECLAIM, 0);
- 	if (di->btemp_wq == NULL) {
--		dev_err(di->dev, "failed to create work queue\n");
-+		dev_err(dev, "failed to create work queue\n");
- 		return -ENOMEM;
- 	}
+ 	return 0;
+ }
+-#else
+-#define ab8500_btemp_suspend      NULL
+-#define ab8500_btemp_resume       NULL
+-#endif
  
-@@ -1065,10 +1064,10 @@ static int ab8500_btemp_probe(struct platform_device *pdev)
- 	di->btemp_ranges.btemp_low_limit = BTEMP_THERMAL_LOW_LIMIT;
- 	di->btemp_ranges.btemp_med_limit = BTEMP_THERMAL_MED_LIMIT;
+ static int ab8500_btemp_remove(struct platform_device *pdev)
+ {
+@@ -1137,6 +1131,8 @@ static int ab8500_btemp_probe(struct platform_device *pdev)
+ 	return ret;
+ }
  
--	ret = abx500_get_register_interruptible(di->dev, AB8500_CHARGER,
-+	ret = abx500_get_register_interruptible(dev, AB8500_CHARGER,
- 		AB8500_BTEMP_HIGH_TH, &val);
- 	if (ret < 0) {
--		dev_err(di->dev, "%s ab8500 read failed\n", __func__);
-+		dev_err(dev, "%s ab8500 read failed\n", __func__);
- 		goto free_btemp_wq;
- 	}
- 	switch (val) {
-@@ -1088,10 +1087,10 @@ static int ab8500_btemp_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Register BTEMP power supply class */
--	di->btemp_psy = power_supply_register(di->dev, &ab8500_btemp_desc,
-+	di->btemp_psy = power_supply_register(dev, &ab8500_btemp_desc,
- 					      &psy_cfg);
- 	if (IS_ERR(di->btemp_psy)) {
--		dev_err(di->dev, "failed to register BTEMP psy\n");
-+		dev_err(dev, "failed to register BTEMP psy\n");
- 		ret = PTR_ERR(di->btemp_psy);
- 		goto free_btemp_wq;
- 	}
-@@ -1109,11 +1108,11 @@ static int ab8500_btemp_probe(struct platform_device *pdev)
- 			ab8500_btemp_irq[i].name, di);
- 
- 		if (ret) {
--			dev_err(di->dev, "failed to request %s IRQ %d: %d\n"
-+			dev_err(dev, "failed to request %s IRQ %d: %d\n"
- 				, ab8500_btemp_irq[i].name, irq, ret);
- 			goto free_irq;
- 		}
--		dev_dbg(di->dev, "Requested %s IRQ %d: %d\n",
-+		dev_dbg(dev, "Requested %s IRQ %d: %d\n",
- 			ab8500_btemp_irq[i].name, irq, ret);
- 	}
++static SIMPLE_DEV_PM_OPS(ab8500_btemp_pm_ops, ab8500_btemp_suspend, ab8500_btemp_resume);
++
+ static const struct of_device_id ab8500_btemp_match[] = {
+ 	{ .compatible = "stericsson,ab8500-btemp", },
+ 	{ },
+@@ -1145,11 +1141,10 @@ static const struct of_device_id ab8500_btemp_match[] = {
+ static struct platform_driver ab8500_btemp_driver = {
+ 	.probe = ab8500_btemp_probe,
+ 	.remove = ab8500_btemp_remove,
+-	.suspend = ab8500_btemp_suspend,
+-	.resume = ab8500_btemp_resume,
+ 	.driver = {
+ 		.name = "ab8500-btemp",
+ 		.of_match_table = ab8500_btemp_match,
++		.pm = &ab8500_btemp_pm_ops,
+ 	},
+ };
  
 diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index db65be026920..7e28ac1b171b 100644
+index 7e28ac1b171b..47f1ce1012f4 100644
 --- a/drivers/power/supply/ab8500_charger.c
 +++ b/drivers/power/supply/ab8500_charger.c
-@@ -3354,23 +3354,22 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	struct power_supply_config ac_psy_cfg = {}, usb_psy_cfg = {};
- 	struct ab8500_charger *di;
- 	int irq, i, charger_status, ret = 0, ch_stat;
-+	struct device *dev = &pdev->dev;
+@@ -3209,11 +3209,10 @@ static int ab8500_charger_usb_notifier_call(struct notifier_block *nb,
+ 	return NOTIFY_OK;
+ }
  
--	di = devm_kzalloc(&pdev->dev, sizeof(*di), GFP_KERNEL);
--	if (!di) {
--		dev_err(&pdev->dev, "%s no mem for ab8500_charger\n", __func__);
-+	di = devm_kzalloc(dev, sizeof(*di), GFP_KERNEL);
-+	if (!di)
- 		return -ENOMEM;
--	}
+-#if defined(CONFIG_PM)
+-static int ab8500_charger_resume(struct platform_device *pdev)
++static int __maybe_unused ab8500_charger_resume(struct device *dev)
+ {
+ 	int ret;
+-	struct ab8500_charger *di = platform_get_drvdata(pdev);
++	struct ab8500_charger *di = dev_get_drvdata(dev);
  
- 	if (!plat) {
--		dev_err(&pdev->dev, "no battery management data supplied\n");
-+		dev_err(dev, "no battery management data supplied\n");
- 		return -EINVAL;
- 	}
- 	di->bm = plat;
+ 	/*
+ 	 * For ABB revision 1.0 and 1.1 there is a bug in the watchdog
+@@ -3247,10 +3246,9 @@ static int ab8500_charger_resume(struct platform_device *pdev)
+ 	return 0;
+ }
  
- 	if (np) {
--		ret = ab8500_bm_of_probe(&pdev->dev, np, di->bm);
-+		ret = ab8500_bm_of_probe(dev, np, di->bm);
- 		if (ret) {
--			dev_err(&pdev->dev, "failed to get battery information\n");
-+			dev_err(dev, "failed to get battery information\n");
- 			return ret;
- 		}
- 		di->autopower_cfg = of_property_read_bool(np, "autopower_cfg");
-@@ -3378,39 +3377,39 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 		di->autopower_cfg = false;
+-static int ab8500_charger_suspend(struct platform_device *pdev,
+-	pm_message_t state)
++static int __maybe_unused ab8500_charger_suspend(struct device *dev)
+ {
+-	struct ab8500_charger *di = platform_get_drvdata(pdev);
++	struct ab8500_charger *di = dev_get_drvdata(dev);
  
- 	/* get parent data */
--	di->dev = &pdev->dev;
-+	di->dev = dev;
- 	di->parent = dev_get_drvdata(pdev->dev.parent);
+ 	/* Cancel any pending jobs */
+ 	cancel_delayed_work(&di->check_hw_failure_work);
+@@ -3272,10 +3270,6 @@ static int ab8500_charger_suspend(struct platform_device *pdev,
  
- 	/* Get ADC channels */
--	di->adc_main_charger_v = devm_iio_channel_get(&pdev->dev,
-+	di->adc_main_charger_v = devm_iio_channel_get(dev,
- 						      "main_charger_v");
- 	if (IS_ERR(di->adc_main_charger_v)) {
- 		if (PTR_ERR(di->adc_main_charger_v) == -ENODEV)
- 			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "failed to get ADC main charger voltage\n");
-+		dev_err(dev, "failed to get ADC main charger voltage\n");
- 		return PTR_ERR(di->adc_main_charger_v);
- 	}
--	di->adc_main_charger_c = devm_iio_channel_get(&pdev->dev,
-+	di->adc_main_charger_c = devm_iio_channel_get(dev,
- 						      "main_charger_c");
- 	if (IS_ERR(di->adc_main_charger_c)) {
- 		if (PTR_ERR(di->adc_main_charger_c) == -ENODEV)
- 			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "failed to get ADC main charger current\n");
-+		dev_err(dev, "failed to get ADC main charger current\n");
- 		return PTR_ERR(di->adc_main_charger_c);
- 	}
--	di->adc_vbus_v = devm_iio_channel_get(&pdev->dev, "vbus_v");
-+	di->adc_vbus_v = devm_iio_channel_get(dev, "vbus_v");
- 	if (IS_ERR(di->adc_vbus_v)) {
- 		if (PTR_ERR(di->adc_vbus_v) == -ENODEV)
- 			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "failed to get ADC USB charger voltage\n");
-+		dev_err(dev, "failed to get ADC USB charger voltage\n");
- 		return PTR_ERR(di->adc_vbus_v);
- 	}
--	di->adc_usb_charger_c = devm_iio_channel_get(&pdev->dev,
-+	di->adc_usb_charger_c = devm_iio_channel_get(dev,
- 						     "usb_charger_c");
- 	if (IS_ERR(di->adc_usb_charger_c)) {
- 		if (PTR_ERR(di->adc_usb_charger_c) == -ENODEV)
- 			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "failed to get ADC USB charger current\n");
-+		dev_err(dev, "failed to get ADC USB charger current\n");
- 		return PTR_ERR(di->adc_usb_charger_c);
- 	}
+ 	return 0;
+ }
+-#else
+-#define ab8500_charger_suspend      NULL
+-#define ab8500_charger_resume       NULL
+-#endif
  
-@@ -3467,7 +3466,7 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	di->charger_wq = alloc_ordered_workqueue("ab8500_charger_wq",
- 						 WQ_MEM_RECLAIM);
- 	if (di->charger_wq == NULL) {
--		dev_err(di->dev, "failed to create work queue\n");
-+		dev_err(dev, "failed to create work queue\n");
- 		return -ENOMEM;
- 	}
+ static struct notifier_block charger_nb = {
+ 	.notifier_call = ab8500_external_charger_prepare,
+@@ -3658,6 +3652,8 @@ static int ab8500_charger_probe(struct platform_device *pdev)
+ 	return ret;
+ }
  
-@@ -3526,10 +3525,10 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	 * is a charger connected to avoid erroneous BTEMP_HIGH/LOW
- 	 * interrupts during charging
- 	 */
--	di->regu = devm_regulator_get(di->dev, "vddadc");
-+	di->regu = devm_regulator_get(dev, "vddadc");
- 	if (IS_ERR(di->regu)) {
- 		ret = PTR_ERR(di->regu);
--		dev_err(di->dev, "failed to get vddadc regulator\n");
-+		dev_err(dev, "failed to get vddadc regulator\n");
- 		goto free_charger_wq;
- 	}
- 
-@@ -3537,17 +3536,17 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	/* Initialize OVV, and other registers */
- 	ret = ab8500_charger_init_hw_registers(di);
- 	if (ret) {
--		dev_err(di->dev, "failed to initialize ABB registers\n");
-+		dev_err(dev, "failed to initialize ABB registers\n");
- 		goto free_charger_wq;
- 	}
- 
- 	/* Register AC charger class */
- 	if (di->ac_chg.enabled) {
--		di->ac_chg.psy = power_supply_register(di->dev,
-+		di->ac_chg.psy = power_supply_register(dev,
- 						       &ab8500_ac_chg_desc,
- 						       &ac_psy_cfg);
- 		if (IS_ERR(di->ac_chg.psy)) {
--			dev_err(di->dev, "failed to register AC charger\n");
-+			dev_err(dev, "failed to register AC charger\n");
- 			ret = PTR_ERR(di->ac_chg.psy);
- 			goto free_charger_wq;
- 		}
-@@ -3555,11 +3554,11 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 
- 	/* Register USB charger class */
- 	if (di->usb_chg.enabled) {
--		di->usb_chg.psy = power_supply_register(di->dev,
-+		di->usb_chg.psy = power_supply_register(dev,
- 							&ab8500_usb_chg_desc,
- 							&usb_psy_cfg);
- 		if (IS_ERR(di->usb_chg.psy)) {
--			dev_err(di->dev, "failed to register USB charger\n");
-+			dev_err(dev, "failed to register USB charger\n");
- 			ret = PTR_ERR(di->usb_chg.psy);
- 			goto free_ac;
- 		}
-@@ -3567,14 +3566,14 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 
- 	di->usb_phy = usb_get_phy(USB_PHY_TYPE_USB2);
- 	if (IS_ERR_OR_NULL(di->usb_phy)) {
--		dev_err(di->dev, "failed to get usb transceiver\n");
-+		dev_err(dev, "failed to get usb transceiver\n");
- 		ret = -EINVAL;
- 		goto free_usb;
- 	}
- 	di->nb.notifier_call = ab8500_charger_usb_notifier_call;
- 	ret = usb_register_notifier(di->usb_phy, &di->nb);
- 	if (ret) {
--		dev_err(di->dev, "failed to register usb notifier\n");
-+		dev_err(dev, "failed to register usb notifier\n");
- 		goto put_usb_phy;
- 	}
- 
-@@ -3607,11 +3606,11 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 			ab8500_charger_irq[i].name, di);
- 
- 		if (ret != 0) {
--			dev_err(di->dev, "failed to request %s IRQ %d: %d\n"
-+			dev_err(dev, "failed to request %s IRQ %d: %d\n"
- 				, ab8500_charger_irq[i].name, irq, ret);
- 			goto free_irq;
- 		}
--		dev_dbg(di->dev, "Requested %s IRQ %d: %d\n",
-+		dev_dbg(dev, "Requested %s IRQ %d: %d\n",
- 			ab8500_charger_irq[i].name, irq, ret);
- 	}
++static SIMPLE_DEV_PM_OPS(ab8500_charger_pm_ops, ab8500_charger_suspend, ab8500_charger_resume);
++
+ static const struct of_device_id ab8500_charger_match[] = {
+ 	{ .compatible = "stericsson,ab8500-charger", },
+ 	{ },
+@@ -3666,11 +3662,10 @@ static const struct of_device_id ab8500_charger_match[] = {
+ static struct platform_driver ab8500_charger_driver = {
+ 	.probe = ab8500_charger_probe,
+ 	.remove = ab8500_charger_remove,
+-	.suspend = ab8500_charger_suspend,
+-	.resume = ab8500_charger_resume,
+ 	.driver = {
+ 		.name = "ab8500-charger",
+ 		.of_match_table = ab8500_charger_match,
++		.pm = &ab8500_charger_pm_ops,
+ 	},
+ };
  
 diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 592a73d4dde6..56997353c175 100644
+index 56997353c175..ba8dba0d6395 100644
 --- a/drivers/power/supply/ab8500_fg.c
 +++ b/drivers/power/supply/ab8500_fg.c
-@@ -3037,26 +3037,25 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	struct abx500_bm_data *plat = pdev->dev.platform_data;
- 	struct power_supply_config psy_cfg = {};
-+	struct device *dev = &pdev->dev;
- 	struct ab8500_fg *di;
- 	int i, irq;
- 	int ret = 0;
+@@ -2942,10 +2942,9 @@ static void ab8500_fg_sysfs_psy_remove_attrs(struct ab8500_fg *di)
  
--	di = devm_kzalloc(&pdev->dev, sizeof(*di), GFP_KERNEL);
--	if (!di) {
--		dev_err(&pdev->dev, "%s no mem for ab8500_fg\n", __func__);
-+	di = devm_kzalloc(dev, sizeof(*di), GFP_KERNEL);
-+	if (!di)
- 		return -ENOMEM;
--	}
+ /* Exposure to the sysfs interface <<END>> */
  
- 	if (!plat) {
--		dev_err(&pdev->dev, "no battery management data supplied\n");
-+		dev_err(dev, "no battery management data supplied\n");
- 		return -EINVAL;
- 	}
- 	di->bm = plat;
+-#if defined(CONFIG_PM)
+-static int ab8500_fg_resume(struct platform_device *pdev)
++static int __maybe_unused ab8500_fg_resume(struct device *dev)
+ {
+-	struct ab8500_fg *di = platform_get_drvdata(pdev);
++	struct ab8500_fg *di = dev_get_drvdata(dev);
  
- 	if (np) {
--		ret = ab8500_bm_of_probe(&pdev->dev, np, di->bm);
-+		ret = ab8500_bm_of_probe(dev, np, di->bm);
- 		if (ret) {
--			dev_err(&pdev->dev, "failed to get battery information\n");
-+			dev_err(dev, "failed to get battery information\n");
- 			return ret;
- 		}
- 	}
-@@ -3064,14 +3063,14 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	mutex_init(&di->cc_lock);
+ 	/*
+ 	 * Change state if we're not charging. If we're charging we will wake
+@@ -2959,10 +2958,9 @@ static int ab8500_fg_resume(struct platform_device *pdev)
+ 	return 0;
+ }
  
- 	/* get parent data */
--	di->dev = &pdev->dev;
-+	di->dev = dev;
- 	di->parent = dev_get_drvdata(pdev->dev.parent);
+-static int ab8500_fg_suspend(struct platform_device *pdev,
+-	pm_message_t state)
++static int __maybe_unused ab8500_fg_suspend(struct device *dev)
+ {
+-	struct ab8500_fg *di = platform_get_drvdata(pdev);
++	struct ab8500_fg *di = dev_get_drvdata(dev);
  
--	di->main_bat_v = devm_iio_channel_get(&pdev->dev, "main_bat_v");
-+	di->main_bat_v = devm_iio_channel_get(dev, "main_bat_v");
- 	if (IS_ERR(di->main_bat_v)) {
- 		if (PTR_ERR(di->main_bat_v) == -ENODEV)
- 			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "failed to get main battery ADC channel\n");
-+		dev_err(dev, "failed to get main battery ADC channel\n");
- 		return PTR_ERR(di->main_bat_v);
- 	}
+ 	flush_delayed_work(&di->fg_periodic_work);
+ 	flush_work(&di->fg_work);
+@@ -2980,10 +2978,6 @@ static int ab8500_fg_suspend(struct platform_device *pdev,
  
-@@ -3094,7 +3093,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	/* Create a work queue for running the FG algorithm */
- 	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
- 	if (di->fg_wq == NULL) {
--		dev_err(di->dev, "failed to create work queue\n");
-+		dev_err(dev, "failed to create work queue\n");
- 		return -ENOMEM;
- 	}
+ 	return 0;
+ }
+-#else
+-#define ab8500_fg_suspend      NULL
+-#define ab8500_fg_resume       NULL
+-#endif
  
-@@ -3129,7 +3128,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	/* Initialize OVV, and other registers */
- 	ret = ab8500_fg_init_hw_registers(di);
- 	if (ret) {
--		dev_err(di->dev, "failed to initialize registers\n");
-+		dev_err(dev, "failed to initialize registers\n");
- 		goto free_inst_curr_wq;
- 	}
+ static int ab8500_fg_remove(struct platform_device *pdev)
+ {
+@@ -3244,6 +3238,8 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	return ret;
+ }
  
-@@ -3138,9 +3137,9 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	di->flags.batt_id_received = false;
++static SIMPLE_DEV_PM_OPS(ab8500_fg_pm_ops, ab8500_fg_suspend, ab8500_fg_resume);
++
+ static const struct of_device_id ab8500_fg_match[] = {
+ 	{ .compatible = "stericsson,ab8500-fg", },
+ 	{ },
+@@ -3252,11 +3248,10 @@ static const struct of_device_id ab8500_fg_match[] = {
+ static struct platform_driver ab8500_fg_driver = {
+ 	.probe = ab8500_fg_probe,
+ 	.remove = ab8500_fg_remove,
+-	.suspend = ab8500_fg_suspend,
+-	.resume = ab8500_fg_resume,
+ 	.driver = {
+ 		.name = "ab8500-fg",
+ 		.of_match_table = ab8500_fg_match,
++		.pm = &ab8500_fg_pm_ops,
+ 	},
+ };
  
- 	/* Register FG power supply class */
--	di->fg_psy = power_supply_register(di->dev, &ab8500_fg_desc, &psy_cfg);
-+	di->fg_psy = power_supply_register(dev, &ab8500_fg_desc, &psy_cfg);
- 	if (IS_ERR(di->fg_psy)) {
--		dev_err(di->dev, "failed to register FG psy\n");
-+		dev_err(dev, "failed to register FG psy\n");
- 		ret = PTR_ERR(di->fg_psy);
- 		goto free_inst_curr_wq;
- 	}
-@@ -3168,11 +3167,11 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 				  ab8500_fg_irq_th[i].name, di);
+diff --git a/drivers/power/supply/abx500_chargalg.c b/drivers/power/supply/abx500_chargalg.c
+index 175c4f3d7955..a9d84d845f24 100644
+--- a/drivers/power/supply/abx500_chargalg.c
++++ b/drivers/power/supply/abx500_chargalg.c
+@@ -1913,10 +1913,9 @@ static int abx500_chargalg_sysfs_init(struct abx500_chargalg *di)
+ }
+ /* Exposure to the sysfs interface <<END>> */
  
- 		if (ret != 0) {
--			dev_err(di->dev, "failed to request %s IRQ %d: %d\n",
-+			dev_err(dev, "failed to request %s IRQ %d: %d\n",
- 				ab8500_fg_irq_th[i].name, irq, ret);
- 			goto free_irq_th;
- 		}
--		dev_dbg(di->dev, "Requested %s IRQ %d: %d\n",
-+		dev_dbg(dev, "Requested %s IRQ %d: %d\n",
- 			ab8500_fg_irq_th[i].name, irq, ret);
- 	}
+-#if defined(CONFIG_PM)
+-static int abx500_chargalg_resume(struct platform_device *pdev)
++static int __maybe_unused abx500_chargalg_resume(struct device *dev)
+ {
+-	struct abx500_chargalg *di = platform_get_drvdata(pdev);
++	struct abx500_chargalg *di = dev_get_drvdata(dev);
  
-@@ -3188,11 +3187,11 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 			ab8500_fg_irq_bh[0].name, di);
+ 	/* Kick charger watchdog if charging (any charger online) */
+ 	if (di->chg_info.online_chg)
+@@ -1931,10 +1930,9 @@ static int abx500_chargalg_resume(struct platform_device *pdev)
+ 	return 0;
+ }
  
- 	if (ret != 0) {
--		dev_err(di->dev, "failed to request %s IRQ %d: %d\n",
-+		dev_err(dev, "failed to request %s IRQ %d: %d\n",
- 			ab8500_fg_irq_bh[0].name, irq, ret);
- 		goto free_irq_th;
- 	}
--	dev_dbg(di->dev, "Requested %s IRQ %d: %d\n",
-+	dev_dbg(dev, "Requested %s IRQ %d: %d\n",
- 		ab8500_fg_irq_bh[0].name, irq, ret);
+-static int abx500_chargalg_suspend(struct platform_device *pdev,
+-	pm_message_t state)
++static int __maybe_unused abx500_chargalg_suspend(struct device *dev)
+ {
+-	struct abx500_chargalg *di = platform_get_drvdata(pdev);
++	struct abx500_chargalg *di = dev_get_drvdata(dev);
  
- 	di->irq = platform_get_irq_byname(pdev, "CCEOC");
-@@ -3203,13 +3202,13 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	if (di->chg_info.online_chg)
+ 		cancel_delayed_work_sync(&di->chargalg_wd_work);
+@@ -1943,10 +1941,6 @@ static int abx500_chargalg_suspend(struct platform_device *pdev,
  
- 	ret = ab8500_fg_sysfs_init(di);
- 	if (ret) {
--		dev_err(di->dev, "failed to create sysfs entry\n");
-+		dev_err(dev, "failed to create sysfs entry\n");
- 		goto free_irq;
- 	}
+ 	return 0;
+ }
+-#else
+-#define abx500_chargalg_suspend      NULL
+-#define abx500_chargalg_resume       NULL
+-#endif
  
- 	ret = ab8500_fg_sysfs_psy_create_attrs(di);
- 	if (ret) {
--		dev_err(di->dev, "failed to create FG psy\n");
-+		dev_err(dev, "failed to create FG psy\n");
- 		ab8500_fg_sysfs_exit(di);
- 		goto free_irq;
- 	}
+ static int abx500_chargalg_remove(struct platform_device *pdev)
+ {
+@@ -2080,6 +2074,8 @@ static int abx500_chargalg_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static SIMPLE_DEV_PM_OPS(abx500_chargalg_pm_ops, abx500_chargalg_suspend, abx500_chargalg_resume);
++
+ static const struct of_device_id ab8500_chargalg_match[] = {
+ 	{ .compatible = "stericsson,ab8500-chargalg", },
+ 	{ },
+@@ -2088,11 +2084,10 @@ static const struct of_device_id ab8500_chargalg_match[] = {
+ static struct platform_driver abx500_chargalg_driver = {
+ 	.probe = abx500_chargalg_probe,
+ 	.remove = abx500_chargalg_remove,
+-	.suspend = abx500_chargalg_suspend,
+-	.resume = abx500_chargalg_resume,
+ 	.driver = {
+ 		.name = "ab8500-chargalg",
+ 		.of_match_table = ab8500_chargalg_match,
++		.pm = &abx500_chargalg_pm_ops,
+ 	},
+ };
+ 
 -- 
 2.26.2
 
