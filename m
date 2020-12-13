@@ -2,49 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6922D8D0D
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 13:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61B42D8DE1
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 15:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406618AbgLMMKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Dec 2020 07:10:46 -0500
-Received: from mail.saocarlos.sp.gov.br ([187.103.149.63]:53322 "EHLO
-        webmail.saocarlos.sp.gov.br" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406522AbgLMMKq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Dec 2020 07:10:46 -0500
-X-Greylist: delayed 603 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Dec 2020 07:10:45 EST
-Received: from webmail.saocarlos.sp.gov.br (unknown [187.103.149.63])
-        (Authenticated sender: joao.guedes@saocarlos.sp.gov.br)
-        by webmail.saocarlos.sp.gov.br (webmail.saocarlos.sp.gov.br) with ESMTPSA id 5F24920C74;
-        Sun, 13 Dec 2020 08:59:52 -0300 (-03)
+        id S2406049AbgLMOMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Dec 2020 09:12:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2395199AbgLMOL5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 13 Dec 2020 09:11:57 -0500
+Date:   Sun, 13 Dec 2020 09:11:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607868677;
+        bh=4iY0ichsoz9AxrcT1VWUCiZr3pTTCjf5adfxu9D6nwg=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A6siXNdczE7kwUXOYvZQy1uojPOV6wvA01EpOpL9+aoMdtv0OEPkR/+frL6JKC8Xj
+         VD2zJjLkR2AT5wGuanmZRdm7lYAoF1+Bgpu6c44a4MfXkvgh2iGtr+NtPh6J1/eT4t
+         A0LH4sHaWkd/rWNoKJK/jhDx0aye7sLdqDKQpT0Q96NiWzUOTUm6EBRuSXrkwh/Mye
+         nyHTfJvZ04WcakIgxEKgt9JgBnWv2bEtmqEiZvZXECuKJkp3tTxwXBZLRWzwV+lhhy
+         tb8TTX8fMWUApN8prtxLIE+Nev3oNqvL4ggn8X3xxWdeSorzv8+Ys+hEbw1cAnTMxl
+         XB9tlyalA1U5Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.9 28/39] intel_idle: Fix intel_idle() vs tracing
+Message-ID: <20201213141115.GR643756@sasha-vm>
+References: <20201203132834.930999-1-sashal@kernel.org>
+ <20201203132834.930999-28-sashal@kernel.org>
+ <20201203171035.GO2414@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Date:   Sun, 13 Dec 2020 12:59:52 +0100
-From:   "Dr. Cheong Kong" <jao.guedes@saocarlos.sp.gov.br>
-To:     undisclosed-recipients:;
-Subject: Covid-19 Relief Fund
-Reply-To: cckong804@protonmail.ch
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <2f78d40c7b1a3609025d59c8f33e3ec3@saocarlos.sp.gov.br>
-X-Sender: jao.guedes@saocarlos.sp.gov.br
-Organization: Dr. Cheong Kong
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20201203171035.GO2414@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Dec 03, 2020 at 06:10:35PM +0100, Peter Zijlstra wrote:
+>On Thu, Dec 03, 2020 at 08:28:22AM -0500, Sasha Levin wrote:
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> [ Upstream commit 6e1d2bc675bd57640f5658a4a657ae488db4c204 ]
+>>
+>> cpuidle->enter() callbacks should not call into tracing because RCU
+>> has already been disabled. Instead of doing the broadcast thing
+>> itself, simply advertise to the cpuidle core that those states stop
+>> the timer.
+>>
+>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Link: https://lkml.kernel.org/r/20201123143510.GR3021@hirez.programming.kicks-ass.net
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>This patch has a known compile issue, fix is pending.
 
+I've also grabbed 4d916140bf28 ("intel_idle: Build fix"). Thanks!
 
 -- 
-Dear Beneficiary,
-
-You have been selected by the WORLD BANK GROUP to receive a Covid-19 
-Relief
-Fund sum of $850,000.00 USD.
-
-For more details, please email directly to (cckong804@protonmail.ch)
-
-Your Ref #: WBGUTB1920.
-
-Dr. Cheong Kong
-Notification Officer
+Thanks,
+Sasha
