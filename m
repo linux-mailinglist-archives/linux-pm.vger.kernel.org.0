@@ -2,144 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB6D2D8AAC
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 00:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EECB72D8AB3
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 01:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439905AbgLLXm2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Dec 2020 18:42:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59866 "EHLO mail.kernel.org"
+        id S1727017AbgLMAFV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Dec 2020 19:05:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38266 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbgLLXmU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 12 Dec 2020 18:42:20 -0500
-Date:   Sun, 13 Dec 2020 00:41:37 +0100
+        id S1726267AbgLMAFV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 12 Dec 2020 19:05:21 -0500
+Date:   Sun, 13 Dec 2020 01:04:38 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607816499;
-        bh=ld6WI/WbyYmPRfnJouXU9CfxjM3Dou47ngCdq5kAuTo=;
+        s=k20201202; t=1607817880;
+        bh=XyYC08d8VreFz0iZIfxjdgW3Ja0+ozXIt8da6M+Ioas=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p/qq1/cUzMMwE5CNU9VJYm2X9EJpJMiNI7elHxhV7TpKOvaSFHxBhqiU4dFyY5w5T
-         Kdqx7rDxkzgLJJS9GZu+d5C312Zezu/CNCiGlLlozSZfTUJIC5iVyEaqltre51f65J
-         bxGKkxGfWhL82bDpHmzbGjA5qevRlBi9Rk52zO+RYVCkZKJy0D46skX/fkE7PC4wPF
-         QOcn3K5hY7Bqroyw6qKiZHNYBeUBemtb1n/pxJdMNnmMUT7Sj5oPrzaN7xt8JC9k+c
-         elsrwMpLlSiACRXV1wYg+201Hjl0o43/7EpplmVLUduX04npu1z5pQ+zPzxPVlwSM+
-         /wPwpJfoz2Cmw==
+        b=G1BOWp9qYB2geORSiLGJF2aK7dDSADSCOkPMJa6vmR26ss8cw5pIoeC9tHlAaFqes
+         vVVrUiJsNzKwTN1nNzgyoKDpeIn7eb/+DbY78gzGXTNsEGvKk9ja6sVG+IlM7NISIV
+         t9Lj3xNobdUdEISP5R3+3OZzkFUQnMRmP6pFEBmwwIiGHtTL3qmxAybmecgQ7oFdXw
+         xd2Bm6kO4M0jnq7sCDcxV1jT0lu5CV1/2xoEHzsGXrOscZYxfaI0i+Hi2ak4BREH/d
+         BR2gYMSV0xucPvT/mUaY7nk1Bn83fa5KTpI3gbp07bDFOnwrtDBQ9WaODxpWs5N3Xr
+         We5OfydqYKX9A==
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Michael Klein <michael@fossekall.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] Documentation: DT: binding documentation for
- regulator-poweroff
-Message-ID: <20201212234137.xnh2vtqbmxqnkj3c@earth.universe>
-References: <20201211151445.115943-1-michael@fossekall.de>
- <20201211151445.115943-3-michael@fossekall.de>
+To:     Masanari Iida <standby24x7@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: Fix a typo in warning message
+Message-ID: <20201213000438.2gubioh2rqcxerei@earth.universe>
+References: <20201205012532.1196962-1-standby24x7@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="erqydbu4j5uxkufn"
+        protocol="application/pgp-signature"; boundary="j35co2bppgb3rqv2"
 Content-Disposition: inline
-In-Reply-To: <20201211151445.115943-3-michael@fossekall.de>
+In-Reply-To: <20201205012532.1196962-1-standby24x7@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---erqydbu4j5uxkufn
+--j35co2bppgb3rqv2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Dec 11, 2020 at 04:14:44PM +0100, Michael Klein wrote:
-> Add devicetree binding documentation for regulator-poweroff driver.
+On Sat, Dec 05, 2020 at 10:25:32AM +0900, Masanari Iida wrote:
+> This patch fix a warning messages in power_supply_sysfs.c
 >=20
-> Signed-off-by: Michael Klein <michael@fossekall.de>
+> Signed-off-by: Masanari Iida <standby24x7@gmail.com>
 > ---
 
 Thanks, queued.
 
 -- Sebastian
 
->  .../power/reset/regulator-poweroff.yaml       | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/regulat=
-or-poweroff.yaml
+>  drivers/power/supply/power_supply_sysfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/regulator-powe=
-roff.yaml b/Documentation/devicetree/bindings/power/reset/regulator-powerof=
-f.yaml
-> new file mode 100644
-> index 000000000000..03bd1fa5a623
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/regulator-poweroff.ya=
-ml
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/regulator-poweroff.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Force-disable power regulator to turn the power off.
-> +
-> +maintainers:
-> +  - Michael Klein <michael@fossekall.de>
-> +
-> +description: |
-> +  When the power-off handler is called, a power regulator is disabled by
-> +  calling regulator_force_disable(). If the power is still on and the
-> +  CPU still running after a 3000ms delay, a warning is emitted.
-> +
-> +properties:
-> +  compatible:
-> +    const: "regulator-poweroff"
-> +
-> +  cpu-supply:
-> +    description:
-> +      regulator to disable on power-down
-> +
-> +required:
-> +  - compatible
-> +  - cpu-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    regulator-poweroff {
-> +        compatible =3D "regulator-poweroff";
-> +        cpu-supply =3D <&reg_vcc1v2>;
-> +    };
-> +...
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
+pply/power_supply_sysfs.c
+> index a616b9d8f43c..92dd63171193 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -402,7 +402,7 @@ void power_supply_init_attrs(struct device_type *dev_=
+type)
+>  		struct device_attribute *attr;
+> =20
+>  		if (!power_supply_attrs[i].prop_name) {
+> -			pr_warn("%s: Property %d skipped because is is missing from power_sup=
+ply_attrs\n",
+> +			pr_warn("%s: Property %d skipped because it is missing from power_sup=
+ply_attrs\n",
+>  				__func__, i);
+>  			sprintf(power_supply_attrs[i].attr_name, "_err_%d", i);
+>  		} else {
 > --=20
-> 2.29.2
+> 2.25.0
 >=20
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
---erqydbu4j5uxkufn
+--j35co2bppgb3rqv2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl/VVTEACgkQ2O7X88g7
-+poXLg//Y5j/lacOZTPsiDqIHt6dE74UstQENqnz3/rgDBswnVBxSlW/85Md14/a
-j3GLRYe/fqUEO8o2t7CtMxzOQlnmFe80aCpKNfpGj50FKgt1HSaUqN+9rxRDnnhq
-IIvAP1SpdSG2X8ZP031XyRHFYdUsxo2dOJu6W1BSEXAarm0tVqR/AVKohiXuDDYV
-ILotynHjtXgHXN9onhu3s0APz5mHZCQyge/wtPshkE/+ssvbC0l8HFrd6eMarW75
-AS/J1pkQk9vnLgQBOpItUxEtGU79DHkbe+DUKe2DmKA07Q3ZPwnpq69mrJ1MN8yd
-7aO9PZ9ZIae0qUWC59ZDR0wivXLmUc2ROzwvnGfQL7bQedyLPWspE50PVtnydzGb
-9T4jAHctik2i5YnhO6NkbqGmIZueSYl5VCMBx3U+0iOg7QNP1ZiigucMOmZQBGeI
-UNamgXvss4q4izyeGqreH7UAqXmDdPD4qMVfcpgQGf7aiUfRmI0oENtobQ9S2rXq
-Gs1nLgeOUW1xnSnMwebjrzhjGCWuvT0oQPr+d/Iqv0nWN+rIk1AtxiLiNnc4LHEP
-NAznxc7QzQYDseEX4sn7O1rDGtRbJdbcZcJ4i7yXslkQCx6I9DPKhBKRyAMk+MAp
-er+UTH0mHpcuE5fk9hBT85qMletm9b6b8jGuA/d4UJ+ky4Y5WHU=
-=4jjv
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl/VWpEACgkQ2O7X88g7
++pqLuA//U9MSYJWLieSFnBiCVSMlhtZpH7QjeubbvwqUeOV5kmYbaMzwHVRUw7P0
+qg2ALirxaEbStY0GFtWTSdQj2v+MEuCQLXHMLn/pJ32KU/8r+CJnWox7T5fGnHqZ
+p64/lS5xrV1IdvMl4LPqgQrNOGGsiWm58XkAxbNpFirFVSc57vCNQKXC3gf14HPy
+0RI0n2L5ZXMqljd3GhkYuUg0QuInWp1BRkpqaFQ+l+xT1Hu9QzQ/vN6XjLxb4r4K
+0EjTm8+Rl4I6rcmdZtDOTFQs6qk88eaZ8jBqGSIx8lSF5Fjdma7frNxzEmY8lKPH
+Py6Hadt/6pJ4wfakCunAH6zq1XS8sBaNxdzaQevWJXz3r306mWX6dzXWNEgC7AAF
+sdAGvOtOvweAKwNQcSi8OB0yQwf4FNFedCiVj0GvgesbZ2dsk2asCylrVrQ6MWsh
+pNjwCZBunkPeGqNhJnl/3i9FjybdLqk2EoTE/nJtZMPIsAJY+nCN6oOsEY4P6iEj
+VAygV3exywcnctWZFwe717OXp9aGR+H3VIoQwO7U1LkPQUNh+1yiuzF1cEd9zTky
+8DgLfmt98b/SsObyAoGpevbuO2FlafpV74uUn4N//P1HaTxL6VhcxV0JweCVEvl4
+iUd68HPr2Or0eGetDVZbI2sb4XzW5kmqEynXUvavyVnboloMg0o=
+=9700
 -----END PGP SIGNATURE-----
 
---erqydbu4j5uxkufn--
+--j35co2bppgb3rqv2--
