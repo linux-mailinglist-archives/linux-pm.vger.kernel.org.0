@@ -2,64 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C61B42D8DE1
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 15:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F7B2D8E15
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Dec 2020 15:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406049AbgLMOMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Dec 2020 09:12:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37894 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395199AbgLMOL5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 13 Dec 2020 09:11:57 -0500
-Date:   Sun, 13 Dec 2020 09:11:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607868677;
-        bh=4iY0ichsoz9AxrcT1VWUCiZr3pTTCjf5adfxu9D6nwg=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A6siXNdczE7kwUXOYvZQy1uojPOV6wvA01EpOpL9+aoMdtv0OEPkR/+frL6JKC8Xj
-         VD2zJjLkR2AT5wGuanmZRdm7lYAoF1+Bgpu6c44a4MfXkvgh2iGtr+NtPh6J1/eT4t
-         A0LH4sHaWkd/rWNoKJK/jhDx0aye7sLdqDKQpT0Q96NiWzUOTUm6EBRuSXrkwh/Mye
-         nyHTfJvZ04WcakIgxEKgt9JgBnWv2bEtmqEiZvZXECuKJkp3tTxwXBZLRWzwV+lhhy
-         tb8TTX8fMWUApN8prtxLIE+Nev3oNqvL4ggn8X3xxWdeSorzv8+Ys+hEbw1cAnTMxl
-         XB9tlyalA1U5Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.9 28/39] intel_idle: Fix intel_idle() vs tracing
-Message-ID: <20201213141115.GR643756@sasha-vm>
-References: <20201203132834.930999-1-sashal@kernel.org>
- <20201203132834.930999-28-sashal@kernel.org>
- <20201203171035.GO2414@hirez.programming.kicks-ass.net>
+        id S2404842AbgLMO4x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Dec 2020 09:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729813AbgLMO4x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Dec 2020 09:56:53 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB8FC0613CF;
+        Sun, 13 Dec 2020 06:56:13 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id m6so653439pfm.6;
+        Sun, 13 Dec 2020 06:56:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3GVFJG5+b4wwaYZGJY5Q+Ty6yteB44I1X0LEyJpOD4Q=;
+        b=GQo8nLjwy/A+Xg4osxyLYZrO41bSCW7aCe+uxkuHo9PGo+M0tWYbKc6bxIYPizyS7J
+         juIeeq/7CO8m/xfEpcWNZz39mf5LauZ2R3bAxoGjyyrdpVA4rSEcYEpU/JdfDwP/1G+k
+         KY2595tBSlNf2HLzMdrabbvmr0S4Qalr/IjpBZVlDtpMWbSXu3vC5wFzOaMWgXY8gacy
+         PJriOKpHfdn3eLCHFLgIIiZzuw2TIi1bjREXPFIvRsV2yDY888gAlfZok/r5diHJ2r78
+         SStpmIAx39oRh98debp8Qce656veGXmBj8zjOM8klMCHFLiCDgXoja8XHicnrA3Uk5fr
+         Hpfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3GVFJG5+b4wwaYZGJY5Q+Ty6yteB44I1X0LEyJpOD4Q=;
+        b=cIc8vZeMEZVNRrg/jLG/KexPxo5ZFIQjsTcQGHbUhJPQmi2RUrhxsAJB5xqCk5lbHc
+         pnd+QsbS87juUscZQshljBksqRj2HIf4tTpw/53rdkxbveNnm8zW2jKhcy7UHd2K4iSq
+         hSsNy9J8XtMhOm7GYNCwQhUB1ft4nBtD2WVPSMX1dcWZEhFnh6NWOdq8I0GCUNFEbIQw
+         qEeDMMvBvbFqg9RErYytlhWc/UUc/XEq5OOY6vAM1V+KWJX7nEMSa/re9j4KJxW+uuJL
+         j0hyR3jq2K4o0DII0zkxtvOCgE/4xrVhIIbXPnxPzvUKbDL+ikTBibMxe2T5A4sW/hWF
+         YN3w==
+X-Gm-Message-State: AOAM532JDn9fi0+527gu4/GcB61wpjzV5WI7pZjGfW7AFy/Enw9heJsi
+        /YSUhO9weiaHe7Go5xjtx1cktiIPBoOWHo7Id0A=
+X-Google-Smtp-Source: ABdhPJyHCjy5gjCeZf12NOQT17rVqbmsRh+vBivyM/+Ci93YR1wXBbG3c7sP9pW22RPlYkg5PP+otes6jmJuO6o0IMM=
+X-Received: by 2002:a62:445:0:b029:19c:162b:bbef with SMTP id
+ 66-20020a6204450000b029019c162bbbefmr20182418pfe.40.1607871372903; Sun, 13
+ Dec 2020 06:56:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20201203171035.GO2414@hirez.programming.kicks-ass.net>
+References: <cover.1607765147.git.syednwaris@gmail.com> <20268bfeb500ad8819e3a11aa1bea27eade4fd39.1607765147.git.syednwaris@gmail.com>
+In-Reply-To: <20268bfeb500ad8819e3a11aa1bea27eade4fd39.1607765147.git.syednwaris@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 13 Dec 2020 16:55:56 +0200
+Message-ID: <CAHp75Vef2WDjD=DkoTV13Akk9yxwbF1oJH-=O4Kg_uxtY1qOdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] bitmap: Modify bitmap_set_value() to check bitmap length
+To:     Syed Nayyar Waris <syednwaris@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 06:10:35PM +0100, Peter Zijlstra wrote:
->On Thu, Dec 03, 2020 at 08:28:22AM -0500, Sasha Levin wrote:
->> From: Peter Zijlstra <peterz@infradead.org>
->>
->> [ Upstream commit 6e1d2bc675bd57640f5658a4a657ae488db4c204 ]
->>
->> cpuidle->enter() callbacks should not call into tracing because RCU
->> has already been disabled. Instead of doing the broadcast thing
->> itself, simply advertise to the cpuidle core that those states stop
->> the timer.
->>
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> Link: https://lkml.kernel.org/r/20201123143510.GR3021@hirez.programming.kicks-ass.net
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Sun, Dec 13, 2020 at 4:24 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
 >
->This patch has a known compile issue, fix is pending.
+> Add explicit check to see if the value being written into the bitmap
+> does not fall outside the bitmap.
+> The situation that it is falling outside would never be possible in the
+> code because the boundaries are required to be correct before the
+> function is called. The responsibility is on the caller for ensuring the
+> boundaries are correct.
+> The code change is simply to silence the GCC warning messages
+> because GCC is not aware that the boundaries have already been checked.
+> As such, we're better off using __builtin_unreachable() here because we
+> can avoid the latency of the conditional check entirely.
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
+> Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
+>
+> lib/test_bitmap.c: Modify for_each_set_clump test
+>
+> Modify the test where bitmap_set_value() is called. bitmap_set_value()
+> now takes an extra bitmap-width as second argument and the width of
+> value is now present as the fourth argument.
+>
+> Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
+>
+> gpio: xilinx: Modify bitmap_set_value() calls
+>
+> Modify the bitmap_set_value() calls. bitmap_set_value()
+> now takes an extra bitmap width as second argument and the width of
+> value is now present as the fourth argument.
+>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
 
-I've also grabbed 4d916140bf28 ("intel_idle: Build fix"). Thanks!
+Commit message here definitely needs more work.
+First of all, it's now quite awkward to see this squashed stuff like this.
+Second, it misses the warning examples it's talking about.
+Third, it repeats some tags.
+Fourth, it misses the Fixes tag.
+
+Please, redone it correctly (one commit message with clear purpose and
+example of warnings followed by Fixes tag) and resend a v3.
+
+You may mention in the cover letter that this is squashed of three
+patches from v1 (and give a link to lore.kernel.org).
 
 -- 
-Thanks,
-Sasha
+With Best Regards,
+Andy Shevchenko
