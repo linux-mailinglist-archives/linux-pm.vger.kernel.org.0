@@ -2,29 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3746A2D97E2
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 13:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A954D2D9817
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 13:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407162AbgLNMJI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Dec 2020 07:09:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:46462 "EHLO foss.arm.com"
+        id S2393878AbgLNMjk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Dec 2020 07:39:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:46712 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731272AbgLNMJC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Dec 2020 07:09:02 -0500
+        id S2391213AbgLNMjk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Dec 2020 07:39:40 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1515E31B;
-        Mon, 14 Dec 2020 04:08:17 -0800 (PST)
-Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.198.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CF2C23F66B;
-        Mon, 14 Dec 2020 04:08:15 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BD1DD6E;
+        Mon, 14 Dec 2020 04:38:54 -0800 (PST)
+Received: from e108754-lin.cambridge.arm.com (unknown [10.1.198.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0726B3F66B;
+        Mon, 14 Dec 2020 04:38:52 -0800 (PST)
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ionela.voinescu@arm.com,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v2] ACPI: processor: fix NONE coordination for domain mapping failure
-Date:   Mon, 14 Dec 2020 12:07:40 +0000
-Message-Id: <20201214120740.10948-1-ionela.voinescu@arm.com>
+Cc:     yousaf.kaukab@suse.com, jeremy.linton@arm.com, lukasz.luba@arm.com,
+        valentin.schneider@arm.com, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ionela.voinescu@arm.com
+Subject: [PATCH v2 0/4]  cppc_cpufreq: fix, clarify and improve support
+Date:   Mon, 14 Dec 2020 12:38:19 +0000
+Message-Id: <20201214123823.3949-1-ionela.voinescu@arm.com>
 X-Mailer: git-send-email 2.29.2.dirty
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -32,68 +33,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For errors parsing the _PSD domains, a separate domain is returned for
-each CPU in the failed _PSD domain with no coordination (as per previous
-comment). But contrary to the intention, the code was setting
-CPUFREQ_SHARED_TYPE_ALL as coordination type.
-
-Change shared_type to CPUFREQ_SHARED_TYPE_NONE in case of errors parsing
-the domain information. The function still returns the error and the caller
-is free to bail out the domain initialisation altogether in that case.
-
-Given that both functions return domains with a single CPU, this change
-does not affect the functionality, but clarifies the intention.
-
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-[ rjw: Subject edit ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
 Hi guys,
 
 I'm sending v2 of some of the patches at [1] in light of the discussions
 at [2].
 
-This patch is a trivial rebase on linux next 20201211, submitted separately
-due to its lack of dependency on the other patches.
+v2:
+ - Patches 1-3 are trivial rebase on linux next 20201211, with conflicts
+   fixed after eliminating what previously was "[PATCH 4/8] cppc_cpufreq:
+   replace per-cpu structures with lists." Therefore, I have kept
+   Viresh's acks.
+
+ - Patch 4 is a merge between:
+     - [PATCH 4/8] cppc_cpufreq: replace per-cpu structures with lists
+     - [PATCH] cppc_cpufreq: optimise memory allocation for HW and NONE
+       coordination
+   both found at [1].
+
+   This functionality was introducing the problem at [2] and it's fixed
+   in this version by bailing out of driver registration if a _CPC entry
+   is not found for a CPU.
+
+   Yousaf, it would be great if you can test this and make sure it
+   matches your expectations.
+
+   Rafael, Viresh if you think this last patch introduces too many
+   changes, you can skip it for 5.11 which is around the corner and
+   have more time for review for 5.12. I've added more eyes in the review
+   list.
+
+
+All patches are based on linux next 20201211 after patch at [3] is
+applied.
 
 [1] https://lore.kernel.org/linux-pm/20201105125524.4409-1-ionela.voinescu@arm.com/#t
 [2] https://lore.kernel.org/linux-pm/20201210142139.20490-1-yousaf.kaukab@suse.com/
+[3] https://lore.kernel.org/linux-pm/20201214120740.10948-1-ionela.voinescu@arm.com/
 
-Thank you,
-Ionela.
+Ionela Voinescu (4):
+  cppc_cpufreq: use policy->cpu as driver of frequency setting
+  cppc_cpufreq: clarify support for coordination types
+  cppc_cpufreq: expose information on frequency domains
+  cppc_cpufreq: replace per-cpu data array with a list
 
- drivers/acpi/cppc_acpi.c         | 2 +-
- drivers/acpi/processor_perflib.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../ABI/testing/sysfs-devices-system-cpu      |   3 +-
+ drivers/acpi/cppc_acpi.c                      | 141 ++++++------
+ drivers/cpufreq/cppc_cpufreq.c                | 204 ++++++++++--------
+ include/acpi/cppc_acpi.h                      |   6 +-
+ 4 files changed, 181 insertions(+), 173 deletions(-)
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index a852dc4927f7..62f55db443c1 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -512,7 +512,7 @@ int acpi_get_psd_map(struct cppc_cpudata **all_cpu_data)
- 		/* Assume no coordination on any error parsing domain info */
- 		cpumask_clear(pr->shared_cpu_map);
- 		cpumask_set_cpu(i, pr->shared_cpu_map);
--		pr->shared_type = CPUFREQ_SHARED_TYPE_ALL;
-+		pr->shared_type = CPUFREQ_SHARED_TYPE_NONE;
- 	}
- out:
- 	free_cpumask_var(covered_cpus);
-diff --git a/drivers/acpi/processor_perflib.c b/drivers/acpi/processor_perflib.c
-index 0dcedd652807..32f0f554ccae 100644
---- a/drivers/acpi/processor_perflib.c
-+++ b/drivers/acpi/processor_perflib.c
-@@ -708,7 +708,7 @@ int acpi_processor_preregister_performance(
- 		if (retval) {
- 			cpumask_clear(pr->performance->shared_cpu_map);
- 			cpumask_set_cpu(i, pr->performance->shared_cpu_map);
--			pr->performance->shared_type = CPUFREQ_SHARED_TYPE_ALL;
-+			pr->performance->shared_type = CPUFREQ_SHARED_TYPE_NONE;
- 		}
- 		pr->performance = NULL; /* Will be set for real in register */
- 	}
 -- 
 2.29.2.dirty
 
