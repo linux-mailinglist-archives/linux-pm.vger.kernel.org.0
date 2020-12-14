@@ -2,95 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D18982D97A6
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 12:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3746A2D97E2
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 13:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438494AbgLNLrX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Dec 2020 06:47:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41242 "EHLO mail.kernel.org"
+        id S2407162AbgLNMJI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Dec 2020 07:09:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:46462 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407656AbgLNLrI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Dec 2020 06:47:08 -0500
-Date:   Mon, 14 Dec 2020 12:46:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607946387;
-        bh=wyj3+V8/GidtOhBncWae6PlOpBcFpm/Iv+pC8sW/RkI=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BaXsLGisJuwfyFAbkFDHfoiHv9pUqw1vMP4oMOiUd/xDvJ2rLQ9sfORYj9oTYCBJj
-         h8smgylxiSc3oR1S6CES3regeYUf+e2iVOXGiRs31qYSWQXCJAkZT+BALh8JgQv42N
-         zn/nScC5Oc12sHSObgLjQvurD4H62sl9t7T1MJI//7mU1TjNXgTWaOw4KKy1THQERI
-         sq7vNoHstJoNZZ/Z7hcWvVKHyOaNj+mppniF1RRFpFEkUDY01kddURJshR8PGqty4v
-         b9AXmBOKIwnl0vl8HnOuET1dRiNF8nFNJSioZp+TLfbAh2v07CGuDeidwf6Sr8b5tL
-         IqJtGa3TjBnpg==
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Klein <michael@fossekall.de>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] power: reset: new driver regulator-poweroff
-Message-ID: <20201214114625.xq55gkkmvdigese5@earth.universe>
-References: <20201211151445.115943-1-michael@fossekall.de>
- <20201211151445.115943-2-michael@fossekall.de>
- <20201212234116.cddx5yur7ox7itxv@earth.universe>
- <20201214100204.ngkgfrghdp3ui3um@gilmour>
+        id S1731272AbgLNMJC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Dec 2020 07:09:02 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1515E31B;
+        Mon, 14 Dec 2020 04:08:17 -0800 (PST)
+Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.198.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CF2C23F66B;
+        Mon, 14 Dec 2020 04:08:15 -0800 (PST)
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, lenb@kernel.org
+Cc:     linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ionela.voinescu@arm.com,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v2] ACPI: processor: fix NONE coordination for domain mapping failure
+Date:   Mon, 14 Dec 2020 12:07:40 +0000
+Message-Id: <20201214120740.10948-1-ionela.voinescu@arm.com>
+X-Mailer: git-send-email 2.29.2.dirty
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uy472czivduskjvu"
-Content-Disposition: inline
-In-Reply-To: <20201214100204.ngkgfrghdp3ui3um@gilmour>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+For errors parsing the _PSD domains, a separate domain is returned for
+each CPU in the failed _PSD domain with no coordination (as per previous
+comment). But contrary to the intention, the code was setting
+CPUFREQ_SHARED_TYPE_ALL as coordination type.
 
---uy472czivduskjvu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Change shared_type to CPUFREQ_SHARED_TYPE_NONE in case of errors parsing
+the domain information. The function still returns the error and the caller
+is free to bail out the domain initialisation altogether in that case.
 
-Hi Maxime,
+Given that both functions return domains with a single CPU, this change
+does not affect the functionality, but clarifies the intention.
 
-On Mon, Dec 14, 2020 at 11:02:04AM +0100, Maxime Ripard wrote:
-> Hi Sebastian,
->=20
-> On Sun, Dec 13, 2020 at 12:41:16AM +0100, Sebastian Reichel wrote:
-> > Hi,
-> >=20
-> > On Fri, Dec 11, 2020 at 04:14:43PM +0100, Michael Klein wrote:
-> > > This driver registers a pm_power_off function to turn off the board
-> > > by force-disabling a devicetree-defined regulator.
-> > >=20
-> > > Signed-off-by: Michael Klein <michael@fossekall.de>
-> > > ---
-> >=20
-> > Thanks, queued.
->=20
-> Did you also merge the binding?
+Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+[ rjw: Subject edit ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-Yes.
+Hi guys,
 
--- Sebastian
+I'm sending v2 of some of the patches at [1] in light of the discussions
+at [2].
 
---uy472czivduskjvu
-Content-Type: application/pgp-signature; name="signature.asc"
+This patch is a trivial rebase on linux next 20201211, submitted separately
+due to its lack of dependency on the other patches.
 
------BEGIN PGP SIGNATURE-----
+[1] https://lore.kernel.org/linux-pm/20201105125524.4409-1-ionela.voinescu@arm.com/#t
+[2] https://lore.kernel.org/linux-pm/20201210142139.20490-1-yousaf.kaukab@suse.com/
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl/XUIcACgkQ2O7X88g7
-+pr0Fg/9FDDxDr8rhtSeHCAMSGYGI/0Z++QmPLDpGkvEW1wl3bN65PJs++gg4ys8
-pEQ46pqhyeeNB1Ua/B/NNFoLrTxoJl/K2vym/9qNcINtkU2RqJBM1mdbyis6TBB1
-HyH3T6DxAwWgLsavY3xyZE9YOSv727RYIlkMEHeELvoO6TRToiVmgd5vTqumsAds
-EXCiV1uAXGuiujxVxyI9K6/mKK0FZ9ViWgzCRL8pHQIvUj9frndeJPvSnSZUH0Yk
-UwaX2xbhaZmuRLzbVgV/f4VfdhzJgILzh3BgFdiO5zQByjfODBFT117X7CONVtqL
-yngZDUOpMZufgLiGgot+WiMca4e8UY5FEPrwqZ/x7E6ByB5jtejJk8yLKRwwLssC
-uk0MRKVB8Z/q7PioBnKFaJNgkoC1/HURgBHAL9BCxA3OWOSql075ByKfubv5KCgW
-efmO5IM3LSidrU4xezqA0GkQF3J0tl0r0uk7cfrL2r+PgBjJyLdhoIyPhOXFw4ul
-WW+amS5KZCSVby0wTQ2PBxYVQ+JAQSaOuW32DvFckPU7DK9UDB0Ti3EcxjyPUycT
-KxlaFRgJ5ReuVpC+mpli2+LqxJfmSNoBeUihsegU2ijRcg1cbt49i2tCZ7LgdW0O
-GUZcREN7C0nrb+UEn7SuNkCWJVi5HlpY8OWV2ZJalvZZkjx9oVk=
-=9/Cy
------END PGP SIGNATURE-----
+Thank you,
+Ionela.
 
---uy472czivduskjvu--
+ drivers/acpi/cppc_acpi.c         | 2 +-
+ drivers/acpi/processor_perflib.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index a852dc4927f7..62f55db443c1 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -512,7 +512,7 @@ int acpi_get_psd_map(struct cppc_cpudata **all_cpu_data)
+ 		/* Assume no coordination on any error parsing domain info */
+ 		cpumask_clear(pr->shared_cpu_map);
+ 		cpumask_set_cpu(i, pr->shared_cpu_map);
+-		pr->shared_type = CPUFREQ_SHARED_TYPE_ALL;
++		pr->shared_type = CPUFREQ_SHARED_TYPE_NONE;
+ 	}
+ out:
+ 	free_cpumask_var(covered_cpus);
+diff --git a/drivers/acpi/processor_perflib.c b/drivers/acpi/processor_perflib.c
+index 0dcedd652807..32f0f554ccae 100644
+--- a/drivers/acpi/processor_perflib.c
++++ b/drivers/acpi/processor_perflib.c
+@@ -708,7 +708,7 @@ int acpi_processor_preregister_performance(
+ 		if (retval) {
+ 			cpumask_clear(pr->performance->shared_cpu_map);
+ 			cpumask_set_cpu(i, pr->performance->shared_cpu_map);
+-			pr->performance->shared_type = CPUFREQ_SHARED_TYPE_ALL;
++			pr->performance->shared_type = CPUFREQ_SHARED_TYPE_NONE;
+ 		}
+ 		pr->performance = NULL; /* Will be set for real in register */
+ 	}
+-- 
+2.29.2.dirty
+
