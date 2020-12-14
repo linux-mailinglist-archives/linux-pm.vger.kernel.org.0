@@ -2,103 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 651132D95C3
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 11:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABF82D95C5
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 11:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404657AbgLNKEE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Dec 2020 05:04:04 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:42269 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727860AbgLNKDg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Dec 2020 05:03:36 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id DFBEF5C00D4;
-        Mon, 14 Dec 2020 05:02:29 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 14 Dec 2020 05:02:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=+6hgTtQ1G+/Xs+uY2Rz4ZOY80qy
-        9K3UxTBdA7H+vn28=; b=CcqlFTVPOnNe62eURGM4fCToiXOO2wrP1dDG9DklIc3
-        hyzq42vRJEEFSBAL9X3cC7qtxi1KZ2OvL4GPypA64Sp4rETkYO5cfuuPlTKnpkwX
-        L4ysEXNqyJlxyGFi+LZCBoRIBS/XBFTK8DMZB8muBgS4drynUWWvgbrgsrqmuYOG
-        bk+aQX5bJ5cbtUD9xLg7NMDYNIjJ3jlYPQzRD/sNrip1+w34Wfpnzm6jrmk9kMQr
-        0kpzd5FY+I1bU0sfAf7yGFY3TOX22WqfYciVpXBD83C/HFl2aoqtlQD0briraaA6
-        N9/sU6ZMisciHrJ/jdSoIJOI24kkL1AZCdLrcsBCwiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=+6hgTt
-        Q1G+/Xs+uY2Rz4ZOY80qy9K3UxTBdA7H+vn28=; b=fS9mJFOt4vb88c+X4p/TP5
-        osr6tMtwZZvrcE6MpoY2Sqp/bU8TEf4wJA9Cmuly0785wj0ALRmT+o0RnRDda5uX
-        BGHqP/SNRYGQ7Pw5PGLnhJso4nQI7Qp5em7kOYS+dQCYK/4Yury/i91RntMuZXdX
-        yb3ndcHoN9uRzhewMIb8QGGDJjcTz9xi/RwVm1QoTPWNkO77i/Ri0a4F+F8QUnfA
-        GqyKs9xL93HQg2rVg0G7vZ1QousAMxvGukX4SG/yth9xcGYdnrux1Zy8ddKcqRcI
-        x/AHXzqaScYs/QXLQ5TvyjkO5DPCcJh00vMKozieg7mSzZn/TdnUxJvEOLjcL/4A
-        ==
-X-ME-Sender: <xms:NTjXX7Y1l3xs4F-7LYLv8n4aekMEd4HQBIfrC0jQdyDN68E1vnkRUw>
-    <xme:NTjXX6Z-YYbAk34jIPISUJdBqBgJ3J4JDChrVforw7e9y01B7kzB4s4hTuUKo1ZxZ
-    0fKmakgY9AqM6e-ReQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudekkedguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepvdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:NTjXX99otHuqzcKW6_LyoJ8lw2EUevzSMBge5q0teNkogFTHY0VZpA>
-    <xmx:NTjXXxptgBaLgW9TMxYtog03oN9Iu_B8KvKEFe69_B7rp8xzZeOS9A>
-    <xmx:NTjXX2qU71IpbxnJ_upfEZfw3W5YNVeFz70a3-v9mGQF919aZPXshg>
-    <xmx:NTjXX3d0tRIoFOEY6zFQ1VTgPUmYxPVH_1FSYeInNUm423VTrh8xKw>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6E85424005B;
-        Mon, 14 Dec 2020 05:02:29 -0500 (EST)
-Date:   Mon, 14 Dec 2020 11:02:28 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Michael Klein <michael@fossekall.de>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 3/3] ARM: dts: sun8i-h2-plus-bananapi-m2-zero: add
- poweroff node
-Message-ID: <20201214100228.ywal5v5xyzw25hmw@gilmour>
-References: <20201211151445.115943-1-michael@fossekall.de>
- <20201211151445.115943-4-michael@fossekall.de>
+        id S2405550AbgLNKEc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Dec 2020 05:04:32 -0500
+Received: from mail-eopbgr40086.outbound.protection.outlook.com ([40.107.4.86]:10568
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727982AbgLNKEY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Dec 2020 05:04:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ERPWGfFkYQskWhpp7CYVZtsNKmeqD1bP1JR7zqS2gI/EJgxuduaNcsNweJSOQDuTsjmRqWYJZ94qTqQUN0wvRkmLTQUc0pWYDYQnpyvdr66A2f6JBfQLa/TXOFnMjysfGjWPe7wO+N2yo8nM1+ZSod/J9Uk8/1PdUSjhXYxp6Hl1mkfU2H/X8wxYPrgbCEG6s9eFBrqyTnEoweLHqnMP2GCGX2nym582b2yn8C9bI9+h3fqd+owIbalww8/px9nOc0/QRR/2icwJciZ+6OITBMwsakLzNJ/ywCNcCQdH+RyJwTcz5X1Bl0Tycw6pf8GeCfUvIqDTuDMmQK7DhF2BIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DmgE8+1WwYRDP3vn4ueQPgitrGHWerGDWrsNBBHQX1M=;
+ b=eWeWub+Hla2Zu63t44WCqN/Oqo8wJx7jrcblVjgehxGt8mRrPM+bT7jZOH2PIQGF9LZBC9CUSavQ0C2Wo8FyaUHawhr74gm6kWb2QaXxktJRXypSCr0vkm2dSVmUiYEOsxZviuK4WSzC1ORAyzrl2E7CCmyrGrhxEoQTNyf4M48zKiOYYbJafWQx0JnTrdcfWPSRDLZfz6oYCbKAiJfStNwzXBohE76hxskeq+42OaSHWiLoA92X2mQgpT/649w/GLm3p0MKw7ggohrouO3Oy4pnQjPTX90age7DhLiJLbeRXJkG5EWDTdZgM1MqpPOo7cYhAEREw7Kx6XrsxPI+KA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DmgE8+1WwYRDP3vn4ueQPgitrGHWerGDWrsNBBHQX1M=;
+ b=zMx8iFh/5GRIJNa1W9gw1B3ZoI3veCorx5CEB5tP2H3T7XgZwTXl/TIsEeA4lcsQ3l3Epl0HKTnexjHruNb6TG2KXZ05pTwjGKTEouNjIIhXXaY+PD76AA0HaMVfYypwpbJ/AS2fGF1HTnDHbGaOqP6A8sZHfFM2Hstnqb+goNw=
+Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:ac::5)
+ by PA4PR10MB4543.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:bd::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.17; Mon, 14 Dec
+ 2020 10:03:33 +0000
+Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::67:233d:68c6:cabc]) by PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::67:233d:68c6:cabc%7]) with mapi id 15.20.3654.025; Mon, 14 Dec 2020
+ 10:03:33 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Tian Tao <tiantao6@hisilicon.com>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH] thermal: da9062/61: fix platform_get_irq.cocci warnings
+Thread-Topic: [PATCH] thermal: da9062/61: fix platform_get_irq.cocci warnings
+Thread-Index: AQHW0cCa7S4KjoE410O4gRu/ca7Uxqn2XP/g
+Date:   Mon, 14 Dec 2020 10:03:33 +0000
+Message-ID: <PR3PR10MB4142BA80AE30A6FE17A3810180C70@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+References: <1607912820-48593-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <1607912820-48593-1-git-send-email-tiantao6@hisilicon.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: hisilicon.com; dkim=none (message not signed)
+ header.d=none;hisilicon.com; dmarc=none action=none header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [165.225.80.85]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3623e7a1-26b8-4b20-f5be-08d8a0178455
+x-ms-traffictypediagnostic: PA4PR10MB4543:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <PA4PR10MB4543539C6D70587D81C57644A7C70@PA4PR10MB4543.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:758;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XbhXwu4F52d2XXwf4BUgNkGHAWifLtKii0h8j50TY492CvysbnmYAZ4XnQx2e6GM/CgSalT2DssnnXoNuUIP9jpzAnhSFLFUQvB+hqzsSMr/SNoZNO/PdY+fn9ZKBieg8BJrphfaC5kPIkFojYQrLB185IGvqW8qRyNHO2/Rrgul2NIvHyiN0BS8+ygQ9JNofXt0LtIennn2T2G7II3FCaAfAXSOm2K3Zt/05jD17pPHIg2kfcqA4aJtv6oStnNGh3J4eHwVQ2U75Qw0iIRz4PDT0JdY+ub8YA7cxMm+0Sc7kjC5C+1zLF/4wCUahI2ybjFQ3Xjqsk4Rt13NuqmFqw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(366004)(136003)(346002)(396003)(376002)(6506007)(26005)(33656002)(52536014)(186003)(55236004)(4744005)(53546011)(110136005)(66556008)(9686003)(7696005)(66446008)(86362001)(71200400001)(316002)(2906002)(83380400001)(66476007)(66946007)(64756008)(478600001)(55016002)(5660300002)(4326008)(8936002)(76116006)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?FHW34QoClbTUO7ghKIGiDJUBYvJ2urfvcgJCvz/JC2OGXWf+k4iYis0badG3?=
+ =?us-ascii?Q?+GX2jHZrvYD7pibpLXi/Wq5Tg26spVynSKxPUXh90RzP9SPwZhneNDqm5o1c?=
+ =?us-ascii?Q?KYAMN0GIiyBNT4D/u9POEX3Fx5WeFUH8JkOJwFRzJxqhHDfiLlyQjnv9uDwQ?=
+ =?us-ascii?Q?YpzURWar/S7ar5K3EptEdGaAdQRuBt8ygt1YiJSa2m++IeRQF5eV3205AGD7?=
+ =?us-ascii?Q?/+z8Xd1gCJ+vuWs5CINXZPVzjooaomlSkhfPbL97P5eT2Yl8E8Abqrv01680?=
+ =?us-ascii?Q?L4+u4wnR+dSP3Cd073kyI8ggo0aX51Dg0m4B9Wk3YtbHWxDtwpX0XxML8dRC?=
+ =?us-ascii?Q?BpLI/MIPWCJ3COn5vX72GADfpmpUdkKlO6DgeWxcsUSL2LS2eNBO0IRZ7ZDE?=
+ =?us-ascii?Q?FxZ/6vcnbBPlJiIhCgbUoesKYYGFwiJbmeynkbR7sJ4du/qhjC9A23UMr8Os?=
+ =?us-ascii?Q?5Ju0ZDAzkGqXsPvbtgTUoxYc6veRLxL83FzdXbjUVgLZG8SZieEA+mlDv8nE?=
+ =?us-ascii?Q?cyAuDizkrQxlHkQiwPespsaVXOjBTmEbujEaQFiaugryk0LH0/66K6YrREW1?=
+ =?us-ascii?Q?SiO3F0b7wyf2TM5PfiAhwirk7wokvfnC3HyuwDmK/d+0qBAIwyifx7X81aOu?=
+ =?us-ascii?Q?QMZRpq7xOGTdQNsd0QRBzQDLBynzTYmAOwSRhnX6UVxsLxWn0sp+TBXfq5WX?=
+ =?us-ascii?Q?Zl+KRmeanbSOa33L3UEMGmLN2CJOuwRpiZinE4YWz3DdBerI31JQosD8897g?=
+ =?us-ascii?Q?+mgHlesJyccsfqKR6h+z37DzKqFB1g4tq6p5PoNr2ogO+TFZzO2ffcmLh2Yy?=
+ =?us-ascii?Q?NUsHypCV1rUV8WMNoVehR8Zv1TWoFS/3qFr9K8Tzll3H2BifErmenU0eO36b?=
+ =?us-ascii?Q?S90lxLrTOBhkeJ9D4MHwSvdQI9SRUTll4+wNjZTLukQyCUwABv53EU2XLWuW?=
+ =?us-ascii?Q?x3WEgk+4Fb+UYUA3p9MZJCVkmz8aTkzjioUtXO7c2Pk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f4xdeddqbje4hsbx"
-Content-Disposition: inline
-In-Reply-To: <20201211151445.115943-4-michael@fossekall.de>
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3623e7a1-26b8-4b20-f5be-08d8a0178455
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2020 10:03:33.6767
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pyKECYUHL0eh7SnaBTSEvG5OHIg6H8rquLBbInVHO876Dloo7v7jyFJbtLx7dNur2oHgec2i4+DSWKI2r5MNgm+16VhJLaAbtZaPE5p6noE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR10MB4543
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 14 December 2020 02:27, Tian Tao wrote:
 
---f4xdeddqbje4hsbx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Dec 11, 2020 at 04:14:45PM +0100, Michael Klein wrote:
-> Add add devicetree information for the regulator-poweroff driver.
+> Remove dev_err() messages after platform_get_irq*() failures.
+> Line 248 redundant because platform_get_irq() already prints
+> an error.
 >=20
-> Signed-off-by: Michael Klein <michael@fossekall.de>
+> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+>=20
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
-Queued for 5.12, thanks!
-Maxime
+I'm not sure stating line 248 is overly helpful in a commit message, especi=
+ally
+if this were to be cherry-picked (not that this is likely given the kind of
+change being made).
 
---f4xdeddqbje4hsbx
-Content-Type: application/pgp-signature; name="signature.asc"
+That aside, the change itself is fine so:
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX9c4NAAKCRDj7w1vZxhR
-xSxwAP9WB0bbihmJWLWLOsFNtIXErh+AjrGYdeFdrnuWmXgFzwD+OnDMyEmnjmJm
-cTuMw4B4s3aogPo23zUqUxvw8wgt9Ak=
-=o2H6
------END PGP SIGNATURE-----
-
---f4xdeddqbje4hsbx--
+Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
