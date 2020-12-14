@@ -2,58 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 249492D9912
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 14:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC222D99EC
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 15:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729832AbgLNNla (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Dec 2020 08:41:30 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:9523 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405793AbgLNNlT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Dec 2020 08:41:19 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CvjDt4lMVzhtf2;
-        Mon, 14 Dec 2020 21:39:58 +0800 (CST)
-Received: from ubuntu.network (10.175.138.68) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 14 Dec 2020 21:40:24 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] power/supply/bq24190_charger: convert comma to semicolon
-Date:   Mon, 14 Dec 2020 21:40:54 +0800
-Message-ID: <20201214134054.4296-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.22.0
+        id S2395242AbgLNO0d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Dec 2020 09:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405955AbgLNO00 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Dec 2020 09:26:26 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11238C0613CF;
+        Mon, 14 Dec 2020 06:25:46 -0800 (PST)
+Received: from zn.tnic (p200300ec2f0a4700a4e3f86bfec32453.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:4700:a4e3:f86b:fec3:2453])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6A7671EC051E;
+        Mon, 14 Dec 2020 15:25:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1607955944;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OKP/ZIb2SxC7wKCyqIoQ+2hJLxUxcqOf9Z7O8PkQ3uo=;
+        b=R1HBPL99Ho1KrcwC1SUpf7jihXVYcrWye/RkgA4ht+kA1gt70LF9X0hDH//JUEbIP7EUiC
+        sUa5FovgPiJ1dH3g4SSVBwu2tBVsoZZOHZ5pXM3nUdvk0DRuTo7kFfXfuUFB6NBezGJSXV
+        iTlmJ959cRyI5n70haFrFQv6vdtVpMU=
+Date:   Mon, 14 Dec 2020 15:25:40 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Punit Agrawal <punitagrawal@gmail.com>
+Cc:     Wei Huang <whuang2@amd.com>, rjw@rjwysocki.net, wei.huang2@amd.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 2/4] cpufreq: acpi-cpufreq: Add processor to the
+ ignore PSD override list
+Message-ID: <20201214142540.GB25916@zn.tnic>
+References: <20201125144847.3920-3-punitagrawal@gmail.com>
+ <cadb5d57-5aaf-79bc-e30e-502d5e522689@amd.com>
+ <20201207202610.GG20489@zn.tnic>
+ <e9b4ae11-1fe3-a660-bb65-d3ba55ffcc56@amd.com>
+ <20201207223057.GJ20489@zn.tnic>
+ <87a6unq3xv.fsf@stealth>
+ <20201208233216.GH27920@zn.tnic>
+ <871rfvoqy7.fsf@stealth>
+ <20201214124023.GA25916@zn.tnic>
+ <87sg88tt5e.fsf@stealth>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.138.68]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87sg88tt5e.fsf@stealth>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Replace a comma between expression statements by a semicolon.
+On Mon, Dec 14, 2020 at 10:27:09PM +0900, Punit Agrawal wrote:
+> IIUC, this suggests that Linux booting on anything prior to Zen3 is down
+> to pure luck - I hope that wasn't the case.
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
----
- drivers/power/supply/bq24190_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+WTF does this have to do with linux booting?!
 
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index d14186525e1e..00c4f335481f 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -1757,7 +1757,7 @@ static int bq24190_probe(struct i2c_client *client,
- 	charger_cfg.drv_data = bdi;
- 	charger_cfg.of_node = dev->of_node;
- 	charger_cfg.supplied_to = bq24190_charger_supplied_to;
--	charger_cfg.num_supplicants = ARRAY_SIZE(bq24190_charger_supplied_to),
-+	charger_cfg.num_supplicants = ARRAY_SIZE(bq24190_charger_supplied_to);
- 	bdi->charger = power_supply_register(dev, &bq24190_charger_desc,
- 						&charger_cfg);
- 	if (IS_ERR(bdi->charger)) {
+> At the moment acpi thermals is bust on this and other affected AMD
+> system I have access to. That'll need fixing before any sensible
+> measurements can be run.
+
+Nope, still not answering my questions.
+
+> Tbh, I didn't quite expect the patch to the PSD exclusion list to be
+> so controversial
+
+It won't be if you explain properly what your patch is fixing. That is,
+if it fixes anything.
+
 -- 
-2.22.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
