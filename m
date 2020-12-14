@@ -2,72 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 791562D9EE2
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 19:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8E72DA0AA
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 20:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440860AbgLNSWt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Dec 2020 13:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440393AbgLNSWj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Dec 2020 13:22:39 -0500
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7371AC0613D3
-        for <linux-pm@vger.kernel.org>; Mon, 14 Dec 2020 10:21:59 -0800 (PST)
-Received: by mail-io1-xd44.google.com with SMTP id r9so17828100ioo.7
-        for <linux-pm@vger.kernel.org>; Mon, 14 Dec 2020 10:21:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q+41xOvkhPzXEqvcapSgmuBUeyzzNHctlSYb+O7Udfg=;
-        b=Aau1wPH5dsgHO29VfX+VxTNCj9IMmt5rIvftoXO/bq4D6zbBNoKiIAYGlrrGbg3s4a
-         ny8wWnW+k5CkpM9oUOWjA9THy5+XPam64aYJ7vcyR4g9nryf1DL0iLcxwycbUUYPARMc
-         C0R+C7v/Ad5omW+4wH3rut8YA5a/xsZTbwJXxW2992cIn5I6qy1ECiWsTkYHHRJOPp2c
-         TmnL1fkZq+nHXOHwHCL2GoiG82Qrq18xNBmVVdGRoMBVWTi5jJ6OlMsH8XuuwrnD37mE
-         lV2Q2LLUGeLYuXNFGFDZLg1ld9oxdOxC65V89GIxMBLWEuzylWjpfkq3yM8IX8Cu+Swm
-         yfcQ==
+        id S2502063AbgLNThS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 14 Dec 2020 14:37:18 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46483 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502360AbgLNThP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Dec 2020 14:37:15 -0500
+Received: by mail-ot1-f65.google.com with SMTP id w3so16911444otp.13
+        for <linux-pm@vger.kernel.org>; Mon, 14 Dec 2020 11:36:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q+41xOvkhPzXEqvcapSgmuBUeyzzNHctlSYb+O7Udfg=;
-        b=AnntVl9V7r+XWKmk/RDVL6v9fk0dOaEL95smnOMqCASEC+5WDTMbDNLwfngskb7/Cz
-         KspQVli54ifUXez+wEBtG0gShSihBEnHutefoBSH5bRaUGB7djKmbCWc6LbQigFhVGDV
-         LEvmRyZH55UCBzeg22Vsg2SwJs7HrxNiOf8tgNxVjFB9bEWyUZ2MiKs4AarniuN8am8P
-         oCdD2oJa8qeYvRGWvrd5GYXJfOlIpHyKYYDibFkDryq8ixwxiIxAUuWCIWwIMuWB4/Ef
-         jF3cSRHcseQa7OWTxpIe7SigGpUxh6HXHfesPzZq+GamAwLmDfVeR7rQYAR4i2SKnGvA
-         1HRA==
-X-Gm-Message-State: AOAM530+Bzk4AwPnoJjY7OrsSqnvs5yWfrazBeekVpRcKyDZrKg4zMym
-        teUKhR37PjWXWvoqn+UafXJe5+piCNQPPScMqxVZIA==
-X-Google-Smtp-Source: ABdhPJzwB0h+D+HhtQZhHSJ9tzlx8igt+fPegWrdwU5IjnflYC5GvtHfPxSH5LUVMhmFYAOcJk6a4lQ0vSKR2CFBYkM=
-X-Received: by 2002:a02:23ce:: with SMTP id u197mr34431744jau.113.1607970118675;
- Mon, 14 Dec 2020 10:21:58 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=20ZvIWGvWlDrvKEhjMQqg7rXf8wOW07pGgN08di/5mQ=;
+        b=rHQrlo0Re5isD8kRVKYEhNqAKkayMvIDB/Ix+p5Zqb6WnZFM9UOpHiZOueMjl8AwuT
+         yxgp1xVjVTmKFVlkjzAeNnj1fIuRo63aBND6LoV/waDqV7YWaiJtcv+zdaj7mo/6NZTS
+         5zsXdKUbTBjemNnSiy3hs5XJ68lA6vfbkE2TuE19ZvvZqZ+WbK9j4komKzILFNpnzmaY
+         CMIU3mr4RKqK11SQMhwH1UCMhzxR2kdrs2N47B2CpdTNncRi7NQbgIK01A+gzE9Jrm6i
+         1VOPlrvEbPgNxQZsFrVsnbdpfD/kPuzCvxxdK3uHk/LmvsvrExXAdZimrW7LHoN7WV5T
+         3bhw==
+X-Gm-Message-State: AOAM532V3lMgq6Eg+WZqoQSkVgsha7Da8dvEeqsfC53aokGJgI6m0X6z
+        zp1N30B7LAb5MKXs5Ftk5rUxOVDRZuNdu/VgtbY=
+X-Google-Smtp-Source: ABdhPJwfSqt1r/oAg+xDEbKlv5YtXgLcBGqe6VtArEdMnNw5rT4dCid371kzPCASN85r2Tyes/8AJ2fIx+sltsb9fBY=
+X-Received: by 2002:a9d:208a:: with SMTP id x10mr19042669ota.260.1607974592837;
+ Mon, 14 Dec 2020 11:36:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20201130053640.54608-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20201130053640.54608-1-kai.heng.feng@canonical.com>
-From:   Matthew Garrett <mjg59@google.com>
-Date:   Mon, 14 Dec 2020 10:21:47 -0800
-Message-ID: <CACdnJuv_W1q87wUUEBwMgnQLRuv8SzP7OOxjqY29t2tO862m-A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal: core: Add indication for userspace usage
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>, daniel.lezcano@linaro.org,
-        amitk@kernel.org, andrzej.p@collabora.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20201214113718.boh3z2rpnwitmphd@vireshk-i7>
+In-Reply-To: <20201214113718.boh3z2rpnwitmphd@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 14 Dec 2020 20:36:21 +0100
+Message-ID: <CAJZ5v0hRwPLORnD-kBugnRUoBkviTpkbZ9iS6dUFBNQAFuEgsA@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 5.11
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Nov 29, 2020 at 9:36 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
+On Mon, Dec 14, 2020 at 12:37 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> We are seeing thermal shutdown on Intel based mobile workstations, the
-> shutdown happens during the first trip handle in
-> thermal_zone_device_register():
-> kernel: thermal thermal_zone15: critical temperature reached (101 C), shutting down
+> Hi Rafael,
+>
+> This pull request contains following updates:
+>
+> - Fix imx's NVMEM_IMX_OCOTP dependency (Arnd Bergmann).
+>
+> - Add support for mt8167 and blacklist mt8516 (Fabien Parent).
+>
+> - Some ->get() callback related cleanups to the tegra194 driver and
+>   some optimizations in tegra186 driver (Jon Hunter and Sumit Gupta).
+>
+> - Power scale improvements to arm_scmi driver (Lukasz Luba).
+>
+> - Add missing MODULE_DEVICE_TABLE and MODULE_ALIAS to several drivers
+>   (Pali Rohár).
+>
+> - Fix error path in mediatek driver (Qinglang Miao).
+>
+> - Fix memleak in ST's cpufreq driver (Yangtao Li).
+>
+> Note that this stat shown by git is incorrect at the bottom, it
+> somehow got confused as some of the stuff is based on rc3 and the
+> other is based on rc1 (which got applied at rc6). And I didn't wanted
+> to play around with patches to hide this.
+>
+> -------------------------8<-------------------------
+> The following changes since commit f943849f720689214abb3930623c31ff91990be9:
+>
+>   cpufreq: scmi: Fix build for !CONFIG_COMMON_CLK (2020-11-23 10:15:56 +0530)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+>
+> for you to fetch changes up to c8bb4520543823a9b3da3861304273dc7232e2c7:
+>
+>   Merge branch 'cpufreq/scmi' into cpufreq/arm/linux-next (2020-12-08 11:22:17 +0530)
 
-Is the temperature reported by the thermal zone actually correct here?
-101 C seems extremely excessive.
+Pulled, thanks!
