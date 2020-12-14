@@ -2,87 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8E72DA0AA
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 20:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1CE2DA0AD
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Dec 2020 20:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502063AbgLNThS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 14 Dec 2020 14:37:18 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46483 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502360AbgLNThP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Dec 2020 14:37:15 -0500
-Received: by mail-ot1-f65.google.com with SMTP id w3so16911444otp.13
-        for <linux-pm@vger.kernel.org>; Mon, 14 Dec 2020 11:36:58 -0800 (PST)
+        id S2502596AbgLNThu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Dec 2020 14:37:50 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:42406 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502451AbgLNThr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Dec 2020 14:37:47 -0500
+Received: by mail-oi1-f193.google.com with SMTP id l200so20461222oig.9
+        for <linux-pm@vger.kernel.org>; Mon, 14 Dec 2020 11:37:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=20ZvIWGvWlDrvKEhjMQqg7rXf8wOW07pGgN08di/5mQ=;
-        b=rHQrlo0Re5isD8kRVKYEhNqAKkayMvIDB/Ix+p5Zqb6WnZFM9UOpHiZOueMjl8AwuT
-         yxgp1xVjVTmKFVlkjzAeNnj1fIuRo63aBND6LoV/waDqV7YWaiJtcv+zdaj7mo/6NZTS
-         5zsXdKUbTBjemNnSiy3hs5XJ68lA6vfbkE2TuE19ZvvZqZ+WbK9j4komKzILFNpnzmaY
-         CMIU3mr4RKqK11SQMhwH1UCMhzxR2kdrs2N47B2CpdTNncRi7NQbgIK01A+gzE9Jrm6i
-         1VOPlrvEbPgNxQZsFrVsnbdpfD/kPuzCvxxdK3uHk/LmvsvrExXAdZimrW7LHoN7WV5T
-         3bhw==
-X-Gm-Message-State: AOAM532V3lMgq6Eg+WZqoQSkVgsha7Da8dvEeqsfC53aokGJgI6m0X6z
-        zp1N30B7LAb5MKXs5Ftk5rUxOVDRZuNdu/VgtbY=
-X-Google-Smtp-Source: ABdhPJwfSqt1r/oAg+xDEbKlv5YtXgLcBGqe6VtArEdMnNw5rT4dCid371kzPCASN85r2Tyes/8AJ2fIx+sltsb9fBY=
-X-Received: by 2002:a9d:208a:: with SMTP id x10mr19042669ota.260.1607974592837;
- Mon, 14 Dec 2020 11:36:32 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=W3Y3MRHewvnYNtfnxAdgfHaCuyRDM8NoARfsKa7K9RA=;
+        b=R5BsZncppdjxR2+GTRYmLYVnVpV+tyRmn/XGZTgy7nq5xowAUUVcAWKFryxZpvkhZL
+         w1ar8UY3nyY5wvniLQ/GFJk+4ad/0IPC3amNSyNJyBjY1mku/dWUT2KHzWr/aaJHW8m+
+         ZQxLXLfCG6VcEilTyKlu1SFnTplSFtIhJtFj+/0RX69jkoIHGhIdmKRI/6jscnuwXt7m
+         bbI8hOrB05x8VA8COIgtuX39Ta9QyukA+VoPkm5qd9vCEJUFufNdra4z8RGXLELu0RqH
+         ym9nWf3pul2Hy8cj07BAu6Xyh6MMjg7cSatWLM7sidxqofXfyObQrfuQBkJ96C4qaqEo
+         fcfA==
+X-Gm-Message-State: AOAM532NRt0omTaSkUdRxyiqoEGPOIf7lezIln1u5kShVMr6KGjeMXZG
+        snCuPqmXdZ3gmZWrPQ+1EHymwqX5Vzq1YwpuGoY8xDHy
+X-Google-Smtp-Source: ABdhPJwTDN94zrL7d40Cu2AO8dLu2ZOnFavC+USlVsoc9cCeGnjs6JbRo7PSoeWymG8zRm5sKb8nxu4UOXEl47ezRdw=
+X-Received: by 2002:aca:4c1:: with SMTP id 184mr11293025oie.157.1607974626287;
+ Mon, 14 Dec 2020 11:37:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20201214113718.boh3z2rpnwitmphd@vireshk-i7>
-In-Reply-To: <20201214113718.boh3z2rpnwitmphd@vireshk-i7>
+References: <20201214111446.xz5hrfamjm3tyesq@vireshk-i7>
+In-Reply-To: <20201214111446.xz5hrfamjm3tyesq@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 14 Dec 2020 20:36:21 +0100
-Message-ID: <CAJZ5v0hRwPLORnD-kBugnRUoBkviTpkbZ9iS6dUFBNQAFuEgsA@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 5.11
+Date:   Mon, 14 Dec 2020 20:36:55 +0100
+Message-ID: <CAJZ5v0hT2A4qsNWEst05vgTwdc-wZxH2uxJ6jj6mU3hxWDZ5kw@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP updates for 5.11
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 12:37 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Mon, Dec 14, 2020 at 12:14 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
 > Hi Rafael,
 >
 > This pull request contains following updates:
 >
-> - Fix imx's NVMEM_IMX_OCOTP dependency (Arnd Bergmann).
+> - Allow empty (node-less) OPP tables in DT for passing just the
+>   dependency related information (Nicola Mazzucato).
 >
-> - Add support for mt8167 and blacklist mt8516 (Fabien Parent).
+> - Fix a potential lockdep in OPP core and other OPP core cleanups
+>   (Viresh Kumar).
 >
-> - Some ->get() callback related cleanups to the tegra194 driver and
->   some optimizations in tegra186 driver (Jon Hunter and Sumit Gupta).
+> - Don't abuse dev_pm_opp_get_opp_table() to create an OPP table, fix
+>   cpufreq-dt driver for the same (Viresh Kumar).
 >
-> - Power scale improvements to arm_scmi driver (Lukasz Luba).
->
-> - Add missing MODULE_DEVICE_TABLE and MODULE_ALIAS to several drivers
->   (Pali Rohár).
->
-> - Fix error path in mediatek driver (Qinglang Miao).
->
-> - Fix memleak in ST's cpufreq driver (Yangtao Li).
->
-> Note that this stat shown by git is incorrect at the bottom, it
-> somehow got confused as some of the stuff is based on rc3 and the
-> other is based on rc1 (which got applied at rc6). And I didn't wanted
-> to play around with patches to hide this.
+> - dev_pm_opp_put_regulators() accepts a NULL argument now, updates to
+>   all the users as well (Viresh Kumar).
 >
 > -------------------------8<-------------------------
-> The following changes since commit f943849f720689214abb3930623c31ff91990be9:
+> The following changes since commit e0df59de670b48a923246fae1f972317b84b2764:
 >
->   cpufreq: scmi: Fix build for !CONFIG_COMMON_CLK (2020-11-23 10:15:56 +0530)
+>   opp: Reduce the size of critical section in _opp_table_kref_release() (2020-10-27 13:21:03 +0530)
 >
 > are available in the Git repository at:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
 >
-> for you to fetch changes up to c8bb4520543823a9b3da3861304273dc7232e2c7:
+> for you to fetch changes up to 2c07b0fd9bf6dfb0bdf05aac018e6b3242d60822:
 >
->   Merge branch 'cpufreq/scmi' into cpufreq/arm/linux-next (2020-12-08 11:22:17 +0530)
+>   Merge branch 'opp/empty' into opp/linux-next (2020-12-09 11:24:12 +0530)
 
 Pulled, thanks!
