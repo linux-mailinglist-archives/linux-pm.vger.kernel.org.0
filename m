@@ -2,124 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8DB2DB6BB
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Dec 2020 23:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065122DB75E
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 01:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729847AbgLOW7Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Dec 2020 17:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730048AbgLOW7X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Dec 2020 17:59:23 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31571C0617B0
-        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 14:58:37 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id r3so21430871wrt.2
-        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 14:58:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=S4/ArqoyhM6R2IAWg2ouJlOV41Dq/1z4QTe3XTdQngE=;
-        b=XgUtemt7u7kpgcD8bks8ksl/53beQQmR3zAfJWl1PB+4OuvLHyBXcROwXia6ohjhJk
-         OrqiJGR25c9nL0FlW8UOLqn/wpYdHH2rcQ2QdbWXeiYmOYYRtgiyHtqPisQl5hxyd3Rc
-         n0ZzptJbGWYLgbFGuNcTlgxoVqLExFn0TQAu26J48CVg8LDRUAgtaTp5No0k6Kp9sjl4
-         OKNaTCO1aZICVLEd3pWsGCjXJC4vXKffZQVSHdTwRRrVLe9TH9dbZuJADiSt5DRb4pII
-         zXpIaREccXPg3RONSCzCjGXZH+3A8YQlfQiNBFuQcSqopRwT8FYdwUcLQAyXCEHOmc5E
-         myqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=S4/ArqoyhM6R2IAWg2ouJlOV41Dq/1z4QTe3XTdQngE=;
-        b=Y1lEf4jif613/cNOeYDkUZE1shZd10wbgnMy64Z9azVqI4Erw8/deppNDJ+4XproQ3
-         gxJ3b5yIMWfsQSdZBN7NBp0miKt3HwSbx21wVSQYydZBMNNiTAF0uess/4gOOrd82Zlr
-         sRVcS0jiHXqNvF5FfSj6HZCiRBgZN/sryjdR+0jsUb79y1y9XA/TfctyTO9EL+Gce6+V
-         f//W5Ql9L6tsGTRoqd5fmw65PpAFIqxkvhy9iIr1H8aXvt2I50HPA+wsCGtVHUP/zMlc
-         dRShuE+AFfEPsoatdh9NwChECO8l0HtT8iHJ6WmkZv9QiKwop280XoXGkrdjGUcXIlSe
-         uEvg==
-X-Gm-Message-State: AOAM532nGh8MVfgE9lnROTlwCHGPS1LzpS+rJ9QvZN28Y9ze3EqxnFTT
-        1l+40yv1/zmDwqerMIVbgKqQQQ==
-X-Google-Smtp-Source: ABdhPJzN+VdxNoGz5CCRLdungxTDGe3IPh+5/50yEjoJhTIvajc8CLWn1+HPO2cFAFPRxOGqY6emOQ==
-X-Received: by 2002:a05:6000:14b:: with SMTP id r11mr36427160wrx.53.1608073115832;
-        Tue, 15 Dec 2020 14:58:35 -0800 (PST)
-Received: from linaro.org ([2a01:e34:ed2f:f020:1dbc:8063:5912:c6b3])
-        by smtp.gmail.com with ESMTPSA id t1sm83494wro.27.2020.12.15.14.58.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Dec 2020 14:58:35 -0800 (PST)
-Date:   Tue, 15 Dec 2020 23:58:32 +0100
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     rui.zhang@intel.com, amitk@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/4] thermal/core: Precompute the jiffies
-Message-ID: <20201215225832.GB3581@linaro.org>
-References: <20201202120657.1969-1-daniel.lezcano@linaro.org>
- <20201202120657.1969-2-daniel.lezcano@linaro.org>
- <1c909a38-1777-556d-fe87-29394a1b1d56@linaro.org>
+        id S1728008AbgLPABc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Dec 2020 19:01:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:42396 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725550AbgLOXby (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 15 Dec 2020 18:31:54 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 895581FB;
+        Tue, 15 Dec 2020 15:31:07 -0800 (PST)
+Received: from localhost (unknown [10.1.198.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1CB213F718;
+        Tue, 15 Dec 2020 15:31:06 -0800 (PST)
+Date:   Tue, 15 Dec 2020 23:31:05 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Mian Yousaf Kaukab <ykaukab@suse.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Len Brown <lenb@kernel.org>,
+        Mian Yousaf Kaukab <yousaf.kaukab@suse.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/4] cppc_cpufreq: fix, clarify and improve support
+Message-ID: <20201215233105.GA31906@arm.com>
+References: <20201214123823.3949-1-ionela.voinescu@arm.com>
+ <20201214161158.GA11066@suse.de>
+ <CAJZ5v0hn=Xcdyi=E_km-ZJNqY-fbP3w3kCcVWVKigHQh5NsZhA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1c909a38-1777-556d-fe87-29394a1b1d56@linaro.org>
+In-Reply-To: <CAJZ5v0hn=Xcdyi=E_km-ZJNqY-fbP3w3kCcVWVKigHQh5NsZhA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 09:38:06AM -0500, Thara Gopinath wrote:
-> Hi Daniel,
+On Tuesday 15 Dec 2020 at 19:21:01 (+0100), Rafael J. Wysocki wrote:
+> On Mon, Dec 14, 2020 at 5:14 PM Mian Yousaf Kaukab <ykaukab@suse.de> wrote:
+> >
+> > On Mon, Dec 14, 2020 at 12:38:19PM +0000, Ionela Voinescu wrote:
+> > > Hi guys,
+> > >
+> > > I'm sending v2 of some of the patches at [1] in light of the discussions
+> > > at [2].
+> > >
+> > > v2:
+> > >  - Patches 1-3 are trivial rebase on linux next 20201211, with conflicts
+> > >    fixed after eliminating what previously was "[PATCH 4/8] cppc_cpufreq:
+> > >    replace per-cpu structures with lists." Therefore, I have kept
+> > >    Viresh's acks.
+> > >
+> > >  - Patch 4 is a merge between:
+> > >      - [PATCH 4/8] cppc_cpufreq: replace per-cpu structures with lists
+> > >      - [PATCH] cppc_cpufreq: optimise memory allocation for HW and NONE
+> > >        coordination
+> > >    both found at [1].
+> > >
+> > >    This functionality was introducing the problem at [2] and it's fixed
+> > >    in this version by bailing out of driver registration if a _CPC entry
+> > >    is not found for a CPU.
+> > >
+> > >    Yousaf, it would be great if you can test this and make sure it
+> > >    matches your expectations.
+> > >
+> > >    Rafael, Viresh if you think this last patch introduces too many
+> > >    changes, you can skip it for 5.11 which is around the corner and
+> > >    have more time for review for 5.12. I've added more eyes in the review
+> > >    list.
+> > >
+> > >
+> > > All patches are based on linux next 20201211 after patch at [3] is
+> > > applied.
+> > >
+> > > [1] https://lore.kernel.org/linux-pm/20201105125524.4409-1-ionela.voinescu@arm.com/#t
+> > > [2] https://lore.kernel.org/linux-pm/20201210142139.20490-1-yousaf.kaukab@suse.com/
+> > > [3] https://lore.kernel.org/linux-pm/20201214120740.10948-1-ionela.voinescu@arm.com/
+> > >
+> > > Ionela Voinescu (4):
+> > >   cppc_cpufreq: use policy->cpu as driver of frequency setting
+> > >   cppc_cpufreq: clarify support for coordination types
+> > >   cppc_cpufreq: expose information on frequency domains
+> > >   cppc_cpufreq: replace per-cpu data array with a list
+> > >
+> > >  .../ABI/testing/sysfs-devices-system-cpu      |   3 +-
+> > >  drivers/acpi/cppc_acpi.c                      | 141 ++++++------
+> > >  drivers/cpufreq/cppc_cpufreq.c                | 204 ++++++++++--------
+> > >  include/acpi/cppc_acpi.h                      |   6 +-
+> > >  4 files changed, 181 insertions(+), 173 deletions(-)
+> >
+> > For the whole series:
+> > Tested-by: Mian Yousaf Kaukab <ykaukab@suse.de>
 > 
-> On 12/2/20 7:06 AM, Daniel Lezcano wrote:
-> > The delays are stored in ms units and when the polling function is
-> > called this delay is converted into jiffies at each call.
-> > 
-> > Instead of doing the conversion again and again, compute the jiffies
-> > at init time and use the value directly when setting the polling.
-> 
-> A generic comment. You can avoid patch 1 of this series and directly
-> have patch 2 , right? There is no need to rename polling_delay/passive_delay
-> to *_delay_ms and then remove it again?
+> All patches applied as 5.11-rc material, thanks!
 
-Yes, I can simplify that.
+Many thanks, guys!
 
-> > 
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > ---
-
-[ ... ]
-
-> > +static inline void thermal_zone_set_polling_delay(
-> > +	struct thermal_zone_device *tz, int delay_ms)
-> > +{
-> > +	tz->polling_delay_ms = delay_ms;
-> > +	tz->polling_delay_jiffies = msecs_to_jiffies(delay_ms);
-> > +	if (delay_ms > 1000)
-> > +		tz->polling_delay_jiffies = round_jiffies(tz->polling_delay_jiffies);
-> > +}
-> 
-> How about one function instead?
-> static inline void thermal_zone_set_delay_jiffies(int *delay_jiffes, int
-> delay_ms)
-> {
-> 	*delay_jiffies = msecs_to_jiffies(delay_ms);
-> 	if (delay_ms > 1000)
-> 		*delay_jiffies = round_jiffies(*delay_jiffies);
-> }
-> 
-> And then calling thermal_zone_set_delay_jiffies(&tz->passive_delay_jiffies,
-> passive_delay)..
- 
-Yes, agree. I'll do this change.
-
-Thanks for the review
-
-  -- Daniel
-
--- 
-
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Ionela.
