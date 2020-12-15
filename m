@@ -2,75 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 327B72DAD7D
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Dec 2020 13:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DEB2DAF15
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Dec 2020 15:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729069AbgLOMuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Dec 2020 07:50:40 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:33383 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728998AbgLOMub (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Dec 2020 07:50:31 -0500
-Received: from mail-lf1-f71.google.com ([209.85.167.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kp9m1-0005r3-Ph
-        for linux-pm@vger.kernel.org; Tue, 15 Dec 2020 12:49:49 +0000
-Received: by mail-lf1-f71.google.com with SMTP id h15so10207548lft.20
-        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 04:49:49 -0800 (PST)
+        id S1729034AbgLOOi7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Dec 2020 09:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729423AbgLOOiu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Dec 2020 09:38:50 -0500
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A28BC0617A7
+        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 06:38:09 -0800 (PST)
+Received: by mail-qt1-x843.google.com with SMTP id z3so14631122qtw.9
+        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 06:38:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w7jpjH1Jbgu804AfDst7MSgkMyAd/mh6khKgn3kKLTc=;
+        b=V7w0ZMkw6xKCNSAW0VAuR5Un2XMk0yafWlbkOSxQg9JutJyIkRrSdKarM3+gXZDsLL
+         Q4DeWWqB9ClfoNf5b/4ZNZjc9AXNbIP6pbD/QtKLLYo0IVdQTcPod/SZ9uuiW56WV+6V
+         sMu/V8FKT3H2mCxUui5QXGzTGG+rm1XGBfAeKjGCxSaUOmFlbpVkxrEIRNVlEpSQn2n3
+         YVZolF7bq5CzyfqlOXce/eIMcQeyejqThqZj1KH4tB9zPFYiPfKRVcl7O12/jHa4Kt4/
+         k0CjorpVWkFzFHeerJgdIAAa9H2zM/nqDjLaB2cHtQyzGnoKTD5iWw+C6C1RplvYSZye
+         Wu1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vegz+8PijbmQ0bh5O5W54R6ODTmPDdKWoz3bBiTeMUg=;
-        b=E+QdbxRW35dtKaeecAshhKuRa46AiKbncsdGamT/WouU4AiVX/3qkVVhMG6nnxzs7b
-         61fVun+KvJlxGSbMypBoBC6A0xseq9JtTnMGhxECiqWzCXG4tKE6rs0YQvyo6TgvcOZU
-         HrkjkdMMYEfyOJ68cZ3b+PRWTefRSJxSxVlrTNCYGxoBE7oOGQapcsb1OYlxvo0pdEHL
-         NGoHYHl9zb7PJzefbqia3E1HQIF1pfjEJNlUO3k0/BB0+lsMnc2hl9jJ/GkKZZovIGIU
-         IFhu8gEvwLnJ73i6Y9Po/5EAAU/zTbEiO76nj7MwMd8YjD4TMnb08i0icSqDizuh+FpD
-         WC6A==
-X-Gm-Message-State: AOAM532X8zNMv+96nUQakZbQxHMLz1Ni6RE5PLKG22RitBx2RC3GUqf7
-        LyB0X+2nDb/GYvbDZejpvX5pTsaAiAlAougTRBkbRfDFrjt+bNSmY+Lv/2I7/QtwZmEhk/oqH4d
-        RcvVirPPrkFPhtRoCBZqXcZq2jVAumyACjVVCrlJD9Z67EzAQp+N8
-X-Received: by 2002:ac2:561b:: with SMTP id v27mr3208880lfd.425.1608036589232;
-        Tue, 15 Dec 2020 04:49:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyUuS+LeWsmrnu7qIi5R61k+8mvBc0h+L76/AV97qvw3oJkKqju0w8P/ovhLy0uWQ4cURZEhs8wlH6Ga5pbU60=
-X-Received: by 2002:ac2:561b:: with SMTP id v27mr3208876lfd.425.1608036589004;
- Tue, 15 Dec 2020 04:49:49 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=w7jpjH1Jbgu804AfDst7MSgkMyAd/mh6khKgn3kKLTc=;
+        b=noWcGPMLta8j4evslgJU0ifvzg3S/L5Yx8e6HJfW1KK5q2BjyQ1IOJtx6Ma3XmBtCv
+         OkjWuiSUXczSHliYTIyGn8pL8RkBQ+98Hw7jLXxcJqJKvi2gwSjNSqW1smEY3LYVRCxq
+         FjUbV9EO0YNUq9YT4NVEufLa8AXVh1A44QrxKUlOIyI4MnvCOmB0K6lfLsrxqLRxeTwX
+         HCvPcYT26wtp6xlozIhl1zivjKb9giWqA0Q9VA3FE/d6PhLJRlnU5azXg26k5LvX44e7
+         Hpploy3wFdQD64wSi1/w8+CkrgFeu/1bTbRwpJ3/YOUkrff3UjP39GmM3vcHNq3rjaaM
+         TWPQ==
+X-Gm-Message-State: AOAM532f9O/jPZH+QNAjZmi59gTKLgnCUsSKREm1lvK38E/a9OEVoPH7
+        eQXjNDoVioQiqZZHD1cv8YDaicO8uQdRXw==
+X-Google-Smtp-Source: ABdhPJxOaC0n7+XXIS6ZI6MMKP5M3A+89QYy4enzXD/zj/tBM8VS5Ef0yLT4wL0rsaH7vRoK7kZbuA==
+X-Received: by 2002:ac8:5a95:: with SMTP id c21mr37113165qtc.115.1608043087777;
+        Tue, 15 Dec 2020 06:38:07 -0800 (PST)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id r128sm17235414qke.94.2020.12.15.06.38.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Dec 2020 06:38:07 -0800 (PST)
+Subject: Re: [PATCH 2/4] thermal/core: Precompute the jiffies
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
+Cc:     amitk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20201202120657.1969-1-daniel.lezcano@linaro.org>
+ <20201202120657.1969-2-daniel.lezcano@linaro.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <1c909a38-1777-556d-fe87-29394a1b1d56@linaro.org>
+Date:   Tue, 15 Dec 2020 09:38:06 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20201130053640.54608-1-kai.heng.feng@canonical.com> <CACdnJuv_W1q87wUUEBwMgnQLRuv8SzP7OOxjqY29t2tO862m-A@mail.gmail.com>
-In-Reply-To: <CACdnJuv_W1q87wUUEBwMgnQLRuv8SzP7OOxjqY29t2tO862m-A@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 15 Dec 2020 20:49:38 +0800
-Message-ID: <CAAd53p4Z_yH_t5HS4PnPbSAx-PKd85yqhie2mA0VCvJ-yqKD8Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal: core: Add indication for userspace usage
-To:     Matthew Garrett <mjg59@google.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201202120657.1969-2-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 2:22 AM Matthew Garrett <mjg59@google.com> wrote:
->
-> On Sun, Nov 29, 2020 at 9:36 PM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
-> >
-> > We are seeing thermal shutdown on Intel based mobile workstations, the
-> > shutdown happens during the first trip handle in
-> > thermal_zone_device_register():
-> > kernel: thermal thermal_zone15: critical temperature reached (101 C), shutting down
->
-> Is the temperature reported by the thermal zone actually correct here?
-> 101 C seems extremely excessive.
+Hi Daniel,
 
-According to ODM/OEM, it's correct.
-It's a short period when Intel Turbo Boost kicks in.
+On 12/2/20 7:06 AM, Daniel Lezcano wrote:
+> The delays are stored in ms units and when the polling function is
+> called this delay is converted into jiffies at each call.
+> 
+> Instead of doing the conversion again and again, compute the jiffies
+> at init time and use the value directly when setting the polling.
 
-Kai-Heng
+A generic comment. You can avoid patch 1 of this series and directly
+have patch 2 , right? There is no need to rename 
+polling_delay/passive_delay to *_delay_ms and then remove it again?
+
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/thermal/thermal_core.c  |  5 +++--
+>   drivers/thermal/thermal_core.h  | 18 ++++++++++++++++++
+>   drivers/thermal/thermal_sysfs.c |  4 ++--
+>   include/linux/thermal.h         |  7 +++++++
+>   4 files changed, 30 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 53f55ceca220..3111ca2c87a1 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1340,8 +1340,9 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>   	tz->device.class = &thermal_class;
+>   	tz->devdata = devdata;
+>   	tz->trips = trips;
+> -	tz->passive_delay_ms = passive_delay;
+> -	tz->polling_delay_ms = polling_delay;
+> +
+> +	thermal_zone_set_passive_delay(tz, passive_delay);
+> +	thermal_zone_set_polling_delay(tz, polling_delay);
+>   
+>   	/* sys I/F */
+>   	/* Add nodes that are always present via .groups */
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+> index 8df600fa7b79..2c9551ed5ef8 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -128,6 +128,24 @@ int thermal_build_list_of_policies(char *buf);
+>   /* Helpers */
+>   void thermal_zone_set_trips(struct thermal_zone_device *tz);
+>   
+> +static inline void thermal_zone_set_passive_delay(
+> +	struct thermal_zone_device *tz, int delay_ms)
+> +{
+> +	tz->passive_delay_ms = delay_ms;
+> +	tz->passive_delay_jiffies = msecs_to_jiffies(delay_ms);
+> +	if (delay_ms > 1000)
+> +		tz->passive_delay_jiffies = round_jiffies(tz->passive_delay_jiffies);
+> +}
+> +
+> +static inline void thermal_zone_set_polling_delay(
+> +	struct thermal_zone_device *tz, int delay_ms)
+> +{
+> +	tz->polling_delay_ms = delay_ms;
+> +	tz->polling_delay_jiffies = msecs_to_jiffies(delay_ms);
+> +	if (delay_ms > 1000)
+> +		tz->polling_delay_jiffies = round_jiffies(tz->polling_delay_jiffies);
+> +}
+
+How about one function instead?
+static inline void thermal_zone_set_delay_jiffies(int *delay_jiffes, int 
+delay_ms)
+{
+	*delay_jiffies = msecs_to_jiffies(delay_ms);
+	if (delay_ms > 1000)
+		*delay_jiffies = round_jiffies(*delay_jiffies);
+}
+
+And then calling 
+thermal_zone_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay)..
+
+Regards
+Thara
+> +
+>   /* sysfs I/F */
+>   int thermal_zone_create_device_groups(struct thermal_zone_device *, int);
+>   void thermal_zone_destroy_device_groups(struct thermal_zone_device *);
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index f465462d8aa1..9598b288a0a1 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -234,11 +234,11 @@ passive_store(struct device *dev, struct device_attribute *attr,
+>   
+>   	if (state && !tz->forced_passive) {
+>   		if (!tz->passive_delay_ms)
+> -			tz->passive_delay_ms = 1000;
+> +			thermal_zone_set_passive_delay(tz, 1000);
+>   		thermal_zone_device_rebind_exception(tz, "Processor",
+>   						     sizeof("Processor"));
+>   	} else if (!state && tz->forced_passive) {
+> -		tz->passive_delay_ms = 0;
+> +		thermal_zone_set_passive_delay(tz, 0);
+>   		thermal_zone_device_unbind_exception(tz, "Processor",
+>   						     sizeof("Processor"));
+>   	}
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 230d451bf335..5dd9bdb6c6ad 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -118,9 +118,14 @@ struct thermal_cooling_device {
+>    * @trips_disabled;	bitmap for disabled trips
+>    * @passive_delay_ms:	number of milliseconds to wait between polls when
+>    *			performing passive cooling.
+> + * @passive_delay_jiffies: number of jiffies to wait between polls when
+> + *			performing passive cooling.
+>    * @polling_delay_ms:	number of milliseconds to wait between polls when
+>    *			checking whether trip points have been crossed (0 for
+>    *			interrupt driven systems)
+> + * @polling_delay_jiffies: number of jiffies to wait between polls when
+> + *			checking whether trip points have been crossed (0 for
+> + *			interrupt driven systems)
+>    * @temperature:	current temperature.  This is only for core code,
+>    *			drivers should use thermal_zone_get_temp() to get the
+>    *			current temperature
+> @@ -161,6 +166,8 @@ struct thermal_zone_device {
+>   	unsigned long trips_disabled;	/* bitmap for disabled trips */
+>   	int passive_delay_ms;
+>   	int polling_delay_ms;
+> +	int passive_delay_jiffies;
+> +	int polling_delay_jiffies;
+>   	int temperature;
+>   	int last_temperature;
+>   	int emul_temperature;
+> 
+
+-- 
+Warm Regards
+Thara
