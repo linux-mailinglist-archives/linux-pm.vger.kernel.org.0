@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4E12DABFC
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Dec 2020 12:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB872DABC5
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Dec 2020 12:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728578AbgLOL0Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Dec 2020 06:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
+        id S1728606AbgLOLSo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Dec 2020 06:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728595AbgLOLSN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Dec 2020 06:18:13 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28346C061248
-        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 03:17:30 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id e2so3696950plt.12
-        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 03:17:30 -0800 (PST)
+        with ESMTP id S1728613AbgLOLSZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Dec 2020 06:18:25 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E875C0617A7
+        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 03:17:33 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id x18so4754640pln.6
+        for <linux-pm@vger.kernel.org>; Tue, 15 Dec 2020 03:17:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nclCHANFNijvEDnymHTZhqBOvD0PdZUMm8AQp2xAWLI=;
-        b=uOj10VFTGCZlHtTLgzshL9J7I+7HFxXnslBQ6WH1pbh+rQukw+h8S0dpORerJ5H2oH
-         T3vI1t+J8y5Rz1gKkhQMn5mrBOLRsaHcHHsFijW1dK63wgnDdjxbPA5TbhfDyJmhmQGE
-         ABHxvNaIvNAI43e9owLbZs/ZicJHyZVjkGaIG+L/HARYb8+jpe1HhScjAGi6CeQtqg5Y
-         mWCFVrcqFbq+e+KHJPPY/Uz/FsbUkj6aDf7ZiCs27CwXG7hu6p9feXPhpkfxGhTHecZQ
-         TPSXzDazZAj+eAQsUNwddaSsBVnOYV2DJhWfVNCLB7EJ+qMjMqNnt023j2w0fDq+CUNO
-         ppRg==
+        bh=6++dMGM1FCC5pOaCFzsM+Us3BSilGScrEfoUSQ6anmM=;
+        b=vMn03ETfI15mhXTc/u6kRPMA7u+C9RVBlTviPSBGG78sPfY/32VWaY8PoT8hn718hR
+         5bfFCcFvM/b3aImkJ/gYzidODEHpiQcfW61I77yZBG5xjOTC82Wa6kjpHkejtt1mqOR5
+         Aa1abKCgqrGK9fymjybug0aw/ZNLNXkr6QsAx6iz+t4yM/Yq8rRKxSY5T5iCvfNoM2bQ
+         KYbE5l7n/Aju8gsYGYIDeOOepdyBWFXT+VTb6Fk0lrPaRGSpLwxms+2OlzrWXgizEoYh
+         xrJNS4Nc2Io0LasuDjqIzfRRIzDmZ9YSXGfe6jT6G11kBbe8cYZggSe8y44kzv1xrk8k
+         BWww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nclCHANFNijvEDnymHTZhqBOvD0PdZUMm8AQp2xAWLI=;
-        b=Dvf+ZbFdii4nY1yLCYUd0qYNLYuq8SGR/A7YyC1z+sFu9IvHDhFpI0DOoOoVXJAzgu
-         voHdQkZeDRwRIUhDRXC4O0REkD7GmE9Y+12LliBoz4r/bmLBlPlbWwW5ALvw4gxqNAxz
-         T/7AxsUDIbw9xLhiutjNk0LfD6hF8pNgM5zL7zUX4+YUpq6TwSs9UlMtojo+imwnQxR/
-         +r4cFyIDUoZ81bNe+zKH+mX1xAC7PWK6/2zrKqGY05wfRpj3mwsnstS9nMqZ4xTeL4pQ
-         ooHBd8hdJ0lolprVdxhTumHuKD14wFihVV+lKR4mQo2MFTUS7nUrLy4DDnvBa40pdNzM
-         fsfg==
-X-Gm-Message-State: AOAM531qxgvE7T8LskOd+gqUqQWBy/WHlOPv/iD0Nj+FD/XcobuxfK8o
-        JOt1ffkHksvcyrOIvd+AV5lv4Wu6UhZBMQ==
-X-Google-Smtp-Source: ABdhPJycj3p9qs4bJA1A2K4DuS1ScRWDc3mE4oOc+jvseAOncXmuTkTMszfNTV6wm5uUs/E585De9A==
-X-Received: by 2002:a17:90a:ea02:: with SMTP id w2mr29527143pjy.99.1608031049626;
-        Tue, 15 Dec 2020 03:17:29 -0800 (PST)
+        bh=6++dMGM1FCC5pOaCFzsM+Us3BSilGScrEfoUSQ6anmM=;
+        b=tyTo0l0n1UTyKSiXhRPZd9Osq0gAL0WWj6/c6aYy7MULQuaaQ6P1X1js5FjsAJ1TQk
+         ++MX1Ao+G17UHG8sj2krIxkrt6JysBxKV570Vx5VoxT967mP/BxWPww3QnTDtdPKdSPT
+         ZO6Fu3HOLV6P5F9wtTCqs30IxCZxVDuU0msU+7IjbfYEKwBRdz7vhoOMYR6oE4NqUEb3
+         tD7wz+ltMOMZ42BTvWIeujjR8/HYDiq7kr0uB69rG4JMVyyWiGfQ084OJq6tr4rQhiR2
+         GwdBvinkqVirlSYuqg8lEPkG5CEmtkR1ykLaTVbm0vaIEgf/6ZP0V+TDaE7asJa+8uU6
+         Ihyw==
+X-Gm-Message-State: AOAM530KxQzbUhb1OiGWm/ClDyndzQtmvVJt/w/9PXMENbjtvLvD1mGL
+        FTFu36cQ2lruF1SUokE1pkBx2g==
+X-Google-Smtp-Source: ABdhPJxekiCucfTOMCe9TtyUvabyXTd1Y7OA4VDtveI+/WBlY9GEOHLKr+dPSXZco+Q2ITWzqDzKEw==
+X-Received: by 2002:a17:90a:6604:: with SMTP id l4mr12001617pjj.119.1608031053176;
+        Tue, 15 Dec 2020 03:17:33 -0800 (PST)
 Received: from localhost ([122.172.20.109])
-        by smtp.gmail.com with ESMTPSA id x7sm22694450pfb.96.2020.12.15.03.17.28
+        by smtp.gmail.com with ESMTPSA id n68sm24405883pfn.161.2020.12.15.03.17.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Dec 2020 03:17:29 -0800 (PST)
+        Tue, 15 Dec 2020 03:17:32 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
         Ionela Voinescu <ionela.voinescu@arm.com>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Peter Puhov <peter.puhov@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC V2 1/2] topology: Allow multiple entities to provide sched_freq_tick() callback
-Date:   Tue, 15 Dec 2020 16:46:35 +0530
-Message-Id: <28ade070dd80f6f22d6e8fce5db5f0142b428fa9.1608030508.git.viresh.kumar@linaro.org>
+        linux-kernel@vger.kernel.org
+Subject: [RFC V2 2/2] cpufreq: cppc: Add support for frequency invariance
+Date:   Tue, 15 Dec 2020 16:46:36 +0530
+Message-Id: <069c40c173fc391116d13d60f4c1382c47e1a05a.1608030508.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 In-Reply-To: <cover.1608030508.git.viresh.kumar@linaro.org>
 References: <cover.1608030508.git.viresh.kumar@linaro.org>
@@ -66,268 +66,270 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch attempts to make it generic enough so other parts of the
-kernel can also provide their own implementation of scale_freq_tick()
-callback, which is called by the scheduler periodically to update the
-per-cpu freq_scale variable.
+The Frequency Invariance Engine (FIE) is providing a frequency scaling
+correction factor that helps achieve more accurate load-tracking.
 
-The implementations now need to provide struct scale_freq_tick_data for
-the CPUs for which they have hardware counters available, and a callback
-gets registered for each possible CPU in a per-cpu variable.
+Normally, this scaling factor can be obtained directly with the help of
+the cpufreq drivers as they know the exact frequency the hardware is
+running at. But that isn't the case for CPPC cpufreq driver.
 
-The AMU counters are updated to adapt to this and they take the highest
-priority if they are available, i.e. they will be used instead of CPPC
-based counters for example.
+Another way of obtaining that is using the AMU counter support, which is
+already present in kernel, but that hardware is optional for platforms.
+
+This patch thus obtains this scaling factor using the existing logic
+present in the cppc driver. Note that the AMUs have higher priority than
+CPPC counters if available, though the CPPC driver doesn't need to have
+any special handling for that.
+
+This also exports sched_setattr_nocheck() as the CPPC driver can be
+built as a module.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- arch/arm64/include/asm/topology.h |  8 +--
- arch/arm64/kernel/topology.c      | 89 ++++++++++++++-----------------
- drivers/base/arch_topology.c      | 56 +++++++++++++++++--
- include/linux/arch_topology.h     | 13 ++++-
- 4 files changed, 104 insertions(+), 62 deletions(-)
+ drivers/cpufreq/cppc_cpufreq.c | 140 ++++++++++++++++++++++++++++++++-
+ include/linux/arch_topology.h  |   1 +
+ kernel/sched/core.c            |   1 +
+ 3 files changed, 140 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-index 3b8dca4eb08d..be6a53ba3e2d 100644
---- a/arch/arm64/include/asm/topology.h
-+++ b/arch/arm64/include/asm/topology.h
-@@ -17,15 +17,9 @@ int pcibus_to_node(struct pci_bus *bus);
- #include <linux/arch_topology.h>
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 7cc9bd8568de..a739e20aefd6 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -10,14 +10,18 @@
  
- void update_freq_counters_refs(void);
--void topology_scale_freq_tick(void);
+ #define pr_fmt(fmt)	"CPPC Cpufreq:"	fmt
  
--#ifdef CONFIG_ARM64_AMU_EXTN
--/*
-- * Replace task scheduler's default counter-based
-- * frequency-invariance scale factor setting.
-- */
-+/* Replace task scheduler's default frequency-invariance scale factor setting */
- #define arch_scale_freq_tick topology_scale_freq_tick
--#endif /* CONFIG_ARM64_AMU_EXTN */
++#include <linux/arch_topology.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/delay.h>
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+ #include <linux/dmi.h>
++#include <linux/irq_work.h>
++#include <linux/kthread.h>
+ #include <linux/time.h>
+ #include <linux/vmalloc.h>
++#include <uapi/linux/sched/types.h>
  
- /* Replace task scheduler's default frequency-invariant accounting */
- #define arch_set_freq_scale topology_set_freq_scale
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 0fc2b32ddb45..22f056821585 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -199,8 +199,44 @@ static int freq_inv_set_max_ratio(int cpu, u64 max_rate, u64 ref_rate)
- 	return 0;
+ #include <asm/unaligned.h>
+ 
+@@ -39,6 +43,15 @@
+ static struct cppc_cpudata **all_cpu_data;
+ static bool boost_supported;
+ 
++struct cppc_freq_invariance {
++	struct kthread_worker *worker;
++	struct irq_work irq_work;
++	struct kthread_work work;
++	struct cppc_perf_fb_ctrs prev_perf_fb_ctrs;
++	unsigned int max_freq;
++};
++static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_f_i);
++
+ struct cppc_workaround_oem_info {
+ 	char oem_id[ACPI_OEM_ID_SIZE + 1];
+ 	char oem_table_id[ACPI_OEM_TABLE_ID_SIZE + 1];
+@@ -243,7 +256,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	struct cppc_cpudata *cpu_data = all_cpu_data[policy->cpu];
+ 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
+ 	unsigned int cpu = policy->cpu;
+-	int ret = 0;
++	int ret = 0, i;
+ 
+ 	cpu_data->cpu = cpu;
+ 	ret = cppc_get_perf_caps(cpu, caps);
+@@ -300,6 +313,9 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 
+ 	cpu_data->cur_policy = policy;
+ 
++	for_each_cpu(i, policy->cpus)
++		per_cpu(cppc_f_i, i).max_freq = policy->cpuinfo.max_freq;
++
+ 	/*
+ 	 * If 'highest_perf' is greater than 'nominal_perf', we assume CPU Boost
+ 	 * is supported.
+@@ -374,7 +390,7 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+ {
+ 	struct cppc_cpudata *cpu_data = all_cpu_data[policy->cpu];
+ 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
+-	int ret;
++	int ret, i;
+ 
+ 	if (!boost_supported) {
+ 		pr_err("BOOST not supported by CPU or firmware\n");
+@@ -389,6 +405,9 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+ 						       caps->nominal_perf);
+ 	policy->cpuinfo.max_freq = policy->max;
+ 
++	for_each_cpu(i, policy->related_cpus)
++		per_cpu(cppc_f_i, i).max_freq = policy->cpuinfo.max_freq;
++
+ 	ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+ 	if (ret < 0)
+ 		return ret;
+@@ -449,6 +468,120 @@ static void cppc_check_hisi_workaround(void)
+ 	acpi_put_table(tbl);
  }
  
--static DEFINE_STATIC_KEY_FALSE(amu_fie_key);
--#define amu_freq_invariant() static_branch_unlikely(&amu_fie_key)
-+static void amu_scale_freq_tick(void)
++static void cppc_scale_freq_tick_workfn(struct kthread_work *work)
 +{
-+	u64 prev_core_cnt, prev_const_cnt;
-+	u64 core_cnt, const_cnt, scale;
++	struct cppc_freq_invariance *cppc_fi;
++	struct cppc_perf_fb_ctrs fb_ctrs = {0};
++	int cpu = raw_smp_processor_id();
++	struct cppc_cpudata *cpudata = all_cpu_data[cpu];
++	u64 rate;
 +
-+	prev_const_cnt = this_cpu_read(arch_const_cycles_prev);
-+	prev_core_cnt = this_cpu_read(arch_core_cycles_prev);
++	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
 +
-+	update_freq_counters_refs();
-+
-+	const_cnt = this_cpu_read(arch_const_cycles_prev);
-+	core_cnt = this_cpu_read(arch_core_cycles_prev);
-+
-+	if (unlikely(core_cnt <= prev_core_cnt ||
-+		     const_cnt <= prev_const_cnt))
++	if (cppc_get_perf_ctrs(cpu, &fb_ctrs)) {
++		pr_info("%s: cppc_get_perf_ctrs() failed\n", __func__);
 +		return;
++	}
++
++	rate = cppc_get_rate_from_fbctrs(cpudata, cppc_fi->prev_perf_fb_ctrs, fb_ctrs);
++	cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
++
++	rate <<= SCHED_CAPACITY_SHIFT;
++	per_cpu(freq_scale, cpu) = div64_u64(rate, cppc_fi->max_freq);
++}
++
++static void cppc_irq_work(struct irq_work *irq_work)
++{
++	struct cppc_freq_invariance *cppc_fi;
++
++	cppc_fi = container_of(irq_work, struct cppc_freq_invariance, irq_work);
++	kthread_queue_work(cppc_fi->worker, &cppc_fi->work);
++}
++
++static void cppc_scale_freq_tick(void)
++{
++	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_f_i, raw_smp_processor_id());
 +
 +	/*
-+	 *	    /\core    arch_max_freq_scale
-+	 * scale =  ------- * --------------------
-+	 *	    /\const   SCHED_CAPACITY_SCALE
-+	 *
-+	 * See validate_cpu_freq_invariance_counters() for details on
-+	 * arch_max_freq_scale and the use of SCHED_CAPACITY_SHIFT.
++	 * cppc_get_perf_ctrs() can potentially sleep, call that from the right
++	 * context.
 +	 */
-+	scale = core_cnt - prev_core_cnt;
-+	scale *= this_cpu_read(arch_max_freq_scale);
-+	scale = div64_u64(scale >> SCHED_CAPACITY_SHIFT,
-+			  const_cnt - prev_const_cnt);
-+
-+	scale = min_t(unsigned long, scale, SCHED_CAPACITY_SCALE);
-+	this_cpu_write(freq_scale, (unsigned long)scale);
++	irq_work_queue(&cppc_fi->irq_work);
 +}
 +
-+static struct scale_freq_tick_data amu_sftd = {
-+	.source = SCALE_FREQ_SOURCE_AMU,
-+	.scale_freq = amu_scale_freq_tick,
++static struct scale_freq_tick_data cppc_sftd = {
++	.source = SCALE_FREQ_SOURCE_CPPC,
++	.scale_freq = cppc_scale_freq_tick,
 +};
- 
- static void amu_fie_setup(const struct cpumask *cpus)
- {
-@@ -227,7 +263,7 @@ static void amu_fie_setup(const struct cpumask *cpus)
- 	if (!invariant && !cpumask_equal(amu_fie_cpus, cpu_present_mask))
- 		return;
- 
--	static_branch_enable(&amu_fie_key);
-+	topology_set_scale_freq_tick(&amu_sftd, amu_fie_cpus);
- 
- 	pr_info("CPUs[%*pbl]: counters will be used for FIE.",
- 		cpumask_pr_args(amu_fie_cpus));
-@@ -283,53 +319,6 @@ static int __init init_amu_fie(void)
- }
- core_initcall(init_amu_fie);
- 
--bool arch_freq_counters_available(const struct cpumask *cpus)
--{
--	return amu_freq_invariant() &&
--	       cpumask_subset(cpus, amu_fie_cpus);
--}
--
--void topology_scale_freq_tick(void)
--{
--	u64 prev_core_cnt, prev_const_cnt;
--	u64 core_cnt, const_cnt, scale;
--	int cpu = smp_processor_id();
--
--	if (!amu_freq_invariant())
--		return;
--
--	if (!cpumask_test_cpu(cpu, amu_fie_cpus))
--		return;
--
--	prev_const_cnt = this_cpu_read(arch_const_cycles_prev);
--	prev_core_cnt = this_cpu_read(arch_core_cycles_prev);
--
--	update_freq_counters_refs();
--
--	const_cnt = this_cpu_read(arch_const_cycles_prev);
--	core_cnt = this_cpu_read(arch_core_cycles_prev);
--
--	if (unlikely(core_cnt <= prev_core_cnt ||
--		     const_cnt <= prev_const_cnt))
--		return;
--
--	/*
--	 *	    /\core    arch_max_freq_scale
--	 * scale =  ------- * --------------------
--	 *	    /\const   SCHED_CAPACITY_SCALE
--	 *
--	 * See validate_cpu_freq_invariance_counters() for details on
--	 * arch_max_freq_scale and the use of SCHED_CAPACITY_SHIFT.
--	 */
--	scale = core_cnt - prev_core_cnt;
--	scale *= this_cpu_read(arch_max_freq_scale);
--	scale = div64_u64(scale >> SCHED_CAPACITY_SHIFT,
--			  const_cnt - prev_const_cnt);
--
--	scale = min_t(unsigned long, scale, SCHED_CAPACITY_SCALE);
--	this_cpu_write(freq_scale, (unsigned long)scale);
--}
--
- #ifdef CONFIG_ACPI_CPPC_LIB
- #include <acpi/cppc_acpi.h>
- 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index de8587cc119e..07774fb47bc4 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -21,17 +21,65 @@
- #include <linux/sched.h>
- #include <linux/smp.h>
- 
-+static DEFINE_PER_CPU(struct scale_freq_tick_data *, sft_data);
-+static struct cpumask scale_freq_tick_mask;
 +
-+static bool supports_scale_freq_tick(const struct cpumask *cpus)
++static void cppc_freq_invariance_exit(void)
 +{
-+	return cpumask_subset(cpus, &scale_freq_tick_mask);
-+}
++	struct cppc_freq_invariance *cppc_fi;
++	int i;
 +
- bool topology_scale_freq_invariant(void)
- {
- 	return cpufreq_supports_freq_invariance() ||
--	       arch_freq_counters_available(cpu_online_mask);
-+	       supports_scale_freq_tick(cpu_online_mask);
-+}
++	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
++		return;
 +
-+void topology_set_scale_freq_tick(struct scale_freq_tick_data *data,
-+				  const struct cpumask *cpus)
-+{
-+	struct scale_freq_tick_data *sftd;
-+	int cpu;
++	topology_clear_scale_freq_tick(SCALE_FREQ_SOURCE_CPPC, cpu_present_mask);
 +
-+	for_each_cpu(cpu, cpus) {
-+		sftd = per_cpu(sft_data, cpu);
-+
-+		/* Use AMU counters whenever possible */
-+		if (!sftd || sftd->source != SCALE_FREQ_SOURCE_AMU) {
-+			per_cpu(sft_data, cpu) = data;
-+			cpumask_set_cpu(cpu, &scale_freq_tick_mask);
++	for_each_possible_cpu(i) {
++		cppc_fi = &per_cpu(cppc_f_i, i);
++		if (cppc_fi->worker) {
++			irq_work_sync(&cppc_fi->irq_work);
++			kthread_destroy_worker(cppc_fi->worker);
++			cppc_fi->worker = NULL;
 +		}
 +	}
- }
-+EXPORT_SYMBOL_GPL(topology_set_scale_freq_tick);
- 
--__weak bool arch_freq_counters_available(const struct cpumask *cpus)
-+void topology_clear_scale_freq_tick(enum scale_freq_tick_source source,
-+				    const struct cpumask *cpus)
- {
--	return false;
-+	struct scale_freq_tick_data *sftd;
-+	int cpu;
-+
-+	for_each_cpu(cpu, cpus) {
-+		sftd = per_cpu(sft_data, cpu);
-+
-+		if (sftd && sftd->source == source) {
-+			per_cpu(sft_data, cpu) = NULL;
-+			cpumask_clear_cpu(cpu, &scale_freq_tick_mask);
-+		}
-+	}
- }
-+EXPORT_SYMBOL_GPL(topology_clear_scale_freq_tick);
-+
-+void topology_scale_freq_tick(void)
-+{
-+	struct scale_freq_tick_data *sftd = *this_cpu_ptr(&sft_data);
-+
-+	if (sftd)
-+		sftd->scale_freq();
 +}
 +
- DEFINE_PER_CPU(unsigned long, freq_scale) = SCHED_CAPACITY_SCALE;
-+EXPORT_SYMBOL_GPL(freq_scale);
++static void __init cppc_freq_invariance_init(void)
++{
++	struct cppc_perf_fb_ctrs fb_ctrs = {0};
++	struct cppc_freq_invariance *cppc_fi;
++	struct sched_attr attr = {
++		.size		= sizeof(struct sched_attr),
++		.sched_policy	= SCHED_DEADLINE,
++		.sched_nice	= 0,
++		.sched_priority	= 0,
++		/*
++		 * Fake (unused) bandwidth; workaround to "fix"
++		 * priority inheritance.
++		 */
++		.sched_runtime	= 1000000,
++		.sched_deadline = 10000000,
++		.sched_period	= 10000000,
++	};
++	struct kthread_worker *worker;
++	int i, ret;
++
++	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
++		return;
++
++	for_each_possible_cpu(i) {
++		cppc_fi = &per_cpu(cppc_f_i, i);
++
++		kthread_init_work(&cppc_fi->work, cppc_scale_freq_tick_workfn);
++		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
++		worker = kthread_create_worker_on_cpu(i, 0, "cppc:%d", i);
++		if (IS_ERR(worker))
++			return cppc_freq_invariance_exit();
++
++		cppc_fi->worker = worker;
++		ret = sched_setattr_nocheck(worker->task, &attr);
++		if (ret) {
++			pr_warn("%s: failed to set SCHED_DEADLINE\n", __func__);
++			return cppc_freq_invariance_exit();
++		}
++
++		ret = cppc_get_perf_ctrs(i, &fb_ctrs);
++		if (!ret)
++			per_cpu(cppc_fi->prev_perf_fb_ctrs, i) = fb_ctrs;
++	}
++
++	/* Register for freq-invariance */
++	topology_set_scale_freq_tick(&cppc_sftd, cpu_present_mask);
++}
++
+ static int __init cppc_cpufreq_init(void)
+ {
+ 	struct cppc_cpudata *cpu_data;
+@@ -484,6 +617,8 @@ static int __init cppc_cpufreq_init(void)
+ 	if (ret)
+ 		goto out;
  
- void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
- 			     unsigned long max_freq)
-@@ -47,7 +95,7 @@ void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
- 	 * want to update the scale factor with information from CPUFREQ.
- 	 * Instead the scale factor will be updated from arch_scale_freq_tick.
- 	 */
--	if (arch_freq_counters_available(cpus))
-+	if (supports_scale_freq_tick(cpus))
- 		return;
++	cppc_freq_invariance_init();
++
+ 	return ret;
  
- 	scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
+ out:
+@@ -504,6 +639,7 @@ static void __exit cppc_cpufreq_exit(void)
+ 	struct cppc_cpudata *cpu_data;
+ 	int i;
+ 
++	cppc_freq_invariance_exit();
+ 	cpufreq_unregister_driver(&cppc_cpufreq_driver);
+ 
+ 	for_each_possible_cpu(i) {
 diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index 0f6cd6b73a61..b2422ebef2dd 100644
+index b2422ebef2dd..09205b584ca5 100644
 --- a/include/linux/arch_topology.h
 +++ b/include/linux/arch_topology.h
-@@ -34,7 +34,18 @@ void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
- 			     unsigned long max_freq);
- bool topology_scale_freq_invariant(void);
+@@ -36,6 +36,7 @@ bool topology_scale_freq_invariant(void);
  
--bool arch_freq_counters_available(const struct cpumask *cpus);
-+enum scale_freq_tick_source {
-+	SCALE_FREQ_SOURCE_AMU,
-+};
-+
-+struct scale_freq_tick_data {
-+	enum scale_freq_tick_source source;
-+	void (*scale_freq)(void);
-+};
-+
-+void topology_scale_freq_tick(void);
-+void topology_set_scale_freq_tick(struct scale_freq_tick_data *data, const struct cpumask *cpus);
-+void topology_clear_scale_freq_tick(enum scale_freq_tick_source source, const struct cpumask *cpus);
+ enum scale_freq_tick_source {
+ 	SCALE_FREQ_SOURCE_AMU,
++	SCALE_FREQ_SOURCE_CPPC,
+ };
  
- DECLARE_PER_CPU(unsigned long, thermal_pressure);
+ struct scale_freq_tick_data {
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 51514eef0a9d..76b2fa1a7aaa 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6075,6 +6075,7 @@ int sched_setattr_nocheck(struct task_struct *p, const struct sched_attr *attr)
+ {
+ 	return __sched_setscheduler(p, attr, false, true);
+ }
++EXPORT_SYMBOL_GPL(sched_setattr_nocheck);
  
+ /**
+  * sched_setscheduler_nocheck - change the scheduling policy and/or RT priority of a thread from kernelspace.
 -- 
 2.25.0.rc1.19.g042ed3e048af
 
