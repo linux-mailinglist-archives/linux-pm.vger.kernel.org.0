@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5DB2DC097
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 13:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6298A2DC099
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 13:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726060AbgLPM7F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Dec 2020 07:59:05 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:30169 "EHLO
+        id S1726070AbgLPM7I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Dec 2020 07:59:08 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:38505 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbgLPM7E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Dec 2020 07:59:04 -0500
+        with ESMTP id S1725936AbgLPM7I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Dec 2020 07:59:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1608123544; x=1639659544;
+  t=1608123547; x=1639659547;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=QX08wLzxTODbJ7tONbfhIPOAMrkosrjWU9SC8iacCdY=;
-  b=R2lBYM3DElWiMAHScOlPsKw9rta22s6f97J/C5k0BWoaTV5zjKUcsRW/
-   cUQ/RdhbgxEMpZu058g2JGOsyFiOHeSJ5qT/AUkUH/94bJl0enZGZRA+Q
-   6qjJdCvB/jmcp9cv9f9KIB39lZcmDuZVMtEdXmL+n69iZSSqn1s4Tmd0X
-   9jtF9pueTN+a2XShRRYHdML87Bl2mk+mC5vZ2q9d/j23NU2c4Aw3MvJlr
-   QJZCPyUk0GffC982fqJYQBVJ38jHVhB75N5JeNWVjg5+nKzYzwlC1Q+Bp
-   i5D0aYcLfG66DFKj/9jX7EoRoYy54h+hMDoEVY9Wn7SCJAamIpNP1AhAd
-   A==;
-IronPort-SDR: GqC/6eMxJrjMOjtMoi3L9i+WZ4cklLPfUQz5B+M2gKWjp3ffixcdLdxiXStk1oN8yoD0ycvm9Z
- F1o4xKdBxxE3R+KnhK4PRLg1yK9fUz5aS8S5UdWTSGT+XK4Hrt+aVPSjwSWwalW3oimHRTFQZc
- 4aAeFSvMZhhe5IYjBFz8UQRzEKuRwJ9/47qOhUoaTlhnNyTTDPoRkKmO3+OcmasxqwEOyMmmWg
- bwFEiIqz5FCpHpoVwOOyhAzOkxtv8ZxU1q/8vp/NZaE+Bo/kpRP44g09iqBz/D2kQHqJOQziV3
- E7g=
+  bh=jJL+6xK3GCy1DGPHyo4X0YDSWP1igMBZDBXgya5hNU8=;
+  b=p0rcohWkucV0YUS9BqMsAoIe0+B1v5sxMx17D+kVNHZJGWk3mbghNFXY
+   bqnUDpqwo2lLyldaw/t90S+ZlBEe82FkJLR9PxrlTtqvGBT9gFma/rzL1
+   I6InOtip3VLQ5h2o8dHCmn4c0FTPjEshaoUEAT7j4jXMXFc76mHjvgRU9
+   aDWsRPVCDB1U2n2H4YacBpC6nXG3jNW2UjZJJJo25QapHI81K6TT+B6A3
+   jsWTYdCKR7KrPct8qxNU854Z6i23WVegu3PT4lSq4Q2do4Cqx6AuWmKv7
+   OOjQnAC0jnhbFpKUw5FuboMUf21N3iL8ywvXMiknsAGGqvXYan227SN3J
+   Q==;
+IronPort-SDR: dwdnjqRgXtsgtW8TFS/f8ugRZEUihRq+COl9SQaZmlnLN7LWKGyttox2F0yWtPvU6oloe7KZ9t
+ bto+0jrBcIUEH8Bi2Vtcj1zmRLcyFT5onpvSsWugJEpfjO0/6rwV9CLGmvWuysHh5dNJng68Qo
+ +nwinl90CZOnmewdWgEcI5CANZm/XUaZ5JUgRhPiKZ4U73x3ayvFRRVknqsZiQkrBDUZZ9TQBP
+ LmdKLuquwVlK+ITGauW8jB9kL0K2yiTl1yTfo1cteisHDuOONssbz0YP1cWIodPLwyjj3Edw+5
+ 8tU=
 X-IronPort-AV: E=Sophos;i="5.78,424,1599548400"; 
-   d="scan'208";a="100047312"
+   d="scan'208";a="37618690"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2020 05:57:48 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2020 05:57:51 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 16 Dec 2020 05:57:48 -0700
+ 15.1.1979.3; Wed, 16 Dec 2020 05:57:51 -0700
 Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Wed, 16 Dec 2020 05:57:46 -0700
+ 15.1.1979.3 via Frontend Transport; Wed, 16 Dec 2020 05:57:48 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
@@ -48,9 +48,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 2/3] dt-bindings: atmel-sysreg: add microchip,sama7g5-shdwc
-Date:   Wed, 16 Dec 2020 14:57:32 +0200
-Message-ID: <1608123453-1423-3-git-send-email-claudiu.beznea@microchip.com>
+Subject: [PATCH 3/3] power: reset: at91-sama5d2_shdwc: add support for sama7g5
+Date:   Wed, 16 Dec 2020 14:57:33 +0200
+Message-ID: <1608123453-1423-4-git-send-email-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1608123453-1423-1-git-send-email-claudiu.beznea@microchip.com>
 References: <1608123453-1423-1-git-send-email-claudiu.beznea@microchip.com>
@@ -60,36 +60,142 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add compatible for Microchip SAMA7G5's shutdown controller.
+Add support for SAMA7G5 by adding proper struct reg_config structure
+and since SAMA7G5 is not currently on LPDDR setups the commit also
+avoid the mapping of DDR controller.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- Documentation/devicetree/bindings/arm/atmel-sysregs.txt | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/power/reset/at91-sama5d2_shdwc.c | 72 ++++++++++++++++++++++++--------
+ 1 file changed, 54 insertions(+), 18 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-index 62cd4e89817c..7990358ac06e 100644
---- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-+++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-@@ -91,7 +91,8 @@ SHDWC SAMA5D2-Compatible Shutdown Controller
- 1) shdwc node
+diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+index 3996167f676f..a3342c8c3728 100644
+--- a/drivers/power/reset/at91-sama5d2_shdwc.c
++++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+@@ -78,9 +78,15 @@ struct pmc_reg_config {
+ 	u8 mckr;
+ };
  
- required properties:
--- compatible: should be "atmel,sama5d2-shdwc" or "microchip,sam9x60-shdwc".
-+- compatible: should be "atmel,sama5d2-shdwc", "microchip,sam9x60-shdwc" or
-+  "microchip,sama7g5-shdwc"
- - reg: should contain registers location and length
- - clocks: phandle to input clock.
- - #address-cells: should be one. The cell is the wake-up input index.
-@@ -103,7 +104,7 @@ optional properties:
-   microseconds. It's usually a board-related property.
- - atmel,wakeup-rtc-timer: boolean to enable Real-Time Clock wake-up.
++struct ddrc_reg_config {
++	u32 type_offset;
++	u32 type_mask;
++};
++
+ struct reg_config {
+ 	struct shdwc_reg_config shdwc;
+ 	struct pmc_reg_config pmc;
++	struct ddrc_reg_config ddrc;
+ };
  
--optional microchip,sam9x60-shdwc properties:
-+optional microchip,sam9x60-shdwc or microchip,sama7g5-shdwc properties:
- - atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
+ struct shdwc {
+@@ -262,6 +268,10 @@ static const struct reg_config sama5d2_reg_config = {
+ 	.pmc = {
+ 		.mckr		= 0x30,
+ 	},
++	.ddrc = {
++		.type_offset	= AT91_DDRSDRC_MDR,
++		.type_mask	= AT91_DDRSDRC_MD
++	},
+ };
  
- The node contains child nodes for each wake-up input that the platform uses.
+ static const struct reg_config sam9x60_reg_config = {
+@@ -275,6 +285,23 @@ static const struct reg_config sam9x60_reg_config = {
+ 	.pmc = {
+ 		.mckr		= 0x28,
+ 	},
++	.ddrc = {
++		.type_offset	= AT91_DDRSDRC_MDR,
++		.type_mask	= AT91_DDRSDRC_MD
++	},
++};
++
++static const struct reg_config sama7g5_reg_config = {
++	.shdwc = {
++		.wkup_pin_input = 0,
++		.mr_rtcwk_shift = 17,
++		.mr_rttwk_shift = 16,
++		.sr_rtcwk_shift = 5,
++		.sr_rttwk_shift = 4,
++	},
++	.pmc = {
++		.mckr		= 0x28,
++	},
+ };
+ 
+ static const struct of_device_id at91_shdwc_of_match[] = {
+@@ -285,6 +312,10 @@ static const struct of_device_id at91_shdwc_of_match[] = {
+ 	{
+ 		.compatible = "microchip,sam9x60-shdwc",
+ 		.data = &sam9x60_reg_config,
++	},
++	{
++		.compatible = "microchip,sama7g5-shdwc",
++		.data = &sama7g5_reg_config,
+ 	}, {
+ 		/*sentinel*/
+ 	}
+@@ -294,6 +325,7 @@ MODULE_DEVICE_TABLE(of, at91_shdwc_of_match);
+ static const struct of_device_id at91_pmc_ids[] = {
+ 	{ .compatible = "atmel,sama5d2-pmc" },
+ 	{ .compatible = "microchip,sam9x60-pmc" },
++	{ .compatible = "microchip,sama7g5-pmc" },
+ 	{ /* Sentinel. */ }
+ };
+ 
+@@ -355,30 +387,34 @@ static int __init at91_shdwc_probe(struct platform_device *pdev)
+ 		goto clk_disable;
+ 	}
+ 
+-	np = of_find_compatible_node(NULL, NULL, "atmel,sama5d3-ddramc");
+-	if (!np) {
+-		ret = -ENODEV;
+-		goto unmap;
+-	}
++	if (at91_shdwc->rcfg->ddrc.type_mask) {
++		np = of_find_compatible_node(NULL, NULL,
++					     "atmel,sama5d3-ddramc");
++		if (!np) {
++			ret = -ENODEV;
++			goto unmap;
++		}
+ 
+-	at91_shdwc->mpddrc_base = of_iomap(np, 0);
+-	of_node_put(np);
++		at91_shdwc->mpddrc_base = of_iomap(np, 0);
++		of_node_put(np);
+ 
+-	if (!at91_shdwc->mpddrc_base) {
+-		ret = -ENOMEM;
+-		goto unmap;
++		if (!at91_shdwc->mpddrc_base) {
++			ret = -ENOMEM;
++			goto unmap;
++		}
++
++		ddr_type = readl(at91_shdwc->mpddrc_base +
++				 at91_shdwc->rcfg->ddrc.type_offset) &
++				 at91_shdwc->rcfg->ddrc.type_mask;
++		if (ddr_type != AT91_DDRSDRC_MD_LPDDR2 &&
++		    ddr_type != AT91_DDRSDRC_MD_LPDDR3) {
++			iounmap(at91_shdwc->mpddrc_base);
++			at91_shdwc->mpddrc_base = NULL;
++		}
+ 	}
+ 
+ 	pm_power_off = at91_poweroff;
+ 
+-	ddr_type = readl(at91_shdwc->mpddrc_base + AT91_DDRSDRC_MDR) &
+-			 AT91_DDRSDRC_MD;
+-	if (ddr_type != AT91_DDRSDRC_MD_LPDDR2 &&
+-	    ddr_type != AT91_DDRSDRC_MD_LPDDR3) {
+-		iounmap(at91_shdwc->mpddrc_base);
+-		at91_shdwc->mpddrc_base = NULL;
+-	}
+-
+ 	return 0;
+ 
+ unmap:
 -- 
 2.7.4
 
