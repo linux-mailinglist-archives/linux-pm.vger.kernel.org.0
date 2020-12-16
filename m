@@ -2,308 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DA12DC59C
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 18:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0475E2DC5B9
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 18:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727956AbgLPRrH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Dec 2020 12:47:07 -0500
-Received: from mga11.intel.com ([192.55.52.93]:21277 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727734AbgLPRrG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Dec 2020 12:47:06 -0500
-IronPort-SDR: 5+j0WtlbCDnvv+CerGX/D1+/WIvC+4XOMxkHRDgp8ZDf5sW9VsCc+JQPgeRNDRByOCuPwjzvSe
- Ec7BgR/Yhxqw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9837"; a="171593419"
-X-IronPort-AV: E=Sophos;i="5.78,424,1599548400"; 
-   d="scan'208";a="171593419"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2020 09:46:11 -0800
-IronPort-SDR: tJMQXqgSTx46jc7Phntu/p82oYkqENqqSLs/wotaRKjVcXvIoShxsBh+u7l2XT5hiWnKfF818+
- l+Pvpae+F1+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,424,1599548400"; 
-   d="scan'208";a="391854198"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Dec 2020 09:46:11 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
-        x86@kernel.org, herbert@gondor.apana.org.au
-Cc:     dan.j.williams@intel.com, dave.hansen@intel.com,
-        ravi.v.shankar@intel.com, ning.sun@intel.com,
-        kumar.n.dwarakanath@intel.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com,
-        linux-pm@vger.kernel.org
-Subject: [RFC PATCH 4/8] x86/power: Restore Key Locker internal key from the ACPI S3/4 sleep states
-Date:   Wed, 16 Dec 2020 09:41:42 -0800
-Message-Id: <20201216174146.10446-5-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201216174146.10446-1-chang.seok.bae@intel.com>
-References: <20201216174146.10446-1-chang.seok.bae@intel.com>
+        id S1728225AbgLPRwJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Dec 2020 12:52:09 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:14724 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728224AbgLPRwJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Dec 2020 12:52:09 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1608141105; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=j5jhJprTObWGrrzO7bLScPsPeoAqEcdBaw0JRAlx5eU=; b=HieHD5fSax4dniaGjXZUSAWEhbKRBVKVqFBwMqRK5X3EGHKTrv0Qk9+WxyA5kHPQnJMxCqWZ
+ iEHaWQqTaZ8OZTLvHhSbBN/0SJ6ge2q1sC+ypDym/RYHwKyvE4TUo712IMTna7bFKOTt+xMK
+ d5ZxQkZULDceqkFNLirmQ9P/Y8k=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5fda490df5e9af65f86cda5c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 16 Dec 2020 17:51:09
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 08747C433C6; Wed, 16 Dec 2020 17:51:09 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 99046C433C6;
+        Wed, 16 Dec 2020 17:51:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 99046C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     ulf.hansson@linaro.org, rjw@rjwysocki.net
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Lina Iyer <ilina@codeaurora.org>
+Subject: [PATCH] PM / Domains: allow domain idle states to be disabled
+Date:   Wed, 16 Dec 2020 10:50:56 -0700
+Message-Id: <20201216175056.19554-1-ilina@codeaurora.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the system state switches to these sleep states, the internal key gets
-reset. Since this system transition is transparent to userspace, the
-internal key needs to be restored properly.
+In order to debug critical domain and device power issues, it may be
+necessary to disallow certain idle states at runtime. Let the device
+disallow a domain idle state before suspending.The domain governor shall
+check for the 'disabled' flag while determining the domain idle state.
 
-Key Locker provides a mechanism to back up the internal key in non-volatile
-memory. The kernel requests a backup right after the key loaded at
-boot-time and copies it later when the system wakes up.
-
-The backup during the S5 sleep state is not trusted. It is overwritten by a
-new key at the next boot.
-
-On a system with the S3/4 states, enable the feature only when the backup
-mechanism is supported.
-
-Disable the feature when the copy fails (or the backup corrupts). The
-shutdown is considered too noisy. A new key is considerable only when
-threads can be synchronously suspended.
-
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
+Signed-off-by: Lina Iyer <ilina@codeaurora.org>
 ---
- arch/x86/include/asm/keylocker.h | 12 ++++++++
- arch/x86/kernel/cpu/common.c     | 25 +++++++++++-----
- arch/x86/kernel/keylocker.c      | 51 ++++++++++++++++++++++++++++++++
- arch/x86/power/cpu.c             | 34 +++++++++++++++++++++
- 4 files changed, 115 insertions(+), 7 deletions(-)
+ drivers/base/power/domain.c          | 30 ++++++++++++++++++++++++++++
+ drivers/base/power/domain_governor.c |  3 +++
+ include/linux/pm_domain.h            |  7 +++++++
+ 3 files changed, 40 insertions(+)
 
-diff --git a/arch/x86/include/asm/keylocker.h b/arch/x86/include/asm/keylocker.h
-index daf0734a4095..722574c305c2 100644
---- a/arch/x86/include/asm/keylocker.h
-+++ b/arch/x86/include/asm/keylocker.h
-@@ -6,6 +6,7 @@
- #ifndef __ASSEMBLY__
- 
- #include <linux/bits.h>
-+#include <asm/msr.h>
- 
- #define KEYLOCKER_CPUID                0x019
- #define KEYLOCKER_CPUID_EAX_SUPERVISOR BIT(0)
-@@ -25,5 +26,16 @@ void invalidate_keylocker_data(void);
- #define invalidate_keylocker_data() do { } while (0)
- #endif
- 
-+static inline u64 read_keylocker_backup_status(void)
-+{
-+	u64 status;
-+
-+	rdmsrl(MSR_IA32_IWKEYBACKUP_STATUS, status);
-+	return status;
-+}
-+
-+void backup_keylocker(void);
-+bool copy_keylocker(void);
-+
- #endif /*__ASSEMBLY__ */
- #endif /* _ASM_KEYLOCKER_H */
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index d675075848bb..a446d5aff08f 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -463,24 +463,35 @@ __setup("nofsgsbase", x86_nofsgsbase_setup);
- 
- static __always_inline void setup_keylocker(struct cpuinfo_x86 *c)
- {
--	bool keyloaded;
--
- 	if (!cpu_feature_enabled(X86_FEATURE_KEYLOCKER))
- 		goto out;
- 
- 	cr4_set_bits(X86_CR4_KEYLOCKER);
- 
- 	if (c == &boot_cpu_data) {
-+		bool keyloaded;
-+
- 		if (!check_keylocker_readiness())
- 			goto disable_keylocker;
- 
- 		make_keylocker_data();
--	}
- 
--	keyloaded = load_keylocker();
--	if (!keyloaded) {
--		pr_err_once("x86/keylocker: Failed to load internal key\n");
--		goto disable_keylocker;
-+		keyloaded = load_keylocker();
-+		if (!keyloaded) {
-+			pr_err("x86/keylocker: Fail to load internal key\n");
-+			goto disable_keylocker;
-+		}
-+
-+		backup_keylocker();
-+	} else {
-+		bool keycopied;
-+
-+		/* NB: When system wakes up, this path recovers the internal key. */
-+		keycopied = copy_keylocker();
-+		if (!keycopied) {
-+			pr_err_once("x86/keylocker: Fail to copy internal key\n");
-+			goto disable_keylocker;
-+		}
- 	}
- 
- 	pr_info_once("x86/keylocker: Activated\n");
-diff --git a/arch/x86/kernel/keylocker.c b/arch/x86/kernel/keylocker.c
-index e455d806b80c..229875ac80d5 100644
---- a/arch/x86/kernel/keylocker.c
-+++ b/arch/x86/kernel/keylocker.c
-@@ -5,11 +5,15 @@
-  */
- 
- #include <linux/random.h>
-+#include <linux/acpi.h>
-+#include <linux/delay.h>
- 
- #include <asm/keylocker.h>
- #include <asm/fpu/types.h>
- #include <asm/fpu/api.h>
- 
-+static bool keybackup_available;
-+
- bool check_keylocker_readiness(void)
- {
- 	u32 eax, ebx, ecx, edx;
-@@ -21,6 +25,14 @@ bool check_keylocker_readiness(void)
- 		return false;
- 	}
- 
-+	keybackup_available = (ebx & KEYLOCKER_CPUID_EBX_BACKUP);
-+	/* Internal Key backup is essential with S3/4 states */
-+	if (!keybackup_available &&
-+	    (acpi_sleep_state_supported(ACPI_STATE_S3) ||
-+	     acpi_sleep_state_supported(ACPI_STATE_S4))) {
-+		pr_debug("x86/keylocker: no key backup support with possible S3/4\n");
-+		return false;
-+	}
- 	return true;
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 191539a8e06d..e4e7ab75bdea 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -1926,6 +1926,36 @@ int pm_genpd_remove_subdomain(struct generic_pm_domain *genpd,
  }
+ EXPORT_SYMBOL_GPL(pm_genpd_remove_subdomain);
  
-@@ -29,6 +41,7 @@ bool check_keylocker_readiness(void)
- #define LOADIWKEY_NUM_OPERANDS	3
- 
- static struct key {
-+	bool valid;
- 	struct reg_128_bit value[LOADIWKEY_NUM_OPERANDS];
- } keydata;
- 
-@@ -38,11 +51,15 @@ void make_keylocker_data(void)
- 
- 	for (i = 0; i < LOADIWKEY_NUM_OPERANDS; i++)
- 		get_random_bytes(&keydata.value[i], sizeof(struct reg_128_bit));
-+
-+	keydata.valid = true;
- }
- 
- void invalidate_keylocker_data(void)
- {
- 	memset(&keydata.value, 0, sizeof(struct reg_128_bit) * LOADIWKEY_NUM_OPERANDS);
-+
-+	keydata.valid = false;
- }
- 
- #define USE_SWKEY	0
-@@ -69,3 +86,37 @@ bool load_keylocker(void)
- 
- 	return err ? false : true;
- }
-+
-+void backup_keylocker(void)
-+{
-+	if (keybackup_available)
-+		wrmsrl(MSR_IA32_COPY_LOCAL_TO_PLATFORM, 1);
-+}
-+
-+#define KEYRESTORE_RETRY	1
-+
-+bool copy_keylocker(void)
-+{
-+	bool copied = false;
-+	int i;
-+
-+	/* Use valid key data when available */
-+	if (keydata.valid)
-+		return load_keylocker();
-+
-+	if (!keybackup_available)
-+		return copied;
-+
-+	wrmsrl(MSR_IA32_COPY_PLATFORM_TO_LOCAL, 1);
-+
-+	for (i = 0; (i <= KEYRESTORE_RETRY) && !copied; i++) {
-+		u64 status;
-+
-+		if (i)
-+			udelay(1);
-+		rdmsrl(MSR_IA32_COPY_STATUS, status);
-+		copied = status & BIT(0) ? true : false;
-+	}
-+
-+	return copied;
-+}
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index db1378c6ff26..5412440e7c5c 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -25,6 +25,7 @@
- #include <asm/cpu.h>
- #include <asm/mmu_context.h>
- #include <asm/cpu_device_id.h>
-+#include <asm/keylocker.h>
- 
- #ifdef CONFIG_X86_32
- __visible unsigned long saved_context_ebx;
-@@ -57,6 +58,38 @@ static void msr_restore_context(struct saved_context *ctxt)
- 	}
- }
- 
-+/*
-+ * The boot CPU executes this function, while other CPUs restore the key
-+ * through the setup path in setup_keylocker().
++/**
++ * dev_pm_genpd_disable_idle_state - Disallow a PM domain's idle state
++ *
++ * @dev: device attached to the PM domain
++ * @idx: index of the PM domain's idle state to be disabled
++ * @disable: enable/disable idle state
++ *
++ * Allow a PM domain's idle state to be disabled. Disabled idle states will
++ * be ignored by the domain governor when entering idle. Devices would
++ * invoke this before calling runtime suspend.
 + */
-+static void restore_keylocker(void)
++int dev_pm_genpd_disable_idle_state(struct device *dev, unsigned int idx, bool disable)
 +{
-+	u64 keybackup_status;
-+	bool keycopied;
++	struct generic_pm_domain *genpd;
 +
-+	if (!cpu_feature_enabled(X86_FEATURE_KEYLOCKER))
-+		return;
++	genpd = dev_to_genpd_safe(dev);
++	if (!genpd)
++		return -ENODEV;
 +
-+	keybackup_status = read_keylocker_backup_status();
-+	if (!(keybackup_status & BIT(0))) {
-+		pr_err("x86/keylocker: internal key restoration failed with %s\n",
-+		       (keybackup_status & BIT(2)) ? "read error" : "invalid status");
-+		WARN_ON(1);
-+		goto disable_keylocker;
-+	}
++	if (idx >= genpd->state_count)
++		return -EINVAL;
 +
-+	keycopied = copy_keylocker();
-+	if (keycopied)
-+		return;
++	genpd_lock(genpd);
++	genpd->states[idx].disabled = disable;
++	genpd_unlock(genpd);
 +
-+	pr_err("x86/keylocker: internal key copy failure\n");
++	return 0;
++}
++EXPORT_SYMBOL_GPL(dev_pm_genpd_disable_idle_state);
 +
-+disable_keylocker:
-+	pr_info("x86/keylocker: Disabled with internal key restoration failure\n");
-+	setup_clear_cpu_cap(X86_FEATURE_KEYLOCKER);
-+	cr4_clear_bits(X86_CR4_KEYLOCKER);
+ static void genpd_free_default_power_state(struct genpd_power_state *states,
+ 					   unsigned int state_count)
+ {
+diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
+index 2afb7fa90d5d..8decd17c5a6a 100644
+--- a/drivers/base/power/domain_governor.c
++++ b/drivers/base/power/domain_governor.c
+@@ -175,6 +175,9 @@ static bool __default_power_down_ok(struct dev_pm_domain *pd,
+ 	s64 min_off_time_ns;
+ 	s64 off_on_time_ns;
+ 
++	if (genpd->states[state].disabled)
++		return false;
++
+ 	off_on_time_ns = genpd->states[state].power_off_latency_ns +
+ 		genpd->states[state].power_on_latency_ns;
+ 
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index a41aea9d1c06..3d251b5b461a 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -101,6 +101,7 @@ struct genpd_power_state {
+ 	struct fwnode_handle *fwnode;
+ 	ktime_t idle_time;
+ 	void *data;
++	bool disabled;
+ };
+ 
+ struct genpd_lock_ops;
+@@ -233,6 +234,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+ int dev_pm_genpd_remove_notifier(struct device *dev);
+ void genpd_enable_next_wakeup(struct generic_pm_domain *genpd, bool enable);
+ int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
++int dev_pm_genpd_disable_idle_state(struct device *dev, unsigned int idx, bool disable);
+ 
+ extern struct dev_power_governor simple_qos_governor;
+ extern struct dev_power_governor pm_domain_always_on_gov;
+@@ -300,6 +302,11 @@ static inline int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int dev_pm_genpd_disable_idle_state(struct device *dev, unsigned int idx, bool disable)
++{
++	return -EOPNOTSUPP;
 +}
 +
- /**
-  *	__save_processor_state - save CPU registers before creating a
-  *		hibernation image and before restoring the memory state from it
-@@ -265,6 +298,7 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
- 	mtrr_bp_restore();
- 	perf_restore_debug_store();
- 	msr_restore_context(ctxt);
-+	restore_keylocker();
- 
- 	c = &cpu_data(smp_processor_id());
- 	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
+ #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
+ #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
+ #endif
 -- 
-2.17.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
