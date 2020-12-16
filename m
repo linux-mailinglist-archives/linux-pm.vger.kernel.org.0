@@ -2,74 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3F02DB821
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 02:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F132DB8B1
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 03:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbgLPBB2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Dec 2020 20:01:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51050 "EHLO mail.kernel.org"
+        id S1725308AbgLPCAx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Dec 2020 21:00:53 -0500
+Received: from mga06.intel.com ([134.134.136.31]:63970 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726693AbgLPBB1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 15 Dec 2020 20:01:27 -0500
-Subject: Re: [GIT PULL] thermal for v5.11
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608080409;
-        bh=FXHkQmQiwi0L0d7Qt1C4IF+fiKMt3xaOPb80BEliyL4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Ws2OGi+WNhLuMFNLCmshOZUaibLVkWiwMVv2TRhGjO3sq/ybkMFCUCqCrYVYLwa8v
-         ZAV75ROzX9AI/xaDbUCs2rMPoQJ/POUk2aJ3YcatBlIfKOVPm5EQEV6o3dLrVYNWC8
-         g25Rl42OxV6pBLbKUIpy2cTiu9D32x4IABc7NEN7lpFvaBLHH6iiQsvm60hOq+nZv/
-         w8j4lpyc5RwpHSiYPdVDDIUvv6PZvsVZ8ELJxDZRIpd20C9mQbIypd5wD/gTEeX62X
-         sCUenY08J/ZByaUMiSK2TTHLMq6qbhZ2C36T6GMlItSEI/AUbp0XRFbjbWl4AZiAt/
-         wFJFERwb4kX+A==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <9a2b3f9e-458a-bb66-2c38-db6cbf5a6c73@linaro.org>
-References: <9a2b3f9e-458a-bb66-2c38-db6cbf5a6c73@linaro.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <9a2b3f9e-458a-bb66-2c38-db6cbf5a6c73@linaro.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.11-rc1
-X-PR-Tracked-Commit-Id: 4401117bf7fc11dc738c0963fa0c94814abc8dcd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b109bc72295363fb746bc42bdd777f7a8abb177b
-Message-Id: <160808040981.29502.3041225195237569127.pr-tracker-bot@kernel.org>
-Date:   Wed, 16 Dec 2020 01:00:09 +0000
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        "michael.kao" <Michael.Kao@mediatek.com>,
-        Lukasz Luba <Lukasz.Luba@arm.com>,
-        Tian Tao <tiantao6@hisilicon.com>, Bernard <bernard@vivo.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Zhuguangqing <zhuguangqing@xiaomi.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andres Freund <andres@anarazel.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        rikard.falkeborn@gmail.com,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        zhengyongjun3@huawei.com
+        id S1725275AbgLPCAx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 15 Dec 2020 21:00:53 -0500
+IronPort-SDR: 5pgIPjkuAJGtA6Gb4APRdWTHsyfTjNbzJLMeFcOwVH/JFr75IwFGADjS6XEqtneYFxMqZlTuAa
+ ZuhZkFqkNIqA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9836"; a="236566446"
+X-IronPort-AV: E=Sophos;i="5.78,423,1599548400"; 
+   d="scan'208";a="236566446"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 17:59:07 -0800
+IronPort-SDR: MfgFO6vskrlsq0llruAwsIxdFDUI2kw90H+sMbFRiefTX04/rZTPoczbwKalmEUCqzgregLjJz
+ wv2jZIeUi+3A==
+X-IronPort-AV: E=Sophos;i="5.78,423,1599548400"; 
+   d="scan'208";a="337918692"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 17:59:07 -0800
+Message-ID: <46cad4d0f14b33e77d2cead3b87177cfaa3e03cc.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal: int340x: Support Alder Lake
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 15 Dec 2020 17:59:06 -0800
+In-Reply-To: <20201117194802.503337-1-srinivas.pandruvada@linux.intel.com>
+References: <20201117194802.503337-1-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Tue, 15 Dec 2020 23:17:29 +0100:
+On Tue, 2020-11-17 at 11:48 -0800, Srinivas Pandruvada wrote:
+> Add ACPI IDs for thermal drivers for Alder Lake support.
+> 
+This patch was not in PULL request.
+It is simple patch, adding ids. Can we send as part of second PULL?
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git tags/thermal-v5.11-rc1
+Thanks,
+Srinivas
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b109bc72295363fb746bc42bdd777f7a8abb177b
+> Signed-off-by: Srinivas Pandruvada <
+> srinivas.pandruvada@linux.intel.com>
+> ---
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
+>  drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 0966551cbaaa..823354a1a91a 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -584,6 +584,7 @@ static int int3400_thermal_remove(struct
+> platform_device *pdev)
+>  static const struct acpi_device_id int3400_thermal_match[] = {
+>  	{"INT3400", 0},
+>  	{"INTC1040", 0},
+> +	{"INTC1041", 0},
+>  	{}
+>  };
+>  
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+> b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+> index ec1d58c4ceaa..c3c4c4d34542 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+> @@ -284,6 +284,7 @@ static int int3403_remove(struct platform_device
+> *pdev)
+>  static const struct acpi_device_id int3403_device_ids[] = {
+>  	{"INT3403", 0},
+>  	{"INTC1043", 0},
+> +	{"INTC1046", 0},
+>  	{"", 0},
+>  };
+>  MODULE_DEVICE_TABLE(acpi, int3403_device_ids);
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
