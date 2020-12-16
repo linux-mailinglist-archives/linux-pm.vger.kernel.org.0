@@ -2,20 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C53C22DC173
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 14:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528602DC181
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 14:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgLPNlo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Dec 2020 08:41:44 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:60603 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725947AbgLPNlo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Dec 2020 08:41:44 -0500
+        id S1726336AbgLPNqR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Dec 2020 08:46:17 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:42867 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726148AbgLPNqR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Dec 2020 08:46:17 -0500
+X-Originating-IP: 86.202.109.140
 Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id B6850100006;
-        Wed, 16 Dec 2020 13:41:00 +0000 (UTC)
-Date:   Wed, 16 Dec 2020 14:41:00 +0100
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id EDD5560013;
+        Wed, 16 Dec 2020 13:45:32 +0000 (UTC)
+Date:   Wed, 16 Dec 2020 14:45:32 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
@@ -23,54 +24,162 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
         sre@kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: atmel-sysreg: add
- microchip,sama7g5-shdwc
-Message-ID: <20201216134100.GG2814589@piout.net>
+Subject: Re: [PATCH 3/3] power: reset: at91-sama5d2_shdwc: add support for
+ sama7g5
+Message-ID: <20201216134532.GH2814589@piout.net>
 References: <1608123453-1423-1-git-send-email-claudiu.beznea@microchip.com>
- <1608123453-1423-3-git-send-email-claudiu.beznea@microchip.com>
+ <1608123453-1423-4-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1608123453-1423-3-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <1608123453-1423-4-git-send-email-claudiu.beznea@microchip.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/12/2020 14:57:32+0200, Claudiu Beznea wrote:
-> Add compatible for Microchip SAMA7G5's shutdown controller.
+On 16/12/2020 14:57:33+0200, Claudiu Beznea wrote:
+> Add support for SAMA7G5 by adding proper struct reg_config structure
+> and since SAMA7G5 is not currently on LPDDR setups the commit also
+> avoid the mapping of DDR controller.
 > 
+
+Honestly, I wouldn't leave the LPDDR part out because there is no
+guarantee anyone will think about it when they have a design with LPDDR
+and as a consequence, their device will behave properly but will be
+very short lived.
+
 > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
->  Documentation/devicetree/bindings/arm/atmel-sysregs.txt | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-
-I'm pretty sure the first comment you'll get is to convert this file to
-yaml ;)
-
+>  drivers/power/reset/at91-sama5d2_shdwc.c | 72 ++++++++++++++++++++++++--------
+>  1 file changed, 54 insertions(+), 18 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> index 62cd4e89817c..7990358ac06e 100644
-> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> @@ -91,7 +91,8 @@ SHDWC SAMA5D2-Compatible Shutdown Controller
->  1) shdwc node
+> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+> index 3996167f676f..a3342c8c3728 100644
+> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
+> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+> @@ -78,9 +78,15 @@ struct pmc_reg_config {
+>  	u8 mckr;
+>  };
 >  
->  required properties:
-> -- compatible: should be "atmel,sama5d2-shdwc" or "microchip,sam9x60-shdwc".
-> +- compatible: should be "atmel,sama5d2-shdwc", "microchip,sam9x60-shdwc" or
-> +  "microchip,sama7g5-shdwc"
->  - reg: should contain registers location and length
->  - clocks: phandle to input clock.
->  - #address-cells: should be one. The cell is the wake-up input index.
-> @@ -103,7 +104,7 @@ optional properties:
->    microseconds. It's usually a board-related property.
->  - atmel,wakeup-rtc-timer: boolean to enable Real-Time Clock wake-up.
+> +struct ddrc_reg_config {
+> +	u32 type_offset;
+> +	u32 type_mask;
+> +};
+> +
+>  struct reg_config {
+>  	struct shdwc_reg_config shdwc;
+>  	struct pmc_reg_config pmc;
+> +	struct ddrc_reg_config ddrc;
+>  };
 >  
-> -optional microchip,sam9x60-shdwc properties:
-> +optional microchip,sam9x60-shdwc or microchip,sama7g5-shdwc properties:
->  - atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
+>  struct shdwc {
+> @@ -262,6 +268,10 @@ static const struct reg_config sama5d2_reg_config = {
+>  	.pmc = {
+>  		.mckr		= 0x30,
+>  	},
+> +	.ddrc = {
+> +		.type_offset	= AT91_DDRSDRC_MDR,
+> +		.type_mask	= AT91_DDRSDRC_MD
+> +	},
+>  };
 >  
->  The node contains child nodes for each wake-up input that the platform uses.
+>  static const struct reg_config sam9x60_reg_config = {
+> @@ -275,6 +285,23 @@ static const struct reg_config sam9x60_reg_config = {
+>  	.pmc = {
+>  		.mckr		= 0x28,
+>  	},
+> +	.ddrc = {
+> +		.type_offset	= AT91_DDRSDRC_MDR,
+> +		.type_mask	= AT91_DDRSDRC_MD
+> +	},
+> +};
+> +
+> +static const struct reg_config sama7g5_reg_config = {
+> +	.shdwc = {
+> +		.wkup_pin_input = 0,
+> +		.mr_rtcwk_shift = 17,
+> +		.mr_rttwk_shift = 16,
+> +		.sr_rtcwk_shift = 5,
+> +		.sr_rttwk_shift = 4,
+> +	},
+> +	.pmc = {
+> +		.mckr		= 0x28,
+> +	},
+>  };
+>  
+>  static const struct of_device_id at91_shdwc_of_match[] = {
+> @@ -285,6 +312,10 @@ static const struct of_device_id at91_shdwc_of_match[] = {
+>  	{
+>  		.compatible = "microchip,sam9x60-shdwc",
+>  		.data = &sam9x60_reg_config,
+> +	},
+> +	{
+> +		.compatible = "microchip,sama7g5-shdwc",
+> +		.data = &sama7g5_reg_config,
+>  	}, {
+>  		/*sentinel*/
+>  	}
+> @@ -294,6 +325,7 @@ MODULE_DEVICE_TABLE(of, at91_shdwc_of_match);
+>  static const struct of_device_id at91_pmc_ids[] = {
+>  	{ .compatible = "atmel,sama5d2-pmc" },
+>  	{ .compatible = "microchip,sam9x60-pmc" },
+> +	{ .compatible = "microchip,sama7g5-pmc" },
+>  	{ /* Sentinel. */ }
+>  };
+>  
+> @@ -355,30 +387,34 @@ static int __init at91_shdwc_probe(struct platform_device *pdev)
+>  		goto clk_disable;
+>  	}
+>  
+> -	np = of_find_compatible_node(NULL, NULL, "atmel,sama5d3-ddramc");
+> -	if (!np) {
+> -		ret = -ENODEV;
+> -		goto unmap;
+> -	}
+> +	if (at91_shdwc->rcfg->ddrc.type_mask) {
+> +		np = of_find_compatible_node(NULL, NULL,
+> +					     "atmel,sama5d3-ddramc");
+> +		if (!np) {
+> +			ret = -ENODEV;
+> +			goto unmap;
+> +		}
+>  
+> -	at91_shdwc->mpddrc_base = of_iomap(np, 0);
+> -	of_node_put(np);
+> +		at91_shdwc->mpddrc_base = of_iomap(np, 0);
+> +		of_node_put(np);
+>  
+> -	if (!at91_shdwc->mpddrc_base) {
+> -		ret = -ENOMEM;
+> -		goto unmap;
+> +		if (!at91_shdwc->mpddrc_base) {
+> +			ret = -ENOMEM;
+> +			goto unmap;
+> +		}
+> +
+> +		ddr_type = readl(at91_shdwc->mpddrc_base +
+> +				 at91_shdwc->rcfg->ddrc.type_offset) &
+> +				 at91_shdwc->rcfg->ddrc.type_mask;
+> +		if (ddr_type != AT91_DDRSDRC_MD_LPDDR2 &&
+> +		    ddr_type != AT91_DDRSDRC_MD_LPDDR3) {
+> +			iounmap(at91_shdwc->mpddrc_base);
+> +			at91_shdwc->mpddrc_base = NULL;
+> +		}
+>  	}
+>  
+>  	pm_power_off = at91_poweroff;
+>  
+> -	ddr_type = readl(at91_shdwc->mpddrc_base + AT91_DDRSDRC_MDR) &
+> -			 AT91_DDRSDRC_MD;
+> -	if (ddr_type != AT91_DDRSDRC_MD_LPDDR2 &&
+> -	    ddr_type != AT91_DDRSDRC_MD_LPDDR3) {
+> -		iounmap(at91_shdwc->mpddrc_base);
+> -		at91_shdwc->mpddrc_base = NULL;
+> -	}
+> -
+>  	return 0;
+>  
+>  unmap:
 > -- 
 > 2.7.4
 > 
