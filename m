@@ -2,98 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7138F2DBD23
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 09:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273102DBDBD
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Dec 2020 10:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgLPIzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Dec 2020 03:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726095AbgLPIzy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Dec 2020 03:55:54 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40974C0613D6
-        for <linux-pm@vger.kernel.org>; Wed, 16 Dec 2020 00:55:14 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id 91so22355145wrj.7
-        for <linux-pm@vger.kernel.org>; Wed, 16 Dec 2020 00:55:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=2X0i4LnWvhmDFLe5iRLCVbqdwzEb8VnCa7MUUVftSIM=;
-        b=KKmFkvJ6+Pp0k13eW7K9dRJ/GBUKcTyFvlGvGPyPit+Bpk+KcV+OAAahNMFpxvU/Bb
-         Wztaqcp4EgYcBCeaAwGe21cdweZAM1n6zvXnos7neKCAXNLclMWC72JjcM73dLQQyLt8
-         CqS1tUPM/GBFgcsxYBuoK4evReKaupUR6e7vsQgHU7V6speuCHLs4OJEmZJpN7WZTZpm
-         y5TuGzZj/Q3dqObtYThHAx54Ws5c+/PYXhj415osZcGp57dEQ16ub/6pn/glREnzl5s4
-         lc8Li4PwLuY5Gzan+UxSJnRFIIa/xv80WavF6eaKPXhUVSknBwtJ8G75gvTfOPrjwCOu
-         K3oA==
+        id S1725940AbgLPJgi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Dec 2020 04:36:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35717 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725881AbgLPJgi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Dec 2020 04:36:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1608111312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0FkFaV1sj5tXDICgVYoVeFoC7TWW7hfY+jYxB8b3Zi0=;
+        b=hTzorJzuNUYVE4FdduuRpja6wqqFCd6H0A3BX8lyDkkYSl75/+628zAJmEKmyf3bq8REwv
+        F6Orl9THb6RZPtxePz3snf7AbE+IAOR4g1neettUH6kK6bFBBB2Md5Vx9PF/tv4XfUcVGn
+        q7OdR58Ne6uVZiN/a0ERgHJPJdmukFg=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-173--htg4A3IPVeJfZUNxJ4T0Q-1; Wed, 16 Dec 2020 04:35:10 -0500
+X-MC-Unique: -htg4A3IPVeJfZUNxJ4T0Q-1
+Received: by mail-ej1-f70.google.com with SMTP id k3so7150615ejr.16
+        for <linux-pm@vger.kernel.org>; Wed, 16 Dec 2020 01:35:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2X0i4LnWvhmDFLe5iRLCVbqdwzEb8VnCa7MUUVftSIM=;
-        b=e1l5yerqdCbP13TBGRmxWbdDD5WnqSdrexByCirE4nHkh6sFkWVt7mcjB8BJE1l39G
-         ZgJwAIifWDBD3jjVsxjv4dVxm3kCjLZWhnFjwb581IBFAi4aUb7GZmBQCDhnTX8DlzFY
-         n+PkaVPP4FjCOsarAAccqwtWFpJnV9l0Iw0VVoUht5UkyG99fdxOpNLl4eOVE3F2omJR
-         Srklpx5ERgHNDPthW9YqZfPNdIVT7Ns35FluuJhOotOXSwTg0hiiaIK40GXWuVGqcrsI
-         Z87cDop7xH7rSEKE1ibnrj5FpUMpNUpJv02jWpMnerM/MCabgXjsnnpW/YrlzYbP87W7
-         LP7g==
-X-Gm-Message-State: AOAM533NS1shrtJDLznfT2FLFTAQhzFpgdh/M08JkhaInK5u9B5EZ/gY
-        CFRtAQGfJ7UHmO+LvuEYQ7ThiA==
-X-Google-Smtp-Source: ABdhPJwnGtS9A/gGhOBAsI7ahIG2u0mP9aR4+czSbE59/b/1ukS60p297avYZmDALN8JBC/eVFK0rQ==
-X-Received: by 2002:adf:a29d:: with SMTP id s29mr36867749wra.272.1608108913046;
-        Wed, 16 Dec 2020 00:55:13 -0800 (PST)
-Received: from dell ([91.110.221.200])
-        by smtp.gmail.com with ESMTPSA id b73sm5275396wmb.0.2020.12.16.00.55.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Dec 2020 00:55:12 -0800 (PST)
-Date:   Wed, 16 Dec 2020 08:55:10 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Cong Pham <cpham2403@gmail.com>, rostokus@gmail.com,
-        fan.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH v2 6/6] MFD: bd71828: differentiate bd71828 and
- bd71827 chargers
-Message-ID: <20201216085510.GH4776@dell>
-References: <cover.1607085199.git.matti.vaittinen@fi.rohmeurope.com>
- <a892b00bd90bcd09e124b3a8e306ededebb64d08.1607085199.git.matti.vaittinen@fi.rohmeurope.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0FkFaV1sj5tXDICgVYoVeFoC7TWW7hfY+jYxB8b3Zi0=;
+        b=sM4xMlBHPAx5gtdXCaYA75qoHbP/g5rRJbGhZDLFqAyD8N281wG12de6AEU4l6EQxV
+         ejNPTDgpvqFPXARGSL4v0PQhnnKPmdaKuCuiLBFzc0RbnjBbFUK7oAOLjDCp8RPStoQF
+         /NJSZe87EjAnX9hGl7ZH0egVTkx9FCiYzPGtTaUoYDsMpS5W/pi8XH8ITdgyfz7PQjBD
+         FVjI4yyI2Kv9BtFEraIE4NX+w3fVNGlOnKVTzXPNrTarJv2o2Cp3thZvWqL81IBX93jF
+         2+bcaQPHYqU+nXhtCpsvsqbawaT6DoTUd70GJZtBObtSi8EusfevLVY88eeeNEBpiGuq
+         MrYA==
+X-Gm-Message-State: AOAM531giTT8Z9lPpfZpx1qfW5f2bWGb0+PRxh2yNxidhiKqSwRrsFR8
+        7M1psO+EUbxjK/bXxFkRGhGO3j+3xOjUqLmz5zx/MX+uFmki4i3j9np/KmMS8YxgEip+ahl92B1
+        GnVvCzweFqZDzw3R6HEtcYCFICKlVrDOPQMZPW8ml8lUjZqD08Z6OowX68qgS2DJUycwxSRc=
+X-Received: by 2002:a05:6402:1383:: with SMTP id b3mr5793811edv.100.1608111308724;
+        Wed, 16 Dec 2020 01:35:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzdvUjdbm6lMsgwUA3NC9QrUMdVeACLNPgHnfMNWmcx6VcZyChBkpMa7OKH9C0JK8iWlLEIiw==
+X-Received: by 2002:a05:6402:1383:: with SMTP id b3mr5793790edv.100.1608111308457;
+        Wed, 16 Dec 2020 01:35:08 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id l22sm975568ejk.14.2020.12.16.01.35.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Dec 2020 01:35:07 -0800 (PST)
+Subject: Re: [PATCH] power: supply: axp288_charger: switch to using
+ devm_add_action_or_reset()
+To:     Tian Tao <tiantao6@hisilicon.com>, sre@kernel.org, wens@csie.org
+Cc:     linux-pm@vger.kernel.org
+References: <1608098978-53068-1-git-send-email-tiantao6@hisilicon.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <d5788ae9-2526-e24e-5337-e62670a71935@redhat.com>
+Date:   Wed, 16 Dec 2020 10:35:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
+In-Reply-To: <1608098978-53068-1-git-send-email-tiantao6@hisilicon.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a892b00bd90bcd09e124b3a8e306ededebb64d08.1607085199.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 04 Dec 2020, Matti Vaittinen wrote:
+Hi,
 
-> BD71828 and BD71827 charger blocks have some minor differencies.
-> Use own name for BD71828 so that charger driver can differentiate
-> these by device-id.
+Thank you for your patch, but see comments inline.
+
+On 12/16/20 7:09 AM, Tian Tao wrote:
+> switch to using devm_add_action_or_reset() instead of devm_add_action.
+
+This just states what you are changing, not why. If you cannot explain
+why you are changing something, then possible the change is wrong or
+at least unnecessary.
+
 > 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 > ---
+>  drivers/power/supply/axp288_charger.c | 2 +-
+>  kernel/dma/map_benchmark.c            | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> This patch is also provided in this RFC version only for the sake
-> of the completeness.
+> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
+> index a4df1ea..6480c2e 100644
+> --- a/drivers/power/supply/axp288_charger.c
+> +++ b/drivers/power/supply/axp288_charger.c
+> @@ -855,7 +855,7 @@ static int axp288_charger_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	/* Cancel our work on cleanup, register this before the notifiers */
+> -	ret = devm_add_action(dev, axp288_charger_cancel_work, info);
+> +	ret = devm_add_action_or_reset(dev, axp288_charger_cancel_work, info);
+
+As the comment 1 line above the devm_add_action states, the action gets
+registered *before* the notifiers get registered, so before the work can
+ever be triggered.
+
+IOW there is no need for the reset here. It cannot hurt, but it is not
+necessay, so NACK.
+
+
+>  	if (ret)
+>  		return ret;
+>  
+> diff --git a/kernel/dma/map_benchmark.c b/kernel/dma/map_benchmark.c
+> index 19f6616..775191d 100644
+> --- a/kernel/dma/map_benchmark.c
+> +++ b/kernel/dma/map_benchmark.c
+> @@ -294,7 +294,7 @@ static int __map_benchmark_probe(struct device *dev)
+>  		return -ENOMEM;
+>  	map->dev = dev;
+>  
+> -	ret = devm_add_action(dev, map_benchmark_remove_debugfs, map);
+> +	ret = devm_add_action_or_reset(dev, map_benchmark_remove_debugfs, map);
+>  	if (ret) {
+>  		pr_err("Can't add debugfs remove action\n");
+>  		return ret;
 > 
->  drivers/mfd/rohm-bd71828.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-For my own reference (apply this as-is to your sign-off block):
+And this seems to belong in another patch entirely.
 
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+Regards,
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Hans
+
