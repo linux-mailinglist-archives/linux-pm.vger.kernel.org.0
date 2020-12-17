@@ -2,129 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C54312DD222
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Dec 2020 14:28:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6898D2DD281
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Dec 2020 14:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbgLQN2A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Dec 2020 08:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727723AbgLQN17 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Dec 2020 08:27:59 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BD8C061794;
-        Thu, 17 Dec 2020 05:27:19 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id hk16so4114862pjb.4;
-        Thu, 17 Dec 2020 05:27:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=GuvWsv2yH33NCbzze1u2wOKepqpjiXX/reGunhKlIKk=;
-        b=IEF3qBmbCLKSbITyeNNTcsR769DfrQUerOvbCp6Aebs20HURcKK8Cs3qdCNR52SADp
-         BcWy88BxAlOc+5x8GWElaHfbG4rps9aKsgb7rUPOuFMIozVEEfZVFBBJU7xLd8kxUVyD
-         3QHPh3plxxjlRC+VwpJ6jAl37p5KdGBripJkh64xVHC2VoAhXGMRkbQtPKg/SGBiv5Di
-         f/L5ogRVPo16XxdOm4WBQUXbgye2NHSGJKLRvrvpqL5wzicwckApQtNLf1TuQ+WnKDSm
-         EI8TCwkv8f7njbGFvNXuajSdgVP9baGsXo3Y5jUfiwSTZeEsJcteztxlQIC+j/cxk2vP
-         UdMA==
+        id S1726548AbgLQN7i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Dec 2020 08:59:38 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:42421 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726488AbgLQN7h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Dec 2020 08:59:37 -0500
+Received: by mail-ot1-f48.google.com with SMTP id 11so27311265oty.9;
+        Thu, 17 Dec 2020 05:59:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=GuvWsv2yH33NCbzze1u2wOKepqpjiXX/reGunhKlIKk=;
-        b=Qex3mIxGo8Q9rkcg30MmzA71TAatjnVcPaqhBQ5KiVZeuq4iHLGpFeb3t5ueo9i68t
-         0M6tSG5psyNT6EkEHhHE6mlM5iUO7RaAmUg+grHjw1odV2hRbHRUdQVWh0fSsBbs3Bh0
-         QkP4YyTRbCXQpNoSx17E2+OWSoXX4wngPEu+mPWbdmF4SJX0EZc72nchbt+V9Rrxta/O
-         NyEcB9E/BknSKD4dkjtghRdfU7NBW82qYvAVnbuZqzdl9mogg9u+Knr8GAwOHlP1s0is
-         H2kRWo6g4hinifkFwCjuCC33xUaiux61/1isrL+ulqI1RV2YC6SxU+98/Pb6pFTpsrRl
-         RE2Q==
-X-Gm-Message-State: AOAM532hVElZDGlDfIk6iAoZjLU2wAfDmwhCtc0u7gcnfB26HjNkaZg9
-        uRjsYtpVdFBqRWvNkqCR0Cw=
-X-Google-Smtp-Source: ABdhPJwwH0pFYFGlogGbCovlTaH6DTtnk4vYuGwWFIcW7jXuU8q659i6hONb2RC0omh9aXs8zo1WtA==
-X-Received: by 2002:a17:902:7d84:b029:db:feae:425e with SMTP id a4-20020a1709027d84b02900dbfeae425emr17803897plm.43.1608211639098;
-        Thu, 17 Dec 2020 05:27:19 -0800 (PST)
-Received: from localhost ([2405:6580:31a1:500:1ac0:4dff:fe39:5426])
-        by smtp.gmail.com with ESMTPSA id r7sm4873129pjd.55.2020.12.17.05.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 05:27:17 -0800 (PST)
-From:   Punit Agrawal <punitagrawal@gmail.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Wei Huang <whuang2@amd.com>, rjw@rjwysocki.net, wei.huang2@amd.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH 2/4] cpufreq: acpi-cpufreq: Add processor to the
- ignore PSD override list
-References: <20201125144847.3920-3-punitagrawal@gmail.com>
-        <cadb5d57-5aaf-79bc-e30e-502d5e522689@amd.com>
-        <20201207202610.GG20489@zn.tnic>
-        <e9b4ae11-1fe3-a660-bb65-d3ba55ffcc56@amd.com>
-        <20201207223057.GJ20489@zn.tnic> <87a6unq3xv.fsf@stealth>
-        <20201208233216.GH27920@zn.tnic> <871rfvoqy7.fsf@stealth>
-        <20201214124023.GA25916@zn.tnic> <87sg88tt5e.fsf@stealth>
-        <20201214142540.GB25916@zn.tnic>
-Date:   Thu, 17 Dec 2020 22:27:14 +0900
-In-Reply-To: <20201214142540.GB25916@zn.tnic> (Borislav Petkov's message of
-        "Mon, 14 Dec 2020 15:25:40 +0100")
-Message-ID: <87ft44tvf1.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z7gwvGVWjL+AxRFG9mZnNHSbjEVuL8pXqT0fw2E47yM=;
+        b=PqZ/dEdOvf5iWmTSl8ds9ysybKzV6rkqPECL7Gry4mgZtxt4m75zShoHnJVWYiD0Tv
+         ZsHrGj+6LmVAsetymy6L4YTufw3jXlPqxZpfJHKZcmDeJD98+YfbtwDiNMUUJsa6kC6d
+         ev7y8lS5vfPy7NIn0rJqESuGhWbp9MCd9ka21+TkSbjNe+u8S27ZgybCo/JduHD8JC7T
+         t0XN9N4WqNc/Y9lH7hHmUJ/VzYOnkAfv2L9YsPDD3QfuUEmLwEzG9KZE1lldqZs0zwvs
+         42iOMd7achWZDOLscxwS2U0D6TeRORUpWHuYgssKEut1KcIgIOmTk/mvtnW49TDmteME
+         kMbQ==
+X-Gm-Message-State: AOAM533r3iLMZ+yZ4EWDphrwXl4idwh8leGMRb09ZgNgw5HMUCEKRNWV
+        QqRB1b3nf0oFSfHwp1ZuMssTvcM2+jAPyRdI/Gk=
+X-Google-Smtp-Source: ABdhPJz00EcXzZprqy6xcxFXBAt89LlEDQmITmhJ0zOxqelVcu8TfwpjHGMSUcBIp8DDOmmOvacku6yrkynChinRG/I=
+X-Received: by 2002:a9d:745a:: with SMTP id p26mr30290443otk.206.1608213536569;
+ Thu, 17 Dec 2020 05:58:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20201217104215.2544837-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20201217104215.2544837-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Dec 2020 14:58:45 +0100
+Message-ID: <CAJZ5v0ghXA=mao_S-VH-x0_0uvGYK_oWj10f-A=u0w82tXDg5Q@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Use the latest guaranteed freq
+ during verify
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Borislav Petkov <bp@alien8.de> writes:
-
-> On Mon, Dec 14, 2020 at 10:27:09PM +0900, Punit Agrawal wrote:
->> IIUC, this suggests that Linux booting on anything prior to Zen3 is down
->> to pure luck - I hope that wasn't the case.
+On Thu, Dec 17, 2020 at 11:44 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> WTF does this have to do with linux booting?!
-
-I guess I misunderstood the comment from your previous mail. Pasting
-back for context (emphasis mine) -
-
-    VS the clear statement from AMD that from zen3 onwards, all BIOS
-    will be tested. *I hope they boot Linux at least before they ship.*
-
->> At the moment acpi thermals is bust on this and other affected AMD
->> system I have access to. That'll need fixing before any sensible
->> measurements can be run.
+> This change tries to address an issue, when BIOS disabled turbo
+> but HWP_CAP guaranteed is changed later and user space wants to take
+> advantage of this increased guaranteed performance.
 >
-> Nope, still not answering my questions.
+> The HWP_CAP.GUARANTEED value is not a static value. It can be changed
+> by some out of band agent or during Intel Speed Select performance
+> level change. The HWP_CAP.MAX still shows max possible performance when
+> BIOS disabled turbo. So guaranteed can still change as long as this is
+> same or below HWP_CAP.MAX.
 >
->> Tbh, I didn't quite expect the patch to the PSD exclusion list to be
->> so controversial
+> When guaranteed is changed, the sysfs base_frequency attributes shows
+> the latest guaranteed frequency. This attribute can be used by user
+> space software to update scaling min/max frequency.
 >
-> It won't be if you explain properly what your patch is fixing. That is,
-> if it fixes anything.
+> Currently the setpolicy callback already uses the latest HWP_CAP
+> values when setting HWP_REQ. But the verify callback will still restrict
+> the user settings to the to old guaranteed value. So if the guaranteed
+> is increased, user space can't take advantage of it.
+>
+> To solve this similar to setpolicy callback, read the latest HWP_CAP
+> values and use it to restrict the maximum setting. This is done by
+> calling intel_pstate_get_hwp_max(), which already accounts for user
+> and BIOS turbo disable to get the current max performance.
+>
+> This issue is side effect of fixing the issue of scaling frequency
+> limits by the
+>  'commit eacc9c5a927e ("cpufreq: intel_pstate:
+>  Fix intel_pstate_get_hwp_max() for turbo disabled")'
+> The fix resulted in correct setting of reduced scaling frequencies,
+> but this resulted in capping HWP.REQ to HWP_CAP.GUARANTEED in this case.
+>
+> Cc: 5.8+ <stable@vger.kernel.org> # 5.8+
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 2a4db856222f..7081d1edb22b 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2199,6 +2199,12 @@ static void intel_pstate_clear_update_util_hook(unsigned int cpu)
+>
+>  static int intel_pstate_get_max_freq(struct cpudata *cpu)
+>  {
+> +       if (hwp_active) {
+> +               int turbo_max, max_state;
+> +
+> +               intel_pstate_get_hwp_max(cpu->cpu, &turbo_max, &max_state);
 
-I stared at the driver code (and the ACPI tables for the platform) to
-see if I could provide a better explanation.
+This would cause intel_pstate_get_hwp_max() to be called twice in
+intel_pstate_update_perf_limits() which is not perfect.
 
-That's when I realised that as the platform advertises hardware
-frequency co-ordination, even without the override it still skips
-setting the policy cpus -
-
-    /*
-     * Will let policy->cpus know about dependency only when software
-     * coordination is required.
-     */
-    if (policy->shared_type == CPUFREQ_SHARED_TYPE_ALL ||
-        policy->shared_type == CPUFREQ_SHARED_TYPE_ANY) {
-            cpumask_copy(policy->cpus, perf->shared_cpu_map);
-    }
-
-This ends up treating each CPU as an independent frequency domain
-anyways. So even ignoring the override for the CPU, doesn't change
-anything other than dropping the message from boot log -
-
-    overriding BIOS provided _PSD data
-
-As such, there's no point in merging the patch as it is.
-
-Apologies for the noise. I should've checked more thoroughly before
-sending the patches. 
-
-[ Aside: If Zen3 is using hardware co-ordination it'll probably face the
-issue described above as well. ]
+> +               return max_state * cpu->pstate.scaling;
+> +       }
+>         return global.turbo_disabled || global.no_turbo ?
+>                         cpu->pstate.max_freq : cpu->pstate.turbo_freq;
+>  }
+> --
