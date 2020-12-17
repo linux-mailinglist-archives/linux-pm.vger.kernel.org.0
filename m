@@ -2,98 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC662DD1F2
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Dec 2020 14:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C54312DD222
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Dec 2020 14:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726999AbgLQNKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Dec 2020 08:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S1727781AbgLQN2A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Dec 2020 08:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726601AbgLQNKw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Dec 2020 08:10:52 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED0BC0617A7
-        for <linux-pm@vger.kernel.org>; Thu, 17 Dec 2020 05:10:12 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id a6so5504861wmc.2
-        for <linux-pm@vger.kernel.org>; Thu, 17 Dec 2020 05:10:12 -0800 (PST)
+        with ESMTP id S1727723AbgLQN17 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Dec 2020 08:27:59 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BD8C061794;
+        Thu, 17 Dec 2020 05:27:19 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id hk16so4114862pjb.4;
+        Thu, 17 Dec 2020 05:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RSBE/3zCRI/fdlIa2O85+j7iTM1Xd4ZHnkVFYuERLqE=;
-        b=akD+QnmT3IHGlQ5L7v4Y7apNAE2VpUxEloBUxoQyBkO/E4Uy8ICKJnCGeV1x5z/KqD
-         EaoqzlKVQ82psG4l8kfAWtAr2fKX/+fCwvBUg86RRMiCaUnW2aYodi4ABa9/yTMVwyAG
-         lKn0avA8C8JKRlGxIaLK1+hQHb5rD9BnDVJcaPI6KasxhABHKOF1KkyZmD5SP6vAE1gE
-         R3Yq62k2OXtqm7N6YUO6NIF14lGz9pU0LNPDngrfpBwOfwRkuLSvzZkXe+RadYSfqJF8
-         5UTzj+W9hXBgxKNYlkYZNV3e6ck2shDJFv10W0N44Klxz0rV1l5QKe/D/DHvcyDJrQbX
-         gH8Q==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=GuvWsv2yH33NCbzze1u2wOKepqpjiXX/reGunhKlIKk=;
+        b=IEF3qBmbCLKSbITyeNNTcsR769DfrQUerOvbCp6Aebs20HURcKK8Cs3qdCNR52SADp
+         BcWy88BxAlOc+5x8GWElaHfbG4rps9aKsgb7rUPOuFMIozVEEfZVFBBJU7xLd8kxUVyD
+         3QHPh3plxxjlRC+VwpJ6jAl37p5KdGBripJkh64xVHC2VoAhXGMRkbQtPKg/SGBiv5Di
+         f/L5ogRVPo16XxdOm4WBQUXbgye2NHSGJKLRvrvpqL5wzicwckApQtNLf1TuQ+WnKDSm
+         EI8TCwkv8f7njbGFvNXuajSdgVP9baGsXo3Y5jUfiwSTZeEsJcteztxlQIC+j/cxk2vP
+         UdMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RSBE/3zCRI/fdlIa2O85+j7iTM1Xd4ZHnkVFYuERLqE=;
-        b=uV3xk6zk3LhqYYck8RSMEE8PyWN6XaoKjdqpE5/SoIXVUl3wVQzkL0/8Mmt8UVFVoz
-         QFRSzmNsjhUqdwPT8UGQVb44RkpbzY2OwUNgtHP7EjCu5xr1Ui0jJ6ht2Mnu32ZW/hl5
-         lsEKc646fOGl9SzPb7a05j9M6q6FPJtzIFPmdl8T9Fwl2k2aHs9D/tn6LAGq4vO1CCZB
-         d9K00xPyVQHE46u4bxAVsquRITkm3g3tcsEmtV1Oq7Ptng3dGtkaFvZw5CfU0rulQlGX
-         JKUlBChGQ5xUgkSweyomeXIqKXi0HWHi1iC/CMSrwNvj6gTWo9hzDd+mAHtimXVtfu39
-         Xgsw==
-X-Gm-Message-State: AOAM532VznTi5+X58/d0OCQCvaLX4W0skXGER6SfdOkpJgI2Plhg1bbK
-        sZ0LPmkzQQ5Ll10EG3D5+jEHKg==
-X-Google-Smtp-Source: ABdhPJwANsRN7e8V4fLkplPexm3aweo7K9eQxQVy9vWxCfpQVDnEO0QeHwRf+NBUrOjxXo/B7RZ3lA==
-X-Received: by 2002:a1c:5459:: with SMTP id p25mr8182463wmi.19.1608210610707;
-        Thu, 17 Dec 2020 05:10:10 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:ccb6:ce78:2bcd:4ead? ([2a01:e34:ed2f:f020:ccb6:ce78:2bcd:4ead])
-        by smtp.googlemail.com with ESMTPSA id d8sm7756941wmb.11.2020.12.17.05.10.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Dec 2020 05:10:10 -0800 (PST)
-Subject: Re: [PATCH 3/5] thermal/drivers/acpi: Use hot and critical ops
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rui.zhang@intel.com
-Cc:     kai.heng.feng@canonical.com, lukasz.luba@arm.com,
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version;
+        bh=GuvWsv2yH33NCbzze1u2wOKepqpjiXX/reGunhKlIKk=;
+        b=Qex3mIxGo8Q9rkcg30MmzA71TAatjnVcPaqhBQ5KiVZeuq4iHLGpFeb3t5ueo9i68t
+         0M6tSG5psyNT6EkEHhHE6mlM5iUO7RaAmUg+grHjw1odV2hRbHRUdQVWh0fSsBbs3Bh0
+         QkP4YyTRbCXQpNoSx17E2+OWSoXX4wngPEu+mPWbdmF4SJX0EZc72nchbt+V9Rrxta/O
+         NyEcB9E/BknSKD4dkjtghRdfU7NBW82qYvAVnbuZqzdl9mogg9u+Knr8GAwOHlP1s0is
+         H2kRWo6g4hinifkFwCjuCC33xUaiux61/1isrL+ulqI1RV2YC6SxU+98/Pb6pFTpsrRl
+         RE2Q==
+X-Gm-Message-State: AOAM532hVElZDGlDfIk6iAoZjLU2wAfDmwhCtc0u7gcnfB26HjNkaZg9
+        uRjsYtpVdFBqRWvNkqCR0Cw=
+X-Google-Smtp-Source: ABdhPJwwH0pFYFGlogGbCovlTaH6DTtnk4vYuGwWFIcW7jXuU8q659i6hONb2RC0omh9aXs8zo1WtA==
+X-Received: by 2002:a17:902:7d84:b029:db:feae:425e with SMTP id a4-20020a1709027d84b02900dbfeae425emr17803897plm.43.1608211639098;
+        Thu, 17 Dec 2020 05:27:19 -0800 (PST)
+Received: from localhost ([2405:6580:31a1:500:1ac0:4dff:fe39:5426])
+        by smtp.gmail.com with ESMTPSA id r7sm4873129pjd.55.2020.12.17.05.27.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Dec 2020 05:27:17 -0800 (PST)
+From:   Punit Agrawal <punitagrawal@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Wei Huang <whuang2@amd.com>, rjw@rjwysocki.net, wei.huang2@amd.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>
-References: <20201210121514.25760-1-daniel.lezcano@linaro.org>
- <20201210121514.25760-3-daniel.lezcano@linaro.org>
- <c20d9077-66e8-f947-6422-c48e2f679cc5@linaro.org>
- <2b101b07aa18e06a32b26add651a3d2e009e6d18.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <a91f984b-eb38-3fcf-f968-e3afb36d5f65@linaro.org>
-Date:   Thu, 17 Dec 2020 14:10:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        x86@kernel.org
+Subject: Re: [RFC PATCH 2/4] cpufreq: acpi-cpufreq: Add processor to the
+ ignore PSD override list
+References: <20201125144847.3920-3-punitagrawal@gmail.com>
+        <cadb5d57-5aaf-79bc-e30e-502d5e522689@amd.com>
+        <20201207202610.GG20489@zn.tnic>
+        <e9b4ae11-1fe3-a660-bb65-d3ba55ffcc56@amd.com>
+        <20201207223057.GJ20489@zn.tnic> <87a6unq3xv.fsf@stealth>
+        <20201208233216.GH27920@zn.tnic> <871rfvoqy7.fsf@stealth>
+        <20201214124023.GA25916@zn.tnic> <87sg88tt5e.fsf@stealth>
+        <20201214142540.GB25916@zn.tnic>
+Date:   Thu, 17 Dec 2020 22:27:14 +0900
+In-Reply-To: <20201214142540.GB25916@zn.tnic> (Borislav Petkov's message of
+        "Mon, 14 Dec 2020 15:25:40 +0100")
+Message-ID: <87ft44tvf1.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <2b101b07aa18e06a32b26add651a3d2e009e6d18.camel@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/12/2020 12:38, Srinivas Pandruvada wrote:
-> On Thu, 2020-12-17 at 07:28 +0100, Daniel Lezcano wrote:
->> On 10/12/2020 13:15, Daniel Lezcano wrote:
->>> The acpi driver wants to do a netlink notification in case of a hot
->>> or
->>> critical trip point. Implement the corresponding ops to be used for
->>> the thermal zone and use them instead of the notify ops.
->>>
->>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>
->> Is there any comment on this patch ?
-> 
-> Looks good to me.
+Borislav Petkov <bp@alien8.de> writes:
 
-Thanks for reviewing
+> On Mon, Dec 14, 2020 at 10:27:09PM +0900, Punit Agrawal wrote:
+>> IIUC, this suggests that Linux booting on anything prior to Zen3 is down
+>> to pure luck - I hope that wasn't the case.
+>
+> WTF does this have to do with linux booting?!
 
+I guess I misunderstood the comment from your previous mail. Pasting
+back for context (emphasis mine) -
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+    VS the clear statement from AMD that from zen3 onwards, all BIOS
+    will be tested. *I hope they boot Linux at least before they ship.*
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>> At the moment acpi thermals is bust on this and other affected AMD
+>> system I have access to. That'll need fixing before any sensible
+>> measurements can be run.
+>
+> Nope, still not answering my questions.
+>
+>> Tbh, I didn't quite expect the patch to the PSD exclusion list to be
+>> so controversial
+>
+> It won't be if you explain properly what your patch is fixing. That is,
+> if it fixes anything.
+
+I stared at the driver code (and the ACPI tables for the platform) to
+see if I could provide a better explanation.
+
+That's when I realised that as the platform advertises hardware
+frequency co-ordination, even without the override it still skips
+setting the policy cpus -
+
+    /*
+     * Will let policy->cpus know about dependency only when software
+     * coordination is required.
+     */
+    if (policy->shared_type == CPUFREQ_SHARED_TYPE_ALL ||
+        policy->shared_type == CPUFREQ_SHARED_TYPE_ANY) {
+            cpumask_copy(policy->cpus, perf->shared_cpu_map);
+    }
+
+This ends up treating each CPU as an independent frequency domain
+anyways. So even ignoring the override for the CPU, doesn't change
+anything other than dropping the message from boot log -
+
+    overriding BIOS provided _PSD data
+
+As such, there's no point in merging the patch as it is.
+
+Apologies for the noise. I should've checked more thoroughly before
+sending the patches. 
+
+[ Aside: If Zen3 is using hardware co-ordination it'll probably face the
+issue described above as well. ]
