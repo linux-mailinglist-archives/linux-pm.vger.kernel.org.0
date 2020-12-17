@@ -2,148 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B41F2DCC79
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Dec 2020 07:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0E32DCCD9
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Dec 2020 08:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbgLQG3a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Dec 2020 01:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S1726825AbgLQHPz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Dec 2020 02:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbgLQG3a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Dec 2020 01:29:30 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027C8C0617A7
-        for <linux-pm@vger.kernel.org>; Wed, 16 Dec 2020 22:28:49 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d13so7142436wrc.13
-        for <linux-pm@vger.kernel.org>; Wed, 16 Dec 2020 22:28:49 -0800 (PST)
+        with ESMTP id S1726533AbgLQHPy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Dec 2020 02:15:54 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E909AC061794;
+        Wed, 16 Dec 2020 23:15:12 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id 6so21714399ejz.5;
+        Wed, 16 Dec 2020 23:15:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Uw0qn01yEipuE4KQo4q/I//7O4Z5qhvsoEs4F9itwqk=;
-        b=VJEC/6EOmgFyFKHDv7NxjcSOxbitydIzcOYkIbzqE+DlWxlizfKe5e4ZWTxitA4pjT
-         mhyCgnuIZY28r45HXehI6gk/xqbL/nLipe38jbK+hHwshuM6wGD6doQ23fitAES7Y5Mg
-         +uicIE+cJAxcIMPlsG5WUAJ03mL780xvp1pTP6Q33zNwdrx77qbWEU0He2TjGA7gKTVw
-         /HMert+f/4zgGvMT69ibNddye0lPOzhef285rGCmDr8cs4DUsHPuQPbar0T6fdME2unT
-         AIssadyUx9iBEXc/LO7rTLciI+N6En2ddm7nw8LX1UYM/hPBLjdftjzfZDmkAKX0F3G7
-         qu3A==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=bGy7gLBy2hFyYL8nSs16yQL0Na8VVi6rxjiUYpw2umY=;
+        b=hYJDilWH5PI0sM/ctM4XmnHMmy/VC9X9ze3GqvZytzsEnHTTT7JfJPcRe0wc+Oro2O
+         UamTbMbmnYThx+VozwRfDpwHQv80X+SUNy+FUvJq/kDc0PfMhxlvc/XykW+jxX/oX5x4
+         JdmtEAOqaV+dV64JeZyEX9AaQbAACElDz0SYbXsmsDQYnG977McOlzeSG1FNY3eUu1vd
+         0tQQkZyrBLDXRKR81yY0dPHkJKAsFYssk3Un1qjxZoTM+Mnt3rS6rq3lh51KYkaPAhDA
+         imCfA3ObkPTwWN9ln0DVugoDXF0b39MdTWFTj9r2uFy5L1krm+H91Ij/B9pBOpdICMtH
+         0cIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Uw0qn01yEipuE4KQo4q/I//7O4Z5qhvsoEs4F9itwqk=;
-        b=rhRU1GXIlHsHuUJZkhAb4sC1uYN2h2YF1BMrODtZgrwrrgR592PzaVYnf/d8OcgA/z
-         k0juFQMzVTsnd6iIFsG0J7ySVrXvNmUbsStZ26tfSWEZmPKGUdvuHB6raDbBZwhKZGoL
-         tOFydGn/2h9fmxImXZm19mIoYS8g8KitD61JoD3t4YfvOAVh1RoeZP3v7CCLZAwI31hb
-         IkVOfCNpInkqtwckrsb4AObxlY2/BlLsNr3KVJ334hfD9SIQSqHbxUZHJgaw13sqIhaU
-         7J4JQm0cPOdeeNUSZLGidqion0E8idvPHeykEUix03dPeGtPTrBE01wEyhNMkM6/ZNwn
-         XeuA==
-X-Gm-Message-State: AOAM5305fl4SdHzTokIfJPqFt+HyEcH5lEhByhy/usR8rkLpRUlkwqDE
-        b4sdWDXK0YG2bWBxj0OtGLcSmA==
-X-Google-Smtp-Source: ABdhPJyunrsUCrTcQ8XdR1MnBNLU7dkhvUJngbHOgEo/eLy44Cv0qPXsVg4Nn9LpC9RRWGWk25BnHg==
-X-Received: by 2002:a5d:4683:: with SMTP id u3mr42264872wrq.19.1608186528506;
-        Wed, 16 Dec 2020 22:28:48 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:601a:58a2:ee98:f8a1? ([2a01:e34:ed2f:f020:601a:58a2:ee98:f8a1])
-        by smtp.googlemail.com with ESMTPSA id w3sm6634432wma.3.2020.12.16.22.28.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Dec 2020 22:28:47 -0800 (PST)
-Subject: Re: [PATCH 3/5] thermal/drivers/acpi: Use hot and critical ops
-To:     rui.zhang@intel.com
-Cc:     kai.heng.feng@canonical.com, lukasz.luba@arm.com,
-        srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>
-References: <20201210121514.25760-1-daniel.lezcano@linaro.org>
- <20201210121514.25760-3-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c20d9077-66e8-f947-6422-c48e2f679cc5@linaro.org>
-Date:   Thu, 17 Dec 2020 07:28:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201210121514.25760-3-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=bGy7gLBy2hFyYL8nSs16yQL0Na8VVi6rxjiUYpw2umY=;
+        b=L4teNoQNRq0eHZiFQgfq51esAe8Dbj1ZbiYklV0pc8X5WH9o8u1rJSGwMU0a9VSTS9
+         5WyRxzaVjT3pXNOTqMKgTm0rWR2qjaBzlJbsdfehamj1oCsJ6yjzCCeZ8oTcHxjbZx3c
+         hquucjLgXE6tamE96kBIXHj9TASGEadfbKJ1J0B8YlTYCYIoWvyBho5vGXn7vNC0Dcii
+         kwbhrp2BeXegMPpx0pVTriEx2s4hKlVgHzfkr2AX2onoOBzSNb5ZFKX91UH6lC6KpiOq
+         DeV3/5diDbwMMYvQ+yYGIHhE2yxTR4GLR1+VHwY2bk8NhPUWcIBZtpibs0HEaQOd9SpE
+         5/jg==
+X-Gm-Message-State: AOAM531k5zyXZ8n3TRkR2RGa4Dx8aJHJhWYE3fYikPf03crruJ0BlDD5
+        Y+hHBPIHqpl39fw5DQspy4jN25gQALQnyA==
+X-Google-Smtp-Source: ABdhPJy1nSlTGWTs/AOPSz2icN7kkMpTQo4NU2ITDs0u8lTrYvpAd6c6H96zc8hAOhvnq6hRAJqxKw==
+X-Received: by 2002:a17:907:20dc:: with SMTP id qq28mr33410118ejb.403.1608189311050;
+        Wed, 16 Dec 2020 23:15:11 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2dfe:900:8cfe:59ae:f146:5d09])
+        by smtp.gmail.com with ESMTPSA id mc25sm2961331ejb.58.2020.12.16.23.15.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Dec 2020 23:15:10 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: include governors into CPU IDLE TIME MANAGEMENT FRAMEWORK
+Date:   Thu, 17 Dec 2020 08:15:01 +0100
+Message-Id: <20201217071501.31267-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/12/2020 13:15, Daniel Lezcano wrote:
-> The acpi driver wants to do a netlink notification in case of a hot or
-> critical trip point. Implement the corresponding ops to be used for
-> the thermal zone and use them instead of the notify ops.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+The current pattern in the file entry does not make the files in the
+governors subdirectory to be a part of the CPU IDLE TIME MANAGEMENT
+FRAMEWORK.
 
-Is there any comment on this patch ?
+Adjust the file pattern to include files in governors.
 
-> ---
->  drivers/acpi/thermal.c | 30 ++++++++++++++----------------
->  1 file changed, 14 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-> index 12c0ece746f0..b5e4bc9e3282 100644
-> --- a/drivers/acpi/thermal.c
-> +++ b/drivers/acpi/thermal.c
-> @@ -677,27 +677,24 @@ static int thermal_get_trend(struct thermal_zone_device *thermal,
->  	return 0;
->  }
->  
-> -
-> -static int thermal_notify(struct thermal_zone_device *thermal, int trip,
-> -			   enum thermal_trip_type trip_type)
-> +static void acpi_thermal_zone_device_hot(struct thermal_zone_device *thermal)
->  {
-> -	u8 type = 0;
->  	struct acpi_thermal *tz = thermal->devdata;
->  
-> -	if (trip_type == THERMAL_TRIP_CRITICAL)
-> -		type = ACPI_THERMAL_NOTIFY_CRITICAL;
-> -	else if (trip_type == THERMAL_TRIP_HOT)
-> -		type = ACPI_THERMAL_NOTIFY_HOT;
-> -	else
-> -		return 0;
-> -
->  	acpi_bus_generate_netlink_event(tz->device->pnp.device_class,
-> -					dev_name(&tz->device->dev), type, 1);
-> +					dev_name(&tz->device->dev),
-> +					ACPI_THERMAL_NOTIFY_HOT, 1);
-> +}
->  
-> -	if (trip_type == THERMAL_TRIP_CRITICAL && nocrt)
-> -		return 1;
-> +static void acpi_thermal_zone_device_critical(struct thermal_zone_device *thermal)
-> +{
-> +	struct acpi_thermal *tz = thermal->devdata;
->  
-> -	return 0;
-> +	acpi_bus_generate_netlink_event(tz->device->pnp.device_class,
-> +					dev_name(&tz->device->dev),
-> +					ACPI_THERMAL_NOTIFY_CRITICAL, 1);
-> +
-> +	thermal_zone_device_critical(thermal);
->  }
->  
->  static int acpi_thermal_cooling_device_cb(struct thermal_zone_device *thermal,
-> @@ -812,7 +809,8 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
->  	.get_trip_temp = thermal_get_trip_temp,
->  	.get_crit_temp = thermal_get_crit_temp,
->  	.get_trend = thermal_get_trend,
-> -	.notify = thermal_notify,
-> +	.hot = acpi_thermal_zone_device_hot,
-> +	.critical = acpi_thermal_zone_device_critical,
->  };
->  
->  static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
-> 
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+applies cleanly on current master and next-20201215
 
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 952731d1e43c..ac679aa00e0d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4596,7 +4596,7 @@ B:	https://bugzilla.kernel.org
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+ F:	Documentation/admin-guide/pm/cpuidle.rst
+ F:	Documentation/driver-api/pm/cpuidle.rst
+-F:	drivers/cpuidle/*
++F:	drivers/cpuidle/
+ F:	include/linux/cpuidle.h
+ 
+ CPU POWER MONITORING SUBSYSTEM
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
