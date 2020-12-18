@@ -2,172 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0C52DDF2A
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Dec 2020 08:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299B82DDF67
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Dec 2020 09:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730125AbgLRHde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Dec 2020 02:33:34 -0500
-Received: from mga11.intel.com ([192.55.52.93]:48097 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727235AbgLRHde (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Dec 2020 02:33:34 -0500
-IronPort-SDR: Vi2fYZ6FSQPa1iuXcxv47B1H/coFeTJqPlNWOI4wsRKiG9kZN+VyJeElWUwMT3wqg+dbLrIAtv
- /FArWHkGOyIQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9838"; a="171892128"
-X-IronPort-AV: E=Sophos;i="5.78,429,1599548400"; 
-   d="scan'208";a="171892128"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2020 23:32:54 -0800
-IronPort-SDR: 2yI2XBZQJgALQuQg+WVWfc3wCQK7qGCrioh4QWOmjVfL1+Ikmy6fZVClV4JFxvuZme6k8Rfi8q
- Spm4uMEghNrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,429,1599548400"; 
-   d="scan'208";a="386192741"
-Received: from lkp-server02.sh.intel.com (HELO c4fb2a2464e8) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Dec 2020 23:32:52 -0800
-Received: from kbuild by c4fb2a2464e8 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kqAFv-00005j-Uz; Fri, 18 Dec 2020 07:32:51 +0000
-Date:   Fri, 18 Dec 2020 15:32:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- bbebe3f6011e98d847e4a0841254a9fdae1de703
-Message-ID: <5fdc5b1c.+6qiDM/1s9UX+SNS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728223AbgLRIKr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Dec 2020 03:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728212AbgLRIKq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Dec 2020 03:10:46 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCFEC0617B0
+        for <linux-pm@vger.kernel.org>; Fri, 18 Dec 2020 00:10:06 -0800 (PST)
+Date:   Fri, 18 Dec 2020 08:10:01 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1608279002;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5QnruANJYe7Pz6UVLMs1EeEgZG9La84iFrm78ZTkZBc=;
+        b=3ZJ9yJ8lzWg5/4tizL8PYUb1e5/elA6ewwU6jrTxhq5+bCWOoEJdJdvdcKnEDwLDz4GrXW
+        aUbYiZUStLYgx8iL6/2P4IWomgVondhf/egzAqL+VDm2ToChXKUgmejeqbA/sCXMwSzMpD
+        9dBPfNPrV85Hdt6RTcY2XT2UR9leoUrFdnqAhchqFTthA+uVHjZAgG4SZFT9j7VmlmC84X
+        tNfw4JS5YB61xMySr/NN1dDp5xAhi8EyUFpToOpXTd7DVLlI5hqeGZKp7RkuO+ULMGB6sF
+        ZaROSeLuf++DZ/ZrLsuFsD36Zi2iAKYao+rx9fDPw01x2v+UHIVaFaaqKoKU1g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1608279002;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5QnruANJYe7Pz6UVLMs1EeEgZG9La84iFrm78ZTkZBc=;
+        b=1LjxGOFMOnLKtoINorxk0dY9oKQJAZJWAfNT5r1bQRRvwhNTFjwaDQUGiX0AnJ6EqeP9En
+        0JrlCjwN4Wn6YIAw==
+From:   "thermal-bot for Srinivas Pandruvada" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal: int340x: Support Alder Lake
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20201117194802.503337-1-srinivas.pandruvada@linux.intel.com>
+References: <20201117194802.503337-1-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Message-ID: <160827900139.22759.11476982334025900593.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: bbebe3f6011e98d847e4a0841254a9fdae1de703  Merge branch 'acpi-sleep' into bleeding-edge
+The following commit has been merged into the thermal/next branch of thermal:
 
-Warning reports:
+Commit-ID:     67698880ac9d56367ebf22f8336ccab6234f9feb
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//67698880ac9d56367ebf22f8336ccab6234f9feb
+Author:        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+AuthorDate:    Tue, 17 Nov 2020 11:48:02 -08:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Thu, 17 Dec 2020 15:29:30 +01:00
 
-https://lore.kernel.org/linux-acpi/202012180806.uUcdy2LC-lkp@intel.com
+thermal: int340x: Support Alder Lake
 
-Warning in current branch:
+Add ACPI IDs for thermal drivers for Alder Lake support.
 
-drivers/acpi/x86/s2idle.c:108:30: warning: variable 'info' set but not used [-Wunused-but-set-variable]
-drivers/acpi/x86/s2idle.c:138:25: warning: variable 'obj_new' set but not used [-Wunused-but-set-variable]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- i386-allyesconfig
-    |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-    `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-
-elapsed time: 720m
-
-configs tested: 96
-configs skipped: 2
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-powerpc                    adder875_defconfig
-powerpc                 mpc8272_ads_defconfig
-sh                        edosk7760_defconfig
-arm                        vexpress_defconfig
-powerpc                        cell_defconfig
-sh                         ap325rxa_defconfig
-parisc                generic-64bit_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                     taishan_defconfig
-arm                         assabet_defconfig
-c6x                              alldefconfig
-sh                          r7780mp_defconfig
-mips                         db1xxx_defconfig
-sh                          sdk7786_defconfig
-mips                        maltaup_defconfig
-mips                         tb0226_defconfig
-powerpc                     tqm8541_defconfig
-powerpc                 mpc8313_rdb_defconfig
-powerpc                      ppc6xx_defconfig
-xtensa                           alldefconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20201217
-x86_64               randconfig-a006-20201217
-x86_64               randconfig-a002-20201217
-x86_64               randconfig-a005-20201217
-x86_64               randconfig-a004-20201217
-x86_64               randconfig-a001-20201217
-i386                 randconfig-a001-20201217
-i386                 randconfig-a004-20201217
-i386                 randconfig-a003-20201217
-i386                 randconfig-a002-20201217
-i386                 randconfig-a006-20201217
-i386                 randconfig-a005-20201217
-i386                 randconfig-a014-20201217
-i386                 randconfig-a013-20201217
-i386                 randconfig-a012-20201217
-i386                 randconfig-a011-20201217
-i386                 randconfig-a015-20201217
-i386                 randconfig-a016-20201217
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a016-20201217
-x86_64               randconfig-a012-20201217
-x86_64               randconfig-a013-20201217
-x86_64               randconfig-a015-20201217
-x86_64               randconfig-a014-20201217
-x86_64               randconfig-a011-20201217
-
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20201117194802.503337-1-srinivas.pandruvada@linux.intel.com
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
+ drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index 0966551..823354a 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -584,6 +584,7 @@ static int int3400_thermal_remove(struct platform_device *pdev)
+ static const struct acpi_device_id int3400_thermal_match[] = {
+ 	{"INT3400", 0},
+ 	{"INTC1040", 0},
++	{"INTC1041", 0},
+ 	{}
+ };
+ 
+diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+index ec1d58c..c3c4c4d 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+@@ -284,6 +284,7 @@ static int int3403_remove(struct platform_device *pdev)
+ static const struct acpi_device_id int3403_device_ids[] = {
+ 	{"INT3403", 0},
+ 	{"INTC1043", 0},
++	{"INTC1046", 0},
+ 	{"", 0},
+ };
+ MODULE_DEVICE_TABLE(acpi, int3403_device_ids);
