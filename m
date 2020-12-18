@@ -2,107 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F2B2DE171
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Dec 2020 11:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE732DE33C
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Dec 2020 14:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728246AbgLRKqZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Dec 2020 05:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S1726435AbgLRNWY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Dec 2020 08:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbgLRKqY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Dec 2020 05:46:24 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08026C06138C
-        for <linux-pm@vger.kernel.org>; Fri, 18 Dec 2020 02:45:44 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id q18so1650412wrn.1
-        for <linux-pm@vger.kernel.org>; Fri, 18 Dec 2020 02:45:43 -0800 (PST)
+        with ESMTP id S1726464AbgLRNWX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Dec 2020 08:22:23 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3312EC06138C
+        for <linux-pm@vger.kernel.org>; Fri, 18 Dec 2020 05:21:43 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id r7so2132337wrc.5
+        for <linux-pm@vger.kernel.org>; Fri, 18 Dec 2020 05:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=58X31zZpONeEKwQdcdX8fGmd9oTd9u4c+E9558qGKSU=;
-        b=JlW8X6b2tP9pUaPsTXXX5hdRh+Qn4YzkBdbOVjAsGpiQsBThpDT0M6ux6qPrdVA/Ad
-         /J8fcH+6jYPPuiEXgUCBR+fQHRgkFopX5abwCdFaq9TqcZEZPwTMVzT4Oun5c6AnqqeI
-         GeC1Oj92H9Ae6GHgNGxuf6xgTytKZsaOGwha0fbAVOk/ZGgC6Nn/NOsuG+r8b4yX1voX
-         pwprJ8pXqDxRDtQTgpo8aFIUCHTI06J6OhLyuTmTlmEQzISfHjauvvaP+a0zJoREX5jm
-         ium7SY7q+qMONEkuvC881zsg6MjDU99qD464siHR2Y3sIcBmZf1wfYtqcxIXliD8gVmR
-         MZ4A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=F+ibjVaRawhB9by9+I/z97txlwumatdH7xKnsmPgCGQ=;
+        b=k5O8dSEmSegIR7pYA9kV2ana+UeZIpHtGeDaUNyh9fmp8oCXJhsX8wUXP68tD5eWZv
+         RJZNsMiPVsggdsokowNDv9oX1TWqyfbNOEo8AjdDAIwgyrys3P5y66kWCBOsEuPhQfec
+         eWWyJzb0+2YmlgcrJ2Vewwut/ZG8owPpSTRMsG51UIA2RshPJJEckF1PF17v/GpCTCN9
+         JmoP6ZT/ILZd8XyE1rTs3xCfMNWWFloEsQPfq5hm3XQ/W43zMNM8RXcjG3enzySy8Pjl
+         dsIx74U40ax+muXd4/dAAMrr3h1qL1rj64mYoHM78mhsD9v5orIYz88yAK90ivsTkSv1
+         QU1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=58X31zZpONeEKwQdcdX8fGmd9oTd9u4c+E9558qGKSU=;
-        b=sItdap9VFmUYSSVJCDwcFXjlV6zfIWtd35zKUkH7zNXKBeUITvg6vbU2BiyGuXwUgw
-         vPomxukilZWUBC9fqtYVW1JuUdu9nkWOdH0DRYJPBRsdmlPwbsu18Vs9dkTD11TduJ2O
-         edQAgp3dcxzdwDtXnfxcZE6Ooc5OzXHgxxgVacku+hw218KCReSg1saA/H/9iIvTj7Uc
-         k7ssC826In4S22Kq8KrUIf58SmEISokanzdhscomHNlcaTFEirAr+fBJIjbCfF8DnZz3
-         FBZkSYJ+kY7Z1BhdtAyY5ryjab5MHkR0MmgXJII0Cxcs4TT5cnNX3Mtp0qNzXSLTYbiq
-         o9MQ==
-X-Gm-Message-State: AOAM5338hxtztWpyoBHP6yDOJ+DDLxSQ7zWaByfpPDQxqM1byIALGDnS
-        vdNnCc6caVzxjXNTN7jUUpn1KA==
-X-Google-Smtp-Source: ABdhPJw3rMz0JuHJtNI5TvKJwMhRsZYFrmay2JwIOybU3txdcxLex/rnUmjfipG0+04WxeZ0WnDGDw==
-X-Received: by 2002:adf:a319:: with SMTP id c25mr3778258wrb.262.1608288342621;
-        Fri, 18 Dec 2020 02:45:42 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9551:6b47:8c25:8c7f? ([2a01:e34:ed2f:f020:9551:6b47:8c25:8c7f])
-        by smtp.googlemail.com with ESMTPSA id h16sm12882095wrq.29.2020.12.18.02.45.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Dec 2020 02:45:41 -0800 (PST)
-Subject: Re: [PATCH v2 3/3] thermal/core: Remove ms based delay fields
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>
-Cc:     "amitk@kernel.org" <amitk@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>
-References: <20201216220337.839878-1-daniel.lezcano@linaro.org>
- <20201216220337.839878-3-daniel.lezcano@linaro.org>
- <PR3PR10MB414206497B833D717BC627A280C30@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <0f9ef932-b49c-9a1f-71a8-1c9dbf5de520@linaro.org>
-Date:   Fri, 18 Dec 2020 11:45:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=F+ibjVaRawhB9by9+I/z97txlwumatdH7xKnsmPgCGQ=;
+        b=svgRgLNtz2ezHu6xKbmklhICkHLlQd27OZdEoWV3r6+MO5/Uei39rpfxaPKWx8usHO
+         1mk9LHp4O+W847lGbA+tgOTR7lYNKVt/RAevVC28bgkADcmcqlQUeiVpJGOY+Bhbwkct
+         wUObA15eMx/8wc2Rvsn+QzqIXWQtC0JEjyfM9bBnpQqLU0Nq+q8KSOLMTbKkIMl1mlHa
+         /e3zNHNZ+d0l+n5aTkgdFnKplzsDptIULhKpfD38JdkImBIkEH+X816hl5Y+3MYXThEV
+         z9T4neax+4I3t/WuibL3W4RDLhYadmqYi/lSXlrk/dDiHfP0puVhRaW3XywftsbUksDN
+         Wsgg==
+X-Gm-Message-State: AOAM532Maqjqcejn4zEvloOh6R/pCgyVkFtQFhtuUEZfaIzLl9lNHrKW
+        oxKKi/QbrkB1UaM0SLPg3RiNBw==
+X-Google-Smtp-Source: ABdhPJwtBIUdA1p+Ktu1cWhF7xpUYRoQd2G/kpx1lZYPa72QSunJ0F9p0UsLXj2jqK45VkD4M5qrZw==
+X-Received: by 2002:a05:6000:11c1:: with SMTP id i1mr4613985wrx.16.1608297701780;
+        Fri, 18 Dec 2020 05:21:41 -0800 (PST)
+Received: from dell ([91.110.221.216])
+        by smtp.gmail.com with ESMTPSA id c190sm11393200wme.19.2020.12.18.05.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Dec 2020 05:21:41 -0800 (PST)
+Date:   Fri, 18 Dec 2020 13:21:39 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] mfd: Add MFD driver for ATC260x PMICs
+Message-ID: <20201218132139.GR207743@dell>
+References: <cover.1607216141.git.cristian.ciocaltea@gmail.com>
+ <f538c21de556c66390614bad778f7dc095222e8c.1607216141.git.cristian.ciocaltea@gmail.com>
+ <20201216101000.GD207743@dell>
+ <20201217231731.GA104305@BV030612LT>
 MIME-Version: 1.0
-In-Reply-To: <PR3PR10MB414206497B833D717BC627A280C30@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201217231731.GA104305@BV030612LT>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/12/2020 11:16, Adam Thomson wrote:
-> On 16 December 2020 22:04, Daniel Lezcano wrote:
-> 
->> The code does no longer use the ms unit based fields to set the
->> delays as they are replaced by the jiffies.
->>
->> Remove them and replace their user to use the jiffies version instead.
->>
->> Cc: Thara Gopinath <thara.gopinath@linaro.org>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> 
-> For DA9062: Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+On Fri, 18 Dec 2020, Cristian Ciocaltea wrote:
 
-Thanks !
+> Hi Lee,
+> 
+> Thank you for the detailed review!
+> 
+> I will prepare a new revision, but there are still a couple of open
+> points..
 
+Could you please snip your replies, leaving only the open points.
+
+Scrolling through lots of empty quotes or "done" comments is quite
+time consuming.  Thanks.
+
+[...]
+
+> > > +	/*
+> > > +	 * Using regmap within an atomic context (e.g. accessing a PMIC when
+> > > +	 * powering system down) is normally allowed only if the regmap type
+> > > +	 * is MMIO and the regcache type is either REGCACHE_NONE or
+> > > +	 * REGCACHE_FLAT. For slow buses like I2C and SPI, the regmap is
+> > > +	 * internally protected by a mutex which is acquired non-atomically.
+> > > +	 *
+> > > +	 * Let's improve this by using a customized locking scheme inspired
+> > > +	 * from I2C atomic transfer. See i2c_in_atomic_xfer_mode() for a
+> > > +	 * starting point.
+> > > +	 */
+> > > +	if (system_state > SYSTEM_RUNNING && irqs_disabled())
+> > 
+> > Were does system_state come from?
+> 
+> It is declared in 'include/linux/kernel.h':
+> 
+> extern enum system_states {
+> 	SYSTEM_BOOTING,
+> 	SYSTEM_SCHEDULING,
+> 	SYSTEM_RUNNING,
+> 	SYSTEM_HALT,
+> 	SYSTEM_POWER_OFF,
+> 	SYSTEM_RESTART,
+> 	SYSTEM_SUSPEND,
+> } system_state;
+> 
+> The definition is in 'init/main.c':
+> 
+> enum system_states system_state __read_mostly;
+> EXPORT_SYMBOL(system_state);
+
+Ah, it's a system wide thing.  No problem.
+
+[...]
+
+> > > +	ret = regmap_read(atc260x->regmap, atc260x->rev_reg, &chip_rev);
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Failed to get chip revision\n");
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	if (chip_rev < 0 || chip_rev > 31) {
+> > > +		dev_err(dev, "Unknown chip revision: %d\n", ret);
+> > > +		return -EINVAL;
+> > > +	}
+> > 
+> > This still seems limiting.
+> 
+> This is based on the vendor implementation. Unfortunately I don't have
+> access to a data sheet or any other source of information about the
+> management of the chip revisions.
+
+So which versions does this driver work with?  All 32?
+
+[...]
+
+> > > +const struct of_device_id atc260x_i2c_of_match[] = {
+> > > +	{ .compatible = "actions,atc2603c", .data = (void *)ATC2603C },
+> > > +	{ .compatible = "actions,atc2609a", .data = (void *)ATC2609A },
+> > > +	{ /* sentinel */ }
+> > 
+> > I think you can drop the (void *) casts.
+> 
+> Without the cast, I get the following compiler warning:
+> 
+> drivers/mfd/atc260x-i2c.c:46:46: warning: initialization of ‘const void *’
+> from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+>   { .compatible = "actions,atc2603c", .data = ATC2603C },
+
+Perhaps I'm getting confused with addresses of things.  Never mind.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
