@@ -2,83 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 900A32DE6A5
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Dec 2020 16:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B200C2DE73A
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Dec 2020 17:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725919AbgLRPdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Dec 2020 10:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
+        id S1728216AbgLRQH4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Dec 2020 11:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725878AbgLRPdm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Dec 2020 10:33:42 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C74AC0617A7;
-        Fri, 18 Dec 2020 07:33:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ivzl+SgN1fSmo4LHwIz5rmX0mNUDsLZaBvVQA2TlPFI=; b=L7u/5ZwMZEsfNyllfNMqlLqYso
-        icEocTd4pIA4y+rJOlU5KquYog1RzGuDm+xrPIwzUi12t4SMvvcYbLdSxbb2e9leLcrFUss2Fl0n1
-        y2niBfN26cnXhCZ9uYXQ6BGCZ9/jtNplC8TR3MjoCXyF/lsWXIrAonBODAuVSzm4u8kttnbORN8A8
-        s78dbXKm0rZp0GBe4QkUW6h+kVWNXz8ZsG+PEi4uJS4MEaBOUPhMV8/g3izbi0pLERo4y8m8fDpeV
-        KJhwWf5I1RmRaDDyYH6a2gJ0lgSmvvfI51r6Pvf8Oy9GX6HwdX0LLyy6VwuADyTyP+VZn1637oxDp
-        7aEb+Cdg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kqHkB-0001Qr-8V; Fri, 18 Dec 2020 15:32:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CADA5300B22;
-        Fri, 18 Dec 2020 16:32:31 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B45562BFB9808; Fri, 18 Dec 2020 16:32:31 +0100 (CET)
-Date:   Fri, 18 Dec 2020 16:32:31 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        'Giovanni Gherdovich' <ggherdovich@suse.com>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        'Linux PM' <linux-pm@vger.kernel.org>,
-        'LKML' <linux-kernel@vger.kernel.org>,
-        'Viresh Kumar' <viresh.kumar@linaro.org>,
-        'Srinivas Pandruvada' <srinivas.pandruvada@linux.intel.com>,
-        efault@gmx.de, Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <juri.lelli@gmail.com>
-Subject: Re: [PATCH v1 0/4] cpufreq: Allow drivers to receive more
- information from the governor
-Message-ID: <20201218153231.GB2414@hirez.programming.kicks-ass.net>
-References: <20360841.iInq7taT2Z@kreacher>
- <1607445035.2673.64.camel@suse.com>
- <CAJZ5v0j2u7MrO82+ubx01kvyhDUKo11mfyofF-TAqdSLx_i3Ng@mail.gmail.com>
- <001d01d6cd96$601c8a80$20559f80$@net>
+        with ESMTP id S1726209AbgLRQHz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Dec 2020 11:07:55 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C08C0617A7;
+        Fri, 18 Dec 2020 08:07:15 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id h16so2870838edt.7;
+        Fri, 18 Dec 2020 08:07:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wzkg9HGLizXQ+9HDpc1WbATbetIVR7/Fro/Ux3+6OgA=;
+        b=RZn5K7ghqFrFRHAWNUJrDX3DnMDr2eZAQTEYqdPyiYe5bfli3vb5zMCkLGeNkjmAmz
+         b8Jz1OUrK40kkrdce6s4ykBvygXyHSf4R2OGCiYnYotxMX8mSDRxuuiaVUM8bfRuFj9d
+         RuBOqDSo9Z03rPJ5kOaMYMtfu73/y8mpnqHB6U26ULA4rbKueLrzjrHsnWQxHtf0o6pZ
+         2n+W6D354TDPljCSkIKol7JrTXIO1rewtq/NrwP0yT+ijfcvg7yPwotas1W0/REgWK6v
+         t47xv7iqpkPpDtFRIPzAa9MDViMtp51nmgPI87QRG9P1OpfrjUq+0y+kjM1zepVslDmo
+         FyQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wzkg9HGLizXQ+9HDpc1WbATbetIVR7/Fro/Ux3+6OgA=;
+        b=uQNOHWblnCHeByYujCwkeExnxbcW4+Gpqdcmxb1n7eYGMwlDhJZXpaVDY1aVo0OMwo
+         t5IlME4x3Av/E1+1X68ZtRbrUxgLNy50q33FWdLW+z6ZEAbN7fi42DU0hXcGxsLt/yo0
+         IF/HwZSPpbO3aVxK6VCYpPA1mfrBe4Tpm6bGZhEkip5XHPZiqignQBcB8+QANS3LYafY
+         YwirGHk+CdHwcdYRd3UvV1ey9v47zEmyYiMCS5sdOswF9JKW4grqARg6i/pORXVlaE4w
+         O6b8AmVn1IRizs06KLvJZ82wnKgozdc5WW6bmTV1/CYof+o+/ntVto5az5Y0f54X+BJo
+         JFxQ==
+X-Gm-Message-State: AOAM531CMluFXrCau4N+I6+p6RevFZpdrKXOnPIEwqjTYMSZta/HoJ2G
+        1nG3E3rFX5GrrSqLK03hWec=
+X-Google-Smtp-Source: ABdhPJxvDwAoAVnPk2gGAa5lSa6k9PViJHSSVYv10/jkGSPcg1UXin24sgPKCxZMHjdbU8zNjmkxag==
+X-Received: by 2002:aa7:df91:: with SMTP id b17mr5134614edy.272.1608307634082;
+        Fri, 18 Dec 2020 08:07:14 -0800 (PST)
+Received: from BV030612LT ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id f17sm11561803edu.25.2020.12.18.08.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Dec 2020 08:07:12 -0800 (PST)
+Date:   Fri, 18 Dec 2020 18:07:10 +0200
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] mfd: Add MFD driver for ATC260x PMICs
+Message-ID: <20201218160710.GA134686@BV030612LT>
+References: <cover.1607216141.git.cristian.ciocaltea@gmail.com>
+ <f538c21de556c66390614bad778f7dc095222e8c.1607216141.git.cristian.ciocaltea@gmail.com>
+ <20201216101000.GD207743@dell>
+ <20201217231731.GA104305@BV030612LT>
+ <20201218132139.GR207743@dell>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <001d01d6cd96$601c8a80$20559f80$@net>
+In-Reply-To: <20201218132139.GR207743@dell>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 08, 2020 at 11:14:36AM -0800, Doug Smythies wrote:
-> At least on my system, it is most evident for some of the pipe type tests,
-> where the schedutil governor has never really known what to do. This patch
-> set seems to add enough of a downward bias that this version of the schedutil
-> governor now behaves much like the other versions
+On Fri, Dec 18, 2020 at 01:21:39PM +0000, Lee Jones wrote:
+> On Fri, 18 Dec 2020, Cristian Ciocaltea wrote:
+> 
+> > Hi Lee,
+> > 
+> > Thank you for the detailed review!
+> > 
+> > I will prepare a new revision, but there are still a couple of open
+> > points..
+> 
+> Could you please snip your replies, leaving only the open points.
+> 
+> Scrolling through lots of empty quotes or "done" comments is quite
+> time consuming.  Thanks.
 
-Yeah, pipe relies on task-task interaction, where one task waits on
-another, and by boosting the producer the consumer can start earlier and
-we get more cycles done etc.. Rather similar to IO-wait, where by
-boosting the producer we gain throughput.
+Sure, I'll take that into account.
 
-schedutil doesn't track anything useful here, but it is a semi common
-pattern and it would be really good if we could somehow fix this.
+> [...]
+> 
+> > > > +	ret = regmap_read(atc260x->regmap, atc260x->rev_reg, &chip_rev);
+> > > > +	if (ret) {
+> > > > +		dev_err(dev, "Failed to get chip revision\n");
+> > > > +		return ret;
+> > > > +	}
+> > > > +
+> > > > +	if (chip_rev < 0 || chip_rev > 31) {
+> > > > +		dev_err(dev, "Unknown chip revision: %d\n", ret);
+> > > > +		return -EINVAL;
+> > > > +	}
+> > > 
+> > > This still seems limiting.
+> > 
+> > This is based on the vendor implementation. Unfortunately I don't have
+> > access to a data sheet or any other source of information about the
+> > management of the chip revisions.
+> 
+> So which versions does this driver work with?  All 32?
 
-We obviously have access to the task A wakes task B information, but I'm
-not sure what to do with it, we're tried some things like this in the
-past (although for slightly different reasons) and they've always ended
-up being a mess :/
+I'm not even sure there are so many revisions, I guess that's just a
+rough validation for a vendor reserved range.
+
+For the moment, the only place where the functionality is affected
+by the chip revision is in the regulator driver - there is a special
+handling for the ATC2603C rev.B chip variant.
+
+I expect some additional handling might be required for new drivers
+bringing support for the other functions provided by the hardware.
+
+> [...]
+
+Thanks,
+Cristi
