@@ -2,156 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AD52DED26
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Dec 2020 06:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80ECF2DEE23
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Dec 2020 11:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbgLSFVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Dec 2020 00:21:25 -0500
-Received: from mga01.intel.com ([192.55.52.88]:56415 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726034AbgLSFVY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 19 Dec 2020 00:21:24 -0500
-IronPort-SDR: IAk/BJPNyvyLmcK+Nk31RXDp4McbCrzHHeHQd3UReN0ZxUGDxIo/wxiVVvMSUhodaCwRpPhZ58
- YkuwJG8j4p+Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9839"; a="193963134"
-X-IronPort-AV: E=Sophos;i="5.78,432,1599548400"; 
-   d="scan'208";a="193963134"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 21:19:39 -0800
-IronPort-SDR: AE+E2LV0skps5EhbtDDXuDXQcg/4bNLCviO87GQtjzOZpIlGjU9C2r+6EYITtfMBBA95UQ56fx
- +18eW4zgs2DA==
-X-IronPort-AV: E=Sophos;i="5.78,432,1599548400"; 
-   d="scan'208";a="371001050"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 21:19:38 -0800
-Message-ID: <dffbe4d3d56f29a985d84dcb9e48c7f6fba0514c.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Use most recent guaranteed
- performance values
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>
-Date:   Fri, 18 Dec 2020 21:19:38 -0800
-In-Reply-To: <4600970.KDbqdY64fy@kreacher>
-References: <4600970.KDbqdY64fy@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1726479AbgLSKTh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Dec 2020 05:19:37 -0500
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:31943 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726451AbgLSKTh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Dec 2020 05:19:37 -0500
+Received: from localhost.localdomain ([93.23.13.5])
+        by mwinf5d05 with ME
+        id 6AHr2400406YL0V03AHrCG; Sat, 19 Dec 2020 11:17:53 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 19 Dec 2020 11:17:53 +0100
+X-ME-IP: 93.23.13.5
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        rjw@rjwysocki.net, viresh.kumar@linaro.org, f.fainelli@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] cpufreq: brcmstb-avs-cpufreq: Fix some resource leaks in the error handling path of the probe function
+Date:   Sat, 19 Dec 2020 11:17:51 +0100
+Message-Id: <20201219101751.181783-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2020-12-17 at 20:17 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> When turbo has been disabled by the BIOS, but HWP_CAP.GUARANTEED is
-> changed later, user space may want to take advantage of this
-> increased
-> guaranteed performance.
-> 
-> HWP_CAP.GUARANTEED is not a static value.  It can be adjusted by an
-> out-of-band agent or during an Intel Speed Select performance level
-> change.  The HWP_CAP.MAX is still the maximum achievable performance
-> with turbo disabled by the BIOS, so HWP_CAP.GUARANTEED can still
-> change as long as it remains less than or equal to HWP_CAP.MAX.
-> 
-> When HWP_CAP.GUARANTEED is changed, the sysfs base_frequency
-> attribute shows the most recent guaranteed frequency value. This
-> attribute can be used by user space software to update the scaling
-> min/max limits of the CPU.
-> 
-> Currently, the ->setpolicy() callback already uses the latest
-> HWP_CAP values when setting HWP_REQ, but the ->verify() callback will
-> restrict the user settings to the to old guaranteed performance value
-> which prevents user space from making use of the extra CPU capacity
-> theoretically available to it after increasing HWP_CAP.GUARANTEED.
-> 
-> To address this, read HWP_CAP in intel_pstate_verify_cpu_policy()
-> to obtain the maximum P-state that can be used and use that to
-> confine the policy max limit instead of using the cached and
-> possibly stale pstate.max_freq value for this purpose.
-> 
-> For consistency, update intel_pstate_update_perf_limits() to use the
-> maximum available P-state returned by intel_pstate_get_hwp_max() to
-> compute the maximum frequency instead of using the return value of
-> intel_pstate_get_max_freq() which, again, may be stale.
-> 
-> This issue is a side-effect of fixing the scaling frequency limits in
-> commit eacc9c5a927e ("cpufreq: intel_pstate: Fix
-> intel_pstate_get_hwp_max()
-> for turbo disabled") which currected 
-corrected
+If 'cpufreq_register_driver()' fails, we must release the resources
+allocated in 'brcm_avs_prepare_init()' as already done in the remove
+function.
 
-Thanks,
-Srinivas
+To do that, introduce a new function 'brcm_avs_prepare_uninit()' in order
+to avoid code duplication. This also makes the code more readable (IMHO).
 
-> the setting of the reduced scaling
-> frequency values, but caused stale HWP_CAP.GUARANTEED to be used in
-> the case at hand.
-> 
-> Fixes: eacc9c5a927e ("cpufreq: intel_pstate: Fix
-> intel_pstate_get_hwp_max() for turbo disabled")
-> Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com
-> >
-> Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: 5.8+ <stable@vger.kernel.org> # 5.8+
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/intel_pstate.c |   16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -2207,9 +2207,9 @@ static void intel_pstate_update_perf_lim
->  					    unsigned int policy_min,
->  					    unsigned int policy_max)
->  {
-> -	int max_freq = intel_pstate_get_max_freq(cpu);
->  	int32_t max_policy_perf, min_policy_perf;
->  	int max_state, turbo_max;
-> +	int max_freq;
->  
->  	/*
->  	 * HWP needs some special consideration, because on BDX the
-> @@ -2223,6 +2223,7 @@ static void intel_pstate_update_perf_lim
->  			cpu->pstate.max_pstate : cpu-
-> >pstate.turbo_pstate;
->  		turbo_max = cpu->pstate.turbo_pstate;
->  	}
-> +	max_freq = max_state * cpu->pstate.scaling;
->  
->  	max_policy_perf = max_state * policy_max / max_freq;
->  	if (policy_max == policy_min) {
-> @@ -2325,9 +2326,18 @@ static void intel_pstate_adjust_policy_m
->  static void intel_pstate_verify_cpu_policy(struct cpudata *cpu,
->  					   struct cpufreq_policy_data
-> *policy)
->  {
-> +	int max_freq;
-> +
->  	update_turbo_state();
-> -	cpufreq_verify_within_limits(policy, policy->cpuinfo.min_freq,
-> -				     intel_pstate_get_max_freq(cpu));
-> +	if (hwp_active) {
-> +		int max_state, turbo_max;
-> +
-> +		intel_pstate_get_hwp_max(cpu->cpu, &turbo_max,
-> &max_state);
-> +		max_freq = max_state * cpu->pstate.scaling;
-> +	} else {
-> +		max_freq = intel_pstate_get_max_freq(cpu);
-> +	}
-> +	cpufreq_verify_within_limits(policy, policy->cpuinfo.min_freq,
-> max_freq);
->  
->  	intel_pstate_adjust_policy_max(cpu, policy);
->  }
-> 
-> 
-> 
+Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+I'm not sure that the existing error handling in the remove function is
+correct and/or needed.
+---
+ drivers/cpufreq/brcmstb-avs-cpufreq.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+index 3e31e5d28b79..750ca7cfccb0 100644
+--- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
++++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+@@ -597,6 +597,16 @@ static int brcm_avs_prepare_init(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static void brcm_avs_prepare_uninit(struct platform_device *pdev)
++{
++	struct private_data *priv;
++
++	priv = platform_get_drvdata(pdev);
++
++	iounmap(priv->avs_intr_base);
++	iounmap(priv->base);
++}
++
+ static int brcm_avs_cpufreq_init(struct cpufreq_policy *policy)
+ {
+ 	struct cpufreq_frequency_table *freq_table;
+@@ -732,21 +742,26 @@ static int brcm_avs_cpufreq_probe(struct platform_device *pdev)
+ 
+ 	brcm_avs_driver.driver_data = pdev;
+ 
+-	return cpufreq_register_driver(&brcm_avs_driver);
++	ret = cpufreq_register_driver(&brcm_avs_driver);
++	if (ret)
++		goto err_uninit;
++
++	return 0;
++
++err_uninit:
++	brcm_avs_prepare_uninit(pdev);
++	return ret;
+ }
+ 
+ static int brcm_avs_cpufreq_remove(struct platform_device *pdev)
+ {
+-	struct private_data *priv;
+ 	int ret;
+ 
+ 	ret = cpufreq_unregister_driver(&brcm_avs_driver);
+ 	if (ret)
+ 		return ret;
+ 
+-	priv = platform_get_drvdata(pdev);
+-	iounmap(priv->base);
+-	iounmap(priv->avs_intr_base);
++	brcm_avs_prepare_uninit(pdev);
+ 
+ 	return 0;
+ }
+-- 
+2.27.0
 
