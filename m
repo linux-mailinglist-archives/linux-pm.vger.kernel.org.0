@@ -2,107 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ECF2DEE23
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Dec 2020 11:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EAA2DF1BC
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Dec 2020 22:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbgLSKTh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Dec 2020 05:19:37 -0500
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:31943 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbgLSKTh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Dec 2020 05:19:37 -0500
-Received: from localhost.localdomain ([93.23.13.5])
-        by mwinf5d05 with ME
-        id 6AHr2400406YL0V03AHrCG; Sat, 19 Dec 2020 11:17:53 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 19 Dec 2020 11:17:53 +0100
-X-ME-IP: 93.23.13.5
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org, f.fainelli@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] cpufreq: brcmstb-avs-cpufreq: Fix some resource leaks in the error handling path of the probe function
-Date:   Sat, 19 Dec 2020 11:17:51 +0100
-Message-Id: <20201219101751.181783-1-christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727661AbgLSVHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Dec 2020 16:07:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49560 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727794AbgLSVHV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 19 Dec 2020 16:07:21 -0500
+Subject: Re: [GIT PULL] power-supply changes for 5.11
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608412001;
+        bh=KvShiu93UVVXSjn6zg1RGi8gcBZBLIXK4RW96Y5SjNs=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=adD0R6VokWWyuUJBv8e/oLGST58+gG1CqDnwrHtukFuX+385zMl+qPz+w2egL23K2
+         KS5gPe9AKJj9F7OexG1rS950TaxNy1rZVQsKjIzVTM4IbxkKlwoDnipkZfDQzHEPLD
+         /pu+Rk/mFSE9u5YFJ4FsNSqdVVlVg9B8VZwUoOwFldQM+lc3flrGhfpuFnTrIMH9gC
+         K6Y8olkeAuTSHw5r+DeuXDaU5YX7bJfV28jN6Bq4PUiSSWqqqSERIVNJL2w+E0fbWh
+         GdwF6ONF+uM8eaIPm3VtLK3LZOOdBLdlP1MN3VS035/Vr238ypeKWUor+AAV9zXlj0
+         MFX7ZOMbpwR5g==
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20201218235914.cfmeap7y67hkbt4t@earth.universe>
+References: <20201218235914.cfmeap7y67hkbt4t@earth.universe>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20201218235914.cfmeap7y67hkbt4t@earth.universe>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.11
+X-PR-Tracked-Commit-Id: c2362519a04a7307e386e43bc567780d0d7631c7
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 11c336526e2504d34c70fcf11a3642ae333a5085
+Message-Id: <160841200114.20285.16552723380342070658.pr-tracker-bot@kernel.org>
+Date:   Sat, 19 Dec 2020 21:06:41 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If 'cpufreq_register_driver()' fails, we must release the resources
-allocated in 'brcm_avs_prepare_init()' as already done in the remove
-function.
+The pull request you sent on Sat, 19 Dec 2020 00:59:14 +0100:
 
-To do that, introduce a new function 'brcm_avs_prepare_uninit()' in order
-to avoid code duplication. This also makes the code more readable (IMHO).
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.11
 
-Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-I'm not sure that the existing error handling in the remove function is
-correct and/or needed.
----
- drivers/cpufreq/brcmstb-avs-cpufreq.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/11c336526e2504d34c70fcf11a3642ae333a5085
 
-diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-index 3e31e5d28b79..750ca7cfccb0 100644
---- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-+++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-@@ -597,6 +597,16 @@ static int brcm_avs_prepare_init(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static void brcm_avs_prepare_uninit(struct platform_device *pdev)
-+{
-+	struct private_data *priv;
-+
-+	priv = platform_get_drvdata(pdev);
-+
-+	iounmap(priv->avs_intr_base);
-+	iounmap(priv->base);
-+}
-+
- static int brcm_avs_cpufreq_init(struct cpufreq_policy *policy)
- {
- 	struct cpufreq_frequency_table *freq_table;
-@@ -732,21 +742,26 @@ static int brcm_avs_cpufreq_probe(struct platform_device *pdev)
- 
- 	brcm_avs_driver.driver_data = pdev;
- 
--	return cpufreq_register_driver(&brcm_avs_driver);
-+	ret = cpufreq_register_driver(&brcm_avs_driver);
-+	if (ret)
-+		goto err_uninit;
-+
-+	return 0;
-+
-+err_uninit:
-+	brcm_avs_prepare_uninit(pdev);
-+	return ret;
- }
- 
- static int brcm_avs_cpufreq_remove(struct platform_device *pdev)
- {
--	struct private_data *priv;
- 	int ret;
- 
- 	ret = cpufreq_unregister_driver(&brcm_avs_driver);
- 	if (ret)
- 		return ret;
- 
--	priv = platform_get_drvdata(pdev);
--	iounmap(priv->base);
--	iounmap(priv->avs_intr_base);
-+	brcm_avs_prepare_uninit(pdev);
- 
- 	return 0;
- }
+Thank you!
+
 -- 
-2.27.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
