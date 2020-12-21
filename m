@@ -2,238 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF54B2E023F
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Dec 2020 22:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6702E0268
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Dec 2020 23:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgLUV7V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Dec 2020 16:59:21 -0500
-Received: from mga09.intel.com ([134.134.136.24]:13441 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgLUV7V (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 21 Dec 2020 16:59:21 -0500
-IronPort-SDR: BLD+p4FhCNuJ/+WM8TIL2RNNarbCRBotCdvofFR7Txc26+KLSFiduNYjL7WWh26KBOXX4S76yS
- GYLwzqKvAI/w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9842"; a="175936822"
-X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
-   d="scan'208";a="175936822"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 13:58:39 -0800
-IronPort-SDR: mSZJFdvGkE8sUE3M97hsklyXP6oe/ToH1TpvCj7w+qFqLksp3CbZH2B0E7QMRdpHEbA9gnvQsm
- /DutovF4aKfw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
-   d="scan'208";a="396533088"
-Received: from lkp-server01.sh.intel.com (HELO 65587561063d) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Dec 2020 13:58:37 -0800
-Received: from kbuild by 65587561063d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1krTCO-00017b-VF; Mon, 21 Dec 2020 21:58:36 +0000
-Date:   Tue, 22 Dec 2020 05:58:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- 7e946849977d59d3e6c0b3112da6a36757051bc7
-Message-ID: <5fe11a7c.SVNV1lvSlZrvFHtY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725899AbgLUWU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Dec 2020 17:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgLUWU6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Dec 2020 17:20:58 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82877C0613D3;
+        Mon, 21 Dec 2020 14:20:18 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id f26so8662928qka.0;
+        Mon, 21 Dec 2020 14:20:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=apJ8Ig/EiKTD7cW9gZsBxbwVR+J1NM8sWspkdwWpVME=;
+        b=gftRiDT3yzeIi4Gl/Kndu1LUNA4OoW213qnuk3+GoictPCHq/B9jdsS5bULo9h3LF+
+         btloMxMklOVxdYm8IkYfyQm1cX8Ma3aFFhMV+SHf+4zFQUbR8PpgVOoKoUNLhPKea7SP
+         mAxU5tDi/ARpy5gOC5VoD8SszibkZFXTzqkQVSDWZp40+P5BbLrX80IyiIz1VhucMSl0
+         Qmx3gnsUYsl81YvKJwoEfF5eOHa4ubMMwkqbNIz89uY5tDppnpk+o2tnRDMMrJuFVJEO
+         eWtIkdxEd+HqImWiel4MaK/SOUMysjQMSOYXA/numGQ+tifXpKxRNv8v8wYPxc4Btbes
+         i2jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=apJ8Ig/EiKTD7cW9gZsBxbwVR+J1NM8sWspkdwWpVME=;
+        b=Cth604JRJMaL6HEn7gke438idGIK3O2zTwBVzIQ2VfSqwRLx9KAI5peuXJuMJuhSR7
+         MQEuF6ZYH8hWwSptQ+lxHtLoe/Qi3sLij+C19Q1sMoCA1xelrR4TS2DwvPqhwNTSXlMN
+         4zbjmJWFbVOGaSrT53Q+aTZi7yfVt34m991NjUaCoyjgxOHzzunqh/0ER2cSTwRUktnL
+         TFZCn6gYiEFEZYdE5dEww6MRTMLOlhvWMQN5GP3xYtQDOYXPzRAWxMb4EF3m57u9JRjP
+         s8mV5bZ41tkzf5X0BP2ss5J7QgavBamWnLm/46/+sU7XN8SRN9JYXCenqtmE6d0gcusk
+         /IdQ==
+X-Gm-Message-State: AOAM530QXX9kDLymd6F7b6GdoUnxE9A1nlyzDIbyWCCk77qEOcq4OSIX
+        /L/ulMTs73sBqftDuBN985w=
+X-Google-Smtp-Source: ABdhPJyMi9/vp62EjHvUhhdx/C+hORaQVWkPmoX/YydeAqZetj+hzR5vQRnlL8Tpd34IIv5gnOvo0Q==
+X-Received: by 2002:a37:7143:: with SMTP id m64mr19249783qkc.280.1608589217535;
+        Mon, 21 Dec 2020 14:20:17 -0800 (PST)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id r127sm12014204qkf.75.2020.12.21.14.20.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Dec 2020 14:20:16 -0800 (PST)
+Date:   Mon, 21 Dec 2020 15:20:15 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Tom Rix <trix@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: intel_pstate: remove obsolete functions
+Message-ID: <20201221222015.GA3389117@ubuntu-m3-large-x86>
+References: <20201221051320.18391-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20201221051320.18391-1-lukas.bulwahn@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 7e946849977d59d3e6c0b3112da6a36757051bc7  Merge branch 'acpi-sleep' into linux-next
+On Mon, Dec 21, 2020 at 06:13:20AM +0100, Lukas Bulwahn wrote:
+> percent_fp() was used in intel_pstate_pid_reset(), which was removed in
+> commit 9d0ef7af1f2d ("cpufreq: intel_pstate: Do not use PID-based P-state
+> selection") and hence, percent_fp() is unused since then.
+> 
+> percent_ext_fp() was last used in intel_pstate_update_perf_limits(), which
+> was refactored in commit 1a4fe38add8b ("cpufreq: intel_pstate: Remove
+> max/min fractions to limit performance"), and hence, percent_ext_fp() is
+> unused since then.
+> 
+> make CC=clang W=1 points us those unused functions:
+> 
+> drivers/cpufreq/intel_pstate.c:79:23: warning: unused function 'percent_fp' [-Wunused-function]
+> static inline int32_t percent_fp(int percent)
+>                       ^
+> 
+> drivers/cpufreq/intel_pstate.c:94:23: warning: unused function 'percent_ext_fp' [-Wunused-function]
+> static inline int32_t percent_ext_fp(int percent)
+>                       ^
+> 
+> Remove those obsolete functions.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Warning reports:
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
 
-https://lore.kernel.org/linux-acpi/202012180806.uUcdy2LC-lkp@intel.com
-https://lore.kernel.org/linux-acpi/202012220413.PaYA4ruj-lkp@intel.com
-
-Warning in current branch:
-
-drivers/acpi/x86/s2idle.c:108:30: warning: variable 'info' set but not used [-Wunused-but-set-variable]
-drivers/acpi/x86/s2idle.c:138:25: warning: variable 'obj_new' set but not used [-Wunused-but-set-variable]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- i386-allyesconfig
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-defconfig
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-randconfig-a012-20201221
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-randconfig-a013-20201221
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-randconfig-a014-20201221
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-randconfig-a016-20201221
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-randconfig-c001-20201221
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-randconfig-m021-20201221
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- i386-randconfig-s001-20201221
-|   `-- drivers-acpi-x86-s2idle.c:sparse:sparse:restricted-suspend_state_t-degrades-to-integer
-|-- x86_64-allmodconfig
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- x86_64-allyesconfig
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- x86_64-defconfig
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- x86_64-kexec
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- x86_64-randconfig-s021-20201221
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- x86_64-rhel
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- x86_64-rhel-7.6-kselftests
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-|-- x86_64-rhel-8.3
-|   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-|   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-`-- x86_64-rhel-8.3-kbuiltin
-    |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
-    `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
-
-elapsed time: 723m
-
-configs tested: 111
-configs skipped: 2
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                       imx_v4_v5_defconfig
-nios2                         3c120_defconfig
-sh                   sh7724_generic_defconfig
-sparc64                             defconfig
-powerpc                  storcenter_defconfig
-arm                     am200epdkit_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                           u8500_defconfig
-mips                       capcella_defconfig
-mips                            e55_defconfig
-sh                        sh7757lcr_defconfig
-arc                          axs103_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                      acadia_defconfig
-powerpc                    mvme5100_defconfig
-arm                           omap1_defconfig
-s390                             alldefconfig
-c6x                        evmc6474_defconfig
-h8300                     edosk2674_defconfig
-mips                      malta_kvm_defconfig
-mips                         tb0287_defconfig
-openrisc                            defconfig
-arm                          ep93xx_defconfig
-c6x                              alldefconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                  defconfig
-powerpc                 mpc8560_ads_defconfig
-c6x                         dsk6455_defconfig
-sh                           se7721_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20201221
-i386                 randconfig-a005-20201221
-i386                 randconfig-a006-20201221
-i386                 randconfig-a004-20201221
-i386                 randconfig-a003-20201221
-i386                 randconfig-a001-20201221
-i386                 randconfig-a005-20201222
-i386                 randconfig-a002-20201222
-i386                 randconfig-a006-20201222
-i386                 randconfig-a004-20201222
-i386                 randconfig-a003-20201222
-i386                 randconfig-a001-20201222
-i386                 randconfig-a011-20201221
-i386                 randconfig-a016-20201221
-i386                 randconfig-a014-20201221
-i386                 randconfig-a012-20201221
-i386                 randconfig-a015-20201221
-i386                 randconfig-a013-20201221
-x86_64               randconfig-a001-20201221
-x86_64               randconfig-a006-20201221
-x86_64               randconfig-a002-20201221
-x86_64               randconfig-a004-20201221
-x86_64               randconfig-a003-20201221
-x86_64               randconfig-a005-20201221
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a015-20201221
-x86_64               randconfig-a014-20201221
-x86_64               randconfig-a016-20201221
-x86_64               randconfig-a012-20201221
-x86_64               randconfig-a013-20201221
-x86_64               randconfig-a011-20201221
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> applies cleanly on current master and next-20201221
+> 
+> Srinivas, Len, Rafael, Viresh, please pick this minor non-urgent cleanup patch.
+> 
+>  drivers/cpufreq/intel_pstate.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 2a4db856222f..0e35dd247986 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -76,11 +76,6 @@ static inline int ceiling_fp(int32_t x)
+>  	return ret;
+>  }
+>  
+> -static inline int32_t percent_fp(int percent)
+> -{
+> -	return div_fp(percent, 100);
+> -}
+> -
+>  static inline u64 mul_ext_fp(u64 x, u64 y)
+>  {
+>  	return (x * y) >> EXT_FRAC_BITS;
+> @@ -91,11 +86,6 @@ static inline u64 div_ext_fp(u64 x, u64 y)
+>  	return div64_u64(x << EXT_FRAC_BITS, y);
+>  }
+>  
+> -static inline int32_t percent_ext_fp(int percent)
+> -{
+> -	return div_ext_fp(percent, 100);
+> -}
+> -
+>  /**
+>   * struct sample -	Store performance sample
+>   * @core_avg_perf:	Ratio of APERF/MPERF which is the actual average
+> -- 
+> 2.17.1
+> 
