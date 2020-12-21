@@ -2,94 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9EE2DF61D
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Dec 2020 17:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DA82DF88F
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Dec 2020 06:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727130AbgLTQm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Dec 2020 11:42:27 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:37724 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727112AbgLTQm0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Dec 2020 11:42:26 -0500
-Received: by mail-ot1-f53.google.com with SMTP id o11so6772504ote.4;
-        Sun, 20 Dec 2020 08:42:11 -0800 (PST)
+        id S1727341AbgLUFOK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Dec 2020 00:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727340AbgLUFOJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Dec 2020 00:14:09 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE50C0613D3;
+        Sun, 20 Dec 2020 21:13:29 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id x22so8712516wmc.5;
+        Sun, 20 Dec 2020 21:13:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=lLDJBIJ2YYNuh2CnTnkqFja+9uBc8NH5OZ465zjG1e0=;
+        b=kPNDbFnpD7iBvL8GXzD68h40CmDNoKVu8BoXOP80o6fMKA/DKJvljX7bNE9nq9da0o
+         gNWuBK0whcPuN26S4JlpDQUslAw5VTRF3bwqqLA7tqfj/NLaFncpkUjQunj/lETzyLT6
+         VgfkWOYLDBFuviCrmoMu7VYQLaJ8guzVe+NaiD7j5xSNrLar0EmgnKDNfANz7x8J01AI
+         ef4FZBmwnZGS3XbfyetlnY1H7bq5qyvrpAe2641+rJKevlco5V4JqzGoJuXA72XClgJR
+         0yVTaW/GgMBV59+5IIg/xDZ26mVo29onoMDgDNAf70xHZ3WdWnEiudAc7feObqq4IrBB
+         FyUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uMR8UsOOJm/t0/BOhlXp0IthO+C1BPZiiQ0XR2+w7ww=;
-        b=tN4EttWdmxiS6dAbsrwdkDa8g0SkhM+tMitDgKwse15nmbt7NwxspFaQ/YOe3wMXqc
-         TRmRg3OE05AbI1AgMuZsY1vrRjFpYbUOLhxchjPIEud4ooZsU9mtqWsdNKiidBZ2Nfaw
-         NGsRzJ8SVA+r4rWTQDcHqCZ/kIKrpfTmPFO6its6kemJtZZxnBF1LQX0Q1SQBLMq7kQ3
-         ujGywnmNMkvHFjvZVl/cHKRVGVLe2wp/j1PCnGKMVmXTEjeupg2x3sDfgOucvqTM3SLa
-         h1ZmpVptmpICbodn6fFtP1cZHdK4CMxJJENWSeJH9jKwY7VwI7lysNLaZmamR8xUYSHS
-         SBKw==
-X-Gm-Message-State: AOAM533++AxVjw6f4PjXTKV0JMpQwvIZFr7C4Tv6ks++BIrGY86W2bPM
-        OqJfJRi6BomaedVDNmyZVLOL0F7E908l9ERSQi8=
-X-Google-Smtp-Source: ABdhPJxu1NdQ2VEEArUeKHXHU7STlJr8bQSiHLupXAthuz+qkIMoCfQJFz8lBMF+7/LsFVi3fOFkILZwTDH18FoJqZ4=
-X-Received: by 2002:a9d:67da:: with SMTP id c26mr9552050otn.321.1608482505856;
- Sun, 20 Dec 2020 08:41:45 -0800 (PST)
-MIME-Version: 1.0
-References: <4600970.KDbqdY64fy@kreacher> <dffbe4d3d56f29a985d84dcb9e48c7f6fba0514c.camel@linux.intel.com>
-In-Reply-To: <dffbe4d3d56f29a985d84dcb9e48c7f6fba0514c.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 20 Dec 2020 17:41:30 +0100
-Message-ID: <CAJZ5v0jemyvcEFr1n=ZTBnisOW2K2MfhkxJmppEfqqogYcNbmA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Use most recent guaranteed
- performance values
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lLDJBIJ2YYNuh2CnTnkqFja+9uBc8NH5OZ465zjG1e0=;
+        b=IxH3oKEExiKzolG3f43pSqpPwdrWnC9urw3PSV/H3aaFMVFmFlTwIUYA6PeXayzmrL
+         Fx4Hr5QsFOF5NBPVQhyWTfnbbUUUNPUmlbF2azSBsHw8N1RBadMqzx2IR7uiN0W4HADt
+         iwClh56F2lLySfTlr8SE4eJ5VVrfhpuEDCNvSPMQ/ANA1YhJBnUK7SFKZQl9h5d32eF4
+         A8yNG9u39/FSFpaFVja4DTKex7XZJbX3HB3KD1UFfJ0yuoIxnutuQ7Cz4kRFGhG/FB44
+         fo0TP2JW0IUVIlTQUfiU9Vw1idEB7ABFkTmUqZAjhTEkglGqaO6lnyxP/2sIHtKJPH8P
+         PcAA==
+X-Gm-Message-State: AOAM533UUFgjX3YmA6VAgdUsusfWCQLxA/5jsP6PUgExjhArAG5jF/BC
+        k5V5b5jF4FvLmR5lNelyZNA=
+X-Google-Smtp-Source: ABdhPJxilLxWAa1GB0cvaXvue0KuVY/Q1aXIWqgyYMiKucCJaNaWS7R/N3pkOeVwn/QfOzZBDCJiIg==
+X-Received: by 2002:a7b:cb54:: with SMTP id v20mr8483618wmj.148.1608527608118;
+        Sun, 20 Dec 2020 21:13:28 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2dcc:3600:8456:e09e:aa48:2c57])
+        by smtp.gmail.com with ESMTPSA id p8sm21341535wru.50.2020.12.20.21.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Dec 2020 21:13:27 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-pm@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] cpufreq: intel_pstate: remove obsolete functions
+Date:   Mon, 21 Dec 2020 06:13:20 +0100
+Message-Id: <20201221051320.18391-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Dec 19, 2020 at 6:21 AM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Thu, 2020-12-17 at 20:17 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > When turbo has been disabled by the BIOS, but HWP_CAP.GUARANTEED is
-> > changed later, user space may want to take advantage of this
-> > increased
-> > guaranteed performance.
-> >
-> > HWP_CAP.GUARANTEED is not a static value.  It can be adjusted by an
-> > out-of-band agent or during an Intel Speed Select performance level
-> > change.  The HWP_CAP.MAX is still the maximum achievable performance
-> > with turbo disabled by the BIOS, so HWP_CAP.GUARANTEED can still
-> > change as long as it remains less than or equal to HWP_CAP.MAX.
-> >
-> > When HWP_CAP.GUARANTEED is changed, the sysfs base_frequency
-> > attribute shows the most recent guaranteed frequency value. This
-> > attribute can be used by user space software to update the scaling
-> > min/max limits of the CPU.
-> >
-> > Currently, the ->setpolicy() callback already uses the latest
-> > HWP_CAP values when setting HWP_REQ, but the ->verify() callback will
-> > restrict the user settings to the to old guaranteed performance value
-> > which prevents user space from making use of the extra CPU capacity
-> > theoretically available to it after increasing HWP_CAP.GUARANTEED.
-> >
-> > To address this, read HWP_CAP in intel_pstate_verify_cpu_policy()
-> > to obtain the maximum P-state that can be used and use that to
-> > confine the policy max limit instead of using the cached and
-> > possibly stale pstate.max_freq value for this purpose.
-> >
-> > For consistency, update intel_pstate_update_perf_limits() to use the
-> > maximum available P-state returned by intel_pstate_get_hwp_max() to
-> > compute the maximum frequency instead of using the return value of
-> > intel_pstate_get_max_freq() which, again, may be stale.
-> >
-> > This issue is a side-effect of fixing the scaling frequency limits in
-> > commit eacc9c5a927e ("cpufreq: intel_pstate: Fix
-> > intel_pstate_get_hwp_max()
-> > for turbo disabled") which currected
-> corrected
+percent_fp() was used in intel_pstate_pid_reset(), which was removed in
+commit 9d0ef7af1f2d ("cpufreq: intel_pstate: Do not use PID-based P-state
+selection") and hence, percent_fp() is unused since then.
 
-Right, thanks!
+percent_ext_fp() was last used in intel_pstate_update_perf_limits(), which
+was refactored in commit 1a4fe38add8b ("cpufreq: intel_pstate: Remove
+max/min fractions to limit performance"), and hence, percent_ext_fp() is
+unused since then.
+
+make CC=clang W=1 points us those unused functions:
+
+drivers/cpufreq/intel_pstate.c:79:23: warning: unused function 'percent_fp' [-Wunused-function]
+static inline int32_t percent_fp(int percent)
+                      ^
+
+drivers/cpufreq/intel_pstate.c:94:23: warning: unused function 'percent_ext_fp' [-Wunused-function]
+static inline int32_t percent_ext_fp(int percent)
+                      ^
+
+Remove those obsolete functions.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+applies cleanly on current master and next-20201221
+
+Srinivas, Len, Rafael, Viresh, please pick this minor non-urgent cleanup patch.
+
+ drivers/cpufreq/intel_pstate.c | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 2a4db856222f..0e35dd247986 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -76,11 +76,6 @@ static inline int ceiling_fp(int32_t x)
+ 	return ret;
+ }
+ 
+-static inline int32_t percent_fp(int percent)
+-{
+-	return div_fp(percent, 100);
+-}
+-
+ static inline u64 mul_ext_fp(u64 x, u64 y)
+ {
+ 	return (x * y) >> EXT_FRAC_BITS;
+@@ -91,11 +86,6 @@ static inline u64 div_ext_fp(u64 x, u64 y)
+ 	return div64_u64(x << EXT_FRAC_BITS, y);
+ }
+ 
+-static inline int32_t percent_ext_fp(int percent)
+-{
+-	return div_ext_fp(percent, 100);
+-}
+-
+ /**
+  * struct sample -	Store performance sample
+  * @core_avg_perf:	Ratio of APERF/MPERF which is the actual average
+-- 
+2.17.1
+
