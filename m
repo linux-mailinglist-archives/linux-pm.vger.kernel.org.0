@@ -2,127 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DA82DF88F
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Dec 2020 06:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9771F2DF9C5
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Dec 2020 09:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727341AbgLUFOK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Dec 2020 00:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S1726260AbgLUILG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Dec 2020 03:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727340AbgLUFOJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Dec 2020 00:14:09 -0500
+        with ESMTP id S1727171AbgLUILF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Dec 2020 03:11:05 -0500
 Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE50C0613D3;
-        Sun, 20 Dec 2020 21:13:29 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id x22so8712516wmc.5;
-        Sun, 20 Dec 2020 21:13:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AB9C061257
+        for <linux-pm@vger.kernel.org>; Mon, 21 Dec 2020 00:10:19 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id 190so9025173wmz.0
+        for <linux-pm@vger.kernel.org>; Mon, 21 Dec 2020 00:10:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=lLDJBIJ2YYNuh2CnTnkqFja+9uBc8NH5OZ465zjG1e0=;
-        b=kPNDbFnpD7iBvL8GXzD68h40CmDNoKVu8BoXOP80o6fMKA/DKJvljX7bNE9nq9da0o
-         gNWuBK0whcPuN26S4JlpDQUslAw5VTRF3bwqqLA7tqfj/NLaFncpkUjQunj/lETzyLT6
-         VgfkWOYLDBFuviCrmoMu7VYQLaJ8guzVe+NaiD7j5xSNrLar0EmgnKDNfANz7x8J01AI
-         ef4FZBmwnZGS3XbfyetlnY1H7bq5qyvrpAe2641+rJKevlco5V4JqzGoJuXA72XClgJR
-         0yVTaW/GgMBV59+5IIg/xDZ26mVo29onoMDgDNAf70xHZ3WdWnEiudAc7feObqq4IrBB
-         FyUg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=8twWC59nf0hTSYRSk++JzXeEHnzUQgXnLgzo/+5kK6g=;
+        b=ak/30GTUKGf0uURuIBRwK+Z5nJM5LLKw2sFfAb3zHnm6/kGc8thcF/tq1Kdw0YgePc
+         quZBt+/yN0XkBbH/2ISxoXBxFlrf5SW/EIvSLp7LpjmM6y7oCghJ+6XmDxWTJl9qxg7A
+         VzpHTZ8yM97NEExXS00xYG2q8l7LBzVWExi8rJo5SamM2C1AiyixFAeHyWbzaC3Oxecd
+         eQvcC33NzsBe5WsAH1lbD5KtPhsuAvtTZB/NUrsyFXtDYC94GeBeq5bwxYfsxYQqNV0I
+         Qy7fowAljpu7XMO0oFZFeYq644ZHr47XXw/yhWS75H17Jk381f8jC5QBpVkeKsWhle4F
+         guug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=lLDJBIJ2YYNuh2CnTnkqFja+9uBc8NH5OZ465zjG1e0=;
-        b=IxH3oKEExiKzolG3f43pSqpPwdrWnC9urw3PSV/H3aaFMVFmFlTwIUYA6PeXayzmrL
-         Fx4Hr5QsFOF5NBPVQhyWTfnbbUUUNPUmlbF2azSBsHw8N1RBadMqzx2IR7uiN0W4HADt
-         iwClh56F2lLySfTlr8SE4eJ5VVrfhpuEDCNvSPMQ/ANA1YhJBnUK7SFKZQl9h5d32eF4
-         A8yNG9u39/FSFpaFVja4DTKex7XZJbX3HB3KD1UFfJ0yuoIxnutuQ7Cz4kRFGhG/FB44
-         fo0TP2JW0IUVIlTQUfiU9Vw1idEB7ABFkTmUqZAjhTEkglGqaO6lnyxP/2sIHtKJPH8P
-         PcAA==
-X-Gm-Message-State: AOAM533UUFgjX3YmA6VAgdUsusfWCQLxA/5jsP6PUgExjhArAG5jF/BC
-        k5V5b5jF4FvLmR5lNelyZNA=
-X-Google-Smtp-Source: ABdhPJxilLxWAa1GB0cvaXvue0KuVY/Q1aXIWqgyYMiKucCJaNaWS7R/N3pkOeVwn/QfOzZBDCJiIg==
-X-Received: by 2002:a7b:cb54:: with SMTP id v20mr8483618wmj.148.1608527608118;
-        Sun, 20 Dec 2020 21:13:28 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2dcc:3600:8456:e09e:aa48:2c57])
-        by smtp.gmail.com with ESMTPSA id p8sm21341535wru.50.2020.12.20.21.13.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=8twWC59nf0hTSYRSk++JzXeEHnzUQgXnLgzo/+5kK6g=;
+        b=V2Opi01kM5E/l4cBl1ncxGTKi5xNGt0A8hj/4Hlhdx7j9YoJxzrsxER+oaPfRhCMiy
+         a6GCaVU9zd+TVeTtAQykLNGyqxga8EV9Cc6fBLbAobOTO5y5cExzOiNYcCXf+Pz3G3/h
+         gKoir9JvDSS8g++LuzWgNipu1Hao9UcUPRD58H8egnlApvnGbtMom4mg56DE1qtljYK4
+         PpdijIyLHFukp2qS6urBjuUx3hE3tM9q5sUZhqAJ/ec4b/nqI8bN+D8Z7KJBzwaph4Bg
+         v2xmU/BSvetWdONtGBYDNz8EfaiSf/gjdfPh+1HqRK+IEKj/74XOnoxbOq2TVggIGGFg
+         xA4g==
+X-Gm-Message-State: AOAM531sDi6S/98dyFn0IgFQ5Pl5pSv+Jhx8ttg+L5N5zdVvCcgV54Mz
+        ENh+jTHPiwhDQuugXbI2lNZrtQ==
+X-Google-Smtp-Source: ABdhPJyzsu0gxJR0INTrbYFQFjvuiP/hGxunooQWgYOOw8WFVAyYSQeKqMfhChXQwTCsxaVthOHAwA==
+X-Received: by 2002:a1c:a5d8:: with SMTP id o207mr15647996wme.30.1608538218599;
+        Mon, 21 Dec 2020 00:10:18 -0800 (PST)
+Received: from dell ([91.110.221.144])
+        by smtp.gmail.com with ESMTPSA id a62sm26520714wmh.40.2020.12.21.00.10.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Dec 2020 21:13:27 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mon, 21 Dec 2020 00:10:17 -0800 (PST)
+Date:   Mon, 21 Dec 2020 08:10:15 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         linux-pm@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] cpufreq: intel_pstate: remove obsolete functions
-Date:   Mon, 21 Dec 2020 06:13:20 +0100
-Message-Id: <20201221051320.18391-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Subject: Re: [PATCH v3 3/7] mfd: Add MFD driver for ATC260x PMICs
+Message-ID: <20201221081015.GA4825@dell>
+References: <cover.1607216141.git.cristian.ciocaltea@gmail.com>
+ <f538c21de556c66390614bad778f7dc095222e8c.1607216141.git.cristian.ciocaltea@gmail.com>
+ <20201216101000.GD207743@dell>
+ <20201217231731.GA104305@BV030612LT>
+ <20201218132139.GR207743@dell>
+ <20201218160710.GA134686@BV030612LT>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201218160710.GA134686@BV030612LT>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-percent_fp() was used in intel_pstate_pid_reset(), which was removed in
-commit 9d0ef7af1f2d ("cpufreq: intel_pstate: Do not use PID-based P-state
-selection") and hence, percent_fp() is unused since then.
+On Fri, 18 Dec 2020, Cristian Ciocaltea wrote:
 
-percent_ext_fp() was last used in intel_pstate_update_perf_limits(), which
-was refactored in commit 1a4fe38add8b ("cpufreq: intel_pstate: Remove
-max/min fractions to limit performance"), and hence, percent_ext_fp() is
-unused since then.
+> On Fri, Dec 18, 2020 at 01:21:39PM +0000, Lee Jones wrote:
+> > On Fri, 18 Dec 2020, Cristian Ciocaltea wrote:
+> > 
+> > > Hi Lee,
+> > > 
+> > > Thank you for the detailed review!
+> > > 
+> > > I will prepare a new revision, but there are still a couple of open
+> > > points..
+> > 
+> > Could you please snip your replies, leaving only the open points.
+> > 
+> > Scrolling through lots of empty quotes or "done" comments is quite
+> > time consuming.  Thanks.
+> 
+> Sure, I'll take that into account.
+> 
+> > [...]
+> > 
+> > > > > +	ret = regmap_read(atc260x->regmap, atc260x->rev_reg, &chip_rev);
+> > > > > +	if (ret) {
+> > > > > +		dev_err(dev, "Failed to get chip revision\n");
+> > > > > +		return ret;
+> > > > > +	}
+> > > > > +
+> > > > > +	if (chip_rev < 0 || chip_rev > 31) {
+> > > > > +		dev_err(dev, "Unknown chip revision: %d\n", ret);
+> > > > > +		return -EINVAL;
+> > > > > +	}
+> > > > 
+> > > > This still seems limiting.
+> > > 
+> > > This is based on the vendor implementation. Unfortunately I don't have
+> > > access to a data sheet or any other source of information about the
+> > > management of the chip revisions.
+> > 
+> > So which versions does this driver work with?  All 32?
+> 
+> I'm not even sure there are so many revisions, I guess that's just a
+> rough validation for a vendor reserved range.
+> 
+> For the moment, the only place where the functionality is affected
+> by the chip revision is in the regulator driver - there is a special
+> handling for the ATC2603C rev.B chip variant.
+> 
+> I expect some additional handling might be required for new drivers
+> bringing support for the other functions provided by the hardware.
 
-make CC=clang W=1 points us those unused functions:
+The current patch seems to insinuate that 32 versions are currently
+supported.  What is the chip_rev for the ATC2603C rev.B?
 
-drivers/cpufreq/intel_pstate.c:79:23: warning: unused function 'percent_fp' [-Wunused-function]
-static inline int32_t percent_fp(int percent)
-                      ^
-
-drivers/cpufreq/intel_pstate.c:94:23: warning: unused function 'percent_ext_fp' [-Wunused-function]
-static inline int32_t percent_ext_fp(int percent)
-                      ^
-
-Remove those obsolete functions.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-applies cleanly on current master and next-20201221
-
-Srinivas, Len, Rafael, Viresh, please pick this minor non-urgent cleanup patch.
-
- drivers/cpufreq/intel_pstate.c | 10 ----------
- 1 file changed, 10 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 2a4db856222f..0e35dd247986 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -76,11 +76,6 @@ static inline int ceiling_fp(int32_t x)
- 	return ret;
- }
- 
--static inline int32_t percent_fp(int percent)
--{
--	return div_fp(percent, 100);
--}
--
- static inline u64 mul_ext_fp(u64 x, u64 y)
- {
- 	return (x * y) >> EXT_FRAC_BITS;
-@@ -91,11 +86,6 @@ static inline u64 div_ext_fp(u64 x, u64 y)
- 	return div64_u64(x << EXT_FRAC_BITS, y);
- }
- 
--static inline int32_t percent_ext_fp(int percent)
--{
--	return div_ext_fp(percent, 100);
--}
--
- /**
-  * struct sample -	Store performance sample
-  * @core_avg_perf:	Ratio of APERF/MPERF which is the actual average
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
