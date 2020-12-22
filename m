@@ -2,274 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC76D2E09DD
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 12:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEEB2E0A46
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 14:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbgLVLx4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Dec 2020 06:53:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57328 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726131AbgLVLxz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Dec 2020 06:53:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B83CF207CF;
-        Tue, 22 Dec 2020 11:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608637995;
-        bh=s18718z7QuKeAXfw4tLiW6flYSSPmQ4u6y2J3rQcFls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=etWADPBmDsg3oJDx+BGdplaarnprllEzbj1/aMd8nINnHyPrKLAVO73rAvG8vPeOk
-         9q/7aSQcgh+UBVUp5s4uikYBE2dDMIoalQciT3PA2rksd6y47/m/QDlOug0LuaNepC
-         ylLEQSmTNHzpPcWMewSPngQCHkFp/6CK8x4XcRtu+kDR+TlYPfMTLfpAQ52oPD+poj
-         sNJKmflk5l3IvL9ijpaJWj49ghBzY7SrmxQ7gyufYDfBsEGo6DJnxWM/R7iVJCC8OJ
-         L8Z0WawE8/jwaysmnefr+iHH76x0x/k2fqV8pOnJoFIqbfSJoJOOgNruSovaUvcdN6
-         VtHZ1rB5PsSrg==
-Received: by pali.im (Postfix)
-        id 6EB8D848; Tue, 22 Dec 2020 12:53:12 +0100 (CET)
-Date:   Tue, 22 Dec 2020 12:53:12 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Hermes Zhang <chenhui.zhang@axis.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     Dan Murphy <dmurphy@ti.com>, Sebastian Reichel <sre@kernel.org>,
-        kernel@axis.com, Hermes Zhang <chenhuiz@axis.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] power: supply: bq27xxx: Supporrt CHARGE_NOW for
- bq27z561/bq28z610/bq34z100
-Message-ID: <20201222115312.dbrlup5gzkv2oykz@pali>
-References: <20201222110720.20837-1-chenhui.zhang@axis.com>
+        id S1726637AbgLVNH4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 08:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbgLVNHz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 08:07:55 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1006C0613D3
+        for <linux-pm@vger.kernel.org>; Tue, 22 Dec 2020 05:07:15 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id u7so6958141vsg.11
+        for <linux-pm@vger.kernel.org>; Tue, 22 Dec 2020 05:07:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oJdu5vDMCx/ujY8a+bGU6qSDx1c5AEdKsGzNSm0hWYM=;
+        b=ZOkedPHy4xDcFa7mDeWTvIVw1qhHj0i/j5RlW/oihYFku5fnb2+MKebLyfJpZG1Scs
+         p+8CM5tzMgX3cLenZdaj6q0KFsGKBX8othYLqNA8fVlvnCL2dFiy2uNP6nYAkKL3w90M
+         aynZZQjH9sGpf1h2EULcPKDcANWeKEBxNlbGetTNSUbe3e/6jc6NBSmwos8Uj6ZkZCyE
+         LzRpD1SZgCD0Gnsk3B8TB3qfbZ2neN/PAwBEuqsrEPCsYBvvFPlRxA5knGREyIe8avKw
+         hR/pG6BbKVC0zQDAUe9CYF8ttogPiE8piQjA9rLncF5Cw3GB9EuHFZzmnc+00BmWPXAE
+         hvIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oJdu5vDMCx/ujY8a+bGU6qSDx1c5AEdKsGzNSm0hWYM=;
+        b=PU2XP8npzt7IvkM2OWvDwkPKFbzdH074AT/5occUr5UPJOIF8K58B1JWDdRI5/RIJt
+         bw9NBtlFiVpKeJjMxe0PAqKQ087oJjWtsA9tUTE7iFOc+T/ZE4yvmXP7mEOReT1rPXGG
+         QfVe26vzkSxfYEpSKUteuj+etEGw7A9ZkhC4kV1ASBrMNKHLPD3c8k/bAsZbL5U4Yr91
+         +QJCBz8KdUxQzXHs5/K6590y4xKhqSfH6GMs0gK3tBUfkMP4EfJjdG7GCpk4IGaDPyzX
+         qaFFmabtzVx5l9p7ZC5DwC0RzMvKdDu2K6kkzQXFRAmBcfMFsx1bTrtx+dXPbarR2b6x
+         2q1g==
+X-Gm-Message-State: AOAM533Oih1F1R2j4mlpD2ZOOA3ig+SLueUur5sTS1wT4ZsvIjqygEEQ
+        2ZzFPQqcEV20hd3rHN4ZieEOiwy8DUDS+LAKPvrG1/ov67WK/Q==
+X-Google-Smtp-Source: ABdhPJwLLXzicnAhS9NdWV6aM8UTBiKQmmvSZ8pRvEydd7nXMyhANVh3BHf14B+GdIkx4jtUNgSs02f88RZkQvRYqow=
+X-Received: by 2002:a67:70c6:: with SMTP id l189mr14980585vsc.34.1608642434179;
+ Tue, 22 Dec 2020 05:07:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201222110720.20837-1-chenhui.zhang@axis.com>
-User-Agent: NeoMutt/20180716
+References: <20201130225039.15981-1-ilina@codeaurora.org> <20201130225039.15981-2-ilina@codeaurora.org>
+In-Reply-To: <20201130225039.15981-2-ilina@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 22 Dec 2020 14:06:38 +0100
+Message-ID: <CAPDyKFr0+Hzod+cq1gBN66O-Tvt5RAB2aK=rzcqGaPF41TMRnQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] PM / Domains: add domain feature flag for next wakeup
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday 22 December 2020 19:07:20 Hermes Zhang wrote:
-> From: Hermes Zhang <chenhuiz@axis.com>
-> 
-> The CHARGE_NOW is map to REG_NAC for all the gauge chips beofre. But for
-> some chips (e.g. bq27z561) which doesn't have the REG_NAC, we use REG_RC
-> (remaining capacity) for CHARGE_NOW.
-> 
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+On Mon, 30 Nov 2020 at 23:51, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> PM domains may support entering multiple power down states when the
+> component devices and sub-domains are suspended. Also, they may specify
+> the residency value for an idle state, only after which the idle state
+> may provide power benefits. If the domain does not specify the residency
+> for any of its idle states, the governor's choice is much simplified.
+>
+> Let's make this optional with the use of a PM domain feature flag.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
 > ---
-> 
-> Notes:
->     Set correct REG_RC for all the chips if have
->     
->     keep INVALID_REG_ADDR for bq27521, as we could not find
->     the datasheet and seems no one use it now.
-
-This chip is used in Nokia N950 and Nokia N9. Pavel implemented kernel
-support, adding to loop.
-
-Public information about it are at:
-https://elinux.org/N950#sn27521_register_map
-
->  drivers/power/supply/bq27xxx_battery.c | 35 +++++++++++++++++++++++++-
->  1 file changed, 34 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> index 315e0909e6a4..774aa376653e 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -110,6 +110,7 @@ enum bq27xxx_reg_index {
->  	BQ27XXX_REG_TTES,	/* Time-to-Empty Standby */
->  	BQ27XXX_REG_TTECP,	/* Time-to-Empty at Constant Power */
->  	BQ27XXX_REG_NAC,	/* Nominal Available Capacity */
-> +	BQ27XXX_REG_RC,		/* Remaining Capacity */
->  	BQ27XXX_REG_FCC,	/* Full Charge Capacity */
->  	BQ27XXX_REG_CYCT,	/* Cycle Count */
->  	BQ27XXX_REG_AE,		/* Available Energy */
-> @@ -145,6 +146,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1c,
->  		[BQ27XXX_REG_TTECP] = 0x26,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = 0x22,
-> @@ -169,6 +171,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1c,
->  		[BQ27XXX_REG_TTECP] = 0x26,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -193,6 +196,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1a,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -215,6 +219,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1c,
->  		[BQ27XXX_REG_TTECP] = 0x26,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = 0x22,
-> @@ -237,6 +242,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1a,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x1e,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -257,6 +263,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1c,
->  		[BQ27XXX_REG_TTECP] = 0x26,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_AE] = 0x22,
-> @@ -277,6 +284,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1c,
->  		[BQ27XXX_REG_TTECP] = 0x26,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = 0x22,
-> @@ -297,6 +305,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1c,
->  		[BQ27XXX_REG_TTECP] = 0x26,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = 0x22,
-> @@ -317,6 +326,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1c,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x1e,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -337,6 +347,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = INVALID_REG_ADDR,
-> +		[BQ27XXX_REG_RC] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_FCC] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_CYCT] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -361,6 +372,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -382,6 +394,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -405,6 +418,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = 0x0c,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -425,6 +439,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = 0x08,
-> +		[BQ27XXX_REG_RC] = 0x0c,
->  		[BQ27XXX_REG_FCC] = 0x0e,
->  		[BQ27XXX_REG_CYCT] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_AE] = INVALID_REG_ADDR,
-> @@ -450,6 +465,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = INVALID_REG_ADDR,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = 0x22,
-> @@ -470,6 +486,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = INVALID_REG_ADDR,
-> +		[BQ27XXX_REG_RC] = 0x10,
->  		[BQ27XXX_REG_FCC] = 0x12,
->  		[BQ27XXX_REG_CYCT] = 0x2a,
->  		[BQ27XXX_REG_AE] = 0x22,
-> @@ -490,6 +507,7 @@ static u8
->  		[BQ27XXX_REG_TTES] = 0x1e,
->  		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
->  		[BQ27XXX_REG_NAC] = INVALID_REG_ADDR,
-> +		[BQ27XXX_REG_RC] = 0x04,
->  		[BQ27XXX_REG_FCC] = 0x06,
->  		[BQ27XXX_REG_CYCT] = 0x2c,
->  		[BQ27XXX_REG_AE] = 0x24,
-> @@ -745,6 +763,7 @@ static enum power_supply_property bq27z561_props[] = {
->  	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
->  	POWER_SUPPLY_PROP_TECHNOLOGY,
->  	POWER_SUPPLY_PROP_CHARGE_FULL,
-> +	POWER_SUPPLY_PROP_CHARGE_NOW,
->  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_CYCLE_COUNT,
->  	POWER_SUPPLY_PROP_POWER_AVG,
-> @@ -764,6 +783,7 @@ static enum power_supply_property bq28z610_props[] = {
->  	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
->  	POWER_SUPPLY_PROP_TECHNOLOGY,
->  	POWER_SUPPLY_PROP_CHARGE_FULL,
-> +	POWER_SUPPLY_PROP_CHARGE_NOW,
->  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_CYCLE_COUNT,
->  	POWER_SUPPLY_PROP_POWER_AVG,
-> @@ -784,6 +804,7 @@ static enum power_supply_property bq34z100_props[] = {
->  	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
->  	POWER_SUPPLY_PROP_TECHNOLOGY,
->  	POWER_SUPPLY_PROP_CHARGE_FULL,
-> +	POWER_SUPPLY_PROP_CHARGE_NOW,
->  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_CYCLE_COUNT,
->  	POWER_SUPPLY_PROP_ENERGY_NOW,
-> @@ -1518,6 +1539,15 @@ static inline int bq27xxx_battery_read_nac(struct bq27xxx_device_info *di)
->  	return bq27xxx_battery_read_charge(di, BQ27XXX_REG_NAC);
+> Changes in v6:
+>         - New patch based on discussions on v5 of the series
+> ---
+>  drivers/base/power/domain.c | 18 ++++++++++++++++++
+>  include/linux/pm_domain.h   | 28 ++++++++++++++++++++++------
+>  2 files changed, 40 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 1b0c9ccbbe1f..1e6c0bf1c945 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -1748,6 +1748,24 @@ int dev_pm_genpd_remove_notifier(struct device *dev)
 >  }
->  
-> +/*
-> + * Return the battery Remaining Capacity in µAh
-> + * Or < 0 if something fails.
+>  EXPORT_SYMBOL_GPL(dev_pm_genpd_remove_notifier);
+>
+> +/**
+> + * genpd_enable_next_wakeup - Enable genpd gov to use next_wakeup
+> + *
+> + * @genpd: The genpd to be updated
+> + * @enable: Enable/disable genpd gov to use next wakeup
 > + */
-> +static inline int bq27xxx_battery_read_rc(struct bq27xxx_device_info *di)
+> +void genpd_enable_next_wakeup(struct generic_pm_domain *genpd, bool enable)
 > +{
-> +	return bq27xxx_battery_read_charge(di, BQ27XXX_REG_RC);
+> +       genpd_lock(genpd);
+> +       if (enable)
+> +               genpd->flags |= GENPD_FLAG_GOV_NEXT_WAKEUP;
+> +       else
+> +               genpd->flags &= ~GENPD_FLAG_GOV_NEXT_WAKEUP;
+> +       genpd->next_wakeup = KTIME_MAX;
+> +       genpd_unlock(genpd);
 > +}
+> +EXPORT_SYMBOL_GPL(genpd_enable_next_wakeup);
 > +
->  /*
->   * Return the battery Full Charge Capacity in µAh
->   * Or < 0 if something fails.
-> @@ -1965,7 +1995,10 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
->  			val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
->  		break;
->  	case POWER_SUPPLY_PROP_CHARGE_NOW:
-> -		ret = bq27xxx_simple_value(bq27xxx_battery_read_nac(di), val);
-> +		if (di->regs[BQ27XXX_REG_NAC] != INVALID_REG_ADDR)
-> +			ret = bq27xxx_simple_value(bq27xxx_battery_read_nac(di), val);
-> +		else
-> +			ret = bq27xxx_simple_value(bq27xxx_battery_read_rc(di), val);
->  		break;
->  	case POWER_SUPPLY_PROP_CHARGE_FULL:
->  		ret = bq27xxx_simple_value(di->cache.charge_full, val);
-> -- 
-> 2.20.1
-> 
+
+Please drop this, as I don't think we need a dedicated function to
+enable this feature.
+
+Instead, it seems like a better idea to let the genpd provider set it,
+before it calls pm_genpd_init(), along with its other genpd
+configurations.
+
+>  static int genpd_add_subdomain(struct generic_pm_domain *genpd,
+>                                struct generic_pm_domain *subdomain)
+>  {
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 2ca919ae8d36..1f359bd19f77 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -55,13 +55,19 @@
+>   *
+>   * GENPD_FLAG_RPM_ALWAYS_ON:   Instructs genpd to always keep the PM domain
+>   *                             powered on except for system suspend.
+> + *
+> + * GENPD_FLAG_GOV_NEXT_WAKEUP: Enable the genpd governor to consider its
+> + *                             components' next wakeup when  determining the
+> + *                             optimal idle state. This is setup only if the
+> + *                             domain's idle state specifies a residency.
+>   */
+> -#define GENPD_FLAG_PM_CLK       (1U << 0)
+> -#define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+> -#define GENPD_FLAG_ALWAYS_ON    (1U << 2)
+> -#define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
+> -#define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
+> -#define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+> +#define GENPD_FLAG_PM_CLK         (1U << 0)
+> +#define GENPD_FLAG_IRQ_SAFE       (1U << 1)
+> +#define GENPD_FLAG_ALWAYS_ON      (1U << 2)
+> +#define GENPD_FLAG_ACTIVE_WAKEUP   (1U << 3)
+> +#define GENPD_FLAG_CPU_DOMAIN     (1U << 4)
+> +#define GENPD_FLAG_RPM_ALWAYS_ON   (1U << 5)
+> +#define GENPD_FLAG_GOV_NEXT_WAKEUP (1U << 6)
+
+Nitpick.
+
+To me, the configuration is something that corresponds to the genpd,
+rather than the governor (even if it affects it in this case). That
+said, how about just naming the flag something like
+"GENPD_FLAG_MIN_RESIDENCY", as to indicate that the genpd's power off
+states have minimum residencies values that may deserve to be
+considered, while power off.
+
+>
+>  enum gpd_status {
+>         GENPD_STATE_ON = 0,     /* PM domain is on */
+> @@ -205,6 +211,11 @@ static inline struct generic_pm_domain_data *dev_gpd_data(struct device *dev)
+>         return to_gpd_data(dev->power.subsys_data->domain_data);
+>  }
+>
+> +static inline bool genpd_may_use_next_wakeup(struct generic_pm_domain *genpd)
+> +{
+> +       return genpd->flags & GENPD_FLAG_GOV_NEXT_WAKEUP;
+> +}
+
+This can probably be moved into drivers/base/power/domain_governor.c.
+
+> +
+>  int pm_genpd_add_device(struct generic_pm_domain *genpd, struct device *dev);
+>  int pm_genpd_remove_device(struct device *dev);
+>  int pm_genpd_add_subdomain(struct generic_pm_domain *genpd,
+> @@ -217,6 +228,7 @@ int pm_genpd_remove(struct generic_pm_domain *genpd);
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>  int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>  int dev_pm_genpd_remove_notifier(struct device *dev);
+> +void genpd_enable_next_wakeup(struct generic_pm_domain *genpd, bool enable);
+>
+>  extern struct dev_power_governor simple_qos_governor;
+>  extern struct dev_power_governor pm_domain_always_on_gov;
+> @@ -275,6 +287,10 @@ static inline int dev_pm_genpd_remove_notifier(struct device *dev)
+>         return -EOPNOTSUPP;
+>  }
+>
+> +static void genpd_enable_next_wakeup(struct generic_pm_domain *genpd,
+> +                                    bool enable)
+> +{ }
+> +
+>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
+>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
+>  #endif
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
+
+Kind regards
+Uffe
