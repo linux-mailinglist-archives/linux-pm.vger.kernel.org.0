@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5822E06C2
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 08:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1912E06BD
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 08:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725783AbgLVHcR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Dec 2020 02:32:17 -0500
-Received: from mail-40131.protonmail.ch ([185.70.40.131]:23780 "EHLO
-        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726070AbgLVHcA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 02:32:00 -0500
-Date:   Tue, 22 Dec 2020 07:31:14 +0000
+        id S1725820AbgLVHcH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 02:32:07 -0500
+Received: from mail-40136.protonmail.ch ([185.70.40.136]:54436 "EHLO
+        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726176AbgLVHcH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 02:32:07 -0500
+Date:   Tue, 22 Dec 2020 07:31:21 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1608622277;
-        bh=uD0o1RGxUdohZwqEit8GaCkXhH2zAclkKXfTpSwZqmA=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=YNkxNP1CjHq3ry96pM3okOw2TEp9G7NBSRJc42Gt8dDgcnpWw40ckl5ryYit8mbfN
-         l8dOVEDFfQ8gfrc4aPiCRtgJO3xg+FxNSxilfM91F1pA9Emu/R9/hs29cdNDkTwZje
-         DWm9sBcJh42gcHRzPTj/UYPIkPs1cuWjrSBjaoCY=
+        s=protonmail; t=1608622284;
+        bh=zj7BLVma6bwTDbkNV2OP9sFWg/3xvXVUsybje3al6Cg=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=r3C02VT9/wOS5O5ImAMG6zrfSVRoM5vFDZBuCezPuMsu6pdjTrzqkn2jDZK+uJHd1
+         lZNL6nkOL/VUT00XD60ghn6SL7eXHl2N1RZACf5FTonRmdPBYWF9jQpJXHRmfJ99Yk
+         uSDES7TeCE7GFRdoqK8+aMGckY/dVzkAatDTVCVk=
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 From:   Timon Baetz <timon.baetz@protonmail.com>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -34,8 +34,10 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         ~postmarketos/upstreaming@lists.sr.ht,
         Timon Baetz <timon.baetz@protonmail.com>
 Reply-To: Timon Baetz <timon.baetz@protonmail.com>
-Subject: [PATCH v3 1/7] extcon: max8997: Add CHGINS and CHGRM interrupt handling
-Message-ID: <20201222070520.710096-1-timon.baetz@protonmail.com>
+Subject: [PATCH v3 2/7] regulator: dt-bindings: Document max8997-pmic nodes
+Message-ID: <20201222070520.710096-2-timon.baetz@protonmail.com>
+In-Reply-To: <20201222070520.710096-1-timon.baetz@protonmail.com>
+References: <20201222070520.710096-1-timon.baetz@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -48,38 +50,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This allows the MAX8997 charger to set the current limit depending on
-the detected extcon charger type.
+Add maxim,max8997-battery and maxim,max8997-muic optional nodes.
 
 Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
 ---
- drivers/extcon/extcon-max8997.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../bindings/regulator/max8997-regulator.txt          | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/extcon/extcon-max8997.c b/drivers/extcon/extcon-max899=
-7.c
-index 337b0eea4e62..e1408075ef7d 100644
---- a/drivers/extcon/extcon-max8997.c
-+++ b/drivers/extcon/extcon-max8997.c
-@@ -44,6 +44,8 @@ static struct max8997_muic_irq muic_irqs[] =3D {
- =09{ MAX8997_MUICIRQ_ChgDetRun,=09"muic-CHGDETRUN" },
- =09{ MAX8997_MUICIRQ_ChgTyp,=09"muic-CHGTYP" },
- =09{ MAX8997_MUICIRQ_OVP,=09=09"muic-OVP" },
-+=09{ MAX8997_PMICIRQ_CHGINS,=09"pmic-CHGINS" },
-+=09{ MAX8997_PMICIRQ_CHGRM,=09"pmic-CHGRM" },
- };
+diff --git a/Documentation/devicetree/bindings/regulator/max8997-regulator.=
+txt b/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
+index 6fe825b8ac1b..f969fc09fe29 100644
+--- a/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
++++ b/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
+@@ -53,6 +53,17 @@ Additional properties required if either of the optional=
+ properties are used:
+ - max8997,pmic-buck125-dvs-gpios: GPIO specifiers for three host gpio's us=
+ed
+   for dvs. The format of the gpio specifier depends in the gpio controller=
+.
 =20
- /* Define supported cable type */
-@@ -538,6 +540,8 @@ static void max8997_muic_irq_work(struct work_struct *w=
-ork)
- =09case MAX8997_MUICIRQ_DCDTmr:
- =09case MAX8997_MUICIRQ_ChgDetRun:
- =09case MAX8997_MUICIRQ_ChgTyp:
-+=09case MAX8997_PMICIRQ_CHGINS:
-+=09case MAX8997_PMICIRQ_CHGRM:
- =09=09/* Handle charger cable */
- =09=09ret =3D max8997_muic_chg_handler(info);
- =09=09break;
++Optional nodes:
++- charger: Node for configuring the charger driver.
++  Required properties:
++  - compatible: "maxim,max8997-battery"
++  - extcon: extcon specifier for charging events
++  - charger-supply: regulator node for charging current
++
++- muic: Node used only by extcon consumers.
++  Required properties:
++  - compatible: "maxim,max8997-muic"
++
+ Regulators: The regulators of max8997 that have to be instantiated should =
+be
+ included in a sub-node named 'regulators'. Regulator nodes included in thi=
+s
+ sub-node should be of the format as listed below.
 --=20
 2.25.1
 
