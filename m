@@ -2,153 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5EA2E0568
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 05:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5822E06C2
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 08:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbgLVEfv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Dec 2020 23:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbgLVEfv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Dec 2020 23:35:51 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6882C0613D6
-        for <linux-pm@vger.kernel.org>; Mon, 21 Dec 2020 20:35:10 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id w5so7618040pgj.3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Dec 2020 20:35:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=efVgO12y6qfjlIavBoObF8HNxu4Hvm/8sbVusrJEyQg=;
-        b=gcGcsrRKLFZqUishLYUK2rrAojhE9KbDilt+wO3akI1bUTMp6W4g6QDuvluwKINvEL
-         LPQJwcQesfB7tbcvglhfu/eDlPpLMgIABhch24FsZA3KmDR5YnK4Jf8Ij8kyMStXn0PD
-         eWrEAmPy2T8neKZkvacTysW0dP1CPT0DnemUt9jwi+Nx4w2NaxhUEDnLXb1QS18HYoks
-         r2JGrQ7jj61jt/hpzITPtrXoSmH3d5GRx/0w2CbDGyKlSWKXNYq53HXZCg8RcdvG2LID
-         +lGBlkcfXuKgcYgzovKXbGfJNYLh782NpxjOHrljhj2ug57mZoDd8Nu++wsQhMiCD6G4
-         yKWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=efVgO12y6qfjlIavBoObF8HNxu4Hvm/8sbVusrJEyQg=;
-        b=O9qZgG2R3sIozhYwqo2BlsfFEilwIvpZpg2AgOy64QwI+D6lps3F00LjcUV84y10gq
-         PnFbUWsqkiNZwTuClhMhxhnKu38bMyK0al1XMNlUoltzQvgEoCiv3LOcPiTveBJ3jMOl
-         KGibAEJj39LziIlbWEECJ+xiXJstU7icbVNVz18Onj4mAB9lOMdqqMR1Gxkl3rK2pJhh
-         9FB9ndc79jkeIXZcl18nPmDFndnodQrzYdxLpucUeruSreJtcNVreFSRQ/gzcvLHtbzf
-         sOu1GLvosjzpIQYYYSYxE2OP9TwdBUuNce106iYvAdTjIAsDaWPYUAjRuKZh3h1bQmhl
-         NxuQ==
-X-Gm-Message-State: AOAM532VHQIW29xbOB6zYydjKt5V5F5DOGqkFGJga0QZFdeSx/Ij77al
-        bMRgU/oobU1o0vC1tKf7kFUexA==
-X-Google-Smtp-Source: ABdhPJyIViesLe5L57QCib4Tc30kaHqp521NAFEgLLhIV79uAFs5gXWHG0AJbrltGyBakJ301c0CIQ==
-X-Received: by 2002:a65:5b47:: with SMTP id y7mr16390380pgr.221.1608611710462;
-        Mon, 21 Dec 2020 20:35:10 -0800 (PST)
-Received: from localhost ([122.172.20.109])
-        by smtp.gmail.com with ESMTPSA id 6sm18090487pfj.216.2020.12.21.20.35.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Dec 2020 20:35:09 -0800 (PST)
-Date:   Tue, 22 Dec 2020 10:05:05 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        rjw@rjwysocki.net, f.fainelli@gmail.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: brcmstb-avs-cpufreq: Fix some resource leaks in
- the error handling path of the probe function
-Message-ID: <20201222043505.rq3cmajc3mxv3p2z@vireshk-i7>
-References: <20201219101751.181783-1-christophe.jaillet@wanadoo.fr>
+        id S1725783AbgLVHcR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 02:32:17 -0500
+Received: from mail-40131.protonmail.ch ([185.70.40.131]:23780 "EHLO
+        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726070AbgLVHcA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 02:32:00 -0500
+Date:   Tue, 22 Dec 2020 07:31:14 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1608622277;
+        bh=uD0o1RGxUdohZwqEit8GaCkXhH2zAclkKXfTpSwZqmA=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=YNkxNP1CjHq3ry96pM3okOw2TEp9G7NBSRJc42Gt8dDgcnpWw40ckl5ryYit8mbfN
+         l8dOVEDFfQ8gfrc4aPiCRtgJO3xg+FxNSxilfM91F1pA9Emu/R9/hs29cdNDkTwZje
+         DWm9sBcJh42gcHRzPTj/UYPIkPs1cuWjrSBjaoCY=
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+From:   Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Timon Baetz <timon.baetz@protonmail.com>
+Reply-To: Timon Baetz <timon.baetz@protonmail.com>
+Subject: [PATCH v3 1/7] extcon: max8997: Add CHGINS and CHGRM interrupt handling
+Message-ID: <20201222070520.710096-1-timon.baetz@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201219101751.181783-1-christophe.jaillet@wanadoo.fr>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-12-20, 11:17, Christophe JAILLET wrote:
-> If 'cpufreq_register_driver()' fails, we must release the resources
-> allocated in 'brcm_avs_prepare_init()' as already done in the remove
-> function.
-> 
-> To do that, introduce a new function 'brcm_avs_prepare_uninit()' in order
-> to avoid code duplication. This also makes the code more readable (IMHO).
-> 
-> Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> I'm not sure that the existing error handling in the remove function is
-> correct and/or needed.
-> ---
->  drivers/cpufreq/brcmstb-avs-cpufreq.c | 25 ++++++++++++++++++++-----
->  1 file changed, 20 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> index 3e31e5d28b79..750ca7cfccb0 100644
-> --- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> +++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> @@ -597,6 +597,16 @@ static int brcm_avs_prepare_init(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +static void brcm_avs_prepare_uninit(struct platform_device *pdev)
-> +{
-> +	struct private_data *priv;
-> +
-> +	priv = platform_get_drvdata(pdev);
-> +
-> +	iounmap(priv->avs_intr_base);
-> +	iounmap(priv->base);
-> +}
-> +
->  static int brcm_avs_cpufreq_init(struct cpufreq_policy *policy)
->  {
->  	struct cpufreq_frequency_table *freq_table;
-> @@ -732,21 +742,26 @@ static int brcm_avs_cpufreq_probe(struct platform_device *pdev)
->  
->  	brcm_avs_driver.driver_data = pdev;
->  
-> -	return cpufreq_register_driver(&brcm_avs_driver);
-> +	ret = cpufreq_register_driver(&brcm_avs_driver);
-> +	if (ret)
-> +		goto err_uninit;
-> +
-> +	return 0;
-> +
-> +err_uninit:
-> +	brcm_avs_prepare_uninit(pdev);
-> +	return ret;
+This allows the MAX8997 charger to set the current limit depending on
+the detected extcon charger type.
 
-Maybe rewrite as:
+Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+---
+ drivers/extcon/extcon-max8997.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-	ret = cpufreq_register_driver(&brcm_avs_driver);
-	if (ret)
-                brcm_avs_prepare_uninit(pdev);
-	return ret;
+diff --git a/drivers/extcon/extcon-max8997.c b/drivers/extcon/extcon-max899=
+7.c
+index 337b0eea4e62..e1408075ef7d 100644
+--- a/drivers/extcon/extcon-max8997.c
++++ b/drivers/extcon/extcon-max8997.c
+@@ -44,6 +44,8 @@ static struct max8997_muic_irq muic_irqs[] =3D {
+ =09{ MAX8997_MUICIRQ_ChgDetRun,=09"muic-CHGDETRUN" },
+ =09{ MAX8997_MUICIRQ_ChgTyp,=09"muic-CHGTYP" },
+ =09{ MAX8997_MUICIRQ_OVP,=09=09"muic-OVP" },
++=09{ MAX8997_PMICIRQ_CHGINS,=09"pmic-CHGINS" },
++=09{ MAX8997_PMICIRQ_CHGRM,=09"pmic-CHGRM" },
+ };
+=20
+ /* Define supported cable type */
+@@ -538,6 +540,8 @@ static void max8997_muic_irq_work(struct work_struct *w=
+ork)
+ =09case MAX8997_MUICIRQ_DCDTmr:
+ =09case MAX8997_MUICIRQ_ChgDetRun:
+ =09case MAX8997_MUICIRQ_ChgTyp:
++=09case MAX8997_PMICIRQ_CHGINS:
++=09case MAX8997_PMICIRQ_CHGRM:
+ =09=09/* Handle charger cable */
+ =09=09ret =3D max8997_muic_chg_handler(info);
+ =09=09break;
+--=20
+2.25.1
 
->  }
->  
->  static int brcm_avs_cpufreq_remove(struct platform_device *pdev)
->  {
-> -	struct private_data *priv;
->  	int ret;
->  
->  	ret = cpufreq_unregister_driver(&brcm_avs_driver);
->  	if (ret)
->  		return ret;
 
-Instead of returning here, it can be just WARN_ON(ret); and then go on and free
-the resources and this needs to be done in a separate patch.
-
->  
-> -	priv = platform_get_drvdata(pdev);
-> -	iounmap(priv->base);
-> -	iounmap(priv->avs_intr_base);
-> +	brcm_avs_prepare_uninit(pdev);
->  
->  	return 0;
->  }
-
--- 
-viresh
