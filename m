@@ -2,115 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7342E0EB3
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 20:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13A92E0F48
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 21:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgLVTQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Dec 2020 14:16:15 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:38834 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbgLVTQO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 14:16:14 -0500
-Received: by mail-ot1-f44.google.com with SMTP id j20so12883838otq.5;
-        Tue, 22 Dec 2020 11:15:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ygKvG+Xi5YRuoJ8yhycwuvW5pwPVyAlu9r1/cRnWCXU=;
-        b=r6+ZgHQCCMc8flPWN+kLwLoO2RHtE+dEeDtPG4YPQuip8A2NfSWA3N6lGtMVVEYXMQ
-         ArGc1rAggtnLK9EVgEuKEDyZ4k2KuJ5Gt+xXVk1iSQr6VuIamrF9diQgTC4wgqvtjGzD
-         LRfT9qLm+AiFKCn5MZ1t8sJjU6P0AAbsi4RbHSMqdUHDv8hMdfgfxjOWqbDf07rW2Fsp
-         ndS90clUhtkyxTH5TRTCU+6D/sWZ6+yRvndEaLFY6m6MMNySjMmOkN2dD/7sP+abScrP
-         raao/kmX3cr2iUUrONQMLXarOzGOxESwrCFxKoMFH7KsnuvVt8um4CDAXmapKw9hQial
-         9U/A==
-X-Gm-Message-State: AOAM530GEQ7o9WY/J0lwL2/jS9leWh7qnybzSLRp8+k0uDO3L3+XtBlY
-        WZJWX/vqUN7sIwKISsMMEVZHW5Iy8WTA06NoAS9WcKDrLKM=
-X-Google-Smtp-Source: ABdhPJwE0AahC1wgufL8Le6mAiZdJqEXJP0NI3a0iUlXmOW+y/KD/53RuSiPhQavMMI/1Tu2DJ8NJpDb7uBH33PE7Kc=
-X-Received: by 2002:a9d:67da:: with SMTP id c26mr17221313otn.321.1608664533212;
- Tue, 22 Dec 2020 11:15:33 -0800 (PST)
+        id S1727843AbgLVUSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 15:18:03 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:55051 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726319AbgLVUSC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 15:18:02 -0500
+Received: from [192.168.1.155] ([95.118.68.26]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N5FtF-1jtguL3EaD-0118EC; Tue, 22 Dec 2020 21:14:24 +0100
+Subject: Re: [PATCH] arch: consolidate pm_power_off callback
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Salter <msalter@redhat.com>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        alpha <linux-alpha@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        linux-c6x-dev@linux-c6x.org, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+References: <20201222184510.19415-1-info@metux.net>
+ <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <2f1d53e9-0dbb-78ef-22d5-ab230438ddf0@metux.net>
+Date:   Tue, 22 Dec 2020 21:14:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Dec 2020 20:15:22 +0100
-Message-ID: <CAJZ5v0jS2-kDBA70XwStNEg3pUusK_=h5P58d71cOx83zU-WOw@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v5.11-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:UpSPX5SjSxB2JTjoTNk4sWDtA2g9Ks1Ix8dKZhB/ESwn1jWfyhx
+ EoQG8feaYKyQLnGwygV2naaePTeCvGl6q4M5FCoVvWDzd5IDw7I4++spAXF1Cn7hlWYDZ9i
+ kl7Eptzr5sffhmk6uqoQvQuMaJH6WbEHZSp8VbRZESTCM8tqF2liTqVeSG60D5ct0JeRFXM
+ C/vRJPf10ZNRyihx6OQ7A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4rmsxPbYFfk=:r6XlGr1qgoUDdOPZvl+EZB
+ Tvvn/+E+IBfJxp8NYxN6kmODEYBvHcxpBa91h8yz4H6rftNQGPPvhJG9K3iz7sa8U3axvH9gb
+ k8MQxF8AkxpsOIqgXUvRf2/UkUWU0UyTVaNY4yxFyPXaJ5HZGvdBlHztqC0ROOQbfPfvuc9EL
+ FxgUfcgonSSkeeYMjRiTB3zJbeFMtXOTHkBa2rvNba1MQtk+fNt8bwxkcg/16D1kNX6CaQa6R
+ /HjaLu8M8eiwjXWLzppTMleqwd3hE1HiIRNtfJF9qFLMDQKH5ELRRUKQxUmk7wwJOm6jAqUoz
+ DxOEn9gjBP8Krn67rCBumevzsK7LiZ8dtcUh+n3F3XTZoxMWvkNcvhbeCfAuF95ukrIWyQBXn
+ H8gIR89lqyF1p5Egw7NhgnSoXyIbQAraihthZryjzaPuyq4jPkP8GrsbXJIV3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On 22.12.20 19:54, Geert Uytterhoeven wrote:
 
-Please pull from the tag
+Hi,
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.11-rc1-2
+> On Tue, Dec 22, 2020 at 7:46 PM Enrico Weigelt, metux IT consult
+> <info@metux.net> wrote:
+>> Move the pm_power_off callback into one global place and also add an
+>> function for conditionally calling it (when not NULL), in order to remove
+>> code duplication in all individual archs.
+>>
+>> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+> 
+> Thanks for your patch!
+> 
+>> --- a/arch/alpha/kernel/process.c
+>> +++ b/arch/alpha/kernel/process.c
+>> @@ -43,12 +43,6 @@
+>>  #include "proto.h"
+>>  #include "pci_impl.h"
+>>
+>> -/*
+>> - * Power off function, if any
+>> - */
+>> -void (*pm_power_off)(void) = machine_power_off;
+> 
+> Assignments like these are lost in the conversion.
 
-with top-most commit 538fcf57aaee6ad78a05f52b69a99baa22b33418
+Yes, but this doesn't seem to be ever called anyways. (in arch/alpha)
+And, BTW, letting it point to machine_power_off() doesn't make much
+sense, since it's the arch's machine_power_off() function, who're
+calling pm_power_off().
 
- Merge branches 'acpi-scan', 'acpi-pnp' and 'acpi-sleep'
+Actually, we could remove pm_power_off completely from here, assuming
+nobody would *build* any drivers that register themselves into
+pm_power_off.
 
-on top of commit aab7ce2b099bd9df82573cd3170acf6518fdebeb
-
- Merge tag 'acpi-5.11-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more ACPI updates for 5.11-rc1.
-
-These make the ACPI enumeration of devices take _DEP information
-into account more aggressively, fix device IDs matching in the ACPI
-part of the PNP devices framework and update the ACPI code related
-to suspend-to-idle to take systems based on AMD hardware into account
-properly.
-
-Specifics:
-
- - Modify the ACPI device enumeration code to defer the enumeration
-   of devices with an _HID whose lists of operation region
-   dependencies returned by _DEP are not empty after eliminating the
-   entries representing known-benign dependencies from them (Rafael
-   Wysocki, Hans de Goede).
-
- - Make the ACPI PNP code matching device IDs also take the length of
-   the given ID string into account (Hui Wang).
-
- - Add AMD systems support to the ACPI code handling suspend-to-idle
-   via the PNP0D80 (System Power Management Controller) device _DSM
-   interface (Shyam Sundar).
-
- - Move the suspend-to-idle handling code related to the PNP0D80
-   device _DSM interface, which is x86-specific, to a separate file
-   in the x86/ subdirectory (Rafael Wysocki).
-
-Thanks!
+If you feel better with it, I could post a patch that just removes
+pm_power_off from arch/alpha.
 
 
----------------
+--mtx
 
-Hans de Goede (1):
-      ACPI: scan: Add Intel Baytrail Mailbox Device to acpi_ignore_dep_ids
-
-Hui Wang (1):
-      ACPI: PNP: compare the string length in the matching_id()
-
-Rafael J. Wysocki (4):
-      ACPI: scan: Evaluate _DEP before adding the device
-      ACPI: scan: Defer enumeration of devices with _DEP lists
-      ACPI: scan: Avoid unnecessary second pass in acpi_bus_scan()
-      ACPI: PM: s2idle: Move x86-specific code to the x86 directory
-
-Shyam Sundar S K (1):
-      ACPI: PM: s2idle: Add AMD support to handle _DSM
-
----------------
-
- drivers/acpi/Makefile     |   1 +
- drivers/acpi/acpi_pnp.c   |   3 +
- drivers/acpi/scan.c       | 143 ++++++++++----
- drivers/acpi/sleep.c      | 305 ++----------------------------
- drivers/acpi/sleep.h      |  16 ++
- drivers/acpi/x86/s2idle.c | 460 ++++++++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 598 insertions(+), 330 deletions(-)
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
