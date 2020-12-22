@@ -2,84 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD212E0E8C
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 20:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F822E0E9D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 20:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725811AbgLVTKz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Dec 2020 14:10:55 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:37768 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbgLVTKz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 14:10:55 -0500
-Received: by mail-oi1-f169.google.com with SMTP id l207so15841564oib.4;
-        Tue, 22 Dec 2020 11:10:39 -0800 (PST)
+        id S1725931AbgLVTO1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 14:14:27 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:38231 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgLVTO1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 14:14:27 -0500
+Received: by mail-oi1-f182.google.com with SMTP id x13so15859574oic.5;
+        Tue, 22 Dec 2020 11:14:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qJcLuqhGyTdulZyHvFUwRf4VUU/U5lmTCF6MQyRDs2g=;
-        b=GZfajE4JXKnGt7PAHeNTLu+v2lfvCBncLCp5BlV/iJdsSjGGRxJx8eKsYQOP1LFme+
-         ICeS3fvnTtMqohUyG9fmySxElPVFx82ok/CiqXDK5ST5f2HpzbAH2d/cDtMdt0iw2+Zn
-         VQtnYPAS917OvxxH4Ztr0R22mNi9uED9W9pUBEBqhLSMzgGYErsyfI0y4WSXOnYQAxfF
-         RYGIUnpzYx+zkCRWYMASU+P1Cxl476YSpEIwS2z+yx30ntCc6OEndiikM6LfxxMSnhuE
-         JLXTQsuv2idx4MummYrMU+mFPoK3iyEeDLaPyk9w3xxqRwaxy7CInfbkU3u6VKatOfSY
-         nv+A==
-X-Gm-Message-State: AOAM531wVmdkrAhhT9aa3I0c2Uf4y/retFYu4aKwWdPgVhNC1M00kwag
-        fuHoKot7/jSPsOLlirkLgy2mJ6Y4S2RCGIfX1NI=
-X-Google-Smtp-Source: ABdhPJxIYc4zK08MtEYs62IqavskxUUN8yV3pd/5j8oRAIkj9unjY1mocXJ73PQVKyOWwTXy+PWdKomrjkOYp/vtwRw=
-X-Received: by 2002:aca:4892:: with SMTP id v140mr15360311oia.71.1608664213995;
- Tue, 22 Dec 2020 11:10:13 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=1Eh7m3hFGprfwN/8YW291dz5yjJJmnCPD2wugr7INuE=;
+        b=bOzuFCC8V8ZHc48pAIh7olxkhPSzc0/N+pUkXayWznhanp8DbRIQplTeH++TBFglQn
+         0rKSHTtzGwtAHx6FH8O1iJNorBf9DMxn6OnWQWH/vwJYUq5JWGfHlK7KkmzixguiWBfL
+         pV23gH7VchMz6pZ39aA32Gl5bdbyjRzSr7j4CZtZKi7wTqYiumPazlUCYDPYpTwL7qbR
+         tMpSNEAnPDCcuRT6uRBQ49r93/rFWPxeCq9nii+tkpyfDzGkAraFLzCG4o2BcOcNGINJ
+         1eevK84UDF01Dn4BEOQPc09w+SffM/PuBPYD9SoSRaxMww/uzmxef1fXaEPBTJ/nPi7Q
+         SMVg==
+X-Gm-Message-State: AOAM531w3BY86XUHHRsitq+qgwTrk81fZA6bk9CblvQPBYjrGJXYFr8I
+        D7FnKYJ57wxZ9Kizgn40tjKdyECwOpg9zl9cpsVgkWQpHLc=
+X-Google-Smtp-Source: ABdhPJzxRHHCBlqNA0kd9DowFvps1I/s4YnaTlhdkSEgHi+JH4x0MhlTBOatlp7o6Uqxdm/pBG3QQsso3DTz7jGGogI=
+X-Received: by 2002:aca:4c1:: with SMTP id 184mr15863763oie.157.1608664426224;
+ Tue, 22 Dec 2020 11:13:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20201217071501.31267-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20201217071501.31267-1-lukas.bulwahn@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Dec 2020 20:10:03 +0100
-Message-ID: <CAJZ5v0gC_SLBvSsGC=1OJ-uNEVPC=JLwELEZKj=LKoQkoOuEkQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: include governors into CPU IDLE TIME
- MANAGEMENT FRAMEWORK
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
-        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
-        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+Date:   Tue, 22 Dec 2020 20:13:35 +0100
+Message-ID: <CAJZ5v0iS-Dv2iRkVGPhOLiP5-5D1vx+=9Nr7rtKtVbWmdrx=pg@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v5.11-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 17, 2020 at 8:16 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> The current pattern in the file entry does not make the files in the
-> governors subdirectory to be a part of the CPU IDLE TIME MANAGEMENT
-> FRAMEWORK.
->
-> Adjust the file pattern to include files in governors.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> applies cleanly on current master and next-20201215
->
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 952731d1e43c..ac679aa00e0d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4596,7 +4596,7 @@ B:        https://bugzilla.kernel.org
->  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
->  F:     Documentation/admin-guide/pm/cpuidle.rst
->  F:     Documentation/driver-api/pm/cpuidle.rst
-> -F:     drivers/cpuidle/*
-> +F:     drivers/cpuidle/
->  F:     include/linux/cpuidle.h
->
->  CPU POWER MONITORING SUBSYSTEM
-> --
+Hi Linus,
 
-Applied as 5.11-rc material, thanks!
+Please pull from the tag
 
->
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.11-rc1-2
+
+with top-most commit c3a74f8e25e97166ca0f954414825ae98a3209f6
+
+ Merge branch 'pm-cpufreq'
+
+on top of commit b4ec805464a4a0299216a003278351d0b4806450
+
+ Merge tag 'pm-5.11-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive more power management updates for 5.11-rc1.
+
+These update the CPPC cpufreq driver and intel_pstate (which
+involves updating the cpufreq core and the schedutil governor)
+and make janitorial changes in the ACPI code handling processor
+objects.
+
+Specifics:
+
+ - Rework the passive-mode "fast switch" path in the intel_pstate
+   driver to allow it receive the minimum (required) and target
+   (desired) performance information from the schedutil governor so
+   as to avoid running some workloads too fast (Rafael Wysocki).
+
+ - Make the intel_pstate driver allow the policy max limit to be
+   increased after the guaranteed performance value for the given
+   CPU has increased (Rafael Wysocki).
+
+ - Clean up the handling of CPU coordination types in the CPPC
+   cpufreq driver and make it export frequency domains information
+   to user space via sysfs (Ionela Voinescu).
+
+ - Fix the ACPI code handling processor objects to use a correct
+   coordination type when it fails to map frequency domains and drop
+   a redundant CPU map initialization from it (Ionela Voinescu, Punit
+   Agrawal).
+
+Thanks!
+
+
+---------------
+
+Ionela Voinescu (5):
+      ACPI: processor: fix NONE coordination for domain mapping failure
+      cppc_cpufreq: use policy->cpu as driver of frequency setting
+      cppc_cpufreq: clarify support for coordination types
+      cppc_cpufreq: expose information on frequency domains
+      cppc_cpufreq: replace per-cpu data array with a list
+
+Punit Agrawal (1):
+      ACPI: processor: Drop duplicate setting of shared_cpu_map
+
+Rafael J. Wysocki (4):
+      cpufreq: schedutil: Add util to struct sg_cpu
+      cpufreq: Add special-purpose fast-switching callback for drivers
+      cpufreq: intel_pstate: Implement the ->adjust_perf() callback
+      cpufreq: intel_pstate: Use most recent guaranteed performance values
+
+---------------
+
+ Documentation/ABI/testing/sysfs-devices-system-cpu |   3 +-
+ drivers/acpi/cppc_acpi.c                           | 141 ++++++--------
+ drivers/acpi/processor_perflib.c                   |   3 +-
+ drivers/cpufreq/cppc_cpufreq.c                     | 204 ++++++++++++---------
+ drivers/cpufreq/cpufreq.c                          |  40 ++++
+ drivers/cpufreq/intel_pstate.c                     |  86 +++++++--
+ include/acpi/cppc_acpi.h                           |   6 +-
+ include/linux/cpufreq.h                            |  14 ++
+ include/linux/sched/cpufreq.h                      |   5 +
+ kernel/sched/cpufreq_schedutil.c                   | 106 ++++++++---
+ 10 files changed, 388 insertions(+), 220 deletions(-)
