@@ -2,113 +2,318 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 432002E0D36
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 17:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEA32E0DA2
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 18:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbgLVQUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Dec 2020 11:20:40 -0500
-Received: from mga02.intel.com ([134.134.136.20]:53139 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727387AbgLVQUk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Dec 2020 11:20:40 -0500
-IronPort-SDR: wJ3qN26PD/dNR4HkCZVWga8B/kNYAl/K99WjNWd5MyjxrDrtkilx/yEKvdVHy9ph/Mq7VZ/yu0
- wWpX5p4cYBgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9842"; a="162944845"
-X-IronPort-AV: E=Sophos;i="5.78,439,1599548400"; 
-   d="scan'208";a="162944845"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2020 08:19:58 -0800
-IronPort-SDR: 12rptsdCJSkXnNELEo6p7KKDIZMPPCuDrn4JQ5o5p0l7PODcnORGkAM8Vx9HwFeJbacaokFhYf
- curmvMTQegVg==
-X-IronPort-AV: E=Sophos;i="5.78,439,1599548400"; 
-   d="scan'208";a="344269264"
-Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.132.204]) ([10.249.132.204])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2020 08:19:53 -0800
-Subject: Re: [PATCH 0/4] sched/idle: Fix missing need_resched() checks after
- rcu_idle_enter()
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>, stable@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20201222013712.15056-1-frederic@kernel.org>
-From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
- 173, 80-298 Gdansk
-Message-ID: <4de33f1a-890b-4d29-20e8-a1163b9c1bf7@intel.com>
-Date:   Tue, 22 Dec 2020 17:19:51 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1727121AbgLVRGZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 12:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727019AbgLVRGY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 12:06:24 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D25C061793
+        for <linux-pm@vger.kernel.org>; Tue, 22 Dec 2020 09:05:44 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id d17so19158495ejy.9
+        for <linux-pm@vger.kernel.org>; Tue, 22 Dec 2020 09:05:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jIW+vUoOdue2hhN/Ujgl1CaxmMgqO9c+436UlQtsK48=;
+        b=wTPC2qFpoYogKzqyjMg2r2smp3XDtjFTNO3+PywbsJVSsFgIqFmtafgGN1sryZOF8o
+         ClUaL4KLzwRAyOON74CjdIkXBsMKzcAxb9cuISs+VpD6fsTHYIsjhKUzGBMBD1lvXZBS
+         aCDkGWqJsKY3YJdhKTkt1su0OVv+W0DkwOZWLsj645EX8+aJLS7oInqk1cUimYoY3xsk
+         lila6e8I6Leg6QlJrGR3pJFTIO+hfEQwKgywF3iAOEwBPYSqbecZQQlcBAl6V9Kpb02K
+         4yap/4s7GjLjFApc3iMVmRhXF6BH/XmuCJQvrRQcTDcfD8LV8PMpK1Z6UdZc5BGrEGzQ
+         EhyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jIW+vUoOdue2hhN/Ujgl1CaxmMgqO9c+436UlQtsK48=;
+        b=cG2VS59tPIip3tAalb+0/ROEccC5SUaLMzzitbTnRkBhYrLo7v1diBKOd7atxixeuq
+         DOQNN2bPZiKFurpFC7SE3ZutWlBW7asv+5Vvs5SmgsibMDrWktOMKsP35bR+NvzTrc5P
+         0SqDT2G2QAgV7C4aAQsRy/K5/LseiVpfGjxpAG3ntoT3wXBTnCKxZmjpdmjXnyvBMH5m
+         C/l7bJM2+diLIuSUqy4xqy66J0xV4HGjYpqjKk753bKgEpI39HNJmfGljB+hvSJ6ox37
+         x6izri4BGccUVu1BP8uExqAIy841kRsziFkEY08WqxAI4x0YgMDbblCnT6vxTzLog3Wi
+         QIzg==
+X-Gm-Message-State: AOAM530rT7mH08j/X2f9XR1vkiISQvZ2BIklLyXGyRaqKnAjwivhLquf
+        A55IYm4C/NIWssEqcyNbSK4hjA==
+X-Google-Smtp-Source: ABdhPJzFniJz8KrkwqHVsXeIYwZ/LAAwKLcxxE4ilqtqhkIjz7PMhLIP5MyxC8RNMafJOgU8He2xbA==
+X-Received: by 2002:a17:906:3f8d:: with SMTP id b13mr7539181ejj.464.1608656742735;
+        Tue, 22 Dec 2020 09:05:42 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-148-164.adsl.proxad.net. [82.252.148.164])
+        by smtp.googlemail.com with ESMTPSA id i18sm16278580edt.68.2020.12.22.09.05.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Dec 2020 09:05:41 -0800 (PST)
+Subject: Re: [PATCH 1/6] thermal/core: Remove the 'forced_passive' option
+To:     rui.zhang@intel.com
+Cc:     mjg59@codon.org.uk, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amitk@kernel.org,
+        thara.gopinath@linaro.org, Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20201214233811.485669-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <7fe76a95-fe92-386d-7ff7-4c2a0b478724@linaro.org>
+Date:   Tue, 22 Dec 2020 18:05:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201222013712.15056-1-frederic@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20201214233811.485669-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/22/2020 2:37 AM, Frederic Weisbecker wrote:
-> With Paul, we've been thinking that the idle loop wasn't twisted enough
-> yet to deserve 2020.
->
-> rcutorture, after some recent parameter changes, has been complaining
-> about a hung task.
->
-> It appears that rcu_idle_enter() may wake up a NOCB kthread but this
-> happens after the last generic need_resched() check. Some cpuidle drivers
-> fix it by chance but many others don't.
->
-> Here is a proposed bunch of fixes. I will need to also fix the
-> rcu_user_enter() case, likely using irq_work, since nohz_full requires
-> irq work to support self IPI.
->
-> Also more generally, this raise the question of local task wake_up()
-> under disabled interrupts. When a wake up occurs in a preempt disabled
-> section, it gets handled by the outer preempt_enable() call. There is no
-> similar mechanism when a wake up occurs with interrupts disabled. I guess
-> it is assumed to be handled, at worst, in the next tick. But a local irq
-> work would provide instant preemption once IRQs are re-enabled. Of course
-> this would only make sense in CONFIG_PREEMPTION, and when the tick is
-> disabled...
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> 	sched/idle
->
-> HEAD: f2fa6e4a070c1535b9edc9ee097167fd2b15d235
->
-> Thanks,
-> 	Frederic
+On 15/12/2020 00:38, Daniel Lezcano wrote:
+> The code was reorganized in 2012 with the commit 0c01ebbfd3caf1.
+> 
+> The main change is a loop on the trip points array and a unconditional
+> call to the throttle() ops of the governors for each of them even if
+> the trip temperature is not reached yet.
+> 
+> With this change, the 'forced_passive' is no longer checked in the
+> thermal_zone_device_update() function but in the step wise governor's
+> throttle() callback.
+> 
+> As the force_passive does no belong to the trip point array, the
+> thermal_zone_device_update() can not compare with the specified
+> passive temperature, thus does not detect the passive limit has been
+> crossed. Consequently, throttle() is never called and the
+> 'forced_passive' branch is unreached.
+> 
+> In addition, the default processor cooling device is not automatically
+> bound to the thermal zone if there is not passive trip point, thus the
+> 'forced_passive' can not operate.
+> 
+> If there is an active trip point, then the throttle function will be
+> called to mitigate at this temperature and the 'forced_passive' will
+> override the mitigation of the active trip point in this case but with
+> the default cooling device bound to the thermal zone, so usually a
+> fan, and that is not a passive cooling effect.
+> 
+> Given the regression exists since more than 8 years, nobody complained
+> and at the best of my knowledge there is no bug open in
+> https://bugzilla.kernel.org, it is reasonable to say it is unused.
+> 
+> Remove the 'forced_passive' related code.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+Is there any concern with this series ?
+
+
 > ---
->
-> Frederic Weisbecker (4):
->        sched/idle: Fix missing need_resched() check after rcu_idle_enter()
->        cpuidle: Fix missing need_resched() check after rcu_idle_enter()
->        ARM: imx6q: Fix missing need_resched() check after rcu_idle_enter()
->        ACPI: processor: Fix missing need_resched() check after rcu_idle_enter()
->
->
->   arch/arm/mach-imx/cpuidle-imx6q.c |  7 ++++++-
->   drivers/acpi/processor_idle.c     | 10 ++++++++--
->   drivers/cpuidle/cpuidle.c         | 33 +++++++++++++++++++++++++--------
->   kernel/sched/idle.c               | 18 ++++++++++++------
->   4 files changed, 51 insertions(+), 17 deletions(-)
+>  .../driver-api/thermal/sysfs-api.rst          | 13 ---
+>  drivers/thermal/gov_step_wise.c               | 14 +---
+>  drivers/thermal/thermal_sysfs.c               | 80 -------------------
+>  include/linux/thermal.h                       |  4 -
+>  4 files changed, 3 insertions(+), 108 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
+> index e7520cb439ac..a4969c474cc3 100644
+> --- a/Documentation/driver-api/thermal/sysfs-api.rst
+> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
+> @@ -520,19 +520,6 @@ available_policies
+>  
+>  	RW, Optional
+>  
+> -passive
+> -	Attribute is only present for zones in which the passive cooling
+> -	policy is not supported by native thermal driver. Default is zero
+> -	and can be set to a temperature (in millidegrees) to enable a
+> -	passive trip point for the zone. Activation is done by polling with
+> -	an interval of 1 second.
+> -
+> -	Unit: millidegrees Celsius
+> -
+> -	Valid values: 0 (disabled) or greater than 1000
+> -
+> -	RW, Optional
+> -
+>  emul_temp
+>  	Interface to set the emulated temperature method in thermal zone
+>  	(sensor). After setting this temperature, the thermal zone may pass
+> diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+> index 2ae7198d3067..12acb12aac50 100644
+> --- a/drivers/thermal/gov_step_wise.c
+> +++ b/drivers/thermal/gov_step_wise.c
+> @@ -109,7 +109,7 @@ static void update_passive_instance(struct thermal_zone_device *tz,
+>  	 * If value is +1, activate a passive instance.
+>  	 * If value is -1, deactivate a passive instance.
+>  	 */
+> -	if (type == THERMAL_TRIP_PASSIVE || type == THERMAL_TRIPS_NONE)
+> +	if (type == THERMAL_TRIP_PASSIVE)
+>  		tz->passive += value;
+>  }
+>  
+> @@ -122,13 +122,8 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+>  	bool throttle = false;
+>  	int old_target;
+>  
+> -	if (trip == THERMAL_TRIPS_NONE) {
+> -		trip_temp = tz->forced_passive;
+> -		trip_type = THERMAL_TRIPS_NONE;
+> -	} else {
+> -		tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> -		tz->ops->get_trip_type(tz, trip, &trip_type);
+> -	}
+> +	tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> +	tz->ops->get_trip_type(tz, trip, &trip_type);
+>  
+>  	trend = get_tz_trend(tz, trip);
+>  
+> @@ -189,9 +184,6 @@ static int step_wise_throttle(struct thermal_zone_device *tz, int trip)
+>  
+>  	thermal_zone_trip_update(tz, trip);
+>  
+> -	if (tz->forced_passive)
+> -		thermal_zone_trip_update(tz, THERMAL_TRIPS_NONE);
+> -
+>  	mutex_lock(&tz->lock);
+>  
+>  	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 0866e949339b..4e7f9e880d76 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -216,49 +216,6 @@ trip_point_hyst_show(struct device *dev, struct device_attribute *attr,
+>  	return ret ? ret : sprintf(buf, "%d\n", temperature);
+>  }
+>  
+> -static ssize_t
+> -passive_store(struct device *dev, struct device_attribute *attr,
+> -	      const char *buf, size_t count)
+> -{
+> -	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -	int state;
+> -
+> -	if (sscanf(buf, "%d\n", &state) != 1)
+> -		return -EINVAL;
+> -
+> -	/* sanity check: values below 1000 millicelcius don't make sense
+> -	 * and can cause the system to go into a thermal heart attack
+> -	 */
+> -	if (state && state < 1000)
+> -		return -EINVAL;
+> -
+> -	if (state && !tz->forced_passive) {
+> -		if (!tz->passive_delay)
+> -			tz->passive_delay = 1000;
+> -		thermal_zone_device_rebind_exception(tz, "Processor",
+> -						     sizeof("Processor"));
+> -	} else if (!state && tz->forced_passive) {
+> -		tz->passive_delay = 0;
+> -		thermal_zone_device_unbind_exception(tz, "Processor",
+> -						     sizeof("Processor"));
+> -	}
+> -
+> -	tz->forced_passive = state;
+> -
+> -	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+> -
+> -	return count;
+> -}
+> -
+> -static ssize_t
+> -passive_show(struct device *dev, struct device_attribute *attr,
+> -	     char *buf)
+> -{
+> -	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -
+> -	return sprintf(buf, "%d\n", tz->forced_passive);
+> -}
+> -
+>  static ssize_t
+>  policy_store(struct device *dev, struct device_attribute *attr,
+>  	     const char *buf, size_t count)
+> @@ -403,7 +360,6 @@ static DEVICE_ATTR_RW(sustainable_power);
+>  
+>  /* These thermal zone device attributes are created based on conditions */
+>  static DEVICE_ATTR_RW(mode);
+> -static DEVICE_ATTR_RW(passive);
+>  
+>  /* These attributes are unconditionally added to a thermal zone */
+>  static struct attribute *thermal_zone_dev_attrs[] = {
+> @@ -438,45 +394,9 @@ static const struct attribute_group thermal_zone_mode_attribute_group = {
+>  	.attrs = thermal_zone_mode_attrs,
+>  };
+>  
+> -/* We expose passive only if passive trips are present */
+> -static struct attribute *thermal_zone_passive_attrs[] = {
+> -	&dev_attr_passive.attr,
+> -	NULL,
+> -};
+> -
+> -static umode_t thermal_zone_passive_is_visible(struct kobject *kobj,
+> -					       struct attribute *attr,
+> -					       int attrno)
+> -{
+> -	struct device *dev = kobj_to_dev(kobj);
+> -	struct thermal_zone_device *tz;
+> -	enum thermal_trip_type trip_type;
+> -	int count, passive = 0;
+> -
+> -	tz = container_of(dev, struct thermal_zone_device, device);
+> -
+> -	for (count = 0; count < tz->trips && !passive; count++) {
+> -		tz->ops->get_trip_type(tz, count, &trip_type);
+> -
+> -		if (trip_type == THERMAL_TRIP_PASSIVE)
+> -			passive = 1;
+> -	}
+> -
+> -	if (!passive)
+> -		return attr->mode;
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct attribute_group thermal_zone_passive_attribute_group = {
+> -	.attrs = thermal_zone_passive_attrs,
+> -	.is_visible = thermal_zone_passive_is_visible,
+> -};
+> -
+>  static const struct attribute_group *thermal_zone_attribute_groups[] = {
+>  	&thermal_zone_attribute_group,
+>  	&thermal_zone_mode_attribute_group,
+> -	&thermal_zone_passive_attribute_group,
+>  	/* This is not NULL terminated as we create the group dynamically */
+>  };
+>  
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index c80032322158..a57232a9a6f9 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -131,9 +131,6 @@ struct thermal_cooling_device {
+>  			trip point.
+>   * @prev_high_trip:	the above current temperature if you've crossed a
+>  			passive trip point.
+> - * @forced_passive:	If > 0, temperature at which to switch on all ACPI
+> - *			processor cooling devices.  Currently only used by the
+> - *			step-wise governor.
+>   * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
+>   * @ops:	operations this &thermal_zone_device supports
+>   * @tzp:	thermal zone parameters
+> @@ -167,7 +164,6 @@ struct thermal_zone_device {
+>  	int passive;
+>  	int prev_low_trip;
+>  	int prev_high_trip;
+> -	unsigned int forced_passive;
+>  	atomic_t need_update;
+>  	struct thermal_zone_device_ops *ops;
+>  	struct thermal_zone_params *tzp;
+> 
 
-Please feel free to add
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-to all patches in the series.
-
-Thanks!
-
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
