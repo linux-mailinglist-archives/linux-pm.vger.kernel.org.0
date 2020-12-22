@@ -2,120 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FDF2E0E7A
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 19:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD212E0E8C
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 20:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbgLVSzk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Dec 2020 13:55:40 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:42686 "EHLO
+        id S1725811AbgLVTKz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 14:10:55 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:37768 "EHLO
         mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbgLVSzk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 13:55:40 -0500
-Received: by mail-oi1-f169.google.com with SMTP id l200so15746325oig.9;
-        Tue, 22 Dec 2020 10:55:24 -0800 (PST)
+        with ESMTP id S1725782AbgLVTKz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 14:10:55 -0500
+Received: by mail-oi1-f169.google.com with SMTP id l207so15841564oib.4;
+        Tue, 22 Dec 2020 11:10:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=la43jOzGT8cpDZH0lHbZ8yczIDIlNNAQ1oOndJF72r4=;
-        b=AtCcSb0o7lY006L2GZrR5UPwPilzq/kC67NLyMjTZtASTReROhfjHPSy0RutWkOlKG
-         RqbP27tGmReskQxNo0K1qfHhQcg6BAW8uhUbqOHdmm5hEmtBJFuenLd5NptgWQUOCKDz
-         kjBCjoZCLZnH3k1wGg9YY432uIFwhpY+r6MsQXLuVC5Lukiq3687e0tzgaR02AiCPgSA
-         hUQ6TnjAbNzY2zv/Q8ZK4fhOAFRbv50TPGQ5gIf6Z0+69bzjLuL3yZL4SdU0w7FOj1Nr
-         53m1eQRxRsaWSphjOgaFwTgtkYz5JW6aTdzGIVgfIfPX0m1eiIDBLzh63umJaoDlvgAe
-         kNQA==
-X-Gm-Message-State: AOAM533zU2Uk2Mcr8ixJ0xDbGVLBXHLupoRPMNp6erY+S1JCHptXTjXn
-        D0tMUPgu9lUdRtq9T2gSPgh66ssty+unEomxCjk=
-X-Google-Smtp-Source: ABdhPJy5EVY7T6HE7RxxJ9AoKr5usE9gCbUG5HZ1gWiHgPXdK9RZjFwARYSd7qSwoUdfSw0ANGyqV1mRCh80XLruDv8=
-X-Received: by 2002:aca:3cc5:: with SMTP id j188mr14009921oia.54.1608663299046;
- Tue, 22 Dec 2020 10:54:59 -0800 (PST)
+        bh=qJcLuqhGyTdulZyHvFUwRf4VUU/U5lmTCF6MQyRDs2g=;
+        b=GZfajE4JXKnGt7PAHeNTLu+v2lfvCBncLCp5BlV/iJdsSjGGRxJx8eKsYQOP1LFme+
+         ICeS3fvnTtMqohUyG9fmySxElPVFx82ok/CiqXDK5ST5f2HpzbAH2d/cDtMdt0iw2+Zn
+         VQtnYPAS917OvxxH4Ztr0R22mNi9uED9W9pUBEBqhLSMzgGYErsyfI0y4WSXOnYQAxfF
+         RYGIUnpzYx+zkCRWYMASU+P1Cxl476YSpEIwS2z+yx30ntCc6OEndiikM6LfxxMSnhuE
+         JLXTQsuv2idx4MummYrMU+mFPoK3iyEeDLaPyk9w3xxqRwaxy7CInfbkU3u6VKatOfSY
+         nv+A==
+X-Gm-Message-State: AOAM531wVmdkrAhhT9aa3I0c2Uf4y/retFYu4aKwWdPgVhNC1M00kwag
+        fuHoKot7/jSPsOLlirkLgy2mJ6Y4S2RCGIfX1NI=
+X-Google-Smtp-Source: ABdhPJxIYc4zK08MtEYs62IqavskxUUN8yV3pd/5j8oRAIkj9unjY1mocXJ73PQVKyOWwTXy+PWdKomrjkOYp/vtwRw=
+X-Received: by 2002:aca:4892:: with SMTP id v140mr15360311oia.71.1608664213995;
+ Tue, 22 Dec 2020 11:10:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20201222184510.19415-1-info@metux.net>
-In-Reply-To: <20201222184510.19415-1-info@metux.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Dec 2020 19:54:48 +0100
-Message-ID: <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
-Subject: Re: [PATCH] arch: consolidate pm_power_off callback
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Salter <msalter@redhat.com>,
-        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christian Brauner <christian@brauner.io>,
-        alpha <linux-alpha@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        linux-c6x-dev@linux-c6x.org, linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
+References: <20201217071501.31267-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20201217071501.31267-1-lukas.bulwahn@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 22 Dec 2020 20:10:03 +0100
+Message-ID: <CAJZ5v0gC_SLBvSsGC=1OJ-uNEVPC=JLwELEZKj=LKoQkoOuEkQ@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: include governors into CPU IDLE TIME
+ MANAGEMENT FRAMEWORK
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Enrico,
-
-On Tue, Dec 22, 2020 at 7:46 PM Enrico Weigelt, metux IT consult
-<info@metux.net> wrote:
-> Move the pm_power_off callback into one global place and also add an
-> function for conditionally calling it (when not NULL), in order to remove
-> code duplication in all individual archs.
+On Thu, Dec 17, 2020 at 8:16 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
-
-Thanks for your patch!
-
-> --- a/arch/alpha/kernel/process.c
-> +++ b/arch/alpha/kernel/process.c
-> @@ -43,12 +43,6 @@
->  #include "proto.h"
->  #include "pci_impl.h"
+> The current pattern in the file entry does not make the files in the
+> governors subdirectory to be a part of the CPU IDLE TIME MANAGEMENT
+> FRAMEWORK.
 >
-> -/*
-> - * Power off function, if any
-> - */
-> -void (*pm_power_off)(void) = machine_power_off;
+> Adjust the file pattern to include files in governors.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> applies cleanly on current master and next-20201215
+>
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 952731d1e43c..ac679aa00e0d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4596,7 +4596,7 @@ B:        https://bugzilla.kernel.org
+>  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+>  F:     Documentation/admin-guide/pm/cpuidle.rst
+>  F:     Documentation/driver-api/pm/cpuidle.rst
+> -F:     drivers/cpuidle/*
+> +F:     drivers/cpuidle/
+>  F:     include/linux/cpuidle.h
+>
+>  CPU POWER MONITORING SUBSYSTEM
+> --
 
-Assignments like these are lost in the conversion.
+Applied as 5.11-rc material, thanks!
 
-> -EXPORT_SYMBOL(pm_power_off);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>
