@@ -2,137 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E13A92E0F48
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 21:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6668D2E0FBE
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Dec 2020 22:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbgLVUSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Dec 2020 15:18:03 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:55051 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgLVUSC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 15:18:02 -0500
-Received: from [192.168.1.155] ([95.118.68.26]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N5FtF-1jtguL3EaD-0118EC; Tue, 22 Dec 2020 21:14:24 +0100
-Subject: Re: [PATCH] arch: consolidate pm_power_off callback
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Salter <msalter@redhat.com>,
-        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christian Brauner <christian@brauner.io>,
-        alpha <linux-alpha@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        linux-c6x-dev@linux-c6x.org, linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <20201222184510.19415-1-info@metux.net>
- <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Message-ID: <2f1d53e9-0dbb-78ef-22d5-ab230438ddf0@metux.net>
-Date:   Tue, 22 Dec 2020 21:14:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1727901AbgLVVMz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Dec 2020 16:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727691AbgLVVMz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Dec 2020 16:12:55 -0500
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FF9C0613D6;
+        Tue, 22 Dec 2020 13:11:59 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 62B943F343;
+        Tue, 22 Dec 2020 22:11:54 +0100 (CET)
+Subject: Re: [PATCH 13/13] dt-bindings: cpufreq: qcom-hw: Add bindings for
+ 8998
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        ulf.hansson@linaro.org, jorge.ramirez-ortiz@linaro.org,
+        broonie@kernel.org, lgirdwood@gmail.com, daniel.lezcano@linaro.org,
+        nks@flawful.org, bjorn.andersson@linaro.org, agross@kernel.org,
+        viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        konrad.dybcio@somainline.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org, phone-devel@vger.kernel.org
+References: <20201126184559.3052375-1-angelogioacchino.delregno@somainline.org>
+ <20201126184559.3052375-14-angelogioacchino.delregno@somainline.org>
+ <20201208181103.GA2795715@robh.at.kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <ea5cb3fc-3bda-e220-c0ba-6fd50d648737@somainline.org>
+Date:   Tue, 22 Dec 2020 22:11:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: tl
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:UpSPX5SjSxB2JTjoTNk4sWDtA2g9Ks1Ix8dKZhB/ESwn1jWfyhx
- EoQG8feaYKyQLnGwygV2naaePTeCvGl6q4M5FCoVvWDzd5IDw7I4++spAXF1Cn7hlWYDZ9i
- kl7Eptzr5sffhmk6uqoQvQuMaJH6WbEHZSp8VbRZESTCM8tqF2liTqVeSG60D5ct0JeRFXM
- C/vRJPf10ZNRyihx6OQ7A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4rmsxPbYFfk=:r6XlGr1qgoUDdOPZvl+EZB
- Tvvn/+E+IBfJxp8NYxN6kmODEYBvHcxpBa91h8yz4H6rftNQGPPvhJG9K3iz7sa8U3axvH9gb
- k8MQxF8AkxpsOIqgXUvRf2/UkUWU0UyTVaNY4yxFyPXaJ5HZGvdBlHztqC0ROOQbfPfvuc9EL
- FxgUfcgonSSkeeYMjRiTB3zJbeFMtXOTHkBa2rvNba1MQtk+fNt8bwxkcg/16D1kNX6CaQa6R
- /HjaLu8M8eiwjXWLzppTMleqwd3hE1HiIRNtfJF9qFLMDQKH5ELRRUKQxUmk7wwJOm6jAqUoz
- DxOEn9gjBP8Krn67rCBumevzsK7LiZ8dtcUh+n3F3XTZoxMWvkNcvhbeCfAuF95ukrIWyQBXn
- H8gIR89lqyF1p5Egw7NhgnSoXyIbQAraihthZryjzaPuyq4jPkP8GrsbXJIV3
+In-Reply-To: <20201208181103.GA2795715@robh.at.kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22.12.20 19:54, Geert Uytterhoeven wrote:
+Il 08/12/20 19:11, Rob Herring ha scritto:
 
-Hi,
+Hello! Replying very late seem to be obligatory for me nowadays
+so for this and for any other late replies: I'm sorry!
 
-> On Tue, Dec 22, 2020 at 7:46 PM Enrico Weigelt, metux IT consult
-> <info@metux.net> wrote:
->> Move the pm_power_off callback into one global place and also add an
->> function for conditionally calling it (when not NULL), in order to remove
->> code duplication in all individual archs.
+> On Thu, Nov 26, 2020 at 07:45:59PM +0100, AngeloGioacchino Del Regno wrote:
+>> The OSM programming addition has been done under the
+>> qcom,cpufreq-hw-8998 compatible name: specify the requirement
+>> of two additional register spaces for this functionality.
 >>
->> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
-> 
-> Thanks for your patch!
-> 
->> --- a/arch/alpha/kernel/process.c
->> +++ b/arch/alpha/kernel/process.c
->> @@ -43,12 +43,6 @@
->>  #include "proto.h"
->>  #include "pci_impl.h"
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>> ---
+>>   .../bindings/cpufreq/qcom,cpufreq-hw.yaml     | 31 ++++++++++++++++---
+>>   1 file changed, 27 insertions(+), 4 deletions(-)
 >>
->> -/*
->> - * Power off function, if any
->> - */
->> -void (*pm_power_off)(void) = machine_power_off;
+>> diff --git a/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml b/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
+>> index 94a56317b14b..f64cea73037e 100644
+>> --- a/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
+>> +++ b/Documentation/devicetree/bindings/cpufreq/qcom,cpufreq-hw.yaml
+>> @@ -23,17 +23,21 @@ properties:
+>>             - qcom,cpufreq-epss
+>>   
+>>     reg:
+>> +    description: Base address and size of the RBCPR register region
 > 
-> Assignments like these are lost in the conversion.
+> That doesn't make sense given you have 2 regions.
+> 
+>>       minItems: 2
+>>       maxItems: 2
+> 
+> maxItems: 4
+> 
+Indeed it doesn't make sense.
 
-Yes, but this doesn't seem to be ever called anyways. (in arch/alpha)
-And, BTW, letting it point to machine_power_off() doesn't make much
-sense, since it's the arch's machine_power_off() function, who're
-calling pm_power_off().
+>>   
+>>     reg-names:
+>>       description:
+>> -      Frequency domain register region for each domain.
+>> -    items:
+>> -      - const: "freq-domain0"
+>> -      - const: "freq-domain1"
+>> +      Frequency domain register region for each domain. If OSM programming
+>> +      does not happen in the bootloader and has to be done in this driver,
+>> +      then also the OSM domain region osm-domain[0-1] has to be provided.
+> 
+> Don't write free form text for what can be expressed as schema.
+> 
+I guess the later 'if' for 8998 is sufficient to express that, then...
+right?
 
-Actually, we could remove pm_power_off completely from here, assuming
-nobody would *build* any drivers that register themselves into
-pm_power_off.
+>> +    minItems: 2
+>> +    maxItems: 2
+> 
+> You obviously haven't tried this change with 8998. It will fail with
+> more than 2. What you need here is:
+> 
+My testing methodology must be flawed. Or perhaps I just need some more 
+sleep... probably the latter.
 
-If you feel better with it, I could post a patch that just removes
-pm_power_off from arch/alpha.
+> minItems: 2
+> maxItems: 4
+> 
+> items:
+>    - const: "freq-domain0"
+>    - const: "freq-domain1"
+>    - const: "osm-domain0"
+>    - const: "osm-domain1"
+> 
+> And then...
+> 
+>>   
+>>     clock-names:
+>> +    minItems: 2
+>> +    maxItems: 2
+>>       - const: xo
+>>       - const: ref
+>>   
+>> @@ -53,9 +57,28 @@ properties:
+>>         property with phandle to a cpufreq_hw followed by the Domain ID(0/1)
+>>         in the CPU DT node.
+>>   
+>> +allOf:
+>> + - if:
+>> +     properties:
+>> +       reg-names:
+>> +         contains:
+>> +           const: qcom,cpufreq-hw-8998
+>> +   then:
+>> +     properties:
+>> +       reg:
+>> +         minItems: 4
+>> +         maxItems: 4
+>> +       reg-names:
+> 
+> ...here just:
+> 
+> minItems: 4
+> 
+> And you'll need an 'else' clause with 'maxItems: 2' for reg and
+> reg-names.
+> 
+Big thank you for that!!!
 
+>> +         items:
+>> +           - const: "freq-domain0"
+>> +           - const: "freq-domain1"
+>> +           - const: "osm-domain0"
+>> +           - const: "osm-domain1"
+>> +
+>>   required:
+>>     - compatible
+>>     - reg
+>> +  - reg-names
+> 
+> You can't make something that was optional now required. (Unless it was
+> a mistake and all existing users always had 'reg-names'.)
+> 
+Well, yes. All existing users are already declaring reg-names, no DT 
+changes to do for them.
 
---mtx
+>>     - clock-names
+>>     - clocks
+>>     - "#freq-domain-cells"
+>> -- 
+>> 2.29.2
+>>
 
--- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Thanks for the review.
+A V2 of the entire series will come soon!
+
+-- Angelo
