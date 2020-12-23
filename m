@@ -2,133 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E93E2E1C3A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Dec 2020 13:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8AF2E1C4A
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Dec 2020 13:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbgLWMYb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Dec 2020 07:24:31 -0500
-Received: from mga01.intel.com ([192.55.52.88]:33895 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726266AbgLWMYb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 23 Dec 2020 07:24:31 -0500
-IronPort-SDR: no72jU6hSVVBh9QSJDpSCwTJ5R0dQkCMazByAdY7Yg0/6iXliBf9v7NO4gDUqsDaC3xXEaZEZv
- LTZzajhQWYOQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9843"; a="194455522"
-X-IronPort-AV: E=Sophos;i="5.78,441,1599548400"; 
-   d="scan'208";a="194455522"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2020 04:23:50 -0800
-IronPort-SDR: lxgyqUEkW2ZkpZDNkrIGqLPPJgdGXRffPAzvGiYDM1Hs5Vh2mMBoGTVU7z+HWXbHP4sPL5yexm
- vX7G7fn81Hnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,441,1599548400"; 
-   d="scan'208";a="457951591"
-Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2020 04:23:49 -0800
-From:   Artem Bityutskiy <dedekind1@gmail.com>
+        id S1728356AbgLWMez (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Dec 2020 07:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727047AbgLWMey (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Dec 2020 07:34:54 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F10C0613D3
+        for <linux-pm@vger.kernel.org>; Wed, 23 Dec 2020 04:34:14 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id y17so18463730wrr.10
+        for <linux-pm@vger.kernel.org>; Wed, 23 Dec 2020 04:34:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent:content-language;
+        bh=46s9iCozNdwklFRP9JAUtjF3UizZ0VgnsLK944MzeQA=;
+        b=AIfxhgWzlR35+vH7QotuaW/iEHUPQbqrwNJlpdrmYnTHhSA+E+Xizja8tXSv8yumNW
+         FmWlJU+hiPjh7OheGEOFB7RZefUT6vwPfIz/FTfOU+MK1fHuXpdnO4ZySgiPI5iQtPeq
+         yPVzcsLmKd1jfC+6ASw4V1Pe7SpqPBZIhfJQUXMgOzSCYQYNJ5fluRSmWD7GkmaeFfTv
+         geVDzBZTnkjD7KA+MXEumxBNrmcQC8wI2OCbpRBR9aBXkJZ9X+Al6QGDMP32Ew1oTvQE
+         wNFFrXtsDJMSrXVMWIloEPmFy53koesH7EuGG/fK+N0d+3FpBpgHX5cW90O+79vJxDvS
+         y9bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent:content-language;
+        bh=46s9iCozNdwklFRP9JAUtjF3UizZ0VgnsLK944MzeQA=;
+        b=Fannzq0WSVEr890iMGLxZtJ5MK0XnQ/dX24F63A1iJRq4XCCLGp3eBWllI39pYfHt4
+         TG4/qHYztVP1EfLlFHSC494Qd1i+FBGcpDPyyZxfZj1b+9fbd1jo8g8j4/8Duh/gKbWp
+         oE9GHfxPWfpXqAqkVk+lqtOl97qOPuH5kogjJUQE2/PsCTcco9gucvEAnqFfBA7TIrK9
+         0TGxTYOX/A5t609vLRlQhc4OBaG8H39iKocKj6Pahyvgq43SR6bIyFmmTPtMsE6tAL9A
+         7vtqvao3C/+nHYIL+hKpvMnN9aCpdOVF3xt++4VYo2D5LC3/1YvX2ty4R8kMWdgJJ/+7
+         WvAg==
+X-Gm-Message-State: AOAM533FDuSzrrgex/0xZKv4R83B3fe3WOxWg6rCjzOq3mJ8VqA+pSfv
+        hGvBIMCA36sAMULO2KZ4mwcVcw==
+X-Google-Smtp-Source: ABdhPJwOkSM8Qc8pGGgU1U4SiH/0CnCXZ3kVzavCyqdHyvPoWRa06GmRQrbNHpV201JI6MGhft6XOA==
+X-Received: by 2002:a5d:4a06:: with SMTP id m6mr30207013wrq.189.1608726852733;
+        Wed, 23 Dec 2020 04:34:12 -0800 (PST)
+Received: from linaro.org (lns-bzn-59-82-252-148-164.adsl.proxad.net. [82.252.148.164])
+        by smtp.gmail.com with ESMTPSA id j9sm35164716wrm.14.2020.12.23.04.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Dec 2020 04:34:12 -0800 (PST)
+Date:   Wed, 23 Dec 2020 13:34:09 +0100
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH] intel_idle: add SnowRidge C-state table
-Date:   Wed, 23 Dec 2020 14:23:48 +0200
-Message-Id: <20201223122348.4002645-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.26.2
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH v5 0/4] powercap/dtpm: Add the DTPM framework
+Message-ID: <784894c4-36d3-7eae-ac82-ca0ef68772a2@linaro.org>
+References: <20201208164145.19493-1-daniel.lezcano@linaro.org>
+ <ba9c6f75-3964-3ee9-c849-17db5ae51501@linaro.org>
+ <CAJZ5v0infKumCmn77nzAN80G4bmF+_ZzgGkdaeMvczC_VyjyGg@mail.gmail.com>
+ <CAJZ5v0hbeeVHPAhm01W4NKNBNQo1xS0Dqa6C2h=zoo4hCjGPew@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hbeeVHPAhm01W4NKNBNQo1xS0Dqa6C2h=zoo4hCjGPew@mail.gmail.com>
+X-Identity-Key: id8
+X-Account-Key: account12
+X-Enigmail-Draft-Status: N11100
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
+ attachmentreminder=0; deliveryformat=4
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+Content-Language: en-US
+X-TUID: ARMoOqCpfDUp
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+On 22/12/2020 19:52, Rafael J. Wysocki wrote:
+> On Fri, Dec 11, 2020 at 8:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Fri, Dec 11, 2020 at 11:41 AM Daniel Lezcano
+>> <daniel.lezcano@linaro.org> wrote:
+>>>
+>>>
+>>> Hi Rafael,
+>>>
+>>> I believe I took into account all the comments, do you think it is
+>>> possible to merge this series ?
+>>
+>> It should be, unless more changes are requested.
+>>
+>> I will be taking care of it next week and, if all goes well, it should
+>> be possible to push it during the second half of the merge window.
+> 
+> Applied as 5.11-rc material now, sorry for the delay.
 
-Add C-state table for the SnowRidge SoC which is found on Intel Jacobsville
-platforms.
+No problem, thank you for taking care of the series.
 
-The following has been changed.
-1. C1E latency changed from 10us to 15us. It was measured using the
-   opensource "wult" tool (the "nic" method, 15us is the 99.99th percentile).
-2. C1E power break even changed from 20us to 25us, which may result in less C1E
-   residency in some workloads.
-3. C6 latency changed from 50us to 120us. Measured the same way as C1E.
+I did not want to add another entry in the MAINTAINER file as you are
+the maintainer of the powercap framework and that is fine.
 
-The C6 C-state is supported only by some SnowRidge revisions, so add a C-state
-table commentary about this.
+However the get_maintainer script (and default cccmd) does not return me
+as part of the maintainer/author of the dtpm or idle_inject. I would
+like to be at least Cc'ed to review the changes related to those files
+to make sure they stay aligned with the direction we are taking.
 
-On SnowRidge, C6 support is enumerated via the usual mechanism: "mwait" leaf of
-the "cpuid" instruction. The 'intel_idle' driver does check this leaf, so even
-though C6 is present in the table, the driver will only use it if the CPU does
-support it.
+Is it possible to be automatically Cc'ed for the proposed changes in these
+files ?
 
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
----
- drivers/idle/intel_idle.c | 41 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 9a810e4a7946..1ef4ac3cc87c 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -976,6 +976,39 @@ static struct cpuidle_state dnv_cstates[] __initdata = {
- 		.enter = NULL }
- };
- 
-+/*
-+ * Note, depending on HW and FW revision, SnowRidge SoC may or may not support
-+ * C6, and this is indicated in the CPUID mwait leaf.
-+ */
-+static struct cpuidle_state snr_cstates[] __initdata = {
-+	{
-+		.name = "C1",
-+		.desc = "MWAIT 0x00",
-+		.flags = MWAIT2flg(0x00),
-+		.exit_latency = 2,
-+		.target_residency = 2,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C1E",
-+		.desc = "MWAIT 0x01",
-+		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-+		.exit_latency = 15,
-+		.target_residency = 25,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C6",
-+		.desc = "MWAIT 0x20",
-+		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 130,
-+		.target_residency = 500,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.enter = NULL }
-+};
-+
- static const struct idle_cpu idle_cpu_nehalem __initconst = {
- 	.state_table = nehalem_cstates,
- 	.auto_demotion_disable_flags = NHM_C1_AUTO_DEMOTE | NHM_C3_AUTO_DEMOTE,
-@@ -1097,6 +1130,12 @@ static const struct idle_cpu idle_cpu_dnv __initconst = {
- 	.use_acpi = true,
- };
- 
-+static const struct idle_cpu idle_cpu_snr __initconst = {
-+	.state_table = snr_cstates,
-+	.disable_promotion_to_c1e = true,
-+	.use_acpi = true,
-+};
-+
- static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(NEHALEM_EP,		&idle_cpu_nhx),
- 	X86_MATCH_INTEL_FAM6_MODEL(NEHALEM,		&idle_cpu_nehalem),
-@@ -1135,7 +1174,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_PLUS,	&idle_cpu_bxt),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_D,	&idle_cpu_dnv),
--	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&idle_cpu_dnv),
-+	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&idle_cpu_snr),
- 	{}
- };
- 
 -- 
-2.26.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
