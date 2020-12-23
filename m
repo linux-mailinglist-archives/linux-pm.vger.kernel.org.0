@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5042E1CCD
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Dec 2020 14:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B684C2E1CD2
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Dec 2020 14:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728755AbgLWNoC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Dec 2020 08:44:02 -0500
-Received: from mail-40131.protonmail.ch ([185.70.40.131]:12366 "EHLO
-        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728751AbgLWNoC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Dec 2020 08:44:02 -0500
-Date:   Wed, 23 Dec 2020 13:43:18 +0000
+        id S1728775AbgLWNoK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Dec 2020 08:44:10 -0500
+Received: from mail-40133.protonmail.ch ([185.70.40.133]:57469 "EHLO
+        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728773AbgLWNoK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Dec 2020 08:44:10 -0500
+Date:   Wed, 23 Dec 2020 13:43:25 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1608731000;
-        bh=yKsd9EiB1lb1beK3a4KefGe56jveojVKszto/Y3gwDs=;
+        s=protonmail; t=1608731008;
+        bh=2J2HkMO1x6s17YhUEXyxsyS33PdVMCQ5VOjC6KfqhmA=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=Q/9YXEy9EDINUOv+dbnOKoddsN7HsgTnjwNbSyhaZNfziDZ2VsESEv7Pbfr7LyNN1
-         IFMU+93ywHMG23huYnRuG73EFb161LK9Cv/xHSCTc7cXv+KRUlLYwjHy4RpAh61olr
-         YTP/SsElMVQpoNlLc+YrTNTf1RU5KkqPGbciJri0=
+        b=hdj2YSdZ0HrcWiZEsTkDpZhvcOrfhRUXcXMDESPTxIoUQhGifVOnBB8Bs4d1mWLYq
+         1BK1Biy5bSUXqnnIkY8E1xMaCQEzU7jShiyNMcQwE8Z+kb4PTExNEnIJJiWSKelbq/
+         FMqsNts74MT4+6p6QRsgmmEL/UCFZc3xsQqDKtdo=
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 From:   Timon Baetz <timon.baetz@protonmail.com>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -34,8 +34,8 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         ~postmarketos/upstreaming@lists.sr.ht,
         Timon Baetz <timon.baetz@protonmail.com>
 Reply-To: Timon Baetz <timon.baetz@protonmail.com>
-Subject: [PATCH v4 5/7] ARM: dts: exynos: Added muic and charger nodes for i9100
-Message-ID: <20201223134221.804943-5-timon.baetz@protonmail.com>
+Subject: [PATCH v4 6/7] ARM: dts: exynos: Fix charging regulator voltage and current for i9100
+Message-ID: <20201223134221.804943-6-timon.baetz@protonmail.com>
 In-Reply-To: <20201223134221.804943-1-timon.baetz@protonmail.com>
 References: <20201223134221.804943-1-timon.baetz@protonmail.com>
 MIME-Version: 1.0
@@ -50,35 +50,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-muic node is only used for extcon consumers.
-charger node is used to specify muic and regulator.
+Set CHARGER current and CHARGER_CV voltage according to Galaxy S2 Epic
+4G Touch SPH-D710 Android vendor sources [0,1].
+
+Remove regulator-always-on. The regulator can be enabled and disabled
+based on extcon events.
+
+[0] https://github.com/krzk/linux-vendor-backup/blob/samsung/galaxy-s2-epic=
+-4g-touch-sph-d710-exynos4210-dump/drivers/power/max8997_charger_u1.c#L169-=
+L170
+[1] https://github.com/krzk/linux-vendor-backup/blob/samsung/galaxy-s2-epic=
+-4g-touch-sph-d710-exynos4210-dump/drivers/power/max8997_charger_u1.c#L390-=
+L391
 
 Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
 ---
- arch/arm/boot/dts/exynos4210-i9100.dts | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/arm/boot/dts/exynos4210-i9100.dts | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exy=
 nos4210-i9100.dts
-index 5370ee477186..8fa704babd5e 100644
+index 8fa704babd5e..586d801af0b5 100644
 --- a/arch/arm/boot/dts/exynos4210-i9100.dts
 +++ b/arch/arm/boot/dts/exynos4210-i9100.dts
-@@ -584,6 +584,16 @@ EN32KHZ_CP {
+@@ -562,15 +562,14 @@ safe2_sreg: ESAFEOUT2 {
+=20
+ =09=09=09charger_reg: CHARGER {
+ =09=09=09=09regulator-name =3D "CHARGER";
+-=09=09=09=09regulator-min-microamp =3D <60000>;
+-=09=09=09=09regulator-max-microamp =3D <2580000>;
+-=09=09=09=09regulator-always-on;
++=09=09=09=09regulator-min-microamp =3D <200000>;
++=09=09=09=09regulator-max-microamp =3D <950000>;
+ =09=09=09};
+=20
+ =09=09=09chargercv_reg: CHARGER_CV {
+ =09=09=09=09regulator-name =3D "CHARGER_CV";
+-=09=09=09=09regulator-min-microvolt =3D <3800000>;
+-=09=09=09=09regulator-max-microvolt =3D <4100000>;
++=09=09=09=09regulator-min-microvolt =3D <4200000>;
++=09=09=09=09regulator-max-microvolt =3D <4200000>;
  =09=09=09=09regulator-always-on;
  =09=09=09};
- =09=09};
-+
-+=09=09muic: max8997-muic {
-+=09=09=09compatible =3D "maxim,max8997-muic";
-+=09=09};
-+
-+=09=09charger {
-+=09=09=09compatible =3D "maxim,max8997-battery";
-+=09=09=09charger-supply =3D <&charger_reg>;
-+=09=09=09extcon =3D <&muic>;
-+=09=09};
- =09};
- };
 =20
 --=20
 2.25.1
