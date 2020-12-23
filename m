@@ -2,329 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 243C02E197F
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Dec 2020 08:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFA02E19B2
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Dec 2020 09:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbgLWHub (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Dec 2020 02:50:31 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:39608 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727063AbgLWHua (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Dec 2020 02:50:30 -0500
-X-UUID: 1a5e53b3d5fc4ffb82e6143b380b4e74-20201223
-X-UUID: 1a5e53b3d5fc4ffb82e6143b380b4e74-20201223
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <michael.kao@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 103042784; Wed, 23 Dec 2020 15:49:46 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 23 Dec 2020 15:49:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 23 Dec 2020 15:49:44 +0800
-From:   Michael Kao <michael.kao@mediatek.com>
-To:     <michael.kao@mediatek.com>, <fan.chen@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
-CC:     Eduardo Valentin <edubezval@gmail.com>,
+        id S1728138AbgLWIKl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Dec 2020 03:10:41 -0500
+Received: from mail2.protonmail.ch ([185.70.40.22]:32715 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727706AbgLWIKk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Dec 2020 03:10:40 -0500
+Date:   Wed, 23 Dec 2020 08:09:55 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1608710997;
+        bh=GMlfVIZL/UQ0llYJN+djOiQkhs6kpbE53PRyZR6cwiY=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=w6Qjq3FtWNe6QHjBkYROPa/fkU26bkUpSb1Xm2wYNZu89Iz8+TUU5I4Ow4ORC+cZK
+         JP6BrFQao1WAhgeVXET3hfHbPva6Kvem4MNGb93XZiHlwswCAws8GTjSabS/pXf+hx
+         3TVcC/MZKUNJs61kAMgyX7apAmtxmliby/AinP8g=
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+From:   Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH] arm64: dts: mt8192: add thermal zones, cooling map and trips
-Date:   Wed, 23 Dec 2020 15:49:44 +0800
-Message-ID: <20201223074944.2061-1-michael.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Reply-To: Timon Baetz <timon.baetz@protonmail.com>
+Subject: Re: [PATCH v3 4/7] power: supply: max8997_charger: Set CHARGER current limit
+Message-ID: <20201223090114.750664cd.timon.baetz@protonmail.com>
+In-Reply-To: <20201222084004.GD5026@kozik-lap>
+References: <20201222070520.710096-1-timon.baetz@protonmail.com> <20201222070520.710096-4-timon.baetz@protonmail.com> <20201222084004.GD5026@kozik-lap>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 8E7BA1A4355ECF794BD325262EBA2101F308FC3C1D5B35C546490E00817293EF2000:8
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add thermal zone node to support mt8192 read temperature.
-Thermal throttle will start at 68C and the
-target temperature is 85C.
+On Tue, 22 Dec 2020 09:40:04 +0100, Krzysztof Kozlowski wrote:
+> On Tue, Dec 22, 2020 at 07:31:40AM +0000, Timon Baetz wrote:
+> > Register for extcon notification and set charging current depending on
+> > the detected cable type. Current values are taken from vendor kernel,
+> > where most charger types end up setting 650mA [0].
+> >
+> > Also enable and disable the CHARGER regulator based on extcon events.
+> >
+> > [0] https://github.com/krzk/linux-vendor-backup/blob/samsung/galaxy-s2-=
+epic-4g-touch-sph-d710-exynos4210-dump/drivers/misc/max8997-muic.c#L1675-L1=
+678
+> >
+> > Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+> > ---
+> >  drivers/power/supply/max8997_charger.c | 94 ++++++++++++++++++++++++++
+> >  1 file changed, 94 insertions(+)
+> >
+> > diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/sup=
+ply/max8997_charger.c
+> > index 1947af25879a..673ffff14ae0 100644
+> > --- a/drivers/power/supply/max8997_charger.c
+> > +++ b/drivers/power/supply/max8997_charger.c
+> > @@ -6,12 +6,14 @@
+> >  //  MyungJoo Ham <myungjoo.ham@samsung.com>
+> >
+> >  #include <linux/err.h>
+> > +#include <linux/extcon.h>
+> >  #include <linux/module.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/power_supply.h>
+> >  #include <linux/mfd/max8997.h>
+> >  #include <linux/mfd/max8997-private.h>
+> > +#include <linux/regulator/consumer.h>
+> >
+> >  /* MAX8997_REG_STATUS4 */
+> >  #define DCINOK_SHIFT=09=091
+> > @@ -31,6 +33,10 @@ struct charger_data {
+> >  =09struct device *dev;
+> >  =09struct max8997_dev *iodev;
+> >  =09struct power_supply *battery;
+> > +=09struct regulator *reg;
+> > +=09struct extcon_dev *edev;
+> > +=09struct notifier_block extcon_nb;
+> > +=09struct work_struct extcon_work;
+> >  };
+> >
+> >  static enum power_supply_property max8997_battery_props[] =3D {
+> > @@ -88,6 +94,67 @@ static int max8997_battery_get_property(struct power=
+_supply *psy,
+> >  =09return 0;
+> >  }
+> >
+> > +static void max8997_battery_extcon_evt_stop_work(void *data)
+> > +{
+> > +=09struct charger_data *charger =3D data;
+> > +
+> > +=09cancel_work_sync(&charger->extcon_work);
+> > +}
+> > +
+> > +static void max8997_battery_extcon_evt_worker(struct work_struct *work=
+)
+> > +{
+> > +=09struct charger_data *charger =3D
+> > +=09    container_of(work, struct charger_data, extcon_work);
+> > +=09struct extcon_dev *edev =3D charger->edev;
+> > +=09int current_limit;
+> > +
+> > +=09if (extcon_get_state(edev, EXTCON_CHG_USB_SDP) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB SDP charger is connected\n");
+> > +=09=09current_limit =3D 450000;
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_DCP) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB DCP charger is connected\n");
+> > +=09=09current_limit =3D 650000;
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_FAST) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB FAST charger is connected\n");
+> > +=09=09current_limit =3D 650000;
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_SLOW) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB SLOW charger is connected\n");
+> > +=09=09current_limit =3D 650000;
+> > +=09} else if (extcon_get_state(edev, EXTCON_CHG_USB_CDP) > 0) {
+> > +=09=09dev_dbg(charger->dev, "USB CDP charger is connected\n");
+> > +=09=09current_limit =3D 650000;
+> > +=09} else {
+> > +=09=09dev_dbg(charger->dev, "USB charger is diconnected\n");
+> > +=09=09current_limit =3D -1;
+> > +=09}
+> > +
+> > +=09if (current_limit > 0) {
+> > +=09=09int ret =3D regulator_set_current_limit(charger->reg, current_li=
+mit, current_limit);
+> > +
+> > +=09=09if (ret) {
+> > +=09=09=09dev_err(charger->dev, "failed to set current limit: %d\n", re=
+t);
+> > +=09=09=09return;
+> > +=09=09}
+> > +=09=09ret =3D regulator_enable(charger->reg);
+> > +=09=09if (ret)
+> > +=09=09=09dev_err(charger->dev, "failed to enable regulator: %d\n", ret=
+);
+> > +=09} else {
+> > +=09=09int ret  =3D regulator_disable(charger->reg);
+> > +
+> > +=09=09if (ret)
+> > +=09=09=09dev_err(charger->dev, "failed to disable regulator: %d\n", re=
+t);
+> > +=09}
+> > +}
+> > +
+> > +static int max8997_battery_extcon_evt(struct notifier_block *nb,
+> > +=09=09=09=09unsigned long event, void *param)
+> > +{
+> > +=09struct charger_data *charger =3D
+> > +=09=09container_of(nb, struct charger_data, extcon_nb);
+> > +=09schedule_work(&charger->extcon_work);
+> > +=09return NOTIFY_OK;
+> > +}
+> > +
+> >  static const struct power_supply_desc max8997_battery_desc =3D {
+> >  =09.name=09=09=3D "max8997_pmic",
+> >  =09.type=09=09=3D POWER_SUPPLY_TYPE_BATTERY,
+> > @@ -170,6 +237,33 @@ static int max8997_battery_probe(struct platform_d=
+evice *pdev)
+> >  =09=09return PTR_ERR(charger->battery);
+> >  =09}
+> >
+> > +=09charger->reg =3D devm_regulator_get(&pdev->dev, "charger"); =20
+>=20
+> The code looks good but isn't it breaking all existing platforms?
 
-This patch depends on [1].
+So there is 2 other DTS in the kernel sources that are using MAX8997
+pmic:
+ - Insignal Origen evaluation board
+ - Samsung Trats
+Non of them have charging regulators.
+Also probing of the charger has been failing for long time because of=20
+https://lore.kernel.org/lkml/20201109194251.562203-2-timon.baetz@protonmail=
+.com/
+but that seems to land in 5.11.
 
-[1]https://patchwork.kernel.org/project/linux-mediatek/patch/20201221061018.18503-3-Yz.Wu@mediatek.com/
+That being said, I guess I could make extcon and charger-supply
+optional if you prefer.
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 169 +++++++++++++++++++++++
- 1 file changed, 169 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 4a0d941aec30..4020e40a092a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -9,6 +9,7 @@
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
-+#include <dt-bindings/thermal/thermal.h>
- 
- / {
- 	compatible = "mediatek,mt8192";
-@@ -42,6 +43,7 @@
- 			clock-frequency = <1701000000>;
- 			next-level-cache = <&l2_0>;
- 			capacity-dmips-mhz = <530>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu1: cpu@100 {
-@@ -52,6 +54,7 @@
- 			clock-frequency = <1701000000>;
- 			next-level-cache = <&l2_0>;
- 			capacity-dmips-mhz = <530>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu2: cpu@200 {
-@@ -62,6 +65,7 @@
- 			clock-frequency = <1701000000>;
- 			next-level-cache = <&l2_0>;
- 			capacity-dmips-mhz = <530>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu3: cpu@300 {
-@@ -72,6 +76,7 @@
- 			clock-frequency = <1701000000>;
- 			next-level-cache = <&l2_0>;
- 			capacity-dmips-mhz = <530>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu4: cpu@400 {
-@@ -82,6 +87,7 @@
- 			clock-frequency = <2171000000>;
- 			next-level-cache = <&l2_1>;
- 			capacity-dmips-mhz = <1024>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu5: cpu@500 {
-@@ -92,6 +98,7 @@
- 			clock-frequency = <2171000000>;
- 			next-level-cache = <&l2_1>;
- 			capacity-dmips-mhz = <1024>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu6: cpu@600 {
-@@ -102,6 +109,7 @@
- 			clock-frequency = <2171000000>;
- 			next-level-cache = <&l2_1>;
- 			capacity-dmips-mhz = <1024>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu7: cpu@700 {
-@@ -112,6 +120,7 @@
- 			clock-frequency = <2171000000>;
- 			next-level-cache = <&l2_1>;
- 			capacity-dmips-mhz = <1024>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu-map {
-@@ -178,6 +187,140 @@
- 		method = "smc";
- 	};
- 
-+	thermal-zones {
-+		soc_max {
-+			polling-delay = <1000>; /* milliseconds */
-+			polling-delay-passive = <1000>; /* milliseconds */
-+			thermal-sensors = <&lvts 0>;
-+			sustainable-power = <1500>;
-+
-+			trips {
-+				threshold: trip-point@0 {
-+					temperature = <68000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				target: target@1 {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				soc_max_crit: soc_max_crit@0 {
-+					temperature = <115000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&target>;
-+					cooling-device = <&cpu0
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>,
-+							 <&cpu1
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>,
-+							 <&cpu2
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>,
-+							 <&cpu3
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>;
-+					contribution = <3072>;
-+				};
-+				map1 {
-+					trip = <&target>;
-+					cooling-device = <&cpu4
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>,
-+							 <&cpu5
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>,
-+							 <&cpu6
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>,
-+							 <&cpu7
-+						THERMAL_NO_LIMIT
-+						THERMAL_NO_LIMIT>;
-+					contribution = <1024>;
-+				};
-+			};
-+		};
-+		cpu_big1 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 1>;
-+		};
-+		cpu_big2 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 2>;
-+		};
-+		cpu_big3 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 3>;
-+		};
-+		cpu_big4 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 4>;
-+		};
-+		cci1 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 5>;
-+		};
-+		cci2 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 6>;
-+		};
-+		cpu_little1 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 7>;
-+		};
-+		cpu_little2 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 8>;
-+		};
-+		apu {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 9>;
-+		};
-+		mlda {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 10>;
-+		};
-+		gpu1 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 11>;
-+		};
-+		gpu2 {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 12>;
-+		};
-+		infra {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 13>;
-+		};
-+		camsys {
-+			polling-delay = <0>; /* milliseconds */
-+			polling-delay-passive = <0>; /* milliseconds */
-+			thermal-sensors = <&lvts 14>;
-+		};
-+	};
-+
- 	timer: timer {
- 		compatible = "arm,armv8-timer";
- 		interrupt-parent = <&gic>;
-@@ -224,6 +367,10 @@
- 			compatible = "mediatek,mt8192-infracfg", "syscon";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
-+			ti,reset-bits = <
-+				0x120 0 0x124 0 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-+				0x730 12 0x734 12 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-+			>;
- 		};
- 
- 		pericfg: syscon@10003000 {
-@@ -318,6 +465,24 @@
- 			status = "disabled";
- 		};
- 
-+		lvts: lvts@1100b000 {
-+			compatible = "mediatek,mt6873-lvts";
-+			#thermal-sensor-cells = <1>;
-+			reg = <0 0x1100b000 0 0x1000>,
-+			      <0 0x11278000 0 0x1000>;
-+			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>,
-+				<GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-+
-+			clocks = <&infracfg CLK_INFRA_THERM>;
-+			clock-names = "lvts_clk";
-+
-+			resets = <&infracfg_rst 0>,
-+				 <&infracfg_rst 1>;
-+
-+			nvmem-cells = <&lvts_e_data1>;
-+			nvmem-cell-names = "e_data1";
-+		};
-+
- 		spi1: spi@11010000 {
- 			compatible = "mediatek,mt8192-spi",
- 				     "mediatek,mt6765-spi";
-@@ -425,6 +590,10 @@
- 		efuse: efuse@11c10000 {
- 			compatible = "mediatek,mt8192-efuse",
- 				     "mediatek,efuse";
-+
-+			lvts_e_data1: data1 {
-+				reg = <0x1C0 0x58>;
-+			};
- 		};
- 
- 		i2c3: i2c3@11cb0000 {
--- 
-2.18.0
+Thanks again for reviewing,
+Timon
 
