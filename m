@@ -2,96 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF182E2825
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Dec 2020 18:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 682322E289D
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Dec 2020 19:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728666AbgLXRCf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Dec 2020 12:02:35 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:36905 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726839AbgLXRCf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Dec 2020 12:02:35 -0500
-Received: by mail-ot1-f41.google.com with SMTP id o11so2255063ote.4;
-        Thu, 24 Dec 2020 09:02:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=yQ+jkFqkeNW0g6dJlToG9rqzV65Dab1jDC5D6aio4ug=;
-        b=cONns5qXYt5QAxqMy8Miy/CbKpaJMagUxNQeoLhfVDOJxyTR2p7qUUFUKntX5/dNml
-         C05qjvM6k7stUMMM8G+sOETMEAfmAXN7bv7VqM6sQMfp6j3wT2yVd9YIAy6CYMaj11/a
-         HS0DgyGR+22jPgOQuMTHzX328y49Tt8gQf6NGd0kne9GKdGHYNsUimO5aAqgNcrXdVVk
-         jNDsknRy5uRZXft8clJcI3IVdtaYTp2bYplXanSmxZpYEo03+fXvFkZInw4DSQBVmbX7
-         HPRaRtOw+Lnzawm94hcsj4Xe+A0va5hFOPmqDh1UYMT158toxqP+0D9tut0PZWA5Jj3+
-         +2NA==
-X-Gm-Message-State: AOAM532rZl0kOZFWNArs/gbowZr/FiNwnB2mwlcdWTxVWTfrQyc0AbVT
-        /wRQGtGbG2r26mx4H5f1EQ==
-X-Google-Smtp-Source: ABdhPJxjl8zgjJFFzzINq/VqWXTjo+1x0o/d2ybTE3Qvx2dNR11lKFEb1xRLDizL01CKwjn5zJzOpA==
-X-Received: by 2002:a9d:f66:: with SMTP id 93mr22677948ott.289.1608829314107;
-        Thu, 24 Dec 2020 09:01:54 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id g12sm6917426oos.8.2020.12.24.09.01.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Dec 2020 09:01:53 -0800 (PST)
-Received: (nullmailer pid 2966453 invoked by uid 1000);
-        Thu, 24 Dec 2020 17:01:45 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Henry Chen <henryc.chen@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Arvin Wang <arvin.wang@mediatek.com>, linux-pm@vger.kernel.org,
-        James Liao <jamesjj.liao@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Ryan Case <ryandcase@chromium.org>
-In-Reply-To: <1608790134-27425-2-git-send-email-henryc.chen@mediatek.com>
-References: <1608790134-27425-1-git-send-email-henryc.chen@mediatek.com> <1608790134-27425-2-git-send-email-henryc.chen@mediatek.com>
-Subject: Re: [PATCH V6 01/13] dt-bindings: soc: Add dvfsrc driver bindings
-Date:   Thu, 24 Dec 2020 10:01:45 -0700
-Message-Id: <1608829305.386312.2966452.nullmailer@robh.at.kernel.org>
+        id S1728266AbgLXSqz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Dec 2020 13:46:55 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:48210 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727861AbgLXSqz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Dec 2020 13:46:55 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 4F7971C0B96; Thu, 24 Dec 2020 19:46:12 +0100 (CET)
+Date:   Thu, 24 Dec 2020 19:46:11 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH v5 0/4] powercap/dtpm: Add the DTPM framework
+Message-ID: <20201224184610.GA22388@amd>
+References: <20201208164145.19493-1-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="9amGYk9869ThD9tj"
+Content-Disposition: inline
+In-Reply-To: <20201208164145.19493-1-daniel.lezcano@linaro.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 24 Dec 2020 14:08:42 +0800, Henry Chen wrote:
-> Document the binding for enabling dvfsrc on MediaTek SoC.
-> 
-> Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
-> ---
->  .../devicetree/bindings/soc/mediatek/dvfsrc.yaml   | 68 ++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/dvfsrc.yaml
-> 
 
-My bot found errors running 'make dt_binding_check' on your patch:
+--9amGYk9869ThD9tj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-yamllint warnings/errors:
+Hi!
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/soc/mediatek/dvfsrc.example.dts:19:18: fatal error: dt-bindings/soc/mtk,dvfsrc.h: No such file or directory
-   19 |         #include <dt-bindings/soc/mtk,dvfsrc.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/soc/mediatek/dvfsrc.example.dt.yaml] Error 1
-make: *** [Makefile:1370: dt_binding_check] Error 2
+> The density of components greatly increased the last decade bringing a
+> numerous number of heating sources which are monitored by more than 20
+> sensors on recent SoC. The skin temperature, which is the case
+> temperature of the device, must stay below approximately 45=B0C in order
+> to comply with the legal requirements.
 
-See https://patchwork.ozlabs.org/patch/1420382
+What kind of device is that?
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Does that mean that running fsck is now "illegal" because temperature
+will not be managed during that time?
+							Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+--9amGYk9869ThD9tj
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-pip3 install dtschema --upgrade
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-Please check and re-submit.
+iEYEARECAAYFAl/k4fIACgkQMOfwapXb+vK0pACdElRIhj2E7JSW/euwtaHk+y6G
+MuYAn2zhuOJZFsAkWfeGv0uu00QcTRE5
+=NqMu
+-----END PGP SIGNATURE-----
 
+--9amGYk9869ThD9tj--
