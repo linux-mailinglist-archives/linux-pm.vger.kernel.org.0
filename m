@@ -2,82 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C14622E24A9
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Dec 2020 07:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3801C2E2549
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Dec 2020 08:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727861AbgLXGKT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Dec 2020 01:10:19 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:59098 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727671AbgLXGKT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Dec 2020 01:10:19 -0500
-X-UUID: 177c187a9c3945149d2e58d0adcac2d8-20201224
-X-UUID: 177c187a9c3945149d2e58d0adcac2d8-20201224
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <henryc.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2122171735; Thu, 24 Dec 2020 14:08:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 24 Dec 2020 14:08:57 +0800
-Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Dec 2020 14:08:59 +0800
-From:   Henry Chen <henryc.chen@mediatek.com>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ryan Case <ryandcase@chromium.org>,
-        Mark Brown <broonie@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Fan Chen <fan.chen@mediatek.com>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        Arvin Wang <arvin.wang@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Henry Chen <henryc.chen@mediatek.com>
-Subject: [PATCH V6 12/13] arm64: dts: mt8183: add dvfsrc regulator nodes
-Date:   Thu, 24 Dec 2020 14:08:53 +0800
-Message-ID: <1608790134-27425-13-git-send-email-henryc.chen@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1608790134-27425-1-git-send-email-henryc.chen@mediatek.com>
-References: <1608790134-27425-1-git-send-email-henryc.chen@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 78C5ACEF9E8980C80342D843EE1B767581F872CD0AA3022B3A74886B0FDF1CA12000:8
-X-MTK:  N
+        id S1726347AbgLXHuI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Dec 2020 02:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725613AbgLXHuH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Dec 2020 02:50:07 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CC9C061794;
+        Wed, 23 Dec 2020 23:49:27 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id b8so955332plx.0;
+        Wed, 23 Dec 2020 23:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=SlolyWi3tYq1xjC+al0ttrUuofdE52UVAA6blmH9sEM=;
+        b=eTO6Wl+eK8gwXywAW6K3qck/icFb64N4GiVqAC6ycJ0TvwhrHEGsqxJTc28XXz8UQh
+         sQ+4XClMQ4xTmp8MeCoIn9nfIP5NrZUk5xXcgaiGlPy2ojq8RkJn2ZmSQ/c4hcWWa/tM
+         +fOX5ycpLqJ+zQbLWj13ir6d8v4PisJ3h/qyr2wwjo9qQ5CtOD9sapYerjRgzJjRE5mR
+         AmB3fWQSqFtF4+4hXnKWYIYccmbTWy8hrpbYLR7R/7Z4NoxlGFy2SCF2GFSnP5A65pWF
+         581q1BaK0rteZyOJeidlnIPsc3+TxR0VDYq290OuokHMBqIEL5/cXWkF6MOd3Vt8VC+4
+         08Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=SlolyWi3tYq1xjC+al0ttrUuofdE52UVAA6blmH9sEM=;
+        b=XQlQSJAUC5DjcGsmJHGXLnw1/rxH6mYRr0b7YUkHrS76XhYgIac5ShjoxJch9ht2yz
+         cJ4tk/qxlWoJHZw0gMny6dGEz2YslXqtI9yUfK42oI4+n9KRhwKGlOHmgwpmRXeCeg6t
+         1c/frDNGf6Ttqqz5feEx1DJ5L58Op16Sle6XkIQ+frhT46KwY25Q95dvmHmEWnqypD6y
+         xXAJp1oSpVmcIiB0PvVvWTZ7P8+4sMaif4+YSO5grnT/ag+E6O8iGZ9ZO2YBNsIAsY13
+         8m7QEVYUU3fsw08gBBbo1NrLhtH6nRPIVIxICDmPhEfXUB5lFKM7oY5TQUTkexKLsBcB
+         BFmQ==
+X-Gm-Message-State: AOAM531oxUCeNHXGZUTwoUCzpmNN6QyM8HTHFrwDXyINE8qWNhAX6aPx
+        h6OpKAfR0zVP5zjIMDbt0FI=
+X-Google-Smtp-Source: ABdhPJyi/7Wn4+jU196A5/CLHyiFSodaESpmG4ccXdU5u3v9F0vaAteF6Thcaq8a0pY4cd4y/bGevw==
+X-Received: by 2002:a17:90a:a382:: with SMTP id x2mr3320685pjp.178.1608796166985;
+        Wed, 23 Dec 2020 23:49:26 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:492:86cf:7e4a:b265:b394:eefd])
+        by smtp.gmail.com with ESMTPSA id y9sm1743507pjt.37.2020.12.23.23.49.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Dec 2020 23:49:26 -0800 (PST)
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+To:     sre@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        gene_chen@richtek.com, Wilma.Wu@mediatek.com,
+        shufan_lee@richtek.com, cy_huang@richtek.com,
+        benjamin.chao@mediatek.com
+Subject: [PATCH v3 0/2] power: supply: mt6360_charger: add MT6360 charger support
+Date:   Thu, 24 Dec 2020 15:48:02 +0800
+Message-Id: <1608796084-29418-1-git-send-email-gene.chen.richtek@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add dvfsrc regulator nodes which is for MT8183-based platforms
+This patch series add MT6360 Charger support contains driver and binding
+document
 
-Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+Gene Chen (2)
+ dt-bindings: power: Add bindings document for Charger support on MT6360 PMIC
+ power: supply: mt6360_charger: add MT6360 charger support
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 22b3a68..182b851 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -333,6 +333,12 @@
- 			compatible = "mediatek,mt8183-dvfsrc";
- 			reg = <0 0x10012000 0 0x1000>;
- 			#interconnect-cells = <1>;
-+			dvfsrc_vcore: dvfsrc-vcore {
-+				regulator-name = "dvfsrc-vcore";
-+				regulator-min-microvolt = <725000>;
-+				regulator-max-microvolt = <800000>;
-+				regulator-always-on;
-+			};
- 		};
- 
- 		pwrap: pwrap@1000d000 {
--- 
-1.9.1
+ Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml |   48 
+ drivers/power/supply/Kconfig                                       |   10 
+ drivers/power/supply/Makefile                                      |    1 
+ drivers/power/supply/mt6360_charger.c                              | 1022 ++++++++++
+ 4 files changed, 1081 insertions(+)
+
+changelogs between v1 & v2
+ - Add binding property with unit and custom name prefix
+ - Remove extcon device, redundant brackets and interrupts
+ - Fix power supply prop "charger type"
+
+changelogs between v2 & v3
+ - Add register selector to value mapping
 
