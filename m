@@ -2,123 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E4D2E2B58
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Dec 2020 12:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9642E2B64
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Dec 2020 12:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729274AbgLYLeK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Dec 2020 06:34:10 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:13480 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725873AbgLYLeK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Dec 2020 06:34:10 -0500
-Date:   Fri, 25 Dec 2020 11:33:21 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1608896006;
-        bh=AZddA3E2efwA1g+qUEHAnTmghSFKPKy2RpOAJ63m37w=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=CulIJ8pTiO+N29SlJ4WYYiLNR/jgDe/D8X0fj6eDY0Mpd9ZD8w5goQnRBthx7a56E
-         bMRJe30Fi6oZbhZ+23cwDQBLeS/2vM//Ys2koHBXTWoC3O4c+ExG7nPJhGbXIEm2gz
-         eietdbr2GeFARhMuxFDn4X9V5v029lPKckzKNGGc=
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-From:   Timon Baetz <timon.baetz@protonmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Reply-To: Timon Baetz <timon.baetz@protonmail.com>
-Subject: Re: [PATCH v4 4/7] power: supply: max8997_charger: Set CHARGER current limit
-Message-ID: <20201225123300.07c84dd8.timon.baetz@protonmail.com>
-In-Reply-To: <20201224140038.GA48009@kozik-lap>
-References: <20201223134221.804943-1-timon.baetz@protonmail.com> <20201223134221.804943-4-timon.baetz@protonmail.com> <20201224095559.GB10937@kozik-lap> <20201224141246.7ad0ffc4.timon.baetz@protonmail.com> <20201224133706.GA22856@kozik-lap> <20201224140038.GA48009@kozik-lap>
+        id S1727677AbgLYLzB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Dec 2020 06:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726715AbgLYLzA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Dec 2020 06:55:00 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B451CC061575
+        for <linux-pm@vger.kernel.org>; Fri, 25 Dec 2020 03:54:19 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id e25so3590142wme.0
+        for <linux-pm@vger.kernel.org>; Fri, 25 Dec 2020 03:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nAyf7TfRvNwQbuiqlvSSln+08RwcFkvsGY9pz4gOhaY=;
+        b=dVCcQbr31smEHQ4OsphP9fQNH3+3/3SYWEOiiwEad9cvOIS2J6IEmaXYfIhnG0Ayyb
+         0OnLV2z2FFh3HOlv9JIdkoxvK640Ut9nyMnP01T7QsIqsRr7shn0IhjiibTvbdc9fTwA
+         DiUNO/+Q4qMAqPXa2HnBMEAYJM3+Y9p7tZHHpFyEud2inWTln7uCNNTnwBLs/TUICWQv
+         I/yntL4XuZG3A9D9ppc44Dk1S1EGs8MhauSrNMXG115lRhtk9p7iOdkuPdyVAz84+rlV
+         yhpLGNkj4B5W/iQKAKrLAeCS1h6Ww4MryBZydUuWa4qq8yiBFpLsNOXAJFNFaQA7EvHX
+         1tJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nAyf7TfRvNwQbuiqlvSSln+08RwcFkvsGY9pz4gOhaY=;
+        b=L8w0ayj9qGN7pW85R5vdBeftstysFsWb0qEbYN4KW7blJka+i+n0CpnGcKl8mmCWmE
+         lVSSL/BbQbNulnXWzcGknGNQgwiI0RhTeeBBjP4swh7H1FIQHdmV42btp/7fsqqKCf3P
+         faX4JXKK2QrRXz1tSAA/L0/8Y2eLkPZygCeqiTyEEXZv40VmBZUrY8zdpxBBaev3GcuI
+         l8Wmb7RVNEKctvtrU0V4OtGPw0147eh/zwtHbKqwGpkxp2NKTL8+vpBWNy8CtkaeNmqO
+         2gTPzyjHls5LI5yNZZyLRbf7orlDv8yYs25Op3M+lQGdSKVFfyquSLAUwNGM7TvsNB8q
+         8hMw==
+X-Gm-Message-State: AOAM533Q9B/yQMMMPGR/jv8swfvMieLk+bI+WQVNRJvRUfQpvEYUfRIU
+        hOzjEDiaTHvKQ/UTq7TOcG2T7Ly/cYVwzw==
+X-Google-Smtp-Source: ABdhPJwKTd/dIDmvPDUJE37bewbZ82ItifHzbWPOPAyN4fwyZxu4cBZULv/BGOzzyeWjQmOiCvq8HA==
+X-Received: by 2002:a1c:b78a:: with SMTP id h132mr8204282wmf.141.1608897258251;
+        Fri, 25 Dec 2020 03:54:18 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-148-164.adsl.proxad.net. [82.252.148.164])
+        by smtp.googlemail.com with ESMTPSA id h16sm42979627wrq.29.2020.12.25.03.54.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Dec 2020 03:54:17 -0800 (PST)
+Subject: Re: [PATCH v5 0/4] powercap/dtpm: Add the DTPM framework
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <20201208164145.19493-1-daniel.lezcano@linaro.org>
+ <20201224184610.GA22388@amd>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <8b732330-33ea-97fa-a0ce-c5cf9d9ef0c8@linaro.org>
+Date:   Fri, 25 Dec 2020 12:54:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+In-Reply-To: <20201224184610.GA22388@amd>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 24 Dec 2020 15:00:38 +0100, Krzysztof Kozlowski wrote:
-> On Thu, Dec 24, 2020 at 02:37:06PM +0100, Krzysztof Kozlowski wrote:
-> > On Thu, Dec 24, 2020 at 01:13:02PM +0000, Timon Baetz wrote: =20
-> > > On Thu, 24 Dec 2020 10:55:59 +0100, Krzysztof Kozlowski wrote: =20
-> > > > > @@ -170,6 +237,28 @@ static int max8997_battery_probe(struct plat=
-form_device *pdev)
-> > > > >  =09=09return PTR_ERR(charger->battery);
-> > > > >  =09}
-> > > > >
-> > > > > +=09charger->reg =3D devm_regulator_get(&pdev->dev, "charger"); =
-=20
-> > > >
-> > > > Since you do not use get_optional, you will always get a dummy
-> > > > regulator. In case of error, you should either print it or entirely=
- fail
-> > > > the probe. Silently continuing makes it difficult to spot errors.
-> > > >
-> > > > Since the driver could operate in case of extcon/regulator error, j=
-ust
-> > > > dev_err() so failure will be spotted with dmesg. =20
-> > >
-> > > I will switch to devm_regulator_get_optional() and print an error on
-> > > failure, thanks.
-> > > =20
-> > > > It will complain on older DTBs because you are introducing incompat=
-ible
-> > > > change, but that's expected. Just correct all other in-tree DTS. =
-=20
-> > >
-> > > The other 2 in-tree DTS don't have CHARGER regulators. Not sure
-> > > how to correct those. Should I add muic and charger nodes without a
-> > > charger-supply? It will still complain in that case. =20
-> >
-> > +Cc Marek,
-> >
-> > This is why leaving the code as is - devm_regulator_get(), not optional
-> > - makes sense. Core would provide dummy regulator, so you only have to
-> > provide MUIC node.
-> >
-> > If you change the code to devm_regulator_get_optional(), you need to ad=
-d
-> > everything: the charger regulator, the charger node and MUIC node.
-> >
-> > For Trats, the configuration should be similar as i9100, although I
-> > don't know the exact values of chargign voltage.
-> >
-> > For Origen, there is no battery, so the power supply should not bind.
-> > Maybe this could be achieved with "status disabled" for charger node? I=
-t
-> > depends whether MFD will respect such field... If it disables the
-> > charger, you're done. =20
->=20
-> I just looked at the MFD code and tested it - it nicely skips disabled
-> devices. Therefore, for Origen I propose to add disabled nodes for
-> charger and MUIC because these pins are not connected. No need to add
-> regulators in such case.
+On 24/12/2020 19:46, Pavel Machek wrote:
+> Hi!
+> 
+>> The density of components greatly increased the last decade bringing a
+>> numerous number of heating sources which are monitored by more than 20
+>> sensors on recent SoC. The skin temperature, which is the case
+>> temperature of the device, must stay below approximately 45°C in order
+>> to comply with the legal requirements.
+> 
+> What kind of device is that?
 
-With a dummy regulator regulator_set_current_limit() fails with -EINVAL.
-Isn't it better to just skip charging control (and dev_info()) when there=
-=20
-is no extcon or regulator? The charger driver would still probe
-without those 2 properties and work as before.
+Any complex embedded devices like a phone, a laptop or a tablet with
+components like NPU, CPU, GPU, GPS, DSPs, Camera, ...
 
-Adding disabled nodes for Origen would probably still makes sense.
+> Does that mean that running fsck is now "illegal" because temperature
+> will not be managed during that time?
 
-I also noticed that adding nodes for those MFD cells prints "DMA mask
-not set" which seems to be related to https://lkml.org/lkml/2020/4/23/873.
-Any suggestions on how to handle that?
+The heating effect of the different devices will be conducted through a
+common dissipation device.
 
-Thanks,
-Timon
+The 'skin' temperature or 'case' temperature has a dedicated sensor in
+the path of this dissipation device. So the temperature will increase
+slower at this sensor level because of a higher thermal capacity.
 
+The 'skin' temperature will be the result of the different components
+running at the same time (eg. GPS + CPU + GPU + DSPs).
+
+In the case of fsck, the system is in degraded mode, thus the
+application using these components are not supposed to run and the
+'skin' temperature should stay below.
+
+If you are interested, here you can find some background to explain the
+'skin' temperature [1] and the spreading of the heat [2].
+
+Hope that helps
+
+  -- Daniel
+
+[1] https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4188373/
+
+[2]
+https://nanoheat.stanford.edu/sites/default/files/publications/Electronics%20Cooling%20Article.pdf
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
