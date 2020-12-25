@@ -2,72 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 682322E289D
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Dec 2020 19:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DBF2E296C
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Dec 2020 02:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728266AbgLXSqz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Dec 2020 13:46:55 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:48210 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727861AbgLXSqz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Dec 2020 13:46:55 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 4F7971C0B96; Thu, 24 Dec 2020 19:46:12 +0100 (CET)
-Date:   Thu, 24 Dec 2020 19:46:11 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Ram Chandrasekar <rkumbako@codeaurora.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH v5 0/4] powercap/dtpm: Add the DTPM framework
-Message-ID: <20201224184610.GA22388@amd>
-References: <20201208164145.19493-1-daniel.lezcano@linaro.org>
+        id S1729063AbgLYBct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Dec 2020 20:32:49 -0500
+Received: from so254-31.mailgun.net ([198.61.254.31]:58704 "EHLO
+        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729064AbgLYBct (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Dec 2020 20:32:49 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1608859943; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=Xsxf05wvDsw1c298k7ym33l28dv3ZAJY3RCoa5+YWXc=; b=Q1k2Vv7kIfjyEV7fgZDRoXeJKgXvjLXKdKoB9coWELMqvxDj3mYz042/Wbo7DsJ9YNWiAnN/
+ 0qsXBlq2Gb3apJPM+7xl7vDseELRjDSyV8wqKrpWD2TeLYMz/Nu6rtipPZFliaAD4ruBq45q
+ ith6dpkEqVT04EN77DfcgJzw3ew=
+X-Mailgun-Sending-Ip: 198.61.254.31
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-west-2.postgun.com with SMTP id
+ 5fe5410bcfe5dd67dbb8e692 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 25 Dec 2020 01:31:55
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0C717C433CA; Fri, 25 Dec 2020 01:31:55 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BFF27C433C6;
+        Fri, 25 Dec 2020 01:31:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BFF27C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+Date:   Thu, 24 Dec 2020 18:31:48 -0700
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] PM / Domains: allow domain idle states to be disabled
+Message-ID: <X+VBBKZXZ2JW3ZDL@codeaurora.org>
+References: <20201216175056.19554-1-ilina@codeaurora.org>
+ <CAPDyKFrdZTd0mWHYhk13uyNWoxqjkO_iSni_TC5uir-PpgxSpw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="9amGYk9869ThD9tj"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20201208164145.19493-1-daniel.lezcano@linaro.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <CAPDyKFrdZTd0mWHYhk13uyNWoxqjkO_iSni_TC5uir-PpgxSpw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Dec 22 2020 at 03:16 -0700, Ulf Hansson wrote:
+>On Wed, 16 Dec 2020 at 18:51, Lina Iyer <ilina@codeaurora.org> wrote:
+>>
+>> In order to debug critical domain and device power issues, it may be
+>> necessary to disallow certain idle states at runtime. Let the device
+>> disallow a domain idle state before suspending.The domain governor shall
+>> check for the 'disabled' flag while determining the domain idle state.
+>
+>For debug purposes, you might as well just set a dev PM Qos latency
+>request that corresponds to the state you want to disable. This will
+>then prevent the genpd governor from selecting the state.
+>
+True, but it will also disable idle states deeper as well. Would like to
+avoid that.
 
---9amGYk9869ThD9tj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--Lina
 
-Hi!
-
-> The density of components greatly increased the last decade bringing a
-> numerous number of heating sources which are monitored by more than 20
-> sensors on recent SoC. The skin temperature, which is the case
-> temperature of the device, must stay below approximately 45=B0C in order
-> to comply with the legal requirements.
-
-What kind of device is that?
-
-Does that mean that running fsck is now "illegal" because temperature
-will not be managed during that time?
-							Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---9amGYk9869ThD9tj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl/k4fIACgkQMOfwapXb+vK0pACdElRIhj2E7JSW/euwtaHk+y6G
-MuYAn2zhuOJZFsAkWfeGv0uu00QcTRE5
-=NqMu
------END PGP SIGNATURE-----
-
---9amGYk9869ThD9tj--
+>Kind regards
+>Uffe
+>
+>>
+>> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+>> ---
+>>  drivers/base/power/domain.c          | 30 ++++++++++++++++++++++++++++
+>>  drivers/base/power/domain_governor.c |  3 +++
+>>  include/linux/pm_domain.h            |  7 +++++++
+>>  3 files changed, 40 insertions(+)
+>>
+>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>> index 191539a8e06d..e4e7ab75bdea 100644
+>> --- a/drivers/base/power/domain.c
+>> +++ b/drivers/base/power/domain.c
+>> @@ -1926,6 +1926,36 @@ int pm_genpd_remove_subdomain(struct generic_pm_domain *genpd,
+>>  }
+>>  EXPORT_SYMBOL_GPL(pm_genpd_remove_subdomain);
+>>
+>> +/**
+>> + * dev_pm_genpd_disable_idle_state - Disallow a PM domain's idle state
+>> + *
+>> + * @dev: device attached to the PM domain
+>> + * @idx: index of the PM domain's idle state to be disabled
+>> + * @disable: enable/disable idle state
+>> + *
+>> + * Allow a PM domain's idle state to be disabled. Disabled idle states will
+>> + * be ignored by the domain governor when entering idle. Devices would
+>> + * invoke this before calling runtime suspend.
+>> + */
+>> +int dev_pm_genpd_disable_idle_state(struct device *dev, unsigned int idx, bool disable)
+>> +{
+>> +       struct generic_pm_domain *genpd;
+>> +
+>> +       genpd = dev_to_genpd_safe(dev);
+>> +       if (!genpd)
+>> +               return -ENODEV;
+>> +
+>> +       if (idx >= genpd->state_count)
+>> +               return -EINVAL;
+>> +
+>> +       genpd_lock(genpd);
+>> +       genpd->states[idx].disabled = disable;
+>> +       genpd_unlock(genpd);
+>> +
+>> +       return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_genpd_disable_idle_state);
+>> +
+>>  static void genpd_free_default_power_state(struct genpd_power_state *states,
+>>                                            unsigned int state_count)
+>>  {
+>> diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
+>> index 2afb7fa90d5d..8decd17c5a6a 100644
+>> --- a/drivers/base/power/domain_governor.c
+>> +++ b/drivers/base/power/domain_governor.c
+>> @@ -175,6 +175,9 @@ static bool __default_power_down_ok(struct dev_pm_domain *pd,
+>>         s64 min_off_time_ns;
+>>         s64 off_on_time_ns;
+>>
+>> +       if (genpd->states[state].disabled)
+>> +               return false;
+>> +
+>>         off_on_time_ns = genpd->states[state].power_off_latency_ns +
+>>                 genpd->states[state].power_on_latency_ns;
+>>
+>> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+>> index a41aea9d1c06..3d251b5b461a 100644
+>> --- a/include/linux/pm_domain.h
+>> +++ b/include/linux/pm_domain.h
+>> @@ -101,6 +101,7 @@ struct genpd_power_state {
+>>         struct fwnode_handle *fwnode;
+>>         ktime_t idle_time;
+>>         void *data;
+>> +       bool disabled;
+>>  };
+>>
+>>  struct genpd_lock_ops;
+>> @@ -233,6 +234,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>>  int dev_pm_genpd_remove_notifier(struct device *dev);
+>>  void genpd_enable_next_wakeup(struct generic_pm_domain *genpd, bool enable);
+>>  int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
+>> +int dev_pm_genpd_disable_idle_state(struct device *dev, unsigned int idx, bool disable);
+>>
+>>  extern struct dev_power_governor simple_qos_governor;
+>>  extern struct dev_power_governor pm_domain_always_on_gov;
+>> @@ -300,6 +302,11 @@ static inline int dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+>>         return -EOPNOTSUPP;
+>>  }
+>>
+>> +static inline int dev_pm_genpd_disable_idle_state(struct device *dev, unsigned int idx, bool disable)
+>> +{
+>> +       return -EOPNOTSUPP;
+>> +}
+>> +
+>>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
+>>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
+>>  #endif
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
