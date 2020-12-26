@@ -2,96 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2793C2E2CB5
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Dec 2020 01:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FF32E2D74
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Dec 2020 07:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729267AbgLZAR0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Dec 2020 19:17:26 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:44146 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726579AbgLZARZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Dec 2020 19:17:25 -0500
-Received: by mail-ot1-f46.google.com with SMTP id r9so4646780otk.11;
-        Fri, 25 Dec 2020 16:17:10 -0800 (PST)
+        id S1727442AbgLZGmc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Dec 2020 01:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbgLZGmb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Dec 2020 01:42:31 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1ADC061757;
+        Fri, 25 Dec 2020 22:41:51 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id q22so3468208pfk.12;
+        Fri, 25 Dec 2020 22:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=+Zz2ASXn2o1AAzNUsSqx+OfWOMVjrvSh/KaatXZVe1E=;
+        b=Zccd4ckmnwoGwoJssq58yRMJlLCGNmgWKNNLNjPKTx3E17zvDtnuw7ilNjlBxNdrb1
+         qerj6rEtAE36abDCvqNWbiBN4PGhCbF9gYAHvwLWAarZWV2yWtrkAbfwy6bvczTs+cU1
+         oxZLn9yYTPfTetbf6NTfTm25aLlq0nw4MYlAWhMQ9vBVaHn3XCM2jzREW+f+ue9C1kE1
+         Itsjgn3yOWpBFoQ3SMaTelD8wQUxjd8i5Qup82bvW20ZGgkiEbjvMjoSiZ1JzLccNYyY
+         oRa9db2gXY4ED0ytu8bH+R97APnOhhrv05pSSk01QrZr6GJMB4PtmZRjCXTnl7Lw2c8U
+         xMTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EOlAg2v9iu08C98UhOwCODLFZ1ENz3Eke06f2dm8E8Q=;
-        b=SPdhs4bOso/wgZ4rIyP3pKl72Xrn4eNemSZzr1idxP5OwPd2oJL1W87uB5P0EWhFdn
-         cy8q1+nyVwSaT1pBd0qifVh8JgFpPbRlGNa+prBUfTdvE5TdyxqjlIij+JISNPYMQtE1
-         knSQaJpsPflYJyC6GIW5b/W0xh3le9KssRgd+Im7ytcg8ICl2kr33M5K2V/vRJL2KuIo
-         JWsoagdjirhhhqoveYboF+H56/Rxb2IkSkr7GVtpe5oOJ6MnHRHAYC5D7iFOy3tOOA9Q
-         Vebx78sQj5HTxbjsvnXKgwlsjqnBym7CHDQ9sJ/AKi+QXtQy54W/B5MW7QO/zpKneFy9
-         XMpw==
-X-Gm-Message-State: AOAM531uk1GEfpoLtMCb8N/bxkX6+SjASyBNyGtLE9O84FTbz37tX6ZS
-        ZraZlBeABOuX7xnQurwWjA==
-X-Google-Smtp-Source: ABdhPJwgTn5dMd8lKkA/dE21p/GLjF838PevUwAH24B1igEvQbHfjhM7yzFhe79pSbNQ31FASnTunA==
-X-Received: by 2002:a9d:aca:: with SMTP id 68mr26852801otq.272.1608941804882;
-        Fri, 25 Dec 2020 16:16:44 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id 39sm7692517otu.6.2020.12.25.16.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Dec 2020 16:16:44 -0800 (PST)
-Received: (nullmailer pid 1641174 invoked by uid 1000);
-        Sat, 26 Dec 2020 00:16:42 -0000
-Date:   Fri, 25 Dec 2020 17:16:41 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>
-Cc:     akashast@codeaurora.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, wsa@kernel.org, ulf.hansson@linaro.org,
-        parashar@codeaurora.org, dianders@chromium.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        agross@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, saiprakash.ranjan@codeaurora.org,
-        mka@chromium.org, rnayak@codeaurora.org, swboyd@chromium.org,
-        devicetree@vger.kernel.org, msavaliy@qti.qualcomm.com
-Subject: Re: [PATCH 1/3] dt-bindings: power: Introduce
- 'assigned-performance-states' property
-Message-ID: <20201226001641.GA1641022@robh.at.kernel.org>
-References: <20201224111210.1214-1-rojay@codeaurora.org>
- <20201224111210.1214-2-rojay@codeaurora.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=+Zz2ASXn2o1AAzNUsSqx+OfWOMVjrvSh/KaatXZVe1E=;
+        b=bkO3mPmV25MDLX2ch027WUxlULgn/FyWNYoQfzAAx7mItuWxW0AaUodZRWD9raf7h5
+         am1/T1j/zsDOGEYFF1yh0a5cdwkqSzXvOjOdMuQnEGYwHahvZ3c5UkMU4QPUtXx/FhpY
+         nhocYOcg1VuqPqBud4DbtzrK5iSoA8V9CxjriWxhCEn4ZdpBefCVssIX3dS8ZZxpe8VT
+         PHKOjx+i1VqqtwPsVV7Unn7EhH0VloDqFVDJHojle2vZxd6LJQ4FExwXS3Pchob5xD/b
+         4S1xlR8BZhJY2BJpW0dBX9s/KXdPYsXkKv1S/ibi70YICe4eZ3C1gVV+2oyG9fU2WoHJ
+         7yYQ==
+X-Gm-Message-State: AOAM530JZ2Rxi6PJvANwKIgNdmyL3bSWnDSSdzaxSD7zw/ykHqHEs7XH
+        cXsWwBQwpJmqpDjIWd/i+Bk=
+X-Google-Smtp-Source: ABdhPJxplND6wyf4phagc3MU2/poQTo714TNFqVHAG10cwXZBfUhioXwtZNEbctnfmqiAKSxLgpNMg==
+X-Received: by 2002:a62:c312:0:b029:1a9:19c7:a8e with SMTP id v18-20020a62c3120000b02901a919c70a8emr33462581pfg.74.1608964909710;
+        Fri, 25 Dec 2020 22:41:49 -0800 (PST)
+Received: from syed.domain.name ([103.201.127.53])
+        by smtp.gmail.com with ESMTPSA id x7sm12250703pga.0.2020.12.25.22.41.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Dec 2020 22:41:49 -0800 (PST)
+Date:   Sat, 26 Dec 2020 12:11:33 +0530
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+To:     linus.walleij@linaro.org
+Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, akpm@linux-foundation.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, linux-arch@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH 0/5] Introduce the for_each_set_clump macro
+Message-ID: <cover.1608963094.git.syednwaris@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201224111210.1214-2-rojay@codeaurora.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 24 Dec 2020 16:42:08 +0530, Roja Rani Yarubandi wrote:
-> While most devices within power-domains which support performance states,
-> scale the performance state dynamically, some devices might want to
-> set a static/default performance state while the device is active.
-> These devices typically would also run off a fixed clock and not support
-> dynamically scaling the device's performance, also known as DVFS
-> techniques.
-> 
-> Add a property 'assigned-performance-states' which client devices can
-> use to set this default performance state on their power-domains.
-> 
-> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-> ---
->  .../bindings/power/power-domain.yaml          | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
-> 
+Hello Linus,
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Since this patchset primarily affects GPIO drivers, would you like
+to pick it up through your GPIO tree?
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/power/power-domain.yaml:72:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+(Note: Patchset resent with the new macro and relevant
+functions shifted to a new header clump_bits.h [Linus Torvalds])
 
-dtschema/dtc warnings/errors:
+Michal,
+What do you think of [PATCH 5/5]? Is the conditional check needed? And
+also does returning -EINVAL look good?
 
-See https://patchwork.ozlabs.org/patch/1420485
+This patchset introduces a new generic version of for_each_set_clump.
+The previous version of for_each_set_clump8 used a fixed size 8-bit
+clump, but the new generic version can work with clump of any size but
+less than or equal to BITS_PER_LONG. The patchset utilizes the new macro
+in several GPIO drivers.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+The earlier 8-bit for_each_set_clump8 facilitated a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
 
-pip3 install dtschema --upgrade
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
 
-Please check and re-submit.
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
+
+But with the new for_each_set_clump the clump size can be different from 8 bits.
+Moreover, the clump can be split at word boundary in situations where word
+size is not multiple of clump size. Following are examples showing the working
+of new macro for clump sizes of 24 bits and 6 bits.
+
+Example 1:
+clump size: 24 bits, Number of clumps (or ports): 10
+bitmap stores the bit information from where successive clumps are retrieved.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x000000aa000000aa;
+        0xbbbbabcdeffedcba;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:-
+'offset' is the bit position and 'clump' is the 24 bit clump from the
+above bitmap.
+Iteration first:        offset: 0 clump: 0xfedcba
+Iteration second:       offset: 24 clump: 0xabcdef
+Iteration third:        offset: 48 clump: 0xaabbbb
+Iteration fourth:       offset: 96 clump: 0xaa
+Iteration fifth:        offset: 144 clump: 0xff
+Iteration sixth:        offset: 168 clump: 0xaaaaaa
+Iteration seventh:      offset: 216 clump: 0xff
+Loop breaks because in the end the remaining bits (0x00aa) size was less
+than clump size of 24 bits.
+
+In above example it can be seen that in iteration third, the 24 bit clump
+that was retrieved was split between bitmap[0] and bitmap[1]. This example
+also shows that 24 bit zeroes if present in between, were skipped (preserving
+the previous for_each_set_macro8 behaviour).
+
+Example 2:
+clump size = 6 bits, Number of clumps (or ports) = 3.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x0f00000000000000;
+        0x0000000000000ac0;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:
+'offset' is the bit position and 'clump' is the 6 bit clump from the
+above bitmap.
+Iteration first:        offset: 6 clump: 0x2b
+Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+Here 6 * 3 is clump size * no. of clumps.
+
+GCC gives warning in bitmap_set_value(): https://godbolt.org/z/rjx34r
+Add explicit check to see if the value being written into the bitmap
+does not fall outside the bitmap.
+The situation that it is falling outside would never be possible in the
+code because the boundaries are required to be correct before the
+function is called. The responsibility is on the caller for ensuring the
+boundaries are correct.
+The code change is simply to silence the GCC warning messages
+because GCC is not aware that the boundaries have already been checked.
+As such, we're better off using __builtin_unreachable() here because we
+can avoid the latency of the conditional check entirely.
+
+Syed Nayyar Waris (5):
+  clump_bits: Introduce the for_each_set_clump macro
+  lib/test_bitmap.c: Add for_each_set_clump test cases
+  gpio: thunderx: Utilize for_each_set_clump macro
+  gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+  gpio: xilinx: Add extra check if sum of widths exceed 64
+
+ drivers/gpio/clump_bits.h    | 101 ++++++++++++++++++++++++
+ drivers/gpio/gpio-thunderx.c |  12 ++-
+ drivers/gpio/gpio-xilinx.c   |  72 ++++++++++--------
+ lib/test_bitmap.c            | 144 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 292 insertions(+), 37 deletions(-)
+ create mode 100644 drivers/gpio/clump_bits.h
+
+
+base-commit: bbe2ba04c5a92a49db8a42c850a5a2f6481e47eb
+-- 
+2.29.0
+
