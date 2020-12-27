@@ -2,136 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E9E2E30AE
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Dec 2020 11:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC142E30C1
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Dec 2020 11:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbgL0KL7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Dec 2020 05:11:59 -0500
-Received: from mga06.intel.com ([134.134.136.31]:1558 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725841AbgL0KL7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 27 Dec 2020 05:11:59 -0500
-IronPort-SDR: ijlHiFiIHP8L8ttMi6kyq59H939LviHu5R78lE10MP5nBXvaSZ1la8AYaVYxQEpPhaBEwT2HLK
- hcFEQWapV58Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9846"; a="237854270"
-X-IronPort-AV: E=Sophos;i="5.78,452,1599548400"; 
-   d="scan'208";a="237854270"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2020 02:11:18 -0800
-IronPort-SDR: DatykGpWndZiCNUZwvmGEj/EOSj6/0HQsA8R7aho3wHKfDFS6YTEEn3IJsv/pNzSTG0dPPf63Y
- lVjoXi+VAt4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,452,1599548400"; 
-   d="scan'208";a="346589046"
-Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2020 02:11:17 -0800
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH v2] intel_idle: add SnowRidge C-state table
-Date:   Sun, 27 Dec 2020 12:11:16 +0200
-Message-Id: <20201227101116.1888740-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        id S1726246AbgL0K4P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Dec 2020 05:56:15 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:47773 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726156AbgL0K4P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Dec 2020 05:56:15 -0500
+X-UUID: 3153a855ff7c4a1ba0a571b8ba8e165c-20201227
+X-UUID: 3153a855ff7c4a1ba0a571b8ba8e165c-20201227
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 374566911; Sun, 27 Dec 2020 18:55:10 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sun, 27 Dec 2020 18:56:16 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 27 Dec 2020 18:56:16 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v10 0/7] soc: mediatek: SVS: introduce MTK SVS engine
+Date:   Sun, 27 Dec 2020 18:54:42 +0800
+Message-ID: <20201227105449.11452-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: FD6B93BC45DE05FD942C99464D76DEB9833C2EC44C0B92C252F2326DD2A1B2352000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and do device_link_add()
+to make sure probe/suspend callback priority.
+3. SVS driver gets CPU device by get_cpu_device() and do device_link_add()
+to make sure probe/suspend callback priority.
+3. SVS dts refers to reset controller [4] to help reset SVS HW.
 
-Add C-state table for the SnowRidge SoC which is found on Intel Jacobsville
-platforms.
+#mt8183 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+[3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
 
-The following has been changed.
-1. C1E latency changed from 10us to 15us. It was measured using the
-   opensource "wult" tool (the "nic" method, 15us is the 99.99th percentile).
-2. C1E power break even changed from 20us to 25us, which may result in less C1E
-   residency in some workloads.
-3. C6 latency changed from 50us to 130us. Measured the same way as C1E.
+#mt8192 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
+[3] https://lore.kernel.org/patchwork/patch/1356662/
+[4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
 
-The C6 C-state is supported only by some SnowRidge revisions, so add a C-state
-table commentary about this.
+changes since v9:
+- Since MTK SVS is SoC specific driver that doesn't share any code,
+move it into Soc specific directory like these.
+- Remove unnecessary SVS header file.
+- Add mt8192 SVS driver.
+- Change linux license to GPL-2.0-only.
+- Squash "struct mtk_svs" members into "struct svs_platform"
+and remove "struct mtk_svs".
 
-On SnowRidge, C6 support is enumerated via the usual mechanism: "mwait" leaf of
-the "cpuid" instruction. The 'intel_idle' driver does check this leaf, so even
-though C6 is present in the table, the driver will only use it if the CPU does
-support it.
+Roger Lu (7):
+  [v10,1/7]: dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v10,2/7]: arm64: dts: mt8183: add svs device information
+  [v10,3/7]: soc: mediatek: SVS: introduce MTK SVS engine
+  [v10,4/7]: soc: mediatek: SVS: add debug commands
+  [v10,5/7]: dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v10,6/7]: arm64: dts: mt8192: add svs device information
+  [v10,7/7]: soc: mediatek: SVS: add mt8192 SVS GPU driver
 
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
----
- drivers/idle/intel_idle.c | 41 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ .../bindings/soc/mediatek/mtk-svs.yaml        |  101 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   20 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2554 +++++++++++++++++
+ 6 files changed, 2720 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
 
-Changelog:
-v2. Fixed C6 latency value in the commit message (120 -> 130).
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 9a810e4a7946..1ef4ac3cc87c 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -976,6 +976,39 @@ static struct cpuidle_state dnv_cstates[] __initdata = {
- 		.enter = NULL }
- };
- 
-+/*
-+ * Note, depending on HW and FW revision, SnowRidge SoC may or may not support
-+ * C6, and this is indicated in the CPUID mwait leaf.
-+ */
-+static struct cpuidle_state snr_cstates[] __initdata = {
-+	{
-+		.name = "C1",
-+		.desc = "MWAIT 0x00",
-+		.flags = MWAIT2flg(0x00),
-+		.exit_latency = 2,
-+		.target_residency = 2,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C1E",
-+		.desc = "MWAIT 0x01",
-+		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-+		.exit_latency = 15,
-+		.target_residency = 25,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C6",
-+		.desc = "MWAIT 0x20",
-+		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 130,
-+		.target_residency = 500,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.enter = NULL }
-+};
-+
- static const struct idle_cpu idle_cpu_nehalem __initconst = {
- 	.state_table = nehalem_cstates,
- 	.auto_demotion_disable_flags = NHM_C1_AUTO_DEMOTE | NHM_C3_AUTO_DEMOTE,
-@@ -1097,6 +1130,12 @@ static const struct idle_cpu idle_cpu_dnv __initconst = {
- 	.use_acpi = true,
- };
- 
-+static const struct idle_cpu idle_cpu_snr __initconst = {
-+	.state_table = snr_cstates,
-+	.disable_promotion_to_c1e = true,
-+	.use_acpi = true,
-+};
-+
- static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(NEHALEM_EP,		&idle_cpu_nhx),
- 	X86_MATCH_INTEL_FAM6_MODEL(NEHALEM,		&idle_cpu_nehalem),
-@@ -1135,7 +1174,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_PLUS,	&idle_cpu_bxt),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_D,	&idle_cpu_dnv),
--	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&idle_cpu_dnv),
-+	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&idle_cpu_snr),
- 	{}
- };
- 
--- 
-2.26.2
 
