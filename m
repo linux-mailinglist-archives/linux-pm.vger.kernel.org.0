@@ -2,92 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8682E31F5
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Dec 2020 17:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869F22E321C
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Dec 2020 18:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbgL0Q5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Dec 2020 11:57:07 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:36646 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbgL0Q5G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Dec 2020 11:57:06 -0500
-Received: by mail-oi1-f175.google.com with SMTP id 9so9379455oiq.3;
-        Sun, 27 Dec 2020 08:56:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=EOlAg2v9iu08C98UhOwCODLFZ1ENz3Eke06f2dm8E8Q=;
-        b=V9G/MNhR0GCv5YS8CBQJzxhszjVGf//dtuA/WEd39j8f+srC7DlhFqXxxbvNinnZUJ
-         UYhZcWHyvdLavPsq2Rz2+HCOUxWRhVR1cFlzyvSlZMIBsMkCWXVZcztnHK5EyvaAB7ur
-         8Y87/glYS3a6+cAFy8dL9QZYtdequQtQkOkqpX7IR+BhKBmWWeKNPSjtcgFJu0MpUg0k
-         1BmCK/dri1NnxBiWFGA33zz9oScbOfhzKjjU0EHgKZVsofs5mgu3dKIZJ4qjrua03lKP
-         gDDttksrUvHhh2yGNZ9EYOjj7UYc/l6wLvUtXT2i+IGQtSPZMRfuFIV8vbK9s+LFmrN9
-         hrCg==
-X-Gm-Message-State: AOAM5302atC1dfMtkvxp15iYQx3PI+I2UwK5TI5OxSiirSUw5u2swp7L
-        XJ6hVOh5UghU3lkWpxWdnw==
-X-Google-Smtp-Source: ABdhPJyckCpwAtFyTjFjt97XOEQbjKZxOtNJYxYJDg96ts7gNmBlDpmT7nLsm27Xs+98jptq7Q72uQ==
-X-Received: by 2002:aca:c1d6:: with SMTP id r205mr9858213oif.37.1609088185709;
-        Sun, 27 Dec 2020 08:56:25 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id w5sm8209515oow.7.2020.12.27.08.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Dec 2020 08:56:24 -0800 (PST)
-Received: (nullmailer pid 1338169 invoked by uid 1000);
-        Sun, 27 Dec 2020 16:56:21 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>
-Cc:     akashast@codeaurora.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, wsa@kernel.org, ulf.hansson@linaro.org,
-        parashar@codeaurora.org, dianders@chromium.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        agross@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, saiprakash.ranjan@codeaurora.org,
-        mka@chromium.org, rnayak@codeaurora.org, swboyd@chromium.org,
-        devicetree@vger.kernel.org, msavaliy@qti.qualcomm.com
-In-Reply-To: <20201224111210.1214-2-rojay@codeaurora.org>
-References: <20201224111210.1214-1-rojay@codeaurora.org> <20201224111210.1214-2-rojay@codeaurora.org>
-Subject: Re: [PATCH 1/3] dt-bindings: power: Introduce 'assigned-performance-states' property
-Date:   Sun, 27 Dec 2020 09:56:21 -0700
-Message-Id: <1609088181.474070.1338168.nullmailer@robh.at.kernel.org>
+        id S1726344AbgL0RXr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Dec 2020 12:23:47 -0500
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:45627 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726131AbgL0RXq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Dec 2020 12:23:46 -0500
+Received: from [192.168.42.210] ([93.22.148.120])
+        by mwinf5d09 with ME
+        id 9VMz2400G2c5cNt03VN0zk; Sun, 27 Dec 2020 18:22:02 +0100
+X-ME-Helo: [192.168.42.210]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 27 Dec 2020 18:22:02 +0100
+X-ME-IP: 93.22.148.120
+Subject: Re: [PATCH] cpufreq: brcmstb-avs-cpufreq: Fix some resource leaks in
+ the error handling path of the probe function
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        rjw@rjwysocki.net, f.fainelli@gmail.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <20201219101751.181783-1-christophe.jaillet@wanadoo.fr>
+ <20201222043505.rq3cmajc3mxv3p2z@vireshk-i7>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <a7e1f78c-b4c9-4ef5-7ca4-94a65fefd299@wanadoo.fr>
+Date:   Sun, 27 Dec 2020 18:22:00 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20201222043505.rq3cmajc3mxv3p2z@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 24 Dec 2020 16:42:08 +0530, Roja Rani Yarubandi wrote:
-> While most devices within power-domains which support performance states,
-> scale the performance state dynamically, some devices might want to
-> set a static/default performance state while the device is active.
-> These devices typically would also run off a fixed clock and not support
-> dynamically scaling the device's performance, also known as DVFS
-> techniques.
+Le 22/12/2020 à 05:35, Viresh Kumar a écrit :
+> On 19-12-20, 11:17, Christophe JAILLET wrote:
+>> If 'cpufreq_register_driver()' fails, we must release the resources
+>> allocated in 'brcm_avs_prepare_init()' as already done in the remove
+>> function.
+>>
+>> To do that, introduce a new function 'brcm_avs_prepare_uninit()' in order
+>> to avoid code duplication. This also makes the code more readable (IMHO).
+>>
+>> Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> I'm not sure that the existing error handling in the remove function is
+>> correct and/or needed.
+>> ---
+>>   drivers/cpufreq/brcmstb-avs-cpufreq.c | 25 ++++++++++++++++++++-----
+>>   1 file changed, 20 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+>> index 3e31e5d28b79..750ca7cfccb0 100644
+>> --- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
+>> +++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+>> @@ -597,6 +597,16 @@ static int brcm_avs_prepare_init(struct platform_device *pdev)
+>>   	return ret;
+>>   }
+>>   
+>> +static void brcm_avs_prepare_uninit(struct platform_device *pdev)
+>> +{
+>> +	struct private_data *priv;
+>> +
+>> +	priv = platform_get_drvdata(pdev);
+>> +
+>> +	iounmap(priv->avs_intr_base);
+>> +	iounmap(priv->base);
+>> +}
+>> +
+>>   static int brcm_avs_cpufreq_init(struct cpufreq_policy *policy)
+>>   {
+>>   	struct cpufreq_frequency_table *freq_table;
+>> @@ -732,21 +742,26 @@ static int brcm_avs_cpufreq_probe(struct platform_device *pdev)
+>>   
+>>   	brcm_avs_driver.driver_data = pdev;
+>>   
+>> -	return cpufreq_register_driver(&brcm_avs_driver);
+>> +	ret = cpufreq_register_driver(&brcm_avs_driver);
+>> +	if (ret)
+>> +		goto err_uninit;
+>> +
+>> +	return 0;
+>> +
+>> +err_uninit:
+>> +	brcm_avs_prepare_uninit(pdev);
+>> +	return ret;
 > 
-> Add a property 'assigned-performance-states' which client devices can
-> use to set this default performance state on their power-domains.
+> Maybe rewrite as:
 > 
-> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-> ---
->  .../bindings/power/power-domain.yaml          | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
+> 	ret = cpufreq_register_driver(&brcm_avs_driver);
+> 	if (ret)
+>                  brcm_avs_prepare_uninit(pdev);
+> 	return ret;
 > 
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Personlaly, I prefer what I have proposed. Having a clear and dedicated 
+error handling path is more future proff, IMHO.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/power/power-domain.yaml:72:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+>>   }
+>>   
+>>   static int brcm_avs_cpufreq_remove(struct platform_device *pdev)
+>>   {
+>> -	struct private_data *priv;
+>>   	int ret;
+>>   
+>>   	ret = cpufreq_unregister_driver(&brcm_avs_driver);
+>>   	if (ret)
+>>   		return ret;
+> 
+> Instead of returning here, it can be just WARN_ON(ret); and then go on and free
+> the resources and this needs to be done in a separate patch.
 
-dtschema/dtc warnings/errors:
+Ok, I agree (see my comment below the --- in my patch).
+I'll send a patch for it when the first patch will be applied, unless 
+you prefer if I resend as a serie.
 
-See https://patchwork.ozlabs.org/patch/1420485
+CJ
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+> 
+>>   
+>> -	priv = platform_get_drvdata(pdev);
+>> -	iounmap(priv->base);
+>> -	iounmap(priv->avs_intr_base);
+>> +	brcm_avs_prepare_uninit(pdev);
+>>   
+>>   	return 0;
+>>   }
+> 
 
