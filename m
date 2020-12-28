@@ -2,163 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC292E6479
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Dec 2020 16:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077992E65F5
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Dec 2020 17:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408309AbgL1Pu2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Dec 2020 10:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S2393456AbgL1QG6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Dec 2020 11:06:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408306AbgL1Pu1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Dec 2020 10:50:27 -0500
+        with ESMTP id S2393365AbgL1QG4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Dec 2020 11:06:56 -0500
 Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E4CC0617A1;
-        Mon, 28 Dec 2020 07:49:46 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id m12so24768016lfo.7;
-        Mon, 28 Dec 2020 07:49:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF3DC06179A;
+        Mon, 28 Dec 2020 08:06:05 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id x20so24822927lfe.12;
+        Mon, 28 Dec 2020 08:06:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5dCbZvyPJ9eUu2G59fWkwNpYcrEO/zvwjAoLRWdkXSE=;
-        b=lxCFa2HVC3jf+yN4MDuz+0pTX6fn8ErcyMKifELPEAcor9P6+ePXhRlRpz2yamox05
-         RSOkQeVuqkF+lDy8aFpV3cxjEX2bAQzGf72WJAL3z9DN951jjzAMrUmANiTL6IE6VMzh
-         SBmmTOGKQgYYkrFQJgQT6jXpFoSq+m+dL9GStVrkfCyHDBnKCxaCfyc/A6wCIikCM49F
-         wprwIQmGOm/q6nKYhPQJAD5C2m3WGo/ubhVvsK/FnNPp3w6R5R03c/Jb58PekVJv+deD
-         9pbzn3wlk9Q8AVC1wy04rSeOz8+WYLJ9vrQ4Tkc8aDT89prFPrTcNNqEtgh9XQNFrX9j
-         3VwA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JLh0QpsCd9OrmRyukAVsjurqv+HRFzes5LCotbb5RJ8=;
+        b=rmgmZ0DjB9XoRC9isfDn+QOHo4UOpjUsW5j6PCCgPXnNRxAHfawouTFTIh7G2afjNv
+         y9grkZM6VkPhN7KFY9R/Ixm8pGd5CLKY+QSY9ACBHZwQ57a5i1y5jbmqPDV/VDXi8fHI
+         NDCuTdeQLBg3DiQrUoGdFts8JUzg5WEIlXL2m23iNyutXJFwLK37pSBwI2Ufu6QEoLXo
+         QJQTgU3225tw81+ira/yOqxh/UaSH28hMdC7rkTnoBPtEPACy0hxE7jT3zW366vWKsLl
+         MIRGDCXDsDEjOuuN1zNR79D95U0kt2IZ56NkcKMU1J+Kac8vK6jlKK6RDDBtTRFAlUQZ
+         n6lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5dCbZvyPJ9eUu2G59fWkwNpYcrEO/zvwjAoLRWdkXSE=;
-        b=i7g2zBcNIU0+NCzeQ2ellwgKTnBMMqcu9JrzNrXhvUWADyOo6FbUDULhNQqRR62Nfj
-         YYuVEyYX12kxDurE89WmAqBy5tLRPfSOs3AF9sAwroS6KiVR00rdyLcspxWzebYX55JM
-         0AFqG/3BgTFVQE785UtHf5QSWeSwigr7pCMk2b9lxYzzaP8BuzUq7gIHzcsYp2n0w7Sa
-         F8WisPLFyPClEnYkFlEiJDdUnR6UqT6B+OXtSppSxhwfwhN8liQp2Kn7Lk9Cvad4pLAS
-         2vG5y1uWDGW+HpXLqdhN0F0QNmuCB4+eBLSGN6H93Mhshif9mLHkSP8Yp0ARjjkI+IbF
-         hWGA==
-X-Gm-Message-State: AOAM533ZBu1kw+sMXMrEVOTwPZwPTX+pn0gNqjExzD2cal7r6z4GWds+
-        WSxVJTVj3pwjmUK2enKa4+s=
-X-Google-Smtp-Source: ABdhPJzBVEvhOC7XYqv+u4u4PeXBR3zK+J5gKZL4Q5ljEmnhhYEl7ehktajcZM2/mDlsqeeNzLADyQ==
-X-Received: by 2002:ac2:5333:: with SMTP id f19mr20745727lfh.344.1609170585132;
-        Mon, 28 Dec 2020 07:49:45 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JLh0QpsCd9OrmRyukAVsjurqv+HRFzes5LCotbb5RJ8=;
+        b=UjGGPeIA9UEMjyg1/nxNNBN4N9ibT9hzwt1ei8K8bo2fKa5GJC0+Jbr3lqO95+Kx2e
+         lMKYshBfVlYORtqZkhT+4oZW5jXzO6/9v1tFOStw2FD+OdbQI4EgsUKgBZuGqTWHsKqz
+         Vg4KKAJvjQ7E71XS0L/Mn11eBa0uYAg0lYXZf3JCoQ4kTgon378qS1zsqXchcGoxKTbH
+         Dl73SPjVrhZsIooFnz2U5JO/r0aTXJ7rzuf/CLoKLAgB8iR0J6n6HFlboLaSLy+B1Kct
+         CqMUFgJD9PxXN/BPihUpk5kht4f1hJqNkRY7DoKUZA7Nl0VVK2HkX+jo4h9QnF3QbbUe
+         23PQ==
+X-Gm-Message-State: AOAM532bUtT0EzXCpWT4YEE3UIC/65MUk7rvn7h+zsBz5SRORXFVE8lT
+        umUtOyVl1SRQwZg3lwgLZDY=
+X-Google-Smtp-Source: ABdhPJykASQRrZuu8pgpmv8hsQQirEcTyxl8Csyq3q/V72g/SyAd/Uln/N//1f3moHsftS4ktDKRBA==
+X-Received: by 2002:a05:6512:6cd:: with SMTP id u13mr18811103lff.288.1609171563846;
+        Mon, 28 Dec 2020 08:06:03 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id s27sm6502262ljd.25.2020.12.28.07.49.44
+        by smtp.gmail.com with ESMTPSA id v28sm5338837lfd.57.2020.12.28.08.06.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Dec 2020 07:49:44 -0800 (PST)
+        Mon, 28 Dec 2020 08:06:03 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v12 5/5] drm/tegra: dc: Extend debug stats with total number of events
-Date:   Mon, 28 Dec 2020 18:49:20 +0300
-Message-Id: <20201228154920.18846-6-digetx@gmail.com>
+        Dan Murphy <dmurphy@ti.com>, Sebastian Reichel <sre@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v8 0/3] Introduce Embedded Controller driver for Acer A500
+Date:   Mon, 28 Dec 2020 19:05:44 +0300
+Message-Id: <20201228160547.30562-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201228154920.18846-1-digetx@gmail.com>
-References: <20201228154920.18846-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's useful to know the total number of underflow events and currently
-the debug stats are getting reset each time CRTC is being disabled. Let's
-account the overall number of events that doesn't get a reset.
+This series adds support for the Embedded Controller which is found on
+Acer Iconia Tab A500 (Android tablet device).
 
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/gpu/drm/tegra/dc.c | 10 ++++++++++
- drivers/gpu/drm/tegra/dc.h |  5 +++++
- 2 files changed, 15 insertions(+)
+The Embedded Controller is ENE KB930 and it's running firmware customized
+for the A500. The firmware interface may be reused by some other sibling
+Acer tablets, although none of those tablets are supported in upstream yet.
 
-diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
-index 5c587cfd1bb2..b6676f1fe358 100644
---- a/drivers/gpu/drm/tegra/dc.c
-+++ b/drivers/gpu/drm/tegra/dc.c
-@@ -1539,6 +1539,11 @@ static int tegra_dc_show_stats(struct seq_file *s, void *data)
- 	seq_printf(s, "underflow: %lu\n", dc->stats.underflow);
- 	seq_printf(s, "overflow: %lu\n", dc->stats.overflow);
- 
-+	seq_printf(s, "frames total: %lu\n", dc->stats.frames_total);
-+	seq_printf(s, "vblank total: %lu\n", dc->stats.vblank_total);
-+	seq_printf(s, "underflow total: %lu\n", dc->stats.underflow_total);
-+	seq_printf(s, "overflow total: %lu\n", dc->stats.overflow_total);
-+
- 	return 0;
- }
- 
-@@ -2310,6 +2315,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		/*
- 		dev_dbg(dc->dev, "%s(): frame end\n", __func__);
- 		*/
-+		dc->stats.frames_total++;
- 		dc->stats.frames++;
- 	}
- 
-@@ -2318,6 +2324,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		dev_dbg(dc->dev, "%s(): vertical blank\n", __func__);
- 		*/
- 		drm_crtc_handle_vblank(&dc->base);
-+		dc->stats.vblank_total++;
- 		dc->stats.vblank++;
- 	}
- 
-@@ -2325,6 +2332,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		/*
- 		dev_dbg(dc->dev, "%s(): underflow\n", __func__);
- 		*/
-+		dc->stats.underflow_total++;
- 		dc->stats.underflow++;
- 	}
- 
-@@ -2332,11 +2340,13 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
- 		/*
- 		dev_dbg(dc->dev, "%s(): overflow\n", __func__);
- 		*/
-+		dc->stats.overflow_total++;
- 		dc->stats.overflow++;
- 	}
- 
- 	if (status & HEAD_UF_INT) {
- 		dev_dbg_ratelimited(dc->dev, "%s(): head underflow\n", __func__);
-+		dc->stats.underflow_total++;
- 		dc->stats.underflow++;
- 	}
- 
-diff --git a/drivers/gpu/drm/tegra/dc.h b/drivers/gpu/drm/tegra/dc.h
-index 0d7bdf66a1ec..ba4ed35139fb 100644
---- a/drivers/gpu/drm/tegra/dc.h
-+++ b/drivers/gpu/drm/tegra/dc.h
-@@ -48,6 +48,11 @@ struct tegra_dc_stats {
- 	unsigned long vblank;
- 	unsigned long underflow;
- 	unsigned long overflow;
-+
-+	unsigned long frames_total;
-+	unsigned long vblank_total;
-+	unsigned long underflow_total;
-+	unsigned long overflow_total;
- };
- 
- struct tegra_windowgroup_soc {
+Changelog:
+
+v8: - This series partially missed v5.11 kernel release, hence resending
+      for v5.12.
+
+      Please note that Thierry Reding already applied the v7 DT patch which
+      added the EC node to the Acer A500 device-tree, this change presents
+      in v5.11.
+
+v7: - Improved MFD Kconfig entry by adding explicit dependency on OF and
+      by rewording the help message, matching it to the other MFD drivers.
+
+    - Improved comments in the code by removing unnecessary comments, adding
+      necessary and rewording some others.
+
+    - Added expressive defines for the command opcodes.
+
+    - Fixed alphabet order of the MFD driver includes.
+
+    - Removed unnecessary size checks which are already done by regmap core.
+
+    - Renamed 'rmap' variable to 'regmap'.
+
+v6: - Fixed dtschema-checker warning about a wrong indentation, reported
+      by kernel bot for v5.
+
+v5: - No changes. Re-sending again in order to check whether dtschema-bot
+      warning is resolved now, which didn't happen in v4 because bot used
+      older 5.9 kernel code base instead of 5.10.
+
+v4: - No code changes. Added r-b from Rob Herring and Sebastian Reichel.
+      Re-sending for 5.11.
+
+    - The v3 of LED driver was applied by Pavel Machek and already presents
+      in v5.10 kernel.
+
+v3: - Rebased on a recent linux-next. Fixed new merge conflict and dropped
+      "regmap: Use flexible sleep" patch because it's already applied.
+
+v2: - Factored out KB930 device-tree binding into a separate file, like it
+      was suggested by Lubomir Rintel.
+
+    - Switched to use regmap API like it was suggested by Lubomir Rintel.
+
+    - Added patch "regmap: Use flexible sleep" which allows not to hog
+      CPU while LED is switching state.
+
+    - Corrected MODULE_LICENSE to use "GPL" in all patches.
+
+    - Corrected MFD driver Kconfig entry like it was suggested by
+      Lubomir Rintel, it now depends on I2C.
+
+    - Switched to use I2C probe_new() in the MFD driver.
+
+    - Renamed the global pm_off variable, like it was suggested by
+      Lubomir Rintel and Lee Jones.
+
+    - Dropped serial number from the battery driver because I realized
+      that it's not a battery serial, but a device serial.
+
+    - Battery driver now uses dev_err_probe(), like it was suggested by
+      Sebastian Reichel.
+
+    - Dropped legacy LED_ON usage from the LED driver and renamed the
+      LEDs, like it was suggested by Pavel Machek. I also checked whether
+      LED-name customization via device-tree could be needed by other
+      potentially compatible devices and it shouldn't be needed, anyways it
+      won't be difficult to extend the code even if I'm wrong.
+
+
+Dmitry Osipenko (3):
+  dt-bindings: mfd: Add ENE KB930 Embedded Controller binding
+  mfd: Add driver for Embedded Controller found on Acer Iconia Tab A500
+  power: supply: Add battery gauge driver for Acer Iconia Tab A500
+
+ .../devicetree/bindings/mfd/ene-kb930.yaml    |  65 ++++
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/acer-ec-a500.c                    | 202 ++++++++++++
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/acer_a500_battery.c      | 297 ++++++++++++++++++
+ 7 files changed, 583 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+ create mode 100644 drivers/mfd/acer-ec-a500.c
+ create mode 100644 drivers/power/supply/acer_a500_battery.c
+
 -- 
 2.29.2
 
