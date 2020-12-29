@@ -2,67 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 024372E728E
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Dec 2020 18:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE572E7294
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Dec 2020 18:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726246AbgL2RQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Dec 2020 12:16:07 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56434 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726144AbgL2RQH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Dec 2020 12:16:07 -0500
-Received: from 89-64-79-59.dynamic.chello.pl (89.64.79.59) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.537)
- id 49482a060e45e105; Tue, 29 Dec 2020 18:15:24 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>
-Subject: [PATCH] cpufreq: intel_pstate: Fix fast-switch fallback path
-Date:   Tue, 29 Dec 2020 18:15:23 +0100
-Message-ID: <2586979.mvXUDI8C0e@kreacher>
+        id S1726126AbgL2RVK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Dec 2020 12:21:10 -0500
+Received: from mga18.intel.com ([134.134.136.126]:6917 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726111AbgL2RVK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 29 Dec 2020 12:21:10 -0500
+IronPort-SDR: i+PmgkS09dfN3pKiwtgGflOu6gHVkLiaKFE6e1kXkAUz4LYFV51LIFVGDw4FHvnBg2JPP6q1Lx
+ GYL2jFqg1QJg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9849"; a="164228702"
+X-IronPort-AV: E=Sophos;i="5.78,458,1599548400"; 
+   d="scan'208";a="164228702"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2020 09:20:29 -0800
+IronPort-SDR: bbvQao6qL7U8CvteIPgd/sWex/DkQoA9L2mdDhXfWsEJaK2TCoW7pYN29a2VKm3GkNla8cSBKI
+ rLjhrfXIkAsw==
+X-IronPort-AV: E=Sophos;i="5.78,458,1599548400"; 
+   d="scan'208";a="376124749"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.150.176]) ([10.249.150.176])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2020 09:20:28 -0800
+Subject: Re: Commit a365ab6b9df ("Implement the ->adjust_perf() callback")
+ causing resume failures
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     srinivas.pandruvada@linux.intel.com, viresh.kumar@linaro.org,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <c185acb9-c757-bb5e-60df-b18bd85d79b@panix.com>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <1610e3f7-9699-374d-3375-d421f31fbd98@intel.com>
+Date:   Tue, 29 Dec 2020 18:20:25 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <c185acb9-c757-bb5e-60df-b18bd85d79b@panix.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 12/27/2020 4:39 AM, Kenneth R. Crudup wrote:
+> My laptop (XPS-13 2-in-1, i7-1065G7 CPU) hibernates just fine with this commit
+> in place, but suspends fail, so hard that many times EFI pstore can't finish
+> writing out the crash most times (but I attached one that made it OK).
+>
+> I'm sure you'll need more information, just let me know.
 
-When sugov_update_single_perf() falls back to the "frequency"
-path due to the missing scale-invariance, it will call
-cpufreq_driver_fast_switch() via sugov_fast_switch()
-and the driver's ->fast_switch() callback will be invoked,
-so it must not be NULL.
+Well, not really.
 
-However, after commit a365ab6b9dfb ("cpufreq: intel_pstate: Implement
-the ->adjust_perf() callback") intel_pstate sets ->fast_switch() to
-NULL when it is going to use intel_cpufreq_adjust_perf(), which is a
-mistake, because on x86 the scale-invariance may be turned off
-dynamically, so modify it to retain the original ->adjust_perf()
-callback pointer.
+Please test this patch:
 
-Fixes: a365ab6b9dfb ("cpufreq: intel_pstate: Implement the ->adjust_perf() callback")
-Reported-by: Kenneth R. Crudup <kenny@panix.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |    1 -
- 1 file changed, 1 deletion(-)
+https://patchwork.kernel.org/project/linux-pm/patch/2586979.mvXUDI8C0e@kreacher/
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -3088,7 +3088,6 @@ static int __init intel_pstate_init(void
- 			intel_pstate.attr = hwp_cpufreq_attrs;
- 			intel_cpufreq.attr = hwp_cpufreq_attrs;
- 			intel_cpufreq.flags |= CPUFREQ_NEED_UPDATE_LIMITS;
--			intel_cpufreq.fast_switch = NULL;
- 			intel_cpufreq.adjust_perf = intel_cpufreq_adjust_perf;
- 			if (!default_driver)
- 				default_driver = &intel_pstate;
+also available as a git commit:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=bleeding-edge&id=d77a56dee59ef2f15da63501c50c2c903a36c10b
+
+it should fix the problem.
+
+Thanks for the report!
 
 
