@@ -2,130 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3902E71F1
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Dec 2020 16:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024372E728E
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Dec 2020 18:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726507AbgL2Prl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Dec 2020 10:47:41 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:40039 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbgL2Prl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Dec 2020 10:47:41 -0500
-Received: by mail-oi1-f170.google.com with SMTP id p5so14967017oif.7;
-        Tue, 29 Dec 2020 07:47:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MEK4Mw7UBxOJIa/S7PzM0wAgV0d+78LiF/JzTK6IpGY=;
-        b=qdj8aBOTwilPMY5oade8smWV58IfL0Edd2EXNuwQ2tfG9+SyaDsyZ1dGdtyjGW87cb
-         KW30p0W2MkEHwjrfA0PFDIHW+uWaxF6lVLCJDWph8ubkAB6H8LE+Ypsq72EQiuMS2Vp2
-         Q4KzfyXAHaj5PVefDueizjQ5d/XoGj9SAV1xiTfL2dg3mMd70XbLiPL45x/EOPYwk/ry
-         QFDmzDgXDcFdHTodCZEl7VisuO/xcmrI6s+Brgr+SUJnl6E5YVgF6krfjSVxv8hXI8/S
-         Z2Gea8foxytAE2MbWHQdWtuo7CDvZ3hzfNJ452qqL1s9IKR+JhdpjYGJ8rAGJectvcu8
-         KJQw==
-X-Gm-Message-State: AOAM531AuF31wxVsD/iZIRWp0ms8MsUzEQ+pmT7sGKw7ywJqJ/PUv/1e
-        HgKVbIeO7RORWndDN+G8kOdAh4LKLCEMx5XAKgs=
-X-Google-Smtp-Source: ABdhPJympvLKSdtn+Fy+6FP9V+9doVUVBA4W7GeIJDtKG8gT7sd01LpO7TI4S50YuBA/JEnu2FTSmmKRRj/lb9Y+FOA=
-X-Received: by 2002:aca:4c1:: with SMTP id 184mr2791324oie.157.1609256820193;
- Tue, 29 Dec 2020 07:47:00 -0800 (PST)
+        id S1726246AbgL2RQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Dec 2020 12:16:07 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:56434 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgL2RQH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Dec 2020 12:16:07 -0500
+Received: from 89-64-79-59.dynamic.chello.pl (89.64.79.59) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.537)
+ id 49482a060e45e105; Tue, 29 Dec 2020 18:15:24 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Kenneth R. Crudup" <kenny@panix.com>
+Subject: [PATCH] cpufreq: intel_pstate: Fix fast-switch fallback path
+Date:   Tue, 29 Dec 2020 18:15:23 +0100
+Message-ID: <2586979.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-References: <202012271352.JvNDF17O-lkp@intel.com> <34a43212-ff2b-cbc6-a670-975d39ac9f12@redhat.com>
- <16284400-7c71-ee40-b694-614d6daf21f5@lenovo.com> <CAJZ5v0je=BeU98tkXmE9Mu1aiqc4=o288S=uOuFwh=okWJC2eQ@mail.gmail.com>
- <22e7ec14-faab-bddd-fff2-303ab3bff01e@lenovo.com>
-In-Reply-To: <22e7ec14-faab-bddd-fff2-303ab3bff01e@lenovo.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 29 Dec 2020 16:46:38 +0100
-Message-ID: <CAJZ5v0gyAXmbbjbW=sh9UzZRaJMuc0_Btx4V+4DhrSQOPrt3Mg@mail.gmail.com>
-Subject: Re: [External] Re: [pm:bleeding-edge 8612/8615] drivers/acpi/platform_profile.c:147:24:
- warning: address of array 'pprof->choices' will always evaluate to 'true'
-To:     Mark Pearson <markpearson@lenovo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        clang-built-linux@googlegroups.com,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 4:36 PM Mark Pearson <markpearson@lenovo.com> wrote:
->
-> Hi Rafael
->
-> On 29/12/2020 10:23, Rafael J. Wysocki wrote:
-> > On Tue, Dec 29, 2020 at 12:18 AM Mark Pearson <markpearson@lenovo.com> wrote:
-> >>
-> >> Hi Hans
-> >>
-> >> On 27/12/2020 06:56, Hans de Goede wrote:
-> >>> Hi,
-> >>>
-> >>> On 12/27/20 6:11 AM, kernel test robot wrote:
-> >>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> >>>> head:   a33520709645543f108361fe21fa9434a351c4e9
-> >>>> commit: 8c9b909fb1282e43792433e6c1cba125ccfc6201 [8612/8615] ACPI: platform-profile: Add platform profile support
-> >>>> config: x86_64-randconfig-a015-20201221 (attached as .config)
-> >>>> compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project cee1e7d14f4628d6174b33640d502bff3b54ae45)
-> >>>> reproduce (this is a W=1 build):
-> >>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >>>>         chmod +x ~/bin/make.cross
-> >>>>         # install x86_64 cross compiling tool for clang build
-> >>>>         # apt-get install binutils-x86-64-linux-gnu
-> >>>>         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=8c9b909fb1282e43792433e6c1cba125ccfc6201
-> >>>>         git remote add pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-> >>>>         git fetch --no-tags pm bleeding-edge
-> >>>>         git checkout 8c9b909fb1282e43792433e6c1cba125ccfc6201
-> >>>>         # save the attached .config to linux build tree
-> >>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64
-> >>>>
-> >>>> If you fix the issue, kindly add following tag as appropriate
-> >>>> Reported-by: kernel test robot <lkp@intel.com>
-> >>>>
-> >>>> All warnings (new ones prefixed by >>):
-> >>>>
-> >>>>>> drivers/acpi/platform_profile.c:147:24: warning: address of array 'pprof->choices' will always evaluate to 'true' [-Wpointer-bool-conversion]
-> >>>>            if (!pprof || !pprof->choices || !pprof->profile_set ||
-> >>>>                          ~~~~~~~~^~~~~~~
-> >>>>    1 warning generated.
-> >>>
-> >>>
-> >>> Ah, this is caused by changing choices from a single long to:
-> >>>
-> >>>       unsigned long choices[BITS_TO_LONGS(PLATFORM_PROFILE_LAST)];
-> >>>
-> >>> So that we can use for_each_set_bit and are future proof for more then
-> >>> 32 profiles.
-> >>>
-> >>> To fix this the check should be changed into this (untested):
-> >>>
-> >>> #include <linux/bitmap.h>
-> >>>
-> >>>       if (!pprof || bitmap_empty(pprof->choices, PLATFORM_PROFILE_LAST) ||
-> >>>           !pprof->profile_set || !pprof->profile_get) {
-> >>>               mutex_unlock(&profile_lock);
-> >>>               return -EINVAL;
-> >>>       }
-> >>>
-> >>> Mark can you provide a (tested) patch for this?
-> >>>
-> >>> Regards,
-> >>>
-> >>> Hans
-> >>>
-> >> Will do!
-> >
-> > Please note that I'm not going to push the material to Linus with this
-> > warning, so if you want it to go into 5.11, that needs to be addressed
-> > timely.
-> >
-> > Thanks!
-> >
-> Understood :) I tested this last night and it looks good. Do I push this
-> as a v8 patch on the current series or as a new standalone patch?
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-An incremental patch to fix the issue, please.
+When sugov_update_single_perf() falls back to the "frequency"
+path due to the missing scale-invariance, it will call
+cpufreq_driver_fast_switch() via sugov_fast_switch()
+and the driver's ->fast_switch() callback will be invoked,
+so it must not be NULL.
+
+However, after commit a365ab6b9dfb ("cpufreq: intel_pstate: Implement
+the ->adjust_perf() callback") intel_pstate sets ->fast_switch() to
+NULL when it is going to use intel_cpufreq_adjust_perf(), which is a
+mistake, because on x86 the scale-invariance may be turned off
+dynamically, so modify it to retain the original ->adjust_perf()
+callback pointer.
+
+Fixes: a365ab6b9dfb ("cpufreq: intel_pstate: Implement the ->adjust_perf() callback")
+Reported-by: Kenneth R. Crudup <kenny@panix.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -3088,7 +3088,6 @@ static int __init intel_pstate_init(void
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
+ 			intel_cpufreq.attr = hwp_cpufreq_attrs;
+ 			intel_cpufreq.flags |= CPUFREQ_NEED_UPDATE_LIMITS;
+-			intel_cpufreq.fast_switch = NULL;
+ 			intel_cpufreq.adjust_perf = intel_cpufreq_adjust_perf;
+ 			if (!default_driver)
+ 				default_driver = &intel_pstate;
+
+
+
