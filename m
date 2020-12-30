@@ -2,79 +2,276 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2022E79FD
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 15:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A732E7A0F
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 15:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbgL3Oh1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Dec 2020 09:37:27 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:41178 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgL3Oh0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Dec 2020 09:37:26 -0500
-Received: by mail-ot1-f47.google.com with SMTP id x13so15499707oto.8
-        for <linux-pm@vger.kernel.org>; Wed, 30 Dec 2020 06:37:11 -0800 (PST)
+        id S1726277AbgL3OyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Dec 2020 09:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbgL3OyQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Dec 2020 09:54:16 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868DDC06179B
+        for <linux-pm@vger.kernel.org>; Wed, 30 Dec 2020 06:53:35 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id n16so2676998wmc.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Dec 2020 06:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qtF7atT9/XTnUP957GKheyYGv9hTR/lrp7SvyY96rSY=;
+        b=N41qKgoqG5ahYcONbZ/ezPo9/OX8L4hPhCKc6rNbP5CDFzpRBjYugbxoJuCexWAScx
+         LrlKwtu9miF12ys4DlM57ZwRj6XhoG8GWMTYib+hr6+NgyaUpVnvcdOEqVpgh+r2yZRt
+         Gx/Fkf6juMDK8c58+qO+sr/DoXOWLUGslmuaqV35mE1a1LlPDIJ3MEdUDp7qdxmuJwxr
+         pzhQQTHwl/bRt5VDdEnNiJ6p9bSGhNVlai10vorxMCZjBnPaoPTiQ2gcy3xLw0Is5Bmb
+         1mMuNHi+PbkTy/rI6hTvXV0cO8FSbMjr2DgUHMA3PzPZDbeOemI03pOJs6jUy3GpsTHn
+         3Xgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tEd+774bQtaClZ62Rcq+ivloyHhYF+ctGTMT2QYYj/k=;
-        b=stBBAMde//0phLhyV9Xqxo990QbY9XFbgk95Nu0hPLDmpKtAfqTA6YbFkjqOvraNaQ
-         C58UIkouw5yRHgZ186b8ucjdMExWUtJZAxz7tc3VCTTcHuL6sV1jD95lmirJTBIeR+02
-         wL+XA6qFCmcyOP8h3JOfZaiIqQrNTuV85IqSdSHO2T50Gctdmv1UZkrK+kpTWbdNB5Ms
-         3L+jf8DDXX3KuaFAqgczcxOnAD4R+2dIm+CdnCGXADZBE/qdRRCzNTgAeNTuxhRv3unC
-         D4KfjvjExNgPhXogOAVEvclvTPcVVSnEhcY95cmnLIFdYNrFOB/q8cwNOj9eSJtTSQ+o
-         QpsA==
-X-Gm-Message-State: AOAM5339ViXSrxpO+1YeQ93H2CSvHAzHmVumdOhgE3WEHTraK+3FL4vE
-        +l+Vr9rCRw5nyX8Vjq2ZRMRLPPWLgJ/BqY6FtzNVQRl+
-X-Google-Smtp-Source: ABdhPJzo73uqkV4K8WGUHyHbsVRsfJs2VGHKULEayzSk7dUVsB0yT9Lpm8WkFvSMS5LaqMaKuNYrM+KS7j96dlgtNbY=
-X-Received: by 2002:a9d:208a:: with SMTP id x10mr38575735ota.260.1609339005683;
- Wed, 30 Dec 2020 06:36:45 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qtF7atT9/XTnUP957GKheyYGv9hTR/lrp7SvyY96rSY=;
+        b=hTw1xz5nN/dlo6JU1s68EtiIMwQ2c4DTJDMd1eT2Gc8hHZHrLXTynisMdiuqxjAxSH
+         91kzI1+NCrUoSenIXjmiU/R02L15/SUKTZdLxivpxdznmcLY++Gp1UXm4jBkYYNoTuoG
+         yYr9oGmUNkbpekHYE5W1Mt+bu28c7JO/8jBOpLLU4OIDXqMjglVuelgsgAe00MKDn8Qd
+         xU9PIgii89JroPS9J/ifILGa/D4hU+YS8eA6P8ETqF+Mhrv8Dc9XGXmqGH9GK2vNBbla
+         tgAI0Y9N2EbwsLmLsVfa8nW/7+2mMVK7WdcJHDV1cdbWsUP9Cs7fEl56Yyc8TU/wRgRS
+         McKg==
+X-Gm-Message-State: AOAM531phmKoZbWmLk7BgEVIjBoXp8Z5Zmzx/6F2lxK7ajFj7VBzqDTT
+        WuD4OFvWuWY+37NXXbvzbOmz1g==
+X-Google-Smtp-Source: ABdhPJxZS9Pn6Mx7P3MR8m9TEu+Gv1CJ20aQES0lxwy67+84BRCzEIwcY2RCW/Xmphg+Ama65GVtng==
+X-Received: by 2002:a05:600c:274d:: with SMTP id 13mr7971073wmw.77.1609340014026;
+        Wed, 30 Dec 2020 06:53:34 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-148-164.adsl.proxad.net. [82.252.148.164])
+        by smtp.googlemail.com with ESMTPSA id n189sm7806210wmf.20.2020.12.30.06.53.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Dec 2020 06:53:33 -0800 (PST)
+Subject: Re: [pm:bleeding-edge] BUILD REGRESSION
+ 0c7a6fd3a0e835b0158a1f52176f5d3858fac110
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+References: <5fec0d86.i0RjnNeExICZGSu7%lkp@intel.com>
+ <CAJZ5v0gN3NfWyAHA7At=1ZG90vCJbDoUzF5ts2_t3GmunSbrMQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <c796df50-5086-f5dd-e9c8-9ca5e80f8bdf@linaro.org>
+Date:   Wed, 30 Dec 2020 15:53:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20201230063828.f6qba2h7nyedb2dt@vireshk-i7>
-In-Reply-To: <20201230063828.f6qba2h7nyedb2dt@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Dec 2020 15:36:34 +0100
-Message-ID: <CAJZ5v0gAciHkgaUWsE92k00d1qYn72BhSN7M0T8Wa6ttsaPXKg@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP fixes for 5.11-rc2
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0gN3NfWyAHA7At=1ZG90vCJbDoUzF5ts2_t3GmunSbrMQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 30, 2020 at 7:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> This pull request contains two patches to fix freeing of resources in
-> error paths.
->
-> -------------------------8<-------------------------
->
-> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
->
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
->
-> for you to fetch changes up to 0e1d9ca1766f5d95fb881f57b6c4a1ffa63d4648:
->
->   opp: Call the missing clk_put() on error (2020-12-28 10:56:22 +0530)
->
-> ----------------------------------------------------------------
-> Quanyang Wang (1):
->       opp: fix memory leak in _allocate_opp_table
->
-> Viresh Kumar (1):
->       opp: Call the missing clk_put() on error
->
->  drivers/opp/core.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> --
+On 30/12/2020 15:25, Rafael J. Wysocki wrote:
+> Hi Daniel,
+> 
+> On Wed, Dec 30, 2020 at 6:19 AM kernel test robot <lkp@intel.com> wrote:
+>>
+>> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+>> branch HEAD: 0c7a6fd3a0e835b0158a1f52176f5d3858fac110  Merge branch 'pm-cpuidle-next' into bleeding-edge
+>>
+>> Error/Warning reports:
+>>
+>> https://lore.kernel.org/linux-acpi/202012180806.uUcdy2LC-lkp@intel.com
+>> https://lore.kernel.org/linux-acpi/202012271352.JvNDF17O-lkp@intel.com
+>> https://lore.kernel.org/linux-acpi/202012280239.stlWMtr3-lkp@intel.com
+>> https://lore.kernel.org/linux-acpi/202012280249.nrNm8Jn3-lkp@intel.com
+>>
+>> Error/Warning in current branch:
+>>
+>> drivers/acpi/platform_profile.c:147:24: warning: address of array 'pprof->choices' will always evaluate to 'true' [-Wpointer-bool-conversion]
+>> drivers/acpi/x86/s2idle.c:108:30: warning: variable 'info' set but not used [-Wunused-but-set-variable]
+>> drivers/acpi/x86/s2idle.c:138:25: warning: variable 'obj_new' set but not used [-Wunused-but-set-variable]
+>> dtpm.c:(.text+0x24c): undefined reference to `__udivdi3'
+>> dtpm.c:(.text+0x2a4): undefined reference to `__udivdi3'
+>> dtpm.c:(.text+0x3bc): undefined reference to `__udivdi3'
+>> dtpm.c:(.text+0x514): undefined reference to `__aeabi_uldivmod'
+>> dtpm.c:(.text+0x52d): undefined reference to `__udivdi3'
+> 
+> The above build issues come from the DTPM patches.
+> 
+> I was about to send a pull request including those patches later
+> today, but it looks like that would be premature.
+> 
+> Can you have a look at this, please?
 
-Pulled, thanks!
+I've a patch to fix it. I'm currently testing it.
+
+
+
+
+>> Error/Warning ids grouped by kconfigs:
+>>
+>> gcc_recent_errors
+>> |-- arm-allmodconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__aeabi_uldivmod
+>> |-- arm-allyesconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__aeabi_uldivmod
+>> |-- h8300-allmodconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+>> |-- h8300-allyesconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+>> |-- i386-allyesconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+>> |-- i386-randconfig-a006-20201229
+>> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+>> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+>> |-- i386-randconfig-r002-20201229
+>> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+>> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+>> |-- i386-randconfig-s001-20201229
+>> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+>> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+>> |-- m68k-allmodconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+>> |-- m68k-allyesconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+>> |-- sh-allmodconfig
+>> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+>> |-- x86_64-randconfig-a002-20201229
+>> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+>> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+>> |-- x86_64-randconfig-a004-20201229
+>> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+>> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+>> `-- x86_64-randconfig-s021-20201229
+>>     |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+>>     `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+>>
+>> clang_recent_errors
+>> |-- x86_64-randconfig-a011-20201229
+>> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+>> |-- x86_64-randconfig-a012-20201229
+>> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+>> |-- x86_64-randconfig-a013-20201229
+>> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+>> |-- x86_64-randconfig-a014-20201229
+>> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+>> |-- x86_64-randconfig-a015-20201229
+>> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+>> `-- x86_64-randconfig-a016-20201229
+>>     `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+>>
+>> elapsed time: 724m
+>>
+>> configs tested: 95
+>> configs skipped: 2
+>>
+>> gcc tested configs:
+>> arm                                 defconfig
+>> arm64                            allyesconfig
+>> arm64                               defconfig
+>> arm                              allyesconfig
+>> arm                              allmodconfig
+>> sh                           se7619_defconfig
+>> sh                        sh7785lcr_defconfig
+>> arm                        trizeps4_defconfig
+>> mips                        workpad_defconfig
+>> um                           x86_64_defconfig
+>> mips                     cu1000-neo_defconfig
+>> m68k                          sun3x_defconfig
+>> mips                        bcm47xx_defconfig
+>> arm                            mps2_defconfig
+>> mips                         tb0287_defconfig
+>> s390                          debug_defconfig
+>> arm                           sama5_defconfig
+>> arm                         s3c2410_defconfig
+>> arm                         lpc18xx_defconfig
+>> sh                         microdev_defconfig
+>> arm                         s5pv210_defconfig
+>> mips                         tb0226_defconfig
+>> arm                          pxa910_defconfig
+>> c6x                        evmc6474_defconfig
+>> ia64                             allmodconfig
+>> ia64                                defconfig
+>> ia64                             allyesconfig
+>> m68k                             allmodconfig
+>> m68k                                defconfig
+>> m68k                             allyesconfig
+>> nios2                               defconfig
+>> arc                              allyesconfig
+>> nds32                             allnoconfig
+>> c6x                              allyesconfig
+>> nds32                               defconfig
+>> nios2                            allyesconfig
+>> csky                                defconfig
+>> alpha                               defconfig
+>> alpha                            allyesconfig
+>> xtensa                           allyesconfig
+>> h8300                            allyesconfig
+>> arc                                 defconfig
+>> sh                               allmodconfig
+>> parisc                              defconfig
+>> s390                             allyesconfig
+>> parisc                           allyesconfig
+>> s390                                defconfig
+>> i386                             allyesconfig
+>> sparc                            allyesconfig
+>> sparc                               defconfig
+>> i386                               tinyconfig
+>> i386                                defconfig
+>> mips                             allyesconfig
+>> mips                             allmodconfig
+>> powerpc                          allyesconfig
+>> powerpc                          allmodconfig
+>> powerpc                           allnoconfig
+>> x86_64               randconfig-a001-20201229
+>> x86_64               randconfig-a006-20201229
+>> x86_64               randconfig-a002-20201229
+>> x86_64               randconfig-a004-20201229
+>> x86_64               randconfig-a003-20201229
+>> x86_64               randconfig-a005-20201229
+>> i386                 randconfig-a002-20201229
+>> i386                 randconfig-a005-20201229
+>> i386                 randconfig-a004-20201229
+>> i386                 randconfig-a006-20201229
+>> i386                 randconfig-a003-20201229
+>> i386                 randconfig-a001-20201229
+>> i386                 randconfig-a014-20201229
+>> i386                 randconfig-a012-20201229
+>> i386                 randconfig-a011-20201229
+>> i386                 randconfig-a016-20201229
+>> i386                 randconfig-a015-20201229
+>> i386                 randconfig-a013-20201229
+>> riscv                    nommu_k210_defconfig
+>> riscv                            allyesconfig
+>> riscv                    nommu_virt_defconfig
+>> riscv                             allnoconfig
+>> riscv                               defconfig
+>> riscv                          rv32_defconfig
+>> riscv                            allmodconfig
+>> x86_64                                   rhel
+>> x86_64                           allyesconfig
+>> x86_64                    rhel-7.6-kselftests
+>> x86_64                              defconfig
+>> x86_64                               rhel-8.3
+>> x86_64                      rhel-8.3-kbuiltin
+>> x86_64                                  kexec
+>>
+>> clang tested configs:
+>> x86_64               randconfig-a014-20201229
+>> x86_64               randconfig-a015-20201229
+>> x86_64               randconfig-a016-20201229
+>> x86_64               randconfig-a012-20201229
+>> x86_64               randconfig-a011-20201229
+>> x86_64               randconfig-a013-20201229
+>>
+>> ---
+>> 0-DAY CI Kernel Test Service, Intel Corporation
+>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
