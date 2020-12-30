@@ -2,93 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1482E76A0
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 07:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95192E7723
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 09:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgL3GjP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Dec 2020 01:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726230AbgL3GjM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Dec 2020 01:39:12 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6C5C061799
-        for <linux-pm@vger.kernel.org>; Tue, 29 Dec 2020 22:38:31 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id b5so3217860pjk.2
-        for <linux-pm@vger.kernel.org>; Tue, 29 Dec 2020 22:38:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=NUwYZ8YKLtAkuo5jKMtJ+rMzB7JbhAiv9pyL9FSsR7A=;
-        b=USW9ICiyxg0G3XMT3cL0QyE8aRSumn1uoP1ZEvgoJ53LaclbVy22/kvJvdzSZTNYz5
-         C2qMtxfi2E1RBeIAIRfsjaorUp4EAI4LzeRhp0lu2iEEzJvXAeDe7+1utN0nLBo/g/HL
-         7Sn7pcKKAHv2TvT1YAkyBcy/2Ks7/sYBsT79zfidIjbdCTV+GAuCdfD+BTGeY2jMS6WT
-         TaThao36662lwpFWQKKH+dVk5Gl75DmpV211Iduxm5ttP8v9oeS+V0cuUbXJl/BMSQIk
-         HPMvkMLeMxIhHtbZsfWLJVsWwAIu38nR7iFDlerYSLdC3hPNDGeuctQY6fO56/q8fiOz
-         eMyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=NUwYZ8YKLtAkuo5jKMtJ+rMzB7JbhAiv9pyL9FSsR7A=;
-        b=ZMhdRMEUnU4PDrgclep4kRaudDmvpqGtlGhHmQEoXFWK81qQMdFaCKoUE4H3+e29sl
-         vPwAOrWQyhQGcn/Zg+0/CplvCnh2PyafTVZ0as81MMaFRtfOkEV8gpN/bsEiZYFhD5yJ
-         eYX2NNwiRoi4xT2jPzzmE2Bg4bYX9OU0HLLsnBsdBETJ62VG6aC6t9NHAXqIWwghj4ag
-         XnnZLkcAI7YE5bosC52UoLPu8HQ4fR0Sgv8R7tN/lde5YRB1dBgDMcxtKTIkzGi3qRpd
-         n0VL2lvWJxpJIPuSXN6TPJ6y8gTglh6JQhR9F4mzox5/kx9RcBVPXpyCATLaN3pPkbW6
-         yVBw==
-X-Gm-Message-State: AOAM532NKQ3lfffHtdAt8LT4zLyjLwqFdtOpNf9oAoioFLlgYAaiV94Z
-        tw5YgzcJCFnqNEKatGA4IiMVJg==
-X-Google-Smtp-Source: ABdhPJyff9UM+jkJ/DvX/vRHDsEYb6YVHHyOwRfmnE52Yx2+wRC1PHumzX6UHlQjc3S6QVXxFW5+xg==
-X-Received: by 2002:a17:90a:a781:: with SMTP id f1mr7362426pjq.111.1609310311375;
-        Tue, 29 Dec 2020 22:38:31 -0800 (PST)
-Received: from localhost ([122.172.20.109])
-        by smtp.gmail.com with ESMTPSA id j1sm41058014pfd.181.2020.12.29.22.38.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 29 Dec 2020 22:38:30 -0800 (PST)
-Date:   Wed, 30 Dec 2020 12:08:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP fixes for 5.11-rc2
-Message-ID: <20201230063828.f6qba2h7nyedb2dt@vireshk-i7>
+        id S1726256AbgL3Iob (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Dec 2020 03:44:31 -0500
+Received: from muru.com ([72.249.23.125]:40498 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725853AbgL3Ioa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 30 Dec 2020 03:44:30 -0500
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 9940380BA;
+        Wed, 30 Dec 2020 08:44:01 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, Adam Ford <aford173@gmail.com>,
+        Carl Philipp Klemm <philipp@uvos.xyz>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH 1/3] thermal: ti-soc-thermal: Fix stuck sensor with continuous mode for 4430
+Date:   Wed, 30 Dec 2020 10:43:36 +0200
+Message-Id: <20201230084338.19410-1-tony@atomide.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+At least for 4430, trying to use the single conversion mode eventually
+hangs the thermal sensor. This can be quite easily seen with errors:
 
-This pull request contains two patches to fix freeing of resources in
-error paths.
+thermal thermal_zone0: failed to read out thermal zone (-5)
+
+Also, trying to read the temperature shows a stuck value with:
+
+$ while true; do cat /sys/class/thermal/thermal_zone0/temp; done
+
+Where the temperature is not rising at all with the busy loop.
+
+Additionally, the EOCZ (end of conversion) bit is not rising on 4430 in
+single conversion mode while it works fine in continuous conversion mode.
+It is also possible that the hung temperature sensor can affect the
+thermal shutdown alert too.
+
+Let's fix the issue by adding TI_BANDGAP_FEATURE_CONT_MODE_ONLY flag and
+use it for 4430.
+
+Note that we also need to add udelay to for the EOCZ (end of conversion)
+bit polling as otherwise we have it time out too early on 4430. We'll be
+changing the loop to use iopoll in the following clean-up patch.
+
+Cc: Adam Ford <aford173@gmail.com>
+Cc: Carl Philipp Klemm <philipp@uvos.xyz>
+Cc: Eduardo Valentin <edubezval@gmail.com>
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/thermal/ti-soc-thermal/omap4-thermal-data.c | 3 ++-
+ drivers/thermal/ti-soc-thermal/ti-bandgap.c         | 9 +++++++--
+ drivers/thermal/ti-soc-thermal/ti-bandgap.h         | 2 ++
+ 3 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
+--- a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
++++ b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
+@@ -58,7 +58,8 @@ omap4430_adc_to_temp[OMAP4430_ADC_END_VALUE - OMAP4430_ADC_START_VALUE + 1] = {
+ const struct ti_bandgap_data omap4430_data = {
+ 	.features = TI_BANDGAP_FEATURE_MODE_CONFIG |
+ 			TI_BANDGAP_FEATURE_CLK_CTRL |
+-			TI_BANDGAP_FEATURE_POWER_SWITCH,
++			TI_BANDGAP_FEATURE_POWER_SWITCH |
++			TI_BANDGAP_FEATURE_CONT_MODE_ONLY,
+ 	.fclock_name = "bandgap_fclk",
+ 	.div_ck_name = "bandgap_fclk",
+ 	.conv_table = omap4430_adc_to_temp,
+diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+--- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
++++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+@@ -15,6 +15,7 @@
+ #include <linux/kernel.h>
+ #include <linux/interrupt.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/platform_device.h>
+ #include <linux/err.h>
+@@ -605,8 +606,10 @@ ti_bandgap_force_single_read(struct ti_bandgap *bgp, int id)
+ 	u32 counter = 1000;
+ 	struct temp_sensor_registers *tsr;
  
--------------------------8<-------------------------
-
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
-
-for you to fetch changes up to 0e1d9ca1766f5d95fb881f57b6c4a1ffa63d4648:
-
-  opp: Call the missing clk_put() on error (2020-12-28 10:56:22 +0530)
-
-----------------------------------------------------------------
-Quanyang Wang (1):
-      opp: fix memory leak in _allocate_opp_table
-
-Viresh Kumar (1):
-      opp: Call the missing clk_put() on error
-
- drivers/opp/core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
+-	/* Select single conversion mode */
+-	if (TI_BANDGAP_HAS(bgp, MODE_CONFIG))
++	/* Select continuous or single conversion mode */
++	if (TI_BANDGAP_HAS(bgp, CONT_MODE_ONLY))
++		RMW_BITS(bgp, id, bgap_mode_ctrl, mode_ctrl_mask, 1);
++	else if (TI_BANDGAP_HAS(bgp, MODE_CONFIG))
+ 		RMW_BITS(bgp, id, bgap_mode_ctrl, mode_ctrl_mask, 0);
+ 
+ 	/* Start of Conversion = 1 */
+@@ -619,6 +622,7 @@ ti_bandgap_force_single_read(struct ti_bandgap *bgp, int id)
+ 		if (ti_bandgap_readl(bgp, tsr->temp_sensor_ctrl) &
+ 		    tsr->bgap_eocz_mask)
+ 			break;
++		udelay(1);
+ 	}
+ 
+ 	/* Start of Conversion = 0 */
+@@ -630,6 +634,7 @@ ti_bandgap_force_single_read(struct ti_bandgap *bgp, int id)
+ 		if (!(ti_bandgap_readl(bgp, tsr->temp_sensor_ctrl) &
+ 		      tsr->bgap_eocz_mask))
+ 			break;
++		udelay(1);
+ 	}
+ 
+ 	return 0;
+diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.h b/drivers/thermal/ti-soc-thermal/ti-bandgap.h
+--- a/drivers/thermal/ti-soc-thermal/ti-bandgap.h
++++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.h
+@@ -280,6 +280,7 @@ struct ti_temp_sensor {
+  *	has Errata 814
+  * TI_BANDGAP_FEATURE_UNRELIABLE - used when the sensor readings are too
+  *	inaccurate.
++ * TI_BANDGAP_FEATURE_CONT_MODE_ONLY - used when single mode hangs the sensor
+  * TI_BANDGAP_HAS(b, f) - macro to check if a bandgap device is capable of a
+  *      specific feature (above) or not. Return non-zero, if yes.
+  */
+@@ -295,6 +296,7 @@ struct ti_temp_sensor {
+ #define TI_BANDGAP_FEATURE_HISTORY_BUFFER	BIT(9)
+ #define TI_BANDGAP_FEATURE_ERRATA_814		BIT(10)
+ #define TI_BANDGAP_FEATURE_UNRELIABLE		BIT(11)
++#define TI_BANDGAP_FEATURE_CONT_MODE_ONLY	BIT(12)
+ #define TI_BANDGAP_HAS(b, f)			\
+ 			((b)->conf->features & TI_BANDGAP_FEATURE_ ## f)
+ 
 -- 
-viresh
+2.29.2
