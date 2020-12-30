@@ -2,99 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B662E7BD6
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 19:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E7B2E7C56
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 21:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgL3SJx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Dec 2020 13:09:53 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:34842 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbgL3SJx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Dec 2020 13:09:53 -0500
-Received: by mail-ot1-f42.google.com with SMTP id i6so16079116otr.2;
-        Wed, 30 Dec 2020 10:09:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T6wty7uTHzWolWGlLlhLEhZtRaBVxKw4I5dryMThCo0=;
-        b=age6wQjF4LuFkyGGXwS0lJEfMB/5b1W81N+bmn60AxnVTNj0Ozyg8e8JHsxrukroqY
-         IIV8YOH0y3l8fqdy+kRkWSODu53l8xO/PMlVoQveH4aA/D+CMA3Z2a5aCE+ZggE6Z2hr
-         BJU1A9S7Slg4Iu0gH6DJCL8caiqS0qhjPM4fOdPQ1/VXARbYzyYdFfjwLvv4+VYc0Xtg
-         fHt2YovPxk8GxW5DqCDfe+pforNhJAWejStyApUBtBrPE2lkvWPENOYp/PVXpHRqnLjW
-         3p7CCKYJzZyKvd0Ddcq45avbpBhYDoV8HVKSP+qxBfMLjQYr8Bxq+T3OV/idKxLgz/zp
-         zNZA==
-X-Gm-Message-State: AOAM533+6HXxSMQKtoinsOCFNuvuwLfMdr0uqmUYcB7T2O6/eS3Gxhna
-        vY2XXZ/1RJ8fpSFmv5ffxjS8F6GYJjYB2qp8LYM=
-X-Google-Smtp-Source: ABdhPJzXfCjmB1dcSwHsD8IGGfgs1uWGweBPT2mhXlrlobIpnP9CP9YPZ9u9FKtKrYhWlHYY/E6W99gr0mvooWKpwO4=
-X-Received: by 2002:a9d:67da:: with SMTP id c26mr40507083otn.321.1609351752581;
- Wed, 30 Dec 2020 10:09:12 -0800 (PST)
+        id S1726285AbgL3Uwm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Dec 2020 15:52:42 -0500
+Received: from mail-40133.protonmail.ch ([185.70.40.133]:33592 "EHLO
+        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726247AbgL3Uwl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Dec 2020 15:52:41 -0500
+Date:   Wed, 30 Dec 2020 20:51:53 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1609361519;
+        bh=+xD2FarfshYIV4IW9XFPK6r4Ai4Fr6Cddj2HlgicqZs=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=o2FlyKVrdCTja9nVGQGaMcfgmmLjHu07ijKp5Qp6yEzyWX+p5BPljRmQqljzVzpcm
+         pPXOv3Bde2PPNTO1+QJkJau12D2QUCNEx0w8VfuKDT3U1hEl3mBGarpIom9FTswvsq
+         ixTrWNNc6CwIe9LTgZSp0iw8ZRRhLDYncNksrK/o=
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+From:   Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Timon Baetz <timon.baetz@protonmail.com>
+Reply-To: Timon Baetz <timon.baetz@protonmail.com>
+Subject: [PATCH v6 1/8] extcon: max8997: Add CHGINS and CHGRM interrupt handling
+Message-ID: <20201230205139.1812366-1-timon.baetz@protonmail.com>
 MIME-Version: 1.0
-References: <CAJZ5v0gN3NfWyAHA7At=1ZG90vCJbDoUzF5ts2_t3GmunSbrMQ@mail.gmail.com>
- <20201230153744.15612-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20201230153744.15612-1-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Dec 2020 19:09:00 +0100
-Message-ID: <CAJZ5v0g7DdGFcvn1bMy5=HmRP5+uA0OcrPVMDnJ4aW+VxVvTpA@mail.gmail.com>
-Subject: Re: [PATCH] powercap/drivers/dtpm: Fix __udivdi3 and __aeabi_uldivmod
- unresolved symbols
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 30, 2020 at 4:38 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> 32 bits architectures do not support u64 division, so the macro
-> DIV_ROUND_CLOSEST is not adequate as the compiler will replace the
-> call to an unexisting function for the platform, leading to an
-> unresolved symbols.
->
-> Fix this by using the compatible macros:
->
-> DIV64_U64_ROUND_CLOSEST and DIV_ROUND_CLOSEST_ULL.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+This allows the MAX8997 charger to set the current limit depending on
+the detected extcon charger type.
 
-Applied and pushed into the linux-next branch, thanks!
+Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+---
+v6: No change.
+v5: No change.
+v4: No change.
+v3: No change.
+v2: Remove empty line.
 
-> ---
->  drivers/powercap/dtpm.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> index 5b6857e9b064..0abcc439d728 100644
-> --- a/drivers/powercap/dtpm.c
-> +++ b/drivers/powercap/dtpm.c
-> @@ -99,8 +99,8 @@ static void __dtpm_rebalance_weight(struct dtpm *dtpm)
->                 pr_debug("Setting weight '%d' for '%s'\n",
->                          child->weight, child->zone.name);
->
-> -               child->weight = DIV_ROUND_CLOSEST(child->power_max * 1024,
-> -                                                 dtpm->power_max);
-> +               child->weight = DIV64_U64_ROUND_CLOSEST(
-> +                       child->power_max * 1024, dtpm->power_max);
->
->                 __dtpm_rebalance_weight(child);
->         }
-> @@ -272,7 +272,7 @@ static int __set_power_limit_uw(struct dtpm *dtpm, int cid, u64 power_limit)
->                         } else if (power_limit == dtpm->power_min) {
->                                 power = child->power_min;
->                         } else {
-> -                               power = DIV_ROUND_CLOSEST(
-> +                               power = DIV_ROUND_CLOSEST_ULL(
->                                         power_limit * child->weight, 1024);
->                         }
->
-> --
-> 2.17.1
->
+ drivers/extcon/extcon-max8997.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/extcon/extcon-max8997.c b/drivers/extcon/extcon-max899=
+7.c
+index 337b0eea4e62..e1408075ef7d 100644
+--- a/drivers/extcon/extcon-max8997.c
++++ b/drivers/extcon/extcon-max8997.c
+@@ -44,6 +44,8 @@ static struct max8997_muic_irq muic_irqs[] =3D {
+ =09{ MAX8997_MUICIRQ_ChgDetRun,=09"muic-CHGDETRUN" },
+ =09{ MAX8997_MUICIRQ_ChgTyp,=09"muic-CHGTYP" },
+ =09{ MAX8997_MUICIRQ_OVP,=09=09"muic-OVP" },
++=09{ MAX8997_PMICIRQ_CHGINS,=09"pmic-CHGINS" },
++=09{ MAX8997_PMICIRQ_CHGRM,=09"pmic-CHGRM" },
+ };
+=20
+ /* Define supported cable type */
+@@ -538,6 +540,8 @@ static void max8997_muic_irq_work(struct work_struct *w=
+ork)
+ =09case MAX8997_MUICIRQ_DCDTmr:
+ =09case MAX8997_MUICIRQ_ChgDetRun:
+ =09case MAX8997_MUICIRQ_ChgTyp:
++=09case MAX8997_PMICIRQ_CHGINS:
++=09case MAX8997_PMICIRQ_CHGRM:
+ =09=09/* Handle charger cable */
+ =09=09ret =3D max8997_muic_chg_handler(info);
+ =09=09break;
+--=20
+2.25.1
+
+
