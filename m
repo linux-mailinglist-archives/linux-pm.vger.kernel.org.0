@@ -2,228 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 526EA2E79B7
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 14:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A156A2E79F4
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Dec 2020 15:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbgL3Nce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Dec 2020 08:32:34 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:9630 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbgL3Nce (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Dec 2020 08:32:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1609334979;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:From:
-        Subject:Sender;
-        bh=N6upb9ydMy2qlv00jXdG0mPwSj0PHaipvH7vwQqjdgo=;
-        b=QmpKdSROl6UVp951UXV0i9exl0N/c7KN4c7yCUz0LY5yxOz171lvt6pAEqVJEqChvD
-        dZZBXyxgI0QIJ+URsKAZSqna0QMqNvMEcrhhV+lK3slimG10rnfqSIAmRwI62ARJfiPZ
-        6jZfpUheE933i/zeqEXmvhRlysYNxigqWslo/gpy8ueJkxw6I6aB0n9jEsp1bCvrk8CP
-        FwBmYnKFeOW7TqMHu3rH0QixbhjQsJfHhU8R05pm4htbhiKBYXtDiHxqSTb16tKg2osI
-        x0elsHpSptlUx99D1E4EPOuE017HaOm4zfj+LgO2wnf9iZoP2v1i8fjWiAT36j8NFCz4
-        K7oA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDleUXA4E/LE="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 47.10.7 DYNA|AUTH)
-        with ESMTPSA id 003539wBUDQFFBm
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 30 Dec 2020 14:26:15 +0100 (CET)
-Subject: Re: [PATCH 1/3] thermal: ti-soc-thermal: Fix stuck sensor with continuous mode for 4430
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <CAHCN7xJmwcUOpoza-LNxTAbRNb9ToERnBNuKboP86DSBdtS61A@mail.gmail.com>
-Date:   Wed, 30 Dec 2020 14:26:14 +0100
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Carl Philipp Klemm <philipp@uvos.xyz>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andreas Kemnade <andreas@kemnade.info>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7C9106E0-FC75-4056-AD5F-16CCFA9C24E5@goldelico.com>
-References: <20201230084338.19410-1-tony@atomide.com> <CAHCN7xJmwcUOpoza-LNxTAbRNb9ToERnBNuKboP86DSBdtS61A@mail.gmail.com>
-To:     Adam Ford <aford173@gmail.com>, Tony Lindgren <tony@atomide.com>
-X-Mailer: Apple Mail (2.3124)
+        id S1725853AbgL3O0y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Dec 2020 09:26:54 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:35172 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725814AbgL3O0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Dec 2020 09:26:53 -0500
+Received: by mail-ot1-f41.google.com with SMTP id i6so15503800otr.2;
+        Wed, 30 Dec 2020 06:26:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fVwOdSg4kFV8PqFz9oWIuUkZshE6KT51XDsvu3Y+Dpc=;
+        b=OWAQF7ES3Q56vq71QtPosz3qPTPlvgtQd8gRBwaaXdcqFZv3VGTuIRGL7g6IKunA21
+         wLzeofYa9bgHrKg+LzQjRJVLqtRk4xwKDqidhPOH8X9j5qwN8p41UVOeBNIsE2AB5+ud
+         cyWNjm8hzo51eaHQOn3jxwvQZjEpWCiLpSdp3Km9vb6U0IN0gaP5kIFvQ/HLq2d77W1I
+         qZ8vBw5djov0XwxFiUVPKZ/yrEDj6/sLM/LHAkc46nnala5zK5YdCHgCT2hlKuUBheHB
+         8dmdnfa+FAx9sHUM8OwzzvUELp61XPxCABCjptRwrQ45RV+gHaLUPaYdMed4FNDKYxvk
+         /H+g==
+X-Gm-Message-State: AOAM533CFv1dBmxOBUuKaaaOy1ucbNNW3sjUNS6wS/m6xoNea7htYMGB
+        SMiSoealhEbcL2hKt5Abqo7pEsMS3FtJUnfUZM5QCgeC
+X-Google-Smtp-Source: ABdhPJz27bxNRw0xI3mjSSm1Gd1rRzvwNq7eHGFYp/Xi3QBVX5FZT+xA17gB4C0XSguyTb3pzB7hX2UOUPWg0r616Eg=
+X-Received: by 2002:a9d:745a:: with SMTP id p26mr40228278otk.206.1609338370359;
+ Wed, 30 Dec 2020 06:26:10 -0800 (PST)
+MIME-Version: 1.0
+References: <5fec0d86.i0RjnNeExICZGSu7%lkp@intel.com>
+In-Reply-To: <5fec0d86.i0RjnNeExICZGSu7%lkp@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 30 Dec 2020 15:25:59 +0100
+Message-ID: <CAJZ5v0gN3NfWyAHA7At=1ZG90vCJbDoUzF5ts2_t3GmunSbrMQ@mail.gmail.com>
+Subject: Re: [pm:bleeding-edge] BUILD REGRESSION 0c7a6fd3a0e835b0158a1f52176f5d3858fac110
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Adam and Tony,
+Hi Daniel,
 
-> Am 30.12.2020 um 13:55 schrieb Adam Ford <aford173@gmail.com>:
->=20
-> On Wed, Dec 30, 2020 at 2:43 AM Tony Lindgren <tony@atomide.com> =
-wrote:
->>=20
->> At least for 4430, trying to use the single conversion mode =
-eventually
->> hangs the thermal sensor. This can be quite easily seen with errors:
->>=20
->> thermal thermal_zone0: failed to read out thermal zone (-5)
->>=20
->> Also, trying to read the temperature shows a stuck value with:
->>=20
->> $ while true; do cat /sys/class/thermal/thermal_zone0/temp; done
->>=20
->> Where the temperature is not rising at all with the busy loop.
->>=20
->> Additionally, the EOCZ (end of conversion) bit is not rising on 4430 =
-in
->> single conversion mode while it works fine in continuous conversion =
-mode.
->> It is also possible that the hung temperature sensor can affect the
->> thermal shutdown alert too.
->>=20
->> Let's fix the issue by adding TI_BANDGAP_FEATURE_CONT_MODE_ONLY flag =
-and
->> use it for 4430.
->>=20
->> Note that we also need to add udelay to for the EOCZ (end of =
-conversion)
->> bit polling as otherwise we have it time out too early on 4430. We'll =
-be
->> changing the loop to use iopoll in the following clean-up patch.
->>=20
->> Cc: Adam Ford <aford173@gmail.com>
->=20
-> I don't have an OMAP4, but if you want, I can test a DM3730.
+On Wed, Dec 30, 2020 at 6:19 AM kernel test robot <lkp@intel.com> wrote:
+>
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+> branch HEAD: 0c7a6fd3a0e835b0158a1f52176f5d3858fac110  Merge branch 'pm-cpuidle-next' into bleeding-edge
+>
+> Error/Warning reports:
+>
+> https://lore.kernel.org/linux-acpi/202012180806.uUcdy2LC-lkp@intel.com
+> https://lore.kernel.org/linux-acpi/202012271352.JvNDF17O-lkp@intel.com
+> https://lore.kernel.org/linux-acpi/202012280239.stlWMtr3-lkp@intel.com
+> https://lore.kernel.org/linux-acpi/202012280249.nrNm8Jn3-lkp@intel.com
+>
+> Error/Warning in current branch:
+>
+> drivers/acpi/platform_profile.c:147:24: warning: address of array 'pprof->choices' will always evaluate to 'true' [-Wpointer-bool-conversion]
+> drivers/acpi/x86/s2idle.c:108:30: warning: variable 'info' set but not used [-Wunused-but-set-variable]
+> drivers/acpi/x86/s2idle.c:138:25: warning: variable 'obj_new' set but not used [-Wunused-but-set-variable]
+> dtpm.c:(.text+0x24c): undefined reference to `__udivdi3'
+> dtpm.c:(.text+0x2a4): undefined reference to `__udivdi3'
+> dtpm.c:(.text+0x3bc): undefined reference to `__udivdi3'
+> dtpm.c:(.text+0x514): undefined reference to `__aeabi_uldivmod'
+> dtpm.c:(.text+0x52d): undefined reference to `__udivdi3'
 
-Indeed I remember a similar discussion from the DM3730 [1]. temp values =
-were
-always those from the last measurement. E.g. the first one was done
-during (cold) boot and the first request after 10 minutes did show a
-quite cold system... The next one did show a hot system independent
-of what had been between (suspend or high activity).
+The above build issues come from the DTPM patches.
 
-It seems as if it was even reproducible with a very old kernel on a =
-BeagleBoard.
-So it is quite fundamental.
+I was about to send a pull request including those patches later
+today, but it looks like that would be premature.
 
-We tried to fix it but did not come to a solution [2]. So we opened an =
-issue
-in our tracker [3] and decided to stay with continuous conversion =
-although this
-raises idle mode processor load.
+Can you have a look at this, please?
 
-BR,
-Nikolaus
-
-[1]: =
-https://lists.goldelico.com/pipermail/letux-kernel/2019-September/003958.h=
-tml
-[2]: =
-https://lists.goldelico.com/pipermail/letux-kernel/2019-September/003975.h=
-tml
-[3]: https://projects.goldelico.com/p/gta04-kernel/issues/928/
-
-> adam
->=20
->> Cc: Carl Philipp Klemm <philipp@uvos.xyz>
->> Cc: Eduardo Valentin <edubezval@gmail.com>
->> Cc: Merlijn Wajer <merlijn@wizzup.org>
->> Cc: Pavel Machek <pavel@ucw.cz>
->> Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
->> Cc: Sebastian Reichel <sre@kernel.org>
->> Signed-off-by: Tony Lindgren <tony@atomide.com>
->> ---
->> drivers/thermal/ti-soc-thermal/omap4-thermal-data.c | 3 ++-
->> drivers/thermal/ti-soc-thermal/ti-bandgap.c         | 9 +++++++--
->> drivers/thermal/ti-soc-thermal/ti-bandgap.h         | 2 ++
->> 3 files changed, 11 insertions(+), 3 deletions(-)
->>=20
->> diff --git a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c =
-b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
->> --- a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
->> +++ b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
->> @@ -58,7 +58,8 @@ omap4430_adc_to_temp[OMAP4430_ADC_END_VALUE - =
-OMAP4430_ADC_START_VALUE + 1] =3D {
->> const struct ti_bandgap_data omap4430_data =3D {
->>        .features =3D TI_BANDGAP_FEATURE_MODE_CONFIG |
->>                        TI_BANDGAP_FEATURE_CLK_CTRL |
->> -                       TI_BANDGAP_FEATURE_POWER_SWITCH,
->> +                       TI_BANDGAP_FEATURE_POWER_SWITCH |
->> +                       TI_BANDGAP_FEATURE_CONT_MODE_ONLY,
->>        .fclock_name =3D "bandgap_fclk",
->>        .div_ck_name =3D "bandgap_fclk",
->>        .conv_table =3D omap4430_adc_to_temp,
->> diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c =
-b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
->> --- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
->> +++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
->> @@ -15,6 +15,7 @@
->> #include <linux/kernel.h>
->> #include <linux/interrupt.h>
->> #include <linux/clk.h>
->> +#include <linux/delay.h>
->> #include <linux/gpio/consumer.h>
->> #include <linux/platform_device.h>
->> #include <linux/err.h>
->> @@ -605,8 +606,10 @@ ti_bandgap_force_single_read(struct ti_bandgap =
-*bgp, int id)
->>        u32 counter =3D 1000;
->>        struct temp_sensor_registers *tsr;
->>=20
->> -       /* Select single conversion mode */
->> -       if (TI_BANDGAP_HAS(bgp, MODE_CONFIG))
->> +       /* Select continuous or single conversion mode */
->> +       if (TI_BANDGAP_HAS(bgp, CONT_MODE_ONLY))
->> +               RMW_BITS(bgp, id, bgap_mode_ctrl, mode_ctrl_mask, 1);
->> +       else if (TI_BANDGAP_HAS(bgp, MODE_CONFIG))
->>                RMW_BITS(bgp, id, bgap_mode_ctrl, mode_ctrl_mask, 0);
->>=20
->>        /* Start of Conversion =3D 1 */
->> @@ -619,6 +622,7 @@ ti_bandgap_force_single_read(struct ti_bandgap =
-*bgp, int id)
->>                if (ti_bandgap_readl(bgp, tsr->temp_sensor_ctrl) &
->>                    tsr->bgap_eocz_mask)
->>                        break;
->> +               udelay(1);
->>        }
->>=20
->>        /* Start of Conversion =3D 0 */
->> @@ -630,6 +634,7 @@ ti_bandgap_force_single_read(struct ti_bandgap =
-*bgp, int id)
->>                if (!(ti_bandgap_readl(bgp, tsr->temp_sensor_ctrl) &
->>                      tsr->bgap_eocz_mask))
->>                        break;
->> +               udelay(1);
->>        }
->>=20
->>        return 0;
->> diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.h =
-b/drivers/thermal/ti-soc-thermal/ti-bandgap.h
->> --- a/drivers/thermal/ti-soc-thermal/ti-bandgap.h
->> +++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.h
->> @@ -280,6 +280,7 @@ struct ti_temp_sensor {
->>  *     has Errata 814
->>  * TI_BANDGAP_FEATURE_UNRELIABLE - used when the sensor readings are =
-too
->>  *     inaccurate.
->> + * TI_BANDGAP_FEATURE_CONT_MODE_ONLY - used when single mode hangs =
-the sensor
->>  * TI_BANDGAP_HAS(b, f) - macro to check if a bandgap device is =
-capable of a
->>  *      specific feature (above) or not. Return non-zero, if yes.
->>  */
->> @@ -295,6 +296,7 @@ struct ti_temp_sensor {
->> #define TI_BANDGAP_FEATURE_HISTORY_BUFFER      BIT(9)
->> #define TI_BANDGAP_FEATURE_ERRATA_814          BIT(10)
->> #define TI_BANDGAP_FEATURE_UNRELIABLE          BIT(11)
->> +#define TI_BANDGAP_FEATURE_CONT_MODE_ONLY      BIT(12)
->> #define TI_BANDGAP_HAS(b, f)                   \
->>                        ((b)->conf->features & TI_BANDGAP_FEATURE_ ## =
-f)
->>=20
->> --
->> 2.29.2
-
+> Error/Warning ids grouped by kconfigs:
+>
+> gcc_recent_errors
+> |-- arm-allmodconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__aeabi_uldivmod
+> |-- arm-allyesconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__aeabi_uldivmod
+> |-- h8300-allmodconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+> |-- h8300-allyesconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+> |-- i386-allyesconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+> |-- i386-randconfig-a006-20201229
+> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+> |-- i386-randconfig-r002-20201229
+> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+> |-- i386-randconfig-s001-20201229
+> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+> |-- m68k-allmodconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+> |-- m68k-allyesconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+> |-- sh-allmodconfig
+> |   `-- dtpm.c:(.text):undefined-reference-to-__udivdi3
+> |-- x86_64-randconfig-a002-20201229
+> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+> |-- x86_64-randconfig-a004-20201229
+> |   |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+> |   `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+> `-- x86_64-randconfig-s021-20201229
+>     |-- drivers-acpi-x86-s2idle.c:warning:variable-info-set-but-not-used
+>     `-- drivers-acpi-x86-s2idle.c:warning:variable-obj_new-set-but-not-used
+>
+> clang_recent_errors
+> |-- x86_64-randconfig-a011-20201229
+> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+> |-- x86_64-randconfig-a012-20201229
+> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+> |-- x86_64-randconfig-a013-20201229
+> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+> |-- x86_64-randconfig-a014-20201229
+> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+> |-- x86_64-randconfig-a015-20201229
+> |   `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+> `-- x86_64-randconfig-a016-20201229
+>     `-- drivers-acpi-platform_profile.c:warning:address-of-array-pprof-choices-will-always-evaluate-to-true
+>
+> elapsed time: 724m
+>
+> configs tested: 95
+> configs skipped: 2
+>
+> gcc tested configs:
+> arm                                 defconfig
+> arm64                            allyesconfig
+> arm64                               defconfig
+> arm                              allyesconfig
+> arm                              allmodconfig
+> sh                           se7619_defconfig
+> sh                        sh7785lcr_defconfig
+> arm                        trizeps4_defconfig
+> mips                        workpad_defconfig
+> um                           x86_64_defconfig
+> mips                     cu1000-neo_defconfig
+> m68k                          sun3x_defconfig
+> mips                        bcm47xx_defconfig
+> arm                            mps2_defconfig
+> mips                         tb0287_defconfig
+> s390                          debug_defconfig
+> arm                           sama5_defconfig
+> arm                         s3c2410_defconfig
+> arm                         lpc18xx_defconfig
+> sh                         microdev_defconfig
+> arm                         s5pv210_defconfig
+> mips                         tb0226_defconfig
+> arm                          pxa910_defconfig
+> c6x                        evmc6474_defconfig
+> ia64                             allmodconfig
+> ia64                                defconfig
+> ia64                             allyesconfig
+> m68k                             allmodconfig
+> m68k                                defconfig
+> m68k                             allyesconfig
+> nios2                               defconfig
+> arc                              allyesconfig
+> nds32                             allnoconfig
+> c6x                              allyesconfig
+> nds32                               defconfig
+> nios2                            allyesconfig
+> csky                                defconfig
+> alpha                               defconfig
+> alpha                            allyesconfig
+> xtensa                           allyesconfig
+> h8300                            allyesconfig
+> arc                                 defconfig
+> sh                               allmodconfig
+> parisc                              defconfig
+> s390                             allyesconfig
+> parisc                           allyesconfig
+> s390                                defconfig
+> i386                             allyesconfig
+> sparc                            allyesconfig
+> sparc                               defconfig
+> i386                               tinyconfig
+> i386                                defconfig
+> mips                             allyesconfig
+> mips                             allmodconfig
+> powerpc                          allyesconfig
+> powerpc                          allmodconfig
+> powerpc                           allnoconfig
+> x86_64               randconfig-a001-20201229
+> x86_64               randconfig-a006-20201229
+> x86_64               randconfig-a002-20201229
+> x86_64               randconfig-a004-20201229
+> x86_64               randconfig-a003-20201229
+> x86_64               randconfig-a005-20201229
+> i386                 randconfig-a002-20201229
+> i386                 randconfig-a005-20201229
+> i386                 randconfig-a004-20201229
+> i386                 randconfig-a006-20201229
+> i386                 randconfig-a003-20201229
+> i386                 randconfig-a001-20201229
+> i386                 randconfig-a014-20201229
+> i386                 randconfig-a012-20201229
+> i386                 randconfig-a011-20201229
+> i386                 randconfig-a016-20201229
+> i386                 randconfig-a015-20201229
+> i386                 randconfig-a013-20201229
+> riscv                    nommu_k210_defconfig
+> riscv                            allyesconfig
+> riscv                    nommu_virt_defconfig
+> riscv                             allnoconfig
+> riscv                               defconfig
+> riscv                          rv32_defconfig
+> riscv                            allmodconfig
+> x86_64                                   rhel
+> x86_64                           allyesconfig
+> x86_64                    rhel-7.6-kselftests
+> x86_64                              defconfig
+> x86_64                               rhel-8.3
+> x86_64                      rhel-8.3-kbuiltin
+> x86_64                                  kexec
+>
+> clang tested configs:
+> x86_64               randconfig-a014-20201229
+> x86_64               randconfig-a015-20201229
+> x86_64               randconfig-a016-20201229
+> x86_64               randconfig-a012-20201229
+> x86_64               randconfig-a011-20201229
+> x86_64               randconfig-a013-20201229
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
