@@ -2,147 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2992E8118
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Dec 2020 16:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3942E818B
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Dec 2020 19:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726080AbgLaPuN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Dec 2020 10:50:13 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:46038 "EHLO
+        id S1727042AbgLaSNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Dec 2020 13:13:00 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:39586 "EHLO
         mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726071AbgLaPuN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Dec 2020 10:50:13 -0500
-Received: by mail-ot1-f43.google.com with SMTP id n42so18255579ota.12;
-        Thu, 31 Dec 2020 07:49:57 -0800 (PST)
+        with ESMTP id S1726707AbgLaSNA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Dec 2020 13:13:00 -0500
+Received: by mail-ot1-f43.google.com with SMTP id d8so18570881otq.6;
+        Thu, 31 Dec 2020 10:12:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vrJ54GWrf1gjKYUTCdpFWMnnDxjUx7yI9iWKN6uWpbY=;
-        b=WvF9QIlLVRSpAnCEu6QgBoKAuHTPcKyGd+e1ZMmHt+wS6sR2QjayqQmYpr3d+n3QwJ
-         /wA2iEuy3vY57OiFvyoKK1K+qH+DngvjTZT1K4ttLJfFSCrcarlLE07PFHrBieGUWMY2
-         L5nWjkl8lX2ofRRMqj1CZe0+QClCe8z+BqDH+u9tPUk8kujoj/FVHSzQF3Rf04FeKOD0
-         1wqwNML5n4vDcFz8+ZPPhQWtavMi2bW4wQYLAsMp4J8bqicQxuG2Ack9RszxwFu26ITP
-         U/I38YCgPP9jK6nT1gdqInwsDobnlxX8lT4L3jWarsicvBmc7m0QUDsM/OZJ7zfCqV2L
-         V5Iw==
-X-Gm-Message-State: AOAM531ojOihhFtsqX391ljRONdvNRoyx5ogm9TZbmj7fAovbRrUUqfL
-        x8cqoSzX5RAP38KKCla+QQ==
-X-Google-Smtp-Source: ABdhPJzPV0VHmm9Ury2BxUsTfggiEYoY5ylxj7HrLmkDpdCswUZWCJ4x1QPsJBsLYVaXS9tqBSnGCQ==
-X-Received: by 2002:a05:6830:1650:: with SMTP id h16mr42298972otr.266.1609429772107;
-        Thu, 31 Dec 2020 07:49:32 -0800 (PST)
+        bh=/baDFZ04WPKFvnGfg9yUbKzRdx2bFG5qizeKUagnLfM=;
+        b=qmuSBmZFIIqoII7uW/dGOZZGdPJqzDKiY6B9VB4+QpkJm16X+JWd3Oak2ulzDu19RD
+         OwhQV4A65gxQvr1WMdhmQcdmb6gQj8i4AtQ6vN+uEuM2Esw/ev9D0rOB5OH9o45182q8
+         IzYvZX6mo4emXyc5UEw3roDEbarj3CZh47+iK0k3HWNIqoHoriWvdUtFQYjZJNRbcfjV
+         RdYs4pXe9dvNc/lR0qglwyh/mCSxcecyANb5lUCrlCyiXJDdRWOGMhJY9k+0TiBOd7Cb
+         id4dMXzpY5Zka+cAuJW0dAxImyt65GtSn+B6LQpiOii8i4XbFrvj7L0Q2ovGqMh5KyNX
+         wgeg==
+X-Gm-Message-State: AOAM530otzYDU9DxqFQIjts/80g/kOn4dWbFBQTiZJwBoy29pgtBrfGn
+        mb0TR0xuA8LAqwIvsqx3KQ==
+X-Google-Smtp-Source: ABdhPJyDkXZbrOTrCWfEFNlpNchpSRar2P16KYigEufXLX1WTb+p4jeWGh4MH2z99j4KVmakj2IaGA==
+X-Received: by 2002:a05:6830:1c3d:: with SMTP id f29mr42876645ote.47.1609438338832;
+        Thu, 31 Dec 2020 10:12:18 -0800 (PST)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id s17sm11209427otg.16.2020.12.31.07.49.30
+        by smtp.gmail.com with ESMTPSA id f25sm11147568oou.39.2020.12.31.10.12.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Dec 2020 07:49:31 -0800 (PST)
-Received: (nullmailer pid 1851540 invoked by uid 1000);
-        Thu, 31 Dec 2020 15:49:29 -0000
-Date:   Thu, 31 Dec 2020 08:49:29 -0700
+        Thu, 31 Dec 2020 10:12:17 -0800 (PST)
+Received: (nullmailer pid 2074202 invoked by uid 1000);
+        Thu, 31 Dec 2020 18:12:15 -0000
+Date:   Thu, 31 Dec 2020 11:12:15 -0700
 From:   Rob Herring <robh@kernel.org>
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>
-Cc:     ulf.hansson@linaro.org, bjorn.andersson@linaro.org, wsa@kernel.org,
-        swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, mka@chromium.org,
-        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
-        parashar@codeaurora.org, rnayak@codeaurora.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: power: Introduce
- 'assigned-performance-states' property
-Message-ID: <20201231154929.GA1846089@robh.at.kernel.org>
-References: <20201224111210.1214-1-rojay@codeaurora.org>
- <20201224111210.1214-2-rojay@codeaurora.org>
+To:     Roger Lu <roger.lu@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v10 1/7] [v10,1/7]: dt-bindings: soc: mediatek: add mtk
+ svs dt-bindings
+Message-ID: <20201231181215.GA1874134@robh.at.kernel.org>
+References: <20201227105449.11452-1-roger.lu@mediatek.com>
+ <20201227105449.11452-2-roger.lu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201224111210.1214-2-rojay@codeaurora.org>
+In-Reply-To: <20201227105449.11452-2-roger.lu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 24, 2020 at 04:42:08PM +0530, Roja Rani Yarubandi wrote:
-> While most devices within power-domains which support performance states,
-> scale the performance state dynamically, some devices might want to
-> set a static/default performance state while the device is active.
-> These devices typically would also run off a fixed clock and not support
-> dynamically scaling the device's performance, also known as DVFS
-> techniques.
+On Sun, Dec 27, 2020 at 06:54:43PM +0800, Roger Lu wrote:
+> Document the binding for enabling mtk svs on MediaTek SoC.
 > 
-> Add a property 'assigned-performance-states' which client devices can
-> use to set this default performance state on their power-domains.
-> 
-> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > ---
->  .../bindings/power/power-domain.yaml          | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
+>  .../bindings/soc/mediatek/mtk-svs.yaml        | 75 +++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
-> index aed51e9dcb11..a42977a82d06 100644
-> --- a/Documentation/devicetree/bindings/power/power-domain.yaml
-> +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
-> @@ -66,6 +66,18 @@ properties:
->        by the given provider should be subdomains of the domain specified
->        by this binding.
->  
-> +  assigned-performance-states:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> new file mode 100644
+> index 000000000000..9c7da0acd82f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> @@ -0,0 +1,75 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/mediatek/mtk-svs.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Introduce MTK SVS engine
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +  - Kevin Hilman <khilman@kernel.org>
+> +  - Nishanth Menon <nm@ti.com>
+> +
+> +description: |+
+> +  The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> +  which has several controllers(banks) for calculating suitable
+> +  voltage to different power domains(CPU/GPU/CCI) according to
+> +  chip process corner, temperatures and other factors. Then DVFS
+> +  driver could apply SVS bank voltage to PMIC/Buck.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8183-svs
+> +
+> +  reg:
+> +    description: Address range of the MTK SVS controller.
+
+Drop. That doesn't really add anything.
+
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description: IRQ for the MTK SVS controller.
+
+Drop.
+
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: Main clock for MTK SVS controller to work.
+
+Drop, but you need:
+
+maxItems: 1
+
+> +
+> +  clock-names:
+> +    const: main
+> +
+> +  nvmem-cells:
+> +    maxItems: 2
 > +    description:
-> +       Some devices might need to configure their power domains in a default
-> +       performance state while the device is active. These devices typcially
-> +       would also run off a fixed clock and not support dynamically scaling
-> +       the device's performance, also known as DVFS techniques. Each cell in
-> +       performance state value corresponds to one power domain specified as
-> +       part of the power-domains property. Performance state value can be an
-> +       opp-level inside an OPP table of the power-domain and need not match
-> +       with any OPP table performance state.
+> +      Phandle to the calibration data provided by a nvmem device.
 
-Couldn't this just be an additional cell in 'power-domains'?
+Drop.
 
 > +
->  required:
->    - "#power-domain-cells"
->  
-> @@ -131,3 +143,40 @@ examples:
->              min-residency-us = <7000>;
->          };
->      };
+> +  nvmem-cell-names:
+> +    items:
+> +      - const: svs-calibration-data
+> +      - const: t-calibration-data
 > +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
 > +  - |
-> +    parent4: power-controller@12340000 {
-> +        compatible = "foo,power-controller";
-> +        reg = <0x12340000 0x1000>;
-> +        #power-domain-cells = <0>;
-> +    };
+> +    #include <dt-bindings/clock/mt8183-clk.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
 > +
-> +    parent5: power-controller@43210000 {
-> +        compatible = "foo,power-controller";
-> +        reg = <0x43210000 0x1000>;
-> +        #power-domain-cells = <0>;
-> +        operating-points-v2 = <&power_opp_table>;
-> +
-> +        power_opp_table: opp-table {
-> +            compatible = "operating-points-v2";
-> +
-> +            power_opp_low: opp1 {
-> +                opp-level = <16>;
-> +            };
-> +
-> +            rpmpd_opp_ret: opp2 {
-> +                opp-level = <64>;
-> +            };
-> +
-> +            rpmpd_opp_svs: opp3 {
-> +                opp-level = <256>;
-> +            };
-> +        };
-> +    };
-> +
-> +    child4: consumer@12341000 {
-> +        compatible = "foo,consumer";
-> +        reg = <0x12341000 0x1000>;
-> +        power-domains = <&parent4>, <&parent5>;
-> +        assigned-performance-states = <0>, <256>;
+> +    svs: svs@1100b000 {
+> +        compatible = "mediatek,mt8183-svs";
+> +        reg = <0 0x1100b000 0 0x1000>;
+> +        interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
+> +        clocks = <&infracfg CLK_INFRA_THERM>;
+> +        clock-names = "main";
+> +        nvmem-cells = <&svs_calibration>, <&thermal_calibration>;
+> +        nvmem-cell-names = "svs-calibration-data", "t-calibration-data";
 > +    };
 > -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-> of Code Aurora Forum, hosted by The Linux Foundation
+> 2.18.0
 > 
