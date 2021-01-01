@@ -2,176 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3942E818B
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Dec 2020 19:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3D52E8373
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jan 2021 11:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727042AbgLaSNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Dec 2020 13:13:00 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:39586 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbgLaSNA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Dec 2020 13:13:00 -0500
-Received: by mail-ot1-f43.google.com with SMTP id d8so18570881otq.6;
-        Thu, 31 Dec 2020 10:12:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/baDFZ04WPKFvnGfg9yUbKzRdx2bFG5qizeKUagnLfM=;
-        b=qmuSBmZFIIqoII7uW/dGOZZGdPJqzDKiY6B9VB4+QpkJm16X+JWd3Oak2ulzDu19RD
-         OwhQV4A65gxQvr1WMdhmQcdmb6gQj8i4AtQ6vN+uEuM2Esw/ev9D0rOB5OH9o45182q8
-         IzYvZX6mo4emXyc5UEw3roDEbarj3CZh47+iK0k3HWNIqoHoriWvdUtFQYjZJNRbcfjV
-         RdYs4pXe9dvNc/lR0qglwyh/mCSxcecyANb5lUCrlCyiXJDdRWOGMhJY9k+0TiBOd7Cb
-         id4dMXzpY5Zka+cAuJW0dAxImyt65GtSn+B6LQpiOii8i4XbFrvj7L0Q2ovGqMh5KyNX
-         wgeg==
-X-Gm-Message-State: AOAM530otzYDU9DxqFQIjts/80g/kOn4dWbFBQTiZJwBoy29pgtBrfGn
-        mb0TR0xuA8LAqwIvsqx3KQ==
-X-Google-Smtp-Source: ABdhPJyDkXZbrOTrCWfEFNlpNchpSRar2P16KYigEufXLX1WTb+p4jeWGh4MH2z99j4KVmakj2IaGA==
-X-Received: by 2002:a05:6830:1c3d:: with SMTP id f29mr42876645ote.47.1609438338832;
-        Thu, 31 Dec 2020 10:12:18 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id f25sm11147568oou.39.2020.12.31.10.12.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Dec 2020 10:12:17 -0800 (PST)
-Received: (nullmailer pid 2074202 invoked by uid 1000);
-        Thu, 31 Dec 2020 18:12:15 -0000
-Date:   Thu, 31 Dec 2020 11:12:15 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v10 1/7] [v10,1/7]: dt-bindings: soc: mediatek: add mtk
- svs dt-bindings
-Message-ID: <20201231181215.GA1874134@robh.at.kernel.org>
-References: <20201227105449.11452-1-roger.lu@mediatek.com>
- <20201227105449.11452-2-roger.lu@mediatek.com>
+        id S1726469AbhAAKM3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 1 Jan 2021 05:12:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55364 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726462AbhAAKM3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 1 Jan 2021 05:12:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id EDC0321E92
+        for <linux-pm@vger.kernel.org>; Fri,  1 Jan 2021 10:11:48 +0000 (UTC)
+Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id E241986730; Fri,  1 Jan 2021 10:11:48 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 210993] New: Intel frequency scaling causes electrical noise on
+ 10th gen CPUs
+Date:   Fri, 01 Jan 2021 10:11:48 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: karolherbst@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-210993-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201227105449.11452-2-roger.lu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Dec 27, 2020 at 06:54:43PM +0800, Roger Lu wrote:
-> Document the binding for enabling mtk svs on MediaTek SoC.
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> ---
->  .../bindings/soc/mediatek/mtk-svs.yaml        | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> new file mode 100644
-> index 000000000000..9c7da0acd82f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> @@ -0,0 +1,75 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/mediatek/mtk-svs.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Introduce MTK SVS engine
-> +
-> +maintainers:
-> +  - Matthias Brugger <matthias.bgg@gmail.com>
-> +  - Kevin Hilman <khilman@kernel.org>
-> +  - Nishanth Menon <nm@ti.com>
-> +
-> +description: |+
-> +  The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> +  which has several controllers(banks) for calculating suitable
-> +  voltage to different power domains(CPU/GPU/CCI) according to
-> +  chip process corner, temperatures and other factors. Then DVFS
-> +  driver could apply SVS bank voltage to PMIC/Buck.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8183-svs
-> +
-> +  reg:
-> +    description: Address range of the MTK SVS controller.
+https://bugzilla.kernel.org/show_bug.cgi?id=210993
 
-Drop. That doesn't really add anything.
+            Bug ID: 210993
+           Summary: Intel frequency scaling causes electrical noise on
+                    10th gen CPUs
+           Product: Power Management
+           Version: 2.5
+    Kernel Version: 5.9.16
+          Hardware: Intel
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: enhancement
+          Priority: P1
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: karolherbst@gmail.com
+        Regression: No
 
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    description: IRQ for the MTK SVS controller.
+One thing I noticed with my i7-10850H CPU is, that if there are cores with huge
+differences in their frequencies (e.g. one at 900 MHz another at 4.9 GHz) some
+electrical becomes noticable.
 
-Drop.
+The noise can be reduced by limiting the available range the CPUs frequency can
+be scaled to. Sadly the scaling_min_freq property is ignored outright and only
+matters as long as the CPU stays idle, but as long as one core gets some load,
+another one drops below scaling_min_freq, so I couldn't test if limiting the
+lower bound even helps.
 
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: Main clock for MTK SVS controller to work.
+Putting one core at max load with stress -c 1 effectively eliminates all noise.
 
-Drop, but you need:
+This issue is even more annoying on my laptop as it generally runs with the
+fans turned off.
 
-maxItems: 1
+intel_pstate is used in active mode, but putting it in passive mode, disabling
+HWP or even using the ACPI freq scaling didn't really change anything in this
+regard. The powersave governor and default energy_performance_preference is
+used.
 
-> +
-> +  clock-names:
-> +    const: main
-> +
-> +  nvmem-cells:
-> +    maxItems: 2
-> +    description:
-> +      Phandle to the calibration data provided by a nvmem device.
+Is there anything else which could be done to mitigate the problem? Just
+putting a finger on the touchpad makes the noise quite noticeable as cores get
+scaled to the max.
 
-Drop.
+Thanks
 
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: svs-calibration-data
-> +      - const: t-calibration-data
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8183-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    svs: svs@1100b000 {
-> +        compatible = "mediatek,mt8183-svs";
-> +        reg = <0 0x1100b000 0 0x1000>;
-> +        interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
-> +        clocks = <&infracfg CLK_INFRA_THERM>;
-> +        clock-names = "main";
-> +        nvmem-cells = <&svs_calibration>, <&thermal_calibration>;
-> +        nvmem-cell-names = "svs-calibration-data", "t-calibration-data";
-> +    };
-> -- 
-> 2.18.0
-> 
+-- 
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.
