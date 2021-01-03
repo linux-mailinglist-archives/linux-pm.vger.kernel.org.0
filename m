@@ -2,246 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A38B42E89D2
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Jan 2021 02:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04ED02E89ED
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Jan 2021 02:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727204AbhACB0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Jan 2021 20:26:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726785AbhACB0x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 2 Jan 2021 20:26:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 979E32078E;
-        Sun,  3 Jan 2021 01:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609637172;
-        bh=Bz8jQoVntb6d51Z+BpALkIUssMtnAukuyDITFqTtLIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H/cWgRmmz6VkdU49oww8gqmMzUnVmslKhklOIyLbmkx8ZsLFL0mDBdp31IawXZzCl
-         coaRADY2GkKufP1rmueky8DWbmi0gXcCku4n89VuAMOeoS9V0YWPriszz8YiqobeKI
-         1uDbtK8gB8gD5pLAp/A/bZB38S21nlCuXyM5lkF+nIOgkUp/Cg6dy7OJMp3DXeL56q
-         rekRFIcCzGP7u16yq0TMsrtONhDj6gypl2DttA2KHWf/QN++r/Y3JmITOG3nxB65zt
-         CLbCnZx7iiM4IcJIKViNb04GSKN5VWenqQlvWQWPpjOytXXSkycZO918zzIq0tFdq6
-         7eI9JEr3pwQAA==
+        id S1726935AbhACBy1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Jan 2021 20:54:27 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48456 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726694AbhACBy1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Jan 2021 20:54:27 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id E4D231F410AD
 Received: by earth.universe (Postfix, from userid 1000)
-        id 9E8D73C0C94; Sun,  3 Jan 2021 02:26:10 +0100 (CET)
-Date:   Sun, 3 Jan 2021 02:26:10 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Cc:     robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmurphy@ti.com
-Subject: Re: [PATCH v7 2/2] power: supply: bq256xx: Introduce the BQ256XX
- charger driver
-Message-ID: <20210103012610.exkkwoqz3745bh2u@earth.universe>
-References: <20201230230116.29697-1-r-rivera-matos@ti.com>
- <20201230230116.29697-3-r-rivera-matos@ti.com>
+        id DC47C3C0C94; Sun,  3 Jan 2021 02:53:41 +0100 (CET)
+Date:   Sun, 3 Jan 2021 02:53:41 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v6 3/8] power: supply: max8997_charger: Set CHARGER
+ current limit
+Message-ID: <20210103015341.atzgzdk4orcp2nrx@earth.universe>
+References: <20201230205139.1812366-1-timon.baetz@protonmail.com>
+ <20201230205139.1812366-3-timon.baetz@protonmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kregzxwqskd3mmqq"
+        protocol="application/pgp-signature"; boundary="hgoeyxu2tkjevfuo"
 Content-Disposition: inline
-In-Reply-To: <20201230230116.29697-3-r-rivera-matos@ti.com>
+In-Reply-To: <20201230205139.1812366-3-timon.baetz@protonmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---kregzxwqskd3mmqq
+--hgoeyxu2tkjevfuo
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ricardo,
+Hi,
 
-On Wed, Dec 30, 2020 at 05:01:16PM -0600, Ricardo Rivera-Matos wrote:
-> The BQ256XX family of devices are highly integrated buck chargers
-> for single cell batteries.
+On Wed, Dec 30, 2020 at 08:52:15PM +0000, Timon Baetz wrote:
+> Register for extcon notification and set charging current depending on
+> the detected cable type. Current values are taken from vendor kernel,
+> where most charger types end up setting 650mA [0].
 >=20
-> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> Also enable and disable the CHARGER regulator based on extcon events.
 >=20
-> v5 - adds power_supply_put_battery_info() and devm_add_action_or_rest() c=
-alls
+> [0] https://github.com/krzk/linux-vendor-backup/blob/samsung/galaxy-s2-ep=
+ic-4g-touch-sph-d710-exynos4210-dump/drivers/misc/max8997-muic.c#L1675-L1678
 >=20
-> v6 - implements bq256xx_remove function
->=20
-> v7 - applies various fixes
->=20
->    - implements clamp() API
->=20
->    - implements memcmp() API
->=20
->    - changes cache_type to REGACHE_FLAT
->=20
->    - changes bq256xx_probe to properly unregister device
->=20
-> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
 > ---
 
-Thanks, looks mostly good now.
-
->  drivers/power/supply/Kconfig           |   11 +
->  drivers/power/supply/Makefile          |    1 +
->  drivers/power/supply/bq256xx_charger.c | 1747 ++++++++++++++++++++++++
->  3 files changed, 1759 insertions(+)
->  create mode 100644 drivers/power/supply/bq256xx_charger.c
->=20
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 44d3c8512fb8..87d852914bc2 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -618,6 +618,17 @@ config CHARGER_BQ25890
->  	help
->  	  Say Y to enable support for the TI BQ25890 battery charger.
-> =20
-> +config CHARGER_BQ256XX
-> +	tristate "TI BQ256XX battery charger driver"
-> +	depends on I2C
-> +	depends on GPIOLIB || COMPILE_TEST
-> +	select REGMAP_I2C
-> +	help
-> +	  Say Y to enable support for the TI BQ256XX battery chargers. The
-> +	  BQ256XX family of devices are highly-integrated, switch-mode battery
-> +	  charge management and system power path management devices for single
-> +	  cell Li-ion and Li-polymer batteries.
-> +
->  config CHARGER_SMB347
->  	tristate "Summit Microelectronics SMB347 Battery Charger"
->  	depends on I2C
-
-Please rebase to current power-supply for-next branch, Kconfig and
-Makefile diff does not apply because of one additional BQ device.
-
-> [...]
-> +static void bq256xx_usb_work(struct work_struct *data)
-> +{
-> +	struct bq256xx_device *bq =3D
-> +			container_of(data, struct bq256xx_device, usb_work);
-> +
-> +	switch (bq->usb_event) {
-> +	case USB_EVENT_ID:
-> +		break;
-> +
-
-spurious newline, please remove!
-
-> +	case USB_EVENT_NONE:
-> +		power_supply_changed(bq->charger);
-> +		break;
-> +	default:
-> +		dev_err(bq->dev, "Error switching to charger mode.\n");
-> +		break;
-> +	}
-> +}
-> +
-
-> [...]
-
-> +static int bq256xx_hw_init(struct bq256xx_device *bq)
-> +{
-> +	struct power_supply_battery_info bat_info =3D { };
-> +	int wd_reg_val =3D BQ256XX_WATCHDOG_DIS;
-> +	int ret =3D 0;
-> +	int i;
-> +
-> +	for (i =3D 0; i < BQ256XX_NUM_WD_VAL; i++) {
-> +		if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
-> +		    bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
-> +			wd_reg_val =3D i;
-> +	}
-> +	ret =3D regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
-> +				 BQ256XX_WATCHDOG_MASK, wd_reg_val <<
-> +						BQ256XX_WDT_BIT_SHIFT);
-> +
-> +	ret =3D power_supply_get_battery_info(bq->charger, &bat_info);
-> +	if (ret) {
-> +		dev_warn(bq->dev, "battery info missing, default values will be applie=
-d\n");
-> +
-> +		bat_info.constant_charge_current_max_ua =3D
-> +				bq->chip_info->bq256xx_def_ichg;
-> +
-> +		bat_info.constant_charge_voltage_max_uv =3D
-> +				bq->chip_info->bq256xx_def_vbatreg;
-> +
-> +		bat_info.precharge_current_ua =3D
-> +				bq->chip_info->bq256xx_def_iprechg;
-> +
-> +		bat_info.charge_term_current_ua =3D
-> +				bq->chip_info->bq256xx_def_iterm;
-> +
-> +		bq->init_data.ichg_max =3D
-> +				bq->chip_info->bq256xx_max_ichg;
-> +
-> +		bq->init_data.vbatreg_max =3D
-> +				bq->chip_info->bq256xx_max_vbatreg;
-> +	} else {
-> +		bq->init_data.ichg_max =3D
-> +			bat_info.constant_charge_current_max_ua;
-> +
-> +		bq->init_data.vbatreg_max =3D
-> +			bat_info.constant_charge_voltage_max_uv;
-> +	}
-> +
-> +	ret =3D bq->chip_info->bq256xx_set_vindpm(bq, bq->init_data.vindpm);
-> +	if (ret)
-> +		goto err_out;
-> +
-> +	ret =3D bq->chip_info->bq256xx_set_iindpm(bq, bq->init_data.iindpm);
-> +	if (ret)
-> +		goto err_out;
-> +
-> +	ret =3D bq->chip_info->bq256xx_set_ichg(bq,
-> +				bat_info.constant_charge_current_max_ua);
-> +	if (ret)
-> +		goto err_out;
-> +
-> +	ret =3D bq->chip_info->bq256xx_set_iprechg(bq,
-> +				bat_info.precharge_current_ua);
-> +	if (ret)
-> +		goto err_out;
-> +
-> +	ret =3D bq->chip_info->bq256xx_set_vbatreg(bq,
-> +				bat_info.constant_charge_voltage_max_uv);
-> +	if (ret)
-> +		goto err_out;
-> +
-> +	ret =3D bq->chip_info->bq256xx_set_iterm(bq,
-> +				bat_info.charge_term_current_ua);
-> +	if (ret)
-> +		goto err_out;
-> +
-> +	power_supply_put_battery_info(bq->charger, &bat_info);
-> +
-> +	return 0;
-> +
-> +err_out:
-> +	return ret;
-
-please return error code directly instead of adding this useless
-goto.
-
-> [...]
+Thanks, queued to power-supply's for-next branch.
 
 -- Sebastian
 
---kregzxwqskd3mmqq
+> v6: dev_info() instead of dev_err().
+> v5: Use devm_regulator_get_optional(), dev_err() on failure.
+>     dev_err() on extcon_get_edev_by_phandle() failure.
+> v4: Make extcon and charger-supply optional.
+> v3: Split MFD change.
+>     return on regulator_set_current_limit() failure.
+> v2: Split DTS changes.
+>     Add missing include.
+>     Rename charger_data members.
+>     Disable regulator on regulator_set_current_limit() failure.
+>     Fix ret declaration.
+>     Remove unneeded variables.
+>     Don't dev_err() on deferral.
+>     Get regulator and extcon from DTS.
+>     Use devm_regulator_get().=20
+>     Fix indentation.
+>=20
+>  drivers/power/supply/max8997_charger.c | 96 ++++++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/suppl=
+y/max8997_charger.c
+> index 1947af25879a..23df91ed2c72 100644
+> --- a/drivers/power/supply/max8997_charger.c
+> +++ b/drivers/power/supply/max8997_charger.c
+> @@ -6,12 +6,14 @@
+>  //  MyungJoo Ham <myungjoo.ham@samsung.com>
+> =20
+>  #include <linux/err.h>
+> +#include <linux/extcon.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/power_supply.h>
+>  #include <linux/mfd/max8997.h>
+>  #include <linux/mfd/max8997-private.h>
+> +#include <linux/regulator/consumer.h>
+> =20
+>  /* MAX8997_REG_STATUS4 */
+>  #define DCINOK_SHIFT		1
+> @@ -31,6 +33,10 @@ struct charger_data {
+>  	struct device *dev;
+>  	struct max8997_dev *iodev;
+>  	struct power_supply *battery;
+> +	struct regulator *reg;
+> +	struct extcon_dev *edev;
+> +	struct notifier_block extcon_nb;
+> +	struct work_struct extcon_work;
+>  };
+> =20
+>  static enum power_supply_property max8997_battery_props[] =3D {
+> @@ -88,6 +94,67 @@ static int max8997_battery_get_property(struct power_s=
+upply *psy,
+>  	return 0;
+>  }
+> =20
+> +static void max8997_battery_extcon_evt_stop_work(void *data)
+> +{
+> +	struct charger_data *charger =3D data;
+> +
+> +	cancel_work_sync(&charger->extcon_work);
+> +}
+> +
+> +static void max8997_battery_extcon_evt_worker(struct work_struct *work)
+> +{
+> +	struct charger_data *charger =3D
+> +	    container_of(work, struct charger_data, extcon_work);
+> +	struct extcon_dev *edev =3D charger->edev;
+> +	int current_limit;
+> +
+> +	if (extcon_get_state(edev, EXTCON_CHG_USB_SDP) > 0) {
+> +		dev_dbg(charger->dev, "USB SDP charger is connected\n");
+> +		current_limit =3D 450000;
+> +	} else if (extcon_get_state(edev, EXTCON_CHG_USB_DCP) > 0) {
+> +		dev_dbg(charger->dev, "USB DCP charger is connected\n");
+> +		current_limit =3D 650000;
+> +	} else if (extcon_get_state(edev, EXTCON_CHG_USB_FAST) > 0) {
+> +		dev_dbg(charger->dev, "USB FAST charger is connected\n");
+> +		current_limit =3D 650000;
+> +	} else if (extcon_get_state(edev, EXTCON_CHG_USB_SLOW) > 0) {
+> +		dev_dbg(charger->dev, "USB SLOW charger is connected\n");
+> +		current_limit =3D 650000;
+> +	} else if (extcon_get_state(edev, EXTCON_CHG_USB_CDP) > 0) {
+> +		dev_dbg(charger->dev, "USB CDP charger is connected\n");
+> +		current_limit =3D 650000;
+> +	} else {
+> +		dev_dbg(charger->dev, "USB charger is diconnected\n");
+> +		current_limit =3D -1;
+> +	}
+> +
+> +	if (current_limit > 0) {
+> +		int ret =3D regulator_set_current_limit(charger->reg, current_limit, c=
+urrent_limit);
+> +
+> +		if (ret) {
+> +			dev_err(charger->dev, "failed to set current limit: %d\n", ret);
+> +			return;
+> +		}
+> +		ret =3D regulator_enable(charger->reg);
+> +		if (ret)
+> +			dev_err(charger->dev, "failed to enable regulator: %d\n", ret);
+> +	} else {
+> +		int ret  =3D regulator_disable(charger->reg);
+> +
+> +		if (ret)
+> +			dev_err(charger->dev, "failed to disable regulator: %d\n", ret);
+> +	}
+> +}
+> +
+> +static int max8997_battery_extcon_evt(struct notifier_block *nb,
+> +				unsigned long event, void *param)
+> +{
+> +	struct charger_data *charger =3D
+> +		container_of(nb, struct charger_data, extcon_nb);
+> +	schedule_work(&charger->extcon_work);
+> +	return NOTIFY_OK;
+> +}
+> +
+>  static const struct power_supply_desc max8997_battery_desc =3D {
+>  	.name		=3D "max8997_pmic",
+>  	.type		=3D POWER_SUPPLY_TYPE_BATTERY,
+> @@ -170,6 +237,35 @@ static int max8997_battery_probe(struct platform_dev=
+ice *pdev)
+>  		return PTR_ERR(charger->battery);
+>  	}
+> =20
+> +	charger->reg =3D devm_regulator_get_optional(&pdev->dev, "charger");
+> +	if (IS_ERR(charger->reg)) {
+> +		if (PTR_ERR(charger->reg) =3D=3D -EPROBE_DEFER)
+> +			return -EPROBE_DEFER;
+> +		dev_info(&pdev->dev, "couldn't get charger regulator\n");
+> +	}
+> +	charger->edev =3D extcon_get_edev_by_phandle(&pdev->dev, 0);
+> +	if (IS_ERR(charger->edev)) {
+> +		if (PTR_ERR(charger->edev) =3D=3D -EPROBE_DEFER)
+> +			return -EPROBE_DEFER;
+> +		dev_info(charger->dev, "couldn't get extcon device\n");
+> +	}
+> +
+> +	if (!IS_ERR(charger->reg) && !IS_ERR(charger->edev)) {
+> +		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
+> +		ret =3D devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_wo=
+rk, charger);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "failed to add extcon evt stop action: %d\n", ret=
+);
+> +			return ret;
+> +		}
+> +		charger->extcon_nb.notifier_call =3D max8997_battery_extcon_evt;
+> +		ret =3D devm_extcon_register_notifier_all(&pdev->dev, charger->edev,
+> +							&charger->extcon_nb);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "failed to register extcon notifier\n");
+> +			return ret;
+> +		};
+> +	}
+> +
+>  	return 0;
+>  }
+> =20
+> --=20
+> 2.25.1
+>=20
+>=20
+
+--hgoeyxu2tkjevfuo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl/xHS4ACgkQ2O7X88g7
-+ppMaw/+LL/6dRFRi5RSXmt4yxDjFQuDRvP0Fa2mXCW8NDxS9y9QP9UrM8uGGbVW
-V45cqW0T8h18zJD6oe0mFLO7E1XTUe5+O51ZGtskVdjt4eYjkZr3CxvQfkGswDsG
-Azumr60smGHo+XIvlOscPMg5/SbVxee8qkCUM3vSUsArYGWYazxviQFfHFeanypQ
-2sG600HAzaY7AEQluNE0AOokUhV5mgixu3qhgopFFTyUoHOB+YSI2vMG7TdBL5E9
-+YT5C1KjNt2sF2DaP2x+CtJU8xIAREjLUGPECzQJGkZCoruO/qLgSOW0iS+u3iqy
-SbFCvyOjZwJQv5jun7aUjmsZlpgvk++2SHmEFwqYcu85TAS/mII72T1zPLpwaT7k
-qioNSSy56RtsF7HKbRKWzmyCjWif/SFQS/2PNkjwqJDZX2Ql5Gq01LmQ4r+1ch/K
-h7ZZBoWbf4oxhGgPRWmrbOERWuE4Vn4ZSRzEgKr6BQ3L8E5Hosdue8+sBeZIsjhT
-xFIvHrTh7dZMVmDiwdTLbHCXdTksw53OqfGBhJ7z97FPHqEL87fOHmx3TQN86P70
-oaimLTDS8tqbLPUeNQVwweROmXEvu/OQKIdc90Aodc9U8sJ75f0V2DyMW2PoFjX6
-32Q4i6sph1oC/l/SXQNwN7ceHKL6G9uPeK4hY5+Z75l54qA8eYs=
-=LPL1
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl/xI5wACgkQ2O7X88g7
++pqLHhAAobZV0Wjf5ejo2tYNf+W2Qlmvls8NMsmSk7/X2kmiAN7FbHbWVq0SGeGX
+IX6ja3niIS1NTPlR8DpOYPVGIY7Z8KHvFKSXX8JkEqj9e9lXM1DnfQ1Od0tGiwpl
+9B5xSRk4kAUK9l/+GGxiP1jCHhSK+x/uboNrwMmcJV5mUAXoGtM7OxXQ2jnnUoEE
+Ya0G5+bJ/XM7OZkHApVmBcuHZa0g8ih3SVPbSi7petnt2aLDWypDBwAWvrxuTq4Q
+jSATQ1G7qMlrWNk6ybJzktBGvolnM+hnTLTFFHMYo7USP8aH5E/bVBDrnxvD0bpk
+c+l2W2OjUhQxHIg7p8zbibexOndDZmGEgky7buHs/o5y8gAPR8C3req5uJYw4cIs
+/CjceYG5RXzaGNgjHR9/5mWGPasz/gq7F4qDeVtOT9/rkHHfRjOOquyhrkizhamh
+S6ZxRhLN1tSUCyt38CZLfClUac8gt/8Y3ahrIEEmU8WfSS/XJCiT/uoemnYZCedy
+ioA9Z8DqxXioFKRXYp+7EuPDFqzSU0pCa/0KBGG+A5BLvlf+VCRLVtA6u58US2ul
+n1qRxlcyam3p6Kf6xIR+pkD7fDYGfN3R7wupjAIbOrpApoGfQV1ONdYZdjB0VyNI
+A9FXjBuC52XV8N4Vwk6rYbb6n7KAI6inYpBXbMmp4h35b5dIehg=
+=Qfsr
 -----END PGP SIGNATURE-----
 
---kregzxwqskd3mmqq--
+--hgoeyxu2tkjevfuo--
