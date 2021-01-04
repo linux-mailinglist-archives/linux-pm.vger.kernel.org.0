@@ -2,54 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFF02E9297
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 10:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00F82E92E3
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 10:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbhADJ2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 04:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726469AbhADJ2m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 04:28:42 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F040C061794
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jan 2021 01:28:01 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id e15so14183987vsa.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jan 2021 01:28:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ExeHQWgqTKzH+DZSpsOqxVJU7/CNUO5Q/p82stk7PJg=;
-        b=X/Gi1auS3Z+zUYZURdGr75NeBrHpMm88ga/jDKcAnCz36LUKhNeJ0M3y88x8ecm4aW
-         jb4mF6EA6DYbILrCj8jk9pSE8WoyyMlSKbaZ7dPLlDioDHoVbnXORu5975RR0wGdbP/f
-         UiRWu0Iw93RxoFRjm8IrYO2fT7jyTbN6hNPks=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ExeHQWgqTKzH+DZSpsOqxVJU7/CNUO5Q/p82stk7PJg=;
-        b=TXYF8iuV/HvEfAteEOxhrDNapqxx3bJy/L0nvmGK2Y/yWMN0IAdxZdzXaIrjGpdiNF
-         M2QvKUgJXW/0OaJ2UDwj9Thpwhx7bqUtTronmqFZ1IS0MnQ3jPjF/OU68QVBNfsd8ZwD
-         y7qbljMK6oGKx69RDCNBSWvoJkEsCb24A5C5/nmEcfa5/gKmeWWFU/iQ21NMkVedZyC4
-         bIaafvmzsL3MRyA6l3nMCz9IgdWKatj1QBi9rEqXZdiHyULTTPXbbLaibu5hrW8bvNC+
-         gvhysCjIoySVLhclZryT4UeMmzmyssrZw/lA/Wqxu4MW76swPyAO/Fe5kzd+Eb4y6Eia
-         OxrA==
-X-Gm-Message-State: AOAM5319NqzSxzj16h2TyADuv7S0YZk+tFWsigfraDp20ajyxIsZmS7T
-        ZsA2sOSbanYkmiG/lCLFcQ9dsaKNK+GM/oYi0FWEpg==
-X-Google-Smtp-Source: ABdhPJyF2xBh5X4KryFT0WGdabrZwrmbRW9n5pz8Ld0ZfllL2ZL5QKd1r3/IEp7q8KkK01cJ6iv5O7LHMnae2yoQXKE=
-X-Received: by 2002:a67:5c03:: with SMTP id q3mr43046284vsb.47.1609752480656;
- Mon, 04 Jan 2021 01:28:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20201227105449.11452-1-roger.lu@mediatek.com> <20201227105449.11452-4-roger.lu@mediatek.com>
- <CANMq1KBNKy708Vz67WOc+n7V7ne4L1EZVkUVGj6abd5voxKjxA@mail.gmail.com> <1609750266.20758.40.camel@mtksdaap41>
-In-Reply-To: <1609750266.20758.40.camel@mtksdaap41>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Mon, 4 Jan 2021 17:27:49 +0800
-Message-ID: <CANMq1KDxVLo=JAAq-gjybke1WiX03COwNX7sHsZDMF9USzSECw@mail.gmail.com>
-Subject: Re: [PATCH v10 3/7] [v10, 3/7]: soc: mediatek: SVS: introduce MTK SVS engine
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        id S1725616AbhADJwr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 04:52:47 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:58564 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726178AbhADJwr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 04:52:47 -0500
+X-UUID: 505866cf11114a4c901b7f44555e4c66-20210104
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=sjTcMeyoXjN87Rhyg4qitaPKUaKrIT8FGe/kft/Q+nU=;
+        b=toVXNAnF4COoB0mfQAEUT8Mv6cV/aV5I5jC6T26v0ChYRLXXHRwVymM00aiOV1OmNz+KYiOIqMrzZsmMU1s8yiAB8JFiMASFdjCNAGLMQ2EhKjsvaaNeye+ejA8SRUBtVQy81tlODxBum6FqfJ30Nx3KBMLB4uinRCJoFx3HghU=;
+X-UUID: 505866cf11114a4c901b7f44555e4c66-20210104
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 744153943; Mon, 04 Jan 2021 17:52:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 4 Jan 2021 17:52:00 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 4 Jan 2021 17:52:01 +0800
+Message-ID: <1609753920.7157.3.camel@mtksdaap41>
+Subject: Re: [PATCH v10 3/7] [v10, 3/7]: soc: mediatek: SVS: introduce MTK
+ SVS engine
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Nicolas Boichat <drinkcat@chromium.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
         Kevin Hilman <khilman@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -65,156 +47,123 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         YT Lee <yt.lee@mediatek.com>, Fan Chen <fan.chen@mediatek.com>,
         "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
+        "HenryC Chen" <HenryC.Chen@mediatek.com>,
         Charles Yang <Charles.Yang@mediatek.com>,
         linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 4 Jan 2021 17:52:00 +0800
+In-Reply-To: <CANMq1KDxVLo=JAAq-gjybke1WiX03COwNX7sHsZDMF9USzSECw@mail.gmail.com>
+References: <20201227105449.11452-1-roger.lu@mediatek.com>
+         <20201227105449.11452-4-roger.lu@mediatek.com>
+         <CANMq1KBNKy708Vz67WOc+n7V7ne4L1EZVkUVGj6abd5voxKjxA@mail.gmail.com>
+         <1609750266.20758.40.camel@mtksdaap41>
+         <CANMq1KDxVLo=JAAq-gjybke1WiX03COwNX7sHsZDMF9USzSECw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 4, 2021 at 4:51 PM Roger Lu <roger.lu@mediatek.com> wrote:
->
->
-> Hi Nicolas,
->
-> Thanks for all the advices.
->
-> On Thu, 2020-12-31 at 10:10 +0800, Nicolas Boichat wrote:
-> > On Sun, Dec 27, 2020 at 6:55 PM Roger Lu <roger.lu@mediatek.com> wrote:
-[snip]
-> > > +static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
-> > > +{
-> > > +       int tzone_temp, ret = -EPERM;
-> >
-> > No need to initialize ret.
->
-> Oh, excuse me, some coding check tool warn that this `ret` might return
-> without being uninitialized. Therefore, I'll keep the initialization.
+SGkgTmljb2xhcywNCg0KT24gTW9uLCAyMDIxLTAxLTA0IGF0IDE3OjI3ICswODAwLCBOaWNvbGFz
+IEJvaWNoYXQgd3JvdGU6DQo+IE9uIE1vbiwgSmFuIDQsIDIwMjEgYXQgNDo1MSBQTSBSb2dlciBM
+dSA8cm9nZXIubHVAbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPg0KPiA+DQo+ID4gSGkgTmljb2xh
+cywNCj4gPg0KPiA+IFRoYW5rcyBmb3IgYWxsIHRoZSBhZHZpY2VzLg0KPiA+DQo+ID4gT24gVGh1
+LCAyMDIwLTEyLTMxIGF0IDEwOjEwICswODAwLCBOaWNvbGFzIEJvaWNoYXQgd3JvdGU6DQo+ID4g
+PiBPbiBTdW4sIERlYyAyNywgMjAyMCBhdCA2OjU1IFBNIFJvZ2VyIEx1IDxyb2dlci5sdUBtZWRp
+YXRlay5jb20+IHdyb3RlOg0KPiBbc25pcF0NCj4gPiA+ID4gK3N0YXRpYyBpbnQgc3ZzX2FkanVz
+dF9wbV9vcHBfdm9sdHMoc3RydWN0IHN2c19iYW5rICpzdnNiLCBib29sIGZvcmNlX3VwZGF0ZSkN
+Cj4gPiA+ID4gK3sNCj4gPiA+ID4gKyAgICAgICBpbnQgdHpvbmVfdGVtcCwgcmV0ID0gLUVQRVJN
+Ow0KPiA+ID4NCj4gPiA+IE5vIG5lZWQgdG8gaW5pdGlhbGl6ZSByZXQuDQo+ID4NCj4gPiBPaCwg
+ZXhjdXNlIG1lLCBzb21lIGNvZGluZyBjaGVjayB0b29sIHdhcm4gdGhhdCB0aGlzIGByZXRgIG1p
+Z2h0IHJldHVybg0KPiA+IHdpdGhvdXQgYmVpbmcgdW5pbml0aWFsaXplZC4gVGhlcmVmb3JlLCBJ
+J2xsIGtlZXAgdGhlIGluaXRpYWxpemF0aW9uLg0KPiANCj4gT2gsIHlvdSdyZSByaWdodCwgdGhl
+cmUgaXMgYSBwb3NzaWJsZSBwYXRoIHdoZXJlIHJldCBpcyBub3Qgc2V0LiBzZ3RtIHRoZW4uDQo+
+IA0KPiA+DQo+ID4gPg0KPiA+ID4gPiArICAgICAgIHUzMiBpLCBzdnNiX3ZvbHQsIG9wcF92b2x0
+LCB0ZW1wX29mZnNldCA9IDA7DQo+ID4gPiA+ICsNCj4gPiA+ID4gKyAgICAgICBtdXRleF9sb2Nr
+KCZzdnNiLT5sb2NrKTsNCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICAgIC8qDQo+ID4gPiA+ICsg
+ICAgICAgICogSWYgc3ZzIGJhbmsgaXMgc3VzcGVuZGVkLCBpdCBtZWFucyBzaWduZWQtb2ZmIHZv
+bHRhZ2VzIGFyZSBhcHBsaWVkLg0KPiA+ID4gPiArICAgICAgICAqIERvbid0IG5lZWQgdG8gdXBk
+YXRlIG9wcCB2b2x0YWdlIGFueW1vcmUuDQo+ID4gPiA+ICsgICAgICAgICovDQo+ID4gPiA+ICsg
+ICAgICAgaWYgKHN2c2ItPnN1c3BlbmRlZCAmJiAhZm9yY2VfdXBkYXRlKSB7DQo+ID4gPiA+ICsg
+ICAgICAgICAgICAgICBkZXZfbm90aWNlKHN2c2ItPmRldiwgImJhbmsgaXMgc3VzcGVuZGVkXG4i
+KTsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIHJldCA9IC1FUEVSTTsNCj4gPiA+ID4gKyAgICAg
+ICAgICAgICAgIGdvdG8gdW5sb2NrX211dGV4Ow0KPiA+ID4gPiArICAgICAgIH0NCj4gPiA+ID4g
+Kw0KPiA+ID4gPiArICAgICAgIC8qIEdldCB0aGVybWFsIGVmZmVjdCAqLw0KPiA+ID4gPiArICAg
+ICAgIGlmIChzdnNiLT5waGFzZSA9PSBTVlNCX1BIQVNFX01PTikgew0KPiA+ID4gPiArICAgICAg
+ICAgICAgICAgaWYgKHN2c2ItPnRlbXAgPiBzdnNiLT50ZW1wX3VwcGVyX2JvdW5kICYmDQo+ID4g
+PiA+ICsgICAgICAgICAgICAgICAgICAgc3ZzYi0+dGVtcCA8IHN2c2ItPnRlbXBfbG93ZXJfYm91
+bmQpIHsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgZGV2X3dhcm4oc3ZzYi0+ZGV2
+LCAic3ZzYiB0ZW1wID0gMHgleD9cbiIsIHN2c2ItPnRlbXApOw0KPiA+ID4gPiArICAgICAgICAg
+ICAgICAgICAgICAgICByZXQgPSAtRUlOVkFMOw0KPiA+ID4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICBnb3RvIHVubG9ja19tdXRleDsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIH0NCj4gPiA+
+ID4gKw0KPiA+ID4gPiArICAgICAgICAgICAgICAgcmV0ID0gc3ZzX2dldF9iYW5rX3pvbmVfdGVt
+cGVyYXR1cmUoc3ZzYi0+dHpvbmVfbmFtZSwNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICZ0em9uZV90ZW1wKTsNCj4gPiA+ID4gKyAg
+ICAgICAgICAgICAgIGlmIChyZXQpIHsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ZGV2X2VycihzdnNiLT5kZXYsICJubyBcIiVzXCI/KCVkKT9cbiIsDQo+ID4gPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgc3ZzYi0+dHpvbmVfbmFtZSwgcmV0KTsNCj4gPiA+ID4g
+KyAgICAgICAgICAgICAgICAgICAgICAgZGV2X2VycihzdnNiLT5kZXYsICJzZXQgc2lnbmVkLW9m
+ZiB2b2x0YWdlXG4iKTsNCj4gPiA+DQo+ID4gPiBQbGVhc2UgbWVyZ2UgdGhlIGVycm9yIG1lc3Nh
+Z2UgaW4gb25lIGxpbmUgKEknbSBub3Qgc3VyZSB3aGF0ICJzZXQNCj4gPiA+IHNpZ25lZC1vZmYg
+dm9sdGFnZSIgbWVhbnMgaGVyZSkuDQo+ID4NCj4gPiAxLiBPaywgSSdsbCBtZXJnZSB0aGVtLiBU
+aGFua3MuDQo+ID4gMi4gc2lnbmVkLW9mZiB2b2x0YWdlcyBtZWFucyBDUFUgRFZGUyBkZWZhdWx0
+IHZvbHRhZ2VzDQo+IA0KPiBTbyBqdXN0IHdyaXRlICJkZWZhdWx0IHZvbHRhZ2VzIiB0aGVuPyAs
+LSkNCg0KT2ssIHRoYW5rcy4gOikNCg0KPiANCj4gPg0KPiA+ID4NCj4gW3NuaXBdDQo+ID4gPiA+
+ICtzdGF0aWMgaXJxcmV0dXJuX3Qgc3ZzX2lzcihpbnQgaXJxLCB2b2lkICpkYXRhKQ0KPiA+ID4g
+PiArew0KPiA+ID4gPiArICAgICAgIHN0cnVjdCBzdnNfcGxhdGZvcm0gKnN2c3AgPSAoc3RydWN0
+IHN2c19wbGF0Zm9ybSAqKWRhdGE7DQo+ID4gPg0KPiA+ID4gY2FzdCBub3QgbmVlZGVkLg0KPiA+
+DQo+ID4gT2ssIEknbGwgcmVtb3ZlIGl0LiBUaGFua3MuDQo+ID4NCj4gPiA+DQo+ID4gPiA+ICsg
+ICAgICAgc3RydWN0IHN2c19iYW5rICpzdnNiID0gTlVMTDsNCj4gPiA+ID4gKyAgICAgICB1bnNp
+Z25lZCBsb25nIGZsYWdzOw0KPiA+ID4gPiArICAgICAgIHUzMiBpZHgsIGludF9zdHMsIHN2c19l
+bjsNCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICAgIGZvciAoaWR4ID0gMDsgaWR4IDwgc3ZzcC0+
+YmFua19udW07IGlkeCsrKSB7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICBzdnNiID0gJnN2c3At
+PmJhbmtzW2lkeF07DQo+ID4gPiA+ICsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIHNwaW5fbG9j
+a19pcnFzYXZlKCZtdGtfc3ZzX2xvY2ssIGZsYWdzKTsNCj4gPiA+ID4gKyAgICAgICAgICAgICAg
+IHN2c3AtPnBiYW5rID0gc3ZzYjsNCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICAgICAgICAgICAg
+LyogRmluZCBvdXQgd2hpY2ggc3ZzIGJhbmsgZmlyZXMgaW50ZXJydXB0ICovDQo+ID4gPiA+ICsg
+ICAgICAgICAgICAgICBpZiAoc3ZzYi0+aW50X3N0ICYgc3ZzX3JlYWRsKHN2c3AsIElOVFNUKSkg
+ew0KPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICBzcGluX3VubG9ja19pcnFyZXN0b3Jl
+KCZtdGtfc3ZzX2xvY2ssIGZsYWdzKTsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+Y29udGludWU7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gPiA+ICsNCj4gPiA+ID4g
+KyAgICAgICAgICAgICAgIGlmICghc3ZzYi0+c3VzcGVuZGVkKSB7DQo+ID4gPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgIHN2c19zd2l0Y2hfYmFuayhzdnNwKTsNCj4gPiA+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgaW50X3N0cyA9IHN2c19yZWFkbChzdnNwLCBJTlRTVFMpOw0KPiA+ID4g
+PiArICAgICAgICAgICAgICAgICAgICAgICBzdnNfZW4gPSBzdnNfcmVhZGwoc3ZzcCwgU1ZTRU4p
+Ow0KPiA+ID4gPiArDQo+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGlmIChpbnRfc3Rz
+ID09IFNWU0JfSU5UU1RTX0NPTVBMRVRFICYmDQo+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAoKHN2c19lbiAmIFNWU0JfRU5fTUFTSykgPT0gU1ZTQl9FTl9JTklUMDEpKQ0KPiA+
+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN2c19pbml0MDFfaXNyX2hhbmRs
+ZXIoc3ZzcCk7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGVsc2UgaWYgKChpbnRf
+c3RzID09IFNWU0JfSU5UU1RTX0NPTVBMRVRFKSAmJg0KPiA+ID4gPiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAoKHN2c19lbiAmIFNWU0JfRU5fTUFTSykgPT0gU1ZTQl9FTl9JTklU
+MDIpKQ0KPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN2c19pbml0MDJf
+aXNyX2hhbmRsZXIoc3ZzcCk7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGVsc2Ug
+aWYgKCEhKGludF9zdHMgJiBTVlNCX0lOVFNUU19NT05WT1ApKQ0KPiA+ID4NCj4gPiA+ICEhIGlz
+IG5vdCByZXF1aXJlZC4NCj4gPg0KPiA+IE9rLCBJJ2xsIHJlbW92ZSBpdC4gVGhhbmtzLg0KPiA+
+DQo+ID4gPg0KPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN2c19tb25f
+bW9kZV9pc3JfaGFuZGxlcihzdnNwKTsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ZWxzZQ0KPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN2c19lcnJvcl9p
+c3JfaGFuZGxlcihzdnNwKTsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIH0NCj4gPiA+ID4gKw0K
+PiA+ID4gPiArICAgICAgICAgICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmbXRrX3N2c19s
+b2NrLCBmbGFncyk7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICBicmVhazsNCj4gPiA+ID4gKyAg
+ICAgICB9DQo+ID4gPg0KPiA+ID4gVGhpcyB3aWxsIHBhbmljIGlmIHN2c2IgaXMgTlVMTCwgaXMg
+dGhhdCBvayBvciBkbyB5b3Ugd2FudCB0byBjYXRjaCB0aGF0Pw0KPiA+DQo+ID4gT2gsIGl0IGlz
+IGZpbmUuIFRoYW5rcyBmb3IgdGhlIGhlYWRzLXVwLg0KPiANCj4gSSBzaG91bGQgaGF2ZSBiZWVu
+IHN0cm9uZ2VyIGluIG15IHN0YXRlbWVudCwgSSB0aGluayB5b3Ugd2FudCB0byBhZGQgYQ0KPiBC
+VUdfT04oIXN2c2IpIHRvIGNyYXNoIGluIGEgc2xpZ2h0bHkgbW9yZSBwcmVkaWN0YWJsZSBtYW5u
+ZXIuDQoNCk9rLCBJJ2xsIGFkZCBCVUdfT04oIXN2c2IpIHRvIGdpdmUgYW4gZXZpZGVudCBoZWFk
+cy11cC4gVGhhbmtzLg0KDQo+IA0KPiBbc25pcF0NCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICAg
+IHN2c3AtPnRlZnVzZSA9ICh1MzIgKiludm1lbV9jZWxsX3JlYWQoY2VsbCwgJnN2c3AtPnRlZnVz
+ZV9udW0pOw0KPiA+ID4NCj4gPiA+IENhc3Qgbm90IG5lZWRlZC4NCj4gPg0KPiA+IE9rLCBJJ2xs
+IHJlbW92ZSBpdCBpZiBidWlsZC90ZXN0IG9rLiBCZWNhdXNlIG52bWVtX2NlbGxfcmVhZCByZXR1
+cm5zDQo+ID4gKHZvaWQgKikuDQo+ID4NCj4gPiA+DQo+ID4gPiBBbHNvLCB0aGlzIG5lZWQgdG8g
+YmUgZnJlZWQgc29tZXdoZXJlIGluIHJlbW92ZSBjb2RlIChrZnJlZShzdnNwLT50ZWZ1c2UpKS4N
+Cj4gPiA+DQo+ID4gPiBBbmQgaXQgc2VlbXMgbGlrZSBzdnNwLT50ZWZ1c2UgaXMgb25seSB1c2Vk
+IGluIHRoaXMgZnVuY3Rpb24sIGNhbiB5b3UNCj4gPiA+IGp1c3QgYWxsb2NhdGUgaXQgaGVyZT8N
+Cj4gPg0KPiA+IE9oLCBzdnNwLT50ZWZ1c2Ugd2lsbCBiZSB1c2VkIGluIFNWUyBkZWJ1ZyBwYXRj
+aCBmb3IgZGVidWcgcHVycG9zZS4gU28sDQo+ID4gSSBuZWVkIHRvIHNhdmUgaXQgYXMgc3RydWN0
+IG1lbWJlci4NCj4gDQo+IE9oIEkgbWlzc2VkIHRoYXQsIHNndG0gdGhlbi4gVGhhbmtzLg0KPiAN
+Cj4gPg0KPiBbc25pcF0NCg0K
 
-Oh, you're right, there is a possible path where ret is not set. sgtm then.
-
->
-> >
-> > > +       u32 i, svsb_volt, opp_volt, temp_offset = 0;
-> > > +
-> > > +       mutex_lock(&svsb->lock);
-> > > +
-> > > +       /*
-> > > +        * If svs bank is suspended, it means signed-off voltages are applied.
-> > > +        * Don't need to update opp voltage anymore.
-> > > +        */
-> > > +       if (svsb->suspended && !force_update) {
-> > > +               dev_notice(svsb->dev, "bank is suspended\n");
-> > > +               ret = -EPERM;
-> > > +               goto unlock_mutex;
-> > > +       }
-> > > +
-> > > +       /* Get thermal effect */
-> > > +       if (svsb->phase == SVSB_PHASE_MON) {
-> > > +               if (svsb->temp > svsb->temp_upper_bound &&
-> > > +                   svsb->temp < svsb->temp_lower_bound) {
-> > > +                       dev_warn(svsb->dev, "svsb temp = 0x%x?\n", svsb->temp);
-> > > +                       ret = -EINVAL;
-> > > +                       goto unlock_mutex;
-> > > +               }
-> > > +
-> > > +               ret = svs_get_bank_zone_temperature(svsb->tzone_name,
-> > > +                                                   &tzone_temp);
-> > > +               if (ret) {
-> > > +                       dev_err(svsb->dev, "no \"%s\"?(%d)?\n",
-> > > +                               svsb->tzone_name, ret);
-> > > +                       dev_err(svsb->dev, "set signed-off voltage\n");
-> >
-> > Please merge the error message in one line (I'm not sure what "set
-> > signed-off voltage" means here).
->
-> 1. Ok, I'll merge them. Thanks.
-> 2. signed-off voltages means CPU DVFS default voltages
-
-So just write "default voltages" then? ,-)
-
->
-> >
-[snip]
-> > > +static irqreturn_t svs_isr(int irq, void *data)
-> > > +{
-> > > +       struct svs_platform *svsp = (struct svs_platform *)data;
-> >
-> > cast not needed.
->
-> Ok, I'll remove it. Thanks.
->
-> >
-> > > +       struct svs_bank *svsb = NULL;
-> > > +       unsigned long flags;
-> > > +       u32 idx, int_sts, svs_en;
-> > > +
-> > > +       for (idx = 0; idx < svsp->bank_num; idx++) {
-> > > +               svsb = &svsp->banks[idx];
-> > > +
-> > > +               spin_lock_irqsave(&mtk_svs_lock, flags);
-> > > +               svsp->pbank = svsb;
-> > > +
-> > > +               /* Find out which svs bank fires interrupt */
-> > > +               if (svsb->int_st & svs_readl(svsp, INTST)) {
-> > > +                       spin_unlock_irqrestore(&mtk_svs_lock, flags);
-> > > +                       continue;
-> > > +               }
-> > > +
-> > > +               if (!svsb->suspended) {
-> > > +                       svs_switch_bank(svsp);
-> > > +                       int_sts = svs_readl(svsp, INTSTS);
-> > > +                       svs_en = svs_readl(svsp, SVSEN);
-> > > +
-> > > +                       if (int_sts == SVSB_INTSTS_COMPLETE &&
-> > > +                           ((svs_en & SVSB_EN_MASK) == SVSB_EN_INIT01))
-> > > +                               svs_init01_isr_handler(svsp);
-> > > +                       else if ((int_sts == SVSB_INTSTS_COMPLETE) &&
-> > > +                                ((svs_en & SVSB_EN_MASK) == SVSB_EN_INIT02))
-> > > +                               svs_init02_isr_handler(svsp);
-> > > +                       else if (!!(int_sts & SVSB_INTSTS_MONVOP))
-> >
-> > !! is not required.
->
-> Ok, I'll remove it. Thanks.
->
-> >
-> > > +                               svs_mon_mode_isr_handler(svsp);
-> > > +                       else
-> > > +                               svs_error_isr_handler(svsp);
-> > > +               }
-> > > +
-> > > +               spin_unlock_irqrestore(&mtk_svs_lock, flags);
-> > > +               break;
-> > > +       }
-> >
-> > This will panic if svsb is NULL, is that ok or do you want to catch that?
->
-> Oh, it is fine. Thanks for the heads-up.
-
-I should have been stronger in my statement, I think you want to add a
-BUG_ON(!svsb) to crash in a slightly more predictable manner.
-
-[snip]
-> > > +
-> > > +       svsp->tefuse = (u32 *)nvmem_cell_read(cell, &svsp->tefuse_num);
-> >
-> > Cast not needed.
->
-> Ok, I'll remove it if build/test ok. Because nvmem_cell_read returns
-> (void *).
->
-> >
-> > Also, this need to be freed somewhere in remove code (kfree(svsp->tefuse)).
-> >
-> > And it seems like svsp->tefuse is only used in this function, can you
-> > just allocate it here?
->
-> Oh, svsp->tefuse will be used in SVS debug patch for debug purpose. So,
-> I need to save it as struct member.
-
-Oh I missed that, sgtm then. Thanks.
-
->
-[snip]
