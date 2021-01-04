@@ -2,40 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 574762E9CE9
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 19:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B462E9D00
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 19:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbhADSTK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 13:19:10 -0500
-Received: from mail-wm1-f45.google.com ([209.85.128.45]:39292 "EHLO
-        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbhADSTK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 13:19:10 -0500
-Received: by mail-wm1-f45.google.com with SMTP id 3so127537wmg.4;
-        Mon, 04 Jan 2021 10:18:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y+NTvbLk4IzzMQK1/SZQ7lLpxAYEqAF6MOVXtS7spWg=;
-        b=AsMwAr/K7cyLetQtcPFpqs/NqKQabPftA/pVy0Wiu/KAq4PpwmK4msAZH1aN0QoBXN
-         ZXM7Xj/NFoZISFhjP46zxMksV+YTqZaxappTzgpZFjo+go83E1mEShg4Cy6895gIWdl2
-         q0kmq81inI8rw9rOPTlQhXEo/PMAs+rIcKr2Ov3a8zyfK5Bg9eY96uV9jdD8WaAm9ORH
-         9vUsQsAK0htmHmhBHAct6Qbh5DOF6DdHXS9TIlRnBreob3uQafRLMdDYgiI9fXZjTh36
-         G6EXatwzCzePU5sq+9P7TssECoiW+HrFbpFi7cLPcAfy0YQyLeoQkRTH3HJcNH2qj3iQ
-         +NTQ==
-X-Gm-Message-State: AOAM533Q57kutc8TeDN7MtU3TUl/n2XCVZDmstjqfK74m0/P1cf6fWCH
-        9cAS37TiYTowWykSDMxQtSI=
-X-Google-Smtp-Source: ABdhPJyxaw81/VsDm31di+CjRZDa5b043/h6CfX6p+2JizDxYrVRkfy8Dr09rKnqvDo/5ZkHa0Uyug==
-X-Received: by 2002:a1c:4483:: with SMTP id r125mr143991wma.80.1609784308269;
-        Mon, 04 Jan 2021 10:18:28 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id x7sm210739wmi.11.2021.01.04.10.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jan 2021 10:18:27 -0800 (PST)
-Date:   Mon, 4 Jan 2021 19:18:25 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
+        id S1726019AbhADS2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 13:28:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44436 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725921AbhADS2m (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 4 Jan 2021 13:28:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B65E21D94;
+        Mon,  4 Jan 2021 18:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609784881;
+        bh=hkJleZJl1Rf3/RagFDK72zYpmnsQEELyt+FwMdkhA20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nrhvpqyppjdFjvEh4LE2eQvRyYnvNBvPZFthAe4+6OPM/pE9mdhpaeTtBPrVtt1//
+         M/X/Ogq1/cMHGzI6oJ9IsdxR16TZIDUwcLtoFPRfiORj/YfQgiAD9MBmaTaIla30mu
+         jbBXUlf3lyJyx60ayPDwgNx7u6Dkkxopyu7eavt75PjlwIfSCy2JHY9rhQeWMkHCPm
+         bkc6X4Q6BhgLHKGk42jUq6DYfs9bTzmWn1tL4AiXQvMcpc0LVDvt8wdJKnr46QDGfM
+         GEliG0iKl09Ehuvgctw2fPW5It2NqJk54+ji4W71k0ffSwU9PA28yupmUggThlR7CV
+         ewHkMcuHLa4wQ==
+Date:   Mon, 4 Jan 2021 18:27:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Timon Baetz <timon.baetz@protonmail.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -50,47 +40,68 @@ Cc:     Timon Baetz <timon.baetz@protonmail.com>,
         ~postmarketos/upstreaming@lists.sr.ht
 Subject: Re: [PATCH v6 2/8] regulator: dt-bindings: Document max8997-pmic
  nodes
-Message-ID: <20210104181825.GB27043@kozik-lap>
+Message-ID: <20210104182734.GH5645@sirena.org.uk>
 References: <20201230205139.1812366-1-timon.baetz@protonmail.com>
  <20201230205139.1812366-2-timon.baetz@protonmail.com>
  <20210104135156.GB5645@sirena.org.uk>
+ <20210104181825.GB27043@kozik-lap>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6cMF9JLEeZkfJjkP"
 Content-Disposition: inline
-In-Reply-To: <20210104135156.GB5645@sirena.org.uk>
+In-Reply-To: <20210104181825.GB27043@kozik-lap>
+X-Cookie: Stupidity is its own reward.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 01:51:56PM +0000, Mark Brown wrote:
-> On Wed, Dec 30, 2020 at 08:52:07PM +0000, Timon Baetz wrote:
-> 
-> > +- charger: Node for configuring the charger driver.
-> > +  Required properties:
-> > +  - compatible: "maxim,max8997-battery"
-> > +  Optional properties:
-> > +  - extcon: extcon specifier for charging events
-> > +  - charger-supply: regulator node for charging current
-> > +
-> > +- muic: Node used only by extcon consumers.
-> > +  Required properties:
-> > +  - compatible: "maxim,max8997-muic"
-> 
-> Why do these need to appear in the DT binding?  We know these features
-> are there simply from knowing this is a max8997.
 
-If you refer to children nodes, then we do not know these entirely
-because the features could be disabled (pins not connected).  In such
-case these subnodes can be disabled and MFD framework will not
-instantiate children devices.
+--6cMF9JLEeZkfJjkP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If you mean "the properties" like extcon or charger, then indeed it's a
-good question. In theory, wires still could be routed differently, e.g.
-different charging regulator used as a charger.
-In practice this is highly unlikely, however such DT design allows
-easier hooking up of different devices and even potential re-usage of
-kernel drivers (also unlikely...).
+On Mon, Jan 04, 2021 at 07:18:25PM +0100, Krzysztof Kozlowski wrote:
+> On Mon, Jan 04, 2021 at 01:51:56PM +0000, Mark Brown wrote:
 
-Best regards,
-Krzysztof
+> > > +- charger: Node for configuring the charger driver.
+> > > +  Required properties:
+> > > +  - compatible: "maxim,max8997-battery"
 
+> > > +  Optional properties:
+> > > +  - extcon: extcon specifier for charging events
+> > > +  - charger-supply: regulator node for charging current
+
+> > > +- muic: Node used only by extcon consumers.
+> > > +  Required properties:
+> > > +  - compatible: "maxim,max8997-muic"
+
+> > Why do these need to appear in the DT binding?  We know these features
+> > are there simply from knowing this is a max8997.
+
+> If you refer to children nodes, then we do not know these entirely
+> because the features could be disabled (pins not connected).  In such
+> case these subnodes can be disabled and MFD framework will not
+> instantiate children devices.
+
+We can indicate the presence of features without adding new compatible
+strings, that's just encoding the way Linux currently divides things up
+into the bindings.  For example having an extcon property seems like it
+should be enough to figure out if we're using extcon.
+
+--6cMF9JLEeZkfJjkP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zXhUACgkQJNaLcl1U
+h9D9jgf9EGbTkevPAL1mlthdswaXnEuKys1fjzyruP7TkivQxwr9r7bGCPunJhDU
+MPrg801loRBn+jNA4/VHXyAxmkW7/7Q8mOSzzaegFaP5ls4rSQEmd8iyTGmpK6AZ
+05U2KiOzin5hn3giiXAZ266C2n7IxdmdFwdZHDzrb96qiCTUMWQ07lASykjTwXR1
+fT6FYeLNA/IeHZiXQuG5+MkYndcctydBLiKAK7GxLzVcd7Fq2CMu9g+38+qinIo+
+RMc6UbQ3OoeBlaUO3hinZupwORs7U0sb1lBEfranFSMQj52sZI+DAaR0YWgW969g
+zQlwBhKlaFHLIMBfd3muUrGNnxnxbw==
+=/aRX
+-----END PGP SIGNATURE-----
+
+--6cMF9JLEeZkfJjkP--
