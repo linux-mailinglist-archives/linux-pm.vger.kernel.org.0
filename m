@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2392A2E9111
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 08:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A70D2E9115
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 08:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728011AbhADHb1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 02:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
+        id S1727980AbhADHb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 02:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727989AbhADHb1 (ORCPT
+        with ESMTP id S1727997AbhADHb1 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 02:31:27 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB37C061798
-        for <linux-pm@vger.kernel.org>; Sun,  3 Jan 2021 23:30:06 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id iq13so9580747pjb.3
-        for <linux-pm@vger.kernel.org>; Sun, 03 Jan 2021 23:30:06 -0800 (PST)
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B53C0617A5
+        for <linux-pm@vger.kernel.org>; Sun,  3 Jan 2021 23:30:46 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id d2so15977077pfq.5
+        for <linux-pm@vger.kernel.org>; Sun, 03 Jan 2021 23:30:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=0t5BFoNfCkknbg9Gdfco98fDaInDYPXgN3k5AAnXZzo=;
-        b=rzg4DbiwiKrMuaiMfr759ux4SEDoL1Vr9OAHwaaNfZcMNcU8EWYgeGFze7JnOoOWTn
-         /jniZYDFfeiS2RbqPKuMC6PSqhrYneqeqIshefFgLpSxsaURGC6jqu4KfDCZOcvINjja
-         sY0FYgq2LYD66HwUIPobDZK16A2fRR0Lfg5LUtM6iYlG6G/jN7Kr5o4VqB+d/VL1mTJa
-         K7xAKvdzTPT0T8ri8f4zmfaZQ0OCq/ECkmbV+Pdhn1+anfC2ki0qWbsNjyZz5gU1JLlv
-         cG0rUJWbVk/+nAf2xXb4IpYwHgU1hC9LZiLzomisGCIa+boFxA567vjzpn9i9Bw5LPMi
-         QQRg==
+        bh=7x+ya3WlDYOlVbzunORT/RgtZi0Bw4k+NgmHAp25z4c=;
+        b=WK0hoec2dEzKke+5KHU9JJOZX6GvW3D8DZ/jbKYdzXUAhDpyeTNlQuW/r2gOIuxxzz
+         FGTPuLxLDK3piKlDdhjpxwPB2AfzjEDnu0aaCENgjCdUfQ0/xMGKvzQMD7KsBaJEmWRF
+         gvw9A0Mwnq/9ilJVR401IyxPTbullL2eD9n84L3t2H3KjXqRKJQ/Bpa7Mm8m9PX8qTzD
+         KC8oR20XP3SXsXHtcMIjmh6GdfDaoTqtRuouS9gkf/uEsP06ecifEAfU29rfpoMT6xym
+         K9fiCTuvtMIb9me9wnluF4yzaW1ZY4WsHSK4ven/vl9LD05j/3tR1dkak46f5OClKtJT
+         5EJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0t5BFoNfCkknbg9Gdfco98fDaInDYPXgN3k5AAnXZzo=;
-        b=cvi+6XSPLNm5WrMLANzYZonNPshrePlQhUKJS8FKIOnwA/2DuG+AamoNkACsZGj4uO
-         0d3bNzplUDeITmyAbffphI2+0SsR0gEa482VhG0lWy7RltxlHMXYmEqKgndCkevc8xdO
-         xyRC9ms2rMV/KCJ/f830L1+x7/5W+fh8LgQthuU1+wExnCVhNd1AOimg8CgqPOJnXS3f
-         Oa6xjhwsk9r4d3+vLRC4C2aD9xvwdSig2w9R9y90R/IJ+nDyR8YMaNWZaS45Qxn29QrJ
-         G9Sr5jpy/8iJcAEvkDtG9AEMQUKUF3oFil2oj09+Gao9TdilDk8mPfXT6P/rYo0dAoHi
-         PY/A==
-X-Gm-Message-State: AOAM533hsQUo3KGkRt9EsWE7MBuUlJKKkqrBxkK2ldgPd9RZq0XS7fo7
-        3X/YRzl1EhR8H2KCN1HcRA6c6g==
-X-Google-Smtp-Source: ABdhPJzizEfwxxFAdfGobekyn+UNS6a0sd2O/TTd5ud8jGQA0K4MRZ+iCwg+4Fg+cnMfI+GJ3lFQhw==
-X-Received: by 2002:a17:90a:b110:: with SMTP id z16mr28243007pjq.167.1609745405787;
-        Sun, 03 Jan 2021 23:30:05 -0800 (PST)
+        bh=7x+ya3WlDYOlVbzunORT/RgtZi0Bw4k+NgmHAp25z4c=;
+        b=cspf5cHFvnKRuo2oPG5UFR0C6UtI96JOTmtenFO3nWQpBRFCox7PqmRE3xWngreSjR
+         oTI4Ul2KRR+fQYTKVW8P8PBBw7XCOiFIKZSOujwqkJ0vlkApBQypTageuE56l96w12vs
+         BYYjv0kMRSaqEdNtamaDeUxS0QQExMAsDCTeNdNdKY9w3Jo3VYZny+2nRjxbRTwD3s0B
+         Sc2lzVl6LS9hQaWbOksTWj/1ZH4r0K6bKnhj1JMFfWGeG4qLNYT4NDyuLN2gu37ThoZ4
+         8n3MMjxBgB14IhHXusJByT8yNY7EDmkDdgD9FFVUJBMSUltF79eOIsfv++ZqY2jNM0Sr
+         d6NA==
+X-Gm-Message-State: AOAM533J0z/14I4tOPkGxeOCgP0897x5Jr5tWcOpIBViy65sE46t/7G2
+        DCNwaz6n2J6qixAt0p/3oxrjUw==
+X-Google-Smtp-Source: ABdhPJw8EZ4eSCzESWNyniO8jgscATypf3SyqMk99sQMoYX+wFrC0dRQGUi39G/8m/OrT7kMrwuZRA==
+X-Received: by 2002:a63:5805:: with SMTP id m5mr42352866pgb.352.1609745446550;
+        Sun, 03 Jan 2021 23:30:46 -0800 (PST)
 Received: from localhost ([122.172.20.109])
-        by smtp.gmail.com with ESMTPSA id nm6sm19739846pjb.25.2021.01.03.23.30.04
+        by smtp.gmail.com with ESMTPSA id dw16sm19867854pjb.35.2021.01.03.23.30.45
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 03 Jan 2021 23:30:05 -0800 (PST)
-Date:   Mon, 4 Jan 2021 13:00:03 +0530
+        Sun, 03 Jan 2021 23:30:45 -0800 (PST)
+Date:   Mon, 4 Jan 2021 13:00:44 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -84,26 +84,34 @@ Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 26/31] PM / devfreq: tegra30: convert to use
- devm_pm_opp_* API
-Message-ID: <20210104073003.5kx73zita7laxpmx@vireshk-i7>
-References: <20210103035445.23696-1-tiny.windzz@gmail.com>
+Subject: Re: [PATCH 01/31] opp: Add devres wrapper for dev_pm_opp_set_clkname
+ and dev_pm_opp_put_clkname
+Message-ID: <20210104073044.pqrkprqsh3qetgwe@vireshk-i7>
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <20210101165507.19486-2-tiny.windzz@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210103035445.23696-1-tiny.windzz@gmail.com>
+In-Reply-To: <20210101165507.19486-2-tiny.windzz@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-01-21, 03:54, Yangtao Li wrote:
-> Use devm_pm_opp_* API to simplify code, and remove opp_table
-> from tegra_devfreq.
+On 01-01-21, 16:54, Yangtao Li wrote:
+> +/**
+> + * devm_pm_opp_put_clkname() - Releases resources blocked for clk.
+> + * @dev: Device for which we do this operation.
+> + * @opp_table: OPP table returned from devm_pm_opp_set_clkname().
+> + */
+> +void devm_pm_opp_put_clkname(struct device *dev, struct opp_table *opp_table)
+> +{
+> +	devm_release_action(dev, devm_pm_opp_clkname_release, opp_table);
+> +}
+> +EXPORT_SYMBOL_GPL(devm_pm_opp_put_clkname);
 
-Patches starting this one didn't appear in the same thread and it is a
-nightmare to apply these now. Please send everything properly next
-time.
+We shouldn't be needing changes like this, please drop them for all
+patches.
 
 -- 
 viresh
