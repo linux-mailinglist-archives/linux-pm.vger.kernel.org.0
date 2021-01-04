@@ -2,232 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39ACA2E8E6D
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Jan 2021 22:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AB62E90B4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 08:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbhACV1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Jan 2021 16:27:52 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:55676 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727391AbhACV1w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jan 2021 16:27:52 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 103LQFho079029;
-        Sun, 3 Jan 2021 15:26:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1609709175;
-        bh=LzUKQIdtUxP3VT9n+rTF31A9EZWe/TWaIB53rZGrNTY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=DPB+qve0s8heRhSIjLgjb8mCzQS6nrRBZtS6gnhzNNrkacXzb2GgmodhGi0xfG3iq
-         +MPyv5QRvPf5RwejlcdO/t45mDVZgcFNyrL8cr+yzfG6ycFnRXAxJke3+BPHJgb4P8
-         zYpmkA1vvOafGis9PDkzcXfNVtHCnvt14AK2SLEY=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 103LQE4v016396
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 3 Jan 2021 15:26:14 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Sun, 3 Jan
- 2021 15:26:14 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Sun, 3 Jan 2021 15:26:14 -0600
-Received: from [10.250.79.43] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 103LQEGo126039;
-        Sun, 3 Jan 2021 15:26:14 -0600
-Subject: Re: [EXTERNAL] Re: [PATCH v7 2/2] power: supply: bq256xx: Introduce
- the BQ256XX charger driver
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dmurphy@ti.com>
-References: <20201230230116.29697-1-r-rivera-matos@ti.com>
- <20201230230116.29697-3-r-rivera-matos@ti.com>
- <20210103012610.exkkwoqz3745bh2u@earth.universe>
-From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Message-ID: <a31160cd-6023-236b-ff6f-4c9703bf937d@ti.com>
-Date:   Sun, 3 Jan 2021 15:26:14 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727766AbhADHDW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 02:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727759AbhADHDU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 02:03:20 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821CFC061793
+        for <linux-pm@vger.kernel.org>; Sun,  3 Jan 2021 23:02:40 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id x18so14037609pln.6
+        for <linux-pm@vger.kernel.org>; Sun, 03 Jan 2021 23:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dlLWZrIy6R69T+0RxdKISUof18f+oj7qL0+rpwclI9Q=;
+        b=RWiath2GV29Ceq29YV4Eo/YDxoleBkI6KhvmDVrM13P6i6WvXBHLB3NL03EuF0d5Ig
+         k3jN3V9R8TYaSIt0OajxpW6UaB9wqaf4kbP7YRvdeIkVNd/vE7mO5sxPJfWGQEcfV0TJ
+         gZMIffKXxGkcLQZpqzBpYXnzYhYnVd/wNwl9DW3PspXwbZWlquvU8ndq1l6zzm/9Z2Ms
+         jHlU/V+Cj9z2qjgPbAipggERD7vN+mLZJD88oCTUGrPBT9eVKuPbKuZBrtt01Y1UYPbg
+         OtJCP+3nernL266el36h94jVbwk98vXd2vQnjhu4QVdYXhTe+6c+dYRx2+Up2YsN7xvd
+         a9Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dlLWZrIy6R69T+0RxdKISUof18f+oj7qL0+rpwclI9Q=;
+        b=hQNhiRNKEhVTY4YWpZNIlys0JxWMOPRO+G7xaUyTOAT9GRElfYWjBDxp5vIG9j+zkQ
+         GdEp5/7wTxT6J/METxzJIoMb4dHsHi+RNCrm/J8vZE3SwhKawhWTF8SzU8XimkkdTpEO
+         WogEHxorJux4OS7XoOCG1vsawrb1J3wWMfNw9Gruzw80b/YNn7gvC0K5Kxr9SyDdiFv/
+         51Rdp9/lwc69uB7hHmQpFXtqFucM90dqoc1BGNk2z1SY+lxkxfy1FVJCfCXvuGx4h6I4
+         Vn+jtNG/B8yiOB8xQQYM17dSBHClYrIL1itHqcbYsoDXR9iB/Z5zgQvdpdQnuKorAacS
+         GsiA==
+X-Gm-Message-State: AOAM531eP6M12rwz2cGxFMzvpjp21j/ne2hDpMlpmIJxGkzGTEac9WFH
+        bQlPIU9ZJEJJHf86Ca4C9K5PZw==
+X-Google-Smtp-Source: ABdhPJxTIG1l0JLV+LUHEFjwB/9ntN9aIbvjRCJKn3vjHJRyQgMGHUy/WB5LS59Xy8aTKPshWnMfsA==
+X-Received: by 2002:a17:90b:14d3:: with SMTP id jz19mr28643076pjb.196.1609743760002;
+        Sun, 03 Jan 2021 23:02:40 -0800 (PST)
+Received: from localhost ([122.172.20.109])
+        by smtp.gmail.com with ESMTPSA id n195sm55117950pfd.169.2021.01.03.23.02.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 03 Jan 2021 23:02:38 -0800 (PST)
+Date:   Mon, 4 Jan 2021 12:32:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yangtao Li <tiny.windzz@gmail.com>
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, digetx@gmail.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
+        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        lukasz.luba@arm.com, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
+        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 06/31] serial: qcom_geni_serial: fix potential mem leak
+ in qcom_geni_serial_probe()
+Message-ID: <20210104070236.mnnj3frjtxka7emu@vireshk-i7>
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <20210101165507.19486-7-tiny.windzz@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210103012610.exkkwoqz3745bh2u@earth.universe>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210101165507.19486-7-tiny.windzz@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian
+On 01-01-21, 16:54, Yangtao Li wrote:
+> We should use dev_pm_opp_put_clkname() to free opp table each time
+> dev_pm_opp_of_add_table() got error.
+> 
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index 291649f02821..5aada7ebae35 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -1438,9 +1438,12 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>  		return PTR_ERR(port->se.opp_table);
+>  	/* OPP table is optional */
+>  	ret = dev_pm_opp_of_add_table(&pdev->dev);
+> -	if (ret && ret != -ENODEV) {
+> -		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
+> -		goto put_clkname;
+> +	if (ret) {
+> +		dev_pm_opp_put_clkname(port->se.opp_table);
+> +		if (ret != -ENODEV) {
+> +			dev_err(&pdev->dev, "invalid OPP table in device tree\n");
+> +			return ret;
+> +		}
+>  	}
+>  
+>  	port->private_data.drv = drv;
+> @@ -1482,7 +1485,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>  	return 0;
+>  err:
+>  	dev_pm_opp_of_remove_table(&pdev->dev);
+> -put_clkname:
+>  	dev_pm_opp_put_clkname(port->se.opp_table);
+>  	return ret;
+>  }
 
-On 1/2/21 7:26 PM, Sebastian Reichel wrote:
-> Hi Ricardo,
->
-> On Wed, Dec 30, 2020 at 05:01:16PM -0600, Ricardo Rivera-Matos wrote:
->> The BQ256XX family of devices are highly integrated buck chargers
->> for single cell batteries.
->>
->> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
->>
->> v5 - adds power_supply_put_battery_info() and devm_add_action_or_rest() calls
->>
->> v6 - implements bq256xx_remove function
->>
->> v7 - applies various fixes
->>
->>     - implements clamp() API
->>
->>     - implements memcmp() API
->>
->>     - changes cache_type to REGACHE_FLAT
->>
->>     - changes bq256xx_probe to properly unregister device
->>
->> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
->> ---
-> Thanks, looks mostly good now.
-Cool :)
->
->>   drivers/power/supply/Kconfig           |   11 +
->>   drivers/power/supply/Makefile          |    1 +
->>   drivers/power/supply/bq256xx_charger.c | 1747 ++++++++++++++++++++++++
->>   3 files changed, 1759 insertions(+)
->>   create mode 100644 drivers/power/supply/bq256xx_charger.c
->>
->> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
->> index 44d3c8512fb8..87d852914bc2 100644
->> --- a/drivers/power/supply/Kconfig
->> +++ b/drivers/power/supply/Kconfig
->> @@ -618,6 +618,17 @@ config CHARGER_BQ25890
->>   	help
->>   	  Say Y to enable support for the TI BQ25890 battery charger.
->>   
->> +config CHARGER_BQ256XX
->> +	tristate "TI BQ256XX battery charger driver"
->> +	depends on I2C
->> +	depends on GPIOLIB || COMPILE_TEST
->> +	select REGMAP_I2C
->> +	help
->> +	  Say Y to enable support for the TI BQ256XX battery chargers. The
->> +	  BQ256XX family of devices are highly-integrated, switch-mode battery
->> +	  charge management and system power path management devices for single
->> +	  cell Li-ion and Li-polymer batteries.
->> +
->>   config CHARGER_SMB347
->>   	tristate "Summit Microelectronics SMB347 Battery Charger"
->>   	depends on I2C
-> Please rebase to current power-supply for-next branch, Kconfig and
-> Makefile diff does not apply because of one additional BQ device.
-ACK
->
->> [...]
->> +static void bq256xx_usb_work(struct work_struct *data)
->> +{
->> +	struct bq256xx_device *bq =
->> +			container_of(data, struct bq256xx_device, usb_work);
->> +
->> +	switch (bq->usb_event) {
->> +	case USB_EVENT_ID:
->> +		break;
->> +
-> spurious newline, please remove!
-ACK
->
->> +	case USB_EVENT_NONE:
->> +		power_supply_changed(bq->charger);
->> +		break;
->> +	default:
->> +		dev_err(bq->dev, "Error switching to charger mode.\n");
->> +		break;
->> +	}
->> +}
->> +
->> [...]
->> +static int bq256xx_hw_init(struct bq256xx_device *bq)
->> +{
->> +	struct power_supply_battery_info bat_info = { };
->> +	int wd_reg_val = BQ256XX_WATCHDOG_DIS;
->> +	int ret = 0;
->> +	int i;
->> +
->> +	for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
->> +		if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
->> +		    bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
->> +			wd_reg_val = i;
->> +	}
->> +	ret = regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
->> +				 BQ256XX_WATCHDOG_MASK, wd_reg_val <<
->> +						BQ256XX_WDT_BIT_SHIFT);
->> +
->> +	ret = power_supply_get_battery_info(bq->charger, &bat_info);
->> +	if (ret) {
->> +		dev_warn(bq->dev, "battery info missing, default values will be applied\n");
->> +
->> +		bat_info.constant_charge_current_max_ua =
->> +				bq->chip_info->bq256xx_def_ichg;
->> +
->> +		bat_info.constant_charge_voltage_max_uv =
->> +				bq->chip_info->bq256xx_def_vbatreg;
->> +
->> +		bat_info.precharge_current_ua =
->> +				bq->chip_info->bq256xx_def_iprechg;
->> +
->> +		bat_info.charge_term_current_ua =
->> +				bq->chip_info->bq256xx_def_iterm;
->> +
->> +		bq->init_data.ichg_max =
->> +				bq->chip_info->bq256xx_max_ichg;
->> +
->> +		bq->init_data.vbatreg_max =
->> +				bq->chip_info->bq256xx_max_vbatreg;
->> +	} else {
->> +		bq->init_data.ichg_max =
->> +			bat_info.constant_charge_current_max_ua;
->> +
->> +		bq->init_data.vbatreg_max =
->> +			bat_info.constant_charge_voltage_max_uv;
->> +	}
->> +
->> +	ret = bq->chip_info->bq256xx_set_vindpm(bq, bq->init_data.vindpm);
->> +	if (ret)
->> +		goto err_out;
->> +
->> +	ret = bq->chip_info->bq256xx_set_iindpm(bq, bq->init_data.iindpm);
->> +	if (ret)
->> +		goto err_out;
->> +
->> +	ret = bq->chip_info->bq256xx_set_ichg(bq,
->> +				bat_info.constant_charge_current_max_ua);
->> +	if (ret)
->> +		goto err_out;
->> +
->> +	ret = bq->chip_info->bq256xx_set_iprechg(bq,
->> +				bat_info.precharge_current_ua);
->> +	if (ret)
->> +		goto err_out;
->> +
->> +	ret = bq->chip_info->bq256xx_set_vbatreg(bq,
->> +				bat_info.constant_charge_voltage_max_uv);
->> +	if (ret)
->> +		goto err_out;
->> +
->> +	ret = bq->chip_info->bq256xx_set_iterm(bq,
->> +				bat_info.charge_term_current_ua);
->> +	if (ret)
->> +		goto err_out;
->> +
->> +	power_supply_put_battery_info(bq->charger, &bat_info);
->> +
->> +	return 0;
->> +
->> +err_out:
->> +	return ret;
-> please return error code directly instead of adding this useless
-> goto.
-ACK
->
->> [...]
-> -- Sebastian
-Ricardo
+Since put_clkname is always done in remove(), I don't think there is
+any memleak here. Over that with your patch we will do put_clkname
+twice now, once in probe and once in remove. And that is a bug AFAICT.
+
+-- 
+viresh
