@@ -2,104 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C3B2E96C7
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 15:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993B22E972A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 15:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727155AbhADOGO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 09:06:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42728 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726762AbhADOGO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 4 Jan 2021 09:06:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E752D207BC;
-        Mon,  4 Jan 2021 14:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609769132;
-        bh=79TsA1bA8DKt3n7SY5XnXtm3knysfw0cfWKMLdkrzAc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iHN9zNRZrzzhE+ofXqwGY3v8yznfietvgJMSpIw+/Hb+3GY0GuhJL7mLLW9bt9kcZ
-         PxcqgpZD5FhAKNG8I5jGEXGBvLQpBmco8xGjMnaIc4EebNiLVje0BlJWOj45JL0/PB
-         vxtEJY5OhIuVTA6E/Lui4XNWCjztT9yf7D3//WPmqcmmDQBgRTjNFYUHE+LDDdYS2G
-         vDbXQowhqqzHV+4MYe0UswMc695n3mCySu0MBMSim5Ss3EsWmxmlkITnnS4eNLG3ZK
-         qcONCWIJbRc577IYCOT74XxUKKbK+estp/16xd1zq3Gyj1t5BuDxRAMQebZh9HQ2Px
-         ydgmSJ/nP9dUA==
-Date:   Mon, 4 Jan 2021 14:05:06 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, digetx@gmail.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
-        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        lukasz.luba@arm.com, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
-        sboyd@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        rjw@rjwysocki.net, jcrouse@codeaurora.org, hoegsberg@google.com,
-        eric@anholt.net, tzimmermann@suse.de,
-        marijn.suijten@somainline.org, gustavoars@kernel.org,
-        emil.velikov@collabora.com, jonathan@marek.ca,
-        akhilpo@codeaurora.org, smasetty@codeaurora.org,
-        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
-        tanmay@codeaurora.org, ddavenport@chromium.org,
-        jsanka@codeaurora.org, rnayak@codeaurora.org,
-        tongtiangen@huawei.com, miaoqinglang@huawei.com,
-        khsieh@codeaurora.org, abhinavk@codeaurora.org,
-        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
-        mka@chromium.org, harigovi@codeaurora.org,
-        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
-        georgi.djakov@linaro.org, akashast@codeaurora.org,
-        parashar@codeaurora.org, dianders@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 14/31] spi: spi-qcom-qspi: convert to use devm_pm_opp_*
- API
-Message-ID: <20210104140506.GF5645@sirena.org.uk>
-References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <20210101165507.19486-15-tiny.windzz@gmail.com>
+        id S1727032AbhADOY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 09:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726396AbhADOY1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 09:24:27 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32907C061574
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jan 2021 06:23:47 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id u19so27523336edx.2
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jan 2021 06:23:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vLA6j12Zecwv0meb8C+1VRWv81U64i9hKX8vIp754Io=;
+        b=I3oPAGkPZ5KcEb7llc/oZZCMHkHPeUB+icOycLamMdd2G8dd4nLxLhnjTeiL+t7Q4G
+         QpEeF4OlXNjwdkPkZ7ZRj4zNcJ6wUo/2pjkf8fq1kCrLG88iL1OY25cb4qLP18XOMtBS
+         k9M9QvB9FBL3oRtkEriJvzEBSCQcdcpUVtFC1O2fRQBcx4x6ArmmmqQYL7sX5WAmHdEY
+         NQa544nc8DTB8G1w7XelrRKUhUs0GWbvVrTD+8iuqFEHpKLYR8qk/RnifSuqEZbgP+8Z
+         mmpagbh5IT/n932FSvFndUH9pIs0wVPmZ0KlbMPXdYDEoYQYG0KAUGZ+aNLKgPUeNrz2
+         JXrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vLA6j12Zecwv0meb8C+1VRWv81U64i9hKX8vIp754Io=;
+        b=KINlxqS7PzENRgdhL9Ef3imAWCz0a/VcDeD2TStiGqAbMJqziGODhakt3hqtTUipoK
+         r7vJRM+2hM/U2yUKsNqVqaOzNApjbyc2PELN9+aZI9U17cjj7XKKhxVVppDY8oV4bV3v
+         T0tAh7NslAvQw1mrRkAIfEsq5/QW6PHKviRBIT3yZKZur9qp6UXjH6lkK3TxDFiDEY6U
+         6op6i1XdfV4GKaTr8DHHFKVPOiWEOu9j+MWNr99cLov3ZJvChaYahIGkQpC4U4IHqDgQ
+         nfqyIpTR1fPcn4sePdH9WRkBb/E+mhiyDYP0gQ+MsG6AKMSQL0fWnT/avsg9Nv/2DRs1
+         lmew==
+X-Gm-Message-State: AOAM531ov+BYtLoUwSm8NcyAIQifTXrq6xNPmhR8FQQc3LGfKJSWWKt4
+        6GXrkMcps0UMkopOoKkH5OFuyg==
+X-Google-Smtp-Source: ABdhPJx5MKb7q0HzgWj5X1q78yPmxO1J2m4USNRI49SKOCllbZGISqYkVKgszSxpyRSppYRO0Qagog==
+X-Received: by 2002:aa7:c558:: with SMTP id s24mr72138716edr.257.1609770225795;
+        Mon, 04 Jan 2021 06:23:45 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-129-8.adsl.proxad.net. [82.252.129.8])
+        by smtp.googlemail.com with ESMTPSA id ho34sm23260073ejc.13.2021.01.04.06.23.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jan 2021 06:23:45 -0800 (PST)
+Subject: Re: [PATCH][next] powercap/drivers/dtpm: Fix size of object being
+ allocated
+To:     Colin King <colin.king@canonical.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210104121053.33210-1-colin.king@canonical.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <ea95f420-2a2e-d0f9-9b34-e329d80bbd9d@linaro.org>
+Date:   Mon, 4 Jan 2021 15:23:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4VrXvz3cwkc87Wze"
-Content-Disposition: inline
-In-Reply-To: <20210101165507.19486-15-tiny.windzz@gmail.com>
-X-Cookie: Stupidity is its own reward.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210104121053.33210-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 04/01/2021 13:10, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> The kzalloc allocation for dtpm_cpu is currently allocating the size
+> of the pointer and not the size of the structure. Fix this by using
+> the correct sizeof argument.
+> 
+> Addresses-Coverity: ("Wrong sizeof argument")
+> Fixes: 0e8f68d7f048 ("powercap/drivers/dtpm: Add CPU energy model based support")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
---4VrXvz3cwkc87Wze
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Good catch, thanks for fixing this
 
-On Fri, Jan 01, 2021 at 04:54:50PM +0000, Yangtao Li wrote:
-> Use devm_pm_opp_* API to simplify code, and remove opp_table
-> from qcom_qspi.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> ---
+>  drivers/powercap/dtpm_cpu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+> index 6933c783c6b4..51c366938acd 100644
+> --- a/drivers/powercap/dtpm_cpu.c
+> +++ b/drivers/powercap/dtpm_cpu.c
+> @@ -200,7 +200,7 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
+>  	if (!dtpm)
+>  		return -EINVAL;
+>  
+> -	dtpm_cpu = kzalloc(sizeof(dtpm_cpu), GFP_KERNEL);
+> +	dtpm_cpu = kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
+>  	if (!dtpm_cpu)
+>  		goto out_kfree_dtpm;
+>  
+> 
 
---4VrXvz3cwkc87Wze
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zIJEACgkQJNaLcl1U
-h9DFeQf+IHePH8ftvRUXVVunMDt5ucIZpHjc+KGKU8AM3jyZ+Xyy7jpftefB54+O
-D0zp7MZ5qmBT4HlKD4cibZcvesuW18PPYrUMXVV3H8MuTBZMfvl+XDsWm0NvMjE+
-mG+w8bSqPUM9Mjo5wa7UN8bbEjHzNtPZt0lUNfN+k0NGXJ3XhN5WtH3eGXQAPaIn
-o5aKfPOue5R/hIy2XhK9W7VLqa8NwnhL7tCfYme/Eto/F4ygM/JVeTwdMOeKe3Gi
-SeDV7n7fe5oPecANOGYXE6gdO2c7oAcJl36gxh2rjpz/yGyCykjmHBxU/YdSV3Jk
-T8oGZSZjqmlT+HfPp7aRXPMXmf3ncQ==
-=ApdX
------END PGP SIGNATURE-----
-
---4VrXvz3cwkc87Wze--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
