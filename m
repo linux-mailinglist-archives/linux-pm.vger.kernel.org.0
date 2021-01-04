@@ -2,105 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAC82E9F7B
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 22:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278FD2EA017
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 23:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbhADVZ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 16:25:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39598 "EHLO mail.kernel.org"
+        id S1726520AbhADWjZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 4 Jan 2021 17:39:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725921AbhADVZ5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 4 Jan 2021 16:25:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F0401216C4;
-        Mon,  4 Jan 2021 21:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609795516;
-        bh=ENuN3yW4AW1o6Z39AIixJU3HWpYwrvRogBcKSXsjZPI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IDb5rwA/zMWUNyO+pboCFAAgX12vqdTkFlumCsmAim1FSponJel41VPzIXa/pK4qs
-         eNVFlZjx344b3sPtocDH5AOxyah5I0VS01awbekP+/VB52yzjraMLcDQU7wBFWTrlV
-         8aZEJPUwsXeN8+Qc6HKZfP0gIkA58Q/tUBI2FwzeXp+dEB41iVjx28QGgwZamJVyNI
-         zXqmzaP0rNOKaK0e42V3MgCR+kzV1gOlr4m/q321iXqgcF56IYLpTZWMJXfwrezhiT
-         1mDDlfzfVbGkg3qxr1VfNIlQXcnAOmJV0rMWBu5BJ4wXO74mI18LOuit/7/35rodZY
-         fQ/PfBzUCum1w==
-Date:   Mon, 4 Jan 2021 21:24:49 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Timon Baetz <timon.baetz@protonmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v6 2/8] regulator: dt-bindings: Document max8997-pmic
- nodes
-Message-ID: <20210104212449.GJ5645@sirena.org.uk>
-References: <20201230205139.1812366-1-timon.baetz@protonmail.com>
- <20201230205139.1812366-2-timon.baetz@protonmail.com>
- <20210104135156.GB5645@sirena.org.uk>
- <20210104181825.GB27043@kozik-lap>
- <20210104182734.GH5645@sirena.org.uk>
- <20210104183821.GA29033@kozik-lap>
+        id S1726502AbhADWjY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 4 Jan 2021 17:39:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4A6152253A
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jan 2021 22:38:44 +0000 (UTC)
+Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 3F07F86731; Mon,  4 Jan 2021 22:38:44 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 210993] Intel frequency scaling causes electrical noise on 10th
+ gen CPUs
+Date:   Mon, 04 Jan 2021 22:38:44 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: karolherbst@gmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210993-137361-KjzugXe2F5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210993-137361@https.bugzilla.kernel.org/>
+References: <bug-210993-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/qIPZgKzMPM+y5U5"
-Content-Disposition: inline
-In-Reply-To: <20210104183821.GA29033@kozik-lap>
-X-Cookie: Stupidity is its own reward.
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=210993
 
---/qIPZgKzMPM+y5U5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--- Comment #6 from Karol Herbst (karolherbst@gmail.com) ---
+(In reply to Francisco Jerez from comment #5)
+> O_o, that's really weird. I guess this could also be some sort of
+> electromagnetic interference (E.g. with your soundcard?  Does the problem
+> occur with the loudspeakers turned off?), or an issue with your PSU.
+> 
 
-On Mon, Jan 04, 2021 at 07:38:21PM +0100, Krzysztof Kozlowski wrote:
-> On Mon, Jan 04, 2021 at 06:27:34PM +0000, Mark Brown wrote:
+It is very quiet. Definitely you can hear it only with slowly spinning fans and
+no background noise. Searching through the web it sounds like a common issue
+and disabling sleep states is supposed to be the proper "fix" for this.
 
-> > We can indicate the presence of features without adding new compatible
-> > strings, that's just encoding the way Linux currently divides things up
-> > into the bindings.  For example having an extcon property seems like it
-> > should be enough to figure out if we're using extcon.
+But at least muting the speakers don't help.
 
-> It won't be enough because MFD will create device for extcon and bind
-> the driver. The same for the charger. We have a board where max8997 is
-> used only as PMIC (providing regulators) without battery and USB
-> connectivity.
+> The apparent frequency dropping below scaling_min_freq might be an artifact
+> of how the busy frequency of a CPU thread is calculated: It should
+> approximate the ratio of executed clock cycles to the time it spent in C0
+> state, which can deviate from its actual working frequency if the processor
+> enters and exits some C1+ state repeatedly since the transition may have
+> some significant latency.  According to your turbostat log the CPU cores
+> that report a busy frequency below scaling_min_freq seem to be handling
+> quite a few interrupts which is consistent with that explanation.  It
+> doesn't necessarily indicate a power management bug.
+> 
+> Does disabling some specific idle state (e.g via
+> /sys/devices/system/cpu/cpu*/cpuidle/state*/disable) have any effect on the
+> noise?
 
-I'm not sure I follow, sorry?  Either the core driver can parse the
-bindings enough to know what children it has or (probably better) it can
-instantiate the children unconditionally and then the function drivers
-can figure out if they need to do anything.
+disabling all except state0 stops the noise.
 
-> Another point, is that this reflects the real hardware. The same as we
-> model entire SoC as multiple children of soc node (with their own
-> properties), here we represent smaller chip which also has
-> sub-components.
+-- 
+You may reply to this email to add a comment.
 
-Components we're calling things like "extcon"...
-
---/qIPZgKzMPM+y5U5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zh6AACgkQJNaLcl1U
-h9D85Qf9HAkIDxqmUT3DuU1gC8iLvHOzcvGAFb/R2kAgDBX9QGM4PIo36fI1p7o2
-xwEdAv60V7yNTtP6gpTMfRj+IAl+URIZys7CzALyL77mH7uCc1EZOJgMHEN8FMif
-jngEiDVMzp816XxUJHO9SX9n4vTnWr/9D3j/qD/LdkA2wx98SqyOfUhCs4csGqns
-QUkI2r52B5op3cpVNlxlqcaWBF8b+4dMSNhGoSTw7ZnDCjz3ZVrNalGcQ5DOIi2q
-HbFlJkSA7jHdnrXf6HGfa3hAGRDNaQAg935Zzvc+PV8Sz5kaqxOYa1SoYASV1NZ4
-nwhwhH1ADHFKfU9mTF33rkqAKR8QYQ==
-=Xd45
------END PGP SIGNATURE-----
-
---/qIPZgKzMPM+y5U5--
+You are receiving this mail because:
+You are the assignee for the bug.
