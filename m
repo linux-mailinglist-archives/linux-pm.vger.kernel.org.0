@@ -2,106 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B462E9D00
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 19:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED4A2E9D21
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 19:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbhADS2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 13:28:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725921AbhADS2m (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 4 Jan 2021 13:28:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B65E21D94;
-        Mon,  4 Jan 2021 18:28:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609784881;
-        bh=hkJleZJl1Rf3/RagFDK72zYpmnsQEELyt+FwMdkhA20=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nrhvpqyppjdFjvEh4LE2eQvRyYnvNBvPZFthAe4+6OPM/pE9mdhpaeTtBPrVtt1//
-         M/X/Ogq1/cMHGzI6oJ9IsdxR16TZIDUwcLtoFPRfiORj/YfQgiAD9MBmaTaIla30mu
-         jbBXUlf3lyJyx60ayPDwgNx7u6Dkkxopyu7eavt75PjlwIfSCy2JHY9rhQeWMkHCPm
-         bkc6X4Q6BhgLHKGk42jUq6DYfs9bTzmWn1tL4AiXQvMcpc0LVDvt8wdJKnr46QDGfM
-         GEliG0iKl09Ehuvgctw2fPW5It2NqJk54+ji4W71k0ffSwU9PA28yupmUggThlR7CV
-         ewHkMcuHLa4wQ==
-Date:   Mon, 4 Jan 2021 18:27:34 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Timon Baetz <timon.baetz@protonmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        id S1727763AbhADSfL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 13:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727674AbhADSfL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 13:35:11 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90FEC061794
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jan 2021 10:34:30 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id 3so169085wmg.4
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jan 2021 10:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:cc:references:from:subject:message-id:date:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=b3mdNXCCr+viQUHC/DPnqNgJo78Ga5nEbT7QXKoyiHA=;
+        b=mJcGrH+CF7e3JLUi/6XdtHgMYZ05xDT4uKvH8qP6GKld3KbbCxzzrTReJoHQX0RRos
+         z6he8w1AD7bgKoP7w1Ou9GEfIcM0qI50PfzdklX1exifUgOoJxcl+my40jj0NFyHuRr+
+         eOO+6Ct4bbkEaXnW34IgnPcRJt2lDp+vcPG9v04pIcmIVVRHd4V37jm/5+e/LruGkdDs
+         DbnUK+4AvSXaTxqpQm9HTsNR7FcIOn/uAKi+rnqPum2lVyXnZx1liZpKrLuYc5I9QCUZ
+         vBCczjPJT8huRzKIvQC6Imx/iPGtTS7Z2tvxDigfcl0bbjGHA39H3hqnTJTf3Pm36iK1
+         2cpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=b3mdNXCCr+viQUHC/DPnqNgJo78Ga5nEbT7QXKoyiHA=;
+        b=SsQxQAhLY76BwIWTWROm8n8uCiYS20GD0gm3SfOwo6dZQD0sLfEQgGjvHowRlwmw75
+         IInRBUw2fMDy3kcvhHRNdr5+CZEPq9BmRZJBMes7c92RSbdYBFHt0VzUlQVAVHNQn+Ze
+         YrFAdRSRyeusgBXLctcIvdE0mrL1l8i9K9Ga8uUaMl2gjBrapzHoARa0CShJhhYnVrWc
+         FxAm5o4Kilj7pMn1FEyemBA2BRBa0JsE5Sl4szvqs2tkykErJuWpDMmCyCx6+dxalCQD
+         LJ+xcaUtCF6x++4X5fL56jfY1UwPzhjpKzYxJq8ny2z7GMgtTtj/j5D44vrVLmx5z0J+
+         56vQ==
+X-Gm-Message-State: AOAM533GgorRxO9SqhgwcnJz0QqOuxIgKHa1cOnq3Bfs0w3MOPH8amT+
+        hn9yKc2iPnWgvL2vmmzQiOz+ySmL5+H1mg==
+X-Google-Smtp-Source: ABdhPJwJYzGSd/ZPw+WDOq9k3YHFJGpNwRYCt7btmT6zdcFteWIZPoxAoFgw/VGVvxy40x8V6O0Sdg==
+X-Received: by 2002:a1c:6144:: with SMTP id v65mr164151wmb.125.1609785269279;
+        Mon, 04 Jan 2021 10:34:29 -0800 (PST)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id g78sm245217wme.33.2021.01.04.10.34.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jan 2021 10:34:28 -0800 (PST)
+To:     Henry Chen <henryc.chen@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v6 2/8] regulator: dt-bindings: Document max8997-pmic
- nodes
-Message-ID: <20210104182734.GH5645@sirena.org.uk>
-References: <20201230205139.1812366-1-timon.baetz@protonmail.com>
- <20201230205139.1812366-2-timon.baetz@protonmail.com>
- <20210104135156.GB5645@sirena.org.uk>
- <20210104181825.GB27043@kozik-lap>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Fan Chen <fan.chen@mediatek.com>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        Arvin Wang <arvin.wang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <1608790134-27425-1-git-send-email-henryc.chen@mediatek.com>
+ <1608790134-27425-8-git-send-email-henryc.chen@mediatek.com>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Subject: Re: [PATCH V6 07/13] dt-bindings: interconnect: add MT6873
+ interconnect dt-bindings
+Message-ID: <f8951237-e236-aa99-5dbb-e92415752aa8@linaro.org>
+Date:   Mon, 4 Jan 2021 20:34:30 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6cMF9JLEeZkfJjkP"
-Content-Disposition: inline
-In-Reply-To: <20210104181825.GB27043@kozik-lap>
-X-Cookie: Stupidity is its own reward.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1608790134-27425-8-git-send-email-henryc.chen@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 12/24/20 08:08, Henry Chen wrote:
+> From: "henryc.chen" <henryc.chen@mediatek.com>
+> 
+> Add interconnect provider dt-bindings for MT6873.
+> 
+> Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
 
---6cMF9JLEeZkfJjkP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+checkpatch complains:
 
-On Mon, Jan 04, 2021 at 07:18:25PM +0100, Krzysztof Kozlowski wrote:
-> On Mon, Jan 04, 2021 at 01:51:56PM +0000, Mark Brown wrote:
+From:/Signed-off-by: email name mismatch:
+'From: "henryc.chen" <henryc.chen@mediatek.com>' != 'Signed-off-by: Henry Chen 
+<henryc.chen@mediatek.com>'
 
-> > > +- charger: Node for configuring the charger driver.
-> > > +  Required properties:
-> > > +  - compatible: "maxim,max8997-battery"
+Thanks,
+Georgi
 
-> > > +  Optional properties:
-> > > +  - extcon: extcon specifier for charging events
-> > > +  - charger-supply: regulator node for charging current
-
-> > > +- muic: Node used only by extcon consumers.
-> > > +  Required properties:
-> > > +  - compatible: "maxim,max8997-muic"
-
-> > Why do these need to appear in the DT binding?  We know these features
-> > are there simply from knowing this is a max8997.
-
-> If you refer to children nodes, then we do not know these entirely
-> because the features could be disabled (pins not connected).  In such
-> case these subnodes can be disabled and MFD framework will not
-> instantiate children devices.
-
-We can indicate the presence of features without adding new compatible
-strings, that's just encoding the way Linux currently divides things up
-into the bindings.  For example having an extcon property seems like it
-should be enough to figure out if we're using extcon.
-
---6cMF9JLEeZkfJjkP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zXhUACgkQJNaLcl1U
-h9D9jgf9EGbTkevPAL1mlthdswaXnEuKys1fjzyruP7TkivQxwr9r7bGCPunJhDU
-MPrg801loRBn+jNA4/VHXyAxmkW7/7Q8mOSzzaegFaP5ls4rSQEmd8iyTGmpK6AZ
-05U2KiOzin5hn3giiXAZ266C2n7IxdmdFwdZHDzrb96qiCTUMWQ07lASykjTwXR1
-fT6FYeLNA/IeHZiXQuG5+MkYndcctydBLiKAK7GxLzVcd7Fq2CMu9g+38+qinIo+
-RMc6UbQ3OoeBlaUO3hinZupwORs7U0sb1lBEfranFSMQj52sZI+DAaR0YWgW969g
-zQlwBhKlaFHLIMBfd3muUrGNnxnxbw==
-=/aRX
------END PGP SIGNATURE-----
-
---6cMF9JLEeZkfJjkP--
+> ---
+>   include/dt-bindings/interconnect/mtk,mt6873-emi.h | 41 +++++++++++++++++++++++
+>   1 file changed, 41 insertions(+)
+>   create mode 100644 include/dt-bindings/interconnect/mtk,mt6873-emi.h
+> 
+> diff --git a/include/dt-bindings/interconnect/mtk,mt6873-emi.h b/include/dt-bindings/interconnect/mtk,mt6873-emi.h
+> new file mode 100644
+> index 0000000..7a0bbfb
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/mtk,mt6873-emi.h
+> @@ -0,0 +1,41 @@
+> +/* SPDX-License-Identifier: GPL-2.0
+> + *
+> + * Copyright (c) 2020 MediaTek Inc.
+> + */
+> +
+> +#ifndef __DT_BINDINGS_INTERCONNECT_MTK_MT6873_EMI_H
+> +#define __DT_BINDINGS_INTERCONNECT_MTK_MT6873_EMI_H
+> +
+> +#define MT6873_SLAVE_DDR_EMI		0
+> +#define MT6873_MASTER_MCUSYS		1
+> +#define MT6873_MASTER_GPUSYS		2
+> +#define MT6873_MASTER_MMSYS		3
+> +#define MT6873_MASTER_MM_VPU		4
+> +#define MT6873_MASTER_MM_DISP		5
+> +#define MT6873_MASTER_MM_VDEC		6
+> +#define MT6873_MASTER_MM_VENC		7
+> +#define MT6873_MASTER_MM_CAM		8
+> +#define MT6873_MASTER_MM_IMG		9
+> +#define MT6873_MASTER_MM_MDP		10
+> +#define MT6873_MASTER_VPUSYS		11
+> +#define MT6873_MASTER_VPU_0		12
+> +#define MT6873_MASTER_VPU_1		13
+> +#define MT6873_MASTER_MDLASYS		14
+> +#define MT6873_MASTER_MDLA_0		15
+> +#define MT6873_MASTER_UFS		16
+> +#define MT6873_MASTER_PCIE		17
+> +#define MT6873_MASTER_USB		18
+> +#define MT6873_MASTER_DBGIF		19
+> +#define MT6873_SLAVE_HRT_DDR_EMI	20
+> +#define MT6873_MASTER_HRT_MMSYS		21
+> +#define MT6873_MASTER_HRT_MM_DISP	22
+> +#define MT6873_MASTER_HRT_MM_VDEC	23
+> +#define MT6873_MASTER_HRT_MM_VENC	24
+> +#define MT6873_MASTER_HRT_MM_CAM	25
+> +#define MT6873_MASTER_HRT_MM_IMG	26
+> +#define MT6873_MASTER_HRT_MM_MDP	27
+> +#define MT6873_MASTER_HRT_DBGIF		28
+> +#define MT6873_MASTER_WIFI		29
+> +#define MT6873_MASTER_BT		30
+> +#define MT6873_MASTER_NETSYS		31
+> +#endif
+> 
