@@ -2,52 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0482E9667
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 14:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9976F2E9683
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 15:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbhADNxE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 08:53:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40322 "EHLO mail.kernel.org"
+        id S1726616AbhADN7t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 08:59:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41446 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726029AbhADNxE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 4 Jan 2021 08:53:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B481207B1;
-        Mon,  4 Jan 2021 13:52:22 +0000 (UTC)
+        id S1726253AbhADN7s (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 4 Jan 2021 08:59:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0F00220770;
+        Mon,  4 Jan 2021 13:59:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609768343;
-        bh=WGYF7SlhXlucOWrieoYG3cJVW6/AxFwCogu0WarBMJU=;
+        s=k20201202; t=1609768747;
+        bh=oAmb65NYH72MQStk3VaVbGlppJznbNt2cArcbsPTQcY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d/wYJk7SVuVVAtZC7qLGTgDaw11H1+rJfcvI8K7vJiAXWKIii/jsSsDFnpG/THXED
-         IpCeA+ZxKspqCrCBdzoGyZKXECvByHrrnOnbjTdxwuNGh+uQtOgAUE9IbKj1CL0Jve
-         /qo5lYEyKgBZIXIfacQtJHylkpBtSneFoFECP3NtfrbAD+0so+6R6GVw/KB652h0wy
-         RJU+FfEbpKXFWhbUSKk+iaTM/OPqmQH5ku9uZ4XbM4OiCUXYqhpRpVsRfzNcv5nvqE
-         VQvCb5PoQd6li7omJ45xXKfsFSGIq+fMLy55UWXTMteVy49YV7564ItNoSRTYuf3h4
-         xDaZEOb3D0SHw==
-Date:   Mon, 4 Jan 2021 13:51:56 +0000
+        b=UHS8gGbh9dNUQe4WMvhK/m2XPS+6hdEkfpYdNdSAq5F5FoNaAgW4OBMLdogt4PlMZ
+         0owqku0gRhayi6vNM2OwKxXh4BRxz3nZVLwlaZ+spR/7Kaz/eO91UxFD+Gjdm88bKM
+         jhbtaXUe9H+xEf8aYkQk7np+nTDd+QSWF0mLzWEYykQxJrDUsjg8rSmePf4X6QdP4d
+         DbPFJjV5rqsmmZx+7sd/m9xkeoRVwB+XCzQh7n76FixJZI2Y7qJwkzv34hDPfZoD2r
+         c6JjG0u9Y4MIozR8Hz2zQTzUpbqGcFS6iPKmT+CL8SNTyBz3rbYmmqLY5MWtxtru3X
+         cQiqUfTF80NuQ==
+Date:   Mon, 4 Jan 2021 13:58:40 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Timon Baetz <timon.baetz@protonmail.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v6 2/8] regulator: dt-bindings: Document max8997-pmic
- nodes
-Message-ID: <20210104135156.GB5645@sirena.org.uk>
-References: <20201230205139.1812366-1-timon.baetz@protonmail.com>
- <20201230205139.1812366-2-timon.baetz@protonmail.com>
+To:     Yangtao Li <tiny.windzz@gmail.com>
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, digetx@gmail.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
+        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        lukasz.luba@arm.com, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        rjw@rjwysocki.net, jcrouse@codeaurora.org, hoegsberg@google.com,
+        eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 08/31] spi: spi-qcom-qspi: fix potential mem leak in
+ spi_geni_probe()
+Message-ID: <20210104135840.GC5645@sirena.org.uk>
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <20210101165507.19486-9-tiny.windzz@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uQr8t48UFsdbeI+V"
+        protocol="application/pgp-signature"; boundary="mvpLiMfbWzRoNl4x"
 Content-Disposition: inline
-In-Reply-To: <20201230205139.1812366-2-timon.baetz@protonmail.com>
+In-Reply-To: <20210101165507.19486-9-tiny.windzz@gmail.com>
 X-Cookie: Stupidity is its own reward.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -55,39 +77,29 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---uQr8t48UFsdbeI+V
+--mvpLiMfbWzRoNl4x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Dec 30, 2020 at 08:52:07PM +0000, Timon Baetz wrote:
+On Fri, Jan 01, 2021 at 04:54:44PM +0000, Yangtao Li wrote:
+> We should use dev_pm_opp_put_clkname() to free opp table each time
+> dev_pm_opp_of_add_table() got error.
 
-> +- charger: Node for configuring the charger driver.
-> +  Required properties:
-> +  - compatible: "maxim,max8997-battery"
-> +  Optional properties:
-> +  - extcon: extcon specifier for charging events
-> +  - charger-supply: regulator node for charging current
-> +
-> +- muic: Node used only by extcon consumers.
-> +  Required properties:
-> +  - compatible: "maxim,max8997-muic"
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Why do these need to appear in the DT binding?  We know these features
-are there simply from knowing this is a max8997.
-
---uQr8t48UFsdbeI+V
+--mvpLiMfbWzRoNl4x
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zHXsACgkQJNaLcl1U
-h9Bpuwf+Lbwwbn3A88GywPIb5p6fVae+jvfJHuyrCmnosfLzRuc3P72FyihL2Ssk
-d8+57ttupGJ+sZqgJK+Ih9Eu4mMrsJbScy4O5WyFQfGJ3PQPpWlsHIq8DEUDlEy/
-Ltf5HzGezxfmsC2nhapHNzFE2cbnn+AKmeK+rN2DxeYvuHFlfXNEdWSdeNK/zDeF
-aUNAik0aInnufO7MOE1cqfgWfFxEnin6wxCGKOu2aCdcdli9aE536mwYz9WZc34j
-vNbTxOcLDqWo+dtNtp1aOuRqX3kMO+X1SCBEYPymOwwgqt5Yo9179LOZNvqMN2E9
-E+FL/m5IwwLbH06CDjp/ZT+aoF4psw==
-=tIIA
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zHxAACgkQJNaLcl1U
+h9AFlgf+L/LzmrwnlPEvAiV70bJdryKYNIVHhDTji4GNiw5bc3Fz7A6gxBdDd/Jn
+1qI57uFUYX5WyZ7Avao2gi+jL5EWVJgldsdHEHrlzqSUgK2x9xrgSV9u4JquS45Q
+seFNFtiOh4nAG2I+4V2JWPoQIRWTv4kXzhxOuwTRNZZuW6kHLzTJGUOtXpvSKWvp
+hMqDoVpnnWcyf6WKVAQCPiA8X3YX+UsIiWNVv1RCwnc8s7/g4i3sXQYnvslK/7L6
+vE8FX9MChPQrDewpSlZuH+TLRCMEki6IyGVTdeY+SbwrVQQNavBrAvEH4MGOefoh
+qVdPCyIrmbbWYXhYjynDSBxCC9VgJQ==
+=DvyL
 -----END PGP SIGNATURE-----
 
---uQr8t48UFsdbeI+V--
+--mvpLiMfbWzRoNl4x--
