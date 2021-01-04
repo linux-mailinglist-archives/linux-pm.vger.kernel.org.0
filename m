@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A70D2E9115
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 08:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D1B2E9126
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jan 2021 08:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727980AbhADHb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 02:31:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S1727624AbhADHda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 02:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727997AbhADHb1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 02:31:27 -0500
+        with ESMTP id S1727265AbhADHda (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 02:33:30 -0500
 Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B53C0617A5
-        for <linux-pm@vger.kernel.org>; Sun,  3 Jan 2021 23:30:46 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id d2so15977077pfq.5
-        for <linux-pm@vger.kernel.org>; Sun, 03 Jan 2021 23:30:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02B7C061795
+        for <linux-pm@vger.kernel.org>; Sun,  3 Jan 2021 23:32:49 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id h186so15984319pfe.0
+        for <linux-pm@vger.kernel.org>; Sun, 03 Jan 2021 23:32:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=7x+ya3WlDYOlVbzunORT/RgtZi0Bw4k+NgmHAp25z4c=;
-        b=WK0hoec2dEzKke+5KHU9JJOZX6GvW3D8DZ/jbKYdzXUAhDpyeTNlQuW/r2gOIuxxzz
-         FGTPuLxLDK3piKlDdhjpxwPB2AfzjEDnu0aaCENgjCdUfQ0/xMGKvzQMD7KsBaJEmWRF
-         gvw9A0Mwnq/9ilJVR401IyxPTbullL2eD9n84L3t2H3KjXqRKJQ/Bpa7Mm8m9PX8qTzD
-         KC8oR20XP3SXsXHtcMIjmh6GdfDaoTqtRuouS9gkf/uEsP06ecifEAfU29rfpoMT6xym
-         K9fiCTuvtMIb9me9wnluF4yzaW1ZY4WsHSK4ven/vl9LD05j/3tR1dkak46f5OClKtJT
-         5EJg==
+        bh=iRXPtY20D9orDIjb5tCwjmiIuDnS2goRBPjGMkiKUgk=;
+        b=pYf9Tvqk/nYS1dsljbZYs4vnYyryXc1zZ8aFgpievKkuU/vwdqhMSLPp187p4iUzvk
+         x97na1Zr5IZqGb1yry5b1l7NH6i0R3i19c2LMJof78NSIQ7AWfPL3L1gxGcKVpgpzzsW
+         4LeiX2fUqlrZ4Lz3w8Dvgi/c43rEQRfyiHraEypHkBhucquIxrMWVhKoMbQkiMYxph+J
+         cm/G2VFuGAfBI4oP322CJDvK17BbrTSHsAmuYQ8CKg2k9eDvZbTP5bqMJUpiEY7/iJSv
+         p3pG+kTNMXRK2Yb9ytNFinssZq3pA2LVDEgeVCk9ox/hswNS46iqvElLD/oJZH9VD7bG
+         d23w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7x+ya3WlDYOlVbzunORT/RgtZi0Bw4k+NgmHAp25z4c=;
-        b=cspf5cHFvnKRuo2oPG5UFR0C6UtI96JOTmtenFO3nWQpBRFCox7PqmRE3xWngreSjR
-         oTI4Ul2KRR+fQYTKVW8P8PBBw7XCOiFIKZSOujwqkJ0vlkApBQypTageuE56l96w12vs
-         BYYjv0kMRSaqEdNtamaDeUxS0QQExMAsDCTeNdNdKY9w3Jo3VYZny+2nRjxbRTwD3s0B
-         Sc2lzVl6LS9hQaWbOksTWj/1ZH4r0K6bKnhj1JMFfWGeG4qLNYT4NDyuLN2gu37ThoZ4
-         8n3MMjxBgB14IhHXusJByT8yNY7EDmkDdgD9FFVUJBMSUltF79eOIsfv++ZqY2jNM0Sr
-         d6NA==
-X-Gm-Message-State: AOAM533J0z/14I4tOPkGxeOCgP0897x5Jr5tWcOpIBViy65sE46t/7G2
-        DCNwaz6n2J6qixAt0p/3oxrjUw==
-X-Google-Smtp-Source: ABdhPJw8EZ4eSCzESWNyniO8jgscATypf3SyqMk99sQMoYX+wFrC0dRQGUi39G/8m/OrT7kMrwuZRA==
-X-Received: by 2002:a63:5805:: with SMTP id m5mr42352866pgb.352.1609745446550;
-        Sun, 03 Jan 2021 23:30:46 -0800 (PST)
+        bh=iRXPtY20D9orDIjb5tCwjmiIuDnS2goRBPjGMkiKUgk=;
+        b=imf6Zs5Nb0bUJ/tLpw7EbqeLodr7tgJjmLyt+3IYi+Cztx8d7UbU2D9fQHEEsljwc/
+         5DsINIVC6Ild/EfObNiavsLWbNx45/va61IM6ZVSLjD/4HGzlXE2lNwSb9t9fIRwtP/m
+         /8SKYR7TKrZPUu7fgT+V2zyF73O5llbXicl6DmbMyf85vj1ibi3/L21B9KbuOlsIrMI3
+         wv+8LgyCtkceG5SSjenR31IU1khG6G2do114Yo/dijOTNhq15/8Zw8kukyeDq+yovmFO
+         uOPR/jxVsqZqm0NJlQo+41ZFQ7tY5wxbhqh6xwTVsMRZ9iQBso/cEqgv4ofrvPqK4bhO
+         5pfA==
+X-Gm-Message-State: AOAM532mq2MbW0CQKjX81gqwRWgMw4LoT6Ry42nKavcvGDn9qImyLyOf
+        eGVkFzxX+cJf/eDZQc+GCHDZQQ==
+X-Google-Smtp-Source: ABdhPJxg1RuXm4l0IeX5T2nfNwUfb9eKCIJWL14v0Jtf8jWZLkym1C7f5dh7jOgWjIh5IRoQRH0klg==
+X-Received: by 2002:aa7:9388:0:b029:19e:648:6480 with SMTP id t8-20020aa793880000b029019e06486480mr39127516pfe.21.1609745569526;
+        Sun, 03 Jan 2021 23:32:49 -0800 (PST)
 Received: from localhost ([122.172.20.109])
-        by smtp.gmail.com with ESMTPSA id dw16sm19867854pjb.35.2021.01.03.23.30.45
+        by smtp.gmail.com with ESMTPSA id e5sm54143912pfc.76.2021.01.03.23.32.48
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 03 Jan 2021 23:30:45 -0800 (PST)
-Date:   Mon, 4 Jan 2021 13:00:44 +0530
+        Sun, 03 Jan 2021 23:32:48 -0800 (PST)
+Date:   Mon, 4 Jan 2021 13:02:46 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -84,34 +84,44 @@ Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 01/31] opp: Add devres wrapper for dev_pm_opp_set_clkname
- and dev_pm_opp_put_clkname
-Message-ID: <20210104073044.pqrkprqsh3qetgwe@vireshk-i7>
+Subject: Re: [PATCH 18/31] drm/lima: remove unneeded
+ devm_devfreq_remove_device()
+Message-ID: <20210104073246.vub5fhfwfdbwxkdx@vireshk-i7>
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <20210101165507.19486-2-tiny.windzz@gmail.com>
+ <20210101165507.19486-19-tiny.windzz@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210101165507.19486-2-tiny.windzz@gmail.com>
+In-Reply-To: <20210101165507.19486-19-tiny.windzz@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 01-01-21, 16:54, Yangtao Li wrote:
-> +/**
-> + * devm_pm_opp_put_clkname() - Releases resources blocked for clk.
-> + * @dev: Device for which we do this operation.
-> + * @opp_table: OPP table returned from devm_pm_opp_set_clkname().
-> + */
-> +void devm_pm_opp_put_clkname(struct device *dev, struct opp_table *opp_table)
-> +{
-> +	devm_release_action(dev, devm_pm_opp_clkname_release, opp_table);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_opp_put_clkname);
+> There is no need to manually release devm related resources.
+> 
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> ---
+>  drivers/gpu/drm/lima/lima_devfreq.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
+> index d5937cf86504..7690c5c69f9f 100644
+> --- a/drivers/gpu/drm/lima/lima_devfreq.c
+> +++ b/drivers/gpu/drm/lima/lima_devfreq.c
+> @@ -94,11 +94,6 @@ void lima_devfreq_fini(struct lima_device *ldev)
+>  		devfreq_cooling_unregister(devfreq->cooling);
+>  		devfreq->cooling = NULL;
+>  	}
+> -
+> -	if (devfreq->devfreq) {
+> -		devm_devfreq_remove_device(ldev->dev, devfreq->devfreq);
+> -		devfreq->devfreq = NULL;
+> -	}
+>  }
 
-We shouldn't be needing changes like this, please drop them for all
-patches.
+Why is this part of this patchset ?
 
 -- 
 viresh
