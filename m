@@ -2,84 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BA22EB0EE
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 18:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E236B2EB0FB
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 18:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730537AbhAERET (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jan 2021 12:04:19 -0500
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:36756 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729278AbhAERES (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jan 2021 12:04:18 -0500
-Received: by mail-wm1-f49.google.com with SMTP id y23so222993wmi.1;
-        Tue, 05 Jan 2021 09:04:01 -0800 (PST)
+        id S1730279AbhAERFf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jan 2021 12:05:35 -0500
+Received: from mail-io1-f51.google.com ([209.85.166.51]:42578 "EHLO
+        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729505AbhAERFe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jan 2021 12:05:34 -0500
+Received: by mail-io1-f51.google.com with SMTP id q137so28783109iod.9;
+        Tue, 05 Jan 2021 09:05:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n6KIIJ9J9dzDzP5DUFlGPnwQ7nEofIeMZEzRkiVgqQM=;
-        b=H4MV9vL3a8BjUFOmmmEkWiWStkDk21LRLsZBVpaTg1gguqdBcekChtrnYJYqUSgVz6
-         8tj9wpQ46Bo48x5yWdID1+YHCZw8LFu+gzfDi2+98R8KjNZDxTLlEUlxB9ZJKY5efMS/
-         fhuwG4fHoZLqFTAhRHmHejyi5oX4XPbT+MhmcxHsuJCMIWwg9Z5W/Z3MjzqL9g9iR3UL
-         pdulfqIrE0nbA6M5PwRVhsHQ11EXWj9tnA0O7F+YxTMJ9UXac9gKFF1pjo6tc7qW3BO/
-         fUVqtAo3YBGA92tHFmAaWXIZxbQWDNSmLZ7NiNnPAbnSaHRobeHfnd6bu9YV/2QZDVdT
-         WHJw==
-X-Gm-Message-State: AOAM5306suAhf129tcNqvF7hinbKn+n7+6onnM6CvRTQbjgkkRtrLofu
-        ztmlwOJgrwfjCg8dzrg7v4wER8qpYdVnDQ==
-X-Google-Smtp-Source: ABdhPJxIvlNTGgGlYnSrfmBt1kSEImmptJoCJfWMJoE92dAAzlqcVazWUcMl6D9BuAaEKCQtH3p/Sg==
-X-Received: by 2002:a7b:c4d5:: with SMTP id g21mr116341wmk.92.1609866215958;
-        Tue, 05 Jan 2021 09:03:35 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id v20sm119655wml.34.2021.01.05.09.03.34
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=sxTRWEC8MOpnTMUesMj6I4isC8VAjw1tkHEHI23HMOY=;
+        b=Yp1OlFAVVJr3/SYx7XsxB0clQ0uvqbYVBkDG7WshR4D0AeJ/UGMerce1rP3WlF+sTj
+         xBkjHmQXaDF/k3SFdE4dNMbsyi7Znuiraa0bWvulNKmhFoj6Ug3YEvvdXM8j/OYP+FZe
+         sZ3H83u5Ju/yWvWp5yynXuDr3EsCMzNTcPtGldnCqiqwSk7GRybIzrYQH2OXE5dvvhpK
+         bwq/DEva1vXPCbTEga6tSDsQdnaT2qK6WaKlDMgMv/BEB0l11/+mQb5FKTBo5HJR5D1R
+         tPzZmXvktmC0ClDyNWu97kaHfEvYxKRCwlVF0kpCR5xNYAAdo8A0GGfBOZD1ovGANkAv
+         e1Pg==
+X-Gm-Message-State: AOAM531EL6tGFA8Pt87aD89FIUPRtDDAk1cfVEVa4rR1qCTcF10UJw1n
+        JCMB+nrlpHJbwH7gqAPQVw==
+X-Google-Smtp-Source: ABdhPJyv0RgKbg7aFtr2sDhxf/W4b4hYcZ75/Cv55V8/TksMzERWMcHIKqT2VRvHjbZ5WhzqUSHWPA==
+X-Received: by 2002:a6b:4f13:: with SMTP id d19mr56135iob.121.1609866293433;
+        Tue, 05 Jan 2021 09:04:53 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id 9sm57733iob.28.2021.01.05.09.04.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 09:03:34 -0800 (PST)
-Date:   Tue, 5 Jan 2021 18:03:33 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v12 3/5] memory: tegra124: Support interconnect framework
-Message-ID: <20210105170333.GC20651@kozik-lap>
-References: <20201228154920.18846-1-digetx@gmail.com>
- <20201228154920.18846-4-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201228154920.18846-4-digetx@gmail.com>
+        Tue, 05 Jan 2021 09:04:52 -0800 (PST)
+Received: (nullmailer pid 372421 invoked by uid 1000);
+        Tue, 05 Jan 2021 17:04:48 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     rjw@rjwysocki.net, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, viresh.kumar@linaro.org
+In-Reply-To: <1609842147-8161-2-git-send-email-claudiu.beznea@microchip.com>
+References: <1609842147-8161-1-git-send-email-claudiu.beznea@microchip.com> <1609842147-8161-2-git-send-email-claudiu.beznea@microchip.com>
+Subject: Re: [PATCH 1/3] dt-bindings: cpufreq: sama7g5-cpufreq: add dt bindings documentation
+Date:   Tue, 05 Jan 2021 10:04:48 -0700
+Message-Id: <1609866288.037184.372420.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 28, 2020 at 06:49:18PM +0300, Dmitry Osipenko wrote:
-> Now Internal and External memory controllers are memory interconnection
-> providers. This allows us to use interconnect API for tuning of memory
-> configuration. EMC driver now supports OPPs and DVFS.
+On Tue, 05 Jan 2021 12:22:25 +0200, Claudiu Beznea wrote:
+> Add DT bindings documentation for SAMA7G5 CPUFreq driver.
 > 
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-> Acked-by: Georgi Djakov <georgi.djakov@linaro.org>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
->  drivers/memory/tegra/Kconfig        |   1 +
->  drivers/memory/tegra/tegra124-emc.c | 320 +++++++++++++++++++++++++++-
->  drivers/memory/tegra/tegra124.c     |  82 ++++++-
->  3 files changed, 391 insertions(+), 12 deletions(-)
+>  .../bindings/cpufreq/cpufreq-sama7g5.yaml          | 80 ++++++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-sama7g5.yaml
+> 
 
-Thanks, applied.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Best regards,
-Krzysztof
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-sama7g5.yaml: properties:cpu-supply: '$ref' is not one of ['description', 'deprecated']
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-sama7g5.yaml: ignoring, error in schema: properties: cpu-supply
+warning: no schema found in file: ./Documentation/devicetree/bindings/cpufreq/cpufreq-sama7g5.yaml
+
+See https://patchwork.ozlabs.org/patch/1422407
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
