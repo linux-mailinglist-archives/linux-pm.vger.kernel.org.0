@@ -2,123 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 723AE2EA133
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 00:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE532EA19A
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 01:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbhADX6m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jan 2021 18:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S1725921AbhAEAsP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jan 2021 19:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbhADX6m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 18:58:42 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0294FC061793
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jan 2021 15:57:51 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id h186so17360951pfe.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jan 2021 15:57:51 -0800 (PST)
+        with ESMTP id S1726773AbhAEAsN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jan 2021 19:48:13 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D95C061796;
+        Mon,  4 Jan 2021 16:47:33 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id x20so68746981lfe.12;
+        Mon, 04 Jan 2021 16:47:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Cbf4qUSPecz1BVMGHHpkX8PIH4EMlFN+qvU7k0BNC6o=;
-        b=BSM8zowhQIEBD79vG1JT54Xa0iC40nZD1ap1oOg9lMey5igoND+bdPNi+vSDgqc+jZ
-         T4d2wnAPLAvzI3u2TekCAEeRtlOuKRL3Jwk/vTYaGEq5hz9RQ3asX0jN7+0zG6D8v4WY
-         mehpUQwkby4N5XNtZS4odrC7a3rvngHnpVWWo=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=LbJgq5BqlhcAKKUuFodkRpsTucTQHhzOBEK4gO821Bo=;
+        b=COrfHp/+heOjspVaVTZbnxYjzbzUFe09lWQ9a49kTJC4UQvnyfme/5tFIbM6l3aZCZ
+         TVuZvg/wmmzU4OiTCBsFMiJKlPct+rWnIpLkN/2GTEu5HSorCW6QYT9/MIpgNdrzBY9B
+         xF4ELoMXQK+CKZMzxFVoLAWZf0C6t8qPn1sqBCHt6r8hS4E9+Ml25nAUYhu6vSbGQBCx
+         HU/l8YqfGyT8j9MoGlZDLt2P1NvK180j2m7M6Bzd/sqf4bRKteRwbHC9+mowUtMKRkjs
+         WIdmu61I5ipKxzYVzzSDgvlztlDiGM8wJL8LgTEzUcMXYsCK2rQkf+omo/m5XIwbHSJw
+         sWCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Cbf4qUSPecz1BVMGHHpkX8PIH4EMlFN+qvU7k0BNC6o=;
-        b=X9UjcZM+TLwMo2+ZxeVRbRMOgB0YAk8hRc2DbaRvUzvJ2scPSv521IIru/QiQHTNSq
-         XPt5xCAa0Np1F2Rae1jv0Hrp/8I65jMWozl4rpYE3YFeoqZ/EC2ptBt7y2yVXBo4oTfb
-         OgE8B7PdLDVSZCC6sY3ol2OrNA1DyOR+jfhgkCXBLLi2n5k4kPzmSo09nA6C3ifHPg73
-         L8cYKmlCJiKLRfbf5MykJFAICtdZv/hgYJBtW7qC0Q7EVQknb9r0B8VfJ1DdLUprqzTF
-         lIN09JGfwlIfLybxex+/g27B6WoUxZrhONTak2ydXKniaw6UFNrSBHQKtodnNmhfuIpw
-         zpdg==
-X-Gm-Message-State: AOAM530L8YGKxRrCdtyPtu3/fhDUc0Ay+GkVWtIB8AvEiri+K1wwqVyC
-        wpgcgwZ1eihz6NV8sBeULp73PBpKN6rncRZQ
-X-Google-Smtp-Source: ABdhPJwaKybELNdYGIWtV12kgIkwo6PDlLpGPCwHsDZKfaGmlChDzE0hQ8YZUr83N8BLA4F2jWn3/A==
-X-Received: by 2002:a65:654e:: with SMTP id a14mr1803618pgw.265.1609804670937;
-        Mon, 04 Jan 2021 15:57:50 -0800 (PST)
-Received: from localhost (161.136.24.136.in-addr.arpa. [136.24.136.161])
-        by smtp.gmail.com with ESMTPSA id 4sm500803pjn.14.2021.01.04.15.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jan 2021 15:57:49 -0800 (PST)
-From:   Ivan Babrou <ivan@cloudflare.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] cpupower: add Makefile dependencies for install targets
-Date:   Mon,  4 Jan 2021 15:57:18 -0800
-Message-Id: <20210104235719.13525-1-ivan@cloudflare.com>
-X-Mailer: git-send-email 2.29.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=LbJgq5BqlhcAKKUuFodkRpsTucTQHhzOBEK4gO821Bo=;
+        b=pMmnbEFlyyRU9Y7m0s5dMtR1aWQVllEDg26R5vgYf59HMUgnResQfC5N75StCDx8Qq
+         nEyKuaa2Tav2jDBMaKyfjAy91Q7M1b9UK/j1VxMTr/us58ky0hto6KNDZTh/Z+Iyya0J
+         4DwqxMLpQh5Mza77OEAXJcOy4NDODln4cUiAJw72swgxiXPVKmchs/h9nZLg/X6Hj4PD
+         Wn7PeAybcuxVH1eZa1Stu4IIgRK5ikJZyTJ3JK6ye9FT6CvsSoJEuaIaIWGMdQIl6oxA
+         qAWu7qnV4aDm0dEDND2j2CMyyT1syssPsv+ooFSzEryTBKhc5c0VXDQM8c7pbVZCVOpy
+         A+JA==
+X-Gm-Message-State: AOAM532Z0MGrlnyqinJPFi1U4b41tGKbteQF2EhjAhYv+uzIbay5+L9/
+        S9xP0Aylt8+2tMFXOGVAorGHRomYlp9UfRkaqNXcQqo3DLs=
+X-Google-Smtp-Source: ABdhPJwsKBgmYJWYbFIIxdmIRXJF/zK+FsyQxCRrJGVep9xL3skCukBiryHnEnE9a2ZFA3ZkN6HRcA4IogEXX0JBxLc=
+X-Received: by 2002:a05:6512:789:: with SMTP id x9mr31112231lfr.487.1609807651799;
+ Mon, 04 Jan 2021 16:47:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210104135912.8185-1-lukasz.luba@arm.com>
+In-Reply-To: <20210104135912.8185-1-lukasz.luba@arm.com>
+Reply-To: cwchoi00@gmail.com
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Date:   Tue, 5 Jan 2021 09:46:55 +0900
+Message-ID: <CAGTfZH0eG_gKPfzW-xCrMK7MwraGkxygocEKH1TDVurp3ZGXVQ@mail.gmail.com>
+Subject: Re: [PATCH] PM / devfreq: spelling correction in a comment
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This allows building cpupower in parallel rather than serially.
+Hi Lukasz,
 
-Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
----
- tools/power/cpupower/Makefile       | 8 ++++----
- tools/power/cpupower/bench/Makefile | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Mon, Jan 4, 2021 at 11:01 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> The device attribute exposed in sysfs is called 'polling_interval'. Align
+> the comment.
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+> Hi Chanwoo,
+>
+> While grepping the devfreq polling_interval sources I've found
+> this trivial mistake in the comment.
+>
+> Regards,
+> Lukasz
+>
+>  drivers/devfreq/governor.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+> index 2a52f97b542d..70f44b3ca42e 100644
+> --- a/drivers/devfreq/governor.h
+> +++ b/drivers/devfreq/governor.h
+> @@ -40,7 +40,7 @@
+>  /*
+>   * Definition of governor attribute flags except for common sysfs attributes
+>   * - DEVFREQ_GOV_ATTR_POLLING_INTERVAL
+> - *   : Indicate polling_interal sysfs attribute
+> + *   : Indicate polling_interval sysfs attribute
+>   * - DEVFREQ_GOV_ATTR_TIMER
+>   *   : Indicate timer sysfs attribute
+>   */
+> --
+> 2.17.1
+>
 
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index c7bcddbd486d..3b1594447f29 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -270,14 +270,14 @@ clean:
- 	$(MAKE) -C bench O=$(OUTPUT) clean
- 
- 
--install-lib:
-+install-lib: libcpupower
- 	$(INSTALL) -d $(DESTDIR)${libdir}
- 	$(CP) $(OUTPUT)libcpupower.so* $(DESTDIR)${libdir}/
- 	$(INSTALL) -d $(DESTDIR)${includedir}
- 	$(INSTALL_DATA) lib/cpufreq.h $(DESTDIR)${includedir}/cpufreq.h
- 	$(INSTALL_DATA) lib/cpuidle.h $(DESTDIR)${includedir}/cpuidle.h
- 
--install-tools:
-+install-tools: $(OUTPUT)cpupower
- 	$(INSTALL) -d $(DESTDIR)${bindir}
- 	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
- 	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
-@@ -293,14 +293,14 @@ install-man:
- 	$(INSTALL_DATA) -D man/cpupower-info.1 $(DESTDIR)${mandir}/man1/cpupower-info.1
- 	$(INSTALL_DATA) -D man/cpupower-monitor.1 $(DESTDIR)${mandir}/man1/cpupower-monitor.1
- 
--install-gmo:
-+install-gmo: create-gmo
- 	$(INSTALL) -d $(DESTDIR)${localedir}
- 	for HLANG in $(LANGUAGES); do \
- 		echo '$(INSTALL_DATA) -D $(OUTPUT)po/$$HLANG.gmo $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo'; \
- 		$(INSTALL_DATA) -D $(OUTPUT)po/$$HLANG.gmo $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo; \
- 	done;
- 
--install-bench:
-+install-bench: compile-bench
- 	@#DESTDIR must be set from outside to survive
- 	@sbindir=$(sbindir) bindir=$(bindir) docdir=$(docdir) confdir=$(confdir) $(MAKE) -C bench O=$(OUTPUT) install
- 
-diff --git a/tools/power/cpupower/bench/Makefile b/tools/power/cpupower/bench/Makefile
-index f68b4bc55273..d9d9923af85c 100644
---- a/tools/power/cpupower/bench/Makefile
-+++ b/tools/power/cpupower/bench/Makefile
-@@ -27,7 +27,7 @@ $(OUTPUT)cpufreq-bench: $(OBJS)
- 
- all: $(OUTPUT)cpufreq-bench
- 
--install:
-+install: $(OUTPUT)cpufreq-bench
- 	mkdir -p $(DESTDIR)/$(sbindir)
- 	mkdir -p $(DESTDIR)/$(bindir)
- 	mkdir -p $(DESTDIR)/$(docdir)
+Applied it. Thanks.
+
 -- 
-2.29.2
-
+Best Regards,
+Chanwoo Choi
