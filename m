@@ -2,135 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC112EAF25
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 16:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7FB2EAFA9
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 17:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbhAEPpL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jan 2021 10:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbhAEPpK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jan 2021 10:45:10 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C83CC061574
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jan 2021 07:44:30 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id v14so3420998wml.1
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jan 2021 07:44:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=u8B6Jcqsj2qQHBVOgCivAszp3Mr4Z2LIctYHDfeemKo=;
-        b=rdkjlnzWp+2zOi5b7d3ppqU3lIZOJ5blen0fY3s5Lownn35zv1OY5oSXisTXNXbPyC
-         Ah5BTaAA34KGKm3jno6izGQnj64gA8NV4bnBGGFhoxXY1cRienDsq01Ly1HW5H5v+TQx
-         RWOPXFrWoVhDadJzet0FLMTTT4lZz790d5QI/C4J4dpDywH6AsGpYvxaqVY/qSlO/BPg
-         ZsWCmKKl3DTc8YgbmzfK8jhQJyf6JzeXIk/ww02n/CzBftFPbXesLu8JnbSGmtitC9xf
-         E+awFJNqK1Q5XoKUMT9yHEi6NGaQRncmPO1aB1pii/ZEpU2u3J2T0L7B86U71oVchq4x
-         u48g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=u8B6Jcqsj2qQHBVOgCivAszp3Mr4Z2LIctYHDfeemKo=;
-        b=Jftii3wa78Rk8WENqnyEinE3LJ9JmW6tBbWbvqGPbIQwHMaZc/+BcfdUmPsgo5YWbK
-         KY0EaFAUkZaZpIGqZLYop1rFV+/5U7+PPnXeVHFy/7tldsoG96lmdO1VkI4iMSf+XI0X
-         OugZ/Yai0PvezbhpDROWcez9wW/lVTNq4F6y8HSlInOMkqtcwRP2czR9IiJtgUO8Md67
-         aXzedbqNme5F639SgboWPQCGOlP1DERgdfBe+6HGIkaZli/Yk4ryHJpMr9lYEmG+DSxg
-         Z3JKZf79PDZKdgLr3kSQRYFKixu1myKnlYwMmjruAOnOK8KC9B5ffPpJJrsG7sXFg1kY
-         C80g==
-X-Gm-Message-State: AOAM533nJbTvk2lIvDQynFeka9U2W2uEpNO1JnKXx3ysB0j542ZHDrrz
-        Da6Lf5YoD6RMt1UWoIuFSEswDw==
-X-Google-Smtp-Source: ABdhPJwPZdpUvNf4958mHWq+C7VzsGf8VpOVbdIf0IvglN6LK/TbWfdvoLZMv0Z1Xr0zlF0zVNQlLw==
-X-Received: by 2002:a7b:c246:: with SMTP id b6mr4128150wmj.154.1609861468726;
-        Tue, 05 Jan 2021 07:44:28 -0800 (PST)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-152-224.adsl.proxad.net. [82.252.152.224])
-        by smtp.googlemail.com with ESMTPSA id s6sm191847wro.79.2021.01.05.07.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jan 2021 07:44:27 -0800 (PST)
-Subject: Re: [PATCH 4/6] acpi/drivers/thermal: Remove TRIPS_NONE cooling
- device binding
-To:     rui.zhang@intel.com
-Cc:     mjg59@codon.org.uk, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amitk@kernel.org,
-        thara.gopinath@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>
-References: <20201214233811.485669-1-daniel.lezcano@linaro.org>
- <20201214233811.485669-4-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <1de4868e-6229-ed33-f45a-7cd82d3ee48a@linaro.org>
-Date:   Tue, 5 Jan 2021 16:44:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727019AbhAEQIs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jan 2021 11:08:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37682 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726749AbhAEQIs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 5 Jan 2021 11:08:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 66B0D2226A;
+        Tue,  5 Jan 2021 16:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609862887;
+        bh=Ds7Ux3fJB9sk2PXSEPGwymkvlgIP6rNtPGxUUwGxUIM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=AFf8NLyHept3vbYB1LddoUXr4lqxxjVYXbLVU5DW8tGVcMihq5l+IjE0Qvs1FPLKk
+         sl+EljIfLj69mBD2KqpQuEr5uTsEWHEeyVkNCS41vA3uQIXTUOT8HWJbH02aKJTnAx
+         yMjmoAhAcywlc7qAG06s8Dp0ow+w9bOCR+lwEIviij5YB2fYHQKJNM/itvF23GszZs
+         NVKZNCdVHun88PlknuY83o1uKGoEOdTcvzB87+SQYxYgF4y6Ou9TiVM7GWPk20hVen
+         tGw28VoLWKrxI4dPxZWzYBezQqwXyH4j8BM7bTKQ8/U4Ma5YxEtwugA3tjEGpn9bhS
+         FbvAVLpCWBZJA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Ryan Case <ryandcase@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Henry Chen <henryc.chen@mediatek.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Arvin Wang <arvin.wang@mediatek.com>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-pm@vger.kernel.org, Fan Chen <fan.chen@mediatek.com>,
+        Nicolas Boichat <drinkcat@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1608790134-27425-1-git-send-email-henryc.chen@mediatek.com>
+References: <1608790134-27425-1-git-send-email-henryc.chen@mediatek.com>
+Subject: Re: (subset) [PATCH V6 00/13] Add driver for dvfsrc, support for active state of scpsys
+Message-Id: <160986286072.50149.16225204986666610767.b4-ty@kernel.org>
+Date:   Tue, 05 Jan 2021 16:07:40 +0000
 MIME-Version: 1.0
-In-Reply-To: <20201214233811.485669-4-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rui,
-
-
-On 15/12/2020 00:38, Daniel Lezcano wrote:
-> The loop is here to create default cooling device binding on the
-> THERMAL_TRIPS_NONE number which is used to be the 'forced_passive'
-> feature. However, we removed all code dealing with that in the thermal
-> core, thus this binding does no longer make sense.
+On Thu, 24 Dec 2020 14:08:41 +0800, Henry Chen wrote:
+> This series is based on v5.10-rc1.
 > 
-> Remove it.
+> The patchsets add support for MediaTek hardware module named DVFSRC
+> (dynamic voltage and frequency scaling resource collector). The DVFSRC is
+> a HW module which is used to collect all the requests from both software
+> and hardware and turn into the decision of minimum operating voltage and
+> minimum DRAM frequency to fulfill those requests.
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> [...]
 
-Are you fine with this change?
+Applied to
 
-Thanks
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-  -- Daniel
+Thanks!
 
-> ---
->  drivers/acpi/thermal.c | 19 -------------------
->  1 file changed, 19 deletions(-)
-> 
-> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-> index b5e4bc9e3282..26a89ff80a0e 100644
-> --- a/drivers/acpi/thermal.c
-> +++ b/drivers/acpi/thermal.c
-> @@ -764,25 +764,6 @@ static int acpi_thermal_cooling_device_cb(struct thermal_zone_device *thermal,
->  		}
->  	}
->  
-> -	for (i = 0; i < tz->devices.count; i++) {
-> -		handle = tz->devices.handles[i];
-> -		status = acpi_bus_get_device(handle, &dev);
-> -		if (ACPI_SUCCESS(status) && (dev == device)) {
-> -			if (bind)
-> -				result = thermal_zone_bind_cooling_device
-> -						(thermal, THERMAL_TRIPS_NONE,
-> -						 cdev, THERMAL_NO_LIMIT,
-> -						 THERMAL_NO_LIMIT,
-> -						 THERMAL_WEIGHT_DEFAULT);
-> -			else
-> -				result = thermal_zone_unbind_cooling_device
-> -						(thermal, THERMAL_TRIPS_NONE,
-> -						 cdev);
-> -			if (result)
-> -				goto failed;
-> -		}
-> -	}
-> -
->  failed:
->  	return result;
->  }
-> 
+[11/13] regulator: Regulator driver for the Mediatek DVFSRC
+        commit: a0db6b0aa670ba040f959a000ef24dd4238e016b
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
