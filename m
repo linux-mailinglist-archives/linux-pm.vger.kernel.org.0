@@ -2,164 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AED2EAB70
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 14:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7522EAC64
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 14:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730463AbhAENDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jan 2021 08:03:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57172 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729685AbhAENDc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 5 Jan 2021 08:03:32 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E2CA22AAC;
-        Tue,  5 Jan 2021 13:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609851770;
-        bh=/Tnbq4FC5ordGqRMZzBmEF2707cpXLotVuL1pB4INEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b7A+HlihRW0BWkxuWeObIBnymtaP0ufAI6iZqP+I33dmJaItT4s02eE21hd20fF/X
-         d/gLGOgVM5jXbgjwt3xldxp8Yx05uXAdpw5ayzs7kX/HEqtzXpXUB3oUcRe35cTc//
-         0LAxDBVV/TNR3PSOx4/g/7uEn2gJ4Mz3qDyRHQzw=
-Date:   Tue, 5 Jan 2021 14:04:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
-Message-ID: <X/RjziK30y56uZUj@kroah.com>
-References: <20210104230253.2805217-1-robh@kernel.org>
+        id S1729032AbhAENyp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jan 2021 08:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728990AbhAENyo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jan 2021 08:54:44 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E558C061795
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jan 2021 05:54:04 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r3so36289062wrt.2
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jan 2021 05:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:cc:references:from:subject:message-id:date:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=WeMaF7TAVDOEIygomZnq05mZMvBNk5xAGXnGkwP4VxM=;
+        b=ye5X2VuG3ou5wXNFk5tCMRRCWTPYTJ0gR4UGwUrMrOUE9rOMVq1fn7BEQ7Qv9ZUe0f
+         T52GJNGyEMCs4wOPnymnhwaZita24pCfV2GaE7K76S5eLmBdmPeZI9XHx5xmXsxKp3Kd
+         p9uVsXsss0OXMxuo0BC/GGdWySBMsv5SEQGte5AK5UFq7oREC1oS4GO6Q1yG1KFQwRnq
+         LEDpFxRk5r5JCTI20JAIPALpeI2upYM+47VQVhMKoBNj/nUY8Sgdo353APdpf3WtF9sU
+         A56HDIiyET1lXVEKGyaEQRD+R8KKgfEwuFA3tZZD88P19IWECm1EovZhOlHJ8IXlg/mo
+         K6Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WeMaF7TAVDOEIygomZnq05mZMvBNk5xAGXnGkwP4VxM=;
+        b=XLuRwxK1usc+QPVDAQ/P161GYLsV1/ixSldYldxXrSMgbZpIPiARFqVhH/EdT+IzNG
+         DNgpERnv4fQIwBUE6E0LoeFZ5PBR2NL/vyU6y3km/C0EKkFRgJhKB722Kv8e4dBQDTxf
+         BMpaMwO4kH9xTtOER+wDesOhlGr2wk57dsqc1BkzB9UE2osTNL2/4DDdm9mu0YghhPNo
+         /fLmx4tvEz6/teHbZhJFLkjQjJ8HFLOWn+Q9SfK9Z0UD8dX8ZbD9n2WZ4+DjGYV2Qrp8
+         oOBUuw6QCZCXpSNYMkIcRGF2eyqqjlSF5XgTMDg7zVF74fqUPAjDNpWdPa53aLmTqYhh
+         K4kg==
+X-Gm-Message-State: AOAM530UU0n5xOVyy2RkI3zSjpV69MZgcccYOSp4/VW6KmGzrvfWs+Xg
+        vbXPIXAs7rBFbYiYwDC3XGXHQQ==
+X-Google-Smtp-Source: ABdhPJyD5a1x18fxXMG+4Mcx13Pev1iFYLAfK9YgIqd+kZ7o7mQ6A/yXNqdPNWouLSe9UlACDrP1xQ==
+X-Received: by 2002:adf:dd09:: with SMTP id a9mr84076235wrm.90.1609854843150;
+        Tue, 05 Jan 2021 05:54:03 -0800 (PST)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id i11sm4154410wmd.47.2021.01.05.05.54.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jan 2021 05:54:02 -0800 (PST)
+To:     Vincent Knecht <vincent.knecht@mailoo.org>,
+        Jun Nie <jun.nie@linaro.org>, devicetree@vger.kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh@kernel.org
+Cc:     shawn.guo@linaro.org
+References: <20201204075345.5161-1-jun.nie@linaro.org>
+ <20201204075345.5161-6-jun.nie@linaro.org>
+ <d869ea94b3b1c73800a5c3b855cb6f280be6c185.camel@mailoo.org>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Subject: Re: [PATCH v2 5/5] interconnect: qcom: Add MSM8939 interconnect
+ provider driver
+Message-ID: <a88b39dd-1c50-8aff-f85e-27086db9b040@linaro.org>
+Date:   Tue, 5 Jan 2021 15:54:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
+In-Reply-To: <d869ea94b3b1c73800a5c3b855cb6f280be6c185.camel@mailoo.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 04:02:53PM -0700, Rob Herring wrote:
-> DT properties which can have multiple entries need to specify what the
-> entries are and define how many entries there can be. In the case of
-> only a single entry, just 'maxItems: 1' is sufficient.
+On 1/2/21 13:08, Vincent Knecht wrote:
+> Le vendredi 04 décembre 2020 à 15:53 +0800, Jun Nie a écrit :
+>> Add driver for the Qualcomm interconnect buses found in MSM8939 based
+>> platforms. The topology consists of four NoCs that are controlled by
+>> a remote processor that collects the aggregated bandwidth for each
+>> master-slave pairs.
+>>
+>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
 > 
-> Add the missing entry constraints. These were found with a modified
-> meta-schema. Unfortunately, there are a few cases where the size
-> constraints are not defined such as common bindings, so the meta-schema
-> can't be part of the normal checks.
-> 
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Shouldn't some rpm ids be changed like they were for msm8916 in the following patch ?
+> c497f9322af9 ("interconnect: qcom: msm8916: Remove rpm-ids from non-RPM nodes")
+> https://patchwork.kernel.org/project/linux-arm-msm/patch/20201112105140.10092-1-georgi.djakov@linaro.org/
 
-<snip>
+Maybe they should. I don't have the hardware to try it, but the test will be
+to just add the NoC DT nodes, enable the driver and inspect the boot log for
+messages like:
+[    2.926647] qcom_icc_rpm_smd_send mas X error -6
 
-> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> index 247ef00381ea..f76b25f7fc7a 100644
-> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> @@ -83,6 +83,7 @@ properties:
->        Phandle of a companion.
->  
->    phys:
-> +    maxItems: 1
->      description: PHY specifier for the USB PHY
->  
->    phy-names:
-> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-> index 2178bcc401bc..8e2bd61f2075 100644
-> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-> @@ -71,6 +71,7 @@ properties:
->        Overrides the detected port count
->  
->    phys:
-> +    maxItems: 1
->      description: PHY specifier for the USB PHY
->  
->    phy-names:
-> diff --git a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-> index 678396eeeb78..f506225a4d57 100644
-> --- a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-> @@ -40,7 +40,7 @@ properties:
->        - const: mc
->  
->    phys:
-> -    description: PHY specifier for the USB PHY
-> +    maxItems: 1
->  
->    usb-role-switch:
->      type: boolean
-
-Any reason you dropped the description for this entry, but not the other
-ones above?
-
-> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> index 388245b91a55..adce36e48bc9 100644
-> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> @@ -15,13 +15,14 @@ properties:
->        - const: ti,j721e-usb
->  
->    reg:
-> -    description: module registers
-> +    maxItems: 1
->  
->    power-domains:
->      description:
->        PM domain provider node and an args specifier containing
->        the USB device id value. See,
->        Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
-> +    maxItems: 1
->  
->    clocks:
->      description: Clock phandles to usb2_refclk and lpm_clk
-
-Same here, why remove the description?
-
-thanks,
-
-greg k-h
+Thanks,
+Georgi
