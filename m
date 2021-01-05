@@ -2,159 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 847EC2EAAA5
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 13:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6AED2EAB70
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 14:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728960AbhAEMZ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jan 2021 07:25:56 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62004 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728862AbhAEMZy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jan 2021 07:25:54 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 105CI6sk174780;
-        Tue, 5 Jan 2021 07:25:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=4qVtH+jSjsW5NP/fGJ6PEX3HmzWMveU+fBxP99NEcHU=;
- b=dOZu/Iqt8TTWqdF/SX3RiIfS7tCPPjoPO9CvjXDk+ioO74uoEd6cCXgiTtwLrBpR8gZ9
- K1LjAd62604vyUs0dflCGM7TZi1/dhKgEOsBz7dkhAHlfAqqWQVNH3QkFz4h8Q0zjrrJ
- fd4JLywcZZyH6w0IJCy7rwqQUpJb2lq8v1F/dk46wrYN60nYlYFERwUc0nMmFY43QAXy
- +H7aznxUhUk5yPMCu5GwrE+8lf5+yBGhBxO0Kk1/4tTCOfCUocfgdXLoyhzFQSJXNYai
- w1V9RFFYlwxqBvy0s5T2bu0Li9PvkzSy84Yo8wuSpcxojdvYJmNTGOam3egwEOf3SI0z Gg== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 35vr05r4b7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jan 2021 07:25:08 -0500
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 105C86hE010528;
-        Tue, 5 Jan 2021 12:25:06 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 35tg3havea-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jan 2021 12:25:06 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 105CP4Nx41484668
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 5 Jan 2021 12:25:04 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93C96A4051;
-        Tue,  5 Jan 2021 12:25:04 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 69F43A405F;
-        Tue,  5 Jan 2021 12:25:03 +0000 (GMT)
-Received: from Brahadambals-MacBook-Pro-2.local.domain.name (unknown [9.85.95.140])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  5 Jan 2021 12:25:03 +0000 (GMT)
-From:   Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
-To:     shuah@kernel.org, trenn@suse.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        latha@linux.vnet.ibm.com
-Subject: [PATCH] cpuidle_set accepts alpha numeric values for idle-set operation
-Date:   Tue,  5 Jan 2021 17:54:52 +0530
-Message-Id: <20210105122452.8687-1-latha@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        id S1730463AbhAENDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jan 2021 08:03:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57172 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729685AbhAENDc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 5 Jan 2021 08:03:32 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E2CA22AAC;
+        Tue,  5 Jan 2021 13:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1609851770;
+        bh=/Tnbq4FC5ordGqRMZzBmEF2707cpXLotVuL1pB4INEg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b7A+HlihRW0BWkxuWeObIBnymtaP0ufAI6iZqP+I33dmJaItT4s02eE21hd20fF/X
+         d/gLGOgVM5jXbgjwt3xldxp8Yx05uXAdpw5ayzs7kX/HEqtzXpXUB3oUcRe35cTc//
+         0LAxDBVV/TNR3PSOx4/g/7uEn2gJ4Mz3qDyRHQzw=
+Date:   Tue, 5 Jan 2021 14:04:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
+Message-ID: <X/RjziK30y56uZUj@kroah.com>
+References: <20210104230253.2805217-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-05_01:2021-01-05,2021-01-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 phishscore=0 clxscore=1011 impostorscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101050073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For both the d and e options in cpuidle_set, an atoi() conversion is
-done without checking if the input argument is all numeric. So, an
-atoi conversion is done on any character provided as input and the
-CPU idle_set operation continues with that integer value, which may
-not be what is intended or entirely correct.
+On Mon, Jan 04, 2021 at 04:02:53PM -0700, Rob Herring wrote:
+> DT properties which can have multiple entries need to specify what the
+> entries are and define how many entries there can be. In the case of
+> only a single entry, just 'maxItems: 1' is sufficient.
+> 
+> Add the missing entry constraints. These were found with a modified
+> meta-schema. Unfortunately, there are a few cases where the size
+> constraints are not defined such as common bindings, so the meta-schema
+> can't be part of the normal checks.
+> 
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-A similar check is present for cpufreq-set already.
+<snip>
 
-This patch adds a check to see that the idle_set value is all numeric
-before doing a string-to-int conversion.
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> index 247ef00381ea..f76b25f7fc7a 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -83,6 +83,7 @@ properties:
+>        Phandle of a companion.
+>  
+>    phys:
+> +    maxItems: 1
+>      description: PHY specifier for the USB PHY
+>  
+>    phy-names:
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> index 2178bcc401bc..8e2bd61f2075 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> @@ -71,6 +71,7 @@ properties:
+>        Overrides the detected port count
+>  
+>    phys:
+> +    maxItems: 1
+>      description: PHY specifier for the USB PHY
+>  
+>    phy-names:
+> diff --git a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> index 678396eeeb78..f506225a4d57 100644
+> --- a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> @@ -40,7 +40,7 @@ properties:
+>        - const: mc
+>  
+>    phys:
+> -    description: PHY specifier for the USB PHY
+> +    maxItems: 1
+>  
+>    usb-role-switch:
+>      type: boolean
 
-Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
----
- tools/power/cpupower/utils/cpuidle-set.c | 39 +++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 5 deletions(-)
+Any reason you dropped the description for this entry, but not the other
+ones above?
 
-diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
-index 46158928f9ad..b3dec48e7141 100644
---- a/tools/power/cpupower/utils/cpuidle-set.c
-+++ b/tools/power/cpupower/utils/cpuidle-set.c
-@@ -21,6 +21,19 @@ static struct option info_opts[] = {
-      { },
- };
- 
-+int is_number(char *arg)
-+{
-+	size_t len, i = 0;
-+
-+	len = strlen(arg);
-+
-+	for (i = 0; i < len; i++) {
-+		if (!isdigit(arg[i]))
-+			return 0;
-+	}
-+
-+	return 1;
-+}
- 
- int cmd_idle_set(int argc, char **argv)
- {
-@@ -47,7 +60,12 @@ int cmd_idle_set(int argc, char **argv)
- 				break;
- 			}
- 			param = ret;
--			idlestate = atoi(optarg);
-+			if (is_number(optarg))
-+				idlestate = atoi(optarg);
-+			else {
-+				printf(_("Bad idle_set value : %s. Integer expected\n"), optarg);
-+				exit(EXIT_FAILURE);
-+			}
- 			break;
- 		case 'e':
- 			if (param) {
-@@ -56,7 +74,12 @@ int cmd_idle_set(int argc, char **argv)
- 				break;
- 			}
- 			param = ret;
--			idlestate = atoi(optarg);
-+			if (is_number(optarg))
-+				idlestate = atoi(optarg);
-+			else {
-+				printf(_("Bad idle_set value : %s\n. Integer expected"), optarg);
-+				exit(EXIT_FAILURE);
-+			}
- 			break;
- 		case 'D':
- 			if (param) {
-@@ -65,9 +88,15 @@ int cmd_idle_set(int argc, char **argv)
- 				break;
- 			}
- 			param = ret;
--			latency = strtoull(optarg, &endptr, 10);
--			if (*endptr != '\0') {
--				printf(_("Bad latency value: %s\n"), optarg);
-+			if (is_number(optarg)) {
-+				latency = strtoull(optarg, &endptr, 10);
-+				if (*endptr != '\0') {
-+					printf(_("Bad latency value: %s. Integer expected\n"),
-+						optarg);
-+					exit(EXIT_FAILURE);
-+				}
-+			} else {
-+				printf(_("Bad latency value: %s. Integer expected\n"), optarg);
- 				exit(EXIT_FAILURE);
- 			}
- 			break;
--- 
-2.24.3 (Apple Git-128)
+> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> index 388245b91a55..adce36e48bc9 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> @@ -15,13 +15,14 @@ properties:
+>        - const: ti,j721e-usb
+>  
+>    reg:
+> -    description: module registers
+> +    maxItems: 1
+>  
+>    power-domains:
+>      description:
+>        PM domain provider node and an args specifier containing
+>        the USB device id value. See,
+>        Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+> +    maxItems: 1
+>  
+>    clocks:
+>      description: Clock phandles to usb2_refclk and lpm_clk
 
+Same here, why remove the description?
+
+thanks,
+
+greg k-h
