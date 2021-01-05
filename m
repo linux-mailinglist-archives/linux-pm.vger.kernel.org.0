@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64A52EA8A2
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 11:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95222EA8B5
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jan 2021 11:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728422AbhAEK2H convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 5 Jan 2021 05:28:07 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:41340 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728612AbhAEK2H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jan 2021 05:28:07 -0500
-Received: by mail-ot1-f41.google.com with SMTP id x13so28788627oto.8;
-        Tue, 05 Jan 2021 02:27:52 -0800 (PST)
+        id S1729131AbhAEKaV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 5 Jan 2021 05:30:21 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:46181 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729133AbhAEKaU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jan 2021 05:30:20 -0500
+Received: by mail-ot1-f50.google.com with SMTP id w3so28826156otp.13;
+        Tue, 05 Jan 2021 02:30:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PmiKbSPT7SMid5h27DytWQnhKllxdBmyV/3B1JSoclU=;
-        b=e9I15tGd0/IdywFf0So4fhN2lPpSNqfHC3zP8Tag7FCcxnKtWl9CfhWuBz74y+b2Aj
-         Ab+9do5FMEbv/99V0FxDlk0uQaeBHMEMKdM6cKZZV7N/n44O2+1pmn68NGtg7L2ezYPf
-         BnFQH3aXZAzIxix8SEG/MCTcW8GeyaMsPFopdPA1qgR0G6LrkL0zF0N1z1RF7GbG2opZ
-         N4IufYAQHpACO+iU++TFHr9NSWv5bJu/lcIiSyvWmc8UxBk/BDTF8Bn0G2oodkx9bAby
-         uxtNYsYDgQIomOkTaTpAy8eGShiDN2OccBjYUh68YHbtgRsWYKvwSL4KNCprPSAUVouF
-         eDhg==
-X-Gm-Message-State: AOAM532SCC0eqirwp67cC3mXSOCDECjH4a4AMv8R/PmjLHUZCRe5fWwz
-        2+AMidZKPvAqk+koVp18FQA8AeqoEyVmVwxE/eMrAqnQ
-X-Google-Smtp-Source: ABdhPJz+RNY7JNuJ8BDud0xIAalpOZVqhXvyHXZNAS8hPYmuGcQkH2WXMf07G86NdmuknRZkQsjZhqBv8odQnaZDAAU=
-X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr55654130otc.145.1609842446721;
- Tue, 05 Jan 2021 02:27:26 -0800 (PST)
+        bh=TDV5ld2/gAWUMe2e3Urs0OVOKaSoQnRn0I/4UgQMJgM=;
+        b=kJXXWY9xHnbjkA1R3T8m+le/OFWnOoCfWn9a68vHYI4ZZS2PT6fjUpLIw1xBbrxCGE
+         PqX4QtlTztB5ewMYCqlNXpE7xiWkcnNHUPZcxpgikUV7d2eThBKqYnTfHCQYAs3H0aEi
+         tu+iajzxtA5MW/vJS7212k1HEvoZKXIcIe4H0HddUu62Wjx4wtOYj5gVLv7E3oXU0qU7
+         Vp7ajp9CRK7ItYcw3giPpKMI6FlTgYrG4puRROZt9HjEtvenX5KRA20BbMZU1z9Poo83
+         YZ3dgrbiyl9j8ceXmP6ISculcpf4+jSy0EXhFWYHMymNoAZOmd4iFYqvuDF8tjd5NN/B
+         0GCg==
+X-Gm-Message-State: AOAM532UEBl0CDFE6Jvy848UOKVxXAuZFj5rsQmUQQvsPZbt7QAJ7hZJ
+        4W/pswmayxXn4wfBogz+Lxr3/ZE68Avn7kZ2Z3c=
+X-Google-Smtp-Source: ABdhPJwNA6QGouDzm+wcuKIn/tlwSG85mL6qx+xf5/iIHI5prpE/grOjRPnL80sz12/MCWPpayowKKXHWLBMGrKTw5g=
+X-Received: by 2002:a9d:c01:: with SMTP id 1mr40558293otr.107.1609842579594;
+ Tue, 05 Jan 2021 02:29:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20201126223028.3119044-1-niklas.soderlund+renesas@ragnatech.se> <20201126223028.3119044-3-niklas.soderlund+renesas@ragnatech.se>
-In-Reply-To: <20201126223028.3119044-3-niklas.soderlund+renesas@ragnatech.se>
+References: <20201126223028.3119044-1-niklas.soderlund+renesas@ragnatech.se> <20201126223028.3119044-4-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20201126223028.3119044-4-niklas.soderlund+renesas@ragnatech.se>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Jan 2021 11:27:15 +0100
-Message-ID: <CAMuHMdW=9gDi-D7htccg6mF+FV-B8AfLnrvyNkyEPe=EoNYKYg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a779a0: Add thermal support
+Date:   Tue, 5 Jan 2021 11:29:28 +0100
+Message-ID: <CAMuHMdUm-1Tv11z_--+h+LiU=0OggpYfK=oTsDwx6dT=KmuBKQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thermal: rcar_gen3_thermal: Add r8a779a0 support
 To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -52,104 +52,34 @@ Hi Niklas,
 
 On Thu, Nov 26, 2020 at 11:30 PM Niklas Söderlund
 <niklas.soderlund+renesas@ragnatech.se> wrote:
-> Add support for thermal.
+> Add support for R-Car V3U. The new THCODE values are taken from the
+> example in the datasheet.
 >
 > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
 Thanks for your patch!
 
-> --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-> @@ -91,6 +91,18 @@ sysc: system-controller@e6180000 {
->                         #power-domain-cells = <1>;
->                 };
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -60,13 +60,14 @@
+>  #define MCELSIUS(temp) ((temp) * 1000)
+>  #define GEN3_FUSE_MASK 0xFFF
 >
-> +               tsc: thermal@e6190000 {
-> +                       compatible = "renesas,r8a779a0-thermal";
-> +                       reg = <0 0xe6190000 0 0x100>,
-> +                             <0 0xe6198000 0 0x100>,
-> +                             <0 0xe61a0000 0 0x100>,
-> +                             <0 0xe61a8000 0 0x100>;
+> -#define TSC_MAX_NUM    3
+> +#define TSC_MAX_NUM    4
 
-The fifth region at 0x161b0000 is missing.
+As pointed out by Shimoda-san in response to the DT binding update,
+R-Car V3U has 5 sensors.
 
-> +                       clocks = <&cpg CPG_MOD 919>;
-> +                       power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-> +                       resets = <&cpg 919>;
-> +                       #thermal-sensor-cells = <1>;
-> +               };
-> +
->                 scif0: serial@e6e60000 {
->                         compatible = "renesas,scif-r8a779a0",
->                                      "renesas,rcar-gen3-scif", "renesas,scif";
-> @@ -123,6 +135,64 @@ prr: chipid@fff00044 {
->                 };
->         };
 >
-> +       thermal-zones {
-> +               sensor_thermal1: sensor-thermal1 {
-> +                       polling-delay-passive = <250>;
-> +                       polling-delay = <1000>;
-> +                       thermal-sensors = <&tsc 0>;
-> +
-> +                       trips {
-> +                               sensor1_crit: sensor1-crit {
-> +                                       temperature = <120000>;
-> +                                       hysteresis = <1000>;
-> +                                       type = "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               sensor_thermal2: sensor-thermal2 {
-> +                       polling-delay-passive = <250>;
-> +                       polling-delay = <1000>;
-> +                       thermal-sensors = <&tsc 1>;
-> +
-> +                       trips {
-> +                               sensor2_crit: sensor2-crit {
-> +                                       temperature = <120000>;
-> +                                       hysteresis = <1000>;
-> +                                       type = "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               sensor_thermal3: sensor-thermal3 {
-> +                       polling-delay-passive = <250>;
-> +                       polling-delay = <1000>;
-> +                       thermal-sensors = <&tsc 2>;
-> +
-> +                       trips {
-> +                               sensor3_crit: sensor3-crit {
-> +                                       temperature = <120000>;
-> +                                       hysteresis = <1000>;
-> +                                       type = "critical";
-> +                               };
-> +                       };
-> +               };
-> +
-> +               sensor_thermal4: sensor-thermal4 {
-> +                       polling-delay-passive = <250>;
-> +                       polling-delay = <1000>;
-> +                       thermal-sensors = <&tsc 3>;
-> +
-> +                       trips {
-> +                               sensor4_crit: sensor4-crit {
-> +                                       temperature = <120000>;
-> +                                       hysteresis = <1000>;
-> +                                       type = "critical";
-> +                               };
-> +                       };
-> +               };
+>  /* default THCODE values if FUSEs are missing */
+>  static const int thcodes[TSC_MAX_NUM][3] = {
+>         { 3397, 2800, 2221 },
+>         { 3393, 2795, 2216 },
+>         { 3389, 2805, 2237 },
+> +       { 3415, 2694, 2195 },
 
-Missing fifth entry.
-
-> +       };
-> +
->         timer {
->                 compatible = "arm,armv8-timer";
->                 interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+No idea what the missing fifth entry should be...
 
 Gr{oetje,eeting}s,
 
