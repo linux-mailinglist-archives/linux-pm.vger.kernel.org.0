@@ -2,157 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6A12EBB06
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jan 2021 09:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556BD2EBB25
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jan 2021 09:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbhAFIUR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jan 2021 03:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726020AbhAFIUQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jan 2021 03:20:16 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0B1C06134C;
-        Wed,  6 Jan 2021 00:19:36 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id i5so1757760pgo.1;
-        Wed, 06 Jan 2021 00:19:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/U5C7cSXXWC3ZHRZnRRNCwYTblI/jKmn2rVA8KcxSJM=;
-        b=PAK/LCgT64vP6V1vGj+K9eE8e05GbIdrgGgEZmxtg9N74xdClCsYi4QLfwVO+VAirP
-         selgESgzICugrADPg0yKx/auIhK2WDP3gl0eF27I++3+Fh0SYUVDggeHigfolqUefZE9
-         lqOr2KqLlzUR2ynVavN9HeiK10rIuYs6kGxJdCwd5xKqTxXJW8oxS9ahnjbtL1ytaOeS
-         2JqZAZWM7Yy3yEI92RBU1CMNO8b4zwRWU0ikSJL6Q+TZZTAyUXVJPOL+pr+kbtJn5WrM
-         IXsY+S1tPmq4QzOVkgmlx7fk53q4At5W1yNZ2Kn4ivgI7L3r8lCzyi5QSMyE8tGQaZIg
-         fCmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/U5C7cSXXWC3ZHRZnRRNCwYTblI/jKmn2rVA8KcxSJM=;
-        b=oo5CK7h0T1YXLVqyafoQnbjOg9cW+w0ehDsJLTV7QqkyOG4/Io9clDXXreMm1cC4KM
-         zAkzvPYArML2FajCRXH6XFfkotgG78ZI93X+MXgBWPnu0BQ8aJH/8U8tkQdhGjtph3Ya
-         BCpKH54ecuqyimCb+YXiKZ/GfY/AjlzqxFbupVA6GwkaOvVFSNQ3M8n7x7szHFEbZ0bB
-         iyDCPQw5JnXsqH/ZY31KKlg35GyijncWdOFUDOO20JYMDfB1tKd/9pGvLD8TTn+AZmFJ
-         UEytBOJBPh5m/urJhbXK6pUbIWGpEim/N0nTl7XRLKu1nsvhMslJxhTnXhVAsOkDlVqN
-         /D2g==
-X-Gm-Message-State: AOAM530AFiCgJxGmMGB3+VRRnGyJhyHlJkYPgUh8xrwnoCJHc1C09JEa
-        DOSnF59hxqHDyONDJ0rmpBA=
-X-Google-Smtp-Source: ABdhPJzngzNs2PcZJpclKMgPnTHoksW90J8u4KTkMxsH+ek49+eJ14WA6u41OIhjUkvHrYkH0UG1pQ==
-X-Received: by 2002:a63:1863:: with SMTP id 35mr3393995pgy.191.1609921176010;
-        Wed, 06 Jan 2021 00:19:36 -0800 (PST)
-Received: from shinobu (p97026-ipoefx.ipoe.ocn.ne.jp. [153.246.132.25])
-        by smtp.gmail.com with ESMTPSA id i25sm1684029pgb.33.2021.01.06.00.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 00:19:35 -0800 (PST)
-Date:   Wed, 6 Jan 2021 17:19:25 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "(Exiting) Amit Kucheria" <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 0/5] Introduce the for_each_set_clump macro
-Message-ID: <X/VyjQUIbqXAeZpe@shinobu>
-References: <cover.1608963094.git.syednwaris@gmail.com>
- <CACRpkdYZwMy5faNhUyiNnvdnMOf4ac7XWqjnf3f4jCJeE=p2Lw@mail.gmail.com>
- <CAMpxmJW46Oh2h7RrBNo5vACfYnWy63rZOO=Va=ppUDeaj5GpBg@mail.gmail.com>
- <20210105143921.GL4077@smile.fi.intel.com>
- <CAMpxmJXX5tPBvHRBkgCBK22vUc_FOo2ENUagqOF-opzakkyjrA@mail.gmail.com>
+        id S1726157AbhAFIhf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jan 2021 03:37:35 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:53644 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbhAFIhe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jan 2021 03:37:34 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1068VNI4052402;
+        Wed, 6 Jan 2021 08:36:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=q+KJ8AfPkiSCHLPRdLSxb87gjhWi/QLcykmElkTz1T0=;
+ b=yoTjTwaXig6Czqfr4rcKDk7U2dVFqJQKrVm4tXkcxaCkVSo9eFMr6B4hIz+0BpdZGaqF
+ m3V0rg/djTklghEcNJwa4rOVgvLOwu4v/AhiJoo9GQTqMoRQ3vwb8Oe0AzpZ275kkLTN
+ f4EL9CRw1PiFLu5DLQbrj+Qijv07LsBvesJT8im8LClS/NKKEVtVx8tddj05/79FGyIo
+ OW7nUXLNDdYlaB2iYe4b0jJRKTmzPxxJMKejYJC1I0+GEiB+AZlCT91ekYxkeHKKjHYo
+ LWdxkNGc/e8wKleqHKS1QYyJEPtSQ4LvlDMB4tAZQxZB+uDOe9FLbL1E3kqqy2B5zVtI 3g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 35w53b0r1g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 06 Jan 2021 08:36:47 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1068XAha042304;
+        Wed, 6 Jan 2021 08:36:47 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 35w3g0p66r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Jan 2021 08:36:47 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 1068ajMG027546;
+        Wed, 6 Jan 2021 08:36:45 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 06 Jan 2021 08:36:44 +0000
+Date:   Wed, 6 Jan 2021 11:36:35 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH 1/3] powercap/drivers/dtpm: Fix a double shift bug
+Message-ID: <X/V2k8dwaXJH6VFh@mwanda>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ygWp8EN/cCl4AW3c"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMpxmJXX5tPBvHRBkgCBK22vUc_FOo2ENUagqOF-opzakkyjrA@mail.gmail.com>
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9855 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101060051
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9855 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 clxscore=1011 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101060051
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The DTPM_POWER_LIMIT_FLAG is used for test_bit() etc which take a bit
+number so it should be bit 0.  But currently it's set to BIT(0) then
+that is double shifted equivalent to BIT(BIT(0)).  This doesn't cause a
+run time problem because it's done consistently.
 
---ygWp8EN/cCl4AW3c
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: a20d0ef97abf ("powercap/drivers/dtpm: Add API for dynamic thermal power management")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/powercap/dtpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, Jan 06, 2021 at 08:27:43AM +0100, Bartosz Golaszewski wrote:
-> On Tue, Jan 5, 2021 at 3:38 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Tue, Jan 05, 2021 at 03:19:13PM +0100, Bartosz Golaszewski wrote:
-> > > On Sun, Dec 27, 2020 at 10:27 PM Linus Walleij <linus.walleij@linaro.=
-org> wrote:
-> > > >
-> > > > On Sat, Dec 26, 2020 at 7:41 AM Syed Nayyar Waris <syednwaris@gmail=
-=2Ecom> wrote:
-> > > >
-> > > > > Since this patchset primarily affects GPIO drivers, would you like
-> > > > > to pick it up through your GPIO tree?
-> > > >
-> > > > Actually Bartosz is handling the GPIO patches for v5.12.
-> > > > I tried to merge the patch series before but failed for
-> > > > various reasons.
-> >
-> > > My info on this is a bit outdated - didn't Linus Torvalds reject these
-> > > patches from Andrew Morton's PR? Or am I confusing this series with
-> > > something else?
-> >
-> > Linus T. told that it can be done inside GPIO realm. This version tries
-> > (badly in my opinion) to achieve that.
-> >
->=20
-> I'm seeing William and Arnd have some unaddressed issues with patch 1
-> (with using __builtin_unreachable()).
->=20
-> Admittedly I didn't follow the previous iterations too much so I may
-> miss some history behind it. Why do the first two patches go into lib
-> if this is supposed to be gpiolib-only?
->=20
-> Bartosz
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 0abcc439d728..d49df0569cd4 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -24,7 +24,7 @@
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ 
+-#define DTPM_POWER_LIMIT_FLAG BIT(0)
++#define DTPM_POWER_LIMIT_FLAG 0
+ 
+ static const char *constraint_name[] = {
+ 	"Instantaneous",
+-- 
+2.29.2
 
-This patchset originally start out as a replacement for
-bitmap_get_value8/bitmap_set_value8/for_each_set_clump8, which are used
-outside of the GPIO subsystem. Over the course of the revisions, the
-scope of this patchset was reduced down and now it's only affecting GPIO
-drivers.
-
-You're right that this shouldn't be going into lib anymore because it's
-gpiolib-only now. I expect the next revision of this patchset Syed
-submits will address that.
-
-William Breathitt Gray
-
---ygWp8EN/cCl4AW3c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAl/1cnkACgkQhvpINdm7
-VJLMPRAAwJEYL1+57OyJLDo0vHssi6pk3Thk0epTN66eEBfuWpVGeQIpwB3oeKjp
-N/h5TcXnHUBk7r52tZwPbkm/YoFPbzGCz+3JIOKxIOhnbq3hRjtgPDQOQmBJEMX3
-pIhwSPAtCR+NSzOr5W1yXifWhOazAE5RXhLs1XedN60Gx1Zbopyl5XDr2YbFesgJ
-IUwzzncM6VXMAU6Gf6mbuLFiWRBjLTFyCAtHHZaBxVPbU6hrUwdqXIAXBmaL/pl+
-PBvCiKMXXFCCxJ+hAtTZ+ODXjxO9tRbzvDnYolERDXNK+iO/o5bXoks+Dm/UDROQ
-r+mt2yIIur6IF8SU/pFdC0SYr7PTpv1WtT6D+Q4AlXpwG2yP8g/kXhYE+pJF1M3m
-jGqhYRf7Li6hC6K9xp/3C1pjTGRBB8lhYQWCHbmqT8IqHo/vMLf3Moqvmt/+hFB8
-cGSS+bR7HGQBxJQ58xlwumPCbI0s79wU/HjEcvhQLNZACr7pgNRvHYv9BdXoGN16
-CZZKXSnhOuJxgMOWAplY+unyNBqSItcqNXFQLouoToRGZwqp+tPo04IiOP5NSv6v
-kxipYcsXAApQSy1wqtLsX0LBso4OPSl3e4eAOFJYanWPy6HhJpZgx7BXlDFoDkG3
-lc9Kn4B0BMp8eVH5Qi6gDrMZMIUvrNmWw2XHs4BuRZ5FSpYR0oY=
-=37la
------END PGP SIGNATURE-----
-
---ygWp8EN/cCl4AW3c--
