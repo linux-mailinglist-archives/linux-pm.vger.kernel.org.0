@@ -2,122 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B7E2EBA60
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jan 2021 08:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA0A2EBA79
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jan 2021 08:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726223AbhAFHPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jan 2021 02:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S1725843AbhAFH2g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jan 2021 02:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725861AbhAFHPG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jan 2021 02:15:06 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFE5C061360
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jan 2021 23:13:39 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id t16so3666056ejf.13
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jan 2021 23:13:39 -0800 (PST)
+        with ESMTP id S1725800AbhAFH2g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jan 2021 02:28:36 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE24C061358
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jan 2021 23:27:55 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id q22so3875971eja.2
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jan 2021 23:27:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
-        b=kW/FIQ9UMgiQ4U+TkdADVoEYk5gZPV3uhWmFEaBISm60k6X7HKncaLJMcm7Te12ixW
-         DmozTsbCxinSR4kw60jnPkTRpJcI2yoqWEX3PsYD1Gobe1MgtRCRsAYMvDuT6a2OmRZe
-         JA5aIaNzC2Qz1QI2pjKK7hj+qAEnukuAv07b9W7M8pBoGmUjZmXbHaL5522RR1fvjBcC
-         aUOByaCkN/CFtegf2L0lfAhcsuMiZ+e/Z0kGD0hJrq1CBcozlTfyZi2pX2qyg5tLtp5K
-         qfoj7U94CqKy1yfDXJToNFtVkn5zEBI7/9XBDJd/bwiyCn1gMrTQ4lsyGmJDatnR3P5D
-         m6RA==
+        bh=xGW/hKcgThQrkDmp4/Nq73y8NgwE8XDkGF7zvIldMrM=;
+        b=A2KNk3AHTmJlI18STPME1Sa6t9gc1Ftvw7b31H8Vj39YjusgeaU0c1ypsqit52yWFF
+         3eQGLVMgPfhF0tcCbEJmm3HsNCJ0zZ8NG3JRTyPKW7OXNUZNMMniS0bT/7ndVqBa7b3q
+         FNEjNtzso2oFjWRDBWdctZ8/UBVolbVcrg/o27xs67qQd0Kl0+7v6and6KXS4zT0IDGo
+         L8nHoW7UNQO5cliDlHgM3DAezmy7JMyVE7cZk2uzueStSK5Zefr34N8UH/sgVW6YOIjG
+         mkROA3nUh248uHrjhIU+cLDXpa2DbIJKN7YqY8L5/rgwpwStSYsD7b1Mvy7MEYO2VlnD
+         LaHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
-        b=LFRICoGdphM9Rr/28GO3JBtIYpK1piVWoYq86rpGMkilGTA1GxHeyePX+MuoizYd09
-         vl1QNiUnzkSf1YU44EbsvtPzGfXNiZlg0FBrXLu6uYBwG7MkY+Lt2a3NkGWgyY1gIE8E
-         I8EBTg1g7g7ehXrFr6XO+y5FDYbhJIz+M9qrkh4mrzOaaxQyAMl1Mgi5T4RAUbv+xaau
-         /yNnLOlE+AtAPkwWiVmJeziR06LVW2yMXZ+fI2yEEtTW5MYjvkRmrr9DPc0rL92N7VE0
-         uHQiK7uAsaGVm0YiCYEaI0JRpSg3Fd7QHLrAKySN2SPCmaBGN5C2QdAL/yhyiiJZZuV9
-         0HJA==
-X-Gm-Message-State: AOAM530tFgvAWx0wMNUD1Wiz+aulRJyqk4WkgSCDZV/8sJJ9b4qqON49
-        MUw8HAPn31sffdd3bpjVbYWVEBe/xJ2Ka3B6FMR5bA==
-X-Google-Smtp-Source: ABdhPJz7NZsjb4UgOGiErAdqwk42sh/yXenAjVlhxnzAVaOFNfM5U6i5Q3E7GI/VvU/IA448wOjGCY/95IeDdC3rxz4=
-X-Received: by 2002:a17:906:8594:: with SMTP id v20mr1986708ejx.470.1609917218321;
- Tue, 05 Jan 2021 23:13:38 -0800 (PST)
+        bh=xGW/hKcgThQrkDmp4/Nq73y8NgwE8XDkGF7zvIldMrM=;
+        b=QtUGcIvvU1m8MlourZRfcrKq3tJWx81El+KsZDy8DLGwrpTgiKtr9ORgBrExloxike
+         vDOBkYUGu61+6bYJh8bVhQz0iv7WgA6wdrRVXo0KYHH2t0HcWtGRc2N+I6yYb+BMrzBA
+         CQ85/rqus4p33vOEdtk0EGkQk4eWTsbHkkCgAQZZ0Fkau11Ea+VDKqQQJ825QCDkRZBa
+         jggT22MblAMk+B9aqpxRdabYAU2wI1IRdxVBZn5wuMZgYzj/IibPHXGbx2fhKE/CienY
+         gbJdWmpopO3DoVsBtxNrrQZEM4c2wVgPLRGkezBXHXazNb+m5P/Wp0CdV9JhaKRSvmt3
+         rQAQ==
+X-Gm-Message-State: AOAM5315CZPr/wyeS7uDurKCTstxlz4DdIMX3bTA2MS12U+Tgaa2MFKz
+        hzgVHkwCtRev+3udPKiij/SZU67RpmYzNLbcGr287w==
+X-Google-Smtp-Source: ABdhPJwYjz8N2N+aC7hTbxtGQy//7rOVk9vuZpXjappd1ywiMkx0G+q8sv1KN8h2TqqcyRgEkKycqJpY3pGZKSJx6nY=
+X-Received: by 2002:a17:906:3a55:: with SMTP id a21mr2057000ejf.516.1609918074173;
+ Tue, 05 Jan 2021 23:27:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20210104230253.2805217-1-robh@kernel.org>
-In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
+References: <cover.1608963094.git.syednwaris@gmail.com> <CACRpkdYZwMy5faNhUyiNnvdnMOf4ac7XWqjnf3f4jCJeE=p2Lw@mail.gmail.com>
+ <CAMpxmJW46Oh2h7RrBNo5vACfYnWy63rZOO=Va=ppUDeaj5GpBg@mail.gmail.com> <20210105143921.GL4077@smile.fi.intel.com>
+In-Reply-To: <20210105143921.GL4077@smile.fi.intel.com>
 From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Wed, 6 Jan 2021 08:13:27 +0100
-Message-ID: <CAMpxmJVFFu6q53-O_iWCyhY3M3up2Hg1TMY_DpmOvED4eN8bJQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        linux-drm <dri-devel@lists.freedesktop.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linux-spi@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
+Date:   Wed, 6 Jan 2021 08:27:43 +0100
+Message-ID: <CAMpxmJXX5tPBvHRBkgCBK22vUc_FOo2ENUagqOF-opzakkyjrA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Introduce the for_each_set_clump macro
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "(Exiting) Amit Kucheria" <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 5, 2021 at 12:03 AM Rob Herring <robh@kernel.org> wrote:
+On Tue, Jan 5, 2021 at 3:38 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> DT properties which can have multiple entries need to specify what the
-> entries are and define how many entries there can be. In the case of
-> only a single entry, just 'maxItems: 1' is sufficient.
+> On Tue, Jan 05, 2021 at 03:19:13PM +0100, Bartosz Golaszewski wrote:
+> > On Sun, Dec 27, 2020 at 10:27 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > >
+> > > On Sat, Dec 26, 2020 at 7:41 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> > >
+> > > > Since this patchset primarily affects GPIO drivers, would you like
+> > > > to pick it up through your GPIO tree?
+> > >
+> > > Actually Bartosz is handling the GPIO patches for v5.12.
+> > > I tried to merge the patch series before but failed for
+> > > various reasons.
 >
-> Add the missing entry constraints. These were found with a modified
-> meta-schema. Unfortunately, there are a few cases where the size
-> constraints are not defined such as common bindings, so the meta-schema
-> can't be part of the normal checks.
+> > My info on this is a bit outdated - didn't Linus Torvalds reject these
+> > patches from Andrew Morton's PR? Or am I confusing this series with
+> > something else?
+>
+> Linus T. told that it can be done inside GPIO realm. This version tries
+> (badly in my opinion) to achieve that.
 >
 
-[snip!]
+I'm seeing William and Arnd have some unaddressed issues with patch 1
+(with using __builtin_unreachable()).
 
->  .../bindings/gpio/gpio-pca95xx.yaml           |  1 +
+Admittedly I didn't follow the previous iterations too much so I may
+miss some history behind it. Why do the first two patches go into lib
+if this is supposed to be gpiolib-only?
 
-[snip!]
-
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-> index f5ee23c2df60..57cdcfd4ff3c 100644
-> --- a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-> @@ -81,6 +81,7 @@ properties:
->      const: 2
->
->    reset-gpios:
-> +    maxItems: 1
->      description:
->        GPIO specification for the RESET input. This is an active low signal to
->        the PCA953x.  Not valid for Maxim MAX732x devices.
-
-Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Bartosz
