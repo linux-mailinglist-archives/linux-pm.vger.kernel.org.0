@@ -2,100 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 052712EBA4B
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jan 2021 08:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B7E2EBA60
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jan 2021 08:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbhAFHBf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jan 2021 02:01:35 -0500
-Received: from mga14.intel.com ([192.55.52.115]:8058 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725877AbhAFHBf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 6 Jan 2021 02:01:35 -0500
-IronPort-SDR: hKPlJKhJD/Vk5FnulSzpjg33L7ZzbkxcpNyInWVflyWuObSX0EOy8GZ21EpUgHtxT/zLBaTc4h
- 0RVfunksFYzw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9855"; a="176458239"
-X-IronPort-AV: E=Sophos;i="5.78,479,1599548400"; 
-   d="scan'208";a="176458239"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 22:59:49 -0800
-IronPort-SDR: YkBOHaT7Bgo3kpotuQ8x7/w5WAiUGiP5LtwFpLbZhqW+VWzMIahl5UmJYz1IPkZ9cXvbguQmqV
- KUJ/pduk06Tg==
-X-IronPort-AV: E=Sophos;i="5.78,479,1599548400"; 
-   d="scan'208";a="462583520"
-Received: from sabrinaa-mobl.amr.corp.intel.com ([10.213.162.179])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 22:59:47 -0800
-Message-ID: <a232f29236ae1cc6ecd90495a2dc1c38c1488a04.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Use HWP capabilities in
- intel_cpufreq_adjust_perf()
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Date:   Tue, 05 Jan 2021 22:59:43 -0800
-In-Reply-To: <1784464.uM0JrOW1fs@kreacher>
-References: <1784464.uM0JrOW1fs@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2 (3.38.2-1.fc33) 
+        id S1726223AbhAFHPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jan 2021 02:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbhAFHPG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jan 2021 02:15:06 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFE5C061360
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jan 2021 23:13:39 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id t16so3666056ejf.13
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jan 2021 23:13:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
+        b=kW/FIQ9UMgiQ4U+TkdADVoEYk5gZPV3uhWmFEaBISm60k6X7HKncaLJMcm7Te12ixW
+         DmozTsbCxinSR4kw60jnPkTRpJcI2yoqWEX3PsYD1Gobe1MgtRCRsAYMvDuT6a2OmRZe
+         JA5aIaNzC2Qz1QI2pjKK7hj+qAEnukuAv07b9W7M8pBoGmUjZmXbHaL5522RR1fvjBcC
+         aUOByaCkN/CFtegf2L0lfAhcsuMiZ+e/Z0kGD0hJrq1CBcozlTfyZi2pX2qyg5tLtp5K
+         qfoj7U94CqKy1yfDXJToNFtVkn5zEBI7/9XBDJd/bwiyCn1gMrTQ4lsyGmJDatnR3P5D
+         m6RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
+        b=LFRICoGdphM9Rr/28GO3JBtIYpK1piVWoYq86rpGMkilGTA1GxHeyePX+MuoizYd09
+         vl1QNiUnzkSf1YU44EbsvtPzGfXNiZlg0FBrXLu6uYBwG7MkY+Lt2a3NkGWgyY1gIE8E
+         I8EBTg1g7g7ehXrFr6XO+y5FDYbhJIz+M9qrkh4mrzOaaxQyAMl1Mgi5T4RAUbv+xaau
+         /yNnLOlE+AtAPkwWiVmJeziR06LVW2yMXZ+fI2yEEtTW5MYjvkRmrr9DPc0rL92N7VE0
+         uHQiK7uAsaGVm0YiCYEaI0JRpSg3Fd7QHLrAKySN2SPCmaBGN5C2QdAL/yhyiiJZZuV9
+         0HJA==
+X-Gm-Message-State: AOAM530tFgvAWx0wMNUD1Wiz+aulRJyqk4WkgSCDZV/8sJJ9b4qqON49
+        MUw8HAPn31sffdd3bpjVbYWVEBe/xJ2Ka3B6FMR5bA==
+X-Google-Smtp-Source: ABdhPJz7NZsjb4UgOGiErAdqwk42sh/yXenAjVlhxnzAVaOFNfM5U6i5Q3E7GI/VvU/IA448wOjGCY/95IeDdC3rxz4=
+X-Received: by 2002:a17:906:8594:: with SMTP id v20mr1986708ejx.470.1609917218321;
+ Tue, 05 Jan 2021 23:13:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210104230253.2805217-1-robh@kernel.org>
+In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Wed, 6 Jan 2021 08:13:27 +0100
+Message-ID: <CAMpxmJVFFu6q53-O_iWCyhY3M3up2Hg1TMY_DpmOvED4eN8bJQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        linux-drm <dri-devel@lists.freedesktop.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linux-spi@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2021-01-05 at 19:20 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If turbo P-states cannot be used, either due to the configuration of
-> the processor, or because intel_pstate is not allowed to used them,
-> the maximum available P-state with HWP enabled corresponds to the
-> HWP_CAP.GUARANTEED value which is not static.  It can be adjusted by
-> an out-of-band agent or during an Intel Speed Select performance
-> level change, so long as it remains less than or equal to
-> HWP_CAP.MAX.
-> 
-> However, if turbo P-states cannot be used,
-> intel_cpufreq_adjust_perf()
-> always uses pstate.max_pstate (set during the initialization of the
-> driver only) as the maximum available P-state, so it may miss a
-> change
-> of the HWP_CAP.GUARANTEED value.
-> 
-> Prevent that from happening by modifyig intel_cpufreq_adjust_perf()
-> to always read the "guaranteed" and "maximum turbo" performance
-> levels from the cached HWP_CAP value.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Tue, Jan 5, 2021 at 12:03 AM Rob Herring <robh@kernel.org> wrote:
+>
+> DT properties which can have multiple entries need to specify what the
+> entries are and define how many entries there can be. In the case of
+> only a single entry, just 'maxItems: 1' is sufficient.
+>
+> Add the missing entry constraints. These were found with a modified
+> meta-schema. Unfortunately, there are a few cases where the size
+> constraints are not defined such as common bindings, so the meta-schema
+> can't be part of the normal checks.
+>
 
-> ---
->  drivers/cpufreq/intel_pstate.c |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -2653,12 +2653,13 @@ static void intel_cpufreq_adjust_perf(un
->                                       unsigned long capacity)
->  {
->         struct cpudata *cpu = all_cpu_data[cpunum];
-> +       u64 hwp_cap = READ_ONCE(cpu->hwp_cap_cached);
->         int old_pstate = cpu->pstate.current_pstate;
->         int cap_pstate, min_pstate, max_pstate, target_pstate;
->  
->         update_turbo_state();
-> -       cap_pstate = global.turbo_disabled ? cpu->pstate.max_pstate :
-> -                                            cpu-
-> >pstate.turbo_pstate;
-> +       cap_pstate = global.turbo_disabled ?
-> HWP_GUARANTEED_PERF(hwp_cap) :
-> +                                           
-> HWP_HIGHEST_PERF(hwp_cap);
->  
->         /* Optimization: Avoid unnecessary divisions. */
->  
-> 
-> 
-> 
+[snip!]
 
+>  .../bindings/gpio/gpio-pca95xx.yaml           |  1 +
 
+[snip!]
+
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+> index f5ee23c2df60..57cdcfd4ff3c 100644
+> --- a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+> @@ -81,6 +81,7 @@ properties:
+>      const: 2
+>
+>    reset-gpios:
+> +    maxItems: 1
+>      description:
+>        GPIO specification for the RESET input. This is an active low signal to
+>        the PCA953x.  Not valid for Maxim MAX732x devices.
+
+Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
