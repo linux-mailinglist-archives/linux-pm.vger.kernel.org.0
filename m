@@ -2,134 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9FA2ECC6A
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Jan 2021 10:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5395E2ECD7A
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Jan 2021 11:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbhAGJLn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jan 2021 04:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727273AbhAGJLl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jan 2021 04:11:41 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1D7C061282
-        for <linux-pm@vger.kernel.org>; Thu,  7 Jan 2021 01:10:20 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id o19so13012487lfo.1
-        for <linux-pm@vger.kernel.org>; Thu, 07 Jan 2021 01:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T+iZKNW1gmpT+HQqIiqmRRpQMcaG8pgogUVWa/pKYOM=;
-        b=cyz7QwbTfHcC+qnorIFVkv7DnbL/oyA5L+VJJAN8XWkNMg42oKdig8X5tU4xa7X7pN
-         01zspKzmEcVvu5fY2nzlSr3geA/q2812tr8Wz0sUieGMHhvg1aGrsz+m0J4b8Wmr2jr4
-         Bxuqd5E5gXQb8ARkFssKYAOK0W62M412pmNUBd9NwRQD04zf23syAxjzcLmFBod8VeLt
-         Wkczn2W4OJkxg0o6mQ3tRUOpKTABRCCUpHtxAiPQFjxJEJCf/WQ1QzYZHEZTgGgMtnu2
-         jNC0bNdR63+2S3cfHE4fDoxHLsYIWb3l6Ja+q5Vt8aM4kBs1TbyhYMIEDY91gB4GZfH3
-         2CvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T+iZKNW1gmpT+HQqIiqmRRpQMcaG8pgogUVWa/pKYOM=;
-        b=nFq5StlxPYb5CnglK8Wm7GojzbZZQn7gnrdBST7YRaXBQK4JESZus75DjdPxT1TyZ+
-         0KJhbBcnoqgRpzkPpqU4OKkiOdg6r2I/1P+t97pcCxAc5SZ+05g8uZtD0FQYux094iTt
-         dpJ+8nmjDITv4osqGbRGr0JwoBIGOsRUqfJwLXTbHAW0VVV/EgdFRv5bU2PCL7INItAY
-         12tjiyNn+VtTQ8X2NdTKXz6jQjSbAmrWD0jKqxNRwTeBmxDdI+Y9y/QQXqyTHCnWeKa7
-         RM4oGiVwHEqdFzFRjCbV+sBTIQre+jqYAzllXFDAHU0iMquRvwPxdnQ1qrgyvsRjutNT
-         349g==
-X-Gm-Message-State: AOAM533O3aNEoycJInnxjRwNbjJr689iccD2JqsaKDQHUG3UoMfSmOxU
-        C+uVOSu+r/O5reBwStptfeVVZX7Z509Qwx4g3zOOSA==
-X-Google-Smtp-Source: ABdhPJz6FNuZKYGADUxlk9Tv8Rh/lJVu/2CmZBJO3UIrMaB/edLmB9ZlsVBcuBoQ7GbjgHsRrGXCE/gOnIldpK4OwK0=
-X-Received: by 2002:a19:495d:: with SMTP id l29mr3392190lfj.465.1610010618615;
- Thu, 07 Jan 2021 01:10:18 -0800 (PST)
+        id S1726545AbhAGKIO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jan 2021 05:08:14 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59432 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726526AbhAGKIO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 7 Jan 2021 05:08:14 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1610014046; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ag8XU2LBrp1mFu8W7SfzzMZ0Tky5q4LXKgHAQJA9POU=;
+        b=Yv4KUd9HPo25TBD1RfVzdqzlBDuHgQTJRzGeJDXyYnc8avx5uH7380ae4VHzA8zwCwXF/I
+        l5p64O2IV6ZNJTa9TZlrBB8xjitp5WBA9m+B232e8Y0uNoou+XAcVkkc8eGXNoONGw9HY+
+        2nHa6aa6nvYe6bMeCGckho4xOeem0eg=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9B751ACAF;
+        Thu,  7 Jan 2021 10:07:26 +0000 (UTC)
+From:   Thomas Renninger <trenn@suse.com>
+To:     linux-pm@vger.kernel.org, Ivan Babrou <ivan@cloudflare.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] cpupower: add Makefile dependencies for install targets
+Date:   Thu, 07 Jan 2021 11:07:25 +0100
+Message-ID: <2100533.HVZEckHxcR@c100>
+In-Reply-To: <20210104235719.13525-1-ivan@cloudflare.com>
+References: <20210104235719.13525-1-ivan@cloudflare.com>
 MIME-Version: 1.0
-References: <20210104230253.2805217-1-robh@kernel.org>
-In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 7 Jan 2021 10:10:07 +0100
-Message-ID: <CACRpkdZVC8RE-DTes+p6g-1EAHxQWpu2u+sBCX2ei32cvaCrDA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 5, 2021 at 12:03 AM Rob Herring <robh@kernel.org> wrote:
+Am Dienstag, 5. Januar 2021, 00:57:18 CET schrieb Ivan Babrou:
+> This allows building cpupower in parallel rather than serially.
 
-> DT properties which can have multiple entries need to specify what the
-> entries are and define how many entries there can be. In the case of
-> only a single entry, just 'maxItems: 1' is sufficient.
->
-> Add the missing entry constraints. These were found with a modified
-> meta-schema. Unfortunately, there are a few cases where the size
-> constraints are not defined such as common bindings, so the meta-schema
-> can't be part of the normal checks.
->
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
+cpupower is built serially:
 
-This is good. The stricter the better.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+[ make clean ]
 
-Yours,
-Linus Walleij
+time make
+real    0m3,742s
+user    0m3,330s
+sys     0m1,105s
+
+[ make clean ]
+
+time make -j10
+real    0m1,045s
+user    0m3,153s
+sys     0m1,037s
+
+Only advantage I see is that you can call
+make install-xy
+targets without calling the corresponding build target
+make xy
+similar to the general install target:
+install: all install-lib ...
+
+Not sure anyone needs this and whether all targets
+successfully work this way.
+If you'd show a useful usecase example...
+
+       Thomas
+
+> 
+> Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+> ---
+>  tools/power/cpupower/Makefile       | 8 ++++----
+>  tools/power/cpupower/bench/Makefile | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+> index c7bcddbd486d..3b1594447f29 100644
+> --- a/tools/power/cpupower/Makefile
+> +++ b/tools/power/cpupower/Makefile
+> @@ -270,14 +270,14 @@ clean:
+>  	$(MAKE) -C bench O=$(OUTPUT) clean
+> 
+> 
+> -install-lib:
+> +install-lib: libcpupower
+>  	$(INSTALL) -d $(DESTDIR)${libdir}
+>  	$(CP) $(OUTPUT)libcpupower.so* $(DESTDIR)${libdir}/
+>  	$(INSTALL) -d $(DESTDIR)${includedir}
+>  	$(INSTALL_DATA) lib/cpufreq.h $(DESTDIR)${includedir}/cpufreq.h
+>  	$(INSTALL_DATA) lib/cpuidle.h $(DESTDIR)${includedir}/cpuidle.h
+> 
+> -install-tools:
+> +install-tools: $(OUTPUT)cpupower
+>  	$(INSTALL) -d $(DESTDIR)${bindir}
+>  	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
+>  	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
+> @@ -293,14 +293,14 @@ install-man:
+>  	$(INSTALL_DATA) -D man/cpupower-info.1
+> $(DESTDIR)${mandir}/man1/cpupower-info.1 $(INSTALL_DATA) -D
+> man/cpupower-monitor.1 $(DESTDIR)${mandir}/man1/cpupower-monitor.1
+> 
+> -install-gmo:
+> +install-gmo: create-gmo
+>  	$(INSTALL) -d $(DESTDIR)${localedir}
+>  	for HLANG in $(LANGUAGES); do \
+>  		echo '$(INSTALL_DATA) -D $(OUTPUT)po/$$HLANG.gmo
+> $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo'; \ $(INSTALL_DATA)
+> -D $(OUTPUT)po/$$HLANG.gmo
+> $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo; \ done;
+> 
+> -install-bench:
+> +install-bench: compile-bench
+>  	@#DESTDIR must be set from outside to survive
+>  	@sbindir=$(sbindir) bindir=$(bindir) docdir=$(docdir) confdir=$
+(confdir)
+> $(MAKE) -C bench O=$(OUTPUT) install
+> 
+> diff --git a/tools/power/cpupower/bench/Makefile
+> b/tools/power/cpupower/bench/Makefile index f68b4bc55273..d9d9923af85c
+> 100644
+> --- a/tools/power/cpupower/bench/Makefile
+> +++ b/tools/power/cpupower/bench/Makefile
+> @@ -27,7 +27,7 @@ $(OUTPUT)cpufreq-bench: $(OBJS)
+> 
+>  all: $(OUTPUT)cpufreq-bench
+> 
+> -install:
+> +install: $(OUTPUT)cpufreq-bench
+>  	mkdir -p $(DESTDIR)/$(sbindir)
+>  	mkdir -p $(DESTDIR)/$(bindir)
+>  	mkdir -p $(DESTDIR)/$(docdir)
+
+
+
+
