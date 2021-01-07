@@ -2,28 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB782ED6E3
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Jan 2021 19:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D3D2EE754
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Jan 2021 22:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729053AbhAGSpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jan 2021 13:45:12 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:50092 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728088AbhAGSpM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jan 2021 13:45:12 -0500
-Received: from 89-64-81-64.dynamic.chello.pl (89.64.81.64) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.537)
- id 8eddfbd0a4e78645; Thu, 7 Jan 2021 19:44:30 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>
-Subject: [PATCH v1 3/3] cpufreq: intel_pstate: Rename two functions
-Date:   Thu, 07 Jan 2021 19:44:18 +0100
-Message-ID: <6740994.gz1i9f73Yi@kreacher>
-In-Reply-To: <5701645.lOV4Wx5bFT@kreacher>
-References: <5701645.lOV4Wx5bFT@kreacher>
+        id S1726929AbhAGVAk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jan 2021 16:00:40 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36660 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726541AbhAGVAj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 7 Jan 2021 16:00:39 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1610053193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8J94mEYDJ9t7cE82ktpH+FoNOTHk/H6HpofiDUP5IZA=;
+        b=FwIDkeE5hZIIT2JLvgKIReJ9rJH+7K6iznOQbBIUyvE/is7Dl+20UNHRsOY6u1LQcL8EJJ
+        ka231/nxIYZBaAV9JXa4c+Wu7y5D4UrF6BjAY6QPm8fgH+Yzg1UUd6C0kBd324wonXz7lM
+        rNTIiXJh7NUJBlpqU10pf/URBff86HA=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 006D5ABC4;
+        Thu,  7 Jan 2021 20:59:52 +0000 (UTC)
+From:   Thomas Renninger <trenn@suse.com>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     linux-pm@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] cpupower: add Makefile dependencies for install targets
+Date:   Thu, 07 Jan 2021 21:59:51 +0100
+Message-ID: <3977966.bfq5YHlNPR@c100>
+In-Reply-To: <CABWYdi0sne=6reP5oZMFbYk9Nctws=FLoYkjdmnBwXu0bVFozA@mail.gmail.com>
+References: <20210104235719.13525-1-ivan@cloudflare.com> <2100533.HVZEckHxcR@c100> <CABWYdi0sne=6reP5oZMFbYk9Nctws=FLoYkjdmnBwXu0bVFozA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -31,62 +42,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Am Donnerstag, 7. Januar 2021, 18:42:25 CET schrieb Ivan Babrou:
+> On Thu, Jan 7, 2021 at 2:07 AM Thomas Renninger <trenn@suse.com> wrote:
+> > Am Dienstag, 5. Januar 2021, 00:57:18 CET schrieb Ivan Babrou:
+> > > This allows building cpupower in parallel rather than serially.
+> > 
+> > cpupower is built serially:
+> > 
+> > [ make clean ]
+> > 
+> > time make
+> > real    0m3,742s
+> > user    0m3,330s
+> > sys     0m1,105s
+> > 
+> > [ make clean ]
+> > 
+> > time make -j10
+> > real    0m1,045s
+> > user    0m3,153s
+> > sys     0m1,037s
+> > 
+> > Only advantage I see is that you can call
+> > make install-xy
+> > targets without calling the corresponding build target
+> > make xy
+> > similar to the general install target:
+> > install: all install-lib ...
+> > 
+> > Not sure anyone needs this and whether all targets
+> > successfully work this way.
+> > If you'd show a useful usecase example...
+> 
+> We build a bunch of kernel related tools (perf, cpupower, bpftool,
+> etc.) from our own top level Makefile, propagating parallelism
+> downwards like one should.
+I still do not understand why you do not simply build:
+Also if I call this from /tools directory I get a quick build:
+make -j20 cpupower
 
-Rename intel_cpufreq_adjust_hwp() and intel_cpufreq_adjust_perf_ctl()
-to intel_cpufreq_hwp_update() and intel_cpufreq_perf_ctl_update(),
-respectively, to avoid possible confusion with the ->adjist_perf()
-callback function, intel_cpufreq_adjust_perf().
+Can you please show the make calls, ideally with a timing to better understand
+and also to reproduce the advantages this patch introduces.
+From what I can see, it only helps if one calls "sub-install" targets 
+directly?
+And I still do not understand why things should be more parallel now.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> Without this patch we have to remove parallelism for cpupower,
+Why?
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -2527,7 +2527,7 @@ static void intel_cpufreq_trace(struct c
- 		fp_toint(cpu->iowait_boost * 100));
- }
- 
--static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 min, u32 max,
-+static void intel_cpufreq_hwp_update(struct cpudata *cpu, u32 min, u32 max,
- 				     u32 desired, bool fast_switch)
- {
- 	u64 prev = READ_ONCE(cpu->hwp_req_cached), value = prev;
-@@ -2551,7 +2551,7 @@ static void intel_cpufreq_adjust_hwp(str
- 		wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
- }
- 
--static void intel_cpufreq_adjust_perf_ctl(struct cpudata *cpu,
-+static void intel_cpufreq_perf_ctl_update(struct cpudata *cpu,
- 					  u32 target_pstate, bool fast_switch)
- {
- 	if (fast_switch)
-@@ -2573,10 +2573,10 @@ static int intel_cpufreq_update_pstate(s
- 		int max_pstate = policy->strict_target ?
- 					target_pstate : cpu->max_perf_ratio;
- 
--		intel_cpufreq_adjust_hwp(cpu, target_pstate, max_pstate, 0,
-+		intel_cpufreq_hwp_update(cpu, target_pstate, max_pstate, 0,
- 					 fast_switch);
- 	} else if (target_pstate != old_pstate) {
--		intel_cpufreq_adjust_perf_ctl(cpu, target_pstate, fast_switch);
-+		intel_cpufreq_perf_ctl_update(cpu, target_pstate, fast_switch);
- 	}
- 
- 	cpu->pstate.current_pstate = target_pstate;
-@@ -2674,7 +2674,7 @@ static void intel_cpufreq_adjust_perf(un
- 
- 	target_pstate = clamp_t(int, target_pstate, min_pstate, max_pstate);
- 
--	intel_cpufreq_adjust_hwp(cpu, min_pstate, max_pstate, target_pstate, true);
-+	intel_cpufreq_hwp_update(cpu, min_pstate, max_pstate, target_pstate, true);
- 
- 	cpu->pstate.current_pstate = target_pstate;
- 	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
+> which doesn't seem like a very clean thing
+> to do, especially if you consider that it's 3x faster with parallelism
+> enabled in wall clock terms.
+Sure, you want to build in parallel. I still do not understand how this
+patch helps in this regard.
 
+BTW, I recently had a bunch of userspace tools Makefile patches.
+I'd like to add you to CC for a review if they are not submitted already.
+
+    Thomas
 
 
