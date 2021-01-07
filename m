@@ -2,122 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3953D2ED57E
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Jan 2021 18:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8685B2ED5DE
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Jan 2021 18:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728273AbhAGRZW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jan 2021 12:25:22 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:43308 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbhAGRZV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jan 2021 12:25:21 -0500
-Received: by mail-ot1-f45.google.com with SMTP id q25so6976171otn.10;
-        Thu, 07 Jan 2021 09:25:06 -0800 (PST)
+        id S1728814AbhAGRnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jan 2021 12:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728008AbhAGRnY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jan 2021 12:43:24 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCF7C0612F5
+        for <linux-pm@vger.kernel.org>; Thu,  7 Jan 2021 09:42:38 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id h205so16530688lfd.5
+        for <linux-pm@vger.kernel.org>; Thu, 07 Jan 2021 09:42:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LRqxwEPJISEBHpjqZE2l6FmdiTZQs0jM9TpD8cQN+YA=;
+        b=V0YYF8gWI5uIyBICJ6udbyu5HQC3NPDSYKcM0W27RFdEEv//zmAWylWYvEw3vVGTLk
+         7shGRVqcO5n0D/CR7V6LG8naB6ZmufIvZoX0HqL5BSNYe7lr1TVddGvzs3mMPz0MCPKo
+         +zVPhNZ4dqAaZf48kkvaUOFLNxKSL/LGiN9TI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OpG41d5OlWzv+km3h3m9vib/u3YyCF2qCiMVKCMnb60=;
-        b=TMFIPPBdJYf5nZNqSU2isyQKiQzZuSII4JRr4Acw4wTS3glMfVjdL4uiPL5Mhzpbs8
-         UDmVzl1YzIfqdk0msihtkZ2Luso22fM8IsE1oNR2oI0qpAXkMw5Xnj4hfH2y4z6OIrSD
-         PD3R/Fbwx/WeQZUm5Wk4dx+PphVNZuJd/VSJOuPRBDk7v8jBDLyN1jmYF2++9IRGZYWf
-         f0ocx/vHNTW7A/Wd7R+fi45vGbMrlCHKbTRIdikwhOM73R09ftXbVI0UAkNuCCeKOIog
-         xfh8XGED3qICVBVLokYNK4phA6X26CI/2F/d15LiJn2hygCzuv2XfKhRW+QI3w7bKBXL
-         CJNw==
-X-Gm-Message-State: AOAM532gMrajuL2QKi2raJWsqPZ4vWhuS5bhYSg7kL9q/YWIufR9xv6Y
-        GsQ2Kd7swmsEKFPaw0eu0qe/F3tbeAYQ9B/lGSBDFtT1
-X-Google-Smtp-Source: ABdhPJz5DgAMGWr6iSStmHQMd/2CDd8grSugukgatJ9GG7ZsCYqPZrvkdXmbcN4C5rfTLry0vCdbCwXKNgTPfm3ktdg=
-X-Received: by 2002:a9d:67da:: with SMTP id c26mr7383389otn.321.1610040280622;
- Thu, 07 Jan 2021 09:24:40 -0800 (PST)
+        bh=LRqxwEPJISEBHpjqZE2l6FmdiTZQs0jM9TpD8cQN+YA=;
+        b=CY0wVWB6Vly2oTczy7CxlMYA7zPbzFExd1v+W0JfJN2ieVP2IrSZUh0hM0GI0Q5a7b
+         yd0+vpi8Y8QGdORzNlC0fqQq9bHdwDd6F+jZns60BNDtV1hlSdZswEDFqAo1yFxhJEbw
+         QTjrl5Q0wdAKVW8dQGj6JNB+u9jY3qPDduV1C6/12Txo8TgiHK9Ky5DbqtNRCQ5El2Ur
+         2wVS9aFLtzkylxBCmz/0obsLGaKeXj6n8CddNG9Ca3BmciQzYdJ4NjtaKqE6iA06a9tr
+         wEm9dxUJJivTdLIMRhTiYeZ1EjR6aNAjuk1Ig9NI+vLbtpVCJbEpvvXFAaZEZ+6rNIbm
+         YRPA==
+X-Gm-Message-State: AOAM532J44AX/t+C6DeYiWwnTSVKWVVFtOIAHmwzv8CXVXIONhZO1sYn
+        BgWpDkUncUZ/S9SYvRz/MQJDeOM/swwEDuLyxsikEw==
+X-Google-Smtp-Source: ABdhPJygMEw3KJuTWrlpSqVWGq/if+SbZTegdcW3m7/dcUQTyYrmU8L70iiNQ3ssYUB7pnsZwuPEnSXXThhWN89nycE=
+X-Received: by 2002:a2e:361a:: with SMTP id d26mr4804735lja.115.1610041356957;
+ Thu, 07 Jan 2021 09:42:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20201221051320.18391-1-lukas.bulwahn@gmail.com> <20201221222015.GA3389117@ubuntu-m3-large-x86>
-In-Reply-To: <20201221222015.GA3389117@ubuntu-m3-large-x86>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 7 Jan 2021 18:24:29 +0100
-Message-ID: <CAJZ5v0hv8zzwQm3SwD3V76n+NENKANwBVktETNt2vV+GdHSzPA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: remove obsolete functions
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210104235719.13525-1-ivan@cloudflare.com> <2100533.HVZEckHxcR@c100>
+In-Reply-To: <2100533.HVZEckHxcR@c100>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Thu, 7 Jan 2021 09:42:25 -0800
+Message-ID: <CABWYdi0sne=6reP5oZMFbYk9Nctws=FLoYkjdmnBwXu0bVFozA@mail.gmail.com>
+Subject: Re: [PATCH] cpupower: add Makefile dependencies for install targets
+To:     Thomas Renninger <trenn@suse.com>
+Cc:     linux-pm@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 11:21 PM Nathan Chancellor
-<natechancellor@gmail.com> wrote:
+On Thu, Jan 7, 2021 at 2:07 AM Thomas Renninger <trenn@suse.com> wrote:
 >
-> On Mon, Dec 21, 2020 at 06:13:20AM +0100, Lukas Bulwahn wrote:
-> > percent_fp() was used in intel_pstate_pid_reset(), which was removed in
-> > commit 9d0ef7af1f2d ("cpufreq: intel_pstate: Do not use PID-based P-state
-> > selection") and hence, percent_fp() is unused since then.
-> >
-> > percent_ext_fp() was last used in intel_pstate_update_perf_limits(), which
-> > was refactored in commit 1a4fe38add8b ("cpufreq: intel_pstate: Remove
-> > max/min fractions to limit performance"), and hence, percent_ext_fp() is
-> > unused since then.
-> >
-> > make CC=clang W=1 points us those unused functions:
-> >
-> > drivers/cpufreq/intel_pstate.c:79:23: warning: unused function 'percent_fp' [-Wunused-function]
-> > static inline int32_t percent_fp(int percent)
-> >                       ^
-> >
-> > drivers/cpufreq/intel_pstate.c:94:23: warning: unused function 'percent_ext_fp' [-Wunused-function]
-> > static inline int32_t percent_ext_fp(int percent)
-> >                       ^
-> >
-> > Remove those obsolete functions.
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Am Dienstag, 5. Januar 2021, 00:57:18 CET schrieb Ivan Babrou:
+> > This allows building cpupower in parallel rather than serially.
 >
-> Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+> cpupower is built serially:
 >
-> > ---
-> > applies cleanly on current master and next-20201221
-> >
-> > Srinivas, Len, Rafael, Viresh, please pick this minor non-urgent cleanup patch.
-> >
-> >  drivers/cpufreq/intel_pstate.c | 10 ----------
-> >  1 file changed, 10 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> > index 2a4db856222f..0e35dd247986 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -76,11 +76,6 @@ static inline int ceiling_fp(int32_t x)
-> >       return ret;
-> >  }
-> >
-> > -static inline int32_t percent_fp(int percent)
-> > -{
-> > -     return div_fp(percent, 100);
-> > -}
-> > -
-> >  static inline u64 mul_ext_fp(u64 x, u64 y)
-> >  {
-> >       return (x * y) >> EXT_FRAC_BITS;
-> > @@ -91,11 +86,6 @@ static inline u64 div_ext_fp(u64 x, u64 y)
-> >       return div64_u64(x << EXT_FRAC_BITS, y);
-> >  }
-> >
-> > -static inline int32_t percent_ext_fp(int percent)
-> > -{
-> > -     return div_ext_fp(percent, 100);
-> > -}
-> > -
-> >  /**
-> >   * struct sample -   Store performance sample
-> >   * @core_avg_perf:   Ratio of APERF/MPERF which is the actual average
-> > --
+> [ make clean ]
+>
+> time make
+> real    0m3,742s
+> user    0m3,330s
+> sys     0m1,105s
+>
+> [ make clean ]
+>
+> time make -j10
+> real    0m1,045s
+> user    0m3,153s
+> sys     0m1,037s
+>
+> Only advantage I see is that you can call
+> make install-xy
+> targets without calling the corresponding build target
+> make xy
+> similar to the general install target:
+> install: all install-lib ...
+>
+> Not sure anyone needs this and whether all targets
+> successfully work this way.
+> If you'd show a useful usecase example...
 
-Applied as 5.11-rc material, thanks!
+We build a bunch of kernel related tools (perf, cpupower, bpftool,
+etc.) from our own top level Makefile, propagating parallelism
+downwards like one should. Without this patch we have to remove
+parallelism for cpupower, which doesn't seem like a very clean thing
+to do, especially if you consider that it's 3x faster with parallelism
+enabled in wall clock terms.
+
+>        Thomas
+>
+> >
+> > Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+> > ---
+> >  tools/power/cpupower/Makefile       | 8 ++++----
+> >  tools/power/cpupower/bench/Makefile | 2 +-
+> >  2 files changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+> > index c7bcddbd486d..3b1594447f29 100644
+> > --- a/tools/power/cpupower/Makefile
+> > +++ b/tools/power/cpupower/Makefile
+> > @@ -270,14 +270,14 @@ clean:
+> >       $(MAKE) -C bench O=$(OUTPUT) clean
+> >
+> >
+> > -install-lib:
+> > +install-lib: libcpupower
+> >       $(INSTALL) -d $(DESTDIR)${libdir}
+> >       $(CP) $(OUTPUT)libcpupower.so* $(DESTDIR)${libdir}/
+> >       $(INSTALL) -d $(DESTDIR)${includedir}
+> >       $(INSTALL_DATA) lib/cpufreq.h $(DESTDIR)${includedir}/cpufreq.h
+> >       $(INSTALL_DATA) lib/cpuidle.h $(DESTDIR)${includedir}/cpuidle.h
+> >
+> > -install-tools:
+> > +install-tools: $(OUTPUT)cpupower
+> >       $(INSTALL) -d $(DESTDIR)${bindir}
+> >       $(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
+> >       $(INSTALL) -d $(DESTDIR)${bash_completion_dir}
+> > @@ -293,14 +293,14 @@ install-man:
+> >       $(INSTALL_DATA) -D man/cpupower-info.1
+> > $(DESTDIR)${mandir}/man1/cpupower-info.1 $(INSTALL_DATA) -D
+> > man/cpupower-monitor.1 $(DESTDIR)${mandir}/man1/cpupower-monitor.1
+> >
+> > -install-gmo:
+> > +install-gmo: create-gmo
+> >       $(INSTALL) -d $(DESTDIR)${localedir}
+> >       for HLANG in $(LANGUAGES); do \
+> >               echo '$(INSTALL_DATA) -D $(OUTPUT)po/$$HLANG.gmo
+> > $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo'; \ $(INSTALL_DATA)
+> > -D $(OUTPUT)po/$$HLANG.gmo
+> > $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo; \ done;
+> >
+> > -install-bench:
+> > +install-bench: compile-bench
+> >       @#DESTDIR must be set from outside to survive
+> >       @sbindir=$(sbindir) bindir=$(bindir) docdir=$(docdir) confdir=$
+> (confdir)
+> > $(MAKE) -C bench O=$(OUTPUT) install
+> >
+> > diff --git a/tools/power/cpupower/bench/Makefile
+> > b/tools/power/cpupower/bench/Makefile index f68b4bc55273..d9d9923af85c
+> > 100644
+> > --- a/tools/power/cpupower/bench/Makefile
+> > +++ b/tools/power/cpupower/bench/Makefile
+> > @@ -27,7 +27,7 @@ $(OUTPUT)cpufreq-bench: $(OBJS)
+> >
+> >  all: $(OUTPUT)cpufreq-bench
+> >
+> > -install:
+> > +install: $(OUTPUT)cpufreq-bench
+> >       mkdir -p $(DESTDIR)/$(sbindir)
+> >       mkdir -p $(DESTDIR)/$(bindir)
+> >       mkdir -p $(DESTDIR)/$(docdir)
+>
+>
+>
+>
