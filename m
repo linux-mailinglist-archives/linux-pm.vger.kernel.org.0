@@ -2,163 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3062EF9B4
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jan 2021 21:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9402EFBD5
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Jan 2021 00:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729201AbhAHU64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jan 2021 15:58:56 -0500
-Received: from mga12.intel.com ([192.55.52.136]:63992 "EHLO mga12.intel.com"
+        id S1725890AbhAHXtm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jan 2021 18:49:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52630 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729084AbhAHU64 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 Jan 2021 15:58:56 -0500
-IronPort-SDR: NaX0txC9u+KRF1Ji504XkfsbuouK8UmTJZ5xLSEWmoEKWtZvBJGlOUH0ARukE/EJHLkfk+gTz5
- tAnOljkh9dKw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9858"; a="156839844"
-X-IronPort-AV: E=Sophos;i="5.79,332,1602572400"; 
-   d="scan'208";a="156839844"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 12:58:15 -0800
-IronPort-SDR: mXnFTiBAXQkRUvheR/wHq+2wL47lBqSodmANthbkLOUANfBCNqmFPE6ElPolQwp9ac0sjB+tJZ
- hUN0FdcjMPgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,332,1602572400"; 
-   d="scan'208";a="497960176"
-Received: from lkp-server01.sh.intel.com (HELO 412602b27703) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 08 Jan 2021 12:58:13 -0800
-Received: from kbuild by 412602b27703 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kxypp-0000fU-2G; Fri, 08 Jan 2021 20:58:13 +0000
-Date:   Sat, 09 Jan 2021 04:57:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD REGRESSION
- 2691096b51bae3563007c4b0188c3eec9878224b
-Message-ID: <5ff8c74e.h+cmkUVKPZMMcUNw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1725792AbhAHXtm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 Jan 2021 18:49:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id CB07223A5A;
+        Fri,  8 Jan 2021 23:49:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610149741;
+        bh=lUF0snJfFbdzBHnkECYZ3+pMGgF1UnqnDB2UkbN8Pps=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=t7jxW0qEfGYPkeyNL6btiWqN6p0bGc0IYep5G1x34lZfrhzvnfH7R2x2LwchajYgD
+         qPDnrX2X0BAQmV9c0GXP514clhnEnEXtlb6QHOFJTXyiu2gMdqB5OLX1P7pcqo5dNa
+         j2Bo24xXFwtnITyLq7LNEWRbzPnX6kuJjS12Opylx39FLDLDEfmIT4fOR3EwK4ZV3V
+         Fb1YInTUWvYTQ8Tx27t6htLc0wmay7egoHIsziE4Ygq9yo+wDHn8vlKO6phG+EfFu6
+         6gcBx33lWnNoupQc4O8GztUzmQKuwEbP9ZRms6zr0esNPZP9LVK5UR590LqaXsmO9p
+         plYUWmemzzKug==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id BB87460597;
+        Fri,  8 Jan 2021 23:49:01 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fixes for v5.11-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0iPXqB1zkrbORP+N-ZgLA_fSym7o1xbkBCt0=TTdu_hxg@mail.gmail.com>
+References: <CAJZ5v0iPXqB1zkrbORP+N-ZgLA_fSym7o1xbkBCt0=TTdu_hxg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0iPXqB1zkrbORP+N-ZgLA_fSym7o1xbkBCt0=TTdu_hxg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.11-rc3
+X-PR-Tracked-Commit-Id: c4151604f0603d5700072183a05828ff87d764e4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: be31d940b3b62c57a5d9506090e66e177b7eba90
+Message-Id: <161014974169.3246.17422230849464921252.pr-tracker-bot@kernel.org>
+Date:   Fri, 08 Jan 2021 23:49:01 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 2691096b51bae3563007c4b0188c3eec9878224b  Merge branch 'linux-next' into bleeding-edge
+The pull request you sent on Fri, 8 Jan 2021 18:52:06 +0100:
 
-Error/Warning reports:
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.11-rc3
 
-https://lore.kernel.org/linux-acpi/202101081623.CGkLO3Kx-lkp@intel.com
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/be31d940b3b62c57a5d9506090e66e177b7eba90
 
-Error/Warning in current branch:
+Thank you!
 
-drivers/acpi/platform_profile.c:67:33: error: passing 'const struct platform_profile_handler *' to parameter of type 'struct platform_profile_handler *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-
-Error/Warning ids grouped by kconfigs:
-
-clang_recent_errors
-`-- x86_64-randconfig-r011-20210108
-    `-- drivers-acpi-platform_profile.c:error:passing-const-struct-platform_profile_handler-to-parameter-of-type-struct-platform_profile_handler-discards-qualifiers-Werror-Wincompatible-pointer-types-discards
-
-elapsed time: 1156m
-
-configs tested: 91
-configs skipped: 2
-
-gcc tested configs:
-arm64                               defconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-nios2                         3c120_defconfig
-sparc                            allyesconfig
-powerpc                      katmai_defconfig
-arm                         palmz72_defconfig
-sh                              ul2_defconfig
-mips                       capcella_defconfig
-mips                        bcm47xx_defconfig
-ia64                         bigsur_defconfig
-arm                         orion5x_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                         nhk8815_defconfig
-mips                         tb0287_defconfig
-powerpc                 mpc834x_itx_defconfig
-sh                         ap325rxa_defconfig
-c6x                         dsk6455_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                        icon_defconfig
-openrisc                  or1klitex_defconfig
-powerpc                 linkstation_defconfig
-powerpc                      walnut_defconfig
-mips                         bigsur_defconfig
-mips                          rb532_defconfig
-sh                            hp6xx_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210108
-i386                 randconfig-a002-20210108
-i386                 randconfig-a001-20210108
-i386                 randconfig-a003-20210108
-i386                 randconfig-a006-20210108
-i386                 randconfig-a004-20210108
-i386                 randconfig-a016-20210108
-i386                 randconfig-a011-20210108
-i386                 randconfig-a014-20210108
-i386                 randconfig-a015-20210108
-i386                 randconfig-a013-20210108
-i386                 randconfig-a012-20210108
-x86_64               randconfig-a004-20210108
-x86_64               randconfig-a006-20210108
-x86_64               randconfig-a001-20210108
-x86_64               randconfig-a002-20210108
-x86_64               randconfig-a003-20210108
-x86_64               randconfig-a005-20210108
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
