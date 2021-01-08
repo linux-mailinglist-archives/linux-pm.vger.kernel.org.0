@@ -2,106 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7B12EF09E
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jan 2021 11:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396B52EF362
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jan 2021 14:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726981AbhAHKXn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jan 2021 05:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
+        id S1727482AbhAHNqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jan 2021 08:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726763AbhAHKXn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jan 2021 05:23:43 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1348AC0612F4
-        for <linux-pm@vger.kernel.org>; Fri,  8 Jan 2021 02:23:03 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id h6so5266131vsr.6
-        for <linux-pm@vger.kernel.org>; Fri, 08 Jan 2021 02:23:03 -0800 (PST)
+        with ESMTP id S1727130AbhAHNqg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jan 2021 08:46:36 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9373BC0612F4;
+        Fri,  8 Jan 2021 05:45:56 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id u12so10275285ilv.3;
+        Fri, 08 Jan 2021 05:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aOuT3Oi+vPve6YqCYUYuw/dI03+W04u5ZGoPFLj22Y0=;
-        b=NKZLZMIvdtJLJFN88ujdmELsO2ixYwJXQzvCnS4q68kR2B9rFKwVlSXSaAXiIIloCe
-         ++ouK4EEpLVj2OKsVtg+PoFZH/yH0Pfr1l4vc1EiDUBPK62Pe15zY5Kw0Z3w1o9xrOJ6
-         FXUwy0cuZlN9SFGyP073qWD6RPjZKUMzVIIFkNUmaEJo4kVuVZpMkPF6VsmwN+hlTP7N
-         TGXcm3zMgObi7g2Hl+0WA7kC3iq92PGQiVpishWb3RxtauoKBIaSuGXcHYP/wzKeJU3y
-         6u0U1YbeiBse5+dRG3+99Pk41LgY6A2IfAPclHWvfNbD0dteNxL0zdq9fb0QysHw7Hkt
-         IYMg==
+        bh=cKHeUR1zK43NQMUQKMTc/nRz+XRhb8es7I3o2+Po5OM=;
+        b=QUE6Q4+lt/2IpN5/4MWXoP7r0zJ6gpUbj1DYEZl5QziVOJF8mGuSPZ4J+rL14IiCDW
+         5m78yFYf0V/P5spwFvv2o9vWhc8AVD/UXQQNy4yaR50rIwb87ufnDX6VsgU1SwDX17xo
+         F6MFJBs+ENedFrk3eZMLEzRT6yAlvdM0BhRN/cn75uGqyWtoXsOcuZff7G/4I7OXoPzt
+         DxQ4L9VUR8B2dmmuKGGX6Z/ZijmawRDUESWOR+dT4DnAcv+q8YL5P+oZYErPsHAP/Pe/
+         pNN28cP7WYRNIgrSQtWwtgbjOc0q8QqiGsXZFNG4v3POd+VlM9L0mLIoFR7GiLQLUhy2
+         bPSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aOuT3Oi+vPve6YqCYUYuw/dI03+W04u5ZGoPFLj22Y0=;
-        b=ddpu+nzvCG/V3WTuEslLC8Bjp4OWSuESyTDfZoKtCLW5m8nndAh8eIlJXDw0xL5Ifm
-         hqQv+/tahGFIFspt9DeUq1HWV8Rei8twvNek/s7DHiqfBLGTuudeoGj0CeuiFKShQlIP
-         GFCla8+HB9i03XkF9/I6YlAyqjPgovyrlRnsagceZTAMhQaQS74C0vg0Ds5IVQZPQ+Z8
-         plikq76SDotCNvuDXSNby6zY9fFN4nS6X0xGJlklq6csweM/Y4r+AU6TLWRw/X2yLZWd
-         vVQShL1/afiRg4KIJKtPd9OdpIVLjVDlf0Ih1fPjU8Whhl7r0dUnyxdxMmYna/W309YT
-         iIIg==
-X-Gm-Message-State: AOAM532B7z2TYkYQbL2gU3Esb2g/XaVX1y+Ku2KKV66wzLNiQ8drhWJ0
-        BhInSyKNoi2E4qkQpgtJGr7eqqAwvxnYCSKimycNUg==
-X-Google-Smtp-Source: ABdhPJyew8MgUznUgu9YOJy4A4Lv01S16RtMRDENnkPfo5u3LUHyRLBb6TIWlsHJpeAqlQEOIgaq986in3WuB39kDa0=
-X-Received: by 2002:a67:e286:: with SMTP id g6mr2036107vsf.42.1610101382204;
- Fri, 08 Jan 2021 02:23:02 -0800 (PST)
+        bh=cKHeUR1zK43NQMUQKMTc/nRz+XRhb8es7I3o2+Po5OM=;
+        b=n8Q/41A0FWZDscct4DFtarxeZ1yiU/cZTQKGU8Lko4jI7u+ENVFijdcIaQ/HuhA+Cj
+         CCfJ6j8jlwHU7mTkG4VIPMMz5SsobJQph1bEfknYb94ELhHyyVRWn1Yd9YAvs+Uw9Tfv
+         9guOabVQ7wWxzQpBTnBkGp+6UGXGVrim4EPGUkjPy0jcbxROkSF4JEBsw3zdLKaxASCX
+         42b3BU+4ynQ6bW1ik/Z9PD3hpfprHXQ+UvFaLOdEyj3Mbxuw3/BydQijC1OjBIa+eNpm
+         sEdzj7H1W+HsvNcySM31U5cTHFdeP4hoYz7Afu2exUgUzS803hiOZ7WHgrNkV/d1U7f2
+         w77A==
+X-Gm-Message-State: AOAM533XUXx0h8Mm6tkm+/7M61JZWxsJugoMPdhxHqydZ+CLz2yMSGQf
+        80H37zePRwtlVfgAq0lJNTNaesDmO27eh4zfeGM=
+X-Google-Smtp-Source: ABdhPJxCDlsxvVBHcnRxKe76pie+vUEs4FqREROSJT+0vN+DUoNM18G/O5julpRlaHGXvzKU3rmH0/vttv0j61jeuFw=
+X-Received: by 2002:a92:c561:: with SMTP id b1mr3896749ilj.65.1610113555882;
+ Fri, 08 Jan 2021 05:45:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20201216175056.19554-1-ilina@codeaurora.org> <CAPDyKFrdZTd0mWHYhk13uyNWoxqjkO_iSni_TC5uir-PpgxSpw@mail.gmail.com>
- <X+VBBKZXZ2JW3ZDL@codeaurora.org> <CAPDyKFrAV5Af8WVTy==u1-Ak7zrwC+X7bWSRCc_RrwHoTKfVGw@mail.gmail.com>
- <X+lDTxDqTS9ik9TR@codeaurora.org>
-In-Reply-To: <X+lDTxDqTS9ik9TR@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 8 Jan 2021 11:22:25 +0100
-Message-ID: <CAPDyKFr-C4V+oaD53+ACT02UBqKggRqSqCsm76k7OS8QNx7iCg@mail.gmail.com>
-Subject: Re: [PATCH] PM / Domains: allow domain idle states to be disabled
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20201230084338.19410-1-tony@atomide.com> <CAHCN7xJmwcUOpoza-LNxTAbRNb9ToERnBNuKboP86DSBdtS61A@mail.gmail.com>
+ <7C9106E0-FC75-4056-AD5F-16CCFA9C24E5@goldelico.com> <X/gIO9Ta3JPDaeV3@atomide.com>
+In-Reply-To: <X/gIO9Ta3JPDaeV3@atomide.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 8 Jan 2021 07:45:44 -0600
+Message-ID: <CAHCN7xKzeqabm5YJbNS_jcENnhxdU9tAuhWZv81xJA7VbaW6NA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] thermal: ti-soc-thermal: Fix stuck sensor with
+ continuous mode for 4430
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Carl Philipp Klemm <philipp@uvos.xyz>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Andreas Kemnade <andreas@kemnade.info>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 28 Dec 2020 at 03:30, Lina Iyer <ilina@codeaurora.org> wrote:
+On Fri, Jan 8, 2021 at 1:22 AM Tony Lindgren <tony@atomide.com> wrote:
 >
-> On Sat, Dec 26 2020 at 05:33 -0700, Ulf Hansson wrote:
-> >On Fri, 25 Dec 2020 at 02:31, Lina Iyer <ilina@codeaurora.org> wrote:
-> >>
-> >> On Tue, Dec 22 2020 at 03:16 -0700, Ulf Hansson wrote:
-> >> >On Wed, 16 Dec 2020 at 18:51, Lina Iyer <ilina@codeaurora.org> wrote:
-> >> >>
-> >> >> In order to debug critical domain and device power issues, it may be
-> >> >> necessary to disallow certain idle states at runtime. Let the device
-> >> >> disallow a domain idle state before suspending.The domain governor shall
-> >> >> check for the 'disabled' flag while determining the domain idle state.
-> >> >
-> >> >For debug purposes, you might as well just set a dev PM Qos latency
-> >> >request that corresponds to the state you want to disable. This will
-> >> >then prevent the genpd governor from selecting the state.
-> >> >
-> >> True, but it will also disable idle states deeper as well. Would like to
-> >> avoid that.
+> * H. Nikolaus Schaller <hns@goldelico.com> [201230 13:29]:
+> > > Am 30.12.2020 um 13:55 schrieb Adam Ford <aford173@gmail.com>:
+> > > On Wed, Dec 30, 2020 at 2:43 AM Tony Lindgren <tony@atomide.com> wrote:
+> > >>
+> > >> At least for 4430, trying to use the single conversion mode eventually
+> > >> hangs the thermal sensor. This can be quite easily seen with errors:
+> > >>
+> > >> thermal thermal_zone0: failed to read out thermal zone (-5)
+> ...
+>
+> > > I don't have an OMAP4, but if you want, I can test a DM3730.
 > >
-> >I see. In any case, I am not so excited about adding an exported genpd
-> >interface for this that drivers can call, for example.
+> > Indeed I remember a similar discussion from the DM3730 [1]. temp values were
+> > always those from the last measurement. E.g. the first one was done
+> > during (cold) boot and the first request after 10 minutes did show a
+> > quite cold system... The next one did show a hot system independent
+> > of what had been between (suspend or high activity).
 > >
-> >Then I would rather see a proper debugfs interface, where userspace
-> >can both see the available states and choose which one to
-> >disable/enable. Would that work?
+> > It seems as if it was even reproducible with a very old kernel on a BeagleBoard.
+> > So it is quite fundamental.
 > >
-> Sure, that would work. Any recommendations for existing debugfs node
-> that we can add this to or something new?
+> > We tried to fix it but did not come to a solution [2]. So we opened an issue
+> > in our tracker [3] and decided to stay with continuous conversion although this
+> > raises idle mode processor load.
+>
+> Hmm so maybe eocz high always times out in single mode since it also
+> triggers at least on dra7?
+>
+> Yes it would be great if you guys can the $subject patch a try at
+> least on your omap36xx and omap5 boards and see if you see eocz
+> time out warnings in dmesg.
 
-I think there are two options:
-1. A specific "enabled-states" node containing an array of values, one
-value for each available state. Like "on off on", if there are three
-states available, for example.
-2. Convert into having a per idle state subnode/directory and then add
-a "enabled" node for each state.
+I should be able to try it on the dm3730 logicpd-torpedo kit this weekend.
 
-I guess the second option is more straightforward and easier for user
-space to deal with, but I have no strong opinions.
-
-Perhaps there is a third option as well?
-
-Kind regards
-Uffe
+adam
+>
+> Regards,
+>
+> Tony
