@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA942EEC9F
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jan 2021 05:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141EC2EED49
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jan 2021 06:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727442AbhAHEmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jan 2021 23:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S1727249AbhAHFwK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jan 2021 00:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbhAHEmv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jan 2021 23:42:51 -0500
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E1C0612F5
-        for <linux-pm@vger.kernel.org>; Thu,  7 Jan 2021 20:42:11 -0800 (PST)
-Received: by mail-qk1-x749.google.com with SMTP id k126so8282082qkf.8
-        for <linux-pm@vger.kernel.org>; Thu, 07 Jan 2021 20:42:11 -0800 (PST)
+        with ESMTP id S1727182AbhAHFv5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jan 2021 00:51:57 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E806C0612F6
+        for <linux-pm@vger.kernel.org>; Thu,  7 Jan 2021 21:51:17 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id b11so7478105qtj.11
+        for <linux-pm@vger.kernel.org>; Thu, 07 Jan 2021 21:51:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=PQr4yPkQTCo3NoNalxo9Xzcph0gBC3rQMHOfv+Eq4Tk=;
-        b=JkvnnlyVBJ63nbKuwXuDMyZ1Ecw1ph2Y4nbnSWxvZSM+FP+aKE1KXGvRdmnmW/nUZ2
-         xUde/ZDtAqh1zB4dOne8j43Hrf3cQ0aYjkwkIlaa8cmuGYW/TYVBozmWSfkKganWEQ3D
-         nODperXnC2um+y5Uh03QNbpbJkx6tVCacb7oa+2YxoFXsKH/sZtERebTR335nHj1LFYd
-         ZCa/nSGYCX4XMlBdGwYSowNJEOWM5x5zBPuGdVIUxo7h1T0wGc5ECJ8lyefvqLSmxH2O
-         eRVy+NAw6ubfubfK1cXG4zwz7Xemcqu0MbG8OTtPeiHoaTf23Hb41J4TPFmGrJsbogwp
-         JUxw==
+        bh=4AgPW6qwdhamOL2mtlNZjO/PPsvKL0XnXuAeE+w3MDE=;
+        b=ArjAsKkE8kJQf21wuArfPpOIeIw1bUkoS69VdDPwjQy1iYKheqSD0Y0lJ4Cx6y43sg
+         hsBODMh9F7Y8EzThTCuY+EUP2gg9gLh3lw3Z+l9STuYfTYhljmA1RXTdV2qk9GgdCEm6
+         emXi0XyGeaqkdP7f0z1+zPOEGLoVbi26YPRnlpEFutUlHqkv+8gbJOCGsIireAo6MeI4
+         Eoe1O4vDc3dxWjOvYc9ZjgUo9PFLs1GxWOQTp7wLkVVNlgC2iRZQGRtODg9gQLDtvstP
+         Asy5mnB/bDh8+twXm/iNGTCX5DcCL3nnA1+J2Ft/w/5xgAFoR7siTNUXeOXsxCEzKZpB
+         Eh4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
          :to:cc;
-        bh=PQr4yPkQTCo3NoNalxo9Xzcph0gBC3rQMHOfv+Eq4Tk=;
-        b=fMxHjvOEjq/frU2zZKi4n/q625n0QbJ9jS7+E7qhH3e/4KeCPjyMAHc36J0Zujv2Xu
-         hADIQU4n8wZ8A0ftsAezCqVuyn947Jo0pivn+yLykGXnNH3biqmuIJ1I5KKPhNqfKz9h
-         Xp8TrTgl6JOdTYfW205TG858IPH9iDdneaxX3/h4wGdhIR/Gh4IPeiAK4ErkD7HmbrYw
-         7pRMPe2lDfMlpfizo8YP31pHYm3/Gk7l8xZJ5oH4DW/7VFUotS8xtsUUjGwP/tPwe9R+
-         uwrTdLh09mhBKHtBd1RaROx4ejf21tpjIqb5QXalIAee09Jfdi0Rrr0x2BwozXpyA6nF
-         58aA==
-X-Gm-Message-State: AOAM532U4ielNuJHAmSecRm3YIF0i+aUu5Z4Mb6mT/vwDEqmv6NuIwOG
-        7xU9W2WJo7ul/2tEgye1++WpyZaw3GXIc4V8
-X-Google-Smtp-Source: ABdhPJywr2Dcdn18sfIGqDPWCgFj7yR436AmT3Y0NJLN8w+Disq5DZQjqCzTtjJjnluEmJu3YfMsc5X3IliG8N7W
+        bh=4AgPW6qwdhamOL2mtlNZjO/PPsvKL0XnXuAeE+w3MDE=;
+        b=JbeyQn5D3HiBxapquJSuTM5MXOckdOv9Xjic1Fcub2kXxHIQq6oSebEFkv3Cac1gZd
+         FBE4S5SN/BOCjChYIrOS0EKAd7qC0GVLxOxAyV91Pcflu32nJlsx6AmM0ER69CNfSyGQ
+         jXV3corv0QByIoKYESns/8ySSbCykgNEXuVv7qL5bvSaKgb046Rt3vuRQIW9wEWQ0wWx
+         viJlvFGMp1aTvpPFzVVP/0xAkj+h4OARuHBMXprtmZ8U1lnXrInjJwb40PF1iRySJtAw
+         aTXnWznB/dVD4QDMabQSGiqIlFhR3SlK9y0CMIM30bKvrzuxI6nHvlA5oWkK5KeO2HS+
+         vh9A==
+X-Gm-Message-State: AOAM533aNvUwYbma3bJKz4IOkKoOPutKgPUXMHZ3M50ri6obsUQLhgd6
+        aBFM3nzZ/xdBt4DdBjHu64oLfcyHGeKFEgin
+X-Google-Smtp-Source: ABdhPJxce/lsSsph+CNvhlwiTpQqwp0UBlYwE033pF7excLlOBzVn0eOgE/hQ8wHHmnJqatwtBFT2iEC2bPgnNiw
 Sender: "josephjang via sendgmr" 
         <josephjang@josephjang-p920.ntc.corp.google.com>
 X-Received: from josephjang-p920.ntc.corp.google.com ([2401:fa00:fc:1:7220:84ff:fe09:41e0])
- (user=josephjang job=sendgmr) by 2002:ad4:4c50:: with SMTP id
- cs16mr5137385qvb.33.1610080930396; Thu, 07 Jan 2021 20:42:10 -0800 (PST)
-Date:   Fri,  8 Jan 2021 12:41:59 +0800
-Message-Id: <20210108044159.598669-1-josephjang@google.com>
+ (user=josephjang job=sendgmr) by 2002:a0c:fe91:: with SMTP id
+ d17mr2073157qvs.50.1610085076652; Thu, 07 Jan 2021 21:51:16 -0800 (PST)
+Date:   Fri,  8 Jan 2021 13:51:11 +0800
+Message-Id: <20210108055111.931543-1-josephjang@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
-Subject: [PATCH v4] power: suspend: Move dpm_watchdog to suspend.c and enhance it
+Subject: [PATCH v5] power: suspend: Move dpm_watchdog to suspend.c and enhance it
 From:   Joseph Jang <josephjang@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -85,6 +85,11 @@ CONFIG_PM_SUSPEND_WATCHDOG_TIMEOUT.
 
 Signed-off-by: Joseph Jang <josephjang@google.com>
 ---
+Changes since v4:
+ - Change #define PM_SUSPEND_WATCHDOG to CONFIG_PM_SUSPEND_WATCHDOG in suspend_watchdog.c
+   to make sure we compile all suspend watchdog functions.
+ - Add suspend watchdog functions declared in suspend_watchdog.h to prevent compile errors.
+
 Changes since v3:
  - Change the naming from sleep timer to suspend watchdog.
  - Remove console_is_suspended() from console.h and printk.c
@@ -277,9 +282,9 @@ Changes since v1:
  kernel/power/Makefile           |  1 +
  kernel/power/suspend.c          | 19 ++++++++
  kernel/power/suspend_watchdog.c | 84 +++++++++++++++++++++++++++++++++
- kernel/power/suspend_watchdog.h | 29 ++++++++++++
+ kernel/power/suspend_watchdog.h | 40 ++++++++++++++++
  kernel/printk/printk.c          |  2 +-
- 8 files changed, 151 insertions(+), 84 deletions(-)
+ 8 files changed, 162 insertions(+), 84 deletions(-)
  create mode 100644 kernel/power/suspend_watchdog.c
  create mode 100644 kernel/power/suspend_watchdog.h
 
@@ -566,7 +571,7 @@ index 8b1bb5ee7e5d..a0e3dfb39f6e 100644
  }
 diff --git a/kernel/power/suspend_watchdog.c b/kernel/power/suspend_watchdog.c
 new file mode 100644
-index 000000000000..4493ff541033
+index 000000000000..e6828f8dfb54
 --- /dev/null
 +++ b/kernel/power/suspend_watchdog.c
 @@ -0,0 +1,84 @@
@@ -585,14 +590,14 @@ index 000000000000..4493ff541033
 +
 +#include "suspend_watchdog.h"
 +
-+#ifdef PM_SUSPEND_WATCHDOG
++#ifdef CONFIG_PM_SUSPEND_WATCHDOG
 +
 +/**
 + * init_suspend_watchdog - Initialize suspend watchdog timer.
 + * @suspend_wd: Suspend watchdog to initialize.
 + * @func: Suspend watchdog timeout handler.
 + */
-+void init_suspend_watchdog(struct suspend_watchdog *suspend_wd, void *func)
++inline void init_suspend_watchdog(struct suspend_watchdog *suspend_wd, void *func)
 +{
 +	struct timer_list *timer = &suspend_wd->timer;
 +
@@ -603,7 +608,7 @@ index 000000000000..4493ff541033
 + * start_suspend_watchdog - Enable suspend watchdog to monitor suspend thread.
 + * @suspend_wd: Suspend watchdog to enable.
 + */
-+void start_suspend_watchdog(struct suspend_watchdog *suspend_wd)
++inline void start_suspend_watchdog(struct suspend_watchdog *suspend_wd)
 +{
 +	struct timer_list *timer = &suspend_wd->timer;
 +
@@ -618,7 +623,7 @@ index 000000000000..4493ff541033
 + * stop_suspend_watchdog - Disable suspend watchdog.
 + * @suspend_wd: Suspend watchdog to disable.
 + */
-+void stop_suspend_watchdog(struct suspend_watchdog *suspend_wd)
++inline void stop_suspend_watchdog(struct suspend_watchdog *suspend_wd)
 +{
 +	struct timer_list *timer = &suspend_wd->timer;
 +
@@ -633,7 +638,7 @@ index 000000000000..4493ff541033
 + * Dump all uninterruptible tasks' call stack and call panic() to
 + * reboot system in second round timeout.
 + */
-+void suspend_timeout_handler(struct timer_list *t)
++inline void suspend_timeout_handler(struct timer_list *t)
 +{
 +	struct suspend_watchdog *suspend_wd = from_timer(suspend_wd, t, timer);
 +	static int timeout_count;
@@ -656,10 +661,10 @@ index 000000000000..4493ff541033
 +#endif
 diff --git a/kernel/power/suspend_watchdog.h b/kernel/power/suspend_watchdog.h
 new file mode 100644
-index 000000000000..8a3c0c4d1c4d
+index 000000000000..18037445a77b
 --- /dev/null
 +++ b/kernel/power/suspend_watchdog.h
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,40 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#ifndef _LINUX_SUSPEND_WATCHDOG_H
 +#define _LINUX_SUSPEND_WATCHDOG_H
@@ -674,6 +679,16 @@ index 000000000000..8a3c0c4d1c4d
 +#define DECLARE_SUSPEND_WATCHDOG(suspend_wd) \
 +	struct suspend_watchdog suspend_wd
 +
++#ifdef CONFIG_PM_SUSPEND_WATCHDOG
++inline void init_suspend_watchdog(struct suspend_watchdog *suspend_wd,
++					 void *func);
++
++inline void start_suspend_watchdog(struct suspend_watchdog *suspend_wd);
++
++inline void stop_suspend_watchdog(struct suspend_watchdog *suspend_wd);
++
++inline void suspend_timeout_handler(struct timer_list *t);
++#else
 +static inline void init_suspend_watchdog(struct suspend_watchdog *suspend_wd,
 +					 void *func)
 +{
@@ -687,6 +702,7 @@ index 000000000000..8a3c0c4d1c4d
 +static inline void suspend_timeout_handler(struct timer_list *t)
 +{
 +}
++#endif
 +
 +#endif /* _LINUX_SUSPEND_WATCHDOG_H */
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
@@ -703,5 +719,5 @@ index 9b75f6bfc333..168cb7b3148b 100644
  	down_console_sem();
  	console_suspended = 0;
 -- 
-2.29.2.299.gdc1121823c-goog
+2.29.2.729.g45daf8777d-goog
 
