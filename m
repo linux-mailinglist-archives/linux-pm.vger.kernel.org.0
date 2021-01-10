@@ -2,82 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FC42F08AF
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jan 2021 18:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2C32F08A7
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jan 2021 18:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbhAJRTo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jan 2021 12:19:44 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:32906 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726394AbhAJRTn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 12:19:43 -0500
-Received: by mail-oi1-f172.google.com with SMTP id d203so17759042oia.0;
-        Sun, 10 Jan 2021 09:19:28 -0800 (PST)
+        id S1726913AbhAJRTh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jan 2021 12:19:37 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:34773 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbhAJRTh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 12:19:37 -0500
+Received: by mail-oi1-f169.google.com with SMTP id s75so17722344oih.1;
+        Sun, 10 Jan 2021 09:19:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=dpRmxYlnzoK4Lg6qNYsLrabnqdmAajbzQvyDJX0Sah8=;
-        b=lSTAfPZ8ldEvDWRDiGt6CZ8Temh1k6D3iy0fi4V8e/HEQTyG0GxW2mpcFq92oAbCMY
-         A4TQuF6yrpog7BcKmRImitC0/9jZ2FBXg2YgTxYZy2V7BPgRtc0cA2s6WegM522UlVFx
-         ljLzJWm5NAx5z4YosHksres36ZjfpAt4jEfpE5S27U/4bpoxD+dawfdaH6DFMsuGHbdo
-         qqNjEBeu+cc8hNlvGfSUpLj0E1r6qWCbR+s6D94621KRWoyHkc0PshvM4OryB8zRYlMl
-         5u9qjiks6waU0C62kqA6ELZ2MIzD0IG5630lVYAZBowJ3SG2x17PBys5MBqtGsS7kP1v
-         xHZQ==
-X-Gm-Message-State: AOAM532HxDmL2VR1rd8Egytjm0+rHeg0iZyuvXvvAt5ItsSrB/td1Y/5
-        9RekOMuUmiMlf9f48rSClg==
-X-Google-Smtp-Source: ABdhPJwLUuMmsbYJA5pNeqvmXXoVg51UlNhmRIQluJbm9TYeOig/e6tOEclqP/USGyTB9k81oNqCEw==
-X-Received: by 2002:a54:4785:: with SMTP id o5mr8249939oic.139.1610299142715;
-        Sun, 10 Jan 2021 09:19:02 -0800 (PST)
+        bh=gieP8eMMhIwuDhb0Vl0swuQVI2c1HXJ0Uk0fu04gagQ=;
+        b=skRTs6T2k99yA6OTJnSqsF8ahec5LZW00XErd7PZ3foSvs20epx9IoAWq2IDncL3RN
+         1GoXRl7V8yFb7cjT7YYzuKqJ0AU/TfY9nLFAsXl3ssxg6MptswQObh+G+2jycmv6I1pO
+         X0rWE3C3bt78htLeMIpBVDjgSPzEou3vnyyJFZIBDudyWr6XVhIU9NAhESYiAJ/g2Xaf
+         sBUwzgbDr/gbN0D64oAEXInA+XyWtkT0EWM2AfGebyyCA+a2suKFhRSvkrBhFi4yR3G8
+         xDyF9dF1sIqJN/0/yiK+RhxbJluBvObRHoBHinror2t7C+Zv0e3X5sHTtb9hi5JEcend
+         52jA==
+X-Gm-Message-State: AOAM532M1af5UCrNlUlEm42EHov/PopWJSAd3Euc3Y3n+b24J6HQh5U5
+        05W3mBs+fFqr/N/ZMZZggw==
+X-Google-Smtp-Source: ABdhPJzLxtszYVeUrCOzKty8zftKIo/Vu35XEp81Bhe4mSudgRYg+tdhVx3ypM+/82ZLFWYvrDIQwQ==
+X-Received: by 2002:a05:6808:4cf:: with SMTP id a15mr8301191oie.147.1610299136149;
+        Sun, 10 Jan 2021 09:18:56 -0800 (PST)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g5sm3128772otq.43.2021.01.10.09.19.00
+        by smtp.gmail.com with ESMTPSA id w9sm3125675otq.44.2021.01.10.09.18.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 09:19:01 -0800 (PST)
-Received: (nullmailer pid 785285 invoked by uid 1000);
+        Sun, 10 Jan 2021 09:18:55 -0800 (PST)
+Received: (nullmailer pid 785283 invoked by uid 1000);
         Sun, 10 Jan 2021 17:18:46 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-Cc:     marijn.suijten@somainline.org, linux-arm-msm@vger.kernel.org,
-        manivannan.sadhasivam@linaro.org, phone-devel@vger.kernel.org,
-        martin.botka@somainline.org, linux-pm@vger.kernel.org,
-        bjorn.andersson@linaro.org, nks@flawful.org,
-        viresh.kumar@linaro.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        konrad.dybcio@somainline.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org
-In-Reply-To: <20210109180359.236098-16-angelogioacchino.delregno@somainline.org>
-References: <20210109180359.236098-1-angelogioacchino.delregno@somainline.org> <20210109180359.236098-16-angelogioacchino.delregno@somainline.org>
-Subject: Re: [PATCH v2 15/15] dt-bindings: cpufreq: qcom-hw: Add bindings for 8998
+Cc:     robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        nks@flawful.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        devicetree@vger.kernel.org, konrad.dybcio@somainline.org,
+        manivannan.sadhasivam@linaro.org, linux-pm@vger.kernel.org,
+        martin.botka@somainline.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, marijn.suijten@somainline.org
+In-Reply-To: <20210109180359.236098-9-angelogioacchino.delregno@somainline.org>
+References: <20210109180359.236098-1-angelogioacchino.delregno@somainline.org> <20210109180359.236098-9-angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v2 08/15] dt-bindings: avs: cpr: Convert binding to YAML schema
 Date:   Sun, 10 Jan 2021 11:18:46 -0600
-Message-Id: <1610299126.062379.785284.nullmailer@robh.at.kernel.org>
+Message-Id: <1610299126.051571.785282.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 09 Jan 2021 19:03:59 +0100, AngeloGioacchino Del Regno wrote:
-> The OSM programming addition has been done under the
-> qcom,cpufreq-hw-8998 compatible name: specify the requirement
-> of two additional register spaces for this functionality.
-> This implementation, with the same compatible, has been
-> tested on MSM8998 and SDM630.
+On Sat, 09 Jan 2021 19:03:52 +0100, AngeloGioacchino Del Regno wrote:
+> Convert the qcom,cpr.txt document to YAML schema and place it in the
+> appropriate directory, since this driver was moved from power/avs
+> to soc/qcom, but forgets to move the documentation.
 > 
+> Fixes: a7305e684fcf ("PM: AVS: qcom-cpr: Move the driver to the qcom specific drivers")
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > ---
->  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 44 ++++++++++++++++---
->  1 file changed, 39 insertions(+), 5 deletions(-)
+>  .../bindings/power/avs/qcom,cpr.txt           | 131 +-----------------
+>  .../bindings/soc/qcom/qcom,cpr.yaml           | 116 ++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 118 insertions(+), 131 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:73:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
+./Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml:36:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.example.dt.yaml: cpufreq@17d43000: reg: [[399781888, 5120], [399792128, 5120]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.example.dt.yaml: power-controller@b018000: nvmem-cells: [[4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295]] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.example.dt.yaml: power-controller@b018000: nvmem-cell-names: ['cpr_quotient_offset1', 'cpr_quotient_offset2', 'cpr_quotient_offset3', 'cpr_init_voltage1', 'cpr_init_voltage2', 'cpr_init_voltage3', 'cpr_quotient1', 'cpr_quotient2', 'cpr_quotient3', 'cpr_ring_osc1', 'cpr_ring_osc2', 'cpr_ring_osc3', 'cpr_fuse_revision'] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
 
-See https://patchwork.ozlabs.org/patch/1424138
+See https://patchwork.ozlabs.org/patch/1424131
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.
