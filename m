@@ -2,250 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1792B2F07A3
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jan 2021 15:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FC42F08AF
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jan 2021 18:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbhAJOvu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jan 2021 09:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbhAJOvu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 09:51:50 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38CBC061786
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 06:51:09 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id n11so732710lji.5
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 06:51:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rdjFgfFB6SoIkzaabYkYsn6ww2vuxrkot6sP0zdtMNE=;
-        b=wiLMIaPZh/eYfK/Ya+YsdVlyBXEYWvzNffzLITLIy5CDCLlG+RwutZ59MnRveuThSG
-         ojpo1fI6jtOA5hgqX8SqaPu3dXwlJYQyUJljqZtz/fRaAbPK7yGJAUtSWGsHn5fKm6Gw
-         USLk9glYEJzDi8KYfjHtsQUIOjQDAxZ2nVYDxRKFcmjCuK9SoJr2Qw/WMWKRkr9pUPe1
-         mWiiKv17xDIDTCbZeqKY5QVDaJPR0dDYBP1SNfG9KLZ2/hzsOgwSSvS7qRj6ECwi0gO3
-         41AGva1sCuCAHM9fM5+uj8urqLpq7y08iAJs60tvmThzN8cjnDTKGojHFc8udOrCknsH
-         d3mw==
+        id S1727008AbhAJRTo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jan 2021 12:19:44 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:32906 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbhAJRTn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 12:19:43 -0500
+Received: by mail-oi1-f172.google.com with SMTP id d203so17759042oia.0;
+        Sun, 10 Jan 2021 09:19:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rdjFgfFB6SoIkzaabYkYsn6ww2vuxrkot6sP0zdtMNE=;
-        b=UQm3NSmdLzrGAR1DlwBh+SP8+RDJwQSILyePVjKnT60EQ+VtCzDUpGe/w+QEeItSyh
-         +5+SqTxBK+NtdTympuPZsyEWn9u2EKMnbNnzhLasxv2VOvvLVOgHCBOKav8cPfAKrE1B
-         Swofq6nMPc06/a9PmVn89z2peXDtq9rr4+2lCqF7TCfsmZDA2W0H6+omjqaV5IX7hoa7
-         dN7px6TLvGpww34xqjAr4Sj8of20D0zXMqSrEV7K+qBFE982y4qNzEHfnoAX2waTCxgl
-         dzX9TIq4VJld1rLpC6lxS592/V0V38yFmrC9P3VVPfK7kuLd4ENdyHbmyelNlNNGPfBo
-         iQag==
-X-Gm-Message-State: AOAM533x8YnjIJpc9d3LrXVrXt4Aq9ZSU3KwpwoZUGC0jN98HWy9UHhk
-        Pevt2GpBKLQK+AGAqePlOc+GRw==
-X-Google-Smtp-Source: ABdhPJxQdhHcMMrRJ5U9PQQeH2gn/VkmnuDjNiVOkUcds8g/5UttWZ4F/+LsTJybQup6ySHXIr2sLw==
-X-Received: by 2002:a2e:914d:: with SMTP id q13mr5459861ljg.205.1610290268437;
-        Sun, 10 Jan 2021 06:51:08 -0800 (PST)
-Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id k21sm3077275ljb.43.2021.01.10.06.51.07
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=dpRmxYlnzoK4Lg6qNYsLrabnqdmAajbzQvyDJX0Sah8=;
+        b=lSTAfPZ8ldEvDWRDiGt6CZ8Temh1k6D3iy0fi4V8e/HEQTyG0GxW2mpcFq92oAbCMY
+         A4TQuF6yrpog7BcKmRImitC0/9jZ2FBXg2YgTxYZy2V7BPgRtc0cA2s6WegM522UlVFx
+         ljLzJWm5NAx5z4YosHksres36ZjfpAt4jEfpE5S27U/4bpoxD+dawfdaH6DFMsuGHbdo
+         qqNjEBeu+cc8hNlvGfSUpLj0E1r6qWCbR+s6D94621KRWoyHkc0PshvM4OryB8zRYlMl
+         5u9qjiks6waU0C62kqA6ELZ2MIzD0IG5630lVYAZBowJ3SG2x17PBys5MBqtGsS7kP1v
+         xHZQ==
+X-Gm-Message-State: AOAM532HxDmL2VR1rd8Egytjm0+rHeg0iZyuvXvvAt5ItsSrB/td1Y/5
+        9RekOMuUmiMlf9f48rSClg==
+X-Google-Smtp-Source: ABdhPJwLUuMmsbYJA5pNeqvmXXoVg51UlNhmRIQluJbm9TYeOig/e6tOEclqP/USGyTB9k81oNqCEw==
+X-Received: by 2002:a54:4785:: with SMTP id o5mr8249939oic.139.1610299142715;
+        Sun, 10 Jan 2021 09:19:02 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g5sm3128772otq.43.2021.01.10.09.19.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 06:51:07 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] power: supply: z2_battery: Convert to GPIO descriptors
-Date:   Sun, 10 Jan 2021 15:49:05 +0100
-Message-Id: <20210110144906.168877-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 10 Jan 2021 09:19:01 -0800 (PST)
+Received: (nullmailer pid 785285 invoked by uid 1000);
+        Sun, 10 Jan 2021 17:18:46 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     marijn.suijten@somainline.org, linux-arm-msm@vger.kernel.org,
+        manivannan.sadhasivam@linaro.org, phone-devel@vger.kernel.org,
+        martin.botka@somainline.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, nks@flawful.org,
+        viresh.kumar@linaro.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        konrad.dybcio@somainline.org, linux-kernel@vger.kernel.org,
+        agross@kernel.org
+In-Reply-To: <20210109180359.236098-16-angelogioacchino.delregno@somainline.org>
+References: <20210109180359.236098-1-angelogioacchino.delregno@somainline.org> <20210109180359.236098-16-angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v2 15/15] dt-bindings: cpufreq: qcom-hw: Add bindings for 8998
+Date:   Sun, 10 Jan 2021 11:18:46 -0600
+Message-Id: <1610299126.062379.785284.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This converts the Palm Z2 battery driver to use GPIO descriptors.
+On Sat, 09 Jan 2021 19:03:59 +0100, AngeloGioacchino Del Regno wrote:
+> The OSM programming addition has been done under the
+> qcom,cpufreq-hw-8998 compatible name: specify the requirement
+> of two additional register spaces for this functionality.
+> This implementation, with the same compatible, has been
+> tested on MSM8998 and SDM630.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> ---
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 44 ++++++++++++++++---
+>  1 file changed, 39 insertions(+), 5 deletions(-)
+> 
 
-Cc: Daniel Mack <daniel@zonque.org>
-Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/mach-pxa/z2.c            | 12 +++++++-
- drivers/power/supply/z2_battery.c | 46 ++++++++++++++-----------------
- include/linux/z2_battery.h        |  1 -
- 3 files changed, 32 insertions(+), 27 deletions(-)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/arch/arm/mach-pxa/z2.c b/arch/arm/mach-pxa/z2.c
-index 21fd76bb09cd..a5dad8d08cac 100644
---- a/arch/arm/mach-pxa/z2.c
-+++ b/arch/arm/mach-pxa/z2.c
-@@ -488,7 +488,6 @@ static struct z2_battery_info batt_chip_info = {
- 	.batt_I2C_bus	= 0,
- 	.batt_I2C_addr	= 0x55,
- 	.batt_I2C_reg	= 2,
--	.charge_gpio	= GPIO0_ZIPITZ2_AC_DETECT,
- 	.min_voltage	= 3475000,
- 	.max_voltage	= 4190000,
- 	.batt_div	= 59,
-@@ -497,9 +496,19 @@ static struct z2_battery_info batt_chip_info = {
- 	.batt_name	= "Z2",
- };
- 
-+static struct gpiod_lookup_table z2_battery_gpio_table = {
-+	.dev_id = "aer915",
-+	.table = {
-+		GPIO_LOOKUP("gpio-pxa", GPIO0_ZIPITZ2_AC_DETECT,
-+			    NULL, GPIO_ACTIVE_HIGH),
-+		{ },
-+	},
-+};
-+
- static struct i2c_board_info __initdata z2_i2c_board_info[] = {
- 	{
- 		I2C_BOARD_INFO("aer915", 0x55),
-+		.dev_name = "aer915",
- 		.platform_data	= &batt_chip_info,
- 	}, {
- 		I2C_BOARD_INFO("wm8750", 0x1b),
-@@ -510,6 +519,7 @@ static struct i2c_board_info __initdata z2_i2c_board_info[] = {
- static void __init z2_i2c_init(void)
- {
- 	pxa_set_i2c_info(NULL);
-+	gpiod_add_lookup_table(&z2_battery_gpio_table);
- 	i2c_register_board_info(0, ARRAY_AND_SIZE(z2_i2c_board_info));
- }
- #else
-diff --git a/drivers/power/supply/z2_battery.c b/drivers/power/supply/z2_battery.c
-index ebd2e42a4457..b1508fe70e5e 100644
---- a/drivers/power/supply/z2_battery.c
-+++ b/drivers/power/supply/z2_battery.c
-@@ -6,7 +6,7 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
-@@ -18,6 +18,7 @@
- 
- struct z2_charger {
- 	struct z2_battery_info		*info;
-+	struct gpio_desc		*charge_gpiod;
- 	int				bat_status;
- 	struct i2c_client		*client;
- 	struct power_supply		*batt_ps;
-@@ -95,8 +96,8 @@ static void z2_batt_update(struct z2_charger *charger)
- 
- 	mutex_lock(&charger->work_lock);
- 
--	charger->bat_status = (info->charge_gpio >= 0) ?
--		(gpio_get_value(info->charge_gpio) ?
-+	charger->bat_status = charger->charge_gpiod ?
-+		(gpiod_get_value(charger->charge_gpiod) ?
- 		POWER_SUPPLY_STATUS_CHARGING :
- 		POWER_SUPPLY_STATUS_DISCHARGING) :
- 		POWER_SUPPLY_STATUS_UNKNOWN;
-@@ -131,7 +132,7 @@ static int z2_batt_ps_init(struct z2_charger *charger, int props)
- 	enum power_supply_property *prop;
- 	struct z2_battery_info *info = charger->info;
- 
--	if (info->charge_gpio >= 0)
-+	if (charger->charge_gpiod)
- 		props++;	/* POWER_SUPPLY_PROP_STATUS */
- 	if (info->batt_tech >= 0)
- 		props++;	/* POWER_SUPPLY_PROP_TECHNOLOGY */
-@@ -147,7 +148,7 @@ static int z2_batt_ps_init(struct z2_charger *charger, int props)
- 		return -ENOMEM;
- 
- 	prop[i++] = POWER_SUPPLY_PROP_PRESENT;
--	if (info->charge_gpio >= 0)
-+	if (charger->charge_gpiod)
- 		prop[i++] = POWER_SUPPLY_PROP_STATUS;
- 	if (info->batt_tech >= 0)
- 		prop[i++] = POWER_SUPPLY_PROP_TECHNOLOGY;
-@@ -206,22 +207,23 @@ static int z2_batt_probe(struct i2c_client *client,
- 
- 	mutex_init(&charger->work_lock);
- 
--	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio)) {
--		ret = gpio_request(info->charge_gpio, "BATT CHRG");
--		if (ret)
--			goto err;
-+	charger->charge_gpiod = devm_gpiod_get_optional(&client->dev,
-+							NULL, GPIOD_IN);
-+	if (IS_ERR(charger->charge_gpiod))
-+		return dev_err_probe(&client->dev,
-+				     PTR_ERR(charger->charge_gpiod),
-+				     "failed to get charge GPIO\n");
- 
--		ret = gpio_direction_input(info->charge_gpio);
--		if (ret)
--			goto err2;
-+	if (charger->charge_gpiod) {
-+		gpiod_set_consumer_name(charger->charge_gpiod, "BATT CHRG");
- 
--		irq_set_irq_type(gpio_to_irq(info->charge_gpio),
-+		irq_set_irq_type(gpiod_to_irq(charger->charge_gpiod),
- 				 IRQ_TYPE_EDGE_BOTH);
--		ret = request_irq(gpio_to_irq(info->charge_gpio),
-+		ret = request_irq(gpiod_to_irq(charger->charge_gpiod),
- 				z2_charge_switch_irq, 0,
- 				"AC Detect", charger);
- 		if (ret)
--			goto err3;
-+			goto err;
- 	}
- 
- 	ret = z2_batt_ps_init(charger, props);
-@@ -245,11 +247,8 @@ static int z2_batt_probe(struct i2c_client *client,
- err4:
- 	kfree(charger->batt_ps_desc.properties);
- err3:
--	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio))
--		free_irq(gpio_to_irq(info->charge_gpio), charger);
--err2:
--	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio))
--		gpio_free(info->charge_gpio);
-+	if (charger->charge_gpiod)
-+		free_irq(gpiod_to_irq(charger->charge_gpiod), charger);
- err:
- 	kfree(charger);
- 	return ret;
-@@ -258,16 +257,13 @@ static int z2_batt_probe(struct i2c_client *client,
- static int z2_batt_remove(struct i2c_client *client)
- {
- 	struct z2_charger *charger = i2c_get_clientdata(client);
--	struct z2_battery_info *info = charger->info;
- 
- 	cancel_work_sync(&charger->bat_work);
- 	power_supply_unregister(charger->batt_ps);
- 
- 	kfree(charger->batt_ps_desc.properties);
--	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio)) {
--		free_irq(gpio_to_irq(info->charge_gpio), charger);
--		gpio_free(info->charge_gpio);
--	}
-+	if (charger->charge_gpiod)
-+		free_irq(gpiod_to_irq(charger->charge_gpiod), charger);
- 
- 	kfree(charger);
- 
-diff --git a/include/linux/z2_battery.h b/include/linux/z2_battery.h
-index eaba53ff387c..9e8be7a7cd25 100644
---- a/include/linux/z2_battery.h
-+++ b/include/linux/z2_battery.h
-@@ -6,7 +6,6 @@ struct z2_battery_info {
- 	int	 batt_I2C_bus;
- 	int	 batt_I2C_addr;
- 	int	 batt_I2C_reg;
--	int	 charge_gpio;
- 	int	 min_voltage;
- 	int	 max_voltage;
- 	int	 batt_div;
--- 
-2.29.2
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:73:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.example.dt.yaml: cpufreq@17d43000: reg: [[399781888, 5120], [399792128, 5120]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+
+See https://patchwork.ozlabs.org/patch/1424138
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
