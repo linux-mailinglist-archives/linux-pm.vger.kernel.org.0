@@ -2,58 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C142F0711
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jan 2021 13:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133822F0780
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jan 2021 15:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbhAJMQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jan 2021 07:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S1726534AbhAJOEp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jan 2021 09:04:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbhAJMQO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 07:16:14 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA955C06179F
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 04:15:33 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u11so468582ljo.13
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 04:15:33 -0800 (PST)
+        with ESMTP id S1726250AbhAJOEo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 09:04:44 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC3BC061794
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 06:04:03 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id o10so23143228lfl.13
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 06:04:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MBYAmMQjCUkh+NqqVNzBJgSH8GSy3bOZmGC5IQ6qttI=;
-        b=OeD7d82sZV4gAPnDU6dLCsLpZJEFgYGqZr4q/zLcCaQaCeKeIcABUDnvBSsG5vkG98
-         UJqcodW4A1jO3DE4yVNmQc01NQE4DBqtoPjhWdhhcvmksYO/JUiTE05Wo+Zo8tTJ+BdY
-         ZCqoyKVafa3z2DmWmJYV94fbadXzNL0AEfcNhL0DWrQzGNngBSk+mOEYHm3O4J3xQu9v
-         RA7iW9xRkd3ogXJH0cCmS2XJDU5EfM4U2UMU3XYWVnVlwdpcKU9f/k6BIMpFAHO/7w07
-         r6lap3TsTyvdZLBTxybbfUYMsLzzhu4UXV2o5EJ29tKMdfA1fDiv64saJVBfMZSlHMT4
-         mFHQ==
+        bh=mLjbjqwTG6XEAazNOXknqaBgeFZRwnpR9bYyyAV3nHw=;
+        b=Wgz8RLsmSPzqlDJoHKYia63FUD9V1Yx2bJ6GPoiBLqlKiTv887lHUdHzyM5QXQQP1g
+         r7/nM3LgXNRZFjdQMhgfKgxxA9zWEE5BgFc9L6rpCnfv0VQAOeyPJ32NDlp1z+8wxjRq
+         XFYdFCxiN0SW8RS5n9Uq6Zf5B6b5Lh2oSQlKhn/Z0r6KytGWXPN38XTMCW8BcPTcPwlf
+         tikx5l7FQ4ub8jJAfNe4Yg2qFanix0+0PSR0F7TI++/EFOT6qGYMBaVT2cJTENuPjbCB
+         LxPnv5A1immC5vfC3G5fPRuZ4lErGDaNraXQzcLVfEIkA4UrkUieeT5H3KTymnrbbljl
+         dQcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MBYAmMQjCUkh+NqqVNzBJgSH8GSy3bOZmGC5IQ6qttI=;
-        b=F8n7X1Lm1CIR2+CvX971QysZ+KtPxY3I694XctklXL7Zs0xMh9bqgD65vsV5ZjCDL+
-         yGO29c5Llg8g2xI9j0UEwP3Ma5PUgHW2Yb8XurvqPHM/16DigNmIwVBeARI66LgTnb1o
-         bua4WnTXC5Sf1CbVoB0c51WCqSvZ/IelCiqE/jNPZcoUnvG3/fGKWE6Q8Tn1whlsVAPO
-         +pFAc0uIwx8DbjtGSTXbxitUnOrsYIxOwW8iTVI6XuuTrZhoQG9/syKj0F4L079GUpLJ
-         bOgDhQM7d7tGKvJV8CQD9dkteNL/DcWOB6P/yYlG0cma6Bl6Q0PAxYO+bjChXTkWr14E
-         4vsw==
-X-Gm-Message-State: AOAM5305FyEtZvTM2eZSfKM23NjFaGtPXiO62g3UZdwHSqRm6Rq19Yxz
-        mBL/fJtsC9MpfD8WGosOp+p0FJlT+oeVCA==
-X-Google-Smtp-Source: ABdhPJyF7bi8wkRJ1WWMgPJFw0KhS8NUrQPwb/AkO8fvbSjHZ9jr6+RWN4krzxPcBygLJRtysg88Jg==
-X-Received: by 2002:a2e:7813:: with SMTP id t19mr5675228ljc.87.1610280932294;
-        Sun, 10 Jan 2021 04:15:32 -0800 (PST)
+        bh=mLjbjqwTG6XEAazNOXknqaBgeFZRwnpR9bYyyAV3nHw=;
+        b=tB+wGOwcW3M3b7hVZ6iBkaCxQf1J6Xh2ZVJHxwYcbYzx/dUfmdjKwmS/mshGpZPZWn
+         MgE+wnuflXIvLRh/lyZoI2AnLy0q9bX1LOy0DZEkm7XGdUlhf5spmiQ+zmkrrBttDwTh
+         6bQeWYqZM7yWkoLDu0plwTPh9z8cRJvwGJquYnLoZ/xjuL2P4/Zh32FqJFEfJR4/vWOe
+         kJDHuI0a1KllnjnEMp+ln/o9Juu44ZSnWJJjMeyPihW6IBOvXCQVXQbyIAVSR+KVE7W7
+         +1St6aQBVLoQSM/xp+xdSLbWoK35ZRlWs8IyuoKwW+2hhSS7t+1zld5P01qtxW336utK
+         ipRQ==
+X-Gm-Message-State: AOAM531pDtVHXCnTuZw+TB9fpS9SuNamrYxUvxO563v6AS3DWC1kdYjt
+        i4Gsw43mD3dXf3i74dZwPO7ZnA==
+X-Google-Smtp-Source: ABdhPJxjGsOKjdWPZcG5wEkINcd9NLjjbOXNLjjscFUdHttN5t6+hHt2JExcDxvZb8qOwnmplzdyWA==
+X-Received: by 2002:ac2:4149:: with SMTP id c9mr4196944lfi.385.1610287442404;
+        Sun, 10 Jan 2021 06:04:02 -0800 (PST)
 Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id a24sm2683007lfi.192.2021.01.10.04.15.31
+        by smtp.gmail.com with ESMTPSA id y26sm2981150ljh.63.2021.01.10.06.04.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 04:15:31 -0800 (PST)
+        Sun, 10 Jan 2021 06:04:01 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Alexander Kurz <akurz@blala.de>
-Subject: [PATCH] power: supply: max14656: Drop unused includes
-Date:   Sun, 10 Jan 2021 13:13:28 +0100
-Message-Id: <20210110121328.81259-1-linus.walleij@linaro.org>
+        Chris Lapa <chris@lapa.com.au>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: [PATCH 1/2] power: supply: max8903: Absorb pdata header
+Date:   Sun, 10 Jan 2021 15:01:59 +0100
+Message-Id: <20210110140200.127123-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -61,28 +62,111 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver includes two GPIO headers but does not use
-symbols from any of them, so drop these includes.
+The platform data header is not included by any other file in
+the kernel but the driver itself. Decomission the stand-alone
+header and absorb it into the driver itself.
 
-Cc: Alexander Kurz <akurz@blala.de>
+Cc: Chris Lapa <chris@lapa.com.au>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/power/supply/max14656_charger_detector.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/power/supply/max8903_charger.c | 32 ++++++++++++++++++-
+ include/linux/power/max8903_charger.h  | 43 --------------------------
+ 2 files changed, 31 insertions(+), 44 deletions(-)
+ delete mode 100644 include/linux/power/max8903_charger.h
 
-diff --git a/drivers/power/supply/max14656_charger_detector.c b/drivers/power/supply/max14656_charger_detector.c
-index 137f9fafce8c..3f49b29f3c88 100644
---- a/drivers/power/supply/max14656_charger_detector.c
-+++ b/drivers/power/supply/max14656_charger_detector.c
-@@ -15,8 +15,6 @@
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
+diff --git a/drivers/power/supply/max8903_charger.c b/drivers/power/supply/max8903_charger.c
+index 0bd39b0cc257..ab1aa7df985e 100644
+--- a/drivers/power/supply/max8903_charger.c
++++ b/drivers/power/supply/max8903_charger.c
+@@ -15,7 +15,37 @@
  #include <linux/slab.h>
--#include <linux/gpio.h>
--#include <linux/of_gpio.h>
- #include <linux/of_device.h>
- #include <linux/workqueue.h>
  #include <linux/power_supply.h>
+ #include <linux/platform_device.h>
+-#include <linux/power/max8903_charger.h>
++
++struct max8903_pdata {
++	/*
++	 * GPIOs
++	 * cen, chg, flt, dcm and usus are optional.
++	 * dok and uok are not optional depending on the status of
++	 * dc_valid and usb_valid.
++	 */
++	int cen;	/* Charger Enable input */
++	int dok;	/* DC(Adapter) Power OK output */
++	int uok;	/* USB Power OK output */
++	int chg;	/* Charger status output */
++	int flt;	/* Fault output */
++	int dcm;	/* Current-Limit Mode input (1: DC, 2: USB) */
++	int usus;	/* USB Suspend Input (1: suspended) */
++
++	/*
++	 * DC(Adapter/TA) is wired
++	 * When dc_valid is true,
++	 *	dok should be valid.
++	 *
++	 * At least one of dc_valid or usb_valid should be true.
++	 */
++	bool dc_valid;
++	/*
++	 * USB is wired
++	 * When usb_valid is true,
++	 *	uok should be valid.
++	 */
++	bool usb_valid;
++};
+ 
+ struct max8903_data {
+ 	struct max8903_pdata *pdata;
+diff --git a/include/linux/power/max8903_charger.h b/include/linux/power/max8903_charger.h
+deleted file mode 100644
+index 02f94a1b323b..000000000000
+--- a/include/linux/power/max8903_charger.h
++++ /dev/null
+@@ -1,43 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * max8903_charger.h - Maxim 8903 USB/Adapter Charger Driver
+- *
+- * Copyright (C) 2011 Samsung Electronics
+- * MyungJoo Ham <myungjoo.ham@samsung.com>
+- */
+-
+-#ifndef __MAX8903_CHARGER_H__
+-#define __MAX8903_CHARGER_H__
+-
+-struct max8903_pdata {
+-	/*
+-	 * GPIOs
+-	 * cen, chg, flt, dcm and usus are optional.
+-	 * dok and uok are not optional depending on the status of
+-	 * dc_valid and usb_valid.
+-	 */
+-	int cen;	/* Charger Enable input */
+-	int dok;	/* DC(Adapter) Power OK output */
+-	int uok;	/* USB Power OK output */
+-	int chg;	/* Charger status output */
+-	int flt;	/* Fault output */
+-	int dcm;	/* Current-Limit Mode input (1: DC, 2: USB) */
+-	int usus;	/* USB Suspend Input (1: suspended) */
+-
+-	/*
+-	 * DC(Adapter/TA) is wired
+-	 * When dc_valid is true,
+-	 *	dok should be valid.
+-	 *
+-	 * At least one of dc_valid or usb_valid should be true.
+-	 */
+-	bool dc_valid;
+-	/*
+-	 * USB is wired
+-	 * When usb_valid is true,
+-	 *	uok should be valid.
+-	 */
+-	bool usb_valid;
+-};
+-
+-#endif /* __MAX8903_CHARGER_H__ */
 -- 
 2.29.2
 
