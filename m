@@ -2,183 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C11E2F18EB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 15:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1671D2F18FA
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 15:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387634AbhAKO4j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jan 2021 09:56:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388919AbhAKO4Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 09:56:25 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00DAC061786;
-        Mon, 11 Jan 2021 06:55:55 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id j20so17118383otq.5;
-        Mon, 11 Jan 2021 06:55:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8BFCyJxHnV2W7FXaQSodkkTlXrpGj4TcvpLMb0Fv2E4=;
-        b=aLe1Y6WxbTEwSb9PmhAjo3/3AAw4hKCnXZVIZPrB2O3Xl9aovFmUqVVWeJBnEkxZY+
-         R48KtSq6n8YIFXf7nFOQBH+/PSg0roZ76qz4aIl++8Y5yCOOkA4XK67jvmmHcU8kEMUj
-         WaaJQcntTAAwsHgBQWZQszcEIGGQrwcDUK3pHnlgqshoNw145DQIwDf1Xa++KJb6Y34e
-         SGF3eD+Io5GS9gS/KiCRJ7HofZpZk8U7gMdezFbWfyKbpCCgRf8y3drkkYZS7Pw6Ktn6
-         rfaJ390McvX1ikfwN/jFl3Hpm+OuKcl6PequTkLUHXTwZefoDoC0qqyesq38PvOV8Rl8
-         Iaiw==
+        id S1728348AbhAKO6a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jan 2021 09:58:30 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:42583 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728288AbhAKO63 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 09:58:29 -0500
+Received: by mail-ot1-f52.google.com with SMTP id 11so17100812oty.9;
+        Mon, 11 Jan 2021 06:58:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=8BFCyJxHnV2W7FXaQSodkkTlXrpGj4TcvpLMb0Fv2E4=;
-        b=qep1D6yaxFoLN41N1ydXUZeb+X6IkLmeL9Wt/i7banxdF0UyuIbzE+xW9P+QimUDW9
-         t7LcGuuf4Jlqei1DLbTimYw2jwXNx3GWBkkXwezKoYW1j/wNSGcwef4GsluOCMHWOh8e
-         spapJWMkqksbogtU4n9EO3EwtxLtmw/0zrOu7UR+xFWoiAmvB39bGGJSTTa4/fXRI8sE
-         pGeh5syAUkE7CuG0lPrApdheDd1ZYxbJdK+RB4yx1vemBjV1jKpfZg2jLFf4jVufpUPh
-         jdLt+mFIudnFmKduArNOSedG1ZXz0Lq75MIckFzhwgyLhZPtlWHrKo+AcGUO+C5dZDlG
-         tHHQ==
-X-Gm-Message-State: AOAM5328bSNzjUmVp2Rc3bvJ8ghw19+jqs6v1JxqJkj6LFBHM/h21NyP
-        jR9NvusRjZFbyoXrnf7ZaypF07H++W4=
-X-Google-Smtp-Source: ABdhPJx+/rHrDUfqqikLuJAjU1petTZmY4T1cYdgtInzxQWAwRf5VbW8BnUJhKaJT6fZCrNF6EgqTA==
-X-Received: by 2002:a05:6830:10d2:: with SMTP id z18mr11234544oto.90.1610376954821;
-        Mon, 11 Jan 2021 06:55:54 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p25sm3985335oip.14.2021.01.11.06.55.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jan 2021 06:55:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] thermal/core: Make cooling device state change private
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        "open list:PWM FAN DRIVER" <linux-hwmon@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <20210111141320.15452-1-daniel.lezcano@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <7bdb20ca-9baf-9d2e-1f3d-cc52a5645c8b@roeck-us.net>
-Date:   Mon, 11 Jan 2021 06:55:51 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E7t35NkDKfW6AJAxopDvtvnjqNf+LDF0wYVO4JWwW3k=;
+        b=NBHbal7YLIXwkRZ+F0yBC0iXsf/VDxFTdWgROPpLJThgF2ENs0Hico0EoA6m+fBm9t
+         XGIE2Ra3mEv00iKyzwHM8QqCr+daWRzEKZQYSzwHVn1Gg6YnCX/4xhhtt/vdrAfbIQHW
+         gR3k2bCMRzus02qg2Sa+cGEsgcVx6ijbmUyirtQ7ON/vWp6l9Kx9O2EySlhStJN6XF/k
+         BJVwff6O9BXqIPrnbkLpt8tEn3tjri31Ne3qrlQcyT9gN58u8g16K6Xz1e6hS+c23Z5+
+         CR0aPGWEUbxIS9UsAnrzLn9ZfVGH7U0hb2rUTgrUacCgH+ZQ0TEx7ziE8DY49Mwy+Wf5
+         xJhA==
+X-Gm-Message-State: AOAM532YMe16C7EiQ5xP1QS55opgTRoyLQGeYWyqCZnZ9isAAGjLYKJk
+        6HpgPpex250TxQIBEa4FdcUpmGwSpWsJvvcyGHE=
+X-Google-Smtp-Source: ABdhPJzFuSTDnqMMfBrV+MaNHGkqEHhQbvoD7ET4N8z1jcqX9D14iVLIXpgXJsOUjHyh94OVxLMJuOQsdw7RRieQsWU=
+X-Received: by 2002:a9d:745a:: with SMTP id p26mr11525956otk.206.1610377068634;
+ Mon, 11 Jan 2021 06:57:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210111141320.15452-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <alpine.LSU.2.11.2101102010200.25762@eggly.anvils> <X/xV7ZV5jzI7RvAe@ulmo>
+In-Reply-To: <X/xV7ZV5jzI7RvAe@ulmo>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 11 Jan 2021 15:57:37 +0100
+Message-ID: <CAJZ5v0iriRkEN8dVJ9gE3+Wyn_96=SNhav1QaQ59i9O0genTNQ@mail.gmail.com>
+Subject: Re: 5.11-rc device reordering breaks ThinkPad rmi4 suspend
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/11/21 6:13 AM, Daniel Lezcano wrote:
-> The change of the cooling device state should be used by the governor
-> or at least by the core code, not by the drivers themselves.
-> 
-> Remove the API usage and move the function declaration to the internal
-> headers.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Mon, Jan 11, 2021 at 2:43 PM Thierry Reding <treding@nvidia.com> wrote:
+>
+> On Sun, Jan 10, 2021 at 08:44:13PM -0800, Hugh Dickins wrote:
+> > Hi Rafael,
+> >
+> > Synaptics RMI4 SMBus touchpad on ThinkPad X1 Carbon (5th generation)
+> > fails to suspend when running 5.11-rc kernels: bisected to
+> > 5b6164d3465f ("driver core: Reorder devices on successful probe"),
+> > and reverting that fixes it.  dmesg.xz attached, but go ahead and ask
+> > me to switch on a debug option to extract further info if that may help.
+>
+> Hi Hugh,
+>
+> Quoting what I think are the relevant parts of that log:
+>
+> [   34.373742] printk: Suspending console(s) (use no_console_suspend to debug)
+> [   34.429015] rmi4_physical rmi4-00: Failed to read irqs, code=-6
+> [   34.474973] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
+> [   34.474994] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
+> [   34.475001] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> [   34.475105] rmi4_smbus 6-002c: Failed to suspend device: -6
+> [   34.475113] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x3c returns -6
+> [   34.475130] PM: Device 6-002c failed to suspend: error -6
+> [   34.475187] PM: Some devices failed to suspend, or early wake event detected
+> [   34.480324] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to F03 TX register (-6).
+> [   34.480748] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to F03 TX register (-6).
+> [   34.481558] rmi4_physical rmi4-00: rmi_driver_clear_irq_bits: Failed to change enabled interrupts!
+> [   34.487935] acpi LNXPOWER:02: Turning OFF
+> [   34.488707] acpi LNXPOWER:01: Turning OFF
+> [   34.489554] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to change enabled interrupts!
+> [   34.489669] psmouse: probe of serio2 failed with error -1
+> [   34.489882] OOM killer enabled.
+> [   34.489891] Restarting tasks ... done.
+> [   34.589183] PM: suspend exit
+> [   34.589839] PM: suspend entry (s2idle)
+> [   34.605884] Filesystems sync: 0.017 seconds
+> [   34.607594] Freezing user space processes ... (elapsed 0.006 seconds) done.
+> [   34.613645] OOM killer disabled.
+> [   34.613650] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+> [   34.615482] printk: Suspending console(s) (use no_console_suspend to debug)
+> [   34.653097] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
+> [   34.653108] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
+> [   34.653115] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> [   34.653123] rmi4_smbus 6-002c: Failed to suspend device: -6
+> [   34.653129] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x3c returns -6
+> [   34.653160] PM: Device 6-002c failed to suspend: error -6
+> [   34.653174] PM: Some devices failed to suspend, or early wake event detected
+> [   34.660515] OOM killer enabled.
+> [   34.660524] Restarting tasks ...
+> [   34.661456] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to change enabled interrupts!
+> [   34.661591] psmouse: probe of serio2 failed with error -1
+> [   34.669469] done.
+> [   34.748386] PM: suspend exit
+>
+> I think what might be happening here is that the offending patch causes
+> some devices to be reordered in a way different to how they were ordered
+> originally and the rmi4 driver currently depends on that implicit order.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Actually, the only possible case in which the commit in question can
+introduce suspend failures like this is when some dependency
+information is missing and so the reordering causes the ordering to
+change from the (working) implicit one.
 
-> ---
->  drivers/hwmon/pwm-fan.c        | 1 -
->  drivers/thermal/thermal_core.h | 2 ++
->  include/linux/thermal.h        | 3 ---
->  3 files changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index bdba2143021a..0b1159ceac9b 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -378,7 +378,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  			return ret;
->  		}
->  		ctx->cdev = cdev;
-> -		thermal_cdev_update(cdev);
->  	}
->  
->  	return 0;
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index 90f9a80c8b23..86b8cef7310e 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -65,6 +65,8 @@ static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
->  		cdev->ops->power2state;
->  }
->  
-> +void thermal_cdev_update(struct thermal_cooling_device *);
-> +
->  /**
->   * struct thermal_trip - representation of a point in temperature domain
->   * @np: pointer to struct device_node that this trip point was created from
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 1e686404951b..6ac7bb1d2b1f 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -390,7 +390,6 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
->  int thermal_zone_get_slope(struct thermal_zone_device *tz);
->  int thermal_zone_get_offset(struct thermal_zone_device *tz);
->  
-> -void thermal_cdev_update(struct thermal_cooling_device *);
->  void thermal_notify_framework(struct thermal_zone_device *, int);
->  int thermal_zone_device_enable(struct thermal_zone_device *tz);
->  int thermal_zone_device_disable(struct thermal_zone_device *tz);
-> @@ -437,8 +436,6 @@ static inline int thermal_zone_get_offset(
->  		struct thermal_zone_device *tz)
->  { return -ENODEV; }
->  
-> -static inline void thermal_cdev_update(struct thermal_cooling_device *cdev)
-> -{ }
->  static inline void thermal_notify_framework(struct thermal_zone_device *tz,
->  	int trip)
->  { }
-> 
+> Interestingly one of the bugs that the offending patch fixes is similar
+> in the failure mode but for the reverse reason: the implicit order
+> causes suspend/resume to fail.
 
+And that happens because some dependency information is missing.
+
+So we have failing cases when dependency information is missing, so
+instead of fixing those we have tried to make the core change the
+ordering after every successful probe in the hope that this will take
+care of the problem without introducing new breakage.
+
+However, it evidently has introduced new breakage and in order to fix
+it we need to figure out what dependency information is missing in the
+failing cases and put that information in, but we may as well do the
+same for the cases that are failing without the offending change.
+
+So why don't we revert the commit in question and do just that?
