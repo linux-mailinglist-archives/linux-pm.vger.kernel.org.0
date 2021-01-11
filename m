@@ -2,201 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E88B32F20B2
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 21:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A46C92F2230
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 22:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404036AbhAKUYc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jan 2021 15:24:32 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:42287 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403977AbhAKUY1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 15:24:27 -0500
-Received: by mail-oi1-f180.google.com with SMTP id l200so667997oig.9;
-        Mon, 11 Jan 2021 12:24:11 -0800 (PST)
+        id S1728040AbhAKVup (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jan 2021 16:50:45 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:37508 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727380AbhAKVuo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 16:50:44 -0500
+Received: by mail-ot1-f43.google.com with SMTP id o11so350980ote.4;
+        Mon, 11 Jan 2021 13:50:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=N+l7oEoC2Gtdd3tsUSXfbCD3VNBOdwhPR2for7AGSP0=;
-        b=BfeH9dnmszit+bA8pGswZrF7E/0dltNYlKrH7qRsb9tK8JYOlhSOZgcA3jaQY9IUJK
-         8GdZYRW0bCFRk2lCdstkkAUZf6RbpSb05/VpxBfr9soFUnYCAG1HNttS7AWVJFvmstgi
-         /klIi7UG2VoEfpNzfFrbJ3cYCvKBw4rD0Ngt+oJpqxT2SMiQKWGzRWMe6FrsIXLlEVnr
-         my3QBk6LnzX1KrSFs5jqdPmdXcBAdspNmOIEIYy0+Teo6QeUg62MM5LDNxzmp2/bNykG
-         96y5lnGH78/t0WNPXsY0fdgW2JfPZDpnpuYbEWTly+0fNESMhd4Obck/tNz0FAwh7tS2
-         r2BQ==
-X-Gm-Message-State: AOAM531UHItUO4sNLoEl2TBX++V3yfSbE9kzAxKT80ODd2e0aD5ooibM
-        GHmNRvYku2HofybdZb16LQ==
-X-Google-Smtp-Source: ABdhPJwWxknOlQUQyjNGUH3P7COKkSvblU0b4yZxPrYfjVei7f813EPmKrrInAQ0BrcWWGXpSQEl5g==
-X-Received: by 2002:a05:6808:8f0:: with SMTP id d16mr344964oic.47.1610396626307;
-        Mon, 11 Jan 2021 12:23:46 -0800 (PST)
+        bh=qZB7YFnYmK5pmVyjaf+FA297zYveGF4/mkcj6q7QOss=;
+        b=KzzdNZ6Atd3vBpENJVNI0RJlHFY4HrjV+UMAXXdX00Rah+o4Fl1mJCK/L9LhydwEGD
+         UBkdr1YSw5din4zzw9jg3kI+rDjFEZMR1eV/eKMCa9J+bT7fdxH3G1IyqP4ZZH91OjG0
+         BHQOsgyKaJpl4/BV9D8HDdFc6C6tflQUSNhEzlXKsm0kvIdG/0IdXWk4cQAPmkUbQt8L
+         eAtQ1FV5acmEQGkjaebMlD01hygS9bIlXx0pTbPipZ2k1aJ4irsHg25X0Drp2Rjyr9xJ
+         zlvb8VaqbZH77Au1hgxblZnIYAn8POm9FuNekOSEZV58gqGoP6zDGTk8vj32l8mCR2ZF
+         JXXg==
+X-Gm-Message-State: AOAM53088rib++/Yfr0VEHejVfTiIWtEYfyhsXKZo1UIk/udhHTNwNhs
+        Kv4w46R3+5BYL3ew65PalQ==
+X-Google-Smtp-Source: ABdhPJx4sESqsRtj0tIKhFssBKghbCoKpOR5OcYFGX1jMiDvJvhAgfB0xNG4OTZoj71kNHt+15hP5w==
+X-Received: by 2002:a05:6830:1343:: with SMTP id r3mr753075otq.344.1610401803679;
+        Mon, 11 Jan 2021 13:50:03 -0800 (PST)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v4sm171269otk.50.2021.01.11.12.23.44
+        by smtp.gmail.com with ESMTPSA id f18sm214594otf.55.2021.01.11.13.50.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 12:23:45 -0800 (PST)
-Received: (nullmailer pid 3005685 invoked by uid 1000);
-        Mon, 11 Jan 2021 20:23:44 -0000
-Date:   Mon, 11 Jan 2021 14:23:44 -0600
+        Mon, 11 Jan 2021 13:50:02 -0800 (PST)
+Received: (nullmailer pid 3120427 invoked by uid 1000);
+        Mon, 11 Jan 2021 21:50:01 -0000
+Date:   Mon, 11 Jan 2021 15:50:01 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Hector Yuan <hector.yuan@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH v10 2/2] dt-bindings: cpufreq: add bindings for MediaTek
- cpufreq HW
-Message-ID: <20210111202344.GA2999777@robh.at.kernel.org>
-References: <1609222629-2979-1-git-send-email-hector.yuan@mediatek.com>
- <1609222629-2979-3-git-send-email-hector.yuan@mediatek.com>
+To:     Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v6 2/8] regulator: dt-bindings: Document max8997-pmic
+ nodes
+Message-ID: <20210111215001.GA3111856@robh.at.kernel.org>
+References: <20201230205139.1812366-1-timon.baetz@protonmail.com>
+ <20201230205139.1812366-2-timon.baetz@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1609222629-2979-3-git-send-email-hector.yuan@mediatek.com>
+In-Reply-To: <20201230205139.1812366-2-timon.baetz@protonmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 02:17:09PM +0800, Hector Yuan wrote:
-> From: "Hector.Yuan" <hector.yuan@mediatek.com>
+On Wed, Dec 30, 2020 at 08:52:07PM +0000, Timon Baetz wrote:
+> Add maxim,max8997-battery and maxim,max8997-muic optional nodes.
 > 
-> Add devicetree bindings for MediaTek HW driver.
-> 
-> Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
+> Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |  116 ++++++++++++++++++++
->  1 file changed, 116 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+> v6: No change.
+> v5: No change.
+> v4: Make extcon and charger-supply optional.
+> v3: Reorder patch, no change.
+> v2: Add patch.
 > 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> new file mode 100644
-> index 0000000..53e0eb3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> @@ -0,0 +1,116 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-mediatek-hw.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek's CPUFREQ Bindings
-> +
-> +maintainers:
-> +  - Hector Yuan <hector.yuan@mediatek.com>
-> +
-> +description:
-> +  CPUFREQ HW is a hardware engine used by MediaTek
-> +  SoCs to manage frequency in hardware. It is capable of controlling frequency
-> +  for multiple clusters.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,cpufreq-hw
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: |
-> +      Addresses and sizes for the memory of the
-> +      HW bases in each frequency domain.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: true
+>  .../bindings/regulator/max8997-regulator.txt         | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 
-This is only correct on common bindings which are incomplete. You need 
-to define '#performance-domain-cells'.
+This exceeds my threshold of changes for please convert this to schema 
+first. However, I agree with what Mark has said already, so maybe some 
+of this isn't needed.
 
-And this is all dependent on performance-domains binding being accepted.
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/max8997-regulator.txt b/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
+> index 6fe825b8ac1b..faaf2bbf0272 100644
+> --- a/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
+> +++ b/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
+> @@ -53,6 +53,18 @@ Additional properties required if either of the optional properties are used:
+>  - max8997,pmic-buck125-dvs-gpios: GPIO specifiers for three host gpio's used
+>    for dvs. The format of the gpio specifier depends in the gpio controller.
+>  
+> +Optional nodes:
+> +- charger: Node for configuring the charger driver.
+> +  Required properties:
+> +  - compatible: "maxim,max8997-battery"
+> +  Optional properties:
+> +  - extcon: extcon specifier for charging events
 
+Don't use 'extcon' for new bindings. Define a connector node. USB I 
+suppose?
+
+> +  - charger-supply: regulator node for charging current
 > +
-> +examples:
-> +  - |
-> +    cpus {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
+> +- muic: Node used only by extcon consumers.
+> +  Required properties:
+> +  - compatible: "maxim,max8997-muic"
 > +
-> +            cpu0: cpu@0 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x000>;
-> +            };
-> +
-> +            cpu1: cpu@100 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x100>;
-> +            };
-> +
-> +            cpu2: cpu@200 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x200>;
-> +            };
-> +
-> +            cpu3: cpu@300 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 0>;
-> +                reg = <0x300>;
-> +            };
-> +
-> +            cpu4: cpu@400 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
-> +                reg = <0x400>;
-> +            };
-> +
-> +            cpu5: cpu@500 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a55";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
-> +                reg = <0x500>;
-> +            };
-> +
-> +            cpu6: cpu@600 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a75";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
-> +                reg = <0x600>;
-> +            };
-> +
-> +            cpu7: cpu@700 {
-> +                device_type = "cpu";
-> +                compatible = "arm,cortex-a75";
-> +                enable-method = "psci";
-> +                performance-domains = <&performance 1>;
-> +                reg = <0x700>;
-> +            };
-> +    };
-> +
-> +    /* ... */
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        performance: performance-controller@11bc00 {
-> +            compatible = "mediatek,cpufreq-hw";
-> +            reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
-> +            #performance-domain-cells = <1>;
-> +        };
-> +    };
+>  Regulators: The regulators of max8997 that have to be instantiated should be
+>  included in a sub-node named 'regulators'. Regulator nodes included in this
+>  sub-node should be of the format as listed below.
 > -- 
-> 1.7.9.5
+> 2.25.1
+> 
 > 
