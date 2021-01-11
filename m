@@ -2,172 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE53C2F15B5
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 14:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A762F17CC
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 15:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731979AbhAKNoB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jan 2021 08:44:01 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:10628 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730736AbhAKNnx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 08:43:53 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5ffc55f00001>; Mon, 11 Jan 2021 05:43:12 -0800
-Received: from localhost (172.20.145.6) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 11 Jan
- 2021 13:43:12 +0000
-Date:   Mon, 11 Jan 2021 14:43:09 +0100
-From:   Thierry Reding <treding@nvidia.com>
-To:     Hugh Dickins <hughd@google.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: 5.11-rc device reordering breaks ThinkPad rmi4 suspend
-Message-ID: <X/xV7ZV5jzI7RvAe@ulmo>
-References: <alpine.LSU.2.11.2101102010200.25762@eggly.anvils>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lN+kFVj2Dd+ypR5G"
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.11.2101102010200.25762@eggly.anvils>
-X-NVConfidentiality: public
-User-Agent: Mutt/2.0.3 (a51f058f) (2020-12-04)
-X-Originating-IP: [172.20.145.6]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1610372592; bh=VtI56arTmvPDds1bUHvrFG9JNVtaZLCU5E2c0yjQpUo=;
-        h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-         Content-Type:Content-Disposition:In-Reply-To:X-NVConfidentiality:
-         User-Agent:X-Originating-IP:X-ClientProxiedBy;
-        b=B8wFtRoZgODFUGcc0Xan/ISDzie6Pqg/3b8dr4v8QD47i4N435lnshuSPyNEmuV19
-         GQZv9taXUIKF+kjwPdSp/8/MA4SUutYE+En/EFeDjQ1fJOfKYAPsYQjlclxmv2W46R
-         xFSgqNx3QE6ThP2T3QcIpgAPwRsekSDOMT1teBUgpGE05gJlWSHvJRJX6BlevAE75e
-         N0bOVVdN9Qr6mZSjeeaOKA62ySUjG9ZhxdEspHkIX1tpGXhxUjgWI9JHQ4NZ45s2Qq
-         zzrgJ87A95mgvaGuCX9RYrf14TytF8iialUNsn8UID47XRvsypNxA2nv6kTWcvHIYE
-         zC/HR4SqNKS/w==
+        id S1729926AbhAKOOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jan 2021 09:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727729AbhAKOOd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 09:14:33 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFEBC061795
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jan 2021 06:13:53 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id q75so15248166wme.2
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jan 2021 06:13:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=HDQz4iMlNtJUgLbZfKWh3c6UGq9q4CpkzN2dgTPuBqE=;
+        b=aTCCFtxnRgly36Ux3D+jAWhsNi3Aj+9GAa7C15lOfMsBm1JS/and3I/F97ePyFunQD
+         hchCfukPVLzNWQFV8IcW3G1tfW5kF9gnl6+NuLiQv5B67Rck8wjngMzh+aOYOdr+tk/I
+         RKg4h10awXZjb2nk4FwYWiDsW/dn9wUVcXQ8aMku/JAs5Vunxt9JX5ULNbUfcq6IyjDC
+         0/zD+HeegdWtlTOWHoHaZuLKztzP2pDlNKroCqx3Cs/lOqPYjjoYOcw8dQazH431tZYH
+         t/9vqkJ6N+TFPISx2B9YWzgLu9iSPO5EFaU9Z4RnCVxxJ2/oqSEhAaWXMwYN5KgB7HfV
+         P3QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HDQz4iMlNtJUgLbZfKWh3c6UGq9q4CpkzN2dgTPuBqE=;
+        b=pIsLG+T5m4sQ0E0+MpdLfihTv1E4AXqeIHNnGn5N6BR1q5NI39GfLfiS+Hrtyu0ven
+         d/cpXvpBtQpnHpWTcJSgcr7j0bUVqy6RAJ49lmE88NLW9pO9rYIcdEUK2H417N+SICQ/
+         psZwxpZy3ZPAeEcIZ7zeYxb9r555xzJDLlzvSEScFbjZgXp4FR/C5CPJWjDK5hkSQm7d
+         r6Ay+ideX7sEauxoNczUCdW9Fz1aCh3XhcUos7SrKi7TI2fnTIiTVGuB6poT2pv37yZP
+         KKLownApPmif1ZuOJx5LrunD1/cZKjoFznZFoUytmDVSJHKOQPyk/2JJNfBB45+LKAil
+         GLew==
+X-Gm-Message-State: AOAM531piVownIC42j/D/b7WiE4tRZu8BQWCwAw6b+oxR8ukyt5qyDUr
+        34mnAy5PzmHheFx1ScY6kxyBPA==
+X-Google-Smtp-Source: ABdhPJwFg0efm8YFmQlmB67mGL59RKW9zsqEtOpZpO9CAVBe4fctS5yB+fG7sdWgwygKOZXiGFNnhw==
+X-Received: by 2002:a1c:bb06:: with SMTP id l6mr15224113wmf.112.1610374431483;
+        Mon, 11 Jan 2021 06:13:51 -0800 (PST)
+Received: from localhost.localdomain (lns-bzn-59-82-252-152-224.adsl.proxad.net. [82.252.152.224])
+        by smtp.gmail.com with ESMTPSA id c4sm22367583wmf.19.2021.01.11.06.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 06:13:50 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Amit Kucheria <amitk@kernel.org>,
+        linux-hwmon@vger.kernel.org (open list:PWM FAN DRIVER),
+        linux-kernel@vger.kernel.org (open list),
+        linux-pm@vger.kernel.org (open list:THERMAL)
+Subject: [PATCH] thermal/core: Make cooling device state change private
+Date:   Mon, 11 Jan 2021 15:13:20 +0100
+Message-Id: <20210111141320.15452-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---lN+kFVj2Dd+ypR5G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The change of the cooling device state should be used by the governor
+or at least by the core code, not by the drivers themselves.
 
-On Sun, Jan 10, 2021 at 08:44:13PM -0800, Hugh Dickins wrote:
-> Hi Rafael,
->=20
-> Synaptics RMI4 SMBus touchpad on ThinkPad X1 Carbon (5th generation)
-> fails to suspend when running 5.11-rc kernels: bisected to=20
-> 5b6164d3465f ("driver core: Reorder devices on successful probe"),
-> and reverting that fixes it.  dmesg.xz attached, but go ahead and ask
-> me to switch on a debug option to extract further info if that may help.
+Remove the API usage and move the function declaration to the internal
+headers.
 
-Hi Hugh,
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/hwmon/pwm-fan.c        | 1 -
+ drivers/thermal/thermal_core.h | 2 ++
+ include/linux/thermal.h        | 3 ---
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-Quoting what I think are the relevant parts of that log:
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index bdba2143021a..0b1159ceac9b 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -378,7 +378,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 			return ret;
+ 		}
+ 		ctx->cdev = cdev;
+-		thermal_cdev_update(cdev);
+ 	}
+ 
+ 	return 0;
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 90f9a80c8b23..86b8cef7310e 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -65,6 +65,8 @@ static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
+ 		cdev->ops->power2state;
+ }
+ 
++void thermal_cdev_update(struct thermal_cooling_device *);
++
+ /**
+  * struct thermal_trip - representation of a point in temperature domain
+  * @np: pointer to struct device_node that this trip point was created from
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 1e686404951b..6ac7bb1d2b1f 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -390,7 +390,6 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
+ int thermal_zone_get_slope(struct thermal_zone_device *tz);
+ int thermal_zone_get_offset(struct thermal_zone_device *tz);
+ 
+-void thermal_cdev_update(struct thermal_cooling_device *);
+ void thermal_notify_framework(struct thermal_zone_device *, int);
+ int thermal_zone_device_enable(struct thermal_zone_device *tz);
+ int thermal_zone_device_disable(struct thermal_zone_device *tz);
+@@ -437,8 +436,6 @@ static inline int thermal_zone_get_offset(
+ 		struct thermal_zone_device *tz)
+ { return -ENODEV; }
+ 
+-static inline void thermal_cdev_update(struct thermal_cooling_device *cdev)
+-{ }
+ static inline void thermal_notify_framework(struct thermal_zone_device *tz,
+ 	int trip)
+ { }
+-- 
+2.17.1
 
-[   34.373742] printk: Suspending console(s) (use no_console_suspend to deb=
-ug)
-[   34.429015] rmi4_physical rmi4-00: Failed to read irqs, code=3D-6
-[   34.474973] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
-[   34.474994] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
-[   34.475001] rmi4_physical rmi4-00: Failed to suspend functions: -6
-[   34.475105] rmi4_smbus 6-002c: Failed to suspend device: -6
-[   34.475113] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x3c returns -6
-[   34.475130] PM: Device 6-002c failed to suspend: error -6
-[   34.475187] PM: Some devices failed to suspend, or early wake event dete=
-cted
-[   34.480324] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to =
-F03 TX register (-6).
-[   34.480748] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to =
-F03 TX register (-6).
-[   34.481558] rmi4_physical rmi4-00: rmi_driver_clear_irq_bits: Failed to =
-change enabled interrupts!
-[   34.487935] acpi LNXPOWER:02: Turning OFF
-[   34.488707] acpi LNXPOWER:01: Turning OFF
-[   34.489554] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to ch=
-ange enabled interrupts!
-[   34.489669] psmouse: probe of serio2 failed with error -1
-[   34.489882] OOM killer enabled.
-[   34.489891] Restarting tasks ... done.
-[   34.589183] PM: suspend exit
-[   34.589839] PM: suspend entry (s2idle)
-[   34.605884] Filesystems sync: 0.017 seconds
-[   34.607594] Freezing user space processes ... (elapsed 0.006 seconds) do=
-ne.
-[   34.613645] OOM killer disabled.
-[   34.613650] Freezing remaining freezable tasks ... (elapsed 0.001 second=
-s) done.
-[   34.615482] printk: Suspending console(s) (use no_console_suspend to deb=
-ug)
-[   34.653097] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
-[   34.653108] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
-[   34.653115] rmi4_physical rmi4-00: Failed to suspend functions: -6
-[   34.653123] rmi4_smbus 6-002c: Failed to suspend device: -6
-[   34.653129] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x3c returns -6
-[   34.653160] PM: Device 6-002c failed to suspend: error -6
-[   34.653174] PM: Some devices failed to suspend, or early wake event dete=
-cted
-[   34.660515] OOM killer enabled.
-[   34.660524] Restarting tasks ...
-[   34.661456] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to ch=
-ange enabled interrupts!
-[   34.661591] psmouse: probe of serio2 failed with error -1
-[   34.669469] done.
-[   34.748386] PM: suspend exit
-
-I think what might be happening here is that the offending patch causes
-some devices to be reordered in a way different to how they were ordered
-originally and the rmi4 driver currently depends on that implicit order.
-
-Interestingly one of the bugs that the offending patch fixes is similar
-in the failure mode but for the reverse reason: the implicit order
-causes suspend/resume to fail.
-
-I suspect that the underlying reason here is that rmi4 needs something
-in order to successfully suspend (i.e. read the IRQ status registers)
-that has already been suspended where it hadn't prior to the offending
-patch. It can't be the I2C controller itself that has been suspended,
-because the parent/child relationship should prevent that from
-happening.
-
-I'm not familiar with how exactly rmi4 works, so I'll have to do
-some digging to hopefully pinpoint exactly what's going wrong here.
-
-In the meantime, it would be useful to know what exactly the I2C
-hierarchy looks like. For example, what's the I2C controller that the
-RMI4 device is hooked up to. According to the above, that's I2C bus 6,
-so you should be able to find out some details about it by inspecting
-the corresponding sysfs nodes:
-
-	$ ls -l /sys/class/i2c-adapter/i2c-6/
-	$ cat /sys/class/i2c-adapter/i2c-6/name
-	$ ls -l /sys/class/i2c-adapter/i2c-6/device/
-
-Thierry
-
---lN+kFVj2Dd+ypR5G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl/8VesACgkQ3SOs138+
-s6Ft5Q/9HcqSA6B75qme4KuUeNVezjsP1jchYDUCdqNDWup+tyCiGQBWBxfq/lZ5
-ggDpCzIS5aDv/awCwet/qzm5M8b5a4NJyZ3mEX91tcOaYa4Ah2TVwqgg0e0GOhad
-xpM2VSfnymZOdXiF8zGzs9h1tYyy3P6HY0cKWNY96qu6DX87E1YDg98rEtPmX32Q
-YcvD1xJMtwZFj1hP1VF2v5niQjFQge98sWR+X6oxaqnp4X6JOwQD9m+qGqDORbGX
-ApuB9sUs3HA7kYGQ+jjDJONLIyJipW5sK4b2U6rC7M5GRTZ++WxrtR8dn5YBjRYh
-Isj6OFUccKM35tAUBFmygbA1FXpJaylYJxocOowEwIRFlkCoWCx4LPu0DDfcM0nw
-m7H3Ygt7VM2hM10K+z6iGUGEGmjBbK9p0jsu5GNz5rvKwb2fBJ1C1NPp0hIxscKc
-PyPOfoVuiMeyaGNq1tLzxloSuCViQXpTrjdA05TUmBBq4YIIycD6DO0dZ2AFiL3h
-0AE1SwLmeOLYs4ELf3QbMoETvNoFinPYjzba9c4cmV56ZFLPngKQRTtdGvfxHXC7
-iox6O48PudVOZrZlMDUJKMHsDj9WFWDFtTaEbxSMAzVU0AyEtsk/lTCqmWOc8yHF
-i7Ta5ZR7rOnDhqGcbwMOPTd4232s1Lcv/mRmphYIYlqt/W5h88E=
-=Spe+
------END PGP SIGNATURE-----
-
---lN+kFVj2Dd+ypR5G--
