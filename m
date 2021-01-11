@@ -2,239 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8987C2F0A7D
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 00:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEBF2F0AA4
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 01:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbhAJXrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jan 2021 18:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
+        id S1727100AbhAKAj5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jan 2021 19:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726110AbhAJXrx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 18:47:53 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766FCC061786
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 15:47:12 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id w26so1479510ljo.4
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 15:47:12 -0800 (PST)
+        with ESMTP id S1727092AbhAKAj4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jan 2021 19:39:56 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B2DC061794
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 16:39:16 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id d6so3869221vkb.13
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 16:39:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Mnvq8yYwsEv7XH1wKWk0SdtodY9C7QYQCMqHT4Hw87Q=;
-        b=a/B6j6P4n6FJyDXO2MHRfuPnu+3OcDioOlNlLgCTzKnGyI/0gQ/iShGTHPYfttzmeg
-         oD5fuoSo4AAh5KLcAYV498L47HVwWn9ZUHe1o6lUnfK0Qe0VoLWaGrctr6ic6TYqEJoL
-         4BVNgwFVCS/i+jRxl+PmchYvUZLaueKbQk799/5v4qzlqUkddmN0tZFx+SBKgGPy2pgR
-         vKAlxvPPka+iEJqJHA6x2j0Rk/I6UieCoDbzB1h9mQDcFo2nNGZR1YCU7ckXyxfbreIS
-         qcmi/BxWAkGkyhXp3H5Hj1OCx1hHEjl41uupu/JfVQ9WsqH5/61Kn1p4di/AkQET19sX
-         OeEQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tfW1bXDcu/lByxe5Lzd9326trCLUNqKWrb1d3xD70zE=;
+        b=Vcss8DRQLz+AJgqcoiMcwtcRHNY+1FT4m5PO1GpPO7uSSe/h3lptsFESwXv6y/jDPn
+         uZeESDldBzFW4P11UXupd8R0iDzHZdVW2iUmfDvnV2JfbnEIKbc1827Nlg2rjywQnJk9
+         03bSP87LEsYrhPVKci/2g8cz3XGXrRryTp/58=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Mnvq8yYwsEv7XH1wKWk0SdtodY9C7QYQCMqHT4Hw87Q=;
-        b=ZPQPqeMl4M9VoSwU5MnbAaknsV2foFiUS1XIn7AaT9z7KrKCMb7kdbeJ+qeDWjIgJc
-         qJxCoBFngyWVStEex9nCFnEFNF/d6o2Tb9vjEnGJXEvhttEwrftj1StenHRRcKX/ABVt
-         3fp6tRYwc+TrmIozCyITbymShPtAMvxGtc4sWTEsJVVGGh6G/89/7MiXC5xjqnhDHztf
-         YI9xSQakcHJBbXUDg2t+fGFly+lpjzDYXaPD6omd4TkVqI355iBqw8C5BeOpczAFd1VG
-         QxJcsDd8I/GhIyO19+3SQMkdFHtUMCnE7PJMFCokXaT3zabQ4uKRq6bHWnlJ232bY//a
-         s2RQ==
-X-Gm-Message-State: AOAM5333mZqPFsHSVxT/8SycuTH56hOSYc0U2zSqStBNpU+0nfQE7bOf
-        Awdl9eAS4T+ycbLVbu5KY+AOsGZMptBy0w==
-X-Google-Smtp-Source: ABdhPJz5bBSaxyuSWQAbKJXUpGK8piwhR1ounxThbN4psWrE0w53xk8+op/FfikENPysv9Rt5wk42Q==
-X-Received: by 2002:a2e:850b:: with SMTP id j11mr6423967lji.84.1610322430799;
-        Sun, 10 Jan 2021 15:47:10 -0800 (PST)
-Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id t14sm2887992lfl.216.2021.01.10.15.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 15:47:10 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] power: supply: wm97xx_battery: Convert to GPIO descriptor
-Date:   Mon, 11 Jan 2021 00:45:08 +0100
-Message-Id: <20210110234508.218768-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.29.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tfW1bXDcu/lByxe5Lzd9326trCLUNqKWrb1d3xD70zE=;
+        b=sGTlwsXu3eTvF4XlCQLxJ8eKswVM76xbN/+Nm+aoB1tvdc7nm84A85053v63UfeCgr
+         HXIRmGExkQ+jdixlhoKaKttEd1++FcZgpTBrYQdwK0Y9dXuYLvUeqM7m3GC4Daoy9jeO
+         gxVaJAAi/jaIGzIk4CjRq6AVMREX50EgpYpzGbb5ob9+JPteqkS/Eq5PlhP14+cG1Kyq
+         V6eX6vJScTbIeNUpwumVR4UqmJntjrdr76zI9P4vr6I/PLdvNuluOM7ppPDzjNB1wUBB
+         RQ9aFYdeSfBal7y28Fdf50obX53Lz+RqgzxGxRbjKRBMnYEoA54mtttNPWkj+qTzHT1c
+         pvDQ==
+X-Gm-Message-State: AOAM5307W+AAbgvobufczg5dmY/KqIKuIslsAHyH8Sn34N1vJp8fULeu
+        qmermpj0D40ZqDFEJGznXbXzTMAWON6l597IKxc6rw==
+X-Google-Smtp-Source: ABdhPJwjiecZEFrsXBirizL7rHJlesi3agn3gpEePPWBsWov8yc+6W5r6tJ9rLrqQ3BMouyiAxKTgevMOKDBth7uO2M=
+X-Received: by 2002:ac5:c5b5:: with SMTP id f21mr10963955vkl.13.1610325555144;
+ Sun, 10 Jan 2021 16:39:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201013102358.22588-1-michael.kao@mediatek.com> <20201013102358.22588-4-michael.kao@mediatek.com>
+In-Reply-To: <20201013102358.22588-4-michael.kao@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Mon, 11 Jan 2021 08:39:04 +0800
+Message-ID: <CANMq1KDAuXtPc_J4Kxt+e=BfJP+cLt70wPStQShO84LQLaOe8A@mail.gmail.com>
+Subject: Re: [v5 3/3] thermal: mediatek: add another get_temp ops for thermal sensors
+To:     Michael Kao <michael.kao@mediatek.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This converts the WM97xx driver to use a GPIO descriptor
-instead of passing a GPIO number thru platform data.
+On Tue, Oct 13, 2020 at 6:24 PM Michael Kao <michael.kao@mediatek.com> wrote:
+>
+> Provide thermal zone to read thermal sensor
+> in the SoC. We can read all the thermal sensors
+> value in the SoC by the node /sys/class/thermal/
+>
+> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+> on the first read of sensor that often are bogus values.
+>
+> This can avoid following warning on boot:
+>
+>   thermal thermal_zone6: failed to read out thermal zone (-13)
+>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+>  drivers/thermal/mtk_thermal.c | 99 +++++++++++++++++++++++++++--------
+>  1 file changed, 76 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 0bd7aa564bc2..43c7bdbc147f 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -245,6 +245,11 @@ enum mtk_thermal_version {
+>
+>  struct mtk_thermal;
+>
+> +struct mtk_thermal_zone {
+> +       struct mtk_thermal *mt;
+> +       int id;
+> +};
+> +
+>  struct thermal_bank_cfg {
+>         unsigned int num_sensors;
+>         const int *sensors;
+> @@ -637,6 +642,32 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+>                 mutex_unlock(&mt->lock);
+>  }
+>
+> +static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
+> +{
+> +       u32 raw;
+> +       int temp;
+> +
+> +       const struct mtk_thermal_data *conf = mt->conf;
 
-Like everything else in the driver, use a simple local
-variable for the descriptor, it can only ever appear in
-one instance anyway so it should not hurt.
+nit: You only use conf once, so I'd just use mt->conf->msr[id] below.
 
-After converting the driver I noticed that none of the
-boardfiles actually define a meaningful GPIO line for
-this, but hey, it is converted.
+(or at least use conf->version instead of mt->conf->version just below)
 
-Cc: Daniel Mack <daniel@zonque.org>
-Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/mach-pxa/mioa701.c           |  1 -
- arch/arm/mach-pxa/palm27x.c           |  1 -
- arch/arm/mach-pxa/palmte2.c           |  1 -
- drivers/power/supply/wm97xx_battery.c | 45 +++++++++++----------------
- include/linux/wm97xx.h                |  1 -
- 5 files changed, 19 insertions(+), 30 deletions(-)
+> +
+> +       raw = readl(mt->thermal_base + conf->msr[id]);
+> +
+> +       if (mt->conf->version == MTK_THERMAL_V1)
+> +               temp = raw_to_mcelsius_v1(mt, id, raw);
+> +       else
+> +               temp = raw_to_mcelsius_v2(mt, id, raw);
+> +
+> +       /*
+> +        * The first read of a sensor often contains very high bogus
+> +        * temperature value. Filter these out so that the system does
+> +        * not immediately shut down.
+> +        */
+> +
+> +       if (temp > 200000)
+> +               return  -EAGAIN;
 
-diff --git a/arch/arm/mach-pxa/mioa701.c b/arch/arm/mach-pxa/mioa701.c
-index d3af80317f2d..a79f296e81e0 100644
---- a/arch/arm/mach-pxa/mioa701.c
-+++ b/arch/arm/mach-pxa/mioa701.c
-@@ -577,7 +577,6 @@ static struct platform_device power_dev = {
- static struct wm97xx_batt_pdata mioa701_battery_data = {
- 	.batt_aux	= WM97XX_AUX_ID1,
- 	.temp_aux	= -1,
--	.charge_gpio	= -1,
- 	.min_voltage	= 0xc00,
- 	.max_voltage	= 0xfc0,
- 	.batt_tech	= POWER_SUPPLY_TECHNOLOGY_LION,
-diff --git a/arch/arm/mach-pxa/palm27x.c b/arch/arm/mach-pxa/palm27x.c
-index 0d246a1aebbc..6230381a7ca0 100644
---- a/arch/arm/mach-pxa/palm27x.c
-+++ b/arch/arm/mach-pxa/palm27x.c
-@@ -212,7 +212,6 @@ void __init palm27x_irda_init(int pwdn)
- static struct wm97xx_batt_pdata palm27x_batt_pdata = {
- 	.batt_aux	= WM97XX_AUX_ID3,
- 	.temp_aux	= WM97XX_AUX_ID2,
--	.charge_gpio	= -1,
- 	.batt_mult	= 1000,
- 	.batt_div	= 414,
- 	.temp_mult	= 1,
-diff --git a/arch/arm/mach-pxa/palmte2.c b/arch/arm/mach-pxa/palmte2.c
-index e3bcf58b4e63..a2b10db4aacc 100644
---- a/arch/arm/mach-pxa/palmte2.c
-+++ b/arch/arm/mach-pxa/palmte2.c
-@@ -273,7 +273,6 @@ static struct platform_device power_supply = {
- static struct wm97xx_batt_pdata palmte2_batt_pdata = {
- 	.batt_aux	= WM97XX_AUX_ID3,
- 	.temp_aux	= WM97XX_AUX_ID2,
--	.charge_gpio	= -1,
- 	.max_voltage	= PALMTE2_BAT_MAX_VOLTAGE,
- 	.min_voltage	= PALMTE2_BAT_MIN_VOLTAGE,
- 	.batt_mult	= 1000,
-diff --git a/drivers/power/supply/wm97xx_battery.c b/drivers/power/supply/wm97xx_battery.c
-index 58f01659daa5..a0e1eaa25d93 100644
---- a/drivers/power/supply/wm97xx_battery.c
-+++ b/drivers/power/supply/wm97xx_battery.c
-@@ -15,11 +15,12 @@
- #include <linux/wm97xx.h>
- #include <linux/spinlock.h>
- #include <linux/interrupt.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/irq.h>
- #include <linux/slab.h>
- 
- static struct work_struct bat_work;
-+static struct gpio_desc *charge_gpiod;
- static DEFINE_MUTEX(work_lock);
- static int bat_status = POWER_SUPPLY_STATUS_UNKNOWN;
- static enum power_supply_property *prop;
-@@ -96,12 +97,11 @@ static void wm97xx_bat_external_power_changed(struct power_supply *bat_ps)
- static void wm97xx_bat_update(struct power_supply *bat_ps)
- {
- 	int old_status = bat_status;
--	struct wm97xx_batt_pdata *pdata = power_supply_get_drvdata(bat_ps);
- 
- 	mutex_lock(&work_lock);
- 
--	bat_status = (pdata->charge_gpio >= 0) ?
--			(gpio_get_value(pdata->charge_gpio) ?
-+	bat_status = (charge_gpiod) ?
-+			(gpiod_get_value(charge_gpiod) ?
- 			POWER_SUPPLY_STATUS_DISCHARGING :
- 			POWER_SUPPLY_STATUS_CHARGING) :
- 			POWER_SUPPLY_STATUS_UNKNOWN;
-@@ -171,18 +171,19 @@ static int wm97xx_bat_probe(struct platform_device *dev)
- 	if (dev->id != -1)
- 		return -EINVAL;
- 
--	if (gpio_is_valid(pdata->charge_gpio)) {
--		ret = gpio_request(pdata->charge_gpio, "BATT CHRG");
--		if (ret)
--			goto err;
--		ret = gpio_direction_input(pdata->charge_gpio);
--		if (ret)
--			goto err2;
--		ret = request_irq(gpio_to_irq(pdata->charge_gpio),
-+	charge_gpiod = devm_gpiod_get_optional(&dev->dev, NULL, GPIOD_IN);
-+	if (IS_ERR(charge_gpiod))
-+		return dev_err_probe(&dev->dev,
-+				     PTR_ERR(charge_gpiod),
-+				     "failed to get charge GPIO\n");
-+	if (charge_gpiod) {
-+		gpiod_set_consumer_name(charge_gpiod, "BATT CHRG");
-+		ret = request_irq(gpiod_to_irq(charge_gpiod),
- 				wm97xx_chrg_irq, 0,
- 				"AC Detect", dev);
- 		if (ret)
--			goto err2;
-+			return dev_err_probe(&dev->dev, ret,
-+					     "failed to request GPIO irq\n");
- 		props++;	/* POWER_SUPPLY_PROP_STATUS */
- 	}
- 
-@@ -204,7 +205,7 @@ static int wm97xx_bat_probe(struct platform_device *dev)
- 	}
- 
- 	prop[i++] = POWER_SUPPLY_PROP_PRESENT;
--	if (pdata->charge_gpio >= 0)
-+	if (charge_gpiod)
- 		prop[i++] = POWER_SUPPLY_PROP_STATUS;
- 	if (pdata->batt_tech >= 0)
- 		prop[i++] = POWER_SUPPLY_PROP_TECHNOLOGY;
-@@ -242,23 +243,15 @@ static int wm97xx_bat_probe(struct platform_device *dev)
- err4:
- 	kfree(prop);
- err3:
--	if (gpio_is_valid(pdata->charge_gpio))
--		free_irq(gpio_to_irq(pdata->charge_gpio), dev);
--err2:
--	if (gpio_is_valid(pdata->charge_gpio))
--		gpio_free(pdata->charge_gpio);
--err:
-+	if (charge_gpiod)
-+		free_irq(gpiod_to_irq(charge_gpiod), dev);
- 	return ret;
- }
- 
- static int wm97xx_bat_remove(struct platform_device *dev)
- {
--	struct wm97xx_batt_pdata *pdata = dev->dev.platform_data;
--
--	if (pdata && gpio_is_valid(pdata->charge_gpio)) {
--		free_irq(gpio_to_irq(pdata->charge_gpio), dev);
--		gpio_free(pdata->charge_gpio);
--	}
-+	if (charge_gpiod)
-+		free_irq(gpiod_to_irq(charge_gpiod), dev);
- 	cancel_work_sync(&bat_work);
- 	power_supply_unregister(bat_psy);
- 	kfree(prop);
-diff --git a/include/linux/wm97xx.h b/include/linux/wm97xx.h
-index 58e082dadc68..462854f4f286 100644
---- a/include/linux/wm97xx.h
-+++ b/include/linux/wm97xx.h
-@@ -294,7 +294,6 @@ struct wm97xx {
- struct wm97xx_batt_pdata {
- 	int	batt_aux;
- 	int	temp_aux;
--	int	charge_gpio;
- 	int	min_voltage;
- 	int	max_voltage;
- 	int	batt_div;
--- 
-2.29.2
+nit: one space between return and -EAGAIN.
 
+> +       else
+> +               return  temp;
+
+ditto.
+
+> +}
+> +
+>  /**
+>   * mtk_thermal_bank_temperature - get the temperature of a bank
+>   * @bank:      The bank
+> @@ -649,26 +680,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>         struct mtk_thermal *mt = bank->mt;
+>         const struct mtk_thermal_data *conf = mt->conf;
+
+nit: Since this is now only used once, drop this variable?
+
+>         int i, temp = INT_MIN, max = INT_MIN;
+> -       u32 raw;
+>
+>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+> -               raw = readl(mt->thermal_base + conf->msr[i]);
+> -
+> -               if (mt->conf->version == MTK_THERMAL_V1) {
+> -                       temp = raw_to_mcelsius_v1(
+> -                               mt, conf->bank_data[bank->id].sensors[i], raw);
+
+The new version of the code does this instead:
+                       temp = raw_to_mcelsius_v1(mt, i, raw);
+
+What's the difference between conf->bank_data[bank->id].sensors[i] and i?
+
+
+> -               } else {
+> -                       temp = raw_to_mcelsius_v2(
+> -                               mt, conf->bank_data[bank->id].sensors[i], raw);
+> -               }
+>
+> -               /*
+> -                * The first read of a sensor often contains very high bogus
+> -                * temperature value. Filter these out so that the system does
+> -                * not immediately shut down.
+> -                */
+> -               if (temp > 200000)
+> -                       temp = 0;
+> +               temp = _get_sensor_temp(mt, i);
+>
+>                 if (temp > max)
+>                         max = temp;
+> @@ -679,7 +694,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>
+>  static int mtk_read_temp(void *data, int *temperature)
+>  {
+> -       struct mtk_thermal *mt = data;
+> +       struct mtk_thermal_zone *tz = data;
+> +       struct mtk_thermal *mt = tz->mt;
+>         int i;
+>         int tempmax = INT_MIN;
+>
+> @@ -698,10 +714,28 @@ static int mtk_read_temp(void *data, int *temperature)
+>         return 0;
+>  }
+>
+> +static int mtk_read_sensor_temp(void *data, int *temperature)
+> +{
+> +       struct mtk_thermal_zone *tz = data;
+> +       struct mtk_thermal *mt = tz->mt;
+> +       int id = tz->id - 1;
+> +
+> +       if (id < 0)
+> +               return  -EACCES;
+
+nit: one space after return.
+
+> +
+> +       *temperature = _get_sensor_temp(mt, id);
+> +
+> +       return 0;
+> +}
+> +
+>  static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>         .get_temp = mtk_read_temp,
+>  };
+>
+> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
+> +       .get_temp = mtk_read_sensor_temp,
+> +};
+> +
+>  static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>                                   u32 apmixed_phys_base, u32 auxadc_phys_base,
+>                                   int ctrl_id)
+> @@ -992,6 +1026,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>         u64 auxadc_phys_base, apmixed_phys_base;
+>         struct thermal_zone_device *tzdev;
+>         void __iomem *apmixed_base, *auxadc_base;
+> +       struct mtk_thermal_zone *tz;
+>
+>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>         if (!mt)
+> @@ -1080,11 +1115,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>
+>         platform_set_drvdata(pdev, mt);
+>
+> -       tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+> -                                                    &mtk_thermal_ops);
+> -       if (IS_ERR(tzdev)) {
+> -               ret = PTR_ERR(tzdev);
+> -               goto err_disable_clk_peri_therm;
+> +       for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+> +               tz = kmalloc(sizeof(*tz), GFP_KERNEL);
+
+I don't see those structures being freed on error, or on driver unbind.
+
+Maybe use dev_kmalloc instead?
+
+> +               if (!tz)
+> +                       return -ENOMEM;
+> +
+> +               tz->mt = mt;
+> +               tz->id = i;
+> +
+> +               tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
+> +                                                            &mtk_thermal_ops :
+> +                                                            &mtk_thermal_sensor_ops);
+> +
+> +               if (IS_ERR(tzdev)) {
+> +                       if (PTR_ERR(tzdev) == -ENODEV) {
+> +                               dev_warn(&pdev->dev,
+> +                                        "sensor %d not registered in thermal zone in dt\n", i);
+> +                               continue;
+> +                       }
+> +                       if (PTR_ERR(tzdev) == -EACCES) {
+> +                               ret = PTR_ERR(tzdev);
+> +                               goto err_disable_clk_peri_therm;
+> +                       }
+> +               }
+>         }
+>
+>         return 0;
+> --
+> 2.18.0
