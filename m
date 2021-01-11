@@ -2,84 +2,231 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A512F0BFB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 05:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F772F0D29
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jan 2021 08:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbhAKEvw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jan 2021 23:51:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50276 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727130AbhAKEvw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 10 Jan 2021 23:51:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80110224D2;
-        Mon, 11 Jan 2021 04:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610340671;
-        bh=cExgHqE0WYAUy4mnP4ABwqH1JofZJfZZeZzaAbA8cCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=klTAcy+2ts8/X0gGLmIHsLzqjAEEqtt8DtFjGgNmeUXA9UmhpdJDsDpPFLiPq4HwS
-         XbI/OiwkJfmo1O5DZI6JhhYr01aCokXOcZYQdjuXwPQ5kSuRauk7wVuyLC2ZlMQAzU
-         SZlSW1kph92ZAEYIXGgBzgMyxOYH7wZIKkemGWStJPiBJ9Ti5siFCe1DK1pW9Lmepl
-         /SvY5YTqdYD0FotyhGVZnFiqOJvqEDLYxKGECotyT4RfFP7Sasvwcov6MtTtH4VG+Y
-         TRWyGaIte2L9vi5vrPrBuIcCvXGADH4MUrlmOQHzXf5xmwV1ZgTe565/JDRZREi32f
-         g9x5xOTgbFlvw==
-Date:   Mon, 11 Jan 2021 12:51:04 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     robh@kernel.org, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, georgi.djakov@linaro.org, cdleonard@gmail.com,
-        gregkh@linuxfoundation.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, kernel@puri.sm, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 0/5] imx8mq: updates for the interconnect fabric
-Message-ID: <20210111045103.GH28365@dragon>
-References: <20210107121754.3295-1-martin.kepplinger@puri.sm>
+        id S1727255AbhAKH03 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jan 2021 02:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725897AbhAKH02 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 02:26:28 -0500
+X-Greylist: delayed 74 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Jan 2021 23:25:48 PST
+Received: from mail.bugwerft.de (mail.bugwerft.de [IPv6:2a03:6000:1011::59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85678C061786
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jan 2021 23:25:48 -0800 (PST)
+Received: from [192.168.178.79] (pd95ef192.dip0.t-ipconnect.de [217.94.241.146])
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 4C9204A191B;
+        Mon, 11 Jan 2021 07:25:06 +0000 (UTC)
+Subject: Re: [PATCH] power: supply: z2_battery: Convert to GPIO descriptors
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-arm-kernel@lists.infradead.org
+References: <20210110144906.168877-1-linus.walleij@linaro.org>
+From:   Daniel Mack <daniel@zonque.org>
+Message-ID: <21aaf9d8-1cc3-a647-df5c-cc3777ced0f9@zonque.org>
+Date:   Mon, 11 Jan 2021 08:25:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210107121754.3295-1-martin.kepplinger@puri.sm>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210110144906.168877-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 01:17:49PM +0100, Martin Kepplinger wrote:
-> revision history:
-> v4: (thanks Shawn, Georgi and Greg)
->  * reorder to have dt-bindings doc before code addition
->  * add newline between dt nodes
->  * removed "interconnect: imx8mq: Use icc_sync_state" from the patchset
->    since it's part of gregkh/char-misc.git
->  * Add acks
+On 10/1/2021 3:49 pm, Linus Walleij wrote:
+> This converts the Palm Z2 battery driver to use GPIO descriptors.
 > 
-> v3: (thanks Krysztof and Georgi)
->  * drop the defconfig cycling patch and fix the interconnect enable config
->  * add the noc node to imx8mq only
->  * add missing signed-off-by
->  * https://lore.kernel.org/linux-arm-kernel/20201210100906.18205-1-martin.kepplinger@puri.sm/T/#t
-> 
-> v2: (thanks Lucas)
->  * reorder and clean up defconfig changes
->  * use "dram" for the interconnect path name and document it
->  * https://lore.kernel.org/linux-arm-kernel/20201201123932.12312-1-martin.kepplinger@puri.sm/T/#t
-> 
-> v1:
->  * https://lore.kernel.org/linux-arm-kernel/20201201100124.4676-1-martin.kepplinger@puri.sm/T/#t
-> 
-> thanks,
->                         martin
-> 
-> 
-> Leonard Crestez (1):
->   arm64: dts: imx8mq: Add NOC node
-> 
-> Martin Kepplinger (4):
->   arm64: dts: imx8mq: Add interconnect provider property
->   dt-bindings: mxsfb: Add interconnect bindings for LCDIF path
->   arm64: dts: imx8mq: Add interconnect for lcdif
->   arm64: defconfig: Enable interconnect for imx8mq
+> Cc: Daniel Mack <daniel@zonque.org>
+> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-I only received 3 patches, 1/5, 4/5 and 5/5.
+Reviewed-by: Daniel Mack <daniel@zonque.org>
 
-Shawn
+
+
+> ---
+>  arch/arm/mach-pxa/z2.c            | 12 +++++++-
+>  drivers/power/supply/z2_battery.c | 46 ++++++++++++++-----------------
+>  include/linux/z2_battery.h        |  1 -
+>  3 files changed, 32 insertions(+), 27 deletions(-)
+> 
+> diff --git a/arch/arm/mach-pxa/z2.c b/arch/arm/mach-pxa/z2.c
+> index 21fd76bb09cd..a5dad8d08cac 100644
+> --- a/arch/arm/mach-pxa/z2.c
+> +++ b/arch/arm/mach-pxa/z2.c
+> @@ -488,7 +488,6 @@ static struct z2_battery_info batt_chip_info = {
+>  	.batt_I2C_bus	= 0,
+>  	.batt_I2C_addr	= 0x55,
+>  	.batt_I2C_reg	= 2,
+> -	.charge_gpio	= GPIO0_ZIPITZ2_AC_DETECT,
+>  	.min_voltage	= 3475000,
+>  	.max_voltage	= 4190000,
+>  	.batt_div	= 59,
+> @@ -497,9 +496,19 @@ static struct z2_battery_info batt_chip_info = {
+>  	.batt_name	= "Z2",
+>  };
+>  
+> +static struct gpiod_lookup_table z2_battery_gpio_table = {
+> +	.dev_id = "aer915",
+> +	.table = {
+> +		GPIO_LOOKUP("gpio-pxa", GPIO0_ZIPITZ2_AC_DETECT,
+> +			    NULL, GPIO_ACTIVE_HIGH),
+> +		{ },
+> +	},
+> +};
+> +
+>  static struct i2c_board_info __initdata z2_i2c_board_info[] = {
+>  	{
+>  		I2C_BOARD_INFO("aer915", 0x55),
+> +		.dev_name = "aer915",
+>  		.platform_data	= &batt_chip_info,
+>  	}, {
+>  		I2C_BOARD_INFO("wm8750", 0x1b),
+> @@ -510,6 +519,7 @@ static struct i2c_board_info __initdata z2_i2c_board_info[] = {
+>  static void __init z2_i2c_init(void)
+>  {
+>  	pxa_set_i2c_info(NULL);
+> +	gpiod_add_lookup_table(&z2_battery_gpio_table);
+>  	i2c_register_board_info(0, ARRAY_AND_SIZE(z2_i2c_board_info));
+>  }
+>  #else
+> diff --git a/drivers/power/supply/z2_battery.c b/drivers/power/supply/z2_battery.c
+> index ebd2e42a4457..b1508fe70e5e 100644
+> --- a/drivers/power/supply/z2_battery.c
+> +++ b/drivers/power/supply/z2_battery.c
+> @@ -6,7 +6,7 @@
+>   */
+>  
+>  #include <linux/module.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/irq.h>
+> @@ -18,6 +18,7 @@
+>  
+>  struct z2_charger {
+>  	struct z2_battery_info		*info;
+> +	struct gpio_desc		*charge_gpiod;
+>  	int				bat_status;
+>  	struct i2c_client		*client;
+>  	struct power_supply		*batt_ps;
+> @@ -95,8 +96,8 @@ static void z2_batt_update(struct z2_charger *charger)
+>  
+>  	mutex_lock(&charger->work_lock);
+>  
+> -	charger->bat_status = (info->charge_gpio >= 0) ?
+> -		(gpio_get_value(info->charge_gpio) ?
+> +	charger->bat_status = charger->charge_gpiod ?
+> +		(gpiod_get_value(charger->charge_gpiod) ?
+>  		POWER_SUPPLY_STATUS_CHARGING :
+>  		POWER_SUPPLY_STATUS_DISCHARGING) :
+>  		POWER_SUPPLY_STATUS_UNKNOWN;
+> @@ -131,7 +132,7 @@ static int z2_batt_ps_init(struct z2_charger *charger, int props)
+>  	enum power_supply_property *prop;
+>  	struct z2_battery_info *info = charger->info;
+>  
+> -	if (info->charge_gpio >= 0)
+> +	if (charger->charge_gpiod)
+>  		props++;	/* POWER_SUPPLY_PROP_STATUS */
+>  	if (info->batt_tech >= 0)
+>  		props++;	/* POWER_SUPPLY_PROP_TECHNOLOGY */
+> @@ -147,7 +148,7 @@ static int z2_batt_ps_init(struct z2_charger *charger, int props)
+>  		return -ENOMEM;
+>  
+>  	prop[i++] = POWER_SUPPLY_PROP_PRESENT;
+> -	if (info->charge_gpio >= 0)
+> +	if (charger->charge_gpiod)
+>  		prop[i++] = POWER_SUPPLY_PROP_STATUS;
+>  	if (info->batt_tech >= 0)
+>  		prop[i++] = POWER_SUPPLY_PROP_TECHNOLOGY;
+> @@ -206,22 +207,23 @@ static int z2_batt_probe(struct i2c_client *client,
+>  
+>  	mutex_init(&charger->work_lock);
+>  
+> -	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio)) {
+> -		ret = gpio_request(info->charge_gpio, "BATT CHRG");
+> -		if (ret)
+> -			goto err;
+> +	charger->charge_gpiod = devm_gpiod_get_optional(&client->dev,
+> +							NULL, GPIOD_IN);
+> +	if (IS_ERR(charger->charge_gpiod))
+> +		return dev_err_probe(&client->dev,
+> +				     PTR_ERR(charger->charge_gpiod),
+> +				     "failed to get charge GPIO\n");
+>  
+> -		ret = gpio_direction_input(info->charge_gpio);
+> -		if (ret)
+> -			goto err2;
+> +	if (charger->charge_gpiod) {
+> +		gpiod_set_consumer_name(charger->charge_gpiod, "BATT CHRG");
+>  
+> -		irq_set_irq_type(gpio_to_irq(info->charge_gpio),
+> +		irq_set_irq_type(gpiod_to_irq(charger->charge_gpiod),
+>  				 IRQ_TYPE_EDGE_BOTH);
+> -		ret = request_irq(gpio_to_irq(info->charge_gpio),
+> +		ret = request_irq(gpiod_to_irq(charger->charge_gpiod),
+>  				z2_charge_switch_irq, 0,
+>  				"AC Detect", charger);
+>  		if (ret)
+> -			goto err3;
+> +			goto err;
+>  	}
+>  
+>  	ret = z2_batt_ps_init(charger, props);
+> @@ -245,11 +247,8 @@ static int z2_batt_probe(struct i2c_client *client,
+>  err4:
+>  	kfree(charger->batt_ps_desc.properties);
+>  err3:
+> -	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio))
+> -		free_irq(gpio_to_irq(info->charge_gpio), charger);
+> -err2:
+> -	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio))
+> -		gpio_free(info->charge_gpio);
+> +	if (charger->charge_gpiod)
+> +		free_irq(gpiod_to_irq(charger->charge_gpiod), charger);
+>  err:
+>  	kfree(charger);
+>  	return ret;
+> @@ -258,16 +257,13 @@ static int z2_batt_probe(struct i2c_client *client,
+>  static int z2_batt_remove(struct i2c_client *client)
+>  {
+>  	struct z2_charger *charger = i2c_get_clientdata(client);
+> -	struct z2_battery_info *info = charger->info;
+>  
+>  	cancel_work_sync(&charger->bat_work);
+>  	power_supply_unregister(charger->batt_ps);
+>  
+>  	kfree(charger->batt_ps_desc.properties);
+> -	if (info->charge_gpio >= 0 && gpio_is_valid(info->charge_gpio)) {
+> -		free_irq(gpio_to_irq(info->charge_gpio), charger);
+> -		gpio_free(info->charge_gpio);
+> -	}
+> +	if (charger->charge_gpiod)
+> +		free_irq(gpiod_to_irq(charger->charge_gpiod), charger);
+>  
+>  	kfree(charger);
+>  
+> diff --git a/include/linux/z2_battery.h b/include/linux/z2_battery.h
+> index eaba53ff387c..9e8be7a7cd25 100644
+> --- a/include/linux/z2_battery.h
+> +++ b/include/linux/z2_battery.h
+> @@ -6,7 +6,6 @@ struct z2_battery_info {
+>  	int	 batt_I2C_bus;
+>  	int	 batt_I2C_addr;
+>  	int	 batt_I2C_reg;
+> -	int	 charge_gpio;
+>  	int	 min_voltage;
+>  	int	 max_voltage;
+>  	int	 batt_div;
+> 
+
