@@ -2,259 +2,315 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626B42F2430
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 01:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1012F242F
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 01:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390151AbhALAZk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S2390518AbhALAZk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 11 Jan 2021 19:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390518AbhAKWpV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 17:45:21 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C983C061786
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jan 2021 14:44:41 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id f6so312539ybq.13
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jan 2021 14:44:41 -0800 (PST)
+        with ESMTP id S2403928AbhAKXOQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jan 2021 18:14:16 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A380EC061794
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jan 2021 15:13:35 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id o20so406117ilj.11
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jan 2021 15:13:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jej4pdqNwkIg8l2QksDJDkT9k/833+xSgAcAFpQGffk=;
-        b=PiEI6b5OtvY8dkcx//LAo0oYqZg6id7i3f77D5Eczu0bzcdbKKBtvCZosqlx/WAML5
-         NsDtr0Ha/DBQlofcDa7aip67B6PoATqnnvVMqnqN7HqGFNGan4aq0uiO0p77QbAgMXAn
-         gAoBXeCTd7J8VEOMOefW56CkkJyaFNbe+gwuXJIiyQ0BjSZTgjvxHfZNmNOnDY+EpBNL
-         OvFdgU2neSq3RmSRGyy7yk0RzOsw7zE+ngElHJ9oBhQV4NzRk0D/g9hJOh+YoaT9Rs6j
-         DEWzRzfFKtA0/6ntedKrP7QuZxlh0hjgzkdwXqJl5jUXwiS6tngVCOED8XYwYz+/hIF8
-         9b8A==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rrRq5mHSq4NB5JLwy/mYqVFr8iEMeG5LcRfheBfLpZk=;
+        b=ceLOYbplpX8PK8IkU4hodjUkUzzbeQ4iQnbP1dGKtgMR0T23ZDmuTHVbrLybQSpWWQ
+         LhggthDyaxieWogbXE1qAiDh9SBFcR6Nel0lifbe5wG7nU/dS0OgRujyo0rUyU728WoP
+         TDCV8Q4s3AyjyRQBI2bSyEiL88J0kExw0iBWEX3QrxlKa/DMTGedbHZdgUd7D7RHEYJL
+         2mHVXaWjNwhPFvqHl1ZEt0Euc4PC0dVrgdhDebc7wP2BEkCKUdI94q6wlC6EhHwpUcQ3
+         a7s8Gu3NKPIbV38FeEMmCvUMazx26AE917vOKjmWnRrEeeD/3IM0ylTvGQC1G9znqLb9
+         OJ6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jej4pdqNwkIg8l2QksDJDkT9k/833+xSgAcAFpQGffk=;
-        b=fTmffCJN3rlMl6vAAZdlyDr9/bV9Dv/H/RBbQwzgyqAhhwPEWesaePd6EwDnpiM6mx
-         PKWYoLlaDt0itEr+BBM4ggl1iwg/TSRTXR7Lk4z0adMHIeb5AACouqyBvnkJ8TSLJiqC
-         9j48npze2AF95XLzlnW2RaCxkrrAycWYYMznHnI/qUseW7hVsIXQa8W2MPZcw3LakJZn
-         rDWYo1gtx1cCNZavgpF2VGRDOiCsvBQd1l+p57SfDoFxNwYLF2hYCXec1mmTkoMhE6S4
-         YSTV0H3EpQXqt7FgUlYioBXw4BISHlpNmEWrexTkOwuKdIbH3LFoMG6jP62rpHElbczb
-         ibVQ==
-X-Gm-Message-State: AOAM533tz7bLDeJC5ozSBetp26crpTBnRbTRk8IaSFKww3sI5ORo64OO
-        ZtCK9mlfyjtfIPjpa+a59/WI2AYsstzZbkY9ZOqnBQ==
-X-Google-Smtp-Source: ABdhPJx0p8EFm4tLVybKgINOrK+jAD6YmQvU5PsuPD6zByphBds22lrZnGoqGjjKr+mrSRJTnngGlRU6OzM2goOCKNw=
-X-Received: by 2002:a25:d295:: with SMTP id j143mr3054242ybg.20.1610405079945;
- Mon, 11 Jan 2021 14:44:39 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rrRq5mHSq4NB5JLwy/mYqVFr8iEMeG5LcRfheBfLpZk=;
+        b=YyChOsbPbqaSW1sg/63gQlSCylwlWUX8S1k6gZ9MBSWcejF1ww4EE6qCIxougszA6g
+         3Jd4tt79anHx4EAmnxHDcpIOJVOG9e9Rgv7FUpWGgT6DnG3alyYpWemKpnY6ID5RvbIJ
+         7Vvbt2jvp4GPqdjqREV2RQWHf3/W8QuPwblm6g9P+5ZCCgkO/geBOXc3Tp9R6S3oM9JH
+         wS/4c1vPCOftzCaDl20P73qR8X6kMSbrq2S49x/zfX2aoainrhnlWsU2M3NWWpKfpaLE
+         XI0P8gOAZl6DeP0uU10Drgh1k7bscZ2hbI5cM5xkQm51C9ys0azE5UX0JcFrIFmxM3QI
+         Dovw==
+X-Gm-Message-State: AOAM5308tvC23WuEsaIa0LzOrQUu8PQwYpE/YjYwltGkHQtF7EC5TjT+
+        qEOC943+hPZEWN8C+Bs9klBj8g==
+X-Google-Smtp-Source: ABdhPJy24jGvmbWDWgUyA/ln48Z2jWKXj5z5gpXJIpkDApwErfBJmQT+T1aH5HZK+71MhDAVmYie8g==
+X-Received: by 2002:a05:6e02:5d0:: with SMTP id l16mr1343949ils.90.1610406814979;
+        Mon, 11 Jan 2021 15:13:34 -0800 (PST)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id r3sm756226ilt.76.2021.01.11.15.13.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jan 2021 15:13:32 -0800 (PST)
+Subject: Re: [PATCH 1/6] thermal/core: Remove the 'forced_passive' option
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
+Cc:     mjg59@codon.org.uk, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amitk@kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20201214233811.485669-1-daniel.lezcano@linaro.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <314b70a1-8c39-bd2c-cba8-937657658930@linaro.org>
+Date:   Mon, 11 Jan 2021 18:13:29 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <alpine.LSU.2.11.2101102010200.25762@eggly.anvils>
- <X/xV7ZV5jzI7RvAe@ulmo> <CAJZ5v0iriRkEN8dVJ9gE3+Wyn_96=SNhav1QaQ59i9O0genTNQ@mail.gmail.com>
- <X/x49o3EtrUh6vuO@ulmo> <CAJZ5v0hyvdcKsPJ7U5WioXb1c8Pg_F1BLC_dbKesFBLTUSiVaw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hyvdcKsPJ7U5WioXb1c8Pg_F1BLC_dbKesFBLTUSiVaw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 11 Jan 2021 14:44:03 -0800
-Message-ID: <CAGETcx_odme9ufTps6tctOW+zfOox6iXgTx_9GAjoYn=+jy1BQ@mail.gmail.com>
-Subject: Re: 5.11-rc device reordering breaks ThinkPad rmi4 suspend
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Huang <vincent.huang@tw.synaptics.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andrew Duggan <aduggan@synaptics.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201214233811.485669-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 8:57 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Jan 11, 2021 at 5:12 PM Thierry Reding <treding@nvidia.com> wrote:
-> >
-> > On Mon, Jan 11, 2021 at 03:57:37PM +0100, Rafael J. Wysocki wrote:
-> > > On Mon, Jan 11, 2021 at 2:43 PM Thierry Reding <treding@nvidia.com> wrote:
-> > > >
-> > > > On Sun, Jan 10, 2021 at 08:44:13PM -0800, Hugh Dickins wrote:
-> > > > > Hi Rafael,
-> > > > >
-> > > > > Synaptics RMI4 SMBus touchpad on ThinkPad X1 Carbon (5th generation)
-> > > > > fails to suspend when running 5.11-rc kernels: bisected to
-> > > > > 5b6164d3465f ("driver core: Reorder devices on successful probe"),
-> > > > > and reverting that fixes it.  dmesg.xz attached, but go ahead and ask
-> > > > > me to switch on a debug option to extract further info if that may help.
-> > > >
-> > > > Hi Hugh,
-> > > >
-> > > > Quoting what I think are the relevant parts of that log:
-> > > >
-> > > > [   34.373742] printk: Suspending console(s) (use no_console_suspend to debug)
-> > > > [   34.429015] rmi4_physical rmi4-00: Failed to read irqs, code=-6
-> > > > [   34.474973] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
-> > > > [   34.474994] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
-> > > > [   34.475001] rmi4_physical rmi4-00: Failed to suspend functions: -6
-> > > > [   34.475105] rmi4_smbus 6-002c: Failed to suspend device: -6
-> > > > [   34.475113] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x3c returns -6
-> > > > [   34.475130] PM: Device 6-002c failed to suspend: error -6
-> > > > [   34.475187] PM: Some devices failed to suspend, or early wake event detected
-> > > > [   34.480324] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to F03 TX register (-6).
-> > > > [   34.480748] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to F03 TX register (-6).
-> > > > [   34.481558] rmi4_physical rmi4-00: rmi_driver_clear_irq_bits: Failed to change enabled interrupts!
-> > > > [   34.487935] acpi LNXPOWER:02: Turning OFF
-> > > > [   34.488707] acpi LNXPOWER:01: Turning OFF
-> > > > [   34.489554] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to change enabled interrupts!
-> > > > [   34.489669] psmouse: probe of serio2 failed with error -1
-> > > > [   34.489882] OOM killer enabled.
-> > > > [   34.489891] Restarting tasks ... done.
-> > > > [   34.589183] PM: suspend exit
-> > > > [   34.589839] PM: suspend entry (s2idle)
-> > > > [   34.605884] Filesystems sync: 0.017 seconds
-> > > > [   34.607594] Freezing user space processes ... (elapsed 0.006 seconds) done.
-> > > > [   34.613645] OOM killer disabled.
-> > > > [   34.613650] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-> > > > [   34.615482] printk: Suspending console(s) (use no_console_suspend to debug)
-> > > > [   34.653097] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
-> > > > [   34.653108] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
-> > > > [   34.653115] rmi4_physical rmi4-00: Failed to suspend functions: -6
-> > > > [   34.653123] rmi4_smbus 6-002c: Failed to suspend device: -6
-> > > > [   34.653129] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x3c returns -6
-> > > > [   34.653160] PM: Device 6-002c failed to suspend: error -6
-> > > > [   34.653174] PM: Some devices failed to suspend, or early wake event detected
-> > > > [   34.660515] OOM killer enabled.
-> > > > [   34.660524] Restarting tasks ...
-> > > > [   34.661456] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to change enabled interrupts!
-> > > > [   34.661591] psmouse: probe of serio2 failed with error -1
-> > > > [   34.669469] done.
-> > > > [   34.748386] PM: suspend exit
-> > > >
-> > > > I think what might be happening here is that the offending patch causes
-> > > > some devices to be reordered in a way different to how they were ordered
-> > > > originally and the rmi4 driver currently depends on that implicit order.
-> > >
-> > > Actually, the only possible case in which the commit in question can
-> > > introduce suspend failures like this is when some dependency
-> > > information is missing and so the reordering causes the ordering to
-> > > change from the (working) implicit one.
-> > >
-> > > > Interestingly one of the bugs that the offending patch fixes is similar
-> > > > in the failure mode but for the reverse reason: the implicit order
-> > > > causes suspend/resume to fail.
-> > >
-> > > And that happens because some dependency information is missing.
-> > >
-> > > So we have failing cases when dependency information is missing, so
-> > > instead of fixing those we have tried to make the core change the
-> > > ordering after every successful probe in the hope that this will take
-> > > care of the problem without introducing new breakage.
-> > >
-> > > However, it evidently has introduced new breakage and in order to fix
-> > > it we need to figure out what dependency information is missing in the
-> > > failing cases and put that information in, but we may as well do the
-> > > same for the cases that are failing without the offending change.
-> > >
-> > > So why don't we revert the commit in question and do just that?
-> >
-> > Unfortunately it isn't that easy. In fact, all the dependency
-> > information already exists in the case that I cited in 5b6164d3465f
-> > ("driver core: Reorder devices on successful probe"), but it's the
-> > driver core that suspends/resumes the devices in the wrong order.
-> >
-> > The reason is because the ACONNECT device depends on the BPMP device
-> > (via a power-domains property), but it's also instantiated before the
-> > BPMP device (because it is listed earlier in device tree, which is
-> > sorted by unit-address first, then alphabetically). BPMP being a CPU
-> > non-addressable device it doesn't have a unit-address and hence is
-> > listed very late in device tree (by convention). Normally this is would
-> > not be a problem because deferred probe would take care of it. But there
-> > is one corner-case which happens when the BPMP is built into the kernel
-> > (which it usually is, as it provides access to resources necessary for
-> > booting, such as clocks and resets) and ACONNECT is built as a loadable
-> > module. In that case, BPMP gets probed before ACONNECT and hence when
-> > ACONNECT does eventually get loaded, the BPMP is already there, meaning
-> > ACONNECT won't defer probe and hence the DPM suspend/resume order is not
-> > fixed up by the deferred probe code.
->
-> What about using a device link to enforce the right ordering, then?
->
-> Deferred probing is not a way to ensure the suitable suspend/resume ordering.
 
-Thierry,
 
-Can you try booting with fw_devlink=on with this series? It's queued
-up for 5.12-rc1
-https://lore.kernel.org/lkml/20201218031703.3053753-1-saravanak@google.com/
+On 12/14/20 6:38 PM, Daniel Lezcano wrote:
+> The code was reorganized in 2012 with the commit 0c01ebbfd3caf1.
+> 
+> The main change is a loop on the trip points array and a unconditional
+> call to the throttle() ops of the governors for each of them even if
+> the trip temperature is not reached yet.
+> 
+> With this change, the 'forced_passive' is no longer checked in the
+> thermal_zone_device_update() function but in the step wise governor's
+> throttle() callback.
+> 
+> As the force_passive does no belong to the trip point array, the
+> thermal_zone_device_update() can not compare with the specified
+> passive temperature, thus does not detect the passive limit has been
+> crossed. Consequently, throttle() is never called and the
+> 'forced_passive' branch is unreached.
+> 
+> In addition, the default processor cooling device is not automatically
+> bound to the thermal zone if there is not passive trip point, thus the
+> 'forced_passive' can not operate.
+> 
+> If there is an active trip point, then the throttle function will be
+> called to mitigate at this temperature and the 'forced_passive' will
+> override the mitigation of the active trip point in this case but with
+> the default cooling device bound to the thermal zone, so usually a
+> fan, and that is not a passive cooling effect.
+> 
+> Given the regression exists since more than 8 years, nobody complained
+> and at the best of my knowledge there is no bug open in
+> https://bugzilla.kernel.org, it is reasonable to say it is unused.
+> 
+> Remove the 'forced_passive' related code.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-It might solve your issue, but I think your patch still addresses a real issue.
+Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
 
-> > And that's precisely what the offending commit addresses. However, the
-> > downside is, and we did discuss this during review, that it operates
-> > under the (somewhat optimistic) assumption that all the dependency
-> > information exists. This is because reordering on successful probe can
-> > potentially introduce regressions for dependencies that were previously
-> > implicit. So if a system has component B that depends on component A but
-> > doesn't model that dependency via some child/parent relationship or an
-> > explicit relationship that would be flagged by deferred probe,
->
-> Again, deferred probing may not help here.
->
-> > then this implicit dependency can break by the new reordering on successful probe.
-> >
-> > I very much suspect that that's exactly what's going on here. This RMI4
-> > device very likely implicitly depends on some other resource getting
-> > enabled but doesn't properly model that dependency. If we find out what
-> > that dependency is and return -EPROBE_DEFER when that dependency has not
-> > probed yet, then deferred probe will automatically take care of ordering
-> > everything correctly again (or, in fact, ordering by successful probe
-> > will take care of it already because RMI4 would initially fail with
-> > -EPROBE_DEFER).
-> >
-> > Adding Vincent, Jason, Andrew and Lucas (who have recently worked on
-> > this driver), perhaps they have some better understanding of what
-> > missing dependencies might be causing the above errors.
->
-> IMV it is a mistake to believe that deferred probing can get
-> everything right for you in every case, with or without the offending
-> commit.  Sometimes you need to tell the core what the right ordering
-> is and that's what device links are for.
+> ---
+>   .../driver-api/thermal/sysfs-api.rst          | 13 ---
+>   drivers/thermal/gov_step_wise.c               | 14 +---
+>   drivers/thermal/thermal_sysfs.c               | 80 -------------------
+>   include/linux/thermal.h                       |  4 -
+>   4 files changed, 3 insertions(+), 108 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
+> index e7520cb439ac..a4969c474cc3 100644
+> --- a/Documentation/driver-api/thermal/sysfs-api.rst
+> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
+> @@ -520,19 +520,6 @@ available_policies
+>   
+>   	RW, Optional
+>   
+> -passive
+> -	Attribute is only present for zones in which the passive cooling
+> -	policy is not supported by native thermal driver. Default is zero
+> -	and can be set to a temperature (in millidegrees) to enable a
+> -	passive trip point for the zone. Activation is done by polling with
+> -	an interval of 1 second.
+> -
+> -	Unit: millidegrees Celsius
+> -
+> -	Valid values: 0 (disabled) or greater than 1000
+> -
+> -	RW, Optional
+> -
+>   emul_temp
+>   	Interface to set the emulated temperature method in thermal zone
+>   	(sensor). After setting this temperature, the thermal zone may pass
+> diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+> index 2ae7198d3067..12acb12aac50 100644
+> --- a/drivers/thermal/gov_step_wise.c
+> +++ b/drivers/thermal/gov_step_wise.c
+> @@ -109,7 +109,7 @@ static void update_passive_instance(struct thermal_zone_device *tz,
+>   	 * If value is +1, activate a passive instance.
+>   	 * If value is -1, deactivate a passive instance.
+>   	 */
+> -	if (type == THERMAL_TRIP_PASSIVE || type == THERMAL_TRIPS_NONE)
+> +	if (type == THERMAL_TRIP_PASSIVE)
+>   		tz->passive += value;
+>   }
+>   
+> @@ -122,13 +122,8 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+>   	bool throttle = false;
+>   	int old_target;
+>   
+> -	if (trip == THERMAL_TRIPS_NONE) {
+> -		trip_temp = tz->forced_passive;
+> -		trip_type = THERMAL_TRIPS_NONE;
+> -	} else {
+> -		tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> -		tz->ops->get_trip_type(tz, trip, &trip_type);
+> -	}
+> +	tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> +	tz->ops->get_trip_type(tz, trip, &trip_type);
+>   
+>   	trend = get_tz_trend(tz, trip);
+>   
+> @@ -189,9 +184,6 @@ static int step_wise_throttle(struct thermal_zone_device *tz, int trip)
+>   
+>   	thermal_zone_trip_update(tz, trip);
+>   
+> -	if (tz->forced_passive)
+> -		thermal_zone_trip_update(tz, THERMAL_TRIPS_NONE);
+> -
+>   	mutex_lock(&tz->lock);
+>   
+>   	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 0866e949339b..4e7f9e880d76 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -216,49 +216,6 @@ trip_point_hyst_show(struct device *dev, struct device_attribute *attr,
+>   	return ret ? ret : sprintf(buf, "%d\n", temperature);
+>   }
+>   
+> -static ssize_t
+> -passive_store(struct device *dev, struct device_attribute *attr,
+> -	      const char *buf, size_t count)
+> -{
+> -	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -	int state;
+> -
+> -	if (sscanf(buf, "%d\n", &state) != 1)
+> -		return -EINVAL;
+> -
+> -	/* sanity check: values below 1000 millicelcius don't make sense
+> -	 * and can cause the system to go into a thermal heart attack
+> -	 */
+> -	if (state && state < 1000)
+> -		return -EINVAL;
+> -
+> -	if (state && !tz->forced_passive) {
+> -		if (!tz->passive_delay)
+> -			tz->passive_delay = 1000;
+> -		thermal_zone_device_rebind_exception(tz, "Processor",
+> -						     sizeof("Processor"));
+> -	} else if (!state && tz->forced_passive) {
+> -		tz->passive_delay = 0;
+> -		thermal_zone_device_unbind_exception(tz, "Processor",
+> -						     sizeof("Processor"));
+> -	}
+> -
+> -	tz->forced_passive = state;
+> -
+> -	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+> -
+> -	return count;
+> -}
+> -
+> -static ssize_t
+> -passive_show(struct device *dev, struct device_attribute *attr,
+> -	     char *buf)
+> -{
+> -	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -
+> -	return sprintf(buf, "%d\n", tz->forced_passive);
+> -}
+> -
+>   static ssize_t
+>   policy_store(struct device *dev, struct device_attribute *attr,
+>   	     const char *buf, size_t count)
+> @@ -403,7 +360,6 @@ static DEVICE_ATTR_RW(sustainable_power);
+>   
+>   /* These thermal zone device attributes are created based on conditions */
+>   static DEVICE_ATTR_RW(mode);
+> -static DEVICE_ATTR_RW(passive);
+>   
+>   /* These attributes are unconditionally added to a thermal zone */
+>   static struct attribute *thermal_zone_dev_attrs[] = {
+> @@ -438,45 +394,9 @@ static const struct attribute_group thermal_zone_mode_attribute_group = {
+>   	.attrs = thermal_zone_mode_attrs,
+>   };
+>   
+> -/* We expose passive only if passive trips are present */
+> -static struct attribute *thermal_zone_passive_attrs[] = {
+> -	&dev_attr_passive.attr,
+> -	NULL,
+> -};
+> -
+> -static umode_t thermal_zone_passive_is_visible(struct kobject *kobj,
+> -					       struct attribute *attr,
+> -					       int attrno)
+> -{
+> -	struct device *dev = kobj_to_dev(kobj);
+> -	struct thermal_zone_device *tz;
+> -	enum thermal_trip_type trip_type;
+> -	int count, passive = 0;
+> -
+> -	tz = container_of(dev, struct thermal_zone_device, device);
+> -
+> -	for (count = 0; count < tz->trips && !passive; count++) {
+> -		tz->ops->get_trip_type(tz, count, &trip_type);
+> -
+> -		if (trip_type == THERMAL_TRIP_PASSIVE)
+> -			passive = 1;
+> -	}
+> -
+> -	if (!passive)
+> -		return attr->mode;
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct attribute_group thermal_zone_passive_attribute_group = {
+> -	.attrs = thermal_zone_passive_attrs,
+> -	.is_visible = thermal_zone_passive_is_visible,
+> -};
+> -
+>   static const struct attribute_group *thermal_zone_attribute_groups[] = {
+>   	&thermal_zone_attribute_group,
+>   	&thermal_zone_mode_attribute_group,
+> -	&thermal_zone_passive_attribute_group,
+>   	/* This is not NULL terminated as we create the group dynamically */
+>   };
+>   
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index c80032322158..a57232a9a6f9 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -131,9 +131,6 @@ struct thermal_cooling_device {
+>   			trip point.
+>    * @prev_high_trip:	the above current temperature if you've crossed a
+>   			passive trip point.
+> - * @forced_passive:	If > 0, temperature at which to switch on all ACPI
+> - *			processor cooling devices.  Currently only used by the
+> - *			step-wise governor.
+>    * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
+>    * @ops:	operations this &thermal_zone_device supports
+>    * @tzp:	thermal zone parameters
+> @@ -167,7 +164,6 @@ struct thermal_zone_device {
+>   	int passive;
+>   	int prev_low_trip;
+>   	int prev_high_trip;
+> -	unsigned int forced_passive;
+>   	atomic_t need_update;
+>   	struct thermal_zone_device_ops *ops;
+>   	struct thermal_zone_params *tzp;
+> 
 
-IMHO, Thierry's patch is the right way to imply dependencies when
-device links aren't explicitly calling out dependencies. It's not
-really depending on deferred probe to imply dependency order. Rather,
-it's saying that the order in which devices probe is a better way to
-imply dependency than relying on the order in which devices are added.
-
-For Thierry's case, fw_devlink=on might solve his problem, but that's
-solving the problem by explicitly calling out the dependency (by
-getting it from DT where the dependency is explicitly called out). For
-implicit cases, we still need his patch. I wonder how
-
-> As it stands today, that commit doesn't improve the situation and it
-> adds overhead and complexity.
-
-I'm okay if we revert it for now, but that doesn't solve the
-overarching ordering issues though.
-
-I happen to have an X1 Carbon (different gen though) lying around and
-I poked at its /sys folders. None of the devices in the rmi4_smbus are
-considered the grandchildren of the i2c device. I think the real
-problem is rmi_register_transport_device() [1] not setting up the
-parent for any of the new devices it's adding.
-
-Hugh, can you try this patch?
-
-diff --git a/drivers/input/rmi4/rmi_bus.c b/drivers/input/rmi4/rmi_bus.c
-index 24f31a5c0e04..50a0134b6901 100644
---- a/drivers/input/rmi4/rmi_bus.c
-+++ b/drivers/input/rmi4/rmi_bus.c
-@@ -90,6 +90,7 @@ int rmi_register_transport_device(struct
-rmi_transport_dev *xport)
-
-        rmi_dev->dev.bus = &rmi_bus_type;
-        rmi_dev->dev.type = &rmi_device_type;
-+       rmi_dev->dev.parent = xport->dev;
-
-        xport->rmi_dev = rmi_dev;
-
--Saravana
-
-[1] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/rmi4/rmi_bus.c#n74
+-- 
+Warm Regards
+Thara
