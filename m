@@ -2,157 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C912F29E6
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 09:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103D02F2A6B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 09:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392248AbhALIUu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 03:20:50 -0500
-Received: from mga03.intel.com ([134.134.136.65]:26289 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727988AbhALIUt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 12 Jan 2021 03:20:49 -0500
-IronPort-SDR: 3r6L7ruk2fxCsYTML7X+b0kBof9+ptgUfPVJeXkXXebv56L2NX6c7HS+9A+IXGX8LtRbgMgyhM
- 7rJtL+OFscKw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9861"; a="178097520"
-X-IronPort-AV: E=Sophos;i="5.79,340,1602572400"; 
-   d="scan'208";a="178097520"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 00:20:30 -0800
-IronPort-SDR: v81JxTktJBdKRhzZIUClkOk0PGSIZ4icjzH7DW9ZgKxwMH/xX2dqcn4SGtu6aWumLPQUdrUcAA
- PJsGaZZAtUsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,340,1602572400"; 
-   d="scan'208";a="389089846"
-Received: from lkp-server01.sh.intel.com (HELO b73930e00c65) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 Jan 2021 00:20:28 -0800
-Received: from kbuild by b73930e00c65 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kzEui-00001X-6K; Tue, 12 Jan 2021 08:20:28 +0000
-Date:   Tue, 12 Jan 2021 16:19:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- e286f24a2dd220eef9fc28349fbc054279ef712e
-Message-ID: <5ffd5b96.jmsqyxS9F/ubTXNq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2389011AbhALI50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 03:57:26 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:59444 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731316AbhALI50 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 03:57:26 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10C8n8CT135173;
+        Tue, 12 Jan 2021 08:56:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=s9Fs0MM60cKUnx56MqHSPifPR8CzlhkEo00u1YWO0h8=;
+ b=PxyppCKWnQBsM7h5Df/+EmAk31oBm9axPGYLW3H3Jy3yawjZei/USSKm2tnje+rLQGFF
+ 5/4r5+dRPYZ/gL5Syz05lHKlxtCge0wEW81KHQIsPfWGURGJX7rUHHmZF91MZ4WeWhzu
+ y2Ih5GlWVgm1JwpXfnkNLJ8hqd3Mynur1rm4zOMHxh6O3dl8ycYPpP+dypEb4cFHL9df
+ iOqSbnxzEocANFopzZ6RW0GjFJoqCAQAeV42nSesZ8Y1XUngloQB6Yx4NheX4j6OM1X6
+ dhbhZRyfISDAww5WOI82hGVMmJ7MA7VamlFauMCIAkGU0TblDZipwaI8COXYTysflPRz Hg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 360kvjw2wb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Jan 2021 08:56:43 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10C8o0rY175891;
+        Tue, 12 Jan 2021 08:54:42 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 360kexghhg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jan 2021 08:54:42 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10C8sf55028278;
+        Tue, 12 Jan 2021 08:54:41 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 12 Jan 2021 00:54:40 -0800
+Date:   Tue, 12 Jan 2021 11:54:35 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     r-rivera-matos@ti.com
+Cc:     linux-pm@vger.kernel.org
+Subject: [bug report] power: supply: bq256xx: Introduce the BQ256XX charger
+ driver
+Message-ID: <X/1jy5+2elOl3Lm8@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9861 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101120049
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9861 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1011 impostorscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101120049
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: e286f24a2dd220eef9fc28349fbc054279ef712e  Merge branch 'acpi-platform' into bleeding-edge
+Hello Ricardo Rivera-Matos,
 
-elapsed time: 726m
+The patch 32e4978bb920: "power: supply: bq256xx: Introduce the
+BQ256XX charger driver" from Jan 6, 2021, leads to the following
+static checker warning:
 
-configs tested: 96
-configs skipped: 2
+	drivers/power/supply/bq256xx_charger.c:1512 bq256xx_hw_init()
+	error: buffer overflow 'bq256xx_watchdog_time' 8 <= 8
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+drivers/power/supply/bq256xx_charger.c
+  1503  static int bq256xx_hw_init(struct bq256xx_device *bq)
+  1504  {
+  1505          struct power_supply_battery_info bat_info = { };
+  1506          int wd_reg_val = BQ256XX_WATCHDOG_DIS;
+  1507          int ret = 0;
+  1508          int i;
+  1509  
+  1510          for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
+  1511                  if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
+  1512                      bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The last four members of this array are all zero.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                  cavium_octeon_defconfig
-sh                           se7206_defconfig
-powerpc                  storcenter_defconfig
-arm                          ep93xx_defconfig
-powerpc                  iss476-smp_defconfig
-h8300                     edosk2674_defconfig
-arm                           h5000_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                        bcm63xx_defconfig
-mips                malta_kvm_guest_defconfig
-mips                         rt305x_defconfig
-powerpc                      ppc64e_defconfig
-arm                         vf610m4_defconfig
-m68k                           sun3_defconfig
-arm                           efm32_defconfig
-nios2                            alldefconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                     sbc8548_defconfig
-arm                         palmz72_defconfig
-arm                        mvebu_v7_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20210111
-i386                 randconfig-a005-20210111
-i386                 randconfig-a006-20210111
-i386                 randconfig-a001-20210111
-i386                 randconfig-a003-20210111
-i386                 randconfig-a004-20210111
-x86_64               randconfig-a015-20210110
-x86_64               randconfig-a012-20210110
-x86_64               randconfig-a013-20210110
-x86_64               randconfig-a016-20210110
-x86_64               randconfig-a014-20210110
-x86_64               randconfig-a011-20210110
-i386                 randconfig-a012-20210111
-i386                 randconfig-a011-20210111
-i386                 randconfig-a016-20210111
-i386                 randconfig-a015-20210111
-i386                 randconfig-a013-20210111
-i386                 randconfig-a014-20210111
-x86_64               randconfig-a004-20210111
-x86_64               randconfig-a006-20210111
-x86_64               randconfig-a001-20210111
-x86_64               randconfig-a003-20210111
-x86_64               randconfig-a005-20210111
-x86_64               randconfig-a002-20210111
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+On the last iteration through the loop this will read beyond the end of
+the array possibly setting "wd_reg_val = 7" uninitentionally.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  1513                          wd_reg_val = i;
+  1514          }
+  1515          ret = regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
+  1516                                   BQ256XX_WATCHDOG_MASK, wd_reg_val <<
+  1517                                                  BQ256XX_WDT_BIT_SHIFT);
+
+regards,
+dan carpenter
