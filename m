@@ -2,116 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D847C2F2EBF
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 13:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969C02F2EE7
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 13:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731805AbhALMLv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 07:11:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:21204 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727952AbhALMLv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 07:11:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610453424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NZcfuIkSfijuGWfxInzpq+l4A2mSAx/w0ty9n0COzTo=;
-        b=dughrURgeLkfz3BJSSdXNNk5k5t56Yle8qFq3zzMWhgy4owe5PaEhkvpRDlT7n9oIBJQJy
-        V4gkAL13JTs41s/XjeS8mDu5N4O8iAfXqCrmf5V8fZs4llxTsxNo2KY++z/btiMjCxEyfO
-        gu7cGd3jG4sWkfaRKGS7Gt4ZBkaHgAI=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-335-OJpFgmRZO0mRn95mi29F9w-1; Tue, 12 Jan 2021 07:10:22 -0500
-X-MC-Unique: OJpFgmRZO0mRn95mi29F9w-1
-Received: by mail-ej1-f71.google.com with SMTP id d19so917837ejo.18
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 04:10:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NZcfuIkSfijuGWfxInzpq+l4A2mSAx/w0ty9n0COzTo=;
-        b=I3X3K8EbTYqLHEWJ88yyWW8gHHUUq/jCfVJOYiH2wsw1FKeU9ZXFy5i9QfGFJshAs+
-         lnryx9Dg7rnBqbpXpnjr4qV3DwK8fNZlTdmoYbEhxcSjTKe0mnJrLT9lYHwzqiCXiZ/s
-         +9by8S0M3VHSGrF9K3tsdlv551HuffVrGrAL3ef7l6U7GxBMR9hjxwLMA0P7W90DGT4C
-         7XE0MpsDFlTncWb2G1hZzFRre7DhTbJvZqsR824rLa37doveqaMvD9TTdY/ApbVnV/Km
-         ShYjDaBXIC3zBkrAX86aFC5vx9amnrIKmdHPDaefgJDP+VJhqO5XBXldib5jnGuA24h8
-         uiLw==
-X-Gm-Message-State: AOAM532li+Q/19VdGGxQSGQVI8wm7RppCEVwu+BXIRVnRfO284xx/+ax
-        BwyESXnqIvnSqnpHT4v6EE+Y/WUQs+qom26FO2zc82GubXDAJY5M4kdNItviXb6IDOSEZzkgPM9
-        ur7lWE+FTSJZcq2gyr1/zo3GHYgJqSdRIkJjV1XtRNzgVtEvboQIgjD7/f+tor4bZjLnbIZo=
-X-Received: by 2002:a50:fc83:: with SMTP id f3mr3207139edq.219.1610453420998;
-        Tue, 12 Jan 2021 04:10:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVmcf5yD1UBcXS9zLqzd4HS+LUSsB107z2DJ9q1J1ELacsiWEgharWo+d9R554Z2iIUj5Fuw==
-X-Received: by 2002:a50:fc83:: with SMTP id f3mr3207116edq.219.1610453420798;
-        Tue, 12 Jan 2021 04:10:20 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
-        by smtp.gmail.com with ESMTPSA id v16sm1307446eds.64.2021.01.12.04.10.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jan 2021 04:10:20 -0800 (PST)
-Subject: Re: [pm:bleeding-edge 20/29] drivers/acpi/platform_profile.c:67:33:
- error: passing 'const struct platform_profile_handler to parameter of type
- 'struct platform_profile_handler discards qualifiers
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kernel test robot <lkp@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-References: <202101081623.CGkLO3Kx-lkp@intel.com>
- <5e7a4d87-52ef-e487-9cc2-8e7094beaa08@redhat.com>
- <106d7891-230f-18e1-1b0f-cb6a62cf0387@flygoat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <01442a77-7d87-5a12-d7b8-4fe397a37464@redhat.com>
-Date:   Tue, 12 Jan 2021 13:10:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1732686AbhALMT4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 07:19:56 -0500
+Received: from foss.arm.com ([217.140.110.172]:45106 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732618AbhALMTz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:19:55 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D06D31042;
+        Tue, 12 Jan 2021 04:19:09 -0800 (PST)
+Received: from localhost (unknown [10.1.198.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 71ADC3F66E;
+        Tue, 12 Jan 2021 04:19:09 -0800 (PST)
+Date:   Tue, 12 Jan 2021 12:19:08 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom-hw: add missing devm_release_mem_region()
+ call
+Message-ID: <20210112121859.GA25733@arm.com>
+References: <20210112095236.20515-1-shawn.guo@linaro.org>
+ <20210112101449.cmkjaegukxut3tym@vireshk-i7>
+ <20210112111928.GB2479@dragon>
 MIME-Version: 1.0
-In-Reply-To: <106d7891-230f-18e1-1b0f-cb6a62cf0387@flygoat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210112111928.GB2479@dragon>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi guys,
 
-On 1/12/21 1:07 PM, Jiaxun Yang wrote:
-> 在 2021/1/12 下午6:42, Hans de Goede 写道:
->> Hi,
->>
->> On 1/8/21 9:52 AM, kernel test robot wrote:
-> [...]
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
-> [...]
->>>     2 errors generated.
+On Tuesday 12 Jan 2021 at 19:19:29 (+0800), Shawn Guo wrote:
+> On Tue, Jan 12, 2021 at 03:44:49PM +0530, Viresh Kumar wrote:
+> > On 12-01-21, 17:52, Shawn Guo wrote:
+> > > On SDM845/850, running the following commands to put all cores in
+> > > freq-domain1 offline and then get one core back online, there will be
+> > > a request region error seen from qcom-hw driver.
+> > > 
+> > > $ echo 0 > /sys/devices/system/cpu/cpu4/online
+> > > $ echo 0 > /sys/devices/system/cpu/cpu5/online
+> > > $ echo 0 > /sys/devices/system/cpu/cpu6/online
+> > > $ echo 0 > /sys/devices/system/cpu/cpu7/online
+> > > $ echo 1 > /sys/devices/system/cpu/cpu4/online
+> > > 
+> > > [ 3395.915416] CPU4: shutdown
+> > > [ 3395.938185] psci: CPU4 killed (polled 0 ms)
+> > > [ 3399.071424] CPU5: shutdown
+> > > [ 3399.094316] psci: CPU5 killed (polled 0 ms)
+> > > [ 3402.139358] CPU6: shutdown
+> > > [ 3402.161705] psci: CPU6 killed (polled 0 ms)
+> > > [ 3404.742939] CPU7: shutdown
+> > > [ 3404.765592] psci: CPU7 killed (polled 0 ms)
+> > > [ 3411.492274] Detected VIPT I-cache on CPU4
+> > > [ 3411.492337] GICv3: CPU4: found redistributor 400 region 0:0x0000000017ae0000
+> > > [ 3411.492448] CPU4: Booted secondary processor 0x0000000400 [0x516f802d]
+> > > [ 3411.503654] qcom-cpufreq-hw 17d43000.cpufreq: can't request region for resource [mem 0x17d45800-0x17d46bff]
+> > > 
+> > > The cause is that the memory region requested in .init hook doesn't get
+> > > released in .exit hook, and the subsequent call to .init will always fail
+> > > on this error.  Let's break down the devm_platform_ioremap_resource()
+> > > call a bit, so that we can have the resource pointer to release memory
+> > > region from .exit hook.
+> > > 
+> > > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> > > ---
+> > >  drivers/cpufreq/qcom-cpufreq-hw.c | 8 +++++++-
+> > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > FWIW, Ionela also sent a fix though I like this one better for the
+> > obvious reasons.
+> > 
+> > https://lore.kernel.org/lkml/20210108151406.23595-1-ionela.voinescu@arm.com/
 > 
-> Oops, thanks for the reminder, I should exclude 0day CI from mail filter.
-> It's wired that GCC didn't say anything about it.
+> Ha, thanks for the pointer.  So the original code was tricky and skipped
+> the region request call intentionally.
 > 
->> Ugh, so that means that the current version of the
->> "ACPI: platform-profile: Pass profile pointer to driver callbacks"
->> patch is no good. Since this is causing compile errors I assume
->> that it will be dropped from the bleeding-edge branch.
->> Is that right Rafael?
-> 
-> I'm not familiar with x86pdx and ACPI workflow.
-> Should I resend the patch or send a fixup patch?
 
-I believe a new version of the patch is best, then Rafael can
-replace the broken patch. We want to avoid having a commit in
-git history which does not compile in some cases, because that
-creates problems when git bisecting.
+As long as the problem is fixed, I'm happy :).
+For this patch:
+Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
 
-Regards,
+The patch probably deserves:
+Fixes: f17b3e44320b ("cpufreq: qcom-hw: Use devm_platform_ioremap_resource() to simplify code")
 
-Hans
+Thanks,
+Ionela.
 
+> Shawn
