@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF782F3333
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 15:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B30D22F3336
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 15:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbhALOsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 09:48:10 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:37409 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725863AbhALOsK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 09:48:10 -0500
-Received: by mail-oi1-f170.google.com with SMTP id l207so2570712oib.4;
-        Tue, 12 Jan 2021 06:47:54 -0800 (PST)
+        id S1728166AbhALOtY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 09:49:24 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:36768 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726241AbhALOtY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 09:49:24 -0500
+Received: by mail-ot1-f51.google.com with SMTP id d20so2482248otl.3;
+        Tue, 12 Jan 2021 06:49:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fM7xQp3erzKr1NA4fTfzZcmXzvgc/peYjgAUUn7uWyw=;
-        b=dO+eLV64q95puXhnJW8gF5hx386tbnZCSRKfsDQ7OAUt+cvWk/+EBIrS3/9kKTtOoq
-         fS+kPN01DEtMaQqd57jAtKxGph4zrkHEGe23O+3zIgcENIuNGwdjEUx69m0NhHww2XJE
-         +BBSa0OcwTz9Eb/F8wty20/AL+O5QB0G15tOe86Be1S39yAmgbc5F/SBzNzWryX349jk
-         zeYDCtO8eGE4soLcKQPSpKiPGR2qZs/yZ7MCChonZuCCUcoA1MUV7zYf4Qqf0vib5X2U
-         FIgtTSvdEUN/3OEH1jxKiY8TS4gCa4uM/1nPDrOYsVEsCCeboiuAwsAmxcb6tfM/HT/G
-         ed4w==
-X-Gm-Message-State: AOAM533x+shEmvf5QuAvgFrMQ+XUmOz/wIMJ/j1wAsjI0fIQgx5SBw8J
-        O4BrEBB/XZF2g4lPBO7N6Q==
-X-Google-Smtp-Source: ABdhPJwcZgbwzeRahJPpZSMpiaWcIjlcHI6CPeiAiAqPyp/VNO1VZhfwn95148OOQWTPVBTGqP0F0Q==
-X-Received: by 2002:aca:af8b:: with SMTP id y133mr2510768oie.87.1610462849269;
-        Tue, 12 Jan 2021 06:47:29 -0800 (PST)
+        bh=R65jgJ9ZXA6KLRUaL143AJzdpFEYKDU6ZEDoHXUUWuk=;
+        b=WKLfL0IGoZ95VBhxdscMxzsP6g+H50HF0Xtr89dmjE20KnEMONPufI87oif7xdQHpz
+         zDm8U9d6ff/r7hyH/+Th4ENtzbHEzms5wGukLX8sE6RkGlzoXIGZnMEUzM8HOPeAXUXc
+         6+WOaWULHqHetUbtlWxim2hnqQPFeVf0goOIKJBG2BLK8uviOxAFWs6+kppt2VYhzXEl
+         dDhEps9M//FX9AB6KWMp8BW1w5RLseSqSqB/PIao6khDM6Ff/3T92HWX2vUMRICIKWrq
+         PpAWsDvmHqSBdFcZt+1QAmeIMaMxLOQGvTfcU2QRH/o9EXJo82FPuI1PX0ok1q+enLTD
+         zqwg==
+X-Gm-Message-State: AOAM532CpNAL4o0f6hvznov56GbbO0rJL0KaVsv6wlqxD+8Wpry6lZeh
+        qoAF1Snba638srXcIANw2g==
+X-Google-Smtp-Source: ABdhPJz47DeFCqd1oQBxWpdz0vtjnHrb9OMZhE+QbK/kAhF8YobPG+Mkx0lWOxRC/NuYKWzUBCBJpQ==
+X-Received: by 2002:a9d:71cf:: with SMTP id z15mr2992431otj.259.1610462923140;
+        Tue, 12 Jan 2021 06:48:43 -0800 (PST)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y12sm403965oti.0.2021.01.12.06.47.27
+        by smtp.gmail.com with ESMTPSA id n13sm654071otk.58.2021.01.12.06.48.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 06:47:28 -0800 (PST)
-Received: (nullmailer pid 327562 invoked by uid 1000);
-        Tue, 12 Jan 2021 14:47:27 -0000
-Date:   Tue, 12 Jan 2021 08:47:27 -0600
+        Tue, 12 Jan 2021 06:48:42 -0800 (PST)
+Received: (nullmailer pid 329242 invoked by uid 1000);
+        Tue, 12 Jan 2021 14:48:41 -0000
+Date:   Tue, 12 Jan 2021 08:48:41 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Roger Lu <roger.lu@mediatek.com>
 Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
@@ -55,134 +55,57 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: Re: [PATCH v11 1/7] dt-bindings: soc: mediatek: add mtk svs
+Subject: Re: [PATCH v11 5/7] dt-bindings: soc: mediatek: add mt8192 svs
  dt-bindings
-Message-ID: <20210112144727.GA321805@robh.at.kernel.org>
+Message-ID: <20210112144841.GA327919@robh.at.kernel.org>
 References: <20210107024356.583-1-roger.lu@mediatek.com>
- <20210107024356.583-2-roger.lu@mediatek.com>
+ <20210107024356.583-6-roger.lu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210107024356.583-2-roger.lu@mediatek.com>
+In-Reply-To: <20210107024356.583-6-roger.lu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 10:43:50AM +0800, Roger Lu wrote:
-> Document the binding for enabling mtk svs on MediaTek SoC.
-> 
+On Thu, Jan 07, 2021 at 10:43:54AM +0800, Roger Lu wrote:
 > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > ---
->  .../bindings/soc/mediatek/mtk-svs.yaml        | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+>  .../devicetree/bindings/soc/mediatek/mtk-svs.yaml        | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> new file mode 100644
-> index 000000000000..bb8c345a0c0a
-> --- /dev/null
+> index bb8c345a0c0a..2e61b07921aa 100644
+> --- a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
 > +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/mediatek/mtk-svs.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Introduce MTK SVS engine
-
-Introduce? That's what this commit does, not what this binding is.
-
-> +
-> +maintainers:
-> +  - Matthias Brugger <matthias.bgg@gmail.com>
-> +  - Kevin Hilman <khilman@kernel.org>
-> +  - Nishanth Menon <nm@ti.com>
-
-This should be someone that knows the h/w. Not who applies patches. 
-Perhaps you.
-
-> +
-> +description: |+
-> +  The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> +  which has several controllers(banks) for calculating suitable
-> +  voltage to different power domains(CPU/GPU/CCI) according to
-> +  chip process corner, temperatures and other factors. Then DVFS
-> +  driver could apply SVS bank voltage to PMIC/Buck.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8183-svs
-> +
-> +  reg:
-> +    description: Address range of the MTK SVS controller.
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    description: IRQ for the MTK SVS controller.
-
-Drop. That's kind of obvious with only 1 interrupt.
-
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: Main clock for MTK SVS controller to work.
-
-How many clocks (maxItems)?
-
-> +
-> +  clock-names:
-> +    const: main
-> +
-> +  nvmem-cells:
-> +    maxItems: 2
+> @@ -22,6 +22,7 @@ properties:
+>    compatible:
+>      enum:
+>        - mediatek,mt8183-svs
+> +      - mediatek,mt8192-svs
+>  
+>    reg:
+>      description: Address range of the MTK SVS controller.
+> @@ -47,6 +48,14 @@ properties:
+>        - const: svs-calibration-data
+>        - const: t-calibration-data
+>  
+> +  resets:
 > +    description:
-> +      Phandle to the calibration data provided by a nvmem device.
+> +      svs reset control.
 
-Need to define what each entry is.
+How many?
 
-items:
-  - description: ...
-  - description: ...
+And you can drop the description given there's only 1.
 
 > +
-> +  nvmem-cell-names:
+> +  reset-names:
 > +    items:
-> +      - const: svs-calibration-data
-> +      - const: t-calibration-data
+> +      - const: svs_rst
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8183-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        svs@1100b000 {
-> +            compatible = "mediatek,mt8183-svs";
-> +            reg = <0 0x1100b000 0 0x1000>;
-> +            interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
-> +            clocks = <&infracfg CLK_INFRA_THERM>;
-> +            clock-names = "main";
-> +            nvmem-cells = <&svs_calibration>, <&thermal_calibration>;
-> +            nvmem-cell-names = "svs-calibration-data", "t-calibration-data";
-> +        };
-> +    };
+>  required:
+>    - compatible
+>    - reg
 > -- 
 > 2.18.0
 > 
