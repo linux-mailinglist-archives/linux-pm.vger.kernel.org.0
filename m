@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 534F92F38CD
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 19:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508662F38A6
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 19:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406612AbhALSXf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 13:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S2406482AbhALSW4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 13:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406634AbhALSXe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 13:23:34 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCFCC061385
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 10:21:47 -0800 (PST)
+        with ESMTP id S2406478AbhALSWz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 13:22:55 -0500
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B6FC061795
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 10:22:01 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 610803ED63;
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id BA7D33EDB1;
         Tue, 12 Jan 2021 19:21:00 +0100 (CET)
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
@@ -32,9 +32,9 @@ Cc:     konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH v3 06/15] soc: qcom: cpr: Move common functions to new file
-Date:   Tue, 12 Jan 2021 19:20:43 +0100
-Message-Id: <20210112182052.481888-7-angelogioacchino.delregno@somainline.org>
+Subject: [PATCH v3 07/15] dt-bindings: avs: cpr: Convert binding to YAML schema
+Date:   Tue, 12 Jan 2021 19:20:44 +0100
+Message-Id: <20210112182052.481888-8-angelogioacchino.delregno@somainline.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210112182052.481888-1-angelogioacchino.delregno@somainline.org>
 References: <20210112182052.481888-1-angelogioacchino.delregno@somainline.org>
@@ -44,1114 +44,341 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In preparation for implementing a new driver that will be handling
-CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
-file.
+Convert the qcom,cpr.txt document to YAML schema and place it in the
+appropriate directory, since this driver was moved from power/avs
+to soc/qcom, but forgets to move the documentation.
 
+Fixes: a7305e684fcf ("PM: AVS: qcom-cpr: Move the driver to the qcom specific drivers")
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 ---
- drivers/soc/qcom/Makefile     |   2 +-
- drivers/soc/qcom/cpr-common.c | 382 +++++++++++++++++++++++++++++
- drivers/soc/qcom/cpr-common.h | 113 +++++++++
- drivers/soc/qcom/cpr.c        | 441 +++-------------------------------
- 4 files changed, 523 insertions(+), 415 deletions(-)
- create mode 100644 drivers/soc/qcom/cpr-common.c
- create mode 100644 drivers/soc/qcom/cpr-common.h
+ .../bindings/power/avs/qcom,cpr.txt           | 131 +-------------
+ .../bindings/soc/qcom/qcom,cpr.yaml           | 167 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 169 insertions(+), 131 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
 
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index 24514c722832..778a2a5f07bb 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -3,7 +3,7 @@ CFLAGS_rpmh-rsc.o := -I$(src)
- obj-$(CONFIG_QCOM_AOSS_QMP) +=	qcom_aoss.o
- obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
- obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
--obj-$(CONFIG_QCOM_CPR)		+= cpr.o
-+obj-$(CONFIG_QCOM_CPR)		+= cpr-common.o cpr.o
- obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
- obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
- obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
-diff --git a/drivers/soc/qcom/cpr-common.c b/drivers/soc/qcom/cpr-common.c
+diff --git a/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt b/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
+index ab0d5ebbad4e..2ada8cd08949 100644
+--- a/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
++++ b/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
+@@ -1,130 +1 @@
+-QCOM CPR (Core Power Reduction)
+-
+-CPR (Core Power Reduction) is a technology to reduce core power on a CPU
+-or other device. Each OPP of a device corresponds to a "corner" that has
+-a range of valid voltages for a particular frequency. While the device is
+-running at a particular frequency, CPR monitors dynamic factors such as
+-temperature, etc. and suggests adjustments to the voltage to save power
+-and meet silicon characteristic requirements.
+-
+-- compatible:
+-	Usage: required
+-	Value type: <string>
+-	Definition: should be "qcom,qcs404-cpr", "qcom,cpr" for qcs404
+-
+-- reg:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: base address and size of the rbcpr register region
+-
+-- interrupts:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify the CPR interrupt
+-
+-- clocks:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: phandle to the reference clock
+-
+-- clock-names:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: must be "ref"
+-
+-- vdd-apc-supply:
+-	Usage: required
+-	Value type: <phandle>
+-	Definition: phandle to the vdd-apc-supply regulator
+-
+-- #power-domain-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: should be 0
+-
+-- operating-points-v2:
+-	Usage: required
+-	Value type: <phandle>
+-	Definition: A phandle to the OPP table containing the
+-		    performance states supported by the CPR
+-		    power domain
+-
+-- acc-syscon:
+-	Usage: optional
+-	Value type: <phandle>
+-	Definition: phandle to syscon for writing ACC settings
+-
+-- nvmem-cells:
+-	Usage: required
+-	Value type: <phandle>
+-	Definition: phandle to nvmem cells containing the data
+-		    that makes up a fuse corner, for each fuse corner.
+-		    As well as the CPR fuse revision.
+-
+-- nvmem-cell-names:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: should be "cpr_quotient_offset1", "cpr_quotient_offset2",
+-		    "cpr_quotient_offset3", "cpr_init_voltage1",
+-		    "cpr_init_voltage2", "cpr_init_voltage3", "cpr_quotient1",
+-		    "cpr_quotient2", "cpr_quotient3", "cpr_ring_osc1",
+-		    "cpr_ring_osc2", "cpr_ring_osc3", "cpr_fuse_revision"
+-		    for qcs404.
+-
+-Example:
+-
+-	cpr_opp_table: cpr-opp-table {
+-		compatible = "operating-points-v2-qcom-level";
+-
+-		cpr_opp1: opp1 {
+-			opp-level = <1>;
+-			qcom,opp-fuse-level = <1>;
+-		};
+-		cpr_opp2: opp2 {
+-			opp-level = <2>;
+-			qcom,opp-fuse-level = <2>;
+-		};
+-		cpr_opp3: opp3 {
+-			opp-level = <3>;
+-			qcom,opp-fuse-level = <3>;
+-		};
+-	};
+-
+-	power-controller@b018000 {
+-		compatible = "qcom,qcs404-cpr", "qcom,cpr";
+-		reg = <0x0b018000 0x1000>;
+-		interrupts = <0 15 IRQ_TYPE_EDGE_RISING>;
+-		clocks = <&xo_board>;
+-		clock-names = "ref";
+-		vdd-apc-supply = <&pms405_s3>;
+-		#power-domain-cells = <0>;
+-		operating-points-v2 = <&cpr_opp_table>;
+-		acc-syscon = <&tcsr>;
+-
+-		nvmem-cells = <&cpr_efuse_quot_offset1>,
+-			<&cpr_efuse_quot_offset2>,
+-			<&cpr_efuse_quot_offset3>,
+-			<&cpr_efuse_init_voltage1>,
+-			<&cpr_efuse_init_voltage2>,
+-			<&cpr_efuse_init_voltage3>,
+-			<&cpr_efuse_quot1>,
+-			<&cpr_efuse_quot2>,
+-			<&cpr_efuse_quot3>,
+-			<&cpr_efuse_ring1>,
+-			<&cpr_efuse_ring2>,
+-			<&cpr_efuse_ring3>,
+-			<&cpr_efuse_revision>;
+-		nvmem-cell-names = "cpr_quotient_offset1",
+-			"cpr_quotient_offset2",
+-			"cpr_quotient_offset3",
+-			"cpr_init_voltage1",
+-			"cpr_init_voltage2",
+-			"cpr_init_voltage3",
+-			"cpr_quotient1",
+-			"cpr_quotient2",
+-			"cpr_quotient3",
+-			"cpr_ring_osc1",
+-			"cpr_ring_osc2",
+-			"cpr_ring_osc3",
+-			"cpr_fuse_revision";
+-	};
++This file has been moved to ../../soc/qcom/qcom,cpr.yaml
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
 new file mode 100644
-index 000000000000..70e1e0f441db
+index 000000000000..f58dc6c138a6
 --- /dev/null
-+++ b/drivers/soc/qcom/cpr-common.c
-@@ -0,0 +1,382 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2019, Linaro Limited
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/err.h>
-+#include <linux/debugfs.h>
-+#include <linux/string.h>
-+#include <linux/kernel.h>
-+#include <linux/list.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/bitops.h>
-+#include <linux/slab.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_opp.h>
-+#include <linux/interrupt.h>
-+#include <linux/regmap.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/clk.h>
-+#include <linux/nvmem-consumer.h>
-+#include "cpr-common.h"
-+
-+int cpr_read_efuse(struct device *dev, const char *cname, u32 *data)
-+{
-+	struct nvmem_cell *cell;
-+	ssize_t len;
-+	char *ret;
-+	int i;
-+
-+	*data = 0;
-+
-+	cell = nvmem_cell_get(dev, cname);
-+	if (IS_ERR(cell)) {
-+		if (PTR_ERR(cell) != -EPROBE_DEFER)
-+			dev_err(dev, "undefined cell %s\n", cname);
-+		return PTR_ERR(cell);
-+	}
-+
-+	ret = nvmem_cell_read(cell, &len);
-+	nvmem_cell_put(cell);
-+	if (IS_ERR(ret)) {
-+		dev_err(dev, "can't read cell %s\n", cname);
-+		return PTR_ERR(ret);
-+	}
-+
-+	for (i = 0; i < len; i++)
-+		*data |= ret[i] << (8 * i);
-+
-+	kfree(ret);
-+	dev_dbg(dev, "efuse read(%s) = %x, bytes %zd\n", cname, *data, len);
-+
-+	return 0;
-+}
-+
-+int cpr_populate_ring_osc_idx(struct device *dev,
-+			      struct fuse_corner *fuse_corner,
-+			      const struct cpr_fuse *cpr_fuse,
-+			      int num_fuse_corners)
-+{
-+	struct fuse_corner *end = fuse_corner + num_fuse_corners;
-+	u32 data;
-+	int ret;
-+
-+	for (; fuse_corner < end; fuse_corner++, cpr_fuse++) {
-+		ret = cpr_read_efuse(dev, cpr_fuse->ring_osc,
-+				     &data);
-+		if (ret)
-+			return ret;
-+		fuse_corner->ring_osc_idx = data;
-+	}
-+
-+	return 0;
-+}
-+
-+int cpr_read_fuse_uV(int init_v_width, int step_size_uV, int ref_uV,
-+		     int adj, int step_volt, const char *init_v_efuse,
-+		     struct device *dev)
-+{
-+	int steps, uV;
-+	u32 bits = 0;
-+	int ret;
-+
-+	ret = cpr_read_efuse(dev, init_v_efuse, &bits);
-+	if (ret)
-+		return ret;
-+
-+	steps = bits & (BIT(init_v_width - 1) - 1);
-+	/* Not two's complement.. instead highest bit is sign bit */
-+	if (bits & BIT(init_v_width - 1))
-+		steps = -steps;
-+
-+	uV = ref_uV + steps * step_size_uV;
-+
-+	/* Apply open-loop fixed adjustments to fused values */
-+	uV += adj;
-+
-+	return DIV_ROUND_UP(uV, step_volt) * step_volt;
-+}
-+
-+const struct cpr_fuse *cpr_get_fuses(struct device *dev, int tid,
-+				     int num_fuse_corners)
-+{
-+	struct cpr_fuse *fuses;
-+	int i;
-+
-+	fuses = devm_kcalloc(dev, num_fuse_corners,
-+			     sizeof(struct cpr_fuse),
-+			     GFP_KERNEL);
-+	if (!fuses)
-+		return ERR_PTR(-ENOMEM);
-+
-+	for (i = 0; i < num_fuse_corners; i++) {
-+		char tbuf[50];
-+
-+		snprintf(tbuf, sizeof(tbuf), "cpr%d_ring_osc%d", tid, i + 1);
-+		fuses[i].ring_osc = devm_kstrdup(dev, tbuf, GFP_KERNEL);
-+		if (!fuses[i].ring_osc)
-+			return ERR_PTR(-ENOMEM);
-+
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "cpr%d_init_voltage%d", tid, i + 1);
-+		fuses[i].init_voltage = devm_kstrdup(dev, tbuf,
-+						     GFP_KERNEL);
-+		if (!fuses[i].init_voltage)
-+			return ERR_PTR(-ENOMEM);
-+
-+		snprintf(tbuf, sizeof(tbuf), "cpr%d_quotient%d", tid, i + 1);
-+		fuses[i].quotient = devm_kstrdup(dev, tbuf, GFP_KERNEL);
-+		if (!fuses[i].quotient)
-+			return ERR_PTR(-ENOMEM);
-+
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "cpr%d_quotient_offset%d", tid, i + 1);
-+		fuses[i].quotient_offset = devm_kstrdup(dev, tbuf,
-+							GFP_KERNEL);
-+		if (!fuses[i].quotient_offset)
-+			return ERR_PTR(-ENOMEM);
-+	}
-+
-+	return fuses;
-+}
-+
-+int cpr_populate_fuse_common(struct device *dev,
-+			     struct fuse_corner_data *fdata,
-+			     const struct cpr_fuse *cpr_fuse,
-+			     struct fuse_corner *fuse_corner,
-+			     int step_volt, int init_v_width,
-+			     int init_v_step)
-+{
-+	int uV, ret;
-+
-+	/* Populate uV */
-+	uV = cpr_read_fuse_uV(init_v_width, init_v_step,
-+			      fdata->ref_uV, fdata->volt_oloop_adjust,
-+			      step_volt, cpr_fuse->init_voltage, dev);
-+	if (uV < 0)
-+		return uV;
-+
-+	/*
-+	 * Update SoC voltages: platforms might choose a different
-+	 * regulators than the one used to characterize the algorithms
-+	 * (ie, init_voltage_step).
-+	 */
-+	fdata->min_uV = roundup(fdata->min_uV, step_volt);
-+	fdata->max_uV = roundup(fdata->max_uV, step_volt);
-+
-+	fuse_corner->min_uV = fdata->min_uV;
-+	fuse_corner->max_uV = fdata->max_uV;
-+	fuse_corner->uV = clamp(uV, fuse_corner->min_uV, fuse_corner->max_uV);
-+
-+	/* Populate target quotient by scaling */
-+	ret = cpr_read_efuse(dev, cpr_fuse->quotient, &fuse_corner->quot);
-+	if (ret)
-+		return ret;
-+
-+	fuse_corner->quot *= fdata->quot_scale;
-+	fuse_corner->quot += fdata->quot_offset;
-+	fuse_corner->quot += fdata->quot_adjust;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Returns: Index of the initial corner or negative number for error.
-+ */
-+int cpr_find_initial_corner(struct device *dev, struct clk *cpu_clk,
-+			    struct corner *corners, int num_corners)
-+{
-+	unsigned long rate;
-+	struct corner *iter, *corner;
-+	const struct corner *end;
-+	unsigned int ret = 0;
-+
-+	if (!cpu_clk)
-+		return -EINVAL;
-+
-+	end = &corners[num_corners - 1];
-+	rate = clk_get_rate(cpu_clk);
-+
-+	/*
-+	 * Some bootloaders set a CPU clock frequency that is not defined
-+	 * in the OPP table. When running at an unlisted frequency,
-+	 * cpufreq_online() will change to the OPP which has the lowest
-+	 * frequency, at or above the unlisted frequency.
-+	 * Since cpufreq_online() always "rounds up" in the case of an
-+	 * unlisted frequency, this function always "rounds down" in case
-+	 * of an unlisted frequency. That way, when cpufreq_online()
-+	 * triggers the first ever call to cpr_set_performance_state(),
-+	 * it will correctly determine the direction as UP.
-+	 */
-+	for (iter = corners; iter <= end; iter++) {
-+		if (iter->freq > rate)
-+			break;
-+		ret++;
-+		if (iter->freq == rate) {
-+			corner = iter;
-+			break;
-+		}
-+		if (iter->freq < rate)
-+			corner = iter;
-+	}
-+
-+	if (!corner) {
-+		dev_err(dev, "boot up corner not found\n");
-+		return -EINVAL;
-+	}
-+
-+	dev_dbg(dev, "boot up perf state: %u\n", ret);
-+
-+	return ret;
-+}
-+
-+u32 cpr_get_fuse_corner(struct dev_pm_opp *opp, u32 tid)
-+{
-+	struct device_node *np;
-+	u32 fc;
-+
-+	np = dev_pm_opp_get_of_node(opp);
-+	if (of_property_read_u32_index(np, "qcom,opp-fuse-level", tid, &fc)) {
-+		pr_debug("%s: missing 'qcom,opp-fuse-level' property\n",
-+			 __func__);
-+		fc = 0;
-+	}
-+
-+	of_node_put(np);
-+
-+	return fc;
-+}
-+
-+unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
-+				     struct device *cpu_dev)
-+{
-+	u64 rate = 0;
-+	struct device_node *ref_np;
-+	struct device_node *desc_np;
-+	struct device_node *child_np = NULL;
-+	struct device_node *child_req_np = NULL;
-+
-+	desc_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
-+	if (!desc_np)
-+		return 0;
-+
-+	ref_np = dev_pm_opp_get_of_node(ref);
-+	if (!ref_np)
-+		goto out_ref;
-+
-+	do {
-+		of_node_put(child_req_np);
-+		child_np = of_get_next_available_child(desc_np, child_np);
-+		child_req_np = of_parse_phandle(child_np, "required-opps", 0);
-+	} while (child_np && child_req_np != ref_np);
-+
-+	if (child_np && child_req_np == ref_np)
-+		of_property_read_u64(child_np, "opp-hz", &rate);
-+
-+	of_node_put(child_req_np);
-+	of_node_put(child_np);
-+	of_node_put(ref_np);
-+out_ref:
-+	of_node_put(desc_np);
-+
-+	return (unsigned long) rate;
-+}
-+
-+int cpr_calculate_scaling(const char *quot_offset,
-+			  struct device *dev,
-+			  const struct fuse_corner_data *fdata,
-+			  const struct corner *corner)
-+{
-+	u32 quot_diff = 0;
-+	unsigned long freq_diff;
-+	int scaling;
-+	const struct fuse_corner *fuse, *prev_fuse;
-+	int ret;
-+
-+	fuse = corner->fuse_corner;
-+	prev_fuse = fuse - 1;
-+
-+	if (quot_offset) {
-+		ret = cpr_read_efuse(dev, quot_offset, &quot_diff);
-+		if (ret)
-+			return ret;
-+
-+		quot_diff *= fdata->quot_offset_scale;
-+		quot_diff += fdata->quot_offset_adjust;
-+	} else {
-+		quot_diff = fuse->quot - prev_fuse->quot;
-+	}
-+
-+	freq_diff = fuse->max_freq - prev_fuse->max_freq;
-+	freq_diff /= 1000000; /* Convert to MHz */
-+	scaling = 1000 * quot_diff / freq_diff;
-+	return min(scaling, fdata->max_quot_scale);
-+}
-+
-+int cpr_interpolate(const struct corner *corner, int step_volt,
-+		    const struct fuse_corner_data *fdata)
-+{
-+	unsigned long f_high, f_low, f_diff;
-+	int uV_high, uV_low, uV;
-+	u64 temp, temp_limit;
-+	const struct fuse_corner *fuse, *prev_fuse;
-+
-+	fuse = corner->fuse_corner;
-+	prev_fuse = fuse - 1;
-+
-+	f_high = fuse->max_freq;
-+	f_low = prev_fuse->max_freq;
-+	uV_high = fuse->uV;
-+	uV_low = prev_fuse->uV;
-+	f_diff = fuse->max_freq - corner->freq;
-+
-+	/*
-+	 * Don't interpolate in the wrong direction. This could happen
-+	 * if the adjusted fuse voltage overlaps with the previous fuse's
-+	 * adjusted voltage.
-+	 */
-+	if (f_high <= f_low || uV_high <= uV_low || f_high <= corner->freq)
-+		return corner->uV;
-+
-+	temp = f_diff * (uV_high - uV_low);
-+	do_div(temp, f_high - f_low);
-+
-+	/*
-+	 * max_volt_scale has units of uV/MHz while freq values
-+	 * have units of Hz.  Divide by 1000000 to convert to.
-+	 */
-+	temp_limit = f_diff * fdata->max_volt_scale;
-+	do_div(temp_limit, 1000000);
-+
-+	uV = uV_high - min(temp, temp_limit);
-+	return roundup(uV, step_volt);
-+}
-+
-+int cpr_check_vreg_constraints(struct device *dev, struct regulator *vreg,
-+			       struct fuse_corner *f)
-+{
-+	int ret;
-+
-+	ret = regulator_is_supported_voltage(vreg, f->min_uV, f->min_uV);
-+	if (!ret) {
-+		dev_err(dev, "min uV: %d not supported by regulator\n",
-+			f->min_uV);
-+		return -EINVAL;
-+	}
-+
-+	ret = regulator_is_supported_voltage(vreg, f->max_uV, f->max_uV);
-+	if (!ret) {
-+		dev_err(dev, "max uV: %d not supported by regulator\n",
-+			f->max_uV);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-diff --git a/drivers/soc/qcom/cpr-common.h b/drivers/soc/qcom/cpr-common.h
-new file mode 100644
-index 000000000000..83a1f7c941b8
---- /dev/null
-+++ b/drivers/soc/qcom/cpr-common.h
-@@ -0,0 +1,113 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/clk.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+#include <linux/regulator/consumer.h>
-+
-+enum voltage_change_dir {
-+	NO_CHANGE,
-+	DOWN,
-+	UP,
-+};
-+
-+struct fuse_corner_data {
-+	int ref_uV;
-+	int max_uV;
-+	int min_uV;
-+	int range_uV;
-+	/* fuse volt: closed/open loop */
-+	int volt_cloop_adjust;
-+	int volt_oloop_adjust;
-+	int max_volt_scale;
-+	int max_quot_scale;
-+	/* fuse quot */
-+	int quot_offset;
-+	int quot_scale;
-+	int quot_adjust;
-+	/* fuse quot_offset */
-+	int quot_offset_scale;
-+	int quot_offset_adjust;
-+};
-+
-+struct cpr_fuse {
-+	char *ring_osc;
-+	char *init_voltage;
-+	char *quotient;
-+	char *quotient_offset;
-+};
-+
-+struct fuse_corner {
-+	int min_uV;
-+	int max_uV;
-+	int uV;
-+	int quot;
-+	int step_quot;
-+	const struct reg_sequence *accs;
-+	int num_accs;
-+	unsigned long max_freq;
-+	u8 ring_osc_idx;
-+};
-+
-+struct corner {
-+	int min_uV;
-+	int max_uV;
-+	int uV;
-+	int last_uV;
-+	int quot_adjust;
-+	u32 save_ctl;
-+	u32 save_irq;
-+	unsigned long freq;
-+	bool is_open_loop;
-+	struct fuse_corner *fuse_corner;
-+};
-+
-+struct corner_data {
-+	unsigned int fuse_corner;
-+	unsigned long freq;
-+};
-+
-+struct acc_desc {
-+	unsigned int	enable_reg;
-+	u32		enable_mask;
-+
-+	struct reg_sequence	*config;
-+	struct reg_sequence	*settings;
-+	int			num_regs_per_fuse;
-+};
-+
-+struct cpr_acc_desc {
-+	const struct cpr_desc *cpr_desc;
-+	const struct acc_desc *acc_desc;
-+};
-+
-+
-+int cpr_read_efuse(struct device *dev, const char *cname, u32 *data);
-+int cpr_populate_ring_osc_idx(struct device *dev,
-+			      struct fuse_corner *fuse_corner,
-+			      const struct cpr_fuse *cpr_fuse,
-+			      int num_fuse_corners);
-+int cpr_read_fuse_uV(int init_v_width, int step_size_uV, int ref_uV,
-+		     int adj, int step_volt, const char *init_v_efuse,
-+		     struct device *dev);
-+const struct cpr_fuse *cpr_get_fuses(struct device *dev, int tid,
-+				     int num_fuse_corners);
-+int cpr_populate_fuse_common(struct device *dev,
-+			     struct fuse_corner_data *fdata,
-+			     const struct cpr_fuse *cpr_fuse,
-+			     struct fuse_corner *fuse_corner,
-+			     int step_volt, int init_v_width,
-+			     int init_v_step);
-+int cpr_find_initial_corner(struct device *dev, struct clk *cpu_clk,
-+			    struct corner *corners, int num_corners);
-+u32 cpr_get_fuse_corner(struct dev_pm_opp *opp, u32 tid);
-+unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
-+				     struct device *cpu_dev);
-+int cpr_calculate_scaling(const char *quot_offset,
-+			  struct device *dev,
-+			  const struct fuse_corner_data *fdata,
-+			  const struct corner *corner);
-+int cpr_interpolate(const struct corner *corner, int step_volt,
-+		    const struct fuse_corner_data *fdata);
-+int cpr_check_vreg_constraints(struct device *dev, struct regulator *vreg,
-+			       struct fuse_corner *f);
-diff --git a/drivers/soc/qcom/cpr.c b/drivers/soc/qcom/cpr.c
-index b24cc77d1889..29121567956b 100644
---- a/drivers/soc/qcom/cpr.c
-+++ b/drivers/soc/qcom/cpr.c
-@@ -25,6 +25,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/clk.h>
- #include <linux/nvmem-consumer.h>
-+#include "cpr-common.h"
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
+@@ -0,0 +1,167 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Qualcomm Core Power Reduction (CPR)
++
++description: |
++  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
++  or other device. Each OPP of a device corresponds to a "corner" that has
++  a range of valid voltages for a particular frequency. While the device is
++  running at a particular frequency, CPR monitors dynamic factors such as
++  temperature, etc. and suggests adjustments to the voltage to save power
++  and meet silicon characteristic requirements.
++
++maintainers:
++  - Niklas Cassel <nks@flawful.org>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - qcom,qcs404-cpr
++      - const: qcom,cpr
++
++  reg:
++    description: Base address and size of the RBCPR register region
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: ref
++
++  clocks:
++    items:
++      - description: CPR reference clock
++
++  vdd-apc-supply:
++    description: Autonomous Phase Control (APC) power supply
++
++  '#power-domain-cells':
++    const: 0
++
++  acc-syscon:
++    description: phandle to syscon for writing ACC settings
++
++  nvmem-cells:
++    minItems: 9
++    maxItems: 32
++    description: Cells containing the fuse corners and revision data
++
++  nvmem-cell-names:
++    minItems: 9
++    maxItems: 32
++
++  operating-points-v2: true
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clock-names
++  - clocks
++  - vdd-apc-supply
++  - "#power-domain-cells"
++  - nvmem-cells
++  - nvmem-cell-names
++  - operating-points-v2
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    cpus {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        cpu@100 {
++            compatible = "arm,cortex-a53";
++            device_type = "cpu";
++            reg = <0x100>;
++            operating-points-v2 = <&cpu_opp_table>;
++            power-domains = <&cpr>;
++            power-domain-names = "cpr";
++        };
++    };
++
++    cpu_opp_table: cpu-opp-table {
++        compatible = "operating-points-v2-kryo-cpu";
++        opp-shared;
++
++        opp-1094400000 {
++            opp-hz = /bits/ 64 <1094400000>;
++            required-opps = <&cpr_opp1>;
++        };
++        opp-1248000000 {
++            opp-hz = /bits/ 64 <1248000000>;
++            required-opps = <&cpr_opp2>;
++        };
++        opp-1401600000 {
++            opp-hz = /bits/ 64 <1401600000>;
++            required-opps = <&cpr_opp3>;
++        };
++    };
++
++    cpr_opp_table: cpr-opp-table {
++        compatible = "operating-points-v2-qcom-level";
++
++        cpr_opp1: opp1 {
++            opp-level = <1>;
++            qcom,opp-fuse-level = <1>;
++        };
++        cpr_opp2: opp2 {
++            opp-level = <2>;
++            qcom,opp-fuse-level = <2>;
++        };
++        cpr_opp3: opp3 {
++            opp-level = <3>;
++            qcom,opp-fuse-level = <3>;
++        };
++    };
++
++    power-controller@b018000 {
++        compatible = "qcom,qcs404-cpr", "qcom,cpr";
++        reg = <0x0b018000 0x1000>;
++        interrupts = <0 15 IRQ_TYPE_EDGE_RISING>;
++        clocks = <&xo_board>;
++        clock-names = "ref";
++        vdd-apc-supply = <&pms405_s3>;
++        #power-domain-cells = <0>;
++        operating-points-v2 = <&cpr_opp_table>;
++        acc-syscon = <&tcsr>;
++
++        nvmem-cells = <&cpr_efuse_quot_offset1>,
++                      <&cpr_efuse_quot_offset2>,
++                      <&cpr_efuse_quot_offset3>,
++                      <&cpr_efuse_init_voltage1>,
++                      <&cpr_efuse_init_voltage2>,
++                      <&cpr_efuse_init_voltage3>,
++                      <&cpr_efuse_quot1>,
++                      <&cpr_efuse_quot2>,
++                      <&cpr_efuse_quot3>,
++                      <&cpr_efuse_ring1>,
++                      <&cpr_efuse_ring2>,
++                      <&cpr_efuse_ring3>,
++                      <&cpr_efuse_revision>;
++        nvmem-cell-names = "cpr0_quotient_offset1",
++                           "cpr0_quotient_offset2",
++                           "cpr0_quotient_offset3",
++                           "cpr0_init_voltage1",
++                           "cpr0_init_voltage2",
++                           "cpr0_init_voltage3",
++                           "cpr0_quotient1",
++                           "cpr0_quotient2",
++                           "cpr0_quotient3",
++                           "cpr0_ring_osc1",
++                           "cpr0_ring_osc2",
++                           "cpr0_ring_osc3",
++                           "cpr0_fuse_revision";
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ad9abb42f852..66052be495fb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14763,7 +14763,7 @@ M:	Niklas Cassel <nks@flawful.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
++F:	Documentation/devicetree/bindings/soc/qcom/qcom,cpr.yaml
+ F:	drivers/soc/qcom/cpr.c
  
- /* Register Offsets for RB-CPR and Bit Definitions */
- 
-@@ -124,45 +125,12 @@
- 
- #define FUSE_REVISION_UNKNOWN		(-1)
- 
--enum voltage_change_dir {
--	NO_CHANGE,
--	DOWN,
--	UP,
--};
--
--struct cpr_fuse {
--	char *ring_osc;
--	char *init_voltage;
--	char *quotient;
--	char *quotient_offset;
--};
--
--struct fuse_corner_data {
--	int ref_uV;
--	int max_uV;
--	int min_uV;
--	int max_volt_scale;
--	int max_quot_scale;
--	/* fuse quot */
--	int quot_offset;
--	int quot_scale;
--	int quot_adjust;
--	/* fuse quot_offset */
--	int quot_offset_scale;
--	int quot_offset_adjust;
--};
--
- struct cpr_fuses {
- 	int init_voltage_step;
- 	int init_voltage_width;
- 	struct fuse_corner_data *fuse_corner_data;
- };
- 
--struct corner_data {
--	unsigned int fuse_corner;
--	unsigned long freq;
--};
--
- struct cpr_desc {
- 	unsigned int num_fuse_corners;
- 	int min_diff_quot;
-@@ -184,44 +152,6 @@ struct cpr_desc {
- 	bool reduce_to_corner_uV;
- };
- 
--struct acc_desc {
--	unsigned int	enable_reg;
--	u32		enable_mask;
--
--	struct reg_sequence	*config;
--	struct reg_sequence	*settings;
--	int			num_regs_per_fuse;
--};
--
--struct cpr_acc_desc {
--	const struct cpr_desc *cpr_desc;
--	const struct acc_desc *acc_desc;
--};
--
--struct fuse_corner {
--	int min_uV;
--	int max_uV;
--	int uV;
--	int quot;
--	int step_quot;
--	const struct reg_sequence *accs;
--	int num_accs;
--	unsigned long max_freq;
--	u8 ring_osc_idx;
--};
--
--struct corner {
--	int min_uV;
--	int max_uV;
--	int uV;
--	int last_uV;
--	int quot_adjust;
--	u32 save_ctl;
--	u32 save_irq;
--	unsigned long freq;
--	struct fuse_corner *fuse_corner;
--};
--
- struct cpr_drv {
- 	unsigned int		num_corners;
- 	unsigned int		ref_clk_khz;
-@@ -801,95 +731,16 @@ static int cpr_set_performance_state(struct generic_pm_domain *domain,
- 	return ret;
- }
- 
--static int cpr_read_efuse(struct device *dev, const char *cname, u32 *data)
--{
--	struct nvmem_cell *cell;
--	ssize_t len;
--	char *ret;
--	int i;
--
--	*data = 0;
--
--	cell = nvmem_cell_get(dev, cname);
--	if (IS_ERR(cell)) {
--		if (PTR_ERR(cell) != -EPROBE_DEFER)
--			dev_err(dev, "undefined cell %s\n", cname);
--		return PTR_ERR(cell);
--	}
--
--	ret = nvmem_cell_read(cell, &len);
--	nvmem_cell_put(cell);
--	if (IS_ERR(ret)) {
--		dev_err(dev, "can't read cell %s\n", cname);
--		return PTR_ERR(ret);
--	}
--
--	for (i = 0; i < len; i++)
--		*data |= ret[i] << (8 * i);
--
--	kfree(ret);
--	dev_dbg(dev, "efuse read(%s) = %x, bytes %zd\n", cname, *data, len);
--
--	return 0;
--}
--
--static int
--cpr_populate_ring_osc_idx(struct cpr_drv *drv)
--{
--	struct fuse_corner *fuse = drv->fuse_corners;
--	struct fuse_corner *end = fuse + drv->desc->num_fuse_corners;
--	const struct cpr_fuse *fuses = drv->cpr_fuses;
--	u32 data;
--	int ret;
--
--	for (; fuse < end; fuse++, fuses++) {
--		ret = cpr_read_efuse(drv->dev, fuses->ring_osc,
--				     &data);
--		if (ret)
--			return ret;
--		fuse->ring_osc_idx = data;
--	}
--
--	return 0;
--}
--
--static int cpr_read_fuse_uV(const struct cpr_desc *desc,
--			    const struct fuse_corner_data *fdata,
--			    const char *init_v_efuse,
--			    int step_volt,
--			    struct cpr_drv *drv)
--{
--	int step_size_uV, steps, uV;
--	u32 bits = 0;
--	int ret;
--
--	ret = cpr_read_efuse(drv->dev, init_v_efuse, &bits);
--	if (ret)
--		return ret;
--
--	steps = bits & ~BIT(desc->cpr_fuses.init_voltage_width - 1);
--	/* Not two's complement.. instead highest bit is sign bit */
--	if (bits & BIT(desc->cpr_fuses.init_voltage_width - 1))
--		steps = -steps;
--
--	step_size_uV = desc->cpr_fuses.init_voltage_step;
--
--	uV = fdata->ref_uV + steps * step_size_uV;
--	return DIV_ROUND_UP(uV, step_volt) * step_volt;
--}
--
- static int cpr_fuse_corner_init(struct cpr_drv *drv)
- {
- 	const struct cpr_desc *desc = drv->desc;
--	const struct cpr_fuse *fuses = drv->cpr_fuses;
-+	const struct cpr_fuse *cpr_fuse = drv->cpr_fuses;
- 	const struct acc_desc *acc_desc = drv->acc_desc;
--	int i;
--	unsigned int step_volt;
- 	struct fuse_corner_data *fdata;
- 	struct fuse_corner *fuse, *end;
--	int uV;
- 	const struct reg_sequence *accs;
--	int ret;
-+	unsigned int step_volt;
-+	int i, ret;
- 
- 	accs = acc_desc->settings;
- 
-@@ -902,24 +753,16 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 	end = &fuse[desc->num_fuse_corners - 1];
- 	fdata = desc->cpr_fuses.fuse_corner_data;
- 
--	for (i = 0; fuse <= end; fuse++, fuses++, i++, fdata++) {
--		/*
--		 * Update SoC voltages: platforms might choose a different
--		 * regulators than the one used to characterize the algorithms
--		 * (ie, init_voltage_step).
--		 */
--		fdata->min_uV = roundup(fdata->min_uV, step_volt);
--		fdata->max_uV = roundup(fdata->max_uV, step_volt);
--
--		/* Populate uV */
--		uV = cpr_read_fuse_uV(desc, fdata, fuses->init_voltage,
--				      step_volt, drv);
--		if (uV < 0)
--			return uV;
-+	for (i = 0; fuse <= end; fuse++, cpr_fuse++, i++, fdata++) {
-+		ret = cpr_populate_fuse_common(
-+					drv->dev, fdata, cpr_fuse,
-+					fuse, step_volt,
-+					desc->cpr_fuses.init_voltage_width,
-+					desc->cpr_fuses.init_voltage_step);
-+		if (ret)
-+			return ret;
- 
--		fuse->min_uV = fdata->min_uV;
--		fuse->max_uV = fdata->max_uV;
--		fuse->uV = clamp(uV, fuse->min_uV, fuse->max_uV);
-+		fuse->step_quot = desc->step_quot[fuse->ring_osc_idx];
- 
- 		if (fuse == end) {
- 			/*
-@@ -931,16 +774,6 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 			end->max_uV = max(end->max_uV, end->uV);
- 		}
- 
--		/* Populate target quotient by scaling */
--		ret = cpr_read_efuse(drv->dev, fuses->quotient, &fuse->quot);
--		if (ret)
--			return ret;
--
--		fuse->quot *= fdata->quot_scale;
--		fuse->quot += fdata->quot_offset;
--		fuse->quot += fdata->quot_adjust;
--		fuse->step_quot = desc->step_quot[fuse->ring_osc_idx];
--
- 		/* Populate acc settings */
- 		fuse->accs = accs;
- 		fuse->num_accs = acc_desc->num_regs_per_fuse;
-@@ -957,25 +790,9 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 		else if (fuse->uV < fuse->min_uV)
- 			fuse->uV = fuse->min_uV;
- 
--		ret = regulator_is_supported_voltage(drv->vdd_apc,
--						     fuse->min_uV,
--						     fuse->min_uV);
--		if (!ret) {
--			dev_err(drv->dev,
--				"min uV: %d (fuse corner: %d) not supported by regulator\n",
--				fuse->min_uV, i);
--			return -EINVAL;
--		}
--
--		ret = regulator_is_supported_voltage(drv->vdd_apc,
--						     fuse->max_uV,
--						     fuse->max_uV);
--		if (!ret) {
--			dev_err(drv->dev,
--				"max uV: %d (fuse corner: %d) not supported by regulator\n",
--				fuse->max_uV, i);
--			return -EINVAL;
--		}
-+		ret = cpr_check_vreg_constraints(drv->dev, drv->vdd_apc, fuse);
-+		if (ret)
-+			return ret;
- 
- 		dev_dbg(drv->dev,
- 			"fuse corner %d: [%d %d %d] RO%hhu quot %d squot %d\n",
-@@ -986,126 +803,6 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 	return 0;
- }
- 
--static int cpr_calculate_scaling(const char *quot_offset,
--				 struct cpr_drv *drv,
--				 const struct fuse_corner_data *fdata,
--				 const struct corner *corner)
--{
--	u32 quot_diff = 0;
--	unsigned long freq_diff;
--	int scaling;
--	const struct fuse_corner *fuse, *prev_fuse;
--	int ret;
--
--	fuse = corner->fuse_corner;
--	prev_fuse = fuse - 1;
--
--	if (quot_offset) {
--		ret = cpr_read_efuse(drv->dev, quot_offset, &quot_diff);
--		if (ret)
--			return ret;
--
--		quot_diff *= fdata->quot_offset_scale;
--		quot_diff += fdata->quot_offset_adjust;
--	} else {
--		quot_diff = fuse->quot - prev_fuse->quot;
--	}
--
--	freq_diff = fuse->max_freq - prev_fuse->max_freq;
--	freq_diff /= 1000000; /* Convert to MHz */
--	scaling = 1000 * quot_diff / freq_diff;
--	return min(scaling, fdata->max_quot_scale);
--}
--
--static int cpr_interpolate(const struct corner *corner, int step_volt,
--			   const struct fuse_corner_data *fdata)
--{
--	unsigned long f_high, f_low, f_diff;
--	int uV_high, uV_low, uV;
--	u64 temp, temp_limit;
--	const struct fuse_corner *fuse, *prev_fuse;
--
--	fuse = corner->fuse_corner;
--	prev_fuse = fuse - 1;
--
--	f_high = fuse->max_freq;
--	f_low = prev_fuse->max_freq;
--	uV_high = fuse->uV;
--	uV_low = prev_fuse->uV;
--	f_diff = fuse->max_freq - corner->freq;
--
--	/*
--	 * Don't interpolate in the wrong direction. This could happen
--	 * if the adjusted fuse voltage overlaps with the previous fuse's
--	 * adjusted voltage.
--	 */
--	if (f_high <= f_low || uV_high <= uV_low || f_high <= corner->freq)
--		return corner->uV;
--
--	temp = f_diff * (uV_high - uV_low);
--	do_div(temp, f_high - f_low);
--
--	/*
--	 * max_volt_scale has units of uV/MHz while freq values
--	 * have units of Hz.  Divide by 1000000 to convert to.
--	 */
--	temp_limit = f_diff * fdata->max_volt_scale;
--	do_div(temp_limit, 1000000);
--
--	uV = uV_high - min(temp, temp_limit);
--	return roundup(uV, step_volt);
--}
--
--static unsigned int cpr_get_fuse_corner(struct dev_pm_opp *opp)
--{
--	struct device_node *np;
--	unsigned int fuse_corner = 0;
--
--	np = dev_pm_opp_get_of_node(opp);
--	if (of_property_read_u32(np, "qcom,opp-fuse-level", &fuse_corner))
--		pr_err("%s: missing 'qcom,opp-fuse-level' property\n",
--		       __func__);
--
--	of_node_put(np);
--
--	return fuse_corner;
--}
--
--static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
--					    struct device *cpu_dev)
--{
--	u64 rate = 0;
--	struct device_node *ref_np;
--	struct device_node *desc_np;
--	struct device_node *child_np = NULL;
--	struct device_node *child_req_np = NULL;
--
--	desc_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
--	if (!desc_np)
--		return 0;
--
--	ref_np = dev_pm_opp_get_of_node(ref);
--	if (!ref_np)
--		goto out_ref;
--
--	do {
--		of_node_put(child_req_np);
--		child_np = of_get_next_available_child(desc_np, child_np);
--		child_req_np = of_parse_phandle(child_np, "required-opps", 0);
--	} while (child_np && child_req_np != ref_np);
--
--	if (child_np && child_req_np == ref_np)
--		of_property_read_u64(child_np, "opp-hz", &rate);
--
--	of_node_put(child_req_np);
--	of_node_put(child_np);
--	of_node_put(ref_np);
--out_ref:
--	of_node_put(desc_np);
--
--	return (unsigned long) rate;
--}
--
- static int cpr_corner_init(struct cpr_drv *drv)
- {
- 	const struct cpr_desc *desc = drv->desc;
-@@ -1143,7 +840,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
- 		opp = dev_pm_opp_find_level_exact(&drv->pd.dev, level);
- 		if (IS_ERR(opp))
- 			return -EINVAL;
--		fc = cpr_get_fuse_corner(opp);
-+		fc = cpr_get_fuse_corner(opp, 0);
- 		if (!fc) {
- 			dev_pm_opp_put(opp);
- 			return -EINVAL;
-@@ -1219,7 +916,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
- 		corner->uV = fuse->uV;
- 
- 		if (prev_fuse && cdata[i - 1].freq == prev_fuse->max_freq) {
--			scaling = cpr_calculate_scaling(quot_offset, drv,
-+			scaling = cpr_calculate_scaling(quot_offset, drv->dev,
- 							fdata, corner);
- 			if (scaling < 0)
- 				return scaling;
-@@ -1257,47 +954,6 @@ static int cpr_corner_init(struct cpr_drv *drv)
- 	return 0;
- }
- 
--static const struct cpr_fuse *cpr_get_fuses(struct cpr_drv *drv)
--{
--	const struct cpr_desc *desc = drv->desc;
--	struct cpr_fuse *fuses;
--	int i;
--
--	fuses = devm_kcalloc(drv->dev, desc->num_fuse_corners,
--			     sizeof(struct cpr_fuse),
--			     GFP_KERNEL);
--	if (!fuses)
--		return ERR_PTR(-ENOMEM);
--
--	for (i = 0; i < desc->num_fuse_corners; i++) {
--		char tbuf[32];
--
--		snprintf(tbuf, 32, "cpr_ring_osc%d", i + 1);
--		fuses[i].ring_osc = devm_kstrdup(drv->dev, tbuf, GFP_KERNEL);
--		if (!fuses[i].ring_osc)
--			return ERR_PTR(-ENOMEM);
--
--		snprintf(tbuf, 32, "cpr_init_voltage%d", i + 1);
--		fuses[i].init_voltage = devm_kstrdup(drv->dev, tbuf,
--						     GFP_KERNEL);
--		if (!fuses[i].init_voltage)
--			return ERR_PTR(-ENOMEM);
--
--		snprintf(tbuf, 32, "cpr_quotient%d", i + 1);
--		fuses[i].quotient = devm_kstrdup(drv->dev, tbuf, GFP_KERNEL);
--		if (!fuses[i].quotient)
--			return ERR_PTR(-ENOMEM);
--
--		snprintf(tbuf, 32, "cpr_quotient_offset%d", i + 1);
--		fuses[i].quotient_offset = devm_kstrdup(drv->dev, tbuf,
--							GFP_KERNEL);
--		if (!fuses[i].quotient_offset)
--			return ERR_PTR(-ENOMEM);
--	}
--
--	return fuses;
--}
--
- static void cpr_set_loop_allowed(struct cpr_drv *drv)
- {
- 	drv->loop_disabled = false;
-@@ -1329,54 +985,6 @@ static int cpr_init_parameters(struct cpr_drv *drv)
- 	return 0;
- }
- 
--static int cpr_find_initial_corner(struct cpr_drv *drv)
--{
--	unsigned long rate;
--	const struct corner *end;
--	struct corner *iter;
--	unsigned int i = 0;
--
--	if (!drv->cpu_clk) {
--		dev_err(drv->dev, "cannot get rate from NULL clk\n");
--		return -EINVAL;
--	}
--
--	end = &drv->corners[drv->num_corners - 1];
--	rate = clk_get_rate(drv->cpu_clk);
--
--	/*
--	 * Some bootloaders set a CPU clock frequency that is not defined
--	 * in the OPP table. When running at an unlisted frequency,
--	 * cpufreq_online() will change to the OPP which has the lowest
--	 * frequency, at or above the unlisted frequency.
--	 * Since cpufreq_online() always "rounds up" in the case of an
--	 * unlisted frequency, this function always "rounds down" in case
--	 * of an unlisted frequency. That way, when cpufreq_online()
--	 * triggers the first ever call to cpr_set_performance_state(),
--	 * it will correctly determine the direction as UP.
--	 */
--	for (iter = drv->corners; iter <= end; iter++) {
--		if (iter->freq > rate)
--			break;
--		i++;
--		if (iter->freq == rate) {
--			drv->corner = iter;
--			break;
--		}
--		if (iter->freq < rate)
--			drv->corner = iter;
--	}
--
--	if (!drv->corner) {
--		dev_err(drv->dev, "boot up corner not found\n");
--		return -EINVAL;
--	}
--
--	dev_dbg(drv->dev, "boot up perf state: %u\n", i);
--
--	return 0;
--}
--
- static const struct cpr_desc qcs404_cpr_desc = {
- 	.num_fuse_corners = 3,
- 	.min_diff_quot = CPR_FUSE_MIN_QUOT_DIFF,
-@@ -1564,8 +1172,9 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
- 	if (ret)
- 		goto unlock;
- 
--	ret = cpr_find_initial_corner(drv);
--	if (ret)
-+	ret = cpr_find_initial_corner(drv->dev, drv->cpu_clk, drv->corners,
-+				      drv->num_corners);
-+	if (ret < 0)
- 		goto unlock;
- 
- 	if (acc_desc->config)
-@@ -1650,6 +1259,7 @@ static int cpr_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	struct device *dev = &pdev->dev;
- 	struct cpr_drv *drv;
-+	const struct cpr_desc *desc;
- 	int irq, ret;
- 	const struct cpr_acc_desc *data;
- 	struct device_node *np;
-@@ -1665,6 +1275,7 @@ static int cpr_probe(struct platform_device *pdev)
- 	drv->dev = dev;
- 	drv->desc = data->cpr_desc;
- 	drv->acc_desc = data->acc_desc;
-+	desc = drv->desc;
- 
- 	drv->fuse_corners = devm_kcalloc(dev, drv->desc->num_fuse_corners,
- 					 sizeof(*drv->fuse_corners),
-@@ -1705,11 +1316,13 @@ static int cpr_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	drv->cpr_fuses = cpr_get_fuses(drv);
-+	drv->cpr_fuses = cpr_get_fuses(drv->dev, 0, desc->num_fuse_corners);
- 	if (IS_ERR(drv->cpr_fuses))
- 		return PTR_ERR(drv->cpr_fuses);
- 
--	ret = cpr_populate_ring_osc_idx(drv);
-+	ret = cpr_populate_ring_osc_idx(drv->dev, drv->fuse_corners,
-+					drv->cpr_fuses,
-+					desc->num_fuse_corners);
- 	if (ret)
- 		return ret;
- 
+ QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096
 -- 
 2.29.2
 
