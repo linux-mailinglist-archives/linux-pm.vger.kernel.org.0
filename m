@@ -2,110 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30D22F3336
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 15:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CD82F3388
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 16:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728166AbhALOtY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 09:49:24 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:36768 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726241AbhALOtY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 09:49:24 -0500
-Received: by mail-ot1-f51.google.com with SMTP id d20so2482248otl.3;
-        Tue, 12 Jan 2021 06:49:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R65jgJ9ZXA6KLRUaL143AJzdpFEYKDU6ZEDoHXUUWuk=;
-        b=WKLfL0IGoZ95VBhxdscMxzsP6g+H50HF0Xtr89dmjE20KnEMONPufI87oif7xdQHpz
-         zDm8U9d6ff/r7hyH/+Th4ENtzbHEzms5wGukLX8sE6RkGlzoXIGZnMEUzM8HOPeAXUXc
-         6+WOaWULHqHetUbtlWxim2hnqQPFeVf0goOIKJBG2BLK8uviOxAFWs6+kppt2VYhzXEl
-         dDhEps9M//FX9AB6KWMp8BW1w5RLseSqSqB/PIao6khDM6Ff/3T92HWX2vUMRICIKWrq
-         PpAWsDvmHqSBdFcZt+1QAmeIMaMxLOQGvTfcU2QRH/o9EXJo82FPuI1PX0ok1q+enLTD
-         zqwg==
-X-Gm-Message-State: AOAM532CpNAL4o0f6hvznov56GbbO0rJL0KaVsv6wlqxD+8Wpry6lZeh
-        qoAF1Snba638srXcIANw2g==
-X-Google-Smtp-Source: ABdhPJz47DeFCqd1oQBxWpdz0vtjnHrb9OMZhE+QbK/kAhF8YobPG+Mkx0lWOxRC/NuYKWzUBCBJpQ==
-X-Received: by 2002:a9d:71cf:: with SMTP id z15mr2992431otj.259.1610462923140;
-        Tue, 12 Jan 2021 06:48:43 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n13sm654071otk.58.2021.01.12.06.48.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 06:48:42 -0800 (PST)
-Received: (nullmailer pid 329242 invoked by uid 1000);
-        Tue, 12 Jan 2021 14:48:41 -0000
-Date:   Tue, 12 Jan 2021 08:48:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v11 5/7] dt-bindings: soc: mediatek: add mt8192 svs
- dt-bindings
-Message-ID: <20210112144841.GA327919@robh.at.kernel.org>
-References: <20210107024356.583-1-roger.lu@mediatek.com>
- <20210107024356.583-6-roger.lu@mediatek.com>
+        id S2389778AbhALPC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 10:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387526AbhALPC0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 10:02:26 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED33C061575;
+        Tue, 12 Jan 2021 07:01:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0sGgaWxUWbmYiELyfxS8f48aZu+eQped+nqanx8s+sw=; b=ABUwrMYAkyESdjSWcSwybKocQa
+        7Jj9wYYXjerOEETCCXJZxxcA5FN/6ByXmf9Zr3xOKZlqoNPmwMGm+1+dNXxpL7bBrwZl86FbiUDku
+        Em3Ts8uY6lPcEW5GUlGQOViiYmO4WPlS6MnLSU4SleZW/NEs6tHgHljKafTwiRA5g/RZHQmzSJOc9
+        D7paS6Gm5WbiDG2L/pifQ6JAVQNRNIESVpmt1KTh//QBCqCzqjZbWX4JuqCitujoG8e9zh4MmV0ls
+        zQiqoQQise/bRDHPUQWDwPbgS+FQqGS21ehKDOTCkObRrkXa0DTCrec4gCFwn1lHwqQhMyQjoEhAS
+        IGnpYlBQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1kzLAR-004vhr-U3; Tue, 12 Jan 2021 15:01:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 19F70301A32;
+        Tue, 12 Jan 2021 16:01:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0647E20C228EB; Tue, 12 Jan 2021 16:01:07 +0100 (CET)
+Date:   Tue, 12 Jan 2021 16:01:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        x86 Maintainers <x86@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: Re: [PATCH] x86: PM: Register syscore_ops for scale invariance
+Message-ID: <X/25ssA2scFSu+3/@hirez.programming.kicks-ass.net>
+References: <1803209.Mvru99baaF@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210107024356.583-6-roger.lu@mediatek.com>
+In-Reply-To: <1803209.Mvru99baaF@kreacher>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 10:43:54AM +0800, Roger Lu wrote:
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> ---
->  .../devicetree/bindings/soc/mediatek/mtk-svs.yaml        | 9 +++++++++
->  1 file changed, 9 insertions(+)
+On Fri, Jan 08, 2021 at 07:05:59PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> index bb8c345a0c0a..2e61b07921aa 100644
-> --- a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> @@ -22,6 +22,7 @@ properties:
->    compatible:
->      enum:
->        - mediatek,mt8183-svs
-> +      - mediatek,mt8192-svs
->  
->    reg:
->      description: Address range of the MTK SVS controller.
-> @@ -47,6 +48,14 @@ properties:
->        - const: svs-calibration-data
->        - const: t-calibration-data
->  
-> +  resets:
-> +    description:
-> +      svs reset control.
-
-How many?
-
-And you can drop the description given there's only 1.
-
-> +
-> +  reset-names:
-> +    items:
-> +      - const: svs_rst
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.18.0
+> On x86 scale invariace tends to be disabled during resume from
+> suspend-to-RAM, because the MPERF or APERF MSR values are not as
+> expected then due to updates taking place after the platform
+> firmware has been invoked to complete the suspend transition.
 > 
+> That, of course, is not desirable, especially if the schedutil
+> scaling governor is in use, because the lack of scale invariance
+> causes it to be less reliable.
+> 
+> To counter that effect, modify init_freq_invariance() to register
+> a syscore_ops object for scale invariance with the ->resume callback
+> pointing to init_counter_refs() which will run on the CPU starting
+> the resume transition (the other CPUs will be taken care of the
+> "online" operations taking place later).
+> 
+> Fixes: e2b0d619b400 ("x86, sched: check for counters overflow in frequency invariant accounting")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Thanks!, I'll take it through the sched/urgent tree?
