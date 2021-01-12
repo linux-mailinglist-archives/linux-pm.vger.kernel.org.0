@@ -2,111 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3782F323D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 14:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37BB2F329A
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 15:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732308AbhALNxm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 08:53:42 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:43307 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732266AbhALNxl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 08:53:41 -0500
-Received: by mail-ot1-f43.google.com with SMTP id q25so2265016otn.10;
-        Tue, 12 Jan 2021 05:53:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Uv3tHz4SVDQ8ChUOK2jqRxCBNv/7IX85UqJB4CJwco=;
-        b=R5FOtwxQS2aZioOK9x350fo1IjWDBgeWLUtY5Z0ZIUB0Bs7QvsMj/Xgw6MYgDEyc5G
-         guM4D5U/n9gwgD+OR+dqzcGINfn8BX2AE5L2rvL5G+G0/4EmASE+LW0CE8SNz5vycgVg
-         xnZhcU8zHLkxxGI0AgoE155XDTVlxtOi9r2My4RExTFXYZMXPVX0weZ9e18CAFvFWaSi
-         PJCHmHdR6G+IaGo6pLF+DAETT/hGLZ6VGeUygK8Us7pRGuwGCaTXuFyt83PNn84Q6B4r
-         h5XjKV/5FRO8rZrA5h4JIaPqiT4oSuhOcgpT7csxMyOUInnuO23usQf/E9+d2HbISelW
-         VjfA==
-X-Gm-Message-State: AOAM531kLxVfmZmwA1En4gUdmNQXJTQ1uRhg4OhWWCWg+/aQWMVCoD+T
-        Mrx3x4ngFipyf4azxk00CdfWQN12LONG0rdxAoE=
-X-Google-Smtp-Source: ABdhPJw8z6PmPcN4jbSqyN/xmXo4Xqs1o5eZdsLVM8HqAMwOmnWm41qyyZPPCklrikWgkDtdJUMOZvfHD8134QhgGDM=
-X-Received: by 2002:a9d:7191:: with SMTP id o17mr2837075otj.321.1610459581014;
- Tue, 12 Jan 2021 05:53:01 -0800 (PST)
+        id S2387797AbhALOFw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 09:05:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730158AbhALOFv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Jan 2021 09:05:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A42AE22CE3;
+        Tue, 12 Jan 2021 14:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610460310;
+        bh=YIZSFd4ngdBu3d+V+tCrhUDlUF7epBaWbFsCZCkzGJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S+ljzYYL3QMPhhApX5VwhFNyceVrA27EHM0FStNvwzUR1cQ7GFOIPOcEYTO0fdDaA
+         Kj7O7lmy0yWuWK+AZisJL2LrmlkoM/j63MxdM7S787vyvaT4LD71jTgKDStmGrzxuQ
+         L0/NqqEzqp6wU8ndgl0gsmTuxMJL2Vz98cUyPebone1iHGoyH3HLXEv/yY8kVzE9/C
+         3JxXpkug6tFhHh2/KJ9Ii5coAgelm+gr542ObqppAE3GEOphOgXDNiAJFxaofg4s3u
+         N68pjfATVrUXDVMPlwIcydiug5iK5JLd2AIK2alwIqlmLf7Si7Qy4TLd2kqk9nbCgG
+         c2IYKYoLXP3bw==
+Date:   Tue, 12 Jan 2021 14:05:00 +0000
+From:   Will Deacon <will@kernel.org>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        msalter@redhat.com, jacquiot.aurelien@gmail.com,
+        ysato@users.sourceforge.jp, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, ley.foon.tan@intel.com,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
+        dalias@libc.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        sstabellini@kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        christian@brauner.io, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] arch: consolidate pm_power_off callback
+Message-ID: <20210112140459.GC9277@willie-the-truck>
+References: <20201227140129.19932-1-info@metux.net>
 MIME-Version: 1.0
-References: <20210112052127.4557-1-yu.c.chen@intel.com>
-In-Reply-To: <20210112052127.4557-1-yu.c.chen@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Jan 2021 14:52:50 +0100
-Message-ID: <CAJZ5v0i5jdp6YcpvVuLyxGePRAsFPUPL6=iQC7PEFSzjNRUJLw@mail.gmail.com>
-Subject: Re: [PATCH][v3] cpufreq: intel_pstate: Get percpu max freq via HWP
- MSR register if available
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201227140129.19932-1-info@metux.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 6:19 AM Chen Yu <yu.c.chen@intel.com> wrote:
->
-> Currently when turbo is disabled(either by BIOS or by the user), the
-> intel_pstate driver reads the max non-turbo frequency from the package-wide
-> MSR_PLATFORM_INFO(0xce) register. However on asymmetric platforms it is
-> possible in theory that small and big core with HWP enabled might have
-> different max non-turbo cpu frequency, because the MSR_HWP_CAPABILITIES
-> is percpu scope according to Intel Software Developer Manual.
->
-> The turbo max freq is already percpu basis in current code, thus make
-> similar change to the max non-turbo frequency as well.
->
-> Reported-by: Wendy Wang <wendy.wang@intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
-> v2: Per Srinivas' suggestion, avoid duplicated assignment of max_pstate.
-> v3: Per Rafael's suggestion, do not add new argument in intel_pstate_get_hwp_max()
->     to avoid redundant local vars.
->     Per Srinivas' suggestion, refined the commit log to reflect the 'non-turbo'
->     max frequency.
+On Sun, Dec 27, 2020 at 03:01:28PM +0100, Enrico Weigelt, metux IT consult wrote:
+> Move the pm_power_off callback into one global place and also add an
+> function for conditionally calling it (when not NULL), in order to remove
+> code duplication in all individual archs.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 
-Looks good now, thanks!
+[...]
 
-Is it needed in -stable and if so, which -stable series should it go into?
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index eb1b15850761..ec4cd66dd1ae 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -53,6 +53,16 @@ int reboot_force;
+>  void (*pm_power_off_prepare)(void);
+>  EXPORT_SYMBOL_GPL(pm_power_off_prepare);
+>  
+> +void (*pm_power_off)(void);
+> +EXPORT_SYMBOL_GPL(pm_power_off);
+> +
+> +void do_power_off(void)
+> +{
+> +	if (pm_power_off)
+> +		pm_power_off();
+> +}
+> +EXPORT_SYMBOL_GPL(do_power_off);
 
-> --
->  drivers/cpufreq/intel_pstate.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index eaf32ef7a030..99e180f644c3 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1724,11 +1724,9 @@ static void intel_pstate_max_within_limits(struct cpudata *cpu)
->  static void intel_pstate_get_cpu_pstates(struct cpudata *cpu)
->  {
->         cpu->pstate.min_pstate = pstate_funcs.get_min();
-> -       cpu->pstate.max_pstate = pstate_funcs.get_max();
->         cpu->pstate.max_pstate_physical = pstate_funcs.get_max_physical();
->         cpu->pstate.turbo_pstate = pstate_funcs.get_turbo();
->         cpu->pstate.scaling = pstate_funcs.get_scaling();
-> -       cpu->pstate.max_freq = cpu->pstate.max_pstate * cpu->pstate.scaling;
->
->         if (hwp_active && !hwp_mode_bdw) {
->                 unsigned int phy_max, current_max;
-> @@ -1736,9 +1734,12 @@ static void intel_pstate_get_cpu_pstates(struct cpudata *cpu)
->                 intel_pstate_get_hwp_max(cpu, &phy_max, &current_max);
->                 cpu->pstate.turbo_freq = phy_max * cpu->pstate.scaling;
->                 cpu->pstate.turbo_pstate = phy_max;
-> +               cpu->pstate.max_pstate = HWP_GUARANTEED_PERF(READ_ONCE(cpu->hwp_cap_cached));
->         } else {
->                 cpu->pstate.turbo_freq = cpu->pstate.turbo_pstate * cpu->pstate.scaling;
-> +               cpu->pstate.max_pstate = pstate_funcs.get_max();
->         }
-> +       cpu->pstate.max_freq = cpu->pstate.max_pstate * cpu->pstate.scaling;
->
->         if (pstate_funcs.get_aperf_mperf_shift)
->                 cpu->aperf_mperf_shift = pstate_funcs.get_aperf_mperf_shift();
-> --
-> 2.17.1
->
+Could this just live as a static inline in pm.h to avoid having to export
+the extra symbol?
+
+Will
