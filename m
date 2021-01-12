@@ -2,115 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD3C2F2DC9
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 12:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBA22F2DCA
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 12:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727463AbhALLUR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 06:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S1727111AbhALLVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 06:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727439AbhALLUQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 06:20:16 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB076C061794
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 03:19:35 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id c12so1193753pfo.10
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 03:19:35 -0800 (PST)
+        with ESMTP id S1727003AbhALLVY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 06:21:24 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC6BC061794
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 03:20:44 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id b8so1255579plx.0
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 03:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=5LM7Ut6zxNflOeB9Tu5vwRCaSIoaMf2EWJoyZXprr/E=;
-        b=e+mOIRrlD1KehNg+JVuaOY1EyYcVTXUxKF6xeCqvF3Z7tLh0WWfX+uFpqJNOEAcKce
-         COBZIWDuZREJdjM/E7aRClLchqqn5uOopesQ4XzTQolfBcqtW364vz3Z0cRggy0q3Nii
-         8rekcVLhjrvsj43geeQZ2LmFt8BNs10aBAo2T5NEPMzVFos+8RUE8Bo0wzw43KqvviPN
-         gBx++6Yx69ghFKYeusRaBJqvtfoV3o7TkbmmUkfvP6eBZYKR4ikshv8x9/dzw7+7r5IO
-         GJSmpKSXLOJwHZPXGRFfnCF6BK2UMV/ym/CD4b6PyI10hzZDp52PAh54A+IpAPpiaj6M
-         mgTQ==
+        bh=gO/ONvJS/lYwOKo2vZirVkiqYC7odDjoVLCIXEUYZEU=;
+        b=qMgOdEw2cCptoaMHXp/d6/waoBiD3/s/aN/YTBAtSeVjsdGeh9/k9M/Njt9svovqcX
+         /YGrm/1PCp2+UU77yOqMzb7BukB70/o8hSs5KXuEiSS/X/AxOrm3Vsz5q/2Hw9Vowvdw
+         eySX01PcKwwP8mWMZxgekw0cB5pEQE9en5WyAYpIn7O32cVk+Ydx5vOicZnkPb0QXw8f
+         5GtcAGmuRZQ0z6KRB21FlmSLzBwwwBi3qTT0a+M2eJic/4xqpm8p+kHdbMX1vMsOiU0R
+         r8nOCU++G/lYH+D5eFPU5D0GvnJD5VjuRDl7o1+yLQ0YLiFzo+TGujK5xM+3nYiqd9Js
+         aJlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5LM7Ut6zxNflOeB9Tu5vwRCaSIoaMf2EWJoyZXprr/E=;
-        b=f9iw+BW2lBsHePjKNtVlaN/LB+p6WKPalXLeGEmaEMuWBfdQGpipnl6IhASWKz8b8O
-         /218pFbVRlGm+XTtXVXgZDAlb3ZtHi3kl1I/faqLxYYW7t/Yg8Kd4rFSxuqgBaR1s9Nt
-         Suav42F7xs3AiVhre8vN7bVQb54kS6pMpBxhjyz8eBsJkTKlvSJ/5AW+8qkDuCkNXxdV
-         7VQuw8apHlmLLPZ/l5jCJhPdHnD1K2z8o+15DLsFqiQu28H4D87x2Rl1Lblp3bmiezZG
-         +mEBz8+JjHI/V97sOgw8vZrCKZjssIWy+woD1FZMdYsbJRdF1QfsOKDdF6YUgEMohrN1
-         L+VQ==
-X-Gm-Message-State: AOAM532/J+eAUH6n/EjZ862xnPw+Kzd30WgM/rmLJ6aDo7o4hdVG3m29
-        +2Gf8JS2ruwNDgdMkABvQFnL1A==
-X-Google-Smtp-Source: ABdhPJz1t5A+Hn8D1SJ4cDzyUxtyS07h6peXlXUSHts3pcfTI1hbun/9nRaqWGe/75ED+CIDtGbHTA==
-X-Received: by 2002:a63:a12:: with SMTP id 18mr4230906pgk.140.1610450375352;
-        Tue, 12 Jan 2021 03:19:35 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id c10sm3007178pfj.54.2021.01.12.03.19.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Jan 2021 03:19:34 -0800 (PST)
-Date:   Tue, 12 Jan 2021 19:19:29 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-hw: add missing devm_release_mem_region()
- call
-Message-ID: <20210112111928.GB2479@dragon>
-References: <20210112095236.20515-1-shawn.guo@linaro.org>
- <20210112101449.cmkjaegukxut3tym@vireshk-i7>
+        bh=gO/ONvJS/lYwOKo2vZirVkiqYC7odDjoVLCIXEUYZEU=;
+        b=DWxPiapdGMpJETDg5dB3O8QEfyRkQeCqL7E7X6l6ekqTmM/OrUJupAlyfOLfKXKzlZ
+         ced7I5HiiYA10N+mxroggSdpn1cEUDDhYvpzuusamDz0uJ57MSjOQwVAlhdOagQei9Xs
+         IdTULUzFgcCC8FxOPjP4yaCEDFN4KzBBr0m7rIN3AEvZmkiQM58xN2f2WiHXk7BlydhB
+         AP3WtsjoIgrqbMT7vIO2JdD/5cTZ9SGB5yNpUOs4+ZJ/msc0Ybp3gkm/Nujmkcc22Eh3
+         ATfYVLlI57E/lpXZJnPuiH8hnVM0tW3RVgVq43tMVgIx9atSp0WBkrhYb2GIkT2nQ/kc
+         xumw==
+X-Gm-Message-State: AOAM5307Od5IWxbe/ahI1IDZseFaO2IBFKFXn1IzMLJVE2eVDatZYiGQ
+        MVhMklEkjv/wLJB5dpm6JTLjJw==
+X-Google-Smtp-Source: ABdhPJwKshbH4LDb8t63vzxoPC1twvdvEkbnAXjZF9InmvqfQx5PcVzfmoqZzqW484nfpIIu676yug==
+X-Received: by 2002:a17:902:8d8d:b029:dc:4609:58a9 with SMTP id v13-20020a1709028d8db02900dc460958a9mr4669839plo.27.1610450443973;
+        Tue, 12 Jan 2021 03:20:43 -0800 (PST)
+Received: from localhost ([122.172.85.111])
+        by smtp.gmail.com with ESMTPSA id h18sm2875586pfo.172.2021.01.12.03.20.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 12 Jan 2021 03:20:43 -0800 (PST)
+Date:   Tue, 12 Jan 2021 16:50:41 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com, rjw@rjwysocki.net,
+        vireshk@kernel.org, cristian.marussi@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com
+Subject: Re: [PATCH v6 3/4] scmi-cpufreq: Get opp_shared_cpus from opp-v2 for
+ EM
+Message-ID: <20210112112041.7kjjrrgsqfbuq5mh@vireshk-i7>
+References: <20210111154524.20196-1-nicola.mazzucato@arm.com>
+ <20210111154524.20196-4-nicola.mazzucato@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210112101449.cmkjaegukxut3tym@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210111154524.20196-4-nicola.mazzucato@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 03:44:49PM +0530, Viresh Kumar wrote:
-> On 12-01-21, 17:52, Shawn Guo wrote:
-> > On SDM845/850, running the following commands to put all cores in
-> > freq-domain1 offline and then get one core back online, there will be
-> > a request region error seen from qcom-hw driver.
-> > 
-> > $ echo 0 > /sys/devices/system/cpu/cpu4/online
-> > $ echo 0 > /sys/devices/system/cpu/cpu5/online
-> > $ echo 0 > /sys/devices/system/cpu/cpu6/online
-> > $ echo 0 > /sys/devices/system/cpu/cpu7/online
-> > $ echo 1 > /sys/devices/system/cpu/cpu4/online
-> > 
-> > [ 3395.915416] CPU4: shutdown
-> > [ 3395.938185] psci: CPU4 killed (polled 0 ms)
-> > [ 3399.071424] CPU5: shutdown
-> > [ 3399.094316] psci: CPU5 killed (polled 0 ms)
-> > [ 3402.139358] CPU6: shutdown
-> > [ 3402.161705] psci: CPU6 killed (polled 0 ms)
-> > [ 3404.742939] CPU7: shutdown
-> > [ 3404.765592] psci: CPU7 killed (polled 0 ms)
-> > [ 3411.492274] Detected VIPT I-cache on CPU4
-> > [ 3411.492337] GICv3: CPU4: found redistributor 400 region 0:0x0000000017ae0000
-> > [ 3411.492448] CPU4: Booted secondary processor 0x0000000400 [0x516f802d]
-> > [ 3411.503654] qcom-cpufreq-hw 17d43000.cpufreq: can't request region for resource [mem 0x17d45800-0x17d46bff]
-> > 
-> > The cause is that the memory region requested in .init hook doesn't get
-> > released in .exit hook, and the subsequent call to .init will always fail
-> > on this error.  Let's break down the devm_platform_ioremap_resource()
-> > call a bit, so that we can have the resource pointer to release memory
-> > region from .exit hook.
-> > 
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-hw.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
+On 11-01-21, 15:45, Nicola Mazzucato wrote:
+> By design, SCMI performance domains define the granularity of
+> performance controls, they do not describe any underlying hardware
+> dependencies (although they may match in many cases).
 > 
-> FWIW, Ionela also sent a fix though I like this one better for the
-> obvious reasons.
+> It is therefore possible to have some platforms where hardware may have
+> the ability to control CPU performance at different granularity and choose
+> to describe fine-grained performance control through SCMI.
 > 
-> https://lore.kernel.org/lkml/20210108151406.23595-1-ionela.voinescu@arm.com/
+> In such situations, the energy model would be provided with inaccurate
+> information based on controls, while it still needs to know the
+> performance boundaries.
+> 
+> To restore correct functionality, retrieve information of CPUs under the
+> same performance domain from operating-points-v2 in DT, and pass it on to
+> EM.
+> 
+> Signed-off-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
+> ---
+>  drivers/cpufreq/scmi-cpufreq.c | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> index 4aa97cdc5997..ff6ba6fab58b 100644
+> --- a/drivers/cpufreq/scmi-cpufreq.c
+> +++ b/drivers/cpufreq/scmi-cpufreq.c
+> @@ -226,9 +226,12 @@ static int scmi_init_device(const struct scmi_handle *handle, int cpu)
+>  	struct em_data_callback em_cb = EM_DATA_CB(scmi_get_cpu_power);
+>  	bool power_scale_mw;
+>  	cpumask_var_t scmi_cpus;
+> +	cpumask_var_t opp_shared_cpus;
+>  
+>  	if (!zalloc_cpumask_var(&scmi_cpus, GFP_KERNEL))
+>  		return -ENOMEM;
+> +	if (!zalloc_cpumask_var(&opp_shared_cpus, GFP_KERNEL))
+> +		return -ENOMEM;
+>  
+>  	cpumask_set_cpu(cpu, scmi_cpus);
+>  
+> @@ -240,6 +243,20 @@ static int scmi_init_device(const struct scmi_handle *handle, int cpu)
+>  		goto free_cpumask;
+>  	}
+>  
+> +	/*
+> +	 * The OPP 'sharing cpus' info may come from dt through an empty opp
+> +	 * table and opp-shared. If found, it takes precedence over the SCMI
+> +	 * domain IDs info.
+> +	 */
+> +	ret = dev_pm_opp_of_get_sharing_cpus(cpu_dev, opp_shared_cpus);
 
-Ha, thanks for the pointer.  So the original code was tricky and skipped
-the region request call intentionally.
+If this succeeds, you shouldn't even try to call the other
+get_sharing_cpus variant.
 
-Shawn
+> +	if (ret || !cpumask_weight(opp_shared_cpus)) {
+> +		/*
+> +		 * Either opp-table is not set or no opp-shared was found,
+> +		 * use the information from SCMI domain IDs.
+> +		 */
+> +		cpumask_copy(opp_shared_cpus, scmi_cpus);
+> +	}
+> +
+>  	/*
+>  	 * We get here for each CPU. Add OPPs only on those CPUs for which we
+>  	 * haven't already done so, or set their OPPs as shared.
+> @@ -252,7 +269,7 @@ static int scmi_init_device(const struct scmi_handle *handle, int cpu)
+>  			goto free_cpumask;
+>  		}
+>  
+> -		ret = dev_pm_opp_set_sharing_cpus(cpu_dev, scmi_cpus);
+> +		ret = dev_pm_opp_set_sharing_cpus(cpu_dev, opp_shared_cpus);
+>  		if (ret) {
+>  			dev_err(cpu_dev, "%s: failed to mark OPPs as shared: %d\n",
+>  				__func__, ret);
+> @@ -269,7 +286,7 @@ static int scmi_init_device(const struct scmi_handle *handle, int cpu)
+>  		}
+>  
+>  		power_scale_mw = handle->perf_ops->power_scale_mw_get(handle);
+> -		em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, scmi_cpus,
+> +		em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, opp_shared_cpus,
+>  					    power_scale_mw);
+>  	}
+>  
+> @@ -284,6 +301,7 @@ static int scmi_init_device(const struct scmi_handle *handle, int cpu)
+>  
+>  free_cpumask:
+>  	free_cpumask_var(scmi_cpus);
+> +	free_cpumask_var(opp_shared_cpus);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.27.0
+
+-- 
+viresh
