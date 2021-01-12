@@ -2,90 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3659B2F28A2
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 08:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF852F2990
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jan 2021 08:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388364AbhALHAB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jan 2021 02:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726815AbhALHAB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 02:00:01 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C13C061575;
-        Mon, 11 Jan 2021 22:59:20 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id s26so1746229lfc.8;
-        Mon, 11 Jan 2021 22:59:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jnp0py2XfXRV0FW9+wJqG1Xqe5HVlb5LAeXT35Y7mN0=;
-        b=IgwdvO6tMDacVa3SiHWu/TjA3iAHNWcRPa+jawaFDXO8AYs5RIWQI90Z+O2q29bvTp
-         jxS4RaHqrmbLtwYjbz2fncA4AF8sUMzUPvPzL4Rubz7WoJ97U+PGdYot/LTNxxsBRViG
-         cxqzicApETLDrTGMfLF37HRg7qmVfKjreN2eYKOzLcE4VBWvUlWlN6/Kac0Ooi4zJU3Q
-         8oTD/VpC79o+E1v/khV75oraSQAhNQKgLLl2aupKhGoaot3CyD4eiDjJUoziHZVWUQG2
-         Z95suwK6oBRedgJqH2TJr+3+I/ksTNIVc2R0YgOr/mF8f1h9hfRaHCScHWbyxv5vYr7N
-         u0BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jnp0py2XfXRV0FW9+wJqG1Xqe5HVlb5LAeXT35Y7mN0=;
-        b=gVV609rwUCFlkDfABiRQGk5moTa4YG7aUgTesXgAiqm+R0MqUoLJm2lrJ35YRvLRf6
-         8zz/tid9cJeNyoCJx7UItJpfqt652btUYLwr0cJerFQruQBaiNgWanOjYh/ZKLyOYABI
-         28fuCViyJS7Gnj7hDwgV9XEQA7M9yv0Mi0AtQQMw1PItAoIdKJqU4jHZzj2rR7mWzPmd
-         f16a2gW+AyBF9zITTNsGvrCtCFaEJyMl/2DSR+vcrQfLsNi+ctf5QyJKOKCqE1cOXB5n
-         igZWZLhdPXTvOQ8jpsQj+jekQBmWCeQrbVgr6HMfbC6QsOnt5/KsJ31LHj4mlmi/YO/G
-         2YBg==
-X-Gm-Message-State: AOAM530tM2lzLVX7EpRh0mlSkvzSQVZ4x/cX/cvqfKK+huuo41whPiwP
-        ornBIgaJEJUqKjvNqev4yDRrHyhhpVo=
-X-Google-Smtp-Source: ABdhPJxyewPbnBPNbOq99xW/1Q38pnSTbJiqFKEfHz/WM8dITgwPrn7IrliG3U2e6g0WLs3rT67BBw==
-X-Received: by 2002:a05:6512:33a4:: with SMTP id i4mr1605987lfg.520.1610434758991;
-        Mon, 11 Jan 2021 22:59:18 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id c136sm268561lfg.306.2021.01.11.22.59.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jan 2021 22:59:18 -0800 (PST)
-Subject: Re: [PATCH v8 0/3] Introduce Embedded Controller driver for Acer A500
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dan Murphy <dmurphy@ti.com>, Sebastian Reichel <sre@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201228160547.30562-1-digetx@gmail.com>
-Message-ID: <c9bc0096-44df-2fd6-804b-856751f3185f@gmail.com>
-Date:   Tue, 12 Jan 2021 09:59:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S2392196AbhALH6d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jan 2021 02:58:33 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:36154 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387692AbhALH6c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jan 2021 02:58:32 -0500
+X-UUID: f297533def6b4cdda96ff3839445077d-20210112
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=MSCj26hBYC5yhFYlqz1zDqlpvUKDf/hx4JpIFhfQLI4=;
+        b=W16oFPTeJaN1RA97Wu0YZIKaA88aXNvJ7EUm4Ixma6NxFTB2TVNI3KWFd8Wf/yQHBeJfTVVabbqcYS7tPLbn7ock6OCnIovZ4XFok0xgUI3ffeSMuP9ctEggoZiaVVVbswBz4FpQivOwyMYMNTxsy1DhsgWJLfus87XjjoWFB7M=;
+X-UUID: f297533def6b4cdda96ff3839445077d-20210112
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <henryc.chen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 557589570; Tue, 12 Jan 2021 15:57:46 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 12 Jan 2021 15:57:44 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Jan 2021 15:57:44 +0800
+Message-ID: <1610438264.31838.1.camel@mtksdaap41>
+Subject: Re: [PATCH V7 01/13] dt-bindings: soc: Add dvfsrc driver bindings
+From:   Henry Chen <henryc.chen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Fan Chen <fan.chen@mediatek.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ryan Case <ryandcase@chromium.org>,
+        Arvin Wang <arvin.wang@mediatek.com>,
+        "Nicolas Boichat" <drinkcat@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Mark Brown" <broonie@kernel.org>, <devicetree@vger.kernel.org>
+Date:   Tue, 12 Jan 2021 15:57:44 +0800
+In-Reply-To: <CAL_Jsq+W3UL4-s6ezFJrhUYko2EBPsO9nMOGzGR1nQT3x_VtdQ@mail.gmail.com>
+References: <1610092095-5113-1-git-send-email-henryc.chen@mediatek.com>
+         <1610092095-5113-2-git-send-email-henryc.chen@mediatek.com>
+         <1610163019.789930.3762037.nullmailer@robh.at.kernel.org>
+         <1610333553.2992.7.camel@mtksdaap41>
+         <CAL_Jsq+W3UL4-s6ezFJrhUYko2EBPsO9nMOGzGR1nQT3x_VtdQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <20201228160547.30562-1-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: E12981678A47B5256F94D79B6C1A2E72C722F0897B9519C75472F6B9F7E0D2322000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-28.12.2020 19:05, Dmitry Osipenko пишет:
-> This series adds support for the Embedded Controller which is found on
-> Acer Iconia Tab A500 (Android tablet device).
-> 
-> The Embedded Controller is ENE KB930 and it's running firmware customized
-> for the A500. The firmware interface may be reused by some other sibling
-> Acer tablets, although none of those tablets are supported in upstream yet.
-> 
-> Changelog:
-> 
-> v8: - This series partially missed v5.11 kernel release, hence resending
->       for v5.12.
+T24gTW9uLCAyMDIxLTAxLTExIGF0IDA5OjQyIC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
+T24gU3VuLCBKYW4gMTAsIDIwMjEgYXQgODo1MiBQTSBIZW5yeSBDaGVuIDxoZW5yeWMuY2hlbkBt
+ZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gSGkgUm9iLA0KPiA+DQo+ID4gT24gRnJpLCAy
+MDIxLTAxLTA4IGF0IDIwOjMwIC0wNzAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4gPiA+IE9uIEZy
+aSwgMDggSmFuIDIwMjEgMTU6NDg6MDMgKzA4MDAsIEhlbnJ5IENoZW4gd3JvdGU6DQo+ID4gPiA+
+IERvY3VtZW50IHRoZSBiaW5kaW5nIGZvciBlbmFibGluZyBkdmZzcmMgb24gTWVkaWFUZWsgU29D
+Lg0KPiA+ID4gPg0KPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBIZW5yeSBDaGVuIDxoZW5yeWMuY2hl
+bkBtZWRpYXRlay5jb20+DQo+ID4gPiA+IC0tLQ0KPiA+ID4gPiAgLi4uL2RldmljZXRyZWUvYmlu
+ZGluZ3Mvc29jL21lZGlhdGVrL2R2ZnNyYy55YW1sICAgfCA2NyArKysrKysrKysrKysrKysrKysr
+KysrDQo+ID4gPiA+ICAxIGZpbGUgY2hhbmdlZCwgNjcgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gPiAg
+Y3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9zb2Mv
+bWVkaWF0ZWsvZHZmc3JjLnlhbWwNCj4gPiA+ID4NCj4gPiA+DQo+ID4gPiBNeSBib3QgZm91bmQg
+ZXJyb3JzIHJ1bm5pbmcgJ21ha2UgZHRfYmluZGluZ19jaGVjaycgb24geW91ciBwYXRjaDoNCj4g
+PiA+DQo+ID4gPiB5YW1sbGludCB3YXJuaW5ncy9lcnJvcnM6DQo+ID4gPg0KPiA+ID4gZHRzY2hl
+bWEvZHRjIHdhcm5pbmdzL2Vycm9yczoNCj4gPiA+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy9zb2MvbWVkaWF0ZWsvZHZmc3JjLmV4YW1wbGUuZHRzOjE5OjE4OiBmYXRhbCBlcnJv
+cjogZHQtYmluZGluZ3MvaW50ZXJjb25uZWN0L210ayxtdDgxODMtZW1pLmg6IE5vIHN1Y2ggZmls
+ZSBvciBkaXJlY3RvcnkNCj4gPiA+ICAgIDE5IHwgICAgICAgICAjaW5jbHVkZSA8ZHQtYmluZGlu
+Z3MvaW50ZXJjb25uZWN0L210ayxtdDgxODMtZW1pLmg+DQo+ID4gPiAgICAgICB8ICAgICAgICAg
+ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KPiA+
+IFNvcnJ5LCBiZWNhdXNlIHRoaXMgaGVhZGVyIGZpbGUgaXMgYWRkZWQgb24gIltWNywwNy8xM10g
+ZHQtYmluZGluZ3M6DQo+ID4gaW50ZXJjb25uZWN0OiBhZGQgTVQ4MTgzIGludGVyY29ubmVjdCBk
+dC1iaW5kaW5ncyIuDQo+ID4gU2hvdWxkIEkgY2hhbmdlIHRoZSBvcmRlciBvZiB0aGUgcGF0Y2hz
+ZXQgKGxldCB0aGUgeWFtbCBwYXRoYyBiZWhpbmQgdGhlDQo+ID4gaGVhZGVyKSB0byBmaXhlZCB0
+aGF0ID8NCj4gDQo+IERUIGhlYWRlcnMgc2hvdWxkIGJlIHBhcnQgb2YgdGhlIGJpbmRpbmcgc2No
+ZW1hIHBhdGNoLiAoT3IgYXQgbGVhc3QgY29tZSBmaXJzdCkuDQpPSywgSSB3aWxsIG1lcmdlIERU
+IGhlYWRlciBhbmQgYmluZGluZyBzY2hlbWEgcGF0Y2ggaW50byBhIHNpbmdsZSBwYXRjaC4NCg0K
+SGVucnkNCj4gDQo+IFJvYg0KDQo=
 
-Hello Lee,
-
-Could you please take a look at the MFD patch? If it's good to you, then
-please apply this whole series via MFD tree.
-
-Thanks in advance.
