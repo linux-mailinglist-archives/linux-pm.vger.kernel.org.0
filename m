@@ -2,172 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A052F5102
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 18:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3432F53F5
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 21:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbhAMRU3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 12:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728081AbhAMRU2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 12:20:28 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F6DC061786
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jan 2021 09:19:48 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id 15so2889437oix.8
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jan 2021 09:19:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mjg/jy0DZZvh04Gg0ZIjuk4S6kMRfKUqimeQdNDRAhY=;
-        b=NOSxj9uFAtN+cQGRweNSMDktTTciP/m5r4eugWeqMVmqGUhaZZoEeVw3UlgDzgdZ1S
-         zGwm0xBbCsqHEtpRR/SI0HTnITrKvX6xoay3aWHq0gbN5z5v6dpUM5ZS6gRZXKKeCPTJ
-         7b1Zmrcp8KmlAJ2aedEuaSRVabZuI2T9yAi01WDXkTG9BzaBopQMjdNi4NFfpElKQKxJ
-         /44wANgcMPdCyC4Lzf99g2WYM6qOIicdqF8AoGx+Q7PoxE5PsPNVSeFCvnBuuDIdcpBC
-         cXCl6AenutzNgOiU6WncKcGcHjtbiUr12+P4f6vVbI2xG124HYiQxZzHwHMyrrSGx0gY
-         Ttvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mjg/jy0DZZvh04Gg0ZIjuk4S6kMRfKUqimeQdNDRAhY=;
-        b=GUX3NZ2R5VAbpBE1FO+YJvdCrmNqbUnus5USTd1jYmHXvhw1OnqE61jRk7CAkE6k7V
-         DTDFpqxpNAGESoTxWj4dO8gYfCr+5hEqQ9QZyipxjuMNEM5iwrgAJcz9ZdQnIElbRN4I
-         6Mqnc+7Lu0HLany5j0QTIff5ljNB4c2qU5jZ3iL3ugpMdtwzKwlpe3g3NLAwFYPZlde/
-         aZnxCyNAnxIPh3X11PMLRn9WIIPjwswrvTC2nx/pa59Ky+3oLChuHhf57smkzJtTcHC0
-         e8JM8EV8kXbGKiBtL9fhUz2AbcZ2X0OYiYbi1GaWn7/VXEU8vTGmPekLEDwZIW1oE66Z
-         7imQ==
-X-Gm-Message-State: AOAM530SWJ+ql8zH/v9GA+19ym3JNC0+HYtGWJztoCfkQZKWocp87+0/
-        46y+z+cxwjbDhHK3uHEyrTaNU5knwcRgW6k7zRGrBQ==
-X-Google-Smtp-Source: ABdhPJyblEJ+ghunXPkjZ+L33I7pPCUNf5kVsgKX6Zykxco0gDU7ktSedzB8qJcsKFCITlg6Yk3YhXq9b1JhYPDZ2wQ=
-X-Received: by 2002:aca:b145:: with SMTP id a66mr201607oif.92.1610558387362;
- Wed, 13 Jan 2021 09:19:47 -0800 (PST)
+        id S1728881AbhAMURA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 15:17:00 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:27273 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728846AbhAMUQ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 15:16:59 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1610568995; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=cZ0Qq87aQWcV3xsvX2GqaAzGSviptm60egAi2lx7/1w=; b=YzIjSnyMososUGtFTdkfX8mzAboGSFGIZoj9a9TW8/qPq9XkG45z2OVOBOdp+EqeCbDChb+w
+ 9yYs0wC1qSoUYFrxD5nolb6WYkzyo42whkbIPSgMwwqHEK3SKowv1St/024gWIn8bNgBdnab
+ HQisYhXRDK5e7Zz3jnsKLEvSzRA=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
+ 5fff550846a6c7cde71b15bd (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 13 Jan 2021 20:16:08
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2EDADC433ED; Wed, 13 Jan 2021 20:16:07 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AC18EC433CA;
+        Wed, 13 Jan 2021 20:16:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AC18EC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     ulf.hansson@linaro.org, rjw@rjwysocki.net
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Lina Iyer <ilina@codeaurora.org>
+Subject: [PATCH v7 0/2] Better domain idle from device wakeup patterns
+Date:   Wed, 13 Jan 2021 13:15:59 -0700
+Message-Id: <20210113201601.14874-1-ilina@codeaurora.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20201204025509.1075506-1-dmitry.baryshkov@linaro.org> <20201205170830.4d56ecb7@archlinux>
-In-Reply-To: <20201205170830.4d56ecb7@archlinux>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 13 Jan 2021 20:19:36 +0300
-Message-ID: <CAA8EJporM=aZAn8-ZmocGJCT=KSZHvRMNH5xeBUQ_hypN_M4=g@mail.gmail.com>
-Subject: Re: [PATCH v10 00/15] qcom: pm8150: add support for thermal monitoring
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>, linux-pm@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Changes since v6 [6];
+- Based on discussions on [6], this update simplifies the next wakeup
+  of domains based on genpd flag GENPD_FLAG_MIN_RESIDENCY specified at
+  init.
+- Assume next wakeup will be set by devices when the domain is not
+  powered down. This could avoid locking requirements.
+- Update commit text.
+
+Changes since v5 [5]:
+- It was pointed out that we don't want to run through the unnecessary
+  work for domains that do not need or support next-wakeup. So, patch #1
+  in this version, now uses a flag to detemine if the domain would
+  support next-wakeup.
+- Other review comments addressed in patches #2, #3
+
+Changes since v4 [4]:
+- Address review comments
+
+Changes since v3 [3]:
+- Move the next_wakeup info of the device deeper into the device's
+  domain data. This should avoid overhead for devices that do not have a
+  predictable wakeup pattern.
+
+Changes since v2:
+- Fix unwanted change
+
+Changes since v1 [2]:
+- Update documentation and commit text
+- Remove check for runtime PM when setting next_event
+- Fix kernel-test robot reported issue
+
+Changes since RFC [1]:
+- Organized the code to make it cleaner
+- Fixed some issues with idle state determination
+- Add documentation and update commit text
+
 Hello,
 
-On Sat, 5 Dec 2020 at 20:08, Jonathan Cameron <jic23@kernel.org> wrote:
->
-> On Fri,  4 Dec 2020 05:54:54 +0300
-> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
->
-> > This patch serie adds support for thermal monitoring block on Qualcomm's
-> > PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
-> > to support thermal zones provided by this thermal monitoring block.
-> > Unlike the rest of PMIC thermal senses, these thermal zones describe
-> > particular thermistors, which differ between from board to board.
->
-> I've just taken another look through the various IIO parts in here and
-> I think they are fine.
->
-> My assumption is that given the timing this isn't going to make the merge
-> window now.  Hence I'll be looking to do an immutable branch based on rc1
-> once it's available (assuming everyone else is fine with this version).
+I was looking for an option to do better power management for some
+domains where the devices enter runtime PM in a predictable fashion. For
+example a display device that sends a vsync interrupt every 16 ms for a
+60 Hz panel. These interrupts are not timer interrupts but tend to
+interrupt periodically to service the workflow and the devices and
+domains may go back to idle soon after. Two domains are affected by this
+- the device's PM domain and the CPU PM domain.
 
-Another gracious ping.
+As a first step, I am looking to solve for the device's PM domain idle
+state (and hopefully solve for the CPU PM domains subsequently). The PM
+domain could have multiple idle states and/or the enter/exit latencies
+could be high. In either case, it may not always be beneficial to power
+off the domain, only to turn it back on before satisfying the idle state
+residency. When the wakeup is known for the device, we could use that to
+determine the worthiness of entering a domain idle state. Only the
+device can tell us when the future event would be and that could change
+as the usecase changes. Like, when the panel refresh rate increases to
+120 Hz. If this information was made available to runtime PM, we could
+use that in the domain governor to determine a suitable idle state. This
+is the idea behind these patches.
 
-Daniel, any comments for the thermal part?
+Would appreciate your thoughts on this.
 
-Jonathan, there was  a proposal to have an immutable branch for this
-series. Do you still plan to create it? If IIO parts are fine with
-you, it might be feasible to get that into 5.12 with thermal part
-either being part of the same patch series or coming later depending
-on Daniel's comments.
+Thanks,
+Lina
 
->
-> Thanks,
->
-> Jonathan
->
-> >
-> > Changes since v9:
-> >  - In patch 12 add comments to the code as requested by Daniel Lezcano.
-> >  - Change copyright comment in qcom-spmi-adc-tm5.c to clearly note
-> >    driver history.
-> >
-> > Changes since v8:
-> >  - Simplified qcom_vadc_map_voltage_temp() code by removing ascending
-> >    tables support
-> >  - Simplified qcom-vadc-common volt/temp mapping code
-> >  - Implement suggestions by Matthias Kaehlcke: message formatting,
-> >    rewrite comments, remove unused variable initialization.
-> >
-> > Changes since v7:
-> >  - Move qcom-vadc-common.h header to include/linux/iio/adc/ dir.
-> >  - Use explicit sizeof(var) instead of hand-coding 1 when accessing
-> >    adc-tm registers.
-> >  - Remove buffer read from adc_tm5_init().
-> >  - Remove extra on-stack var from adc_tm5_get_temp().
-> >  - Minor formatting changes as suggested Daniel.
-> >
-> > Changes since v6:
-> >  - Added include <linux/bitfield.h> as noted by Jishnu Prakash.
-> >
-> > Changes since v5:
-> >  - Reworked DT bindings:
-> >    * Removed qcom,adc-channel, instead it is parsed from io-channels
-> >    * Renamed qcom,hw-settle-time to include -us suffix
-> >  - Re-added monitor enabling which got lost during refactored. Noted by
-> >    Jishnu Prakash.
-> >  - Use threaded IRQ handler as susggested by Jishnu.
-> >
-> > Changes since v4:
-> >  - Added kernel-doc comments to ADC-TM structures
-> >  - Used several sizeof(buf) instead of hand-conding register size
-> >
-> > Changes since v3:
-> >  - Fix DT description to spell "thermal monitoring" instead of just TM
-> >  - Fix warnings in DT example
-> >  - Add EXPORT_SYMBOL_GPL(of_iio_channel_get_by_name)
-> >  - Fixed whitespace chanes in qcom-vadc-common.c
-> >  - Removed error message if IIO chanel get returns -EPROBE_DEFER
-> >
-> > Changes since v2:
-> >  - IIO: export of_iio_channel_get_by_name() function
-> >  - dt-bindings: move individual io-channels to each thermal monitoring
-> >    channel rather than listing them all in device node
-> >  - added fallback defaults to of_device_get_match_data calls in
-> >    qcom-spmi-adc5 and qcom-spmi-adc-tm5 drivers
-> >  - minor typo fixes
-> >
-> > Changes since v1:
-> >  - Introduce fixp_linear_interpolate() by Craig Tatlor
-> >  - Lots of syntax/whitespace changes
-> >  - Cleaned up register definitions per Jonathan's suggestion
-> >  - Implemented most of the suggestions from Bjorn's and Jonathan's
-> >    review
-> >
-> >
->
+[1].
+https://lore.kernel.org/linux-pm/010101746eccb270-05beb27f-e1e4-40eb-92da-ad1bb48feb41-000000@us-west-2.amazonses.com/T
+/
+[2]. https://lore.kernel.org/linux-pm/20201012223400.23609-3-ilina@codeaurora.org/T/#u
+[3]. https://lore.kernel.org/linux-pm/20201015193807.17423-1-ilina@codeaurora.org/
+[4]. https://www.spinics.net/lists/linux-arm-msm/msg74322.html
+[5]. https://lore.kernel.org/linux-pm/20201106164811.3698-1-ilina@codeaurora.org/T/#t
+[6]. https://lore.kernel.org/linux-pm/20201130225039.15981-1-ilina@codeaurora.org/T/#t
 
+Lina Iyer (2):
+  PM / domains: inform PM domain of a device's next wakeup
+  PM / Domains: use device's next wakeup to determine domain idle state
+
+ drivers/base/power/domain.c          |  22 ++++++
+ drivers/base/power/domain_governor.c | 102 ++++++++++++++++++++++++---
+ include/linux/pm_domain.h            |  24 +++++--
+ 3 files changed, 133 insertions(+), 15 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
