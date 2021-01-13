@@ -2,158 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCA12F452B
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 08:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 167EC2F4751
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 10:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726254AbhAMHZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 02:25:10 -0500
-Received: from mga06.intel.com ([134.134.136.31]:37153 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726253AbhAMHZK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 13 Jan 2021 02:25:10 -0500
-IronPort-SDR: wkf57km0osEQiOtSWA2jCoQ9MUJOJy7RQmF+Ql2ypramRmrj+dPlJaPtK2mkznUTjsoUfCdQsT
- 632W0StGMHog==
-X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="239704011"
-X-IronPort-AV: E=Sophos;i="5.79,343,1602572400"; 
-   d="scan'208";a="239704011"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 23:24:28 -0800
-IronPort-SDR: b0vpYcBw8km+tWq4XyqIxdaaIoe0dUForOI7n1jYyI1zL6AJHbeePxGYRANjNuOSdxYA+ZzbeD
- aOGfy+7RhMAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,343,1602572400"; 
-   d="scan'208";a="464806425"
-Received: from lkp-server01.sh.intel.com (HELO d5d1a9a2c6bb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2021 23:24:26 -0800
-Received: from kbuild by d5d1a9a2c6bb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kzaW2-00005x-A5; Wed, 13 Jan 2021 07:24:26 +0000
-Date:   Wed, 13 Jan 2021 15:24:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 73249694887d2dab4f292c3b080bd1e8fd1ff7d6
-Message-ID: <5ffea010.nytAwTqeAXJdS3c+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727398AbhAMJOq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 04:14:46 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:38258 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727390AbhAMJOq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 04:14:46 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D99gQR125560;
+        Wed, 13 Jan 2021 09:14:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=corp-2020-01-29;
+ bh=PJppwapMJ05TyudPkc3cYi6LZO9tAK25mpSwQywEWRw=;
+ b=NuwFQIe25jyda5T61hLMe0Q9HRBtB4v7+aR31uwCP28mc+JotF1GfIJdmeJKdRtS0dUq
+ YrdwuMZ8gk5N//MO0IPRCV2Em4wEweM9l6FGncCd6GE6JuM383vx5omVW5XtMdcHl9SY
+ /qOWCYyA3QKWxkDx8vvW7B3uVCxQ+7wfwRSj7tl+3hKZzvGUfIKu8oDF/WTv00h4xj/J
+ bnrJn7+Qg7z9IPkgsDM/oEwG00YGref1YOlclPgs0+9HHeP34drTo7mXTONVM4r1TSCX
+ Z8k6WWpUvEb+UQVNrJ7rwP+lod3iMKUziRiT40D3v5Kg0drNZ4R2gzasE71DrirXC5ga 6g== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 360kg1tck8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jan 2021 09:14:03 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D9BePD104307;
+        Wed, 13 Jan 2021 09:14:03 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 360ke8159u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jan 2021 09:14:03 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10D9E2Lt028370;
+        Wed, 13 Jan 2021 09:14:02 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 13 Jan 2021 01:14:01 -0800
+Date:   Wed, 13 Jan 2021 12:13:56 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [EXTERNAL] [bug report] power: supply: bq256xx: Introduce the
+ BQ256XX charger driver
+Message-ID: <20210113091356.GF5105@kadam>
+References: <X/1jy5+2elOl3Lm8@mwanda>
+ <d0a0fccf-d7c5-c5a4-c4f0-68a8a01b7c34@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d0a0fccf-d7c5-c5a4-c4f0-68a8a01b7c34@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101130055
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ phishscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101130055
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 73249694887d2dab4f292c3b080bd1e8fd1ff7d6  Merge branch 'pm-cpufreq' into bleeding-edge
+On Tue, Jan 12, 2021 at 05:44:52PM -0600, Ricardo Rivera-Matos wrote:
+> Dan,
+> 
+> On 1/12/21 2:54 AM, Dan Carpenter wrote:
+> > Hello Ricardo Rivera-Matos,
+> > 
+> > The patch 32e4978bb920: "power: supply: bq256xx: Introduce the
+> > BQ256XX charger driver" from Jan 6, 2021, leads to the following
+> > static checker warning:
+> > 
+> > 	drivers/power/supply/bq256xx_charger.c:1512 bq256xx_hw_init()
+> > 	error: buffer overflow 'bq256xx_watchdog_time' 8 <= 8
+> > 
+> > drivers/power/supply/bq256xx_charger.c
+> >    1503  static int bq256xx_hw_init(struct bq256xx_device *bq)
+> >    1504  {
+> >    1505          struct power_supply_battery_info bat_info = { };
+> >    1506          int wd_reg_val = BQ256XX_WATCHDOG_DIS;
+> >    1507          int ret = 0;
+> >    1508          int i;
+> >    1509
+> >    1510          for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
+> >    1511                  if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
+> >    1512                      bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
+> >                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > The last four members of this array are all zero.
+> ACK, BQ256XX_NUM_WD_VAL should actually be 4 instead of 8
+> > 
+> > On the last iteration through the loop this will read beyond the end of
+> > the array possibly setting "wd_reg_val = 7" uninitentionally.
+> ACK, bq256xx_parse_dt() will clamp bq->watchdog_timer so then in
+> bq256xx_hw_init()
+> 
+>     for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
+>         if (bq->watchdog_timer == bq256xx_watchdog_time[i]) {
+>             wd_reg_val = i;
+>             break;
+>         }
+>         if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
+>             bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
+>             wd_reg_val = i;
+>     }
+> 
+> The first if will catch the exact matches and the second if will catch the
+> "in-betweens" and round down. The final iteration will always fall into the
+> first if statement and break.
+> 
 
-elapsed time: 722m
+This looks good.  This is a patch you are proposing or it's already
+merged in an upstream tree somewhere?  Either way, that sounds fine.
+Thank!
 
-configs tested: 95
-configs skipped: 2
+regards,
+dan carpenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                           mtx1_defconfig
-m68k                          atari_defconfig
-powerpc                    mvme5100_defconfig
-arc                    vdk_hs38_smp_defconfig
-sh                     magicpanelr2_defconfig
-mips                  cavium_octeon_defconfig
-riscv                            alldefconfig
-arc                            hsdk_defconfig
-arm                            xcep_defconfig
-powerpc                     ksi8560_defconfig
-mips                      fuloong2e_defconfig
-powerpc                      arches_defconfig
-powerpc                     tqm8548_defconfig
-mips                            gpr_defconfig
-arm                         shannon_defconfig
-m68k                       m5475evb_defconfig
-arm                            pleb_defconfig
-mips                           xway_defconfig
-um                             i386_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20210112
-i386                 randconfig-a005-20210112
-i386                 randconfig-a006-20210112
-i386                 randconfig-a003-20210112
-i386                 randconfig-a001-20210112
-i386                 randconfig-a004-20210112
-x86_64               randconfig-a015-20210112
-x86_64               randconfig-a012-20210112
-x86_64               randconfig-a013-20210112
-x86_64               randconfig-a016-20210112
-x86_64               randconfig-a014-20210112
-x86_64               randconfig-a011-20210112
-i386                 randconfig-a012-20210112
-i386                 randconfig-a011-20210112
-i386                 randconfig-a016-20210112
-i386                 randconfig-a013-20210112
-i386                 randconfig-a015-20210112
-i386                 randconfig-a014-20210112
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20210112
-x86_64               randconfig-a004-20210112
-x86_64               randconfig-a001-20210112
-x86_64               randconfig-a005-20210112
-x86_64               randconfig-a003-20210112
-x86_64               randconfig-a002-20210112
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
