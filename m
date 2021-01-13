@@ -2,117 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA3E2F56F4
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 02:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 172762F5704
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 02:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbhANBz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 20:55:58 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:37778 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729598AbhAMXyU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 18:54:20 -0500
+        id S1727560AbhANB5f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 20:57:35 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:39172 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729575AbhAMXn3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 18:43:29 -0500
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10DMpVXw030219;
-        Wed, 13 Jan 2021 16:51:31 -0600
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10DMsMQN093342;
+        Wed, 13 Jan 2021 16:54:22 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1610578291;
-        bh=AMCB9l0RBsNgkb03+ed2+NVwg5pgcoyrXDqE0SivHmY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Z8fVKzQu1amuWvFVfXI3R/JT+DeDDwoTjhs0hhabIi3eVlsq+w2ewZB1c/6gMDTl+
-         cChZ72WUBO+sMxjhkfb2H9nvH2S/DyAnYjZTbXO8DU6UTapEoFGhCG+d43ZFXU8vAy
-         074gV0+s1we7fxjIt9mVIi2QWyrhRGDxi9QgOZHg=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10DMpVIn130069
+        s=ti-com-17Q1; t=1610578462;
+        bh=/Zlmr8Iad4qwtDW5CFTi5k84Y25UAYrbaevAVuzfJqI=;
+        h=From:To:CC:Subject:Date;
+        b=e+Mh/pxPLXzs3fpPzvpw8wl3JP26qlk5xGjDhmzuSm3rO2j8kzmyQNGdACH9gx0Ug
+         nrxFvrQrvTX9enhUg+zifxoqk4CKSRHOc1WmXehV9QUH+Rz31YB7fi7Qhqo3jF+oZj
+         NvNMo+U3HQQEAAsHNuvUYfQ0MDHO+1NqwUNEOqi4=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10DMsMeA004637
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 13 Jan 2021 16:51:31 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 13 Jan 2021 16:54:22 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 13
- Jan 2021 16:51:31 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2021 16:54:21 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 13 Jan 2021 16:51:30 -0600
-Received: from [10.250.42.35] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10DMpUIl036844;
-        Wed, 13 Jan 2021 16:51:30 -0600
-Subject: Re: [EXTERNAL] [bug report] power: supply: bq256xx: Introduce the
- BQ256XX charger driver
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <X/1jy5+2elOl3Lm8@mwanda>
- <d0a0fccf-d7c5-c5a4-c4f0-68a8a01b7c34@ti.com> <20210113091356.GF5105@kadam>
+ Frontend Transport; Wed, 13 Jan 2021 16:54:21 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10DMsLDl042146;
+        Wed, 13 Jan 2021 16:54:21 -0600
 From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Message-ID: <83f5532d-bc1d-2da0-e3b2-31d96ba62fce@ti.com>
-Date:   Wed, 13 Jan 2021 16:51:31 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <dan.carpenter@oracle.com>,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Subject: [PATCH] power: supply: bq256xx: Fix BQ256XX_NUM_WD_VAL and bq256xx_watchdog_time[] overrun
+Date:   Wed, 13 Jan 2021 16:53:52 -0600
+Message-ID: <20210113225352.13099-1-r-rivera-matos@ti.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <20210113091356.GF5105@kadam>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dan,
+Corrects BQ256XX_NUM_WD_VAL from value of "8" to "4" and fixes the issue when 'i'
+is equal to array size then array index over runs the array
 
-On 1/13/21 3:13 AM, Dan Carpenter wrote:
-> On Tue, Jan 12, 2021 at 05:44:52PM -0600, Ricardo Rivera-Matos wrote:
->> Dan,
->>
->> On 1/12/21 2:54 AM, Dan Carpenter wrote:
->>> Hello Ricardo Rivera-Matos,
->>>
->>> The patch 32e4978bb920: "power: supply: bq256xx: Introduce the
->>> BQ256XX charger driver" from Jan 6, 2021, leads to the following
->>> static checker warning:
->>>
->>> 	drivers/power/supply/bq256xx_charger.c:1512 bq256xx_hw_init()
->>> 	error: buffer overflow 'bq256xx_watchdog_time' 8 <= 8
->>>
->>> drivers/power/supply/bq256xx_charger.c
->>>     1503  static int bq256xx_hw_init(struct bq256xx_device *bq)
->>>     1504  {
->>>     1505          struct power_supply_battery_info bat_info = { };
->>>     1506          int wd_reg_val = BQ256XX_WATCHDOG_DIS;
->>>     1507          int ret = 0;
->>>     1508          int i;
->>>     1509
->>>     1510          for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
->>>     1511                  if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
->>>     1512                      bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
->>>                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>> The last four members of this array are all zero.
->> ACK, BQ256XX_NUM_WD_VAL should actually be 4 instead of 8
->>> On the last iteration through the loop this will read beyond the end of
->>> the array possibly setting "wd_reg_val = 7" uninitentionally.
->> ACK, bq256xx_parse_dt() will clamp bq->watchdog_timer so then in
->> bq256xx_hw_init()
->>
->>      for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
->>          if (bq->watchdog_timer == bq256xx_watchdog_time[i]) {
->>              wd_reg_val = i;
->>              break;
->>          }
->>          if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
->>              bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
->>              wd_reg_val = i;
->>      }
->>
->> The first if will catch the exact matches and the second if will catch the
->> "in-betweens" and round down. The final iteration will always fall into the
->> first if statement and break.
->>
-> This looks good.  This is a patch you are proposing or it's already
-> merged in an upstream tree somewhere?  Either way, that sounds fine.
-> Thank!
-I am proposing it. I will CC you when I send off the patchset.
->
-> regards,
-> dan carpenter
->
-Best Regards,
-Ricardo
+Fixes: 32e4978bb92 ("power: supply: bq256xx: Introduce the BQ256XX charger driver")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+---
+ drivers/power/supply/bq256xx_charger.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
+index dc74c44618af..8414472083a6 100644
+--- a/drivers/power/supply/bq256xx_charger.c
++++ b/drivers/power/supply/bq256xx_charger.c
+@@ -135,7 +135,7 @@
+ #define BQ256XX_NTC_FAULT_COLD		(BIT(2) | BIT(0))
+ #define BQ256XX_NTC_FAULT_HOT		(BIT(2) | BIT(1))
+ 
+-#define BQ256XX_NUM_WD_VAL	8
++#define BQ256XX_NUM_WD_VAL	4
+ #define BQ256XX_WATCHDOG_MASK	GENMASK(5, 4)
+ #define BQ256XX_WATCHDOG_MAX	1600000
+ #define BQ256XX_WATCHDOG_DIS	0
+@@ -1508,6 +1508,10 @@ static int bq256xx_hw_init(struct bq256xx_device *bq)
+ 	int i;
+ 
+ 	for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
++		if (bq->watchdog_timer == bq256xx_watchdog_time[i]) {
++			wd_reg_val = i;
++			break;
++		}
+ 		if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
+ 		    bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
+ 			wd_reg_val = i;
+-- 
+2.30.0
+
