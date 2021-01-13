@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C28092F542C
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 21:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A928C2F542E
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 21:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728912AbhAMUdd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 15:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        id S1728939AbhAMUde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 15:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728847AbhAMUdc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 15:33:32 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1F2C061786;
-        Wed, 13 Jan 2021 12:32:52 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id o17so4730303lfg.4;
-        Wed, 13 Jan 2021 12:32:52 -0800 (PST)
+        with ESMTP id S1728847AbhAMUde (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 15:33:34 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C0BC061794;
+        Wed, 13 Jan 2021 12:32:53 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id s26so4700113lfc.8;
+        Wed, 13 Jan 2021 12:32:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wR7PNlqFv0AsQ67UQPizYRL3mDwsloHHs6vUO64bZCw=;
-        b=p9wR9wam7GcQ5WP6JTjzgh2wNVZoCcPmFq8tzIqycoQgaRna3mYXkkYO0Hs+EwSfLK
-         q4m+GwIsoDE5Bftm5l7YfYZpKJf7QtfwpD9oA+yQd++JYCy+bZy6TDlx2a6suA1vP1wT
-         EpBiIS7vO9v/Rbjee919TFzAJ52m05sQEymTCBdbj1MwjcJXf+SYt0wylSouk8cV3cX5
-         06bLgdOftATV1Z9uTp7zgndjzQl97fHcUySKZ0q6fmuUFchep716We08LAWbmaTyc8dU
-         lwvs9SuGUR131mzkaygM6khFwODLnSa55dT0ftGYDlIhr6uh95Ts04jkLKlAExdOLpaD
-         p5nw==
+        bh=+mMQvJM4wNZIQ6YSpFszBGOcba68DllQ5kC+BP4fDqA=;
+        b=k4B2q1PiIdjAOMiVKZd5hh3UaTbrMuM7ssCdnyVI5r2KZsPJvV6y58C37Xhi9+H/ty
+         OMWDNFW9NIpQhFZHmyAd8BFlJ/cpJelLNk9fXoDGWO8UjC84WCUwxfl88irrtkj4/0VT
+         /SCzIoiUHiIiexLLjZrYvU3osnmDazLinjd69L0nq9Zu3basZZRg4vg4pv1aE0UsGUr9
+         kc8FkHzOuEqTDusGcVROPh6on+sf9vl0hhMcf7c2N8plxat9xPi0HMcnSX5pLiAhyPZS
+         I79CiGeyiOghlKOg0w5QPqOte1mz7s3u7+Z5BI9wH6tO2hZ/a5HEC5cC62D5dLqjgBcS
+         NQIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wR7PNlqFv0AsQ67UQPizYRL3mDwsloHHs6vUO64bZCw=;
-        b=jtkFv4zLW2AjlkPkCIgKeNbO3gQFJ4yImhFHMNkJyLI1ERU1CVsl5i8/xFgvBGiT5y
-         SxJWzkbjo8AijAiUYvCNU3m16I+QxEGXvqlS8ROothATNt2wOHvkka4baq3mp22NhoSH
-         x4UttW92zVrnjFKvhd0vOTQ1UO779dTOcg9wBejhMERpsATi2RjQUd442UHDZ/dcb4fd
-         hQnRrjS1G63vgrad5mCKM7ouqKZojRC45KPRCcbxTkoyTEXhQQnwvmrJjCnQpjMA+YGm
-         pG6x2VLp9xDNum7affG/PaJRU6L+9fx90BmE+Ep+yTsf+QsjLzoeoUc7I/uY/0PLUBQ0
-         hmKg==
-X-Gm-Message-State: AOAM532CrMo0/j4hW8M32wwV9tdzG0EzG9cLTIzPXTB3WTUIhECjPZRg
-        LcDRGsldGEaH2bcE6p7iPH9FhNw0nz4=
-X-Google-Smtp-Source: ABdhPJy1fGciFpN/VyFpVSu54hPHj2KcIK71p8DWdQ35cbqaj33IsJ8roD5zEwGmoWYRVXji9glmhg==
-X-Received: by 2002:a19:8bc6:: with SMTP id n189mr1521184lfd.291.1610569970890;
-        Wed, 13 Jan 2021 12:32:50 -0800 (PST)
+        bh=+mMQvJM4wNZIQ6YSpFszBGOcba68DllQ5kC+BP4fDqA=;
+        b=apwsRtm7rJ2S6UNcE9pK7hRfGZrauLTXqeE8Bs3WGy7ictZsHF0HUTglI/D0ZDbLLD
+         AHeLIOl9VCqndwL3Yo2bAw39YycJuXm2OtbPdp+GYbRJWHaqLA9iTMWy4cTDLKicQMjw
+         YeDsYgWt03WD9uyIgwMBuDqf6/FGbbiGLCxIQZKDH62OqVZKh2FZ2muoZTs55/9GZMQy
+         msm2C+FpXqzUFtRwetRBBxsQGvYuVkecYfUatOIXccXdyuf5v00Kjgca8xS1fmMf7ShU
+         8vTMWVOMZ8ZipWknRuQouZq2gUOCE5GbWREQCFCw5bYMXrolkQfI8XN7WoJ1rdpIyjcA
+         qfZg==
+X-Gm-Message-State: AOAM530mt07qOhDCXtq47Uai+STAsufuub8gyEYLrRDoQeY/OKJHz8PO
+        Y72dB9COZUYxA+xT8eC2BWo=
+X-Google-Smtp-Source: ABdhPJwcs0EZNBCk+4uLIDnvt23NEpqJqlglPMOPuIqXpYb6fjPHz2V0uv2YzDm0TH7D392Vu4sBkg==
+X-Received: by 2002:ac2:51af:: with SMTP id f15mr1680335lfk.592.1610569971999;
+        Wed, 13 Jan 2021 12:32:51 -0800 (PST)
 Received: from localhost.localdomain (h-98-128-228-148.NA.cust.bahnhof.se. [98.128.228.148])
-        by smtp.gmail.com with ESMTPSA id w202sm311194lff.182.2021.01.13.12.32.49
+        by smtp.gmail.com with ESMTPSA id w202sm311194lff.182.2021.01.13.12.32.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 12:32:50 -0800 (PST)
+        Wed, 13 Jan 2021 12:32:51 -0800 (PST)
 From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Mike Looijmans <mike.looijmans@topic.nl>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH 1/2] power: supply: ltc4162-l: Constify static struct attribute_group
-Date:   Wed, 13 Jan 2021 21:32:42 +0100
-Message-Id: <20210113203243.20146-2-rikard.falkeborn@gmail.com>
+Subject: [PATCH 2/2] power: supply: core: Constify static struct attribute_group
+Date:   Wed, 13 Jan 2021 21:32:43 +0100
+Message-Id: <20210113203243.20146-3-rikard.falkeborn@gmail.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210113203243.20146-1-rikard.falkeborn@gmail.com>
 References: <20210113203243.20146-1-rikard.falkeborn@gmail.com>
@@ -70,21 +70,21 @@ read-only memory.
 
 Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 ---
- drivers/power/supply/ltc4162-l-charger.c | 2 +-
+ drivers/power/supply/power_supply_sysfs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/ltc4162-l-charger.c b/drivers/power/supply/ltc4162-l-charger.c
-index cded6484febb..1a5cb4405ee3 100644
---- a/drivers/power/supply/ltc4162-l-charger.c
-+++ b/drivers/power/supply/ltc4162-l-charger.c
-@@ -666,7 +666,7 @@ static struct attribute *ltc4162l_sysfs_entries[] = {
- 	NULL,
- };
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 92dd63171193..c3d7cbcd4fad 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -374,7 +374,7 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
+ 	return 0;
+ }
  
--static struct attribute_group ltc4162l_attr_group = {
-+static const struct attribute_group ltc4162l_attr_group = {
- 	.name	= NULL,	/* put in device directory */
- 	.attrs	= ltc4162l_sysfs_entries,
+-static struct attribute_group power_supply_attr_group = {
++static const struct attribute_group power_supply_attr_group = {
+ 	.attrs = __power_supply_attrs,
+ 	.is_visible = power_supply_attr_is_visible,
  };
 -- 
 2.30.0
