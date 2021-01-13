@@ -2,88 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D752F4380
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 06:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704252F44B3
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 07:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbhAMFHg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 00:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S1725895AbhAMGyE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 01:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725818AbhAMFHg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 00:07:36 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD0EC061786
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 21:06:55 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id cq1so387813pjb.4
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 21:06:55 -0800 (PST)
+        with ESMTP id S1725681AbhAMGyC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 01:54:02 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59841C061575
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 22:53:22 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id q20so642993pfu.8
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 22:53:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gyKIFw+IPWRbdD3u9S0/inpqqBfelQFBDgUhalF3D4o=;
-        b=oC/8+wx9OS5TrvncTk9uKUJsoDN0GpZ9jAPR1pJ2adPYtYkJ7zr99b/qpQEK0+7sMK
-         cT5C7uRDk3hruPnRjbcMprurgOT4b/GY5NusBKRi/ofm9GUX2OhsByV1D2smhmVlEKkk
-         MWd0/3kALZDn+M31ANta1DBXq4Q8xsXx/sDGIPSL9kRCSjh8Em7qWkL5IyCni7FggMZt
-         dX1rfKnSHQRqbNRkhrL9k/R1d53g3bWFl9mIYp5Y7mE0BoymmY90G6DePNLYMJUUG8Y5
-         HPX5OP0535cj2LMM/i4O4hBra6lcp4Ckc0mWFqJZfQo6ONj/MVqOocGfLwN+hz7N4ytG
-         ZGBg==
+        h=from:to:cc:subject:date:message-id;
+        bh=7tnhSr/TgWVw/GPv3kc5UsoWGWtqZNElqDlp8y6EGT0=;
+        b=uNXha/oB+9R/2OP/sVAbuMv72bhyOwU5pGmElrqqNkn/gYhwdTC4Pji0m0RQDSac64
+         9a25gAf0ESz7IdZdlxmVwMS5cnLppbhoC5aZa+t2GdaquRCJ9DXxkAKtTD0jOVJTIt7b
+         4+9gSkY1CPwJesKEMelvKiHU6vZTc4nt9xgFQVCe8aI9gOEb0SSOnEzSSvFxe34XoMVs
+         /A+Dzck3SNZNIi7SyzxxNba9IVVDMnnSweNHGdmqmxpEd1PLxf5ZiaRUK8MgxpRu1Sw7
+         uZ9Dg4fcTNpU5NMLsZmYjJ+koOfn6dckSDccSFBTBSt+NY94Z1zskYfrxL8kH9hnBmUK
+         magg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gyKIFw+IPWRbdD3u9S0/inpqqBfelQFBDgUhalF3D4o=;
-        b=CC3SbO7pUn5qBvwQH2owi8fA0i81JFhxsnMc/VtWig/LGl27zWqX7XV/fxpaLTbOq+
-         RKqviDA8mh4dqzffVoAUhudtQKLLx4NNEQ8rZV/KtseRIBCYzKnwpw6i4v79y8z67mGE
-         wJ9KJra8Go4Sx4P8PTYzip0W++8MDuRr5QwNChd2ukp4PtJAbNRtCwvXn3/SGD3MNtZu
-         VliapffU9HdJh81bwcjiT7dTwhuAOUxw96G023DfBqTrSbYM575qsySC0i3vUZ9YgL1z
-         JLH5ecfhRWoMAR/hKvHzTCL1c+MKmeslm5308HYMoa0KLTCuSN8t5baRRp2mIzGyR6Oe
-         Qajw==
-X-Gm-Message-State: AOAM532LbvFjZxvhSJOCrpG+OBiravKFbRANhj2QDSlw5AZTOhSQX7Ee
-        03ZaimUIUAd+Aw0ky2E3zlcbFw==
-X-Google-Smtp-Source: ABdhPJzP3V6xcb8suT8nqzb7MmeBAtJDFAETD/WxvXgCPy6ZwHQdClJgivOX5JPkGy5gX2UvLvn1ug==
-X-Received: by 2002:a17:90a:b296:: with SMTP id c22mr308880pjr.91.1610514415205;
-        Tue, 12 Jan 2021 21:06:55 -0800 (PST)
-Received: from localhost ([122.172.85.111])
-        by smtp.gmail.com with ESMTPSA id j15sm857607pfn.180.2021.01.12.21.06.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Jan 2021 21:06:53 -0800 (PST)
-Date:   Wed, 13 Jan 2021 10:36:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-hw: add missing devm_release_mem_region()
- call
-Message-ID: <20210113050651.q2txref3d6bifrf3@vireshk-i7>
-References: <20210112095236.20515-1-shawn.guo@linaro.org>
- <X/210llTiuNt3haG@builder.lan>
- <20210113043143.y45mmnw3e2kjkxnl@vireshk-i7>
- <X/5+GbueKg66DoEE@builder.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X/5+GbueKg66DoEE@builder.lan>
-User-Agent: NeoMutt/20180716-391-311a52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7tnhSr/TgWVw/GPv3kc5UsoWGWtqZNElqDlp8y6EGT0=;
+        b=lBcfa+AU1B8ZZU6zmfSHullw0d8+p00cAvbEMHxS64xEG2I4+LA8C0wbdJflDMR9gE
+         A0IkrRAokaF5/pUdPvsK86V81dJXY6wlMmQ9PnLxgZVVbd4LUE/sPAIzOvP2j8rS3m2l
+         +Ysl1NOkZMKhno4PFxQc7356ToMYdhegC1YkCswoOtJ3bnTyL0Kqk2Ws0KYHzsOBBTsa
+         3hVqKqq+YJ+M18GwF+vriBG6gUsj4MNQ4uMIyK0YX47GDCAaz66hHuCFv6R/Z57brjHK
+         nEQoiZqnnh3RzOT7jiAGDgVuvYhNUX9eK2Jc0KgyQNRGPpl1WQvKyaSNGX5SzXI/4dM5
+         C2Qg==
+X-Gm-Message-State: AOAM532rc0AQ1MyGJrmhcYkWm91SMWx9TQd5/YazLXJXZQ/E5vwaJPwq
+        vTFbYMaasKGBInb/WgOHoEsJTQ==
+X-Google-Smtp-Source: ABdhPJzytLgbSbUEwpCYlqfbnPKHFilahzfk6Ge9TtH1yvtXBfdXiZ7sMFpMP/cyyVBwlukxYgud5A==
+X-Received: by 2002:a62:528c:0:b029:19e:4a39:d9ea with SMTP id g134-20020a62528c0000b029019e4a39d9eamr807735pfb.20.1610520801918;
+        Tue, 12 Jan 2021 22:53:21 -0800 (PST)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id b6sm1217532pfd.43.2021.01.12.22.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jan 2021 22:53:21 -0800 (PST)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Steev Klimaszewski <steev@kali.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH] cpufreq: qcom-hw: enable boost support
+Date:   Wed, 13 Jan 2021 14:52:41 +0800
+Message-Id: <20210113065241.23829-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-01-21, 22:59, Bjorn Andersson wrote:
-> But that said, why are the ioremap done at init and not at probe time?
+At least on sdm850, the 2956800 khz is detected as a boost frequency in
+function qcom_cpufreq_hw_read_lut().  Let's enable boost support by
+calling cpufreq_enable_boost_support(), so that we can get the boost
+frequency by switching it on via 'boost' sysfs entry like below.
 
-These are some hardware registers per cpufreq policy I believe, and so
-they did it from policy init instead.
+ $ echo 1 > /sys/devices/system/cpu/cpufreq/boost
 
-And yes I agree that we shouldn't use devm_ from init() for the cases
-where we need to put the resources in exit() as well. But things like
-devm_kzalloc() are fine there.
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+---
+ drivers/cpufreq/qcom-cpufreq-hw.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Ionela, since you were the first one to post a patch about this, can
-you send a fix for this by dropping the devm_ thing altogether for the
-ioremap thing ? Mark it suggested by Bjorn. Thanks.
-
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 315ee987d2d3..6eb88463a24e 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -351,6 +351,12 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+ 
+ 	dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
+ 
++	if (policy_has_boost_freq(policy)) {
++		ret = cpufreq_enable_boost_support();
++		if (ret)
++			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
++	}
++
+ 	return 0;
+ error:
+ 	devm_iounmap(dev, base);
 -- 
-viresh
+2.17.1
+
