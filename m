@@ -2,93 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704252F44B3
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 07:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCA12F452B
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 08:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725895AbhAMGyE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 01:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725681AbhAMGyC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 01:54:02 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59841C061575
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 22:53:22 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id q20so642993pfu.8
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jan 2021 22:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=7tnhSr/TgWVw/GPv3kc5UsoWGWtqZNElqDlp8y6EGT0=;
-        b=uNXha/oB+9R/2OP/sVAbuMv72bhyOwU5pGmElrqqNkn/gYhwdTC4Pji0m0RQDSac64
-         9a25gAf0ESz7IdZdlxmVwMS5cnLppbhoC5aZa+t2GdaquRCJ9DXxkAKtTD0jOVJTIt7b
-         4+9gSkY1CPwJesKEMelvKiHU6vZTc4nt9xgFQVCe8aI9gOEb0SSOnEzSSvFxe34XoMVs
-         /A+Dzck3SNZNIi7SyzxxNba9IVVDMnnSweNHGdmqmxpEd1PLxf5ZiaRUK8MgxpRu1Sw7
-         uZ9Dg4fcTNpU5NMLsZmYjJ+koOfn6dckSDccSFBTBSt+NY94Z1zskYfrxL8kH9hnBmUK
-         magg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7tnhSr/TgWVw/GPv3kc5UsoWGWtqZNElqDlp8y6EGT0=;
-        b=lBcfa+AU1B8ZZU6zmfSHullw0d8+p00cAvbEMHxS64xEG2I4+LA8C0wbdJflDMR9gE
-         A0IkrRAokaF5/pUdPvsK86V81dJXY6wlMmQ9PnLxgZVVbd4LUE/sPAIzOvP2j8rS3m2l
-         +Ysl1NOkZMKhno4PFxQc7356ToMYdhegC1YkCswoOtJ3bnTyL0Kqk2Ws0KYHzsOBBTsa
-         3hVqKqq+YJ+M18GwF+vriBG6gUsj4MNQ4uMIyK0YX47GDCAaz66hHuCFv6R/Z57brjHK
-         nEQoiZqnnh3RzOT7jiAGDgVuvYhNUX9eK2Jc0KgyQNRGPpl1WQvKyaSNGX5SzXI/4dM5
-         C2Qg==
-X-Gm-Message-State: AOAM532rc0AQ1MyGJrmhcYkWm91SMWx9TQd5/YazLXJXZQ/E5vwaJPwq
-        vTFbYMaasKGBInb/WgOHoEsJTQ==
-X-Google-Smtp-Source: ABdhPJzytLgbSbUEwpCYlqfbnPKHFilahzfk6Ge9TtH1yvtXBfdXiZ7sMFpMP/cyyVBwlukxYgud5A==
-X-Received: by 2002:a62:528c:0:b029:19e:4a39:d9ea with SMTP id g134-20020a62528c0000b029019e4a39d9eamr807735pfb.20.1610520801918;
-        Tue, 12 Jan 2021 22:53:21 -0800 (PST)
-Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id b6sm1217532pfd.43.2021.01.12.22.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 22:53:21 -0800 (PST)
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH] cpufreq: qcom-hw: enable boost support
-Date:   Wed, 13 Jan 2021 14:52:41 +0800
-Message-Id: <20210113065241.23829-1-shawn.guo@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1726254AbhAMHZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 02:25:10 -0500
+Received: from mga06.intel.com ([134.134.136.31]:37153 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726253AbhAMHZK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 13 Jan 2021 02:25:10 -0500
+IronPort-SDR: wkf57km0osEQiOtSWA2jCoQ9MUJOJy7RQmF+Ql2ypramRmrj+dPlJaPtK2mkznUTjsoUfCdQsT
+ 632W0StGMHog==
+X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="239704011"
+X-IronPort-AV: E=Sophos;i="5.79,343,1602572400"; 
+   d="scan'208";a="239704011"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 23:24:28 -0800
+IronPort-SDR: b0vpYcBw8km+tWq4XyqIxdaaIoe0dUForOI7n1jYyI1zL6AJHbeePxGYRANjNuOSdxYA+ZzbeD
+ aOGfy+7RhMAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,343,1602572400"; 
+   d="scan'208";a="464806425"
+Received: from lkp-server01.sh.intel.com (HELO d5d1a9a2c6bb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2021 23:24:26 -0800
+Received: from kbuild by d5d1a9a2c6bb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kzaW2-00005x-A5; Wed, 13 Jan 2021 07:24:26 +0000
+Date:   Wed, 13 Jan 2021 15:24:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 73249694887d2dab4f292c3b080bd1e8fd1ff7d6
+Message-ID: <5ffea010.nytAwTqeAXJdS3c+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-At least on sdm850, the 2956800 khz is detected as a boost frequency in
-function qcom_cpufreq_hw_read_lut().  Let's enable boost support by
-calling cpufreq_enable_boost_support(), so that we can get the boost
-frequency by switching it on via 'boost' sysfs entry like below.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 73249694887d2dab4f292c3b080bd1e8fd1ff7d6  Merge branch 'pm-cpufreq' into bleeding-edge
 
- $ echo 1 > /sys/devices/system/cpu/cpufreq/boost
+elapsed time: 722m
 
-Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+configs tested: 95
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                           mtx1_defconfig
+m68k                          atari_defconfig
+powerpc                    mvme5100_defconfig
+arc                    vdk_hs38_smp_defconfig
+sh                     magicpanelr2_defconfig
+mips                  cavium_octeon_defconfig
+riscv                            alldefconfig
+arc                            hsdk_defconfig
+arm                            xcep_defconfig
+powerpc                     ksi8560_defconfig
+mips                      fuloong2e_defconfig
+powerpc                      arches_defconfig
+powerpc                     tqm8548_defconfig
+mips                            gpr_defconfig
+arm                         shannon_defconfig
+m68k                       m5475evb_defconfig
+arm                            pleb_defconfig
+mips                           xway_defconfig
+um                             i386_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210112
+i386                 randconfig-a005-20210112
+i386                 randconfig-a006-20210112
+i386                 randconfig-a003-20210112
+i386                 randconfig-a001-20210112
+i386                 randconfig-a004-20210112
+x86_64               randconfig-a015-20210112
+x86_64               randconfig-a012-20210112
+x86_64               randconfig-a013-20210112
+x86_64               randconfig-a016-20210112
+x86_64               randconfig-a014-20210112
+x86_64               randconfig-a011-20210112
+i386                 randconfig-a012-20210112
+i386                 randconfig-a011-20210112
+i386                 randconfig-a016-20210112
+i386                 randconfig-a013-20210112
+i386                 randconfig-a015-20210112
+i386                 randconfig-a014-20210112
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20210112
+x86_64               randconfig-a004-20210112
+x86_64               randconfig-a001-20210112
+x86_64               randconfig-a005-20210112
+x86_64               randconfig-a003-20210112
+x86_64               randconfig-a002-20210112
+
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 315ee987d2d3..6eb88463a24e 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -351,6 +351,12 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 
- 	dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
- 
-+	if (policy_has_boost_freq(policy)) {
-+		ret = cpufreq_enable_boost_support();
-+		if (ret)
-+			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
-+	}
-+
- 	return 0;
- error:
- 	devm_iounmap(dev, base);
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
