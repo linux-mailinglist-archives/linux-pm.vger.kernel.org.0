@@ -2,90 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A928C2F542E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 21:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311992F5489
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 22:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbhAMUde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 15:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728847AbhAMUde (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 15:33:34 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C0BC061794;
-        Wed, 13 Jan 2021 12:32:53 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id s26so4700113lfc.8;
-        Wed, 13 Jan 2021 12:32:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+mMQvJM4wNZIQ6YSpFszBGOcba68DllQ5kC+BP4fDqA=;
-        b=k4B2q1PiIdjAOMiVKZd5hh3UaTbrMuM7ssCdnyVI5r2KZsPJvV6y58C37Xhi9+H/ty
-         OMWDNFW9NIpQhFZHmyAd8BFlJ/cpJelLNk9fXoDGWO8UjC84WCUwxfl88irrtkj4/0VT
-         /SCzIoiUHiIiexLLjZrYvU3osnmDazLinjd69L0nq9Zu3basZZRg4vg4pv1aE0UsGUr9
-         kc8FkHzOuEqTDusGcVROPh6on+sf9vl0hhMcf7c2N8plxat9xPi0HMcnSX5pLiAhyPZS
-         I79CiGeyiOghlKOg0w5QPqOte1mz7s3u7+Z5BI9wH6tO2hZ/a5HEC5cC62D5dLqjgBcS
-         NQIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+mMQvJM4wNZIQ6YSpFszBGOcba68DllQ5kC+BP4fDqA=;
-        b=apwsRtm7rJ2S6UNcE9pK7hRfGZrauLTXqeE8Bs3WGy7ictZsHF0HUTglI/D0ZDbLLD
-         AHeLIOl9VCqndwL3Yo2bAw39YycJuXm2OtbPdp+GYbRJWHaqLA9iTMWy4cTDLKicQMjw
-         YeDsYgWt03WD9uyIgwMBuDqf6/FGbbiGLCxIQZKDH62OqVZKh2FZ2muoZTs55/9GZMQy
-         msm2C+FpXqzUFtRwetRBBxsQGvYuVkecYfUatOIXccXdyuf5v00Kjgca8xS1fmMf7ShU
-         8vTMWVOMZ8ZipWknRuQouZq2gUOCE5GbWREQCFCw5bYMXrolkQfI8XN7WoJ1rdpIyjcA
-         qfZg==
-X-Gm-Message-State: AOAM530mt07qOhDCXtq47Uai+STAsufuub8gyEYLrRDoQeY/OKJHz8PO
-        Y72dB9COZUYxA+xT8eC2BWo=
-X-Google-Smtp-Source: ABdhPJwcs0EZNBCk+4uLIDnvt23NEpqJqlglPMOPuIqXpYb6fjPHz2V0uv2YzDm0TH7D392Vu4sBkg==
-X-Received: by 2002:ac2:51af:: with SMTP id f15mr1680335lfk.592.1610569971999;
-        Wed, 13 Jan 2021 12:32:51 -0800 (PST)
-Received: from localhost.localdomain (h-98-128-228-148.NA.cust.bahnhof.se. [98.128.228.148])
-        by smtp.gmail.com with ESMTPSA id w202sm311194lff.182.2021.01.13.12.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 12:32:51 -0800 (PST)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH 2/2] power: supply: core: Constify static struct attribute_group
-Date:   Wed, 13 Jan 2021 21:32:43 +0100
-Message-Id: <20210113203243.20146-3-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210113203243.20146-1-rikard.falkeborn@gmail.com>
+        id S1729078AbhAMVUv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 16:20:51 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38548 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729070AbhAMVTS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 16:19:18 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 410901F44F75
+Received: by earth.universe (Postfix, from userid 1000)
+        id E1E673C0C94; Wed, 13 Jan 2021 22:19:50 +0100 (CET)
+Date:   Wed, 13 Jan 2021 22:19:50 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     Mike Looijmans <mike.looijmans@topic.nl>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] power: supply: Constify static struct attribute_group
+Message-ID: <20210113211950.vjqo5vywpsysxo3t@earth.universe>
 References: <20210113203243.20146-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kukvvetchmjri4zq"
+Content-Disposition: inline
+In-Reply-To: <20210113203243.20146-1-rikard.falkeborn@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The only usage of it is to put its address in an array of pointers to
-const static structs. Make it const to allow the compiler to put it in
-read-only memory.
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/power/supply/power_supply_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--kukvvetchmjri4zq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 92dd63171193..c3d7cbcd4fad 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -374,7 +374,7 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
- 	return 0;
- }
- 
--static struct attribute_group power_supply_attr_group = {
-+static const struct attribute_group power_supply_attr_group = {
- 	.attrs = __power_supply_attrs,
- 	.is_visible = power_supply_attr_is_visible,
- };
--- 
-2.30.0
+Hi,
 
+On Wed, Jan 13, 2021 at 09:32:41PM +0100, Rikard Falkeborn wrote:
+> Constify two static struct attribute_group. The only place they are
+> used is to put their address in an array of pointers to const struct
+> attribute_group. With these patches applied, all static attribute_group
+> structs in drivers/power are const.
+
+Thanks, I queued both to power-supply's for-next branch.
+
+-- Sebastian
+
+--kukvvetchmjri4zq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl//Y/MACgkQ2O7X88g7
++pq7UQ/6A6k4wZbdEVwjlFsNLTPuQQ6LHAHisbRopf4kAurq/N0e4uLvl5Q0K0HM
+c2pqHqGj41X+o8/CvsULdgYnkexGGVFOO/mUSSawq1grvsaheL9bbOpMlWKYSuKM
+wQHIPqBGN6S8CvF7Tl9JxcKYwVAe1JuR5tj7o+C6S2gE/vmBRtCXMlETvSyYF9vN
+a0JUidWZAMW3M4xQ9IVSqFRd6VhxiISpNRcvKoUvmw8Tvfv4Gd3KFLuW4cjPvVTX
+pL+JfYv0cknikUXDG1t+GkBFsRR9mxASHC3u4sRZgBXnrqznjakHUdQpp4zjlwVe
+zKV6Una/1GK4G26xjsX3ANKGgLyMzBJOKtHWRPJzr6/o5kA2nNb2GdBolQFljIhe
+QbLcl7sJ6pnWe/FCYvMIXrNx2bexGW2UqyD1N33/f2nMHZS1VbXL1cNUOWEMa/ht
+s9F5R0UUC50oxwKlmV5aSaIhQu+L79ccE/9bwwtTh7pRj65uDMQGqbVpFLp+iCNh
+Pyj7eTiGWI1QLtOa/TIQWIDAjl4IeONIMVDRLaR1azJ1E21adWe7V1aiJ0FSpvyH
+hbZ79toyHT/2m7IDDIv0LLZhOC7Aj0FlNPBq7SI05X5ZZ0/o744bhnEi+8srP+27
+8CpomsiWrgRIwu/f2h6PWhiHurO1kM5TXqqgHt8TyQSa56zWRxo=
+=u/mS
+-----END PGP SIGNATURE-----
+
+--kukvvetchmjri4zq--
