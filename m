@@ -2,292 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570152F4FC1
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 17:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A052F5102
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jan 2021 18:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbhAMQTt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jan 2021 11:19:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:38832 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727205AbhAMQTt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 13 Jan 2021 11:19:49 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D53BBD6E;
-        Wed, 13 Jan 2021 08:18:57 -0800 (PST)
-Received: from localhost (unknown [10.1.198.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 674733F66E;
-        Wed, 13 Jan 2021 08:18:57 -0800 (PST)
-Date:   Wed, 13 Jan 2021 16:18:56 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Puhov <peter.puhov@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC V2 1/2] topology: Allow multiple entities to provide
- sched_freq_tick() callback
-Message-ID: <20210113161855.GA32402@arm.com>
-References: <cover.1608030508.git.viresh.kumar@linaro.org>
- <28ade070dd80f6f22d6e8fce5db5f0142b428fa9.1608030508.git.viresh.kumar@linaro.org>
+        id S1728336AbhAMRU3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jan 2021 12:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728081AbhAMRU2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jan 2021 12:20:28 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F6DC061786
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jan 2021 09:19:48 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id 15so2889437oix.8
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jan 2021 09:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mjg/jy0DZZvh04Gg0ZIjuk4S6kMRfKUqimeQdNDRAhY=;
+        b=NOSxj9uFAtN+cQGRweNSMDktTTciP/m5r4eugWeqMVmqGUhaZZoEeVw3UlgDzgdZ1S
+         zGwm0xBbCsqHEtpRR/SI0HTnITrKvX6xoay3aWHq0gbN5z5v6dpUM5ZS6gRZXKKeCPTJ
+         7b1Zmrcp8KmlAJ2aedEuaSRVabZuI2T9yAi01WDXkTG9BzaBopQMjdNi4NFfpElKQKxJ
+         /44wANgcMPdCyC4Lzf99g2WYM6qOIicdqF8AoGx+Q7PoxE5PsPNVSeFCvnBuuDIdcpBC
+         cXCl6AenutzNgOiU6WncKcGcHjtbiUr12+P4f6vVbI2xG124HYiQxZzHwHMyrrSGx0gY
+         Ttvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mjg/jy0DZZvh04Gg0ZIjuk4S6kMRfKUqimeQdNDRAhY=;
+        b=GUX3NZ2R5VAbpBE1FO+YJvdCrmNqbUnus5USTd1jYmHXvhw1OnqE61jRk7CAkE6k7V
+         DTDFpqxpNAGESoTxWj4dO8gYfCr+5hEqQ9QZyipxjuMNEM5iwrgAJcz9ZdQnIElbRN4I
+         6Mqnc+7Lu0HLany5j0QTIff5ljNB4c2qU5jZ3iL3ugpMdtwzKwlpe3g3NLAwFYPZlde/
+         aZnxCyNAnxIPh3X11PMLRn9WIIPjwswrvTC2nx/pa59Ky+3oLChuHhf57smkzJtTcHC0
+         e8JM8EV8kXbGKiBtL9fhUz2AbcZ2X0OYiYbi1GaWn7/VXEU8vTGmPekLEDwZIW1oE66Z
+         7imQ==
+X-Gm-Message-State: AOAM530SWJ+ql8zH/v9GA+19ym3JNC0+HYtGWJztoCfkQZKWocp87+0/
+        46y+z+cxwjbDhHK3uHEyrTaNU5knwcRgW6k7zRGrBQ==
+X-Google-Smtp-Source: ABdhPJyblEJ+ghunXPkjZ+L33I7pPCUNf5kVsgKX6Zykxco0gDU7ktSedzB8qJcsKFCITlg6Yk3YhXq9b1JhYPDZ2wQ=
+X-Received: by 2002:aca:b145:: with SMTP id a66mr201607oif.92.1610558387362;
+ Wed, 13 Jan 2021 09:19:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28ade070dd80f6f22d6e8fce5db5f0142b428fa9.1608030508.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20201204025509.1075506-1-dmitry.baryshkov@linaro.org> <20201205170830.4d56ecb7@archlinux>
+In-Reply-To: <20201205170830.4d56ecb7@archlinux>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 13 Jan 2021 20:19:36 +0300
+Message-ID: <CAA8EJporM=aZAn8-ZmocGJCT=KSZHvRMNH5xeBUQ_hypN_M4=g@mail.gmail.com>
+Subject: Re: [PATCH v10 00/15] qcom: pm8150: add support for thermal monitoring
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>, linux-pm@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jishnu Prakash <jprakash@qti.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hello,
 
-I focused for now on the design of the solution and mostly on the
-generic code in arch_topology.c, as that will then impact the arm64
-code. 
+On Sat, 5 Dec 2020 at 20:08, Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Fri,  4 Dec 2020 05:54:54 +0300
+> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
+>
+> > This patch serie adds support for thermal monitoring block on Qualcomm's
+> > PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
+> > to support thermal zones provided by this thermal monitoring block.
+> > Unlike the rest of PMIC thermal senses, these thermal zones describe
+> > particular thermistors, which differ between from board to board.
+>
+> I've just taken another look through the various IIO parts in here and
+> I think they are fine.
+>
+> My assumption is that given the timing this isn't going to make the merge
+> window now.  Hence I'll be looking to do an immutable branch based on rc1
+> once it's available (assuming everyone else is fine with this version).
 
-On Tuesday 15 Dec 2020 at 16:46:35 (+0530), Viresh Kumar wrote:
-[..]
->  
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index de8587cc119e..07774fb47bc4 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -21,17 +21,65 @@
->  #include <linux/sched.h>
->  #include <linux/smp.h>
->  
-> +static DEFINE_PER_CPU(struct scale_freq_tick_data *, sft_data);
-> +static struct cpumask scale_freq_tick_mask;
-> +
-> +static bool supports_scale_freq_tick(const struct cpumask *cpus)
-> +{
-> +	return cpumask_subset(cpus, &scale_freq_tick_mask);
-> +}
-> +
->  bool topology_scale_freq_invariant(void)
->  {
->  	return cpufreq_supports_freq_invariance() ||
-> -	       arch_freq_counters_available(cpu_online_mask);
-> +	       supports_scale_freq_tick(cpu_online_mask);
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-I think the names that involve "scale_freq_tick" are unfortunate and
-unclear here. arch_scale_freq_tick() is a good wrapper as it refers to
-some work being done for FIE on the tick, but for other functions and
-structures here, any similar naming makes things unclear.
+Another gracious ping.
 
-Basically all FIE related activity on the tick involves counters that
-need regular sampling. So I'd suggest to keep to names that give a hint
-about the source of information for frequency invariance, as it makes it
-more clear what are the options you're choosing between for FIE.
+Daniel, any comments for the thermal part?
 
-s/supports_scale_freq_tick/supports_scale_freq_counters
-s/scale_freq_tick_data/scale_freq_data
-s/topology_set_scale_freq_tick/topology_set_scale_freq_source
-s/topology_clear_scale_freq_tick/topology_clear_scale_freq_source
-s/scale_freq_tick_mask/scale_freq_counters_mask
+Jonathan, there was  a proposal to have an immutable branch for this
+series. Do you still plan to create it? If IIO parts are fine with
+you, it might be feasible to get that into 5.12 with thermal part
+either being part of the same patch series or coming later depending
+on Daniel's comments.
 
-.. or similar.
+>
+> Thanks,
+>
+> Jonathan
+>
+> >
+> > Changes since v9:
+> >  - In patch 12 add comments to the code as requested by Daniel Lezcano.
+> >  - Change copyright comment in qcom-spmi-adc-tm5.c to clearly note
+> >    driver history.
+> >
+> > Changes since v8:
+> >  - Simplified qcom_vadc_map_voltage_temp() code by removing ascending
+> >    tables support
+> >  - Simplified qcom-vadc-common volt/temp mapping code
+> >  - Implement suggestions by Matthias Kaehlcke: message formatting,
+> >    rewrite comments, remove unused variable initialization.
+> >
+> > Changes since v7:
+> >  - Move qcom-vadc-common.h header to include/linux/iio/adc/ dir.
+> >  - Use explicit sizeof(var) instead of hand-coding 1 when accessing
+> >    adc-tm registers.
+> >  - Remove buffer read from adc_tm5_init().
+> >  - Remove extra on-stack var from adc_tm5_get_temp().
+> >  - Minor formatting changes as suggested Daniel.
+> >
+> > Changes since v6:
+> >  - Added include <linux/bitfield.h> as noted by Jishnu Prakash.
+> >
+> > Changes since v5:
+> >  - Reworked DT bindings:
+> >    * Removed qcom,adc-channel, instead it is parsed from io-channels
+> >    * Renamed qcom,hw-settle-time to include -us suffix
+> >  - Re-added monitor enabling which got lost during refactored. Noted by
+> >    Jishnu Prakash.
+> >  - Use threaded IRQ handler as susggested by Jishnu.
+> >
+> > Changes since v4:
+> >  - Added kernel-doc comments to ADC-TM structures
+> >  - Used several sizeof(buf) instead of hand-conding register size
+> >
+> > Changes since v3:
+> >  - Fix DT description to spell "thermal monitoring" instead of just TM
+> >  - Fix warnings in DT example
+> >  - Add EXPORT_SYMBOL_GPL(of_iio_channel_get_by_name)
+> >  - Fixed whitespace chanes in qcom-vadc-common.c
+> >  - Removed error message if IIO chanel get returns -EPROBE_DEFER
+> >
+> > Changes since v2:
+> >  - IIO: export of_iio_channel_get_by_name() function
+> >  - dt-bindings: move individual io-channels to each thermal monitoring
+> >    channel rather than listing them all in device node
+> >  - added fallback defaults to of_device_get_match_data calls in
+> >    qcom-spmi-adc5 and qcom-spmi-adc-tm5 drivers
+> >  - minor typo fixes
+> >
+> > Changes since v1:
+> >  - Introduce fixp_linear_interpolate() by Craig Tatlor
+> >  - Lots of syntax/whitespace changes
+> >  - Cleaned up register definitions per Jonathan's suggestion
+> >  - Implemented most of the suggestions from Bjorn's and Jonathan's
+> >    review
+> >
+> >
+>
 
-> +}
-> +
-> +void topology_set_scale_freq_tick(struct scale_freq_tick_data *data,
-> +				  const struct cpumask *cpus)
-> +{
-> +	struct scale_freq_tick_data *sftd;
-> +	int cpu;
-> +
-> +	for_each_cpu(cpu, cpus) {
-> +		sftd = per_cpu(sft_data, cpu);
-> +
-> +		/* Use AMU counters whenever possible */
-> +		if (!sftd || sftd->source != SCALE_FREQ_SOURCE_AMU) {
 
-I don't think the arch_topology driver should know anything about AMUs, as
-they are an arm64 feature. SCALE_FREQ_SOURCE_ARCH might be better.
-This way any architecture that uses the arch topology driver can register
-some architected method which should take priority over all other
-methods (at least until someone shows up wanting otherwise).
-
-> +			per_cpu(sft_data, cpu) = data;
-> +			cpumask_set_cpu(cpu, &scale_freq_tick_mask);
-> +		}
-> +	}
->  }
-> +EXPORT_SYMBOL_GPL(topology_set_scale_freq_tick);
->  
-> -__weak bool arch_freq_counters_available(const struct cpumask *cpus)
-> +void topology_clear_scale_freq_tick(enum scale_freq_tick_source source,
-> +				    const struct cpumask *cpus)
->  {
-> -	return false;
-> +	struct scale_freq_tick_data *sftd;
-> +	int cpu;
-> +
-> +	for_each_cpu(cpu, cpus) {
-> +		sftd = per_cpu(sft_data, cpu);
-> +
-> +		if (sftd && sftd->source == source) {
-> +			per_cpu(sft_data, cpu) = NULL;
-> +			cpumask_clear_cpu(cpu, &scale_freq_tick_mask);
-> +		}
-> +	}
->  }
-> +EXPORT_SYMBOL_GPL(topology_clear_scale_freq_tick);
-> +
-> +void topology_scale_freq_tick(void)
-> +{
-> +	struct scale_freq_tick_data *sftd = *this_cpu_ptr(&sft_data);
-> +
-> +	if (sftd)
-> +		sftd->scale_freq();
-> +}
-
-What do you think about having a single topology function that handles
-all sources of invariance (cpufreq, arch counters, platform counters)?
-
-Snippet of possible code:
-
-"""
-diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-index be6a53ba3e2d..d9b7221b8ea9 100644
---- a/arch/arm64/include/asm/topology.h
-+++ b/arch/arm64/include/asm/topology.h
-@@ -19,7 +19,7 @@ int pcibus_to_node(struct pci_bus *bus);
- void update_freq_counters_refs(void);
- 
- /* Replace task scheduler's default frequency-invariance scale factor setting */
--#define arch_scale_freq_tick topology_scale_freq_tick
-+#define arch_scale_freq_tick() topology_set_freq_scale(NULL, 0, 0)
- 
- /* Replace task scheduler's default frequency-invariant accounting */
- #define arch_set_freq_scale topology_set_freq_scale
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 07774fb47bc4..a669963e7b01 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -70,38 +70,27 @@ void topology_clear_scale_freq_tick(enum scale_freq_tick_source source,
- }
- EXPORT_SYMBOL_GPL(topology_clear_scale_freq_tick);
- 
--void topology_scale_freq_tick(void)
--{
--	struct scale_freq_tick_data *sftd = *this_cpu_ptr(&sft_data);
--
--	if (sftd)
--		sftd->scale_freq();
--}
--
- DEFINE_PER_CPU(unsigned long, freq_scale) = SCHED_CAPACITY_SCALE;
- EXPORT_SYMBOL_GPL(freq_scale);
- 
- void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
- 			     unsigned long max_freq)
- {
-+	struct scale_freq_tick_data *sftd;
- 	unsigned long scale;
- 	int i;
- 
--	if (WARN_ON_ONCE(!cur_freq || !max_freq))
--		return;
--
--	/*
--	 * If the use of counters for FIE is enabled, just return as we don't
--	 * want to update the scale factor with information from CPUFREQ.
--	 * Instead the scale factor will be updated from arch_scale_freq_tick.
--	 */
--	if (supports_scale_freq_tick(cpus))
--		return;
--
--	scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
--
--	for_each_cpu(i, cpus)
--		per_cpu(freq_scale, i) = scale;
-+	/* Retrieve provided method for scale factor setting for current CPU */
-+	if (!cpus) {
-+		sftd = *this_cpu_ptr(&sft_data);
-+		if (sftd)
-+			sftd->scale_freq();
-+	} else if (cur_freq && max_freq) {
-+		/* Use arguments to compute and set scale factor for CPUs */
-+		scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
-+		for_each_cpu(i, cpus)
-+			per_cpu(freq_scale, i) = scale;
-+	}
- }
- 
- DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index 09205b584ca5..9b41a90fc955 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -44,7 +44,6 @@ struct scale_freq_tick_data {
- 	void (*scale_freq)(void);
- };
- 
--void topology_scale_freq_tick(void);
- void topology_set_scale_freq_tick(struct scale_freq_tick_data *data, const struct cpumask *cpus);
- void topology_clear_scale_freq_tick(enum scale_freq_tick_source source, const struct cpumask *cpus);
- 
-"""
-
-This basically says that if there is a method registered for a certain
-CPU to set the scale factor, that method should be used. Otherwise,
-rely on this default math of obtaining the scale factor based on the
-current and maximum frequency arguments, if they are provided.
-
-This could get us rid of supports_scale_freq_tick() and possibly
-even the scale_freq_tick_mask. topology_set_scale_freq_tick() and
-topology_clear_scale_freq_tick() could also be used to enable and
-disable system level invariance (through a static key) so we don't have
-to do cpumask checks in topology_scale_freq_invariant().
-
-We might then add a static key to prevent those useless conditions being
-evaluated on the tick. But we'll see possible optimisations later.
-
-> +
->  DEFINE_PER_CPU(unsigned long, freq_scale) = SCHED_CAPACITY_SCALE;
-> +EXPORT_SYMBOL_GPL(freq_scale);
->  
->  void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
->  			     unsigned long max_freq)
-> @@ -47,7 +95,7 @@ void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
->  	 * want to update the scale factor with information from CPUFREQ.
->  	 * Instead the scale factor will be updated from arch_scale_freq_tick.
->  	 */
-> -	if (arch_freq_counters_available(cpus))
-> +	if (supports_scale_freq_tick(cpus))
->  		return;
->  
->  	scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index 0f6cd6b73a61..b2422ebef2dd 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -34,7 +34,18 @@ void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
->  			     unsigned long max_freq);
->  bool topology_scale_freq_invariant(void);
->  
-> -bool arch_freq_counters_available(const struct cpumask *cpus);
-> +enum scale_freq_tick_source {
-> +	SCALE_FREQ_SOURCE_AMU,
-> +};
-> +
-> +struct scale_freq_tick_data {
-> +	enum scale_freq_tick_source source;
-> +	void (*scale_freq)(void);
-> +};
-
-s/scale_freq/set_freq_scale?
-
-Hope it helps,
-Ionela.
-
-> +
-> +void topology_scale_freq_tick(void);
-> +void topology_set_scale_freq_tick(struct scale_freq_tick_data *data, const struct cpumask *cpus);
-> +void topology_clear_scale_freq_tick(enum scale_freq_tick_source source, const struct cpumask *cpus);
->  
->  DECLARE_PER_CPU(unsigned long, thermal_pressure);
->  
-> -- 
-> 2.25.0.rc1.19.g042ed3e048af
-> 
+-- 
+With best wishes
+Dmitry
