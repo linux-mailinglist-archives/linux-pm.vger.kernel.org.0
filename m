@@ -2,81 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB7F2F5B69
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 08:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FB72F5B78
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 08:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727305AbhANHgy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 02:36:54 -0500
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:58439 "EHLO
+        id S1726820AbhANHmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jan 2021 02:42:15 -0500
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:57343 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727134AbhANHgx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 02:36:53 -0500
+        by vger.kernel.org with ESMTP id S1727184AbhANHmO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 02:42:14 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 526291287;
-        Thu, 14 Jan 2021 02:30:14 -0500 (EST)
+        by mailnew.west.internal (Postfix) with ESMTP id 1FC7C12FF;
+        Thu, 14 Jan 2021 02:30:17 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 14 Jan 2021 02:30:14 -0500
+  by compute6.internal (MEProxy); Thu, 14 Jan 2021 02:30:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=11vVmhICgQaKCnjaXu8ChcmbdO
-        WIh2uA9aaQxcrccQ8=; b=uYugPZPr5TY3Y5wo92jQ7fY/ktNwxpsQfl2IvMa4xy
-        NychX2NQrdDnWxTkQG/32SkYUk9aQF9CGapoKE/A9nH8iOhOXpSzcamGZFBtDkZD
-        97T9vF19T8s5fRLlcZmHI9PQJh0LoEpS1IQ9UQ54cveHOMB302TfdmjkzZCXb35H
-        YmTQM/pMePEbAUc2GD2HkfkuqjK0pszOll5QggLRP0+zhgIgFrO51RcE7ZBIyLMI
-        Jk9XVFjTT1T1feiJRx2tz1IimYJBqxESmmgYUAXsHeOSUf5xjAmfrkxKE75Usn86
-        JVqtYJWU2+lSQul0C59LdvMpFJESeUY1drGxlV274wuw==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=pl/fwFs3liZoW
+        1v6PYB/hJz7Z5at8pyDDKPnWlYHs1U=; b=BI0LDD2GoxMjL26gyU+iOizKcSWr0
+        1HaMutMvHBoo8RpmAmvEd5+I2mdI1LSawp3yc9Qn+jSAn83FTctDSFOhqsaAVl0+
+        wpInRqcY6md7hC/95ofB3J4L/AT/f5aXAOAajvjl5z0p3KSqKLhp7A2YiuirVnm4
+        GaWBE3P+oZOvdidIvuYGuB7icYBc/IajT5Uyv6FpIH8yF1iF/7olsWq6dHy1Etp8
+        ovOOhvINwy0xQSqyEBdULtMqrKrXSFOiZnK2HDOFezcHB2AlUtHGfzCEA2sq1RQy
+        clGDtctX30+RJGqEZhnNLy8WLzAmxLhY5FhA0/VmtQV5utucv3ZHgLNiA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=11vVmhICgQaKCnjaX
-        u8ChcmbdOWIh2uA9aaQxcrccQ8=; b=ekia3S8WvMiLMDcSuccOzG4Kbpfvt4iCw
-        2epibDoM7SCDPs0Dbhys2YwYCS4s/VQaP12BhxB+G//Ht+CnosmiPV3gW7sa1qY3
-        iHZLwKFx/DXg1RIRoFy8JXsCNLoUDNgrvRc5urV2ZoeKYE2hx9FTeL1VMU9Rnt9V
-        Vn4aXJYYUOfCWWsu7QzKq6G5CYHGRvxiKfJaHSRA9RfhPwuIYw2ZfOTSIlbNk6QP
-        VgL32TMhmaMgsJEsXJgzKOYybC0j4DOP0YLFmKi7q8sQc2XqZSHtBTUtq4P3YVb/
-        91bMnu1mZ0KLrAJJr0XUpWB9EvVa3wrp7gxqsmmmzBrRWLFRjzApQ==
-X-ME-Sender: <xms:BfP_X427NJEK1VBtxdgJDUmFT5h4_QT_nDOwwVLsRAfaaOZhYEyOig>
-    <xme:BfP_XzGl5qc42QDNnUExx2IgBWcehSSkKMj9t1iC7VP42jxbJjNf4Z2EFKvR-WW8o
-    x4uY1SUAloA2dgkSho>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=pl/fwFs3liZoW1v6PYB/hJz7Z5at8pyDDKPnWlYHs1U=; b=rCg5rHjS
+        9y49OLQb0JdvrwR53IPLinRqWsQ80A+Qo1v+7bfqu6yJGieWIEGYPWhYfpy6pBki
+        PbgCf7Y+bMslx4BK6vdl6R1r3DHoXCBMdTYu6OyiKwR+U6SGSoumHjglySCVgS/H
+        V86uDCs1OtNH6Us9/CEGA5lniHXYa84ADeRI2P9Uu5wSvMuzSNweeLCf4yXj7UHZ
+        6iFr58XemHn+5SIaXGNl5R/C4DP43cExiQQQGxH/SGSACEujppYxekMzYCkK7PVv
+        GcPxx5zLJeGEXpmYf63sZWTi83GtLn3XbIsjghAA7mJpHeA7x4muW89Qc6rm5Bao
+        a7KmUDMn+QKzrA==
+X-ME-Sender: <xms:CPP_X8DgdF0W1esa_eUxLF1m6BNRaXDvJNCt56hphkDJ_jL5bBrkWg>
+    <xme:CPP_X-hNpsW0-XiCDJ0w6nROgjIwmgO5bubX0p20m0hFfyMbfudnBepH3Yo_IcD-G
+    7zh32Vl_flFuVWasEE>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedukedrtdeggddutdekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgggfestdekredtre
-    dttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehf
-    lhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpefhjedtkedtueehtdeifeetke
-    evffetjeetfeegkeevgefftedvudfgleeihfdtudenucfkphepudduiedrvddvkedrkeeg
-    rddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjh
-    hirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:BfP_Xw60KnRHPapbenhFx6xwcPOmIJWkwqIn-r8vZ0aSIvQLbxe1xw>
-    <xmx:BfP_Xx2qvjn8Ra1G0x3J2Al8VXC9o0GQmJ04A_e5M0DW26vX8RX_hA>
-    <xmx:BfP_X7FABBjB779Ez1ytKAEO86ZWAZt5Tgox3gisRc9sgVAN6aBiiQ>
-    <xmx:BfP_XwRTGsLGBvr90KDOzZyHtd5VIB4TFSEmwhlD2ncIXojr8cvLDXAa0pw>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
+    dtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeehgfelvdeugeetheekge
+    dvgeehhfektdetteelhfefkeeuudekvedtteffteegkeenucffohhmrghinhepkhgvrhhn
+    vghlrdhorhhgnecukfhppeduudeirddvvdekrdekgedrvdenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhih
+    ghhorghtrdgtohhm
+X-ME-Proxy: <xmx:CPP_X_nzDYu7aSe4WcCri5SV-DXdvJ4h5YuNyXF-BdvwLgaIXJEg0Q>
+    <xmx:CPP_XywDktoM2iR645hHh7G4ro15Xk4L2iy91ydtXiZIF4tJvgjTZA>
+    <xmx:CPP_XxSm2I8puEZp8SWnvM65oC9hv0Wv_-Ni8GffQZO2qf_3mGjNWw>
+    <xmx:CPP_X8fhwkPlkQmuKC-BR7b1xOSXYTdRjZ2M0X8NzDMyNSKQDIAAQFzI3To>
 Received: from strike.U-LINK.com (unknown [116.228.84.2])
-        by mail.messagingengine.com (Postfix) with ESMTPA id E95C0108005B;
-        Thu, 14 Jan 2021 02:30:10 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 13BAA108005C;
+        Thu, 14 Jan 2021 02:30:13 -0500 (EST)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-acpi@vger-kernel.org
 Cc:     hdegoede@redhat.com, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 0/2] ACPI: platform-profile enhancements
-Date:   Thu, 14 Jan 2021 15:30:02 +0800
-Message-Id: <20210114073004.174502-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH 1/2] ACPI: platform-profile: Drop const qualifier for cur_profile
+Date:   Thu, 14 Jan 2021 15:30:03 +0800
+Message-Id: <20210114073004.174502-2-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210114073004.174502-1-jiaxun.yang@flygoat.com>
+References: <20210114073004.174502-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Replacing b417d9c7404df67b9be0104585fefb2ca8d36677 at pm/bleeding-edge.
+All planned uses of cur_profile have their platform_profile_handler
+defined as const, so just drop const qualifier here to prevent build
+error.
 
-Jiaxun Yang (2):
-  ACPI: platform-profile: Drop const qualifier for cur_profile
-  ACPI: platform-profile: Introduce object pointers to callbacks
+Link: https://lore.kernel.org/linux-acpi/5e7a4d87-52ef-e487-9cc2-8e7094beaa08@redhat.com/
+Suggested-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ drivers/acpi/platform_profile.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/acpi/platform_profile.c  | 6 +++---
- include/linux/platform_profile.h | 6 ++++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_profile.c
+index 91be50a32cc8..9dddf44b43d4 100644
+--- a/drivers/acpi/platform_profile.c
++++ b/drivers/acpi/platform_profile.c
+@@ -9,7 +9,7 @@
+ #include <linux/platform_profile.h>
+ #include <linux/sysfs.h>
+ 
+-static const struct platform_profile_handler *cur_profile;
++static struct platform_profile_handler *cur_profile;
+ static DEFINE_MUTEX(profile_lock);
+ 
+ static const char * const profile_names[] = {
 -- 
 2.30.0
 
