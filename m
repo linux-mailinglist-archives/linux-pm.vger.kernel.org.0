@@ -2,97 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E86B32F631F
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 15:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2EB2F64B1
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 16:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728952AbhANO3K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 09:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S1727183AbhANPdp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jan 2021 10:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727121AbhANO3J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 09:29:09 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E57C0613C1
-        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 06:28:29 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id a6so4714408wmc.2
-        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 06:28:29 -0800 (PST)
+        with ESMTP id S1728967AbhANPdo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 10:33:44 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E129CC061574
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 07:33:03 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id a109so5544095otc.1
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 07:33:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MPTk+HmqdCjdjidJtOd0WIYIXVB1tbYmSpL5fOenu7I=;
-        b=U4OkCt2msRgYdPGx2VgRmbl4PmL6wgg4w68xLUYwLKxSnkNAk9cpI68qtYgN1RhPEQ
-         YSFAIw4sIz9sWUDhNl2VC8ZVg5TiWgmtv3ynMMDJDgcMvnB37SS1SbrtMOmm1W3iDbT6
-         36a1uFlgSWrXqbDvmwXjmRxUwoWozCfhZDSLbBWP/vNiDZqsrBTF1dcf+Ww+ytZ6dTed
-         Tho5d/6VxHg/KDbIvb8MK6WEY3UmLrAc+MdUtGhwqP41N0UE1rJpZWl0mAFImNQVZ+ir
-         PTi+8Kk9ZnzzY1XKJ9NPxBHLLzfdfwEWPtVhD4mHh6qg96xSuu5dRHWTY3CGCoBOw1WP
-         BA3g==
+        d=kali.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=CN9yyasN1oxiJuUILssDAKyt/f3/POyBWjHsMKxopUE=;
+        b=haLehNxceNh0sZMnqyZ9Xs8INXb/FJbxtSizLpM+DEwdcF+HnASr+8VxC/SOFGCDHj
+         gNr1tjqKKJJE7Iai4bvvkqNL0YshUPr72SgP7jpVjf2twHGSpFCLIEwu2UYLLZ4EhzH5
+         3BAXf3PA+oy5JrmuKtkhkmkKYkY82f7SXcJZ5qDE0yhxhaH7dBMlmXM+vzBxH1AD1igF
+         OP8uLbTVUq30eI4thlFdbO9Cyc7FZMB4HOaAnNUOCYBQqjgoEsibnsA2JrxUf1+/HefS
+         FdKnK/9bgklMMzavMIkHkGjWLQ8yP9aQea8F4DVpv1HzGjmGky5m7Qo7g6Lp+fRchdzM
+         K+ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MPTk+HmqdCjdjidJtOd0WIYIXVB1tbYmSpL5fOenu7I=;
-        b=hUkjdRF42p4Uz27gwNT/aCU9NgCyVKbXryXoddcHMwBRTua+t95gxUtw/PmMA23Axi
-         MZwiOii7VlnKaZCnt7i5t+YmBplr14/m/O5iMzS+7bHcqwVPM2Vt2wknpJvBMM1ITMIR
-         W/f8RbTME9ymJUMLTKyU08FzTgZjnQjoeuX38IOWA3vTPY2vfMe90lw+x3hCNc0eqags
-         JFDAU07+lIkmZQe3raAGKLfDjt2pM1Qi0HNJAtIuFgH4RwxH2mZS/ME0hBiDeX6LM85O
-         RAQfThRour63PlblO48cVPfcQBltnaZWQ3EqYie5hP8SYNWnghesXneufLs8EXXZjx2e
-         e/PA==
-X-Gm-Message-State: AOAM531an4AcXBuQaedoaRiL1097KayfmzZgm2KbBkOs3LWOjjnmCdY1
-        sZZfmd9qfw5q09VyrfpPD3Bllw==
-X-Google-Smtp-Source: ABdhPJyYklvkpRTs6jXoawkcBdR4XMRZtdbAWn4oVTs/qxrQ/dB/X+L8fSSl9mbEg3qnrsoyckjcww==
-X-Received: by 2002:a7b:cd91:: with SMTP id y17mr4250808wmj.5.1610634508112;
-        Thu, 14 Jan 2021 06:28:28 -0800 (PST)
-Received: from dell ([91.110.221.178])
-        by smtp.gmail.com with ESMTPSA id i16sm9557842wrx.89.2021.01.14.06.28.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jan 2021 06:28:27 -0800 (PST)
-Date:   Thu, 14 Jan 2021 14:28:25 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/3] mfd: Add driver for Embedded Controller found on
- Acer Iconia Tab A500
-Message-ID: <20210114142825.GA3975472@dell>
-References: <20201228160547.30562-1-digetx@gmail.com>
- <20201228160547.30562-3-digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=CN9yyasN1oxiJuUILssDAKyt/f3/POyBWjHsMKxopUE=;
+        b=sKnoHpJi+lihMItqY0ypA9dI69u8E++AR+F9ICxveiEYkIQY6ty9pZvg2tHZtPmjFS
+         hKwZpPWalbW8YicJJWGdLwlPA6kSmEtHEOtaNDCbqeHNjJeaxgPsU+FWwIMUGA9dMxUL
+         ID3hahpBLwIrn0hTqY1AQc7vJmKgZBMh0gBICJic/tZW/T6AKMAAzeoIllseV5eZAtUk
+         Ol87se5rwN7ZnDOb2kIqTG7Y+aJE1kr/WxNBdh3OkncYbVe6DrDR/f32GSjvQTtGT1Oh
+         IEw0byBDQR8owl1iSaaqYJic9PaymuY4q0edJajUEAGIN67qCcppfwUR7wz5wXaJMxy+
+         RMeg==
+X-Gm-Message-State: AOAM533sZ3lolQLw9jVLmFCwnLrR/WgFvChAs4oGg93VGMRR/bo1gPQy
+        Ld6iHjnKVAq7mAPrVYzwGZBLvw==
+X-Google-Smtp-Source: ABdhPJyUWxaztSGJAxUr/fYy2F1FrMg130a/TvQCsFZQyVEmeB9AGou56kWg67yR5hoki7h8lxyYXA==
+X-Received: by 2002:a9d:3e2:: with SMTP id f89mr4963458otf.278.1610638383352;
+        Thu, 14 Jan 2021 07:33:03 -0800 (PST)
+Received: from Steevs-MBP.hackershack.net (cpe-173-175-113-3.satx.res.rr.com. [173.175.113.3])
+        by smtp.gmail.com with ESMTPSA id p28sm1119207ota.14.2021.01.14.07.33.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jan 2021 07:33:02 -0800 (PST)
+Subject: Re: [PATCH] cpufreq: qcom-hw: enable boost support
+To:     Shawn Guo <shawn.guo@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20210113065241.23829-1-shawn.guo@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+Message-ID: <020d9f4c-d1bd-a2c9-60e5-97f3ed770ad7@kali.org>
+Date:   Thu, 14 Jan 2021 09:33:01 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20210113065241.23829-1-shawn.guo@linaro.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201228160547.30562-3-digetx@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 28 Dec 2020, Dmitry Osipenko wrote:
 
-> Acer Iconia Tab A500 is an Android tablet device, it has ENE KB930
-> Embedded Controller which provides battery-gauge, LED, GPIO and some
-> other functions. The EC uses firmware that is specifically customized
-> for Acer A500. This patch adds MFD driver for the Embedded Controller
-> which allows to power-off / reboot the A500 device, it also provides
-> a common register read/write API that will be used by the sub-devices.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+On 1/13/21 12:52 AM, Shawn Guo wrote:
+> At least on sdm850, the 2956800 khz is detected as a boost frequency in
+> function qcom_cpufreq_hw_read_lut().  Let's enable boost support by
+> calling cpufreq_enable_boost_support(), so that we can get the boost
+> frequency by switching it on via 'boost' sysfs entry like below.
+>
+>  $ echo 1 > /sys/devices/system/cpu/cpufreq/boost
+>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 > ---
->  drivers/mfd/Kconfig        |  11 ++
->  drivers/mfd/Makefile       |   1 +
->  drivers/mfd/acer-ec-a500.c | 202 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 214 insertions(+)
->  create mode 100644 drivers/mfd/acer-ec-a500.c
-
-Applied, thanks.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 315ee987d2d3..6eb88463a24e 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -351,6 +351,12 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>  
+>  	dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
+>  
+> +	if (policy_has_boost_freq(policy)) {
+> +		ret = cpufreq_enable_boost_support();
+> +		if (ret)
+> +			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
+> +	}
+> +
+>  	return 0;
+>  error:
+>  	devm_iounmap(dev, base);
+Tested-by: Steev Klimaszewski <steev@kali.org>
