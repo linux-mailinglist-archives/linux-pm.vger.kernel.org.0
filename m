@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 351C92F5EBB
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 11:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D69EA2F5EB7
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 11:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725982AbhANK2R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 05:28:17 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:57886 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726503AbhANK2R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 05:28:17 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10EAPAHO015418;
-        Thu, 14 Jan 2021 02:27:30 -0800
+        id S1726581AbhANK1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jan 2021 05:27:47 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:54752 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726551AbhANK1r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 05:27:47 -0500
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10EAPcX0005505;
+        Thu, 14 Jan 2021 02:27:01 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=eFDjoveljCQQJKcxDvUtCMV2TbXj5Ak0PinCMDmx6Uk=;
- b=XQQyXTHecQaz03pF1ebSXJAnSj5+N33gz4th6aQOtBIxxSv0NO3Okf0x5MRYR+33duF2
- 99S4ceVlTz3lYDt8zC327+5AEhsFZcRcrZ/lRQjCZagsvNV56vnuBFry481xns/YIbpc
- uKXzPUt2lzNEERzYvA3o9hvE/fSIntg/ucM54u5AOoi41tXLdG78xpaMCAy0S5tZn4+Z
- ZE3WdXfg68oq7JHh+8POiYi75FgCt3qcQD+B9ghVsEARlszniCUhdwx8B9bdC9NulDPp
- eorbfKg1UdcVqZLSGzJJfoxxjltBGz2xgUzhWlnbsYB9zAyEIscoJw5hG6Zw4q6q8YUV YA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 35ycvpxknt-5
+ content-type; s=pfpt0220; bh=Qokv4bL3z6a0wPGpXzrr8kHylqgug5IZowzc5TWCijg=;
+ b=FeOOki/dXkfJl+ORGsqYbs8TKoJMIdB0r56i9rifWbEkfeFQZmRzxn4wWPwfMT0+/vMI
+ A+kC5RFsKn6P3mjvcVJXOHylVjHt24EKFB3IEE9XuZ2RWBy14pvj39qJydRnSWssHlux
+ txwi++Hg21WD5zAusA7kKoXts7VCHRElDwqZhg06LuIkr7nN/PbAQz8XN7KSzvA3odkz
+ bvQtmoofAX6LyW+SX8k4S2aPiJwFWeEWd2Gojgh7jGfsGgx5bL69f/9eOAQLL94Nh/Lj
+ WkQ2EHC7RtQU6TNf+wG8taSicmOn50zEKPSYErkoa39dnVaLvs0eSL1T/wPNgU288Evf jA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com with ESMTP id 35yaqsxvra-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jan 2021 02:27:30 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Jan
- 2021 02:26:56 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Jan
- 2021 02:26:55 -0800
+        Thu, 14 Jan 2021 02:27:01 -0800
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Jan
+ 2021 02:26:59 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Jan
+ 2021 02:26:59 -0800
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Jan 2021 02:26:55 -0800
+ Transport; Thu, 14 Jan 2021 02:26:59 -0800
 Received: from octopus.marvell.com (octopus.marvell.com [10.5.24.3])
-        by maili.marvell.com (Postfix) with ESMTP id BC8C53F7045;
-        Thu, 14 Jan 2021 02:26:52 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 51D823F7043;
+        Thu, 14 Jan 2021 02:26:56 -0800 (PST)
 From:   <kostap@marvell.com>
 To:     <linux-clk@vger.kernel.org>
 CC:     <linux-pm@vger.kernel.org>, <mturquette@baylibre.com>,
@@ -46,9 +46,9 @@ CC:     <linux-pm@vger.kernel.org>, <mturquette@baylibre.com>,
         <amitk@kernel.org>, <mw@semihalf.com>, <jaz@semihalf.com>,
         <nadavh@marvell.com>, <bpeled@marvell.com>, <stefanc@marvell.com>,
         Konstantin Porotchkin <kostap@marvell.com>
-Subject: [PATCH v2 1/2] thermal: armada: ap806: use firmware SiP services for thermal operations
-Date:   Thu, 14 Jan 2021 12:26:42 +0200
-Message-ID: <20210114102643.16108-2-kostap@marvell.com>
+Subject: [PATCH v2 2/2] clk: mvebu: use firmware SiP service for accessing dfx register set
+Date:   Thu, 14 Jan 2021 12:26:43 +0200
+Message-ID: <20210114102643.16108-3-kostap@marvell.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210114102643.16108-1-kostap@marvell.com>
 References: <20210114102643.16108-1-kostap@marvell.com>
@@ -62,77 +62,66 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Grzegorz Jaszczyk <jaz@semihalf.com>
 
-This patch introduces support for ap806 thermal driver in case when SoC
+This patch introduces support for cpu clk driver in case when SoC
 DFX region is marked as secure by the firmware. In such case accessing
-thermal registers, which are part of dfx register set, will not be
-possible from non-secure world. Due to above the ARM Trusted Firmware
-exposes thermal driver as a SiP service.  This allows Linux thermal
-driver to initialise and perform various operations on thermal sensor
-with use of SMC calls.
+cpu clk registers, which are part of dfx register set, will not be
+possible from non-secure world.
 
-If during ap806 thermal initialisation the SMC is unhandled (old fw
-case), fallback to regmap handling.
+The ARM Trusted Firmware exposes SiP service which allows to read/write
+some dfx registers (white-listed in firmware). This allows Linux cpu clk
+driver to set_rate and recalc_rate with use of SMC calls.
+
+If during cpu clk operation the SMC is unhandled (old fw case), fallback
+to regmap handling.
 
 Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
 Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
 ---
- drivers/thermal/armada_thermal.c  | 125 +++++++++++++++++++-
- include/soc/marvell/armada8k/fw.h |  19 +++
- 2 files changed, 141 insertions(+), 3 deletions(-)
- create mode 100644 include/soc/marvell/armada8k/fw.h
+ drivers/clk/mvebu/ap-cpu-clk.c    | 168 ++++++++++++++++++--
+ include/soc/marvell/armada8k/fw.h |   3 +
+ 2 files changed, 155 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-index c2ebfb5be4b3..ec077e834c85 100644
---- a/drivers/thermal/armada_thermal.c
-+++ b/drivers/thermal/armada_thermal.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright (C) 2013 Marvell
-  */
+diff --git a/drivers/clk/mvebu/ap-cpu-clk.c b/drivers/clk/mvebu/ap-cpu-clk.c
+index b4259b60dcfd..b63bd5da4752 100644
+--- a/drivers/clk/mvebu/ap-cpu-clk.c
++++ b/drivers/clk/mvebu/ap-cpu-clk.c
+@@ -10,6 +10,7 @@
+ 
+ #define pr_fmt(fmt) "ap-cpu-clk: " fmt
+ 
 +#include <linux/arm-smccc.h>
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/io.h>
-@@ -18,6 +19,8 @@
+ #include <linux/clk-provider.h>
+ #include <linux/clk.h>
  #include <linux/mfd/syscon.h>
+@@ -19,6 +20,7 @@
+ #include <linux/platform_device.h>
  #include <linux/regmap.h>
- #include <linux/interrupt.h>
-+#include <linux/time.h>
+ #include "armada_ap_cp_helper.h"
 +#include "soc/marvell/armada8k/fw.h"
  
- #include "thermal_core.h"
- 
-@@ -62,6 +65,8 @@
- #define STATUS_POLL_TIMEOUT_US		100000
- #define OVERHEAT_INT_POLL_DELAY_MS	1000
- 
-+#define THERMAL_SUPPORTED_IN_FIRMWARE(priv) (priv->data->is_smc_supported)
+ #define AP806_CPU_CLUSTER0		0
+ #define AP806_CPU_CLUSTER1		1
+@@ -139,8 +141,118 @@ struct ap_cpu_clk {
+ 	struct clk_hw hw;
+ 	struct regmap *pll_cr_base;
+ 	const struct cpu_dfs_regs *pll_regs;
++	phys_addr_t phys;
++	int (*regmap_read)(struct ap_cpu_clk *clk, unsigned int reg,
++			   unsigned int *val);
++	int (*regmap_write)(struct ap_cpu_clk *clk, unsigned int reg,
++			    unsigned int val);
++	int (*regmap_update_bits)(struct ap_cpu_clk *clk, unsigned int reg,
++				  unsigned int mask, unsigned int val);
++	int (*regmap_read_poll_timeout)(struct ap_cpu_clk *clk, unsigned int reg,
++					unsigned int stable_bit);
 +
- struct armada_thermal_data;
- 
- /* Marvell EBU Thermal Sensor Dev Structure */
-@@ -111,6 +116,12 @@ struct armada_thermal_data {
- 
- 	/* One sensor is in the thermal IC, the others are in the CPUs if any */
- 	unsigned int cpu_nr;
-+
-+	/*
-+	 * Thermal sensor operations exposed as firmware SIP services and
-+	 * accessed via SMC
-+	 */
-+	bool is_smc_supported;
  };
  
- struct armada_drvdata {
-@@ -135,6 +146,18 @@ struct armada_thermal_sensor {
- 	int id;
- };
- 
-+static int thermal_smc(u32 addr, u32 *reg, u32 val1, u32 val2)
++static int dfx_sread_smc(unsigned long addr, unsigned int *reg)
 +{
 +	struct arm_smccc_res res;
 +
-+	arm_smccc_smc(MV_SIP_DFX, addr, val1, val2, 0, 0, 0, 0, &res);
++	arm_smccc_smc(MV_SIP_DFX, MV_SIP_DFX_SREAD, addr, 0, 0, 0, 0, 0, &res);
 +
 +	if (res.a0 == 0 && reg != NULL)
 +		*reg = res.a1;
@@ -140,214 +129,216 @@ index c2ebfb5be4b3..ec077e834c85 100644
 +	return res.a0;
 +}
 +
- static void armadaxp_init(struct platform_device *pdev,
- 			  struct armada_thermal_priv *priv)
- {
-@@ -206,6 +229,27 @@ static void armada375_init(struct platform_device *pdev,
- static int armada_wait_sensor_validity(struct armada_thermal_priv *priv)
- {
- 	u32 reg;
-+	int ret;
-+	ktime_t timeout;
-+
-+	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
-+		timeout = ktime_add_us(ktime_get(), STATUS_POLL_TIMEOUT_US);
-+		do {
-+			ret = thermal_smc(MV_SIP_DFX_THERMAL_IS_VALID,
-+					  &reg, 0, 0);
-+			if (ret || reg)
-+				break;
-+
-+			usleep_range((STATUS_POLL_PERIOD_US >> 2) + 1,
-+				     STATUS_POLL_PERIOD_US);
-+
-+		} while (ktime_before(ktime_get(), timeout));
-+
-+		if (ret == SMCCC_RET_SUCCESS)
-+			return reg ? 0 : -ETIMEDOUT;
-+
-+		return ret;
-+	}
- 
- 	return regmap_read_poll_timeout(priv->syscon,
- 					priv->data->syscon_status_off, reg,
-@@ -238,6 +282,22 @@ static void armada_ap806_init(struct platform_device *pdev,
- {
- 	struct armada_thermal_data *data = priv->data;
- 	u32 reg;
-+	int ret;
-+
-+	/*
-+	 * The ap806 thermal sensor registers are part of DFX which is secured
-+	 * by latest firmware, therefore accessing relevant registers from
-+	 * not-secure world will not be possible. In that case Arm Trusted
-+	 * Firmware exposes thermal operations as firmware run-time service. If
-+	 * SMC initialization succeeds, perform other thermal operations using
-+	 * SMC, otherwise (old fw case) fallback to regmap handling.
-+	 */
-+	ret = thermal_smc(MV_SIP_DFX_THERMAL_INIT, 0x0, 0, 0);
-+	if (ret == SMCCC_RET_SUCCESS) {
-+		dev_info(&pdev->dev, "firmware support\n");
-+		THERMAL_SUPPORTED_IN_FIRMWARE(priv) = true;
-+		return;
-+	}
- 
- 	regmap_read(priv->syscon, data->syscon_control0_off, &reg);
- 	reg &= ~CONTROL0_TSEN_RESET;
-@@ -274,11 +334,17 @@ static void armada_cp110_init(struct platform_device *pdev,
- 
- static bool armada_is_valid(struct armada_thermal_priv *priv)
- {
-+	int ret;
- 	u32 reg;
- 
- 	if (!priv->data->is_valid_bit)
- 		return true;
- 
-+	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
-+		ret = thermal_smc(MV_SIP_DFX_THERMAL_IS_VALID, &reg, 0, 0);
-+		return ret ? false : reg;
-+	}
-+
- 	regmap_read(priv->syscon, priv->data->syscon_status_off, &reg);
- 
- 	return reg & priv->data->is_valid_bit;
-@@ -324,6 +390,7 @@ static int armada_select_channel(struct armada_thermal_priv *priv, int channel)
- {
- 	struct armada_thermal_data *data = priv->data;
- 	u32 ctrl0;
-+	int ret;
- 
- 	if (channel < 0 || channel > priv->data->cpu_nr)
- 		return -EINVAL;
-@@ -331,6 +398,16 @@ static int armada_select_channel(struct armada_thermal_priv *priv, int channel)
- 	if (priv->current_channel == channel)
- 		return 0;
- 
-+	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
-+		ret = thermal_smc(MV_SIP_DFX_THERMAL_SEL_CHANNEL,
-+				  NULL, channel, 0);
-+		if (ret)
-+			return ret;
-+
-+		priv->current_channel = channel;
-+		goto is_valid;
-+	}
-+
- 	/* Stop the measurements */
- 	regmap_read(priv->syscon, data->syscon_control0_off, &ctrl0);
- 	ctrl0 &= ~CONTROL0_TSEN_START;
-@@ -357,6 +434,7 @@ static int armada_select_channel(struct armada_thermal_priv *priv, int channel)
- 	ctrl0 |= CONTROL0_TSEN_START;
- 	regmap_write(priv->syscon, data->syscon_control0_off, ctrl0);
- 
-+is_valid:
- 	/*
- 	 * The IP has a latency of ~15ms, so after updating the selected source,
- 	 * we must absolutely wait for the sensor validity bit to ensure we read
-@@ -376,6 +454,9 @@ static int armada_read_sensor(struct armada_thermal_priv *priv, int *temp)
- 	u32 reg, div;
- 	s64 sample, b, m;
- 
-+	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv))
-+		return thermal_smc(MV_SIP_DFX_THERMAL_READ, temp, 0, 0);
-+
- 	regmap_read(priv->syscon, priv->data->syscon_status_off, &reg);
- 	reg = (reg >> priv->data->temp_shift) & priv->data->temp_mask;
- 	if (priv->data->signed_sample)
-@@ -559,7 +640,13 @@ static irqreturn_t armada_overheat_isr_thread(int irq, void *blob)
- 			goto enable_irq;
- 	} while (temperature >= low_threshold);
- 
--	regmap_read(priv->syscon, priv->data->dfx_irq_cause_off, &dummy);
-+	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
-+		if (thermal_smc(MV_SIP_DFX_THERMAL_IRQ, 0, 0, 0))
-+			return IRQ_NONE;
-+	} else {
-+		regmap_read(priv->syscon, priv->data->dfx_irq_cause_off,
-+			    &dummy);
-+	}
- 
- 	/* Notify the thermal core that the temperature is acceptable again */
- 	thermal_zone_device_update(priv->overheat_sensor,
-@@ -772,6 +859,27 @@ static void armada_set_sane_name(struct platform_device *pdev,
- 	} while (insane_char);
- }
- 
-+/*
-+ * Let the firmware configure the thermal overheat threshold, hysteresis and
-+ * enable overheat interrupt
-+ */
-+static int armada_fw_overheat_settings(struct armada_thermal_priv *priv,
-+				       int thresh_mc, int hyst_mc)
++static int dfx_swrite_smc(unsigned long addr, unsigned long val)
 +{
-+	int ret;
++	struct arm_smccc_res res;
 +
-+	ret = thermal_smc(MV_SIP_DFX_THERMAL_THRESH, NULL, thresh_mc, hyst_mc);
-+	if (ret)
-+		return ret;
++	arm_smccc_smc(MV_SIP_DFX, MV_SIP_DFX_SWRITE, addr, val,
++		      0, 0, 0, 0, &res);
 +
-+	if (thresh_mc >= 0)
-+		priv->current_threshold = thresh_mc;
-+	if (hyst_mc >= 0)
-+		priv->current_hysteresis = hyst_mc;
-+
-+	return 0;
++	return res.a0;
 +}
 +
- /*
-  * The IP can manage to trigger interrupts on overheat situation from all the
-  * sensors. However, the interrupt source changes along with the last selected
-@@ -803,11 +911,22 @@ static int armada_configure_overheat_int(struct armada_thermal_priv *priv,
++static int smc_regmap_read(struct ap_cpu_clk *clk, unsigned int reg,
++			   unsigned int *val)
++{
++	return dfx_sread_smc(clk->phys + reg, val);
++}
++
++static int legacy_regmap_read(struct ap_cpu_clk *clk, unsigned int reg,
++			      unsigned int *val)
++{
++	return regmap_read(clk->pll_cr_base, reg, val);
++}
++
++static int smc_regmap_write(struct ap_cpu_clk *clk, unsigned int reg,
++			    unsigned int val)
++{
++	return dfx_swrite_smc(clk->phys + reg, val);
++}
++
++static int legacy_regmap_write(struct ap_cpu_clk *clk, unsigned int reg,
++			       unsigned int val)
++{
++	return regmap_write(clk->pll_cr_base, reg, val);
++}
++
++static int smc_regmap_update_bits(struct ap_cpu_clk *clk, unsigned int reg,
++				  unsigned int mask, unsigned int val)
++{
++	int ret;
++	unsigned int tmp;
++
++	ret = dfx_sread_smc(clk->phys + reg, &tmp);
++	if (ret != SMCCC_RET_SUCCESS)
++		return ret;
++
++	tmp &= ~mask;
++	tmp |= val & mask;
++
++	return dfx_swrite_smc(clk->phys + reg, tmp);
++}
++
++static int legacy_regmap_update_bits(struct ap_cpu_clk *clk, unsigned int reg,
++				     unsigned int mask, unsigned int val)
++{
++	return regmap_update_bits(clk->pll_cr_base, reg, mask, val);
++}
++
++static int smc_regmap_read_poll_timeout(struct ap_cpu_clk *clk,
++					unsigned int reg,
++					unsigned int stable_bit)
++{
++	int ret;
++	u32 val;
++	ktime_t timeout;
++
++	timeout = ktime_add_us(ktime_get(), STATUS_POLL_TIMEOUT_US);
++	do {
++		ret = dfx_sread_smc(clk->phys + reg, &val);
++		if (ret || (val & stable_bit))
++			break;
++
++		usleep_range((STATUS_POLL_PERIOD_US >> 2) + 1,
++			     STATUS_POLL_PERIOD_US);
++
++	} while (ktime_before(ktime_get(), timeout));
++
++	if (ret == SMCCC_RET_SUCCESS)
++		return (val & stable_bit) ? 0 : -ETIMEDOUT;
++}
++
++static int legacy_regmap_read_poll_timeout(struct ap_cpu_clk *clk,
++					   unsigned int reg,
++					   unsigned int stable_bit)
++{
++	return regmap_read_poll_timeout(clk->pll_cr_base,
++					reg, val,
++					val & stable_bit, STATUS_POLL_PERIOD_US,
++					STATUS_POLL_TIMEOUT_US);
++}
+ static unsigned long ap_cpu_clk_recalc_rate(struct clk_hw *hw,
+ 					    unsigned long parent_rate)
+ {
+@@ -150,7 +262,7 @@ static unsigned long ap_cpu_clk_recalc_rate(struct clk_hw *hw,
+ 
+ 	cpu_clkdiv_reg = clk->pll_regs->divider_reg +
+ 		(clk->cluster * clk->pll_regs->cluster_offset);
+-	regmap_read(clk->pll_cr_base, cpu_clkdiv_reg, &cpu_clkdiv_ratio);
++	clk->regmap_read(clk, cpu_clkdiv_reg, &cpu_clkdiv_ratio);
+ 	cpu_clkdiv_ratio &= clk->pll_regs->divider_mask;
+ 	cpu_clkdiv_ratio >>= clk->pll_regs->divider_offset;
+ 
+@@ -171,7 +283,7 @@ static int ap_cpu_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	cpu_ratio_reg = clk->pll_regs->ratio_reg +
+ 		(clk->cluster * clk->pll_regs->cluster_offset);
+ 
+-	regmap_read(clk->pll_cr_base, cpu_clkdiv_reg, &reg);
++	clk->regmap_read(clk, cpu_clkdiv_reg, &reg);
+ 	reg &= ~(clk->pll_regs->divider_mask);
+ 	reg |= (divider << clk->pll_regs->divider_offset);
+ 
+@@ -184,29 +296,26 @@ static int ap_cpu_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 		reg |= ((divider * clk->pll_regs->divider_ratio) <<
+ 				AP807_PLL_CR_1_CPU_CLK_DIV_RATIO_OFFSET);
+ 	}
+-	regmap_write(clk->pll_cr_base, cpu_clkdiv_reg, reg);
++	clk->regmap_write(clk, cpu_clkdiv_reg, reg);
+ 
++	clk->regmap_update_bits(clk, cpu_force_reg, clk->pll_regs->force_mask,
++				clk->pll_regs->force_mask);
+ 
+-	regmap_update_bits(clk->pll_cr_base, cpu_force_reg,
+-			   clk->pll_regs->force_mask,
+-			   clk->pll_regs->force_mask);
+-
+-	regmap_update_bits(clk->pll_cr_base, cpu_ratio_reg,
+-			   BIT(clk->pll_regs->ratio_offset),
+-			   BIT(clk->pll_regs->ratio_offset));
++	clk->regmap_update_bits(clk, cpu_ratio_reg,
++				BIT(clk->pll_regs->ratio_offset),
++				BIT(clk->pll_regs->ratio_offset));
+ 
+ 	stable_bit = BIT(clk->pll_regs->ratio_state_offset +
+ 			 clk->cluster *
+ 			 clk->pll_regs->ratio_state_cluster_offset);
+-	ret = regmap_read_poll_timeout(clk->pll_cr_base,
+-				       clk->pll_regs->ratio_state_reg, reg,
+-				       reg & stable_bit, STATUS_POLL_PERIOD_US,
+-				       STATUS_POLL_TIMEOUT_US);
++	ret = clk->regmap_read_poll_timeout(clk,
++					    clk->pll_regs->ratio_state_reg,
++					    stable_bit);
  	if (ret)
  		return ret;
  
-+	priv->overheat_sensor = tz;
-+	priv->interrupt_source = sensor_id;
-+
-+	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
-+		/*
-+		 * When thermal supported in firmware the configuring overheat
-+		 * threshold and enabling overheat interrupt is done in one
-+		 * step.
-+		 */
-+		return armada_fw_overheat_settings(priv, trips[i].temperature,
-+						   trips[i].hysteresis);
-+	}
-+
- 	armada_set_overheat_thresholds(priv,
- 				       trips[i].temperature,
- 				       trips[i].hysteresis);
--	priv->overheat_sensor = tz;
--	priv->interrupt_source = sensor_id;
+-	regmap_update_bits(clk->pll_cr_base, cpu_ratio_reg,
+-			   BIT(clk->pll_regs->ratio_offset), 0);
++	clk->regmap_update_bits(clk, cpu_ratio_reg,
++				BIT(clk->pll_regs->ratio_offset), 0);
  
- 	armada_enable_overheat_interrupt(priv);
+ 	return 0;
+ }
+@@ -235,6 +344,11 @@ static int ap_cpu_clock_probe(struct platform_device *pdev)
+ 	struct clk_hw_onecell_data *ap_cpu_data;
+ 	struct ap_cpu_clk *ap_cpu_clk;
+ 	struct regmap *regmap;
++	struct resource res;
++
++	ret = of_address_to_resource(np->parent, 0, &res);
++	if (ret)
++		return ret;
  
+ 	regmap = syscon_node_to_regmap(np->parent);
+ 	if (IS_ERR(regmap)) {
+@@ -286,6 +400,7 @@ static int ap_cpu_clock_probe(struct platform_device *pdev)
+ 		const char *parent_name;
+ 		struct clk *parent;
+ 		int cpu, err;
++		unsigned int tmp;
+ 
+ 		err = of_property_read_u32(dn, "reg", &cpu);
+ 		if (WARN_ON(err))
+@@ -313,6 +428,27 @@ static int ap_cpu_clock_probe(struct platform_device *pdev)
+ 		ap_cpu_clk[cluster_index].dev = dev;
+ 		ap_cpu_clk[cluster_index].pll_regs = of_device_get_match_data(&pdev->dev);
+ 
++		/* Get the physical address to hand to the firmware. */
++		ap_cpu_clk[cluster_index].phys = res.start;
++
++		/* Try to read a register using SMC and setup DFX access APIs accordingly */
++		ret = smc_regmap_read(&ap_cpu_clk[cluster_index],
++				      ap_cpu_clk[cluster_index].pll_regs->divider_reg,
++				      &tmp);
++		if (ret == SMCCC_RET_SUCCESS) {
++			ap_cpu_clk[cluster_index].regmap_read = smc_regmap_read;
++			ap_cpu_clk[cluster_index].regmap_wriite = smc_regmap_write;
++			ap_cpu_clk[cluster_index].regmap_update_bits = smc_regmap_update_bits;
++			ap_cpu_clk[cluster_index].regmap_read_poll_timeout =
++								smc_regmap_read_poll_timeout;
++		} else {
++			ap_cpu_clk[cluster_index].regmap_read = legacy_regmap_read;
++			ap_cpu_clk[cluster_index].regmap_wriite = legacy_regmap_write;
++			ap_cpu_clk[cluster_index].regmap_update_bits = legacy_regmap_update_bits;
++			ap_cpu_clk[cluster_index].regmap_read_poll_timeout =
++								legacy_regmap_read_poll_timeout;
++		}
++
+ 		init.name = ap_cpu_clk[cluster_index].clk_name;
+ 		init.ops = &ap_cpu_clk_ops;
+ 		init.num_parents = 1;
 diff --git a/include/soc/marvell/armada8k/fw.h b/include/soc/marvell/armada8k/fw.h
-new file mode 100644
-index 000000000000..2a80f26cbf6f
---- /dev/null
+index 2a80f26cbf6f..e646212a3796 100644
+--- a/include/soc/marvell/armada8k/fw.h
 +++ b/include/soc/marvell/armada8k/fw.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2019 Marvell International Ltd.
-+ */
+@@ -16,4 +16,7 @@
+ #define MV_SIP_DFX_THERMAL_THRESH	5
+ #define MV_SIP_DFX_THERMAL_SEL_CHANNEL	6
+ 
++#define MV_SIP_DFX_SREAD		20
++#define MV_SIP_DFX_SWRITE		21
 +
-+#ifndef _SOC_MARVELL_ARMADA8K_FW_H
-+#define _SOC_MARVELL_ARMADA8K_FW_H
-+
-+/* FW related definitions */
-+#define MV_SIP_DFX			0x82000014
-+
-+#define MV_SIP_DFX_THERMAL_INIT		1
-+#define MV_SIP_DFX_THERMAL_READ		2
-+#define MV_SIP_DFX_THERMAL_IS_VALID	3
-+#define MV_SIP_DFX_THERMAL_IRQ		4
-+#define MV_SIP_DFX_THERMAL_THRESH	5
-+#define MV_SIP_DFX_THERMAL_SEL_CHANNEL	6
-+
-+#endif /* _SOC_MARVELL_ARMADA8K_FW_H */
+ #endif /* _SOC_MARVELL_ARMADA8K_FW_H */
 -- 
 2.17.1
 
