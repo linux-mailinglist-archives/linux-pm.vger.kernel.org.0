@@ -2,81 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AC82F60F7
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 13:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5621E2F6149
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 13:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbhANMRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 07:17:18 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:37309 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726680AbhANMRO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 07:17:14 -0500
-Received: by mail-ot1-f47.google.com with SMTP id o11so4977632ote.4;
-        Thu, 14 Jan 2021 04:16:58 -0800 (PST)
+        id S1726212AbhANMyf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jan 2021 07:54:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725955AbhANMye (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 07:54:34 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106A6C061575
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 04:53:54 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id i7so3723804pgc.8
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 04:53:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=eXnQAiBbeXDviZp37GV8KmT5y3rwxZmS9zyI+lL9iw0=;
+        b=ucMhkMhqcMEOc4TFg7R3xHZdjrfT/iLDk2DzJ+Bm5DrrT5DHkr+iyvnTqJ6neStAYZ
+         OKz36evDav9KK6sCROMZBPHVUK21HPPP4/d4jQlXnmd/cAoaicE2xonsXcSI+6YsoGHn
+         Bhq/HlMcYKKiI4shoCjKSANyBu447rSGMUWtL6QCn8jN1NelluzxNsnLKysYBIlgU8VS
+         4seI+nwMw4s9t+UV9SEWVZoOqTr/9olNQfJpvMQ9Jnx6hRn9wk1xiXEdW54wjHTviS4c
+         d49QYAHaIRr+2X0E/ANVPFpqI7Thxg8V6ywzThHyQwrRyLOAK3WOC4T8GAM+EJWoTqao
+         kBuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VKPfJLF9iRxoYE42LhdNndZuWy7KRy7TVrhbL4lB9EY=;
-        b=Nxmw/D3cxghbMimlroGS2RMwLgvDp0Z9h15qy4CSos/EC4MvGRmvO571eP8cGqVno6
-         Z8URQCLwBdagbERpnAt4+YMKQX2XkNJmWASP10LoCOiuWuloDRh8KWvHLEKWS6d09UlP
-         IWIgR74u0Zv1br5oYt8rSwJfNbjX8nedYwSTleqMitp+7Wj6/qAQyaYxW7JECAnOsIwk
-         63heWMGZ224+lkfepcyze/v1jyVkYGZ9FR4cuo0UKMIqYX+wnsDRV6XBZ9BNVKF1KIkb
-         XGcefIx8NJFyKNib4gs+6GrCzQMU7IBlfG0I21+YVLGaAEJ4wQ5DiQCgZHLRLTSXl+Y7
-         G56Q==
-X-Gm-Message-State: AOAM530n/+akNNfEXbZE60JRpTIIw857+en4brvY3wqrYtzdROdFqIXB
-        0gTSebJBTA4ZrO6j/lBvpiq9lfV8yS13XXK6Lgs=
-X-Google-Smtp-Source: ABdhPJz2/t2VsrTR/UXGRJS3p8JAoj5C7JxHIUIkWs9Brhqo4wVBpeFy+EFfZOT/dyDuJ4IitI4gSjMhZa7dmBkD0L4=
-X-Received: by 2002:a9d:745a:: with SMTP id p26mr4502295otk.206.1610626593091;
- Thu, 14 Jan 2021 04:16:33 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=eXnQAiBbeXDviZp37GV8KmT5y3rwxZmS9zyI+lL9iw0=;
+        b=pJ4aNykJV3+IMjDPGRSTmP6At8EhvX3zdsHLH/V4FYLdi0yFXGmUgxQ9bZjW/xxW90
+         F44LXTnait4YxBxylqq1jHCeKsO1qEwx7JSc9ICeyUw+158Rt/jPudsaYhoJe01v+k+J
+         AhQqzXgLzWPmfLCs5SVNVWVmedQUDKbbtzOtPW9OC+VOj/cIGgajz+y5qtxJ6A25UrYe
+         Ihe/FX0CjYv0UPMVxuk1MCHxSPbD7Wf0Z4YBawCpuxxA5xmCmhbDoUv1jnBdAA510fzc
+         jaHBYvK6f6F9HWDRD8S94QWT2Q306j+KAlXSseBOGw2eeTlKhO8JElKGpl5mA/+9GV/8
+         Bc/w==
+X-Gm-Message-State: AOAM531ZPEaWUJyPFaUqSOKrN2REYrNZl5mhI45PdaQNq5lOycc/vN1A
+        2ynRH157OoF00edNlZJkn3jGaQ==
+X-Google-Smtp-Source: ABdhPJzZPDYn18xksvDy195dCNUg8HL8aEXgn/FmYxJYjAECqq/9SwJGa2XRe6cHwOzi6J9eIxsBQQ==
+X-Received: by 2002:a65:6207:: with SMTP id d7mr7528869pgv.92.1610628833701;
+        Thu, 14 Jan 2021 04:53:53 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id j20sm5184563pfd.106.2021.01.14.04.53.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jan 2021 04:53:53 -0800 (PST)
+Message-ID: <60003ee1.1c69fb81.9c9b6.ce0a@mx.google.com>
+Date:   Thu, 14 Jan 2021 04:53:53 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20210114073429.176462-1-jiaxun.yang@flygoat.com> <20210114073429.176462-2-jiaxun.yang@flygoat.com>
-In-Reply-To: <20210114073429.176462-2-jiaxun.yang@flygoat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 14 Jan 2021 13:16:20 +0100
-Message-ID: <CAJZ5v0i=bFw7WJA615UyLXnZ4kgK4E+0ZB=Ykgge+o3+9onnPA@mail.gmail.com>
-Subject: Re: [PATCH RESEND 1/2] ACPI: platform-profile: Drop const qualifier
- for cur_profile
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.11-rc3-19-g9f0b1e583eac
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.11-rc3-19-g9f0b1e583eac)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 8:42 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
-> All planned uses of cur_profile have their platform_profile_handler
-> defined as const, so just drop const qualifier here to prevent build
-> error.
->
-> Link: https://lore.kernel.org/linux-acpi/5e7a4d87-52ef-e487-9cc2-8e7094beaa08@redhat.com/
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  drivers/acpi/platform_profile.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_profile.c
-> index 91be50a32cc8..9dddf44b43d4 100644
-> --- a/drivers/acpi/platform_profile.c
-> +++ b/drivers/acpi/platform_profile.c
-> @@ -9,7 +9,7 @@
->  #include <linux/platform_profile.h>
->  #include <linux/sysfs.h>
->
-> -static const struct platform_profile_handler *cur_profile;
-> +static struct platform_profile_handler *cur_profile;
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.11-rc3-19-g9f=
+0b1e583eac)
 
-I think that it's not just here, but also in the
-platform_profile_register() argument.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+11-rc3-19-g9f0b1e583eac/
 
->  static DEFINE_MUTEX(profile_lock);
->
->  static const char * const profile_names[] = {
-> --
-> 2.30.0
->
+Tree: pm
+Branch: testing
+Git Describe: v5.11-rc3-19-g9f0b1e583eac
+Git Commit: 9f0b1e583eac5573c52c2ead2e1f232adae7d044
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+    multi_v7_defconfig (gcc-8): 1 warning
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused v=
+ariable =E2=80=98wake=E2=80=99 [-Wunused-variable]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused variab=
+le =E2=80=98wake=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
