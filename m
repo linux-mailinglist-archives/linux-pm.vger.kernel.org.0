@@ -2,103 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793412F6258
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 14:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06ED2F626C
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 14:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbhANNsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 08:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S1726259AbhANNxU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jan 2021 08:53:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbhANNsh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 08:48:37 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC04C0613C1
-        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 05:47:56 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id e25so4763810wme.0
-        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 05:47:56 -0800 (PST)
+        with ESMTP id S1726236AbhANNxT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 08:53:19 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5D7C061574
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 05:52:39 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id s15so2923246plr.9
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 05:52:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=TbqE2IlRGagFgBkQ2kCkUrfXzLCjHj/NgUbyVG+QOLU=;
-        b=OwOxLsbosDLvoLhRLZ8mzzei4v0t2XhAEbH8Iq2Sxm640+qWBEKYZm4cocQg4aGYiV
-         Xffe/6oKYTXJTmiquE5GGTUFqyH4SWt1o3Mk/HO8mr1iB4/oJKfzT+653Fp1pZ6tPwzi
-         S1stu6wWFThE8hKMRzYPWMNQPSVjWsmHzrcFSQebC+wFsDX7FJfNPmzHzMhUEvcJ4Cv+
-         by4PSWVqcLWwoS6qTTEpItMusrhWhM+A6A9T+EBRMyqDtNd1C3s6YY82pNWW5Yu/oudv
-         zQUzIvGo47Uv1SukMAsYZkAvpT4tZhYQ7JGE+BCNysEIgarpETIZ2w3ApWtZcqTPbAU2
-         CxtA==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=DiRDbMGE6RwUlk3o6wLe9grwGd18nYv6pFVeW+MSqQA=;
+        b=tX6B1YF39AzF/MVG20a6GNvAm9634o+1sYJ6ZIi57hM+eBWnrZsdIY1iVUljvHtzFr
+         4W8hWOGs0g1B7nDlCrSRm/L4LTUmGQE1por1A4P11f/agIT1CUZFChGW9EDKySCMccea
+         4lHR3W0InZ6mZ2vkLTamIARQ2CexQMbtd47YRhOo6yMC093nvfnNA+VYqGAzwDIc+UeN
+         jA/Zm2KUIztNRc2yR8ZQfK0Yy3rgXhTqtT8Dj2ixKISNsZZ5AFAQl55BMHuXJDT5afZV
+         c67IdHDkTGXbusiZFgXi7olG4A6WHnWVU2+ACQw7eZ9U0I/CufAinbmuOH6ACYrpijpn
+         +erg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=TbqE2IlRGagFgBkQ2kCkUrfXzLCjHj/NgUbyVG+QOLU=;
-        b=TsbopkpEjUB29ieAZ6ypFlfNmhCzfi9GgckqXdHv2aypngMLKC8tOyGiM/GmYs3vcd
-         MLo6XORAl1CV/NySLO1fLewb5WTFWdwz0NI5vG4zSv5UfXQaHTWYNSdhZ7y4O8qY3DI3
-         Q+YEH+h/RABTXOSF8pNx6r0LQmFwS/0iOYIU+YRApL9y5nETRwKx7+Qj4gD4qHtnfpy2
-         WszyVPbUxEvG4fmNI0Bd0ryXVKLxwItOeGRnPmEnEirvivqdqQd9TCpj2M88czqWG+Go
-         XCb+BPr4xqWHIcvkG+/gMAq+vwvbLCP7Wrtx74cB6f+l65xQEpiNp/0tgKDdDTCSRZbS
-         6olA==
-X-Gm-Message-State: AOAM533L7ytgq64S6jhzmbYSEEnRfIte05jDgD23ZPufRT+UC7odet/1
-        UpYYOxkM2nhxAPQY+NHw2hZB2w==
-X-Google-Smtp-Source: ABdhPJx7eMOHq1ibtaSAKOLLhWbpBK52AbF8LO4+T4csN/v/5B1yHZ36jNUkiZ/Dhf1ZMfYjqWO/Sw==
-X-Received: by 2002:a1c:2905:: with SMTP id p5mr4021448wmp.156.1610632075437;
-        Thu, 14 Jan 2021 05:47:55 -0800 (PST)
-Received: from dell ([91.110.221.178])
-        by smtp.gmail.com with ESMTPSA id n9sm9766176wrq.41.2021.01.14.05.47.54
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=DiRDbMGE6RwUlk3o6wLe9grwGd18nYv6pFVeW+MSqQA=;
+        b=AtV6VCBCuJKRRZsl33rIR72I0Ho3jiuM17M8/umBa19iVCZUbcFKUJW4ICW7rSdT9Z
+         0Ucj/+F9hoFr3NnvCy+qLJtBFyhpDlvqx7nXBZpiR2N+ggdIuLfcXjMoO7w6tdTzYDvF
+         EsgIeUkUiB3bmxcnFGSmUyjpphqOTPHezjJpcolSm/iygVtgYhkwqeLkNaVHoOsaxykL
+         pANDeVyYPMNJfg0RNzAN2SSola9bJ/6PDXZN9kMx3h88S4/zD9a4YGIjmHd+CNCIp9JQ
+         +iio+z0wDlIxlRJchkbOO0w6BUrOBinViHfP3D8hxR76fbcxDSy5BAt7WGBId7MCpODw
+         b6OA==
+X-Gm-Message-State: AOAM533Qw5SpIdeTilT0oWJfIN1ubuwtL6ygEOpJIPYXjbTzgChOsofO
+        +p5grGw/Yw2Drd+ovg9McIajjA==
+X-Google-Smtp-Source: ABdhPJxTa7063IZfDXPBQdmClfzFMb0c9raap125+/Oqu9RZe1mkSwU4YnCWXsu84EZURAESbVJglA==
+X-Received: by 2002:a17:90b:2317:: with SMTP id mt23mr5095262pjb.2.1610632359173;
+        Thu, 14 Jan 2021 05:52:39 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id v1sm5885903pga.63.2021.01.14.05.52.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jan 2021 05:47:54 -0800 (PST)
-Date:   Thu, 14 Jan 2021 13:47:53 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/3] mfd: Add driver for Embedded Controller found on
- Acer Iconia Tab A500
-Message-ID: <20210114134753.GY3975472@dell>
-References: <20201228160547.30562-1-digetx@gmail.com>
- <20201228160547.30562-3-digetx@gmail.com>
+        Thu, 14 Jan 2021 05:52:38 -0800 (PST)
+Message-ID: <60004ca6.1c69fb81.79912.d86a@mx.google.com>
+Date:   Thu, 14 Jan 2021 05:52:38 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201228160547.30562-3-digetx@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.11-rc3-19-g9f0b1e583eac
+X-Kernelci-Report-Type: test
+Subject: pm/testing sleep: 5 runs, 1 regressions (v5.11-rc3-19-g9f0b1e583eac)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 28 Dec 2020, Dmitry Osipenko wrote:
+pm/testing sleep: 5 runs, 1 regressions (v5.11-rc3-19-g9f0b1e583eac)
 
-> Acer Iconia Tab A500 is an Android tablet device, it has ENE KB930
-> Embedded Controller which provides battery-gauge, LED, GPIO and some
-> other functions. The EC uses firmware that is specifically customized
-> for Acer A500. This patch adds MFD driver for the Embedded Controller
-> which allows to power-off / reboot the A500 device, it also provides
-> a common register read/write API that will be used by the sub-devices.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/mfd/Kconfig        |  11 ++
->  drivers/mfd/Makefile       |   1 +
->  drivers/mfd/acer-ec-a500.c | 202 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 214 insertions(+)
->  create mode 100644 drivers/mfd/acer-ec-a500.c
+Regressions Summary
+-------------------
 
-Looks good to me:
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
 
-For my own reference (apply this as-is to your sign-off block):
 
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.11-rc=
+3-19-g9f0b1e583eac/plan/sleep/
 
-Do you have a merge plan?
+  Test:     sleep
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.11-rc3-19-g9f0b1e583eac
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      9f0b1e583eac5573c52c2ead2e1f232adae7d044 =
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6000406e388847c78bc94cda
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.11-rc3-19-g9f0b1=
+e583eac/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.11-rc3-19-g9f0b1=
+e583eac/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+1221.0/arm64/rootfs.cpio.gz =
+
+
+
+  * sleep.login: https://kernelci.org/test/case/id/6000406e388847c78bc94cdb
+        failing since 147 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
+il: v5.9-rc1-4-g1f08d51cd57f) =
+
+ =20
