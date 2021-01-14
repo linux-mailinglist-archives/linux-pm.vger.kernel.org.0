@@ -2,70 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4592F5FCF
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 12:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AC82F60F7
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 13:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbhANL1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 06:27:38 -0500
-Received: from foss.arm.com ([217.140.110.172]:48192 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726672AbhANL1h (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 14 Jan 2021 06:27:37 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12112ED1;
-        Thu, 14 Jan 2021 03:26:52 -0800 (PST)
-Received: from [10.57.10.156] (unknown [10.57.10.156])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C99D13F719;
-        Thu, 14 Jan 2021 03:26:50 -0800 (PST)
-Subject: Re: [PATCH] thermal: power allocator: Add control for non-power actor
- devices
-To:     daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com
-References: <20210105190107.30479-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <6c2d06e7-8eda-53b0-30e1-10a21fe86f0f@arm.com>
-Date:   Thu, 14 Jan 2021 11:26:48 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726620AbhANMRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jan 2021 07:17:18 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:37309 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbhANMRO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 07:17:14 -0500
+Received: by mail-ot1-f47.google.com with SMTP id o11so4977632ote.4;
+        Thu, 14 Jan 2021 04:16:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VKPfJLF9iRxoYE42LhdNndZuWy7KRy7TVrhbL4lB9EY=;
+        b=Nxmw/D3cxghbMimlroGS2RMwLgvDp0Z9h15qy4CSos/EC4MvGRmvO571eP8cGqVno6
+         Z8URQCLwBdagbERpnAt4+YMKQX2XkNJmWASP10LoCOiuWuloDRh8KWvHLEKWS6d09UlP
+         IWIgR74u0Zv1br5oYt8rSwJfNbjX8nedYwSTleqMitp+7Wj6/qAQyaYxW7JECAnOsIwk
+         63heWMGZ224+lkfepcyze/v1jyVkYGZ9FR4cuo0UKMIqYX+wnsDRV6XBZ9BNVKF1KIkb
+         XGcefIx8NJFyKNib4gs+6GrCzQMU7IBlfG0I21+YVLGaAEJ4wQ5DiQCgZHLRLTSXl+Y7
+         G56Q==
+X-Gm-Message-State: AOAM530n/+akNNfEXbZE60JRpTIIw857+en4brvY3wqrYtzdROdFqIXB
+        0gTSebJBTA4ZrO6j/lBvpiq9lfV8yS13XXK6Lgs=
+X-Google-Smtp-Source: ABdhPJz2/t2VsrTR/UXGRJS3p8JAoj5C7JxHIUIkWs9Brhqo4wVBpeFy+EFfZOT/dyDuJ4IitI4gSjMhZa7dmBkD0L4=
+X-Received: by 2002:a9d:745a:: with SMTP id p26mr4502295otk.206.1610626593091;
+ Thu, 14 Jan 2021 04:16:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210105190107.30479-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210114073429.176462-1-jiaxun.yang@flygoat.com> <20210114073429.176462-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20210114073429.176462-2-jiaxun.yang@flygoat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 14 Jan 2021 13:16:20 +0100
+Message-ID: <CAJZ5v0i=bFw7WJA615UyLXnZ4kgK4E+0ZB=Ykgge+o3+9onnPA@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] ACPI: platform-profile: Drop const qualifier
+ for cur_profile
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
-
-Gentle ping.
-
-On 1/5/21 7:01 PM, Lukasz Luba wrote:
-> The cooling devices which are used in IPA should provide power mapping
-> functions. The callback functions are used for power estimation and state
-> setting. When these functions are missing IPA ignores such cooling devices
-> and does not limit their performance. It could happen that the platform
-> configuration is missing these functions in example when the Energy Model
-> was not setup properly (missing DT entry 'dynamic-power-coefficient').
-> 
-> The patch adds basic control over these devices' performance. It
-> manages to throttle them to stay safe and not overheat. It also adds a
-> warning during the binding phase, so it can be captured during testing.
-> 
-> The patch covers also a corner case when all of the cooling devices are
-> non-power actors.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+On Thu, Jan 14, 2021 at 8:42 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> All planned uses of cur_profile have their platform_profile_handler
+> defined as const, so just drop const qualifier here to prevent build
+> error.
+>
+> Link: https://lore.kernel.org/linux-acpi/5e7a4d87-52ef-e487-9cc2-8e7094beaa08@redhat.com/
+> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->   drivers/thermal/gov_power_allocator.c | 71 +++++++++++++++++++++++++--
->   1 file changed, 68 insertions(+), 3 deletions(-)
-> 
+>  drivers/acpi/platform_profile.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_profile.c
+> index 91be50a32cc8..9dddf44b43d4 100644
+> --- a/drivers/acpi/platform_profile.c
+> +++ b/drivers/acpi/platform_profile.c
+> @@ -9,7 +9,7 @@
+>  #include <linux/platform_profile.h>
+>  #include <linux/sysfs.h>
+>
+> -static const struct platform_profile_handler *cur_profile;
+> +static struct platform_profile_handler *cur_profile;
 
-Could you have a look on the patch and if OK take it into
-your tree, please?
-If you missed it, I can resend. I'm still going through emails received
-around my holidays.
+I think that it's not just here, but also in the
+platform_profile_register() argument.
 
-Regards,
-Lukasz
+>  static DEFINE_MUTEX(profile_lock);
+>
+>  static const char * const profile_names[] = {
+> --
+> 2.30.0
+>
