@@ -2,89 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474482F6AA8
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 20:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3949F2F6B04
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jan 2021 20:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729117AbhANTPb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 14:15:31 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:46521 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728116AbhANTPb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 14:15:31 -0500
-Received: by mail-ot1-f53.google.com with SMTP id w3so6184634otp.13;
-        Thu, 14 Jan 2021 11:15:15 -0800 (PST)
+        id S1727527AbhANTc3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jan 2021 14:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725781AbhANTc3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 14:32:29 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA48C061757
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 11:31:49 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id f6so2814952ybq.13
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jan 2021 11:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jlLwyIAZcmcU3J10djRNP6+bc1Fnx0blUx9zkQy002E=;
+        b=h+QwShStJ0xWLhL8nOmLsjwIPcJFLxQjvYyXFsBD26nvqbTmCIKy96u/AbEFkKKPDf
+         bSsnbuFGr7o9zxjKsnZJzBI0qtzhOiT9LGyM3n61bu5FJMG2dAe+iAmNCgp5oBywLgAj
+         Aw52qPQbu5rTDuW3y/3ycT+26lo6A64C9BjtXniGQqS2ovhJWgc92MGBVsR6Uk100sHm
+         iEneprcfnBF07s9/m2/AT0zKft4brSh4skum0wP2G3RIBe0rz4t64GnKpguONDhqKwuw
+         XZe+undmTjPQrmJDqwhl6qbZPPR1tjKOcq+UN6m3CJk7gsPvlh5pidGlIpMEwPKzhuSO
+         zbmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WzAyTjck5VNq3GorX0qlmMkVncxZPl9Fylne3/uG+Bk=;
-        b=BFEDfMtHIdJP36JGALXCJSj4iQSlMKNxiWJn3N7Gyctqay2OsoxYzl4kpJzx2bBKJX
-         197OwvhbKGPM5d14WnAHxRvIs86051R17jhJaS1bCZkL0g8ChWlGM+c40F95Qv+imbCE
-         QHzo+Y7/ed2qAT+nD6TbixJQQkVL4d6xbG9WcIJXHwf36A6VGB9z+PTxhSZtZ7/x3MOx
-         dlW9Ye/s0XTeHhLJhpM0wQkkxv35KfFqLbJibcTyYQGS792P5FkoSZe4UXiTR5Zf4KUI
-         cXyXWZFIGYITRkxAnjxmOGiEt667dZRxktXuixtiH7wne6mBgdnZBtyH7gWCp55Ysfpb
-         /PQw==
-X-Gm-Message-State: AOAM531ORSQS+Yx/B8zcUX1Lho2HMKLQ4Qe2WI6d8fthInMYIa1u+X4W
-        75SSE580pWmWAul7fYCsPA==
-X-Google-Smtp-Source: ABdhPJynsLO4CFhjws/utmf+yuRYsXbydDIE4TO7RkRifb9aLMovWwrOyWS6Men1QPw5WPvKgAZxpg==
-X-Received: by 2002:a9d:2ae3:: with SMTP id e90mr5698821otb.105.1610651690420;
-        Thu, 14 Jan 2021 11:14:50 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t26sm1242137otm.17.2021.01.14.11.14.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jan 2021 11:14:49 -0800 (PST)
-Received: (nullmailer pid 3400941 invoked by uid 1000);
-        Thu, 14 Jan 2021 19:14:48 -0000
-Date:   Thu, 14 Jan 2021 13:14:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     shawnguo@kernel.org, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, georgi.djakov@linaro.org, cdleonard@gmail.com,
-        kernel@pengutronix.de, linux-imx@nxp.com, kernel@puri.sm,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 3/5] dt-bindings: mxsfb: Add interconnect bindings for
- LCDIF path
-Message-ID: <20210114191448.GA3396163@robh.at.kernel.org>
-References: <20210111045103.GH28365@dragon>
- <20210111082240.27691-1-martin.kepplinger@puri.sm>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jlLwyIAZcmcU3J10djRNP6+bc1Fnx0blUx9zkQy002E=;
+        b=SqcRDp7nd/HYUGFNZ6kQb+7qN9QZadlRHTcmtpvzIX6yM3WoG972QpIqVWM8/0x1Pw
+         OXAwihkBDMwXdLs0kmW4i2zsjigS710CTN+bYXhYgEuJa/c/z6YbH7gPFmJuVrOWeWdd
+         MYIVzxDx8EbHBoZc/xP+AJd7L4NfEwnTC7xiWfTx8jkIi4FpYtfVveUJdenYydJWme2g
+         81slZjG0nCd/DVUd51WR6QOAicO+gkgczQZsYJMmLqdPHhQsCVYnrQ94EArh0mdy0pV7
+         LMhnoZGucxfh9KzxySoZ65ydXhnKDQNclNuvNRLCH9Y95RC+I6JNk2vrO4mgVWp3YsSw
+         Py3g==
+X-Gm-Message-State: AOAM530icAHPpP4sg9rOYNs34q2UpmJtwdk2qpuUcOmM3hUB89LOvz89
+        q2bmYt+o2RMTzk58iPc0f/ji1XcEp+zC2g4FtMkOKg==
+X-Google-Smtp-Source: ABdhPJz/Z3gWGQUlo3M96oztqJ00Rd3rTonSFSBx090xCEmk8k26cGcBZBquWd7qOTRhkz2kLqM6Y7XRWoc7/VjRqhw=
+X-Received: by 2002:a25:77d4:: with SMTP id s203mr6927491ybc.32.1610652708236;
+ Thu, 14 Jan 2021 11:31:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210111082240.27691-1-martin.kepplinger@puri.sm>
+References: <2073294.4OfjquceTg@kreacher>
+In-Reply-To: <2073294.4OfjquceTg@kreacher>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 14 Jan 2021 11:31:12 -0800
+Message-ID: <CAGETcx980TXe_Jur3LqpWoMwt0wG9BBvVdXfhAo3jU8-tgv=kw@mail.gmail.com>
+Subject: Re: [PATCH] driver core: Extend device_is_dependent()
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 09:22:40AM +0100, Martin Kepplinger wrote:
-> Add optional interconnect properties for the dram path requests.
-> 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+On Thu, Jan 14, 2021 at 10:41 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> When adding a new device link, device_is_dependent() is used to
+> check whether or not the prospective supplier device does not
+> depend on the prospective consumer one to avoid adding loops
+> to the graph of device dependencies.
+>
+> However, device_is_dependent() does not take the ancestors of
+> the target device into account, so it may not detect an existing
+> reverse dependency if, for example, the parent of the target
+> device depends on the device passed as its first argument.
+>
+> For this reason, extend device_is_dependent() to also check if
+> the device passed as its first argument is an ancestor of the
+> target one and return 1 if that is the case.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reported-by: Stephan Gerhold <stephan@gerhold.net>
 > ---
->  Documentation/devicetree/bindings/display/mxsfb.txt | 6 ++++++
->  1 file changed, 6 insertions(+)
-
-Looks fine, but I believe there's an in flight patch to convert this to 
-schema. Please coordinate with that.
-
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mxsfb.txt b/Documentation/devicetree/bindings/display/mxsfb.txt
-> index c985871c46b3..d494a2674290 100644
-> --- a/Documentation/devicetree/bindings/display/mxsfb.txt
-> +++ b/Documentation/devicetree/bindings/display/mxsfb.txt
-> @@ -15,6 +15,12 @@ Required properties:
->      - "pix" for the LCDIF block clock
->      - (MX6SX-only) "axi", "disp_axi" for the bus interface clock
->  
-> +Optional properties:
-> +- interconnects : interconnect path specifier for LCDIF according to
-> +		Documentation/devicetree/bindings/interconnect/interconnect.txt.
-> +- interconnect-names: the name describing the interconnect path.
-> +		Should be "dram" for i.MX8MQ.
+>  drivers/base/core.c |   12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> Index: linux-pm/drivers/base/core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/core.c
+> +++ linux-pm/drivers/base/core.c
+> @@ -208,6 +208,16 @@ int device_links_read_lock_held(void)
+>  #endif
+>  #endif /* !CONFIG_SRCU */
+>
+> +static bool device_is_ancestor(struct device *dev, struct device *target)
+> +{
+> +       while (target->parent) {
+> +               target = target->parent;
+> +               if (dev == target)
+> +                       return true;
+> +       }
+> +       return false;
+> +}
 > +
->  Required sub-nodes:
->    - port: The connection to an encoder chip.
->  
-> -- 
-> 2.20.1
-> 
+>  /**
+>   * device_is_dependent - Check if one device depends on another one
+>   * @dev: Device to check dependencies for.
+> @@ -221,7 +231,7 @@ int device_is_dependent(struct device *d
+>         struct device_link *link;
+>         int ret;
+>
+> -       if (dev == target)
+> +       if (dev == target || device_is_ancestor(dev, target))
+>                 return 1;
+>
+>         ret = device_for_each_child(dev, target, device_is_dependent);
+>
+
+The code works, but it's not at all obvious what it's doing. Because,
+at first glance, it's easy to mistakenly think that it's trying to
+catch this case:
+dev <- child1 <- child2 <- target
+
+Maybe it's clearer if we do this check inside the loop? Something like:
+
+                if (link->consumer == target ||
+device_is_ancestor(link->consumer, target))
+                        return 1;
+
+-Saravana
