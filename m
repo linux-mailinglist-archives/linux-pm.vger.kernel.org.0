@@ -2,296 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1DC2F7AE8
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 13:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AD82F791F
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 13:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732456AbhAOMeT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jan 2021 07:34:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41160 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387460AbhAOMeS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 Jan 2021 07:34:18 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C635923403;
-        Fri, 15 Jan 2021 12:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610714017;
-        bh=9rfeQFWDLHpk0C5kvAXsSj+fHByNXU8h1esp9GMVos4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJilnvETzTR6t/cGoOdvtTLo0x5CAD0BRgjH0fHICycRGEH2MCAGqHzV65p3XZZsb
-         MKqlhyyr66BMWmaScNXFuRN2xTIeKydT3pP/AWLLLKtUt7dle1Dl1Vwx81cCPyNEw9
-         tREKzvsiJT8zSJfgca4o49kRXAmdnHX1Kc5CLz10=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Len Brown <len.brown@intel.com>, linux-arch@vger.kernel.org,
-        linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, Sasha Levin <sashal@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.4 01/62] x86/asm/32: Add ENDs to some functions and relabel with SYM_CODE_*
-Date:   Fri, 15 Jan 2021 13:27:23 +0100
-Message-Id: <20210115121958.466877482@linuxfoundation.org>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210115121958.391610178@linuxfoundation.org>
-References: <20210115121958.391610178@linuxfoundation.org>
-User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
+        id S1728338AbhAOMbq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jan 2021 07:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732777AbhAOMbn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jan 2021 07:31:43 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39308C0613C1
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jan 2021 04:31:03 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id t16so2110754vkl.10
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jan 2021 04:31:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z/BesD9/XsuCseYpXAMWyVXZDWL3uMJKI3ILP+bL1nM=;
+        b=EVSVVLgC50T2uyGnNfHMt2uCsfvy6zHMK8mlEATSOs/yZVq/wF6KaPEBiicPuNzfVI
+         Q0+wf/Vcrh/T2Bd2NK30Pq+PtgYiF0Jc5eYW54IhGWqmA7HVK0Xcc6DzRbYtNyUOeufc
+         d1RRC9PhHKWiXCYnsmI78wluOs/rKMdOXC1/LwQQ3/cp14tkAhLwVD2zWNirmGb+gWwZ
+         M0KVTDZwsSoJTm5dJOPG8GO7Mwdqzc2AlhNra4/tMZEm09u/9tCg/GGkkIcy3GRGE7Vr
+         xQvK0qpgj3xa4SWJ+38K7QPVTE4KhAYknLYmKtpabCK9hpwFJzlLFc0czkNn1r9BT4+m
+         HHhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z/BesD9/XsuCseYpXAMWyVXZDWL3uMJKI3ILP+bL1nM=;
+        b=DnzPqxQs5ov1+WrSXOLK3mzBae3bRvg4OVwRyxEuzyFn3Hk3iL2vGjcIchyZXjr6M8
+         lwhsv2CSXrDTVc5XUamju1jk+Yz4/mAZOKc7sh7oMqfEg4UkUQnjgviLj5T5bGPj2GMy
+         uaqNc/BxSj0k5G19Zkjb99B/Tp53vXzMVyDvJTbAKqz+k2iL2/i6uZbj0KMto+sXCvgx
+         OWZEYEaErG8GGe8B1WCoXvE2/3DpyjemFGwVWdgaWwBtl6To8TqM93CGusX4owp1e6SP
+         njApic6Dxym9TD2qJoDAO0N9kRE6vOt/FCScg6QNd35E6DORqXMyVoWXl8+2+YSNO92W
+         b28w==
+X-Gm-Message-State: AOAM530/4fvKipEW3ZtW4qfWh7KVXYsTz5YXfYXWtJnDBktG/Eob4729
+        di8GB5nBYP6V5Zj6iD29kCYQjgHOrnb05pOyrMLv05kBPSZErLQJ
+X-Google-Smtp-Source: ABdhPJwnw0wYStzAzhvHcIVldC/k54ts3D4KwQQmeCHPWy3OtuRL/xnr+7+VwpA6vGJ5opV8FygsDNwcBKrUCtSZ2x8=
+X-Received: by 2002:a1f:5fd5:: with SMTP id t204mr9681211vkb.6.1610713862303;
+ Fri, 15 Jan 2021 04:31:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210113201601.14874-1-ilina@codeaurora.org> <20210113201601.14874-2-ilina@codeaurora.org>
+In-Reply-To: <20210113201601.14874-2-ilina@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 15 Jan 2021 13:30:26 +0100
+Message-ID: <CAPDyKFqQxPMo_U7i7iAWZcXFQOSvP4UjdE6N9Mu_fHdpCdYGOA@mail.gmail.com>
+Subject: Re: [PATCH v7 1/2] PM / domains: inform PM domain of a device's next wakeup
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+On Wed, 13 Jan 2021 at 21:16, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> Some devices may have a predictable interrupt pattern while executing
+> usecases. An example would be the VSYNC interrupt associated with
+> display devices. A 60 Hz display could cause a interrupt every 16 ms. If
+> the device were in a PM domain, the domain would need to be powered up
+> for device to resume and handle the interrupt.
+>
+> Entering a domain idle state saves power, only if the residency of the
+> idle state is met. Without knowing the idle duration of the domain, the
+> governor would just choose the deepest idle state that matches the QoS
+> requirements. The domain might be powered off just as the device is
+> expecting to wake up. If devices could inform PM frameworks of their
+> next event, the parent PM domain's idle duration can be determined.
+>
+> So let's add the dev_pm_genpd_set_next_wakeup() API for the device to
+> inform PM domains of the impending wakeup. This information will be the
+> domain governor to determine the best idle state given the wakeup.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
 
-commit 78762b0e79bc1dd01347be061abdf505202152c9 upstream.
+One comment below about the documentation of the new interface. WIth
+that fixed, please add:
 
-All these are functions which are invoked from elsewhere but they are
-not typical C functions. So annotate them using the new SYM_CODE_START.
-All these were not balanced with any END, so mark their ends by
-SYM_CODE_END, appropriately.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com> [xen bits]
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com> [hibernate]
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Pingfan Liu <kernelfans@gmail.com>
-Cc: Stefano Stabellini <sstabellini@kernel.org>
-Cc: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: x86-ml <x86@kernel.org>
-Cc: xen-devel@lists.xenproject.org
-Link: https://lkml.kernel.org/r/20191011115108.12392-26-jslaby@suse.cz
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/entry/entry_32.S            | 3 ++-
- arch/x86/kernel/acpi/wakeup_32.S     | 7 ++++---
- arch/x86/kernel/ftrace_32.S          | 3 ++-
- arch/x86/kernel/head_32.S            | 3 ++-
- arch/x86/power/hibernate_asm_32.S    | 6 ++++--
- arch/x86/realmode/rm/trampoline_32.S | 6 ++++--
- arch/x86/xen/xen-asm_32.S            | 7 ++++---
- 7 files changed, 22 insertions(+), 13 deletions(-)
+Kind regards
+Uffe
 
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index 390edb7638265..bde3e0f85425f 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -869,9 +869,10 @@ GLOBAL(__begin_SYSENTER_singlestep_region)
-  * Xen doesn't set %esp to be precisely what the normal SYSENTER
-  * entry point expects, so fix it up before using the normal path.
-  */
--ENTRY(xen_sysenter_target)
-+SYM_CODE_START(xen_sysenter_target)
- 	addl	$5*4, %esp			/* remove xen-provided frame */
- 	jmp	.Lsysenter_past_esp
-+SYM_CODE_END(xen_sysenter_target)
- #endif
- 
- /*
-diff --git a/arch/x86/kernel/acpi/wakeup_32.S b/arch/x86/kernel/acpi/wakeup_32.S
-index e95e95960156b..5b076cb79f5fb 100644
---- a/arch/x86/kernel/acpi/wakeup_32.S
-+++ b/arch/x86/kernel/acpi/wakeup_32.S
-@@ -9,8 +9,7 @@
- 	.code32
- 	ALIGN
- 
--ENTRY(wakeup_pmode_return)
--wakeup_pmode_return:
-+SYM_CODE_START(wakeup_pmode_return)
- 	movw	$__KERNEL_DS, %ax
- 	movw	%ax, %ss
- 	movw	%ax, %fs
-@@ -39,6 +38,7 @@ wakeup_pmode_return:
- 	# jump to place where we left off
- 	movl	saved_eip, %eax
- 	jmp	*%eax
-+SYM_CODE_END(wakeup_pmode_return)
- 
- bogus_magic:
- 	jmp	bogus_magic
-@@ -72,7 +72,7 @@ restore_registers:
- 	popfl
- 	ret
- 
--ENTRY(do_suspend_lowlevel)
-+SYM_CODE_START(do_suspend_lowlevel)
- 	call	save_processor_state
- 	call	save_registers
- 	pushl	$3
-@@ -87,6 +87,7 @@ ret_point:
- 	call	restore_registers
- 	call	restore_processor_state
- 	ret
-+SYM_CODE_END(do_suspend_lowlevel)
- 
- .data
- ALIGN
-diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
-index 073aab525d800..2cc0303522c99 100644
---- a/arch/x86/kernel/ftrace_32.S
-+++ b/arch/x86/kernel/ftrace_32.S
-@@ -89,7 +89,7 @@ WEAK(ftrace_stub)
- 	ret
- END(ftrace_caller)
- 
--ENTRY(ftrace_regs_caller)
-+SYM_CODE_START(ftrace_regs_caller)
- 	/*
- 	 * We're here from an mcount/fentry CALL, and the stack frame looks like:
- 	 *
-@@ -163,6 +163,7 @@ GLOBAL(ftrace_regs_call)
- 	popl	%eax
- 
- 	jmp	.Lftrace_ret
-+SYM_CODE_END(ftrace_regs_caller)
- 
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
- ENTRY(ftrace_graph_caller)
-diff --git a/arch/x86/kernel/head_32.S b/arch/x86/kernel/head_32.S
-index 2e6a0676c1f43..11a5d5ade52ce 100644
---- a/arch/x86/kernel/head_32.S
-+++ b/arch/x86/kernel/head_32.S
-@@ -64,7 +64,7 @@ RESERVE_BRK(pagetables, INIT_MAP_SIZE)
-  * can.
-  */
- __HEAD
--ENTRY(startup_32)
-+SYM_CODE_START(startup_32)
- 	movl pa(initial_stack),%ecx
- 	
- 	/* test KEEP_SEGMENTS flag to see if the bootloader is asking
-@@ -172,6 +172,7 @@ num_subarch_entries = (. - subarch_entries) / 4
- #else
- 	jmp .Ldefault_entry
- #endif /* CONFIG_PARAVIRT */
-+SYM_CODE_END(startup_32)
- 
- #ifdef CONFIG_HOTPLUG_CPU
- /*
-diff --git a/arch/x86/power/hibernate_asm_32.S b/arch/x86/power/hibernate_asm_32.S
-index 6fe383002125f..a19ed3d231853 100644
---- a/arch/x86/power/hibernate_asm_32.S
-+++ b/arch/x86/power/hibernate_asm_32.S
-@@ -35,7 +35,7 @@ ENTRY(swsusp_arch_suspend)
- 	ret
- ENDPROC(swsusp_arch_suspend)
- 
--ENTRY(restore_image)
-+SYM_CODE_START(restore_image)
- 	/* prepare to jump to the image kernel */
- 	movl	restore_jump_address, %ebx
- 	movl	restore_cr3, %ebp
-@@ -45,9 +45,10 @@ ENTRY(restore_image)
- 	/* jump to relocated restore code */
- 	movl	relocated_restore_code, %eax
- 	jmpl	*%eax
-+SYM_CODE_END(restore_image)
- 
- /* code below has been relocated to a safe page */
--ENTRY(core_restore_code)
-+SYM_CODE_START(core_restore_code)
- 	movl	temp_pgt, %eax
- 	movl	%eax, %cr3
- 
-@@ -77,6 +78,7 @@ copy_loop:
- 
- done:
- 	jmpl	*%ebx
-+SYM_CODE_END(core_restore_code)
- 
- 	/* code below belongs to the image kernel */
- 	.align PAGE_SIZE
-diff --git a/arch/x86/realmode/rm/trampoline_32.S b/arch/x86/realmode/rm/trampoline_32.S
-index 1868b158480d4..3a0ef0d577344 100644
---- a/arch/x86/realmode/rm/trampoline_32.S
-+++ b/arch/x86/realmode/rm/trampoline_32.S
-@@ -29,7 +29,7 @@
- 	.code16
- 
- 	.balign	PAGE_SIZE
--ENTRY(trampoline_start)
-+SYM_CODE_START(trampoline_start)
- 	wbinvd			# Needed for NUMA-Q should be harmless for others
- 
- 	LJMPW_RM(1f)
-@@ -54,11 +54,13 @@ ENTRY(trampoline_start)
- 	lmsw	%dx			# into protected mode
- 
- 	ljmpl	$__BOOT_CS, $pa_startup_32
-+SYM_CODE_END(trampoline_start)
- 
- 	.section ".text32","ax"
- 	.code32
--ENTRY(startup_32)			# note: also used from wakeup_asm.S
-+SYM_CODE_START(startup_32)			# note: also used from wakeup_asm.S
- 	jmp	*%eax
-+SYM_CODE_END(startup_32)
- 
- 	.bss
- 	.balign 8
-diff --git a/arch/x86/xen/xen-asm_32.S b/arch/x86/xen/xen-asm_32.S
-index cd177772fe4d5..2712e91553063 100644
---- a/arch/x86/xen/xen-asm_32.S
-+++ b/arch/x86/xen/xen-asm_32.S
-@@ -56,7 +56,7 @@
- 	_ASM_EXTABLE(1b,2b)
- .endm
- 
--ENTRY(xen_iret)
-+SYM_CODE_START(xen_iret)
- 	/* test eflags for special cases */
- 	testl $(X86_EFLAGS_VM | XEN_EFLAGS_NMI), 8(%esp)
- 	jnz hyper_iret
-@@ -122,6 +122,7 @@ xen_iret_end_crit:
- hyper_iret:
- 	/* put this out of line since its very rarely used */
- 	jmp hypercall_page + __HYPERVISOR_iret * 32
-+SYM_CODE_END(xen_iret)
- 
- 	.globl xen_iret_start_crit, xen_iret_end_crit
- 
-@@ -152,7 +153,7 @@ hyper_iret:
-  * The only caveat is that if the outer eax hasn't been restored yet (i.e.
-  * it's still on stack), we need to restore its value here.
-  */
--ENTRY(xen_iret_crit_fixup)
-+SYM_CODE_START(xen_iret_crit_fixup)
- 	/*
- 	 * Paranoia: Make sure we're really coming from kernel space.
- 	 * One could imagine a case where userspace jumps into the
-@@ -179,4 +180,4 @@ ENTRY(xen_iret_crit_fixup)
- 
- 2:
- 	ret
--END(xen_iret_crit_fixup)
-+SYM_CODE_END(xen_iret_crit_fixup)
--- 
-2.27.0
+> ---
+> Changes in v7:
+>         - Simplify and set next-wakeup locklessly
+> Changes in v6:
+>         - Update documentation
+> Changes in v5:
+>         - Fix commit text as pointed by Ulf
+>         - Use -EOPNOTSUPP
+> Changes in v4:
+>         - Use PM domain data to store next_wakeup
+>         - Drop runtime PM documentation
+> Changes in v3:
+>         - Fix unwanted change
+> Changes in v2:
+>         - Update documentation
+>         - Remove runtime PM enabled check
+>         - Update commit text
+> ---
+>  drivers/base/power/domain.c | 22 ++++++++++++++++++++++
+>  include/linux/pm_domain.h   |  6 ++++++
+>  2 files changed, 28 insertions(+)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 9a14eedacb92..1a6174babe94 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -423,6 +423,27 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+>
+> +/**
+> + * dev_pm_genpd_set_next_wakeup - Notify PM framework of an impending wakeup.
+> + *
+> + * @dev: Device to handle
+> + * @next: impending interrupt/wakeup for the device
+> + *
+> + * Allow devices to inform of the next wakeup. But, if the domain were already
+> + * powered off, we will not wakeup the domain to recompute it's idle duration.
+> + * Although devices are expected to update the next_wakeup after the end of
+> + * their usecase as well, it is possible the devices themselves may not know
+> + * about that. Stale @next will be ignored when powering off the domain.
 
+Sorry for nagging (same comment as for the previous version), but
+could you please extend the above with the below text, as to make it
+more clear:
 
+"It's assumed that the users guarantee that the genpd wouldn't be
+detached while this routine is getting called. Additionally, it's also
+assumed that @dev isn't runtime suspended (RPM_SUSPENDED)."
 
+With this, you don't need to mention the thing with the state of the
+PM domain, as it can't be powered off when this function is called.
+
+> + */
+> +void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+> +{
+> +       struct generic_pm_domain_data *gpd_data;
+> +
+> +       gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
+> +       gpd_data->next_wakeup = next;
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_genpd_set_next_wakeup);
+> +
+>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>  {
+>         unsigned int state_idx = genpd->state_idx;
+> @@ -1465,6 +1486,7 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev)
+>         gpd_data->td.constraint_changed = true;
+>         gpd_data->td.effective_constraint_ns = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
+>         gpd_data->nb.notifier_call = genpd_dev_pm_qos_notifier;
+> +       gpd_data->next_wakeup = KTIME_MAX;
+>
+>         spin_lock_irq(&dev->power.lock);
+>
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 2ca919ae8d36..735583c0bc6d 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -9,6 +9,7 @@
+>  #define _LINUX_PM_DOMAIN_H
+>
+>  #include <linux/device.h>
+> +#include <linux/ktime.h>
+>  #include <linux/mutex.h>
+>  #include <linux/pm.h>
+>  #include <linux/err.h>
+> @@ -191,6 +192,7 @@ struct generic_pm_domain_data {
+>         struct notifier_block *power_nb;
+>         int cpu;
+>         unsigned int performance_state;
+> +       ktime_t next_wakeup;
+>         void *data;
+>  };
+>
+> @@ -217,6 +219,7 @@ int pm_genpd_remove(struct generic_pm_domain *genpd);
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>  int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>  int dev_pm_genpd_remove_notifier(struct device *dev);
+> +void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
+>
+>  extern struct dev_power_governor simple_qos_governor;
+>  extern struct dev_power_governor pm_domain_always_on_gov;
+> @@ -275,6 +278,9 @@ static inline int dev_pm_genpd_remove_notifier(struct device *dev)
+>         return -EOPNOTSUPP;
+>  }
+>
+> +static inline void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+> +{ }
+> +
+>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
+>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
+>  #endif
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
