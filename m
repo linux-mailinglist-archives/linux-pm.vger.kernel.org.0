@@ -2,91 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FDA2F7D15
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 14:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B54202F7E53
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 15:34:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731883AbhAONs1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jan 2021 08:48:27 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:58200 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731315AbhAONsZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jan 2021 08:48:25 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10FDkUo0065901;
-        Fri, 15 Jan 2021 07:46:30 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1610718390;
-        bh=g7HD7ULQS09G7hiJfcw3OafibAomYsnv2U8SQHZGHIc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=xW7T/GF7QsCClzw6Zx567sx7J89omJ1Duf/wkPrh2oUf9nfCZLv9UFkW6mM5pMUZc
-         4Gp07bB1wrq5d84zq9SZ8yTpA4s+Cvg+kgfX1Y8KFfLA+Ev9MiQz1ouBUlBQTAemBM
-         CnbmLEn/Vf5rNrog3hk1xT0Dqu0zrk1Z13jlakio=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10FDkUOt006225
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 Jan 2021 07:46:30 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 15
- Jan 2021 07:46:30 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 15 Jan 2021 07:46:30 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10FDkUpW124791;
-        Fri, 15 Jan 2021 07:46:30 -0600
-Date:   Fri, 15 Jan 2021 07:46:28 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v11 1/7] dt-bindings: soc: mediatek: add mtk svs
- dt-bindings
-Message-ID: <20210115134628.nzayd3kn6wehkirh@enactment>
-References: <20210107024356.583-1-roger.lu@mediatek.com>
- <20210107024356.583-2-roger.lu@mediatek.com>
- <20210112144727.GA321805@robh.at.kernel.org>
+        id S1728641AbhAOOdk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jan 2021 09:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728439AbhAOOdj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jan 2021 09:33:39 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6B4C061757;
+        Fri, 15 Jan 2021 06:32:59 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 8E8321F45FC7
+Received: by earth.universe (Postfix, from userid 1000)
+        id D04903C0C94; Fri, 15 Jan 2021 15:32:55 +0100 (CET)
+Date:   Fri, 15 Jan 2021 15:32:55 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Colin King <colin.king@canonical.com>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] power: supply: cpcap-charger: Fix power_supply_put
+ on null battery pointer
+Message-ID: <20210115143255.ornoji7wr232topr@earth.universe>
+References: <20210115131524.71339-1-colin.king@canonical.com>
+ <YAGXgWeWvy/0FyqN@atomide.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u7krr22x5oqasrjc"
 Content-Disposition: inline
-In-Reply-To: <20210112144727.GA321805@robh.at.kernel.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <YAGXgWeWvy/0FyqN@atomide.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08:47-20210112, Rob Herring wrote:
+
+--u7krr22x5oqasrjc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Fri, Jan 15, 2021 at 03:24:17PM +0200, Tony Lindgren wrote:
+> * Colin King <colin.king@canonical.com> [210115 13:15]:
+> > From: Colin Ian King <colin.king@canonical.com>
+> >=20
+> > Currently if the pointer battery is null there is a null pointer
+> > dereference on the call to power_supply_put.  Fix this by only
+> > performing the put if battery is not null.
+> >=20
+> > Addresses-Coverity: ("Dereference after null check")
+> > Fixes: 4bff91bb3231 ("power: supply: cpcap-charger: Fix missing power_s=
+upply_put()")
+> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
+>=20
+> Oopsie, thanks for fixing it:
+>=20
+> Acked-by: Tony Lindgren <tony@atomide.com>
+
+Thanks, queued.
+
+-- Sebastian
+
+> >  drivers/power/supply/cpcap-charger.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/suppl=
+y/cpcap-charger.c
+> > index 823d666f09e0..641dcad1133f 100644
+> > --- a/drivers/power/supply/cpcap-charger.c
+> > +++ b/drivers/power/supply/cpcap-charger.c
+> > @@ -300,8 +300,9 @@ cpcap_charger_get_bat_const_charge_voltage(struct c=
+pcap_charger_ddata *ddata)
+> >  				&prop);
+> >  		if (!error)
+> >  			voltage =3D prop.intval;
 > > +
-> > +maintainers:
-> > +  - Matthias Brugger <matthias.bgg@gmail.com>
-> > +  - Kevin Hilman <khilman@kernel.org>
-> > +  - Nishanth Menon <nm@ti.com>
-> 
-> This should be someone that knows the h/w. Not who applies patches. 
-> Perhaps you.
+> > +		power_supply_put(battery);
+> >  	}
+> > -	power_supply_put(battery);
+> > =20
+> >  	return voltage;
+> >  }
+> > --=20
+> > 2.29.2
+> >=20
 
-Yes please, I would have no idea what to do with SVS patches. Thanks Rob
-for catching it.
+--u7krr22x5oqasrjc
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmABp48ACgkQ2O7X88g7
++po0jxAAh7jfrbid8B+lxearz9t9C+okKFY4PfYtDMOOzoomxqzZ0NSjbRTsScrU
+HBDqwOkt25UmllTEIBm6fn+LYn4ND8O2Ur2GyuLMjVB4a1j6qs76Ha3sA3o2E6Zk
+z7VNlkGyejQFgsBOUGekvdlr+LSxSelj8vtY8VbeQczHt5SFQ5eqx2YSDgzpX15W
+aL3h3Xlq2SodQtb6QJ833y1p1XsxjrJAxBGATI/Ry1LWRdNCkq4VtQNP49n2JGzL
+2fV2GJ03tKYDrRq2E9Pbm4b7p6nALi3QwpYNJoqdSU4cHcIX4oq4p6in1/JOU2hL
+TnUIPXXLO1uUQr5/HpbOyUbPfhFW3hzKecr+KmGKjjG52vga4Ws1OQUPRKnA3kwe
+GEEqDNCpDF7Eo4Z5UfQybVBIJyr72bffvjtd6gQgkPpYCdR9hmXumZFBkMYifJBC
+dGNaOQzQSztTLGTpiEhIDufpPvDNnQvpWQ6Qz4mdCldmyygC8CHogptacuZPKaV7
+qMwiN3vwtAw9vpMRIx7gYXZfS4+IeNrMh98xO2Ks8GyH1EX/uMFB+rPjiifMyy4N
+25LZdChqJe+cDDiZ7UW6euABvOd+AbP5DBKHSLoxXDQ2QIgFR58TtCR8YurVOUrM
+rzpmqDr9AhzCB7S/3v80ouzcayieGIxMEP81GWRdIpuFzGd1yOg=
+=nwqI
+-----END PGP SIGNATURE-----
+
+--u7krr22x5oqasrjc--
