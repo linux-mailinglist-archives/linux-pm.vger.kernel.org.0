@@ -2,213 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0912F8192
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 18:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3372F821C
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 18:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728999AbhAORGZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jan 2021 12:06:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:45946 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728943AbhAORGY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 Jan 2021 12:06:24 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1C78D6E;
-        Fri, 15 Jan 2021 09:05:38 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.57.3.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0612A3F719;
-        Fri, 15 Jan 2021 09:05:36 -0800 (PST)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cw00.choi@samsung.com
-Cc:     lukasz.luba@arm.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-Subject: [PATCH] PM / devfreq: Add sysfs attributes to simple_ondemand governor
-Date:   Fri, 15 Jan 2021 17:05:30 +0000
-Message-Id: <20210115170530.22603-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725923AbhAORWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jan 2021 12:22:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727706AbhAORWL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jan 2021 12:22:11 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F430C061793
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jan 2021 09:21:31 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id x78so1230728ybe.11
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jan 2021 09:21:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OxzZ/Qnk01z8zwtpMZ9daSSidnxxWHeejrhyAXZTEZ0=;
+        b=B/JFFOqPcdmIVqzwDgXE0hlp/xt4YiAvZDH4o37IhMsO9suJO1zDtHktpIQRUb3i5k
+         s+RehkDhXK/Na1fU9Hj8BseNqmr3w0mTf+rXKlqhVGUaONcZXUTe7wPkCZQYf8OE6oft
+         zUihAEBfmhy+WKOnoSK97uKESGxUltJvzkj8NVvWmol4Cou2pgZptrgwavn/prC4rAZX
+         iV8zOitkv47PMHGv9VCNBqeICz0P7Vmm8i6YBGVgl18/LH0SxkL8sCGkBrxzygBMDdOh
+         FY3WasN6GFQQ6sBoDMG5ENMeaptkNHIdvqJ8pyZRdg5L2wkl2yw+Lg4nbCIBvziZe4Dj
+         8p7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OxzZ/Qnk01z8zwtpMZ9daSSidnxxWHeejrhyAXZTEZ0=;
+        b=Njiz76PRsTQMZxYDvCQwcJCvU5Qu4+akS5ZBVc3ooKPxTEfmL0lea97kNvJmLSt3w1
+         nrbZy3N9soTJGbm3k0xXcD0ELH0nBgjLXuha81cAG0roF+pcN4lXjTuJMcH1EVQm1TVD
+         /l/KSA4SyLAGHDQWemdCZmTmQIBiEgl/UNVhETQAd4zqgeJ7zOb6o26OV6Jbe0Bh9lcf
+         x4YXmuQwNXnffYUNhMlsZkaMt1nM9OM/AlFDYjdDrEenXUjWjJbRGrb+pDdoQ/h/Gqtf
+         M40QTbiDfYq8nFCBDwLW64NTjzE2TY0WWXmRkUT6q42CaG3eQ2cWCTvfzLY1easZslxL
+         bfrQ==
+X-Gm-Message-State: AOAM533zVkwCt+jtVEsxYd1IXRfW7+Hlur9ag/lJJasMxSvU5DFgbtOT
+        SoDRTg9lOeHhKlJ28zBun3Bsnal1rd4p0Z4gRq/PSg==
+X-Google-Smtp-Source: ABdhPJykBRVp7LYsfZTEJVItUl00D79akqbLnAw5J5tYIz1pIIpe8i5dDV+tdNuGKsED41d2fNXu6vEIptgM5ZIqRlg=
+X-Received: by 2002:a25:6604:: with SMTP id a4mr20116318ybc.412.1610731290143;
+ Fri, 15 Jan 2021 09:21:30 -0800 (PST)
+MIME-Version: 1.0
+References: <2073294.4OfjquceTg@kreacher> <CAGETcx980TXe_Jur3LqpWoMwt0wG9BBvVdXfhAo3jU8-tgv=kw@mail.gmail.com>
+ <YAFmoinbKocE9Jf5@gerhold.net> <CAJZ5v0hgmrN_zWBrX7FsfP=7mZHf_BYm+Qe+E3Ti4k0mK7t2MA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hgmrN_zWBrX7FsfP=7mZHf_BYm+Qe+E3Ti4k0mK7t2MA@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 15 Jan 2021 09:20:54 -0800
+Message-ID: <CAGETcx_A9YLmiMeizsrJEcdTMSZpJU03twAdRSdGeco83Z5uCQ@mail.gmail.com>
+Subject: Re: [PATCH] driver core: Extend device_is_dependent()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The simple_ondemand devfreq governor is used by quite a few devices, like
-GPUs, DSPs, memory controllers, etc. It implements algorithm which tries
-to predict the device frequency based on past statistics. There are two
-tunables for the algorithm: 'upthreshold' and 'downdifferential'. These
-tunables change the behavior of the decision, e.g. how fast to increase
-the frequency or how rapidly limit the frequency. These values might be
-different based on the application which is currently running, e.g.
-different behavior is needed for a game than for web browsing or clean
-desktop. The patch exports these two tunables so they can be adjusted
-based on current need. There is also a check with the allowed ranges
-to make sure the values are correct and safe.
+On Fri, Jan 15, 2021 at 5:03 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Fri, Jan 15, 2021 at 11:03 AM Stephan Gerhold <stephan@gerhold.net> wrote:
+> >
+> > Hi,
+> >
+> > On Thu, Jan 14, 2021 at 11:31:12AM -0800, Saravana Kannan wrote:
+> > > On Thu, Jan 14, 2021 at 10:41 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > > >
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > When adding a new device link, device_is_dependent() is used to
+> > > > check whether or not the prospective supplier device does not
+> > > > depend on the prospective consumer one to avoid adding loops
+> > > > to the graph of device dependencies.
+> > > >
+> > > > However, device_is_dependent() does not take the ancestors of
+> > > > the target device into account, so it may not detect an existing
+> > > > reverse dependency if, for example, the parent of the target
+> > > > device depends on the device passed as its first argument.
+> > > >
+> > > > For this reason, extend device_is_dependent() to also check if
+> > > > the device passed as its first argument is an ancestor of the
+> > > > target one and return 1 if that is the case.
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > Reported-by: Stephan Gerhold <stephan@gerhold.net>
+> > > > ---
+> > > >  drivers/base/core.c |   12 +++++++++++-
+> > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > >
+> > > > Index: linux-pm/drivers/base/core.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/drivers/base/core.c
+> > > > +++ linux-pm/drivers/base/core.c
+> > > > @@ -208,6 +208,16 @@ int device_links_read_lock_held(void)
+> > > >  #endif
+> > > >  #endif /* !CONFIG_SRCU */
+> > > >
+> > > > +static bool device_is_ancestor(struct device *dev, struct device *target)
+> > > > +{
+> > > > +       while (target->parent) {
+> > > > +               target = target->parent;
+> > > > +               if (dev == target)
+> > > > +                       return true;
+> > > > +       }
+> > > > +       return false;
+> > > > +}
+> > > > +
+> > > >  /**
+> > > >   * device_is_dependent - Check if one device depends on another one
+> > > >   * @dev: Device to check dependencies for.
+> > > > @@ -221,7 +231,7 @@ int device_is_dependent(struct device *d
+> > > >         struct device_link *link;
+> > > >         int ret;
+> > > >
+> > > > -       if (dev == target)
+> > > > +       if (dev == target || device_is_ancestor(dev, target))
+> > > >                 return 1;
+> > > >
+> > > >         ret = device_for_each_child(dev, target, device_is_dependent);
+> > > >
+> > >
+> >
+> > Thanks for the patch, Rafael! I tested it and it seems to avoid the
+> > circular device link (and therefore also the crash). FWIW:
+> >
+> > Tested-by: Stephan Gerhold <stephan@gerhold.net>
+>
+> Thanks!
+>
+> > > The code works, but it's not at all obvious what it's doing. Because,
+> > > at first glance, it's easy to mistakenly think that it's trying to
+> > > catch this case:
+> > > dev <- child1 <- child2 <- target
+> > >
+> >
+> > Isn't this pretty much the case we are trying to catch? I have:
+> >
+> >   78d9000.usb <- ci_hdrc.0 <- ci_hdrc.0.ulpi <- phy-ci_hdrc.0.ulpi.0
+> >
+> > then something attempts to create a device link with
+> > consumer = 78d9000.usb, supplier = phy-ci_hdrc.0.ulpi.0, and to check if
+> > that is allowed we call device_is_dependent() with dev = 78d9000.usb,
+> > target = phy-ci_hdrc.0.ulpi.0.
+> >
+> > Note that this case would normally be covered by the device_for_each_child().
+> > It's not in this case because the klist_children of 78d9000.usb
+> > is updated too late.
+>
+> Exactly.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/devfreq/governor_simpleondemand.c | 135 ++++++++++++++++++++++
- 1 file changed, 135 insertions(+)
+Stephan,
 
-diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-index d57b82a2b570..4b3c182e0a49 100644
---- a/drivers/devfreq/governor_simpleondemand.c
-+++ b/drivers/devfreq/governor_simpleondemand.c
-@@ -15,6 +15,7 @@
- /* Default constants for DevFreq-Simple-Ondemand (DFSO) */
- #define DFSO_UPTHRESHOLD	(90)
- #define DFSO_DOWNDIFFERENCTIAL	(5)
-+#define DFSO_MAX_VALUE		(100)
- static int devfreq_simple_ondemand_func(struct devfreq *df,
- 					unsigned long *freq)
- {
-@@ -84,15 +85,149 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
- 	return 0;
- }
- 
-+static ssize_t upthreshold_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct devfreq_simple_ondemand_data *data;
-+	struct devfreq *df = to_devfreq(dev);
-+
-+	if (!df->data)
-+		return -EINVAL;
-+
-+	data = df->data;
-+
-+	return sprintf(buf, "%d\n", data->upthreshold);
-+}
-+
-+static ssize_t upthreshold_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf, size_t count)
-+{
-+	struct devfreq_simple_ondemand_data *data;
-+	struct devfreq *df = to_devfreq(dev);
-+	unsigned int value;
-+	int ret;
-+
-+	if (!df->data)
-+		return -EINVAL;
-+
-+	data = df->data;
-+
-+	ret = kstrtouint(buf, 10, &value);
-+	if (ret < 0)
-+		return -EINVAL;
-+
-+	mutex_lock(&df->lock);
-+
-+	if (value > DFSO_MAX_VALUE || value <= data->downdifferential) {
-+		mutex_unlock(&df->lock);
-+		return -EINVAL;
-+	}
-+
-+	data->upthreshold = value;
-+	mutex_unlock(&df->lock);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(upthreshold);
-+
-+static ssize_t downdifferential_show(struct device *dev,
-+				     struct device_attribute *attr, char *buf)
-+{
-+	struct devfreq_simple_ondemand_data *data;
-+	struct devfreq *df = to_devfreq(dev);
-+
-+	if (!df->data)
-+		return -EINVAL;
-+
-+	data = df->data;
-+
-+	return sprintf(buf, "%d\n", data->downdifferential);
-+}
-+
-+static ssize_t downdifferential_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf, size_t count)
-+{
-+	struct devfreq_simple_ondemand_data *data;
-+	struct devfreq *df = to_devfreq(dev);
-+	unsigned int value;
-+	int ret;
-+
-+	if (!df->data)
-+		return -EINVAL;
-+
-+	data = df->data;
-+
-+	ret = kstrtouint(buf, 10, &value);
-+	if (ret < 0)
-+		return -EINVAL;
-+
-+	mutex_lock(&df->lock);
-+
-+	if (value > DFSO_MAX_VALUE || value >= data->upthreshold) {
-+		mutex_unlock(&df->lock);
-+		return -EINVAL;
-+	}
-+
-+	data->downdifferential = value;
-+	mutex_unlock(&df->lock);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(downdifferential);
-+
-+static void devfreq_simple_ondemand_sysfs_setup(struct devfreq *df)
-+{
-+	struct devfreq_simple_ondemand_data *data;
-+	int ret;
-+
-+	if (!df->data) {
-+		/* The memory will be freed automatically */
-+		df->data = devm_kzalloc(&df->dev,
-+				sizeof(struct devfreq_simple_ondemand_data),
-+				GFP_KERNEL);
-+		if (!df->data) {
-+			dev_warn(&df->dev, "Unable to allocate memory");
-+			return;
-+		}
-+	}
-+
-+	data = df->data;
-+
-+	/* After new allocation setup default values, since they are used */
-+	if (!data->upthreshold)
-+		data->upthreshold = DFSO_UPTHRESHOLD;
-+
-+	if (!data->downdifferential)
-+		data->downdifferential = DFSO_DOWNDIFFERENCTIAL;
-+
-+	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_upthreshold.attr);
-+	if (ret < 0)
-+		dev_warn(&df->dev, "Unable to create 'upthreshold' attr\n");
-+
-+	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_downdifferential.attr);
-+	if (ret < 0)
-+		dev_warn(&df->dev, "Unable to create 'downdifferential' attr\n");
-+}
-+
-+static void devfreq_simple_ondemand_sysfs_remove(struct devfreq *df)
-+{
-+	sysfs_remove_file(&df->dev.kobj, &dev_attr_upthreshold.attr);
-+	sysfs_remove_file(&df->dev.kobj, &dev_attr_downdifferential.attr);
-+}
-+
- static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
- 				unsigned int event, void *data)
- {
- 	switch (event) {
- 	case DEVFREQ_GOV_START:
- 		devfreq_monitor_start(devfreq);
-+		devfreq_simple_ondemand_sysfs_setup(devfreq);
- 		break;
- 
- 	case DEVFREQ_GOV_STOP:
-+		devfreq_simple_ondemand_sysfs_remove(devfreq);
- 		devfreq_monitor_stop(devfreq);
- 		break;
- 
--- 
-2.17.1
+What device/driver is this? Is this a dwc3 device/driver? That driver
+does some weird/incorrect stuff the last time I checked.
 
+>
+> The supplier has been initialized, which is why device_is_dependent()
+> is invoked at all, but it has not been fully registered yet, so
+> device_for_each_child() cannot be relied on to catch all of the
+> possible dependencies.
+
+Rafael,
+
+Ok, I understand this additional case now.
+
+What functions does one call to get the device to this state? AFAIR,
+device_add() does both the "initialization" and adding to the
+parent's children list.
+
+I'm okay with this, but I want to make sure the driver isn't doing weird stuff.
+
+-Saravana
