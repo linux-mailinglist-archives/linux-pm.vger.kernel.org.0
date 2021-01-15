@@ -2,322 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DEE2F7A49
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 13:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8081E2F7B4C
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 14:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387872AbhAOMgY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jan 2021 07:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733273AbhAOMgX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jan 2021 07:36:23 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6B3C0613C1
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jan 2021 04:35:42 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id q66so2133474vke.0
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jan 2021 04:35:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uMakeFoh6Ncg56i6DwGomJHlhBG8cOKWO5An8k3T4oc=;
-        b=o/QRrKtquYMxE3xaN9agiJ4nnMAyQNB1aQtvqvpXr/JgJf8giVb19ToFemJotuJpoI
-         etTVWazKjFUXNWRRZKoakwHVGfOFb37uqLhMRqhTRdQQMWPTzvuQdPZXsWaqpjHFKSt1
-         /kkYIYKV5czBxKG5uX4mk17Sur1fCLpMusrfO2zH1hrNPW/Nt82Oi5JFg+xEaF1XQJjg
-         5DRb4VqAExjjI8xIRHpvGkd6DJt54qYxiLEbPEvnfP2YAnvaGLZVXajP7yslnYC3IJZ9
-         VWdBicB/roSo/Ky1Oqh5VDpiUGpvQVEq2nDovDw/kMIIbxb9pvFama5iK8bBY78x90/X
-         ItSw==
+        id S1733288AbhAONAM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jan 2021 08:00:12 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:33651 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726137AbhAONAM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jan 2021 08:00:12 -0500
+Received: by mail-oi1-f173.google.com with SMTP id d203so9452040oia.0;
+        Fri, 15 Jan 2021 04:59:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uMakeFoh6Ncg56i6DwGomJHlhBG8cOKWO5An8k3T4oc=;
-        b=iULrjy9DW9d9C4WHFIwV0aoCcHSidvyToHuRLQL+AHtg8WO1Fad4NoAnN1Af7BfV5r
-         3zKanQbl2qRuJfBeFSapEz6A/9ZHSpxFmgFAIja9KnyVp9X1ApyevpKXu+O+CKKEy6JC
-         gG+QYBw5wW9SVGPWsgC/cSOXTkANDQFaqANsst3jQ+nM44/ypHJNz28m+0DQq6wPcZwC
-         DTSDvUEl9BJVBgRts5DqKgIGym2b6ZNvoCdlpQLdR7o0osxwGIYDio3XMqIwT6umD7L9
-         CofG8tVI3EJfH6e9y1yRuJwbyCYp4tMeVqhln0C5BEJu8OJBrRKwduX+gtMf8axR680D
-         RLvg==
-X-Gm-Message-State: AOAM532lV5aJPUonLs15BYB97O9MmZt6cTknz0OBpDxqwEx1zq05rfAb
-        DLk9t8Su8olO/OtXMUlrwmSIp80O0LatSG5XG5E8Sg==
-X-Google-Smtp-Source: ABdhPJwmdB4j35uF6udNub64LnLZ4nTQx/nT1TtURRy9TIIMnkUU42Dumacz/8fvkBN17cRokwPFA8LZur9x/qJgVU8=
-X-Received: by 2002:a1f:5fd5:: with SMTP id t204mr9691323vkb.6.1610714142023;
- Fri, 15 Jan 2021 04:35:42 -0800 (PST)
+        bh=YvhCbOA5k3IxeAVfkiAa0smIV4HU4p/9zKuQCQSUGuA=;
+        b=d3Df1OQWM7JhlLwuGGl4ks/DRfFzKHSVJJxCveRIpooutIpsA1RF3O1SJ+X+/IFt6Q
+         5UJpEkk3CWMKSWCEm1mIIPzY+A0THjxf5sY+o6h4HV6N0NVwzReGK+ff7ALudNx4A1zZ
+         OR+p2hporsTzuB1nj8UvqsYVSQT+P40CQz+xxtbNj65Posy9vId+WhKOS9tqpGSZR2lY
+         ZQ4QMo3lqGoV0ONkK376cKLXslw5FwPJuLHxn10R9r4P0pp6XI8As7MEhR2CKW6Fzq6B
+         iqxeBDmMVzLR8MhrN/QZYgOvSoAF61kyibqMykVQF1kfyq0zimwQqZeDUBjpGwUUYOIB
+         YVGA==
+X-Gm-Message-State: AOAM5328V4x0ShoFPzCKxtMhNmLvodJUq9C+qD4j6qjp9mYFExXQrKp0
+        FRydQqFk2m3hiJMtcvKGYcLIhOC1zeLm5B/xhsY=
+X-Google-Smtp-Source: ABdhPJzfeNsLfCbNEnl1Wxpov3PlygdxuZSAjP6IZbsk08NqecL/DEtG1ZxX7kxEXIO9udsCfLeE5f1LcHmC25DWG+k=
+X-Received: by 2002:aca:d6c8:: with SMTP id n191mr5229964oig.69.1610715570885;
+ Fri, 15 Jan 2021 04:59:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20210113201601.14874-1-ilina@codeaurora.org> <20210113201601.14874-3-ilina@codeaurora.org>
-In-Reply-To: <20210113201601.14874-3-ilina@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 15 Jan 2021 13:35:04 +0100
-Message-ID: <CAPDyKFqbaX9KbtJ3x9cB=coqEp9BwLG7UkAm=YhH4p2dZmvOVg@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] PM / Domains: use device's next wakeup to
- determine domain idle state
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+References: <2073294.4OfjquceTg@kreacher> <CAGETcx980TXe_Jur3LqpWoMwt0wG9BBvVdXfhAo3jU8-tgv=kw@mail.gmail.com>
+ <CAJZ5v0jREeXtYa8LAiLoRBG1ok66BR86MCQxrQ1WPR5qbhTKbw@mail.gmail.com> <CAGETcx-G4YQ2Og0CrpVXK3n9Re=VNQbdSt=d7MA7gzRf8D5SxA@mail.gmail.com>
+In-Reply-To: <CAGETcx-G4YQ2Og0CrpVXK3n9Re=VNQbdSt=d7MA7gzRf8D5SxA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Jan 2021 13:59:19 +0100
+Message-ID: <CAJZ5v0ganM6exWL62Pua4ETY_RNieW0JHixQZAx3ebiya94qNQ@mail.gmail.com>
+Subject: Re: [PATCH] driver core: Extend device_is_dependent()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+        Stephan Gerhold <stephan@gerhold.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 13 Jan 2021 at 21:16, Lina Iyer <ilina@codeaurora.org> wrote:
+On Thu, Jan 14, 2021 at 8:59 PM Saravana Kannan <saravanak@google.com> wrote:
 >
-> Currently, a PM domain's idle state is determined based on whether the
-> QoS requirements are met. However, even entering an idle state may waste
-> power if the minimum residency requirements aren't fulfilled.
+> On Thu, Jan 14, 2021 at 11:38 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Thu, Jan 14, 2021 at 8:32 PM Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > On Thu, Jan 14, 2021 at 10:41 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > > >
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > When adding a new device link, device_is_dependent() is used to
+> > > > check whether or not the prospective supplier device does not
+> > > > depend on the prospective consumer one to avoid adding loops
+> > > > to the graph of device dependencies.
+> > > >
+> > > > However, device_is_dependent() does not take the ancestors of
+> > > > the target device into account, so it may not detect an existing
+> > > > reverse dependency if, for example, the parent of the target
+> > > > device depends on the device passed as its first argument.
+> > > >
+> > > > For this reason, extend device_is_dependent() to also check if
+> > > > the device passed as its first argument is an ancestor of the
+> > > > target one and return 1 if that is the case.
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > Reported-by: Stephan Gerhold <stephan@gerhold.net>
+> > > > ---
+> > > >  drivers/base/core.c |   12 +++++++++++-
+> > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > >
+> > > > Index: linux-pm/drivers/base/core.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/drivers/base/core.c
+> > > > +++ linux-pm/drivers/base/core.c
+> > > > @@ -208,6 +208,16 @@ int device_links_read_lock_held(void)
+> > > >  #endif
+> > > >  #endif /* !CONFIG_SRCU */
+> > > >
+> > > > +static bool device_is_ancestor(struct device *dev, struct device *target)
+> > > > +{
+> > > > +       while (target->parent) {
+> > > > +               target = target->parent;
+> > > > +               if (dev == target)
+> > > > +                       return true;
+> > > > +       }
+> > > > +       return false;
+> > > > +}
+> > > > +
+> > > >  /**
+> > > >   * device_is_dependent - Check if one device depends on another one
+> > > >   * @dev: Device to check dependencies for.
+> > > > @@ -221,7 +231,7 @@ int device_is_dependent(struct device *d
+> > > >         struct device_link *link;
+> > > >         int ret;
+> > > >
+> > > > -       if (dev == target)
+> > > > +       if (dev == target || device_is_ancestor(dev, target))
+> > > >                 return 1;
+> > > >
+> > > >         ret = device_for_each_child(dev, target, device_is_dependent);
+> > > >
+> > >
+> > > The code works, but it's not at all obvious what it's doing. Because,
+> > > at first glance, it's easy to mistakenly think that it's trying to
+> > > catch this case:
+> > > dev <- child1 <- child2 <- target
+> > >
+> > > Maybe it's clearer if we do this check inside the loop?
+> >
+> > Which of the loops do you mean?
 >
-> CPU PM domains use the next timer wakeup for the CPUs in the domain to
-> determine the sleep duration of the domain. This is compared with the
-> idle state residencies to determine the optimal idle state. For other PM
-> domains, determining the sleep length is not that straight forward. But
-> if the device's next_event is available, we can use that to determine
-> the sleep duration of the PM domain.
+> Sorry, the list of consumers loop.
 >
-> Let's update the domain governor logic to check for idle state residency
-> based on the next wakeup of devices as well as QoS constraints. But
-> since, not all domains may contain devices capable of specifying the
-> next wakeup, let's enable this additional check only if specified by the
-> domain's flags when initializing the domain.
+> > There are two of them and both need
+> > to do the check in each step AFAICS.
 >
-> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> I don't think we need it in the "loop through children" one. Here's why.
+>
+> We already make sure:
+> 1. The prospective supplier (target) is not a child of the prospective
+> consumer (dev).
+> 2. The prospective supplier (target) is not a consumer of the
+> prospective consumer (dev) or any of its children.
+>
+> To address the problem in the commit, we need to make changes to make sure:
+> 3. The ancestor of prospective supplier (ancestor of target) is not a
+> child of prospective consumer (dev)
+> 4. The ancestor of prospective supplier (ancestor of target) is not a
+> consumer of the prospective consumer (dev) or any of its children.
 
-A minor comment about white spaces, see below. With that fixed, please add:
+This should be taken care of by the recursive device_is_depedent()
+invocation in the loop over consumers, but only if (and that's what's
+really missing) the supplier has been fully registered.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+If the supplier has been initialized, which is specifically checked by
+device_link_add(), but not added, it may be missing from its parent's
+list of children, but device_is_depedent() only checks those lists.
 
-Kind regards
-Uffe
+> But (3) would be caught automatically when we do (1). Because if (3)
+> is true, (1) would also be true.
+> So, what's left is (4), for which my suggestion should be sufficient?
+>
+> Does it make sense? Or am I missing anything else that needs to be checked?
 
-> ---
-> Changes in v7:
->         - Define GENPD_FLAG_MIN_RESIDENCY and check for min residency
->           only if the flag is set.
->         - Update commit text.
-> Changes in v6:
->         - Do not include power_on_latency_ns for next_wakeup
->           determination.
->         - Re-organize code to avoid multiple ktime_get() reads.
->         - Check genpd flag if next_wakeup is useful for the domain.
->         - Document why we ignore stale data
-> Changes in v5:
->         - Minor code changes suggested by Rafel
-> Changes in v4:
->         - Update to use next_wakeup from struct generic_pm_domain_data.
-> Changes in v3:
->         - None
-> Changes in v2:
->         - Fix state_idx type to hold negative value.
->         - Update commit text.
-> ---
->  drivers/base/power/domain_governor.c | 102 ++++++++++++++++++++++++---
->  include/linux/pm_domain.h            |  18 +++--
->  2 files changed, 105 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-> index 490ed7deb99a..c6c218758f0b 100644
-> --- a/drivers/base/power/domain_governor.c
-> +++ b/drivers/base/power/domain_governor.c
-> @@ -117,6 +117,55 @@ static bool default_suspend_ok(struct device *dev)
->         return td->cached_suspend_ok;
->  }
->
-> +static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
-> +{
-> +       ktime_t domain_wakeup = KTIME_MAX;
-> +       ktime_t next_wakeup;
-> +       struct pm_domain_data *pdd;
-> +       struct gpd_link *link;
-> +
-> +       if (!(genpd->flags & GENPD_FLAG_MIN_RESIDENCY))
-> +               return;
-> +
-> +       /*
-> +        * Devices that have a predictable wakeup pattern, may specify
-> +        * their next wakeup. Let's find the next wakeup from all the
-> +        * devices attached to this domain and from all the sub-domains.
-> +        * It is possible that component's a next wakeup may have become
-> +        * stale when we read that here. We will ignore to ensure the domain
-> +        * is able to enter its optimal idle state.
-> +        */
-> +       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-> +               next_wakeup = to_gpd_data(pdd)->next_wakeup;
-> +               if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-> +                       if (ktime_before(next_wakeup, domain_wakeup))
-> +                               domain_wakeup = next_wakeup;
-> +       }
-> +
-> +       list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> +               next_wakeup = link->child->next_wakeup;
-> +               if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-> +                       if (ktime_before(next_wakeup, domain_wakeup))
-> +                               domain_wakeup = next_wakeup;
-> +       }
-> +
-> +       genpd->next_wakeup = domain_wakeup;
-> +}
-> +
-> +static bool next_wakeup_allows_state(struct generic_pm_domain *genpd,
-> +                                    unsigned int state, ktime_t now)
-> +{
-> +       ktime_t domain_wakeup = genpd->next_wakeup;
-> +       s64 idle_time_ns, min_sleep_ns;
-> +
-> +       min_sleep_ns = genpd->states[state].power_off_latency_ns +
-> +                      genpd->states[state].residency_ns;
-> +
-> +       idle_time_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
-> +
-> +       return idle_time_ns >= min_sleep_ns;
-> +}
-> +
->  static bool __default_power_down_ok(struct dev_pm_domain *pd,
->                                      unsigned int state)
->  {
-> @@ -201,16 +250,41 @@ static bool __default_power_down_ok(struct dev_pm_domain *pd,
->  }
->
->  /**
-> - * default_power_down_ok - Default generic PM domain power off governor routine.
-> + * _default_power_down_ok - Default generic PM domain power off governor routine.
->   * @pd: PM domain to check.
->   *
->   * This routine must be executed under the PM domain's lock.
->   */
-> -static bool default_power_down_ok(struct dev_pm_domain *pd)
-> +static bool _default_power_down_ok(struct dev_pm_domain *pd, ktime_t now)
->  {
->         struct generic_pm_domain *genpd = pd_to_genpd(pd);
-> +       int state_idx = genpd->state_count - 1;
->         struct gpd_link *link;
->
-> +       /*
-> +        * Find the next wakeup from devices that can determine their own wakeup
-> +        * to find when the domain would wakeup and do it for every device down
-> +        * the hierarchy. It is not worth while to sleep if the state's residency
-> +        * cannot be met.
-> +        */
-> +       update_domain_next_wakeup(genpd, now);
-> +       if ((genpd->flags & GENPD_FLAG_MIN_RESIDENCY) && (genpd->next_wakeup != KTIME_MAX)) {
-> +               /* Let's find out the deepest domain idle state, the devices prefer */
-> +               while (state_idx >= 0) {
-> +                       if (next_wakeup_allows_state(genpd, state_idx, now)) {
-> +                               genpd->max_off_time_changed = true;
-> +                               break;
-> +                       }
-> +                       state_idx--;
-> +               }
-> +
-> +               if (state_idx < 0) {
-> +                       state_idx = 0;
-> +                       genpd->cached_power_down_ok = false;
-> +                       goto done;
-> +               }
-> +       }
-> +
->         if (!genpd->max_off_time_changed) {
->                 genpd->state_idx = genpd->cached_power_down_state_idx;
->                 return genpd->cached_power_down_ok;
-> @@ -228,21 +302,30 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
->         genpd->max_off_time_ns = -1;
->         genpd->max_off_time_changed = false;
->         genpd->cached_power_down_ok = true;
-> -       genpd->state_idx = genpd->state_count - 1;
->
-> -       /* Find a state to power down to, starting from the deepest. */
-> -       while (!__default_power_down_ok(pd, genpd->state_idx)) {
-> -               if (genpd->state_idx == 0) {
-> +       /*
-> +        * Find a state to power down to, starting from the state
-> +        * determined by the next wakeup.
-> +        */
-> +       while (!__default_power_down_ok(pd, state_idx)) {
-> +               if (state_idx == 0) {
->                         genpd->cached_power_down_ok = false;
->                         break;
->                 }
-> -               genpd->state_idx--;
-> +               state_idx--;
->         }
->
-> +done:
-> +       genpd->state_idx = state_idx;
->         genpd->cached_power_down_state_idx = genpd->state_idx;
->         return genpd->cached_power_down_ok;
->  }
->
-> +static bool default_power_down_ok(struct dev_pm_domain *pd)
-> +{
-> +       return _default_power_down_ok(pd, ktime_get());
-> +}
-> +
->  static bool always_on_power_down_ok(struct dev_pm_domain *domain)
->  {
->         return false;
-> @@ -254,11 +337,12 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
->         struct generic_pm_domain *genpd = pd_to_genpd(pd);
->         struct cpuidle_device *dev;
->         ktime_t domain_wakeup, next_hrtimer;
-> +       ktime_t now = ktime_get();
->         s64 idle_duration_ns;
->         int cpu, i;
->
->         /* Validate dev PM QoS constraints. */
-> -       if (!default_power_down_ok(pd))
-> +       if (!_default_power_down_ok(pd, now))
->                 return false;
->
->         if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN))
-> @@ -280,7 +364,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
->         }
->
->         /* The minimum idle duration is from now - until the next wakeup. */
-> -       idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, ktime_get()));
-> +       idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
->         if (idle_duration_ns <= 0)
->                 return false;
->
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 735583c0bc6d..8ff3cac87f88 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -56,13 +56,18 @@
->   *
->   * GENPD_FLAG_RPM_ALWAYS_ON:   Instructs genpd to always keep the PM domain
->   *                             powered on except for system suspend.
-> + *
-> + * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to consider its
-> + *                             components' next wakeup when determining the
-> + *                             optimal idle state.
->   */
-> -#define GENPD_FLAG_PM_CLK       (1U << 0)
-> -#define GENPD_FLAG_IRQ_SAFE     (1U << 1)
-> -#define GENPD_FLAG_ALWAYS_ON    (1U << 2)
-> -#define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
-> -#define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
-> -#define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
-> +#define GENPD_FLAG_PM_CLK         (1U << 0)
-> +#define GENPD_FLAG_IRQ_SAFE       (1U << 1)
-> +#define GENPD_FLAG_ALWAYS_ON      (1U << 2)
-> +#define GENPD_FLAG_ACTIVE_WAKEUP   (1U << 3)
-> +#define GENPD_FLAG_CPU_DOMAIN     (1U << 4)
-> +#define GENPD_FLAG_RPM_ALWAYS_ON   (1U << 5)
+AFAICS, the failing case is when the suppliers has been initialized
+already, but not fully registered yet, because in that case it is not
+sufficient to walk the list of children, it is also necessary to look
+at the supplier's parent pointer (and the whole chain of direct
+ancestors associated with it).
 
-Looks like the above are white space changes, probably carried forward
-from previous versions. Please fix it up.
+So the code change in the patch is correct, but the description of it isn't.
 
-> +#define GENPD_FLAG_MIN_RESIDENCY   (1U << 6)
->
->  enum gpd_status {
->         GENPD_STATE_ON = 0,     /* PM domain is on */
-> @@ -130,6 +135,7 @@ struct generic_pm_domain {
->                                      unsigned int state);
->         struct gpd_dev_ops dev_ops;
->         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
-> +       ktime_t next_wakeup;    /* Maintained by the domain governor */
->         bool max_off_time_changed;
->         bool cached_power_down_ok;
->         bool cached_power_down_state_idx;
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+Let me respin.
