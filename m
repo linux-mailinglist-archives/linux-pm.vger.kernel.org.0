@@ -2,154 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 920682F7147
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 04:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25DD2F72D1
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jan 2021 07:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731260AbhAODz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jan 2021 22:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731139AbhAODzw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jan 2021 22:55:52 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30998C061575;
-        Thu, 14 Jan 2021 19:55:12 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id j12so7363044ota.7;
-        Thu, 14 Jan 2021 19:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=P1pE3SlC44ai1ckIdueI94VlVgFy9zu5zhNWEKBjxuQ=;
-        b=Tg1Uvl8gK/EKXgNwP6EqowAB4+ptGN9J8bRToi75GZ9OVHhY+DNTjWDgSnLve60V1W
-         p4SBj67qBAcI5V7c1ECEXI9BADrVtA/kqdWUZ8wrmvkZLq80wPK1P9aOcxi9jP+t1o1Y
-         KJr9TmA3Emi2eYjvaTNmfYa78wa2J7E/MtSKH1w0D1ZFiY9+trEAB+Lk/sB78j34+U6Q
-         QByhUNBgx9QoaEVsdVJXJ9oc7L+Wzpj2rRZf3GGKLUd6e994kaH+aTmFouM/T+5YkMor
-         B9vA+ZyssFr4nIV+q9jMInF47uDkXYY8FgOjmCO1Gda/s+Pg2GpJG7kq0nmsH76Du8lk
-         AUMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P1pE3SlC44ai1ckIdueI94VlVgFy9zu5zhNWEKBjxuQ=;
-        b=Tg65Etht3bOsVE/Da3JOQpYk0/09e/TZQZMEK6ek8+oFckRW8X02NsmShSOrpKU6FV
-         C6FqnJVdlKoD0PRou93UijGp3/StuMDVF/igVl+byxm+BqW6/I2IeVN7F47tDDlhfcyM
-         OjLP9g8oozujm28Ssq8BkgBYMC+PuwLMu4M4xkrCHHIXkE4CaLa1xM+H5K0zcId4uJ/R
-         8xhCEKPB8J//xxNmHfl7wNZoygR4Gj0Frb/GyThPnEzar7MX5BZQ/27KtnqWd1HxZAxI
-         7hxEzypZRRrlHqhDSiG/K3B/tuPu6DwH76DVPabWb7wlZzVOtCw3afJSnXP08uu7tfBc
-         8e3A==
-X-Gm-Message-State: AOAM530BoLtC4msCNF1bt/55JOfBPWDvARhjAiFrjhFKg2D+TxPw4/qQ
-        C6GNqfkqAabeOB31U6S2iFmF5vZk+DENy6RcJSA=
-X-Google-Smtp-Source: ABdhPJycmwChvFy+e4H9mlLdITjI5zgt1vFrzcRWChV7FXDg5tJwdGl+uV3O3z94glc+CC6FWc8S3nIDWhJ/O4Ph/I0=
-X-Received: by 2002:a05:6830:160f:: with SMTP id g15mr6975275otr.129.1610682911620;
- Thu, 14 Jan 2021 19:55:11 -0800 (PST)
+        id S1727064AbhAOGUP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jan 2021 01:20:15 -0500
+Received: from mail2.protonmail.ch ([185.70.40.22]:60060 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726509AbhAOGUP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jan 2021 01:20:15 -0500
+Date:   Fri, 15 Jan 2021 06:19:28 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1610691573;
+        bh=MMAL5Kui+vVOjSc+zW3syAP1NEdjBqjVan7pfvyQkw4=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=PioXalzsNQh9fZk+GHvLgr527n281L2QYgFXV7MI95OYX2HB0ONxk1fAb5dq4r9WA
+         BrXiKejeXBoX2tlA78NXM+SVkadjyGJLLmw8oOyfa42O/T+ahM+bzCTb0ew4Vyzd/t
+         zt8m9dHUBEd2iu1EZHRhwHW3JZXHKcBfhGGngAV8=
+To:     Mark Brown <broonie@kernel.org>
+From:   Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Reply-To: Timon Baetz <timon.baetz@protonmail.com>
+Subject: Re: [PATCH v6 2/8] regulator: dt-bindings: Document max8997-pmic nodes
+Message-ID: <20210115071914.0407a928.timon.baetz@protonmail.com>
+In-Reply-To: <20210108161653.GA4554@sirena.org.uk>
+References: <20201230205139.1812366-1-timon.baetz@protonmail.com> <20210104181825.GB27043@kozik-lap> <20210104182734.GH5645@sirena.org.uk> <20210104183821.GA29033@kozik-lap> <20210104212449.GJ5645@sirena.org.uk> <20210105165529.GB20401@kozik-lap> <20210106145931.GE4752@sirena.org.uk> <20210108161635.1b9303c8.timon.baetz@protonmail.com> <20210108161653.GA4554@sirena.org.uk>
 MIME-Version: 1.0
-References: <1605177598-23501-1-git-send-email-gene.chen.richtek@gmail.com>
- <1605177598-23501-5-git-send-email-gene.chen.richtek@gmail.com> <74b127eb-9a3c-20c9-5692-b00b982f4da3@gmail.com>
-In-Reply-To: <74b127eb-9a3c-20c9-5692-b00b982f4da3@gmail.com>
-From:   Gene Chen <gene.chen.richtek@gmail.com>
-Date:   Fri, 15 Jan 2021 11:55:00 +0800
-Message-ID: <CAE+NS34qR9f2LOpvxTBDF4OR=Xq-SFP+uHdWe3dZ5x8xggS8kA@mail.gmail.com>
-Subject: Re: [PATCH v7 04/11] mfd: mt6360: Combine mt6360 pmic/ldo resources
- into mt6360 regulator resources
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     sre@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Gene Chen <gene_chen@richtek.com>, Wilma.Wu@mediatek.com,
-        shufan_lee@richtek.com, ChiYuan Huang <cy_huang@richtek.com>,
-        benjamin.chao@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2021=E5=B9=B41=E6=9C=88=
-12=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=888:32=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
->
->
-> On 12/11/2020 11:39, Gene Chen wrote:
-> > From: Gene Chen <gene_chen@richtek.com>
-> >
-> > Combine mt6360 pmic/ldo resources into mt6360 regulator resources
-> > to simplify the similar resources object.
-> >
-> > Signed-off-by: Gene Chen <gene_chen@richtek.com>
-> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/mfd/mt6360-core.c | 11 +++--------
-> >  1 file changed, 3 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/mfd/mt6360-core.c b/drivers/mfd/mt6360-core.c
-> > index 692e47b..5119e51 100644
-> > --- a/drivers/mfd/mt6360-core.c
-> > +++ b/drivers/mfd/mt6360-core.c
-> > @@ -265,7 +265,7 @@ static const struct resource mt6360_led_resources[]=
- =3D {
-> >       DEFINE_RES_IRQ_NAMED(MT6360_FLED1_STRB_TO_EVT, "fled1_strb_to_evt=
-"),
-> >  };
-> >
-> > -static const struct resource mt6360_pmic_resources[] =3D {
-> > +static const struct resource mt6360_regulator_resources[] =3D {
-> >       DEFINE_RES_IRQ_NAMED(MT6360_BUCK1_PGB_EVT, "buck1_pgb_evt"),
-> >       DEFINE_RES_IRQ_NAMED(MT6360_BUCK1_OC_EVT, "buck1_oc_evt"),
-> >       DEFINE_RES_IRQ_NAMED(MT6360_BUCK1_OV_EVT, "buck1_ov_evt"),
-> > @@ -278,9 +278,6 @@ static const struct resource mt6360_pmic_resources[=
-] =3D {
-> >       DEFINE_RES_IRQ_NAMED(MT6360_LDO7_OC_EVT, "ldo7_oc_evt"),
-> >       DEFINE_RES_IRQ_NAMED(MT6360_LDO6_PGB_EVT, "ldo6_pgb_evt"),
-> >       DEFINE_RES_IRQ_NAMED(MT6360_LDO7_PGB_EVT, "ldo7_pgb_evt"),
-> > -};
-> > -
-> > -static const struct resource mt6360_ldo_resources[] =3D {
-> >       DEFINE_RES_IRQ_NAMED(MT6360_LDO1_OC_EVT, "ldo1_oc_evt"),
-> >       DEFINE_RES_IRQ_NAMED(MT6360_LDO2_OC_EVT, "ldo2_oc_evt"),
-> >       DEFINE_RES_IRQ_NAMED(MT6360_LDO3_OC_EVT, "ldo3_oc_evt"),
-> > @@ -298,10 +295,8 @@ static const struct mfd_cell mt6360_devs[] =3D {
-> >                   NULL, 0, 0, "mediatek,mt6360-chg"),
-> >       OF_MFD_CELL("mt6360-led", mt6360_led_resources,
-> >                   NULL, 0, 0, "mediatek,mt6360-led"),
-> > -     OF_MFD_CELL("mt6360-pmic", mt6360_pmic_resources,
-> > -                 NULL, 0, 0, "mediatek,mt6360-pmic"),
-> > -     OF_MFD_CELL("mt6360-ldo", mt6360_ldo_resources,
-> > -                 NULL, 0, 0, "mediatek,mt6360-ldo"),
-> > +     OF_MFD_CELL("mt6360-regulator", mt6360_regulator_resources,
-> > +                 NULL, 0, 0, "mediatek,mt6360-regulator"),
->
-> As discussed with the MFD maintainer [1], the regulator (and probably all=
- cells)
-> shouldn't have a DT binding.
->
-> So please send a new version which fixes that.
->
-> Regards,
-> Matthias
->
-> [1] https://lore.kernel.org/linux-mediatek/20210111164118.GE4728@sirena.o=
-rg.uk/
->
+On Fri, 8 Jan 2021 16:16:53 +0000, Mark Brown wrote:
+> On Fri, Jan 08, 2021 at 03:16:48PM +0000, Timon Baetz wrote:
+>=20
+> > Muic needs a node to be used with extcon_get_edev_by_phandle().
+> > Charger needs a node to reference a regulator. =20
+>=20
+> The pattern is to use the parent device's node.
 
-Should I use parent's device to find sub-devices of_node if without
-compatible name?
-I trace the function mfd_add_device,
+So is extcon going to be a self-reference then?
 
-if (IS_ENABLED(CONFIG_OF) && parent->of_node && cell->of_compatible) {
-    .....
-    ret =3D mfd_match_of_node_to_dev(pdev, np, cell);
-    .....
-}
+Just for my understanding: I can see sub-nodes for MFD all over the
+place. It is still not clear to me why sub-nodes aren't the right
+choice in this specific case?
 
-which is binding mfd sub-device with compatible. Does it be removed in
-the feature?
+Thanks for the feedback,
+Timon
 
-> >       OF_MFD_CELL("mt6360-tcpc", NULL,
-> >                   NULL, 0, 0, "mediatek,mt6360-tcpc"),
-> >  };
-> >
