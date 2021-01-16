@@ -2,95 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7AC2F8D26
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Jan 2021 12:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFE52F8D36
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Jan 2021 13:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726467AbhAPLod (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Jan 2021 06:44:33 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47938 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725979AbhAPLoc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jan 2021 06:44:32 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id D88821F45E81
-Received: by earth.universe (Postfix, from userid 1000)
-        id 04B0B3C0C94; Sat, 16 Jan 2021 12:43:49 +0100 (CET)
-Date:   Sat, 16 Jan 2021 12:43:48 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Zheng Yongjun <zhengyongjun3@huawei.com>
+        id S1726111AbhAPMBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Jan 2021 07:01:42 -0500
+Received: from m12-12.163.com ([220.181.12.12]:57152 "EHLO m12-12.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbhAPMBl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 16 Jan 2021 07:01:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=PL/Jq
+        HSck/4HYIlMBJO7I9Krmfq9sE0LU3UwCK14FsA=; b=oF7csRQpgjxY1Rk7eykVO
+        ZM+UVqiDRg9Boa/wfs9y1KMx289//0Ki0qjWmUbNWyPYz4wGrmVGyoxzPBsP1rJD
+        Y+TeWW8AXHXoxuEF4qn7NFwgGkcGyLMBCIGHhAx1HJE+mWB2wUkobFxvlzk0UfLG
+        yLtAKW44Epn2GjldXmI4NE=
+Received: from yangjunlin.ccdomain.com (unknown [119.137.52.218])
+        by smtp8 (Coremail) with SMTP id DMCowAAXWOM40QJgnUpiMQ--.32724S2;
+        Sat, 16 Jan 2021 19:42:49 +0800 (CST)
+From:   angkery <angkery@163.com>
+To:     sre@kernel.org, yangjunlin@yulong.com
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] power: supply: ab8500_fg: convert comma to
- semicolon
-Message-ID: <20210116114348.x5erkpwwzwfyowy3@earth.universe>
-References: <20201214134000.4243-1-zhengyongjun3@huawei.com>
+Subject: [PATCH] power: supply: charger-manager: fix the wrong status of health
+Date:   Sat, 16 Jan 2021 19:41:20 +0800
+Message-Id: <20210116114120.3531-1-angkery@163.com>
+X-Mailer: git-send-email 2.24.0.windows.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mlj73v7fip325zvq"
-Content-Disposition: inline
-In-Reply-To: <20201214134000.4243-1-zhengyongjun3@huawei.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMCowAAXWOM40QJgnUpiMQ--.32724S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZF4UXr4DXryxJr1UKF1kuFg_yoWkGrgEka
+        ykA340qFya9r1ayrnrKFn3Zry09ayrXayxWa92grZ8A3WYqw4kJrykZF98Jw47GF43uFZI
+        qas8JFn5CFy8KjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5HxR3UUUUU==
+X-Originating-IP: [119.137.52.218]
+X-CM-SenderInfo: 5dqjyvlu16il2tof0z/xtbBFBkcI1aD+EUA9AAAsu
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Junlin Yang <yangjunlin@yulong.com>
 
---mlj73v7fip325zvq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+cm->emergency_stop will only be the value in the enumeration,
+and can not be less than zero, it will get an exception value.
+So replace it with the corresponding value.
 
-Hi,
+Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
+---
+ drivers/power/supply/charger-manager.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Dec 14, 2020 at 09:40:00PM +0800, Zheng Yongjun wrote:
-> Replace a comma between expression statements by a semicolon.
->=20
-> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-> ---
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index 6fcebe4..0d28741 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -723,9 +723,9 @@ static int charger_get_property(struct power_supply *psy,
+ 		val->intval = cm->battery_status;
+ 		break;
+ 	case POWER_SUPPLY_PROP_HEALTH:
+-		if (cm->emergency_stop > 0)
++		if (cm->emergency_stop == CM_BATT_OVERHEAT)
+ 			val->intval = POWER_SUPPLY_HEALTH_OVERHEAT;
+-		else if (cm->emergency_stop < 0)
++		else if (cm->emergency_stop == CM_BATT_COLD)
+ 			val->intval = POWER_SUPPLY_HEALTH_COLD;
+ 		else
+ 			val->intval = POWER_SUPPLY_HEALTH_GOOD;
+-- 
+1.9.1
 
-Thanks, queued.
 
--- Sebastian
-
->  drivers/power/supply/ab8500_fg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
-00_fg.c
-> index 592a73d4dde6..6594f09c993c 100644
-> --- a/drivers/power/supply/ab8500_fg.c
-> +++ b/drivers/power/supply/ab8500_fg.c
-> @@ -857,7 +857,7 @@ static int ab8500_fg_volt_to_capacity(struct ab8500_f=
-g *di, int voltage)
->  	const struct abx500_v_to_cap *tbl;
->  	int cap =3D 0;
-> =20
-> -	tbl =3D di->bm->bat_type[di->bm->batt_id].v_to_cap_tbl,
-> +	tbl =3D di->bm->bat_type[di->bm->batt_id].v_to_cap_tbl;
->  	tbl_size =3D di->bm->bat_type[di->bm->batt_id].n_v_cap_tbl_elements;
-> =20
->  	for (i =3D 0; i < tbl_size; ++i) {
-> --=20
-> 2.22.0
->=20
-
---mlj73v7fip325zvq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmAC0XQACgkQ2O7X88g7
-+prf0w/+PKxWaHtDNVQAV/m6l0jduMXpwcWZPEiEGlpwrYa+xckr+dA6hwDLuzPt
-NNYAm98rYVIX4/Yq2AtE3Y3YM4/q1lIXRh4PqcmFy8AB6InyRLH8xyv5LUZUWmyp
-4vDBkovbxnc2IhGpi0wUVY+2GI8h+XYg/ToZwv/KxHtCjpsDB4F5umiArJORzSBx
-wEA/Px5rdi6FihVxH1AuO/FLlEeVPI9Q0FmCs7p5isBQMhBl87I2mHQ5nEmYXoK5
-wPV7D0N47WQ625G4LQ6huXRi9bLICHnkRckRBSiuIImBgWQZQg/5UJbMYMMJ5whE
-qBRYQCXegAHir/Zj7qwqXIdflysxTnp9OXFxHBPsxuduAPv7ax9j7caNl9spI9Bt
-5Ld7jtHmylOcjPTxTh8Yd4W0TO0qzjs1oBkBkcBU5ruXDY8Bv4hBiSjxGk8Keujs
-Ib8aKp634wReEITyVhfV0EjTvp7Xccbx4/f01lX9crWH+1OwPuua/pFEGvh27nJO
-sBRvm3YrV3mdBvAYhaouiK//TLlbwFpwuakQKEgaQ75IuOc8PCbsrwOKbu0GO//i
-Ot6YjkMUbPK4CbV/NO3TzHB+0/iqT8g4Injgs9N9p1pMNy7cSchEcdZj7pFkYYwJ
-XpI463bgtrq+n9DJ8QDWDEygBhbjKyF0UN4HvHczKkt2eVMa45Q=
-=jBrW
------END PGP SIGNATURE-----
-
---mlj73v7fip325zvq--
