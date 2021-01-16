@@ -2,177 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F682F8DC8
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Jan 2021 18:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273652F8E97
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Jan 2021 19:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbhAPRJR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Jan 2021 12:09:17 -0500
-Received: from cmta19.telus.net ([209.171.16.92]:41724 "EHLO cmta19.telus.net"
+        id S1726788AbhAPSKH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Jan 2021 13:10:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40788 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728005AbhAPRJN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 16 Jan 2021 12:09:13 -0500
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id 0p3qlG1kyxoDi0p3slzzsF; Sat, 16 Jan 2021 10:08:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1610816910; bh=JQ1lIQOw/FQhQdyihlNdeL4ktOlij8E6lAkowA8vVPg=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=62ip32+bQMWpDwPvK8BsqUoUci/+Z+ZIbQI6vsfuval2J8SWFbPFLlAukgsoeZIUs
-         6vM2GgAnRgPInNVoQ19jhjpA6jFVP585xLBGdIxdfKX+ybGLMhNsF1Vq1CCWAc4H18
-         Q1SVkrPISfDUL0hJAbwg90kTj5cZzMhKzRxVR56KFns/ExKRSLqfSHjn/AV9R5Mo22
-         EcGI6CyezufUof4JfDqOa1xQLFKbjbudbxk6f8ZGqaMqS0Qdz4mLEtX2EMyEs3iOpb
-         nHk+d6TOGpT0bCvXOJN5fKUK7Knqf9aAWwOTsY7QlhKAiNnlPEWG6TGbSJi8H2ta0O
-         ArsrUMH/Sj2hQ==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.4 cv=ctJeL30i c=1 sm=1 tr=0 ts=60031d8e
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=aatUQebYAAAA:8
- a=skdSOlplxTDZW_2ePFQA:9 a=CjuIK1q_8ugA:10 a=7715FyvI7WU-l6oqrZBK:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Zhang Rui'" <rui.zhang@intel.com>
-Cc:     <daniel.lezcano@linaro.org>, <srinivas.pandruvada@linux.intel.com>,
-        <linux-pm@vger.kernel.org>
-References: <20210115094744.21156-1-rui.zhang@intel.com>
-In-Reply-To: <20210115094744.21156-1-rui.zhang@intel.com>
-Subject: RE: [PATCH] thermal/intel: introduce tcc cooling driver
-Date:   Sat, 16 Jan 2021 09:08:26 -0800
-Message-ID: <002601d6ec2a$36663da0$a332b8e0$@net>
+        id S1726018AbhAPSKG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 16 Jan 2021 13:10:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6433922DBF;
+        Sat, 16 Jan 2021 15:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610809455;
+        bh=b07lwLAQD1OJQprPbI2xSjAn/WmejmRmegi5Xr2ZiFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HcgSRdE7vJG48PYcjIqtVUT36kwmsCnvPVsvR9untI2vzkxZB84wtOyRCbk2Q/71/
+         RfwWJ8GtxnOqw40Ufg23qVR5E4T8zPzV0oLh2hlfWl5aTVnnmKN2QGz+DfemiT8iTO
+         kIVOkGeepdbOi9jGvFK27K7ef5SySLaehn7Mwjw4H87Znrp8+2xL9txK+r1u7uBiTn
+         aJ0GpjBnbhXLD1wkdSePczJ7lQ4x778yKJoWHWOiC2tB9jSXTO4KtC3IPFdXuMODhl
+         zKhINqfKHfJ+O27m05IBSTY1TemHlN35m1u+Z1e5G9MikgA9ZNBefbKQKyZgf+N/iA
+         /USdY4b5q/4aw==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 6D2E73C0C94; Sat, 16 Jan 2021 16:04:13 +0100 (CET)
+Date:   Sat, 16 Jan 2021 16:04:13 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Marek Czerski <ma.czerski@gmail.com>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: reset: ltc2952: make trigger delay configurable
+Message-ID: <20210116150413.gqsodziwjv6g6bvd@earth.universe>
+References: <20201207222829.13676-1-ma.czerski@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdbrIkJv3Xd49VUQTf+fLZID/bj4xQAuumUQ
-Content-Language: en-ca
-X-CMAE-Envelope: MS4xfEFPzzj+ZSNq7CLh2pOs4LDiCDQlUhrwBfQjg/8yirKr/JaqqmOwKIwUS2xKLV02rEP9uwBpvpvOJW19uoiELEl2k0cGynXFFSehkizV98hlAzmD83+8
- rueChHB0lLFXLjv/oHcokSWdzNBWcz9sS5Fp5kTrHiLFMLQoglArnDQV99z4FnFDQQ5IiCC7D+ID/jqJL0QotpgYLXt21OTUuY2WnMH4aUbtEIvlFzpa9Uej
- ZNrQBp8RXwS4gZSGX+lO270WnxKyMNKJBn1sH5OXVXVQ+oHA2Se18REUTXyJVMqGRxqb1UltgWni4ElSuZSJAA==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="e2hmrl2yurqucwco"
+Content-Disposition: inline
+In-Reply-To: <20201207222829.13676-1-ma.czerski@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021.01.15 Zhang Rui wrote:
-> 
-> On Intel processors, the core frequency can be reduced below OS request,
-> when the current temperature reaches the TCC (Thermal Control Circuit)
-> activation temperature.
-> 
-> The default TCC activation temperature is specified by
-> MSR_IA32_TEMPERATURE_TARGET. However, it can be adjusted by specifying an
-> offset in degrees C, using the TCC Offset bits in the same MSR register.
-> 
-> This patch introduces a cooling devices driver that utilizes the TCC
-> Offset feature. The bigger the current cooling state is, the lower the
-> effective TCC activation temperature is, so that the processors can be
-> throttled earlier before system critical overheats.
 
-Thank you for this useful patch.
-My systems don't need thermald or any other thermal control, but it is nice
-to have this extra margin to add to the critical stuff, as a backup.
-I also like to use the offset to test stuff.
+--e2hmrl2yurqucwco
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I use the internal power limit servo for power limiting,
-and that servo works very well indeed. Using this temperature
-offset as a way to servo the thermal operating limit does work,
-but tends to overshoot, oscillate, hold low excessively long
-(minutes). It also seems to limit CPU clock frequency reduction
-to the non-turbo limit, regardless of the desired maximum
-temperature.
+Hi,
 
-I am not familiar with the thermal stuff at all, and didn't know
-where to find the trip point knob. Anyway, found "cooling_devices11".
+On Mon, Dec 07, 2020 at 11:28:29PM +0100, Marek Czerski wrote:
+> Make trigger delay configurable through device tree with
+> trigger-delay-ms property.
+>=20
+> Trigger delay is the time to wait before starting shutdown
+> sequence after trigger line assertion.
+> Trigger delay must take into account the OFFT time configured
+> with the capacitor connected to OFFT pin of the LTC2952 chip.
+> Basically, the higher the capacitance connected to OFFT pin,
+> the larger trigger delay must be.
+>=20
+> Signed-off-by: Marek Czerski <ma.czerski@gmail.com>
+> ---
+>  .../devicetree/bindings/power/reset/ltc2952-poweroff.txt  | 4 ++++
+>  drivers/power/reset/ltc2952-poweroff.c                    | 8 ++++++++
+>  2 files changed, 12 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/reset/ltc2952-powero=
+ff.txt b/Documentation/devicetree/bindings/power/reset/ltc2952-poweroff.txt
+> index cd2d7f58a..881f15a78 100644
+> --- a/Documentation/devicetree/bindings/power/reset/ltc2952-poweroff.txt
+> +++ b/Documentation/devicetree/bindings/power/reset/ltc2952-poweroff.txt
 
-I do not understand this:
+Please additionally Cc DT binding maintainer:
 
-~$ cat /sys/devices/virtual/thermal/cooling_device11/stats/trans_table
-cat: /sys/devices/virtual/thermal/cooling_device11/stats/trans_table: File too large
+OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
+M:	Rob Herring <robh+dt@kernel.org>
+L:	devicetree@vger.kernel.org
 
-Rather than enter the actual TCC offset, I would rather enter the desired trip
-point, and have the driver do the math to convert it to the offset.
+> @@ -17,6 +17,9 @@ Optional properties:
+>  			chip's trigger line. If this property is not set, the
+>  			trigger function is ignored and the chip is kept alive
+>  			until an explicit kill signal is received
+> +- trigger-delay-ms	The number of milliseconds to wait after trigger line
+> +			assertion before executing shut down procedure.
+> +			The default is 2500ms.
+> =20
+>  Example:
+> =20
+> @@ -24,6 +27,7 @@ ltc2952 {
+>  	compatible =3D "lltc,ltc2952";
+> =20
+>  	trigger-gpios =3D <&gpio0 1 GPIO_ACTIVE_LOW>;
+> +        trigger-delay-ms =3D <2000>;
 
-Example step function overshoot, trip point set to 55 degrees C.
+please use tab instead of spaces
 
-doug@s18:~$ sudo ~/turbostat --Summary --quiet --show Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 1
-Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-0.07    800     45      24      1.89    0.00
-0.04    800     29      23      1.89    0.00
-61.76   4546    4151    66      103.77  0.00 < step function load applied on 4 of 6 cores
-67.76   4570    4476    66      120.42  0.00
-68.03   4567    4488    66      120.73  0.00
-67.98   4572    4492    67      121.00  0.00 < 19 degrees over trip point
-68.10   4489    4493    58      109.19  0.00 < this throttling is either the power servo or the temp servo.
-68.08   4262    4476    51      82.82   0.00 < this throttling is the temp servo.
-68.13   4143    4513    48      75.16   0.00
-68.03   4086    4488    46      71.87   0.00 < It actually undershoots often, I don't know why.
-68.12   4000    4505    46      67.02   0.00 < often it doesn't undershoot.
-68.44   4000    4502    45      67.16   0.00
-68.06   4000    4483    45      66.95   0.00
-68.02   3973    4490    44      65.20   0.00
-67.94   3900    4489    43      60.51   0.00
-67.88   3900    4501    44      60.55   0.00
-67.85   3900    4472    43      60.52   0.00
-67.96   3900    4481    43      60.59   0.00
-68.26   3900    4501    44      60.70   0.00
-67.93   3900    4498    43      60.58   0.00
-68.03   3900    4476    43      60.68   0.00
-67.83   3900    4481    44      60.54   0.00
-35.06   3895    2412    25      32.13   0.00 < load removed.
-0.04    800     25      24      1.89    0.00
-0.04    800     22      23      1.89    0.00
-0.06    800     35      23      1.90    0.00
-0.03    800     18      23      1.89    0.00
-0.04    800     26      22      1.90    0.00
-0.30    1927    44      23      1.97    0.00
-^C0.10  800     25      23      1.91    0.00
+>  	watchdog-gpios =3D <&gpio1 2 GPIO_ACTIVE_HIGH>;
+>  	kill-gpios =3D <&gpio0 2 GPIO_ACTIVE_LOW>;
+>  };
+> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset=
+/ltc2952-poweroff.c
+> index 318927938..243811541 100644
+> --- a/drivers/power/reset/ltc2952-poweroff.c
+> +++ b/drivers/power/reset/ltc2952-poweroff.c
+> @@ -55,6 +55,7 @@
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/gpio/consumer.h>
+>  #include <linux/reboot.h>
+> +#include <linux/of.h>
+> =20
+>  struct ltc2952_poweroff {
+>  	struct hrtimer timer_trigger;
+> @@ -172,10 +173,17 @@ static void ltc2952_poweroff_default(struct ltc2952=
+_poweroff *data)
+>  static int ltc2952_poweroff_init(struct platform_device *pdev)
+>  {
+>  	int ret;
+> +	u32 trigger_delay_ms;
+>  	struct ltc2952_poweroff *data =3D platform_get_drvdata(pdev);
+> =20
+>  	ltc2952_poweroff_default(data);
+> =20
+> +	if (!of_property_read_u32(pdev->dev.of_node, "trigger-delay-ms",
+> +				  &trigger_delay_ms)) {
 
-Example long time to recover:
-(actually, this example never recovers, unusual):
-Note: 3.7 GHz is the limit.
+please use device_property_read_u32() from <linux/property.h>.
 
-doug@s18:~$ sudo ~/turbostat --Summary --quiet --show Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 30
-Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-67.58   3700    134812  42      52.15   0.00 <<< the trip point was changed from 37 to 57 degrees
-67.90   3700    134964  42      52.08   0.00
-68.07   3700    134424  42      52.06   0.00
-68.01   3700    134415  41      50.76   0.00
-68.14   3700    134521  41      50.78   0.00
-68.11   3700    134424  42      50.75   0.00
-68.03   3700    134329  42      50.70   0.00
-68.11   3700    134321  42      50.76   0.00
-68.05   3700    134456  42      51.09   0.00
-68.12   3700    134549  42      52.21   0.00
-68.12   3700    134482  42      52.19   0.00
-68.10   3700    134301  42      52.20   0.00
-68.11   3700    134444  42      52.14   0.00
-68.08   3700    134422  42      52.17   0.00
-68.07   3700    134430  42      52.23   0.00
-68.00   3700    134723  42      52.12   0.00
-67.96   3711    135207  44      52.53   0.00 <<< It takes 8 minutes until the frequency goes above 3.7 GHz
-68.05   3765    134519  42      54.34   0.00
-68.11   3771    134461  43      54.60   0.00
-67.83   3763    134867  43      54.26   0.00
-67.93   3773    134577  43      54.78   0.00 <<< But it never recovers, Why not?
-...
+> +		data->trigger_delay =3D ktime_set(trigger_delay_ms / MSEC_PER_SEC,
+> +			(trigger_delay_ms % MSEC_PER_SEC) * NSEC_PER_MSEC);
+> +	}
+> +
+>  	data->gpio_watchdog =3D devm_gpiod_get(&pdev->dev, "watchdog",
+>  					     GPIOD_OUT_LOW);
+>  	if (IS_ERR(data->gpio_watchdog)) {
 
-For unknown reason the processor seems to now
-think it is not heavily loaded. From my MSR decoder:
+Thanks and sorry for delayed response,
 
-0x64F: MSR_CORE_PERF_LIMIT_REASONS: 200020 AUTO AUTOL
+-- Sebastian
 
-From the book:
+--e2hmrl2yurqucwco
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Autonomous Utilization-Based Frequency Control
-> Status (R0)
-> When set, frequency is reduced below the operating
-> system request because the processor has detected
-> that utilization is low.
+-----BEGIN PGP SIGNATURE-----
 
-Which is not true.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmADAG0ACgkQ2O7X88g7
++pouRg//XUlGkUbYoKKhWpKuAUENJk15apzYkpcnfHqTUvZV6Z6cEKxUfbJ0JSR/
+fMLLidPz+pRZFv/VSnY7hk5aKwxwElRbjZ0PXRdr/72GqBbFX8eCifPkjHUY0cfL
+OZ9G9SpN1Ldtvxp1H5q18Uf1S0CdOMFkbscdc4yMsWZKj6RfyIPJ+DIFN+MJhWVr
+ucpiuSw9Gjf7zr7DQSHNUO8ujsF2wZxjA0m9UqtE2N5IJ7oULMKVvxtOtjLr2WR+
+HuGvL472+3F/V19xctv5fceOhk7/hI6owc24M3iduoQfmIkXIiRediCx5pRjzSMq
+l9ir4euSrrDSF8d7MaMyf8K6UXFSfjB07ev8mR7PpkIV4bnxv7hMwLlmSHFw+mNc
+MAvP2iYFwLBLSyk0VSiILyCuGWjQFQgL1Kgz7iV/QF+uhMmK+MPMccJnNZriuaxb
+sr3OU0dRNGSSmQchtH0HE3Ulmqg5BSdOBPNBjSi6vq/uEjwCzGaVkhtAO/0shZyv
+L4qiuTzjooJYp0iuRrKQyG+K/641ItkQHMjN+DJfEYGgVq3440n9+4JyFKS/ZOFL
+b4P1RyZskfRMCmlO4mBscEwkJ+h8FNu+tEG3T/MlRpTA3iNeS5xbALMWe4AojDl/
+qY+B6Oe3pR1ky/Yep/Vhd3aIsFI6m1xhlwJNNVmZm/GyLEUZACg=
+=8gbA
+-----END PGP SIGNATURE-----
 
-Anyway,
-
-Acked-by: Doug Smythies <dsmythies@telus.net>
-
-... Doug
-
-
+--e2hmrl2yurqucwco--
