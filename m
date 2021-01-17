@@ -2,141 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B512C2F9486
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Jan 2021 19:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260282F95B0
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Jan 2021 22:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729456AbhAQSWD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Jan 2021 13:22:03 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59442 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729315AbhAQSWC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jan 2021 13:22:02 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 96E761F44A51
-Received: by earth.universe (Postfix, from userid 1000)
-        id BC9953C0C95; Sun, 17 Jan 2021 19:21:17 +0100 (CET)
-Date:   Sun, 17 Jan 2021 19:21:17 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Martin Mokrejs <mmokrejs@fold.natur.cuni.cz>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolassaenzj@gmail.com,
-        Nicolas Saenz Julienne <nicolas.saenz@prodys.net>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH] power: supply: fix sbs-charger build, needs REGMAP_I2C
-Message-ID: <20210117182117.ewq2e6ce2c5p2mdz@earth.universe>
-References: <20210116211310.19232-1-rdunlap@infradead.org>
- <537de36b-6709-3e58-5610-9f54e2bee8a9@fold.natur.cuni.cz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zzpialt2nuswu7ld"
-Content-Disposition: inline
-In-Reply-To: <537de36b-6709-3e58-5610-9f54e2bee8a9@fold.natur.cuni.cz>
+        id S1730186AbhAQV7b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Jan 2021 16:59:31 -0500
+Received: from sender11-of-o51.zoho.eu ([31.186.226.237]:21128 "EHLO
+        sender11-of-o51.zoho.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730185AbhAQV7X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jan 2021 16:59:23 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1610919720; cv=none; 
+        d=zohomail.eu; s=zohoarc; 
+        b=T6ZiSJEnKAgD1fHvgi9+5OBGTROu7NvHycmmlw7UvMeOPw4EVzFyCrfdA5HZTtFdFH+b0d2Y1UE2T+EI7FoVYCNiomhvy1yXYv92Vn6LHP7Fi/eXH3KaJf3wIVHA7MFUBtSOcfyqLzEiqnUBRPnWQi9WdkaV3RvfFQRucinDCXY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+        t=1610919720; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=oya5WPtN116hQHLGQkYpVddhzhK3tPiR8VPGqrDlLac=; 
+        b=U+4FG+fY8t05ED6tIRPav8b0t+sTJTkCT0lWwK2wLf0DZp7sM/V2HjWDcZGpBu8go/oSevB3Wsn+O3havb0CRUHz0SrTuISs3PS3mxQvTMyhLLUISNreAwY6wpPZ/Dm7b5uwSwQXiaCOSEGunjFA6nsDZkIuzNaYQKtspwySVuI=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+        spf=pass  smtp.mailfrom=philipp@uvos.xyz;
+        dmarc=pass header.from=<philipp@uvos.xyz> header.from=<philipp@uvos.xyz>
+Received: from localhost.localdomain (ip-95-222-215-9.hsi15.unitymediagroup.de [95.222.215.9]) by mx.zoho.eu
+        with SMTPS id 1610919718953679.2994000138575; Sun, 17 Jan 2021 22:41:58 +0100 (CET)
+Date:   Sun, 17 Jan 2021 22:41:58 +0100
+From:   Carl Philipp Klemm <philipp@uvos.xyz>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
+        Arthur Demchenkov <spinal.by@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH 1/5] power: supply: cpcap-charger: get the battery inserted
+ infomation from cpcap-battery
+Message-Id: <20210117224158.f0ac792da5f480a660ff3c89@uvos.xyz>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This avoids reimplementing the detection logic twice and removes the
+possibility of activating charging with 500mA even if a battery is not
+detected.
 
---zzpialt2nuswu7ld
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Carl Philipp Klemm <philipp@uvos.xyz>
+---
+ drivers/power/supply/cpcap-charger.c | 41 ++++++++++++++--------------
+ 1 file changed, 21 insertions(+), 20 deletions(-)
 
-Hi,
+diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
+index 823d666f09e0..152090faf5b2 100644
+--- a/drivers/power/supply/cpcap-charger.c
++++ b/drivers/power/supply/cpcap-charger.c
+@@ -26,8 +26,8 @@
+ #include <linux/gpio/consumer.h>
+ #include <linux/usb/phy_companion.h>
+ #include <linux/phy/omap_usb.h>
+-#include <linux/usb/otg.h>
+ #include <linux/iio/consumer.h>
++#include <linux/usb/otg.h>
+ #include <linux/mfd/motorola-cpcap.h>
+ 
+ /*
+@@ -173,23 +173,6 @@ static enum power_supply_property cpcap_charger_props[] = {
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ };
+ 
+-/* No battery always shows temperature of -40000 */
+-static bool cpcap_charger_battery_found(struct cpcap_charger_ddata *ddata)
+-{
+-	struct iio_channel *channel;
+-	int error, temperature;
+-
+-	channel = ddata->channels[CPCAP_CHARGER_IIO_BATTDET];
+-	error = iio_read_channel_processed(channel, &temperature);
+-	if (error < 0) {
+-		dev_warn(ddata->dev, "%s failed: %i\n", __func__, error);
+-
+-		return false;
+-	}
+-
+-	return temperature > -20000 && temperature < 60000;
+-}
+-
+ static int cpcap_charger_get_charge_voltage(struct cpcap_charger_ddata *ddata)
+ {
+ 	struct iio_channel *channel;
+@@ -696,11 +679,29 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 
+ 	if (!ddata->feeding_vbus && cpcap_charger_vbus_valid(ddata) &&
+ 	    s.chrgcurr1) {
+-		int max_current = 532000;
++		int max_current;
+ 		int vchrg, ichrg;
++		union power_supply_propval val;
++		struct power_supply *battery;
+ 
+-		if (cpcap_charger_battery_found(ddata))
++		battery = power_supply_get_by_phandle(ddata->dev->of_node, "battery");
++		if (IS_ERR_OR_NULL(battery)) {
++			dev_err(ddata->dev, "battery described by phandle not available %li\n",
++					PTR_ERR(battery));
++			return;
++		}
++
++		error = power_supply_get_property(battery, POWER_SUPPLY_PROP_PRESENT, &val);
++		power_supply_put(battery);
++		if (error)
++			goto out_err;
++
++		if (val.intval) {
+ 			max_current = 1596000;
++		} else {
++			dev_info(ddata->dev, "battery not inserted charging disabled\n");
++			max_current = 0;
++		}
+ 
+ 		if (max_current > ddata->limit_current)
+ 			max_current = ddata->limit_current;
+-- 
+2.29.2
 
-On Sun, Jan 17, 2021 at 10:48:44AM +0100, Martin Mokrejs wrote:
-> Hi Randy,
->   thank you very much. I would not mind dropping my name but I tested the=
- patch
-> now with 5.4.89 so you may actually also add
->=20
-> Tested-by: Martin Mokrejs <mmokrejs@fold.natur.cuni.cz>
->=20
-> It also happened with 5.10.7, it is probably obvious.
->=20
-> Thank you for quick action.
-> Martin
->=20
-> On 16/01/2021 22:13, Randy Dunlap wrote:
-> > CHARGER_SBS should select REGMAP_I2C since it uses API(s) that are
-> > provided by that Kconfig symbol.
-> >=20
-> > Fixes these errors:
-> >=20
-> > ../drivers/power/supply/sbs-charger.c:149:21: error: variable =E2=80=98=
-sbs_regmap=E2=80=99 has initializer but incomplete type
-> >  static const struct regmap_config sbs_regmap =3D {
-> > ../drivers/power/supply/sbs-charger.c:150:3: error: =E2=80=98const stru=
-ct regmap_config=E2=80=99 has no member named =E2=80=98reg_bits=E2=80=99
-> >   .reg_bits =3D 8,
-> > ../drivers/power/supply/sbs-charger.c:155:23: error: =E2=80=98REGMAP_EN=
-DIAN_LITTLE=E2=80=99 undeclared here (not in a function)
-> >   .val_format_endian =3D REGMAP_ENDIAN_LITTLE, /* since based on SMBus =
-*/
-> > ../drivers/power/supply/sbs-charger.c: In function =E2=80=98sbs_probe=
-=E2=80=99:
-> > ../drivers/power/supply/sbs-charger.c:183:17: error: implicit declarati=
-on of function =E2=80=98devm_regmap_init_i2c=E2=80=99; did you mean =E2=80=
-=98devm_request_irq=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-> >   chip->regmap =3D devm_regmap_init_i2c(client, &sbs_regmap);
-> > ../drivers/power/supply/sbs-charger.c: At top level:
-> > ../drivers/power/supply/sbs-charger.c:149:35: error: storage size of =
-=E2=80=98sbs_regmap=E2=80=99 isn=E2=80=99t known
-> >  static const struct regmap_config sbs_regmap =3D {
-> >=20
-> > Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Sebastian Reichel <sre@kernel.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: Martin Mokrejs <mmokrejs@fold.natur.cuni.cz>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: nicolassaenzj@gmail.com
-> > Cc: Nicolas Saenz Julienne <nicolas.saenz@prodys.net>
-> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > ---
-> > Martin, do you want Reported-by: on this?
 
-Thanks, queued. I added Reported-by and Tested-by from Martin.
-
--- Sebastian
-
-> >=20
-> >  drivers/power/supply/Kconfig |    1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > --- linux-next-20210115.orig/drivers/power/supply/Kconfig
-> > +++ linux-next-20210115/drivers/power/supply/Kconfig
-> > @@ -229,6 +229,7 @@ config BATTERY_SBS
-> >  config CHARGER_SBS
-> >  	tristate "SBS Compliant charger"
-> >  	depends on I2C
-> > +	select REGMAP_I2C
-> >  	help
-> >  	  Say Y to include support for SBS compliant battery chargers.
-> > =20
-> >=20
->=20
-
---zzpialt2nuswu7ld
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmAEgBcACgkQ2O7X88g7
-+prWyBAAoxtPZN6DuY6SHm6D8CnY7c7aVcpUum3Ipc3dLD1HOKOc2t+qo2dtMBbX
-WJALYV/QhsBmOChnNNd9962fOhxlU8mpBftAO6FONjCJnupRdG5cTqacJBcUv8R2
-UZb6ABAmFkjScRUoGXR7OcBirzCbwNh9/e0sIxu4JrCAA9qtXuFCQt4/lAtWVSiT
-m582qGLMDEH9cbrmlITgAmDPgzXZHQJugCAA0zt1kFbd5d7XfZCHXW50lAvNb+Bw
-MvApWZEK0hD1YrGcYOLwz8CMHoiDUYZm+3LC0n4gZoZxVc9ey/84pr0PnI0b9Ttr
-K346KBMnArUpBATUG3OloCdfGc744anNe+FA5DbpYZc0YeZJ9QJ8nHe8H/bzsSFW
-RxzeWwejrfj2jE5f+avln0Cuup+5uzt7XUh/xV4tTU/PjhUfdDBiU+k3ai/9r2ql
-qtAP5vi1BOov7unk6HOZmtCHRTzIhDtyRM7/hXt9ktKXnfU/WJDGzRomSJR0clfT
-yTFROIEBCAiE9czAogHnD8h8IL7lVAoIzmZNCsI4nwiL/9csYm9LtUwHNZwhIg0x
-ZHKuWpFqHF0zT23kofOTiZyfIeXWnx9jlwHP12s3672K+Ks2ZDp95uVZXK0d0uDJ
-ZsmM+MlPwqw4JUhssPZE1rsjZrjxipY9LosE3ziM29byjak4GUc=
-=4asC
------END PGP SIGNATURE-----
-
---zzpialt2nuswu7ld--
