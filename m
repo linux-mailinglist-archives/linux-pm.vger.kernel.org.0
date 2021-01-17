@@ -2,37 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260282F95B0
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Jan 2021 22:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8122F959B
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Jan 2021 22:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730186AbhAQV7b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Jan 2021 16:59:31 -0500
-Received: from sender11-of-o51.zoho.eu ([31.186.226.237]:21128 "EHLO
+        id S1728469AbhAQVsU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Jan 2021 16:48:20 -0500
+Received: from sender11-of-o51.zoho.eu ([31.186.226.237]:21109 "EHLO
         sender11-of-o51.zoho.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730185AbhAQV7X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jan 2021 16:59:23 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1610919720; cv=none; 
+        with ESMTP id S1728042AbhAQVsR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jan 2021 16:48:17 -0500
+X-Greylist: delayed 319 seconds by postgrey-1.27 at vger.kernel.org; Sun, 17 Jan 2021 16:48:16 EST
+ARC-Seal: i=1; a=rsa-sha256; t=1610920000; cv=none; 
         d=zohomail.eu; s=zohoarc; 
-        b=T6ZiSJEnKAgD1fHvgi9+5OBGTROu7NvHycmmlw7UvMeOPw4EVzFyCrfdA5HZTtFdFH+b0d2Y1UE2T+EI7FoVYCNiomhvy1yXYv92Vn6LHP7Fi/eXH3KaJf3wIVHA7MFUBtSOcfyqLzEiqnUBRPnWQi9WdkaV3RvfFQRucinDCXY=
+        b=P+H6nnM+FZeWXf0MXvP4oVecdDTXhjY5XD32pfmLSKEzzXf2SblMhA3zoEIVLPaQbi8BsPXE+ZEMM+mc/1GWt3b0MWax0DFWcO0IZxSePYxfkQMOlcIEpwBjK81A77Pfh3jdMFJEyYTek96AHfL1PEjfcUEHyZxgy0GPi5tMiB4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-        t=1610919720; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=oya5WPtN116hQHLGQkYpVddhzhK3tPiR8VPGqrDlLac=; 
-        b=U+4FG+fY8t05ED6tIRPav8b0t+sTJTkCT0lWwK2wLf0DZp7sM/V2HjWDcZGpBu8go/oSevB3Wsn+O3havb0CRUHz0SrTuISs3PS3mxQvTMyhLLUISNreAwY6wpPZ/Dm7b5uwSwQXiaCOSEGunjFA6nsDZkIuzNaYQKtspwySVuI=
+        t=1610920000; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=Wnte+4AlAVGi6rAOeWTfm7Nsc593X5q+3gShAhPDrqw=; 
+        b=NBVsPC1GiSViiEe790BSbU4Cc0MogeUhrHexpPXHeW1y93bZmeUuERIB4MlP1cY0HZY4ToaNWeVZpFEhmtdVRt2iq5ceQnl/iXOE1dST+OHdJGw4d+fTobW+oudnIU5/cNxYY+A4U151jMENoCNl+EMIy4vqKowTSC/KkXkoL40=
 ARC-Authentication-Results: i=1; mx.zohomail.eu;
         spf=pass  smtp.mailfrom=philipp@uvos.xyz;
         dmarc=pass header.from=<philipp@uvos.xyz> header.from=<philipp@uvos.xyz>
 Received: from localhost.localdomain (ip-95-222-215-9.hsi15.unitymediagroup.de [95.222.215.9]) by mx.zoho.eu
-        with SMTPS id 1610919718953679.2994000138575; Sun, 17 Jan 2021 22:41:58 +0100 (CET)
-Date:   Sun, 17 Jan 2021 22:41:58 +0100
+        with SMTPS id 1610919998920388.4063998988232; Sun, 17 Jan 2021 22:46:38 +0100 (CET)
+Date:   Sun, 17 Jan 2021 22:46:38 +0100
 From:   Carl Philipp Klemm <philipp@uvos.xyz>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
         Arthur Demchenkov <spinal.by@gmail.com>,
         Tony Lindgren <tony@atomide.com>,
         Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH 1/5] power: supply: cpcap-charger: get the battery inserted
- infomation from cpcap-battery
-Message-Id: <20210117224158.f0ac792da5f480a660ff3c89@uvos.xyz>
+Subject: [PATCH 3/5] power: supply: cpcap-battery: invalidate
+ empty->counter_uah and charge_full when they are grossly wrong
+Message-Id: <20210117224638.10c9d9aee7c0144fafd70520@uvos.xyz>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -42,85 +43,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This avoids reimplementing the detection logic twice and removes the
-possibility of activating charging with 500mA even if a battery is not
-detected.
+This invalidates empty->counter_uah and charge_full when charge_now indicates
+that they are grossly wrong and adds some tolerance to
+POWER_SUPPLY_PROP_CHARGE_FULL to allow for inaccuracies in the charge counter
+and manufacturing tolerances in the battery.
 
 Signed-off-by: Carl Philipp Klemm <philipp@uvos.xyz>
 ---
- drivers/power/supply/cpcap-charger.c | 41 ++++++++++++++--------------
- 1 file changed, 21 insertions(+), 20 deletions(-)
+ drivers/power/supply/cpcap-battery.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
-index 823d666f09e0..152090faf5b2 100644
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@ -26,8 +26,8 @@
- #include <linux/gpio/consumer.h>
- #include <linux/usb/phy_companion.h>
- #include <linux/phy/omap_usb.h>
--#include <linux/usb/otg.h>
- #include <linux/iio/consumer.h>
-+#include <linux/usb/otg.h>
- #include <linux/mfd/motorola-cpcap.h>
- 
- /*
-@@ -173,23 +173,6 @@ static enum power_supply_property cpcap_charger_props[] = {
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- };
- 
--/* No battery always shows temperature of -40000 */
--static bool cpcap_charger_battery_found(struct cpcap_charger_ddata *ddata)
--{
--	struct iio_channel *channel;
--	int error, temperature;
--
--	channel = ddata->channels[CPCAP_CHARGER_IIO_BATTDET];
--	error = iio_read_channel_processed(channel, &temperature);
--	if (error < 0) {
--		dev_warn(ddata->dev, "%s failed: %i\n", __func__, error);
--
--		return false;
--	}
--
--	return temperature > -20000 && temperature < 60000;
--}
--
- static int cpcap_charger_get_charge_voltage(struct cpcap_charger_ddata *ddata)
- {
- 	struct iio_channel *channel;
-@@ -696,11 +679,29 @@ static void cpcap_usb_detect(struct work_struct *work)
- 
- 	if (!ddata->feeding_vbus && cpcap_charger_vbus_valid(ddata) &&
- 	    s.chrgcurr1) {
--		int max_current = 532000;
-+		int max_current;
- 		int vchrg, ichrg;
-+		union power_supply_propval val;
-+		struct power_supply *battery;
- 
--		if (cpcap_charger_battery_found(ddata))
-+		battery = power_supply_get_by_phandle(ddata->dev->of_node, "battery");
-+		if (IS_ERR_OR_NULL(battery)) {
-+			dev_err(ddata->dev, "battery described by phandle not available %li\n",
-+					PTR_ERR(battery));
-+			return;
+diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
+index 86ed41d9627f..8ae0c9c7ebcb 100644
+--- a/drivers/power/supply/cpcap-battery.c
++++ b/drivers/power/supply/cpcap-battery.c
+@@ -667,10 +667,22 @@ static int cpcap_battery_get_property(struct power_supply *psy,
+ 		if (!empty->voltage)
+ 			return -ENODATA;
+ 		val->intval = empty->counter_uah - latest->counter_uah;
+-		if (val->intval < 0)
++		if (val->intval < 0) {
++			if (ddata->charge_full && abs(val->intval) > ddata->charge_full/5) {
++				empty->voltage = 0;
++				ddata->charge_full = 0;
++				return -ENODATA;
++			}
+ 			val->intval = 0;
+-		else if (ddata->charge_full && ddata->charge_full < val->intval)
 +		}
-+
-+		error = power_supply_get_property(battery, POWER_SUPPLY_PROP_PRESENT, &val);
-+		power_supply_put(battery);
-+		if (error)
-+			goto out_err;
-+
-+		if (val.intval) {
- 			max_current = 1596000;
-+		} else {
-+			dev_info(ddata->dev, "battery not inserted charging disabled\n");
-+			max_current = 0;
++		else if (ddata->charge_full && ddata->charge_full < val->intval) {
++			if (val->intval > (6*ddata->charge_full)/5) {
++				empty->voltage = 0;
++				ddata->charge_full = 0;
++				return -ENODATA;
++			}
+ 			val->intval = ddata->charge_full;
 +		}
+ 		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL:
+ 		if (!ddata->charge_full)
+@@ -747,7 +759,7 @@ static int cpcap_battery_set_property(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL:
+ 		if (val->intval < 0)
+ 			return -EINVAL;
+-		if (val->intval > ddata->config.info.charge_full_design)
++		if (val->intval > (6*ddata->config.info.charge_full_design)/5)
+ 			return -EINVAL;
  
- 		if (max_current > ddata->limit_current)
- 			max_current = ddata->limit_current;
+ 		ddata->charge_full = val->intval;
 -- 
 2.29.2
 
