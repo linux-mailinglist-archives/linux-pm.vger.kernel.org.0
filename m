@@ -2,234 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FCC2FA8C2
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 19:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280512FA8F6
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 19:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407587AbhARS1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jan 2021 13:27:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:41794 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407598AbhARS1A (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 18 Jan 2021 13:27:00 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BE6831B;
-        Mon, 18 Jan 2021 10:26:14 -0800 (PST)
-Received: from [10.57.2.166] (unknown [10.57.2.166])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18E183F719;
-        Mon, 18 Jan 2021 10:26:12 -0800 (PST)
-Subject: Re: [PATCH] PM / devfreq: Add sysfs attributes to simple_ondemand
- governor
-To:     Greg KH <greg@kroah.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-References: <20210115170530.22603-1-lukasz.luba@arm.com>
- <YAXCnMsUy3n+asfm@kroah.com> <43729797-2d3c-be12-ce72-bfe5bca54fa0@arm.com>
- <YAXQCK7dmHrSq29b@kroah.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <76f88a00-31ce-db9b-350a-bca6644dbfc9@arm.com>
-Date:   Mon, 18 Jan 2021 18:26:11 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2393654AbhARSgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jan 2021 13:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407690AbhARSfs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jan 2021 13:35:48 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F774C061574;
+        Mon, 18 Jan 2021 10:35:08 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id s26so25409335lfc.8;
+        Mon, 18 Jan 2021 10:35:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IJQ7iXT5ZJJPGjCWc7ZOg3Jpy57FUNGSPots343V6k8=;
+        b=IKNVZurPpwbxQi3xk/Clq+rIAj62XBhEdmVhP58GRiJjUuXEAZslFUxhoa/8kxXvEU
+         gTtDcdLgFaZ0UAPzQYsdeZZzAOMi2CFP5sxEHPxqlrb3zopA1E6hEXeZ4ZY1zqyhioHB
+         2uG/p2g1rOwbpVotyMsBqBcED5/MKoWGqt8Y4zul52D1FO8tyN0NbdDM/HmJkGQ8Vszn
+         O8RS2tJNi+DAiFEPPyAc+R4t3r03xwTv54Qre2xRNCXq/SV6aF2/dgSFIKOEQMvZHNnG
+         6zoXZaWQxf+C8IN+x6NPwMn6p4Zo8wj+5/RlNR76i6rmb87HRh2fq1ydUryxJgNr6fwQ
+         3sfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IJQ7iXT5ZJJPGjCWc7ZOg3Jpy57FUNGSPots343V6k8=;
+        b=D66WZexjx100P/T29vwEF322empwVZ2/Tadcqri2LI2ZJnkjap5fz8S5SfsuHHubzg
+         SMw/VKj509wVpR2waau+eKf+IZaqQJlfr5/7SSSvNXzDSoZ94F9QzZDrZchkcv7Wgt+B
+         rYta9UPB8lhqzcVVOLk93UQmLZ+cu5uT8CnSXsV2VsSjJElBEIvXCnVyACRV634zyDlm
+         Hv3jFHybWAupzm7ewHl3aZ1LC/5TAoCTQf+GTH/8ge4jXvhB51I9NXTJAK5z8GbLZNkW
+         QLi1Kbsrfl/4ecxFVmjSDLdoTpz2tIvjPuldoRmStnOj7lH7iH0yiEBmEXiPkHCXsZPl
+         VEHQ==
+X-Gm-Message-State: AOAM530ClZrJZewrkNUHBvf6BWVIAcAWpevQee4+m8I/A+nQGM0Xct9R
+        ybqvHZgsTmddBgK5r09GchamuiATV04=
+X-Google-Smtp-Source: ABdhPJyZo4KZcV7s56vOT07NUXhRMBh8KcsWPfNtNu+wnqlNtl80pkRMbSaZuOv2tb32jORs1eijvw==
+X-Received: by 2002:ac2:4a75:: with SMTP id q21mr190165lfp.119.1610994906533;
+        Mon, 18 Jan 2021 10:35:06 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id w24sm1980365lfl.199.2021.01.18.10.35.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 10:35:05 -0800 (PST)
+Subject: Re: [PATCH v3 04/12] opp: Add dev_pm_opp_sync_regulators()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210118005524.27787-1-digetx@gmail.com>
+ <20210118005524.27787-5-digetx@gmail.com>
+ <20210118082013.32y5tndlbw4xrdgc@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4acde958-91c1-bbcb-6e20-2d90cf0e57d3@gmail.com>
+Date:   Mon, 18 Jan 2021 21:35:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <YAXQCK7dmHrSq29b@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210118082013.32y5tndlbw4xrdgc@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+18.01.2021 11:20, Viresh Kumar пишет:
+>> +int dev_pm_opp_sync_regulators(struct device *dev)
+>> +{
+>> +	struct opp_table *opp_table;
+>> +	struct regulator *reg;
+>> +	int i, ret = 0;
+>> +
+>> +	/* Device may not have OPP table */
+>> +	opp_table = _find_opp_table(dev);
+>> +	if (IS_ERR(opp_table))
+>> +		return 0;
+>> +
+>> +	/* Regulator may not be required for the device */
+>> +	if (!opp_table->regulators)
+>> +		goto put_table;
+>> +
+>> +	mutex_lock(&opp_table->lock);
+> What exactly do you need this lock for ?
 
+It is needed for protecting simultaneous invocations of
+dev_pm_opp_sync_regulators() and dev_pm_opp_set_voltage().
 
-On 1/18/21 6:14 PM, Greg KH wrote:
-> On Mon, Jan 18, 2021 at 05:56:06PM +0000, Lukasz Luba wrote:
->>
->>
->> On 1/18/21 5:17 PM, Greg KH wrote:
->>> On Fri, Jan 15, 2021 at 05:05:30PM +0000, Lukasz Luba wrote:
->>>> The simple_ondemand devfreq governor is used by quite a few devices, like
->>>> GPUs, DSPs, memory controllers, etc. It implements algorithm which tries
->>>> to predict the device frequency based on past statistics. There are two
->>>> tunables for the algorithm: 'upthreshold' and 'downdifferential'. These
->>>> tunables change the behavior of the decision, e.g. how fast to increase
->>>> the frequency or how rapidly limit the frequency. These values might be
->>>> different based on the application which is currently running, e.g.
->>>> different behavior is needed for a game than for web browsing or clean
->>>> desktop. The patch exports these two tunables so they can be adjusted
->>>> based on current need. There is also a check with the allowed ranges
->>>> to make sure the values are correct and safe.
->>>>
->>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>> ---
->>>>    drivers/devfreq/governor_simpleondemand.c | 135 ++++++++++++++++++++++
->>>>    1 file changed, 135 insertions(+)
->>>>
->>>> diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
->>>> index d57b82a2b570..4b3c182e0a49 100644
->>>> --- a/drivers/devfreq/governor_simpleondemand.c
->>>> +++ b/drivers/devfreq/governor_simpleondemand.c
->>>> @@ -15,6 +15,7 @@
->>>>    /* Default constants for DevFreq-Simple-Ondemand (DFSO) */
->>>>    #define DFSO_UPTHRESHOLD	(90)
->>>>    #define DFSO_DOWNDIFFERENCTIAL	(5)
->>>> +#define DFSO_MAX_VALUE		(100)
->>>>    static int devfreq_simple_ondemand_func(struct devfreq *df,
->>>>    					unsigned long *freq)
->>>>    {
->>>> @@ -84,15 +85,149 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
->>>>    	return 0;
->>>>    }
->>>> +static ssize_t upthreshold_show(struct device *dev,
->>>> +				struct device_attribute *attr, char *buf)
->>>> +{
->>>> +	struct devfreq_simple_ondemand_data *data;
->>>> +	struct devfreq *df = to_devfreq(dev);
->>>> +
->>>> +	if (!df->data)
->>>> +		return -EINVAL;
->>>> +
->>>> +	data = df->data;
->>>> +
->>>> +	return sprintf(buf, "%d\n", data->upthreshold);
->>>
->>> sysfs_emit()?
->>>
->>> Also, you forgot the Documentation/ABI/ updates for new sysfs files :(
->>
->> True, I will remember next time.
->>
->>>
->>>
->>>> +}
->>>> +
->>>> +static ssize_t upthreshold_store(struct device *dev,
->>>> +				 struct device_attribute *attr,
->>>> +				 const char *buf, size_t count)
->>>> +{
->>>> +	struct devfreq_simple_ondemand_data *data;
->>>> +	struct devfreq *df = to_devfreq(dev);
->>>> +	unsigned int value;
->>>> +	int ret;
->>>> +
->>>> +	if (!df->data)
->>>> +		return -EINVAL;
->>>> +
->>>> +	data = df->data;
->>>> +
->>>> +	ret = kstrtouint(buf, 10, &value);
->>>> +	if (ret < 0)
->>>> +		return -EINVAL;
->>>> +
->>>> +	mutex_lock(&df->lock);
->>>> +
->>>> +	if (value > DFSO_MAX_VALUE || value <= data->downdifferential) {
->>>> +		mutex_unlock(&df->lock);
->>>> +		return -EINVAL;
->>>> +	}
->>>> +
->>>> +	data->upthreshold = value;
->>>> +	mutex_unlock(&df->lock);
->>>> +
->>>> +	return count;
->>>> +}
->>>> +static DEVICE_ATTR_RW(upthreshold);
->>>> +
->>>> +static ssize_t downdifferential_show(struct device *dev,
->>>> +				     struct device_attribute *attr, char *buf)
->>>> +{
->>>> +	struct devfreq_simple_ondemand_data *data;
->>>> +	struct devfreq *df = to_devfreq(dev);
->>>> +
->>>> +	if (!df->data)
->>>> +		return -EINVAL;
->>>> +
->>>> +	data = df->data;
->>>> +
->>>> +	return sprintf(buf, "%d\n", data->downdifferential);
->>>> +}
->>>> +
->>>> +static ssize_t downdifferential_store(struct device *dev,
->>>> +				      struct device_attribute *attr,
->>>> +				      const char *buf, size_t count)
->>>> +{
->>>> +	struct devfreq_simple_ondemand_data *data;
->>>> +	struct devfreq *df = to_devfreq(dev);
->>>> +	unsigned int value;
->>>> +	int ret;
->>>> +
->>>> +	if (!df->data)
->>>> +		return -EINVAL;
->>>> +
->>>> +	data = df->data;
->>>> +
->>>> +	ret = kstrtouint(buf, 10, &value);
->>>> +	if (ret < 0)
->>>> +		return -EINVAL;
->>>> +
->>>> +	mutex_lock(&df->lock);
->>>> +
->>>> +	if (value > DFSO_MAX_VALUE || value >= data->upthreshold) {
->>>> +		mutex_unlock(&df->lock);
->>>> +		return -EINVAL;
->>>> +	}
->>>> +
->>>> +	data->downdifferential = value;
->>>> +	mutex_unlock(&df->lock);
->>>> +
->>>> +	return count;
->>>> +}
->>>> +static DEVICE_ATTR_RW(downdifferential);
->>>> +
->>>> +static void devfreq_simple_ondemand_sysfs_setup(struct devfreq *df)
->>>> +{
->>>> +	struct devfreq_simple_ondemand_data *data;
->>>> +	int ret;
->>>> +
->>>> +	if (!df->data) {
->>>> +		/* The memory will be freed automatically */
->>>> +		df->data = devm_kzalloc(&df->dev,
->>>> +				sizeof(struct devfreq_simple_ondemand_data),
->>>> +				GFP_KERNEL);
->>>> +		if (!df->data) {
->>>> +			dev_warn(&df->dev, "Unable to allocate memory");
->>>> +			return;
->>>> +		}
->>>> +	}
->>>> +
->>>> +	data = df->data;
->>>> +
->>>> +	/* After new allocation setup default values, since they are used */
->>>> +	if (!data->upthreshold)
->>>> +		data->upthreshold = DFSO_UPTHRESHOLD;
->>>> +
->>>> +	if (!data->downdifferential)
->>>> +		data->downdifferential = DFSO_DOWNDIFFERENCTIAL;
->>>> +
->>>> +	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_upthreshold.attr);
->>>> +	if (ret < 0)
->>>> +		dev_warn(&df->dev, "Unable to create 'upthreshold' attr\n");
->>>> +
->>>> +	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_downdifferential.attr);
->>>> +	if (ret < 0)
->>>> +		dev_warn(&df->dev, "Unable to create 'downdifferential' attr\n");
->>>
->>> You just raced with userspace and lost :(
->>>
->>> Please use the default sysfs groups so that it all works properly.
->>>
->>> Huge hint, when calling sysfs_* from a driver, that usually means you
->>> are doing something wrong.
->>
->> I should have used kobject_init_and_add() and the default devfreq
->> sysfs group as a parent.
-> 
-> No, never use "raw" kobjects in the sys/devices/ tree, that is a sure
-> way to ensure that userspace will never be notified or see your
-> attributes.
+The sync_regulators() should be invoked only after completion of the
+set_voltage() in a case of Tegra power domain driver since potentially
+both could be running in parallel. For example device driver may be
+changing performance state in a work thread, while PM domain state is
+syncing.
 
-Interesting, I've seen it in the schedutil governor, but might in a
-different context.
-
-Regards,
-Lukasz
+But maybe it will be better to move the protection to the PM driver
+since we're focused on sync_regulators() and set_voltage() here, but
+there are other OPP API functions which use regulators. I'll need to
+take a closer look at it.
