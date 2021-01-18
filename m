@@ -2,55 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7B92F9D10
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 11:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674162F9D14
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 11:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388174AbhARKpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jan 2021 05:45:34 -0500
-Received: from mga01.intel.com ([192.55.52.88]:61490 "EHLO mga01.intel.com"
+        id S1727461AbhARKq6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 18 Jan 2021 05:46:58 -0500
+Received: from mga17.intel.com ([192.55.52.151]:22346 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388887AbhARJcu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 18 Jan 2021 04:32:50 -0500
-IronPort-SDR: eQa/thXqLBRbYyMIlvK06rjG1fRV/oIAFhqmJh95aQ3RoRC/dvaHc9BvwEwWlhlimsVIg/TkOB
- CRk1sXekfZYQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="197474082"
+        id S2389281AbhARJrT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 18 Jan 2021 04:47:19 -0500
+IronPort-SDR: lSL1rtmeyPPM+bjnLgLjmzj+hogY6UeF5DimhfzbJPp4rpaVLLj92ppVefisJ064QoWqknXqZ3
+ 7EM0D63Cb02w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="158555512"
 X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
-   d="scan'208";a="197474082"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 01:31:57 -0800
-IronPort-SDR: dK6Tfizyn4tqTsdx427tABPIFYBE8RBjfJE/sy65uM7+PV9/rYBzgFq8qdgTx8CvkRhGyHzG4Y
- qTfvSxJQGYfQ==
+   d="scan'208";a="158555512"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 01:46:34 -0800
+IronPort-SDR: 5LkACl7sIG+dz4oXlTUEJ/B2/RqS5kvT4RiZhfL70B+aIfP8Sa6sAixN4z3YtKYCV/L/t4RE1O
+ 1NWQOONXXLgA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
-   d="scan'208";a="401990183"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jan 2021 01:31:56 -0800
-Received: from shsmsx603.ccr.corp.intel.com (10.109.6.143) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+   d="scan'208";a="500598342"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2021 01:46:33 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 18 Jan 2021 01:31:56 -0800
+ 15.1.1713.5; Mon, 18 Jan 2021 01:46:32 -0800
 Received: from shsmsx603.ccr.corp.intel.com (10.109.6.143) by
- SHSMSX603.ccr.corp.intel.com (10.109.6.143) with Microsoft SMTP Server
+ SHSMSX601.ccr.corp.intel.com (10.109.6.141) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 18 Jan 2021 17:31:54 +0800
+ 15.1.1713.5; Mon, 18 Jan 2021 17:46:31 +0800
 Received: from shsmsx603.ccr.corp.intel.com ([10.109.6.143]) by
  SHSMSX603.ccr.corp.intel.com ([10.109.6.143]) with mapi id 15.01.1713.004;
- Mon, 18 Jan 2021 17:31:54 +0800
+ Mon, 18 Jan 2021 17:46:30 +0800
 From:   "Zhang, Rui" <rui.zhang@intel.com>
-To:     Doug Smythies <dsmythies@telus.net>,
-        "Brown, Len" <len.brown@intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
 CC:     "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
         "srinivas.pandruvada@linux.intel.com" 
         <srinivas.pandruvada@linux.intel.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Subject: RE: [PATCH] thermal/intel: introduce tcc cooling driver
 Thread-Topic: [PATCH] thermal/intel: introduce tcc cooling driver
-Thread-Index: AQHW6yHiKpPnm28pL0qlE9q5Zsm1daop+AgAgABGv4CAAt0dgA==
-Date:   Mon, 18 Jan 2021 09:31:54 +0000
-Message-ID: <3942de4204d447228ecb2b8026aa1a51@intel.com>
+Thread-Index: AQHW6yHiKpPnm28pL0qlE9q5Zsm1daop+AgAgAMrOtA=
+Date:   Mon, 18 Jan 2021 09:46:30 +0000
+Message-ID: <e04c36aae6eb4cbb9b99799290016d58@intel.com>
 References: <20210115094744.21156-1-rui.zhang@intel.com>
- <002601d6ec2a$36663da0$a332b8e0$@net> <003f01d6ec4d$96038ba0$c20aa2e0$@net>
-In-Reply-To: <003f01d6ec4d$96038ba0$c20aa2e0$@net>
+ <002601d6ec2a$36663da0$a332b8e0$@net>
+In-Reply-To: <002601d6ec2a$36663da0$a332b8e0$@net>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -59,121 +58,166 @@ dlp-product: dlpe-windows
 dlp-reaction: no-action
 dlp-version: 11.5.1.3
 x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRG91ZyBTbXl0aGllcyA8
-ZHNteXRoaWVzQHRlbHVzLm5ldD4NCj4gU2VudDogU3VuZGF5LCBKYW51YXJ5IDE3LCAyMDIxIDU6
-MjIgQU0NCj4gVG86IFpoYW5nLCBSdWkgPHJ1aS56aGFuZ0BpbnRlbC5jb20+OyBCcm93biwgTGVu
-IDxsZW4uYnJvd25AaW50ZWwuY29tPg0KPiBDYzogZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZzsg
-c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5jb207IGxpbnV4LQ0KPiBwbUB2Z2VyLmtl
-cm5lbC5vcmc7ICdEb3VnIFNteXRoaWVzJyA8ZHNteXRoaWVzQHRlbHVzLm5ldD4NCj4gU3ViamVj
-dDogUkU6IFtQQVRDSF0gdGhlcm1hbC9pbnRlbDogaW50cm9kdWNlIHRjYyBjb29saW5nIGRyaXZl
-cg0KPiBJbXBvcnRhbmNlOiBIaWdoDQo+IA0KPiBPbiAyMDIxLjAxLjE2IDA5OjA4IERvdWcgU215
-dGhpZXMgd3JvdGU6DQo+ID4gT24gMjAyMS4wMS4xNSBaaGFuZyBSdWkgd3JvdGU6DQo+IA0KPiBB
-ZGRlZCBMZW4gdG8gdGhlICJUbyIgbGlzdDoNCj4gDQo+IFR1cm9zdGF0IGhhcyBhbm90aGVyIGlz
-c3VlIHdpdGggdGhpcyBzdHVmZi4NCj4gSXQgd2lsbCBiZSBtb3JlIHdvcmsgdGhhbiBJIHdhbnQg
-dG8gZG8gdG8gc3VibWl0IGEgZml4IHBhdGNoLCBzbyBJIGFtIG5vdCwgYnV0DQo+IHNlZSBmdXJ0
-aGVyIGRvd24gZm9yIG15IGhhY2sgZml4Lg0KPiANCj4gLi4uDQo+IA0KPiA+IEV4YW1wbGUgc3Rl
-cCBmdW5jdGlvbiBvdmVyc2hvb3QsIHRyaXAgcG9pbnQgc2V0IHRvIDU1IGRlZ3JlZXMgQy4NCj4g
-Pg0KPiA+IGRvdWdAczE4On4kIHN1ZG8gfi90dXJib3N0YXQgLS1TdW1tYXJ5IC0tcXVpZXQgLS1z
-aG93DQo+ID4gQnVzeSUsQnp5X01IeixQa2dUbXAsUGtnV2F0dCxHRlhXYXR0LElSUSAtLSBpbnRl
-cnZhbCAxDQo+ID4gQnVzeSUgICBCenlfTUh6IElSUSAgICAgUGtnVG1wICBQa2dXYXR0IEdGWFdh
-dHQNCj4gPiAwLjA3ICAgIDgwMCAgICAgNDUgICAgICAyNCAgICAgIDEuODkgICAgMC4wMA0KPiA+
-IDAuMDQgICAgODAwICAgICAyOSAgICAgIDIzICAgICAgMS44OSAgICAwLjAwDQo+ID4gNjEuNzYg
-ICA0NTQ2ICAgIDQxNTEgICAgNjYgICAgICAxMDMuNzcgIDAuMDAgPCBzdGVwIGZ1bmN0aW9uIGxv
-YWQgYXBwbGllZCBvbiA0IG9mIDYNCj4gY29yZXMNCj4gPiA2Ny43NiAgIDQ1NzAgICAgNDQ3NiAg
-ICA2NiAgICAgIDEyMC40MiAgMC4wMA0KPiA+IDY4LjAzICAgNDU2NyAgICA0NDg4ICAgIDY2ICAg
-ICAgMTIwLjczICAwLjAwDQo+ID4gNjcuOTggICA0NTcyICAgIDQ0OTIgICAgNjcgICAgICAxMjEu
-MDAgIDAuMDAgPCAxOSBkZWdyZWVzIG92ZXIgdHJpcCBwb2ludA0KPiA+IDY4LjEwICAgNDQ4OSAg
-ICA0NDkzICAgIDU4ICAgICAgMTA5LjE5ICAwLjAwIDwgdGhpcyB0aHJvdHRsaW5nIGlzIGVpdGhl
-ciB0aGUgcG93ZXINCj4gc2Vydm8gb3IgdGhlIHRlbXANCj4gPiBzZXJ2by4NCj4gPiA2OC4wOCAg
-IDQyNjIgICAgNDQ3NiAgICA1MSAgICAgIDgyLjgyICAgMC4wMCA8IHRoaXMgdGhyb3R0bGluZyBp
-cyB0aGUgdGVtcCBzZXJ2by4NCj4gPiA2OC4xMyAgIDQxNDMgICAgNDUxMyAgICA0OCAgICAgIDc1
-LjE2ICAgMC4wMA0KPiA+IDY4LjAzICAgNDA4NiAgICA0NDg4ICAgIDQ2ICAgICAgNzEuODcgICAw
-LjAwIDwgSXQgYWN0dWFsbHkgdW5kZXJzaG9vdHMgb2Z0ZW4sIEkgZG9uJ3QNCj4ga25vdyB3aHku
-DQo+ID4gNjguMTIgICA0MDAwICAgIDQ1MDUgICAgNDYgICAgICA2Ny4wMiAgIDAuMDAgPCBvZnRl
-biBpdCBkb2Vzbid0IHVuZGVyc2hvb3QuDQo+IA0KPiBJdCB0dXJucyBvdXQgdGhhdCB0dWJvc3Rh
-dCBkb2VzIG5vdCBsaXN0IHRoZSBwYWNrYWdlIHRlbXBlcmF0dXJlIHByb3Blcmx5IGlmIGl0DQo+
-IGlzIHN0YXJ0ZWQgd2l0aCBhbiBhY3RpdmUgVENDIG9mZnNldC4NCj4gSXQgZXJyb25lb3VzbHkg
-aW5jbHVkZXMgdGhlIG9mZnNldCBpbiB0aGUgdGVtcGVyYXR1cmUgbWF0aC4NCj4gSW4gdGhlIGFi
-b3ZlIGV4YW1wbGUgdHVyYm9zdGF0IGhhZCBhbHNvIG5vdCB5ZXQgYmVlbiBmaXhlZCBmb3IgdGhl
-IGJpdCBtYXNrDQo+IGlzc3VlLiBTbyB0aGUgcmVhbCB0ZW1wIGFib3ZlIHdhcyA1OSBkZWdyZWVz
-IEMuDQo+IA0KPiA+IDY4LjQ0ICAgNDAwMCAgICA0NTAyICAgIDQ1ICAgICAgNjcuMTYgICAwLjAw
-DQo+ID4gNjguMDYgICA0MDAwICAgIDQ0ODMgICAgNDUgICAgICA2Ni45NSAgIDAuMDANCj4gPiA2
-OC4wMiAgIDM5NzMgICAgNDQ5MCAgICA0NCAgICAgIDY1LjIwICAgMC4wMA0KPiA+IDY3Ljk0ICAg
-MzkwMCAgICA0NDg5ICAgIDQzICAgICAgNjAuNTEgICAwLjAwDQo+ID4gNjcuODggICAzOTAwICAg
-IDQ1MDEgICAgNDQgICAgICA2MC41NSAgIDAuMDANCj4gPiA2Ny44NSAgIDM5MDAgICAgNDQ3MiAg
-ICA0MyAgICAgIDYwLjUyICAgMC4wMA0KPiANCj4gQW5kIGl0IHNldHRsZWQgYXQgYWJvdXQgNTYg
-ZGVncmVlcywgY2xvc2UgdG8gd2hhdCB3YXMgYXNrZWQgZm9yLg0KPiANCj4gVG8gcHJvY2VlZCB3
-aXRoIG15IHdvcmssIEkgZGlkIGEgaGFjayBmaXggdG8gdHVyYm9zdGF0Og0KPiANCj4gZG91Z0Bz
-MTg6fi90ZW1wLWstZ2l0L2xpbnV4L3Rvb2xzL3Bvd2VyL3g4Ni90dXJib3N0YXQkIGdpdCBkaWZm
-IGRpZmYgLS1naXQNCj4gYS90b29scy9wb3dlci94ODYvdHVyYm9zdGF0L3R1cmJvc3RhdC5jDQo+
-IGIvdG9vbHMvcG93ZXIveDg2L3R1cmJvc3RhdC90dXJib3N0YXQuYw0KPiBpbmRleCBkN2FjZGQ0
-ZDE2YzQuLjdmMGEyMmFiM2EwZCAxMDA2NDQNCj4gLS0tIGEvdG9vbHMvcG93ZXIveDg2L3R1cmJv
-c3RhdC90dXJib3N0YXQuYw0KPiArKysgYi90b29scy9wb3dlci94ODYvdHVyYm9zdGF0L3R1cmJv
-c3RhdC5jDQo+IEBAIC00ODMxLDYgKzQ4MzEsNyBAQCBpbnQgcmVhZF90Y2NfYWN0aXZhdGlvbl90
-ZW1wKCkNCj4gICAgICAgICAgICAgICAgIGZwcmludGYob3V0ZiwgImNwdSVkOiBNU1JfSUEzMl9U
-RU1QRVJBVFVSRV9UQVJHRVQ6IDB4JTA4bGx4DQo+ICglZCBDKSAoJWQgZGVmYXVsdCAtICVkIG9m
-ZnNldClcbiIsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIGJhc2VfY3B1LCBtc3IsIHRjYywg
-dGFyZ2V0X2MsIG9mZnNldF9jKTsNCj4gDQo+ICsgICAgICAgdGNjID0gdGFyZ2V0X2M7DQo+ICAg
-ICAgICAgcmV0dXJuIHRjYzsNCj4gIH0NCj4gDQoNClllcywgdGhpcyBpcyBhIHJpZ2h0IGZpeC4N
-CkkgdGhpbmsgTGVuIGFscmVhZHkga25vd3MgdGhpcyBicmVha2FnZSBhbmQgaGUgd2lsbCBwcm9w
-b3NlIHNvbWUgZml4IHNvb24uDQoNCj4gU28gdGhpczoNCj4gDQo+IGNwdTQ6IE1TUl9JQTMyX1RF
-TVBFUkFUVVJFX1RBUkdFVDogMHgyYjY0MTAwZCAoNTcgQykgKDEwMCBkZWZhdWx0IC0NCj4gNDMg
-b2Zmc2V0KQ0KPiBjcHUwOiBNU1JfSUEzMl9QQUNLQUdFX1RIRVJNX1NUQVRVUzogMHg4ODQyMDAw
-MCAoLTkgQykNCj4gDQo+IGJlY29tZXMgdGhpczoNCj4gDQo+IGNwdTE6IE1TUl9JQTMyX1RFTVBF
-UkFUVVJFX1RBUkdFVDogMHgyYjY0MTAwZCAoNTcgQykgKDEwMCBkZWZhdWx0IC0NCj4gNDMgb2Zm
-c2V0KQ0KPiBjcHUwOiBNU1JfSUEzMl9QQUNLQUdFX1RIRVJNX1NUQVRVUzogMHg4ODQwMDAwMCAo
-MzYgQykNCj4gDQo+IGFuZCB0aGlzOg0KPiANCj4gQnVzeSUgICBCenlfTUh6IElSUSAgICAgUGtn
-VG1wICBQa2dXYXR0IEdGWFdhdHQNCj4gMC4wOCAgICAxMDc5ICAgIDkyOCAgICAgLTExICAgICAx
-LjkxICAgIDAuMDANCj4gDQo+IEJlY29tZXMgdGhpczoNCj4gDQo+IEJ1c3klICAgQnp5X01IeiBJ
-UlEgICAgIFBrZ1RtcCAgUGtnV2F0dCBHRlhXYXR0DQo+IDAuMDUgICAgMTA0NiAgICA4NDYgICAg
-IDMyICAgICAgMS45NCAgICAwLjAwDQo+IA0KPiBTbyBub3cgYmFjayB0byBteSBvdmVyc2hvb3Qg
-ZXhhbXBsZToNCj4gDQo+IFRoaXM6DQo+IA0KPiA+IDY3Ljk4ICAgNDU3MiAgICA0NDkyICAgIDY3
-ICAgICAgMTIxLjAwICAwLjAwIDwgMTkgZGVncmVlcyBvdmVyIHRyaXAgcG9pbnQNCj4gDQo+IFdh
-cyBhY3R1YWxseToNCj4gDQo+ID4gNjcuOTggICA0NTcyICAgIDQ0OTIgICAgODAgICAgICAxMjEu
-MDAgIDAuMDAgPDw8IDI1IGRlZ3JlZXMgb3ZlciB0cmlwIHBvaW50DQo+IA0KPiBCdXQgbGV0J3Mg
-anVzdCBkbyBpdCBhZ2FpbjoNCj4gDQo+IGRvdWdAczE4On4kIGNhdCAvc3lzL2RldmljZXMvdmly
-dHVhbC90aGVybWFsL2Nvb2xpbmdfZGV2aWNlMTEvY3VyX3N0YXRlDQo+IDQzICAgICAgIDw8PCBz
-byAxMDAgLSA0MyA9IDU3IGRlZ3JlZXMgdHJpcCBwb2ludC4NCj4gZG91Z0BzMTg6fiQgc3VkbyB+
-L3R1cmJvc3RhdCAtLVN1bW1hcnkgLS1xdWlldCAtLXNob3cNCj4gQnVzeSUsQnp5X01IeixQa2dU
-bXAsUGtnV2F0dCxHRlhXYXR0LElSUSAtLWludGVydmFsIDAuMjUNCj4gQnVzeSUgICBCenlfTUh6
-IElSUSAgICAgUGtnVG1wICBQa2dXYXR0IEdGWFdhdHQNCj4gMC4wOSAgICA4MDAgICAgIDYgICAg
-ICAgMzYgICAgICAyLjAxICAgIDAuMDANCj4gMC4xNiAgICA4MDAgICAgIDIzICAgICAgMzYgICAg
-ICAyLjAwICAgIDAuMDANCj4gMC4xMSAgICA4MDAgICAgIDE0ICAgICAgMzYgICAgICAyLjE1ICAg
-IDAuMDANCj4gNjYuODEgICA0NDYxICAgIDExNjAgICAgNzAgICAgICAxMDEuMTcgIDAuMDAgPDw8
-IGxvYWQgYXBwbGllZCwgdGVtcCB1cCAzNCBkZWdyZWVzIGluDQo+IGxlc3MgdGhhbiAwLjI1IHNl
-Y29uZHMuIE5vcm1hbC4NCj4gNjguMDYgICA0NTgxICAgIDExMjYgICAgNzQgICAgICAxMTcuMzYg
-IDAuMDANCj4gNjcuNjkgICA0NTg5ICAgIDExMTkgICAgNzYgICAgICAxMTkuNjAgIDAuMDANCj4g
-NjcuODAgICA0NTg5ICAgIDExMjUgICAgNzcgICAgICAxMjAuOTQgIDAuMDANCj4gNjcuODMgICA0
-NTg3ICAgIDExMzIgICAgNzggICAgICAxMjAuNzUgIDAuMDANCj4gNjcuNjggICA0NTkxICAgIDEx
-MjUgICAgNzggICAgICAxMjEuNjMgIDAuMDANCj4gNjguMDcgICA0NTg1ICAgIDExMzkgICAgNzcg
-ICAgICAxMjEuMjUgIDAuMDANCj4gNjcuODAgICA0NTg4ICAgIDExMjEgICAgNzkgICAgICAxMjEu
-NDEgIDAuMDAgPDw8IG5vdyAyMCBkZWdyZWVzIG92ZXIgdHJpcCBwb2ludC4NCj4gNjguNTcgICA0
-NTc5ICAgIDExMzkgICAgNzkgICAgICAxMjEuNzEgIDAuMDANCj4gLi4uDQo+IDY4LjAzICAgNDIy
-MCAgICAxMTMwICAgIDYzICAgICAgODAuMjggICAwLjAwIDw8PCBpdCB0YWtlcyBxdWl0ZSBhd2hp
-bGUgKD43IHNlY29uZHMpIHRvDQo+IHJlYWxseSB0aHJvdHRsZSBkb3duLg0KDQpXaGF0IHBsYXRm
-b3JtIHRoaXMgaXM/DQpPbiBhIEtCTCBwbGF0Zm9ybSBJJ20gcnVubmluZyByaWdodCBub3csIHdp
-dGggcGVyZm9ybWFuY2UgZ292ZXJub3IsIGFuZCB0Y2Mgb2Zmc2V0IHNldCB0byAzMCAoRWZmZWN0
-aXZlIFRDQyAgaXMgNzBjKSwgYW5kIGFsc28gdHVyYm9zdGF0IGZpeGVkLA0KSSBjYW4gb2JzZXJ2
-ZSB0aGF0DQoxLiBhbGwgY3B1cyBydW5uaW5nIGF0IG1heCB0dXJibyBmcmVxICgzLjlHKSB3aGVu
-IGlkbGUsIFBrZ1RtcCBhcm91bmQgNDBDDQoyLiB3aXRoIGxvYWQgYXBwbGllZCAoSSB1c2Ugc3Ry
-ZXNzIHRvb2wgdG8gZ2V0IDEwMCUgQ1BVIGxvYWQpLCB0aGUgUGtnVG1wIHJlcG9ydHMgNzBDIGFu
-ZCB0aGUgZnJlcXVlbmN5IGRyb3BzIHRvICBhcm91bmQgM0csIElNTUVESUFURUxZLg0KMy4gd2hl
-biBJIGNoYW5nZSBUQ0MgT2Zmc2V0IHRvIDYwLCBjcHUgaXMgdGhyb3R0bGVkIHRvIGFyb3VuZCAy
-MDBNSHosIGFuZCB0aGUgdGVtcGVyYXR1cmUgaXMgYXQgYXJvdW5kICA1MEMsIElNTUVESUFURUxZ
-Lg0KNC4gd2hlbiBJIGNoYW5nZSBUQ0MgT2Zmc2V0IHRvICAyMCwgY3B1IGZyZXEgcmFpc2VzIHRv
-IHR1cmJvIHJhbmdlLCBhbmQgUGtnVG1wIHJlYWNoZXMgODBDLCBJTU1FRElBVEVMWS4NCg0KU28g
-aW4geW91ciB0ZXN0LCB0aGVyZSBpcyBzb21ldGhpbmcgSSBkb24ndCB1bmRlcnN0YW5kLiDwn5iK
-DQphKSBpdCB0YWtlIHN1Y2ggYSBsb25nIHRpbWUgKDcrIHNlY29uZHMpIHRvIHRocm90dGxlDQpi
-KSBpdCB0aHJvdHRsZXMgdG8gYSBmcmVxdWVuY3kgdGhhdCBpcyBub3QgbG93IGVub3VnaCAoaW4g
-b3JkZXIgdG8ga2VlcCB0aGUgc3lzdGVtIHVuZGVyIGVmZmVjdGl2ZSBUQ0MgdGVtcGVyYXR1cmUs
-IHRoZSBmcmVxdWVuY3kgY2FuIGJlIHRocm90dGxlZCB0byBiZWxvdyB0dXJibyByYW5nZSwgTEZN
-LCBhbmQgZXZlbiBiZWxvdyBMRk0gaW4gbXkgY2FzZSkNCg0KQ2FuIHlvdSBwbGVhc2UgdHJ5IHBl
-cmZvcm1hbmNlIGdvdmVybm9yIGFuZCAxMDAlIENQVSBsb2FkIHRvIHNlZSBpZiB0aGUgc3ltcHRv
-bSBpcyB0aGUgc2FtZT8NCg0KdGhhbmtzLA0KcnVpDQo+IA0KPiAuLi4gRG91Zw0KPiANCg0K
+Hi, Doug,
+
+Thanks for testing this patch.
+
+> -----Original Message-----
+> From: Doug Smythies <dsmythies@telus.net>
+> Sent: Sunday, January 17, 2021 1:08 AM
+> To: Zhang, Rui <rui.zhang@intel.com>
+> Cc: daniel.lezcano@linaro.org; srinivas.pandruvada@linux.intel.com; linux-
+> pm@vger.kernel.org
+> Subject: RE: [PATCH] thermal/intel: introduce tcc cooling driver
+> Importance: High
+> 
+> On 2021.01.15 Zhang Rui wrote:
+> >
+> > On Intel processors, the core frequency can be reduced below OS
+> > request, when the current temperature reaches the TCC (Thermal Control
+> > Circuit) activation temperature.
+> >
+> > The default TCC activation temperature is specified by
+> > MSR_IA32_TEMPERATURE_TARGET. However, it can be adjusted by
+> specifying
+> > an offset in degrees C, using the TCC Offset bits in the same MSR register.
+> >
+> > This patch introduces a cooling devices driver that utilizes the TCC
+> > Offset feature. The bigger the current cooling state is, the lower the
+> > effective TCC activation temperature is, so that the processors can be
+> > throttled earlier before system critical overheats.
+> 
+> Thank you for this useful patch.
+> My systems don't need thermald or any other thermal control, but it is nice
+> to have this extra margin to add to the critical stuff, as a backup.
+> I also like to use the offset to test stuff.
+> 
+> I use the internal power limit servo for power limiting, and that servo works
+> very well indeed. Using this temperature offset as a way to servo the
+> thermal operating limit does work, but tends to overshoot, oscillate, hold low
+> excessively long (minutes). 
+
+Do you have a script to test and show the drawbacks of this feature?
+It seems that it behaves differently on different platforms.
+Maybe we can evaluate this on more platforms.
+
+> It also seems to limit CPU clock frequency
+> reduction to the non-turbo limit, regardless of the desired maximum
+> temperature.
+> 
+> I am not familiar with the thermal stuff at all, and didn't know where to find
+> the trip point knob. Anyway, found "cooling_devices11".
+> 
+> I do not understand this:
+> 
+> ~$ cat /sys/devices/virtual/thermal/cooling_device11/stats/trans_table
+> cat: /sys/devices/virtual/thermal/cooling_device11/stats/trans_table: File
+> too large
+
+This is a known issue that stats table can not handle devices with too many cooling states, say, 127 cooling states for TCC Offset cooling device.
+We can ignore this for now.
+
+> 
+> Rather than enter the actual TCC offset, I would rather enter the desired trip
+> point, and have the driver do the math to convert it to the offset.
+
+Hmmm, a writable trip point? I need to think about this.
+
+> 
+> Example step function overshoot, trip point set to 55 degrees C.
+> 
+> doug@s18:~$ sudo ~/turbostat --Summary --quiet --show
+> Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 1
+> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
+> 0.07    800     45      24      1.89    0.00
+> 0.04    800     29      23      1.89    0.00
+> 61.76   4546    4151    66      103.77  0.00 < step function load applied on 4 of 6
+> cores
+> 67.76   4570    4476    66      120.42  0.00
+> 68.03   4567    4488    66      120.73  0.00
+> 67.98   4572    4492    67      121.00  0.00 < 19 degrees over trip point
+> 68.10   4489    4493    58      109.19  0.00 < this throttling is either the power
+> servo or the temp servo.
+> 68.08   4262    4476    51      82.82   0.00 < this throttling is the temp servo.
+> 68.13   4143    4513    48      75.16   0.00
+> 68.03   4086    4488    46      71.87   0.00 < It actually undershoots often, I don't
+> know why.
+> 68.12   4000    4505    46      67.02   0.00 < often it doesn't undershoot.
+> 68.44   4000    4502    45      67.16   0.00
+> 68.06   4000    4483    45      66.95   0.00
+> 68.02   3973    4490    44      65.20   0.00
+> 67.94   3900    4489    43      60.51   0.00
+> 67.88   3900    4501    44      60.55   0.00
+> 67.85   3900    4472    43      60.52   0.00
+> 67.96   3900    4481    43      60.59   0.00
+> 68.26   3900    4501    44      60.70   0.00
+> 67.93   3900    4498    43      60.58   0.00
+> 68.03   3900    4476    43      60.68   0.00
+> 67.83   3900    4481    44      60.54   0.00
+> 35.06   3895    2412    25      32.13   0.00 < load removed.
+> 0.04    800     25      24      1.89    0.00
+> 0.04    800     22      23      1.89    0.00
+> 0.06    800     35      23      1.90    0.00
+> 0.03    800     18      23      1.89    0.00
+> 0.04    800     26      22      1.90    0.00
+> 0.30    1927    44      23      1.97    0.00
+> ^C0.10  800     25      23      1.91    0.00
+> 
+> Example long time to recover:
+> (actually, this example never recovers, unusual):
+> Note: 3.7 GHz is the limit.
+> 
+> doug@s18:~$ sudo ~/turbostat --Summary --quiet --show
+> Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 30
+> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
+> 67.58   3700    134812  42      52.15   0.00 <<< the trip point was changed from 37
+> to 57 degrees
+> 67.90   3700    134964  42      52.08   0.00
+> 68.07   3700    134424  42      52.06   0.00
+> 68.01   3700    134415  41      50.76   0.00
+> 68.14   3700    134521  41      50.78   0.00
+> 68.11   3700    134424  42      50.75   0.00
+> 68.03   3700    134329  42      50.70   0.00
+> 68.11   3700    134321  42      50.76   0.00
+> 68.05   3700    134456  42      51.09   0.00
+> 68.12   3700    134549  42      52.21   0.00
+> 68.12   3700    134482  42      52.19   0.00
+> 68.10   3700    134301  42      52.20   0.00
+> 68.11   3700    134444  42      52.14   0.00
+> 68.08   3700    134422  42      52.17   0.00
+> 68.07   3700    134430  42      52.23   0.00
+> 68.00   3700    134723  42      52.12   0.00
+> 67.96   3711    135207  44      52.53   0.00 <<< It takes 8 minutes until the
+> frequency goes above 3.7 GHz
+> 68.05   3765    134519  42      54.34   0.00
+> 68.11   3771    134461  43      54.60   0.00
+> 67.83   3763    134867  43      54.26   0.00
+> 67.93   3773    134577  43      54.78   0.00 <<< But it never recovers, Why not?
+> ...
+> 
+> For unknown reason the processor seems to now think it is not heavily
+> loaded. From my MSR decoder:
+> 
+> 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 200020 AUTO AUTOL
+> 
+> From the book:
+> 
+> > Autonomous Utilization-Based Frequency Control Status (R0) When set,
+> > frequency is reduced below the operating system request because the
+> > processor has detected that utilization is low.
+> 
+> Which is not true.
+> 
+> Anyway,
+> 
+> Acked-by: Doug Smythies <dsmythies@telus.net>
+> 
+thanks,
+rui
