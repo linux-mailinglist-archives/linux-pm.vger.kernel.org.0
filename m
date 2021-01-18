@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E122F9730
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 02:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1C82F973D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 02:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730521AbhARBPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Jan 2021 20:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S1730891AbhARBRg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Jan 2021 20:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730583AbhARBOg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jan 2021 20:14:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFC9C061573;
-        Sun, 17 Jan 2021 17:13:54 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id v24so15046631lfr.7;
-        Sun, 17 Jan 2021 17:13:54 -0800 (PST)
+        with ESMTP id S1730610AbhARBOh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jan 2021 20:14:37 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE268C061574;
+        Sun, 17 Jan 2021 17:13:55 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id w26so16547981ljo.4;
+        Sun, 17 Jan 2021 17:13:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XcOh2xAP7VZKJ2ySQGqyTzs8gZeIcwyB1WogfvPY5Tg=;
-        b=jwMdfO03LYllUg/SmQv5V0IyTz6rRHafgK7yVjJLnaYbh1QHDZfQA6+wg4WjNueUnj
-         9FbsJVqGj6A4Rfpz33uKcze/8s6eUFZ24LcVL11sPtUP82qZGVTIPPl0FqgZ5sp81PEi
-         jXqf1Y+RRqnUt/Kp5Usi3oYXfVSGqpelKiMQvFTTUKwiRuAeu8PWnstgc9zdpnWsbdpR
-         Gxe+xFCY2GH4EUc/2aKTzYPeaTIfkFY/G3IQB1MMUq9PgYv4dEK0tzOIIbVntPrCCxrt
-         YuJ723qycWEq1iK5negTXvkTQjCX5wbODDG2E3VIF3MQOOryUM4bTKNXeBLvoh8Bl/Dk
-         w9zA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ky1yRRPYE3K2/PqCBcIuIXx+q8eWWpmi1zq1iqBWRVA=;
+        b=q+diSSe2R030qndeAFAfZRgHCAIgGRJ6B4aLARKXHXH5QwjRF7xBWB+T+5FpvOTflu
+         jbZp4IVRNExbQlJAYK+fpbxcUSx6lGFwtsi9gV0dX9QoyO14ZmVJ2uPsxNMftGEJW/Vv
+         R/PDVc9pkjEmeOK7saEgS2btpJyGdnU6iCFApPSZ5ccAMLaaCfvpjTY1HZS53A45lqPh
+         vNwbTjbTUUw1XGKw4mt60ehkKpgGTOZhti25T0MDxWUEPeM3LxTcuOZuLSJFtuEd/RLx
+         TiXTuxemmY2hrz2ajxGHR2zUIc0v/M8xiBI8ZSWj5oZrvtYM8OXQcajtJTCJb5sbjYAn
+         rk1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XcOh2xAP7VZKJ2ySQGqyTzs8gZeIcwyB1WogfvPY5Tg=;
-        b=bBrpqKvUBPkwVPijomtkpcurVS1AUDsgKamNAoW/P6xa/QuvMqKyY2JZhIwmXCgxkq
-         W+w5qTKDwP+HA2On+3OmZPUuv7NwcdpGq02U6h9+b2UJ8V0o5mTWux92TDndtz6GUzK0
-         UL5ZMWQZyEZdd/isRNVyLVlExAvhm5fb4IE55cXNqYxPfKDcOlgBf0S2DTgjG7l0RwBO
-         zqUdB4jK4rR5qYhmWN9TXVLxE48Sjp5k84g00vOiWQOsyM3LfbuRCiUiirchZ20boOyV
-         fLR0y3WhVUx7qbXiMYibqhR5cg6jB5yDJEv6wEjSyiIRtS3BI1clbv20qTTuJL35Ut3b
-         e27A==
-X-Gm-Message-State: AOAM532WZ0c/NXg3SueNkFK6hpk7nmDkhtecoI+QHJ5Ljcpbmr5f31Vf
-        XfmChE6YfCpwL04FlVPlZFE=
-X-Google-Smtp-Source: ABdhPJxKlbuErs5/kZ5sbgaR/zrvu00CfzF9pCQWh/7rECWFKpoUl30ragGPVNw4E0Ebeo/UfN1GYQ==
-X-Received: by 2002:a19:8343:: with SMTP id f64mr10329900lfd.542.1610932433355;
-        Sun, 17 Jan 2021 17:13:53 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ky1yRRPYE3K2/PqCBcIuIXx+q8eWWpmi1zq1iqBWRVA=;
+        b=bk1eCRaQzME3nsLDPhhakBtf4ByRl1PRW983kMiFwS/xEvTBc4vWhKpPyT4hZOjJ7c
+         WApLSgFwONC2U/iFI1H578fm9cHVGUkJBQIPJrPZV7Eac5yB/JqLcbPxbCjm0/LY+R7t
+         KpSt/DpTeMwRWytoo+un8WfWQRGcvvuxtqWhtdaa9F5BUIt2m0+t253qAu1ASeeLlFKv
+         jQkYfFCRa01DoZFmaCy3AXZFHCeZpCHRZS0qFZkj84uyKjwd/2+aapB02qCvdpfU/YjN
+         ukxMQtJSMGGw9oeKa+Yigc06VKUvlhA7Nnw4Xlxy0jol9gDoNdKusFQzWUKDhRoc1V8k
+         3I3Q==
+X-Gm-Message-State: AOAM533up44qQAcdJ9zxsgBmM9LWgoN3K7V3RvajcXofmEyUzxG4rCzp
+        0/qkdViuK2LCLRl5IVF3jFM=
+X-Google-Smtp-Source: ABdhPJzP8/KyLz++yd6Vo1A+C0ydVblu+PMmSfSpVzN0iuYCstDuNRogG2NSYmgsci6UsnvRuZCJaw==
+X-Received: by 2002:a2e:920b:: with SMTP id k11mr9606381ljg.313.1610932434282;
+        Sun, 17 Jan 2021 17:13:54 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id l84sm1710836lfd.75.2021.01.17.17.13.52
+        by smtp.gmail.com with ESMTPSA id l84sm1710836lfd.75.2021.01.17.17.13.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 17:13:52 -0800 (PST)
+        Sun, 17 Jan 2021 17:13:53 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -62,43 +62,62 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Matt Merhar <mattmerhar@protonmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v3 0/3] GENPD API improvements
-Date:   Mon, 18 Jan 2021 04:13:27 +0300
-Message-Id: <20210118011330.4145-1-digetx@gmail.com>
+Subject: [PATCH v3 1/3] PM: domains: Make set_performance_state() callback optional
+Date:   Mon, 18 Jan 2021 04:13:28 +0300
+Message-Id: <20210118011330.4145-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210118011330.4145-1-digetx@gmail.com>
+References: <20210118011330.4145-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Make set_performance_state() callback optional in order to remove the
+need from power domain drivers to implement a dummy callback. If callback
+isn't implemented by a GENPD driver, then the performance state is passed
+to the parent domain.
 
-This is a continuation of [1], where Ulf Hansson suggested to factor out
-GENPD patches into a separate series. This series is a prerequisite of
-the power domain driver for NVIDIA Tegra SoCs.
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+Tested-by: Matt Merhar <mattmerhar@protonmail.com>
+Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/base/power/domain.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=221130
-
-Changelog:
-
-v3: - Added r-b from Ulf Hansson.
-
-    - Added new patch "Make of_genpd_add_subdomain() to return -EPROBE_DEFER",
-      which was suggested by Ulf Hansson.
-
-    - Improved "Add "performance" column to debug summary" patch by
-      correcting the formatting of debug output, which had a superfluous
-      whitespace.
-
-Dmitry Osipenko (3):
-  PM: domains: Make set_performance_state() callback optional
-  PM: domains: Add "performance" column to debug summary
-  PM: domains: Make of_genpd_add_subdomain() to return -EPROBE_DEFER
-
- drivers/base/power/domain.c | 32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 9a14eedacb92..a3e1bfc233d4 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -339,9 +339,11 @@ static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+ 			goto err;
+ 	}
+ 
+-	ret = genpd->set_performance_state(genpd, state);
+-	if (ret)
+-		goto err;
++	if (genpd->set_performance_state) {
++		ret = genpd->set_performance_state(genpd, state);
++		if (ret)
++			goto err;
++	}
+ 
+ 	genpd->performance_state = state;
+ 	return 0;
+@@ -399,9 +401,6 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+ 	if (!genpd)
+ 		return -ENODEV;
+ 
+-	if (unlikely(!genpd->set_performance_state))
+-		return -EINVAL;
+-
+ 	if (WARN_ON(!dev->power.subsys_data ||
+ 		     !dev->power.subsys_data->domain_data))
+ 		return -EINVAL;
 -- 
 2.29.2
 
