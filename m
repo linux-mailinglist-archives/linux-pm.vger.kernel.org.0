@@ -2,141 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5EC2FA803
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 18:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A392FA819
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 18:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436712AbhARRqn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jan 2021 12:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406983AbhARRjr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jan 2021 12:39:47 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D19C0613CF
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jan 2021 09:38:59 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id a12so17239647wrv.8
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jan 2021 09:38:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=9DsbzojBVFKuQ48xkTo4URNA+UO51ULaaDoVeAXSBBA=;
-        b=P8YxMFky/mImBavbpo7nJwdUt/1ifWSE4KBf/sPnkT27LpA0jX50OVfzcgYE3urnZm
-         /zIzAmTU+AffMrzt0s0DAw+P7SsU2INfZnLvfwmJLOd+Mh8CyyZdXTsXGoZnwuy72WGj
-         cZXqT5I+WLIWRhIXvI6pXoAHV4BIk4byowE5X+6kRfSfrxkO5WYc9xwkQyeDKSJjrVvO
-         60AicgS6UW0FTFUl5rmuHTtkW5iAY+MfSNHdfrsqgIzQa7UcxvPYqahyXujM0CfRceuX
-         bECOxxao6O1vJZJaQOkXpEkHCG7Bo/m2+HidxOw1ZO+nvXEOsllmTf8zpi9D/O+vt2El
-         PwMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9DsbzojBVFKuQ48xkTo4URNA+UO51ULaaDoVeAXSBBA=;
-        b=aBWi74m3NvO9Gn4ziJWCuZiULmTdHMOP1P5PFWvI9ian36l3ZwSWpTBE713JEVY9nI
-         wO5TdraF0SNai+8yz8Zo8RRCYh1FOzziUFYUAYEOHaSYru4tBA/kMxSTIQnhs1aJYchq
-         bkhvmng2WKRCq0/ApNBXaOjMsh3AKMJkMosbVgKEEe8lbo4zRCKF4o4+raIS4Ojo1Aht
-         opt6q3AjOa96gC0vjq64OdfZ3IKQkFLgfNy3TT7WlVqeWzCcKDX2ehEiVmj/ilInh1//
-         DgWv9qX4lb2tkx+Kjya195E2Kku5e7TW7u+lz2KuiR+2ScTS0tr7G4oxDp83hJQGIUe6
-         euGw==
-X-Gm-Message-State: AOAM532GaQyN5WNJabQsHRfbfivt8u7ICKUeKCn83zATWiIhXl+qqO7W
-        KeuMaVd0VpiosAZs9eREs4i1Xw==
-X-Google-Smtp-Source: ABdhPJyq2aDkR1RLYe+jp7iO6xkLOP6P057ChtKd77qUmfHOQxOSPMkiPb9UzfN72DeGoGnHUzowUg==
-X-Received: by 2002:a5d:4882:: with SMTP id g2mr541856wrq.273.1610991537677;
-        Mon, 18 Jan 2021 09:38:57 -0800 (PST)
-Received: from localhost.localdomain (lns-bzn-59-82-252-148-144.adsl.proxad.net. [82.252.148.144])
-        by smtp.gmail.com with ESMTPSA id o8sm30042848wrm.17.2021.01.18.09.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jan 2021 09:38:56 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
-Cc:     Guenter Roeck <linux@roeck-us.net>, Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-hwmon@vger.kernel.org (open list:PWM FAN DRIVER),
-        linux-kernel@vger.kernel.org (open list),
-        linux-amlogic@lists.infradead.org (open list:KHADAS MCU MFD DRIVER),
-        linux-pm@vger.kernel.org (open list:THERMAL)
-Subject: [PATCH v2] thermal/core: Make cooling device state change private
-Date:   Mon, 18 Jan 2021 18:38:24 +0100
-Message-Id: <20210118173824.9970-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S2436751AbhARR44 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jan 2021 12:56:56 -0500
+Received: from foss.arm.com ([217.140.110.172]:40270 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2436736AbhARR4z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 18 Jan 2021 12:56:55 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29DEE31B;
+        Mon, 18 Jan 2021 09:56:09 -0800 (PST)
+Received: from [10.57.2.166] (unknown [10.57.2.166])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E068A3F719;
+        Mon, 18 Jan 2021 09:56:07 -0800 (PST)
+Subject: Re: [PATCH] PM / devfreq: Add sysfs attributes to simple_ondemand
+ governor
+To:     Greg KH <greg@kroah.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com
+References: <20210115170530.22603-1-lukasz.luba@arm.com>
+ <YAXCnMsUy3n+asfm@kroah.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <43729797-2d3c-be12-ce72-bfe5bca54fa0@arm.com>
+Date:   Mon, 18 Jan 2021 17:56:06 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <YAXCnMsUy3n+asfm@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The change of the cooling device state should be used by the governor
-or at least by the core code, not by the drivers themselves.
 
-Remove the API usage and move the function declaration to the internal
-headers.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pwm-fan.c          | 1 -
- drivers/thermal/khadas_mcu_fan.c | 1 -
- drivers/thermal/thermal_core.h   | 2 ++
- include/linux/thermal.h          | 3 ---
- 4 files changed, 2 insertions(+), 5 deletions(-)
+On 1/18/21 5:17 PM, Greg KH wrote:
+> On Fri, Jan 15, 2021 at 05:05:30PM +0000, Lukasz Luba wrote:
+>> The simple_ondemand devfreq governor is used by quite a few devices, like
+>> GPUs, DSPs, memory controllers, etc. It implements algorithm which tries
+>> to predict the device frequency based on past statistics. There are two
+>> tunables for the algorithm: 'upthreshold' and 'downdifferential'. These
+>> tunables change the behavior of the decision, e.g. how fast to increase
+>> the frequency or how rapidly limit the frequency. These values might be
+>> different based on the application which is currently running, e.g.
+>> different behavior is needed for a game than for web browsing or clean
+>> desktop. The patch exports these two tunables so they can be adjusted
+>> based on current need. There is also a check with the allowed ranges
+>> to make sure the values are correct and safe.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/devfreq/governor_simpleondemand.c | 135 ++++++++++++++++++++++
+>>   1 file changed, 135 insertions(+)
+>>
+>> diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
+>> index d57b82a2b570..4b3c182e0a49 100644
+>> --- a/drivers/devfreq/governor_simpleondemand.c
+>> +++ b/drivers/devfreq/governor_simpleondemand.c
+>> @@ -15,6 +15,7 @@
+>>   /* Default constants for DevFreq-Simple-Ondemand (DFSO) */
+>>   #define DFSO_UPTHRESHOLD	(90)
+>>   #define DFSO_DOWNDIFFERENCTIAL	(5)
+>> +#define DFSO_MAX_VALUE		(100)
+>>   static int devfreq_simple_ondemand_func(struct devfreq *df,
+>>   					unsigned long *freq)
+>>   {
+>> @@ -84,15 +85,149 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
+>>   	return 0;
+>>   }
+>>   
+>> +static ssize_t upthreshold_show(struct device *dev,
+>> +				struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct devfreq_simple_ondemand_data *data;
+>> +	struct devfreq *df = to_devfreq(dev);
+>> +
+>> +	if (!df->data)
+>> +		return -EINVAL;
+>> +
+>> +	data = df->data;
+>> +
+>> +	return sprintf(buf, "%d\n", data->upthreshold);
+> 
+> sysfs_emit()?
+> 
+> Also, you forgot the Documentation/ABI/ updates for new sysfs files :(
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index bdba2143021a..0b1159ceac9b 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -378,7 +378,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 			return ret;
- 		}
- 		ctx->cdev = cdev;
--		thermal_cdev_update(cdev);
- 	}
- 
- 	return 0;
-diff --git a/drivers/thermal/khadas_mcu_fan.c b/drivers/thermal/khadas_mcu_fan.c
-index 9eadd2d6413e..d35e5313bea4 100644
---- a/drivers/thermal/khadas_mcu_fan.c
-+++ b/drivers/thermal/khadas_mcu_fan.c
-@@ -100,7 +100,6 @@ static int khadas_mcu_fan_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	ctx->cdev = cdev;
--	thermal_cdev_update(cdev);
- 
- 	return 0;
- }
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 90f9a80c8b23..86b8cef7310e 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -65,6 +65,8 @@ static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
- 		cdev->ops->power2state;
- }
- 
-+void thermal_cdev_update(struct thermal_cooling_device *);
-+
- /**
-  * struct thermal_trip - representation of a point in temperature domain
-  * @np: pointer to struct device_node that this trip point was created from
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 1e686404951b..6ac7bb1d2b1f 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -390,7 +390,6 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
- int thermal_zone_get_slope(struct thermal_zone_device *tz);
- int thermal_zone_get_offset(struct thermal_zone_device *tz);
- 
--void thermal_cdev_update(struct thermal_cooling_device *);
- void thermal_notify_framework(struct thermal_zone_device *, int);
- int thermal_zone_device_enable(struct thermal_zone_device *tz);
- int thermal_zone_device_disable(struct thermal_zone_device *tz);
-@@ -437,8 +436,6 @@ static inline int thermal_zone_get_offset(
- 		struct thermal_zone_device *tz)
- { return -ENODEV; }
- 
--static inline void thermal_cdev_update(struct thermal_cooling_device *cdev)
--{ }
- static inline void thermal_notify_framework(struct thermal_zone_device *tz,
- 	int trip)
- { }
--- 
-2.17.1
+True, I will remember next time.
 
+> 
+> 
+>> +}
+>> +
+>> +static ssize_t upthreshold_store(struct device *dev,
+>> +				 struct device_attribute *attr,
+>> +				 const char *buf, size_t count)
+>> +{
+>> +	struct devfreq_simple_ondemand_data *data;
+>> +	struct devfreq *df = to_devfreq(dev);
+>> +	unsigned int value;
+>> +	int ret;
+>> +
+>> +	if (!df->data)
+>> +		return -EINVAL;
+>> +
+>> +	data = df->data;
+>> +
+>> +	ret = kstrtouint(buf, 10, &value);
+>> +	if (ret < 0)
+>> +		return -EINVAL;
+>> +
+>> +	mutex_lock(&df->lock);
+>> +
+>> +	if (value > DFSO_MAX_VALUE || value <= data->downdifferential) {
+>> +		mutex_unlock(&df->lock);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	data->upthreshold = value;
+>> +	mutex_unlock(&df->lock);
+>> +
+>> +	return count;
+>> +}
+>> +static DEVICE_ATTR_RW(upthreshold);
+>> +
+>> +static ssize_t downdifferential_show(struct device *dev,
+>> +				     struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct devfreq_simple_ondemand_data *data;
+>> +	struct devfreq *df = to_devfreq(dev);
+>> +
+>> +	if (!df->data)
+>> +		return -EINVAL;
+>> +
+>> +	data = df->data;
+>> +
+>> +	return sprintf(buf, "%d\n", data->downdifferential);
+>> +}
+>> +
+>> +static ssize_t downdifferential_store(struct device *dev,
+>> +				      struct device_attribute *attr,
+>> +				      const char *buf, size_t count)
+>> +{
+>> +	struct devfreq_simple_ondemand_data *data;
+>> +	struct devfreq *df = to_devfreq(dev);
+>> +	unsigned int value;
+>> +	int ret;
+>> +
+>> +	if (!df->data)
+>> +		return -EINVAL;
+>> +
+>> +	data = df->data;
+>> +
+>> +	ret = kstrtouint(buf, 10, &value);
+>> +	if (ret < 0)
+>> +		return -EINVAL;
+>> +
+>> +	mutex_lock(&df->lock);
+>> +
+>> +	if (value > DFSO_MAX_VALUE || value >= data->upthreshold) {
+>> +		mutex_unlock(&df->lock);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	data->downdifferential = value;
+>> +	mutex_unlock(&df->lock);
+>> +
+>> +	return count;
+>> +}
+>> +static DEVICE_ATTR_RW(downdifferential);
+>> +
+>> +static void devfreq_simple_ondemand_sysfs_setup(struct devfreq *df)
+>> +{
+>> +	struct devfreq_simple_ondemand_data *data;
+>> +	int ret;
+>> +
+>> +	if (!df->data) {
+>> +		/* The memory will be freed automatically */
+>> +		df->data = devm_kzalloc(&df->dev,
+>> +				sizeof(struct devfreq_simple_ondemand_data),
+>> +				GFP_KERNEL);
+>> +		if (!df->data) {
+>> +			dev_warn(&df->dev, "Unable to allocate memory");
+>> +			return;
+>> +		}
+>> +	}
+>> +
+>> +	data = df->data;
+>> +
+>> +	/* After new allocation setup default values, since they are used */
+>> +	if (!data->upthreshold)
+>> +		data->upthreshold = DFSO_UPTHRESHOLD;
+>> +
+>> +	if (!data->downdifferential)
+>> +		data->downdifferential = DFSO_DOWNDIFFERENCTIAL;
+>> +
+>> +	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_upthreshold.attr);
+>> +	if (ret < 0)
+>> +		dev_warn(&df->dev, "Unable to create 'upthreshold' attr\n");
+>> +
+>> +	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_downdifferential.attr);
+>> +	if (ret < 0)
+>> +		dev_warn(&df->dev, "Unable to create 'downdifferential' attr\n");
+> 
+> You just raced with userspace and lost :(
+> 
+> Please use the default sysfs groups so that it all works properly.
+> 
+> Huge hint, when calling sysfs_* from a driver, that usually means you
+> are doing something wrong.
+
+I should have used kobject_init_and_add() and the default devfreq
+sysfs group as a parent.
+
+Thank you for the comments and hints. I'll make use of them next time.
+
+This patch is abandoned, since Chanwoo is already trying to address
+the same issue.
+
+Regards,
+Lukasz
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
