@@ -2,191 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1163C2FA4F2
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 16:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527AF2FA5A4
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jan 2021 17:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390901AbhARPjP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jan 2021 10:39:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:38158 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393416AbhARPjM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 18 Jan 2021 10:39:12 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA6A01FB;
-        Mon, 18 Jan 2021 07:38:25 -0800 (PST)
-Received: from localhost (unknown [10.1.198.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C8E43F68F;
-        Mon, 18 Jan 2021 07:38:25 -0800 (PST)
-Date:   Mon, 18 Jan 2021 15:38:23 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-hw: drop devm_xxx() calls from init/exit
- hooks
-Message-ID: <20210118153823.GA3310@arm.com>
-References: <20210118130603.16176-1-shawn.guo@linaro.org>
+        id S2406226AbhARQIO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jan 2021 11:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406435AbhARQHz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jan 2021 11:07:55 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93A5C061574
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jan 2021 08:07:14 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id o10so167949wmc.1
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jan 2021 08:07:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lkU/Vu2jsZl8gjMBcdEUs2PWYLIzcsKski8kSUkVIow=;
+        b=H9pW3X8pb8YGtrePLFXvUc63OFgGS5pBMVP0vjva3ryV6ExKJW1VDQ8/Dbl3oHK93+
+         4/vxpoI4sqy6qRqYC+C6v9xsLKyhuhdb6qok7xZglGUSKs4E5C7vZCRiKuyiLYcPV4Gj
+         eYMk5RlUrs1sv9qqKXwHAPeCTD5AgoIqVicrICrFY0cFzNzOc65xiKMMXkrewcJ+xML/
+         jFmoj9m92iP38brqRL602VT9YA9gv3DImWnysywWN+mpIA1rorPxZKY6wFs2LNibN5kw
+         WWJqLPMaPsMPoLCL/4sY5r7CesKwiRVp+vJNn8HEfn2GY8bo93JL3FGsI4MGbqh+CABu
+         mBaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lkU/Vu2jsZl8gjMBcdEUs2PWYLIzcsKski8kSUkVIow=;
+        b=HOY+Mm9bjF1gycNwRmOL5+cYHW+VCc2QYQm1e7/hL1haBquOa3WfxpXSmsBS3H57X/
+         dDr16y0KvJrqkYXjnoqtUroZjMOOROmFWGLQqx2rpD7zwEx/dHeESKWIMysOKcG28tYy
+         i7nhRdnP4ShPW6ojKNPRSpDpeYwZ9zEf4VAxJVaZAcvSPMMJ5Q6ZDf9c9o8v4X88hpyL
+         cY2CXG8CbDISgwOmZ9IDQHYa5RCy78QL08xVAoz68wYbr7AL7Dp5bkeZ7abUYSMNT2Kc
+         hEyAnkPZmkf6Vx+Vxox2gU/XO2QGtmMLZKEiLEdTAzzxbA4LzE1/y5Lgtv2mt9L7XxM/
+         q4VQ==
+X-Gm-Message-State: AOAM532NQjjrmbF6911XdkyX/hfSCPJcrcVnrjjykaniUE5+cTLfs3+F
+        aVMagFmiNrcwCdTpkcd4xdVk3Q==
+X-Google-Smtp-Source: ABdhPJxQjU0YQYOIDMQJh2zQ8Lznp+KQPAh88kwLXthcsOXeKCX71nsdYi74mGirMwu3hwp+YrT/Hw==
+X-Received: by 2002:a1c:770d:: with SMTP id t13mr75991wmi.35.1610986033465;
+        Mon, 18 Jan 2021 08:07:13 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:2095:8614:d69:136f? ([2a01:e34:ed2f:f020:2095:8614:d69:136f])
+        by smtp.googlemail.com with ESMTPSA id p15sm31181362wrt.15.2021.01.18.08.07.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 08:07:12 -0800 (PST)
+Subject: Re: [PATCH] thermal: power allocator: Add control for non-power actor
+ devices
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com
+References: <20210105190107.30479-1-lukasz.luba@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <3b98cbfa-3bfb-607c-aa4d-2c2ef3e61990@linaro.org>
+Date:   Mon, 18 Jan 2021 17:07:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210118130603.16176-1-shawn.guo@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210105190107.30479-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 05/01/2021 20:01, Lukasz Luba wrote:
+> The cooling devices which are used in IPA should provide power mapping
+> functions. The callback functions are used for power estimation and state
+> setting. When these functions are missing IPA ignores such cooling devices
+> and does not limit their performance. It could happen that the platform
+> configuration is missing these functions in example when the Energy Model
+> was not setup properly (missing DT entry 'dynamic-power-coefficient').
+> 
+> The patch adds basic control over these devices' performance. It
+> manages to throttle them to stay safe and not overheat. It also adds a
+> warning during the binding phase, so it can be captured during testing.
+> 
+> The patch covers also a corner case when all of the cooling devices are
+> non-power actors.
 
-On Monday 18 Jan 2021 at 21:06:03 (+0800), Shawn Guo wrote:
-> Commit f17b3e44320b ("cpufreq: qcom-hw: Use
-> devm_platform_ioremap_resource() to simplify code") introduces
-> a regression on platforms using the driver, by failing to initialise
-> a policy, when one is created post hotplug.
-> 
-> When all the CPUs of a policy are hoptplugged out, the call to .exit()
-> and later to devm_iounmap() does not release the memory region that was
-> requested during devm_platform_ioremap_resource().  Therefore,
-> a subsequent call to .init() will result in the following error, which
-> will prevent a new policy to be initialised:
-> 
-> [ 3395.915416] CPU4: shutdown
-> [ 3395.938185] psci: CPU4 killed (polled 0 ms)
-> [ 3399.071424] CPU5: shutdown
-> [ 3399.094316] psci: CPU5 killed (polled 0 ms)
-> [ 3402.139358] CPU6: shutdown
-> [ 3402.161705] psci: CPU6 killed (polled 0 ms)
-> [ 3404.742939] CPU7: shutdown
-> [ 3404.765592] psci: CPU7 killed (polled 0 ms)
-> [ 3411.492274] Detected VIPT I-cache on CPU4
-> [ 3411.492337] GICv3: CPU4: found redistributor 400 region 0:0x0000000017ae0000
-> [ 3411.492448] CPU4: Booted secondary processor 0x0000000400 [0x516f802d]
-> [ 3411.503654] qcom-cpufreq-hw 17d43000.cpufreq: can't request region for resource [mem 0x17d45800-0x17d46bff]
-> 
-> With that being said, the original code was tricky and skipping memory
-> region request intentionally to hide this issue.  The true cause is that
-> those devm_xxx() device managed functions shouldn't be used for cpufreq
-> init/exit hooks, because &pdev->dev is alive across the hooks and will
-> not trigger auto resource free-up.  Let's drop the use of device managed
-> functions and manually allocate/free resources, so that the issue can be
-> fixed properly.
-> 
-> Fixes: f17b3e44320b ("cpufreq: qcom-hw: Use devm_platform_ioremap_resource() to simplify code")
-> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+In my opinion this is a user space problem. If a device does not have
+power information, then it should use the step-wise governor instead.
+
+It is not the power allocator to overcome a wrong or unsupported setup.
+
+Usually, the default governor is the step-wise and the userspace sets
+the power allocator policy.
+
+A solution can be to fail to change the policy or bind if the associated
+cooling devices are not all power actors.
+
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
+>  drivers/thermal/gov_power_allocator.c | 71 +++++++++++++++++++++++++--
+>  1 file changed, 68 insertions(+), 3 deletions(-)
 > 
-> I took some of the commit log from Ionela.
-> 
->  drivers/cpufreq/qcom-cpufreq-hw.c | 43 ++++++++++++++++++++++++-------
->  1 file changed, 33 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 9ed5341dc515..b529b49649e0 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -32,6 +32,7 @@ struct qcom_cpufreq_soc_data {
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 7a4170a0b51f..bcd1d524a1ba 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -276,6 +276,33 @@ static u32 pid_controller(struct thermal_zone_device *tz,
+>  	return power_range;
+>  }
 >  
->  struct qcom_cpufreq_data {
->  	void __iomem *base;
-> +	struct resource *res;
->  	const struct qcom_cpufreq_soc_data *soc_data;
->  };
->  
-> @@ -280,6 +281,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->  	struct of_phandle_args args;
->  	struct device_node *cpu_np;
->  	struct device *cpu_dev;
-> +	struct resource *res;
->  	void __iomem *base;
->  	struct qcom_cpufreq_data *data;
->  	int ret, index;
-> @@ -303,18 +305,33 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->  
->  	index = args.args[0];
->  
-> -	base = devm_platform_ioremap_resource(pdev, index);
-> -	if (IS_ERR(base))
-> -		return PTR_ERR(base);
-> +	data = kzalloc(sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
->  
-
-Nit: you could move this allocation after all resource reservation and
-mapping below, possibly to avoid doing it unless the base address and
-the memory resource is actually valid. Or you can keep it here and
-remove the use of the local variables, especially the "base" variable.
-
-> -	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> -	if (!data) {
-> -		ret = -ENOMEM;
-> -		goto error;
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
-> +	if (!res) {
-> +		dev_err(dev, "failed to get mem resource %d\n", index);
-> +		ret = -ENODEV;
-> +		goto free_data;
-> +	}
+> +/**
+> + * control_non_power_actor() - control performance of a cooling device which
+> + *				is not a power actor
+> + * @instance:   thermal instance to update
+> + * @throttle:	boolean flag indicating the action
+> + *
+> + * Set the min/max performance point for a given cooling device, with respect
+> + * to limits. It is needed only for devices which are not power actors and
+> + * don't provide the power mapping functions. These devices will be capped
+> + * more strictly to provide safe conditions and not overheat them.
+> + */
+> +static void control_non_power_actor(struct thermal_instance *instance,
+> +				    bool throttle)
+> +{
+> +	struct thermal_cooling_device *cdev = instance->cdev;
 > +
-> +	if (!request_mem_region(res->start, resource_size(res), res->name)) {
-> +		dev_err(dev, "failed to request resource %pR\n", res);
-> +		ret = -EBUSY;
-> +		goto free_data;
-> +	}
+> +	if (throttle)
+> +		instance->target = instance->upper;
+> +	else
+> +		instance->target = instance->lower;
 > +
-> +	base = ioremap(res->start, resource_size(res));
-> +	if (IS_ERR(base)) {
-> +		dev_err(dev, "failed to map resource %pR\n", res);
-> +		ret = PTR_ERR(base);
-> +		goto release_region;
+> +	mutex_lock(&cdev->lock);
+> +	cdev->updated = false;
+> +	mutex_unlock(&cdev->lock);
+> +	thermal_cdev_update(cdev);
+> +}
+> +
+>  /**
+>   * power_actor_set_power() - limit the maximum power a cooling device consumes
+>   * @cdev:	pointer to &thermal_cooling_device
+> @@ -405,7 +432,7 @@ static int allocate_power(struct thermal_zone_device *tz,
+>  
+>  	if (!num_actors) {
+>  		ret = -ENODEV;
+> -		goto unlock;
+> +		goto safety_throttling;
 >  	}
 >  
->  	data->soc_data = of_device_get_match_data(&pdev->dev);
->  	data->base = base;
-> +	data->res = res;
+>  	/*
+> @@ -495,6 +522,16 @@ static int allocate_power(struct thermal_zone_device *tz,
+>  				      control_temp - tz->temperature);
 >  
->  	/* HW should be in enabled state to proceed */
->  	if (!(readl_relaxed(base + data->soc_data->reg_enable) & 0x1)) {
-> @@ -349,7 +366,11 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>  	kfree(req_power);
+> +
+> +safety_throttling:
+> +	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+> +		if (instance->trip != trip_max_desired_temperature)
+> +			continue;
+> +
+> +		if (!cdev_is_power_actor(instance->cdev))
+> +			control_non_power_actor(instance, true);
+> +	}
+> +
+>  unlock:
+>  	mutex_unlock(&tz->lock);
 >  
->  	return 0;
->  error:
-> -	devm_iounmap(dev, base);
-> +	iounmap(data->base);
-> +release_region:
-> +	release_mem_region(res->start, resource_size(res));
-> +free_data:
-> +	kfree(data);
->  	return ret;
+> @@ -576,9 +613,13 @@ static void allow_maximum_power(struct thermal_zone_device *tz)
+>  
+>  	mutex_lock(&tz->lock);
+>  	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+> -		if ((instance->trip != params->trip_max_desired_temperature) ||
+> -		    (!cdev_is_power_actor(instance->cdev)))
+> +		if (instance->trip != params->trip_max_desired_temperature)
+> +			continue;
+> +
+> +		if (!cdev_is_power_actor(instance->cdev)) {
+> +			control_non_power_actor(instance, false);
+>  			continue;
+> +		}
+>  
+>  		instance->target = 0;
+>  		mutex_lock(&instance->cdev->lock);
+> @@ -589,6 +630,28 @@ static void allow_maximum_power(struct thermal_zone_device *tz)
+>  	mutex_unlock(&tz->lock);
 >  }
 >  
-> @@ -357,12 +378,14 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
->  {
->  	struct device *cpu_dev = get_cpu_device(policy->cpu);
->  	struct qcom_cpufreq_data *data = policy->driver_data;
-> -	struct platform_device *pdev = cpufreq_get_driver_data();
-> +	struct resource *res = data->res;
+> +/**
+> + * check_power_actors() - Check all cooling devices and warn when they are
+> + *			not power actors
+> + * @tz:		thermal zone to operate on
+> + *
+> + * Check all cooling devices in the @tz and warn when they are not power
+> + * actors. These cooling devices will be throttled aggressively because they
+> + * miss needed callbacks. The warning would help to investigate the issue,
+> + * which could be e.g. lack of Energy Model for a given device.
+> + */
+> +static void check_power_actors(struct thermal_zone_device *tz)
+> +{
+> +	struct thermal_instance *instance;
+> +
+> +	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+> +		if (!cdev_is_power_actor(instance->cdev)) {
+> +			dev_warn(&tz->device, "power_allocator: %s is not a power actor\n",
+> +				 instance->cdev->type);
+> +		}
+> +	}
+> +}
+> +
+>  /**
+>   * power_allocator_bind() - bind the power_allocator governor to a thermal zone
+>   * @tz:	thermal zone to bind it to
+> @@ -637,6 +700,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
 >  
->  	dev_pm_opp_remove_all_dynamic(cpu_dev);
->  	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
->  	kfree(policy->freq_table);
-> -	devm_iounmap(&pdev->dev, data->base);
-> +	iounmap(data->base);
-> +	release_mem_region(res->start, resource_size(res));
-> +	kfree(data);
+>  	tz->governor_data = params;
 >  
+> +	check_power_actors(tz);
+> +
 >  	return 0;
->  }
-> -- 
-> 2.17.1
+>  
+>  free_params:
 > 
 
 
-I only mentioned a small nit above. Otherwise it looks good to me and it
-works nicely on DB845c.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Many thanks,
-Ionela.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
