@@ -2,77 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04162FC2AA
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 22:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E2A2FC26D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 22:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728707AbhASVqF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 16:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S1727011AbhASVfC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 16:35:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391458AbhASRu6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 12:50:58 -0500
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447CBC06138F;
-        Tue, 19 Jan 2021 09:46:01 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 937C93F20C;
-        Tue, 19 Jan 2021 18:45:59 +0100 (CET)
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-To:     viresh.kumar@linaro.org
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 3/7] dt-bindings: arm: cpus: Document 'qcom,freq-domain' property
-Date:   Tue, 19 Jan 2021 18:45:53 +0100
-Message-Id: <20210119174557.227318-4-angelogioacchino.delregno@somainline.org>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210119174557.227318-1-angelogioacchino.delregno@somainline.org>
-References: <20210119174557.227318-1-angelogioacchino.delregno@somainline.org>
+        with ESMTP id S1727959AbhASV2K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 16:28:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF682C061575
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 13:27:29 -0800 (PST)
+Date:   Tue, 19 Jan 2021 21:27:25 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1611091646;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q3G+YDwPYN7neBOD8rA6aRuClL/6iHsM/u3oBKqzayY=;
+        b=TkL13HYN9M6JRe7rlBVraTdGp7oxkM89DQD3OINLS4mQFCo//EXh5dnRM3VvZknOMZWWy7
+        kdXbRtjFT+9F0xVaTpAg2MzWslJb3uYXgKqCZISkzEKNXsUX3zZYCyrRbU+lXvBUsEBXrS
+        JvM7vdlL5bwCO59IHFi1g13l4ek8XlLg8gwwFioYVwut76y/bCemeMIxzZqWOQS2a4d2b4
+        UQ33e3pbl9CUbBd6Ycihekn64O/BAtpRO9WhW4zXZ1TCM4A7hrT/47wpg6PyKfC7YCWInD
+        CzDhwayF5OOc+vGS9RXuF888KdH4wq+GftCrP7Z2ojmCJxRBy2r2oApGWUxz3Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1611091646;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q3G+YDwPYN7neBOD8rA6aRuClL/6iHsM/u3oBKqzayY=;
+        b=kQydRSo09rSqVDQlai7Lvq/QO+zy3Iv1EJzvqtZub9K3MAuwlsJqvN4//xKG0lZAXZTwJd
+        1oft3R9va22iayCg==
+From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal/core: Precompute the delays from
+ msecs to jiffies
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>, rui.zhang@intel.com,
+        amitk@kernel.org
+In-Reply-To: <20201216220337.839878-1-daniel.lezcano@linaro.org>
+References: <20201216220337.839878-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <161109164594.414.12897889848127148595.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+The following commit has been merged into the thermal/next branch of thermal:
 
-Add devicetree documentation for 'qcom,freq-domain' property specific
-to Qualcomm CPUs. This property is used to reference the CPUFREQ node
-along with Domain ID (0/1).
+Commit-ID:     17d399cd9c8936909bc8936a5837b6da9af9c29e
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//17d399cd9c8936909bc8936a5837b6da9af9c29e
+Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
+AuthorDate:    Wed, 16 Dec 2020 23:03:35 +01:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Tue, 19 Jan 2021 22:23:38 +01:00
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+thermal/core: Precompute the delays from msecs to jiffies
+
+The delays are stored in ms units and when the polling function is
+called this delay is converted into jiffies at each call.
+
+Instead of doing the conversion again and again, compute the jiffies
+at init time and use the value directly when setting the polling.
+
+Cc: Thara Gopinath <thara.gopinath@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
+Link: https://lore.kernel.org/r/20201216220337.839878-1-daniel.lezcano@linaro.org
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/thermal/thermal_core.c    | 3 +++
+ drivers/thermal/thermal_core.h    | 1 +
+ drivers/thermal/thermal_helpers.c | 7 +++++++
+ include/linux/thermal.h           | 7 +++++++
+ 4 files changed, 18 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 14cd727d3c4b..1d60975df23a 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -290,6 +290,12 @@ properties:
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index bcc2ea4..2c41d4a 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1315,6 +1315,9 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+ 	tz->passive_delay = passive_delay;
+ 	tz->polling_delay = polling_delay;
  
-       * arm/msm/qcom,kpss-acc.txt
- 
-+  qcom,freq-domain:
-+    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-+    description: |
-+      CPUs supporting freq-domain must set their "qcom,freq-domain" property
-+      with phandle to a cpufreq_hw node followed by the Domain ID(0/1).
++	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
++	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
 +
-   rockchip,pmu:
-     $ref: '/schemas/types.yaml#/definitions/phandle'
-     description: |
--- 
-2.30.0
-
+ 	/* sys I/F */
+ 	/* Add nodes that are always present via .groups */
+ 	result = thermal_zone_create_device_groups(tz, mask);
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index e50c6b2..90f9a80 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -123,6 +123,7 @@ int thermal_build_list_of_policies(char *buf);
+ 
+ /* Helpers */
+ void thermal_zone_set_trips(struct thermal_zone_device *tz);
++void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms);
+ 
+ /* sysfs I/F */
+ int thermal_zone_create_device_groups(struct thermal_zone_device *, int);
+diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+index c94bc82..7f50f41 100644
+--- a/drivers/thermal/thermal_helpers.c
++++ b/drivers/thermal/thermal_helpers.c
+@@ -175,6 +175,13 @@ exit:
+ 	mutex_unlock(&tz->lock);
+ }
+ 
++void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
++{
++	*delay_jiffies = msecs_to_jiffies(delay_ms);
++	if (delay_ms > 1000)
++		*delay_jiffies = round_jiffies(*delay_jiffies);
++}
++
+ static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev,
+ 				       int target)
+ {
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 060a216..d1b82c7 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -117,9 +117,14 @@ struct thermal_cooling_device {
+  * @trips_disabled;	bitmap for disabled trips
+  * @passive_delay:	number of milliseconds to wait between polls when
+  *			performing passive cooling.
++ * @passive_delay_jiffies: number of jiffies to wait between polls when
++ *			performing passive cooling.
+  * @polling_delay:	number of milliseconds to wait between polls when
+  *			checking whether trip points have been crossed (0 for
+  *			interrupt driven systems)
++ * @polling_delay_jiffies: number of jiffies to wait between polls when
++ *			checking whether trip points have been crossed (0 for
++ *			interrupt driven systems)
+  * @temperature:	current temperature.  This is only for core code,
+  *			drivers should use thermal_zone_get_temp() to get the
+  *			current temperature
+@@ -155,6 +160,8 @@ struct thermal_zone_device {
+ 	void *devdata;
+ 	int trips;
+ 	unsigned long trips_disabled;	/* bitmap for disabled trips */
++	unsigned long passive_delay_jiffies;
++	unsigned long polling_delay_jiffies;
+ 	int passive_delay;
+ 	int polling_delay;
+ 	int temperature;
