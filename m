@@ -2,147 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4972FBBF6
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE922FBBF5
 	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 17:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389138AbhASQHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 11:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S2389915AbhASQHS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 11:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391224AbhASQD4 (ORCPT
+        with ESMTP id S2391385AbhASQD4 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 11:03:56 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CADAC061573
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 08:03:00 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id g15so158300pjd.2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 08:03:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=yq46fU2UhqS8M9Zthah4LUZ0vX50wKV+7yazyHD9svE=;
-        b=jPBHWhROQhfq7p+X9RRpS85+ysvGnpMnCihtAMQ2qf9d9Wzi6ir6tagJfjM2n36wUF
-         6wa8rkGfSoEfLtxJpW83RZXJMFxBtH+VxSsIBcTx8Q6AZqvZVb3hrvY+wshijRpnWAZx
-         vBhV7L/5uZdYJqn/+p+ZpVJ1PRs8ZlJjbjW+u2tJw6qX/45G+yB5m+DeLABBcuEy14v8
-         +iubq2xaERhiaGWqZXfMMiB8Rloj9kUqxfdu/2B256xo4Z7C0eqJZRJhZdipe9PLjLgR
-         qQ5eRrAvz/RmqpI9mivc2tbKX79+nrOFl7PVguN86tWP1OESymWxOoP9AloEGqvbJjTR
-         ArkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=yq46fU2UhqS8M9Zthah4LUZ0vX50wKV+7yazyHD9svE=;
-        b=fdcnZdpwVkWqB5JN+hM8uelT0x2ehZp/Y3D2fcKTtjxUx1B8rk4g1tEiB5UpMaQEDS
-         GYn3gqyRzK5CfAudE00/Rsxoohkn8Kq8o8gtU7qXM1gx9uHiMHt7CDtvNZh9gghJa5HR
-         qQFpMlsnctckHQ8kLq/+Kv/9HEYR6RlWvONWYQbUp9X5U2mAag5jCNF6OiVIkFcSNk3k
-         TZCRlkVmukOuhxwHkXpiAbijt+XkI3t6yewXy5U9i6dA+OiSgPukcR3soyzfFxVHyoxa
-         Uj3tk/+JAFYeSZXDS8fwu44o7JU93JXMwxjgLZFbclMR2bAmY/JNucYHF9edFn47XjQi
-         Smjw==
-X-Gm-Message-State: AOAM530QYeJhfdGy1PxroAlLvTws7hpXux0NrIeV95HxXWT2T0QRPElm
-        raNM8qA1uxczTdZAssK2GfvT6Q==
-X-Google-Smtp-Source: ABdhPJwIHbAwz43j8CiUN6CPz1D70j9N4FAEqnVg6ROq1rrk7yaI/M3WSe9wsWh0+wcLqc2xfPOcgA==
-X-Received: by 2002:a17:90b:3507:: with SMTP id ls7mr374483pjb.208.1611072179744;
-        Tue, 19 Jan 2021 08:02:59 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 11sm18945070pgz.22.2021.01.19.08.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 08:02:59 -0800 (PST)
-Message-ID: <600702b3.1c69fb81.112c1.db08@mx.google.com>
-Date:   Tue, 19 Jan 2021 08:02:59 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A50DC061575;
+        Tue, 19 Jan 2021 08:03:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EhVNN5w31+BoStuV5p83fjIjrTbho1tnvewJve+/h9Q=; b=UWCs2GbaEiVNzA19wKWlr9c/PQ
+        UMAZuyoJbhGdlV8lgXLhfgFbaPPe7Lpsa68jxwobKbaLIK+P95bRELv5UA3iWDav8I5VDBfvkedFS
+        L655rampQgJNMFtqTyNpv4zhDBCk/jYsuzhSepx26gdFHNwfX1Uc1s17Q8QY/zMfurFb/78c8Y0we
+        MDdUdDeZ+qlSShuLda/IkktpDC0tDiIidFBkainB86N45fT63FFku/gyzrJFqNzf7dmi9FK1xiQOb
+        CPyBMTYfs8OAwFR4XgeYhEW+k1h+t85peDC+ohOBO0BCTXoWjFUiCPrp3agxiORyWrL6fKJt+QkvY
+        IKD6dfBg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l1tTE-0007Eu-LV; Tue, 19 Jan 2021 16:03:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 104D53059DD;
+        Tue, 19 Jan 2021 17:03:03 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 02B0A202638D9; Tue, 19 Jan 2021 17:03:02 +0100 (CET)
+Date:   Tue, 19 Jan 2021 17:03:02 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        x86 Maintainers <x86@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: Re: [PATCH] x86: PM: Register syscore_ops for scale invariance
+Message-ID: <YAcCtnYbhasv+ENi@hirez.programming.kicks-ass.net>
+References: <1803209.Mvru99baaF@kreacher>
+ <X/25ssA2scFSu+3/@hirez.programming.kicks-ass.net>
+ <CAJZ5v0gHHPcBbL-EnCYJieMV-pRJWsjb5qC-iqHYznYjzrkitw@mail.gmail.com>
+ <CAJZ5v0gY+WjB2q=wnRYxpwFmLzOcLMKewrCgKdpC0oNPFgoDww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.11-rc4-16-g192963bcaa64
-Subject: pm/testing sleep: 2 runs, 2 regressions (v5.11-rc4-16-g192963bcaa64)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gY+WjB2q=wnRYxpwFmLzOcLMKewrCgKdpC0oNPFgoDww@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 2 runs, 2 regressions (v5.11-rc4-16-g192963bcaa64)
+On Tue, Jan 19, 2021 at 04:12:20PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Jan 12, 2021 at 4:10 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Tue, Jan 12, 2021 at 4:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Fri, Jan 08, 2021 at 07:05:59PM +0100, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > On x86 scale invariace tends to be disabled during resume from
+> > > > suspend-to-RAM, because the MPERF or APERF MSR values are not as
+> > > > expected then due to updates taking place after the platform
+> > > > firmware has been invoked to complete the suspend transition.
+> > > >
+> > > > That, of course, is not desirable, especially if the schedutil
+> > > > scaling governor is in use, because the lack of scale invariance
+> > > > causes it to be less reliable.
+> > > >
+> > > > To counter that effect, modify init_freq_invariance() to register
+> > > > a syscore_ops object for scale invariance with the ->resume callback
+> > > > pointing to init_counter_refs() which will run on the CPU starting
+> > > > the resume transition (the other CPUs will be taken care of the
+> > > > "online" operations taking place later).
+> > > >
+> > > > Fixes: e2b0d619b400 ("x86, sched: check for counters overflow in frequency invariant accounting")
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Thanks!, I'll take it through the sched/urgent tree?
+> >
+> > That works, thanks!
+> 
+> Any news on this front?  It's been a few days ...
 
-Regressions Summary
--------------------
-
-platform            | arch | lab           | compiler | defconfig          =
-| regressions
---------------------+------+---------------+----------+--------------------=
-+------------
-rk3288-rock2-square | arm  | lab-collabora | gcc-8    | multi_v7_defconfig =
-| 2          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.11-rc=
-4-16-g192963bcaa64/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.11-rc4-16-g192963bcaa64
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      192963bcaa64826582bed29644e2a54b81c0fb9a =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform            | arch | lab           | compiler | defconfig          =
-| regressions
---------------------+------+---------------+----------+--------------------=
-+------------
-rk3288-rock2-square | arm  | lab-collabora | gcc-8    | multi_v7_defconfig =
-| 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6006f615015073c434bb5d17
-
-  Results:     2 PASS, 12 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.11-rc4-16-g19296=
-3bcaa64/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
-e.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.11-rc4-16-g19296=
-3bcaa64/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
-e.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0118.2/armhf/rootfs.cpio.gz =
-
-
-
-  * sleep.rtcwake-mem-4: https://kernelci.org/test/case/id/6006f615015073c4=
-34bb5d1a
-        new failure (last pass: v5.11-rc3-19-g9f0b1e583eac)
-
-    2021-01-19 15:08:58.844000+00:00  ake: assuming RTC uses UTC ...
-    2021-01-19 15:08:58.890000+00:00  rtcwake: read rtc time failed: Invali=
-d argument
-    2021-01-19 15:08:58.891000+00:00  1 RESULT=3Dfail>
-    2021-01-19 15:08:58.891000+00:00  rtcwake: assuming RTC uses UTC ...
-    2021-01-19 15:08:58.891000+00:00  rtcwake: read rtc time failed: Invali=
-d argument
-    2021-01-19 15:08:58.891000+00:00  CASE_ID=3Drtcwake-mem-2 RESULT=3Dfail>
-    2021-01-19 15:08:58.891000+00:00  rtcwake: assuming RTC uses UTC ...
-    2021-01-19 15:08:58.892000+00:00  rtcwake: read rtc time failed: Invali=
-d argument
-    2021-01-19 15:08:58.939000+00:00  IGNAL_TESTCASE TEST_CASE_ID=3Drtcwake=
--mem-3 RESULT=3Dfail>
-    2021-01-19 15:08:58.939000+00:00  rtcwake: assuming RTC uses UTC ... =
-
-    ... (2 line(s) more)  =
-
-
-  * sleep.rtcwake-mem-5: https://kernelci.org/test/case/id/6006f615015073c4=
-34bb5d1b
-        new failure (last pass: v5.11-rc3-19-g9f0b1e583eac) =
-
- =20
+My bad, it's been held up behind me trying to fix another sched
+regression. Lemme push out just this one so it doesn't go walk-about.
