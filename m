@@ -2,93 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB2E2FC4A4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 00:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C422FC50E
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 00:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730440AbhASXST (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 18:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S1729379AbhASXhL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 18:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730428AbhASXRy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 18:17:54 -0500
+        with ESMTP id S2395106AbhASOGa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 09:06:30 -0500
 Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E512C0613ED
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 15:17:14 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id 19so23706306qkm.8
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 15:17:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333C3C0613C1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 06:05:44 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id 22so21867790qkf.9
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 06:05:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dB7F3Mtlu9hzcaH0arXRlX+sy8rlfc5xRtRuFS9rvVg=;
-        b=SibYt1GVdrviyGqBHiuRdkDJ212F7mKHeGAGTB3L6VdvZ2tX3F1XaE6kRQ89HeDHwg
-         ctZ9o3Y7tlLWqVfF7LjJMXmKGSrNa7VSowWHy5QAb8k8NxgbCOgJC1zipjomGEe3iJea
-         5TUZlIHbOQHHZiG4nXdh4SABgjHW6NYYLnatBHGCtcOa1VU0mfaYrkyObMYi3FoyzCIS
-         u9No6XJWWpJnuT3Yd0j9glu45Q1AoZ59LbenJHRMpv6VgZ3urxG+tii+h03WPMXVJeF0
-         oYBrTIqMJDQYiiWTHVH+nvfZqnu+QcedayPLqgxAsYcqY9Mg7ssCkwU2X4lXf6mmRWne
-         Q9Ww==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WRH1U9XGgfqWEUznDbBjK+ln/wIg4FAs6AUuAcYpjiM=;
+        b=DkPzlGL8rpnYUhr0x+ghT+YFzXkOJ7sTyBFKUJGFq8VcsE8h4Sln2lwXqVBHI7Lks4
+         xh/4BFR8MqvCwkLi4Q4KsWMPlOCkJH9sfYTbFT68N3+6EfCHlIzkRDwv1hOHGJFGVZDm
+         cHu89JimX1mqMVYoGT+644GjIgt9E4B7cnbvChs+RCzqiakB6vsuPv3oJpS2skHBUvSh
+         p/BDiaR1LSkvGJuANlc+pvGVEpVgaNXii+Oc9YkOnRPUdY4KgCBBPRZVS8VGvVtBNRDy
+         YytAWVFyQ9UpK6+vyh0Rbp+iSLsR/0FlmO5P9UiGEciBE5GqVkbIYlzcwdrIi4b3lBa5
+         qHZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dB7F3Mtlu9hzcaH0arXRlX+sy8rlfc5xRtRuFS9rvVg=;
-        b=FOOxCNS5g3nUTDR4rpKSsmpKylrMOY9LWrek2MRmx1kwK/C6xUb3IJORWQQrMD3hWa
-         tbuUiEjhsoYkL3Oi2rwLwL1zlyrD1S9Hkfxlbe/P3X9dkBnc+zBtn1J5dug52sfeapNF
-         oHoGYKqm7P6i2Mk9DXh8Xk55PTsKASe5/pYDsiKwlw6lFMmDGLYV5l9bdLB6pe0TFjXd
-         3Ed34dM/1r1WIdjiaEMUFnvs2fFrAtL1LKO+SCq+Q0o6z/cEJMHH/chZ/X1NUGWSxSN7
-         vaYU1TIawa9EM9Z0cp8TODuoLJR1GobuA/ftpU5ksXNtdcnnpAgneDEJdegm5Rsjkoq7
-         N1cg==
-X-Gm-Message-State: AOAM5315vr44YgdVPerrv11QkMYH60Mw59YRFvk5/jgJrcPISZr4Bv5p
-        xJUpw2e7DHEhs6L8iSpQu7C3nAlZepZ7EfHf1NkigA==
-X-Google-Smtp-Source: ABdhPJyGeUyg+YiDKqtN0x6dVvip4U9xb9aSUrHVlWP6pb2DIhbKAAN/SFc8tehaF+Bmf26mv1wmQWdcJ5xXSunbNtM=
-X-Received: by 2002:a37:be84:: with SMTP id o126mr3005803qkf.138.1611098233468;
- Tue, 19 Jan 2021 15:17:13 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WRH1U9XGgfqWEUznDbBjK+ln/wIg4FAs6AUuAcYpjiM=;
+        b=l5tO+cjuF1kVD1ojJ4K5oJCZcwKsA7uhJarXOoS+HAEQlmIHXq+BmVyxIVJdDYJ9lL
+         qmgu+falVaIV4l5NneKEeh+Ff3TtTXM8bl1BVeEopWtEth3kFxQ90T1grR6AK2RVLOLu
+         7iuMkx798C10XrkOf8taye6ctRWYcxpm8GwWLTjNtMZ91Mzz0SUTjHmrz35UVLBZ5/W8
+         ax91EIqtr1q2HsXUyO/xTh/GuXgctmpdMENhBGQCMtU72kFP7OHXxzIho3Cj/oW7WPAR
+         271FLI2OTjqIQaO/JpcIVz5KdZtn0HhfYKTEWW4Y76DjRQV5yBIJCg6gnOJhtZY/ZtKg
+         Yf8w==
+X-Gm-Message-State: AOAM533iXBBdKGCZ0JGb01mTlyyJd/b5tG8f+DPwwcrY2XNwfscBdAus
+        ix+usPglG3UGc1DZowxaR9aPuQ==
+X-Google-Smtp-Source: ABdhPJyJW/SKWMo//tsJYkLob0dolrZzCo67MSuqy0v+ITqmyMiKwgdxgev8K215pVK2IvL7oX3pHg==
+X-Received: by 2002:ae9:f819:: with SMTP id x25mr4369008qkh.429.1611065143335;
+        Tue, 19 Jan 2021 06:05:43 -0800 (PST)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id f134sm12910308qke.85.2021.01.19.06.05.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 06:05:42 -0800 (PST)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
+        luciano.coelho@intel.com
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org, amitk@kernel.org,
+        nathan.errera@intel.com
+Subject: [PATCH 0/2] thermal: Replace thermal_notify_framework with thermal_zone_device_update
+Date:   Tue, 19 Jan 2021 09:05:39 -0500
+Message-Id: <20210119140541.2453490-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210119054848.592329-1-dmitry.baryshkov@linaro.org> <078a7025-ce5c-a252-f8f4-694c56153b3a@linaro.org>
-In-Reply-To: <078a7025-ce5c-a252-f8f4-694c56153b3a@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 20 Jan 2021 02:17:02 +0300
-Message-ID: <CAA8EJpr2bubGBtUGf=4+d4ZVT1nReTBzT25scGehdwKy2EepmQ@mail.gmail.com>
-Subject: Re: [PATCH v12 0/5] qcom: pm8150: add support for thermal monitoring
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>, linux-pm@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 19 Jan 2021 at 23:58, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 19/01/2021 06:48, Dmitry Baryshkov wrote:
-> > This patch serie adds support for thermal monitoring block on Qualcomm's
-> > PMIC5 chips. PM8150{,b,l}, qrb5165-rb5 board and sm8250-mtp board device
-> > trees are extended to support thermal zones provided by this thermal
-> > monitoring block.  Unlike the rest of PMIC thermal senses, these thermal
-> > zones describe particular thermistors, which differ between from board
-> > to board.
-> >
-> > Dependencies: https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/log/?h=ib-iio-thermal-5.11-rc1
->
-> Shall I pick 3,4,5 also ?
+thermal_notify_framework just updates for a single trip point where as
+thermal_zone_device_update does other bookkeeping like updating the
+temperature of the thermal zone, running through the list of trip points
+and setting the next trip point etc. Since  the later is a more thorough
+version of former, replace thermal_notify_framework with
+thermal_zone_device_update. 
 
-I have no strong preference on this topic. It might be easier to get
-3,4,5 through lk-qcom so that we won't face possible conflicts. Bjorn?
+Thara Gopinath (2):
+  net: wireless: intel: iwlwifi: mvm: tt: Replace
+    thermal_notify_framework
+  drivers: thermal: Remove thermal_notify_framework
 
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c |  4 ++--
+ drivers/thermal/thermal_core.c              | 18 ------------------
+ include/linux/thermal.h                     |  4 ----
+ 3 files changed, 2 insertions(+), 24 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.25.1
+
