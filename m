@@ -2,346 +2,523 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AAD2FC033
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 20:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A322FC0BE
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 21:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbhASTXP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 14:23:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:46568 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404563AbhASTSP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 19 Jan 2021 14:18:15 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EEB7D6E;
-        Tue, 19 Jan 2021 11:17:27 -0800 (PST)
-Received: from localhost (unknown [10.1.198.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 304873F719;
-        Tue, 19 Jan 2021 11:17:27 -0800 (PST)
-Date:   Tue, 19 Jan 2021 19:17:25 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Puhov <peter.puhov@linaro.org>, Jeremy.Linton@arm.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC V2 2/2] cpufreq: cppc: Add support for frequency invariance
-Message-ID: <20210119191550.GB19274@arm.com>
-References: <cover.1608030508.git.viresh.kumar@linaro.org>
- <069c40c173fc391116d13d60f4c1382c47e1a05a.1608030508.git.viresh.kumar@linaro.org>
+        id S1728886AbhASURY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 15:17:24 -0500
+Received: from mail-oo1-f46.google.com ([209.85.161.46]:34217 "EHLO
+        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728949AbhASUQl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 15:16:41 -0500
+Received: by mail-oo1-f46.google.com with SMTP id x23so5237265oop.1;
+        Tue, 19 Jan 2021 12:16:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ADy6JPToWLaKlK8OT2t2Ni42Mp7UoZX80LpKTwGwr6g=;
+        b=amB9a2Rah6vH6aT9JKEpsVQfR4HYdo0AropPPcWI7eRw8ppSxp2Kq8rw1srAkqSaAi
+         pojFhzNeMjWNIrFYcDsuuoLYHQwDpsiUs16gMV8Bm3lGaI/OYQiBfsy9d0Qpr22X0QCf
+         ruK5YMdBIct7z8mWkMCwEG920NHv4oj9u+LsJPTAWe0iK3VsVWVq4BPuoYzk+ArjcPp2
+         tnuolhSMHkLbqAGatJx694If2Y8eFtKpssGlvTcmB4ccdhNWVMTwcRA1lylPAm5TBYHf
+         wyWARrEjIR8KFU9XNweKegc4tOuhD3Pp3bdE2MQv8SrM2/s9c4shy6VuKjCEDqaKMNbG
+         sD3A==
+X-Gm-Message-State: AOAM530U4kR9Y7j5Ez3++IPRw85NCZNPUqs+P3o0eKYSHlwPqiTUGHx4
+        NR9Z1qIVMwB1EwydU02Iyff15s7m4TELIBq5B4R3mHKp
+X-Google-Smtp-Source: ABdhPJw8ocVEuJExeSaGIk8wgCl35/472S6I+2Arri8MRWBPCuNIUawo+T9prUUI9uKyhqa9dTCj2RKcjtv0pbEwplQ=
+X-Received: by 2002:a4a:bf14:: with SMTP id r20mr4017286oop.2.1611087358781;
+ Tue, 19 Jan 2021 12:15:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <069c40c173fc391116d13d60f4c1382c47e1a05a.1608030508.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz> <3o6s1sr4-60o2-2o54-259o-oq7o635sqo4p@onlyvoer.pbz>
+In-Reply-To: <3o6s1sr4-60o2-2o54-259o-oq7o635sqo4p@onlyvoer.pbz>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Jan 2021 21:15:47 +0100
+Message-ID: <CAJZ5v0jmMmj4tLwP9vLETnxh_Wkbc_XV-Z8yaWRL-jLJ0anetg@mail.gmail.com>
+Subject: Re: [PATCH] PM / clk: make PM clock layer compatible with clocks that
+ must sleep
+To:     Nicolas Pitre <npitre@baylibre.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Mon, Jan 18, 2021 at 12:50 AM Nicolas Pitre <npitre@baylibre.com> wrote:
+>
+> Ping.
 
-Do you know of a current platform that would benefit from this, that we
-could run some tests on?
+Applied as 5.12 material,  sorry for the delay.
 
-I've Cc-ed Jeremy as well, as he might be interested in this.
+Thanks!
 
-Also, please find some initial comments below:
-
-On Tuesday 15 Dec 2020 at 16:46:36 (+0530), Viresh Kumar wrote:
-> The Frequency Invariance Engine (FIE) is providing a frequency scaling
-> correction factor that helps achieve more accurate load-tracking.
-> 
-> Normally, this scaling factor can be obtained directly with the help of
-> the cpufreq drivers as they know the exact frequency the hardware is
-> running at. But that isn't the case for CPPC cpufreq driver.
-> 
-> Another way of obtaining that is using the AMU counter support, which is
-> already present in kernel, but that hardware is optional for platforms.
-> 
-> This patch thus obtains this scaling factor using the existing logic
-> present in the cppc driver. Note that the AMUs have higher priority than
-> CPPC counters if available, though the CPPC driver doesn't need to have
-> any special handling for that.
-> 
-
-Probably best to replace "AMU counters" with "architectural counters" as
-the use of cppc_cpufreq is not limited to arm64.
-
-> This also exports sched_setattr_nocheck() as the CPPC driver can be
-> built as a module.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 140 ++++++++++++++++++++++++++++++++-
->  include/linux/arch_topology.h  |   1 +
->  kernel/sched/core.c            |   1 +
->  3 files changed, 140 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 7cc9bd8568de..a739e20aefd6 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -10,14 +10,18 @@
->  
->  #define pr_fmt(fmt)	"CPPC Cpufreq:"	fmt
->  
-> +#include <linux/arch_topology.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/delay.h>
->  #include <linux/cpu.h>
->  #include <linux/cpufreq.h>
->  #include <linux/dmi.h>
-> +#include <linux/irq_work.h>
-> +#include <linux/kthread.h>
->  #include <linux/time.h>
->  #include <linux/vmalloc.h>
-> +#include <uapi/linux/sched/types.h>
->  
->  #include <asm/unaligned.h>
->  
-> @@ -39,6 +43,15 @@
->  static struct cppc_cpudata **all_cpu_data;
->  static bool boost_supported;
->  
-> +struct cppc_freq_invariance {
-> +	struct kthread_worker *worker;
-> +	struct irq_work irq_work;
-> +	struct kthread_work work;
-> +	struct cppc_perf_fb_ctrs prev_perf_fb_ctrs;
-> +	unsigned int max_freq;
-> +};
-> +static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_f_i);
-> +
->  struct cppc_workaround_oem_info {
->  	char oem_id[ACPI_OEM_ID_SIZE + 1];
->  	char oem_table_id[ACPI_OEM_TABLE_ID_SIZE + 1];
-> @@ -243,7 +256,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  	struct cppc_cpudata *cpu_data = all_cpu_data[policy->cpu];
->  	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
->  	unsigned int cpu = policy->cpu;
-> -	int ret = 0;
-> +	int ret = 0, i;
->  
->  	cpu_data->cpu = cpu;
->  	ret = cppc_get_perf_caps(cpu, caps);
-> @@ -300,6 +313,9 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  
->  	cpu_data->cur_policy = policy;
->  
-> +	for_each_cpu(i, policy->cpus)
-> +		per_cpu(cppc_f_i, i).max_freq = policy->cpuinfo.max_freq;
-> +
-
-Is policy->cpuinfo populated at this point?
-
->  	/*
->  	 * If 'highest_perf' is greater than 'nominal_perf', we assume CPU Boost
->  	 * is supported.
-> @@ -374,7 +390,7 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
->  {
->  	struct cppc_cpudata *cpu_data = all_cpu_data[policy->cpu];
->  	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-> -	int ret;
-> +	int ret, i;
->  
->  	if (!boost_supported) {
->  		pr_err("BOOST not supported by CPU or firmware\n");
-> @@ -389,6 +405,9 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
->  						       caps->nominal_perf);
->  	policy->cpuinfo.max_freq = policy->max;
->  
-> +	for_each_cpu(i, policy->related_cpus)
-> +		per_cpu(cppc_f_i, i).max_freq = policy->cpuinfo.max_freq;
-> +
->  	ret = freq_qos_update_request(policy->max_freq_req, policy->max);
->  	if (ret < 0)
->  		return ret;
-> @@ -449,6 +468,120 @@ static void cppc_check_hisi_workaround(void)
->  	acpi_put_table(tbl);
->  }
->  
-> +static void cppc_scale_freq_tick_workfn(struct kthread_work *work)
-> +{
-> +	struct cppc_freq_invariance *cppc_fi;
-> +	struct cppc_perf_fb_ctrs fb_ctrs = {0};
-> +	int cpu = raw_smp_processor_id();
-> +	struct cppc_cpudata *cpudata = all_cpu_data[cpu];
-> +	u64 rate;
-> +
-> +	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
-> +
-> +	if (cppc_get_perf_ctrs(cpu, &fb_ctrs)) {
-> +		pr_info("%s: cppc_get_perf_ctrs() failed\n", __func__);
-> +		return;
-> +	}
-> +
-> +	rate = cppc_get_rate_from_fbctrs(cpudata, cppc_fi->prev_perf_fb_ctrs, fb_ctrs);
-> +	cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
-> +
-> +	rate <<= SCHED_CAPACITY_SHIFT;
-> +	per_cpu(freq_scale, cpu) = div64_u64(rate, cppc_fi->max_freq);
-
-It will save you some computation by skipping the intermediary frequency
-scale transition. For this computation you're obtaining current
-performance from counters, on the CPPC abstract performance scale,
-then you're converting it to a current frequency, which then gets
-translated again to a scale factor on the [0,1024] scale.
-
-You probably want to keep the sanitation done in
-cppc_get_rate_from_fbctrs() on the counter values, but you could skip
-the call to cppc_cpufreq_perf_to_khz(), and use obtained performance
-together with caps->highest_perf, or caps->nominal_perf instead of
-cppc_fi->max_freq, in this function.
-
-Also, to optimise it further, you can compute a reference scale (from
-reference performance and highest/nominal performance as done in
-freq_inv_set_max_ratio() - arch/arm64/kernel/topology.c, and use that
-instead in further freq scale computations.
-
-I've resurrected my Juno setup and I'll do further review and testing
-tomorrow.
-
-Hope it helps,
-Ionela.
-
-> +}
-> +
-> +static void cppc_irq_work(struct irq_work *irq_work)
-> +{
-> +	struct cppc_freq_invariance *cppc_fi;
-> +
-> +	cppc_fi = container_of(irq_work, struct cppc_freq_invariance, irq_work);
-> +	kthread_queue_work(cppc_fi->worker, &cppc_fi->work);
-> +}
-> +
-> +static void cppc_scale_freq_tick(void)
-> +{
-> +	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_f_i, raw_smp_processor_id());
-> +
-> +	/*
-> +	 * cppc_get_perf_ctrs() can potentially sleep, call that from the right
-> +	 * context.
-> +	 */
-> +	irq_work_queue(&cppc_fi->irq_work);
-> +}
-> +
-> +static struct scale_freq_tick_data cppc_sftd = {
-> +	.source = SCALE_FREQ_SOURCE_CPPC,
-> +	.scale_freq = cppc_scale_freq_tick,
-> +};
-> +
-> +static void cppc_freq_invariance_exit(void)
-> +{
-> +	struct cppc_freq_invariance *cppc_fi;
-> +	int i;
-> +
-> +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +		return;
-> +
-> +	topology_clear_scale_freq_tick(SCALE_FREQ_SOURCE_CPPC, cpu_present_mask);
-> +
-> +	for_each_possible_cpu(i) {
-> +		cppc_fi = &per_cpu(cppc_f_i, i);
-> +		if (cppc_fi->worker) {
-> +			irq_work_sync(&cppc_fi->irq_work);
-> +			kthread_destroy_worker(cppc_fi->worker);
-> +			cppc_fi->worker = NULL;
-> +		}
-> +	}
-> +}
-> +
-> +static void __init cppc_freq_invariance_init(void)
-> +{
-> +	struct cppc_perf_fb_ctrs fb_ctrs = {0};
-> +	struct cppc_freq_invariance *cppc_fi;
-> +	struct sched_attr attr = {
-> +		.size		= sizeof(struct sched_attr),
-> +		.sched_policy	= SCHED_DEADLINE,
-> +		.sched_nice	= 0,
-> +		.sched_priority	= 0,
-> +		/*
-> +		 * Fake (unused) bandwidth; workaround to "fix"
-> +		 * priority inheritance.
-> +		 */
-> +		.sched_runtime	= 1000000,
-> +		.sched_deadline = 10000000,
-> +		.sched_period	= 10000000,
-> +	};
-> +	struct kthread_worker *worker;
-> +	int i, ret;
-> +
-> +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +		return;
-> +
-> +	for_each_possible_cpu(i) {
-> +		cppc_fi = &per_cpu(cppc_f_i, i);
-> +
-> +		kthread_init_work(&cppc_fi->work, cppc_scale_freq_tick_workfn);
-> +		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
-> +		worker = kthread_create_worker_on_cpu(i, 0, "cppc:%d", i);
-> +		if (IS_ERR(worker))
-> +			return cppc_freq_invariance_exit();
-> +
-> +		cppc_fi->worker = worker;
-> +		ret = sched_setattr_nocheck(worker->task, &attr);
-> +		if (ret) {
-> +			pr_warn("%s: failed to set SCHED_DEADLINE\n", __func__);
-> +			return cppc_freq_invariance_exit();
-> +		}
-> +
-> +		ret = cppc_get_perf_ctrs(i, &fb_ctrs);
-> +		if (!ret)
-> +			per_cpu(cppc_fi->prev_perf_fb_ctrs, i) = fb_ctrs;
-> +	}
-> +
-> +	/* Register for freq-invariance */
-> +	topology_set_scale_freq_tick(&cppc_sftd, cpu_present_mask);
-> +}
-> +
->  static int __init cppc_cpufreq_init(void)
->  {
->  	struct cppc_cpudata *cpu_data;
-> @@ -484,6 +617,8 @@ static int __init cppc_cpufreq_init(void)
->  	if (ret)
->  		goto out;
->  
-> +	cppc_freq_invariance_init();
-> +
->  	return ret;
->  
->  out:
-> @@ -504,6 +639,7 @@ static void __exit cppc_cpufreq_exit(void)
->  	struct cppc_cpudata *cpu_data;
->  	int i;
->  
-> +	cppc_freq_invariance_exit();
->  	cpufreq_unregister_driver(&cppc_cpufreq_driver);
->  
->  	for_each_possible_cpu(i) {
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index b2422ebef2dd..09205b584ca5 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -36,6 +36,7 @@ bool topology_scale_freq_invariant(void);
->  
->  enum scale_freq_tick_source {
->  	SCALE_FREQ_SOURCE_AMU,
-> +	SCALE_FREQ_SOURCE_CPPC,
->  };
->  
->  struct scale_freq_tick_data {
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 51514eef0a9d..76b2fa1a7aaa 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -6075,6 +6075,7 @@ int sched_setattr_nocheck(struct task_struct *p, const struct sched_attr *attr)
->  {
->  	return __sched_setscheduler(p, attr, false, true);
->  }
-> +EXPORT_SYMBOL_GPL(sched_setattr_nocheck);
->  
->  /**
->   * sched_setscheduler_nocheck - change the scheduling policy and/or RT priority of a thread from kernelspace.
-> -- 
-> 2.25.0.rc1.19.g042ed3e048af
-> 
+> On Mon, 4 Jan 2021, Nicolas Pitre wrote:
+>
+> > The clock API splits its interface into sleepable ant atomic contexts:
+> >
+> > - clk_prepare/clk_unprepare for stuff that might sleep
+> >
+> > - clk_enable_clk_disable for anything that may be done in atomic context
+> >
+> > The code handling runtime PM for clocks only calls clk_disable() on
+> > suspend requests, and clk_enable on resume requests. This means that
+> > runtime PM with clock providers that only have the prepare/unprepare
+> > methods implemented is basically useless.
+> >
+> > Many clock implementations can't accommodate atomic contexts. This is
+> > often the case when communication with the clock happens through another
+> > subsystem like I2C or SCMI.
+> >
+> > Let's make the clock PM code useful with such clocks by safely invoking
+> > clk_prepare/clk_unprepare upon resume/suspend requests. Of course, when
+> > such clocks are registered with the PM layer then pm_runtime_irq_safe()
+> > can't be used, and neither pm_runtime_suspend() nor pm_runtime_resume()
+> > may be invoked in atomic context.
+> >
+> > For clocks that do implement the enable and disable methods then
+> > everything just works as before.
+> >
+> > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+> >
+> > diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
+> > index ced6863a16..a62fb0f9b1 100644
+> > --- a/drivers/base/power/clock_ops.c
+> > +++ b/drivers/base/power/clock_ops.c
+> > @@ -23,6 +23,7 @@
+> >  enum pce_status {
+> >       PCE_STATUS_NONE = 0,
+> >       PCE_STATUS_ACQUIRED,
+> > +     PCE_STATUS_PREPARED,
+> >       PCE_STATUS_ENABLED,
+> >       PCE_STATUS_ERROR,
+> >  };
+> > @@ -32,8 +33,102 @@ struct pm_clock_entry {
+> >       char *con_id;
+> >       struct clk *clk;
+> >       enum pce_status status;
+> > +     bool enabled_when_prepared;
+> >  };
+> >
+> > +/**
+> > + * pm_clk_list_lock - ensure exclusive access for modifying the PM clock
+> > + *                 entry list.
+> > + * @psd: pm_subsys_data instance corresponding to the PM clock entry list
+> > + *    and clk_op_might_sleep count to be modified.
+> > + *
+> > + * Get exclusive access before modifying the PM clock entry list and the
+> > + * clock_op_might_sleep count to guard against concurrent modifications.
+> > + * This also protects against a concurrent clock_op_might_sleep and PM clock
+> > + * entry list usage in pm_clk_suspend()/pm_clk_resume() that may or may not
+> > + * happen in atomic context, hence both the mutex and the spinlock must be
+> > + * taken here.
+> > + */
+> > +static void pm_clk_list_lock(struct pm_subsys_data *psd)
+> > +{
+> > +     mutex_lock(&psd->clock_mutex);
+> > +     spin_lock_irq(&psd->lock);
+> > +}
+> > +
+> > +/**
+> > + * pm_clk_list_unlock - counterpart to pm_clk_list_lock().
+> > + * @psd: the same pm_subsys_data instance previously passed to
+> > + *    pm_clk_list_lock().
+> > + */
+> > +static void pm_clk_list_unlock(struct pm_subsys_data *psd)
+> > +{
+> > +     spin_unlock_irq(&psd->lock);
+> > +     mutex_unlock(&psd->clock_mutex);
+> > +}
+> > +
+> > +/**
+> > + * pm_clk_op_lock - ensure exclusive access for performing clock operations.
+> > + * @psd: pm_subsys_data instance corresponding to the PM clock entry list
+> > + *    and clk_op_might_sleep count being used.
+> > + * @flags: stored irq flags.
+> > + * @fn: string for the caller function's name.
+> > + *
+> > + * This is used by pm_clk_suspend() and pm_clk_resume() to guard
+> > + * against concurrent modifications to the clock entry list and the
+> > + * clock_op_might_sleep count. If clock_op_might_sleep is != 0 then
+> > + * only the mutex can be locked and those functions can only be used in
+> > + * non atomic context. If clock_op_might_sleep == 0 then these functions
+> > + * may be used in any context and only the spinlock can be locked.
+> > + * Returns -EINVAL if called in atomic context when clock ops might sleep.
+> > + */
+> > +static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
+> > +                       const char *fn)
+> > +{
+> > +     bool atomic_context = in_atomic() || irqs_disabled();
+> > +
+> > +try_again:
+> > +     spin_lock_irqsave(&psd->lock, *flags);
+> > +     if (!psd->clock_op_might_sleep)
+> > +             return 0;
+> > +
+> > +     /* bail out if in atomic context */
+> > +     if (atomic_context) {
+> > +             pr_err("%s: atomic context with clock_ops_might_sleep = %d",
+> > +                    fn, psd->clock_op_might_sleep);
+> > +             spin_unlock_irqrestore(&psd->lock, *flags);
+> > +             might_sleep();
+> > +             return -EPERM;
+> > +     }
+> > +
+> > +     /* we must switch to the mutex */
+> > +     spin_unlock_irqrestore(&psd->lock, *flags);
+> > +     mutex_lock(&psd->clock_mutex);
+> > +
+> > +     /*
+> > +      * There was a possibility for psd->clock_op_might_sleep
+> > +      * to become 0 above. Keep the mutex only if not the case.
+> > +      */
+> > +     if (likely(psd->clock_op_might_sleep))
+> > +             return 0;
+> > +
+> > +     mutex_unlock(&psd->clock_mutex);
+> > +     goto try_again;
+> > +}
+> > +
+> > +/**
+> > + * pm_clk_op_unlock - counterpart to pm_clk_op_lock().
+> > + * @psd: the same pm_subsys_data instance previously passed to
+> > + *    pm_clk_op_lock().
+> > + * @flags: irq flags provided by pm_clk_op_lock().
+> > + */
+> > +static void pm_clk_op_unlock(struct pm_subsys_data *psd, unsigned long *flags)
+> > +{
+> > +     if (psd->clock_op_might_sleep)
+> > +             mutex_unlock(&psd->clock_mutex);
+> > +     else
+> > +             spin_unlock_irqrestore(&psd->lock, *flags);
+> > +}
+> > +
+> >  /**
+> >   * pm_clk_enable - Enable a clock, reporting any errors
+> >   * @dev: The device for the given clock
+> > @@ -43,14 +138,21 @@ static inline void __pm_clk_enable(struct device *dev, struct pm_clock_entry *ce
+> >  {
+> >       int ret;
+> >
+> > -     if (ce->status < PCE_STATUS_ERROR) {
+> > +     switch (ce->status) {
+> > +     case PCE_STATUS_ACQUIRED:
+> > +             ret = clk_prepare_enable(ce->clk);
+> > +             break;
+> > +     case PCE_STATUS_PREPARED:
+> >               ret = clk_enable(ce->clk);
+> > -             if (!ret)
+> > -                     ce->status = PCE_STATUS_ENABLED;
+> > -             else
+> > -                     dev_err(dev, "%s: failed to enable clk %p, error %d\n",
+> > -                             __func__, ce->clk, ret);
+> > +             break;
+> > +     default:
+> > +             return;
+> >       }
+> > +     if (!ret)
+> > +             ce->status = PCE_STATUS_ENABLED;
+> > +     else
+> > +             dev_err(dev, "%s: failed to enable clk %p, error %d\n",
+> > +                     __func__, ce->clk, ret);
+> >  }
+> >
+> >  /**
+> > @@ -64,17 +166,20 @@ static void pm_clk_acquire(struct device *dev, struct pm_clock_entry *ce)
+> >               ce->clk = clk_get(dev, ce->con_id);
+> >       if (IS_ERR(ce->clk)) {
+> >               ce->status = PCE_STATUS_ERROR;
+> > +             return;
+> > +     } else if (clk_is_enabled_when_prepared(ce->clk)) {
+> > +             /* we defer preparing the clock in that case */
+> > +             ce->status = PCE_STATUS_ACQUIRED;
+> > +             ce->enabled_when_prepared = true;
+> > +     } else if (clk_prepare(ce->clk)) {
+> > +             ce->status = PCE_STATUS_ERROR;
+> > +             dev_err(dev, "clk_prepare() failed\n");
+> > +             return;
+> >       } else {
+> > -             if (clk_prepare(ce->clk)) {
+> > -                     ce->status = PCE_STATUS_ERROR;
+> > -                     dev_err(dev, "clk_prepare() failed\n");
+> > -             } else {
+> > -                     ce->status = PCE_STATUS_ACQUIRED;
+> > -                     dev_dbg(dev,
+> > -                             "Clock %pC con_id %s managed by runtime PM.\n",
+> > -                             ce->clk, ce->con_id);
+> > -             }
+> > +             ce->status = PCE_STATUS_PREPARED;
+> >       }
+> > +     dev_dbg(dev, "Clock %pC con_id %s managed by runtime PM.\n",
+> > +             ce->clk, ce->con_id);
+> >  }
+> >
+> >  static int __pm_clk_add(struct device *dev, const char *con_id,
+> > @@ -106,9 +211,11 @@ static int __pm_clk_add(struct device *dev, const char *con_id,
+> >
+> >       pm_clk_acquire(dev, ce);
+> >
+> > -     spin_lock_irq(&psd->lock);
+> > +     pm_clk_list_lock(psd);
+> >       list_add_tail(&ce->node, &psd->clock_list);
+> > -     spin_unlock_irq(&psd->lock);
+> > +     if (ce->enabled_when_prepared)
+> > +             psd->clock_op_might_sleep++;
+> > +     pm_clk_list_unlock(psd);
+> >       return 0;
+> >  }
+> >
+> > @@ -239,14 +346,20 @@ static void __pm_clk_remove(struct pm_clock_entry *ce)
+> >       if (!ce)
+> >               return;
+> >
+> > -     if (ce->status < PCE_STATUS_ERROR) {
+> > -             if (ce->status == PCE_STATUS_ENABLED)
+> > -                     clk_disable(ce->clk);
+> > -
+> > -             if (ce->status >= PCE_STATUS_ACQUIRED) {
+> > -                     clk_unprepare(ce->clk);
+> > +     switch (ce->status) {
+> > +     case PCE_STATUS_ENABLED:
+> > +             clk_disable(ce->clk);
+> > +             fallthrough;
+> > +     case PCE_STATUS_PREPARED:
+> > +             clk_unprepare(ce->clk);
+> > +             fallthrough;
+> > +     case PCE_STATUS_ACQUIRED:
+> > +     case PCE_STATUS_ERROR:
+> > +             if (!IS_ERR(ce->clk))
+> >                       clk_put(ce->clk);
+> > -             }
+> > +             break;
+> > +     default:
+> > +             break;
+> >       }
+> >
+> >       kfree(ce->con_id);
+> > @@ -269,7 +382,7 @@ void pm_clk_remove(struct device *dev, const char *con_id)
+> >       if (!psd)
+> >               return;
+> >
+> > -     spin_lock_irq(&psd->lock);
+> > +     pm_clk_list_lock(psd);
+> >
+> >       list_for_each_entry(ce, &psd->clock_list, node) {
+> >               if (!con_id && !ce->con_id)
+> > @@ -280,12 +393,14 @@ void pm_clk_remove(struct device *dev, const char *con_id)
+> >                       goto remove;
+> >       }
+> >
+> > -     spin_unlock_irq(&psd->lock);
+> > +     pm_clk_list_unlock(psd);
+> >       return;
+> >
+> >   remove:
+> >       list_del(&ce->node);
+> > -     spin_unlock_irq(&psd->lock);
+> > +     if (ce->enabled_when_prepared)
+> > +             psd->clock_op_might_sleep--;
+> > +     pm_clk_list_unlock(psd);
+> >
+> >       __pm_clk_remove(ce);
+> >  }
+> > @@ -307,19 +422,21 @@ void pm_clk_remove_clk(struct device *dev, struct clk *clk)
+> >       if (!psd || !clk)
+> >               return;
+> >
+> > -     spin_lock_irq(&psd->lock);
+> > +     pm_clk_list_lock(psd);
+> >
+> >       list_for_each_entry(ce, &psd->clock_list, node) {
+> >               if (clk == ce->clk)
+> >                       goto remove;
+> >       }
+> >
+> > -     spin_unlock_irq(&psd->lock);
+> > +     pm_clk_list_unlock(psd);
+> >       return;
+> >
+> >   remove:
+> >       list_del(&ce->node);
+> > -     spin_unlock_irq(&psd->lock);
+> > +     if (ce->enabled_when_prepared)
+> > +             psd->clock_op_might_sleep--;
+> > +     pm_clk_list_unlock(psd);
+> >
+> >       __pm_clk_remove(ce);
+> >  }
+> > @@ -330,13 +447,16 @@ EXPORT_SYMBOL_GPL(pm_clk_remove_clk);
+> >   * @dev: Device to initialize the list of PM clocks for.
+> >   *
+> >   * Initialize the lock and clock_list members of the device's pm_subsys_data
+> > - * object.
+> > + * object, set the count of clocks that might sleep to 0.
+> >   */
+> >  void pm_clk_init(struct device *dev)
+> >  {
+> >       struct pm_subsys_data *psd = dev_to_psd(dev);
+> > -     if (psd)
+> > +     if (psd) {
+> >               INIT_LIST_HEAD(&psd->clock_list);
+> > +             mutex_init(&psd->clock_mutex);
+> > +             psd->clock_op_might_sleep = 0;
+> > +     }
+> >  }
+> >  EXPORT_SYMBOL_GPL(pm_clk_init);
+> >
+> > @@ -372,12 +492,13 @@ void pm_clk_destroy(struct device *dev)
+> >
+> >       INIT_LIST_HEAD(&list);
+> >
+> > -     spin_lock_irq(&psd->lock);
+> > +     pm_clk_list_lock(psd);
+> >
+> >       list_for_each_entry_safe_reverse(ce, c, &psd->clock_list, node)
+> >               list_move(&ce->node, &list);
+> > +     psd->clock_op_might_sleep = 0;
+> >
+> > -     spin_unlock_irq(&psd->lock);
+> > +     pm_clk_list_unlock(psd);
+> >
+> >       dev_pm_put_subsys_data(dev);
+> >
+> > @@ -397,23 +518,30 @@ int pm_clk_suspend(struct device *dev)
+> >       struct pm_subsys_data *psd = dev_to_psd(dev);
+> >       struct pm_clock_entry *ce;
+> >       unsigned long flags;
+> > +     int ret;
+> >
+> >       dev_dbg(dev, "%s()\n", __func__);
+> >
+> >       if (!psd)
+> >               return 0;
+> >
+> > -     spin_lock_irqsave(&psd->lock, flags);
+> > +     ret = pm_clk_op_lock(psd, &flags, __func__);
+> > +     if (ret)
+> > +             return ret;
+> >
+> >       list_for_each_entry_reverse(ce, &psd->clock_list, node) {
+> > -             if (ce->status < PCE_STATUS_ERROR) {
+> > -                     if (ce->status == PCE_STATUS_ENABLED)
+> > +             if (ce->status == PCE_STATUS_ENABLED) {
+> > +                     if (ce->enabled_when_prepared) {
+> > +                             clk_disable_unprepare(ce->clk);
+> > +                             ce->status = PCE_STATUS_ACQUIRED;
+> > +                     } else {
+> >                               clk_disable(ce->clk);
+> > -                     ce->status = PCE_STATUS_ACQUIRED;
+> > +                             ce->status = PCE_STATUS_PREPARED;
+> > +                     }
+> >               }
+> >       }
+> >
+> > -     spin_unlock_irqrestore(&psd->lock, flags);
+> > +     pm_clk_op_unlock(psd, &flags);
+> >
+> >       return 0;
+> >  }
+> > @@ -428,18 +556,21 @@ int pm_clk_resume(struct device *dev)
+> >       struct pm_subsys_data *psd = dev_to_psd(dev);
+> >       struct pm_clock_entry *ce;
+> >       unsigned long flags;
+> > +     int ret;
+> >
+> >       dev_dbg(dev, "%s()\n", __func__);
+> >
+> >       if (!psd)
+> >               return 0;
+> >
+> > -     spin_lock_irqsave(&psd->lock, flags);
+> > +     ret = pm_clk_op_lock(psd, &flags, __func__);
+> > +     if (ret)
+> > +             return ret;
+> >
+> >       list_for_each_entry(ce, &psd->clock_list, node)
+> >               __pm_clk_enable(dev, ce);
+> >
+> > -     spin_unlock_irqrestore(&psd->lock, flags);
+> > +     pm_clk_op_unlock(psd, &flags);
+> >
+> >       return 0;
+> >  }
+> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > index 8c1d04db99..3d751ae5bc 100644
+> > --- a/drivers/clk/clk.c
+> > +++ b/drivers/clk/clk.c
+> > @@ -1164,6 +1164,27 @@ int clk_enable(struct clk *clk)
+> >  }
+> >  EXPORT_SYMBOL_GPL(clk_enable);
+> >
+> > +/**
+> > + * clk_is_enabled_when_prepared - indicate if preparing a clock also enables it.
+> > + * @clk: clock source
+> > + *
+> > + * Returns true if clk_prepare() implicitly enables the clock, effectively
+> > + * making clk_enable()/clk_disable() no-ops, false otherwise.
+> > + *
+> > + * This is of interest mainly to power management code where actually
+> > + * disabling the clock also requires unpreparing it to have any material
+> > + * effect.
+> > + *
+> > + * Regardless of the value returned here, the caller must always invoke
+> > + * clk_enable() or clk_prepare_enable()  and counterparts for usage counts
+> > + * to be right.
+> > + */
+> > +bool clk_is_enabled_when_prepared(struct clk *clk)
+> > +{
+> > +     return clk && !(clk->core->ops->enable && clk->core->ops->disable);
+> > +}
+> > +EXPORT_SYMBOL_GPL(clk_is_enabled_when_prepared);
+> > +
+> >  static int clk_core_prepare_enable(struct clk_core *core)
+> >  {
+> >       int ret;
+> > diff --git a/include/linux/clk.h b/include/linux/clk.h
+> > index 31ff1bf1b7..71295906a2 100644
+> > --- a/include/linux/clk.h
+> > +++ b/include/linux/clk.h
+> > @@ -554,6 +554,23 @@ void clk_disable(struct clk *clk);
+> >   */
+> >  void clk_bulk_disable(int num_clks, const struct clk_bulk_data *clks);
+> >
+> > +/**
+> > + * clk_is_enabled_when_prepared - indicate if preparing a clock also enables it.
+> > + * @clk: clock source
+> > + *
+> > + * Returns true if clk_prepare() implicitly enables the clock, effectively
+> > + * making clk_enable()/clk_disable() no-ops, false otherwise.
+> > + *
+> > + * This is of interest mainly to the power management code where actually
+> > + * disabling the clock also requires unpreparing it to have any material
+> > + * effect.
+> > + *
+> > + * Regardless of the value returned here, the caller must always invoke
+> > + * clk_enable() or clk_prepare_enable()  and counterparts for usage counts
+> > + * to be right.
+> > + */
+> > +bool clk_is_enabled_when_prepared(struct clk *clk);
+> > +
+> >  /**
+> >   * clk_get_rate - obtain the current clock rate (in Hz) for a clock source.
+> >   *             This is only valid once the clock source has been enabled.
+> > diff --git a/include/linux/pm.h b/include/linux/pm.h
+> > index 47aca6bac1..482313a8cc 100644
+> > --- a/include/linux/pm.h
+> > +++ b/include/linux/pm.h
+> > @@ -537,6 +537,8 @@ struct pm_subsys_data {
+> >       spinlock_t lock;
+> >       unsigned int refcount;
+> >  #ifdef CONFIG_PM_CLK
+> > +     unsigned int clock_op_might_sleep;
+> > +     struct mutex clock_mutex;
+> >       struct list_head clock_list;
+> >  #endif
+> >  #ifdef CONFIG_PM_GENERIC_DOMAINS
+> >
