@@ -2,115 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391CA2FBA24
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 15:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC2E2FBA26
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 15:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389168AbhASOob (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 09:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S1730796AbhASOor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 09:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730796AbhASJ4H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 04:56:07 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367FBC061575
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 01:55:15 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id g3so10213206plp.2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 01:55:15 -0800 (PST)
+        with ESMTP id S2389315AbhASKC2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 05:02:28 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEFDC0613C1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 02:01:27 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id p20so3468224vsq.7
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 02:01:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xAqXt2hrMnUwGHY4K/vXVEtDT5xO+PqICWyHvp6jNI4=;
-        b=yLyMj40c8dpxG49080WIa+e1h0pdwJbbPb6WrmW/NlllBflJkMeezxlqx/j4D5Eu+f
-         UVjn8MO4sm0KngRQxbChnQghGE8x7cuFzzgtIWVDa4mwXm+TnRc3LgZNKRDKwjDIWqk/
-         xd1U0afI3Wfh4S7IEVlwnL6i/FE6p/oj8XtHRhcJDpvC45IRYws7FU6ZBKyBFqPyed4U
-         MoieLszFLBCu2JWPzofsc8lwyRT7UFSDBPMDaoTmg4iGU+VoBu3jjofvFwH1C2en01Mf
-         UePfcVcZW4+RGC2J74FvKjBsbvFQ0mWIWrfMWdyEpT6tW6pjxGN2/N1X2RjaVTPIu+SA
-         92aw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZFiICJwniMc0Mg91xgmY2/SkSt2U98JxqZWHMzErHqI=;
+        b=EJRJbsr3k7ZHbk8Tfyu4r3RFd7m7/nXBSpmTxaHZ1j6GYoE3PHBScLqAWa0H1U+VXq
+         24pDFQT09sOrdWpptqcrUJt89G0GBdQoHexg9QHOjqLyqD1c6lH3B9zfEJBjmaX6wgg3
+         5eOOPxFTyAs17E+U4GWXMLgn5jC9xvbCY5LBV5gDTi0pQf4eGOGX6YwUXWN0opi55hFF
+         ZpepDAm2dyDyds6SJp9u6VSkRYwFL8lq8FfayCw8xs3a7SEVaBFi/0XWHRNDt9Fufo3J
+         r20PFRCQOBbitGw81vBlUkwyzw2j1SvkwiIubHo3QRPYAlBqubrwQJQm959qigD67a4f
+         BYnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xAqXt2hrMnUwGHY4K/vXVEtDT5xO+PqICWyHvp6jNI4=;
-        b=GSlX9a4jdOzZa+93aieHSa0KWAIY1yTlvRDlf6hDNSrgqA/P66unWaBZsk4BV+NiTa
-         7/8yfWoyW7AEyJjlT4HeUgFnI0CcKzeGLFKugX3JYgVgue+JF4tAeujFPoldtOso1RKl
-         ECBaNjlWBa2H2Y6GnTjnsj1k3GjcBUNFq7k8dnE0YfegxB2XJRWFW1f2g6uKK/ZLDA4t
-         i4dzdFd+RUeUGIX877KgzdTIICE5LFpj8YlPkCi31vE0PZZDiYrjuodszrpeMbR9AsMJ
-         iFCXaO1DOaU2EVFCaxKD6BksnC/0bPkUqwRuZvpMc2/rXnSh2rnw4t2Mmi1AWyLM5O0e
-         UX7A==
-X-Gm-Message-State: AOAM531AiUhSG70+eSphY58FJYMZcVvfh4I766ujTr3ohcQhy7nOAftU
-        8y3KQOJL1u1baDzzyIiC8ROg+A==
-X-Google-Smtp-Source: ABdhPJzzA9SrNQFl+F6LdDy36vNrtNXWt6cwOvgIfknJpkBo8QX65rmWDW606+FJKruuIfh0mqyekA==
-X-Received: by 2002:a17:90a:fa84:: with SMTP id cu4mr4536724pjb.0.1611050114175;
-        Tue, 19 Jan 2021 01:55:14 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id q9sm18869325pgb.82.2021.01.19.01.55.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Jan 2021 01:55:13 -0800 (PST)
-Date:   Tue, 19 Jan 2021 15:25:11 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] PM: domains: Make set_performance_state()
- callback optional
-Message-ID: <20210119095511.s3xntwwq4g65dcoa@vireshk-i7>
-References: <20210118011330.4145-1-digetx@gmail.com>
- <20210118011330.4145-2-digetx@gmail.com>
- <20210118072855.anncyl6z3e5uznvd@vireshk-i7>
- <CAPDyKFquCGUSTvcCpmN0vm1eGEz9B_hYSNm7wojhgwuXT=jkEQ@mail.gmail.com>
- <20210118110506.linvsoca7jbl42iq@vireshk-i7>
- <CAPDyKFr7SD_A9sKD2+90XfjP09T+PCLE=8qvn=M-yPEPXvBhsg@mail.gmail.com>
- <20210119034428.qgjjlvti6sirsnzy@vireshk-i7>
- <CAPDyKFp3OpV5qgfB_EGf=fyCR5b0b0zntbsXAJJsWbJX09gF6A@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZFiICJwniMc0Mg91xgmY2/SkSt2U98JxqZWHMzErHqI=;
+        b=UqNfkgg6yWwxdaJKQzZrSR134Raa6SjBrYwAtqA7vxzGSYnClEalunBe2cYpdwcoDg
+         O79NpStPmh9T98MgD/o0Bbu9jNki9BsERa+x8XXw2+71MOYLABJ0g01cXLIWZQSkOdt4
+         kms1esbHpZVeEmk+2R3IvjYocNr9IzT0hHAESdszFj+/UxgYi/sNIOBGBbBsZWYLLXtJ
+         MzYVN9skKQVM2eQrH+/LXcemN2HIfH0rRG9iQlQP40eJ2/I+njvoQM3pRAlaz8ENaJ1w
+         xXRmjb4tyEicrLOphSc1DuIOPM/vwsNjyCLuxlkezpVW+SLTaJBES7O1Kogrhk7gakMB
+         v5MQ==
+X-Gm-Message-State: AOAM531lpEDzRoYy/Xv7+/E5nweEVXRAXGZsDP9yYmcql8/LHrDTsFXg
+        vaRdr6SAnK6OLyl1onTFJdPzR8phWrJigtur2cFqSA==
+X-Google-Smtp-Source: ABdhPJy2RQAuq0B7Krbdn+Ul9WJ02t79YLdw2ym10tsq+ZsL8PYYwZCm7Zo1EGHSq8lvwMbikXefekKPz4bpkUaUzKY=
+X-Received: by 2002:a67:c787:: with SMTP id t7mr2238076vsk.48.1611050486284;
+ Tue, 19 Jan 2021 02:01:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFp3OpV5qgfB_EGf=fyCR5b0b0zntbsXAJJsWbJX09gF6A@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20210115165004.22385-1-ilina@codeaurora.org> <20210115165004.22385-2-ilina@codeaurora.org>
+In-Reply-To: <20210115165004.22385-2-ilina@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 19 Jan 2021 11:00:50 +0100
+Message-ID: <CAPDyKFqcPsr-aLP0zRgj2F4h_j0Vj7kSy5-aiH5qyH47dM6oYA@mail.gmail.com>
+Subject: Re: [PATCH v8 1/2] PM / domains: inform PM domain of a device's next wakeup
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-01-21, 10:52, Ulf Hansson wrote:
-> That would work if the topology is built from top to bottom, but I
-> don't think we can rely on that.
-> 
-> For example, when a domain A is added as a child to domain B, domain B
-> doesn't have a parent yet (and the "can-handle-pstates" don't get set
-> for neither domain A or domain B). Next, domain B is added as child
-> domain to domain C. Domain C has the "can-handle-pstates" set, which
-> means domain B gets the "can-handle-pstates" set as well. This means
-> domain A, will not have "can-handle-pstates" set, while it probably
-> should have.
+On Fri, 15 Jan 2021 at 17:50, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> Some devices may have a predictable interrupt pattern while executing
+> usecases. An example would be the VSYNC interrupt associated with
+> display devices. A 60 Hz display could cause a interrupt every 16 ms. If
+> the device were in a PM domain, the domain would need to be powered up
+> for device to resume and handle the interrupt.
+>
+> Entering a domain idle state saves power, only if the residency of the
+> idle state is met. Without knowing the idle duration of the domain, the
+> governor would just choose the deepest idle state that matches the QoS
+> requirements. The domain might be powered off just as the device is
+> expecting to wake up. If devices could inform PM frameworks of their
+> next event, the parent PM domain's idle duration can be determined.
+>
+> So let's add the dev_pm_genpd_set_next_wakeup() API for the device to
+> inform PM domains of the impending wakeup. This information will be the
+> domain governor to determine the best idle state given the wakeup.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+> Changes in v8:
+>         - Update documentation. Add Reviewed-by tag.
+> Changes in v7:
+>         - Simplify and set next-wakeup locklessly
+> Changes in v6:
+>         - Update documentation
+> Changes in v5:
+>         - Fix commit text as pointed by Ulf
+>         - Use -EOPNOTSUPP
+> Changes in v4:
+>         - Use PM domain data to store next_wakeup
+>         - Drop runtime PM documentation
+> Changes in v3:
+>         - Fix unwanted change
+> Changes in v2:
+>         - Update documentation
+>         - Remove runtime PM enabled check
+>         - Update commit text
+> ---
+>  drivers/base/power/domain.c | 25 +++++++++++++++++++++++++
+>  include/linux/pm_domain.h   |  6 ++++++
+>  2 files changed, 31 insertions(+)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 9a14eedacb92..10a960bd3204 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -423,6 +423,30 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+>
+> +/**
+> + * dev_pm_genpd_set_next_wakeup - Notify PM framework of an impending wakeup.
+> + *
+> + * @dev: Device to handle
+> + * @next: impending interrupt/wakeup for the device
+> + *
+> + *
+> + * Allow devices to inform of the next wakeup. It's assumed that the users
+> + * guarantee that the genpd wouldn't be detached while this routine is getting
+> + * called. Additionally, it's also assumed that @dev isn't runtime suspended
+> + * (RPM_SUSPENDED)."
+> + * Although devices are expected to update the next_wakeup after the end of
+> + * their usecase as well, it is possible the devices themselves may not know
+> + * about that, so stale @next will be ignored when powering off the domain.
+> + */
+> +void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+> +{
+> +       struct generic_pm_domain_data *gpd_data;
 
-Okay, I missed that part.
+Looks like you have dropped one of the needed sanity checks, to make
+sure the device is attached to a genpd. My apologies if I missed that
+in the previous version. So you need something like this:
 
-> >
-> > > So, maybe we should simply just stick to the existing code, forcing
-> > > the parent to have a ->set_performance() callback assigned if
-> > > propagation should continue?
-> >
-> > I think it would be better to fix the issue even if we aren't fully optimized
-> > and making the change to make sure we keep propagating is rather important.
-> 
-> Alright, let's continue with Dmitry's patches and discuss this further
-> when v4 is out, as he seems to have it almost ready.
+genpd = dev_to_genpd_safe(dev);
+if (!genpd)
+    return;
 
-Right.
+> +
+> +       gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
+> +       gpd_data->next_wakeup = next;
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_genpd_set_next_wakeup);
+> +
+>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>  {
+>         unsigned int state_idx = genpd->state_idx;
+> @@ -1465,6 +1489,7 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev)
+>         gpd_data->td.constraint_changed = true;
+>         gpd_data->td.effective_constraint_ns = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
+>         gpd_data->nb.notifier_call = genpd_dev_pm_qos_notifier;
+> +       gpd_data->next_wakeup = KTIME_MAX;
+>
+>         spin_lock_irq(&dev->power.lock);
+>
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 2ca919ae8d36..735583c0bc6d 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -9,6 +9,7 @@
+>  #define _LINUX_PM_DOMAIN_H
+>
+>  #include <linux/device.h>
+> +#include <linux/ktime.h>
+>  #include <linux/mutex.h>
+>  #include <linux/pm.h>
+>  #include <linux/err.h>
+> @@ -191,6 +192,7 @@ struct generic_pm_domain_data {
+>         struct notifier_block *power_nb;
+>         int cpu;
+>         unsigned int performance_state;
+> +       ktime_t next_wakeup;
+>         void *data;
+>  };
+>
+> @@ -217,6 +219,7 @@ int pm_genpd_remove(struct generic_pm_domain *genpd);
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>  int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>  int dev_pm_genpd_remove_notifier(struct device *dev);
+> +void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
+>
+>  extern struct dev_power_governor simple_qos_governor;
+>  extern struct dev_power_governor pm_domain_always_on_gov;
+> @@ -275,6 +278,9 @@ static inline int dev_pm_genpd_remove_notifier(struct device *dev)
+>         return -EOPNOTSUPP;
+>  }
+>
+> +static inline void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+> +{ }
+> +
+>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
+>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
+>  #endif
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
 
--- 
-viresh
+Kind regards
+Uffe
