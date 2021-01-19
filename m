@@ -2,143 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED762FC274
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 22:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB772FC275
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 22:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391317AbhASRs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 12:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732203AbhASPGb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 10:06:31 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A991C061573
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 07:04:34 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id r4so10643923pls.11
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 07:04:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=obLBRjopawFQS1P0rqiT1SLY+yVd5BfnpOSpsiCeQOg=;
-        b=P2ovxFuQDjm6i1Kc1LZl71Kh1iEyhh65t8/0MCrbGJjM+rEM3R970ra2v1YbJn7FUa
-         1O6/9sso/ZaiDcjnBEplmpI02ExkVe3tuqK45OK+RHBtsi+h8atAkUShz7ctunjpY5wh
-         f53aMEw9XjpuVXYy3t998cx+jMbNy3O1f/+hoZPkdhP7lNa6k4yKiJxeyhswP6eIBLrP
-         4MalxEix3AtW9p4qTm+jvGfx6TjTTvXOm8l3gI0dcKCgawja98u1XWtdgM30T9m/cV2n
-         Y1weFt0sw8roZRCwOil7kwjZLKGiQT9b74Uy9QDoH0NyaTxqAFK2pA0Ad7LNzwe8/5Si
-         sHoQ==
+        id S2391497AbhASRsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 12:48:31 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:34267 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389124AbhASPKG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 10:10:06 -0500
+Received: by mail-oi1-f173.google.com with SMTP id h192so3782786oib.1;
+        Tue, 19 Jan 2021 07:09:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=obLBRjopawFQS1P0rqiT1SLY+yVd5BfnpOSpsiCeQOg=;
-        b=KnVxSgn8WJH9KRzowJDHW4nH/n6XoK9cPNXoBETeeMOjV8NCptmM2VB7q+tV4ZdOkm
-         y9HsFGKKEfF/S1rdHOmrSHFxokE6E91XwZ/yIhiD90vtOCtoAu1hpi6kJT/v57Ak7HPb
-         0pJHF/el9N0gdi8NK6+UqyOlYc0zyeyJqN5L9f0RqA9bZeSm5rKeRZMT9i0AolNxgojE
-         3VymVwbACrEoAo5IbQG6O2+q7Upnkn8rfxtK0e7Fpc/hXXY2l7dQLRT2jKRbAAvJbfpT
-         ISdzJ39Y7kG7wiOktwdEhpkABQ1VFBduTM4U1x9nGR8/thZiyurH2IPGxDALsy4s12eS
-         ewQA==
-X-Gm-Message-State: AOAM531qJTwfcBkzCIQhDWq0c+zq90UMLQPZC22+dcVNCV8b7iWoZqvZ
-        +j0d7QXOVJqtfrfFE/6PsqaS64nHu3N++Q==
-X-Google-Smtp-Source: ABdhPJz5Apet0aiImh5hOn4lqyBPRePY7QfHi7TDCE3PbT+pPnVLJZNesa11IUEdD0uyPn+I8MA7Gg==
-X-Received: by 2002:a17:902:6903:b029:da:f458:798c with SMTP id j3-20020a1709026903b02900daf458798cmr5154506plk.68.1611068674086;
-        Tue, 19 Jan 2021 07:04:34 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e63sm10328723pfe.216.2021.01.19.07.04.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 07:04:33 -0800 (PST)
-Message-ID: <6006f501.1c69fb81.1f180.756a@mx.google.com>
-Date:   Tue, 19 Jan 2021 07:04:33 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=++IVvZ2kgMH9GFUIsq1f35VqyxedSb+37MMbjI/pptM=;
+        b=hl/xht3qMp9MY3jCzXV9rW2vBoT9ag3SuiFDexdwFyidky0/AMIp0cfF6EuvVnQHfi
+         l5o5nPiiN1osEkj/MnhvkCfMEZj/L5yXQhXb/M4HjwIVFz27YI8p+9F8vflj/lddxkS0
+         pfRwI74D0CtkUbnm/Gg2r/3J0oINrh8Q1AXiu8XvSDCGfcluhfuMAMrmL0yTsfRolqRX
+         GaLzG0ci+Vi9Hl5lFrBV80MIXVVcBp9GzxXJtfgG2/aWbiE5GIVXTsp3M+rmtO5Sm79r
+         5MBph/H/Gb09Qny9gZspLDqmJah2NEP1eACRuprCdutYomaz39nZb06Homk7jFjSdQxW
+         cg9A==
+X-Gm-Message-State: AOAM532foQSl+SUFRILoFVA0VvQbbcKI9ir1zmibJ7ur/ajLowcg4sv0
+        migMqtxMt0PdmWEcnZxCMEsiY9Tp7FtyEVCcNs0=
+X-Google-Smtp-Source: ABdhPJydK8I08ZXQnAS/dd+fKv2KFZZSvWr0szZww8Tr4PPJ6llRQU50vaBDj10O+1EUD94dAUTmBfJIzxlI7Mioymg=
+X-Received: by 2002:aca:308a:: with SMTP id w132mr51025oiw.69.1611068965134;
+ Tue, 19 Jan 2021 07:09:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.11-rc4-16-g192963bcaa64
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 1 warning (v5.11-rc4-16-g192963bcaa64)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <17705994.d592GUb2YH@kreacher>
+In-Reply-To: <17705994.d592GUb2YH@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Jan 2021 16:09:14 +0100
+Message-ID: <CAJZ5v0gccJKSVuN-okBnvHPjNYJ_FbkzfOueb=AUDr2xHaL7Xg@mail.gmail.com>
+Subject: Re: [PATCH v2] driver core: Extend device_is_dependent()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 1 warning (v5.11-rc4-16-g19=
-2963bcaa64)
+On Fri, Jan 15, 2021 at 7:31 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> If the device passed as the target (second argument) to
+> device_is_dependent() is not completely registered (that is, it has
+> been initialized, but not added yet), but the parent pointer of it
+> is set, it may be missing from the list of the parent's children
+> and device_for_each_child() called by device_is_dependent() cannot
+> be relied on to catch that dependency.
+>
+> For this reason, modify device_is_dependent() to check the ancestors
+> of the target device by following its parent pointer in addition to
+> the device_for_each_child() walk.
+>
+> Fixes: 9ed9895370ae ("driver core: Functional dependencies tracking support")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reported-by: Stephan Gerhold <stephan@gerhold.net>
+> Tested-by: Stephan Gerhold <stephan@gerhold.net>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-11-rc4-16-g192963bcaa64/
+Greg, are you going to pick up this one or do you want me to take care of it?
 
-Tree: pm
-Branch: testing
-Git Describe: v5.11-rc4-16-g192963bcaa64
-Git Commit: 192963bcaa64826582bed29644e2a54b81c0fb9a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+It has been reviewed by Saravana.
 
-Warnings Detected:
-
-arc:
-
-arm:
-    multi_v7_defconfig (gcc-8): 1 warning
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused v=
-ariable =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused variab=
-le =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+> ---
+>
+> -> v2:
+>    * Improve the changelog.
+>    * Add a comment to explain the reason for the extra check.
+>    * Add tags.
+>
+>    No code changes.
+>
+> ---
+>  drivers/base/core.c |   17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+>
+> Index: linux-pm/drivers/base/core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/core.c
+> +++ linux-pm/drivers/base/core.c
+> @@ -208,6 +208,16 @@ int device_links_read_lock_held(void)
+>  #endif
+>  #endif /* !CONFIG_SRCU */
+>
+> +static bool device_is_ancestor(struct device *dev, struct device *target)
+> +{
+> +       while (target->parent) {
+> +               target = target->parent;
+> +               if (dev == target)
+> +                       return true;
+> +       }
+> +       return false;
+> +}
+> +
+>  /**
+>   * device_is_dependent - Check if one device depends on another one
+>   * @dev: Device to check dependencies for.
+> @@ -221,7 +231,12 @@ int device_is_dependent(struct device *d
+>         struct device_link *link;
+>         int ret;
+>
+> -       if (dev == target)
+> +       /*
+> +        * The "ancestors" check is needed to catch the case when the target
+> +        * device has not been completely initialized yet and it is still
+> +        * missing from the list of children of its parent device.
+> +        */
+> +       if (dev == target || device_is_ancestor(dev, target))
+>                 return 1;
+>
+>         ret = device_for_each_child(dev, target, device_is_dependent);
+>
+>
+>
