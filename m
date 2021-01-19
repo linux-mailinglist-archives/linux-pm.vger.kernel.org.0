@@ -2,92 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 769032FBA2E
+	by mail.lfdr.de (Postfix) with ESMTP id E1E9E2FBA2F
 	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 15:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390723AbhASOpt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 09:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405177AbhASLGH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 06:06:07 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3D4C061757
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 03:05:20 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id q131so1669021pfq.10
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 03:05:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4TOzYyZIin/yiRGi1ie9o6/CbIyjNQOy95/3SVEBU9A=;
-        b=uExiI/2TzOCWPI0pjBTK0TdMIUfxRWt8KPMbORnS5c9XO68eyPvKDWJwxuopER796L
-         vURhfaHxKLDrdEPMFkOr9D58bDFAGeSBZqyZoZFnV8Ds7wkLh1pLnTtIRfKzC3SNrIG8
-         4yP6GQFO22QzekfpAs4U1eCA1618km+cf6i7I1xDcH3U66TWqpFoSnJURTiEhgICz/DU
-         PNnFj2qdBYVwZw3IYfwhM3DmNJJsRyPbxgsnldEdXpXHVPwmlxWQ3gmqbfaoayhgLuzv
-         3XIncpgMG7FADLMlh68SnARce4hUuVnnPuu2JPftCXyp7Mk01bVkT2woy+Zvbj/1lR5b
-         eoIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4TOzYyZIin/yiRGi1ie9o6/CbIyjNQOy95/3SVEBU9A=;
-        b=RJUB+Lrf5dyVdAVAZ4cehUhfM1LyCOGcSw7JKljazkx46jUOKXTyQEFmKvG24RlbOJ
-         Rah1ArckAnjfxI7kiT4WwfapBNioX0W5M1RpH93ZKHXR9FeDazszLdzNbMB+Klf2YFP7
-         D27zPpjIFyl+EH4ce8BJmM8T90f5Jkwnnni1PK5nxpLX+TLD2XlMB4tsL/NATL3kJ4zR
-         yxVSarQKOSJNIrv/RGTlqwuNfhqg1/hj5IOdJHXL0UEvF10b+qkQOTj7GDvEr3W/DRHD
-         7+SmTOQ6fonIUa/7QJ4Hyl1Fuu1dLNiOqz5iVtvU6pHlgqn5aFdPaenMS2kAqaOo/I1a
-         AueQ==
-X-Gm-Message-State: AOAM530HV6+jxHzXJHXXP4WSpCmz2erQceFqd0X98J7Kskxwi6hxCnZr
-        YcBzw5iDma3FdzdOM7yeCLAwnQ==
-X-Google-Smtp-Source: ABdhPJypZ7g85maNn/Fq9wWXClDnT5wovR1kfqNu7P4AWwxVkN+tY7vWNWWbv+l/0xEltuRgBAxuTA==
-X-Received: by 2002:a62:a508:0:b029:1ba:621:ff29 with SMTP id v8-20020a62a5080000b02901ba0621ff29mr707798pfm.44.1611054320340;
-        Tue, 19 Jan 2021 03:05:20 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id a5sm18186189pgl.41.2021.01.19.03.05.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Jan 2021 03:05:18 -0800 (PST)
-Date:   Tue, 19 Jan 2021 16:35:16 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, parashar@codeaurora.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for
- 'assigned-performance-states'
-Message-ID: <20210119110516.fgbbllyg7lxwwfdz@vireshk-i7>
-References: <20201224111210.1214-1-rojay@codeaurora.org>
- <20201224111210.1214-4-rojay@codeaurora.org>
- <YAGqKfDfB7EEuZVn@builder.lan>
- <6bfec3e6-3d26-7ade-d836-032273856ce2@codeaurora.org>
- <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S2390820AbhASOp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 09:45:57 -0500
+Received: from foss.arm.com ([217.140.110.172]:52696 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388791AbhASLnC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 19 Jan 2021 06:43:02 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0986E113E;
+        Tue, 19 Jan 2021 03:41:51 -0800 (PST)
+Received: from e123648.arm.com (unknown [10.57.9.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5D4093F719;
+        Tue, 19 Jan 2021 03:41:49 -0800 (PST)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com
+Subject: [PATCH v2] thermal: power allocator: fail binding for non-power actor devices
+Date:   Tue, 19 Jan 2021 11:41:26 +0000
+Message-Id: <20210119114126.19480-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-01-21, 12:02, Ulf Hansson wrote:
-> As a matter of fact this was quite recently discussed [1], which also
-> pointed out some issues when using the "required-opps" in combination,
-> but perhaps that got resolved? Viresh?
+The thermal zone can have cooling devices which are missing power actor
+API. This could be due to missing Energy Model for devfreq or cpufreq
+cooling device. In this case it is safe to fail the binding rather than
+trying to workaround and control the temperature in such thermal zone.
 
-Perhaps we never did anything there ..
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+Hi all,
 
+This is a v2 patch which just stops the binding when there is some
+cooling device which is not implementing power actor API. As discussed
+with Daniel, it's better option than trying to control such undefined
+thermal zone.
+The v1 and related seggestion from Daniel can be found here [1].
+
+Regards,
+Lukasz Luba
+
+[1] https://lore.kernel.org/linux-pm/20210105190107.30479-1-lukasz.luba@arm.com/
+
+
+ drivers/thermal/gov_power_allocator.c | 35 ++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 7a4170a0b51f..39e64eea7841 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -589,6 +589,34 @@ static void allow_maximum_power(struct thermal_zone_device *tz)
+ 	mutex_unlock(&tz->lock);
+ }
+ 
++/**
++ * check_power_actors() - Check all cooling devices and warn when they are
++ *			not power actors
++ * @tz:		thermal zone to operate on
++ *
++ * Check all cooling devices in the @tz and warn every time they are missing
++ * power actor API. The warning should help to investigate the issue, which
++ * could be e.g. lack of Energy Model for a given device.
++ *
++ * Return: 0 on success, -EINVAL if any cooling device does not implement
++ * the power actor API.
++ */
++static int check_power_actors(struct thermal_zone_device *tz)
++{
++	struct thermal_instance *instance;
++	int ret = 0;
++
++	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
++		if (!cdev_is_power_actor(instance->cdev)) {
++			dev_warn(&tz->device, "power_allocator: %s is not a power actor\n",
++				 instance->cdev->type);
++			ret = -EINVAL;
++		}
++	}
++
++	return ret;
++}
++
+ /**
+  * power_allocator_bind() - bind the power_allocator governor to a thermal zone
+  * @tz:	thermal zone to bind it to
+@@ -596,7 +624,8 @@ static void allow_maximum_power(struct thermal_zone_device *tz)
+  * Initialize the PID controller parameters and bind it to the thermal
+  * zone.
+  *
+- * Return: 0 on success, or -ENOMEM if we ran out of memory.
++ * Return: 0 on success, or -ENOMEM if we ran out of memory, or -EINVAL
++ * when there are unsupported cooling devices in the @tz.
+  */
+ static int power_allocator_bind(struct thermal_zone_device *tz)
+ {
+@@ -604,6 +633,10 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 	struct power_allocator_params *params;
+ 	int control_temp;
+ 
++	ret = check_power_actors(tz);
++	if (ret)
++		return ret;
++
+ 	params = kzalloc(sizeof(*params), GFP_KERNEL);
+ 	if (!params)
+ 		return -ENOMEM;
 -- 
-viresh
+2.17.1
+
