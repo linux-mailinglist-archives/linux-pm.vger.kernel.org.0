@@ -2,724 +2,1155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C56E2FBE74
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 19:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933F52FBF76
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jan 2021 19:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404377AbhASSBc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 13:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S2403811AbhASSu7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 13:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391692AbhASSBJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 13:01:09 -0500
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652A5C0617A1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 09:45:01 -0800 (PST)
+        with ESMTP id S2392093AbhASRzv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 12:55:51 -0500
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5FEC0612A8;
+        Tue, 19 Jan 2021 09:49:41 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 129271F895;
-        Tue, 19 Jan 2021 18:44:59 +0100 (CET)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9FA0B3F1D8;
+        Tue, 19 Jan 2021 18:45:30 +0100 (CET)
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-To:     bjorn.andersson@linaro.org
-Cc:     agross@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com,
+To:     nks@flawful.org
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        jeffrey.l.hugo@gmail.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH v4 1/3] cpuidle: qcom_spm: Detach state machine from main SPM handling
-Date:   Tue, 19 Jan 2021 18:44:52 +0100
-Message-Id: <20210119174454.226808-2-angelogioacchino.delregno@somainline.org>
+Subject: [PATCH v4 1/3] soc: qcom: cpr: Move common functions to new file
+Date:   Tue, 19 Jan 2021 18:45:27 +0100
+Message-Id: <20210119174529.227074-2-angelogioacchino.delregno@somainline.org>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210119174454.226808-1-angelogioacchino.delregno@somainline.org>
-References: <20210119174454.226808-1-angelogioacchino.delregno@somainline.org>
+In-Reply-To: <20210119174529.227074-1-angelogioacchino.delregno@somainline.org>
+References: <20210119174529.227074-1-angelogioacchino.delregno@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In commit a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic
-CPUidle driver") the SPM driver has been converted to a
-generic CPUidle driver: that was mainly made to simplify the
-driver and that was a great accomplishment;
-Though, it was ignored that the SPM driver is not used only
-on the ARM architecture.
-
-In preparation for the enablement of SPM features on AArch64/ARM64,
-split the cpuidle-qcom-spm driver in two: the CPUIdle related
-state machine (currently used only on ARM SoCs) stays there, while
-the SPM communication handling lands back in soc/qcom/spm.c and
-also making sure to not discard the simplifications that were
-introduced in the aforementioned commit.
-
-Since now the "two drivers" are split, the SCM dependency in the
-main SPM handling is gone and for this reason it was also possible
-to move the SPM initialization early: this will also make sure that
-whenever the SAW CPUIdle driver is getting initialized, the SPM
-driver will be ready to do the job.
-
-Please note that the anticipation of the SPM initialization was
-also done to optimize the boot times on platforms that have their
-CPU/L2 idle states managed by other means (such as PSCI), while
-needing SAW initialization for other purposes, like AVS control.
+In preparation for implementing a new driver that will be handling
+CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
+file.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 ---
- drivers/cpuidle/Kconfig.arm        |   1 +
- drivers/cpuidle/cpuidle-qcom-spm.c | 294 ++++++-----------------------
- drivers/soc/qcom/Kconfig           |   9 +
- drivers/soc/qcom/Makefile          |   1 +
- drivers/soc/qcom/spm.c             | 198 +++++++++++++++++++
- include/soc/qcom/spm.h             |  45 +++++
- 6 files changed, 312 insertions(+), 236 deletions(-)
- create mode 100644 drivers/soc/qcom/spm.c
- create mode 100644 include/soc/qcom/spm.h
+ drivers/soc/qcom/Makefile     |   2 +-
+ drivers/soc/qcom/cpr-common.c | 382 +++++++++++++++++++++++++++++
+ drivers/soc/qcom/cpr-common.h | 113 +++++++++
+ drivers/soc/qcom/cpr.c        | 441 +++-------------------------------
+ 4 files changed, 523 insertions(+), 415 deletions(-)
+ create mode 100644 drivers/soc/qcom/cpr-common.c
+ create mode 100644 drivers/soc/qcom/cpr-common.h
 
-diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-index 0844fadc4be8..c5e2f4d0df04 100644
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -112,6 +112,7 @@ config ARM_QCOM_SPM_CPUIDLE
- 	select CPU_IDLE_MULTIPLE_DRIVERS
- 	select DT_IDLE_STATES
- 	select QCOM_SCM
-+	select QCOM_SPM
- 	help
- 	  Select this to enable cpuidle for Qualcomm processors.
- 	  The Subsystem Power Manager (SPM) controls low power modes for the
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index adf91a6e4d7d..3dd7bb10b82d 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -18,146 +18,13 @@
- #include <linux/cpuidle.h>
- #include <linux/cpu_pm.h>
- #include <linux/qcom_scm.h>
-+#include <soc/qcom/spm.h>
- 
- #include <asm/proc-fns.h>
- #include <asm/suspend.h>
- 
- #include "dt_idle_states.h"
- 
--#define MAX_PMIC_DATA		2
--#define MAX_SEQ_DATA		64
--#define SPM_CTL_INDEX		0x7f
--#define SPM_CTL_INDEX_SHIFT	4
--#define SPM_CTL_EN		BIT(0)
--
--enum pm_sleep_mode {
--	PM_SLEEP_MODE_STBY,
--	PM_SLEEP_MODE_RET,
--	PM_SLEEP_MODE_SPC,
--	PM_SLEEP_MODE_PC,
--	PM_SLEEP_MODE_NR,
--};
--
--enum spm_reg {
--	SPM_REG_CFG,
--	SPM_REG_SPM_CTL,
--	SPM_REG_DLY,
--	SPM_REG_PMIC_DLY,
--	SPM_REG_PMIC_DATA_0,
--	SPM_REG_PMIC_DATA_1,
--	SPM_REG_VCTL,
--	SPM_REG_SEQ_ENTRY,
--	SPM_REG_SPM_STS,
--	SPM_REG_PMIC_STS,
--	SPM_REG_NR,
--};
--
--struct spm_reg_data {
--	const u8 *reg_offset;
--	u32 spm_cfg;
--	u32 spm_dly;
--	u32 pmic_dly;
--	u32 pmic_data[MAX_PMIC_DATA];
--	u8 seq[MAX_SEQ_DATA];
--	u8 start_index[PM_SLEEP_MODE_NR];
--};
--
--struct spm_driver_data {
--	struct cpuidle_driver cpuidle_driver;
--	void __iomem *reg_base;
--	const struct spm_reg_data *reg_data;
--};
--
--static const u8 spm_reg_offset_v2_1[SPM_REG_NR] = {
--	[SPM_REG_CFG]		= 0x08,
--	[SPM_REG_SPM_CTL]	= 0x30,
--	[SPM_REG_DLY]		= 0x34,
--	[SPM_REG_SEQ_ENTRY]	= 0x80,
--};
--
--/* SPM register data for 8974, 8084 */
--static const struct spm_reg_data spm_reg_8974_8084_cpu  = {
--	.reg_offset = spm_reg_offset_v2_1,
--	.spm_cfg = 0x1,
--	.spm_dly = 0x3C102800,
--	.seq = { 0x03, 0x0B, 0x0F, 0x00, 0x20, 0x80, 0x10, 0xE8, 0x5B, 0x03,
--		0x3B, 0xE8, 0x5B, 0x82, 0x10, 0x0B, 0x30, 0x06, 0x26, 0x30,
--		0x0F },
--	.start_index[PM_SLEEP_MODE_STBY] = 0,
--	.start_index[PM_SLEEP_MODE_SPC] = 3,
--};
--
--static const u8 spm_reg_offset_v1_1[SPM_REG_NR] = {
--	[SPM_REG_CFG]		= 0x08,
--	[SPM_REG_SPM_CTL]	= 0x20,
--	[SPM_REG_PMIC_DLY]	= 0x24,
--	[SPM_REG_PMIC_DATA_0]	= 0x28,
--	[SPM_REG_PMIC_DATA_1]	= 0x2C,
--	[SPM_REG_SEQ_ENTRY]	= 0x80,
--};
--
--/* SPM register data for 8064 */
--static const struct spm_reg_data spm_reg_8064_cpu = {
--	.reg_offset = spm_reg_offset_v1_1,
--	.spm_cfg = 0x1F,
--	.pmic_dly = 0x02020004,
--	.pmic_data[0] = 0x0084009C,
--	.pmic_data[1] = 0x00A4001C,
--	.seq = { 0x03, 0x0F, 0x00, 0x24, 0x54, 0x10, 0x09, 0x03, 0x01,
--		0x10, 0x54, 0x30, 0x0C, 0x24, 0x30, 0x0F },
--	.start_index[PM_SLEEP_MODE_STBY] = 0,
--	.start_index[PM_SLEEP_MODE_SPC] = 2,
--};
--
--static inline void spm_register_write(struct spm_driver_data *drv,
--					enum spm_reg reg, u32 val)
--{
--	if (drv->reg_data->reg_offset[reg])
--		writel_relaxed(val, drv->reg_base +
--				drv->reg_data->reg_offset[reg]);
--}
--
--/* Ensure a guaranteed write, before return */
--static inline void spm_register_write_sync(struct spm_driver_data *drv,
--					enum spm_reg reg, u32 val)
--{
--	u32 ret;
--
--	if (!drv->reg_data->reg_offset[reg])
--		return;
--
--	do {
--		writel_relaxed(val, drv->reg_base +
--				drv->reg_data->reg_offset[reg]);
--		ret = readl_relaxed(drv->reg_base +
--				drv->reg_data->reg_offset[reg]);
--		if (ret == val)
--			break;
--		cpu_relax();
--	} while (1);
--}
--
--static inline u32 spm_register_read(struct spm_driver_data *drv,
--					enum spm_reg reg)
--{
--	return readl_relaxed(drv->reg_base + drv->reg_data->reg_offset[reg]);
--}
--
--static void spm_set_low_power_mode(struct spm_driver_data *drv,
--					enum pm_sleep_mode mode)
--{
--	u32 start_index;
--	u32 ctl_val;
--
--	start_index = drv->reg_data->start_index[mode];
--
--	ctl_val = spm_register_read(drv, SPM_REG_SPM_CTL);
--	ctl_val &= ~(SPM_CTL_INDEX << SPM_CTL_INDEX_SHIFT);
--	ctl_val |= start_index << SPM_CTL_INDEX_SHIFT;
--	ctl_val |= SPM_CTL_EN;
--	spm_register_write_sync(drv, SPM_REG_SPM_CTL, ctl_val);
--}
--
- static int qcom_pm_collapse(unsigned long int unused)
- {
- 	qcom_scm_cpu_power_down(QCOM_SCM_CPU_PWR_DOWN_L2_ON);
-@@ -213,132 +80,87 @@ static const struct of_device_id qcom_idle_state_match[] = {
- 	{ },
- };
- 
--static int spm_cpuidle_init(struct cpuidle_driver *drv, int cpu)
-+static int spm_cpuidle_register(int cpu)
- {
-+	struct platform_device *pdev = NULL;
-+	struct spm_driver_data *spm = NULL;
-+	struct device_node *cpu_node, *saw_node;
- 	int ret;
- 
--	memcpy(drv, &qcom_spm_idle_driver, sizeof(*drv));
--	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-+	cpu_node = of_cpu_device_node_get(cpu);
-+	if (!cpu_node)
-+		return -ENODEV;
- 
--	/* Parse idle states from device tree */
--	ret = dt_init_idle_driver(drv, qcom_idle_state_match, 1);
--	if (ret <= 0)
--		return ret ? : -ENODEV;
-+	saw_node = of_parse_phandle(cpu_node, "qcom,saw", 0);
-+	if (!saw_node)
-+		return -ENODEV;
- 
--	/* We have atleast one power down mode */
--	return qcom_scm_set_warm_boot_addr(cpu_resume_arm, drv->cpumask);
--}
-+	pdev = of_find_device_by_node(saw_node);
-+	of_node_put(saw_node);
-+	of_node_put(cpu_node);
-+	if (!pdev)
-+		return -ENODEV;
- 
--static struct spm_driver_data *spm_get_drv(struct platform_device *pdev,
--		int *spm_cpu)
--{
--	struct spm_driver_data *drv = NULL;
--	struct device_node *cpu_node, *saw_node;
--	int cpu;
--	bool found = 0;
-+	spm = dev_get_drvdata(&pdev->dev);
-+	if (!spm)
-+		return -EINVAL;
- 
--	for_each_possible_cpu(cpu) {
--		cpu_node = of_cpu_device_node_get(cpu);
--		if (!cpu_node)
--			continue;
--		saw_node = of_parse_phandle(cpu_node, "qcom,saw", 0);
--		found = (saw_node == pdev->dev.of_node);
--		of_node_put(saw_node);
--		of_node_put(cpu_node);
--		if (found)
--			break;
--	}
-+	spm->cpuidle_driver = qcom_spm_idle_driver;
- 
--	if (found) {
--		drv = devm_kzalloc(&pdev->dev, sizeof(*drv), GFP_KERNEL);
--		if (drv)
--			*spm_cpu = cpu;
--	}
-+	ret = dt_init_idle_driver(&spm->cpuidle_driver,
-+				  qcom_idle_state_match, 1);
-+	if (ret <= 0)
-+		return ret ? : -ENODEV;
- 
--	return drv;
--}
-+	ret = qcom_scm_set_warm_boot_addr(cpu_resume_arm, cpumask_of(cpu));
-+	if (ret)
-+		return ret;
- 
--static const struct of_device_id spm_match_table[] = {
--	{ .compatible = "qcom,msm8974-saw2-v2.1-cpu",
--	  .data = &spm_reg_8974_8084_cpu },
--	{ .compatible = "qcom,apq8084-saw2-v2.1-cpu",
--	  .data = &spm_reg_8974_8084_cpu },
--	{ .compatible = "qcom,apq8064-saw2-v1.1-cpu",
--	  .data = &spm_reg_8064_cpu },
--	{ },
--};
-+	return cpuidle_register(&spm->cpuidle_driver, NULL);
-+}
- 
--static int spm_dev_probe(struct platform_device *pdev)
-+static int spm_cpuidle_drv_probe(struct platform_device *pdev)
- {
--	struct spm_driver_data *drv;
--	struct resource *res;
--	const struct of_device_id *match_id;
--	void __iomem *addr;
- 	int cpu, ret;
- 
- 	if (!qcom_scm_is_available())
- 		return -EPROBE_DEFER;
- 
--	drv = spm_get_drv(pdev, &cpu);
--	if (!drv)
--		return -EINVAL;
--	platform_set_drvdata(pdev, drv);
-+	for_each_possible_cpu(cpu) {
-+		ret = spm_cpuidle_register(cpu);
-+		if (ret != -ENODEV) {
-+			dev_err(&pdev->dev,
-+				"Cannot register for CPU%d: %d\n", cpu, ret);
-+			break;
-+		}
-+	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	drv->reg_base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(drv->reg_base))
--		return PTR_ERR(drv->reg_base);
-+	return ret;
-+}
- 
--	match_id = of_match_node(spm_match_table, pdev->dev.of_node);
--	if (!match_id)
--		return -ENODEV;
-+static struct platform_driver spm_cpuidle_driver = {
-+	.probe = spm_cpuidle_drv_probe,
-+	.driver = {
-+		.name = "qcom-spm-cpuidle",
-+	},
-+};
- 
--	drv->reg_data = match_id->data;
-+static int __init qcom_spm_cpuidle_init(void)
-+{
-+	struct platform_device *pdev;
-+	int ret;
- 
--	ret = spm_cpuidle_init(&drv->cpuidle_driver, cpu);
-+	ret = platform_driver_register(&spm_cpuidle_driver);
- 	if (ret)
- 		return ret;
- 
--	/* Write the SPM sequences first.. */
--	addr = drv->reg_base + drv->reg_data->reg_offset[SPM_REG_SEQ_ENTRY];
--	__iowrite32_copy(addr, drv->reg_data->seq,
--			ARRAY_SIZE(drv->reg_data->seq) / 4);
--
--	/*
--	 * ..and then the control registers.
--	 * On some SoC if the control registers are written first and if the
--	 * CPU was held in reset, the reset signal could trigger the SPM state
--	 * machine, before the sequences are completely written.
--	 */
--	spm_register_write(drv, SPM_REG_CFG, drv->reg_data->spm_cfg);
--	spm_register_write(drv, SPM_REG_DLY, drv->reg_data->spm_dly);
--	spm_register_write(drv, SPM_REG_PMIC_DLY, drv->reg_data->pmic_dly);
--	spm_register_write(drv, SPM_REG_PMIC_DATA_0,
--				drv->reg_data->pmic_data[0]);
--	spm_register_write(drv, SPM_REG_PMIC_DATA_1,
--				drv->reg_data->pmic_data[1]);
--
--	/* Set up Standby as the default low power mode */
--	spm_set_low_power_mode(drv, PM_SLEEP_MODE_STBY);
--
--	return cpuidle_register(&drv->cpuidle_driver, NULL);
--}
--
--static int spm_dev_remove(struct platform_device *pdev)
--{
--	struct spm_driver_data *drv = platform_get_drvdata(pdev);
-+	pdev = platform_device_register_simple("qcom-spm-cpuidle",
-+					       -1, NULL, 0);
-+	if (IS_ERR(pdev)) {
-+		platform_driver_unregister(&spm_cpuidle_driver);
-+		return PTR_ERR(pdev);
-+	}
- 
--	cpuidle_unregister(&drv->cpuidle_driver);
- 	return 0;
- }
--
--static struct platform_driver spm_driver = {
--	.probe = spm_dev_probe,
--	.remove = spm_dev_remove,
--	.driver = {
--		.name = "saw",
--		.of_match_table = spm_match_table,
--	},
--};
--
--builtin_platform_driver(spm_driver);
-+device_initcall(qcom_spm_cpuidle_init);
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 79b568f82a1c..fe3c486ae32d 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -190,6 +190,15 @@ config QCOM_SOCINFO
- 	 Say yes here to support the Qualcomm socinfo driver, providing
- 	 information about the SoC to user space.
- 
-+config QCOM_SPM
-+	tristate "Qualcomm Subsystem Power Manager (SPM)"
-+	depends on ARCH_QCOM
-+	select QCOM_SCM
-+	help
-+	  Enable the support for the Qualcomm Subsystem Power Manager, used
-+	  to manage cores, L2 low power modes and to configure the internal
-+	  Adaptive Voltage Scaler parameters, where supported.
-+
- config QCOM_WCNSS_CTRL
- 	tristate "Qualcomm WCNSS control driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
 diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index ad675a6593d0..24514c722832 100644
+index ad675a6593d0..8d1262a2e23c 100644
 --- a/drivers/soc/qcom/Makefile
 +++ b/drivers/soc/qcom/Makefile
-@@ -20,6 +20,7 @@ obj-$(CONFIG_QCOM_SMEM_STATE) += smem_state.o
- obj-$(CONFIG_QCOM_SMP2P)	+= smp2p.o
- obj-$(CONFIG_QCOM_SMSM)	+= smsm.o
- obj-$(CONFIG_QCOM_SOCINFO)	+= socinfo.o
-+obj-$(CONFIG_QCOM_SPM)		+= spm.o
- obj-$(CONFIG_QCOM_WCNSS_CTRL) += wcnss_ctrl.o
- obj-$(CONFIG_QCOM_APR) += apr.o
- obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
-diff --git a/drivers/soc/qcom/spm.c b/drivers/soc/qcom/spm.c
+@@ -3,7 +3,7 @@ CFLAGS_rpmh-rsc.o := -I$(src)
+ obj-$(CONFIG_QCOM_AOSS_QMP) +=	qcom_aoss.o
+ obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
+ obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
+-obj-$(CONFIG_QCOM_CPR)		+= cpr.o
++obj-$(CONFIG_QCOM_CPR)		+= cpr-common.o cpr.o
+ obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
+ obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
+ obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
+diff --git a/drivers/soc/qcom/cpr-common.c b/drivers/soc/qcom/cpr-common.c
 new file mode 100644
-index 000000000000..0c8aa9240c41
+index 000000000000..70e1e0f441db
 --- /dev/null
-+++ b/drivers/soc/qcom/spm.c
-@@ -0,0 +1,198 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/drivers/soc/qcom/cpr-common.c
+@@ -0,0 +1,382 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2014,2015, Linaro Ltd.
-+ *
-+ * SAW power controller driver
++ * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2019, Linaro Limited
 + */
 +
++#include <linux/module.h>
++#include <linux/err.h>
++#include <linux/debugfs.h>
++#include <linux/string.h>
 +#include <linux/kernel.h>
++#include <linux/list.h>
 +#include <linux/init.h>
 +#include <linux/io.h>
++#include <linux/bitops.h>
 +#include <linux/slab.h>
 +#include <linux/of.h>
-+#include <linux/of_address.h>
 +#include <linux/of_device.h>
-+#include <linux/err.h>
 +#include <linux/platform_device.h>
-+#include <soc/qcom/spm.h>
++#include <linux/pm_domain.h>
++#include <linux/pm_opp.h>
++#include <linux/interrupt.h>
++#include <linux/regmap.h>
++#include <linux/mfd/syscon.h>
++#include <linux/regulator/consumer.h>
++#include <linux/clk.h>
++#include <linux/nvmem-consumer.h>
++#include "cpr-common.h"
 +
-+#define SPM_CTL_INDEX		0x7f
-+#define SPM_CTL_INDEX_SHIFT	4
-+#define SPM_CTL_EN		BIT(0)
-+
-+enum spm_reg {
-+	SPM_REG_CFG,
-+	SPM_REG_SPM_CTL,
-+	SPM_REG_DLY,
-+	SPM_REG_PMIC_DLY,
-+	SPM_REG_PMIC_DATA_0,
-+	SPM_REG_PMIC_DATA_1,
-+	SPM_REG_VCTL,
-+	SPM_REG_SEQ_ENTRY,
-+	SPM_REG_SPM_STS,
-+	SPM_REG_PMIC_STS,
-+	SPM_REG_NR,
-+};
-+
-+static const u16 spm_reg_offset_v2_1[SPM_REG_NR] = {
-+	[SPM_REG_CFG]		= 0x08,
-+	[SPM_REG_SPM_CTL]	= 0x30,
-+	[SPM_REG_DLY]		= 0x34,
-+	[SPM_REG_SEQ_ENTRY]	= 0x80,
-+};
-+
-+/* SPM register data for 8974, 8084 */
-+static const struct spm_reg_data spm_reg_8974_8084_cpu  = {
-+	.reg_offset = spm_reg_offset_v2_1,
-+	.spm_cfg = 0x1,
-+	.spm_dly = 0x3C102800,
-+	.seq = { 0x03, 0x0B, 0x0F, 0x00, 0x20, 0x80, 0x10, 0xE8, 0x5B, 0x03,
-+		0x3B, 0xE8, 0x5B, 0x82, 0x10, 0x0B, 0x30, 0x06, 0x26, 0x30,
-+		0x0F },
-+	.start_index[PM_SLEEP_MODE_STBY] = 0,
-+	.start_index[PM_SLEEP_MODE_SPC] = 3,
-+};
-+
-+static const u16 spm_reg_offset_v1_1[SPM_REG_NR] = {
-+	[SPM_REG_CFG]		= 0x08,
-+	[SPM_REG_SPM_CTL]	= 0x20,
-+	[SPM_REG_PMIC_DLY]	= 0x24,
-+	[SPM_REG_PMIC_DATA_0]	= 0x28,
-+	[SPM_REG_PMIC_DATA_1]	= 0x2C,
-+	[SPM_REG_SEQ_ENTRY]	= 0x80,
-+};
-+
-+/* SPM register data for 8064 */
-+static const struct spm_reg_data spm_reg_8064_cpu = {
-+	.reg_offset = spm_reg_offset_v1_1,
-+	.spm_cfg = 0x1F,
-+	.pmic_dly = 0x02020004,
-+	.pmic_data[0] = 0x0084009C,
-+	.pmic_data[1] = 0x00A4001C,
-+	.seq = { 0x03, 0x0F, 0x00, 0x24, 0x54, 0x10, 0x09, 0x03, 0x01,
-+		0x10, 0x54, 0x30, 0x0C, 0x24, 0x30, 0x0F },
-+	.start_index[PM_SLEEP_MODE_STBY] = 0,
-+	.start_index[PM_SLEEP_MODE_SPC] = 2,
-+};
-+
-+static inline void spm_register_write(struct spm_driver_data *drv,
-+					enum spm_reg reg, u32 val)
++int cpr_read_efuse(struct device *dev, const char *cname, u32 *data)
 +{
-+	if (drv->reg_data->reg_offset[reg])
-+		writel_relaxed(val, drv->reg_base +
-+				drv->reg_data->reg_offset[reg]);
-+}
++	struct nvmem_cell *cell;
++	ssize_t len;
++	char *ret;
++	int i;
 +
-+/* Ensure a guaranteed write, before return */
-+static inline void spm_register_write_sync(struct spm_driver_data *drv,
-+					enum spm_reg reg, u32 val)
-+{
-+	u32 ret;
++	*data = 0;
 +
-+	if (!drv->reg_data->reg_offset[reg])
-+		return;
++	cell = nvmem_cell_get(dev, cname);
++	if (IS_ERR(cell)) {
++		if (PTR_ERR(cell) != -EPROBE_DEFER)
++			dev_err(dev, "undefined cell %s\n", cname);
++		return PTR_ERR(cell);
++	}
 +
-+	do {
-+		writel_relaxed(val, drv->reg_base +
-+				drv->reg_data->reg_offset[reg]);
-+		ret = readl_relaxed(drv->reg_base +
-+				drv->reg_data->reg_offset[reg]);
-+		if (ret == val)
-+			break;
-+		cpu_relax();
-+	} while (1);
-+}
++	ret = nvmem_cell_read(cell, &len);
++	nvmem_cell_put(cell);
++	if (IS_ERR(ret)) {
++		dev_err(dev, "can't read cell %s\n", cname);
++		return PTR_ERR(ret);
++	}
 +
-+static inline u32 spm_register_read(struct spm_driver_data *drv,
-+					enum spm_reg reg)
-+{
-+	return readl_relaxed(drv->reg_base + drv->reg_data->reg_offset[reg]);
-+}
++	for (i = 0; i < len; i++)
++		*data |= ret[i] << (8 * i);
 +
-+void spm_set_low_power_mode(struct spm_driver_data *drv,
-+					enum pm_sleep_mode mode)
-+{
-+	u32 start_index;
-+	u32 ctl_val;
-+
-+	start_index = drv->reg_data->start_index[mode];
-+
-+	ctl_val = spm_register_read(drv, SPM_REG_SPM_CTL);
-+	ctl_val &= ~(SPM_CTL_INDEX << SPM_CTL_INDEX_SHIFT);
-+	ctl_val |= start_index << SPM_CTL_INDEX_SHIFT;
-+	ctl_val |= SPM_CTL_EN;
-+	spm_register_write_sync(drv, SPM_REG_SPM_CTL, ctl_val);
-+}
-+
-+static const struct of_device_id spm_match_table[] = {
-+	{ .compatible = "qcom,msm8974-saw2-v2.1-cpu",
-+	  .data = &spm_reg_8974_8084_cpu },
-+	{ .compatible = "qcom,apq8084-saw2-v2.1-cpu",
-+	  .data = &spm_reg_8974_8084_cpu },
-+	{ .compatible = "qcom,apq8064-saw2-v1.1-cpu",
-+	  .data = &spm_reg_8064_cpu },
-+	{ },
-+};
-+
-+static int spm_dev_probe(struct platform_device *pdev)
-+{
-+	const struct of_device_id *match_id;
-+	struct spm_driver_data *drv;
-+	struct resource *res;
-+	void __iomem *addr;
-+
-+	drv = devm_kzalloc(&pdev->dev, sizeof(*drv), GFP_KERNEL);
-+	if (!drv)
-+		return -ENOMEM;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	drv->reg_base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(drv->reg_base))
-+		return PTR_ERR(drv->reg_base);
-+
-+	match_id = of_match_node(spm_match_table, pdev->dev.of_node);
-+	if (!match_id)
-+		return -ENODEV;
-+
-+	drv->reg_data = match_id->data;
-+	platform_set_drvdata(pdev, drv);
-+
-+	/* Write the SPM sequences first.. */
-+	addr = drv->reg_base + drv->reg_data->reg_offset[SPM_REG_SEQ_ENTRY];
-+	__iowrite32_copy(addr, drv->reg_data->seq,
-+			ARRAY_SIZE(drv->reg_data->seq) / 4);
-+
-+	/*
-+	 * ..and then the control registers.
-+	 * On some SoC if the control registers are written first and if the
-+	 * CPU was held in reset, the reset signal could trigger the SPM state
-+	 * machine, before the sequences are completely written.
-+	 */
-+	spm_register_write(drv, SPM_REG_CFG, drv->reg_data->spm_cfg);
-+	spm_register_write(drv, SPM_REG_DLY, drv->reg_data->spm_dly);
-+	spm_register_write(drv, SPM_REG_PMIC_DLY, drv->reg_data->pmic_dly);
-+	spm_register_write(drv, SPM_REG_PMIC_DATA_0,
-+				drv->reg_data->pmic_data[0]);
-+	spm_register_write(drv, SPM_REG_PMIC_DATA_1,
-+				drv->reg_data->pmic_data[1]);
-+
-+	/* Set up Standby as the default low power mode */
-+	spm_set_low_power_mode(drv, PM_SLEEP_MODE_STBY);
++	kfree(ret);
++	dev_dbg(dev, "efuse read(%s) = %x, bytes %zd\n", cname, *data, len);
 +
 +	return 0;
 +}
 +
-+static struct platform_driver spm_driver = {
-+	.probe = spm_dev_probe,
-+	.driver = {
-+		.name = "qcom_spm",
-+		.of_match_table = spm_match_table,
-+	},
-+};
-+
-+static int __init qcom_spm_init(void)
++int cpr_populate_ring_osc_idx(struct device *dev,
++			      struct fuse_corner *fuse_corner,
++			      const struct cpr_fuse *cpr_fuse,
++			      int num_fuse_corners)
 +{
-+	return platform_driver_register(&spm_driver);
++	struct fuse_corner *end = fuse_corner + num_fuse_corners;
++	u32 data;
++	int ret;
++
++	for (; fuse_corner < end; fuse_corner++, cpr_fuse++) {
++		ret = cpr_read_efuse(dev, cpr_fuse->ring_osc,
++				     &data);
++		if (ret)
++			return ret;
++		fuse_corner->ring_osc_idx = data;
++	}
++
++	return 0;
 +}
-+arch_initcall(qcom_spm_init);
-diff --git a/include/soc/qcom/spm.h b/include/soc/qcom/spm.h
-new file mode 100644
-index 000000000000..604eca2c4d4a
---- /dev/null
-+++ b/include/soc/qcom/spm.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
++
++int cpr_read_fuse_uV(int init_v_width, int step_size_uV, int ref_uV,
++		     int adj, int step_volt, const char *init_v_efuse,
++		     struct device *dev)
++{
++	int steps, uV;
++	u32 bits = 0;
++	int ret;
++
++	ret = cpr_read_efuse(dev, init_v_efuse, &bits);
++	if (ret)
++		return ret;
++
++	steps = bits & (BIT(init_v_width - 1) - 1);
++	/* Not two's complement.. instead highest bit is sign bit */
++	if (bits & BIT(init_v_width - 1))
++		steps = -steps;
++
++	uV = ref_uV + steps * step_size_uV;
++
++	/* Apply open-loop fixed adjustments to fused values */
++	uV += adj;
++
++	return DIV_ROUND_UP(uV, step_volt) * step_volt;
++}
++
++const struct cpr_fuse *cpr_get_fuses(struct device *dev, int tid,
++				     int num_fuse_corners)
++{
++	struct cpr_fuse *fuses;
++	int i;
++
++	fuses = devm_kcalloc(dev, num_fuse_corners,
++			     sizeof(struct cpr_fuse),
++			     GFP_KERNEL);
++	if (!fuses)
++		return ERR_PTR(-ENOMEM);
++
++	for (i = 0; i < num_fuse_corners; i++) {
++		char tbuf[50];
++
++		snprintf(tbuf, sizeof(tbuf), "cpr%d_ring_osc%d", tid, i + 1);
++		fuses[i].ring_osc = devm_kstrdup(dev, tbuf, GFP_KERNEL);
++		if (!fuses[i].ring_osc)
++			return ERR_PTR(-ENOMEM);
++
++		snprintf(tbuf, sizeof(tbuf),
++			 "cpr%d_init_voltage%d", tid, i + 1);
++		fuses[i].init_voltage = devm_kstrdup(dev, tbuf,
++						     GFP_KERNEL);
++		if (!fuses[i].init_voltage)
++			return ERR_PTR(-ENOMEM);
++
++		snprintf(tbuf, sizeof(tbuf), "cpr%d_quotient%d", tid, i + 1);
++		fuses[i].quotient = devm_kstrdup(dev, tbuf, GFP_KERNEL);
++		if (!fuses[i].quotient)
++			return ERR_PTR(-ENOMEM);
++
++		snprintf(tbuf, sizeof(tbuf),
++			 "cpr%d_quotient_offset%d", tid, i + 1);
++		fuses[i].quotient_offset = devm_kstrdup(dev, tbuf,
++							GFP_KERNEL);
++		if (!fuses[i].quotient_offset)
++			return ERR_PTR(-ENOMEM);
++	}
++
++	return fuses;
++}
++
++int cpr_populate_fuse_common(struct device *dev,
++			     struct fuse_corner_data *fdata,
++			     const struct cpr_fuse *cpr_fuse,
++			     struct fuse_corner *fuse_corner,
++			     int step_volt, int init_v_width,
++			     int init_v_step)
++{
++	int uV, ret;
++
++	/* Populate uV */
++	uV = cpr_read_fuse_uV(init_v_width, init_v_step,
++			      fdata->ref_uV, fdata->volt_oloop_adjust,
++			      step_volt, cpr_fuse->init_voltage, dev);
++	if (uV < 0)
++		return uV;
++
++	/*
++	 * Update SoC voltages: platforms might choose a different
++	 * regulators than the one used to characterize the algorithms
++	 * (ie, init_voltage_step).
++	 */
++	fdata->min_uV = roundup(fdata->min_uV, step_volt);
++	fdata->max_uV = roundup(fdata->max_uV, step_volt);
++
++	fuse_corner->min_uV = fdata->min_uV;
++	fuse_corner->max_uV = fdata->max_uV;
++	fuse_corner->uV = clamp(uV, fuse_corner->min_uV, fuse_corner->max_uV);
++
++	/* Populate target quotient by scaling */
++	ret = cpr_read_efuse(dev, cpr_fuse->quotient, &fuse_corner->quot);
++	if (ret)
++		return ret;
++
++	fuse_corner->quot *= fdata->quot_scale;
++	fuse_corner->quot += fdata->quot_offset;
++	fuse_corner->quot += fdata->quot_adjust;
++
++	return 0;
++}
++
 +/*
-+ * Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2014,2015, Linaro Ltd.
-+ * Copyright (C) 2020, AngeloGioacchino Del Regno <kholk11@gmail.com>
++ * Returns: Index of the initial corner or negative number for error.
 + */
++int cpr_find_initial_corner(struct device *dev, struct clk *cpu_clk,
++			    struct corner *corners, int num_corners)
++{
++	unsigned long rate;
++	struct corner *iter, *corner;
++	const struct corner *end;
++	unsigned int ret = 0;
 +
-+#ifndef __SPM_H__
-+#define __SPM_H__
++	if (!cpu_clk)
++		return -EINVAL;
 +
-+#include <linux/cpuidle.h>
++	end = &corners[num_corners - 1];
++	rate = clk_get_rate(cpu_clk);
 +
-+#define MAX_PMIC_DATA		2
-+#define MAX_SEQ_DATA		64
++	/*
++	 * Some bootloaders set a CPU clock frequency that is not defined
++	 * in the OPP table. When running at an unlisted frequency,
++	 * cpufreq_online() will change to the OPP which has the lowest
++	 * frequency, at or above the unlisted frequency.
++	 * Since cpufreq_online() always "rounds up" in the case of an
++	 * unlisted frequency, this function always "rounds down" in case
++	 * of an unlisted frequency. That way, when cpufreq_online()
++	 * triggers the first ever call to cpr_set_performance_state(),
++	 * it will correctly determine the direction as UP.
++	 */
++	for (iter = corners; iter <= end; iter++) {
++		if (iter->freq > rate)
++			break;
++		ret++;
++		if (iter->freq == rate) {
++			corner = iter;
++			break;
++		}
++		if (iter->freq < rate)
++			corner = iter;
++	}
 +
-+enum pm_sleep_mode {
-+	PM_SLEEP_MODE_STBY,
-+	PM_SLEEP_MODE_RET,
-+	PM_SLEEP_MODE_SPC,
-+	PM_SLEEP_MODE_PC,
-+	PM_SLEEP_MODE_NR,
++	if (!corner) {
++		dev_err(dev, "boot up corner not found\n");
++		return -EINVAL;
++	}
++
++	dev_dbg(dev, "boot up perf state: %u\n", ret);
++
++	return ret;
++}
++
++u32 cpr_get_fuse_corner(struct dev_pm_opp *opp, u32 tid)
++{
++	struct device_node *np;
++	u32 fc;
++
++	np = dev_pm_opp_get_of_node(opp);
++	if (of_property_read_u32_index(np, "qcom,opp-fuse-level", tid, &fc)) {
++		pr_debug("%s: missing 'qcom,opp-fuse-level' property\n",
++			 __func__);
++		fc = 0;
++	}
++
++	of_node_put(np);
++
++	return fc;
++}
++
++unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
++				     struct device *cpu_dev)
++{
++	u64 rate = 0;
++	struct device_node *ref_np;
++	struct device_node *desc_np;
++	struct device_node *child_np = NULL;
++	struct device_node *child_req_np = NULL;
++
++	desc_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
++	if (!desc_np)
++		return 0;
++
++	ref_np = dev_pm_opp_get_of_node(ref);
++	if (!ref_np)
++		goto out_ref;
++
++	do {
++		of_node_put(child_req_np);
++		child_np = of_get_next_available_child(desc_np, child_np);
++		child_req_np = of_parse_phandle(child_np, "required-opps", 0);
++	} while (child_np && child_req_np != ref_np);
++
++	if (child_np && child_req_np == ref_np)
++		of_property_read_u64(child_np, "opp-hz", &rate);
++
++	of_node_put(child_req_np);
++	of_node_put(child_np);
++	of_node_put(ref_np);
++out_ref:
++	of_node_put(desc_np);
++
++	return (unsigned long) rate;
++}
++
++int cpr_calculate_scaling(const char *quot_offset,
++			  struct device *dev,
++			  const struct fuse_corner_data *fdata,
++			  const struct corner *corner)
++{
++	u32 quot_diff = 0;
++	unsigned long freq_diff;
++	int scaling;
++	const struct fuse_corner *fuse, *prev_fuse;
++	int ret;
++
++	fuse = corner->fuse_corner;
++	prev_fuse = fuse - 1;
++
++	if (quot_offset) {
++		ret = cpr_read_efuse(dev, quot_offset, &quot_diff);
++		if (ret)
++			return ret;
++
++		quot_diff *= fdata->quot_offset_scale;
++		quot_diff += fdata->quot_offset_adjust;
++	} else {
++		quot_diff = fuse->quot - prev_fuse->quot;
++	}
++
++	freq_diff = fuse->max_freq - prev_fuse->max_freq;
++	freq_diff /= 1000000; /* Convert to MHz */
++	scaling = 1000 * quot_diff / freq_diff;
++	return min(scaling, fdata->max_quot_scale);
++}
++
++int cpr_interpolate(const struct corner *corner, int step_volt,
++		    const struct fuse_corner_data *fdata)
++{
++	unsigned long f_high, f_low, f_diff;
++	int uV_high, uV_low, uV;
++	u64 temp, temp_limit;
++	const struct fuse_corner *fuse, *prev_fuse;
++
++	fuse = corner->fuse_corner;
++	prev_fuse = fuse - 1;
++
++	f_high = fuse->max_freq;
++	f_low = prev_fuse->max_freq;
++	uV_high = fuse->uV;
++	uV_low = prev_fuse->uV;
++	f_diff = fuse->max_freq - corner->freq;
++
++	/*
++	 * Don't interpolate in the wrong direction. This could happen
++	 * if the adjusted fuse voltage overlaps with the previous fuse's
++	 * adjusted voltage.
++	 */
++	if (f_high <= f_low || uV_high <= uV_low || f_high <= corner->freq)
++		return corner->uV;
++
++	temp = f_diff * (uV_high - uV_low);
++	do_div(temp, f_high - f_low);
++
++	/*
++	 * max_volt_scale has units of uV/MHz while freq values
++	 * have units of Hz.  Divide by 1000000 to convert to.
++	 */
++	temp_limit = f_diff * fdata->max_volt_scale;
++	do_div(temp_limit, 1000000);
++
++	uV = uV_high - min(temp, temp_limit);
++	return roundup(uV, step_volt);
++}
++
++int cpr_check_vreg_constraints(struct device *dev, struct regulator *vreg,
++			       struct fuse_corner *f)
++{
++	int ret;
++
++	ret = regulator_is_supported_voltage(vreg, f->min_uV, f->min_uV);
++	if (!ret) {
++		dev_err(dev, "min uV: %d not supported by regulator\n",
++			f->min_uV);
++		return -EINVAL;
++	}
++
++	ret = regulator_is_supported_voltage(vreg, f->max_uV, f->max_uV);
++	if (!ret) {
++		dev_err(dev, "max uV: %d not supported by regulator\n",
++			f->max_uV);
++		return -EINVAL;
++	}
++
++	return 0;
++}
+diff --git a/drivers/soc/qcom/cpr-common.h b/drivers/soc/qcom/cpr-common.h
+new file mode 100644
+index 000000000000..83a1f7c941b8
+--- /dev/null
++++ b/drivers/soc/qcom/cpr-common.h
+@@ -0,0 +1,113 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <linux/clk.h>
++#include <linux/platform_device.h>
++#include <linux/pm_opp.h>
++#include <linux/regulator/consumer.h>
++
++enum voltage_change_dir {
++	NO_CHANGE,
++	DOWN,
++	UP,
 +};
 +
-+struct spm_reg_data {
-+	const u16 *reg_offset;
-+	u32 spm_cfg;
-+	u32 spm_dly;
-+	u32 pmic_dly;
-+	u32 pmic_data[MAX_PMIC_DATA];
-+	u32 avs_ctl;
-+	u32 avs_limit;
-+	u8 seq[MAX_SEQ_DATA];
-+	u8 start_index[PM_SLEEP_MODE_NR];
++struct fuse_corner_data {
++	int ref_uV;
++	int max_uV;
++	int min_uV;
++	int range_uV;
++	/* fuse volt: closed/open loop */
++	int volt_cloop_adjust;
++	int volt_oloop_adjust;
++	int max_volt_scale;
++	int max_quot_scale;
++	/* fuse quot */
++	int quot_offset;
++	int quot_scale;
++	int quot_adjust;
++	/* fuse quot_offset */
++	int quot_offset_scale;
++	int quot_offset_adjust;
 +};
 +
-+struct spm_driver_data {
-+	struct cpuidle_driver cpuidle_driver;
-+	void __iomem *reg_base;
-+	const struct spm_reg_data *reg_data;
++struct cpr_fuse {
++	char *ring_osc;
++	char *init_voltage;
++	char *quotient;
++	char *quotient_offset;
 +};
 +
-+void spm_set_low_power_mode(struct spm_driver_data *drv,
-+					enum pm_sleep_mode mode);
++struct fuse_corner {
++	int min_uV;
++	int max_uV;
++	int uV;
++	int quot;
++	int step_quot;
++	const struct reg_sequence *accs;
++	int num_accs;
++	unsigned long max_freq;
++	u8 ring_osc_idx;
++};
 +
-+#endif /* __SPM_H__ */
++struct corner {
++	int min_uV;
++	int max_uV;
++	int uV;
++	int last_uV;
++	int quot_adjust;
++	u32 save_ctl;
++	u32 save_irq;
++	unsigned long freq;
++	bool is_open_loop;
++	struct fuse_corner *fuse_corner;
++};
++
++struct corner_data {
++	unsigned int fuse_corner;
++	unsigned long freq;
++};
++
++struct acc_desc {
++	unsigned int	enable_reg;
++	u32		enable_mask;
++
++	struct reg_sequence	*config;
++	struct reg_sequence	*settings;
++	int			num_regs_per_fuse;
++};
++
++struct cpr_acc_desc {
++	const struct cpr_desc *cpr_desc;
++	const struct acc_desc *acc_desc;
++};
++
++
++int cpr_read_efuse(struct device *dev, const char *cname, u32 *data);
++int cpr_populate_ring_osc_idx(struct device *dev,
++			      struct fuse_corner *fuse_corner,
++			      const struct cpr_fuse *cpr_fuse,
++			      int num_fuse_corners);
++int cpr_read_fuse_uV(int init_v_width, int step_size_uV, int ref_uV,
++		     int adj, int step_volt, const char *init_v_efuse,
++		     struct device *dev);
++const struct cpr_fuse *cpr_get_fuses(struct device *dev, int tid,
++				     int num_fuse_corners);
++int cpr_populate_fuse_common(struct device *dev,
++			     struct fuse_corner_data *fdata,
++			     const struct cpr_fuse *cpr_fuse,
++			     struct fuse_corner *fuse_corner,
++			     int step_volt, int init_v_width,
++			     int init_v_step);
++int cpr_find_initial_corner(struct device *dev, struct clk *cpu_clk,
++			    struct corner *corners, int num_corners);
++u32 cpr_get_fuse_corner(struct dev_pm_opp *opp, u32 tid);
++unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
++				     struct device *cpu_dev);
++int cpr_calculate_scaling(const char *quot_offset,
++			  struct device *dev,
++			  const struct fuse_corner_data *fdata,
++			  const struct corner *corner);
++int cpr_interpolate(const struct corner *corner, int step_volt,
++		    const struct fuse_corner_data *fdata);
++int cpr_check_vreg_constraints(struct device *dev, struct regulator *vreg,
++			       struct fuse_corner *f);
+diff --git a/drivers/soc/qcom/cpr.c b/drivers/soc/qcom/cpr.c
+index b24cc77d1889..29121567956b 100644
+--- a/drivers/soc/qcom/cpr.c
++++ b/drivers/soc/qcom/cpr.c
+@@ -25,6 +25,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/clk.h>
+ #include <linux/nvmem-consumer.h>
++#include "cpr-common.h"
+ 
+ /* Register Offsets for RB-CPR and Bit Definitions */
+ 
+@@ -124,45 +125,12 @@
+ 
+ #define FUSE_REVISION_UNKNOWN		(-1)
+ 
+-enum voltage_change_dir {
+-	NO_CHANGE,
+-	DOWN,
+-	UP,
+-};
+-
+-struct cpr_fuse {
+-	char *ring_osc;
+-	char *init_voltage;
+-	char *quotient;
+-	char *quotient_offset;
+-};
+-
+-struct fuse_corner_data {
+-	int ref_uV;
+-	int max_uV;
+-	int min_uV;
+-	int max_volt_scale;
+-	int max_quot_scale;
+-	/* fuse quot */
+-	int quot_offset;
+-	int quot_scale;
+-	int quot_adjust;
+-	/* fuse quot_offset */
+-	int quot_offset_scale;
+-	int quot_offset_adjust;
+-};
+-
+ struct cpr_fuses {
+ 	int init_voltage_step;
+ 	int init_voltage_width;
+ 	struct fuse_corner_data *fuse_corner_data;
+ };
+ 
+-struct corner_data {
+-	unsigned int fuse_corner;
+-	unsigned long freq;
+-};
+-
+ struct cpr_desc {
+ 	unsigned int num_fuse_corners;
+ 	int min_diff_quot;
+@@ -184,44 +152,6 @@ struct cpr_desc {
+ 	bool reduce_to_corner_uV;
+ };
+ 
+-struct acc_desc {
+-	unsigned int	enable_reg;
+-	u32		enable_mask;
+-
+-	struct reg_sequence	*config;
+-	struct reg_sequence	*settings;
+-	int			num_regs_per_fuse;
+-};
+-
+-struct cpr_acc_desc {
+-	const struct cpr_desc *cpr_desc;
+-	const struct acc_desc *acc_desc;
+-};
+-
+-struct fuse_corner {
+-	int min_uV;
+-	int max_uV;
+-	int uV;
+-	int quot;
+-	int step_quot;
+-	const struct reg_sequence *accs;
+-	int num_accs;
+-	unsigned long max_freq;
+-	u8 ring_osc_idx;
+-};
+-
+-struct corner {
+-	int min_uV;
+-	int max_uV;
+-	int uV;
+-	int last_uV;
+-	int quot_adjust;
+-	u32 save_ctl;
+-	u32 save_irq;
+-	unsigned long freq;
+-	struct fuse_corner *fuse_corner;
+-};
+-
+ struct cpr_drv {
+ 	unsigned int		num_corners;
+ 	unsigned int		ref_clk_khz;
+@@ -801,95 +731,16 @@ static int cpr_set_performance_state(struct generic_pm_domain *domain,
+ 	return ret;
+ }
+ 
+-static int cpr_read_efuse(struct device *dev, const char *cname, u32 *data)
+-{
+-	struct nvmem_cell *cell;
+-	ssize_t len;
+-	char *ret;
+-	int i;
+-
+-	*data = 0;
+-
+-	cell = nvmem_cell_get(dev, cname);
+-	if (IS_ERR(cell)) {
+-		if (PTR_ERR(cell) != -EPROBE_DEFER)
+-			dev_err(dev, "undefined cell %s\n", cname);
+-		return PTR_ERR(cell);
+-	}
+-
+-	ret = nvmem_cell_read(cell, &len);
+-	nvmem_cell_put(cell);
+-	if (IS_ERR(ret)) {
+-		dev_err(dev, "can't read cell %s\n", cname);
+-		return PTR_ERR(ret);
+-	}
+-
+-	for (i = 0; i < len; i++)
+-		*data |= ret[i] << (8 * i);
+-
+-	kfree(ret);
+-	dev_dbg(dev, "efuse read(%s) = %x, bytes %zd\n", cname, *data, len);
+-
+-	return 0;
+-}
+-
+-static int
+-cpr_populate_ring_osc_idx(struct cpr_drv *drv)
+-{
+-	struct fuse_corner *fuse = drv->fuse_corners;
+-	struct fuse_corner *end = fuse + drv->desc->num_fuse_corners;
+-	const struct cpr_fuse *fuses = drv->cpr_fuses;
+-	u32 data;
+-	int ret;
+-
+-	for (; fuse < end; fuse++, fuses++) {
+-		ret = cpr_read_efuse(drv->dev, fuses->ring_osc,
+-				     &data);
+-		if (ret)
+-			return ret;
+-		fuse->ring_osc_idx = data;
+-	}
+-
+-	return 0;
+-}
+-
+-static int cpr_read_fuse_uV(const struct cpr_desc *desc,
+-			    const struct fuse_corner_data *fdata,
+-			    const char *init_v_efuse,
+-			    int step_volt,
+-			    struct cpr_drv *drv)
+-{
+-	int step_size_uV, steps, uV;
+-	u32 bits = 0;
+-	int ret;
+-
+-	ret = cpr_read_efuse(drv->dev, init_v_efuse, &bits);
+-	if (ret)
+-		return ret;
+-
+-	steps = bits & ~BIT(desc->cpr_fuses.init_voltage_width - 1);
+-	/* Not two's complement.. instead highest bit is sign bit */
+-	if (bits & BIT(desc->cpr_fuses.init_voltage_width - 1))
+-		steps = -steps;
+-
+-	step_size_uV = desc->cpr_fuses.init_voltage_step;
+-
+-	uV = fdata->ref_uV + steps * step_size_uV;
+-	return DIV_ROUND_UP(uV, step_volt) * step_volt;
+-}
+-
+ static int cpr_fuse_corner_init(struct cpr_drv *drv)
+ {
+ 	const struct cpr_desc *desc = drv->desc;
+-	const struct cpr_fuse *fuses = drv->cpr_fuses;
++	const struct cpr_fuse *cpr_fuse = drv->cpr_fuses;
+ 	const struct acc_desc *acc_desc = drv->acc_desc;
+-	int i;
+-	unsigned int step_volt;
+ 	struct fuse_corner_data *fdata;
+ 	struct fuse_corner *fuse, *end;
+-	int uV;
+ 	const struct reg_sequence *accs;
+-	int ret;
++	unsigned int step_volt;
++	int i, ret;
+ 
+ 	accs = acc_desc->settings;
+ 
+@@ -902,24 +753,16 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
+ 	end = &fuse[desc->num_fuse_corners - 1];
+ 	fdata = desc->cpr_fuses.fuse_corner_data;
+ 
+-	for (i = 0; fuse <= end; fuse++, fuses++, i++, fdata++) {
+-		/*
+-		 * Update SoC voltages: platforms might choose a different
+-		 * regulators than the one used to characterize the algorithms
+-		 * (ie, init_voltage_step).
+-		 */
+-		fdata->min_uV = roundup(fdata->min_uV, step_volt);
+-		fdata->max_uV = roundup(fdata->max_uV, step_volt);
+-
+-		/* Populate uV */
+-		uV = cpr_read_fuse_uV(desc, fdata, fuses->init_voltage,
+-				      step_volt, drv);
+-		if (uV < 0)
+-			return uV;
++	for (i = 0; fuse <= end; fuse++, cpr_fuse++, i++, fdata++) {
++		ret = cpr_populate_fuse_common(
++					drv->dev, fdata, cpr_fuse,
++					fuse, step_volt,
++					desc->cpr_fuses.init_voltage_width,
++					desc->cpr_fuses.init_voltage_step);
++		if (ret)
++			return ret;
+ 
+-		fuse->min_uV = fdata->min_uV;
+-		fuse->max_uV = fdata->max_uV;
+-		fuse->uV = clamp(uV, fuse->min_uV, fuse->max_uV);
++		fuse->step_quot = desc->step_quot[fuse->ring_osc_idx];
+ 
+ 		if (fuse == end) {
+ 			/*
+@@ -931,16 +774,6 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
+ 			end->max_uV = max(end->max_uV, end->uV);
+ 		}
+ 
+-		/* Populate target quotient by scaling */
+-		ret = cpr_read_efuse(drv->dev, fuses->quotient, &fuse->quot);
+-		if (ret)
+-			return ret;
+-
+-		fuse->quot *= fdata->quot_scale;
+-		fuse->quot += fdata->quot_offset;
+-		fuse->quot += fdata->quot_adjust;
+-		fuse->step_quot = desc->step_quot[fuse->ring_osc_idx];
+-
+ 		/* Populate acc settings */
+ 		fuse->accs = accs;
+ 		fuse->num_accs = acc_desc->num_regs_per_fuse;
+@@ -957,25 +790,9 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
+ 		else if (fuse->uV < fuse->min_uV)
+ 			fuse->uV = fuse->min_uV;
+ 
+-		ret = regulator_is_supported_voltage(drv->vdd_apc,
+-						     fuse->min_uV,
+-						     fuse->min_uV);
+-		if (!ret) {
+-			dev_err(drv->dev,
+-				"min uV: %d (fuse corner: %d) not supported by regulator\n",
+-				fuse->min_uV, i);
+-			return -EINVAL;
+-		}
+-
+-		ret = regulator_is_supported_voltage(drv->vdd_apc,
+-						     fuse->max_uV,
+-						     fuse->max_uV);
+-		if (!ret) {
+-			dev_err(drv->dev,
+-				"max uV: %d (fuse corner: %d) not supported by regulator\n",
+-				fuse->max_uV, i);
+-			return -EINVAL;
+-		}
++		ret = cpr_check_vreg_constraints(drv->dev, drv->vdd_apc, fuse);
++		if (ret)
++			return ret;
+ 
+ 		dev_dbg(drv->dev,
+ 			"fuse corner %d: [%d %d %d] RO%hhu quot %d squot %d\n",
+@@ -986,126 +803,6 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
+ 	return 0;
+ }
+ 
+-static int cpr_calculate_scaling(const char *quot_offset,
+-				 struct cpr_drv *drv,
+-				 const struct fuse_corner_data *fdata,
+-				 const struct corner *corner)
+-{
+-	u32 quot_diff = 0;
+-	unsigned long freq_diff;
+-	int scaling;
+-	const struct fuse_corner *fuse, *prev_fuse;
+-	int ret;
+-
+-	fuse = corner->fuse_corner;
+-	prev_fuse = fuse - 1;
+-
+-	if (quot_offset) {
+-		ret = cpr_read_efuse(drv->dev, quot_offset, &quot_diff);
+-		if (ret)
+-			return ret;
+-
+-		quot_diff *= fdata->quot_offset_scale;
+-		quot_diff += fdata->quot_offset_adjust;
+-	} else {
+-		quot_diff = fuse->quot - prev_fuse->quot;
+-	}
+-
+-	freq_diff = fuse->max_freq - prev_fuse->max_freq;
+-	freq_diff /= 1000000; /* Convert to MHz */
+-	scaling = 1000 * quot_diff / freq_diff;
+-	return min(scaling, fdata->max_quot_scale);
+-}
+-
+-static int cpr_interpolate(const struct corner *corner, int step_volt,
+-			   const struct fuse_corner_data *fdata)
+-{
+-	unsigned long f_high, f_low, f_diff;
+-	int uV_high, uV_low, uV;
+-	u64 temp, temp_limit;
+-	const struct fuse_corner *fuse, *prev_fuse;
+-
+-	fuse = corner->fuse_corner;
+-	prev_fuse = fuse - 1;
+-
+-	f_high = fuse->max_freq;
+-	f_low = prev_fuse->max_freq;
+-	uV_high = fuse->uV;
+-	uV_low = prev_fuse->uV;
+-	f_diff = fuse->max_freq - corner->freq;
+-
+-	/*
+-	 * Don't interpolate in the wrong direction. This could happen
+-	 * if the adjusted fuse voltage overlaps with the previous fuse's
+-	 * adjusted voltage.
+-	 */
+-	if (f_high <= f_low || uV_high <= uV_low || f_high <= corner->freq)
+-		return corner->uV;
+-
+-	temp = f_diff * (uV_high - uV_low);
+-	do_div(temp, f_high - f_low);
+-
+-	/*
+-	 * max_volt_scale has units of uV/MHz while freq values
+-	 * have units of Hz.  Divide by 1000000 to convert to.
+-	 */
+-	temp_limit = f_diff * fdata->max_volt_scale;
+-	do_div(temp_limit, 1000000);
+-
+-	uV = uV_high - min(temp, temp_limit);
+-	return roundup(uV, step_volt);
+-}
+-
+-static unsigned int cpr_get_fuse_corner(struct dev_pm_opp *opp)
+-{
+-	struct device_node *np;
+-	unsigned int fuse_corner = 0;
+-
+-	np = dev_pm_opp_get_of_node(opp);
+-	if (of_property_read_u32(np, "qcom,opp-fuse-level", &fuse_corner))
+-		pr_err("%s: missing 'qcom,opp-fuse-level' property\n",
+-		       __func__);
+-
+-	of_node_put(np);
+-
+-	return fuse_corner;
+-}
+-
+-static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
+-					    struct device *cpu_dev)
+-{
+-	u64 rate = 0;
+-	struct device_node *ref_np;
+-	struct device_node *desc_np;
+-	struct device_node *child_np = NULL;
+-	struct device_node *child_req_np = NULL;
+-
+-	desc_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
+-	if (!desc_np)
+-		return 0;
+-
+-	ref_np = dev_pm_opp_get_of_node(ref);
+-	if (!ref_np)
+-		goto out_ref;
+-
+-	do {
+-		of_node_put(child_req_np);
+-		child_np = of_get_next_available_child(desc_np, child_np);
+-		child_req_np = of_parse_phandle(child_np, "required-opps", 0);
+-	} while (child_np && child_req_np != ref_np);
+-
+-	if (child_np && child_req_np == ref_np)
+-		of_property_read_u64(child_np, "opp-hz", &rate);
+-
+-	of_node_put(child_req_np);
+-	of_node_put(child_np);
+-	of_node_put(ref_np);
+-out_ref:
+-	of_node_put(desc_np);
+-
+-	return (unsigned long) rate;
+-}
+-
+ static int cpr_corner_init(struct cpr_drv *drv)
+ {
+ 	const struct cpr_desc *desc = drv->desc;
+@@ -1143,7 +840,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
+ 		opp = dev_pm_opp_find_level_exact(&drv->pd.dev, level);
+ 		if (IS_ERR(opp))
+ 			return -EINVAL;
+-		fc = cpr_get_fuse_corner(opp);
++		fc = cpr_get_fuse_corner(opp, 0);
+ 		if (!fc) {
+ 			dev_pm_opp_put(opp);
+ 			return -EINVAL;
+@@ -1219,7 +916,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
+ 		corner->uV = fuse->uV;
+ 
+ 		if (prev_fuse && cdata[i - 1].freq == prev_fuse->max_freq) {
+-			scaling = cpr_calculate_scaling(quot_offset, drv,
++			scaling = cpr_calculate_scaling(quot_offset, drv->dev,
+ 							fdata, corner);
+ 			if (scaling < 0)
+ 				return scaling;
+@@ -1257,47 +954,6 @@ static int cpr_corner_init(struct cpr_drv *drv)
+ 	return 0;
+ }
+ 
+-static const struct cpr_fuse *cpr_get_fuses(struct cpr_drv *drv)
+-{
+-	const struct cpr_desc *desc = drv->desc;
+-	struct cpr_fuse *fuses;
+-	int i;
+-
+-	fuses = devm_kcalloc(drv->dev, desc->num_fuse_corners,
+-			     sizeof(struct cpr_fuse),
+-			     GFP_KERNEL);
+-	if (!fuses)
+-		return ERR_PTR(-ENOMEM);
+-
+-	for (i = 0; i < desc->num_fuse_corners; i++) {
+-		char tbuf[32];
+-
+-		snprintf(tbuf, 32, "cpr_ring_osc%d", i + 1);
+-		fuses[i].ring_osc = devm_kstrdup(drv->dev, tbuf, GFP_KERNEL);
+-		if (!fuses[i].ring_osc)
+-			return ERR_PTR(-ENOMEM);
+-
+-		snprintf(tbuf, 32, "cpr_init_voltage%d", i + 1);
+-		fuses[i].init_voltage = devm_kstrdup(drv->dev, tbuf,
+-						     GFP_KERNEL);
+-		if (!fuses[i].init_voltage)
+-			return ERR_PTR(-ENOMEM);
+-
+-		snprintf(tbuf, 32, "cpr_quotient%d", i + 1);
+-		fuses[i].quotient = devm_kstrdup(drv->dev, tbuf, GFP_KERNEL);
+-		if (!fuses[i].quotient)
+-			return ERR_PTR(-ENOMEM);
+-
+-		snprintf(tbuf, 32, "cpr_quotient_offset%d", i + 1);
+-		fuses[i].quotient_offset = devm_kstrdup(drv->dev, tbuf,
+-							GFP_KERNEL);
+-		if (!fuses[i].quotient_offset)
+-			return ERR_PTR(-ENOMEM);
+-	}
+-
+-	return fuses;
+-}
+-
+ static void cpr_set_loop_allowed(struct cpr_drv *drv)
+ {
+ 	drv->loop_disabled = false;
+@@ -1329,54 +985,6 @@ static int cpr_init_parameters(struct cpr_drv *drv)
+ 	return 0;
+ }
+ 
+-static int cpr_find_initial_corner(struct cpr_drv *drv)
+-{
+-	unsigned long rate;
+-	const struct corner *end;
+-	struct corner *iter;
+-	unsigned int i = 0;
+-
+-	if (!drv->cpu_clk) {
+-		dev_err(drv->dev, "cannot get rate from NULL clk\n");
+-		return -EINVAL;
+-	}
+-
+-	end = &drv->corners[drv->num_corners - 1];
+-	rate = clk_get_rate(drv->cpu_clk);
+-
+-	/*
+-	 * Some bootloaders set a CPU clock frequency that is not defined
+-	 * in the OPP table. When running at an unlisted frequency,
+-	 * cpufreq_online() will change to the OPP which has the lowest
+-	 * frequency, at or above the unlisted frequency.
+-	 * Since cpufreq_online() always "rounds up" in the case of an
+-	 * unlisted frequency, this function always "rounds down" in case
+-	 * of an unlisted frequency. That way, when cpufreq_online()
+-	 * triggers the first ever call to cpr_set_performance_state(),
+-	 * it will correctly determine the direction as UP.
+-	 */
+-	for (iter = drv->corners; iter <= end; iter++) {
+-		if (iter->freq > rate)
+-			break;
+-		i++;
+-		if (iter->freq == rate) {
+-			drv->corner = iter;
+-			break;
+-		}
+-		if (iter->freq < rate)
+-			drv->corner = iter;
+-	}
+-
+-	if (!drv->corner) {
+-		dev_err(drv->dev, "boot up corner not found\n");
+-		return -EINVAL;
+-	}
+-
+-	dev_dbg(drv->dev, "boot up perf state: %u\n", i);
+-
+-	return 0;
+-}
+-
+ static const struct cpr_desc qcs404_cpr_desc = {
+ 	.num_fuse_corners = 3,
+ 	.min_diff_quot = CPR_FUSE_MIN_QUOT_DIFF,
+@@ -1564,8 +1172,9 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
+ 	if (ret)
+ 		goto unlock;
+ 
+-	ret = cpr_find_initial_corner(drv);
+-	if (ret)
++	ret = cpr_find_initial_corner(drv->dev, drv->cpu_clk, drv->corners,
++				      drv->num_corners);
++	if (ret < 0)
+ 		goto unlock;
+ 
+ 	if (acc_desc->config)
+@@ -1650,6 +1259,7 @@ static int cpr_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct device *dev = &pdev->dev;
+ 	struct cpr_drv *drv;
++	const struct cpr_desc *desc;
+ 	int irq, ret;
+ 	const struct cpr_acc_desc *data;
+ 	struct device_node *np;
+@@ -1665,6 +1275,7 @@ static int cpr_probe(struct platform_device *pdev)
+ 	drv->dev = dev;
+ 	drv->desc = data->cpr_desc;
+ 	drv->acc_desc = data->acc_desc;
++	desc = drv->desc;
+ 
+ 	drv->fuse_corners = devm_kcalloc(dev, drv->desc->num_fuse_corners,
+ 					 sizeof(*drv->fuse_corners),
+@@ -1705,11 +1316,13 @@ static int cpr_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	drv->cpr_fuses = cpr_get_fuses(drv);
++	drv->cpr_fuses = cpr_get_fuses(drv->dev, 0, desc->num_fuse_corners);
+ 	if (IS_ERR(drv->cpr_fuses))
+ 		return PTR_ERR(drv->cpr_fuses);
+ 
+-	ret = cpr_populate_ring_osc_idx(drv);
++	ret = cpr_populate_ring_osc_idx(drv->dev, drv->fuse_corners,
++					drv->cpr_fuses,
++					desc->num_fuse_corners);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.30.0
 
