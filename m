@@ -2,84 +2,287 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A4D2FD985
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 20:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2732FDA1D
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 20:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391914AbhATTYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 14:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
+        id S2387916AbhATSo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 13:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731961AbhATTXh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 14:23:37 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1667DC061575;
-        Wed, 20 Jan 2021 11:22:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=KZ0iCEv8dO4oaEcXXlKBGTHYzPM9i6Lr3e34zMPgxiw=; b=s0r1NF4bIp0KXSj/YxPnbiRQlC
-        5lsms4Jhix04Cgj4F3NEehgwMENlKw5VroDWGNkpT773VXJOPlxSYPvhKlPnj8smmJpKebTqufPzs
-        +P79bRD+2C/Zedy/9Ea/VeKmgEA0L667/+TkXmALu1CeiDQ73oPrQhlnT6wZ1xGFNfvGRzznhgEF5
-        R/6zgAuOtaUIwDNsMwL1Mvd3joURqhLI3qvDt+p5jOu6AA6QSMJJHczDuXotztySw0+BPrBI0gM5E
-        2j0P386+6qzwI2C+KwQu58wBaUxQvA/YqLPpqeCU1LM5OQaI/WSDSJrkmRC08vs70fieMVONK7JUD
-        e6uo5r1w==;
-Received: from [2601:1c0:6280:3f0::9abc]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l2J49-0003PH-CD; Wed, 20 Jan 2021 19:22:53 +0000
-Subject: Re: [PATCH] drivers: base: power: Fix resposible -> responsible in
- runtime.c
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, rjw@rjwysocki.net,
-        len.brown@intel.com, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210120143312.3229181-1-unixbhaskar@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <50d66599-bd99-1402-a387-2c4d37ce1a61@infradead.org>
-Date:   Wed, 20 Jan 2021 11:22:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        with ESMTP id S2404234AbhATSYV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 13:24:21 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D31CC0613C1;
+        Wed, 20 Jan 2021 10:23:41 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id s11so19621120edd.5;
+        Wed, 20 Jan 2021 10:23:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DmwajdtcsvpevtFPcr/W9PT5T5hPWpAKVvzcBmaY6LI=;
+        b=dEF9rDuPXvxzN1UQzzb3r9e09PRulKHZh0yoClrJqAhrfDPGAnJaQUWw8aHssqmnM4
+         v/PUxyNKwr0Ol7DZh+ZLq6RY5jhI8YUYsS2P1YbYrg3gyAB28EhnDqlNaPUL/MAO5c7H
+         3/6f2R8YC6E0e79YUmhrlde7gxlDLFCR2kzFgil1rjXuB+qI84ihKpwXaRxReaEVJSJa
+         t1AdsqVo646iZSubp051HiFdiA1RaZyzd9lrPxGPuSjeiW3dkDUovUMmW+920FGTg7rV
+         Luoaypc9jThcj4xyT4SkGIfL3tA+g5nFt+Xrogatrx7GtfnFV/aJSoKTMDwPBC4oKftu
+         yhzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DmwajdtcsvpevtFPcr/W9PT5T5hPWpAKVvzcBmaY6LI=;
+        b=rG/KNQcXfyIsqVlI9+6+zXFkLSmAXvWUAaf3cBAIc+2xdtcJHlCQOD/lp8erBpMgWT
+         fHyhNmgziLe2ZZwnc+pNRIK1IieKEJ0zRAUV+v1mQUjn1LsCxfe9EFHuCEua5W6IZy8P
+         /thZr4xQ2yOa3Cv/t+ri2gykmIiGkt8HSfeSG7b4wSQPUmNqnsd4K0+A3T5E6yyAcsVO
+         7sVJ9mhi/UboINdJ2XFptxysG+x0hQ97d0ExhwMubjcMgbGXy61nZwlTVohnM2vj3AP9
+         pBgbtn7VlWKwp6Crhnb3YZ8uBae1vJvRwYAIDajtb84ko8HtpdSNJmnGpiR2OeupaoIv
+         +d+Q==
+X-Gm-Message-State: AOAM531Akt3Oo/fBLpi5wOBtVc0BqqAqiulW/oSc7QgYB4J7LC2vQgS8
+        rGX7VWP0swWSgdMKDudsXGI=
+X-Google-Smtp-Source: ABdhPJyzlbPaiWan/dUu3IOjOoRhLTl+WrCJ9qJN/cmzqtDnXDGd+NBSGNWqoYl4dWTsY3Z8TZCIMg==
+X-Received: by 2002:aa7:c643:: with SMTP id z3mr8761528edr.330.1611167019929;
+        Wed, 20 Jan 2021 10:23:39 -0800 (PST)
+Received: from localhost.localdomain ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id hr31sm1158332ejc.125.2021.01.20.10.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jan 2021 10:23:39 -0800 (PST)
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 2/7] dt-bindings: mfd: Add Actions Semi ATC260x PMIC binding
+Date:   Wed, 20 Jan 2021 20:23:27 +0200
+Message-Id: <0fe2072b32faaf5db430b9a1979bb99e18887e7e.1611165200.git.cristian.ciocaltea@gmail.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <cover.1611165200.git.cristian.ciocaltea@gmail.com>
+References: <cover.1611165200.git.cristian.ciocaltea@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210120143312.3229181-1-unixbhaskar@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/20/21 6:33 AM, Bhaskar Chowdhury wrote:
-> s/resposible/responsible/
-> 
-> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Add devicetree binding for Actions Semi ATC260x PMICs.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changes in v6:
+ - None
 
-thanks.
+Changes in v5:
+ - None
 
-> ---
->  drivers/base/power/runtime.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index bfda153b1a41..a46a7e30881b 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1100,7 +1100,7 @@ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
->   * suspending the device when both its runtime PM status is %RPM_ACTIVE and its
->   * runtime PM usage counter is not zero.
->   *
-> - * The caller is resposible for decrementing the runtime PM usage counter of
-> + * The caller is responsible for decrementing the runtime PM usage counter of
->   * @dev after this function has returned a positive value for it.
->   */
->  int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
-> --
-> 2.30.0
-> 
+Changes in v4
+ - Added Reviewed-by from Rob
+ - Added support for ATC2603C LDO12 fixed regulator per Mark's suggestion
 
+Changes in v3 (according to Rob's review):
+ - Dropped the 'pwrc' and 'onkey' nodes
+ - Used a common 'reset-time-sec' property
 
+ .../bindings/mfd/actions,atc260x.yaml         | 183 ++++++++++++++++++
+ 1 file changed, 183 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
+
+diff --git a/Documentation/devicetree/bindings/mfd/actions,atc260x.yaml b/Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
+new file mode 100644
+index 000000000000..dd43a0c766f3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
+@@ -0,0 +1,183 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/actions,atc260x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Actions Semi ATC260x Power Management IC bindings
++
++maintainers:
++  - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++  - Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
++
++description: |
++  ATC260x series PMICs integrates Audio Codec, Power Management, RTC, IR
++  and GPIO controller blocks. Currently only the PM related functionalities
++  (i.e. regulators and system power-off/reboot) for the ATC2603C and ATC2609A
++  chip variants are supported.
++  ATC2603C includes 3 programmable DC-DC converters, 9 programmable LDO
++  regulators and 1 fixed LDO regulator.
++  ATC2609A includes 5 programmable DC-DC converters and 10 programmable LDO
++  regulators.
++
++allOf:
++  - $ref: ../input/input.yaml
++
++properties:
++  compatible:
++    enum:
++      - actions,atc2603c
++      - actions,atc2609a
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  reset-time-sec:
++    description: |
++      Duration in seconds which the key should be kept pressed for device
++      to reset automatically. The hardware default is 8. Use 0 to disable
++      this functionality.
++    enum: [0, 6, 8, 10, 12]
++
++  regulators:
++    type: object
++    description: |
++      List of child nodes specifying the regulators, depending on chip variant:
++      * ATC2603C: dcdc[1-3], ldo[1-3,5-8,11,12], switchldo1
++      * ATC2609A: dcdc[0-4], ldo[0-9]
++
++    properties:
++      compatible:
++        enum:
++          - actions,atc2603c-regulator
++          - actions,atc2609a-regulator
++
++      switchldo1:
++        type: object
++        $ref: ../regulator/regulator.yaml
++
++        properties:
++          regulator-name: true
++          regulator-boot-on: true
++          regulator-always-on: true
++          regulator-min-microvolt: true
++          regulator-max-microvolt: true
++          regulator-allow-bypass: true
++          regulator-active-discharge: true
++
++        additionalProperties: false
++
++    patternProperties:
++      "^(dcdc[0-4]|ldo[0-9]|ldo1[1-2]|switchldo1)-supply$":
++        description: ATC260x voltage regulators supplies
++
++      "^(dcdc[0-4]|ldo[0-9]|ldo1[1-2])$":
++        type: object
++        $ref: ../regulator/regulator.yaml
++
++        properties:
++          regulator-name: true
++          regulator-boot-on: true
++          regulator-always-on: true
++          regulator-min-microvolt: true
++          regulator-max-microvolt: true
++          regulator-allow-bypass: true
++
++        additionalProperties: false
++
++    allOf:
++      - if:
++          properties:
++            compatible:
++              contains:
++                const: actions,atc2603c-regulator
++        then:
++          patternProperties:
++            "^(dcdc[0,4]|ldo[0,4,9])(-supply)?$": false
++
++            "^(ldo|dcdc)":
++              properties:
++                regulator-allow-bypass: false
++      - if:
++          properties:
++            compatible:
++              contains:
++                const: actions,atc2609a-regulator
++        then:
++          patternProperties:
++            "^(ldo1[1-2]|switchldo1)(-supply)?$": false
++
++            "^(dcdc|ldo[3-9])":
++              properties:
++                regulator-allow-bypass: false
++
++    required:
++      - compatible
++
++    additionalProperties: false
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    i2c0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pmic@65 {
++            compatible = "actions,atc2603c";
++            reg = <0x65>;
++            interrupt-parent = <&sirq>;
++            interrupts = <2 IRQ_TYPE_LEVEL_HIGH>;
++
++            reset-time-sec = <6>;
++
++            regulators {
++                compatible = "actions,atc2603c-regulator";
++
++                dcdc1-supply = <&reg_5v0>;
++                dcdc3-supply = <&reg_5v0>;
++                ldo5-supply = <&reg_5v0>;
++                switchldo1-supply = <&vcc>;
++
++                vdd_cpu: dcdc1 {
++                    regulator-name = "VDD_CPU";
++                    regulator-min-microvolt = <700000>;
++                    regulator-max-microvolt = <1400000>;
++                    regulator-always-on;
++                };
++
++                vcc: dcdc3 {
++                    regulator-name = "VCC";
++                    regulator-min-microvolt = <2600000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                };
++
++                vcc_3v1: ldo5 {
++                    regulator-name = "VCC_3V1";
++                    regulator-min-microvolt = <2600000>;
++                    regulator-max-microvolt = <3300000>;
++                };
++
++                sd_vcc: switchldo1 {
++                    regulator-name = "SD_VCC";
++                    regulator-min-microvolt = <3000000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                    regulator-boot-on;
++                };
++            };
++        };
++    };
++
++...
 -- 
-~Randy
-"He closes his eyes and drops the goggles.  You can't get hurt
-by looking at a bitmap.  Or can you?"
-(Neal Stephenson: Snow Crash)
+2.30.0
+
