@@ -2,151 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A18D2FDCE8
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 00:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225162FDCE6
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 00:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732305AbhATVZ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 16:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S1730699AbhATVZT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 16:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbhATVYv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 16:24:51 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07248C0613CF;
-        Wed, 20 Jan 2021 13:13:55 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id v67so36099853lfa.0;
-        Wed, 20 Jan 2021 13:13:54 -0800 (PST)
+        with ESMTP id S2388556AbhATVRG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 16:17:06 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86252C0613D6
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 13:16:20 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b8so13239939plx.0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 13:16:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KjwS82fYqqkv4xPlnla6S9j26In+4jWKlglRsnCKUho=;
-        b=EmysAZqHCtHWslXxtghv190tfnK9KVVE01KhsXjEV21KwwZ8fvmvnbV9bozew3fksr
-         BRNtH8BL0tIuVGNWzvn18YPp6GhXZQPjKPDIBlR9z4lFbOGIVRPBpHLsPmi4iH2Lmcx8
-         Vrsu8jLBHyBFjRb/RVLnHv4BuCkAUoWzh/e7OvgK0PLxIzDkk/M5i+1dhViQhgiIIO0X
-         StMTRS0PRA8BhHq7tpBdUeol5Mh7vwy1B9ZIwqeEus/O8Utjck6P5zXwCortKdkgfw63
-         f8GiDBK6z8HREsMGmVCgjjSZSnVZZtNcWjRa+89kNE73kqa1+659eJ4hqYBQh2oMOmJy
-         saHQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ca+8NzTfETzVE4+uw+qveOGQYKjaycmberW1KwYsv+g=;
+        b=sp/+zyym2ObOAZ5VSgKGDvFyd7fzMiEelycw2XiJgLanPAV191du/v4seZcP2n1ckS
+         14O504wPDap2gIAXzcaB/PQnNGWe0xB5neErN1fyt3P41nv3RkeBk/ilNj6zXtdahhHo
+         I8K+OTjgm5aURXGPoa+cSxvje004UqQMR7ejb0dF0m6CU+YR185Pskgmy7TQazkfD8E5
+         gNfEpWMUecYuiBrLN/ad5GzWAPFClDd2KIdrBqCNKXMtkeEwBEHahx2/gbNVbE/xk2/V
+         V93OlgwEvSV2JRtRHvnFizXWIP83SwZQf/MlPOfVQiVJD8WYXW//tjWbv9MDssegIoLd
+         ZCUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KjwS82fYqqkv4xPlnla6S9j26In+4jWKlglRsnCKUho=;
-        b=Y+MoB9Rm7SizMki9XnJqMz6rA4riQJOyYOePine0CI4SbWTp7CmMHHzdGoBAWarubt
-         r0f7G2LN783jrTXgnQp8dZkI7Vx5e3VwgwzrTAaaIUqoxFQO5waKw3jKKThCYD15oWKD
-         3gjBAfWmNC3S0IycUOe9SoEZuuwD3zWz6kVlfOKUrO2pmu6vLb/e9hX/GVdedczYAHgE
-         swTj6CpIUly9LJDn2NDG19zKkDaK0ExrAxuakB/Udq/cttrpjKGkxwkRdp90rtVzIXeV
-         mt7yOU/KMnsFNxlRUCGvmEL9t+jQGgAG036u8QlJCNufxRec6s3OJ8xmU9DbktR3sLSQ
-         PoJA==
-X-Gm-Message-State: AOAM532+pOePXRh/XaQBd8HquVMu8RHxYbZDZ5ktqS13XSciFk0QWNHL
-        A8cSSDRIK+Yx6HFoE7b/xMo=
-X-Google-Smtp-Source: ABdhPJzFbfdCzVoQJkISeG4Rz4RWsAmu98GhPnEYYfDeTQBLSEyPyyrlRWvyypuYoFYyWVC4Ekyfjw==
-X-Received: by 2002:a05:6512:131b:: with SMTP id x27mr4615717lfu.593.1611177233593;
-        Wed, 20 Jan 2021 13:13:53 -0800 (PST)
-Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id 196sm298131lfj.219.2021.01.20.13.13.52
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ca+8NzTfETzVE4+uw+qveOGQYKjaycmberW1KwYsv+g=;
+        b=YuBPImg9WNnOvrY1hrsC4dlJBsZGUNOxMNjtPzJis1gqbYdzJmvXfRLH7tHeCIPEtl
+         jw/B5Nzf1IKhDgnI8Ks1kTEZlTXiBhjRfh0lDuLKuFlgJHvfJnb7DwhDPrULoYh27k+l
+         mgMkqfRFUNipNXvYwowF2xmTTK4//jQX2AcU2dMXQwn2CL0PRj5wO6/LMKNxUb3S7AH1
+         Gz3ez+/3MLgK/cb2XGT79wM5qN4SITKhhzlz8jLG7W4jGTX+jqjTqHKAX6bm3+9damx+
+         6W2tcHb+TIbTT3iJ69InuFrre+84A56s9YAxIg9vdGvlkWUyfnch8b63VGtAjJGznL2R
+         62lA==
+X-Gm-Message-State: AOAM53368rnHR4UxMv49YhgwNc4zxOMYBFiS0dsdhVTQoKPMWaZKFtKX
+        WITLdXO19N0+nsVE1u8bxz68tg==
+X-Google-Smtp-Source: ABdhPJw4pOCKvDfQNI0uJJUeDzQYXxP9mahfTb+hb/0MVvzM3/BurD6mZpkApPxQpERLeXet9cWjkw==
+X-Received: by 2002:a17:90a:4cc5:: with SMTP id k63mr7552829pjh.202.1611177380010;
+        Wed, 20 Jan 2021 13:16:20 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n128sm3487876pga.55.2021.01.20.13.16.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 13:13:53 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matt Merhar <mattmerhar@protonmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v5 3/3] PM: domains: Add "performance" column to debug summary
-Date:   Thu, 21 Jan 2021 00:12:32 +0300
-Message-Id: <20210120211232.17299-4-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120211232.17299-1-digetx@gmail.com>
-References: <20210120211232.17299-1-digetx@gmail.com>
+        Wed, 20 Jan 2021 13:16:19 -0800 (PST)
+Message-ID: <60089da3.1c69fb81.bbd1d.859a@mx.google.com>
+Date:   Wed, 20 Jan 2021 13:16:19 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.11-rc4-28-ga31400ec480e
+Subject: pm/testing sleep: 4 runs, 1 regressions (v5.11-rc4-28-ga31400ec480e)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add "performance" column to debug summary which shows performance state
-of all power domains and theirs devices.
+pm/testing sleep: 4 runs, 1 regressions (v5.11-rc4-28-ga31400ec480e)
 
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-Tested-by: Matt Merhar <mattmerhar@protonmail.com>
-[tested on NVIDIA Tegra20/30/124 SoCs]
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/base/power/domain.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+Regressions Summary
+-------------------
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 25b346bb2d97..40b72b1d8e8f 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2955,7 +2955,15 @@ static void rtpm_status_str(struct seq_file *s, struct device *dev)
- 	else
- 		WARN_ON(1);
- 
--	seq_puts(s, p);
-+	seq_printf(s, "%-25s  ", p);
-+}
-+
-+static void perf_status_str(struct seq_file *s, struct device *dev)
-+{
-+	struct generic_pm_domain_data *gpd_data;
-+
-+	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
-+	seq_put_decimal_ull(s, "", gpd_data->performance_state);
- }
- 
- static int genpd_summary_one(struct seq_file *s,
-@@ -2983,7 +2991,7 @@ static int genpd_summary_one(struct seq_file *s,
- 	else
- 		snprintf(state, sizeof(state), "%s",
- 			 status_lookup[genpd->status]);
--	seq_printf(s, "%-30s  %-15s ", genpd->name, state);
-+	seq_printf(s, "%-30s  %-50s %u", genpd->name, state, genpd->performance_state);
- 
- 	/*
- 	 * Modifications on the list require holding locks on both
-@@ -2991,6 +2999,8 @@ static int genpd_summary_one(struct seq_file *s,
- 	 * Also genpd->name is immutable.
- 	 */
- 	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-+		if (list_is_first(&link->parent_node, &genpd->parent_links))
-+			seq_printf(s, "\n%48s", " ");
- 		seq_printf(s, "%s", link->child->name);
- 		if (!list_is_last(&link->parent_node, &genpd->parent_links))
- 			seq_puts(s, ", ");
-@@ -3005,6 +3015,7 @@ static int genpd_summary_one(struct seq_file *s,
- 
- 		seq_printf(s, "\n    %-50s  ", kobj_path);
- 		rtpm_status_str(s, pm_data->dev);
-+		perf_status_str(s, pm_data->dev);
- 		kfree(kobj_path);
- 	}
- 
-@@ -3020,9 +3031,9 @@ static int summary_show(struct seq_file *s, void *data)
- 	struct generic_pm_domain *genpd;
- 	int ret = 0;
- 
--	seq_puts(s, "domain                          status          children\n");
-+	seq_puts(s, "domain                          status          children                           performance\n");
- 	seq_puts(s, "    /device                                             runtime status\n");
--	seq_puts(s, "----------------------------------------------------------------------\n");
-+	seq_puts(s, "----------------------------------------------------------------------------------------------\n");
- 
- 	ret = mutex_lock_interruptible(&gpd_list_lock);
- 	if (ret)
--- 
-2.29.2
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
 
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.11-rc=
+4-28-ga31400ec480e/plan/sleep/
+
+  Test:     sleep
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.11-rc4-28-ga31400ec480e
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      a31400ec480e8a579467fbe36d7ea49c952109dc =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60088d0d11d9b575b6bb5d49
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.11-rc4-28-ga3140=
+0ec480e/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.11-rc4-28-ga3140=
+0ec480e/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
+0118.2/arm64/rootfs.cpio.gz =
+
+
+
+  * sleep.login: https://kernelci.org/test/case/id/60088d0d11d9b575b6bb5d4a
+        failing since 154 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
+il: v5.9-rc1-4-g1f08d51cd57f) =
+
+ =20
