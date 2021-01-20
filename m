@@ -2,251 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DEC2FCCD2
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 09:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485EA2FCEB6
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 12:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730973AbhATIfi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 03:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730947AbhATIec (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 03:34:32 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57BC061575
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 00:33:51 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c127so2015055wmf.5
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 00:33:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=kf68twK2VJqQ9rG90iy/Ey4koGBofqxtFe6BH41DE2U=;
-        b=ugv47AZmMA+xT9rztkNUf1l1ZWJmiwwKfuZcduQNMyAoiXL1mZ4978OKPr3LEWr7vz
-         KNR0D99j9aUzgV+TNPAvrOBbhn7PIvz7iQEtTR8K7v2JE6FekzIw1fz+7P8nFv0cCABa
-         DFK85L7PJVYKs3/kbL4eFwcH8lwz93GswENPw+JUpWOI4HzhyrwL1SkCK8duQCmGJj/J
-         Zykl2cLd1X48gVne+VuwLslmUSSTeNwdoTkcr/PaN0H1vjdySHEBNArm4zAIzxcmNa3P
-         /oxAmhso1coeEuToHfQMLoUafrOJ1eonMC542hB3+fycgWMDpuMVbNSJBoZp6Aee3GnB
-         yUwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=kf68twK2VJqQ9rG90iy/Ey4koGBofqxtFe6BH41DE2U=;
-        b=r/tPys7b8dhyOTxdjIxrrIgl//0hASGvidah77kI7WoZNxUnShLYHdXAtSjgbaq5tf
-         5CMZ5525adUr/8gIGXERj/LklKZOjerTDcGQYNx5QgrtYVjKIln491QKCnnfRtM6Blz7
-         FJBM7YIw0siHB54nAPTwnKgxl/Pob940YypTqqsaDV2NS+v1eRRWN6HFoQqFJCmMqoNt
-         54VO05mclyMxNQidK6axAWLx0AeESzTGFxW8xyEGR3Xx2xhX1CtiYjvVcpHzsiWx4B+N
-         8k3rl7kDJXbOzhEAbyYdptANuULHuDR1fmQ3POTf7cBtr4PZ+pg0UpNgtFzQbzikKycj
-         +3yQ==
-X-Gm-Message-State: AOAM533xh9m5ukTgpTfRfYl6aqUdsXRyr/eyoj/y3ArqocnC/57Q3TOa
-        9xclZgLSHLy2Rja3too9ja1f5w==
-X-Google-Smtp-Source: ABdhPJzEiyHU50818frV69xIg7wQLT2H4SHkDbjF641qDAzxYiCtZvuG6UsYBlE6su9suTh5V1Du6g==
-X-Received: by 2002:a1c:6005:: with SMTP id u5mr3248278wmb.122.1611131630513;
-        Wed, 20 Jan 2021 00:33:50 -0800 (PST)
-Received: from dell ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id h13sm2480169wrm.28.2021.01.20.00.33.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 00:33:49 -0800 (PST)
-Date:   Wed, 20 Jan 2021 08:33:48 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 3/7] mfd: Add MFD driver for ATC260x PMICs
-Message-ID: <20210120083348.GM4903@dell>
-References: <cover.1610534765.git.cristian.ciocaltea@gmail.com>
- <81546cf3265f51374a1b38b9e801003fd6c3e298.1610534765.git.cristian.ciocaltea@gmail.com>
+        id S1730444AbhATLBh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 06:01:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36166 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731398AbhATJcN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 04:32:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611135026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JBEHTu6Bu4ohAuOu7gRJBoClExSCGrjx9SGtkFNBopE=;
+        b=hJ6SfqejgT492mZ1YBx0gE3Mm+eX/0LEzSMXovridnCfHAfdFPKuZibPRqBjfFjI627oqD
+        8hEtJ5q5AEbi69Ku2XFT7e7sz9ehy4n9weccCl3WAU19w0QgYb9iQqBlC6zr7IGXVwOiNX
+        EgehTPl7buuKKYeyBwlFAzk3MDVLjbM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-333-bnFzU7UkN0q9whIEGbKNaA-1; Wed, 20 Jan 2021 04:30:22 -0500
+X-MC-Unique: bnFzU7UkN0q9whIEGbKNaA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7CBB2107ACE4;
+        Wed, 20 Jan 2021 09:30:21 +0000 (UTC)
+Received: from localhost (ovpn-12-59.pek2.redhat.com [10.72.12.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D19406F99D;
+        Wed, 20 Jan 2021 09:30:17 +0000 (UTC)
+Date:   Wed, 20 Jan 2021 17:30:15 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kernelfans@gmail.com, kexec@lists.infradead.org,
+        linux-pm@vger.kernel.org, dyoung@redhat.com
+Subject: Re: [bug report] PM / reboot: Eliminate race between reboot and
+ suspend
+Message-ID: <20210120093015.GE20161@MiWiFi-R3L-srv>
+References: <20201118185917.GA433776@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <81546cf3265f51374a1b38b9e801003fd6c3e298.1610534765.git.cristian.ciocaltea@gmail.com>
+In-Reply-To: <20201118185917.GA433776@mwanda>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 13 Jan 2021, Cristian Ciocaltea wrote:
+Hi,
 
-> Add initial support for the Actions Semi ATC260x PMICs which integrates
-> Audio Codec, Power management, Clock generation and GPIO controller
-> blocks.
+On 11/18/20 at 09:59pm, Dan Carpenter wrote:
+> Hello Pingfan Liu,
 > 
-> For the moment this driver only supports Regulator, Poweroff and Onkey
-> functionalities for the ATC2603C and ATC2609A chip variants.
+> The patch 55f2503c3b69: "PM / reboot: Eliminate race between reboot
+> and suspend" from Jul 31, 2018, leads to the following static checker
+> warning:
 > 
-> Since the PMICs can be accessed using both I2C and SPI buses, the
-> following driver structure has been adopted:
+> 	kernel/power/main.c:27 lock_system_sleep()
+> 	warn: called with lock held.  '&system_transition_mutex'
+
+This is a good finding. I think we can simply remove the lock/unlock
+pair of system_transition_mutex in kernel_kexec() function. The dead
+lock should be easily triggered, but it hasn't caused any failure report
+because the feature 'kexec jump' is almost not used by anyone as far as
+I know. We may need to find out who is using it and where it's used
+through an inquiry. Before that, we can just remove the lock operation
+inside CONFIG_KEXEC_JUMP ifdeffery scope. Thanks. 
+
+
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 80905e5aa8ae..a0b6780740c8 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -1134,7 +1134,6 @@ int kernel_kexec(void)
+ 
+ #ifdef CONFIG_KEXEC_JUMP
+ 	if (kexec_image->preserve_context) {
+-		lock_system_sleep();
+ 		pm_prepare_console();
+ 		error = freeze_processes();
+ 		if (error) {
+@@ -1197,7 +1196,6 @@ int kernel_kexec(void)
+ 		thaw_processes();
+  Restore_console:
+ 		pm_restore_console();
+-		unlock_system_sleep();
+ 	}
+ #endif
+ 
+
 > 
->            -----> atc260x-core.c (Implements core functionalities)
->           /
-> ATC260x --------> atc260x-i2c.c (Implements I2C interface)
->           \
->            -----> atc260x-spi.c (Implements SPI interface - TODO)
+> kernel/reboot.c
+>    345  
+>    346          mutex_lock(&system_transition_mutex);
+>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> The patch changed the code to take this lock.
 > 
-> Co-developed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-> ---
-> Changes in v5:
->  - None
+>    347          switch (cmd) {
+>    348          case LINUX_REBOOT_CMD_RESTART:
+>    349                  kernel_restart(NULL);
+>    350                  break;
+>    351  
+>    352          case LINUX_REBOOT_CMD_CAD_ON:
+>    353                  C_A_D = 1;
+>    354                  break;
+>    355  
+>    356          case LINUX_REBOOT_CMD_CAD_OFF:
+>    357                  C_A_D = 0;
+>    358                  break;
+>    359  
+>    360          case LINUX_REBOOT_CMD_HALT:
+>    361                  kernel_halt();
+>    362                  do_exit(0);
+>    363                  panic("cannot halt");
+>    364  
+>    365          case LINUX_REBOOT_CMD_POWER_OFF:
+>    366                  kernel_power_off();
+>    367                  do_exit(0);
+>    368                  break;
+>    369  
+>    370          case LINUX_REBOOT_CMD_RESTART2:
+>    371                  ret = strncpy_from_user(&buffer[0], arg, sizeof(buffer) - 1);
+>    372                  if (ret < 0) {
+>    373                          ret = -EFAULT;
+>    374                          break;
+>    375                  }
+>    376                  buffer[sizeof(buffer) - 1] = '\0';
+>    377  
+>    378                  kernel_restart(buffer);
+>    379                  break;
+>    380  
+>    381  #ifdef CONFIG_KEXEC_CORE
+>    382          case LINUX_REBOOT_CMD_KEXEC:
+>    383                  ret = kernel_kexec();
+>                         ^^^^^^^^^^^^^^^^^^^^
+> Called with lock held.
 > 
-> Changes in v4 - according to Lee's review:
->  - Replaced 'regmap_add_irq_chip()' with 'devm' counterpart and dropped
->    'atc260x_device_remove()' and 'atc260x_i2c_remove()' functions
->  - Moved kerneldoc sections from prototypes to real functions
->  - Placed single line entries on one line for mfd_cells[]
->  - Several other minor changes
+>    384                  break;
+>    385  #endif
 > 
-> Changes in v3:
->  - Fixed the issues reported by Lee's kernel test robot:
->    WARNING: modpost: missing MODULE_LICENSE() in drivers/mfd/atc260x-core.o
->    >> FATAL: modpost: drivers/mfd/atc260x-i2c: sizeof(struct i2c_device_id)=24 is
->       not a modulo of the size of section __mod_i2c__<identifier>_device_table=588.
->    >> Fix definition of struct i2c_device_id in mod_devicetable.h
->  - Dropped the usage of '.of_compatible' fields in {atc2603c,atc2609a}_mfd_cells[]
->  - Added 'Co-developed-by' tag in commit message and dropped [cristian: ...] line
+> But kernel_kexec() also tries to take the &system_transition_mutex so
+> it will dead lock.
 > 
->  drivers/mfd/Kconfig                  |  18 ++
->  drivers/mfd/Makefile                 |   3 +
->  drivers/mfd/atc260x-core.c           | 293 +++++++++++++++++++++++++
->  drivers/mfd/atc260x-i2c.c            |  64 ++++++
->  include/linux/mfd/atc260x/atc2603c.h | 281 ++++++++++++++++++++++++
->  include/linux/mfd/atc260x/atc2609a.h | 308 +++++++++++++++++++++++++++
->  include/linux/mfd/atc260x/core.h     |  58 +++++
->  7 files changed, 1025 insertions(+)
->  create mode 100644 drivers/mfd/atc260x-core.c
->  create mode 100644 drivers/mfd/atc260x-i2c.c
->  create mode 100644 include/linux/mfd/atc260x/atc2603c.h
->  create mode 100644 include/linux/mfd/atc260x/atc2609a.h
->  create mode 100644 include/linux/mfd/atc260x/core.h
+> kernel/kexec_core.c
+>   1125  int kernel_kexec(void)
+>   1126  {
+>   1127          int error = 0;
+>   1128  
+>   1129          if (!mutex_trylock(&kexec_mutex))
+>   1130                  return -EBUSY;
+>   1131          if (!kexec_image) {
+>   1132                  error = -EINVAL;
+>   1133                  goto Unlock;
+>   1134          }
+>   1135  
+>   1136  #ifdef CONFIG_KEXEC_JUMP
+>   1137          if (kexec_image->preserve_context) {
+>   1138                  lock_system_sleep();
+>                         ^^^^^^^^^^^^^^^^^^^
+> Here.
+> 
+>   1139                  pm_prepare_console();
+>   1140                  error = freeze_processes();
+>   1141                  if (error) {
+>   1142                          error = -EBUSY;
+>   1143                          goto Restore_console;
+>   1144                  }
+>   1145                  suspend_console();
+>   1146                  error = dpm_suspend_start(PMSG_FREEZE);
+>   1147                  if (error)
+>   1148                          goto Resume_console;
+>   1149                  /* At this point, dpm_suspend_start() has been called,
+>   1150                   * but *not* dpm_suspend_end(). We *must* call
+>   1151                   * dpm_suspend_end() now.  Otherwise, drivers for
+>   1152                   * some devices (e.g. interrupt controllers) become
+>   1153                   * desynchronized with the actual state of the
+>   1154                   * hardware at resume time, and evil weirdness ensues.
+>   1155                   */
+>   1156                  error = dpm_suspend_end(PMSG_FREEZE);
+>   1157                  if (error)
+>   1158                          goto Resume_devices;
+>   1159                  error = suspend_disable_secondary_cpus();
+>   1160                  if (error)
+> 
+> regards,
+> dan carpenter
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
 
-[...]
-
-> +/**
-> + * atc260x_device_probe(): Probe a configured ATC260x device
-> + *
-> + * @atc260x: ATC260x device to probe (must be configured)
-> + *
-> + * This function lets the ATC260x core register the ATC260x MFD devices
-> + * and IRQCHIP. The ATC260x device passed in must be fully configured
-> + * with atc260x_match_device, its IRQ set, and regmap created.
-> + */
-> +int atc260x_device_probe(struct atc260x *atc260x)
-> +{
-> +	struct device *dev = atc260x->dev;
-> +	unsigned int chip_rev;
-> +	int ret;
-> +
-> +	if (!atc260x->irq) {
-> +		dev_err(dev, "No interrupt support\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Initialize the hardware */
-> +	atc260x->dev_init(atc260x);
-> +
-> +	ret = regmap_read(atc260x->regmap, atc260x->rev_reg, &chip_rev);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to get chip revision\n");
-> +		return ret;
-> +	}
-> +
-> +	if (chip_rev > 31) {
-
-Nit: If you have to respin this, please define this magic number.
-
-> +		dev_err(dev, "Unknown chip revision: %u\n", chip_rev);
-> +		return -EINVAL;
-> +	}
-> +
-> +	atc260x->ic_ver = __ffs(chip_rev + 1U);
-> +
-> +	dev_info(dev, "Detected chip type %s rev.%c\n",
-> +		 atc260x->type_name, 'A' + atc260x->ic_ver);
-> +
-> +	ret = devm_regmap_add_irq_chip(dev, atc260x->regmap, atc260x->irq, IRQF_ONESHOT,
-> +				       -1, atc260x->regmap_irq_chip, &atc260x->irq_data);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to add IRQ chip: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
-> +				   atc260x->cells, atc260x->nr_cells, NULL, 0,
-> +				   regmap_irq_get_domain(atc260x->irq_data));
-> +	if (ret) {
-> +		dev_err(dev, "Failed to add child devices: %d\n", ret);
-> +		regmap_del_irq_chip(atc260x->irq, atc260x->irq_data);
-> +	}
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(atc260x_device_probe);
-
-[...]
-
-> +static struct i2c_driver atc260x_i2c_driver = {
-> +	.driver = {
-> +		.name	= "atc260x",
-> +		.of_match_table	= of_match_ptr(atc260x_i2c_of_match),
-> +	},
-> +	.probe		= atc260x_i2c_probe,
-> +};
-
-Nit: These spacings/line-ups just look odd.
-
-Please stick to one ' ' after the '='.
-
-> +module_i2c_driver(atc260x_i2c_driver);
-
-[...]
-
-> +struct atc260x {
-> +	struct device *dev;
-> +
-> +	struct regmap *regmap;
-> +	const struct regmap_irq_chip *regmap_irq_chip;
-> +	struct regmap_irq_chip_data *irq_data;
-> +
-> +	struct mutex *regmap_mutex;	/* mutex for custom regmap locking */
-> +
-> +	const struct mfd_cell *cells;
-> +	int nr_cells;
-> +	int irq;
-> +
-> +	enum atc260x_type ic_type;
-> +	enum atc260x_ver ic_ver;
-> +	const char *type_name;
-> +	unsigned int rev_reg;
-> +
-> +	int (*dev_init)(struct atc260x *atc260x);
-
-Ah, I didn't see this before.
-
-Call-backs of this nature are the devil.  Please populate a struct
-with the differentiating register addresses/values instead and always
-call a generic deivce_init().
-
-> +};
-> +
-> +struct regmap_config;
-> +
-> +int atc260x_match_device(struct atc260x *atc260x, struct regmap_config *regmap_cfg);
-> +int atc260x_device_probe(struct atc260x *atc260x);
-> +
-> +#endif /* __LINUX_MFD_ATC260X_CORE_H */
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
