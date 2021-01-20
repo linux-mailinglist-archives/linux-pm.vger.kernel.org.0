@@ -2,114 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF6E2FCEC9
+	by mail.lfdr.de (Postfix) with ESMTP id E67C52FCECB
 	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 12:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730144AbhATLGG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 06:06:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S1731723AbhATLGJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 06:06:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731678AbhATJre (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 04:47:34 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35216C061575
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 01:46:51 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id s2so12725346vsk.2
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 01:46:51 -0800 (PST)
+        with ESMTP id S1731327AbhATKrz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 05:47:55 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A944DC0613D6
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 02:46:12 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id n142so24902211qkn.2
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 02:46:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nhkW5Un12MQxFKkR9JsfkRF/gz1LnCi9m0FMvMURDwI=;
-        b=EDHUMoJhmI1vDbf8WoGqzB0P8ceHOj5SdAnr2Fra+YO2uuty8NaFRqlpwt1+fuHAbu
-         btkX0AfouIJVoNP4D95p9U/fmMZco3eBu7FcIEdWDZqvfghi7T8Z1V2P9l+VF9KpOfDJ
-         WJOSPi+ZFWYoaZ1CUtwlfV5exs58PEPnZDh1t+DRVhTOQ8jd1OIrOUBctpJtNrWX2uOY
-         E6lwdvlFe7m1GwvtJESG69Q+SsqsbG0Jy/2IjdQx+k9rqUrVB4ilgjP/sAT7SQupFwPV
-         IMRUpCQ5EwwbE14Z9WPtQWh8Eeo180qitc4WtpQYUVRuhPWdz70SGwIox3WTVWzZencA
-         CzTA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IH+y5l7D9IXEiqreal2USqyW5KlCbCpfaX3aYI5hrxM=;
+        b=hqvnX/GUC9ppLbTqTwHrv8Oaq9Gi5ilcaq0rvLQZKsCEO82tyevSV4jH6VZLDvi6gT
+         eUngELb08kiQXKUeDZH/9WxR39+3VEyGLDV0AxF+R1cSif94bYhoxZlv4/rgKZOi/zsB
+         J0TGViHqNY9WAhm98EJWjnrhTTDhVxGTSyiOmQRnQSroqvBo7lOBIKuLSoUsZrjZ1PNt
+         BI9D6ebZ7PqSAW0DgHl1pVQHaXYsDVrT//nUzIImCxq7kUhXva1kINl6R+eJVYRVOOOR
+         3+GHuq4EefbJcTvyZmZHE3sDGEEQ6DPJI49JON2tL8gFFjXsQBTTYEgUtELCi5DIwUsS
+         Dvew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nhkW5Un12MQxFKkR9JsfkRF/gz1LnCi9m0FMvMURDwI=;
-        b=he3TGC0E9jNpyMmyDB8PMKOLAG9QIRlTv2Rw8Lo4FhGpnw2EKnFpHZHOB6mUZDXhQJ
-         pKil4ymp/C82mHoYq3hTnAxXjas9hCIea6ts32jG+vufmoeRc09wRKcVaZ2xVnv0kdsR
-         89c7nShPddq4vsm+z6KrMZckFljU7OJnrz4eMBaj3A001lBOpJJPabOJGIuxqwlHmjub
-         Ye4CXkOZJ0TtP5NIY5FoOH326CiJ3YtjwGfGVQ346TJsz2+YKiuKh4lC0XR/mLgO3UFy
-         +9gjPLfGFDu7ZAjlxj7HUZ4ZvBDWthRnBRWCptoH3nUVViumSXLJ/lxWPgMhQhrDNJju
-         caSw==
-X-Gm-Message-State: AOAM533DMKfOMMq+XwBq06vQcIrSmk5mMYluN+XlW9EqXESb88OmedPx
-        QpyYsDW/DktMbFZw1mCeQ50PAaRx/19i2kZXJKPJJQ==
-X-Google-Smtp-Source: ABdhPJwO6uu53BOw77rfLTS5GBUN3JZG76q4E0f/Siu6uksMYN3b96L0snD4x7kn508rPkM54zSM0QQ2t+NOS+nO6Rs=
-X-Received: by 2002:a67:f997:: with SMTP id b23mr5655937vsq.34.1611136010227;
- Wed, 20 Jan 2021 01:46:50 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IH+y5l7D9IXEiqreal2USqyW5KlCbCpfaX3aYI5hrxM=;
+        b=ndZY4VhlnHl+6F1YEPj0gLkN9BfMiepMWjOelcqtfXfvTMf3Yw5tjzngzB+YFY0VlP
+         S9UDfv1qO8vhDZZyMR6xH+MD+p8emw/MDm7zsU4rREBFrIW8Wq+lmkV0tOFIbU87IdVa
+         8D0mSkjbybZlJ8S1qbVweXI2KPE1Cbgyb2sLIlHOlup5dXBzkSa/7W2r+ejPFN6QXcSH
+         YSNjvuzGZRoxyMsqzFcRneY3a7v+Acg6rJmOMKgTA1BPG7x3AjpRNmPTTJVQy02EqgD1
+         bapJy73h+l/IYEsXNh6ks/VQxhq8aUDSBOv1urVUqaLQb9NkiIHEJ2q1yfjEErmsr0GN
+         VSIA==
+X-Gm-Message-State: AOAM533W6zDQLqV+Gj6DoaSdcFUoHxo/UhQ5mV3t9iMszLT78za9EcB7
+        J9JV/pBTqjur2AETxx3MPDejFg==
+X-Google-Smtp-Source: ABdhPJznZ9/31lzAODteFFA8Su2/Qqb+HqHd69/SOir4QHFtIdzsP4arW1usNa6/7PVtnwItHzH0bw==
+X-Received: by 2002:a05:620a:21cd:: with SMTP id h13mr3278885qka.204.1611139571749;
+        Wed, 20 Jan 2021 02:46:11 -0800 (PST)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id v196sm1026251qkb.84.2021.01.20.02.46.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jan 2021 02:46:10 -0800 (PST)
+Subject: Re: [PATCH 1/2] net: wireless: intel: iwlwifi: mvm: tt: Replace
+ thermal_notify_framework
+To:     Kalle Valo <kvalo@codeaurora.org>
+Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        davem@davemloft.net, kuba@kernel.org, luciano.coelho@intel.com,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org, amitk@kernel.org,
+        nathan.errera@intel.com
+References: <20210119140541.2453490-1-thara.gopinath@linaro.org>
+ <20210119140541.2453490-2-thara.gopinath@linaro.org>
+ <87pn20garq.fsf@codeaurora.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <9452ceb2-3e3c-399b-4cfd-a31f71200fa3@linaro.org>
+Date:   Wed, 20 Jan 2021 05:46:08 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20210120015010.14191-1-digetx@gmail.com> <20210120015010.14191-2-digetx@gmail.com>
- <20210120043933.6ilryvgkhvnsrei7@vireshk-i7>
-In-Reply-To: <20210120043933.6ilryvgkhvnsrei7@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 20 Jan 2021 10:46:14 +0100
-Message-ID: <CAPDyKFp-7CEY42PCEGa97_89Ew6QysbV7pBBQOSLwBKAZwFpvg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] PM: domains: Make set_performance_state() callback optional
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87pn20garq.fsf@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 20 Jan 2021 at 05:39, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 20-01-21, 04:50, Dmitry Osipenko wrote:
-> > Make set_performance_state() callback optional in order to remove the
-> > need from power domain drivers to implement a dummy callback. If callback
-> > isn't implemented by a GENPD driver, then the performance state is passed
-> > to the parent domain.
-> >
-> > Tested-by: Peter Geis <pgwipeout@gmail.com>
-> > Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-> > Tested-by: Matt Merhar <mattmerhar@protonmail.com>
-> > [tested on NVIDIA Tegra20/30/124 SoCs]
-> > Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > ---
-> >  drivers/base/power/domain.c | 33 ++++++++++++++++++---------------
-> >  1 file changed, 18 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 9a14eedacb92..0bd0cdc30393 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -297,6 +297,18 @@ static int _genpd_reeval_performance_state(struct generic_pm_domain *genpd,
-> >       return state;
-> >  }
-> >
-> > +static int _genpd_xlate_performance_state(struct generic_pm_domain *src_genpd,
-> > +                                       struct generic_pm_domain *dst_genpd,
-> > +                                       unsigned int pstate)
->
-> I would name them as genpd and parent, that makes it more readable for it.
 
-... and while at it, probably also drop the "_" as the prefix of the
-function name.
 
-Other than that, please add:
+On 1/19/21 11:19 AM, Kalle Valo wrote:
+> Thara Gopinath <thara.gopinath@linaro.org> writes:
+> 
+>> thermal_notify_framework just updates for a single trip point where as
+>> thermal_zone_device_update does other bookkeeping like updating the
+>> temperature of the thermal zone and setting the next trip point etc.
+>> Replace thermal_notify_framework with thermal_zone_device_update as the
+>> later is more thorough.
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> 
+> The title could be just "iwlwifi: mvm: tt: Replace
+> thermal_notify_framework".
+> 
+> But via which tree is this going? I assume it's not
+> wireless-drivers-next so:
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Thanks for the quick review. I would say thermal.
+I will fix the subject and add your acked in the next version.
 
-Kind regards
-Uffe
+> 
+> Acked-by: Kalle Valo <kvalo@codeaurora.org> >
+> 
+
+-- 
+Warm Regards
+Thara
