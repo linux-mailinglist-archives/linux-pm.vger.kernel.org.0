@@ -2,92 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 075652FD255
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 15:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12E72FD2A7
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 15:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732374AbhATOHs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 09:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S2388425AbhATO1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 09:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388339AbhATNc2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 08:32:28 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB4FC061575
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 05:31:48 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id t43so7848248uad.7
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 05:31:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EygyrNo1L66YguGSTSkEZs1oOOE5dPsaKPmSAlahwhk=;
-        b=hFuCyLYIUL4bPuSmVyGwJ5qOdl9VuxHNMdTOzr19HhTY8Qw8M95643Sr3sDDY21Zyu
-         jNzFPBb0zSofa2aZatqnXTmPP2A3EJeg8yfRxYVD6DihsAyj8Maeg9uS9lLCNNXdVdTQ
-         PW2VMXc5rtoUbZO4cuH3/JfK7gVdE59o8Ten4A9HedDee2EqeCupC4s/KIHpVsRaf7CT
-         ur2XoCezvAZaDTLJbgoP5Gq/Jwyr3yknamxPGVOa5y5ngerkbktCxytiKcxbgbm1NsLs
-         M9cupGjLJf30oFZQ90aLQbh9Zxwq49JQkZ+dqcg3cAnVp7Ce70WZI42+e5dc3JSMr/LW
-         LtBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EygyrNo1L66YguGSTSkEZs1oOOE5dPsaKPmSAlahwhk=;
-        b=fqukK1mfCWywD80DzZNif24klOJ+/eLvv6V6jMSVAlI1p5W78upf0dZq42i9It4Sgv
-         Tv/jxucgZf7CT7kHMqbnIKW/coce2+CImae69WuBmfaxNjfrsSaEUTksX5rOLwADbR16
-         OWeh2TG9y/ILPzuDDD7tQI5+y+VerYyqoIa6LdqqxI6LEdqk7iblfFIJV46Xu9emyytQ
-         XhnPMX4rNlMd6c+7HCMwNXRl6wei9CxSirxb/JnvevDkhTwfHc19dE9WhwanoCAMzIaa
-         xBdoLzcAaR6xM+U/adTg53Li5JtjlLKN3HogUY9Ey3IySiyjFHfalQ+kBLs7i4HTKXNu
-         ytgw==
-X-Gm-Message-State: AOAM531nmQeUwS4shHuOa1/It5WZAYvA7F8gS1ojn+BGdW68bGWihIQ4
-        GAG7p2FKAB7jEo6JLoU+anMnYX5AfpWbhHmYJ9VhHw==
-X-Google-Smtp-Source: ABdhPJzkobxZ3ZkN8/e+5qJpHJ+BQ3MwguUnina2HKp/lBcnr/mhXKUDNIf5dGu8SstEZIGrIePbNt3r4BgNcnONcXo=
-X-Received: by 2002:ab0:768:: with SMTP id h95mr6005681uah.104.1611149507447;
- Wed, 20 Jan 2021 05:31:47 -0800 (PST)
+        with ESMTP id S2389628AbhATOZD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 09:25:03 -0500
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28F4C0617A0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 06:23:40 -0800 (PST)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by xavier.telenet-ops.be with bizsmtp
+        id K2PS2400g4C55Sk012PSaA; Wed, 20 Jan 2021 15:23:37 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1l2EOL-005BZX-He; Wed, 20 Jan 2021 15:23:25 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1l2EOL-009FIO-3H; Wed, 20 Jan 2021 15:23:25 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH/RFC] soc: renesas: rcar-sysc: Mark device node OF_POPULATED after init
+Date:   Wed, 20 Jan 2021 15:23:23 +0100
+Message-Id: <20210120142323.2203705-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20201224111210.1214-1-rojay@codeaurora.org> <20201224111210.1214-4-rojay@codeaurora.org>
- <YAGqKfDfB7EEuZVn@builder.lan> <6bfec3e6-3d26-7ade-d836-032273856ce2@codeaurora.org>
- <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com> <20210119110516.fgbbllyg7lxwwfdz@vireshk-i7>
-In-Reply-To: <20210119110516.fgbbllyg7lxwwfdz@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 20 Jan 2021 14:31:10 +0100
-Message-ID: <CAPDyKFogrWt=K3VtEZVH5bPL_fYt7rgdm5wGgq+QHtzX-n0z7g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for 'assigned-performance-states'
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, parashar@codeaurora.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 19 Jan 2021 at 12:05, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 19-01-21, 12:02, Ulf Hansson wrote:
-> > As a matter of fact this was quite recently discussed [1], which also
-> > pointed out some issues when using the "required-opps" in combination,
-> > but perhaps that got resolved? Viresh?
->
-> Perhaps we never did anything there ..
+The R-Car System Controller (SYSC) driver registers PM domains from an
+early_initcall().  It does not use a platform driver, as secondary CPU
+startup on R-Car H1 needs to control the CPU power domains, before
+initialization of the driver framework.
 
-Okay. Looks like we should pick up that discussion again, to conclude
-on how to move forward.
+As fw_devlink only considers platform devices, it does not know that the
+System Controller is ready.  Hence probing of on-chip devices that are
+part of the SYSC PM domain fail:
 
->
-> --
-> viresh
+    probe deferral - supplier e6180000.system-controller not ready
 
-Kind regards
-Uffe
+Fix this by setting the OF_POPULATED flag for the SYSC device node after
+successful initialization.  This will make of_link_to_phandle() ignore
+the SYSC device node as a dependency, and consumer devices will be
+probed again.
+
+Fixes: e590474768f1cc04 ("driver core: Set fw_devlink=on by default")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/soc/renesas/rcar-sysc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/soc/renesas/rcar-sysc.c b/drivers/soc/renesas/rcar-sysc.c
+index 9b235fc900273405..a00bb098e1fe7488 100644
+--- a/drivers/soc/renesas/rcar-sysc.c
++++ b/drivers/soc/renesas/rcar-sysc.c
+@@ -439,6 +439,8 @@ static int __init rcar_sysc_pd_init(void)
+ 	}
+ 
+ 	error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
++	if (!error)
++		of_node_set_flag(np, OF_POPULATED);
+ 
+ out_put:
+ 	of_node_put(np);
+-- 
+2.25.1
+
