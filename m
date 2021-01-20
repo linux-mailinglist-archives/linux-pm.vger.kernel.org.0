@@ -2,143 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF5C2FC95E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 04:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C8C2FCA01
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 05:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730420AbhATDqz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 22:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S1728071AbhATEdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jan 2021 23:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730222AbhATDoh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 22:44:37 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353BCC0613C1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 19:43:54 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id w14so4628568pfi.2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 19:43:54 -0800 (PST)
+        with ESMTP id S1727683AbhATEc6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 23:32:58 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C521C061757
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 20:32:18 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 11so13719504pfu.4
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jan 2021 20:32:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=RmIbevJLti+B0r0QkUZmPDTRtdNwZ9i1tIt+2/r6lwk=;
-        b=e99btfWFqG2vmHaZC87kVR7eiKxmRlwvMNv2hdrfB+t5lxPFYPd5M0vVsIBuTrCcMI
-         biEHxIJ5CcaVNunHL+pMsH/7Vu0s0WjNa9mmWipjdsYu5G74C9LEKQz1qs7n56MQAgGC
-         oOUKODVAUc54c8BQwdOQ/KYTlY2eMcMMOjelGsaF3zzlBR58Hb0LGlcTsrRxBC8vFggi
-         myD9Kigt8K5jYWcjzsvRMr4eauxPdFZyXLaRkj5NlqR2/ahN//JxR+2Q2gAx4PyknP7H
-         atkeyCaAI1FP/lzKds+AWDxQWwnHJF+qw0tdDCLeSmSuhRBI+cLJBxwTCiHGjDl0XSNP
-         Z0jQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jtrfxvYoDEq3RZCyVGjLYtU5e+mF9oTQsRcyWM47vks=;
+        b=Qi7IYVi+JQEiMs6lekW5M0ChYs+HdEmLIcV8nmfIq0ufPG4j5BYZMxff78LGzyTVvI
+         Dtkwsndwy4DSomsmW8+E4WUmr+KN5vq8yxEUWqomHpNkE0RI5oBE15EoK2JCvXLOZdVj
+         3Ey3cC3y1mYZSqLJ6ucdtqUUSZAeeZTCcl9zgLulc7SKBXrfDQd9GhnGtS9O033VVIb5
+         huc1gp07WTTdQFLwvPOaxIi9m9cx3K+4WQn/DIpWBz4SNMiqUw8IPw/rXuyaLGfkIE75
+         BjeUoZW03NC748AFJN/rkuZY8qX2KOUs1ORWaEzhwkoAZxsSuVEkN4TMSU03S3bHDpZU
+         kKIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=RmIbevJLti+B0r0QkUZmPDTRtdNwZ9i1tIt+2/r6lwk=;
-        b=Aj0F66j++7e+PpZeHhjk1XRG8I2t+jayFHCZpSyCbbEEgOkFxABbjpeC+CFwqF1iCH
-         NMIXOC9L03HMbP4qQTPKM5xsVn3jRmyRgPuzs0ohXYjaDE2TRvvHIXm7BoUds0WBYLXj
-         8XYBMolky5rDQTYKjbEADopUS2AYN709n+Fr9+gkgiLgUAIvCYWP5Z3+Pm441FjBkYZ6
-         0JxWX3nxMPvPSjK6N80VxGZYxJzKZYn3ipdAaLfVC59EAovtihfI4LacB4nAi7/CHqab
-         SxJiuUQ6LqB+1fH6pGzSuXcJT/1GUl8AkfhvXTd6zCoW9H1UfxLO/+zRaIL9AQ/81yYZ
-         O7YA==
-X-Gm-Message-State: AOAM533Wq/MPKru7Oq8BXKhX/nVt1yUGYpU4b7BzVaD7QWZ2T7GhGV/T
-        pTjJGiTCxSwlo2SOeRl/+7vfn4a0TEalvA==
-X-Google-Smtp-Source: ABdhPJw5NSQZzLfGaDLZ5u+b5NJtaCtVtjq0+Gasd6t59rxgXlRbld7kWkQ4vkbX+SfqQuDo4tKr5A==
-X-Received: by 2002:a63:db54:: with SMTP id x20mr7397392pgi.200.1611114233766;
-        Tue, 19 Jan 2021 19:43:53 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a18sm507422pfg.107.2021.01.19.19.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 19:43:53 -0800 (PST)
-Message-ID: <6007a6f9.1c69fb81.add92.23c8@mx.google.com>
-Date:   Tue, 19 Jan 2021 19:43:53 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jtrfxvYoDEq3RZCyVGjLYtU5e+mF9oTQsRcyWM47vks=;
+        b=OevwSPcAXv7AWjd13oATSLOdZplF7g1GgYUnlGWWcqMvsgstcO6SOSCl5UYbEO3a+9
+         f3YCYTf5TVehAEaDdebZHIcrxwobcWSM1Aze+1nGmJOS3quT+ipnfcFrfeJOlwfUixHD
+         jLI8gKV01uvEtmWio8IOGOZc2CmcQpB+D4BXWreDMR5n35Ubn3gFeneWGqe6fcMq4viM
+         8wgoBABrC4zH7mIu9ox90YGOUjtwNmA0JuqOKZk0crFsQ4ih+y+8zU0aH/NR+Z3dzinF
+         X/TmykHLwoMorjI8fJtuR/sulgzCjX6VZm4XyZO1FFYq8FU733deaOWsm1SrTXEpZoju
+         dzWQ==
+X-Gm-Message-State: AOAM531zsbDwuLSeSfA7LUkvJ46hMfW1Goz2LeiFd7lRPqR+br2v4NSk
+        6VbOqjqyfuiS83ZPOVu9tP7KLQ==
+X-Google-Smtp-Source: ABdhPJwBADlP3zfaNDQ2lytPl+ztqBiN4oMl0NB+9YvvugtaEhsGTWHp/yJftqCzbgIcaG9HT+uSKQ==
+X-Received: by 2002:a63:1261:: with SMTP id 33mr7577909pgs.213.1611117137877;
+        Tue, 19 Jan 2021 20:32:17 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id 21sm617075pfx.84.2021.01.19.20.32.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 19 Jan 2021 20:32:16 -0800 (PST)
+Date:   Wed, 20 Jan 2021 10:02:11 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] cpufreq: tegra20: Use resource-managed API
+Message-ID: <20210120043211.qakitv5yyr4lun37@vireshk-i7>
+References: <20210117231825.28256-1-digetx@gmail.com>
+ <20210118063910.on4vgbllfmsduezo@vireshk-i7>
+ <09f93579-9de0-d541-1331-e2b45518c270@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.11-rc4-26-ga2ab445613e2
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 1 warning (v5.11-rc4-26-ga2ab445613e2)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <09f93579-9de0-d541-1331-e2b45518c270@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 1 warning (v5.11-rc4-26-ga2=
-ab445613e2)
+On 19-01-21, 18:01, Dmitry Osipenko wrote:
+> The regular devm_opp_* helpers won't be usable for CPUFreq drivers because OPP is applied to the CPU device and not the device of the CPUFreq driver.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-11-rc4-26-ga2ab445613e2/
+Ahh, I missed that.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.11-rc4-26-ga2ab445613e2
-Git Commit: a2ab445613e2ef8a14a759e53a883b87215e737f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+> But maybe we could support such cases by the helpers?
+> 
+> I CC'd Yangtao Li.
+> 
+> For example we could do this:
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index ca8c6acc29f4..e2eb0f9cf46c 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1771,7 +1771,8 @@ static void devm_pm_opp_supported_hw_release(void *data)
+>  
+>  /**
+>   * devm_pm_opp_set_supported_hw() - Set supported platforms
+> - * @dev: Device for which supported-hw has to be set.
+> + * @dev: Device which manages allocated resources.
+> + * @opp_dev: Device for which supported-hw has to be set.
+>   * @versions: Array of hierarchy of versions to match.
+>   * @count: Number of elements in the array.
+>   *
+> @@ -1783,13 +1784,14 @@ static void devm_pm_opp_supported_hw_release(void *data)
+>   * The opp_table structure will be freed after the device is destroyed.
+>   */
+>  struct opp_table *devm_pm_opp_set_supported_hw(struct device *dev,
+> +					       struct device *opp_dev,
+>  					       const u32 *versions,
+>  					       unsigned int count)
+>  {
+>  	struct opp_table *opp_table;
+>  	int err;
+>  
+> -	opp_table = dev_pm_opp_set_supported_hw(dev, versions, count);
+> +	opp_table = dev_pm_opp_set_supported_hw(opp_dev, versions, count);
+>  	if (IS_ERR(opp_table))
+>  		return opp_table;
 
-Warnings Detected:
+No please :)
 
-arc:
-
-arm:
-    multi_v7_defconfig (gcc-8): 1 warning
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused v=
-ariable =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused variab=
-le =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+viresh
