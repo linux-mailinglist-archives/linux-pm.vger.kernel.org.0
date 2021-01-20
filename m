@@ -2,91 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4B52FD425
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 16:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AD32FD424
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 16:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732086AbhATPdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 10:33:04 -0500
-Received: from mail-m975.mail.163.com ([123.126.97.5]:55002 "EHLO
-        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732346AbhATPWu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:22:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=HSOMGmJKfL1rX2qIMN
-        /0Rl6FIRq81VcX1sAW1LqlfqU=; b=ml/ixOdtO7GbHbx36eyL332hIBPp89v1E6
-        atbEKoIpvlF3TH5EACTUDTGs1rw5EeFjDTfx/10+sD5wny+ypYUypySR8Dfu2B0R
-        SyabV/PENPt6hevGgRxfytCnaaNU/NL13SiDYsj+UqbMhTZHyS7SjIVxRfO3g2n7
-        QgPJAja8w=
-Received: from localhost.localdomain (unknown [111.201.134.89])
-        by smtp5 (Coremail) with SMTP id HdxpCgDnI1_7RQhgBWkCAw--.303S4;
-        Wed, 20 Jan 2021 23:02:25 +0800 (CST)
-From:   Pan Bian <bianpan2016@163.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pan Bian <bianpan2016@163.com>
-Subject: [PATCH] thermal: drop reference of child node on error
-Date:   Wed, 20 Jan 2021 07:02:08 -0800
-Message-Id: <20210120150208.24868-1-bianpan2016@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: HdxpCgDnI1_7RQhgBWkCAw--.303S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tr43JrWfuF1rZry5urWUXFb_yoW8GF1rpF
-        4j9FWIyrWUWa109a10yr1UZayqqa18tayxWr1rC3W5uas8trZ7JrWfWFyUXrWrJFZ5Ca15
-        A3WDKF40van5C3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U1BTOUUUUU=
-X-Originating-IP: [111.201.134.89]
-X-CM-SenderInfo: held01tdqsiiqw6rljoofrz/1tbiNgEgclWBluMj4QAAsG
+        id S2390194AbhATPXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 10:23:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388155AbhATPJi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 20 Jan 2021 10:09:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE4512336D;
+        Wed, 20 Jan 2021 15:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611155336;
+        bh=ND9BSgncNjn0y6BjJzAbUADTI3Dr4GSKaRvxG9v5LxY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hvEpRXXa2TnOGrmtsUasxsGTeqxdZG3ey4D+dt6Q66PavcGgQ0LwInbWQRg3LXxj3
+         a868mE82AHFSgeS0LOmmHJY3t0z8NcRewm1/cs+c3LvVZuSh8HG6aA9i8GdpSZPbcD
+         gv1/b2K/VqLa3wuWi85RbArHa/AA3MvzdMGyUKiYhDIIZp+w0zO351c+EqdiOFcJnq
+         K7lOt5mFxw/3lx7a2fDW+vHmvVpMoPu4eBnuBEvsV/1kq5pLuT9pc2/4MELKAOo1Dh
+         iBEnmspCnONWoWuXJfs/aYZnv0qSdduxhv/xZQwnGe5U+E+FBuVv67IDHBy+sb5OBg
+         /2eY74IUEPbMw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jun Nie <jun.nie@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] power/reset: remove zte zx driver
+Date:   Wed, 20 Jan 2021 16:08:26 +0100
+Message-Id: <20210120150851.1670788-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Drop the reference of the child node sen_child before goto out of
-the loop.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Pan Bian <bianpan2016@163.com>
+The zte zx platform is getting removed, so this driver is no
+longer needed.
+
+Cc: Jun Nie <jun.nie@linaro.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/thermal/sprd_thermal.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/power/reset/Kconfig     |  7 ---
+ drivers/power/reset/Makefile    |  1 -
+ drivers/power/reset/zx-reboot.c | 86 ---------------------------------
+ 3 files changed, 94 deletions(-)
+ delete mode 100644 drivers/power/reset/zx-reboot.c
 
-diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-index 3682edb2f466..e843f10167b8 100644
---- a/drivers/thermal/sprd_thermal.c
-+++ b/drivers/thermal/sprd_thermal.c
-@@ -387,6 +387,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 	for_each_child_of_node(np, sen_child) {
- 		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
- 		if (!sen) {
-+			of_node_put(sen_child);
- 			ret = -ENOMEM;
- 			goto disable_clk;
- 		}
-@@ -397,12 +398,14 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 		ret = of_property_read_u32(sen_child, "reg", &sen->id);
- 		if (ret) {
- 			dev_err(&pdev->dev, "get sensor reg failed");
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index b22c4fdb2561..0376a90bec09 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -251,13 +251,6 @@ config POWER_RESET_RMOBILE
+ 	help
+ 	  Reboot support for Renesas R-Mobile and SH-Mobile SoCs.
  
- 		ret = sprd_thm_sensor_calibration(sen_child, thm, sen);
- 		if (ret) {
- 			dev_err(&pdev->dev, "efuse cal analysis failed");
-+			of_node_put(sen_child);
- 			goto disable_clk;
- 		}
+-config POWER_RESET_ZX
+-	tristate "ZTE SoCs reset driver"
+-	depends on ARCH_ZX || COMPILE_TEST
+-	depends on HAS_IOMEM
+-	help
+-	  Reboot support for ZTE SoCs.
+-
+ config REBOOT_MODE
+ 	tristate
  
-@@ -415,6 +418,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
- 		if (IS_ERR(sen->tzd)) {
- 			dev_err(&pdev->dev, "register thermal zone failed %d\n",
- 				sen->id);
-+			of_node_put(sen_child);
- 			ret = PTR_ERR(sen->tzd);
- 			goto disable_clk;
- 		}
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 9dc49d3a57ff..46331119c886 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -29,7 +29,6 @@ obj-$(CONFIG_POWER_RESET_KEYSTONE) += keystone-reset.o
+ obj-$(CONFIG_POWER_RESET_SYSCON) += syscon-reboot.o
+ obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
+ obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
+-obj-$(CONFIG_POWER_RESET_ZX) += zx-reboot.o
+ obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
+ obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
+ obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
+diff --git a/drivers/power/reset/zx-reboot.c b/drivers/power/reset/zx-reboot.c
+deleted file mode 100644
+index 457950833dba..000000000000
+--- a/drivers/power/reset/zx-reboot.c
++++ /dev/null
+@@ -1,86 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * ZTE zx296702 SoC reset code
+- *
+- * Copyright (c) 2015 Linaro Ltd.
+- *
+- * Author: Jun Nie <jun.nie@linaro.org>
+- */
+-
+-#include <linux/delay.h>
+-#include <linux/io.h>
+-#include <linux/module.h>
+-#include <linux/notifier.h>
+-#include <linux/of_address.h>
+-#include <linux/platform_device.h>
+-#include <linux/reboot.h>
+-
+-static void __iomem *base;
+-static void __iomem *pcu_base;
+-
+-static int zx_restart_handler(struct notifier_block *this,
+-			      unsigned long mode, void *cmd)
+-{
+-	writel_relaxed(1, base + 0xb0);
+-	writel_relaxed(1, pcu_base + 0x34);
+-
+-	mdelay(50);
+-	pr_emerg("Unable to restart system\n");
+-
+-	return NOTIFY_DONE;
+-}
+-
+-static struct notifier_block zx_restart_nb = {
+-	.notifier_call = zx_restart_handler,
+-	.priority = 128,
+-};
+-
+-static int zx_reboot_probe(struct platform_device *pdev)
+-{
+-	struct device_node *np = pdev->dev.of_node;
+-	int err;
+-
+-	base = of_iomap(np, 0);
+-	if (!base) {
+-		WARN(1, "failed to map base address");
+-		return -ENODEV;
+-	}
+-
+-	np = of_find_compatible_node(NULL, NULL, "zte,zx296702-pcu");
+-	pcu_base = of_iomap(np, 0);
+-	of_node_put(np);
+-	if (!pcu_base) {
+-		iounmap(base);
+-		WARN(1, "failed to map pcu_base address");
+-		return -ENODEV;
+-	}
+-
+-	err = register_restart_handler(&zx_restart_nb);
+-	if (err) {
+-		iounmap(base);
+-		iounmap(pcu_base);
+-		dev_err(&pdev->dev, "Register restart handler failed(err=%d)\n",
+-			err);
+-	}
+-
+-	return err;
+-}
+-
+-static const struct of_device_id zx_reboot_of_match[] = {
+-	{ .compatible = "zte,sysctrl" },
+-	{}
+-};
+-MODULE_DEVICE_TABLE(of, zx_reboot_of_match);
+-
+-static struct platform_driver zx_reboot_driver = {
+-	.probe = zx_reboot_probe,
+-	.driver = {
+-		.name = "zx-reboot",
+-		.of_match_table = zx_reboot_of_match,
+-	},
+-};
+-module_platform_driver(zx_reboot_driver);
+-
+-MODULE_DESCRIPTION("ZTE SoCs reset driver");
+-MODULE_AUTHOR("Jun Nie <jun.nie@linaro.org>");
+-MODULE_LICENSE("GPL v2");
 -- 
-2.17.1
+2.29.2
 
