@@ -2,110 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7CA2FC74F
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 03:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D7D2FC890
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 04:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728299AbhATB7X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jan 2021 20:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731384AbhATBvf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jan 2021 20:51:35 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668A6C061573;
-        Tue, 19 Jan 2021 17:50:55 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id o17so31971874lfg.4;
-        Tue, 19 Jan 2021 17:50:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g0Z7h9bg+7HGu4fSvr9LvhKp90jXWDcL2gI3AJjDonI=;
-        b=PGIrOj1nZpTfvp1DDH1UrdhWcj3jN6bLf6XpM4jn5v3JiETzTYfZDPItRCvaY/rg88
-         lhUy7AhJP0BxI2N+tH8VMhTx+wPZBpkcRwQwxZrMocxr0BOFE6rGt00BFUDkRzMQranR
-         17lAqB+KTkOzDB2HrXel9dH5V+TxaRuDefQEeJylk6l+YirRWKDHV5q/Pa/3X3JqeutF
-         f+rq+QFxtNIO7WowD4aA+S+YnZd0GDLjOMbU4hEVSD0V44SNwBUTXCfhhj9QWEiUIQkf
-         wxgarM/uet9zKlGWXvi3A45DtPuniC9rrvzF9CdAzrZnvjI0dYm/jGpg13OoCeJ0ovXJ
-         6sAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g0Z7h9bg+7HGu4fSvr9LvhKp90jXWDcL2gI3AJjDonI=;
-        b=epRMZLaWIeMQcOQCU3h0o7Qzj1HN8Kxe9140nOUKrxTFF/XTC1W6ITJ/ZeiREgg7in
-         4HFzo5u9n3S0NAQ+VbbyNjokbgLQfh5SiXBMAkeJ876ETLlmvEE9MrFpwrQzzySJOx22
-         2SUtGUNaHdtHnnhXhzwBxAQynh2a0WihPbIzM5iYf4pCIAK0bJWwZvzuuLD5ZeY8JEcp
-         uGxReU49UxMp/1+E5xMWREKOSbRaFt9twuuGdJLRH7TXPKEZi7v9jmwpcXGdssY3vG3+
-         DBO8IXOu+gxYJTDgESVFDfKZ9TAAs39BI9S5cepMnrtAf2zGCFKRTxvoCedpbwROKCzf
-         Naxg==
-X-Gm-Message-State: AOAM532hqMSlzyRIfPp9oAC0q5sX/CQXRN6epiERzI+raFmXDwiT6Enc
-        lBDON5g0dweR+2eVEz6+F3U=
-X-Google-Smtp-Source: ABdhPJy0omEijItkCZZccB/DnERd8KPObDC8xwSGkB6x6hDvMCy3ohbpgdf7F9lGgntW5kFJjO07VA==
-X-Received: by 2002:ac2:504e:: with SMTP id a14mr2832014lfm.285.1611107453983;
-        Tue, 19 Jan 2021 17:50:53 -0800 (PST)
-Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id o14sm56163lfi.92.2021.01.19.17.50.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 17:50:53 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matt Merhar <mattmerhar@protonmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v4 0/3] GENPD API improvements
-Date:   Wed, 20 Jan 2021 04:50:07 +0300
-Message-Id: <20210120015010.14191-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        id S1729659AbhATDOU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 19 Jan 2021 22:14:20 -0500
+Received: from mga07.intel.com ([134.134.136.100]:41730 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389369AbhATC50 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 19 Jan 2021 21:57:26 -0500
+IronPort-SDR: +tqYSUAvJq2j8vQm2vJgum2crtz0M/pklOwucfGKg7ih7nrOs9QRC9/7D7j5h94/cUacFnrgrn
+ hT7FDvFvbzXg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="243105324"
+X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
+   d="scan'208";a="243105324"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 18:56:44 -0800
+IronPort-SDR: 054cMV2fPfs4AHEfqJpd/TJx0x16OrndzTfihhHekhg2rmlre7gU7G+iSitMyDSqR97RmMfkVl
+ S2Tu2yhsswNQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
+   d="scan'208";a="402589859"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2021 18:56:44 -0800
+Received: from shsmsx602.ccr.corp.intel.com (10.109.6.142) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 19 Jan 2021 18:56:43 -0800
+Received: from shsmsx603.ccr.corp.intel.com (10.109.6.143) by
+ SHSMSX602.ccr.corp.intel.com (10.109.6.142) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 20 Jan 2021 10:56:41 +0800
+Received: from shsmsx603.ccr.corp.intel.com ([10.109.6.143]) by
+ SHSMSX603.ccr.corp.intel.com ([10.109.6.143]) with mapi id 15.01.1713.004;
+ Wed, 20 Jan 2021 10:56:41 +0800
+From:   "Zhang, Rui" <rui.zhang@intel.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "Coelho, Luciano" <luciano.coelho@intel.com>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "Errera, Nathan" <nathan.errera@intel.com>
+Subject: RE: [PATCH 0/2] thermal: Replace thermal_notify_framework with
+ thermal_zone_device_update
+Thread-Topic: [PATCH 0/2] thermal: Replace thermal_notify_framework with
+ thermal_zone_device_update
+Thread-Index: AQHW7myNyN+HFidWAkieGDM5y8leBqov0QOw
+Date:   Wed, 20 Jan 2021 02:56:41 +0000
+Message-ID: <fb5571b452f7495eb76396795eeec096@intel.com>
+References: <20210119140541.2453490-1-thara.gopinath@linaro.org>
+In-Reply-To: <20210119140541.2453490-1-thara.gopinath@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi, Thara,
 
-This is a continuation of [1], where Ulf Hansson suggested to factor out
-GENPD patches into a separate series. This series is a prerequisite for
-the power domain driver of NVIDIA Tegra SoCs.
+Thanks for the cleanup. I've proposed similar patches previously.
+https://patchwork.kernel.org/project/linux-pm/patch/20200430063229.6182-2-rui.zhang@intel.com/
+https://patchwork.kernel.org/project/linux-pm/patch/20200430063229.6182-3-rui.zhang@intel.com/
+can you please also address the comments in the previous discussion, like doc cleanup?
 
-[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=221130
+Thanks,
+rui
 
-Changelog:
-
-v4: - Updated the "Make set_performance_state() callback optional" patch.
-      Now the case where one of intermediate domains doesn't implement
-      the set_performance_state() callback is handled properly, thanks
-      to Viresh and Ulf for catching this drawback and suggesting the fix.
-
-    - Added more r-bs from Ulf Hansson and Viresh Kumar.
-
-v3: - Added r-b from Ulf Hansson.
-
-    - Added new patch "Make of_genpd_add_subdomain() to return -EPROBE_DEFER",
-      which was suggested by Ulf Hansson.
-
-    - Improved "Add "performance" column to debug summary" patch by
-      correcting the formatting of debug output, which had a superfluous
-      whitespace.
-
-Dmitry Osipenko (3):
-  PM: domains: Make set_performance_state() callback optional
-  PM: domains: Make of_genpd_add_subdomain() to return -EPROBE_DEFER
-  PM: domains: Add "performance" column to debug summary
-
- drivers/base/power/domain.c | 54 +++++++++++++++++++++++--------------
- 1 file changed, 34 insertions(+), 20 deletions(-)
-
--- 
-2.29.2
+> -----Original Message-----
+> From: Thara Gopinath <thara.gopinath@linaro.org>
+> Sent: Tuesday, January 19, 2021 10:06 PM
+> To: Zhang, Rui <rui.zhang@intel.com>; daniel.lezcano@linaro.org;
+> kvalo@codeaurora.org; davem@davemloft.net; kuba@kernel.org; Coelho,
+> Luciano <luciano.coelho@intel.com>
+> Cc: linux-wireless@vger.kernel.org; linux-kernel@vger.kernel.org;
+> netdev@vger.kernel.org; linux-pm@vger.kernel.org; amitk@kernel.org;
+> Errera, Nathan <nathan.errera@intel.com>
+> Subject: [PATCH 0/2] thermal: Replace thermal_notify_framework with
+> thermal_zone_device_update
+> Importance: High
+> 
+> thermal_notify_framework just updates for a single trip point where as
+> thermal_zone_device_update does other bookkeeping like updating the
+> temperature of the thermal zone, running through the list of trip points and
+> setting the next trip point etc. Since  the later is a more thorough version of
+> former, replace thermal_notify_framework with
+> thermal_zone_device_update.
+> 
+> Thara Gopinath (2):
+>   net: wireless: intel: iwlwifi: mvm: tt: Replace
+>     thermal_notify_framework
+>   drivers: thermal: Remove thermal_notify_framework
+> 
+>  drivers/net/wireless/intel/iwlwifi/mvm/tt.c |  4 ++--
+>  drivers/thermal/thermal_core.c              | 18 ------------------
+>  include/linux/thermal.h                     |  4 ----
+>  3 files changed, 2 insertions(+), 24 deletions(-)
+> 
+> --
+> 2.25.1
 
