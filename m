@@ -2,126 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A88772FDCE5
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 00:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650522FDCEA
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 00:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730099AbhATVZM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 16:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S1732564AbhATVZe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 16:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436685AbhATVCC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 16:02:02 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6028EC061757
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 13:01:21 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id i63so8210770pfg.7
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 13:01:21 -0800 (PST)
+        with ESMTP id S1729585AbhATVYv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 16:24:51 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEC4C061575;
+        Wed, 20 Jan 2021 13:13:51 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id h205so36039386lfd.5;
+        Wed, 20 Jan 2021 13:13:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=REJMYy9834tYhSeEdTMN64eJIDaHuEK0d/R4CMs0wPw=;
-        b=pgdRdQYfN8QLqiZ4byMOTuE40wjbaBg9KnMvcEr19bBTKex43pNdTR20KAT5BtWpYh
-         1gx9iYb3uyJVjfbnW2imGtuEvnRtjX4hETbckLaNbA1XvHn85IeGCVxa6qeeoWR/PaVT
-         xRjZKyxuTwIoaVjIwxSXzOdVrPv5GK7aLWISGbuwO8yZRJCL1KKPZaojiUkLV8zeeSOt
-         E4Wnpuc1vgmt0t0r3aq/oCEm6fx8PIAwyIzxOfEhdy5OBoc2Uw+3lm/uEq81Av46V9CY
-         SfAO4YBTAu4aPTuT4NtHS2JoDZpXCuj3gfT8NB58kX+PZJ3oqAhNmurR1Bqd8QZilbF4
-         5giw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HM+kPSLxbcGuQtpmn+lHuIBs3kdjxoFtz28EJXxS7zg=;
+        b=Rsgpal3kAkbYt71GPypPxgpyohAY5taJJXOGXEjvFATzhq46V+v4nnelJQdHN/dTgu
+         J+wV/xKYGCbgmocmBF057xhuQXaXpzWijWXDEnG/szu6WH02JItR1kHpxmq3gmGsDdso
+         k/b97i87l3qrTyB3WAa51fnxUj8nAdDNUlBvhbYxiSUjbiIVmUOazQw65xJhKtdtlMjV
+         YyUcvEXbDTjacpSG+PI6iFL7HKdWVQu1AextIJZIGAEriMBpg4yUce3WtqHN2OZWSbqh
+         uXpRkYl7i9o3BOBUiqO4z8OhDw3tvvQOgiXwVYItUx4I/bMYLSGzP//diRg6h2eGy19z
+         mnng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=REJMYy9834tYhSeEdTMN64eJIDaHuEK0d/R4CMs0wPw=;
-        b=TRpjo1nd5jfhbJCRddZSUbx+/JjkP45hU6HCrcp+0oq4Idzqy5yfYJf1Goh8GKWE2s
-         /QiuNby+LFeudE7TBofenNXHxzMJB6Bb6oH7PIT17K/TuuaCInKxBeABLs6gxHUqgVQD
-         aCKNsHQNrZYpfnITV5gdTcLzb8PYxM06W6KolL1i1lF2J7+6xYhhBIEwe3D9v4dPn6j9
-         xPEI9VmGRJhzpgnREcoY8H1KlNqB3MZaOYCl58XXn0nncFkktHrUoNuEpqzr6dlbJBcy
-         z3sfxbOxRWSv55c1aeQXb+3h6t/AQi+Aw3XiHhyx3oMBq+WUMWth9ADWh8r2cHIZ0PCI
-         pb8w==
-X-Gm-Message-State: AOAM531CldP1mnCQv7cPla4Ew0MCTKHdOKWQq6IKNhbSxmUmDMlhxusK
-        A+wmBHObKHpDWdLbZpzQMxS8TQ==
-X-Google-Smtp-Source: ABdhPJykYTSNWSTM/z7uHcc9UyfKLNn+62suzLXxPWSm+dxOHVAq52OCO/6S6EwnosFrUrIlRLjFtw==
-X-Received: by 2002:a63:d903:: with SMTP id r3mr11132796pgg.445.1611176480915;
-        Wed, 20 Jan 2021 13:01:20 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k11sm3133642pgt.83.2021.01.20.13.01.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HM+kPSLxbcGuQtpmn+lHuIBs3kdjxoFtz28EJXxS7zg=;
+        b=hu1G8/cyFlZEodtF29Ho0+mQDp14/ZCsmQ/2do4sSmfP2fxfuSDe1b+Ncgc0JJLMv2
+         x3ZJocXmEnBEY8YcnCghqSq7TUhPqQio0L7ICwQd0uJiK7lw94dkDQhFVaXgA1hM3e1I
+         a7ZnEzrLjDg+nfumQWVHRJBzu/U4N3wB1mqqKAMXODBPQv2N2VeQJE6RwUwn+zDq0c/E
+         okYZU2cZYJrni6Ew8FHIDlNHZtjAHnB5KpWQrCjIcmN5HcP6oopRWP1xL7DhM5TLLWDt
+         HJy19c20ILiTEHqntYq2Xzl9m/rgAl0mnYIgOgbRudpWqhbrouHw/UBO0wejQ0Nep9UO
+         RjRQ==
+X-Gm-Message-State: AOAM532QWaEeyZOhe2OoS4sW05vKQDBgsp8WyikWwNj7FDbBM9HKjhyt
+        FcnOFnG7dj60IMTqXP9wbUvvBcLcxME=
+X-Google-Smtp-Source: ABdhPJwppQdoc95LhQkyhFMdU8KkEKCLWzXUoEZZ7CBVaMSh53NI2hFNeLQ2hmtxHzN+Vojv+KrKYw==
+X-Received: by 2002:ac2:58f2:: with SMTP id v18mr4915989lfo.623.1611177230404;
+        Wed, 20 Jan 2021 13:13:50 -0800 (PST)
+Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.gmail.com with ESMTPSA id 196sm298131lfj.219.2021.01.20.13.13.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 13:01:20 -0800 (PST)
-Message-ID: <60089a20.1c69fb81.1ed02.78a8@mx.google.com>
-Date:   Wed, 20 Jan 2021 13:01:20 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 20 Jan 2021 13:13:49 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matt Merhar <mattmerhar@protonmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v5 0/3] GENPD API improvements
+Date:   Thu, 21 Jan 2021 00:12:29 +0300
+Message-Id: <20210120211232.17299-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.11-rc4-28-ga31400ec480e
-Subject: pm/testing baseline: 117 runs,
- 1 regressions (v5.11-rc4-28-ga31400ec480e)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 117 runs, 1 regressions (v5.11-rc4-28-ga31400ec480e)
+Hi,
 
-Regressions Summary
--------------------
+This series is a prerequisite for the power domain driver of NVIDIA Tegra
+SoCs [1]. It extends the GENPD core with a better support of performance
+states and eases linking of child/parent PDs for the PD drivers.
 
-platform                   | arch  | lab         | compiler | defconfig | r=
-egressions
----------------------------+-------+-------------+----------+-----------+--=
-----------
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie | gcc-8    | defconfig | 1=
-          =
+[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=221130
 
+Changelog:
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.11-rc=
-4-28-ga31400ec480e/plan/baseline/
+v5: - Renamed genpd_xlate_performance_state() and its arguments like it
+      was requested by Ulf Hansson and Viresh Kumar in a v4 review.
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.11-rc4-28-ga31400ec480e
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      a31400ec480e8a579467fbe36d7ea49c952109dc =
+    - Added r-b from Ulf Hansson to "Make set_performance_state() callback
+      optional" patch.
 
+v4: - Updated the "Make set_performance_state() callback optional" patch.
+      Now the case where one of intermediate domains doesn't implement
+      the set_performance_state() callback is handled properly, thanks
+      to Viresh and Ulf for catching this drawback and suggesting the fix.
 
+    - Added more r-bs from Ulf Hansson and Viresh Kumar.
 
-Test Regressions
----------------- =
+v3: - Added r-b from Ulf Hansson.
 
+    - Added new patch "Make of_genpd_add_subdomain() to return -EPROBE_DEFER",
+      which was suggested by Ulf Hansson.
 
-
-platform                   | arch  | lab         | compiler | defconfig | r=
-egressions
----------------------------+-------+-------------+----------+-----------+--=
-----------
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie | gcc-8    | defconfig | 1=
-          =
+    - Improved "Add "performance" column to debug summary" patch by
+      correcting the formatting of debug output, which had a superfluous
+      whitespace.
 
 
-  Details:     https://kernelci.org/test/plan/id/60088d59b698163f93bb5d0b
+Dmitry Osipenko (3):
+  PM: domains: Make set_performance_state() callback optional
+  PM: domains: Make of_genpd_add_subdomain() to return -EPROBE_DEFER
+  PM: domains: Add "performance" column to debug summary
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.11-rc4-28-ga3140=
-0ec480e/arm64/defconfig/gcc-8/lab-broonie/baseline-qemu_arm64-virt-gicv3-ue=
-fi.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.11-rc4-28-ga3140=
-0ec480e/arm64/defconfig/gcc-8/lab-broonie/baseline-qemu_arm64-virt-gicv3-ue=
-fi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+ drivers/base/power/domain.c | 54 +++++++++++++++++++++++--------------
+ 1 file changed, 34 insertions(+), 20 deletions(-)
 
+-- 
+2.29.2
 
-
-  * baseline.login: https://kernelci.org/test/case/id/60088d59b698163f93bb5=
-d0c
-        new failure (last pass: v5.11-rc3-19-g9f0b1e583eac) =
-
- =20
