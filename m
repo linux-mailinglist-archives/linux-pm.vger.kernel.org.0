@@ -2,114 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F8D2FD61C
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 17:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B1C2FD6AD
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 18:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391274AbhATQxN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 11:53:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S1732627AbhATPql (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 10:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391243AbhATQiY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 11:38:24 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1747EC061757
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 08:37:44 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id p15so2495071pjv.3
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 08:37:44 -0800 (PST)
+        with ESMTP id S1732535AbhATPm0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:42:26 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEC8C0613C1;
+        Wed, 20 Jan 2021 07:41:46 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id f17so26568807ljg.12;
+        Wed, 20 Jan 2021 07:41:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F/DhG0PPxm0vKgWn3ZUodFL5gREX9ouvD4YqI6sx3m0=;
-        b=T5xizAhCUnokT5bbT4Dz2K7SWIx4lepR61GZQ3HYDfJVWkirqLoPYTENaBy0UESLVT
-         HQ9LdIC/+DMy6GeeZSgu5eQudCxPQfMFsGM4mcx9pxxZVjTwLGiiUrshA07jFyBRiOAj
-         J5aimP/fSm8b9zSInqaq7Q+U9hCGwgpkAv/MshMoGh05QKecI8RiOHvXEngqRru0WpUY
-         SPzdtNptVXkmPQaFHmMFBJAw+7c+Gq4nYiTgv7BETFlXp66C5H2wbwf1Sxx4NhyeY4HO
-         RQpf/I3APZggx/HkIAuajo/CoJVwxeptNzt4uikARVj87NRj6wROC3lJgqFmeyMx6/z1
-         wSAA==
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9sJ1ScRq8N/XaLEQifnGC6kRifQqptOQ2pXix1nlQlY=;
+        b=Uajiq292D24xViZSilHw5Nw54/tYtaDcIPIzm0DmQ1axRpfxwauVk6W3xes7SPa8ME
+         /Qdm+mMXRCwcadGLIWF8ocpHiR24QX5YLae+1HzZwWnKQztag6cmwfKZbONjTi7Ga3fH
+         q5RP5Oy90ofLvcDP3vqOxS3TLOGic5cXgVIogUXp/KQrop3QNZIJet0XLVPeu7nD0TbD
+         D+ebXCuRzp1A3rlGZmbgc0KU7yLtuJ1A2G4F+M+6jSzOBqkP+P2AsM9JXL7BD78B91O5
+         3ehukk8m/3jWoqMe0tB+VjLGd8sIfjaBrGBx8TIMWxIBRBQ+H7AxMJCw1RextufG0Hc2
+         rRNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F/DhG0PPxm0vKgWn3ZUodFL5gREX9ouvD4YqI6sx3m0=;
-        b=SG+pZY0TkGC2wO8hL+BBWdv2CTt5IKc1eM8YxHTtv4omiDoth1bMXllIVQZDKKjqzl
-         hKgowh/AxcQFfG2Y/eU2AxkhuNnezsZm7dXYSVOMiLPtQrVtINlQGcSu+FXlaSCGREIL
-         Ivzsn442ilv88bxwgifwx3nt+3SrhF+sCyepFQYNrn32WEhV+XrUsLY55R/FS20XrAHN
-         TRIYGa+Bbf5nCrtGpM0UbqWnA1ohGm26brEoJIb6J3VlefXunj6rB27MkK7emmWZLZQI
-         Khqj1dPkWitsw2qdaY22wXIMd4dyzuPfLeChA1EfCmGEmEAq0uR4Y36YKSO/zhzIbbpV
-         IuwQ==
-X-Gm-Message-State: AOAM530ZkoMuZDdK+NM6mxgGpA+/9oFnPQcH+hV9Q/SOfxabdgoSK5pO
-        ZLUOoWsSgfBabEserISfR+yp
-X-Google-Smtp-Source: ABdhPJwYzAMEAtg9/JFbhiEuwp4XYSlhS8FCZoRDmYqnHbumm4A5Hob0ASGs5q1KrV8/8oB0j4+sVg==
-X-Received: by 2002:a17:90a:d913:: with SMTP id c19mr2267949pjv.19.1611160663340;
-        Wed, 20 Jan 2021 08:37:43 -0800 (PST)
-Received: from thinkpad ([2409:4072:409:c713:3d52:1d51:c724:155d])
-        by smtp.gmail.com with ESMTPSA id a9sm2889668pfn.178.2021.01.20.08.37.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 08:37:42 -0800 (PST)
-Date:   Wed, 20 Jan 2021 22:07:35 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        okukatla@codeaurora.org
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add SDX55 interconnect provider
- driver
-Message-ID: <20210120163735.GC54606@thinkpad>
-References: <20210120080627.20784-1-manivannan.sadhasivam@linaro.org>
- <20210120080627.20784-3-manivannan.sadhasivam@linaro.org>
- <cb0f56b6-a75c-51a8-d640-08896d459a68@linaro.org>
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9sJ1ScRq8N/XaLEQifnGC6kRifQqptOQ2pXix1nlQlY=;
+        b=J5Tl1owmaH5flvbn/Xed5ltELFrv2dEaRrFAuIY/+FXglX8Dxa/jBMwwW19WbJZcO6
+         T0yfFeFL76FmMXNx9m5LoiapzJSS3FPi06Hfs+0+tvlGx+E4RJdQRIll79LuY+2vJkwe
+         AtsCDWPrs4Ahff9f972DU8Igq8F7iv5UpI/C5QGvgZU4zUlyFY935GNY7iNkkoyiUP8D
+         1SwrjCFZyrvZ7KQt7gE2GP/E3ynVZdZg61i+RNeho5K2S0MAacMQFa29BQlRC1X6mtT9
+         GnZrMi/3/6m0G21k0vhjSyxNumxwNNvmNOYH4LmCmvVfX9ZE0LEJyv302s/aW0EeQc3Q
+         IpZA==
+X-Gm-Message-State: AOAM531RQiq94fBGiowe8DfQybf/jdqF3WYDb0hMd/ufMjdGZhD4g9z3
+        kHeCAz4KloA66Q7Qep2Dx1YVpRGPBZE=
+X-Google-Smtp-Source: ABdhPJwS4Qe/V4DTqXpHPpVFyBynrwBLREgqIfYmzBAewWBaQBUksbpctc33wZx6P9VYWEGo5ma19g==
+X-Received: by 2002:a2e:b4cd:: with SMTP id r13mr1564048ljm.273.1611157304363;
+        Wed, 20 Jan 2021 07:41:44 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id 29sm229492lfr.304.2021.01.20.07.41.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jan 2021 07:41:43 -0800 (PST)
+Subject: Re: [PATCH v3 00/12] OPP API fixes and improvements
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210118005524.27787-1-digetx@gmail.com>
+ <20210118114613.fzq7nkrdfm53upkr@vireshk-i7>
+ <1d17901f-6341-d278-f517-33d9c7aadf42@gmail.com>
+Message-ID: <af1044be-263e-0aa2-7061-0b217f94197b@gmail.com>
+Date:   Wed, 20 Jan 2021 18:41:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cb0f56b6-a75c-51a8-d640-08896d459a68@linaro.org>
+In-Reply-To: <1d17901f-6341-d278-f517-33d9c7aadf42@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Georgi,
+19.01.2021 20:35, Dmitry Osipenko пишет:
+> 18.01.2021 14:46, Viresh Kumar пишет:
+>> On 18-01-21, 03:55, Dmitry Osipenko wrote:
+>>> Hi,
+>>>
+>>> This series fixes problems and adds features to OPP API that are required
+>>> for implementation of a power domain driver for NVIDIA Tegra SoCs.
+>>>
+>>> It is a continuation of [1], where Viresh Kumar asked to factor OPP
+>>> patches into a separate series. I factored out the patches into this
+>>> series, addressed the previous review comments and re-based patches
+>>> on top of [2], which replaced some of my patches that added resource-managed
+>>> helpers.
+>>>
+>>> [1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=221130
+>>> [2] https://lore.kernel.org/linux-pm/20210101165507.19486-1-tiny.windzz@gmail.com/
+>>
+>> Hi Dmitry,
+>>
+>> I have applied 9 out of 12 patches already. Thanks.
+>>
+> 
+> Thanks, I checked that everything is applied properly using today's
+> linux-next.
+> 
 
-On Wed, Jan 20, 2021 at 04:59:31PM +0200, Georgi Djakov wrote:
-> Hi Mani,
-> 
-> Thanks for the patch!
-> 
-> On 1/20/21 10:06, Manivannan Sadhasivam wrote:
-> > Add driver for the Qualcomm interconnect buses found in SDX55 based
-> > platforms. The topology consists of several NoCs that are controlled by
-> > a remote processor that collects the aggregated bandwidth for each
-> > master-slave pairs.
-> > 
-> > Based on SM8250 driver and generated from downstream dts.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/interconnect/qcom/Kconfig  |  10 +
-> >   drivers/interconnect/qcom/Makefile |   2 +
-> >   drivers/interconnect/qcom/sdx55.c  | 356 +++++++++++++++++++++++++++++
-> >   drivers/interconnect/qcom/sdx55.h  |  70 ++++++
-> >   4 files changed, 438 insertions(+)
-> >   create mode 100644 drivers/interconnect/qcom/sdx55.c
-> >   create mode 100644 drivers/interconnect/qcom/sdx55.h
-> > 
-> > diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> > index a8f93ba265f8..6df7e2161a0a 100644
-> > --- a/drivers/interconnect/qcom/Kconfig
-> > +++ b/drivers/interconnect/qcom/Kconfig
-> > @@ -65,6 +65,16 @@ config INTERCONNECT_QCOM_SDM845
-> >   	  This is a driver for the Qualcomm Network-on-Chip on sdm845-based
-> >   	  platforms.
-> > +config INTERCONNECT_QCOM_SDX55
-> > +	tristate "Qualcomm SDX55 interconnect driver"
-> > +	depends on INTERCONNECT_QCOM
-> > +	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
-> 
-> Why not use depends on INTERCONNECT_QCOM_RPMH_POSSIBLE?
->
-
-I just followed the same pattern as other RPMh based drivers. And I don't get
-what you are suggesting here! Can you please explain?
- 
-Thanks,
-Mani
+Turned out that one minor issue was actually introduced, the
+devm_pm_opp_attach_genpd() lost the export. I'll make a patch to fix this.
