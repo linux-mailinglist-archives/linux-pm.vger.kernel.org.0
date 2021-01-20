@@ -2,112 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B1C2FD6AD
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 18:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42C92FD69B
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 18:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732627AbhATPql (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 10:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S2388494AbhATRMB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 12:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732535AbhATPm0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:42:26 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEC8C0613C1;
-        Wed, 20 Jan 2021 07:41:46 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id f17so26568807ljg.12;
-        Wed, 20 Jan 2021 07:41:46 -0800 (PST)
+        with ESMTP id S2403811AbhATRK0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 12:10:26 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B924C0613C1
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 09:09:46 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id w24so17885767ybi.7
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 09:09:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9sJ1ScRq8N/XaLEQifnGC6kRifQqptOQ2pXix1nlQlY=;
-        b=Uajiq292D24xViZSilHw5Nw54/tYtaDcIPIzm0DmQ1axRpfxwauVk6W3xes7SPa8ME
-         /Qdm+mMXRCwcadGLIWF8ocpHiR24QX5YLae+1HzZwWnKQztag6cmwfKZbONjTi7Ga3fH
-         q5RP5Oy90ofLvcDP3vqOxS3TLOGic5cXgVIogUXp/KQrop3QNZIJet0XLVPeu7nD0TbD
-         D+ebXCuRzp1A3rlGZmbgc0KU7yLtuJ1A2G4F+M+6jSzOBqkP+P2AsM9JXL7BD78B91O5
-         3ehukk8m/3jWoqMe0tB+VjLGd8sIfjaBrGBx8TIMWxIBRBQ+H7AxMJCw1RextufG0Hc2
-         rRNw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WPDT0PVm4/aPIbV0EAFgXlokPV1lvrypzi2ZcvT8T1I=;
+        b=rFRBi4r7OH8297hz1xcaXSPUbNFKEfIqzd2Rx6NTH6Y+ffjagOVvyD11mOjKIK6B0O
+         EnTvixK2CI5mbaIucjkharRIVAqkKZG5jXeLsZt8H/leQjyUZfpCU/YrMuoQYOs7zzkz
+         L3qyIDLjN5iwMYQDLHDxV5/WN03ot8PPm69Pjib6KSymHmyH+aT+P9pOLSe4amUP9zgH
+         CITfFpa4KGafOK3wMO9DHmi/sQr8tpA4uiCLdHLID2eCDdqnrsUfY98E2eqIgUP/aMEh
+         Fp/feg0UkH6IqjyNqHlfmOLP3AmpJpT9w9xsPjzaL1gKQTdRETZyG3AN8dWBD/XddnwN
+         0T7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9sJ1ScRq8N/XaLEQifnGC6kRifQqptOQ2pXix1nlQlY=;
-        b=J5Tl1owmaH5flvbn/Xed5ltELFrv2dEaRrFAuIY/+FXglX8Dxa/jBMwwW19WbJZcO6
-         T0yfFeFL76FmMXNx9m5LoiapzJSS3FPi06Hfs+0+tvlGx+E4RJdQRIll79LuY+2vJkwe
-         AtsCDWPrs4Ahff9f972DU8Igq8F7iv5UpI/C5QGvgZU4zUlyFY935GNY7iNkkoyiUP8D
-         1SwrjCFZyrvZ7KQt7gE2GP/E3ynVZdZg61i+RNeho5K2S0MAacMQFa29BQlRC1X6mtT9
-         GnZrMi/3/6m0G21k0vhjSyxNumxwNNvmNOYH4LmCmvVfX9ZE0LEJyv302s/aW0EeQc3Q
-         IpZA==
-X-Gm-Message-State: AOAM531RQiq94fBGiowe8DfQybf/jdqF3WYDb0hMd/ufMjdGZhD4g9z3
-        kHeCAz4KloA66Q7Qep2Dx1YVpRGPBZE=
-X-Google-Smtp-Source: ABdhPJwS4Qe/V4DTqXpHPpVFyBynrwBLREgqIfYmzBAewWBaQBUksbpctc33wZx6P9VYWEGo5ma19g==
-X-Received: by 2002:a2e:b4cd:: with SMTP id r13mr1564048ljm.273.1611157304363;
-        Wed, 20 Jan 2021 07:41:44 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id 29sm229492lfr.304.2021.01.20.07.41.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jan 2021 07:41:43 -0800 (PST)
-Subject: Re: [PATCH v3 00/12] OPP API fixes and improvements
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20210118005524.27787-1-digetx@gmail.com>
- <20210118114613.fzq7nkrdfm53upkr@vireshk-i7>
- <1d17901f-6341-d278-f517-33d9c7aadf42@gmail.com>
-Message-ID: <af1044be-263e-0aa2-7061-0b217f94197b@gmail.com>
-Date:   Wed, 20 Jan 2021 18:41:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WPDT0PVm4/aPIbV0EAFgXlokPV1lvrypzi2ZcvT8T1I=;
+        b=Db2DT+5d6gbSDzT7JbXvNFPf0W/aUIEDC8LFhaveGgyMVvi5jIBVmfZn1VKs4Uyavd
+         nriLbYNVhmXDwJo1DKo4g68KjARWos/OsWDTTWTzHlhqyadhy8a52jQZHAGf12geUFiJ
+         rKcK0Z/qobHnvwIT+XoPAUWJcH2MgreaRHN5HPEhBIKZl1XYWaEWv1pJejJBN5RSJIxT
+         O1+VyqXcY7/t318d12LmKjRDhsHr7dK4joW5kdnIkkx+Wf4bp3Owo5a3Vn/SvsafONet
+         aW0c5Xo9wWga/NZ1kV36BOkEcjKPq2WFrqGUt6CaD+ssSKk/efAoVFZre3/euhRprZLZ
+         i+xw==
+X-Gm-Message-State: AOAM5309ldF15ZpPXntJxDn+E3GilRl2JC9MFJWW18rUQZQOU7p5mi82
+        dwqKuot2LejCIwx1itZn92olF1Zte6PawvAe9rHXhA==
+X-Google-Smtp-Source: ABdhPJwgt9Cxc/JcL4f7pl9d8H1GVMqWeXV7Rq5bFY8Gar7UAQgJ9hjlLUp5Y+jDcGNKkVZXb2EOADxVGcwvFJ6fju0=
+X-Received: by 2002:a25:3345:: with SMTP id z66mr7809991ybz.466.1611162585610;
+ Wed, 20 Jan 2021 09:09:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1d17901f-6341-d278-f517-33d9c7aadf42@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210120142323.2203705-1-geert+renesas@glider.be>
+In-Reply-To: <20210120142323.2203705-1-geert+renesas@glider.be>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 20 Jan 2021 09:09:09 -0800
+Message-ID: <CAGETcx-ZcXB9Zw_RnMjA0G2oKAyeK3VfKgha=Mvqnn_dDREuOw@mail.gmail.com>
+Subject: Re: [PATCH/RFC] soc: renesas: rcar-sysc: Mark device node
+ OF_POPULATED after init
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-19.01.2021 20:35, Dmitry Osipenko пишет:
-> 18.01.2021 14:46, Viresh Kumar пишет:
->> On 18-01-21, 03:55, Dmitry Osipenko wrote:
->>> Hi,
->>>
->>> This series fixes problems and adds features to OPP API that are required
->>> for implementation of a power domain driver for NVIDIA Tegra SoCs.
->>>
->>> It is a continuation of [1], where Viresh Kumar asked to factor OPP
->>> patches into a separate series. I factored out the patches into this
->>> series, addressed the previous review comments and re-based patches
->>> on top of [2], which replaced some of my patches that added resource-managed
->>> helpers.
->>>
->>> [1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=221130
->>> [2] https://lore.kernel.org/linux-pm/20210101165507.19486-1-tiny.windzz@gmail.com/
->>
->> Hi Dmitry,
->>
->> I have applied 9 out of 12 patches already. Thanks.
->>
-> 
-> Thanks, I checked that everything is applied properly using today's
-> linux-next.
-> 
+On Wed, Jan 20, 2021 at 6:23 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> The R-Car System Controller (SYSC) driver registers PM domains from an
+> early_initcall().  It does not use a platform driver, as secondary CPU
+> startup on R-Car H1 needs to control the CPU power domains, before
+> initialization of the driver framework.
+>
+> As fw_devlink only considers platform devices,
 
-Turned out that one minor issue was actually introduced, the
-devm_pm_opp_attach_genpd() lost the export. I'll make a patch to fix this.
+Correction. It only considers devices. As in, devices on all types of
+busses are supported.
+
+> it does not know that the
+> System Controller is ready.  Hence probing of on-chip devices that are
+> part of the SYSC PM domain fail:
+>
+>     probe deferral - supplier e6180000.system-controller not ready
+>
+> Fix this by setting the OF_POPULATED flag for the SYSC device node after
+> successful initialization.  This will make of_link_to_phandle() ignore
+> the SYSC device node as a dependency, and consumer devices will be
+> probed again.
+
+It'd still be nice if you could (maybe in a later patch), at least
+probe all the power domains that aren't really needed this early.
+Using the driver core framework (when it's possible), gives you nice
+things :)
+
++Rob. I know he hates people using OF_POPULATED, but I think this case
+is reasonable and want to make sure he's aware of this.
+
+Once you fix my commit nitpick, you can add:
+Reviewed-by: Saravana Kannan <saravanak@google.com>
+
+-Saravana
+
+>
+> Fixes: e590474768f1cc04 ("driver core: Set fw_devlink=on by default")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/soc/renesas/rcar-sysc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/soc/renesas/rcar-sysc.c b/drivers/soc/renesas/rcar-sysc.c
+> index 9b235fc900273405..a00bb098e1fe7488 100644
+> --- a/drivers/soc/renesas/rcar-sysc.c
+> +++ b/drivers/soc/renesas/rcar-sysc.c
+> @@ -439,6 +439,8 @@ static int __init rcar_sysc_pd_init(void)
+>         }
+>
+>         error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
+> +       if (!error)
+> +               of_node_set_flag(np, OF_POPULATED);
+>
+>  out_put:
+>         of_node_put(np);
+> --
+> 2.25.1
+>
