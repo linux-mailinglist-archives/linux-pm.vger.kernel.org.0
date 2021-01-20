@@ -2,150 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C6A2FDAA5
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 21:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B75B2FDBD5
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 22:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387789AbhATUSr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 15:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S1732538AbhATVZa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 16:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388255AbhATUSn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 15:18:43 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77736C061575
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 12:18:01 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id x18so13140941pln.6
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 12:18:01 -0800 (PST)
+        with ESMTP id S1728375AbhATVYv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 16:24:51 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AC9C061757;
+        Wed, 20 Jan 2021 13:13:52 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id q8so4482322lfm.10;
+        Wed, 20 Jan 2021 13:13:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=9s0lNYGOLKxB00+xV/C3Jl4+9XUvHC83RBRw0aqYRvc=;
-        b=pnq9WgPx9aqXaaRTYlIGv7xzyB3FJSu3aB61fPCC8J2vv3SaY087sfejaaYZrpNFL4
-         +Va9lQFMAHN/W+RCzjz7PuVP++9e2LbVGJV2nD2uY9M+kAvw5wxEJsIDKM4z9QROQvM2
-         1sxOWsbrwPnqEOcg/IxcnmyTDaimIqtDYVGWMk48WGlKtWcPADe8galK7YtT+nOvc47C
-         /INc34WjFzRbNs6GOC4/jLTNfdKWtA4J4SnXZEJKFHVeA5Hp8p8c74thKAZVcBokMeZ4
-         mrpCgsx7SbmQF1BVX6vMZf8fY3xGOAEG7ZMCHIyqcBAG5UiEJcPyGlwT5qdAt2M6w3XF
-         8VIw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BZyyjughXVQWOCamHA5hQecx4dkH4WA782c6u3ykaXc=;
+        b=lNXdLU+DdJmsFQjB9xuWEX+44vbJRXDESQMP0PnyNXhcDw1LzXMoH9NgAD5Y2lLERK
+         8NtGccxUAflMbyVJTda4y78/TK+fILB6BEWDbgaP0BUHxqEI718k8zgp3BivIOj1baoB
+         VvsEMyh4hF7ouTF2nD/s3sni86dWT9I2qvPaXlHBzw+r1TJEutIKLxfj1QWTWCwQFauH
+         /IK/7nEpxiChvfHROpN/yuWq25KmDGR/4SHjHVE1lVpUfu9LvBivFM/xlv5wspMJEzjI
+         tOx3J9/715C63VncN4BP6m0BZYrtYlsI1w3EOLs62DoqeCUFYuxZvi2cgyYm5iQne2WT
+         +M2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=9s0lNYGOLKxB00+xV/C3Jl4+9XUvHC83RBRw0aqYRvc=;
-        b=e7uh7ap2DDQ5AyZD/Dh2u6oT8tSwz6zpuS4qETeh+FOGFdO/1rouGtBPid51q7Gb3M
-         HVd5xrvPQNCvOf8IpIUWv8L37OyvwtVhBUzlPLvVgJHRBh3omIcupKsTSYOqUVinEGbP
-         6tQyJspaYvVbaQzWw/5wbszXocUu0DEWdYZ3VxRSFVv9RenD0PtuQgpr6JAFPUDJg4RZ
-         8/ua+s4y1YzJQjWdCLMSb98W9gB6HFj/ditIANXfQPScm/79nsbr1zv4s28XpSf9nsOE
-         4P3PgigsJQuonaVMktDenT0GbmQOFMLNvr5fgWTiBBlQ9tg4dF31PbSYXP5cuKdPBr9S
-         4GHQ==
-X-Gm-Message-State: AOAM533bg9h3btTpkIoXAkjugU5JPOyaepvczev0GDHvmhOMeq8Ya2Zw
-        K5/3q74Tc3QMJqbIlPsRBC5N9w==
-X-Google-Smtp-Source: ABdhPJw0w5qWHPUGi7vXYF5MZ21zwx0CZxg5bejUkh6EM+pjdnt+ZKOKhvbTeLLFzDKCCwBYhVf+3g==
-X-Received: by 2002:a17:90b:3805:: with SMTP id mq5mr7534658pjb.93.1611173881075;
-        Wed, 20 Jan 2021 12:18:01 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w21sm2411525pff.220.2021.01.20.12.18.00
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BZyyjughXVQWOCamHA5hQecx4dkH4WA782c6u3ykaXc=;
+        b=khK1eJ06jRs9PJT1BtnMV67czSbsobmX2X7EUJt+0+9hn7wDtnbFdho2c4Ef9zG0hb
+         JVyvMWNIkGFPteDzgSpEMg1wTUtCsjqjSNtSwljztIP7ZcgnV3D7XpTmEZfa+NvYe+T5
+         t0zlxha8IrqQQ2xLKrqHQ3VeeqFdRWzloAgQVcLyt1tCPUccQYUOXDmYTiCzwrPBoprm
+         4y8FCHJqQ9rUGY2Gz8xn7SNdxR+XiTyjDWguMm4PCiQnmcfOYc7MKzh7kQRDKiTqSOjG
+         KWu+J7kBt85qmgNN1o3Iy2+w7QXWl0zXCGLdvfe9UrPfKsINdcIjhZ85oq+hN1z2P88G
+         DNJQ==
+X-Gm-Message-State: AOAM533+NWyhQ8KS7l/yyZ4E1AGIa1Pcl/xiqQ+u7sjcmxUllmY2Vu+Y
+        hcTYkehyhSiB8NniDVNYxBQ=
+X-Google-Smtp-Source: ABdhPJwkj0Lo/eNGpw4KKAwbidgNRUzYBBJG1SH49hWuruG5tXCvSHBQJ9EX265XlHQnFeGrtKVJ6Q==
+X-Received: by 2002:a05:6512:3ea:: with SMTP id n10mr5034842lfq.535.1611177231423;
+        Wed, 20 Jan 2021 13:13:51 -0800 (PST)
+Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.gmail.com with ESMTPSA id 196sm298131lfj.219.2021.01.20.13.13.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 12:18:00 -0800 (PST)
-Message-ID: <60088ff8.1c69fb81.18e3b.4d18@mx.google.com>
-Date:   Wed, 20 Jan 2021 12:18:00 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 20 Jan 2021 13:13:50 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matt Merhar <mattmerhar@protonmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v5 1/3] PM: domains: Make set_performance_state() callback optional
+Date:   Thu, 21 Jan 2021 00:12:30 +0300
+Message-Id: <20210120211232.17299-2-digetx@gmail.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210120211232.17299-1-digetx@gmail.com>
+References: <20210120211232.17299-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.11-rc4-28-ga31400ec480e
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.11-rc4-28-ga31400ec480e)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.11-rc4-28-ga3=
-1400ec480e)
+Make set_performance_state() callback optional in order to remove the
+need from power domain drivers to implement a dummy callback. If callback
+isn't implemented by a GENPD driver, then the performance state is passed
+to the parent domain.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-11-rc4-28-ga31400ec480e/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.11-rc4-28-ga31400ec480e
-Git Commit: a31400ec480e8a579467fbe36d7ea49c952109dc
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-    multi_v7_defconfig (gcc-8): 1 warning
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused v=
-ariable =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused variab=
-le =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+Tested-by: Matt Merhar <mattmerhar@protonmail.com>
+[tested on NVIDIA Tegra20/30/124 SoCs]
+Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
-For more info write to <info@kernelci.org>
+ drivers/base/power/domain.c | 33 ++++++++++++++++++---------------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 9a14eedacb92..5c843772f7f4 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -297,6 +297,18 @@ static int _genpd_reeval_performance_state(struct generic_pm_domain *genpd,
+ 	return state;
+ }
+ 
++static int genpd_xlate_performance_state(struct generic_pm_domain *genpd,
++					 struct generic_pm_domain *parent,
++					 unsigned int pstate)
++{
++	if (!parent->set_performance_state)
++		return pstate;
++
++	return dev_pm_opp_xlate_performance_state(genpd->opp_table,
++						  parent->opp_table,
++						  pstate);
++}
++
+ static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+ 					unsigned int state, int depth)
+ {
+@@ -311,13 +323,8 @@ static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+ 	list_for_each_entry(link, &genpd->child_links, child_node) {
+ 		parent = link->parent;
+ 
+-		if (!parent->set_performance_state)
+-			continue;
+-
+ 		/* Find parent's performance state */
+-		ret = dev_pm_opp_xlate_performance_state(genpd->opp_table,
+-							 parent->opp_table,
+-							 state);
++		ret = genpd_xlate_performance_state(genpd, parent, state);
+ 		if (unlikely(ret < 0))
+ 			goto err;
+ 
+@@ -339,9 +346,11 @@ static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+ 			goto err;
+ 	}
+ 
+-	ret = genpd->set_performance_state(genpd, state);
+-	if (ret)
+-		goto err;
++	if (genpd->set_performance_state) {
++		ret = genpd->set_performance_state(genpd, state);
++		if (ret)
++			goto err;
++	}
+ 
+ 	genpd->performance_state = state;
+ 	return 0;
+@@ -352,9 +361,6 @@ static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+ 					     child_node) {
+ 		parent = link->parent;
+ 
+-		if (!parent->set_performance_state)
+-			continue;
+-
+ 		genpd_lock_nested(parent, depth + 1);
+ 
+ 		parent_state = link->prev_performance_state;
+@@ -399,9 +405,6 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+ 	if (!genpd)
+ 		return -ENODEV;
+ 
+-	if (unlikely(!genpd->set_performance_state))
+-		return -EINVAL;
+-
+ 	if (WARN_ON(!dev->power.subsys_data ||
+ 		     !dev->power.subsys_data->domain_data))
+ 		return -EINVAL;
+-- 
+2.29.2
+
