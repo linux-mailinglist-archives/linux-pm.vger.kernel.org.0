@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050612FD49C
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 16:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCB32FD56D
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 17:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732795AbhATPyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 10:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S2391216AbhATQUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 11:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390562AbhATPx3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:53:29 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FE4C061575;
-        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id o17so34757590lfg.4;
-        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
+        with ESMTP id S1726694AbhATPyA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:54:00 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E386C061757;
+        Wed, 20 Jan 2021 07:53:20 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id f17so26614029ljg.12;
+        Wed, 20 Jan 2021 07:53:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
-        b=b2NLVokQPZCUuJAyv3kiWNUb/D7/YvKoWfUJcCHR1heKGaiZjLpcSwBstX7Q3YX8MD
-         0VSL3nGarP20z1Z7t1EQA7XA2H4vpXyhlGms2qwFGmlN5vFPCkNOEwhXvgcl2dX2OHl0
-         Fk8lwe7s8eUZ2wwS5RMH6/mUWuXSRNmTjNvQCAwK5Dd3NdzmkpZHt4llHrw8Ni5khkmn
-         myMjJRhAiEUeq/sHdT1yh60NnMmGAROPatvIjJ8mP6HQeV19cvk6YGXY87IpFAtncwaV
-         v00shKKr9e/yxCXAB3jbsK18rnr4dn0SL3OuJ8SyDsoqZnywmH2zxXJFRB0YEqFQqi04
-         OP8Q==
+        bh=lE0By9BdqcLq0DFuPQl1N1WFBOvj2HiI4v8fCey86OI=;
+        b=O8YbneSc0EPrK+x+ACTtxER1MN0M1XBi9LAGKH0nJM/5YJ1U79U/haRbmcrTpw14Ng
+         lBaEFHTJj6uIY63LJCsu0OOLazGC+3p3cBzv4s5khXMYyJCLeRJM3f/UJi7Rf3bv7HNz
+         k0aqDb53e+mRms17Zo1upTYQlWehrToOd/0vHZ7fRfi1mE9K/82zL3j5wsS+Se83qP/e
+         xJAYfHeMu3zMp0M4hy//z7iIh2UPaY0XFSze5PIVkL8fgXJw/hKGhv8n54eHuLqO+3jk
+         XMsUhVHZrUptWva+QjeF42vhw1p0cSAIbp9cNnBd1rO1Ez8jfoRVI+SaUV/sESqO5CFJ
+         xJSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
-        b=nbGUUFMp2tvkeX6XBsXTytoIiQPoz2eDIbHMmu4obTt01NoNLbaj2f9zx3wVyrCp4j
-         XIEjmjHhN6R1F1fnjSKUn9LIH2fe1HWXJOARadqqsVIByKni7NkJOPdLj+5chmh06SoZ
-         6TH9b14hriqgE1+ThonVV1NND8L1OGT9qf8dXWsrbFRjvgVWZ0Hv2ANhdQP7Pp0rUInH
-         DdyJhS2vnOcnkWMdS4WMk+TAwt6OmI0ezULfIAVj4iUL3FbjIeIkwceqBm8ZxGEFnVmy
-         1k1exhCfw1zlHcU/HC6vF73fyQJL7udqR/YCzWTZyBsWL6xCKgckEZ+apslDjtXdNUTt
-         jDZQ==
-X-Gm-Message-State: AOAM5338hi7aA1pHPOm9dFhgTGZXp4CKCcQIfKiU3dvNwEKhL+T6Bgjo
-        K/NSxyBc5oPD2aA5LNiSlbJh8+WQmjY=
-X-Google-Smtp-Source: ABdhPJz54jp4p6N7ro9OB4UGTlGLwMbj9w9A1NhmVFwuW25RiB7kgYemoqd4C3nN1Esa+ddCNU5GUA==
-X-Received: by 2002:a19:ac45:: with SMTP id r5mr4942869lfc.305.1611157967504;
-        Wed, 20 Jan 2021 07:52:47 -0800 (PST)
+        bh=lE0By9BdqcLq0DFuPQl1N1WFBOvj2HiI4v8fCey86OI=;
+        b=G/qkOJG89j1/4D02sop5zAUjwYix+kQpe0eYSS+LTFmocrxl2HAAf5BTWfvu8pqhvX
+         MpXeubbdZbmk2lLcDtJC+M4ojSza5cfrYmkLZzFnRm4KUyiL3+dtCrAt5hm6hnQS7UXd
+         wfaRTjq667VzvGq49YB4EBZLaVPhP3uwevjN0Je/R+5K+zF3h4xDAH7k+VwTbQIALG9l
+         1LTteBXqZJ1TJjVBtIh52Tq1T3SXSk2eistEvmj2ptkZvNb3L3knhpA/kSJ2tmJt14bt
+         aSmV5VB2qYu1DZfCQSoJbzVDrWkYf8aifIH7pTe0YhcZAD43DiOlOGLElaXmaezF4LTv
+         fbyQ==
+X-Gm-Message-State: AOAM5309kl+IeJfedEDaTEsY/ZKmku/vEnr12aRXYmHmSrBLuMcN8k7G
+        2pXBYCNptFfNy3Z0Gvn7M6Np+u01T4A=
+X-Google-Smtp-Source: ABdhPJyBy+9sQjBpII9U0Ep8TbQz3BXDkf0PkENZMYoEspvmyYtpJD0VWDKPNhL7YKEOT6kR2w2cOw==
+X-Received: by 2002:a2e:a366:: with SMTP id i6mr4945023ljn.427.1611157998525;
+        Wed, 20 Jan 2021 07:53:18 -0800 (PST)
 Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id b4sm74228ljp.53.2021.01.20.07.52.43
+        by smtp.googlemail.com with ESMTPSA id w13sm188387ljw.115.2021.01.20.07.53.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jan 2021 07:52:46 -0800 (PST)
-Subject: Re: [PATCH 02/31] opp: Add devres wrapper for
- dev_pm_opp_set_regulators and dev_pm_opp_put_regulators
+        Wed, 20 Jan 2021 07:53:17 -0800 (PST)
+Subject: Re: [PATCH 03/31] opp: Add devres wrapper for
+ dev_pm_opp_set_supported_hw
 To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
         kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
@@ -85,14 +85,14 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <20210101165507.19486-3-tiny.windzz@gmail.com>
+ <20210101165507.19486-4-tiny.windzz@gmail.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <43c251a2-430a-040c-4152-94cf10c884e0@gmail.com>
-Date:   Wed, 20 Jan 2021 18:52:43 +0300
+Message-ID: <fc9a1f79-639c-4384-c324-87249ac576fd@gmail.com>
+Date:   Wed, 20 Jan 2021 18:53:15 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <20210101165507.19486-3-tiny.windzz@gmail.com>
+In-Reply-To: <20210101165507.19486-4-tiny.windzz@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -101,14 +101,14 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 01.01.2021 19:54, Yangtao Li пишет:
-> Add devres wrapper for dev_pm_opp_set_regulators()
-> dev_pm_opp_put_regulators () to simplify driver code.
+> Add devres wrapper for dev_pm_opp_set_supported_hw() to simplify driver
+> code.
 > 
 > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 > ---
->  drivers/opp/core.c     | 50 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_opp.h |  9 ++++++++
->  2 files changed, 59 insertions(+)
+>  drivers/opp/core.c     | 38 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_opp.h |  8 ++++++++
+>  2 files changed, 46 insertions(+)
 
 Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 Tested-by: Dmitry Osipenko <digetx@gmail.com>
