@@ -2,117 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 225162FDCE6
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 00:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6547D2FDD08
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 00:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730699AbhATVZT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 16:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        id S1726085AbhATWay (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 17:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388556AbhATVRG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 16:17:06 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86252C0613D6
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 13:16:20 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b8so13239939plx.0
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 13:16:20 -0800 (PST)
+        with ESMTP id S1727099AbhATV5t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 16:57:49 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD7BC061575;
+        Wed, 20 Jan 2021 13:57:08 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id j3so199524ljb.9;
+        Wed, 20 Jan 2021 13:57:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ca+8NzTfETzVE4+uw+qveOGQYKjaycmberW1KwYsv+g=;
-        b=sp/+zyym2ObOAZ5VSgKGDvFyd7fzMiEelycw2XiJgLanPAV191du/v4seZcP2n1ckS
-         14O504wPDap2gIAXzcaB/PQnNGWe0xB5neErN1fyt3P41nv3RkeBk/ilNj6zXtdahhHo
-         I8K+OTjgm5aURXGPoa+cSxvje004UqQMR7ejb0dF0m6CU+YR185Pskgmy7TQazkfD8E5
-         gNfEpWMUecYuiBrLN/ad5GzWAPFClDd2KIdrBqCNKXMtkeEwBEHahx2/gbNVbE/xk2/V
-         V93OlgwEvSV2JRtRHvnFizXWIP83SwZQf/MlPOfVQiVJD8WYXW//tjWbv9MDssegIoLd
-         ZCUw==
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ceHRCJDK3HYsIEFwVaZdcOC3/1LUUaiOgnlHMxXcJKg=;
+        b=W4ZRzJICVHiuDztf0opX/vCbrya/2gxGbYiulmDAeN26an7pfDLwC4uXVeSsZjs2qP
+         cAIeGhUo4T20zGUkQwArJb/rD7L2agpHRuA4x84VPsCwWZP/JW9zAMLfMwjVXhVJRMx0
+         n8IKlOMybH2T1r8fxngsjrDBnq7dID9jfN/zRu0TjA9rPmO9p9HuQl53eeYWaPitLDsJ
+         ZqIELerQYMLrCrtSmIBa3YXesH/Rr3lL8eBp/foZBi5/yw6hJ+wUqi3Gz+orqqqa0D2t
+         bLUD7GdJGCCXvkEsXyNOuOI/9/ldHYAJfNE0L8LglMfczwKtfYEOgWJ+dhHt4kH2bmXw
+         reNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ca+8NzTfETzVE4+uw+qveOGQYKjaycmberW1KwYsv+g=;
-        b=YuBPImg9WNnOvrY1hrsC4dlJBsZGUNOxMNjtPzJis1gqbYdzJmvXfRLH7tHeCIPEtl
-         jw/B5Nzf1IKhDgnI8Ks1kTEZlTXiBhjRfh0lDuLKuFlgJHvfJnb7DwhDPrULoYh27k+l
-         mgMkqfRFUNipNXvYwowF2xmTTK4//jQX2AcU2dMXQwn2CL0PRj5wO6/LMKNxUb3S7AH1
-         Gz3ez+/3MLgK/cb2XGT79wM5qN4SITKhhzlz8jLG7W4jGTX+jqjTqHKAX6bm3+9damx+
-         6W2tcHb+TIbTT3iJ69InuFrre+84A56s9YAxIg9vdGvlkWUyfnch8b63VGtAjJGznL2R
-         62lA==
-X-Gm-Message-State: AOAM53368rnHR4UxMv49YhgwNc4zxOMYBFiS0dsdhVTQoKPMWaZKFtKX
-        WITLdXO19N0+nsVE1u8bxz68tg==
-X-Google-Smtp-Source: ABdhPJw4pOCKvDfQNI0uJJUeDzQYXxP9mahfTb+hb/0MVvzM3/BurD6mZpkApPxQpERLeXet9cWjkw==
-X-Received: by 2002:a17:90a:4cc5:: with SMTP id k63mr7552829pjh.202.1611177380010;
-        Wed, 20 Jan 2021 13:16:20 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n128sm3487876pga.55.2021.01.20.13.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 13:16:19 -0800 (PST)
-Message-ID: <60089da3.1c69fb81.bbd1d.859a@mx.google.com>
-Date:   Wed, 20 Jan 2021 13:16:19 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ceHRCJDK3HYsIEFwVaZdcOC3/1LUUaiOgnlHMxXcJKg=;
+        b=icVs2wgz1sxsRk2joxvFo7LHGeexY8B19C9qMxgbyqO695UMSC7TYUCZR0dEl4a35X
+         zbtyaJd3pOm8EM26Mhduuh93XH9qNEvnxGHb2Twp/qbr0MLnDLHYqryPI11yIPr7KGRn
+         K7sn/UUe0j/P8u/Oezggbxg7O7ViW9G83elxl4rO8MKXYEQveNwNggJ69OJ8klUrUWoI
+         lnq4Bm2oW2tOrZhxHZepn6LihmK8KbEsLVYU5moTVOSKElzExDQw4mAktaNaMqciAS83
+         jnlWYM76M2W63QoSuhUFi5n+xImdDDZoNsB5LW2ICuxVFMm1WZREsT/lzauJTq/ZzA9q
+         tqEQ==
+X-Gm-Message-State: AOAM533ki+jmJIx1nMeTQHqyIFWGeVggn8wCD8SUsQygW6grhvPZQX6Z
+        E7COPg1a5mdRgOVWEmCq2GrUg2psf8I=
+X-Google-Smtp-Source: ABdhPJwycW2kFZEra1VeimUqPfqf9oMM2IltvnYEEPSGXuxF3K4moS4SD52zegkvlFyE/vW2eYuhlA==
+X-Received: by 2002:a2e:2f17:: with SMTP id v23mr5515563ljv.222.1611179826782;
+        Wed, 20 Jan 2021 13:57:06 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id f3sm349528ljp.114.2021.01.20.13.57.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jan 2021 13:57:05 -0800 (PST)
+Subject: Re: [PATCH v3 05/12] opp: Add dev_pm_opp_set_voltage()
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210118005524.27787-1-digetx@gmail.com>
+ <20210118005524.27787-6-digetx@gmail.com>
+ <20210118095256.tr2qgnrmokkc6ngf@vireshk-i7>
+ <a48dca91-4264-e153-cefa-ccbcca1b1d9d@gmail.com>
+Message-ID: <16c7e096-5efd-2d0c-a2ac-c11133c29c30@gmail.com>
+Date:   Thu, 21 Jan 2021 00:57:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.11-rc4-28-ga31400ec480e
-Subject: pm/testing sleep: 4 runs, 1 regressions (v5.11-rc4-28-ga31400ec480e)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <a48dca91-4264-e153-cefa-ccbcca1b1d9d@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 1 regressions (v5.11-rc4-28-ga31400ec480e)
+18.01.2021 22:14, Dmitry Osipenko пишет:
+> 18.01.2021 12:52, Viresh Kumar пишет:
+>> On 18-01-21, 03:55, Dmitry Osipenko wrote:
+>>> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+>>> index 99d18befc209..341484d58e6c 100644
+>>> --- a/drivers/opp/core.c
+>>> +++ b/drivers/opp/core.c
+>>> @@ -2731,3 +2731,58 @@ int dev_pm_opp_sync_regulators(struct device *dev)
+>>>  	return ret;
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(dev_pm_opp_sync_regulators);
+>>> +
+>>> +/**
+>>> + * dev_pm_opp_set_voltage() - Change voltage of regulators
+>>> + * @dev:	device for which we do this operation
+>>> + * @opp:	opp based on which the voltages are to be configured
+>>> + *
+>>> + * Change voltage of the OPP table regulators.
+>>> + *
+>>> + * Return: 0 on success or a negative error value.
+>>> + */
+>>> +int dev_pm_opp_set_voltage(struct device *dev, struct dev_pm_opp *opp)
+>>
+>> I think we should do better than this, will require some work from
+>> your part though (or I can do it if you want).
+>>
+>> Basically what you wanted to do here is set the OPP for a device and
+>> this means do whatever is required for setting the OPP. It is normally
+>> frequency, which is not your case, but it is other things as well.
+>> Like setting multiple regulators, bandwidth, required-opps, etc.
+>>
+>> I feel the right way of doing this would be to do this:
+>>
+>> Factor out dev_pm_opp_set_opp() from dev_pm_opp_set_rate() and make
+>> the later call the former. And then we can just call
+>> dev_pm_opp_set_opp() from your usecase. This will make sure we have a
+>> single code path for all the set-opp stuff. What do you think ?
+>>
+> 
+> Sounds like it could be a lot of code moving and some extra complexity
+> will be added to the code. If nobody will ever need the universal
+> dev_pm_opp_set_opp(), then it could become a wasted effort. I'd choose
+> the easiest path, i.e. to defer the dev_pm_opp_set_opp() implementation
+> until somebody will really need it.
+> 
+> But if it looks to you that it won't be a too much effort, then I'll
+> appreciate if you could type the patch.
+> 
 
-Regressions Summary
--------------------
+Let's start with dev_pm_opp_set_voltage() for now. It shouldn't be a
+problem at all to upgrade it to dev_pm_opp_set_opp() later on.
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.11-rc=
-4-28-ga31400ec480e/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.11-rc4-28-ga31400ec480e
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      a31400ec480e8a579467fbe36d7ea49c952109dc =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60088d0d11d9b575b6bb5d49
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.11-rc4-28-ga3140=
-0ec480e/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.11-rc4-28-ga3140=
-0ec480e/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0118.2/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/60088d0d11d9b575b6bb5d4a
-        failing since 154 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+I'll make a v4 with the dev_pm_opp_set_voltage(), please let me know if
+you have objections or more suggestions!
