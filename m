@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B77D52FDCAC
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 23:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 964F02FDC9D
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 23:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727463AbhATWby (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 17:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S1728920AbhATWbo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 17:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387511AbhATW1m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 17:27:42 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED33C061575;
-        Wed, 20 Jan 2021 14:27:02 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id s24so4062848wmj.0;
-        Wed, 20 Jan 2021 14:27:02 -0800 (PST)
+        with ESMTP id S2387520AbhATW1o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 17:27:44 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD36C061757;
+        Wed, 20 Jan 2021 14:27:03 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id l12so19345721wry.2;
+        Wed, 20 Jan 2021 14:27:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dKcbJOeGT1X867/R9y81CHjqL2NMHtb7qjxbq5JTTeY=;
-        b=WEjw89t9vfKEoWaPW9FfwUDOx7EJFwSflfFIYw7I7k7tG7mjfLOXk4r3Wwq+1JqEQm
-         OFRkXqQTNsZfGeO5qk5XlU/FGvRLR+faZ0lAa1BRI+omdBVc3A7vbOdfkTaJh8vJ+CW/
-         KxKwKPeZJ2R/wLFDYF/FH7TFeiyTyJWsP/W9OOrei5ZNy1606QXqkginswgWFvx1CFZd
-         VV29M0YZBztO7fpfB9SGkoXA4pdPhZN9WDGTRTG89cU73IkT1GINHY5MfOld7V6CLHr1
-         r7xeWetE0YOsKgSw8UT9OI9HUTjlVDcx/gEieadPNSdtFJyXtVBSKhq/BUQiR5csP/va
-         s+vA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=n+YYPxYgIaXaJZpbVcLE+s+aMMIfmEVlIGclm9I+uGo=;
+        b=jWDK5lkswMxFB5eDSywZJkZnnjT1+XRgOnMTr2hqt5W6G+5IGqI3QqX1kWVZHD3Q5Y
+         HAxAKqu8v9KK/dAIm6xL5tNTLPn6VppSZCF6Kahpzly/AEbtelgNjuq+xVbNA/4Rlscq
+         Y5oRecBmc+UMufl1gZZjhWofYJ0qBnJ+uMqnMwNucrDbnRIKvfpjezDP05HU4E6C5wHM
+         /s8vcMqQjPxoO3X7hXd2t1zcaexwrC4hvpV4kQ6VbLCGVrw5fo/4CV4AySEqb5rpZRr/
+         +e4Kca1/mgUveyl/mMEJdZi4bNOUNz4qZPexBDSRzH2P7b8KFgEys/bqeV/WD7KZc6bh
+         wMZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dKcbJOeGT1X867/R9y81CHjqL2NMHtb7qjxbq5JTTeY=;
-        b=QMzu0gpS328nKqKRCFuw6gsvdjvLpmzxCLEqyahoPN3C/tOpAqjE2ycTbw2X8mCMJQ
-         rgPcbWuEE5qsJ4ww8PAKTSA4qFQIxSv0NwUfKUy1v8jcESQuy3XOycIt9+ooEgmxu3jK
-         04fxuHtmKa4uTQn277+zg4x9soZs8KAs2RghKjTffMLRWddnHllicuGbMHNpWpw7OMTU
-         U+F1tp/33/ry/v6zX2lnd4v1NGgc3aw7h4zDMQ7Mpkppr5mVZ3ZKBsxU9Y6xA0vMJ4hx
-         9YXggAh+GVG33CKQ6cIWTnAl1uL4IVZT1S/0ANnhDsFLhkrHqrrMv0hhUNQnQBplBXEo
-         btUg==
-X-Gm-Message-State: AOAM533IKCF0pOvdcApozMBbEI9xJH+RTZhqi1mN6lHhtyqewpkdn5iY
-        oYbXUeFvvHq5Gz6hU9fNJlo=
-X-Google-Smtp-Source: ABdhPJyyrGsYpY1bAWX8P5JPdH4Zf1EuoMPcCtKKcCDcP95EdaCe7tIrn7eHGT2F1R9v6Ws8LWzYDw==
-X-Received: by 2002:a1c:a7c5:: with SMTP id q188mr6130788wme.108.1611181620905;
-        Wed, 20 Jan 2021 14:27:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=n+YYPxYgIaXaJZpbVcLE+s+aMMIfmEVlIGclm9I+uGo=;
+        b=pflOE2VLxcJMlG5/E0oCZMoDeusOKXKQQ1lF3VjZn1vx5gdand/e5t+imGQ9nVvYwc
+         XtZrJieCORz48a7rXS2ZxdA/HztMNMsZAVPY0v59cWQop+9PlBVIqsdaJdVTQVv7H1QD
+         i1xi9oTyCSWjvDPgSVGAScCwgTmgmPoHir6bFBGqBiGq8J5jh1nzxPNF5t5NEaT75aHl
+         92iERZ0MfD7M9ZpOQq0RkdPBqNjtePp8b2wzqgxPYggDFwVONcFLtJTvh8mHTFiGgIja
+         bOJMOzaifteDYp2MUFMqtuY0FHv6KytUIBcXJkAKJD0/r/akS2mX/q6YHnvfzTv1k0OE
+         JpQg==
+X-Gm-Message-State: AOAM532zVpcJTN8NUcSRb+50VtHRxoAcVbPmOkcGo/obtyMewxMwSXQC
+        UxsIeWMNriaATNI4RydesIs=
+X-Google-Smtp-Source: ABdhPJyrZQPB3Ey0eDn6/hzyTw+mqhkHR/gqn+t/H8qUzNN0aJvK4qP5fvE8ZBW10NjAHqsqO7KpKw==
+X-Received: by 2002:adf:fdcb:: with SMTP id i11mr11401188wrs.349.1611181622424;
+        Wed, 20 Jan 2021 14:27:02 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id i131sm5663710wmi.25.2021.01.20.14.26.59
+        by smtp.gmail.com with ESMTPSA id i131sm5663710wmi.25.2021.01.20.14.27.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 14:27:00 -0800 (PST)
+        Wed, 20 Jan 2021 14:27:02 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -64,71 +64,41 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Matt Merhar <mattmerhar@protonmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v4 0/4] OPP API fixes and improvements
-Date:   Thu, 21 Jan 2021 01:26:45 +0300
-Message-Id: <20210120222649.28149-1-digetx@gmail.com>
+Subject: [PATCH v4 1/4] opp: Export devm_pm_opp_attach_genpd()
+Date:   Thu, 21 Jan 2021 01:26:46 +0300
+Message-Id: <20210120222649.28149-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210120222649.28149-1-digetx@gmail.com>
+References: <20210120222649.28149-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+The devm_pm_opp_attach_genpd() lost its export by accident when it was
+merged. Re-add the missing export, Tegra DRM driver now works when
+compiled as a loadable kernel module since it uses the exported function.
 
-This series fixes problems and adds features to OPP API that are required
-for implementation of a power domain driver for NVIDIA Tegra SoCs.
+Fixes: 22300b8fd92a ("opp: Add devm_pm_opp_attach_genpd")
+Reported-by: Nicolas Chauvet <kwizart@gmail.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/opp/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-It is a continuation of [1], where Viresh Kumar asked to factor OPP
-patches into a separate series. I factored out the patches into this
-series, addressed the previous review comments and re-based patches
-on top of [2], which replaced some of my patches that added resource-managed
-helpers.
-
-[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=221130
-[2] https://lore.kernel.org/linux-pm/20210101165507.19486-1-tiny.windzz@gmail.com/
-
-Changelog:
-
-v4: - Fixed missing export of devm_pm_opp_attach_genpd(). Thanks to
-      Nicolas Chauvet for catching this problem.
-
-    - Removed a bit questionable locking from dev_pm_opp_sync_regulators()
-      and dev_pm_opp_set_voltage(). We may come back to the OPP locking
-      sometime later, it's not an essential problem right now. I moved
-      the lock from OPP core to the PD driver for now.
-
-    - Added "Make _set_opp_custom() work without regulators" patch,
-      which is made on top of "Prepare for ->set_opp() helper to work without
-      regulators" patch from Viresh Kumar. The set_opp() helper now works
-      without regulators.
-
-v3: - Reordered patches by importance.
-
-    - Added locking to dev_pm_opp_set_voltage().
-
-    - Reworked "Fix adding OPP entries in a wrong order if rate is unavailable"
-      patch, like it was suggested by Viresh Kumar.
-
-    - Reworked "Support set_opp() customization without requiring to use
-      regulators" patch, like it was suggested by Viresh Kumar.
-
-      The opp_table->set_opp_data is now allocated by dev_pm_opp_register_set_opp_helper().
-
-      The set_opp_data is refcounted now and can be allocated by any other
-      OPP functions if this will become needed in the future for other OPP API
-      changes.
-
-Dmitry Osipenko (4):
-  opp: Export devm_pm_opp_attach_genpd()
-  opp: Add dev_pm_opp_sync_regulators()
-  opp: Add dev_pm_opp_set_voltage()
-  opp: Make _set_opp_custom() work without regulators
-
- drivers/opp/core.c     | 119 +++++++++++++++++++++++++++++++++++++----
- include/linux/pm_opp.h |  12 +++++
- 2 files changed, 122 insertions(+), 9 deletions(-)
-
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index f80b6f1ca108..6049b17f99d6 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2297,6 +2297,7 @@ devm_pm_opp_attach_genpd(struct device *dev, const char **names,
+ 
+ 	return opp_table;
+ }
++EXPORT_SYMBOL_GPL(devm_pm_opp_attach_genpd);
+ 
+ /**
+  * dev_pm_opp_xlate_performance_state() - Find required OPP's pstate for src_table.
 -- 
 2.29.2
 
