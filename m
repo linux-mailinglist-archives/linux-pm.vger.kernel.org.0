@@ -2,179 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AD32FD424
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 16:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754242FD494
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 16:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390194AbhATPXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 10:23:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388155AbhATPJi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 20 Jan 2021 10:09:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE4512336D;
-        Wed, 20 Jan 2021 15:08:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611155336;
-        bh=ND9BSgncNjn0y6BjJzAbUADTI3Dr4GSKaRvxG9v5LxY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hvEpRXXa2TnOGrmtsUasxsGTeqxdZG3ey4D+dt6Q66PavcGgQ0LwInbWQRg3LXxj3
-         a868mE82AHFSgeS0LOmmHJY3t0z8NcRewm1/cs+c3LvVZuSh8HG6aA9i8GdpSZPbcD
-         gv1/b2K/VqLa3wuWi85RbArHa/AA3MvzdMGyUKiYhDIIZp+w0zO351c+EqdiOFcJnq
-         K7lOt5mFxw/3lx7a2fDW+vHmvVpMoPu4eBnuBEvsV/1kq5pLuT9pc2/4MELKAOo1Dh
-         iBEnmspCnONWoWuXJfs/aYZnv0qSdduxhv/xZQwnGe5U+E+FBuVv67IDHBy+sb5OBg
-         /2eY74IUEPbMw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jun Nie <jun.nie@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] power/reset: remove zte zx driver
-Date:   Wed, 20 Jan 2021 16:08:26 +0100
-Message-Id: <20210120150851.1670788-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S1733042AbhATPxU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 10:53:20 -0500
+Received: from a1.mail.mailgun.net ([198.61.254.60]:25052 "EHLO
+        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391142AbhATPvo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:51:44 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1611157889; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=FdyN5ISRQ3+612ca7ggRzEbc8lae01ttdDOUnvzB428=; b=ZTGCiaTU+b7OVrBOgAh6vRurpoqaVpb/RBryFcsoLt3qt7a4X06wf+AnHFUbuWWzXnhrUWXY
+ En/6tyvkWMKuugHVG0v+7OqVJwSnvRgNNm4rgoLZ0opDjthFXzSLQ7+7DJGAPqP3+5LtLg/0
+ fFtc1bfysOL305aKKa4ckfPCLv0=
+X-Mailgun-Sending-Ip: 198.61.254.60
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 60085158beacd1a252fab9ab (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 20 Jan 2021 15:50:48
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 71452C43462; Wed, 20 Jan 2021 15:50:47 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 50FDAC433ED;
+        Wed, 20 Jan 2021 15:50:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 50FDAC433ED
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     ulf.hansson@linaro.org, rjw@rjwysocki.net
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Lina Iyer <ilina@codeaurora.org>
+Subject: [PATCH v9 0/2] Better domain idle from device wakeup patterns
+Date:   Wed, 20 Jan 2021 08:50:40 -0700
+Message-Id: <20210120155042.28975-1-ilina@codeaurora.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Changes since v8 [8]:
+- Check if device is attached to genpd
 
-The zte zx platform is getting removed, so this driver is no
-longer needed.
+Changes since v7 [7]:
+- Whitespace and comment fixes
+- Add Reviewed-by tags
 
-Cc: Jun Nie <jun.nie@linaro.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/power/reset/Kconfig     |  7 ---
- drivers/power/reset/Makefile    |  1 -
- drivers/power/reset/zx-reboot.c | 86 ---------------------------------
- 3 files changed, 94 deletions(-)
- delete mode 100644 drivers/power/reset/zx-reboot.c
+Changes since v6 [6];
+- Based on discussions on [6], this update simplifies the next wakeup
+  of domains based on genpd flag GENPD_FLAG_MIN_RESIDENCY specified at
+  init.
+- Assume next wakeup will be set by devices when the domain is not
+  powered down. This could avoid locking requirements.
+- Update commit text.
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index b22c4fdb2561..0376a90bec09 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -251,13 +251,6 @@ config POWER_RESET_RMOBILE
- 	help
- 	  Reboot support for Renesas R-Mobile and SH-Mobile SoCs.
- 
--config POWER_RESET_ZX
--	tristate "ZTE SoCs reset driver"
--	depends on ARCH_ZX || COMPILE_TEST
--	depends on HAS_IOMEM
--	help
--	  Reboot support for ZTE SoCs.
--
- config REBOOT_MODE
- 	tristate
- 
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index 9dc49d3a57ff..46331119c886 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -29,7 +29,6 @@ obj-$(CONFIG_POWER_RESET_KEYSTONE) += keystone-reset.o
- obj-$(CONFIG_POWER_RESET_SYSCON) += syscon-reboot.o
- obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
- obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
--obj-$(CONFIG_POWER_RESET_ZX) += zx-reboot.o
- obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
- obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
- obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
-diff --git a/drivers/power/reset/zx-reboot.c b/drivers/power/reset/zx-reboot.c
-deleted file mode 100644
-index 457950833dba..000000000000
---- a/drivers/power/reset/zx-reboot.c
-+++ /dev/null
-@@ -1,86 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * ZTE zx296702 SoC reset code
-- *
-- * Copyright (c) 2015 Linaro Ltd.
-- *
-- * Author: Jun Nie <jun.nie@linaro.org>
-- */
--
--#include <linux/delay.h>
--#include <linux/io.h>
--#include <linux/module.h>
--#include <linux/notifier.h>
--#include <linux/of_address.h>
--#include <linux/platform_device.h>
--#include <linux/reboot.h>
--
--static void __iomem *base;
--static void __iomem *pcu_base;
--
--static int zx_restart_handler(struct notifier_block *this,
--			      unsigned long mode, void *cmd)
--{
--	writel_relaxed(1, base + 0xb0);
--	writel_relaxed(1, pcu_base + 0x34);
--
--	mdelay(50);
--	pr_emerg("Unable to restart system\n");
--
--	return NOTIFY_DONE;
--}
--
--static struct notifier_block zx_restart_nb = {
--	.notifier_call = zx_restart_handler,
--	.priority = 128,
--};
--
--static int zx_reboot_probe(struct platform_device *pdev)
--{
--	struct device_node *np = pdev->dev.of_node;
--	int err;
--
--	base = of_iomap(np, 0);
--	if (!base) {
--		WARN(1, "failed to map base address");
--		return -ENODEV;
--	}
--
--	np = of_find_compatible_node(NULL, NULL, "zte,zx296702-pcu");
--	pcu_base = of_iomap(np, 0);
--	of_node_put(np);
--	if (!pcu_base) {
--		iounmap(base);
--		WARN(1, "failed to map pcu_base address");
--		return -ENODEV;
--	}
--
--	err = register_restart_handler(&zx_restart_nb);
--	if (err) {
--		iounmap(base);
--		iounmap(pcu_base);
--		dev_err(&pdev->dev, "Register restart handler failed(err=%d)\n",
--			err);
--	}
--
--	return err;
--}
--
--static const struct of_device_id zx_reboot_of_match[] = {
--	{ .compatible = "zte,sysctrl" },
--	{}
--};
--MODULE_DEVICE_TABLE(of, zx_reboot_of_match);
--
--static struct platform_driver zx_reboot_driver = {
--	.probe = zx_reboot_probe,
--	.driver = {
--		.name = "zx-reboot",
--		.of_match_table = zx_reboot_of_match,
--	},
--};
--module_platform_driver(zx_reboot_driver);
--
--MODULE_DESCRIPTION("ZTE SoCs reset driver");
--MODULE_AUTHOR("Jun Nie <jun.nie@linaro.org>");
--MODULE_LICENSE("GPL v2");
+Changes since v5 [5]:
+- It was pointed out that we don't want to run through the unnecessary
+  work for domains that do not need or support next-wakeup. So, patch #1
+  in this version, now uses a flag to detemine if the domain would
+  support next-wakeup.
+- Other review comments addressed in patches #2, #3
+
+Changes since v4 [4]:
+- Address review comments
+
+Changes since v3 [3]:
+- Move the next_wakeup info of the device deeper into the device's
+  domain data. This should avoid overhead for devices that do not have a
+  predictable wakeup pattern.
+
+Changes since v2:
+- Fix unwanted change
+
+Changes since v1 [2]:
+- Update documentation and commit text
+- Remove check for runtime PM when setting next_event
+- Fix kernel-test robot reported issue
+
+Changes since RFC [1]:
+- Organized the code to make it cleaner
+- Fixed some issues with idle state determination
+- Add documentation and update commit text
+
+Hello,
+
+I was looking for an option to do better power management for some
+domains where the devices enter runtime PM in a predictable fashion. For
+example a display device that sends a vsync interrupt every 16 ms for a
+60 Hz panel. These interrupts are not timer interrupts but tend to
+interrupt periodically to service the workflow and the devices and
+domains may go back to idle soon after. Two domains are affected by this
+- the device's PM domain and the CPU PM domain.
+
+As a first step, I am looking to solve for the device's PM domain idle
+state (and hopefully solve for the CPU PM domains subsequently). The PM
+domain could have multiple idle states and/or the enter/exit latencies
+could be high. In either case, it may not always be beneficial to power
+off the domain, only to turn it back on before satisfying the idle state
+residency. When the wakeup is known for the device, we could use that to
+determine the worthiness of entering a domain idle state. Only the
+device can tell us when the future event would be and that could change
+as the usecase changes. Like, when the panel refresh rate increases to
+120 Hz. If this information was made available to runtime PM, we could
+use that in the domain governor to determine a suitable idle state. This
+is the idea behind these patches.
+
+Would appreciate your thoughts on this.
+
+Thanks,
+Lina
+
+[1].
+https://lore.kernel.org/linux-pm/010101746eccb270-05beb27f-e1e4-40eb-92da-ad1bb48feb41-000000@us-west-2.amazonses.com/T
+/
+[2]. https://lore.kernel.org/linux-pm/20201012223400.23609-3-ilina@codeaurora.org/T/#u
+[3]. https://lore.kernel.org/linux-pm/20201015193807.17423-1-ilina@codeaurora.org/
+[4]. https://www.spinics.net/lists/linux-arm-msm/msg74322.html
+[5]. https://lore.kernel.org/linux-pm/20201106164811.3698-1-ilina@codeaurora.org/T/#t
+[6]. https://lore.kernel.org/linux-pm/20201130225039.15981-1-ilina@codeaurora.org/T/#t
+[7]. https://lore.kernel.org/linux-pm/20210113201601.14874-1-ilina@codeaurora.org/T/#t
+[8]. https://lore.kernel.org/linux-pm/20210115165004.22385-1-ilina@codeaurora.org/T/#t
+
+
+Lina Iyer (2):
+  PM / domains: inform PM domain of a device's next wakeup
+  PM / Domains: use device's next wakeup to determine domain idle state
+
+ drivers/base/power/domain.c          |  30 ++++++++
+ drivers/base/power/domain_governor.c | 102 ++++++++++++++++++++++++---
+ include/linux/pm_domain.h            |  12 ++++
+ 3 files changed, 135 insertions(+), 9 deletions(-)
+
 -- 
-2.29.2
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
