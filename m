@@ -2,478 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D0B2FD58F
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 17:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F8D2FD61C
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 17:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403908AbhATQZF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 11:25:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732218AbhATQY5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 20 Jan 2021 11:24:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BFFF6233EF;
-        Wed, 20 Jan 2021 16:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611159853;
-        bh=xEs2bOSXbMSUhxxuSZjX48yiNs5+INFp7l/yAgKizkg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hoo60njeXd5jRcJzNCp3XIC7I2nZjgvtsMYZklV+m97puU1Ou5XxamkkmlJspbgDk
-         ORMREdn0BNjzuU9eZWY/VFN97Mvv8vIsVPgjSl7Zz7fvdU5CB+/mZycdVS5Lk1rXr9
-         PdXK4D46/n5du67iQTNs9QoX/1NxW2qYCr/2f2HL8OKX8X/1RHHk9wxxBIa7tfMRmF
-         H/k6/1+AeawgtgNdtZgDA4+DeA1DreGc1Be2FViNuEHcgkgp4nTNYEy1A2zUyKG90B
-         14JmNtMvFphvd+22Qwkq15vUifwMEqbEqPCw1wZc/T+F8BgK1ljLpcN1fMrwhUJ146
-         78HysrdKvfoWw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jun Nie <jun.nie@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 2/2] thermal: remove zx driver
-Date:   Wed, 20 Jan 2021 17:24:00 +0100
-Message-Id: <20210120162400.4115366-3-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120162400.4115366-1-arnd@kernel.org>
-References: <20210120162400.4115366-1-arnd@kernel.org>
+        id S2391274AbhATQxN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 11:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391243AbhATQiY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 11:38:24 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1747EC061757
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 08:37:44 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id p15so2495071pjv.3
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jan 2021 08:37:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F/DhG0PPxm0vKgWn3ZUodFL5gREX9ouvD4YqI6sx3m0=;
+        b=T5xizAhCUnokT5bbT4Dz2K7SWIx4lepR61GZQ3HYDfJVWkirqLoPYTENaBy0UESLVT
+         HQ9LdIC/+DMy6GeeZSgu5eQudCxPQfMFsGM4mcx9pxxZVjTwLGiiUrshA07jFyBRiOAj
+         J5aimP/fSm8b9zSInqaq7Q+U9hCGwgpkAv/MshMoGh05QKecI8RiOHvXEngqRru0WpUY
+         SPzdtNptVXkmPQaFHmMFBJAw+7c+Gq4nYiTgv7BETFlXp66C5H2wbwf1Sxx4NhyeY4HO
+         RQpf/I3APZggx/HkIAuajo/CoJVwxeptNzt4uikARVj87NRj6wROC3lJgqFmeyMx6/z1
+         wSAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F/DhG0PPxm0vKgWn3ZUodFL5gREX9ouvD4YqI6sx3m0=;
+        b=SG+pZY0TkGC2wO8hL+BBWdv2CTt5IKc1eM8YxHTtv4omiDoth1bMXllIVQZDKKjqzl
+         hKgowh/AxcQFfG2Y/eU2AxkhuNnezsZm7dXYSVOMiLPtQrVtINlQGcSu+FXlaSCGREIL
+         Ivzsn442ilv88bxwgifwx3nt+3SrhF+sCyepFQYNrn32WEhV+XrUsLY55R/FS20XrAHN
+         TRIYGa+Bbf5nCrtGpM0UbqWnA1ohGm26brEoJIb6J3VlefXunj6rB27MkK7emmWZLZQI
+         Khqj1dPkWitsw2qdaY22wXIMd4dyzuPfLeChA1EfCmGEmEAq0uR4Y36YKSO/zhzIbbpV
+         IuwQ==
+X-Gm-Message-State: AOAM530ZkoMuZDdK+NM6mxgGpA+/9oFnPQcH+hV9Q/SOfxabdgoSK5pO
+        ZLUOoWsSgfBabEserISfR+yp
+X-Google-Smtp-Source: ABdhPJwYzAMEAtg9/JFbhiEuwp4XYSlhS8FCZoRDmYqnHbumm4A5Hob0ASGs5q1KrV8/8oB0j4+sVg==
+X-Received: by 2002:a17:90a:d913:: with SMTP id c19mr2267949pjv.19.1611160663340;
+        Wed, 20 Jan 2021 08:37:43 -0800 (PST)
+Received: from thinkpad ([2409:4072:409:c713:3d52:1d51:c724:155d])
+        by smtp.gmail.com with ESMTPSA id a9sm2889668pfn.178.2021.01.20.08.37.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jan 2021 08:37:42 -0800 (PST)
+Date:   Wed, 20 Jan 2021 22:07:35 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        okukatla@codeaurora.org
+Subject: Re: [PATCH 2/2] interconnect: qcom: Add SDX55 interconnect provider
+ driver
+Message-ID: <20210120163735.GC54606@thinkpad>
+References: <20210120080627.20784-1-manivannan.sadhasivam@linaro.org>
+ <20210120080627.20784-3-manivannan.sadhasivam@linaro.org>
+ <cb0f56b6-a75c-51a8-d640-08896d459a68@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb0f56b6-a75c-51a8-d640-08896d459a68@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Georgi,
 
-The zte zx platform is getting removed, so this driver is no
-longer needed.
+On Wed, Jan 20, 2021 at 04:59:31PM +0200, Georgi Djakov wrote:
+> Hi Mani,
+> 
+> Thanks for the patch!
+> 
+> On 1/20/21 10:06, Manivannan Sadhasivam wrote:
+> > Add driver for the Qualcomm interconnect buses found in SDX55 based
+> > platforms. The topology consists of several NoCs that are controlled by
+> > a remote processor that collects the aggregated bandwidth for each
+> > master-slave pairs.
+> > 
+> > Based on SM8250 driver and generated from downstream dts.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   drivers/interconnect/qcom/Kconfig  |  10 +
+> >   drivers/interconnect/qcom/Makefile |   2 +
+> >   drivers/interconnect/qcom/sdx55.c  | 356 +++++++++++++++++++++++++++++
+> >   drivers/interconnect/qcom/sdx55.h  |  70 ++++++
+> >   4 files changed, 438 insertions(+)
+> >   create mode 100644 drivers/interconnect/qcom/sdx55.c
+> >   create mode 100644 drivers/interconnect/qcom/sdx55.h
+> > 
+> > diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+> > index a8f93ba265f8..6df7e2161a0a 100644
+> > --- a/drivers/interconnect/qcom/Kconfig
+> > +++ b/drivers/interconnect/qcom/Kconfig
+> > @@ -65,6 +65,16 @@ config INTERCONNECT_QCOM_SDM845
+> >   	  This is a driver for the Qualcomm Network-on-Chip on sdm845-based
+> >   	  platforms.
+> > +config INTERCONNECT_QCOM_SDX55
+> > +	tristate "Qualcomm SDX55 interconnect driver"
+> > +	depends on INTERCONNECT_QCOM
+> > +	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
+> 
+> Why not use depends on INTERCONNECT_QCOM_RPMH_POSSIBLE?
+>
 
-Cc: Jun Nie <jun.nie@linaro.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- .../bindings/thermal/zx2967-thermal.txt       | 116 --------
- drivers/thermal/Kconfig                       |   8 -
- drivers/thermal/Makefile                      |   1 -
- drivers/thermal/zx2967_thermal.c              | 256 ------------------
- 4 files changed, 381 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/zx2967-thermal.txt
- delete mode 100644 drivers/thermal/zx2967_thermal.c
-
-diff --git a/Documentation/devicetree/bindings/thermal/zx2967-thermal.txt b/Documentation/devicetree/bindings/thermal/zx2967-thermal.txt
-deleted file mode 100644
-index 3dc1c6bf0478..000000000000
---- a/Documentation/devicetree/bindings/thermal/zx2967-thermal.txt
-+++ /dev/null
-@@ -1,116 +0,0 @@
--* ZTE zx2967 family Thermal
--
--Required Properties:
--- compatible: should be one of the following.
--    * zte,zx296718-thermal
--- reg: physical base address of the controller and length of memory mapped
--    region.
--- clocks : Pairs of phandle and specifier referencing the controller's clocks.
--- clock-names: "topcrm" for the topcrm clock.
--	       "apb" for the apb clock.
--- #thermal-sensor-cells: must be 0.
--
--Please note: slope coefficient defined in thermal-zones section need to be
--multiplied by 1000.
--
--Example for tempsensor:
--
--	tempsensor: tempsensor@148a000 {
--		compatible = "zte,zx296718-thermal";
--		reg = <0x0148a000 0x20>;
--		clocks = <&topcrm TEMPSENSOR_GATE>, <&audiocrm AUDIO_TS_PCLK>;
--		clock-names = "topcrm", "apb";
--		#thermal-sensor-cells = <0>;
--	};
--
--Example for cooling device:
--
--	cooling_dev: cooling_dev {
--		cluster0_cooling_dev: cluster0-cooling-dev {
--			#cooling-cells = <2>;
--			cpumask = <0xf>;
--			capacitance = <1500>;
--		};
--
--	cluster1_cooling_dev: cluster1-cooling-dev {
--			#cooling-cells = <2>;
--			cpumask = <0x30>;
--			capacitance = <2000>;
--		};
--	};
--
--Example for thermal zones:
--
--	thermal-zones {
--		zx296718_thermal: zx296718_thermal {
--			polling-delay-passive = <500>;
--			polling-delay = <1000>;
--			sustainable-power = <6500>;
--
--			thermal-sensors = <&tempsensor 0>;
--			/*
--			 * slope need to be multiplied by 1000.
--			 */
--			coefficients = <1951 (-922)>;
--
--			trips {
--				trip0: switch_on_temperature {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				trip1: desired_temperature {
--					temperature = <100000>;
--					hysteresis = <2000>;
--					type = "passive";
--				};
--
--				crit: critical_temperature {
--					temperature = <110000>;
--					hysteresis = <2000>;
--					type = "critical";
--				};
--			};
--
--			cooling-maps {
--				map0 {
--					trip = <&trip0>;
--					cooling-device = <&gpu 2 5>;
--				};
--
--				map1 {
--					trip = <&trip0>;
--					cooling-device = <&cluster0_cooling_dev 1 2>;
--				};
--
--				map2 {
--					trip = <&trip1>;
--					cooling-device = <&cluster0_cooling_dev 1 2>;
--				};
--
--				map3 {
--					trip = <&crit>;
--					cooling-device = <&cluster0_cooling_dev 1 2>;
--				};
--
--				map4 {
--					trip = <&trip0>;
--					cooling-device = <&cluster1_cooling_dev 1 2>;
--					contribution = <9000>;
--				};
--
--				map5 {
--					trip = <&trip1>;
--					cooling-device = <&cluster1_cooling_dev 1 2>;
--					contribution = <4096>;
--				};
--
--				map6 {
--					trip = <&crit>;
--					cooling-device = <&cluster1_cooling_dev 1 2>;
--					contribution = <4096>;
--				};
--			};
--		};
--	};
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index cf199574c096..d7f44deab5b1 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -467,14 +467,6 @@ depends on (ARCH_QCOM && OF) || COMPILE_TEST
- source "drivers/thermal/qcom/Kconfig"
- endmenu
+I just followed the same pattern as other RPMh based drivers. And I don't get
+what you are suggesting here! Can you please explain?
  
--config ZX2967_THERMAL
--	tristate "Thermal sensors on zx2967 SoC"
--	depends on ARCH_ZX || COMPILE_TEST
--	help
--	  Enable the zx2967 thermal sensors driver, which supports
--	  the primitive temperature sensor embedded in zx2967 SoCs.
--	  This sensor generates the real time die temperature.
--
- config UNIPHIER_THERMAL
- 	tristate "Socionext UniPhier thermal driver"
- 	depends on ARCH_UNIPHIER || COMPILE_TEST
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index a44dda2d03bc..82fc3e616e54 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -56,7 +56,6 @@ obj-y				+= tegra/
- obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
- obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
- obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
--obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
- obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
- obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
-diff --git a/drivers/thermal/zx2967_thermal.c b/drivers/thermal/zx2967_thermal.c
-deleted file mode 100644
-index 8e3a2d3c2f9a..000000000000
---- a/drivers/thermal/zx2967_thermal.c
-+++ /dev/null
-@@ -1,256 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * ZTE's zx2967 family thermal sensor driver
-- *
-- * Copyright (C) 2017 ZTE Ltd.
-- *
-- * Author: Baoyou Xie <baoyou.xie@linaro.org>
-- */
--
--#include <linux/clk.h>
--#include <linux/device.h>
--#include <linux/err.h>
--#include <linux/iopoll.h>
--#include <linux/module.h>
--#include <linux/platform_device.h>
--#include <linux/thermal.h>
--
--/* Power Mode: 0->low 1->high */
--#define ZX2967_THERMAL_POWER_MODE	0
--#define ZX2967_POWER_MODE_LOW		0
--#define ZX2967_POWER_MODE_HIGH		1
--
--/* DCF Control Register */
--#define ZX2967_THERMAL_DCF		0x4
--#define ZX2967_DCF_EN			BIT(1)
--#define ZX2967_DCF_FREEZE		BIT(0)
--
--/* Selection Register */
--#define ZX2967_THERMAL_SEL		0x8
--
--/* Control Register */
--#define ZX2967_THERMAL_CTRL		0x10
--
--#define ZX2967_THERMAL_READY		BIT(12)
--#define ZX2967_THERMAL_TEMP_MASK	GENMASK(11, 0)
--#define ZX2967_THERMAL_ID_MASK		0x18
--#define ZX2967_THERMAL_ID		0x10
--
--#define ZX2967_GET_TEMP_TIMEOUT_US	(100 * 1024)
--
--/**
-- * struct zx2967_thermal_priv - zx2967 thermal sensor private structure
-- * @tzd: struct thermal_zone_device where the sensor is registered
-- * @lock: prevents read sensor in parallel
-- * @clk_topcrm: topcrm clk structure
-- * @clk_apb: apb clk structure
-- * @regs: pointer to base address of the thermal sensor
-- * @dev: struct device pointer
-- */
--
--struct zx2967_thermal_priv {
--	struct thermal_zone_device	*tzd;
--	struct mutex			lock;
--	struct clk			*clk_topcrm;
--	struct clk			*clk_apb;
--	void __iomem			*regs;
--	struct device			*dev;
--};
--
--static int zx2967_thermal_get_temp(void *data, int *temp)
--{
--	void __iomem *regs;
--	struct zx2967_thermal_priv *priv = data;
--	u32 val;
--	int ret;
--
--	if (!priv->tzd)
--		return -EAGAIN;
--
--	regs = priv->regs;
--	mutex_lock(&priv->lock);
--	writel_relaxed(ZX2967_POWER_MODE_LOW,
--		       regs + ZX2967_THERMAL_POWER_MODE);
--	writel_relaxed(ZX2967_DCF_EN, regs + ZX2967_THERMAL_DCF);
--
--	val = readl_relaxed(regs + ZX2967_THERMAL_SEL);
--	val &= ~ZX2967_THERMAL_ID_MASK;
--	val |= ZX2967_THERMAL_ID;
--	writel_relaxed(val, regs + ZX2967_THERMAL_SEL);
--
--	/*
--	 * Must wait for a while, surely it's a bit odd.
--	 * otherwise temperature value we got has a few deviation, even if
--	 * the THERMAL_READY bit is set.
--	 */
--	usleep_range(100, 300);
--	ret = readx_poll_timeout(readl, regs + ZX2967_THERMAL_CTRL,
--				 val, val & ZX2967_THERMAL_READY, 300,
--				 ZX2967_GET_TEMP_TIMEOUT_US);
--	if (ret) {
--		dev_err(priv->dev, "Thermal sensor data timeout\n");
--		goto unlock;
--	}
--
--	writel_relaxed(ZX2967_DCF_FREEZE | ZX2967_DCF_EN,
--		       regs + ZX2967_THERMAL_DCF);
--	val = readl_relaxed(regs + ZX2967_THERMAL_CTRL)
--			 & ZX2967_THERMAL_TEMP_MASK;
--	writel_relaxed(ZX2967_POWER_MODE_HIGH,
--		       regs + ZX2967_THERMAL_POWER_MODE);
--
--	/*
--	 * Calculate temperature
--	 * In dts, slope is multiplied by 1000.
--	 */
--	*temp = DIV_ROUND_CLOSEST(((s32)val + priv->tzd->tzp->offset) * 1000,
--				  priv->tzd->tzp->slope);
--
--unlock:
--	mutex_unlock(&priv->lock);
--	return ret;
--}
--
--static const struct thermal_zone_of_device_ops zx2967_of_thermal_ops = {
--	.get_temp = zx2967_thermal_get_temp,
--};
--
--static int zx2967_thermal_probe(struct platform_device *pdev)
--{
--	struct zx2967_thermal_priv *priv;
--	struct resource *res;
--	int ret;
--
--	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->regs = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(priv->regs))
--		return PTR_ERR(priv->regs);
--
--	priv->clk_topcrm = devm_clk_get(&pdev->dev, "topcrm");
--	if (IS_ERR(priv->clk_topcrm)) {
--		ret = PTR_ERR(priv->clk_topcrm);
--		dev_err(&pdev->dev, "failed to get topcrm clock: %d\n", ret);
--		return ret;
--	}
--
--	ret = clk_prepare_enable(priv->clk_topcrm);
--	if (ret) {
--		dev_err(&pdev->dev, "failed to enable topcrm clock: %d\n",
--			ret);
--		return ret;
--	}
--
--	priv->clk_apb = devm_clk_get(&pdev->dev, "apb");
--	if (IS_ERR(priv->clk_apb)) {
--		ret = PTR_ERR(priv->clk_apb);
--		dev_err(&pdev->dev, "failed to get apb clock: %d\n", ret);
--		goto disable_clk_topcrm;
--	}
--
--	ret = clk_prepare_enable(priv->clk_apb);
--	if (ret) {
--		dev_err(&pdev->dev, "failed to enable apb clock: %d\n",
--			ret);
--		goto disable_clk_topcrm;
--	}
--
--	mutex_init(&priv->lock);
--	priv->tzd = thermal_zone_of_sensor_register(&pdev->dev,
--					0, priv, &zx2967_of_thermal_ops);
--
--	if (IS_ERR(priv->tzd)) {
--		ret = PTR_ERR(priv->tzd);
--		dev_err(&pdev->dev, "failed to register sensor: %d\n", ret);
--		goto disable_clk_all;
--	}
--
--	if (priv->tzd->tzp->slope == 0) {
--		thermal_zone_of_sensor_unregister(&pdev->dev, priv->tzd);
--		dev_err(&pdev->dev, "coefficients of sensor is invalid\n");
--		ret = -EINVAL;
--		goto disable_clk_all;
--	}
--
--	priv->dev = &pdev->dev;
--	platform_set_drvdata(pdev, priv);
--
--	return 0;
--
--disable_clk_all:
--	clk_disable_unprepare(priv->clk_apb);
--disable_clk_topcrm:
--	clk_disable_unprepare(priv->clk_topcrm);
--	return ret;
--}
--
--static int zx2967_thermal_exit(struct platform_device *pdev)
--{
--	struct zx2967_thermal_priv *priv = platform_get_drvdata(pdev);
--
--	thermal_zone_of_sensor_unregister(&pdev->dev, priv->tzd);
--	clk_disable_unprepare(priv->clk_topcrm);
--	clk_disable_unprepare(priv->clk_apb);
--
--	return 0;
--}
--
--static const struct of_device_id zx2967_thermal_id_table[] = {
--	{ .compatible = "zte,zx296718-thermal" },
--	{}
--};
--MODULE_DEVICE_TABLE(of, zx2967_thermal_id_table);
--
--#ifdef CONFIG_PM_SLEEP
--static int zx2967_thermal_suspend(struct device *dev)
--{
--	struct zx2967_thermal_priv *priv = dev_get_drvdata(dev);
--
--	if (priv && priv->clk_topcrm)
--		clk_disable_unprepare(priv->clk_topcrm);
--
--	if (priv && priv->clk_apb)
--		clk_disable_unprepare(priv->clk_apb);
--
--	return 0;
--}
--
--static int zx2967_thermal_resume(struct device *dev)
--{
--	struct zx2967_thermal_priv *priv = dev_get_drvdata(dev);
--	int error;
--
--	error = clk_prepare_enable(priv->clk_topcrm);
--	if (error)
--		return error;
--
--	error = clk_prepare_enable(priv->clk_apb);
--	if (error) {
--		clk_disable_unprepare(priv->clk_topcrm);
--		return error;
--	}
--
--	return 0;
--}
--#endif
--
--static SIMPLE_DEV_PM_OPS(zx2967_thermal_pm_ops,
--			 zx2967_thermal_suspend, zx2967_thermal_resume);
--
--static struct platform_driver zx2967_thermal_driver = {
--	.probe = zx2967_thermal_probe,
--	.remove = zx2967_thermal_exit,
--	.driver = {
--		.name = "zx2967_thermal",
--		.of_match_table = zx2967_thermal_id_table,
--		.pm = &zx2967_thermal_pm_ops,
--	},
--};
--module_platform_driver(zx2967_thermal_driver);
--
--MODULE_AUTHOR("Baoyou Xie <baoyou.xie@linaro.org>");
--MODULE_DESCRIPTION("ZTE zx2967 thermal driver");
--MODULE_LICENSE("GPL v2");
--- 
-2.29.2
-
+Thanks,
+Mani
