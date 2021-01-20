@@ -2,305 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6482B2FD496
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 16:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050612FD49C
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jan 2021 16:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733197AbhATPxX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jan 2021 10:53:23 -0500
-Received: from a1.mail.mailgun.net ([198.61.254.60]:50685 "EHLO
-        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391171AbhATPwD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:52:03 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611157903; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=dMLbNJEGXzoM679Q50OxCv2q5Q2UInHzraIg7p9pWgs=; b=TJ0icM1M50zBvxMxgVvAafTWvY+JHSzr717hVP5MfpTuUCflpQrVJZRSXQWAsHssX56UAcWc
- D3fRrl5+23HZA6AZzgOeQXNxEpfBr6N3i2ZsmEMdpeEwomnwIqeTiNHoSeBqrXZ6TCbrODTA
- 6n9d2Nh7aWFiUbDor++TbxLvn08=
-X-Mailgun-Sending-Ip: 198.61.254.60
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 6008515a2c36b2106d706e1e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 20 Jan 2021 15:50:50
- GMT
-Sender: ilina=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5B3ADC43461; Wed, 20 Jan 2021 15:50:49 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1A261C433CA;
-        Wed, 20 Jan 2021 15:50:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1A261C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     ulf.hansson@linaro.org, rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Lina Iyer <ilina@codeaurora.org>
-Subject: [PATCH v9 2/2] PM / Domains: use device's next wakeup to determine domain idle state
-Date:   Wed, 20 Jan 2021 08:50:42 -0700
-Message-Id: <20210120155042.28975-3-ilina@codeaurora.org>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210120155042.28975-1-ilina@codeaurora.org>
-References: <20210120155042.28975-1-ilina@codeaurora.org>
+        id S1732795AbhATPyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jan 2021 10:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390562AbhATPx3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jan 2021 10:53:29 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FE4C061575;
+        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id o17so34757590lfg.4;
+        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
+        b=b2NLVokQPZCUuJAyv3kiWNUb/D7/YvKoWfUJcCHR1heKGaiZjLpcSwBstX7Q3YX8MD
+         0VSL3nGarP20z1Z7t1EQA7XA2H4vpXyhlGms2qwFGmlN5vFPCkNOEwhXvgcl2dX2OHl0
+         Fk8lwe7s8eUZ2wwS5RMH6/mUWuXSRNmTjNvQCAwK5Dd3NdzmkpZHt4llHrw8Ni5khkmn
+         myMjJRhAiEUeq/sHdT1yh60NnMmGAROPatvIjJ8mP6HQeV19cvk6YGXY87IpFAtncwaV
+         v00shKKr9e/yxCXAB3jbsK18rnr4dn0SL3OuJ8SyDsoqZnywmH2zxXJFRB0YEqFQqi04
+         OP8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
+        b=nbGUUFMp2tvkeX6XBsXTytoIiQPoz2eDIbHMmu4obTt01NoNLbaj2f9zx3wVyrCp4j
+         XIEjmjHhN6R1F1fnjSKUn9LIH2fe1HWXJOARadqqsVIByKni7NkJOPdLj+5chmh06SoZ
+         6TH9b14hriqgE1+ThonVV1NND8L1OGT9qf8dXWsrbFRjvgVWZ0Hv2ANhdQP7Pp0rUInH
+         DdyJhS2vnOcnkWMdS4WMk+TAwt6OmI0ezULfIAVj4iUL3FbjIeIkwceqBm8ZxGEFnVmy
+         1k1exhCfw1zlHcU/HC6vF73fyQJL7udqR/YCzWTZyBsWL6xCKgckEZ+apslDjtXdNUTt
+         jDZQ==
+X-Gm-Message-State: AOAM5338hi7aA1pHPOm9dFhgTGZXp4CKCcQIfKiU3dvNwEKhL+T6Bgjo
+        K/NSxyBc5oPD2aA5LNiSlbJh8+WQmjY=
+X-Google-Smtp-Source: ABdhPJz54jp4p6N7ro9OB4UGTlGLwMbj9w9A1NhmVFwuW25RiB7kgYemoqd4C3nN1Esa+ddCNU5GUA==
+X-Received: by 2002:a19:ac45:: with SMTP id r5mr4942869lfc.305.1611157967504;
+        Wed, 20 Jan 2021 07:52:47 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id b4sm74228ljp.53.2021.01.20.07.52.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jan 2021 07:52:46 -0800 (PST)
+Subject: Re: [PATCH 02/31] opp: Add devres wrapper for
+ dev_pm_opp_set_regulators and dev_pm_opp_put_regulators
+To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
+        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        lukasz.luba@arm.com, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
+        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <20210101165507.19486-3-tiny.windzz@gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <43c251a2-430a-040c-4152-94cf10c884e0@gmail.com>
+Date:   Wed, 20 Jan 2021 18:52:43 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
+In-Reply-To: <20210101165507.19486-3-tiny.windzz@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, a PM domain's idle state is determined based on whether the
-QoS requirements are met. However, even entering an idle state may waste
-power if the minimum residency requirements aren't fulfilled.
+01.01.2021 19:54, Yangtao Li пишет:
+> Add devres wrapper for dev_pm_opp_set_regulators()
+> dev_pm_opp_put_regulators () to simplify driver code.
+> 
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> ---
+>  drivers/opp/core.c     | 50 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_opp.h |  9 ++++++++
+>  2 files changed, 59 insertions(+)
 
-CPU PM domains use the next timer wakeup for the CPUs in the domain to
-determine the sleep duration of the domain. This is compared with the
-idle state residencies to determine the optimal idle state. For other PM
-domains, determining the sleep length is not that straight forward. But
-if the device's next_event is available, we can use that to determine
-the sleep duration of the PM domain.
-
-Let's update the domain governor logic to check for idle state residency
-based on the next wakeup of devices as well as QoS constraints. But
-since, not all domains may contain devices capable of specifying the
-next wakeup, let's enable this additional check only if specified by the
-domain's flags when initializing the domain.
-
-Signed-off-by: Lina Iyer <ilina@codeaurora.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
----
-Changes in v9:
-	- None.
-Changes in v8:
-	- Whitespace fixes and added reviewed-by tag
-Changes in v7:
-	- Define GENPD_FLAG_MIN_RESIDENCY and check for min residency
-	  only if the flag is set.
-	- Update commit text.
-Changes in v6:
-	- Do not include power_on_latency_ns for next_wakeup
-	  determination.
-	- Re-organize code to avoid multiple ktime_get() reads.
-	- Check genpd flag if next_wakeup is useful for the domain.
-	- Document why we ignore stale data
-Changes in v5:
-	- Minor code changes suggested by Rafel
-Changes in v4:
-	- Update to use next_wakeup from struct generic_pm_domain_data.
-Changes in v3:
-	- None
-Changes in v2:
-	- Fix state_idx type to hold negative value.
-	- Update commit text.
----
- drivers/base/power/domain_governor.c | 102 ++++++++++++++++++++++++---
- include/linux/pm_domain.h            |   6 ++
- 2 files changed, 99 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-index 490ed7deb99a..c6c218758f0b 100644
---- a/drivers/base/power/domain_governor.c
-+++ b/drivers/base/power/domain_governor.c
-@@ -117,6 +117,55 @@ static bool default_suspend_ok(struct device *dev)
- 	return td->cached_suspend_ok;
- }
- 
-+static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
-+{
-+	ktime_t domain_wakeup = KTIME_MAX;
-+	ktime_t next_wakeup;
-+	struct pm_domain_data *pdd;
-+	struct gpd_link *link;
-+
-+	if (!(genpd->flags & GENPD_FLAG_MIN_RESIDENCY))
-+		return;
-+
-+	/*
-+	 * Devices that have a predictable wakeup pattern, may specify
-+	 * their next wakeup. Let's find the next wakeup from all the
-+	 * devices attached to this domain and from all the sub-domains.
-+	 * It is possible that component's a next wakeup may have become
-+	 * stale when we read that here. We will ignore to ensure the domain
-+	 * is able to enter its optimal idle state.
-+	 */
-+	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-+		next_wakeup = to_gpd_data(pdd)->next_wakeup;
-+		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-+			if (ktime_before(next_wakeup, domain_wakeup))
-+				domain_wakeup = next_wakeup;
-+	}
-+
-+	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-+		next_wakeup = link->child->next_wakeup;
-+		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-+			if (ktime_before(next_wakeup, domain_wakeup))
-+				domain_wakeup = next_wakeup;
-+	}
-+
-+	genpd->next_wakeup = domain_wakeup;
-+}
-+
-+static bool next_wakeup_allows_state(struct generic_pm_domain *genpd,
-+				     unsigned int state, ktime_t now)
-+{
-+	ktime_t domain_wakeup = genpd->next_wakeup;
-+	s64 idle_time_ns, min_sleep_ns;
-+
-+	min_sleep_ns = genpd->states[state].power_off_latency_ns +
-+		       genpd->states[state].residency_ns;
-+
-+	idle_time_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
-+
-+	return idle_time_ns >= min_sleep_ns;
-+}
-+
- static bool __default_power_down_ok(struct dev_pm_domain *pd,
- 				     unsigned int state)
- {
-@@ -201,16 +250,41 @@ static bool __default_power_down_ok(struct dev_pm_domain *pd,
- }
- 
- /**
-- * default_power_down_ok - Default generic PM domain power off governor routine.
-+ * _default_power_down_ok - Default generic PM domain power off governor routine.
-  * @pd: PM domain to check.
-  *
-  * This routine must be executed under the PM domain's lock.
-  */
--static bool default_power_down_ok(struct dev_pm_domain *pd)
-+static bool _default_power_down_ok(struct dev_pm_domain *pd, ktime_t now)
- {
- 	struct generic_pm_domain *genpd = pd_to_genpd(pd);
-+	int state_idx = genpd->state_count - 1;
- 	struct gpd_link *link;
- 
-+	/*
-+	 * Find the next wakeup from devices that can determine their own wakeup
-+	 * to find when the domain would wakeup and do it for every device down
-+	 * the hierarchy. It is not worth while to sleep if the state's residency
-+	 * cannot be met.
-+	 */
-+	update_domain_next_wakeup(genpd, now);
-+	if ((genpd->flags & GENPD_FLAG_MIN_RESIDENCY) && (genpd->next_wakeup != KTIME_MAX)) {
-+		/* Let's find out the deepest domain idle state, the devices prefer */
-+		while (state_idx >= 0) {
-+			if (next_wakeup_allows_state(genpd, state_idx, now)) {
-+				genpd->max_off_time_changed = true;
-+				break;
-+			}
-+			state_idx--;
-+		}
-+
-+		if (state_idx < 0) {
-+			state_idx = 0;
-+			genpd->cached_power_down_ok = false;
-+			goto done;
-+		}
-+	}
-+
- 	if (!genpd->max_off_time_changed) {
- 		genpd->state_idx = genpd->cached_power_down_state_idx;
- 		return genpd->cached_power_down_ok;
-@@ -228,21 +302,30 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
- 	genpd->max_off_time_ns = -1;
- 	genpd->max_off_time_changed = false;
- 	genpd->cached_power_down_ok = true;
--	genpd->state_idx = genpd->state_count - 1;
- 
--	/* Find a state to power down to, starting from the deepest. */
--	while (!__default_power_down_ok(pd, genpd->state_idx)) {
--		if (genpd->state_idx == 0) {
-+	/*
-+	 * Find a state to power down to, starting from the state
-+	 * determined by the next wakeup.
-+	 */
-+	while (!__default_power_down_ok(pd, state_idx)) {
-+		if (state_idx == 0) {
- 			genpd->cached_power_down_ok = false;
- 			break;
- 		}
--		genpd->state_idx--;
-+		state_idx--;
- 	}
- 
-+done:
-+	genpd->state_idx = state_idx;
- 	genpd->cached_power_down_state_idx = genpd->state_idx;
- 	return genpd->cached_power_down_ok;
- }
- 
-+static bool default_power_down_ok(struct dev_pm_domain *pd)
-+{
-+	return _default_power_down_ok(pd, ktime_get());
-+}
-+
- static bool always_on_power_down_ok(struct dev_pm_domain *domain)
- {
- 	return false;
-@@ -254,11 +337,12 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
- 	struct generic_pm_domain *genpd = pd_to_genpd(pd);
- 	struct cpuidle_device *dev;
- 	ktime_t domain_wakeup, next_hrtimer;
-+	ktime_t now = ktime_get();
- 	s64 idle_duration_ns;
- 	int cpu, i;
- 
- 	/* Validate dev PM QoS constraints. */
--	if (!default_power_down_ok(pd))
-+	if (!_default_power_down_ok(pd, now))
- 		return false;
- 
- 	if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN))
-@@ -280,7 +364,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
- 	}
- 
- 	/* The minimum idle duration is from now - until the next wakeup. */
--	idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, ktime_get()));
-+	idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
- 	if (idle_duration_ns <= 0)
- 		return false;
- 
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 735583c0bc6d..dfcfbcecc34b 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -56,6 +56,10 @@
-  *
-  * GENPD_FLAG_RPM_ALWAYS_ON:	Instructs genpd to always keep the PM domain
-  *				powered on except for system suspend.
-+ *
-+ * GENPD_FLAG_MIN_RESIDENCY:	Enable the genpd governor to consider its
-+ *				components' next wakeup when determining the
-+ *				optimal idle state.
-  */
- #define GENPD_FLAG_PM_CLK	 (1U << 0)
- #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
-@@ -63,6 +67,7 @@
- #define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
- #define GENPD_FLAG_CPU_DOMAIN	 (1U << 4)
- #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
-+#define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
- 
- enum gpd_status {
- 	GENPD_STATE_ON = 0,	/* PM domain is on */
-@@ -130,6 +135,7 @@ struct generic_pm_domain {
- 				     unsigned int state);
- 	struct gpd_dev_ops dev_ops;
- 	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
-+	ktime_t next_wakeup;	/* Maintained by the domain governor */
- 	bool max_off_time_changed;
- 	bool cached_power_down_ok;
- 	bool cached_power_down_state_idx;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Tested-by: Dmitry Osipenko <digetx@gmail.com>
