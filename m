@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9002FF42B
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 20:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C522FF425
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 20:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727353AbhAUTTA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 14:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S1727114AbhAUTSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 14:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727142AbhAUTSG (ORCPT
+        with ESMTP id S1727192AbhAUTSG (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 14:18:06 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639BCC061797;
-        Thu, 21 Jan 2021 11:17:03 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id q20so2091175pfu.8;
-        Thu, 21 Jan 2021 11:17:03 -0800 (PST)
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819BEC0617A7;
+        Thu, 21 Jan 2021 11:17:11 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id y205so2101981pfc.5;
+        Thu, 21 Jan 2021 11:17:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=//vxmImvEZezGNbMSIPWRQhGQeqxvlD68gBH9D1FgFg=;
-        b=R7KUiUJJWYSwWrD4WNNBgCrqmvJpxhNqd/c1X8Y/559czgj0X2KIIBjCGEgMqvX8PI
-         NyS0AQMJncdJ7ZhZvp9mSen31DtOtPAoL7YuOUsSvNk5dxI4yVHyF3hx29f7JSeeCOnl
-         bwVYikZrkvTzMYhtDMiWbsG4OAtamVTsyPlS8JfCMsEP/q6qhjiKRplj6Pu6/KkN/vbC
-         ikwq8HIj9Dvm87yZbSg9qsvmkJzHdNHdjXb7LfAnRgq1jSpNZYzrx+nncxNU80+c3FtU
-         tTYZ5b08d425cDnQaxWbJvA+LViVzKktoJIYmeVfpYEkHd8fHwOPxgwGXuOVHppjOkXp
-         jexg==
+        bh=2bCUVYm5PTbXlWccEltwKHodbOdPVGehKn93HfL2DGM=;
+        b=dIwoVnESU5Rx+/2SD908/EvsLyfO6j9QDOu1khYe/SoP9JuwImQr53/StGNnDBhKjh
+         ISPxsI8TN4E2jQAq91haWROqWgKAQkH6KA7OyjFv4Wfgr1KDi95wqmHeRn09MiOpQGin
+         uvhQZ5V7a/x5e4u2rcwYfBlPIj2J1EZWDpNZKs6NgbywANMG0rM+w1y6X6r4wFk/ZJ9I
+         swx8K3jOmLxZdiw9766tJGeWswlSMj1iO37HN5lnvc2d7wjg87KoLdtEgmheLktS7SF6
+         w/3wT31ZpGpOQhD8VWpBDbELxbkVFNpHNm2AGoCNF4NjXt3XoQHW9q+fhcCFTERV2eK8
+         oXXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=//vxmImvEZezGNbMSIPWRQhGQeqxvlD68gBH9D1FgFg=;
-        b=hKZjnaqWEVuZ/2Vooxs9A8MkL0pj2B8WVKgl93Zt3KnvIlaWtoqQogi7eWkRNpP0WB
-         50RTEk0xWbPf6f9fbgLvcz01TOnuSWkyY6ADfbCYVvMPzk+KUrIYZZCUwE7Iw4N3P97G
-         EVW0JXKMG3lCjIl7aIVB9QXerNAhaeXbwQh4qS+KlIAZyCHEDMlkZAztbVZAwlyw/QaG
-         Ixq2mVAq+tEZcQetvdWl/B3CsoAyVd4e8yfJNLh4fKkNGPbdYl78I5u7BwxcC8LWUVln
-         otBJpPvyCe+NPSIrWrR6kFklmBx2/tcZVCNd7GxKREVe8PLZdpbE/vj68DdOjgUSc6GO
-         ZloA==
-X-Gm-Message-State: AOAM5308oDpBt26/MufZ1xV3F/LHbhcQT5BEEwiS83RXQwrp7uND+/zI
-        IDA2Q0T2uPH7cwDvb54Dh0I=
-X-Google-Smtp-Source: ABdhPJzRBGVet/vJkDYEKMJ2TqwbMFDisP8AhdPlmYFcTEsFyHz7AQYOC3M+XNxnE/hvpzpLcDkzGg==
-X-Received: by 2002:aa7:87d9:0:b029:1b7:1c6c:56e0 with SMTP id i25-20020aa787d90000b02901b71c6c56e0mr914114pfo.25.1611256622929;
-        Thu, 21 Jan 2021 11:17:02 -0800 (PST)
+        bh=2bCUVYm5PTbXlWccEltwKHodbOdPVGehKn93HfL2DGM=;
+        b=i5aF+p42u0RIDZoVm6EFGRYaq8PoNTHIqogVzNfPiqo4rahA+iMp/G3nogLuXGwO8q
+         nXP9nRaHlwg1IAZsbZm8lM3pB9IR+ji0jmobqSvDjd4rZSURFnAwwizokfwELl8YfJXx
+         MS8vYEgyqirifV5qNPBbZzkOcKjllYdQ7JuCF5WvgvWfX9JpCaT3/0ZtUE8GO207MzTd
+         lt0xZiH54mU73n0xuccPNDVBMFEzh0kg4eqmljsgYRJnIrVHCbTMSIl0wWFjZbN4rFM0
+         JTawZloIxuTOW0ZcJsvHXt9RA08nqgxhnqDiYlqHQdds9Zzo+t+rfIDaGlYRu6+x453K
+         k78w==
+X-Gm-Message-State: AOAM531dSbWHTyHx+nYtL3ht9tj9gPojKl8lDz1FTHxc4xV2/CpA2MFM
+        Fm1r/LCpohMO8gCzSYeDwMk=
+X-Google-Smtp-Source: ABdhPJyuFjgXz+YzNsvaxQkREdbWGWptT2114jjZD14FftTHMx31mOG42iXJ8ALyu304Hvi4c7b95A==
+X-Received: by 2002:a63:cd08:: with SMTP id i8mr728701pgg.425.1611256631036;
+        Thu, 21 Jan 2021 11:17:11 -0800 (PST)
 Received: from ansuel-xps20.localdomain (host-79-41-39-5.retail.telecomitalia.it. [79.41.39.5])
-        by smtp.googlemail.com with ESMTPSA id gg6sm11291013pjb.2.2021.01.21.11.16.55
+        by smtp.googlemail.com with ESMTPSA id gg6sm11291013pjb.2.2021.01.21.11.17.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 11:17:02 -0800 (PST)
+        Thu, 21 Jan 2021 11:17:10 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Amit Kucheria <amitk@kernel.org>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
@@ -57,9 +57,9 @@ Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v8 5/8] drivers: thermal: tsens: Fix bug in sensor enable for msm8960
-Date:   Thu, 21 Jan 2021 20:15:57 +0100
-Message-Id: <20210121191601.14403-6-ansuelsmth@gmail.com>
+Subject: [PATCH v8 6/8] drivers: thermal: tsens: Use get_temp_common for msm8960
+Date:   Thu, 21 Jan 2021 20:15:58 +0100
+Message-Id: <20210121191601.14403-7-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210121191601.14403-1-ansuelsmth@gmail.com>
 References: <20210121191601.14403-1-ansuelsmth@gmail.com>
@@ -69,58 +69,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's present a hardware bug in tsens VER_0 where if sensors upper to id
-6 are enabled selectively, underfined results are expected. Fix this by
-enabling all the remaining sensor in one step.
+Rework calibrate function to use common function. Derive the offset from
+a missing hardcoded slope table and the data from the nvmem calib
+efuses.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/thermal/qcom/tsens-8960.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ drivers/thermal/qcom/tsens-8960.c | 56 +++++++++----------------------
+ 1 file changed, 15 insertions(+), 41 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
-index 86585f439985..248aaa65b5b0 100644
+index 248aaa65b5b0..43ebe4d54672 100644
 --- a/drivers/thermal/qcom/tsens-8960.c
 +++ b/drivers/thermal/qcom/tsens-8960.c
-@@ -27,9 +27,9 @@
- #define EN			BIT(0)
- #define SW_RST			BIT(1)
- #define SENSOR0_EN		BIT(3)
-+#define MEASURE_PERIOD		BIT(18)
- #define SLP_CLK_ENA		BIT(26)
- #define SLP_CLK_ENA_8660	BIT(24)
--#define MEASURE_PERIOD		1
- #define SENSOR0_SHIFT		3
+@@ -67,6 +67,13 @@
+ #define S9_STATUS_OFF		0x3674
+ #define S10_STATUS_OFF		0x3678
  
- /* INT_STATUS_ADDR bitmasks */
-@@ -132,11 +132,26 @@ static int enable_8960(struct tsens_priv *priv, int id)
- 	if (ret)
- 		return ret;
++/* Original slope - 200 to compensate mC to C inaccuracy */
++u32 tsens_msm8960_slope[] = {
++			976, 976, 954, 976,
++			911, 932, 932, 999,
++			932, 999, 932
++			};
++
+ static int suspend_8960(struct tsens_priv *priv)
+ {
+ 	int ret;
+@@ -192,9 +199,7 @@ static int calibrate_8960(struct tsens_priv *priv)
+ {
+ 	int i;
+ 	char *data;
+-
+-	ssize_t num_read = priv->num_sensors;
+-	struct tsens_sensor *s = priv->sensor;
++	u32 p1[11];
  
--	mask = BIT(id + SENSOR0_SHIFT);
-+	/* HARDWARE BUG:
-+	 * On platform with more than 5 sensors, all the remaining
-+	 * sensors needs to be enabled all togheder or underfined
-+	 * results are expected. (Sensor 6-7 disabled, Sensor 3
-+	 * disabled...) In the original driver, all the sensors
-+	 * are enabled in one step hence this bug is not triggered.
-+	 */
-+	if (id > 5)
-+		mask = GENMASK(10, 6);
-+	else
-+		mask = BIT(id);
-+
-+	mask <<= SENSOR0_SHIFT;
-+
- 	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg | SW_RST);
- 	if (ret)
- 		return ret;
+ 	data = qfprom_read(priv->dev, "calib");
+ 	if (IS_ERR(data))
+@@ -202,49 +207,18 @@ static int calibrate_8960(struct tsens_priv *priv)
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
  
-+	reg |= MEASURE_PERIOD;
+-	for (i = 0; i < num_read; i++, s++)
+-		s->offset = data[i];
++	for (i = 0; i < priv->num_sensors; i++) {
++		p1[i] = data[i];
++		priv->sensor[i].slope = tsens_msm8960_slope[i];
++	}
 +
- 	if (priv->num_sensors > 1)
- 		reg |= mask | SLP_CLK_ENA | EN;
- 	else
++	compute_intercept_slope(priv, p1, NULL, ONE_PT_CALIB);
+ 
+ 	kfree(data);
+ 
+ 	return 0;
+ }
+ 
+-/* Temperature on y axis and ADC-code on x-axis */
+-static inline int code_to_mdegC(u32 adc_code, const struct tsens_sensor *s)
+-{
+-	int slope, offset;
+-
+-	slope = thermal_zone_get_slope(s->tzd);
+-	offset = CAL_MDEGC - slope * s->offset;
+-
+-	return adc_code * slope + offset;
+-}
+-
+-static int get_temp_8960(const struct tsens_sensor *s, int *temp)
+-{
+-	int ret;
+-	u32 code, trdy;
+-	struct tsens_priv *priv = s->priv;
+-	unsigned long timeout;
+-
+-	timeout = jiffies + usecs_to_jiffies(TIMEOUT_US);
+-	do {
+-		ret = regmap_read(priv->tm_map, INT_STATUS_ADDR, &trdy);
+-		if (ret)
+-			return ret;
+-		if (!(trdy & TRDY_MASK))
+-			continue;
+-		ret = regmap_read(priv->tm_map, s->status, &code);
+-		if (ret)
+-			return ret;
+-		*temp = code_to_mdegC(code, s);
+-		return 0;
+-	} while (time_before(jiffies, timeout));
+-
+-	return -ETIMEDOUT;
+-}
+-
+ static struct tsens_features tsens_8960_feat = {
+ 	.ver_major	= VER_0,
+ 	.crit_int	= 0,
+@@ -313,7 +287,7 @@ static const struct reg_field tsens_8960_regfields[MAX_REGFIELDS] = {
+ static const struct tsens_ops ops_8960 = {
+ 	.init		= init_common,
+ 	.calibrate	= calibrate_8960,
+-	.get_temp	= get_temp_8960,
++	.get_temp	= get_temp_common,
+ 	.enable		= enable_8960,
+ 	.disable	= disable_8960,
+ 	.suspend	= suspend_8960,
 -- 
 2.29.2
 
