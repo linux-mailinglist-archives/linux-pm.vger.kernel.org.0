@@ -2,63 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1BC2FE92C
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 12:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A81AD2FE927
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 12:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730494AbhAULrH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 06:47:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S1730084AbhAULVX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 06:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730223AbhAULVe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 06:21:34 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C42C0617A1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:19:07 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id w18so1302910pfu.9
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:19:07 -0800 (PST)
+        with ESMTP id S1729924AbhAULVN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 06:21:13 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F22C0617B1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:19:18 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id c132so1166897pga.3
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:19:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QsvG3t6xFRgx0s76cOQVzbYkqHL9lM3bJ086HXut2lo=;
-        b=W8sAOHZXGjGsUHf8lA5IP8zqppO9iNNGBAO/qkfocVkFGmZSsW/naH1YNTl0xP/gTa
-         gY50hBXssIxtuU2G59zExSMtcwVt7utDVVzmh6u9fjrD+gxfwmaw+ao5wN7cr/pBoIw3
-         oRUkfsAVRcuJw664wy7zI0ZnVC2itA4TtpRfrtC0Gl5gtFhl4IOvROR/LH20rudx7rlv
-         gWtqNMLBkoXlXYJmuXSwOzf/XejjXh9qiAA0ZlrkJH/afNscVDAJM3rbqNgElgUCPqRm
-         UBPCokJYgpbAq0qwbubfijtQgJxq9EDuL0R+iegFbZcUTi60rDsqp0znC1i8ZppPwSnH
-         /QqA==
+        bh=lxCu1KRXdVN3L+OkUbo1cLFCc74qHBWwsGsHoVvYmGQ=;
+        b=a87cJbhAisItlTCiddZHPHEtszqt8a4bVO1biv2X4xyyxixy0vT9T72gtaa3iyj1/S
+         0BYSnHb7hnb7XQ1rwlEu5cBS3rWsXlBuzJ4FCOmHrteZ986iw9RUbu7t7crDd55rb+q0
+         KYQl0KVBN5AykV+JO3HcTaywDinFAvXk5RBBj+bYE7h3h/GJhlpuhndjXEI073NQmGYd
+         F8sCiXjYnLCSEiHzao8Cj5NEiGNRRhnEQY8ln7F6+OXeYTrLLExrly2aWRCNqMuVgIyM
+         o+ZW521aJNq2QMtttfOcvWZ9gEK/aMtc7HonSr2L7N/XYDiInAo5mzdEK+TIZbY9C/Xa
+         SMRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QsvG3t6xFRgx0s76cOQVzbYkqHL9lM3bJ086HXut2lo=;
-        b=cKqX6LzbRNUn2S3TGyJ5kjauaIydodz+Pi0HjjqPn+hXlwZYeSGnOT5Nt8GPFyXBm3
-         pNqgUXXUnh1zuecZCRZanakqelXcGsH+w26LoGab3iiPeJowU4BUiJ3cBHL+3IVA7hzr
-         xzdujxLV5NYKLjpIMtr9UAaMYma/MIn95u8i5dTtbk4cFtAUNQsQbJ3DA7nAcXnJGJUb
-         CKerYwDcD2HOUC99tjre/uTSGV7z0iWozm5Sd0EhcyRYt4+21ADIbdxIA6ZASlXhYDS+
-         TqKH6Ey1/AecleD4Lw0jhfbGdrSGkyrJed2AmKC/Yqerc+ixZICSDS3PxzF3I3Y9h0Bx
-         jH/g==
-X-Gm-Message-State: AOAM530xOKwH4DeOIbL5BLWmFHF6pdnK/yZ7BTU6Q5xEgr0IfL+acNOp
-        CYQoxiqCJkgw92mIaFZZtKWqfw==
-X-Google-Smtp-Source: ABdhPJy5sX9QMNxrrbhz8F+SIc0A20khl+IXc6z8UY/zsrD3/92c9hrmIh3MhaQyDhyT3bApnJ9r9g==
-X-Received: by 2002:a65:6542:: with SMTP id a2mr13920489pgw.148.1611227946652;
-        Thu, 21 Jan 2021 03:19:06 -0800 (PST)
+        bh=lxCu1KRXdVN3L+OkUbo1cLFCc74qHBWwsGsHoVvYmGQ=;
+        b=UqyYkoejCmHebJtXKFyJlsA7NESsFiCX57Bn8el+ojxreEOzjaPKFlDnsBUftzB5MO
+         Ur+IfDTqU05RMvhop0ccXpIDzTAMJEuUUxCuy/kJ0e9gjidPTz7+tJPcVrdrb/4uJ83P
+         ID7YcvmepzNbOtAcgqU4yl1l+aAF81TDSSWzGgYpPHp6Kq/WomiibInYqBzTrDBNTCcL
+         /CtDgvbaOk8o+EWDwY10Mlg1ZKtMq4ghQINqykWkA9QjzQxnBlumeQvsvhsF7pA3A65v
+         cFwdKlXo+75mDLv3yFVSWxPN6xGAEovi/oSttmeUSgO3Sv3fs+jKYdNrBfAk9yMQIkZR
+         CF4w==
+X-Gm-Message-State: AOAM532/PX0ixJHyZIBjAF1j3jtKwcz5sF7j4UCm1QTBdX6g/uC3cpqO
+        pNxBhDTjVERmo/6WJKQXmRsu5w==
+X-Google-Smtp-Source: ABdhPJxRoJPh+zCGLlNXEzcomeslehl5ItANfOXfCWt+o9vxW4dTT0mgqMj6QlfqpWP4MwpTT0cTAw==
+X-Received: by 2002:a65:4083:: with SMTP id t3mr14089089pgp.150.1611227958549;
+        Thu, 21 Jan 2021 03:19:18 -0800 (PST)
 Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id gk2sm5826702pjb.6.2021.01.21.03.19.05
+        by smtp.gmail.com with ESMTPSA id f36sm6098298pjk.52.2021.01.21.03.19.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Jan 2021 03:19:06 -0800 (PST)
+        Thu, 21 Jan 2021 03:19:17 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Dmitry Osipenko <digetx@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Sibi Sankar <sibis@codeaurora.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 08/13] opp: Update parameters of  _set_opp_custom()
-Date:   Thu, 21 Jan 2021 16:47:48 +0530
-Message-Id: <296a3a64a673ed3eb261a6fc06f4dfd90dbca479.1611227342.git.viresh.kumar@linaro.org>
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: [PATCH 12/13] drm: msm: Migrate to dev_pm_opp_set_opp()
+Date:   Thu, 21 Jan 2021 16:47:52 +0530
+Message-Id: <8d10f850eead0e91b1a0e20bd2ae449f4f4f8bb3.1611227342.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 In-Reply-To: <cover.1611227342.git.viresh.kumar@linaro.org>
 References: <cover.1611227342.git.viresh.kumar@linaro.org>
@@ -68,87 +70,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Drop the unnecessary parameters and follow the pattern from
-_generic_set_opp_regulator().
-
-While at it, also remove the local variable old_freq.
+dev_pm_opp_set_bw() is getting removed and dev_pm_opp_set_opp() should
+be used instead. Migrate to the new API.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 6b09d468d37a..3500cc9de66b 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -826,11 +826,10 @@ static int _set_opp_bw(const struct opp_table *opp_table,
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index e6703ae98760..05e0ef58fe32 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -134,7 +134,7 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 
+ 	if (!gmu->legacy) {
+ 		a6xx_hfi_set_freq(gmu, perf_index);
+-		dev_pm_opp_set_bw(&gpu->pdev->dev, opp);
++		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+ 		pm_runtime_put(gmu->dev);
+ 		return;
+ 	}
+@@ -158,7 +158,7 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 	if (ret)
+ 		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
+ 
+-	dev_pm_opp_set_bw(&gpu->pdev->dev, opp);
++	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+ 	pm_runtime_put(gmu->dev);
  }
  
- static int _set_opp_custom(const struct opp_table *opp_table,
--			   struct device *dev, unsigned long old_freq,
--			   unsigned long freq,
--			   struct dev_pm_opp_supply *old_supply,
--			   struct dev_pm_opp_supply *new_supply)
-+			   struct device *dev, struct dev_pm_opp *opp,
-+			   unsigned long freq)
- {
-+	struct dev_pm_opp *old_opp = opp_table->current_opp;
- 	struct dev_pm_set_opp_data *data;
- 	int size;
+@@ -866,7 +866,7 @@ static void a6xx_gmu_set_initial_bw(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
+ 	if (IS_ERR_OR_NULL(gpu_opp))
+ 		return;
  
-@@ -840,12 +839,12 @@ static int _set_opp_custom(const struct opp_table *opp_table,
- 	data->clk = opp_table->clk;
- 	data->dev = dev;
- 
--	data->old_opp.rate = old_freq;
--	size = sizeof(*old_supply) * opp_table->regulator_count;
--	memcpy(data->old_opp.supplies, old_supply, size);
-+	data->old_opp.rate = old_opp->rate;
-+	size = sizeof(*old_opp->supplies) * opp_table->regulator_count;
-+	memcpy(data->old_opp.supplies, old_opp->supplies, size);
- 
- 	data->new_opp.rate = freq;
--	memcpy(data->new_opp.supplies, new_supply, size);
-+	memcpy(data->new_opp.supplies, opp->supplies, size);
- 
- 	return opp_table->set_opp(data);
+-	dev_pm_opp_set_bw(&gpu->pdev->dev, gpu_opp);
++	dev_pm_opp_set_opp(&gpu->pdev->dev, gpu_opp);
+ 	dev_pm_opp_put(gpu_opp);
  }
-@@ -1000,7 +999,6 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 		    struct dev_pm_opp *opp, unsigned long freq)
- {
- 	struct dev_pm_opp *old_opp;
--	unsigned long old_freq;
- 	int scaling_down, ret;
  
- 	if (unlikely(!opp))
-@@ -1011,7 +1009,6 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 		_find_current_opp(dev, opp_table);
+@@ -1072,7 +1072,7 @@ int a6xx_gmu_stop(struct a6xx_gpu *a6xx_gpu)
+ 		a6xx_gmu_shutdown(gmu);
  
- 	old_opp = opp_table->current_opp;
--	old_freq = old_opp->rate;
+ 	/* Remove the bus vote */
+-	dev_pm_opp_set_bw(&gpu->pdev->dev, NULL);
++	dev_pm_opp_set_opp(&gpu->pdev->dev, NULL);
  
- 	/* Return early if nothing to do */
- 	if (opp_table->enabled && old_opp == opp) {
-@@ -1020,7 +1017,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 	}
- 
- 	dev_dbg(dev, "%s: switching OPP: Freq %lu -> %lu Hz, Level %u -> %u, Bw %u -> %u\n",
--		__func__, old_freq, freq, old_opp->level, opp->level,
-+		__func__, old_opp->rate, freq, old_opp->level, opp->level,
- 		old_opp->bandwidth ? old_opp->bandwidth[0].peak : 0,
- 		opp->bandwidth ? opp->bandwidth[0].peak : 0);
- 
-@@ -1036,8 +1033,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 	}
- 
- 	if (opp_table->set_opp) {
--		ret = _set_opp_custom(opp_table, dev, old_freq, freq,
--				      old_opp->supplies, opp->supplies);
-+		ret = _set_opp_custom(opp_table, dev, opp, freq);
- 	} else if (opp_table->regulators) {
- 		ret = _generic_set_opp_regulator(opp_table, dev, opp, freq,
- 						 scaling_down);
+ 	/*
+ 	 * Make sure the GX domain is off before turning off the GMU (CX)
 -- 
 2.25.0.rc1.19.g042ed3e048af
 
