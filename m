@@ -2,143 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EE42FF580
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 21:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751482FF5D5
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 21:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbhAUUJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 15:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S1727150AbhAUU1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 15:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726587AbhAUUIw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 15:08:52 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F7BC0613D6
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 12:08:12 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id i7so2066807pgc.8
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 12:08:12 -0800 (PST)
+        with ESMTP id S1726672AbhAUU11 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 15:27:27 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC3EC061756;
+        Thu, 21 Jan 2021 12:26:47 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id p13so4033712ljg.2;
+        Thu, 21 Jan 2021 12:26:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=GqRCi+y1spNswoFiwX+flezPi2864HDBX4dlc2oqbCI=;
-        b=zYgknaNKBt2Cvu1moNkY7mvQzYqptM3Yc3aBC3vUfpSSH5GKWs2iEgCd0bqqyLBwVp
-         CCFrDM4uVD/JcfnOJ5DAqvEG+A340nEvsqRbQtdy/Q3ALq8WDMi6dpMJW8NUlnG/LFc8
-         4epwg+N3N/ar6myOnJNaeYeJnJlF6QpIHx5nVIxUFN9/WkKJgCouSRdVfaoVok2MGFAR
-         u77jCTOAzB7DXbAjpNSBXJXCYjjcysKFeWMbOK+wucsK30pRjXwkALSYawt3vo/hq4LG
-         Ag5/oxCcieTahCAcsy22p+PayeP663+5O+P2xWO3MJXFWOSVN47lmXX5StAVVEn9JjDk
-         rnHg==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/HRTfbG4emabSLFelmlx+vEEglKRLfy1gL/MezAi/ZM=;
+        b=Wmpj3uR+B0oz7EbHGBH0A/9/umuq3HtC70vKmknXE/bVji4YOs7D1DVYHD5yuI0mcI
+         rhxEp0Yr0sg5kAIEbnC2sQ6MFHGa77WLAIQUTBLVaAXTgfG3RMHgoAH9brIk0RlVFIZi
+         kBQwEl/lTlkkRiJqbRwZC1NSLZO8lLKnAMfio+iQrD+6GBEHDX0ToT6qUCCuCIrT6sy9
+         IIsBCKprxdFHSTsB4zVRt+YXOQ7N6hO1HT3vHdrjZ40Kh2UdL/5oKL2SUe6Cfj8irMNL
+         cjDWbZGfdpZX/BkGISTFxt1MrKPB8u+lZlFV4V7Oty91HcIUt6yDLfBuY07u70csd96Y
+         w6DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=GqRCi+y1spNswoFiwX+flezPi2864HDBX4dlc2oqbCI=;
-        b=N0d0wIr+J6kJylTusy2YLzj1wOBn2T8O1IRPltFNE5OI+q6o5bQW8D/1vxJoTJkkMz
-         mHL+gE9fc/SvG1kWbclzEmSC66KTQnbhGIh734ZUphdVfxOsG+jZE5Cyk66IgOaouTFW
-         yPKWJzOIny+saZJhAXM5OJWjrbOu9MtN5xN2bcnHclvedfuRMnJFSycgZaTB5Ka96Boc
-         pAm/htCy2zKYPpNOXzGDjrIns0LYSrurQTqv3/YTKb7r4o7V9Z+FKWMHcnoYjsLnu5O+
-         OG2r77faVMQ+GOSHI/mxNrozpLkeNYZdzT3WPkssdtJNTGudLagnS7QYbYPC3O5P6aN1
-         dUYw==
-X-Gm-Message-State: AOAM531zoxrRo7JgY6pU615rFrOEjBMpIOgiCPJlYb4hZ0DOCaSzdvbo
-        f6ig56K8SGDNpUQSaHpqgu88KQ==
-X-Google-Smtp-Source: ABdhPJxxaAinyaAMOQjPXaxDN5FQm4tXEr3AJL/UYaoFop+cSVcA4CDgbch00L8mkNB4la3cdrcJDA==
-X-Received: by 2002:a62:1d46:0:b029:1b7:fe6e:4bb4 with SMTP id d67-20020a621d460000b02901b7fe6e4bb4mr1384944pfd.4.1611259692062;
-        Thu, 21 Jan 2021 12:08:12 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j9sm6383156pgb.47.2021.01.21.12.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 12:08:11 -0800 (PST)
-Message-ID: <6009df2b.1c69fb81.9ff86.e6a6@mx.google.com>
-Date:   Thu, 21 Jan 2021 12:08:11 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/HRTfbG4emabSLFelmlx+vEEglKRLfy1gL/MezAi/ZM=;
+        b=P5IDwIbrXRgMqOCWtU4tWIiujMAEjEhZbuaYvdHKM87oAetkMOOvPOSAfqbh8lYis7
+         q4mFU/I+VRtbSY3zY2sKZW2psTEmUi59qaV7DLzuKuW3r0oc80XM+OsPOuQHV3wR/LQ/
+         L2TGIMtUuBkch1UaEcEOf7c/g2FOkaFJHK24iQ9b2tBDZxU+gjjyi2X9fJU05DRfYVNA
+         NQD5ePctxv/jzcMAXaCGDMj8ORWcNcNS5jaH8CMIr2Bbn5zJ4/YP0JtjGB8KulSu+Fg6
+         aMQ0RLM/eyZHe+FjNJrNXBaahI9UultYqhFNVndYwymLQkEzUxoSYR03HIEYaacdUZxj
+         kHbA==
+X-Gm-Message-State: AOAM531dvnof7Dbuo8YJ9G79hQVODMIaFQUqULLBBMP2XCAfbfN8eVAs
+        g46+TuNSgJcahSZZ/8+DXg/cRMCOrLc=
+X-Google-Smtp-Source: ABdhPJztFRGAPddrobgjhvcdhiqrWAqsLj6Hf8+fRw2jY6qn6Z2O41UhIeIZis2JIksLu/TG8DVIKA==
+X-Received: by 2002:a2e:8350:: with SMTP id l16mr538281ljh.403.1611260805366;
+        Thu, 21 Jan 2021 12:26:45 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id m25sm633354lfb.144.2021.01.21.12.26.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jan 2021 12:26:44 -0800 (PST)
+Subject: Re: [PATCH 07/13] opp: Allow _generic_set_opp_clk_only() to work for
+ non-freq devices
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <cover.1611227342.git.viresh.kumar@linaro.org>
+ <1585f6c21ea8aee64fe4da0bf72b36ea4d74a779.1611227342.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <9b2638e6-b842-8737-e5a0-aeeb84927fce@gmail.com>
+Date:   Thu, 21 Jan 2021 23:26:43 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: acpi-5.11-rc5-27-gd9ac95f54ba88
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 1 warning (acpi-5.11-rc5-27-gd9ac95f54ba88)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <1585f6c21ea8aee64fe4da0bf72b36ea4d74a779.1611227342.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 1 warning (acpi-5.11-rc5-27=
--gd9ac95f54ba88)
+21.01.2021 14:17, Viresh Kumar пишет:
+> In order to avoid conditional statements at the caller site, this patch
+> updates _generic_set_opp_clk_only() to work for devices that don't
+> change frequency (like power domains, etc.). Return 0 if the clk pointer
+> passed to this routine is not valid.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+...
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-5.11-rc5-27-gd9ac95f54ba88/
+Hello Viresh,
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-5.11-rc5-27-gd9ac95f54ba88
-Git Commit: d9ac95f54ba88454a0ff889028149b802118a89b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+Thank you very much for yours effort! I gave a quick test to this series
+and instantly found one small issue in this patch.
 
-Warnings Detected:
+> +	/* We may reach here for devices which don't change frequency */
+> +	if (unlikely(!clk))
 
-arc:
+I replaced dev_pm_opp_set_voltage() with dev_pm_opp_set_opp() in the
+Tegra PD driver and got a crash, which happens because the above line
+should be:
 
-arm:
-    multi_v7_defconfig (gcc-8): 1 warning
+	if (IS_ERR(clk))
 
-i386:
+The opp_table->clk is initialized to ERR_PTR(-ENOENT) if device doesn't
+have a clock, like a power domain device in my case.
 
-mips:
+Everything works good after fixing this patch. I'll keep testing and
+will be taking a closer look at the rest of the patches over this weekend.
 
-riscv:
+For the record, here is a backtrace of the crash:
 
-x86_64:
-
-
-Warnings summary:
-
-    1    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused v=
-ariable =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused variab=
-le =E2=80=98wake=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+Unable to handle kernel NULL pointer dereference at virtual address 00000016
+...
+(clk_set_rate) from (_set_opp)
+(_set_opp) from (dev_pm_opp_set_opp)
+(dev_pm_opp_set_opp) from (tegra_genpd_set_performance_state)
+(tegra_genpd_set_performance_state) from (_genpd_set_performance_state)
+(_genpd_set_performance_state) from (dev_pm_genpd_set_performance_state)
+(dev_pm_genpd_set_performance_state) from (_set_required_opp)
+(_set_required_opp) from (_set_opp)
+(_set_opp) from (dev_pm_opp_set_rate)
+(dev_pm_opp_set_rate) from (host1x_runtime_resume)
+(host1x_runtime_resume) from (genpd_runtime_resume)
+(genpd_runtime_resume) from (__rpm_callback)
+(__rpm_callback) from (rpm_callback)
+(rpm_callback) from (rpm_resume)
+(rpm_resume) from (__pm_runtime_resume)
+(__pm_runtime_resume) from (host1x_probe)
+(host1x_probe) from (platform_probe)
+(platform_probe) from (really_probe)
+(really_probe) from (driver_probe_device)
+(driver_probe_device) from (device_driver_attach)
+(device_driver_attach) from (__driver_attach)
+(__driver_attach) from (bus_for_each_dev)
+(bus_for_each_dev) from (bus_add_driver)
+(bus_add_driver) from (driver_register)
+(driver_register) from (__platform_register_drivers)
+(__platform_register_drivers) from (host1x_module_init)
+(host1x_module_init) from (do_one_initcall)
+(do_one_initcall) from (kernel_init_freeable)
+(kernel_init_freeable) from (kernel_init)
