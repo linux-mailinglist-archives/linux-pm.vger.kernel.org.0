@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 964B92FF416
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 20:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137882FF40E
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 20:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbhAUTQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 14:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S1726662AbhAUTQR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 14:16:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727142AbhAUTOy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 14:14:54 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B981C061794;
-        Thu, 21 Jan 2021 11:01:45 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id o19so4073296lfo.1;
-        Thu, 21 Jan 2021 11:01:45 -0800 (PST)
+        with ESMTP id S1726122AbhAUTPI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 14:15:08 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0DAC06174A;
+        Thu, 21 Jan 2021 11:14:27 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id j3so3772336ljb.9;
+        Thu, 21 Jan 2021 11:14:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lHjyh7MnV6uiNlbgvZbHpAWHz87CVF0R+X82k3ji/PE=;
-        b=aJGmiz+oXm0EHRDMHp7kyCXIYMj/XuK7oa+3WZUSDModbG2ZFD8twjon54RLI0hqrZ
-         fYhv133PHtKcGaScG3POQ03Vm3Gj+HL9j0Eq/2U8hHXOr4R3bwDYeLIAtnJS7/v443qq
-         R7eLT7nnEYr4cIjTANpNbNEt6LWGKJTd8U3nKmB1C8PbQ/0VvJh0hvJFe+pWkZXJmiMg
-         gIT0bqcBMhpE4iHqTUFnJ9b31LSUJAfATEMJwALl0b3fx0GD1kCZ+kHjlu2WHr7onnpA
-         GIFovCWGBzLP2XwFY1WiZrDiZEiJL8/Yt5xN5Koiu61aQLRKU8JMrdirUpJCGiqwS1UK
-         kOUg==
+        bh=6KWQI8XD7L6EDXDFReXNozccameFVZf4WSpONfuhC2U=;
+        b=d1h027qiGtzmqxfp3brM4N5sDpzRXXr8lK3gA9nhMLzUfxUSMhLbLCciyh8Ec+H7x0
+         cctjyjuCP5WGhCECoKU6D4KFz62BbASk6uFJQfCt0mzI3qBaeKUNVcpvk3TkJsGWS75u
+         NFRKmvF+YQjQR5450zyByMK6WNKbeYX+8F60bAggWWyiQ616lskiYL3PcPz0ofxahSXE
+         VeDUHhY8EY6fIZo3+C7WTRioU2mVbMt+3HWzeIGSrt62S/aXXWsMzR5UJWElCLT4GlQz
+         /h/Bb9cNRXnCvHklAcFwBeDzDg11wsWPSVKu0mH1rXHPectmYpjLvXXeV1+sOlYRTLXO
+         /y0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lHjyh7MnV6uiNlbgvZbHpAWHz87CVF0R+X82k3ji/PE=;
-        b=Bg+1QQjlfRTcJfYphMa6ninJyTaP/m1PXrk38VnqsJN1Sxaf3K4uEOsTVcuNCUL9IK
-         jPWUnqjeLxRBgniwtYu2L74JW9Pv0UDMdgQYG6fwFWHDWVQXJb0fYt79bFjgry0qiKXg
-         QduZKW71eFnnJSRxF00ZmdVCBWkoVVR3ZMOsWCct0kAXkN2VwjVPdiCsntyLq8fxbkPj
-         yXdtbyez5qDg/Yl34iPD3B5egO1DqaxlyvfbNPsgIolFbJUTKQi4H8F/zLnH4CL1pJ2S
-         G/z2TL8dad3GV5wnMzBRWykdRByibXxPK6p4uWfJ/F5R5D3r8I9I8gQIHinYRy9NAhYh
-         zsHQ==
-X-Gm-Message-State: AOAM532BSXmPGuz8u5QU7xlVNhu0uc66oNBl3q/Q84Pa+zd6Cj01YoIN
-        cKdxS6mTeTJkklfj/HaDWoCPZisLbso=
-X-Google-Smtp-Source: ABdhPJxYwEA872CMBZJRO7q4DBvRTrDJ9hc8oEC2qss8oB4KLHvjih2rSRATBTP8y6hMDhPjU/z/sw==
-X-Received: by 2002:ac2:44ce:: with SMTP id d14mr300570lfm.146.1611255703954;
-        Thu, 21 Jan 2021 11:01:43 -0800 (PST)
+        bh=6KWQI8XD7L6EDXDFReXNozccameFVZf4WSpONfuhC2U=;
+        b=PSgC4iZtrH4eqPLH60+pmqMh86LQ37ZAsob+gDtLfghK3JsufjN8p/DRVfQGsFGbLt
+         z7v+guqLNW1eq8aAQYhgTJS7oYvgmyhyj5EPEgE52SHcJFV9r2eV9RubGMEC6tkOOJZv
+         QGW/y4hS9HSSEW1i4K93phC3WwBcKKiTAoC2fMnHSacSmumoedGirSKvTnuz+Lh1PWz9
+         AnM500pFOq2xZOdbsC8Tqh8cqBwsaeJQlXIea9e7YJ54spraE5hlK28jsidM0Rm0FQmM
+         qiFlMq05HHbAzvMAh2D7Hn+eppJw1FJAt6FqG35+gQEfj6bmPZcajtdy7qdfjIwmTsg5
+         kRIw==
+X-Gm-Message-State: AOAM533mXbDWUsLgZxzqhQSwvuxX9uyL5MnuhvdxU+xnV3dTiwSnR7a9
+        tshSx/anSUA0GJDHv+Gq+HI=
+X-Google-Smtp-Source: ABdhPJx1Q0Qo9k/uDxQk4+fgSogXKXxXSjpY3pCvtz9JDz2xYLZ0baZM5V1k+iUkva4Z79qWt7wZzQ==
+X-Received: by 2002:a2e:b8c5:: with SMTP id s5mr374840ljp.335.1611256465700;
+        Thu, 21 Jan 2021 11:14:25 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id a4sm654802ljp.14.2021.01.21.11.01.42
+        by smtp.gmail.com with ESMTPSA id o11sm613304lfi.267.2021.01.21.11.14.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 11:01:43 -0800 (PST)
+        Thu, 21 Jan 2021 11:14:25 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,9 +57,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Matt Merhar <mattmerhar@protonmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v3] soc/tegra: Add devm_tegra_core_dev_init_opp_table()
-Date:   Thu, 21 Jan 2021 22:01:17 +0300
-Message-Id: <20210121190117.25235-1-digetx@gmail.com>
+Subject: [PATCH v4] soc/tegra: Add devm_tegra_core_dev_init_opp_table()
+Date:   Thu, 21 Jan 2021 22:14:10 +0300
+Message-Id: <20210121191410.13781-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,15 +69,19 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Add common helper which initializes OPP table for Tegra SoC core devices.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Dmitry Osipenko <digetx@gmail.com> # A500 T20 and Nexus7 T30
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-[tested on some other non-upstreamed-yet T20/30/114 devices as well]
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+Tested-by: Matt Merhar <mattmerhar@protonmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
 
 Changelog:
+
+v4: - Fixed inconsistency of "params" argument naming. I renamed "cfg"
+      to "params" in v3, but missed to rename the doc-comment and
+      prototype in tegra/common.h.
+
+    - Fixed missing doc-comment for @dev.
 
 v3: - This patch is factored out from [1] to ease merging of the patches
       that will use the new helper. The goal is to get this new helper
@@ -92,12 +96,12 @@ v3: - This patch is factored out from [1] to ease merging of the patches
     - The v3 got couple very minor cleanup improvements in comparison to [1],
       like a removed unused variable and improved comments in the code.
 
- drivers/soc/tegra/common.c | 137 +++++++++++++++++++++++++++++++++++++
+ drivers/soc/tegra/common.c | 138 +++++++++++++++++++++++++++++++++++++
  include/soc/tegra/common.h |  30 ++++++++
- 2 files changed, 167 insertions(+)
+ 2 files changed, 168 insertions(+)
 
 diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-index 3dc54f59cafe..6b965471db30 100644
+index 3dc54f59cafe..6d9110fd3645 100644
 --- a/drivers/soc/tegra/common.c
 +++ b/drivers/soc/tegra/common.c
 @@ -3,9 +3,16 @@
@@ -117,7 +121,7 @@ index 3dc54f59cafe..6b965471db30 100644
  
  static const struct of_device_id tegra_machine_match[] = {
  	{ .compatible = "nvidia,tegra20", },
-@@ -31,3 +38,133 @@ bool soc_is_tegra(void)
+@@ -31,3 +38,134 @@ bool soc_is_tegra(void)
  
  	return match != NULL;
  }
@@ -188,7 +192,8 @@ index 3dc54f59cafe..6b965471db30 100644
 +
 +/**
 + * devm_tegra_core_dev_init_opp_table() - initialize OPP table
-+ * @cfg: pointer to the OPP table configuration
++ * @dev: device for which OPP table is initialized
++ * @params: pointer to the OPP table configuration
 + *
 + * This function will initialize OPP table and sync OPP state of a Tegra SoC
 + * core device.
@@ -252,7 +257,7 @@ index 3dc54f59cafe..6b965471db30 100644
 +}
 +EXPORT_SYMBOL_GPL(devm_tegra_core_dev_init_opp_table);
 diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
-index 98027a76ce3d..18e562496f2a 100644
+index 98027a76ce3d..e8eab13aa199 100644
 --- a/include/soc/tegra/common.h
 +++ b/include/soc/tegra/common.h
 @@ -6,6 +6,36 @@
@@ -276,7 +281,7 @@ index 98027a76ce3d..18e562496f2a 100644
 +#ifdef CONFIG_ARCH_TEGRA
  bool soc_is_tegra(void);
 +int devm_tegra_core_dev_init_opp_table(struct device *dev,
-+				       struct tegra_core_opp_params *cfg);
++				       struct tegra_core_opp_params *params);
 +#else
 +static inline bool soc_is_tegra(void)
 +{
@@ -285,7 +290,7 @@ index 98027a76ce3d..18e562496f2a 100644
 +
 +static inline int
 +devm_tegra_core_dev_init_opp_table(struct device *dev,
-+				   struct tegra_core_opp_params *cfg)
++				   struct tegra_core_opp_params *params)
 +{
 +	return -ENODEV;
 +}
