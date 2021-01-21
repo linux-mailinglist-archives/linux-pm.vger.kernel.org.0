@@ -2,162 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3992FE2D2
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 07:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169BE2FE60A
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 10:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727018AbhAUG1G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 01:27:06 -0500
-Received: from mga06.intel.com ([134.134.136.31]:58483 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727035AbhAUG02 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:26:28 -0500
-IronPort-SDR: z0ynmDEXZTU89ZoL3ClzIwcX9z2vWNGvC6ootWMvhauWI798Kk1uItPLSOyhaAsyi50jAVHUYr
- lmtpShlp+haA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="240764674"
-X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
-   d="scan'208";a="240764674"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 22:25:46 -0800
-IronPort-SDR: YCSivWnmkbZ0e9A8AW3RrJNGJYH5aQykJ1/4YZV6IXTwbH564DyN1ToorCSixoFTBnSHwxdOxz
- J2BZr155h1ng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
-   d="scan'208";a="467350049"
-Received: from lkp-server01.sh.intel.com (HELO 260eafd5ecd0) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Jan 2021 22:25:44 -0800
-Received: from kbuild by 260eafd5ecd0 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l2TPb-0006Lb-TM; Thu, 21 Jan 2021 06:25:43 +0000
-Date:   Thu, 21 Jan 2021 14:25:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- 693e119601907f923bcf08aca03793a0d1cf4416
-Message-ID: <60091e62.ARJpxQVSwHfZKZ/b%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728343AbhAUJOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 04:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727080AbhAUJLI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 04:11:08 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79040C0613CF
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 01:10:27 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id z22so2570972ioh.9
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 01:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q1UC4Vr1q+5J2Uy7mwHTSdaridk3Fe0PBXsEt6dmNRU=;
+        b=ree/DxaNIueL4Wb6kkZs6kJ5zXE+SH4zAcjPqL1/hsWXn2ZqU/vGDNBHSWvnFijNrD
+         Fl230aS/YBgutE6QbjwGnkpfHi4+FAkw1KwALSs7YUSqoOFCQVHchqoAt6MVj/YkCtAi
+         wr9mE18EhUO96pxIFH3NHQBY37F1DspLqenv/q3p47KerzEwgCFjMQ3Mc9WsLsLhgkY3
+         YombjHiUlU4/GFdfCmpLlKYGOEESP7oaBk+yMFEM6XyxOFStruaxddt48Idt5XBTmHDL
+         TBlt8VvaLZmOHDUMMKw1Wf/BRLB1DuOtKqPTgpAgJqH48fjb5teqbnheJ+0CbTN95dkY
+         ckJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q1UC4Vr1q+5J2Uy7mwHTSdaridk3Fe0PBXsEt6dmNRU=;
+        b=qlIAz9MoOyE8IWYRQhgGuEZbeqI03BmSUqBQKtB9PlXgJYsoemyykvgIawHk8BqxZr
+         yNsqeUcLUZzlZ/fYGt6kIZjQDXc4+XIiRg213kx4gqn3ezc9XAE3a+xJxLatR9MtdhDZ
+         e+nBejSKi5Kx61e5yGDZlJH+z5c0/UHYlMHiSqRELaGhAy15PE0V9RQIbhVw/xAh9kTc
+         4vq2WrmsS17rBVYgCY6HD4ck9iWnxrk2g02CT6cqcLNOhQ5Inh/cMVZBLOzTuVX6NhXp
+         CBNrq0Px38OxZYHfXy4g+NlzGEHYHMgtAUTezDpLYgWogW2OeYSMwO8WFpvlLXcs+36S
+         8Ydw==
+X-Gm-Message-State: AOAM530bYnrpuX5We+UcV965kvYGmpq9voJEXqgaq3mqFka5H1MaoLSe
+        A7lu0IhKjmJ124UnUMXDUuOKrnXCTzgmlVOHWw==
+X-Google-Smtp-Source: ABdhPJyuv0Xn3ESQa+f0IRWD8fUFWmSY5VE2sBAv9nK2AX1huYa+6L4x3oUBZ8RxJqj26SwtzfXq10hEn0qLFiflMBY=
+X-Received: by 2002:a92:d107:: with SMTP id a7mr4101095ilb.45.1611220226882;
+ Thu, 21 Jan 2021 01:10:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20201118185917.GA433776@mwanda> <20210120093015.GE20161@MiWiFi-R3L-srv>
+In-Reply-To: <20210120093015.GE20161@MiWiFi-R3L-srv>
+From:   Pingfan Liu <kernelfans@gmail.com>
+Date:   Thu, 21 Jan 2021 17:10:15 +0800
+Message-ID: <CAFgQCTubgqy3ANR_oPH9w_OZ1Mm0a0daWT7SAFhXx3QX+-vHBQ@mail.gmail.com>
+Subject: Re: [bug report] PM / reboot: Eliminate race between reboot and suspend
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Kexec Mailing List <kexec@lists.infradead.org>,
+        linux-pm@vger.kernel.org, Dave Young <dyoung@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 693e119601907f923bcf08aca03793a0d1cf4416  Merge branch 'acpi-platform' into bleeding-edge
+On Wed, Jan 20, 2021 at 5:30 PM Baoquan He <bhe@redhat.com> wrote:
+>
+> Hi,
+>
+> On 11/18/20 at 09:59pm, Dan Carpenter wrote:
+> > Hello Pingfan Liu,
+> >
+> > The patch 55f2503c3b69: "PM / reboot: Eliminate race between reboot
+> > and suspend" from Jul 31, 2018, leads to the following static checker
+> > warning:
+> >
+> >       kernel/power/main.c:27 lock_system_sleep()
+> >       warn: called with lock held.  '&system_transition_mutex'
+>
+> This is a good finding. I think we can simply remove the lock/unlock
+> pair of system_transition_mutex in kernel_kexec() function. The dead
+> lock should be easily triggered, but it hasn't caused any failure report
+> because the feature 'kexec jump' is almost not used by anyone as far as
+> I know. We may need to find out who is using it and where it's used
+> through an inquiry. Before that, we can just remove the lock operation
+> inside CONFIG_KEXEC_JUMP ifdeffery scope. Thanks.
+>
+>
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 80905e5aa8ae..a0b6780740c8 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1134,7 +1134,6 @@ int kernel_kexec(void)
+>
+>  #ifdef CONFIG_KEXEC_JUMP
+>         if (kexec_image->preserve_context) {
+> -               lock_system_sleep();
+>                 pm_prepare_console();
+>                 error = freeze_processes();
+>                 if (error) {
+> @@ -1197,7 +1196,6 @@ int kernel_kexec(void)
+>                 thaw_processes();
+>   Restore_console:
+>                 pm_restore_console();
+> -               unlock_system_sleep();
 
-Warning ids grouped by kconfigs:
+This should work since the only caller syscall_reboot has already
+placed kernel_kexec() under the protection of system_transition_mutex.
 
-gcc_recent_errors
-`-- i386-randconfig-s002-20210119
-    `-- include-linux-spinlock.h:sparse:sparse:context-imbalance-in-pm_clk_list_lock-wrong-count-at-exit
+Thanks for the fix.
 
-elapsed time: 722m
-
-configs tested: 96
-configs skipped: 2
-
-gcc tested configs:
-arm64                            allyesconfig
-arm64                               defconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                        workpad_defconfig
-sh                                  defconfig
-arm                          gemini_defconfig
-mips                           jazz_defconfig
-arm                           spitz_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                     redwood_defconfig
-mips                          rm200_defconfig
-ia64                          tiger_defconfig
-m68k                       bvme6000_defconfig
-powerpc                    klondike_defconfig
-sh                            titan_defconfig
-powerpc                     rainier_defconfig
-powerpc                  storcenter_defconfig
-arm                         axm55xx_defconfig
-arm                           h3600_defconfig
-c6x                                 defconfig
-xtensa                       common_defconfig
-m68k                          multi_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210120
-i386                 randconfig-a002-20210120
-i386                 randconfig-a004-20210120
-i386                 randconfig-a006-20210120
-i386                 randconfig-a005-20210120
-i386                 randconfig-a003-20210120
-i386                 randconfig-a013-20210120
-i386                 randconfig-a011-20210120
-i386                 randconfig-a012-20210120
-i386                 randconfig-a014-20210120
-i386                 randconfig-a015-20210120
-i386                 randconfig-a016-20210120
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a002-20210120
-x86_64               randconfig-a003-20210120
-x86_64               randconfig-a001-20210120
-x86_64               randconfig-a005-20210120
-x86_64               randconfig-a006-20210120
-x86_64               randconfig-a004-20210120
-x86_64               randconfig-a015-20210119
-x86_64               randconfig-a013-20210119
-x86_64               randconfig-a012-20210119
-x86_64               randconfig-a016-20210119
-x86_64               randconfig-a011-20210119
-x86_64               randconfig-a014-20210119
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Pingfan Liu <kernelfans@gmail.com>
