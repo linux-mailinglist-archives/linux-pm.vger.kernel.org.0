@@ -2,116 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBBC2FEF28
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 16:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D98632FEF1F
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 16:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731830AbhAUPi7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 10:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733135AbhAUPhh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 10:37:37 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7BDC0613D6
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 07:36:56 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m187so1831276wme.2
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 07:36:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JcVTg+smuk+JvjKNodQ46EIl4LUKQrz4MgqUhJc2c80=;
-        b=JiBVAej+mj5P09SDTOqy/z13p3dfmhJLUGqUlhdCTWBgsEh4vciDlpLWsRf8TL4lvi
-         sNqqBZluOfTslKoM48OG8EjkDvHT/8XFUcUCgycz+OvAN8p9j3lyD5HbXCldJSLwkzqK
-         JYjvMxQgkPIUGjMPRxzaF97kve0KuVZebypAlN8uJqY6G1HiUo8Is+OfXsjeBYgBQL3U
-         T88HHH7F4w5U819uM4sV8QWcHSbhGRsbACOP/kercgXBHMRsxcea6g5faDvCqUJqb6te
-         KOCp/cR0z4xjU0+OnWCfQmhTdEsWtgiD54SNU1h8bDxJk2n0BCCckVasXzLfIjSSwWs2
-         uL8A==
+        id S1732933AbhAUPkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 10:40:09 -0500
+Received: from mail-oo1-f43.google.com ([209.85.161.43]:36366 "EHLO
+        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733243AbhAUPjs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 10:39:48 -0500
+Received: by mail-oo1-f43.google.com with SMTP id j8so600140oon.3;
+        Thu, 21 Jan 2021 07:39:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JcVTg+smuk+JvjKNodQ46EIl4LUKQrz4MgqUhJc2c80=;
-        b=RBH4auZuFEcfgjoeSlaNRYILHG/z71LomkCE4X/PzHmhblm1qr9GJKdhpGPm9flTL0
-         6JZEWbjVob9Ewxcxy0G4lDzrmNE9L7V9Y/YwOYMrBUWPLbqnbXFeZlP479YfOHKbjMX3
-         5yAjtVMr4pZSbdS/B2AxEfMHAzURuti5a3sKeSafPz8OMoupvxlSdIY/WxP0iIrip9Xw
-         TTv9I7TiO0YM6GH7OE89WcaCXmwXORX0ie7jli0Ytb6S1ju3FQEtcjVTQaeIdXTjhXtE
-         b6ahjG3eInlKT7IfD1jiO6EnTB1/EDp3k5GKewbRcLe8/OdFtgAwDeYAbZkp6Q0w5oN0
-         ilnw==
-X-Gm-Message-State: AOAM5334piFsvn9JtodvdiMn8jF+pGoadxHcBnJS24m+o4BmtiLG8oIf
-        s+EuaxTVOLwiCHJ88CX2gwxRbw==
-X-Google-Smtp-Source: ABdhPJyfXqxxgqOmtoSnJpiF3iqSkYaC/yU+/103LNk7Ep1oDZ5J01CBAR32cmExYpf+0vSeN4/3KQ==
-X-Received: by 2002:a1c:608b:: with SMTP id u133mr9438737wmb.140.1611243415109;
-        Thu, 21 Jan 2021 07:36:55 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:1539:1c19:f5a3:71b8? ([2a01:e34:ed2f:f020:1539:1c19:f5a3:71b8])
-        by smtp.googlemail.com with ESMTPSA id p17sm8602926wmg.46.2021.01.21.07.36.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jan 2021 07:36:54 -0800 (PST)
-Subject: Re: [PATCH v12 0/5] qcom: pm8150: add support for thermal monitoring
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>
-References: <20210119054848.592329-1-dmitry.baryshkov@linaro.org>
- <078a7025-ce5c-a252-f8f4-694c56153b3a@linaro.org>
- <YAmedqs9/1oDSWvK@builder.lan>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <49eb2533-e6ba-9310-a4f8-5b633c7a0253@linaro.org>
-Date:   Thu, 21 Jan 2021 16:36:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0R3/vn4OjBwMbm80SVwgo6ViJcCgYeuJbJTYwOEMXho=;
+        b=FaAxe0ztYmmDlexY5mGRDzmKb2lVBFnCvnJHpV1+ewthxB5t6g0thxRsXFeswBCnB8
+         5eUQDgGM2/Q+k/kuGT09vjNKxRHCIKuFbnrYWQYon58g90pVJ+Zlr2a7H0i6zZQ6eNnx
+         mK4BQRLmACvkoFM9DiRsjCk5MbmdCZC2Foe7WAJ+upyfi54xWNX/4avWmIesfGNGF5AQ
+         aDgxDyJ5xeJkOqAzk/wBmD5Lz4XPiBXk8gKZz26ZMipIylFMwCEAREYmaEevW6jjr50L
+         LHFDNSb8tyv1zRxdhPzd0p+ujD+sN4sySCtMoRMZqjad+mtdECkLIvO7x+YtORNNaTW7
+         Psow==
+X-Gm-Message-State: AOAM5321E2n1TMlqHoQrXv9CruAo6ZlThup+fVuMCDGUA+aNmN8JwyfT
+        PpN2dsIY8+e25FDkjt5tOVxDeoVJT5NtEcOH0JYJCaF9
+X-Google-Smtp-Source: ABdhPJyPp4o0v1chZHpawhDO/ZE7GYsY5Wdnka7U4wtIxMUDBXOJwl/XQxnwKaYrFAo6tvTDBufd8fPO824Jnc+3JAI=
+X-Received: by 2002:a4a:8353:: with SMTP id q19mr156184oog.40.1611243529514;
+ Thu, 21 Jan 2021 07:38:49 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YAmedqs9/1oDSWvK@builder.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210120142323.2203705-1-geert+renesas@glider.be> <CAGETcx-ZcXB9Zw_RnMjA0G2oKAyeK3VfKgha=Mvqnn_dDREuOw@mail.gmail.com>
+In-Reply-To: <CAGETcx-ZcXB9Zw_RnMjA0G2oKAyeK3VfKgha=Mvqnn_dDREuOw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Jan 2021 16:38:38 +0100
+Message-ID: <CAMuHMdUfA2LgXxz1srbgQLiMw=oadrJ0ASMnwcvCO2xVXqWnUw@mail.gmail.com>
+Subject: Re: [PATCH/RFC] soc: renesas: rcar-sysc: Mark device node
+ OF_POPULATED after init
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/01/2021 16:32, Bjorn Andersson wrote:
-> On Tue 19 Jan 14:57 CST 2021, Daniel Lezcano wrote:
-> 
->> On 19/01/2021 06:48, Dmitry Baryshkov wrote:
->>> This patch serie adds support for thermal monitoring block on Qualcomm's
->>> PMIC5 chips. PM8150{,b,l}, qrb5165-rb5 board and sm8250-mtp board device
->>> trees are extended to support thermal zones provided by this thermal
->>> monitoring block.  Unlike the rest of PMIC thermal senses, these thermal
->>> zones describe particular thermistors, which differ between from board
->>> to board.
->>>
->>> Dependencies: https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/log/?h=ib-iio-thermal-5.11-rc1
->>
->> Shall I pick 3,4,5 also ?
->>
-> 
-> I believe I have some adjacent changes staged in these files, so I'll
-> prefer to pick them through the Qualcomm tree.
+Hi Saravana,
 
-Ok, thanks
+On Wed, Jan 20, 2021 at 6:09 PM Saravana Kannan <saravanak@google.com> wrote:
+> On Wed, Jan 20, 2021 at 6:23 AM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
+> > The R-Car System Controller (SYSC) driver registers PM domains from an
+> > early_initcall().  It does not use a platform driver, as secondary CPU
+> > startup on R-Car H1 needs to control the CPU power domains, before
+> > initialization of the driver framework.
+> >
+> > As fw_devlink only considers platform devices,
+>
+> Correction. It only considers devices. As in, devices on all types of
+> busses are supported.
 
->> -- 
->> <http://www.linaro.org/> Linaro.org ??? Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
+OK.
 
+> > it does not know that the
+> > System Controller is ready.  Hence probing of on-chip devices that are
+> > part of the SYSC PM domain fail:
+> >
+> >     probe deferral - supplier e6180000.system-controller not ready
+> >
+> > Fix this by setting the OF_POPULATED flag for the SYSC device node after
+> > successful initialization.  This will make of_link_to_phandle() ignore
+> > the SYSC device node as a dependency, and consumer devices will be
+> > probed again.
+>
+> It'd still be nice if you could (maybe in a later patch), at least
+> probe all the power domains that aren't really needed this early.
+> Using the driver core framework (when it's possible), gives you nice
+> things :)
+
+Which nice things are you thinking of? Making the driver modular?
+At least on R-Car H1, it needs to be built-in for SMP to work.
+
+> +Rob. I know he hates people using OF_POPULATED, but I think this case
+> is reasonable and want to make sure he's aware of this.
+>
+> Once you fix my commit nitpick, you can add:
+> Reviewed-by: Saravana Kannan <saravanak@google.com>
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
