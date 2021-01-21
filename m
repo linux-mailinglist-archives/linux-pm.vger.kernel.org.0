@@ -2,122 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C885F2FED46
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 15:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8BE2FED9C
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 15:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729326AbhAUOpr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 09:45:47 -0500
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:43676 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732119AbhAUOpc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 09:45:32 -0500
-Received: by mail-oo1-f54.google.com with SMTP id y14so544464oom.10;
-        Thu, 21 Jan 2021 06:45:15 -0800 (PST)
+        id S1731610AbhAUOzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 09:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731694AbhAUOyX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 09:54:23 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A31C06178B
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 06:53:18 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j18so1684850wmi.3
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 06:53:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q4wdqxJTegCBCyudkxp306qF0hGkVyYVDvgQVJoeSCk=;
+        b=i0TAZnF8mXhOlA8h4KBwAMX6kIijqujfjhv0IlCDx/80JiwI/iVBW/rnEiZDNQrF9x
+         PrQwSWDBO6L4bgJDXqGaQau+AK71C7/x3rbNhVby2SfvNI+nFzUfNZ5MYtIrryREyUeu
+         1vdYR8vDFWIT938VboG27nf6IhAfshWBgi+bodT+PQh5bx6XqqGuMaJV7Nr38qT8GiVf
+         MmZNLldBCoxLKnT7m4PM+Kv66bd3g0Z2qycOkmjjTwv/OvBHsmIpUh4BIG12FQY50hgQ
+         iICzC75+YJsi0puJMBduKi4qHIp0JD/JcXKTDiXWzWZwVjcTkfU0Mb9bDL1NM4yyz+hf
+         +a4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i5jdvvWEwgNFSV1EO/moduPbzx68vOpeI3wGza6ZRNs=;
-        b=L2mSAoTNaUrr70WaFGcLDIHC7D0urpRm7Ef9NRE4OYiavUSVafwvTe0BTotQ07sypa
-         dlNcJxIEd99fcv1EG8kGIASb06I3QagTdmxCDzsLF+aDIE/1yQBlDZhFGo2gM+qeUbHi
-         bq+IYTntQscl7MFCcYif7gmxpIkmJ8rqgo+zQRVgt+aAKgblMCAjlaQ5wEMayO85cwVt
-         wq//5V39ajjNAfYVZkpycfKbNsUciBxlATNG2acQag8W9ltfGDrjvJJ85XVuU9Xyy6AI
-         YdonI5MeXstxQzThkj+IR/lo4+1Uc3JppGqB/DAx82w3bjAh0+Uh1hrGCQiphL/RqEzm
-         Nr3Q==
-X-Gm-Message-State: AOAM531YTMu5zsZj3A8XOGtnXiL4cSr+z/KnFGtW6zsMjXWqLM3ChDh2
-        in9+iC7XqFqid9osl9sbDAi94FwnBADNqGw4W2Y=
-X-Google-Smtp-Source: ABdhPJz61fItLIccZEjHhNtKpcqGSx4IHgJ29Wilse3walTqUNTCCSTc27NL1zFGK+jamMrtant9lK3Cd7FH5yCrMNo=
-X-Received: by 2002:a4a:9873:: with SMTP id z48mr9798920ooi.44.1611240287043;
- Thu, 21 Jan 2021 06:44:47 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q4wdqxJTegCBCyudkxp306qF0hGkVyYVDvgQVJoeSCk=;
+        b=h6hPaQNrf31isdW4WtSiWbO5VwUryTY+cdXc7hrjPToH8eAXGCa84Kq1nSsoKlLvBV
+         HFpSWna6w86dsMe/7QMSU+XKFb2kVX6cxDrkEpI927c4rDN3FQdtCDREwhb9lITFrPJT
+         sTRcBjdcmWC/JRQ0fj6UA+rUa7jiBodpKYrMdFm3Mb97s34Jl7aN7eqzmsRnnxiaUiij
+         c7RyKzSjgNnqR/rEYBnrUcsgKT7+1g9U3zyFOkK692scF4Wnk19iff/ZKT9oVTCy8lx3
+         WzLM0CHg8Yfm/HZyKOXjBHdq8rUIVWAIMpXYQ1ycneTtniU795NKDkKSOU0HR69THxio
+         VcsQ==
+X-Gm-Message-State: AOAM531EWy5RlCCFXXA8q+Z4WpYVyX5togYF2Eypk+YY1vd/gHgiiriS
+        j/RGz4VyzR1n6Cp+i/3DxWJxvbMuIJSvcw==
+X-Google-Smtp-Source: ABdhPJy14pKkimPBMZLcUFcqTO3N/p4HlHo4oRUVSxAy0QmPrmPmNPb2zeKLFfOScJlLR6sJ9dDdEQ==
+X-Received: by 2002:a1c:9844:: with SMTP id a65mr9394986wme.113.1611240797414;
+        Thu, 21 Jan 2021 06:53:17 -0800 (PST)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id a25sm7921770wmb.25.2021.01.21.06.53.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Jan 2021 06:53:16 -0800 (PST)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     devicetree@vger.kernel.org, robh+dt@kernel.org
+Cc:     okukatla@codeaurora.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Subject: [PATCH] dt-bindings: interconnect: Fix the expected number of cells
+Date:   Thu, 21 Jan 2021 16:53:20 +0200
+Message-Id: <20210121145320.2383-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz>
- <CA+G9fYsyXsNSXGy6BWZ6mgpAP=+7r6Xy9jQ2xxb9mXyHdRoBCg@mail.gmail.com>
- <CAMuHMdULW4bnb0Jc0+ZaF9P2VNgnYsvEks7y8WYCk045BHqh7A@mail.gmail.com> <CA+G9fYvh0iSyEDQs7+0CX82FLPDCg5UmAt+1JuPsndmfmYF3kw@mail.gmail.com>
-In-Reply-To: <CA+G9fYvh0iSyEDQs7+0CX82FLPDCg5UmAt+1JuPsndmfmYF3kw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Jan 2021 15:44:35 +0100
-Message-ID: <CAJZ5v0hFjpGp2GbV1Evi+BbUF7Am4ETY4Cm8VzTrvTJ=7=oyPQ@mail.gmail.com>
-Subject: Re: [PATCH] PM / clk: make PM clock layer compatible with clocks that
- must sleep
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 1:11 PM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> On Thu, 21 Jan 2021 at 16:28, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > On Thu, Jan 21, 2021 at 10:13 AM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> > > On Tue, 5 Jan 2021 at 08:48, Nicolas Pitre <npitre@baylibre.com> wrote:
-> > > >
-> > > > The clock API splits its interface into sleepable ant atomic contexts:
-> > > >
-> > > > - clk_prepare/clk_unprepare for stuff that might sleep
-> > > >
-> > > > - clk_enable_clk_disable for anything that may be done in atomic context
-> > > >
-> > >
-> > > <trim>
-> > >
-> > > >
-> > > > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
-> > > >
-> > > > diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
-> > > > index ced6863a16..a62fb0f9b1 100644
-> > > > --- a/drivers/base/power/clock_ops.c
-> > > > +++ b/drivers/base/power/clock_ops.c
-> > >
-> > > <trim>
-> > >
-> > > > @@ -64,17 +166,20 @@ static void pm_clk_acquire(struct device *dev, struct pm_clock_entry *ce)
-> > > >                 ce->clk = clk_get(dev, ce->con_id);
-> > > >         if (IS_ERR(ce->clk)) {
-> > > >                 ce->status = PCE_STATUS_ERROR;
-> > > > +               return;
-> > > > +       } else if (clk_is_enabled_when_prepared(ce->clk)) {
-> > >
-> > > arm-linux-gnueabihf-ld: drivers/base/power/clock_ops.o: in function
-> > > `pm_clk_acquire':
-> > > drivers/base/power/clock_ops.c:170: undefined reference to
-> > > `clk_is_enabled_when_prepared'
-> > >
-> > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > >
-> > > This build error was noticed on arm architecture on linux next 20210121 tag.
-> > > Following builds failed.
-> > >  - arm (omap1_defconfig) with clang-10 - FAILED
-> > >  - arm (omap1_defconfig) with clang-11 - FAILED
-> > >
-> > >  - arm (omap1_defconfig) with gcc-8 - FAILED
-> > >  - arm (omap1_defconfig) with gcc-9 - FAILED
-> > >  - arm (omap1_defconfig) with gcc-10 - FAILED
-> >
-> > Missing dummy clk_is_enabled_when_prepared() for the
-> > !CONFIG_HAVE_CLK case?
->
-> I see these configs enabled in failed builds config file,
->
-> CONFIG_HAVE_CLK=y
-> CONFIG_CLKDEV_LOOKUP=y
-> CONFIG_HAVE_LEGACY_CLK=y
->
-> ref:
-> https://builds.tuxbuild.com/1nN0vkpNP4qhvIuIJN12j7tTpQs/
+"make dtbs_check" complains that the number of interconnect-cells
+for some RPMh platforms is not "const: 1" (as defined in the schema).
 
-So I'm going to drop this patch from linux-next until the issue is
-resolved, thanks!
+That's because the interconnect-cells now can be 1 or 2, depending
+on what is supported by the specific interconnect provider. Let's
+reflect this in the schema.
+
+Fixes: 9a34e7ad2e12 ("dt-bindings: interconnect: Document the support of optional path tag")
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+---
+ Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+index f9b150b817d8..799e73cdb90b 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+@@ -73,7 +73,7 @@ properties:
+       - qcom,sm8250-system-noc
+ 
+   '#interconnect-cells':
+-    const: 1
++    enum: [ 1, 2 ]
+ 
+   qcom,bcm-voters:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
