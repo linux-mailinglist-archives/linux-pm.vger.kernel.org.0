@@ -2,128 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D1F2FF66D
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 21:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D132FF6C9
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 22:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbhAUUwK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 15:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S1726501AbhAUVFc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 16:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725779AbhAUUwE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 15:52:04 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6621EC06174A
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 12:51:23 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id x18so1979052pln.6
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 12:51:23 -0800 (PST)
+        with ESMTP id S1727481AbhAUVC4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 16:02:56 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D906C06174A;
+        Thu, 21 Jan 2021 13:02:15 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id p13so4141695ljg.2;
+        Thu, 21 Jan 2021 13:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=y1kdWwW6tBm+eBFHi9McSUw7HB2Z9NLD4esehe0HXVo=;
-        b=V33k+DYfR0bCSw3m93JiYJnFA/hmCF7uYFPN2JWOear2k9GO2tCFFsnfqVDwxCK1ck
-         f2MFPGMCKTy2C4FdqSre1nhujQ7n2+lH7R6WlqsR5yUVsaT4wdxCsg6E0pvSUpEk3RMC
-         EfzKInqeRKpzHg5sYzd2uwUMPvK3BLI9N//v/HRDGVt1kGF2kXCn8HCuUvtsPg6JwF3t
-         BkyO8TI+TG/JTF2KgeIO3/JHhc5a6605PpZgvVo91xiZUpwfXxKO8FVesWodNxdvkUiu
-         laH94MyQEgEbjtQUYT2UDQyEUECTI4hcA1rZUejZ6S8K5QcYAsmYOjyiK1tA2AMVj7xO
-         qsew==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HTSI5kPzLoA4thqADbG4CT4ZHn9/tnIJfNYkNNeKGi0=;
+        b=pL5Ut6SetM5MPOm/3ixVXBM3DPvSn7HbiYCbSxTe4Ys7us9j7lJnVR+jlWE1sjup58
+         8buGxJAu5vvM3HAi6kpWSegsvF9IXz9zR6u2oq6SeDfvET2xuL2A9OQ3f4N4jfwSoPmT
+         QUhDxmGKn9WzMZ+fpeXnKtow5vK2CTRLkUBO2e9V/7E28TdvTacN3ODwGM4LlNmj/wHW
+         2SUeETpzKAuOG9X8M6or3ny3Jl3QHT9HKw19XV4fI40DIsqeS6OUchOXFlczrtwwekr6
+         bIBNBIRZUHJd+/kDuz8vXsR35GRgnXqRTC7wfNVxusUaOpeh1QTgGaWnEqymUEH8lwpT
+         lHTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=y1kdWwW6tBm+eBFHi9McSUw7HB2Z9NLD4esehe0HXVo=;
-        b=kZ8po+z5KtgucKEyeupWu+nx9p5NxPYoze6WeNjnd4zMfsUqIswGhbCbWF5ktqKVUB
-         wkqhJnM6dXGagB4SevgHRQ117Znzs+jpMq7dHcWczwcaF92qkv602y3WJMSGGfxigPBz
-         LlvkVR1qGoHJLdfHB+fgu5DTToE9h15Mq2KGt9DLOOJjpzpInirRKo0VgH++KYsE7yEV
-         arZUXVGZfAey8npeb8bkhDru+dL9oTMIU1bzcS+GV2K/mR+wRCsoH47YfO6RyM+b5bgT
-         7UsWIydK8YoHi2jnv+8/YmgEZv5rmT20ydrYj4tOYhwf8K/xnRA5E1leTMTzYVSXzvUn
-         NJVA==
-X-Gm-Message-State: AOAM531sDJLSpbJsA+6hvcQj5j9uBjr9p5IN8syYvTvCPVgBUMpG/da2
-        leooghRdsMbeyCnIikwuJfHGBA==
-X-Google-Smtp-Source: ABdhPJzkFtqFOFpc873Ql/VuJ5plkgcvc4Qa2/xgiFL9tEJYpwL6+WmVenyqAxHp+SteKhcYGF/OkA==
-X-Received: by 2002:a17:90a:d3c7:: with SMTP id d7mr1310568pjw.169.1611262283040;
-        Thu, 21 Jan 2021 12:51:23 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n2sm6085882pfu.42.2021.01.21.12.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jan 2021 12:51:22 -0800 (PST)
-Message-ID: <6009e94a.1c69fb81.5ba7.e7b2@mx.google.com>
-Date:   Thu, 21 Jan 2021 12:51:22 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HTSI5kPzLoA4thqADbG4CT4ZHn9/tnIJfNYkNNeKGi0=;
+        b=JEp3Vbbzi6OQ0HREZB5+k7m7QDUjOm1n5J0D4sy5XHlDicl0S7ee1kY4tdMBCRmRQ0
+         4+SAxwc1X1O61/V6kaiShptPi6JbY8y5QzDXuIf9dgwdRIMJ2Y22YNKKOWJKfygpLoXs
+         smjLp8KT/Zs4Ky9pDJZtQ/sQxW1vKcwD4C5HTtNREC8PUWH9TpPypvi8wg2Z6KqiiBK6
+         ZrXJHCKs8VSTOZ9JvxGhf/sKqqPksJ3JvNlWhfSXzCogw1t37ISjt6hUqqftrvPDxRdS
+         ZY4rw1xhZE4vdPeNIAFbDupbK8pYyWvdJ/vxHzS9kQ2kz0Y/ENFPSEwvPf03J5Z/N7DV
+         ImjA==
+X-Gm-Message-State: AOAM531DBmHz4oqmf7O3Ef/9pZ27K3M7EWj17lAcW8R1I1fEDXeSzb+A
+        b0b54KNu6pehzkBe6ZuYWZIOnaKYIv4=
+X-Google-Smtp-Source: ABdhPJysbwgbBj7t7ErG5NYCTp7ZNZBostezYf6/TCcQqQ7j4wHzOFhtnC3qIrzpw23Zmovd9C7evA==
+X-Received: by 2002:a2e:9214:: with SMTP id k20mr591843ljg.45.1611262933987;
+        Thu, 21 Jan 2021 13:02:13 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id s2sm498041lfc.261.2021.01.21.13.02.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jan 2021 13:02:13 -0800 (PST)
+Subject: Re: [PATCH V2] opp: Prepare for ->set_opp() helper to work without
+ regulators
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org
+References: <fb69353c-a35b-9b7c-46bc-d464c6dab6f5@gmail.com>
+ <d60bc79ed2ac3fd2f2911449ba994b4d55bd1bfd.1611228541.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <58d15e20-8688-99be-b107-4350ff81e90a@gmail.com>
+Date:   Fri, 22 Jan 2021 00:02:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: acpi-5.11-rc5-27-gd9ac95f54ba88
-Subject: pm/testing baseline: 63 runs,
- 1 regressions (acpi-5.11-rc5-27-gd9ac95f54ba88)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <d60bc79ed2ac3fd2f2911449ba994b4d55bd1bfd.1611228541.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 63 runs, 1 regressions (acpi-5.11-rc5-27-gd9ac95f54ba8=
-8)
+21.01.2021 14:30, Viresh Kumar пишет:
+> @@ -1952,9 +1930,16 @@ void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+>  	for (i = opp_table->regulator_count - 1; i >= 0; i--)
+>  		regulator_put(opp_table->regulators[i]);
+>  
+> -	_free_set_opp_data(opp_table);
+> +	mutex_lock(&opp_table->lock);
+> +	if (opp_table->set_opp_data) {
+> +		opp_table->set_opp_data->old_opp.supplies = NULL;
+> +		opp_table->set_opp_data->new_opp.supplies = NULL;
+> +	}
+> +	mutex_unlock(&opp_table->lock);
+>  
+> +	kfree(opp_table->sod_supplies);
+>  	kfree(opp_table->regulators);
+> +	opp_table->sod_supplies = NULL;
+>  	opp_table->regulators = NULL;
+>  	opp_table->regulator_count = -1;
 
-Regressions Summary
--------------------
-
-platform             | arch  | lab          | compiler | defconfig | regres=
-sions
----------------------+-------+--------------+----------+-----------+-------=
------
-hifive-unleashed-a00 | riscv | lab-baylibre | gcc-8    | defconfig | 1     =
-     =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-5.1=
-1-rc5-27-gd9ac95f54ba88/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: acpi-5.11-rc5-27-gd9ac95f54ba88
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      d9ac95f54ba88454a0ff889028149b802118a89b =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig | regres=
-sions
----------------------+-------+--------------+----------+-----------+-------=
------
-hifive-unleashed-a00 | riscv | lab-baylibre | gcc-8    | defconfig | 1     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/6009db0b9afc6fd14dbb5d15
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (riscv64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.11-rc5-27-gd=
-9ac95f54ba88/riscv/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a=
-00.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.11-rc5-27-gd=
-9ac95f54ba88/riscv/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a=
-00.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/riscv/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6009db0b9afc6fd14dbb5=
-d16
-        failing since 56 days (last pass: pm-5.10-rc4-33-g52d108cd060d, fir=
-st fail: pm-5.10-rc6-75-g735f7fba25ec) =
-
- =20
+The sod_supplies should be unset under the lock.
