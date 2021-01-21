@@ -2,115 +2,250 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6392FE931
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 12:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DEE2FE8F2
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 12:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730071AbhAULrm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 06:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
+        id S1730235AbhAULhM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 06:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728983AbhAULVU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 06:21:20 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7D8C0613D3
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:20:03 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id t29so1292907pfg.11
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:20:03 -0800 (PST)
+        with ESMTP id S1726603AbhAULau (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 06:30:50 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DCFC0613C1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:30:10 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u11so1092858plg.13
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 03:30:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=UlV9SkLktbmadacAKGgdNG9Y2QsM6fa71yNEW4spCec=;
-        b=dV21di/SIMnV6UG3syoEA4dXCTmipisQDkMW2ufldO2KP0jSQItvJ3YkLtmXk/+JhE
-         7hmZ57fpHjt97X8PR5gXKmU1bgQz8d9clCagTI0XMnZpqP7mbO2Zh9iAagmu72olXVXj
-         CpvgynAYjmFNlOtru+P+SYxpt+iir3lFG9dv6lysvnZP2hLf/APuNd8AjgmKHKz2BNET
-         Q/B3hhhnbz+8xj6PhO4etIkonSNJevSre91l8KyekoUNJ+w0l4BvS0UDAMyBit0BFHnd
-         2TjKMVh5o1fOz3r3E2jv7XYpty6AqtiuILOhk63BTwf28a0P+EHbNvdsGS3BPWyxJAU3
-         Rplg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/s/91ANhuBaU4JbgzRnP0zjULLauKJWjuOxKOA8GyFY=;
+        b=MCRk9PgrPaREcmxQnnNY8Ha7rAKjS2CsbbcLa+jAD7KmcCvNrghlmO7KSAxeClWtYi
+         jbrGnFEVL6fyh9zk7kKHWgob4JdQksCNP0yvP7M/XMZZ6ES713eSic7NMJ/nsfVLWkLk
+         FNs5VrGmpCOFnpHhvcm+geOQrO5ZHiU50WhzV9Y1hhssDBW2GULJK4gLUXE5rPo4nQG6
+         0XkCJ7Zc904s4ZpvOtELSMPs+TsOXEHqFWgtbnl0hE/2xxQXalORL0QZHz0ccdA8C8/R
+         gEqZr88R1jExQ924FQPZsUxUqo2H0cSoiYiARKa7EgkemPMyVTePqmhwD/7wRsLRUAqT
+         5lkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=UlV9SkLktbmadacAKGgdNG9Y2QsM6fa71yNEW4spCec=;
-        b=RfOnxKUKZYp9osq+BxG8KLE0xecgVZH/75RqwtImCe3VIWRFAs77JDJXo5w3LerMoP
-         yxPJqPHeT0FDlSboOKHKBNGFXAszoTlIHg9Pwrfa35zDzzSw6u+Ekz+xDt8uFyz8Adnb
-         e1fqmzo1eLDjO2kqt34fFCwcNWn/0mehdaNhgCjZI4pO6o22C3y8v/uhhHqHsU19Ebpc
-         795ZFHalphreE/3pt778hX+P7zjmG1ywyGXkKjppU+aZxUItSNPeWyGBf6MANU2uNCYV
-         OlkxgnLYirekA6uu73vZyY7362e2tmgjwmwUfKU//PMlVUfFDxIF8CG7War53cWcZ7SQ
-         0h5A==
-X-Gm-Message-State: AOAM531/y5Kg8PF8gNZNXUQrjvTWdmLr6o/vRZ9B8COalIv4MBQJ6WCJ
-        tQc1HdfolL+IFyi2pUcAfzWiwQ==
-X-Google-Smtp-Source: ABdhPJyWSSNOh5sgHtD8hlBg7objnemuBrANhZgMxnAG9UmzBJYI+f5LE6kZ+jLn7AkBm1SA7BUzng==
-X-Received: by 2002:a63:455c:: with SMTP id u28mr506335pgk.142.1611228002718;
-        Thu, 21 Jan 2021 03:20:02 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/s/91ANhuBaU4JbgzRnP0zjULLauKJWjuOxKOA8GyFY=;
+        b=nq8PuUHN1FRaNGrY/Hhx6axM+txm6eNWte+7kMhUOY2XODle3BbTBNGKHEnPkIZI7k
+         hyAOPyaUHzbd8DYCG0EOwlHLwB4Pb+gD3RRcSnum0M75VETFuoUJiBwrBjCet/CPUWgC
+         2IBTk73AXFTX/HyrHDpoV78hZFEQD2KiMcR1U0Ej+RjVqv18T3siYQ1BKBxPhHMNCgyF
+         h+4WLLCGnkKNELCh7DRzQnoRJOpLH41fJ/ob1yEaHKB5Z9fBKvfmz7yQ5BQCIAii4fB4
+         Q+Jecw7ScyC1NqIpBn9scRKQW78nDGNUeD2UdjORQj4QRsc0Jv+4DSU84PQHuHsghFs3
+         OjNw==
+X-Gm-Message-State: AOAM530B9XcyLrDKFodUTdUr6rWdVeG6Wla7ayIgZk0FxxhcLzeMkkCa
+        yfmRbATxBvFEw1H1SDqJN/ls6Q==
+X-Google-Smtp-Source: ABdhPJxfgn43DtBQWoOhDUkCM1Bi7wxbFoDlJCnv795IJgVUKgpgrIFgL8fN1qNE7lVCm6EKAgrKPw==
+X-Received: by 2002:a17:90a:df15:: with SMTP id gp21mr11113853pjb.63.1611228609548;
+        Thu, 21 Jan 2021 03:30:09 -0800 (PST)
 Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id gk2sm5831650pjb.6.2021.01.21.03.20.01
+        by smtp.gmail.com with ESMTPSA id j14sm5685837pjl.35.2021.01.21.03.30.08
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Jan 2021 03:20:01 -0800 (PST)
-Date:   Thu, 21 Jan 2021 16:50:00 +0530
+        Thu, 21 Jan 2021 03:30:08 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 05/12] opp: Add dev_pm_opp_set_voltage()
-Message-ID: <20210121112000.rn6uvfsmgy2wyxwh@vireshk-i7>
-References: <20210118005524.27787-1-digetx@gmail.com>
- <20210118005524.27787-6-digetx@gmail.com>
- <20210118095256.tr2qgnrmokkc6ngf@vireshk-i7>
- <a48dca91-4264-e153-cefa-ccbcca1b1d9d@gmail.com>
- <16c7e096-5efd-2d0c-a2ac-c11133c29c30@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2] opp: Prepare for ->set_opp() helper to work without regulators
+Date:   Thu, 21 Jan 2021 17:00:05 +0530
+Message-Id: <d60bc79ed2ac3fd2f2911449ba994b4d55bd1bfd.1611228541.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+In-Reply-To: <fb69353c-a35b-9b7c-46bc-d464c6dab6f5@gmail.com>
+References: <fb69353c-a35b-9b7c-46bc-d464c6dab6f5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <16c7e096-5efd-2d0c-a2ac-c11133c29c30@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-01-21, 00:57, Dmitry Osipenko wrote:
-> 18.01.2021 22:14, Dmitry Osipenko пишет:
-> > Sounds like it could be a lot of code moving and some extra complexity
-> > will be added to the code. If nobody will ever need the universal
-> > dev_pm_opp_set_opp(), then it could become a wasted effort. I'd choose
-> > the easiest path, i.e. to defer the dev_pm_opp_set_opp() implementation
-> > until somebody will really need it.
-> > 
-> > But if it looks to you that it won't be a too much effort, then I'll
-> > appreciate if you could type the patch.
+Until now the ->set_opp() helper (i.e. special implementation for
+setting the OPPs for platforms) was implemented only to take care of
+multiple regulators case, but going forward we would need that for other
+use cases as well.
 
-Yes.
+This patch prepares for that by allocating the regulator specific part
+from dev_pm_opp_set_regulators() and the opp helper part from
+dev_pm_opp_register_set_opp_helper().
+
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Tested-by: Dmitry Osipenko <digetx@gmail.com>
+---
+V2:
+- Fixed a bug where we accessed the wrong pointer
+- Add locks in dev_pm_opp_unregister_set_opp_helper()
+
+ drivers/opp/core.c | 83 +++++++++++++++++++++++++---------------------
+ drivers/opp/opp.h  |  2 ++
+ 2 files changed, 47 insertions(+), 38 deletions(-)
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 846390c9434a..dff939ed5118 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1817,38 +1817,6 @@ void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
  
-> Let's start with dev_pm_opp_set_voltage() for now. It shouldn't be a
-> problem at all to upgrade it to dev_pm_opp_set_opp() later on.
-> 
-> I'll make a v4 with the dev_pm_opp_set_voltage(), please let me know if
-> you have objections or more suggestions!
-
-Sorry about this, I have been working on this stuff for last 2 days. I
-didn't reply earlier as I thought I would be able to finish this
-earlier. Once you see the patches you will see it was a significant
-change :)
-
-I have cc'd you to the relevant patches now. Please see if they work
-fine for you or not.
-
+-static int _allocate_set_opp_data(struct opp_table *opp_table)
+-{
+-	struct dev_pm_set_opp_data *data;
+-	int len, count = opp_table->regulator_count;
+-
+-	if (WARN_ON(!opp_table->regulators))
+-		return -EINVAL;
+-
+-	/* space for set_opp_data */
+-	len = sizeof(*data);
+-
+-	/* space for old_opp.supplies and new_opp.supplies */
+-	len += 2 * sizeof(struct dev_pm_opp_supply) * count;
+-
+-	data = kzalloc(len, GFP_KERNEL);
+-	if (!data)
+-		return -ENOMEM;
+-
+-	data->old_opp.supplies = (void *)(data + 1);
+-	data->new_opp.supplies = data->old_opp.supplies + count;
+-
+-	opp_table->set_opp_data = data;
+-
+-	return 0;
+-}
+-
+-static void _free_set_opp_data(struct opp_table *opp_table)
+-{
+-	kfree(opp_table->set_opp_data);
+-	opp_table->set_opp_data = NULL;
+-}
+-
+ /**
+  * dev_pm_opp_set_regulators() - Set regulator names for the device
+  * @dev: Device for which regulator name is being set.
+@@ -1865,6 +1833,7 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+ 					    const char * const names[],
+ 					    unsigned int count)
+ {
++	struct dev_pm_opp_supply *supplies;
+ 	struct opp_table *opp_table;
+ 	struct regulator *reg;
+ 	int ret, i;
+@@ -1906,10 +1875,19 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+ 
+ 	opp_table->regulator_count = count;
+ 
+-	/* Allocate block only once to pass to set_opp() routines */
+-	ret = _allocate_set_opp_data(opp_table);
+-	if (ret)
++	supplies = kmalloc_array(count * 2, sizeof(*supplies), GFP_KERNEL);
++	if (!supplies) {
++		ret = -ENOMEM;
+ 		goto free_regulators;
++	}
++
++	mutex_lock(&opp_table->lock);
++	opp_table->sod_supplies = supplies;
++	if (opp_table->set_opp_data) {
++		opp_table->set_opp_data->old_opp.supplies = supplies;
++		opp_table->set_opp_data->new_opp.supplies = supplies + count;
++	}
++	mutex_unlock(&opp_table->lock);
+ 
+ 	return opp_table;
+ 
+@@ -1952,9 +1930,16 @@ void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+ 	for (i = opp_table->regulator_count - 1; i >= 0; i--)
+ 		regulator_put(opp_table->regulators[i]);
+ 
+-	_free_set_opp_data(opp_table);
++	mutex_lock(&opp_table->lock);
++	if (opp_table->set_opp_data) {
++		opp_table->set_opp_data->old_opp.supplies = NULL;
++		opp_table->set_opp_data->new_opp.supplies = NULL;
++	}
++	mutex_unlock(&opp_table->lock);
+ 
++	kfree(opp_table->sod_supplies);
+ 	kfree(opp_table->regulators);
++	opp_table->sod_supplies = NULL;
+ 	opp_table->regulators = NULL;
+ 	opp_table->regulator_count = -1;
+ 
+@@ -2046,6 +2031,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_put_clkname);
+ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+ 			int (*set_opp)(struct dev_pm_set_opp_data *data))
+ {
++	struct dev_pm_set_opp_data *data;
+ 	struct opp_table *opp_table;
+ 
+ 	if (!set_opp)
+@@ -2062,8 +2048,23 @@ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+ 	}
+ 
+ 	/* Another CPU that shares the OPP table has set the helper ? */
+-	if (!opp_table->set_opp)
+-		opp_table->set_opp = set_opp;
++	if (opp_table->set_opp)
++		return opp_table;
++
++	data = kzalloc(sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return ERR_PTR(-ENOMEM);
++
++	mutex_lock(&opp_table->lock);
++	opp_table->set_opp_data = data;
++	if (opp_table->sod_supplies) {
++		data->old_opp.supplies = opp_table->sod_supplies;
++		data->new_opp.supplies = opp_table->sod_supplies +
++					 opp_table->regulator_count;
++	}
++	mutex_unlock(&opp_table->lock);
++
++	opp_table->set_opp = set_opp;
+ 
+ 	return opp_table;
+ }
+@@ -2085,6 +2086,12 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table)
+ 	WARN_ON(!list_empty(&opp_table->opp_list));
+ 
+ 	opp_table->set_opp = NULL;
++
++	mutex_lock(&opp_table->lock);
++	kfree(opp_table->set_opp_data);
++	opp_table->set_opp_data = NULL;
++	mutex_unlock(&opp_table->lock);
++
+ 	dev_pm_opp_put_opp_table(opp_table);
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_unregister_set_opp_helper);
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 4ced7ffa8158..4408cfcb0f31 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -155,6 +155,7 @@ enum opp_table_access {
+  * @genpd_performance_state: Device's power domain support performance state.
+  * @is_genpd: Marks if the OPP table belongs to a genpd.
+  * @set_opp: Platform specific set_opp callback
++ * @sod_supplies: Set opp data supplies
+  * @set_opp_data: Data to be passed to set_opp callback
+  * @dentry:	debugfs dentry pointer of the real device directory (not links).
+  * @dentry_name: Name of the real dentry.
+@@ -202,6 +203,7 @@ struct opp_table {
+ 	bool is_genpd;
+ 
+ 	int (*set_opp)(struct dev_pm_set_opp_data *data);
++	struct dev_pm_opp_supply *sod_supplies;
+ 	struct dev_pm_set_opp_data *set_opp_data;
+ 
+ #ifdef CONFIG_DEBUG_FS
 -- 
-viresh
+2.25.0.rc1.19.g042ed3e048af
+
