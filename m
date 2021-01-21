@@ -2,110 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98632FEF1F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 16:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A8F2FF00E
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jan 2021 17:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732933AbhAUPkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 10:40:09 -0500
-Received: from mail-oo1-f43.google.com ([209.85.161.43]:36366 "EHLO
-        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733243AbhAUPjs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 10:39:48 -0500
-Received: by mail-oo1-f43.google.com with SMTP id j8so600140oon.3;
-        Thu, 21 Jan 2021 07:39:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0R3/vn4OjBwMbm80SVwgo6ViJcCgYeuJbJTYwOEMXho=;
-        b=FaAxe0ztYmmDlexY5mGRDzmKb2lVBFnCvnJHpV1+ewthxB5t6g0thxRsXFeswBCnB8
-         5eUQDgGM2/Q+k/kuGT09vjNKxRHCIKuFbnrYWQYon58g90pVJ+Zlr2a7H0i6zZQ6eNnx
-         mK4BQRLmACvkoFM9DiRsjCk5MbmdCZC2Foe7WAJ+upyfi54xWNX/4avWmIesfGNGF5AQ
-         aDgxDyJ5xeJkOqAzk/wBmD5Lz4XPiBXk8gKZz26ZMipIylFMwCEAREYmaEevW6jjr50L
-         LHFDNSb8tyv1zRxdhPzd0p+ujD+sN4sySCtMoRMZqjad+mtdECkLIvO7x+YtORNNaTW7
-         Psow==
-X-Gm-Message-State: AOAM5321E2n1TMlqHoQrXv9CruAo6ZlThup+fVuMCDGUA+aNmN8JwyfT
-        PpN2dsIY8+e25FDkjt5tOVxDeoVJT5NtEcOH0JYJCaF9
-X-Google-Smtp-Source: ABdhPJyPp4o0v1chZHpawhDO/ZE7GYsY5Wdnka7U4wtIxMUDBXOJwl/XQxnwKaYrFAo6tvTDBufd8fPO824Jnc+3JAI=
-X-Received: by 2002:a4a:8353:: with SMTP id q19mr156184oog.40.1611243529514;
- Thu, 21 Jan 2021 07:38:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20210120142323.2203705-1-geert+renesas@glider.be> <CAGETcx-ZcXB9Zw_RnMjA0G2oKAyeK3VfKgha=Mvqnn_dDREuOw@mail.gmail.com>
-In-Reply-To: <CAGETcx-ZcXB9Zw_RnMjA0G2oKAyeK3VfKgha=Mvqnn_dDREuOw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Jan 2021 16:38:38 +0100
-Message-ID: <CAMuHMdUfA2LgXxz1srbgQLiMw=oadrJ0ASMnwcvCO2xVXqWnUw@mail.gmail.com>
-Subject: Re: [PATCH/RFC] soc: renesas: rcar-sysc: Mark device node
- OF_POPULATED after init
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        id S1732981AbhAUQTw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 11:19:52 -0500
+Received: from pb-smtp21.pobox.com ([173.228.157.53]:64563 "EHLO
+        pb-smtp21.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732100AbhAUQTi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 11:19:38 -0500
+Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id E28A1106769;
+        Thu, 21 Jan 2021 11:18:52 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=xwglBKNBDOQa41zIQ1eVypVyscM=; b=dYOM9G
+        FYHGC97iyU6/IxQRN5Of9psoeePTQJOmHWgvn1zdAo8NtJrkw1PaCbHG10n+f5i2
+        lHwUwFW8wtHRc8AlalvHmVMnFfMryEeV8QgDuv4FMzKvLjtYzaduxcktcCVKcKYa
+        bbQHN5MI8upRWw1VVF9CIkKkoVWZoaeATF3dA=
+Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id D99A9106765;
+        Thu, 21 Jan 2021 11:18:51 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=5fBPzAB/LUGoYmsC4s4Q3GVI9ZCjSpshAfLaiXN9zLg=; b=Iha+EsdhQeI8Ki7aaPar41/MZhotmmhAYcR34Vm/RS2dry4qKAqsQtlQhZKV0Ek7B2gTcuZkSsF+zj14sE/pefEZ0KxehuMt3FLCJ+xZMfjB1nQW910K9iXBqhM00ZTuEIx5hB+vdwsqvTzbBU3BHWl7QTUQbDEr+8tRol/Tvmk=
+Received: from yoda.home (unknown [24.203.50.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp21.pobox.com (Postfix) with ESMTPSA id BC6CB10675B;
+        Thu, 21 Jan 2021 11:18:48 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 14E2D2DA015D;
+        Thu, 21 Jan 2021 11:18:47 -0500 (EST)
+Date:   Thu, 21 Jan 2021 11:18:46 -0500 (EST)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-clk <linux-clk@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] PM / clk: make PM clock layer compatible with clocks
+ that must sleep
+In-Reply-To: <CAJZ5v0hFjpGp2GbV1Evi+BbUF7Am4ETY4Cm8VzTrvTJ=7=oyPQ@mail.gmail.com>
+Message-ID: <43p026p5-468-n892-4nss-6ro5s047qp9@syhkavp.arg>
+References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz> <CA+G9fYsyXsNSXGy6BWZ6mgpAP=+7r6Xy9jQ2xxb9mXyHdRoBCg@mail.gmail.com> <CAMuHMdULW4bnb0Jc0+ZaF9P2VNgnYsvEks7y8WYCk045BHqh7A@mail.gmail.com> <CA+G9fYvh0iSyEDQs7+0CX82FLPDCg5UmAt+1JuPsndmfmYF3kw@mail.gmail.com>
+ <CAJZ5v0hFjpGp2GbV1Evi+BbUF7Am4ETY4Cm8VzTrvTJ=7=oyPQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: 57D11538-5C04-11EB-9E8A-D609E328BF65-78420484!pb-smtp21.pobox.com
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
+On Thu, 21 Jan 2021, Rafael J. Wysocki wrote:
 
-On Wed, Jan 20, 2021 at 6:09 PM Saravana Kannan <saravanak@google.com> wrote:
-> On Wed, Jan 20, 2021 at 6:23 AM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> > The R-Car System Controller (SYSC) driver registers PM domains from an
-> > early_initcall().  It does not use a platform driver, as secondary CPU
-> > startup on R-Car H1 needs to control the CPU power domains, before
-> > initialization of the driver framework.
+> On Thu, Jan 21, 2021 at 1:11 PM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
 > >
-> > As fw_devlink only considers platform devices,
->
-> Correction. It only considers devices. As in, devices on all types of
-> busses are supported.
+> > ref:
+> > https://builds.tuxbuild.com/1nN0vkpNP4qhvIuIJN12j7tTpQs/
+> 
+> So I'm going to drop this patch from linux-next until the issue is
+> resolved, thanks!
 
-OK.
+No problem - I'm on it.
 
-> > it does not know that the
-> > System Controller is ready.  Hence probing of on-chip devices that are
-> > part of the SYSC PM domain fail:
-> >
-> >     probe deferral - supplier e6180000.system-controller not ready
-> >
-> > Fix this by setting the OF_POPULATED flag for the SYSC device node after
-> > successful initialization.  This will make of_link_to_phandle() ignore
-> > the SYSC device node as a dependency, and consumer devices will be
-> > probed again.
->
-> It'd still be nice if you could (maybe in a later patch), at least
-> probe all the power domains that aren't really needed this early.
-> Using the driver core framework (when it's possible), gives you nice
-> things :)
+Thanks Naresh for reporting the issue.
 
-Which nice things are you thinking of? Making the driver modular?
-At least on R-Car H1, it needs to be built-in for SMP to work.
 
-> +Rob. I know he hates people using OF_POPULATED, but I think this case
-> is reasonable and want to make sure he's aware of this.
->
-> Once you fix my commit nitpick, you can add:
-> Reviewed-by: Saravana Kannan <saravanak@google.com>
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Nicolas
