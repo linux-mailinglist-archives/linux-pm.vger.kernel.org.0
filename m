@@ -2,137 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A21300CDD
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 20:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E73F300DA5
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 21:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729226AbhAVTog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 14:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S1728373AbhAVUZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 15:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728674AbhAVTSr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 14:18:47 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07C2C061788;
-        Fri, 22 Jan 2021 11:18:06 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id f17so7760219ljg.12;
-        Fri, 22 Jan 2021 11:18:06 -0800 (PST)
+        with ESMTP id S1730941AbhAVUSB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 15:18:01 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E256C0613D6
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 12:17:20 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id e22so13754241iog.6
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 12:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=x/j5bxV3su/zAKnCmk1bt6joxRJHQqb1aOUcW9Eg2tM=;
-        b=oZOF825K+Hgc9MwIwL7Uupdbk/HyRaPnb4qspvFVACKYhqiGe2UjBwIFuVI13qsk5s
-         OZEWJBqkldIn6TZNkefpbIERwuf5kzjyWcX8vzO7WPX1NU8bDMdXft7S3i4DV0+2nVZd
-         k3+lXzHQvHmRBj5g9GISGf4QOaj62r0n9w+3oeuvcbw8UrDI5S6eBIgiZRBgoKRiKEsi
-         2Gpph8/vNLK5zzXN6LxrNjS+eh4FNnXHvI3s7V9x3oriWDsx04jmRgA4LUigBAhcj/cY
-         L23nY5rmtjMNrgDXCZzUzqMVYtnhqT5RCOMwGXmzr0MlqYjA4jshIJSdfMLrgaWUAKhQ
-         Xe3A==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=EyMAX4RDBgEWkK9rI+suZ/hX/nCJTqw3QIBCBEq4UXk=;
+        b=dJwax//rwioNZS4Dzs7YQpeWeK7An50ETJLEKlVIgL3QG+hm8G+dyQmmkNkjlt3PHm
+         2DZAFGIUS7sphdsZp4b+cXc+UqLtsFpnuXk297zobBwOVSX7H9YwdVgeAxbG8KTJkuUm
+         AaYnexvivNbrYHpNO4SRFpr09nN+JsrBBs4FE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=x/j5bxV3su/zAKnCmk1bt6joxRJHQqb1aOUcW9Eg2tM=;
-        b=OLIiGu7AKdRhx2gA/HZW3g7v1GI8Bnhe/tmjKtaBVMfSdpOE31hDHHVs3ExPnJJHhi
-         gx/Ti1+g2NHLjzOf39ApmxNgzDrAQ2bvlJOAvM66hSJCFeUISJ8pzmWZyB/SXU0IeI63
-         iSgP2BHiCZqEY34VfVM6fMGFAhGeUVEpnfHoTZhHJFkLdxLruS+W+S5mnO07aD3+LflS
-         rHwmw1Wd0vNOj/7QN2CzFoC+MpPYdnixLmtuVvuovu/bArxOWPwQiFD/PeQe8JDNT9cy
-         pOAFlykYJy6m/7/0r7xDuw0mmvwuaZdGmgVt0y15SRdKUiVddMdZJKgqTOx87OeTjmdE
-         /3Kg==
-X-Gm-Message-State: AOAM533BsNfTLrBtt/l9CZMkgWRvYb1VrGhUiANptZqR6Od5ViEvtKH1
-        S9AEl/iyfjUKKBteOInSeoc=
-X-Google-Smtp-Source: ABdhPJyy8oO/DvRhkAOrLEsBbRgcpb0qTO8Jr2QGtf/mhAaoGnPDUaG0HSdyNlWx4Kox2DoKjum6XQ==
-X-Received: by 2002:a2e:81d5:: with SMTP id s21mr1057426ljg.263.1611343085197;
-        Fri, 22 Jan 2021 11:18:05 -0800 (PST)
-Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id f205sm94759lfd.70.2021.01.22.11.18.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 11:18:04 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] power: supply: smb347-charger: Fix interrupt usage if interrupt is unavailable
-Date:   Fri, 22 Jan 2021 22:17:34 +0300
-Message-Id: <20210122191734.27584-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        bh=EyMAX4RDBgEWkK9rI+suZ/hX/nCJTqw3QIBCBEq4UXk=;
+        b=R/p5p8RlQuXI8sH1cW0MRF0AkBq1CoFTRi6hUIBDYptc+aEO3zdmlTFPfvTZhVkQ0c
+         Bf/XpIhp17hWYax7I1LfdGXycKUcxYbUvaWD4umoOfXzue12xDaA7oLk4gqEUv90Yry8
+         58qOCoQFxlv7zWcakCOe9uH/XRM16Waupr1RDkgnYbuPty24yMazTxSHVRfbtqu6uwzj
+         YJ92KMtUPvUL9gO82+cng0OtBe00wVqeGSxZOO54fQc2PEAH3fxt6QJtqNk03ehGi8UJ
+         leNuhDleZ9dXSPGPY8zj7pBNKmGiELPviQcGsJHAia0PpDfSXc/yFATqKZ07uxUxhNfw
+         khCw==
+X-Gm-Message-State: AOAM532EX52lCXIG6OwTTUHoNcOdI36d37Au7vjZqFN+KBJuDLynx/UV
+        le7d0pL6kbTqnrulu/0xKeeiag==
+X-Google-Smtp-Source: ABdhPJxJ3hKf1xeZDaxdmqh1aqHeVHxWslc3PVpTAKROnI9SiuTH3kg0bLskeGBy+JLTQI8tr4Ql1w==
+X-Received: by 2002:a6b:c949:: with SMTP id z70mr2126720iof.80.1611346639525;
+        Fri, 22 Jan 2021 12:17:19 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g13sm6635927iln.12.2021.01.22.12.17.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jan 2021 12:17:18 -0800 (PST)
+Subject: Re: [PATCH 1/8] cpupower: Update msr_pstate union struct naming
+To:     Nathan Fontenot <nathan.fontenot@amd.com>, rrichter@amd.com,
+        shuah@kernel.org, linux-kernel@vger.kernel.org, trenn@suse.com,
+        linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <161133705833.59625.6935511700675018185.stgit@ethanol01c7-host.amd.com>
+ <161133711513.59625.9843026563692886689.stgit@ethanol01c7-host.amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a677f0bb-2d17-f372-66a3-65a74494eb6c@linuxfoundation.org>
+Date:   Fri, 22 Jan 2021 13:17:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <161133711513.59625.9843026563692886689.stgit@ethanol01c7-host.amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The IRQ=0 could be a valid interrupt number in kernel because interrupt
-numbers are virtual in a modern kernel. Hence fix the interrupt usage in
-a case if interrupt is unavailable by not overriding the interrupt number
-which is used by the driver.
+On 1/22/21 10:38 AM, Nathan Fontenot wrote:
+> The msr_pstate union struct named fam17h_bits is misleading since
+> this is the struct to use for all families >= 0x17, not just
+> for family 0x17. Rename the bits structs to be 'pstate' (for pre
+> family 17h CPUs) and 'pstatedef' (for CPUs since fam 17h) to align
+> closer with PPR/BDKG naming.
 
-Note that currently Nexus 7 is the only know device which uses SMB347
-kernel diver and it has a properly working interrupt, hence this patch
-doesn't fix any real problems, it's a minor cleanup/improvement.
+What is PPR/PDKG - would be helpful to know what it is and provide
+link to the doc if applicable.
+> 
+> There are no functional changes as part of this update.
+> 
+> Signed-off-by: Nathan Fontenot <nathan.fontenot@amd.com>
+> ---
+>   tools/power/cpupower/utils/helpers/amd.c |   26 ++++++++++++++------------
+>   1 file changed, 14 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
+> index 7c4f83a8c973..34368436bbd6 100644
+> --- a/tools/power/cpupower/utils/helpers/amd.c
+> +++ b/tools/power/cpupower/utils/helpers/amd.c
+> @@ -13,7 +13,8 @@
+>   #define MSR_AMD_PSTATE		0xc0010064
+>   #define MSR_AMD_PSTATE_LIMIT	0xc0010061
+>   
+> -union msr_pstate {
+> +union core_pstate {
+> +	/* pre fam 17h: */
+>   	struct {
+>   		unsigned fid:6;
+>   		unsigned did:3;
+> @@ -26,7 +27,8 @@ union msr_pstate {
+>   		unsigned idddiv:2;
+>   		unsigned res3:21;
+>   		unsigned en:1;
+> -	} bits;
+> +	} pstate;
+> +	/* since fam 17h: */
+>   	struct {
+>   		unsigned fid:8;
+>   		unsigned did:6;
+> @@ -35,36 +37,36 @@ union msr_pstate {
+>   		unsigned idddiv:2;
+>   		unsigned res1:31;
+>   		unsigned en:1;
+> -	} fam17h_bits;
+> +	} pstatedef;
 
-Fixes: 99298de5df92 ("power: supply: smb347-charger: Replace mutex with IRQ disable/enable")
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/power/supply/smb347-charger.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Does pstatedef indicate this is pstate default?
 
-diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply/smb347-charger.c
-index d3bf35ed12ce..8cfbd8d6b478 100644
---- a/drivers/power/supply/smb347-charger.c
-+++ b/drivers/power/supply/smb347-charger.c
-@@ -137,6 +137,7 @@
-  * @mains_online: is AC/DC input connected
-  * @usb_online: is USB input connected
-  * @charging_enabled: is charging enabled
-+ * @irq_unsupported: is interrupt unsupported by SMB hardware
-  * @max_charge_current: maximum current (in uA) the battery can be charged
-  * @max_charge_voltage: maximum voltage (in uV) the battery can be charged
-  * @pre_charge_current: current (in uA) to use in pre-charging phase
-@@ -193,6 +194,7 @@ struct smb347_charger {
- 	bool			mains_online;
- 	bool			usb_online;
- 	bool			charging_enabled;
-+	bool			irq_unsupported;
- 
- 	unsigned int		max_charge_current;
- 	unsigned int		max_charge_voltage;
-@@ -862,6 +864,9 @@ static int smb347_irq_set(struct smb347_charger *smb, bool enable)
- {
- 	int ret;
- 
-+	if (smb->irq_unsupported)
-+		return 0;
-+
- 	ret = smb347_set_writable(smb, true);
- 	if (ret < 0)
- 		return ret;
-@@ -923,8 +928,6 @@ static int smb347_irq_init(struct smb347_charger *smb,
- 	ret = regmap_update_bits(smb->regmap, CFG_STAT,
- 				 CFG_STAT_ACTIVE_HIGH | CFG_STAT_DISABLED,
- 				 CFG_STAT_DISABLED);
--	if (ret < 0)
--		client->irq = 0;
- 
- 	smb347_set_writable(smb, false);
- 
-@@ -1345,6 +1348,7 @@ static int smb347_probe(struct i2c_client *client,
- 		if (ret < 0) {
- 			dev_warn(dev, "failed to initialize IRQ: %d\n", ret);
- 			dev_warn(dev, "disabling IRQ support\n");
-+			smb->irq_unsupported = true;
- 		} else {
- 			smb347_irq_enable(smb);
- 		}
-@@ -1357,8 +1361,8 @@ static int smb347_remove(struct i2c_client *client)
- {
- 	struct smb347_charger *smb = i2c_get_clientdata(client);
- 
--	if (client->irq)
--		smb347_irq_disable(smb);
-+	smb347_irq_disable(smb);
-+
- 	return 0;
- }
- 
--- 
-2.29.2
+>   	unsigned long long val;
+>   };
+>   
+> -static int get_did(int family, union msr_pstate pstate)
+> +static int get_did(int family, union core_pstate pstate)
+>   {
+>   	int t;
+>   
+>   	if (family == 0x12)
+>   		t = pstate.val & 0xf;
+>   	else if (family == 0x17 || family == 0x18)
+> -		t = pstate.fam17h_bits.did;
+> +		t = pstate.pstatedef.did;
+>   	else
+> -		t = pstate.bits.did;
+> +		t = pstate.pstate.did;
+>   
+>   	return t;
+>   }
+>   
+> -static int get_cof(int family, union msr_pstate pstate)
+> +static int get_cof(int family, union core_pstate pstate)
+>   {
+>   	int t;
+>   	int fid, did, cof;
+>   
+>   	did = get_did(family, pstate);
+>   	if (family == 0x17 || family == 0x18) {
+> -		fid = pstate.fam17h_bits.fid;
+> +		fid = pstate.pstatedef.fid;
+>   		cof = 200 * fid / did;
+>   	} else {
+>   		t = 0x10;
+> -		fid = pstate.bits.fid;
+> +		fid = pstate.pstate.fid;
+>   		if (family == 0x11)
+>   			t = 0x8;
+>   		cof = (100 * (fid + t)) >> did;
+> @@ -89,7 +91,7 @@ int decode_pstates(unsigned int cpu, unsigned int cpu_family,
+>   		   int boost_states, unsigned long *pstates, int *no)
+>   {
+>   	int i, psmax, pscur;
+> -	union msr_pstate pstate;
+> +	union core_pstate pstate;
+>   	unsigned long long val;
+>   
+>   	/* Only read out frequencies from HW when CPU might be boostable
+> @@ -119,9 +121,9 @@ int decode_pstates(unsigned int cpu, unsigned int cpu_family,
+>   		}
+>   		if (read_msr(cpu, MSR_AMD_PSTATE + i, &pstate.val))
+>   			return -1;
+> -		if ((cpu_family == 0x17) && (!pstate.fam17h_bits.en))
+> +		if ((cpu_family == 0x17) && (!pstate.pstatedef.en))
+>   			continue;
+> -		else if (!pstate.bits.en)
+> +		else if (!pstate.pstate.en)
+>   			continue;
+>   
+>   		pstates[i] = get_cof(cpu_family, pstate);
+> 
+> 
 
+thanks,
+-- Shuah
