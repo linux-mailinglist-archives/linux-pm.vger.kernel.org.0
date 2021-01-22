@@ -2,74 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B273B30092E
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 18:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FB03009EE
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 18:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729662AbhAVRCp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 12:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S1726024AbhAVRbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 12:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729550AbhAVRCX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 12:02:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D863C0613D6;
-        Fri, 22 Jan 2021 09:01:40 -0800 (PST)
-Date:   Fri, 22 Jan 2021 18:01:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1611334898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AEd+UZxbHmiF2tOBpSyRAlX6c0QcubXcj2vz5mCJSCs=;
-        b=Qyn5cXcXO5A+IF/D/KJPan/Tkqm/tyGUfqH6DdrbD5WVAXtfcAcXhzszYdlgEYhcWZyOU0
-        an6EwKQ3/aqPGsaeElDs2Q1PxfbqRtf0Pn2IPCiO/sQgJZhMSqJ81u7iOd+qXdI5uPmITn
-        nw5ZAH8RPCZV6Kcxc9ESMer4PPIoogpyeaI/RUV3lexFbE8KaOVYMILyrCRQRJYESdNkhK
-        2a0Xtuz3cg9tKKaxMlYmh6ixKVj4hyCAxKrlKUpxd1mepdBeY4pXF0/Kcb0LndD8r0Nhwo
-        xg8H6digGariQYVI8GMYiWwwv3z4bSMuToDcJiQYOqVmE/tYOW3XDuc9MR2zLg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1611334898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AEd+UZxbHmiF2tOBpSyRAlX6c0QcubXcj2vz5mCJSCs=;
-        b=YwIyiiSAqFHOBDhMwgZXNVI+JKhUbvbjqO9nNF4iiGDORemK7dBt7gP3tu2vRT0FBsseRg
-        iU6MhUDkbGsxtvCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Stephen Berman <stephen.berman@gmx.net>
-Subject: Re: [PATCH] ACPI: thermal: Do not call acpi_thermal_check() directly
-Message-ID: <20210122170138.zflol3gohzgqw5zm@linutronix.de>
-References: <3391226.KRKnzuvfpg@kreacher>
- <CAJZ5v0gB4B_Os0VQv-F2SdVcJ8_rUdjic6rOEjOd=ZWhGzdLdQ@mail.gmail.com>
+        with ESMTP id S1729289AbhAVPt2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 10:49:28 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBC7C061793
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 07:48:37 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id c6so7106791ede.0
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 07:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3eAbnY6xA/gRZJxfscCuC7XOiulmOFHNvPNXAXuxGa8=;
+        b=goHCeJXW4a9N8IFJcoZ3YyUmIOymCqSCz//9nfnjcAad8iVVpKl8L+p1eHdtH3/4Be
+         WE5acK0za0ULdzyvCDmSrgwR8uL9N/1MC5ihXsQuvhE94HnPA/kilQeKD1nR8qVt0Syz
+         XBIShATeB/BwyBzl59hjU62kpr5oDMX0bLk6OP26jYvz+oJHEu5LAX9PHSHOzKEIi5ir
+         lBhsN+clgveRvAzPaH0GDddOcUnLeMar3q0FiwK2Acso5SjfLbzwpbNBIVRg1mczQJ5D
+         e0UNRZa5vNxbUkCQXFZ+ffqlvy1+1nIKlcfCrYST/hQ8YTA19B+TkCfcSUqhPIeFkgXo
+         sCrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3eAbnY6xA/gRZJxfscCuC7XOiulmOFHNvPNXAXuxGa8=;
+        b=pry1+8V+xyiIjC1HKJltpmiXgipAfoqpWTOND4ai+2YpAUv9qu9arSTnAWMOyYpqnF
+         qR9kVtm/rGDruc7QpCgdVfz/ZpPGeuk8dbgJg5D07vgjNfCDEh4i/V/JMdMiQTG4dfX+
+         szp5J1gNWSIkIdyxG0EjJ5VHPm82jX5B8XylJkPmISV5uFZHY2wF4eNktIq+3tZroFPP
+         RPL+OrnwD2xGOLgau7S88/IC43S01APPdjPIN8PSitQ139blExBa+JmrUUJ7WeENkctt
+         SLxjcP9+0B1+uWweYivqxBiqVogm6DrjVO7Sa3//KNK9K/gnO5lTdzzLypO19kdOuMdV
+         Fp+Q==
+X-Gm-Message-State: AOAM531TaRldXhJk21r2MtR+b3Yq92NHMorecD3SNq4o0RMNY+tG597T
+        yva+qLoIFRInZ4tGYprTKT+u8QrKOlv+xp7/SkjI3g==
+X-Google-Smtp-Source: ABdhPJykC69CR2e+nr62M52Lok+oDvN8mv4SexJ6FQnttTJp8cflAQ6JhBcpXQnK9m/0xOawZJBKRZ6CQ10FIqrURB4=
+X-Received: by 2002:a05:6402:60a:: with SMTP id n10mr3607422edv.230.1611330515907;
+ Fri, 22 Jan 2021 07:48:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gB4B_Os0VQv-F2SdVcJ8_rUdjic6rOEjOd=ZWhGzdLdQ@mail.gmail.com>
+References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz>
+ <CA+G9fYsyXsNSXGy6BWZ6mgpAP=+7r6Xy9jQ2xxb9mXyHdRoBCg@mail.gmail.com>
+ <CAMuHMdULW4bnb0Jc0+ZaF9P2VNgnYsvEks7y8WYCk045BHqh7A@mail.gmail.com>
+ <CA+G9fYvh0iSyEDQs7+0CX82FLPDCg5UmAt+1JuPsndmfmYF3kw@mail.gmail.com>
+ <CAJZ5v0hFjpGp2GbV1Evi+BbUF7Am4ETY4Cm8VzTrvTJ=7=oyPQ@mail.gmail.com>
+ <84r6s34s-opq7-9358-o45n-27s17084012@onlyvoer.pbz> <CAJZ5v0jUxonxp0q80Kdcbax+WMmh-NZ_h=KQG-HcfFdE1hr4VA@mail.gmail.com>
+ <CAJZ5v0hj4VC_kjB5e_b_ho=ET_quG5zUh0Dbbdwofp-6azopsw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hj4VC_kjB5e_b_ho=ET_quG5zUh0Dbbdwofp-6azopsw@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 22 Jan 2021 21:18:23 +0530
+Message-ID: <CA+G9fYsRVxWPW1nvSXMTLWfEadrdBDSH5hRPtoUYpfpqq8zRSw@mail.gmail.com>
+Subject: Re: [PATCH v2] PM / clk: make PM clock layer compatible with clocks
+ that must sleep
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Nicolas Pitre <npitre@baylibre.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021-01-22 17:23:36 [+0100], Rafael J. Wysocki wrote:
-> 
-> Well, it's been over a week since this was posted.
+On Fri, 22 Jan 2021 at 20:39, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Thu, Jan 21, 2021 at 8:01 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Thu, Jan 21, 2021 at 6:23 PM Nicolas Pitre <npitre@baylibre.com> wrote:
+> > >
+> > > The clock API splits its interface into sleepable ant atomic contexts:
+> > >
+> > > - clk_prepare/clk_unprepare for stuff that might sleep
+> > >
+> > > - clk_enable_clk_disable for anything that may be done in atomic context
+> > >
+> > > The code handling runtime PM for clocks only calls clk_disable() on
+> > > suspend requests, and clk_enable on resume requests. This means that
+> > > runtime PM with clock providers that only have the prepare/unprepare
+> > > methods implemented is basically useless.
+> > >
+> > > Many clock implementations can't accommodate atomic contexts. This is
+> > > often the case when communication with the clock happens through another
+> > > subsystem like I2C or SCMI.
+> > >
+> > > Let's make the clock PM code useful with such clocks by safely invoking
+> > > clk_prepare/clk_unprepare upon resume/suspend requests. Of course, when
+> > > such clocks are registered with the PM layer then pm_runtime_irq_safe()
+> > > can't be used, and neither pm_runtime_suspend() nor pm_runtime_resume()
+> > > may be invoked in atomic context.
+> > >
+> > > For clocks that do implement the enable and disable methods then
+> > > everything just works as before.
+> > >
+> > > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+> > >
+> > > ---
+> > >
+> > > On Thu, 21 Jan 2021, Rafael J. Wysocki wrote:
+> > >
+> > > > So I'm going to drop this patch from linux-next until the issue is
+> > > > resolved, thanks!
+> > >
+> > > Here's the fixed version.
+> >
+> > Applied instead of the v1, thanks!
+> >
+> > > Changes from v1:
+> > >
+> > > - Moved clk_is_enabled_when_prepared() declaration under
+> > >   CONFIG_HAVE_CLK_PREPARE and provided a dummy definition when that
+> > >   config option is unset.
+> > >
+> > > diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
+> > > index ced6863a16..a62fb0f9b1 100644
+> > > --- a/drivers/base/power/clock_ops.c
+> > > +++ b/drivers/base/power/clock_ops.c
+> > > @@ -23,6 +23,7 @@
+> > >  enum pce_status {
+> > >         PCE_STATUS_NONE = 0,
+> > >         PCE_STATUS_ACQUIRED,
+> > > +       PCE_STATUS_PREPARED,
+> > >         PCE_STATUS_ENABLED,
+> > >         PCE_STATUS_ERROR,
+> > >  };
+> > > @@ -32,8 +33,102 @@ struct pm_clock_entry {
+> > >         char *con_id;
+> > >         struct clk *clk;
+> > >         enum pce_status status;
+> > > +       bool enabled_when_prepared;
+> > >  };
+> > >
+> > > +/**
+> > > + * pm_clk_list_lock - ensure exclusive access for modifying the PM clock
+> > > + *                   entry list.
+> > > + * @psd: pm_subsys_data instance corresponding to the PM clock entry list
+> > > + *      and clk_op_might_sleep count to be modified.
+> > > + *
+> > > + * Get exclusive access before modifying the PM clock entry list and the
+> > > + * clock_op_might_sleep count to guard against concurrent modifications.
+> > > + * This also protects against a concurrent clock_op_might_sleep and PM clock
+> > > + * entry list usage in pm_clk_suspend()/pm_clk_resume() that may or may not
+> > > + * happen in atomic context, hence both the mutex and the spinlock must be
+> > > + * taken here.
+> > > + */
+> > > +static void pm_clk_list_lock(struct pm_subsys_data *psd)
+> > > +{
+> > > +       mutex_lock(&psd->clock_mutex);
+> > > +       spin_lock_irq(&psd->lock);
+> > > +}
+> > > +
+> > > +/**
+> > > + * pm_clk_list_unlock - counterpart to pm_clk_list_lock().
+> > > + * @psd: the same pm_subsys_data instance previously passed to
+> > > + *      pm_clk_list_lock().
+> > > + */
+> > > +static void pm_clk_list_unlock(struct pm_subsys_data *psd)
+>
+> Locking annotations for sparse were missing here and above, so I've
+> added them by hand.
+>
+> Please double check the result in my linux-next branch (just pushed).
 
-Thank you for this ;)
+May i request to add Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-> Does anyone have any comments?
-
-I looked over it and it makes sense, so
-  Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-
-I didn't comment on it since a testing-by would be better ;)
-
-Could you please add a stable tag? I've seen a few "comments" in forums
-suggesting what I suggested to Stephen as a work around while I was
-searching for his motherboard so they are more people affected by the
-shutdown problem.
-
-Sebastian
+- Naresh
