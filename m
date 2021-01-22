@@ -2,105 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F361301056
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 23:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EB030104C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 23:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbhAVWyD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 17:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
+        id S1728575AbhAVWsz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 17:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729292AbhAVWx1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 17:53:27 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7ECC0613D6
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 14:52:46 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id q131so4773992pfq.10
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 14:52:46 -0800 (PST)
+        with ESMTP id S1728882AbhAVWsI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 17:48:08 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3C6C061788;
+        Fri, 22 Jan 2021 14:47:25 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id p5so7783548oif.7;
+        Fri, 22 Jan 2021 14:47:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sJKac0a7OSKp1f0kvUdgdMfcoqobY0w2Qi4X2IElxuc=;
-        b=AnFnMxm7WfC1rua1IAn/BS6BSjggXvQNEVtQhO35dCfNT1aEkmSRuUWxnRufpUz/Ob
-         ceKZJdL20R0z6pVacalU66DpQmGxYUqfmTfdUH7WgYKoXccDChPAt9AdVvWrn77Y9uft
-         3Mn5lWJ4Ql3DMS65MwjK0+bqUMxoc7aEiGo7w=
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Q724GeiTZ+Om7tqqLffblQ1ndWRdcUnxMTkOY/r9LV0=;
+        b=j8K/vK8BkLu/zwpyBR/iOViwsj4WuRlN6z/AFKftqheEoL6P4Hec0aQ9XMV30hxj7T
+         AK00ssHVDIbiVsZwNo4+t/9lZ30eoqo5O6yghyYNCulQzZ5NIIqNK2Yep1Ga6PGxZBGp
+         yU6BADWYtFbpG+MHdq5syt0nTX9K7SbphvTTI1FkCqpTUb9HSmffNa37rjaTnAJzT0hC
+         rN37id4oLFvwR/A35WoLGkDmPS5289wwK8UoyK9M9KKOLyEDoFtmPPMr97c+RGvGjstV
+         GMhjpxquN6Io88wzxMTld2CCP6xO+J96dlHCWG7mqGh0Y7okTOo/OumNerE1AsjTPVQr
+         P4Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sJKac0a7OSKp1f0kvUdgdMfcoqobY0w2Qi4X2IElxuc=;
-        b=q1wSljwLYzNGpeAr2+chJboejYabi/RRRUUXJX4XOB5aGChPZDXupREAOfMdvly4r+
-         /KMbpEV9IhRcHDk/7mQhvuAXEEoYBIY6y+0fierUyNrhV8F1JOirGhyua5L29bO4Tykx
-         tIDXuMmIf15uNZgG1gTAc7jWizIjELTFA671NEnzGDY4ut8gL0a+yPZK+WiaeTfbidCN
-         PbZ44I31XbYviaGQFnV0U7v6PoT0vkgXoYGqLMqmSF8y3J1U2ic7EyN+4vx/yf1WCok8
-         VMa/MzsKYMnHBKEkZaXWDUPriBhFePHQsZZjEyGDMhEwJqMQaqnFmWc1EN8FBtFGZ7z8
-         wTrg==
-X-Gm-Message-State: AOAM5335tNctAofxikPPiNbSitKH6oat/wzALn9AxIAm74rt+jvarPQ5
-        zOt0HtfryzoG3tTA7G5Z/UTpTLMJpSP29Q==
-X-Google-Smtp-Source: ABdhPJzp8LHwexv71sLxZHS49wC3I1PVH82OCL8Tj5sxjcCCZgjzjMMzjq5XpCQh3zwKj3aJAov01Q==
-X-Received: by 2002:aa7:9192:0:b029:1bb:f763:3cac with SMTP id x18-20020aa791920000b02901bbf7633cacmr7223411pfa.72.1611355966312;
-        Fri, 22 Jan 2021 14:52:46 -0800 (PST)
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com. [209.85.215.170])
-        by smtp.gmail.com with ESMTPSA id 24sm2961696pgt.14.2021.01.22.14.52.46
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jan 2021 14:52:46 -0800 (PST)
-Received: by mail-pg1-f170.google.com with SMTP id i7so4802666pgc.8
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 14:52:46 -0800 (PST)
-X-Received: by 2002:a67:2ac6:: with SMTP id q189mr1198085vsq.49.1611355613860;
- Fri, 22 Jan 2021 14:46:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Q724GeiTZ+Om7tqqLffblQ1ndWRdcUnxMTkOY/r9LV0=;
+        b=NvEYBGjHQX1iBxI33gmeGawNm9Lvn0lrqbDlD514X5zXtdhpZc2ETA39kzGgVh+NQr
+         mj2/wyasXoTygRuRovMAZMA1IRA7UUc2u9y29/yF4YauN9PO8lre8y4aqCte8Ss/vmAv
+         NI+Qmn0nzzugKwq6v1ziXYfA4pCZ6ZdWUolbv9I1ArP2iMPMlPI73hkhrwvz8Vnjsf01
+         3805W1o+g5NgfNOVi/5au3y9TMrbbTehShx0jLhO93CKrbYA8mhj1MlldSL45FYTwmiK
+         Hp9tfOK+pgyBhKmnvb/SiCYeRCKgVIwdNl0gLC1rrhG608qhz2B4uHgR36IF/OgK2rdx
+         1oTw==
+X-Gm-Message-State: AOAM532a1M3hkMEKcc2vrz+y62XuGVFW2gE6c8kaiVw1KTIfjL/nBcwX
+        P7NisM+E6hDmrD6L1XZhza+cgmdBhWtyh5e7ZT69zsNh0Iw=
+X-Google-Smtp-Source: ABdhPJywynaQDmXIEi1I44xi2hpkoAljmwB2nwmkzp9D4mgqsQTo0OHTrvq7nGhnp5LSTv3Yqfemt1FU8t9y9yiJSNA=
+X-Received: by 2002:aca:b755:: with SMTP id h82mr4598175oif.5.1611355645094;
+ Fri, 22 Jan 2021 14:47:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20210122215900.1168610-1-dnojiri@chromium.org>
-In-Reply-To: <20210122215900.1168610-1-dnojiri@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 22 Jan 2021 14:46:42 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XW5rodt0LdmzVwnzUgBgxe98zh1PshHa1G5=oUcg6aAA@mail.gmail.com>
-Message-ID: <CAD=FV=XW5rodt0LdmzVwnzUgBgxe98zh1PshHa1G5=oUcg6aAA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] power: supply: PCHG: Peripheral device charger
-To:     Daisuke Nojiri <dnojiri@chromium.org>
-Cc:     Vincent Palatin <vpalatin@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Yu-Hsuan Hsu <yuhsuan@chromium.org>,
-        Ching-Kang Yen <chingkang@chromium.org>,
-        Vijay Hiremath <vijay.p.hiremath@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 22 Jan 2021 17:47:14 -0500
+Message-ID: <CADnq5_P7HbKxUC7BoVEhjA2F7puTT471bYZgiHHnkfP2UN9fPg@mail.gmail.com>
+Subject: Understanding DPM_FLAG_MAY_SKIP_RESUME and DPM_FLAG_SMART_SUSPEND flags
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi, I'm trying to understand how these flags are supposed to work.
+What I'd like to do, is when my pcie device runtime suspends (d3cold),
+I would like it to stay off during system suspend and resume and on be
+turned on again if the user accesses the device which would cause it
+to be runtime resumed.  Runtime pm works fine on the devices, but they
+get resumed on system suspend and powered back up on system resume.
+The driver provides the following pm callbacks:
 
-On Fri, Jan 22, 2021 at 2:07 PM Daisuke Nojiri <dnojiri@chromium.org> wrote:
->
-> +static int cros_ec_notify(struct notifier_block *nb,
-> +                         unsigned long queued_during_suspend,
-> +                         void *data)
-> +{
-> +       struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
-> +       u32 host_event = cros_ec_get_host_event(ec_dev);
-> +       struct charger_data *charger =
-> +                       container_of(nb, struct charger_data, notifier);
-> +       u32 device_event_mask;
-> +
-> +       if (!host_event)
-> +               return NOTIFY_BAD;
+static const struct dev_pm_ops amdgpu_pm_ops =3D {
+        .suspend =3D amdgpu_pmops_suspend,
+     .resume =3D amdgpu_pmops_resume,
+    .freeze =3D amdgpu_pmops_freeze,
+    .thaw =3D amdgpu_pmops_thaw,
+        .poweroff =3D amdgpu_pmops_poweroff,
+    .restore =3D amdgpu_pmops_restore,
+        .runtime_suspend =3D amdgpu_pmops_runtime_suspend,
+        .runtime_resume =3D amdgpu_pmops_runtime_resume,
+        .runtime_idle =3D amdgpu_pmops_runtime_idle,
+};
 
-Drive-by bug report: the above should be NOTIFY_DONE.  By returning
-NOTIFY_BAD you're preventing other people on the call chain that come
-after you from receiving any events that aren't "host events".
-Specifically this includes keyboard events, switch events, etc.
+I'm having trouble parsing the last few paragraphs in the pm
+documentation (https://www.kernel.org/doc/html/latest/driver-api/pm/devices=
+.html).
+Ideally once the device is runtime suspended, it would not be powered
+up again until someone accesses the device and it runtime resumes with
+possibly multiple system suspend/resume cycles in between.
 
-The patch <https://crrev.com/c/2645556> contains the fix.
+"If that function returns true, the driver=E2=80=99s =E2=80=9Cnoirq=E2=80=
+=9D and =E2=80=9Cearly=E2=80=9D
+resume callbacks should be skipped and the device=E2=80=99s runtime PM stat=
+us
+will be set to =E2=80=9Csuspended=E2=80=9D by the PM core. Otherwise, if th=
+e device
+was runtime-suspended during the preceding system-wide suspend
+transition and its DPM_FLAG_SMART_SUSPEND is set, its runtime PM
+status will be set to =E2=80=9Cactive=E2=80=9D by the PM core. [Hence, the =
+drivers
+that do not set DPM_FLAG_SMART_SUSPEND should not expect the runtime
+PM status of their devices to be changed from =E2=80=9Csuspended=E2=80=9D t=
+o =E2=80=9Cactive=E2=80=9D
+by the PM core during system-wide resume-type transitions.]"
 
--Doug
+The last sentence is confusing me.  Why would setting
+DPM_FLAG_SMART_SUSPEND change the status to active?  Wouldn't still be
+suspended?
+
+"Likewise, if DPM_FLAG_MAY_SKIP_RESUME is set for a device, its
+driver=E2=80=99s system-wide =E2=80=9Cnoirq=E2=80=9D and =E2=80=9Cearly=E2=
+=80=9D resume callbacks may be
+skipped while its =E2=80=9Clate=E2=80=9D and =E2=80=9Cnoirq=E2=80=9D suspen=
+d callbacks may have been
+executed (in principle, regardless of whether or not
+DPM_FLAG_SMART_SUSPEND is set). In that case, the driver needs to be
+able to cope with the invocation of its ->runtime_resume callback
+back-to-back with its =E2=80=9Clate=E2=80=9D and =E2=80=9Cnoirq=E2=80=9D su=
+spend ones. [For instance,
+that is not a concern if the driver sets both DPM_FLAG_SMART_SUSPEND
+and DPM_FLAG_MAY_SKIP_RESUME and uses the same pair of suspend/resume
+callback functions for runtime PM and system-wide suspend/resume.]"
+
+The last sentence here is confusing me again.  I'm not following why
+it matters if the callbacks are the same.  Why would the suspend and
+resume callbacks be called at all.  Wouldn't it just be the runtime
+variants?
+
+It's not clear what happens with the suspend and resume pm callbacks.
+The documentation only mentions the early/late and noirq callbacks.
+Is the idea that the driver should not use the suspend/resume
+callbacks in this case if they want to skip system suspend/resume in
+favor of the runtime variant?
+
+Thanks,
+
+Alex
