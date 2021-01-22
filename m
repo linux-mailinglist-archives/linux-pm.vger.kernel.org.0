@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 838A72FFBCB
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 05:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4287D2FFBED
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 05:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbhAVEfv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jan 2021 23:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S1726579AbhAVEqS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jan 2021 23:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbhAVEft (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 23:35:49 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2A1C06174A
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 20:35:09 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id u4so3039773pjn.4
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 20:35:09 -0800 (PST)
+        with ESMTP id S1726444AbhAVEqR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jan 2021 23:46:17 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B832DC061756
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 20:45:36 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id g3so2551707plp.2
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jan 2021 20:45:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=yetUGqIq6nwDP/Z5XoMcv9Fbw9FD3H4M8DzhhGq80G4=;
-        b=bcp+GOMzL9ijzDOWNP7XZsMTtd3/kiRN5ST2t1isOPSlwMc4uIda0EOzl9jSq2xcFT
-         YExngj2Yc4a8PWDpqao1t61oNjSIhvSBEEBTXptB+Jdr6am3AOVnop1dLRf1oyw3w2Nq
-         NIZpM2O/bW3PGC3rBHUfsrtjcXsaki+ah5uAgXdM2Y3E8XdtBkUxL4gT3pp85jVKoTgC
-         FcAZedd0fshyrcDxcFMrSIaFdb0Ur4PfM0o7//yARqA1hoTS/8y6Vxwx5PF4TrUx5vhH
-         UoX0EJTK3g13TUfaf4cbK6GCRPXpJcDpZWjaKfS2PRULah/HANv8IPloOf0SvXxtAsOT
-         ir9g==
+        bh=bbM2dKaYpv41IbTKFCnMXIDb9vPr8F5wpZdCakgIuw0=;
+        b=uHQ/LNKv9Ii50fZb5s/RYG98hKXnhSwPVs+L5cPkfIj6K5CZebreMfP5nc4Gb/6QJ5
+         en/0A+D/wVkrU/v1I1mZ4ey4n9lTklU45zI9HBM+ZIxlO0gsG7kePmQj5M4dQt2+8mcS
+         tdi5E804YOrjQzv9HV5b1auk/Vnnp4oxbpk5DFl1MEHdy0OGHxTArUDvzPPcMDID5Wql
+         JDs6C5dsNRPyxQobVu8AspBDMQYCFaaMEIug/AVM2NjHzwlhxuX2RThA5DN5fB7Z56Hy
+         hqdulwE2KMuLCX8fb9+42VUWneZI4v8PzuMnwbIsOjA5OMtxuZL29KrqU5stPKnzJNvq
+         ustA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=yetUGqIq6nwDP/Z5XoMcv9Fbw9FD3H4M8DzhhGq80G4=;
-        b=NlQVsVW8nbtZeQox29gLdhwAHTO7qU4Vh03W6oJxCcmYY+/AGsEB7592zINH6gE0UT
-         5zDNBgCmoU6pEIaZuy6sGtRtmCLRKcHW6zDZDEcPlMzMfIrzMqUF1SIqwvWo3m0TlaOa
-         QN4nL6AFIHMN/z0VUkHF4rt+7NXLEAVagGGdJmSYrLXubP2wCSb4nqxPRgrHboQIEmJa
-         MXbCHYseY8KB+a63JoHVWu+Jl/KFro8RC5+CE9FihxJv15Z6YlodmBGVNhWBowkiJ4Vt
-         JjiZb58fvsknWK62a5zLvvABapa/PNi+DU51wy015oQ97PAcTBVtWVHw44wG84BkLvxJ
-         VQkQ==
-X-Gm-Message-State: AOAM533UgXIE+IbzTTnQcwCHronBKdk/s5VVaTbAFVlvtJeKBzAnspWu
-        ssM7ofYI4Cwnc/zap+T8X7Zi+Llyh+KSOA==
-X-Google-Smtp-Source: ABdhPJx1VRpZysMio5HKg8II4nInDm6FtWRYuxHyTtXWeliAjY/fbVa0zm+yb9pGb1PBCIDixdfUIA==
-X-Received: by 2002:a17:90a:9918:: with SMTP id b24mr3155479pjp.108.1611290109187;
-        Thu, 21 Jan 2021 20:35:09 -0800 (PST)
+        bh=bbM2dKaYpv41IbTKFCnMXIDb9vPr8F5wpZdCakgIuw0=;
+        b=D6mjnOaS8aqptVOHnPHPqTldSYnmTpVtZkQxgoTbQ5k90BGrAupLwjjom92paLLikU
+         ZIF+5Cgs5VeyOrMI35XT06zDfoodaZmezGcZCNGNy6e3Se5lzW7f8NWMmd4HGgFuW1o0
+         rC3LKVXKlQP8gvO07A5Lh/2AWJ++wWQUlzBjXm0lq7SpEgq202xmYaAQG8IiCDEWuYKM
+         rJNij7A/SyU/78SmrDVZNF242krrEZLwyO47BOoAy67vRoOQ+qOGeZkPbglbk9mFVjX9
+         8N8tU8G/hg15fG3V/1aYfbOgmLt2zFq++pfF0aHjeCIw3toPYeTS2/S1NzJWFKYgQMR0
+         0pqQ==
+X-Gm-Message-State: AOAM530phzKkWD8vraQgb/VikpP/9cSL9jqVoJW8LcZbL/tSAgsFnlUG
+        WexWO3/E8aqGG+6yRPhSDMOqxw==
+X-Google-Smtp-Source: ABdhPJykjY//oEpUUCa97mb5wm8LARwb1qXlD4yQTn+cDtixVvBIM0+Lr3O+f+FTqokTzkG4IHsSZg==
+X-Received: by 2002:a17:90a:4598:: with SMTP id v24mr3128802pjg.135.1611290735797;
+        Thu, 21 Jan 2021 20:45:35 -0800 (PST)
 Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id o10sm7187231pfp.87.2021.01.21.20.35.07
+        by smtp.gmail.com with ESMTPSA id n128sm7428126pga.55.2021.01.21.20.45.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Jan 2021 20:35:08 -0800 (PST)
-Date:   Fri, 22 Jan 2021 10:05:06 +0530
+        Thu, 21 Jan 2021 20:45:34 -0800 (PST)
+Date:   Fri, 22 Jan 2021 10:15:32 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
@@ -57,50 +57,56 @@ Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Sibi Sankar <sibis@codeaurora.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 07/13] opp: Allow _generic_set_opp_clk_only() to work for
- non-freq devices
-Message-ID: <20210122043506.lm6yiefzlyubq5my@vireshk-i7>
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 03/13] opp: Keep track of currently programmed OPP
+Message-ID: <20210122044532.pc7cpcgy3kjbqmls@vireshk-i7>
 References: <cover.1611227342.git.viresh.kumar@linaro.org>
- <1585f6c21ea8aee64fe4da0bf72b36ea4d74a779.1611227342.git.viresh.kumar@linaro.org>
- <9b2638e6-b842-8737-e5a0-aeeb84927fce@gmail.com>
+ <96b57316a2a307a5cc5ff7302b3cd0084123a2ed.1611227342.git.viresh.kumar@linaro.org>
+ <b634343a-8005-fc35-e38b-bfeaa7310a70@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b2638e6-b842-8737-e5a0-aeeb84927fce@gmail.com>
+In-Reply-To: <b634343a-8005-fc35-e38b-bfeaa7310a70@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-01-21, 23:26, Dmitry Osipenko wrote:
+On 22-01-21, 00:41, Dmitry Osipenko wrote:
 > 21.01.2021 14:17, Viresh Kumar пишет:
-> > In order to avoid conditional statements at the caller site, this patch
-> > updates _generic_set_opp_clk_only() to work for devices that don't
-> > change frequency (like power domains, etc.). Return 0 if the clk pointer
-> > passed to this routine is not valid.
-> > 
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> ...
+> > @@ -1074,15 +1091,18 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+> >  
+> >  	if (!ret) {
+> >  		ret = _set_opp_bw(opp_table, opp, dev, false);
+> > -		if (!ret)
+> > +		if (!ret) {
+> >  			opp_table->enabled = true;
+> > +			dev_pm_opp_put(old_opp);
+> > +
+> > +			/* Make sure current_opp doesn't get freed */
+> > +			dev_pm_opp_get(opp);
+> > +			opp_table->current_opp = opp;
+> > +		}
+> >  	}
 > 
-> Hello Viresh,
+> I'm a bit surprised that _set_opp_bw() isn't used similarly to
+> _set_opp_voltage() in _generic_set_opp_regulator().
 > 
-> Thank you very much for yours effort! I gave a quick test to this series
-> and instantly found one small issue in this patch.
-> 
-> > +	/* We may reach here for devices which don't change frequency */
-> > +	if (unlikely(!clk))
-> 
-> I replaced dev_pm_opp_set_voltage() with dev_pm_opp_set_opp() in the
-> Tegra PD driver and got a crash, which happens because the above line
-> should be:
-> 
-> 	if (IS_ERR(clk))
+> I'd expect the BW requirement to be raised before the clock rate goes UP.
 
-Fixed, thanks.
+I remember discussing that earlier when this stuff came in, and this I
+believe is the reason for that.
+
+We need to scale regulators before/after frequency because when we
+increase the frequency a regulator may _not_ be providing enough power
+to sustain that (even for a short while) and this may have undesired
+effects on the hardware and so it is important to prevent that
+malfunction.
+
+In case of bandwidth such issues will not happen (AFAIK) and doing it
+just once is normally enough. It is just about allowing more data to
+be transmitted, and won't make the hardware behave badly.
 
 -- 
 viresh
