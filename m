@@ -2,95 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5A430097F
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 18:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9541530097C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 18:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729527AbhAVQsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 11:48:10 -0500
-Received: from mail2.eaton.com ([192.104.67.3]:10500 "EHLO mail2.eaton.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729609AbhAVQUl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 Jan 2021 11:20:41 -0500
-Received: from mail2.eaton.com (simtcimsva04.etn.com [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7231B8C11B;
-        Fri, 22 Jan 2021 11:19:49 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eaton.com;
-        s=eaton-s2020-01; t=1611332389;
-        bh=yWewDqoIBEqGUJz3VJAg+qs4xm37J7YinYjIwl0kKps=; h=From:To:Date;
-        b=Bj3UCrE/V93GblhwRuGkf+vxzMPHXGiLcRNOnarYsyfELbEbRF2oNdJGrjwJtuRip
-         ANm39c1LhuSzpWdN/MNuU7xR9lGlc3GCdyS7D74YYzq0GhR68YImitG175sgyJKJVH
-         LQxFM96GUWDeit2CZWm9TjJgDXn9WpzPRc+7hmno6R5CSVVyqfEcfz85Ee31hQOKOX
-         F4vz8kMTbKCLGQqnGewXQfWlLAfVT77ySDdCQBGLfDRRY2uf6s/AV9BEkGxG8iyOtA
-         c2V5NhuvpP9bLY078wnSRdmCdy0H43y+hbarPT/2dObV5nr4oZLEwgA43RL7ixh6mc
-         dn4dboo8M+J4g==
-Received: from mail2.eaton.com (simtcimsva04.etn.com [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E6958C114;
-        Fri, 22 Jan 2021 11:19:49 -0500 (EST)
-Received: from SIMTCSGWY03.napa.ad.etn.com (simtcsgwy03.napa.ad.etn.com [151.110.126.189])
-        by mail2.eaton.com (Postfix) with ESMTPS;
-        Fri, 22 Jan 2021 11:19:49 -0500 (EST)
-Received: from localhost (151.110.234.147) by SIMTCSGWY03.napa.ad.etn.com
- (151.110.126.205) with Microsoft SMTP Server id 14.3.487.0; Fri, 22 Jan 2021
- 11:19:44 -0500
-From:   Laurent Badel <laurentbadel@eaton.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, <linux-pm@vger.kernel.org>
-CC:     Laurent Badel <laurentbadel@eaton.com>
-Subject: [PATCH 0/1] PM: hibernate: Fix swap file marking
-Date:   Fri, 22 Jan 2021 17:19:40 +0100
-Message-ID: <20210122161941.1080-1-laurentbadel@eaton.com>
-X-Mailer: git-send-email 2.17.1
+        id S1729416AbhAVQrZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 11:47:25 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:45057 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729674AbhAVQY2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 11:24:28 -0500
+Received: by mail-ot1-f50.google.com with SMTP id n42so5564826ota.12;
+        Fri, 22 Jan 2021 08:24:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EPqbjGqOCOoSzZRxoAwaj2hPNXhZmenfwoDHfGglI+Q=;
+        b=LSbA68bTu6zq0a1WkO8+H8rD4vAiU0t00y5sYXzIil7f+CF4ZOQiOQfpC64XVmRTpf
+         ttL0fxVc1XIVoU01aENBM0zBnYl+qhrrQQd6F9nlR7ANMjGYwjpElSEe8+sM4szZgSba
+         S6xMsFkcyECSjqzJJGuTkcufUdej2cjMJo7Caw8i74sWGZb9WcERu/S+R4AoQYPoVmGd
+         ucdE8L430eLuoefysSESQEYq7ms42g//wun3bWKDrncSBn/ImqXZcsjUmJ8sjoioBi5H
+         DC4lWeYriBHL21JlujkObpZmvw6lJcZjnIxpc8y6FUitPsTIR1j1JU8ruS7AeGznx2FZ
+         oFJw==
+X-Gm-Message-State: AOAM5323QeiBI707CPacAkO651OQjxQKRhigsLVPcZnIu5XINFHcq5Mp
+        7eQv9P02sqxsarlbhfOFATpEOz43kv+47AZrwLNCfHWU
+X-Google-Smtp-Source: ABdhPJzGj7ZposAvStHiEOSFy/Ek2R7PveNB03N14lwckMK/Q5s5uAoFQ0udt+0ayKG7CJ9EIVib8tKPWaXHXs/ZtDg=
+X-Received: by 2002:a05:6830:2313:: with SMTP id u19mr712384ote.321.1611332627100;
+ Fri, 22 Jan 2021 08:23:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-EXCLAIMER-MD-CONFIG: 96b59d02-bc1a-4a40-8c96-611cac62bce9
-X-TM-SNTS-SMTP: B934DEEAB4CB8FD8A5B7994CBC3DB3C2852D84A63AEE7A0BEA346469ED5EFD062002:8
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSVA-9.1.0.1988-8.6.0.1013-25928.001
-X-TM-AS-Result: No--0.054-7.0-31-10
-X-imss-scan-details: No--0.054-7.0-31-10
-X-TMASE-Version: IMSVA-9.1.0.1988-8.6.1013-25928.001
-X-TMASE-Result: 10--0.054200-10.000000
-X-TMASE-MatchedRID: e7Ukgmbx2cyYizZS4XBb37SlePUaQB976HigDLMyLuZUQwJCGT3cGsEI
-        kNzFiDxLd/zkRsk3r3D7XRb/M9j3617bBp0oAOqqfid4LSHtIAOo2aYwunflnzNCQB9pla5ySwj
-        GLfgtslIEf1geLaoegC/AK98t35jA7aNCrPxQ/ucmxU58j99z8wEPJrYlsf/6WMFR4yyN53oIyT
-        NFi0TCbVYJIpN1DYJ5DsmL+Dl+ilTQLWxBF9DMQcRB0bsfrpPIcSqbxBgG0w5RAl+fwAdPp61+6
-        pBftFJwfzZLo3h5LcJ45zoy90LssUzsUHcZ+ORfyTZfip8hAZrEWIS2IDhm/mix8CxzEqVSR/zg
-        aQpTZVZB73EZz7XBCOp1XUG/h2MOieWdV7FfKATLbAp0fm+COw==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
+References: <3391226.KRKnzuvfpg@kreacher>
+In-Reply-To: <3391226.KRKnzuvfpg@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Jan 2021 17:23:36 +0100
+Message-ID: <CAJZ5v0gB4B_Os0VQv-F2SdVcJ8_rUdjic6rOEjOd=ZWhGzdLdQ@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: thermal: Do not call acpi_thermal_check() directly
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Stephen Berman <stephen.berman@gmx.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=EF=BB=BFIt seems that the swap writer might need be flushed after marking =
-the=20
-signature into the swap files, otherwise the system may power off before
-the signature is written. This is what happened on my system (the swap=20
-file was missing the hibernation signature) and this patch allowed it
-to restore from the hibernation image.=20
+On Thu, Jan 14, 2021 at 7:35 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Calling acpi_thermal_check() from acpi_thermal_notify() directly
+> is problematic if _TMP triggers Notify () on the thermal zone for
+> which it has been evaluated (which happens on some systems), because
+> it causes a new acpi_thermal_notify() invocation to be queued up
+> every time and if that takes place too often, an indefinite number of
+> pending work items may accumulate in kacpi_notify_wq over time.
+>
+> Besides, it is not really useful to queue up a new invocation of
+> acpi_thermal_check() if one of them is pending already.
+>
+> For these reasons, rework acpi_thermal_notify() to queue up a thermal
+> check instead of calling acpi_thermal_check() directly and only allow
+> one thermal check to be pending at a time.  Moreover, only allow one
+> acpi_thermal_check_fn() instance at a time to run
+> thermal_zone_device_update() for one thermal zone and make it return
+> early if it sees other instances running for the same thermal zone.
+>
+> While at it, fold acpi_thermal_check() into acpi_thermal_check_fn(),
+> as it is only called from there after the other changes made here.
+>
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=208877
+> Reported-by: Stephen Berman <stephen.berman@gmx.net>
+> Diagnosed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I don't know if it might be due to a peculiarity of the system I am using,
-it is a custom board with an iMX28 SoC and the hibernation image is stored
-on the gpmi nand flash.
+Well, it's been over a week since this was posted.
 
-Best regards,
+Does anyone have any comments?
 
-Laurent
-
-Laurent Badel (1):
-  PM: hibernate: flush swap writer after marking
-
- kernel/power/swap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---=20
-2.17.1
-
-
-
------------------------------
-Eaton Industries Manufacturing GmbH ~ Registered place of business: Route d=
-e la Longeraie 7, 1110, Morges, Switzerland=20
-
------------------------------
-
+> ---
+>  drivers/acpi/thermal.c |   46 +++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 33 insertions(+), 13 deletions(-)
+>
+> Index: linux-pm/drivers/acpi/thermal.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/thermal.c
+> +++ linux-pm/drivers/acpi/thermal.c
+> @@ -174,6 +174,8 @@ struct acpi_thermal {
+>         struct thermal_zone_device *thermal_zone;
+>         int kelvin_offset;      /* in millidegrees */
+>         struct work_struct thermal_check_work;
+> +       struct mutex thermal_check_lock;
+> +       refcount_t thermal_check_count;
+>  };
+>
+>  /* --------------------------------------------------------------------------
+> @@ -495,14 +497,6 @@ static int acpi_thermal_get_trip_points(
+>         return 0;
+>  }
+>
+> -static void acpi_thermal_check(void *data)
+> -{
+> -       struct acpi_thermal *tz = data;
+> -
+> -       thermal_zone_device_update(tz->thermal_zone,
+> -                                  THERMAL_EVENT_UNSPECIFIED);
+> -}
+> -
+>  /* sys I/F for generic thermal sysfs support */
+>
+>  static int thermal_get_temp(struct thermal_zone_device *thermal, int *temp)
+> @@ -900,6 +894,12 @@ static void acpi_thermal_unregister_ther
+>                                   Driver Interface
+>     -------------------------------------------------------------------------- */
+>
+> +static void acpi_queue_thermal_check(struct acpi_thermal *tz)
+> +{
+> +       if (!work_pending(&tz->thermal_check_work))
+> +               queue_work(acpi_thermal_pm_queue, &tz->thermal_check_work);
+> +}
+> +
+>  static void acpi_thermal_notify(struct acpi_device *device, u32 event)
+>  {
+>         struct acpi_thermal *tz = acpi_driver_data(device);
+> @@ -910,17 +910,17 @@ static void acpi_thermal_notify(struct a
+>
+>         switch (event) {
+>         case ACPI_THERMAL_NOTIFY_TEMPERATURE:
+> -               acpi_thermal_check(tz);
+> +               acpi_queue_thermal_check(tz);
+>                 break;
+>         case ACPI_THERMAL_NOTIFY_THRESHOLDS:
+>                 acpi_thermal_trips_update(tz, ACPI_TRIPS_REFRESH_THRESHOLDS);
+> -               acpi_thermal_check(tz);
+> +               acpi_queue_thermal_check(tz);
+>                 acpi_bus_generate_netlink_event(device->pnp.device_class,
+>                                                   dev_name(&device->dev), event, 0);
+>                 break;
+>         case ACPI_THERMAL_NOTIFY_DEVICES:
+>                 acpi_thermal_trips_update(tz, ACPI_TRIPS_REFRESH_DEVICES);
+> -               acpi_thermal_check(tz);
+> +               acpi_queue_thermal_check(tz);
+>                 acpi_bus_generate_netlink_event(device->pnp.device_class,
+>                                                   dev_name(&device->dev), event, 0);
+>                 break;
+> @@ -1020,7 +1020,25 @@ static void acpi_thermal_check_fn(struct
+>  {
+>         struct acpi_thermal *tz = container_of(work, struct acpi_thermal,
+>                                                thermal_check_work);
+> -       acpi_thermal_check(tz);
+> +
+> +       /*
+> +        * In general, it is not sufficient to check the pending bit, because
+> +        * subsequent instances of this function may be queued after one of them
+> +        * has started running (e.g. if _TMP sleeps).  Avoid bailing out if just
+> +        * one of them is running, though, because it may have done the actual
+> +        * check some time ago, so allow at least one of them to block on the
+> +        * mutex while another one is running the update.
+> +        */
+> +       if (!refcount_dec_not_one(&tz->thermal_check_count))
+> +               return;
+> +
+> +       mutex_lock(&tz->thermal_check_lock);
+> +
+> +       thermal_zone_device_update(tz->thermal_zone, THERMAL_EVENT_UNSPECIFIED);
+> +
+> +       refcount_inc(&tz->thermal_check_count);
+> +
+> +       mutex_unlock(&tz->thermal_check_lock);
+>  }
+>
+>  static int acpi_thermal_add(struct acpi_device *device)
+> @@ -1052,6 +1070,8 @@ static int acpi_thermal_add(struct acpi_
+>         if (result)
+>                 goto free_memory;
+>
+> +       refcount_set(&tz->thermal_check_count, 3);
+> +       mutex_init(&tz->thermal_check_lock);
+>         INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
+>
+>         pr_info(PREFIX "%s [%s] (%ld C)\n", acpi_device_name(device),
+> @@ -1117,7 +1137,7 @@ static int acpi_thermal_resume(struct de
+>                 tz->state.active |= tz->trips.active[i].flags.enabled;
+>         }
+>
+> -       queue_work(acpi_thermal_pm_queue, &tz->thermal_check_work);
+> +       acpi_queue_thermal_check(tz);
+>
+>         return AE_OK;
+>  }
+>
+>
+>
