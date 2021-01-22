@@ -2,345 +2,564 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88126300E00
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 21:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2964B300F94
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 23:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729138AbhAVUql (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 15:46:41 -0500
-Received: from mx2.suse.de ([195.135.220.15]:52124 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730382AbhAVUlg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 Jan 2021 15:41:36 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id BBAC6ABDA;
-        Fri, 22 Jan 2021 20:40:46 +0000 (UTC)
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jon Grimm <Jon.Grimm@amd.com>,
-        Nathan Fontenot <Nathan.Fontenot@amd.com>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Michael Larabel <Michael@phoronix.com>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost in schedutil invariant formula
-Date:   Fri, 22 Jan 2021 21:40:38 +0100
-Message-Id: <20210122204038.3238-2-ggherdovich@suse.cz>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210122204038.3238-1-ggherdovich@suse.cz>
-References: <20210122204038.3238-1-ggherdovich@suse.cz>
+        id S1728684AbhAVWFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 17:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730911AbhAVWEz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 17:04:55 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E20C061786
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 14:04:14 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id g3so4084818plp.2
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 14:04:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0ItXq89Fp8DrRospnZ5epJ5IbjFMXG0vksbW9xyQS2c=;
+        b=g1ozRKDLGxHeyyuLnTxF2YG9g5By7mXw90kuZUCj2MZlKIRl5FYmVrCNsHcJ2b3Yof
+         dzitOr8frbZcJsqyIxGV6SG/kyS7Hc/YEAV1rUQ7xkjbf+KNwrSZZgQ65M7uFUmIc8pX
+         7OsAFZC614KgkOxqE3HOwjd6/DV4r6WMoxs/g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0ItXq89Fp8DrRospnZ5epJ5IbjFMXG0vksbW9xyQS2c=;
+        b=llVk4dZMaXyQ+hOlPDmyShkdMYqE3LxD/6qhq1UncteJnaOavCvRlfg0ShfL0jpsEo
+         ygko96IHB22DaMbNjUUFIjPJj1boz5IwjU7EiEwZJhVJjm0V+gXNDSO2RbVMsdo80trx
+         1zSg1i+QM7rOF1rWlx4ity4G6k1kia8c+N7KDJ1RCUe8MFBOXmOqfZpuqqKEONZZKfJP
+         aMJPaZN+/yGqLPYGsdmJrSX/tGqIkfPY5eQOJ4snMJQWnfVq8TTqscvFYLI6lGrqsry+
+         eBD0Z6ZgD09IuPpJtZmGmHtRx7JvSTnw7g4wkZ43lmV24lglP1uN+YS6f52AQ4oRIyem
+         cSIA==
+X-Gm-Message-State: AOAM532V6P/0hNPL1as1L9Ph3PNGDS8IlYdlec+vOJn59P7/SG2odpMd
+        e6DXYypxdwEtczGSyAZr6n7yqQ==
+X-Google-Smtp-Source: ABdhPJxdJxnc6jTD23222+mRk4vqwF3Xv/yDNqixnGk1J++VDtAwuKf88nXMxhUmOkYQ4iv87eDtFQ==
+X-Received: by 2002:a17:90b:368f:: with SMTP id mj15mr1093964pjb.201.1611353054091;
+        Fri, 22 Jan 2021 14:04:14 -0800 (PST)
+Received: from pc98bx3.roam.corp.google.com (c-73-222-23-249.hsd1.ca.comcast.net. [73.222.23.249])
+        by smtp.gmail.com with ESMTPSA id h12sm9863300pgk.70.2021.01.22.14.04.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jan 2021 14:04:13 -0800 (PST)
+From:   Daisuke Nojiri <dnojiri@chromium.org>
+Cc:     vpalatin@chromium.org, Daisuke Nojiri <dnojiri@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        Pi-Hsun Shih <pihsun@chromium.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Yu-Hsuan Hsu <yuhsuan@chromium.org>,
+        Ching-Kang Yen <chingkang@chromium.org>,
+        Vijay Hiremath <vijay.p.hiremath@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v3 1/2] power: supply: PCHG: Peripheral device charger
+Date:   Fri, 22 Jan 2021 13:58:58 -0800
+Message-Id: <20210122215900.1168610-1-dnojiri@chromium.org>
+X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Phoronix.com discovered a severe performance regression on AMD EPYC
-introduced on schedutil [see link 1] by the following commits from v5.11-rc1
+This patch adds a driver for PCHG (Peripheral CHarGer). PCHG is a
+framework managing power supplies for peripheral devices.
 
-    commit 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-    commit 976df7e5730e ("x86, sched: Use midpoint of max_boost and max_P for frequency invariance on AMD EPYC")
+This driver creates a sysfs node for each peripheral charge port:
 
-Furthermore commit db865272d9c4 ("cpufreq: Avoid configuring old governors as
-default with intel_pstate") from v5.10 made it extremely easy to default to
-schedutil even if the preferred driver is acpi_cpufreq. Distros are likely to
-build both intel_pstate and acpi_cpufreq on x86, and the presence of the
-former removes ondemand from the defaults. This situation amplifies the
-visibility of the bug we're addressing.
+	/sys/class/power_supply/PCHGn
 
-[link 1] https://www.phoronix.com/scan.php?page=article&item=linux511-amd-schedutil&num=1
+where <n> is the index of a charge port.
 
-1. PROBLEM DESCRIPTION   : over-utilization and schedutil
-2. PROPOSED SOLUTION     : raise freq_max in schedutil formula
-3. DATA TABLE            : image processing benchmark
-4. ANALYSIS AND COMMENTS : with over-utilization, freq-invariance is lost
+For example, when a stylus is connected to a NFC/WLC port, the node
+prints:
 
-1. PROBLEM DESCRIPTION (over-utilization and schedutil)
+	/sys/class/power_supply/PCHG0/
+		capacity=50
+		scope=Device
+		status=Charging
+		type=Battery
 
-The problem happens on CPU-bound workloads spanning a large number of cores.
-In this case schedutil won't select the maximum P-State. Actually, it's
-likely that it will select the minimum one.
-
-A CPU-bound workload puts the machine in a state generally called
-"over-utilization": an increase in CPU speed doesn't result in an increase of
-capacity. The fraction of time tasks spend on CPU becomes constant regardless
-of clock frequency (the tasks eat whatever we throw at them), and the PELT
-invariant util goes up and down with the frequency (i.e. it's not invariant
-anymore).
-
-2. PROPOSED SOLUTION (raise freq_max in schedutil formula)
-
-The solution we implement here is a stop-gap one: when the driver is
-acpi_cpufreq and the machine an AMD EPYC, schedutil will use max_boost instead
-of max_P as the value for freq_max in its formula
-
-    freq_next = 1.25 * freq_max * util
-
-essentially giving freq_next some more headroom to grow in the over-utilized
-case. This is the approach also followed by intel_pstate in passive mode.
-
-The correct way to attack this problem would be to have schedutil detect
-over-utilization and select freq_max irrespective of the util value, which has
-no meaning at that point. This approach is too risky for an -rc5 submission so
-we defer it to the next cycle.
-
-3. DATA TABLE (image processing benchmark)
-
-What follows is a more detailed account of the effects on a specific test.
-
-TEST        : Intel Open Image Denoise, www.openimagedenoise.org
-INVOCATION  : ./denoise -hdr memorial.pfm -out out.pfm -bench 200 -threads $NTHREADS
-CPU         : MODEL            : 2x AMD EPYC 7742
-              FREQUENCY TABLE  : P2: 1.50 GHz
-                                 P1: 2.00 GHz
-				 P0: 2.25 GHz
-              MAX BOOST        :     3.40 GHz
-
-Results: threads, msecs (ratio). Lower is better.
-
-               v5.10          v5.11-rc4    v5.11-rc4-patch
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      1   1069.85 (1.00)   1071.84 (1.00)   1070.42 (1.00)
-      2    542.24 (1.00)    544.40 (1.00)    544.48 (1.00)
-      4    278.00 (1.00)    278.44 (1.00)    277.72 (1.00)
-      8    149.81 (1.00)    149.61 (1.00)    149.87 (1.00)
-     16     79.01 (1.00)     79.31 (1.00)     78.94 (1.00)
-     24     58.01 (1.00)     58.51 (1.01)     58.15 (1.00)
-     32     46.58 (1.00)     48.30 (1.04)     46.66 (1.00)
-     48     37.29 (1.00)     51.29 (1.38)     37.27 (1.00)
-     64     34.01 (1.00)     49.59 (1.46)     33.71 (0.99)
-     80     31.09 (1.00)     44.27 (1.42)     31.33 (1.01)
-     96     28.56 (1.00)     40.82 (1.43)     28.47 (1.00)
-    112     28.09 (1.00)     40.06 (1.43)     28.63 (1.02)
-    120     28.73 (1.00)     39.78 (1.38)     28.14 (0.98)
-    128     28.93 (1.00)     39.60 (1.37)     29.38 (1.02)
-
-See how the 128 threads case is almost 40% worse than baseline in v5.11-rc4.
-
-4. ANALYSIS AND COMMENTS (with over-utilization freq-invariance is lost)
-
-Statistics for NTHREADS=128 (number of physical cores of the machine)
-
-                                      v5.10          v5.11-rc4
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~
-CPU activity (mpstat)                 80-90%         80-90%
-schedutil requests (tracepoint)       always P0      mostly P2
-CPU frequency (HW feedback)           ~2.2 GHz       ~1.5 GHz
-PELT root rq util (tracepoint)        ~825           ~450
-
-mpstat shows that the workload is CPU-bound and usage doesn't change with
-clock speed. What is striking is that the PELT util of any root runqueue in
-v5.11-rc4 is half of what used to be before the frequency invariant support
-(v5.10), leading to wrong frequency choices. How did we get there?
-
-This workload is constant in time, so instead of using the PELT sum we can
-pretend that scale invariance is obtained with
-
-    util_inv = util_raw * freq_curr / freq_max1        [formula-1]
-
-where util_raw is the PELT util from v5.10 (which is to say, not invariant),
-and util_inv is the PELT util from v5.11-rc4. freq_max1 comes from
-commit 976df7e5730e ("x86, sched: Use midpoint of max_boost and max_P for
-frequency invariance on AMD EPYC") and is (P0+max_boost)/2 = (2.25+3.4)/2 =
-2.825 GHz.  Then we have the schedutil formula
-
-    freq_next = 1.25 * freq_max2 * util_inv            [formula-2]
-
-Here v5.11-rc4 uses freq_max2 = P0 = 2.25 GHz (and this patch changes it to
-3.4 GHz).
-
-Since all cores are busy, there is no boost available. Let's be generous and say
-the tasks initially get P0, i.e. freq_curr = 2.25 GHz. Combining the formulas
-above and taking util_raw = 825/1024 = 0.8, freq_next is:
-
-    freq_next = 1.25 * 2.25 * 0.8 * 2.25 / 2.825 = 1.79 GHz
-
-After quantization (pick the next frequency up in the table), freq_next is
-P1 = 2.0 GHz. See how we lost 250 MHz in the process. Iterate once more,
-freq_next become 1.59 GHz. Since it's > P2, it's saved by quantization and P1
-is selected, but if util_raw fluctuates a little and goes below 0.75, P0 is
-selected and that kills util_inv by formula-1, which gives util_inv = 0.4.
-
-The culprit of the problem is that with over-utilization, util_raw and
-freq_curr in formula-1 are independent. In the nominal case, if freq_curr goes
-up then util_raw goes down and viceversa. Here util_raw doesn't care and stays
-constant. If freq_curr descrease, util_inv decreases too and so forth (it's a
-feedback loop).
-
-Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-Fixes: 976df7e5730e ("x86, sched: Use midpoint of max_boost and max_P for frequency invariance on AMD EPYC")
-Reported-by: Michael Larabel <Michael@phoronix.com>
-Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
 ---
- drivers/cpufreq/acpi-cpufreq.c   | 64 +++++++++++++++++++++++++++++++-
- drivers/cpufreq/cpufreq.c        |  3 ++
- include/linux/cpufreq.h          |  5 +++
- kernel/sched/cpufreq_schedutil.c |  8 +++-
- 4 files changed, 76 insertions(+), 4 deletions(-)
+v1 -> v2
+* Separate mfd/cros_ec_dev.c
+* Make CONFIG_CHARGER_CROS_PCHG default to CONFIG_MFD_CROS_EC_DEV
+v2 -> v3
+* Return POWER_SUPPLY_SCOPE_DEVICE for POWER_SUPPLY_PROP_SCOPE
+* POWER_SUPPLY_TYPE_WIRELESS -> POWER_SUPPLY_TYPE_BATTERY
+---
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ .../power/supply/cros_peripheral_charger.c    | 350 ++++++++++++++++++
+ .../linux/platform_data/cros_ec_commands.h    |  48 +++
+ 4 files changed, 409 insertions(+)
+ create mode 100644 drivers/power/supply/cros_peripheral_charger.c
 
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 1e4fbb002a31..2378bc1bf2c4 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -27,6 +27,10 @@
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index eec646c568b7be..407f9fbbc2bb50 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -714,6 +714,16 @@ config CHARGER_CROS_USBPD
+ 	  what is connected to USB PD ports from the EC and converts
+ 	  that into power_supply properties.
  
- #include <acpi/processor.h>
- 
-+#ifdef CONFIG_ACPI_CPPC_LIB
-+#include <acpi/cppc_acpi.h>
-+#endif
++config CHARGER_CROS_PCHG
++	tristate "ChromeOS EC based peripheral charger"
++	depends on MFD_CROS_EC_DEV
++	default MFD_CROS_EC_DEV
++	help
++	  Say Y here to enable ChromeOS EC based peripheral charge driver.
++	  This driver gets various information about the devices connected to
++	  the peripheral charge ports from the EC and converts that into
++	  power_supply properties.
 +
- #include <asm/msr.h>
- #include <asm/processor.h>
- #include <asm/cpufeature.h>
-@@ -628,11 +632,57 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
- }
- #endif
- 
-+#ifdef CONFIG_ACPI_CPPC_LIB
-+static bool amd_max_boost(unsigned int max_freq,
-+			  unsigned int *max_boost)
+ config CHARGER_SC2731
+ 	tristate "Spreadtrum SC2731 charger driver"
+ 	depends on MFD_SC27XX_PMIC || COMPILE_TEST
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index dd4b86318cd9bd..5263472a64809b 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -91,6 +91,7 @@ obj-$(CONFIG_CHARGER_TPS65217)	+= tps65217_charger.o
+ obj-$(CONFIG_AXP288_FUEL_GAUGE) += axp288_fuel_gauge.o
+ obj-$(CONFIG_AXP288_CHARGER)	+= axp288_charger.o
+ obj-$(CONFIG_CHARGER_CROS_USBPD)	+= cros_usbpd-charger.o
++obj-$(CONFIG_CHARGER_CROS_PCHG)	+= cros_peripheral_charger.o
+ obj-$(CONFIG_CHARGER_SC2731)	+= sc2731_charger.o
+ obj-$(CONFIG_FUEL_GAUGE_SC27XX)	+= sc27xx_fuel_gauge.o
+ obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
+diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
+new file mode 100644
+index 00000000000000..a864a33a48033f
+--- /dev/null
++++ b/drivers/power/supply/cros_peripheral_charger.c
+@@ -0,0 +1,350 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Power supply driver for ChromeOS EC based Peripheral Device Charger.
++ *
++ * Copyright 2020 Google LLC.
++ */
++
++#include <linux/module.h>
++#include <linux/notifier.h>
++#include <linux/platform_data/cros_ec_commands.h>
++#include <linux/platform_data/cros_ec_proto.h>
++#include <linux/platform_device.h>
++#include <linux/power_supply.h>
++#include <linux/slab.h>
++#include <linux/stringify.h>
++#include <linux/types.h>
++
++#define DRV_NAME		"cros-ec-pchg"
++#define PCHG_DIR_NAME		"PCHG%d"
++#define PCHG_DIR_NAME_LENGTH	sizeof("PCHG" __stringify(EC_PCHG_MAX_PORTS))
++#define PCHG_CACHE_UPDATE_DELAY	msecs_to_jiffies(500)
++
++struct port_data {
++	int port_number;
++	char name[PCHG_DIR_NAME_LENGTH];
++	struct power_supply *psy;
++	struct power_supply_desc psy_desc;
++	int psy_status;
++	int battery_percentage;
++	struct charger_data *charger;
++	unsigned long last_update;
++};
++
++struct charger_data {
++	struct device *dev;
++	struct cros_ec_dev *ec_dev;
++	struct cros_ec_device *ec_device;
++	int num_registered_psy;
++	struct port_data *ports[EC_PCHG_MAX_PORTS];
++	struct notifier_block notifier;
++};
++
++static enum power_supply_property cros_pchg_props[] = {
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_SCOPE,
++	/*
++	 * todo: Add the following.
++	 *
++	 * POWER_SUPPLY_PROP_TECHNOLOGY,
++	 * POWER_SUPPLY_PROP_ERROR,
++	 * POWER_SUPPLY_PROP_SERIAL_NUMBER,
++	 *
++	 * POWER_SUPPLY_PROP_ONLINE can't be used because it indicates the
++	 * system is powered by AC.
++	 */
++};
++
++static int cros_pchg_ec_command(const struct charger_data *charger,
++				unsigned int version,
++				unsigned int command,
++				const void *outdata,
++				unsigned int outsize,
++				void *indata,
++				unsigned int insize)
 +{
-+	struct cppc_perf_caps perf_caps;
-+	u64 highest_perf, nominal_perf, perf_ratio;
++	struct cros_ec_dev *ec_dev = charger->ec_dev;
++	struct cros_ec_command *msg;
 +	int ret;
 +
-+	ret = cppc_get_perf_caps(0, &perf_caps);
-+	if (ret) {
-+		pr_debug("Could not retrieve perf counters (%d)\n", ret);
-+		return false;
-+	}
++	msg = kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
 +
-+	highest_perf = perf_caps.highest_perf;
-+	nominal_perf = perf_caps.nominal_perf;
++	msg->version = version;
++	msg->command = ec_dev->cmd_offset + command;
++	msg->outsize = outsize;
++	msg->insize = insize;
 +
-+	if (!highest_perf || !nominal_perf) {
-+		pr_debug("Could not retrieve highest or nominal performance\n");
-+		return false;
-+	}
++	if (outsize)
++		memcpy(msg->data, outdata, outsize);
 +
-+	perf_ratio = div_u64(highest_perf * SCHED_CAPACITY_SCALE, nominal_perf);
-+	if (perf_ratio <= SCHED_CAPACITY_SCALE) {
-+		pr_debug("Either perf_ratio is 0, or nominal >= highest performance\n");
-+		return false;
-+	}
++	ret = cros_ec_cmd_xfer_status(charger->ec_device, msg);
++	if (ret >= 0 && insize)
++		memcpy(indata, msg->data, insize);
 +
-+	*max_boost = max_freq * perf_ratio >> SCHED_CAPACITY_SHIFT;
-+	if (!*max_boost) {
-+		pr_debug("max_boost seems to be zero\n");
-+		return false;
-+	}
-+
-+	return true;
++	kfree(msg);
++	return ret;
 +}
-+#else
-+static bool amd_max_boost(unsigned int max_freq,
-+			  unsigned int *max_boost)
++
++static int cros_pchg_port_count(const struct charger_data *charger)
 +{
-+	return false;
-+}
-+#endif
++	struct ec_response_pchg_count rsp;
++	int ret;
 +
- static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
- {
- 	unsigned int i;
- 	unsigned int valid_states = 0;
- 	unsigned int cpu = policy->cpu;
-+	unsigned int freq, max_freq = 0;
-+	unsigned int max_boost;
- 	struct acpi_cpufreq_data *data;
- 	unsigned int result = 0;
- 	struct cpuinfo_x86 *c = &cpu_data(policy->cpu);
-@@ -779,15 +829,25 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 		    freq_table[valid_states-1].frequency / 1000)
- 			continue;
- 
-+		freq = perf->states[i].core_frequency * 1000;
- 		freq_table[valid_states].driver_data = i;
--		freq_table[valid_states].frequency =
--		    perf->states[i].core_frequency * 1000;
-+		freq_table[valid_states].frequency = freq;
-+
-+		if (freq > max_freq)
-+			max_freq = freq;
-+
- 		valid_states++;
- 	}
- 	freq_table[valid_states].frequency = CPUFREQ_TABLE_END;
- 	policy->freq_table = freq_table;
- 	perf->state = 0;
- 
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD &&
-+	    amd_max_boost(max_freq, &max_boost)) {
-+		policy->cpuinfo.max_boost = max_boost;
-+		static_branch_enable(&cpufreq_amd_max_boost);
++	ret = cros_pchg_ec_command(charger, 0, EC_CMD_PCHG_COUNT,
++				   NULL, 0, &rsp, sizeof(rsp));
++	if (ret < 0) {
++		dev_warn(charger->dev,
++			 "Unable to get number or ports (err:%d)\n", ret);
++		return ret;
 +	}
 +
- 	switch (perf->control_register.space_id) {
- 	case ACPI_ADR_SPACE_SYSTEM_IO:
- 		/*
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index d0a3525ce27f..b96677f6b57e 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2721,6 +2721,9 @@ int cpufreq_boost_enabled(void)
- }
- EXPORT_SYMBOL_GPL(cpufreq_boost_enabled);
- 
-+DEFINE_STATIC_KEY_FALSE(cpufreq_amd_max_boost);
-+EXPORT_SYMBOL_GPL(cpufreq_amd_max_boost);
++	return rsp.port_count;
++}
 +
- /*********************************************************************
-  *               REGISTER / UNREGISTER CPUFREQ DRIVER                *
-  *********************************************************************/
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 9c8b7437b6cd..341cac76d254 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -40,9 +40,14 @@ enum cpufreq_table_sorting {
- 	CPUFREQ_TABLE_SORTED_DESCENDING
++static int cros_pchg_get_status(struct port_data *port)
++{
++	struct charger_data *charger = port->charger;
++	struct ec_params_pchg req;
++	struct ec_response_pchg rsp;
++	struct device *dev = charger->dev;
++	int ret;
++
++	req.port = port->port_number;
++	ret = cros_pchg_ec_command(charger, 0, EC_CMD_PCHG,
++				   &req, sizeof(req), &rsp, sizeof(rsp));
++	if (ret < 0) {
++		dev_err(dev, "Unable to get port.%d status (err:%d)\n",
++			port->port_number, ret);
++		return ret;
++	}
++
++	switch (rsp.state) {
++	case PCHG_STATE_RESET:
++	case PCHG_STATE_INITIALIZED:
++	case PCHG_STATE_ENABLED:
++	default:
++		port->psy_status = POWER_SUPPLY_STATUS_UNKNOWN;
++		port->battery_percentage = 0;
++		break;
++	case PCHG_STATE_DETECTED:
++		port->psy_status = POWER_SUPPLY_STATUS_NOT_CHARGING;
++		port->battery_percentage = rsp.battery_percentage;
++		break;
++	case PCHG_STATE_CHARGING:
++		port->psy_status = POWER_SUPPLY_STATUS_CHARGING;
++		port->battery_percentage = rsp.battery_percentage;
++		break;
++	}
++
++	dev_dbg(dev,
++		"Port %d: state=%d battery=%d%%\n",
++		port->port_number, rsp.state, rsp.battery_percentage);
++
++	return 0;
++}
++
++static int cros_pchg_get_port_status(struct port_data *port, bool ratelimit)
++{
++	int ret;
++
++	if (ratelimit &&
++	    time_is_after_jiffies(port->last_update + PCHG_CACHE_UPDATE_DELAY))
++		return 0;
++
++	ret = cros_pchg_get_status(port);
++	if (ret < 0)
++		return ret;
++
++	port->last_update = jiffies;
++
++	return ret;
++}
++
++static int cros_pchg_get_prop(struct power_supply *psy,
++			      enum power_supply_property psp,
++			      union power_supply_propval *val)
++{
++	struct port_data *port = power_supply_get_drvdata(psy);
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++	case POWER_SUPPLY_PROP_CAPACITY:
++		cros_pchg_get_port_status(port, true);
++		break;
++	default:
++		break;
++	}
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = port->psy_status;
++		break;
++	case POWER_SUPPLY_PROP_CAPACITY:
++		val->intval = port->battery_percentage;
++		break;
++	case POWER_SUPPLY_PROP_SCOPE:
++		val->intval = POWER_SUPPLY_SCOPE_DEVICE;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int cros_pchg_event(const struct charger_data *charger,
++			   unsigned long host_event)
++{
++	int i;
++
++	for (i = 0; i < charger->num_registered_psy; i++)
++		cros_pchg_get_port_status(charger->ports[i], false);
++
++	return NOTIFY_OK;
++}
++
++static u32 cros_get_device_event(const struct charger_data *charger)
++{
++	struct ec_params_device_event req;
++	struct ec_response_device_event rsp;
++	struct device *dev = charger->dev;
++	int ret;
++
++	req.param = EC_DEVICE_EVENT_PARAM_GET_CURRENT_EVENTS;
++	ret = cros_pchg_ec_command(charger, 0, EC_CMD_DEVICE_EVENT,
++				   &req, sizeof(req), &rsp, sizeof(rsp));
++	if (ret < 0) {
++		dev_warn(dev, "Unable to get device events (err:%d)\n", ret);
++		return 0;
++	}
++
++	return rsp.event_mask;
++}
++
++static int cros_ec_notify(struct notifier_block *nb,
++			  unsigned long queued_during_suspend,
++			  void *data)
++{
++	struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
++	u32 host_event = cros_ec_get_host_event(ec_dev);
++	struct charger_data *charger =
++			container_of(nb, struct charger_data, notifier);
++	u32 device_event_mask;
++
++	if (!host_event)
++		return NOTIFY_BAD;
++
++	if (!(host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_DEVICE)))
++		return NOTIFY_DONE;
++
++	/*
++	 * todo: Retrieve device event mask in common place
++	 * (e.g. cros_ec_proto.c).
++	 */
++	device_event_mask = cros_get_device_event(charger);
++	if (!(device_event_mask & EC_DEVICE_EVENT_MASK(EC_DEVICE_EVENT_WLC)))
++		return NOTIFY_DONE;
++
++	return cros_pchg_event(charger, host_event);
++}
++
++static int cros_pchg_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
++	struct cros_ec_device *ec_device = ec_dev->ec_dev;
++	struct power_supply_desc *psy_desc;
++	struct charger_data *charger;
++	struct power_supply *psy;
++	struct port_data *port;
++	struct notifier_block *nb;
++	int num_ports;
++	int ret;
++	int i;
++
++	charger = devm_kzalloc(dev, sizeof(*charger), GFP_KERNEL);
++	if (!charger)
++		return -ENOMEM;
++
++	charger->dev = dev;
++	charger->ec_dev = ec_dev;
++	charger->ec_device = ec_device;
++
++	ret = cros_pchg_port_count(charger);
++	if (ret <= 0) {
++		/*
++		 * This feature is enabled by the EC and the kernel driver is
++		 * included by default for CrOS devices. Don't need to be loud
++		 * since this error can be normal.
++		 */
++		dev_info(dev, "No peripheral charge ports (err:%d)\n", ret);
++		return -ENODEV;
++	}
++
++	num_ports = ret;
++	if (num_ports > EC_PCHG_MAX_PORTS) {
++		dev_err(dev, "Too many peripheral charge ports (%d)\n",
++			num_ports);
++		return -ENOBUFS;
++	}
++
++	dev_info(dev, "%d peripheral charge ports found\n", num_ports);
++
++	for (i = 0; i < num_ports; i++) {
++		struct power_supply_config psy_cfg = {};
++
++		port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
++		if (!port)
++			return -ENOMEM;
++
++		port->charger = charger;
++		port->port_number = i;
++		snprintf(port->name, sizeof(port->name), PCHG_DIR_NAME, i);
++
++		psy_desc = &port->psy_desc;
++		psy_desc->name = port->name;
++		psy_desc->type = POWER_SUPPLY_TYPE_BATTERY;
++		psy_desc->get_property = cros_pchg_get_prop;
++		psy_desc->external_power_changed = NULL;
++		psy_desc->properties = cros_pchg_props;
++		psy_desc->num_properties = ARRAY_SIZE(cros_pchg_props);
++		psy_cfg.drv_data = port;
++
++		psy = devm_power_supply_register_no_ws(dev, psy_desc, &psy_cfg);
++		if (IS_ERR(psy)) {
++			dev_err(dev, "Failed to register power supply\n");
++			continue;
++		}
++		port->psy = psy;
++
++		charger->ports[charger->num_registered_psy++] = port;
++	}
++
++	if (!charger->num_registered_psy)
++		return -ENODEV;
++
++	nb = &charger->notifier;
++	nb->notifier_call = cros_ec_notify;
++	ret = blocking_notifier_chain_register(&ec_dev->ec_dev->event_notifier,
++					       nb);
++	if (ret < 0)
++		dev_err(dev, "Failed to register notifier (err:%d)\n", ret);
++
++	return 0;
++}
++
++static struct platform_driver cros_pchg_driver = {
++	.driver = {
++		.name = DRV_NAME,
++	},
++	.probe = cros_pchg_probe
++};
++
++module_platform_driver(cros_pchg_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("ChromeOS EC peripheral device charger");
++MODULE_ALIAS("platform:" DRV_NAME);
+diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+index 5a3ccf8968968e..6a82a9ad99eadf 100644
+--- a/include/linux/platform_data/cros_ec_commands.h
++++ b/include/linux/platform_data/cros_ec_commands.h
+@@ -4249,6 +4249,7 @@ enum ec_device_event {
+ 	EC_DEVICE_EVENT_TRACKPAD,
+ 	EC_DEVICE_EVENT_DSP,
+ 	EC_DEVICE_EVENT_WIFI,
++	EC_DEVICE_EVENT_WLC,
  };
  
-+DECLARE_STATIC_KEY_FALSE(cpufreq_amd_max_boost);
-+
-+#define cpufreq_driver_has_max_boost() static_branch_unlikely(&cpufreq_amd_max_boost)
-+
- struct cpufreq_cpuinfo {
- 	unsigned int		max_freq;
- 	unsigned int		min_freq;
-+	unsigned int		max_boost;
+ enum ec_device_event_param {
+@@ -5480,6 +5481,53 @@ struct ec_response_rollback_info {
+ /* Issue AP reset */
+ #define EC_CMD_AP_RESET 0x0125
  
- 	/* in 10^(-9) s = nanoseconds */
- 	unsigned int		transition_latency;
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 6931f0cdeb80..541f3db3f576 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -159,8 +159,12 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
- 				  unsigned long util, unsigned long max)
- {
- 	struct cpufreq_policy *policy = sg_policy->policy;
--	unsigned int freq = arch_scale_freq_invariant() ?
--				policy->cpuinfo.max_freq : policy->cur;
-+	unsigned int freq, max_freq;
++/**
++ * Get the number of peripheral charge ports
++ */
++#define EC_CMD_PCHG_COUNT 0x0134
 +
-+	max_freq = cpufreq_driver_has_max_boost() ?
-+			policy->cpuinfo.max_boost : policy->cpuinfo.max_freq;
++#define EC_PCHG_MAX_PORTS 8
 +
-+	freq = arch_scale_freq_invariant() ? max_freq : policy->cur;
- 
- 	freq = map_util_freq(util, freq, max);
- 
++struct ec_response_pchg_count {
++	uint8_t port_count;
++} __ec_align1;
++
++/**
++ * Get the status of a peripheral charge port
++ */
++#define EC_CMD_PCHG 0x0135
++
++struct ec_params_pchg {
++	uint8_t port;
++} __ec_align1;
++
++struct ec_response_pchg {
++	uint32_t error; /* enum pchg_error */
++	uint8_t state; /* enum pchg_state state */
++	uint8_t battery_percentage;
++} __ec_align2;
++
++enum pchg_state {
++	/* Charger is reset and not initialized. */
++	PCHG_STATE_RESET = 0,
++	/* Charger is initialized or disabled. */
++	PCHG_STATE_INITIALIZED,
++	/* Charger is enabled and ready to detect a device. */
++	PCHG_STATE_ENABLED,
++	/* Device is detected in proximity. */
++	PCHG_STATE_DETECTED,
++	/* Device is being charged. */
++	PCHG_STATE_CHARGING,
++};
++
++#define EC_PCHG_STATE_TEXT { \
++	[PCHG_STATE_RESET] = "RESET", \
++	[PCHG_STATE_INITIALIZED] = "INITIALIZED", \
++	[PCHG_STATE_ENABLED] = "ENABLED", \
++	[PCHG_STATE_DETECTED] = "DETECTED", \
++	[PCHG_STATE_CHARGING] = "CHARGING", \
++	}
++
+ /*****************************************************************************/
+ /* Locate peripheral chips
+  *
 -- 
-2.26.2
+2.30.0.280.ga3ce27912f-goog
 
