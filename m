@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E73F300DA5
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 21:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5E9300DB0
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 21:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728373AbhAVUZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 15:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S1729251AbhAVU2g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 15:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730941AbhAVUSB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 15:18:01 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E256C0613D6
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 12:17:20 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id e22so13754241iog.6
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 12:17:20 -0800 (PST)
+        with ESMTP id S1729915AbhAVU0b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 15:26:31 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53480C0613D6
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 12:23:10 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id h11so13720258ioh.11
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 12:23:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:references:from:message-id:date:user-agent:mime-version
          :in-reply-to:content-language:content-transfer-encoding;
-        bh=EyMAX4RDBgEWkK9rI+suZ/hX/nCJTqw3QIBCBEq4UXk=;
-        b=dJwax//rwioNZS4Dzs7YQpeWeK7An50ETJLEKlVIgL3QG+hm8G+dyQmmkNkjlt3PHm
-         2DZAFGIUS7sphdsZp4b+cXc+UqLtsFpnuXk297zobBwOVSX7H9YwdVgeAxbG8KTJkuUm
-         AaYnexvivNbrYHpNO4SRFpr09nN+JsrBBs4FE=
+        bh=9zlW2lUUFq94a13H+Bafe0Un7K52KcvjGZoo5gL5FNQ=;
+        b=DEcMA/aHIITXo2glOdJIFeUrpOemjBS4r4FO8QOL2msXtLnoofFI4wVgt5UIDcL4m7
+         d7olgXzRgwYuoYmlcH+/EFl39wMRVgFfH8k/CwWVcniw3/CTZvcCo3KU3/xcodqJo3vq
+         Hd6aQc170oX51155kP7R5p03JpwS7m0Ke4fSQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=EyMAX4RDBgEWkK9rI+suZ/hX/nCJTqw3QIBCBEq4UXk=;
-        b=R/p5p8RlQuXI8sH1cW0MRF0AkBq1CoFTRi6hUIBDYptc+aEO3zdmlTFPfvTZhVkQ0c
-         Bf/XpIhp17hWYax7I1LfdGXycKUcxYbUvaWD4umoOfXzue12xDaA7oLk4gqEUv90Yry8
-         58qOCoQFxlv7zWcakCOe9uH/XRM16Waupr1RDkgnYbuPty24yMazTxSHVRfbtqu6uwzj
-         YJ92KMtUPvUL9gO82+cng0OtBe00wVqeGSxZOO54fQc2PEAH3fxt6QJtqNk03ehGi8UJ
-         leNuhDleZ9dXSPGPY8zj7pBNKmGiELPviQcGsJHAia0PpDfSXc/yFATqKZ07uxUxhNfw
-         khCw==
-X-Gm-Message-State: AOAM532EX52lCXIG6OwTTUHoNcOdI36d37Au7vjZqFN+KBJuDLynx/UV
-        le7d0pL6kbTqnrulu/0xKeeiag==
-X-Google-Smtp-Source: ABdhPJxJ3hKf1xeZDaxdmqh1aqHeVHxWslc3PVpTAKROnI9SiuTH3kg0bLskeGBy+JLTQI8tr4Ql1w==
-X-Received: by 2002:a6b:c949:: with SMTP id z70mr2126720iof.80.1611346639525;
-        Fri, 22 Jan 2021 12:17:19 -0800 (PST)
+        bh=9zlW2lUUFq94a13H+Bafe0Un7K52KcvjGZoo5gL5FNQ=;
+        b=MHKr1AcRvsdSwGEOfmz4Ceh++uefHPJ56YARvvtsENj47nYiJtI21H4dkRvWTqwl8s
+         9P5cNBkdOz7K+2tKQl3mfToqiv1a4z1a9xpfTDe1o7nJfPfXYsUNwcXqnPBWi8VBhp13
+         uBXRfCoTIqdl57ms01XVdF+PcB08fDLzILd7i9ZDNF+DfvUMwSD3dAUFvclhtJf0348d
+         mwjwmw2EImCtWzBUq7t3dYqAH+jxS5ew4DGTCmxl1nHmceoc0WHQ5MAMg5c3nt/Fm6rw
+         3fNGztr6hNINypekD6NT4p99z7oOtkRmtZ4JBHZtow5gMMwBh2vqRB7UuULQPRWk46lz
+         jImA==
+X-Gm-Message-State: AOAM531xLEzpeQdY6faBPn5QKlQGHN9hDXdPOEhjiynIsNFey00G2n0p
+        zCN6NZ8Y35Ec2VI24u6E98DZONNMfowT8g==
+X-Google-Smtp-Source: ABdhPJwcn8nRuo6Qb686uL+p/vPB+9tyIaVgT9p4fktoVA2x6YM1lKkssKnHF7j5oip7gz4/ni5oig==
+X-Received: by 2002:a5d:8887:: with SMTP id d7mr4647810ioo.151.1611346989709;
+        Fri, 22 Jan 2021 12:23:09 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id g13sm6635927iln.12.2021.01.22.12.17.18
+        by smtp.gmail.com with ESMTPSA id u3sm6684919ilg.48.2021.01.22.12.23.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jan 2021 12:17:18 -0800 (PST)
-Subject: Re: [PATCH 1/8] cpupower: Update msr_pstate union struct naming
+        Fri, 22 Jan 2021 12:23:09 -0800 (PST)
+Subject: Re: [PATCH 3/8] cpupower: Add CPUPOWER_CAP_AMD_HW_PSTATE cpuid caps
+ flag
 To:     Nathan Fontenot <nathan.fontenot@amd.com>, rrichter@amd.com,
         shuah@kernel.org, linux-kernel@vger.kernel.org, trenn@suse.com,
         linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
 References: <161133705833.59625.6935511700675018185.stgit@ethanol01c7-host.amd.com>
- <161133711513.59625.9843026563692886689.stgit@ethanol01c7-host.amd.com>
+ <161133713035.59625.1577978944767511822.stgit@ethanol01c7-host.amd.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a677f0bb-2d17-f372-66a3-65a74494eb6c@linuxfoundation.org>
-Date:   Fri, 22 Jan 2021 13:17:17 -0700
+Message-ID: <512d7ad9-dac9-7e54-6afc-0bdf60eff8f2@linuxfoundation.org>
+Date:   Fri, 22 Jan 2021 13:23:08 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <161133711513.59625.9843026563692886689.stgit@ethanol01c7-host.amd.com>
+In-Reply-To: <161133713035.59625.1577978944767511822.stgit@ethanol01c7-host.amd.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -66,114 +67,76 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 1/22/21 10:38 AM, Nathan Fontenot wrote:
-> The msr_pstate union struct named fam17h_bits is misleading since
-> this is the struct to use for all families >= 0x17, not just
-> for family 0x17. Rename the bits structs to be 'pstate' (for pre
-> family 17h CPUs) and 'pstatedef' (for CPUs since fam 17h) to align
-> closer with PPR/BDKG naming.
-
-What is PPR/PDKG - would be helpful to know what it is and provide
-link to the doc if applicable.
+> Add a check in get_cpu_info() for the ability to read frequencies
+> from hardware and set the CPUPOWER_CAP_AMD_HW_PSTATE cpuid flag.
+> The cpuid flag is set when CPUID_80000007_EDX[7] is set,
+> which is all families >= 10h. The check excludes family 14h
+> because HW pstate reporting was not implemented on family 14h.
 > 
-> There are no functional changes as part of this update.
+> This is intended to reduce family checks in the main code paths.
 > 
 > Signed-off-by: Nathan Fontenot <nathan.fontenot@amd.com>
 > ---
->   tools/power/cpupower/utils/helpers/amd.c |   26 ++++++++++++++------------
->   1 file changed, 14 insertions(+), 12 deletions(-)
+>   tools/power/cpupower/utils/helpers/amd.c     |    6 +-----
+>   tools/power/cpupower/utils/helpers/cpuid.c   |   12 +++++++++---
+>   tools/power/cpupower/utils/helpers/helpers.h |    1 +
+>   3 files changed, 11 insertions(+), 8 deletions(-)
 > 
 > diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-> index 7c4f83a8c973..34368436bbd6 100644
+> index 34368436bbd6..496844a20fe2 100644
 > --- a/tools/power/cpupower/utils/helpers/amd.c
 > +++ b/tools/power/cpupower/utils/helpers/amd.c
-> @@ -13,7 +13,8 @@
->   #define MSR_AMD_PSTATE		0xc0010064
->   #define MSR_AMD_PSTATE_LIMIT	0xc0010061
->   
-> -union msr_pstate {
-> +union core_pstate {
-> +	/* pre fam 17h: */
->   	struct {
->   		unsigned fid:6;
->   		unsigned did:3;
-> @@ -26,7 +27,8 @@ union msr_pstate {
->   		unsigned idddiv:2;
->   		unsigned res3:21;
->   		unsigned en:1;
-> -	} bits;
-> +	} pstate;
-> +	/* since fam 17h: */
->   	struct {
->   		unsigned fid:8;
->   		unsigned did:6;
-> @@ -35,36 +37,36 @@ union msr_pstate {
->   		unsigned idddiv:2;
->   		unsigned res1:31;
->   		unsigned en:1;
-> -	} fam17h_bits;
-> +	} pstatedef;
-
-Does pstatedef indicate this is pstate default?
-
->   	unsigned long long val;
->   };
->   
-> -static int get_did(int family, union msr_pstate pstate)
-> +static int get_did(int family, union core_pstate pstate)
->   {
->   	int t;
->   
->   	if (family == 0x12)
->   		t = pstate.val & 0xf;
->   	else if (family == 0x17 || family == 0x18)
-> -		t = pstate.fam17h_bits.did;
-> +		t = pstate.pstatedef.did;
->   	else
-> -		t = pstate.bits.did;
-> +		t = pstate.pstate.did;
->   
->   	return t;
->   }
->   
-> -static int get_cof(int family, union msr_pstate pstate)
-> +static int get_cof(int family, union core_pstate pstate)
->   {
->   	int t;
->   	int fid, did, cof;
->   
->   	did = get_did(family, pstate);
->   	if (family == 0x17 || family == 0x18) {
-> -		fid = pstate.fam17h_bits.fid;
-> +		fid = pstate.pstatedef.fid;
->   		cof = 200 * fid / did;
->   	} else {
->   		t = 0x10;
-> -		fid = pstate.bits.fid;
-> +		fid = pstate.pstate.fid;
->   		if (family == 0x11)
->   			t = 0x8;
->   		cof = (100 * (fid + t)) >> did;
-> @@ -89,7 +91,7 @@ int decode_pstates(unsigned int cpu, unsigned int cpu_family,
->   		   int boost_states, unsigned long *pstates, int *no)
->   {
->   	int i, psmax, pscur;
-> -	union msr_pstate pstate;
-> +	union core_pstate pstate;
+> @@ -94,11 +94,7 @@ int decode_pstates(unsigned int cpu, unsigned int cpu_family,
+>   	union core_pstate pstate;
 >   	unsigned long long val;
 >   
->   	/* Only read out frequencies from HW when CPU might be boostable
-> @@ -119,9 +121,9 @@ int decode_pstates(unsigned int cpu, unsigned int cpu_family,
->   		}
->   		if (read_msr(cpu, MSR_AMD_PSTATE + i, &pstate.val))
->   			return -1;
-> -		if ((cpu_family == 0x17) && (!pstate.fam17h_bits.en))
-> +		if ((cpu_family == 0x17) && (!pstate.pstatedef.en))
->   			continue;
-> -		else if (!pstate.bits.en)
-> +		else if (!pstate.pstate.en)
->   			continue;
+> -	/* Only read out frequencies from HW when CPU might be boostable
+> -	   to keep the code as short and clean as possible.
+> -	   Otherwise frequencies are exported via ACPI tables.
+> -	*/
+
+Please update comment instead of deleting it.
+
+> -	if (cpu_family < 0x10 || cpu_family == 0x14)
+> +	if (!(cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_HW_PSTATE))
+>   		return -1;
 >   
->   		pstates[i] = get_cof(cpu_family, pstate);
+>   	if (read_msr(cpu, MSR_AMD_PSTATE_LIMIT, &val))
+> diff --git a/tools/power/cpupower/utils/helpers/cpuid.c b/tools/power/cpupower/utils/helpers/cpuid.c
+> index f9a66a430b72..d577220a193b 100644
+> --- a/tools/power/cpupower/utils/helpers/cpuid.c
+> +++ b/tools/power/cpupower/utils/helpers/cpuid.c
+> @@ -128,9 +128,15 @@ int get_cpu_info(struct cpupower_cpu_info *cpu_info)
+>   	/* AMD or Hygon Boost state enable/disable register */
+>   	if (cpu_info->vendor == X86_VENDOR_AMD ||
+>   	    cpu_info->vendor == X86_VENDOR_HYGON) {
+> -		if (ext_cpuid_level >= 0x80000007 &&
+> -		    (cpuid_edx(0x80000007) & (1 << 9)))
+> -			cpu_info->caps |= CPUPOWER_CAP_AMD_CPB;
+> +		if (ext_cpuid_level >= 0x80000007) {
+> +			if (cpuid_edx(0x80000007) & (1 << 9))
+> +				cpu_info->caps |= CPUPOWER_CAP_AMD_CPB;
+> +
+> +			if ((cpuid_edx(0x80000007) & (1 << 7)) &&
+> +			    cpu_info->family != 0x14)
+> +				/* HW pstate was not implemented in family 0x14 */
+> +				cpu_info->caps |= CPUPOWER_CAP_AMD_HW_PSTATE;
+> +		}
+>   
+>   		if (ext_cpuid_level >= 0x80000008 &&
+>   		    cpuid_ebx(0x80000008) & (1 << 4))
+> diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
+> index a84f85a9dbd2..5f61eefff5b2 100644
+> --- a/tools/power/cpupower/utils/helpers/helpers.h
+> +++ b/tools/power/cpupower/utils/helpers/helpers.h
+> @@ -70,6 +70,7 @@ enum cpupower_cpu_vendor {X86_VENDOR_UNKNOWN = 0, X86_VENDOR_INTEL,
+>   #define CPUPOWER_CAP_IS_SNB		0x00000020
+>   #define CPUPOWER_CAP_INTEL_IDA		0x00000040
+>   #define CPUPOWER_CAP_AMD_RDPRU		0x00000080
+> +#define CPUPOWER_CAP_AMD_HW_PSTATE	0x00000100
+>   
+>   #define CPUPOWER_AMD_CPBDIS		0x02000000
+>   
 > 
 > 
 
