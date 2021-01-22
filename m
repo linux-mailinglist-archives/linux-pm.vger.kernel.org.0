@@ -2,44 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FF8300818
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 17:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DDD300828
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 17:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729389AbhAVQCB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 11:02:01 -0500
-Received: from pb-smtp1.pobox.com ([64.147.108.70]:60487 "EHLO
-        pb-smtp1.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728595AbhAVQBr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 11:01:47 -0500
-Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id 66ABEA5DB3;
-        Fri, 22 Jan 2021 11:00:59 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
-        :cc:subject:in-reply-to:message-id:references:mime-version
-        :content-type; s=sasl; bh=+J0DdzVn5zPqDxaONCTWTpK0x0k=; b=QWM0Sn
-        Ded40Jp8fwZCTUOW2iOyX3VkZcvHGiwoaV0x+L7G1H7MIePM/p1ZBoEazldodD2e
-        N7pReVbvHFQvkaO/QgWQNl7/5XDXQm5YrIeGvvStuMQvssZy1T8JZxe69Q5JTa8w
-        JSub+MswHymjYTalTEU8DSPQ/dRzAISK9uGmU=
-Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id 5B3DCA5DB1;
-        Fri, 22 Jan 2021 11:00:59 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=VIMkOf8SOu9wBcxejf8WoJF4GsTy8Ojp1X08IO9Wu1k=; b=fxx/L5sIeV1kRnaWu00cqGnPBtkHzDSs0tE5RCOsMeekdd/5aTl1sVFUqfAN3dnSFPVrqQN6aSF7Pv9WqEdF531FJ0c0PtHt9WWWAorSwXqJKxnJ1/blT91LTHe8ckV+HOadJ6sxJewaGlzUlCWewZuWeCzgyN9jtERS3PW5eW4=
-Received: from yoda.home (unknown [24.203.50.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 8AC91A5DAE;
-        Fri, 22 Jan 2021 11:00:58 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-Received: from xanadu.home (xanadu.home [192.168.2.2])
-        by yoda.home (Postfix) with ESMTPSA id 9FA272DA0140;
-        Fri, 22 Jan 2021 11:00:57 -0500 (EST)
-Date:   Fri, 22 Jan 2021 11:00:57 -0500 (EST)
-From:   Nicolas Pitre <nico@fluxnic.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        id S1729478AbhAVQEA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 11:04:00 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:43103 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729474AbhAVQDp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 11:03:45 -0500
+Received: by mail-ot1-f52.google.com with SMTP id v1so5501852ott.10;
+        Fri, 22 Jan 2021 08:03:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WZXt3LPjp06oNUnJDeoDXc8Gsk/FMkSs1QZqQ06tFM4=;
+        b=VKBGR1h6ci6j9cDUJk4v2aFaGKT025l/14M5T1UQSe4mUdC7QQCMXBQOmPy38qbrjX
+         jgmwgMADS2lPW6o63J/5ASR1YdR6v4MFx5hbZ5Lv1XAsop1AXrUaPOg3d3YJeCaD4eOJ
+         AHYHh/0JB6SwEuJ85/hqdXG1G8V/9mnMcpNpvM8tnNHyqdtGloW1Z9qv9Q/n0R202ZUF
+         2rMs5eMg4OzAhlPdcaEr0q46ISq4H/p67PyYX0o8JVb0ERryFGSrVfJfJtc4ejXlLm2y
+         z5bvp9HucWg7N0HwkBEZmDP0GOA3QSomT989zOwMwjjO9QdkWhMhFS+JIowrvEM2cmBC
+         113A==
+X-Gm-Message-State: AOAM5320jePDqiRNSGaTGzadSmqmr3JHoU9nn0VxRDr7whXWAHVUJfSw
+        Oz/pP5rlNZ3nHyfrihcPDa/1mTW+55yde6i633Y=
+X-Google-Smtp-Source: ABdhPJwPlqEb4HShYX56M/xSFCnI33iv6UVQbwalZkDHIh9m6GgnDlvU01gnMmft+b4AaYEUf3Uiub8XLGXz+puMstE=
+X-Received: by 2002:a9d:745a:: with SMTP id p26mr3937315otk.206.1611331369485;
+ Fri, 22 Jan 2021 08:02:49 -0800 (PST)
+MIME-Version: 1.0
+References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz>
+ <CA+G9fYsyXsNSXGy6BWZ6mgpAP=+7r6Xy9jQ2xxb9mXyHdRoBCg@mail.gmail.com>
+ <CAMuHMdULW4bnb0Jc0+ZaF9P2VNgnYsvEks7y8WYCk045BHqh7A@mail.gmail.com>
+ <CA+G9fYvh0iSyEDQs7+0CX82FLPDCg5UmAt+1JuPsndmfmYF3kw@mail.gmail.com>
+ <CAJZ5v0hFjpGp2GbV1Evi+BbUF7Am4ETY4Cm8VzTrvTJ=7=oyPQ@mail.gmail.com>
+ <84r6s34s-opq7-9358-o45n-27s17084012@onlyvoer.pbz> <CAJZ5v0jUxonxp0q80Kdcbax+WMmh-NZ_h=KQG-HcfFdE1hr4VA@mail.gmail.com>
+ <CAJZ5v0hj4VC_kjB5e_b_ho=ET_quG5zUh0Dbbdwofp-6azopsw@mail.gmail.com>
+ <CA+G9fYsRVxWPW1nvSXMTLWfEadrdBDSH5hRPtoUYpfpqq8zRSw@mail.gmail.com>
+ <CAJZ5v0gsYb1uxDUTHUe539w8uXhk=m337Xn6wtPhF1oPKzaYrQ@mail.gmail.com> <30np982n-r2q8-8532-q6os-9p9729ppos45@syhkavp.arg>
+In-Reply-To: <30np982n-r2q8-8532-q6os-9p9729ppos45@syhkavp.arg>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Jan 2021 17:02:38 +0100
+Message-ID: <CAJZ5v0iNtmXWr3uXzit5Er_j7G=LkGVyhdNAsjwpVWsDy8F7KQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PM / clk: make PM clock layer compatible with clocks
+ that must sleep
+To:     Nicolas Pitre <nico@fluxnic.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,24 +58,15 @@ cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2] PM / clk: make PM clock layer compatible with clocks
- that must sleep
-In-Reply-To: <30np982n-r2q8-8532-q6os-9p9729ppos45@syhkavp.arg>
-Message-ID: <p7777p-2qn5-1572-7q70-16sppn4q474@syhkavp.arg>
-References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz> <CA+G9fYsyXsNSXGy6BWZ6mgpAP=+7r6Xy9jQ2xxb9mXyHdRoBCg@mail.gmail.com> <CAMuHMdULW4bnb0Jc0+ZaF9P2VNgnYsvEks7y8WYCk045BHqh7A@mail.gmail.com> <CA+G9fYvh0iSyEDQs7+0CX82FLPDCg5UmAt+1JuPsndmfmYF3kw@mail.gmail.com>
- <CAJZ5v0hFjpGp2GbV1Evi+BbUF7Am4ETY4Cm8VzTrvTJ=7=oyPQ@mail.gmail.com> <84r6s34s-opq7-9358-o45n-27s17084012@onlyvoer.pbz> <CAJZ5v0jUxonxp0q80Kdcbax+WMmh-NZ_h=KQG-HcfFdE1hr4VA@mail.gmail.com> <CAJZ5v0hj4VC_kjB5e_b_ho=ET_quG5zUh0Dbbdwofp-6azopsw@mail.gmail.com>
- <CA+G9fYsRVxWPW1nvSXMTLWfEadrdBDSH5hRPtoUYpfpqq8zRSw@mail.gmail.com> <CAJZ5v0gsYb1uxDUTHUe539w8uXhk=m337Xn6wtPhF1oPKzaYrQ@mail.gmail.com> <30np982n-r2q8-8532-q6os-9p9729ppos45@syhkavp.arg>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID: 045754F4-5CCB-11EB-A9BB-D152C8D8090B-78420484!pb-smtp1.pobox.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 22 Jan 2021, Nicolas Pitre wrote:
-
+On Fri, Jan 22, 2021 at 4:59 PM Nicolas Pitre <nico@fluxnic.net> wrote:
+>
 > On Fri, 22 Jan 2021, Rafael J. Wysocki wrote:
-> 
+>
 > > On Fri, Jan 22, 2021 at 4:48 PM Naresh Kamboju
 > > <naresh.kamboju@linaro.org> wrote:
 > > >
@@ -171,20 +170,19 @@ On Fri, 22 Jan 2021, Nicolas Pitre wrote:
 > > > > Please double check the result in my linux-next branch (just pushed).
 > > >
 > > > May i request to add Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > 
+> >
 > > If this had been a patch fixing a problem reported by you, there would
 > > have been a reason to add a Reported-by,
-> > 
+> >
 > > In this case, it is just a new version of a patch taking your testing
 > > feedback into account.
-> > 
+> >
 > > I can add a Tested-by for you to it if desired, though.
-> 
+>
 > It is probably fair to mention that Naresh reported the issue too.
 > My bad, I should have added the tag myself in v2.
 
-That being said, I agree that this isn't a fix but a whole new patch, so 
-I agree that Tested-by is probably more appropriate.
+OK
 
-
-Nicolas
+I'm assuming that there will be a v3 because of the sparse warnings,
+so please add the tags as needed when posting it.
