@@ -2,114 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5990B3005CC
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 15:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3453A3005B8
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 15:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728496AbhAVOp1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 09:45:27 -0500
-Received: from mail.eaton.com ([192.104.67.6]:10400 "EHLO mail.eaton.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728774AbhAVOo7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 Jan 2021 09:44:59 -0500
-X-Greylist: delayed 519 seconds by postgrey-1.27 at vger.kernel.org; Fri, 22 Jan 2021 09:44:57 EST
-Received: from mail.eaton.com (simtcimsva01.etn.com [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28EDC960C3;
-        Fri, 22 Jan 2021 09:35:41 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eaton.com;
-        s=eaton-s2020-01; t=1611326141;
-        bh=R2zHmX5/NiL6WCxfs6TaceDHiNspxfniXOh6eGlV4CQ=; h=From:To:Date;
-        b=KeIJAdRuXECjMpawxwr3DS7u6S3DVG6dkMhU9DAOuu3pYyvRn+DgRdQ/lEBOgAHzA
-         edSIhNG/9FD1C8CF5EqjzwEGcORpwMUaifBQFQze9n/rtB+34aSLIV+FHukp4vNeaP
-         RGcxNdsMB6VbHZuy1iB0lTb1hISIgZ/vNYAmCORMb8dHKhYloX+6Xas9fA/gs9nHnp
-         hNNVkN9NwtOc+Mz5eEqB39j4enJpVZHY83UPBTrDOznND5Ju1Z6BjRUN4gWXv6BpT0
-         QvsFmnG9G6D6GX7NpNZ+gKBnO1LukKNLse6eD4Xg/ANxckpOrsh7HJ0/MmiYZmXuQF
-         uy+zEdEANXiUw==
-Received: from mail.eaton.com (simtcimsva01.etn.com [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AD403960BD;
-        Fri, 22 Jan 2021 09:35:38 -0500 (EST)
-Received: from SIMTCSGWY04.napa.ad.etn.com (simtcsgwy04.napa.ad.etn.com [151.110.126.121])
-        by mail.eaton.com (Postfix) with ESMTPS;
-        Fri, 22 Jan 2021 09:35:38 -0500 (EST)
-Received: from localhost (151.110.234.147) by SIMTCSGWY04.napa.ad.etn.com
- (151.110.126.205) with Microsoft SMTP Server id 14.3.487.0; Fri, 22 Jan 2021
- 09:35:37 -0500
-From:   Laurent Badel <laurentbadel@eaton.com>
-To:     <netdev@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, <linux-pm@vger.kernel.org>
-CC:     Laurent Badel <laurentbadel@eaton.com>
-Subject: [PATCH net 1/1] net: phy: Reconfigure PHY interrupt in mdio_bus_phy_restore()
-Date:   Fri, 22 Jan 2021 15:35:24 +0100
-Message-ID: <20210122143524.14516-2-laurentbadel@eaton.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210122143524.14516-1-laurentbadel@eaton.com>
-References: <20210122143524.14516-1-laurentbadel@eaton.com>
+        id S1728760AbhAVOmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 09:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728707AbhAVOls (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 09:41:48 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6530FC06174A;
+        Fri, 22 Jan 2021 06:41:08 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id o17so7845014lfg.4;
+        Fri, 22 Jan 2021 06:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xoSe8r1qjBUVWGzfJU/ltvkY+iSuecaF2y7zZ5LnPZs=;
+        b=MUCab2ILvhXHvluaoo8PgOOpIDjLiYd36l+qB5nGQwHmzIcytWIGMwqnN1wd6cYC+n
+         gCHdMGlxbamDB9FXEkavaLSct3bNGzImmsGYbRP+vusyLZp3m5FvgoccKQ1s3zbElSPC
+         yC921z8EjEQMWo+cpBBTB7Imr/dXYYbECd4bxgE+Vc/GQ4vWA1a0PGaciK2HaKRvCy2h
+         Ei2sRxvvizYoWQ2e/Aao1r8Ac5KCZuNewPIkD9H0iJbEYUuxX2V4E6e47+L+c02DeoiO
+         4iY62LTGGRtx1lXWJsFDVOErOdIvVDMpplLXLABkPpTvpW5K/e8E9mPxm4gV/PCJ19Xd
+         96RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xoSe8r1qjBUVWGzfJU/ltvkY+iSuecaF2y7zZ5LnPZs=;
+        b=jWfe60+XTMsBBNX2cjNgsiHofB6sxeuOqCh1gwS8mb2K0oKjOMTO2xMjf3j5lv2HoE
+         vbFhdx6uN8QWrj8W6qk5N+KlEcblvNfBRo6Vv4S5+1k329mkn1LVIf4MovuCj63wDJoz
+         U1ysFOGLwUckY3MWCdJdR3Ryy+TGfnEOQtUsvyGV4eTB6D8ialVkDQ2i/MPwqEkbVXTg
+         yR+fVvW0N8mPPAAuK9h5HYsNh0mMOYkcpMx8/zxszeHcO4mjwZgDEn5DC99k/5vJNpuP
+         3nBeJ+NvwnVqD4ODkG6MS3CqvGOn7nD+sX32UCrdrTj71l6CtTKsI8gvaIpEOWjOYKgI
+         zWYg==
+X-Gm-Message-State: AOAM530S2timK4cF5/u2grMtBzetFNZnAo6xGri0o+tikw4j7EhkxQjZ
+        Qu1mHAJ5868UK9l12Bnnj6M=
+X-Google-Smtp-Source: ABdhPJxef6llQ5TdSL/YmUH2jy98F7g+cgf1+AHpK9A9lncJEg1OMiL1GCihXJJ3QD9zUr7KZD6FQA==
+X-Received: by 2002:a19:4104:: with SMTP id o4mr1354010lfa.34.1611326466913;
+        Fri, 22 Jan 2021 06:41:06 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id y23sm908006lfy.158.2021.01.22.06.41.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jan 2021 06:41:06 -0800 (PST)
+Subject: Re: [PATCH v3] soc/tegra: Add devm_tegra_core_dev_init_opp_table()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>
+References: <20210121190117.25235-1-digetx@gmail.com>
+ <20210122063537.7yd7ww47gl2rdsdu@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <60cfafdf-4615-5a41-103d-96c35ba1fa8c@gmail.com>
+Date:   Fri, 22 Jan 2021 17:41:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-EXCLAIMER-MD-CONFIG: 96b59d02-bc1a-4a40-8c96-611cac62bce9
-X-TM-SNTS-SMTP: FE70FC713CB97F6DAD8BEDAB0A1D68EFAE1D5103F39DC3EE98EE31318D8342EB2002:8
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSVA-9.1.0.1988-8.6.0.1013-25928.000
-X-TM-AS-Result: No--2.003-7.0-31-10
-X-imss-scan-details: No--2.003-7.0-31-10
-X-TMASE-Version: IMSVA-9.1.0.1988-8.6.1013-25928.000
-X-TMASE-Result: 10--2.002600-10.000000
-X-TMASE-MatchedRID: VIW3LEg1l16YizZS4XBb3/RUId35VCIe+ahnrHhmAJRGM2uNXRqsUvsY
-        8bNjl3gGPMs0cdM/lphnRutsGMyuGPI1YbpS1+avqJSK+HSPY+9lRzZAkKRGDVIxScKXZnK0QBz
-        oPKhLasiPqQJ9fQR1zrcPaeb4aji83nEpDU+5f9ko19GoN4WoGEyWLwjUVKFuA8FfY2Fm0lMIyT
-        NFi0TCbVYJIpN1DYJ5vqEhop8TGnRYF3qW3Je6+19QXM0Jj/jaf1tdYMcH2nI1pZREe8ejp8uoR
-        xHHrkLVNN00X0JwCr1AKfTbEPjR+peTN2GaEP5Hz9DvVzrxOJm0hbFWy4EqU4pebMSk1UmKlmXP
-        gyQocYp5E1G2nFNyeETBf0diyKhk8g9TaEI7TXx+3BndfXUhXQ==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
+In-Reply-To: <20210122063537.7yd7ww47gl2rdsdu@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=EF=BB=BFSome PHY (e.g. SMSC LAN87xx) clear their interrupt mask on softwar=
-e
-reset. This breaks the ethernet interface on resuming from hibernation,
-if the PHY is running in interrupt mode, so reconfigure interrupts
-after the software reset in mdio_bus_phy_restore().
+22.01.2021 09:35, Viresh Kumar пишет:
+> On 21-01-21, 22:01, Dmitry Osipenko wrote:
+>> Add common helper which initializes OPP table for Tegra SoC core devices.
+>>
+>> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+>> Tested-by: Dmitry Osipenko <digetx@gmail.com> # A500 T20 and Nexus7 T30
+>> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
+>> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+>> [tested on some other non-upstreamed-yet T20/30/114 devices as well]
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>
+>> Changelog:
+>>
+>> v3: - This patch is factored out from [1] to ease merging of the patches
+>>       that will use the new helper. The goal is to get this new helper
+>>       into 5.12, this should remove dependency on this patch for a several
+>>       patchsets of a different subsystems (DRM, media, memory, etc) that
+>>       will target 5.13.
+>>
+>>       @Thierry/Jon, please review and apply this patch for 5.12!
+> 
+> This is not how stuff works in kernel Dmitry, every commit in the
+> kernel tree should build(at least)/boot fine. Your patch can only be
+> applied once your base tree has all the patches on which your work is
+> based of, otherwise this will lead to build failure (stuff like git
+> bisect breaks with that). It would be better if you take this patch in
+> 5.13, or after 5.12-rc2 once all other stuff lands.
+> 
 
-Signed-off-by: Laurent Badel <laurentbadel@eaton.com>
----
- drivers/net/phy/phy_device.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+OMG, I completely missed that the devm series from Yangtao Li isn't
+merged yet.
 
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 80c2e646c093..5070eed55447 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -324,6 +324,15 @@ static int mdio_bus_phy_restore(struct device *dev)
- 	if (ret < 0)
- 		return ret;
-=20
-+	if (phydev->drv->config_intr && phy_interrupt_is_valid(phydev))
-+	{
-+		/* Some PHYs (e.g. SMSC LAN8720) clear their
-+		 * interrupt mask on software reset.
-+		 */
-+		phy_free_interrupt(phydev);
-+		phy_request_interrupt(phydev);
-+	}
-+
- 	if (phydev->attached_dev && phydev->adjust_link)
- 		phy_start_machine(phydev);
-=20
---=20
-2.17.1
+Viresh / Yangtao, will be it be okay if I'll collect all the
+prerequisite devm patches from Yangtao + add this patch into a single
+series that could be merged via the OPP tree for 5.12?
 
-
-
------------------------------
-Eaton Industries Manufacturing GmbH ~ Registered place of business: Route d=
-e la Longeraie 7, 1110, Morges, Switzerland=20
-
------------------------------
-
+Of course Thierry or Jon will need to give the ack for the Tegra changes
+in that case.
