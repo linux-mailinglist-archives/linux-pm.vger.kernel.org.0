@@ -2,76 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A2F300839
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 17:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E1C300858
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jan 2021 17:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729461AbhAVQH1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 11:07:27 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:45644 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729408AbhAVQHU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 11:07:20 -0500
-Received: by mail-ot1-f53.google.com with SMTP id n42so5505335ota.12;
-        Fri, 22 Jan 2021 08:07:05 -0800 (PST)
+        id S1729463AbhAVQLy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 11:11:54 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:44604 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729472AbhAVQLA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 11:11:00 -0500
+Received: by mail-oi1-f175.google.com with SMTP id x137so5261008oix.11;
+        Fri, 22 Jan 2021 08:10:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QYkRYnREnsaoy26u+xFFqCYy/dFfndRZVMIwAMnpr9s=;
-        b=I9GerIBaiL+7qVpAW+TyGY7mF2+jHFbix8C4QGUFZLB6UfrrSRPeoTBMrZy+kzaNMD
-         LCtFiFOlq8upkXBGqf+8Q1x+X51FGSGkUB4c5KtnbfoQdoDkzEuG9TLsF5DWtlVBQyTD
-         mYQtfAf56EGaVFMK+yG7/qgGAjn2c7F8GOjn458xkJKPdp+UFkc7XPT0hujC6GgNnIFO
-         Z5aSVpTPyO2kUQPehPl99YEMpi8jGh+0of0JCarwLu//MKau5qR5of82CR8IF+F6wewu
-         rpbi2p3FapzxOgZ0qBm/ohSKYkJNw8KJbKYqbVHpzTLd0mPtPBcRuLFT8dsqq+Stkwyu
-         hp6g==
-X-Gm-Message-State: AOAM533qAZ7y4ZR5NrKnAVl02ChwkWJOhz+skSjRUXIuPpY0WJAeeIwa
-        FZx7MvbjNjjcAqrIci4txb9M5Chrr52eySsmVkHMyHZQ
-X-Google-Smtp-Source: ABdhPJyMcjSUb80rzcyu7DxoBvjsmx1VIY7g/MTuzzLrCzFhHfvDRm60ldDzmDaxZVKzAzduIMKMXob3h1IISRMJ0ew=
-X-Received: by 2002:a05:6830:2313:: with SMTP id u19mr642634ote.321.1611331599132;
- Fri, 22 Jan 2021 08:06:39 -0800 (PST)
+        bh=4QJOLWJZmF+NWe59yyneExd/euMLwMsHwRJgWMafHFM=;
+        b=DkPxlrvgQIVFgxggGFDhoozd32azQr3rc6AcrGtjefcFpyLipJbcl9zQ9FMh9lQF7p
+         DCkix/xiUTbr0N8pq6QlkX1bm1AcQEQ5Ewe+M8mfCRz32dC12El0yZy9Y6cn82Eav9qu
+         w6QAK94vNeU4MJFM7KT7QFfNJuwsmSuMZfrBIz8z42jKkk74HLlGT4ijQsq5qHr8IMxx
+         rntqUI5qLrbBYFHLewTReLgbR0ldyPXf4qzO+mOq7Hed7axe74umT9P3oqJrvHV65UHV
+         VCO24MhcKb/XFF1LGKh75QbLcCLu6DnfQeyR16ieqsQlY66c6Px27Lum0k1wlqlTVPBC
+         uZyw==
+X-Gm-Message-State: AOAM532r+2vQdfRyfAgZCQYid8C+QsSTDLV0zcw6US38/G73+KtEwz9d
+        qiAJVoyDLBJMs4Ea6lWz5BebsXHlBIA9dFSFdkc=
+X-Google-Smtp-Source: ABdhPJxLY5PerPLcwqA+39SgSd1WtO2QsOPj1ChUZwmItWePbMy79hWTWs5EsUq7wotD9dbPPmm4Cc+wW2qA3rtpYCU=
+X-Received: by 2002:aca:308a:: with SMTP id w132mr3586396oiw.69.1611331818926;
+ Fri, 22 Jan 2021 08:10:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20210117004705.GA10789@fedora>
-In-Reply-To: <20210117004705.GA10789@fedora>
+References: <20210120155042.28975-1-ilina@codeaurora.org>
+In-Reply-To: <20210120155042.28975-1-ilina@codeaurora.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Jan 2021 17:06:28 +0100
-Message-ID: <CAJZ5v0h7VN9-uKZPPBJ3wuRRLJpCN5EjLKFM++DcCi3fU2zwzw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Remove repeated word
-To:     Nigel Christian <nigel.l.christian@gmail.com>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
+Date:   Fri, 22 Jan 2021 17:10:07 +0100
+Message-ID: <CAJZ5v0i88KBG6fUGWhwE_AYnPeqN_1BtHnsWFPScjn25JuV4CQ@mail.gmail.com>
+Subject: Re: [PATCH v9 0/2] Better domain idle from device wakeup patterns
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jan 17, 2021 at 1:48 AM Nigel Christian
-<nigel.l.christian@gmail.com> wrote:
+On Wed, Jan 20, 2021 at 4:53 PM Lina Iyer <ilina@codeaurora.org> wrote:
 >
-> In the comment for trace in passive mode there is an
-> unnecessary "the". Eradicate it.
+> Changes since v8 [8]:
+> - Check if device is attached to genpd
 >
-> Signed-off-by: Nigel Christian <nigel.l.christian@gmail.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since v7 [7]:
+> - Whitespace and comment fixes
+> - Add Reviewed-by tags
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 6f2ff2775664..5175ae3cac44 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2498,7 +2498,7 @@ static int intel_cpufreq_verify_policy(struct cpufreq_policy_data *policy)
->   * driver call was via the normal or fast switch path. Various graphs
->   * output from the intel_pstate_tracer.py utility that include core_busy
->   * (or performance or core_avg_perf) have a fixed y-axis from 0 to 100%,
-> - * so we use 10 to indicate the the normal path through the driver, and
-> + * so we use 10 to indicate the normal path through the driver, and
->   * 90 to indicate the fast switch path through the driver.
->   * The scaled_busy field is not used, and is set to 0.
->   */
+> Changes since v6 [6];
+> - Based on discussions on [6], this update simplifies the next wakeup
+>   of domains based on genpd flag GENPD_FLAG_MIN_RESIDENCY specified at
+>   init.
+> - Assume next wakeup will be set by devices when the domain is not
+>   powered down. This could avoid locking requirements.
+> - Update commit text.
+>
+> Changes since v5 [5]:
+> - It was pointed out that we don't want to run through the unnecessary
+>   work for domains that do not need or support next-wakeup. So, patch #1
+>   in this version, now uses a flag to detemine if the domain would
+>   support next-wakeup.
+> - Other review comments addressed in patches #2, #3
+>
+> Changes since v4 [4]:
+> - Address review comments
+>
+> Changes since v3 [3]:
+> - Move the next_wakeup info of the device deeper into the device's
+>   domain data. This should avoid overhead for devices that do not have a
+>   predictable wakeup pattern.
+>
+> Changes since v2:
+> - Fix unwanted change
+>
+> Changes since v1 [2]:
+> - Update documentation and commit text
+> - Remove check for runtime PM when setting next_event
+> - Fix kernel-test robot reported issue
+>
+> Changes since RFC [1]:
+> - Organized the code to make it cleaner
+> - Fixed some issues with idle state determination
+> - Add documentation and update commit text
+>
+> Hello,
+>
+> I was looking for an option to do better power management for some
+> domains where the devices enter runtime PM in a predictable fashion. For
+> example a display device that sends a vsync interrupt every 16 ms for a
+> 60 Hz panel. These interrupts are not timer interrupts but tend to
+> interrupt periodically to service the workflow and the devices and
+> domains may go back to idle soon after. Two domains are affected by this
+> - the device's PM domain and the CPU PM domain.
+>
+> As a first step, I am looking to solve for the device's PM domain idle
+> state (and hopefully solve for the CPU PM domains subsequently). The PM
+> domain could have multiple idle states and/or the enter/exit latencies
+> could be high. In either case, it may not always be beneficial to power
+> off the domain, only to turn it back on before satisfying the idle state
+> residency. When the wakeup is known for the device, we could use that to
+> determine the worthiness of entering a domain idle state. Only the
+> device can tell us when the future event would be and that could change
+> as the usecase changes. Like, when the panel refresh rate increases to
+> 120 Hz. If this information was made available to runtime PM, we could
+> use that in the domain governor to determine a suitable idle state. This
+> is the idea behind these patches.
+>
+> Would appreciate your thoughts on this.
+>
+> Thanks,
+> Lina
+>
+> [1].
+> https://lore.kernel.org/linux-pm/010101746eccb270-05beb27f-e1e4-40eb-92da-ad1bb48feb41-000000@us-west-2.amazonses.com/T
+> /
+> [2]. https://lore.kernel.org/linux-pm/20201012223400.23609-3-ilina@codeaurora.org/T/#u
+> [3]. https://lore.kernel.org/linux-pm/20201015193807.17423-1-ilina@codeaurora.org/
+> [4]. https://www.spinics.net/lists/linux-arm-msm/msg74322.html
+> [5]. https://lore.kernel.org/linux-pm/20201106164811.3698-1-ilina@codeaurora.org/T/#t
+> [6]. https://lore.kernel.org/linux-pm/20201130225039.15981-1-ilina@codeaurora.org/T/#t
+> [7]. https://lore.kernel.org/linux-pm/20210113201601.14874-1-ilina@codeaurora.org/T/#t
+> [8]. https://lore.kernel.org/linux-pm/20210115165004.22385-1-ilina@codeaurora.org/T/#t
+>
+>
+> Lina Iyer (2):
+>   PM / domains: inform PM domain of a device's next wakeup
+>   PM / Domains: use device's next wakeup to determine domain idle state
+>
+>  drivers/base/power/domain.c          |  30 ++++++++
+>  drivers/base/power/domain_governor.c | 102 ++++++++++++++++++++++++---
+>  include/linux/pm_domain.h            |  12 ++++
+>  3 files changed, 135 insertions(+), 9 deletions(-)
+>
 > --
 
-Applied as 5.12 material, thanks!
+Both patches applied as 5.12 material, thanks!
