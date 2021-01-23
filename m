@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F23301201
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Jan 2021 02:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64159301234
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Jan 2021 03:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726305AbhAWBaj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 20:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S1726208AbhAWCOP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 21:14:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726287AbhAWBab (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 20:30:31 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D9DC06174A
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 17:29:43 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 15so5001885pgx.7
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 17:29:43 -0800 (PST)
+        with ESMTP id S1726147AbhAWCON (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 21:14:13 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A82DC06174A
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 18:13:33 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id x20so5010690pjh.3
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 18:13:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=fwMK8hL5GZtK2ukB9hGytscFOxF0z5dBeuZnyFzeGEM=;
-        b=gOXUJTORQSiiVCuTD9XX1Xe94jsTezUID2nOq/RqOlUX7RtptWYavSiQrkDWqPXDjX
-         Tl2kJfmOchHqo8nse0zVA221fQVzWYQcEzNGkzxaMMWFVsdMzOfK+2DthkAYgnAa6P3u
-         rcq3XnPtHT5hWFEXaZG7fHBdN9g098ii49iM3FADXgTM0NLxXHOInL/CHfrNMCfrt4Wo
-         15TXtNlPMLxOkJlh5izSJtICG1u+WU0BAxiQPJnoshBgo0uGOKsTCCBAtaNcM4KwCzpz
-         JjKMqqLmUoJtuRT3tBDfq92WiJkUs+U5/kkvfQYGlFAWUUFtGdgDuQyOuVJUphNl5HWg
-         P+RQ==
+        bh=r7TouDibufHtbmdxr0EEYMvNY/v8CjQUkYNq5D8Hkdg=;
+        b=PS5tTDHjWcCNlVfEL1txrDotIA6fVnIbCcBq6rMA8GxW2jaY2odFC15UMCMh8hr55t
+         xscDCs7ndFx1kMOcemMdSaLtCk2Hb2+46F09daMOIPC3M5Umo/EnBuvHlOpsVNVOWtGk
+         /nNo6GbUvmkja5zQqa2ycTLrLcYwR/E8Yws3nxqpXK6d0EgxrBmlZGRZr/Vfv2pgRhaY
+         ppgyrvzBRhf3uKMMpQi19wUHbbMein7IC6CIC0hBnoaIcl7dnNV5DY/NaWVDKlnRjv7T
+         bTvJjoL+vJW6MsmgwA8e0Hn7Vig3bmfNTkiMXlZDFyM+KXBUyltOJTyxoAwoX1RfR6+1
+         E2fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=fwMK8hL5GZtK2ukB9hGytscFOxF0z5dBeuZnyFzeGEM=;
-        b=thtSWVQQNYJGjAmcjwyKTa771GBHdZ5YrPbXjONljZ/Gkg3ClYdl+LIVGUjWYDvluX
-         2STv4mrpMJ3G/nvTgdxQBP2GGKnEQ8nMoVcSRs8xng80SZSQAhDDFAnlyuvm48lXNyKv
-         8wDP9LIfzv3JOSl7ZtSR68t5SJtTT4gB30/IB398X3BYC3jtcf3FSsc9gki3QmueOIFq
-         WkDzGtEz5SEbzzOHKYa3kYpsPla83g60PrXCwLEmOkaDlAaoZ+4aYUtoJRB8HYXoUQSQ
-         vm0RkkQ4atndrIlfgXHzzNOD+x6k0P3/ZRunrQmaIBWdU0afSV1jgMaeo4u4qB9jLMyC
-         QAfQ==
-X-Gm-Message-State: AOAM531F5ENfaGfwO3ZPR4FF0v17f0hXuwTke+xue2q56lc78k2jbKbo
-        m1rQKWolBINaKkhAGK+wsPJlGw==
-X-Google-Smtp-Source: ABdhPJxy3YBNoXxW9Pqc9DTj8JI+2vrLdotdipVinXcT4WE2lYlGDIc7cc1f0uFqSi6pOuCxtCLoDg==
-X-Received: by 2002:a65:49cf:: with SMTP id t15mr7417427pgs.77.1611365383415;
-        Fri, 22 Jan 2021 17:29:43 -0800 (PST)
+        bh=r7TouDibufHtbmdxr0EEYMvNY/v8CjQUkYNq5D8Hkdg=;
+        b=aKQ6fkTWwIfn+OutrdC+xuuC6jKaZhOXQaHLl/M/U+ZQjyBC9UflL33MTGOIQin2sG
+         OIUbuEV1XbJzCOyWVdRiAnxm8+0LuigpQ0loeGKcbLXO25O1ATAf7E+IC+JZjbiMSdjO
+         6DyeCid0iQS/NQtH5InlLnvEzqQrYYDYHLBENshdxHv3PWChjbi8VP2w6eRnNYbI9afr
+         1NEyT1lfqnG8GVDohz/VCgfAMe7d6h2DlGuKWNWmwheP//+JksptkzfeISIqhop/U0yk
+         EN6rNrZ9SPVcetCJ7dpTkA5A8pWXiwmnCw3HiyZqUm9lK3CfmBGpZVhwem+gtWYhAFvf
+         b0pg==
+X-Gm-Message-State: AOAM531IMt4KBzy4JCq/pUJcPTZ9klB5gKIwHi/HaaZMbbDMGgQ7JSJA
+        AlWgVSxzH6J3pveBwZuRnPk9CA==
+X-Google-Smtp-Source: ABdhPJw6RYwUcUf+UQ6dhBSfgO4AwR7ZWUExdjUJPAg76+8EFA0xu/nolum6TDKhW1w03S+r7hmmNA==
+X-Received: by 2002:a17:90a:fd0b:: with SMTP id cv11mr8691764pjb.26.1611368012775;
+        Fri, 22 Jan 2021 18:13:32 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id v8sm2131641pfn.114.2021.01.22.17.29.42
+        by smtp.gmail.com with ESMTPSA id k141sm8261492pfd.9.2021.01.22.18.13.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 17:29:42 -0800 (PST)
-Message-ID: <600b7c06.1c69fb81.f2ba6.52ec@mx.google.com>
-Date:   Fri, 22 Jan 2021 17:29:42 -0800 (PST)
+        Fri, 22 Jan 2021 18:13:32 -0800 (PST)
+Message-ID: <600b864c.1c69fb81.35147.4718@mx.google.com>
+Date:   Fri, 22 Jan 2021 18:13:32 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Kernel: acpi-5.11-rc5-27-gad758c58a703
-X-Kernelci-Report-Type: build
+X-Kernelci-Report-Type: test
 X-Kernelci-Tree: pm
 X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (acpi-5.11-rc5-27-gad758c58a703)
+Subject: pm/testing baseline: 106 runs,
+ 2 regressions (acpi-5.11-rc5-27-gad758c58a703)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -65,87 +65,88 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (acpi-5.11-rc5-27=
--gad758c58a703)
+pm/testing baseline: 106 runs, 2 regressions (acpi-5.11-rc5-27-gad758c58a70=
+3)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-5.11-rc5-27-gad758c58a703/
+Regressions Summary
+-------------------
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-5.11-rc5-27-gad758c58a703
-Git Commit: ad758c58a7036596aed10b408535d4e0dd16c7d6
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-    multi_v7_defconfig (gcc-8): 1 warning
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
+platform                 | arch | lab          | compiler | defconfig      =
+    | regressions
+-------------------------+------+--------------+----------+----------------=
+----+------------
+imx6q-var-dt6customboard | arm  | lab-baylibre | gcc-8    | multi_v7_defcon=
+fig | 2          =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-5.1=
+1-rc5-27-gad758c58a703/plan/baseline/
 
-    1    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused v=
-ariable =E2=80=98wake=E2=80=99 [-Wunused-variable]
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: acpi-5.11-rc5-27-gad758c58a703
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      ad758c58a7036596aed10b408535d4e0dd16c7d6 =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Test Regressions
+---------------- =
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+platform                 | arch | lab          | compiler | defconfig      =
+    | regressions
+-------------------------+------+--------------+----------+----------------=
+----+------------
+imx6q-var-dt6customboard | arm  | lab-baylibre | gcc-8    | multi_v7_defcon=
+fig | 2          =
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
+  Details:     https://kernelci.org/test/plan/id/600b7c53e5eb037555d3dfd8
 
-Warnings:
-    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused variab=
-le =E2=80=98wake=E2=80=99 [-Wunused-variable]
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.11-rc5-27-ga=
+d758c58a703/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-var-dt=
+6customboard.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.11-rc5-27-ga=
+d758c58a703/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-var-dt=
+6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
----
-For more info write to <info@kernelci.org>
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/600b7c53e5eb037=
+555d3dfde
+        new failure (last pass: acpi-5.11-rc5-27-gd9ac95f54ba88)
+        4 lines
+
+    2021-01-23 01:30:47.103000+00:00  kern  :alert : Unhandled fault: align=
+ment exception (0x001) at 0xcec60217
+    2021-01-23 01:30:47.104000+00:00  kern  :alert : pgd =3D (ptrval)
+    2021-01-23 01:30:47.104000+00:00  kern  :alert : [<8>[   43.007141] <LA=
+VA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASURE=
+MENT=3D4>
+    2021-01-23 01:30:47.104000+00:00  cec60217] *pgd=3D1ec1141e(bad)   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/600b7c53e5eb037=
+555d3dfdf
+        new failure (last pass: acpi-5.11-rc5-27-gd9ac95f54ba88)
+        26 lines
+
+    2021-01-23 01:30:47.162000+00:00  kern  :emerg : Process kworker/0:1 (p=
+id: 30, stack limit =3D 0x(ptrval))
+    2021-01-23 01:30:47.163000+00:00  kern  :emerg : Stack: (0xc2259eb0 to<=
+8>[   43.054613] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail U=
+NITS=3Dlines MEASUREMENT=3D26>
+    2021-01-23 01:30:47.163000+00:00   0xc225a000)
+    2021-01-23 01:30:47.163000+00:00  kern  :emerg : 9ea0<8>[   43.065943] =
+<LAVA_SIGNAL_ENDRUN 0_dmesg 624844_1.5.2.4.1>   =
+
+ =20
