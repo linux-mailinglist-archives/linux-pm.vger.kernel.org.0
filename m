@@ -2,76 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1BB301119
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Jan 2021 00:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F23301201
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Jan 2021 02:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbhAVXoR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jan 2021 18:44:17 -0500
-Received: from relay06.th.seeweb.it ([5.144.164.167]:39107 "EHLO
-        relay06.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726013AbhAVXoQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 18:44:16 -0500
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 47CC13EEDE;
-        Sat, 23 Jan 2021 00:43:18 +0100 (CET)
-Subject: Re: [PATCH v5 0/7] cpufreq-qcom-hw: Implement full OSM programming
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com
-References: <20210121195250.492500-1-angelogioacchino.delregno@somainline.org>
- <20210122094646.35d6wrbj73jrhk7v@vireshk-i7>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <31a1ad25-30f5-8741-fa85-90b93f070f9d@somainline.org>
-Date:   Sat, 23 Jan 2021 00:43:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1726305AbhAWBaj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jan 2021 20:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726287AbhAWBab (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jan 2021 20:30:31 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D9DC06174A
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 17:29:43 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 15so5001885pgx.7
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jan 2021 17:29:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=fwMK8hL5GZtK2ukB9hGytscFOxF0z5dBeuZnyFzeGEM=;
+        b=gOXUJTORQSiiVCuTD9XX1Xe94jsTezUID2nOq/RqOlUX7RtptWYavSiQrkDWqPXDjX
+         Tl2kJfmOchHqo8nse0zVA221fQVzWYQcEzNGkzxaMMWFVsdMzOfK+2DthkAYgnAa6P3u
+         rcq3XnPtHT5hWFEXaZG7fHBdN9g098ii49iM3FADXgTM0NLxXHOInL/CHfrNMCfrt4Wo
+         15TXtNlPMLxOkJlh5izSJtICG1u+WU0BAxiQPJnoshBgo0uGOKsTCCBAtaNcM4KwCzpz
+         JjKMqqLmUoJtuRT3tBDfq92WiJkUs+U5/kkvfQYGlFAWUUFtGdgDuQyOuVJUphNl5HWg
+         P+RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=fwMK8hL5GZtK2ukB9hGytscFOxF0z5dBeuZnyFzeGEM=;
+        b=thtSWVQQNYJGjAmcjwyKTa771GBHdZ5YrPbXjONljZ/Gkg3ClYdl+LIVGUjWYDvluX
+         2STv4mrpMJ3G/nvTgdxQBP2GGKnEQ8nMoVcSRs8xng80SZSQAhDDFAnlyuvm48lXNyKv
+         8wDP9LIfzv3JOSl7ZtSR68t5SJtTT4gB30/IB398X3BYC3jtcf3FSsc9gki3QmueOIFq
+         WkDzGtEz5SEbzzOHKYa3kYpsPla83g60PrXCwLEmOkaDlAaoZ+4aYUtoJRB8HYXoUQSQ
+         vm0RkkQ4atndrIlfgXHzzNOD+x6k0P3/ZRunrQmaIBWdU0afSV1jgMaeo4u4qB9jLMyC
+         QAfQ==
+X-Gm-Message-State: AOAM531F5ENfaGfwO3ZPR4FF0v17f0hXuwTke+xue2q56lc78k2jbKbo
+        m1rQKWolBINaKkhAGK+wsPJlGw==
+X-Google-Smtp-Source: ABdhPJxy3YBNoXxW9Pqc9DTj8JI+2vrLdotdipVinXcT4WE2lYlGDIc7cc1f0uFqSi6pOuCxtCLoDg==
+X-Received: by 2002:a65:49cf:: with SMTP id t15mr7417427pgs.77.1611365383415;
+        Fri, 22 Jan 2021 17:29:43 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id v8sm2131641pfn.114.2021.01.22.17.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jan 2021 17:29:42 -0800 (PST)
+Message-ID: <600b7c06.1c69fb81.f2ba6.52ec@mx.google.com>
+Date:   Fri, 22 Jan 2021 17:29:42 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210122094646.35d6wrbj73jrhk7v@vireshk-i7>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: acpi-5.11-rc5-27-gad758c58a703
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (acpi-5.11-rc5-27-gad758c58a703)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 22/01/21 10:46, Viresh Kumar ha scritto:
-> On 21-01-21, 20:52, AngeloGioacchino Del Regno wrote:
->>    **
->>    ** NOTE: To "view the full picture", please look at the following
->>    ** patch series:
->>    ** https://patchwork.kernel.org/project/linux-arm-msm/list/?series=413355
->>    **              This is a subset of that series.
->>    **
->>
->> Changes in v5:
->> - Fixed OPP table API abuse, in conjunction with the CPR3 driver
->> - Some minor cleanups
-> 
-> Tanya had some comments about the driver in the previous version,
-> please let such discussions close before sending any new versions. I
-> haven't seen any reviews for the major driver changes until this
-> version and we are already on V5. Please wait for some time for people
-> to review the patches.
-> 
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (acpi-5.11-rc5-27=
+-gad758c58a703)
 
-Well, okay... it's just that I didn't want reviewers to lose time with
-something that had to be fixed, as it wasn't working anymore on the
-newest RC, due to a commit that was (rightfully!) blocking the abuse of
-the OPP API.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
+i-5.11-rc5-27-gad758c58a703/
 
-I know that it may be not practical to send a new version while a
-discussion is in progress, but this looked like being a critical fix
-for the driver that I'm sending.
+Tree: pm
+Branch: testing
+Git Describe: acpi-5.11-rc5-27-gad758c58a703
+Git Commit: ad758c58a7036596aed10b408535d4e0dd16c7d6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-In any case, this time it is a "final" version and will not get any more
-changes unless requested by reviewers/maintainers.
+Warnings Detected:
 
--- Angelo
+arc:
+
+arm64:
+
+arm:
+    multi_v7_defconfig (gcc-8): 1 warning
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused v=
+ariable =E2=80=98wake=E2=80=99 [-Wunused-variable]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    drivers/pinctrl/nomadik/pinctrl-nomadik.c:952:8: warning: unused variab=
+le =E2=80=98wake=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
