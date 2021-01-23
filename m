@@ -2,106 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B00301681
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Jan 2021 16:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47CD30167B
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Jan 2021 16:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725268AbhAWPzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Jan 2021 10:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S1725765AbhAWPuL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Jan 2021 10:50:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbhAWPzN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Jan 2021 10:55:13 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1377C06174A
-        for <linux-pm@vger.kernel.org>; Sat, 23 Jan 2021 07:54:32 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id cq1so5665921pjb.4
-        for <linux-pm@vger.kernel.org>; Sat, 23 Jan 2021 07:54:32 -0800 (PST)
+        with ESMTP id S1725550AbhAWPuJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Jan 2021 10:50:09 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C6EC06174A
+        for <linux-pm@vger.kernel.org>; Sat, 23 Jan 2021 07:49:28 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s3so1683455edt.7
+        for <linux-pm@vger.kernel.org>; Sat, 23 Jan 2021 07:49:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2mtBkjZESyT156xGNaV1KXAli7x013uyZv3rN8+Ze4w=;
-        b=Fso86ViIKuG9+aMPCyTdgUMi0x0Tn4c3u2gsswgGr/yI0EE1Oa08yWXmB/iFuj9tXv
-         iMWeZ7jnhUZacBavDCM6IcFVzBg3QAQmH2Kr8El6QtEj2/bTqw+Tlzds4ktExqH4Vhpp
-         9IDxEwdYYG3sXtfZkerI8ndYeEQLcj4vJSLzk=
+        d=basnieuwenhuizen.nl; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zyl5GSBGd/oNImpJtBfc3jd3P4/zNXMNogqjsD66BjM=;
+        b=gCxJ38IX0080P2+aTGNBI+D0is0EdqbNxp2mx2j09uFmiDKwMH8EVxlW9DoiTUdvCo
+         RerNaBXDvB7pIk/fWKu+9xII7DFE5QHVYVxNIi2+sjSCSmf0PNRIIUWL9t9Aj/JljBdl
+         qTEMVrPcUR2UM4Wy4+6nYcyny4wqeAOTB6+RA03EkvAQGtj+XQt355eb4xsp1VveJtK/
+         NYXD+79FkUmQobcOXJXh+uG76cj9MSvGmA3AQreoadDaMiClkO/ZI45O5+jKPMM4I/E3
+         1mWSB0JRNFog9gPRiZ9koqNqfxDz8Pix0oMdLPc1XWGMJTavIuKOWZUR7t+LaTX7W5Jk
+         /ImQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2mtBkjZESyT156xGNaV1KXAli7x013uyZv3rN8+Ze4w=;
-        b=Xv26Qes0ZrPpm65IMQOym9XaxLuC5EnDt/1ui2TUDt0jpc/iuuhTBdGiPnJthdCJoW
-         gfoGP4uQbbY2XeyQULb9cYNlq3N+rezjHP/dp2VjH/Q1K9o+hTzeHedoo8IsAlVXTR+p
-         +ke1bB7DZKVNC1YosraoTR78Y8BkqGtdJBraDQoSpzJFysL8NBD9ZyKQthdKBifb+mRl
-         QYvhQQV8rMU/gwDhX2ZKIU/MOv2LZx8JsiKOXQpqNnO+cOM16eE4CGRV7s3H8g7GCn7d
-         68VHjhSGT4XQakZHfK5zazy//zg8951CPb4nDYAsnc1uFICcqUksAmwadb2qKmkG7xam
-         7Y7g==
-X-Gm-Message-State: AOAM530ObVnFlxLIGvdAImIAspc3jAQvje7JPAEe8lFztJ31DcaESQX3
-        ZNJXnOHQ/IbQpu9VUe/ruVSEtg==
-X-Google-Smtp-Source: ABdhPJwmI2I9B1jyTomjzxc4lAeypyXKU8eIVtsPO+NudME1+Z+012FpRzgC57IXf1VyooJ4syXJuA==
-X-Received: by 2002:a17:902:467:b029:da:9ac2:24ee with SMTP id 94-20020a1709020467b02900da9ac224eemr1275828ple.22.1611417272423;
-        Sat, 23 Jan 2021 07:54:32 -0800 (PST)
-Received: from pc98bx3.roam.corp.google.com (c-73-222-23-249.hsd1.ca.comcast.net. [73.222.23.249])
-        by smtp.gmail.com with ESMTPSA id c5sm12210407pgt.73.2021.01.23.07.54.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zyl5GSBGd/oNImpJtBfc3jd3P4/zNXMNogqjsD66BjM=;
+        b=ElRjjWIUMBjXMtNSq6tVDrd/I3yMLktgxGJhQTwWtdl2HOMK7cf/Tq0/v13BR3oEoI
+         VZKweOxWvOTlXAF0gAvDX04/24UYNGb2y4sbhC/QvwoLfjY2cfvSEdHhlZ6GKDyYjqQX
+         O2meHq/+cfhpDdUpB8qF/73A8TscoMeKOydqRDKLYxk+acf3B3VEP2C8TXx1yjFiSJ25
+         gkeax8V0FdjyYY5eLZCi9rnHQxEiS9Bf5npZkpTXZITEJUjRcHmRU9m2NVXkIgXvPKop
+         LdTuc1e/9Ny0NiDKBcEKbFLUjs0o4I0My4LiFeJxll4LYFzmrpLg2NTSuYk+izlMotSy
+         xd4w==
+X-Gm-Message-State: AOAM531b2sWI8WiG3I6nldMuLQGg0xlAoUFwLy5jE2SrArzrmHasddZS
+        ggjqxXJjI76AI3QqUMDqBr8K2RJC2xbJgQ==
+X-Google-Smtp-Source: ABdhPJyOR6ssVkf+4lzRydqeHrecU/4X2i4gJsO1xChO3e8+nl2S150id4A50d5NGiMMyVYC9tCJkQ==
+X-Received: by 2002:a05:6402:1f4:: with SMTP id i20mr2447982edy.180.1611416967520;
+        Sat, 23 Jan 2021 07:49:27 -0800 (PST)
+Received: from bas-workstation.. ([2a02:aa12:a77f:2000:7285:c2ff:fe67:a82f])
+        by smtp.gmail.com with ESMTPSA id x17sm7184534edd.76.2021.01.23.07.49.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jan 2021 07:54:31 -0800 (PST)
-From:   Daisuke Nojiri <dnojiri@chromium.org>
-Cc:     vpalatin@chromium.org, Daisuke Nojiri <dnojiri@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Levin <levinale@google.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        Vijay Hiremath <vijay.p.hiremath@intel.com>,
-        Yu-Hsuan Hsu <yuhsuan@chromium.org>,
-        Ching-Kang Yen <chingkang@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v4 2/2] mfd: cros_ec: Add peripheral device charger
-Date:   Sat, 23 Jan 2021 07:49:22 -0800
-Message-Id: <20210123154922.1309290-2-dnojiri@chromium.org>
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-In-Reply-To: <20210123154922.1309290-1-dnojiri@chromium.org>
-References: <20210123154922.1309290-1-dnojiri@chromium.org>
+        Sat, 23 Jan 2021 07:49:26 -0800 (PST)
+From:   Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+To:     linux-pm@vger.kernel.org
+Cc:     lenb@kernel.org, Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+Subject: [PATCH] tools/power/turbostat: Fix turbostat for AMD Zen CPUs
+Date:   Sat, 23 Jan 2021 16:50:03 +0100
+Message-Id: <20210123155003.30370-1-bas@basnieuwenhuizen.nl>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds a cell entry for PCHG (Peripheral CHarGer). PCHG is a
-framework managing power supplies for peripheral devices.
+On my Zen+ system turbostat started exiting, which I tracked
+down to the MSR_PKG_ENERGY_STAT read failing because
+offset_to_idx wasn't returning a non-negative index.
 
-Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
----
-v1->v2
-* None
-v2->v3
-* None
-v3->v4
-* None
----
- drivers/mfd/cros_ec_dev.c | 1 +
- 1 file changed, 1 insertion(+)
+This adds the MSR to the index system as alternative for
+MSR_PKG_ENERGY_STATUS.
 
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index 6135321592b76c..f3bc1cb6891ba5 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -116,6 +116,7 @@ static const struct mfd_cell cros_ec_platform_cells[] = {
- 	{ .name = "cros-ec-pd-sysfs" },
- 	{ .name = "cros-ec-sysfs", },
- 	{ .name = "cros-ec-pd-update", },
-+	{ .name = "cros-ec-pchg", },
- };
+Signed-off-by: Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+Fixes: 9972d5d84d76 ("tools/power turbostat: Enable accumulate RAPL display")
+---
+ tools/power/x86/turbostat/turbostat.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 389ea5209a83..6b9528d96c48 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -297,7 +297,10 @@ int idx_to_offset(int idx)
  
- static const struct mfd_cell cros_ec_vbc_cells[] = {
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+-		offset = MSR_PKG_ENERGY_STATUS;
++		if (do_rapl & RAPL_PKG)
++			offset = MSR_PKG_ENERGY_STATUS;
++		else
++			offset = MSR_PKG_ENERGY_STAT;
+ 		break;
+ 	case IDX_DRAM_ENERGY:
+ 		offset = MSR_DRAM_ENERGY_STATUS;
+@@ -326,6 +329,7 @@ int offset_to_idx(int offset)
+ 
+ 	switch (offset) {
+ 	case MSR_PKG_ENERGY_STATUS:
++	case MSR_PKG_ENERGY_STAT:
+ 		idx = IDX_PKG_ENERGY;
+ 		break;
+ 	case MSR_DRAM_ENERGY_STATUS:
+@@ -353,7 +357,7 @@ int idx_valid(int idx)
+ {
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+-		return do_rapl & RAPL_PKG;
++		return do_rapl & (RAPL_PKG | RAPL_AMD_F17H);
+ 	case IDX_DRAM_ENERGY:
+ 		return do_rapl & RAPL_DRAM;
+ 	case IDX_PP0_ENERGY:
 -- 
-2.30.0.280.ga3ce27912f-goog
+2.29.2
 
