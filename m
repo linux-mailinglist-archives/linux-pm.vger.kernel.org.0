@@ -2,126 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4AE301E9C
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Jan 2021 21:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 379AE301F6B
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Jan 2021 23:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbhAXUHu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Jan 2021 15:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725969AbhAXUHt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Jan 2021 15:07:49 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FD0C061573
-        for <linux-pm@vger.kernel.org>; Sun, 24 Jan 2021 12:07:08 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id i30so10765610ota.6
-        for <linux-pm@vger.kernel.org>; Sun, 24 Jan 2021 12:07:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=+wHtxvtC1jI/nW4txRp0ZVFK13xVD/e5tlgnnpJhrT4=;
-        b=B/QLKbHQOWdsoFbigku1iPJMvRLlLy+1TmxPksBRa+/6POLJXMaf5d5r6YsgrPiEoo
-         7EIQUKkWyEyYrAofrEJUMo5LgTxq9C5ggTi2ZUdomWqah2G2pILJ7/ZzL2SkQHFdnrnU
-         KmJX5+7ArMjRrsVwmpma1f6kpwEADEHM5cZ8vJ2cubwQNRuO9FzRld5NVoZmLl1bx64/
-         4+LvkXd1VFbh979akhsraEnpq25toxFpyGxoDBY2u5lI3qKDo1HcpCV6JHSMffFXw0AI
-         ePvFODKlkCcezc/DrDPL8f1RU+Pn8RU3taLT+iHvlOl4kmH9hcTIBx9Y1iNSMzxrK1/Q
-         RiMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=+wHtxvtC1jI/nW4txRp0ZVFK13xVD/e5tlgnnpJhrT4=;
-        b=joRun5uDcBhAdpi04lPuPxIuj1VByviR74W9ueIqJc4GDP9wkQOQkj0O3VporhobDH
-         vvuXzgh1DlPbxz2ijWS9aA1dEY6mGkOPwuz/QRm44LJa+n9RCGzHW5jvvgLCrVSWmF4R
-         4E++BKPvmv2RpEfng3ifVD6HI4tEHfwaDVTGe2oAtiMuEVr/Z15aMhmNtK/Py2gwXKes
-         F+rvV6/T5aRjiGrHEeSL/vZom58Ra+LMffyLX8kp1oUYuvxU8cdg1w02Vf3/xlZDj15m
-         d0vM2ct4IRfi0yT2oDEkofDzyismU3tsMCFteuwBTp1Nha2hzjmouryuEEkbllzmislm
-         i1dQ==
-X-Gm-Message-State: AOAM5304y9VOs6veEOv6tHTetJiqDS+YGrEMknLxMFh73xVcwKwABN2A
-        1g8uAemc/zGRbrJx0TQe46M8ww==
-X-Google-Smtp-Source: ABdhPJwkjeguUQQq8ExODbw+xBALYdofTAdvUgePeXABnj2QpaJq5Qo/5Rp/MaDPboyRQtCXP5fbNw==
-X-Received: by 2002:a05:6830:2152:: with SMTP id r18mr10445402otd.296.1611518827927;
-        Sun, 24 Jan 2021 12:07:07 -0800 (PST)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k15sm3058068otp.10.2021.01.24.12.07.06
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Sun, 24 Jan 2021 12:07:07 -0800 (PST)
-Date:   Sun, 24 Jan 2021 12:06:54 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Thierry Reding <treding@nvidia.com>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: Infinite recursion in device_reorder_to_tail() due to circular
- device links
-In-Reply-To: <YA0sOFj6VjQ8LUL2@kroah.com>
-Message-ID: <alpine.LSU.2.11.2101241205190.2585@eggly.anvils>
-References: <X/ycQpu7NIGI969v@gerhold.net> <CAJZ5v0gAsZ45O8mv-gz0UvbyxnKA6fQBYvambBYEH6OSk3-m3g@mail.gmail.com> <X/3kveeVrb35qsvb@kroah.com> <alpine.LSU.2.11.2101231524290.1540@eggly.anvils> <YA0sOFj6VjQ8LUL2@kroah.com>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
+        id S1726749AbhAXWtr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Jan 2021 17:49:47 -0500
+Received: from rome.phoronix.com ([192.211.48.82]:61956 "EHLO
+        rome.phoronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726663AbhAXWtp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Jan 2021 17:49:45 -0500
+X-Greylist: delayed 1071 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Jan 2021 17:49:44 EST
+Received: from c-73-176-63-28.hsd1.il.comcast.net ([73.176.63.28]:52254 helo=[192.168.86.21])
+        by rome.phoronix.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <Michael@phoronix.com>)
+        id 1l3nuP-0002JK-MX; Sun, 24 Jan 2021 17:31:01 -0500
+Subject: Re: [PATCH v2 0/1] AMD EPYC: fix schedutil perf regression
+ (freq-invariance)
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+References: <20210122204038.3238-1-ggherdovich@suse.cz>
+From:   Michael Larabel <Michael@phoronix.com>
+Message-ID: <a5071cb5-6a5b-d2e4-ff06-fa7810b8127c@phoronix.com>
+Date:   Sun, 24 Jan 2021 16:30:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20210122204038.3238-1-ggherdovich@suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - rome.phoronix.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - phoronix.com
+X-Get-Message-Sender-Via: rome.phoronix.com: authenticated_id: michael@phoronix.com
+X-Authenticated-Sender: rome.phoronix.com: michael@phoronix.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 24 Jan 2021, Greg Kroah-Hartman wrote:
-> On Sat, Jan 23, 2021 at 03:37:30PM -0800, Hugh Dickins wrote:
-> > On Tue, 12 Jan 2021, Greg Kroah-Hartman wrote:
-> > > On Tue, Jan 12, 2021 at 03:32:04PM +0100, Rafael J. Wysocki wrote:
-> > > > On Mon, Jan 11, 2021 at 7:46 PM Stephan Gerhold <stephan@gerhold.net> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > since 5.11-rc1 I get kernel crashes with infinite recursion in
-> > > > > device_reorder_to_tail() in some situations... It's a bit complicated to
-> > > > > explain so I want to apologize in advance for the long mail. :)
-> > > > >
-> > > > >   Kernel panic - not syncing: kernel stack overflow
-> > > > >   CPU: 1 PID: 33 Comm: kworker/1:1 Not tainted 5.11.0-rc3 #1
-> > > > >   Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > > > >   Call trace:
-> > > > >    ...
-> > > > >    device_reorder_to_tail+0x4c/0xf0
-> > > > >    device_reorder_to_tail+0x98/0xf0
-> > > > >    device_reorder_to_tail+0x60/0xf0
-> > > > >    device_reorder_to_tail+0x60/0xf0
-> > > > >    device_reorder_to_tail+0x60/0xf0
-> > > > >    ...
-> > > > >
-> > > > > The crash happens only in 5.11 with commit 5b6164d3465f ("driver core:
-> > > > > Reorder devices on successful probe"). It stops happening when I revert
-> > > > > this commit.
-> > > > 
-> > > > Thanks for the report!
-> > > > 
-> > > > Greg, please revert commit 5b6164d3465f, it clearly is not an
-> > > > improvement, at least at this point.
-> > > 
-> > > Now reverted, thanks.
-> > > 
-> > > greg k-h
-> > 
-> > I think that there has been a misunderstanding here: although
-> > 5b6164d3465f ("driver core: Reorder devices on successful probe")
-> > has been reverted from linux-next (thank you), it has not yet been
-> > reverted from 5.11-rc, and still causing problems there (in my case,
-> > not the infinite recursion Stephan reported in this thread, but the
-> > ThinkPad rmi4 suspend failure that I reported in another thread).
-> 
-> It will be sent to Linus in a few hours, thanks, so should show up in
-> 5.11-rc5.  I had other patches to go along with this to send him at the
-> same time :)
+ From ongoing tests of this patch, it still certainly shows to address 
+most of the Linux 5.11 performance regression previously encountered 
+when using Schedutil. Additionally, for a number of workloads where not 
+seeing a regression from 5.10 to 5.11 Git is still showing even better 
+performance with this patch. The power monitoring on the AMD EPYC server 
+is showing higher power spikes but the average power consumption rate is 
+roughly comparable to that of Linux 5.11 Git, which is higher than 5.10 
+by just about 3%.
 
-And indeed it's now in, thanks Greg: I'm sorry for being importunate,
-the misunderstanding was mine.
+So this patch still seems to be working out well and indeed taking care 
+of some wide losses seen otherwise on Linux 5.11 when using Schedutil on 
+AMD Zen2/Zen3. Still have some other tests running but so far no 
+unexpected results.
 
-Hugh
+Michael
+
+
+AMD EPYC 7F72 2P
+
+On an EPYC 7F72 2P server[1] across 147 test cases I am finding the 
+patched Linux 5.11 kernel to be just over 1% faster than 5.10 stable 
+compared to the unpatched 5.11 Git being just behind 5.10. For the 
+workloads on that server where Linux 5.11 is slower with Schedutil, the 
+patch indeed is largely addressing that regression and also providing 
+other improvements.
+
+During that testing, the amd_energy interface was monitored. Linux 5.11 
+with Schedutil AMD freq invariance did show on average 10 Watts (~3.7%) 
+higher power consumption on average than Linux 5.10 with Schedutil. But 
+with this patch, that average is still basically the same. The peak 
+power consumption during any of the tests was higher at 530~549 Watts 
+compared to 501 Watts with Linux 5.10. Overall the performance is 
+looking good but given amd_energy still not working for consumer models, 
+I don't have much power data to share at the moment.
+
+Ryzen 9 5950X
+
+Expanding on the prior testing with the 5950X, I ran some follow-up 
+tests[2]. Of 221 test cases there, the current Linux 5.11 Git 
+performance came around 2% slower on a geo mean basis than Linux 5.10 
+while the patched performance pulls it to ~2.5% faster than 5.10. There 
+still are some cases where Linux 5.10 is faster, but overall at least 
+the patched Linux 5.11 performance doesn't show nearly as many 
+regressions. In a number of test cases, the Linux 5.11 patched 
+performance is outright better than Linux 5.10 even where 5.11 
+(un-patched) hadn't regressed or by that much.
+
+Ryzen 5 4500U
+
+For something at the lower end of the spectrum I also ran a number of 
+tests on a Ryzen 5 4500U notebook[3]. Linux 5.11 (unpatched) doesn't see 
+as many regressions as on the larger systems but still the patched 
+performance did help in a number of tests, particularly around 
+graphics/gaming. In the heavier multi-core core tests are still a number 
+of cases where Linux 5.10 is faster than patched/unpatched 5.11. The 
+patched kernel in those 90 tests came out to being about 4% faster than 
+5.10.
+
+(Result highlights below, results with little change set to hidden by 
+default.)
+[1] 
+https://openbenchmarking.org/result/2101248-HA-AMDEPYC7F52&grs&hlc=1&hnr=1&hlc=1
+[2] https://openbenchmarking.org/result/2101242-HA-RYZEN959530&grs&hlc=1
+[3] 
+https://openbenchmarking.org/result/2101232-PTS-RENOIRLI89&grs&hnr=1&hlc=1
+
+
+On 1/22/21 2:40 PM, Giovanni Gherdovich wrote:
+> Michael Larabel from Phoronix.com graciously tested v1, see results at:
+>
+> AMD EPYC 7702 -
+> https://openbenchmarking.org/result/2101210-PTS-LINUX51178
+>
+> AMD Ryzen 9 5950X -
+> https://openbenchmarking.org/result/2101212-HA-RYZEN959566
+>
+> The reported regression is recovered, and some workloads even report an
+> improvement over the v5.10 results.
+>
+> Thanks Michael for the feedback!
+>
+>
+> v1 at https://lore.kernel.org/lkml/20210121003223.20257-1-ggherdovich@suse.cz/
+>
+> Changes wrt v1:
+>
+> - move code around so that it builds for non-x86 architectures too
+>
+> Giovanni Gherdovich (1):
+>    x86,sched: On AMD EPYC set freq_max = max_boost in schedutil invariant
+>      formula
+>
+>   drivers/cpufreq/acpi-cpufreq.c   | 64 +++++++++++++++++++++++++++++++-
+>   drivers/cpufreq/cpufreq.c        |  3 ++
+>   include/linux/cpufreq.h          |  5 +++
+>   kernel/sched/cpufreq_schedutil.c |  8 +++-
+>   4 files changed, 76 insertions(+), 4 deletions(-)
+>
