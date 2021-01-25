@@ -2,339 +2,242 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DC0303599
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 06:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4D230359B
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 06:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728872AbhAZFrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 00:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
+        id S1728909AbhAZFrv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 00:47:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728578AbhAYNH6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jan 2021 08:07:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC1CC061574;
-        Mon, 25 Jan 2021 05:05:57 -0800 (PST)
-Received: from zn.tnic (p200300ec2f09db0060c9c38025ffa6e4.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:db00:60c9:c380:25ff:a6e4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BC1E91EC0588;
-        Mon, 25 Jan 2021 14:05:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1611579955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+Bs0PpQ88v0uF1lsWP3GVKzNP36Wuhdo/KmSyHbc03E=;
-        b=HacRBINI/4ezuwwxVEQz3XHxTwJsszTS20UzVuuyiRP5O1ICTQ7rQvY90GsGiQNhfo5uf9
-        ygjdVneXOB1WaWWalstLqShbHXHbJbrbBZgPiwHtO4rlSqCoAzS7RZjKGp/3NcVuO/ApoY
-        1YRBlQ7OGpBNq4WfWSCrmASJe7F7JIk=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v2 2/2] thermal: Move therm_throt there from x86/mce
-Date:   Mon, 25 Jan 2021 14:05:33 +0100
-Message-Id: <20210125130533.19938-3-bp@alien8.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210125130533.19938-1-bp@alien8.de>
-References: <20210125130533.19938-1-bp@alien8.de>
+        with ESMTP id S1729562AbhAYOfc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jan 2021 09:35:32 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47909C061788
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jan 2021 06:26:02 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id h9so2502684wrr.9
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jan 2021 06:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Vji1Tx5QRSQNLp89Gs6e8lzkkwhzHlemOJyNOLZx/Vs=;
+        b=C7OKxxXbzwcriXVOqt/vHbQNBqSMpqwjmlk7grSPzIT+mfxg/TvYC8aScaDUGk9ACp
+         gzWErcI9AFx59YsvnMYwSFfJ54l8HWaKF4dBUDNv4WMe8eAPx1q2TLruc8ABW8gF7VcZ
+         kFLUhRkp+NtHywqLT75AhPZOlXonh8UqhAnJAFV/ZHGRkOOb2hnPTZV2NbHg+XjWsxrX
+         sIcgMjZlS4WJrYyTqBMC77lRyI/MEVCqczskgg79ZbERtAuP5kWXsw4BuGs5BhjSiw01
+         cN8J8ba13f09b7WdFnqjNtXFF3ITRVAlsoVX+OrOWyQCD0uNQ6RI3XK4VuWKeDIvaKn+
+         Gh+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Vji1Tx5QRSQNLp89Gs6e8lzkkwhzHlemOJyNOLZx/Vs=;
+        b=kgn9C2un6YWN90EHGPj40WfZ4Cqei/NKly3BnxcJUOkrZYcHptMHkrCQ5tbWuYG1zn
+         GEzYEoPms++JXw1YCU/tEIDTLsyJMkvc7m75MZFVkiqQJtpf7A72/T9jRvO0Uio5dQYK
+         0x9kxu9sf23lDhTOVF3oqunSNBvCiQJSR9urQbhCIk8bnim+A5Ypmiy8gM2oudgZs4rP
+         YMbQFq7VVkcpGVa1AifDVHXMVE+k0P6EjHaDrIzT6vnwZKAeXpAjz/8LEVCqkyq8ltLo
+         FUI4ZhwCR7IgZDC8EsZIw4nx8PFTtiC6/KeXH+a4RlQVAlVxPO/BSLs/yEYHw1IvEpIs
+         IfmA==
+X-Gm-Message-State: AOAM532WucRUxCSxtqfwaOjsdIFk5qOb9ybcsy5pHzyVonYJ3HmV/nU3
+        oyMUkK5McsUQA2PJTyV0XOXpIQ==
+X-Google-Smtp-Source: ABdhPJwRHIRT4t+tsU+w3Q4lxBuXQlIFUyjKY1apuZy7xv0+VfMOA1VLqRWa9iiUnXxm5EhLHf8Dww==
+X-Received: by 2002:adf:d206:: with SMTP id j6mr1184505wrh.427.1611584760873;
+        Mon, 25 Jan 2021 06:26:00 -0800 (PST)
+Received: from dell ([91.110.221.194])
+        by smtp.gmail.com with ESMTPSA id r15sm23355806wrq.1.2021.01.25.06.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jan 2021 06:26:00 -0800 (PST)
+Date:   Mon, 25 Jan 2021 14:25:58 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 3/7] mfd: Add MFD driver for ATC260x PMICs
+Message-ID: <20210125142558.GA4903@dell>
+References: <cover.1611165200.git.cristian.ciocaltea@gmail.com>
+ <4bc76f9e3dc7204d7f407af6ee61c9f193a789d3.1611165200.git.cristian.ciocaltea@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <4bc76f9e3dc7204d7f407af6ee61c9f193a789d3.1611165200.git.cristian.ciocaltea@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Wed, 20 Jan 2021, Cristian Ciocaltea wrote:
 
-This functionality has nothing to do with MCE, move it to the thermal
-framework and untangle it from MCE.
+> Add initial support for the Actions Semi ATC260x PMICs which integrates
+> Audio Codec, Power management, Clock generation and GPIO controller
+> blocks.
+> 
+> For the moment this driver only supports Regulator, Poweroff and Onkey
+> functionalities for the ATC2603C and ATC2609A chip variants.
+> 
+> Since the PMICs can be accessed using both I2C and SPI buses, the
+> following driver structure has been adopted:
+> 
+>            -----> atc260x-core.c (Implements core functionalities)
+>           /
+> ATC260x --------> atc260x-i2c.c (Implements I2C interface)
+>           \
+>            -----> atc260x-spi.c (Implements SPI interface - TODO)
+> 
+> Co-developed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+> ---
+> Changes in v6 - per Lee's feedback:
+> - Added ATC260X_CHIP_REV_MAX magic number
+> - Fixed code formattting arround atc260x_i2c_driver initialization
+> - Replaced dev_init() callback in struct atc260x with a pointer to a new struct
+> atc260x_init_regs to hold hardware specific registry information
+> - Added a generic atc260x_dev_init() function and instantiated atc2603c_init_regs
+> and atc2609a_init_regs
+> 
+> Changes in v5:
+>  - None
+> 
+> Changes in v4 - according to Lee's review:
+>  - Replaced 'regmap_add_irq_chip()' with 'devm' counterpart and dropped
+>    'atc260x_device_remove()' and 'atc260x_i2c_remove()' functions
+>  - Moved kerneldoc sections from prototypes to real functions
+>  - Placed single line entries on one line for mfd_cells[]
+>  - Several other minor changes
+> 
+> Changes in v3:
+>  - Fixed the issues reported by Lee's kernel test robot:
+>    WARNING: modpost: missing MODULE_LICENSE() in drivers/mfd/atc260x-core.o
+>    >> FATAL: modpost: drivers/mfd/atc260x-i2c: sizeof(struct i2c_device_id)=24 is
+>       not a modulo of the size of section __mod_i2c__<identifier>_device_table=588.
+>    >> Fix definition of struct i2c_device_id in mod_devicetable.h
+>  - Dropped the usage of '.of_compatible' fields in {atc2603c,atc2609a}_mfd_cells[]
+>  - Added 'Co-developed-by' tag in commit message and dropped [cristian: ...] line
+> 
+>  drivers/mfd/Kconfig                  |  18 ++
+>  drivers/mfd/Makefile                 |   3 +
+>  drivers/mfd/atc260x-core.c           | 310 +++++++++++++++++++++++++++
+>  drivers/mfd/atc260x-i2c.c            |  64 ++++++
+>  include/linux/mfd/atc260x/atc2603c.h | 281 ++++++++++++++++++++++++
+>  include/linux/mfd/atc260x/atc2609a.h | 308 ++++++++++++++++++++++++++
+>  include/linux/mfd/atc260x/core.h     |  58 +++++
+>  7 files changed, 1042 insertions(+)
+>  create mode 100644 drivers/mfd/atc260x-core.c
+>  create mode 100644 drivers/mfd/atc260x-i2c.c
+>  create mode 100644 include/linux/mfd/atc260x/atc2603c.h
+>  create mode 100644 include/linux/mfd/atc260x/atc2609a.h
+>  create mode 100644 include/linux/mfd/atc260x/core.h
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index bdfce7b15621..a27ff2e83e7a 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -2064,6 +2064,24 @@ config MFD_WCD934X
+>  	  This driver provides common support WCD934x audio codec and its
+>  	  associated Pin Controller, Soundwire Controller and Audio codec.
+>  
+> +config MFD_ATC260X
+> +	tristate
+> +	select MFD_CORE
+> +	select REGMAP
+> +	select REGMAP_IRQ
+> +
+> +config MFD_ATC260X_I2C
+> +	tristate "Actions Semi ATC260x PMICs with I2C"
+> +	select MFD_ATC260X
+> +	select REGMAP_I2C
+> +	depends on I2C
+> +	help
+> +	  Support for the Actions Semi ATC260x PMICs controlled via I2C.
+> +
+> +	  This driver provides common support for accessing the ATC2603C
+> +	  and ATC2609A chip variants, additional drivers must be enabled
+> +	  in order to use the functionality of the device.
+> +
+>  config MFD_KHADAS_MCU
+>  	tristate "Support for Khadas System control Microcontroller"
+>  	depends on I2C
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 14fdb188af02..1ea88d2c83b4 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -268,3 +268,6 @@ obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+>  obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+>  obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+>  obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
+> +
+> +obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+> +obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
+> diff --git a/drivers/mfd/atc260x-core.c b/drivers/mfd/atc260x-core.c
+> new file mode 100644
+> index 000000000000..7148ff5b05b1
+> --- /dev/null
+> +++ b/drivers/mfd/atc260x-core.c
+> @@ -0,0 +1,310 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Core support for ATC260x PMICs
+> + *
+> + * Copyright (C) 2019 Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> + * Copyright (C) 2020 Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+> + */
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/atc260x/core.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#define ATC260X_CHIP_REV_MAX	31
+> +
+> +struct atc260x_init_regs {
+> +	unsigned int cmu_devrst;
+> +	unsigned int cmu_devrst_ints;
+> +	unsigned int ints_msk;
+> +	unsigned int pad_en;
+> +	unsigned int pad_en_extirq;
+> +};
+> +
+> +static void regmap_lock_mutex(void *__mutex)
+> +{
+> +	struct mutex *mutex = __mutex;
+> +
+> +	/*
+> +	 * Using regmap within an atomic context (e.g. accessing a PMIC when
+> +	 * powering system down) is normally allowed only if the regmap type
+> +	 * is MMIO and the regcache type is either REGCACHE_NONE or
+> +	 * REGCACHE_FLAT. For slow buses like I2C and SPI, the regmap is
+> +	 * internally protected by a mutex which is acquired non-atomically.
+> +	 *
+> +	 * Let's improve this by using a customized locking scheme inspired
+> +	 * from I2C atomic transfer. See i2c_in_atomic_xfer_mode() for a
+> +	 * starting point.
+> +	 */
+> +	if (system_state > SYSTEM_RUNNING && irqs_disabled())
+> +		mutex_trylock(mutex);
+> +	else
+> +		mutex_lock(mutex);
+> +}
 
-Have thermal_set_handler() check the build-time assigned default handler
-stub was the one used before therm_throt assigns a new one.
+Would this be useful to anyone else?
 
-Requested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/Kconfig                              |  4 ---
- arch/x86/include/asm/irq.h                    |  4 +++
- arch/x86/include/asm/mce.h                    | 16 ----------
- arch/x86/include/asm/thermal.h                | 21 ++++++++++++++
- arch/x86/kernel/cpu/intel.c                   |  3 ++
- arch/x86/kernel/cpu/mce/Makefile              |  2 --
- arch/x86/kernel/cpu/mce/intel.c               |  1 -
- arch/x86/kernel/irq.c                         | 29 +++++++++++++++++++
- drivers/thermal/intel/Kconfig                 |  4 +++
- drivers/thermal/intel/Makefile                |  1 +
- .../thermal/intel}/therm_throt.c              | 25 ++--------------
- drivers/thermal/intel/x86_pkg_temp_thermal.c  |  3 +-
- 12 files changed, 67 insertions(+), 46 deletions(-)
- create mode 100644 arch/x86/include/asm/thermal.h
- rename {arch/x86/kernel/cpu/mce => drivers/thermal/intel}/therm_throt.c (97%)
+For my own reference (apply this as-is to your sign-off block):
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 21f851179ff0..9989db3a9bf5 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1158,10 +1158,6 @@ config X86_MCE_INJECT
- 	  If you don't know what a machine check is and you don't do kernel
- 	  QA it is safe to say n.
- 
--config X86_THERMAL_VECTOR
--	def_bool y
--	depends on X86_MCE_INTEL
--
- source "arch/x86/events/Kconfig"
- 
- config X86_LEGACY_VM86
-diff --git a/arch/x86/include/asm/irq.h b/arch/x86/include/asm/irq.h
-index 528c8a71fe7f..ad65fe7dceb1 100644
---- a/arch/x86/include/asm/irq.h
-+++ b/arch/x86/include/asm/irq.h
-@@ -53,4 +53,8 @@ void arch_trigger_cpumask_backtrace(const struct cpumask *mask,
- #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
- #endif
- 
-+#ifdef CONFIG_X86_THERMAL_VECTOR
-+void thermal_set_handler(void (*handler)(void));
-+#endif
-+
- #endif /* _ASM_X86_IRQ_H */
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index def9aa5e1fa4..ddfb3cad8dff 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -288,22 +288,6 @@ extern void (*mce_threshold_vector)(void);
- /* Deferred error interrupt handler */
- extern void (*deferred_error_int_vector)(void);
- 
--/*
-- * Thermal handler
-- */
--
--void intel_init_thermal(struct cpuinfo_x86 *c);
--
--/* Interrupt Handler for core thermal thresholds */
--extern int (*platform_thermal_notify)(__u64 msr_val);
--
--/* Interrupt Handler for package thermal thresholds */
--extern int (*platform_thermal_package_notify)(__u64 msr_val);
--
--/* Callback support of rate control, return true, if
-- * callback has rate control */
--extern bool (*platform_thermal_package_rate_control)(void);
--
- /*
-  * Used by APEI to report memory error via /dev/mcelog
-  */
-diff --git a/arch/x86/include/asm/thermal.h b/arch/x86/include/asm/thermal.h
-new file mode 100644
-index 000000000000..58b0e0a4af6e
---- /dev/null
-+++ b/arch/x86/include/asm/thermal.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_THERMAL_H
-+#define _ASM_X86_THERMAL_H
-+
-+/* Interrupt Handler for package thermal thresholds */
-+extern int (*platform_thermal_package_notify)(__u64 msr_val);
-+
-+/* Interrupt Handler for core thermal thresholds */
-+extern int (*platform_thermal_notify)(__u64 msr_val);
-+
-+/* Callback support of rate control, return true, if
-+ * callback has rate control */
-+extern bool (*platform_thermal_package_rate_control)(void);
-+
-+#ifdef CONFIG_X86_THERMAL_VECTOR
-+void intel_init_thermal(struct cpuinfo_x86 *c);
-+#else
-+static inline void intel_init_thermal(struct cpuinfo_x86 *c) { }
-+#endif
-+
-+#endif /* _ASM_X86_THERMAL_H */
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 59a1e3ce3f14..71221af87cb1 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -24,6 +24,7 @@
- #include <asm/traps.h>
- #include <asm/resctrl.h>
- #include <asm/numa.h>
-+#include <asm/thermal.h>
- 
- #ifdef CONFIG_X86_64
- #include <linux/topology.h>
-@@ -719,6 +720,8 @@ static void init_intel(struct cpuinfo_x86 *c)
- 		tsx_disable();
- 
- 	split_lock_init();
-+
-+	intel_init_thermal(c);
- }
- 
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/kernel/cpu/mce/Makefile b/arch/x86/kernel/cpu/mce/Makefile
-index 9f020c994154..015856abdbb1 100644
---- a/arch/x86/kernel/cpu/mce/Makefile
-+++ b/arch/x86/kernel/cpu/mce/Makefile
-@@ -9,8 +9,6 @@ obj-$(CONFIG_X86_MCE_THRESHOLD) += threshold.o
- mce-inject-y			:= inject.o
- obj-$(CONFIG_X86_MCE_INJECT)	+= mce-inject.o
- 
--obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
--
- obj-$(CONFIG_ACPI_APEI)		+= apei.o
- 
- obj-$(CONFIG_X86_MCELOG_LEGACY)	+= dev-mcelog.o
-diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index c2476fe0682e..e309476743b7 100644
---- a/arch/x86/kernel/cpu/mce/intel.c
-+++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -531,7 +531,6 @@ static void intel_imc_init(struct cpuinfo_x86 *c)
- 
- void mce_intel_feature_init(struct cpuinfo_x86 *c)
- {
--	intel_init_thermal(c);
- 	intel_init_cmci();
- 	intel_init_lmce();
- 	intel_ppin_init(c);
-diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
-index c5dd50369e2f..523fa5266d3e 100644
---- a/arch/x86/kernel/irq.c
-+++ b/arch/x86/kernel/irq.c
-@@ -374,3 +374,32 @@ void fixup_irqs(void)
- 	}
- }
- #endif
-+
-+#ifdef CONFIG_X86_THERMAL_VECTOR
-+static void unexpected_thermal_interrupt(void)
-+{
-+	pr_err("CPU%d: Unexpected LVT thermal interrupt!\n",
-+		smp_processor_id());
-+}
-+
-+static void (*smp_thermal_vector)(void) = unexpected_thermal_interrupt;
-+
-+void thermal_set_handler(void (*handler)(void))
-+{
-+	if (handler) {
-+		WARN_ON(smp_thermal_vector != unexpected_thermal_interrupt);
-+		smp_thermal_vector = handler;
-+	} else {
-+		smp_thermal_vector = unexpected_thermal_interrupt;
-+	}
-+}
-+
-+DEFINE_IDTENTRY_SYSVEC(sysvec_thermal)
-+{
-+	trace_thermal_apic_entry(THERMAL_APIC_VECTOR);
-+	inc_irq_stat(irq_thermal_count);
-+	smp_thermal_vector();
-+	trace_thermal_apic_exit(THERMAL_APIC_VECTOR);
-+	ack_APIC_irq();
-+}
-+#endif
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index 8025b21f43fa..ce4f59213c7a 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -8,6 +8,10 @@ config INTEL_POWERCLAMP
- 	  enforce idle time which results in more package C-state residency. The
- 	  user interface is exposed via generic thermal framework.
- 
-+config X86_THERMAL_VECTOR
-+	def_bool y
-+	depends on X86 && CPU_SUP_INTEL && X86_LOCAL_APIC
-+
- config X86_PKG_TEMP_THERMAL
- 	tristate "X86 package temperature thermal driver"
- 	depends on X86_THERMAL_VECTOR
-diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
-index 0d9736ced5d4..ff2ad30ef397 100644
---- a/drivers/thermal/intel/Makefile
-+++ b/drivers/thermal/intel/Makefile
-@@ -10,3 +10,4 @@ obj-$(CONFIG_INTEL_QUARK_DTS_THERMAL)	+= intel_quark_dts_thermal.o
- obj-$(CONFIG_INT340X_THERMAL)  += int340x_thermal/
- obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
- obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
-+obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-similarity index 97%
-rename from arch/x86/kernel/cpu/mce/therm_throt.c
-rename to drivers/thermal/intel/therm_throt.c
-index 5b1aa0f30655..4f12fcd0e40a 100644
---- a/arch/x86/kernel/cpu/mce/therm_throt.c
-+++ b/drivers/thermal/intel/therm_throt.c
-@@ -26,13 +26,11 @@
- #include <linux/cpu.h>
- 
- #include <asm/processor.h>
-+#include <asm/thermal.h>
- #include <asm/traps.h>
- #include <asm/apic.h>
--#include <asm/mce.h>
-+#include <asm/irq.h>
- #include <asm/msr.h>
--#include <asm/trace/irq_vectors.h>
--
--#include "internal.h"
- 
- /* How long to wait between reporting thermal events */
- #define CHECK_INTERVAL		(300 * HZ)
-@@ -606,23 +604,6 @@ static void intel_thermal_interrupt(void)
- 	}
- }
- 
--static void unexpected_thermal_interrupt(void)
--{
--	pr_err("CPU%d: Unexpected LVT thermal interrupt!\n",
--		smp_processor_id());
--}
--
--static void (*smp_thermal_vector)(void) = unexpected_thermal_interrupt;
--
--DEFINE_IDTENTRY_SYSVEC(sysvec_thermal)
--{
--	trace_thermal_apic_entry(THERMAL_APIC_VECTOR);
--	inc_irq_stat(irq_thermal_count);
--	smp_thermal_vector();
--	trace_thermal_apic_exit(THERMAL_APIC_VECTOR);
--	ack_APIC_irq();
--}
--
- /* Thermal monitoring depends on APIC, ACPI and clock modulation */
- static int intel_thermal_supported(struct cpuinfo_x86 *c)
- {
-@@ -718,7 +699,7 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
- 				| PACKAGE_THERM_INT_HIGH_ENABLE), h);
- 	}
- 
--	smp_thermal_vector = intel_thermal_interrupt;
-+	thermal_set_handler(intel_thermal_interrupt);
- 
- 	rdmsr(MSR_IA32_MISC_ENABLE, l, h);
- 	wrmsr(MSR_IA32_MISC_ENABLE, l | MSR_IA32_MISC_ENABLE_TM1, h);
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index b81c33202f41..090f9176ba62 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -17,8 +17,9 @@
- #include <linux/pm.h>
- #include <linux/thermal.h>
- #include <linux/debugfs.h>
-+
- #include <asm/cpu_device_id.h>
--#include <asm/mce.h>
-+#include <asm/thermal.h>
- 
- /*
- * Rate control delay: Idea is to introduce denounce effect
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
 -- 
-2.29.2
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
