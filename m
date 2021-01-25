@@ -2,25 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7D93046C6
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 19:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAAA304840
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 20:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390740AbhAZRUM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 12:20:12 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48038 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390906AbhAZJKO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Jan 2021 04:10:14 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 57DE5B254;
-        Tue, 26 Jan 2021 09:09:28 +0000 (UTC)
-Message-ID: <1611652167.11983.65.camel@suse.cz>
-Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
- in schedutil invariant formula
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        id S1726021AbhAZFrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 00:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbhAYJPo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jan 2021 04:15:44 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF3CC061351;
+        Mon, 25 Jan 2021 00:35:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XJYeiAvL4VeVAenUSsgyMYNM2qEv0ZjDoysHFmUMJos=; b=jgTw6YQpQch96Jh2NAY77ZJaOK
+        Z/CXctZ/YGYOQ29vtW6E7aXdigyHfW+hPf06Z0lUPiwnC9h7NU4CsZKFhWScilSj+ffNdBTqLswS8
+        N2TfhsHCtqtmI/TzHn5tD1qjhxtEhx/jJGLxK1eDTMFXbxNWar/1wvxc5rM/4qUePeZkrgHD/RHo5
+        PF5LQQFEX8vKLYcnS75Buw78QaV4YUZbgxgFExzAAOtCbOT1UE3gd30f1CCQM51nUZjK/nqVCdHte
+        R356/Mu24kfBMqxvoePR48L/8PH2Wr2WnX474tEKcLKVsT+5Q2AaJiBvkvlDpIottlxUkLwpwa89o
+        9HKDCL+A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l3xKp-0001tn-Ez; Mon, 25 Jan 2021 08:34:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2AF1D3010C8;
+        Mon, 25 Jan 2021 09:34:50 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DEFA1207D3C61; Mon, 25 Jan 2021 09:34:49 +0100 (CET)
+Date:   Mon, 25 Jan 2021 09:34:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Michael Larabel <Michael@phoronix.com>
+Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Jon Grimm <Jon.Grimm@amd.com>,
@@ -31,58 +49,40 @@ Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
         Mel Gorman <mgorman@techsingularity.net>,
         Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Michael Larabel <Michael@phoronix.com>, x86@kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org
-Date:   Tue, 26 Jan 2021 10:09:27 +0100
-In-Reply-To: <YA6YEK4/rjtPLdkG@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH v2 0/1] AMD EPYC: fix schedutil perf regression
+ (freq-invariance)
+Message-ID: <YA6CqYcaEhUoyJdH@hirez.programming.kicks-ass.net>
 References: <20210122204038.3238-1-ggherdovich@suse.cz>
-         <20210122204038.3238-2-ggherdovich@suse.cz>
-         <YA6YEK4/rjtPLdkG@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+ <a5071cb5-6a5b-d2e4-ff06-fa7810b8127c@phoronix.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a5071cb5-6a5b-d2e4-ff06-fa7810b8127c@phoronix.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-01-25 at 11:06 +0100, Peter Zijlstra wrote:
-> On Fri, Jan 22, 2021 at 09:40:38PM +0100, Giovanni Gherdovich wrote:
-> > 1. PROBLEM DESCRIPTION (over-utilization and schedutil)
-> > 
-> > The problem happens on CPU-bound workloads spanning a large number of cores.
-> > In this case schedutil won't select the maximum P-State. Actually, it's
-> > likely that it will select the minimum one.
-> > 
-> > A CPU-bound workload puts the machine in a state generally called
-> > "over-utilization": an increase in CPU speed doesn't result in an increase of
-> > capacity. The fraction of time tasks spend on CPU becomes constant regardless
-> > of clock frequency (the tasks eat whatever we throw at them), and the PELT
-> > invariant util goes up and down with the frequency (i.e. it's not invariant
-> > anymore).
-> >                                       v5.10          v5.11-rc4
-> >                                       ~~~~~~~~~~~~~~~~~~~~~~~~
-> > CPU activity (mpstat)                 80-90%         80-90%
-> > schedutil requests (tracepoint)       always P0      mostly P2
-> > CPU frequency (HW feedback)           ~2.2 GHz       ~1.5 GHz
-> > PELT root rq util (tracepoint)        ~825           ~450
-> > 
-> > mpstat shows that the workload is CPU-bound and usage doesn't change with
+On Sun, Jan 24, 2021 at 04:30:57PM -0600, Michael Larabel wrote:
+> From ongoing tests of this patch, it still certainly shows to address most
+> of the Linux 5.11 performance regression previously encountered when using
+> Schedutil. Additionally, for a number of workloads where not seeing a
+> regression from 5.10 to 5.11 Git is still showing even better performance
+> with this patch. The power monitoring on the AMD EPYC server is showing
+> higher power spikes but the average power consumption rate is roughly
+> comparable to that of Linux 5.11 Git, which is higher than 5.10 by just
+> about 3%.
 > 
-> So I'm having trouble with calling a 80%-90% workload CPU bound, because
-> clearly there's a ton of idle time.
+> So this patch still seems to be working out well and indeed taking care of
+> some wide losses seen otherwise on Linux 5.11 when using Schedutil on AMD
+> Zen2/Zen3. Still have some other tests running but so far no unexpected
+> results.
+> 
 
-Yes you're right. There is considerable idle time and calling it CPU-bound is
-a bit of a stretch.
+Did you do all this writing and forget to add:
 
-Yet I don't think I'm completely off the mark. The busy time is the same with
-the machine running at 1.5 GHz and at 2.2 GHz (it just takes longer to
-finish). To me it seems like the CPU is the bottleneck, with some overhead on
-top.
+Tested-by: Michael Larabel <Michael@phoronix.com>
 
-I will confirm what causes the idle time.
-
-
-Giovanni
+?
