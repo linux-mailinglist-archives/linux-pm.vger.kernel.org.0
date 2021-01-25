@@ -2,236 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DED30291E
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jan 2021 18:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E76302913
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jan 2021 18:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729818AbhAYRiU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jan 2021 12:38:20 -0500
-Received: from mail-bn8nam11on2067.outbound.protection.outlook.com ([40.107.236.67]:55220
+        id S1731025AbhAYRhz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jan 2021 12:37:55 -0500
+Received: from mail-bn8nam11on2041.outbound.protection.outlook.com ([40.107.236.41]:64288
         "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731068AbhAYRiC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 Jan 2021 12:38:02 -0500
+        id S1731165AbhAYRhb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 25 Jan 2021 12:37:31 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bb1jgxKcuqJU3XjzTPyIk+ex3IcRoGVtNVs++zcDst0JXi0bo6C9bvV95V8w7GMmNFugnUCCI1YERoAwgUpld1PnUv03SRFtuPjQVWrt0gmIxW1QqU38y1pxyfjO4n5cd5kTTpo5rNn2HBU5I/sWqflbauBx2aj5GKgbg/N1f5sibTScWCOc465XoH1qXHkODhwmbJf3B6IDDoIDBg908aatKpC2/nySrzU003CxNh1TQzEj2Zvs3q1mERQTcnerXTaKwuvtGu8bccsuJ8Uzne8bGseYHWlXy5eQQMzQkPuiZE3GOnkjl+W8hh9nZBujwrh1/ooylmYYZMSy8RUVqg==
+ b=KQFlFlxWMIRWp9E60xmfUaIOQtDmoQQcOgvcMpSdWu4jWtApBI1AKa3GPWmMz6qxLgD8WgkSEGtINBxO+iqQVKWdV+keezl99nIv6spBkslNaxR08lZ9MLxoakwz07wyhK+I/JHvPVGYedJGlgTw7RiAe4u4eySFZaOJydJcwaxK7+u59Tu2N5TeHdKdf5gb6OqG7DJiVoyqybqLWLLfH+m+As6Zwt2Q1cppEJGU+v1R7GY44BRjxuLTu1lGbDFr1iqRda0ROpqurdV9o4hqWHDAuZ0H294WBw4hTwxkY6cydKQu3AMT6MD2zBsf6zV/DD7T8qxD1I0rTxbR45f1Vg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CVCXZm7orfvAjfcDNWKOf/1kAYD72qGKMCGdVVvrBf4=;
- b=QHSb/jwN4rci/KVwMJiZGxxbuSjgzuSxDMR7oVlQCxyp27Q6F+fl7dawYpJJQW3e7qMvAifuB69ibFy/vGYObzgrSlsqT3JkVhBOzWM+9PdKzUo/A76goPEfJ4hDppz5CxJPRpHs0ph10OaNRYoHXdm4YvDByb7vBRy2oeo6Ljw/rhCJnHC7F/JG8ONL4MHNFOl81tQb/PlKqbkVj1Tactkbam7eduB3YmZo1nPYJTPtilVZqFwDy6MxhU9ttRrX3ZNs/kersM/ln6h4PibDZfMForSaY3BFJ3gthgSkJ1XWHz2Tiu+ttTkHlhRwtjFmsijw27SUwzZkOd2uVJgMpw==
+ bh=bNDm1aRoQ3tc9/79od1t+dZqam/WZcpmnoz3H8TSuR4=;
+ b=i5QWLEqnfnSJhz4T+K5NGfeXlyRjegkeQZPClJ2YQn2ZSy/OnYnLG6KRft/ZyWP124+2xkK10AN7eyufG6svUAlWfBorlcgqD9wEFT6yrkIVEnmtLMt+s/r4aN2A4Do3vJzZUF6NgERRrgUK+sl3j3WpvVi3HhoW3xgo2KQLuTQnHGawejTsVH67EEc5P5hYJjanChvCtAzh8/cSl4VwOTHzgntqs4NxRmh23GxTi+YWZZYf8bLIsy29EyMn9HlTkG9gMcrXmVvFo8LjyOEAkDNOPWSH5oQZxO5oM+Eh28GTPjYhFW1fst6F/+kFQu2EIsqn13z/0qoIkpEqtm26Rw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CVCXZm7orfvAjfcDNWKOf/1kAYD72qGKMCGdVVvrBf4=;
- b=gCuXFLK75dcVROrHk67nZozzs503rSEbCbJXjVpwsXxFDdKyMAHL39o6+9jsjHD1G9yUO5AfrMAne3O9Pan1uajBIoIC1GE5A1rTR2cQhor+IzkgFROIPzG8TqSnyc5Mp9diWdxBf0PhxRESI3QqW/YdxZfzNke/WPb3yINz0XI=
+ bh=bNDm1aRoQ3tc9/79od1t+dZqam/WZcpmnoz3H8TSuR4=;
+ b=AE+tmfxbugAPWlFPBevCgg30PK2+GTFaNcjl7534WnB3Ro6RsPkVI2syjG+tOiJTfSdm+UxxBjxtuvi5ccMvf0SU3vlBFLO72aimk8RUaFKP3iSH4m0rREBbnk3sj4PJtj5PWIBrQ3DOI8QrsTOQrnl5w83YbrPjg26v0UotHZ4=
 Authentication-Results: amd.com; dkim=none (message not signed)
  header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
 Received: from SN6PR12MB4720.namprd12.prod.outlook.com (2603:10b6:805:e6::31)
  by SN1PR12MB2576.namprd12.prod.outlook.com (2603:10b6:802:22::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11; Mon, 25 Jan
- 2021 17:36:14 +0000
+ 2021 17:36:20 +0000
 Received: from SN6PR12MB4720.namprd12.prod.outlook.com
  ([fe80::71a3:7df5:647c:1665]) by SN6PR12MB4720.namprd12.prod.outlook.com
  ([fe80::71a3:7df5:647c:1665%6]) with mapi id 15.20.3784.019; Mon, 25 Jan 2021
- 17:36:14 +0000
-Subject: [PATCH v2 7/8] cpupower: Remove family arg to decode_pstates()
+ 17:36:20 +0000
+Subject: [PATCH v2 8/8] cpupower: Add cpuid cap flag for MSR_AMD_HWCR support
 From:   Nathan Fontenot <nathan.fontenot@amd.com>
 To:     rrichter@amd.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
         trenn@suse.com, linux-pm@vger.kernel.org
 Cc:     boris.ostrovsky@oracle.com, joao.m.martins@oracle.com,
         konrad.wilk@oracle.com
-Date:   Mon, 25 Jan 2021 11:36:01 -0600
-Message-ID: <161159616115.68367.1898001254335287663.stgit@ethanol01c7-host.amd.com>
+Date:   Mon, 25 Jan 2021 11:36:23 -0600
+Message-ID: <161159618336.68367.17545859893619697961.stgit@ethanol01c7-host.amd.com>
 In-Reply-To: <161159600371.68367.14890273216040482793.stgit@ethanol01c7-host.amd.com>
 References: <161159600371.68367.14890273216040482793.stgit@ethanol01c7-host.amd.com>
 User-Agent: StGit/0.17.1-dirty
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [165.204.78.2]
-X-ClientProxiedBy: SN7PR04CA0181.namprd04.prod.outlook.com
- (2603:10b6:806:126::6) To SN6PR12MB4720.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN6PR08CA0014.namprd08.prod.outlook.com
+ (2603:10b6:805:66::27) To SN6PR12MB4720.namprd12.prod.outlook.com
  (2603:10b6:805:e6::31)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from ethanol01c7-host.amd.com (165.204.78.2) by SN7PR04CA0181.namprd04.prod.outlook.com (2603:10b6:806:126::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11 via Frontend Transport; Mon, 25 Jan 2021 17:36:13 +0000
+Received: from ethanol01c7-host.amd.com (165.204.78.2) by SN6PR08CA0014.namprd08.prod.outlook.com (2603:10b6:805:66::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.12 via Frontend Transport; Mon, 25 Jan 2021 17:36:20 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 8c1a4438-3342-4d13-df6f-08d8c157b651
+X-MS-Office365-Filtering-Correlation-Id: f7c64a63-8166-4bfb-2711-08d8c157ba5a
 X-MS-TrafficTypeDiagnostic: SN1PR12MB2576:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SN1PR12MB25763E621B6DE7FB3265F0DFECBD9@SN1PR12MB2576.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-Microsoft-Antispam-PRVS: <SN1PR12MB25765AA5DBC2090AE438D644ECBD9@SN1PR12MB2576.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Lt6U1ZR63PDiwXAIzmI8o+NlkAp1VqVXj2KX2FaJrtSwv0sETmghrMqF3RrdRA9XAGBN0NWDA3vPaxb1EUepGxD9X3+YDdDtUj6lPjHhTZjAxB747wX7gasz2KP2wLTP4lsNEIzJWQstXXpuEwy14Dyw37oFtypZJ5oYRei83PGgWClAHtSVJn6XuklR6R4HXtRb2slQLYzFPrVk6zluN2RrnXft1tVCF69Q20oUwA+TlLVf1PU8qJzjobwOsundA5pmTqu/Ppk0dip74J4l3ElTfard5oOFAYUQykRXM0l1ERadtNXN2hlpkYJjsxw8jGiSxK9zi6DeyAu7H0mszaPu0b80/1idvgYcAfyibfN3wuaR4V1v/GBeaTXzgZ9eps75yHkwENfFau+jF9amKw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB4720.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(376002)(366004)(396003)(136003)(66476007)(66946007)(66556008)(5660300002)(7696005)(52116002)(316002)(8676002)(956004)(4326008)(83380400001)(44832011)(2906002)(6666004)(86362001)(8936002)(478600001)(26005)(186003)(16526019)(55016002)(103116003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?OGw4WStxM0M2NFZ5T21ydmtseFZjb0dGN3QzV3FYQ2xsTStzcE5mZEswUzFM?=
- =?utf-8?B?WjRzeGdOUWhVZnFyMG1CRU9SR1F0WnBxK0xVdTdhSTNqeWY3cWtWOVhjRUJl?=
- =?utf-8?B?MkxxekwvNXJRYW1yQ2JlZFl0ZzA0RHozMDdSY0l4S2FsYytHNHYxZVpHRXFR?=
- =?utf-8?B?SDcxNFVsc1h6eE5BQWRDZ0UrTWFYcTdBc2lHcG1xZmo5bm9GMUhVWXJwNUtt?=
- =?utf-8?B?d2RxK3RlREh6L3lsSG1XS1VUZ0I5KzdxV25hSjJUaFVmb2VzaTcrZVFzY05R?=
- =?utf-8?B?TGFGbFVab2JIK0hxb2JjV3VWRGR3MGxra3poMWdkRWpSWmFNWHNMYmNhYVB5?=
- =?utf-8?B?VHlLaE5acC9BRnI1WElkUTF2ZzFiUnRzSEViME9OSGRnZE5YbFlZNHBHaHQx?=
- =?utf-8?B?SHJlRVlXSjB4UlVyS001aWZrZE1rK2R4ZVBHejVBZFJ5RTV5enFLWEIwcjhM?=
- =?utf-8?B?bEFmSU4rMTJPWFJrWG0rM3RPbHoyWTB4ZktVQ1FZcks2aGpOMnJMNzFWVkJX?=
- =?utf-8?B?NkwvMXNCL0NlUGhwcnlveUZtSXVvSEVvUmtPaUxwdjZZWDBaaFAxOGlNcFha?=
- =?utf-8?B?SkdyOUNqV1lTYjhsSnhiMTRzc21jK1d4WVM5KzRza1NYeW9ZQk1FTXMyZVNv?=
- =?utf-8?B?WGI5STBZZFlzcFMySkJqcGtnckp6QURBalo3clNRdWpVTkJ4akF5Z3BuY3BX?=
- =?utf-8?B?cStKSkRlUXpiWkM5R3BuNkc1V1FWRmFMVy9iLzRuWitEQXhFVGxWUjRqaVYw?=
- =?utf-8?B?SnFodktlSUtwUjJ4cjAvcFZrbWMvaUdjUFVzVmFnc3dMN0pQNWZwTXhMb29p?=
- =?utf-8?B?ZDFxbUVrQ01LYTZEU2Q5cU1LcUFhTjlMMWYyZmk3THhrcDFhV1BZSWo0TG9t?=
- =?utf-8?B?amtGbEt0M1JEdG0rRTh0aGo5b05xaUVIR2MyanVXc1daRE9LV3R1amtoUm9X?=
- =?utf-8?B?eGZ1bW40TjhaQ2JCNThVRDVBb3ZXemJaTmNNcnBnSFI3ekliUjFNQy81cW8w?=
- =?utf-8?B?QjJFOUxhTys4b21TYzBjSWdOZy9BaEQ4a01PYkNhRHJIZmI0SERhUWszb0cy?=
- =?utf-8?B?TERGMkU1dG15TGl2b05qaUgxMkp1QytXMFRUbGx0UUdMWXFRWTVlUlNmK25a?=
- =?utf-8?B?ZlByWDN2NXRZNEhEYS9PdUpIUStreTBzbW9rN1VqMUZJaXVUd0djV3ppZ0dY?=
- =?utf-8?B?aEx2dDVtRS9RNEIwT3JyRUcyS3hXU3FlVzlSUXFyYTlLR3pVSnJ4ZllSTVlJ?=
- =?utf-8?B?TmFuYjZYVW5RZHk1bGpqNTdOc0puSlUvMTRkMjhLZHFCQ1NhcCsza3VTK05v?=
- =?utf-8?B?S0l1NlhOeER0R2xGaHZUaHNCdyttVG9tTHRQOWZUc213K3JYVXdaemlyOHNN?=
- =?utf-8?B?bDhRRk5ib3pMVUhtWSsvNmYvdWtTYUI1L1J3L1FNV2NEVE5NNG44Wk81NVN5?=
- =?utf-8?Q?RlvenIXA?=
+X-Microsoft-Antispam-Message-Info: PZSgtZxUIG78YBT3ho+l69I+/VILYcbzXqV/tdrlCEUY+fgUsFxwhJakPfgLYDsE5A/m0pWP4uJdMkIVQ+z4xYnCLLwSPBJosgHRbzwRfoAYdrotF+1BsKsXnEyvuLlIdhP1tLMtz96E+GJNimO8vmc7gahuWCHlloh3ZcPzK96076fJl4llwYD4MVrr7C3TsW2+wXHh89HGlhfGImHUBh+AqTPv57KSxa7c/8VcW1dyxTx8Yss8hsODrzYxe6K7H8fuxOxOEVJ0Elnl8BpipxtJ9cXkV9pyg+S81HX1ctwhEUQpAaW9Cy4YbwNCItXAAoje7+XYC9yYKADvvOuL4RBChl2f1er/GYVT1iKWOrNkA/lCHfxJlXmaz7PhgLsTpBv9JP56rs3f2ebRHMKiNQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB4720.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(376002)(366004)(396003)(136003)(66476007)(66946007)(66556008)(5660300002)(7696005)(52116002)(316002)(8676002)(956004)(4326008)(83380400001)(44832011)(2906002)(86362001)(8936002)(478600001)(26005)(186003)(16526019)(55016002)(103116003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?empoMFVGZ0Q5TXhTQUVjU245R3pmbXdtbU9ralZFWjBpTEVEckpHMzRVZjFK?=
+ =?utf-8?B?Y2ZMelMybW9WM3FhbjBvOE1jQ1NUb0ZCUkxBcklzaU5GbWM2SVAzRkZWVkE0?=
+ =?utf-8?B?U0ZSeVMvbko3WVJhNGZPdHRrU21CMGFtVDU2eEtNalpTSzgzblZPQi9rK3d2?=
+ =?utf-8?B?RGJ1OGNmYkhtL2tHcUlaTkYvdklVWnRTaVp0L2FyNjRKb2ZhYXJzbzNxNkhp?=
+ =?utf-8?B?Z0lJOXQxU0tVV3IybDhqRUVRaU83VWw3RnEwdWNFVHdZWVVTNDF0UnRJQ2kx?=
+ =?utf-8?B?Ykp0Qzl6NmE0Q1JOVG9QT2o1SW92YWFaM25sTE8zcFNDVkFzSUdiYU1tVDN2?=
+ =?utf-8?B?TmhGWFZiQ01ML1RjNmk4ZmVYOFg3bmlnVU14YlFhTnJ2RmR1NnBOcG1KOHNM?=
+ =?utf-8?B?eHVaMVlWcmVVUlBpNDNzdVZQbXhmZmNGQXNvR293c0RZL2tWbW5yZnZXeTVt?=
+ =?utf-8?B?MEhxSGhSWXFPMHFQdlM5aUFzci8zaEdXMTBZMjhtOU1iMXUweWoyTFI4eWx4?=
+ =?utf-8?B?RzF3eFg3SitESS8vcDFhV3FRMlZOWnA1aGVLTWQxcm5obEVlSlR2dVVVb3kz?=
+ =?utf-8?B?UlF6OFNiZkNkaVUvTi9KLzVaSkVybnJVeXdqVEZDc1lIaUFJR0MrZEtmOXli?=
+ =?utf-8?B?eHVZbVJiNjdJbGU1eDROSUNmSitWTjdXUU1jVFFnWSs1dEc0VFdhVld0WGZH?=
+ =?utf-8?B?aHd6TjBoWUdlWUtnanlvMnVBUTVqQ1h3VndRMC9IWk8xdUM1ZVY4Znlrd280?=
+ =?utf-8?B?amhaV1pZTms2MkEveDFjZUk5SkdMdDgwbkxaSDRsVzdCNU9ZbTFaUXdyT3lB?=
+ =?utf-8?B?ZWdCWUxRSmdIbUVwYytWMlY3dkx1a2RCZWllMGtISVhxN0ZEdjQwVzUwaHAz?=
+ =?utf-8?B?OHBkQ2VuaDB6Qm1sekZyVUhMd0N1S3dKNVI1bTF0c2hmNkVtdVdnMXBZRkpI?=
+ =?utf-8?B?MkpKWmpTdERlZlczUXlpdk1za014SjZMOVlYN0FHU01ubW1ZQkppVm9vQU5P?=
+ =?utf-8?B?L3NjbHlJSE1qSmYyQmt0WVZiOXRTKzBvSHVqYXBMQ3VtZm5Tc1BhV1p4NWFo?=
+ =?utf-8?B?VHlPTllhdXQyZk9jN3crTXJ3dkhyU0l1U0JIWE8reTlkaUZnYUJuUmZ3aHoz?=
+ =?utf-8?B?OGdUTkJneW5LVmFwZGdVS1g5MlE4YzBSdnBublJ3N3dkVWI0Z1JDVk1jSDZp?=
+ =?utf-8?B?ZXovSXN2b0Q4dFRITXJjSjJPbDJMdjVFc3dXNmgrenp3WWNZM1VrSm15L2V6?=
+ =?utf-8?B?SnpWanlIZ1NKa05WM0JtM3NUVVFUNjBKakF2N3lNYis1QVJUaFRvbzdYTDhX?=
+ =?utf-8?B?SU93QkRrQitpTVllUnZHUnF0cFpWdUdzdnBINkJlSTNrbE1jb2xjUFlDYzQx?=
+ =?utf-8?B?b0RWdmp4NnBUVEtLdituczUwNm5KVzB4cmVkUFlEOS8vdTF3bzNvQW9OVGRt?=
+ =?utf-8?Q?/ujVwnxb?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c1a4438-3342-4d13-df6f-08d8c157b651
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7c64a63-8166-4bfb-2711-08d8c157ba5a
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB4720.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2021 17:36:13.9268
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2021 17:36:20.6900
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WrZl8+s7SwFcwwrYNyL5ctvRKYUv6ii1sh9fh1O1VuYw9CT0V5FoO160k1fcvmD0gGcbwIwk3X/E5Ue+E0lZHw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: I4y7yHrb/0kzoVVSJsH8HaVHgbZK6s/Sd1tLDvzKbJG1T1RatT5+tMiQEtLqcMWCmnmoNAmBQvf4F3JHbwmnBA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2576
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The decode_pstates() routine no longer uses the CPU family and
-the caleed routines (get_cof() and get_did()) can grab the family
-from the global cpupower_cpu_info struct. These update removes
-passing the family arg to all these routines.
+Remove the family check for accessing the MSR_AMD_HWCR MSR and replace
+it with a cpupower cap flag.
+
+This update also allows for the removal of the local cpupower_cpu_info
+variable in cpufreq_has_boost_support() since we no longer need it to
+check the family.
 
 Signed-off-by: Nathan Fontenot <nathan.fontenot@amd.com>
 ---
- tools/power/cpupower/utils/cpufreq-info.c    |    3 +--
- tools/power/cpupower/utils/helpers/amd.c     |   19 +++++++++----------
- tools/power/cpupower/utils/helpers/helpers.h |    9 ++++-----
- 3 files changed, 14 insertions(+), 17 deletions(-)
+ tools/power/cpupower/utils/helpers/cpuid.c   |    6 +++++-
+ tools/power/cpupower/utils/helpers/helpers.h |    1 +
+ tools/power/cpupower/utils/helpers/misc.c    |    7 +------
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
-index 6efc0f6b1b11..f9895e31ff5a 100644
---- a/tools/power/cpupower/utils/cpufreq-info.c
-+++ b/tools/power/cpupower/utils/cpufreq-info.c
-@@ -186,8 +186,7 @@ static int get_boost_mode_x86(unsigned int cpu)
- 	if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
- 	     cpupower_cpu_info.family >= 0x10) ||
- 	     cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
--		ret = decode_pstates(cpu, cpupower_cpu_info.family, b_states,
--				     pstates, &pstate_no);
-+		ret = decode_pstates(cpu, b_states, pstates, &pstate_no);
- 		if (ret)
- 			return ret;
+diff --git a/tools/power/cpupower/utils/helpers/cpuid.c b/tools/power/cpupower/utils/helpers/cpuid.c
+index db2e88ceb67b..72eb43593180 100644
+--- a/tools/power/cpupower/utils/helpers/cpuid.c
++++ b/tools/power/cpupower/utils/helpers/cpuid.c
+@@ -129,9 +129,13 @@ int get_cpu_info(struct cpupower_cpu_info *cpu_info)
+ 	if (cpu_info->vendor == X86_VENDOR_AMD ||
+ 	    cpu_info->vendor == X86_VENDOR_HYGON) {
+ 		if (ext_cpuid_level >= 0x80000007) {
+-			if (cpuid_edx(0x80000007) & (1 << 9))
++			if (cpuid_edx(0x80000007) & (1 << 9)) {
+ 				cpu_info->caps |= CPUPOWER_CAP_AMD_CPB;
  
-diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-index 216240e2b771..97f2c857048e 100644
---- a/tools/power/cpupower/utils/helpers/amd.c
-+++ b/tools/power/cpupower/utils/helpers/amd.c
-@@ -41,13 +41,13 @@ union core_pstate {
- 	unsigned long long val;
- };
- 
--static int get_did(int family, union core_pstate pstate)
-+static int get_did(union core_pstate pstate)
- {
- 	int t;
- 
- 	if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATEDEF)
- 		t = pstate.pstatedef.did;
--	else if (family == 0x12)
-+	else if (cpupower_cpu_info.family == 0x12)
- 		t = pstate.val & 0xf;
- 	else
- 		t = pstate.pstate.did;
-@@ -55,19 +55,19 @@ static int get_did(int family, union core_pstate pstate)
- 	return t;
- }
- 
--static int get_cof(int family, union core_pstate pstate)
-+static int get_cof(union core_pstate pstate)
- {
- 	int t;
- 	int fid, did, cof;
- 
--	did = get_did(family, pstate);
-+	did = get_did(pstate);
- 	if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATEDEF) {
- 		fid = pstate.pstatedef.fid;
- 		cof = 200 * fid / did;
- 	} else {
- 		t = 0x10;
- 		fid = pstate.pstate.fid;
--		if (family == 0x11)
-+		if (cpupower_cpu_info.family == 0x11)
- 			t = 0x8;
- 		cof = (100 * (fid + t)) >> did;
- 	}
-@@ -76,8 +76,7 @@ static int get_cof(int family, union core_pstate pstate)
- 
- /* Needs:
-  * cpu          -> the cpu that gets evaluated
-- * cpu_family   -> The cpu's family (0x10, 0x12,...)
-- * boots_states -> how much boost states the machines support
-+ * boost_states -> how much boost states the machines support
-  *
-  * Fills up:
-  * pstates -> a pointer to an array of size MAX_HW_PSTATES
-@@ -87,8 +86,8 @@ static int get_cof(int family, union core_pstate pstate)
-  *
-  * returns zero on success, -1 on failure
-  */
--int decode_pstates(unsigned int cpu, unsigned int cpu_family,
--		   int boost_states, unsigned long *pstates, int *no)
-+int decode_pstates(unsigned int cpu, int boost_states,
-+		   unsigned long *pstates, int *no)
- {
- 	int i, psmax;
- 	union core_pstate pstate;
-@@ -118,7 +117,7 @@ int decode_pstates(unsigned int cpu, unsigned int cpu_family,
- 		if (!pstate.pstatedef.en)
- 			continue;
- 
--		pstates[i] = get_cof(cpu_family, pstate);
-+		pstates[i] = get_cof(pstate);
- 	}
- 	*no = i;
- 	return 0;
++				if (cpu_info->family >= 0x17)
++					cpu_info->caps |= CPUPOWER_CAP_AMD_CPB_MSR;
++			}
++
+ 			if ((cpuid_edx(0x80000007) & (1 << 7)) &&
+ 			    cpu_info->family != 0x14) {
+ 				/* HW pstate was not implemented in family 0x14 */
 diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index e4dc44ced770..8a0c11c6ec63 100644
+index 8a0c11c6ec63..33ffacee7fcb 100644
 --- a/tools/power/cpupower/utils/helpers/helpers.h
 +++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -127,8 +127,8 @@ extern struct pci_dev *pci_slot_func_init(struct pci_access **pacc,
+@@ -72,6 +72,7 @@ enum cpupower_cpu_vendor {X86_VENDOR_UNKNOWN = 0, X86_VENDOR_INTEL,
+ #define CPUPOWER_CAP_AMD_RDPRU		0x00000080
+ #define CPUPOWER_CAP_AMD_HW_PSTATE	0x00000100
+ #define CPUPOWER_CAP_AMD_PSTATEDEF	0x00000200
++#define CPUPOWER_CAP_AMD_CPB_MSR	0x00000400
  
- /* AMD HW pstate decoding **************************/
+ #define CPUPOWER_AMD_CPBDIS		0x02000000
  
--extern int decode_pstates(unsigned int cpu, unsigned int cpu_family,
--			  int boost_states, unsigned long *pstates, int *no);
-+extern int decode_pstates(unsigned int cpu, int boost_states,
-+			  unsigned long *pstates, int *no);
+diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+index f9bcce9c72d5..fc6e34511721 100644
+--- a/tools/power/cpupower/utils/helpers/misc.c
++++ b/tools/power/cpupower/utils/helpers/misc.c
+@@ -16,16 +16,11 @@
+ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+ 			int *states)
+ {
+-	struct cpupower_cpu_info cpu_info;
+ 	int ret;
+ 	unsigned long long val;
  
- /* AMD HW pstate decoding **************************/
+ 	*support = *active = *states = 0;
  
-@@ -145,9 +145,8 @@ unsigned int cpuid_edx(unsigned int op);
- /* cpuid and cpuinfo helpers  **************************/
- /* X86 ONLY ********************************************/
- #else
--static inline int decode_pstates(unsigned int cpu, unsigned int cpu_family,
--				 int boost_states, unsigned long *pstates,
--				 int *no)
-+static inline int decode_pstates(unsigned int cpu, int boost_states,
-+				 unsigned long *pstates, int *no)
- { return -1; };
+-	ret = get_cpu_info(&cpu_info);
+-	if (ret)
+-		return ret;
+-
+ 	if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB) {
+ 		*support = 1;
  
- static inline int read_msr(int cpu, unsigned int idx, unsigned long long *val)
+@@ -34,7 +29,7 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+ 		 * has Hardware determined variable increments instead.
+ 		 */
+ 
+-		if (cpu_info.family == 0x17 || cpu_info.family == 0x18) {
++		if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_CPB_MSR) {
+ 			if (!read_msr(cpu, MSR_AMD_HWCR, &val)) {
+ 				if (!(val & CPUPOWER_AMD_CPBDIS))
+ 					*active = 1;
 
