@@ -2,102 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D7530290C
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jan 2021 18:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DED30291E
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jan 2021 18:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731145AbhAYRg4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jan 2021 12:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731000AbhAYRgg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jan 2021 12:36:36 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F031C061786;
-        Mon, 25 Jan 2021 09:35:42 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id p13so16347700ljg.2;
-        Mon, 25 Jan 2021 09:35:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=X83exQMOztH+V+6RKs+mLlDQ2mY3VBp/sSkBeCvqfIU=;
-        b=dLDEE8ucdkDxl02KcwK9VxrydqBs7/Gis+S8JTrtOAWFi/WQ2uKwoU9Q0n56+15h3r
-         aSmNSI9G8hFoxk3YQzFpVCI91y3DmPL9XgJIAq2g8j8j/jAbsIBrc+F7ulOCS37nbQYg
-         9eYqthPf3ryUCi+MAYFY95WB5+VwYW1jbRrEAws9sQqTSH0R7F02CWQUp49KY0XgmQ3r
-         PnohwYm4UdmIk6r+10eX+zdGXovwmpCQnmOlptiCJ3Q5Fz5PKe4GvpHik/geDbusdCzI
-         jgfu6fd5aN08FVFs61+LacwrLE9YKq2SdzhzNugkfes6z/UJsgyZ3fanyZlI/uWQ/A3c
-         fPjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=X83exQMOztH+V+6RKs+mLlDQ2mY3VBp/sSkBeCvqfIU=;
-        b=KHLv4eXklo8yofY14uNMX8UhC4vzdDz1q9d+mVyM8cE51BVGPveGYDnrAEclvLxaEH
-         L+D1eKHGhpN3AxA7y1QQX3uUQekN2xQFkyo/mjmuBT+NVDGJ7oocoXmxZufKw6hb2TQX
-         B3O0+qU8sg0nuLh7Fcjg8coWZqJRsuPKycWvCfKg+ye7UYM5Hnh21R9W6dKEcRrgePiB
-         m4hWngYDsEljcrzCJQa94tflx3Vx2YJKn/Baz0WXBDvNYIrOqUf8ZNgjamb4DVk1AJZT
-         z/iI/c+7PjbZcyoDzlp4tqhNW9JuuMZnxOPsrbgUDpmfUOTPNMyFHMl/bkPavLbaobn+
-         u7hQ==
-X-Gm-Message-State: AOAM531HWbwwl2AYpBAvVolJNuUoyC+2PNy8mRHfN+rroU3D4PSgyGJp
-        NcGvL1VXBPEmbnbWUp7H4S0=
-X-Google-Smtp-Source: ABdhPJwrVRjKISUhGPG51fA4v6H3gH94RDNCwsh4GjGzdQwUIMcUpp8sUecuEHv6y7+L/VWT8pXIyA==
-X-Received: by 2002:a2e:8059:: with SMTP id p25mr682526ljg.155.1611596139799;
-        Mon, 25 Jan 2021 09:35:39 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id j2sm2023879lfe.134.2021.01.25.09.35.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jan 2021 09:35:39 -0800 (PST)
-Subject: Re: [PATCH v12 4/5] drm/tegra: dc: Support memory bandwidth
- management
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20201228154920.18846-1-digetx@gmail.com>
- <20201228154920.18846-5-digetx@gmail.com>
-Message-ID: <f19789d5-fdf2-8cae-9b54-db885873032a@gmail.com>
-Date:   Mon, 25 Jan 2021 20:35:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S1729818AbhAYRiU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jan 2021 12:38:20 -0500
+Received: from mail-bn8nam11on2067.outbound.protection.outlook.com ([40.107.236.67]:55220
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731068AbhAYRiC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 25 Jan 2021 12:38:02 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bb1jgxKcuqJU3XjzTPyIk+ex3IcRoGVtNVs++zcDst0JXi0bo6C9bvV95V8w7GMmNFugnUCCI1YERoAwgUpld1PnUv03SRFtuPjQVWrt0gmIxW1QqU38y1pxyfjO4n5cd5kTTpo5rNn2HBU5I/sWqflbauBx2aj5GKgbg/N1f5sibTScWCOc465XoH1qXHkODhwmbJf3B6IDDoIDBg908aatKpC2/nySrzU003CxNh1TQzEj2Zvs3q1mERQTcnerXTaKwuvtGu8bccsuJ8Uzne8bGseYHWlXy5eQQMzQkPuiZE3GOnkjl+W8hh9nZBujwrh1/ooylmYYZMSy8RUVqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CVCXZm7orfvAjfcDNWKOf/1kAYD72qGKMCGdVVvrBf4=;
+ b=QHSb/jwN4rci/KVwMJiZGxxbuSjgzuSxDMR7oVlQCxyp27Q6F+fl7dawYpJJQW3e7qMvAifuB69ibFy/vGYObzgrSlsqT3JkVhBOzWM+9PdKzUo/A76goPEfJ4hDppz5CxJPRpHs0ph10OaNRYoHXdm4YvDByb7vBRy2oeo6Ljw/rhCJnHC7F/JG8ONL4MHNFOl81tQb/PlKqbkVj1Tactkbam7eduB3YmZo1nPYJTPtilVZqFwDy6MxhU9ttRrX3ZNs/kersM/ln6h4PibDZfMForSaY3BFJ3gthgSkJ1XWHz2Tiu+ttTkHlhRwtjFmsijw27SUwzZkOd2uVJgMpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CVCXZm7orfvAjfcDNWKOf/1kAYD72qGKMCGdVVvrBf4=;
+ b=gCuXFLK75dcVROrHk67nZozzs503rSEbCbJXjVpwsXxFDdKyMAHL39o6+9jsjHD1G9yUO5AfrMAne3O9Pan1uajBIoIC1GE5A1rTR2cQhor+IzkgFROIPzG8TqSnyc5Mp9diWdxBf0PhxRESI3QqW/YdxZfzNke/WPb3yINz0XI=
+Authentication-Results: amd.com; dkim=none (message not signed)
+ header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB4720.namprd12.prod.outlook.com (2603:10b6:805:e6::31)
+ by SN1PR12MB2576.namprd12.prod.outlook.com (2603:10b6:802:22::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11; Mon, 25 Jan
+ 2021 17:36:14 +0000
+Received: from SN6PR12MB4720.namprd12.prod.outlook.com
+ ([fe80::71a3:7df5:647c:1665]) by SN6PR12MB4720.namprd12.prod.outlook.com
+ ([fe80::71a3:7df5:647c:1665%6]) with mapi id 15.20.3784.019; Mon, 25 Jan 2021
+ 17:36:14 +0000
+Subject: [PATCH v2 7/8] cpupower: Remove family arg to decode_pstates()
+From:   Nathan Fontenot <nathan.fontenot@amd.com>
+To:     rrichter@amd.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        trenn@suse.com, linux-pm@vger.kernel.org
+Cc:     boris.ostrovsky@oracle.com, joao.m.martins@oracle.com,
+        konrad.wilk@oracle.com
+Date:   Mon, 25 Jan 2021 11:36:01 -0600
+Message-ID: <161159616115.68367.1898001254335287663.stgit@ethanol01c7-host.amd.com>
+In-Reply-To: <161159600371.68367.14890273216040482793.stgit@ethanol01c7-host.amd.com>
+References: <161159600371.68367.14890273216040482793.stgit@ethanol01c7-host.amd.com>
+User-Agent: StGit/0.17.1-dirty
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [165.204.78.2]
+X-ClientProxiedBy: SN7PR04CA0181.namprd04.prod.outlook.com
+ (2603:10b6:806:126::6) To SN6PR12MB4720.namprd12.prod.outlook.com
+ (2603:10b6:805:e6::31)
 MIME-Version: 1.0
-In-Reply-To: <20201228154920.18846-5-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from ethanol01c7-host.amd.com (165.204.78.2) by SN7PR04CA0181.namprd04.prod.outlook.com (2603:10b6:806:126::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11 via Frontend Transport; Mon, 25 Jan 2021 17:36:13 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 8c1a4438-3342-4d13-df6f-08d8c157b651
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2576:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SN1PR12MB25763E621B6DE7FB3265F0DFECBD9@SN1PR12MB2576.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Lt6U1ZR63PDiwXAIzmI8o+NlkAp1VqVXj2KX2FaJrtSwv0sETmghrMqF3RrdRA9XAGBN0NWDA3vPaxb1EUepGxD9X3+YDdDtUj6lPjHhTZjAxB747wX7gasz2KP2wLTP4lsNEIzJWQstXXpuEwy14Dyw37oFtypZJ5oYRei83PGgWClAHtSVJn6XuklR6R4HXtRb2slQLYzFPrVk6zluN2RrnXft1tVCF69Q20oUwA+TlLVf1PU8qJzjobwOsundA5pmTqu/Ppk0dip74J4l3ElTfard5oOFAYUQykRXM0l1ERadtNXN2hlpkYJjsxw8jGiSxK9zi6DeyAu7H0mszaPu0b80/1idvgYcAfyibfN3wuaR4V1v/GBeaTXzgZ9eps75yHkwENfFau+jF9amKw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB4720.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(376002)(366004)(396003)(136003)(66476007)(66946007)(66556008)(5660300002)(7696005)(52116002)(316002)(8676002)(956004)(4326008)(83380400001)(44832011)(2906002)(6666004)(86362001)(8936002)(478600001)(26005)(186003)(16526019)(55016002)(103116003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?OGw4WStxM0M2NFZ5T21ydmtseFZjb0dGN3QzV3FYQ2xsTStzcE5mZEswUzFM?=
+ =?utf-8?B?WjRzeGdOUWhVZnFyMG1CRU9SR1F0WnBxK0xVdTdhSTNqeWY3cWtWOVhjRUJl?=
+ =?utf-8?B?MkxxekwvNXJRYW1yQ2JlZFl0ZzA0RHozMDdSY0l4S2FsYytHNHYxZVpHRXFR?=
+ =?utf-8?B?SDcxNFVsc1h6eE5BQWRDZ0UrTWFYcTdBc2lHcG1xZmo5bm9GMUhVWXJwNUtt?=
+ =?utf-8?B?d2RxK3RlREh6L3lsSG1XS1VUZ0I5KzdxV25hSjJUaFVmb2VzaTcrZVFzY05R?=
+ =?utf-8?B?TGFGbFVab2JIK0hxb2JjV3VWRGR3MGxra3poMWdkRWpSWmFNWHNMYmNhYVB5?=
+ =?utf-8?B?VHlLaE5acC9BRnI1WElkUTF2ZzFiUnRzSEViME9OSGRnZE5YbFlZNHBHaHQx?=
+ =?utf-8?B?SHJlRVlXSjB4UlVyS001aWZrZE1rK2R4ZVBHejVBZFJ5RTV5enFLWEIwcjhM?=
+ =?utf-8?B?bEFmSU4rMTJPWFJrWG0rM3RPbHoyWTB4ZktVQ1FZcks2aGpOMnJMNzFWVkJX?=
+ =?utf-8?B?NkwvMXNCL0NlUGhwcnlveUZtSXVvSEVvUmtPaUxwdjZZWDBaaFAxOGlNcFha?=
+ =?utf-8?B?SkdyOUNqV1lTYjhsSnhiMTRzc21jK1d4WVM5KzRza1NYeW9ZQk1FTXMyZVNv?=
+ =?utf-8?B?WGI5STBZZFlzcFMySkJqcGtnckp6QURBalo3clNRdWpVTkJ4akF5Z3BuY3BX?=
+ =?utf-8?B?cStKSkRlUXpiWkM5R3BuNkc1V1FWRmFMVy9iLzRuWitEQXhFVGxWUjRqaVYw?=
+ =?utf-8?B?SnFodktlSUtwUjJ4cjAvcFZrbWMvaUdjUFVzVmFnc3dMN0pQNWZwTXhMb29p?=
+ =?utf-8?B?ZDFxbUVrQ01LYTZEU2Q5cU1LcUFhTjlMMWYyZmk3THhrcDFhV1BZSWo0TG9t?=
+ =?utf-8?B?amtGbEt0M1JEdG0rRTh0aGo5b05xaUVIR2MyanVXc1daRE9LV3R1amtoUm9X?=
+ =?utf-8?B?eGZ1bW40TjhaQ2JCNThVRDVBb3ZXemJaTmNNcnBnSFI3ekliUjFNQy81cW8w?=
+ =?utf-8?B?QjJFOUxhTys4b21TYzBjSWdOZy9BaEQ4a01PYkNhRHJIZmI0SERhUWszb0cy?=
+ =?utf-8?B?TERGMkU1dG15TGl2b05qaUgxMkp1QytXMFRUbGx0UUdMWXFRWTVlUlNmK25a?=
+ =?utf-8?B?ZlByWDN2NXRZNEhEYS9PdUpIUStreTBzbW9rN1VqMUZJaXVUd0djV3ppZ0dY?=
+ =?utf-8?B?aEx2dDVtRS9RNEIwT3JyRUcyS3hXU3FlVzlSUXFyYTlLR3pVSnJ4ZllSTVlJ?=
+ =?utf-8?B?TmFuYjZYVW5RZHk1bGpqNTdOc0puSlUvMTRkMjhLZHFCQ1NhcCsza3VTK05v?=
+ =?utf-8?B?S0l1NlhOeER0R2xGaHZUaHNCdyttVG9tTHRQOWZUc213K3JYVXdaemlyOHNN?=
+ =?utf-8?B?bDhRRk5ib3pMVUhtWSsvNmYvdWtTYUI1L1J3L1FNV2NEVE5NNG44Wk81NVN5?=
+ =?utf-8?Q?RlvenIXA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c1a4438-3342-4d13-df6f-08d8c157b651
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB4720.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2021 17:36:13.9268
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WrZl8+s7SwFcwwrYNyL5ctvRKYUv6ii1sh9fh1O1VuYw9CT0V5FoO160k1fcvmD0gGcbwIwk3X/E5Ue+E0lZHw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2576
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-28.12.2020 18:49, Dmitry Osipenko пишет:
-> Display controller (DC) performs isochronous memory transfers, and thus,
-> has a requirement for a minimum memory bandwidth that shall be fulfilled,
-> otherwise framebuffer data can't be fetched fast enough and this results
-> in a DC's data-FIFO underflow that follows by a visual corruption.
-> 
-> The Memory Controller drivers provide facility for memory bandwidth
-> management via interconnect API. Let's wire up the interconnect API
-> support to the DC driver in order to fix the distorted display output
-> on T30 Ouya, T124 TK1 and other Tegra devices.
-> 
-> Tested-by: Peter Geis <pgwipeout@gmail.com>
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
+The decode_pstates() routine no longer uses the CPU family and
+the caleed routines (get_cof() and get_did()) can grab the family
+from the global cpupower_cpu_info struct. These update removes
+passing the family arg to all these routines.
 
-Thierry, I'm looking forward to yours review. Only DRM patches are left
-unmerged yet in this series.
+Signed-off-by: Nathan Fontenot <nathan.fontenot@amd.com>
+---
+ tools/power/cpupower/utils/cpufreq-info.c    |    3 +--
+ tools/power/cpupower/utils/helpers/amd.c     |   19 +++++++++----------
+ tools/power/cpupower/utils/helpers/helpers.h |    9 ++++-----
+ 3 files changed, 14 insertions(+), 17 deletions(-)
+
+diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
+index 6efc0f6b1b11..f9895e31ff5a 100644
+--- a/tools/power/cpupower/utils/cpufreq-info.c
++++ b/tools/power/cpupower/utils/cpufreq-info.c
+@@ -186,8 +186,7 @@ static int get_boost_mode_x86(unsigned int cpu)
+ 	if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
+ 	     cpupower_cpu_info.family >= 0x10) ||
+ 	     cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
+-		ret = decode_pstates(cpu, cpupower_cpu_info.family, b_states,
+-				     pstates, &pstate_no);
++		ret = decode_pstates(cpu, b_states, pstates, &pstate_no);
+ 		if (ret)
+ 			return ret;
+ 
+diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
+index 216240e2b771..97f2c857048e 100644
+--- a/tools/power/cpupower/utils/helpers/amd.c
++++ b/tools/power/cpupower/utils/helpers/amd.c
+@@ -41,13 +41,13 @@ union core_pstate {
+ 	unsigned long long val;
+ };
+ 
+-static int get_did(int family, union core_pstate pstate)
++static int get_did(union core_pstate pstate)
+ {
+ 	int t;
+ 
+ 	if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATEDEF)
+ 		t = pstate.pstatedef.did;
+-	else if (family == 0x12)
++	else if (cpupower_cpu_info.family == 0x12)
+ 		t = pstate.val & 0xf;
+ 	else
+ 		t = pstate.pstate.did;
+@@ -55,19 +55,19 @@ static int get_did(int family, union core_pstate pstate)
+ 	return t;
+ }
+ 
+-static int get_cof(int family, union core_pstate pstate)
++static int get_cof(union core_pstate pstate)
+ {
+ 	int t;
+ 	int fid, did, cof;
+ 
+-	did = get_did(family, pstate);
++	did = get_did(pstate);
+ 	if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATEDEF) {
+ 		fid = pstate.pstatedef.fid;
+ 		cof = 200 * fid / did;
+ 	} else {
+ 		t = 0x10;
+ 		fid = pstate.pstate.fid;
+-		if (family == 0x11)
++		if (cpupower_cpu_info.family == 0x11)
+ 			t = 0x8;
+ 		cof = (100 * (fid + t)) >> did;
+ 	}
+@@ -76,8 +76,7 @@ static int get_cof(int family, union core_pstate pstate)
+ 
+ /* Needs:
+  * cpu          -> the cpu that gets evaluated
+- * cpu_family   -> The cpu's family (0x10, 0x12,...)
+- * boots_states -> how much boost states the machines support
++ * boost_states -> how much boost states the machines support
+  *
+  * Fills up:
+  * pstates -> a pointer to an array of size MAX_HW_PSTATES
+@@ -87,8 +86,8 @@ static int get_cof(int family, union core_pstate pstate)
+  *
+  * returns zero on success, -1 on failure
+  */
+-int decode_pstates(unsigned int cpu, unsigned int cpu_family,
+-		   int boost_states, unsigned long *pstates, int *no)
++int decode_pstates(unsigned int cpu, int boost_states,
++		   unsigned long *pstates, int *no)
+ {
+ 	int i, psmax;
+ 	union core_pstate pstate;
+@@ -118,7 +117,7 @@ int decode_pstates(unsigned int cpu, unsigned int cpu_family,
+ 		if (!pstate.pstatedef.en)
+ 			continue;
+ 
+-		pstates[i] = get_cof(cpu_family, pstate);
++		pstates[i] = get_cof(pstate);
+ 	}
+ 	*no = i;
+ 	return 0;
+diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
+index e4dc44ced770..8a0c11c6ec63 100644
+--- a/tools/power/cpupower/utils/helpers/helpers.h
++++ b/tools/power/cpupower/utils/helpers/helpers.h
+@@ -127,8 +127,8 @@ extern struct pci_dev *pci_slot_func_init(struct pci_access **pacc,
+ 
+ /* AMD HW pstate decoding **************************/
+ 
+-extern int decode_pstates(unsigned int cpu, unsigned int cpu_family,
+-			  int boost_states, unsigned long *pstates, int *no);
++extern int decode_pstates(unsigned int cpu, int boost_states,
++			  unsigned long *pstates, int *no);
+ 
+ /* AMD HW pstate decoding **************************/
+ 
+@@ -145,9 +145,8 @@ unsigned int cpuid_edx(unsigned int op);
+ /* cpuid and cpuinfo helpers  **************************/
+ /* X86 ONLY ********************************************/
+ #else
+-static inline int decode_pstates(unsigned int cpu, unsigned int cpu_family,
+-				 int boost_states, unsigned long *pstates,
+-				 int *no)
++static inline int decode_pstates(unsigned int cpu, int boost_states,
++				 unsigned long *pstates, int *no)
+ { return -1; };
+ 
+ static inline int read_msr(int cpu, unsigned int idx, unsigned long long *val)
+
