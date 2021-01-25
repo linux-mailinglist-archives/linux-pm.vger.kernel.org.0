@@ -2,87 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAAA304840
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 20:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B07E304842
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 20:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbhAZFrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 00:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
+        id S1727829AbhAZFqx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 00:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726017AbhAYJPo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jan 2021 04:15:44 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF3CC061351;
-        Mon, 25 Jan 2021 00:35:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XJYeiAvL4VeVAenUSsgyMYNM2qEv0ZjDoysHFmUMJos=; b=jgTw6YQpQch96Jh2NAY77ZJaOK
-        Z/CXctZ/YGYOQ29vtW6E7aXdigyHfW+hPf06Z0lUPiwnC9h7NU4CsZKFhWScilSj+ffNdBTqLswS8
-        N2TfhsHCtqtmI/TzHn5tD1qjhxtEhx/jJGLxK1eDTMFXbxNWar/1wvxc5rM/4qUePeZkrgHD/RHo5
-        PF5LQQFEX8vKLYcnS75Buw78QaV4YUZbgxgFExzAAOtCbOT1UE3gd30f1CCQM51nUZjK/nqVCdHte
-        R356/Mu24kfBMqxvoePR48L/8PH2Wr2WnX474tEKcLKVsT+5Q2AaJiBvkvlDpIottlxUkLwpwa89o
-        9HKDCL+A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l3xKp-0001tn-Ez; Mon, 25 Jan 2021 08:34:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2AF1D3010C8;
-        Mon, 25 Jan 2021 09:34:50 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DEFA1207D3C61; Mon, 25 Jan 2021 09:34:49 +0100 (CET)
-Date:   Mon, 25 Jan 2021 09:34:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Michael Larabel <Michael@phoronix.com>
-Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jon Grimm <Jon.Grimm@amd.com>,
-        Nathan Fontenot <Nathan.Fontenot@amd.com>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 0/1] AMD EPYC: fix schedutil perf regression
- (freq-invariance)
-Message-ID: <YA6CqYcaEhUoyJdH@hirez.programming.kicks-ass.net>
-References: <20210122204038.3238-1-ggherdovich@suse.cz>
- <a5071cb5-6a5b-d2e4-ff06-fa7810b8127c@phoronix.com>
+        with ESMTP id S1726021AbhAYJPX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jan 2021 04:15:23 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB27C06121C
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jan 2021 00:44:54 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i9so3439791wmq.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jan 2021 00:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=IFHl3bl4OZPJd0JoqwGAwIlNY7YxXKKQkfzZqr2Pg80=;
+        b=Ri1hXGuDzteU5OZGSXFpK4YybGw/wAHghQohkPBQQzxC8vg7LHhN0VPfV3WU5H8zD4
+         5VdkSpc/1R9/2yfniMDa550PfTZMRY47g6s8luxhlsgfce/1VVaJyLJpeO+LOL97nJHj
+         qitCcNSk2Jxr1z6mwFRMO/clgXYiRaiAFhyOl53yutU+4bsIF+WJIwR+qHJh156wr0GA
+         iayr0RBAEY04LpcdG1Jw7pj66lWVe0RwFKdd+euM3WYsKj12WG8f+LGD8EsibHzomv4O
+         T2t07mBMKAmxOZuLD8QdAj0/B3vEqr+K/Ip93TmBoD5exDE/T1+itiqGZAwXSiFQLcyE
+         iZsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=IFHl3bl4OZPJd0JoqwGAwIlNY7YxXKKQkfzZqr2Pg80=;
+        b=VTZrVCvwsrnZVDU0QFMiDvWFYJrS5G6yEGFiFTOCeJ8FWgla3Y6s/nkNm0zpO/wxlg
+         oQaF9NciFLukwHEaoGTv3JTL9GMbgmthphHnL0zZ1V6/PXI4D3OaApxI4lnwFmWTrc1Y
+         0q9ypK/0K0wJBKXKVs38UpzW3DTQJ86mjUMv6cznDhWjWhddyU4Y5yR3zrVrcBOr7a2A
+         kajInorUtQrwYsB3Pc/hEWtDM4XF5QSgGWbcnur08vsOzCmr9wZo+t22c1GDgzP91bYs
+         l7scXJ0KrHZgUNrOwTUq/Urn8VA2rWhKEKAe7S6MKwuxauosSWfFHyODxGEc2ywj1jUs
+         lliA==
+X-Gm-Message-State: AOAM5339JaEa3PDzFEDuwVlZwvyqnib/NSLbtgK0lfEahBzf6dDqlETv
+        IimODiiz7Gv+yLbZB7gU+t+zsg==
+X-Google-Smtp-Source: ABdhPJyFN5c/c6on04JHgiLXHPb9pHibi+YHGz3T4vhcHbVRUzR7zzOs94GoI04aeloeiIXl4eyiIw==
+X-Received: by 2002:a1c:e1d4:: with SMTP id y203mr1205877wmg.50.1611564293197;
+        Mon, 25 Jan 2021 00:44:53 -0800 (PST)
+Received: from dell ([91.110.221.194])
+        by smtp.gmail.com with ESMTPSA id z4sm966388wrw.38.2021.01.25.00.44.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jan 2021 00:44:52 -0800 (PST)
+Date:   Mon, 25 Jan 2021 08:44:51 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 04/10] power: supply: ab8500: Push data to power supply
+ code
+Message-ID: <20210125084451.GV4903@dell>
+References: <20210123221908.2993388-1-linus.walleij@linaro.org>
+ <20210123221908.2993388-5-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a5071cb5-6a5b-d2e4-ff06-fa7810b8127c@phoronix.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210123221908.2993388-5-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jan 24, 2021 at 04:30:57PM -0600, Michael Larabel wrote:
-> From ongoing tests of this patch, it still certainly shows to address most
-> of the Linux 5.11 performance regression previously encountered when using
-> Schedutil. Additionally, for a number of workloads where not seeing a
-> regression from 5.10 to 5.11 Git is still showing even better performance
-> with this patch. The power monitoring on the AMD EPYC server is showing
-> higher power spikes but the average power consumption rate is roughly
-> comparable to that of Linux 5.11 Git, which is higher than 5.10 by just
-> about 3%.
+On Sat, 23 Jan 2021, Linus Walleij wrote:
+
+> There is a slew of defines, structs and enums and even a
+> function call only relevant for the charging code that
+> still lives in <linux/mfd/abx500.h>. Push it down to the
+> "ab8500-bm.h" header in the power supply subsystem where
+> it is actually used.
 > 
-> So this patch still seems to be working out well and indeed taking care of
-> some wide losses seen otherwise on Linux 5.11 when using Schedutil on AMD
-> Zen2/Zen3. Still have some other tests running but so far no unexpected
-> results.
-> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/power/supply/ab8500-bm.h | 278 ++++++++++++++++++++++++++++++-
+>  include/linux/mfd/abx500.h       | 276 ------------------------------
+>  2 files changed, 274 insertions(+), 280 deletions(-)
 
-Did you do all this writing and forget to add:
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-Tested-by: Michael Larabel <Michael@phoronix.com>
-
-?
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
