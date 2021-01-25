@@ -2,104 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6DB304841
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 20:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C6430483D
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 20:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727969AbhAZFrM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 00:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726344AbhAYJUO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jan 2021 04:20:14 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10D9C061226
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jan 2021 01:05:55 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id e22so25026115iog.6
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jan 2021 01:05:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RFuyLVDtLc2EnagVSKSkkI4AlK/6//a9pOD3OMIzloQ=;
-        b=GLVyI0q6znNhqi8+MqGgiRP5fsoGuSyn5AbGuY7457oyjwEqRG6RAvKYC9nbcHMASg
-         +zCpjWKjNu8RfFvWsMEYBG7IZ5CV5jbNFn513XcbWCMMKmPJd+H5MQOPYXtY6qpG+3j+
-         yJKBbZCfFt41zjxXcK75AQddTsT/giaXXln3kj5KwLZwY7DURz5M81H/Y2us28P0gZSq
-         y///2ds14ad3SvRRhutzRt7tSzVCpzTc2OuWtycVD9m+duezXXejBqC184aOxRADYCbC
-         xwRllcpO6hey/di2ED+7r2r/F2+4BsmZS8E8QVqTcRW8hiNfQRe6Su3efAjPDj9Vfr2k
-         thNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RFuyLVDtLc2EnagVSKSkkI4AlK/6//a9pOD3OMIzloQ=;
-        b=pWtd1TeF5wEokcOKwBaIuqFLko1ibgB6UYqZFZ1dFoYGpwlCqX443kswg2AP/uCqnR
-         injN1hA1AUv5AZnTj2HE3fO2mNnJROhGL1wGrO5X86LiWSwnCWV+KuRa6teZC+6O+ePK
-         ixKX0wtrdTJt7H3tOIQr/9IAy4ExoFGscbv/gSNMJUta4RHYX/O23c4E+2WW3d43QtRJ
-         NccfllnaltmIhXlZHEI9epnuzTXbNq99E6eT4jozAMZCrViEep2lKq7yGBVL2RdKbpCN
-         E5SR93uA+w027+A0NdHnWkYMAR5UQck/cm6OYFLPvckOfKoRnAShaGgIhV+sytkyzhIz
-         39Cw==
-X-Gm-Message-State: AOAM5301Kv/A1ryAbSg3AmTY58tVMdlvyqWZC+shYsmi9L9QWaG4GPHX
-        cvRVgSCXNoWTN295slpgMVFe2rfpkjviJrX1DQ==
-X-Google-Smtp-Source: ABdhPJw8ZNa4ohJxH0wqszaylWODHKxvu1kldTfxOHIcL9s+D/JjRjyY/r/lWsWN0Dxl1brzZM1O5nQrtMuKU+CAUKw=
-X-Received: by 2002:a05:6e02:c2d:: with SMTP id q13mr158779ilg.83.1611565555089;
- Mon, 25 Jan 2021 01:05:55 -0800 (PST)
+        id S1726344AbhAZFrV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 00:47:21 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:41000 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728573AbhAYNH6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 25 Jan 2021 08:07:58 -0500
+Received: from zn.tnic (p200300ec2f09db0060c9c38025ffa6e4.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:db00:60c9:c380:25ff:a6e4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 391751EC04DF;
+        Mon, 25 Jan 2021 14:05:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1611579946;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=hM/b/XGcvs4Dw1tgaHiDWLqnY29FFdGZW1BkxJIIpjs=;
+        b=iW5KV97DEZ9rLsBVUgyizPmOVC1yrAZzQwdRId9gQ42MxN2yN9hwbu8Wx8oU5j0CNpjDTR
+        8zbV8S+gfSdv2d2SAbaUMGlwlXD7lQJgjdNZP5z0YZojHT5OGCVkjKDKjSoJnKh06OmRtm
+        s6Uw7OavL3taMDv4jKNYA/4mwV1+cfA=
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] Move ...mce/therm_throt.c to drivers/thermal/
+Date:   Mon, 25 Jan 2021 14:05:31 +0100
+Message-Id: <20210125130533.19938-1-bp@alien8.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20210122074214.26583-1-bhe@redhat.com>
-In-Reply-To: <20210122074214.26583-1-bhe@redhat.com>
-From:   Pingfan Liu <kernelfans@gmail.com>
-Date:   Mon, 25 Jan 2021 17:05:44 +0800
-Message-ID: <CAFgQCTuvh40hOUKS1MLnuUm_14JeKUg_c1rncAFmd1bRXML0xA@mail.gmail.com>
-Subject: Re: [PATCH] kernel/kexec: remove the lock operation of system_transition_mutex
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-pm@vger.kernel.org,
-        Kexec Mailing List <kexec@lists.infradead.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 3:42 PM Baoquan He <bhe@redhat.com> wrote:
->
-> Function kernel_kexec() is called with lock system_transition_mutex held
-> in reboot system call. While inside kernel_kexec(), it will acquire
-> system_transition_mutex agin. This will lead to dead lock.
->
-> The dead lock should be easily triggered, it hasn't caused any failure
-> report just because the feature 'kexec jump' is almost not used by anyone
-> as far as I know. An inquiry can be made about who is using 'kexec jump'
-> and where it's used. Before that, let's simply remove the lock operation
-> inside CONFIG_KEXEC_JUMP ifdeffery scope.
->
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: Pingfan Liu <kernelfans@gmail.com>
-> ---
->  kernel/kexec_core.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 80905e5aa8ae..a0b6780740c8 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -1134,7 +1134,6 @@ int kernel_kexec(void)
->
->  #ifdef CONFIG_KEXEC_JUMP
->         if (kexec_image->preserve_context) {
-> -               lock_system_sleep();
->                 pm_prepare_console();
->                 error = freeze_processes();
->                 if (error) {
-> @@ -1197,7 +1196,6 @@ int kernel_kexec(void)
->                 thaw_processes();
->   Restore_console:
->                 pm_restore_console();
-> -               unlock_system_sleep();
->         }
->  #endif
->
-> --
-> 2.17.2
->
-Reviewed-by: Pingfan Liu <kernelfans@gmail.com>
+From: Borislav Petkov <bp@suse.de>
+
+Hi,
+
+here's v2 which addresses peterz's comments to patch 2.
+
+@thermal folks, lemme know if you have any objections otherwise I'll
+route this through the tip tree.
+
+Thx.
+
+Changelog:
+==========
+
+v1:
+
+so this has come up a bunch of times in the past and PeterZ is right
+- that thing doesn't have anything to do with the MCE glue so move it
+where it belongs.
+
+Thx.
+
+Borislav Petkov (2):
+  x86/mce: Get rid of mcheck_intel_therm_init()
+  thermal: Move therm_throt there from x86/mce
+
+ arch/x86/Kconfig                              |  4 --
+ arch/x86/include/asm/irq.h                    |  4 ++
+ arch/x86/include/asm/mce.h                    | 22 -----------
+ arch/x86/include/asm/thermal.h                | 21 ++++++++++
+ arch/x86/kernel/cpu/intel.c                   |  3 ++
+ arch/x86/kernel/cpu/mce/Makefile              |  2 -
+ arch/x86/kernel/cpu/mce/core.c                |  1 -
+ arch/x86/kernel/cpu/mce/intel.c               |  1 -
+ arch/x86/kernel/irq.c                         | 29 ++++++++++++++
+ drivers/thermal/intel/Kconfig                 |  4 ++
+ drivers/thermal/intel/Makefile                |  1 +
+ .../thermal/intel}/therm_throt.c              | 39 +++----------------
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |  3 +-
+ 13 files changed, 70 insertions(+), 64 deletions(-)
+ create mode 100644 arch/x86/include/asm/thermal.h
+ rename {arch/x86/kernel/cpu/mce => drivers/thermal/intel}/therm_throt.c (96%)
+
+-- 
+2.29.2
+
