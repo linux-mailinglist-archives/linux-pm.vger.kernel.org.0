@@ -2,159 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379AE301F6B
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Jan 2021 23:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C0C3020AA
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jan 2021 04:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbhAXWtr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Jan 2021 17:49:47 -0500
-Received: from rome.phoronix.com ([192.211.48.82]:61956 "EHLO
-        rome.phoronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726663AbhAXWtp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Jan 2021 17:49:45 -0500
-X-Greylist: delayed 1071 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Jan 2021 17:49:44 EST
-Received: from c-73-176-63-28.hsd1.il.comcast.net ([73.176.63.28]:52254 helo=[192.168.86.21])
-        by rome.phoronix.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <Michael@phoronix.com>)
-        id 1l3nuP-0002JK-MX; Sun, 24 Jan 2021 17:31:01 -0500
-Subject: Re: [PATCH v2 0/1] AMD EPYC: fix schedutil perf regression
- (freq-invariance)
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jon Grimm <Jon.Grimm@amd.com>,
-        Nathan Fontenot <Nathan.Fontenot@amd.com>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-References: <20210122204038.3238-1-ggherdovich@suse.cz>
-From:   Michael Larabel <Michael@phoronix.com>
-Message-ID: <a5071cb5-6a5b-d2e4-ff06-fa7810b8127c@phoronix.com>
-Date:   Sun, 24 Jan 2021 16:30:57 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726630AbhAYDIm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Jan 2021 22:08:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726714AbhAYDIk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Jan 2021 22:08:40 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5B6C06174A
+        for <linux-pm@vger.kernel.org>; Sun, 24 Jan 2021 19:07:54 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id t6so6736173plq.1
+        for <linux-pm@vger.kernel.org>; Sun, 24 Jan 2021 19:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=u8+YbkbccOnTqbWHKnDyaMuyym5pEv5IG+EImU42D6M=;
+        b=MJy6OqiaaLqTicZSQyhluQpXvA0EVEL681DUoeBYtHv7G3AVEEeDpKIhkdZLMMKvuU
+         1QH4rMwBnUZnRgpvGKKVleRTyzdI4+BsusreYgtgBupeL6Bo0otwlK51fYQWYBAxpDdH
+         NI5fXAjrYMAVyFltVblQkcpfbiBTJomT05odfRQxEuyTu+kY99Twaam1l4m/vSxAO/WL
+         CMS9fH3sZ2XVYbZmgkmLrOzEVZ+FZX4m8c34hLjaMb2XV1Tz+HxNb6qJtwP5fCgVxwtb
+         isVgmExJEyCZTHyTE+Uvq8OXKxn42vzX0v+rsIFL5X9rUGKbrjXEH4tlnh9V29kbWFT3
+         Zvhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=u8+YbkbccOnTqbWHKnDyaMuyym5pEv5IG+EImU42D6M=;
+        b=c9ALximr8DQ0V4s6pkCzrBVSqoXNBbvbiIt1wZjww0CowQscjQmeIUnTQGZGv/Zyrd
+         jtBpQVhjebrh9QZ0TeXAZhm4BZS6VfrxFmZS1zqCsZlqStOrtANh1PITYZsscAtKP2zB
+         aMuJJZTrNLaW/a15nAZaNzuiQJPeZrplSB33KXO12VhjwcFjxfv+EZDAgzWoHfT8NXJd
+         opGIWep7K9vmRdtK6eF92B6Yb4intxGeWiT1ENqdd1C2x3qzvwejLXt56UIkwkekxhba
+         u96kUgoEL4C9M1+K1Wz97dPjquk9KUTWsaK9Djs8hUmvjfdkp+ugHz+58CsJaXQVpRoR
+         k7Dw==
+X-Gm-Message-State: AOAM533cB+WMwv+NvaUDnbkGWmN+yxhJvh+TU3uzvREYL7GOWOyuQJlE
+        /90LHt4PbCw74S/bIOrXhwzd4A==
+X-Google-Smtp-Source: ABdhPJznGhbmqZqh5TnNgZUZ5C8Qkle96KENqXu8ahyIxfYvxvKFOOt/YTH0Tf8L7qqK0ZJZEnm2KQ==
+X-Received: by 2002:a17:902:e541:b029:df:df4f:2921 with SMTP id n1-20020a170902e541b02900dfdf4f2921mr6555444plf.52.1611544073448;
+        Sun, 24 Jan 2021 19:07:53 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id b14sm17415811pju.14.2021.01.24.19.07.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 24 Jan 2021 19:07:52 -0800 (PST)
+Date:   Mon, 25 Jan 2021 08:37:50 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>
+Subject: Re: [PATCH v3] soc/tegra: Add devm_tegra_core_dev_init_opp_table()
+Message-ID: <20210125030750.735minp7toxortm4@vireshk-i7>
+References: <20210121190117.25235-1-digetx@gmail.com>
+ <20210122063537.7yd7ww47gl2rdsdu@vireshk-i7>
+ <60cfafdf-4615-5a41-103d-96c35ba1fa8c@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210122204038.3238-1-ggherdovich@suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - rome.phoronix.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - phoronix.com
-X-Get-Message-Sender-Via: rome.phoronix.com: authenticated_id: michael@phoronix.com
-X-Authenticated-Sender: rome.phoronix.com: michael@phoronix.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <60cfafdf-4615-5a41-103d-96c35ba1fa8c@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
- From ongoing tests of this patch, it still certainly shows to address 
-most of the Linux 5.11 performance regression previously encountered 
-when using Schedutil. Additionally, for a number of workloads where not 
-seeing a regression from 5.10 to 5.11 Git is still showing even better 
-performance with this patch. The power monitoring on the AMD EPYC server 
-is showing higher power spikes but the average power consumption rate is 
-roughly comparable to that of Linux 5.11 Git, which is higher than 5.10 
-by just about 3%.
+On 22-01-21, 17:41, Dmitry Osipenko wrote:
+> 22.01.2021 09:35, Viresh Kumar пишет:
+> > On 21-01-21, 22:01, Dmitry Osipenko wrote:
+> >> Add common helper which initializes OPP table for Tegra SoC core devices.
+> >>
+> >> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+> >> Tested-by: Dmitry Osipenko <digetx@gmail.com> # A500 T20 and Nexus7 T30
+> >> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
+> >> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+> >> [tested on some other non-upstreamed-yet T20/30/114 devices as well]
+> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >> ---
+> >>
+> >> Changelog:
+> >>
+> >> v3: - This patch is factored out from [1] to ease merging of the patches
+> >>       that will use the new helper. The goal is to get this new helper
+> >>       into 5.12, this should remove dependency on this patch for a several
+> >>       patchsets of a different subsystems (DRM, media, memory, etc) that
+> >>       will target 5.13.
+> >>
+> >>       @Thierry/Jon, please review and apply this patch for 5.12!
+> > 
+> > This is not how stuff works in kernel Dmitry, every commit in the
+> > kernel tree should build(at least)/boot fine. Your patch can only be
+> > applied once your base tree has all the patches on which your work is
+> > based of, otherwise this will lead to build failure (stuff like git
+> > bisect breaks with that). It would be better if you take this patch in
+> > 5.13, or after 5.12-rc2 once all other stuff lands.
+> > 
+> 
+> OMG, I completely missed that the devm series from Yangtao Li isn't
+> merged yet.
+> 
+> Viresh / Yangtao, will be it be okay if I'll collect all the
+> prerequisite devm patches from Yangtao + add this patch into a single
+> series that could be merged via the OPP tree for 5.12?
+> 
+> Of course Thierry or Jon will need to give the ack for the Tegra changes
+> in that case.
 
-So this patch still seems to be working out well and indeed taking care 
-of some wide losses seen otherwise on Linux 5.11 when using Schedutil on 
-AMD Zen2/Zen3. Still have some other tests running but so far no 
-unexpected results.
+I haven't heard back from Yangtao since his last post, not sure what's going on.
+It is normally better if he keeps posting his series, unless he is busy and will
+not be able to do it.
 
-Michael
-
-
-AMD EPYC 7F72 2P
-
-On an EPYC 7F72 2P server[1] across 147 test cases I am finding the 
-patched Linux 5.11 kernel to be just over 1% faster than 5.10 stable 
-compared to the unpatched 5.11 Git being just behind 5.10. For the 
-workloads on that server where Linux 5.11 is slower with Schedutil, the 
-patch indeed is largely addressing that regression and also providing 
-other improvements.
-
-During that testing, the amd_energy interface was monitored. Linux 5.11 
-with Schedutil AMD freq invariance did show on average 10 Watts (~3.7%) 
-higher power consumption on average than Linux 5.10 with Schedutil. But 
-with this patch, that average is still basically the same. The peak 
-power consumption during any of the tests was higher at 530~549 Watts 
-compared to 501 Watts with Linux 5.10. Overall the performance is 
-looking good but given amd_energy still not working for consumer models, 
-I don't have much power data to share at the moment.
-
-Ryzen 9 5950X
-
-Expanding on the prior testing with the 5950X, I ran some follow-up 
-tests[2]. Of 221 test cases there, the current Linux 5.11 Git 
-performance came around 2% slower on a geo mean basis than Linux 5.10 
-while the patched performance pulls it to ~2.5% faster than 5.10. There 
-still are some cases where Linux 5.10 is faster, but overall at least 
-the patched Linux 5.11 performance doesn't show nearly as many 
-regressions. In a number of test cases, the Linux 5.11 patched 
-performance is outright better than Linux 5.10 even where 5.11 
-(un-patched) hadn't regressed or by that much.
-
-Ryzen 5 4500U
-
-For something at the lower end of the spectrum I also ran a number of 
-tests on a Ryzen 5 4500U notebook[3]. Linux 5.11 (unpatched) doesn't see 
-as many regressions as on the larger systems but still the patched 
-performance did help in a number of tests, particularly around 
-graphics/gaming. In the heavier multi-core core tests are still a number 
-of cases where Linux 5.10 is faster than patched/unpatched 5.11. The 
-patched kernel in those 90 tests came out to being about 4% faster than 
-5.10.
-
-(Result highlights below, results with little change set to hidden by 
-default.)
-[1] 
-https://openbenchmarking.org/result/2101248-HA-AMDEPYC7F52&grs&hlc=1&hnr=1&hlc=1
-[2] https://openbenchmarking.org/result/2101242-HA-RYZEN959530&grs&hlc=1
-[3] 
-https://openbenchmarking.org/result/2101232-PTS-RENOIRLI89&grs&hnr=1&hlc=1
-
-
-On 1/22/21 2:40 PM, Giovanni Gherdovich wrote:
-> Michael Larabel from Phoronix.com graciously tested v1, see results at:
->
-> AMD EPYC 7702 -
-> https://openbenchmarking.org/result/2101210-PTS-LINUX51178
->
-> AMD Ryzen 9 5950X -
-> https://openbenchmarking.org/result/2101212-HA-RYZEN959566
->
-> The reported regression is recovered, and some workloads even report an
-> improvement over the v5.10 results.
->
-> Thanks Michael for the feedback!
->
->
-> v1 at https://lore.kernel.org/lkml/20210121003223.20257-1-ggherdovich@suse.cz/
->
-> Changes wrt v1:
->
-> - move code around so that it builds for non-x86 architectures too
->
-> Giovanni Gherdovich (1):
->    x86,sched: On AMD EPYC set freq_max = max_boost in schedutil invariant
->      formula
->
->   drivers/cpufreq/acpi-cpufreq.c   | 64 +++++++++++++++++++++++++++++++-
->   drivers/cpufreq/cpufreq.c        |  3 ++
->   include/linux/cpufreq.h          |  5 +++
->   kernel/sched/cpufreq_schedutil.c |  8 +++-
->   4 files changed, 76 insertions(+), 4 deletions(-)
->
+-- 
+viresh
