@@ -2,77 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08834303A21
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 11:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200E63039D8
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 11:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391860AbhAZKWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 05:22:39 -0500
-Received: from m12-18.163.com ([220.181.12.18]:34164 "EHLO m12-18.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391657AbhAZKV3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Jan 2021 05:21:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=PgTMq
-        TZn7npXraokTycNIhlMSf+uj61Uk0lqhNzYuKY=; b=aKU4BSjw31sUQfWrUhc0L
-        JbmuCXTftdKu7dpY6VpIZ1tcmHyxv6q4pf84FvprEtC5SJRO0Jwsv0KgQ206mLxb
-        jPihZZKij7z6B7K0dDQ6lA7FyY96yY5r1i12UWmkjlNmEyAV+g3E6WXHmrnDrKdo
-        mxU/6iNMwk5KpyUAb09drc=
-Received: from COOL-20201210PM.ccdomain.com (unknown [218.94.48.178])
-        by smtp14 (Coremail) with SMTP id EsCowAAXHgry6A9goABtRA--.24561S2;
-        Tue, 26 Jan 2021 18:03:34 +0800 (CST)
-From:   zuoqilin1@163.com
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zuoqilin <zuoqilin@yulong.com>
-Subject: [PATCH] drivers/power/supply: fix typo
-Date:   Tue, 26 Jan 2021 18:03:26 +0800
-Message-Id: <20210126100326.869-1-zuoqilin1@163.com>
-X-Mailer: git-send-email 2.28.0.windows.1
+        id S2403745AbhAZKII (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 05:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391896AbhAZKGd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jan 2021 05:06:33 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439B9C061573;
+        Tue, 26 Jan 2021 02:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KuCgcrnIdOEtxOBYgiCuEx/9JXpZ5oWiPodajfjA2qg=; b=0eI3kvqnsNNA/WqLoQzfA7VbCm
+        Q6Jb6DK9DpFfuA19c/yxFDHE/TZxOY8gnbj1FlnRqq+Vu3UWznZjzulAQwJiSJ7EujwfnvbsM/Dmz
+        7hbIT1vwt0Yr85M4Irn0Mw1CalND/XnAW/pIVfuG7I8//U391gu3Ydf98w84QEZc9XerAJej/Wt1k
+        h2FYtm9TJaSYjxQWCTvk5NUfYzODVj32KYVa5Pj6FrPgwH+HqzDz0ucFnS5Lbo7MNjdLYKW8E39dt
+        aVbt2is5B2hQzQwED+WPFrqGrS7mMpnSUQdVnrDK2C43Xwr9JI7Rj/U2hsYhLqwT1efdNI85CCZ1p
+        J6vbqU+w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l4LDx-0003tn-0a; Tue, 26 Jan 2021 10:05:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 26B7C305C22;
+        Tue, 26 Jan 2021 11:05:23 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0A1E6209C50F3; Tue, 26 Jan 2021 11:05:22 +0100 (CET)
+Date:   Tue, 26 Jan 2021 11:05:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
+        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Michael Larabel <Michael@phoronix.com>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
+ in schedutil invariant formula
+Message-ID: <YA/pYrvvjf8AxPEv@hirez.programming.kicks-ass.net>
+References: <20210122204038.3238-1-ggherdovich@suse.cz>
+ <20210122204038.3238-2-ggherdovich@suse.cz>
+ <YA6YEK4/rjtPLdkG@hirez.programming.kicks-ass.net>
+ <1611652167.11983.65.camel@suse.cz>
+ <20210126093140.GB3592@techsingularity.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EsCowAAXHgry6A9goABtRA--.24561S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWruFy8KryxGFWkXF17GF47twb_yoW8Jr18pa
-        n2vFnrWw4jyFWUJa4DA3ya9FyYganakrWj9w4fG3WrZF43Xws3Wr15tF47Xr1IyryxXF4S
-        qasIyw4xtF1jkr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jESoXUUUUU=
-X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: 52xr1xpolqiqqrwthudrp/1tbipRYmiVUMcELpTQAAsT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210126093140.GB3592@techsingularity.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: zuoqilin <zuoqilin@yulong.com>
+On Tue, Jan 26, 2021 at 09:31:40AM +0000, Mel Gorman wrote:
 
-Change 'exeeds' to 'exceeds'.
+> So, should this patch be merged for 5.11 as a stopgap, fix up
+> schedutil/cpufreq and then test both AMD and Intel chips reporting the
+> correct max non-turbo and max-turbo frequencies? That would give time to
+> give some testing in linux-next before merging to reduce the chance
+> something else falls out.
 
-Signed-off-by: zuoqilin <zuoqilin@yulong.com>
----
- drivers/power/supply/charger-manager.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index 6fcebe4..731351d8 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -570,7 +570,7 @@ static int cm_get_target_status(struct charger_manager *cm)
- 		return POWER_SUPPLY_STATUS_DISCHARGING;
- 
- 	if (cm_check_thermal_status(cm)) {
--		/* Check if discharging duration exeeds limit. */
-+		/* Check if discharging duration exceeds limit. */
- 		if (check_charging_duration(cm))
- 			goto charging_ok;
- 		return POWER_SUPPLY_STATUS_NOT_CHARGING;
-@@ -578,7 +578,7 @@ static int cm_get_target_status(struct charger_manager *cm)
- 
- 	switch (cm->battery_status) {
- 	case POWER_SUPPLY_STATUS_CHARGING:
--		/* Check if charging duration exeeds limit. */
-+		/* Check if charging duration exceeds limit. */
- 		if (check_charging_duration(cm))
- 			return POWER_SUPPLY_STATUS_FULL;
- 		fallthrough;
--- 
-1.9.1
-
-
+Yeah, we should probably do this now. Rafael, you want this or should I
+take it?
