@@ -2,158 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 689DC3046C5
+	by mail.lfdr.de (Postfix) with ESMTP id DC7D93046C6
 	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 19:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390730AbhAZRUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 12:20:11 -0500
-Received: from mga09.intel.com ([134.134.136.24]:15839 "EHLO mga09.intel.com"
+        id S2390740AbhAZRUM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 12:20:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48038 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390465AbhAZIok (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Jan 2021 03:44:40 -0500
-IronPort-SDR: Yq45K40M+4SBL2Ujuyo6PDd0Sm4YKmnhR9Xw6RFzNFXR1LW5DvStLIyPBZABwo03glgx4M2sNJ
- hVfKwRGNu+gw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="180014704"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="180014704"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 00:43:58 -0800
-IronPort-SDR: 6gE8SxDSLPcFVEEYmrlZxR2rjxVbNkQMY4xuDDnEJst3+0Pg277ju5kuSAti0XCTObm3mt4LYZ
- rZBrLq8mKlaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="369035750"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2021 00:43:56 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l4Jx5-0000m4-KY; Tue, 26 Jan 2021 08:43:55 +0000
-Date:   Tue, 26 Jan 2021 16:42:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        id S2390906AbhAZJKO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 Jan 2021 04:10:14 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 57DE5B254;
+        Tue, 26 Jan 2021 09:09:28 +0000 (UTC)
+Message-ID: <1611652167.11983.65.camel@suse.cz>
+Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
+ in schedutil invariant formula
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Michael Larabel <Michael@phoronix.com>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- d1182f4c1fbc5ad585d78a03d515792aaa3534fd
-Message-ID: <600fd611.JiuzGdbYQPDhm29Z%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Date:   Tue, 26 Jan 2021 10:09:27 +0100
+In-Reply-To: <YA6YEK4/rjtPLdkG@hirez.programming.kicks-ass.net>
+References: <20210122204038.3238-1-ggherdovich@suse.cz>
+         <20210122204038.3238-2-ggherdovich@suse.cz>
+         <YA6YEK4/rjtPLdkG@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d1182f4c1fbc5ad585d78a03d515792aaa3534fd  Merge branch 'acpi-messages' into bleeding-edge
+On Mon, 2021-01-25 at 11:06 +0100, Peter Zijlstra wrote:
+> On Fri, Jan 22, 2021 at 09:40:38PM +0100, Giovanni Gherdovich wrote:
+> > 1. PROBLEM DESCRIPTION (over-utilization and schedutil)
+> > 
+> > The problem happens on CPU-bound workloads spanning a large number of cores.
+> > In this case schedutil won't select the maximum P-State. Actually, it's
+> > likely that it will select the minimum one.
+> > 
+> > A CPU-bound workload puts the machine in a state generally called
+> > "over-utilization": an increase in CPU speed doesn't result in an increase of
+> > capacity. The fraction of time tasks spend on CPU becomes constant regardless
+> > of clock frequency (the tasks eat whatever we throw at them), and the PELT
+> > invariant util goes up and down with the frequency (i.e. it's not invariant
+> > anymore).
+> >                                       v5.10          v5.11-rc4
+> >                                       ~~~~~~~~~~~~~~~~~~~~~~~~
+> > CPU activity (mpstat)                 80-90%         80-90%
+> > schedutil requests (tracepoint)       always P0      mostly P2
+> > CPU frequency (HW feedback)           ~2.2 GHz       ~1.5 GHz
+> > PELT root rq util (tracepoint)        ~825           ~450
+> > 
+> > mpstat shows that the workload is CPU-bound and usage doesn't change with
+> 
+> So I'm having trouble with calling a 80%-90% workload CPU bound, because
+> clearly there's a ton of idle time.
 
-elapsed time: 726m
+Yes you're right. There is considerable idle time and calling it CPU-bound is
+a bit of a stretch.
 
-configs tested: 97
-configs skipped: 2
+Yet I don't think I'm completely off the mark. The busy time is the same with
+the machine running at 1.5 GHz and at 2.2 GHz (it just takes longer to
+finish). To me it seems like the CPU is the bottleneck, with some overhead on
+top.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I will confirm what causes the idle time.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                   secureedge5410_defconfig
-c6x                         dsk6455_defconfig
-mips                        qi_lb60_defconfig
-sparc64                             defconfig
-arm                            xcep_defconfig
-arm                         lpc32xx_defconfig
-sh                           se7722_defconfig
-mips                         db1xxx_defconfig
-m68k                       m5249evb_defconfig
-powerpc                          g5_defconfig
-sh                           se7343_defconfig
-powerpc                   motionpro_defconfig
-i386                             alldefconfig
-mips                  maltasmvp_eva_defconfig
-sh                   sh7770_generic_defconfig
-mips                          ath25_defconfig
-sh                          polaris_defconfig
-arm                           corgi_defconfig
-powerpc                      walnut_defconfig
-arm                        mvebu_v7_defconfig
-mips                         mpc30x_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210125
-i386                 randconfig-a002-20210125
-i386                 randconfig-a004-20210125
-i386                 randconfig-a006-20210125
-i386                 randconfig-a005-20210125
-i386                 randconfig-a003-20210125
-x86_64               randconfig-a012-20210126
-x86_64               randconfig-a016-20210126
-x86_64               randconfig-a015-20210126
-x86_64               randconfig-a011-20210126
-x86_64               randconfig-a013-20210126
-x86_64               randconfig-a014-20210126
-i386                 randconfig-a013-20210125
-i386                 randconfig-a011-20210125
-i386                 randconfig-a012-20210125
-i386                 randconfig-a015-20210125
-i386                 randconfig-a014-20210125
-i386                 randconfig-a016-20210125
-x86_64               randconfig-a003-20210125
-x86_64               randconfig-a002-20210125
-x86_64               randconfig-a001-20210125
-x86_64               randconfig-a005-20210125
-x86_64               randconfig-a006-20210125
-x86_64               randconfig-a004-20210125
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Giovanni
