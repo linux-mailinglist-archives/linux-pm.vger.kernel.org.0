@@ -2,83 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB18B303A8F
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 11:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E328303EA5
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 14:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404282AbhAZKlj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 05:41:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:60928 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404267AbhAZKlS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Jan 2021 05:41:18 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08040113E;
-        Tue, 26 Jan 2021 02:40:33 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.57.2.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 55E0A3F66B;
-        Tue, 26 Jan 2021 02:40:30 -0800 (PST)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     vireshk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        Dietmar.Eggemann@arm.com, lukasz.luba@arm.com, amitk@kernel.org,
-        rui.zhang@intel.com, cw00.choi@samsung.com,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-Subject: [RFC][PATCH 3/3] thermal: power_allocator: get proper max power limited by user
-Date:   Tue, 26 Jan 2021 10:40:01 +0000
-Message-Id: <20210126104001.20361-4-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210126104001.20361-1-lukasz.luba@arm.com>
-References: <20210126104001.20361-1-lukasz.luba@arm.com>
+        id S2391700AbhAZN0F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 08:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391751AbhAZJ5Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jan 2021 04:57:24 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4622BC06178B;
+        Tue, 26 Jan 2021 01:56:13 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id gx5so22075689ejb.7;
+        Tue, 26 Jan 2021 01:56:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/bLs6/jhlVV266f2Dse0B5k3M255RLfRErwO519Pwyo=;
+        b=CdSm0lR7j0E1W7kotMmRm0m30oDKrvEDpA/vsUBb9Vjd/rh6AcBrDfg9SRTIOgAbDE
+         2tGvrLbIwu/ukZX3Y3nM/xf7/0Ozv7wP3W2D+oS8wku+WZBI1l34wGHRxGU3/Djdat4Y
+         G+JFBEkqRhAhFBgln/TWdZ120yTsQzXs4BILu1WwD52gL1fjWlkBmf5cgsiBLw4CjbWz
+         KFzPSMNp0c/O73bQ31p94j8USDYNkwdyy3VjlUV0EE//U9h3sDnsROtSP/6li6wHcyrd
+         vcvGgp/zxxzkWBGEAgpJpf40nQdnGvz7is2NJf//xwqxK7jG4C48ykLhsp64Yi+Gq2kX
+         +VAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/bLs6/jhlVV266f2Dse0B5k3M255RLfRErwO519Pwyo=;
+        b=J3lbEkyktrHDzYqxy98QQsB4TDy7N20KaLziTk7okO6HI5twgTThXtlzygSp1Ws7no
+         ZSHyESJIaKL46dWcmDuI9PyOKqYQc905+GOWHmsv4cVLufMINiHjP3djmaZ//q1YRY6f
+         yuC5CDHFO17+AKBWkBPxIF++WpXvmh3BaTeCuTcx0sE94cVFSXIEXHq0J3LxLCFe1PZ2
+         jjmK8LiVLBKx5Id66T6pq/NKNVBPkDUskUJrg5VhF3brkQtRSKjJ1mjx3tv9uktopPsN
+         BclSDaUq7dg/ZwxzXjws63mycYv1OYf9jsMtumPdU5kSYHaRrmrYBbV87or08ZnYLOOu
+         wsFA==
+X-Gm-Message-State: AOAM533YkrtfePZ+TOb37pkN4OBjqQQ6pXK5RfdDoQmWh69QEnyQ9KKp
+        16/xUpdR/VujjvkSxxV1ecI=
+X-Google-Smtp-Source: ABdhPJzQpRUkBDMGdAezh86+55sGvFZIpjRCP7vjBNcuPoj6XDxSgEIQ2V592B9En+BBUiNt0K2hyQ==
+X-Received: by 2002:a17:906:a082:: with SMTP id q2mr2919021ejy.483.1611654972084;
+        Tue, 26 Jan 2021 01:56:12 -0800 (PST)
+Received: from localhost.localdomain ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id h12sm11648310edb.16.2021.01.26.01.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jan 2021 01:56:11 -0800 (PST)
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v7 5/5] MAINTAINERS: Add entry for ATC260x PMIC
+Date:   Tue, 26 Jan 2021 11:56:01 +0200
+Message-Id: <715ac9a4a87dd8f85c57f9e65abfca9769e9e21c.1611653995.git.cristian.ciocaltea@gmail.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <cover.1611653995.git.cristian.ciocaltea@gmail.com>
+References: <cover.1611653995.git.cristian.ciocaltea@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use new API interface to get the maximum power of the cooling device. This
-is needed to properly allocate and split the total power budget. The
-allowed limit is taken from supported cooling device and then checked with
-limits set in DT. The final state value is used for asking for the related
-power value the cooling device.
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Add MAINTAINERS entry for ATC260x PMIC.
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+[cristian: change binding doc file path, add file patterns for onkey and
+           poweroff drivers, fix ordering, add myself as co-maintainer]
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
 ---
- drivers/thermal/gov_power_allocator.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+Changes in v7:
+ - None
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 92acae53df49..ec33fba5a358 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -308,6 +308,20 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
- 	return 0;
- }
+Changes in v6:
+ - None
+
+Changes in v5:
+ - None
+
+Changes in v4:
+ - None
+
+Changes in v3:
+ - Restored the authorship of the patch to Mani
+
+ MAINTAINERS | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cfb47554b951..32c16d13fe28 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2891,6 +2891,18 @@ W:	http://www.openaoe.org/
+ F:	Documentation/admin-guide/aoe/
+ F:	drivers/block/aoe/
  
-+static int
-+power_actor_get_max_power(struct thermal_cooling_device *cdev,
-+			  struct thermal_instance *instance, u32 *max_power)
-+{
-+	unsigned long min_state = 0;
++ATC260X PMIC MFD DRIVER
++M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++M:	Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
++L:	linux-actions@lists.infradead.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
++F:	drivers/input/misc/atc260x-onkey.c
++F:	drivers/mfd/atc260*
++F:	drivers/power/reset/atc260x-poweroff.c
++F:	drivers/regulator/atc260x-regulator.c
++F:	include/linux/mfd/atc260x/*
 +
-+	if (cdev->ops->get_user_min_state)
-+		cdev->ops->get_user_min_state(cdev, &min_state);
-+
-+	min_state = max(instance->lower, min_state);
-+
-+	return cdev->ops->state2power(cdev, min_state, max_power);
-+}
-+
- /**
-  * divvy_up_power() - divvy the allocated power between the actors
-  * @req_power:	each actor's requested power
-@@ -455,8 +469,7 @@ static int allocate_power(struct thermal_zone_device *tz,
- 
- 		weighted_req_power[i] = frac_to_int(weight * req_power[i]);
- 
--		if (cdev->ops->state2power(cdev, instance->lower,
--					   &max_power[i]))
-+		if (power_actor_get_max_power(cdev, instance, &max_power[i]))
- 			continue;
- 
- 		total_req_power += req_power[i];
+ ATHEROS 71XX/9XXX GPIO DRIVER
+ M:	Alban Bedel <albeu@free.fr>
+ S:	Maintained
 -- 
-2.17.1
+2.30.0
 
