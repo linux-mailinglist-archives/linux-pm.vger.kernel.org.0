@@ -2,79 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D78303A95
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 11:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094C9303A8D
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jan 2021 11:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404226AbhAZKml (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 05:42:41 -0500
-Received: from foss.arm.com ([217.140.110.172]:60876 "EHLO foss.arm.com"
+        id S2404261AbhAZKlb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jan 2021 05:41:31 -0500
+Received: from foss.arm.com ([217.140.110.172]:60888 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404262AbhAZKlJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Jan 2021 05:41:09 -0500
+        id S1732057AbhAZKlM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 Jan 2021 05:41:12 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DF83D6E;
-        Tue, 26 Jan 2021 02:40:23 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C019D101E;
+        Tue, 26 Jan 2021 02:40:26 -0800 (PST)
 Received: from e123648.arm.com (unknown [10.57.2.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CA2D83F66B;
-        Tue, 26 Jan 2021 02:40:20 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DBCAD3F66B;
+        Tue, 26 Jan 2021 02:40:23 -0800 (PST)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     vireshk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
         Dietmar.Eggemann@arm.com, lukasz.luba@arm.com, amitk@kernel.org,
         rui.zhang@intel.com, cw00.choi@samsung.com,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-Subject: [RFC][PATCH 0/3] New thermal interface allowing IPA to get max power
-Date:   Tue, 26 Jan 2021 10:39:58 +0000
-Message-Id: <20210126104001.20361-1-lukasz.luba@arm.com>
+Subject: [RFC][PATCH 1/3] PM /devfreq: add user frequency limits into devfreq struct
+Date:   Tue, 26 Jan 2021 10:39:59 +0000
+Message-Id: <20210126104001.20361-2-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210126104001.20361-1-lukasz.luba@arm.com>
+References: <20210126104001.20361-1-lukasz.luba@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+The new fields inside devfreq struct allow to check the frequency limits
+set by the user via sysfs. These limits are important for thermal governor
+Intelligent Power Allocation (IPA) which needs to know the maximum allowed
+power consumption of the device.
 
-This patch set tries to add the missing feature in the Intelligent Power
-Allocation (IPA) governor which is: frequency limit set by user space.
-User can set max allowed frequency for a given device which has impact on
-max allowed power. In current design there is no mechanism to figure this
-out. IPA must know the maximum allowed power for every device. It is then
-used for proper power split and divvy-up. When the user limit for max
-frequency is not know, IPA assumes it is the highest possible frequency.
-It causes wrong power split across the devices.
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+ drivers/devfreq/devfreq.c | 41 +++++++++++++++++++++++++++++++++++----
+ include/linux/devfreq.h   |  4 ++++
+ 2 files changed, 41 insertions(+), 4 deletions(-)
 
-This new mechanism provides the max allowed frequency to the thermal
-framework and then max allowed power to the IPA.
-The implementation is done in this way because currently there is no way
-to retrieve the limits from the PM QoS, without uncapping the local
-thermal limit and reading the next value. It would be a heavy way of
-doing these things, since it should be done every polling time (e.g. 50ms).
-Also, the value stored in PM QoS can be different than the real OPP 'rate'
-so still would need conversion into proper OPP for comparison with EM.
-Furthermore, uncapping the device in thermal just to check the user freq
-limit is not the safest way.
-Thus, this simple implementation moves the calculation of the proper
-frequency to the sysfs write code, since it's called less often. The value
-is then used as-is in the thermal framework without any hassle.
-
-As it's a RFC, it still misses the cpufreq sysfs implementation, but would
-be addressed if all agree.
-
-Regards,
-Lukasz Luba
-
-Lukasz Luba (3):
-  PM /devfreq: add user frequency limits into devfreq struct
-  thermal: devfreq_cooling: add new callback to get user limit for min
-    state
-  thermal: power_allocator: get proper max power limited by user
-
- drivers/devfreq/devfreq.c             | 41 ++++++++++++++++++++++++---
- drivers/thermal/devfreq_cooling.c     | 33 +++++++++++++++++++++
- drivers/thermal/gov_power_allocator.c | 17 +++++++++--
- include/linux/devfreq.h               |  4 +++
- include/linux/thermal.h               |  1 +
- 5 files changed, 90 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 94cc25fd68da..e985a76e5ff3 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -843,6 +843,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 		goto err_dev;
+ 	}
+ 
++	devfreq->user_min_freq = devfreq->scaling_min_freq;
++	devfreq->user_max_freq = devfreq->scaling_max_freq;
++
+ 	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
+ 	atomic_set(&devfreq->suspend_count, 0);
+ 
+@@ -1513,6 +1516,8 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
+ 			      const char *buf, size_t count)
+ {
+ 	struct devfreq *df = to_devfreq(dev);
++	struct device *pdev = df->dev.parent;
++	struct dev_pm_opp *opp;
+ 	unsigned long value;
+ 	int ret;
+ 
+@@ -1533,6 +1538,19 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	if (!value)
++		value = df->scaling_min_freq;
++
++	opp = dev_pm_opp_find_freq_ceil(pdev, &value);
++	if (IS_ERR(opp))
++		return count;
++
++	dev_pm_opp_put(opp);
++
++	mutex_lock(&df->lock);
++	df->user_min_freq = value;
++	mutex_unlock(&df->lock);
++
+ 	return count;
+ }
+ 
+@@ -1554,7 +1572,9 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
+ 			      const char *buf, size_t count)
+ {
+ 	struct devfreq *df = to_devfreq(dev);
+-	unsigned long value;
++	struct device *pdev = df->dev.parent;
++	unsigned long value, value_khz;
++	struct dev_pm_opp *opp;
+ 	int ret;
+ 
+ 	/*
+@@ -1579,14 +1599,27 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
+ 	 * A value of zero means "no limit".
+ 	 */
+ 	if (value)
+-		value = DIV_ROUND_UP(value, HZ_PER_KHZ);
++		value_khz = DIV_ROUND_UP(value, HZ_PER_KHZ);
+ 	else
+-		value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
++		value_khz = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
+ 
+-	ret = dev_pm_qos_update_request(&df->user_max_freq_req, value);
++	ret = dev_pm_qos_update_request(&df->user_max_freq_req, value_khz);
+ 	if (ret < 0)
+ 		return ret;
+ 
++	if (!value)
++		value = df->scaling_max_freq;
++
++	opp = dev_pm_opp_find_freq_floor(pdev, &value);
++	if (IS_ERR(opp))
++		return count;
++
++	dev_pm_opp_put(opp);
++
++	mutex_lock(&df->lock);
++	df->user_max_freq = value;
++	mutex_unlock(&df->lock);
++
+ 	return count;
+ }
+ 
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index b6d3bae1c74d..147a229056d2 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -147,6 +147,8 @@ struct devfreq_stats {
+  *		touch this.
+  * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
+  * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
++ * @user_min_freq:	User's minimum frequency
++ * @user_max_freq:	User's maximum frequency
+  * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
+  * @scaling_max_freq:	Limit maximum frequency requested by OPP interface
+  * @stop_polling:	 devfreq polling status of a device.
+@@ -185,6 +187,8 @@ struct devfreq {
+ 	struct dev_pm_qos_request user_max_freq_req;
+ 	unsigned long scaling_min_freq;
+ 	unsigned long scaling_max_freq;
++	unsigned long user_min_freq;
++	unsigned long user_max_freq;
+ 	bool stop_polling;
+ 
+ 	unsigned long suspend_freq;
 -- 
 2.17.1
 
