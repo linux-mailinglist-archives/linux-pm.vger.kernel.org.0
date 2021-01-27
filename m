@@ -2,358 +2,458 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC723305959
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jan 2021 12:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE36D305A80
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jan 2021 12:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbhA0LOO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jan 2021 06:14:14 -0500
-Received: from mga14.intel.com ([192.55.52.115]:63689 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236347AbhA0LI3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 27 Jan 2021 06:08:29 -0500
-IronPort-SDR: VMhaDtKPQfGuYF+ZAfTodzN+l0ySASWTiFUL0PbdBoXOx4RxgIW/JNgVpi8Wdrx6XWyzyVKtmX
- +jJylpPyxqkQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9876"; a="179270252"
-X-IronPort-AV: E=Sophos;i="5.79,379,1602572400"; 
-   d="scan'208";a="179270252"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 03:07:42 -0800
-IronPort-SDR: l6DHboqk75PMNcg1dVUo0hq4plGw+KrbyxZGbDNDpBDoxep2tZP534XyjfMiCbeAtwAbNFaMSo
- FELKINDjQIkQ==
-X-IronPort-AV: E=Sophos;i="5.79,379,1602572400"; 
-   d="scan'208";a="388265837"
-Received: from yuankuns-mobl.ccr.corp.intel.com ([10.249.169.180])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 03:07:39 -0800
-Message-ID: <2d039f7da4e4f8b57f7256f41a524d55dc6236de.camel@intel.com>
-Subject: Re: [PATCH v2 2/2] thermal: Move therm_throt there from x86/mce
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Date:   Wed, 27 Jan 2021 19:07:37 +0800
-In-Reply-To: <20210125130533.19938-3-bp@alien8.de>
-References: <20210125130533.19938-1-bp@alien8.de>
-         <20210125130533.19938-3-bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S231193AbhA0L7M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jan 2021 06:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237226AbhA0LzY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 06:55:24 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0604C061756
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 03:54:43 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id q2so911838plk.4
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 03:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tyztanc1Lrx3VvCr64qwKzuktGG8MUMMjTpyKB+6ItA=;
+        b=tuUXZETT3dxsiScCEE1o+cqmDsOZZFvSKvAqKqnCFT37gxLHB/vH2HPj/7lNpcLA3X
+         1CWEMzJwTD46MiWLH7tzgvLvGujab6x4pTK+81WD6IR50SLSkf8G9sizuwU8ZqETL1Kp
+         IWmnCbPUDxTK+HWKOt4ddNjkUVExbXxLGDOvFoCj5vwyd0NkkxTl/vpFKEFDJ1w1AoIt
+         DtB82bKMlBCf0o8XHpUBkCXk+/loRTGsk/+XelgG++vaK5E8WXD0tEu0be+w3+vh6Gtb
+         p+nahwlTerXr+yb3zSpV7U4pXGaz94mUlcuVD6i2iwMFHJNuCsVaddmG9dr0EX6b0CDw
+         4FXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tyztanc1Lrx3VvCr64qwKzuktGG8MUMMjTpyKB+6ItA=;
+        b=CUBmpJV7qHh1EheZFMJr7fnPMJJemKwlDjkutMRRyKS8vRktqMd+Kb0Jk3RBCaksWK
+         KODbkAh/m/tzoiAnaVjohot6zaXIiocJGt1ZLJG2Wz6s63LfYkskLUjp/GE51xWaKGmH
+         lu/0k/LR4YchoB/FpWhtAJALlBp2EGGX0vvA5VeS9RoCxZJjY0cDtQ7v8XQ/PCgoN36/
+         LcM8E4GBK2MhiDjaDWKFLbdkKYhkszMoLsN9UBL5+cZKfRH14YUCi9duhEe+ogT6o6b7
+         erufg8uLJ6+KDoAPd7c5CPUVQ1koHSSDwAQJCFE0i1AK8Vkail2XMcE3QebPK57Vhm0t
+         hxfA==
+X-Gm-Message-State: AOAM533qsCH9Sdv7bevQug1uOXH0iGcM+Mq0zrPxdRNyLeUBnMzokTmw
+        lFMsoPABhAB0vtrUHKfYgCDXUQ==
+X-Google-Smtp-Source: ABdhPJznhSqSvC5nSA+uzzbejlwt3l5F2tu3NZey4pBl+WrD4vhtAimaxfArFR1qMTll14yFRbTzrw==
+X-Received: by 2002:a17:90b:4005:: with SMTP id ie5mr5436372pjb.104.1611748483395;
+        Wed, 27 Jan 2021 03:54:43 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id c5sm2396029pgt.73.2021.01.27.03.54.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 27 Jan 2021 03:54:41 -0800 (PST)
+Date:   Wed, 27 Jan 2021 17:24:15 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <saravanak@google.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
+Message-ID: <20210127115415.7zjpf6uaybwswno3@vireshk-i7>
+References: <20190717222340.137578-1-saravanak@google.com>
+ <20190717222340.137578-4-saravanak@google.com>
+ <20191125112812.26jk5hsdwqfnofc2@vireshk-i7>
+ <20200127061118.5bxei6nghowlmf53@vireshk-i7>
+ <b0be1275-c5cb-8171-58fa-64d65f60eaf8@codeaurora.org>
+ <20200130042126.ahkik6ffb5vnzdim@vireshk-i7>
+ <CAJMQK-gmO-tLZkRRxRdgU9eyfo95omw_RnffFVdhv2A6_9T-nQ@mail.gmail.com>
+ <20210118073430.a6lr3ynkd2duv34l@vireshk-i7>
+ <CAJMQK-j6EYjU1z_SUY4MFEJO6qTtOH7mQ_QWj2iUMewBKAghng@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJMQK-j6EYjU1z_SUY4MFEJO6qTtOH7mQ_QWj2iUMewBKAghng@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-01-25 at 14:05 +0100, Borislav Petkov wrote:
-> From: Borislav Petkov <bp@suse.de>
-> 
-> This functionality has nothing to do with MCE, move it to the thermal
-> framework and untangle it from MCE.
-> 
-> Have thermal_set_handler() check the build-time assigned default
-> handler
-> stub was the one used before therm_throt assigns a new one.
-> 
-> Requested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
+On 18-01-21, 15:39, Hsin-Yi Wang wrote:
+> Thanks. I can test this with the mt8183-cci series.
 
-Acked-by: Zhang Rui <rui.zhang@intel.com>
+Can you please give this a try ?
 
-thanks,
-rui
-> ---
->  arch/x86/Kconfig                              |  4 ---
->  arch/x86/include/asm/irq.h                    |  4 +++
->  arch/x86/include/asm/mce.h                    | 16 ----------
->  arch/x86/include/asm/thermal.h                | 21 ++++++++++++++
->  arch/x86/kernel/cpu/intel.c                   |  3 ++
->  arch/x86/kernel/cpu/mce/Makefile              |  2 --
->  arch/x86/kernel/cpu/mce/intel.c               |  1 -
->  arch/x86/kernel/irq.c                         | 29
-> +++++++++++++++++++
->  drivers/thermal/intel/Kconfig                 |  4 +++
->  drivers/thermal/intel/Makefile                |  1 +
->  .../thermal/intel}/therm_throt.c              | 25 ++--------------
->  drivers/thermal/intel/x86_pkg_temp_thermal.c  |  3 +-
->  12 files changed, 67 insertions(+), 46 deletions(-)
->  create mode 100644 arch/x86/include/asm/thermal.h
->  rename {arch/x86/kernel/cpu/mce =>
-> drivers/thermal/intel}/therm_throt.c (97%)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 21f851179ff0..9989db3a9bf5 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1158,10 +1158,6 @@ config X86_MCE_INJECT
->  	  If you don't know what a machine check is and you don't do
-> kernel
->  	  QA it is safe to say n.
->  
-> -config X86_THERMAL_VECTOR
-> -	def_bool y
-> -	depends on X86_MCE_INTEL
-> -
->  source "arch/x86/events/Kconfig"
->  
->  config X86_LEGACY_VM86
-> diff --git a/arch/x86/include/asm/irq.h b/arch/x86/include/asm/irq.h
-> index 528c8a71fe7f..ad65fe7dceb1 100644
-> --- a/arch/x86/include/asm/irq.h
-> +++ b/arch/x86/include/asm/irq.h
-> @@ -53,4 +53,8 @@ void arch_trigger_cpumask_backtrace(const struct
-> cpumask *mask,
->  #define arch_trigger_cpumask_backtrace
-> arch_trigger_cpumask_backtrace
->  #endif
->  
-> +#ifdef CONFIG_X86_THERMAL_VECTOR
-> +void thermal_set_handler(void (*handler)(void));
-> +#endif
-> +
->  #endif /* _ASM_X86_IRQ_H */
-> diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-> index def9aa5e1fa4..ddfb3cad8dff 100644
-> --- a/arch/x86/include/asm/mce.h
-> +++ b/arch/x86/include/asm/mce.h
-> @@ -288,22 +288,6 @@ extern void (*mce_threshold_vector)(void);
->  /* Deferred error interrupt handler */
->  extern void (*deferred_error_int_vector)(void);
->  
-> -/*
-> - * Thermal handler
-> - */
-> -
-> -void intel_init_thermal(struct cpuinfo_x86 *c);
-> -
-> -/* Interrupt Handler for core thermal thresholds */
-> -extern int (*platform_thermal_notify)(__u64 msr_val);
-> -
-> -/* Interrupt Handler for package thermal thresholds */
-> -extern int (*platform_thermal_package_notify)(__u64 msr_val);
-> -
-> -/* Callback support of rate control, return true, if
-> - * callback has rate control */
-> -extern bool (*platform_thermal_package_rate_control)(void);
-> -
->  /*
->   * Used by APEI to report memory error via /dev/mcelog
->   */
-> diff --git a/arch/x86/include/asm/thermal.h
-> b/arch/x86/include/asm/thermal.h
-> new file mode 100644
-> index 000000000000..58b0e0a4af6e
-> --- /dev/null
-> +++ b/arch/x86/include/asm/thermal.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_THERMAL_H
-> +#define _ASM_X86_THERMAL_H
-> +
-> +/* Interrupt Handler for package thermal thresholds */
-> +extern int (*platform_thermal_package_notify)(__u64 msr_val);
-> +
-> +/* Interrupt Handler for core thermal thresholds */
-> +extern int (*platform_thermal_notify)(__u64 msr_val);
-> +
-> +/* Callback support of rate control, return true, if
-> + * callback has rate control */
-> +extern bool (*platform_thermal_package_rate_control)(void);
-> +
-> +#ifdef CONFIG_X86_THERMAL_VECTOR
-> +void intel_init_thermal(struct cpuinfo_x86 *c);
-> +#else
-> +static inline void intel_init_thermal(struct cpuinfo_x86 *c) { }
-> +#endif
-> +
-> +#endif /* _ASM_X86_THERMAL_H */
-> diff --git a/arch/x86/kernel/cpu/intel.c
-> b/arch/x86/kernel/cpu/intel.c
-> index 59a1e3ce3f14..71221af87cb1 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -24,6 +24,7 @@
->  #include <asm/traps.h>
->  #include <asm/resctrl.h>
->  #include <asm/numa.h>
-> +#include <asm/thermal.h>
->  
->  #ifdef CONFIG_X86_64
->  #include <linux/topology.h>
-> @@ -719,6 +720,8 @@ static void init_intel(struct cpuinfo_x86 *c)
->  		tsx_disable();
->  
->  	split_lock_init();
-> +
-> +	intel_init_thermal(c);
->  }
->  
->  #ifdef CONFIG_X86_32
-> diff --git a/arch/x86/kernel/cpu/mce/Makefile
-> b/arch/x86/kernel/cpu/mce/Makefile
-> index 9f020c994154..015856abdbb1 100644
-> --- a/arch/x86/kernel/cpu/mce/Makefile
-> +++ b/arch/x86/kernel/cpu/mce/Makefile
-> @@ -9,8 +9,6 @@ obj-$(CONFIG_X86_MCE_THRESHOLD) += threshold.o
->  mce-inject-y			:= inject.o
->  obj-$(CONFIG_X86_MCE_INJECT)	+= mce-inject.o
->  
-> -obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-> -
->  obj-$(CONFIG_ACPI_APEI)		+= apei.o
->  
->  obj-$(CONFIG_X86_MCELOG_LEGACY)	+= dev-mcelog.o
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c
-> b/arch/x86/kernel/cpu/mce/intel.c
-> index c2476fe0682e..e309476743b7 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -531,7 +531,6 @@ static void intel_imc_init(struct cpuinfo_x86 *c)
->  
->  void mce_intel_feature_init(struct cpuinfo_x86 *c)
->  {
-> -	intel_init_thermal(c);
->  	intel_init_cmci();
->  	intel_init_lmce();
->  	intel_ppin_init(c);
-> diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
-> index c5dd50369e2f..523fa5266d3e 100644
-> --- a/arch/x86/kernel/irq.c
-> +++ b/arch/x86/kernel/irq.c
-> @@ -374,3 +374,32 @@ void fixup_irqs(void)
->  	}
->  }
->  #endif
-> +
-> +#ifdef CONFIG_X86_THERMAL_VECTOR
-> +static void unexpected_thermal_interrupt(void)
-> +{
-> +	pr_err("CPU%d: Unexpected LVT thermal interrupt!\n",
-> +		smp_processor_id());
-> +}
-> +
-> +static void (*smp_thermal_vector)(void) =
-> unexpected_thermal_interrupt;
-> +
-> +void thermal_set_handler(void (*handler)(void))
-> +{
-> +	if (handler) {
-> +		WARN_ON(smp_thermal_vector !=
-> unexpected_thermal_interrupt);
-> +		smp_thermal_vector = handler;
-> +	} else {
-> +		smp_thermal_vector = unexpected_thermal_interrupt;
-> +	}
-> +}
-> +
-> +DEFINE_IDTENTRY_SYSVEC(sysvec_thermal)
-> +{
-> +	trace_thermal_apic_entry(THERMAL_APIC_VECTOR);
-> +	inc_irq_stat(irq_thermal_count);
-> +	smp_thermal_vector();
-> +	trace_thermal_apic_exit(THERMAL_APIC_VECTOR);
-> +	ack_APIC_irq();
-> +}
-> +#endif
-> diff --git a/drivers/thermal/intel/Kconfig
-> b/drivers/thermal/intel/Kconfig
-> index 8025b21f43fa..ce4f59213c7a 100644
-> --- a/drivers/thermal/intel/Kconfig
-> +++ b/drivers/thermal/intel/Kconfig
-> @@ -8,6 +8,10 @@ config INTEL_POWERCLAMP
->  	  enforce idle time which results in more package C-state
-> residency. The
->  	  user interface is exposed via generic thermal framework.
->  
-> +config X86_THERMAL_VECTOR
-> +	def_bool y
-> +	depends on X86 && CPU_SUP_INTEL && X86_LOCAL_APIC
-> +
->  config X86_PKG_TEMP_THERMAL
->  	tristate "X86 package temperature thermal driver"
->  	depends on X86_THERMAL_VECTOR
-> diff --git a/drivers/thermal/intel/Makefile
-> b/drivers/thermal/intel/Makefile
-> index 0d9736ced5d4..ff2ad30ef397 100644
-> --- a/drivers/thermal/intel/Makefile
-> +++ b/drivers/thermal/intel/Makefile
-> @@ -10,3 +10,4 @@ obj-$(CONFIG_INTEL_QUARK_DTS_THERMAL)	+=
-> intel_quark_dts_thermal.o
->  obj-$(CONFIG_INT340X_THERMAL)  += int340x_thermal/
->  obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
->  obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
-> +obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-> diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c
-> b/drivers/thermal/intel/therm_throt.c
-> similarity index 97%
-> rename from arch/x86/kernel/cpu/mce/therm_throt.c
-> rename to drivers/thermal/intel/therm_throt.c
-> index 5b1aa0f30655..4f12fcd0e40a 100644
-> --- a/arch/x86/kernel/cpu/mce/therm_throt.c
-> +++ b/drivers/thermal/intel/therm_throt.c
-> @@ -26,13 +26,11 @@
->  #include <linux/cpu.h>
->  
->  #include <asm/processor.h>
-> +#include <asm/thermal.h>
->  #include <asm/traps.h>
->  #include <asm/apic.h>
-> -#include <asm/mce.h>
-> +#include <asm/irq.h>
->  #include <asm/msr.h>
-> -#include <asm/trace/irq_vectors.h>
-> -
-> -#include "internal.h"
->  
->  /* How long to wait between reporting thermal events */
->  #define CHECK_INTERVAL		(300 * HZ)
-> @@ -606,23 +604,6 @@ static void intel_thermal_interrupt(void)
->  	}
->  }
->  
-> -static void unexpected_thermal_interrupt(void)
-> -{
-> -	pr_err("CPU%d: Unexpected LVT thermal interrupt!\n",
-> -		smp_processor_id());
-> -}
-> -
-> -static void (*smp_thermal_vector)(void) =
-> unexpected_thermal_interrupt;
-> -
-> -DEFINE_IDTENTRY_SYSVEC(sysvec_thermal)
-> -{
-> -	trace_thermal_apic_entry(THERMAL_APIC_VECTOR);
-> -	inc_irq_stat(irq_thermal_count);
-> -	smp_thermal_vector();
-> -	trace_thermal_apic_exit(THERMAL_APIC_VECTOR);
-> -	ack_APIC_irq();
-> -}
-> -
->  /* Thermal monitoring depends on APIC, ACPI and clock modulation */
->  static int intel_thermal_supported(struct cpuinfo_x86 *c)
->  {
-> @@ -718,7 +699,7 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
->  				| PACKAGE_THERM_INT_HIGH_ENABLE), h);
->  	}
->  
-> -	smp_thermal_vector = intel_thermal_interrupt;
-> +	thermal_set_handler(intel_thermal_interrupt);
->  
->  	rdmsr(MSR_IA32_MISC_ENABLE, l, h);
->  	wrmsr(MSR_IA32_MISC_ENABLE, l | MSR_IA32_MISC_ENABLE_TM1, h);
-> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> index b81c33202f41..090f9176ba62 100644
-> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> @@ -17,8 +17,9 @@
->  #include <linux/pm.h>
->  #include <linux/thermal.h>
->  #include <linux/debugfs.h>
-> +
->  #include <asm/cpu_device_id.h>
-> -#include <asm/mce.h>
-> +#include <asm/thermal.h>
->  
->  /*
->  * Rate control delay: Idea is to introduce denounce effect
+Apply over: 
 
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+
+-------------------------8<-------------------------
+Subject: [PATCH] opp: Allow lazy-linking of required-opps
+
+The OPP core currently requires the required opp tables to be available
+before the dependent OPP table is added, as it needs to create links
+from the dependent OPP table to the required ones. This may not be
+convenient for all the platforms though, as this requires strict
+ordering for probing the drivers.
+
+This patch allows lazy-linking of the required-opps. The OPP tables for
+which the required-opp-tables aren't available at the time of their
+initialization, are added to a special list of OPP tables:
+lazy_opp_tables. Later on, whenever a new OPP table is registered with
+the OPP core, we check if it is required by an OPP table in the pending
+list; if yes, then we complete the linking then and there.
+
+An OPP table is marked unusable until the time all its required-opp
+tables are available. And if lazy-linking fails for an OPP table, the
+OPP core disables all of its OPPs to make sure no one can use them.
+
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/opp/core.c |  45 +++++++++++++----
+ drivers/opp/of.c   | 122 +++++++++++++++++++++++++++++++++++++++++++--
+ drivers/opp/opp.h  |  10 +++-
+ 3 files changed, 161 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 7e4a51be5bb0..d886840628a0 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -27,6 +27,10 @@
+  * various states of availability.
+  */
+ LIST_HEAD(opp_tables);
++
++/* OPP tables with uninitialized required OPPs */
++LIST_HEAD(lazy_opp_tables);
++
+ /* Lock to allow exclusive modification to the device and opp lists */
+ DEFINE_MUTEX(opp_table_lock);
+ /* Flag indicating that opp_tables list is being updated at the moment */
+@@ -163,6 +167,10 @@ unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
+ 		return 0;
+ 	}
+ 
++	/* required-opps not fully initialized yet */
++	if (lazy_linking_pending(opp->opp_table))
++		return 0;
++
+ 	return opp->required_opps[index]->pstate;
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_get_required_pstate);
+@@ -885,6 +893,10 @@ static int _set_required_opps(struct device *dev,
+ 	if (!required_opp_tables)
+ 		return 0;
+ 
++	/* required-opps not fully initialized yet */
++	if (lazy_linking_pending(opp_table))
++		return -EBUSY;
++
+ 	/* Single genpd case */
+ 	if (!genpd_virt_devs)
+ 		return _set_required_opp(dev, dev, opp, 0);
+@@ -1182,6 +1194,7 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index,
+ 	mutex_init(&opp_table->lock);
+ 	mutex_init(&opp_table->genpd_virt_dev_lock);
+ 	INIT_LIST_HEAD(&opp_table->dev_list);
++	INIT_LIST_HEAD(&opp_table->lazy);
+ 
+ 	/* Mark regulator count uninitialized */
+ 	opp_table->regulator_count = -1;
+@@ -1623,6 +1636,21 @@ static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
+ 	return 0;
+ }
+ 
++void _opp_required_opps_available(struct dev_pm_opp *opp, int count)
++{
++	int i;
++
++	for (i = 0; i < count; i++) {
++		if (opp->required_opps[i]->available)
++			continue;
++
++		opp->available = false;
++		pr_warn("%s: OPP not supported by required OPP %pOF (%lu)\n",
++			 __func__, opp->required_opps[i]->np, opp->rate);
++		return;
++	}
++}
++
+ /*
+  * Returns:
+  * 0: On success. And appropriate error message for duplicate OPPs.
+@@ -1637,7 +1665,6 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+ 	     struct opp_table *opp_table, bool rate_not_available)
+ {
+ 	struct list_head *head;
+-	unsigned int i;
+ 	int ret;
+ 
+ 	mutex_lock(&opp_table->lock);
+@@ -1663,15 +1690,11 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+ 			 __func__, new_opp->rate);
+ 	}
+ 
+-	for (i = 0; i < opp_table->required_opp_count; i++) {
+-		if (new_opp->required_opps[i]->available)
+-			continue;
++	/* required-opps not fully initialized yet */
++	if (lazy_linking_pending(opp_table))
++		return 0;
+ 
+-		new_opp->available = false;
+-		dev_warn(dev, "%s: OPP not supported by required OPP %pOF (%lu)\n",
+-			 __func__, new_opp->required_opps[i]->np, new_opp->rate);
+-		break;
+-	}
++	_opp_required_opps_available(new_opp, opp_table->required_opp_count);
+ 
+ 	return 0;
+ }
+@@ -2377,6 +2400,10 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+ 	if (!src_table || !src_table->required_opp_count)
+ 		return pstate;
+ 
++	/* required-opps not fully initialized yet */
++	if (lazy_linking_pending(src_table))
++		return -EBUSY;
++
+ 	for (i = 0; i < src_table->required_opp_count; i++) {
+ 		if (src_table->required_opp_tables[i]->np == dst_table->np)
+ 			break;
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 20ccdaab9384..31ac55714b57 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -144,7 +144,7 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
+ 
+ 	for (i = 0; i < opp_table->required_opp_count; i++) {
+ 		if (IS_ERR_OR_NULL(required_opp_tables[i]))
+-			break;
++			continue;
+ 
+ 		dev_pm_opp_put_opp_table(required_opp_tables[i]);
+ 	}
+@@ -153,6 +153,7 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
+ 
+ 	opp_table->required_opp_count = 0;
+ 	opp_table->required_opp_tables = NULL;
++	list_del(&opp_table->lazy);
+ }
+ 
+ /*
+@@ -165,6 +166,7 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ {
+ 	struct opp_table **required_opp_tables;
+ 	struct device_node *required_np, *np;
++	bool lazy = false;
+ 	int count, i;
+ 
+ 	/* Traversing the first OPP node is all we need */
+@@ -195,8 +197,10 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 		required_opp_tables[i] = _find_table_of_opp_np(required_np);
+ 		of_node_put(required_np);
+ 
+-		if (IS_ERR(required_opp_tables[i]))
+-			goto free_required_tables;
++		if (IS_ERR(required_opp_tables[i])) {
++			lazy = true;
++			continue;
++		}
+ 
+ 		/*
+ 		 * We only support genpd's OPPs in the "required-opps" for now,
+@@ -210,6 +214,10 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 		}
+ 	}
+ 
++	/* Let's do the linking later on */
++	if (lazy)
++		list_add(&opp_table->lazy, &lazy_opp_tables);
++
+ 	goto put_np;
+ 
+ free_required_tables:
+@@ -278,14 +286,14 @@ void _of_opp_free_required_opps(struct opp_table *opp_table,
+ 
+ 	for (i = 0; i < opp_table->required_opp_count; i++) {
+ 		if (!required_opps[i])
+-			break;
++			continue;
+ 
+ 		/* Put the reference back */
+ 		dev_pm_opp_put(required_opps[i]);
+ 	}
+ 
+-	kfree(required_opps);
+ 	opp->required_opps = NULL;
++	kfree(required_opps);
+ }
+ 
+ /* Populate all required OPPs which are part of "required-opps" list */
+@@ -309,6 +317,10 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
+ 	for (i = 0; i < count; i++) {
+ 		required_table = opp_table->required_opp_tables[i];
+ 
++		/* Required table not added yet, we will link later */
++		if (IS_ERR_OR_NULL(required_table))
++			continue;
++
+ 		np = of_parse_required_opp(opp->np, i);
+ 		if (unlikely(!np)) {
+ 			ret = -ENODEV;
+@@ -334,6 +346,104 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
+ 	return ret;
+ }
+ 
++/* Link required OPPs for an individual OPP */
++static int lazy_link_required_opps(struct opp_table *opp_table,
++				   struct opp_table *new_table, int index)
++{
++	struct device_node *required_np;
++	struct dev_pm_opp *opp;
++
++	list_for_each_entry(opp, &opp_table->opp_list, node) {
++		required_np = of_parse_required_opp(opp->np, index);
++		if (unlikely(!required_np))
++			return -ENODEV;
++
++		opp->required_opps[index] = _find_opp_of_np(new_table, required_np);
++		of_node_put(required_np);
++
++		if (!opp->required_opps[index]) {
++			pr_err("%s: Unable to find required OPP node: %pOF (%d)\n",
++			       __func__, opp->np, index);
++			return -ENODEV;
++		}
++	}
++
++	return 0;
++}
++
++/* Link required OPPs for all OPPs of the newly added OPP table */
++static void lazy_link_required_opp_table(struct opp_table *new_table)
++{
++	struct opp_table *opp_table, *temp, **required_opp_tables;
++	struct device_node *required_np, *opp_np, *required_table_np;
++	struct dev_pm_opp *opp;
++	int i, ret;
++
++	/*
++	 * We only support genpd's OPPs in the "required-opps" for now,
++	 * as we don't know much about other cases.
++	 */
++	if (!new_table->is_genpd)
++		return;
++
++	mutex_lock(&opp_table_lock);
++
++	list_for_each_entry_safe(opp_table, temp, &lazy_opp_tables, lazy) {
++		bool lazy = false;
++
++		/* opp_np can't be invalid here */
++		opp_np = of_get_next_available_child(opp_table->np, NULL);
++
++		for (i = 0; i < opp_table->required_opp_count; i++) {
++			required_opp_tables = opp_table->required_opp_tables;
++
++			/* Required opp-table is already parsed */
++			if (!IS_ERR(required_opp_tables[i]))
++				continue;
++
++			/* required_np can't be invalid here */
++			required_np = of_parse_required_opp(opp_np, i);
++			required_table_np = of_get_parent(required_np);
++
++			of_node_put(required_table_np);
++			of_node_put(required_np);
++
++			/*
++			 * Newly added table isn't the required opp-table for
++			 * opp_table.
++			 */
++			if (required_table_np != new_table->np) {
++				lazy = true;
++				continue;
++			}
++
++			required_opp_tables[i] = new_table;
++			_get_opp_table_kref(new_table);
++
++			/* Link OPPs now */
++			ret = lazy_link_required_opps(opp_table, new_table, i);
++			if (ret) {
++				/* The OPPs will be marked unusable */
++				lazy = false;
++				break;
++			}
++		}
++
++		of_node_put(opp_np);
++
++		/* All required opp-tables found, remove from lazy list */
++		if (!lazy) {
++			list_del(&opp_table->lazy);
++			INIT_LIST_HEAD(&opp_table->lazy);
++
++			list_for_each_entry(opp, &opp_table->opp_list, node)
++				_opp_required_opps_available(opp, opp_table->required_opp_count);
++		}
++	}
++
++	mutex_unlock(&opp_table_lock);
++}
++
+ static int _bandwidth_supported(struct device *dev, struct opp_table *opp_table)
+ {
+ 	struct device_node *np, *opp_np;
+@@ -889,6 +999,8 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+ 		}
+ 	}
+ 
++	lazy_link_required_opp_table(opp_table);
++
+ 	return 0;
+ 
+ remove_static_opp:
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 734df1f764ec..a5a10b685bf7 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -26,7 +26,7 @@ struct regulator;
+ /* Lock to allow exclusive modification to the device and opp lists */
+ extern struct mutex opp_table_lock;
+ 
+-extern struct list_head opp_tables;
++extern struct list_head opp_tables, lazy_opp_tables;
+ 
+ /*
+  * Internal data structure organization with the OPP layer library is as
+@@ -168,7 +168,7 @@ enum opp_table_access {
+  * meant for book keeping and private to OPP library.
+  */
+ struct opp_table {
+-	struct list_head node;
++	struct list_head node, lazy;
+ 
+ 	struct blocking_notifier_head head;
+ 	struct list_head dev_list;
+@@ -230,6 +230,12 @@ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cp
+ struct opp_table *_add_opp_table(struct device *dev);
+ struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
+ void _put_opp_list_kref(struct opp_table *opp_table);
++void _opp_required_opps_available(struct dev_pm_opp *opp, int count);
++
++static inline bool lazy_linking_pending(struct opp_table *opp_table)
++{
++	return unlikely(!list_empty(&opp_table->lazy));
++}
+ 
+ #ifdef CONFIG_OF
+ void _of_init_opp_table(struct opp_table *opp_table, struct device *dev, int index);
+
+-- 
+viresh
