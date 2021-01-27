@@ -2,90 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8501304E96
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jan 2021 02:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF246305254
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jan 2021 06:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732059AbhA0AmQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jan 2021 19:42:16 -0500
-Received: from mail.ashbysoft.com ([51.140.81.171]:52142 "EHLO
-        mail.ashbysoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728357AbhAZWOq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jan 2021 17:14:46 -0500
-X-Greylist: delayed 2051 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 Jan 2021 17:14:43 EST
-Received: from ashbysoft.plus.com ([84.92.108.193] helo=phil.ashbysoft.com)
-        by mail.ashbysoft.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <martin@ashbysoft.com>)
-        id 1l4W3s-0003XA-Fu; Tue, 26 Jan 2021 21:39:44 +0000
-Received: from static-90-251-253-38.vodafonexdsl.co.uk ([90.251.253.38] helo=martin-desktop.pkbinternal.com)
-        by phil.ashbysoft.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <martin@ashbysoft.com>)
-        id 1l4W3r-00023d-QP; Tue, 26 Jan 2021 21:39:44 +0000
-From:   Martin Ashby <martin@ashbysoft.com>
-To:     t.schramm@manjaro.org, linux-pm@vger.kernel.org
-Cc:     Martin Ashby <martin@ashbysoft.com>
-Subject: [PATCH] Add CHARGE_NOW support to cw2015_battery.c
-Date:   Tue, 26 Jan 2021 21:39:28 +0000
-Message-Id: <20210126213928.136561-1-martin@ashbysoft.com>
-X-Mailer: git-send-email 2.25.1
+        id S232677AbhA0FqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jan 2021 00:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239108AbhA0Eax (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jan 2021 23:30:53 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AD8C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jan 2021 20:30:13 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id o63so714700pgo.6
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jan 2021 20:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=//ioNvWDQkvk42Fc89Zh4vygy6z/RRR07z1hB6ofzIU=;
+        b=d3GR+gHmnaa96Nm0QcKgBXmK3NGGMKMwA33oyu6d7nrqpoeQY+1ytoD4gwsnG1vqfY
+         TY/HPQ7TS8N7jTwjK+vxUfiRVR1YpM43Br5CXg9JWVgPt1d7sV6EYtL6cQV6ISSbTHfg
+         m54M+yzrLlRq7bNu167pbivdFiYFw2H6fi5lqieiqc29Wp+txQhPG2FMsvmC2a9AaNKE
+         xfi593mYnvYKMeb7gRwZgmLR4u+ScXbnIabpUw1jz5coZnfIjOViHg8BB7nrHDGDkxEF
+         UsZXFq/187R3pD6qVIYH8eKwX0DI9tibhvmOlEodYAOj7gL35FyEh6hQ7809px5Jmqbh
+         SYXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=//ioNvWDQkvk42Fc89Zh4vygy6z/RRR07z1hB6ofzIU=;
+        b=XKK3sAjZkmMO1es2qoDtRGK7qyXCPxqFKXl/oPXQ14qHi0xAAzNeXpvU1r5vNK4w7/
+         N6j5cLuS6ptwcNXrGmJ+Qdi9SOUe0Ne/U8QnI/mrtRbMCj9X+RaEm9HE1DULFhzj2+Ib
+         g0NCY3iJ9LR7/0Z1rLMVj5VYryGkrqNj1EQPIWSDUG0EgktCwDc4q760qgObl0FFBOyu
+         XzmdR0aRnEPkq678/rUAA8whsMqSrFCOc3BwsdfzDwEd9g4TspkUk4BKUNY6a+EVD+qe
+         WxVt7IcbpfvfEJfE7RS5plhijPbdIjcE/Nn/L0yABDdp5L3SJua/Jsl/N1Ty+6Fw6f5K
+         aZMg==
+X-Gm-Message-State: AOAM533BmPPl1rZ+B3yr7/1Mj+W9B/gPNBOq+jrcBXOnQxxk+xNrtHGL
+        04iv5Q0VysuPB/F+eoRy/3ZOhQ==
+X-Google-Smtp-Source: ABdhPJyqKTCjg4RoXfa5PGfc0trCuDCoxGmhg6h3Uthbq8A5dQcjfqyDV5/szcFEstejMp18qWeXGw==
+X-Received: by 2002:aa7:8d86:0:b029:19e:cb57:2849 with SMTP id i6-20020aa78d860000b029019ecb572849mr8603482pfr.54.1611721812500;
+        Tue, 26 Jan 2021 20:30:12 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id 17sm533107pgy.53.2021.01.26.20.30.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Jan 2021 20:30:11 -0800 (PST)
+Date:   Wed, 27 Jan 2021 10:00:09 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] opp: Add dev_pm_opp_sync_regulators()
+Message-ID: <20210127043009.rwy4l3u7fohlibec@vireshk-i7>
+References: <20210120222649.28149-1-digetx@gmail.com>
+ <20210120222649.28149-3-digetx@gmail.com>
+ <42abee3f-ce18-7930-b584-17ae69bdc498@gmail.com>
 MIME-Version: 1.0
-Signed-Off-By: Martin Ashby <martin@ashbysoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam_score: -2.9
-X-Spam_score_int: -28
-X-Spam_bar: --
-X-Spam_report: Spam detection software, running on the system "timmy-iii",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- @@CONTACT_ADDRESS@@ for details.
- Content preview:  CHARGE_NOW is expected by some user software (such as waybar)
-    instead of 'CAPACITY', in order to correctly calculate remaining battery
-   life. --- drivers/power/supply/cw2015_battery.c | 6 ++++++ 1 file changed,
-    6 insertions(+) 
- Content analysis details:   (-2.9 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
- -1.9 BAYES_00               BODY: Bayes spam probability is 0 to 1%
-                             [score: 0.0000]
+In-Reply-To: <42abee3f-ce18-7930-b584-17ae69bdc498@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CHARGE_NOW is expected by some user software (such as waybar) 
-instead of 'CAPACITY', in order to correctly calculate 
-remaining battery life.
+On 26-01-21, 01:30, Dmitry Osipenko wrote:
+> 21.01.2021 01:26, Dmitry Osipenko пишет:
+> > Extend OPP API with dev_pm_opp_sync_regulators() function, which syncs
+> > voltage state of regulators.
+> > 
+> > Tested-by: Peter Geis <pgwipeout@gmail.com>
+> > Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+> > Tested-by: Matt Merhar <mattmerhar@protonmail.com>
+> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> > ---
+> >  drivers/opp/core.c     | 41 +++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/pm_opp.h |  6 ++++++
+> >  2 files changed, 47 insertions(+)
+> 
+> Hello Viresh,
+> 
+> This is the last patch that is left unmerged from this series. We will
+> need it for implementation of the PD driver for NVIDIA Tegra20/30 SoCs.
+> Please consider applying it, thanks in advance!
 
----
- drivers/power/supply/cw2015_battery.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+I have replied to 0/4 earlier giving the reason why I haven't applied this.
 
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-index 0146f1bfc..d11059774 100644
---- a/drivers/power/supply/cw2015_battery.c
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -511,6 +511,11 @@ static int cw_battery_get_property(struct power_supply *psy,
- 			val->intval = 0;
- 		break;
- 
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		val->intval = cw_bat->battery.charge_full_design_uah;
-+		val->intval = val->intval * cw_bat->soc / 100;
-+		break;
-+
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		if (cw_battery_valid_time_to_empty(cw_bat) &&
- 		    cw_bat->battery.charge_full_design_uah > 0) {
-@@ -542,6 +547,7 @@ static enum power_supply_property cw_battery_properties[] = {
- 	POWER_SUPPLY_PROP_CHARGE_COUNTER,
- 	POWER_SUPPLY_PROP_CHARGE_FULL,
- 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CHARGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- };
- 
 -- 
-2.30.0
-
+viresh
