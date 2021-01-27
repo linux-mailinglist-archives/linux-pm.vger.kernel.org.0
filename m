@@ -2,122 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53A930631A
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jan 2021 19:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E9B306324
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jan 2021 19:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbhA0STK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jan 2021 13:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbhA0STK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 13:19:10 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1395AC061573
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 10:18:30 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id g15so1890304pjd.2
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 10:18:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Bwj01gKlHb+axgiSNe+6BbEjXmPX6Z52py8J/II9MKo=;
-        b=kM3lJLx8YAhMnYTIeWP5SMs/JAwRV/kwTgkOhgpXugO+i/Lb6sGNoF5RjeeOgPEEr5
-         1QfA0wqq6PSrxDRQqPnNsRtWGlps7BSvteeaOBFh7qrx6QVtA/bXsXrzDDsDzTdFW/ik
-         Pgg8yjCiUKSDqfgSZtV5iUG3RXxnj5c0iuFuGxWnkicfR5oUs2dRNtBUY4cLdi3tuHRF
-         silez0onwTJF8H2OpjA9VAjuAoh9OCp0SbMAgtyo9Emzz8vLKRV/CqiTEULUcRCioszb
-         Nhxt6hv7sSPLMzs/VJU4BP7LT7mTUvSnVnHYk3FjkLG2NhZab71DIg/PAYrXCyx92F+W
-         JyhA==
+        id S234878AbhA0SX2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jan 2021 13:23:28 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:41410 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234864AbhA0SX1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 13:23:27 -0500
+Received: by mail-oo1-f51.google.com with SMTP id q6so769636ooo.8
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 10:23:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Bwj01gKlHb+axgiSNe+6BbEjXmPX6Z52py8J/II9MKo=;
-        b=cTFC780MA2k+wiGVUYlQH5sAQiaMkq+Sm1DT2Kv4MEWE2eEqp42se4yxgC7Mj88/Ax
-         8jyH70d+htD345tMvZK09ZXILgBq+xfFP6bHjKxxdmnG6f386o8vCQIqkzZIJh5k2T3M
-         eLq6ih9YStc2esi/BWIveWmU+el9QZOJoqfljRL8cjb+rVFtR95HlD7qwRPbZZ6wlBzu
-         ZyvJBlBLvyX1VK3FTDy4wm2HctF4JcDU6k/4dynql5Q1DkNOdetwfdeQnNA5YggD55Qq
-         BghGWYhNcsMUnAW68HFgz7IS5Jb1HS7sunT7p8Ro2NWRdvQ40M5YWLi0GObhhl+0OM1L
-         QVHw==
-X-Gm-Message-State: AOAM530nV7vTzDm9e7ykge3xGSJ6MNATz5KRsHIm2n+MFfTCd1SbPRg+
-        pCtVV9kCktY8Vf+GQFao25OQbGjzeKyVBXEh
-X-Google-Smtp-Source: ABdhPJx14bTWHquYwAUR8CP1IUCdoW/fmamx61WqqLOgt3v06hcwCkF/JdUtJkSA92WO7oc85nrR9Q==
-X-Received: by 2002:a17:903:248f:b029:de:c703:9839 with SMTP id p15-20020a170903248fb02900dec7039839mr12540236plw.42.1611771509706;
-        Wed, 27 Jan 2021 10:18:29 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 5sm2740823pjz.23.2021.01.27.10.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jan 2021 10:18:28 -0800 (PST)
-Message-ID: <6011ae74.1c69fb81.f2789.60b7@mx.google.com>
-Date:   Wed, 27 Jan 2021 10:18:28 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ST67nQdI5wRH8CqvlonVuOTDz2NikvzARu57CePeA1U=;
+        b=d8PvLjiIEgUX92woQxkkPARCtITzR+cM/ighT5p/VlJPeV3appG/oBa7IrSuEDPvnc
+         1+FjuVIpWxl26fUVBDoY1g+j2Lg/p8+Bythh3vlNMKE9U1U3tYzoRjd+psDuad0xLpLg
+         q2342923G+C4lfmaHcCrzfexNOO5xg2ZRCYMXzEw20XjFy0dypVNlmezh08jV6sj8dUx
+         KxdLoNbWevPAeSDUcN9ra0qBnP6EaCajrdlGAteALn4S4NfxcIROE5RWJCYWM7TP8cLd
+         ZbeMXfnQE7np1wEjqNF5GE6h7iaZjPzfZlQ970khmSkO2fUgppR7fu46cCwaRlgECcZE
+         hbjA==
+X-Gm-Message-State: AOAM533WobTv2oZ1w+xjEDu8+syqNxhWmaakIY8tRnBGOa9JMiU5fQd+
+        bUe0WWG+zmy1ihT9+CCqnjiah19COQ53+f1XWPI=
+X-Google-Smtp-Source: ABdhPJwDA4MCFWs+YpQCIzHsjP2rQZdKhdA4jVwO9uaLyYtAnqIX9sI/+NIFzUk9JOXxHNVOJEw98iSO4tD0prsyCRg=
+X-Received: by 2002:a4a:9873:: with SMTP id z48mr8661412ooi.44.1611771766463;
+ Wed, 27 Jan 2021 10:22:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.11-rc5-62-g93c3d4245f20
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (v5.11-rc5-62-g93c3d4245f20)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20210126212940.2922275-1-helgaas@kernel.org>
+In-Reply-To: <20210126212940.2922275-1-helgaas@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 27 Jan 2021 19:22:35 +0100
+Message-ID: <CAJZ5v0ix5KHpe4yX20ddp8JaFgBYfVT80mAe4XY2m0pe3_m9aQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: Use dev_printk() when possible
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (v5.11-rc5-62-g93c3d4245f20)
+On Wed, Jan 27, 2021 at 8:23 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Use dev_printk() when possible to make messages more consistent with other
+> device-related messages.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/base/power/main.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 46793276598d..f893c3c5af07 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -16,6 +16,7 @@
+>   */
+>
+>  #define pr_fmt(fmt) "PM: " fmt
+> +#define dev_fmt pr_fmt
+>
+>  #include <linux/device.h>
+>  #include <linux/export.h>
+> @@ -449,8 +450,8 @@ static void pm_dev_dbg(struct device *dev, pm_message_t state, const char *info)
+>  static void pm_dev_err(struct device *dev, pm_message_t state, const char *info,
+>                         int error)
+>  {
+> -       pr_err("Device %s failed to %s%s: error %d\n",
+> -              dev_name(dev), pm_verb(state.event), info, error);
+> +       dev_err(dev, "failed to %s%s: error %d\n", pm_verb(state.event), info,
+> +               error);
+>  }
+>
+>  static void dpm_show_time(ktime_t starttime, pm_message_t state, int error,
+> @@ -1897,8 +1898,8 @@ int dpm_prepare(pm_message_t state)
+>                                 error = 0;
+>                                 continue;
+>                         }
+> -                       pr_info("Device %s not prepared for power transition: code %d\n",
+> -                               dev_name(dev), error);
+> +                       dev_info(dev, "not prepared for power transition: code %d\n",
+> +                                error);
+>                         put_device(dev);
+>                         break;
+>                 }
+> --
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-11-rc5-62-g93c3d4245f20/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.11-rc5-62-g93c3d4245f20
-Git Commit: 93c3d4245f208b925982f9e9bef346f47dff0157
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+Applied as 5.12 material, thanks!
