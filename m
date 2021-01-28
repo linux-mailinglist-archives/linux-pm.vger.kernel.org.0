@@ -2,117 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B030E30739F
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 11:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5793073AA
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 11:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbhA1KWr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 05:22:47 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:46845 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232167AbhA1KWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 05:22:30 -0500
-Received: by mail-ot1-f44.google.com with SMTP id d1so4656563otl.13;
-        Thu, 28 Jan 2021 02:22:14 -0800 (PST)
+        id S231819AbhA1KYt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 05:24:49 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:42960 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232507AbhA1KYC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 05:24:02 -0500
+Received: by mail-ot1-f48.google.com with SMTP id f6so4661706ots.9;
+        Thu, 28 Jan 2021 02:23:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HDfQ7EgSz4He6IVrUzqy89nGy356H19n/4Ap6Knawyw=;
-        b=ap5O9cqTcOiSHFhFdbRrv53BN6XowdeTuBT1GP9VPeY+ZNabvIwActdIi7PQ47tvbV
-         /YDmcZ+nY6gZKcmfEaLUvP6zF6DoF1yYK3FCj3QG/gKoALMMKIy966Veb/uk7vYW16fe
-         A5piiN825Sk5u/MZFMC+Q9bVHmuGzttXQUFPZPzhWtx6wXVGJJeeIXY8y3/pdvX4ASAC
-         lFXndUvDktmKSbPDzPVRRCO6XTv9Ru1uvOG1CM3k7qDJSNoXw30rxMqWmpPywwOSDUMA
-         Oer+6NQ9jcBMfpHHEuzTOSlweRtKkArqFojZ1wjhJUdrcBNk8C6H/obzrnzVdQ3/xqrM
-         GGyw==
-X-Gm-Message-State: AOAM532mflGamN0r49fluHL4KmEJBqCZzAZg4X2HpYsQuGNmRcMFBLrj
-        OfxVkla/cS6HJNSzKNMFeC7s4Ouy8mfgNCp43XNiwJSLdck=
-X-Google-Smtp-Source: ABdhPJwJviHVEMHN6dwg9pHl9sFzPeOTWi/Tyw7MUMRzUkqGbWVHXybuLc31QSYFbmu849bxozre+7WWIBRJddZRpNc=
-X-Received: by 2002:a05:6830:2313:: with SMTP id u19mr11117098ote.321.1611829309173;
- Thu, 28 Jan 2021 02:21:49 -0800 (PST)
+        bh=Gmohf92thXCgnWNXBIkteP5MCZIewZGUS0ihSmdrono=;
+        b=Lx1h/7KJdOhtRKDsXT8IpfRsREpCGJ30jtR9gVh2L4x4KIW5qYhsP5ytfREUEkKvOV
+         yfQIaFvCFao/B5TME2HYKZ3M2O+6uP1a1RUoDz1wr6Wrrphxs0grrMEMftRK4vB7R5Jd
+         VUfvLu8KwQ5E/RiMGadrWEqVA4SamJDYPV8sL7zR88xGk6etZZffdX8/qJmaar/nldrJ
+         xlYPRTFjyX/QGGT7iBWHrCFc16fNoQZRMVgyDgUSdbP09lT/wcJQIaFgIrPjVaWbHm1l
+         XIRR6Psb1+ME8q/eguu+mIyvGgg7DXq5n9hbnekX734kZy9kbWW84I2bT3oVgJsol1pJ
+         4YBQ==
+X-Gm-Message-State: AOAM530IPxAxuNTQiDUVKlwWPoAnbIZk/bRXQuKXOxxaJ8Yz5l9iwqzz
+        t/N405oz6NNonaldyVCck1BK4P9GXB3AYBLPg0A=
+X-Google-Smtp-Source: ABdhPJz2JsbM785dSppFtayfF32mQBJFoGoCgyX1owdBPGhH3NaBveB7k1HEjJct57Cr5r01VRmzQdtIkYeeztyXMgo=
+X-Received: by 2002:a9d:7a4a:: with SMTP id z10mr11170677otm.206.1611829401499;
+ Thu, 28 Jan 2021 02:23:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com> <20210128071133.60335-30-chaitanya.kulkarni@wdc.com>
-In-Reply-To: <20210128071133.60335-30-chaitanya.kulkarni@wdc.com>
+References: <20201231060319.137133-1-kai.heng.feng@canonical.com> <s5h7dnxxz1k.wl-tiwai@suse.de>
+In-Reply-To: <s5h7dnxxz1k.wl-tiwai@suse.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Jan 2021 11:21:36 +0100
-Message-ID: <CAJZ5v0h01e4LgV0c5FxLorcc6iFW2LVzC=hJcd7LNAJ6D0E8jg@mail.gmail.com>
-Subject: Re: [RFC PATCH 29/34] power/swap: use bio_new in hib_submit_io
-To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        dm-devel@redhat.com, linux-block@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        drbd-dev@lists.linbit.com, xen-devel@lists.xenproject.org,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        target-devel@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
-        ocfs2-devel@oss.oracle.com, Linux PM <linux-pm@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        roger.pau@citrix.com, Minchan Kim <minchan@kernel.org>,
-        ngupta@vflare.org,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, "Ted Ts'o" <tytso@mit.edu>,
-        jaegeuk@kernel.org, Eric Biggers <ebiggers@kernel.org>,
-        djwong@kernel.org, shaggy@kernel.org, konishi.ryusuke@gmail.com,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>, damien.lemoal@wdc.com,
-        naohiro.aota@wdc.com, jth@kernel.org,
+Date:   Thu, 28 Jan 2021 11:23:08 +0100
+Message-ID: <CAJZ5v0jeZea4gHN0EJWfbZr4rdXvsc1KuYBQm5XmLhLvWZgM6g@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: core: Resume suspended device if
+ direct-complete is disabled
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hannes Reinecke <hare@suse.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Alex Shi <alex.shi@linux.alibaba.com>, asml.silence@gmail.com,
-        Ming Lei <ming.lei@redhat.com>, Tejun Heo <tj@kernel.org>,
-        osandov@fb.com, Bart Van Assche <bvanassche@acm.org>,
-        jefflexu@linux.alibaba.com
+        "Kenneth R. Crudup" <kenny@panix.com>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 8:21 AM Chaitanya Kulkarni
-<chaitanya.kulkarni@wdc.com> wrote:
+On Thu, Jan 28, 2021 at 9:11 AM Takashi Iwai <tiwai@suse.de> wrote:
 >
+> On Thu, 31 Dec 2020 07:03:19 +0100,
+> Kai-Heng Feng wrote:
+> >
+> > HDA controller can't be runtime-suspended after commit 215a22ed31a1
+> > ("ALSA: hda: Refactor codjc PM to use direct-complete optimization"),
+> > which enables direct-complete for HDA codec.
+> >
+> > The HDA codec driver doesn't expect direct-complete will be disabled
+> > after it returns a positive value from prepare() callback. So freeze()
+> > is called directly when it's runtime-suspended, breaks the balance of
+> > its internal codec_powered counting.
+> >
+> > So if a device is prepared for direct-complete but PM core breaks the
+> > assumption, resume the device to keep PM operations balanced.
+> >
+> > Fixes: 215a22ed31a1 ("ALSA: hda: Refactor codec PM to use direct-complete optimization")
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>
+> Kai-Heng, is this fix still needed for 5.11?
+>
+> The description mentions about HD-audio controller, while the recent
+> revert was the HD-audio codec, so I suppose it's still affected?
 
-Please explain in the changelog why making this change is a good idea.
+Regardless, this is not the right fix, because it doesn't take driver
+flags into account AFAICS.
 
-> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-> ---
->  kernel/power/swap.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index c73f2e295167..e92e36c053a6 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -271,13 +271,12 @@ static int hib_submit_io(int op, int op_flags, pgoff_t page_off, void *addr,
->                 struct hib_bio_batch *hb)
->  {
->         struct page *page = virt_to_page(addr);
-> +       sector_t sect = page_off * (PAGE_SIZE >> 9);
->         struct bio *bio;
->         int error = 0;
->
-> -       bio = bio_alloc(GFP_NOIO | __GFP_HIGH, 1);
-> -       bio->bi_iter.bi_sector = page_off * (PAGE_SIZE >> 9);
-> -       bio_set_dev(bio, hib_resume_bdev);
-> -       bio_set_op_attrs(bio, op, op_flags);
-> +       bio = bio_new(hib_resume_bdev, sect, op, op_flags, 1,
-> +                     GFP_NOIO | __GFP_HIGH);
->
->         if (bio_add_page(bio, page, PAGE_SIZE, 0) < PAGE_SIZE) {
->                 pr_err("Adding page to bio failed at %llu\n",
-> --
-> 2.22.1
->
+> > ---
+> >  drivers/base/power/main.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> > index 46793276598d..9c0e25a92ad0 100644
+> > --- a/drivers/base/power/main.c
+> > +++ b/drivers/base/power/main.c
+> > @@ -1849,6 +1849,10 @@ static int device_prepare(struct device *dev, pm_message_t state)
+> >               (ret > 0 || dev->power.no_pm_callbacks) &&
+> >               !dev_pm_test_driver_flags(dev, DPM_FLAG_NO_DIRECT_COMPLETE);
+> >       spin_unlock_irq(&dev->power.lock);
+> > +
+> > +     if (ret > 0 && !dev->power.direct_complete)
+> > +             pm_runtime_resume(dev);
+> > +
+> >       return 0;
+> >  }
+> >
+> > --
+> > 2.29.2
+> >
