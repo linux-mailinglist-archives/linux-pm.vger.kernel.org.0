@@ -2,123 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6334830686D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 01:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A14306883
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 01:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbhA1AM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jan 2021 19:12:56 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36306 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbhA1ALv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 19:11:51 -0500
+        id S231244AbhA1ASY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jan 2021 19:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231282AbhA1ARo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 19:17:44 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10439C061574
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 16:17:04 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id D5F161F4560D
+        with ESMTPSA id CFC3A1F4560D
 Received: by earth.universe (Postfix, from userid 1000)
-        id 7A29E3C0C97; Thu, 28 Jan 2021 01:10:57 +0100 (CET)
-Date:   Thu, 28 Jan 2021 01:10:57 +0100
+        id 4FBFE3C0C97; Thu, 28 Jan 2021 01:17:00 +0100 (CET)
+Date:   Thu, 28 Jan 2021 01:17:00 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Lee Jones <lee.jones@linaro.org>,
         Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 05/10] power: supply: ab8500: Move to componentized
- binding
-Message-ID: <20210128001057.urzxmx6f53qrek4o@earth.universe>
+Subject: Re: [PATCH 00/10] power: supply: ab8500: refactor and isolate
+Message-ID: <20210128001700.pkuyfpq6uzcjb5ud@earth.universe>
 References: <20210123221908.2993388-1-linus.walleij@linaro.org>
- <20210123221908.2993388-6-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hn2idq3ef4spysyr"
+        protocol="application/pgp-signature"; boundary="mspejcb5fu33ajvu"
 Content-Disposition: inline
-In-Reply-To: <20210123221908.2993388-6-linus.walleij@linaro.org>
+In-Reply-To: <20210123221908.2993388-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---hn2idq3ef4spysyr
+--mspejcb5fu33ajvu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Jan 23, 2021 at 11:19:03PM +0100, Linus Walleij wrote:
-> The driver has problems with the different components of
-> the charging code racing with each other to probe().
+On Sat, Jan 23, 2021 at 11:18:58PM +0100, Linus Walleij wrote:
+> The AB8500 code was merged in 2012 and hasn't seen
+> much love in the years since that, but the code is
+> needed by the PostmarketOS community.
+> commit a1149ae975547142f78e96745a994cb9b0e98fd2
+> ("ARM: ux500: Disable Power Supply and Battery Management by default")
+> disabled the use of the code in 2013 mentioning that
+> "drivers are more than a little bit broken".
 >=20
-> This results in all four subdrivers populating battery
-> information to ascertain that it is populated for their
-> own needs for example.
+> Charging is nice. The platform is not unused. Let's
+> begin to fix this.
 >=20
-> Fix this by using component probing and thus expressing
-> to the kernel that these are dependent components.
-> The probes can happen in any order and will only acquire
-> resources such as state container, regulators and
-> interrupts and initialize the data structures, but no
-> execution happens until the .bind() callback is called.
+> This patch set does a bunch of things to the AB8500
+> charger code:
 >=20
-> The charging driver is the main component and binds
-> first, then bind in order the three subcomponents:
-> ab8500-fg, ab8500-btemp and ab8500-chargalg.
+> - Cleans out non-devicetree code as we are now always
+>   probing Ux500 and AB8500 from the device tree.
 >=20
-> Do some housekeeping while we are moving the code around.
-> Like use devm_* for IRQs so as to cut down on some
-> boilerplate.
+> - Breaks the ties to the MFD subsystem and pushes the
+>   charging-related headers down to power/supply/*
+>   these headers were shared in include/linux/mfd in
+>   order to support board files, and with device tree
+>   that is unnecessary.
 >=20
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+> - Bind all subdrivers using the driver component
+>   model which is common in the DRM subsystem, and as
+>   a consequence we know the order the subdrivers are
+>   initialized and we can cut the code that is just
+>   there to satisfy the case where the drivers probe
+>   in different order.
+>=20
+> - Add some minor code that makes the drivers actually
+>   work (it was very close).
+>=20
+> Right now it has dependencies on the MFD tree (this
+> series is based on thefor-mfd-next branch) due to a
+> renaming of the cell macro so the best would be if Lee
+> could merge it, at least partly. I am also fine if
+> we only merge patches 1 thru 4 into MFD this merge
+> window to isolate the charger code into drivers/power
+> so we can continue next merge window with the rest
+> of the code.
 
-[...]
+Patches 1-4 and 6-9 are
 
-> +	ret =3D component_bind_all(dev, di);
-> +        if (ret) {
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-^^^ typo (prefixed with space)
-
-> +		dev_err(dev, "can't bind component devices\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
-
-> +	mutex_lock(&di->charger_attached_mutex);
-> =20
-> -	/* Register interrupts */
-> -	for (i =3D 0; i < ARRAY_SIZE(ab8500_charger_irq); i++) {
-> -		irq =3D platform_get_irq_byname(pdev, ab8500_charger_irq[i].name);
-> -		if (irq < 0) {
-> -			ret =3D irq;
-> -			goto free_irq;
-> -		}
-> +	mutex_unlock(&di->charger_attached_mutex);
-
-what's the purpose of this empty mutex lock/unlock?
+I think best solution would be to merge patches 1-4 using
+an immutable branch based on v5.11-rc1 and Lee fixing the
+trivial conflict when merging the immutable branch into
+his tree. That way I can also merge it into the power-supply
+tree and take the remaining patches (but I actually have
+feedback/questions for patch 5 and 10).
 
 -- Sebastian
 
---hn2idq3ef4spysyr
+> Linus Walleij (10):
+>   power: supply: ab8500: Require device tree
+>   power: supply: ab8500: Push data to power supply code
+>   power: supply: ab8500: Push algorithm to power supply code
+>   power: supply: ab8500: Push data to power supply code
+>   power: supply: ab8500: Move to componentized binding
+>   power: supply: ab8500: Call battery population once
+>   power: supply: ab8500: Avoid NULL pointers
+>   power: supply: ab8500: Enable USB and AC
+>   power: supply: ab8500: Drop unused member
+>   power: supply: ab8500_bmdata: Use standard phandle
+>=20
+>  drivers/mfd/ab8500-core.c                     |  17 +-
+>  drivers/power/supply/Kconfig                  |   2 +-
+>  .../power/supply}/ab8500-bm.h                 | 298 ++++++++++++-
+>  .../power/supply/ab8500-chargalg.h            |   6 +-
+>  drivers/power/supply/ab8500_bmdata.c          |   6 +-
+>  drivers/power/supply/ab8500_btemp.c           | 162 +++----
+>  drivers/power/supply/ab8500_charger.c         | 406 ++++++++++--------
+>  drivers/power/supply/ab8500_fg.c              | 154 +++----
+>  drivers/power/supply/abx500_chargalg.c        | 129 +++---
+>  drivers/power/supply/pm2301_charger.c         |   4 +-
+>  include/linux/mfd/abx500.h                    | 276 ------------
+>  11 files changed, 720 insertions(+), 740 deletions(-)
+>  rename {include/linux/mfd/abx500 =3D> drivers/power/supply}/ab8500-bm.h =
+(58%)
+>  rename include/linux/mfd/abx500/ux500_chargalg.h =3D> drivers/power/supp=
+ly/ab8500-chargalg.h (93%)
+>=20
+> --=20
+> 2.29.2
+>=20
+
+--mspejcb5fu33ajvu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmASAREACgkQ2O7X88g7
-+ppelxAAnijnHh+bolHeRIY1iqsV8I0FEb/CiiUJbUD6JA1XZerq+NIF859DRR5O
-CR6AnMrMmKIOr2FhZ3aVJsdwwDEyB4tBK6sPBpj9ukEzRcXgeL8lk04A1Db7DIkz
-ImMN/tg9MTee6B9gcHG8lyVDWjlsYyPxGhDiIgOJVOhMyCyKX/4b9j/NcD9uIO6e
-YFZVYlkRxoxocGJQDRc7JgGZB0TnGBTLI5bXVJkDZ2LkQE55uhCFRyGdJHu8aPxE
-nWSCK+dudVTKmP/D8o7DDdjRgpuQ84R10T08njrMzmPHvCbSolzcb+bj8DgFGDn4
-HgBoEiG7aR9jQtEHiW1A+yof8iwfuoGVTQzAQNCIfm5jomPCz8hcFnzKf9+VS72G
-DUoFOYMKYgyQa2KfrrDUn7n3KkKAUEl6cdwGSiMygX9j24Y2qRq24VJ5z9XO+G6N
-GItjpBhu/teFCUPDZr7JhB1hrw3ZqZNEoq34gdbT6zmQb3SWs86Q6BMeNHr29zJq
-CilDfHkGChPi6+3/xR5VaAasAJo0fKn920pX0pmq5Q63ZGBkWjYu0jrVjgj9SSbF
-Tqvvx/71RUXS0a07tvHj0Ifikb4eXFpwtMl+nz1KUdVil1WHaFdjC9AT63+3UYtR
-AZk7XxCraovNqxCMJ0IKGLbIewoABJ20y5NGqJUypvK5apfg2RE=
-=vQiT
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmASAnwACgkQ2O7X88g7
++pqqEg//Vc6lnORuzOVt0i63m9+CPZHT/uSRqsrZqKknHJmiFgBZTBiXXGT89uA+
+XGWieq8b52srA+wj9Gmj12drEIQj0kn2IUE4HCv3irIHyFFR5O2BfFpZo6optW85
+dDz2KeW/LNHulIHmNnfOZKj6Ib5CwMQqXqgUGAP+aSApIqJd+APAXcV1f7FNMEjw
+xVby3GsDgreuOFV9ELAgeS3Z6eUNQ4gaHEumuwMLAoNml0Z1DPbJ+YGqIWtohdW1
+A8N5WlZmda+Ram5MPruu7MCDbYX2d+TcqRAWpZbeMGWedni1u1gVrEwNEL9Bomi6
+t9jZGuVopvvFkzkKPiIQkhXfwGiiKvapvHQI2LtJC3ww2UYRMuO+Q6Lo8yGCrmAZ
+f7JE2BoWbc2QsE/UDWosf5ppqS1bS7QROZ4LKBs/LH7aCNasBFQmcBi5H2bzB+Zv
+dATllV2yOTc13II9MuG8BQIq9ycUC0hz2Y2SLFePH9MsIkM7/8h/0kPve6idu0Yl
+K0OOcaqrZQw5AhvJ91OXL+BIbsKclCF0xdJOmt7jwbQjzVQIKTuFWGbyCeUfHMrG
+HHoYIaUTaGy6KWAvWVFJAy+P9dGGiZUaqBHAByVYnC9KnOK92/v1Ezw8aH7pSz0M
+4bm9UGdXyuRrbH945zfwTsuz7bxjiu27k+K5UejMCDOVkYg6aC4=
+=y147
 -----END PGP SIGNATURE-----
 
---hn2idq3ef4spysyr--
+--mspejcb5fu33ajvu--
