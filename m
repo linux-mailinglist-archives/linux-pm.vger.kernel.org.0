@@ -2,159 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7018F30709E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 09:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732A53070C3
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 09:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbhA1H5I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 02:57:08 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:22258 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbhA1HND (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 02:13:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1611817983; x=1643353983;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1Q7huJyMDOVynURh2o3jolV4xRilOq3cl8xkF29/liU=;
-  b=BF656N9Md7amskVa9OhnRt/3h1JnVMpu86eJqYskPF+LqKax7r6fVHzP
-   19/IA4ZNrNUnwZCe9bqDsHTiLLnCCNy4xhPY5KO98fsmEeVZJ3QeJGo/0
-   YQjafx7kHo2MMEEvSGDcjawUjt6GU4i+gYGpuQB6zq/DOLgexYx141tbw
-   6ozPlkWuGM44zvfRqIbGPPzwkZipdhfaVuZMnK7ni60sUXAwPkcx5bzC9
-   qKXUkxhsZTZAGpy9P1boa2vXaJMWFLW/Mgf3XlBUj5uc1UCoINxsHCPqr
-   8CdejfBECfeJDkX16FQPpuxfLOpsyhsHpy56oT6sbi/DgOKiGMvfHtE1m
-   A==;
-IronPort-SDR: vIZnkF2Czkmm3+nF5M88vV6vEUmFH522u3yLtlyjYiCT+NamsDP17XNTBpQzFGmeK8g6YBfNWS
- lh/GaT2O5YMWRSMWVVz9esscsPjiZ3H1Ngab/0oRFWYpciQX9meaNknw3eMEDQqzsTyQyKegg8
- bEVeuNjra5+epTKh4tkkWTkTX+yUWoRtDofjMYy11VFKyn6DVnqo2E4ANqwGD8fY0HHkoY4Tdi
- rbI4THhx1yPQ52r4iHACoeUSOWEOssoLNeZu301qgZXTaKppcNso9dmSv/TWOp0MrK1CTDfws3
- 4ik=
-X-IronPort-AV: E=Sophos;i="5.79,381,1602518400"; 
-   d="scan'208";a="158517214"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2021 15:11:57 +0800
-IronPort-SDR: xYgbyLAQ5HcCHqYFed1v2HqdFeAtuF8ugd9ioDRWNeAXATeaQ56qJsRgg0dYMy8R9EzHkYHCxw
- YxXGrxu8y8M98gONOgYP2L/1S3B+xeKwhKTWed/7mcR1BYud6C3z+4XL6SQVoOAFFMmHjk8+yl
- AcOge4vA1UukuwkonUt2Xh+9FwxCU5TX2qPmaqHgAW6sYM1K93z0XE8H7nu3c/++BX+aw+Y4If
- wLYWCWSefZ7b90CPVo+SNPlufolSEqBrVnih/6bIIgcZqGTlAew0INs9NtYPAE0C/eQFvtH276
- eEqeaEW1P0WmxTowkAf9s6J8
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 22:56:17 -0800
-IronPort-SDR: HYKG8+pmcZ9KZ4KZ0ijEvKFdi7W0dgGDXHFsWIaWNxW3zaOZulAuYVmKBU97gor6eDg6ylP5Ni
- 6/ahnxe6yM79ewZwsqKvrfMjvqQiAhLVOYCtlxS8Bh1Gz/vhwXPlVRnl4SwtLQD680yYKL86EL
- o3y724i0cbqHM9ChTIb0swq0MYuYoJx+iwqVjQ/XkVzNSKEtJ8uwRbdybmRUPVMHWHGtPAl98+
- IjNd0sVxBZiY+I2eDgAQpiJ9r1dqmBNoZAqnfBCkqleNy/DSVZGKQaXDO89s0wR1FlZS/ZCSSd
- 5w0=
-WDCIronportException: Internal
-Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
-  by uls-op-cesaip02.wdc.com with ESMTP; 27 Jan 2021 23:11:57 -0800
-From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-To:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        xen-devel@lists.xenproject.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
-        ocfs2-devel@oss.oracle.com, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     axboe@kernel.dk, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, konrad.wilk@oracle.com,
-        roger.pau@citrix.com, minchan@kernel.org, ngupta@vflare.org,
-        sergey.senozhatsky.work@gmail.com, agk@redhat.com,
-        snitzer@redhat.com, hch@lst.de, sagi@grimberg.me,
-        chaitanya.kulkarni@wdc.com, martin.petersen@oracle.com,
-        viro@zeniv.linux.org.uk, tytso@mit.edu, jaegeuk@kernel.org,
-        ebiggers@kernel.org, djwong@kernel.org, shaggy@kernel.org,
-        konishi.ryusuke@gmail.com, mark@fasheh.com, jlbec@evilplan.org,
-        joseph.qi@linux.alibaba.com, damien.lemoal@wdc.com,
-        naohiro.aota@wdc.com, jth@kernel.org, rjw@rjwysocki.net,
-        len.brown@intel.com, pavel@ucw.cz, akpm@linux-foundation.org,
-        hare@suse.de, gustavoars@kernel.org, tiwai@suse.de,
-        alex.shi@linux.alibaba.com, asml.silence@gmail.com,
-        ming.lei@redhat.com, tj@kernel.org, osandov@fb.com,
-        bvanassche@acm.org, jefflexu@linux.alibaba.com
-Subject: [RFC PATCH 02/34] block: introduce and use bio_new
-Date:   Wed, 27 Jan 2021 23:11:01 -0800
-Message-Id: <20210128071133.60335-3-chaitanya.kulkarni@wdc.com>
-X-Mailer: git-send-email 2.22.1
-In-Reply-To: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
-References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229774AbhA1IK7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 03:10:59 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36610 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231428AbhA1IKl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 28 Jan 2021 03:10:41 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2E3F2ABC4;
+        Thu, 28 Jan 2021 08:09:59 +0000 (UTC)
+Date:   Thu, 28 Jan 2021 09:09:59 +0100
+Message-ID: <s5h7dnxxz1k.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     rjw@rjwysocki.net, kenny@panix.com, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend,
+        aka swsusp)), linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH] PM: sleep: core: Resume suspended device if direct-complete is disabled
+In-Reply-To: <20201231060319.137133-1-kai.heng.feng@canonical.com>
+References: <20201231060319.137133-1-kai.heng.feng@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce bio_new() helper and use it in blk-lib.c to allocate and
-initialize various non-optional or semi-optional members of the bio
-along with bio allocation done with bio_alloc(). Here we also calmp the
-max_bvecs for bio with BIO_MAX_PAGES before we pass to bio_alloc().
+On Thu, 31 Dec 2020 07:03:19 +0100,
+Kai-Heng Feng wrote:
+> 
+> HDA controller can't be runtime-suspended after commit 215a22ed31a1
+> ("ALSA: hda: Refactor codjc PM to use direct-complete optimization"),
+> which enables direct-complete for HDA codec.
+> 
+> The HDA codec driver doesn't expect direct-complete will be disabled
+> after it returns a positive value from prepare() callback. So freeze()
+> is called directly when it's runtime-suspended, breaks the balance of
+> its internal codec_powered counting.
+> 
+> So if a device is prepared for direct-complete but PM core breaks the
+> assumption, resume the device to keep PM operations balanced.
+> 
+> Fixes: 215a22ed31a1 ("ALSA: hda: Refactor codec PM to use direct-complete optimization")
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
----
- block/blk-lib.c     |  6 +-----
- include/linux/bio.h | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+), 5 deletions(-)
+Kai-Heng, is this fix still needed for 5.11?
 
-diff --git a/block/blk-lib.c b/block/blk-lib.c
-index fb486a0bdb58..ec29415f00dd 100644
---- a/block/blk-lib.c
-+++ b/block/blk-lib.c
-@@ -14,17 +14,13 @@ struct bio *blk_next_bio(struct bio *bio, struct block_device *bdev,
- 			sector_t sect, unsigned op, unsigned opf,
- 			unsigned int nr_pages, gfp_t gfp)
- {
--	struct bio *new = bio_alloc(gfp, nr_pages);
-+	struct bio *new = bio_new(bdev, sect, op, opf, gfp, nr_pages);
- 
- 	if (bio) {
- 		bio_chain(bio, new);
- 		submit_bio(bio);
- 	}
- 
--	new->bi_iter.bi_sector = sect;
--	bio_set_dev(new, bdev);
--	bio_set_op_attrs(new, op, opf);
--
- 	return new;
- }
- 
-diff --git a/include/linux/bio.h b/include/linux/bio.h
-index c74857cf1252..2a09ba100546 100644
---- a/include/linux/bio.h
-+++ b/include/linux/bio.h
-@@ -826,5 +826,30 @@ static inline void bio_set_polled(struct bio *bio, struct kiocb *kiocb)
- 	if (!is_sync_kiocb(kiocb))
- 		bio->bi_opf |= REQ_NOWAIT;
- }
-+/**
-+ * bio_new -	allcate and initialize new bio
-+ * @bdev:	blockdev to issue discard for
-+ * @sector:	start sector
-+ * @op:		REQ_OP_XXX from enum req_opf
-+ * @op_flags:	REQ_XXX from enum req_flag_bits
-+ * @max_bvecs:	maximum bvec to be allocated for this bio
-+ * @gfp_mask:	memory allocation flags (for bio_alloc)
-+ *
-+ * Description:
-+ *    Allocates, initializes common members, and returns a new bio.
-+ */
-+static inline struct bio *bio_new(struct block_device *bdev, sector_t sector,
-+				  unsigned int op, unsigned int op_flags,
-+				  unsigned int max_bvecs, gfp_t gfp_mask)
-+{
-+	unsigned nr_bvec = clamp_t(unsigned int, max_bvecs, 0, BIO_MAX_PAGES);
-+	struct bio *bio = bio_alloc(gfp_mask, nr_bvec);
-+
-+	bio_set_dev(bio, bdev);
-+	bio->bi_iter.bi_sector = sector;
-+	bio_set_op_attrs(bio, op, op_flags);
-+
-+	return bio;
-+}
- 
- #endif /* __LINUX_BIO_H */
--- 
-2.22.1
+The description mentions about HD-audio controller, while the recent
+revert was the HD-audio codec, so I suppose it's still affected?
 
+
+thanks,
+
+Takashi
+
+> ---
+>  drivers/base/power/main.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 46793276598d..9c0e25a92ad0 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1849,6 +1849,10 @@ static int device_prepare(struct device *dev, pm_message_t state)
+>  		(ret > 0 || dev->power.no_pm_callbacks) &&
+>  		!dev_pm_test_driver_flags(dev, DPM_FLAG_NO_DIRECT_COMPLETE);
+>  	spin_unlock_irq(&dev->power.lock);
+> +
+> +	if (ret > 0 && !dev->power.direct_complete)
+> +		pm_runtime_resume(dev);
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.29.2
+> 
