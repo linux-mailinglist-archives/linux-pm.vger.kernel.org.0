@@ -2,431 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C57930702A
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 08:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7018F30709E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 09:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbhA1Hut (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 02:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhA1Hsq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 02:48:46 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF60C061574
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 23:48:06 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id t25so3756698pga.2
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 23:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PGqjfQqxznB2yU+RCpzc780tLLtAThmAuUjiL+zRtfo=;
-        b=uVTKkSyt2BZzkjX1mF6Gr1hy0iVERFRFojGPoS1+8DoMYVbPv/ezRyaoNQw+in6tdv
-         0JWBO0nBtpLG51/y/wb7cdE5J9BdB3OMHqxP5M83n9eqUGMzOFrqgJdfjBjQjviXLiMM
-         uNhXUX8L2VofFKkpDW6Gk+R5wsO2M3RdiTf89v6O2nn34v66oUSKfrzvbiUxfBHukXjh
-         kL2eJEfWYYHihCOhh+4G4TIx2jpy5Mhxb6kkHQFIHJWt2i/yqIeNEKJEd+1FQ/LmB7HJ
-         wFt6bP9T07Ya/uGlgP1txpcrA1kwOC5Yl6XzWFhIC6KyJVvl9031EPaWelcMXbMb4G8w
-         djVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PGqjfQqxznB2yU+RCpzc780tLLtAThmAuUjiL+zRtfo=;
-        b=nLFWj2FNLVX5VzlvL2g/ha6a7dZkk5UX0VH2K0gt7qJDPvj7EWo+cZuoTOZ2/zY8oJ
-         SJL5oaENk7fyii51KgUxEAV4Vl/k2pEB/Mdahobf+tOf4IPjgYG5BKYCZ7u3ic/yEMWJ
-         znC1FzxyPbn+F54mpeQ3fFILc7ZwZpuTgPedf1tU49khQnXSlpmhMkzv2baDudQzIOYT
-         FrKb/fRod7lA9T8bKIYcCiQst/I8FtPwl642x1mokeqVq0eclFUZaR5y0uTlCDyH4rN/
-         jrJkdMGB7TVNd6FG9DYG0a3s0kQCQL8osqcBtwobZZP1q2OrxASw00nKcOKPQRcs13Tc
-         YLpw==
-X-Gm-Message-State: AOAM533DbXhbjVRpj4WQQNXY7Bh35CmCIAWXv/xEzu8HHbXiNInymkJO
-        kPr0ZKv0bysgQsUvo7RVkxmPig==
-X-Google-Smtp-Source: ABdhPJxB5RholxOLvm3sUAkXJorZEvmi6DJDqvOMFYD1YJtfkbQgAgNXSIi1llCrkIzOQiwRNnZKzQ==
-X-Received: by 2002:a63:5014:: with SMTP id e20mr15256612pgb.152.1611820086020;
-        Wed, 27 Jan 2021 23:48:06 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id n2sm4893908pfu.129.2021.01.27.23.48.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Jan 2021 23:48:04 -0800 (PST)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Saravana Kannan <saravanak@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Allow lazy-linking of required-opps
-Date:   Thu, 28 Jan 2021 13:18:00 +0530
-Message-Id: <46e877258bd2779efb186eaf944263ea6a981ab9.1611820046.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        id S232311AbhA1H5I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 02:57:08 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:22258 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231633AbhA1HND (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 02:13:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1611817983; x=1643353983;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=1Q7huJyMDOVynURh2o3jolV4xRilOq3cl8xkF29/liU=;
+  b=BF656N9Md7amskVa9OhnRt/3h1JnVMpu86eJqYskPF+LqKax7r6fVHzP
+   19/IA4ZNrNUnwZCe9bqDsHTiLLnCCNy4xhPY5KO98fsmEeVZJ3QeJGo/0
+   YQjafx7kHo2MMEEvSGDcjawUjt6GU4i+gYGpuQB6zq/DOLgexYx141tbw
+   6ozPlkWuGM44zvfRqIbGPPzwkZipdhfaVuZMnK7ni60sUXAwPkcx5bzC9
+   qKXUkxhsZTZAGpy9P1boa2vXaJMWFLW/Mgf3XlBUj5uc1UCoINxsHCPqr
+   8CdejfBECfeJDkX16FQPpuxfLOpsyhsHpy56oT6sbi/DgOKiGMvfHtE1m
+   A==;
+IronPort-SDR: vIZnkF2Czkmm3+nF5M88vV6vEUmFH522u3yLtlyjYiCT+NamsDP17XNTBpQzFGmeK8g6YBfNWS
+ lh/GaT2O5YMWRSMWVVz9esscsPjiZ3H1Ngab/0oRFWYpciQX9meaNknw3eMEDQqzsTyQyKegg8
+ bEVeuNjra5+epTKh4tkkWTkTX+yUWoRtDofjMYy11VFKyn6DVnqo2E4ANqwGD8fY0HHkoY4Tdi
+ rbI4THhx1yPQ52r4iHACoeUSOWEOssoLNeZu301qgZXTaKppcNso9dmSv/TWOp0MrK1CTDfws3
+ 4ik=
+X-IronPort-AV: E=Sophos;i="5.79,381,1602518400"; 
+   d="scan'208";a="158517214"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2021 15:11:57 +0800
+IronPort-SDR: xYgbyLAQ5HcCHqYFed1v2HqdFeAtuF8ugd9ioDRWNeAXATeaQ56qJsRgg0dYMy8R9EzHkYHCxw
+ YxXGrxu8y8M98gONOgYP2L/1S3B+xeKwhKTWed/7mcR1BYud6C3z+4XL6SQVoOAFFMmHjk8+yl
+ AcOge4vA1UukuwkonUt2Xh+9FwxCU5TX2qPmaqHgAW6sYM1K93z0XE8H7nu3c/++BX+aw+Y4If
+ wLYWCWSefZ7b90CPVo+SNPlufolSEqBrVnih/6bIIgcZqGTlAew0INs9NtYPAE0C/eQFvtH276
+ eEqeaEW1P0WmxTowkAf9s6J8
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 22:56:17 -0800
+IronPort-SDR: HYKG8+pmcZ9KZ4KZ0ijEvKFdi7W0dgGDXHFsWIaWNxW3zaOZulAuYVmKBU97gor6eDg6ylP5Ni
+ 6/ahnxe6yM79ewZwsqKvrfMjvqQiAhLVOYCtlxS8Bh1Gz/vhwXPlVRnl4SwtLQD680yYKL86EL
+ o3y724i0cbqHM9ChTIb0swq0MYuYoJx+iwqVjQ/XkVzNSKEtJ8uwRbdybmRUPVMHWHGtPAl98+
+ IjNd0sVxBZiY+I2eDgAQpiJ9r1dqmBNoZAqnfBCkqleNy/DSVZGKQaXDO89s0wR1FlZS/ZCSSd
+ 5w0=
+WDCIronportException: Internal
+Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
+  by uls-op-cesaip02.wdc.com with ESMTP; 27 Jan 2021 23:11:57 -0800
+From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+To:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        xen-devel@lists.xenproject.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
+        ocfs2-devel@oss.oracle.com, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     axboe@kernel.dk, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, minchan@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, agk@redhat.com,
+        snitzer@redhat.com, hch@lst.de, sagi@grimberg.me,
+        chaitanya.kulkarni@wdc.com, martin.petersen@oracle.com,
+        viro@zeniv.linux.org.uk, tytso@mit.edu, jaegeuk@kernel.org,
+        ebiggers@kernel.org, djwong@kernel.org, shaggy@kernel.org,
+        konishi.ryusuke@gmail.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, damien.lemoal@wdc.com,
+        naohiro.aota@wdc.com, jth@kernel.org, rjw@rjwysocki.net,
+        len.brown@intel.com, pavel@ucw.cz, akpm@linux-foundation.org,
+        hare@suse.de, gustavoars@kernel.org, tiwai@suse.de,
+        alex.shi@linux.alibaba.com, asml.silence@gmail.com,
+        ming.lei@redhat.com, tj@kernel.org, osandov@fb.com,
+        bvanassche@acm.org, jefflexu@linux.alibaba.com
+Subject: [RFC PATCH 02/34] block: introduce and use bio_new
+Date:   Wed, 27 Jan 2021 23:11:01 -0800
+Message-Id: <20210128071133.60335-3-chaitanya.kulkarni@wdc.com>
+X-Mailer: git-send-email 2.22.1
+In-Reply-To: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
+References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The OPP core currently requires the required opp tables to be available
-before the dependent OPP table is added, as it needs to create links
-from the dependent OPP table to the required ones. This may not be
-convenient for all the platforms though, as this requires strict
-ordering for probing the drivers.
+Introduce bio_new() helper and use it in blk-lib.c to allocate and
+initialize various non-optional or semi-optional members of the bio
+along with bio allocation done with bio_alloc(). Here we also calmp the
+max_bvecs for bio with BIO_MAX_PAGES before we pass to bio_alloc().
 
-This patch allows lazy-linking of the required-opps. The OPP tables for
-which the required-opp-tables aren't available at the time of their
-initialization, are added to a special list of OPP tables:
-lazy_opp_tables. Later on, whenever a new OPP table is registered with
-the OPP core, we check if it is required by an OPP table in the pending
-list; if yes, then we complete the linking then and there.
-
-An OPP table is marked unusable until the time all its required-opp
-tables are available. And if lazy-linking fails for an OPP table, the
-OPP core disables all of its OPPs to make sure no one can use them.
-
-Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 ---
- drivers/opp/core.c |  45 +++++++++++++----
- drivers/opp/of.c   | 122 +++++++++++++++++++++++++++++++++++++++++++--
- drivers/opp/opp.h  |  10 +++-
- 3 files changed, 161 insertions(+), 16 deletions(-)
+ block/blk-lib.c     |  6 +-----
+ include/linux/bio.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 6958a5cd2fd8..e03600547b98 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -27,6 +27,10 @@
-  * various states of availability.
-  */
- LIST_HEAD(opp_tables);
-+
-+/* OPP tables with uninitialized required OPPs */
-+LIST_HEAD(lazy_opp_tables);
-+
- /* Lock to allow exclusive modification to the device and opp lists */
- DEFINE_MUTEX(opp_table_lock);
- /* Flag indicating that opp_tables list is being updated at the moment */
-@@ -163,6 +167,10 @@ unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
- 		return 0;
- 	}
- 
-+	/* required-opps not fully initialized yet */
-+	if (lazy_linking_pending(opp->opp_table))
-+		return 0;
-+
- 	return opp->required_opps[index]->pstate;
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_get_required_pstate);
-@@ -885,6 +893,10 @@ static int _set_required_opps(struct device *dev,
- 	if (!required_opp_tables)
- 		return 0;
- 
-+	/* required-opps not fully initialized yet */
-+	if (lazy_linking_pending(opp_table))
-+		return -EBUSY;
-+
- 	/* Single genpd case */
- 	if (!genpd_virt_devs)
- 		return _set_required_opp(dev, dev, opp, 0);
-@@ -1181,6 +1193,7 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
- 	mutex_init(&opp_table->lock);
- 	mutex_init(&opp_table->genpd_virt_dev_lock);
- 	INIT_LIST_HEAD(&opp_table->dev_list);
-+	INIT_LIST_HEAD(&opp_table->lazy);
- 
- 	/* Mark regulator count uninitialized */
- 	opp_table->regulator_count = -1;
-@@ -1632,6 +1645,21 @@ static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
- 	return 0;
- }
- 
-+void _required_opps_available(struct dev_pm_opp *opp, int count)
-+{
-+	int i;
-+
-+	for (i = 0; i < count; i++) {
-+		if (opp->required_opps[i]->available)
-+			continue;
-+
-+		opp->available = false;
-+		pr_warn("%s: OPP not supported by required OPP %pOF (%lu)\n",
-+			 __func__, opp->required_opps[i]->np, opp->rate);
-+		return;
-+	}
-+}
-+
- /*
-  * Returns:
-  * 0: On success. And appropriate error message for duplicate OPPs.
-@@ -1646,7 +1674,6 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
- 	     struct opp_table *opp_table, bool rate_not_available)
+diff --git a/block/blk-lib.c b/block/blk-lib.c
+index fb486a0bdb58..ec29415f00dd 100644
+--- a/block/blk-lib.c
++++ b/block/blk-lib.c
+@@ -14,17 +14,13 @@ struct bio *blk_next_bio(struct bio *bio, struct block_device *bdev,
+ 			sector_t sect, unsigned op, unsigned opf,
+ 			unsigned int nr_pages, gfp_t gfp)
  {
- 	struct list_head *head;
--	unsigned int i;
- 	int ret;
+-	struct bio *new = bio_alloc(gfp, nr_pages);
++	struct bio *new = bio_new(bdev, sect, op, opf, gfp, nr_pages);
  
- 	mutex_lock(&opp_table->lock);
-@@ -1672,15 +1699,11 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
- 			 __func__, new_opp->rate);
+ 	if (bio) {
+ 		bio_chain(bio, new);
+ 		submit_bio(bio);
  	}
  
--	for (i = 0; i < opp_table->required_opp_count; i++) {
--		if (new_opp->required_opps[i]->available)
--			continue;
-+	/* required-opps not fully initialized yet */
-+	if (lazy_linking_pending(opp_table))
-+		return 0;
- 
--		new_opp->available = false;
--		dev_warn(dev, "%s: OPP not supported by required OPP %pOF (%lu)\n",
--			 __func__, new_opp->required_opps[i]->np, new_opp->rate);
--		break;
--	}
-+	_required_opps_available(new_opp, opp_table->required_opp_count);
- 
- 	return 0;
- }
-@@ -2388,6 +2411,10 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
- 	if (!src_table || !src_table->required_opp_count)
- 		return pstate;
- 
-+	/* required-opps not fully initialized yet */
-+	if (lazy_linking_pending(src_table))
-+		return -EBUSY;
-+
- 	for (i = 0; i < src_table->required_opp_count; i++) {
- 		if (src_table->required_opp_tables[i]->np == dst_table->np)
- 			break;
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 20ccdaab9384..f480c10e6314 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -144,7 +144,7 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
- 
- 	for (i = 0; i < opp_table->required_opp_count; i++) {
- 		if (IS_ERR_OR_NULL(required_opp_tables[i]))
--			break;
-+			continue;
- 
- 		dev_pm_opp_put_opp_table(required_opp_tables[i]);
- 	}
-@@ -153,6 +153,7 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
- 
- 	opp_table->required_opp_count = 0;
- 	opp_table->required_opp_tables = NULL;
-+	list_del(&opp_table->lazy);
+-	new->bi_iter.bi_sector = sect;
+-	bio_set_dev(new, bdev);
+-	bio_set_op_attrs(new, op, opf);
+-
+ 	return new;
  }
  
- /*
-@@ -165,6 +166,7 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
- {
- 	struct opp_table **required_opp_tables;
- 	struct device_node *required_np, *np;
-+	bool lazy = false;
- 	int count, i;
- 
- 	/* Traversing the first OPP node is all we need */
-@@ -195,8 +197,10 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
- 		required_opp_tables[i] = _find_table_of_opp_np(required_np);
- 		of_node_put(required_np);
- 
--		if (IS_ERR(required_opp_tables[i]))
--			goto free_required_tables;
-+		if (IS_ERR(required_opp_tables[i])) {
-+			lazy = true;
-+			continue;
-+		}
- 
- 		/*
- 		 * We only support genpd's OPPs in the "required-opps" for now,
-@@ -210,6 +214,10 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
- 		}
- 	}
- 
-+	/* Let's do the linking later on */
-+	if (lazy)
-+		list_add(&opp_table->lazy, &lazy_opp_tables);
-+
- 	goto put_np;
- 
- free_required_tables:
-@@ -278,14 +286,14 @@ void _of_opp_free_required_opps(struct opp_table *opp_table,
- 
- 	for (i = 0; i < opp_table->required_opp_count; i++) {
- 		if (!required_opps[i])
--			break;
-+			continue;
- 
- 		/* Put the reference back */
- 		dev_pm_opp_put(required_opps[i]);
- 	}
- 
--	kfree(required_opps);
- 	opp->required_opps = NULL;
-+	kfree(required_opps);
+diff --git a/include/linux/bio.h b/include/linux/bio.h
+index c74857cf1252..2a09ba100546 100644
+--- a/include/linux/bio.h
++++ b/include/linux/bio.h
+@@ -826,5 +826,30 @@ static inline void bio_set_polled(struct bio *bio, struct kiocb *kiocb)
+ 	if (!is_sync_kiocb(kiocb))
+ 		bio->bi_opf |= REQ_NOWAIT;
  }
- 
- /* Populate all required OPPs which are part of "required-opps" list */
-@@ -309,6 +317,10 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
- 	for (i = 0; i < count; i++) {
- 		required_table = opp_table->required_opp_tables[i];
- 
-+		/* Required table not added yet, we will link later */
-+		if (IS_ERR_OR_NULL(required_table))
-+			continue;
-+
- 		np = of_parse_required_opp(opp->np, i);
- 		if (unlikely(!np)) {
- 			ret = -ENODEV;
-@@ -334,6 +346,104 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
- 	return ret;
- }
- 
-+/* Link required OPPs for an individual OPP */
-+static int lazy_link_required_opps(struct opp_table *opp_table,
-+				   struct opp_table *new_table, int index)
++/**
++ * bio_new -	allcate and initialize new bio
++ * @bdev:	blockdev to issue discard for
++ * @sector:	start sector
++ * @op:		REQ_OP_XXX from enum req_opf
++ * @op_flags:	REQ_XXX from enum req_flag_bits
++ * @max_bvecs:	maximum bvec to be allocated for this bio
++ * @gfp_mask:	memory allocation flags (for bio_alloc)
++ *
++ * Description:
++ *    Allocates, initializes common members, and returns a new bio.
++ */
++static inline struct bio *bio_new(struct block_device *bdev, sector_t sector,
++				  unsigned int op, unsigned int op_flags,
++				  unsigned int max_bvecs, gfp_t gfp_mask)
 +{
-+	struct device_node *required_np;
-+	struct dev_pm_opp *opp;
++	unsigned nr_bvec = clamp_t(unsigned int, max_bvecs, 0, BIO_MAX_PAGES);
++	struct bio *bio = bio_alloc(gfp_mask, nr_bvec);
 +
-+	list_for_each_entry(opp, &opp_table->opp_list, node) {
-+		required_np = of_parse_required_opp(opp->np, index);
-+		if (unlikely(!required_np))
-+			return -ENODEV;
++	bio_set_dev(bio, bdev);
++	bio->bi_iter.bi_sector = sector;
++	bio_set_op_attrs(bio, op, op_flags);
 +
-+		opp->required_opps[index] = _find_opp_of_np(new_table, required_np);
-+		of_node_put(required_np);
-+
-+		if (!opp->required_opps[index]) {
-+			pr_err("%s: Unable to find required OPP node: %pOF (%d)\n",
-+			       __func__, opp->np, index);
-+			return -ENODEV;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+/* Link required OPPs for all OPPs of the newly added OPP table */
-+static void lazy_link_required_opp_table(struct opp_table *new_table)
-+{
-+	struct opp_table *opp_table, *temp, **required_opp_tables;
-+	struct device_node *required_np, *opp_np, *required_table_np;
-+	struct dev_pm_opp *opp;
-+	int i, ret;
-+
-+	/*
-+	 * We only support genpd's OPPs in the "required-opps" for now,
-+	 * as we don't know much about other cases.
-+	 */
-+	if (!new_table->is_genpd)
-+		return;
-+
-+	mutex_lock(&opp_table_lock);
-+
-+	list_for_each_entry_safe(opp_table, temp, &lazy_opp_tables, lazy) {
-+		bool lazy = false;
-+
-+		/* opp_np can't be invalid here */
-+		opp_np = of_get_next_available_child(opp_table->np, NULL);
-+
-+		for (i = 0; i < opp_table->required_opp_count; i++) {
-+			required_opp_tables = opp_table->required_opp_tables;
-+
-+			/* Required opp-table is already parsed */
-+			if (!IS_ERR(required_opp_tables[i]))
-+				continue;
-+
-+			/* required_np can't be invalid here */
-+			required_np = of_parse_required_opp(opp_np, i);
-+			required_table_np = of_get_parent(required_np);
-+
-+			of_node_put(required_table_np);
-+			of_node_put(required_np);
-+
-+			/*
-+			 * Newly added table isn't the required opp-table for
-+			 * opp_table.
-+			 */
-+			if (required_table_np != new_table->np) {
-+				lazy = true;
-+				continue;
-+			}
-+
-+			required_opp_tables[i] = new_table;
-+			_get_opp_table_kref(new_table);
-+
-+			/* Link OPPs now */
-+			ret = lazy_link_required_opps(opp_table, new_table, i);
-+			if (ret) {
-+				/* The OPPs will be marked unusable */
-+				lazy = false;
-+				break;
-+			}
-+		}
-+
-+		of_node_put(opp_np);
-+
-+		/* All required opp-tables found, remove from lazy list */
-+		if (!lazy) {
-+			list_del(&opp_table->lazy);
-+			INIT_LIST_HEAD(&opp_table->lazy);
-+
-+			list_for_each_entry(opp, &opp_table->opp_list, node)
-+				_required_opps_available(opp, opp_table->required_opp_count);
-+		}
-+	}
-+
-+	mutex_unlock(&opp_table_lock);
-+}
-+
- static int _bandwidth_supported(struct device *dev, struct opp_table *opp_table)
- {
- 	struct device_node *np, *opp_np;
-@@ -889,6 +999,8 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
- 		}
- 	}
- 
-+	lazy_link_required_opp_table(opp_table);
-+
- 	return 0;
- 
- remove_static_opp:
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 372df68e185b..9b9daf83b074 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -26,7 +26,7 @@ struct regulator;
- /* Lock to allow exclusive modification to the device and opp lists */
- extern struct mutex opp_table_lock;
- 
--extern struct list_head opp_tables;
-+extern struct list_head opp_tables, lazy_opp_tables;
- 
- /*
-  * Internal data structure organization with the OPP layer library is as
-@@ -168,7 +168,7 @@ enum opp_table_access {
-  * meant for book keeping and private to OPP library.
-  */
- struct opp_table {
--	struct list_head node;
-+	struct list_head node, lazy;
- 
- 	struct blocking_notifier_head head;
- 	struct list_head dev_list;
-@@ -229,6 +229,12 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long f
- void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
- struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
- void _put_opp_list_kref(struct opp_table *opp_table);
-+void _required_opps_available(struct dev_pm_opp *opp, int count);
-+
-+static inline bool lazy_linking_pending(struct opp_table *opp_table)
-+{
-+	return unlikely(!list_empty(&opp_table->lazy));
++	return bio;
 +}
  
- #ifdef CONFIG_OF
- void _of_init_opp_table(struct opp_table *opp_table, struct device *dev, int index);
+ #endif /* __LINUX_BIO_H */
 -- 
-2.25.0.rc1.19.g042ed3e048af
+2.22.1
 
