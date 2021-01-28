@@ -2,61 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB2B306DFA
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 08:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D20306DFE
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 08:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbhA1G6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 01:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
+        id S229774AbhA1HBA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 02:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbhA1G6p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 01:58:45 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9175EC0613D6
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 22:58:05 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id o20so3411925pfu.0
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 22:58:05 -0800 (PST)
+        with ESMTP id S229676AbhA1HA7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 02:00:59 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CEBC061574
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 23:00:19 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id v19so3655147pgj.12
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 23:00:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2gJpFkK5TmW5EOcLua8dRT08KePDv15G0fJENxu9Phs=;
-        b=Ti6oOUz8rg0O96Ii9pV7IYBgjnHKK9Q+09y+Rmds4gHWkxFXgRKvHr1Y+J2MKn8Fz3
-         XkL7/gYQ1pH7VfoA9F07IVE4S8K17vDEHvCYSkoxrBIAR0bE290KygzoUT95gDc47X1T
-         0QqARhBv01Q0PBr64uYEtcblKclmzu9rNKNzgxU4Rx/Rn6FJC1wm3bw/2GxXHCTn5cEL
-         sE74oQJ4iMPb8DLeH/xqAkcoBVUr/Eep+oFtQdpxix83RWfKCvdgVTF8y3NXXbjJ+zEL
-         Iks/gI2mwPRphMiQDtMFMXhUL5fgkIQ1flkYBOwhmRLI3FqG2p0vxVcdm/FFtrxeh4cw
-         s3Rg==
+        bh=5/az9vJJKvmVOYVTxpGhyp9BVL4fKFn3/tkkqVwm4EE=;
+        b=OYHLeJvJ79zb8hTo6KJmqeevrBj7uphPKvhzq5FcHZoQNm/yUs99TH8fvKXJuEQnhl
+         xDIYpgf5EQAo8ikr34NJqRRwPygEFqtEgs68qy0dgtj8freOMSijibFKuxGOpmN3RXS6
+         5yEV2EJOyeAAQq1nfKuJJTdWmePkgE7uUeBOJmi9hhueLVIAzjg5K9F0C2FzqOKL1Kgl
+         MzjFfkV97PH8vrmCSN7e6FZvT8+iFx2nZrLJ5bqf1qYwflZrml+i1Zmm0hdku47VrGnl
+         hKk412NM2vWcQLX846T6ZUjRoc2Kd2SGSfCrh858MstLf6JF+Oet9jzGWKJrDsQUSD5p
+         r03g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2gJpFkK5TmW5EOcLua8dRT08KePDv15G0fJENxu9Phs=;
-        b=P60WuK92dajsKD7HkmVfOX0g0dAWrxtMsS/iTJ1mVpn2mNyvygQ/b+rLt6wKUXszX8
-         kzAsfRSV4mQ5En361PHH9MgO3O8M6tnvukuSWmoGO01kKXDjAHsWK7swNeP3Pwg3UTdl
-         6zBHWLwc8WExiRTC46VRAoAxzR6E/+P8PdVW2esf0jK7pnTgJU5fhRWpD789Zw1n95xG
-         YD76jY2ZCxv1egZFqCBZKHUwrCh7KqdzIAfvuPUd+Nap6SbVtvNXuUIHrWI0HRQWv+5k
-         RPcHpJ0QLSzUsorJt3+MkmwLiIyvqQswGlezXKkTzEtIzXXqVLQv/bm1bHTuryyfapXO
-         ++pA==
-X-Gm-Message-State: AOAM532FUZcRA7gTYkuyMMpyrlq+kJVXPfOR6bwmHkmWF+R9/Cz1lVRE
-        Her6hwho4j16nG8Vq6VKIhu02w==
-X-Google-Smtp-Source: ABdhPJy1k6ZQbOA9EeAeCdvN1uayI3cmHdyr8G6/NLxEL62v/JzP49XUvHFJ9fD6IMgzhvLqUmlHVw==
-X-Received: by 2002:a65:4203:: with SMTP id c3mr15098898pgq.65.1611817085039;
-        Wed, 27 Jan 2021 22:58:05 -0800 (PST)
+        bh=5/az9vJJKvmVOYVTxpGhyp9BVL4fKFn3/tkkqVwm4EE=;
+        b=YRAQdSxexFlDOOsviFbiiK9HkexCvX+fW3hOQrHn0h/cWZqJ8tAABuZ5YlRpN1ysng
+         yknkl7ANy9nEomwzp8IrO9IUYP78jxBwGGLQYweijP3VkYRBurduPUAb5gEnC7eTNeOG
+         F6KaSVlDKHDVTnMNF2bp1TsKSYWkAMBN8q37zulQrBo3gn54Ba/xIxn76Hun6Hap6Qey
+         2NwfGcjYJgtYnDrVO0QwZ+iWXWC/RlYxdvoHbGlx7O3gfZpAgN3aNpjSjSRhrAsyXtAi
+         5yy7UBxBF5K3YOD423xbDOZy2lJ4AkvMisXwWBiY5xAwTK1ou6lTpjA6maD2PYJ3Nr1W
+         Rpbw==
+X-Gm-Message-State: AOAM533KpTFbJJU3EDwDcHwgS8TZmva/yO644UcC+NHuo8ArNm6hMbHC
+        j7HBKMsSRresP/v2kQiXwNaYUA==
+X-Google-Smtp-Source: ABdhPJzMiM3YJKRToSRR29s9MRrC70lmHwUZhVNvqWsBxW6GWCHIoDdZVSITYQ3L250EF9/LfVEGzQ==
+X-Received: by 2002:a63:464a:: with SMTP id v10mr15401609pgk.393.1611817218478;
+        Wed, 27 Jan 2021 23:00:18 -0800 (PST)
 Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id j15sm4608977pfn.180.2021.01.27.22.58.03
+        by smtp.gmail.com with ESMTPSA id s21sm3967791pjz.13.2021.01.27.23.00.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Jan 2021 22:58:04 -0800 (PST)
+        Wed, 27 Jan 2021 23:00:17 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
+        Dmitry Osipenko <digetx@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Staticize _add_opp_table()
-Date:   Thu, 28 Jan 2021 12:28:00 +0530
-Message-Id: <f65f77ed2e17da87b5ff7878f6dd95c94c8a3744.1611817064.git.viresh.kumar@linaro.org>
+Subject: [PATCH V2 1/3] opp: Create _of_add_table_indexed() to reduce code duplication
+Date:   Thu, 28 Jan 2021 12:30:07 +0530
+Message-Id: <1b58a72fa4d6aadc9542a66f8150150534752d81.1611817096.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -64,38 +65,135 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-_add_opp_table() isn't used outside of core.c, mark it static.
+The implementation of dev_pm_opp_of_add_table() and
+dev_pm_opp_of_add_table_indexed() are almost identical. Create
+_of_add_table_indexed() to reduce code redundancy.
+
+Also remove the duplication of the doc style comments by referring to
+dev_pm_opp_of_add_table() from dev_pm_opp_of_add_table_indexed().
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c | 2 +-
- drivers/opp/opp.h  | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+V2:
+- No change
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 253bc87b5695..dc7a298f3611 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1193,7 +1193,7 @@ struct opp_table *_add_opp_table_indexed(struct device *dev, int index)
- 	return opp_table;
+ drivers/opp/of.c | 81 ++++++++++++++++++++----------------------------
+ 1 file changed, 33 insertions(+), 48 deletions(-)
+
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index d0c0336be39b..c6856dcf4c34 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -956,29 +956,23 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 	return ret;
  }
  
--struct opp_table *_add_opp_table(struct device *dev)
-+static struct opp_table *_add_opp_table(struct device *dev)
+-/**
+- * dev_pm_opp_of_add_table() - Initialize opp table from device tree
+- * @dev:	device pointer used to lookup OPP table.
+- *
+- * Register the initial OPP table with the OPP library for given device.
+- *
+- * Return:
+- * 0		On success OR
+- *		Duplicate OPPs (both freq and volt are same) and opp->available
+- * -EEXIST	Freq are same and volt are different OR
+- *		Duplicate OPPs (both freq and volt are same) and !opp->available
+- * -ENOMEM	Memory allocation failure
+- * -ENODEV	when 'operating-points' property is not found or is invalid data
+- *		in device node.
+- * -ENODATA	when empty 'operating-points' property is found
+- * -EINVAL	when invalid entries are found in opp-v2 table
+- */
+-int dev_pm_opp_of_add_table(struct device *dev)
++static int _of_add_table_indexed(struct device *dev, int index)
  {
- 	return _add_opp_table_indexed(dev, 0);
+ 	struct opp_table *opp_table;
+-	int ret;
++	int ret, count;
+ 
+-	opp_table = _add_opp_table_indexed(dev, 0);
++	if (index) {
++		/*
++		 * If only one phandle is present, then the same OPP table
++		 * applies for all index requests.
++		 */
++		count = of_count_phandle_with_args(dev->of_node,
++						   "operating-points-v2", NULL);
++		if (count == 1)
++			index = 0;
++	}
++
++	opp_table = _add_opp_table_indexed(dev, index);
+ 	if (IS_ERR(opp_table))
+ 		return PTR_ERR(opp_table);
+ 
+@@ -996,15 +990,12 @@ int dev_pm_opp_of_add_table(struct device *dev)
+ 
+ 	return ret;
  }
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 4ced7ffa8158..ee2593afae0c 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -223,7 +223,6 @@ int _opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
- int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table, bool rate_not_available);
- int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long freq, long u_volt, bool dynamic);
- void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
--struct opp_table *_add_opp_table(struct device *dev);
- struct opp_table *_add_opp_table_indexed(struct device *dev, int index);
- void _put_opp_list_kref(struct opp_table *opp_table);
+-EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table);
+ 
+ /**
+- * dev_pm_opp_of_add_table_indexed() - Initialize indexed opp table from device tree
++ * dev_pm_opp_of_add_table() - Initialize opp table from device tree
+  * @dev:	device pointer used to lookup OPP table.
+- * @index:	Index number.
+  *
+- * Register the initial OPP table with the OPP library for given device only
+- * using the "operating-points-v2" property.
++ * Register the initial OPP table with the OPP library for given device.
+  *
+  * Return:
+  * 0		On success OR
+@@ -1017,31 +1008,25 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table);
+  * -ENODATA	when empty 'operating-points' property is found
+  * -EINVAL	when invalid entries are found in opp-v2 table
+  */
+-int dev_pm_opp_of_add_table_indexed(struct device *dev, int index)
++int dev_pm_opp_of_add_table(struct device *dev)
+ {
+-	struct opp_table *opp_table;
+-	int ret, count;
+-
+-	if (index) {
+-		/*
+-		 * If only one phandle is present, then the same OPP table
+-		 * applies for all index requests.
+-		 */
+-		count = of_count_phandle_with_args(dev->of_node,
+-						   "operating-points-v2", NULL);
+-		if (count == 1)
+-			index = 0;
+-	}
+-
+-	opp_table = _add_opp_table_indexed(dev, index);
+-	if (IS_ERR(opp_table))
+-		return PTR_ERR(opp_table);
+-
+-	ret = _of_add_opp_table_v2(dev, opp_table);
+-	if (ret)
+-		dev_pm_opp_put_opp_table(opp_table);
++	return _of_add_table_indexed(dev, 0);
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table);
+ 
+-	return ret;
++/**
++ * dev_pm_opp_of_add_table_indexed() - Initialize indexed opp table from device tree
++ * @dev:	device pointer used to lookup OPP table.
++ * @index:	Index number.
++ *
++ * Register the initial OPP table with the OPP library for given device only
++ * using the "operating-points-v2" property.
++ *
++ * Return: Refer to dev_pm_opp_of_add_table() for return values.
++ */
++int dev_pm_opp_of_add_table_indexed(struct device *dev, int index)
++{
++	return _of_add_table_indexed(dev, index);
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table_indexed);
  
 -- 
 2.25.0.rc1.19.g042ed3e048af
