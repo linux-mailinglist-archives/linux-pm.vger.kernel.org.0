@@ -2,334 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9513073D7
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 11:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7746E307414
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 11:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbhA1Kff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 05:35:35 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:36274 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbhA1Kfb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 05:35:31 -0500
-Received: by mail-ot1-f41.google.com with SMTP id d7so4702149otf.3;
-        Thu, 28 Jan 2021 02:35:15 -0800 (PST)
+        id S231231AbhA1Ktp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 05:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231152AbhA1Ktm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 05:49:42 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F5EC061574
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jan 2021 02:49:02 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id j12so3723232pfj.12
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jan 2021 02:49:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v8tY7xOSVL8TKmu23l5iwSWLMDTVdZzvIWOkVTMFGtE=;
+        b=GOVFFIZleKeu/u0ClRM2qZBnFQcwtfJ8rA2iqIzKh4pprvawvMHg+/qykqmwoO4Qv6
+         wx5VoD8JLCNalnmcuv46OFtu0o96/BWOseUB+v/QBLExW4R3c2nq2iA1VA2xUTYZbu5r
+         Rd6vqPsDA6dhwCO3+h4J4lGF7AkGQ4jl3FGuvCNyniC6VwNLOWVtUcJ2X/OLD6RHs9g2
+         mzkLcdThwlY++oad1iemBQy65e0FdneukoyiNpD7I6+9tC7m0Bn2pfwtZ7j5A41pNufT
+         xzw9TUQVwy5Qdz6My0hZ6zqsN1wz2VUNLJTJN/2l+9yX2gJRBUTmvdiJ2m37syVS/mC6
+         HNaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eM3bLsjxVdhKVCPZibScqY9Yi+rfdugDa6YasYlA1c0=;
-        b=df5pj9YWGMli/f9jtgiRKQOhfR6TP1+cCtomUL4SNPdwh0oHvirBsHM2R3BMKVgf/7
-         aRQhT4jQkHHcogMjaoo0JnvtCXSDiNdP9M7CRnOAXzKTnnca73RpSIB2LyzmxKFzxK6d
-         mUJ5CzMALXu/1V+jjP1FqD1Bq9q5wRyHulD6YzpMGEbYkTMxsp5/OiyHah8VDtJEkn23
-         E76koaxe/HvFdUvo0Z2t6+115Y8fURpLuLLRERG+d3ZOvcGitAuthB+unVxxmtu3HAnj
-         R/0uPsHAtTa5wkQYnOKCR6RDCArDRcnxIZXk2ZxfcM6MIZXbcPypD+hPN91Pp7K3ndWC
-         lRGw==
-X-Gm-Message-State: AOAM533iGip/FhzW7cl+Fs1B0+yOZ5pQyPIJ0Wp8h96mqzWxzxPmPBKZ
-        Zp4C5Ew3+YktHRRdRzH+e6pbQjw5x9UQ2elrhiM=
-X-Google-Smtp-Source: ABdhPJwhQjZGqoMXVX4zZgO1PB2TaI23c2MiN2Qhoom2AcJ9upK8mtWpdybJ+4E15R5cpHWaVEVKP3v0VxTN+lEbRbc=
-X-Received: by 2002:a05:6830:2313:: with SMTP id u19mr11144610ote.321.1611830089890;
- Thu, 28 Jan 2021 02:34:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v8tY7xOSVL8TKmu23l5iwSWLMDTVdZzvIWOkVTMFGtE=;
+        b=b6nMQ4pcxy3Pn2xsj1hjbRCPbIPcfEkbKmKmUTG8Uua5TY9vznlFxYOWgYz7rbNFAO
+         1Z/J8u8AKL9xwJ9AQOk6bSLvP0q2/Iimvx3cZM8faWMPR05W9mQKxAdaEPkNQkl4cFRz
+         xsx155GA7IhQ7M3Jb9BcRGOHXaer4NHqGgV2wU7xvNvRDU1kt4mkYQR1b+sgidozcXQt
+         K4Tp1Kzwg70YEse15ngZsg/lupUko4FmXePYFFT3hnrfugdHBWuyiBSuY0v14Jzdmk0u
+         V7Zn8x3raCVke6exenVX1wcDGDFeRd1Qy5hUEABXr/bD1i8WzKINbdjQUXtm5rAMjl+w
+         bOgg==
+X-Gm-Message-State: AOAM533l23o26fjDYf8IaFtkakU/tykK0306eqwf+mnnD5NdJQ44CDru
+        y8Ysnb8Clm+wgR3CvIcPYlfpPQbjIC3eMg==
+X-Google-Smtp-Source: ABdhPJwa+ZzBlBpHuDnGeZby0eouiQdqpT0URVUu78gQU8t16ZFZ3MV/GorfSzD1iZ9T/VN5tnBVxQ==
+X-Received: by 2002:a63:1a48:: with SMTP id a8mr16032597pgm.257.1611830942070;
+        Thu, 28 Jan 2021 02:49:02 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id a30sm5378756pfh.66.2021.01.28.02.49.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Jan 2021 02:49:01 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH V3 0/2] cpufreq: cppc: Add support for frequency invariance
+Date:   Thu, 28 Jan 2021 16:18:54 +0530
+Message-Id: <cover.1611829953.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-References: <20201216174146.10446-1-chang.seok.bae@intel.com> <20201216174146.10446-5-chang.seok.bae@intel.com>
-In-Reply-To: <20201216174146.10446-5-chang.seok.bae@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Jan 2021 11:34:36 +0100
-Message-ID: <CAJZ5v0jbz16DQg6CZr1hp-ZgUJ6gJOw=4AUaGeqeUk2UD7U_Fw@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/8] x86/power: Restore Key Locker internal key from
- the ACPI S3/4 sleep states
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ning Sun <ning.sun@intel.com>, kumar.n.dwarakanath@intel.com,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 16, 2020 at 6:47 PM Chang S. Bae <chang.seok.bae@intel.com> wrote:
->
-> When the system state switches to these sleep states, the internal key gets
-> reset. Since this system transition is transparent to userspace, the
-> internal key needs to be restored properly.
->
-> Key Locker provides a mechanism to back up the internal key in non-volatile
-> memory. The kernel requests a backup right after the key loaded at
-> boot-time and copies it later when the system wakes up.
->
-> The backup during the S5 sleep state is not trusted. It is overwritten by a
-> new key at the next boot.
->
-> On a system with the S3/4 states, enable the feature only when the backup
-> mechanism is supported.
->
-> Disable the feature when the copy fails (or the backup corrupts). The
-> shutdown is considered too noisy. A new key is considerable only when
-> threads can be synchronously suspended.
->
-> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> ---
->  arch/x86/include/asm/keylocker.h | 12 ++++++++
->  arch/x86/kernel/cpu/common.c     | 25 +++++++++++-----
->  arch/x86/kernel/keylocker.c      | 51 ++++++++++++++++++++++++++++++++
->  arch/x86/power/cpu.c             | 34 +++++++++++++++++++++
->  4 files changed, 115 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/x86/include/asm/keylocker.h b/arch/x86/include/asm/keylocker.h
-> index daf0734a4095..722574c305c2 100644
-> --- a/arch/x86/include/asm/keylocker.h
-> +++ b/arch/x86/include/asm/keylocker.h
-> @@ -6,6 +6,7 @@
->  #ifndef __ASSEMBLY__
->
->  #include <linux/bits.h>
-> +#include <asm/msr.h>
->
->  #define KEYLOCKER_CPUID                0x019
->  #define KEYLOCKER_CPUID_EAX_SUPERVISOR BIT(0)
-> @@ -25,5 +26,16 @@ void invalidate_keylocker_data(void);
->  #define invalidate_keylocker_data() do { } while (0)
->  #endif
->
-> +static inline u64 read_keylocker_backup_status(void)
-> +{
-> +       u64 status;
-> +
-> +       rdmsrl(MSR_IA32_IWKEYBACKUP_STATUS, status);
-> +       return status;
-> +}
-> +
-> +void backup_keylocker(void);
-> +bool copy_keylocker(void);
-> +
->  #endif /*__ASSEMBLY__ */
->  #endif /* _ASM_KEYLOCKER_H */
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index d675075848bb..a446d5aff08f 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -463,24 +463,35 @@ __setup("nofsgsbase", x86_nofsgsbase_setup);
->
->  static __always_inline void setup_keylocker(struct cpuinfo_x86 *c)
->  {
-> -       bool keyloaded;
-> -
->         if (!cpu_feature_enabled(X86_FEATURE_KEYLOCKER))
->                 goto out;
->
->         cr4_set_bits(X86_CR4_KEYLOCKER);
->
->         if (c == &boot_cpu_data) {
-> +               bool keyloaded;
-> +
->                 if (!check_keylocker_readiness())
->                         goto disable_keylocker;
->
->                 make_keylocker_data();
-> -       }
->
-> -       keyloaded = load_keylocker();
-> -       if (!keyloaded) {
-> -               pr_err_once("x86/keylocker: Failed to load internal key\n");
-> -               goto disable_keylocker;
-> +               keyloaded = load_keylocker();
-> +               if (!keyloaded) {
-> +                       pr_err("x86/keylocker: Fail to load internal key\n");
-> +                       goto disable_keylocker;
-> +               }
-> +
-> +               backup_keylocker();
-> +       } else {
-> +               bool keycopied;
-> +
-> +               /* NB: When system wakes up, this path recovers the internal key. */
-> +               keycopied = copy_keylocker();
-> +               if (!keycopied) {
-> +                       pr_err_once("x86/keylocker: Fail to copy internal key\n");
-> +                       goto disable_keylocker;
-> +               }
->         }
->
->         pr_info_once("x86/keylocker: Activated\n");
-> diff --git a/arch/x86/kernel/keylocker.c b/arch/x86/kernel/keylocker.c
-> index e455d806b80c..229875ac80d5 100644
-> --- a/arch/x86/kernel/keylocker.c
-> +++ b/arch/x86/kernel/keylocker.c
-> @@ -5,11 +5,15 @@
->   */
->
->  #include <linux/random.h>
-> +#include <linux/acpi.h>
-> +#include <linux/delay.h>
->
->  #include <asm/keylocker.h>
->  #include <asm/fpu/types.h>
->  #include <asm/fpu/api.h>
->
-> +static bool keybackup_available;
-> +
->  bool check_keylocker_readiness(void)
->  {
->         u32 eax, ebx, ecx, edx;
-> @@ -21,6 +25,14 @@ bool check_keylocker_readiness(void)
->                 return false;
->         }
->
-> +       keybackup_available = (ebx & KEYLOCKER_CPUID_EBX_BACKUP);
-> +       /* Internal Key backup is essential with S3/4 states */
-> +       if (!keybackup_available &&
-> +           (acpi_sleep_state_supported(ACPI_STATE_S3) ||
-> +            acpi_sleep_state_supported(ACPI_STATE_S4))) {
-> +               pr_debug("x86/keylocker: no key backup support with possible S3/4\n");
-> +               return false;
-> +       }
->         return true;
->  }
->
-> @@ -29,6 +41,7 @@ bool check_keylocker_readiness(void)
->  #define LOADIWKEY_NUM_OPERANDS 3
->
->  static struct key {
-> +       bool valid;
->         struct reg_128_bit value[LOADIWKEY_NUM_OPERANDS];
->  } keydata;
->
-> @@ -38,11 +51,15 @@ void make_keylocker_data(void)
->
->         for (i = 0; i < LOADIWKEY_NUM_OPERANDS; i++)
->                 get_random_bytes(&keydata.value[i], sizeof(struct reg_128_bit));
-> +
-> +       keydata.valid = true;
->  }
->
->  void invalidate_keylocker_data(void)
->  {
->         memset(&keydata.value, 0, sizeof(struct reg_128_bit) * LOADIWKEY_NUM_OPERANDS);
-> +
-> +       keydata.valid = false;
->  }
->
->  #define USE_SWKEY      0
-> @@ -69,3 +86,37 @@ bool load_keylocker(void)
->
->         return err ? false : true;
->  }
-> +
-> +void backup_keylocker(void)
-> +{
-> +       if (keybackup_available)
-> +               wrmsrl(MSR_IA32_COPY_LOCAL_TO_PLATFORM, 1);
-> +}
-> +
-> +#define KEYRESTORE_RETRY       1
-> +
-> +bool copy_keylocker(void)
-> +{
-> +       bool copied = false;
-> +       int i;
-> +
-> +       /* Use valid key data when available */
-> +       if (keydata.valid)
-> +               return load_keylocker();
-> +
-> +       if (!keybackup_available)
-> +               return copied;
-> +
-> +       wrmsrl(MSR_IA32_COPY_PLATFORM_TO_LOCAL, 1);
-> +
-> +       for (i = 0; (i <= KEYRESTORE_RETRY) && !copied; i++) {
-> +               u64 status;
-> +
-> +               if (i)
-> +                       udelay(1);
-> +               rdmsrl(MSR_IA32_COPY_STATUS, status);
-> +               copied = status & BIT(0) ? true : false;
-> +       }
-> +
-> +       return copied;
-> +}
-> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> index db1378c6ff26..5412440e7c5c 100644
-> --- a/arch/x86/power/cpu.c
-> +++ b/arch/x86/power/cpu.c
-> @@ -25,6 +25,7 @@
->  #include <asm/cpu.h>
->  #include <asm/mmu_context.h>
->  #include <asm/cpu_device_id.h>
-> +#include <asm/keylocker.h>
->
->  #ifdef CONFIG_X86_32
->  __visible unsigned long saved_context_ebx;
-> @@ -57,6 +58,38 @@ static void msr_restore_context(struct saved_context *ctxt)
->         }
->  }
->
-> +/*
-> + * The boot CPU executes this function, while other CPUs restore the key
-> + * through the setup path in setup_keylocker().
-> + */
-> +static void restore_keylocker(void)
-> +{
-> +       u64 keybackup_status;
-> +       bool keycopied;
-> +
-> +       if (!cpu_feature_enabled(X86_FEATURE_KEYLOCKER))
-> +               return;
-> +
-> +       keybackup_status = read_keylocker_backup_status();
-> +       if (!(keybackup_status & BIT(0))) {
-> +               pr_err("x86/keylocker: internal key restoration failed with %s\n",
-> +                      (keybackup_status & BIT(2)) ? "read error" : "invalid status");
-> +               WARN_ON(1);
-> +               goto disable_keylocker;
-> +       }
+Hello,
 
-The above conditional could be consolidated a bit by using WARN():
+CPPC cpufreq driver is used for ARM servers and this patch series tries
+to provide counter-based frequency invariance support for them in the
+absence for architecture specific counters (like AMUs).
 
-if (WARN(!(keybackup_status & BIT(0)), "x86/keylocker: internal key
-restoration failed with %s\n",
-        (keybackup_status & BIT(2)) ? "read error" : "invalid status")
-                goto disable_keylocker;
+This is tested with some hacks, as I didn't have access to the right
+hardware, on the ARM64 hikey board to check the overall functionality
+and that works fine.
 
-Apart from this the patch LGTM.
+Vincent/Ionela, it would be nice if you guys can give this a shot on
+some real hardware where counters work.
 
-Thanks!
+This is based of pm/linux-next (need some stuff from the arm64 tree).
+These patches should get merged via the arm64 tree only for the same
+reason.
 
-> +
-> +       keycopied = copy_keylocker();
-> +       if (keycopied)
-> +               return;
-> +
-> +       pr_err("x86/keylocker: internal key copy failure\n");
-> +
-> +disable_keylocker:
-> +       pr_info("x86/keylocker: Disabled with internal key restoration failure\n");
-> +       setup_clear_cpu_cap(X86_FEATURE_KEYLOCKER);
-> +       cr4_clear_bits(X86_CR4_KEYLOCKER);
-> +}
-> +
->  /**
->   *     __save_processor_state - save CPU registers before creating a
->   *             hibernation image and before restoring the memory state from it
-> @@ -265,6 +298,7 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
->         mtrr_bp_restore();
->         perf_restore_debug_store();
->         msr_restore_context(ctxt);
-> +       restore_keylocker();
->
->         c = &cpu_data(smp_processor_id());
->         if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
-> --
-> 2.17.1
->
+Changes since V2:
+- Not sending as an RFC anymore.
+- Several renames, reordering of code in 1/2 based on Ionela's comments.
+- Several rebase changes for 2/2.
+- The freq_scale calculations are optimized a bit.
+- Better overall commenting and commit logs.
+
+Changes since V1:
+- The interface for setting the callbacks is improved, so different
+  parts looking to provide their callbacks don't need to think about
+  each other.
+
+- Moved to per-cpu storage for storing the callback related data, AMU
+  counters have higher priority with this.
+
+--
+viresh
+
+Viresh Kumar (2):
+  topology: Allow multiple entities to provide sched_freq_tick()
+    callback
+  cpufreq: cppc: Add support for frequency invariance
+
+ arch/arm64/include/asm/topology.h |  10 +-
+ arch/arm64/kernel/topology.c      |  89 +++++++--------
+ drivers/base/arch_topology.c      |  56 +++++++++-
+ drivers/cpufreq/cppc_cpufreq.c    | 179 ++++++++++++++++++++++++++++--
+ include/linux/arch_topology.h     |  15 ++-
+ kernel/sched/core.c               |   1 +
+ 6 files changed, 274 insertions(+), 76 deletions(-)
+
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
