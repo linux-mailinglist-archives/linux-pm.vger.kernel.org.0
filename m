@@ -2,89 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7DE307BED
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 18:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EA6307C3F
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 18:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbhA1RNW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 12:13:22 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45180 "EHLO mx2.suse.de"
+        id S232810AbhA1RY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 12:24:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52950 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231630AbhA1RLS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 Jan 2021 12:11:18 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 66168AD2B;
-        Thu, 28 Jan 2021 17:10:37 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 18:10:33 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     'Artem Bityutskiy' <dedekind1@gmail.com>
-Cc:     Doug Smythies <dsmythies@telus.net>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        'Len Brown' <lenb@kernel.org>,
-        'Linux PM Mailing List' <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] tools/power/turbostat: fix compatibility with older
- kernels
-Message-ID: <20210128171033.GC5685@zn.tnic>
-References: <20210127132444.981120-1-dedekind1@gmail.com>
- <20210127185957.GD8115@zn.tnic>
- <002201d6f4e9$1e9f6c10$5bde4430$@net>
- <20210127203346.GE8115@zn.tnic>
+        id S233003AbhA1RWN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 28 Jan 2021 12:22:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C458764DED;
+        Thu, 28 Jan 2021 17:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611854492;
+        bh=wN/vYbjN9dGjcLcGdnyPwaVCaPorwnyIWndgrJa+c0Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h4Jj9WXKrn+6FaWHbaqLTTirarAYDVXXbmjKm43Pwyv9CvWF/FCcMNgRPgrx3ByMo
+         28fxrNXlVVTo5g3juSTT+7sNpMpJgqbGb4DuHZ8KF3an7+1BY6+nbU2z1+n7iGhwih
+         wkXCxISTeJgnl/ygSyJKGjvjcoECGRGnzVlWu3E9jKtn6wt5VP3JuKjRalNmzU1hCy
+         4OORtBiU8sk9BK43/E82eZ6NyUeC5IBPMIffBmVCBQkowGnqLXw2BEreMWAztT9vas
+         UyeabZv1xy0SE+hBOV4TAGEolTup4mRCss8y10V/Fh7qEXQ2ropSARSls0wsWRnCVn
+         9DTzlrlwSUtJA==
+Date:   Thu, 28 Jan 2021 09:21:32 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        xen-devel@lists.xenproject.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
+        ocfs2-devel@oss.oracle.com, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org, axboe@kernel.dk, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, minchan@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, agk@redhat.com,
+        snitzer@redhat.com, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, viro@zeniv.linux.org.uk, tytso@mit.edu,
+        jaegeuk@kernel.org, ebiggers@kernel.org, shaggy@kernel.org,
+        konishi.ryusuke@gmail.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, damien.lemoal@wdc.com,
+        naohiro.aota@wdc.com, jth@kernel.org, rjw@rjwysocki.net,
+        len.brown@intel.com, pavel@ucw.cz, akpm@linux-foundation.org,
+        hare@suse.de, gustavoars@kernel.org, tiwai@suse.de,
+        alex.shi@linux.alibaba.com, asml.silence@gmail.com,
+        ming.lei@redhat.com, tj@kernel.org, osandov@fb.com,
+        bvanassche@acm.org, jefflexu@linux.alibaba.com
+Subject: Re: [RFC PATCH 26/34] xfs: use bio_new in xfs_rw_bdev
+Message-ID: <20210128172132.GM7698@magnolia>
+References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
+ <20210128071133.60335-27-chaitanya.kulkarni@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210127203346.GE8115@zn.tnic>
+In-Reply-To: <20210128071133.60335-27-chaitanya.kulkarni@wdc.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 09:33:46PM +0100, Borislav Petkov wrote:
-> Yeah, lemme do a proper patch tomorrow.
+On Wed, Jan 27, 2021 at 11:11:25PM -0800, Chaitanya Kulkarni wrote:
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 
-Artem, how's that?
+Seems fine to me...
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
----
+--D
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 389ea5209a83..a7c4f0772e53 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1834,12 +1834,15 @@ int get_mp(int cpu, struct msr_counter *mp, unsigned long long *counterp)
- int get_epb(int cpu)
- {
- 	char path[128 + PATH_BYTES];
-+	unsigned long long msr;
- 	int ret, epb = -1;
- 	FILE *fp;
- 
- 	sprintf(path, "/sys/devices/system/cpu/cpu%d/power/energy_perf_bias", cpu);
- 
--	fp = fopen_or_die(path, "r");
-+	fp = fopen(path, "r");
-+	if (!fp)
-+		goto msr_fallback;
- 
- 	ret = fscanf(fp, "%d", &epb);
- 	if (ret != 1)
-@@ -1848,6 +1851,11 @@ int get_epb(int cpu)
- 	fclose(fp);
- 
- 	return epb;
-+
-+msr_fallback:
-+	get_msr(cpu, MSR_IA32_ENERGY_PERF_BIAS, &msr);
-+
-+	return msr & 0xf;
- }
- 
- void get_apic_id(struct thread_data *t)
-
----
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+> ---
+>  fs/xfs/xfs_bio_io.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/xfs/xfs_bio_io.c b/fs/xfs/xfs_bio_io.c
+> index e2148f2d5d6b..e4644f22ebe6 100644
+> --- a/fs/xfs/xfs_bio_io.c
+> +++ b/fs/xfs/xfs_bio_io.c
+> @@ -26,11 +26,8 @@ xfs_rw_bdev(
+>  	if (is_vmalloc && op == REQ_OP_WRITE)
+>  		flush_kernel_vmap_range(data, count);
+>  
+> -	bio = bio_alloc(GFP_KERNEL, bio_max_vecs(left));
+> -	bio_set_dev(bio, bdev);
+> -	bio->bi_iter.bi_sector = sector;
+> -	bio->bi_opf = op | REQ_META | REQ_SYNC;
+> -
+> +	bio = bio_new(bdev, sector, op, REQ_META | REQ_SYNC, bio_max_vecs(left),
+> +		      GFP_KERNEL);
+>  	do {
+>  		struct page	*page = kmem_to_page(data);
+>  		unsigned int	off = offset_in_page(data);
+> -- 
+> 2.22.1
+> 
