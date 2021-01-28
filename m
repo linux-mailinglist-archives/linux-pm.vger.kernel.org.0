@@ -2,148 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 823FB307369
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 11:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B030E30739F
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 11:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbhA1KHr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 05:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbhA1KH2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 05:07:28 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22926C061573
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jan 2021 02:06:48 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d13so3063970plg.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jan 2021 02:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cBZWaj2uywenUIUOK44qGD3Loy0e9/b1fubB3+jzn28=;
-        b=m0qYlXosbEbrq5WcpnKWh2pXCVvx8OVVvmTthseHiHFztbqft21EEAdg/9qbaHOH9e
-         2mkdmX8aSGd5a6SBHxsBU9mmCzT5AIKDgetRlPrFr22KOzwbBx2nCAIAON4xgjMu4n45
-         nWG+Df7eoqxeyVA2UoH2omw6iMnxmx+9+VAJ7yYE5lo6j2Ri4cYMmTNqJNuqP9ohpXe7
-         BoZhq+vP2Ha4qFO93BujdslZTaJr7soJW9R+Vs5OWV6+e4HcVUHlNCEgLHIip28A+6WK
-         AedM7Qt86orOYOybD42Pwc4nC+NrrLzRtOCqDZvob7Uc7mFJI0IJeY1AVhlLNZkwUiW8
-         m5qA==
+        id S232430AbhA1KWr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 05:22:47 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:46845 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232167AbhA1KWa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 05:22:30 -0500
+Received: by mail-ot1-f44.google.com with SMTP id d1so4656563otl.13;
+        Thu, 28 Jan 2021 02:22:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cBZWaj2uywenUIUOK44qGD3Loy0e9/b1fubB3+jzn28=;
-        b=cK/qOKNB16ivQvX3CE5+H2IDMXohGMCEpvPSmi6NB7MjW/bJSgut0SDZWb3namIZQw
-         TXU1rG+4sCxC+Cks9S7a3SMYRwxOjnnuhKXMQ4iM96vri1/RWsVFDof4Qmi2Pufc1jn+
-         oYvain2TNKJwt44oTcjv2waYaOUYyigz/IAhiUbb9fQ74OvmcgIGmdTLI3faH0ravlKk
-         F0AAxhnWt686NU7pFTbv84G/vi0Q2adrSi2jaX7QSAE9WPvEmEoQ2cz48895GlWldvUc
-         UPCyc7x/Z4JHzTYGSDvaies/27NtBTpyqxsTP11nhyev6KkET1RrnhlS9fbPALOa8h6n
-         hesg==
-X-Gm-Message-State: AOAM531Gb3G0gkHXzsEcIex1sQmIM0MGv9T8L0pIqWkRWr5qwC5joWXA
-        GJcDiEUAvV4K4hGxGGyEuj4Hlh+aqqbXOA==
-X-Google-Smtp-Source: ABdhPJxBDwVqMF7IIVucDTTS2NMNCchkkEh8PfPH1VqrxqgMI+pMf4U1EM1p2MEjrGuAJQf73xQCAA==
-X-Received: by 2002:a17:90a:df15:: with SMTP id gp21mr10051363pjb.63.1611828407605;
-        Thu, 28 Jan 2021 02:06:47 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id q22sm5535066pgi.66.2021.01.28.02.06.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 Jan 2021 02:06:46 -0800 (PST)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Akhil P Oommen <akhilpo@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Update bandwidth requirements based on scaling up/down
-Date:   Thu, 28 Jan 2021 15:36:39 +0530
-Message-Id: <8b523d9f7f0a00f4353cb2f0d6c8c3ab2b7c9324.1611828360.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HDfQ7EgSz4He6IVrUzqy89nGy356H19n/4Ap6Knawyw=;
+        b=ap5O9cqTcOiSHFhFdbRrv53BN6XowdeTuBT1GP9VPeY+ZNabvIwActdIi7PQ47tvbV
+         /YDmcZ+nY6gZKcmfEaLUvP6zF6DoF1yYK3FCj3QG/gKoALMMKIy966Veb/uk7vYW16fe
+         A5piiN825Sk5u/MZFMC+Q9bVHmuGzttXQUFPZPzhWtx6wXVGJJeeIXY8y3/pdvX4ASAC
+         lFXndUvDktmKSbPDzPVRRCO6XTv9Ru1uvOG1CM3k7qDJSNoXw30rxMqWmpPywwOSDUMA
+         Oer+6NQ9jcBMfpHHEuzTOSlweRtKkArqFojZ1wjhJUdrcBNk8C6H/obzrnzVdQ3/xqrM
+         GGyw==
+X-Gm-Message-State: AOAM532mflGamN0r49fluHL4KmEJBqCZzAZg4X2HpYsQuGNmRcMFBLrj
+        OfxVkla/cS6HJNSzKNMFeC7s4Ouy8mfgNCp43XNiwJSLdck=
+X-Google-Smtp-Source: ABdhPJwJviHVEMHN6dwg9pHl9sFzPeOTWi/Tyw7MUMRzUkqGbWVHXybuLc31QSYFbmu849bxozre+7WWIBRJddZRpNc=
+X-Received: by 2002:a05:6830:2313:: with SMTP id u19mr11117098ote.321.1611829309173;
+ Thu, 28 Jan 2021 02:21:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com> <20210128071133.60335-30-chaitanya.kulkarni@wdc.com>
+In-Reply-To: <20210128071133.60335-30-chaitanya.kulkarni@wdc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 28 Jan 2021 11:21:36 +0100
+Message-ID: <CAJZ5v0h01e4LgV0c5FxLorcc6iFW2LVzC=hJcd7LNAJ6D0E8jg@mail.gmail.com>
+Subject: Re: [RFC PATCH 29/34] power/swap: use bio_new in hib_submit_io
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        drbd-dev@lists.linbit.com, xen-devel@lists.xenproject.org,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        target-devel@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
+        ocfs2-devel@oss.oracle.com, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        roger.pau@citrix.com, Minchan Kim <minchan@kernel.org>,
+        ngupta@vflare.org,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, "Ted Ts'o" <tytso@mit.edu>,
+        jaegeuk@kernel.org, Eric Biggers <ebiggers@kernel.org>,
+        djwong@kernel.org, shaggy@kernel.org, konishi.ryusuke@gmail.com,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>, damien.lemoal@wdc.com,
+        naohiro.aota@wdc.com, jth@kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hannes Reinecke <hare@suse.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Takashi Iwai <tiwai@suse.de>,
+        Alex Shi <alex.shi@linux.alibaba.com>, asml.silence@gmail.com,
+        Ming Lei <ming.lei@redhat.com>, Tejun Heo <tj@kernel.org>,
+        osandov@fb.com, Bart Van Assche <bvanassche@acm.org>,
+        jefflexu@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The bandwidth must be scaled at a different point in the code flow based
-on if we are scaling up or down the frequency, otherwise this may cause
-undesired effects as the device will try to use more of the memory
-bandwidth which may be shared across several devices. Much like how
-regulators and required-opps are programmed.
+On Thu, Jan 28, 2021 at 8:21 AM Chaitanya Kulkarni
+<chaitanya.kulkarni@wdc.com> wrote:
+>
 
-Reported-by: Dmitry Osipenko <digetx@gmail.com>
-Reported-by: Akhil P Oommen <akhilpo@codeaurora.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 40 +++++++++++++++++++++++++++-------------
- 1 file changed, 27 insertions(+), 13 deletions(-)
+Please explain in the changelog why making this change is a good idea.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index e03600547b98..a518173fd64a 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1015,8 +1015,16 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 	/* Scaling up? Configure required OPPs before frequency */
- 	if (!scaling_down) {
- 		ret = _set_required_opps(dev, opp_table, opp, true);
--		if (ret)
-+		if (ret) {
-+			dev_err(dev, "Failed to set required opps: %d\n", ret);
-+			return ret;
-+		}
-+
-+		ret = _set_opp_bw(opp_table, opp, dev);
-+		if (ret) {
-+			dev_err(dev, "Failed to set bw: %d\n", ret);
- 			return ret;
-+		}
- 	}
- 
- 	if (opp_table->set_opp) {
-@@ -1029,24 +1037,30 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
- 	}
- 
-+	if (ret)
-+		return ret;
-+
- 	/* Scaling down? Configure required OPPs after frequency */
--	if (!ret && scaling_down) {
-+	if (scaling_down) {
-+		ret = _set_opp_bw(opp_table, opp, dev);
-+		if (ret) {
-+			dev_err(dev, "Failed to set bw: %d\n", ret);
-+			return ret;
-+		}
-+
- 		ret = _set_required_opps(dev, opp_table, opp, false);
--		if (ret)
-+		if (ret) {
- 			dev_err(dev, "Failed to set required opps: %d\n", ret);
-+			return ret;
-+		}
- 	}
- 
--	if (!ret) {
--		ret = _set_opp_bw(opp_table, opp, dev);
--		if (!ret) {
--			opp_table->enabled = true;
--			dev_pm_opp_put(old_opp);
-+	opp_table->enabled = true;
-+	dev_pm_opp_put(old_opp);
- 
--			/* Make sure current_opp doesn't get freed */
--			dev_pm_opp_get(opp);
--			opp_table->current_opp = opp;
--		}
--	}
-+	/* Make sure current_opp doesn't get freed */
-+	dev_pm_opp_get(opp);
-+	opp_table->current_opp = opp;
- 
- 	return ret;
- }
--- 
-2.25.0.rc1.19.g042ed3e048af
-
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+> ---
+>  kernel/power/swap.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index c73f2e295167..e92e36c053a6 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -271,13 +271,12 @@ static int hib_submit_io(int op, int op_flags, pgoff_t page_off, void *addr,
+>                 struct hib_bio_batch *hb)
+>  {
+>         struct page *page = virt_to_page(addr);
+> +       sector_t sect = page_off * (PAGE_SIZE >> 9);
+>         struct bio *bio;
+>         int error = 0;
+>
+> -       bio = bio_alloc(GFP_NOIO | __GFP_HIGH, 1);
+> -       bio->bi_iter.bi_sector = page_off * (PAGE_SIZE >> 9);
+> -       bio_set_dev(bio, hib_resume_bdev);
+> -       bio_set_op_attrs(bio, op, op_flags);
+> +       bio = bio_new(hib_resume_bdev, sect, op, op_flags, 1,
+> +                     GFP_NOIO | __GFP_HIGH);
+>
+>         if (bio_add_page(bio, page, PAGE_SIZE, 0) < PAGE_SIZE) {
+>                 pr_err("Adding page to bio failed at %llu\n",
+> --
+> 2.22.1
+>
