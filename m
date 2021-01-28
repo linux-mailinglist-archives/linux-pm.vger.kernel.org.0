@@ -2,95 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5EA3068AD
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 01:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7282E3068B1
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 01:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbhA1Ae3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jan 2021 19:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S229640AbhA1AfY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jan 2021 19:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhA1AeT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 19:34:19 -0500
+        with ESMTP id S229520AbhA1AfM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 19:35:12 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579D0C061573;
-        Wed, 27 Jan 2021 16:33:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AC8C061573;
+        Wed, 27 Jan 2021 16:34:30 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 2E8521F45627
+        with ESMTPSA id 91E071F45627
 Received: by earth.universe (Postfix, from userid 1000)
-        id 6C5903C0C97; Thu, 28 Jan 2021 01:33:35 +0100 (CET)
-Date:   Thu, 28 Jan 2021 01:33:35 +0100
+        id 5ABC23C0C97; Thu, 28 Jan 2021 01:34:27 +0100 (CET)
+Date:   Thu, 28 Jan 2021 01:34:27 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     xinjian <xinjian34324@163.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xinjian <xinjian@yulong.com>
-Subject: Re: [PATCH] power: supply: bq25980: Fix repetive bq25975 with bq25960
-Message-ID: <20210128003335.clpbwb2cuwp5bnel@earth.universe>
-References: <20210122064052.40880-1-xinjian34324@163.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] power: supply: smb347-charger: Fix interrupt usage if
+ interrupt is unavailable
+Message-ID: <20210128003427.dil4b7vtqdt5p27u@earth.universe>
+References: <20210122191734.27584-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zgmr2dkejh6fdxdm"
+        protocol="application/pgp-signature"; boundary="hevgxstszn4dg4ig"
 Content-Disposition: inline
-In-Reply-To: <20210122064052.40880-1-xinjian34324@163.com>
+In-Reply-To: <20210122191734.27584-1-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---zgmr2dkejh6fdxdm
+--hevgxstszn4dg4ig
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Jan 22, 2021 at 02:40:52PM +0800, xinjian wrote:
-> From: xinjian <xinjian@yulong.com>
+On Fri, Jan 22, 2021 at 10:17:34PM +0300, Dmitry Osipenko wrote:
+> The IRQ=3D0 could be a valid interrupt number in kernel because interrupt
+> numbers are virtual in a modern kernel. Hence fix the interrupt usage in
+> a case if interrupt is unavailable by not overriding the interrupt number
+> which is used by the driver.
 >=20
-> The i2c_device_id bq25975 is repeated, and should be bq25960.
+> Note that currently Nexus 7 is the only know device which uses SMB347
+> kernel diver and it has a properly working interrupt, hence this patch
+> doesn't fix any real problems, it's a minor cleanup/improvement.
 >=20
-> Signed-off-by: xinjian <xinjian@yulong.com>
+> Fixes: 99298de5df92 ("power: supply: smb347-charger: Replace mutex with I=
+RQ disable/enable")
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/power/supply/bq25980_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/bq25980_charger.c b/drivers/power/suppl=
-y/bq25980_charger.c
-> index c936f311eb4f..530ff4025b31 100644
-> --- a/drivers/power/supply/bq25980_charger.c
-> +++ b/drivers/power/supply/bq25980_charger.c
-> @@ -1285,7 +1285,7 @@ static int bq25980_probe(struct i2c_client *client,
->  static const struct i2c_device_id bq25980_i2c_ids[] =3D {
->  	{ "bq25980", BQ25980 },
->  	{ "bq25975", BQ25975 },
-> -	{ "bq25975", BQ25975 },
-> +	{ "bq25960", BQ25960 },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(i2c, bq25980_i2c_ids);
 
 Thanks, queued.
 
 -- Sebastian
 
---zgmr2dkejh6fdxdm
+>  drivers/power/supply/smb347-charger.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply=
+/smb347-charger.c
+> index d3bf35ed12ce..8cfbd8d6b478 100644
+> --- a/drivers/power/supply/smb347-charger.c
+> +++ b/drivers/power/supply/smb347-charger.c
+> @@ -137,6 +137,7 @@
+>   * @mains_online: is AC/DC input connected
+>   * @usb_online: is USB input connected
+>   * @charging_enabled: is charging enabled
+> + * @irq_unsupported: is interrupt unsupported by SMB hardware
+>   * @max_charge_current: maximum current (in uA) the battery can be charg=
+ed
+>   * @max_charge_voltage: maximum voltage (in uV) the battery can be charg=
+ed
+>   * @pre_charge_current: current (in uA) to use in pre-charging phase
+> @@ -193,6 +194,7 @@ struct smb347_charger {
+>  	bool			mains_online;
+>  	bool			usb_online;
+>  	bool			charging_enabled;
+> +	bool			irq_unsupported;
+> =20
+>  	unsigned int		max_charge_current;
+>  	unsigned int		max_charge_voltage;
+> @@ -862,6 +864,9 @@ static int smb347_irq_set(struct smb347_charger *smb,=
+ bool enable)
+>  {
+>  	int ret;
+> =20
+> +	if (smb->irq_unsupported)
+> +		return 0;
+> +
+>  	ret =3D smb347_set_writable(smb, true);
+>  	if (ret < 0)
+>  		return ret;
+> @@ -923,8 +928,6 @@ static int smb347_irq_init(struct smb347_charger *smb,
+>  	ret =3D regmap_update_bits(smb->regmap, CFG_STAT,
+>  				 CFG_STAT_ACTIVE_HIGH | CFG_STAT_DISABLED,
+>  				 CFG_STAT_DISABLED);
+> -	if (ret < 0)
+> -		client->irq =3D 0;
+> =20
+>  	smb347_set_writable(smb, false);
+> =20
+> @@ -1345,6 +1348,7 @@ static int smb347_probe(struct i2c_client *client,
+>  		if (ret < 0) {
+>  			dev_warn(dev, "failed to initialize IRQ: %d\n", ret);
+>  			dev_warn(dev, "disabling IRQ support\n");
+> +			smb->irq_unsupported =3D true;
+>  		} else {
+>  			smb347_irq_enable(smb);
+>  		}
+> @@ -1357,8 +1361,8 @@ static int smb347_remove(struct i2c_client *client)
+>  {
+>  	struct smb347_charger *smb =3D i2c_get_clientdata(client);
+> =20
+> -	if (client->irq)
+> -		smb347_irq_disable(smb);
+> +	smb347_irq_disable(smb);
+> +
+>  	return 0;
+>  }
+> =20
+> --=20
+> 2.29.2
+>=20
+
+--hevgxstszn4dg4ig
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmASBl8ACgkQ2O7X88g7
-+poMKw/7BXkCy6q72ZWt+LVLD2Qysg46XCRp+IRGfR1GpjQAeNeL9foURna7sGs3
-aZqnwWKRJyAR2DkSmoAp0Bp9zEGQdMZsd/0Id4rtJyy6NBzy4fTOaWd609xvuuQ3
-cBIxSELlKE1nDEOySbHZxBYQn7xnzQpqt8AgfAAEKJTbTlhQmxYGEnC2BDMdmHFA
-AfPmSBcLHjf7VE1xEU5Zh07KGMVjPw4kgUowaO84NKUcAJfC+UyTPXCPvl01fh8P
-4nkHxYTsBSlnGOhKAI4GUo8lZvd9puGjkx8pnw2HAtUN/Q+6MROE+ew7brlRrVPS
-uN1kDrOwtaRIt0bu13cRua5s196PsG9xKytKZDMAwem5iE9c6x8ZgIyox6mJdPuK
-D8nLY9ADK5uGYnMqpnL2zLLQ8avMQ8zHwr+kzS7l5qTHYYa+xODrnGAanB8nNcAp
-siAfNdekTDW5QAHqjPbZjJFvln2zo8ZCu13QFKKYe3yrUdlXs5rsRPHsgzmp/Rg9
-X2LHG1uXPrSC4RGuEiQDUC9spSMlNJhn88h4tnmgWcwr7CYc4/38AZc8Op0WON/1
-84yuxe2n6GI6BreqH1q7tYVnhM0hu+r9mkxlX/QRPpWJfxWJA1qFbeV1i9XpCgT4
-qDZmUgrCl7u0P/sMZN1kV9V9LnUWF/nGduzq2+J0xIDinjTghc0=
-=pFYr
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmASBpMACgkQ2O7X88g7
++poujBAAjurIzj0e+muNxEkKHCmG2/i6Zoj2oMRQSC8KdUK9mCGm5gtKBx54jdFA
+VqieEtJxlCMwpyfEWKFbAdQEll3w07nG24IHWd+U7GWpeaymERDV/a01Zdvf9oo+
+U385cXbGtOpjSRhOMQXSBfn5GPpZnfs24LpCXwXhH6h6s6knXTmyYcn24NPtqJxw
+Cxytin9QkU6HSY/eAZOY8q1DRszVHtLVJJYJoHHkzr8Q3z/d11q7y62AROhk/PMH
+tq8McX5nZewdmTj4M3NYYe6DA5WzH/7sS9xJNLpAMW7IN6OXPFShW+O9jOmEBHpT
+sEgFnURyRlsyhclTp9QBz/mTQBOPE0jKWLF4Wlfu+rmYyj3V729q+a3aiCGWDkoP
+vLlZkHRHw9g77GuyXbOXBInoZIvx6cTNinnrZLPHH3A/+csiQMfiB/XcvRTPBexe
+/l9pSoFoufMqgvxOa/Ppk/9F8yBWbWAffxbVIsxSnJsopuZKKwMtVQOJBC3uVHwm
+lAJtKa3P1OAXPrmz1uQCVDhmWqGhQymoc3Y3CoVq7r4njUNhuTElv8Vns34FKnmB
+u1TS0xrMjq6nko9ip6wn8L491HicdKLZwpfKC7V2NGiCa36NuB8rYgAAITkJa4p8
+I7KipfASEB3WIm2dSHbRYNDt55VURZB+GATuNSLz1iAkJDyolcQ=
+=NZYk
 -----END PGP SIGNATURE-----
 
---zgmr2dkejh6fdxdm--
+--hevgxstszn4dg4ig--
