@@ -2,155 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A14306883
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 01:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B92F30688D
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 01:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbhA1ASY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jan 2021 19:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbhA1ARo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 19:17:44 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10439C061574
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 16:17:04 -0800 (PST)
+        id S231255AbhA1AUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jan 2021 19:20:31 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36338 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231261AbhA1AT5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 19:19:57 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id CFC3A1F4560D
+        with ESMTPSA id DC2B11F4560D
 Received: by earth.universe (Postfix, from userid 1000)
-        id 4FBFE3C0C97; Thu, 28 Jan 2021 01:17:00 +0100 (CET)
-Date:   Thu, 28 Jan 2021 01:17:00 +0100
+        id D21183C0C97; Thu, 28 Jan 2021 01:18:57 +0100 (CET)
+Date:   Thu, 28 Jan 2021 01:18:57 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 00/10] power: supply: ab8500: refactor and isolate
-Message-ID: <20210128001700.pkuyfpq6uzcjb5ud@earth.universe>
-References: <20210123221908.2993388-1-linus.walleij@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jun Nie <jun.nie@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power/reset: remove zte zx driver
+Message-ID: <20210128001857.nfxlxqfjfdkyx6ze@earth.universe>
+References: <20210120150851.1670788-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mspejcb5fu33ajvu"
+        protocol="application/pgp-signature"; boundary="vuuovyfplnkmpmva"
 Content-Disposition: inline
-In-Reply-To: <20210123221908.2993388-1-linus.walleij@linaro.org>
+In-Reply-To: <20210120150851.1670788-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---mspejcb5fu33ajvu
+--vuuovyfplnkmpmva
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Jan 23, 2021 at 11:18:58PM +0100, Linus Walleij wrote:
-> The AB8500 code was merged in 2012 and hasn't seen
-> much love in the years since that, but the code is
-> needed by the PostmarketOS community.
-> commit a1149ae975547142f78e96745a994cb9b0e98fd2
-> ("ARM: ux500: Disable Power Supply and Battery Management by default")
-> disabled the use of the code in 2013 mentioning that
-> "drivers are more than a little bit broken".
+On Wed, Jan 20, 2021 at 04:08:26PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >=20
-> Charging is nice. The platform is not unused. Let's
-> begin to fix this.
+> The zte zx platform is getting removed, so this driver is no
+> longer needed.
 >=20
-> This patch set does a bunch of things to the AB8500
-> charger code:
->=20
-> - Cleans out non-devicetree code as we are now always
->   probing Ux500 and AB8500 from the device tree.
->=20
-> - Breaks the ties to the MFD subsystem and pushes the
->   charging-related headers down to power/supply/*
->   these headers were shared in include/linux/mfd in
->   order to support board files, and with device tree
->   that is unnecessary.
->=20
-> - Bind all subdrivers using the driver component
->   model which is common in the DRM subsystem, and as
->   a consequence we know the order the subdrivers are
->   initialized and we can cut the code that is just
->   there to satisfy the case where the drivers probe
->   in different order.
->=20
-> - Add some minor code that makes the drivers actually
->   work (it was very close).
->=20
-> Right now it has dependencies on the MFD tree (this
-> series is based on thefor-mfd-next branch) due to a
-> renaming of the cell macro so the best would be if Lee
-> could merge it, at least partly. I am also fine if
-> we only merge patches 1 thru 4 into MFD this merge
-> window to isolate the charger code into drivers/power
-> so we can continue next merge window with the rest
-> of the code.
+> Cc: Jun Nie <jun.nie@linaro.org>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-Patches 1-4 and 6-9 are
-
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-I think best solution would be to merge patches 1-4 using
-an immutable branch based on v5.11-rc1 and Lee fixing the
-trivial conflict when merging the immutable branch into
-his tree. That way I can also merge it into the power-supply
-tree and take the remaining patches (but I actually have
-feedback/questions for patch 5 and 10).
+Thanks, queued.
 
 -- Sebastian
 
-> Linus Walleij (10):
->   power: supply: ab8500: Require device tree
->   power: supply: ab8500: Push data to power supply code
->   power: supply: ab8500: Push algorithm to power supply code
->   power: supply: ab8500: Push data to power supply code
->   power: supply: ab8500: Move to componentized binding
->   power: supply: ab8500: Call battery population once
->   power: supply: ab8500: Avoid NULL pointers
->   power: supply: ab8500: Enable USB and AC
->   power: supply: ab8500: Drop unused member
->   power: supply: ab8500_bmdata: Use standard phandle
+>  drivers/power/reset/Kconfig     |  7 ---
+>  drivers/power/reset/Makefile    |  1 -
+>  drivers/power/reset/zx-reboot.c | 86 ---------------------------------
+>  3 files changed, 94 deletions(-)
+>  delete mode 100644 drivers/power/reset/zx-reboot.c
 >=20
->  drivers/mfd/ab8500-core.c                     |  17 +-
->  drivers/power/supply/Kconfig                  |   2 +-
->  .../power/supply}/ab8500-bm.h                 | 298 ++++++++++++-
->  .../power/supply/ab8500-chargalg.h            |   6 +-
->  drivers/power/supply/ab8500_bmdata.c          |   6 +-
->  drivers/power/supply/ab8500_btemp.c           | 162 +++----
->  drivers/power/supply/ab8500_charger.c         | 406 ++++++++++--------
->  drivers/power/supply/ab8500_fg.c              | 154 +++----
->  drivers/power/supply/abx500_chargalg.c        | 129 +++---
->  drivers/power/supply/pm2301_charger.c         |   4 +-
->  include/linux/mfd/abx500.h                    | 276 ------------
->  11 files changed, 720 insertions(+), 740 deletions(-)
->  rename {include/linux/mfd/abx500 =3D> drivers/power/supply}/ab8500-bm.h =
-(58%)
->  rename include/linux/mfd/abx500/ux500_chargalg.h =3D> drivers/power/supp=
-ly/ab8500-chargalg.h (93%)
->=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index b22c4fdb2561..0376a90bec09 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -251,13 +251,6 @@ config POWER_RESET_RMOBILE
+>  	help
+>  	  Reboot support for Renesas R-Mobile and SH-Mobile SoCs.
+> =20
+> -config POWER_RESET_ZX
+> -	tristate "ZTE SoCs reset driver"
+> -	depends on ARCH_ZX || COMPILE_TEST
+> -	depends on HAS_IOMEM
+> -	help
+> -	  Reboot support for ZTE SoCs.
+> -
+>  config REBOOT_MODE
+>  	tristate
+> =20
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index 9dc49d3a57ff..46331119c886 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -29,7 +29,6 @@ obj-$(CONFIG_POWER_RESET_KEYSTONE) +=3D keystone-reset.o
+>  obj-$(CONFIG_POWER_RESET_SYSCON) +=3D syscon-reboot.o
+>  obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) +=3D syscon-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_RMOBILE) +=3D rmobile-reset.o
+> -obj-$(CONFIG_POWER_RESET_ZX) +=3D zx-reboot.o
+>  obj-$(CONFIG_REBOOT_MODE) +=3D reboot-mode.o
+>  obj-$(CONFIG_SYSCON_REBOOT_MODE) +=3D syscon-reboot-mode.o
+>  obj-$(CONFIG_POWER_RESET_SC27XX) +=3D sc27xx-poweroff.o
+> diff --git a/drivers/power/reset/zx-reboot.c b/drivers/power/reset/zx-reb=
+oot.c
+> deleted file mode 100644
+> index 457950833dba..000000000000
+> --- a/drivers/power/reset/zx-reboot.c
+> +++ /dev/null
+> @@ -1,86 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -/*
+> - * ZTE zx296702 SoC reset code
+> - *
+> - * Copyright (c) 2015 Linaro Ltd.
+> - *
+> - * Author: Jun Nie <jun.nie@linaro.org>
+> - */
+> -
+> -#include <linux/delay.h>
+> -#include <linux/io.h>
+> -#include <linux/module.h>
+> -#include <linux/notifier.h>
+> -#include <linux/of_address.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/reboot.h>
+> -
+> -static void __iomem *base;
+> -static void __iomem *pcu_base;
+> -
+> -static int zx_restart_handler(struct notifier_block *this,
+> -			      unsigned long mode, void *cmd)
+> -{
+> -	writel_relaxed(1, base + 0xb0);
+> -	writel_relaxed(1, pcu_base + 0x34);
+> -
+> -	mdelay(50);
+> -	pr_emerg("Unable to restart system\n");
+> -
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static struct notifier_block zx_restart_nb =3D {
+> -	.notifier_call =3D zx_restart_handler,
+> -	.priority =3D 128,
+> -};
+> -
+> -static int zx_reboot_probe(struct platform_device *pdev)
+> -{
+> -	struct device_node *np =3D pdev->dev.of_node;
+> -	int err;
+> -
+> -	base =3D of_iomap(np, 0);
+> -	if (!base) {
+> -		WARN(1, "failed to map base address");
+> -		return -ENODEV;
+> -	}
+> -
+> -	np =3D of_find_compatible_node(NULL, NULL, "zte,zx296702-pcu");
+> -	pcu_base =3D of_iomap(np, 0);
+> -	of_node_put(np);
+> -	if (!pcu_base) {
+> -		iounmap(base);
+> -		WARN(1, "failed to map pcu_base address");
+> -		return -ENODEV;
+> -	}
+> -
+> -	err =3D register_restart_handler(&zx_restart_nb);
+> -	if (err) {
+> -		iounmap(base);
+> -		iounmap(pcu_base);
+> -		dev_err(&pdev->dev, "Register restart handler failed(err=3D%d)\n",
+> -			err);
+> -	}
+> -
+> -	return err;
+> -}
+> -
+> -static const struct of_device_id zx_reboot_of_match[] =3D {
+> -	{ .compatible =3D "zte,sysctrl" },
+> -	{}
+> -};
+> -MODULE_DEVICE_TABLE(of, zx_reboot_of_match);
+> -
+> -static struct platform_driver zx_reboot_driver =3D {
+> -	.probe =3D zx_reboot_probe,
+> -	.driver =3D {
+> -		.name =3D "zx-reboot",
+> -		.of_match_table =3D zx_reboot_of_match,
+> -	},
+> -};
+> -module_platform_driver(zx_reboot_driver);
+> -
+> -MODULE_DESCRIPTION("ZTE SoCs reset driver");
+> -MODULE_AUTHOR("Jun Nie <jun.nie@linaro.org>");
+> -MODULE_LICENSE("GPL v2");
 > --=20
 > 2.29.2
 >=20
 
---mspejcb5fu33ajvu
+--vuuovyfplnkmpmva
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmASAnwACgkQ2O7X88g7
-+pqqEg//Vc6lnORuzOVt0i63m9+CPZHT/uSRqsrZqKknHJmiFgBZTBiXXGT89uA+
-XGWieq8b52srA+wj9Gmj12drEIQj0kn2IUE4HCv3irIHyFFR5O2BfFpZo6optW85
-dDz2KeW/LNHulIHmNnfOZKj6Ib5CwMQqXqgUGAP+aSApIqJd+APAXcV1f7FNMEjw
-xVby3GsDgreuOFV9ELAgeS3Z6eUNQ4gaHEumuwMLAoNml0Z1DPbJ+YGqIWtohdW1
-A8N5WlZmda+Ram5MPruu7MCDbYX2d+TcqRAWpZbeMGWedni1u1gVrEwNEL9Bomi6
-t9jZGuVopvvFkzkKPiIQkhXfwGiiKvapvHQI2LtJC3ww2UYRMuO+Q6Lo8yGCrmAZ
-f7JE2BoWbc2QsE/UDWosf5ppqS1bS7QROZ4LKBs/LH7aCNasBFQmcBi5H2bzB+Zv
-dATllV2yOTc13II9MuG8BQIq9ycUC0hz2Y2SLFePH9MsIkM7/8h/0kPve6idu0Yl
-K0OOcaqrZQw5AhvJ91OXL+BIbsKclCF0xdJOmt7jwbQjzVQIKTuFWGbyCeUfHMrG
-HHoYIaUTaGy6KWAvWVFJAy+P9dGGiZUaqBHAByVYnC9KnOK92/v1Ezw8aH7pSz0M
-4bm9UGdXyuRrbH945zfwTsuz7bxjiu27k+K5UejMCDOVkYg6aC4=
-=y147
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmASAvEACgkQ2O7X88g7
++poBtw/7B1nY0wBH91ftjlZ6t079U27zYLApRVUokmLY9xOxS41O/lADZjb8i62H
+7cDen/RnqVq7ozT+gDa1GG0gbFRMyqhhaSpI92gbatukJBStn6ZmHIXqI6DZRf7Q
+j3txMqernTpv0PsXEB+cSAV6fl38K6O+HwzMD2MYmkS9njxwAlqg11t53yYqFVtI
+F5IMDiuy9/N0ta2/kLWLf1dubT3qUD9ZnMSuU/bVmoYlAaXywGU44lCp5gZw2kuR
+LWjVORQTC6Ns5z3n7tQHvJY4hyNmVTJk49f6/4GJdXkN3iNuGh7s0GqUAnWDqznq
+nTidX9fFal2O4TObyoMuvNcY8dJdO/8r7b8hS57wqJMSzRLke8K6g2soUU/dgEIU
+uAQflzSob4H0pZkQ1BgumTa8i6LpbU4dEXZ8JOkNITAnP/jT8cKkyINpdzPggUBU
+8z66hQdY9ANTuuDgwTayBGobyOPGZDKSLJPifzP64ffBJVZR43bBPbo77gvv9Ial
+yaQZiuXYBFtRS7q47dKoVblLfp+B1md+IObCLBolApBapmJTAIf0kgM+6GRXnX9h
+rc21RzgfUZtr050LxzTE6wlNxKH/lRthg/huv5gUl+e5CWA8OKP9M9SAtY79gn+r
+T29+l7bsojsgcMNq0EEvqjHWVJg2QxWfeoHQWk5mSUxkC7Ykb1c=
+=M4o/
 -----END PGP SIGNATURE-----
 
---mspejcb5fu33ajvu--
+--vuuovyfplnkmpmva--
