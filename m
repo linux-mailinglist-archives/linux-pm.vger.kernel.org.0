@@ -2,99 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E7C306C2D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 05:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55962306C94
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 06:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbhA1EWS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jan 2021 23:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S229646AbhA1FGN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 00:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbhA1EWR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jan 2021 23:22:17 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BDFC061574
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 20:21:36 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id t29so3163087pfg.11
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 20:21:36 -0800 (PST)
+        with ESMTP id S229446AbhA1FGK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 00:06:10 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E4CC061573
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 21:05:29 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id u8so4316175ior.13
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jan 2021 21:05:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jPEFaIx1yHTK24ypqi53HKXI8fE0uVbSnWtKF2EIgzI=;
-        b=OFnSQkYoe9kKZ10tVm3QByzfyaPyo4w5g0/W7GQEoKnbKWJmWdsWEvqe5w5xyC+m33
-         Vh2rw+KwAVf7nkrCGPbpyAcI6QIX73/yuWF0aF+JyjkITOluPkr9WpprGKPw+F3W1BJs
-         1ADWqUb2ut405RryMrBvk/AsXMSw4LCqqc3BWrzC0mWfBaO3TvN1KaQwLHHfflp8YN4z
-         aF08DnoLLtDv9UOM4lnWfLwFTdaa18NIjBw/rghja8kkwEiM3cFs7BYNkJHSmy9+wtrd
-         TkwJjryFyIjughIBVu295YEbNMzKjjexhpuiAdaW0cTCGGrqrP7DTmUWkn0D1JODXk4T
-         De5w==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KD4tLcNiy4HDrNzSGD8idjPG6xTsOou7ZvcPQ2ez8CM=;
+        b=TifuJpGfQ7QtFN4bFHbdHHfGowQ6U7GIMHEry/x3fvhgeZbLFRYf4vrRfQqHOaTtrZ
+         eCszRiZhu3+nL8/ZfDIdEL+r0fApbE/n143eaR/RCh0w7j7GRD398mwMGjWDLSFk0zGM
+         Z6cJOQ8JW1OfTub+T2OPb1n02EjOYBw/eQwuc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jPEFaIx1yHTK24ypqi53HKXI8fE0uVbSnWtKF2EIgzI=;
-        b=HxiAiDqsvKqomi1PrALj/36XPeLzT9PKzn3zK/r61aNqSSNxAtQDRBWv+2RaXfUNsF
-         jH3ebboHyJ1tKfbs6NTe3zZ3OmOUhxhGFDyPeA6T+3nBMm70ge48ivR51c+KlqJe9Q83
-         WEDZiSNcwQYlUBT85l+HSo/sFgsiKguT6Gnu6gMcDnPRQ92jF8afNDnsBG95FUOK9rxn
-         YJs+jq9emjv/n/jsrDNV8W5zXsWpCSLtW196/V1GWT5rpY71NCny3LhIuGeU1oym/4FM
-         50z5fY12OBsXVv8AjBHbGI+bm3avKPC0wqw5Qlq4pZcm9RsNjQgx46J1mQwX6+V0mLx4
-         TkqQ==
-X-Gm-Message-State: AOAM530dbsej4f/Emw1Y4N2tA+ng7ojoiRoXEPsKs5Z8eRsvu86Zta5u
-        wegB0rZ954Hro5RyqOLqOLlLng==
-X-Google-Smtp-Source: ABdhPJwx+CivHEPYDbxBD37bGoeyNKiZnYuIXJOD/BG/RuTHRCGk3I8fvJpvt8mr/E+Dvsg5KFUTDA==
-X-Received: by 2002:a63:6f0d:: with SMTP id k13mr14661332pgc.256.1611807696385;
-        Wed, 27 Jan 2021 20:21:36 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id r194sm3932994pfr.168.2021.01.27.20.21.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Jan 2021 20:21:35 -0800 (PST)
-Date:   Thu, 28 Jan 2021 09:51:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] opp: Allow dev_pm_opp_set_opp() to be called without opp
-Message-ID: <20210128042131.k7mh2a3xneoecwcu@vireshk-i7>
-References: <20210128040426.953529-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KD4tLcNiy4HDrNzSGD8idjPG6xTsOou7ZvcPQ2ez8CM=;
+        b=UBu6HL1nkrFv6I5IZcTc2QpwHEOq4UJAZuayVUNN2CZ3BBK7mMXlwXIHIq6VS72iuk
+         qdh0ZLly1yPD3RybAw3Nghk7riChEAXsCXKVgLc9cVDXYcf4J2kjSDLTxfgJLO7uOk6T
+         Wa7xo5HhHkQqM/QGXJ7jtZP5WocHKNqmhySHq/p8dBtQhZv6noacMAKd7y0bHPUqqOsv
+         8wdNYN3jlGUEjPYnO0E4iy2/ex/P3ZGWJnQhGm0tvddj+EWZiSioYiVMbFaeEHICs9EE
+         3Kfbsg3TPIcp/RsNko9T+RzDpjv6q1wt3yUg6uNL9O2bFtSXUaWit2jMhvvkMS2j/zPw
+         gJNA==
+X-Gm-Message-State: AOAM530jQNXG2cORzpk2V3s9Z64KeAF3oS55mnTw5cCmrUk5IrwWS4YQ
+        E6San1/AwxjukiuPXQiAnFkWtjHT1EpTvGS7kunRaA==
+X-Google-Smtp-Source: ABdhPJwuSTPahAgGAw+cKvGKb8TBfZr01yuh3jcOCIdO5QCznjylSsK5+v58VVUIpuRX3/ECyMmBFiBuxCZc4RRVrr0=
+X-Received: by 2002:a6b:2d4:: with SMTP id 203mr9812074ioc.0.1611810328608;
+ Wed, 27 Jan 2021 21:05:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210128040426.953529-1-bjorn.andersson@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20190717222340.137578-4-saravanak@google.com> <20191125112812.26jk5hsdwqfnofc2@vireshk-i7>
+ <20200127061118.5bxei6nghowlmf53@vireshk-i7> <b0be1275-c5cb-8171-58fa-64d65f60eaf8@codeaurora.org>
+ <20200130042126.ahkik6ffb5vnzdim@vireshk-i7> <CAJMQK-gmO-tLZkRRxRdgU9eyfo95omw_RnffFVdhv2A6_9T-nQ@mail.gmail.com>
+ <20210118073430.a6lr3ynkd2duv34l@vireshk-i7> <CAJMQK-j6EYjU1z_SUY4MFEJO6qTtOH7mQ_QWj2iUMewBKAghng@mail.gmail.com>
+ <20210127115415.7zjpf6uaybwswno3@vireshk-i7> <CAJMQK-hgeOv9XDasmmWGguxyC62SCsSoX5_enEb46whE8_Emew@mail.gmail.com>
+ <20210128041342.owkjl4voodw4dcmf@vireshk-i7>
+In-Reply-To: <20210128041342.owkjl4voodw4dcmf@vireshk-i7>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Thu, 28 Jan 2021 13:05:02 +0800
+Message-ID: <CAJMQK-ihjnTWXVuKZXE=cX2TpVaFMTreZ7fdieWm7PRbB8byxg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <saravanak@google.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-01-21, 20:04, Bjorn Andersson wrote:
-> a6xx_gmu_stop() calls dev_pm_opp_set_opp() with NULL as opp in order to
-> drop its bandwidth request, which was valid with dev_pm_opp_set_bw().
-> But after the transition to dev_pm_opp_set_opp() this leads to a NULL
-> dereference before jumping into _set_opp(), which does disable the
-> vote as expected.
-> 
-> Fixes: a0d67b94e2ef ("opp: Implement dev_pm_opp_set_opp()")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/opp/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 583bb1274df9..3ff05f40e443 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1157,7 +1157,7 @@ int dev_pm_opp_set_opp(struct device *dev, struct dev_pm_opp *opp)
->  		return PTR_ERR(opp_table);
->  	}
->  
-> -	ret = _set_opp(dev, opp_table, opp, opp->rate);
-> +	ret = _set_opp(dev, opp_table, opp, opp ? opp->rate : 0);
->  	dev_pm_opp_put_opp_table(opp_table);
->  
->  	return ret;
+On Thu, Jan 28, 2021 at 12:13 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 27-01-21, 22:40, Hsin-Yi Wang wrote:
+> > Hi Viresh,
+> >
+> > I tested this patch with devfreq passive governor[1] and mt8183
+> > cci[2]. It's also working as expected.
+>
+> I hope I can add your Tested-by for the patch then, right ?
+>
+Yes, thanks!
 
-I specially handled this case with care and still missed this :(
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
-I have updated the original patch to fix it, thanks.
+> > [1] https://patchwork.kernel.org/project/linux-pm/cover/20190724014222.110767-1-saravanak@google.com/
+> > (patch 2,4,5)
+> > [2] https://patchwork.kernel.org/project/linux-mediatek/cover/1594348284-14199-1-git-send-email-andrew-sh.cheng@mediatek.com/
+> >
+> > In my testing case, required_opp_table is not genpd case (mt8183 cci
+> > is not genpd), so I remove the following constraint. Does that make
+> > sense to you?
+> >
+> > @@ -377,13 +377,6 @@ static void lazy_link_required_opp_table(struct
+> > opp_table *new_table)
+> >         struct dev_pm_opp *opp;
+> >         int i, ret;
+> >
+> > -       /*
+> > -        * We only support genpd's OPPs in the "required-opps" for now,
+> > -        * as we don't know much about other cases.
+> > -        */
+> > -       if (!new_table->is_genpd)
+> > -               return;
+> > -
+> >         mutex_lock(&opp_table_lock);
+>
+> We will perhaps need more changes than that, but those should be done
+> separately when you try to add a user for the same.
+>
 
--- 
-viresh
+Ack.
+
+> --
+> viresh
