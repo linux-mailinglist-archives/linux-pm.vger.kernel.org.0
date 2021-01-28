@@ -2,153 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299A430758F
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 13:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E626F3075B2
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jan 2021 13:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbhA1MIv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jan 2021 07:08:51 -0500
-Received: from mga11.intel.com ([192.55.52.93]:27803 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231368AbhA1MIu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 Jan 2021 07:08:50 -0500
-IronPort-SDR: uz6FIVrlZbvZTOsSyvxxA8SNtOYQnFrRMcHnEY/NIiZkET+wv1A5PPQtu+ugdAqorhfh1gZgCX
- vTvoxF8SL0Jw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="176714786"
-X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
-   d="scan'208";a="176714786"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 04:08:07 -0800
-IronPort-SDR: QHqBFmuIZepoAWIouaMwRHAbyJPh2vjlqsnJwepKQIrxnJ/lxKN1W916tPcgz+SGr5kUnU7fSj
- gcVaPgaoWPfg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
-   d="scan'208";a="408968704"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jan 2021 04:08:06 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l565l-0002sV-F1; Thu, 28 Jan 2021 12:08:05 +0000
-Date:   Thu, 28 Jan 2021 20:07:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- d8eafbfd2e76d83b8740c90ab8466243c93d61b4
-Message-ID: <6012a910.MY+w+Ue0LNA4hchw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231409AbhA1MOr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jan 2021 07:14:47 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:54601 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231363AbhA1MOZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jan 2021 07:14:25 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R261e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=56;SR=0;TI=SMTPD_---0UN8ZMkY_1611836008;
+Received: from B-D1K7ML85-0059.local(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0UN8ZMkY_1611836008)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 28 Jan 2021 20:13:29 +0800
+Subject: Re: [RFC PATCH 25/34] ocfs/cluster: use bio_new in dm-log-writes
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        xen-devel@lists.xenproject.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
+        ocfs2-devel@oss.oracle.com, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     axboe@kernel.dk, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, minchan@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, agk@redhat.com,
+        snitzer@redhat.com, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, viro@zeniv.linux.org.uk, tytso@mit.edu,
+        jaegeuk@kernel.org, ebiggers@kernel.org, djwong@kernel.org,
+        shaggy@kernel.org, konishi.ryusuke@gmail.com, mark@fasheh.com,
+        jlbec@evilplan.org, damien.lemoal@wdc.com, naohiro.aota@wdc.com,
+        jth@kernel.org, rjw@rjwysocki.net, len.brown@intel.com,
+        pavel@ucw.cz, akpm@linux-foundation.org, hare@suse.de,
+        gustavoars@kernel.org, tiwai@suse.de, alex.shi@linux.alibaba.com,
+        asml.silence@gmail.com, ming.lei@redhat.com, tj@kernel.org,
+        osandov@fb.com, bvanassche@acm.org, jefflexu@linux.alibaba.com
+References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
+ <20210128071133.60335-26-chaitanya.kulkarni@wdc.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+Message-ID: <8ba2c461-6042-757d-a3c1-0490932e749e@linux.alibaba.com>
+Date:   Thu, 28 Jan 2021 20:13:28 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20210128071133.60335-26-chaitanya.kulkarni@wdc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d8eafbfd2e76d83b8740c90ab8466243c93d61b4  Merge branch 'pm-clk' into bleeding-edge
+I think you send a wrong subject by mistake.
 
-elapsed time: 732m
+Thanks,
+Joseph
 
-configs tested: 90
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                      mgcoge_defconfig
-powerpc                          g5_defconfig
-arm                       aspeed_g4_defconfig
-c6x                        evmc6678_defconfig
-mips                          malta_defconfig
-arc                           tb10x_defconfig
-powerpc                  mpc885_ads_defconfig
-nios2                         3c120_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                 mpc8313_rdb_defconfig
-arc                            hsdk_defconfig
-mips                        bcm63xx_defconfig
-mips                  cavium_octeon_defconfig
-sparc                            allyesconfig
-powerpc                  storcenter_defconfig
-x86_64                              defconfig
-m68k                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210128
-i386                 randconfig-a002-20210128
-i386                 randconfig-a004-20210128
-i386                 randconfig-a005-20210128
-i386                 randconfig-a003-20210128
-i386                 randconfig-a006-20210128
-x86_64               randconfig-a012-20210128
-x86_64               randconfig-a015-20210128
-x86_64               randconfig-a016-20210128
-x86_64               randconfig-a011-20210128
-x86_64               randconfig-a013-20210128
-x86_64               randconfig-a014-20210128
-i386                 randconfig-a013-20210128
-i386                 randconfig-a011-20210128
-i386                 randconfig-a012-20210128
-i386                 randconfig-a016-20210128
-i386                 randconfig-a014-20210128
-i386                 randconfig-a015-20210128
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a002-20210128
-x86_64               randconfig-a003-20210128
-x86_64               randconfig-a001-20210128
-x86_64               randconfig-a005-20210128
-x86_64               randconfig-a006-20210128
-x86_64               randconfig-a004-20210128
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 1/28/21 3:11 PM, Chaitanya Kulkarni wrote:
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+> ---
+>  fs/ocfs2/cluster/heartbeat.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/ocfs2/cluster/heartbeat.c b/fs/ocfs2/cluster/heartbeat.c
+> index 0179a73a3fa2..b34518036446 100644
+> --- a/fs/ocfs2/cluster/heartbeat.c
+> +++ b/fs/ocfs2/cluster/heartbeat.c
+> @@ -515,12 +515,13 @@ static struct bio *o2hb_setup_one_bio(struct o2hb_region *reg,
+>  	unsigned int cs = *current_slot;
+>  	struct bio *bio;
+>  	struct page *page;
+> +	sector_t sect = (reg->hr_start_block + cs) << (bits - 9);
+>  
+>  	/* Testing has shown this allocation to take long enough under
+>  	 * GFP_KERNEL that the local node can get fenced. It would be
+>  	 * nicest if we could pre-allocate these bios and avoid this
+>  	 * all together. */
+> -	bio = bio_alloc(GFP_ATOMIC, 16);
+> +	bio = bio_new(reg->hr_bdev, sect, op, op_flags, 16, GFP_ATOMIC);
+>  	if (!bio) {
+>  		mlog(ML_ERROR, "Could not alloc slots BIO!\n");
+>  		bio = ERR_PTR(-ENOMEM);
+> @@ -528,11 +529,8 @@ static struct bio *o2hb_setup_one_bio(struct o2hb_region *reg,
+>  	}
+>  
+>  	/* Must put everything in 512 byte sectors for the bio... */
+> -	bio->bi_iter.bi_sector = (reg->hr_start_block + cs) << (bits - 9);
+> -	bio_set_dev(bio, reg->hr_bdev);
+>  	bio->bi_private = wc;
+>  	bio->bi_end_io = o2hb_bio_end_io;
+> -	bio_set_op_attrs(bio, op, op_flags);
+>  
+>  	vec_start = (cs << bits) % PAGE_SIZE;
+>  	while(cs < max_slots) {
+> 
