@@ -2,134 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFD9308D62
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Jan 2021 20:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63BC308E26
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Jan 2021 21:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbhA2T1C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Jan 2021 14:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S232816AbhA2UI6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Jan 2021 15:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbhA2T1B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jan 2021 14:27:01 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EA5C061756;
-        Fri, 29 Jan 2021 11:26:20 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id r14so11799114ljc.2;
-        Fri, 29 Jan 2021 11:26:20 -0800 (PST)
+        with ESMTP id S232781AbhA2UG5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jan 2021 15:06:57 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C77C0613D6
+        for <linux-pm@vger.kernel.org>; Fri, 29 Jan 2021 12:06:17 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id j2so5747562pgl.0
+        for <linux-pm@vger.kernel.org>; Fri, 29 Jan 2021 12:06:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1edXkuxL4Xu0RLSWp37gfcR1JPTBiU4IIXR+AyA7W1s=;
-        b=dInJpVjd8dcAnPMt22uLSkDsLH6gOmOp3CwgjIPLdw2cDbQ70Sw4ppR5/RpVoiN1X4
-         1r5y1uaN4BcJXrsefXILbRKuMn5UazroHhuzJqu0cefw1TXyZmapdSbCFJCoqQzwaWdo
-         LV1bTg/kE2XP0H6kdV7q3X+FRWMsFrwY3LQOYuEvHg0QM2C5o6MYhZwc0ImSeOKygQ1k
-         MzlnPmpAif1jZuaveGg3ATSuaXJjiQXDmisSpSd3joPTXGNq7JbBOic0aoqHg1KcWzWc
-         vLjz6fdvXZoqbP6WjQmHHbwDIH6oH+K/Q1xSs9NQlVZsfqTjZhaIq8K+8FaJKUAsA3ed
-         fIiQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=nGuUZMw55hxcG7Ma6KBmO7zSQWoS8fU4Ah14wBhwRlo=;
+        b=f6NVuhQQ+QU1+9KRJwx+uOq/YrRklzEX/l5Zpbzm51dPOWsUnUS3exuvYdcdkTOlhU
+         0ZYg5pSK97Gwcg11/sWmberMOAerGXANMN9LCtkH7CfCoTnB6EbttFV1ymG3SQPbofae
+         Adfn+AU0gVTR116BqU2ZzDSuogmdHgE3drJNChiLbBpEzmJZMfaI+Q45fH/s9Pg3Js4Z
+         GUvciCxX8QPbNYuHo8dWK4he/kphSnT7mTpX14Ua/JUUXqMWb5kX+xqi6akZY6wPW6Wa
+         lpBi57Vu7Arc9wj+fa0fAjixYtAo8Yo8J+0BBLzW7jEebUA7t8mxv9Z7fvDvulAiCnBM
+         0Z8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1edXkuxL4Xu0RLSWp37gfcR1JPTBiU4IIXR+AyA7W1s=;
-        b=HljyR6mJ+WT+5tJRAP/EmoyaDIFar4ZTLV4GeZQPdRD3BYh6EPCif9Mbwh/6TdP6M5
-         N6C2pOQ6nyUoc94UROSCfzW9mBvEhmsRCBYrZPpf8XF25RGYsGNTpJuaCoHosy5PoS2t
-         OLg1IltC3ipEjYdrxWSO5FsAMKdEgNf2948FPNQp/nLYLy+hrOpbf1hn638M12X19+Ye
-         rhEM8RvFmr0R3bj3QtzZjjWhXpxMOE+BK+/Cy4pf9QMhKb6ck3pUC+F4h/YalMbP7gM0
-         5CnX75S+YSaTNF+2hfwMamgLB89cgxwAH1zXPlXRvo1FjP5U0+viq3QsBBf4CPdiyi7M
-         5vRw==
-X-Gm-Message-State: AOAM533G6Al3Uyi2go6K0mtiwtnZ3AewwNCnR5ltcXK4ifXfmG7QGaAi
-        2PxFxJLWofk07bWUmKI6Htms52i7F9E=
-X-Google-Smtp-Source: ABdhPJxhoI4bcqqBU+WRLE6IYYpcGpEc+afEQZ/FO21FG5H8cvNWwO7TyrRxTFE+N1JO6hVeaf1vLA==
-X-Received: by 2002:a2e:3317:: with SMTP id d23mr3319330ljc.199.1611948378953;
-        Fri, 29 Jan 2021 11:26:18 -0800 (PST)
-Received: from ?IPv6:2a00:1370:814d:ea25:a10:76ff:fe69:21b6? ([2a00:1370:814d:ea25:a10:76ff:fe69:21b6])
-        by smtp.googlemail.com with ESMTPSA id b26sm1458799lff.162.2021.01.29.11.26.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jan 2021 11:26:18 -0800 (PST)
-Subject: Re: [PATCH] opp: Don't ignore clk_get() errors other than -ENODEV
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org
-References: <28d24b4c5b9ceabbd32b7b312dee050992610be9.1611917396.git.viresh.kumar@linaro.org>
- <49983ca1-feb3-48f5-bdf5-b2f39c963a74@gmail.com>
- <20210129174608.owianuy6yj5m6fgl@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a7585f81-ed88-06d7-c1c5-4b3052fc0aaa@gmail.com>
-Date:   Fri, 29 Jan 2021 22:26:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=nGuUZMw55hxcG7Ma6KBmO7zSQWoS8fU4Ah14wBhwRlo=;
+        b=TJ3ftAxCOELMlEyn3U4PJTecQEp3W7oSR1TokXNDafNJwJl1uZ3y6GRbg1sQyNVbJf
+         jfe59H6Fu8XOhSfEOt9FrTrAW1maO3KwYLd+eq3ovUdcjuQP4/xWD5qeVRhwzwWHWuMx
+         mrx8tvsfBmjrsjRA/Sxt0q3kGB4jbSUlmNyMozGJ4hDrnlbjsjwjPiGdK85O+GZ64mhG
+         hnRmPoq/Si2ZQaxDPuqINU02TxBJyhBOOFx84qKUUiLlAReu8RvOmB0xhAjajLeLU9d0
+         ZBmJfFAyKjnl/2xFFSpvSLnA49gFnd4AYZ77+4jV2KQCFfGCYNpx1LeCKY92Fvju1kv1
+         wLGA==
+X-Gm-Message-State: AOAM533cXIRTutmB9lCsQAhtIfHe4HbWfKZWC8Ps69H/3m2j2q1Q28SJ
+        FN4L41ODAJG6OZ4n6h6FcEGFvA==
+X-Google-Smtp-Source: ABdhPJxcFmLyUCSKHAsjemzggjGNDOkvSp88h77ZsvKCMSrvXbeTUHEIPAw1lJXF4Wj21vTDticEZA==
+X-Received: by 2002:a62:8f96:0:b029:1b7:75a9:a8b7 with SMTP id n144-20020a628f960000b02901b775a9a8b7mr5938848pfd.28.1611950776908;
+        Fri, 29 Jan 2021 12:06:16 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h15sm8364079pja.4.2021.01.29.12.06.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jan 2021 12:06:16 -0800 (PST)
+Message-ID: <60146ab8.1c69fb81.2355d.3f3d@mx.google.com>
+Date:   Fri, 29 Jan 2021 12:06:16 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210129174608.owianuy6yj5m6fgl@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: pm-5.11-rc6-71-ge86d494782b7e
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (pm-5.11-rc6-71-ge86d494782b7e)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-29.01.2021 20:46, Viresh Kumar пишет:
-> On 29-01-21, 18:23, Dmitry Osipenko wrote:
->> 29.01.2021 13:51, Viresh Kumar пишет:
->>> Not all devices that need to use OPP core need to have clocks, a missing
->>> clock is fine in which case -ENODEV shall be returned by clk_get().
->>>
->>> Anything else is an error and must be handled properly.
->>>
->>> Reported-by: Dmitry Osipenko <digetx@gmail.com>
->>> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
->>> ---
->>> Stephen, is the understanding correct that -ENODEV is the only error
->>> returned for missing clocks ?
->>>
->>> Dmitry: I hope this is on the lines of what you were looking for ?
->>
->> Viresh, thank you! This is not what I was looking for because clk core
->> doesn't return -ENODEV for a missing clock, but -ENOENT. The ENODEV
->> certainly should break drivers.
-> 
-> My bad.
->  
->> I was looking for this:
->>
->> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
->> index 0305861fee1b..3dd9cdbc0e75 100644
->> --- a/drivers/opp/core.c
->> +++ b/drivers/opp/core.c
->> @@ -1264,7 +1264,7 @@ static struct opp_table
->> *_update_opp_table_clk(struct device *dev,
->>  	if (IS_ERR(opp_table->clk)) {
->>  		int ret = PTR_ERR(opp_table->clk);
->>
->> -		if (ret == -EPROBE_DEFER) {
->> +		if (ret != -ENOENT) {
->>  			dev_pm_opp_put_opp_table(opp_table);
->>  			return ERR_PTR(ret);
->>  		}
-> 
-> You should be looking for this instead, isn't it ?
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 049d45e70807..4bfcbe5b57af 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1268,7 +1268,7 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
->         if (!ret)
->                 return opp_table;
->  
-> -       if (ret == -ENODEV) {
-> +       if (ret == -ENOENT) {
->                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
->                 return opp_table;
->         }
-> 
-> 
+pm/testing build: 7 builds: 0 failed, 7 passed (pm-5.11-rc6-71-ge86d494782b=
+7e)
 
-This will work too.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
+5.11-rc6-71-ge86d494782b7e/
 
-Then also could be better to replace the "if (ret != -EPROBE_DEFER)"
-with dev_err_probe(..).
+Tree: pm
+Branch: testing
+Git Describe: pm-5.11-rc6-71-ge86d494782b7e
+Git Commit: e86d494782b7e43504b343d37b88c5c1d7af9ff6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
