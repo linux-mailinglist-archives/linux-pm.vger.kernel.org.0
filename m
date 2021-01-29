@@ -2,121 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E334308947
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Jan 2021 14:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2194308A37
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Jan 2021 17:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbhA2MLn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Jan 2021 07:11:43 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:41986 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232719AbhA2MJL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jan 2021 07:09:11 -0500
-X-UUID: a167416d63e24cdcbe82235c4eddb1b9-20210129
-X-UUID: a167416d63e24cdcbe82235c4eddb1b9-20210129
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
-        (envelope-from <michael.kao@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 82846894; Fri, 29 Jan 2021 18:10:14 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 29 Jan 2021 18:10:13 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 29 Jan 2021 18:10:13 +0800
-From:   Michael Kao <michael.kao@mediatek.com>
-To:     <michael.kao@mediatek.com>, <fan.chen@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
-CC:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [v6,0/3] mt8183: Add Mediatek thermal driver and dtsi
-Date:   Fri, 29 Jan 2021 18:10:09 +0800
-Message-ID: <20210129101012.25180-1-michael.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S229636AbhA2Q2h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Jan 2021 11:28:37 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:37652 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229635AbhA2Q1F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jan 2021 11:27:05 -0500
+Received: by mail-oi1-f175.google.com with SMTP id a77so10449560oii.4;
+        Fri, 29 Jan 2021 08:26:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Sw7St9UL1LkCIt1JZNpQeAAR+iljICDwa25aSYhSN3I=;
+        b=NSI5hk7qzrOlYYa75Z0ZHY1bmDFqBnP2mJhqD9KmMNx5BJck7dsB3DlbGi1dh5YoVH
+         rXDHFRCJ1xLv4f5Qtmd3ZZs3UBBNkJ/zrau8dv0hQy6MxhdcU4ii2+vqmC3JerwFFo1b
+         DwvvrZJGdhZdIs4Q5MMApStTxMRTV5UePdM32N4fzYVGMaU2mjI+rJCRTHMLh39dS+kl
+         OiCNqCCMaR7Xe03X49HFRf8Mdq47fi+NViSGaLRfXC3l5BbYpfWTjp8PDIamBRB2xyCg
+         q/DKSuqs/2v1nLBFDBObxga2Q4zfScrJmt/ReyraHZ8cdOjUdvwTd7lRuXYntICNTgJw
+         Mjpg==
+X-Gm-Message-State: AOAM532wNyV6GZFNEGbQzcB3CJQTadQTgRu5nUTikPA9rNq0PhAknylX
+        f30w05vmc1vSsD32zuJ9oFntD9LTgRhnIUIZ9KpN3pQEbqM=
+X-Google-Smtp-Source: ABdhPJz1rTcBvpsjwSKMD3OcbA5+wsLMX9EE2+NVPpGcdxNsXLoT7awBV2M0pvrjHAeRc2RczeYUdka8El1I1NKHFk0=
+X-Received: by 2002:aca:fc84:: with SMTP id a126mr3129718oii.71.1611937575270;
+ Fri, 29 Jan 2021 08:26:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 29 Jan 2021 17:26:04 +0100
+Message-ID: <CAJZ5v0ip25AwMxWuwQMTbqQ3BSKoqLazh-Eso5SqNrHyjP3bHw@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.11-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patchset supports for MT8183 chip to mtk_thermal.c.
-Add thermal zone of all the thermal sensor in SoC for
-another get temperatrue. They don't need to thermal throttle.
-And we bind coolers for thermal zone nodes of cpu_thermal.
+Hi Linus,
 
-Changes in v6:
-    - Rebase to kernel-5.11-rc1.
-    - [1/3]
-	- add interrupts property.
-    - [2/3]
-	- add the Tested-by in the commit message.
-    - [3/3]
-	- use the mt->conf->msr[id] instead of conf->msr[id] in the
-	  _get_sensor_temp and mtk_thermal_bank_temperature.
-	- remove the redundant space in _get_sensor_temp and
-	  mtk_read_sensor_temp.
-	- change kmalloc to dev_kmalloc in mtk_thermal_probe.
+Please pull from the tag
 
-Changes in v5:
-    - Rebase to kernel-5.9-rc1.
-    - Revise the title of cover letter.
-    - Drop "[v4,7/7] thermal: mediatek: use spinlock to protect PTPCORESEL"
-    - [2/2]
-        -  Add the judgement to the version of raw_to_mcelsius.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.11-rc6
 
-Changes in v4:
-    - Rebase to kernel-5.6-rc1.
-    - [1/7]
-        - Squash thermal zone settings in the dtsi from [v3,5/8]
-          arm64: dts: mt8183: Increase polling frequency for CPU thermal zone.
-        - Remove the property of interrupts and mediatek,hw-reset-temp.
-    - [2/7]
-        - Correct commit message.
-    - [4/7]
-        - Change the target temperature to the 80C and change the commit message.
-    - [6/7]
-        - Adjust newline alignment.
-        - Fix the judgement on the return value of registering thermal zone.
+with top-most commit fef9c8d28e28a808274a18fbd8cc2685817fd62a
 
-Changes in v3:
-    - Rebase to kernel-5.5-rc1.
-    - [1/8]
-        - Update sustainable power of cpu, tzts1~5 and tztsABB.
-    - [7/8]
-        - Bypass the failure that non cpu_thermal sensor is not find in thermal-zones
-          in dts, which is normal for mt8173, so prompt a warning here instead of
-          failing.
+ PM: hibernate: flush swap writer after marking
 
-        Return -EAGAIN instead of -EACCESS on the first read of sensor that
-        often are bogus values. This can avoid following warning on boot:
+on top of commit 6ee1d745b7c9fd573fba142a2efdad76a9f1cb04
 
-          thermal thermal_zone6: failed to read out thermal zone (-13)
+ Linux 5.11-rc5
 
-Changes in v2:
-    - [1/8]
-        - Add the sustainable-power,trips,cooling-maps to the tzts1~tztsABB.
-    - [4/8]
-        - Add the min opp of cpu throttle.
+to receive power management fixes for 5.11-rc6.
 
-Matthias Kaehlcke (1):
-  arm64: dts: mt8183: Configure CPU cooling
+These fix a deadlock in the "kexec jump" code and address a possible
+hibernation image creation issue.
 
-Michael Kao (2):
-  thermal: mediatek: add another get_temp ops for thermal sensors
-  arm64: dts: mt8183: add thermal zone node
+Specifics:
 
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 140 +++++++++++++++++++++++
- drivers/thermal/mtk_thermal.c            | 100 ++++++++++++----
- 2 files changed, 215 insertions(+), 25 deletions(-)
+ - Fix a deadlock caused by attempting to acquire the same mutex
+   twice in a row in the "kexec jump" code (Baoquan He).
 
--- 
-2.18.0
+ - Modify the hibernation image saving code to flush the unwritten
+   data to the swap storage later so as to avoid failing to write the
+   image signature which is possible in some cases (Laurent Badel).
 
+Thanks!
+
+
+---------------
+
+Baoquan He (1):
+      kernel: kexec: remove the lock operation of system_transition_mutex
+
+Laurent Badel (1):
+      PM: hibernate: flush swap writer after marking
+
+---------------
+
+ kernel/kexec_core.c | 2 --
+ kernel/power/swap.c | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
