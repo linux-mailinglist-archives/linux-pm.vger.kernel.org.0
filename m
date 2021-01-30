@@ -2,367 +2,304 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8D4309391
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Jan 2021 10:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF46D3096F9
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Jan 2021 18:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbhA3Jli (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Jan 2021 04:41:38 -0500
-Received: from foss.arm.com ([217.140.110.172]:34122 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231901AbhA3JlW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 30 Jan 2021 04:41:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71D6B113E;
-        Sat, 30 Jan 2021 01:40:30 -0800 (PST)
-Received: from [10.57.44.129] (unknown [10.57.44.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE0423F885;
-        Sat, 30 Jan 2021 01:40:28 -0800 (PST)
-Subject: Re: [PATCH v6 2/4] scmi-cpufreq: Move CPU initialisation to probe
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com, rjw@rjwysocki.net,
-        vireshk@kernel.org, morten.rasmussen@arm.com, chris.redpath@arm.com
-References: <20210111154524.20196-1-nicola.mazzucato@arm.com>
- <20210111154524.20196-3-nicola.mazzucato@arm.com>
- <20210114165427.GC46841@e120937-lin>
-From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
-Message-ID: <5a4c82bb-093c-3953-c762-835e38be5d31@arm.com>
-Date:   Sat, 30 Jan 2021 09:43:08 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S230045AbhA3Q6z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Jan 2021 11:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229953AbhA3Q6y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Jan 2021 11:58:54 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEC2C061573
+        for <linux-pm@vger.kernel.org>; Sat, 30 Jan 2021 08:58:14 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id y19so12801010iov.2
+        for <linux-pm@vger.kernel.org>; Sat, 30 Jan 2021 08:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LvLRtp+BeTWEB12kdIOXlxszYuNnLaeNNd6Fv0O7yoo=;
+        b=f/7TjOh/+QF/QNIRxLMjZzQlLfMJdlj3OnWESQECJZ679w2IHWa++ngctJ6otYinoX
+         2S/oZ0MuPDhCXYDUZPrDC/CFyX2a1WqAb3RdEPcGrsKufzlMGs/85909EWIcx0PY0SnN
+         V+/fFsA2A4NYXp6HbiYF7ps0D4oH98lzldSSqCh6aqs6zmcnxfQYa4DZenCDl5c5CULB
+         Qiwfk8qgZbHdSEOoZ+3fkC6qjOzNXzINwaq81w5s+nPv12W4DO4Zjay+S7QHlDV32KGe
+         vTnF99bfcw9Go1N+slJg/IWmbJjtPkVTDwQoOPG/9lBWXa944lQXAhuBeC8oQOGxO3/f
+         3y0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LvLRtp+BeTWEB12kdIOXlxszYuNnLaeNNd6Fv0O7yoo=;
+        b=VTQGw1T1V73r+Hx772l+kOwWxEq73ntyeGWoKTufT9pxMA58opJ6mC7YklzVsE/9ZL
+         L41KnaKT+FM8p31xIoDXkZZdbZ3zy42M8qos8W493VxYP0pDUmP7RnKhFk9tAt1o/Uoh
+         8HZEvNGgOetpChp2SF7v6eSJwIU6i8On4m9F3SK/CANqs0P8Mn5weFtsqNTEDI+unUOO
+         0cw/O6IfSElCD4ZukRMZg+tWxfGfm/ROhKq9AFb2+DzhFmxR9Qwnl2NX5aPmXO6T3CD8
+         q83tzAmtIQLJpIdhd/MCabOnGQnDUebYvYSMlmeatukcWu6m496VdC5CACDisYMl9vwD
+         gMiw==
+X-Gm-Message-State: AOAM532ZShDQocgeueez3AiIh/ML3uhjBTLdlpp50kYBwsPi4Macw+3U
+        843va042Ig4kVAT6mlBLEnfYQrtLJ/ntbuwzfOlthK4citgGjRZV
+X-Google-Smtp-Source: ABdhPJwQI27StjJcIkNo6A4hREAUndnNhd8SGeSzRiwJWhCh4T1ew06nZ2wzfERbpHP9ISi0muNsGP1t0stNYkY0e60=
+X-Received: by 2002:a5e:8903:: with SMTP id k3mr7415934ioj.36.1612025893940;
+ Sat, 30 Jan 2021 08:58:13 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210114165427.GC46841@e120937-lin>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210115094744.21156-1-rui.zhang@intel.com> <002601d6ec2a$36663da0$a332b8e0$@net>
+ <000901d6f418$1a9b34e0$4fd19ea0$@net> <53074020f2b19a38811eec925457e828581658f3.camel@intel.com>
+In-Reply-To: <53074020f2b19a38811eec925457e828581658f3.camel@intel.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Sat, 30 Jan 2021 08:58:02 -0800
+Message-ID: <CAAYoRsXcPSJ5N-n6FC31kRkewJYEXC9PSk+r7gnMrt40ppUDAQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal/intel: introduce tcc cooling driver
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     daniel.lezcano@linaro.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Cristian,
+On Thu, Jan 28, 2021 at 9:30 AM Zhang Rui <rui.zhang@intel.com> wrote:
+> On Tue, 2021-01-26 at 11:18 -0800, Doug Smythies wrote:
+> > On 2021.01.16 09:08 Doug Smythies wrote:
+> > > On 2021.01.15 Zhang Rui wrote:
+...
+> > They should have been: RATL and RATLL.
+> >
+> > From the proper page of the book:
+> >
+> > > Running Average Thermal Limit Status (R0)
+> > > When set, frequency is reduced below the operating
+> > > system request due to Running Average Thermal Limit
+> > > (RATL).
+> >
+>
+> > 2.) Due to the already discussed turbostat issue, that was not
+> > the actual temperature and so the RATL bit being set was actually
+> > valid at that time.
+> >
+> On my side, I got the "Thermal status bit" set.
 
-sorry for my late reply.
-Thanks for looking into this.
+Yes, and if I understand your comment correctly, you are referring
+to IA32_THERM_STATUS (0X19C) and/or
+IA32_PACKAGE_THERM_STATUS (0X1B1). I am referring to
+MSR_CORE_PERF_LIMIT_REASONS (0X64F).
 
-I am preparing a v7 with suggestions proposed by Viresh which, hopefully, should
-remove some unclear parts and resolve your comments.
-I had left behind some dealloc, so thanks for spotting!
+>
+> > I have not been able to find the time window knob for this, if there
+> > even is one, similar to the time window knobs for the package power
+> > limits.
 
-Many thanks,
-Nicola
+I just assume there is a time window, similar to the RAPL based
+power limits. But I haven't found it.
 
-On 1/14/21 4:54 PM, Cristian Marussi wrote:
-> Hi Nicola,
-> 
-> a few remarks down below.
-> 
-> On Mon, Jan 11, 2021 at 03:45:22PM +0000, Nicola Mazzucato wrote:
->> Some of the cpu related initialisation can be done at probe stage.
->> This patch moves those initialisations from the ->init callback to the
->> probe stage.
->>
->> This is done in preparation for adding support to retrieve additional
->> information from DT (CPUs sharing v/f lines).
->>
->> Signed-off-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
->> ---
->>  drivers/cpufreq/scmi-cpufreq.c | 180 ++++++++++++++++++++++++---------
->>  1 file changed, 135 insertions(+), 45 deletions(-)
->>
->> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
->> index 15b213ed78fa..4aa97cdc5997 100644
->> --- a/drivers/cpufreq/scmi-cpufreq.c
->> +++ b/drivers/cpufreq/scmi-cpufreq.c
->> @@ -25,6 +25,14 @@ struct scmi_data {
->>  	struct device *cpu_dev;
->>  };
->>  
->> +/* Per-CPU storage for runtime management */
->> +struct scmi_cpudata {
->> +	cpumask_var_t scmi_shared_cpus;
->> +	struct cpufreq_frequency_table *freq_table;
->> +};
->> +
->> +static struct scmi_cpudata *cpudata_table;
->> +
->>  static const struct scmi_handle *handle;
->>  
->>  static unsigned int scmi_cpufreq_get_rate(unsigned int cpu)
->> @@ -120,13 +128,10 @@ scmi_get_cpu_power(unsigned long *power, unsigned long *KHz,
->>  
->>  static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->>  {
->> -	int ret, nr_opp;
->> +	int ret;
->>  	unsigned int latency;
->>  	struct device *cpu_dev;
->>  	struct scmi_data *priv;
->> -	struct cpufreq_frequency_table *freq_table;
->> -	struct em_data_callback em_cb = EM_DATA_CB(scmi_get_cpu_power);
->> -	bool power_scale_mw;
->>  
->>  	cpu_dev = get_cpu_device(policy->cpu);
->>  	if (!cpu_dev) {
->> @@ -134,42 +139,19 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->>  		return -ENODEV;
->>  	}
->>  
->> -	ret = handle->perf_ops->device_opps_add(handle, cpu_dev);
->> -	if (ret) {
->> -		dev_warn(cpu_dev, "failed to add opps to the device\n");
->> -		return ret;
->> -	}
->> -
->> -	ret = scmi_get_sharing_cpus(cpu_dev, policy->cpus);
->> -	if (ret) {
->> -		dev_warn(cpu_dev, "failed to get sharing cpumask\n");
->> -		return ret;
->> -	}
->> -
->> -	ret = dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
->> -	if (ret) {
->> -		dev_err(cpu_dev, "%s: failed to mark OPPs as shared: %d\n",
->> -			__func__, ret);
->> -		return ret;
->> -	}
->> -
->>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
->>  	if (!priv) {
->>  		ret = -ENOMEM;
->>  		goto out_free_opp;
->>  	}
->>  
->> -	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &freq_table);
->> -	if (ret) {
->> -		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
->> -		goto out_free_priv;
->> -	}
->> +	cpumask_copy(policy->cpus, cpudata_table[policy->cpu].scmi_shared_cpus);
->>  
->>  	priv->cpu_dev = cpu_dev;
->>  	priv->domain_id = handle->perf_ops->device_domain_id(cpu_dev);
->>  
->>  	policy->driver_data = priv;
->> -	policy->freq_table = freq_table;
->> +	policy->freq_table = cpudata_table[policy->cpu].freq_table;
->>  
->>  	/* SCMI allows DVFS request for any domain from any CPU */
->>  	policy->dvfs_possible_from_any_cpu = true;
->> @@ -183,23 +165,8 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->>  	policy->fast_switch_possible =
->>  		handle->perf_ops->fast_switch_possible(handle, cpu_dev);
->>  
->> -	nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
->> -	if (nr_opp <= 0) {
->> -		dev_err(cpu_dev, "%s: No OPPs for this device: %d\n",
->> -			__func__, ret);
->> -
->> -		ret = -ENODEV;
->> -		goto out_free_priv;
->> -	}
->> -
->> -	power_scale_mw = handle->perf_ops->power_scale_mw_get(handle);
->> -	em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, policy->cpus,
->> -				    power_scale_mw);
->> -
->>  	return 0;
->>  
->> -out_free_priv:
->> -	kfree(priv);
->>  out_free_opp:
->>  	dev_pm_opp_remove_all_dynamic(cpu_dev);
->>  
-> 
-> My understanding (but I could be wrong given my limited familiarity with
-> CPUFREQ ... so bear with me) is that dev_pm_opp_remove_all_dynamic() is
-> meant to clean dynamic OPPs added by dev_pm_opp_add() which in turn in
-> this driver is folded inside the handle->perf_ops->device_opps_add() call,
-> so is not that this call should be added also on the error path inside
-> the new scmi_init_device() ? (this was already faulty this way in the
-> original code to be honest...if faulty at all :D)
-> 
-> I added a few such invocations down below as rough untested example of
-> what I mean.
-> 
->> @@ -210,7 +177,6 @@ static int scmi_cpufreq_exit(struct cpufreq_policy *policy)
->>  {
->>  	struct scmi_data *priv = policy->driver_data;
->>  
->> -	dev_pm_opp_free_cpufreq_table(priv->cpu_dev, &policy->freq_table);
->>  	dev_pm_opp_remove_all_dynamic(priv->cpu_dev);
->>  	kfree(priv);
->>  
->> @@ -231,10 +197,102 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
->>  	.exit	= scmi_cpufreq_exit,
->>  };
->>  
->> +static int scmi_init_cpudata(void)
->> +{
->> +	int cpu;
->> +	unsigned int ncpus = num_possible_cpus();
->> +
->> +	cpudata_table = kzalloc(sizeof(*cpudata_table) * ncpus, GFP_KERNEL);
-> Shouldn/t this be a kcalloc() given it's an array allocation, checkpatch
-> complains too.
-> 
->> +	if (!cpudata_table)
->> +		return -ENOMEM;
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		if (!zalloc_cpumask_var(&cpudata_table[cpu].scmi_shared_cpus,
->> +					GFP_KERNEL))
->> +			goto out;
->> +	}
->> +
->> +	return 0;
->> +
->> +out:
->> +	kfree(cpudata_table);
->> +	return -ENOMEM;
->> +}
->> +
->> +static int scmi_init_device(const struct scmi_handle *handle, int cpu)
->> +{
->> +	struct device *cpu_dev;
->> +	int ret, nr_opp;
->> +	struct em_data_callback em_cb = EM_DATA_CB(scmi_get_cpu_power);
->> +	bool power_scale_mw;
->> +	cpumask_var_t scmi_cpus;
->> +
->> +	if (!zalloc_cpumask_var(&scmi_cpus, GFP_KERNEL))
->> +		return -ENOMEM;
->> +
->> +	cpumask_set_cpu(cpu, scmi_cpus);
->> +
->> +	cpu_dev = get_cpu_device(cpu);
->> +
->> +	ret = scmi_get_sharing_cpus(cpu_dev, scmi_cpus);
->> +	if (ret) {
->> +		dev_warn(cpu_dev, "failed to get sharing cpumask\n");
->> +		goto free_cpumask;
->> +	}
->> +
->> +	/*
->> +	 * We get here for each CPU. Add OPPs only on those CPUs for which we
->> +	 * haven't already done so, or set their OPPs as shared.
->> +	 */
->> +	nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
->> +	if (nr_opp <= 0) {
->> +		ret = handle->perf_ops->device_opps_add(handle, cpu_dev);
->> +		if (ret) {
->> +			dev_warn(cpu_dev, "failed to add opps to the device\n");
->> +			goto free_cpumask;
->> +		}
->> +
->> +		ret = dev_pm_opp_set_sharing_cpus(cpu_dev, scmi_cpus);
->> +		if (ret) {
->> +			dev_err(cpu_dev, "%s: failed to mark OPPs as shared: %d\n",
->> +				__func__, ret);
-> 			goto free_dynamic_opps;
->> +		}
->> +
->> +		nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
->> +		if (nr_opp <= 0) {
->> +			dev_err(cpu_dev, "%s: No OPPs for this device: %d\n",
->> +				__func__, ret);
->> +
->> +			ret = -ENODEV;
-> 			goto free_dynamic_opps;
->> +		}
->> +
->> +		power_scale_mw = handle->perf_ops->power_scale_mw_get(handle);
->> +		em_dev_register_perf_domain(cpu_dev, nr_opp, &em_cb, scmi_cpus,
->> +					    power_scale_mw);
->> +	}
->> +
->> +	ret = dev_pm_opp_init_cpufreq_table(cpu_dev,
->> +					    &cpudata_table[cpu].freq_table);
->> +	if (ret) {
->> +		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
-> 		goto free_dynamic_opps;
->> +	}
->> +
->> +	cpumask_copy(cpudata_table[cpu].scmi_shared_cpus, scmi_cpus);
->> +
->    free_dynamic_opps:
-> 	   dev_pm_opp_remove_all_dynamic(cpu_dev);
->> +free_cpumask:
->> +	free_cpumask_var(scmi_cpus);
->> +	return ret;
->> +}
->> +
->>  static int scmi_cpufreq_probe(struct scmi_device *sdev)
->>  {
->>  	int ret;
->>  	struct device *dev = &sdev->dev;
->> +	int cpu;
->> +	struct device *cpu_dev;
->>  
->>  	handle = sdev->handle;
->>  
->> @@ -247,6 +305,24 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
->>  		devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
->>  #endif
->>  
->> +	ret = scmi_init_cpudata();
->> +	if (ret) {
->> +		pr_err("%s: init cpu data failed\n", __func__);
->> +		return ret;
->> +	}
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		cpu_dev = get_cpu_device(cpu);
->> +
->> +		ret = scmi_init_device(handle, cpu);
->> +		if (ret) {
->> +			dev_err(cpu_dev, "%s: init device failed\n",
->> +				__func__);
->> +
-> 			goto clean;
->> +		}
->> +	}
->> +
->>  	ret = cpufreq_register_driver(&scmi_cpufreq_driver);
->>  	if (ret) {
->>  		dev_err(dev, "%s: registering cpufreq failed, err: %d\n",
-> 
-> 	/* clean any dynamic OPPs already set */
-> clean:
-> 	for_each_possible_cpu(cpu) {
-> 		cpu_dev = get_cpu_device(cpu);
-> 
-> 		dev_pm_opp_remove_all_dynamic(cpu_dev);
-> 	}
-> 
-> 	return ret;
-> }
-> 
-> 
-> Thanks
-> 
-> Cristian
-> 
->> @@ -258,6 +334,20 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
->>  
->>  static void scmi_cpufreq_remove(struct scmi_device *sdev)
->>  {
->> +	int cpu;
->> +	struct device *cpu_dev;
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		cpu_dev = get_cpu_device(cpu);
->> +
->> +		dev_pm_opp_free_cpufreq_table(cpu_dev,
->> +					      &cpudata_table[cpu].freq_table);
->> +
->> +		free_cpumask_var(cpudata_table[cpu].scmi_shared_cpus);
->> +	}
->> +
->> +	kfree(cpudata_table);
->> +
->>  	cpufreq_unregister_driver(&scmi_cpufreq_driver);
->>  }
->>  
->> -- 
->> 2.27.0
->>
+> > I wanted to reduce the time constant, just as a test, in an attempt
+> > to reduce the step function load potential temperature overshoot.
+...
+
+> >
+> Thanks for your test.
+> I'd prefer this is platform specific.
+> Because it behaves really differently from what I observed.
+
+O.K. These oddities aside, in the end it does do
+the expected job.
+
+> 99.06   2036    14195   66      12.27
+> 99.07   2007    14240   66      12.07
+> 99.12   2888    12147   98      28.23   <<< offset cleared
+> 99.03   3413    11503   98      37.21
+> 98.96   3317    11698   98      34.64
+
+very close to critical temp.
+I never knowingly allow my processor
+to go above 80 degrees.
+Although, I admit it hit 90 degrees a couple of
+times during this work.
+
+> 99.07   3246    11410   98      32.89
+> 98.95   3210    12107   98      32.13
+> 98.94   3164    11790   98      31.08
+> 99.00   3124    12106   98      30.84
+> 99.00   3086    11876   98      29.60
+> 98.94   3054    12482   98      29.00
+> 98.89   3030    12629   98      28.54
+> 99.39   2377    10764   82      17.62   <<< Didn't do anything, so it
+> is probably thermald or something
+
+or critical temp hit.
+
+>
+> I tried both tests, and the results are the same, in both cases, it
+> starts throttling immediately (within a second), and no over-throttling
+> observed.
+>
+> Do you have a script to do this?
+
+No, all of my tests were done manually, varing:
+. placement of high loads on some cores for more heat over smaller surface area.
+. balance between 100% CPU load at max heat verses 100% CPU load at less heat.
+. balance between this TCC Offset throttling verses package power limits
+. using ambient (coolant temperature) as a heat removal capacity knob.
+
+In summary: I played around until I found something interesting.
+
+> Say, run turbostat in background and
+> then change tcc offset at certain timestamp? Maybe we can try exactly
+> the same test on different machines.
+
+I had an idea, and wasted way way too much time trying to make it work.
+I thought to just get turbostat to also show the offset, so then we know for
+certain when it changed. I tried virtually all combinations of:
+
+turbostat --Summary --quiet --add
+/sys/devices/virtual/thermal/cooling_device11/cur_state,,,,TCC --show
+Busy%,Bzy_MHz,PkgTmp,PkgWatt,IRQ --interval 1
+turbostat --Summary --quiet --add msr0x1a2,u32,package,raw,TCC --show
+Busy%,Bzy_MHz,PkgTmp,PkgWatt,IRQ --interval 1
+
+and could never get it to work in "Summary" mode. (note: about 95% of
+my use of turbostat is in "Summary" mode.)
+
+Anyway, after too long, I did get this to work:
+
+turbostat --quiet --cpu 0 --add
+/sys/devices/virtual/thermal/cooling_device11/cur_state,u32,,raw,TCC
+--show CPU,Busy%,Bzy_MHz,PkgTmp,PkgWatt,IRQ --interval 1 | grep "^ 0"
+
+Example 1:
+
+turbostat --quiet --cpu 0 --add
+/sys/devices/virtual/thermal/cooling_device11/cur_state,u32,,raw,TCC
+--show CPU,Busy%,Bzy_MHz,PkgTmp,PkgWatt,IRQ --interval 1 | grep "^0"
+CPU     Busy%   Bzy_MHz IRQ            TCC      PkgTmp  PkgWatt
+0       100.26  4500    1002    0x00000001      78      99.88 <<< Offset = 1
+0       100.26  4501    1002    0x00000001      77      99.90 <<<
+steady state power limit throttle
+0       100.26  4501    1004    0x00000001      77      99.92
+0       100.26  4500    1002    0x0000001e      78      99.91   <<<
+offset changed, trip int 70
+0       100.25  4502    1003    0x0000001e      77      100.03
+0       100.25  4503    1002    0x0000001e      77      99.85
+0       100.25  4502    1002    0x0000001e      78      99.92
+0       100.26  4501    1003    0x0000001e      78      99.95
+0       100.25  4503    1002    0x0000001e      77      99.88
+0       100.25  4502    1002    0x0000001e      78      99.86
+0       100.25  4502    1004    0x0000001e      77      99.92
+0       100.25  4503    1002    0x0000001e      77      99.98
+0       100.25  4502    1002    0x0000001e      77      99.88
+0       100.26  4498    1004    0x0000001e      77      100.06
+0       100.26  4501    1002    0x0000001e      78      99.77
+0       100.26  4500    1002    0x0000001e      78      99.53
+0       100.26  4430    1002    0x0000001e      72      91.19  <<<
+Thermal throttling. 13 Seconds
+0       100.26  4400    1002    0x0000001e      72      87.55
+0       100.26  4400    1002    0x0000001e      71      87.52
+0       100.26  4400    1005    0x0000001e      71      87.56
+0       100.26  4400    1002    0x0000001e      72      87.53
+
+Example 2:
+
+0       100.26  4600    1002    0x00000000      83      113.26 <<< Offset = 0
+0       100.26  4600    1002    0x00000000      84      113.43
+0       100.25  4599    1002    0x00000000      83      113.42 <<< No
+power limit throttle yet.
+0       100.26  4600    1004    0x00000000      83      113.40 <<< Not
+steady state.
+0       100.26  4600    1002    0x00000000      83      113.25
+0       100.25  3797    1003    0x00000018      56      54.11  <<<
+Overshoot is immediate.
+0       100.26  3700    1002    0x00000018      56      47.09
+0       100.26  3700    1002    0x00000018      55      47.08
+0       100.26  3700    1002    0x00000018      54      46.98
+0       100.26  3820    1002    0x00000018      58      51.62  <<<
+starts to recover.
+0       100.26  4016    1002    0x00000018      62      61.55
+0       100.26  4177    1002    0x00000018      64      69.91
+0       100.26  4275    1004    0x00000018      68      75.81
+0       100.26  4300    1002    0x00000018      68      77.36
+0       100.26  4371    1002    0x00000018      71      84.53
+0       100.26  4400    1002    0x00000018      72      87.52
+0       100.26  4400    1003    0x00000018      72      87.62
+
+Example 3:
+This test is specifically an attempt to test the TCC Offset in the exact
+way I intend to use it. trip point = 75 degrees, and never changes.
+Power limit 2 is 115 watts, timing window short.
+Power limit 1 is 100 watts , timing window 8 seconds.
+Note: all previous work was with the timing window at 28 seconds.
+Note: typically temperature < 75 at 100 watts.
+
+The load is 4 prime95 maximum heat threads, plus 0 weaker memory
+hammering threads.
+
+The collant had to be preheated for about an hour before this test
+started, otherwise
+the  processor would not get hot enough before package power limit 1
+took over the
+throttling duties.
+
+Now, watching the TCC offset is useless for this test, so let's watch
+MSR_CORE_PERF_LIMIT_REASONS instead:
+
+turbostat --add msr0x64f,u32,,raw,TCC --show
+CPU,Busy%,Bzy_MHz,PkgTmp,PkgWatt,IRQ,RAMWatt --interval 1 | grep "^0"
+
+(O.K., I should have changed the added column name. I filter it
+anyhow, but manually added back, edited.)
+
+CPU     Busy%   Bzy_MHz IRQ            TCC      PkgTmp  PkgWatt RAMWatt
+0       0.07    1081    5       0x08200000      38      2.31    0.45
+<<< Note high idle start temp.
+0       0.16    824     11      0x08200000      38      2.12    0.45
+0       1.74    3430    44      0x00000000      38      2.65    0.45
+<<< clear last times log bits
+0       0.16    851     6       0x00000000      37      2.27    0.45
+0       4.32    3313    269     0x00000000      75      47.15   0.45
+<<< load applied
+0       4.24    4585    458     0x08000800      78      97.16   0.45
+<<< package power limit 2
+0       2.80    4588    482     0x08000000      77      97.49   0.45
+<<< temperature just high
+0       2.87    4593    463     0x08000000      78      97.95   0.45
+0       3.39    4600    465     0x08000000      78      97.68   0.45
+0       2.66    4600    462     0x08000000      78      97.55   0.45
+0       2.28    4584    490     0x08000000      78      97.97   0.45
+0       3.29    4583    478     0x08000000      78      97.72   0.45
+0       3.24    4595    465     0x08000000      77      97.52   0.45
+0       2.47    4600    465     0x08000000      78      97.50   0.45
+0       4.18    4570    464     0x08000000      78      97.72   0.45
+0       2.51    4600    470     0x08000000      78      97.40   0.45
+0       1.77    4601    482     0x08000000      78      97.33   0.45
+0       3.13    4584    462     0x08000000      78      97.57   0.45
+0       3.06    4600    466     0x08000000      78      97.77   0.45
+0       2.86    4592    461     0x08000000      78      97.56   0.45
+0       2.85    4569    486     0x08000000      78      97.99   0.45
+0       2.96    4600    465     0x08000000      78      97.91   0.45
+0       3.00    4585    451     0x08000000      78      97.68   0.45
+0       2.06    4600    475     0x08000000      78      97.50   0.45
+0       3.05    4594    462     0x08000000      78      97.78   0.45
+0       3.11    4592    461     0x08000000      78      97.68   0.45
+0       2.31    4546    463     0x08200020      73      93.00   0.45  <<< RATL
+0       2.80    4525    454     0x08200000      78      91.29   0.45
+<<< Oscillates within
+0       3.32    4538    445     0x08200020      73      91.61   0.45
+<<< 1 pstate
+0       3.27    4557    434     0x08200000      78      93.12   0.45
+0       3.26    4523    470     0x08200020      73      89.85   0.45
+<<< rough estimate is
+0       2.48    4586    466     0x08200020      74      95.67   0.45
+<<< oscillation costs 0.4%
+0       1.95    4521    468     0x08200000      76      87.93   0.45
+<<< performance loss verses
+0       3.28    4569    449     0x08200020      73      94.67   0.45
+<<< the power limit 2 servo.
+0       0.44    4546    495     0x08200000      78      91.77   0.45
+<<< (very crude, hard to defend
+0       1.91    4518    487     0x08200020      73      91.24   0.45 <<< data.)
+0       3.25    4539    460     0x08200000      78      91.63   0.45
+0       2.51    4546    469     0x08200020      74      91.12   0.45
+0       3.60    4540    453     0x08200000      77      91.43   0.45
+0       3.06    4542    463     0x08200020      73      91.56   0.45
+
+... Doug
