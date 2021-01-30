@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9AE309742
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Jan 2021 18:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799B4309744
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Jan 2021 18:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbhA3R3j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Jan 2021 12:29:39 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:63779 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbhA3R3j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Jan 2021 12:29:39 -0500
-Date:   Sat, 30 Jan 2021 17:28:49 +0000
+        id S231968AbhA3RaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Jan 2021 12:30:07 -0500
+Received: from mail-40131.protonmail.ch ([185.70.40.131]:41251 "EHLO
+        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231916AbhA3RaG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Jan 2021 12:30:06 -0500
+Date:   Sat, 30 Jan 2021 17:29:17 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1612027736;
-        bh=6t41VqcyyZdCArTnBHxNv9rzmYfvAGRD55C9dQ+BKlw=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=JTjL5lKfGS5aBa3kvmy/TMq35P5jrzx+dAPapVglOwVByt+L2RtTdRV4hjenQ6F+8
-         R2HtFKy2EWIkKdAzvrgWkkx4dnBHrIzjFSeBA8TM40DpqWu8C9GgsIp4xoyV1uipn4
-         /XedgSD5qbPtTIt5+pqnbsFhJSuFLZp8Y0a55m5o=
+        s=protonmail; t=1612027764;
+        bh=Jef0sxyvy4V4e51bjeysAtFKH9/BhUi4CG0LIgwACFY=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=scN7H758NYWgDlCXSVPD5gadJ2SYKpQqwWxUa/KnXQBRi+0yokF8UD4Z4jIfLaC2k
+         xewkoOTJigChipX+d0+7qLJ3JTiAr0HHILUUbEiURVt+0N3Pm5tweH8UTCYn+IYTAA
+         mO7T2vMK9l+7cTCSPafgsSg9OZoxsL0dTId14pPk=
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -30,8 +30,10 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
         Timon Baetz <timon.baetz@protonmail.com>
 Reply-To: Timon Baetz <timon.baetz@protonmail.com>
-Subject: [PATCH 0/3] charger-supply for max8997_charger
-Message-ID: <20210130172747.2022977-1-timon.baetz@protonmail.com>
+Subject: [PATCH 1/3] regulator: dt-bindings: Document charger-supply for max8997
+Message-ID: <20210130172747.2022977-2-timon.baetz@protonmail.com>
+In-Reply-To: <20210130172747.2022977-1-timon.baetz@protonmail.com>
+References: <20210130172747.2022977-1-timon.baetz@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -44,22 +46,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Based on the discussion from [0] add an optional DT property to retrieve
-the regulator used for charging control in the max8997_charger driver.
+Add charger-supply optional property to enable charging control.
 
-[0] https://lore.kernel.org/lkml/20210118124505.GG4455@sirena.org.uk/
+Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+---
+ .../devicetree/bindings/regulator/max8997-regulator.txt          | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-Timon Baetz (3):
-  regulator: dt-bindings: Document charger-supply for max8997
-  ARM: dts: exynos: Add charger supply for I9100
-  power: supply: max8997_charger: Switch to new binding
-
- .../bindings/regulator/max8997-regulator.txt         |  1 +
- arch/arm/boot/dts/exynos4210-i9100.dts               |  2 ++
- drivers/power/supply/max8997_charger.c               | 12 ++++++++----
- 3 files changed, 11 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/regulator/max8997-regulator.=
+txt b/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
+index 6fe825b8ac1b..b53c5e2b335f 100644
+--- a/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
++++ b/Documentation/devicetree/bindings/regulator/max8997-regulator.txt
+@@ -35,6 +35,7 @@ Optional properties:
+ - interrupts: Interrupt specifiers for two interrupt sources.
+   - First interrupt specifier is for 'irq1' interrupt.
+   - Second interrupt specifier is for 'alert' interrupt.
++- charger-supply: regulator node for charging current.
+ - max8997,pmic-buck1-uses-gpio-dvs: 'buck1' can be controlled by gpio dvs.
+ - max8997,pmic-buck2-uses-gpio-dvs: 'buck2' can be controlled by gpio dvs.
+ - max8997,pmic-buck5-uses-gpio-dvs: 'buck5' can be controlled by gpio dvs.
 --=20
 2.25.1
 
