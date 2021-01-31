@@ -2,125 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E90C5309C89
-	for <lists+linux-pm@lfdr.de>; Sun, 31 Jan 2021 15:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA97309ECB
+	for <lists+linux-pm@lfdr.de>; Sun, 31 Jan 2021 21:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbhAaOFF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 Jan 2021 09:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
+        id S231631AbhAaUNq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 31 Jan 2021 15:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbhAaKfQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jan 2021 05:35:16 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6F4C061573;
-        Sun, 31 Jan 2021 02:34:31 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id u14so10149261wml.4;
-        Sun, 31 Jan 2021 02:34:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W9CKV72LQw4/n8DHvLlfFWWqWP3t9mTNcTVq9zgFDBI=;
-        b=ml8PKnnmBVwUtJhYLrAps2xa09WZPf+AXeAAXBnX2G3emw7Vy1EEUdoJaQrdVgaG1r
-         9mezcZR0R+t+DnxSH8YPChK16hDbrqz1tr0GfLDx2lGbNbfAHV7cjlTWV2UG4b/kVHzL
-         i7/HURt8gH3+WkwoP5l//hg4TjAzrZSWrbmAUG0KyVaDrK8OKr+GKvChOykALEPlgLUZ
-         dVZLalDzCfDlP1Fiisl28ZP8dH4XVahGOMF0epO+eCMkiBrw0QySknwCco2CpRkGObdD
-         yfk9dIbJUVsfqd9cZgOTxHalWseyCADX9lZouQpB+CSFS4DTZXJzxsTPZXrb/MCVV9Me
-         0SrQ==
+        with ESMTP id S230298AbhAaTfo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jan 2021 14:35:44 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE01FC061788;
+        Sun, 31 Jan 2021 09:28:45 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id b9so1081763ejy.12;
+        Sun, 31 Jan 2021 09:28:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=W9CKV72LQw4/n8DHvLlfFWWqWP3t9mTNcTVq9zgFDBI=;
-        b=Jgp8DUo1EhEGOrw2E1y/dyYlbLvynAYwHoZewCg9zRhcmxIdK55mVgvb+XysYiCxpU
-         nQ/YFNXFzem7E6toWl768HHFCQCMlci7sFB9J3BmWkYb+qOynVxA0BTJHXShuVLwZXc5
-         Yi3I8TS6pgwjbT6T3muLkPhrdMXpvkZzUDvGlAALNRRV+n2wOEkhO8EaUvzZOaOBI7Fl
-         hRT6VWU3Uhg+MVAhOcksKKSZEJ7PuYP5MkrD6Gt9895qd3wf5KX1BGfj2igV9AqdbZ6G
-         r9Tj3coJOWhH+y4mh76JDQli4smOZXJ6Plqmrx2gEU4VDzFSYl/ohh0xbyt7LLqVYFH5
-         +h4Q==
-X-Gm-Message-State: AOAM530q7zapT+QwwH58DvqfVa4/7WGTqZLWq5Iv2i7A/dqsPeyJjW91
-        cDCxv9vyUP+ChfZEfKlUUsM=
-X-Google-Smtp-Source: ABdhPJwPTJI1CsqFftboMFqkzFWZVTHNIT+DTDdAe3T0tcfqcLxYyFtEaR4/kluCLCarlg8Hk4ZwdQ==
-X-Received: by 2002:a1c:6289:: with SMTP id w131mr2504113wmb.0.1612089269557;
-        Sun, 31 Jan 2021 02:34:29 -0800 (PST)
-Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id d17sm13134357wma.2.2021.01.31.02.34.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jan 2021 02:34:28 -0800 (PST)
-Subject: Re: [PATCH v10] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
-To:     Hector Yuan <hector.yuan@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wsd_upstream@mediatek.com
-References: <1609222629-2979-1-git-send-email-hector.yuan@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <49f4400f-c803-f044-4974-f4e8703876e7@gmail.com>
-Date:   Sun, 31 Jan 2021 11:34:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Gd1kwiYZVZqHxGZ4QrLOcLWC/Yc7tIB41MFJH1DjrOE=;
+        b=QKzEiLQ6NzOtXTY2GxWnm1OdzuV/+KIMM/bxqzcl6AWarRDPmlWsg5XZL634VlvtFk
+         dd0MlMtSNlXnR8BWUFra+7oftF4sCQ/GJOimxqAGa+q2pnfQwAlmIcedzH+B4CrOZ6rH
+         IkbRaW7sGUAmRnPz5KD09KHhUTVl259sUtA1e9LxKU/Ax+rGivv+Mh0QTmLiVWfRiBT8
+         LAiCLoe59/4adve4f9340PyPFbscXnQ2OmBY96w9kwsEGVxlmcibAvM84HoRut599jmL
+         hHdOZZ0XN6ZS3f/hmzJQ484+qTzMtIXqYygLDvuI9S2ybTUgjWcuK0IvNhomx5kfpvpF
+         HqaA==
+X-Gm-Message-State: AOAM5324J7qqm+F/v8dRWbl+jWpZFR9WPNEVdoQ4zsf7SlWHRVCWdzLS
+        1GEZc9L0j9gbzPgLAuW7m50=
+X-Google-Smtp-Source: ABdhPJz+pSN0UgQq9d30A0QB6sxrw8CN2kA2ipY6zlnjIn+rBf6kLJaK1Mc4wolK/V1jCHU+t7Yg1w==
+X-Received: by 2002:a17:906:f144:: with SMTP id gw4mr14257685ejb.189.1612114123011;
+        Sun, 31 Jan 2021 09:28:43 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id u23sm7486937edt.87.2021.01.31.09.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jan 2021 09:28:41 -0800 (PST)
+Date:   Sun, 31 Jan 2021 18:28:40 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Timon Baetz <timon.baetz@protonmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/3] power: supply: max8997_charger: Switch to new binding
+Message-ID: <20210131172840.fxaadhhsafa4aeex@kozik-lap>
+References: <20210130172747.2022977-1-timon.baetz@protonmail.com>
+ <20210130172747.2022977-4-timon.baetz@protonmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1609222629-2979-1-git-send-email-hector.yuan@mediatek.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210130172747.2022977-4-timon.baetz@protonmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sat, Jan 30, 2021 at 05:30:14PM +0000, Timon Baetz wrote:
+> Get regulator from parent device's node and extcon by name.
+> 
+> Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
+> ---
+>  drivers/power/supply/max8997_charger.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
+> index 321bd6b8ee41..625d8cc4312a 100644
+> --- a/drivers/power/supply/max8997_charger.c
+> +++ b/drivers/power/supply/max8997_charger.c
+> @@ -168,6 +168,7 @@ static int max8997_battery_probe(struct platform_device *pdev)
+>  	int ret = 0;
+>  	struct charger_data *charger;
+>  	struct max8997_dev *iodev = dev_get_drvdata(pdev->dev.parent);
+> +	struct device_node *np = pdev->dev.of_node;
+>  	struct i2c_client *i2c = iodev->i2c;
+>  	struct max8997_platform_data *pdata = iodev->pdata;
+>  	struct power_supply_config psy_cfg = {};
+> @@ -237,20 +238,23 @@ static int max8997_battery_probe(struct platform_device *pdev)
+>  		return PTR_ERR(charger->battery);
+>  	}
+>  
+> +	// grab regulator from parent device's node
+> +	pdev->dev.of_node = iodev->dev->of_node;
+>  	charger->reg = devm_regulator_get_optional(&pdev->dev, "charger");
+> +	pdev->dev.of_node = np;
+
+I think the device does not have its own node anymore. Or did I miss
+something?
+
+>  	if (IS_ERR(charger->reg)) {
+>  		if (PTR_ERR(charger->reg) == -EPROBE_DEFER)
+>  			return -EPROBE_DEFER;
+>  		dev_info(&pdev->dev, "couldn't get charger regulator\n");
+>  	}
+> -	charger->edev = extcon_get_edev_by_phandle(&pdev->dev, 0);
+> -	if (IS_ERR(charger->edev)) {
+> -		if (PTR_ERR(charger->edev) == -EPROBE_DEFER)
+> +	charger->edev = extcon_get_extcon_dev("max8997-muic");
+> +	if (IS_ERR_OR_NULL(charger->edev)) {
+> +		if (!charger->edev)
+
+Isn't NULL returned when there is simply no extcon? It's different than
+deferred probe. Returning here EPROBE_DEFER might lead to infinite probe
+tries (on every new device probe) instead of just failing it.
+
+Best regards,
+Krzysztof
 
 
-On 29/12/2020 07:17, Hector Yuan wrote:
-> The CPUfreq HW present in some Mediatek chipsets offloads the steps necessary for changing the frequency of CPUs. 
-> The driver implements the cpufreq driver interface for this hardware engine. 
-> This patch depends on MT6779 DTS patchset[1] submitted by Hanks Chen.
-
-This dependency got resolved, the patch is mainline since v5.11. Please delete
-it in further revisions of the patch set to minimize confusion.
-
-Thanks!
-
+>  			return -EPROBE_DEFER;
+>  		dev_info(charger->dev, "couldn't get extcon device\n");
+>  	}
+>  
+> -	if (!IS_ERR(charger->reg) && !IS_ERR(charger->edev)) {
+> +	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
+>  		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
+>  		ret = devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_work, charger);
+>  		if (ret) {
+> -- 
+> 2.25.1
 > 
-> From v8 to v9, there are three more modifications.
-> 1. Based on patchset[2], align binding with scmi for performance domain.
-> 2. Add the CPUFREQ fast switch function support and define DVFS latency.
-> 3. Based on patchser[3], add energy model API parameter for mW.
-> 
-> From v7 to v8, there are three more patches based on patchset v8[4].
-> This patchset is about to register power table to Energy model for EAS and thermal usage.
-> 1. EM CPU power table
-> - Register energy model table for EAS and thermal cooling device usage.
-> - Read the coresponding LUT for power table.
-> 2. SVS initialization
-> - The SVS(Smart Voltage Scaling) engine is a hardware which is
->   used to calculate optimized voltage values for CPU power domain.
->   DVFS driver could apply those optimized voltage values to reduce power consumption.
-> - Driver will polling if HW engine is done for SVS initialization.
->   After that, driver will read power table and register it to EAS.
-> - CPUs must be in power on state when doing SVS. Use pm_qos to block cpu-idle state for SVS initializing.
-> 3. Cooling device flag
-> - Add cooling device flag for thermal
-> 
-> [1]  https://lkml.org/lkml/2020/8/4/1094
-> [2]  https://lore.kernel.org/lkml/20201116181356.804590-1-sudeep.holla@arm.com/
-> [3]  https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=c250d50fe2ce627ca9805d9c8ac11cbbf922a4a6
-> [4]  https://lkml.org/lkml/2020/9/23/384
-> 
-> 
-> Hector.Yuan (2):
->   cpufreq: mediatek-hw: Add support for CPUFREQ HW
->   dt-bindings: cpufreq: add bindings for MediaTek cpufreq HW
-> 
->  .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |  116 ++++++
->  drivers/cpufreq/Kconfig.arm                        |   12 +
->  drivers/cpufreq/Makefile                           |    1 +
->  drivers/cpufreq/mediatek-cpufreq-hw.c              |  370 ++++++++++++++++++++
->  4 files changed, 499 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
->  create mode 100644 drivers/cpufreq/mediatek-cpufreq-hw.c
 > 
