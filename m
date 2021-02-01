@@ -2,354 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9B930AF25
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 19:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E416930AFBC
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 19:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbhBASZ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 13:25:29 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:52884 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbhBASVX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 13:21:23 -0500
-Received: from 89-64-80-124.dynamic.chello.pl (89.64.80.124) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.537)
- id 1442e88330b5154c; Mon, 1 Feb 2021 19:20:22 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
+        id S230438AbhBASqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 13:46:48 -0500
+Received: from smtprelay0139.hostedemail.com ([216.40.44.139]:44048 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231873AbhBASqn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 13:46:43 -0500
+X-Greylist: delayed 614 seconds by postgrey-1.27 at vger.kernel.org; Mon, 01 Feb 2021 13:46:43 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id 8D9E21801DFA0
+        for <linux-pm@vger.kernel.org>; Mon,  1 Feb 2021 18:36:47 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id C9901182CF66A;
+        Mon,  1 Feb 2021 18:35:37 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1261:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2559:2562:2691:2828:2895:3138:3139:3140:3141:3142:3352:3622:3865:3867:3868:3870:3872:3874:4321:5007:7576:7652:7875:10004:10400:10848:11026:11232:11473:11658:11914:12043:12296:12297:12438:12740:12895:13069:13311:13357:13439:13894:14181:14659:14721:21080:21212:21451:21611:21627:21660:30054:30064:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: sound29_52137f3275c4
+X-Filterd-Recvd-Size: 2116
+Received: from [192.168.1.159] (unknown [47.151.137.21])
+        (Authenticated sender: joe@perches.com)
+        by omf09.hostedemail.com (Postfix) with ESMTPA;
+        Mon,  1 Feb 2021 18:35:35 +0000 (UTC)
+Message-ID: <ab62890a1128b0d3109553208379015fcb36e0c7.camel@perches.com>
+Subject: Re: [PATCH v1 2/5] ACPI: battery: Clean up printing messages
+From:   Joe Perches <joe@perches.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v1 5/5] ACPI: thermal: Clean up printing messages
-Date:   Mon, 01 Feb 2021 19:19:21 +0100
-Message-ID: <2844446.tJ1DJ623rE@kreacher>
-In-Reply-To: <2367702.B5bJTmGzJm@kreacher>
-References: <2367702.B5bJTmGzJm@kreacher>
+        Erik Kaneda <erik.kaneda@intel.com>
+Date:   Mon, 01 Feb 2021 10:35:33 -0800
+In-Reply-To: <1996712.1aSbzQgNOC@kreacher>
+References: <2367702.B5bJTmGzJm@kreacher> <1996712.1aSbzQgNOC@kreacher>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, 2021-02-01 at 19:16 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace the ACPI_DEBUG_PRINT() and ACPI_EXCEPTION() instances
+> in battery.c with acpi_handle_debug() and acpi_handle_info() calls,
+> respectively, drop the _COMPONENT and ACPI_MODULE_NAME() definitions
+> that are not used any more, drop the no longer needed
+> ACPI_BATTERY_COMPONENT definition from the headers and update the
+> documentation accordingly.
+> 
+> While at it, update the pr_fmt() definition and drop the unneeded
+> PREFIX sybmbol definition from battery.c.
+[]
+> --- linux-pm.orig/drivers/acpi/battery.c
+[]
+> @@ -466,7 +460,8 @@ static int extract_package(struct acpi_b
+>  static int acpi_battery_get_status(struct acpi_battery *battery)
+>  {
+>  	if (acpi_bus_get_status(battery->device)) {
+> -		ACPI_EXCEPTION((AE_INFO, AE_ERROR, "Evaluating _STA"));
+> +		acpi_handle_info(battery->device->handle,
+> +				 "_STA evaluation failed\n");
 
-Replace the ACPI_DEBUG_PRINT() instances in thermal.c with
-acpi_handle_debug() calls and modify the ACPI_THERMAL_TRIPS_EXCEPTION()
-macro in there to use acpi_handle_info() internally.
+I believe this changes the logging level from KERN_ERR to KERN_INFO.
 
-Drop the _COMPONENT and ACPI_MODULE_NAME() definitions that are not
-used any more from thermal.c, drop the no longer needed
-ACPI_THERMAL_COMPONENT definition from the headers and update the
-documentation accordingly.
-
-While at it, add a pr_fmt() definition to thermal.c, drop the PREFIX
-definition from there and replace some pr_warn() calls with pr_info()
-or acpi_handle_info().
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- Documentation/firmware-guide/acpi/debug.rst |    1 
- drivers/acpi/sysfs.c                        |    1 
- drivers/acpi/thermal.c                      |   87 +++++++++++++---------------
- include/acpi/acpi_drivers.h                 |    1 
- 4 files changed, 43 insertions(+), 47 deletions(-)
-
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -13,6 +13,8 @@
-  *          concepts of 'multiple limiters', upper/lower limits, etc.
-  */
- 
-+#define pr_fmt(fmt) "ACPI: thermal: " fmt
-+
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/dmi.h>
-@@ -29,8 +31,6 @@
- #include <linux/uaccess.h>
- #include <linux/units.h>
- 
--#define PREFIX "ACPI: "
--
- #define ACPI_THERMAL_CLASS		"thermal_zone"
- #define ACPI_THERMAL_DEVICE_NAME	"Thermal Zone"
- #define ACPI_THERMAL_NOTIFY_TEMPERATURE	0x80
-@@ -43,9 +43,6 @@
- #define ACPI_THERMAL_MAX_ACTIVE	10
- #define ACPI_THERMAL_MAX_LIMIT_STR_LEN 65
- 
--#define _COMPONENT		ACPI_THERMAL_COMPONENT
--ACPI_MODULE_NAME("thermal");
--
- MODULE_AUTHOR("Paul Diefenbaugh");
- MODULE_DESCRIPTION("ACPI Thermal Zone Driver");
- MODULE_LICENSE("GPL");
-@@ -197,8 +194,9 @@ static int acpi_thermal_get_temperature(
- 		return -ENODEV;
- 
- 	tz->temperature = tmp;
--	ACPI_DEBUG_PRINT((ACPI_DB_INFO, "Temperature is %lu dK\n",
--			  tz->temperature));
-+
-+	acpi_handle_debug(tz->device->handle, "Temperature is %lu dK\n",
-+			  tz->temperature);
- 
- 	return 0;
- }
-@@ -216,8 +214,8 @@ static int acpi_thermal_get_polling_freq
- 		return -ENODEV;
- 
- 	tz->polling_frequency = tmp;
--	ACPI_DEBUG_PRINT((ACPI_DB_INFO, "Polling frequency is %lu dS\n",
--			  tz->polling_frequency));
-+	acpi_handle_debug(tz->device->handle, "Polling frequency is %lu dS\n",
-+			  tz->polling_frequency);
- 
- 	return 0;
- }
-@@ -254,12 +252,12 @@ static int acpi_thermal_set_cooling_mode
-  * 2.TODO: Devices listed in _PSL, _ALx, _TZD may change.
-  *   We need to re-bind the cooling devices of a thermal zone when this occurs.
-  */
--#define ACPI_THERMAL_TRIPS_EXCEPTION(flags, str)	\
-+#define ACPI_THERMAL_TRIPS_EXCEPTION(flags, tz, str)	\
- do {	\
- 	if (flags != ACPI_TRIPS_INIT)	\
--		ACPI_EXCEPTION((AE_INFO, AE_ERROR,	\
-+		acpi_handle_info(tz->device->handle,	\
- 		"ACPI thermal trip point %s changed\n"	\
--		"Please send acpidump to linux-acpi@vger.kernel.org", str)); \
-+		"Please report to linux-acpi@vger.kernel.org\n", str); \
- } while (0)
- 
- static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
-@@ -283,17 +281,17 @@ static int acpi_thermal_trips_update(str
- 		 */
- 		if (ACPI_FAILURE(status)) {
- 			tz->trips.critical.flags.valid = 0;
--			ACPI_DEBUG_PRINT((ACPI_DB_INFO,
--					  "No critical threshold\n"));
-+			acpi_handle_debug(tz->device->handle,
-+					  "No critical threshold\n");
- 		} else if (tmp <= 2732) {
--			pr_warn(FW_BUG "Invalid critical threshold (%llu)\n",
-+			pr_info(FW_BUG "Invalid critical threshold (%llu)\n",
- 				tmp);
- 			tz->trips.critical.flags.valid = 0;
- 		} else {
- 			tz->trips.critical.flags.valid = 1;
--			ACPI_DEBUG_PRINT((ACPI_DB_INFO,
-+			acpi_handle_debug(tz->device->handle,
- 					  "Found critical threshold [%lu]\n",
--					  tz->trips.critical.temperature));
-+					  tz->trips.critical.temperature);
- 		}
- 		if (tz->trips.critical.flags.valid == 1) {
- 			if (crt == -1) {
-@@ -305,8 +303,8 @@ static int acpi_thermal_trips_update(str
- 				 * Allow override critical threshold
- 				 */
- 				if (crt_k > tz->trips.critical.temperature)
--					pr_warn(PREFIX "Critical threshold %d C\n",
--						crt);
-+					pr_info("Critical threshold %d C\n", crt);
-+
- 				tz->trips.critical.temperature = crt_k;
- 			}
- 		}
-@@ -318,14 +316,14 @@ static int acpi_thermal_trips_update(str
- 				"_HOT", NULL, &tmp);
- 		if (ACPI_FAILURE(status)) {
- 			tz->trips.hot.flags.valid = 0;
--			ACPI_DEBUG_PRINT((ACPI_DB_INFO,
--					"No hot threshold\n"));
-+			acpi_handle_debug(tz->device->handle,
-+					  "No hot threshold\n");
- 		} else {
- 			tz->trips.hot.temperature = tmp;
- 			tz->trips.hot.flags.valid = 1;
--			ACPI_DEBUG_PRINT((ACPI_DB_INFO,
--					"Found hot threshold [%lu]\n",
--					tz->trips.hot.temperature));
-+			acpi_handle_debug(tz->device->handle,
-+					  "Found hot threshold [%lu]\n",
-+					  tz->trips.hot.temperature);
- 		}
- 	}
- 
-@@ -378,7 +376,8 @@ static int acpi_thermal_trips_update(str
- 		status = acpi_evaluate_reference(tz->device->handle, "_PSL",
- 							NULL, &devices);
- 		if (ACPI_FAILURE(status)) {
--			pr_warn(PREFIX "Invalid passive threshold\n");
-+			acpi_handle_info(tz->device->handle,
-+					 "Invalid passive threshold\n");
- 			tz->trips.passive.flags.valid = 0;
- 		}
- 		else
-@@ -388,12 +387,12 @@ static int acpi_thermal_trips_update(str
- 				sizeof(struct acpi_handle_list))) {
- 			memcpy(&tz->trips.passive.devices, &devices,
- 				sizeof(struct acpi_handle_list));
--			ACPI_THERMAL_TRIPS_EXCEPTION(flag, "device");
-+			ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "device");
- 		}
- 	}
- 	if ((flag & ACPI_TRIPS_PASSIVE) || (flag & ACPI_TRIPS_DEVICES)) {
- 		if (valid != tz->trips.passive.flags.valid)
--				ACPI_THERMAL_TRIPS_EXCEPTION(flag, "state");
-+				ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "state");
- 	}
- 
- 	/* Active (optional) */
-@@ -440,8 +439,8 @@ static int acpi_thermal_trips_update(str
- 			status = acpi_evaluate_reference(tz->device->handle,
- 						name, NULL, &devices);
- 			if (ACPI_FAILURE(status)) {
--				pr_warn(PREFIX "Invalid active%d threshold\n",
--					i);
-+				acpi_handle_info(tz->device->handle,
-+						 "Invalid active%d threshold\n", i);
- 				tz->trips.active[i].flags.valid = 0;
- 			}
- 			else
-@@ -451,12 +450,12 @@ static int acpi_thermal_trips_update(str
- 					sizeof(struct acpi_handle_list))) {
- 				memcpy(&tz->trips.active[i].devices, &devices,
- 					sizeof(struct acpi_handle_list));
--				ACPI_THERMAL_TRIPS_EXCEPTION(flag, "device");
-+				ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "device");
- 			}
- 		}
- 		if ((flag & ACPI_TRIPS_ACTIVE) || (flag & ACPI_TRIPS_DEVICES))
- 			if (valid != tz->trips.active[i].flags.valid)
--				ACPI_THERMAL_TRIPS_EXCEPTION(flag, "state");
-+				ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "state");
- 
- 		if (!tz->trips.active[i].flags.valid)
- 			break;
-@@ -469,7 +468,7 @@ static int acpi_thermal_trips_update(str
- 		if (ACPI_SUCCESS(status)
- 		    && memcmp(&tz->devices, &devices, sizeof(devices))) {
- 			tz->devices = devices;
--			ACPI_THERMAL_TRIPS_EXCEPTION(flag, "device");
-+			ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "device");
- 		}
- 	}
- 
-@@ -925,8 +924,8 @@ static void acpi_thermal_notify(struct a
- 						  dev_name(&device->dev), event, 0);
- 		break;
- 	default:
--		ACPI_DEBUG_PRINT((ACPI_DB_INFO,
--				  "Unsupported event [0x%x]\n", event));
-+		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
-+				  event);
- 		break;
- 	}
- }
-@@ -1074,7 +1073,7 @@ static int acpi_thermal_add(struct acpi_
- 	mutex_init(&tz->thermal_check_lock);
- 	INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
- 
--	pr_info(PREFIX "%s [%s] (%ld C)\n", acpi_device_name(device),
-+	pr_info("%s [%s] (%ld C)\n", acpi_device_name(device),
- 		acpi_device_bid(device), deci_kelvin_to_celsius(tz->temperature));
- 	goto end;
- 
-@@ -1146,24 +1145,24 @@ static int acpi_thermal_resume(struct de
- static int thermal_act(const struct dmi_system_id *d) {
- 
- 	if (act == 0) {
--		pr_notice(PREFIX "%s detected: "
--			  "disabling all active thermal trip points\n", d->ident);
-+		pr_notice("%s detected: disabling all active thermal trip points\n",
-+			  d->ident);
- 		act = -1;
- 	}
- 	return 0;
- }
- static int thermal_nocrt(const struct dmi_system_id *d) {
- 
--	pr_notice(PREFIX "%s detected: "
--		  "disabling all critical thermal trip point actions.\n", d->ident);
-+	pr_notice("%s detected: disabling all critical thermal trip point actions.\n",
-+		  d->ident);
- 	nocrt = 1;
- 	return 0;
- }
- static int thermal_tzp(const struct dmi_system_id *d) {
- 
- 	if (tzp == 0) {
--		pr_notice(PREFIX "%s detected: "
--			  "enabling thermal zone polling\n", d->ident);
-+		pr_notice("%s detected: enabling thermal zone polling\n",
-+			  d->ident);
- 		tzp = 300;	/* 300 dS = 30 Seconds */
- 	}
- 	return 0;
-@@ -1171,8 +1170,8 @@ static int thermal_tzp(const struct dmi_
- static int thermal_psv(const struct dmi_system_id *d) {
- 
- 	if (psv == 0) {
--		pr_notice(PREFIX "%s detected: "
--			  "disabling all passive thermal trip points\n", d->ident);
-+		pr_notice("%s detected: disabling all passive thermal trip points\n",
-+			  d->ident);
- 		psv = -1;
- 	}
- 	return 0;
-@@ -1225,7 +1224,7 @@ static int __init acpi_thermal_init(void
- 	dmi_check_system(thermal_dmi_table);
- 
- 	if (off) {
--		pr_notice(PREFIX "thermal control disabled\n");
-+		pr_notice("thermal control disabled\n");
- 		return -ENODEV;
- 	}
- 
-Index: linux-pm/Documentation/firmware-guide/acpi/debug.rst
-===================================================================
---- linux-pm.orig/Documentation/firmware-guide/acpi/debug.rst
-+++ linux-pm/Documentation/firmware-guide/acpi/debug.rst
-@@ -57,7 +57,6 @@ shows the supported mask values, current
-     ACPI_PCI_COMPONENT              0x00400000
-     ACPI_CONTAINER_COMPONENT        0x01000000
-     ACPI_SYSTEM_COMPONENT           0x02000000
--    ACPI_THERMAL_COMPONENT          0x04000000
-     ACPI_MEMORY_DEVICE_COMPONENT    0x08000000
-     ACPI_PROCESSOR_COMPONENT        0x20000000
- 
-Index: linux-pm/drivers/acpi/sysfs.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sysfs.c
-+++ linux-pm/drivers/acpi/sysfs.c
-@@ -57,7 +57,6 @@ static const struct acpi_dlayer acpi_deb
- 	ACPI_DEBUG_INIT(ACPI_PCI_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_CONTAINER_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_SYSTEM_COMPONENT),
--	ACPI_DEBUG_INIT(ACPI_THERMAL_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_MEMORY_DEVICE_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_PROCESSOR_COMPONENT),
- };
-Index: linux-pm/include/acpi/acpi_drivers.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_drivers.h
-+++ linux-pm/include/acpi/acpi_drivers.h
-@@ -20,7 +20,6 @@
- #define ACPI_PCI_COMPONENT		0x00400000
- #define ACPI_CONTAINER_COMPONENT	0x01000000
- #define ACPI_SYSTEM_COMPONENT		0x02000000
--#define ACPI_THERMAL_COMPONENT		0x04000000
- #define ACPI_MEMORY_DEVICE_COMPONENT	0x08000000
- #define ACPI_PROCESSOR_COMPONENT	0x20000000
- 
-
+Perhaps this and others should instead use acpi_handle_err()
 
 
