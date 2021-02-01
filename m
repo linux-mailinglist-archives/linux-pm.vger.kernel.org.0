@@ -2,102 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A130430A945
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 15:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1022A30A957
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 15:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbhBAODA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 09:03:00 -0500
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:35338 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbhBAOC7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 09:02:59 -0500
-Received: by mail-oi1-f174.google.com with SMTP id w8so18862534oie.2;
-        Mon, 01 Feb 2021 06:02:43 -0800 (PST)
+        id S232157AbhBAOGp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 09:06:45 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:38047 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231511AbhBAOGd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 09:06:33 -0500
+Received: by mail-oi1-f170.google.com with SMTP id h6so18877425oie.5;
+        Mon, 01 Feb 2021 06:06:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PjQ2aAipDSaq5oC4lmBya+0Rk1klXjpSSVN7GA5y3Ng=;
-        b=tx1hsv+UOTZdkmkVsqprjcwNkmce1Z7Kmpr6pVGux/5cntzJ2+koInp0Of+ZT8GbbJ
-         f3no2hLMfDxlojDrrdwgtfwFA6sAas2+nDMYMC546L4Z8+f92+XKR22Qlb3hW1/+2BAv
-         76dK4TmaINCX7ABBvHZg24xqVRXC8AD2P/utJ7FAE8L6wkIbLHagITuqyVexyf86y4F/
-         Va/7SNL6sHQ8wCtMJ9e1gKNSkdXTCPiB6beau2M09LDn6m9XuoLgwrbtD4FpLGHzZGNN
-         s3knvojLv0oj72LR3mYLtGCf5T3JEUq9yYXkAIIDbByxu581gckufiBS4DsT+Z8bYH61
-         JAaA==
-X-Gm-Message-State: AOAM530BfBbSKtSkkefXKOXXPVRSEzvV8tY62vmTkcJsCkEFM4iAsNdQ
-        kaJtlvfZA5wjvJZfRLdbuv3h08tQCLymoFSMxXWOs7q1
-X-Google-Smtp-Source: ABdhPJw1DQOtXQiOfLob/rMGpYwphh6HqBDyeQVpm2HarfCzjirlfFQpNkL8KnEPZ6WvYaJWPQuOJUtbJQHKhwp2iUI=
-X-Received: by 2002:aca:fc84:: with SMTP id a126mr11038406oii.71.1612188138028;
- Mon, 01 Feb 2021 06:02:18 -0800 (PST)
+        bh=4SzpemPQB+/TRnRzTNJla8BM75IUCXAeWcKUwN4Y6ms=;
+        b=G/0ur6JrGubFYU5Au+iQKd2fpKUmRFCKN19qC3LlpnsSVXrOatoqe5a9hnjSnqgZD8
+         6J/vj8/mfEnI1RIQnBKjISk1ykauLIvCbcaxmco09P4CfToy+fuyQrbvJqqr4piaOmCU
+         6D9xdc8I+i+IUBrR+VBJ5gUGZIXX2SydZJcLj69CY7+cEEJK9Tj+P3CRuZf4eT/l46OL
+         9CmqqXoNBFSZOPZYIDZlrtc74uuUZFoW5A7pdxF/P5ZxoV/Cg5H5ds/6enEehDTfXbMs
+         mj47/6LOsU/QK1wiNbGhSrb7tIp1SeL0Hf5KQOAyYpgCpeJIWHjvJgRIhEZS8Cz1jNrt
+         4+UQ==
+X-Gm-Message-State: AOAM5334JVeZLvk2k/knabhRf6Orn4b1saA8q7xpqP/MvQoriSN4C89r
+        r50Vn89zBTkWL6tfSVn00VPq13/gej+jtWrmznY=
+X-Google-Smtp-Source: ABdhPJwJB9jBNuY8JgwpRFRdK2Bkqgl8TxJR/6j+4AlzXXofvePOK74g45qZiRTctcZ/Pf1S+BE6Cbq+UFbObKydWys=
+X-Received: by 2002:aca:d14:: with SMTP id 20mr11411887oin.157.1612188353137;
+ Mon, 01 Feb 2021 06:05:53 -0800 (PST)
 MIME-Version: 1.0
-References: <377d2e2d328276070ae2f26c65daa1497bb3c3cf.1612166647.git.viresh.kumar@linaro.org>
- <YBfNb91psVcf3TAS@light.dominikbrodowski.net> <20210201100502.xluaj5rpqosqsq7b@vireshk-i7>
-In-Reply-To: <20210201100502.xluaj5rpqosqsq7b@vireshk-i7>
+References: <1611736925-32547-1-git-send-email-abaci-bugfix@linux.alibaba.com> <CAPDyKFrtwFwPjLz7OYOtF4S7WORoyGFgpv9n6xABn-vp3w59dQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFrtwFwPjLz7OYOtF4S7WORoyGFgpv9n6xABn-vp3w59dQ@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 1 Feb 2021 15:02:06 +0100
-Message-ID: <CAJZ5v0iowSHeie2HLPjHUftBDVBQXi30O1Kfk3Kxchc0K=gYag@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Remove CPUFREQ_STICKY flag
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
+Date:   Mon, 1 Feb 2021 15:05:42 +0100
+Message-ID: <CAJZ5v0h_=Wm_nSNFj_s4+16y3rW0OMzTxNQ=GbUNUfpqYy=EXA@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Simplify the calculation of variables
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Abaci Team <abaci-bugfix@linux.alibaba.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 1, 2021 at 11:06 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Mon, Feb 1, 2021 at 11:11 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> On 01-02-21, 10:44, Dominik Brodowski wrote:
-> > IIRC, it was required on various ARM systems,[*] as CPUs were registered as
-> > subsys_initcall(), while cpufreq used to be initialized only later, as an
->
-> s/later/earlier ? arch happens before subsys not at least and that is
-> the only way we can break cpufreq here, i.e. when the driver comes up
-> before the CPUs are registered.
->
-> > arch_initcall(). If the ordering is opposite now on all architectures (it
-> > wasn't on ARM back then), we should be fine.
+> On Wed, 27 Jan 2021 at 09:42, Abaci Team <abaci-bugfix@linux.alibaba.com> wrote:
 > >
-> > [*] https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/arch/arm/mach-sa1100/cpu-sa1100.c?id=f59d3bbe35f6268d729f51be82af8325d62f20f5
+> > Fix the following coccicheck warnings:
+> >
+> > ./drivers/base/power/domain.c:938:31-33: WARNING !A || A && B is
+> > equivalent to !A || B.
+> >
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Suggested-by: Jiapeng Zhong <oswb@linux.alibaba.com>
+> > Signed-off-by: Abaci Team <abaci-bugfix@linux.alibaba.com>
 >
-> Thanks for your reply, it made me look at that aspect in some more
-> detail to confirm I don't end up breaking anything. Unless I am making
-> a mistake in reading the code, this is the code flow that we have
-> right now:
->
-> start_kernel()
-> -> kernel_init()
->    -> kernel_init_freeable()
->       -> do_basic_setup()
->          -> driver_init()
->             -> cpu_dev_init()
->                -> subsys_system_register(for-CPUs)
->
->          -> do_initcalls()
->             -> register-cpufreq-driver from any level
->
-> And so CPUs should always be there for a cpufreq driver.
->
-> Makes sense ?
+> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-It does to me, but can you update the changelog, please?
+Applied as 5.12 material, thanks!
+
+> > ---
+> >  drivers/base/power/domain.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 9a14eed..e689710 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -934,8 +934,7 @@ static int genpd_runtime_resume(struct device *dev)
+> >  err_stop:
+> >         genpd_stop_dev(genpd, dev);
+> >  err_poweroff:
+> > -       if (!pm_runtime_is_irq_safe(dev) ||
+> > -               (pm_runtime_is_irq_safe(dev) && genpd_is_irq_safe(genpd))) {
+> > +       if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
+> >                 genpd_lock(genpd);
+> >                 genpd_power_off(genpd, true, 0);
+> >                 genpd_unlock(genpd);
+> > --
+> > 1.8.3.1
+> >
