@@ -2,85 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF3930AFB8
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 19:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECE230B01F
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 20:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbhBASpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 13:45:51 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:40671 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbhBASpi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 13:45:38 -0500
-Received: by mail-oi1-f178.google.com with SMTP id k142so5462444oib.7;
-        Mon, 01 Feb 2021 10:45:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3F+IaK/LsrQrHTLR46KGKmkQYpd2IqLJ3cy++TfHCOw=;
-        b=PTLBFKfUCgeX1DZXG8ht8oQv5uNZqQLyQG2y7AuKoxg4zBn/uuYZimwfbdGLQo0EG8
-         1irTCtqfwL0ElLiQNCWYtcCb1Ewt9P3tCWOINnlU3+m5fXZAXjGoVRx3T7k+H1hzs1GS
-         7KTZsdcGw2oTYDg+DkoOqxPFwbMsio4cB7lP265i4IFCPrIQ+OwxinNbJL753uzE/5ho
-         9ReduF/t/ah6PGjPWBaoxuD29KljszKWT8WFrsRXxpqakGQUBW34xqk8cXZbCStw5u8t
-         mBd94hzh/omnJ3PcR4+2F9MuQM8CidMtqs8fAwWy1GvKmqX22DM1rq0/qCeGkcf2UgEn
-         s0yA==
-X-Gm-Message-State: AOAM532x+geUoyy4q0eyRgGF25Kn3ZAVkHZpca1Lp0MBbusYEXx92J8M
-        kHTKw9IHe3vRn7nywwU4Y+uQ/wehZK8YqPBAT1K1UXeD
-X-Google-Smtp-Source: ABdhPJzopJHlhNhpir5maIJreoA9jMznT8poHisvkoSSMrrZIJGmFYhdiu1HY4P/xs6wY/6LlBOOvINugbgG+phwxZ0=
-X-Received: by 2002:aca:fc84:: with SMTP id a126mr170770oii.71.1612205096134;
- Mon, 01 Feb 2021 10:44:56 -0800 (PST)
-MIME-Version: 1.0
-References: <2367702.B5bJTmGzJm@kreacher> <1996712.1aSbzQgNOC@kreacher> <ab62890a1128b0d3109553208379015fcb36e0c7.camel@perches.com>
-In-Reply-To: <ab62890a1128b0d3109553208379015fcb36e0c7.camel@perches.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 1 Feb 2021 19:44:43 +0100
-Message-ID: <CAJZ5v0hoPLKe9mVY_mJgFrcLSdutTd-UFGJS11pu8qDzemy43w@mail.gmail.com>
-Subject: Re: [PATCH v1 2/5] ACPI: battery: Clean up printing messages
-To:     Joe Perches <joe@perches.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Erik Kaneda <erik.kaneda@intel.com>
+        id S232209AbhBATMH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 14:12:07 -0500
+Received: from mga03.intel.com ([134.134.136.65]:26204 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232026AbhBATMG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 1 Feb 2021 14:12:06 -0500
+IronPort-SDR: gNOsHG34c3TiXeO2HT4H0WC9Z7G7Uh11UxqvWD7jEYTsffs57u1nVEhnlvmVS1tethSiRAsqKk
+ hG5G7w9TEY2A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="180814809"
+X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
+   d="scan'208";a="180814809"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 11:10:19 -0800
+IronPort-SDR: eENvFbI8VPGXGsUKVdHJA5wLBm2+s23n394IlK811aXDid5Xq4X3wP6eY4FJcCpTtshNAO9R9f
+ zpRMTVB7JAFw==
+X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
+   d="scan'208";a="479203639"
+Received: from spandruv-mobl.amr.corp.intel.com ([10.209.6.188])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 11:10:19 -0800
+Message-ID: <e78dac06f056231ab7e9b4295e77f8fb146eb587.camel@linux.intel.com>
+Subject: Re: [PATCH v3 0/2] Move ...mce/therm_throt.c to drivers/thermal/
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Date:   Mon, 01 Feb 2021 11:10:18 -0800
+In-Reply-To: <20210201142704.12495-1-bp@alien8.de>
+References: <20210201142704.12495-1-bp@alien8.de>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 1, 2021 at 7:37 PM Joe Perches <joe@perches.com> wrote:
->
-> On Mon, 2021-02-01 at 19:16 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Replace the ACPI_DEBUG_PRINT() and ACPI_EXCEPTION() instances
-> > in battery.c with acpi_handle_debug() and acpi_handle_info() calls,
-> > respectively, drop the _COMPONENT and ACPI_MODULE_NAME() definitions
-> > that are not used any more, drop the no longer needed
-> > ACPI_BATTERY_COMPONENT definition from the headers and update the
-> > documentation accordingly.
-> >
-> > While at it, update the pr_fmt() definition and drop the unneeded
-> > PREFIX sybmbol definition from battery.c.
-> []
-> > --- linux-pm.orig/drivers/acpi/battery.c
-> []
-> > @@ -466,7 +460,8 @@ static int extract_package(struct acpi_b
-> >  static int acpi_battery_get_status(struct acpi_battery *battery)
-> >  {
-> >       if (acpi_bus_get_status(battery->device)) {
-> > -             ACPI_EXCEPTION((AE_INFO, AE_ERROR, "Evaluating _STA"));
-> > +             acpi_handle_info(battery->device->handle,
-> > +                              "_STA evaluation failed\n");
->
-> I believe this changes the logging level from KERN_ERR to KERN_INFO.
->
-> Perhaps this and others should instead use acpi_handle_err()
+On Mon, 2021-02-01 at 15:27 +0100, Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
+> 
+> Hi,
+> 
+> I know I already committed those but
+> 
+> https://lkml.kernel.org/r/20210201032427.GB12524@xsang-OptiPlex-9020
+> 
+> made me look at the IRQ handler registration. And it does happen per
+> CPU
+> which is particularly daft and unneeded. And it used to do that
+> before
+> that change too, for some unknown reason.
+> 
+> So I decided to not have a handler registration but simply call the
+> thermal interrupt handler if all is setup and before that issue the
+> message about the unexpected IRQ.
+> 
+> I did test it by sending bogus thermal interrupts before and after
+> registration - see hunk below - and it looks good:
+> 
+> [    0.136608] 0: Sending thermal IRQ
+> [    0.136760] CPU0: Unexpected LVT thermal interrupt!
+> [    0.136917] CPU0: Thermal monitoring enabled (TM1)
+> [    0.137071] 1: Sending thermal IRQ
+> [    0.043243] 0: Sending thermal IRQ
+> [    0.043243] 1: Sending thermal IRQ
+> [    0.043243] 0: Sending thermal IRQ
+> [    0.043243] 1: Sending thermal IRQ
+> [    0.043243] 0: Sending thermal IRQ
+> [    0.043243] 1: Sending thermal IRQ
+> [    0.043243] 0: Sending thermal IRQ
+> [    0.043243] 1: Sending thermal IRQ
+> [    0.043243] 0: Sending thermal IRQ
+> [    0.043243] 1: Sending thermal IRQ
+> [    0.149436] thermal_sys: Registered thermal governor 'fair_share'
+> [    0.149437] thermal_sys: Registered thermal governor 'bang_bang'
+> [    0.149595] thermal_sys: Registered thermal governor 'step_wise'
+> [    0.149753] thermal_sys: Registered thermal governor 'user_space'
+> [    0.445717] ACPI: \_SB_.PR00: _OSC native thermal LVT Acked
+> [    0.707539] thermal LNXTHERM:00: registered as thermal_zone0
+> 
+> Logic in patch 1 got a bit simplified too.
+> 
+[...]
 
-Actually, these log level changes, because the messages in question
-are not very urgent.
+> 
+> Borislav Petkov (2):
+>   x86/mce: Get rid of mcheck_intel_therm_init()
+>   thermal: Move therm_throt there from x86/mce
+> 
 
-Something doesn't work and it's kind of good to know that, but there's
-not much that can be done about it.
+I have applied this series and tested. Didn't find any functional
+issues. But I have one comment on patch 2/2.
+
+Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+Thanks,
+Srinivas
+
+>  arch/x86/Kconfig                              |  4 --
+>  arch/x86/include/asm/mce.h                    | 22 ----------
+>  arch/x86/include/asm/thermal.h                | 24 +++++++++++
+>  arch/x86/kernel/cpu/intel.c                   |  3 ++
+>  arch/x86/kernel/cpu/mce/Makefile              |  2 -
+>  arch/x86/kernel/cpu/mce/core.c                |  1 -
+>  arch/x86/kernel/cpu/mce/intel.c               |  1 -
+>  arch/x86/kernel/irq.c                         | 21 ++++++++++
+>  drivers/thermal/intel/Kconfig                 |  4 ++
+>  drivers/thermal/intel/Makefile                |  1 +
+>  .../thermal/intel}/therm_throt.c              | 41 ++++-------------
+> --
+>  drivers/thermal/intel/x86_pkg_temp_thermal.c  |  3 +-
+>  12 files changed, 64 insertions(+), 63 deletions(-)
+>  create mode 100644 arch/x86/include/asm/thermal.h
+>  rename {arch/x86/kernel/cpu/mce =>
+> drivers/thermal/intel}/therm_throt.c (96%)
+> 
+> 2nd:rc6-therm_throt
+> 
+
