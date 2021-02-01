@@ -2,85 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 905C630A5D7
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 11:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A077030A66E
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 12:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbhBAKxq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 05:53:46 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:56658 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbhBAKxn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 05:53:43 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id CF9951C0B78; Mon,  1 Feb 2021 11:52:43 +0100 (CET)
-Date:   Mon, 1 Feb 2021 11:52:43 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Abel Wu <abel.w@icloud.com>
-Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hewenliang4@huawei.com,
-        wuyun.wu@huawei.com
-Subject: Re: [PATCH] PM: hibernate: add sanity check on power_kobj
-Message-ID: <20210201105243.GA23135@duo.ucw.cz>
-References: <20210201075041.1201-1-abel.w@icloud.com>
+        id S233569AbhBALYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 06:24:25 -0500
+Received: from foss.arm.com ([217.140.110.172]:56696 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233560AbhBALYY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 1 Feb 2021 06:24:24 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 929031042;
+        Mon,  1 Feb 2021 03:23:38 -0800 (PST)
+Received: from [10.57.8.191] (unknown [10.57.8.191])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7568A3F718;
+        Mon,  1 Feb 2021 03:23:36 -0800 (PST)
+Subject: Re: [RFC][PATCH 0/3] New thermal interface allowing IPA to get max
+ power
+To:     daniel.lezcano@linaro.org, cw00.choi@samsung.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, rafael@kernel.org, Dietmar.Eggemann@arm.com,
+        amitk@kernel.org, rui.zhang@intel.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com
+References: <20210126104001.20361-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <5751adfa-6e25-3f3c-4a60-9b3c739fec1f@arm.com>
+Date:   Mon, 1 Feb 2021 11:23:34 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="SUOF0GtieIMvvwua"
-Content-Disposition: inline
-In-Reply-To: <20210201075041.1201-1-abel.w@icloud.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210126104001.20361-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Daniel, Chanwoo
 
---SUOF0GtieIMvvwua
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Gentle ping. Have you have a chance to check these patches?
 
-On Mon 2021-02-01 02:50:41, Abel Wu wrote:
-> The @power_kobj is initialized in pm_init() which is the same
-> initcall level as pm_disk_init(). Although this dependency is
-> guaranteed based on the current initcall serial execution model,
-> it would still be better do a cost-less sanity check to avoid
-> oops once the dependency is broken.
-
-I don't believe this is good idea. If the dependency is ever broken,
-this will make failure more subtle and harder to debug.
-
-> Signed-off-by: Abel Wu <abel.w@icloud.com>
-> ---
->  kernel/power/hibernate.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index da0b41914177..060089cc261d 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -1262,6 +1262,9 @@ static const struct attribute_group attr_group =3D {
-> =20
->  static int __init pm_disk_init(void)
->  {
-> +	if (!power_kobj)
-> +		return -EINVAL;
-> +
->  	return sysfs_create_group(power_kobj, &attr_group);
->  }
-> =20
-> --=20
-> 2.27.0
-
---=20
-http://www.livejournal.com/~pavelmachek
-
---SUOF0GtieIMvvwua
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYBfdewAKCRAw5/Bqldv6
-8hWOAJ9GZ5FYShq3xhcMliGsSXBmz0SA+gCePQN4Q0MHaHcYqgR2q8kjeDrW2mM=
-=nGhd
------END PGP SIGNATURE-----
-
---SUOF0GtieIMvvwua--
+On 1/26/21 10:39 AM, Lukasz Luba wrote:
+> Hi all,
+> 
+> This patch set tries to add the missing feature in the Intelligent Power
+> Allocation (IPA) governor which is: frequency limit set by user space.
+> User can set max allowed frequency for a given device which has impact on
+> max allowed power. In current design there is no mechanism to figure this
+> out. IPA must know the maximum allowed power for every device. It is then
+> used for proper power split and divvy-up. When the user limit for max
+> frequency is not know, IPA assumes it is the highest possible frequency.
+> It causes wrong power split across the devices.
+> 
+> This new mechanism provides the max allowed frequency to the thermal
+> framework and then max allowed power to the IPA.
+> The implementation is done in this way because currently there is no way
+> to retrieve the limits from the PM QoS, without uncapping the local
+> thermal limit and reading the next value. It would be a heavy way of
+> doing these things, since it should be done every polling time (e.g. 50ms).
+> Also, the value stored in PM QoS can be different than the real OPP 'rate'
+> so still would need conversion into proper OPP for comparison with EM.
+> Furthermore, uncapping the device in thermal just to check the user freq
+> limit is not the safest way.
+> Thus, this simple implementation moves the calculation of the proper
+> frequency to the sysfs write code, since it's called less often. The value
+> is then used as-is in the thermal framework without any hassle.
+> 
+> As it's a RFC, it still misses the cpufreq sysfs implementation, but would
+> be addressed if all agree.
+> 
+> Regards,
+> Lukasz Luba
+> 
+> Lukasz Luba (3):
+>    PM /devfreq: add user frequency limits into devfreq struct
+>    thermal: devfreq_cooling: add new callback to get user limit for min
+>      state
+>    thermal: power_allocator: get proper max power limited by user
+> 
+>   drivers/devfreq/devfreq.c             | 41 ++++++++++++++++++++++++---
+>   drivers/thermal/devfreq_cooling.c     | 33 +++++++++++++++++++++
+>   drivers/thermal/gov_power_allocator.c | 17 +++++++++--
+>   include/linux/devfreq.h               |  4 +++
+>   include/linux/thermal.h               |  1 +
+>   5 files changed, 90 insertions(+), 6 deletions(-)
+> 
