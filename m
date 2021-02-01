@@ -2,88 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1022A30A957
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 15:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FBA30A981
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 15:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbhBAOGp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 09:06:45 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:38047 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbhBAOGd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 09:06:33 -0500
-Received: by mail-oi1-f170.google.com with SMTP id h6so18877425oie.5;
-        Mon, 01 Feb 2021 06:06:18 -0800 (PST)
+        id S231750AbhBAOT4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 09:19:56 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:45632 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231657AbhBAOTy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 09:19:54 -0500
+Received: by mail-oi1-f181.google.com with SMTP id g69so18883433oib.12;
+        Mon, 01 Feb 2021 06:19:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4SzpemPQB+/TRnRzTNJla8BM75IUCXAeWcKUwN4Y6ms=;
-        b=G/0ur6JrGubFYU5Au+iQKd2fpKUmRFCKN19qC3LlpnsSVXrOatoqe5a9hnjSnqgZD8
-         6J/vj8/mfEnI1RIQnBKjISk1ykauLIvCbcaxmco09P4CfToy+fuyQrbvJqqr4piaOmCU
-         6D9xdc8I+i+IUBrR+VBJ5gUGZIXX2SydZJcLj69CY7+cEEJK9Tj+P3CRuZf4eT/l46OL
-         9CmqqXoNBFSZOPZYIDZlrtc74uuUZFoW5A7pdxF/P5ZxoV/Cg5H5ds/6enEehDTfXbMs
-         mj47/6LOsU/QK1wiNbGhSrb7tIp1SeL0Hf5KQOAyYpgCpeJIWHjvJgRIhEZS8Cz1jNrt
-         4+UQ==
-X-Gm-Message-State: AOAM5334JVeZLvk2k/knabhRf6Orn4b1saA8q7xpqP/MvQoriSN4C89r
-        r50Vn89zBTkWL6tfSVn00VPq13/gej+jtWrmznY=
-X-Google-Smtp-Source: ABdhPJwJB9jBNuY8JgwpRFRdK2Bkqgl8TxJR/6j+4AlzXXofvePOK74g45qZiRTctcZ/Pf1S+BE6Cbq+UFbObKydWys=
-X-Received: by 2002:aca:d14:: with SMTP id 20mr11411887oin.157.1612188353137;
- Mon, 01 Feb 2021 06:05:53 -0800 (PST)
+        bh=Nl0r7E4pmPDbzLNU5N8bDECPX3AdG/sX/U/vlhC1xFk=;
+        b=hf4+ue6GgKRubzn8XHs5QlRnkkMCnu+kJ8KpOJ2+bmOoElvND+Wq5/IDzCWm1d42fl
+         /jFXMHlLDVyrgMgivYH5ni9JsWuu+GkbaLhi4p6qjrjlqIOs42SQu3k2n8lnPJOi+dpU
+         e0FAmP1XsUVRA2PsrDeREKRdb6jHL17Jtjr9l0jUv0ZQD9hzCnmSwz7puZYA7wHYq1nf
+         IlK6+VJl7nmzcrlOxxXKD9/fE3jF78E6BpwHhawj4zkPADSD/Jhhy7nF268SbX/kGo/T
+         wfzMPC/x8XJEJJHfVdk6pt/ugEjHFMvx/1e9y/A+ymjxANf3BS13ulXisIanrkli4Xmg
+         hPew==
+X-Gm-Message-State: AOAM532IROtiOam3dv6BMp7n9fH7ru/PtT5HBd1VdQYjD9edQLzJsyNp
+        OHUgcvKy6uULpvxMV4pmFgkJkwSTSlMU/PHRsaY=
+X-Google-Smtp-Source: ABdhPJz00OGkDdFmt7vYjfTz/1PnWPAq//PkpSMGscieC47E85iAXencF6eG0+UOGIujvJ5b8D/NWkPfFRm89XBiu/M=
+X-Received: by 2002:aca:308a:: with SMTP id w132mr10398744oiw.69.1612189153445;
+ Mon, 01 Feb 2021 06:19:13 -0800 (PST)
 MIME-Version: 1.0
-References: <1611736925-32547-1-git-send-email-abaci-bugfix@linux.alibaba.com> <CAPDyKFrtwFwPjLz7OYOtF4S7WORoyGFgpv9n6xABn-vp3w59dQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFrtwFwPjLz7OYOtF4S7WORoyGFgpv9n6xABn-vp3w59dQ@mail.gmail.com>
+References: <20210126104001.20361-1-lukasz.luba@arm.com>
+In-Reply-To: <20210126104001.20361-1-lukasz.luba@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 1 Feb 2021 15:05:42 +0100
-Message-ID: <CAJZ5v0h_=Wm_nSNFj_s4+16y3rW0OMzTxNQ=GbUNUfpqYy=EXA@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Simplify the calculation of variables
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Abaci Team <abaci-bugfix@linux.alibaba.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Date:   Mon, 1 Feb 2021 15:19:02 +0100
+Message-ID: <CAJZ5v0gm7TU59Cr1SUZ8Xk_PwBbwv+J5kA75fNqK7OsGM8F6RA@mail.gmail.com>
+Subject: Re: [RFC][PATCH 0/3] New thermal interface allowing IPA to get max power
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Viresh Kumar <vireshk@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Myungjoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 1, 2021 at 11:11 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Tue, Jan 26, 2021 at 11:40 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> On Wed, 27 Jan 2021 at 09:42, Abaci Team <abaci-bugfix@linux.alibaba.com> wrote:
-> >
-> > Fix the following coccicheck warnings:
-> >
-> > ./drivers/base/power/domain.c:938:31-33: WARNING !A || A && B is
-> > equivalent to !A || B.
-> >
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Suggested-by: Jiapeng Zhong <oswb@linux.alibaba.com>
-> > Signed-off-by: Abaci Team <abaci-bugfix@linux.alibaba.com>
+> Hi all,
 >
-> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+> This patch set tries to add the missing feature in the Intelligent Power
+> Allocation (IPA) governor which is: frequency limit set by user space.
+> User can set max allowed frequency for a given device which has impact on
+> max allowed power.
 
-Applied as 5.12 material, thanks!
+If there is more than one frequency that can be limited for the given
+device, are you going to add a limit knob for each of them?
 
-> > ---
-> >  drivers/base/power/domain.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 9a14eed..e689710 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -934,8 +934,7 @@ static int genpd_runtime_resume(struct device *dev)
-> >  err_stop:
-> >         genpd_stop_dev(genpd, dev);
-> >  err_poweroff:
-> > -       if (!pm_runtime_is_irq_safe(dev) ||
-> > -               (pm_runtime_is_irq_safe(dev) && genpd_is_irq_safe(genpd))) {
-> > +       if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
-> >                 genpd_lock(genpd);
-> >                 genpd_power_off(genpd, true, 0);
-> >                 genpd_unlock(genpd);
-> > --
-> > 1.8.3.1
-> >
+> In current design there is no mechanism to figure this
+> out. IPA must know the maximum allowed power for every device. It is then
+> used for proper power split and divvy-up. When the user limit for max
+> frequency is not know, IPA assumes it is the highest possible frequency.
+> It causes wrong power split across the devices.
+
+Do I think correctly that this depends on the Energy Model?
+
+> This new mechanism provides the max allowed frequency to the thermal
+> framework and then max allowed power to the IPA.
+> The implementation is done in this way because currently there is no way
+> to retrieve the limits from the PM QoS, without uncapping the local
+> thermal limit and reading the next value.
+
+The above is unclear.  What PM QoS limit are you referring to in the
+first place?
+
+> It would be a heavy way of
+> doing these things, since it should be done every polling time (e.g. 50ms).
+> Also, the value stored in PM QoS can be different than the real OPP 'rate'
+> so still would need conversion into proper OPP for comparison with EM.
+> Furthermore, uncapping the device in thermal just to check the user freq
+> limit is not the safest way.
+> Thus, this simple implementation moves the calculation of the proper
+> frequency to the sysfs write code, since it's called less often. The value
+> is then used as-is in the thermal framework without any hassle.
+>
+> As it's a RFC, it still misses the cpufreq sysfs implementation,
+
+What exactly do you mean by this?
+
+> but would be addressed if all agree.
+
+Depending on the answers above.
+
+But my general comment would be that it might turn out to be
+unrealistic to expect user space to know what frequency limit to use
+to get the desired result in terms of constraining power.
