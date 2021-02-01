@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C80730AF17
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 19:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAF230AF28
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 19:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbhBASYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 13:24:15 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42114 "EHLO
+        id S232707AbhBASZY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 13:25:24 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:45586 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbhBASVz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 13:21:55 -0500
+        with ESMTP id S232767AbhBASVv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 13:21:51 -0500
 Received: from 89-64-80-124.dynamic.chello.pl (89.64.80.124) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.537)
- id e62bb841359b88c5; Mon, 1 Feb 2021 19:20:28 +0100
+ id dab7a9325be5469d; Mon, 1 Feb 2021 19:20:27 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
@@ -23,9 +23,9 @@ Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
         Erik Kaneda <erik.kaneda@intel.com>,
         Joe Perches <joe@perches.com>
-Subject: [PATCH v1 1/5] ACPI: AC: Clean up printing messages
-Date:   Mon, 01 Feb 2021 19:15:31 +0100
-Message-ID: <1712686.ktuFUgcqXO@kreacher>
+Subject: [PATCH v1 2/5] ACPI: battery: Clean up printing messages
+Date:   Mon, 01 Feb 2021 19:16:16 +0100
+Message-ID: <1996712.1aSbzQgNOC@kreacher>
 In-Reply-To: <2367702.B5bJTmGzJm@kreacher>
 References: <2367702.B5bJTmGzJm@kreacher>
 MIME-Version: 1.0
@@ -38,19 +38,119 @@ X-Mailing-List: linux-pm@vger.kernel.org
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 Replace the ACPI_DEBUG_PRINT() and ACPI_EXCEPTION() instances
-in ac.c with acpi_handle_debug() and acpi_handle_info() calls,
+in battery.c with acpi_handle_debug() and acpi_handle_info() calls,
 respectively, drop the _COMPONENT and ACPI_MODULE_NAME() definitions
-that are not used any more, drop the no longer needed ACPI_AC_COMPONENT
-definition from the headers and update the documentation accordingly.
+that are not used any more, drop the no longer needed
+ACPI_BATTERY_COMPONENT definition from the headers and update the
+documentation accordingly.
+
+While at it, update the pr_fmt() definition and drop the unneeded
+PREFIX sybmbol definition from battery.c.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- Documentation/firmware-guide/acpi/debug.rst |    1 -
- drivers/acpi/ac.c                           |   12 +++++-------
- drivers/acpi/sysfs.c                        |    1 -
- include/acpi/acpi_drivers.h                 |    1 -
- 4 files changed, 5 insertions(+), 10 deletions(-)
+ Documentation/firmware-guide/acpi/debug.rst |    1 
+ drivers/acpi/battery.c                      |   29 ++++++++++++++--------------
+ drivers/acpi/sysfs.c                        |    1 
+ include/acpi/acpi_drivers.h                 |    1 
+ 4 files changed, 15 insertions(+), 17 deletions(-)
 
+Index: linux-pm/drivers/acpi/battery.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/battery.c
++++ linux-pm/drivers/acpi/battery.c
+@@ -8,7 +8,7 @@
+  *  Copyright (C) 2001, 2002 Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>
+  */
+ 
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++#define pr_fmt(fmt) "ACPI: battery: " fmt
+ 
+ #include <linux/async.h>
+ #include <linux/delay.h>
+@@ -29,8 +29,6 @@
+ 
+ #include <acpi/battery.h>
+ 
+-#define PREFIX "ACPI: "
+-
+ #define ACPI_BATTERY_VALUE_UNKNOWN 0xFFFFFFFF
+ #define ACPI_BATTERY_CAPACITY_VALID(capacity) \
+ 	((capacity) != 0 && (capacity) != ACPI_BATTERY_VALUE_UNKNOWN)
+@@ -44,10 +42,6 @@
+ #define ACPI_BATTERY_STATE_CHARGING	0x2
+ #define ACPI_BATTERY_STATE_CRITICAL	0x4
+ 
+-#define _COMPONENT		ACPI_BATTERY_COMPONENT
+-
+-ACPI_MODULE_NAME("battery");
+-
+ MODULE_AUTHOR("Paul Diefenbaugh");
+ MODULE_AUTHOR("Alexey Starikovskiy <astarikovskiy@suse.de>");
+ MODULE_DESCRIPTION("ACPI Battery Driver");
+@@ -466,7 +460,8 @@ static int extract_package(struct acpi_b
+ static int acpi_battery_get_status(struct acpi_battery *battery)
+ {
+ 	if (acpi_bus_get_status(battery->device)) {
+-		ACPI_EXCEPTION((AE_INFO, AE_ERROR, "Evaluating _STA"));
++		acpi_handle_info(battery->device->handle,
++				 "_STA evaluation failed\n");
+ 		return -ENODEV;
+ 	}
+ 	return 0;
+@@ -535,8 +530,10 @@ static int acpi_battery_get_info(struct
+ 		mutex_unlock(&battery->lock);
+ 
+ 		if (ACPI_FAILURE(status)) {
+-			ACPI_EXCEPTION((AE_INFO, status, "Evaluating %s",
+-					use_bix ? "_BIX":"_BIF"));
++			acpi_handle_info(battery->device->handle,
++					 "%s evaluation failed: %s\n",
++					 use_bix ?"_BIX":"_BIF",
++				         acpi_format_exception(status));
+ 		} else {
+ 			result = extract_battery_info(use_bix,
+ 						      battery,
+@@ -573,7 +570,9 @@ static int acpi_battery_get_state(struct
+ 	mutex_unlock(&battery->lock);
+ 
+ 	if (ACPI_FAILURE(status)) {
+-		ACPI_EXCEPTION((AE_INFO, status, "Evaluating _BST"));
++		acpi_handle_info(battery->device->handle,
++				 "_BST evaluation failed: %s",
++				 acpi_format_exception(status));
+ 		return -ENODEV;
+ 	}
+ 
+@@ -625,7 +624,9 @@ static int acpi_battery_set_alarm(struct
+ 	if (ACPI_FAILURE(status))
+ 		return -ENODEV;
+ 
+-	ACPI_DEBUG_PRINT((ACPI_DB_INFO, "Alarm set to %d\n", battery->alarm));
++	acpi_handle_debug(battery->device->handle, "Alarm set to %d\n",
++			  battery->alarm);
++
+ 	return 0;
+ }
+ 
+@@ -1201,7 +1202,7 @@ static int acpi_battery_add(struct acpi_
+ 	if (result)
+ 		goto fail;
+ 
+-	pr_info(PREFIX "%s Slot [%s] (battery %s)\n",
++	pr_info("%s Slot [%s] (battery %s)\n",
+ 		ACPI_BATTERY_DEVICE_NAME, acpi_device_bid(device),
+ 		device->status.battery_present ? "present" : "absent");
+ 
+@@ -1282,7 +1283,7 @@ static void __init acpi_battery_init_asy
+ 	if (battery_check_pmic) {
+ 		for (i = 0; i < ARRAY_SIZE(acpi_battery_blacklist); i++)
+ 			if (acpi_dev_present(acpi_battery_blacklist[i], "1", -1)) {
+-				pr_info(PREFIX ACPI_BATTERY_DEVICE_NAME
++				pr_info(ACPI_BATTERY_DEVICE_NAME
+ 					": found native %s PMIC, not loading\n",
+ 					acpi_battery_blacklist[i]);
+ 				return;
 Index: linux-pm/Documentation/firmware-guide/acpi/debug.rst
 ===================================================================
 --- linux-pm.orig/Documentation/firmware-guide/acpi/debug.rst
@@ -59,47 +159,10 @@ Index: linux-pm/Documentation/firmware-guide/acpi/debug.rst
      ACPI_CA_DISASSEMBLER            0x00000800
      ACPI_COMPILER                   0x00001000
      ACPI_TOOLS                      0x00002000
--    ACPI_AC_COMPONENT               0x00020000
-     ACPI_BATTERY_COMPONENT          0x00040000
+-    ACPI_BATTERY_COMPONENT          0x00040000
      ACPI_BUTTON_COMPONENT           0x00080000
      ACPI_SBS_COMPONENT              0x00100000
-Index: linux-pm/drivers/acpi/ac.c
-===================================================================
---- linux-pm.orig/drivers/acpi/ac.c
-+++ linux-pm/drivers/acpi/ac.c
-@@ -28,9 +28,6 @@
- #define ACPI_AC_STATUS_ONLINE		0x01
- #define ACPI_AC_STATUS_UNKNOWN		0xFF
- 
--#define _COMPONENT		ACPI_AC_COMPONENT
--ACPI_MODULE_NAME("ac");
--
- MODULE_AUTHOR("Paul Diefenbaugh");
- MODULE_DESCRIPTION("ACPI AC Adapter Driver");
- MODULE_LICENSE("GPL");
-@@ -102,8 +99,9 @@ static int acpi_ac_get_state(struct acpi
- 	status = acpi_evaluate_integer(ac->device->handle, "_PSR", NULL,
- 				       &ac->state);
- 	if (ACPI_FAILURE(status)) {
--		ACPI_EXCEPTION((AE_INFO, status,
--				"Error reading AC Adapter state"));
-+		acpi_handle_info(ac->device->handle,
-+				"Error reading AC Adapter state: %s\n",
-+				acpi_format_exception(status));
- 		ac->state = ACPI_AC_STATUS_UNKNOWN;
- 		return -ENODEV;
- 	}
-@@ -153,8 +151,8 @@ static void acpi_ac_notify(struct acpi_d
- 
- 	switch (event) {
- 	default:
--		ACPI_DEBUG_PRINT((ACPI_DB_INFO,
--				  "Unsupported event [0x%x]\n", event));
-+		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
-+				  event);
- 		fallthrough;
- 	case ACPI_AC_NOTIFY_STATUS:
- 	case ACPI_NOTIFY_BUS_CHECK:
+     ACPI_FAN_COMPONENT              0x00200000
 Index: linux-pm/drivers/acpi/sysfs.c
 ===================================================================
 --- linux-pm.orig/drivers/acpi/sysfs.c
@@ -108,10 +171,10 @@ Index: linux-pm/drivers/acpi/sysfs.c
  	ACPI_DEBUG_INIT(ACPI_COMPILER),
  	ACPI_DEBUG_INIT(ACPI_TOOLS),
  
--	ACPI_DEBUG_INIT(ACPI_AC_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_BATTERY_COMPONENT),
+-	ACPI_DEBUG_INIT(ACPI_BATTERY_COMPONENT),
  	ACPI_DEBUG_INIT(ACPI_BUTTON_COMPONENT),
  	ACPI_DEBUG_INIT(ACPI_SBS_COMPONENT),
+ 	ACPI_DEBUG_INIT(ACPI_FAN_COMPONENT),
 Index: linux-pm/include/acpi/acpi_drivers.h
 ===================================================================
 --- linux-pm.orig/include/acpi/acpi_drivers.h
@@ -120,10 +183,10 @@ Index: linux-pm/include/acpi/acpi_drivers.h
   * Please update drivers/acpi/debug.c and Documentation/firmware-guide/acpi/debug.rst
   * if you add to this list.
   */
--#define ACPI_AC_COMPONENT		0x00020000
- #define ACPI_BATTERY_COMPONENT		0x00040000
+-#define ACPI_BATTERY_COMPONENT		0x00040000
  #define ACPI_BUTTON_COMPONENT		0x00080000
  #define ACPI_SBS_COMPONENT		0x00100000
+ #define ACPI_FAN_COMPONENT		0x00200000
 
 
 
