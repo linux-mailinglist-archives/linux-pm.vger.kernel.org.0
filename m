@@ -2,89 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A077030A66E
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 12:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A130430A945
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 15:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbhBALYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 06:24:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:56696 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233560AbhBALYY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 1 Feb 2021 06:24:24 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 929031042;
-        Mon,  1 Feb 2021 03:23:38 -0800 (PST)
-Received: from [10.57.8.191] (unknown [10.57.8.191])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7568A3F718;
-        Mon,  1 Feb 2021 03:23:36 -0800 (PST)
-Subject: Re: [RFC][PATCH 0/3] New thermal interface allowing IPA to get max
- power
-To:     daniel.lezcano@linaro.org, cw00.choi@samsung.com
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, rafael@kernel.org, Dietmar.Eggemann@arm.com,
-        amitk@kernel.org, rui.zhang@intel.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-References: <20210126104001.20361-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <5751adfa-6e25-3f3c-4a60-9b3c739fec1f@arm.com>
-Date:   Mon, 1 Feb 2021 11:23:34 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232248AbhBAODA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 09:03:00 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:35338 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231916AbhBAOC7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 09:02:59 -0500
+Received: by mail-oi1-f174.google.com with SMTP id w8so18862534oie.2;
+        Mon, 01 Feb 2021 06:02:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PjQ2aAipDSaq5oC4lmBya+0Rk1klXjpSSVN7GA5y3Ng=;
+        b=tx1hsv+UOTZdkmkVsqprjcwNkmce1Z7Kmpr6pVGux/5cntzJ2+koInp0Of+ZT8GbbJ
+         f3no2hLMfDxlojDrrdwgtfwFA6sAas2+nDMYMC546L4Z8+f92+XKR22Qlb3hW1/+2BAv
+         76dK4TmaINCX7ABBvHZg24xqVRXC8AD2P/utJ7FAE8L6wkIbLHagITuqyVexyf86y4F/
+         Va/7SNL6sHQ8wCtMJ9e1gKNSkdXTCPiB6beau2M09LDn6m9XuoLgwrbtD4FpLGHzZGNN
+         s3knvojLv0oj72LR3mYLtGCf5T3JEUq9yYXkAIIDbByxu581gckufiBS4DsT+Z8bYH61
+         JAaA==
+X-Gm-Message-State: AOAM530BfBbSKtSkkefXKOXXPVRSEzvV8tY62vmTkcJsCkEFM4iAsNdQ
+        kaJtlvfZA5wjvJZfRLdbuv3h08tQCLymoFSMxXWOs7q1
+X-Google-Smtp-Source: ABdhPJw1DQOtXQiOfLob/rMGpYwphh6HqBDyeQVpm2HarfCzjirlfFQpNkL8KnEPZ6WvYaJWPQuOJUtbJQHKhwp2iUI=
+X-Received: by 2002:aca:fc84:: with SMTP id a126mr11038406oii.71.1612188138028;
+ Mon, 01 Feb 2021 06:02:18 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210126104001.20361-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <377d2e2d328276070ae2f26c65daa1497bb3c3cf.1612166647.git.viresh.kumar@linaro.org>
+ <YBfNb91psVcf3TAS@light.dominikbrodowski.net> <20210201100502.xluaj5rpqosqsq7b@vireshk-i7>
+In-Reply-To: <20210201100502.xluaj5rpqosqsq7b@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 1 Feb 2021 15:02:06 +0100
+Message-ID: <CAJZ5v0iowSHeie2HLPjHUftBDVBQXi30O1Kfk3Kxchc0K=gYag@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Remove CPUFREQ_STICKY flag
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Daniel, Chanwoo
+On Mon, Feb 1, 2021 at 11:06 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 01-02-21, 10:44, Dominik Brodowski wrote:
+> > IIRC, it was required on various ARM systems,[*] as CPUs were registered as
+> > subsys_initcall(), while cpufreq used to be initialized only later, as an
+>
+> s/later/earlier ? arch happens before subsys not at least and that is
+> the only way we can break cpufreq here, i.e. when the driver comes up
+> before the CPUs are registered.
+>
+> > arch_initcall(). If the ordering is opposite now on all architectures (it
+> > wasn't on ARM back then), we should be fine.
+> >
+> > [*] https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/arch/arm/mach-sa1100/cpu-sa1100.c?id=f59d3bbe35f6268d729f51be82af8325d62f20f5
+>
+> Thanks for your reply, it made me look at that aspect in some more
+> detail to confirm I don't end up breaking anything. Unless I am making
+> a mistake in reading the code, this is the code flow that we have
+> right now:
+>
+> start_kernel()
+> -> kernel_init()
+>    -> kernel_init_freeable()
+>       -> do_basic_setup()
+>          -> driver_init()
+>             -> cpu_dev_init()
+>                -> subsys_system_register(for-CPUs)
+>
+>          -> do_initcalls()
+>             -> register-cpufreq-driver from any level
+>
+> And so CPUs should always be there for a cpufreq driver.
+>
+> Makes sense ?
 
-Gentle ping. Have you have a chance to check these patches?
-
-On 1/26/21 10:39 AM, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set tries to add the missing feature in the Intelligent Power
-> Allocation (IPA) governor which is: frequency limit set by user space.
-> User can set max allowed frequency for a given device which has impact on
-> max allowed power. In current design there is no mechanism to figure this
-> out. IPA must know the maximum allowed power for every device. It is then
-> used for proper power split and divvy-up. When the user limit for max
-> frequency is not know, IPA assumes it is the highest possible frequency.
-> It causes wrong power split across the devices.
-> 
-> This new mechanism provides the max allowed frequency to the thermal
-> framework and then max allowed power to the IPA.
-> The implementation is done in this way because currently there is no way
-> to retrieve the limits from the PM QoS, without uncapping the local
-> thermal limit and reading the next value. It would be a heavy way of
-> doing these things, since it should be done every polling time (e.g. 50ms).
-> Also, the value stored in PM QoS can be different than the real OPP 'rate'
-> so still would need conversion into proper OPP for comparison with EM.
-> Furthermore, uncapping the device in thermal just to check the user freq
-> limit is not the safest way.
-> Thus, this simple implementation moves the calculation of the proper
-> frequency to the sysfs write code, since it's called less often. The value
-> is then used as-is in the thermal framework without any hassle.
-> 
-> As it's a RFC, it still misses the cpufreq sysfs implementation, but would
-> be addressed if all agree.
-> 
-> Regards,
-> Lukasz Luba
-> 
-> Lukasz Luba (3):
->    PM /devfreq: add user frequency limits into devfreq struct
->    thermal: devfreq_cooling: add new callback to get user limit for min
->      state
->    thermal: power_allocator: get proper max power limited by user
-> 
->   drivers/devfreq/devfreq.c             | 41 ++++++++++++++++++++++++---
->   drivers/thermal/devfreq_cooling.c     | 33 +++++++++++++++++++++
->   drivers/thermal/gov_power_allocator.c | 17 +++++++++--
->   include/linux/devfreq.h               |  4 +++
->   include/linux/thermal.h               |  1 +
->   5 files changed, 90 insertions(+), 6 deletions(-)
-> 
+It does to me, but can you update the changelog, please?
