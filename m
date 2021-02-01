@@ -2,310 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0B330B021
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 20:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B643F30B0EB
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Feb 2021 20:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbhBATMS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 14:12:18 -0500
-Received: from mga11.intel.com ([192.55.52.93]:1921 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231599AbhBATMR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 1 Feb 2021 14:12:17 -0500
-IronPort-SDR: WRAV5bS2E5KpCqX9LbRPd/lgzaYLksaoeAo2g87kn61hs9DNnQK9smBLeev/9qM5lyYCxd4NlP
- p0jfLDCiNZPQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="177229518"
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="177229518"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 11:10:31 -0800
-IronPort-SDR: kEscRIGZdK78p3SZ5Ceh+soYcERzp/06PzDiagN5E8SdgDtiBKUZBSJBaqI/AggpLUqDsHThK2
- h0GumwHHrRTQ==
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="412665704"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.209.6.188])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 11:10:30 -0800
-Message-ID: <bcf48ba877acf7ae003672d5b7cf2effe004ca0e.camel@linux.intel.com>
-Subject: Re: [PATCH v3 2/2] thermal: Move therm_throt there from x86/mce
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Date:   Mon, 01 Feb 2021 11:10:29 -0800
-In-Reply-To: <20210201142704.12495-3-bp@alien8.de>
-References: <20210201142704.12495-1-bp@alien8.de>
-         <20210201142704.12495-3-bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S232618AbhBAT4X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 14:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232604AbhBATze (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 14:55:34 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D558C061573;
+        Mon,  1 Feb 2021 11:54:53 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id h12so24505572lfp.9;
+        Mon, 01 Feb 2021 11:54:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xNZmBp/NiAMhZaOERjhb6fMDFf2qqf4mAQ51ygipeQY=;
+        b=lbdzyrBvHigqHOmgNAq5dH4y1FeuWfRIaOOAPsoRhLcstaYZ8OnTc9JDc2vfj8txQn
+         NWlgwCUlkywea+CggPhPU82lpMOPzGQb4Rp8tSVe5cw6jh4s4lkE7SlVn5osGewBI4UW
+         R4NOXAYDSQNQxa6byK8kkYhv+HTRQirjjOdj4VBpqxQ4DgjM/zswVGM3StVbpCLWzaTe
+         9M29hy4FJ1YVxPRYHkdBDVepWobhW6zXWlQpSv2N7zl6dRGJrKlyVgnU89G3UkVeN4XG
+         /VZzAnbFsTEzYvYDl3pfNauV8ZF4UFzaLL8jvEwA2IrWlMQe50qVPi9uX6OuhdniogAz
+         sFEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xNZmBp/NiAMhZaOERjhb6fMDFf2qqf4mAQ51ygipeQY=;
+        b=qnMXbNKzKplGU7Svx3S8rCUyUtkvGd/HVxiSaTFsMQDNlnfT9VZCPqxK4DEKqyDOji
+         wvRdeT9tDh+ISKIN25YmnmD8RozmgbVpBuQ0xY5nUyFMGTdanUTYkxhe5B5zYScARnxL
+         +6dKBu6XweQwgpNXHlCPN23lBKka+PXNrC3zZarYlMH+8R7yow8YBYCfQW4RTRsA6m4R
+         RU8F6xZiGP2wGIizdzkB1q8LN5XyYV2fY/nXaWL9EIjzz6PyDDnvheUsj+lZwjTE1XjR
+         OMybUsw7W6dZ2+/Da+taukysSkMXfvAgh2Gzd+BFi4Mi9b7/kkHlcgTQNJ1Q5Nljb2gG
+         ATDw==
+X-Gm-Message-State: AOAM532p27ZKPz9kL04a4VZ6SfFDWRnkiUQIrZ4T0ddUPrJcahkdKus4
+        excehI2GKGw8bMlry/J5GidZqnS1tmw=
+X-Google-Smtp-Source: ABdhPJxIuWRfc32O54z4/fRPd2HxwmXl7qreqL8CxoCppKQNa32s+SYrCxnsihXGsebYITP0skNnrQ==
+X-Received: by 2002:a19:5f0a:: with SMTP id t10mr9165525lfb.568.1612209290313;
+        Mon, 01 Feb 2021 11:54:50 -0800 (PST)
+Received: from ?IPv6:2a00:1370:814d:ea25:a10:76ff:fe69:21b6? ([2a00:1370:814d:ea25:a10:76ff:fe69:21b6])
+        by smtp.googlemail.com with ESMTPSA id x31sm3114995lfu.10.2021.02.01.11.54.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Feb 2021 11:54:49 -0800 (PST)
+Subject: Re: [PATCH V2] opp: Don't ignore clk_get() errors other than -ENOENT
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org
+References: <61854037cd4d3ac367cfda3f02fd1557b1b3bb8b.1612153322.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <e6523427-0484-18c3-5b66-a35146556bab@gmail.com>
+Date:   Mon, 1 Feb 2021 22:54:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <61854037cd4d3ac367cfda3f02fd1557b1b3bb8b.1612153322.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-02-01 at 15:27 +0100, Borislav Petkov wrote:
-> From: Borislav Petkov <bp@suse.de>
+01.02.2021 07:22, Viresh Kumar пишет:
+> Not all devices that need to use OPP core need to have clocks, a missing
+> clock is fine in which case -ENOENT shall be returned by clk_get().
 > 
-> This functionality has nothing to do with MCE, move it to the thermal
-> framework and untangle it from MCE.
+> Anything else is an error and must be handled properly.
 > 
+> Reported-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> V2:
+> - s/ENODEV/ENOENT
+> - Use dev_err_probe()
 > 
-
-[...]
-
->  /*
->   * Used by APEI to report memory error via /dev/mcelog
->   */
-> diff --git a/arch/x86/include/asm/thermal.h
-> b/arch/x86/include/asm/thermal.h
-> new file mode 100644
-> index 000000000000..36f97bff62e1
-> --- /dev/null
-> +++ b/arch/x86/include/asm/thermal.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_THERMAL_H
-> +#define _ASM_X86_THERMAL_H
-> +
-> +/* Interrupt Handler for package thermal thresholds */
-> +extern int (*platform_thermal_package_notify)(__u64 msr_val);
-> +
-> +/* Interrupt Handler for core thermal thresholds */
-> +extern int (*platform_thermal_notify)(__u64 msr_val);
-> +
-> +/* Callback support of rate control, return true, if
-> + * callback has rate control */
-> +extern bool (*platform_thermal_package_rate_control)(void);
-> +
-
-Only user of the above interface is in drivers/thermal/intel.
-So why can't we move these to drivers/thermal/intel/thermal_interrupt.h
-or similar?
-
-Thanks,
-Srinivas
-
-
-> +#ifdef CONFIG_X86_THERMAL_VECTOR
-> +void intel_init_thermal(struct cpuinfo_x86 *c);
-> +bool x86_thermal_enabled(void);
-> +void intel_thermal_interrupt(void);
-> +#else
-> +static inline void intel_init_thermal(struct cpuinfo_x86 *c) { }
-> +#endif
-> +
-> +
-> +#endif /* _ASM_X86_THERMAL_H */
-> diff --git a/arch/x86/kernel/cpu/intel.c
-> b/arch/x86/kernel/cpu/intel.c
-> index 59a1e3ce3f14..71221af87cb1 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -24,6 +24,7 @@
->  #include <asm/traps.h>
->  #include <asm/resctrl.h>
->  #include <asm/numa.h>
-> +#include <asm/thermal.h>
->  
->  #ifdef CONFIG_X86_64
->  #include <linux/topology.h>
-> @@ -719,6 +720,8 @@ static void init_intel(struct cpuinfo_x86 *c)
->  		tsx_disable();
->  
->  	split_lock_init();
-> +
-> +	intel_init_thermal(c);
->  }
->  
->  #ifdef CONFIG_X86_32
-> diff --git a/arch/x86/kernel/cpu/mce/Makefile
-> b/arch/x86/kernel/cpu/mce/Makefile
-> index 9f020c994154..015856abdbb1 100644
-> --- a/arch/x86/kernel/cpu/mce/Makefile
-> +++ b/arch/x86/kernel/cpu/mce/Makefile
-> @@ -9,8 +9,6 @@ obj-$(CONFIG_X86_MCE_THRESHOLD) += threshold.o
->  mce-inject-y			:= inject.o
->  obj-$(CONFIG_X86_MCE_INJECT)	+= mce-inject.o
->  
-> -obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-> -
->  obj-$(CONFIG_ACPI_APEI)		+= apei.o
->  
->  obj-$(CONFIG_X86_MCELOG_LEGACY)	+= dev-mcelog.o
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c
-> b/arch/x86/kernel/cpu/mce/intel.c
-> index c2476fe0682e..e309476743b7 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -531,7 +531,6 @@ static void intel_imc_init(struct cpuinfo_x86 *c)
->  
->  void mce_intel_feature_init(struct cpuinfo_x86 *c)
+> Stephen, is the understanding correct that -ENOENT is the only error
+> returned for missing clocks ?
+> 
+>  drivers/opp/core.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index a518173fd64a..0beb3ee79523 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1252,6 +1252,8 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+>  					       struct opp_table *opp_table,
+>  					       bool getclk)
 >  {
-> -	intel_init_thermal(c);
->  	intel_init_cmci();
->  	intel_init_lmce();
->  	intel_ppin_init(c);
-> diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
-> index c5dd50369e2f..d4ad344e80bf 100644
-> --- a/arch/x86/kernel/irq.c
-> +++ b/arch/x86/kernel/irq.c
-> @@ -21,6 +21,7 @@
->  #include <asm/hw_irq.h>
->  #include <asm/desc.h>
->  #include <asm/traps.h>
-> +#include <asm/thermal.h>
->  
->  #define CREATE_TRACE_POINTS
->  #include <asm/trace/irq_vectors.h>
-> @@ -374,3 +375,23 @@ void fixup_irqs(void)
->  	}
->  }
->  #endif
+> +	int ret;
 > +
-> +#ifdef CONFIG_X86_THERMAL_VECTOR
-> +static void smp_thermal_vector(void)
-> +{
-> +	if (x86_thermal_enabled())
-> +		intel_thermal_interrupt();
-> +	else
-> +		pr_err("CPU%d: Unexpected LVT thermal interrupt!\n",
-> +		       smp_processor_id());
-> +}
-> +
-> +DEFINE_IDTENTRY_SYSVEC(sysvec_thermal)
-> +{
-> +	trace_thermal_apic_entry(THERMAL_APIC_VECTOR);
-> +	inc_irq_stat(irq_thermal_count);
-> +	smp_thermal_vector();
-> +	trace_thermal_apic_exit(THERMAL_APIC_VECTOR);
-> +	ack_APIC_irq();
-> +}
-> +#endif
-> diff --git a/drivers/thermal/intel/Kconfig
-> b/drivers/thermal/intel/Kconfig
-> index 8025b21f43fa..ce4f59213c7a 100644
-> --- a/drivers/thermal/intel/Kconfig
-> +++ b/drivers/thermal/intel/Kconfig
-> @@ -8,6 +8,10 @@ config INTEL_POWERCLAMP
->  	  enforce idle time which results in more package C-state
-> residency. The
->  	  user interface is exposed via generic thermal framework.
+>  	/*
+>  	 * Return early if we don't need to get clk or we have already tried it
+>  	 * earlier.
+> @@ -1261,18 +1263,19 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
 >  
-> +config X86_THERMAL_VECTOR
-> +	def_bool y
-> +	depends on X86 && CPU_SUP_INTEL && X86_LOCAL_APIC
-> +
->  config X86_PKG_TEMP_THERMAL
->  	tristate "X86 package temperature thermal driver"
->  	depends on X86_THERMAL_VECTOR
-> diff --git a/drivers/thermal/intel/Makefile
-> b/drivers/thermal/intel/Makefile
-> index 0d9736ced5d4..ff2ad30ef397 100644
-> --- a/drivers/thermal/intel/Makefile
-> +++ b/drivers/thermal/intel/Makefile
-> @@ -10,3 +10,4 @@ obj-$(CONFIG_INTEL_QUARK_DTS_THERMAL)	+=
-> intel_quark_dts_thermal.o
->  obj-$(CONFIG_INT340X_THERMAL)  += int340x_thermal/
->  obj-$(CONFIG_INTEL_BXT_PMIC_THERMAL) += intel_bxt_pmic_thermal.o
->  obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
-> +obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
-> diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c
-> b/drivers/thermal/intel/therm_throt.c
-> similarity index 97%
-> rename from arch/x86/kernel/cpu/mce/therm_throt.c
-> rename to drivers/thermal/intel/therm_throt.c
-> index 5b15d7cef1d1..6221f0f418f7 100644
-> --- a/arch/x86/kernel/cpu/mce/therm_throt.c
-> +++ b/drivers/thermal/intel/therm_throt.c
-> @@ -26,13 +26,11 @@
->  #include <linux/cpu.h>
+>  	/* Find clk for the device */
+>  	opp_table->clk = clk_get(dev, NULL);
+> -	if (IS_ERR(opp_table->clk)) {
+> -		int ret = PTR_ERR(opp_table->clk);
 >  
->  #include <asm/processor.h>
-> +#include <asm/thermal.h>
->  #include <asm/traps.h>
->  #include <asm/apic.h>
-> -#include <asm/mce.h>
-> +#include <asm/irq.h>
->  #include <asm/msr.h>
-> -#include <asm/trace/irq_vectors.h>
-> -
-> -#include "internal.h"
+> -		if (ret == -EPROBE_DEFER) {
+> -			dev_pm_opp_put_opp_table(opp_table);
+> -			return ERR_PTR(ret);
+> -		}
+> +	ret = PTR_ERR_OR_ZERO(opp_table->clk);
+> +	if (!ret)
+> +		return opp_table;
 >  
->  /* How long to wait between reporting thermal events */
->  #define CHECK_INTERVAL		(300 * HZ)
-> @@ -570,7 +568,7 @@ static void notify_thresholds(__u64 msr_val)
->  }
->  
->  /* Thermal transition interrupt handler */
-> -static void intel_thermal_interrupt(void)
-> +void intel_thermal_interrupt(void)
->  {
->  	__u64 msr_val;
->  
-> @@ -606,23 +604,6 @@ static void intel_thermal_interrupt(void)
->  	}
->  }
->  
-> -static void unexpected_thermal_interrupt(void)
-> -{
-> -	pr_err("CPU%d: Unexpected LVT thermal interrupt!\n",
-> -		smp_processor_id());
-> -}
-> -
-> -static void (*smp_thermal_vector)(void) =
-> unexpected_thermal_interrupt;
-> -
-> -DEFINE_IDTENTRY_SYSVEC(sysvec_thermal)
-> -{
-> -	trace_thermal_apic_entry(THERMAL_APIC_VECTOR);
-> -	inc_irq_stat(irq_thermal_count);
-> -	smp_thermal_vector();
-> -	trace_thermal_apic_exit(THERMAL_APIC_VECTOR);
-> -	ack_APIC_irq();
-> -}
-> -
->  /* Thermal monitoring depends on APIC, ACPI and clock modulation */
->  static int intel_thermal_supported(struct cpuinfo_x86 *c)
->  {
-> @@ -633,6 +614,11 @@ static int intel_thermal_supported(struct
-> cpuinfo_x86 *c)
->  	return 1;
->  }
->  
-> +bool x86_thermal_enabled(void)
-> +{
-> +	return atomic_read(&therm_throt_en);
-> +}
-> +
->  void intel_init_thermal(struct cpuinfo_x86 *c)
->  {
->  	unsigned int cpu = smp_processor_id();
-> @@ -719,8 +705,6 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
->  				| PACKAGE_THERM_INT_HIGH_ENABLE), h);
+> +	if (ret == -ENOENT) {
+>  		dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+> +		return opp_table;
 >  	}
 >  
-> -	smp_thermal_vector = intel_thermal_interrupt;
-> -
->  	rdmsr(MSR_IA32_MISC_ENABLE, l, h);
->  	wrmsr(MSR_IA32_MISC_ENABLE, l | MSR_IA32_MISC_ENABLE_TM1, h);
->  
-> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> index b81c33202f41..090f9176ba62 100644
-> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> @@ -17,8 +17,9 @@
->  #include <linux/pm.h>
->  #include <linux/thermal.h>
->  #include <linux/debugfs.h>
+> -	return opp_table;
+> +	dev_pm_opp_put_opp_table(opp_table);
 > +
->  #include <asm/cpu_device_id.h>
-> -#include <asm/mce.h>
-> +#include <asm/thermal.h>
+> +	return ERR_PTR(dev_err_probe(dev, ret, "Couldn't find clock\n"));
+>  }
 >  
 >  /*
->  * Rate control delay: Idea is to introduce denounce effect
+> 
 
+Thanks, looks okay.
+
+Although, I think the previous variant of coding style was a bit more appropriate, i.e. like this:
+
+dev_err_probe(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+
+return ERR_PTR(ret);
