@@ -2,75 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F86230B4E8
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 02:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5718030B4EE
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 03:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbhBBByX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 20:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhBBByW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 20:54:22 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B72C061573;
-        Mon,  1 Feb 2021 17:53:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=YxWfLCZ++XySlUZIlHdupbrsffrTbHqEUP48NT9i2kw=; b=j0mmeXYuwSUk5KyZiz5UWnayRV
-        sJ1IJqIp1D4aS2X7JVveUGNjjwL7SlNLtNsf93Rrj0bJDRqvTyczl7pBbDw8Fx6dblfO4v7PdT/wW
-        e2HWqtGIYjs9SnZHQJq1dZaLjJJCyaMAX6n/7yPoO/7FzPy8FqP/Z6h9dQOxs5f9eIk42d8+WQqpd
-        n/MQL0o11LVRyiU+5iLZ2BAROyRHvrIBR+qYvydaDxl4U6VI9pPfAZXLj5URCmWeeGj/rbSw5nGze
-        RujGCBFi30yERvlv8QnkxbcDSWJPQ2fFaTuQlOMGSCOxfNfISjhzfRzj7qK5wRXQPUEruamb1/VqS
-        YT0kqpcg==;
-Received: from [2601:1c0:6280:3f0::2a53]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l6ksu-00032k-3W; Tue, 02 Feb 2021 01:53:40 +0000
-Subject: Re: do not suspend/sleep
-To:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
-Cc:     "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <f4cfa048-f612-8e38-2899-988471d84faa@infradead.org>
- <_fXGHc0QxoA6O5ljZuheCXVM4m0EDO5yDitURpjxeesPWQ-etoD0Im3937FdotSufu1ZRtBaLFFsCzAY2qtNANeP829mo-YbOZhHksxn8HM=@protonmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <521702af-b5af-02a6-d58d-ff1e63d49e1d@infradead.org>
-Date:   Mon, 1 Feb 2021 17:53:37 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <_fXGHc0QxoA6O5ljZuheCXVM4m0EDO5yDitURpjxeesPWQ-etoD0Im3937FdotSufu1ZRtBaLFFsCzAY2qtNANeP829mo-YbOZhHksxn8HM=@protonmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S229543AbhBBCAQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 21:00:16 -0500
+Received: from pv50p00im-ztbu10011701.me.com ([17.58.6.53]:59983 "EHLO
+        pv50p00im-ztbu10011701.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229527AbhBBCAQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 21:00:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1612231160;
+        bh=rGl5/iosVM/5pN5iya5pmf6fh8L6VxYZ78FobWeoRvk=;
+        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
+        b=mEWdeyPUHIQXfuu3//mKjmjXXvCjOkyEth0dBwJEQ0fv+SHpSnyFXmnF5F0F6U4QI
+         ELTiBQuDdPGrgN7p2RNT/blAPeTYiqx9Yti0sdogKAW78QWmt06bGMldYIA6l5JYkT
+         Gb2ujFoyvOFT8ZvMPyU8cK4BohWiUvLeq7gFUtil6xLt/I+cczbcxDO3FTERBm4OFz
+         5UkMSUTORkI62VSfhs5iLAWapTmp/u80LruMr1z0MlwAf8z7Q8kLT9SdgPdkgk3XkT
+         RMUclNRvYqiZAwdNyHS+QfpDth7kapx0x8+v0SHVmnOiPwqttKhIEvLUENhZtZdGZo
+         a3EqYrzjzHSzA==
+Received: from [11.240.15.70] (unknown [119.3.119.19])
+        by pv50p00im-ztbu10011701.me.com (Postfix) with ESMTPSA id 3C4218A0551;
+        Tue,  2 Feb 2021 01:59:17 +0000 (UTC)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.40.0.2.32\))
+Subject: Re: [PATCH] PM: hibernate: add sanity check on power_kobj
+From:   Abel Wu <abel.w@icloud.com>
+In-Reply-To: <20210201105243.GA23135@duo.ucw.cz>
+Date:   Tue, 2 Feb 2021 09:59:11 +0800
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hewenliang4@huawei.com,
+        wuyun.wu@huawei.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <F87648CF-E5D6-41C7-9F4E-87A4BA2A4786@icloud.com>
+References: <20210201075041.1201-1-abel.w@icloud.com>
+ <20210201105243.GA23135@duo.ucw.cz>
+To:     Pavel Machek <pavel@ucw.cz>
+X-Mailer: Apple Mail (2.3654.40.0.2.32)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-01_14:2021-01-29,2021-02-01 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2006250000 definitions=main-2102020012
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/1/21 5:51 PM, Barnabás Pőcze wrote:
-> Hi
-> 
-> 
-> 2021. február 2., kedd 0:47 keltezéssel, Randy Dunlap írta:
-> 
->> Hi all.
->>
->> I usually run my systems (laptops) so that they will suspend to RAM
->> after 30 or 60 minutes of no use (no input), but when I am building
->> e.g. 3 kernels, that will take more than 30 minutes and I don't want
->> the system to suspend during that time.
->>
->> I was wondering what options are available to prevent entering suspend.
->> I am willing to manually enter a command to make that happen if one
->> is available.
->> [...]
-> 
-> Have you looked at systemd-inhibit(1)?
 
-No, I'm wasn't aware of that, but I'll take a look.
 
-Thanks.
+> On Feb 1, 2021, at 6:52 PM, Pavel Machek <pavel@ucw.cz> wrote:
+> 
+> On Mon 2021-02-01 02:50:41, Abel Wu wrote:
+>> The @power_kobj is initialized in pm_init() which is the same
+>> initcall level as pm_disk_init(). Although this dependency is
+>> guaranteed based on the current initcall serial execution model,
+>> it would still be better do a cost-less sanity check to avoid
+>> oops once the dependency is broken.
+> 
+> I don't believe this is good idea. If the dependency is ever broken,
+> this will make failure more subtle and harder to debug.
 
--- 
-~Randy
+Thanks for reviewing. I think the cmdline parameter initcall_debug will
+help in this case.
+Actually we are trying to make initcalls being called asynchronously to
+reduce boot time which is crucial to our cloud-native business. And we
+resolve this kind of dependencies by retrying failed initcalls.
+
+Best regards,
+	Abel
+> 
+>> Signed-off-by: Abel Wu <abel.w@icloud.com>
+>> ---
+>> kernel/power/hibernate.c | 3 +++
+>> 1 file changed, 3 insertions(+)
+>> 
+>> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+>> index da0b41914177..060089cc261d 100644
+>> --- a/kernel/power/hibernate.c
+>> +++ b/kernel/power/hibernate.c
+>> @@ -1262,6 +1262,9 @@ static const struct attribute_group attr_group = {
+>> 
+>> static int __init pm_disk_init(void)
+>> {
+>> +	if (!power_kobj)
+>> +		return -EINVAL;
+>> +
+>> 	return sysfs_create_group(power_kobj, &attr_group);
+>> }
+>> 
+>> -- 
+>> 2.27.0
+> 
+> -- 
+> http://www.livejournal.com/~pavelmachek
 
