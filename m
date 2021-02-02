@@ -2,136 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2507F30C9A1
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 19:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D6B30C972
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 19:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238480AbhBBSXk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Feb 2021 13:23:40 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:57100 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238420AbhBBSVY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Feb 2021 13:21:24 -0500
-Received: from 89-64-80-193.dynamic.chello.pl (89.64.80.193) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.537)
- id 637ff068aa18e73b; Tue, 2 Feb 2021 19:19:56 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        id S238458AbhBBSSa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Feb 2021 13:18:30 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:34431 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238352AbhBBSQW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Feb 2021 13:16:22 -0500
+Received: by mail-ot1-f45.google.com with SMTP id d5so5320464otc.1;
+        Tue, 02 Feb 2021 10:16:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8dDjqTPK+llWIRGrZH/KSVCS5Q0oIZSoyMWb9i78HpA=;
+        b=lUtDETH6QjFhezNga/K6oBhtwpVty5rKUslxX1qXgBDeiN+HufW+N5HA+IVT8POXCw
+         /XU483YGhcdgj+3VwyBId8CvrWqhgwvxziwA0t2xizWGph+RtKEt6dtkgciZ9ucG1viz
+         7jGDLhGgG5m++fteiAVH0q+0M1ID8TpBhWk3GeXnF2RsaTLUVyfriLVko/yBnjPu2GAX
+         S3FiVAXtbBkfbWaHhphPv6K4XVRY7S4ocruFL0ubU/Y0wmtN56APaoNVj5pDjWdX9lEg
+         xbl/rDqI8ETavzL1eWUFRc4Jb9RyDzIdslpD06XdgFmQnMdcup0Z/1VDWV0zb+/6z92e
+         hIAA==
+X-Gm-Message-State: AOAM531b6MtsGbHaM/QTtRpXQz3RvWU8HUdPH491qkMrjJyiGDpMJEVN
+        Kkd5DIYbgy2EeV4o1cOKuS2Xes2Usw==
+X-Google-Smtp-Source: ABdhPJwDzdTeGq37aNKpjJFMzbUg64rp+M/CU437C9KhLoxSHuWdlKLLpwcNiDt7lcCsYenGpWxp0A==
+X-Received: by 2002:a9d:4a8e:: with SMTP id i14mr16786937otf.37.1612289740973;
+        Tue, 02 Feb 2021 10:15:40 -0800 (PST)
+Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.googlemail.com with ESMTPSA id v16sm4805020otq.20.2021.02.02.10.15.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Feb 2021 10:15:40 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v2 1/5] ACPI: AC: Clean up printing messages
-Date:   Tue, 02 Feb 2021 19:14:55 +0100
-Message-ID: <5584914.5WsbVgmIkf@kreacher>
-In-Reply-To: <1991501.dpTHplkurC@kreacher>
-References: <2367702.B5bJTmGzJm@kreacher> <1991501.dpTHplkurC@kreacher>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] dt-bindings: thermal: sun8i: Fix misplaced schema keyword in compatible strings
+Date:   Tue,  2 Feb 2021 12:15:38 -0600
+Message-Id: <20210202181538.3936235-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+A compatible string 'enum' mistakenly has 'const: ' in the compatible
+strings. Remove these.
 
-Replace the ACPI_DEBUG_PRINT() and ACPI_EXCEPTION() instances
-in ac.c with acpi_handle_debug() and acpi_handle_info() calls,
-respectively, which among other things causes the excessive log
-level of the messages previously printed via ACPI_EXCEPTION() to
-be more adequate.
-
-Drop the _COMPONENT and ACPI_MODULE_NAME() definitions that are not
-used any more, drop the no longer needed ACPI_AC_COMPONENT definition
-from the headers and update the documentation accordingly.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 0b28594d67a8 ("dt-bindings: thermal: Add YAML schema for sun8i-thermal driver bindings")
+Cc: Vasily Khoruzhick <anarsoul@gmail.com>
+Cc: Yangtao Li <tiny.windzz@gmail.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Jernej Skrabec <jernej.skrabec@siol.net>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
+ .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml   | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-v1 -> v2: Changelog update
-
----
- Documentation/firmware-guide/acpi/debug.rst |    1 -
- drivers/acpi/ac.c                           |   12 +++++-------
- drivers/acpi/sysfs.c                        |    1 -
- include/acpi/acpi_drivers.h                 |    1 -
- 4 files changed, 5 insertions(+), 10 deletions(-)
-
-Index: linux-pm/Documentation/firmware-guide/acpi/debug.rst
-===================================================================
---- linux-pm.orig/Documentation/firmware-guide/acpi/debug.rst
-+++ linux-pm/Documentation/firmware-guide/acpi/debug.rst
-@@ -52,7 +52,6 @@ shows the supported mask values, current
-     ACPI_CA_DISASSEMBLER            0x00000800
-     ACPI_COMPILER                   0x00001000
-     ACPI_TOOLS                      0x00002000
--    ACPI_AC_COMPONENT               0x00020000
-     ACPI_BATTERY_COMPONENT          0x00040000
-     ACPI_BUTTON_COMPONENT           0x00080000
-     ACPI_SBS_COMPONENT              0x00100000
-Index: linux-pm/drivers/acpi/ac.c
-===================================================================
---- linux-pm.orig/drivers/acpi/ac.c
-+++ linux-pm/drivers/acpi/ac.c
-@@ -28,9 +28,6 @@
- #define ACPI_AC_STATUS_ONLINE		0x01
- #define ACPI_AC_STATUS_UNKNOWN		0xFF
+diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+index 31edd051295a..bf97d1fb33e7 100644
+--- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
++++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+@@ -103,12 +103,12 @@ allOf:
+         compatible:
+           contains:
+             enum:
+-              - const: allwinner,sun8i-h3-ths
+-              - const: allwinner,sun8i-r40-ths
+-              - const: allwinner,sun50i-a64-ths
+-              - const: allwinner,sun50i-a100-ths
+-              - const: allwinner,sun50i-h5-ths
+-              - const: allwinner,sun50i-h6-ths
++              - allwinner,sun8i-h3-ths
++              - allwinner,sun8i-r40-ths
++              - allwinner,sun50i-a64-ths
++              - allwinner,sun50i-a100-ths
++              - allwinner,sun50i-h5-ths
++              - allwinner,sun50i-h6-ths
  
--#define _COMPONENT		ACPI_AC_COMPONENT
--ACPI_MODULE_NAME("ac");
--
- MODULE_AUTHOR("Paul Diefenbaugh");
- MODULE_DESCRIPTION("ACPI AC Adapter Driver");
- MODULE_LICENSE("GPL");
-@@ -102,8 +99,9 @@ static int acpi_ac_get_state(struct acpi
- 	status = acpi_evaluate_integer(ac->device->handle, "_PSR", NULL,
- 				       &ac->state);
- 	if (ACPI_FAILURE(status)) {
--		ACPI_EXCEPTION((AE_INFO, status,
--				"Error reading AC Adapter state"));
-+		acpi_handle_info(ac->device->handle,
-+				"Error reading AC Adapter state: %s\n",
-+				acpi_format_exception(status));
- 		ac->state = ACPI_AC_STATUS_UNKNOWN;
- 		return -ENODEV;
- 	}
-@@ -153,8 +151,8 @@ static void acpi_ac_notify(struct acpi_d
- 
- 	switch (event) {
- 	default:
--		ACPI_DEBUG_PRINT((ACPI_DB_INFO,
--				  "Unsupported event [0x%x]\n", event));
-+		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
-+				  event);
- 		fallthrough;
- 	case ACPI_AC_NOTIFY_STATUS:
- 	case ACPI_NOTIFY_BUS_CHECK:
-Index: linux-pm/drivers/acpi/sysfs.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sysfs.c
-+++ linux-pm/drivers/acpi/sysfs.c
-@@ -52,7 +52,6 @@ static const struct acpi_dlayer acpi_deb
- 	ACPI_DEBUG_INIT(ACPI_COMPILER),
- 	ACPI_DEBUG_INIT(ACPI_TOOLS),
- 
--	ACPI_DEBUG_INIT(ACPI_AC_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_BATTERY_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_BUTTON_COMPONENT),
- 	ACPI_DEBUG_INIT(ACPI_SBS_COMPONENT),
-Index: linux-pm/include/acpi/acpi_drivers.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_drivers.h
-+++ linux-pm/include/acpi/acpi_drivers.h
-@@ -15,7 +15,6 @@
-  * Please update drivers/acpi/debug.c and Documentation/firmware-guide/acpi/debug.rst
-  * if you add to this list.
-  */
--#define ACPI_AC_COMPONENT		0x00020000
- #define ACPI_BATTERY_COMPONENT		0x00040000
- #define ACPI_BUTTON_COMPONENT		0x00080000
- #define ACPI_SBS_COMPONENT		0x00100000
-
-
+     then:
+       required:
+-- 
+2.27.0
 
