@@ -2,105 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF6430C105
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 15:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2856830C1EF
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 15:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234153AbhBBOMi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Feb 2021 09:12:38 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:33362 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbhBBOKv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Feb 2021 09:10:51 -0500
-Received: by mail-oi1-f180.google.com with SMTP id j25so22884949oii.0;
-        Tue, 02 Feb 2021 06:10:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rYfGir+nbz/4ZTAALmTVXRO3TLfJBR8+o48CtPhExRw=;
-        b=Cgy1Dq+CHDk3gfHmsmxzSsva2eRg0CPB9jLbbMqPNn5lNfHqaXDqKyWInJuYk1VlMM
-         jf/2SW4VwXDOZxeBIK+OoEdZ9VpwvYGyqoPNA4uI+eWk2AWMdXNAqN1X2AIW0h7PhcMb
-         lbkVJ4NIoPk+juHs9YRUVszCENUjU2b/3u/iOz0OcGd+fdLAXz8gGUBIJ9GrCyQbokX+
-         josWlh0I9QaW4E356QtWHWT4oAJDp3XBlV1E+iQ85qPVSh1MiryZy19cM1aiUMbGKE8i
-         PBp1m2ADSFAbIS0JHorx8ZSM6dU4GKsEOv8BXYGsl3vLeLd9ADZqnVMU72O4V4DgHgzf
-         U+rA==
-X-Gm-Message-State: AOAM533aUt8JXn+ORg6O7lbrlXgO/OQrWPvBa/vNdVlNmf8TLzRCUlYo
-        HPkYHN6q2fCaPhed6NieC8mrJFvU5kowOdPamkA=
-X-Google-Smtp-Source: ABdhPJzgzScfdhBlOTPsbrFqaBpBr46DpQwcwDV7GmB4WTMc+WTLZh24M0uZH+0WkkBRRQw/nRLNDeRsRq174H0X7Sc=
-X-Received: by 2002:aca:308a:: with SMTP id w132mr2641367oiw.69.1612275009533;
- Tue, 02 Feb 2021 06:10:09 -0800 (PST)
-MIME-Version: 1.0
-References: <2367702.B5bJTmGzJm@kreacher> <1996712.1aSbzQgNOC@kreacher>
- <ab62890a1128b0d3109553208379015fcb36e0c7.camel@perches.com>
- <CAJZ5v0hoPLKe9mVY_mJgFrcLSdutTd-UFGJS11pu8qDzemy43w@mail.gmail.com> <d1064a357d80e2df3e78de1119f23c6f60ee1a50.camel@perches.com>
-In-Reply-To: <d1064a357d80e2df3e78de1119f23c6f60ee1a50.camel@perches.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 2 Feb 2021 15:09:57 +0100
-Message-ID: <CAJZ5v0jBXoG01Yoqyryb3aJTagXR3JCufuA7fcfRrLZU+4TETQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/5] ACPI: battery: Clean up printing messages
-To:     Joe Perches <joe@perches.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Erik Kaneda <erik.kaneda@intel.com>
+        id S234510AbhBBOhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Feb 2021 09:37:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49700 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231524AbhBBORt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 2 Feb 2021 09:17:49 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id D77EBABD5;
+        Tue,  2 Feb 2021 14:17:06 +0000 (UTC)
+Message-ID: <1612275425.27785.70.camel@suse.cz>
+Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
+ in schedutil invariant formula
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
+        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Michael Larabel <Michael@phoronix.com>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Date:   Tue, 02 Feb 2021 15:17:05 +0100
+In-Reply-To: <1611933781.15858.48.camel@suse.cz>
+References: <20210122204038.3238-1-ggherdovich@suse.cz>
+         <20210122204038.3238-2-ggherdovich@suse.cz>
+         <YA6YEK4/rjtPLdkG@hirez.programming.kicks-ass.net>
+         <1611652167.11983.65.camel@suse.cz>
+         <20210126093140.GB3592@techsingularity.net>
+         <YA/pYrvvjf8AxPEv@hirez.programming.kicks-ass.net>
+         <1611933781.15858.48.camel@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 2, 2021 at 2:38 PM Joe Perches <joe@perches.com> wrote:
->
-> On Mon, 2021-02-01 at 19:44 +0100, Rafael J. Wysocki wrote:
-> > On Mon, Feb 1, 2021 at 7:37 PM Joe Perches <joe@perches.com> wrote:
-> > >
-> > > On Mon, 2021-02-01 at 19:16 +0100, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Replace the ACPI_DEBUG_PRINT() and ACPI_EXCEPTION() instances
-> > > > in battery.c with acpi_handle_debug() and acpi_handle_info() calls,
-> > > > respectively, drop the _COMPONENT and ACPI_MODULE_NAME() definitions
-> > > > that are not used any more, drop the no longer needed
-> > > > ACPI_BATTERY_COMPONENT definition from the headers and update the
-> > > > documentation accordingly.
-> > > >
-> > > > While at it, update the pr_fmt() definition and drop the unneeded
-> > > > PREFIX sybmbol definition from battery.c.
-> > > []
-> > > > --- linux-pm.orig/drivers/acpi/battery.c
-> > > []
-> > > > @@ -466,7 +460,8 @@ static int extract_package(struct acpi_b
-> > > >  static int acpi_battery_get_status(struct acpi_battery *battery)
-> > > >  {
-> > > >       if (acpi_bus_get_status(battery->device)) {
-> > > > -             ACPI_EXCEPTION((AE_INFO, AE_ERROR, "Evaluating _STA"));
-> > > > +             acpi_handle_info(battery->device->handle,
-> > > > +                              "_STA evaluation failed\n");
-> > >
-> > > I believe this changes the logging level from KERN_ERR to KERN_INFO.
-> > >
-> > > Perhaps this and others should instead use acpi_handle_err()
-> >
-> > Actually, these log level changes, because the messages in question
-> > are not very urgent.
-> >
-> > Something doesn't work and it's kind of good to know that, but there's
-> > not much that can be done about it.
->
-> That more argues for removal of KERN_<LEVEL> filtering.
->
-> I fail to see how difficult it is to change these to the existing
-> KERN_<LEVEL> using a simple acpi_handle_info() -> acpi_handle_err()
-> substitution where appropriate.
+On Fri, 2021-01-29 at 16:23 +0100, Giovanni Gherdovich wrote:
+> On Tue, 2021-01-26 at 11:05 +0100, Peter Zijlstra wrote:
+> > On Tue, Jan 26, 2021 at 09:31:40AM +0000, Mel Gorman wrote:
+> > 
+> > > So, should this patch be merged for 5.11 as a stopgap, fix up
+> > > schedutil/cpufreq and then test both AMD and Intel chips reporting the
+> > > correct max non-turbo and max-turbo frequencies? That would give time to
+> > > give some testing in linux-next before merging to reduce the chance
+> > > something else falls out.
+> > 
+> > Yeah, we should probably do this now. Rafael, you want this or should I
+> > take it?
+> 
+> Hello Rafael,
+> 
+> did you have a chance to check this patch?
+> 
+> It fixes a performance regression from 5.11-rc1, I hoped it could be included
+> before v5.11 is released.
 
-I'm not really sure what you mean.
+Hello Rafael,
 
-It is not a technical problem, but in my view the KERN_ERR log level
-is excessive for these messages.
+you haven't replied to this patch, which was written aiming at v5.11.
 
-> At a minimum, the commit message should note the KERN_<LEVEL> changes.
+Do you see any problem with it?
+Frequency-invariant schedutil needs the driver to advertise a high max_freq to
+work properly; the patch addresses this for AMD EPYC.
 
-OK, let me update the changelogs, then.
+
+Thanks,
+Giovanni
