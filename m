@@ -2,99 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5718030B4EE
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 03:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 038EA30B52A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 03:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbhBBCAQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Feb 2021 21:00:16 -0500
-Received: from pv50p00im-ztbu10011701.me.com ([17.58.6.53]:59983 "EHLO
-        pv50p00im-ztbu10011701.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229527AbhBBCAQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 21:00:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1612231160;
-        bh=rGl5/iosVM/5pN5iya5pmf6fh8L6VxYZ78FobWeoRvk=;
-        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-        b=mEWdeyPUHIQXfuu3//mKjmjXXvCjOkyEth0dBwJEQ0fv+SHpSnyFXmnF5F0F6U4QI
-         ELTiBQuDdPGrgN7p2RNT/blAPeTYiqx9Yti0sdogKAW78QWmt06bGMldYIA6l5JYkT
-         Gb2ujFoyvOFT8ZvMPyU8cK4BohWiUvLeq7gFUtil6xLt/I+cczbcxDO3FTERBm4OFz
-         5UkMSUTORkI62VSfhs5iLAWapTmp/u80LruMr1z0MlwAf8z7Q8kLT9SdgPdkgk3XkT
-         RMUclNRvYqiZAwdNyHS+QfpDth7kapx0x8+v0SHVmnOiPwqttKhIEvLUENhZtZdGZo
-         a3EqYrzjzHSzA==
-Received: from [11.240.15.70] (unknown [119.3.119.19])
-        by pv50p00im-ztbu10011701.me.com (Postfix) with ESMTPSA id 3C4218A0551;
-        Tue,  2 Feb 2021 01:59:17 +0000 (UTC)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.40.0.2.32\))
-Subject: Re: [PATCH] PM: hibernate: add sanity check on power_kobj
-From:   Abel Wu <abel.w@icloud.com>
-In-Reply-To: <20210201105243.GA23135@duo.ucw.cz>
-Date:   Tue, 2 Feb 2021 09:59:11 +0800
-Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hewenliang4@huawei.com,
-        wuyun.wu@huawei.com
-Content-Transfer-Encoding: 7bit
-Message-Id: <F87648CF-E5D6-41C7-9F4E-87A4BA2A4786@icloud.com>
-References: <20210201075041.1201-1-abel.w@icloud.com>
- <20210201105243.GA23135@duo.ucw.cz>
-To:     Pavel Machek <pavel@ucw.cz>
-X-Mailer: Apple Mail (2.3654.40.0.2.32)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-01_14:2021-01-29,2021-02-01 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2006250000 definitions=main-2102020012
+        id S229543AbhBBCT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Feb 2021 21:19:28 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:43078 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229527AbhBBCTZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Feb 2021 21:19:25 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1122Hm5M048967;
+        Mon, 1 Feb 2021 20:17:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1612232268;
+        bh=HpAcjjyMX+aBZiXEvhn3ye8U6EEBAbEnKPxzDdE0GFc=;
+        h=From:To:CC:Subject:Date;
+        b=PZYHjC/q0U/MGjL9e1iv+ZbnEKqBbcieTghMvAWupLufuO5oLzwmEkFNLBZKgBNE6
+         apjc7cskdP6ActFqZesODrYKJbvfyU7yzh7Xjfua6pTCmLjbHrda0NWtAnZ/zs5QIk
+         hBruaoOFxTZGgyJEySz8lriqg6MFeFYRPN+XqsOc=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1122HmAU086782
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 1 Feb 2021 20:17:48 -0600
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 1 Feb
+ 2021 20:17:48 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 1 Feb 2021 20:17:48 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1122HlgW043895;
+        Mon, 1 Feb 2021 20:17:48 -0600
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <dmurphy@ti.com>, Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Subject: [PATCH v5 0/2] Introduce the BQ25790 charger driver
+Date:   Mon, 1 Feb 2021 20:17:45 -0600
+Message-ID: <20210202021747.717-1-r-rivera-matos@ti.com>
+X-Mailer: git-send-email 2.30.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
 
+This patchset introduces the BQ25790 integrated buck-boost charging IC.
 
-> On Feb 1, 2021, at 6:52 PM, Pavel Machek <pavel@ucw.cz> wrote:
-> 
-> On Mon 2021-02-01 02:50:41, Abel Wu wrote:
->> The @power_kobj is initialized in pm_init() which is the same
->> initcall level as pm_disk_init(). Although this dependency is
->> guaranteed based on the current initcall serial execution model,
->> it would still be better do a cost-less sanity check to avoid
->> oops once the dependency is broken.
-> 
-> I don't believe this is good idea. If the dependency is ever broken,
-> this will make failure more subtle and harder to debug.
+Dan Murphy (2):
+  dt-bindings: power: Add the bq25790 dt bindings
+  power: supply: bq25790: Introduce the BQ25790 charger driver
 
-Thanks for reviewing. I think the cmdline parameter initcall_debug will
-help in this case.
-Actually we are trying to make initcalls being called asynchronously to
-reduce boot time which is crucial to our cloud-native business. And we
-resolve this kind of dependencies by retrying failed initcalls.
+ .../bindings/power/supply/bq25790.yaml        |   95 ++
+ drivers/power/supply/Kconfig                  |    8 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/bq25790_charger.c        | 1100 +++++++++++++++++
+ drivers/power/supply/bq25790_charger.h        |  148 +++
+ 5 files changed, 1352 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq25790.yaml
+ create mode 100644 drivers/power/supply/bq25790_charger.c
+ create mode 100644 drivers/power/supply/bq25790_charger.h
 
-Best regards,
-	Abel
-> 
->> Signed-off-by: Abel Wu <abel.w@icloud.com>
->> ---
->> kernel/power/hibernate.c | 3 +++
->> 1 file changed, 3 insertions(+)
->> 
->> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
->> index da0b41914177..060089cc261d 100644
->> --- a/kernel/power/hibernate.c
->> +++ b/kernel/power/hibernate.c
->> @@ -1262,6 +1262,9 @@ static const struct attribute_group attr_group = {
->> 
->> static int __init pm_disk_init(void)
->> {
->> +	if (!power_kobj)
->> +		return -EINVAL;
->> +
->> 	return sysfs_create_group(power_kobj, &attr_group);
->> }
->> 
->> -- 
->> 2.27.0
-> 
-> -- 
-> http://www.livejournal.com/~pavelmachek
+-- 
+2.30.0
 
