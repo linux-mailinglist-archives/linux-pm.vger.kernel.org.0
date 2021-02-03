@@ -2,67 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACC330D597
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 09:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F31230D605
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 10:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbhBCIvz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Feb 2021 03:51:55 -0500
-Received: from mga17.intel.com ([192.55.52.151]:35695 "EHLO mga17.intel.com"
+        id S233355AbhBCJOb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Feb 2021 04:14:31 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42128 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233053AbhBCIvy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Feb 2021 03:51:54 -0500
-IronPort-SDR: AHgleIZ7uXYE3P7Hm97cW4jYrMFBRqdRvKyCA086gmJAWgozol2ZTU6fmPvkNDXgJ/592zZEZl
- CHGM8mYvPgQw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="160769574"
-X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
-   d="scan'208";a="160769574"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 00:51:13 -0800
-IronPort-SDR: aSAv4mGarYqxl8FCjqWcnHA9yN7jxJjGnsdWkZ/8cciHBoFdPyYAAFq5aUWdJu7YfLS8pwljpz
- 9oCbmanY1pbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
-   d="scan'208";a="392337738"
-Received: from chenyu-desktop.sh.intel.com ([10.239.158.173])
-  by orsmga008.jf.intel.com with ESMTP; 03 Feb 2021 00:51:09 -0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Len Brown <lenb@kernel.org>, Len Brown <len.brown@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chen Yu <yu.c.chen@intel.com>,
-        Wendy Wang <wendy.wang@intel.com>
-Subject: [PATCH 2/2] tools/power turbostat: Support Ice Lake D
-Date:   Wed,  3 Feb 2021 16:54:36 +0800
-Message-Id: <fbf91a90f6414379dff110f9430122670487ffa4.1612341978.git.yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1612341978.git.yu.c.chen@intel.com>
-References: <cover.1612341978.git.yu.c.chen@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S232880AbhBCJMt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 3 Feb 2021 04:12:49 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 8B1E8AC9B;
+        Wed,  3 Feb 2021 09:12:07 +0000 (UTC)
+Message-ID: <1612343526.3640.23.camel@suse.cz>
+Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
+ in schedutil invariant formula
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Michael Larabel <Michael@phoronix.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Date:   Wed, 03 Feb 2021 10:12:06 +0100
+In-Reply-To: <CAJZ5v0hQ_r3th5upo-X5fNBG0tUNbLbhQN-cqmDd1FGwhGx4dg@mail.gmail.com>
+References: <20210122204038.3238-1-ggherdovich@suse.cz>
+         <20210122204038.3238-2-ggherdovich@suse.cz>
+         <CAJZ5v0hQ_r3th5upo-X5fNBG0tUNbLbhQN-cqmDd1FGwhGx4dg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ice Lake D is low-end server version of Ice Lake X, reuse
-the code accordingly.
+On Tue, 2021-02-02 at 19:59 +0100, Rafael J. Wysocki wrote:
+> On Fri, Jan 22, 2021 at 9:47 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+> > 
+> 
+> [cut]
+> 
+> > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> > index 1e4fbb002a31..2378bc1bf2c4 100644
+> > --- a/drivers/cpufreq/acpi-cpufreq.c
+> > +++ b/drivers/cpufreq/acpi-cpufreq.c
+> > @@ -27,6 +27,10 @@
+> > 
+> >  #include <acpi/processor.h>
+> > 
+> > +#ifdef CONFIG_ACPI_CPPC_LIB
+> 
+> Why is the #ifdef needed here?
+> 
 
-Tested-by: Wendy Wang <wendy.wang@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+Right, it isn't needed. The guard is necessary only later when the function
+cppc_get_perf_caps() is used. I'll send a v3 with this correction.
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 34628e3e7099..d3c2ef91ac49 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4993,6 +4993,7 @@ unsigned int intel_model_duplicates(unsigned int model)
- 		return INTEL_FAM6_ATOM_TREMONT;
- 
- 	case INTEL_FAM6_ICELAKE_X:
-+	case INTEL_FAM6_ICELAKE_D:
- 	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 		return INTEL_FAM6_SKYLAKE_X;
- 	}
--- 
-2.25.1
+
+Giovanni
+
+
+> > +#include <acpi/cppc_acpi.h>
+> > +#endif
+> > +
+> >  #include <asm/msr.h>
+> >  #include <asm/processor.h>
+> >  #include <asm/cpufeature.h>
 
