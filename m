@@ -2,111 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F77330D341
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 07:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A16830D34A
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 07:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbhBCF77 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Feb 2021 00:59:59 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:54743 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbhBCF76 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 00:59:58 -0500
-Received: by mail-io1-f69.google.com with SMTP id g7so20681012ion.21
-        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 21:59:43 -0800 (PST)
+        id S231205AbhBCGE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Feb 2021 01:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230098AbhBCGE6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 01:04:58 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB0CC0613D6
+        for <linux-pm@vger.kernel.org>; Tue,  2 Feb 2021 22:04:18 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id 8so8510615plc.10
+        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 22:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=20vLb8nYoRvjkPixtWI9JyTtznsxFpVmJabeCI3aLrY=;
+        b=zGGMz/uCsy0DOqmB03VshMAkT5rniOOZV3bCV0tOGZi/hHQ9cjyCqqwzX9DuRBEf4t
+         t8bFIx/1iFpir/3PucbPSQPzBoBje5cXnHmFttoARVScRt6Ifk0qdvFOFirf0DCnyjHT
+         3xw2XT7YtZ8kkho+WAk1TDgSY4ugVW5QSMheAiTEZCmi5fnS9EU/DHz5lyv1RpVTS9kO
+         RjURqEtHyOvoaAgkcAq1uEhuYUGO99s8tnvqW/7YPYbUXlvVyYBWF7WpLIupc2r8RniM
+         DFv8DAK6Una8oUMAIicu+rNxya7V4tz/08nW5tNd0cgE5ndlinOMP/SDh9q1f/i7Z2Tp
+         +vhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=GJ/TBvcrz0gRxndvI+wg7NtGKj1+puWSs8F15LZl46U=;
-        b=JpyJ+bEj8wItZv9X9n5g+TeTBRyXD99jTrAPHr/roQYHVdxEGW/ZqDOWNw0EkDdd1Y
-         f9QRBV5aFOZYtd+GUuFZp4r+Jc8o6sn1y4h+tUK2D+MJipEWzBxilBxcGSQd+u6wVVMj
-         oMGWGy0TYfgMq+Lw1Sz274tqn9Ul9rdfcSd4I6ZZNvutjiKYu1ycolYv2dHKJh4b6oM4
-         SjySRfAm6TcKzK224a31N8O3/mCq4GWtgZ6gsoerIyZ+R5l1iVTTfTgiUCyt/OXnT4KH
-         hRr7pczFHw7zXT8XNO3E2z9xB9gP+B6NNYEI/CCZCIGMEwPn+43vXyANQWRRa6t4XbVS
-         wQuA==
-X-Gm-Message-State: AOAM531MW9MvY74+m5NhNh3ayr8B83ONTBmSHzdH4wDO5/MwS4F2YC3D
-        yPlSUxZjkRGSW6ojMLYMCUacvcqlWgCRSEPbQSGV2eeIo/pZ
-X-Google-Smtp-Source: ABdhPJxaUdC+nGpiCRbkZxim1ZR61kTpD+WH8WNtEd5gGBmrnQCM/aWCBMtMpHiU9uRTLWr0C68F4Wq4cswrWQGJaRKEGj4nQ5uH
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=20vLb8nYoRvjkPixtWI9JyTtznsxFpVmJabeCI3aLrY=;
+        b=pFHCfebaGTvTNoaYKVEJtIaBYnblAcEKyCKiWr1t4OvC9/Qr2CrgjY2YsWHthQxKmH
+         rTu/JYNQoaT7m1VpUVmMg0kqgAGaI5jBo0aIjs9AyMQsaU5AIRAXT6xlhXEM0f0Yx+Kf
+         B3Wg+Tvpg0AX6JGFVoGWMR2a6nqZ3goxCBqF+LuzI8mD3hbPkUkyHw86o0fEWcsjOc5K
+         F9mgcNDDPcE2XN5w3dRGNOthls/c3JbfyDJvaxGyl5NmHzyVGnlOuYL+ohOorltB16Ep
+         K4+0OeTn3eLjKR3WY7Pb+1iypdiO6YCq39kEpWLqlsTLyxKj912uoW234dGcf3bptKDp
+         jOIw==
+X-Gm-Message-State: AOAM531kKi6aAxJLeAjvuJnGHJfzGf3S+2Tt489Yzp17tu6Jx+cmpw8r
+        BsISpDNYOo7u205Yeirm0QugTw==
+X-Google-Smtp-Source: ABdhPJxtrX8twjMyPQUKFe6UCeOxc2rSBdHhhqxdLHRiGlFr4M2VYBRQsjmgmKxijcLOYNEVoka3dw==
+X-Received: by 2002:a17:90b:17c7:: with SMTP id me7mr1583302pjb.205.1612332257550;
+        Tue, 02 Feb 2021 22:04:17 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id f7sm770871pjh.45.2021.02.02.22.04.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Feb 2021 22:04:16 -0800 (PST)
+Date:   Wed, 3 Feb 2021 11:34:14 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>
+Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        Nathan Fontenot <Nathan.Fontenot@amd.com>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Michael Larabel <Michael@phoronix.com>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
+ in schedutil invariant formula
+Message-ID: <20210203060414.hexqlimjol3tdtvq@vireshk-i7>
+References: <20210122204038.3238-1-ggherdovich@suse.cz>
+ <20210122204038.3238-2-ggherdovich@suse.cz>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1928:: with SMTP id p40mr1582615jal.71.1612331957886;
- Tue, 02 Feb 2021 21:59:17 -0800 (PST)
-Date:   Tue, 02 Feb 2021 21:59:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009c21de05ba6849e7@google.com>
-Subject: kernel BUG in memory_bm_free
-From:   syzbot <syzbot+5ecbe63baca437585bd4@syzkaller.appspotmail.com>
-To:     len.brown@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, pavel@ucw.cz, rjw@rjwysocki.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210122204038.3238-2-ggherdovich@suse.cz>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+I am sorry but I wasn't able to get the full picture (not your fault,
+it is me), but ...
 
-syzbot found the following issue on:
+On 22-01-21, 21:40, Giovanni Gherdovich wrote:
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index d0a3525ce27f..b96677f6b57e 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2721,6 +2721,9 @@ int cpufreq_boost_enabled(void)
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_boost_enabled);
+>  
+> +DEFINE_STATIC_KEY_FALSE(cpufreq_amd_max_boost);
+> +EXPORT_SYMBOL_GPL(cpufreq_amd_max_boost);
+> +
+>  /*********************************************************************
+>   *               REGISTER / UNREGISTER CPUFREQ DRIVER                *
+>   *********************************************************************/
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 9c8b7437b6cd..341cac76d254 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -40,9 +40,14 @@ enum cpufreq_table_sorting {
+>  	CPUFREQ_TABLE_SORTED_DESCENDING
+>  };
+>  
+> +DECLARE_STATIC_KEY_FALSE(cpufreq_amd_max_boost);
+> +
+> +#define cpufreq_driver_has_max_boost() static_branch_unlikely(&cpufreq_amd_max_boost)
+> +
 
-HEAD commit:    3aaf0a27 Merge tag 'clang-format-for-linux-v5.11-rc7' of g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17ef6108d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=10152c2ea16351e7
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ecbe63baca437585bd4
-userspace arch: arm64
+I am not happy with AMD specific code/changes in common parts..
 
-Unfortunately, I don't have any reproducer for this issue yet.
+>  struct cpufreq_cpuinfo {
+>  	unsigned int		max_freq;
+>  	unsigned int		min_freq;
+> +	unsigned int		max_boost;
+>  
+>  	/* in 10^(-9) s = nanoseconds */
+>  	unsigned int		transition_latency;
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 6931f0cdeb80..541f3db3f576 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -159,8 +159,12 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+>  				  unsigned long util, unsigned long max)
+>  {
+>  	struct cpufreq_policy *policy = sg_policy->policy;
+> -	unsigned int freq = arch_scale_freq_invariant() ?
+> -				policy->cpuinfo.max_freq : policy->cur;
+> +	unsigned int freq, max_freq;
+> +
+> +	max_freq = cpufreq_driver_has_max_boost() ?
+> +			policy->cpuinfo.max_boost : policy->cpuinfo.max_freq;
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5ecbe63baca437585bd4@syzkaller.appspotmail.com
+Also, can't we update max_freq itself from the cpufreq driver? What
+troubles will it cost ?
 
-------------[ cut here ]------------
-kernel BUG at kernel/power/snapshot.c:257!
-Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 2394 Comm: syz-executor.0 Not tainted 5.11.0-rc6-syzkaller-00055-g3aaf0a27ffc2 #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 20400009 (nzCv daif +PAN -UAO -TCO BTYPE=--)
-pc : free_image_page kernel/power/snapshot.c:257 [inline]
-pc : free_image_page kernel/power/snapshot.c:253 [inline]
-pc : free_list_of_pages kernel/power/snapshot.c:274 [inline]
-pc : memory_bm_free+0x260/0x320 kernel/power/snapshot.c:726
-lr : free_basic_memory_bitmaps+0x3c/0x90 kernel/power/snapshot.c:1173
-sp : ffff8000163dbc50
-x29: ffff8000163dbc50 x28: f4ff000025204070 
-x27: ffff800012d4c000 x26: f4ff000025204008 
-x25: f5ff00002827c700 x24: ffff800012d4c000 
-x23: 00007fffffffffff x22: f4ff000025204018 
-x21: 0000000000000001 x20: ffff800013b576d0 
-x19: f5ff00002827c700 x18: 0000000000000000 
-x17: 0000000000000000 x16: 0000000000000000 
-x15: 0000000000000000 x14: 0000000000000000 
-x13: 0000000000000000 x12: 0000000000000000 
-x11: 0000000000000000 x10: 0000000000000000 
-x9 : fcff000025205400 x8 : 0000000000000002 
-x7 : f6ff000025205000 x6 : 00000000000001ff 
-x5 : 0000000000000000 x4 : 0000000000000000 
-x3 : ffff800013b576d0 x2 : f4ff00002517e000 
-x1 : 0000000000000001 x0 : 0b0000002517e000 
-Call trace:
- free_image_page kernel/power/snapshot.c:257 [inline]
- free_list_of_pages kernel/power/snapshot.c:274 [inline]
- memory_bm_free+0x260/0x320 kernel/power/snapshot.c:726
- free_basic_memory_bitmaps+0x3c/0x90 kernel/power/snapshot.c:1173
- snapshot_release+0x74/0x90 kernel/power/user.c:120
- __fput+0x78/0x230 fs/file_table.c:280
- ____fput+0x10/0x20 fs/file_table.c:313
- task_work_run+0x80/0x160 kernel/task_work.c:140
- tracehook_notify_resume include/linux/tracehook.h:189 [inline]
- do_notify_resume+0x20c/0x13e0 arch/arm64/kernel/signal.c:939
- work_pending+0xc/0x3d4
-Code: cb000260 d34cfc00 97fcf6fe 35fffc20 (d4210000) 
----[ end trace 174c294156b0dfb3 ]---
+> +
+> +	freq = arch_scale_freq_invariant() ? max_freq : policy->cur;
+>  
+>  	freq = map_util_freq(util, freq, max);
+>  
+> -- 
+> 2.26.2
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+viresh
