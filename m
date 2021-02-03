@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C49F30D647
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 10:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B353730D648
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 10:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbhBCJ2C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Feb 2021 04:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S233315AbhBCJ2G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Feb 2021 04:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233459AbhBCJ0F (ORCPT
+        with ESMTP id S233348AbhBCJ0F (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 04:26:05 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AFEC061788
-        for <linux-pm@vger.kernel.org>; Wed,  3 Feb 2021 01:24:10 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id y205so16261981pfc.5
-        for <linux-pm@vger.kernel.org>; Wed, 03 Feb 2021 01:24:10 -0800 (PST)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EACC06178B
+        for <linux-pm@vger.kernel.org>; Wed,  3 Feb 2021 01:24:13 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id w14so16279637pfi.2
+        for <linux-pm@vger.kernel.org>; Wed, 03 Feb 2021 01:24:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BUo70dpbWZG2th1HyMSGNG98xfWBgw6XoNhP4iRnwRU=;
-        b=PolVeq0gP5/5egZAteKRDbawZu0yybIhpZS9jypjX6nuquWFQZse/nNqVIeb+heNWi
-         Q0zRn4kap/a+7AQ9cXHDGy7CortJiwMhtX2oj3GgaueNYvoSA3qeT0WNepyeP4OTBVYq
-         8+2xK4PGN4APrnQwi+kxVKdeeNdFK/NYOECzQ=
+        bh=/YBwKXZIAHM5O75qgqkZJUqkDsfjvCGWB4Ihiew6J+E=;
+        b=ETNwtu1ZmDOZdrKuPYq2aSu+6XDPB8j3IGJZEojQZ9QEyMLBFOvJ8LchGtb3G/14/o
+         KsdqcZ49CAKSR1t1HG6/OwyMHbIPHjIKzm/yyu/kDrjqkLNz1gxVZ7T9wpPJxkc07gGN
+         34tftBwM35J4Y7cZQvDXNbqgSWAqPDcElU5JQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BUo70dpbWZG2th1HyMSGNG98xfWBgw6XoNhP4iRnwRU=;
-        b=X2TUhVvX1pHnOP6WtxBLuvQOkf4MvxQjOrKkaMOz39gO3F4tBLPSPNwclkfDTCRHtr
-         s77qwQX63eSu6HrMA1sq5rZ3KkyuUzbyO96L9i82lcxwHMp174CCqNHnCmVIoamP59ye
-         wepVlJS+W4AbKiPFxqo3wcYmcfZLPsXGp95mvdFbGpficN8wqhrpENmTH1gaz4J/yLGu
-         BGiytN5rUFPRXzKpm3jawzZ6l/moa9PusdGDobNLF+7WvOD026mtwgvXRru9x+YsMZTG
-         9htJwz40dhHXFYJDmdkjMKOhoT3KilA9CM8bzAZvyCVVVgWMxQ8JNd1cw/SN4F3gCKWe
-         ux5Q==
-X-Gm-Message-State: AOAM5324TdmUpnzj+Fyr122zVJsYYCt1C7fk6Sgw8nzLtgvueDIcsDdh
-        x250fmRKF+X8Pqk5/iKSHzMQrg==
-X-Google-Smtp-Source: ABdhPJypAXiKQeV7+kTP25ChJV2GX9+q7S7jk6HODiK/eZQUPss02etbFuNRkSxR/FZIxIESY3Y0+g==
-X-Received: by 2002:a63:5223:: with SMTP id g35mr2660671pgb.255.1612344250566;
-        Wed, 03 Feb 2021 01:24:10 -0800 (PST)
+        bh=/YBwKXZIAHM5O75qgqkZJUqkDsfjvCGWB4Ihiew6J+E=;
+        b=cQxbfFIvaeFMY1XlcDnYzZ0vx1Fgp69lSen0Drng8p3Of9cyw1M6u+7ZNykeOAeB6t
+         +J05Xv+XkJppKosYTfGAQPMZxqGxstQ+hG+sfdTjzaTxCtCI3N/KD8oUKy3aRPOSYyCl
+         QnbV/0YUo9GseRF8pHpoX0v+UaLITpi07F3tKqqbt5yAdnsapi4KH0D9ft5kPNdIcWBq
+         IdscITjE5qoHkZbToE0HaznzHQ0egGdMF0k4pWiXr3NLHuGkNSj5eT+7i4E0J0JTYzPM
+         M/8bc3YppAPLilCcHJpu17Ag1vhi1x9P9BIHMwul85ILu0XlpfSie4NEZRlodxgzBRtB
+         l8Zg==
+X-Gm-Message-State: AOAM53291j5M7pijuakMPFgMrxL1sWGntpaEFC+YqkSPbvtwR3AkahYJ
+        egqGg35kB2uD5msROe3NeSaYFg==
+X-Google-Smtp-Source: ABdhPJzn9NcUV4ulcmPDo2XoIO/8wiG2wV/vpqORSuLF06mHkmkpUrnO2XbJdABrNL4qEc8b2Hhvlg==
+X-Received: by 2002:a63:43c6:: with SMTP id q189mr2641475pga.245.1612344252875;
+        Wed, 03 Feb 2021 01:24:12 -0800 (PST)
 Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:743e:7944:50c8:ff72])
-        by smtp.gmail.com with ESMTPSA id u20sm932294pjy.36.2021.02.03.01.24.08
+        by smtp.gmail.com with ESMTPSA id u20sm932294pjy.36.2021.02.03.01.24.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Feb 2021 01:24:10 -0800 (PST)
+        Wed, 03 Feb 2021 01:24:12 -0800 (PST)
 From:   Hsin-Yi Wang <hsinyi@chromium.org>
 To:     Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org
 Cc:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
@@ -53,9 +53,9 @@ Cc:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Saravana Kannan <saravanak@google.com>
-Subject: [PATCH v5 2/3] PM / devfreq: Cache OPP table reference in devfreq
-Date:   Wed,  3 Feb 2021 17:23:59 +0800
-Message-Id: <20210203092400.1791884-3-hsinyi@chromium.org>
+Subject: [PATCH v5 3/3] PM / devfreq: Add required OPPs support to passive governor
+Date:   Wed,  3 Feb 2021 17:24:00 +0800
+Message-Id: <20210203092400.1791884-4-hsinyi@chromium.org>
 X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
 In-Reply-To: <20210203092400.1791884-1-hsinyi@chromium.org>
 References: <20210203092400.1791884-1-hsinyi@chromium.org>
@@ -67,61 +67,66 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Saravana Kannan <saravanak@google.com>
 
-The OPP table can be used often in devfreq. Trying to get it each time can
-be expensive, so cache it in the devfreq struct.
+Look at the required OPPs of the "parent" device to determine the OPP that
+is required from the slave device managed by the passive governor. This
+allows having mappings between a parent device and a slave device even when
+they don't have the same number of OPPs.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 ---
- drivers/devfreq/devfreq.c | 6 ++++++
- include/linux/devfreq.h   | 2 ++
- 2 files changed, 8 insertions(+)
+ drivers/devfreq/governor_passive.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 6aa10de792b33..a5899c9ae16fc 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -757,6 +757,8 @@ static void devfreq_dev_release(struct device *dev)
- 	if (devfreq->profile->exit)
- 		devfreq->profile->exit(devfreq->dev.parent);
+diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+index 63332e4a65ae8..8d92b1964f9c3 100644
+--- a/drivers/devfreq/governor_passive.c
++++ b/drivers/devfreq/governor_passive.c
+@@ -19,7 +19,7 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+ 			= (struct devfreq_passive_data *)devfreq->data;
+ 	struct devfreq *parent_devfreq = (struct devfreq *)p_data->parent;
+ 	unsigned long child_freq = ULONG_MAX;
+-	struct dev_pm_opp *opp;
++	struct dev_pm_opp *opp = NULL, *p_opp = NULL;
+ 	int i, count, ret = 0;
  
-+	if (devfreq->opp_table)
-+		dev_pm_opp_put_opp_table(devfreq->opp_table);
- 	mutex_destroy(&devfreq->lock);
- 	kfree(devfreq);
- }
-@@ -844,6 +846,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 	/*
+@@ -56,13 +56,20 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+ 	 * list of parent device. Because in this case, *freq is temporary
+ 	 * value which is decided by ondemand governor.
+ 	 */
+-	opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
+-	if (IS_ERR(opp)) {
+-		ret = PTR_ERR(opp);
++	p_opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
++	if (IS_ERR(p_opp)) {
++		ret = PTR_ERR(p_opp);
+ 		goto out;
  	}
  
- 	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
-+	devfreq->opp_table = dev_pm_opp_get_opp_table(dev);
-+	if (IS_ERR(devfreq->opp_table))
-+		devfreq->opp_table = NULL;
-+
- 	atomic_set(&devfreq->suspend_count, 0);
+-	dev_pm_opp_put(opp);
++	if (devfreq->opp_table && parent_devfreq->opp_table)
++		opp = dev_pm_opp_xlate_required_opp(parent_devfreq->opp_table,
++						    devfreq->opp_table, p_opp);
++	if (opp) {
++		*freq = dev_pm_opp_get_freq(opp);
++		dev_pm_opp_put(opp);
++		goto out;
++	}
  
- 	dev_set_name(&devfreq->dev, "%s", dev_name(dev));
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index b6d3bae1c74d8..26ea0850be9bb 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -137,6 +137,7 @@ struct devfreq_stats {
-  *		using devfreq.
-  * @profile:	device-specific devfreq profile
-  * @governor:	method how to choose frequency based on the usage.
-+ * @opp_table:	Reference to OPP table of dev.parent, if one exists.
-  * @nb:		notifier block used to notify devfreq object that it should
-  *		reevaluate operable frequencies. Devfreq users may use
-  *		devfreq.nb to the corresponding register notifier call chain.
-@@ -173,6 +174,7 @@ struct devfreq {
- 	struct device dev;
- 	struct devfreq_dev_profile *profile;
- 	const struct devfreq_governor *governor;
-+	struct opp_table *opp_table;
- 	struct notifier_block nb;
- 	struct delayed_work work;
+ 	/*
+ 	 * Get the OPP table's index of decided freqeuncy by governor
+@@ -89,6 +96,9 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+ 	*freq = child_freq;
+ 
+ out:
++	if (!IS_ERR_OR_NULL(opp))
++		dev_pm_opp_put(p_opp);
++
+ 	return ret;
+ }
  
 -- 
 2.30.0.365.g02bc693789-goog
