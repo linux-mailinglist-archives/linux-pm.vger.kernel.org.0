@@ -2,120 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6B730D91A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 12:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479D230DB7B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 14:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbhBCLqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Feb 2021 06:46:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:38546 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234227AbhBCLqJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Feb 2021 06:46:09 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32569D6E;
-        Wed,  3 Feb 2021 03:45:23 -0800 (PST)
-Received: from localhost (unknown [10.1.198.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C65523F719;
-        Wed,  3 Feb 2021 03:45:22 -0800 (PST)
-Date:   Wed, 3 Feb 2021 11:45:21 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
- sched_freq_tick() callback
-Message-ID: <20210203114521.GA6380@arm.com>
-References: <cover.1611829953.git.viresh.kumar@linaro.org>
- <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
+        id S231490AbhBCNjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Feb 2021 08:39:41 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:35570 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232025AbhBCNja (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 08:39:30 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 6A0F11C0B79; Wed,  3 Feb 2021 14:38:29 +0100 (CET)
+Date:   Wed, 3 Feb 2021 14:38:29 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     syzbot <syzbot+5ecbe63baca437585bd4@syzkaller.appspotmail.com>,
+        syzkaller@googlegroups.com
+Cc:     len.brown@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+        syzkaller-bugs@googlegroups.com
+Subject: syzbot spam -- is it useful? time to ban them from the list? [was
+ Re: kernel BUG in memory_bm_free]
+Message-ID: <20210203133829.GA5952@duo.ucw.cz>
+References: <0000000000009c21de05ba6849e7@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="VS++wcV0S1rZb1Fb"
 Content-Disposition: inline
-In-Reply-To: <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <0000000000009c21de05ba6849e7@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
 
-Many thanks for the renaming of functions/variables/enums.
+--VS++wcV0S1rZb1Fb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I've cropped all the code that looks good to me, and I kept some
-portions of interest.
+On Tue 2021-02-02 21:59:17, syzbot wrote:
+> Hello,
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    3aaf0a27 Merge tag 'clang-format-for-linux-v5.11-rc7' of =
+g..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D17ef6108d00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D10152c2ea1635=
+1e7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D5ecbe63baca4375=
+85bd4
+> userspace arch: arm64
+>=20
+> Unfortunately, I don't have any reproducer for this issue yet.
 
-On Thursday 28 Jan 2021 at 16:18:55 (+0530), Viresh Kumar wrote:
-> This patch attempts to make it generic enough so other parts of the
-> kernel can also provide their own implementation of scale_freq_tick()
-> callback, which is called by the scheduler periodically to update the
-> per-cpu freq_scale variable.
-[..]
->  static void amu_fie_setup(const struct cpumask *cpus)
->  {
-> @@ -227,7 +263,7 @@ static void amu_fie_setup(const struct cpumask *cpus)
->  	if (!invariant && !cpumask_equal(amu_fie_cpus, cpu_present_mask))
->  		return;
->  
-> -	static_branch_enable(&amu_fie_key);
-> +	topology_set_scale_freq_source(&amu_sfd, amu_fie_cpus);
->  
->  	pr_debug("CPUs[%*pbl]: counters will be used for FIE.",
->  		 cpumask_pr_args(cpus));
-> @@ -283,53 +319,6 @@ static int __init init_amu_fie(void)
->  }
->  core_initcall(init_amu_fie);
-[..]
-> +void topology_set_scale_freq_source(struct scale_freq_data *data,
-> +				    const struct cpumask *cpus)
-> +{
-> +	struct scale_freq_data *sfd;
-> +	int cpu;
-> +
-> +	for_each_cpu(cpu, cpus) {
-> +		sfd = per_cpu(sft_data, cpu);
-> +
-> +		/* Use ARCH provided counters whenever possible */
-> +		if (!sfd || sfd->source != SCALE_FREQ_SOURCE_ARCH) {
-> +			per_cpu(sft_data, cpu) = data;
-> +			cpumask_set_cpu(cpu, &scale_freq_counters_mask);
-> +		}
-> +	}
->  }
-> +EXPORT_SYMBOL_GPL(topology_set_scale_freq_source);
-[..]
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+5ecbe63baca437585bd4@syzkaller.appspotmail.com
 
-I have one single comment left for this patch, and apologies in advance
-for the long story.
+Important: Follow netiquette. You are sending automated emails to people
+that did not consent to it. You are not even providing unsubscribe
+link. That's actually illegal here.
 
-In general, for frequency invariance, we're interested in whether the full
-system is frequency invariant as well, for two reasons:
- - We want to be able to either set a scale factor for all CPUs or none
-   at all.
- - If at some point during the boot process the system invariance status
-   changes, we want to be able to inform dependents: schedutil and EAS.
+Put real name of person responsible in the email. Put [syzbot] in the
+subject so that it and any resulting replies can be filtered out.
 
-This management is currently done on amu_fie_setup(), because before
-these patches we only had two sources for frequency invariance: cpufreq
-and AMU counters. But that's not enough after these two patches, from
-both functional and code design point of view.
+								Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
 
-I have to mention that your code will work as it is for now, but only
-because CPPC is the new other source of counters, and for CPPC we also
-have cpufreq invariance available. But this only hides what can become a
-problem later: if in the future we won't have cpufreq invariance for
-CPPC or if another provider of counters is added and used in a system
-without cpufreq invariance, the late initialization of these counters
-will either break schedutil/scheduler if not all CPUs support those
-counters, or keep EAS disabled, even if all CPUs support these counters,
-and frequency invariance is later enabled.
+--VS++wcV0S1rZb1Fb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Therefore, I think system level invariance management (checks and
-call to rebuild_sched_domains_energy()) also needs to move from arm64
-code to arch_topology code.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Ionela.
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYBqnVQAKCRAw5/Bqldv6
+8kweAJ420oF32VQxYNg+V4NqoDXNy4l6TwCggaLpGEFXo4QcWBE1/d1PSfVr36g=
+=Au3W
+-----END PGP SIGNATURE-----
+
+--VS++wcV0S1rZb1Fb--
