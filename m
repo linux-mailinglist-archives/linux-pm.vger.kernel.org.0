@@ -2,158 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED4230D571
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 09:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3A530D593
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 09:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbhBCIkf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Feb 2021 03:40:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48040 "EHLO mx2.suse.de"
+        id S232665AbhBCIvf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Feb 2021 03:51:35 -0500
+Received: from mga11.intel.com ([192.55.52.93]:32820 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232978AbhBCIkH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Feb 2021 03:40:07 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6B919AC9B;
-        Wed,  3 Feb 2021 08:39:25 +0000 (UTC)
-Message-ID: <1612341564.3640.14.camel@suse.cz>
-Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
- in schedutil invariant formula
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jon Grimm <Jon.Grimm@amd.com>,
-        Nathan Fontenot <Nathan.Fontenot@amd.com>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Michael Larabel <Michael@phoronix.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Date:   Wed, 03 Feb 2021 09:39:24 +0100
-In-Reply-To: <CAJZ5v0jsF-_8GzQgqZH10bf0oUTmALiT1kVcjDqYgGPqx9iKZg@mail.gmail.com>
-References: <20210122204038.3238-1-ggherdovich@suse.cz>
-         <20210122204038.3238-2-ggherdovich@suse.cz>
-         <CAJZ5v0hQ_r3th5upo-X5fNBG0tUNbLbhQN-cqmDd1FGwhGx4dg@mail.gmail.com>
-         <CAJZ5v0jsF-_8GzQgqZH10bf0oUTmALiT1kVcjDqYgGPqx9iKZg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S232690AbhBCIve (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 3 Feb 2021 03:51:34 -0500
+IronPort-SDR: XCGp58A/5mbre23MW/tjD8NrhVQtcgpP4K8wIZzT5GDjkwZiA0uvM1ncMmUSidU+EtSMzkGd+P
+ 0iDzfLrH3weA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="177501312"
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="177501312"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 00:50:52 -0800
+IronPort-SDR: cEUiofSbB9VAT4J4Mq9U0O8CsCSINPvUfCYDm91QeRbFgX7iUwR4gowaK27UxdG5gAFRv2k3we
+ nlaibvJyA0Bw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="433315023"
+Received: from chenyu-desktop.sh.intel.com ([10.239.158.173])
+  by orsmga001.jf.intel.com with ESMTP; 03 Feb 2021 00:50:49 -0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Len Brown <lenb@kernel.org>, Len Brown <len.brown@intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH 0/2] Add more CPUs support in turbostat
+Date:   Wed,  3 Feb 2021 16:54:11 +0800
+Message-Id: <cover.1612341978.git.yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Alder Lake P and Ice Lake D are added in this patch set.
 
-both Rafael and Viresh make a similar remark: why adding a new "max_boost"
-variable, since "max_freq" is already available and could be used instead.
+Chen Yu (2):
+  tools/power turbostat: Support Alder Lake Mobile
+  tools/power turbostat: Support Ice Lake D
 
-Replying here to both.
+ tools/power/x86/turbostat/turbostat.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Tue, 2021-02-02 at 20:26 +0100, Rafael J. Wysocki wrote:
-> On Tue, Feb 2, 2021 at 7:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > 
-> > On Fri, Jan 22, 2021 at 9:47 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
-> > 
-> > [cut]
-> > > @@ -779,15 +829,25 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
-> > >                     freq_table[valid_states-1].frequency / 1000)
-> > >                         continue;
-> > > 
-> > > +               freq = perf->states[i].core_frequency * 1000;
-> > >                 freq_table[valid_states].driver_data = i;
-> > > -               freq_table[valid_states].frequency =
-> > > -                   perf->states[i].core_frequency * 1000;
-> > > +               freq_table[valid_states].frequency = freq;
-> > > +
-> > > +               if (freq > max_freq)
-> > > +                       max_freq = freq;
-> > > +
-> > >                 valid_states++;
-> > >         }
-> > >         freq_table[valid_states].frequency = CPUFREQ_TABLE_END;
-> > >         policy->freq_table = freq_table;
-> > >         perf->state = 0;
-> > > 
-> > > +       if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD &&
-> > > +           amd_max_boost(max_freq, &max_boost)) {
-> > > +               policy->cpuinfo.max_boost = max_boost;
-> > 
-> > Why not to set max_freq to max_boost instead?
-> 
-> I mean, would setting the frequency in the last table entry to max_boost work?
-> 
-> Alternatively, one more (artificial) entry with the frequency equal to
-> max_boost could be added.
+-- 
+2.25.1
 
-On Wed, 2021-02-03 at 11:34 +0530, Viresh Kumar wrote:
-> [cut]
-> 
-> On 22-01-21, 21:40, Giovanni Gherdovich wrote:
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index 6931f0cdeb80..541f3db3f576 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -159,8 +159,12 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >  				  unsigned long util, unsigned long max)
-> >  {
-> >  	struct cpufreq_policy *policy = sg_policy->policy;
-> > -	unsigned int freq = arch_scale_freq_invariant() ?
-> > -				policy->cpuinfo.max_freq : policy->cur;
-> > +	unsigned int freq, max_freq;
-> > +
-> > +	max_freq = cpufreq_driver_has_max_boost() ?
-> > +			policy->cpuinfo.max_boost : policy->cpuinfo.max_freq;
-> 
-> Also, can't we update max_freq itself from the cpufreq driver? What
-> troubles will it cost ?
-
-I could add the max boost frequency to the frequency table (and
-policy->cpuinfo.max_freq would follow), yes, but that would trigger the
-following warning from acpi-cpufreq.c:
-
-static void acpi_cpufreq_cpu_ready(struct cpufreq_policy *policy)
-{
-        struct acpi_processor_performance *perf = per_cpu_ptr(acpi_perf_data,
-                                                              policy->cpu);
-
-        if (perf->states[0].core_frequency * 1000 != policy->cpuinfo.max_freq)
-                pr_warn(FW_WARN "P-state 0 is not max freq\n");
-}
-
-so I thought that to stay out of troubles I'd supply a different variable,
-max_boost, to be used only in the schedutil formula. After schedutil
-figures out a desired next_freq then the usual comparison with the
-firmware-supplied frequency table could take place.
-
-Altering the frequency table seemed more invasive because once a freq value is
-in there, it's going to be actually requested by the driver to the platform. I
-only want my max_boost to stretch the range of schedutil's next_freq.
-
-On Tue, 2021-02-02 at 19:59 +0100, Rafael J. Wysocki wrote:
-> 
-> [cut]
-> Also notice that the static branch is global and the max_boost value
-> for different CPUs may be different, at least in theory.
-
-In theory yes, but I'm guarding the code with two conditions:
-
-* vendor is X86_VENDOR_AMD
-* cppc_get_perf_caps() returns success
-
-this identifies AMD EPYC cpus with model 7xx2 and later, where max_boost is
-the same on all cores. I may have added synchronization so that only one cpu
-sets the value, but I didn't in the interest of simplicity for an -rc patch
-(I'd have to consider hotplug, the maxcpus= command line param, ecc).
-
-
-Giovanni
