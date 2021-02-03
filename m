@@ -2,117 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3C430CF6C
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Feb 2021 23:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E454F30D07F
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 01:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbhBBWxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Feb 2021 17:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S231508AbhBCAu7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Feb 2021 19:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236080AbhBBWxt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Feb 2021 17:53:49 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47DBC0613ED
-        for <linux-pm@vger.kernel.org>; Tue,  2 Feb 2021 14:53:08 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id t29so15364246pfg.11
-        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 14:53:08 -0800 (PST)
+        with ESMTP id S232042AbhBCAuz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Feb 2021 19:50:55 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0AAC06174A
+        for <linux-pm@vger.kernel.org>; Tue,  2 Feb 2021 16:50:15 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id e9so13496226plh.3
+        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 16:50:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=eMxMCpeXWUYDBwy8sh1LDwQBEqIVPCZRI09DRgNUXPg=;
-        b=bSu6c/DhS2gzEWEd1saU4NVljt+5ZHGZ8w5zlvveANyXnnYZPOaaiWfr6VAF6YJ+EI
-         5fD6M0YY4gE2mydnx1Ol1ysAWIskq6CGd0EaBnrWc1in8oqf+CFo8m9aO+Xd0kwK01Jj
-         s+L8HUYii6W/PFX4sSMK4XTErwUHbFKRMGOCBfHKbQolV47DSNlbwjoZh8ZaMN64mY5c
-         l+JaCjq0AvxrN/gLFV9jSUI7P3o1FHV1ttPnPwwPjNv7/Bv5Fes5Fhxpy4mOVHMMhf6f
-         UCr+uaKojFvdmq95GHNMWmQT7bGrRw31OZhEtl0ukRyXwxEXPOW+ZZUwmuYqOWCsPGId
-         pAWg==
+        d=squareup.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WrIVK8sDseMlS4o9lz0V6MRsGpJ6jWjlISOO9cArdaE=;
+        b=SWSiiHtZvYGMNzfqn0C705T+byGm0SCksZTFqTryqHaM/C6AJ2+ZFyZfH977qTEzUb
+         S+fzKzvzpBfi9CqT6vS20/vSqQ3Pgf9kx+tWZTe7I7oF+n7AL3aNgDDxxV/YNFIDK463
+         IDXak76GlG862GDExIWJUcWa9x1fedwPFH+1o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=eMxMCpeXWUYDBwy8sh1LDwQBEqIVPCZRI09DRgNUXPg=;
-        b=gIQV1xxdc3hN2k0SHWjQbQAq425e9oSYffqvczTx7K9uZsUMVKQjEpByObw+Vo7wrQ
-         rgAKbgkqLYNyOTytMP1EqiIAvyMOK8gsmtpguxws0lZuuVIhoRGp48hkNDB5k+k6Bsi7
-         lNzRzZk/Cs1DGcHmEEvlVgckz/4DpsSUU954mokOOWNKRN87VLg8lbm8ILS0NQKAAxRo
-         EBTCPTnFk7atCUYQuWzlCC9I3yYSgEPtI1s34CrVqiNt50B5S7gPolkuZeDbCVP6t4CM
-         qS3XIPtHttZCNaZpWynG5GooQHaROtlnob/eupvCMnnnS4iUqtsjkJvuk+sZHoicK4AZ
-         dmVA==
-X-Gm-Message-State: AOAM533VVt+x7t5cEyub0H1HwZPrZ81LVuZmxDSEQpQdSpYXT8iduUB6
-        IdPWVnv3oQlc9VP/0Wf0SXRCLHNa5D9YCg==
-X-Google-Smtp-Source: ABdhPJw5c81fGOVMsdAeR5rsumbgfD3SMFHDPJ9x7jAKtGeRjP5+kOEsZURIX4MBXVp2VRljj5bcPA==
-X-Received: by 2002:a65:67ce:: with SMTP id b14mr321167pgs.387.1612306388377;
-        Tue, 02 Feb 2021 14:53:08 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d2sm65231pjd.29.2021.02.02.14.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Feb 2021 14:53:07 -0800 (PST)
-Message-ID: <6019d7d3.1c69fb81.7b1af.04b3@mx.google.com>
-Date:   Tue, 02 Feb 2021 14:53:07 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WrIVK8sDseMlS4o9lz0V6MRsGpJ6jWjlISOO9cArdaE=;
+        b=hXnlAj8kURCFwC1apzxOqw7uAk337JYGBUWi/QceiMyDS9dAKpD8vk0d8dHxgZ8quM
+         qIuLBTnXMnEJlADyrsEDPm+u/rpyV105UpHhuLM62tGrDic32iYPje/Fcc00p4OISGky
+         rKyz61x3UqWJTPgWGW8qp7jKGkoupx7qj0KzM3wf1uw825V4QHeEnRGB+S2ZZpscgW8E
+         eZLu/ofIl8CPcCbo8KRZgYUgutfZI99HMmQoO49OWu+3BiQk3lx6MqeImS5vS9v1Awbw
+         jqocHpO1sL+LZlAjQPC8PDh/2VFqDyMXk3Q953oGlwxpj3mgmf8Bm897hdwldK/N7J3n
+         MIBw==
+X-Gm-Message-State: AOAM533sEnz7I/0tLVgaFA83PuHK1AZ5sVoiHvZ1yI3aLlQaJ2IFY3MW
+        mFvyDq06EDzHlLDatdWQmW433A==
+X-Google-Smtp-Source: ABdhPJwUtVndBlHghaUzgOXZqCD8uLRkChgDzib4W7gmbknEoDqpUtRqOAYHnIJg9ki5c/5sOFwvKQ==
+X-Received: by 2002:a17:902:a614:b029:e1:5b43:956a with SMTP id u20-20020a170902a614b02900e15b43956amr846276plq.38.1612313415034;
+        Tue, 02 Feb 2021 16:50:15 -0800 (PST)
+Received: from benl-m5lvdt.local ([2600:1700:87d0:94f:dd59:3fb8:f6a9:fc02])
+        by smtp.gmail.com with ESMTPSA id z11sm169589pfk.97.2021.02.02.16.50.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Feb 2021 16:50:14 -0800 (PST)
+Subject: Re: [PATCH v2 5/5] interconnect: qcom: Add MSM8939 interconnect
+ provider driver
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Jun Nie <jun.nie@linaro.org>, devicetree@vger.kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh@kernel.org
+Cc:     shawn.guo@linaro.org
+References: <20201204075345.5161-1-jun.nie@linaro.org>
+ <20201204075345.5161-6-jun.nie@linaro.org>
+ <d869ea94b3b1c73800a5c3b855cb6f280be6c185.camel@mailoo.org>
+ <a88b39dd-1c50-8aff-f85e-27086db9b040@linaro.org>
+From:   Benjamin Li <benl@squareup.com>
+Message-ID: <7630c4aa-b023-55a6-e2aa-37a7538c6b45@squareup.com>
+Date:   Tue, 2 Feb 2021 16:50:12 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.11-rc6-72-gc42187278fc1
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 5 runs, 1 regressions (v5.11-rc6-72-gc42187278fc1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <a88b39dd-1c50-8aff-f85e-27086db9b040@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 5 runs, 1 regressions (v5.11-rc6-72-gc42187278fc1)
+On 1/5/21 5:54 AM, Georgi Djakov wrote:
+> On 1/2/21 13:08, Vincent Knecht wrote:
+>> Le vendredi 04 décembre 2020 à 15:53 +0800, Jun Nie a écrit :
+>>> Add driver for the Qualcomm interconnect buses found in MSM8939 based
+>>> platforms. The topology consists of four NoCs that are controlled by
+>>> a remote processor that collects the aggregated bandwidth for each
+>>> master-slave pairs.
+>>>
+>>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+>>
+>> Shouldn't some rpm ids be changed like they were for msm8916 in the following patch ?
+>> c497f9322af9 ("interconnect: qcom: msm8916: Remove rpm-ids from non-RPM nodes")
+>> https://patchwork.kernel.org/project/linux-arm-msm/patch/20201112105140.10092-1-georgi.djakov@linaro.org/
+> 
+> Maybe they should. I don't have the hardware to try it, but the test will be
+> to just add the NoC DT nodes, enable the driver and inspect the boot log for
+> messages like:
+> [    2.926647] qcom_icc_rpm_smd_send mas X error -6
+> 
+> Thanks,
+> Georgi
 
-Regressions Summary
--------------------
+Hi Vincent & Georgi,
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+Thanks, I ran your suggestion on an MSM8939 board (with an additional
+change to print slave IDs as well). Results:
 
+[    1.901376] qcom_icc_rpm_smd_send slv 24 error -6
+[    2.005977] qcom_icc_rpm_smd_send mas 20 error -6
+[    2.010250] qcom_icc_rpm_smd_send slv 20 error -6
+[    2.014684] qcom_icc_rpm_smd_send slv 106 error -6
+[    2.019338] qcom_icc_rpm_smd_send slv 107 error -6
+[    2.024615] qcom_icc_rpm_smd_send slv 29 error -6
+[    2.028782] qcom_icc_rpm_smd_send mas 3 error -6
+[    2.034657] qcom_icc_rpm_smd_send mas 100 error -6
+(and there's another slv 131 that's hidden by the mas 100 failure)
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.11-rc=
-6-72-gc42187278fc1/plan/sleep/
+Jun, I'll send you the patch I tested with to silence all these errors,
+if you want to just squash that into the next version of your patchset.
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.11-rc6-72-gc42187278fc1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      c42187278fc107ad17fdaa2def70c451bcfdb6be =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6019cb2d91756a6b823abe6d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.11-rc6-72-gc4218=
-7278fc1/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.11-rc6-72-gc4218=
-7278fc1/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0201.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/6019cb2d91756a6b823abe6e
-        failing since 167 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+Ben
