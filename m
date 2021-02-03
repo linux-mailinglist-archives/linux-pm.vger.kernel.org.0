@@ -2,190 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE58E30D35E
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 07:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E359A30D389
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 07:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbhBCG2Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Feb 2021 01:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S231704AbhBCGui (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Feb 2021 01:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbhBCG2P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 01:28:15 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A87C06174A
-        for <linux-pm@vger.kernel.org>; Tue,  2 Feb 2021 22:27:34 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id g9so3270880ilc.3
-        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 22:27:34 -0800 (PST)
+        with ESMTP id S231717AbhBCGuX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 01:50:23 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACBDC061573
+        for <linux-pm@vger.kernel.org>; Tue,  2 Feb 2021 22:49:43 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id b3so4763626wrj.5
+        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 22:49:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X5H7u6zfULjhTslVinp72inAV8tftlmzyLj44kPZOIo=;
-        b=ATr9kJuhoM7hsEPMLnjZO+qm6UV1LVj8rzqxjUU8jx4jPJAuLYrR7/ZJvq/6fqdSZQ
-         YKZmkGo8OmonC93l2P0UjhAlLyQpvI2y4QXQZzaehVss6Kyw5UiKDYw4hb2oGnyYq+ja
-         E5b+ocFQF8WGclyVsu0U5ahnR/jWsjkBBHlbM=
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=Llt9wZ/++YWpNuv24fYJyAK2KaKZ50JAQBYyHHTRHl0=;
+        b=eMd6ybxnZ1GMNU8CePXnXb1pTr6Ufz1IDd0Ctp4ZlKMVoPoNxn0ozbVA2qeUr1CqPN
+         Go0jM+q9METdwsc19UY3lhxyBGBqmQem9uQv3feFzfiYu4Xm4gubwTEDWsqd6ndAz/R5
+         zZaaTNnjrM7HXSPRIzwwnd+ICKb9BAO+0Q0r9CbY+tLvoNv5Wmq3vEwWU3qWhB6v6x0s
+         p15tmaQ+8Rx7FSXc4FF1/shXUABaAcZhXzjWQvk+prBEyBK8nxwoDu2/H9wPkCsqj7wv
+         jXQo5x/fNSBx3ThDZnAN6BUFvMO4tD6gcg8vofcRDo3n2hTDGX67QtWQV5CHc9lU+dg9
+         aiAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X5H7u6zfULjhTslVinp72inAV8tftlmzyLj44kPZOIo=;
-        b=JAU6DDa4yLpuC9hxnRR/uSUNXCGh59oh4MyvySURekA+8M+wxdoHBuObdKTRYr4/G/
-         sNFBgVpOkk4q34PhakrA7rtrHjbljwQyzPGkYS0LCDNrm2RRix07GemgaLeulXFxkMIa
-         Dq2/vkeH/zDC6JDVCZJlFvzg8SOgVMmQGewddkZAT1IAyMv5WcS64ewVtdg8SEklq7YL
-         mrsIoeLZxHzl6vTnBpNiUG6V1MrLeVyUqW79/WNaiMOno7ccS9UVUqVq7HoKsvf6pux0
-         EWJ3Dcram+AfOB5J3tks5ivbTS7zTCCde2y/OYWd6A3L38n2W66uC1Ge63rSRA/xNI81
-         hwEw==
-X-Gm-Message-State: AOAM530jVJ/64nr+V5v015E0AJhW6hQVOJeqhZ1UvOApxDOGfr1Jdz/8
-        OD229aV/vZFCqA8IBkLaZf1Dd6ZE3K0Kvu5XTdXr1A==
-X-Google-Smtp-Source: ABdhPJxejwYn2puVey+RwiCn1hqYG5601tBESzbm/PelZLqN5flyaRACJ3sbmOAAzVTl66bgVRKcsUxC399ATAVUfXY=
-X-Received: by 2002:a92:cc4d:: with SMTP id t13mr370408ilq.150.1612333654249;
- Tue, 02 Feb 2021 22:27:34 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Llt9wZ/++YWpNuv24fYJyAK2KaKZ50JAQBYyHHTRHl0=;
+        b=t5lrcEUkz6dVavLo7YkfKn3x/UDh8cD1ixLQbEnkOFYSgreC30vhlpUcskzV21B15V
+         QivRS3YJdp/RolGnbcMWmvY6pLXAbCvaDJNOPd0o6JkyPLWOnDAWFZ6jasFweleWdfZv
+         HiV4q4DM33OMi3FFHMPFF9Tn4nhAllqOe0+m9EahcZjXN6cL9U/8SFBeei9JTl3HSkT9
+         XbP9pS6gQ0OUPAofpzY8Hke0EstPZkSc09e37ZGHtgk2iIJNmMRio3/tqm9fhZ1Rmi5O
+         X5ioZLZ37hUP1GqHsLJRij0kKkvBAe5Nq6DYZehZHfJ3J11wFDTblOHgIMLgI7gTtFIC
+         O+Qg==
+X-Gm-Message-State: AOAM532gu/zylHiM98oI6X1QlzcImF08LnIfz7+/dn1vNpMBlafYlFkx
+        xDt/pgbO4aoeIfAeA02IoEo0mQ==
+X-Google-Smtp-Source: ABdhPJxQrjhEspsMyRywC+CZuV6pLjH2d0gs0SU2q/MWY/IqDeweyxSs/Z4+de3Z6tAprGygraB2Qw==
+X-Received: by 2002:adf:fc86:: with SMTP id g6mr1721941wrr.20.1612334981687;
+        Tue, 02 Feb 2021 22:49:41 -0800 (PST)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id l5sm1883815wrv.44.2021.02.02.22.49.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Feb 2021 22:49:41 -0800 (PST)
+Subject: Re: [PATCH v2 5/5] interconnect: qcom: Add MSM8939 interconnect
+ provider driver
+To:     Benjamin Li <benl@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Jun Nie <jun.nie@linaro.org>, devicetree@vger.kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh@kernel.org
+Cc:     shawn.guo@linaro.org
+References: <20201204075345.5161-1-jun.nie@linaro.org>
+ <20201204075345.5161-6-jun.nie@linaro.org>
+ <d869ea94b3b1c73800a5c3b855cb6f280be6c185.camel@mailoo.org>
+ <a88b39dd-1c50-8aff-f85e-27086db9b040@linaro.org>
+ <7630c4aa-b023-55a6-e2aa-37a7538c6b45@squareup.com>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Message-ID: <8aa03f6d-dcf5-73b3-41f8-0d872d9f4f86@linaro.org>
+Date:   Wed, 3 Feb 2021 08:49:40 +0200
 MIME-Version: 1.0
-References: <20210129101012.25180-1-michael.kao@mediatek.com> <20210129101012.25180-2-michael.kao@mediatek.com>
-In-Reply-To: <20210129101012.25180-2-michael.kao@mediatek.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 3 Feb 2021 14:27:08 +0800
-Message-ID: <CAJMQK-iYYGQ3N08PnkDzwSOc22ydEeekp_e1bXrm9Eas9xJQrA@mail.gmail.com>
-Subject: Re: [v6,1/3] arm64: dts: mt8183: add thermal zone node
-To:     Michael Kao <michael.kao@mediatek.com>
-Cc:     fan.chen@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        srv_heupstream@mediatek.com,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <7630c4aa-b023-55a6-e2aa-37a7538c6b45@squareup.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 6:10 PM Michael Kao <michael.kao@mediatek.com> wrote:
->
-> From: "michael.kao" <michael.kao@mediatek.com>
->
-> Add thermal zone node to Mediatek MT8183 dts file.
->
-> Evaluate the thermal zone every 500ms while not cooling
-> and every 100ms when passive cooling is performed.
->
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 84 ++++++++++++++++++++++++
->  1 file changed, 84 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index 5b782a4769e7..0aa31d338fb0 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -657,6 +657,87 @@
->                         status = "disabled";
->                 };
->
-> +               thermal: thermal@1100b000 {
-> +                       #thermal-sensor-cells = <1>;
-> +                       compatible = "mediatek,mt8183-thermal";
-> +                       reg = <0 0x1100b000 0 0x1000>;
-> +                       clocks = <&infracfg CLK_INFRA_THERM>,
-> +                                <&infracfg CLK_INFRA_AUXADC>;
-> +                       clock-names = "therm", "auxadc";
-> +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
-> +                       interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
-> +                       mediatek,auxadc = <&auxadc>;
-> +                       mediatek,apmixedsys = <&apmixedsys>;
-> +                       nvmem-cells = <&thermal_calibration>;
-> +                       nvmem-cell-names = "calibration-data";
-> +               };
-> +
-> +               thermal-zones {
-> +                       cpu_thermal: cpu_thermal {
-> +                               polling-delay-passive = <100>;
-> +                               polling-delay = <500>;
-> +                               thermal-sensors = <&thermal 0>;
-> +                               sustainable-power = <5000>;
-> +                       };
-> +
-> +                       /* The tzts1 ~ tzts6 don't need to polling */
-> +                       /* The tzts1 ~ tzts6 don't need to thermal throttle */
-> +
-> +                       tzts1: tzts1 {
-> +                               polling-delay-passive = <0>;
-> +                               polling-delay = <0>;
-> +                               thermal-sensors = <&thermal 1>;
-> +                               sustainable-power = <5000>;
-> +                               trips {};
-> +                               cooling-maps {};
-> +                       };
-> +
-> +                       tzts2: tzts2 {
-> +                               polling-delay-passive = <0>;
-> +                               polling-delay = <0>;
-> +                               thermal-sensors = <&thermal 2>;
-> +                               sustainable-power = <5000>;
-> +                               trips {};
-> +                               cooling-maps {};
-> +                       };
-> +
-> +                       tzts3: tzts3 {
-> +                               polling-delay-passive = <0>;
-> +                               polling-delay = <0>;
-> +                               thermal-sensors = <&thermal 3>;
-> +                               sustainable-power = <5000>;
-> +                               trips {};
-> +                               cooling-maps {};
-> +                       };
-> +
-> +                       tzts4: tzts4 {
-> +                               polling-delay-passive = <0>;
-> +                               polling-delay = <0>;
-> +                               thermal-sensors = <&thermal 4>;
-> +                               sustainable-power = <5000>;
-> +                               trips {};
-> +                               cooling-maps {};
-> +                       };
-> +
-> +                       tzts5: tzts5 {
-> +                               polling-delay-passive = <0>;
-> +                               polling-delay = <0>;
-> +                               thermal-sensors = <&thermal 5>;
-> +                               sustainable-power = <5000>;
-> +                               trips {};
-> +                               cooling-maps {};
-> +                       };
-> +
-> +                       tztsABB: tztsABB {
-> +                               polling-delay-passive = <0>;
-> +                               polling-delay = <0>;
-> +                               thermal-sensors = <&thermal 6>;
-> +                               sustainable-power = <5000>;
-> +                               trips {};
-> +                               cooling-maps {};
-> +                       };
-> +               };
-> +
->                 pwm0: pwm@1100e000 {
->                         compatible = "mediatek,mt8183-disp-pwm";
->                         reg = <0 0x1100e000 0 0x1000>;
-> @@ -926,6 +1007,9 @@
->                         reg = <0 0x11f10000 0 0x1000>;
->                         #address-cells = <1>;
->                         #size-cells = <1>;
-> +                       thermal_calibration: calib@180 {
-> +                               reg = <0x180 0xc>;
-> +
-missing };
+Hi Ben,
 
->                         mipi_tx_calibration: calib@190 {
->                                 reg = <0x190 0xc>;
->                         };
-> --
-> 2.18.0
->
+On 2/3/21 02:50, Benjamin Li wrote:
+> On 1/5/21 5:54 AM, Georgi Djakov wrote:
+>> On 1/2/21 13:08, Vincent Knecht wrote:
+>>> Le vendredi 04 décembre 2020 à 15:53 +0800, Jun Nie a écrit :
+>>>> Add driver for the Qualcomm interconnect buses found in MSM8939 based
+>>>> platforms. The topology consists of four NoCs that are controlled by
+>>>> a remote processor that collects the aggregated bandwidth for each
+>>>> master-slave pairs.
+>>>>
+>>>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+>>>
+>>> Shouldn't some rpm ids be changed like they were for msm8916 in the following patch ?
+>>> c497f9322af9 ("interconnect: qcom: msm8916: Remove rpm-ids from non-RPM nodes")
+>>> https://patchwork.kernel.org/project/linux-arm-msm/patch/20201112105140.10092-1-georgi.djakov@linaro.org/
+>>
+>> Maybe they should. I don't have the hardware to try it, but the test will be
+>> to just add the NoC DT nodes, enable the driver and inspect the boot log for
+>> messages like:
+>> [    2.926647] qcom_icc_rpm_smd_send mas X error -6
+>>
+>> Thanks,
+>> Georgi
+> 
+> Hi Vincent & Georgi,
+> 
+> Thanks, I ran your suggestion on an MSM8939 board (with an additional
+> change to print slave IDs as well). Results:
+> 
+> [    1.901376] qcom_icc_rpm_smd_send slv 24 error -6
+> [    2.005977] qcom_icc_rpm_smd_send mas 20 error -6
+> [    2.010250] qcom_icc_rpm_smd_send slv 20 error -6
+> [    2.014684] qcom_icc_rpm_smd_send slv 106 error -6
+> [    2.019338] qcom_icc_rpm_smd_send slv 107 error -6
+> [    2.024615] qcom_icc_rpm_smd_send slv 29 error -6
+> [    2.028782] qcom_icc_rpm_smd_send mas 3 error -6
+> [    2.034657] qcom_icc_rpm_smd_send mas 100 error -6
+> (and there's another slv 131 that's hidden by the mas 100 failure)
+> 
+> Jun, I'll send you the patch I tested with to silence all these errors,
+> if you want to just squash that into the next version of your patchset.
+
+Thank you for doing this! Please send a follow-up patch as i already
+queued Jun's patches.
+
+Thanks,
+Georgi
