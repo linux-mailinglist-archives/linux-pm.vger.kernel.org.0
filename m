@@ -2,148 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A16830D34A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 07:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE58E30D35E
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Feb 2021 07:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbhBCGE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Feb 2021 01:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
+        id S230193AbhBCG2Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Feb 2021 01:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbhBCGE6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 01:04:58 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB0CC0613D6
-        for <linux-pm@vger.kernel.org>; Tue,  2 Feb 2021 22:04:18 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id 8so8510615plc.10
-        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 22:04:18 -0800 (PST)
+        with ESMTP id S230527AbhBCG2P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Feb 2021 01:28:15 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A87C06174A
+        for <linux-pm@vger.kernel.org>; Tue,  2 Feb 2021 22:27:34 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id g9so3270880ilc.3
+        for <linux-pm@vger.kernel.org>; Tue, 02 Feb 2021 22:27:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=20vLb8nYoRvjkPixtWI9JyTtznsxFpVmJabeCI3aLrY=;
-        b=zGGMz/uCsy0DOqmB03VshMAkT5rniOOZV3bCV0tOGZi/hHQ9cjyCqqwzX9DuRBEf4t
-         t8bFIx/1iFpir/3PucbPSQPzBoBje5cXnHmFttoARVScRt6Ifk0qdvFOFirf0DCnyjHT
-         3xw2XT7YtZ8kkho+WAk1TDgSY4ugVW5QSMheAiTEZCmi5fnS9EU/DHz5lyv1RpVTS9kO
-         RjURqEtHyOvoaAgkcAq1uEhuYUGO99s8tnvqW/7YPYbUXlvVyYBWF7WpLIupc2r8RniM
-         DFv8DAK6Una8oUMAIicu+rNxya7V4tz/08nW5tNd0cgE5ndlinOMP/SDh9q1f/i7Z2Tp
-         +vhA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X5H7u6zfULjhTslVinp72inAV8tftlmzyLj44kPZOIo=;
+        b=ATr9kJuhoM7hsEPMLnjZO+qm6UV1LVj8rzqxjUU8jx4jPJAuLYrR7/ZJvq/6fqdSZQ
+         YKZmkGo8OmonC93l2P0UjhAlLyQpvI2y4QXQZzaehVss6Kyw5UiKDYw4hb2oGnyYq+ja
+         E5b+ocFQF8WGclyVsu0U5ahnR/jWsjkBBHlbM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=20vLb8nYoRvjkPixtWI9JyTtznsxFpVmJabeCI3aLrY=;
-        b=pFHCfebaGTvTNoaYKVEJtIaBYnblAcEKyCKiWr1t4OvC9/Qr2CrgjY2YsWHthQxKmH
-         rTu/JYNQoaT7m1VpUVmMg0kqgAGaI5jBo0aIjs9AyMQsaU5AIRAXT6xlhXEM0f0Yx+Kf
-         B3Wg+Tvpg0AX6JGFVoGWMR2a6nqZ3goxCBqF+LuzI8mD3hbPkUkyHw86o0fEWcsjOc5K
-         F9mgcNDDPcE2XN5w3dRGNOthls/c3JbfyDJvaxGyl5NmHzyVGnlOuYL+ohOorltB16Ep
-         K4+0OeTn3eLjKR3WY7Pb+1iypdiO6YCq39kEpWLqlsTLyxKj912uoW234dGcf3bptKDp
-         jOIw==
-X-Gm-Message-State: AOAM531kKi6aAxJLeAjvuJnGHJfzGf3S+2Tt489Yzp17tu6Jx+cmpw8r
-        BsISpDNYOo7u205Yeirm0QugTw==
-X-Google-Smtp-Source: ABdhPJxtrX8twjMyPQUKFe6UCeOxc2rSBdHhhqxdLHRiGlFr4M2VYBRQsjmgmKxijcLOYNEVoka3dw==
-X-Received: by 2002:a17:90b:17c7:: with SMTP id me7mr1583302pjb.205.1612332257550;
-        Tue, 02 Feb 2021 22:04:17 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id f7sm770871pjh.45.2021.02.02.22.04.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Feb 2021 22:04:16 -0800 (PST)
-Date:   Wed, 3 Feb 2021 11:34:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jon Grimm <Jon.Grimm@amd.com>,
-        Nathan Fontenot <Nathan.Fontenot@amd.com>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Pu Wen <puwen@hygon.cn>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Michael Larabel <Michael@phoronix.com>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] x86,sched: On AMD EPYC set freq_max = max_boost
- in schedutil invariant formula
-Message-ID: <20210203060414.hexqlimjol3tdtvq@vireshk-i7>
-References: <20210122204038.3238-1-ggherdovich@suse.cz>
- <20210122204038.3238-2-ggherdovich@suse.cz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X5H7u6zfULjhTslVinp72inAV8tftlmzyLj44kPZOIo=;
+        b=JAU6DDa4yLpuC9hxnRR/uSUNXCGh59oh4MyvySURekA+8M+wxdoHBuObdKTRYr4/G/
+         sNFBgVpOkk4q34PhakrA7rtrHjbljwQyzPGkYS0LCDNrm2RRix07GemgaLeulXFxkMIa
+         Dq2/vkeH/zDC6JDVCZJlFvzg8SOgVMmQGewddkZAT1IAyMv5WcS64ewVtdg8SEklq7YL
+         mrsIoeLZxHzl6vTnBpNiUG6V1MrLeVyUqW79/WNaiMOno7ccS9UVUqVq7HoKsvf6pux0
+         EWJ3Dcram+AfOB5J3tks5ivbTS7zTCCde2y/OYWd6A3L38n2W66uC1Ge63rSRA/xNI81
+         hwEw==
+X-Gm-Message-State: AOAM530jVJ/64nr+V5v015E0AJhW6hQVOJeqhZ1UvOApxDOGfr1Jdz/8
+        OD229aV/vZFCqA8IBkLaZf1Dd6ZE3K0Kvu5XTdXr1A==
+X-Google-Smtp-Source: ABdhPJxejwYn2puVey+RwiCn1hqYG5601tBESzbm/PelZLqN5flyaRACJ3sbmOAAzVTl66bgVRKcsUxC399ATAVUfXY=
+X-Received: by 2002:a92:cc4d:: with SMTP id t13mr370408ilq.150.1612333654249;
+ Tue, 02 Feb 2021 22:27:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210122204038.3238-2-ggherdovich@suse.cz>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20210129101012.25180-1-michael.kao@mediatek.com> <20210129101012.25180-2-michael.kao@mediatek.com>
+In-Reply-To: <20210129101012.25180-2-michael.kao@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 3 Feb 2021 14:27:08 +0800
+Message-ID: <CAJMQK-iYYGQ3N08PnkDzwSOc22ydEeekp_e1bXrm9Eas9xJQrA@mail.gmail.com>
+Subject: Re: [v6,1/3] arm64: dts: mt8183: add thermal zone node
+To:     Michael Kao <michael.kao@mediatek.com>
+Cc:     fan.chen@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        srv_heupstream@mediatek.com,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I am sorry but I wasn't able to get the full picture (not your fault,
-it is me), but ...
-
-On 22-01-21, 21:40, Giovanni Gherdovich wrote:
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index d0a3525ce27f..b96677f6b57e 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -2721,6 +2721,9 @@ int cpufreq_boost_enabled(void)
->  }
->  EXPORT_SYMBOL_GPL(cpufreq_boost_enabled);
->  
-> +DEFINE_STATIC_KEY_FALSE(cpufreq_amd_max_boost);
-> +EXPORT_SYMBOL_GPL(cpufreq_amd_max_boost);
+On Fri, Jan 29, 2021 at 6:10 PM Michael Kao <michael.kao@mediatek.com> wrote:
+>
+> From: "michael.kao" <michael.kao@mediatek.com>
+>
+> Add thermal zone node to Mediatek MT8183 dts file.
+>
+> Evaluate the thermal zone every 500ms while not cooling
+> and every 100ms when passive cooling is performed.
+>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 84 ++++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 5b782a4769e7..0aa31d338fb0 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -657,6 +657,87 @@
+>                         status = "disabled";
+>                 };
+>
+> +               thermal: thermal@1100b000 {
+> +                       #thermal-sensor-cells = <1>;
+> +                       compatible = "mediatek,mt8183-thermal";
+> +                       reg = <0 0x1100b000 0 0x1000>;
+> +                       clocks = <&infracfg CLK_INFRA_THERM>,
+> +                                <&infracfg CLK_INFRA_AUXADC>;
+> +                       clock-names = "therm", "auxadc";
+> +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
+> +                       interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
+> +                       mediatek,auxadc = <&auxadc>;
+> +                       mediatek,apmixedsys = <&apmixedsys>;
+> +                       nvmem-cells = <&thermal_calibration>;
+> +                       nvmem-cell-names = "calibration-data";
+> +               };
 > +
->  /*********************************************************************
->   *               REGISTER / UNREGISTER CPUFREQ DRIVER                *
->   *********************************************************************/
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 9c8b7437b6cd..341cac76d254 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -40,9 +40,14 @@ enum cpufreq_table_sorting {
->  	CPUFREQ_TABLE_SORTED_DESCENDING
->  };
->  
-> +DECLARE_STATIC_KEY_FALSE(cpufreq_amd_max_boost);
+> +               thermal-zones {
+> +                       cpu_thermal: cpu_thermal {
+> +                               polling-delay-passive = <100>;
+> +                               polling-delay = <500>;
+> +                               thermal-sensors = <&thermal 0>;
+> +                               sustainable-power = <5000>;
+> +                       };
 > +
-> +#define cpufreq_driver_has_max_boost() static_branch_unlikely(&cpufreq_amd_max_boost)
+> +                       /* The tzts1 ~ tzts6 don't need to polling */
+> +                       /* The tzts1 ~ tzts6 don't need to thermal throttle */
 > +
-
-I am not happy with AMD specific code/changes in common parts..
-
->  struct cpufreq_cpuinfo {
->  	unsigned int		max_freq;
->  	unsigned int		min_freq;
-> +	unsigned int		max_boost;
->  
->  	/* in 10^(-9) s = nanoseconds */
->  	unsigned int		transition_latency;
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 6931f0cdeb80..541f3db3f576 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -159,8 +159,12 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
->  				  unsigned long util, unsigned long max)
->  {
->  	struct cpufreq_policy *policy = sg_policy->policy;
-> -	unsigned int freq = arch_scale_freq_invariant() ?
-> -				policy->cpuinfo.max_freq : policy->cur;
-> +	unsigned int freq, max_freq;
+> +                       tzts1: tzts1 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 1>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
 > +
-> +	max_freq = cpufreq_driver_has_max_boost() ?
-> +			policy->cpuinfo.max_boost : policy->cpuinfo.max_freq;
-
-Also, can't we update max_freq itself from the cpufreq driver? What
-troubles will it cost ?
-
+> +                       tzts2: tzts2 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 2>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
 > +
-> +	freq = arch_scale_freq_invariant() ? max_freq : policy->cur;
->  
->  	freq = map_util_freq(util, freq, max);
->  
-> -- 
-> 2.26.2
+> +                       tzts3: tzts3 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 3>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tzts4: tzts4 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 4>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tzts5: tzts5 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 5>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+> +                       tztsABB: tztsABB {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 6>;
+> +                               sustainable-power = <5000>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +               };
+> +
+>                 pwm0: pwm@1100e000 {
+>                         compatible = "mediatek,mt8183-disp-pwm";
+>                         reg = <0 0x1100e000 0 0x1000>;
+> @@ -926,6 +1007,9 @@
+>                         reg = <0 0x11f10000 0 0x1000>;
+>                         #address-cells = <1>;
+>                         #size-cells = <1>;
+> +                       thermal_calibration: calib@180 {
+> +                               reg = <0x180 0xc>;
+> +
+missing };
 
--- 
-viresh
+>                         mipi_tx_calibration: calib@190 {
+>                                 reg = <0x190 0xc>;
+>                         };
+> --
+> 2.18.0
+>
