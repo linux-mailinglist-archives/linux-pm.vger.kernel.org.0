@@ -2,146 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEE130ED96
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 08:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B14730EE18
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 09:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbhBDHl3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 02:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S234921AbhBDINJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 03:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234748AbhBDHl1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 02:41:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5193EC061573
-        for <linux-pm@vger.kernel.org>; Wed,  3 Feb 2021 23:40:47 -0800 (PST)
-Date:   Thu, 04 Feb 2021 07:40:45 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1612424445;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hrS5oia4ethNl2nxGmHWQSOKeZBtHqrIzOhnekH39IE=;
-        b=MSNcSWn0yL6uQ3t+Rua/jM0LG0/KZLbteg08+7fyNNZNC16hi9FV/uPuWePAxGARNRQ96i
-        HgKa7u3lelYTrtCEvg/P9kMaPoOcPnmpLT295v4f94oqn8oCGOr8hJbmX47d0jRdcPuQQN
-        Im+Whn+MecoM0pe01QHOhYTPT27c6vKd0KM/iqpTKeXZkj6w+8M+n6dp052r7sdIdDRiH2
-        +ti+nWhpXSz3gpP6sqwzRbxrk2uV1TGW9Dk9TdRbQdUYV2Zs6Cf64nSI28SayAufUcVr0N
-        PSLi1dG57hkLDSunrkNMBommJMVVGewdj+jgJ5mPVH49Ci8vRgUzjvnRlaPgqw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1612424445;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hrS5oia4ethNl2nxGmHWQSOKeZBtHqrIzOhnekH39IE=;
-        b=caqwKte7B/d0uKAbHV+aj6CjBRWclRaRjd2jGI5J/48lLH9vK+6yrzZd0qPDOQcHIXYsQv
-        JWJQZ7qIAEEMnuBg==
-From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/core: Make cooling device state
- change private
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Zhang Rui <rui.zhang@intel.com>, amitk@kernel.org
-In-Reply-To: <20210118173824.9970-1-daniel.lezcano@linaro.org>
-References: <20210118173824.9970-1-daniel.lezcano@linaro.org>
+        with ESMTP id S234314AbhBDINH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 03:13:07 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A1BC061573
+        for <linux-pm@vger.kernel.org>; Thu,  4 Feb 2021 00:12:27 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id p15so1766540ilq.8
+        for <linux-pm@vger.kernel.org>; Thu, 04 Feb 2021 00:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qx0Orp2D7dKzIfXughhW29/GNQy6bVJN7VUDID0upIw=;
+        b=mK1+xAQ57OW3J+YyKJ2vxHMqrrYC4PwdNXP08DPqwEsqhYxk8DVvE+M/ld+hmk3ndi
+         yN1ZVKl7fF9k1gOMNnhBGMy7FWqX0OB+DjiOdWsRVOOpsunHmP7y2K65xWlqBnI3O6Ab
+         tWOKYc0/gsl4MPQ/hCUThugfrR2w9gPYH23BY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qx0Orp2D7dKzIfXughhW29/GNQy6bVJN7VUDID0upIw=;
+        b=TToHEluHHyc8mt81yOdUISgV7dZv2RP5Hor9O4lhTVXG1WMj+kVTExDvBDtbce9l2z
+         ytMsAuk611a2eOWYY/GHO8tYPk2zMlJi95OgI9tRmkLRFMfnnpYio+xJY33Cs3Ivix7e
+         bihdhli7gs89jaV1Qi9+uPsdWzZU2n8BGZK96t7oQOAMgdJzrYI/fkStnuc6YcgiMpS8
+         5p7szjXkcQPOuRl5CAIzMmWuqmiGO+9hL+HKmLVjrKL5yfdE7gq/suBkzhfYZASfeW/d
+         vdSBttvszoE8raYW7mHfC93xjhGS9uiJU2BlI4LZFt45Z50Ax/ShTCfW41+O/xlIBf7B
+         ZZMg==
+X-Gm-Message-State: AOAM533pDqEn2oOLInpCYWW4OGqviA8oJr4svNCavtrh9ZmChz0cgwHw
+        YQG4hfBLkEXdqMAtfbw2X9b+qFwyctjADlbxhyCKhw==
+X-Google-Smtp-Source: ABdhPJw14nNO+4UCNhjLacUdfSxIIGkS9lR5qAS0Fs8h3ihFqjc65Fu3/rKMEoaPy8iosx/qJ8vE4rb0BxqPKExmHFc=
+X-Received: by 2002:a92:cf08:: with SMTP id c8mr5929433ilo.106.1612426347082;
+ Thu, 04 Feb 2021 00:12:27 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <161242444507.23325.10160721886826811281.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20210203092400.1791884-1-hsinyi@chromium.org> <20210204054133.sb6vymf56u43bpwe@vireshk-i7>
+In-Reply-To: <20210204054133.sb6vymf56u43bpwe@vireshk-i7>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Thu, 4 Feb 2021 16:12:01 +0800
+Message-ID: <CAJMQK-jaYTG_jRB1mfs8c1=NWM2bEAWhUUhjVTfGJ5fCR6dCkQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Add required-opps support to devfreq passive gov
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "MyungJoo Ham )" <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Saravana Kannan <saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/next branch of thermal:
+On Thu, Feb 4, 2021 at 1:41 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 03-02-21, 17:23, Hsin-Yi Wang wrote:
+> > The devfreq passive governor scales the frequency of a "child" device based
+> > on the current frequency of a "parent" device (not parent/child in the
+> > sense of device hierarchy). As of today, the passive governor requires one
+> > of the following to work correctly:
+> > 1. The parent and child device have the same number of frequencies
+> > 2. The child device driver passes a mapping function to translate from
+> >    parent frequency to child frequency.
+> >
+> > When (1) is not true, (2) is the only option right now. But often times,
+> > all that is required is a simple mapping from parent's frequency to child's
+> > frequency.
+> >
+> > Since OPPs already support pointing to other "required-opps", add support
+> > for using that to map from parent device frequency to child device
+> > frequency. That way, every child device driver doesn't have to implement a
+> > separate mapping function anytime (1) isn't true.
+>
+> So you guys aren't interested in dev_pm_opp_set_opp() but just the
+> translation of the required-OPPs ?
+>
+I think this series focuses on required-opps.
 
-Commit-ID:     23ff8529ee207c634ce2e170c353938db7aa98a9
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//23ff8529ee207c634ce2e170c353938db7aa98a9
-Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Mon, 18 Jan 2021 18:38:24 +01:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 19 Jan 2021 22:31:10 +01:00
+> I am fine with most of the stuff and I would like to take it via OPP
+> tree, hope that would be fine ?
+>
+Sounds good to me, thanks.
 
-thermal/core: Make cooling device state change private
-
-The change of the cooling device state should be used by the governor
-or at least by the core code, not by the drivers themselves.
-
-Remove the API usage and move the function declaration to the internal
-headers.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Zhang Rui <rui.zhang@intel.com>
-Link: https://lore.kernel.org/r/20210118173824.9970-1-daniel.lezcano@linaro.org
----
- drivers/hwmon/pwm-fan.c          | 1 -
- drivers/thermal/khadas_mcu_fan.c | 1 -
- drivers/thermal/thermal_core.h   | 2 ++
- include/linux/thermal.h          | 3 ---
- 4 files changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 777439f..c8a1597 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -422,7 +422,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 			return ret;
- 		}
- 		ctx->cdev = cdev;
--		thermal_cdev_update(cdev);
- 	}
- 
- 	return 0;
-diff --git a/drivers/thermal/khadas_mcu_fan.c b/drivers/thermal/khadas_mcu_fan.c
-index 9eadd2d..d35e531 100644
---- a/drivers/thermal/khadas_mcu_fan.c
-+++ b/drivers/thermal/khadas_mcu_fan.c
-@@ -100,7 +100,6 @@ static int khadas_mcu_fan_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	ctx->cdev = cdev;
--	thermal_cdev_update(cdev);
- 
- 	return 0;
- }
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 90f9a80..86b8cef 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -65,6 +65,8 @@ static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
- 		cdev->ops->power2state;
- }
- 
-+void thermal_cdev_update(struct thermal_cooling_device *);
-+
- /**
-  * struct thermal_trip - representation of a point in temperature domain
-  * @np: pointer to struct device_node that this trip point was created from
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 1e68640..6ac7bb1 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -390,7 +390,6 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
- int thermal_zone_get_slope(struct thermal_zone_device *tz);
- int thermal_zone_get_offset(struct thermal_zone_device *tz);
- 
--void thermal_cdev_update(struct thermal_cooling_device *);
- void thermal_notify_framework(struct thermal_zone_device *, int);
- int thermal_zone_device_enable(struct thermal_zone_device *tz);
- int thermal_zone_device_disable(struct thermal_zone_device *tz);
-@@ -437,8 +436,6 @@ static inline int thermal_zone_get_offset(
- 		struct thermal_zone_device *tz)
- { return -ENODEV; }
- 
--static inline void thermal_cdev_update(struct thermal_cooling_device *cdev)
--{ }
- static inline void thermal_notify_framework(struct thermal_zone_device *tz,
- 	int trip)
- { }
+> --
+> viresh
