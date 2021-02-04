@@ -2,158 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B384630ED72
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 08:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D075630ED97
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 08:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbhBDHe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 02:34:58 -0500
-Received: from mga07.intel.com ([134.134.136.100]:39008 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234521AbhBDHe5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 4 Feb 2021 02:34:57 -0500
-IronPort-SDR: SdAGlXHwMNdkvJBaxDgDOXRFlVPAO4Ny0SpcIC6yQfL+YiURjWvwPMDsN1+8W8Cqbydj40DNGr
- 3ZpIUCSRDVLw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="245261638"
-X-IronPort-AV: E=Sophos;i="5.79,400,1602572400"; 
-   d="scan'208";a="245261638"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 23:34:14 -0800
-IronPort-SDR: tuQBFfMGQL7Xgm+mxxMJvT42Elb3QZ331n87q9q6vZQxYBLTXN9Hi3DWTxnZ4oDEl98Q0kEmSd
- piTJvsGWGNeQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,400,1602572400"; 
-   d="scan'208";a="576198674"
-Received: from lkp-server02.sh.intel.com (HELO 8b832f01bb9c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 03 Feb 2021 23:34:12 -0800
-Received: from kbuild by 8b832f01bb9c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l7Z9X-0000pE-Uy; Thu, 04 Feb 2021 07:34:11 +0000
-Date:   Thu, 04 Feb 2021 15:33:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- d0df27d78279aaa73c22e54f0b97d5f3f508f27e
-Message-ID: <601ba352.VfF+oLpzGWFpeVB1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S234748AbhBDHla (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 02:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234751AbhBDHl1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 02:41:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590FBC0613D6
+        for <linux-pm@vger.kernel.org>; Wed,  3 Feb 2021 23:40:47 -0800 (PST)
+Date:   Thu, 04 Feb 2021 07:40:44 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1612424445;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CArLlvBHilk+zsvJN01PGWTU2LdI0ISGbaAOrzgbQ/g=;
+        b=x7uvqlJFhvoP2f5zwKzqofoJ3vvpTqH8QByPqHdNq+1YObNMQd5Ha0Wlqbwt9cCVWuWalZ
+        o+G6cvRJSzTS6TpVNDscECKxe6w0W94b5rfPq8DSY2O6siaaf12GlyHhpnWpk9xb/yM9KH
+        DfVJzbc5mbOKq4LSHDa9LCqr5s8BKi31BTAiKI55gRJBDFUMrEAWVvANGl73vy0qOhXzdy
+        8iTUBGQbKjyuKbY6mSRNxHe5CSHpO0x+It7mgYqf6nOxBTUrwFdJmAtF2eu4HW67LeQAtD
+        oiZj6zbS0BVigIuBxOSaw5sI+tN4FcWP0l8ggYB8YaPzcW84CNMzvZgwRoVCmg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1612424445;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CArLlvBHilk+zsvJN01PGWTU2LdI0ISGbaAOrzgbQ/g=;
+        b=lwykZnvk9rEuyeiEmw60Cnxsy0/+tpz4RLPBnktjEErokCXHnxG3rq3jOHWY1xwIjY0CHW
+        e2c4+g2SXr1SkbCw==
+From:   "thermal-bot for Lukasz Luba" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal: power allocator: fail binding for
+ non-power actor devices
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20210119114126.19480-1-lukasz.luba@arm.com>
+References: <20210119114126.19480-1-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Message-ID: <161242444480.23325.11302648327159355536.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d0df27d78279aaa73c22e54f0b97d5f3f508f27e  Merge branch 'sfi-removal' into bleeding-edge
+The following commit has been merged into the thermal/next branch of thermal:
 
-elapsed time: 723m
+Commit-ID:     7a583405f24bffdd9f696a8e1b2f02c297245f4d
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//7a583405f24bffdd9f696a8e1b2f02c297245f4d
+Author:        Lukasz Luba <lukasz.luba@arm.com>
+AuthorDate:    Tue, 19 Jan 2021 11:41:26 
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Tue, 19 Jan 2021 22:31:10 +01:00
 
-configs tested: 95
-configs skipped: 2
+thermal: power allocator: fail binding for non-power actor devices
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The thermal zone can have cooling devices which are missing power actor
+API. This could be due to missing Energy Model for devfreq or cpufreq
+cooling device. In this case it is safe to fail the binding rather than
+trying to workaround and control the temperature in such thermal zone.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         cm_x300_defconfig
-sh                          urquell_defconfig
-arm                        spear6xx_defconfig
-sh                ecovec24-romimage_defconfig
-c6x                        evmc6472_defconfig
-arc                      axs103_smp_defconfig
-arc                            hsdk_defconfig
-arc                        nsim_700_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                    socrates_defconfig
-sh                          sdk7780_defconfig
-sh                         microdev_defconfig
-arm                          pxa168_defconfig
-arc                          axs103_defconfig
-s390                          debug_defconfig
-mips                         bigsur_defconfig
-arm                          lpd270_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210203
-i386                 randconfig-a005-20210203
-i386                 randconfig-a003-20210203
-i386                 randconfig-a006-20210203
-i386                 randconfig-a002-20210203
-i386                 randconfig-a004-20210203
-x86_64               randconfig-a013-20210202
-x86_64               randconfig-a014-20210202
-x86_64               randconfig-a015-20210202
-x86_64               randconfig-a016-20210202
-x86_64               randconfig-a011-20210202
-x86_64               randconfig-a012-20210202
-i386                 randconfig-a013-20210202
-i386                 randconfig-a016-20210202
-i386                 randconfig-a014-20210202
-i386                 randconfig-a012-20210202
-i386                 randconfig-a015-20210202
-i386                 randconfig-a011-20210202
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20210202
-x86_64               randconfig-a001-20210202
-x86_64               randconfig-a005-20210202
-x86_64               randconfig-a002-20210202
-x86_64               randconfig-a004-20210202
-x86_64               randconfig-a003-20210202
-
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20210119114126.19480-1-lukasz.luba@arm.com
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/thermal/gov_power_allocator.c | 35 +++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index f8c3d1e..92acae5 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -590,13 +590,42 @@ static void allow_maximum_power(struct thermal_zone_device *tz)
+ }
+ 
+ /**
++ * check_power_actors() - Check all cooling devices and warn when they are
++ *			not power actors
++ * @tz:		thermal zone to operate on
++ *
++ * Check all cooling devices in the @tz and warn every time they are missing
++ * power actor API. The warning should help to investigate the issue, which
++ * could be e.g. lack of Energy Model for a given device.
++ *
++ * Return: 0 on success, -EINVAL if any cooling device does not implement
++ * the power actor API.
++ */
++static int check_power_actors(struct thermal_zone_device *tz)
++{
++	struct thermal_instance *instance;
++	int ret = 0;
++
++	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
++		if (!cdev_is_power_actor(instance->cdev)) {
++			dev_warn(&tz->device, "power_allocator: %s is not a power actor\n",
++				 instance->cdev->type);
++			ret = -EINVAL;
++		}
++	}
++
++	return ret;
++}
++
++/**
+  * power_allocator_bind() - bind the power_allocator governor to a thermal zone
+  * @tz:	thermal zone to bind it to
+  *
+  * Initialize the PID controller parameters and bind it to the thermal
+  * zone.
+  *
+- * Return: 0 on success, or -ENOMEM if we ran out of memory.
++ * Return: 0 on success, or -ENOMEM if we ran out of memory, or -EINVAL
++ * when there are unsupported cooling devices in the @tz.
+  */
+ static int power_allocator_bind(struct thermal_zone_device *tz)
+ {
+@@ -604,6 +633,10 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 	struct power_allocator_params *params;
+ 	int control_temp;
+ 
++	ret = check_power_actors(tz);
++	if (ret)
++		return ret;
++
+ 	params = kzalloc(sizeof(*params), GFP_KERNEL);
+ 	if (!params)
+ 		return -ENOMEM;
