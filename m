@@ -2,151 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BA530EE92
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 09:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BC730EF16
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 09:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbhBDIh7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 03:37:59 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:31558 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbhBDIhz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 03:37:55 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210204083713epoutp029bc060490c781bdbece42b262e6399bb~gfpJgSNPl2511825118epoutp02T
-        for <linux-pm@vger.kernel.org>; Thu,  4 Feb 2021 08:37:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210204083713epoutp029bc060490c781bdbece42b262e6399bb~gfpJgSNPl2511825118epoutp02T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1612427833;
-        bh=8Mj5Ia0Wbe17+4rHiGSNzvrjHnMDGiyeLkAiWH6BRTw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=M6SZbwIeR7uL/EtPSFCbhKeI5s6Sh/AwG+YH6Bg66v6xZn6t+ONw5AsFoI2bYQMVN
-         v29ryDmJisau57GYD513pbosyBP1LWCg8vmr9SmvtLak2B+LABlkHgUEeolKLpakJy
-         9T1dkUBNv6uN4hJ/QlvzfgGtCaWFyoDxBBa6TMj4=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20210204083713epcas1p46f93c98fc47988e6ad260812f420caab~gfpJBNTYm2023220232epcas1p4L;
-        Thu,  4 Feb 2021 08:37:13 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4DWX3W0G4Mz4x9Q2; Thu,  4 Feb
-        2021 08:37:11 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.A6.10463.632BB106; Thu,  4 Feb 2021 17:37:10 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20210204083710epcas1p1f03d346b83d8a1eabed3f81c91bbb447~gfpGaIteO0749807498epcas1p1h;
-        Thu,  4 Feb 2021 08:37:10 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210204083710epsmtrp1ee71e4b75200d74c9f9fe240acb9597d~gfpGYvPjI0843908439epsmtrp1a;
-        Thu,  4 Feb 2021 08:37:10 +0000 (GMT)
-X-AuditID: b6c32a38-f11ff700000028df-38-601bb236080f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        32.B3.08745.632BB106; Thu,  4 Feb 2021 17:37:10 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210204083710epsmtip224b4185165e1d4a2e9d11085dbe36334~gfpGJHRRR2837528375epsmtip2I;
-        Thu,  4 Feb 2021 08:37:10 +0000 (GMT)
-Subject: Re: [PATCH v5 0/3] Add required-opps support to devfreq passive gov
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org,
-        "MyungJoo Ham )" <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <ab504f1d-9024-8ad2-e437-e7c10ad64121@samsung.com>
-Date:   Thu, 4 Feb 2021 17:53:18 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S234772AbhBDI4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 03:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231767AbhBDI4R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 03:56:17 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B42C061573;
+        Thu,  4 Feb 2021 00:55:37 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id y17so1835135ili.12;
+        Thu, 04 Feb 2021 00:55:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wgqtCgxTyEkoatPNuk1/d0sbXAfUIl1+10KCCoubueE=;
+        b=jCSq/9Hh63zcQprobHHi7fqAMnr1T2L7KH/Q67a+uu2UEN7CgnIVX9A/LLfm03nbg9
+         H1kcCYOYwyB05dsLtHzVaxu3Eu8hTeCsidcToCnq7LqWtlcCu3b4dy+REHvnfFQHMEkv
+         T3QJZLfLx4DHBGXRzSHVJhiXCC4vTsrYG9C2wdGN8hSkoQJIZgTUyDiSMQjS7Pl9qwnY
+         hulCbu3rHsOdcJxUd71ivdXusLLRfzVnIQbAql6TAqa/gXW8g3DTQqB7PnoAU5hFePA0
+         7dc/unNnpjdRZcKVXxACKnwAXq0U82J0rfR8QoHAp8pqGL0HRnb0ebxTsYnIoo1AyJdr
+         5lcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wgqtCgxTyEkoatPNuk1/d0sbXAfUIl1+10KCCoubueE=;
+        b=AzKIHMIQRHMr7kbTx5pBLTFKJTnvTcEAsrRzKIGGB23c43ftUZt8qOVPP5p+d1CuzI
+         VLuEQnOlQMl88fEogyKTMv8G1pU17exlg1139MnX/IcEA8N5kDPAX1UdM4bAaNP/ze4U
+         hK9wWZRpR6eeMSjmFVK97aoYqBtBMRldTszUkrnN5yDpHGx2TbIDH845h+d7MMQNsobm
+         apXpH0HJtrDeNCZwc0gay5p62htAImfyBqF1rKhePHUfFIxe9rZae3qX7zyz5FBclAdl
+         QLNcqGtAmi7LzkGafga5S4Xzhv37+/IOwpdcAe1MMT1ebpfORWZ3H6YDS4lmRVb+HW+X
+         4ynA==
+X-Gm-Message-State: AOAM530HcKqt4a+zVwg9Arpn1+H7xPFgbbbQmIQcVSFvwTe+PVRJb/YE
+        STSIR3MSwwiK6+gchO6h2NbzMxzGvq6Aqro8WpKAKEgDuYM=
+X-Google-Smtp-Source: ABdhPJz9k6ybKd/Iiv1NxWPmTbfh043bu1P7WPQnmsZo7oVbMtqG2ILSVjiEDDVCGcHmpd+YXWLg0ahrVxJ9GSai0fA=
+X-Received: by 2002:a05:6e02:20e8:: with SMTP id q8mr5961862ilv.205.1612428936646;
+ Thu, 04 Feb 2021 00:55:36 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210204054133.sb6vymf56u43bpwe@vireshk-i7>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmga7ZJukEg41HrCwmtG5ntjjb9Ibd
-        4vKuOWwWn3uPMFrcblzBZvHmx1kmizOnL7FadB36y2bx79pGFouNXz0sNj84xubA7TG74SKL
-        x4JNpR6bVnWyedy5tofNY8vVdhaPvi2rGD2O39jO5PF5k1wAR1S2TUZqYkpqkUJqXnJ+SmZe
-        uq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QnUoKZYk5pUChgMTiYiV9O5ui/NKS
-        VIWM/OISW6XUgpScAssCveLE3OLSvHS95PxcK0MDAyNToMKE7IzfX5axFBzmqvj6rJGlgXED
-        RxcjB4eEgInEjH1WXYycHEICOxglJq1W6WLkArI/MUq86fjABuF8ZpRo3X6bDaQKpKHh6hlW
-        iMQuRom2J1eZIJz3jBLTnn8DqxIW8JG4eu4/I4gtIhAgsaK3lR2kiFngDJPE4asnwIrYBLQk
-        9r+4AWbzCyhKXP3xGKyBV8BO4vaiZcwgNouAisTqZ3dYQGxRgTCJk9taoGoEJU7OfAIW5xSw
-        lJi6cRETiM0sIC5x68l8KFteYvvbOcwgiyUEznBIrNs1ixHiBxeJc52rWCBsYYlXx7ewQ9hS
-        Ei/726DsaomVJ4+wQTR3MEps2X+BFSJhLLF/6WQmUOgxC2hKrN+lDxFWlNj5ey4jxGI+iXdf
-        e1ghAcwr0dEmBFGiLHH5wV0mCFtSYnF7J9sERqVZSN6ZheSFWUhemIWwbAEjyypGsdSC4tz0
-        1GLDAhPk2N7ECE7DWhY7GOe+/aB3iJGJg/EQowQHs5IIb2KbVIIQb0piZVVqUX58UWlOavEh
-        RlNgAE9klhJNzgdmgrySeENTI2NjYwsTQzNTQ0Mlcd4kgwfxQgLpiSWp2ampBalFMH1MHJxS
-        DUxKTIaKOy/2JgVNuvNogbd6cNd+jz/3u9qW/bgaV2+UZs30nHljlaN4tH+F2mFO6cp+1edV
-        Xn9iN4k9tZRq1yuT6TzNWD85Ju3oRpcKxSVXTwRs2dP4VP3vpavcKTWCk7L0Hdec0M/zWtPQ
-        JjJx4rSNlk4fZxnxBMz04P/28vdTji4DnigLma9zj0ho9zCwLjn0m5Vn84r9i07HC6TvfPp6
-        3c/HLDF6shKpNieEWzWvGCutvRv9SGxJ9/FVBw/dXnle9dymGxPOKExg6G6a5nFg7y0znv2O
-        m6+/EFIxEk2tT1mhyOlpWP5EvP3FxCw9xXXt3CvvP+w7EWv9KzJS2dL44au9mi4pf65vUfrq
-        UqjEUpyRaKjFXFScCAAsJG4uTAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKIsWRmVeSWpSXmKPExsWy7bCSvK7ZJukEg4M3hC0mtG5ntjjb9Ibd
-        4vKuOWwWn3uPMFrcblzBZvHmx1kmizOnL7FadB36y2bx79pGFouNXz0sNj84xubA7TG74SKL
-        x4JNpR6bVnWyedy5tofNY8vVdhaPvi2rGD2O39jO5PF5k1wARxSXTUpqTmZZapG+XQJXxu8v
-        y1gKDnNVfH3WyNLAuIGji5GTQ0LARKLh6hnWLkYuDiGBHYwSW49sYIdISEpMu3iUuYuRA8gW
-        ljh8uBii5i2jxJ6XF8FqhAV8JK6e+88IYosI+Ek8abnDBlLELHCOSaJh3ywWiI69jBJXW6+A
-        VbEJaEnsf3GDDcTmF1CUuPrjMVicV8BO4vaiZcwgNouAisTqZ3dYQGxRgTCJnUseM0HUCEqc
-        nPkELM4pYCkxdeMisDizgLrEn3mXmCFscYlbT+ZDxeUltr+dwzyBUXgWkvZZSFpmIWmZhaRl
-        ASPLKkbJ1ILi3PTcYsMCo7zUcr3ixNzi0rx0veT83E2M4JjU0trBuGfVB71DjEwcjIcYJTiY
-        lUR4E9ukEoR4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpg
-        CmZ2kjd9p5rvvDZ/Pv/SOIZHwlpR2497Js2aJR3DoZuVfnhnaOWFaaUeb5iVzbcr6cZZnLj+
-        lmeL4STO/CW+OmeMDba5G1X+eJ19LyXbXTn/FKv0pKvb7abcL9m+cIflLTa/xo6Vt//Pf/L7
-        xXvTdcpmG7LSu6vW8Nr18rktq9NTObQ+KSf88kkftq+xlk//tuVwV2sLKnctbu2s4HHljpgm
-        eron/N6ZjuTVrZbbxdrKcnW3b1ir9LztzOTpraU51iKCS9IOC36ydgrat3b3Ma9FvyPcxbTD
-        WbanlBTz3po+4a9zQNPcXUFsi/g91FPXLti64dc0R73Y1JQmN3HLBevE2gtPKHxvWhweyKLE
-        UpyRaKjFXFScCACFeSpWOAMAAA==
-X-CMS-MailID: 20210204083710epcas1p1f03d346b83d8a1eabed3f81c91bbb447
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210204054354epcas1p41f04a9cf560fa08e2bbe7a64ddd4784f
-References: <20210203092400.1791884-1-hsinyi@chromium.org>
-        <CGME20210204054354epcas1p41f04a9cf560fa08e2bbe7a64ddd4784f@epcas1p4.samsung.com>
-        <20210204054133.sb6vymf56u43bpwe@vireshk-i7>
+References: <cover.1608963094.git.syednwaris@gmail.com> <da4eaafa84f32375319014f6e9af5c104a6153fd.1608963095.git.syednwaris@gmail.com>
+ <CAHp75VcSsfDKY3w4ufZktXzRB=GiObAV6voPfmeAHcbdwX0uqg@mail.gmail.com>
+In-Reply-To: <CAHp75VcSsfDKY3w4ufZktXzRB=GiObAV6voPfmeAHcbdwX0uqg@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Thu, 4 Feb 2021 14:25:24 +0530
+Message-ID: <CACG_h5otB5hhAX0z9YzN8bT6Nz5WVRUQWbhENF+u8Z3WsCp_8A@mail.gmail.com>
+Subject: Re: [PATCH 2/5] lib/test_bitmap.c: Add for_each_set_clump test cases
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "vilhelm.gray@gmail.com" <vilhelm.gray@gmail.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "rrichter@marvell.com" <rrichter@marvell.com>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "yamada.masahiro@socionext.com" <yamada.masahiro@socionext.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
-
-On 2/4/21 2:41 PM, Viresh Kumar wrote:
-> On 03-02-21, 17:23, Hsin-Yi Wang wrote:
->> The devfreq passive governor scales the frequency of a "child" device based
->> on the current frequency of a "parent" device (not parent/child in the
->> sense of device hierarchy). As of today, the passive governor requires one
->> of the following to work correctly:
->> 1. The parent and child device have the same number of frequencies
->> 2. The child device driver passes a mapping function to translate from
->>    parent frequency to child frequency.
+On Sat, Dec 26, 2020 at 8:15 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+>
+>
+> On Saturday, December 26, 2020, Syed Nayyar Waris <syednwaris@gmail.com> wrote:
 >>
->> When (1) is not true, (2) is the only option right now. But often times,
->> all that is required is a simple mapping from parent's frequency to child's
->> frequency.
->>
->> Since OPPs already support pointing to other "required-opps", add support
->> for using that to map from parent device frequency to child device
->> frequency. That way, every child device driver doesn't have to implement a
->> separate mapping function anytime (1) isn't true.
-> 
-> So you guys aren't interested in dev_pm_opp_set_opp() but just the
-> translation of the required-OPPs ?
-> 
-> I am fine with most of the stuff and I would like to take it via OPP
-> tree, hope that would be fine ?
+>> The introduction of the generic for_each_set_clump macro need test
+>> cases to verify the implementation. This patch adds test cases for
+>> scenarios in which clump sizes are 8 bits, 24 bits, 30 bits and 6 bits.
+>> The cases contain situations where clump is getting split at the word
+>> boundary and also when zeroes are present in the start and middle of
+>> bitmap.
+>
+>
+> You have to split it to a separate test under drivers/gpio, because now it has no sense to be like this.
 
-I agree. Take these patches to OPP tree.
+Hi Andy,
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+How do I split it into separate test under drivers/gpio ? I have
+thought of making a test_clump_bits.c file in drivers/gpio.
+But how do I integrate this test file so that tests are executed at
+runtime? Similar to tests in lib/test_bitmap.c ?
+
+I believe I need to make changes in config files so that tests in
+test_clump_bits.c ( in drivers/gpio ) are executed at runtime. Could
+you please provide some steps on how to do that. Thank You !
+
+Regards
+Syed Nayyar Waris
