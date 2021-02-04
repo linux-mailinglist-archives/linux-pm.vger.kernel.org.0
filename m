@@ -2,128 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFDE30ED98
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 08:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEE130ED96
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 08:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbhBDHli (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 02:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
+        id S234328AbhBDHl3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 02:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234750AbhBDHl2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 02:41:28 -0500
+        with ESMTP id S234748AbhBDHl1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 02:41:27 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD2C0613ED
-        for <linux-pm@vger.kernel.org>; Wed,  3 Feb 2021 23:40:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5193EC061573
+        for <linux-pm@vger.kernel.org>; Wed,  3 Feb 2021 23:40:47 -0800 (PST)
 Date:   Thu, 04 Feb 2021 07:40:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1612424446;
+        s=2020; t=1612424445;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1lh6uaHQifMDtHh9mupc8ntP1hfl8K2baZn6QMWvSDE=;
-        b=ualkLkvwC2gXrWNDLdYYLpfvwE2yzKkQsr3OLl2oz4Cq3uqg8d2AJ7KJFhLri4q625p6iW
-        SUYi7PoQtavfE/P9utpwZr4DO9OB3ghr+5g64jDh8pEpmK64Nh9TGXCO1FrlA7j/N4mjs4
-        QlIjPYtB1G7wEhUDJVOdYkRVRG8+rWHUZg91JL+jC8v6PG7ia39oBbCuMtwXAidpS2/e3N
-        7A/OYvxeSvTro+fCcRc6JCaG+qqGVryuX5m+cFg1MHjupQiK78C3UY2/URI0gmo8mJdJtH
-        HxTV+A3dM6yswkJYMjlqZmplomTWwH6amrQ7eIo7bLnAZqAdJSG3Oy2mTM+T1g==
+        bh=hrS5oia4ethNl2nxGmHWQSOKeZBtHqrIzOhnekH39IE=;
+        b=MSNcSWn0yL6uQ3t+Rua/jM0LG0/KZLbteg08+7fyNNZNC16hi9FV/uPuWePAxGARNRQ96i
+        HgKa7u3lelYTrtCEvg/P9kMaPoOcPnmpLT295v4f94oqn8oCGOr8hJbmX47d0jRdcPuQQN
+        Im+Whn+MecoM0pe01QHOhYTPT27c6vKd0KM/iqpTKeXZkj6w+8M+n6dp052r7sdIdDRiH2
+        +ti+nWhpXSz3gpP6sqwzRbxrk2uV1TGW9Dk9TdRbQdUYV2Zs6Cf64nSI28SayAufUcVr0N
+        PSLi1dG57hkLDSunrkNMBommJMVVGewdj+jgJ5mPVH49Ci8vRgUzjvnRlaPgqw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1612424446;
+        s=2020e; t=1612424445;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1lh6uaHQifMDtHh9mupc8ntP1hfl8K2baZn6QMWvSDE=;
-        b=6AfRgGd/R7EM6CVbP4vneM3xZqjM+NxZ9ke1YVuMJV405FGCVJ0pv2HirAwTNvWCPpyV8s
-        v0w3W94jxturMlDg==
-From:   "thermal-bot for Kai-Heng Feng" <tip-bot2@linutronix.de>
+        bh=hrS5oia4ethNl2nxGmHWQSOKeZBtHqrIzOhnekH39IE=;
+        b=caqwKte7B/d0uKAbHV+aj6CjBRWclRaRjd2jGI5J/48lLH9vK+6yrzZd0qPDOQcHIXYsQv
+        JWJQZ7qIAEEMnuBg==
+From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: int340x: Fix unexpected shutdown at
- critical temperature
-Cc:     "Kai-Heng Feng" <kai.heng.feng@canonical.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20201221172345.36976-1-kai.heng.feng@canonical.com>
-References: <20201221172345.36976-1-kai.heng.feng@canonical.com>
+Subject: [thermal: thermal/next] thermal/core: Make cooling device state
+ change private
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Zhang Rui <rui.zhang@intel.com>, amitk@kernel.org
+In-Reply-To: <20210118173824.9970-1-daniel.lezcano@linaro.org>
+References: <20210118173824.9970-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Message-ID: <161242444551.23325.8894385262578414322.tip-bot2@tip-bot2>
+Message-ID: <161242444507.23325.10160721886826811281.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     dd47366aaa9b93ac3d97cb4ee7641d38a28a771e
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
-git//dd47366aaa9b93ac3d97cb4ee7641d38a28a771e
-Author:        Kai-Heng Feng <kai.heng.feng@canonical.com>
-AuthorDate:    Tue, 22 Dec 2020 01:23:43 +08:00
+Commit-ID:     23ff8529ee207c634ce2e170c353938db7aa98a9
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//23ff8529ee207c634ce2e170c353938db7aa98a9
+Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
+AuthorDate:    Mon, 18 Jan 2021 18:38:24 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 19 Jan 2021 22:30:25 +01:00
+CommitterDate: Tue, 19 Jan 2021 22:31:10 +01:00
 
-thermal: int340x: Fix unexpected shutdown at critical temperature
+thermal/core: Make cooling device state change private
 
-We are seeing thermal shutdown on Intel based mobile workstations, the
-shutdown happens during the first trip handle in
-thermal_zone_device_register():
-kernel: thermal thermal_zone15: critical temperature reached (101 C), shuttin=
-g down
+The change of the cooling device state should be used by the governor
+or at least by the core code, not by the drivers themselves.
 
-However, we shouldn't do a thermal shutdown here, since
-1) We may want to use a dedicated daemon, Intel's thermald in this case,
-to handle thermal shutdown.
+Remove the API usage and move the function declaration to the internal
+headers.
 
-2) For ACPI based system, _CRT doesn't mean shutdown unless it's inside
-ThermalZone namespace. ACPI Spec, 11.4.4 _CRT (Critical Temperature):
-"... If this object it present under a device, the device=E2=80=99s driver
-evaluates this object to determine the device=E2=80=99s critical cooling
-temperature trip point. This value may then be used by the device=E2=80=99s
-driver to program an internal device temperature sensor trip point."
-
-So a "critical trip" here merely means we should take a more aggressive
-cooling method.
-
-As int340x device isn't present under ACPI ThermalZone, override the
-default .critical callback to prevent surprising thermal shutdown.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20201221172345.36976-1-kai.heng.feng@canonica=
-l.com
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Zhang Rui <rui.zhang@intel.com>
+Link: https://lore.kernel.org/r/20210118173824.9970-1-daniel.lezcano@linaro.org
 ---
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/hwmon/pwm-fan.c          | 1 -
+ drivers/thermal/khadas_mcu_fan.c | 1 -
+ drivers/thermal/thermal_core.h   | 2 ++
+ include/linux/thermal.h          | 3 ---
+ 4 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/d=
-rivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-index 6e479de..d1248ba 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -146,12 +146,18 @@ static int int340x_thermal_get_trip_hyst(struct thermal=
-_zone_device *zone,
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 777439f..c8a1597 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -422,7 +422,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 			return ret;
+ 		}
+ 		ctx->cdev = cdev;
+-		thermal_cdev_update(cdev);
+ 	}
+ 
+ 	return 0;
+diff --git a/drivers/thermal/khadas_mcu_fan.c b/drivers/thermal/khadas_mcu_fan.c
+index 9eadd2d..d35e531 100644
+--- a/drivers/thermal/khadas_mcu_fan.c
++++ b/drivers/thermal/khadas_mcu_fan.c
+@@ -100,7 +100,6 @@ static int khadas_mcu_fan_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 	ctx->cdev = cdev;
+-	thermal_cdev_update(cdev);
+ 
  	return 0;
  }
-=20
-+static void int340x_thermal_critical(struct thermal_zone_device *zone)
-+{
-+	dev_dbg(&zone->device, "%s: critical temperature reached\n", zone->type);
-+}
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 90f9a80..86b8cef 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -65,6 +65,8 @@ static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
+ 		cdev->ops->power2state;
+ }
+ 
++void thermal_cdev_update(struct thermal_cooling_device *);
 +
- static struct thermal_zone_device_ops int340x_thermal_zone_ops =3D {
- 	.get_temp       =3D int340x_thermal_get_zone_temp,
- 	.get_trip_temp	=3D int340x_thermal_get_trip_temp,
- 	.get_trip_type	=3D int340x_thermal_get_trip_type,
- 	.set_trip_temp	=3D int340x_thermal_set_trip_temp,
- 	.get_trip_hyst =3D  int340x_thermal_get_trip_hyst,
-+	.critical	=3D int340x_thermal_critical,
- };
-=20
- static int int340x_thermal_get_trip_config(acpi_handle handle, char *name,
+ /**
+  * struct thermal_trip - representation of a point in temperature domain
+  * @np: pointer to struct device_node that this trip point was created from
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 1e68640..6ac7bb1 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -390,7 +390,6 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
+ int thermal_zone_get_slope(struct thermal_zone_device *tz);
+ int thermal_zone_get_offset(struct thermal_zone_device *tz);
+ 
+-void thermal_cdev_update(struct thermal_cooling_device *);
+ void thermal_notify_framework(struct thermal_zone_device *, int);
+ int thermal_zone_device_enable(struct thermal_zone_device *tz);
+ int thermal_zone_device_disable(struct thermal_zone_device *tz);
+@@ -437,8 +436,6 @@ static inline int thermal_zone_get_offset(
+ 		struct thermal_zone_device *tz)
+ { return -ENODEV; }
+ 
+-static inline void thermal_cdev_update(struct thermal_cooling_device *cdev)
+-{ }
+ static inline void thermal_notify_framework(struct thermal_zone_device *tz,
+ 	int trip)
+ { }
