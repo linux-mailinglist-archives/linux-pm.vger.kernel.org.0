@@ -2,102 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D54EC30ED99
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 08:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFDE30ED98
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 08:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbhBDHln (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 02:41:43 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:39212 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbhBDHl2 (ORCPT
+        id S234702AbhBDHli (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 02:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234750AbhBDHl2 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 02:41:28 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD2C0613ED
+        for <linux-pm@vger.kernel.org>; Wed,  3 Feb 2021 23:40:48 -0800 (PST)
 Date:   Thu, 04 Feb 2021 07:40:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1612424445;
+        s=2020; t=1612424446;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FmIa/dHwKQ4emIJO7qQeKMzpFiBkoOnsamXI3vGMq2Y=;
-        b=rMNVNvoQqQrUqccNtJ1j+kXdOFffkJ8mSttHxX2B/WbW6VI+/uaDOswbDB4dg5ecQZOFAU
-        M8lZt39OCHeKla5Gz/7Tc341qhUs7cVM63XlnAcZzDP43TrQMzbW4qS+civlDj0bAaLJsY
-        De8ybgNtxRhdgKPrtu7vhHi6SUp2haVeq6Te+AZZKRRIvd2SteRyG1IDkYE9HjQef//3lh
-        h11ziIhdWGX4FCal1SIlYTsYmpJY8awcRIISgFkB77shOx9Lm5++3Yn2nh2xO9P0vXEOXH
-        e/GwJqDvzDVwvFh0odgSDkK9EZ7PzU/gh/GXcWulLPnpOV3IjFYfaSkghnEu+A==
+        bh=1lh6uaHQifMDtHh9mupc8ntP1hfl8K2baZn6QMWvSDE=;
+        b=ualkLkvwC2gXrWNDLdYYLpfvwE2yzKkQsr3OLl2oz4Cq3uqg8d2AJ7KJFhLri4q625p6iW
+        SUYi7PoQtavfE/P9utpwZr4DO9OB3ghr+5g64jDh8pEpmK64Nh9TGXCO1FrlA7j/N4mjs4
+        QlIjPYtB1G7wEhUDJVOdYkRVRG8+rWHUZg91JL+jC8v6PG7ia39oBbCuMtwXAidpS2/e3N
+        7A/OYvxeSvTro+fCcRc6JCaG+qqGVryuX5m+cFg1MHjupQiK78C3UY2/URI0gmo8mJdJtH
+        HxTV+A3dM6yswkJYMjlqZmplomTWwH6amrQ7eIo7bLnAZqAdJSG3Oy2mTM+T1g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1612424445;
+        s=2020e; t=1612424446;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FmIa/dHwKQ4emIJO7qQeKMzpFiBkoOnsamXI3vGMq2Y=;
-        b=MsGOGrimuM3U6DtykHwCXqh8Qa8MQWVt4TmM2cHKWtp+Tmum9hCYjGTkHb3ILTHcnMqz/V
-        B4r3MQqzh96j79Ag==
+        bh=1lh6uaHQifMDtHh9mupc8ntP1hfl8K2baZn6QMWvSDE=;
+        b=6AfRgGd/R7EM6CVbP4vneM3xZqjM+NxZ9ke1YVuMJV405FGCVJ0pv2HirAwTNvWCPpyV8s
+        v0w3W94jxturMlDg==
 From:   "thermal-bot for Kai-Heng Feng" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: intel: pch: Fix unexpected shutdown
- at critical temperature
+Subject: [thermal: thermal/next] thermal: int340x: Fix unexpected shutdown at
+ critical temperature
 Cc:     "Kai-Heng Feng" <kai.heng.feng@canonical.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20201221172345.36976-2-kai.heng.feng@canonical.com>
-References: <20201221172345.36976-2-kai.heng.feng@canonical.com>
+In-Reply-To: <20201221172345.36976-1-kai.heng.feng@canonical.com>
+References: <20201221172345.36976-1-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-Message-ID: <161242444533.23325.16982539612575849138.tip-bot2@tip-bot2>
+Message-ID: <161242444551.23325.8894385262578414322.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     03671968d0bf2db598f7e3aa98f190b76c1bb4ff
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//03671968d0bf2db598f7e3aa98f190b76c1bb4ff
+Commit-ID:     dd47366aaa9b93ac3d97cb4ee7641d38a28a771e
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
+git//dd47366aaa9b93ac3d97cb4ee7641d38a28a771e
 Author:        Kai-Heng Feng <kai.heng.feng@canonical.com>
-AuthorDate:    Tue, 22 Dec 2020 01:23:44 +08:00
+AuthorDate:    Tue, 22 Dec 2020 01:23:43 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Tue, 19 Jan 2021 22:30:25 +01:00
 
-thermal: intel: pch: Fix unexpected shutdown at critical temperature
+thermal: int340x: Fix unexpected shutdown at critical temperature
 
-Like previous patch, the intel_pch_thermal device is not in ACPI
-ThermalZone namespace, so a critical trip doesn't mean shutdown.
+We are seeing thermal shutdown on Intel based mobile workstations, the
+shutdown happens during the first trip handle in
+thermal_zone_device_register():
+kernel: thermal thermal_zone15: critical temperature reached (101 C), shuttin=
+g down
 
-Override the default .critical callback to prevent surprising thermal
-shutdoown.
+However, we shouldn't do a thermal shutdown here, since
+1) We may want to use a dedicated daemon, Intel's thermald in this case,
+to handle thermal shutdown.
+
+2) For ACPI based system, _CRT doesn't mean shutdown unless it's inside
+ThermalZone namespace. ACPI Spec, 11.4.4 _CRT (Critical Temperature):
+"... If this object it present under a device, the device=E2=80=99s driver
+evaluates this object to determine the device=E2=80=99s critical cooling
+temperature trip point. This value may then be used by the device=E2=80=99s
+driver to program an internal device temperature sensor trip point."
+
+So a "critical trip" here merely means we should take a more aggressive
+cooling method.
+
+As int340x device isn't present under ACPI ThermalZone, override the
+default .critical callback to prevent surprising thermal shutdown.
 
 Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20201221172345.36976-2-kai.heng.feng@canonical.com
+Link: https://lore.kernel.org/r/20201221172345.36976-1-kai.heng.feng@canonica=
+l.com
 ---
- drivers/thermal/intel/intel_pch_thermal.c | 6 ++++++
+ drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
-index 41723c6..527c91f 100644
---- a/drivers/thermal/intel/intel_pch_thermal.c
-+++ b/drivers/thermal/intel/intel_pch_thermal.c
-@@ -326,10 +326,16 @@ static int pch_get_trip_temp(struct thermal_zone_device *tzd, int trip, int *tem
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/d=
+rivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+index 6e479de..d1248ba 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -146,12 +146,18 @@ static int int340x_thermal_get_trip_hyst(struct thermal=
+_zone_device *zone,
  	return 0;
  }
- 
-+static void pch_critical(struct thermal_zone_device *tzd)
+=20
++static void int340x_thermal_critical(struct thermal_zone_device *zone)
 +{
-+	dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
++	dev_dbg(&zone->device, "%s: critical temperature reached\n", zone->type);
 +}
 +
- static struct thermal_zone_device_ops tzd_ops = {
- 	.get_temp = pch_thermal_get_temp,
- 	.get_trip_type = pch_get_trip_type,
- 	.get_trip_temp = pch_get_trip_temp,
-+	.critical = pch_critical,
+ static struct thermal_zone_device_ops int340x_thermal_zone_ops =3D {
+ 	.get_temp       =3D int340x_thermal_get_zone_temp,
+ 	.get_trip_temp	=3D int340x_thermal_get_trip_temp,
+ 	.get_trip_type	=3D int340x_thermal_get_trip_type,
+ 	.set_trip_temp	=3D int340x_thermal_set_trip_temp,
+ 	.get_trip_hyst =3D  int340x_thermal_get_trip_hyst,
++	.critical	=3D int340x_thermal_critical,
  };
- 
- enum board_ids {
+=20
+ static int int340x_thermal_get_trip_config(acpi_handle handle, char *name,
