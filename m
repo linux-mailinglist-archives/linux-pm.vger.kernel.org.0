@@ -2,238 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C831630FB69
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 19:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D449B30FB76
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Feb 2021 19:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239033AbhBDS10 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 13:27:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24569 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239069AbhBDS1H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 13:27:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612463133;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1xldkfZkqWfGGk6TArkScHUALBjtnF9wc0SKvfCMMaM=;
-        b=hYUJIAnRZEV3Pmt7xysT2wQ2I4lAwPpo6wq6GCWRpf84wHhzv9YOIQxyjketnWRLJesVMz
-        EQrrI5cJnhQLXGUHDvS+2pUY9vuPYZPUqqHZUObMKhryshrwS2uZfMuHX5KKEG8lY7J9tE
-        v/YGktMhwgqgQpa1RAE+9Idj2jelHC8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-575-NKp8GqQ-MgeipvvcPQBYXA-1; Thu, 04 Feb 2021 13:25:32 -0500
-X-MC-Unique: NKp8GqQ-MgeipvvcPQBYXA-1
-Received: by mail-ej1-f70.google.com with SMTP id yd11so3280327ejb.9
-        for <linux-pm@vger.kernel.org>; Thu, 04 Feb 2021 10:25:31 -0800 (PST)
+        id S238368AbhBDS2e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 13:28:34 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:41761 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238980AbhBDS2I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 13:28:08 -0500
+Received: by mail-oi1-f177.google.com with SMTP id m13so4694120oig.8;
+        Thu, 04 Feb 2021 10:27:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1xldkfZkqWfGGk6TArkScHUALBjtnF9wc0SKvfCMMaM=;
-        b=ErTFKS27+7YbizKLRFh3jTdn9G+gQwDp6J+Qmz+d0rZ/0eqamy32xGBavhK17Tk/mR
-         M0U2OmwSAPQLRSrl1xYTXtmSUMs3sEcZlKZBMC/eWg9UDnRl9vhrj7ftyHk/2cbCWfZw
-         P2DHxCs4VhBykzjT452HF1llhQaYXaDvcsDYme2ypln//dH9ChbifSQOChmmwEQXO1JM
-         gtpaQv53ONgnkeVYLuk8QuO364zou7iL+o5Jxp8XW8veOHdOOdd/2EsQGKK6aVAxUrgm
-         TvrXwm7cd+XFwANjaCIbjcFcaV8T3/+AzhsR0+d3OHP+k0TaoIOjxl0xL1UcX+mbGjKz
-         mpsw==
-X-Gm-Message-State: AOAM532Gx7qhONfOYSqLbFcs5XhjWw2LsgL8ofVXhjTcJBrNDE6wPhtP
-        LTKz70nMeUV88HZlXHkfBNsp1U5zxMtAKLVkfFdi06/AObJamhe7D8qoMY4pfU/1s+GvgZfKvIo
-        Gm2O/VspKWqYgaJZJVnI=
-X-Received: by 2002:a17:906:5ac8:: with SMTP id x8mr371575ejs.347.1612463130796;
-        Thu, 04 Feb 2021 10:25:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw/zCYJ0KGwPPt4Ohj9Wlhj90xFLRGk/jUWth5vtj8+7OUdv41IsVDNVbAFTKPUHKxuBDh1/Q==
-X-Received: by 2002:a17:906:5ac8:: with SMTP id x8mr371565ejs.347.1612463130633;
-        Thu, 04 Feb 2021 10:25:30 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
-        by smtp.gmail.com with ESMTPSA id u17sm2914283edr.0.2021.02.04.10.25.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Feb 2021 10:25:29 -0800 (PST)
-Subject: Re: [PATCH v3 1/5] ACPI: AC: Clean up printing messages
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Joe Perches <joe@perches.com>,
-        Hanjun Guo <guohanjun@huawei.com>
-References: <2367702.B5bJTmGzJm@kreacher> <1991501.dpTHplkurC@kreacher>
- <1961054.9MKZ8ejxOh@kreacher> <15677254.uJehtQVoeh@kreacher>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <754e838c-b3e3-9759-51f2-5e4022f42e91@redhat.com>
-Date:   Thu, 4 Feb 2021 19:25:29 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O++Ni8S6CV3MVdO8ZTSo7Rk4YCUFt3D0XWVU9XGT+a8=;
+        b=OhvX5VCmd9zqE54QVuBZUOXNhvwbNZEc0t3MXEsz79gE1WFCOqzyxWwuAAJwVmx8Cn
+         340nXLrIv4VE8xYm9A6kHjQYyw0Wqu/8rp6R7m2Mw1jP/UBsIyVkuff3IUqGoMu452Sa
+         fDsnmP5UV6ieJCNzvSA1sod5kcRKM/swVKcep898pPIUFj+7Gyz8/53sBpYXk6M5pcGr
+         8APu8YhSqcQkX8yMfXqhfP9hxTX5/1MD7FA/6LZdyA8UXKh+BVQ5BZJV2ZP/x0dWqNbr
+         AI2LRqYDJZfEPw4UfuJJ+NG8hAB4cs7+RvJV2MCEB6rjEXygb2xggSWQ2/TLZGlFma9S
+         fpGA==
+X-Gm-Message-State: AOAM531ab3JkBe5vHq2Ww6Mv899Tkx619ms8TBhstf61v6IylFhsYzWW
+        TpTyHQBFZX/KZCeI7AV3cSqFIx3OT0N4Odkp2us=
+X-Google-Smtp-Source: ABdhPJxkhKYk4oXkJeTKUtjMr66fakUbvZ+6flWoKUE4tBqAvByzPRwDVWs4bapr1CEIe0d2dayBEHB5xmsWwJ+pEuE=
+X-Received: by 2002:aca:308a:: with SMTP id w132mr529264oiw.69.1612463247909;
+ Thu, 04 Feb 2021 10:27:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <15677254.uJehtQVoeh@kreacher>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <bed6bc7e15c3ed398dd61b8f3968049f1f16b1b6.1612244449.git.viresh.kumar@linaro.org>
+In-Reply-To: <bed6bc7e15c3ed398dd61b8f3968049f1f16b1b6.1612244449.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 4 Feb 2021 19:27:16 +0100
+Message-ID: <CAJZ5v0hFFXKnnTdkc3SHoSNPO06pDAWjudvxSjxQ6eOOnuXq_A@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Remove unused flag CPUFREQ_PM_NO_WARN
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Tue, Feb 2, 2021 at 6:42 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> This flag is set by one of the drivers but it isn't used in the code
+> otherwise. Remove the unused flag and update the driver.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-On 2/3/21 7:43 PM, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Replace the ACPI_DEBUG_PRINT() and ACPI_EXCEPTION() instances
-> in ac.c with acpi_handle_debug() and acpi_handle_info() calls,
-> respectively, which among other things causes the excessive log
-> level of the messages previously printed via ACPI_EXCEPTION() to
-> be increased.
-> 
-> Drop the _COMPONENT and ACPI_MODULE_NAME() definitions that are not
-> used any more, drop the no longer needed ACPI_AC_COMPONENT definition
-> from the headers and update the documentation accordingly.
-> 
-> While at it, replace the direct printk() invocation with pr_info(),
-> add a pr_fmt() definition to ac.c and drop the unneeded PREFIX
-> symbol definition from there.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
+Applied as 5.12 material, thanks!
 
 > ---
-> 
-> v2 -> v3: Also add a pr_fmt() definition to ac.c and replace direct
->           printk() with pr_info (no log level change).
-> 
-> v1 -> v2: Changelog update.
-> 
-> ---
->  Documentation/firmware-guide/acpi/debug.rst |    1 -
->  drivers/acpi/ac.c                           |   23 ++++++++++-------------
->  drivers/acpi/sysfs.c                        |    1 -
->  include/acpi/acpi_drivers.h                 |    1 -
->  4 files changed, 10 insertions(+), 16 deletions(-)
-> 
-> Index: linux-pm/Documentation/firmware-guide/acpi/debug.rst
-> ===================================================================
-> --- linux-pm.orig/Documentation/firmware-guide/acpi/debug.rst
-> +++ linux-pm/Documentation/firmware-guide/acpi/debug.rst
-> @@ -52,7 +52,6 @@ shows the supported mask values, current
->      ACPI_CA_DISASSEMBLER            0x00000800
->      ACPI_COMPILER                   0x00001000
->      ACPI_TOOLS                      0x00002000
-> -    ACPI_AC_COMPONENT               0x00020000
->      ACPI_BATTERY_COMPONENT          0x00040000
->      ACPI_BUTTON_COMPONENT           0x00080000
->      ACPI_SBS_COMPONENT              0x00100000
-> Index: linux-pm/drivers/acpi/ac.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/ac.c
-> +++ linux-pm/drivers/acpi/ac.c
-> @@ -6,6 +6,8 @@
->   *  Copyright (C) 2001, 2002 Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>
+> Rebased over:
+>
+> https://lore.kernel.org/lkml/a59bb322b22c247d570b70a8e94067804287623b.1612241683.git.viresh.kumar@linaro.org/
+>
+>  drivers/cpufreq/pmac32-cpufreq.c |  3 +--
+>  include/linux/cpufreq.h          | 13 +++++--------
+>  2 files changed, 6 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
+> index 73621bc11976..4f20c6a9108d 100644
+> --- a/drivers/cpufreq/pmac32-cpufreq.c
+> +++ b/drivers/cpufreq/pmac32-cpufreq.c
+> @@ -439,8 +439,7 @@ static struct cpufreq_driver pmac_cpufreq_driver = {
+>         .init           = pmac_cpufreq_cpu_init,
+>         .suspend        = pmac_cpufreq_suspend,
+>         .resume         = pmac_cpufreq_resume,
+> -       .flags          = CPUFREQ_PM_NO_WARN |
+> -                         CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING,
+> +       .flags          = CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING,
+>         .attr           = cpufreq_generic_attr,
+>         .name           = "powermac",
+>  };
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index c8e40e91fe9b..353969c7acd3 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -398,8 +398,11 @@ struct cpufreq_driver {
+>  /* loops_per_jiffy or other kernel "constants" aren't affected by frequency transitions */
+>  #define CPUFREQ_CONST_LOOPS                    BIT(1)
+>
+> -/* don't warn on suspend/resume speed mismatches */
+> -#define CPUFREQ_PM_NO_WARN                     BIT(2)
+> +/*
+> + * Set by drivers that want the core to automatically register the cpufreq
+> + * driver as a thermal cooling device.
+> + */
+> +#define CPUFREQ_IS_COOLING_DEV                 BIT(2)
+>
+>  /*
+>   * This should be set by platforms having multiple clock-domains, i.e.
+> @@ -431,12 +434,6 @@ struct cpufreq_driver {
 >   */
->  
-> +#define pr_fmt(fmt) "ACPI: AC: " fmt
-> +
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/slab.h>
-> @@ -18,8 +20,6 @@
->  #include <linux/acpi.h>
->  #include <acpi/battery.h>
->  
-> -#define PREFIX "ACPI: "
+>  #define CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING      BIT(6)
+>
+> -/*
+> - * Set by drivers that want the core to automatically register the cpufreq
+> - * driver as a thermal cooling device.
+> - */
+> -#define CPUFREQ_IS_COOLING_DEV                 BIT(7)
 > -
->  #define ACPI_AC_CLASS			"ac_adapter"
->  #define ACPI_AC_DEVICE_NAME		"AC Adapter"
->  #define ACPI_AC_FILE_STATE		"state"
-> @@ -28,9 +28,6 @@
->  #define ACPI_AC_STATUS_ONLINE		0x01
->  #define ACPI_AC_STATUS_UNKNOWN		0xFF
->  
-> -#define _COMPONENT		ACPI_AC_COMPONENT
-> -ACPI_MODULE_NAME("ac");
-> -
->  MODULE_AUTHOR("Paul Diefenbaugh");
->  MODULE_DESCRIPTION("ACPI AC Adapter Driver");
->  MODULE_LICENSE("GPL");
-> @@ -102,8 +99,9 @@ static int acpi_ac_get_state(struct acpi
->  	status = acpi_evaluate_integer(ac->device->handle, "_PSR", NULL,
->  				       &ac->state);
->  	if (ACPI_FAILURE(status)) {
-> -		ACPI_EXCEPTION((AE_INFO, status,
-> -				"Error reading AC Adapter state"));
-> +		acpi_handle_info(ac->device->handle,
-> +				"Error reading AC Adapter state: %s\n",
-> +				acpi_format_exception(status));
->  		ac->state = ACPI_AC_STATUS_UNKNOWN;
->  		return -ENODEV;
->  	}
-> @@ -153,8 +151,8 @@ static void acpi_ac_notify(struct acpi_d
->  
->  	switch (event) {
->  	default:
-> -		ACPI_DEBUG_PRINT((ACPI_DB_INFO,
-> -				  "Unsupported event [0x%x]\n", event));
-> +		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
-> +				  event);
->  		fallthrough;
->  	case ACPI_AC_NOTIFY_STATUS:
->  	case ACPI_NOTIFY_BUS_CHECK:
-> @@ -278,9 +276,8 @@ static int acpi_ac_add(struct acpi_devic
->  		goto end;
->  	}
->  
-> -	printk(KERN_INFO PREFIX "%s [%s] (%s)\n",
-> -	       acpi_device_name(device), acpi_device_bid(device),
-> -	       ac->state ? "on-line" : "off-line");
-> +	pr_info("%s [%s] (%s)\n", acpi_device_name(device),
-> +		acpi_device_bid(device), ac->state ? "on-line" : "off-line");
->  
->  	ac->battery_nb.notifier_call = acpi_ac_battery_notify;
->  	register_acpi_notifier(&ac->battery_nb);
-> @@ -348,7 +345,7 @@ static int __init acpi_ac_init(void)
->  		for (i = 0; i < ARRAY_SIZE(acpi_ac_blacklist); i++)
->  			if (acpi_dev_present(acpi_ac_blacklist[i].hid, "1",
->  					     acpi_ac_blacklist[i].hrv)) {
-> -				pr_info(PREFIX "AC: found native %s PMIC, not loading\n",
-> +				pr_info("found native %s PMIC, not loading\n",
->  					acpi_ac_blacklist[i].hid);
->  				return -ENODEV;
->  			}
-> Index: linux-pm/drivers/acpi/sysfs.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/sysfs.c
-> +++ linux-pm/drivers/acpi/sysfs.c
-> @@ -52,7 +52,6 @@ static const struct acpi_dlayer acpi_deb
->  	ACPI_DEBUG_INIT(ACPI_COMPILER),
->  	ACPI_DEBUG_INIT(ACPI_TOOLS),
->  
-> -	ACPI_DEBUG_INIT(ACPI_AC_COMPONENT),
->  	ACPI_DEBUG_INIT(ACPI_BATTERY_COMPONENT),
->  	ACPI_DEBUG_INIT(ACPI_BUTTON_COMPONENT),
->  	ACPI_DEBUG_INIT(ACPI_SBS_COMPONENT),
-> Index: linux-pm/include/acpi/acpi_drivers.h
-> ===================================================================
-> --- linux-pm.orig/include/acpi/acpi_drivers.h
-> +++ linux-pm/include/acpi/acpi_drivers.h
-> @@ -15,7 +15,6 @@
->   * Please update drivers/acpi/debug.c and Documentation/firmware-guide/acpi/debug.rst
->   * if you add to this list.
->   */
-> -#define ACPI_AC_COMPONENT		0x00020000
->  #define ACPI_BATTERY_COMPONENT		0x00040000
->  #define ACPI_BUTTON_COMPONENT		0x00080000
->  #define ACPI_SBS_COMPONENT		0x00100000
-> 
-> 
-> 
-
+>  int cpufreq_register_driver(struct cpufreq_driver *driver_data);
+>  int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
+>
+> --
+> 2.25.0.rc1.19.g042ed3e048af
+>
