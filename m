@@ -2,64 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 664E73111B1
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 21:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B513111F7
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 21:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbhBESRh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 13:17:37 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:55697 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S233183AbhBEPTk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:19:40 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=JFt3cjfr2gf0oZFNAIkKMxcz4dJD/YGkc0fGvOoSd3DydZ6om7JzTU837vBFVq1NIPU0D2QA5BLHZXE1+7cBmkJlbZjYCUFmJkkaBVbP88e4KHnDVRcctmBLIZ1pL5VerRqjcciKkL4DSuyXFJlGk3Z0CRoskvUoLBM7ZhpxLeqIU2BKsbHQXJZ1h2qHQhaHiD+VrGx+bGKjZzbhmRvwLDQIByq6jRcjht5MzYCcxpzOzp/k+Dev9dQj7B
-        WId68CyP4XonlI4wIMRo1xiGfUtKZ+P3cZo2ejPWBjr+ynq3dK3OxibTTEKfmOc5W1zmJFMAPQ+ZKxsa3M4d1PiYxHmg==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Mon, 1 Feb 2021 08:50:14 +0000
-Message-ID: <D474448D-A325-42CC-A881-8334C6C84BA7@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Mon, 1 Feb 2021 08:50:13 -0000
+        id S229864AbhBES1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 13:27:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34770 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233706AbhBES1S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Feb 2021 13:27:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EC17364FBA;
+        Fri,  5 Feb 2021 20:09:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612555742;
+        bh=beiP1QVTcTtnz/28je3Db2hFbKVGRBpJgYPrzRQ3FJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=HiHatxkiTqo19TZ7agC6KDqUsgXV67Li8ly2L0wqDAIgO/TnRxAG2RsEVs5oqP6c+
+         UaOzHqagc4QJeLih2kXFAEt5d7GhSEhvjlhL3gH10/QCgaTVU1AQai8Mn1NFjTiezP
+         i1wgd9CTA84LgzCyhkwn5/kx2hr1+O0JvExsTupHij3anIzI/f4gsgHmz14r0nXCYL
+         l0+YcKZuoB+EBsv5ijeTNTCycIDJJ3bqKmtNaMYKKxf/lWGat0JwJxc2r6hSYJ80aS
+         IrqB6hXBSMagUQ342uqUdCGIfPNEt/aJJPrbGL+JfG1RPWW1Icry7tJhu+BlO9Wj7x
+         cGUyryDyXIy7Q==
+Date:   Fri, 5 Feb 2021 14:08:59 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Yicong Yang <yangyicong@hisilicon.com>, gregkh@linuxfoundation.org,
+        jdelvare@suse.com, giometti@enneenne.com, abbotti@mev.co.uk,
+        hsweeten@visionengravers.com, kw@linux.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
+        michal.lkml@markovi.net, prime.zeng@huawei.com,
+        linuxarm@openeuler.org
+Subject: Re: [PATCH 2/4] hwmon: Use subdir-ccflags-* to inherit debug flag
+Message-ID: <20210205200859.GA193526@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210205182832.GA186268@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Fri, Feb 05, 2021 at 10:28:32AM -0800, Guenter Roeck wrote:
+> On Fri, Feb 05, 2021 at 05:44:13PM +0800, Yicong Yang wrote:
+> > From: Junhao He <hejunhao2@hisilicon.com>
+> > 
+> > Use subdir-ccflags-* instead of ccflags-* to inherit the debug
+> > settings from Kconfig when traversing subdirectories.
+> > 
+> > Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
+> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> What problem does this fix ? Maybe I am missing it, but I don't see
+> DEBUG being used in a subdirectory of drivers/hwmon.
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+It's my fault for raising this question [1].  Yicong fixed a real
+problem in drivers/pci, where we are currently using
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+  ccflags-$(CONFIG_PCI_DEBUG) := -DDEBUG
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
+so CONFIG_PCI_DEBUG=y turns on debug in drivers/pci, but not in the
+subdirectories.  That's surprising to users.
 
-Regards,
-Ms. Reem.
+So my question was whether we should default to using subdir-ccflags
+for -DDEBUG in general, and only use ccflags when we have
+subdirectories that have their own debug options, e.g.,
 
+  drivers/i2c/Makefile:ccflags-$(CONFIG_I2C_DEBUG_CORE) := -DDEBUG
+  drivers/i2c/algos/Makefile:ccflags-$(CONFIG_I2C_DEBUG_ALGO) := -DDEBUG
+  drivers/i2c/busses/Makefile:ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
+  drivers/i2c/muxes/Makefile:ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
+
+I mentioned drivers/hwmon along with a few others that have
+subdirectories, do not have per-subdirectory debug options, and use
+ccflags.  I didn't try to determine whether those subdirectories
+currently use -DDEBUG.
+
+In the case of drivers/hwmon, several drivers do use pr_debug(),
+and CONFIG_HWMON_DEBUG_CHIP=y turns those on.  But if somebody
+were to add pr_debug() to drivers/hwmon/occ/common.c, for example,
+CONFIG_HWMON_DEBUG_CHIP=y would *not* turn it on.  That sounds
+surprising to me, but if that's what you intend, that's totally fine.
+
+[1] https://lore.kernel.org/r/20210204161048.GA68790@bjorn-Precision-5520
+
+> > ---
+> >  drivers/hwmon/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> > index 09a86c5..1c0c089 100644
+> > --- a/drivers/hwmon/Makefile
+> > +++ b/drivers/hwmon/Makefile
+> > @@ -201,5 +201,5 @@ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
+> >  obj-$(CONFIG_SENSORS_OCC)	+= occ/
+> >  obj-$(CONFIG_PMBUS)		+= pmbus/
+> >  
+> > -ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+> > +subdir-ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+> >  
+> > -- 
+> > 2.8.1
+> > 
