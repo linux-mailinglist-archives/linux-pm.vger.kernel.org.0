@@ -2,95 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C66310317
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 04:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C0D31034E
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 04:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhBEDET (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 22:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S230150AbhBEDKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 22:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbhBEDES (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 22:04:18 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8C7C061786
-        for <linux-pm@vger.kernel.org>; Thu,  4 Feb 2021 19:03:38 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id f14so9302588ejc.8
-        for <linux-pm@vger.kernel.org>; Thu, 04 Feb 2021 19:03:38 -0800 (PST)
+        with ESMTP id S229692AbhBEDJ5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 22:09:57 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1BDC061797;
+        Thu,  4 Feb 2021 19:08:41 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id m13so5939544wro.12;
+        Thu, 04 Feb 2021 19:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HdD5j9j3cDfjeYVvH0pZjtrZ1PN33V1eaKUOEOiYAwA=;
-        b=MCMgQ3BYFsf9mhagcx4mgzpXPagKjbvtJ0+E0wsfHfLu/UZ/cI1ftqJOZnqmhhBf79
-         0YZ2LAxqGE8ftu53EGD3mVgkOQprDB591lZYinaLo4uPXB7e1Ebby2muI7HoP0T7zSQr
-         G6vIvNdyz41RhUUpBXVLJX+sZCkKTLvHJ0BuwjGmJEwxw5PmvrBTVt2H57GEUZIS9Upx
-         gaZA8u5FVEeck1Esp5wRI3RND1hFJA69Fw1Cy6x9g7A3v69vddDJYUtF/uSD7V4P4pjX
-         IuSPk6h6og6kpLQN4o+YMhTMI4u5aUIXFzhj0GHUMq328asHle5Ne2gNpFUFUOYPBLc7
-         o5gg==
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=NRTh4M0Jcl6GH1vZx6tfehzdSRsMQorZISNOE9gHFCDnJ9pKqRA7GWrfGPHC6OgQqp
+         BRNYtYsNO5JT0lD1kYg6TcwP7Z8niz0b3VHWG8eQNg7Gc20C/neX86SKnRyzJOmIJrgJ
+         kB5eKRBOfoFLXDnIFwo/XdUtkMV34RBU3+TE/cotaoXGm7XnE6fg74/ybaXKyAQrS3qY
+         KYCwxSEiM6aUEaumxUCFfOeSc9ZItOxax77yIHpPnuIcGyYnAlYjctLHt3xL8zjfdYOc
+         sI13F+PxWTL2rp7sbp/7MJQs+zHp2JuW8LQkwb22UVWHPnAHhrkt9vKPACdqHBDoQIWh
+         Nbaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HdD5j9j3cDfjeYVvH0pZjtrZ1PN33V1eaKUOEOiYAwA=;
-        b=hQcbXD03gY1FQUfcmxsBbmkBVpUS/iS/dWgFi+Pr3WcAIdGvwpE+K/A8xsJZU/yNXN
-         ocsoZKDNetGbbTrR0lpQd2i4CccUOQKCN62VHuY2GJYroOccXtrqyKqZBdVTOdkdy3Cz
-         BqzsK06GuT6gWGvcI0fUa3NukCIE0s1wNNpMOoc6yg7swlGL5hY64kCEnzWlR4PGeGqo
-         KZm9qb7hzpiBLwa8G+dK7/Mu0I2S89P1PtlDv/fuyHSGXDOLowV2H508cLB+U1aUnlpz
-         ghABk+7NwJv3/RfRzYzUBCFPHx646RsLtuCs6yeHm5OqnyQgkgcq3BhrGhBRzciTjW+r
-         B5IQ==
-X-Gm-Message-State: AOAM532UFR8G7V1NqPtkwKEcO5tgJRBuyOJ7U06YtZPcavZPaseKafsg
-        WOUOeXQnq8k4uN8592DEWtlEocc+/ExU3SKFjRNzAA==
-X-Google-Smtp-Source: ABdhPJw0PU39HJiajGWKqQ+imH+UHqp7b05QK93dctO7TbXzblEzR/b6gXLoEwUEYGmAkDwAg94gyHIUfp5CyvY9OCk=
-X-Received: by 2002:a17:906:5846:: with SMTP id h6mr1992980ejs.521.1612494217144;
- Thu, 04 Feb 2021 19:03:37 -0800 (PST)
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=NVCuMvsxLp7BVimjV0Z44wx+FECULNFIqMQwdZcE6UEl5/Hm8BvbggKj0WlwfYBuz1
+         Mlef7ZRLVx4u7l1cjzamBrkto5GB4BYFT8m9ZRWzfqtOoIjBRpWnxojss1VqHv6ifk9z
+         FxKv/uWLIZ27L4WV8Oqyyj1MawOp+lQWhgbgVKwrhENmw8fDcXxQYPK3RDh4SyqQo78v
+         oKIe4p9FoYWs0+lqERDR5mM5J+uf84a2N2xySHT+5MU3wfc8IFEN9ul8DXe4OucTw+1H
+         OAQwAu7BykzxcOMMNTdgviY4kgG7jp0slY5xfCshlz/EXyb7yDis9nonYuLPIugI3TtV
+         Bn+g==
+X-Gm-Message-State: AOAM531w+Vh5R5NeEdnHoOFbbruK9yQu4KYVVVbM11FsFGt+MwZvU+KF
+        J1njTpmimMzmwzo/FOtvcwmF+2FYWlHhGw==
+X-Google-Smtp-Source: ABdhPJyPEO5lhPU5Ki3tYUdHo7/A48MpSbIv/4vddJ3dvYDTD5o8YUiYoljvt6TQN6lCHXJY1Pc/sQ==
+X-Received: by 2002:adf:9f54:: with SMTP id f20mr2470551wrg.362.1612494519670;
+        Thu, 04 Feb 2021 19:08:39 -0800 (PST)
+Received: from [192.168.1.6] ([154.124.28.35])
+        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.35
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 04 Feb 2021 19:08:38 -0800 (PST)
+Message-ID: <601cb6b6.1c69fb81.5ea54.2ead@mx.google.com>
+Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
+From:   calantha camara <sgt.andersonskylar0@gmail.com>
+X-Google-Original-From: calantha camara
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20210205015205.22947-1-benl@squareup.com>
-In-Reply-To: <20210205015205.22947-1-benl@squareup.com>
-From:   Jun Nie <jun.nie@linaro.org>
-Date:   Fri, 5 Feb 2021 11:03:26 +0800
-Message-ID: <CABymUCNfCZT5bkCeHOf6SEw1aStCNcXraen5pEiKSpcXc16z2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Clean up MSM8939 interconnect driver
-To:     Benjamin Li <benl@squareup.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>, kernel@squareup.com,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: hi dear
+To:     Recipients <calantha@vger.kernel.org>
+Date:   Fri, 05 Feb 2021 03:08:31 +0000
+Reply-To: calanthac20@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Benjamin Li <benl@squareup.com> =E4=BA=8E2021=E5=B9=B42=E6=9C=885=E6=97=A5=
-=E5=91=A8=E4=BA=94 =E4=B8=8A=E5=8D=889:52=E5=86=99=E9=81=93=EF=BC=9A
->
-> Following up on a review comment on commit 6c6fe5d3dc5e ("interconnect: q=
-com:
-> Add MSM8939 interconnect provider driver") to clean up some log pollution=
-.
->
-> This is based on icc-next (which appears to contain a refactor commonizin=
-g
-> functions into icc-rpm.c).
->
-> v2:
-> - Update commit message to add a full explanation, rather than referencin=
-g a
->   previous commit.
->
-> Benjamin Li (2):
->   interconnect: qcom: icc-rpm: record slave RPM id in error log
->   interconnect: qcom: msm8939: remove rpm-ids from non-RPM nodes
->
->  drivers/interconnect/qcom/icc-rpm.c |  4 ++--
->  drivers/interconnect/qcom/msm8939.c | 16 ++++++++--------
->  2 files changed, 10 insertions(+), 10 deletions(-)
->
-> --
-> 2.17.1
->
-
-For 2 patches:
-Reviewed-by: Jun Nie <jun.nie@linaro.org>
+do you speak Eglish
