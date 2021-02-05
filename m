@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 353633115CC
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 23:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6014B3115CE
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 23:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhBEWmC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 17:42:02 -0500
-Received: from muru.com ([72.249.23.125]:57664 "EHLO muru.com"
+        id S230515AbhBEWmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 17:42:22 -0500
+Received: from muru.com ([72.249.23.125]:57682 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231421AbhBENq2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Feb 2021 08:46:28 -0500
+        id S230315AbhBENqb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:46:31 -0500
 Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 364CB81BC;
-        Fri,  5 Feb 2021 13:45:59 +0000 (UTC)
+        by muru.com (Postfix) with ESMTP id 46EE181BD;
+        Fri,  5 Feb 2021 13:46:02 +0000 (UTC)
 From:   Tony Lindgren <tony@atomide.com>
 To:     Amit Kucheria <amitk@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -27,9 +27,9 @@ Cc:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
         Pavel Machek <pavel@ucw.cz>,
         Peter Ujfalusi <peter.ujfalusi@gmail.com>,
         Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH 3/4] thermal: ti-soc-thermal: Simplify polling with iopoll
-Date:   Fri,  5 Feb 2021 15:45:33 +0200
-Message-Id: <20210205134534.49200-4-tony@atomide.com>
+Subject: [PATCH 4/4] thermal: ti-soc-thermal: Use non-inverted define for omap4
+Date:   Fri,  5 Feb 2021 15:45:34 +0200
+Message-Id: <20210205134534.49200-5-tony@atomide.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210205134534.49200-1-tony@atomide.com>
 References: <20210205134534.49200-1-tony@atomide.com>
@@ -39,12 +39,9 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We can use iopoll for checking the EOCZ (end of conversion) bit. And with
-this we now also want to handle the timeout errors properly.
-
-For omap3, we need about 1.2ms for the single mode sampling to wait for
-EOCZ down, so let's use 1.5ms timeout there. Waiting for sampling to start
-is faster and we can use 1ms timeout.
+When we set bit 10 high we use continuous mode and not single
+mode. Let's correct this to avoid confusion. No functional
+changes here, the code does the right thing with bit 10.
 
 Cc: Adam Ford <aford173@gmail.com>
 Cc: Carl Philipp Klemm <philipp@uvos.xyz>
@@ -56,75 +53,51 @@ Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 Cc: Sebastian Reichel <sre@kernel.org>
 Signed-off-by: Tony Lindgren <tony@atomide.com>
 ---
- drivers/thermal/ti-soc-thermal/ti-bandgap.c | 30 ++++++++++-----------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ drivers/thermal/ti-soc-thermal/omap4-thermal-data.c | 4 ++--
+ drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
---- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-+++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
-@@ -15,7 +15,6 @@
- #include <linux/kernel.h>
- #include <linux/interrupt.h>
- #include <linux/clk.h>
--#include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/err.h>
-@@ -27,6 +26,7 @@
- #include <linux/of_platform.h>
- #include <linux/of_irq.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/cpu_pm.h>
- #include <linux/device.h>
- #include <linux/pm_runtime.h>
-@@ -604,7 +604,9 @@ static int
- ti_bandgap_force_single_read(struct ti_bandgap *bgp, int id)
- {
- 	struct temp_sensor_registers *tsr = bgp->conf->sensors[id].registers;
--	u32 counter;
-+	void __iomem *temp_sensor_ctrl = bgp->base + tsr->temp_sensor_ctrl;
-+	int error;
-+	u32 val;
+diff --git a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
+--- a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
++++ b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
+@@ -24,7 +24,7 @@ omap4430_mpu_temp_sensor_registers = {
+ 	.bgap_dtemp_mask = OMAP4430_BGAP_TEMP_SENSOR_DTEMP_MASK,
  
- 	/* Select continuous or single conversion mode */
- 	if (TI_BANDGAP_HAS(bgp, MODE_CONFIG)) {
-@@ -619,26 +621,22 @@ ti_bandgap_force_single_read(struct ti_bandgap *bgp, int id)
- 		RMW_BITS(bgp, id, temp_sensor_ctrl, bgap_soc_mask, 1);
+ 	.bgap_mode_ctrl = OMAP4430_TEMP_SENSOR_CTRL_OFFSET,
+-	.mode_ctrl_mask = OMAP4430_SINGLE_MODE_MASK,
++	.mode_ctrl_mask = OMAP4430_CONTINUOUS_MODE_MASK,
  
- 		/* Wait for EOCZ going up */
--		counter = 1000;
--		while (--counter) {
--			if (ti_bandgap_readl(bgp, tsr->temp_sensor_ctrl) &
--			    tsr->bgap_eocz_mask)
--				break;
--			udelay(1);
--		}
-+		error = readl_poll_timeout_atomic(temp_sensor_ctrl, val,
-+						  val & tsr->bgap_eocz_mask,
-+						  1, 1000);
-+		if (error)
-+			dev_warn(bgp->dev, "eocz timed out waiting high\n");
+ 	.bgap_efuse = OMAP4430_FUSE_OPP_BGAP,
+ };
+@@ -97,7 +97,7 @@ omap4460_mpu_temp_sensor_registers = {
+ 	.mask_cold_mask = OMAP4460_MASK_COLD_MASK,
  
- 		/* Clear Start of Conversion if available */
- 		RMW_BITS(bgp, id, temp_sensor_ctrl, bgap_soc_mask, 0);
- 	}
+ 	.bgap_mode_ctrl = OMAP4460_BGAP_CTRL_OFFSET,
+-	.mode_ctrl_mask = OMAP4460_SINGLE_MODE_MASK,
++	.mode_ctrl_mask = OMAP4460_CONTINUOUS_MODE_MASK,
  
- 	/* Wait for EOCZ going down, always needed even if no bgap_soc_mask */
--	counter = 1000;
--	while (--counter) {
--		if (!(ti_bandgap_readl(bgp, tsr->temp_sensor_ctrl) &
--		      tsr->bgap_eocz_mask))
--			break;
--		udelay(1);
--	}
-+	error = readl_poll_timeout_atomic(temp_sensor_ctrl, val,
-+					  !(val & tsr->bgap_eocz_mask),
-+					  1, 1500);
-+	if (error)
-+		dev_warn(bgp->dev, "eocz timed out waiting low\n");
+ 	.bgap_counter = OMAP4460_BGAP_COUNTER_OFFSET,
+ 	.counter_mask = OMAP4460_COUNTER_MASK,
+diff --git a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
+--- a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
++++ b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
+@@ -40,7 +40,7 @@
+ /* OMAP4430.TEMP_SENSOR bits */
+ #define OMAP4430_BGAP_TEMPSOFF_MASK			BIT(12)
+ #define OMAP4430_BGAP_TSHUT_MASK			BIT(11)
+-#define OMAP4430_SINGLE_MODE_MASK			BIT(10)
++#define OMAP4430_CONTINUOUS_MODE_MASK			BIT(10)
+ #define OMAP4430_BGAP_TEMP_SENSOR_SOC_MASK		BIT(9)
+ #define OMAP4430_BGAP_TEMP_SENSOR_EOCZ_MASK		BIT(8)
+ #define OMAP4430_BGAP_TEMP_SENSOR_DTEMP_MASK		(0xff << 0)
+@@ -113,7 +113,7 @@
+ #define OMAP4460_BGAP_TEMP_SENSOR_DTEMP_MASK		(0x3ff << 0)
  
- 	return 0;
- }
+ /* OMAP4460.BANDGAP_CTRL bits */
+-#define OMAP4460_SINGLE_MODE_MASK			BIT(31)
++#define OMAP4460_CONTINUOUS_MODE_MASK			BIT(31)
+ #define OMAP4460_MASK_HOT_MASK				BIT(1)
+ #define OMAP4460_MASK_COLD_MASK				BIT(0)
+ 
 -- 
 2.30.0
