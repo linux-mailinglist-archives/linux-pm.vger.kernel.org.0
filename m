@@ -2,107 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B513111F7
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 21:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C993112AB
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 21:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbhBES1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 13:27:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34770 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233706AbhBES1S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Feb 2021 13:27:18 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EC17364FBA;
-        Fri,  5 Feb 2021 20:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612555742;
-        bh=beiP1QVTcTtnz/28je3Db2hFbKVGRBpJgYPrzRQ3FJY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=HiHatxkiTqo19TZ7agC6KDqUsgXV67Li8ly2L0wqDAIgO/TnRxAG2RsEVs5oqP6c+
-         UaOzHqagc4QJeLih2kXFAEt5d7GhSEhvjlhL3gH10/QCgaTVU1AQai8Mn1NFjTiezP
-         i1wgd9CTA84LgzCyhkwn5/kx2hr1+O0JvExsTupHij3anIzI/f4gsgHmz14r0nXCYL
-         l0+YcKZuoB+EBsv5ijeTNTCycIDJJ3bqKmtNaMYKKxf/lWGat0JwJxc2r6hSYJ80aS
-         IrqB6hXBSMagUQ342uqUdCGIfPNEt/aJJPrbGL+JfG1RPWW1Icry7tJhu+BlO9Wj7x
-         cGUyryDyXIy7Q==
-Date:   Fri, 5 Feb 2021 14:08:59 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>, gregkh@linuxfoundation.org,
-        jdelvare@suse.com, giometti@enneenne.com, abbotti@mev.co.uk,
-        hsweeten@visionengravers.com, kw@linux.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
-        michal.lkml@markovi.net, prime.zeng@huawei.com,
-        linuxarm@openeuler.org
-Subject: Re: [PATCH 2/4] hwmon: Use subdir-ccflags-* to inherit debug flag
-Message-ID: <20210205200859.GA193526@bjorn-Precision-5520>
+        id S231876AbhBES6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 13:58:39 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:43286 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233143AbhBES62 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Feb 2021 13:58:28 -0500
+Received: by mail-ot1-f45.google.com with SMTP id v1so8134446ott.10;
+        Fri, 05 Feb 2021 12:40:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Sm6NpdOnTtwSXORx8mTFH6un3hRG8XHN59PuT9PxTHY=;
+        b=ZiOPJE00cF5eWIq91x1XoXARyeQfeoutVToDfKzAD7LoW1SebwgCr5FPAv8wAdHVtU
+         F0yYUgTb4Z+ojDzrB44KCAVu11JA2iG13Cb5rqhpHbJru3WNFH/BMPEvRJX2hqniAWgG
+         AR2/sUm3yklvLBq4e0EcTEp2isz/HkTVCwVcBRhNwPwxSLQaTgwzL1OXRanCfUhNjiIk
+         qTOsukOodw+34V8XFa0NFh3kCTM0HU2K0lHTb7mP0jbK8S9s7mgcgWxzPOJ0O2rK3Sus
+         R1FcExNZMewQSzUjFfKn5UV9KJUVEI+kuaZqXvTwKkSjFAMYk0gmNoe7kSqalg89h0+6
+         UMUQ==
+X-Gm-Message-State: AOAM531ncUr0wLlACXvccMi30C0mY6WsIWJBtB0K+rQnO+baPM13t1Gn
+        jeY7DF0uXo5fSYRNvOYb1EICY4TxqA==
+X-Google-Smtp-Source: ABdhPJwSZjklLi0OGnD3BND6Th44dDLWc0079PTTrz8plDrDN/FVp4rS9kWi3YGddwujHwSNSyuuYg==
+X-Received: by 2002:a9d:6b02:: with SMTP id g2mr4477933otp.19.1612557612724;
+        Fri, 05 Feb 2021 12:40:12 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n93sm1986681ota.37.2021.02.05.12.40.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Feb 2021 12:40:11 -0800 (PST)
+Received: (nullmailer pid 3691439 invoked by uid 1000);
+        Fri, 05 Feb 2021 20:40:09 -0000
+Date:   Fri, 5 Feb 2021 14:40:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v9 8/8] dt-bindings: thermal: tsens: Document ipq8064
+ bindings
+Message-ID: <20210205204009.GA3691379@robh.at.kernel.org>
+References: <20210122145558.4982-1-ansuelsmth@gmail.com>
+ <20210122145558.4982-9-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210205182832.GA186268@roeck-us.net>
+In-Reply-To: <20210122145558.4982-9-ansuelsmth@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 10:28:32AM -0800, Guenter Roeck wrote:
-> On Fri, Feb 05, 2021 at 05:44:13PM +0800, Yicong Yang wrote:
-> > From: Junhao He <hejunhao2@hisilicon.com>
-> > 
-> > Use subdir-ccflags-* instead of ccflags-* to inherit the debug
-> > settings from Kconfig when traversing subdirectories.
-> > 
-> > Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
-> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+On Fri, 22 Jan 2021 15:55:57 +0100, Ansuel Smith wrote:
+> Document the use of bindings used for msm8960 tsens based devices.
+> msm8960 use the same gcc regs and is set as a child of the qcom gcc.
 > 
-> What problem does this fix ? Maybe I am missing it, but I don't see
-> DEBUG being used in a subdirectory of drivers/hwmon.
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/thermal/qcom-tsens.yaml          | 56 ++++++++++++++++---
+>  1 file changed, 48 insertions(+), 8 deletions(-)
+> 
 
-It's my fault for raising this question [1].  Yicong fixed a real
-problem in drivers/pci, where we are currently using
-
-  ccflags-$(CONFIG_PCI_DEBUG) := -DDEBUG
-
-so CONFIG_PCI_DEBUG=y turns on debug in drivers/pci, but not in the
-subdirectories.  That's surprising to users.
-
-So my question was whether we should default to using subdir-ccflags
-for -DDEBUG in general, and only use ccflags when we have
-subdirectories that have their own debug options, e.g.,
-
-  drivers/i2c/Makefile:ccflags-$(CONFIG_I2C_DEBUG_CORE) := -DDEBUG
-  drivers/i2c/algos/Makefile:ccflags-$(CONFIG_I2C_DEBUG_ALGO) := -DDEBUG
-  drivers/i2c/busses/Makefile:ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-  drivers/i2c/muxes/Makefile:ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-
-I mentioned drivers/hwmon along with a few others that have
-subdirectories, do not have per-subdirectory debug options, and use
-ccflags.  I didn't try to determine whether those subdirectories
-currently use -DDEBUG.
-
-In the case of drivers/hwmon, several drivers do use pr_debug(),
-and CONFIG_HWMON_DEBUG_CHIP=y turns those on.  But if somebody
-were to add pr_debug() to drivers/hwmon/occ/common.c, for example,
-CONFIG_HWMON_DEBUG_CHIP=y would *not* turn it on.  That sounds
-surprising to me, but if that's what you intend, that's totally fine.
-
-[1] https://lore.kernel.org/r/20210204161048.GA68790@bjorn-Precision-5520
-
-> > ---
-> >  drivers/hwmon/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index 09a86c5..1c0c089 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -201,5 +201,5 @@ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
-> >  obj-$(CONFIG_SENSORS_OCC)	+= occ/
-> >  obj-$(CONFIG_PMBUS)		+= pmbus/
-> >  
-> > -ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> > +subdir-ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> >  
-> > -- 
-> > 2.8.1
-> > 
+Reviewed-by: Rob Herring <robh@kernel.org>
