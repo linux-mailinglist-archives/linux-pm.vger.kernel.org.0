@@ -2,227 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8671E31059B
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 08:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD9F310790
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 10:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbhBEHLy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 02:11:54 -0500
-Received: from mail-eopbgr50113.outbound.protection.outlook.com ([40.107.5.113]:10918
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231144AbhBEHLG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Feb 2021 02:11:06 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q5DVDvyIeMTis5V37RR0ZlQxDa3qom/8yQEWCdbEX11OidvBKgWPBBZKY4HxickjR7ImOETWizLWCwd6ePpB52px/fqUtiozjsH+xXI0c44TYXe+hhSzPbSFkydLTEnRqnHgfyzG6ZVPiP6bhQZgnuNeBhmaalceruY6yjDbWLO5MF4Ag+tade7bhEgf1Pd0zi6Nq+Ksi+6d/AYRSQVIzhcsy2qnu9GrtaPG6Of//wx+RdJkMBBmfS2S21ZrtEklI9PTEW5shBlJ+1zoSinJpPcT9HsBp29AeY10s+BqsakcHxiIZleK8WwEDioNi1gHWQcMl03U7aeLE3zPV96Pig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6JGFG4hj3UyIS5K5V7leE41pEt3J5EQEx6BogS1e7uQ=;
- b=j/AwKFdBc7ZgFo9F1ck/BrAyp1UFVm8ueEC0uBWl6xEiy4HfvY5ht0sIN3ge+7MnPA9cslg1CiT/y5SdTSU2mXyNHgqAPx8jcEpNJtOTqzQzL2BplaxEd3dbw/Fv0EgEYyiOY63g8toOIo3s2cA4EzfS0CWO13cdQRjMRJC5ZyYJnMaswjzTBWlva8zoFyy2sWkoFCYIpAC6mjFscyePxvPZtr8/Mele4rwNOso3nfjQf38/++RzlCSML5MRWYuyHLeSOPvW5Yts3rTXRTb7KSJ6kWs8COvovZ1NqpzzGrkIw2vT5Zo1j6N72JmyeToB2bMC7A0c6Y7oYAGcpFia8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 193.8.40.99) smtp.rcpttodomain=kernel.org
- smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=quarantine sp=quarantine
- pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
- not signed); arc=none
+        id S229771AbhBEJRZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 04:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230111AbhBEJPI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Feb 2021 04:15:08 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D84C06178C
+        for <linux-pm@vger.kernel.org>; Fri,  5 Feb 2021 01:14:27 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id lw17so6393710pjb.0
+        for <linux-pm@vger.kernel.org>; Fri, 05 Feb 2021 01:14:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=leica-geosystems.com.cn; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6JGFG4hj3UyIS5K5V7leE41pEt3J5EQEx6BogS1e7uQ=;
- b=gdMlIv1Q6jONZ9iuRvlofN6YqViCqaF/iAwyrYyLiaZAP+BzbBBmvdfh7PLdBB3+/3ATWZ6/RhwVo8l2vNVfHSjPLU3iSQDoWr0/YSH2FeF8XtlwJeK1EMLUjABuLksoiLZBnfqYqdT1BvMHgQbkWzZ1Vl8YCADP999+8JO6HCo=
-Received: from AM6P194CA0082.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:8f::23)
- by AM6PR06MB5095.eurprd06.prod.outlook.com (2603:10a6:20b:3b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.23; Fri, 5 Feb
- 2021 07:10:14 +0000
-Received: from AM5EUR02FT033.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:209:8f:cafe::75) by AM6P194CA0082.outlook.office365.com
- (2603:10a6:209:8f::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.17 via Frontend
- Transport; Fri, 5 Feb 2021 07:10:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
- smtp.mailfrom=leica-geosystems.com.cn; kernel.org; dkim=none (message not
- signed) header.d=none;kernel.org; dmarc=pass action=none
- header.from=leica-geosystems.com.cn;
-Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
- designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
- client-ip=193.8.40.99; helo=aherlnxbspsrv01.lgs-net.com;
-Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.99) by
- AM5EUR02FT033.mail.protection.outlook.com (10.152.8.86) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3784.11 via Frontend Transport; Fri, 5 Feb 2021 07:10:13 +0000
-From:   LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-To:     sre@kernel.org, robh+dt@kernel.org, dmurphy@ti.com,
-        pali@kernel.org, krzk@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     grygorii.tertychnyi@leica-geosystems.com,
-        andrey.zhizhikin@leica-geosystems.com,
-        LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Subject: [PATCH V4 2/2] power: supply: bq27xxx: Add support for BQ78Z100
-Date:   Fri,  5 Feb 2021 07:10:04 +0000
-Message-Id: <20210205071004.26317-3-Qing-wu.Li@leica-geosystems.com.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210205071004.26317-1-Qing-wu.Li@leica-geosystems.com.cn>
-References: <20210205071004.26317-1-Qing-wu.Li@leica-geosystems.com.cn>
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hF9qEuN0t60aQwKqM2EZNImZ2qgd4dzTdPhlz4GhOnQ=;
+        b=baG+mICmSRFGZPpmbX/z/Q4npvhOxgihshME85DpDK2T0FDiP7iS/B3GDOrt6gJxVZ
+         FZtI11V//62Tp1qEsLtjEMoYU3iXL2YKkyckgA4PUsQIMK+XKon9U4sIWjCmgEvzoTb0
+         TzEgzdfvMHxlSrzrD7Gc/Bvh1lCla/shieQ/Tn3wQlCWHrd1oIB5ajwVjGMRjE2pxw0E
+         I3C/2bRtZcqghfKMZCQjcBulO8O7VO2I02wJWYUH8HN15LGZvYLrl5OyeGHMP5lkxU3X
+         DZijxN0r3GKjXbNrsx2DM4daqIiIXsQp+JhPVhvE7LFBtyB2y6sHrcf965+pSgDCdN2f
+         j4uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hF9qEuN0t60aQwKqM2EZNImZ2qgd4dzTdPhlz4GhOnQ=;
+        b=OEsUEdY5k4GY3QUlOYHPkeqpS5fr1H5tal9ngFaeEePzso7/9D0UXhJw5NB8YHlatS
+         dHaLDBJHr4Pe5jdKbOSSPa+G7SnSyV7Edqnp5D/gHNPSLzsU2IsyP9ode0y93cqb0lmY
+         xSB5P0mSeRTUPL/hAmdk/eaoQQ8LBx4FS5lroe/M0MJmlhTdvfZLdmy9zMs8rJhQRFft
+         zwAAMH9i/5M4qd1gVk74zAS2D5gCtsbgvuzPmFijcNGMD4AVBg03GNtrk/JY1h0yJJtO
+         ZqgtjFgsEc/aBjWjHGvg0nF9c98hcrrFPtdzVo7brJtZdG/BmSQHJR2ELAhwGzZY2XIa
+         Xzzg==
+X-Gm-Message-State: AOAM530j9pIUUfjxtLzd2toB2hsxq4uZfZtwcOw9Vvl7n7iFDUofbi6T
+        lguB/t2yAGVuaj87Z1gfJxffdw==
+X-Google-Smtp-Source: ABdhPJzMZUYleeQSiIhOFPG2P/DidutEB3glNkXsbtPLIAjr9ajmQIPI/We0jC/1sgmvuqkqgZmNaQ==
+X-Received: by 2002:a17:90a:7c45:: with SMTP id e5mr3198293pjl.170.1612516467392;
+        Fri, 05 Feb 2021 01:14:27 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id j3sm7721155pjs.50.2021.02.05.01.14.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Feb 2021 01:14:26 -0800 (PST)
+Date:   Fri, 5 Feb 2021 14:44:24 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
+ sched_freq_tick() callback
+Message-ID: <20210205091424.3od3tme3f7mh7ebp@vireshk-i7>
+References: <cover.1611829953.git.viresh.kumar@linaro.org>
+ <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
+ <20210203114521.GA6380@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 9f9bd80e-6c4c-48b2-1f02-08d8c9a5158b
-X-MS-TrafficTypeDiagnostic: AM6PR06MB5095:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR06MB5095202BF18BD581F3BC4688D7B29@AM6PR06MB5095.eurprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1LvdE1ydfKFKZ924uWlIP1KG1luurVGlMU33zq/+bn+xFK2SSNaeZuG81JveddimFpqcnk4RpXcAL6tiCOEKjajchoiIF0yumjhUDBwEreALKzC2w/ABMoR+4TARHMzmnhyvJPWmZU3CXavI2M3lJyQEbohEaeG6TkR+47ULnCaOIjyfecyuCVXzQV1byqiqwXfnjqjRZTqF6qbkcQujA7LLIXNb+wYPq2tuUdHAU0l6kEW7yYGfeU9T4or7v+ugqBXxUi96hymaA4QCR+gixSiQj+rpLt2E7jaYPXHVfJx3UW2ryJSY1ZGRD3acCzqSMB7oeN83mPeCZscqZEL4z5nLv8yczywAvPx0FXH0iHic2Mr5jzO4/s8DKYSBNmgya0R1sfq1dFra1d/Czxg1oxuatst3FXmvI5AIoDOfzm8uJHer/VsuOmsUr/6/3fl5kziwv/ZciRfSPlH6ZjySGMXBEc90Ctzva95+Z62laHsx5x+tNcjJ+ZYYcc1xCURSqqVi1C6c2VSx0yivci6QZztKsMs3fIm4JviiiiDi11H7W3/H1OV9BPsRVi/nmEZzXqFf1v+s0Rw330Kdolc6EkhKzuflu5ZNc+Yr0LTajLqcjiNoTfl8mtHTig2NBLCZrzdLnL7+AHnqeyvbJNSuMtfFik2CNd4A2p4ik2QbLppPmJXvyvjMOVSn4eqAjASLyL/VOCsBpttt4Lm26YOujDuhOufADWE3r1G6mr462+kC07kOdCMqy1E4UwkhUNiz9wmwjmbZEC4sxTqCno2x3Q==
-X-Forefront-Antispam-Report: CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:aherlnxbspsrv01.lgs-net.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(4636009)(346002)(376002)(136003)(39860400002)(396003)(36840700001)(46966006)(36736006)(107886003)(6486002)(316002)(36756003)(118246002)(356005)(5660300002)(34020700004)(2906002)(47076005)(26005)(82310400003)(8676002)(8936002)(4326008)(86362001)(336012)(36860700001)(186003)(83380400001)(6512007)(81166007)(1076003)(6506007)(70586007)(478600001)(70206006)(6666004)(956004)(2616005)(82740400003)(966005);DIR:OUT;SFP:1102;
-X-OriginatorOrg: leica-geosystems.com.cn
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2021 07:10:13.8972
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f9bd80e-6c4c-48b2-1f02-08d8c9a5158b
-X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[aherlnxbspsrv01.lgs-net.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM5EUR02FT033.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR06MB5095
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210203114521.GA6380@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for TI BQ78Z100, I2C interface gas gauge.
-It provides a fully integrated safety protection
-and authentication for 1 to 2-series cell Li-Ion and
-Li-Polymer battery packs.
+On 03-02-21, 11:45, Ionela Voinescu wrote:
+> Therefore, I think system level invariance management (checks and
+> call to rebuild_sched_domains_energy()) also needs to move from arm64
+> code to arch_topology code.
 
-The patch was tested with BQ78Z100 equipment.
+Here is the 3rd patch of this series then :)
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+From: Viresh Kumar <viresh.kumar@linaro.org>
+Date: Fri, 5 Feb 2021 13:31:53 +0530
+Subject: [PATCH] drivers: arch_topology: rebuild sched domains on invariance
+ change
+
+We already do this for the arm64, move it to arch_topology.c as we
+manage all sched_freq_tick sources here now.
+
+Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/power/supply/bq27xxx_battery.c     | 46 +++++++++++++++++++++-
- drivers/power/supply/bq27xxx_battery_i2c.c |  2 +
- include/linux/power/bq27xxx_battery.h      |  1 +
- 3 files changed, 48 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/topology.c | 16 ----------------
+ drivers/base/arch_topology.c | 22 ++++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 315e0909e6a4..c8579ec7a4f8 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -39,6 +39,7 @@
-  * https://www.ti.com/product/bq27z561
-  * https://www.ti.com/product/bq28z610
-  * https://www.ti.com/product/bq34z100-g1
-+ * https://www.ti.com/product/bq78z100
-  */
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 1e47dfd465f8..47fca7376c93 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -240,7 +240,6 @@ static struct scale_freq_data amu_sfd = {
  
- #include <linux/device.h>
-@@ -497,7 +498,27 @@ static u8
- 		[BQ27XXX_REG_DCAP] = 0x3c,
- 		[BQ27XXX_REG_AP] = 0x22,
- 		BQ27XXX_DM_REG_ROWS,
--	};
-+	},
-+	bq78z100_regs[BQ27XXX_REG_MAX] = {
-+		[BQ27XXX_REG_CTRL] = 0x00,
-+		[BQ27XXX_REG_TEMP] = 0x06,
-+		[BQ27XXX_REG_INT_TEMP] = 0x28,
-+		[BQ27XXX_REG_VOLT] = 0x08,
-+		[BQ27XXX_REG_AI] = 0x14,
-+		[BQ27XXX_REG_FLAGS] = 0x0a,
-+		[BQ27XXX_REG_TTE] = 0x16,
-+		[BQ27XXX_REG_TTF] = 0x18,
-+		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
-+		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
-+		[BQ27XXX_REG_NAC] = INVALID_REG_ADDR,
-+		[BQ27XXX_REG_FCC] = 0x12,
-+		[BQ27XXX_REG_CYCT] = 0x2a,
-+		[BQ27XXX_REG_AE] = 0x22,
-+		[BQ27XXX_REG_SOC] = 0x2c,
-+		[BQ27XXX_REG_DCAP] = 0x3c,
-+		[BQ27XXX_REG_AP] = 0x22,
-+		BQ27XXX_DM_REG_ROWS,
-+};
+ static void amu_fie_setup(const struct cpumask *cpus)
+ {
+-	bool invariant;
+ 	int cpu;
  
- static enum power_supply_property bq27000_props[] = {
- 	POWER_SUPPLY_PROP_STATUS,
-@@ -792,6 +813,27 @@ static enum power_supply_property bq34z100_props[] = {
- 	POWER_SUPPLY_PROP_MANUFACTURER,
- };
+ 	/* We are already set since the last insmod of cpufreq driver */
+@@ -257,25 +256,10 @@ static void amu_fie_setup(const struct cpumask *cpus)
  
-+static enum power_supply_property bq78z100_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_CAPACITY_LEVEL,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
-+	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
-+	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CYCLE_COUNT,
-+	POWER_SUPPLY_PROP_ENERGY_NOW,
-+	POWER_SUPPLY_PROP_POWER_AVG,
-+	POWER_SUPPLY_PROP_HEALTH,
-+	POWER_SUPPLY_PROP_MANUFACTURER,
-+};
+ 	cpumask_or(amu_fie_cpus, amu_fie_cpus, cpus);
+ 
+-	invariant = topology_scale_freq_invariant();
+-
+-	/* We aren't fully invariant yet */
+-	if (!invariant && !cpumask_equal(amu_fie_cpus, cpu_present_mask))
+-		return;
+-
+ 	topology_set_scale_freq_source(&amu_sfd, amu_fie_cpus);
+ 
+ 	pr_debug("CPUs[%*pbl]: counters will be used for FIE.",
+ 		 cpumask_pr_args(cpus));
+-
+-	/*
+-	 * Task scheduler behavior depends on frequency invariance support,
+-	 * either cpufreq or counter driven. If the support status changes as
+-	 * a result of counter initialisation and use, retrigger the build of
+-	 * scheduling domains to ensure the information is propagated properly.
+-	 */
+-	if (!invariant)
+-		rebuild_sched_domains_energy();
+ }
+ 
+ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 20b511949cd8..3631877f4440 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -23,6 +23,7 @@
+ 
+ static DEFINE_PER_CPU(struct scale_freq_data *, sft_data);
+ static struct cpumask scale_freq_counters_mask;
++static bool scale_freq_invariant;
+ 
+ static bool supports_scale_freq_counters(const struct cpumask *cpus)
+ {
+@@ -35,6 +36,23 @@ bool topology_scale_freq_invariant(void)
+ 	       supports_scale_freq_counters(cpu_online_mask);
+ }
+ 
++static void update_scale_freq_invariant(bool status)
++{
++	if (scale_freq_invariant == status)
++		return;
 +
- struct bq27xxx_dm_reg {
- 	u8 subclass_id;
- 	u8 offset;
-@@ -890,6 +932,7 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
- #define bq27z561_dm_regs 0
- #define bq28z610_dm_regs 0
- #define bq34z100_dm_regs 0
-+#define bq78z100_dm_regs 0
++	/*
++	 * Task scheduler behavior depends on frequency invariance support,
++	 * either cpufreq or counter driven. If the support status changes as
++	 * a result of counter initialisation and use, retrigger the build of
++	 * scheduling domains to ensure the information is propagated properly.
++	 */
++	if (topology_scale_freq_invariant() == status) {
++		scale_freq_invariant = status;
++		rebuild_sched_domains_energy();
++	}
++}
++
+ void topology_set_scale_freq_source(struct scale_freq_data *data,
+ 				    const struct cpumask *cpus)
+ {
+@@ -50,6 +68,8 @@ void topology_set_scale_freq_source(struct scale_freq_data *data,
+ 			cpumask_set_cpu(cpu, &scale_freq_counters_mask);
+ 		}
+ 	}
++
++	update_scale_freq_invariant(true);
+ }
+ EXPORT_SYMBOL_GPL(topology_set_scale_freq_source);
  
- #define BQ27XXX_O_ZERO		BIT(0)
- #define BQ27XXX_O_OTDC		BIT(1) /* has OTC/OTD overtemperature flags */
-@@ -948,6 +991,7 @@ static struct {
- 	[BQ28Z610]  = BQ27XXX_DATA(bq28z610,  0         , BQ27Z561_O_BITS),
- 	[BQ34Z100]  = BQ27XXX_DATA(bq34z100,  0         , BQ27XXX_O_OTDC | BQ27XXX_O_SOC_SI | \
- 							  BQ27XXX_O_HAS_CI | BQ27XXX_O_MUL_CHEM),
-+	[BQ78Z100]  = BQ27XXX_DATA(bq78z100,  0x00000000, BQ27Z561_O_BITS),
- };
+@@ -67,6 +87,8 @@ void topology_clear_scale_freq_source(enum scale_freq_source source,
+ 			cpumask_clear_cpu(cpu, &scale_freq_counters_mask);
+ 		}
+ 	}
++
++	update_scale_freq_invariant(false);
+ }
+ EXPORT_SYMBOL_GPL(topology_clear_scale_freq_source);
  
- static DEFINE_MUTEX(bq27xxx_list_lock);
-diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
-index eb4f4284982f..46f078350fd3 100644
---- a/drivers/power/supply/bq27xxx_battery_i2c.c
-+++ b/drivers/power/supply/bq27xxx_battery_i2c.c
-@@ -248,6 +248,7 @@ static const struct i2c_device_id bq27xxx_i2c_id_table[] = {
- 	{ "bq27z561", BQ27Z561 },
- 	{ "bq28z610", BQ28Z610 },
- 	{ "bq34z100", BQ34Z100 },
-+	{ "bq78z100", BQ78Z100 },
- 	{},
- };
- MODULE_DEVICE_TABLE(i2c, bq27xxx_i2c_id_table);
-@@ -284,6 +285,7 @@ static const struct of_device_id bq27xxx_battery_i2c_of_match_table[] = {
- 	{ .compatible = "ti,bq27z561" },
- 	{ .compatible = "ti,bq28z610" },
- 	{ .compatible = "ti,bq34z100" },
-+	{ .compatible = "ti,bq78z100" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, bq27xxx_battery_i2c_of_match_table);
-diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
-index 111a40d0d3d5..ac17618043b1 100644
---- a/include/linux/power/bq27xxx_battery.h
-+++ b/include/linux/power/bq27xxx_battery.h
-@@ -33,6 +33,7 @@ enum bq27xxx_chip {
- 	BQ27Z561,
- 	BQ28Z610,
- 	BQ34Z100,
-+	BQ78Z100,
- };
- 
- struct bq27xxx_device_info;
 -- 
-2.17.1
+2.25.0.rc1.19.g042ed3e048af
 
+-- 
+viresh
