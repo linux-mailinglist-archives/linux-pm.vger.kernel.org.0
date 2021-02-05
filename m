@@ -2,106 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F64311018
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 19:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0798631115E
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 20:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbhBEQ4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 11:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbhBEQsW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Feb 2021 11:48:22 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6FAC0611C3;
-        Fri,  5 Feb 2021 10:28:35 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id y21so1850754oot.12;
-        Fri, 05 Feb 2021 10:28:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=m24jKGGmGki3qeVOM6zz/wESINDsCmuIsOMA9QLVHHY=;
-        b=nY7/EII8giBI27YgK2N32iOY7orsIskuUmQAmyFa9eEyds7Hw+Ww2IEzZj1XZDhdbp
-         zQyMRL3A1Coc/q9SaFq/0NUKmTkdC0PLu1GRtfHbjbBQrIQTfQfnwMiBi5LRwFODyI4g
-         ITA1QCMAoOGkxgRrnOaS8n6LtCqxekZEr7X75x9UsmBdFzf6sNcQZNZxQWb7ptTiHG4M
-         yl/puPyK5Q09SGNKwS1Y7dZuYlBVE14mGxGKs4jrEawSr3xJBLDArtlppWFGK4XkJ6Bi
-         PflvEkc+Nf/OTWSt2oTLvE7MFAR/68JMkyH7M9tW5BVgk1pqdvKVggKr7I33WcRKzgz/
-         RTnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=m24jKGGmGki3qeVOM6zz/wESINDsCmuIsOMA9QLVHHY=;
-        b=siiqd/AHJQ2ysECsalLPtP2qBYWzDLOW++Oz5mZqS+1OPU0bY4rwhkfAIOKQqx1D4/
-         2rSpKDUvIewLVi2RnutwTvtixKMskpEsQbzEmfaGV8Q6/23vpbjcSKaxsIZKuU4+yrJN
-         n/KpHPmgFEr5Xr6t+AlDVuyQWFi/YhFdoMo1FzNICBp0O23C2JHBp7ljZ7rn4itpuDT1
-         E6GBjPfBFXeCT1Vqj93wY2rBFDye2eSVF3sUAiVn3DxX0iXnI3+AXSoBHyaFIIlXEc/0
-         c5usskd3+VHAqj4gIGpaAHP21txv431d9ws1JD+gd99dfvV1Y4YBsOvS6tNRv6PwgdEa
-         w86A==
-X-Gm-Message-State: AOAM5319oXvPd6Z2nQ4eBRtjuZFdcSnlO88fI0b6sg5KHBQBs6R/xOj8
-        FcFr1YNoolhvIzJ/cYJ24ivDyZV88Ww=
-X-Google-Smtp-Source: ABdhPJyE2MF8OFOaDmpo0vh7Eo2L1g2amAJPTfQqAlqkEqPU8XrD8rxQEXHiuZfPi83S4TSCbsj/zQ==
-X-Received: by 2002:a4a:aa8b:: with SMTP id d11mr952667oon.36.1612549714774;
-        Fri, 05 Feb 2021 10:28:34 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d127sm1951329oib.26.2021.02.05.10.28.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 05 Feb 2021 10:28:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 5 Feb 2021 10:28:32 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     gregkh@linuxfoundation.org, jdelvare@suse.com,
-        giometti@enneenne.com, abbotti@mev.co.uk,
-        hsweeten@visionengravers.com, kw@linux.com, helgaas@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
-        michal.lkml@markovi.net, prime.zeng@huawei.com,
-        linuxarm@openeuler.org
-Subject: Re: [PATCH 2/4] hwmon: Use subdir-ccflags-* to inherit debug flag
-Message-ID: <20210205182832.GA186268@roeck-us.net>
-References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
- <1612518255-23052-3-git-send-email-yangyicong@hisilicon.com>
+        id S233280AbhBER55 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 12:57:57 -0500
+Received: from mga11.intel.com ([192.55.52.93]:3071 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233238AbhBEP1Q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Feb 2021 10:27:16 -0500
+IronPort-SDR: DBWi9nnisSoA8Cdvker+OvShWDgaPtMv0Jwpi8AQhzj/Ly7SSvlMl+ZAOuOsdgSEWN4CXgQMPU
+ Ep1HDkmi/vRQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="177955330"
+X-IronPort-AV: E=Sophos;i="5.81,155,1610438400"; 
+   d="scan'208";a="177955330"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 09:07:37 -0800
+IronPort-SDR: mGPnbtVPmJJg3NoDEko5zdYAU1Mj7/ClAx+9ByIq3ztejbmWSU/Op+By5NXQ/Xnnb32UcH1EmV
+ HSs71W5HB+0g==
+X-IronPort-AV: E=Sophos;i="5.81,155,1610438400"; 
+   d="scan'208";a="393939598"
+Received: from mjwilkin-mobl.amr.corp.intel.com ([10.212.80.131])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 09:07:36 -0800
+Message-ID: <0f63aaa63cb4217f772aa702fac5c44a3ac110b6.camel@linux.intel.com>
+Subject: Re: [PATCH 1/2] powercap/intel_rapl: Use topology interface in
+ rapl_add_package()
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yunfeng Ye <yeyunfeng@huawei.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        hushiyuan@huawei.com, hewenliang4@huawei.com, caihongda@huawei.com
+Date:   Fri, 05 Feb 2021 09:07:28 -0800
+In-Reply-To: <CAJZ5v0hNryYqKfTZfRjN+KJVgw973G+vi9SrT4mGTPz_TTT2ng@mail.gmail.com>
+References: <20210123100608.2349629-1-yeyunfeng@huawei.com>
+         <CAJZ5v0hNryYqKfTZfRjN+KJVgw973G+vi9SrT4mGTPz_TTT2ng@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1612518255-23052-3-git-send-email-yangyicong@hisilicon.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 05:44:13PM +0800, Yicong Yang wrote:
-> From: Junhao He <hejunhao2@hisilicon.com>
+On Fri, 2021-02-05 at 13:45 +0100, Rafael J. Wysocki wrote:
+> On Sat, Jan 23, 2021 at 11:07 AM Yunfeng Ye <yeyunfeng@huawei.com>
+> wrote:
+> > It's not a good way to access phys_proc_id and cpu_die_id directly.
+> > So using topology_physical_package_id(cpu) and topology_die_id(cpu)
+> > instead.
+> > 
+> > Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
 > 
-> Use subdir-ccflags-* instead of ccflags-* to inherit the debug
-> settings from Kconfig when traversing subdirectories.
-> 
-> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Srinivas, Rui, any concerns?
+Looks good.
 
-What problem does this fix ? Maybe I am missing it, but I don't see
-DEBUG being used in a subdirectory of drivers/hwmon.
+Thanks,
+Srinivas
 
-Guenter
+> 
+> > ---
+> >  drivers/powercap/intel_rapl_common.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/powercap/intel_rapl_common.c
+> > b/drivers/powercap/intel_rapl_common.c
+> > index c9e57237d778..5f3d39b8212a 100644
+> > --- a/drivers/powercap/intel_rapl_common.c
+> > +++ b/drivers/powercap/intel_rapl_common.c
+> > @@ -1309,7 +1309,6 @@ struct rapl_package *rapl_add_package(int
+> > cpu, struct rapl_if_priv *priv)
+> >  {
+> >         int id = topology_logical_die_id(cpu);
+> >         struct rapl_package *rp;
+> > -       struct cpuinfo_x86 *c = &cpu_data(cpu);
+> >         int ret;
+> > 
+> >         if (!rapl_defaults)
+> > @@ -1326,10 +1325,11 @@ struct rapl_package *rapl_add_package(int
+> > cpu, struct rapl_if_priv *priv)
+> > 
+> >         if (topology_max_die_per_package() > 1)
+> >                 snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH,
+> > -                        "package-%d-die-%d", c->phys_proc_id, c-
+> > >cpu_die_id);
+> > +                        "package-%d-die-%d",
+> > +                        topology_physical_package_id(cpu),
+> > topology_die_id(cpu));
+> >         else
+> >                 snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH,
+> > "package-%d",
+> > -                        c->phys_proc_id);
+> > +                        topology_physical_package_id(cpu));
+> > 
+> >         /* check if the package contains valid domains */
+> >         if (rapl_detect_domains(rp, cpu) || rapl_defaults-
+> > >check_unit(rp, cpu)) {
+> > --
+> > 2.27.0
+> > 
 
-> ---
->  drivers/hwmon/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 09a86c5..1c0c089 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -201,5 +201,5 @@ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
->  obj-$(CONFIG_SENSORS_OCC)	+= occ/
->  obj-$(CONFIG_PMBUS)		+= pmbus/
->  
-> -ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> +subdir-ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
->  
-> -- 
-> 2.8.1
-> 
