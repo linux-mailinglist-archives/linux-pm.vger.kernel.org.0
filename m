@@ -2,119 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC607310575
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 08:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364BC310596
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 08:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbhBEHIZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 02:08:25 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41556 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230516AbhBEHIU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Feb 2021 02:08:20 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2D16EACBA;
-        Fri,  5 Feb 2021 07:07:38 +0000 (UTC)
-Message-ID: <1612508857.19825.7.camel@suse.cz>
-Subject: Re: [PATCH v1 2/2] cpufreq: ACPI: Update arch scale-invariance max
- perf ratio if CPPC is not there
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michael Larabel <Michael@phoronix.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 05 Feb 2021 08:07:37 +0100
-In-Reply-To: <9510730.kuOQ4KzHjt@kreacher>
-References: <13690581.X0sz4iL7V8@kreacher> <9510730.kuOQ4KzHjt@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S231451AbhBEHLL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 02:11:11 -0500
+Received: from mail-eopbgr120108.outbound.protection.outlook.com ([40.107.12.108]:63216
+        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231280AbhBEHLB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Feb 2021 02:11:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O6ubhRxxWFSduavFrtRg5O+5rNI/D6DZ5DfL2+BWoPr/kgti4DlZRW+y6BIhZTMi0bXaq8+HbK0r7cQ9DCdluZ7wdf1IY1mLsNdYzhjh/ttjuBZ2MAqO1sYQOvAFXTAr1mI4h2QqTIGnhSDYrjZePVYF6w/3LCVLGTM8E3dkl559FS9xzFQawqJQY97x81xwb4Lcq/xrZYyL5YhKshaeYdTBoLXOU3zS/JqgV2SFFtZPfW6KqnMOTmve532PJUVm3X/qlT6NhT6lvrEkPBibcuuV3BwjOivhsq6PBXlt0rvpjLFgXwx6Zj9X5xVZxjlFY3plJNo+A4CZVIF+6PKukQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BqwOKEx6IU9HiUwRket33pSxEPsYi81KppD7xitkyhE=;
+ b=c91SwIuq6Ni9grHFTbbE1DEluj81NJqqjXzha48MyacC4TbwUlTeIfeihW57NR5ANz9YlY3DObnm7YNhIi/x4sHbNcIidquiPsGpD+a9aVk++3yFwdUreul2Ndr9iyTBHOvyvWVEdT77IgPKvoI6WBmC5syb06VJmcwu/QEKWZPhOt4C2VZ4kQju/YPs6y6vA+qcXEu5EfswFMF61Dyt0AhIchZzxq52+73IqzFRt7vdTfc9G1uzzygSiewAwoh2bzwQWLiw6BYwXK2kniSA+0egDCI6xpUrRt4N9J8HiRcMF+rkI5U3SRoSTCf3Lc0NymqLSdhAFQ2UGXBcSgDL+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.99) smtp.rcpttodomain=kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=quarantine sp=quarantine
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BqwOKEx6IU9HiUwRket33pSxEPsYi81KppD7xitkyhE=;
+ b=wHjVLJXH3v/0rBhMWIjdwxjya6QKDwCuZ3iD12YftNitCKiD0kbUtRUnz880GsGN3XD6XxzN+Kjc/giqFYxEu3sjHUvCmfsN9vDHqV4v6UhJThQ5W70FD2NwEuxAtQUGktAHZSUC5TQOGJ4p+knB6W1VJV4MfmJag4KcVQ0oYG4=
+Received: from AM6P194CA0100.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:8f::41)
+ by PR1PR06MB4714.eurprd06.prod.outlook.com (2603:10a6:102:6::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.24; Fri, 5 Feb
+ 2021 07:10:09 +0000
+Received: from AM5EUR02FT033.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:209:8f:cafe::cc) by AM6P194CA0100.outlook.office365.com
+ (2603:10a6:209:8f::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.19 via Frontend
+ Transport; Fri, 5 Feb 2021 07:10:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
+ smtp.mailfrom=leica-geosystems.com.cn; kernel.org; dkim=none (message not
+ signed) header.d=none;kernel.org; dmarc=pass action=none
+ header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.99; helo=aherlnxbspsrv01.lgs-net.com;
+Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.99) by
+ AM5EUR02FT033.mail.protection.outlook.com (10.152.8.86) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3784.11 via Frontend Transport; Fri, 5 Feb 2021 07:10:08 +0000
+From:   LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To:     sre@kernel.org, robh+dt@kernel.org, dmurphy@ti.com,
+        pali@kernel.org, krzk@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     grygorii.tertychnyi@leica-geosystems.com,
+        andrey.zhizhikin@leica-geosystems.com,
+        LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Subject: [PATCH V4 0/2] power: bq27xxx: add bq78z100
+Date:   Fri,  5 Feb 2021 07:10:02 +0000
+Message-Id: <20210205071004.26317-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 8e74e9f1-cc80-4f45-6fd4-08d8c9a5124d
+X-MS-TrafficTypeDiagnostic: PR1PR06MB4714:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <PR1PR06MB47141BD2EFBC9847C0F4695BD7B29@PR1PR06MB4714.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2yjhwNtCha2nXaWluSAcYkdqvySQSStjQqVUOTXycX0NuPCcPWpZaY4+L/pcZDw5HE9uLjdWc1fI5hiRpxHdjl4QT7COIXhbO5Uj4Jw8dvlqkurLP71cl7X6D2zUSlTBLgO2B9VGX9+MExr+mS+5PlAI/geT+hYb/sAUuViQcFycGFZIUJmXFGUlqC9Ck4NaF7MKv2MvmN0tfVvtdcLhbN9HC7ULod9ejZgCWW4M1Gcobiwrf7kUCF7ecb7731+glejTTqdWYQLqFhafhuLIDy+glRj6uLvMiZGtg+M80Di7KI61h4Es1fnuZ9UI0r62iuMDmmGOzaIWY4Wo6DPbgjz8C4GhCSVPnN+2ewBZs97Fvsw2PCRN/atfOdFkJjhEGuhbHoXj39guyN12viJI5Rnzvseo+gmarVxE6Aba2x6ErJ7LgUgTV5hv5FahUUprnVVUeCDP4ObAsAS8k2D5Rg+fV6eenp30gwUxBnxLNE4VI1y+9bdIlTAVJSx1vVgqGJHGLrBtkv/wUa3k/wrcySM7UWvbpGSfIiwl//S+NN1Rm9fepV2eMeUlADS2h0QkS0gbcXNmCsB66JsK+QJ27kO6c3aTihwYaLtGwmntxSUsOOYVEIZvB7eyqzSsMnywbAT5JaxpoXMjXLIEbcBPm/solnBGzqbAmHTpi9HqHzHTf1Palj7UFYKj+CJYDsz2ww+3lZDeoNX7BXPV6qvISg==
+X-Forefront-Antispam-Report: CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:aherlnxbspsrv01.lgs-net.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(39860400002)(36840700001)(46966006)(70586007)(36736006)(6486002)(956004)(8936002)(47076005)(36860700001)(6512007)(34020700004)(2616005)(6506007)(336012)(1076003)(2906002)(186003)(356005)(82310400003)(26005)(36756003)(82740400003)(316002)(83380400001)(478600001)(8676002)(107886003)(5660300002)(4326008)(86362001)(6666004)(81166007)(118246002)(4744005)(70206006)(138113003);DIR:OUT;SFP:1102;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2021 07:10:08.4587
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e74e9f1-cc80-4f45-6fd4-08d8c9a5124d
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[aherlnxbspsrv01.lgs-net.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM5EUR02FT033.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1PR06MB4714
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2021-02-04 at 18:34 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If the maximum performance level taken for computing the
-> arch_max_freq_ratio value used in the x86 scale-invariance code is
-> higher than the one corresponding to the cpuinfo.max_freq value
-> coming from the acpi_cpufreq driver, the scale-invariant utilization
-> falls below 100% even if the CPU runs at cpuinfo.max_freq or slightly
-> faster, which causes the schedutil governor to select a frequency
-> below cpuinfo.max_freq.  That frequency corresponds to a frequency
-> table entry below the maximum performance level necessary to get to
-> the "boost" range of CPU frequencies which prevents "boost"
-> frequencies from being used in some workloads.
-> 
-> While this issue is related to scale-invariance, it may be amplified
-> by commit db865272d9c4 ("cpufreq: Avoid configuring old governors as
-> default with intel_pstate") from the 5.10 development cycle which
-> made it extremely easy to default to schedutil even if the preferred
-> driver is acpi_cpufreq as long as intel_pstate is built too, because
-> the mere presence of the latter effectively removes the ondemand
-> governor from the defaults.  Distro kernels are likely to include
-> both intel_pstate and acpi_cpufreq on x86, so their users who cannot
-> use intel_pstate or choose to use acpi_cpufreq may easily be
-> affectecd by this issue.
-> 
-> If CPPC is available, it can be used to address this issue by
-> extending the frequency tables created by acpi_cpufreq to cover the
-> entire available frequency range (including "boost" frequencies) for
-> each CPU, but if CPPC is not there, acpi_cpufreq has no idea what
-> the maximum "boost" frequency is and the frequency tables created by
-> it cannot be extended in a meaningful way, so in that case make it
-> ask the arch scale-invariance code to to use the "nominal" performance
-> level for CPU utilization scaling in order to avoid the issue at hand.
-> 
-> Fixes: db865272d9c4 ("cpufreq: Avoid configuring old governors as default with intel_pstate")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  arch/x86/kernel/smpboot.c      |    1 +
->  drivers/cpufreq/acpi-cpufreq.c |    8 ++++++++
->  2 files changed, 9 insertions(+)
-> 
-> Index: linux-pm/drivers/cpufreq/acpi-cpufreq.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/acpi-cpufreq.c
-> +++ linux-pm/drivers/cpufreq/acpi-cpufreq.c
-> @@ -806,6 +806,14 @@ static int acpi_cpufreq_cpu_init(struct
->  		state_count++;
->  		valid_states++;
->  		data->first_perf_state = valid_states;
-> +	} else {
-> +		/*
-> +		 * If the maximum "boost" frequency is unknown, ask the arch
-> +		 * scale-invariance code to use the "nominal" performance for
-> +		 * CPU utilization scaling so as to prevent the schedutil
-> +		 * governor from selecting inadequate CPU frequencies.
-> +		 */
-> +		arch_set_max_freq_ratio(true);
->  	}
->  
->  	freq_table = kcalloc(state_count, sizeof(*freq_table), GFP_KERNEL);
-> Index: linux-pm/arch/x86/kernel/smpboot.c
-> ===================================================================
-> --- linux-pm.orig/arch/x86/kernel/smpboot.c
-> +++ linux-pm/arch/x86/kernel/smpboot.c
-> @@ -1833,6 +1833,7 @@ void arch_set_max_freq_ratio(bool turbo_
->  	arch_max_freq_ratio = turbo_disabled ? SCHED_CAPACITY_SCALE :
->  					arch_turbo_freq_ratio;
->  }
-> +EXPORT_SYMBOL_GPL(arch_set_max_freq_ratio);
->  
->  static bool turbo_disabled(void)
->  {
+Changes in V4:
+Correct the wrong part number in the subject, bq78z100 instead of
+bq78z10.
 
-Reviewed-by: Giovanni Gherdovich <ggherdovich@suse.cz>
 
-Thanks,
-Giovanni
+LI Qingwu (2):
+  dt-bindings: power: bq27xxx: add bq78z100
+  power: supply: bq27xxx: Add support for BQ78Z100
+
+ .../bindings/power/supply/bq27xxx.yaml        |  1 +
+ drivers/power/supply/bq27xxx_battery.c        | 46 ++++++++++++++++++-
+ drivers/power/supply/bq27xxx_battery_i2c.c    |  2 +
+ include/linux/power/bq27xxx_battery.h         |  1 +
+ 4 files changed, 49 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
+
