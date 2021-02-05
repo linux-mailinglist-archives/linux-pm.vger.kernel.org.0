@@ -2,123 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC453100FB
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 00:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D62310133
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 01:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbhBDXrd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 18:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S231514AbhBEACH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 19:02:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbhBDXr1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 18:47:27 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FC4C0613D6
-        for <linux-pm@vger.kernel.org>; Thu,  4 Feb 2021 15:37:47 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id a16so2599461plh.8
-        for <linux-pm@vger.kernel.org>; Thu, 04 Feb 2021 15:37:47 -0800 (PST)
+        with ESMTP id S231499AbhBEACE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 19:02:04 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D54C0613D6
+        for <linux-pm@vger.kernel.org>; Thu,  4 Feb 2021 16:01:24 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id i187so7286512lfd.4
+        for <linux-pm@vger.kernel.org>; Thu, 04 Feb 2021 16:01:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=/w7sZOIByAjRaoebtQFL0fDDQeJInEUxk36q3cZwmd0=;
-        b=SMiXG6XcqnaHl/IBjGVX2Qq2uJLjqTCs2iofm6LjGSuCe/eQJ1x+ByHQ0vH23BWeN3
-         iM6e1xHkzhkbZK62TlbJFRCc45uHBkKL8TYUNhl7iu/ubA9xy/Pgg2j4j7IwUYXUM29P
-         VHo70ECkwbMTEkzHMJirsdYUtla/3Xw40aV3cXMdCKQxmIgNOItVag/OrlCkgZg/eU0w
-         F53XvcMbnHyYqjooqebe2PJi9S6yKi5FWLuzEGCoDwVZ6klNe6JfgYs0lEYN3KZvv9C5
-         HdJZVL0pDSjN7VcMH+cCro9+prQvQdkKrcGLKouq4C2aDKMPHpfoOBvPC81mvTQy1jGO
-         JTGA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zLqPTFh6CuSeccJgUeUot2gtzesuWCTA8N4g9JUgJlg=;
+        b=fhw60sCMKSzS6vpKxVfqfnprR1Gtbsn0Wxse5P5rrCDoZ6UwYx7uLY25tp2uuhFX7O
+         BemTos5LhfGk5sleNbZ+39yJ1FXQ/e/Rz6CgdB//tPK4ReckJ1rGdJjM8gi665JDYbmA
+         LKiS7Kr7pf3dQ7q/L/wQeFCdT3CTu6nBdwghdKOslF9VgUGLviXJdkjy2QtjMeIrZTsM
+         s46gZj8bvH1K61SP3c6iLBj4IjD7tzGqYqgt8En8L8VUnxa7apl5kH9IheBa6sJrxF0N
+         nre6zg9VGTaAvLmm2JVwwStMDQAZKN7w3OcQMHl3BvD84AE4rY0yiyQ1e05n714z1ZBW
+         iByQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=/w7sZOIByAjRaoebtQFL0fDDQeJInEUxk36q3cZwmd0=;
-        b=sSBwzFia346tgD8IP5UV9Vc1Wyna1Wra+NzLRyr/OoMDm9NchKtrQIjI6b4kKrH2Eo
-         2UoVrgXnsCVnSMI7cjw1lw/mx2sDb8p5hjx+418Wb7yfixA3JXCiA/LQpUu11LVEVf2O
-         aHHvpOtIs6gjCqRai/ZyFhzRuv+bAPf+XQAE/ivsr+Q7rlVZXGhp1dBfqLl9xX5FJLsJ
-         xhQd+YYlFZctr3BH13wwaJo1Y5nr67J45iELcYUCB3bAmJfj4qK+zZKLlgscw/bOB/pF
-         FQFQU+0R3fLxfZBlqnZr4GIYMlg4qhXhNpAH6A1gcRoQZYSjg1+84PnMEEkmArTHJE/U
-         oNIw==
-X-Gm-Message-State: AOAM531Ixsy/Nv4R9qzA0xOzTZylrRhBJfMEHhoyqCc0nB8titUfJ0Uz
-        T2A7bnLIAO5c37GJMBKVf7nIWA==
-X-Google-Smtp-Source: ABdhPJwxEWpZfksvTNVrIvyWQ/I9IczC33BfC7/TMjTj//uAX8zmxqSp3XwKeEE8eXg/xzhMUzo3QQ==
-X-Received: by 2002:a17:90b:3805:: with SMTP id mq5mr1324205pjb.93.1612481866817;
-        Thu, 04 Feb 2021 15:37:46 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id gc13sm6309202pjb.11.2021.02.04.15.37.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zLqPTFh6CuSeccJgUeUot2gtzesuWCTA8N4g9JUgJlg=;
+        b=dbCT4XoPtIPlON2g3nzA9D5z7NwV8mkCyzz16F9TfyzK7YJXTK+IBdiPb7Sm+CtbXl
+         dfGe1/pPdp7SEO0La6xi/uREcmQnSwrD3NJ6yJW0RVVjAfaXEK9bOQZvlp3R01Uu45D3
+         b4BfjwuE/NHlGBv/wam2YXco52uZ3lcY42hYwzkhmkjQiAVpjGeRFULZ4ir/hgjsndPp
+         ZDNmVAfvnUFTHvUfXvPGIVylchwtu5Bt9EkUs4orKZp9L8WfVIZVATOIvz7FhL4cKTau
+         s+EDO8vpPM2VFt+9JkFwHQ7SATeb7XNiHN55qlIgkl+pleB86L3f9oIz5s2eYrFH+bU2
+         dgPQ==
+X-Gm-Message-State: AOAM5309Fw6OplVK0zBSsHwR1exGgNZRgGYw04FXh9fxCGNcggAKC4dy
+        R/VkvEBk2FWL0tzVeJhXh3X2nA==
+X-Google-Smtp-Source: ABdhPJyL2cGQ3cX3iT0ggBpT5cJGbH5cWbn0wNvpFUEBfbnV9f5wHpFlWmZm4QiOa+XIxvQp21WB/A==
+X-Received: by 2002:a05:6512:2248:: with SMTP id i8mr939789lfu.632.1612483282579;
+        Thu, 04 Feb 2021 16:01:22 -0800 (PST)
+Received: from eriador.lan ([188.162.64.67])
+        by smtp.gmail.com with ESMTPSA id x11sm799532ljh.69.2021.02.04.16.01.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 15:37:46 -0800 (PST)
-Message-ID: <601c854a.1c69fb81.64695.e17f@mx.google.com>
-Date:   Thu, 04 Feb 2021 15:37:46 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 04 Feb 2021 16:01:22 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jishnu Prakash <jprakash@qti.qualcomm.com>
+Subject: [PATCH v14 0/2] thermal: qcom: add support for adc-tm5 PMIC thermal monitor
+Date:   Fri,  5 Feb 2021 03:01:16 +0300
+Message-Id: <20210205000118.493610-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: acpi-5.11-rc7-89-g5f8da9ef1c5d8
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (acpi-5.11-rc7-89-g5f8da9ef1c5d8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (acpi-5.11-rc7-89-g5f8da9ef1=
-c5d8)
+This patch serie adds support for thermal monitoring block on Qualcomm's
+PMIC5 chips. PM8150{,b,l}, qrb5165-rb5 board and sm8250-mtp board device
+trees are extended to support thermal zones provided by this thermal
+monitoring block.  Unlike the rest of PMIC thermal senses, these thermal
+zones describe particular thermistors, which differ between from board
+to board.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-5.11-rc7-89-g5f8da9ef1c5d8/
+Dependencies: https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/log/?h=ib-iio-thermal-5.11-rc1
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-5.11-rc7-89-g5f8da9ef1c5d8
-Git Commit: 5f8da9ef1c5d88b9a6de64ad33d98e2edd58ce89
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Changes since v13:
+ - Really fix adc_tm5_get_temp(). Failed to squash the fixup into the
+   v13.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+Changes since v12:
+ - Drop patches taken into linux-next.
+ - Fix adc_tm5_get_temp to handle IIO_VAL_INT properly (removed in v9).
 
-Detailed per-defconfig build reports:
+Changes since v11:
+ - Drop io-channel-ranges from dts example.
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Changes since v10:
+ - Rebased on top of ib-iio-thermal-5.11-rc1 immutable branch, with
+   IIO-related patches picked up by Jonathan.
+ - Changed thermal zone device tree nodes to use -thermal suffix
+   following the schema.
+ - Reordered device tree nodes to keep the alphanumeric sorting order.
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+Changes since v9:
+ - In patch 12 add comments to the code as requested by Daniel Lezcano.
+ - Change copyright comment in qcom-spmi-adc-tm5.c to clearly note
+   driver history.
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+Changes since v8:
+ - Simplified qcom_vadc_map_voltage_temp() code by removing ascending
+   tables support
+ - Simplified qcom-vadc-common volt/temp mapping code
+ - Implement suggestions by Matthias Kaehlcke: message formatting,
+   rewrite comments, remove unused variable initialization.
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+Changes since v7:
+ - Move qcom-vadc-common.h header to include/linux/iio/adc/ dir.
+ - Use explicit sizeof(var) instead of hand-coding 1 when accessing
+   adc-tm registers.
+ - Remove buffer read from adc_tm5_init().
+ - Remove extra on-stack var from adc_tm5_get_temp().
+ - Minor formatting changes as suggested Daniel.
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+Changes since v6:
+ - Added include <linux/bitfield.h> as noted by Jishnu Prakash.
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+Changes since v5:
+ - Reworked DT bindings:
+   * Removed qcom,adc-channel, instead it is parsed from io-channels
+   * Renamed qcom,hw-settle-time to include -us suffix
+ - Re-added monitor enabling which got lost during refactored. Noted by
+   Jishnu Prakash.
+ - Use threaded IRQ handler as susggested by Jishnu.
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+Changes since v4:
+ - Added kernel-doc comments to ADC-TM structures
+ - Used several sizeof(buf) instead of hand-conding register size
 
----
-For more info write to <info@kernelci.org>
+Changes since v3:
+ - Fix DT description to spell "thermal monitoring" instead of just TM
+ - Fix warnings in DT example
+ - Add EXPORT_SYMBOL_GPL(of_iio_channel_get_by_name)
+ - Fixed whitespace chanes in qcom-vadc-common.c
+ - Removed error message if IIO chanel get returns -EPROBE_DEFER
+
+Changes since v2:
+ - IIO: export of_iio_channel_get_by_name() function
+ - dt-bindings: move individual io-channels to each thermal monitoring
+   channel rather than listing them all in device node
+ - added fallback defaults to of_device_get_match_data calls in
+   qcom-spmi-adc5 and qcom-spmi-adc-tm5 drivers
+ - minor typo fixes
+
+Changes since v1:
+ - Introduce fixp_linear_interpolate() by Craig Tatlor
+ - Lots of syntax/whitespace changes
+ - Cleaned up register definitions per Jonathan's suggestion
+ - Implemented most of the suggestions from Bjorn's and Jonathan's
+   review
+
+
+
