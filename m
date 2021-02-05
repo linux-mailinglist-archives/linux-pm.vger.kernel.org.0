@@ -2,53 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C8B31195B
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Feb 2021 04:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBFB311959
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Feb 2021 04:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbhBFDCs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 22:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S231597AbhBFDCm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 22:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbhBFCxG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Feb 2021 21:53:06 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79B1C0698DA
-        for <linux-pm@vger.kernel.org>; Fri,  5 Feb 2021 14:26:48 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id v17so8720467ybq.9
-        for <linux-pm@vger.kernel.org>; Fri, 05 Feb 2021 14:26:48 -0800 (PST)
+        with ESMTP id S231743AbhBFCxB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Feb 2021 21:53:01 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8523C0698E2
+        for <linux-pm@vger.kernel.org>; Fri,  5 Feb 2021 14:26:54 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id b125so8783152ybg.10
+        for <linux-pm@vger.kernel.org>; Fri, 05 Feb 2021 14:26:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=KekFTcOSO4wGAzjYFoTwyn8B3aXY0kSnpBZiIzqgZEQ=;
-        b=KrQzTpS6DEL/LCcOb464QcY63wZdOZyXEce3rYox0e/nGOQdvy7laJJKstqsB2NyjQ
-         jZtp7noJv+D3j5LbRhVy96dSNljsXiOTyrCUGWuv/JSD+bIejeLKNXrqbCgwGBilJi/2
-         oEE561HncfQrVH5rGAj5pGzI1tXoAZtO4SAMKijao3R8oTf7rdFdA9z7kIg92gEcYLot
-         ttNIT/yBpvW8eS4kR4/f06jsFYlGYoifws72E7669fzKMKYIaENiMi5Hb5K5PIq+F9G8
-         IrKDlnWLqO6ClP2GHCwNFAX6wO37RQwoYo0d7cl1yi7luH1HtnqO+4m85WADDz8irR7V
-         biTA==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=j8xLJ/gRsabqXmVqApH6UU1AJY7QICocc5XvPOoh2CA=;
+        b=E5sFvJO7MoqTQ5HU1iZRDkvKf3YEJnMxgLBzB4Bdzzu+OwTihKotepF9+vecFbKNIx
+         RMScWAE2zE8rfvaCnxQasMRx1b2r+VjvXf9v4q+HNHmXZS+zJmKBYlJ1jOnNKPkYLUUx
+         +9C9RV4z0aszLyrKr2OQQUAT3XhAqGUElzBIGIsskZIGV69KYaqaW83ucTaO/doqcRq5
+         aA1hFJJYjJVvodQlIzs4Yf6qBGi+RWhj71EWMUCnJT+YB8Jg9U54RCqfkCTP8s/4Q2lH
+         nfjbItiLvc4Ce0s3du8UwLa5Sd+7cG0N/EYOX2N9Kz9ci0pHOQ3JMNDAeaGfizIIj8Tt
+         OyuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=KekFTcOSO4wGAzjYFoTwyn8B3aXY0kSnpBZiIzqgZEQ=;
-        b=BUyjwbHWjktovZI/iJ1AC2DMkevmYPtiNgRHLbLmCwuQdoDnGFQcTCKScqkeL4aIEt
-         sGoqxjbrHyv6lDZ8e6uMHtQQs7zFxDcNF+bWnWS65sVsCXfdb6DLvEKjralRReLxKi0D
-         Kdw0pa4N1tW+rHGyM+19CrWoaAyrbMDmCZAawGNpqXVu0lqPcHgZBQ49/kPnhwAkR1C2
-         oTT61x6vowjZPk8Mz48ECrK1N7OC8OyXuJW0f2sDQtlhXjyJEczcS9hOY7zr3Q5Nustg
-         jX9O68ca1coczwtDv1niJviQ4DSiKLmsL8IKPEvKhGTOLVQX9WYoZRUPmIEuouatr5nX
-         wevw==
-X-Gm-Message-State: AOAM530E8YJJbvnC9QOM7Y+5bqPmgaBYvpRu0bpvd+I7c8k+NOO7GeSD
-        Dhx28/HEnYBeFnk4UMxpEqKAVCDNN2DqxX4=
-X-Google-Smtp-Source: ABdhPJxm8PTm8GV67URDpWm+ruVimL263DiRMvQSkPWTdfF+6ykLYu749Qsb3g8GDsFUzpQF0GFx6o5daJQkNyM=
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=j8xLJ/gRsabqXmVqApH6UU1AJY7QICocc5XvPOoh2CA=;
+        b=VwbBCIoucoRRdWzkqR9m7M9HJql0tHDqqR+zAoa4ESjadreRv0BGWNrqumS5phZ19M
+         Ef/bVunewQoJzC4zZ7zhhyGX/ocLW7NoaPq2vAI54AUhLeFDQBH6zVnM5UYZp8Asl6MQ
+         LsrRP5Vr1Y41zJYwVeenRSrXxHf9HuhBVEfJdC97GJ7nMK6ZUinDF0fr8VkPPCCaXJoL
+         D4BorWglmNQH+7kZ/CKwmv4bsr6I+gH3eWwa2rqOu/f+Pfnqx2TM/BOpnyUjyxRE0cVt
+         9zKgdbZ2nuC5vZgR/3peP2WTgGx7rrcYit4RFnpJ4fhsLAJbMQFGASglf6C6cAMcLWvM
+         Y+vQ==
+X-Gm-Message-State: AOAM531FQ9DOsi8e44nx5ZGtWYt3BYmQgL/QBdOQAP59nTaKM8e8cnpX
+        /ENoBgZ1/9kpPC0XuZQIdry8dBR+7lEwkY4=
+X-Google-Smtp-Source: ABdhPJwaxJzPZ4XSeGkT3P5EprKNXkjzOOR8qEj+Bd02rhMYgGuOOcL7rRwb/dvXftOqDNpM24CwbGcGHu5s6VY=
 Sender: "saravanak via sendgmr" <saravanak@saravanak.san.corp.google.com>
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:6d36:b798:55d7:f5c5])
- (user=saravanak job=sendgmr) by 2002:a25:5f02:: with SMTP id
- t2mr9740666ybb.161.1612564007719; Fri, 05 Feb 2021 14:26:47 -0800 (PST)
-Date:   Fri,  5 Feb 2021 14:26:36 -0800
-Message-Id: <20210205222644.2357303-1-saravanak@google.com>
+ (user=saravanak job=sendgmr) by 2002:a25:d648:: with SMTP id
+ n69mr8876885ybg.462.1612564014028; Fri, 05 Feb 2021 14:26:54 -0800 (PST)
+Date:   Fri,  5 Feb 2021 14:26:38 -0800
+In-Reply-To: <20210205222644.2357303-1-saravanak@google.com>
+Message-Id: <20210205222644.2357303-3-saravanak@google.com>
 Mime-Version: 1.0
+References: <20210205222644.2357303-1-saravanak@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v4 0/8] Make fw_devlink=on more forgiving
+Subject: [PATCH v4 2/8] of: property: Don't add links to absent suppliers
 From:   Saravana Kannan <saravanak@google.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -62,11 +65,11 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Saravana Kannan <saravanak@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         kernel-team@android.com
@@ -75,49 +78,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are a lot of devices/drivers where they never have a struct device
-created for them or the driver initializes the hardware without ever
-binding to the struct device.
+If driver core marks a firmware node as not a device, don't add fwnode
+links where it's a supplier.
 
-This series is intended to avoid any boot regressions due to such
-devices/drivers when fw_devlink=on and also address the handling of
-optional suppliers.
+Fixes: e590474768f1 ("driver core: Set fw_devlink=on by default")
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ drivers/of/property.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Patch 1 and 2 addresses the issue of firmware nodes that look like
-they'll have struct devices created for them, but will never actually
-have struct devices added for them. For example, DT nodes with a
-compatible property that don't have devices added for them.
-
-Patch 3 and 4 allow for handling optional DT bindings.
-
-Patch 5 sets up a generic API to handle drivers that never bind with
-their devices.
-
-Patch 6 through 8 update different frameworks to use the new API.
-
-Thanks,
-Saravana
-
-Saravana Kannan (8):
-  driver core: fw_devlink: Detect supplier devices that will never be
-    added
-  of: property: Don't add links to absent suppliers
-  driver core: Add fw_devlink.strict kernel param
-  of: property: Add fw_devlink support for optional properties
-  driver core: fw_devlink: Handle suppliers that don't use driver core
-  irqdomain: Mark fwnodes when their irqdomain is added/removed
-  PM: domains: Mark fwnodes when their powerdomain is added/removed
-  clk: Mark fwnodes when their clock provider is added/removed
-
- .../admin-guide/kernel-parameters.txt         |  5 ++
- drivers/base/core.c                           | 58 ++++++++++++++++++-
- drivers/base/power/domain.c                   |  2 +
- drivers/clk/clk.c                             |  3 +
- drivers/of/property.c                         | 16 +++--
- include/linux/fwnode.h                        | 20 ++++++-
- kernel/irq/irqdomain.c                        |  2 +
- 7 files changed, 98 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/of/property.c b/drivers/of/property.c
+index 6287c6d60bb7..53d163c8d39b 100644
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@ -1103,7 +1103,9 @@ static int of_link_to_phandle(struct device_node *con_np,
+ 	 * created for them.
+ 	 */
+ 	sup_dev = get_dev_from_fwnode(&sup_np->fwnode);
+-	if (!sup_dev && of_node_check_flag(sup_np, OF_POPULATED)) {
++	if (!sup_dev &&
++	    (of_node_check_flag(sup_np, OF_POPULATED) ||
++	     sup_np->fwnode.flags & FWNODE_FLAG_NOT_DEVICE)) {
+ 		pr_debug("Not linking %pOFP to %pOFP - No struct device\n",
+ 			 con_np, sup_np);
+ 		of_node_put(sup_np);
 -- 
 2.30.0.478.g8a0d178c01-goog
 
