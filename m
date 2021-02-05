@@ -2,102 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6014B3115CE
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 23:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EBE3116E4
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Feb 2021 00:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbhBEWmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Feb 2021 17:42:22 -0500
-Received: from muru.com ([72.249.23.125]:57682 "EHLO muru.com"
+        id S231821AbhBEXTl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Feb 2021 18:19:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53652 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230315AbhBENqb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Feb 2021 08:46:31 -0500
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 46EE181BD;
-        Fri,  5 Feb 2021 13:46:02 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, Adam Ford <aford173@gmail.com>,
-        Carl Philipp Klemm <philipp@uvos.xyz>,
-        "H . Nikolaus Schaller" <hns@goldelico.com>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH 4/4] thermal: ti-soc-thermal: Use non-inverted define for omap4
-Date:   Fri,  5 Feb 2021 15:45:34 +0200
-Message-Id: <20210205134534.49200-5-tony@atomide.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210205134534.49200-1-tony@atomide.com>
-References: <20210205134534.49200-1-tony@atomide.com>
+        id S231184AbhBEKMx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Feb 2021 05:12:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AEFA464FE8;
+        Fri,  5 Feb 2021 10:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612519931;
+        bh=hyxFqW+U+ERTl6fdQ6DabAaCml48h/TapiiG4RYoe50=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XkVDqZaaYwA/J8q/MaPhu50D66OdqLgjNfs6YwoLV+ROb7ZJkhX53K9EH3iYlYFay
+         Za9lu2KxcWPM9xhI8onLwnl+vU1StbktYUNAk22YIiYPOX5lejfqRZluE8ViqVzpVI
+         iRBQmXHmupdjq+JMLmuGUyermQXPBjLohaWPz2hk=
+Date:   Fri, 5 Feb 2021 11:11:56 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org
+Subject: Re: [GIT PULL] interconnect changes for 5.12
+Message-ID: <YB0Z7CeIdcdvaGpD@kroah.com>
+References: <20210205095246.24577-1-djakov@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210205095246.24577-1-djakov@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When we set bit 10 high we use continuous mode and not single
-mode. Let's correct this to avoid confusion. No functional
-changes here, the code does the right thing with bit 10.
+On Fri, Feb 05, 2021 at 11:52:46AM +0200, Georgi Djakov wrote:
+> Hello Greg,
+> 
+> This is the pull request with the interconnect changes for the 5.12-rc1
+> merge window. These include two new drivers some driver consolidation.
+> 
+> Patches have been in linux-next without any reported issues. Please pull
+> into char-misc-next.
+> 
+> Thanks,
+> Georgi
+> 
+> The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
+> 
+>   Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.12-rc1
 
-Cc: Adam Ford <aford173@gmail.com>
-Cc: Carl Philipp Klemm <philipp@uvos.xyz>
-Cc: Eduardo Valentin <edubezval@gmail.com>
-Cc: H. Nikolaus Schaller <hns@goldelico.com>
-Cc: Merlijn Wajer <merlijn@wizzup.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/thermal/ti-soc-thermal/omap4-thermal-data.c | 4 ++--
- drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Pulled and pushed out, thanks.
 
-diff --git a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
---- a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
-+++ b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
-@@ -24,7 +24,7 @@ omap4430_mpu_temp_sensor_registers = {
- 	.bgap_dtemp_mask = OMAP4430_BGAP_TEMP_SENSOR_DTEMP_MASK,
- 
- 	.bgap_mode_ctrl = OMAP4430_TEMP_SENSOR_CTRL_OFFSET,
--	.mode_ctrl_mask = OMAP4430_SINGLE_MODE_MASK,
-+	.mode_ctrl_mask = OMAP4430_CONTINUOUS_MODE_MASK,
- 
- 	.bgap_efuse = OMAP4430_FUSE_OPP_BGAP,
- };
-@@ -97,7 +97,7 @@ omap4460_mpu_temp_sensor_registers = {
- 	.mask_cold_mask = OMAP4460_MASK_COLD_MASK,
- 
- 	.bgap_mode_ctrl = OMAP4460_BGAP_CTRL_OFFSET,
--	.mode_ctrl_mask = OMAP4460_SINGLE_MODE_MASK,
-+	.mode_ctrl_mask = OMAP4460_CONTINUOUS_MODE_MASK,
- 
- 	.bgap_counter = OMAP4460_BGAP_COUNTER_OFFSET,
- 	.counter_mask = OMAP4460_COUNTER_MASK,
-diff --git a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
---- a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
-+++ b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
-@@ -40,7 +40,7 @@
- /* OMAP4430.TEMP_SENSOR bits */
- #define OMAP4430_BGAP_TEMPSOFF_MASK			BIT(12)
- #define OMAP4430_BGAP_TSHUT_MASK			BIT(11)
--#define OMAP4430_SINGLE_MODE_MASK			BIT(10)
-+#define OMAP4430_CONTINUOUS_MODE_MASK			BIT(10)
- #define OMAP4430_BGAP_TEMP_SENSOR_SOC_MASK		BIT(9)
- #define OMAP4430_BGAP_TEMP_SENSOR_EOCZ_MASK		BIT(8)
- #define OMAP4430_BGAP_TEMP_SENSOR_DTEMP_MASK		(0xff << 0)
-@@ -113,7 +113,7 @@
- #define OMAP4460_BGAP_TEMP_SENSOR_DTEMP_MASK		(0x3ff << 0)
- 
- /* OMAP4460.BANDGAP_CTRL bits */
--#define OMAP4460_SINGLE_MODE_MASK			BIT(31)
-+#define OMAP4460_CONTINUOUS_MODE_MASK			BIT(31)
- #define OMAP4460_MASK_HOT_MASK				BIT(1)
- #define OMAP4460_MASK_COLD_MASK				BIT(0)
- 
--- 
-2.30.0
+greg k-h
