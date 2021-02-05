@@ -2,161 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BA531018B
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 01:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83DE31019C
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Feb 2021 01:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbhBEAWU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Feb 2021 19:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbhBEAWT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 19:22:19 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C097C0613D6
-        for <linux-pm@vger.kernel.org>; Thu,  4 Feb 2021 16:21:39 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id j2so3328856pgl.0
-        for <linux-pm@vger.kernel.org>; Thu, 04 Feb 2021 16:21:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=0cipnU1+bW72Ga3/Etb3ZkiSnTx2ZaxsfCrDprF2M+4=;
-        b=reXJ9wnfWOIPmi+EhaznRvQ3ZrN31ka4o2qYcULaBfuJKXavoNObXCinOe8hvgpkty
-         QvlggwW18JvGcSK+tUaMwmy28kKgLS7MOwsPOuWhXAAf+9p2WDbMeF6XAZgQ6SiLHuDP
-         mjAjcSpWlGIB73SbO26CcTqbTl5wbwRcHnnV7vwKJ2A9hQBJSV1YG6Q4k9p0QiLOXlWI
-         GPV7gPWCB9ekcE7qUMCtP2COZRSI45hvHj6+vf6gXYOL6F0NnER/fz/dTrF8o218uh27
-         frp+2V/B7VPBQYpiSOCGCFQ2r835q2Sy4UDL9wTngvcVK3AJhrhJq4vxnNaDQSse/i0l
-         1DrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=0cipnU1+bW72Ga3/Etb3ZkiSnTx2ZaxsfCrDprF2M+4=;
-        b=XDirLy0IZztl2pv8cVCDgPo2IHlxejaTesrKmQuUqwrHoaJGawmubraa8y74NGAKyL
-         ToDirtZ50vDsqlwAvkV/4b314wxmthHCwaaopq1KR4vA3Erl+8EbP0sEI5kn9KAaxBif
-         SE5sl8V9OIgBaMKnZCzNvgOHrsGLOmuHZD1iCivwv+e+LKe2upi+dPBHOuJ+p0ox/VA9
-         bH2Gxy+VSgaB1CnhM/NvifoRZZQjD2t2w8RvUCHNXCnIf2vaftG5EgNH3h71K6O4MgOP
-         ElAjjOx4WvbOUXsiqfsYp6vpO+3m1h7g9iRrTM8NW5hkT3mZy31X/ktQCdPUiskMx+J3
-         gM3g==
-X-Gm-Message-State: AOAM531xi3eTNE0SwB1nASdE4RmSj1OGAuabhyuKJfgJkUVZcyDNzUvU
-        9sYp6Xbx2a6zoYfngMEWNX/oUg==
-X-Google-Smtp-Source: ABdhPJyML3A8/0OUqKfnDF5Nd7ceons5y1fczO3QVhb6xm3ANLrOVDFMv83bjg8t6XJd51eumgSCRw==
-X-Received: by 2002:a63:6e0f:: with SMTP id j15mr1541102pgc.21.1612484499027;
-        Thu, 04 Feb 2021 16:21:39 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id r7sm6616361pfc.26.2021.02.04.16.21.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 16:21:38 -0800 (PST)
-Message-ID: <601c8f92.1c69fb81.68aca.eeb3@mx.google.com>
-Date:   Thu, 04 Feb 2021 16:21:38 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S231939AbhBEA14 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Feb 2021 19:27:56 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:36556 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231838AbhBEA14 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Feb 2021 19:27:56 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1150QvK5061256;
+        Thu, 4 Feb 2021 18:26:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1612484817;
+        bh=yq7hCIHhoSTeDHW7juAsUUz79Y6SVLIYjBY085/BArw=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=bRbldSr45AFTDWj5sJu0z7AZJMA0QmQM09LruICalcxcxkCxIiJmJiFISYns/c1TU
+         3ZWpU6wTjGzXqvPAhXUCoT3gYSahDuu76kyRpxpjukRC2LKMPdKDfhZV2rh4z8YDdo
+         qElbrEdoI4ycFS0rHZF8gHZoKfZTPoXlJHSYGWac=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1150QvX2129581
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 4 Feb 2021 18:26:57 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 4 Feb
+ 2021 18:26:56 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 4 Feb 2021 18:26:56 -0600
+Received: from [10.250.39.117] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1150QuOY077490;
+        Thu, 4 Feb 2021 18:26:56 -0600
+Subject: Re: [PATCH V3 1/2] dt-bindings: power: bq27xxx: add bq78z10
+To:     Rob Herring <robh@kernel.org>,
+        LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <sre@kernel.org>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>, <grygorii.tertychnyi@leica-geosystems.com>,
+        <andrey.zhizhikin@leica-geosystems.com>, <krzk@kernel.org>,
+        <pali@kernel.org>
+References: <20210203104100.17143-1-Qing-wu.Li@leica-geosystems.com.cn>
+ <20210203104100.17143-2-Qing-wu.Li@leica-geosystems.com.cn>
+ <20210204233721.GA1331253@robh.at.kernel.org>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <3342dd48-e165-2ca4-6411-d2641163ff91@ti.com>
+Date:   Thu, 4 Feb 2021 18:26:51 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: acpi-5.11-rc7-89-g5f8da9ef1c5d8
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 98 runs,
- 2 regressions (acpi-5.11-rc7-89-g5f8da9ef1c5d8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20210204233721.GA1331253@robh.at.kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 98 runs, 2 regressions (acpi-5.11-rc7-89-g5f8da9ef1c5d=
-8)
+Li
 
-Regressions Summary
--------------------
+On 2/4/21 5:37 PM, Rob Herring wrote:
+> On Wed, 03 Feb 2021 10:40:59 +0000, LI Qingwu wrote:
+>> Add bindings for TI BQ78Z100. An I2C interface gas gauge.
+>> It provides a fully integrated safety protection
+>> and authentication for 1 to 2-series cell Li-Ion and
+>> Li-Polymer battery packs.
 
-platform             | arch  | lab          | compiler | defconfig | regres=
-sions
----------------------+-------+--------------+----------+-----------+-------=
------
-hifive-unleashed-a00 | riscv | lab-baylibre | gcc-8    | defconfig | 1     =
-     =
+$subject has the wrong part number
 
-imx8mp-evk           | arm64 | lab-nxp      | gcc-8    | defconfig | 1     =
-     =
+Dan
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-5.1=
-1-rc7-89-g5f8da9ef1c5d8/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: acpi-5.11-rc7-89-g5f8da9ef1c5d8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      5f8da9ef1c5d88b9a6de64ad33d98e2edd58ce89 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig | regres=
-sions
----------------------+-------+--------------+----------+-----------+-------=
------
-hifive-unleashed-a00 | riscv | lab-baylibre | gcc-8    | defconfig | 1     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/601c82841c125eb69f3abe76
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (riscv64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.11-rc7-89-g5=
-f8da9ef1c5d8/riscv/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a=
-00.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.11-rc7-89-g5=
-f8da9ef1c5d8/riscv/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a=
-00.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/riscv/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/601c82841c125eb69f3ab=
-e77
-        failing since 70 days (last pass: pm-5.10-rc4-33-g52d108cd060d, fir=
-st fail: pm-5.10-rc6-75-g735f7fba25ec) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig | regres=
-sions
----------------------+-------+--------------+----------+-----------+-------=
------
-imx8mp-evk           | arm64 | lab-nxp      | gcc-8    | defconfig | 1     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/601c86de0b254387ac3abe94
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.11-rc7-89-g5=
-f8da9ef1c5d8/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.11-rc7-89-g5=
-f8da9ef1c5d8/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/601c86de0b254387ac3ab=
-e95
-        new failure (last pass: v5.11-rc6-72-gc42187278fc1) =
-
- =20
+>> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+>> ---
+>>   Documentation/devicetree/bindings/power/supply/bq27xxx.yaml | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+> Acked-by: Rob Herring <robh@kernel.org>
