@@ -2,79 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D5F311C49
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Feb 2021 09:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BD5311CD8
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Feb 2021 12:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbhBFIvg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Feb 2021 03:51:36 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:39098 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbhBFIvg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Feb 2021 03:51:36 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0B62C1C0B77; Sat,  6 Feb 2021 09:50:38 +0100 (CET)
-Date:   Sat, 6 Feb 2021 09:50:37 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        Adam Ford <aford173@gmail.com>,
-        Carl Philipp Klemm <philipp@uvos.xyz>,
-        "H . Nikolaus Schaller" <hns@goldelico.com>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH 4/4] thermal: ti-soc-thermal: Use non-inverted define for
- omap4
-Message-ID: <20210206085037.GA15736@amd>
-References: <20210205134534.49200-1-tony@atomide.com>
- <20210205134534.49200-5-tony@atomide.com>
+        id S229646AbhBFLSB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Feb 2021 06:18:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49168 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229529AbhBFLSB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 6 Feb 2021 06:18:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5771964E5F;
+        Sat,  6 Feb 2021 11:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612610240;
+        bh=UVaykrGaFKk8Qu59885F5o+xsLHdmSO/46BUYOQ0qEA=;
+        h=From:To:Subject:Date:From;
+        b=I62NUtL4JWss4jsAvfFWFY7ZXStwhvIvzaz+VE+CglgYfMe135VmYUkQ35s56UBoG
+         Ds0gwh2112rF/dijl6t1wcl5hzWLRqeyaP682CNfa7cpNnztIgCHwbtfHGdkuAss0i
+         8y6uky+xcLJl8MpzIMaTItr13+YFEyTfkEHVSlp3uTkSfnd2OLaPEwMskIDTGcBwNV
+         90DcEceyDwZvZWL+7U/p1hRS83dk+lo3KcBrjt22qRQyFYVcQsuefU/sUNPNWggpOs
+         /BqrnMtE+igGmRPRNn5NOMDR9lyKUM4aA1BxvBxzaDSInnMv4Bj/Bfl0x3AGbOYPSU
+         I7Yo9QiBRwL+g==
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] memory: samsung: exynos5422-dmc: Correct function names in kerneldoc
+Date:   Sat,  6 Feb 2021 12:17:15 +0100
+Message-Id: <20210206111715.20774-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
-Content-Disposition: inline
-In-Reply-To: <20210205134534.49200-5-tony@atomide.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Correct kerneldoc to fix W=1 warnings:
 
---u3/rZRmxL6MmkK24
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+    drivers/memory/samsung/exynos5422-dmc.c:290: warning:
+        expecting prototype for find_target_freq_id(). Prototype was for find_target_freq_idx() instead
+    drivers/memory/samsung/exynos5422-dmc.c:1015: warning:
+        expecting prototype for exynos5_dmc_align_initial_frequency(). Prototype was for exynos5_dmc_align_init_freq() instead
 
-Hi!
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/memory/samsung/exynos5422-dmc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> When we set bit 10 high we use continuous mode and not single
-> mode. Let's correct this to avoid confusion. No functional
-> changes here, the code does the right thing with bit 10.
+diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+index c5ee4121a4d2..1dabb509dec3 100644
+--- a/drivers/memory/samsung/exynos5422-dmc.c
++++ b/drivers/memory/samsung/exynos5422-dmc.c
+@@ -278,7 +278,7 @@ static int exynos5_counters_disable_edev(struct exynos5_dmc *dmc)
+ }
+ 
+ /**
+- * find_target_freq_id() - Finds requested frequency in local DMC configuration
++ * find_target_freq_idx() - Finds requested frequency in local DMC configuration
+  * @dmc:	device for which the information is checked
+  * @target_rate:	requested frequency in KHz
+  *
+@@ -998,7 +998,7 @@ static struct devfreq_dev_profile exynos5_dmc_df_profile = {
+ };
+ 
+ /**
+- * exynos5_dmc_align_initial_frequency() - Align initial frequency value
++ * exynos5_dmc_align_init_freq() - Align initial frequency value
+  * @dmc:	device for which the frequency is going to be set
+  * @bootloader_init_freq:	initial frequency set by the bootloader in KHz
+  *
+-- 
+2.25.1
 
-Seems okay to me. 1/4:
-
-Acked-by: Pavel Machek <pavel@ucw.cz>
-
-Best regards,
-							Pavel
-
---=20
-http://www.livejournal.com/~pavelmachek
-
---u3/rZRmxL6MmkK24
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmAeWF0ACgkQMOfwapXb+vJXogCggf/PATmsqQj9afp1RX5Ex5UE
-tekAn1oRdjaJiDARyjDlQRp33SU5l8s/
-=nyzP
------END PGP SIGNATURE-----
-
---u3/rZRmxL6MmkK24--
