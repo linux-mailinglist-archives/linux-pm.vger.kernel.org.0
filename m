@@ -2,147 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD51312015
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Feb 2021 21:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D1C312147
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Feb 2021 05:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbhBFUs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Feb 2021 15:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S229570AbhBGET3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Feb 2021 23:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhBFUsZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Feb 2021 15:48:25 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89323C06178A
-        for <linux-pm@vger.kernel.org>; Sat,  6 Feb 2021 12:47:45 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id y4so10483606ybk.12
-        for <linux-pm@vger.kernel.org>; Sat, 06 Feb 2021 12:47:45 -0800 (PST)
+        with ESMTP id S229763AbhBGETI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Feb 2021 23:19:08 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C76C061756;
+        Sat,  6 Feb 2021 20:18:27 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id a16so9743459ilq.5;
+        Sat, 06 Feb 2021 20:18:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+hjAXsPVbgElgRdj+BZ+6MVnNMTVzcYGHrvtwU1AcCs=;
-        b=PivZDf7vbfBH6bSgHRaWMYMP8xN20P+lGSInQZfjmRrebl4zG19XOD81h4xHPsxfvN
-         rrEa3VG5KM++VddLx0G0hTtcKmO3HR5nuYYQszPGx7j17MOYIXpprrMbnqMjHCQ16gnh
-         vAAp8M7sh5ngMRXLEvCnpR0SE2eLb/b831luTAfpCMUIl/+mJcASqjF/vSQElaBpCa5G
-         ILxRh/y64IoVeO+zKE/zafs6iW5iGJpNWNeiVO4o5xdYwVvhVcqNHRaL4XC6XStW1r/E
-         jU8CFfUhqfItkbmKMgW8wP9A8yilwS0e3PFFDVjJn3PIqvllgunktYiSTLq9+arpDImJ
-         yCYw==
+        bh=C0nh6s6iVQifHimFBlt9HsSWgh0AuZfoaMEvFjIFmTw=;
+        b=PXVstjrRPiSBUJHkTotsW1+xZIPbMhPQV5Z/9ECzLJcj9omaRFj/6zfj3OX82+S3ih
+         4w/Fs8HvInZDyln13YIVs84TWEv20e5JlM+hLuUBkx8JhC+7Ya2FeH6egJn9Gvj/uC0w
+         zmaw7JsHrGrkAVN7gBbG8l2NnPrGdoz7q/0vSzJgTZFRmUSKNdKu6zWNr/AuPlc06Pya
+         TADXJLoXyT+V0vCtPflXWT9WBl+pAbThonZAQRg0gMAt+PKYDU1+v8lZUy6X44QWMYPs
+         TdIlqmiX6q3jpt7L0LjxaceE+yaPwJzomfd4YU22pqHsqHjrDwDcBbt9DvoCfKx6hOs3
+         OOSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+hjAXsPVbgElgRdj+BZ+6MVnNMTVzcYGHrvtwU1AcCs=;
-        b=KNGgQnjekNHZwnWf5CJDekQLPrtMbkGZ7xFsirsV79m+2UqW/fBoxZy3FqpgbE4QsF
-         zxbrrjrL0Upi/qxUSxjTiV9U/QhD+pAbO29dXYCY1AwNihqLBbMQATXcNodDksAXKBLb
-         pmvTDH9sizIQ7Tpzvxp6UPUmBVVF/oaof9Q0WvZrbOLh3ZGLn42DwxcKrSRsohso8pGV
-         20ZEf91mBrs1ao4Mk2IhCdzyBAb4fV9TdHShdx8C83eg+QsA9pZ69Z7YFcPFcpH+sH+y
-         OnSKunqkEDajTmK/gtiCpuSLUFzxnHE9iCtLXP0LOV1ej/PNMnp8nJGRaSJhyHpfg36o
-         nEew==
-X-Gm-Message-State: AOAM533QT0V0wIskInm7J6lJq2p1Ipc6am266Y0AuHprVSeDlSbCInd9
-        4R6/5ZnP66e8BcMVpN5uU4ypF4sV7H5N0iIFtsrwTQ==
-X-Google-Smtp-Source: ABdhPJyL0NcBX/RigrI99Osm8m1ZvOqxCkoIvfHxGEI93KNtJj0ymk4vExKY8KweKVKWPIOdql7mDcRKQHJIMzVuTpU=
-X-Received: by 2002:a25:b74c:: with SMTP id e12mr16000102ybm.20.1612644464464;
- Sat, 06 Feb 2021 12:47:44 -0800 (PST)
+        bh=C0nh6s6iVQifHimFBlt9HsSWgh0AuZfoaMEvFjIFmTw=;
+        b=kmLw1bKaObUE+SvZzVJolTu1s/EVyMXQYyVTm/2W0/SRQUf4ehb1hRe5plP+2i6LRv
+         2hRfdCspqU5h9vFAVgzLRkVVDJkXCCMAUj1U6U6i4AOoeMFCLtsTd8dnPPkGVTKt68YP
+         ZaeNWsPhsyHQgfpVKKMZDkvspAuSdZgPBXlMqEVARgrhirSOuF35/Cgha0ddRJlxPbJm
+         UhOXnOS+N3pf3RJuL3S9lUktyUxJhM2Zp4DWcPgSklzXuQySVegsMFZxUd9/wwb3nTJA
+         6LMvzJZ3vmtNCzdPHUH5ZRp/mygGpORk4aw8BNv7ES5SbMzTcQPKcSXmUt8QFwaDPJWq
+         FsZQ==
+X-Gm-Message-State: AOAM533pEFQv5xru72vkZIqe4PUL5B8kaCtCtSStlMBnlpUNoKr1dwpc
+        6VuWO+TujL5Osirf5erW+jZ/mBi/2V3Y+G2G33g=
+X-Google-Smtp-Source: ABdhPJwuh8pvYd3UmzNgZcDRU1W1DbwxMv0Vdth/wCvy0cjMA/poeLmKteZhRQv890ip+9TXKH+FH3gDJI/8VK32ieo=
+X-Received: by 2002:a05:6e02:b2e:: with SMTP id e14mr10135604ilu.164.1612671507292;
+ Sat, 06 Feb 2021 20:18:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20210205222644.2357303-1-saravanak@google.com> <CAMuHMdXo+ShM3Ct2OSCscJwaLJ4rbytpA14=dR5q+3F9kJjNfw@mail.gmail.com>
-In-Reply-To: <CAMuHMdXo+ShM3Ct2OSCscJwaLJ4rbytpA14=dR5q+3F9kJjNfw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Sat, 6 Feb 2021 12:47:08 -0800
-Message-ID: <CAGETcx9j8YzcJa6-s4cuyTpwFsUAAaBD6H9mf1wfzafb_x+5tg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>
+References: <cover.1608963094.git.syednwaris@gmail.com> <da4eaafa84f32375319014f6e9af5c104a6153fd.1608963095.git.syednwaris@gmail.com>
+ <CAHp75VcSsfDKY3w4ufZktXzRB=GiObAV6voPfmeAHcbdwX0uqg@mail.gmail.com> <CACG_h5otB5hhAX0z9YzN8bT6Nz5WVRUQWbhENF+u8Z3WsCp_8A@mail.gmail.com>
+In-Reply-To: <CACG_h5otB5hhAX0z9YzN8bT6Nz5WVRUQWbhENF+u8Z3WsCp_8A@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Sun, 7 Feb 2021 09:48:17 +0530
+Message-ID: <CACG_h5rLzpo-oz9uPe4d66-e088Y8YXiUhkLwEEf7MVyLDcJRg@mail.gmail.com>
+Subject: Re: [PATCH 2/5] lib/test_bitmap.c: Add for_each_set_clump test cases
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "vilhelm.gray@gmail.com" <vilhelm.gray@gmail.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "rrichter@marvell.com" <rrichter@marvell.com>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "yamada.masahiro@socionext.com" <yamada.masahiro@socionext.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 6, 2021 at 11:41 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Thu, Feb 4, 2021 at 2:25 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
 >
-> Hi Saravana,
->
-> On Fri, Feb 5, 2021 at 11:26 PM Saravana Kannan <saravanak@google.com> wrote:
-> > There are a lot of devices/drivers where they never have a struct device
-> > created for them or the driver initializes the hardware without ever
-> > binding to the struct device.
+> On Sat, Dec 26, 2020 at 8:15 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
 > >
-> > This series is intended to avoid any boot regressions due to such
-> > devices/drivers when fw_devlink=on and also address the handling of
-> > optional suppliers.
->
-> Thanks for your series!
->
-> > Patch 5 sets up a generic API to handle drivers that never bind with
-> > their devices.
 > >
-> > Patch 6 through 8 update different frameworks to use the new API.
+> >
+> > On Saturday, December 26, 2020, Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> >>
+> >> The introduction of the generic for_each_set_clump macro need test
+> >> cases to verify the implementation. This patch adds test cases for
+> >> scenarios in which clump sizes are 8 bits, 24 bits, 30 bits and 6 bits.
+> >> The cases contain situations where clump is getting split at the word
+> >> boundary and also when zeroes are present in the start and middle of
+> >> bitmap.
+> >
+> >
+> > You have to split it to a separate test under drivers/gpio, because now it has no sense to be like this.
 >
-> >   driver core: fw_devlink: Handle suppliers that don't use driver core
-> >   irqdomain: Mark fwnodes when their irqdomain is added/removed
-> >   PM: domains: Mark fwnodes when their powerdomain is added/removed
-> >   clk: Mark fwnodes when their clock provider is added/removed
+> Hi Andy,
 >
-> I take it this is an automatic alternative for letting drivers set the
-> OF_POPULATED flag manually?
-
-The frameworks can still continue setting it to avoid creating dead
-"struct devices" that'll never be used. This new flag handles cases
-where the device is already created, but will never bind to a driver.
-So, they are meant to do slightly different things, but the end result
-is removing the need for individual drivers to set OF_POPULATED (and
-Rob hates that too).
-
-> Is this actually safe?  It's not uncommon for a driver to register
-> multiple providers, sometimes even of different types (clock, genpd,
-> irq, reset[1], ...).
-
-This flag is just an indication that the fwnode has been initialized
-by a driver. It's okay if the flag gets set multiple times when a
-driver is registering with multiple frameworks. It's also okay if the
-flag is cleared multiple times as the driver is uninitializing the
-hardware (although, this is very unlikely for drivers that don't use
-device-driver model). When we actually try to create device links, we
-just check if this happened without a driver actually binding to this
-device. There's no "probing" race because the "status" I check goes
-through NO_DRIVER -> PROBING -(registering happens)-> BOUND ->
-UNBINDING -(deregistering happens) -> NO_DRIVER. So if the fwnode flag
-is getting set as part of the driver's probe function, the "status"
-value will never be NO_DRIVER.
-
-> Can you be sure consumer drivers do not start probing while their
-> dependency is still busy registering providers?
-
-The code only acts on that flag when trying to create device links
-from the consumer to the supplier. This is just a way to tell "hey,
-don't bother creating a device link, this supplier will never bind".
-So it just avoids blocking the consumer. Doesn't really make the
-consumers probe earlier than they would have.
-
-> [1] Which brings my attention to the fact that devlink does not consider
->     "resets" properties yet.
+> How do I split it into separate test under drivers/gpio ? I have
+> thought of making a test_clump_bits.c file in drivers/gpio.
+> But how do I integrate this test file so that tests are executed at
+> runtime? Similar to tests in lib/test_bitmap.c ?
 >
+> I believe I need to make changes in config files so that tests in
+> test_clump_bits.c ( in drivers/gpio ) are executed at runtime. Could
+> you please provide some steps on how to do that. Thank You !
+>
+> Regards
+> Syed Nayyar Waris
 
-Yeah, we can add that and other bindings as we go.
+Hi Andy, could you please help me on the above. Thanks !
 
--Saravana
+Regards
+Syed Nayyar Waris
