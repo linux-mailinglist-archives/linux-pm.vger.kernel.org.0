@@ -2,144 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA78731292E
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 04:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B130B312A59
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 07:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbhBHDId (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Feb 2021 22:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S229648AbhBHGBR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Feb 2021 01:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbhBHDIc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Feb 2021 22:08:32 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFF7C061756;
-        Sun,  7 Feb 2021 19:07:52 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id j5so485596pgb.11;
-        Sun, 07 Feb 2021 19:07:52 -0800 (PST)
+        with ESMTP id S229503AbhBHGBL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 01:01:11 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B6FC06174A
+        for <linux-pm@vger.kernel.org>; Sun,  7 Feb 2021 22:00:31 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id cv23so224833pjb.5
+        for <linux-pm@vger.kernel.org>; Sun, 07 Feb 2021 22:00:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EhtEZeeEA+VVGotJ/o1in6C2esDFRE7ssaKSW/qYRbY=;
-        b=YmYvKX+L0bfETG6+6bpLt3y/HSDuSQk3Gq05qlSFDHBFkRMo9Y3BnbtN/WUeq9cFM9
-         koSeSVrfnx8tatKAkY+9jTRFF5ZxXHhxbnVaE099SHlBdNqx/cM9m+w1AlJl4DN2/pV7
-         ULCXsnbxrMlKDyM9gaG5bS1urhv+VTZOrt/irFNXZVkcdkYY4lHlK1+Jlgy47dJf/IHW
-         5rdOy+uszR/LmrrqiQxnhVTSrEVNL7Z126BLa8mCzVdkY0kXPRoOs4sPfQojj+s02eAK
-         ovhEIAgTUf74b1k+S9IiTjTd6pCPwO9n29p+Bynb9BeQrsst9tTywgKTM+059gfez8Xc
-         UbIQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=/c7Iv0cjmCSSrPnUhUKaznddxtbBnlBBgmij3981uEo=;
+        b=qayu2BPFcmW8/cZ13BCbBwC1RghiQdspWFIubREBAC7Mw7eDleAt0l5/gA1iW1+IP0
+         rNd+fueqnmmTts7eCPvz37Q/oT6u8HDs0czKFrZx9W4MGuU3NVYux4F3jfIGu+1E8TQb
+         hxkiuin4N87gN0MNQpjwScSObIdmAokRvQ+/eAiPUulLqgZ0VoVWfLRZp87lquoPn6R8
+         u2mMXvUs45PoxYI36++OxudCiJk8G5xM+1+DFHpvJ+qJ+humPpa3ncKUouXjLEXCko23
+         OuTKErxVlf9dClZbkGed9Sv4Q9vm9GznqeJtwwt6mGaOOAFklWhvXUpb/M1GjactDYeu
+         4rJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EhtEZeeEA+VVGotJ/o1in6C2esDFRE7ssaKSW/qYRbY=;
-        b=h/mt6aggwe+HqZmRg941/35GD8ltRvzhzq5BYLiZlyyaZ8smK7FTegwY5OnMMZ3OuU
-         yErP+9gxvxcsWPxY0zwT+A4Tf6TzOQCOf552TQ01Q347kFkQli1qGsQA3f1J2yt3SI1B
-         +/IDfDQBFTZ1YMdbXaseyZQwb4r9n/Fe943zLzT53/2/rDy0DQ65w/jvuTUH1BpFDfEY
-         yinAt49wnc6uWwaALh6v/h7r2MgGFjWKbXRUXXEDYXFzwQ+jZIuqsnJIMpyADE4qH32n
-         zE44NCOHiGjVa0GpHJLR+U0jUhPr4qncD8A2amEoCJfylgkLtYnUUECwMe2FapK2a7va
-         lPrA==
-X-Gm-Message-State: AOAM533wRmqWRENCpvKfwtZLnQThbN+bVy74Bo5V5ExfrAdaVsUUHFoc
-        UstxEtL6YWd77ELYZBt4pOQ=
-X-Google-Smtp-Source: ABdhPJzR9UCjMHew/cXX0RbLB0aUFOgi9xX9rIP7bs5xgXu2ARIJ60PNqofThIfqxUxxOqGKLwt/5Q==
-X-Received: by 2002:a63:c911:: with SMTP id o17mr15023146pgg.102.1612753672326;
-        Sun, 07 Feb 2021 19:07:52 -0800 (PST)
-Received: from tj.ccdomain.com ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id q17sm16970213pfl.143.2021.02.07.19.07.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Feb 2021 19:07:51 -0800 (PST)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     rjw@rjwysocki.net, rafael.j.wysocki@intel.com,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huyue2@yulong.com, zbestahu@163.com,
-        zhangwen@yulong.com
-Subject: [PATCH] cpufreq: schedutil: Don't use the limits_changed flag any more
-Date:   Mon,  8 Feb 2021 11:07:23 +0800
-Message-Id: <20210208030723.781-1-zbestahu@gmail.com>
-X-Mailer: git-send-email 2.29.2.windows.3
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/c7Iv0cjmCSSrPnUhUKaznddxtbBnlBBgmij3981uEo=;
+        b=QBZm8v1TK0g4NOdH1QsYHaf9C+IhaBt+ASZ0ntK+TOyMtrlVKaVGcJL1AGeAQzKWns
+         FkekBSJRhGsMwvTq8qde/tz9gjvuyoe8B6OojBvE/nrkTfZ8jCNnv8uWZZuz+oOA61Ov
+         V0SqACA5qEm2q6A8kmzhPmF0OreyVYiASCHM3zbvC3s3x+qx9kUfKtO4Lxi0gZx4x3oI
+         X9pCf1GWrlQDAoK6vqBd2wbJeQoKTFjaKQv2Qy+I05f/Ldg8jBDocI8ccgAH7DoNHuW3
+         5EC927qqrXK+nJ1vhwSR9FDh0/ghT0lSkGVEu+ONeooui9synk7TDlWRcR0ftqQKW/ys
+         8hBA==
+X-Gm-Message-State: AOAM532a/W6sQ+PYclTOkvVGmIfS0i+x+Eqzey6JAZ4ibHdvFV8zPiAU
+        14tf2Wffb1K5vDtbz9Oeq9QgnA==
+X-Google-Smtp-Source: ABdhPJylc7/sgoMomJ7u1DSFma7zuVU31xXAixY/udaZjMGv1fe86vr0yGwxGbuP+fEIDl327zK8Ig==
+X-Received: by 2002:a17:90a:fe92:: with SMTP id co18mr13721846pjb.146.1612764030976;
+        Sun, 07 Feb 2021 22:00:30 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id w9sm6890341pfc.51.2021.02.07.22.00.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 07 Feb 2021 22:00:29 -0800 (PST)
+Date:   Mon, 8 Feb 2021 11:30:27 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] OPP updates for 5.12
+Message-ID: <20210208060027.kzqxscpceb7l6656@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="rm5mzonogh57oycu"
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Yue Hu <huyue2@yulong.com>
 
-The limits_changed flag was introduced by commit 600f5badb78c
-("cpufreq: schedutil: Don't skip freq update when limits change") due
-to race condition where need_freq_update is cleared in get_next_freq()
-which causes reducing the CPU frequency is ineffective while busy.
+--rm5mzonogh57oycu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But now, the race condition above is gone because get_next_freq()
-doesn't clear the flag any more after commit 23a881852f3e ("cpufreq:
-schedutil: Don't skip freq update if need_freq_update is set").
+Hi Rafael,
 
-Moreover, need_freq_update currently will be set to true only in
-sugov_should_update_freq() if CPUFREQ_NEED_UPDATE_LIMITS is not set
-for the driver. However, limits may have changed at any time. And
-subsequent frequence update is depending on need_freq_update. So, we
-may skip this update.
+This pull request contains following changes:
 
-Hence, let's remove it to avoid above issue and make code more simple.
+- Generic cleanups across the OPP core (Dmitry Osipenko, Viresh
+  Kumar).
 
-Signed-off-by: Yue Hu <huyue2@yulong.com>
----
- kernel/sched/cpufreq_schedutil.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+- New OPP helpers dev_pm_opp_find_level_ceil(),
+  dev_pm_opp_get_required_pstate(), dev_pm_opp_sync_regulators(),
+  devm_pm_opp_register_set_opp_helper(),
+  dev_pm_opp_of_add_table_noclk() and devm_pm_opp_attach_genpd()
+  (Dmitry Osipenko, Viresh Kumar).
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 41e498b..7dd85fb 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -40,7 +40,6 @@ struct sugov_policy {
- 	struct task_struct	*thread;
- 	bool			work_in_progress;
- 
--	bool			limits_changed;
- 	bool			need_freq_update;
- };
- 
-@@ -89,11 +88,8 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
- 	if (!cpufreq_this_cpu_can_update(sg_policy->policy))
- 		return false;
- 
--	if (unlikely(sg_policy->limits_changed)) {
--		sg_policy->limits_changed = false;
--		sg_policy->need_freq_update = true;
-+	if (unlikely(sg_policy->need_freq_update))
- 		return true;
--	}
- 
- 	delta_ns = time - sg_policy->last_freq_update_time;
- 
-@@ -323,7 +319,7 @@ static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
- static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu, struct sugov_policy *sg_policy)
- {
- 	if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_dl)
--		sg_policy->limits_changed = true;
-+		sg_policy->need_freq_update = true;
- }
- 
- static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-@@ -759,7 +755,6 @@ static int sugov_start(struct cpufreq_policy *policy)
- 	sg_policy->last_freq_update_time	= 0;
- 	sg_policy->next_freq			= 0;
- 	sg_policy->work_in_progress		= false;
--	sg_policy->limits_changed		= false;
- 	sg_policy->cached_raw_freq		= 0;
- 
- 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-@@ -813,7 +808,7 @@ static void sugov_limits(struct cpufreq_policy *policy)
- 		mutex_unlock(&sg_policy->work_lock);
- 	}
- 
--	sg_policy->limits_changed = true;
-+	sg_policy->need_freq_update = true;
- }
- 
- struct cpufreq_governor schedutil_gov = {
--- 
-1.9.1
+- Allow required OPPs to be used for devfreq devices and related
+  changes to devfreq governor (Saravana Kannan).
 
+- Significant code changes to allow a new OPP helper,
+  dev_pm_opp_set_opp() (Viresh Kumar).
+
+- Remove dev_pm_opp_set_bw() and update related drivers (Viresh
+  Kumar).
+
+- Allow lazy linking of required-OPPs (Viresh Kumar).
+=20
+-------------------------8<-------------------------
+
+The following changes since commit 1048ba83fb1c00cd24172e23e8263972f6b5d9ac:
+
+  Linux 5.11-rc6 (2021-01-31 13:50:09 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-ne=
+xt
+
+for you to fetch changes up to 86ad9a24f21ea7aac7deed06fe9556392568d88a:
+
+  PM / devfreq: Add required OPPs support to passive governor (2021-02-04 1=
+6:48:16 +0530)
+
+----------------------------------------------------------------
+Dmitry Osipenko (11):
+      opp: Fix adding OPP entries in a wrong order if rate is unavailable
+      opp: Filter out OPPs based on availability of a required-OPP
+      opp: Correct debug message in _opp_add_static_v2()
+      opp: Add dev_pm_opp_find_level_ceil()
+      opp: Add dev_pm_opp_get_required_pstate()
+      opp: Add dev_pm_opp_sync_regulators()
+      opp: Add devm_pm_opp_register_set_opp_helper
+      opp: Add devm_pm_opp_attach_genpd
+      opp: Handle missing OPP table in dev_pm_opp_xlate_performance_state()
+      opp: Print OPP level in debug message of _opp_add_static_v2()
+      opp: Make _set_opp_custom() work without regulators
+
+Saravana Kannan (3):
+      OPP: Add function to look up required OPP's for a given OPP
+      PM / devfreq: Cache OPP table reference in devfreq
+      PM / devfreq: Add required OPPs support to passive governor
+
+Viresh Kumar (23):
+      opp: Staticize _add_opp_table()
+      opp: Create _of_add_table_indexed() to reduce code duplication
+      opp: Defer acquiring the clk until OPPs are added
+      opp: Add dev_pm_opp_of_add_table_noclk()
+      opp: Prepare for ->set_opp() helper to work without regulators
+      opp: Rename _opp_set_rate_zero()
+      opp: No need to check clk for errors
+      opp: Keep track of currently programmed OPP
+      opp: Split _set_opp() out of dev_pm_opp_set_rate()
+      opp: Allow _set_opp() to work for non-freq devices
+      opp: Allow _generic_set_opp_regulator() to work for non-freq devices
+      opp: Allow _generic_set_opp_clk_only() to work for non-freq devices
+      opp: Update parameters of  _set_opp_custom()
+      opp: Implement dev_pm_opp_set_opp()
+      cpufreq: qcom: Migrate to dev_pm_opp_set_opp()
+      drm: msm: Migrate to dev_pm_opp_set_opp()
+      devfreq: tegra30: Migrate to dev_pm_opp_set_opp()
+      opp: Remove dev_pm_opp_set_bw()
+      opp: Allow lazy-linking of required-opps
+      opp: Update bandwidth requirements based on scaling up/down
+      opp: Don't ignore clk_get() errors other than -ENOENT
+      opp: Fix "foo * bar" should be "foo *bar"
+      opp: Replace ENOTSUPP with EOPNOTSUPP
+
+ drivers/cpufreq/qcom-cpufreq-hw.c     |   2 +-
+ drivers/devfreq/devfreq.c             |   7 +
+ drivers/devfreq/governor_passive.c    |  44 +-
+ drivers/devfreq/tegra30-devfreq.c     |   4 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c |   8 +-
+ drivers/opp/core.c                    | 798 ++++++++++++++++++++++++------=
+----
+ drivers/opp/of.c                      | 230 +++++++---
+ drivers/opp/opp.h                     |  17 +-
+ include/linux/devfreq.h               |   2 +
+ include/linux/pm_opp.h                | 112 +++--
+ 10 files changed, 885 insertions(+), 339 deletions(-)
+
+--=20
+viresh
+
+--rm5mzonogh57oycu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJgINN7AAoJENK5HDyugRIclkAP/RwMFl808awDb+6m9gjcCNj8
+Sy7AoaC6e98HDJcLaqSFRCAwGx4lE2roSqXzYHMvHAhCehmXi/XbBqJSUzk036+5
+nEpsAg3jlTcTNfJJ1uEAJziAFgXiBMCOiVTb1Ca7Lpae4AY9nt1Q6YdFMBVNmuYQ
+NZ18Uf8UBHuzVhTnaSv9Y+6836LKTBrGT/FWYxkgBeIC8GFtW6JzeVfo6XPBTG+l
+JJqqB7uMEj9nwg/NAXKwiSE3lriUbVwClOPi0Nyzo1KDn7FoS9KOIUIvWku207nM
+p/elf2j2LWr+IV3uwgJ9TEkAhqEDmHZnmoyennCWsp/Dfx5BSwqu9CITM0VzL/Kv
+xgcVzFKKRvN5Hx9Y/rRwFIUGX/N7a2BPiWgINOJFAvjNDTotfJME6rQif68Jl0Xh
+j+gLyaLr7uI+eF0PaX/Z4hgBVAxDMx8W4XIZ8DcwRLdxDl4ORJ3yBRgUriQPcP6j
+C5RM1A+POPVmHFmLQVw6Ll6YXBC470mGexSlc+g9OlInDBYs2jm/Y+qiUVNGJ1AB
+uzhEE82rKAL8d+ZbJn82Dq6ojkQUXkGdi+iOISma23QO/0UfBSx2TDhcwUY6zgpY
+3aD/atDlbEt9V6qNv99Vky5nBFNF/5D5irL7HMn0l7yTPU/6pG9NGIQ21z4uGdPx
+6JAAUaXiFf9QkOGI9gab
+=mPTo
+-----END PGP SIGNATURE-----
+
+--rm5mzonogh57oycu--
