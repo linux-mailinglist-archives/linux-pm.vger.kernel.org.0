@@ -2,146 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18824312A77
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 07:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 207B8312B05
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 08:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbhBHGHT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Feb 2021 01:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
+        id S229795AbhBHHRL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Feb 2021 02:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbhBHGHN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 01:07:13 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4CEC061793
-        for <linux-pm@vger.kernel.org>; Sun,  7 Feb 2021 22:06:18 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id k13so2556904pfh.13
-        for <linux-pm@vger.kernel.org>; Sun, 07 Feb 2021 22:06:18 -0800 (PST)
+        with ESMTP id S229608AbhBHHRJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 02:17:09 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BC8C06174A;
+        Sun,  7 Feb 2021 23:16:28 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id p20so22949676ejb.6;
+        Sun, 07 Feb 2021 23:16:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=Tlt0KYtqA+Hr03xQ/isU/faVPTM5pqVbpY2dvJsj1+Q=;
-        b=k141nhWPND0piT7Rh94UFx3FeE1DhHq14fUlWvR6jISynDPdW0pUtB0UbMMIeM+Y2F
-         ABuweKJgHzjGkW1sF5Zdxu1lcksa8LtC1AixqRH1Cmgxk9pnQ9vTJNaPFqbSGpPQfIQd
-         s3saf5bni2UksiIkEOVw5q8LmIqvzJJAzZp+pfW1bgN8CoEJFI+Pv8/00VGL2Tkm92oB
-         baWCJeVSSDArxOox9Dej/IuiL+g/Eis83oJwgUyiSAV5AANiVCHHSmEVGJcrsVsm+MGD
-         7LCpbdmYKKZJlCVl+geaFbaCY4eBKRdgH8i1GehHuqgParTkuRWGoBqfr6fheF43oHMI
-         joyA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=krqWjImkL2aI2UxmellDdSuNGZ6V2RDP8gOeRiAmdmg=;
+        b=qJVc36k8sBxNw2X02X+MJik2TCKX76BRTZGkc28zSjpfBWhdCvgtPxOF3bbFGwZorX
+         yQbqJb3omUNY6hAvX/7utnFP/Jslo8ZzGMmcw4Ac32i8zcerZuHTny+1E8IlsrWrJKpi
+         YUhSLYqczc9VpYVyy+mgA0b6xX/Q43kz+QZtQlaZSp4+pm/RKA5kDGZAE9J6lVreUEI7
+         kSn+wfZPp581R7Tl4CdrQqPl6AMKgkqjrKDJrGuvKzi+4NKYgkM+odx4+V3TKsCadcZJ
+         IYdNp3Scx0PSjfcrkmjJezuBAJtoST6dlAdLHbwL4YN+KMnHiD6Hj/mLlxAI7HUyeKRg
+         MZdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=Tlt0KYtqA+Hr03xQ/isU/faVPTM5pqVbpY2dvJsj1+Q=;
-        b=tw+b/C71jGX7OKdFBFEkWexLatkUm5FCcF6MdbOydlJjTh8tj2WVQJ/5ltdtGMB+6j
-         wNA/q/3bSSppbvz3vG14Tk7bYyCZKHPF+eHnF2c/m1eW4TJ9IQRBMRWzElD4fFLsY3Da
-         WRYe8tTz6LcI5w0WxXmFB5eM1nmx/BVnDEWicCXwKCLuv6kFTGLmDPs8kX2bjBjVZEpX
-         f2N0XA9L5angssai0o07tB5CaEjyKuB1jAzrJ2Teg6HaE+h3TDikd5caBUXFMkINKBTs
-         m02e84u3slnxzhW+f3BjsQSzPqMzrgVTkA7elmc2fbLy8CwKhBSJiSLcCqXeNqm1NNWk
-         /mtA==
-X-Gm-Message-State: AOAM530lJFScvYg6EwaKk0oOJTsVBr4QA343w1CyP6gMwnKWUAw5nF2T
-        IzLcykulu0kw9DGnjNMkA9o9fw==
-X-Google-Smtp-Source: ABdhPJySYy/6INpXgzhqp5iu9WWvzLC7FXFy2v+g0BbdC16OEkpzo/akdq6mshkVQerMXpHervKnOQ==
-X-Received: by 2002:a63:7f09:: with SMTP id a9mr15385309pgd.63.1612764377712;
-        Sun, 07 Feb 2021 22:06:17 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id p7sm16091648pfn.52.2021.02.07.22.06.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Feb 2021 22:06:16 -0800 (PST)
-Date:   Mon, 8 Feb 2021 11:36:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm updates for 5.12
-Message-ID: <20210208060614.krjwvatrp6wxxxkp@vireshk-i7>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="5lk7veuvwpxdtxdk"
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716-391-311a52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=krqWjImkL2aI2UxmellDdSuNGZ6V2RDP8gOeRiAmdmg=;
+        b=sSLunMrLxGnkQofKXgin1aIjyGYCA+0v2ZexGJ6NdN7yb3WGATH4RITd0qvfy4jV5o
+         5qq9+ksLWK/N0wjTjt/DyrlHm7TzwlRFTp9LWOKIxOaVn1Dm+EQkLq2WXGRDrG1oNBhR
+         b7+9V9gH3t7G9eF2dDFufi3byhvAExpcKoWyxbNCf48Vq5Kua3GxKuyCBHeWUua/iAuV
+         CPHynXdN5B+MwI1ekQbEDCdei901CrO/Gu/Fyp/rnLTUCjzBbNzuDyMAjGoei2bSuhHR
+         IzB+jC0vm08GKFQ8nGX30gg647KezjGiFWPzwdKJV0uQBpIL+7wjl9FPjAY+e2sqtKQ5
+         LbMA==
+X-Gm-Message-State: AOAM530QcdqbfEaqp3tIT7tmr9sV28AHQY+BG7J/McM+Q8w1aUXZxbCr
+        666OdDG2NLBE1BjQcKOUkwQ=
+X-Google-Smtp-Source: ABdhPJyKkJ+xmxPCgvpMetHKmyyHLONSRFLlkA6IPTTWWCLsCmEB8YEVSkXWpIFguOsmFbbzjR9R2w==
+X-Received: by 2002:a17:906:5857:: with SMTP id h23mr15170797ejs.465.1612768587484;
+        Sun, 07 Feb 2021 23:16:27 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2d8e:7300:842e:a74a:35f3:bd06])
+        by smtp.gmail.com with ESMTPSA id b4sm3278152edh.40.2021.02.07.23.16.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Feb 2021 23:16:26 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: rectify BROADCOM PMB (POWER MANAGEMENT BUS) DRIVER
+Date:   Mon,  8 Feb 2021 08:16:19 +0100
+Message-Id: <20210208071619.3234-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Commit 8bcac4011ebe ("soc: bcm: add PM driver for Broadcom's PMB") includes
+a new MAINTAINERS section BROADCOM PMB (POWER MANAGEMENT BUS) DRIVER with
+'drivers/soc/bcm/bcm-pmb.c', but the file was actually added at
+'drivers/soc/bcm/bcm63xx/bcm-pmb.c'.
 
---5lk7veuvwpxdtxdk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
 
-Hi Rafael,
+  warning: no file matches  F:    drivers/soc/bcm/bcm-pmb.c
 
-This pull request contains following changes:
+Point the file entry to the right location.
 
-- Removal of Tango driver as the platform got removed (Arnd Bergmann).
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+applies cleanly on next-20210205
 
-- Use resource managed APIs for tegra20 (Dmitry Osipenko).
+Rafal, please ack.
+Florian, please pick this minor fixup patch for soc next tree.
 
-- Generic cleanups for brcmstb (Christophe JAILLET).
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Enable boost support for qcom-hw (Shawn Guo).
-=20
--------------------------8<-------------------------
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6b507e8d7828..c23731c88dc2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3647,7 +3647,7 @@ M:	bcm-kernel-feedback-list@broadcom.com
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ T:	git git://github.com/broadcom/stblinux.git
+-F:	drivers/soc/bcm/bcm-pmb.c
++F:	drivers/soc/bcm/bcm63xx/bcm-pmb.c
+ F:	include/dt-bindings/soc/bcm-pmb.h
+ 
+ BROADCOM SPECIFIC AMBA DRIVER (BCMA)
+-- 
+2.17.1
 
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/=
-linux-next
-
-for you to fetch changes up to 7114ebffd330bfc5a95b9832a70b6bd857d26fd8:
-
-  cpufreq: remove tango driver (2021-01-21 09:34:46 +0530)
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      cpufreq: remove tango driver
-
-Christophe JAILLET (2):
-      cpufreq: brcmstb-avs-cpufreq: Free resources in error path
-      cpufreq: brcmstb-avs-cpufreq: Fix resource leaks in ->remove()
-
-Dmitry Osipenko (1):
-      cpufreq: tegra20: Use resource-managed API
-
-Shawn Guo (1):
-      cpufreq: qcom-hw: enable boost support
-
- drivers/cpufreq/Kconfig.arm           |  5 ----
- drivers/cpufreq/Makefile              |  1 -
- drivers/cpufreq/brcmstb-avs-cpufreq.c | 24 +++++++++++++------
- drivers/cpufreq/cpufreq-dt-platdev.c  |  2 --
- drivers/cpufreq/qcom-cpufreq-hw.c     |  6 +++++
- drivers/cpufreq/tango-cpufreq.c       | 38 -----------------------------
- drivers/cpufreq/tegra20-cpufreq.c     | 45 +++++++++++++++++--------------=
-----
- 7 files changed, 45 insertions(+), 76 deletions(-)
- delete mode 100644 drivers/cpufreq/tango-cpufreq.c
-
---=20
-viresh
-
---5lk7veuvwpxdtxdk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJgINTWAAoJENK5HDyugRIcAycP/RvH0NPOFedux40XKytVyPyf
-0WbAItQIT6p4pMvI4sswtGa9eu2vvCDEJj6rX2d4aB+XNzRvXtsM+Lj2gxE+3xBS
-bf8ZXTFlv9pQcFUgOI3cz3+vsOTF0q4SqvwNR9f69WDkT9nVCnnp6vKyv7vvwor3
-pxIO2EDH4T8Z+aBbilXp7mbl5U0EKsxkG3QUAKuuWgwt5jk7Q9z5vgIKNpYlGKa3
-mzeCgzWGm4MRaaIt0scadqLFXYmuMHcu3dqE7ZKNJOK05MBsOeefSSa4ix1aa6QV
-JEdj2bcgZYtf0yBpKgLzqXmSxQn69Hv+QEgxYbmSPndRV2wtzqs5LdyQa7UwCKSh
-e216edXaRs0rjq643zQX1w2+k8RsWdGloV5XHUxf5ofWxk7hKmZn6x3kB9/HVtlx
-Ln74T3ljjL4aEZ0vpF+f+7Bl846a8q8YM5ub2qQTc4lt8FC3axbxLCbPSEdndBpm
-pqnOSGsKDO3xKMZIYeMmjCeYunsvv8P2i5MlLH+3+8Hl4kpwCJhE6LirIqwCafpd
-aNd8Jr3gNijp7jOsbv7B8hAaHqRTZk7AUIaYP6fiT4S++o40VRPJloDfR3Qe5L8Y
-9jRGdUW+vZHRJiTseC1NmpEUgsBJz4mYu19gt5a7u2j6MQ7dOranq0EnUs8KHcpL
-R6dRPn6gA5X0zrQUwdcC
-=s8aw
------END PGP SIGNATURE-----
-
---5lk7veuvwpxdtxdk--
