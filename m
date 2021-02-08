@@ -2,99 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C793132F5
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 14:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E4E31333C
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 14:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbhBHNKU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Feb 2021 08:10:20 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12599 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbhBHNKS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 08:10:18 -0500
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DZ5tN1XMdz164TN;
-        Mon,  8 Feb 2021 21:08:12 +0800 (CST)
-Received: from [127.0.0.1] (10.69.38.196) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.498.0; Mon, 8 Feb 2021
- 21:09:29 +0800
-Subject: Re: [PATCH 1/4] driver core: Use subdir-ccflags-* to inherit debug
- flag
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <giometti@enneenne.com>,
-        <abbotti@mev.co.uk>, <hsweeten@visionengravers.com>,
-        <kw@linux.com>, <helgaas@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <devel@driverdev.osuosl.org>,
-        <linux-kbuild@vger.kernel.org>, <masahiroy@kernel.org>,
-        <michal.lkml@markovi.net>, <linuxarm@openeuler.org>,
-        <prime.zeng@huawei.com>
-References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
- <1612518255-23052-2-git-send-email-yangyicong@hisilicon.com>
- <YB0Vk6ERJ3lFc3WD@kroah.com>
- <08017751-a1be-ea07-50de-73d14ab6d57e@hisilicon.com>
- <YCEWtxYgbRPET4Sr@kroah.com>
-From:   Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
-Date:   Mon, 8 Feb 2021 21:09:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S229611AbhBHN2b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Feb 2021 08:28:31 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:33613 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230510AbhBHN03 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 08:26:29 -0500
+Received: by mail-oi1-f176.google.com with SMTP id g84so1762697oib.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 Feb 2021 05:26:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qMjM9wpamFoY06E53UBLnHfXSS2GlhbGJebFWr4kPes=;
+        b=CyXU+WkK0cLng73OqUJEueo2mYKnjfA0nEZpWo+f9rpjhymJfa9NqPEjCqM2Cew6Y8
+         xhZyGONlAVS1DDB7yTO8BlLN5C5E4nC2eGuHzcYTFHPxVoPhfIG/jsv9KLqdmV8oTROV
+         HFJ8DLILipuoLlWxBbJ9MM3Qt3NNTQ0hvYlQdQr0QHUh+TfrfJ3JYh+fx4a48MpXgOT4
+         VUEnhJgdCEyW+n6MTEeiWdfJ42lR8+PcwdgU2XxEoxbCWlRD53DG+I6Z09tSOghcb7aQ
+         1MY1KxjvussjDtycTb9USSISujawCr/pc+ySc7qs5opTDa3eP/v/uu6ptc9SO/b6oDh3
+         Vpuw==
+X-Gm-Message-State: AOAM530Pemw+E2OAIzgGx2sc7SjlzfnSnIm0YNRXeVnFfZrbcMSRGFYm
+        iybIJfWCnMgtlqoCpQSUxi17j3UbBhL6i1aBCvk=
+X-Google-Smtp-Source: ABdhPJzdPqEaTA+rKSMf6V4+2exuyBrE8M52XaS9VCvXYJN2uXCcKc0G0ELRvpTU4oM6ybUiZX8Jt0RpiYeVCkOqK4s=
+X-Received: by 2002:aca:d14:: with SMTP id 20mr11587482oin.157.1612790749098;
+ Mon, 08 Feb 2021 05:25:49 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YCEWtxYgbRPET4Sr@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.38.196]
-X-CFilter-Loop: Reflected
+References: <20210208060614.krjwvatrp6wxxxkp@vireshk-i7>
+In-Reply-To: <20210208060614.krjwvatrp6wxxxkp@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 8 Feb 2021 14:25:33 +0100
+Message-ID: <CAJZ5v0joO0drsV=Paj9wbX3rfGWEaQdw4E163Z2xbGn+QPTGew@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 5.12
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021/2/8 18:47, Greg KH wrote:
-> On Mon, Feb 08, 2021 at 06:44:52PM +0800, Yicong Yang wrote:
->> Hi Greg,
->>
->> On 2021/2/5 17:53, Greg KH wrote:
->>> On Fri, Feb 05, 2021 at 05:44:12PM +0800, Yicong Yang wrote:
->>>> From: Junhao He <hejunhao2@hisilicon.com>
->>>>
->>>> Use subdir-ccflags-* instead of ccflags-* to inherit the debug
->>>> settings from Kconfig when traversing subdirectories.
->>>
->>> That says what you do, but not _why_ you are doing it.
->>
->> i'll illustrate the reason and reword the commit.
->>
->>>
->>> What does this offer in benefit of the existing way?  What is it fixing?
->>> Why do this "churn"?
->>
->> currently we have added ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG in the Makefile
->> of driver/base and driver/base/power, but not in the subdirectory
->> driver/base/firmware_loader. we cannot turn the debug on for subdirectory
->> firmware_loader if we config DEBUG_DRIVER and there is no kconfig option
->> for the it.
-> 
-> Is that necessary?  Does that directory need it?
+On Mon, Feb 8, 2021 at 7:06 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> This pull request contains following changes:
+>
+> - Removal of Tango driver as the platform got removed (Arnd Bergmann).
+>
+> - Use resource managed APIs for tegra20 (Dmitry Osipenko).
+>
+> - Generic cleanups for brcmstb (Christophe JAILLET).
+>
+> - Enable boost support for qcom-hw (Shawn Guo).
+>
+> -------------------------8<-------------------------
+>
+> The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+>
+>   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+>
+> for you to fetch changes up to 7114ebffd330bfc5a95b9832a70b6bd857d26fd8:
+>
+>   cpufreq: remove tango driver (2021-01-21 09:34:46 +0530)
 
-there are several debug prints in firmware_loader/main.c:
-
-./main.c:207:   pr_debug("%s: fw-%s fw_priv=%p\n", __func__, fw_name, fw_priv);
-./main.c:245:                   pr_debug("batched request - sharing the same struct fw_priv and lookup for multiple requests\n");
-./main.c:269:   pr_debug("%s: fw-%s fw_priv=%p data=%p size=%u\n",
-./main.c:594:   pr_debug("%s: fw-%s fw_priv=%p data=%p size=%u\n",
-./main.c:605:           pr_debug("%s: fw_name-%s devm-%p released\n",
-./main.c:1175:  pr_debug("%s: %s\n", __func__, fw_name);
-./main.c:1181:  pr_debug("%s: %s ret=%d\n", __func__, fw_name, ret);
-./main.c:1214:  pr_debug("%s: %s\n", __func__, fw_name);
-./main.c:1272:          pr_debug("%s: fw: %s\n", __func__, name);
-./main.c:1389:  pr_debug("%s\n", __func__);
-./main.c:1415:  pr_debug("%s\n", __func__);
-
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> .
-> 
-
+Pulled, thanks!
