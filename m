@@ -2,67 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F193139D1
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 17:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E46A8313AAB
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 18:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbhBHQmV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Feb 2021 11:42:21 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:46606 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234522AbhBHQlt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 11:41:49 -0500
-Received: by mail-oi1-f181.google.com with SMTP id k25so16204451oik.13;
-        Mon, 08 Feb 2021 08:41:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ThLQib0vbE0ELv0+iOCjIn3TgGjZaF25CvVRr6GIWa8=;
-        b=MsgG2YV7HrFj8EsRzkJ2sa07SikmjKpmJPYRmhybNP7DUV84E5KzYbKfFnGZ+V+IdT
-         iPkYSPoTaXP/pDfjkqcbh/XSoFnnJ21Gdk5MDOUN7XMkX5zFM6gyHEy0HbyTd/ZjWYGy
-         D0edG/mbMCE+ofGMguX/mvVAhlKolTiuquEyWh9jTbXDv247O7yzxDdr7g1IUB4iQQUw
-         J8BeG6Q6ev72MnlTielHkjJX6GaRLkfpa2HVd9OOil5Is6ylf3/h/BENcwggq0pPz0pg
-         n4ZC+mxBzMueS6EQ9UTtdALa7EbGAAZ0ihpbS0XQUOFSzz0sZATceetSEXFnAkO/m0hu
-         qnkg==
-X-Gm-Message-State: AOAM5325b8Cbc8zkPdt2nIyGblt0lITahGt/rjst11mZwUtNlEmM/ggo
-        hdv7nHozYzSrYWzYgz31/Q4oU1gmjf1qdBbVw4k=
-X-Google-Smtp-Source: ABdhPJwtL0j0/DDGI/WQfni1MRlfErfRVstv1DaehZlL1UKUwiMqb8f+NvdoWRvTQSjsGi2g31g2A9hlEmgrSVMsA8Q=
-X-Received: by 2002:aca:d14:: with SMTP id 20mr12267922oin.157.1612802469189;
- Mon, 08 Feb 2021 08:41:09 -0800 (PST)
+        id S232160AbhBHRSN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Feb 2021 12:18:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234671AbhBHRRr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Feb 2021 12:17:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 982F464E6E;
+        Mon,  8 Feb 2021 17:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612804626;
+        bh=BfPVNPhD+Ba/YNfUfM7utwp0Nvw3QE+oOCX7q7XltPE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=WZnrYnIqbli8bx4CGwsbi0lgpuo+Fh8NznXE5/0i6ZbR6B9ZOXqATxVjt8p+iTyjQ
+         9N6Eulwn0MOs9CPvPqdD1HOyD5Sejih+04flUiBHO8zwcnNqr3KVEqf7/Enxivoy83
+         e22Di1pxizbeIVyfC9XQaznR7jN4+yhPXyEBhW4bFxAiOWHEJ1YyLlC5UJai56ikHg
+         oGV6wacETKDJaiAKudZXTP4A/slOw2V2cKjo0jA/n7qqCulL7XbtmBl8NaJf7r6OYT
+         jXYz26e9FWCSY8OpjsrxxvEJLmmCYBB8SA9D3znWT7Sv0vvyATWnaHD/N10ORyC2jH
+         Knn1Ztt1NHMoA==
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: (subset) [PATCH] memory: samsung: exynos5422-dmc: Correct function names in kerneldoc
+Date:   Mon,  8 Feb 2021 18:16:54 +0100
+Message-Id: <161280460935.4459.2076677774296231794.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210206111715.20774-1-krzk@kernel.org>
+References: <20210206111715.20774-1-krzk@kernel.org>
 MIME-Version: 1.0
-References: <b2393aa6-747f-56e0-707a-96bfc54d9a0f@linuxfoundation.org>
-In-Reply-To: <b2393aa6-747f-56e0-707a-96bfc54d9a0f@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 8 Feb 2021 17:40:58 +0100
-Message-ID: <CAJZ5v0ivhnNs=FdW8hkchTxWHJGZ=M28az1kvU3M5Y4XLXAe3Q@mail.gmail.com>
-Subject: Re: [GIT PULL] cpupower update for Linux 5.12-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Renninger <trenn@suse.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Fontenot <nathan.fontenot@amd.com>, rrichter@amd.com,
-        Ivan Babrou <ivan@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 5:11 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Hi Rafael,
->
-> Please pull the following cpupower update for Linux 5.12-rc1
->
-> This cpupower update for Linux 5.12-rc1 consists of:
->
-> - Updates to the cpupower command to add support for AMD family 0x19
->    and cleanup the code to remove many of the family checks to make
->    future family updates easier.
->
-> - Adding Makefile dependencies for install targets to allow building
->    cpupower in parallel rather than serially.
->
-> diff is attached.
+On Sat, 6 Feb 2021 12:17:15 +0100, Krzysztof Kozlowski wrote:
+> Correct kerneldoc to fix W=1 warnings:
+> 
+>     drivers/memory/samsung/exynos5422-dmc.c:290: warning:
+>         expecting prototype for find_target_freq_id(). Prototype was for find_target_freq_idx() instead
+>     drivers/memory/samsung/exynos5422-dmc.c:1015: warning:
+>         expecting prototype for exynos5_dmc_align_initial_frequency(). Prototype was for exynos5_dmc_align_init_freq() instead
 
-Pulled, thanks!
+Applied, thanks!
+
+[1/1] memory: samsung: exynos5422-dmc: Correct function names in kerneldoc
+      commit: 0e9bc42089a7374d056745419c7a8f28016b4191
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzk@kernel.org>
