@@ -2,60 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5792E3132CE
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 13:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C793132F5
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 14:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbhBHM5W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Feb 2021 07:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbhBHM5W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 07:57:22 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF105C06174A
-        for <linux-pm@vger.kernel.org>; Mon,  8 Feb 2021 04:56:41 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id o21so8752129pgn.12
-        for <linux-pm@vger.kernel.org>; Mon, 08 Feb 2021 04:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=4RTXjInOoJRZeudmogRQFPNiUagxIDCKGLphTA7zIco=;
-        b=Wdrj8aPnL3PIkm/bp/pvMP80ygF6DbHgf/eWxcMcH/lwlsN8aSCaB6AfGilQ+lc0hP
-         GcD6K5equ6Oe7Dup+VsFYC97jnVFeU/FhRdZLXXRddNNBndTIDfKCEds2l7g1sZuDl35
-         TbVg8kF6vZmZ5wMbAMMf2+o6SZHbihOTEu0WjWAhIvlf3Fk+IdyAQTg8koXvuGOAyrZa
-         Dct1I6spABj5fIXygRYWCu/0wzPiVeGpGzMHVDKeZ+RmMz6TXU8hCCF8jOqlMeq/ITGy
-         CWKRoy51UPucudWwUVK+hbLM8B/oiG/ObCpQM19SwwyS9ke6N8KQRW4bDvoqlXGYCctf
-         NHcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=4RTXjInOoJRZeudmogRQFPNiUagxIDCKGLphTA7zIco=;
-        b=HN4moWrTGJLwfG4uY37vbGVgLKJt53aa7RByJCYMK+bSfLWze2rY11shflWFSXr6B3
-         vcPmY3DKsdMVI9S0D8rAngaW44zBt8XhctahSlodnEw54ieVYQqEl/cdCsxjAKC5A7Nk
-         pyNtrYgMv6nCruu5Iiuz+RlKlvNZc/i81mNW+n5GfTQ05vlCwnIM0ij44SrFWI56G27F
-         FwXm4InoOQaqt6WU8cr0J3N6pn7KFlJlfECNMqcCPuXez28Rv560ZnLjq4lNRIENsVEe
-         Sp5bgh6QFBlYVbJb5xIhwuLXeoWgrVZFumkqgDHLKrDOVJgO3Bn0j32qxTRhFgYorVY2
-         H2BQ==
-X-Gm-Message-State: AOAM531K7ylHrjHcheb2/5JgKbzUAeqpaYNxX8QUR3ZdJfqkL5aOlDiK
-        B4yBl7VmBf3RIXgkBJNA/mZ5slTJMZoD7S5PZKE=
-X-Google-Smtp-Source: ABdhPJzCLCbkQlZo6f5Y3JUaTU2y4yNw6WQ81s23eBHGEiS71sA7mNhHov2ceD5Gop00Qmt4hHm1BAezG1m6HTIUViM=
-X-Received: by 2002:a62:a108:0:b029:1c1:119b:8713 with SMTP id
- b8-20020a62a1080000b02901c1119b8713mr17891463pff.74.1612789001314; Mon, 08
- Feb 2021 04:56:41 -0800 (PST)
+        id S229766AbhBHNKU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Feb 2021 08:10:20 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12599 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229848AbhBHNKS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 08:10:18 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DZ5tN1XMdz164TN;
+        Mon,  8 Feb 2021 21:08:12 +0800 (CST)
+Received: from [127.0.0.1] (10.69.38.196) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.498.0; Mon, 8 Feb 2021
+ 21:09:29 +0800
+Subject: Re: [PATCH 1/4] driver core: Use subdir-ccflags-* to inherit debug
+ flag
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <giometti@enneenne.com>,
+        <abbotti@mev.co.uk>, <hsweeten@visionengravers.com>,
+        <kw@linux.com>, <helgaas@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <devel@driverdev.osuosl.org>,
+        <linux-kbuild@vger.kernel.org>, <masahiroy@kernel.org>,
+        <michal.lkml@markovi.net>, <linuxarm@openeuler.org>,
+        <prime.zeng@huawei.com>
+References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
+ <1612518255-23052-2-git-send-email-yangyicong@hisilicon.com>
+ <YB0Vk6ERJ3lFc3WD@kroah.com>
+ <08017751-a1be-ea07-50de-73d14ab6d57e@hisilicon.com>
+ <YCEWtxYgbRPET4Sr@kroah.com>
+From:   Yicong Yang <yangyicong@hisilicon.com>
+Message-ID: <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
+Date:   Mon, 8 Feb 2021 21:09:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Received: by 2002:a17:90b:4c07:0:0:0:0 with HTTP; Mon, 8 Feb 2021 04:56:40
- -0800 (PST)
-Reply-To: sgt.kayla12@gmail.com
-From:   Kayla <pakaramazabalo@gmail.com>
-Date:   Mon, 8 Feb 2021 12:56:40 +0000
-Message-ID: <CAEDgmhZJD=qNVTtjOcsS_fD3JbQJUdJLd91swYpPgpTh15P3Bg@mail.gmail.com>
-Subject: Hello my dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YCEWtxYgbRPET4Sr@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.38.196]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I sent a message to you, did you get it?, Please confirm and write me
-back, thanks.
+On 2021/2/8 18:47, Greg KH wrote:
+> On Mon, Feb 08, 2021 at 06:44:52PM +0800, Yicong Yang wrote:
+>> Hi Greg,
+>>
+>> On 2021/2/5 17:53, Greg KH wrote:
+>>> On Fri, Feb 05, 2021 at 05:44:12PM +0800, Yicong Yang wrote:
+>>>> From: Junhao He <hejunhao2@hisilicon.com>
+>>>>
+>>>> Use subdir-ccflags-* instead of ccflags-* to inherit the debug
+>>>> settings from Kconfig when traversing subdirectories.
+>>>
+>>> That says what you do, but not _why_ you are doing it.
+>>
+>> i'll illustrate the reason and reword the commit.
+>>
+>>>
+>>> What does this offer in benefit of the existing way?  What is it fixing?
+>>> Why do this "churn"?
+>>
+>> currently we have added ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG in the Makefile
+>> of driver/base and driver/base/power, but not in the subdirectory
+>> driver/base/firmware_loader. we cannot turn the debug on for subdirectory
+>> firmware_loader if we config DEBUG_DRIVER and there is no kconfig option
+>> for the it.
+> 
+> Is that necessary?  Does that directory need it?
+
+there are several debug prints in firmware_loader/main.c:
+
+./main.c:207:   pr_debug("%s: fw-%s fw_priv=%p\n", __func__, fw_name, fw_priv);
+./main.c:245:                   pr_debug("batched request - sharing the same struct fw_priv and lookup for multiple requests\n");
+./main.c:269:   pr_debug("%s: fw-%s fw_priv=%p data=%p size=%u\n",
+./main.c:594:   pr_debug("%s: fw-%s fw_priv=%p data=%p size=%u\n",
+./main.c:605:           pr_debug("%s: fw_name-%s devm-%p released\n",
+./main.c:1175:  pr_debug("%s: %s\n", __func__, fw_name);
+./main.c:1181:  pr_debug("%s: %s ret=%d\n", __func__, fw_name, ret);
+./main.c:1214:  pr_debug("%s: %s\n", __func__, fw_name);
+./main.c:1272:          pr_debug("%s: fw: %s\n", __func__, name);
+./main.c:1389:  pr_debug("%s\n", __func__);
+./main.c:1415:  pr_debug("%s\n", __func__);
+
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
+> .
+> 
+
