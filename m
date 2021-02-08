@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD033143E9
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Feb 2021 00:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403F931446B
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Feb 2021 01:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbhBHXgS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Feb 2021 18:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
+        id S230023AbhBHX7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Feb 2021 18:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbhBHXgO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 18:36:14 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8BEC06178A
-        for <linux-pm@vger.kernel.org>; Mon,  8 Feb 2021 15:35:34 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id e132so16339057ybh.8
-        for <linux-pm@vger.kernel.org>; Mon, 08 Feb 2021 15:35:34 -0800 (PST)
+        with ESMTP id S229638AbhBHX7M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 18:59:12 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393AC061793
+        for <linux-pm@vger.kernel.org>; Mon,  8 Feb 2021 15:57:49 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id e132so16382096ybh.8
+        for <linux-pm@vger.kernel.org>; Mon, 08 Feb 2021 15:57:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8+WfYcK1+ZV8R23zYWi1zlMlBGGvpKMkA8UnDsJm1Oc=;
-        b=aq0w3Rjj+uR7KU5tlbnt8SRF9CFdEuy0AjgqgYqNKMir3fsFHUIThfxfnu6aqGB7eT
-         vs+u57fNuc/O7ZRw5aKGWiem1cEzcuXK+XxIdxgfxTBXHmTIQp3KZHyvYv3tdTODaAav
-         QoqPkDQGqZRxy0sKbdCT1rSSH9CVQWQGCrrH6bCFRUureuu+/e1sQxNUJJLoQ7V7oq1C
-         /4WafwSXw2fU1fJ/QJAqBNP3vkfOAwZW/LHSpQi4qMfFU4IM0iQKD94nDyXeN9KFJ9pM
-         RSovOiSyfkjD/d67bVKM0uYGDgggNUXN0564+kGokV4Qpic30xP48LDt4BmbI0KgTAsy
-         trcw==
+        bh=3BKcbNNOjiBO2ETX8rA0e94Kcv/0Lli4UWrEe/qIvRE=;
+        b=KNC+VPHlDueVrMXq1S5/C3olGud4OPz1qXgkjrqCAGN6Esj3rrVX1vx7ruKisOPefR
+         MkzSFhRx1oSEp7RaPuVS9x1eluitBSwsVEiIuof3ZJn2MAx4+N5a2I+vf7ZzeM7v3ji0
+         7c4SiozsLlDdy1uva4nIDpkMHKl7COC/++5GRQNKxT7AX0nKR9iVrlP99HXE65FFKGZE
+         zGA3xLaox1T4twIexyMsH2qJpW3Q4q/G8EK7CC7TApJDRDLNTjnGaG+x1yDl49jv5hYt
+         oXm0cSYXegRY7Ht9qCunkDZ7RMYK771pzpJjr46Ne4DCKEp6LuD11FpTkVcqpvKHLHiS
+         RupQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8+WfYcK1+ZV8R23zYWi1zlMlBGGvpKMkA8UnDsJm1Oc=;
-        b=JzKgLP2YrM9C1sm6bgpnJFr3Sxm+Syw/EwIskbWNrLjdqrUFUrNF14pCQGvOnpljYB
-         gkiAoaoXT/8fmuOpUnJ3f2ZX2bPPro6ph1bYg44koGnMrsgsjHdnh5RBHkD982CZ2Gsz
-         2b1/rhnkRMIJijVdPKtQofdin2IdZlAM5TEm0KfjoVlxWieW3Q4V+mvz4YMWZwSVuYoc
-         EeKEh+lu4gQshnrZpF17YfX5e4ni5RgObh7KMv6AKhsAApdHATbXSnl27kGTfFUrWt1b
-         Kfv++y2HaRD0OaIkEfxKWUcS6kqT6DRB5luVAJMjhPEIck6mN6OVIQCcJLD0hIdMs5Xh
-         8/Iw==
-X-Gm-Message-State: AOAM530KbqxOiaFHHW6d8lNFQvSQCt/Rl0O4lg+Pp+IqFT5ZUMVQxSFl
-        EyPBlIP1YWzP7V/u6I4lzrZ24ucllj9s6EuzIddx7g==
-X-Google-Smtp-Source: ABdhPJxvfXuvovy4qYPt4qo+kIvhWQQydMERIf2YxT9yDyTigYeTY9JT7AKMlyJ6w7jOmvoinijXVeHNTqdDkwzfQ44=
-X-Received: by 2002:a25:aa43:: with SMTP id s61mr2791520ybi.32.1612827333706;
- Mon, 08 Feb 2021 15:35:33 -0800 (PST)
+        bh=3BKcbNNOjiBO2ETX8rA0e94Kcv/0Lli4UWrEe/qIvRE=;
+        b=J04ZVrqSFNb0nBHgMloNTWMrPcjg7mFEisY7wDjNCD6iqxQ1bbwJFUnlTpPmgq5bmJ
+         0erMhPizD08JDNgOeHajb7HbPHOX+tRqAGXwFBvhDw7dIGBSGX04NqAmDVVgHEVHOLK8
+         9SG+JAeZCfnKT4cMQ8LOI6XojpY04teehuvciQ5QQCRCGx78aVbCqbPt5bKfQMKvCejB
+         ska/RAUhEAuZEMMEy0H12jHQ10QfmGFNrhIq2jMiFMvfV5VLxcp/a9yDDxNuk5F56BQg
+         a4xNENSWgPMaAAZK624YZc0KZKSUhAL0r9aJVbT7V7q5JIYR0QgC+W2g1A97Jokc/hV3
+         TeZQ==
+X-Gm-Message-State: AOAM530G4IafM8gH6aj7Sd/gz6ltfw6NwQgHvKGsKUk8mssGhFilfar+
+        wRPjAcZ2yuef63PzTy6fH/We+Pm43ircjDBgy8Kwng==
+X-Google-Smtp-Source: ABdhPJyWSN7D3Y6ZE8yWgCF8LiMpKCeSFyCoZ713kZRoDVbY3Hxuk2zkhBte1avCHvyEJ0NFmPIP3IBl22VvJgpOlqU=
+X-Received: by 2002:a25:3345:: with SMTP id z66mr29775941ybz.466.1612828669020;
+ Mon, 08 Feb 2021 15:57:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20210205222644.2357303-1-saravanak@google.com>
- <20210205222644.2357303-9-saravanak@google.com> <CAL_JsqJc8XRAL5Bj5LpH0M528K7ZL=wSqt8t=ibwjWutjCgB-Q@mail.gmail.com>
-In-Reply-To: <CAL_JsqJc8XRAL5Bj5LpH0M528K7ZL=wSqt8t=ibwjWutjCgB-Q@mail.gmail.com>
+References: <CGME20210205222651eucas1p28ef87073dea33c1c5224c14aa203bec5@eucas1p2.samsung.com>
+ <20210205222644.2357303-1-saravanak@google.com> <7b486072-453d-a344-bdfc-dec58a35c8f5@samsung.com>
+In-Reply-To: <7b486072-453d-a344-bdfc-dec58a35c8f5@samsung.com>
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 8 Feb 2021 15:34:57 -0800
-Message-ID: <CAGETcx9Ynzqx5vo+mqi9EGr+bVs8MBzO5sHhZiT+sB8Q_+7dPA@mail.gmail.com>
-Subject: Re: [PATCH v4 8/8] clk: Mark fwnodes when their clock provider is added/removed
-To:     Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 8 Feb 2021 15:57:13 -0800
+Message-ID: <CAGETcx9fpiy02+2_kRvtWos1usqA3gtCXqULsN906o70VKVGYA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -61,17 +61,17 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Pavel Machek <pavel@ucw.cz>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Marc Zyngier <maz@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Android Kernel Team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,30 +79,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 7:39 AM Rob Herring <robh+dt@kernel.org> wrote:
+On Mon, Feb 8, 2021 at 12:40 AM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
 >
-> On Fri, Feb 5, 2021 at 4:27 PM Saravana Kannan <saravanak@google.com> wrote:
+> Hi Saravana,
+>
+> On 05.02.2021 23:26, Saravana Kannan wrote:
+> > There are a lot of devices/drivers where they never have a struct device
+> > created for them or the driver initializes the hardware without ever
+> > binding to the struct device.
 > >
-> > This allows fw_devlink to recognize clock provider drivers that don't
-> > use the device-driver model to initialize the device. fw_devlink will
-> > use this information to make sure consumers of such clock providers
-> > aren't indefinitely blocked from probing, waiting for the power domain
-> > device to appear and bind to a driver.
+> > This series is intended to avoid any boot regressions due to such
+> > devices/drivers when fw_devlink=on and also address the handling of
+> > optional suppliers.
+> >
+> > Patch 1 and 2 addresses the issue of firmware nodes that look like
+> > they'll have struct devices created for them, but will never actually
+> > have struct devices added for them. For example, DT nodes with a
+> > compatible property that don't have devices added for them.
+> >
+> > Patch 3 and 4 allow for handling optional DT bindings.
+> >
+> > Patch 5 sets up a generic API to handle drivers that never bind with
+> > their devices.
+> >
+> > Patch 6 through 8 update different frameworks to use the new API.
 >
-> Don't we have cases that are a mixture? IOW, a subset of the clock
-> provider is initialized early, then the full driver takes over. You'd
-> want consumers that are not a driver to succeed, but drivers to defer
-> until the full driver is up.
+> This patchset fixes probing issue observed on various Exynos based
+> boards even with commit c09a3e6c97f0 ("soc: samsung: pm_domains: Convert
+> to regular platform driver") reverted. Thanks!
+>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>
 
-You probably just made a typo, but to clarify, this is about ignoring
-suppliers that never bind. So, in your case the clock device is the
-supplier.
-
-To answer your question, consumer devices added after the full
-supplier driver takes over will still have device links created to the
-supplier clock device. But consumers added before the full driver
-takes over won't. So, nothing is worse off with fw_devlink=on and we
-get way more dependency tracking (device links) created than what we
-have today.
+Thanks for testing!
 
 -Saravana
