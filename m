@@ -2,73 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE1E3127F7
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Feb 2021 23:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA78731292E
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Feb 2021 04:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbhBGWrh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Feb 2021 17:47:37 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:36302 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbhBGWrg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Feb 2021 17:47:36 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1l8spM-0007Sp-Sk; Sun, 07 Feb 2021 22:46:48 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marc Titinger <mtitinger+renesas@baylibre.com>,
-        Lina Iyer <lina.iyer@linaro.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PM / Domains: Fix integer overflows on u32 bit multiplies
-Date:   Sun,  7 Feb 2021 22:46:48 +0000
-Message-Id: <20210207224648.8137-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.29.2
+        id S229587AbhBHDId (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Feb 2021 22:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229570AbhBHDIc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Feb 2021 22:08:32 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFF7C061756;
+        Sun,  7 Feb 2021 19:07:52 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id j5so485596pgb.11;
+        Sun, 07 Feb 2021 19:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EhtEZeeEA+VVGotJ/o1in6C2esDFRE7ssaKSW/qYRbY=;
+        b=YmYvKX+L0bfETG6+6bpLt3y/HSDuSQk3Gq05qlSFDHBFkRMo9Y3BnbtN/WUeq9cFM9
+         koSeSVrfnx8tatKAkY+9jTRFF5ZxXHhxbnVaE099SHlBdNqx/cM9m+w1AlJl4DN2/pV7
+         ULCXsnbxrMlKDyM9gaG5bS1urhv+VTZOrt/irFNXZVkcdkYY4lHlK1+Jlgy47dJf/IHW
+         5rdOy+uszR/LmrrqiQxnhVTSrEVNL7Z126BLa8mCzVdkY0kXPRoOs4sPfQojj+s02eAK
+         ovhEIAgTUf74b1k+S9IiTjTd6pCPwO9n29p+Bynb9BeQrsst9tTywgKTM+059gfez8Xc
+         UbIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EhtEZeeEA+VVGotJ/o1in6C2esDFRE7ssaKSW/qYRbY=;
+        b=h/mt6aggwe+HqZmRg941/35GD8ltRvzhzq5BYLiZlyyaZ8smK7FTegwY5OnMMZ3OuU
+         yErP+9gxvxcsWPxY0zwT+A4Tf6TzOQCOf552TQ01Q347kFkQli1qGsQA3f1J2yt3SI1B
+         +/IDfDQBFTZ1YMdbXaseyZQwb4r9n/Fe943zLzT53/2/rDy0DQ65w/jvuTUH1BpFDfEY
+         yinAt49wnc6uWwaALh6v/h7r2MgGFjWKbXRUXXEDYXFzwQ+jZIuqsnJIMpyADE4qH32n
+         zE44NCOHiGjVa0GpHJLR+U0jUhPr4qncD8A2amEoCJfylgkLtYnUUECwMe2FapK2a7va
+         lPrA==
+X-Gm-Message-State: AOAM533wRmqWRENCpvKfwtZLnQThbN+bVy74Bo5V5ExfrAdaVsUUHFoc
+        UstxEtL6YWd77ELYZBt4pOQ=
+X-Google-Smtp-Source: ABdhPJzR9UCjMHew/cXX0RbLB0aUFOgi9xX9rIP7bs5xgXu2ARIJ60PNqofThIfqxUxxOqGKLwt/5Q==
+X-Received: by 2002:a63:c911:: with SMTP id o17mr15023146pgg.102.1612753672326;
+        Sun, 07 Feb 2021 19:07:52 -0800 (PST)
+Received: from tj.ccdomain.com ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id q17sm16970213pfl.143.2021.02.07.19.07.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Feb 2021 19:07:51 -0800 (PST)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     rjw@rjwysocki.net, rafael.j.wysocki@intel.com,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org
+Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyue2@yulong.com, zbestahu@163.com,
+        zhangwen@yulong.com
+Subject: [PATCH] cpufreq: schedutil: Don't use the limits_changed flag any more
+Date:   Mon,  8 Feb 2021 11:07:23 +0800
+Message-Id: <20210208030723.781-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.29.2.windows.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Yue Hu <huyue2@yulong.com>
 
-There are three occurrances of u32 variables being multiplied by
-1000 using 32 bit multiplies and the result being assigned to a
-64 bit signed integer.  These can potentially lead to a 32 bit
-overflows, so fix this by casting 1000 to a UL first to force
-a 64 bit multiply hence avoiding the overflow.
+The limits_changed flag was introduced by commit 600f5badb78c
+("cpufreq: schedutil: Don't skip freq update when limits change") due
+to race condition where need_freq_update is cleared in get_next_freq()
+which causes reducing the CPU frequency is ineffective while busy.
 
-Addresses-Coverity: ("Unintentional integer overflow")
-Fixes: 30f604283e05 ("PM / Domains: Allow domain power states to be read from DT")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+But now, the race condition above is gone because get_next_freq()
+doesn't clear the flag any more after commit 23a881852f3e ("cpufreq:
+schedutil: Don't skip freq update if need_freq_update is set").
+
+Moreover, need_freq_update currently will be set to true only in
+sugov_should_update_freq() if CPUFREQ_NEED_UPDATE_LIMITS is not set
+for the driver. However, limits may have changed at any time. And
+subsequent frequence update is depending on need_freq_update. So, we
+may skip this update.
+
+Hence, let's remove it to avoid above issue and make code more simple.
+
+Signed-off-by: Yue Hu <huyue2@yulong.com>
 ---
- drivers/base/power/domain.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/sched/cpufreq_schedutil.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index aaf6c83b5cf6..ddeff69126ff 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2831,10 +2831,10 @@ static int genpd_parse_state(struct genpd_power_state *genpd_state,
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 41e498b..7dd85fb 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -40,7 +40,6 @@ struct sugov_policy {
+ 	struct task_struct	*thread;
+ 	bool			work_in_progress;
  
- 	err = of_property_read_u32(state_node, "min-residency-us", &residency);
- 	if (!err)
--		genpd_state->residency_ns = 1000 * residency;
-+		genpd_state->residency_ns = 1000UL * residency;
+-	bool			limits_changed;
+ 	bool			need_freq_update;
+ };
  
--	genpd_state->power_on_latency_ns = 1000 * exit_latency;
--	genpd_state->power_off_latency_ns = 1000 * entry_latency;
-+	genpd_state->power_on_latency_ns = 1000UL * exit_latency;
-+	genpd_state->power_off_latency_ns = 1000UL * entry_latency;
- 	genpd_state->fwnode = &state_node->fwnode;
+@@ -89,11 +88,8 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+ 	if (!cpufreq_this_cpu_can_update(sg_policy->policy))
+ 		return false;
  
- 	return 0;
+-	if (unlikely(sg_policy->limits_changed)) {
+-		sg_policy->limits_changed = false;
+-		sg_policy->need_freq_update = true;
++	if (unlikely(sg_policy->need_freq_update))
+ 		return true;
+-	}
+ 
+ 	delta_ns = time - sg_policy->last_freq_update_time;
+ 
+@@ -323,7 +319,7 @@ static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
+ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu, struct sugov_policy *sg_policy)
+ {
+ 	if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_dl)
+-		sg_policy->limits_changed = true;
++		sg_policy->need_freq_update = true;
+ }
+ 
+ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+@@ -759,7 +755,6 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 	sg_policy->last_freq_update_time	= 0;
+ 	sg_policy->next_freq			= 0;
+ 	sg_policy->work_in_progress		= false;
+-	sg_policy->limits_changed		= false;
+ 	sg_policy->cached_raw_freq		= 0;
+ 
+ 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+@@ -813,7 +808,7 @@ static void sugov_limits(struct cpufreq_policy *policy)
+ 		mutex_unlock(&sg_policy->work_lock);
+ 	}
+ 
+-	sg_policy->limits_changed = true;
++	sg_policy->need_freq_update = true;
+ }
+ 
+ struct cpufreq_governor schedutil_gov = {
 -- 
-2.29.2
+1.9.1
 
