@@ -2,116 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403F931446B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Feb 2021 01:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33643314543
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Feb 2021 02:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbhBHX7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Feb 2021 18:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S229623AbhBIBJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Feb 2021 20:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbhBHX7M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 18:59:12 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393AC061793
-        for <linux-pm@vger.kernel.org>; Mon,  8 Feb 2021 15:57:49 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id e132so16382096ybh.8
-        for <linux-pm@vger.kernel.org>; Mon, 08 Feb 2021 15:57:49 -0800 (PST)
+        with ESMTP id S229564AbhBIBJC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Feb 2021 20:09:02 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BD0C061786
+        for <linux-pm@vger.kernel.org>; Mon,  8 Feb 2021 17:08:22 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id g15so11398830pgu.9
+        for <linux-pm@vger.kernel.org>; Mon, 08 Feb 2021 17:08:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3BKcbNNOjiBO2ETX8rA0e94Kcv/0Lli4UWrEe/qIvRE=;
-        b=KNC+VPHlDueVrMXq1S5/C3olGud4OPz1qXgkjrqCAGN6Esj3rrVX1vx7ruKisOPefR
-         MkzSFhRx1oSEp7RaPuVS9x1eluitBSwsVEiIuof3ZJn2MAx4+N5a2I+vf7ZzeM7v3ji0
-         7c4SiozsLlDdy1uva4nIDpkMHKl7COC/++5GRQNKxT7AX0nKR9iVrlP99HXE65FFKGZE
-         zGA3xLaox1T4twIexyMsH2qJpW3Q4q/G8EK7CC7TApJDRDLNTjnGaG+x1yDl49jv5hYt
-         oXm0cSYXegRY7Ht9qCunkDZ7RMYK771pzpJjr46Ne4DCKEp6LuD11FpTkVcqpvKHLHiS
-         RupQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Kjar+SGvmPiiMRUKrlOlBSLAoZS9qmdK1bK/xBkl598=;
+        b=RnEytroyoomfRi8nnlVyxni83cDkQcCHEkvKnmxOKi1VGxRHTPakErLrKg04fSssdS
+         r20kiwlKBkSLywjmRYfVlo71kvn583/MlZMjEldx58sz0Dpz6kJh0GyckCM/HHyQ5sBu
+         bBT9x+jVLcS8fAXhNNSN2tt0kJkldWfAMK7DtJlJKBmU4zlM1gbLYS6wSc9Sa+wtTO+u
+         e+KYA/HuKaVc2xXI2h7teQ7GckPgwubMIkc6o+URPx2MaQfWwNAixBrRyD1LwMO0kNpe
+         HfZsrSyGTFHcYeRZ2vbLlRZ0bK19+9azG7Ia0IZlNsYpkfB1rHNwqbxfLl0Mkl60k4J6
+         B87w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3BKcbNNOjiBO2ETX8rA0e94Kcv/0Lli4UWrEe/qIvRE=;
-        b=J04ZVrqSFNb0nBHgMloNTWMrPcjg7mFEisY7wDjNCD6iqxQ1bbwJFUnlTpPmgq5bmJ
-         0erMhPizD08JDNgOeHajb7HbPHOX+tRqAGXwFBvhDw7dIGBSGX04NqAmDVVgHEVHOLK8
-         9SG+JAeZCfnKT4cMQ8LOI6XojpY04teehuvciQ5QQCRCGx78aVbCqbPt5bKfQMKvCejB
-         ska/RAUhEAuZEMMEy0H12jHQ10QfmGFNrhIq2jMiFMvfV5VLxcp/a9yDDxNuk5F56BQg
-         a4xNENSWgPMaAAZK624YZc0KZKSUhAL0r9aJVbT7V7q5JIYR0QgC+W2g1A97Jokc/hV3
-         TeZQ==
-X-Gm-Message-State: AOAM530G4IafM8gH6aj7Sd/gz6ltfw6NwQgHvKGsKUk8mssGhFilfar+
-        wRPjAcZ2yuef63PzTy6fH/We+Pm43ircjDBgy8Kwng==
-X-Google-Smtp-Source: ABdhPJyWSN7D3Y6ZE8yWgCF8LiMpKCeSFyCoZ713kZRoDVbY3Hxuk2zkhBte1avCHvyEJ0NFmPIP3IBl22VvJgpOlqU=
-X-Received: by 2002:a25:3345:: with SMTP id z66mr29775941ybz.466.1612828669020;
- Mon, 08 Feb 2021 15:57:49 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Kjar+SGvmPiiMRUKrlOlBSLAoZS9qmdK1bK/xBkl598=;
+        b=styqHprHhvjltutfVNgQNKPh3/MMFmbE9Q/3awu/+/ZY5VAOX5uPytbx3PKTv1qZAM
+         DQ5kVSE+GkWBSgTh+xiXUzJzoX9wAXzd3XFKcEn1K+Urkz4/DK0hti66n1kdVizbCebU
+         6KgXn1EXSrBEv/pQ+bgAW3WUb8Jt5LmWoJpy/LIvRKGTtLgQemLEUPFLr+LkQ4RuoSJh
+         CTbFLxdqUBKaUGRM/45cfDfXdCP67coAK/NMo3EaMZECvTtlAjt9HGpMgXAuiWhJcO4L
+         G2M/IjFrZhmkclF/fSFpBi/i7mzDn0PfWclR3lxIOqbXhVdfXWn90zDiAV0Sqhz9L75h
+         UuwA==
+X-Gm-Message-State: AOAM530Lge306yhNqZpOptmh3hS01SOT/6T3eh6sLJieTWwPcCeV2/i4
+        jOGPB5sN/8TphuGxgfraz/HEnw==
+X-Google-Smtp-Source: ABdhPJzTb0eHF7cpph4nd2aMC/bu0w/46WvNUYs5YW0bLqGVHvtUMubkiAwBP/rxzWln7p47vd3C7w==
+X-Received: by 2002:a63:4d59:: with SMTP id n25mr19227335pgl.122.1612832902147;
+        Mon, 08 Feb 2021 17:08:22 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 21sm19182358pfh.56.2021.02.08.17.08.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 17:08:21 -0800 (PST)
+Message-ID: <6021e085.1c69fb81.af63c.b93d@mx.google.com>
+Date:   Mon, 08 Feb 2021 17:08:21 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CGME20210205222651eucas1p28ef87073dea33c1c5224c14aa203bec5@eucas1p2.samsung.com>
- <20210205222644.2357303-1-saravanak@google.com> <7b486072-453d-a344-bdfc-dec58a35c8f5@samsung.com>
-In-Reply-To: <7b486072-453d-a344-bdfc-dec58a35c8f5@samsung.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 8 Feb 2021 15:57:13 -0800
-Message-ID: <CAGETcx9fpiy02+2_kRvtWos1usqA3gtCXqULsN906o70VKVGYA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.11-rc7-100-g4084a778320d
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 6 builds: 0 failed,
+ 6 passed (v5.11-rc7-100-g4084a778320d)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 12:40 AM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> Hi Saravana,
->
-> On 05.02.2021 23:26, Saravana Kannan wrote:
-> > There are a lot of devices/drivers where they never have a struct device
-> > created for them or the driver initializes the hardware without ever
-> > binding to the struct device.
-> >
-> > This series is intended to avoid any boot regressions due to such
-> > devices/drivers when fw_devlink=on and also address the handling of
-> > optional suppliers.
-> >
-> > Patch 1 and 2 addresses the issue of firmware nodes that look like
-> > they'll have struct devices created for them, but will never actually
-> > have struct devices added for them. For example, DT nodes with a
-> > compatible property that don't have devices added for them.
-> >
-> > Patch 3 and 4 allow for handling optional DT bindings.
-> >
-> > Patch 5 sets up a generic API to handle drivers that never bind with
-> > their devices.
-> >
-> > Patch 6 through 8 update different frameworks to use the new API.
->
-> This patchset fixes probing issue observed on various Exynos based
-> boards even with commit c09a3e6c97f0 ("soc: samsung: pm_domains: Convert
-> to regular platform driver") reverted. Thanks!
->
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
->
+pm/testing build: 6 builds: 0 failed, 6 passed (v5.11-rc7-100-g4084a778320d)
 
-Thanks for testing!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+11-rc7-100-g4084a778320d/
 
--Saravana
+Tree: pm
+Branch: testing
+Git Describe: v5.11-rc7-100-g4084a778320d
+Git Commit: 4084a778320da1b8455b8a1083a549247f901315
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 6 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
