@@ -2,79 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DACE314C5E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Feb 2021 11:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6BC314CC9
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Feb 2021 11:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhBIKB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Feb 2021 05:01:56 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:44448 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230491AbhBIJ7u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Feb 2021 04:59:50 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UOHsNhv_1612864725;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UOHsNhv_1612864725)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 09 Feb 2021 17:59:01 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] power: supply: Use true and false for bool variable
-Date:   Tue,  9 Feb 2021 17:58:43 +0800
-Message-Id: <1612864723-57143-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S231288AbhBIKTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Feb 2021 05:19:15 -0500
+Received: from mx2.suse.de ([195.135.220.15]:54266 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231483AbhBIKRL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Feb 2021 05:17:11 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 866D1AD24;
+        Tue,  9 Feb 2021 10:16:27 +0000 (UTC)
+Date:   Tue, 9 Feb 2021 11:16:22 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        X86 ML <x86@kernel.org>
+Subject: Re: [PATCH v2 2/2] thermal: Move therm_throt there from x86/mce
+Message-ID: <20210209101622.GA15909@zn.tnic>
+References: <YCHzLQewQIylgyUj@jagdpanzerIV.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YCHzLQewQIylgyUj@jagdpanzerIV.localdomain>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix the following coccicheck warning:
+Hi,
 
-./include/linux/power_supply.h:507:9-10: WARNING: return of 0/1 in
-function 'power_supply_is_watt_property' with return type bool.
+On Tue, Feb 09, 2021 at 11:27:57AM +0900, Sergey Senozhatsky wrote:
+> Seems that the patch triggers some WARNs on my laptop.
 
-./include/linux/power_supply.h:479:9-10: WARNING: return of 0/1 in
-function 'power_supply_is_amp_property' with return type bool.
+yeah, that one is replaced with a better variant now and it should land
+in the next linux-next, the one after next-20210208 :)
 
-Reported-by: Abaci Robot<abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- include/linux/power_supply.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Thx.
 
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 81a55e9..029e6e9 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -476,12 +476,12 @@ static inline bool power_supply_is_amp_property(enum power_supply_property psp)
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 	case POWER_SUPPLY_PROP_CURRENT_AVG:
- 	case POWER_SUPPLY_PROP_CURRENT_BOOT:
--		return 1;
-+		return true;
- 	default:
- 		break;
- 	}
- 
--	return 0;
-+	return false;
- }
- 
- static inline bool power_supply_is_watt_property(enum power_supply_property psp)
-@@ -504,12 +504,12 @@ static inline bool power_supply_is_watt_property(enum power_supply_property psp)
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
- 	case POWER_SUPPLY_PROP_POWER_NOW:
--		return 1;
-+		return true;
- 	default:
- 		break;
- 	}
- 
--	return 0;
-+	return false;
- }
- 
- #ifdef CONFIG_POWER_SUPPLY_HWMON
 -- 
-1.8.3.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
