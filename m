@@ -2,123 +2,280 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DFA3160F7
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 09:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2569316139
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 09:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbhBJI1Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 03:27:16 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:42596 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233534AbhBJI0W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 03:26:22 -0500
-Received: by mail-oi1-f169.google.com with SMTP id u66so1137800oig.9;
-        Wed, 10 Feb 2021 00:26:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aGjLISWJ+fszvKmcvo2/oB8kqSJgVo4mq+414YKd0ak=;
-        b=tTM6x9WvBKj6CCIlz5RGq1bETqJFXJYJAyrAXjmBzr16syAZxbUCQOGezwW2g727mV
-         w614B9nQnvXZ8OYELXXA+2fURs4cGDkRsj/f66PXoqNUY5tY8ZpgyahSXVf8kBX0L/sE
-         WDjWyDtsCnZofUMxrngqtSJ2clsWhMoo+KtFahwp8HtKKFJiaA/MhFZb+gkY7qLNnHzs
-         oLjEvT1FJW58acYBABkf7kLGPUpra3CoZtS+Ul8ViCMgUNv/4hzy3yRVOXff/MuTvPPd
-         wVBu46NiyjJc3trNDdKRUYqvPe3wVCdyXiay6CbPlbN/K/EHZ2Bi9E8+uurDFardRwmZ
-         /j4g==
-X-Gm-Message-State: AOAM530czFG4/8pl89E0IAj34w1s5I0BFI7K9LTibSdoee0QrQpUkjP1
-        JT9cbPZ8rztGkspJ0aSdxBnTfklbLzCSp3+DHaE=
-X-Google-Smtp-Source: ABdhPJw76RbbTdIjOWOYdNuMSRd5sBeR2j0014yZb4MdeOrBQA1HjGlwkbMtEPnZoE9rsvsL6sEmWZSBR33/719FBhk=
-X-Received: by 2002:a54:4e88:: with SMTP id c8mr1277055oiy.148.1612945537621;
- Wed, 10 Feb 2021 00:25:37 -0800 (PST)
+        id S229721AbhBJIjC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 03:39:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49052 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229866AbhBJIgl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Feb 2021 03:36:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D80CD64E4B;
+        Wed, 10 Feb 2021 08:35:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612946154;
+        bh=wgCPkGGS0IKofl2KiKwa9tYDcV/QzFJiyPoJ3KXa+GM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dYgZaO/82CpuCbPdGwT0XIMPc/iTQyjvcysKCXfIj6lTKfQnS2tXhOeBvNbsBroGV
+         LJfQHFFABgkK3MTQKg4YyLaAlJgbMZUXzhBgE1DkXM5ZSwF9f7FRKMYpH3URn+xEzx
+         Syrf30SrqZKbTML0UKYIT2QWdzT9msClTBDTLOpoPLgaBbWqSyhbZ/xDG3RCCvr609
+         DplZi+PelRT6Xa59TydyBaSvV3I1yKCCdap52mPM8ZWbRtZgaaTsP8PZ6N/r+8N8Ob
+         Sia+tg8boNorx2ydm2gPgftyuPsoTcpGSYpNIaeSf4g7gt1PPXhqkovVvPq0N0wdgC
+         5zP4ktUTofNLg==
+Received: by mail-ej1-f48.google.com with SMTP id l25so2540643eja.9;
+        Wed, 10 Feb 2021 00:35:53 -0800 (PST)
+X-Gm-Message-State: AOAM532jm8zV9G7oB9tm7BQpi1N0Puaz4HxOzQAbAugZvbhyrFr42mpE
+        ZZPBHsqSEaSPg24Kt3mikKJavzQuBms0L4xl0fY=
+X-Google-Smtp-Source: ABdhPJyshAsfw41zuCJPO5U9sz20Bb4CD663F3F49sEEPxxSkGNo+Qksxg0XGPWppVGjuUTKS5dqCI4fE5WDjrwQWNk=
+X-Received: by 2002:a17:907:20ae:: with SMTP id pw14mr1864916ejb.454.1612946152268;
+ Wed, 10 Feb 2021 00:35:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20210205222644.2357303-1-saravanak@google.com>
- <20210205222644.2357303-5-saravanak@google.com> <20210209213320.GA219007@robh.at.kernel.org>
- <CAGETcx_gHRd9UYHvSsHX_=NFF+HEJkamJp3JcpojuJob_a8_DA@mail.gmail.com>
-In-Reply-To: <CAGETcx_gHRd9UYHvSsHX_=NFF+HEJkamJp3JcpojuJob_a8_DA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 10 Feb 2021 09:25:26 +0100
-Message-ID: <CAMuHMdXi9s_b0xjaQ3n_-qFfdwfBtxnrhYfVuRENJM5UJ9TUwg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/8] of: property: Add fw_devlink support for optional properties
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>
+References: <20210202021747.717-1-r-rivera-matos@ti.com> <20210202021747.717-3-r-rivera-matos@ti.com>
+In-Reply-To: <20210202021747.717-3-r-rivera-matos@ti.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 10 Feb 2021 09:35:40 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPdmJEVNNj4+d+GV4zchw=87ZKMiEpA6naADTMMMz-3j=w@mail.gmail.com>
+Message-ID: <CAJKOXPdmJEVNNj4+d+GV4zchw=87ZKMiEpA6naADTMMMz-3j=w@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] power: supply: bq25790: Introduce the BQ25790
+ charger driver
+To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dmurphy@ti.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
-
-CC iommu
-
-On Tue, Feb 9, 2021 at 10:55 PM Saravana Kannan <saravanak@google.com> wrote:
-> On Tue, Feb 9, 2021 at 1:33 PM Rob Herring <robh@kernel.org> wrote:
-> > On Fri, Feb 05, 2021 at 02:26:40PM -0800, Saravana Kannan wrote:
-> > > Not all DT bindings are mandatory bindings. Add support for optional DT
-> > > bindings and mark iommus, iommu-map, dmas as optional DT bindings.
-> >
-> > I don't think we can say these are optional or not. It's got to be a
-> > driver decision somehow.
+On Tue, 2 Feb 2021 at 03:20, Ricardo Rivera-Matos <r-rivera-matos@ti.com> wrote:
 >
-> Right, so maybe the word "optional" isn't a good name for it. I can
-> change that if you want.
+> From: Dan Murphy <dmurphy@ti.com>
 >
-> The point being, fw_devlink can't block the probe of this driver based
-> on iommu property. We let the driver decide if it wants to
-> -EPROBE_DEFER or not or however it wants to handle this.
+> BQ25790 is a highly integrated switch-mode buck-boost charger
+> for 1-4 cell Li-ion battery and Li-polymer battery.
+>
+> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
 
-The driver cannot make that decision, cfr. below.
+Looks like wrong order of Sobs. Since Dan was the author, did you
+really contribute here before him?
 
-> > For example, if IOMMU is optional, what happens with this sequence:
-> >
-> > driver probes without IOMMU
-> > driver calls dma_map_?()
-> > IOMMU driver probes
-> > h/w accesses DMA buffer --> BOOM!
+(...)
 
-Does it really behave that way? Or does it continue without IOMMU?
+> +
+> +static bool bq25790_state_changed(struct bq25790_device *bq,
+> +                                 struct bq25790_state *new_state)
+> +{
+> +       struct bq25790_state old_state;
+> +
+> +       mutex_lock(&bq->lock);
+> +       old_state = bq->state;
+> +       mutex_unlock(&bq->lock);
+> +
+> +       return memcmp(&old_state, new_state,
+> +                               sizeof(struct bq25790_state)) != 0;
+> +}
+> +
+> +static irqreturn_t bq25790_irq_handler_thread(int irq, void *private)
+> +{
+> +       struct bq25790_device *bq = private;
+> +       struct bq25790_state state;
+> +       int ret;
+> +
+> +       ret = bq25790_get_state(bq, &state);
+> +       if (ret < 0)
+> +               goto irq_out;
+> +
+> +       if (!bq25790_state_changed(bq, &state))
 
-> Right. But how is this really related to fw_devlink? AFAICT, this is
-> an issue even today. If the driver needs the IOMMU, then it needs to
-> make sure the IOMMU has probed? What am I missing?
+You will be waking up user-space on every voltage or current change.
+It was expressed on the lists that this is not desired and instead you
+should notify only on change of important attributes (e.g. SoC, charge
+status, cable status).
 
-Individual I/O (IOMMU slave) drivers are completely unaware of the
-presence or absence of an IOMMU; they just use the DMA API, which is the
-same regardless of an IOMMU being used or not.
-While for GPIO/IRQ/CLK/DMA/... have request/get_{gpio,irq,clk,dma,...}
-APIs for a driver to get a reference, which can return -EPROBE_DEFER, no
-such thing exists for IOMMUs.  This is handled by the IOMMU core
-instead.
 
-Using the IOMMU or not is more like a system policy decision.
+> +               goto irq_out;
+> +
+> +       mutex_lock(&bq->lock);
+> +       bq->state = state;
+> +       mutex_unlock(&bq->lock);
+> +
+> +       power_supply_changed(bq->charger);
+> +
+> +irq_out:
+> +       return IRQ_HANDLED;
+> +}
+> +
 
-Gr{oetje,eeting}s,
+(...)
 
-                        Geert
+> +
+> +static int bq25790_parse_dt(struct bq25790_device *bq,
+> +               struct power_supply_config *psy_cfg, struct device *dev)
+> +{
+> +       int ret = 0;
+> +
+> +       psy_cfg->drv_data = bq;
+> +       psy_cfg->of_node = dev->of_node;
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+You parse here DT, so don't initialize power supply config in the same
+time. It's mixing two things in the same function.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +
+> +       ret = device_property_read_u32(bq->dev, "ti,watchdog-timeout-ms",
+> +                                      &bq->watchdog_timer);
+> +       if (ret)
+> +               bq->watchdog_timer = BQ25790_WATCHDOG_DIS;
+> +
+> +       if (bq->watchdog_timer > BQ25790_WATCHDOG_MAX ||
+> +           bq->watchdog_timer < BQ25790_WATCHDOG_DIS)
+> +               return -EINVAL;
+> +
+> +       ret = device_property_read_u32(bq->dev,
+> +                                      "input-voltage-limit-microvolt",
+> +                                      &bq->init_data.vlim);
+> +       if (ret)
+> +               bq->init_data.vlim = BQ25790_VINDPM_DEF_uV;
+> +
+> +       if (bq->init_data.vlim > BQ25790_VINDPM_V_MAX_uV ||
+> +           bq->init_data.vlim < BQ25790_VINDPM_V_MIN_uV)
+> +               return -EINVAL;
+> +
+> +       ret = device_property_read_u32(bq->dev,
+> +                                      "input-current-limit-microamp",
+> +                                      &bq->init_data.ilim);
+> +       if (ret)
+> +               bq->init_data.ilim = BQ25790_IINDPM_DEF_uA;
+> +
+> +       if (bq->init_data.ilim > BQ25790_IINDPM_I_MAX_uA ||
+> +           bq->init_data.ilim < BQ25790_IINDPM_I_MIN_uA)
+> +               return -EINVAL;
+> +
+> +       return 0;
+> +}
+> +
+> +static int bq25790_probe(struct i2c_client *client,
+> +                        const struct i2c_device_id *id)
+> +{
+> +       struct device *dev = &client->dev;
+> +       struct bq25790_device *bq;
+> +       struct power_supply_config psy_cfg = { };
+> +
+> +       int ret;
+> +
+> +       bq = devm_kzalloc(dev, sizeof(*bq), GFP_KERNEL);
+> +       if (!bq)
+> +               return -ENOMEM;
+> +
+> +       bq->client = client;
+> +       bq->dev = dev;
+> +
+> +       mutex_init(&bq->lock);
+> +
+> +       strncpy(bq->model_name, id->name, I2C_NAME_SIZE);
+> +
+> +       bq->regmap = devm_regmap_init_i2c(client, &bq25790_regmap_config);
+> +
+
+Don't add blank line after every statement. All four blank lines above
+should be removed.
+
+> +       if (IS_ERR(bq->regmap)) {
+> +               dev_err(dev, "Failed to allocate register map\n");
+> +               return PTR_ERR(bq->regmap);
+> +       }
+> +
+> +       i2c_set_clientdata(client, bq);
+> +
+> +       ret = bq25790_parse_dt(bq, &psy_cfg, dev);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to read device tree properties%d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       ret = devm_add_action_or_reset(dev, bq25790_charger_reset, bq);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* OTG reporting */
+> +       bq->usb2_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+> +       if (!IS_ERR_OR_NULL(bq->usb2_phy)) {
+> +               INIT_WORK(&bq->usb_work, bq25790_usb_work);
+> +               bq->usb_nb.notifier_call = bq25790_usb_notifier;
+> +               usb_register_notifier(bq->usb2_phy, &bq->usb_nb);
+
+Where is the error checking? Where is cleanup in remove()?
+
+> +       }
+> +
+> +       bq->usb3_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
+> +       if (!IS_ERR_OR_NULL(bq->usb3_phy)) {
+> +               INIT_WORK(&bq->usb_work, bq25790_usb_work);
+> +               bq->usb_nb.notifier_call = bq25790_usb_notifier;
+> +               usb_register_notifier(bq->usb3_phy, &bq->usb_nb);
+
+The same.
+
+> +       }
+> +
+> +       if (client->irq) {
+> +               ret = devm_request_threaded_irq(dev, client->irq, NULL,
+> +                                               bq25790_irq_handler_thread,
+> +                                               IRQF_TRIGGER_FALLING |
+> +                                               IRQF_ONESHOT,
+> +                                               dev_name(&client->dev), bq);
+> +               if (ret < 0) {
+> +                       dev_err(dev, "get irq fail: %d\n", ret);
+> +                       return ret;
+> +               }
+> +       }
+> +
+> +       ret = bq25790_power_supply_init(bq, &psy_cfg, dev);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to register power supply\n");
+> +               return ret;
+> +       }
+> +
+> +       ret = bq25790_hw_init(bq);
+> +       if (ret) {
+> +               dev_err(dev, "Cannot initialize the chip.\n");
+> +               return ret;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct i2c_device_id bq25790_i2c_ids[] = {
+> +       { "bq25790", BQ25790 },
+> +       { "bq25792", BQ25792 },
+> +       {},
+> +};
+> +MODULE_DEVICE_TABLE(i2c, bq25790_i2c_ids);
+> +
+> +static const struct of_device_id bq25790_of_match[] = {
+> +       { .compatible = "ti,bq25790", },
+> +       { .compatible = "ti,bq25792", },
+> +       { },
+> +};
+> +MODULE_DEVICE_TABLE(of, bq25790_of_match);
+> +
+> +static const struct acpi_device_id bq25790_acpi_match[] = {
+> +       { "bq25790", BQ25790 },
+> +       { "bq25792", BQ25792 },
+> +       {},
+> +};
+> +MODULE_DEVICE_TABLE(acpi, bq25790_acpi_match);
+> +
+> +static struct i2c_driver bq25790_driver = {
+> +       .driver = {
+> +               .name = "bq25790-charger",
+> +               .of_match_table = bq25790_of_match,
+> +               .acpi_match_table = bq25790_acpi_match,
+> +       },
+> +       .probe = bq25790_probe,
+
+probe_new
+
+Best regards,
+Krzysztof
