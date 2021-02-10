@@ -2,103 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDE6316576
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 12:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF0A316596
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 12:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbhBJLos (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 06:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbhBJLmg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 06:42:36 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9BBC061224
-        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 03:42:07 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id a16so3549589wmm.0
-        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 03:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IN+db2cORNt7VkGGcBYrI5DAOlBAd7luCiB6c6UTORg=;
-        b=A+lqcb1Mco2IH4sWZvbvEORyp44FjHIA2kKgYhWKHPRcBkihslWgY+eyCxjObLl4xM
-         IJdLu77vzz0H46AfAyGLrLZ3P1y6a5z1GwgMJhI4clGjeFf+PyAsCenM3g5U2vflKhew
-         Ju+igjclW8aHFZvW5zgCxQyfWMS4Xu5pD9ywx63JFAYNlS4WSR6nbO70ZKcfoghRGb4z
-         Rf0JtLIheyrZWr3WvWIiahz7R05/j8oqaJTIUkNIo+kjiEWRTPpEAZUcmb+bwwR3TthY
-         w8gny9neoDuQOvARwJ0yj7al35enKLxoqYkPmwR0BkgrFFw+H8Knypppuo27DmWcolMY
-         g6AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IN+db2cORNt7VkGGcBYrI5DAOlBAd7luCiB6c6UTORg=;
-        b=HuC16RMsgRIp3TPGmmS4Ar3uQKoI3eJlYSj+a2UPBqW2czrnNKLtA5rMGoN/gI06/N
-         Y3G76A9orV/leAqHoJMNhPxtHuHaQ7aJTsg+Sxxo1VseI1eS/GgAI9QgBoWWObcaeeTw
-         MAxHtifIGoJv7Oo2/TArUgkypP6fLqp90PB7qbQKmpoXwlLkZ30XlySPQBHI1o3CwN4w
-         iEFQqjxwBP566GzBK7SKjidvieRyQMm3zZDjmZsd7a4icKM5rVrxF68m91d3Vt5LA/IL
-         Tkf8XWiRXx3J9+FneFsWLsCciy5hcnV7OOqCVd8ujxgzRZGrUMGWfg2clUPCadK0T3B7
-         de8Q==
-X-Gm-Message-State: AOAM5311aGl1zFQI6gGjAOLJfw9NfQ10wPRLcBOXwRJflfeanpCy84gL
-        azW4yn2KKfXGrh+1zHkeB++gwJf13VqkAg==
-X-Google-Smtp-Source: ABdhPJzcqeZvzBcu69WDOYa0AXEj+jkTjIK/0ivShR9A511clPVo2aBOAWDwimsl6o1C8uR6vnac8Q==
-X-Received: by 2002:a7b:c215:: with SMTP id x21mr2619209wmi.61.1612957326535;
-        Wed, 10 Feb 2021 03:42:06 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id y63sm2154970wmd.21.2021.02.10.03.42.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 03:42:05 -0800 (PST)
-Date:   Wed, 10 Feb 2021 11:42:03 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, jdelvare@suse.com,
-        linux@roeck-us.net, giometti@enneenne.com, abbotti@mev.co.uk,
-        hsweeten@visionengravers.com, kw@linux.com, helgaas@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
-        michal.lkml@markovi.net, linuxarm@openeuler.org,
-        prime.zeng@huawei.com
-Subject: Re: [PATCH 1/4] driver core: Use subdir-ccflags-* to inherit debug
- flag
-Message-ID: <20210210114203.jvhst2veqbx73r5g@maple.lan>
-References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
- <1612518255-23052-2-git-send-email-yangyicong@hisilicon.com>
- <YB0Vk6ERJ3lFc3WD@kroah.com>
- <08017751-a1be-ea07-50de-73d14ab6d57e@hisilicon.com>
- <YCEWtxYgbRPET4Sr@kroah.com>
- <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
+        id S231255AbhBJLsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 06:48:19 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:53048 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231260AbhBJLqN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 06:46:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1612957572; x=1644493572;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HiRooR0JRPW34th/7QSHeDW6g1Xmz/WY9IkNdXFN45o=;
+  b=XfUqdweFbC/6vzRVj/mX53tPvRbWTx2asMr2LtKB+S27ggN2Iz5USJ6H
+   toWzlY0NF28TrX/n6NELdiNqu0kr7+OiY+sVItJ30Sgh7Z6A6OpkZ+2uh
+   CX9+nNBO5mhAUPKmNxPjYYL10QSELyBIIfLa2keByWbNhKh6u1eDf38Xq
+   RprVo2Ql/dRESLvgsmiHzgYdDf2zE7fOgz79t2vSSg8sRRv6i6ikymtwa
+   gALslvPkMakBlP5ubrJIOOcstZbvvxuJU2m2W08BX3XoXGYgTHmbhm88q
+   tpcTFR30ONpkd7Awy0i1t3ipp09cWKv1i37HIcSEvTX16Gx6WD58NIsmE
+   g==;
+IronPort-SDR: OJzOT1L7uR9EmsWc/byKWwNOkbxZX5ra5Qezzd8kgRQ5TkFJOnClQLYVRAhlaYG4DOUZBeg/Du
+ tc8jDnu5zgYjn1ZPne5vnQclQ/SYOg7EDOT27/vbn4zYVlcGyyBzd7dsK8QHtlPv3W9LLuWXs5
+ fA0+sXRCAF8SDN7JnFwc5KXcjkH2HaRAjecHslK0blQ16mHCN17TgsS3p4WSbpWKZS89oiviWC
+ In5HEVkM+jLk/NmesobzktSTduQGvBR6xxpa4cZzRegMmsvSlTBAHcBublgXQlWf3a5D+JaVrx
+ yBY=
+X-IronPort-AV: E=Sophos;i="5.81,168,1610434800"; 
+   d="scan'208";a="114541425"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2021 04:44:54 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 10 Feb 2021 04:44:53 -0700
+Received: from atudor-ThinkPad-T470p.amer.actel.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Wed, 10 Feb 2021 04:44:47 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <corbet@lwn.net>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <khilman@kernel.org>,
+        <ulf.hansson@linaro.org>, <len.brown@intel.com>, <lenb@kernel.org>,
+        <pavel@ucw.cz>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <frowand.list@gmail.com>, <maz@kernel.org>,
+        <tglx@linutronix.de>, <saravanak@google.com>
+CC:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <m.szyprowski@samsung.com>, <geert@linux-m68k.org>,
+        <kernel-team@android.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH] clk: Mark fwnodes when their clock provider is added
+Date:   Wed, 10 Feb 2021 13:44:34 +0200
+Message-ID: <20210210114435.122242-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210205222644.2357303-9-saravanak@google.com>
+References: <20210205222644.2357303-9-saravanak@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 08, 2021 at 09:09:20PM +0800, Yicong Yang wrote:
-> On 2021/2/8 18:47, Greg KH wrote:
-> > On Mon, Feb 08, 2021 at 06:44:52PM +0800, Yicong Yang wrote:
-> >> On 2021/2/5 17:53, Greg KH wrote:
-> >>> What does this offer in benefit of the existing way?  What is it fixing?
-> >>> Why do this "churn"?
-> >>
-> >> currently we have added ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG in the Makefile
-> >> of driver/base and driver/base/power, but not in the subdirectory
-> >> driver/base/firmware_loader. we cannot turn the debug on for subdirectory
-> >> firmware_loader if we config DEBUG_DRIVER and there is no kconfig option
-> >> for the it.
-> > 
-> > Is that necessary?  Does that directory need it?
-> 
-> there are several debug prints in firmware_loader/main.c:
-> 
-> ./main.c:207:   pr_debug("%s: fw-%s fw_priv=%p\n", __func__, fw_name, fw_priv);
-> ./main.c:245:                   pr_debug("batched request - sharing the same struct fw_priv and lookup for multiple requests\n");
-> <snip>
+This is a follow-up for:
+commit 3c9ea42802a1 ("clk: Mark fwnodes when their clock provider is added/removed")
 
-Even if these are not in scope for CONFIG_DEBUG_DRVIER there is a
-config option that would allow you to observe them without changing
-any code (CONFIG_DYNAMIC_DEBUG).
+The above commit updated the deprecated of_clk_add_provider(),
+but missed to update the preferred of_clk_add_hw_provider().
+Update it now.
 
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ drivers/clk/clk.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Daniel.
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 27ff90eacb1f..9370e4dfecae 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4594,6 +4594,8 @@ int of_clk_add_hw_provider(struct device_node *np,
+ 	if (ret < 0)
+ 		of_clk_del_provider(np);
+ 
++	fwnode_dev_initialized(&np->fwnode, true);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_clk_add_hw_provider);
+-- 
+2.25.1
+
