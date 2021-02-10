@@ -2,101 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952F1315ECF
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 06:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC03A315ED9
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 06:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbhBJFO1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 00:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhBJFOY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 00:14:24 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7547C061786
-        for <linux-pm@vger.kernel.org>; Tue,  9 Feb 2021 21:13:43 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id o38so470994pgm.9
-        for <linux-pm@vger.kernel.org>; Tue, 09 Feb 2021 21:13:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pO3lkyqchaYYvHw0M6i1yFLd4JchiSimkLF+9OaaS4k=;
-        b=PWZOvzgMLbj7RMzzT+oZtCfRn+XY/NWVebBDvtdZNCMZyjY01OJ0k7VTLbRJioC3w/
-         9ikKTLQPZTQwJx2pzgU9qcNpllDN1LfJD9zgHhA9NauSL6CorGdiYVF8UbTXOFMyKsj4
-         IWmjPbfirZQDe/e+HfNGHNIT1PNJNF1bTux/nm2sDxTyrhYMbiU/15kyyWvV5OlDn/8a
-         Z2kZQoL398q9cwNuYRMHqO7u2j3Nyy14MMxpnVpIdNHqDIDnvrpNJsO0UxajEGREgTXv
-         lrJWpAFuSwYL3qX6R7nTllwHORP++UZB/57sPHGyWycj/jT2wMqoFf60s31a9cKKiVpI
-         N9UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pO3lkyqchaYYvHw0M6i1yFLd4JchiSimkLF+9OaaS4k=;
-        b=jZGBFlv/9wg/apQyz75+YHky8YxRpCo28Lijs6Js1iGenkZxAMo/eYe6uEvqNMwfNY
-         YlqCld0MV+pt8eR6ZOC+KIKXdNMJeU6CxpTS3Pm6UOGTxfMsjuNktHiQPZpxHNOCVtvK
-         j+BXaOmlKT2BKlZzpXqoQx2bNFzmPWj06pZBxVQI0/9MsBqeDC1kSXBFIqQHsX/5Ydy1
-         ZGf1OU+0OWvgC8lXl6QxU57jfSnVjCU3A8TXgztDk4FrWBQC17O4om6C+an9VHAF6E16
-         zYGSoVlYQQ7h4WFB4OTdlpHdwSsz2dSobRV2QThSmwTORIfqy0P+PKL8k+rt6NvPVILm
-         CdnA==
-X-Gm-Message-State: AOAM530ubaP/8uHwqLcalIjOoolarG6QfwNrWdkrxAQZW+TnA7YoUANK
-        oHV+P1ulocQ0JCW4D91Jt+95dg==
-X-Google-Smtp-Source: ABdhPJw5n3egOAVJeYZPlVVxWxFxfAnU6kKInAnwrHbcQbub2l1W2oW3U/73yADLfrLAiswp8pgHPg==
-X-Received: by 2002:a63:ef14:: with SMTP id u20mr1507445pgh.93.1612934023032;
-        Tue, 09 Feb 2021 21:13:43 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id j9sm618424pjn.32.2021.02.09.21.13.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Feb 2021 21:13:41 -0800 (PST)
-Date:   Wed, 10 Feb 2021 10:43:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Taniya Das <tdas@codeaurora.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>, agross@kernel.org,
-        rjw@rjwysocki.net, devicetree@vger.kernel.org, robh+dt@kernel.org,
-        amit.kucheria@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, jeffrey.l.hugo@gmail.com
-Subject: Re: [PATCH v4 5/7] cpufreq: qcom-hw: Implement CPRh aware OSM
- programming
-Message-ID: <20210210051339.ixagw6gfipdzwgae@vireshk-i7>
-References: <20210119174557.227318-1-angelogioacchino.delregno@somainline.org>
- <20210119174557.227318-6-angelogioacchino.delregno@somainline.org>
- <c35bfd76-0d7e-d7bc-79ab-041b1074c1af@codeaurora.org>
- <YAh+9/IgRhI8M3ov@builder.lan>
+        id S231300AbhBJFTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 00:19:11 -0500
+Received: from mail29.static.mailgun.info ([104.130.122.29]:35757 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231284AbhBJFTK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 00:19:10 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1612934331; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=yA4uPCcjgumhOn0bEUKjVJ4BqtcWpZ83bZnHx4aWj0s=; b=o947b+qH2jIrx5jfQhTDAMINa79ME+Su1MEf+CyMznFUr4Gd8VLIyGvYE7hd68IOX38gmMBw
+ U6LaogUMkZq173brQKNOdgX49E9YPgjdqLQDAFWXlbOGAt14yT19Kugri0uXc2GiK6SrVNei
+ IrdsQ2CC3EUKe7wEnqJWMGcNLjE=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60236c9c8e43a988b781a34c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 10 Feb 2021 05:18:20
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9E7F1C433C6; Wed, 10 Feb 2021 05:18:20 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C8A4AC433C6;
+        Wed, 10 Feb 2021 05:18:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C8A4AC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Paul McKenney <paulmck@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>, ath10k@lists.infradead.org,
+        Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: WARNING: suspicious RCU usage (5.11.0-rc7+ #1812 Tainted: G)
+References: <2578278.ATerS0GEoy@kreacher>
+        <YCJyJgEeiQqBRgzL@hirez.programming.kicks-ass.net>
+        <877dnhv4lg.fsf@codeaurora.org>
+        <CAJZ5v0iX0Bn7qjTB6S8exox_NYujAupUy4XkJAyFVNDjvnnZXg@mail.gmail.com>
+Date:   Wed, 10 Feb 2021 07:18:13 +0200
+In-Reply-To: <CAJZ5v0iX0Bn7qjTB6S8exox_NYujAupUy4XkJAyFVNDjvnnZXg@mail.gmail.com>
+        (Rafael J. Wysocki's message of "Tue, 9 Feb 2021 18:44:21 +0100")
+Message-ID: <87pn18tsa2.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YAh+9/IgRhI8M3ov@builder.lan>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-01-21, 13:05, Bjorn Andersson wrote:
-> On Wed 20 Jan 12:25 CST 2021, Taniya Das wrote:
-> 
-> > The CPUFREQ-HW driver is intended to be used only for CPUFREQ HW designs
-> > where the firmware programs the look up tables.
-> > 
-> 
-> It's obvious that this is the intended target for the current version of
-> the driver, but what are your technical arguments for keeping it that
-> way?
-> 
-> > Suggestion is to separate out the driver where the programming is managed by
-> > high level OS.
-> > 
-> 
-> Can you please elaborate on the benefits of this approach?
-> 
-> PS. Please don't top-post on LKML.
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
-Taniya, Can you please respond back to this ? We are waiting for
-merging this patchset..
+>> > AFAICT that's a simple 'use RCU without holding rcu_read_lock' warning.
+>> > I've not dug through ath10k to see who should be doing rcu_read_lock,
+>> > but the few places I did look at don't seem to have changed recently.
+>>
+>> Just this morning I applied a patch which should fix this:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=ath-next&id=2615e3cdbd9c0e864f5906279c952a309871d225
+>>
+>> Please let me know if it fixes the issue.
+>
+> The traces are gone after applying this patch, so it does help:
+>
+> Tested-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Bjorn, can you or someone else please review this patch ?
+Good, thanks for testing.
 
 -- 
-viresh
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
