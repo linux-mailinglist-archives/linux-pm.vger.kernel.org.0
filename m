@@ -2,110 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EAA316573
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 12:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDE6316576
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 12:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbhBJLok (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 06:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        id S231148AbhBJLos (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 06:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbhBJLme (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 06:42:34 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A67C061786
-        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 03:40:32 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id u14so2138453wri.3
-        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 03:40:32 -0800 (PST)
+        with ESMTP id S230272AbhBJLmg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 06:42:36 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9BBC061224
+        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 03:42:07 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id a16so3549589wmm.0
+        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 03:42:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=to:cc:references:from:subject:message-id:date:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=5GoJC4V0UCuiiuIOTJUq3dIm+H2v/ROpsGNFKYUDXXU=;
-        b=Qi5XNSOFPAVFMr0fcYS7hcd3qhkQTLTVqeruUI9G2lw1lgceAhsT2AYnmtP9wVURdp
-         7PAZENJo35MBq8rQiYSjPTTkHrTP7/qncDHbV+j3O/Euq6kAKQ62yDYuIJt+c2OCtoWo
-         Z4/hWslhlVa7iv2ROx5r/aDDHKf9F4YXl4w1QlvqxlgrSdJAr7E0qROdgDvjDyfhqgfe
-         XCEIodx+aMr7xnX23ufyqWM6AsdTipeHFNJ/JTXE7tUMVl99QyGEQizweoERsWY2v8xb
-         LQa0bCMlSi9rEAAEUBWCIIp9/A1e5xW4rv3S9mQKzCLlDfTkdFm0JVqbj6uUKFAmd/pV
-         3uTw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IN+db2cORNt7VkGGcBYrI5DAOlBAd7luCiB6c6UTORg=;
+        b=A+lqcb1Mco2IH4sWZvbvEORyp44FjHIA2kKgYhWKHPRcBkihslWgY+eyCxjObLl4xM
+         IJdLu77vzz0H46AfAyGLrLZ3P1y6a5z1GwgMJhI4clGjeFf+PyAsCenM3g5U2vflKhew
+         Ju+igjclW8aHFZvW5zgCxQyfWMS4Xu5pD9ywx63JFAYNlS4WSR6nbO70ZKcfoghRGb4z
+         Rf0JtLIheyrZWr3WvWIiahz7R05/j8oqaJTIUkNIo+kjiEWRTPpEAZUcmb+bwwR3TthY
+         w8gny9neoDuQOvARwJ0yj7al35enKLxoqYkPmwR0BkgrFFw+H8Knypppuo27DmWcolMY
+         g6AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5GoJC4V0UCuiiuIOTJUq3dIm+H2v/ROpsGNFKYUDXXU=;
-        b=XDVXyYgCAnkvEPI3DG4s+J6JnX2M7h8mGTLuIHn+VA6LE7eoSC+zIoB1SP8wf+6tm4
-         LpPJsSb2vocKH4kf/iHVRYkIPrRIxloirPeeJ5UulMF43wjANcPd9h1fK3YAltKyGrU1
-         utu+Ktk7C7t06sOQK8boQpjvd9KQWNAjIxAMc0ru14G++q5kiR94mzJPhAbCFtOYp35x
-         o/61ugTm81u0ZBhIrWFBw2TKFy8ImGl9NE8S9s99wzA9BRJQ7ZQWm9VuWjCXUmyu7XWf
-         uAqcfqBYCJ+zcmrb91KFlSROdruORjPnevIseyCN4Zs+k/D1wiOecb+2kmvzWtQLaqJ9
-         4vog==
-X-Gm-Message-State: AOAM533jUyISAhQ7bHk2xoZmndo1+xl1846XAXVkr2lQwORwrM/42wMB
-        FNpUwVkcEmpaUr2eg0mavGPGq8DeViDh8A==
-X-Google-Smtp-Source: ABdhPJxzau1EbOBPcSPe2+wNcHLxx/mMRPnSIsn0pb7u1nT2J0Pqr4ogGG9I/HtSEhRYsfiKnwqv7w==
-X-Received: by 2002:a5d:6712:: with SMTP id o18mr3077510wru.375.1612957231068;
-        Wed, 10 Feb 2021 03:40:31 -0800 (PST)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id c62sm2216146wmd.43.2021.02.10.03.40.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Feb 2021 03:40:30 -0800 (PST)
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210210104724.340991-1-vkoul@kernel.org>
- <20210210104724.340991-2-vkoul@kernel.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add SM8350 interconnect provider
- driver
-Message-ID: <8ab6dfcc-a710-1ecd-6774-1f54ce30685c@linaro.org>
-Date:   Wed, 10 Feb 2021 13:40:29 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IN+db2cORNt7VkGGcBYrI5DAOlBAd7luCiB6c6UTORg=;
+        b=HuC16RMsgRIp3TPGmmS4Ar3uQKoI3eJlYSj+a2UPBqW2czrnNKLtA5rMGoN/gI06/N
+         Y3G76A9orV/leAqHoJMNhPxtHuHaQ7aJTsg+Sxxo1VseI1eS/GgAI9QgBoWWObcaeeTw
+         MAxHtifIGoJv7Oo2/TArUgkypP6fLqp90PB7qbQKmpoXwlLkZ30XlySPQBHI1o3CwN4w
+         iEFQqjxwBP566GzBK7SKjidvieRyQMm3zZDjmZsd7a4icKM5rVrxF68m91d3Vt5LA/IL
+         Tkf8XWiRXx3J9+FneFsWLsCciy5hcnV7OOqCVd8ujxgzRZGrUMGWfg2clUPCadK0T3B7
+         de8Q==
+X-Gm-Message-State: AOAM5311aGl1zFQI6gGjAOLJfw9NfQ10wPRLcBOXwRJflfeanpCy84gL
+        azW4yn2KKfXGrh+1zHkeB++gwJf13VqkAg==
+X-Google-Smtp-Source: ABdhPJzcqeZvzBcu69WDOYa0AXEj+jkTjIK/0ivShR9A511clPVo2aBOAWDwimsl6o1C8uR6vnac8Q==
+X-Received: by 2002:a7b:c215:: with SMTP id x21mr2619209wmi.61.1612957326535;
+        Wed, 10 Feb 2021 03:42:06 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id y63sm2154970wmd.21.2021.02.10.03.42.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 03:42:05 -0800 (PST)
+Date:   Wed, 10 Feb 2021 11:42:03 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, jdelvare@suse.com,
+        linux@roeck-us.net, giometti@enneenne.com, abbotti@mev.co.uk,
+        hsweeten@visionengravers.com, kw@linux.com, helgaas@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
+        michal.lkml@markovi.net, linuxarm@openeuler.org,
+        prime.zeng@huawei.com
+Subject: Re: [PATCH 1/4] driver core: Use subdir-ccflags-* to inherit debug
+ flag
+Message-ID: <20210210114203.jvhst2veqbx73r5g@maple.lan>
+References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
+ <1612518255-23052-2-git-send-email-yangyicong@hisilicon.com>
+ <YB0Vk6ERJ3lFc3WD@kroah.com>
+ <08017751-a1be-ea07-50de-73d14ab6d57e@hisilicon.com>
+ <YCEWtxYgbRPET4Sr@kroah.com>
+ <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
 MIME-Version: 1.0
-In-Reply-To: <20210210104724.340991-2-vkoul@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Vinod,
-
-On 2/10/21 12:47, Vinod Koul wrote:
-> Add driver for the Qualcomm interconnect buses found in SM8i350 based
-
-SM8i350?
-
-> platforms. The topology consists of several NoCs that are controlled by
-> a remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
+On Mon, Feb 08, 2021 at 09:09:20PM +0800, Yicong Yang wrote:
+> On 2021/2/8 18:47, Greg KH wrote:
+> > On Mon, Feb 08, 2021 at 06:44:52PM +0800, Yicong Yang wrote:
+> >> On 2021/2/5 17:53, Greg KH wrote:
+> >>> What does this offer in benefit of the existing way?  What is it fixing?
+> >>> Why do this "churn"?
+> >>
+> >> currently we have added ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG in the Makefile
+> >> of driver/base and driver/base/power, but not in the subdirectory
+> >> driver/base/firmware_loader. we cannot turn the debug on for subdirectory
+> >> firmware_loader if we config DEBUG_DRIVER and there is no kconfig option
+> >> for the it.
+> > 
+> > Is that necessary?  Does that directory need it?
 > 
-> Generated from downstream interconnect driver written by David Dai
+> there are several debug prints in firmware_loader/main.c:
 > 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->   drivers/interconnect/qcom/Kconfig  |  10 +
->   drivers/interconnect/qcom/Makefile |   2 +
->   drivers/interconnect/qcom/sm8350.c | 635 +++++++++++++++++++++++++++++
->   3 files changed, 647 insertions(+)
->   create mode 100644 drivers/interconnect/qcom/sm8350.c
-> 
-> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> index a8f93ba265f8..2ad0aea8336a 100644
-> --- a/drivers/interconnect/qcom/Kconfig
-> +++ b/drivers/interconnect/qcom/Kconfig
-> @@ -85,5 +85,15 @@ config INTERCONNECT_QCOM_SM8250
->   	  This is a driver for the Qualcomm Network-on-Chip on sm8250-based
->   	  platforms.
->   
-> +config INTERCONNECT_QCOM_SM8350
-> +	tristate "Qualcomm SM8350 interconnect driver"
-> +	depends on INTERCONNECT_QCOM
-> +	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
+> ./main.c:207:   pr_debug("%s: fw-%s fw_priv=%p\n", __func__, fw_name, fw_priv);
+> ./main.c:245:                   pr_debug("batched request - sharing the same struct fw_priv and lookup for multiple requests\n");
+> <snip>
 
-Maybe depend on INTERCONNECT_QCOM_RPMH_POSSIBLE instead of the above.
+Even if these are not in scope for CONFIG_DEBUG_DRVIER there is a
+config option that would allow you to observe them without changing
+any code (CONFIG_DYNAMIC_DEBUG).
 
-Thanks,
-Georgi
+
+Daniel.
