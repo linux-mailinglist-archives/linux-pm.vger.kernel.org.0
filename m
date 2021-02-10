@@ -2,259 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7BA316331
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 11:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D987316449
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 11:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbhBJKGX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 05:06:23 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:12717 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbhBJKEH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 05:04:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1612951447; x=1644487447;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=nN6H+jJM2wVkOCz8AZzoS6U+BImifu28hiSAhZd1Rvk=;
-  b=r09Wo2mmIWEvhF0PHQRsbhd0n3HWInITZnrgg2Fb0gK/2JVAZqnMPpss
-   KUi7b581C25rgqWHQdE5qPXgO8cGSgYwAZojVrxtVcBG9FN1hgiEblHmi
-   9KYNzCsnbivE6M5xTriPQZ3UvVmy/Tb5M4JOzz5fYTw8X6jTnsdlq3/OG
-   SW00zcgRU5BmfmZiFYzmSuTkEc6yvjFDPrbf7HzF3si6Wgt/kb3m+0jjY
-   FDI6HaAtub31cW6U3oP5XYc2VTg+ap3sxrvNJ2sTei1xkIkEilqk/fSr5
-   lcbBHjqrtmtYhQIKzsHA+7AIuzqjVGGWDFySeWehHc7m+lbNjNLRqCtUv
-   Q==;
-IronPort-SDR: 5SSDtez8PpSfvjCPvLGYw31tHSAZ/T0BKqozaGCTGPLOBqG+6cu7bftrs2EMFOJUFIA9DBH1ru
- N1f6PjXVxzy5oFaN3K1QOaUuwZKspEg8mIb++f04lAoNbjCBieK5IxGj4/QAvehfnAByhQdbvb
- r386mExdPUHg954OYRNsktP1lrP1POWpgz1UbsYavrrbhJa4tpWWNZg8nAWHUrbTvUbhApNmPO
- g1VMxuB9YWjBu+JnNfMdtTSYdbBZmkYCSPQE4JgkDi96nLl8xixb7d3UWHBiFM+2YnYXIikq5m
- Clc=
-X-IronPort-AV: E=Sophos;i="5.81,167,1610434800"; 
-   d="scan'208";a="114532763"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2021 03:02:46 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 10 Feb 2021 03:02:46 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3 via Frontend
- Transport; Wed, 10 Feb 2021 03:02:46 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jz+ZACGsKY7Syu5zKZj9/u2ALxYuRiry8Af6p3qORhl3tVwlj0RBQIRKEw3ZOq5rG2FHUWHby2IwGDy4EKHrYtmMpSgS3Un3t4NW+JUbFZTaig/nhnvJ0Rn6l0ajyIGbWIPCNjLvwjMeOSIPzgrrHW3TNMM+Hd07SU4imRUZMBU+8IN+sdxYm0qSFIRa4+YTtkt329xC0EWXs/RG2y85r4nms2zFk3DdpW70im/HIfmfhXyoTZEG5GB8JYAjzN4jdDZmB7LGZndHq9xN1r/n7SHSbg6cV58K68Lj50g274lnk88HYUyExFRoIPogdL2/a4nDnIWtQQj9eaRDCV+P2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nN6H+jJM2wVkOCz8AZzoS6U+BImifu28hiSAhZd1Rvk=;
- b=SdfB3eJ0ZEYGrCPJ3Q45ozNR9OD38ktodhQqN0Nn+P/A5C3Vq089plGuZ6LBy4AxrQCF/xu0QQPlzxloj415bf/LRd4nL5vvivx7qkZOhz5dRCN+b1+f1lGDIU7uyeGqBAmH41NKmMxNkZzy5JdEnA7BNHeCq430Ymbf2DdjD9+5WLrFgJGLKexXYNPLWedb1IYEhIvlLY1IDwCpU0cpxTxB8oxh9H0LMl8EXq28TtI+nfezkkpN1q1BO7KcV8gQsCt3eyJyf2GWGqE89+D9m5/zaVtTjUrWZNxxFRb9tqnHeb0wTE6Y2LC/dxAwVW0Dm3hiHmWYWNBQAilRS+qi2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nN6H+jJM2wVkOCz8AZzoS6U+BImifu28hiSAhZd1Rvk=;
- b=aqh1F60Uy7K5kxbNcx1pgoPbf2b4L/28rfNpHqtfO67VZ5bb1ynLRfbvjSo83gwW9xF91dNVHDfZVbu3IuB98hmES36PS9AkiVNfmHYJBD6iGyDScsZtt7Mq+3XaHhqqcigEr/wE3jr0/88ilkdkhBAj3N2ZP152MmBKh4XNQkY=
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
- by SA2PR11MB4828.namprd11.prod.outlook.com (2603:10b6:806:110::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.17; Wed, 10 Feb
- 2021 10:02:43 +0000
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::f4e3:108c:4222:7dab]) by SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::f4e3:108c:4222:7dab%4]) with mapi id 15.20.3825.031; Wed, 10 Feb 2021
- 10:02:43 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <saravanak@google.com>
-CC:     <corbet@lwn.net>, <gregkh@linuxfoundation.org>,
-        <rafael@kernel.org>, <khilman@kernel.org>,
-        <ulf.hansson@linaro.org>, <len.brown@intel.com>, <lenb@kernel.org>,
-        <pavel@ucw.cz>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <frowand.list@gmail.com>, <maz@kernel.org>,
-        <tglx@linutronix.de>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <m.szyprowski@samsung.com>,
-        <geert@linux-m68k.org>, <kernel-team@android.com>
-Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-Thread-Topic: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-Thread-Index: AQHW/4V+vQSyjAznUkuJJWGt4Acu+apRFcEAgAAS84A=
-Date:   Wed, 10 Feb 2021 10:02:43 +0000
-Message-ID: <3ec7ba3a-bbf6-aa5f-7800-4fc91ab199ec@microchip.com>
-References: <20210205222644.2357303-1-saravanak@google.com>
- <47ca46aa-99f3-5203-8aa7-65c6443bd965@microchip.com>
- <CAGETcx862JPn8759tk-69WySBvokxMXJaaOVY7L6V8FLwfpV8g@mail.gmail.com>
-In-Reply-To: <CAGETcx862JPn8759tk-69WySBvokxMXJaaOVY7L6V8FLwfpV8g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-authentication-results: google.com; dkim=none (message not signed)
- header.d=none;google.com; dmarc=none action=none header.from=microchip.com;
-x-originating-ip: [79.115.63.147]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 76c7195b-dd19-4bd5-6561-08d8cdab027c
-x-ms-traffictypediagnostic: SA2PR11MB4828:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SA2PR11MB482837B7B7C07E6B9F7F8528F08D9@SA2PR11MB4828.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kcs0PxIRQwZIhWb24fh91I3VxpIiE5hGz5FBJBrUBOEPXG9kkm14CP8etNWOBST4adN55ifiQX/chB9YGoO8qJGXdcDgfPTOG2vPWIoS1iNteV2BKBN+RWq7q/8QpCYEg2JonEdZ5roTrcwertJNrGn6dG+EG0eDm0CIF5oE/8B37Mno6Pwhx6WrA0fV1WWOKgks4fIoX1YYiSfWyaeqfIIXV9j2k6DX5wc90hfhxkVH0SOr2ZZRyyJ4+KBTzDdCR7TpzFc+/QT4BFb26UXy5MdNwuHBmCcdi4smSciq9wC02ymmQ7lP6uZCA9YiIDzXAi9WogWvTJ6A8FhY0JK5CiJb2k8VTRf57hfANiqUNd009vEc3RZg2xcjITYoA/aYpNgkVti6xaZxANn5LQBnq7h5CuNXJIK45PviOrEKD5JZzydhCUHXbARMUf7t+qjaeBQxWA1tFEgP5uVUj2ndCElxWPcLxZx1Ibot2OD4TA+SkFoZvQdz9jHRoyFT7MKhZQ9xyfNBKcvFBqyIVMBOqrWJKmWTGOI/2LfFn9EraLqT7ht8fruVjmGAy2HJqr0z2G014kn+r57Ga+buNxz3Z6YlDTqqmMaec3tnGLyYh1Et8Gno2dQz8ietrTqpiIqouNJKOL/vhx9uD7JocULIo4jHQc2w+tEywULL7WEBUUiuCKwz36HJd1BVDmUxM9No
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(136003)(376002)(39850400004)(366004)(396003)(6512007)(8936002)(2616005)(91956017)(966005)(8676002)(2906002)(66556008)(4326008)(6486002)(86362001)(76116006)(66476007)(478600001)(5660300002)(66446008)(64756008)(66946007)(83380400001)(54906003)(36756003)(7416002)(316002)(186003)(31696002)(71200400001)(53546011)(6506007)(26005)(31686004)(6916009)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?dHBVbEsxZlBneTArOW1CaWFnSTY3SHNJVmZHREZnTS9PZ3k4eXI0bDJxTERz?=
- =?utf-8?B?dEJBT2FzZFhWc1FQbTh2VmFXeEV5Z1FWRUJENkwyZy83a2Vnc0gyMDhKZnB3?=
- =?utf-8?B?RmRtYVRXYm9SV3A5VUE2QmViUXpLYnM2dFRFYXF6NVdNR1FacFVVY3VYZ0g5?=
- =?utf-8?B?cUdnWWpIQ3MvdDBZVHU5QW5BL1VkSSs0Vm5yNm90Wmk1d0s4YXRNNkYxUE9o?=
- =?utf-8?B?dmxzNTJaclI3Q3UycGRTOG4xRElRdkpiVDJqNjJVSHBPcm5rQmM5UTVkNHRF?=
- =?utf-8?B?T2pYd0RaQXpIZXllZXFHWTd0dG5FeGN1Z3pxS1M3cUMwNFEzYWQ2YnBlWnJh?=
- =?utf-8?B?MXRHU1plekdON0c2d3oyNXJQTGdnV2FoYWxBQTRoclZUQVpnWU51MkVxVHA2?=
- =?utf-8?B?L251OG9ZYUFvTTh6MnZ0Uk5RVm10SlEzWmg4azFmSFliblRYYXhLWGVWSDJQ?=
- =?utf-8?B?Y1NMakR2aE90NmFBdVVPWS8rVWhid01yUTFPVnpFMm9mdjFJbVJBeXowT1g4?=
- =?utf-8?B?TDhsUFQyN0JQZTAzS0FLdEtBSTVCUDRDRjhZTENQMDhmQ3I4RzF6dCtNRWVx?=
- =?utf-8?B?by9NM0l2QTd6dWxjTEVTY3d2bTNyQlhRaG4wT3p4T2l6WTF4cDVjYXlWNy9E?=
- =?utf-8?B?MmRCMzYvWWJXekN6aWNzUCtGa1JxTEh1TzN2OVVJNUhnQUpLWWxxcmhHUnFN?=
- =?utf-8?B?WHpIQ2RZVThkUExpNE1FcGhNV0RNUkJ0OHErc3YzUzIwNTVYQUJYT1h0SHl2?=
- =?utf-8?B?T1NZNEtjT1R2SkU5Vzk0WE9aYVovU05tRjZJTDF1Vmo2WG5tL3l5cDRxVUtt?=
- =?utf-8?B?ak5DMVNsSXVBdG04VmxUU3I3NGJKUUprQyt3SDBxWWxVMnBOQXo1d3pEbUVT?=
- =?utf-8?B?K2xxK25GajdYazRMZmlLRHFzQ1NKNVJVa3NjcDBOOVAxNHZQdVJLbDZNSjJV?=
- =?utf-8?B?TGg0aC80dGFHbUFLQk45aVRvbFJ6TEdaRS9VQnhFR09jZ09UeVpmQS9sSHNa?=
- =?utf-8?B?b29pTGhnZHJZYkVhczNnb3FnV08wQ0lBME9KYXJXVlhFdEh2Y0hNQ3hIb0tL?=
- =?utf-8?B?UVF6cEdFOE55dkU5T2N2TFRLWDlmcEpPcHJaSXYvZGRqMDZSNzl1MFVYcmRH?=
- =?utf-8?B?TytXKzNTN1pqQ2ZTWWd6dUVZcWhhVTFESHZFRGhBUnZodTdOWWU0TDZKTEJX?=
- =?utf-8?B?bVp5T21FT21Fd2EyU1d5ZEN1UVhWd3dhV2x1K2dBMFcyNm52ZGpneEoyMWE5?=
- =?utf-8?B?Sk45akp1MU9pT0VoVHc5ZEsvbi83TUdZQmg0QmdhZG1rVUZzVXZQclUzbnhI?=
- =?utf-8?B?WlZaSlVsVm52VlZsZ3FHb1lJeFI4ZmpUVVFDVy9vZkRIdE1YRlZQMzVwZkJH?=
- =?utf-8?B?VmpKUXlwZUhtbTkzbHFISzRvb0xSS2EyTElnV3dhZkUwMHJmRHpwR3NxdFVr?=
- =?utf-8?B?b2U2MFdoN3g2MnhnZ1lKTFJlcUg0TEpzOU5MUmpWVDNCRDdIeVEzSUJ2Y1di?=
- =?utf-8?B?MlhZeDBPcXRialF6NUtBRlpuY05Qa0dtNHdSZUFjOGZkdm9zTmhucTFJczJR?=
- =?utf-8?B?QXNWYXgwOEdodm44VVFkT09QZHR5WitZSnpiY1E3V3FtcDVhbHA2cGM0N0ZF?=
- =?utf-8?B?YXpxT0dXbmU1T1JvR2R0Z2RJVVdhNlN4RG85ZEZFZ3dwRDBZTWdSUUp2ZGNi?=
- =?utf-8?B?SUNIN3pGSW1LUmhhWHZ3T1dRV3lDbUVmQUFmdGpZdWVqVHM3RWVhSVVyN2h0?=
- =?utf-8?Q?0afN+R0C5zZY+Z7dqg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9E27E5695B00A947B94B1BF6CDC6D9CA@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S231538AbhBJKu1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 05:50:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51054 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231390AbhBJKsQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Feb 2021 05:48:16 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D402264E2F;
+        Wed, 10 Feb 2021 10:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612954055;
+        bh=a/XM9pHwhQW765fjQFIo8vqfMN/x8BO1mdYZQselwNc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OdqDDODEOqYt21vtszWOhisBj5iLxzG70K1r8heHzX3jxa42y60A7/pyOuPXXgp2m
+         mT3nstdJqn6G4BmD5Jndo8peF61CTNQLe6gA7z3QMsu8K/tpu91P6caRzTRFGd33/u
+         kDTRFDKbAAlB5kpWqrqLSZy6kZ5b6yE1GXrp6t2f110RP0Csv7u++KZqDcVkEpcwWJ
+         lapi8yXk3goNENH/92RIo3HC7eW13pUOLOUeOZCrP8fu2KphfVoIwCjHhw0hZidx3a
+         iQoIEcgTVLyrGr6fUzVm2/7lnd+wjkG6qL9/Zoun0YOSEKKr8oG7UleyDm/nSVWyqZ
+         WLjQ3AVV8isjA==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SM8350 DT bindings
+Date:   Wed, 10 Feb 2021 16:17:23 +0530
+Message-Id: <20210210104724.340991-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76c7195b-dd19-4bd5-6561-08d8cdab027c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2021 10:02:43.6110
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P0DbxkmL5HZ6xdb2Y9eJWOHr2rdX1/DorOP18rMN4MyFqWFmKZTmRincF/554oozTYOLAQqJBiKqNmmxpWF/TXGVM/PWsuis8IjhxXWxhxc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4828
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gMi8xMC8yMSAxMDo1NCBBTSwgU2FyYXZhbmEgS2FubmFuIHdyb3RlOg0KPiBFWFRFUk5BTCBF
-TUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBr
-bm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIFdlZCwgRmViIDEwLCAyMDIxIGF0IDEy
-OjE5IEFNIDxUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb20+IHdyb3RlOg0KPj4NCj4+IEhpLCBT
-YXJhdmFuYSwNCj4+DQo+PiBPbiAyLzYvMjEgMTI6MjYgQU0sIFNhcmF2YW5hIEthbm5hbiB3cm90
-ZToNCj4+PiBUaGVyZSBhcmUgYSBsb3Qgb2YgZGV2aWNlcy9kcml2ZXJzIHdoZXJlIHRoZXkgbmV2
-ZXIgaGF2ZSBhIHN0cnVjdCBkZXZpY2UNCj4+PiBjcmVhdGVkIGZvciB0aGVtIG9yIHRoZSBkcml2
-ZXIgaW5pdGlhbGl6ZXMgdGhlIGhhcmR3YXJlIHdpdGhvdXQgZXZlcg0KPj4+IGJpbmRpbmcgdG8g
-dGhlIHN0cnVjdCBkZXZpY2UuDQo+Pj4NCj4+PiBUaGlzIHNlcmllcyBpcyBpbnRlbmRlZCB0byBh
-dm9pZCBhbnkgYm9vdCByZWdyZXNzaW9ucyBkdWUgdG8gc3VjaA0KPj4+IGRldmljZXMvZHJpdmVy
-cyB3aGVuIGZ3X2Rldmxpbms9b24gYW5kIGFsc28gYWRkcmVzcyB0aGUgaGFuZGxpbmcgb2YNCj4+
-PiBvcHRpb25hbCBzdXBwbGllcnMuDQo+Pj4NCj4+PiBQYXRjaCAxIGFuZCAyIGFkZHJlc3NlcyB0
-aGUgaXNzdWUgb2YgZmlybXdhcmUgbm9kZXMgdGhhdCBsb29rIGxpa2UNCj4+PiB0aGV5J2xsIGhh
-dmUgc3RydWN0IGRldmljZXMgY3JlYXRlZCBmb3IgdGhlbSwgYnV0IHdpbGwgbmV2ZXIgYWN0dWFs
-bHkNCj4+PiBoYXZlIHN0cnVjdCBkZXZpY2VzIGFkZGVkIGZvciB0aGVtLiBGb3IgZXhhbXBsZSwg
-RFQgbm9kZXMgd2l0aCBhDQo+Pj4gY29tcGF0aWJsZSBwcm9wZXJ0eSB0aGF0IGRvbid0IGhhdmUg
-ZGV2aWNlcyBhZGRlZCBmb3IgdGhlbS4NCj4+Pg0KPj4+IFBhdGNoIDMgYW5kIDQgYWxsb3cgZm9y
-IGhhbmRsaW5nIG9wdGlvbmFsIERUIGJpbmRpbmdzLg0KPj4+DQo+Pj4gUGF0Y2ggNSBzZXRzIHVw
-IGEgZ2VuZXJpYyBBUEkgdG8gaGFuZGxlIGRyaXZlcnMgdGhhdCBuZXZlciBiaW5kIHdpdGgNCj4+
-PiB0aGVpciBkZXZpY2VzLg0KPj4+DQo+Pj4gUGF0Y2ggNiB0aHJvdWdoIDggdXBkYXRlIGRpZmZl
-cmVudCBmcmFtZXdvcmtzIHRvIHVzZSB0aGUgbmV3IEFQSS4NCj4+Pg0KPj4+IFRoYW5rcywNCj4+
-PiBTYXJhdmFuYQ0KPj4+DQo+Pj4gU2FyYXZhbmEgS2FubmFuICg4KToNCj4+PiAgIGRyaXZlciBj
-b3JlOiBmd19kZXZsaW5rOiBEZXRlY3Qgc3VwcGxpZXIgZGV2aWNlcyB0aGF0IHdpbGwgbmV2ZXIg
-YmUNCj4+PiAgICAgYWRkZWQNCj4+PiAgIG9mOiBwcm9wZXJ0eTogRG9uJ3QgYWRkIGxpbmtzIHRv
-IGFic2VudCBzdXBwbGllcnMNCj4+PiAgIGRyaXZlciBjb3JlOiBBZGQgZndfZGV2bGluay5zdHJp
-Y3Qga2VybmVsIHBhcmFtDQo+Pj4gICBvZjogcHJvcGVydHk6IEFkZCBmd19kZXZsaW5rIHN1cHBv
-cnQgZm9yIG9wdGlvbmFsIHByb3BlcnRpZXMNCj4+PiAgIGRyaXZlciBjb3JlOiBmd19kZXZsaW5r
-OiBIYW5kbGUgc3VwcGxpZXJzIHRoYXQgZG9uJ3QgdXNlIGRyaXZlciBjb3JlDQo+Pj4gICBpcnFk
-b21haW46IE1hcmsgZndub2RlcyB3aGVuIHRoZWlyIGlycWRvbWFpbiBpcyBhZGRlZC9yZW1vdmVk
-DQo+Pj4gICBQTTogZG9tYWluczogTWFyayBmd25vZGVzIHdoZW4gdGhlaXIgcG93ZXJkb21haW4g
-aXMgYWRkZWQvcmVtb3ZlZA0KPj4+ICAgY2xrOiBNYXJrIGZ3bm9kZXMgd2hlbiB0aGVpciBjbG9j
-ayBwcm92aWRlciBpcyBhZGRlZC9yZW1vdmVkDQo+Pj4NCj4+PiAgLi4uL2FkbWluLWd1aWRlL2tl
-cm5lbC1wYXJhbWV0ZXJzLnR4dCAgICAgICAgIHwgIDUgKysNCj4+PiAgZHJpdmVycy9iYXNlL2Nv
-cmUuYyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgNTggKysrKysrKysrKysrKysrKysrLQ0K
-Pj4+ICBkcml2ZXJzL2Jhc2UvcG93ZXIvZG9tYWluLmMgICAgICAgICAgICAgICAgICAgfCAgMiAr
-DQo+Pj4gIGRyaXZlcnMvY2xrL2Nsay5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAz
-ICsNCj4+PiAgZHJpdmVycy9vZi9wcm9wZXJ0eS5jICAgICAgICAgICAgICAgICAgICAgICAgIHwg
-MTYgKysrLS0NCj4+PiAgaW5jbHVkZS9saW51eC9md25vZGUuaCAgICAgICAgICAgICAgICAgICAg
-ICAgIHwgMjAgKysrKysrLQ0KPj4+ICBrZXJuZWwvaXJxL2lycWRvbWFpbi5jICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAgMiArDQo+Pj4gIDcgZmlsZXMgY2hhbmdlZCwgOTggaW5zZXJ0aW9ucygr
-KSwgOCBkZWxldGlvbnMoLSkNCj4+Pg0KPj4NCj4+IEV2ZW4gd2l0aCB0aGlzIHBhdGNoIHNldCBh
-cHBsaWVkLCBzYW1hNWQyX3hwbGFpbmVkIGNhbiBub3QgYm9vdC4NCj4+IFBhdGNoIGF0IFsxXSBt
-YWtlcyBzYW1hNWQyX3hwbGFpbmVkIGJvb3QgYWdhaW4uIFN0ZXBoZW4gYXBwbGllZCBpdA0KPj4g
-dG8gY2xrLW5leHQuDQo+IA0KPiBJJ20gZ2xhZCB5b3Ugd29uJ3QgYWN0dWFsbHkgaGF2ZSBhbnkg
-Ym9vdCBpc3N1ZXMgaW4gNS4xMiwgYnV0IHRoZSBmYWN0DQo+IHlvdSBuZWVkIFsxXSB3aXRoIHRo
-aXMgc2VyaWVzIGRvZXNuJ3QgbWFrZSBhIGxvdCBvZiBzZW5zZSB0byBtZQ0KPiBiZWNhdXNlOg0K
-PiANCj4gMS4gVGhlIEZXTk9ERV9GTEFHX0lOSVRJQUxJWkVEIGZsYWcgd2lsbCBiZSBzZXQgZm9y
-IHRoZSBjbG9jayBmd25vZGUNCj4gaW4gcXVlc3Rpb24gd2F5IGJlZm9yZSBhbnkgY29uc3VtZXIg
-ZGV2aWNlcyBhcmUgYWRkZWQuDQoNCkxvb2tzIGxpa2UgaW4gbXkgY2FzZSBGV05PREVfRkxBR19J
-TklUSUFMSVpFRCBpcyBub3Qgc2V0LCBiZWNhdXNlDQpkcml2ZXJzL2Nsay9hdDkxL3NhbWE1ZDIu
-YyB1c2VzIG9mX2Nsa19hZGRfaHdfcHJvdmlkZXIoKS4NCg0KPiAyLiBBbnkgY29uc3VtZXIgZGV2
-aWNlIGFkZGVkIGFmdGVyICgxKSB3aWxsIHN0b3AgdHJ5aW5nIHRvIGxpbmsgdG8gdGhlDQo+IGNs
-b2NrIGRldmljZS4NCj4gDQo+IEFyZSB5b3Ugc29tZWhvdyBhZGRpbmcgYSBjb25zdW1lciB0byB0
-aGUgY2xvY2sgZndub2RlIGJlZm9yZSAoMSk/DQo+IA0KPiBDYW4geW91IHRyeSB0aGlzIHBhdGNo
-IHdpdGhvdXQgeW91ciBjbGsgZml4PyBJIHdhcyB0cnlpbmcgdG8gYXZvaWQNCj4gbG9vcGluZyB0
-aHJvdWdoIGEgbGlzdCwgYnV0IGxvb2tzIGxpa2UgeW91ciBjYXNlIG1pZ2h0IHNvbWVob3cgbmVl
-ZA0KPiBpdD8NCj4gDQoNCkkgdHJpZWQgaXQsIGRpZG4ndCBzb2x2ZSBteSBib290IHByb2JsZW0u
-IFRoZSBmb2xsb3dpbmcgcGF0Y2ggbWFrZXMgdGhlDQpzYW1hNWQyX3hwbGFpbmVkIGJvb3QgYWdh
-aW4sIGV2ZW4gd2l0aG91dCB0aGUgcGF0Y2ggZnJvbSBbMV06DQoNCmRpZmYgLS1naXQgYS9kcml2
-ZXJzL2Nsay9jbGsuYyBiL2RyaXZlcnMvY2xrL2Nsay5jDQppbmRleCAyN2ZmOTBlYWNiMWYuLjkz
-NzBlNGRmZWNhZSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvY2xrL2Nsay5jDQorKysgYi9kcml2ZXJz
-L2Nsay9jbGsuYw0KQEAgLTQ1OTQsNiArNDU5NCw4IEBAIGludCBvZl9jbGtfYWRkX2h3X3Byb3Zp
-ZGVyKHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAsDQogICAgICAgIGlmIChyZXQgPCAwKQ0KICAgICAg
-ICAgICAgICAgIG9mX2Nsa19kZWxfcHJvdmlkZXIobnApOw0KIA0KKyAgICAgICBmd25vZGVfZGV2
-X2luaXRpYWxpemVkKCZucC0+Zndub2RlLCB0cnVlKTsNCisNCiAgICAgICAgcmV0dXJuIHJldDsN
-CiB9DQogRVhQT1JUX1NZTUJPTF9HUEwob2ZfY2xrX2FkZF9od19wcm92aWRlcik7DQoNCkNoZWVy
-cywNCnRhDQoNCj4gLVNhcmF2YW5hDQo+IA0KPiArKysgYi9kcml2ZXJzL2Jhc2UvY29yZS5jDQo+
-IEBAIC05NDMsNiArOTQzLDMxIEBAIHN0YXRpYyB2b2lkIGRldmljZV9saW5rc19taXNzaW5nX3N1
-cHBsaWVyKHN0cnVjdA0KPiBkZXZpY2UgKmRldikNCj4gICAgICAgICB9DQo+ICB9DQo+IA0KPiAr
-c3RhdGljIGludCBmd19kZXZsaW5rX2NoZWNrX3N1cHBsaWVycyhzdHJ1Y3QgZGV2aWNlICpkZXYp
-DQo+ICt7DQo+ICsgICAgICAgc3RydWN0IGZ3bm9kZV9saW5rICpsaW5rOw0KPiArICAgICAgIGlu
-dCByZXQgPSAwOw0KPiArDQo+ICsgICAgICAgaWYgKCFkZXYtPmZ3bm9kZSB8fGZ3X2Rldmxpbmtf
-aXNfcGVybWlzc2l2ZSgpKQ0KPiArICAgICAgICAgICAgICAgcmV0dXJuIDA7DQo+ICsNCj4gKyAg
-ICAgICAvKg0KPiArICAgICAgICAqIERldmljZSB3YWl0aW5nIGZvciBzdXBwbGllciB0byBiZWNv
-bWUgYXZhaWxhYmxlIGlzIG5vdCBhbGxvd2VkIHRvDQo+ICsgICAgICAgICogcHJvYmUuDQo+ICsg
-ICAgICAgICovDQo+ICsgICAgICAgbXV0ZXhfbG9jaygmZndub2RlX2xpbmtfbG9jayk7DQo+ICsg
-ICAgICAgbGlzdF9mb3JfZWFjaF9lbnRyeShsaW5rLCAmZGV2LT5md25vZGUtPnN1cHBsaWVycywg
-Y19ob29rKSB7DQo+ICsgICAgICAgICAgICAgICBpZiAobGluay0+c3VwcGxpZXItPmZsYWdzICYg
-RldOT0RFX0ZMQUdfSU5JVElBTElaRUQpDQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGNvbnRp
-bnVlOw0KPiArDQo+ICsgICAgICAgICAgICAgICByZXQgPSAtRVBST0JFX0RFRkVSOw0KPiArICAg
-ICAgICAgICAgICAgYnJlYWs7DQo+ICsgICAgICAgfQ0KPiArICAgICAgIG11dGV4X3VubG9jaygm
-Zndub2RlX2xpbmtfbG9jayk7DQo+ICsNCj4gKyAgICAgICByZXR1cm4gcmV0Ow0KPiArfQ0KPiAr
-DQo+ICAvKioNCj4gICAqIGRldmljZV9saW5rc19jaGVja19zdXBwbGllcnMgLSBDaGVjayBwcmVz
-ZW5jZSBvZiBzdXBwbGllciBkcml2ZXJzLg0KPiAgICogQGRldjogQ29uc3VtZXIgZGV2aWNlLg0K
-PiBAQCAtOTY0LDIxICs5ODksMTMgQEAgaW50IGRldmljZV9saW5rc19jaGVja19zdXBwbGllcnMo
-c3RydWN0IGRldmljZSAqZGV2KQ0KPiAgICAgICAgIHN0cnVjdCBkZXZpY2VfbGluayAqbGluazsN
-Cj4gICAgICAgICBpbnQgcmV0ID0gMDsNCj4gDQo+IC0gICAgICAgLyoNCj4gLSAgICAgICAgKiBE
-ZXZpY2Ugd2FpdGluZyBmb3Igc3VwcGxpZXIgdG8gYmVjb21lIGF2YWlsYWJsZSBpcyBub3QgYWxs
-b3dlZCB0bw0KPiAtICAgICAgICAqIHByb2JlLg0KPiAtICAgICAgICAqLw0KPiAtICAgICAgIG11
-dGV4X2xvY2soJmZ3bm9kZV9saW5rX2xvY2spOw0KPiAtICAgICAgIGlmIChkZXYtPmZ3bm9kZSAm
-JiAhbGlzdF9lbXB0eSgmZGV2LT5md25vZGUtPnN1cHBsaWVycykgJiYNCj4gLSAgICAgICAgICAg
-IWZ3X2RldmxpbmtfaXNfcGVybWlzc2l2ZSgpKSB7DQo+ICsgICAgICAgaWYgKGZ3X2Rldmxpbmtf
-Y2hlY2tfc3VwcGxpZXJzKGRldikpIHsNCj4gICAgICAgICAgICAgICAgIGRldl9kYmcoZGV2LCAi
-cHJvYmUgZGVmZXJyYWwgLSB3YWl0IGZvciBzdXBwbGllciAlcGZ3UFxuIiwNCj4gICAgICAgICAg
-ICAgICAgICAgICAgICAgbGlzdF9maXJzdF9lbnRyeSgmZGV2LT5md25vZGUtPnN1cHBsaWVycywN
-Cj4gICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGZ3bm9kZV9saW5rLA0KPiAgICAgICAg
-ICAgICAgICAgICAgICAgICBjX2hvb2spLT5zdXBwbGllcik7DQo+IC0gICAgICAgICAgICAgICBt
-dXRleF91bmxvY2soJmZ3bm9kZV9saW5rX2xvY2spOw0KPiAgICAgICAgICAgICAgICAgcmV0dXJu
-IC1FUFJPQkVfREVGRVI7DQo+ICAgICAgICAgfQ0KPiAtICAgICAgIG11dGV4X3VubG9jaygmZndu
-b2RlX2xpbmtfbG9jayk7DQo+IA0KPiAgICAgICAgIGRldmljZV9saW5rc193cml0ZV9sb2NrKCk7
-DQo+IA0KPiANCj4gDQo+Pg0KPj4gQ2hlZXJzLA0KPj4gdGENCj4+DQo+PiBbMV0gaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvbGttbC8yMDIxMDIwMzE1NDMzMi40NzA1ODctMS10dWRvci5hbWJhcnVz
-QG1pY3JvY2hpcC5jb20vDQoNCg==
+The Qualcomm SM8350 platform has several bus fabrics that could be
+controlled and tuned dynamically according to the bandwidth demand.
+
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ .../bindings/interconnect/qcom,rpmh.yaml      |  10 ++
+ .../dt-bindings/interconnect/qcom,sm8350.h    | 169 ++++++++++++++++++
+ 2 files changed, 179 insertions(+)
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8350.h
+
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+index 30c2a092d2d3..e47f2aa0c61b 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+@@ -67,6 +67,16 @@ properties:
+       - qcom,sm8250-mmss-noc
+       - qcom,sm8250-npu-noc
+       - qcom,sm8250-system-noc
++      - qcom,sm8350-aggre1-noc
++      - qcom,sm8350-aggre2-noc
++      - qcom,sm8350-config-noc
++      - qcom,sm8350-dc-noc
++      - qcom,sm8350-gem-noc
++      - qcom,sm8350-lpass-ag-noc
++      - qcom,sm8350-mc-virt
++      - qcom,sm8350-mmss-noc
++      - qcom,sm8350-compute-noc
++      - qcom,sm8350-system-noc
+ 
+   '#interconnect-cells':
+     const: 1
+diff --git a/include/dt-bindings/interconnect/qcom,sm8350.h b/include/dt-bindings/interconnect/qcom,sm8350.h
+new file mode 100644
+index 000000000000..8633c58b3b80
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,sm8350.h
+@@ -0,0 +1,169 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Qualcomm SM8350 interconnect IDs
++ *
++ * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2021, Linaro Limited
++ */
++
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SM8350_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_SM8350_H
++
++#define SM8350_MASTER_GPU_TCU				0
++#define SM8350_MASTER_SYS_TCU				1
++#define SM8350_MASTER_APPSS_PROC			2
++#define SM8350_MASTER_LLCC				3
++#define SM8350_MASTER_CNOC_LPASS_AG_NOC			4
++#define SM8350_MASTER_CDSP_NOC_CFG			5
++#define SM8350_MASTER_QDSS_BAM				6
++#define SM8350_MASTER_QSPI_0				7
++#define SM8350_MASTER_QUP_0				8
++#define SM8350_MASTER_QUP_1				9
++#define SM8350_MASTER_QUP_2				10
++#define SM8350_MASTER_A1NOC_CFG				11
++#define SM8350_MASTER_A2NOC_CFG				12
++#define SM8350_MASTER_A1NOC_SNOC			13
++#define SM8350_MASTER_A2NOC_SNOC			14
++#define SM8350_MASTER_CAMNOC_HF				15
++#define SM8350_MASTER_CAMNOC_ICP			16
++#define SM8350_MASTER_CAMNOC_SF				17
++#define SM8350_MASTER_COMPUTE_NOC			18
++#define SM8350_MASTER_CNOC_DC_NOC			19
++#define SM8350_MASTER_GEM_NOC_CFG			20
++#define SM8350_MASTER_GEM_NOC_CNOC			21
++#define SM8350_MASTER_GEM_NOC_PCIE_SNOC			22
++#define SM8350_MASTER_GFX3D				23
++#define SM8350_MASTER_CNOC_MNOC_CFG			24
++#define SM8350_MASTER_MNOC_HF_MEM_NOC			25
++#define SM8350_MASTER_MNOC_SF_MEM_NOC			26
++#define SM8350_MASTER_ANOC_PCIE_GEM_NOC			27
++#define SM8350_MASTER_SNOC_CFG				28
++#define SM8350_MASTER_SNOC_GC_MEM_NOC			29
++#define SM8350_MASTER_SNOC_SF_MEM_NOC			30
++#define SM8350_MASTER_VIDEO_P0				31
++#define SM8350_MASTER_VIDEO_P1				32
++#define SM8350_MASTER_VIDEO_PROC			33
++#define SM8350_MASTER_QUP_CORE_0			34
++#define SM8350_MASTER_QUP_CORE_1			35
++#define SM8350_MASTER_QUP_CORE_2			36
++#define SM8350_MASTER_CRYPTO				37
++#define SM8350_MASTER_IPA				38
++#define SM8350_MASTER_MDP0				39
++#define SM8350_MASTER_MDP1				40
++#define SM8350_MASTER_CDSP_PROC				41
++#define SM8350_MASTER_PIMEM				42
++#define SM8350_MASTER_ROTATOR				43
++#define SM8350_MASTER_GIC				44
++#define SM8350_MASTER_PCIE_0				45
++#define SM8350_MASTER_PCIE_1				46
++#define SM8350_MASTER_QDSS_DAP				47
++#define SM8350_MASTER_QDSS_ETR				48
++#define SM8350_MASTER_SDCC_2				49
++#define SM8350_MASTER_SDCC_4				50
++#define SM8350_MASTER_UFS_CARD				51
++#define SM8350_MASTER_UFS_MEM				52
++#define SM8350_MASTER_USB3_0				53
++#define SM8350_MASTER_USB3_1				54
++#define SM8350_SLAVE_EBI1				512
++#define SM8350_SLAVE_AHB2PHY_SOUTH			513
++#define SM8350_SLAVE_AHB2PHY_NORTH			514
++#define SM8350_SLAVE_AOSS				515
++#define SM8350_SLAVE_APPSS				516
++#define SM8350_SLAVE_CAMERA_CFG				517
++#define SM8350_SLAVE_CLK_CTL				518
++#define SM8350_SLAVE_CDSP_CFG				519
++#define SM8350_SLAVE_RBCPR_CX_CFG			520
++#define SM8350_SLAVE_RBCPR_MMCX_CFG			521
++#define SM8350_SLAVE_RBCPR_MX_CFG			522
++#define SM8350_SLAVE_CRYPTO_0_CFG			523
++#define SM8350_SLAVE_CX_RDPM				524
++#define SM8350_SLAVE_DCC_CFG				525
++#define SM8350_SLAVE_DISPLAY_CFG			526
++#define SM8350_SLAVE_GFX3D_CFG				527
++#define SM8350_SLAVE_HWKM				528
++#define SM8350_SLAVE_IMEM_CFG				529
++#define SM8350_SLAVE_IPA_CFG				530
++#define SM8350_SLAVE_IPC_ROUTER_CFG			531
++#define SM8350_SLAVE_LLCC_CFG				532
++#define SM8350_SLAVE_LPASS				533
++#define SM8350_SLAVE_LPASS_CORE_CFG			534
++#define SM8350_SLAVE_LPASS_LPI_CFG			535
++#define SM8350_SLAVE_LPASS_MPU_CFG			536
++#define SM8350_SLAVE_LPASS_TOP_CFG			537
++#define SM8350_SLAVE_MSS_PROC_MS_MPU_CFG		538
++#define SM8350_SLAVE_MCDMA_MS_MPU_CFG			539
++#define SM8350_SLAVE_CNOC_MSS				540
++#define SM8350_SLAVE_MX_RDPM				541
++#define SM8350_SLAVE_PCIE_0_CFG				542
++#define SM8350_SLAVE_PCIE_1_CFG				543
++#define SM8350_SLAVE_PDM				544
++#define SM8350_SLAVE_PIMEM_CFG				545
++#define SM8350_SLAVE_PKA_WRAPPER_CFG			546
++#define SM8350_SLAVE_PMU_WRAPPER_CFG			547
++#define SM8350_SLAVE_QDSS_CFG				548
++#define SM8350_SLAVE_QSPI_0				549
++#define SM8350_SLAVE_QUP_0				550
++#define SM8350_SLAVE_QUP_1				551
++#define SM8350_SLAVE_QUP_2				552
++#define SM8350_SLAVE_SDCC_2				553
++#define SM8350_SLAVE_SDCC_4				554
++#define SM8350_SLAVE_SECURITY				555
++#define SM8350_SLAVE_SPSS_CFG				556
++#define SM8350_SLAVE_TCSR				557
++#define SM8350_SLAVE_TLMM				558
++#define SM8350_SLAVE_UFS_CARD_CFG			559
++#define SM8350_SLAVE_UFS_MEM_CFG			560
++#define SM8350_SLAVE_USB3_0				561
++#define SM8350_SLAVE_USB3_1				562
++#define SM8350_SLAVE_VENUS_CFG				563
++#define SM8350_SLAVE_VSENSE_CTRL_CFG			564
++#define SM8350_SLAVE_A1NOC_CFG				565
++#define SM8350_SLAVE_A1NOC_SNOC				566
++#define SM8350_SLAVE_A2NOC_CFG				567
++#define SM8350_SLAVE_A2NOC_SNOC				568
++#define SM8350_SLAVE_DDRSS_CFG				569
++#define SM8350_SLAVE_GEM_NOC_CNOC			570
++#define SM8350_SLAVE_GEM_NOC_CFG			571
++#define SM8350_SLAVE_SNOC_GEM_NOC_GC			572
++#define SM8350_SLAVE_SNOC_GEM_NOC_SF			573
++#define SM8350_SLAVE_LLCC				574
++#define SM8350_SLAVE_MNOC_HF_MEM_NOC			575
++#define SM8350_SLAVE_MNOC_SF_MEM_NOC			576
++#define SM8350_SLAVE_CNOC_MNOC_CFG			577
++#define SM8350_SLAVE_CDSP_MEM_NOC			578
++#define SM8350_SLAVE_MEM_NOC_PCIE_SNOC			579
++#define SM8350_SLAVE_ANOC_PCIE_GEM_NOC			580
++#define SM8350_SLAVE_SNOC_CFG				581
++#define SM8350_SLAVE_QUP_CORE_0				582
++#define SM8350_SLAVE_QUP_CORE_1				583
++#define SM8350_SLAVE_QUP_CORE_2				584
++#define SM8350_SLAVE_BOOT_IMEM				585
++#define SM8350_SLAVE_IMEM				586
++#define SM8350_SLAVE_PIMEM				587
++#define SM8350_SLAVE_SERVICE_NSP_NOC			588
++#define SM8350_SLAVE_SERVICE_A1NOC			589
++#define SM8350_SLAVE_SERVICE_A2NOC			590
++#define SM8350_SLAVE_SERVICE_CNOC			591
++#define SM8350_SLAVE_SERVICE_GEM_NOC_1			592
++#define SM8350_SLAVE_SERVICE_MNOC			593
++#define SM8350_SLAVE_SERVICES_LPASS_AML_NOC		594
++#define SM8350_SLAVE_SERVICE_LPASS_AG_NOC		595
++#define SM8350_SLAVE_SERVICE_GEM_NOC_2			596
++#define SM8350_SLAVE_SERVICE_SNOC			597
++#define SM8350_SLAVE_SERVICE_GEM_NOC			598
++#define SM8350_SLAVE_PCIE_0				599
++#define SM8350_SLAVE_PCIE_1				600
++#define SM8350_SLAVE_QDSS_STM				601
++#define SM8350_SLAVE_TCU				602
++#define SM8350_MASTER_LLCC_DISP				1000
++#define SM8350_MASTER_MNOC_HF_MEM_NOC_DISP		1001
++#define SM8350_MASTER_MNOC_SF_MEM_NOC_DISP		1002
++#define SM8350_MASTER_MDP0_DISP				1003
++#define SM8350_MASTER_MDP1_DISP				1004
++#define SM8350_MASTER_ROTATOR_DISP			1005
++#define SM8350_SLAVE_EBI1_DISP				1512
++#define SM8350_SLAVE_LLCC_DISP				1513
++#define SM8350_SLAVE_MNOC_HF_MEM_NOC_DISP		1514
++#define SM8350_SLAVE_MNOC_SF_MEM_NOC_DISP		1515
++
++#endif
+-- 
+2.26.2
+
