@@ -2,82 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 686D1316C75
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 18:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58EE316C7D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 18:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbhBJRV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 12:21:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43590 "EHLO mail.kernel.org"
+        id S232449AbhBJRW7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 12:22:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232097AbhBJRV4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Feb 2021 12:21:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D5E8764EC7;
-        Wed, 10 Feb 2021 17:21:15 +0000 (UTC)
+        id S232439AbhBJRWy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Feb 2021 12:22:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D92164E7E;
+        Wed, 10 Feb 2021 17:22:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612977677;
-        bh=3XsRZ7GaXx8P2kZhXGx8Nf98E9I8mJO0HBDDnM97tTI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=fVMn/+wSlxJDfg8IIIAwSZ3aB/5/73hoMqc177Y6KIUTjK2aEvxqKbxFm1g8yxstH
-         SFfvtWT0YCA8iOxmhdBh4ZbbNexcYtiUx5KHG8sq5niB0nfC03/TZD9UCtU49bd7Xa
-         2PWr+uCLshusoY43a99IIflIONLDO9NoAvPN1rAS3ky9rPIfZniAZePooEuE4BzZ/j
-         pP5eCNNr/s5yCqECttj1H8tIjLE+WAnq7GlvTo2bGNHiTT4YTk4AHQIVHz7gbtwCe+
-         b+/OdeWdPdEyklKJXnYa5CJmPWkQsSZpoG2GiNr27Jfkj7SuCcmBsELRTagiYX6mu5
-         l3kwv2NzKSL/A==
+        s=k20201202; t=1612977734;
+        bh=yw2XyAm2K8/xWuBIJ2NtL5vuJXnjpYH9iI0vb12aEP4=;
+        h=From:To:Subject:Date:From;
+        b=hahi1dY52NsLU0n4Hwlf18PcYZpDjPLLMrrccA24xF46GL6/cG5f8D3Q7r3sBhMzG
+         JiGfIYyJrd9fm5zUAWrninlaPHKGsLVBkArpKHK4bN6StulOlNEkFP+eh1hosda7Ug
+         f7bJ0Ca6vLQMfCLaUK8yurDuNLkP36uFW8YGjoLlKA66wEWFGaaAmf58uRvO14qmnj
+         3LKfoUHuGApByQTpUNRYz4H8A4eigI6lNI77YlD6Pz4SkgJDYgzsOy9fzKzjjUyKxS
+         +LfYVzEBtletd1SlMKC3Mm/EplKZzBDFkyeKKgIHMtJDtDsAPeJuTsQ8mB+M1nIaAe
+         nYhg3Uw0z6gDw==
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 3/3] power: supply: s3c_adc_battery: remove unused pdata in suspend/resume
-Date:   Wed, 10 Feb 2021 18:21:08 +0100
-Message-Id: <20210210172108.334896-3-krzk@kernel.org>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: cpuidle: exynos: include header in file pattern
+Date:   Wed, 10 Feb 2021 18:22:08 +0100
+Message-Id: <20210210172208.335048-1-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210210172108.334896-1-krzk@kernel.org>
-References: <20210210172108.334896-1-krzk@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The "pdata" local variable is not used in suspend/resume handlers since
-commit 7776bcd241e0 ("power: supply: s3c-adc-battery: Convert to GPIO
-descriptors"):
+Inclue the platform data header in Exynos cpuidle maintainer entry.
 
-    drivers/power/supply/s3c_adc_battery.c: In function ‘s3c_adc_bat_suspend’:
-    drivers/power/supply/s3c_adc_battery.c:405:28: warning: unused variable ‘pdata’ [-Wunused-variable]
-
-    drivers/power/supply/s3c_adc_battery.c: In function ‘s3c_adc_bat_resume’:
-    drivers/power/supply/s3c_adc_battery.c:422:28: warning: unused variable ‘pdata’ [-Wunused-variable]
-
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/power/supply/s3c_adc_battery.c | 4 ----
- 1 file changed, 4 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/supply/s3c_adc_battery.c
-index de98aea53a24..dc700066d7bc 100644
---- a/drivers/power/supply/s3c_adc_battery.c
-+++ b/drivers/power/supply/s3c_adc_battery.c
-@@ -402,8 +402,6 @@ static int s3c_adc_bat_remove(struct platform_device *pdev)
- static int s3c_adc_bat_suspend(struct platform_device *pdev,
- 	pm_message_t state)
- {
--	struct s3c_adc_bat_pdata *pdata = pdev->dev.platform_data;
--
- 	if (main_bat.charge_finished) {
- 		if (device_may_wakeup(&pdev->dev))
- 			enable_irq_wake(
-@@ -419,8 +417,6 @@ static int s3c_adc_bat_suspend(struct platform_device *pdev,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 674f42375acf..68e2b4cb4788 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4625,6 +4625,7 @@ L:	linux-samsung-soc@vger.kernel.org
+ S:	Supported
+ F:	arch/arm/mach-exynos/pm.c
+ F:	drivers/cpuidle/cpuidle-exynos.c
++F:	include/linux/platform_data/cpuidle-exynos.h
  
- static int s3c_adc_bat_resume(struct platform_device *pdev)
- {
--	struct s3c_adc_bat_pdata *pdata = pdev->dev.platform_data;
--
- 	if (main_bat.charge_finished) {
- 		if (device_may_wakeup(&pdev->dev))
- 			disable_irq_wake(
+ CPUIDLE DRIVER - ARM PSCI
+ M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 -- 
 2.25.1
 
