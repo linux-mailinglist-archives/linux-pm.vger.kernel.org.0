@@ -2,169 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 046C63173DA
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Feb 2021 00:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 681A13174D4
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Feb 2021 00:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbhBJXAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 18:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbhBJXAe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 18:00:34 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F3CC061756;
-        Wed, 10 Feb 2021 14:59:53 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id d26so2298721pfn.5;
-        Wed, 10 Feb 2021 14:59:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KT1/+q26UpMTGY5hez+ykySBsh/GlZRPF35yJMtlWVA=;
-        b=R2zvjlRWz47+CI6PwBa5mA9+zEsWKdASVNkzwaFRkBS0MshqfBzI/RuZHgtGGL20+K
-         /8Q2orswd8eEHES2Ygt5FWwhnV7pBR7ZckC77wOC3hI+hUgs8AQUVtK7yRdCiqw4p8Pm
-         M84+FlLhtZqfrS5nn5qPg/qj54CMzqe7+ULm5rcc2Mrkx0dkNiK5BcyybXy+Ul6g/1lm
-         RdML9KVwjl5B8ZGg1lHCOpe79jvNir/j8ZgKz7FnQeiuvDj1TvelBdPa9MCzqV0j7dhN
-         98Whn3vOygAhHm7uNVBgsgczjPK2h1YJStQzuw2B1y6VTZLU9p6qblm5wLFoKRV0IZ5S
-         /cOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KT1/+q26UpMTGY5hez+ykySBsh/GlZRPF35yJMtlWVA=;
-        b=T8M7TtFf7umA03u3dbz1qGd4Frxc7T2soEWgiPDgKOlmdT9CvPpV/p4QqGn6EtwyMI
-         gYvkm6PivV/9v3Msv0lp7F6qgsMdtOFp0ngNE0zRUIYzNwlOzLY4m0yutFDY36KrNHCT
-         djWhgz0YvUooHodKpUKd7Y1UlencUAA5Qb4GaluB6EE7gqyrqBHusOVtaehxzZgHVRib
-         hEB8iKx05YliWp1Tm6ifD7qPScZdMoyRqJBlsE+Dan0HKf3jgp9MRArzaxC2P4VBu50j
-         OtyI3NMzE4e+DMXjQlEu/vKW9VtnKbLeNLd+R6mFihJ6DTs0q/XduZUf8S4KgQ9O2/j4
-         y6bg==
-X-Gm-Message-State: AOAM532wP4whd++MyNwb0Ew5sSMe5rCgcZYOWoJTRZehkQwQGBZRDjls
-        hYDqXZg85bcGGIl4TEBYmZdoEQVAosI=
-X-Google-Smtp-Source: ABdhPJxaG/M0B4A/sBmPVP7xbuAxvBMYhH7GqnHxNk2UDcS4vU4spH22S2zKwEwDv1cIe/xBd/+vtw==
-X-Received: by 2002:a63:eb05:: with SMTP id t5mr5086534pgh.389.1612997992978;
-        Wed, 10 Feb 2021 14:59:52 -0800 (PST)
-Received: from [10.230.29.30] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y67sm3395360pfb.71.2021.02.10.14.59.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Feb 2021 14:59:52 -0800 (PST)
-Subject: Re: bcm2711_thermal: Kernel panic - not syncing: Asynchronous SError
- Interrupt
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        stefan.wahren@i2se.com, Florian Fainelli <f.fainelli@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Robin Murphy <robin.murphy@arm.con>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20210210114829.2915de78@gollum>
- <6d9ca41b4ad2225db102da654d38bc61f6c1c111.camel@suse.de>
- <35e17dc9-c88d-582f-607d-1d90b20868fa@arm.com>
- <c6774af169854dc1d4efa272b439e80cea8cd8ff.camel@suse.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <6612b35f-86bb-bb1e-bae8-188366495dbe@gmail.com>
-Date:   Wed, 10 Feb 2021 14:59:45 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+        id S233905AbhBJX6d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 18:58:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231564AbhBJX6c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Feb 2021 18:58:32 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D48364E0D;
+        Wed, 10 Feb 2021 23:57:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613001471;
+        bh=SaNe+4sznhzVt1n/wb+asu4cuOT8/tQOnU+IeBWSNMs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SyN5Xw1/hpGtpAu4oJeB/BI/zY383zQINolzxZMio+oUgbRR0sEXKB1dzN15fmN+G
+         e1FMjskAmEO2PHoO3Nty8+8XpFTseFtbR5lwlcQC8NnGAmjg1VM5EljfcZOfwFH1Pn
+         30TR88axOSHO1aXXyU55cYPLwE9PjLAMvQfO0dAzTcK1yfjg1JTc2Dq9iK0hs5yrZP
+         dVYYLj1AyR+hlFiZ56TaVGsqgjojrb3gabU/egRcxZT5M64KIM8JLgTKpObvfxX2ws
+         QP0p8s6TgvUXBadaJJTyBeZc+JujxgY2wdCoIZp1ID23BNv0v53NO1hgbksJu4tZTM
+         4J4iX4IMdDtGw==
+Date:   Wed, 10 Feb 2021 17:57:49 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PCI: Run platform power transition on initial D0 entry
+Message-ID: <20210210235749.GA617942@bjorn-Precision-5520>
 MIME-Version: 1.0
-In-Reply-To: <c6774af169854dc1d4efa272b439e80cea8cd8ff.camel@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210204220640.1548532-1-luzmaximilian@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+[+cc Rafael, linux-pm]
 
-
-On 2/10/2021 8:55 AM, Nicolas Saenz Julienne wrote:
-> Hi Robin,
+On Thu, Feb 04, 2021 at 11:06:40PM +0100, Maximilian Luz wrote:
+> On some devices and platforms, the initial platform power state is not
+> in sync with the power state of the PCI device.
 > 
-> On Wed, 2021-02-10 at 16:25 +0000, Robin Murphy wrote:
->> On 2021-02-10 13:15, Nicolas Saenz Julienne wrote:
->>> [ Add Robin, Catalin and Florian in case they want to chime in ]
->>>
->>> Hi Juerg, thanks for the report!
->>>
->>> On Wed, 2021-02-10 at 11:48 +0100, Juerg Haefliger wrote:
->>>> Trying to dump the BCM2711 registers kills the kernel:
->>>>
->>>> # cat /sys/kernel/debug/regmap/dummy-avs-monitor\@fd5d2000/range
->>>> 0-efc
->>>> # cat /sys/kernel/debug/regmap/dummy-avs-monitor\@fd5d2000/registers
->>>>
->>>> [   62.857661] SError Interrupt on CPU1, code 0xbf000002 -- SError
->>>
->>> So ESR's IDS (bit 24) is set, which means it's an 'Implementation Defined
->>> SError,' hence IIUC the rest of the error code is meaningless to anyone outside
->>> of Broadcom/RPi.
->>
->> It's imp-def from the architecture's PoV, but the implementation in this 
->> case is Cortex-A72, where 0x000002 means an attributable, containable 
->> Slave Error:
->>
->> https://developer.arm.com/documentation/100095/0003/system-control/aarch64-register-descriptions/exception-syndrome-register--el1-and-el3?lang=en
->>
->> In other words, the thing at the other end of an interconnect 
->> transaction said "no" :)
->>
->> (The fact that Cortex-A72 gets too far ahead of itself to take it as a 
->> synchronous external abort is a mild annoyance, but hey...)
-> 
-> Thanks for both your clarifications! Reading arm documentation is a skill on
-> its own.
+> pci_enable_device_flags() updates the state of a PCI device by reading
+> from the PCI_PM_CTRL register. This may change the stored power state of
+> the device without running the appropriate platform power transition.
 
-Yes it is.
+At this point in the code, setting dev->current_state based on the
+value of PCI_PM_CTRL seems reasonable.  We're making the pci_dev state
+match the PCI device hardware state.  This paragraph sort of implies
+we're missing an "appropriate platform power transition" here, but I
+don't think that's the case.
 
-> 
->>> The regmap is created through the following syscon device:
->>>
->>> 	avs_monitor: avs-monitor@7d5d2000 {
->>> 		compatible = "brcm,bcm2711-avs-monitor",
->>> 			     "syscon", "simple-mfd";
->>> 		reg = <0x7d5d2000 0xf00>;
->>>
->>> 		thermal: thermal {
->>> 			compatible = "brcm,bcm2711-thermal";
->>> 			#thermal-sensor-cells = <0>;
->>> 		};
->>> 	};
->>>
->>> I've done some tests with devmem, and the whole <0x7d5d2000 0xf00> range is
->>> full of addresses that trigger this same error. Also note that as per Florian's
->>> comments[1]: "AVS_RO_REGISTERS_0: 0x7d5d2200 - 0x7d5d22e3." But from what I can
->>> tell, at least 0x7d5d22b0 seems to be faulty too.
->>>
->>> Any ideas/comments? My guess is that those addresses are marked somehow as
->>> secure, and only for VC4 to access (VC4 is RPi4's co-processor). Ultimately,
->>> the solution is to narrow the register range exposed by avs-monitor to whatever
->>> bcm2711-thermal needs (which is ATM a single 32bit register).
->>
->> When a peripheral decodes a region of address space, nobody says it has 
->> to accept accesses to *every* address in that space; registers may be 
->> sparsely populated, and although some devices might be "nice" and make 
->> unused areas behave as RAZ/WI, others may throw slave errors if you poke 
->> at the wrong places. As you note, in a TrustZone-aware device some 
->> registers may only exist in one or other of the Secure/Non-Secure 
->> address spaces.
->>
->> Even when there is a defined register at a given address, it still 
->> doesn't necessarily accept all possible types of access; it wouldn't be 
->> particularly friendly, but a device *could* have, say, some registers 
->> that support 32-bit accesses and others that only support 16-bit 
->> accesses, and thus throw slave errors if you do the wrong thing in the 
->> wrong place.
->>
->> It really all depends on the device itself.
-> 
-> All in all, assuming there is no special device quirk to apply, the feeling I'm
-> getting is to just let the error be. As you hint, firmware has no blame here,
-> and debugfs is a 'best effort, zero guarantees' interface after all.
+But it would be nice if we could combine this bit from
+pci_enable_device_flags() with the pci_set_power_state() in
+do_pci_enable_device().
 
-We should probably fill a regmap_access_table to deny reading registers
-for which there is no address decoding and possibly another one to deny
-writing to the read-only registers.
--- 
-Florian
+> Due to the stored power-state being changed, the later call to
+> pci_set_power_state(..., PCI_D0) in do_pci_enable_device() can evaluate
+> to a no-op if the stored state has been changed to D0 via that. This
+> will then prevent the appropriate platform power transition to be run,
+> which can on some devices and platforms lead to platform and PCI power
+> state being entirely different, i.e. out-of-sync. On ACPI platforms,
+> this can lead to power resources not being turned on, even though they
+> are marked as required for D0.
+> 
+> Specifically, on the Microsoft Surface Book 2 and 3, some ACPI power
+> regions that should be "on" for the D0 state (and others) are
+> initialized as "off" in ACPI, whereas the PCI device is in D0.
+
+So some ACPI power regions are in fact "on" (because the PCI device
+that requires them is in D0), but the ACPI core believes them to be
+"off" (or probably "unknown, treated as 'off'")?
+
+> As the
+> state is updated in pci_enable_device_flags() without ensuring that the
+> platform state is also updated, the power resource will never be
+> properly turned on. Instead, it lives in a sort of on-but-marked-as-off
+> zombie-state, which confuses things down the line when attempting to
+> transition the device into D3cold: As the resource is already marked as
+> off, it won't be turned off and the device does not fully enter D3cold,
+> causing increased power consumption during (runtime-)suspend.
+> 
+> By replacing pci_set_power_state() in do_pci_enable_device() with
+> pci_power_up(), we can force pci_platform_power_transition() to be
+> called, which will then check if the platform power state needs updating
+> and appropriate actions need to be taken.
+> 
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+
+I added Rafael & linux-pm because he should chime in here.
+
+> ---
+> 
+> I'm not entirely sure if this is the best way to do this, so I'm open to
+> alternatives. In a previous version of this, I've tried to run the
+> platform/ACPI transition directly after the pci_read_config_word() in
+> pci_enable_device_flags(), however, that caused some regression in
+> intel-lpss-pci, specifically that then had trouble accessing its config
+> space for initial setup.
+> 
+> This version has been tested for a while now on [1/2] without any
+> complaints. As this essentially only drops the initial are-we-already-
+> in-that-state-check, I don't expect any issues to be caused by that.
+> 
+> [1]: https://github.com/linux-surface/linux-surface
+> [2]: https://github.com/linux-surface/kernel
+> 
+> ---
+>  drivers/pci/pci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index b9fecc25d213..eb778e80d8cf 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1802,7 +1802,7 @@ static int do_pci_enable_device(struct pci_dev *dev, int bars)
+>  	u16 cmd;
+>  	u8 pin;
+>  
+> -	err = pci_set_power_state(dev, PCI_D0);
+> +	err = pci_power_up(dev);
+>  	if (err < 0 && err != -EIO)
+>  		return err;
+>  
+> -- 
+> 2.30.0
+> 
