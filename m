@@ -2,172 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B30316FE2
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 20:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C24D3170A0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 20:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbhBJTQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 14:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbhBJTQM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 14:16:12 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D38C061788
-        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 11:15:32 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id x19so400830ybe.0
-        for <linux-pm@vger.kernel.org>; Wed, 10 Feb 2021 11:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bMm7LhCNfiXatte+J72259TBwE3qgGrJaSabgZ25gjg=;
-        b=HRIiwWTs47Szc6oxYxnhSOiBHfT4UHEE38Ch+iU28KkeDshpiC1SepDhdslHI23tt3
-         OS6PP06URj7B5CC3eUzROAwtGPBWwYlZObWB0SekS4wI484RrQtNhKydUqynhO0Q8Pyk
-         qguBlQPU+LMbanRwX+gBvVJF+BhQCcYxMSwMCzRFIEXITAKkGL/LKRyfcgN2HYRlGkG0
-         9Em0m0j6lShbUakz/6okuTXwmW2fb5MPmmWsxUn71aH5g/bQoczVbCIQxEdxfw7rHKoN
-         TLKZpTEXoYkJo9BrpaUYxzaQJytCtOK/yU8wbQvE6Yx/wkzfdo1t+bWo+N2VU47k8h1/
-         XX5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bMm7LhCNfiXatte+J72259TBwE3qgGrJaSabgZ25gjg=;
-        b=KKXRx6lDNbyLWvkqYLjbHv0b5gW9A/+cTPaQh71imO6nS0+O5gtrrx8tbvO7wjoPDV
-         +4HxPcBTR+bHgN3cyIhdniJ9v0rrPkmA4G2b6Wv0OqaSun4eCluFHH9eMKEWqEePvX6s
-         0knvsjtAMQBxP69Kwhuro6a5GEYmVl8GqQ1/Y/A/jdzwBaPKS8E+1LKYo+Ic8TVLkkcN
-         15nNGG4NgV7e+H8WXJoqMejMpQ39TWpAQqt3qgdcFRvsYzBi8ZumCVkyLvoMd5cqI/uH
-         3yThYGcAdQUpWByigX4sO4kRibzeCqYUV1NF0GmK73jdvSt4HMAJ2XXyGhzCjsaASfxH
-         o8hA==
-X-Gm-Message-State: AOAM530FzGhBHh9fOuro1ofgIV0fNPYHDdRLUXm1sK1owloCwC3Jv6+n
-        Vu+ZVoTNH0cooheHvkAsNP25j6eTGg9cyJBF/eZiaA==
-X-Google-Smtp-Source: ABdhPJxPLs/+QIJMt+wtIBzBZGrhURUX+xSgCx7EymGDDvrfSfAubD/1PiDbpILIMYyk25/SJ0qOy+BTaFfHFwoVjsg=
-X-Received: by 2002:a05:6902:1025:: with SMTP id x5mr6476503ybt.96.1612984531616;
- Wed, 10 Feb 2021 11:15:31 -0800 (PST)
+        id S232318AbhBJTvs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 14:51:48 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:44014 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232802AbhBJTvh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Feb 2021 14:51:37 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 11AJo32w023859;
+        Wed, 10 Feb 2021 13:50:03 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1612986603;
+        bh=KbGjO9RvEE9nypUEybeaQ6iz5h67qLkB0O8m1jrgJBc=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=C6J7LLk7n/hg1720k5dC1KGWg58+rp6eT8FXtAyK2wLcbRw4YGnD/xlMVYKPqe8kP
+         r/UKk0WF6JbNryd0yxdmI34QTl1oU4i1aTgEjTSl6wnI1b2BUwsn2oAZCY70VKiCB0
+         FL2Ckf877nchhNZisf6PBmumULG0DsNdhfqiTHOI=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 11AJo21U102328
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 Feb 2021 13:50:03 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 10
+ Feb 2021 13:50:03 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 10 Feb 2021 13:50:03 -0600
+Received: from [10.250.39.16] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 11AJo3nM107248;
+        Wed, 10 Feb 2021 13:50:03 -0600
+Subject: Re: [EXTERNAL] Re: [PATCH 1/2] power: supply: bq25980: Applies
+ multiple fixes brought on
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+CC:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210209230527.26712-1-r-rivera-matos@ti.com>
+ <CAJKOXPdy4BJMSb7KXhU8vYrJ2+qWPOw0MzTGhXQEgh1xHDZFNw@mail.gmail.com>
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Message-ID: <8f952bd9-1849-af7e-d54f-b897c653a126@ti.com>
+Date:   Wed, 10 Feb 2021 13:50:03 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20210205222644.2357303-1-saravanak@google.com>
- <47ca46aa-99f3-5203-8aa7-65c6443bd965@microchip.com> <CAGETcx862JPn8759tk-69WySBvokxMXJaaOVY7L6V8FLwfpV8g@mail.gmail.com>
- <3ec7ba3a-bbf6-aa5f-7800-4fc91ab199ec@microchip.com>
-In-Reply-To: <3ec7ba3a-bbf6-aa5f-7800-4fc91ab199ec@microchip.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 10 Feb 2021 11:14:55 -0800
-Message-ID: <CAGETcx87RmBAhC2Kg0xP9oYGhGWXFWoTtshzuqT2=4_svm5s5A@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-To:     Tudor Ambarus <Tudor.Ambarus@microchip.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Brown, Len" <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJKOXPdy4BJMSb7KXhU8vYrJ2+qWPOw0MzTGhXQEgh1xHDZFNw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 2:02 AM <Tudor.Ambarus@microchip.com> wrote:
+Krzysztof,
+
+On 2/10/21 2:20 AM, Krzysztof Kozlowski wrote:
+> On Wed, 10 Feb 2021 at 00:52, Ricardo Rivera-Matos
+> <r-rivera-matos@ti.com> wrote:
+>> fix: corrects various register step size and offset values
+>>
+>> fix: corrects bq25980_get_input_curr_lim() and bq25980_set_input_curr_lim()
+>>
+>> fix: corrects bq25980_get_const_charge_curr() and bq25980_set_const_charge_curr()
+>>
+>> fix: corrects BQ25960_BATOVP_MIN_uV, BQ25960_BATOVP_OFFSET_uV,
+>>
+>> BQ25960_BATOVP_STEP_uV, and BQ25960_BATOVP_MAX_uV
+>>
+>> fix: corrects busocp_sc_min and busocp_byp_min members
+>>
+>> fix: removes unnecessary polarity check from bq25980_get_adc_ibus()
+>>
+>> fix: removes unnecessary polarity check from bq25980_get_adc_ibat()
+>>
+>> fix: clamps ibat_adc to match datasheet change
+> Thanks for the patch.
 >
-> On 2/10/21 10:54 AM, Saravana Kannan wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > On Wed, Feb 10, 2021 at 12:19 AM <Tudor.Ambarus@microchip.com> wrote:
-> >>
-> >> Hi, Saravana,
-> >>
-> >> On 2/6/21 12:26 AM, Saravana Kannan wrote:
-> >>> There are a lot of devices/drivers where they never have a struct device
-> >>> created for them or the driver initializes the hardware without ever
-> >>> binding to the struct device.
-> >>>
-> >>> This series is intended to avoid any boot regressions due to such
-> >>> devices/drivers when fw_devlink=on and also address the handling of
-> >>> optional suppliers.
-> >>>
-> >>> Patch 1 and 2 addresses the issue of firmware nodes that look like
-> >>> they'll have struct devices created for them, but will never actually
-> >>> have struct devices added for them. For example, DT nodes with a
-> >>> compatible property that don't have devices added for them.
-> >>>
-> >>> Patch 3 and 4 allow for handling optional DT bindings.
-> >>>
-> >>> Patch 5 sets up a generic API to handle drivers that never bind with
-> >>> their devices.
-> >>>
-> >>> Patch 6 through 8 update different frameworks to use the new API.
-> >>>
-> >>> Thanks,
-> >>> Saravana
-> >>>
-> >>> Saravana Kannan (8):
-> >>>   driver core: fw_devlink: Detect supplier devices that will never be
-> >>>     added
-> >>>   of: property: Don't add links to absent suppliers
-> >>>   driver core: Add fw_devlink.strict kernel param
-> >>>   of: property: Add fw_devlink support for optional properties
-> >>>   driver core: fw_devlink: Handle suppliers that don't use driver core
-> >>>   irqdomain: Mark fwnodes when their irqdomain is added/removed
-> >>>   PM: domains: Mark fwnodes when their powerdomain is added/removed
-> >>>   clk: Mark fwnodes when their clock provider is added/removed
-> >>>
-> >>>  .../admin-guide/kernel-parameters.txt         |  5 ++
-> >>>  drivers/base/core.c                           | 58 ++++++++++++++++++-
-> >>>  drivers/base/power/domain.c                   |  2 +
-> >>>  drivers/clk/clk.c                             |  3 +
-> >>>  drivers/of/property.c                         | 16 +++--
-> >>>  include/linux/fwnode.h                        | 20 ++++++-
-> >>>  kernel/irq/irqdomain.c                        |  2 +
-> >>>  7 files changed, 98 insertions(+), 8 deletions(-)
-> >>>
-> >>
-> >> Even with this patch set applied, sama5d2_xplained can not boot.
-> >> Patch at [1] makes sama5d2_xplained boot again. Stephen applied it
-> >> to clk-next.
-> >
-> > I'm glad you won't actually have any boot issues in 5.12, but the fact
-> > you need [1] with this series doesn't make a lot of sense to me
-> > because:
-> >
-> > 1. The FWNODE_FLAG_INITIALIZED flag will be set for the clock fwnode
-> > in question way before any consumer devices are added.
+> Only one fix at a time and please exactly describe what is being fixed
+> using proper sentences (starting with capital letter, ending with a
+> full stop... and usually description needs multiple of such
+> sentences). You add here multiple changes without proper description
+> of a problem being fixed. This is not the correct style of a patch.
+ACK, this patch is meant to implement changes brought on by a new 
+datasheet revision. The revision tweaked the register step size and 
+offset values to improve the accuracy. I can rebase and reword the patch 
+if that works for you.
 >
-> Looks like in my case FWNODE_FLAG_INITIALIZED is not set, because
-> drivers/clk/at91/sama5d2.c uses of_clk_add_hw_provider().
-
-Ah, that explains it.
-
-> > 2. Any consumer device added after (1) will stop trying to link to the
-> > clock device.
-> >
-> > Are you somehow adding a consumer to the clock fwnode before (1)?
-> >
-> > Can you try this patch without your clk fix? I was trying to avoid
-> > looping through a list, but looks like your case might somehow need
-> > it?
-> >
->
-> I tried it, didn't solve my boot problem.
-
-Thanks! I should stop coding past midnight!
-
-> The following patch makes the
-> sama5d2_xplained boot again, even without the patch from [1]:
-
-Great! I gave a reviewed-by.
-
--Saravana
+> Best regards,
+> Krzysztof
+Best Regards,
+Ricardo
