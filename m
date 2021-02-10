@@ -2,43 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 109253160D7
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 09:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC873160E3
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Feb 2021 09:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbhBJIVx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Feb 2021 03:21:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46610 "EHLO mail.kernel.org"
+        id S233760AbhBJIYV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Feb 2021 03:24:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47140 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233831AbhBJIVv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Feb 2021 03:21:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11BE264E53;
-        Wed, 10 Feb 2021 08:21:10 +0000 (UTC)
+        id S233972AbhBJIYK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Feb 2021 03:24:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E23064E3E;
+        Wed, 10 Feb 2021 08:23:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612945270;
-        bh=he0NlorbIxJARoaXnx/ZkaYSmkKVl5iSAAFd7uIvSfc=;
+        s=k20201202; t=1612945409;
+        bh=VJiP6abJMM0Su6pGO5hZby/1O1e5TrK9ylS0T3dXchg=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=V22ifIVEXJUA7/jZjmwDSOs5j064spwQOa0gzmuIXDT+sfx/dXog1b0n7Fgsafp4D
-         QeVJ/ovfRNFMuLdNMLkc/MwytYtzWiievSzmUOL3rA8tvSIzLwS5UIp0QKFLL0IOiC
-         tUra+KXJWoKF9P77BuBIuZcbpde3DcNBfbJKjys3JuidWasisYgcBnkEiBlypp6MGG
-         0w8TkiquZi4uVO0RcIBZQXqjKU2PAKKk7mfPCJZyMS/19NDaFu9MOabfuc8vcbDWP/
-         UPK6LumO/IkiIdmhBAgMDxvrpRkJm1unoaIltqNr218FzH1nc0Wa6/rWxrM1ANhkZL
-         UeIVnAqM07+Rw==
-Received: by mail-ed1-f45.google.com with SMTP id v7so1798695eds.10;
-        Wed, 10 Feb 2021 00:21:09 -0800 (PST)
-X-Gm-Message-State: AOAM531TJtWhUilETWATS4SNWHhS/I15xXH4TNTX4sJRLynNOXrKelJg
-        iAdO/b/IRS+xMPxn2uYyu27Wied7MC942gLumJ0=
-X-Google-Smtp-Source: ABdhPJz6Mu9mo5jCVNryUBj6TLkdEUzdU7aGUTz/GL6lUYh9blsGAgr+btdMcJIlQ25o+MoBVGpbHV7InANBmtsAB6s=
-X-Received: by 2002:aa7:ce15:: with SMTP id d21mr2147092edv.246.1612945268495;
- Wed, 10 Feb 2021 00:21:08 -0800 (PST)
+        b=Ro0LhPtO3/RkuCZbLBlNIedsnLfyvIjyrCrQcrv/rd62fr8rYyE8wpglgI0xKSzp9
+         3njnTgAMcyASVPxxH6qdZQc1YOnFdMeUWwowQcTHkFw1Kn2VCwBcq5ovZNLHSyVauj
+         0OGSlYOWlDJtnGQeO2I8Kxl3izJDmCLxJouc+C0lI1Ix450e8NDwLCfKuPIhzAWLft
+         nPY6rYOZMFQqPFUm6O2zllRUXvbAWT7oCtAhe3UvxWPVnnSw0kkGtQk14F9MIXey3t
+         oa9XKOplMzdFn9vAl62Xmm5O3LMoAvttyqwR7I22a++7Q1wozjNgnx80YRORR2oiaH
+         HhUOHotFhABFQ==
+Received: by mail-ed1-f44.google.com with SMTP id y8so1829608ede.6;
+        Wed, 10 Feb 2021 00:23:29 -0800 (PST)
+X-Gm-Message-State: AOAM5330kHTI56FoC7g4og0Bma17mymD9qxwwH/hvuOmpRMhVAZucVkU
+        rQ1xS4iz3qHf6akg4Tl1ElXpT2G3QccXIzqHdR8=
+X-Google-Smtp-Source: ABdhPJwR0i+wMWRkRIdVXX5/+ms2VCS56xpQWXlXIB6AETk5jvmVA5tT2PWExKx1w84ltg5TAHvgJlkbYqYa+MEedJA=
+X-Received: by 2002:a05:6402:1484:: with SMTP id e4mr2165360edv.104.1612945407649;
+ Wed, 10 Feb 2021 00:23:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20210209230527.26712-1-r-rivera-matos@ti.com>
-In-Reply-To: <20210209230527.26712-1-r-rivera-matos@ti.com>
+References: <20210209230527.26712-1-r-rivera-matos@ti.com> <20210209230527.26712-2-r-rivera-matos@ti.com>
+In-Reply-To: <20210209230527.26712-2-r-rivera-matos@ti.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 10 Feb 2021 09:20:55 +0100
-X-Gmail-Original-Message-ID: <CAJKOXPdy4BJMSb7KXhU8vYrJ2+qWPOw0MzTGhXQEgh1xHDZFNw@mail.gmail.com>
-Message-ID: <CAJKOXPdy4BJMSb7KXhU8vYrJ2+qWPOw0MzTGhXQEgh1xHDZFNw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] power: supply: bq25980: Applies multiple fixes
- brought on
+Date:   Wed, 10 Feb 2021 09:23:15 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPeqd7iMU+gVC-xT-MY6YKXrB88gsCyd9M0NX=wCtyWrmA@mail.gmail.com>
+Message-ID: <CAJKOXPeqd7iMU+gVC-xT-MY6YKXrB88gsCyd9M0NX=wCtyWrmA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] power: supply: bq25980: Moves properties from battery node
 To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
 Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
@@ -50,31 +49,13 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Wed, 10 Feb 2021 at 00:52, Ricardo Rivera-Matos
 <r-rivera-matos@ti.com> wrote:
 >
-> fix: corrects various register step size and offset values
+> fix: exposes POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT on the
 >
-> fix: corrects bq25980_get_input_curr_lim() and bq25980_set_input_curr_lim()
->
-> fix: corrects bq25980_get_const_charge_curr() and bq25980_set_const_charge_curr()
->
-> fix: corrects BQ25960_BATOVP_MIN_uV, BQ25960_BATOVP_OFFSET_uV,
->
-> BQ25960_BATOVP_STEP_uV, and BQ25960_BATOVP_MAX_uV
->
-> fix: corrects busocp_sc_min and busocp_byp_min members
->
-> fix: removes unnecessary polarity check from bq25980_get_adc_ibus()
->
-> fix: removes unnecessary polarity check from bq25980_get_adc_ibat()
->
-> fix: clamps ibat_adc to match datasheet change
+> charger node
 
-Thanks for the patch.
-
-Only one fix at a time and please exactly describe what is being fixed
-using proper sentences (starting with capital letter, ending with a
-full stop... and usually description needs multiple of such
-sentences). You add here multiple changes without proper description
-of a problem being fixed. This is not the correct style of a patch.
+Why is this a fix? Why is exposing this property wrong? What is the
+problem here? Why do you start sentences with a small letter? Your
+commit message should answer such questions.
 
 Best regards,
 Krzysztof
