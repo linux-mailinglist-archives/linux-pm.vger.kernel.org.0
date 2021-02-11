@@ -2,42 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810A8318CF3
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Feb 2021 15:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93712318CF1
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Feb 2021 15:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbhBKOGM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Feb 2021 09:06:12 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:13260 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231293AbhBKODw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Feb 2021 09:03:52 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11BE1XbY022387;
-        Thu, 11 Feb 2021 06:02:49 -0800
+        id S232144AbhBKOGG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Feb 2021 09:06:06 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:61936 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231494AbhBKODv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Feb 2021 09:03:51 -0500
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11BE0SUU000573;
+        Thu, 11 Feb 2021 06:02:52 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=0elgG08z95Mp0bp42T6eKXc/pbp6nML5TVGVwcbMJp0=;
- b=WsFZJYLcM4JpHGrj1V7DI6O8kqunBbE5yjECzMZO8zhr7wRheTYRWnp+Ck4edr4JfoCw
- +1RsHw2TsJzxUIINxmGprMOY6VyU7J6igYkh42j+GhvtJvmYisbPy8pTec19ZzpEf7vn
- 0w/FNvlGqSWUnLSjWvfWX+XZ9ELmmywGYtZ4te+4xu2tAZi4pnjv+ogCa4ikLWx2qOHE
- y5bEyH0EE6OJkywDCuIo8rtvFy+6q87io+ZSIq8gg0pAalbiZ0s4MoNj7uXTjDt86ILW
- 6wpKw3zXUcWsu5L8nF3s6dC3kC7jzDct8Vqm65kyDiOT2uH6tlCpO2RaE8to2K0jvSt9 XQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 36hugqew71-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=pfpt0220; bh=eFDjoveljCQQJKcxDvUtCMV2TbXj5Ak0PinCMDmx6Uk=;
+ b=HF9mPfiDzk/I91+PItagFKf15LS1okm+oERdDpDSvgOztpsyzm1ee0SGfmzklCEr7+WL
+ Ycz3+0ZzFVZ7nbNz4+oiLT9SlkWJSHKzj06fMj76xd4w6cMDTWXLBLTyrvxthfTr9wsF
+ GnV2xIbQ2hF11rj5QCoire6vi8rfeo5oU1NJvUTdMt8DvkG6PLLSCIK2XVKNrBu9Nqms
+ RoD9H5zacBqVJ3nHf1X7P57r5DFP3zaMMIFORI8U6dbpf9IGfda9SW9YqYGMp6lCGwrq
+ szhv05dFiKik3Vrn0Ue0ImuOQNPcACULq/PWCOBMHSDwmKvMvNjv7fuUe+sr6FZ1OQYj Jw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com with ESMTP id 36hsbrq6k3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 06:02:49 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 11 Feb
- 2021 06:02:47 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 11 Feb
- 2021 06:02:47 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 11 Feb 2021 06:02:47 -0800
+        Thu, 11 Feb 2021 06:02:52 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 11 Feb
+ 2021 06:02:50 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 11 Feb 2021 06:02:50 -0800
 Received: from octopus.marvell.com (octopus.marvell.com [10.5.24.3])
-        by maili.marvell.com (Postfix) with ESMTP id 8E5B63F7040;
-        Thu, 11 Feb 2021 06:02:43 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 8E83F3F7040;
+        Thu, 11 Feb 2021 06:02:47 -0800 (PST)
 From:   <kostap@marvell.com>
 To:     <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -47,10 +44,12 @@ CC:     <Julia.Lawall@inria.fr>, <amitk@kernel.org>,
         <mturquette@baylibre.com>, <mw@semihalf.com>, <jaz@semihalf.com>,
         <nadavh@marvell.com>, <stefanc@marvell.com>, <bpeled@marvell.com>,
         "Konstantin Porotchkin" <kostap@marvell.com>
-Subject: [PATCH v3 0/2] Enable usage of Marvell FW SIP services
-Date:   Thu, 11 Feb 2021 16:02:38 +0200
-Message-ID: <20210211140240.23778-1-kostap@marvell.com>
+Subject: [PATCH v3 1/2] thermal: armada: ap806: use firmware SiP services for thermal operations
+Date:   Thu, 11 Feb 2021 16:02:39 +0200
+Message-ID: <20210211140240.23778-2-kostap@marvell.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210211140240.23778-1-kostap@marvell.com>
+References: <20210211140240.23778-1-kostap@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
@@ -59,31 +58,294 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Konstantin Porotchkin <kostap@marvell.com>
+From: Grzegorz Jaszczyk <jaz@semihalf.com>
 
-These patches enable usage of Arm Trusted Firmware SIP services on
-Marvell Armada plaforms for accessing system registers that are not
-normally accessible from kernel or user space (EL1/EL0), like DFX
-registers group.
+This patch introduces support for ap806 thermal driver in case when SoC
+DFX region is marked as secure by the firmware. In such case accessing
+thermal registers, which are part of dfx register set, will not be
+possible from non-secure world. Due to above the ARM Trusted Firmware
+exposes thermal driver as a SiP service.  This allows Linux thermal
+driver to initialise and perform various operations on thermal sensor
+with use of SMC calls.
 
-v2:
-* use separate legacy/smc regmap functions registered at ap-cpu
-  clock driver probe according to FW response
+If during ap806 thermal initialisation the SMC is unhandled (old fw
+case), fallback to regmap handling.
 
-v3:
-* fix build errors and rebase on top of clk-next branch
-
-Grzegorz Jaszczyk (2):
-  thermal: armada: ap806: use firmware SiP services for thermal
-    operations
-  clk: mvebu: use firmware SiP service for accessing dfx register set
-
- drivers/clk/mvebu/ap-cpu-clk.c    | 174 ++++++++++++++++++--
- drivers/thermal/armada_thermal.c  | 125 +++++++++++++-
- include/soc/marvell/armada8k/fw.h |  22 +++
- 3 files changed, 302 insertions(+), 19 deletions(-)
+Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+---
+ drivers/thermal/armada_thermal.c  | 125 +++++++++++++++++++-
+ include/soc/marvell/armada8k/fw.h |  19 +++
+ 2 files changed, 141 insertions(+), 3 deletions(-)
  create mode 100644 include/soc/marvell/armada8k/fw.h
 
+diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+index c2ebfb5be4b3..ec077e834c85 100644
+--- a/drivers/thermal/armada_thermal.c
++++ b/drivers/thermal/armada_thermal.c
+@@ -4,6 +4,7 @@
+  *
+  * Copyright (C) 2013 Marvell
+  */
++#include <linux/arm-smccc.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/io.h>
+@@ -18,6 +19,8 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/regmap.h>
+ #include <linux/interrupt.h>
++#include <linux/time.h>
++#include "soc/marvell/armada8k/fw.h"
+ 
+ #include "thermal_core.h"
+ 
+@@ -62,6 +65,8 @@
+ #define STATUS_POLL_TIMEOUT_US		100000
+ #define OVERHEAT_INT_POLL_DELAY_MS	1000
+ 
++#define THERMAL_SUPPORTED_IN_FIRMWARE(priv) (priv->data->is_smc_supported)
++
+ struct armada_thermal_data;
+ 
+ /* Marvell EBU Thermal Sensor Dev Structure */
+@@ -111,6 +116,12 @@ struct armada_thermal_data {
+ 
+ 	/* One sensor is in the thermal IC, the others are in the CPUs if any */
+ 	unsigned int cpu_nr;
++
++	/*
++	 * Thermal sensor operations exposed as firmware SIP services and
++	 * accessed via SMC
++	 */
++	bool is_smc_supported;
+ };
+ 
+ struct armada_drvdata {
+@@ -135,6 +146,18 @@ struct armada_thermal_sensor {
+ 	int id;
+ };
+ 
++static int thermal_smc(u32 addr, u32 *reg, u32 val1, u32 val2)
++{
++	struct arm_smccc_res res;
++
++	arm_smccc_smc(MV_SIP_DFX, addr, val1, val2, 0, 0, 0, 0, &res);
++
++	if (res.a0 == 0 && reg != NULL)
++		*reg = res.a1;
++
++	return res.a0;
++}
++
+ static void armadaxp_init(struct platform_device *pdev,
+ 			  struct armada_thermal_priv *priv)
+ {
+@@ -206,6 +229,27 @@ static void armada375_init(struct platform_device *pdev,
+ static int armada_wait_sensor_validity(struct armada_thermal_priv *priv)
+ {
+ 	u32 reg;
++	int ret;
++	ktime_t timeout;
++
++	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
++		timeout = ktime_add_us(ktime_get(), STATUS_POLL_TIMEOUT_US);
++		do {
++			ret = thermal_smc(MV_SIP_DFX_THERMAL_IS_VALID,
++					  &reg, 0, 0);
++			if (ret || reg)
++				break;
++
++			usleep_range((STATUS_POLL_PERIOD_US >> 2) + 1,
++				     STATUS_POLL_PERIOD_US);
++
++		} while (ktime_before(ktime_get(), timeout));
++
++		if (ret == SMCCC_RET_SUCCESS)
++			return reg ? 0 : -ETIMEDOUT;
++
++		return ret;
++	}
+ 
+ 	return regmap_read_poll_timeout(priv->syscon,
+ 					priv->data->syscon_status_off, reg,
+@@ -238,6 +282,22 @@ static void armada_ap806_init(struct platform_device *pdev,
+ {
+ 	struct armada_thermal_data *data = priv->data;
+ 	u32 reg;
++	int ret;
++
++	/*
++	 * The ap806 thermal sensor registers are part of DFX which is secured
++	 * by latest firmware, therefore accessing relevant registers from
++	 * not-secure world will not be possible. In that case Arm Trusted
++	 * Firmware exposes thermal operations as firmware run-time service. If
++	 * SMC initialization succeeds, perform other thermal operations using
++	 * SMC, otherwise (old fw case) fallback to regmap handling.
++	 */
++	ret = thermal_smc(MV_SIP_DFX_THERMAL_INIT, 0x0, 0, 0);
++	if (ret == SMCCC_RET_SUCCESS) {
++		dev_info(&pdev->dev, "firmware support\n");
++		THERMAL_SUPPORTED_IN_FIRMWARE(priv) = true;
++		return;
++	}
+ 
+ 	regmap_read(priv->syscon, data->syscon_control0_off, &reg);
+ 	reg &= ~CONTROL0_TSEN_RESET;
+@@ -274,11 +334,17 @@ static void armada_cp110_init(struct platform_device *pdev,
+ 
+ static bool armada_is_valid(struct armada_thermal_priv *priv)
+ {
++	int ret;
+ 	u32 reg;
+ 
+ 	if (!priv->data->is_valid_bit)
+ 		return true;
+ 
++	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
++		ret = thermal_smc(MV_SIP_DFX_THERMAL_IS_VALID, &reg, 0, 0);
++		return ret ? false : reg;
++	}
++
+ 	regmap_read(priv->syscon, priv->data->syscon_status_off, &reg);
+ 
+ 	return reg & priv->data->is_valid_bit;
+@@ -324,6 +390,7 @@ static int armada_select_channel(struct armada_thermal_priv *priv, int channel)
+ {
+ 	struct armada_thermal_data *data = priv->data;
+ 	u32 ctrl0;
++	int ret;
+ 
+ 	if (channel < 0 || channel > priv->data->cpu_nr)
+ 		return -EINVAL;
+@@ -331,6 +398,16 @@ static int armada_select_channel(struct armada_thermal_priv *priv, int channel)
+ 	if (priv->current_channel == channel)
+ 		return 0;
+ 
++	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
++		ret = thermal_smc(MV_SIP_DFX_THERMAL_SEL_CHANNEL,
++				  NULL, channel, 0);
++		if (ret)
++			return ret;
++
++		priv->current_channel = channel;
++		goto is_valid;
++	}
++
+ 	/* Stop the measurements */
+ 	regmap_read(priv->syscon, data->syscon_control0_off, &ctrl0);
+ 	ctrl0 &= ~CONTROL0_TSEN_START;
+@@ -357,6 +434,7 @@ static int armada_select_channel(struct armada_thermal_priv *priv, int channel)
+ 	ctrl0 |= CONTROL0_TSEN_START;
+ 	regmap_write(priv->syscon, data->syscon_control0_off, ctrl0);
+ 
++is_valid:
+ 	/*
+ 	 * The IP has a latency of ~15ms, so after updating the selected source,
+ 	 * we must absolutely wait for the sensor validity bit to ensure we read
+@@ -376,6 +454,9 @@ static int armada_read_sensor(struct armada_thermal_priv *priv, int *temp)
+ 	u32 reg, div;
+ 	s64 sample, b, m;
+ 
++	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv))
++		return thermal_smc(MV_SIP_DFX_THERMAL_READ, temp, 0, 0);
++
+ 	regmap_read(priv->syscon, priv->data->syscon_status_off, &reg);
+ 	reg = (reg >> priv->data->temp_shift) & priv->data->temp_mask;
+ 	if (priv->data->signed_sample)
+@@ -559,7 +640,13 @@ static irqreturn_t armada_overheat_isr_thread(int irq, void *blob)
+ 			goto enable_irq;
+ 	} while (temperature >= low_threshold);
+ 
+-	regmap_read(priv->syscon, priv->data->dfx_irq_cause_off, &dummy);
++	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
++		if (thermal_smc(MV_SIP_DFX_THERMAL_IRQ, 0, 0, 0))
++			return IRQ_NONE;
++	} else {
++		regmap_read(priv->syscon, priv->data->dfx_irq_cause_off,
++			    &dummy);
++	}
+ 
+ 	/* Notify the thermal core that the temperature is acceptable again */
+ 	thermal_zone_device_update(priv->overheat_sensor,
+@@ -772,6 +859,27 @@ static void armada_set_sane_name(struct platform_device *pdev,
+ 	} while (insane_char);
+ }
+ 
++/*
++ * Let the firmware configure the thermal overheat threshold, hysteresis and
++ * enable overheat interrupt
++ */
++static int armada_fw_overheat_settings(struct armada_thermal_priv *priv,
++				       int thresh_mc, int hyst_mc)
++{
++	int ret;
++
++	ret = thermal_smc(MV_SIP_DFX_THERMAL_THRESH, NULL, thresh_mc, hyst_mc);
++	if (ret)
++		return ret;
++
++	if (thresh_mc >= 0)
++		priv->current_threshold = thresh_mc;
++	if (hyst_mc >= 0)
++		priv->current_hysteresis = hyst_mc;
++
++	return 0;
++}
++
+ /*
+  * The IP can manage to trigger interrupts on overheat situation from all the
+  * sensors. However, the interrupt source changes along with the last selected
+@@ -803,11 +911,22 @@ static int armada_configure_overheat_int(struct armada_thermal_priv *priv,
+ 	if (ret)
+ 		return ret;
+ 
++	priv->overheat_sensor = tz;
++	priv->interrupt_source = sensor_id;
++
++	if (THERMAL_SUPPORTED_IN_FIRMWARE(priv)) {
++		/*
++		 * When thermal supported in firmware the configuring overheat
++		 * threshold and enabling overheat interrupt is done in one
++		 * step.
++		 */
++		return armada_fw_overheat_settings(priv, trips[i].temperature,
++						   trips[i].hysteresis);
++	}
++
+ 	armada_set_overheat_thresholds(priv,
+ 				       trips[i].temperature,
+ 				       trips[i].hysteresis);
+-	priv->overheat_sensor = tz;
+-	priv->interrupt_source = sensor_id;
+ 
+ 	armada_enable_overheat_interrupt(priv);
+ 
+diff --git a/include/soc/marvell/armada8k/fw.h b/include/soc/marvell/armada8k/fw.h
+new file mode 100644
+index 000000000000..2a80f26cbf6f
+--- /dev/null
++++ b/include/soc/marvell/armada8k/fw.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2019 Marvell International Ltd.
++ */
++
++#ifndef _SOC_MARVELL_ARMADA8K_FW_H
++#define _SOC_MARVELL_ARMADA8K_FW_H
++
++/* FW related definitions */
++#define MV_SIP_DFX			0x82000014
++
++#define MV_SIP_DFX_THERMAL_INIT		1
++#define MV_SIP_DFX_THERMAL_READ		2
++#define MV_SIP_DFX_THERMAL_IS_VALID	3
++#define MV_SIP_DFX_THERMAL_IRQ		4
++#define MV_SIP_DFX_THERMAL_THRESH	5
++#define MV_SIP_DFX_THERMAL_SEL_CHANNEL	6
++
++#endif /* _SOC_MARVELL_ARMADA8K_FW_H */
 -- 
 2.17.1
 
