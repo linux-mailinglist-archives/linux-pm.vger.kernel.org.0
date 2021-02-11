@@ -2,128 +2,306 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB2C318AFB
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Feb 2021 13:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F75318B75
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Feb 2021 14:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbhBKMkd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Feb 2021 07:40:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbhBKMhF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Feb 2021 07:37:05 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8236C061574;
-        Thu, 11 Feb 2021 04:36:24 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id n10so3710402wmq.0;
-        Thu, 11 Feb 2021 04:36:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wvId9QB5MA8DN7Z/Wwn99KHW4uDuXdx8aL5nWnOvqUI=;
-        b=KWhn7mo93wQSGNpPerkogAeENqdhj/Jet54/l8HJ9cnyHNJoun/Itg4shkO9w6bbO9
-         AYTTuNp8NJbNHMJt0wK2qScEnSjM+rkNgck/SoibYkFKX+yutXwZWpIN7Z3EQaCE6wAh
-         xTs36xzMGtlIRCYLZA+ADwd0BBWH3md3eozN/aDxSqfDtKIG7zDLm3dLIJaN5fNunFMm
-         66gBFbaXnbHGFsIWEuRiwEjHLbVwuhmfgl2WyP1ld5/DCkMqYhE5sw8klLSZCWsbBl6O
-         /T6keqTEASsJ4VKX7Se6Mi/bGFmHsC/fpU3qC/LDtTOOHJJs3K/Ky4Z6G1zUsfSwQCAu
-         46eA==
+        id S231821AbhBKNEK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Feb 2021 08:04:10 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:44262 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231635AbhBKNBh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Feb 2021 08:01:37 -0500
+Received: by mail-ot1-f44.google.com with SMTP id e5so4999676otb.11;
+        Thu, 11 Feb 2021 05:01:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wvId9QB5MA8DN7Z/Wwn99KHW4uDuXdx8aL5nWnOvqUI=;
-        b=t2zqzdBEtNr7WPav7RamrpsK7lIMNZOwgwfSlRiEgmGk3xArCbiQ9wsoa5AAvIY+N7
-         yRtuVjV0ushnSzmgJgb5VtF7NhUm49VrNkTrv4MMsfeEoPkFFZm+8s5vi1NvU6dsIPek
-         7WjbkH09nua6D1Hte6vAhZSGIvlFkwVCXUrD0GJfnWOWAW3zHlbdip8HYaYzxJ5uORGT
-         QKaNLvC1WFfy0tdhHXv3LlToIRu+IvjKOGx6PPR6U17J1LmXAq2RSTZ5zqcmAuIcbQzl
-         zkh/uQvMZjx8inH+D78mT7RJ5O/kyWNSpJb+uYRdOjnwYErEFS6LMbTV93Ok1L1xZGnq
-         0AwA==
-X-Gm-Message-State: AOAM530In2h5mIAYLOA48GgS9sYZLRFFy1R5I245018d1lKnDyUyoqgZ
-        NcKGt4a+Zugkzf5ub5MbRqW46A8wlB1tsg==
-X-Google-Smtp-Source: ABdhPJx8T464XDkRhixA0ExWSElblHccGwg/e0x7g0npu1eXjQzPj58qbi9uNN18U0FArKY6ORwT0w==
-X-Received: by 2002:a1c:6002:: with SMTP id u2mr4868870wmb.83.1613046983117;
-        Thu, 11 Feb 2021 04:36:23 -0800 (PST)
-Received: from ?IPv6:2003:ea:8f1f:ad00:60ca:853:df03:450e? (p200300ea8f1fad0060ca0853df03450e.dip0.t-ipconnect.de. [2003:ea:8f1f:ad00:60ca:853:df03:450e])
-        by smtp.googlemail.com with ESMTPSA id u3sm5228983wre.54.2021.02.11.04.36.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Feb 2021 04:36:22 -0800 (PST)
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Claudiu.Beznea@microchip.com, linux@armlinux.org.uk,
-        andrew@lunn.ch, davem@davemloft.net, kuba@kernel.org,
-        rjw@rjwysocki.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <1610120754-14331-1-git-send-email-claudiu.beznea@microchip.com>
- <25ec943f-ddfc-9bcd-ef30-d0baf3c6b2a2@gmail.com>
- <ce20d4f3-3e43-154a-0f57-2c2d42752597@microchip.com>
- <ee0fd287-c737-faa5-eee1-99ffa120540a@gmail.com>
- <ae4e73e9-109f-fdb9-382c-e33513109d1c@microchip.com>
- <7976f7df-c22f-d444-c910-b0462b3d7f61@gmail.com>
- <d9fcf8da-c0b0-0f18-48e9-a7534948bc93@microchip.com>
- <20210114102508.GO1551@shell.armlinux.org.uk>
- <fe4c31a0-b807-0eb2-1223-c07d7580e1fc@microchip.com>
- <56366231-4a1f-48c3-bc29-6421ed834bdf@gmail.com> <20210211121701.GA31708@amd>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH] net: phy: micrel: reconfigure the phy on resume
-Message-ID: <0ac6414e-b785-1f82-94a2-9aa26b357d02@gmail.com>
-Date:   Thu, 11 Feb 2021 13:36:16 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QMFNyDV7DmfIVLEmKQYa9awS7YrY55WsSx5JuI5FbdM=;
+        b=K8Fi9JmP4ane2ru66Z4kGgUDBZ5rpo2KNZKbxEZ0u6xbmAq6YGe/Eq+pKKteL9GrbX
+         /gvq4l3w5RecZocamcu5TEYGWKLkEuEHDjiZJ5kaebhR0j8YQ7i3i1HwS5srTESbhI/3
+         +x8o2Ecf7MLKJs+0SRKPW2m4GtetUTTOTV/SgXf7oywg4TPiJpYXUarrmZc4eFrDqlMz
+         9cD3MzVH1uOKmEvzU/+MTpc4eL0a9jwgcZOun2xxGU81oKBuCyN8plTA+vco854eJXZ5
+         fbTp2xdYqebFYf1om0yb91hH7480OVle2WLQoa3WgDcJi3x7Hn9pEYkrJhQLthcD3eIH
+         SUEw==
+X-Gm-Message-State: AOAM533lr9AYd//vNHSeEoBsn+KDgQnXoVrAjtMXUHMcw7r6fhKNUp9I
+        D6hGwcAdVjAGGKJmo72o9NYmwU5MDfL98UWT8vk=
+X-Google-Smtp-Source: ABdhPJxZDiUEbHhrzo8aCY9HhP7XU37YsKe5rfbHE0/8zTtJXnv01AsivsknDjLGR8Mn+hMIyIy6+OlyuPE1NQkrSOk=
+X-Received: by 2002:a9d:77d6:: with SMTP id w22mr5641603otl.145.1613048454541;
+ Thu, 11 Feb 2021 05:00:54 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210211121701.GA31708@amd>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210205222644.2357303-1-saravanak@google.com>
+In-Reply-To: <20210205222644.2357303-1-saravanak@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 Feb 2021 14:00:43 +0100
+Message-ID: <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11.02.2021 13:17, Pavel Machek wrote:
-> On Thu 2021-01-14 12:05:21, Heiner Kallweit wrote:
->> On 14.01.2021 11:41, Claudiu.Beznea@microchip.com wrote:
->>>
->>>
->>> On 14.01.2021 12:25, Russell King - ARM Linux admin wrote:
->>>>
->>>> As I've said, if phylib/PHY driver is not restoring the state of the
->>>> PHY on resume from suspend-to-ram, then that's an issue with phylib
->>>> and/or the phy driver.
->>>
->>> In the patch I proposed in this thread the restoring is done in PHY driver.
->>> Do you think I should continue the investigation and check if something
->>> should be done from the phylib itself?
->>>
->> It was the right move to approach the PM maintainers to clarify whether
->> the resume PM callback has to assume that power had been cut off and
->> it has to completely reconfigure the device. If they confirm this
->> understanding, then:
-> 
-> Power to some devices can be cut during s2ram, yes.
-> 
-Thanks for the confirmation.
+Hi Saravana,
 
->> - the general question remains why there's separate resume and restore
->>   callbacks, and what restore is supposed to do that resume doesn't
->>   have to do
-> 
-> You'll often have same implementation, yes.
-> 
+On Fri, Feb 5, 2021 at 11:26 PM Saravana Kannan <saravanak@google.com> wrote:
+> There are a lot of devices/drivers where they never have a struct device
+> created for them or the driver initializes the hardware without ever
+> binding to the struct device.
+>
+> This series is intended to avoid any boot regressions due to such
+> devices/drivers when fw_devlink=on and also address the handling of
+> optional suppliers.
+>
+> Patch 1 and 2 addresses the issue of firmware nodes that look like
+> they'll have struct devices created for them, but will never actually
+> have struct devices added for them. For example, DT nodes with a
+> compatible property that don't have devices added for them.
+>
+> Patch 3 and 4 allow for handling optional DT bindings.
+>
+> Patch 5 sets up a generic API to handle drivers that never bind with
+> their devices.
+>
+> Patch 6 through 8 update different frameworks to use the new API.
+>
+> Thanks,
+> Saravana
+>
+> Saravana Kannan (8):
+>   driver core: fw_devlink: Detect supplier devices that will never be
+>     added
+>   of: property: Don't add links to absent suppliers
+>   driver core: Add fw_devlink.strict kernel param
+>   of: property: Add fw_devlink support for optional properties
+>   driver core: fw_devlink: Handle suppliers that don't use driver core
+>   irqdomain: Mark fwnodes when their irqdomain is added/removed
+>   PM: domains: Mark fwnodes when their powerdomain is added/removed
+>   clk: Mark fwnodes when their clock provider is added/removed
 
-If resume and restore both have to assume that power was cut off,
-then they have to fully re-initialize the device. Therefore it's still
-not clear to me when you would have differing implementations for both
-callbacks.
+Thanks for your series, which is now part of driver-core-next.
+I gave driver-core-next + [1] a try on various Renesas boards.
+Test results are below.
+In general, the result looks much better than before.
 
->> - it should be sufficient to use mdio_bus_phy_restore also as resume
->>   callback (instead of changing each and every PHY driver's resume),
->>   because we can expect that somebody cutting off power to the PHY
->>   properly suspends the MDIO bus before
-> 
-> If restore works with power cut and power not cut then yes, you should
-> get away with that.
-> 
-> Best regards,
-> 								Pavel
-> 
+[1] - https://lore.kernel.org/lkml/20210210114435.122242-1-tudor.ambarus@microchip.com/
 
-Heiner
+  1. R-Car Gen2 (Koelsch), R-Car Gen3 (Salvator-X(S), Ebisu).
+
+      - Commit 2dfc564bda4a31bc ("soc: renesas: rcar-sysc: Mark device
+        node OF_POPULATED after init") is no longer needed (but already
+        queued for v5.12 anyway)
+
+      - Some devices are reprobed, despite their drivers returning
+        a real error code, and not -EPROBE_DEFER:
+
+            renesas_wdt e6020000.watchdog: Watchdog blacklisted on r8a7791 ES1.*
+            (rwdt_probe() returns -ENODEV)
+
+            sh-pfc e6060000.pinctrl: pin GP_7_23 already requested by
+ee090000.pci; cannot claim for e6590000.usb
+            sh-pfc e6060000.pinctrl: pin-247 (e6590000.usb) status -22
+            sh-pfc e6060000.pinctrl: could not request pin 247
+(GP_7_23) from group usb0  on device sh-pfc
+            renesas_usbhs e6590000.usb: Error applying setting,
+reverse things back
+            renesas_usbhs: probe of e6590000.usb failed with error -22
+
+            rcar-pcie fe000000.pcie: host bridge /soc/pcie@fe000000 ranges:
+            rcar-pcie fe000000.pcie:       IO
+0x00fe100000..0x00fe1fffff -> 0x0000000000
+            rcar-pcie fe000000.pcie:      MEM
+0x00fe200000..0x00fe3fffff -> 0x00fe200000
+            rcar-pcie fe000000.pcie:      MEM
+0x0030000000..0x0037ffffff -> 0x0030000000
+            rcar-pcie fe000000.pcie:      MEM
+0x0038000000..0x003fffffff -> 0x0038000000
+            rcar-pcie fe000000.pcie:   IB MEM
+0x0040000000..0x00bfffffff -> 0x0040000000
+            rcar-pcie fe000000.pcie:   IB MEM
+0x0200000000..0x02ffffffff -> 0x0200000000
+            rcar-pcie fe000000.pcie: PCIe link down
+            (rcar_pcie_probe() returns -ENODEV)
+
+            xhci-hcd ee000000.usb: xHCI Host Controller
+            xhci-hcd ee000000.usb: new USB bus registered, assigned bus number 7
+            xhci-hcd ee000000.usb: Direct firmware load for
+r8a779x_usb3_v3.dlmem failed with error -2
+            xhci-hcd ee000000.usb: can't setup: -2
+            xhci-hcd ee000000.usb: USB bus 7 deregistered
+            xhci-hcd: probe of ee000000.usb failed with error -2
+
+      - The PCI reprobing leads to a memory leak, for which I've sent a fix
+        "[PATCH] PCI: Fix memory leak in pci_register_io_range()"
+        https://lore.kernel.org/linux-pci/20210202100332.829047-1-geert+renesas@glider.be/
+
+      - I2C on R-Car Gen3 does not seem to use DMA, according to
+        /sys/kernel/debug/dmaengine/summary:
+
+            -dma4chan0    | e66d8000.i2c:tx
+            -dma4chan1    | e66d8000.i2c:rx
+            -dma5chan0    | e6510000.i2c:tx
+
+      - Disabling CONFIG_IPMMU_VMSA (IOMMU) now works, good!
+
+           ignoring dependency for device, assuming no driver
+
+      - Disabling CONFIG_RCAR_DMAC works for most devices, except for
+        sound:
+
+            -rcar_sound ec500000.sound: probed
+
+             ALSA device list:
+            -  #0: rcar-sound
+            +  No soundcards found.
+
+            # cat  /sys/kernel/debug/devices_deferred
+            2-0010
+            sound
+            ec500000.sound
+
+            platform e6510000.i2c: Linked as a sync state only
+consumer to ec500000.sound
+            platform ec500000.sound: Linked as a consumer to e6060000.pinctrl
+            platform ec500000.sound: Linked as a consumer to
+e6150000.clock-controller
+            i2c 2-0010: Linked as a consumer to ec500000.sound
+            platform ec500000.sound: Linked as a consumer to 2-004f
+            cs2000-cp 2-004f: revision - C1
+            i2c-rcar e6510000.i2c: probed
+            i2c-rcar e6510000.i2c: Dropping the link to ec500000.sound
+            i2c 2-0010: probe deferral - supplier ec500000.sound not ready
+
+        With CONFIG_RCAR_DMAC=y, ec500000.sound is probed quite early.
+
+            arch/arm64/boot/dts/renesas/r8a77951-salvator-xs.dts
+
+            ak4613: codec@10 {
+                    clocks = <&rcar_sound 3>;
+
+                    port {
+                            ak4613_endpoint: endpoint {
+                                    remote-endpoint = <&rsnd_endpoint0>;
+                            };
+                    };
+            };
+
+            sound_card: sound {
+                    dais = <&rsnd_port0     /* ak4613 */
+                            &rsnd_port1     /* HDMI0  */
+                            &rsnd_port2>;   /* HDMI1  */
+            };
+
+            rcar_sound: sound@ec500000 {
+                    ports {
+                            rsnd_port0: port@0 {
+                                    rsnd_endpoint0: endpoint {
+                                            remote-endpoint =
+<&ak4613_endpoint>;
+                                    }
+                            }
+                    }
+            };
+
+
+  2. SH/R-Mobile AG5 (kzm9g), APE6 (ape6evm), A1 (armadillo800-eva)
+
+      - "PATCH] soc: renesas: rmobile-sysc: Set OF_POPULATED and absorb
+        reset handling" is no longer needed
+        https://lore.kernel.org/linux-arm-kernel/20210205133319.1921108-1-geert+renesas@glider.be/
+
+      - On R-Mobile A1, I get a BUG and a memory leak:
+
+            BUG: spinlock bad magic on CPU#0, swapper/1
+             lock: lcdc0_device+0x10c/0x308, .magic: 00000000, .owner:
+<none>/-1, .owner_cpu: 0
+            CPU: 0 PID: 1 Comm: swapper Not tainted
+5.11.0-rc5-armadillo-00032-gf0a85c26907e #266
+            Hardware name: Generic R8A7740 (Flattened Device Tree)
+            [<c010c3c8>] (unwind_backtrace) from [<c010a49c>]
+(show_stack+0x10/0x14)
+            [<c010a49c>] (show_stack) from [<c0159534>]
+(do_raw_spin_lock+0x20/0x94)
+            [<c0159534>] (do_raw_spin_lock) from [<c04089d8>]
+(dev_pm_get_subsys_data+0x30/0xa0)
+            [<c04089d8>] (dev_pm_get_subsys_data) from [<c0413698>]
+(genpd_add_device+0x34/0x1c0)
+            [<c0413698>] (genpd_add_device) from [<c041389c>]
+(of_genpd_add_device+0x34/0x4c)
+            [<c041389c>] (of_genpd_add_device) from [<c0a1e9bc>]
+(board_staging_register_device+0xf8/0x118)
+            [<c0a1e9bc>] (board_staging_register_device) from
+[<c0a1ea00>] (board_staging_register_devices+0x24/0x28)
+            [<c0a1ea00>] (board_staging_register_devices) from
+[<c0a1ea30>] (runtime_board_check+0x2c/0x40)
+            [<c0a1ea30>] (runtime_board_check) from [<c0101fac>]
+(do_one_initcall+0xe0/0x278)
+            [<c0101fac>] (do_one_initcall) from [<c0a01034>]
+(kernel_init_freeable+0x174/0x1c0)
+            [<c0a01034>] (kernel_init_freeable) from [<c05fd568>]
+(kernel_init+0x8/0x118)
+            [<c05fd568>] (kernel_init) from [<c010011c>]
+(ret_from_fork+0x14/0x38)
+            Exception stack(0xc19c9fb0 to 0xc19c9ff8)
+            9fa0:                                     00000000
+00000000 00000000 00000000
+            9fc0: 00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000
+            9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+
+            unreferenced object 0xc4134e00 (size 512):
+              comm "swapper", pid 1, jiffies 4294937296 (age 3541.930s)
+              hex dump (first 32 bytes):
+                00 4e 13 c4 00 4e 13 c4 ff ff ff 7f ff ff ff 7f
+.N...N..........
+                ff ff ff 7f 02 00 00 00 00 5f 13 c4 1c 4e 13 c4
+........._...N..
+              backtrace:
+                [<de1a3c34>] dev_pm_qos_constraints_allocate+0x10/0xcc
+                [<d21cf6e4>] dev_pm_qos_add_notifier+0x6c/0xd0
+                [<e04bbc90>] genpd_add_device+0x178/0x1c0
+                [<95067303>] of_genpd_add_device+0x34/0x4c
+                [<c334b97a>] board_staging_register_device+0xf8/0x118
+                [<01bd495a>] board_staging_register_devices+0x24/0x28
+                [<fb25a5d8>] runtime_board_check+0x2c/0x40
+                [<65aed679>] do_one_initcall+0xe0/0x278
+                [<97e3f4f7>] kernel_init_freeable+0x174/0x1c0
+                [<63c8fed0>] kernel_init+0x8/0x118
+                [<f704d96c>] ret_from_fork+0x14/0x38
+                [<00000000>] 0x0
+
+  3. RZ/A1 and RZ/A2: No issues.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
