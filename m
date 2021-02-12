@@ -2,89 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2252A31A227
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 16:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8409A31A22C
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 16:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbhBLPzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Feb 2021 10:55:51 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:32942 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbhBLPzl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Feb 2021 10:55:41 -0500
-Received: by mail-ot1-f54.google.com with SMTP id c16so8804875otp.0;
-        Fri, 12 Feb 2021 07:55:25 -0800 (PST)
+        id S229539AbhBLP5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Feb 2021 10:57:50 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:35786 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232196AbhBLP5q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Feb 2021 10:57:46 -0500
+Received: by mail-ot1-f52.google.com with SMTP id k10so8813487otl.2;
+        Fri, 12 Feb 2021 07:57:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5hkgvMeCL8KgFHrlSi+ZPMQoYcV+scrqJ+oH5o6Hh20=;
-        b=XfsF+DfMdpAJvUJs/e2hyE46JPHbVXelp/iAK9yStBEQUKz8fVJcNn2+QuiqsxrdNn
-         +KngmygnlgePT+XibX0IfQaXpCAkgnAW05fLt5b7xzL74gnpkYBavIU1qO9OIZNBWkHJ
-         m+kE8hd3XUcb1/pd2S6LnBtfyhYP73ntj5j4WmH+mXZmckPHm2r18ShflqxKCtMUt0J8
-         JUTvgJb4f35l4h7CWIE3N+lGW2cAESGyGdPtltRm7nplRVVQlmKaFMYcSJcpwJwYSoXU
-         31hbSyjvbixvnFU+QRNlO1wP7Z5XoLY2t+3oGleYECRk3hVIza7jmMLl7LrDBvu9Ha6K
-         QFNw==
-X-Gm-Message-State: AOAM5312WWmsK4a+oSzq1zIycpkD8fKgOQSB3g7d2TUepzoWygbLq9Oc
-        QHfbiVL+lsgCIXRJfs3oHUD8pVjXZHn3Kv8MRsc=
-X-Google-Smtp-Source: ABdhPJzOJfXGfFsUz/Fb0COQlRSswtiNVGTbrpEk/PhfmqR4BOzKMlsXikSs77QgIyuUxuvU3KLcxX8527edD+oV2LU=
-X-Received: by 2002:a05:6830:2106:: with SMTP id i6mr2391390otc.260.1613145298025;
- Fri, 12 Feb 2021 07:54:58 -0800 (PST)
+        bh=CSjbbaNIKklsxIEn5AtJtdKG7TrM5/PAZ+RSicaxCII=;
+        b=ZjhczgzlBu32CW9IXKhdQHoiEuEA0GIEUzkLJf8jM7bb+1F0t31e+FGPt61BOZZDf2
+         vYyeQLoKMhDIrcKKbDtsCc3bLdVTH4axH7t8cmKYNSmoBVwM/qPLl4ZPptkB6tMpRspP
+         hxQoHEREQkid6faG4XSv+PIitHP2WcRQe3tUZRItibneRBpDsJfdxymU5ybFJEPU5ku6
+         5EIBMd4ynseudM4UoUbARpTCnLft6eKEjzNd+CNEb8C6kNmos4e/iHqVdKH3X4QlGqpy
+         eziupAnZTwBj8zS50ZWl1ZNq7UMI8WEjQNxEZZLM515t7e7EhxbJfucvk0x1QkbeY4Te
+         Tfug==
+X-Gm-Message-State: AOAM533FHWOEEzN6kH1b3w/HmcHhCbNcPfEMNiPJdK+6LdL6ne3ICQsu
+        zhbOEtiGnQxBAzy2dKdV7dGHRCEClPbfHOLA7Ig=
+X-Google-Smtp-Source: ABdhPJxrlmCpx7RQESMcBTpnckct/6GjNtdVIpA6+Hidss2QWym3ldzjlUJBrwRvvFayvCsrgkx/8UfBqoJJSTryaG8=
+X-Received: by 2002:a05:6830:2106:: with SMTP id i6mr2397056otc.260.1613145424507;
+ Fri, 12 Feb 2021 07:57:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20210123100608.2349629-1-yeyunfeng@huawei.com>
-In-Reply-To: <20210123100608.2349629-1-yeyunfeng@huawei.com>
+References: <20210210172208.335048-1-krzk@kernel.org>
+In-Reply-To: <20210210172208.335048-1-krzk@kernel.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 12 Feb 2021 16:54:47 +0100
-Message-ID: <CAJZ5v0jwpuhh75mV+JTFicjbguJu2VMCUzAZcomTeL13m2BR1A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] powercap/intel_rapl: Use topology interface in rapl_add_package()
-To:     Yunfeng Ye <yeyunfeng@huawei.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+Date:   Fri, 12 Feb 2021 16:56:53 +0100
+Message-ID: <CAJZ5v0jnb__EpZxMSSk5Aop3+=FXXt5+0jNfTy9G1ac4s+xTaQ@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: cpuidle: exynos: include header in file pattern
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        hushiyuan@huawei.com, hewenliang4@huawei.com, caihongda@huawei.com
+        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jan 23, 2021 at 11:07 AM Yunfeng Ye <yeyunfeng@huawei.com> wrote:
+On Wed, Feb 10, 2021 at 6:23 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> It's not a good way to access phys_proc_id and cpu_die_id directly.
-> So using topology_physical_package_id(cpu) and topology_die_id(cpu)
-> instead.
+> Inclue the platform data header in Exynos cpuidle maintainer entry.
 >
-> Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  drivers/powercap/intel_rapl_common.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index c9e57237d778..5f3d39b8212a 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -1309,7 +1309,6 @@ struct rapl_package *rapl_add_package(int cpu, struct rapl_if_priv *priv)
->  {
->         int id = topology_logical_die_id(cpu);
->         struct rapl_package *rp;
-> -       struct cpuinfo_x86 *c = &cpu_data(cpu);
->         int ret;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 674f42375acf..68e2b4cb4788 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4625,6 +4625,7 @@ L:        linux-samsung-soc@vger.kernel.org
+>  S:     Supported
+>  F:     arch/arm/mach-exynos/pm.c
+>  F:     drivers/cpuidle/cpuidle-exynos.c
+> +F:     include/linux/platform_data/cpuidle-exynos.h
 >
->         if (!rapl_defaults)
-> @@ -1326,10 +1325,11 @@ struct rapl_package *rapl_add_package(int cpu, struct rapl_if_priv *priv)
->
->         if (topology_max_die_per_package() > 1)
->                 snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH,
-> -                        "package-%d-die-%d", c->phys_proc_id, c->cpu_die_id);
-> +                        "package-%d-die-%d",
-> +                        topology_physical_package_id(cpu), topology_die_id(cpu));
->         else
->                 snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH, "package-%d",
-> -                        c->phys_proc_id);
-> +                        topology_physical_package_id(cpu));
->
->         /* check if the package contains valid domains */
->         if (rapl_detect_domains(rp, cpu) || rapl_defaults->check_unit(rp, cpu)) {
+>  CPUIDLE DRIVER - ARM PSCI
+>  M:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 > --
 
-Applied along with the [2/2] with some minor changelog edits as 5.12 material.
-
-Thanks!
+Do you want me to apply this?
