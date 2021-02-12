@@ -2,108 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C36319BFC
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 10:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 590BD319FB4
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 14:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbhBLJiv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Feb 2021 04:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S230489AbhBLNU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Feb 2021 08:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbhBLJis (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Feb 2021 04:38:48 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B44C06178B
-        for <linux-pm@vger.kernel.org>; Fri, 12 Feb 2021 01:37:50 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j11so336244wmi.3
-        for <linux-pm@vger.kernel.org>; Fri, 12 Feb 2021 01:37:50 -0800 (PST)
+        with ESMTP id S230482AbhBLNUZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Feb 2021 08:20:25 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96F7C061756;
+        Fri, 12 Feb 2021 05:19:44 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cl8so418684pjb.0;
+        Fri, 12 Feb 2021 05:19:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PkIJB2P07r0I1a+6LmYfF/eJubpC6EF+zgj8b/X18t0=;
-        b=eqRVHicKGReNXZNXMkWRBT0kFywqGplwhpjcUYlB+Dzf0i6cW4ak4i+4McZgmJiDxU
-         qrcLAVDrynys9ejnB2JdhWeUwxwpesyBKOsqS28WeTxBLe/O8XZfxjSdPnL/Y5t0peNi
-         yDM08OokUHlNIRwXFhjHYEZqY70UeuTxiiY+dQzuIaWkqIpwAfu2tbDXnUKmnGg3A/JM
-         BmzedKCknGOD7v86cKOoEnA49Oa+EY0X217l2DnwuVg5eD0gNT3OOveC2ia01NRveZsm
-         aI5Yrk+fFU+f1gZePAoti/0LbeM4BrPodYTHlpG/R4FnE3YtwJ1uZvsIC2Fd4YOpzJ6u
-         P/ZQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=4cqievP1oLWYJ4Ny++CVFsTeEL6uztXwZyN4nT6gCro=;
+        b=o5ZQbFt3B3FNXTmRxyQrf5MaQvp1zVQr+8Ct25pANYhFgjoWEVXVvSB/sP3eFz8bRR
+         +GRpVSWZZTTeAR8kL+vzT2VfOBPiEz3tEJWEZ2MbI7Z/xO7M1iEkJPw7z7SANxTNL1Lu
+         p/l7Gxu5fEPPZ7VVmOIHNcWcuj0GCUyQGUn0BMUnX0LwFJNA5PdroaKS2NtNBEzInIVM
+         TQImvrYekeJhPHUmYAOdxSiB6uuoqLZMyYQJacafSLCTQchn6BD5h5sQ681Uv1/kDu/k
+         gtE2j8nGri1FW298EGy6ug3ATnrT2d0SwB1Lk2uZfAGcAZzxKWPj+yxYYNkQjg5bVfTQ
+         Tsfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PkIJB2P07r0I1a+6LmYfF/eJubpC6EF+zgj8b/X18t0=;
-        b=d8kjyMaLsdV6iLqW87acK2Wy1fJPRVY7P9apkxqisqsLh//tgsb5PG/Y39fIBssAT8
-         RL+O1ib29jFJ5ZniOmKsVOekuqGBxmNKaSghZZDu6hUNoRjPj1nJbu2Al4JoRzargaYE
-         EQLKbYuEilRja4rOYf+GmBv/AtBVYrpgEjNzMmcfEa4UkjXE2SpKwbny0OcpocBpJ7vq
-         9EVZ75AVJaN2EUKLsM2xzbgEkbYocOEdVhNwMSKf9Lc6BUPITRk50FJp0/KLu2fV/T0i
-         LB0RfMkFvKd6/XrIsPXWO81JIy8GBiHgDcypt5z6AZMH6g7gc9EqDicF8KU8oY5EDtN2
-         in2w==
-X-Gm-Message-State: AOAM530J2fhD1yIGRT6xmFE4sqxAnM1smqTcvBaTHZlHZB4JitZkOm94
-        tu3u8+YYoNMnC6CZKPhmWyEu7w==
-X-Google-Smtp-Source: ABdhPJwDhFICyz/JghmhucGWJYKHNvfrNUqx6TUMtJd8PfA8C9At8/3JQNBc9Xkla9akgZ01OGXsSQ==
-X-Received: by 2002:a1c:7e4e:: with SMTP id z75mr1879586wmc.168.1613122669035;
-        Fri, 12 Feb 2021 01:37:49 -0800 (PST)
-Received: from dell ([91.110.221.187])
-        by smtp.gmail.com with ESMTPSA id u10sm12871354wmj.40.2021.02.12.01.37.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Feb 2021 01:37:48 -0800 (PST)
-Date:   Fri, 12 Feb 2021 09:37:46 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Timon Baetz <timon.baetz@protonmail.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v3 3/7] mfd: max8997: Add of_compatible to extcon and
- charger mfd_cell
-Message-ID: <20210212093746.GH4572@dell>
-References: <20201222070520.710096-1-timon.baetz@protonmail.com>
- <20201222070520.710096-3-timon.baetz@protonmail.com>
- <20201222095522.GC53991@dell>
- <20210211221132.5e8d156c.timon.baetz@protonmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=4cqievP1oLWYJ4Ny++CVFsTeEL6uztXwZyN4nT6gCro=;
+        b=GbvQlrmPj2KXBbhvB0oefD+M3QJk/0gDri3AWsdlVKq2+pePK0wtaWUwpgGsxjChe3
+         8w5xm5yTMcs20WlmJD1p8XFPNbaOgzYVFktQwGzH07SH1SYis4yZ0jxRsLotcw04AkDg
+         CUTM6F6CxcQwJ1jKI/J+s1fiM0uHYlYRc1L1Zv+fVcj2iJOBXvjfp2tfQ7km5zDv5/rF
+         D2iKpJeyJERoJNhcVX9exi94xRyxnQeazpzWCerZ4tK1zVOi3UEBUxAEcPT90ZsJNGLg
+         p6833ww8p6kfr9PUlr1NjOZkqkywYrJcGPMgemTD6VoKmzlGvRd+yMnsNQ65NjsJs5+4
+         qE6Q==
+X-Gm-Message-State: AOAM533aP4IMhWrkdtkMAOCatc6H1i/Uj5BfwpHzIrnK/USCIVctwLzK
+        5mrvm7yJNz0H1elepyI2At4=
+X-Google-Smtp-Source: ABdhPJw0W9r8mdFX58Wo4VzZMJed+tKGDHGxxiRlac9ze/7Q95PPuP7D90PvhGJ1KFgc0+sISreARg==
+X-Received: by 2002:a17:90a:c84:: with SMTP id v4mr2763919pja.228.1613135984448;
+        Fri, 12 Feb 2021 05:19:44 -0800 (PST)
+Received: from syed.domain.name ([103.201.127.1])
+        by smtp.gmail.com with ESMTPSA id g6sm8729106pfi.15.2021.02.12.05.19.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Feb 2021 05:19:43 -0800 (PST)
+Date:   Fri, 12 Feb 2021 18:49:28 +0530
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+To:     bgolaszewski@baylibre.com
+Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, akpm@linux-foundation.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, linux-arch@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/3] Introduce the for_each_set_clump macro
+Message-ID: <cover.1613134924.git.syednwaris@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210211221132.5e8d156c.timon.baetz@protonmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 11 Feb 2021, Timon Baetz wrote:
+Hello Bartosz,
 
-> On Tue, 22 Dec 2020 09:55:22 +0000, Lee Jones wrote:
-> > On Tue, 22 Dec 2020, Timon Baetz wrote:
-> > 
-> > > Add of_compatible ("maxim,max8997-muic") to the mfd_cell to have a
-> > > of_node set in the extcon driver.
-> > >
-> > > Add of_compatible ("maxim,max8997-battery") to the mfd_cell to configure
-> > > the charger driver.
-> > >
-> > > Signed-off-by: Timon Baetz <timon.baetz@protonmail.com>
-> > > ---
-> > >  drivers/mfd/max8997.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)  
-> > 
-> > Applied, thanks.
-> 
-> Once https://lore.kernel.org/lkml/20210130172747.2022977-1-timon.baetz@protonmail.com/
-> gets accepted, this is not needed anymore. Can this be reverted or
-> should I create a new patch?
+Since this patchset primarily affects GPIO drivers, would you like
+to pick it up through your GPIO tree?
 
-Please submit a revert with the reasons why.
+This patchset introduces a new generic version of for_each_set_clump.
+The previous version of for_each_set_clump8 used a fixed size 8-bit
+clump, but the new generic version can work with clump of any size but
+less than or equal to BITS_PER_LONG. The patchset utilizes the new macro
+in several GPIO drivers.
 
+The earlier 8-bit for_each_set_clump8 facilitated a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
+
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
+
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
+
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
+
+But with the new for_each_set_clump the clump size can be different from 8 bits.
+Moreover, the clump can be split at word boundary in situations where word
+size is not multiple of clump size. Following are examples showing the working
+of new macro for clump sizes of 24 bits and 6 bits.
+
+Example 1:
+clump size: 24 bits, Number of clumps (or ports): 10
+bitmap stores the bit information from where successive clumps are retrieved.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x000000aa000000aa;
+        0xbbbbabcdeffedcba;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:-
+'offset' is the bit position and 'clump' is the 24 bit clump from the
+above bitmap.
+Iteration first:        offset: 0 clump: 0xfedcba
+Iteration second:       offset: 24 clump: 0xabcdef
+Iteration third:        offset: 48 clump: 0xaabbbb
+Iteration fourth:       offset: 96 clump: 0xaa
+Iteration fifth:        offset: 144 clump: 0xff
+Iteration sixth:        offset: 168 clump: 0xaaaaaa
+Iteration seventh:      offset: 216 clump: 0xff
+Loop breaks because in the end the remaining bits (0x00aa) size was less
+than clump size of 24 bits.
+
+In above example it can be seen that in iteration third, the 24 bit clump
+that was retrieved was split between bitmap[0] and bitmap[1]. This example
+also shows that 24 bit zeroes if present in between, were skipped (preserving
+the previous for_each_set_macro8 behaviour).
+
+Example 2:
+clump size = 6 bits, Number of clumps (or ports) = 3.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x0f00000000000000;
+        0x0000000000000ac0;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:
+'offset' is the bit position and 'clump' is the 6 bit clump from the
+above bitmap.
+Iteration first:        offset: 6 clump: 0x2b
+Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+Here 6 * 3 is clump size * no. of clumps.
+
+Changes in v2:
+ - [Patch 1/3]: Shift the macros and related functions to gpiolib inside 
+   gpio/. Reduce the visibilty of 'for_each_set_clump' to gpio.
+ - [Patch 1/3]: Remove __builtin_unreachable and simply use return
+   statement.
+ - Remove tests from lib/test_bitmap.c as 'for_each_set_clump' is
+   now localised inside gpio/ only.
+
+Syed Nayyar Waris (3):
+  gpiolib: : Introduce the for_each_set_clump macro
+  gpio: thunderx: Utilize for_each_set_clump macro
+  gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+
+ drivers/gpio/gpio-thunderx.c | 13 ++++--
+ drivers/gpio/gpio-xilinx.c   | 63 ++++++++++++-------------
+ drivers/gpio/gpiolib.c       | 90 ++++++++++++++++++++++++++++++++++++
+ drivers/gpio/gpiolib.h       | 28 +++++++++++
+ 4 files changed, 158 insertions(+), 36 deletions(-)
+
+
+base-commit: e71ba9452f0b5b2e8dc8aa5445198cd9214a6a62
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.29.0
+
