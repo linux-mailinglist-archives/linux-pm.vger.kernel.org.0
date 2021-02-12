@@ -2,118 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6774631A3B3
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 18:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5801C31A473
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 19:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbhBLReX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Feb 2021 12:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbhBLReK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Feb 2021 12:34:10 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE81C061574
-        for <linux-pm@vger.kernel.org>; Fri, 12 Feb 2021 09:33:31 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id z6so6246311pfq.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 Feb 2021 09:33:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=6GhVdkMYkI/0dHYuKI4F6kZgqc+LNZAtiz8RClj5UEs=;
-        b=WVZ2Y6iBv4nM539UMdm6jjtePPpTu3VfxVa/rxkn+5Gu20R8MeJVY5oUAUj9cdsbTW
-         7mJvVi8/DyJ4+Sdf26htR822c+uCuXx3XKBq3p8DBLZBX1Lks28VmT+lxaqjErZBW94t
-         drAO6CkAnhAfxrjwn+kp9+gz8V7wMIo1ykiXwOyfnmbxTwPx51IPYENoJIP+rRXAcUjx
-         idaCgR1mmiHVT17jEG7/YZw9jgbG7Kvah+r+6dGHB/zTY236+yjWpBidN9NPLASZryOI
-         X2g8lPeTOcZGw1vOKnaonyO3mkkP9oHrXtcQAu8IHy2XkOKn0Y9RbWmukCOviNfaWkF5
-         Ag9A==
+        id S231731AbhBLSUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Feb 2021 13:20:32 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:38615 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231705AbhBLSUT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Feb 2021 13:20:19 -0500
+Received: by mail-oi1-f176.google.com with SMTP id h6so592351oie.5
+        for <linux-pm@vger.kernel.org>; Fri, 12 Feb 2021 10:20:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=6GhVdkMYkI/0dHYuKI4F6kZgqc+LNZAtiz8RClj5UEs=;
-        b=jmGYs8NUdilPoldSstRUb7AociyVlurABqd/IpFR8ryoX95Fp253ic2e2BAILWNkX4
-         +HBE5C3Aoqwjt/fFSgUxXydXnsAM/cCauYzvlq8N3YL/q+CsIyZtisq1LsO855iLDQtB
-         5+nsvR0A036s12yN1WsASEk08JzP00dFj1VtPBJ4HZ/ddqZ9aexm15s5nBLGamw7nJK3
-         zUikS+HnGb2W4oPM2Ez9iay8ZHhTjDb4tZmRqF7NM9Y2sHdjRDLd/TE/xVBGsJiNDuSa
-         rYxc7bDBELM6cBnfbd741qM1pG2DMY6E9nQtcsIN+1L7FDz9hd41Td4iAAfsFnx+kK6H
-         roiQ==
-X-Gm-Message-State: AOAM5305NokNFmrdU83d+dUki+cTWuuwVQUIudv1mfJmhF02NXOQePz8
-        jVlGBKJVVwi/RVntbdNuQoCQ0w==
-X-Google-Smtp-Source: ABdhPJwYAQwsXipxK1Gg3lqnNXbNreCeqATTNUomHVbj5+BwL/pDeYP697LkF8mWxVLLUcpEPdMD7A==
-X-Received: by 2002:a63:f95b:: with SMTP id q27mr4285621pgk.82.1613151210600;
-        Fri, 12 Feb 2021 09:33:30 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f28sm10568805pfk.182.2021.02.12.09.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Feb 2021 09:33:30 -0800 (PST)
-Message-ID: <6026bbea.1c69fb81.6016b.7272@mx.google.com>
-Date:   Fri, 12 Feb 2021 09:33:30 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qniHPk/1CE5Dyn73p25mgrPyhAmrHa9TfgFAtGea62s=;
+        b=sGNFiKKKqSeFjXMEfqNzVWlW1lzSFxMWdGFYrEPuFAsyAOF1+7WRtd9ik+WCfX+lnP
+         XrhJjttDDs3eTBwdVMqzTyDIesmXajgcXbK/UUJeUzkuqFLl1cel5fATyB8j6RhkDFQ2
+         8b0LFHGxERKE3sJnWd+UA0KRiFk/LtLNr4ud70K23ncR/HkYlWQnyADozas9XuabU3xx
+         nKIKa7ejDLEQg4v97U7hVpuZ+OSev0QKhDbSJ3Mb7ioswd2jZdDenyLUA86H0qwsRobz
+         drGbuV1VTlgWT5huG9ePyc3rcbhQkfP6DlvPTUzJAAiggkFH51x/ZO9idFjUMHKGtD4l
+         5i3Q==
+X-Gm-Message-State: AOAM531RV635b+EVbB+hTJy6+c2y6RmbfOo7i37xcfFg5pxcfOSzo6uW
+        ek5rQInpF732RjfdKsnpBh+ahqeLa77ycFpmBqM=
+X-Google-Smtp-Source: ABdhPJyqEL2+ARB7rpx0u6dB1VoaGQZnOWGLa5NVVqjc5Hmt8z7tXvhwcOYN9tHFCMLfpfryJsSzFDLLLsD3pZi0/XY=
+X-Received: by 2002:a05:6808:5cf:: with SMTP id d15mr485116oij.69.1613153978558;
+ Fri, 12 Feb 2021 10:19:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: pm-5.11-rc8-133-g5352de4c92b3a
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 5 runs,
- 1 regressions (pm-5.11-rc8-133-g5352de4c92b3a)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <bug-211305-137361@https.bugzilla.kernel.org/> <bug-211305-137361-xxZGwJzw8e@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-211305-137361-xxZGwJzw8e@https.bugzilla.kernel.org/>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 12 Feb 2021 19:19:27 +0100
+Message-ID: <CAJZ5v0hWurgg=tMudRopuLkruAwoELOB0KMXF5VPf9K+PLYAhg@mail.gmail.com>
+Subject: Re: [Bug 211305] schedutil selects low P-States on AMD EPYC with
+ frequency invariance
+To:     bugzilla-daemon@bugzilla.kernel.org,
+        Matt McDonald <gardotd426@gmail.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 5 runs, 1 regressions (pm-5.11-rc8-133-g5352de4c92b3a)
+On Fri, Feb 12, 2021 at 6:29 PM <bugzilla-daemon@bugzilla.kernel.org> wrote:
+>
+> https://bugzilla.kernel.org/show_bug.cgi?id=211305
+>
+> Matt McDonald (gardotd426@gmail.com) changed:
+>
+>            What    |Removed                     |Added
+> ----------------------------------------------------------------------------
+>                  CC|                            |gardotd426@gmail.com
+>
+> --- Comment #6 from Matt McDonald (gardotd426@gmail.com) ---
+> So, the replacement patch from Rafael causes Zen 3 frequency reporting to be
+> ALL jacked up.
+>
+> Before the patch, core frequencies in /proc/cpuinfo as well as using tools like
+> nmon seemed accurate. After testing Rafael's patch, my core frequencies are all
+> up around 6 GHz (!), and even external tools like Geekbench report my 5800X's
+> BASE clock as 6.0 GHz (https://browser.geekbench.com/v5/cpu/6466982)
+>
+> I'm sure this isn't intended behavior.
 
-Regressions Summary
--------------------
+If the reported frequencies are like that all the time, then it isn't.
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+What is there in scaling_cur_freq in sysfs if the system is idle?
 
+> The patch was merged like yesterday into
+> the mainline kernel, so should I file an actual bug report?
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/pm-5.11-=
-rc8-133-g5352de4c92b3a/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: pm-5.11-rc8-133-g5352de4c92b3a
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      5352de4c92b3acb86d4756be6105203619809e07 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6026ac7d49009a73cf3abe76
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pm-5.11-rc8-133-g53=
-52de4c92b3a/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pm-5.11-rc8-133-g53=
-52de4c92b3a/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0208.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/6026ac7d49009a73cf3abe77
-        failing since 176 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+It doesn't particularly matter, because I have seen this comment from you.
