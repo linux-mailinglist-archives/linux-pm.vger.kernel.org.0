@@ -2,156 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2BB31A270
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 17:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDC731A2CC
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Feb 2021 17:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbhBLQPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Feb 2021 11:15:00 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:46375 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbhBLQO7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Feb 2021 11:14:59 -0500
-Received: by mail-oi1-f181.google.com with SMTP id f3so98926oiw.13;
-        Fri, 12 Feb 2021 08:14:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lXNUtlsEhBTv3Qbo5ZsDYSNl4IO2zUHe9HmhCN3Jg7I=;
-        b=Cf0oLZOXRkFG1LpB0GovV7bcZR1+TimOsEErnW7xrjG5NZe5CtOX3RFgv+YXrT0FaR
-         lv4ucuhE2sydTPz8M6jq6uUpKjsik1nqVR7WRHDyYTJCiWqkFuKDgSmalyqRr+G7UmDF
-         dWqYorHN5I8MXqF6vnWQzcWX7viFE9L+dcuvTmWVuJKpDD5VD1zT/WMdTq8ADP/0nT8X
-         /JjbXz3mGQKDLyP5U51jbbEw+C3XJbU75MV4OXgE8hG2WPMgKcZYreT6ujcyx3VasPdR
-         yfVWNBl0h97Kf9ATTIniEkbh9rHM68BK85MmO7XgCvwCicDdxE/xbjIK4p0fosCOGFmP
-         o14Q==
-X-Gm-Message-State: AOAM5321+WcA1jlgw5uV8xpUBUiSsfPsCUUorSm3bu66OZU4JmYkHwQD
-        3RmmbCa/kIe/poGPXZ8VZsTVRnUlNLk1m/SzAeA=
-X-Google-Smtp-Source: ABdhPJydAzUv2dYl07m2W1w3jEZK6q+SCpUnAQh+fGtgPe6wIfXgqozSW4a4KCEMUzSxWlN6CzNsEUMNmxxQ4dDEuMw=
-X-Received: by 2002:aca:3d85:: with SMTP id k127mr47022oia.157.1613146455073;
- Fri, 12 Feb 2021 08:14:15 -0800 (PST)
+        id S230470AbhBLQfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Feb 2021 11:35:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36966 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231307AbhBLQdW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 12 Feb 2021 11:33:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E138F64DB1;
+        Fri, 12 Feb 2021 16:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613147557;
+        bh=u1/9qFb1jcDrE7vnQF9/4iC4Sa1MsRCfL+IXvC69710=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bj9TAl6rU/VSmGsk4jINUW3SBmVXm8I4saZ1pOqYDX2pwqiuktm+7BhosA+XtmQ3T
+         MW+eeJJqlS3Tr07yRiuZvi2CpvGq6cvvhiVq+xKtu/5clbEw8Nx1DaNZJEK4w5exoM
+         NNwsu5HMxi5zzeNjo1H2295SMj2q6FiVtQNEs9mC2MicMCDN+wHT5+lSXir4fQpC9T
+         Ld24ZMWwMXSm51Kb36ttYGe6GAobtE6KB7QE8hCSIRh3ydQLwmz7DjHaiRQtos28hC
+         HtiMUfsaEwahiUNvI0FwgWbY9AR5Tpz0w4clg5GE7TS/EsVUPWqkJOrBsIcWHaCgRq
+         0meT4kgrRmH7A==
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-iio@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-pwm@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Dan Murphy <dmurphy@ti.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v4] MAINTAINERS: move Milo Kim to credits
+Date:   Fri, 12 Feb 2021 17:32:29 +0100
+Message-Id: <20210212163229.68270-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210208030723.781-1-zbestahu@gmail.com>
-In-Reply-To: <20210208030723.781-1-zbestahu@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 12 Feb 2021 17:14:03 +0100
-Message-ID: <CAJZ5v0hmgQp--uhRMZbqZnOvQPy9zLfQx_u=xAewmV=LgT6rPA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: Don't use the limits_changed flag any more
-To:     Yue Hu <zbestahu@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yue Hu <huyue2@yulong.com>, zbestahu@163.com,
-        zhangwen@yulong.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 4:08 AM Yue Hu <zbestahu@gmail.com> wrote:
->
-> From: Yue Hu <huyue2@yulong.com>
->
-> The limits_changed flag was introduced by commit 600f5badb78c
-> ("cpufreq: schedutil: Don't skip freq update when limits change") due
-> to race condition where need_freq_update is cleared in get_next_freq()
-> which causes reducing the CPU frequency is ineffective while busy.
->
-> But now, the race condition above is gone because get_next_freq()
-> doesn't clear the flag any more after commit 23a881852f3e ("cpufreq:
-> schedutil: Don't skip freq update if need_freq_update is set").
->
-> Moreover, need_freq_update currently will be set to true only in
-> sugov_should_update_freq() if CPUFREQ_NEED_UPDATE_LIMITS is not set
-> for the driver. However, limits may have changed at any time.
+Milo Kim's email in TI bounces with permanent error (550: Invalid
+recipient).  Last email from him on LKML was in 2017.  Move Milo Kim to
+credits and remove the separate driver entries for:
+ - TI LP855x backlight driver,
+ - TI LP8727 charger driver,
+ - TI LP8788 MFD (ADC, LEDs, charger and regulator) drivers.
 
-Yes, they may change at any time.
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Jingoo Han <jingoohan1@gmail.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Daniel Thompson <daniel.thompson@linaro.org>
 
-> And subsequent frequence update is depending on need_freq_update.
+---
 
-I'm not following, sorry.
+Dear Lee,
 
-need_freq_update is set in sugov_should_update_freq() when
-limits_changed is cleared and it cannot be modified until
-sugov_update_next_freq() runs on the same CPU.
+Could you take care about this patch?
 
-> So, we may skip this update.
+Best regards,
+Krzysztof
 
-I'm not sure why?
+Changes since v3:
+1. Remove the entries as Dan Murphy won't be mainaining them.
 
-> Hence, let's remove it to avoid above issue and make code more simple.
->
-> Signed-off-by: Yue Hu <huyue2@yulong.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
->
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 41e498b..7dd85fb 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -40,7 +40,6 @@ struct sugov_policy {
->         struct task_struct      *thread;
->         bool                    work_in_progress;
->
-> -       bool                    limits_changed;
->         bool                    need_freq_update;
->  };
->
-> @@ -89,11 +88,8 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
->         if (!cpufreq_this_cpu_can_update(sg_policy->policy))
->                 return false;
->
-> -       if (unlikely(sg_policy->limits_changed)) {
-> -               sg_policy->limits_changed = false;
-> -               sg_policy->need_freq_update = true;
-> +       if (unlikely(sg_policy->need_freq_update))
->                 return true;
-> -       }
->
->         delta_ns = time - sg_policy->last_freq_update_time;
->
-> @@ -323,7 +319,7 @@ static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
->  static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu, struct sugov_policy *sg_policy)
->  {
->         if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_dl)
-> -               sg_policy->limits_changed = true;
-> +               sg_policy->need_freq_update = true;
->  }
->
->  static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> @@ -759,7 +755,6 @@ static int sugov_start(struct cpufreq_policy *policy)
->         sg_policy->last_freq_update_time        = 0;
->         sg_policy->next_freq                    = 0;
->         sg_policy->work_in_progress             = false;
-> -       sg_policy->limits_changed               = false;
->         sg_policy->cached_raw_freq              = 0;
->
->         sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
-> @@ -813,7 +808,7 @@ static void sugov_limits(struct cpufreq_policy *policy)
->                 mutex_unlock(&sg_policy->work_lock);
->         }
->
-> -       sg_policy->limits_changed = true;
-> +       sg_policy->need_freq_update = true;
+Changes since v2:
+1. Fix subject (TP -> TI).
 
-This may be running in parallel with sugov_update_next_freq() on a
-different CPU, so the latter may clear need_freq_update right after it
-has been set here unless I'm overlooking something.
+Changes since v1:
+1. Add Dan Murphy, do not remove the entries.
+---
+ CREDITS     |  3 +++
+ MAINTAINERS | 23 -----------------------
+ 2 files changed, 3 insertions(+), 23 deletions(-)
 
->  }
->
->  struct cpufreq_governor schedutil_gov = {
-> --
-> 1.9.1
->
+diff --git a/CREDITS b/CREDITS
+index be097156bd71..71552790774d 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -1933,6 +1933,9 @@ N: Kukjin Kim
+ E: kgene@kernel.org
+ D: Samsung S3C, S5P and Exynos ARM architectures
+ 
++N: Milo Kim
++D: TI LP855x, LP8727 and LP8788 drivers
++
+ N: Sangbeom Kim
+ E: sbkim73@samsung.com
+ D: Samsung SoC Audio (ASoC) drivers
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 00bca3e220cc..3478082debd1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17880,29 +17880,6 @@ S:	Maintained
+ F:	sound/soc/codecs/isabelle*
+ F:	sound/soc/codecs/lm49453*
+ 
+-TI LP855x BACKLIGHT DRIVER
+-M:	Milo Kim <milo.kim@ti.com>
+-S:	Maintained
+-F:	Documentation/driver-api/backlight/lp855x-driver.rst
+-F:	drivers/video/backlight/lp855x_bl.c
+-F:	include/linux/platform_data/lp855x.h
+-
+-TI LP8727 CHARGER DRIVER
+-M:	Milo Kim <milo.kim@ti.com>
+-S:	Maintained
+-F:	drivers/power/supply/lp8727_charger.c
+-F:	include/linux/platform_data/lp8727.h
+-
+-TI LP8788 MFD DRIVER
+-M:	Milo Kim <milo.kim@ti.com>
+-S:	Maintained
+-F:	drivers/iio/adc/lp8788_adc.c
+-F:	drivers/leds/leds-lp8788.c
+-F:	drivers/mfd/lp8788*.c
+-F:	drivers/power/supply/lp8788-charger.c
+-F:	drivers/regulator/lp8788-*.c
+-F:	include/linux/mfd/lp8788*.h
+-
+ TI NETCP ETHERNET DRIVER
+ M:	Wingman Kwok <w-kwok2@ti.com>
+ M:	Murali Karicheri <m-karicheri2@ti.com>
+-- 
+2.25.1
+
