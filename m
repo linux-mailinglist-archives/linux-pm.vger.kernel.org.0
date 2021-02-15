@@ -2,114 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A3A31B607
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 09:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644A431B74B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 11:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbhBOIxb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Feb 2021 03:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbhBOIxZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Feb 2021 03:53:25 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B2BC0613D6
-        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 00:52:44 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id r5so2255472wmp.1
-        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 00:52:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uKS+Djquue+LfyedBxvXt9cVVOP7cKVsEq1hWOM8/vw=;
-        b=jYg060gKSWt358ST2fmYuHV8DpNAJXRWYerutXv0eEjyiL0Ka3jDeQN/sNUhvqs48Q
-         SQEoWnwFYESI3wDaZz0v6kdy0uPVCiVl82s3GL9DzLanLKcsVP73Wh/8F2ElY3WoViot
-         4aeCUbwU0W+2oVJvubEalXgmO/cHQClK1LMvwWj3no/Qi3NsH7bpbENxklgVWyURjdP+
-         Ro2Ev5GbeRvvTi6B1Hadu80eZtbsfJROWzReZCUPa+Qd84TzKgbdK1n5DqxWC2/TUMYt
-         2SHUgMcJKUSSq941TgCzCLepCZ7eP9UGBKuW8rJrYDh0c1kbNyPn/CYmofg6R70jAPEY
-         BKpw==
+        id S229907AbhBOKi7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Feb 2021 05:38:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:53803 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229933AbhBOKi6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Feb 2021 05:38:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613385450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qc6c5uDkuHKyGcgNcwsQu/75zJZpP0qScLTmIXfkA7E=;
+        b=RfCAeL2I6kvHgRaxl0FQAA1fBRwR/J14GmbmYxtRw/GpJJKm/a1Vug3XTGmZeHQz1c9a1h
+        X6eH949rMENuesB9NECJAD3IaCxBWDVhUCQ3D74EiyaNLC9nEw43Rpo4fhFvRLqaPnltsy
+        rGc033Za0Sc2u+kc9LsxJ+HxEcaxSxs=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-98-b-aRHbBlP8WmdAy939_Fow-1; Mon, 15 Feb 2021 05:37:29 -0500
+X-MC-Unique: b-aRHbBlP8WmdAy939_Fow-1
+Received: by mail-ej1-f71.google.com with SMTP id m4so4081203ejc.14
+        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 02:37:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uKS+Djquue+LfyedBxvXt9cVVOP7cKVsEq1hWOM8/vw=;
-        b=NDkQ56+isFmgVWWlHD9O/zQ3xoXSBUBH8vr8M+R1IbPkx5ngGlzj0FWxixVkq9ioqp
-         gCGSmpvHMmS7grxH0hwjO1qk7Hb39/Ka19YKwYEH0LUMoVA+Ac2q8phHllzyUb0iy99E
-         NSkL7cizEgqPI4YJ6d8Hodgo9eoMQeA0uxvUG19YfpYc4rn34p5imXDfZQ7quV4BHZKS
-         ZllhXcnL8vLYUUUpWGqZda81CmtHkGAygpkZCkJTUWyBjf3a0jONvFfp84BJZC9QLXR8
-         9RLo1209n8N/IFNO3tRVAT6xiMaZ1QDtfiHHWNTB9AkdmjpcQ/S5jOqfNFsECcG8msRO
-         Czog==
-X-Gm-Message-State: AOAM531D8yAS4+E+Y4JefY9c6qWBnufOukBYXJSszQiKxML3Z5ReBshG
-        qm7Cg022Yq4KVjFrFlIfXoaLBg==
-X-Google-Smtp-Source: ABdhPJyBhnjYaHKKbEfnlUU0rpoWpGgWVScJOAenfp2X7EhRm7SH+e1L0eehd3cBdyFbEZGBA2K05w==
-X-Received: by 2002:a05:600c:1991:: with SMTP id t17mr8399158wmq.118.1613379163409;
-        Mon, 15 Feb 2021 00:52:43 -0800 (PST)
-Received: from dell ([91.110.221.146])
-        by smtp.gmail.com with ESMTPSA id a84sm24586107wme.12.2021.02.15.00.52.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Feb 2021 00:52:43 -0800 (PST)
-Date:   Mon, 15 Feb 2021 08:52:41 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Dan Murphy <dmurphy@ti.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v4] MAINTAINERS: move Milo Kim to credits
-Message-ID: <20210215085241.GG179940@dell>
-References: <20210212163229.68270-1-krzk@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Qc6c5uDkuHKyGcgNcwsQu/75zJZpP0qScLTmIXfkA7E=;
+        b=JALUvejHKf0kPgIr2aVh2xUTMvghNB+COCgpJWvQOnE/v0TtYuKmKn/jMgvnqJTx03
+         H9NaFitOWAvKvgYuCf684ZszSI+LXJ5aHWCIr0PrdzduUmqW0cnIHE2iQpyH0yvCBrud
+         qEfBzXyFo+qSjDUl4AvtwfZssCgJVRWj1DFdDDySpRtjpST+9Bm1rVf8+Nr2XZDnZOjh
+         BaBY0teoLyBwU6cvwQ/2/TMAOd0AAjfL9frurd9J4Pl4s2cVjC/xXOl1oJXPaHt40C2/
+         IluT1BFBWxPfUWDIhKTdgHJa4Xr8vNjgkl5UURAvaSKCVybGmvnU9p7oooZDrYB69zpx
+         T1uw==
+X-Gm-Message-State: AOAM533rp6PqRd9sWN+vie7pa3ztW4nKR1s4KlmV5zkFsX5QVGBDjPe2
+        M5wAn7RbqvjgJKHF+w0dO3uwRdAmZ0mcnrEQhLDoCjSIzGi8rZI4hKanI81DWmDtorvAJo9Z0Ig
+        WHUEMJuJ8RC36g+wlcHo=
+X-Received: by 2002:a17:906:4c85:: with SMTP id q5mr14729128eju.375.1613385448066;
+        Mon, 15 Feb 2021 02:37:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz48iDFT6icNz/G5V8W+1Gbn7S+71yinDSb0pE+yIHXEoPgTdlObwbV19LXrzwB8QNHY2LTFQ==
+X-Received: by 2002:a17:906:4c85:: with SMTP id q5mr14729106eju.375.1613385447894;
+        Mon, 15 Feb 2021 02:37:27 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id o4sm9693499edw.78.2021.02.15.02.37.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Feb 2021 02:37:27 -0800 (PST)
+Subject: Re: [RFC PATCH 1/7] drivers: base: Add resource managed version of
+ delayed work init
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "wens@csie.org" <wens@csie.org>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "cw00.choi@samsung.com" <cw00.choi@samsung.com>
+References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+ <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+ <2fb4b305-a93f-f91e-3001-dab5057e39cc@redhat.com>
+ <084893a3-0071-13e9-5ce6-b7b027e6cd2a@roeck-us.net>
+ <16140f5b-c504-1c07-9f0c-3813d686d157@redhat.com>
+ <74ec29cb5780e93cca3d4cdec221c65e764c8a3e.camel@fi.rohmeurope.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <400d3e82-a76e-136c-0e03-ed7e40608e2a@redhat.com>
+Date:   Mon, 15 Feb 2021 11:37:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
+In-Reply-To: <74ec29cb5780e93cca3d4cdec221c65e764c8a3e.camel@fi.rohmeurope.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210212163229.68270-1-krzk@kernel.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 12 Feb 2021, Krzysztof Kozlowski wrote:
+Hi,
 
-> Milo Kim's email in TI bounces with permanent error (550: Invalid
-> recipient).  Last email from him on LKML was in 2017.  Move Milo Kim to
-> credits and remove the separate driver entries for:
->  - TI LP855x backlight driver,
->  - TI LP8727 charger driver,
->  - TI LP8788 MFD (ADC, LEDs, charger and regulator) drivers.
+On 2/15/21 8:22 AM, Vaittinen, Matti wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> On Sat, 2021-02-13 at 16:59 +0100, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 2/13/21 4:27 PM, Guenter Roeck wrote:
+>>> On 2/13/21 7:03 AM, Hans de Goede wrote:
+>>> [ ... ]
+>>>> I think something like this should work:
+>>>>
+>>>> static int devm_delayed_work_autocancel(struct device *dev,
+>>>> struct delayed_work *w,
+>>>> 					void (*worker)(struct
+>>>> work_struct *work)) {
+>>>> 	INIT_DELAYED_WORK(w, worker);
+>>>> 	return devm_add_action(dev, (void (*action)(void
+>>>> *))cancel_delayed_work_sync, w);
+>>>> }
+>>>>
+>>>> I'm not sure about the cast, that may need something like this
+>>>> instead:
+>>>>
+>>>> typedef void (*devm_action_func)(void *);
+>>>>
+>>>> static int devm_delayed_work_autocancel(struct device *dev,
+>>>> struct delayed_work *w,
+>>>> 					void (*worker)(struct
+>>>> work_struct *work)) {
+>>>> 	INIT_DELAYED_WORK(w, worker);
+>>>> 	return devm_add_action(dev,
+>>>> (devm_action_func)cancel_delayed_work_sync, w);
+>>>
+>>> Unfortunately, you can not type cast function pointers in C. It is
+>>> against the C ABI.
+>>> I am sure it is done in a few places in the kernel anyway, but
+>>> those are wrong.
+>>
+>> I see, bummer.
 > 
-> ---
-> 
-> Dear Lee,
-> 
-> Could you take care about this patch?
+> I think using devm_add_action() is still a good idea.
 
-Yes, but I'll be sending out my pull-request for v5.12 in the next
-couple of days (maybe even today if I can find some time), so this
-will have to wait until v5.13.
+Yes, we could also just have a 1 line static inline function to do
+the function-cast. Like this:
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+static inline void devm_delayed_work_autocancel_func(void *work)
+{
+	cancel_delayed_work_sync(work);
+}
+
+static inline int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w, void (*worker)(struct work_struct *work))
+{
+	INIT_DELAYED_WORK(w, worker);
+	return devm_add_action(dev, devm_delayed_work_autocancel_func, w);
+}
+
+Both functions will then simply be compiled out in files which do not
+use them.
+
+>> If we add a devm_clk_prepare_enable() helper that should probably be
+>> added
+>> to drivers/clk/clk-devres.c and not to drivers/base/devres.c .
+>>
+>> I also still wonder if we cannot find a better place for this new
+>> devm_delayed_work_autocancel() helper but nothing comes to mind.
+> 
+> I don't like the idea of including device.h from workqueue.h - and I
+> think this would be necessary if we added
+> devm_delayed_work_autocancel() as inline in workqueue.h, right?
+
+Yes.
+
+> I also see strong objection towards the devm managed clean-ups.
+
+Yes it seems that there are some people who don't like this, where as
+others do like them.
+
+> How about adding some devm-helpers.c in drivers/base - where we could
+> collect devm-based helpers - and which could be enabled by own CONFIG -
+> and left out by those who dislike it?
+
+I would make this something configurable through Kconfig, but if
+go the static inline route, which I'm in favor of then we could just
+have a:
+
+include/linux/devm-cleanup-helpers.h
+
+And put everything (including kdoc texts) there.
+
+This way the functionality is 100% opt-in (by explicitly including
+the header if you want the helpers) which hopefully makes this a
+bit more acceptable to people who don't like this style of cleanups.
+
+I would be even happy to act as the upstream maintainer for such a
+include/linux/devm-cleanup-helpers.h file, I can maintain it as part
+of the platform-drivers-x86 tree (with its own MAINTAINERS entry).
+
+Greg, would this be an acceptable solution to you ?
+
+Regards,
+
+Hans
+
