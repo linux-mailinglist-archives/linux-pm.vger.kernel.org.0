@@ -2,137 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBDB31BBF4
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 16:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0CC31BC0D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 16:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbhBOPLu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Feb 2021 10:11:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41138 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230011AbhBOPKM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Feb 2021 10:10:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4FC4564E40
-        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 15:09:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613401770;
-        bh=R+Mg0mj3Fm3npgYidz9CygM+EdZZaouETFTiMHtluq8=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=MoMXrgQLYbd7bdH1sw6iRjvwRhFNyVmyGh/kjUsCjl5ku9C7gENdjO3o2hztLZQTj
-         GOa9PQgLmOeRvEluQrtnHevG+ZdqbH9SV5rjFuWVVw0hx0G/nuoLgCsadkKXC4/4fO
-         hPSgQ/VRykE9IYkKhCJ0isluqDS2l1c9VRbxsLfst8unmlqA8Rv8uXb6iIgDthI84n
-         l4ETZEPZTp3uOygCyyDayOW8WJZuOZBoXBXwC9mxRUdqNW2pa1pT7eiRD/nUP0xRYn
-         mm4VHOg7RhlkEy79XB1gGNQlstzGWRUOg4Z8M4/WkAp4Ysq6YmxScjxZcTQ05OEfo4
-         gfYiX6YwrKkKA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 3A31660249; Mon, 15 Feb 2021 15:09:30 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 211305] schedutil selects low P-States on AMD EPYC with
- frequency invariance
-Date:   Mon, 15 Feb 2021 15:09:29 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gardotd426@gmail.com
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-211305-137361-G1GnIh19eR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-211305-137361@https.bugzilla.kernel.org/>
-References: <bug-211305-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S230313AbhBOPP2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Feb 2021 10:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230235AbhBOPO4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Feb 2021 10:14:56 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A1AC061788
+        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 07:14:10 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed60:c5d6:9422:c618:ee58])
+        by albert.telenet-ops.be with bizsmtp
+        id VTE8240042PLE0706TE84E; Mon, 15 Feb 2021 16:14:09 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lBfZf-0079Q4-IO; Mon, 15 Feb 2021 16:14:07 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lBfZe-00AhgE-RK; Mon, 15 Feb 2021 16:14:06 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] staging: board: Fix uninitialized spinlock when attaching genpd
+Date:   Mon, 15 Feb 2021 16:14:05 +0100
+Message-Id: <20210215151405.2551143-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D211305
+On Armadillo-800-EVA with CONFIG_DEBUG_SPINLOCK=y:
 
---- Comment #17 from Matt McDonald (gardotd426@gmail.com) ---
-That does seem to have fixed it:
+    BUG: spinlock bad magic on CPU#0, swapper/1
+     lock: lcdc0_device+0x10c/0x308, .magic: 00000000, .owner: <none>/-1, .owner_cpu: 0
+    CPU: 0 PID: 1 Comm: swapper Not tainted 5.11.0-rc5-armadillo-00036-gbbca04be7a80-dirty #287
+    Hardware name: Generic R8A7740 (Flattened Device Tree)
+    [<c010c3c8>] (unwind_backtrace) from [<c010a49c>] (show_stack+0x10/0x14)
+    [<c010a49c>] (show_stack) from [<c0159534>] (do_raw_spin_lock+0x20/0x94)
+    [<c0159534>] (do_raw_spin_lock) from [<c040858c>] (dev_pm_get_subsys_data+0x8c/0x11c)
+    [<c040858c>] (dev_pm_get_subsys_data) from [<c05fbcac>] (genpd_add_device+0x78/0x2b8)
+    [<c05fbcac>] (genpd_add_device) from [<c0412db4>] (of_genpd_add_device+0x34/0x4c)
+    [<c0412db4>] (of_genpd_add_device) from [<c0a1ea74>] (board_staging_register_device+0x11c/0x148)
+    [<c0a1ea74>] (board_staging_register_device) from [<c0a1eac4>] (board_staging_register_devices+0x24/0x28)
 
-cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
-4854354
-3823787
-3647266
-4016171
-3576030
-3974600
-3816628
-3590646
-3919312
-3626692
-3618178
-3597246
-4367040
-3599805
-3837612
-3874146
+of_genpd_add_device() is called before platform_device_register(), as it
+needs to attach the genpd before the device is probed.  But the spinlock
+is only initialized when the device is registered.
 
-cat /proc/cpuinfo | grep MHz
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 4193.751
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
-cpu MHz         : 3800.000
+Fix this by open-coding the spinlock initialization, cfr.
+device_pm_init_common() in the internal drivers/base code, and in the
+SuperH early platform code.
 
-sudo cpupower frequency-info
-[sudo] password for matt:
-analyzing CPU 0:
-  driver: acpi-cpufreq
-  CPUs which run at the same hardware frequency: 0
-  CPUs which need to have their frequency coordinated by software: 0
-  maximum transition latency:  Cannot determine or is not supported.
-  hardware limits: 2.20 GHz - 6.00 GHz
-  available frequency steps:  3.80 GHz, 2.80 GHz, 2.20 GHz
-  available cpufreq governors: performance schedutil
-  current policy: frequency should be within 2.20 GHz and 3.80 GHz.
-                  The governor "performance" may decide which speed to use
-                  within this range.
-  current CPU frequency: 3.80 GHz (asserted by call to hardware)
-  boost state support:
-    Supported: yes
-    Active: no
-    Boost States: 0
-    Total States: 3
-    Pstate-P0:  1000MHz
-    Pstate-P1:  700MHz
-    Pstate-P2:  500MHz
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Exposed by fw_devlinks changing probe order.
+Masked before due to an unrelated wait context check failure, which
+disabled any further spinlock checks.
+https://lore.kernel.org/linux-acpi/CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com
+---
+ drivers/staging/board/board.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/staging/board/board.c b/drivers/staging/board/board.c
+index cb6feb34dd401ae3..604612937f038e92 100644
+--- a/drivers/staging/board/board.c
++++ b/drivers/staging/board/board.c
+@@ -136,6 +136,7 @@ int __init board_staging_register_clock(const struct board_staging_clk *bsc)
+ static int board_staging_add_dev_domain(struct platform_device *pdev,
+ 					const char *domain)
+ {
++	struct device *dev = &pdev->dev;
+ 	struct of_phandle_args pd_args;
+ 	struct device_node *np;
+ 
+@@ -148,7 +149,11 @@ static int board_staging_add_dev_domain(struct platform_device *pdev,
+ 	pd_args.np = np;
+ 	pd_args.args_count = 0;
+ 
+-	return of_genpd_add_device(&pd_args, &pdev->dev);
++	/* Cfr. device_pm_init_common() */
++	spin_lock_init(&dev->power.lock);
++	dev->power.early_init = true;
++
++	return of_genpd_add_device(&pd_args, dev);
+ }
+ #else
+ static inline int board_staging_add_dev_domain(struct platform_device *pdev,
+-- 
+2.25.1
 
-Everything is back to how it should be, only now with assumingly better
-schedutil performance (I'll run some benchmarks later). No 6.0GHz reporting=
- and
-no being stuck at 2.20GHz. CPU performance under the "performance" governor=
- is
-back to where it should be, and I'm boosting up to 4.9-5.0 in single core a=
-nd
-4.8 all-core.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
