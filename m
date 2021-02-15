@@ -2,131 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4E031B7E7
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 12:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E7631B822
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 12:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbhBOLUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Feb 2021 06:20:32 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:39330 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhBOLUZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Feb 2021 06:20:25 -0500
-Received: by mail-oi1-f173.google.com with SMTP id l19so7380179oih.6;
-        Mon, 15 Feb 2021 03:20:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g+2l6KM1UP6n61yvg+ftleSaZOAPmTS96UBlT5bgVOw=;
-        b=EQX1VzOfpryADedahZgHDQ/na8KZ5NFdG8eGPrKMAjbAhkaibs/wx9FsgtbVTBrjh/
-         jFTxZYUORcw23zr8hRa6LVJBq9CRTVWOM2tQbcF3Oifqy9bPEfIOBLJKoLRpOz77xcad
-         YQ3PsgccOH96XkLEE3u8qvVEQum1CEeiq5VjZbxrS0eRdjQnz0ROIgptVGECQNHkGjHn
-         Kqw/PshVAswVrq0dktl3YuDwOARSvR9BAjoKR9r80tt74Ey9oEgJnQBf/hPspsPXFARM
-         GDYahSsuWANpZdTBuTDFLBwz24kO4g6Cdvv6tJHUnuM7UD9oXeRNb4XzPGrsDskAiNJA
-         0lLA==
-X-Gm-Message-State: AOAM5326cj/POgmd+sUbJmRp7UgbMeJFeqIosFN1FEAlLqLXZ5QXuWyB
-        3xGF4LAvNl1kxNBIZ9tFWzTmTkGaWBmuNdcJKOg=
-X-Google-Smtp-Source: ABdhPJzMI39m+KunbmWjRc0zXWvqEeHuECgd3ZsHjx+5rhHkVKdfXJ1QGr9mXD/zemLpBd0PNc0mqgI1Ax9YA4EUGXE=
-X-Received: by 2002:aca:d8c6:: with SMTP id p189mr8141707oig.54.1613387983592;
- Mon, 15 Feb 2021 03:19:43 -0800 (PST)
+        id S229916AbhBOLjR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Feb 2021 06:39:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55574 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229802AbhBOLjO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Feb 2021 06:39:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 169C464DE0;
+        Mon, 15 Feb 2021 11:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1613389113;
+        bh=jmmj+Sj/0CdSrHbS95/UtmVOin2tjnR3EAmcJtWDvMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2mO/lP34yJ55Ulq4sZSmsz3l1aChIoTWHld0y66VyK36nAWf6SFBD7HyBx/0HmFtr
+         3WPGf0rnBuGU9wj6EpgaU/xiNaTYHmLE0B81mhLF8f4sNVZRBeKtdzT1K1mrazfANZ
+         mN1bdJ4CVBm6IP5IMcNX6DrMvbOU4K6FnTHsKAhU=
+Date:   Mon, 15 Feb 2021 12:31:22 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "wens@csie.org" <wens@csie.org>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "cw00.choi@samsung.com" <cw00.choi@samsung.com>
+Subject: Re: [RFC PATCH 1/7] drivers: base: Add resource managed version of
+ delayed work init
+Message-ID: <YCpbit8W3xsvb37Q@kroah.com>
+References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+ <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+ <2fb4b305-a93f-f91e-3001-dab5057e39cc@redhat.com>
+ <084893a3-0071-13e9-5ce6-b7b027e6cd2a@roeck-us.net>
+ <16140f5b-c504-1c07-9f0c-3813d686d157@redhat.com>
+ <74ec29cb5780e93cca3d4cdec221c65e764c8a3e.camel@fi.rohmeurope.com>
+ <400d3e82-a76e-136c-0e03-ed7e40608e2a@redhat.com>
 MIME-Version: 1.0
-References: <20210205222644.2357303-1-saravanak@google.com> <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
-In-Reply-To: <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 15 Feb 2021 12:19:32 +0100
-Message-ID: <CAMuHMdUi-_LJBB7fYB9ugpcj0J+FWXrqn2u44n7MemmvwiWQWw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <400d3e82-a76e-136c-0e03-ed7e40608e2a@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 2:00 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Fri, Feb 5, 2021 at 11:26 PM Saravana Kannan <saravanak@google.com> wrote:
-> > There are a lot of devices/drivers where they never have a struct device
-> > created for them or the driver initializes the hardware without ever
-> > binding to the struct device.
-> >
-> > This series is intended to avoid any boot regressions due to such
-> > devices/drivers when fw_devlink=on and also address the handling of
-> > optional suppliers.
+On Mon, Feb 15, 2021 at 11:37:26AM +0100, Hans de Goede wrote:
+> Hi,
+> 
+> On 2/15/21 8:22 AM, Vaittinen, Matti wrote:
+> > 
+> > On Sat, 2021-02-13 at 16:59 +0100, Hans de Goede wrote:
+> >> Hi,
+> >>
+> >> On 2/13/21 4:27 PM, Guenter Roeck wrote:
+> >>> On 2/13/21 7:03 AM, Hans de Goede wrote:
+> >>> [ ... ]
+> >>>> I think something like this should work:
+> >>>>
+> >>>> static int devm_delayed_work_autocancel(struct device *dev,
+> >>>> struct delayed_work *w,
+> >>>> 					void (*worker)(struct
+> >>>> work_struct *work)) {
+> >>>> 	INIT_DELAYED_WORK(w, worker);
+> >>>> 	return devm_add_action(dev, (void (*action)(void
+> >>>> *))cancel_delayed_work_sync, w);
+> >>>> }
+> >>>>
+> >>>> I'm not sure about the cast, that may need something like this
+> >>>> instead:
+> >>>>
+> >>>> typedef void (*devm_action_func)(void *);
+> >>>>
+> >>>> static int devm_delayed_work_autocancel(struct device *dev,
+> >>>> struct delayed_work *w,
+> >>>> 					void (*worker)(struct
+> >>>> work_struct *work)) {
+> >>>> 	INIT_DELAYED_WORK(w, worker);
+> >>>> 	return devm_add_action(dev,
+> >>>> (devm_action_func)cancel_delayed_work_sync, w);
+> >>>
+> >>> Unfortunately, you can not type cast function pointers in C. It is
+> >>> against the C ABI.
+> >>> I am sure it is done in a few places in the kernel anyway, but
+> >>> those are wrong.
+> >>
+> >> I see, bummer.
+> > 
+> > I think using devm_add_action() is still a good idea.
+> 
+> Yes, we could also just have a 1 line static inline function to do
+> the function-cast. Like this:
+> 
+> static inline void devm_delayed_work_autocancel_func(void *work)
+> {
+> 	cancel_delayed_work_sync(work);
+> }
+> 
+> static inline int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w, void (*worker)(struct work_struct *work))
+> {
+> 	INIT_DELAYED_WORK(w, worker);
+> 	return devm_add_action(dev, devm_delayed_work_autocancel_func, w);
+> }
+> 
+> Both functions will then simply be compiled out in files which do not
+> use them.
+> 
+> >> If we add a devm_clk_prepare_enable() helper that should probably be
+> >> added
+> >> to drivers/clk/clk-devres.c and not to drivers/base/devres.c .
+> >>
+> >> I also still wonder if we cannot find a better place for this new
+> >> devm_delayed_work_autocancel() helper but nothing comes to mind.
+> > 
+> > I don't like the idea of including device.h from workqueue.h - and I
+> > think this would be necessary if we added
+> > devm_delayed_work_autocancel() as inline in workqueue.h, right?
+> 
+> Yes.
+> 
+> > I also see strong objection towards the devm managed clean-ups.
+> 
+> Yes it seems that there are some people who don't like this, where as
+> others do like them.
+> 
+> > How about adding some devm-helpers.c in drivers/base - where we could
+> > collect devm-based helpers - and which could be enabled by own CONFIG -
+> > and left out by those who dislike it?
+> 
+> I would make this something configurable through Kconfig, but if
+> go the static inline route, which I'm in favor of then we could just
+> have a:
+> 
+> include/linux/devm-cleanup-helpers.h
+> 
+> And put everything (including kdoc texts) there.
+> 
+> This way the functionality is 100% opt-in (by explicitly including
+> the header if you want the helpers) which hopefully makes this a
+> bit more acceptable to people who don't like this style of cleanups.
+> 
+> I would be even happy to act as the upstream maintainer for such a
+> include/linux/devm-cleanup-helpers.h file, I can maintain it as part
+> of the platform-drivers-x86 tree (with its own MAINTAINERS entry).
+> 
+> Greg, would this be an acceptable solution to you ?
 
->       - Some devices are reprobed, despite their drivers returning
->         a real error code, and not -EPROBE_DEFER:
->
->             renesas_wdt e6020000.watchdog: Watchdog blacklisted on r8a7791 ES1.*
->             (rwdt_probe() returns -ENODEV)
->
->             sh-pfc e6060000.pinctrl: pin GP_7_23 already requested by
-> ee090000.pci; cannot claim for e6590000.usb
->             sh-pfc e6060000.pinctrl: pin-247 (e6590000.usb) status -22
->             sh-pfc e6060000.pinctrl: could not request pin 247
-> (GP_7_23) from group usb0  on device sh-pfc
->             renesas_usbhs e6590000.usb: Error applying setting,
-> reverse things back
->             renesas_usbhs: probe of e6590000.usb failed with error -22
->
->             rcar-pcie fe000000.pcie: host bridge /soc/pcie@fe000000 ranges:
->             rcar-pcie fe000000.pcie:       IO
-> 0x00fe100000..0x00fe1fffff -> 0x0000000000
->             rcar-pcie fe000000.pcie:      MEM
-> 0x00fe200000..0x00fe3fffff -> 0x00fe200000
->             rcar-pcie fe000000.pcie:      MEM
-> 0x0030000000..0x0037ffffff -> 0x0030000000
->             rcar-pcie fe000000.pcie:      MEM
-> 0x0038000000..0x003fffffff -> 0x0038000000
->             rcar-pcie fe000000.pcie:   IB MEM
-> 0x0040000000..0x00bfffffff -> 0x0040000000
->             rcar-pcie fe000000.pcie:   IB MEM
-> 0x0200000000..0x02ffffffff -> 0x0200000000
->             rcar-pcie fe000000.pcie: PCIe link down
->             (rcar_pcie_probe() returns -ENODEV)
->
->             xhci-hcd ee000000.usb: xHCI Host Controller
->             xhci-hcd ee000000.usb: new USB bus registered, assigned bus number 7
->             xhci-hcd ee000000.usb: Direct firmware load for
-> r8a779x_usb3_v3.dlmem failed with error -2
->             xhci-hcd ee000000.usb: can't setup: -2
->             xhci-hcd ee000000.usb: USB bus 7 deregistered
->             xhci-hcd: probe of ee000000.usb failed with error -2
+I don't know, sorry, let's revisit this after 5.12-rc1 is out, with a
+patch set that I can review again, and we can go from there as I can't
+do anything until then...
 
-Consumers are added to the deferred probe pending list before
-they are probed, but not removed on probe failure.
-Patch sent
-"[PATCH] driver core: Fix double failed probing with fw_devlink=on"
-https://lore.kernel.org/linux-renesas-soc/20210215111619.2385030-1-geert+renesas@glider.be/
+thanks,
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h
