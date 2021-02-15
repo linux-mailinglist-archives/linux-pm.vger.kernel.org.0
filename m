@@ -2,131 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0726131BAED
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 15:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCC831BB58
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Feb 2021 15:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbhBOOXC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Feb 2021 09:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbhBOOXA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Feb 2021 09:23:00 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D523C061786
-        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 06:22:20 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id r21so9084077wrr.9
-        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 06:22:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=cNvVdIdxlGj+Sfuamem72Qeix0oXAhgklbIFT61Vzrw=;
-        b=bmcYji8KmCDbksc8hp2MPVH5eDhkXRgtiRRfCRq6DoX2SEzAHyOlzQ8MimKicYZ9xC
-         7T87ysTFuAlWQw/+jY0Gid3ydZ+2hT460y3G8h1X2uC2a78MZckm5G4Noz+gW+rkep05
-         lVKA9dNP2HfcTsfjRTtZvbrLf5wmJAOZE4k+2Dh5baeQhavOwAiNWxaC6o6QaM9+8zP/
-         54JW0GJMfUMwO2nQg8Py25NO45SApbJ8njSeJ1SDZgXnhEmwi6VtSn2qwARAwFplSZgV
-         KZrsU//AhVGco7TlybPeYe9+BZSj0rvHalZIUlQ4kyX3keUE81D19FNWvFN39+PVh+bZ
-         YcFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cNvVdIdxlGj+Sfuamem72Qeix0oXAhgklbIFT61Vzrw=;
-        b=BlZBLcOLkeGy5KRa0FiNLqjAHzVN24zSPXijQIN6ANK2Fz9hnOdSX9gmui9DhwTJPo
-         ssT2/Sngw5D7t8AWgSg0W65Ey7Smq5k7i8WD0sNWhB7ltw/xeoxZclEsgTtutWbv6bL8
-         PIdxZV0i+V7jUIQgCHBrXgUYCaXaeNwaVn1K6KJQF92UCeH7x6r1TiQpNk2vv1O6qPav
-         RID8GpwutsJbPB7pWAF4+Ac/tC/GfCJ2oyS6xQVHeLottjvwq0Gd9dva2anbqIVTelbD
-         zZX36GGHlWQ5GxjJaqQ7sVYojVgSn+CI+bu9PJken+A06JOrQ0nADNklTVQ0IoM8ytA6
-         TFAg==
-X-Gm-Message-State: AOAM531aNrmh0jg9lZFe+1C8P11ze4TC4NYuE+ZjLcWQGu28Kc3NfSTC
-        KoA39sENn9+XRv7PEIhap8Q11w==
-X-Google-Smtp-Source: ABdhPJyvLoPzpqgceTkmdirn2jBoo7kyNUoI9xyniMGSW3yxHYUlh/mGG05y681DGTzNHzaIx7MD9w==
-X-Received: by 2002:adf:fc4c:: with SMTP id e12mr19808318wrs.106.1613398938553;
-        Mon, 15 Feb 2021 06:22:18 -0800 (PST)
-Received: from dell ([91.110.221.146])
-        by smtp.gmail.com with ESMTPSA id f14sm17218090wmg.28.2021.02.15.06.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Feb 2021 06:22:18 -0800 (PST)
-Date:   Mon, 15 Feb 2021 14:22:16 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, linux-pwm@vger.kernel.org,
-        linux-fbdev <linux-fbdev@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-iio@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>, Pavel Machek <pavel@ucw.cz>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v4] MAINTAINERS: move Milo Kim to credits
-Message-ID: <20210215142216.GA4770@dell>
-References: <20210212163229.68270-1-krzk@kernel.org>
- <20210215085241.GG179940@dell>
- <CACvgo53wn84G8wuyF++=bwtjnVzVB31BA2_JBWnihnwinSFD7A@mail.gmail.com>
+        id S229802AbhBOOoi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Feb 2021 09:44:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229670AbhBOOoh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Feb 2021 09:44:37 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 2C13761606
+        for <linux-pm@vger.kernel.org>; Mon, 15 Feb 2021 14:43:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613400237;
+        bh=b3E5qHSvbs2XeqD+stpnE23BMwS/SEBzM7Bmz/Y1CGk=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=QUH1DfAaMRmBpGKY/qgw7/JHbLq5wabs8/wqffyBeRsYqtv+pXDgp8FmP+bUid4JG
+         oaG0vKPrf+M7DvgQDVA/oYIk2pcshVydEvxgqyvHPXqTDDk5SKEzi3d/ho4ZFxIn7q
+         0C1UZykSuOM7vyY+fQxVqtVQlGY3x00BeEEPQY7qAEokx2Xx9e8/mOIsNzbC2y/P4G
+         MINkrkxXAh8++xm2L0mLoXm6yjHqELxru9wVmi9IBCe6kf2+jYd3p/xQjxWu0EhJig
+         ZMjALHMUp5LrgTlHRo5sD18KNIqaLLzzkUy59BZyCO2qsLfqatU4IJunVPdoQgRcoZ
+         jasB0FLEHVZYg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 1E18360249; Mon, 15 Feb 2021 14:43:57 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 211305] schedutil selects low P-States on AMD EPYC with
+ frequency invariance
+Date:   Mon, 15 Feb 2021 14:43:56 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: rjw@rjwysocki.net
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.isobsolete attachments.created
+Message-ID: <bug-211305-137361-LYnqs6oL4o@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-211305-137361@https.bugzilla.kernel.org/>
+References: <bug-211305-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACvgo53wn84G8wuyF++=bwtjnVzVB31BA2_JBWnihnwinSFD7A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 15 Feb 2021, Emil Velikov wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D211305
 
-> Greetings everyone,
-> 
-> On Mon, 15 Feb 2021 at 08:52, Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > On Fri, 12 Feb 2021, Krzysztof Kozlowski wrote:
-> >
-> > > Milo Kim's email in TI bounces with permanent error (550: Invalid
-> > > recipient).  Last email from him on LKML was in 2017.  Move Milo Kim to
-> > > credits and remove the separate driver entries for:
-> > >  - TI LP855x backlight driver,
-> > >  - TI LP8727 charger driver,
-> > >  - TI LP8788 MFD (ADC, LEDs, charger and regulator) drivers.
-> > >
-> > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > Cc: Mark Brown <broonie@kernel.org>
-> > > Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > Cc: Jingoo Han <jingoohan1@gmail.com>
-> > > Cc: Lee Jones <lee.jones@linaro.org>
-> > > Cc: Pavel Machek <pavel@ucw.cz>
-> > > Cc: Thierry Reding <thierry.reding@gmail.com>
-> > > Cc: Sebastian Reichel <sre@kernel.org>
-> > > Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> > >
-> > > ---
-> > >
-> > > Dear Lee,
-> > >
-> > > Could you take care about this patch?
-> >
-> > Yes, but I'll be sending out my pull-request for v5.12 in the next
-> > couple of days (maybe even today if I can find some time), so this
-> > will have to wait until v5.13.
-> >
-> Would it make sense to keep the MAINTAINERS entries as "orphan"?
-> Checking with linux-next, the drivers are still present in-tree.
+Rafael J. Wysocki (rjw@rjwysocki.net) changed:
 
-Please see:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #295255|0                           |1
+        is obsolete|                            |
 
- https://lore.kernel.org/patchwork/patch/1379016/
+--- Comment #15 from Rafael J. Wysocki (rjw@rjwysocki.net) ---
+Created attachment 295295
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D295295&action=3Dedit
+cpufreq: ACPI: Set cpuinfo.max_freq directly if max boost is known (v2)
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+I found a mistake in the previous version of the fix patch which didn't
+initialize policy->max properly.
+
+Please test this one instead and there is no need to provide the information
+requested in the previous comments (at least not ATM).
+
+Thanks!
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
