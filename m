@@ -2,78 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDC031CCEF
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 16:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F65731CCC2
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 16:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbhBPPap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Feb 2021 10:30:45 -0500
-Received: from mail.manjaro.org ([176.9.38.148]:39490 "EHLO mail.manjaro.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229585AbhBPPap (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Feb 2021 10:30:45 -0500
-X-Greylist: delayed 1291 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Feb 2021 10:30:45 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.manjaro.org (Postfix) with ESMTP id 414DC183325;
-        Tue, 16 Feb 2021 16:08:33 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at manjaro.org
-Received: from mail.manjaro.org ([127.0.0.1])
-        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PpCXceh3Pb8D; Tue, 16 Feb 2021 16:08:31 +0100 (CET)
-Subject: Re: [PATCH] Add CHARGE_NOW support to cw2015_battery.c
-To:     Martin Ashby <martin@ashbysoft.com>,
-        Sebastian Reichel <sre@kernel.org>
-References: <20210126213928.136561-1-martin@ashbysoft.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        t.schramm@manjaro.org
-From:   Tobias Schramm <t.schramm@manjaro.org>
-Message-ID: <10574fda-0a3b-a762-7795-f1fb609b0dde@manjaro.org>
-Date:   Tue, 16 Feb 2021 16:08:24 +0100
+        id S229956AbhBPPRL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Feb 2021 10:17:11 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:53329 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229946AbhBPPRL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 10:17:11 -0500
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1lC25S-0005ar-ML; Tue, 16 Feb 2021 15:16:26 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] thermal: qcom: Fix comparison with uninitialized variable channels_available
+Date:   Tue, 16 Feb 2021 15:16:26 +0000
+Message-Id: <20210216151626.162996-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <20210126213928.136561-1-martin@ashbysoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Martin,
+From: Colin Ian King <colin.king@canonical.com>
 
-thanks for the patch. Looks good and tests fine.
+Currently the check of chip->channels[i].channel is against an the
+uninitialized variable channels_available.  I believe the variable
+channels_available needs to be fetched first by the call to adc_tm5_read
+before the channels check. Fix the issue swapping the order of the
+channels check loop with the call to adc_tm5_read.
 
-> CHARGE_NOW is expected by some user software (such as waybar)
-> instead of 'CAPACITY', in order to correctly calculate
-> remaining battery life.
-> 
-> ---
->   drivers/power/supply/cw2015_battery.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-> index 0146f1bfc..d11059774 100644
-> --- a/drivers/power/supply/cw2015_battery.c
-> +++ b/drivers/power/supply/cw2015_battery.c
-> @@ -511,6 +511,11 @@ static int cw_battery_get_property(struct power_supply *psy,
->   			val->intval = 0;
->   		break;
->   
-> +	case POWER_SUPPLY_PROP_CHARGE_NOW:
-> +		val->intval = cw_bat->battery.charge_full_design_uah;
-> +		val->intval = val->intval * cw_bat->soc / 100;
-> +		break;
-> +
->   	case POWER_SUPPLY_PROP_CURRENT_NOW:
->   		if (cw_battery_valid_time_to_empty(cw_bat) &&
->   		    cw_bat->battery.charge_full_design_uah > 0) {
-> @@ -542,6 +547,7 @@ static enum power_supply_property cw_battery_properties[] = {
->   	POWER_SUPPLY_PROP_CHARGE_COUNTER,
->   	POWER_SUPPLY_PROP_CHARGE_FULL,
->   	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-> +	POWER_SUPPLY_PROP_CHARGE_NOW,
->   	POWER_SUPPLY_PROP_CURRENT_NOW,
->   };
->   
-> 
+Addresses-Coverity: ("Uninitialized scalar variable")
+Fixes: ca66dca5eda6 ("thermal: qcom: add support for adc-tm5 PMIC thermal monitor")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Reviewed-by: Tobias Schramm <t.schramm@manjaro.org>
-Tested-by: Tobias Schramm <t.schramm@manjaro.org>
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index a2014375587d..b460b56e981c 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -375,13 +375,6 @@ static int adc_tm5_init(struct adc_tm5_chip *chip)
+ 	int ret;
+ 	unsigned int i;
+ 
+-	for (i = 0; i < chip->nchannels; i++) {
+-		if (chip->channels[i].channel >= channels_available) {
+-			dev_err(chip->dev, "Invalid channel %d\n", chip->channels[i].channel);
+-			return -EINVAL;
+-		}
+-	}
+-
+ 	ret = adc_tm5_read(chip, ADC_TM5_NUM_BTM,
+ 			   &channels_available, sizeof(channels_available));
+ 	if (ret) {
+@@ -389,6 +382,13 @@ static int adc_tm5_init(struct adc_tm5_chip *chip)
+ 		return ret;
+ 	}
+ 
++	for (i = 0; i < chip->nchannels; i++) {
++		if (chip->channels[i].channel >= channels_available) {
++			dev_err(chip->dev, "Invalid channel %d\n", chip->channels[i].channel);
++			return -EINVAL;
++		}
++	}
++
+ 	buf[0] = chip->decimation;
+ 	buf[1] = chip->avg_samples | ADC_TM5_FAST_AVG_EN;
+ 	buf[2] = ADC_TM5_TIMER1;
+-- 
+2.30.0
+
