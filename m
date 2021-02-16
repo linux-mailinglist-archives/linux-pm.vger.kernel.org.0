@@ -2,89 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F44131D103
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 20:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F7D31D164
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 21:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbhBPTdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Feb 2021 14:33:14 -0500
-Received: from mail.ashbysoft.com ([51.140.81.171]:46814 "EHLO
-        mail.ashbysoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbhBPTdN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 14:33:13 -0500
-Received: from ashbysoft.plus.com ([84.92.108.193] helo=phil.ashbysoft.com)
-        by mail.ashbysoft.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <martin@ashbysoft.com>)
-        id 1lC65G-0005lg-N3; Tue, 16 Feb 2021 19:32:30 +0000
-Received: from static-90-251-253-38.vodafonexdsl.co.uk ([90.251.253.38] helo=martin-intelz370.broadband)
-        by phil.ashbysoft.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <martin@ashbysoft.com>)
-        id 1lC65F-0005Mj-OZ; Tue, 16 Feb 2021 19:32:30 +0000
-From:   Martin Ashby <martin@ashbysoft.com>
-To:     t.schramm@manjaro.org, linux-pm@vger.kernel.org
-Cc:     Martin Ashby <martin@ashbysoft.com>
-Subject: [PATCH] Add CHARGE_NOW support to cw2015_battery.c
-Date:   Tue, 16 Feb 2021 14:32:17 -0500
-Message-Id: <20210216193217.144803-1-martin@ashbysoft.com>
-X-Mailer: git-send-email 2.30.0
+        id S229830AbhBPUML (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Feb 2021 15:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229796AbhBPUML (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 15:12:11 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE06C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 12:11:30 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id c25so5250038qvb.4
+        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 12:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ESU2v6PnWuuqrc3aBtGPRviCIYxee3TEkKh6dRFK5uo=;
+        b=Gb3bXHKRAg/D7IARf3bWgbaQnVZPbDzZXMaW8ftiH2UDhv1Dze7XbrejZTpAghSOJQ
+         eyJwEDlW3onw3k29tSH3mp7Ab2RBOAVYpkhTeomnvz0+WRqmFiEa5Uf0WP9eVB2v3eFB
+         P3u29V2HepHJuKqgSy4HGcf1kukKcKKI/xlR/iebsRLPSajCIHprbjaNCv1U4uiep05H
+         sk2rs4bfStcQI7IsirbvbBxXst6SYAMgjx1T7nkNS3mV41BBC0IKs6E6iPIulBL6GHKE
+         iCEFPAilq4jv9bbsQ4ncj0asisko/+/Hnmc0C7OmIEv2drTF3exVkTNjX+LkxJBONs80
+         42aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ESU2v6PnWuuqrc3aBtGPRviCIYxee3TEkKh6dRFK5uo=;
+        b=a5lgF3n6eKC+McyXaxNbDQQpNmkSRlVWkjWhbUPsVdLpcnvCU0MRNywE/Zx3iRFRbO
+         21beSgXyB+U6BEr0dd8GeX3ZDGqae+RlKFVKhbudGl/wyzI7jAopb7eLZpjHOppLLhRE
+         uzZnf1ygx2M6uDF9B+mdKoRM8lAoLwdgH0fPxc763G3hWEWp2R60HoLFhg7+fHGBZXnQ
+         H1OT/1NL/U/f13W8cP6UWHPJtsvyqOIn/zRODVxJBTIVd6SjfnKAEtT2l5omujgteqeS
+         qEYfYM7kS456k7egCyheFzZiJ800u8jCkF0uuSdDIZCCUIaKaXoDqAT7Lk1Gx+E2OgO+
+         kC0g==
+X-Gm-Message-State: AOAM531RYP00AYQzb2Spq1oO2qcYL6+I57fIss9vGH6AUt4XZTwALKMV
+        pt7l4sJqFUcvtYkHPmugl/a3wA==
+X-Google-Smtp-Source: ABdhPJzqz6Fnqc3dQq6MdJJTrMD4jpD2ItrVRYu0DaxtvxmCIOqvdeZ2BWlz+1iyg+y1MS2V463oRQ==
+X-Received: by 2002:a05:6214:16cf:: with SMTP id d15mr21451336qvz.32.1613506289989;
+        Tue, 16 Feb 2021 12:11:29 -0800 (PST)
+Received: from localhost.localdomain (modemcable068.184-131-66.mc.videotron.ca. [66.131.184.68])
+        by smtp.gmail.com with ESMTPSA id t6sm13790761qti.2.2021.02.16.12.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Feb 2021 12:11:29 -0800 (PST)
+From:   Jonathan Marek <jonathan@marek.ca>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org (open list:OPERATING PERFORMANCE POINTS (OPP)),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] opp: fix dev_pm_opp_set_rate for different frequency at the same opp level
+Date:   Tue, 16 Feb 2021 15:10:29 -0500
+Message-Id: <20210216201030.19152-1-jonathan@marek.ca>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam_score: -2.9
-X-Spam_score_int: -28
-X-Spam_bar: --
-X-Spam_report: Spam detection software, running on the system "timmy-iii",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- @@CONTACT_ADDRESS@@ for details.
- Content preview:  CHARGE_NOW is expected by some user software (such as waybar)
-    instead of 'CAPACITY', in order to correctly calculate remaining battery
-   life. Signed-off-by: Martin Ashby <martin@ashbysoft.com> --- drivers/power/supply/cw2015_battery.c
-    | 6 ++++++ 1 file changed, 6 insertions(+) 
- Content analysis details:   (-2.9 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
- -1.9 BAYES_00               BODY: Bayes spam probability is 0 to 1%
-                             [score: 0.0000]
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CHARGE_NOW is expected by some user software (such as waybar)
-instead of 'CAPACITY', in order to correctly calculate remaining battery
-life.
+There is not "nothing to do" when the opp is the same. The frequency can
+be different from opp->rate.
 
-Signed-off-by: Martin Ashby <martin@ashbysoft.com>
+Fixes: 81c4d8a3c414 ("opp: Keep track of currently programmed OPP")
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
 ---
- drivers/power/supply/cw2015_battery.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/opp/core.c | 7 +++++--
+ drivers/opp/opp.h  | 1 +
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-index 0146f1bfc..aa1f1771b 100644
---- a/drivers/power/supply/cw2015_battery.c
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -511,6 +511,11 @@ static int cw_battery_get_property(struct power_supply *psy,
- 			val->intval = 0;
- 		break;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index c3f3d9249cc5..f82cf72f433e 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -986,6 +986,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+ 		    struct dev_pm_opp *opp, unsigned long freq)
+ {
+ 	struct dev_pm_opp *old_opp;
++	unsigned long old_freq;
+ 	int scaling_down, ret;
  
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		val->intval = cw_bat->battery.charge_full_design_uah;
-+		val->intval = val->intval * cw_bat->soc / 100;
-+		break;
-+
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		if (cw_battery_valid_time_to_empty(cw_bat) &&
- 		    cw_bat->battery.charge_full_design_uah > 0) {
-@@ -542,6 +547,7 @@ static enum power_supply_property cw_battery_properties[] = {
- 	POWER_SUPPLY_PROP_CHARGE_COUNTER,
- 	POWER_SUPPLY_PROP_CHARGE_FULL,
- 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CHARGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- };
+ 	if (unlikely(!opp))
+@@ -996,15 +997,16 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+ 		_find_current_opp(dev, opp_table);
  
+ 	old_opp = opp_table->current_opp;
++	old_freq = opp_table->current_freq;
+ 
+ 	/* Return early if nothing to do */
+-	if (opp_table->enabled && old_opp == opp) {
++	if (opp_table->enabled && old_opp == opp && old_freq == freq) {
+ 		dev_dbg(dev, "%s: OPPs are same, nothing to do\n", __func__);
+ 		return 0;
+ 	}
+ 
+ 	dev_dbg(dev, "%s: switching OPP: Freq %lu -> %lu Hz, Level %u -> %u, Bw %u -> %u\n",
+-		__func__, old_opp->rate, freq, old_opp->level, opp->level,
++		__func__, old_freq, freq, old_opp->level, opp->level,
+ 		old_opp->bandwidth ? old_opp->bandwidth[0].peak : 0,
+ 		opp->bandwidth ? opp->bandwidth[0].peak : 0);
+ 
+@@ -1061,6 +1063,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+ 	/* Make sure current_opp doesn't get freed */
+ 	dev_pm_opp_get(opp);
+ 	opp_table->current_opp = opp;
++	opp_table->current_freq = freq;
+ 
+ 	return ret;
+ }
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 9b9daf83b074..9f1d9c877380 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -186,6 +186,7 @@ struct opp_table {
+ 	enum opp_table_access shared_opp;
+ 	struct dev_pm_opp *current_opp;
+ 	struct dev_pm_opp *suspend_opp;
++	unsigned long current_freq;
+ 
+ 	struct mutex genpd_virt_dev_lock;
+ 	struct device **genpd_virt_devs;
 -- 
-2.30.0
+2.26.1
 
