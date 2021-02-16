@@ -2,128 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F7D31D164
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 21:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02B231D196
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 21:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbhBPUML (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Feb 2021 15:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbhBPUML (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 15:12:11 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE06C06174A
-        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 12:11:30 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id c25so5250038qvb.4
-        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 12:11:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ESU2v6PnWuuqrc3aBtGPRviCIYxee3TEkKh6dRFK5uo=;
-        b=Gb3bXHKRAg/D7IARf3bWgbaQnVZPbDzZXMaW8ftiH2UDhv1Dze7XbrejZTpAghSOJQ
-         eyJwEDlW3onw3k29tSH3mp7Ab2RBOAVYpkhTeomnvz0+WRqmFiEa5Uf0WP9eVB2v3eFB
-         P3u29V2HepHJuKqgSy4HGcf1kukKcKKI/xlR/iebsRLPSajCIHprbjaNCv1U4uiep05H
-         sk2rs4bfStcQI7IsirbvbBxXst6SYAMgjx1T7nkNS3mV41BBC0IKs6E6iPIulBL6GHKE
-         iCEFPAilq4jv9bbsQ4ncj0asisko/+/Hnmc0C7OmIEv2drTF3exVkTNjX+LkxJBONs80
-         42aw==
+        id S229970AbhBPUci (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Feb 2021 15:32:38 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:41380 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229771AbhBPUch (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 15:32:37 -0500
+Received: by mail-oi1-f174.google.com with SMTP id v193so12584610oie.8;
+        Tue, 16 Feb 2021 12:32:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ESU2v6PnWuuqrc3aBtGPRviCIYxee3TEkKh6dRFK5uo=;
-        b=a5lgF3n6eKC+McyXaxNbDQQpNmkSRlVWkjWhbUPsVdLpcnvCU0MRNywE/Zx3iRFRbO
-         21beSgXyB+U6BEr0dd8GeX3ZDGqae+RlKFVKhbudGl/wyzI7jAopb7eLZpjHOppLLhRE
-         uzZnf1ygx2M6uDF9B+mdKoRM8lAoLwdgH0fPxc763G3hWEWp2R60HoLFhg7+fHGBZXnQ
-         H1OT/1NL/U/f13W8cP6UWHPJtsvyqOIn/zRODVxJBTIVd6SjfnKAEtT2l5omujgteqeS
-         qEYfYM7kS456k7egCyheFzZiJ800u8jCkF0uuSdDIZCCUIaKaXoDqAT7Lk1Gx+E2OgO+
-         kC0g==
-X-Gm-Message-State: AOAM531RYP00AYQzb2Spq1oO2qcYL6+I57fIss9vGH6AUt4XZTwALKMV
-        pt7l4sJqFUcvtYkHPmugl/a3wA==
-X-Google-Smtp-Source: ABdhPJzqz6Fnqc3dQq6MdJJTrMD4jpD2ItrVRYu0DaxtvxmCIOqvdeZ2BWlz+1iyg+y1MS2V463oRQ==
-X-Received: by 2002:a05:6214:16cf:: with SMTP id d15mr21451336qvz.32.1613506289989;
-        Tue, 16 Feb 2021 12:11:29 -0800 (PST)
-Received: from localhost.localdomain (modemcable068.184-131-66.mc.videotron.ca. [66.131.184.68])
-        by smtp.gmail.com with ESMTPSA id t6sm13790761qti.2.2021.02.16.12.11.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 12:11:29 -0800 (PST)
-From:   Jonathan Marek <jonathan@marek.ca>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org (open list:OPERATING PERFORMANCE POINTS (OPP)),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] opp: fix dev_pm_opp_set_rate for different frequency at the same opp level
-Date:   Tue, 16 Feb 2021 15:10:29 -0500
-Message-Id: <20210216201030.19152-1-jonathan@marek.ca>
-X-Mailer: git-send-email 2.26.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=927w3C5wOreIMVqF7KZZWL8Qt1QVMVnJDepIixCvrzw=;
+        b=mkZ4wf02MfAcIz+RPGKOobSfMgZAsQXuQTXOAeN+KnB5WEblsW5IwXZBJttkqGoahL
+         rjlBxfe4YL9g0ymlfclSEAddYkd6SNNv6CoCSOSc//yXcGYoaUjQ3QW2GumxoyzII5Bc
+         XQlxT1xLkKJ1Mf4lwz4DBCpTssWPBxh12or5iBIgY9vUf6o2wV9J9sOAuhplXvmysQpz
+         /QKM2rPMDRxlpVZy7i9i6lyYcP43xxzjgP4ats5eIAVMizkuJMRTreqzfGFHdwCMIYjE
+         k6rQwU2ZjG5v5QXL+nLJqYxWCNcyLY3Bo0932J9/FVi7UlzQhsMOjT0CVc+6FpEg/mzy
+         YG/Q==
+X-Gm-Message-State: AOAM531xUE2THg97tYg6xwe2crYHYGuosHRenx4cHFNhBvTpJdb9DUBj
+        hBMVHtIiYTIYmnLoE1/g2dJ2KG3t8IbpJ60UpoI=
+X-Google-Smtp-Source: ABdhPJymxKKC1ZNPlWTz8A3a7NhS0cM9LpJ1C3gukdn1HAk3BQNK9bw1MTvavykJRbbqavqRyHqhbWSVphMC6+E14qw=
+X-Received: by 2002:aca:744:: with SMTP id 65mr3638907oih.153.1613507515477;
+ Tue, 16 Feb 2021 12:31:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210205222644.2357303-1-saravanak@google.com>
+ <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
+ <CAGETcx-668+uGigaOMcsvv00mo6o_eGPcH0YyD28OCVEyVbw+w@mail.gmail.com>
+ <CAMuHMdXduvBqjAqraXkEKErNJFyN6JNq5wqagc4yHHPpH5SPGQ@mail.gmail.com>
+ <CAGETcx_4FGa-rzLp6bjXbm4F4R6H2W78+nM_kN=XPz5hswzANA@mail.gmail.com>
+ <CAMuHMdVodauqBmLMxsfi0kQtAFT8ruJ36LJL9YuQgqwQNKwHHg@mail.gmail.com> <CAGETcx_-yBvhXDPtOiKjenvx83oMNr32UvpMN0Dt-qz5ToXEbw@mail.gmail.com>
+In-Reply-To: <CAGETcx_-yBvhXDPtOiKjenvx83oMNr32UvpMN0Dt-qz5ToXEbw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 16 Feb 2021 21:31:43 +0100
+Message-ID: <CAMuHMdXTO8wQ3=woLMjDaf9g3tTr-dRB3Nu_XvZUrr+wGSXyeg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is not "nothing to do" when the opp is the same. The frequency can
-be different from opp->rate.
+Hi Saravana,
 
-Fixes: 81c4d8a3c414 ("opp: Keep track of currently programmed OPP")
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
----
- drivers/opp/core.c | 7 +++++--
- drivers/opp/opp.h  | 1 +
- 2 files changed, 6 insertions(+), 2 deletions(-)
+On Tue, Feb 16, 2021 at 7:49 PM Saravana Kannan <saravanak@google.com> wrote:
+> On Tue, Feb 16, 2021 at 12:05 AM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Mon, Feb 15, 2021 at 10:27 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > On Mon, Feb 15, 2021 at 4:38 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > On Fri, Feb 12, 2021 at 4:00 AM Saravana Kannan <saravanak@google.com> wrote:
+> > > > > On Thu, Feb 11, 2021 at 5:00 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > >       - I2C on R-Car Gen3 does not seem to use DMA, according to
+> > > > > >         /sys/kernel/debug/dmaengine/summary:
+> > > > > >
+> > > > > >             -dma4chan0    | e66d8000.i2c:tx
+> > > > > >             -dma4chan1    | e66d8000.i2c:rx
+> > > > > >             -dma5chan0    | e6510000.i2c:tx
+> > > > >
+> > > > > I think I need more context on the problem before I can try to fix it.
+> > > > > I'm also very unfamiliar with that file. With fw_devlink=permissive,
+> > > > > I2C was using DMA? If so, the next step is to see if the I2C relative
+> > > > > probe order with DMA is getting changed and if so, why.
+> > > >
+> > > > More detailed log:
+> > > >
+> > > >     platform e66d8000.i2c: Linked as a consumer to e6150000.clock-controller
+> > > >     platform e66d8000.i2c: Linked as a sync state only consumer to e6055400.gpio
+> > > >
+> > > > Why is e66d8000.i2c not linked as a consumer to e6700000.dma-controller?
+> > >
+> > > Because fw_devlink.strict=1 is not set and dma/iommu is considered an
+> > > "optional"/"driver decides" dependency.
+> >
+> > Oh, I thought dma/iommu were considered mandatory initially,
+> > but dropped as dependencies in the late boot process?
+>
+> No, I didn't do that in case the drivers that didn't need the
+> IOMMU/DMA were sensitive to probe order.
+>
+> My goal was for fw_devlink=on to not affect probe order for devices
+> that currently don't need to defer probe. But see below...
+>
+> >
+> > >
+> > > >     platform e6700000.dma-controller: Linked as a consumer to
+> > > > e6150000.clock-controller
+> > >
+> > > Is this the only supplier of dma-controller?
+> >
+> > No, e6180000.system-controller is also a supplier.
+> >
+> > > >     platform e66d8000.i2c: Added to deferred list
+> > > >     platform e6700000.dma-controller: Added to deferred list
+> > > >
+> > > >     bus: 'platform': driver_probe_device: matched device
+> > > > e6700000.dma-controller with driver rcar-dmac
+> > > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > > device e6700000.dma-controller
+> > > >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
+> > > >
+> > > >     bus: 'platform': driver_probe_device: matched device e66d8000.i2c
+> > > > with driver i2c-rcar
+> > > >     bus: 'platform': really_probe: probing driver i2c-rcar with device
+> > > > e66d8000.i2c
+> > > >
+> > > > I2C becomes available...
+> > > >
+> > > >     i2c-rcar e66d8000.i2c: request_channel failed for tx (-517)
+> > > >     [...]
+> > > >
+> > > > but DMA is not available yet, so the driver falls back to PIO.
+> > > >
+> > > >     driver: 'i2c-rcar': driver_bound: bound to device 'e66d8000.i2c'
+> > > >     bus: 'platform': really_probe: bound device e66d8000.i2c to driver i2c-rcar
+> > > >
+> > > >     platform e6700000.dma-controller: Retrying from deferred list
+> > > >     bus: 'platform': driver_probe_device: matched device
+> > > > e6700000.dma-controller with driver rcar-dmac
+> > > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > > device e6700000.dma-controller
+> > > >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
+> > > >     platform e6700000.dma-controller: Added to deferred list
+> > > >     platform e6700000.dma-controller: Retrying from deferred list
+> > > >     bus: 'platform': driver_probe_device: matched device
+> > > > e6700000.dma-controller with driver rcar-dmac
+> > > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > > device e6700000.dma-controller
+> > > >     driver: 'rcar-dmac': driver_bound: bound to device 'e6700000.dma-controller'
+> > > >     bus: 'platform': really_probe: bound device
+> > > > e6700000.dma-controller to driver rcar-dmac
+> > > >
+> > > > DMA becomes available.
+> > > >
+> > > > Here userspace is entered. /sys/kernel/debug/dmaengine/summary shows
+> > > > that the I2C controllers do not have DMA channels allocated, as the
+> > > > kernel has performed no more I2C transfers after DMA became available.
+> > > >
+> > > > Using i2cdetect shows that DMA is used, which is good:
+> > > >
+> > > >     i2c-rcar e66d8000.i2c: got DMA channel for rx
+> > > >
+> > > > With permissive devlinks, the clock controller consumers are not added
+> > > > to the deferred probing list, and probe order is slightly different.
+> > > > The I2C controllers are still probed before the DMA controllers.
+> > > > But DMA becomes available a bit earlier, before the probing of the last
+> > > > I2C slave driver.
+> > >
+> > > This seems like a race? I'm guessing it's two different threads
+> > > probing those two devices? And it just happens to work for
+> > > "permissive" assuming the boot timing doesn't change?
+> > >
+> > > > Hence /sys/kernel/debug/dmaengine/summary shows that
+> > > > some I2C transfers did use DMA.
+> > > >
+> > > > So the real issue is that e66d8000.i2c not linked as a consumer to
+> > > > e6700000.dma-controller.
+> > >
+> > > That's because fw_devlink.strict=1 isn't set. If you need DMA to be
+> > > treated as a mandatory supplier, you'll need to set the flag.
+> > >
+> > > Is fw_devlink=on really breaking anything here? It just seems like
+> > > "permissive" got lucky with the timing and it could break at any point
+> > > in the future. Thought?
+> >
+> > I don't think there is a race.
+>
+> Can you explain more please? This below makes it sound like DMA just
+> sneaks in at the last minute.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index c3f3d9249cc5..f82cf72f433e 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -986,6 +986,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 		    struct dev_pm_opp *opp, unsigned long freq)
- {
- 	struct dev_pm_opp *old_opp;
-+	unsigned long old_freq;
- 	int scaling_down, ret;
- 
- 	if (unlikely(!opp))
-@@ -996,15 +997,16 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 		_find_current_opp(dev, opp_table);
- 
- 	old_opp = opp_table->current_opp;
-+	old_freq = opp_table->current_freq;
- 
- 	/* Return early if nothing to do */
--	if (opp_table->enabled && old_opp == opp) {
-+	if (opp_table->enabled && old_opp == opp && old_freq == freq) {
- 		dev_dbg(dev, "%s: OPPs are same, nothing to do\n", __func__);
- 		return 0;
- 	}
- 
- 	dev_dbg(dev, "%s: switching OPP: Freq %lu -> %lu Hz, Level %u -> %u, Bw %u -> %u\n",
--		__func__, old_opp->rate, freq, old_opp->level, opp->level,
-+		__func__, old_freq, freq, old_opp->level, opp->level,
- 		old_opp->bandwidth ? old_opp->bandwidth[0].peak : 0,
- 		opp->bandwidth ? opp->bandwidth[0].peak : 0);
- 
-@@ -1061,6 +1063,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
- 	/* Make sure current_opp doesn't get freed */
- 	dev_pm_opp_get(opp);
- 	opp_table->current_opp = opp;
-+	opp_table->current_freq = freq;
- 
- 	return ret;
- }
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 9b9daf83b074..9f1d9c877380 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -186,6 +186,7 @@ struct opp_table {
- 	enum opp_table_access shared_opp;
- 	struct dev_pm_opp *current_opp;
- 	struct dev_pm_opp *suspend_opp;
-+	unsigned long current_freq;
- 
- 	struct mutex genpd_virt_dev_lock;
- 	struct device **genpd_virt_devs;
+Yes it does, as the DMAC also has a consumer link to the IOMMU.
+If you ignore the consumer link from I2C to DMAC, the I2C device has
+less dependencies than the DMAC, so the I2C device, and the
+devices on the I2C bus, are probed much earlier than the DMAC.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.26.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
