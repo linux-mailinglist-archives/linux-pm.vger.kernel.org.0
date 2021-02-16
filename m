@@ -2,124 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C39831D031
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 19:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF5431D06F
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 19:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbhBPS1R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Feb 2021 13:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        id S231131AbhBPStv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Feb 2021 13:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbhBPS1Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 13:27:16 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119E3C0613D6
-        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 10:26:36 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id n195so11353700ybg.9
-        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 10:26:36 -0800 (PST)
+        with ESMTP id S230520AbhBPStr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 13:49:47 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465FC06174A
+        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 10:49:07 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id p186so11453918ybg.2
+        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 10:49:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=86ZOTfo2pRLUjt+3X3QjxmKkX8aHJubkBHJvWhxkHZg=;
-        b=jplIDjDGKUUBlrkHKo/8ABuCOHTog1UcXNNzGLP/87K7e4DMHib05919ZF/TTX7W56
-         gksGp+fBfgYV+wRWsJOiz49XBqYw8badhUpVwJ18+IpoBwL952ghsJbcFLQYK0zlvAeK
-         u3wGJRA7XC5wM2qVL8egr/TZLGgN6BtChopZGxZc1Z57bW9Ad6lrhz2LnzZA7UWAD5aS
-         6bZkf4sTUJl2Kbb9BMeje1rvCS/pmNGoH4CLObA70++6wh8WaxlN/NasICuqSF4sXCub
-         zVHKmj68JZUnwKt/ikuoKYdLAxiw+/lw/FPhzU4LARv6YIviQbZlAQWDjbNsQb2Wbx9Q
-         NzJw==
+        bh=ulqwXrQZpRrYT3IHT4CJ8bN5l6f9WiL4VvK05t2vkhU=;
+        b=GFVUZyY2+36xaWQOsBNcWeZvX9dgErqzir1orOVD41NTZeSKMP3B4a8JAZpGfpZNzN
+         7bXyMp1VBKh/kAFxyiGVdzGSA28wFoRfpMTz2roVpux4P7yqn6bWrY2qK82Ppkov5uAu
+         QUDkguqttvIFR+d3KCw1u52ojhCNVVQmY4DxpG/8ts2opf5bn67o4y7luRYhIOq2Pvlw
+         IvqSqfN5YIBG35KA0rfgWvZir4VWpbMA8m7NKzrc+hEQ4W99fQF8YRU4P7ukvmPeARfm
+         S0fkAUw88oh53rPVhsngwpmb43ayPtF8/Jb5qc2PUkdNqhbSgYiCedPXLmVT5cQJ805u
+         S1+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=86ZOTfo2pRLUjt+3X3QjxmKkX8aHJubkBHJvWhxkHZg=;
-        b=Nd8LpgWGJy13VUuNGeoCxAy6wnBL38T8KE15Z1HIfblaInz60Tnzs9N6twWHoZm3U+
-         RoGUtAH1WgbZBwA9lYy2FkEbVPyJPNFI5+V+TqHdQaADFSWuE5a2NeRdQmllg0MQ1qmB
-         J+v6S9SW5iuZkl3QRJ2svubcSkc6KFQ4Eoju5Ocho5XyqTSM6ByQvhj0MCXo7D27NY40
-         swULhsi2WRQA2kCcIEgvIh3rQlOLGqTt0Vehi/kfRO42P9JEwEURcgnG79gJYAcGrbby
-         0VDGLxUloRrY9e/Hp612OQYI6x7ACxzz1q62NiliXYoyG+39Op2nsJ5hVT8rDB3jiw2r
-         hsLg==
-X-Gm-Message-State: AOAM532HRxSzWPB1sEZDRQ2/Tn9J/BiCdLg0I6dCBZ3dvMSJtqcenM9I
-        1UFwxZ4NKmeeoReSrPVTLUn4qgA15+5RppFhiizPsw==
-X-Google-Smtp-Source: ABdhPJyZspXVqzarSXof+RAxF+6vufj39CfyT7WwHzYfMgr/xSoC2BqtLkJKBPt11/r+1as7k8cT/4rUscOBlCdaR9M=
-X-Received: by 2002:a25:b74c:: with SMTP id e12mr34402113ybm.20.1613499994962;
- Tue, 16 Feb 2021 10:26:34 -0800 (PST)
+        bh=ulqwXrQZpRrYT3IHT4CJ8bN5l6f9WiL4VvK05t2vkhU=;
+        b=TYUwWJgTLJpxK4KTjHBvwaFVCpiaqOMZT7vVA3M9VQxedodveu4+upH7Q6aVcUT4Ak
+         ILz99kyHGimV9mmOD+zLmLqQplAcuE5vXF1FLNyTlISEBSx+6u3b/sQ7ZbXifWtn5NR7
+         ZRvUHTS+007SekfSueWb7EOsbreVtWtXGqzSTP2EY856fWTC9ZdfelmDRSrVWB0kKEjz
+         C1BhZ7vIqjia0fx932hV10Eee6Y0npE9YOpu4t7t8wFC9UZ/iiYWW2Et31YhXEWeR36Y
+         jHMQL0qDetfFeBfPmmi7DwNVcZnBkPr0EsYP00zjQfTPxoOaYbCF9vMbk8twTEKQYGgQ
+         SIrA==
+X-Gm-Message-State: AOAM532gR0Mze5+yAOZvl6mUsR1IckN0lxxuz5QteMR/Et8Ax31MgtFp
+        0ZCdubqJTwHV1yySeMok70J/k38jKJyw3QdAs6LhNA==
+X-Google-Smtp-Source: ABdhPJy/W97Gt0DiNuOozzUVmxZ1k867IJaF8h5dqBDAKdPQOmZJZO6WvC505FeNpD/Kj6p1JVZxSHxHAj6xXqAAWDU=
+X-Received: by 2002:a05:6902:1025:: with SMTP id x5mr31500894ybt.96.1613501346147;
+ Tue, 16 Feb 2021 10:49:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20210216123958.3180014-1-geert+renesas@glider.be>
-In-Reply-To: <20210216123958.3180014-1-geert+renesas@glider.be>
+References: <20210205222644.2357303-1-saravanak@google.com>
+ <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
+ <CAGETcx-668+uGigaOMcsvv00mo6o_eGPcH0YyD28OCVEyVbw+w@mail.gmail.com>
+ <CAMuHMdXduvBqjAqraXkEKErNJFyN6JNq5wqagc4yHHPpH5SPGQ@mail.gmail.com>
+ <CAGETcx_4FGa-rzLp6bjXbm4F4R6H2W78+nM_kN=XPz5hswzANA@mail.gmail.com> <CAMuHMdVodauqBmLMxsfi0kQtAFT8ruJ36LJL9YuQgqwQNKwHHg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVodauqBmLMxsfi0kQtAFT8ruJ36LJL9YuQgqwQNKwHHg@mail.gmail.com>
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 16 Feb 2021 10:25:59 -0800
-Message-ID: <CAGETcx_YeiNAMkSxtbTSZcsQugxK4=CwhR6UfbSLLHzQ2EfguA@mail.gmail.com>
-Subject: Re: [PATCH v2] soc: renesas: rmobile-sysc: Mark fwnode when PM domain
- is added
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Tue, 16 Feb 2021 10:48:30 -0800
+Message-ID: <CAGETcx_-yBvhXDPtOiKjenvx83oMNr32UvpMN0Dt-qz5ToXEbw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 16, 2021 at 4:40 AM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
+On Tue, Feb 16, 2021 at 12:05 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
 >
-> Currently, there are two drivers binding to the R-Mobile System
-> Controller (SYSC):
->   - The rmobile-sysc driver registers PM domains from a core_initcall(),
->     and does not use a platform driver,
->   - The optional rmobile-reset driver registers a reset handler, and
->     does use a platform driver.
+> Hi Saravana,
 >
-> As fw_devlink only considers devices, commit bab2d712eeaf9d60 ("PM:
-> domains: Mark fwnodes when their powerdomain is added/removed") works
-> only for PM Domain drivers where the DT node is a real device node, and
-> not for PM Domain drivers using a hierarchical representation inside a
-> subnode.  Hence if fw_devlink is enabled, probing of on-chip devices
-> that are part of the SYSC PM domain is deferred until the optional
-> rmobile-reset driver has been bound.   If the rmobile-reset driver is
-> not available, this will never happen, and thus lead to complete system
-> boot failures.
+> On Mon, Feb 15, 2021 at 10:27 PM Saravana Kannan <saravanak@google.com> wrote:
+> > On Mon, Feb 15, 2021 at 4:38 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Fri, Feb 12, 2021 at 4:00 AM Saravana Kannan <saravanak@google.com> wrote:
+> > > > On Thu, Feb 11, 2021 at 5:00 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > >       - I2C on R-Car Gen3 does not seem to use DMA, according to
+> > > > >         /sys/kernel/debug/dmaengine/summary:
+> > > > >
+> > > > >             -dma4chan0    | e66d8000.i2c:tx
+> > > > >             -dma4chan1    | e66d8000.i2c:rx
+> > > > >             -dma5chan0    | e6510000.i2c:tx
+> > > >
+> > > > I think I need more context on the problem before I can try to fix it.
+> > > > I'm also very unfamiliar with that file. With fw_devlink=permissive,
+> > > > I2C was using DMA? If so, the next step is to see if the I2C relative
+> > > > probe order with DMA is getting changed and if so, why.
+> > >
+> > > More detailed log:
+> > >
+> > >     platform e66d8000.i2c: Linked as a consumer to e6150000.clock-controller
+> > >     platform e66d8000.i2c: Linked as a sync state only consumer to e6055400.gpio
+> > >
+> > > Why is e66d8000.i2c not linked as a consumer to e6700000.dma-controller?
+> >
+> > Because fw_devlink.strict=1 is not set and dma/iommu is considered an
+> > "optional"/"driver decides" dependency.
 >
-> Fix this by explicitly marking the fwnode initialized.
->
-> Suggested-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> This is v2 of "soc: renesas: rmobile-sysc: Set OF_POPULATED and absorb
-> reset handling".
-> To be queued in renesas-devel as a fix for v5.12 if v5.12-rc1 will have
-> fw_devlink enabled.
->
-> v2:
->   - Call fwnode_dev_initialized() instead of setting OF_POPULATED,
->   - Drop reset handling move, as fwnode_dev_initialized() does not
->     prevent the rmobile-reset driver from binding against the same
->     device.
-> ---
->  drivers/soc/renesas/rmobile-sysc.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/soc/renesas/rmobile-sysc.c b/drivers/soc/renesas/rmobile-sysc.c
-> index bf64d052f9245db5..204e6135180b919c 100644
-> --- a/drivers/soc/renesas/rmobile-sysc.c
-> +++ b/drivers/soc/renesas/rmobile-sysc.c
-> @@ -342,6 +342,8 @@ static int __init rmobile_init_pm_domains(void)
->                         of_node_put(np);
->                         break;
->                 }
-> +
-> +               fwnode_dev_initialized(&np->fwnode, true);
->         }
->
->         put_special_pds();
+> Oh, I thought dma/iommu were considered mandatory initially,
+> but dropped as dependencies in the late boot process?
 
-Acked-by: Saravana Kannan <saravanak@google.com>
+No, I didn't do that in case the drivers that didn't need the
+IOMMU/DMA were sensitive to probe order.
 
-Keep in mind that this might have to land in driver-core-next since
-that API is currently only in driver-core-next.
+My goal was for fw_devlink=on to not affect probe order for devices
+that currently don't need to defer probe. But see below...
+
+>
+> >
+> > >     platform e6700000.dma-controller: Linked as a consumer to
+> > > e6150000.clock-controller
+> >
+> > Is this the only supplier of dma-controller?
+>
+> No, e6180000.system-controller is also a supplier.
+>
+> > >     platform e66d8000.i2c: Added to deferred list
+> > >     platform e6700000.dma-controller: Added to deferred list
+> > >
+> > >     bus: 'platform': driver_probe_device: matched device
+> > > e6700000.dma-controller with driver rcar-dmac
+> > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > device e6700000.dma-controller
+> > >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
+> > >
+> > >     bus: 'platform': driver_probe_device: matched device e66d8000.i2c
+> > > with driver i2c-rcar
+> > >     bus: 'platform': really_probe: probing driver i2c-rcar with device
+> > > e66d8000.i2c
+> > >
+> > > I2C becomes available...
+> > >
+> > >     i2c-rcar e66d8000.i2c: request_channel failed for tx (-517)
+> > >     [...]
+> > >
+> > > but DMA is not available yet, so the driver falls back to PIO.
+> > >
+> > >     driver: 'i2c-rcar': driver_bound: bound to device 'e66d8000.i2c'
+> > >     bus: 'platform': really_probe: bound device e66d8000.i2c to driver i2c-rcar
+> > >
+> > >     platform e6700000.dma-controller: Retrying from deferred list
+> > >     bus: 'platform': driver_probe_device: matched device
+> > > e6700000.dma-controller with driver rcar-dmac
+> > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > device e6700000.dma-controller
+> > >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
+> > >     platform e6700000.dma-controller: Added to deferred list
+> > >     platform e6700000.dma-controller: Retrying from deferred list
+> > >     bus: 'platform': driver_probe_device: matched device
+> > > e6700000.dma-controller with driver rcar-dmac
+> > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > device e6700000.dma-controller
+> > >     driver: 'rcar-dmac': driver_bound: bound to device 'e6700000.dma-controller'
+> > >     bus: 'platform': really_probe: bound device
+> > > e6700000.dma-controller to driver rcar-dmac
+> > >
+> > > DMA becomes available.
+> > >
+> > > Here userspace is entered. /sys/kernel/debug/dmaengine/summary shows
+> > > that the I2C controllers do not have DMA channels allocated, as the
+> > > kernel has performed no more I2C transfers after DMA became available.
+> > >
+> > > Using i2cdetect shows that DMA is used, which is good:
+> > >
+> > >     i2c-rcar e66d8000.i2c: got DMA channel for rx
+> > >
+> > > With permissive devlinks, the clock controller consumers are not added
+> > > to the deferred probing list, and probe order is slightly different.
+> > > The I2C controllers are still probed before the DMA controllers.
+> > > But DMA becomes available a bit earlier, before the probing of the last
+> > > I2C slave driver.
+> >
+> > This seems like a race? I'm guessing it's two different threads
+> > probing those two devices? And it just happens to work for
+> > "permissive" assuming the boot timing doesn't change?
+> >
+> > > Hence /sys/kernel/debug/dmaengine/summary shows that
+> > > some I2C transfers did use DMA.
+> > >
+> > > So the real issue is that e66d8000.i2c not linked as a consumer to
+> > > e6700000.dma-controller.
+> >
+> > That's because fw_devlink.strict=1 isn't set. If you need DMA to be
+> > treated as a mandatory supplier, you'll need to set the flag.
+> >
+> > Is fw_devlink=on really breaking anything here? It just seems like
+> > "permissive" got lucky with the timing and it could break at any point
+> > in the future. Thought?
+>
+> I don't think there is a race.
+
+Can you explain more please? This below makes it sound like DMA just
+sneaks in at the last minute.
+
+> > > The I2C controllers are still probed before the DMA controllers.
+> > > But DMA becomes available a bit earlier, before the probing of the last
+> > > I2C slave driver.
+
+>  fw_devlinks calling driver_deferred_probe_add()
+> on all consumers has a big impact on probe order.
+
+Ugh... yeah. That's the real issue. This is really a device links
+issue that fw_devlink is exposing. I already have a bunch of things in
+my TODO list to improve deferred probing and probe ordering. Since
+this is not causing boot issues (only DMA issue) with fw_devlink=on,
+can we treat this as not a blocking item for fw_devlink=on? Once I go
+through my TODO list, it should be fixed (by not changing probe
+ordering unnecessarily). And if not, I can help find out a different
+solution at that point.
+
+Also, if you have IOMMU drivers, then fw_devlink.strict is also
+another solution that's available. On a separate note (not a final
+fix), I was wondering if we should have a config for fw_devlink.strict
+default value and then have it selected when IOMMU drivers configs are
+enabled.
 
 -Saravana
