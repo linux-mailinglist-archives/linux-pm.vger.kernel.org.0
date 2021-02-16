@@ -2,139 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F89231CACE
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 14:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6D431CC8C
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 16:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbhBPM7g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Feb 2021 07:59:36 -0500
-Received: from mail-oo1-f44.google.com ([209.85.161.44]:33618 "EHLO
-        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbhBPM7b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 07:59:31 -0500
-Received: by mail-oo1-f44.google.com with SMTP id f1so2260750oou.0;
-        Tue, 16 Feb 2021 04:59:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TVzLBkqKt0MyMwotNPEi8xMZ2SypGbVfWBR5eQRTmO0=;
-        b=TSrlLp/dLEvzVgYJtBCOI3GotDN81ZyYyNXCWTYNpHQgk7Li5hOwwdA5DI2aVSvN9u
-         QICOgn7PbSKOcD4TmUPyNR7oKuxBs3DRmjIHypg4EVgbNimg6pKuT5bwMw7moz4dwLlL
-         gjdt7k5aWaERMGI3+fJDXSrlHu2OJ9hawJ1IIJ519xcScgkh+VYkKXqvBJEeJYysa/jh
-         YXE+7Ldl1Zi4IScqJWUOTLySBilR7SJVmtB2c1olcSBMQ1p5so5ih9WB4v9f2GCIdtQX
-         90JznuDtxze58Ae7oSVog6crOzMwV4EJrKQef2q+3GOVSCtmHuJyt0kO8hHSu38Bx9ch
-         Kc3w==
-X-Gm-Message-State: AOAM533dFVUWMFTeNpqtYrlApLDE2W6QZi7whbG0yNmAx4DrvYCjd2vI
-        GNT/Gs4D//cYdXj1Xg9+ht5WAUkYOp5oeLp67ns=
-X-Google-Smtp-Source: ABdhPJxqORgG+iXS2MUSd76bl5TBZKlc/qcbt9O7R3tRFXJ0lESsAEHwXxj7DFW88YmAQPIcXwkV95yEjue34nqZXjY=
-X-Received: by 2002:a4a:ab08:: with SMTP id i8mr13952968oon.40.1613480328418;
- Tue, 16 Feb 2021 04:58:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20210205222644.2357303-1-saravanak@google.com>
- <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
- <CAGETcx-668+uGigaOMcsvv00mo6o_eGPcH0YyD28OCVEyVbw+w@mail.gmail.com>
- <CAMuHMdWFp_teT5Lgxe6BOpOb4UMM2_4FrKJm-2C6kuCH2YUMrw@mail.gmail.com> <CAGETcx9AZct4h0AdjbNzF5vjoYxT+M+zJ2ddsEN5SV9ALqV48A@mail.gmail.com>
-In-Reply-To: <CAGETcx9AZct4h0AdjbNzF5vjoYxT+M+zJ2ddsEN5SV9ALqV48A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 16 Feb 2021 13:58:37 +0100
-Message-ID: <CAMuHMdULCQrjba0sM3wUFdPDTB4Txh3LVY-8ACq6P_vFJvk+SA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+        id S229708AbhBPPCs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Feb 2021 10:02:48 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53528 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229628AbhBPPCs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Feb 2021 10:02:48 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9A41FAC90;
+        Tue, 16 Feb 2021 15:02:07 +0000 (UTC)
+Message-ID: <1613487727.13456.210.camel@suse.cz>
+Subject: Re: [RFT][PATCH v1] cpufreq: ACPI: Set cpuinfo.max_freq directly if
+ max boost is known
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michael Larabel <Michael@phoronix.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 16 Feb 2021 16:02:07 +0100
+In-Reply-To: <1974978.nRy8TqEeLZ@kreacher>
+References: <1974978.nRy8TqEeLZ@kreacher>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
+On Mon, 2021-02-15 at 20:24 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Commit 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover
+> boost frequencies") attempted to address a performance issue involving
+> acpi-cpufreq, the schedutil governor and scale-invariance on x86 by
+> extending the frequency tables created by acpi-cpufreq to cover the
+> entire range of "turbo" (or "boost") frequencies, but that caused
+> frequencies reported via /proc/cpuinfo and the scaling_cur_freq
+> attribute in sysfs to change which may confuse users and monitoring
+> tools.
+> 
+> For this reason, revert the part of commit 3c55e94c0ade adding the
+> extra entry to the frequency table and use the observation that
+> in principle cpuinfo.max_freq need not be equal to the maximum
+> frequency listed in the frequency table for the given policy.
+> 
+> Namely, modify cpufreq_frequency_table_cpuinfo() to allow cpufreq
+> drivers to set their own cpuinfo.max_freq above that frequency and
+> change  acpi-cpufreq to set cpuinfo.max_freq to the maximum boost
+> frequency found via CPPC.
+> 
+> This should be sufficient to let all of the cpufreq subsystem know
+> the real maximum frequency of the CPU without changing frequency
+> reporting.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=211305
+> Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
+> Reported-by: Matt McDonald <gardotd426@gmail.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> Michael, Giovanni,
+> 
+> The fix for the EPYC performance regression that was merged into 5.11 introduced
+> an undesirable side-effect by distorting the CPU frequency reporting via
+> /proc/cpuinfo and scaling_cur_freq (see the BZ link above for details).
+> 
+> The patch below is reported to address this problem and it should still allow
+> schedutil to achieve desirable performance, because it simply sets
+> cpuinfo.max_freq without extending the frequency table of the CPU.
+> 
+> Please test this one and let me know if it adversely affects performance.
+> 
+> Thanks!
+> 
+> ---
+>  drivers/cpufreq/acpi-cpufreq.c |   62 ++++++++++-------------------------------
+>  drivers/cpufreq/freq_table.c   |    8 ++++-
+>  2 files changed, 23 insertions(+), 47 deletions(-)
 
-On Mon, Feb 15, 2021 at 10:57 PM Saravana Kannan <saravanak@google.com> wrote:
-> On Mon, Feb 15, 2021 at 7:16 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Fri, Feb 12, 2021 at 4:00 AM Saravana Kannan <saravanak@google.com> wrote:
-> > > On Thu, Feb 11, 2021 at 5:00 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > >   1. R-Car Gen2 (Koelsch), R-Car Gen3 (Salvator-X(S), Ebisu).
-> > > >
-> > > >       - Commit 2dfc564bda4a31bc ("soc: renesas: rcar-sysc: Mark device
-> > > >         node OF_POPULATED after init") is no longer needed (but already
-> > > >         queued for v5.12 anyway)
-> > >
-> > > Rob doesn't like the proliferation of OF_POPULATED and we don't need
-> > > it anymore, so maybe work it out with him? It's a balance between some
-> > > wasted memory (struct device(s)) vs not proliferating OF_POPULATED.
-> >
-> > > >   2. SH/R-Mobile AG5 (kzm9g), APE6 (ape6evm), A1 (armadillo800-eva)
-> > > >
-> > > >       - "PATCH] soc: renesas: rmobile-sysc: Set OF_POPULATED and absorb
-> > > >         reset handling" is no longer needed
-> > > >         https://lore.kernel.org/linux-arm-kernel/20210205133319.1921108-1-geert+renesas@glider.be/
-> > >
-> > > Good to see more evidence that this series is fixing things at a more
-> > > generic level.
-> >
-> > I spoke too soon: if CONFIG_POWER_RESET_RMOBILE=n,
-> > booting fails again, as everything is waiting on the system controller,
-> > which never becomes available.
-> > Rcar-sysc doesn't suffer from this problem, cfr. above.
-> > Perhaps because the rmobile-sysc bindings use a hierarchical instead
-> > of a linear PM domain description, and thus consumers point to the
-> > children of the system controller node?
-> > Cfr. system-controller@e6180000 in arch/arm/boot/dts/r8a7740.dtsi.
->
-> Ok, I see what's going on. The problem is that the "power domain"
-> fwnode being registered is not the node that contains the "compatible"
-> property and becomes a device. So this patch[1] is not helping here.
-> Fix is to do something like this (to avoid using OF_POPULATED flag and
-> breaking reset):
->
-> diff --git a/drivers/soc/renesas/rmobile-sysc.c
-> b/drivers/soc/renesas/rmobile-sysc.c
-> index 9046b8c933cb..b7e66139ef7d 100644
-> --- a/drivers/soc/renesas/rmobile-sysc.c
-> +++ b/drivers/soc/renesas/rmobile-sysc.c
-> @@ -344,6 +344,7 @@ static int __init rmobile_init_pm_domains(void)
->                         of_node_put(np);
->                         break;
->                 }
-> +               fwnode_dev_initialized(&np->fwnode, true);
->         }
->
->         put_special_pds();
->
-> Can you give it a shot?
+Hello Rafael,
 
-Thanks, works.  Patch sent
-"[PATCH v2] soc: renesas: rmobile-sysc: Mark fwnode when PM domain is added"
-https://lore.kernel.org/linux-arm-kernel/20210216123958.3180014-1-geert+renesas@glider.be/
+I've run the quick image processing test below and the performance is in line
+with v5.11. I'll send some more results as longer tests complete.
 
-Gr{oetje,eeting}s,
+TEST        : Intel Open Image Denoise, www.openimagedenoise.org
+INVOCATION  : ./denoise -hdr memorial.pfm -out out.pfm -bench 200 -threads $NTHREADS
+CPU         : MODEL            : 2x AMD EPYC 7742
+              FREQUENCY TABLE  : P2: 1.50 GHz
+                                 P1: 2.00 GHz
+				 P0: 2.25 GHz
+              MAX BOOST        :     3.40 GHz
 
-                        Geert
+Results: threads, msecs (ratio). Lower is better.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+              v5.11          v5.11-patch
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      1   1071.43 (1.00)   1068.57 (1.00)
+      2    541.50 (1.00)    542.26 (1.00)
+      4    276.38 (1.00)    276.96 (1.00)
+      8    149.51 (1.00)    149.24 (1.00)
+     16     78.57 (1.00)     78.57 (1.00)
+     24     57.59 (1.00)     57.67 (1.00)
+     32     46.40 (1.00)     46.30 (1.00)
+     48     37.48 (1.00)     38.28 (1.02)
+     64     33.18 (1.00)     33.69 (1.02)
+     80     30.73 (1.00)     31.24 (1.02)
+     96     28.06 (1.00)     28.79 (1.03)
+    112     27.82 (1.00)     28.14 (1.01)
+    120     28.33 (1.00)     29.16 (1.03)
+    128     28.44 (1.00)     28.35 (1.00)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+Giovanni
