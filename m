@@ -2,194 +2,266 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B27D931C71F
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 09:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1EC31C8FC
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 11:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbhBPIGX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Feb 2021 03:06:23 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:41934 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbhBPIGV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 03:06:21 -0500
-Received: by mail-oi1-f173.google.com with SMTP id v193so10377161oie.8;
-        Tue, 16 Feb 2021 00:06:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=83BrpC0oQ/cmeAj/lHKeDzK9StSyqlfuwywAdDjNejw=;
-        b=QBgBUBqgx1FN/5KM3VfFOpGjnuJqRT6RfKbqnFNNIUKXAxvOKKb6hhQNp6UoY2//d9
-         gH9b4zjKmunB8jgDTzJnHj5UkJ22QmdHCTgfoV4ubdn3MknMyfMZNmfTcLgyCH/mVZwz
-         wDgFAs0Uc89WRqE84ReBUia2b1YfWdQ2dHnmDfUbtXn2i71MQcgPyPEGmFwE09AwbpVn
-         moQ3RkGaBjggWRWfEZUeGiRSoqyPP2qKIVBAhFnOGtuIr4RvvBhVgSjpT84b5B0GXUXE
-         5e8BdVdVAxcJMt/Cz526LpfeyJA9AwH96YbaSfigvhtbwTe9Ql5Qa1RrBlepYly2ILPF
-         PKww==
-X-Gm-Message-State: AOAM533sr8FRE/LxLo2YI9f/zHqLnNj/hkQmACmwQPh1dC/tDUXsPSnY
-        zIyAN8KUIYNJ+vE+mSXdU8J2RS8R4Or1uz5LcrA=
-X-Google-Smtp-Source: ABdhPJzz+NpULZTIa3tjUW8686AiYK7eX+4Ie30gH/r1xHcs0vWPfv5qgwYUJGkxQKm1FzqrQsvfEXHLJ4R55M5RltI=
-X-Received: by 2002:aca:d8c6:: with SMTP id p189mr1857071oig.54.1613462740012;
- Tue, 16 Feb 2021 00:05:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20210205222644.2357303-1-saravanak@google.com>
- <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
- <CAGETcx-668+uGigaOMcsvv00mo6o_eGPcH0YyD28OCVEyVbw+w@mail.gmail.com>
- <CAMuHMdXduvBqjAqraXkEKErNJFyN6JNq5wqagc4yHHPpH5SPGQ@mail.gmail.com> <CAGETcx_4FGa-rzLp6bjXbm4F4R6H2W78+nM_kN=XPz5hswzANA@mail.gmail.com>
-In-Reply-To: <CAGETcx_4FGa-rzLp6bjXbm4F4R6H2W78+nM_kN=XPz5hswzANA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 16 Feb 2021 09:05:28 +0100
-Message-ID: <CAMuHMdVodauqBmLMxsfi0kQtAFT8ruJ36LJL9YuQgqwQNKwHHg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229790AbhBPKlz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Feb 2021 05:41:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:60348 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229662AbhBPKlx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Feb 2021 05:41:53 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 250F21FB;
+        Tue, 16 Feb 2021 02:41:07 -0800 (PST)
+Received: from [10.57.62.135] (unknown [10.57.62.135])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABA8E3F73B;
+        Tue, 16 Feb 2021 02:41:04 -0800 (PST)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [RFC][PATCH 1/3] PM /devfreq: add user frequency limits into
+ devfreq struct
+To:     cwchoi00@gmail.com
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Viresh Kumar <vireshk@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar.Eggemann@arm.com, amitk@kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+References: <20210126104001.20361-1-lukasz.luba@arm.com>
+ <CGME20210126104217epcas1p349c717ccf0ea4f964153040b48c72352@epcas1p3.samsung.com>
+ <20210126104001.20361-2-lukasz.luba@arm.com>
+ <ea409e2f-f3ca-437f-d787-7ba793a2c226@samsung.com>
+ <5bd13e13-202f-d059-da29-f82806c33a38@arm.com>
+ <fe7763c8-22f7-65ad-94ee-3c4a78a3f6eb@arm.com>
+ <932c04da-46bf-8867-6b10-c6af83a36588@arm.com>
+ <CAGTfZH12DwvKDv7aKwisL-mvx0tyMcXA96nLTbSpO5zVp5UCiA@mail.gmail.com>
+Message-ID: <89343e3c-3213-19d4-e67e-1dc56afebf4c@arm.com>
+Date:   Tue, 16 Feb 2021 10:41:02 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAGTfZH12DwvKDv7aKwisL-mvx0tyMcXA96nLTbSpO5zVp5UCiA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
+Hi Chanwoo,
 
-On Mon, Feb 15, 2021 at 10:27 PM Saravana Kannan <saravanak@google.com> wrote:
-> On Mon, Feb 15, 2021 at 4:38 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Fri, Feb 12, 2021 at 4:00 AM Saravana Kannan <saravanak@google.com> wrote:
-> > > On Thu, Feb 11, 2021 at 5:00 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > >       - I2C on R-Car Gen3 does not seem to use DMA, according to
-> > > >         /sys/kernel/debug/dmaengine/summary:
-> > > >
-> > > >             -dma4chan0    | e66d8000.i2c:tx
-> > > >             -dma4chan1    | e66d8000.i2c:rx
-> > > >             -dma5chan0    | e6510000.i2c:tx
-> > >
-> > > I think I need more context on the problem before I can try to fix it.
-> > > I'm also very unfamiliar with that file. With fw_devlink=permissive,
-> > > I2C was using DMA? If so, the next step is to see if the I2C relative
-> > > probe order with DMA is getting changed and if so, why.
-> >
-> > More detailed log:
-> >
-> >     platform e66d8000.i2c: Linked as a consumer to e6150000.clock-controller
-> >     platform e66d8000.i2c: Linked as a sync state only consumer to e6055400.gpio
-> >
-> > Why is e66d8000.i2c not linked as a consumer to e6700000.dma-controller?
->
-> Because fw_devlink.strict=1 is not set and dma/iommu is considered an
-> "optional"/"driver decides" dependency.
+On 2/15/21 3:00 PM, Chanwoo Choi wrote:
+> Hi Lukasz,
+> 
+> On Fri, Feb 12, 2021 at 7:28 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
+>> On 2/11/21 11:07 AM, Lukasz Luba wrote:
+>>> Hi Chanwoo,
+>>>
+>>> On 2/3/21 10:21 AM, Lukasz Luba wrote:
+>>>> Hi Chanwoo,
+>>>>
+>>>> Thank you for looking at this.
+>>>>
+>>>> On 2/3/21 10:11 AM, Chanwoo Choi wrote:
+>>>>> Hi Lukasz,
+>>>>>
+>>>>> When accessing the max_freq and min_freq at devfreq-cooling.c,
+>>>>> even if can access 'user_max_freq' and 'lock' by using the 'devfreq'
+>>>>> instance,
+>>>>> I think that the direct access of variables
+>>>>> (lock/user_max_freq/user_min_freq)
+>>>>> of struct devfreq are not good.
+>>>>>
+>>>>> Instead, how about using the 'DEVFREQ_TRANSITION_NOTIFIER'
+>>>>> notification with following changes of 'struct devfreq_freq'?
+>>>>
+>>>> I like the idea with devfreq notification. I will have to go through the
+>>>> code to check that possibility.
+>>>>
+>>>>> Also, need to add codes into devfreq_set_target() for initializing
+>>>>> 'new_max_freq' and 'new_min_freq' before sending the DEVFREQ_POSTCHANGE
+>>>>> notification.
+>>>>>
+>>>>> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+>>>>> index 147a229056d2..d5726592d362 100644
+>>>>> --- a/include/linux/devfreq.h
+>>>>> +++ b/include/linux/devfreq.h
+>>>>> @@ -207,6 +207,8 @@ struct devfreq {
+>>>>>    struct devfreq_freqs {
+>>>>>           unsigned long old;
+>>>>>           unsigned long new;
+>>>>> +       unsigned long new_max_freq;
+>>>>> +       unsigned long new_min_freq;
+>>>>>    };
+>>>>>
+>>>>>
+>>>>> And I think that new 'user_min_freq'/'user_max_freq' are not necessary.
+>>>>> You can get the current max_freq/min_freq by using the following steps:
+>>>>>
+>>>>>      get_freq_range(devfreq, &min_freq, &max_freq);
+>>>>>      dev_pm_opp_find_freq_floor(pdev, &min_freq);
+>>>>>      dev_pm_opp_find_freq_floor(pdev, &max_freq);
+>>>>>
+>>>>> So that you can get the 'max_freq/min_freq' and then
+>>>>> initialize the 'freqs.new_max_freq and freqs.new_min_freq'
+>>>>> with them as following:
+>>>>>
+>>>>> in devfreq_set_target()
+>>>>>      get_freq_range(devfreq, &min_freq, &max_freq);
+>>>>>      dev_pm_opp_find_freq_floor(pdev, &min_freq);
+>>>>>      dev_pm_opp_find_freq_floor(pdev, &max_freq);
+>>>>>      freqs.new_max_freq = min_freq;
+>>>>>      freqs.new_max_freq = max_freq;
+>>>>>      devfreq_notify_transition(devfreq, &freqs, DEVFREQ_POSTCHANGE);
+>>>>
+>>>> I will plumb it in and check that option. My concern is that function
+>>>> get_freq_range() would give me the max_freq value from PM QoS, which
+>>>> might be my thermal limit - lower that user_max_freq. Then I still
+>>>> need
+>>>>
+>>>> I've been playing with PM QoS notifications because I thought it would
+>>>> be possible to be notified in thermal for all new set values - even from
+>>>> devfreq sysfs user max_freq write, which has value higher that the
+>>>> current limit set by thermal governor. Unfortunately PM QoS doesn't
+>>>> send that information by design. PM QoS also by desing won't allow
+>>>> me to check first two limits in the plist - which would be thermal
+>>>> and user sysfs max_freq.
+>>>>
+>>>> I will experiment with this notifications and share the results.
+>>>> That you for your comments.
+>>>
+>>> I have experimented with your proposal. Unfortunately, the value stored
+>>> in the pm_qos which is read by get_freq_range() is not the user max
+>>> freq. It's the value from thermal devfreq cooling when that one is
+>>> lower. Which is OK in the overall design, but not for my IPA use case.
+>>>
+>>> What comes to my mind is two options:
+>>> 1) this patch proposal, with simple solution of two new variables
+>>> protected by mutex, which would maintain user stored values
+>>> 2) add a new notification chain in devfreq to notify about new
+>>> user written value, to which devfreq cooling would register; that
+>>> would allow devfreq cooling to get that value instantly and store
+>>> locally
+>>
+>> 3) How about new define for existing notification chain:
+>> #define DEVFREQ_USER_CHANGE            (2)
+> 
+> I think that if we add the notification with specific actor like user change
+> or OPP change or others, it is not proper. But, we can add the notification
+> for min or max frequency change timing. Because the devfreq already has
+> the notification for current frequency like DEVFREQ_PRECHANGE,
+> DEVFREQ_POSTCHANGE.
+> 
+> Maybe, we can add the following notification for min/max_freq.
+> The following min_freq and max_freq values will be calculated by
+> get_freq_range().
+> DEVFREQ_MIN_FREQ_PRECHANGE
+> DEVFREQ_MIN_FREQ_POSTCHANGE
+> DEVFREQ_MAX_FREQ_PRECHANGE
+> DEVFREQ_MAX_FREQ_POSTCHANGE
 
-Oh, I thought dma/iommu were considered mandatory initially,
-but dropped as dependencies in the late boot process?
+Would it be then possible to pass the user max freq value written via
+sysfs? Something like in the example below, when writing into max sysfs:
 
->
-> >     platform e6700000.dma-controller: Linked as a consumer to
-> > e6150000.clock-controller
->
-> Is this the only supplier of dma-controller?
+1) starting in max_freq_store()
+         freqs.new_max_freq = max_freq;
+         devfreq_notify_transition(devfreq, &freqs, 
+DEVFREQ_MAX_FREQ_PRECHANGE);
+	dev_pm_qos_update_request()
 
-No, e6180000.system-controller is also a supplier.
+2)then after a while in devfreq_set_target()
+	get_freq_range(devfreq, &min_freq, &max_freq);
+	dev_pm_opp_find_freq_floor(pdev, &min_freq);
+	dev_pm_opp_find_freq_floor(pdev, &max_freq);
+	freqs.new_min_freq = min_freq;
+	freqs.new_max_freq = max_freq;
+	devfreq_notify_transition(devfreq, &freqs, DEVFREQ_MAX_FREQ_POSTCHANGE);
 
-> >     platform e66d8000.i2c: Added to deferred list
-> >     platform e6700000.dma-controller: Added to deferred list
-> >
-> >     bus: 'platform': driver_probe_device: matched device
-> > e6700000.dma-controller with driver rcar-dmac
-> >     bus: 'platform': really_probe: probing driver rcar-dmac with
-> > device e6700000.dma-controller
-> >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
-> >
-> >     bus: 'platform': driver_probe_device: matched device e66d8000.i2c
-> > with driver i2c-rcar
-> >     bus: 'platform': really_probe: probing driver i2c-rcar with device
-> > e66d8000.i2c
-> >
-> > I2C becomes available...
-> >
-> >     i2c-rcar e66d8000.i2c: request_channel failed for tx (-517)
-> >     [...]
-> >
-> > but DMA is not available yet, so the driver falls back to PIO.
-> >
-> >     driver: 'i2c-rcar': driver_bound: bound to device 'e66d8000.i2c'
-> >     bus: 'platform': really_probe: bound device e66d8000.i2c to driver i2c-rcar
-> >
-> >     platform e6700000.dma-controller: Retrying from deferred list
-> >     bus: 'platform': driver_probe_device: matched device
-> > e6700000.dma-controller with driver rcar-dmac
-> >     bus: 'platform': really_probe: probing driver rcar-dmac with
-> > device e6700000.dma-controller
-> >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
-> >     platform e6700000.dma-controller: Added to deferred list
-> >     platform e6700000.dma-controller: Retrying from deferred list
-> >     bus: 'platform': driver_probe_device: matched device
-> > e6700000.dma-controller with driver rcar-dmac
-> >     bus: 'platform': really_probe: probing driver rcar-dmac with
-> > device e6700000.dma-controller
-> >     driver: 'rcar-dmac': driver_bound: bound to device 'e6700000.dma-controller'
-> >     bus: 'platform': really_probe: bound device
-> > e6700000.dma-controller to driver rcar-dmac
-> >
-> > DMA becomes available.
-> >
-> > Here userspace is entered. /sys/kernel/debug/dmaengine/summary shows
-> > that the I2C controllers do not have DMA channels allocated, as the
-> > kernel has performed no more I2C transfers after DMA became available.
-> >
-> > Using i2cdetect shows that DMA is used, which is good:
-> >
-> >     i2c-rcar e66d8000.i2c: got DMA channel for rx
-> >
-> > With permissive devlinks, the clock controller consumers are not added
-> > to the deferred probing list, and probe order is slightly different.
-> > The I2C controllers are still probed before the DMA controllers.
-> > But DMA becomes available a bit earlier, before the probing of the last
-> > I2C slave driver.
->
-> This seems like a race? I'm guessing it's two different threads
-> probing those two devices? And it just happens to work for
-> "permissive" assuming the boot timing doesn't change?
->
-> > Hence /sys/kernel/debug/dmaengine/summary shows that
-> > some I2C transfers did use DMA.
-> >
-> > So the real issue is that e66d8000.i2c not linked as a consumer to
-> > e6700000.dma-controller.
->
-> That's because fw_devlink.strict=1 isn't set. If you need DMA to be
-> treated as a mandatory supplier, you'll need to set the flag.
->
-> Is fw_devlink=on really breaking anything here? It just seems like
-> "permissive" got lucky with the timing and it could break at any point
-> in the future. Thought?
+This 2nd part is called after the PM QoS has changed that limit,
+so might be missing (in case value was higher that current),
+but thermal would know about that, so no worries.
 
-I don't think there is a race.  fw_devlinks calling driver_deferred_probe_add()
-on all consumers has a big impact on probe order.
+> 
+> 
+>>
+>> Then a modified devfreq_notify_transition() would get:
+>> @@ -339,6 +339,10 @@ static int devfreq_notify_transition(struct devfreq
+>> *devfreq,
+>>
+>> srcu_notifier_call_chain(&devfreq->transition_notifier_list,
+>>                                   DEVFREQ_POSTCHANGE, freqs);
+>>                   break;
+>> +       case DEVFREQ_USER_CHANGE:
+>> +               srcu_notifier_call_chain(&devfreq->transition_notifier_list,
+>> +                               DEVFREQ_USER_CHANGE, freqs);
+>> +               break;
+>>           default:
+>>                   return -EINVAL;
+>>           }
+>>
+>> If that is present, I can plumb your suggestion with:
+>> struct devfreq_freq {
+>> +       unsigned long new_max_freq;
+>> +       unsigned long new_min_freq;
+>>
+>> and populate them with values in the max_freq_store() by adding at the
+>> end:
+>>
+>> freqs.new_max_freq = max_freq;
+>> mutex_lock();
+>> devfreq_notify_transition(devfreq, &freqs, DEVFREQ_USER_CHANGE);
+>> mutex_unlock();
+>>
+>> I would handle this notification in devfreq cooling and keep the
+>> value there, for future IPA checks.
+>>
+>> If you agree, I can send next version of the patch set.
+>>
+>>>
+>>> What do you think Chanwoo?
+> 
+> I thought that your suggestion to expose the user input for min/max_freq.
+> But, these values are not valid for the public user. Actually, the devfreq core
+> handles these values only internally without any explicit access from outside.
+> 
+> I'm not sure that it is right or not to expose the internal value of
+> devfreq struct.
+> Until now, I think that it is not proper to show the interval value outside.
+> 
+> Because the devfreq subsystem only provides the min_freq and max_freq
+> which reflect the all requirement of user input/cooling policy/OPP
+> instead of user_min_freq, user_max_freq.
+> 
+> If we provide the user_min_freq, user_max_freq via DEVFREQ notification,
+> we have to make the new sysfs attributes for user_min_freq and user_max_freq
+> to show the value to the user. But, it seems that it is not nice.
 
-Gr{oetje,eeting}s,
+I would say we don't have to expose it. Let's take a closer look into
+an example. The main problem is with GPUs. The middleware is aware of
+the OPPs in the GPU. If the middleware wants to switch into different
+power-performance mode e.g. power-saving, it writes into this sysfs
+the max allowed freq. IPA does not know about it and makes wrong
+decisions. As you said, the sysfs read operation combines all:
+user input/cooling policy/OPP, but that's not a problem for this aware
+middleware. So it can stay as is.
+The only addition would be this 'notification about user attempt of
+reducing max device speed' internally inside the kernel, for those
+subsystems which are interested in it.
 
-                        Geert
+> 
+> Actually, I have no other idea how to support your feature.
+> We try to find the more proper method.
+> 
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thank you for coming back with your comments. I know it's not
+an easy feature but I hope we can find a solution.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Lukasz
