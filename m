@@ -2,68 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 653BA31C977
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 12:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1755B31CAA5
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Feb 2021 13:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhBPLNm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Feb 2021 06:13:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36392 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229958AbhBPLNl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Feb 2021 06:13:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D60B164DA1;
-        Tue, 16 Feb 2021 11:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613473981;
-        bh=U/9Xwrg8bAM2A5MgFUI0Cfy5+k8D9Ryv+uAjX8R5bJc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EL9Vm+9ChSDdG5fjYVCPwkyPUDDjSSq5lq33Yb7r4Fgka+MaEcYgR9NcjdQkEH52a
-         E81VRuJsw7LAnC2ytlqxnIybr8vPtu23pUES+KN9WWRuXmOHlz1tbXLm5k0vz9j9TT
-         qZkfZUDo5P5H3UeMFAGbeuarm3CKzErWoLEl28piSh5who7BNxuu5BDrX39TVDyj0F
-         eRLwxkPaQNoYY6HwzwYOrKPCpWs2gThBrUdRQ6IY3Gg9qPBScEqAwoF4XD+0f7I4aS
-         yLSU1/89bMfyD1ep74tW1KypH3mKi8oWXBig+luvW5Z46RDOe0Us+rCJg25c40GAlU
-         a6EDbW2/PuFKA==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Document SM8350 CPUfreq compatible
-Date:   Tue, 16 Feb 2021 16:42:51 +0530
-Message-Id: <20210216111251.1838149-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        id S230020AbhBPMkv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Feb 2021 07:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229983AbhBPMkt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Feb 2021 07:40:49 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B83C061756
+        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 04:40:03 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed60:c5d6:9422:c618:ee58])
+        by andre.telenet-ops.be with bizsmtp
+        id Vog02400c2PLE0701og0oF; Tue, 16 Feb 2021 13:40:01 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lBze4-007Pal-DB; Tue, 16 Feb 2021 13:40:00 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lBze3-00DLHK-Tg; Tue, 16 Feb 2021 13:39:59 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Magnus Damm <magnus.damm@gmail.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2] soc: renesas: rmobile-sysc: Mark fwnode when PM domain is added
+Date:   Tue, 16 Feb 2021 13:39:58 +0100
+Message-Id: <20210216123958.3180014-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the CPUfreq compatible for SM8350 SoC along with note for using the
-specific compatible for SoCs
+Currently, there are two drivers binding to the R-Mobile System
+Controller (SYSC):
+  - The rmobile-sysc driver registers PM domains from a core_initcall(),
+    and does not use a platform driver,
+  - The optional rmobile-reset driver registers a reset handler, and
+    does use a platform driver.
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+As fw_devlink only considers devices, commit bab2d712eeaf9d60 ("PM:
+domains: Mark fwnodes when their powerdomain is added/removed") works
+only for PM Domain drivers where the DT node is a real device node, and
+not for PM Domain drivers using a hierarchical representation inside a
+subnode.  Hence if fw_devlink is enabled, probing of on-chip devices
+that are part of the SYSC PM domain is deferred until the optional
+rmobile-reset driver has been bound.   If the rmobile-reset driver is
+not available, this will never happen, and thus lead to complete system
+boot failures.
+
+Fix this by explicitly marking the fwnode initialized.
+
+Suggested-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This is v2 of "soc: renesas: rmobile-sysc: Set OF_POPULATED and absorb
+reset handling".
+To be queued in renesas-devel as a fix for v5.12 if v5.12-rc1 will have
+fw_devlink enabled.
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-index 9299028ee712..3eb3cee59d79 100644
---- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-+++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-@@ -8,7 +8,9 @@ Properties:
- - compatible
- 	Usage:		required
- 	Value type:	<string>
--	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss".
-+	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss"
-+			along with SoC specific compatible:
-+			  "qcom,sm8350-cpufreq-epss", "qcom,cpufreq-epss"
+v2:
+  - Call fwnode_dev_initialized() instead of setting OF_POPULATED,
+  - Drop reset handling move, as fwnode_dev_initialized() does not
+    prevent the rmobile-reset driver from binding against the same
+    device.
+---
+ drivers/soc/renesas/rmobile-sysc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/soc/renesas/rmobile-sysc.c b/drivers/soc/renesas/rmobile-sysc.c
+index bf64d052f9245db5..204e6135180b919c 100644
+--- a/drivers/soc/renesas/rmobile-sysc.c
++++ b/drivers/soc/renesas/rmobile-sysc.c
+@@ -342,6 +342,8 @@ static int __init rmobile_init_pm_domains(void)
+ 			of_node_put(np);
+ 			break;
+ 		}
++
++		fwnode_dev_initialized(&np->fwnode, true);
+ 	}
  
- - clocks
- 	Usage:		required
+ 	put_special_pds();
 -- 
-2.26.2
+2.25.1
 
