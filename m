@@ -2,24 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666B531D885
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 12:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9544631D8A9
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 12:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbhBQLiF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Feb 2021 06:38:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:56714 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231380AbhBQLbG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Feb 2021 06:31:06 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7203931B;
-        Wed, 17 Feb 2021 03:30:13 -0800 (PST)
-Received: from localhost (unknown [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 043473F73B;
-        Wed, 17 Feb 2021 03:30:12 -0800 (PST)
-Date:   Wed, 17 Feb 2021 11:30:11 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S230428AbhBQLnk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Feb 2021 06:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231717AbhBQLnc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 06:43:32 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D259C061794
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 03:40:31 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id j12so8214100pfj.12
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 03:40:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=11pGVD0nzA2DAiJ7cWPXp9I44T8zR661lI4xstwokb8=;
+        b=nN3POMtqLZQF8/79uB0ZdenvqJkcov6oKL3+Yaukuqsj3U0pi+rmZsW6D/unqNXCP0
+         4Xdu9O8wIAQpxqis6OuGqhr9RyyW/HWKYqZvwuPiAvJH+AHoGjRTDzciOgrTwWOkCoUF
+         XT+TnNXJQBqDJCNrAYWI7L4mVB0cgLerE8aevwJe0wxiKZjvQsNBpi12uHi1aFyY+LEN
+         9HAfWZMhSvePdMxjTbgmHXF0qK740ZMRl8hnxQotc2GLAzMrDYRs03JAFseq1X4pOtbd
+         lNCp3VQMft6/UqDuzuWT4qnPLMsSrIfq3lbn5vOqg/MtC5jv83XFjcuEW3ygFDMyvUoR
+         IK9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=11pGVD0nzA2DAiJ7cWPXp9I44T8zR661lI4xstwokb8=;
+        b=TkY9NTcDWj2KfW7UVYzXefyeb8EVEiPXbdGm6bBRMLd3jZAcNHu6EsTC3Pvfmpo6qr
+         op3u3WkQUwewl6lrsFLNQ4IJ7xrG0vhH3UbWrf4XhCkyf/comTTnxNnnUe0AjvECas+f
+         riOoIud1sRCXIFy5fMaadzb3bAYr/IEKziuNz7QiwMygKJJuj8E3JV72ca7p+z8R/VkX
+         D41omyipQCe+20QAVsMWg+opy/vZUP06YSihQELejxTpPML9HG23fftXqUpY5r3TJ4J3
+         YuzgtTSn+084qKzWYe3Q/7YRdp6HZqmb3aY2owAe995qHcG55L/DdyOOt4AM0B6QcIzE
+         rBGA==
+X-Gm-Message-State: AOAM53002vf9HaXSEC00Mog8QQDsjkNxs5eBF2uuT+yr4jFF7eg6A30o
+        6ngSPNFteRZursDBaee74+cpSw==
+X-Google-Smtp-Source: ABdhPJzr4uJe4QkljUPFWlLqLXnOjixB1cwYPo3cq1LNkxSXQbV/GK5ae2xqgQx6gdCFQbeMSp90cQ==
+X-Received: by 2002:a62:6585:0:b029:1b9:d8d9:1af2 with SMTP id z127-20020a6265850000b02901b9d8d91af2mr23638713pfb.17.1613562030391;
+        Wed, 17 Feb 2021 03:40:30 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id h124sm2331354pfe.216.2021.02.17.03.40.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 17 Feb 2021 03:40:29 -0800 (PST)
+Date:   Wed, 17 Feb 2021 17:10:27 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
 Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -29,129 +59,53 @@ Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
  sched_freq_tick() callback
-Message-ID: <20210217113011.GA22176@arm.com>
+Message-ID: <20210217114027.ashqh67hrfk4hwib@vireshk-i7>
 References: <cover.1611829953.git.viresh.kumar@linaro.org>
  <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
  <20210203114521.GA6380@arm.com>
  <20210205091424.3od3tme3f7mh7ebp@vireshk-i7>
  <20210217002422.GA17422@arm.com>
  <20210217042558.o4anjdkayzgqny55@vireshk-i7>
+ <20210217113011.GA22176@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210217042558.o4anjdkayzgqny55@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210217113011.GA22176@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-Replying this first as it's going to be relevant below:
-
-> Just out of curiosity, what exactly did you test and what was the setup ? :)
-
-I tested it on:
-
- - Juno R0 (CPUs [0, 3-5] are littles, CPUs [1-2] are bigs)
-   + PMUs faking AMUs
-   + userspace/schedutil +
-   + cpufreq-FIE/!cpufreq-FIE
-   + DT
-
-This testing did not yet cover patch 2/2.
-
-My checklist shows:
- - system invariance status correct - passed
- - scale factor correct (userspace cpufreq governor) - passed
- - arch_set_freq_scale bypassed - passed
- - partial "AMUs" support - failed (see below)
- - EAS enabling - passed
-
-I don't have an automated process for this as many test cases involve
-kernel source changes. In time I will automate all of these and
-possibly cover all scenarios with FVP (fast models) testing, but for
-now human error is possible :).
-
-On Wednesday 17 Feb 2021 at 09:55:58 (+0530), Viresh Kumar wrote:
-> On 17-02-21, 00:24, Ionela Voinescu wrote:
-> > I think it could be merged in patch 1/2 as it's part of enabling the use
-> > of multiple sources of information for FIE. Up to you!
+On 17-02-21, 11:30, Ionela Voinescu wrote:
+> The problem is not topology_scale_freq_invariant() but whether a scale
+> factor is set for some CPUs.
 > 
-> Sure.
+> Scenario (test system above):
+>  - "AMUs" are only supported for [1-2],
+>  - cpufreq_supports_freq_invariance() -> false
 > 
-> > >  static void amu_fie_setup(const struct cpumask *cpus)
-> > >  {
-> > > -	bool invariant;
-> > >  	int cpu;
-> > >  
-> > >  	/* We are already set since the last insmod of cpufreq driver */
-> > > @@ -257,25 +256,10 @@ static void amu_fie_setup(const struct cpumask *cpus)
-> > >  
-> > >  	cpumask_or(amu_fie_cpus, amu_fie_cpus, cpus);
-> > >  
-> > > -	invariant = topology_scale_freq_invariant();
-> > > -
-> > > -	/* We aren't fully invariant yet */
-> > > -	if (!invariant && !cpumask_equal(amu_fie_cpus, cpu_present_mask))
-> > > -		return;
-> > > -
-> > 
-> > You still need these checks, otherwise you could end up with only part
-> > of the CPUs setting a scale factor, when only part of the CPUs support
-> > AMUs and there is no cpufreq support for FIE.
+> What should happen:
+>  - topology_scale_freq_invariant() -> false (passed)
+>  - all CPUs should have their freq_scale unmodified (1024) - (failed)
+>    because only 2 out of 6 CPUs have a method of setting a scale factor
 > 
-> Both supports_scale_freq_counters() and topology_scale_freq_invariant() take
-> care of this now and they will keep reporting the system as invariant until the
-> time all the CPUs have counters (in absence of cpufreq).
-> 
+> What does happen:
+>  - arch_set_freq_tick() -> topology_set_freq_tick() will set a scale
+>    factor for [1-2] based on AMUs. This should not happen. We will end
+>    up with invariant signals for bigs and signals that are not freq
+>    invariant for littles.
 
-Correct!
+Another case. cpufreq is included as a module and AMU is implemented
+partially.
 
-> The topology_set_scale_freq_source() API is supposed to be called multiple
-> times, probably once for each policy and so I don't see a need of these checks
-> anymore.
-> 
+- first time cpufreq driver is inserted, we set up everything and
+  freq_scale gets updated on ticks.
 
-The problem is not topology_scale_freq_invariant() but whether a scale
-factor is set for some CPUs.
+- remove cpufreq driver, we are back in same situation.
 
-Scenario (test system above):
- - "AMUs" are only supported for [1-2],
- - cpufreq_supports_freq_invariance() -> false
+We can't control it that way.. Or we add another call layer in middle
+before the tick-handler gets called for AMU, which will check if we
+are fully invariant or not ?
 
-What should happen:
- - topology_scale_freq_invariant() -> false (passed)
- - all CPUs should have their freq_scale unmodified (1024) - (failed)
-   because only 2 out of 6 CPUs have a method of setting a scale factor
-
-What does happen:
- - arch_set_freq_tick() -> topology_set_freq_tick() will set a scale
-   factor for [1-2] based on AMUs. This should not happen. We will end
-   up with invariant signals for bigs and signals that are not freq
-   invariant for littles.
-
-Ionela.
-
-> > Small(ish) optimisation at the beginning of this function:
-> > 
-> >     if (cpumask_empty(&scale_freq_counters_mask))
-> >         scale_freq_invariant = topology_scale_freq_invariant();
-> > 
-> > This will save you a call to rebuild_sched_domains_energy(), which is
-> > quite expensive, when cpufreq supports FIE and we also have counters.
-> 
-> Good Point.
->  
-> > After comments addressed,
-> > 
-> > Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> 
-> Thanks.
-> 
-> > Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> 
-> 
-
-> -- 
-> viresh
+-- 
+viresh
