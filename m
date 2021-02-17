@@ -2,232 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 043F831D511
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 06:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC3B31D52A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 06:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbhBQFev (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Feb 2021 00:34:51 -0500
-Received: from mga05.intel.com ([192.55.52.43]:54690 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231492AbhBQFef (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Feb 2021 00:34:35 -0500
-IronPort-SDR: StYLZ6sABfNCHiiQ7+Wh0l1ylYUt4zRDsuQVZJrN9KmGM/8xcIuXhG4xYbtx7hupXDNCGzPvmj
- yIuvt358GN4w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9897"; a="267959440"
-X-IronPort-AV: E=Sophos;i="5.81,184,1610438400"; 
-   d="scan'208";a="267959440"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 21:33:32 -0800
-IronPort-SDR: zrqcThvVUP1FZhnZ6TjWsXkFH2fDA553cyCtUSZjbHSTRFJ1lEPZVdxpXBZ650yy7/sOZxgnRn
- ZItdPedohkPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,184,1610438400"; 
-   d="scan'208";a="364346199"
-Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2021 21:33:31 -0800
-Received: from kbuild by cd560a204411 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lCFSs-0008mP-8q; Wed, 17 Feb 2021 05:33:30 +0000
-Date:   Wed, 17 Feb 2021 13:32:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 606a1948458764ff9a1ffa47a3d68749b9b93041
-Message-ID: <602caa79.xSxQXm0wF8N7T0PX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231216AbhBQFtt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Feb 2021 00:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230221AbhBQFtq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 00:49:46 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBA7C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 21:49:06 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d15so6848214plh.4
+        for <linux-pm@vger.kernel.org>; Tue, 16 Feb 2021 21:49:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=emQXPuqsgdPSuXYNHs0efrSNIkqWhGSVKDhTTdUubPU=;
+        b=UM0W1EROsKnnez2p5z5LslvgyTFdH1bXFYB4C/W/MIWfs5sSfuIwm/WsNV3THSjkC8
+         q08/e7CU00IjvLsa0Um4TNuhC2WI35K1v8PDQZoHRiWwA+SQV0hDiY61WRMG5swjNemb
+         vOeuf8GHA0oSeQxmkCgWUXrH7Ow2l3icXf85rNkRJ2gvSk4YQT8IopwzMZBWEbiZnPas
+         V5uampE4auaSsVj3MrM8bO5JzeQhsmJMCgNQuqcG+9gsMSxjap/t3SUBA3+VwonfJXzq
+         93E9Uq+D0fCW/2rauj5/kmF4o8Ois6HGwreVALPqYGj/fpvET1YZyP8nejLOsnEGBTDb
+         2MXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=emQXPuqsgdPSuXYNHs0efrSNIkqWhGSVKDhTTdUubPU=;
+        b=EWJwUN5Ppn8/g2oKIeG+Dy72mpXwOqFn6o/dyXu5fs3vrgua8MXsCGbeA1AAcsT9P2
+         QdFunwLrJSWNUW9w4dK4mEsSzipVJpS4UQxPLMmVehrn3ECpv1TrdMD9KY1yv089QY5R
+         S3l6RSMiEtFS9XSC3P2w8lGWY4CUjtzMG94on8RlFlagc6xok7q8zHn4caUw6y16MmlG
+         hLc0Z8myoGnCWhrTTIvYvDDVPyN1fKmP5LJ3IQDbLJKF9kz63GFyVSutQ5Hf8liIZP2b
+         c/+Hk1XwAq+oEoMvM9kj+bDtobeSf+ashGFKo++YvNIFXPyB4AI+peZeFNaeem5Pxo2C
+         XXOw==
+X-Gm-Message-State: AOAM531oH+UNBVJuLxYQLXOlGaP8ql0smieni9Ss6BSYqf1RCPRxG21K
+        sNKjh+azunBg+Agi8L8rAk6ZWA==
+X-Google-Smtp-Source: ABdhPJzjKJf4FU20uEGFouwXC02tQlCg6j476G+w0mokmMJ5uCcC+odaB6FT6A4CpwEVlrVqbts2jw==
+X-Received: by 2002:a17:90a:ac09:: with SMTP id o9mr7946027pjq.191.1613540946178;
+        Tue, 16 Feb 2021 21:49:06 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id j22sm803460pff.57.2021.02.16.21.49.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Feb 2021 21:49:05 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        "v5 . 7+" <stable@vger.kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal: cpufreq_cooling: freq_qos_update_request() returns < 0 on error
+Date:   Wed, 17 Feb 2021 11:18:58 +0530
+Message-Id: <b2b7e84944937390256669df5a48ce5abba0c1ef.1613540713.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 606a1948458764ff9a1ffa47a3d68749b9b93041  Merge branches 'pm-misc', 'pm-cpuidle', 'pm-sleep' and 'powercap' into linux-next
+freq_qos_update_request() returns 1 if the effective constraint value
+has changed, 0 if the effective constraint value has not changed, or a
+negative error code on failures.
 
-elapsed time: 725m
+The frequency constraints for CPUs can be set by different parts of the
+kernel. If the maximum frequency constraint set by other parts of the
+kernel are set at a lower value than the one corresponding to cooling
+state 0, then we will never be able to cool down the system as
+freq_qos_update_request() will keep on returning 0 and we will skip
+updating cpufreq_state and thermal pressure.
 
-configs tested: 169
-configs skipped: 2
+Fix that by doing the updates even in the case where
+freq_qos_update_request() returns 0, as we have effectively set the
+constraint to a new value even if the consolidated value of the
+actual constraint is unchanged because of external factors.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                           jazz_defconfig
-powerpc                        fsp2_defconfig
-csky                             alldefconfig
-arc                           tb10x_defconfig
-alpha                               defconfig
-sh                           se7343_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                     redwood_defconfig
-arm                        shmobile_defconfig
-c6x                        evmc6678_defconfig
-powerpc                      walnut_defconfig
-ia64                            zx1_defconfig
-powerpc                    klondike_defconfig
-arm                           stm32_defconfig
-m68k                        m5272c3_defconfig
-arm                       imx_v4_v5_defconfig
-ia64                          tiger_defconfig
-xtensa                    smp_lx200_defconfig
-arm                      pxa255-idp_defconfig
-arm                          exynos_defconfig
-arm                          pxa168_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                         axm55xx_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc                    mvme5100_defconfig
-arm                      footbridge_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                mpc7448_hpc2_defconfig
-h8300                    h8300h-sim_defconfig
-arm                  colibri_pxa270_defconfig
-arc                     haps_hs_smp_defconfig
-sh                        edosk7760_defconfig
-sh                          rsk7264_defconfig
-nds32                             allnoconfig
-powerpc                   lite5200b_defconfig
-powerpc                     mpc83xx_defconfig
-arm                              alldefconfig
-riscv                               defconfig
-c6x                              allyesconfig
-sh                   rts7751r2dplus_defconfig
-mips                   sb1250_swarm_defconfig
-xtensa                           allyesconfig
-mips                         tb0287_defconfig
-arm                     eseries_pxa_defconfig
-arm                             rpc_defconfig
-powerpc                     sbc8548_defconfig
-sh                        apsh4ad0a_defconfig
-arm                      jornada720_defconfig
-arm                         hackkit_defconfig
-sh                ecovec24-romimage_defconfig
-arm                       cns3420vb_defconfig
-arm                        mini2440_defconfig
-arm                       multi_v4t_defconfig
-xtensa                              defconfig
-powerpc                    sam440ep_defconfig
-arm                         s3c6400_defconfig
-sh                         apsh4a3a_defconfig
-powerpc                  storcenter_defconfig
-ia64                         bigsur_defconfig
-sh                        dreamcast_defconfig
-m68k                          hp300_defconfig
-ia64                                defconfig
-powerpc                      ppc64e_defconfig
-sh                            shmin_defconfig
-mips                         cobalt_defconfig
-xtensa                  cadence_csp_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                 mpc832x_mds_defconfig
-um                            kunit_defconfig
-mips                           ci20_defconfig
-mips                      maltaaprp_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                        oxnas_v6_defconfig
-mips                  cavium_octeon_defconfig
-mips                      fuloong2e_defconfig
-arc                              alldefconfig
-arm                            mps2_defconfig
-arm                     davinci_all_defconfig
-mips                           rs90_defconfig
-mips                       lemote2f_defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210216
-x86_64               randconfig-a002-20210216
-x86_64               randconfig-a004-20210216
-x86_64               randconfig-a001-20210216
-x86_64               randconfig-a005-20210216
-x86_64               randconfig-a006-20210216
-i386                 randconfig-a003-20210216
-i386                 randconfig-a005-20210216
-i386                 randconfig-a002-20210216
-i386                 randconfig-a006-20210216
-i386                 randconfig-a001-20210216
-i386                 randconfig-a004-20210216
-x86_64               randconfig-a016-20210215
-x86_64               randconfig-a013-20210215
-x86_64               randconfig-a012-20210215
-x86_64               randconfig-a015-20210215
-x86_64               randconfig-a014-20210215
-x86_64               randconfig-a011-20210215
-i386                 randconfig-a016-20210216
-i386                 randconfig-a014-20210216
-i386                 randconfig-a012-20210216
-i386                 randconfig-a013-20210216
-i386                 randconfig-a011-20210216
-i386                 randconfig-a015-20210216
-i386                 randconfig-a016-20210215
-i386                 randconfig-a014-20210215
-i386                 randconfig-a012-20210215
-i386                 randconfig-a013-20210215
-i386                 randconfig-a011-20210215
-i386                 randconfig-a015-20210215
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a003-20210215
-x86_64               randconfig-a002-20210215
-x86_64               randconfig-a001-20210215
-x86_64               randconfig-a004-20210215
-x86_64               randconfig-a005-20210215
-x86_64               randconfig-a006-20210215
-x86_64               randconfig-a013-20210216
-x86_64               randconfig-a016-20210216
-x86_64               randconfig-a012-20210216
-x86_64               randconfig-a015-20210216
-x86_64               randconfig-a014-20210216
-x86_64               randconfig-a011-20210216
-
+Cc: v5.7+ <stable@vger.kernel.org> # v5.7+
+Reported-by: Thara Gopinath <thara.gopinath@linaro.org>
+Fixes: f12e4f66ab6a ("thermal/cpu-cooling: Update thermal pressure in case of a maximum frequency capping")
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hi Guys,
+
+This needs to go in 5.12-rc.
+
+Thara, please give this a try and give your tested-by :).
+
+ drivers/thermal/cpufreq_cooling.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index f5af2571f9b7..10af3341e5ea 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -485,7 +485,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+ 	frequency = get_state_freq(cpufreq_cdev, state);
+ 
+ 	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
+-	if (ret > 0) {
++	if (ret >= 0) {
+ 		cpufreq_cdev->cpufreq_state = state;
+ 		cpus = cpufreq_cdev->policy->cpus;
+ 		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
