@@ -2,117 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C1031E1DD
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 23:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976F731E354
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 00:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbhBQWOq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Feb 2021 17:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S230088AbhBQX6i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Feb 2021 18:58:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233203AbhBQWOl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 17:14:41 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083ACC061574
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 14:14:01 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id s16so85518plr.9
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 14:14:01 -0800 (PST)
+        with ESMTP id S230305AbhBQX6g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 18:58:36 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2EEC061788
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 15:57:56 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id m188so371526yba.13
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 15:57:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=riZhsWhKU0dm/J5AOcoBM++eYapsJeL1OmU541ESLhA=;
-        b=VhVKWzSy93h1BBhC1girL6Hxpq5EUorrk4L5k60hjmekxi1ybETqQ9leBOP2l0rQLZ
-         evrRf4xhh3DepT1dQnAAeFvqY9Nr7KTnoTB31TU0neKuT4IJ2GWiMplUnNkL/dbcPdgR
-         X6LAI+UuLFLqzvczxq5Vpg7yX3BKec3M0hAYFDnclCVzNglJ2Xrq09qAOYBX/f7H8RyX
-         BTxe8B7MqO+lRjrhAQDmsOj+oze9l8aDP7C2ovPFmEa04XOor/bnM0LoJJ51A20LG8oc
-         /JjX76xR1HWVUiVPkfImxsvbXPXyRXyp6NdGjRsuxxqGkY55M8rSkVT1ytfdeL+9J1Cz
-         2Urw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gyyd+fg6rE1jikDjwjComYSD9NHlv04HXSqrgjKmU18=;
+        b=g74HmmdJSYKVCHRbytSRkHgd4z3jdETXm4uDfSzCa6DrvZZX/JtQKKxBIabrkWOhUx
+         JzLhYIdmK9+4a+TIIIpgQpcTPa10bFzsd5Obcs+85Zd2729d+a79LfumiVXstLdfaFeX
+         3PmgDObTOtKT2+StqbGtYMqk/V2b7H2RjvrEJZE8xbEFQvimTrlbT1Juz9HtX3utvtrx
+         2tMaWKn9BEQ2GIPCsLDcVVnRIXv31H00A2I2ET5OzWRD0nJe1PzwB1JZPL3YCssCVygf
+         7HuR5fDQf9DNuu2M8Ow1OdqHHmgf9NFSWIRYWIqVn9YTIynb5OGRcisVQcnO3WBoRasl
+         1T+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=riZhsWhKU0dm/J5AOcoBM++eYapsJeL1OmU541ESLhA=;
-        b=d+GvQUGyqh/ufAO/Xm7PP03zukdHH66WwhII7deOmRCjKT/heqltii4GyxbY3jxpRv
-         /KyRRqB9qL5X1837k74ilUVkuXNiTxRXLAI/82YnArMhUn3qB8WUr5zOjJXzjPeuLUku
-         Ch5H9VarCaqwxrWDIRx6vlG4PavZNeUEp/BIY+U/zgs7i+fFxjWvO+bWTKmj5cxKfVSY
-         uM0fKMX/cy1Lfh3mdAPHt8CJq3YhppBQm3BaUYKFu3iQ7LyiV6/iU1dFTGejpp73Y7As
-         wOFa7KhyMFVReSAcdx/0zqAZFIp6UoFdDQODUw7H/0eUftiIH12eOBocAWeZy+yl/JBi
-         Zptg==
-X-Gm-Message-State: AOAM532FzbQsSR+909ybCKYxULgYopVWUhZRJ4Jlni55rbZ+palPLQlT
-        2lBLe/VZYkSqbGBIiUMFYNxTWA==
-X-Google-Smtp-Source: ABdhPJygYxoDowsWg3IeBZ6wlkM0XiLcs5E5Z7TYpKTJ1vP4kfH5GuUZbwLwWRsNU3n4F0seZE9o7A==
-X-Received: by 2002:a17:90a:ff01:: with SMTP id ce1mr902746pjb.164.1613600040636;
-        Wed, 17 Feb 2021 14:14:00 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k24sm3331016pfg.40.2021.02.17.14.13.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Feb 2021 14:14:00 -0800 (PST)
-Message-ID: <602d9528.1c69fb81.7309e.78f4@mx.google.com>
-Date:   Wed, 17 Feb 2021 14:14:00 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gyyd+fg6rE1jikDjwjComYSD9NHlv04HXSqrgjKmU18=;
+        b=YaCST97rP+G/976zBSFLWSAGjDFtY2GpFYXWkS4HvCmkMMojzHP5FNL6FCu4iCx4EV
+         gkPIhnHsAduv+oI5kJmi6dAo6GdkUKp2dpgQ/d4IHkz33dVCZQGY9t4qao+ac837M0iw
+         vQLvksZIy6G65c/sgyRmmvP4prox4nbqbl8SeBwm2OVbDofZwrtIjs8hgcqtIPDhGS9M
+         lwfiADiNKgLlWQkHy/ZvdC8QGUMDHOZY95ovZcOsOgeUaMAI9kBOh0z690G7wtoTc69F
+         OeHhhpF+tktfXVVPDuHOLAmw0hFW+2OOnsNG2HQKdVzY2DJAQbraf0kv3fK+VC1sreH6
+         uZ2Q==
+X-Gm-Message-State: AOAM531Rp/KE10O2BV1HV9DKc2zAJPOsA1qs3wZVeaIFazgAtvkD6gWW
+        oU/QnYsEuywq+cdXeEFTnZFUuRVfFCZgv301n0mBhQ==
+X-Google-Smtp-Source: ABdhPJyOSQa4Jj9rh8MYWVVAqAFPqUPnVtB1UzPtZJ/GyByZHitchaJCswelIanrPLQJ+P5TzrwtxVaA8GlnZr7rWrE=
+X-Received: by 2002:a25:8b8b:: with SMTP id j11mr2655973ybl.310.1613606274746;
+ Wed, 17 Feb 2021 15:57:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.11-156-gc9756fcd3979
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 6 runs, 1 regressions (v5.11-156-gc9756fcd3979)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20210205222644.2357303-1-saravanak@google.com>
+ <CAMuHMdVL-1RKJ5u-HDVA4F4w_+8yGvQQuJQBcZMsdV4yXzzfcw@mail.gmail.com>
+ <CAGETcx-668+uGigaOMcsvv00mo6o_eGPcH0YyD28OCVEyVbw+w@mail.gmail.com>
+ <CAMuHMdXduvBqjAqraXkEKErNJFyN6JNq5wqagc4yHHPpH5SPGQ@mail.gmail.com>
+ <CAGETcx_4FGa-rzLp6bjXbm4F4R6H2W78+nM_kN=XPz5hswzANA@mail.gmail.com>
+ <CAMuHMdVodauqBmLMxsfi0kQtAFT8ruJ36LJL9YuQgqwQNKwHHg@mail.gmail.com>
+ <CAGETcx_-yBvhXDPtOiKjenvx83oMNr32UvpMN0Dt-qz5ToXEbw@mail.gmail.com> <CAMuHMdXTO8wQ3=woLMjDaf9g3tTr-dRB3Nu_XvZUrr+wGSXyeg@mail.gmail.com>
+In-Reply-To: <CAMuHMdXTO8wQ3=woLMjDaf9g3tTr-dRB3Nu_XvZUrr+wGSXyeg@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 17 Feb 2021 15:57:18 -0800
+Message-ID: <CAGETcx8jXkbtdgMCr6KGT4ScoaoP=AwaW6MQeEv-gsDySiY35A@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 1 regressions (v5.11-156-gc9756fcd3979)
+On Tue, Feb 16, 2021 at 12:31 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Saravana,
+>
+> On Tue, Feb 16, 2021 at 7:49 PM Saravana Kannan <saravanak@google.com> wrote:
+> > On Tue, Feb 16, 2021 at 12:05 AM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > > On Mon, Feb 15, 2021 at 10:27 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > > On Mon, Feb 15, 2021 at 4:38 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > On Fri, Feb 12, 2021 at 4:00 AM Saravana Kannan <saravanak@google.com> wrote:
+> > > > > > On Thu, Feb 11, 2021 at 5:00 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > > >       - I2C on R-Car Gen3 does not seem to use DMA, according to
+> > > > > > >         /sys/kernel/debug/dmaengine/summary:
+> > > > > > >
+> > > > > > >             -dma4chan0    | e66d8000.i2c:tx
+> > > > > > >             -dma4chan1    | e66d8000.i2c:rx
+> > > > > > >             -dma5chan0    | e6510000.i2c:tx
+> > > > > >
+> > > > > > I think I need more context on the problem before I can try to fix it.
+> > > > > > I'm also very unfamiliar with that file. With fw_devlink=permissive,
+> > > > > > I2C was using DMA? If so, the next step is to see if the I2C relative
+> > > > > > probe order with DMA is getting changed and if so, why.
+> > > > >
+> > > > > More detailed log:
+> > > > >
+> > > > >     platform e66d8000.i2c: Linked as a consumer to e6150000.clock-controller
+> > > > >     platform e66d8000.i2c: Linked as a sync state only consumer to e6055400.gpio
+> > > > >
+> > > > > Why is e66d8000.i2c not linked as a consumer to e6700000.dma-controller?
+> > > >
+> > > > Because fw_devlink.strict=1 is not set and dma/iommu is considered an
+> > > > "optional"/"driver decides" dependency.
+> > >
+> > > Oh, I thought dma/iommu were considered mandatory initially,
+> > > but dropped as dependencies in the late boot process?
+> >
+> > No, I didn't do that in case the drivers that didn't need the
+> > IOMMU/DMA were sensitive to probe order.
+> >
+> > My goal was for fw_devlink=on to not affect probe order for devices
+> > that currently don't need to defer probe. But see below...
+> >
+> > >
+> > > >
+> > > > >     platform e6700000.dma-controller: Linked as a consumer to
+> > > > > e6150000.clock-controller
+> > > >
+> > > > Is this the only supplier of dma-controller?
+> > >
+> > > No, e6180000.system-controller is also a supplier.
+> > >
+> > > > >     platform e66d8000.i2c: Added to deferred list
+> > > > >     platform e6700000.dma-controller: Added to deferred list
+> > > > >
+> > > > >     bus: 'platform': driver_probe_device: matched device
+> > > > > e6700000.dma-controller with driver rcar-dmac
+> > > > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > > > device e6700000.dma-controller
+> > > > >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
+> > > > >
+> > > > >     bus: 'platform': driver_probe_device: matched device e66d8000.i2c
+> > > > > with driver i2c-rcar
+> > > > >     bus: 'platform': really_probe: probing driver i2c-rcar with device
+> > > > > e66d8000.i2c
+> > > > >
+> > > > > I2C becomes available...
+> > > > >
+> > > > >     i2c-rcar e66d8000.i2c: request_channel failed for tx (-517)
+> > > > >     [...]
+> > > > >
+> > > > > but DMA is not available yet, so the driver falls back to PIO.
+> > > > >
+> > > > >     driver: 'i2c-rcar': driver_bound: bound to device 'e66d8000.i2c'
+> > > > >     bus: 'platform': really_probe: bound device e66d8000.i2c to driver i2c-rcar
+> > > > >
+> > > > >     platform e6700000.dma-controller: Retrying from deferred list
+> > > > >     bus: 'platform': driver_probe_device: matched device
+> > > > > e6700000.dma-controller with driver rcar-dmac
+> > > > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > > > device e6700000.dma-controller
+> > > > >     platform e6700000.dma-controller: Driver rcar-dmac requests probe deferral
+> > > > >     platform e6700000.dma-controller: Added to deferred list
+> > > > >     platform e6700000.dma-controller: Retrying from deferred list
+> > > > >     bus: 'platform': driver_probe_device: matched device
+> > > > > e6700000.dma-controller with driver rcar-dmac
+> > > > >     bus: 'platform': really_probe: probing driver rcar-dmac with
+> > > > > device e6700000.dma-controller
+> > > > >     driver: 'rcar-dmac': driver_bound: bound to device 'e6700000.dma-controller'
+> > > > >     bus: 'platform': really_probe: bound device
+> > > > > e6700000.dma-controller to driver rcar-dmac
+> > > > >
+> > > > > DMA becomes available.
+> > > > >
+> > > > > Here userspace is entered. /sys/kernel/debug/dmaengine/summary shows
+> > > > > that the I2C controllers do not have DMA channels allocated, as the
+> > > > > kernel has performed no more I2C transfers after DMA became available.
+> > > > >
+> > > > > Using i2cdetect shows that DMA is used, which is good:
+> > > > >
+> > > > >     i2c-rcar e66d8000.i2c: got DMA channel for rx
+> > > > >
+> > > > > With permissive devlinks, the clock controller consumers are not added
+> > > > > to the deferred probing list, and probe order is slightly different.
+> > > > > The I2C controllers are still probed before the DMA controllers.
+> > > > > But DMA becomes available a bit earlier, before the probing of the last
+> > > > > I2C slave driver.
+> > > >
+> > > > This seems like a race? I'm guessing it's two different threads
+> > > > probing those two devices? And it just happens to work for
+> > > > "permissive" assuming the boot timing doesn't change?
+> > > >
+> > > > > Hence /sys/kernel/debug/dmaengine/summary shows that
+> > > > > some I2C transfers did use DMA.
+> > > > >
+> > > > > So the real issue is that e66d8000.i2c not linked as a consumer to
+> > > > > e6700000.dma-controller.
+> > > >
+> > > > That's because fw_devlink.strict=1 isn't set. If you need DMA to be
+> > > > treated as a mandatory supplier, you'll need to set the flag.
+> > > >
+> > > > Is fw_devlink=on really breaking anything here? It just seems like
+> > > > "permissive" got lucky with the timing and it could break at any point
+> > > > in the future. Thought?
+> > >
+> > > I don't think there is a race.
+> >
+> > Can you explain more please? This below makes it sound like DMA just
+> > sneaks in at the last minute.
+>
+> Yes it does, as the DMAC also has a consumer link to the IOMMU.
+> If you ignore the consumer link from I2C to DMAC, the I2C device has
+> less dependencies than the DMAC, so the I2C device, and the
+> devices on the I2C bus, are probed much earlier than the DMAC.
 
-Regressions Summary
--------------------
+Can you give this a shot?
+https://lore.kernel.org/lkml/20210217235130.1744843-1-saravanak@google.com/T/#u
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+It should make sure fw_devlink doesn't add a device to the deferred
+probe list too soon and change the probe ordering unnecessarily.
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.11-15=
-6-gc9756fcd3979/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.11-156-gc9756fcd3979
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      c9756fcd3979ee48382b8e442bb0375bfa05291f =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/602d880c98ce68eef9addcbb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.11-156-gc9756fcd=
-3979/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.11-156-gc9756fcd=
-3979/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0215.2/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/602d880c98ce68eef9addcbc
-        failing since 182 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+-Saravana
