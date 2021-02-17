@@ -2,133 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F84E31DC86
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 16:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40C331E11D
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 22:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbhBQPjX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Feb 2021 10:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S230201AbhBQVQh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Feb 2021 16:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbhBQPjS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 10:39:18 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D31C061756
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 07:38:38 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id w19so13053845qki.13
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 07:38:38 -0800 (PST)
+        with ESMTP id S229753AbhBQVQe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 16:16:34 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8530BC061574
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 13:15:54 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id q20so9248908pfu.8
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 13:15:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XRJ+49TR+P9xR+Yv/N5YNz5Xe+uRVUn68R2bZSbodzQ=;
-        b=i+F9VmpOBxKQqz8SyUGCrE1A9zkcBw8vEiEfn6bWK2F/JEyUyqpignvI8EhPLwJ/JW
-         fg3mHsoPjP1vUxzi/cmDzUVAuJSOmtpH0AFYIVH7MlrUgtrQlyRQLta/89k7RY/CPfSs
-         7rUOiMU/nuq+bmaRgBy8v68//dBh4UjBU2BCdpiEuF0r7FuP8A7I7ok8JfooEBjFkpzq
-         94vn9DmpPXoSK14ONJKHWroDT/QsfvzIkjTK73BBmuObxg3BpzJqsfHuqNgPMy7cIcew
-         OnLW/d5mKw5Ix7aoXY9qCqJkLM0mIlJXdwA1FHnB5UDyHf2bIJSALhhIdyouhuUDUXfH
-         szew==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=f9OLwvLv4OsJRXQ9UN/tv3Isfx9VyPIZ5fd588hEO8Q=;
+        b=MP7mJblA9y49qF6b1tQSNpwBRDJ1FtRf5mAXGVhBDwSKOrOdL4KnrQAuDB7DQFRaya
+         LgNUVtRzdX1y2DRA29CrZU/Gvi4YMKYVY6ggl41H4mtiRNOesLyIgsku5KuWtha2evWu
+         tKP4fwrE/A9foiY6HcJKx8cdctYw1qlb9Pwy7IZyySfg/X9QO2iJsu2nV4a/Ufgp/ZJ/
+         0LCQmFM2lHo2409uFgDTpBZrZ6c6BRHWo9dmTPiUf9jDzUz6NirJn8/6+wdjaIb+Ahwf
+         9I1PQBwmVWyIEl89q3qblYW8MMoStqrfhZyfdot24fMAA/Pya602BxONdZhPHKzdgIIt
+         rLkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XRJ+49TR+P9xR+Yv/N5YNz5Xe+uRVUn68R2bZSbodzQ=;
-        b=TF8LI37NMWnIRYqnDuysW981+MhDetN+mIDxhXDNls4jf+FCVkrPEtABi5iELs+ITr
-         9yB0mv7XsOA9Y9A0OfSTYWrH/cotFds6UUiu4xylP+qCjY0COmi5ln1xjQS51OzaceDg
-         KeaynCzb4U27yV/uvL58cXUpAFgQAODS6E0j1IqwFxs25vHr1fHS4NnEwCjA323ABmar
-         3g5XVU7D2atY9mpbpvwNRCL2VluNZI2QzYV69543cgym3rKELaAYIs1pkL02Hqi9gjXw
-         ivnocjbANk/hZP4u26VxYUEddvVoof4V7o/iGYoNCevv21e1xMDfEx/shXkble01ZJ3X
-         cTKA==
-X-Gm-Message-State: AOAM533giUNfM1+/53sy4az6voOYw4mEOCCZiCEKybdGnFxHip+x9dmz
-        CrL1aa0JW8H79lvWaWkhXKaQBA==
-X-Google-Smtp-Source: ABdhPJw3KOW63BdC9SznzI+lfQbZxm6pHpLjZ2ef4CxTvvC0j38/yrkQOCEeS7wBLHQeViRC7eVfDA==
-X-Received: by 2002:ae9:e90c:: with SMTP id x12mr15897393qkf.498.1613576317376;
-        Wed, 17 Feb 2021 07:38:37 -0800 (PST)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id h186sm1766262qke.129.2021.02.17.07.38.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Feb 2021 07:38:36 -0800 (PST)
-Subject: Re: [PATCH] thermal: cpufreq_cooling: freq_qos_update_request()
- returns < 0 on error
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        "v5 . 7+" <stable@vger.kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <b2b7e84944937390256669df5a48ce5abba0c1ef.1613540713.git.viresh.kumar@linaro.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <a23d2d44-1636-2ce1-d469-f6d344db66a1@linaro.org>
-Date:   Wed, 17 Feb 2021 10:38:36 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=f9OLwvLv4OsJRXQ9UN/tv3Isfx9VyPIZ5fd588hEO8Q=;
+        b=tO5+aYQDbvha2Ig2RdnWxeCC4RuuWgTOkBeAAF2u1uWb472T5/n6/TJYbATazlfsoA
+         YV0eyb/R90GyBxm8bTegf9uzviYNGadcK79bLEGHYT+knRY7MpCqL1/m1KJRHx5jKoUs
+         AQ+n9miDgo1vziB7Cv1Ewgk0VDqjBy290E8aE/iVofyA6np4xWoSMUyjTed1Kg7gLMCe
+         6WLINQea/JzILZH3XXhN1w1iJ2lW80tER0LPhEvqeGWf590eJrQ/LbN6d4Uet0z2hGbE
+         g3IYdZlErsJAhs/JZnBnk+pGXPV/PxaZUZ05ezLyPeE5xiPgjVrtch/pUFpDF99f2IyV
+         3+WQ==
+X-Gm-Message-State: AOAM532SJSoOVu377pEGSylOLh+ZydGnfW6Cawrzst65l+cmAxca4dk0
+        ZQljnP7GlSbBLlNQVwMdUCm0mQ==
+X-Google-Smtp-Source: ABdhPJzZo9rNmjIMiD+NskMHrj8hPNrnenLUgBVNLYa08ApvkbpzPdZfD6xdpaZrO9Jw532z+ej51w==
+X-Received: by 2002:a63:e108:: with SMTP id z8mr1086971pgh.363.1613596554094;
+        Wed, 17 Feb 2021 13:15:54 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w3sm3103665pjb.2.2021.02.17.13.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Feb 2021 13:15:53 -0800 (PST)
+Message-ID: <602d8789.1c69fb81.e8ad9.7134@mx.google.com>
+Date:   Wed, 17 Feb 2021 13:15:53 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <b2b7e84944937390256669df5a48ce5abba0c1ef.1613540713.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.11-156-gc9756fcd3979
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (v5.11-156-gc9756fcd3979)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 7 builds: 0 failed, 7 passed (v5.11-156-gc9756fcd3979)
 
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+11-156-gc9756fcd3979/
 
-On 2/17/21 12:48 AM, Viresh Kumar wrote:
-> freq_qos_update_request() returns 1 if the effective constraint value
-> has changed, 0 if the effective constraint value has not changed, or a
-> negative error code on failures.
-> 
-> The frequency constraints for CPUs can be set by different parts of the
-> kernel. If the maximum frequency constraint set by other parts of the
-> kernel are set at a lower value than the one corresponding to cooling
-> state 0, then we will never be able to cool down the system as
-> freq_qos_update_request() will keep on returning 0 and we will skip
-> updating cpufreq_state and thermal pressure.
-> 
-> Fix that by doing the updates even in the case where
-> freq_qos_update_request() returns 0, as we have effectively set the
-> constraint to a new value even if the consolidated value of the
-> actual constraint is unchanged because of external factors.
-> 
-> Cc: v5.7+ <stable@vger.kernel.org> # v5.7+
-> Reported-by: Thara Gopinath <thara.gopinath@linaro.org>
-> Fixes: f12e4f66ab6a ("thermal/cpu-cooling: Update thermal pressure in case of a maximum frequency capping")
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> Hi Guys,
-> 
-> This needs to go in 5.12-rc.
-> 
-> Thara, please give this a try and give your tested-by :).
+Tree: pm
+Branch: testing
+Git Describe: v5.11-156-gc9756fcd3979
+Git Commit: c9756fcd3979ee48382b8e442bb0375bfa05291f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-It fixes the thermal runaway issue on sdm845 that I had reported. So,
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-Tested-by: Thara Gopinath<thara.gopinath@linaro.org>
+Detailed per-defconfig build reports:
 
-> 
->   drivers/thermal/cpufreq_cooling.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index f5af2571f9b7..10af3341e5ea 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -485,7 +485,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
->   	frequency = get_state_freq(cpufreq_cdev, state);
->   
->   	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
-> -	if (ret > 0) {
-> +	if (ret >= 0) {
->   		cpufreq_cdev->cpufreq_state = state;
->   		cpus = cpufreq_cdev->policy->cpus;
->   		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
-> 
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
--- 
-Warm Regards
-Thara
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
