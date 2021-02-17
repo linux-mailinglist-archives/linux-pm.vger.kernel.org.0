@@ -2,123 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8186D31D7AB
+	by mail.lfdr.de (Postfix) with ESMTP id F1CFE31D7AC
 	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 11:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbhBQKqc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Feb 2021 05:46:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46838 "EHLO mx2.suse.de"
+        id S230014AbhBQKqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Feb 2021 05:46:48 -0500
+Received: from foss.arm.com ([217.140.110.172]:55806 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229720AbhBQKqc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Feb 2021 05:46:32 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 30B35B256;
-        Wed, 17 Feb 2021 10:45:50 +0000 (UTC)
-Message-ID: <1613558749.2373.55.camel@suse.cz>
-Subject: Re: [RFT][PATCH v1] cpufreq: ACPI: Set cpuinfo.max_freq directly if
- max boost is known
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michael Larabel <Michael@phoronix.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 17 Feb 2021 11:45:49 +0100
-In-Reply-To: <1974978.nRy8TqEeLZ@kreacher>
-References: <1974978.nRy8TqEeLZ@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S229707AbhBQKqo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Feb 2021 05:46:44 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50CF31042;
+        Wed, 17 Feb 2021 02:45:58 -0800 (PST)
+Received: from [10.57.61.90] (unknown [10.57.61.90])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96EDF3F73B;
+        Wed, 17 Feb 2021 02:45:55 -0800 (PST)
+Subject: Re: [PATCH] thermal: cpufreq_cooling: freq_qos_update_request()
+ returns < 0 on error
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "v5 . 7+" <stable@vger.kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <b2b7e84944937390256669df5a48ce5abba0c1ef.1613540713.git.viresh.kumar@linaro.org>
+ <91749e19-9091-1292-b8aa-c923efa8021d@arm.com>
+ <20210217103911.n34zzjttyso7dlco@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <0b276055-e93a-3e08-5eee-662008d8db6c@arm.com>
+Date:   Wed, 17 Feb 2021 10:45:53 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20210217103911.n34zzjttyso7dlco@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-02-15 at 20:24 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+
+On 2/17/21 10:39 AM, Viresh Kumar wrote:
+> On 17-02-21, 10:29, Lukasz Luba wrote:
+>> On 2/17/21 5:48 AM, Viresh Kumar wrote:
+>>> freq_qos_update_request() returns 1 if the effective constraint value
+>>> has changed, 0 if the effective constraint value has not changed, or a
+>>> negative error code on failures.
+>>>
+>>> The frequency constraints for CPUs can be set by different parts of the
+>>> kernel. If the maximum frequency constraint set by other parts of the
+>>> kernel are set at a lower value than the one corresponding to cooling
+>>> state 0, then we will never be able to cool down the system as
+>>> freq_qos_update_request() will keep on returning 0 and we will skip
+>>> updating cpufreq_state and thermal pressure.
+>>
+>> To be precised, thermal pressure signal is not so important in this
+>> mechanism and the 'cpufreq_state' has changed recently:
 > 
-> Commit 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover
-> boost frequencies") attempted to address a performance issue involving
-> acpi-cpufreq, the schedutil governor and scale-invariance on x86 by
-> extending the frequency tables created by acpi-cpufreq to cover the
-> entire range of "turbo" (or "boost") frequencies, but that caused
-> frequencies reported via /proc/cpuinfo and the scaling_cur_freq
-> attribute in sysfs to change which may confuse users and monitoring
-> tools.
+> Right, I wasn't concerned only about no thermal cooling, but both
+> thermal cooling and pressure.
 > 
-> For this reason, revert the part of commit 3c55e94c0ade adding the
-> extra entry to the frequency table and use the observation that
-> in principle cpuinfo.max_freq need not be equal to the maximum
-> frequency listed in the frequency table for the given policy.
+>> 236761f19a4f373354  thermal/drivers/cpufreq_cooling: Update cpufreq_state
+>> only if state has changed
 > 
-> Namely, modify cpufreq_frequency_table_cpuinfo() to allow cpufreq
-> drivers to set their own cpuinfo.max_freq above that frequency and
-> change  acpi-cpufreq to set cpuinfo.max_freq to the maximum boost
-> frequency found via CPPC.
+> This moved the assignment to a more logical place for me, i.e. not to
+> do that on errors, just that the block in which it landed may not get
+> called at all :(
 > 
-> This should be sufficient to let all of the cpufreq subsystem know
-> the real maximum frequency of the CPU without changing frequency
-> reporting.
+>>> Fix that by doing the updates even in the case where
+>>> freq_qos_update_request() returns 0, as we have effectively set the
+>>> constraint to a new value even if the consolidated value of the
+>>> actual constraint is unchanged because of external factors.
+>>>
+>>> Cc: v5.7+ <stable@vger.kernel.org> # v5.7+
+>>> Reported-by: Thara Gopinath <thara.gopinath@linaro.org>
+>>> Fixes: f12e4f66ab6a ("thermal/cpu-cooling: Update thermal pressure in case of a maximum frequency capping")
+>>
+>> I'm not sure if that f12e4f is the root cause.
 > 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=211305
-> Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
-> Reported-by: Matt McDonald <gardotd426@gmail.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+> Hmm, depends on how we define the problem :)
 > 
-> Michael, Giovanni,
+> If this was just about thermal-cooling not happening, then may be yes,
+> but to me it is rather about mishandled return value of
+> freq_qos_update_request() which has more than one side effects and so
+> I went for the main commit.
 > 
-> The fix for the EPYC performance regression that was merged into 5.11 introduced
-> an undesirable side-effect by distorting the CPU frequency reporting via
-> /proc/cpuinfo and scaling_cur_freq (see the BZ link above for details).
+> This is also important as f12e4f66ab6a got merged in 5.7 and 236761f19
+> merged in 5.11 and this patch needs to get applied in stable kernels
+> since 5.7 to fix it all.
 > 
-> The patch below is reported to address this problem and it should still allow
-> schedutil to achieve desirable performance, because it simply sets
-> cpuinfo.max_freq without extending the frequency table of the CPU.
-> 
-> Please test this one and let me know if it adversely affects performance.
-> 
-> Thanks!
 
-Hello Rafael,
-
-more extended testing confirms the initial feeling; performance with this
-patch is mostly identical to vanilla v5.11. Tbench shows an improvement.
-
-Thanks for the fix!
-
-Tested-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-
-Results follow. The machine has two sockets with an AMD EPYC 7742 each.
-The governor is always schedutil.
-
-
-Ratios of time, lower is better:
-					    v5.11     v5.11
-					   vanilla    patch
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    NASA Parallel Benchmarks w/ MPI         1.00      0.96
-    NASA Parallel Benchmarks w/ OpenMP      1.00      ~
-    dbench on XFS                           1.00      ~
-    Linux kernel compilation                1.00      ~
-    git unit test suite                     1.00      ~
-
-
-Ratio of throughput, higher is better:
-					    v5.11     v5.11
-					   vanilla    patch
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    tbench on localhost                     1.00      1.09
-
-
-Tilde (~): no change wrt baseline.
-
-
-Giovanni
+'to fix it all' - I agree
