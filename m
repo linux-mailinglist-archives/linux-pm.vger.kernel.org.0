@@ -2,101 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 095BC31DA87
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 14:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37DB31DB4E
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 15:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbhBQNbb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Feb 2021 08:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbhBQNbN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 08:31:13 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D0C061574
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 05:30:32 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id v3so9465180qtw.4
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 05:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9KvlBXWE9H1CeowlMEMLTPIl6Q9OVw73HzJ2aa5ZmGg=;
-        b=vA5plzml7tzyib+hGFxVRbODs0ykXI8/JjG5qU3MkU5IcmOjw6MZ3XD5lKJBOZeDSv
-         jOfJT+4h563NBykjv6VMmsNE//0tc+OawkhxvM8OJh633rGvQKFH8upmKZWEzJ0hj/b8
-         iTFiNhYg62B7KEB8lwb4xi2KgY+f713Ywjsegh4Bm/nY2ZeuBQV1EsU2lqXoUvRjspGM
-         A1y+r74E+oEXTC67qTFJsYBEJRO7Rzg3kVVnu8CXOFPcvDR6fadB/3RM8D3otxdMO+uK
-         LIvgfB9a3f8v3bcww0R/NeUd00qCTnzezOhDbhTrH5UDvNOpsMjU45kI2/IsElxJFhUf
-         HikA==
+        id S233336AbhBQOTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Feb 2021 09:19:15 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:34513 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232371AbhBQOTO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 09:19:14 -0500
+Received: by mail-oi1-f177.google.com with SMTP id j5so2850100oie.1;
+        Wed, 17 Feb 2021 06:18:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9KvlBXWE9H1CeowlMEMLTPIl6Q9OVw73HzJ2aa5ZmGg=;
-        b=eMhm4m5DFw/dG0WCrCjKAXVCkEJ6oRY5k/aSSA/+dHdu7hVh6UJ1UJKYWHC0GIAIWD
-         4xeTg0jJuape93ivimDzasvDqFvO2YjBl2haE3zfKNH935rhEX/ZWGUby4Eyj0rVRuum
-         mdXMHf3UOxTYggiYIUUtzGm84+9OFalZDKSPAE9hIZLFLi5wL7wOCfDLiNXdsveVzLlf
-         4nLX9j4v3kSlWYKv8PTMKcVoeSP32Eh1oYJeOEP7DUwM00iI2VF3TZ8cvTrhQAukOW16
-         1RgSr7hmFnHWcd90zCAhA8QlqmigqXpCuQSMuyFtKAau442VwTntPpYn8nDDmkbVE/r7
-         6G7g==
-X-Gm-Message-State: AOAM532cvlj656YxlZIyXZjatN/yTC5JReLtrl38k8mqzmis5tF0o2+5
-        fS/l5wjC7MnDmmvpPMSTAeswwg==
-X-Google-Smtp-Source: ABdhPJyUzFF6WeMX4sFQFQgyNcl6ORc08DpDDsdCdLs2jTqDrjcn2QGP394cLkzhNsofkTrDLzaRWQ==
-X-Received: by 2002:ac8:47d6:: with SMTP id d22mr22147384qtr.44.1613568631867;
-        Wed, 17 Feb 2021 05:30:31 -0800 (PST)
-Received: from [192.168.0.189] (modemcable068.184-131-66.mc.videotron.ca. [66.131.184.68])
-        by smtp.gmail.com with ESMTPSA id n8sm1097761qta.61.2021.02.17.05.30.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Feb 2021 05:30:31 -0800 (PST)
-Subject: Re: [PATCH] opp: fix dev_pm_opp_set_rate for different frequency at
- the same opp level
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        "open list:OPERATING PERFORMANCE POINTS (OPP)" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20210216201030.19152-1-jonathan@marek.ca>
- <20210217045310.thfl7ckxzfiqjlu6@vireshk-i7>
-From:   Jonathan Marek <jonathan@marek.ca>
-Message-ID: <88b0c110-78fb-cbb0-dd2b-5c4ffb5bc930@marek.ca>
-Date:   Wed, 17 Feb 2021 08:29:43 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NsxA0/UMZkWVAuhoOzLnhRZ4hWdYEg6eUXHOKWQmu2s=;
+        b=BSKjF3wLOs+y+UOiRwuFTRlg85iBdwD4JQqOPAcVfgaBkKEfkLK2KEFReaGDw3/kEG
+         FIk1BUA/US7XfukeRDO67vWYBZdbBjWULAiMiQxgcmBNyjwU98/dNORpwKh0JpVU1934
+         6AuC46IzxyUwxE+IsaGDQNz/4VZsQ0MwQgkrqCmIGV0UMUndkb+pRd3R79nzSWK4y4tI
+         bkBff2e7niKkuIjiOoKp0m/mhGmmU1vSHycKY/YjVcm9mdJxrmG6RVMXwbRuvuiZr3ok
+         37g7e84PcW4bvms4trfpY/YgpWCORL/efLM+2krV5MLSuajiTt/kPZfqka9n8JS+Xwyt
+         zpjQ==
+X-Gm-Message-State: AOAM531+WEEoSbx8jnsCEftpfsI6IKkHaj29WXVZW6QXSd7sf5s6JCRq
+        LMAuIrSKinSUf1Dn1ZoX0xZNLpoGwfQWhWSxHIfVgbWk
+X-Google-Smtp-Source: ABdhPJwye/1M50cGEfgKGs0AAZcZAOe6ZZ7AelM6gzs8QYWO/HXIzyqiYrRkV1uGM61diyUAmuMy3LtZphrg3L7goWg=
+X-Received: by 2002:a54:400b:: with SMTP id x11mr5818289oie.71.1613571513496;
+ Wed, 17 Feb 2021 06:18:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210217045310.thfl7ckxzfiqjlu6@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1974978.nRy8TqEeLZ@kreacher> <1613558749.2373.55.camel@suse.cz>
+In-Reply-To: <1613558749.2373.55.camel@suse.cz>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 17 Feb 2021 15:18:20 +0100
+Message-ID: <CAJZ5v0iv22rCJ5uw-sguk6hgMhYn8EdXooHiMaD1pkR_d+zNnA@mail.gmail.com>
+Subject: Re: [RFT][PATCH v1] cpufreq: ACPI: Set cpuinfo.max_freq directly if
+ max boost is known
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michael Larabel <Michael@phoronix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/16/21 11:53 PM, Viresh Kumar wrote:
-> On 16-02-21, 15:10, Jonathan Marek wrote:
->> There is not "nothing to do" when the opp is the same. The frequency can
->> be different from opp->rate.
-> 
-> I am sorry but I am not sure what are you trying to fix here and what exactly is
-> broken here. Can you provide a usecase for your platform where this doesn't work
-> like it used to ?
-> 
+On Wed, Feb 17, 2021 at 11:46 AM Giovanni Gherdovich
+<ggherdovich@suse.cz> wrote:
+>
+> On Mon, 2021-02-15 at 20:24 +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Commit 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover
+> > boost frequencies") attempted to address a performance issue involving
+> > acpi-cpufreq, the schedutil governor and scale-invariance on x86 by
+> > extending the frequency tables created by acpi-cpufreq to cover the
+> > entire range of "turbo" (or "boost") frequencies, but that caused
+> > frequencies reported via /proc/cpuinfo and the scaling_cur_freq
+> > attribute in sysfs to change which may confuse users and monitoring
+> > tools.
+> >
+> > For this reason, revert the part of commit 3c55e94c0ade adding the
+> > extra entry to the frequency table and use the observation that
+> > in principle cpuinfo.max_freq need not be equal to the maximum
+> > frequency listed in the frequency table for the given policy.
+> >
+> > Namely, modify cpufreq_frequency_table_cpuinfo() to allow cpufreq
+> > drivers to set their own cpuinfo.max_freq above that frequency and
+> > change  acpi-cpufreq to set cpuinfo.max_freq to the maximum boost
+> > frequency found via CPPC.
+> >
+> > This should be sufficient to let all of the cpufreq subsystem know
+> > the real maximum frequency of the CPU without changing frequency
+> > reporting.
+> >
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=211305
+> > Fixes: 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to cover boost frequencies")
+> > Reported-by: Matt McDonald <gardotd426@gmail.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > Michael, Giovanni,
+> >
+> > The fix for the EPYC performance regression that was merged into 5.11 introduced
+> > an undesirable side-effect by distorting the CPU frequency reporting via
+> > /proc/cpuinfo and scaling_cur_freq (see the BZ link above for details).
+> >
+> > The patch below is reported to address this problem and it should still allow
+> > schedutil to achieve desirable performance, because it simply sets
+> > cpuinfo.max_freq without extending the frequency table of the CPU.
+> >
+> > Please test this one and let me know if it adversely affects performance.
+> >
+> > Thanks!
+>
+> Hello Rafael,
+>
+> more extended testing confirms the initial feeling; performance with this
+> patch is mostly identical to vanilla v5.11.
 
-The specific case is this opp table:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sm8250.dtsi#n439
+Thank you!
 
-It does not define every possible clock frequency, it only defines the 
-rates at which a higher rpmhpd level must be used. Which is the intended 
-use of opp.
+> Tbench shows an improvement.
 
-Your change broke this completely: the clock rate change can be silently 
-ignored because the opp level is the same. In particular it breaks 
-bluetooth for this platform.
+Interesting.
 
->> Fixes: 81c4d8a3c414 ("opp: Keep track of currently programmed OPP")
->> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
->> ---
->>   drivers/opp/core.c | 7 +++++--
->>   drivers/opp/opp.h  | 1 +
->>   2 files changed, 6 insertions(+), 2 deletions(-)
-> 
+> Thanks for the fix!
+
+YW
+
+> Tested-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+>
+> Results follow. The machine has two sockets with an AMD EPYC 7742 each.
+> The governor is always schedutil.
+>
+>
+> Ratios of time, lower is better:
+>                                             v5.11     v5.11
+>                                            vanilla    patch
+>     - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+>     NASA Parallel Benchmarks w/ MPI         1.00      0.96
+>     NASA Parallel Benchmarks w/ OpenMP      1.00      ~
+>     dbench on XFS                           1.00      ~
+>     Linux kernel compilation                1.00      ~
+>     git unit test suite                     1.00      ~
+>
+>
+> Ratio of throughput, higher is better:
+>                                             v5.11     v5.11
+>                                            vanilla    patch
+>     - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+>     tbench on localhost                     1.00      1.09
+>
+>
+> Tilde (~): no change wrt baseline.
+
+Thanks again!
+
+It would be good to hear from Michael too, but this is already
+sufficient for me to queue up the patch for 5.12-rc.
+
+Cheers!
