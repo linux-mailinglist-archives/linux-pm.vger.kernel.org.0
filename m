@@ -2,67 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB37231DC48
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 16:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F84E31DC86
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Feb 2021 16:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbhBQPeB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Feb 2021 10:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S233716AbhBQPjX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Feb 2021 10:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233774AbhBQPdV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 10:33:21 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3935C061756
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 07:32:40 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id v10so9777090qtq.7
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 07:32:40 -0800 (PST)
+        with ESMTP id S233766AbhBQPjS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Feb 2021 10:39:18 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D31C061756
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 07:38:38 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id w19so13053845qki.13
+        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 07:38:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iCNwmZhWZAWkw9lmubfy3Ctrt4GVRNHAO0fjrQG+z70=;
-        b=K7XhU7BCJNi7/Km2X5hifC75VEEjDwXIINfNpjT8aMJZecj/NE0rRTuoy3sNMp8fB1
-         KTaxnDT2kurODW77ZPkg4j89ophmKvoPQKqyBbn1+kBkl7pkQLajB0xVcUf/4+bVg82m
-         VD1ij0jLVKod10+gUZlx76ymqBLMwiHRUvUfRwxvt6fGrqIJz+jEoR99HapRyMqa+O8p
-         So1G+QUivb7t1a1+9sgRSLKEvJL5PfwAPYLnI8V9h0Gqd9lNtHRwKl/QasnfX7QKqy48
-         Tz8zGa9q/c3xU0nDgKh5qMZ5x9M99S5kCRJQcPf3XlQfTyckCOTp+2t+ekotQuR6B+NY
-         YZiA==
+        bh=XRJ+49TR+P9xR+Yv/N5YNz5Xe+uRVUn68R2bZSbodzQ=;
+        b=i+F9VmpOBxKQqz8SyUGCrE1A9zkcBw8vEiEfn6bWK2F/JEyUyqpignvI8EhPLwJ/JW
+         fg3mHsoPjP1vUxzi/cmDzUVAuJSOmtpH0AFYIVH7MlrUgtrQlyRQLta/89k7RY/CPfSs
+         7rUOiMU/nuq+bmaRgBy8v68//dBh4UjBU2BCdpiEuF0r7FuP8A7I7ok8JfooEBjFkpzq
+         94vn9DmpPXoSK14ONJKHWroDT/QsfvzIkjTK73BBmuObxg3BpzJqsfHuqNgPMy7cIcew
+         OnLW/d5mKw5Ix7aoXY9qCqJkLM0mIlJXdwA1FHnB5UDyHf2bIJSALhhIdyouhuUDUXfH
+         szew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=iCNwmZhWZAWkw9lmubfy3Ctrt4GVRNHAO0fjrQG+z70=;
-        b=oNELTj4RIgi0EUCKbywXBWxaVahmmiK27NJdeXBiJuVcSZQYr3VSpc4WE1ZuXeL3UO
-         4X1uulpP5OR3qoSyAXfA4lqtfkaLjjkqVPyobvDsn/SZhCOJm+8eYQJbFabTgxCwAqe2
-         4Ei8ofnsqFjubHc0eSPaRy91BaXD8Vtmj74UyBm08gfjBaxz3+pIUA9+2XTKEdb0JANP
-         la1ph52q8pob6WNoPhRdWbJCdUJINLAwETN4vaqBCS+ePQRu+Uc5f4F741XvlZtZsFu6
-         OOjymjXJksMcx+aLsTx111OGC2PCAG4OGjRV8JVHt3NumLuzZJUayF5F15rVLY8xwgOw
-         CU5w==
-X-Gm-Message-State: AOAM530GdfzuNhK489ES0f7XeAsaDTnrPKSib8Ty2U7nu1IjKq+O7xPw
-        lpwH9aUzXOTb/Rt5rhJkTJd01QoGlGD2Nw==
-X-Google-Smtp-Source: ABdhPJzI+kSwjLRo2M5K5Vwk1Dg2soKjc4+KPmHsDbzklvoB72bf2QBgKx4M9bDqrixDGSOrhRhTtw==
-X-Received: by 2002:ac8:110e:: with SMTP id c14mr23911588qtj.78.1613575959225;
-        Wed, 17 Feb 2021 07:32:39 -0800 (PST)
+        bh=XRJ+49TR+P9xR+Yv/N5YNz5Xe+uRVUn68R2bZSbodzQ=;
+        b=TF8LI37NMWnIRYqnDuysW981+MhDetN+mIDxhXDNls4jf+FCVkrPEtABi5iELs+ITr
+         9yB0mv7XsOA9Y9A0OfSTYWrH/cotFds6UUiu4xylP+qCjY0COmi5ln1xjQS51OzaceDg
+         KeaynCzb4U27yV/uvL58cXUpAFgQAODS6E0j1IqwFxs25vHr1fHS4NnEwCjA323ABmar
+         3g5XVU7D2atY9mpbpvwNRCL2VluNZI2QzYV69543cgym3rKELaAYIs1pkL02Hqi9gjXw
+         ivnocjbANk/hZP4u26VxYUEddvVoof4V7o/iGYoNCevv21e1xMDfEx/shXkble01ZJ3X
+         cTKA==
+X-Gm-Message-State: AOAM533giUNfM1+/53sy4az6voOYw4mEOCCZiCEKybdGnFxHip+x9dmz
+        CrL1aa0JW8H79lvWaWkhXKaQBA==
+X-Google-Smtp-Source: ABdhPJw3KOW63BdC9SznzI+lfQbZxm6pHpLjZ2ef4CxTvvC0j38/yrkQOCEeS7wBLHQeViRC7eVfDA==
+X-Received: by 2002:ae9:e90c:: with SMTP id x12mr15897393qkf.498.1613576317376;
+        Wed, 17 Feb 2021 07:38:37 -0800 (PST)
 Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id f78sm1845446qke.71.2021.02.17.07.32.38
+        by smtp.gmail.com with ESMTPSA id h186sm1766262qke.129.2021.02.17.07.38.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Feb 2021 07:32:38 -0800 (PST)
-Subject: Re: [PATCH] cpufreq: exclude boost frequencies from valid count if
- not enabled
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rjw@rjwysocki.net, bjorn.andersson@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20210217000013.4063289-1-thara.gopinath@linaro.org>
- <20210217055029.a25wjsyoosxageti@vireshk-i7>
+        Wed, 17 Feb 2021 07:38:36 -0800 (PST)
+Subject: Re: [PATCH] thermal: cpufreq_cooling: freq_qos_update_request()
+ returns < 0 on error
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        "v5 . 7+" <stable@vger.kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <b2b7e84944937390256669df5a48ce5abba0c1ef.1613540713.git.viresh.kumar@linaro.org>
 From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <4c9d9d44-5fa5-3ae1-e9bb-45cf6521b764@linaro.org>
-Date:   Wed, 17 Feb 2021 10:32:38 -0500
+Message-ID: <a23d2d44-1636-2ce1-d469-f6d344db66a1@linaro.org>
+Date:   Wed, 17 Feb 2021 10:38:36 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210217055029.a25wjsyoosxageti@vireshk-i7>
+In-Reply-To: <b2b7e84944937390256669df5a48ce5abba0c1ef.1613540713.git.viresh.kumar@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,97 +78,55 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 2/17/21 12:50 AM, Viresh Kumar wrote:
-> Hi Thara,
+On 2/17/21 12:48 AM, Viresh Kumar wrote:
+> freq_qos_update_request() returns 1 if the effective constraint value
+> has changed, 0 if the effective constraint value has not changed, or a
+> negative error code on failures.
 > 
-> On 16-02-21, 19:00, Thara Gopinath wrote:
->> This is a fix for a regression observed on db845 platforms with 5.7-rc11
->> kernel.  On these platforms running stress tests with 5.11-rc7 kernel
->> causes big cpus to overheat and ultimately shutdown the system due to
->> hitting critical temperature (thermal throttling does not happen and
->> cur_state of cpufreq cooling device for big cpus remain stuck at 0 or max
->> frequency).
->>
->> This platform has boost opp defined for big cpus but boost mode itself is
->> disabled in the cpufreq driver. Hence the initial max frequency request
->> from cpufreq cooling device(cur_state) for big cpus is for boost
->> frequency(2803200) where as initial max frequency request from cpufreq
->> driver itself is for the highest non boost frequency (2649600).
+> The frequency constraints for CPUs can be set by different parts of the
+> kernel. If the maximum frequency constraint set by other parts of the
+> kernel are set at a lower value than the one corresponding to cooling
+> state 0, then we will never be able to cool down the system as
+> freq_qos_update_request() will keep on returning 0 and we will skip
+> updating cpufreq_state and thermal pressure.
 > 
-> Okay.
+> Fix that by doing the updates even in the case where
+> freq_qos_update_request() returns 0, as we have effectively set the
+> constraint to a new value even if the consolidated value of the
+> actual constraint is unchanged because of external factors.
 > 
->> qos
->> framework collates these two requests and puts the max frequency of big
->> cpus to 2649600 which the thermal framework is unaware of.
+> Cc: v5.7+ <stable@vger.kernel.org> # v5.7+
+> Reported-by: Thara Gopinath <thara.gopinath@linaro.org>
+> Fixes: f12e4f66ab6a ("thermal/cpu-cooling: Update thermal pressure in case of a maximum frequency capping")
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> Hi Guys,
 > 
-> It doesn't need to be aware of that. It sets its max frequency and other
-> frameworks can put their own requests and the lowest one wins. In this case the
-> other constraint came from cpufreq-core, which is fine.
+> This needs to go in 5.12-rc.
+> 
+> Thara, please give this a try and give your tested-by :).
 
-Yes. the qos behavior is correct here.
+It fixes the thermal runaway issue on sdm845 that I had reported. So,
 
-> 
->> Now during an
->> over heat event, with step-wise policy governor, thermal framework tries to
->> throttle the cpu and places a restriction on max frequency of the cpu to
->> cur_state - 1
-> 
-> Actually it is cur_state + 1 as the values are inversed here, cooling state 0
-> refers to highest frequency :)
-
-yes. it does indeed!
+Tested-by: Thara Gopinath<thara.gopinath@linaro.org>
 
 > 
->> which in this case 2649600. qos framework in turn tells the
->> cpufreq cooling device that max frequency of the cpu is already at 2649600
->> and the cooling device driver returns doing nothing(cur_state of the
->> cooling device remains unchanged).
+>   drivers/thermal/cpufreq_cooling.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> And that's where the bug lies, I have sent proper fix for that now.
-
-Like I mention below there are multiple possible fixes for this issue!
-More on mismatch of frequencies below.
-> 
->> Thus thermal remains stuck in a loop and
->> never manages to actually throttle the cpu frequency. This ultimately leads
->> to system shutdown in case of a thermal overheat event on big cpus.
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index f5af2571f9b7..10af3341e5ea 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -485,7 +485,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+>   	frequency = get_state_freq(cpufreq_cdev, state);
 >   
->> There are multiple possible fixes for this issue. Fundamentally,it is wrong
->> for cpufreq driver and cpufreq cooling device driver to show different
->> maximum possible state/frequency for a cpu.
-> 
-> Not actually, cpufreq core changes the max supported frequency at runtime based
-> on the availability of boost frequencies.
-
-First of all, I am still unable to find this setting in the sysfs space.
-Irrespective the ideal behavior here will be to change the cpufreq 
-cooling dev max state when this happens. I say this for two reasons
-1. The cooling device max state will reflect the correct highest 
-frequency as reported by cpufreq core. These are interfaces exposed to
-user space and they should not be showing two different things.
-2. More importantly, thermal will not waste valuable cycles attempting 
-to throttle down from an non-existing high frequency. In the case of 
-sdm845 we have only one boost opp in the opp table and hence the first 
-time thermal tries to throttle via the cpufreq cooling device(with the 
-step policy governor), it will return back saying that the state is 
-already achieved and then will retry again because overheating has not 
-stopped. But let us a platform has 5 such opps in the table and boost 
-mode not enabled. cpufreq cooling device will have to attempt 5 times 
-before any actual cooling action happens.
-
-> 
-> cpufreq_table_count_valid_entries() is used at different places and it is
-> implemented correctly.
-
-It is used in one other place which is for statistics count. Boost 
-statistics need not be considered if boost mode is not enabled. And like 
-I mentioned before as in the case of cpufreq cooling device correct 
-behavior will be to reflect this as and when boost is enabled. But then 
-again for statistics purpose it is not much of an issue if the entry 
-itself is present with the count showing 0 if boost modes are not 
-enabled. In this case, we should have another api or cpufreq cooling 
-device not use cpufreq_table_count_valid_entries to get the max state.
-
+>   	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
+> -	if (ret > 0) {
+> +	if (ret >= 0) {
+>   		cpufreq_cdev->cpufreq_state = state;
+>   		cpus = cpufreq_cdev->policy->cpus;
+>   		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
 > 
 
 -- 
