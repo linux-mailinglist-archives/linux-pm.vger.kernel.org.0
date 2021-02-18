@@ -2,64 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C47831EF6A
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 20:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C6231F027
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 20:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbhBRTMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 14:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbhBRST0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 13:19:26 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF4C061574
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 10:18:45 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.93.0.4)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1lCnsx-0001HI-Rw; Thu, 18 Feb 2021 19:18:44 +0100
-Date:   Thu, 18 Feb 2021 18:18:36 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH] power: reset: replace curly brackets in Makefile
-Message-ID: <YC6vfCWycDwbz5Sf@makrotopia.org>
-References: <CABwr4_sfV_sRexcpBsGZw2UJf4cGRCFrNsNnmffvYHGknP2XMg@mail.gmail.com>
+        id S232701AbhBRTly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 14:41:54 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:54042 "EHLO mail.JVPinto.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233972AbhBRTNA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 18 Feb 2021 14:13:00 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Thu, 18 Feb 2021 11:12:15 -0800
+Received: from User (20.48.109.21) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Thu, 18 Feb 2021
+ 11:12:03 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Re:ok
+Date:   Thu, 18 Feb 2021 19:12:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABwr4_sfV_sRexcpBsGZw2UJf4cGRCFrNsNnmffvYHGknP2XMg@mail.gmail.com>
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <ab5238a09b984825a50d7b0428610a74@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Normal parentheses should be used when referring to config variables
-in Makefile. Replace the accidentally introduced curly brackets by
-regular parentheses.
+Hello,
 
-Fixes: a7f79f99541ef ("power: reset: add driver for LinkStation power off")
-Acked-by: Daniel González Cabanelas <dgcbueu@gmail.com>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/power/reset/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index 4f959b6976066..cf3f4d02d8a54 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -11,7 +11,7 @@ obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) += gemini-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
- obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
--obj-${CONFIG_POWER_RESET_LINKSTATION} += linkstation-poweroff.o
-+obj-$(CONFIG_POWER_RESET_LINKSTATION) += linkstation-poweroff.o
- obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
- obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
- obj-$(CONFIG_POWER_RESET_OXNAS) += oxnas-restart.o
--- 
-2.30.0
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
