@@ -2,94 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48BE31E8CC
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 11:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEA231E8CD
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 11:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbhBRKpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 05:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbhBRKN5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 05:13:57 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0717AC061794
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 02:05:13 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id cl8so1060656pjb.0
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 02:05:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=QqUlEVqUFxLYYj8AnwL4tFC5BJXkPMxniJs3C6hKrpM=;
-        b=FQVsNk7fKcaL9PiZFVq1VKNicrBTsDaKguZ6Q6e3lgpdbFD8gljU3ok+bRuVyhz4Vs
-         nSH2P1gRCuo9nfUXYBXmG8OdMMJNBxaP7H2ouoOCixARy18S5XvZKXSQHHE4OeOquGY6
-         tHPB4sHGc6+hJ8FT1yy1jREvCfRYE4mzvIDL8QAn5mZlmCZnpUbHZ33mq+q/DvBLl6EG
-         WfQyKCATHs9vbyeZ73rxMNGs2nE4jiJ9zKEhhNtgvCCGV2ghmT7b96KwvIKMErDrw+2R
-         84Q+BfvH/AEsGzpaUNFpv2ESIxZSMbeY+4yZGs9WR5y9pDUX77kGeapU4q6GKetvoTCE
-         zjcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QqUlEVqUFxLYYj8AnwL4tFC5BJXkPMxniJs3C6hKrpM=;
-        b=Arw0HTZm6C4TSAIpOmb/RFO+7rOdWHjvmsNWkVPMKfewDYUM6wUP0kbAxJzZxqDlUv
-         jYYorwPhogd83+EdD1T1eMGadH8g7XRe/kAV5LoATa/j+WXesmMbYrz0jY5yYsBmKOR/
-         ol4PHGupMWBYq9BdQ7x2w+zmqX/RJWrBzDudp4rNwUF5g3UNkGKxlNecy0N9ZXmbPTWX
-         iXlHNqAdqf35IhGpMNOPZi2MXaTuw+o1MdJrflhzOEJr6Q02+Bfn/EUroD5tOFRVVDgz
-         5Rcb7T1yxR9DnKZVXDM6t96mHwQn5AQbZnX6WXT/zp8rXbxeLfzZyCwYsBcyA5MryREO
-         fRuA==
-X-Gm-Message-State: AOAM5305XKzza8pHPZEeMmOKE/nbZwxNqtHFI7jqBjMm2fuocgFmdOY6
-        +ZD6cofbsk56xdfPNvPWTuS0Uw==
-X-Google-Smtp-Source: ABdhPJyEDHRWzw5hc3tHKGnukExfAzOn9IIufBXE3DJwmLdE78T34qelXx7qDFAm6qY6CyLN6NfjQg==
-X-Received: by 2002:a17:90b:46cb:: with SMTP id jx11mr3353038pjb.45.1613642713510;
-        Thu, 18 Feb 2021 02:05:13 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id y20sm5532912pfo.210.2021.02.18.02.05.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Feb 2021 02:05:13 -0800 (PST)
-Date:   Thu, 18 Feb 2021 15:35:11 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yue Hu <zbestahu@gmail.com>
-Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org, huyue2@yulong.com
-Subject: Re: [PATCH] cpufreq: Fix typo in comments
-Message-ID: <20210218100511.nsjgtu3mdkr6f4zf@vireshk-i7>
-References: <20210218095338.1766-1-zbestahu@gmail.com>
+        id S231815AbhBRKpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 05:45:21 -0500
+Received: from mga14.intel.com ([192.55.52.115]:22459 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230428AbhBRKOL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 18 Feb 2021 05:14:11 -0500
+IronPort-SDR: P0Nw3GViz5AaV+ETM7+zv7hJYUlF8gqitqCuE4mEZKkDs15QD8bP5EEiIesIvf7e1glMFlzRSJ
+ k3cBDtxjcQfg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="182665043"
+X-IronPort-AV: E=Sophos;i="5.81,186,1610438400"; 
+   d="scan'208";a="182665043"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2021 02:09:38 -0800
+IronPort-SDR: mard8TJbZeholjzD5Ca8t/YAk0s5CZ3dQ8iFWlFD68/n7L6Q7kgLNMLmDmQzW/ilTQggVzvbh8
+ dd/TXXmXWwhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,186,1610438400"; 
+   d="scan'208";a="400430609"
+Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 18 Feb 2021 02:09:37 -0800
+Received: from kbuild by cd560a204411 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lCgFc-0009bC-CN; Thu, 18 Feb 2021 10:09:36 +0000
+Date:   Thu, 18 Feb 2021 18:09:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ c9756fcd3979ee48382b8e442bb0375bfa05291f
+Message-ID: <602e3cc6.MQhu9YenDQ+chS5K%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210218095338.1766-1-zbestahu@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-02-21, 17:53, Yue Hu wrote:
-> From: Yue Hu <huyue2@yulong.com>
-> 
-> Change 'Terget' to 'Target'.
-> 
-> Should be Target.
-> 
-> Signed-off-by: Yue Hu <huyue2@yulong.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index d0a3525..e4ec74d 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -2101,7 +2101,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
->   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
->   * @cpu: Target CPU.
->   * @min_perf: Minimum (required) performance level (units of @capacity).
-> - * @target_perf: Terget (desired) performance level (units of @capacity).
-> + * @target_perf: Target (desired) performance level (units of @capacity).
->   * @capacity: Capacity of the target CPU.
->   *
->   * Carry out a fast performance level switch of @cpu without sleeping.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c9756fcd3979ee48382b8e442bb0375bfa05291f  Merge branch 'pm-cpufreq-fixes' into linux-next
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+elapsed time: 725m
 
--- 
-viresh
+configs tested: 121
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                        multi_v5_defconfig
+arm                            u300_defconfig
+powerpc                        icon_defconfig
+sh                          polaris_defconfig
+arm                            lart_defconfig
+powerpc                     rainier_defconfig
+arm                        cerfcube_defconfig
+arm                         lpc32xx_defconfig
+arm                         s3c2410_defconfig
+arm                          pxa3xx_defconfig
+m68k                       m5208evb_defconfig
+mips                      pic32mzda_defconfig
+sparc                       sparc64_defconfig
+powerpc                      katmai_defconfig
+powerpc                      acadia_defconfig
+xtensa                    xip_kc705_defconfig
+m68k                        m5307c3_defconfig
+m68k                        m5407c3_defconfig
+arm                             rpc_defconfig
+sh                           sh2007_defconfig
+mips                           ip27_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arc                         haps_hs_defconfig
+xtensa                           alldefconfig
+sh                     sh7710voipgw_defconfig
+powerpc                 mpc8315_rdb_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210216
+i386                 randconfig-a005-20210216
+i386                 randconfig-a002-20210216
+i386                 randconfig-a006-20210216
+i386                 randconfig-a001-20210216
+i386                 randconfig-a004-20210216
+x86_64               randconfig-a013-20210217
+x86_64               randconfig-a016-20210217
+x86_64               randconfig-a012-20210217
+x86_64               randconfig-a015-20210217
+x86_64               randconfig-a014-20210217
+x86_64               randconfig-a011-20210217
+i386                 randconfig-a016-20210216
+i386                 randconfig-a014-20210216
+i386                 randconfig-a012-20210216
+i386                 randconfig-a013-20210216
+i386                 randconfig-a011-20210216
+i386                 randconfig-a015-20210216
+i386                 randconfig-a016-20210217
+i386                 randconfig-a014-20210217
+i386                 randconfig-a012-20210217
+i386                 randconfig-a013-20210217
+i386                 randconfig-a011-20210217
+i386                 randconfig-a015-20210217
+x86_64               randconfig-a003-20210216
+x86_64               randconfig-a002-20210216
+x86_64               randconfig-a004-20210216
+x86_64               randconfig-a001-20210216
+x86_64               randconfig-a005-20210216
+x86_64               randconfig-a006-20210216
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a013-20210216
+x86_64               randconfig-a016-20210216
+x86_64               randconfig-a012-20210216
+x86_64               randconfig-a015-20210216
+x86_64               randconfig-a014-20210216
+x86_64               randconfig-a011-20210216
+x86_64               randconfig-a003-20210215
+x86_64               randconfig-a002-20210215
+x86_64               randconfig-a001-20210215
+x86_64               randconfig-a004-20210215
+x86_64               randconfig-a005-20210215
+x86_64               randconfig-a006-20210215
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
