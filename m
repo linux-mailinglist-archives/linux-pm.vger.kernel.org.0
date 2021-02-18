@@ -2,104 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 571B331ED20
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 18:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBA831EF65
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 20:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbhBRRRW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 12:17:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:53202 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233306AbhBRQiV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 18 Feb 2021 11:38:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59FDA106F;
-        Thu, 18 Feb 2021 08:36:37 -0800 (PST)
-Received: from localhost (unknown [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF7E73F73D;
-        Thu, 18 Feb 2021 08:36:36 -0800 (PST)
-Date:   Thu, 18 Feb 2021 16:36:35 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
- sched_freq_tick() callback
-Message-ID: <20210218163635.GA23622@arm.com>
-References: <cover.1611829953.git.viresh.kumar@linaro.org>
- <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
- <20210203114521.GA6380@arm.com>
- <20210205091424.3od3tme3f7mh7ebp@vireshk-i7>
- <20210217002422.GA17422@arm.com>
- <20210218093304.3mt3o7kbeymn5ofl@vireshk-i7>
+        id S233583AbhBRTMA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 14:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234968AbhBRSCf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 13:02:35 -0500
+X-Greylist: delayed 1326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Feb 2021 10:01:55 PST
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BD8C061756
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 10:01:55 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.93.0.4)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1lCnHG-00017r-Ho; Thu, 18 Feb 2021 18:39:46 +0100
+Date:   Thu, 18 Feb 2021 17:39:39 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: small oddity in commit "power: reset: add driver for LinkStation
+ power off"
+Message-ID: <YC6mW6hebIg7z9eA@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210218093304.3mt3o7kbeymn5ofl@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey,
+Hi Daniel,
 
-On Thursday 18 Feb 2021 at 15:03:04 (+0530), Viresh Kumar wrote:
-> On 17-02-21, 00:24, Ionela Voinescu wrote:
-> > > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > > index 1e47dfd465f8..47fca7376c93 100644
-> > > --- a/arch/arm64/kernel/topology.c
-> > > +++ b/arch/arm64/kernel/topology.c
-> > > @@ -240,7 +240,6 @@ static struct scale_freq_data amu_sfd = {
-> > >  
-> > >  static void amu_fie_setup(const struct cpumask *cpus)
-> > >  {
-> > > -	bool invariant;
-> > >  	int cpu;
-> > >  
-> > >  	/* We are already set since the last insmod of cpufreq driver */
-> > > @@ -257,25 +256,10 @@ static void amu_fie_setup(const struct cpumask *cpus)
-> > >  
-> > >  	cpumask_or(amu_fie_cpus, amu_fie_cpus, cpus);
-> > >  
-> > > -	invariant = topology_scale_freq_invariant();
-> > > -
-> > > -	/* We aren't fully invariant yet */
-> > > -	if (!invariant && !cpumask_equal(amu_fie_cpus, cpu_present_mask))
-> > > -		return;
-> > > -
-> > 
-> > You still need these checks, otherwise you could end up with only part
-> > of the CPUs setting a scale factor, when only part of the CPUs support
-> > AMUs and there is no cpufreq support for FIE.
+I stumbled upon a slight oddity in acommit you have contributed.
+Please see my comment below.
+
+> commit a7f79f99541eff4e6bcae0014eb08d3019337565
+> Author: Daniel González Cabanelas <dgcbueu@gmail.com>
+> Date:   Wed Jul 15 15:35:14 2020 +0200
 > 
-> Another look at it and here goes another reason (hope I don't have
-> another in-code comment somewhere else to kill this one) :)
-> 
-> We don't need to care for the reason you gave (which is a valid reason
-> otherwise), as we are talking specifically about amu_fie_setup() here
-> and it gets called from cpufreq policy-notifier. i.e. we won't support
-> AMUs without cpufreq being there in the first place and the same goes
-> for cppc-driver.
-> 
-> Does that sound reasonable ?
-> 
+>     power: reset: add driver for LinkStation power off
+>     
+>     Some Buffalo LinkStations perform the power off operation, at restart
+>     time, depending on the state of an output pin (LED2/INTn) at the ethernet
+>     PHY. This pin is also used to wake the machine when a WoL packet is
+>     received by the PHY.
+>     
+>     The driver is required by the Buffalo LinkStation LS421DE (ARM MVEBU),
+>     and other models. Without it, the board remains forever halted if a
+>     power off command is executed, unless the PSU is disconnected and
+>     connected again.
+>     
+>     Add the driver to provide the power off function and also make the WoL
+>     feature to be available.
+>     
+>     Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
+>     Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ...
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index 5710ca4695170..c51eceba9ea39 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) += gemini-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
+>  obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
+> +obj-${CONFIG_POWER_RESET_LINKSTATION} += linkstation-poweroff.o
 
-Yes, we don't care if there is no cpufreq driver, as the use of AMUs won't
-get initialised either. But we do care if there is a cpufreq driver that
-does not support frequency invariance, which is the example above.
+Why are you using curly brackets (ie. shell variable) here instead of
+normal parentheses (ie. Make variable)? It might work, but if there is
+no special reason for this, we should just be consistent with the rest
+of the file.
 
-The intention with the patches that made cpufreq based invariance generic
-a while back was for it to be present, seamlessly, for as many drivers as
-possible, as a less than accurate invariance default method is still
-better than nothing. So only a few drivers today don't support cpufreq
-based FI, but it's not a guarantee that it will stay this way.
 
-Hope it makes sense,
-Ionela.
+Cheers
 
-> -- 
-> viresh
+
+Daniel
