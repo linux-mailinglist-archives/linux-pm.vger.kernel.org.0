@@ -2,98 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21E331E6EE
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 08:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F2E31E7A7
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 09:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbhBRH12 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 02:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
+        id S230095AbhBRIu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 03:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbhBRHY4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 02:24:56 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC4C061574
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 23:23:50 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id q20so691886pfu.8
-        for <linux-pm@vger.kernel.org>; Wed, 17 Feb 2021 23:23:50 -0800 (PST)
+        with ESMTP id S231379AbhBRIta (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 03:49:30 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C14C06178C
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 00:48:50 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d13so889312plg.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 00:48:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=XZ+7cyfIAMa4qybTYJPAFZXKgOwCxm2f1fhL0vcgILs=;
-        b=zcxNV4rPUkqxVIFX2+P/FTys8pW1F4mnkWDnGADI+Q7Tis+cADSwa1UOZtgCkKASKK
-         CYUn3vaV+t9ey7m29lQ3IsB4A2DAdIigVTKb/iVwLZMZDwyUODjXXkJ9ngm5ghs0xY3n
-         Hrn6M0brC/CxGhMw2J0+tgnSCG5rnMjHKzNATniq1eeXwPesUP/8JtoE32bg/LdispEY
-         xIB2ie6BKy+aU0LybOt91BZEbGixq1SJzyb/IlT19r5lwNzSyMuQf+pLZU/1pwiHrGmG
-         TcgUZJDI0mtF5mBwvpwn1odWmGjrHEKJfYH30+8NhGkcBk8E0lpePdk6+gKwUOPX6IND
-         QVkA==
+        bh=5V1dhMz49FBbfbFJI2tpYTF5MVo+s3zgUy0K5VPiR4o=;
+        b=SMYKL3rdCwOCRSemhKAk0Bi3POUbxr8tuzIIcTwf4oF+HkrTWpgFFTZqK25UpiiGZg
+         7IAtw6NJR4wVDtdc/WRWmyGkNqkLm2CvO585jawp5SAfmzDrYDGZpWklrcNjBvHjPlD3
+         qbyFQqFkXmFQUqW7mJq1AEo7Jo6loSl7ygP2PQdGqR5VFXeuvhWrS88QRjukJnDcuLFt
+         bKE0Fpr5n6fG6GX16PY98WH+crByHTNIgSvOtOJrT3Uuwb/GAvnxJpt9P04dr+wUCond
+         8o+UCRVEs0lAkN/MFPygRx1oWBPdB0jGRad8iCfjVU+KJ+XPykPEPj/Q8ijCE/mzKoZz
+         86Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XZ+7cyfIAMa4qybTYJPAFZXKgOwCxm2f1fhL0vcgILs=;
-        b=uGxZlUVy05D/v596fh1XXRc4NsUiEhx+6IUc5IAQu57bkld9wqT8nbnnbNBtmWGgMe
-         Tu+bRO9Vup7Tphc9NPsreFsrlZ1DpJ2VcLef5l1dFlKUCWReN9pg9s+vXTvCMk8DmPwM
-         w0YS5Njo3li7c938F8dDSVDHIB9Ns9+ynZ0UFow53SI52Wqt6ofBGv53MXUHlcysb23O
-         IBuqplHHpS+o7L8uoQYBZQakfh6xuLhuh2JVRmqj/7iX164RR50UVnOGJ6zygb7S8xA7
-         Jn1tCQIV3wntf3znqZ2EBva3qzgTuftrWRSHjWVvZr94Gy4cELep/OgfTXq5GX8mJGFH
-         YxyA==
-X-Gm-Message-State: AOAM531aN7IYVb9QrumDiMgBLieHWnbOcqUKkSA4Z1j2VkIAk8EWL3OA
-        7Qq7aCHhe3oRH5oNe6G31fnZWw==
-X-Google-Smtp-Source: ABdhPJyay5kfbTBaholo6asX0wF7iLAKXd37i762FtCcYsP3JZWMTcmGy+pyGz15MHaOgt+sI+Tj4Q==
-X-Received: by 2002:a63:1519:: with SMTP id v25mr2932024pgl.217.1613633029702;
-        Wed, 17 Feb 2021 23:23:49 -0800 (PST)
+        bh=5V1dhMz49FBbfbFJI2tpYTF5MVo+s3zgUy0K5VPiR4o=;
+        b=k99YniaNpRCcV4GRzMrAE90LITW+0c8mivJDU+BWR5YkJ3BOKM1/MM4+x91VS8WB98
+         oNIlFFJPFFP7TLadX2KIsippauqZ2eRwdZPxjYf5joTiHtclLuvzYKBsH0xyWP8fVS7a
+         WzcqjbjQB+mz8j4gDFdlUyQUr5QswnF+IsylFVpI78EYIpkOa6XGdgIynmBy/ekF+AM+
+         VbWlcUattbxqKpTZPLDwXKIC2YUu71vPtHt0MOTpQJM5IxZN/pE5CtDVZZsCZiy9RPAs
+         ebsd6I827/36g5VU1nEB4bjaT8i7wygHsHonv3w2I+kvjrIY9s6aceRCwRbEOEIjSxWg
+         S+VQ==
+X-Gm-Message-State: AOAM530QY0psC6u05RllZgvdY4a70igeDwJjmXy1gbTJn0H87mD+cRUu
+        +ozOPqpIKRgui5AJQF+gnA3n2w==
+X-Google-Smtp-Source: ABdhPJwQzMQEQHeUP0SWs/zHqqmTL2W9ZrTk6OG29IwBDBRBEVQcu/fZ4fXs++FfQLe1eghBKfTGTA==
+X-Received: by 2002:a17:902:7b89:b029:e1:1b46:bcec with SMTP id w9-20020a1709027b89b02900e11b46bcecmr3321594pll.5.1613638129948;
+        Thu, 18 Feb 2021 00:48:49 -0800 (PST)
 Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id u10sm4580386pjr.27.2021.02.17.23.23.48
+        by smtp.gmail.com with ESMTPSA id u20sm4960335pjy.36.2021.02.18.00.48.48
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Feb 2021 23:23:49 -0800 (PST)
-Date:   Thu, 18 Feb 2021 12:53:46 +0530
+        Thu, 18 Feb 2021 00:48:49 -0800 (PST)
+Date:   Thu, 18 Feb 2021 14:18:47 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
- sched_freq_tick() callback
-Message-ID: <20210218072346.5lvymba35ezuz2do@vireshk-i7>
-References: <cover.1611829953.git.viresh.kumar@linaro.org>
- <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
- <20210203114521.GA6380@arm.com>
- <20210205091424.3od3tme3f7mh7ebp@vireshk-i7>
- <20210217002422.GA17422@arm.com>
- <20210217042558.o4anjdkayzgqny55@vireshk-i7>
- <20210217113011.GA22176@arm.com>
- <20210217114027.ashqh67hrfk4hwib@vireshk-i7>
- <20210217115726.GA25441@arm.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rjw@rjwysocki.net, bjorn.andersson@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: exclude boost frequencies from valid count if
+ not enabled
+Message-ID: <20210218084847.743rttqwlmwyx6pz@vireshk-i7>
+References: <20210217000013.4063289-1-thara.gopinath@linaro.org>
+ <20210217055029.a25wjsyoosxageti@vireshk-i7>
+ <4c9d9d44-5fa5-3ae1-e9bb-45cf6521b764@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210217115726.GA25441@arm.com>
+In-Reply-To: <4c9d9d44-5fa5-3ae1-e9bb-45cf6521b764@linaro.org>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-02-21, 11:57, Ionela Voinescu wrote:
-> See a very useful comment someone added recently :) :
-> 
-> """
-> +	/*
-> +	 * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
-> +	 * counters don't have any dependency on cpufreq driver once we have
-> +	 * initialized AMU support and enabled invariance. The AMU counters will
-> +	 * keep on working just fine in the absence of the cpufreq driver, and
-> +	 * for the CPUs for which there are no counters available, the last set
-> +	 * value of freq_scale will remain valid as that is the frequency those
-> +	 * CPUs are running at.
-> +	 */
-> """
+On 17-02-21, 10:32, Thara Gopinath wrote:
+> First of all, I am still unable to find this setting in the sysfs space.
 
-Lol... 
+The driver needs to call cpufreq_enable_boost_support() for that.
+
+> Irrespective the ideal behavior here will be to change the cpufreq cooling
+> dev max state when this happens.
+
+Hmm.. recreating it every time boost frequency is enabled is like
+inviting trouble and it will be tricky. Maybe it can be done, I don't
+know.:)
 
 -- 
 viresh
