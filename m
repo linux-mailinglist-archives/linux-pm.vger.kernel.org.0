@@ -2,92 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C70A31E7F1
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 10:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808B931E8C4
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 11:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbhBRJXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 04:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S230415AbhBRKjh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 05:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbhBRJUD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 04:20:03 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7F3C061574
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:18:52 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id z7so911132plk.7
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:18:52 -0800 (PST)
+        with ESMTP id S231777AbhBRJYU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 04:24:20 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEC6C061756
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:23:39 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id f8so924446plg.5
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=ZfrYdTwVhl0qfLNFPC0R+RH2gzkng0p7ghdQ/UiF9U0=;
-        b=QT0+ucAdL/VqkeP+AFXTamPpid8J3w8Z28c1yrNS4fRPPakmtEAsRRFEYGRwmS/MMd
-         5SxKv7lx7c7yZMieFywn+VP6vmA9wK9GbOKyaYjs0ZeiVWsb8cii/FIvMhmtl3ij/52N
-         qmm2Y223ET31f/NaHwzvebYvWnn0qUpl2JM5hbqdx40L9psppC4k78Tu9fCTvvm4OZmy
-         ImGQKEUm70aiI0ZJddzTh/lg96+F+V00nd3GaAm8FNmZKtgr3tTQ7xsgoK8ZEUvWnNZV
-         Er36HcN4j+8mHNXNjUyMyKVPxQBrAlvgj3TMyUCq4CPNAUB6lRuaJiPQbeVXdDYVgEu2
-         N+0g==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wzVpT18eiAjHhO55WLEfdJyCyX2yASsyssyrGm3t5zc=;
+        b=nktXpTqv4+aRwS7BgGmAy7n74qVgUSi7upG3YxO85EvXNra012y0f92XRVT/lgqRXZ
+         A2RHMIHjpNmCgfVCnZPfbTFyJknZNjpPlB8unWHmMUPWw+D3SbFDOYAkkxvSn7AhSPff
+         ZElwY1wrUUirwM5HovqREeaimltZX4PS+KEqZmyolmtFnABM3GgefqHbBstvH0OgAdcR
+         GQWeeBBtNFlbc2dW9Q8DmVpUTwTUrPwnUUVenrnkwynaaYDtnajSqkxx4nG3mfseDhhv
+         o8HtJ5aUnt0g3UIE9AbtRN48SjaZJ4C9yrgm5HqsrKmUEU49ZSk91Kn4oUmo8lpCI5Jg
+         5QTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=ZfrYdTwVhl0qfLNFPC0R+RH2gzkng0p7ghdQ/UiF9U0=;
-        b=TJbK8T8XAc5Z4boZ13Y9P+iORqXRa9a3H2b8vj32og9D1s31Sv9c3x5IJG1UsRkcaw
-         76AcehGp7j+Jr4C0Zui/Eijsuc9eDCU1vKIZ15vr7TDG69fBIQ4czFFky7bPg4OEYAQ/
-         WpiF7hOhJgkJT/HvG/ou7bRoVCbl19o9TncqV7Bp/JulPH5e70rvPZDzBQ2UNw04v/Qf
-         HTJMx2Dk2jaGugeQCdR0HP2VICqb7Q+wuzhwovzPUtMBbJ62b/bJEo8QWfJM4elDwgEl
-         kBJgmCo5lH7FxrheX7lQt9yIRYlZ2gSN0s1+3w9OSjYrtYC25j99S+EAI0iKt8I14hgi
-         1Bew==
-X-Gm-Message-State: AOAM531g2YtQNAGh806KtoJ6MOzcmRkCRPnePcVfROhZ6kf8bWNufpIv
-        aGlPXWhlXCJAOu9L5AhnRvoUCA==
-X-Google-Smtp-Source: ABdhPJx52OLje2eMiNo+eoG4Hc/c+68bZ7JlWsyCiWVmjo6qfIs0Am1kxAbOZSVftHzg0LnA9yGZwA==
-X-Received: by 2002:a17:90a:8e83:: with SMTP id f3mr3373250pjo.70.1613639931853;
-        Thu, 18 Feb 2021 01:18:51 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id y7sm4942926pfl.127.2021.02.18.01.18.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Feb 2021 01:18:51 -0800 (PST)
-Date:   Thu, 18 Feb 2021 14:48:49 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm fixes for 5.12
-Message-ID: <20210218091849.6lem2iaags3dsrz3@vireshk-i7>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wzVpT18eiAjHhO55WLEfdJyCyX2yASsyssyrGm3t5zc=;
+        b=Yj1dx0w4st6dmmJeEiQsUFJjA/G77m5322MJSi0F3DxS0QdspKa4+RxOi0D2Wf9EDT
+         s+1Bo0I9nlDBX8PREF93PjY7cmpbdSiqYudTNKaODP9P2c9Xu6n4iUVtT2LrxpAf8y9f
+         jGqHGwLeGEIJrghqoDbE8RSLUymtXPRp4Qw9ZEtPj4WBjrfMqbLBrR/kGer87Nhpg8mk
+         BFByM3xLq5VkyrzYU5zX9lYd22kw7D0tIrbQN5e3VRNLXmkuzKFrA1fRSAHVOnX/rNH2
+         J5Vzr4Wg78QTcMXLLLBVMojYsVhgdYWs+A9x3qXmN6DUa5lGZZnGaTNknsG+JOIjBlxr
+         5DAA==
+X-Gm-Message-State: AOAM533qvuuDUNbZLrZLnMmZ2H54jCTrod0/oN+6dYy/A2wNkAfyK9wa
+        WwaUEoYZlCwXdDWTGqzl8AE=
+X-Google-Smtp-Source: ABdhPJyJZCppCUy4Z8u5FF0PiXFqagGNDjJ8jH/RzvSmWdtl+0WF+tH/PFoDLw/AaK4vZFyOHigeWQ==
+X-Received: by 2002:a17:90b:1093:: with SMTP id gj19mr3163766pjb.40.1613640219605;
+        Thu, 18 Feb 2021 01:23:39 -0800 (PST)
+Received: from tj.ccdomain.com ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id e6sm4981965pfd.5.2021.02.18.01.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Feb 2021 01:23:39 -0800 (PST)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        linux-pm@vger.kernel.org, huyue2@yulong.com, zbestahu@163.com
+Subject: [PATCH] cpufreq: schedutil: Correct comment to update_lock of struct sugov_policy
+Date:   Thu, 18 Feb 2021 17:23:16 +0800
+Message-Id: <20210218092316.1624-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.29.2.windows.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+From: Yue Hu <huyue2@yulong.com>
 
-This pull request contains a single patch to fix issue with cpu hotplug and
-policy recreation for qcom-cpufreq-hw driver..
+Currently, update_lock is also used in sugov_update_single_freq().
 
-Thanks.
+Signed-off-by: Yue Hu <huyue2@yulong.com>
+---
+ kernel/sched/cpufreq_schedutil.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---
-Viresh
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index add8081..cc0308c 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -26,7 +26,7 @@ struct sugov_policy {
+ 	struct sugov_tunables	*tunables;
+ 	struct list_head	tunables_hook;
+ 
+-	raw_spinlock_t		update_lock;	/* For shared policies */
++	raw_spinlock_t		update_lock;	/* For single + shared policies */
+ 	u64			last_freq_update_time;
+ 	s64			freq_update_delay_ns;
+ 	unsigned int		next_freq;
+-- 
+1.9.1
 
--------------------------8<-------------------------
-
-The following changes since commit 7114ebffd330bfc5a95b9832a70b6bd857d26fd8:
-
-  cpufreq: remove tango driver (2021-01-21 09:34:46 +0530)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-
-for you to fetch changes up to 67fc209b527d023db4d087c68e44e9790aa089ef:
-
-  cpufreq: qcom-hw: drop devm_xxx() calls from init/exit hooks (2021-02-18 14:35:18 +0530)
-
-----------------------------------------------------------------
-Shawn Guo (1):
-      cpufreq: qcom-hw: drop devm_xxx() calls from init/exit hooks
-
- drivers/cpufreq/qcom-cpufreq-hw.c | 40 +++++++++++++++++++++++++++++++--------
- 1 file changed, 32 insertions(+), 8 deletions(-)
