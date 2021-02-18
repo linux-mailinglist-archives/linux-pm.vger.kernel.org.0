@@ -2,82 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D9131EA52
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 14:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7ED31EA53
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 14:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbhBRNPs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 08:15:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53690 "EHLO mail.kernel.org"
+        id S231592AbhBRNP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 08:15:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:50966 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231791AbhBRM5J (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 18 Feb 2021 07:57:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC97C6023C;
-        Thu, 18 Feb 2021 12:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613652301;
-        bh=s7m6e8MgvP5IaBe7fZhQQGsTvRr9vg/yYbEFLpbXV7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s9Jl/A+S2ZuncLL1pzR7Lvw2456VeI3RGhpA4xY+EBOt0IGBOneKFoSkoWAHxj+k0
-         hTvkpIylKTCaa9sJA2sfJzh3SRQdk3+N1XSyklDc5lwfT6ZQDs1AqbfUXZXhpByBWB
-         3lQMiuDiQxEAUeQpHAsd/x1roLMS8qtzAms9wneeTY06jaZd25nRXPSiafwsQMrBQa
-         3WC3Yud/+qGFt4LNQEH7hWJwBA31YtyJxyai0w24482/pn6WbLhOqQDQbFXfLDDtSC
-         R7YvESO1GpFNx9GqNZItCHNA/Xvsn4yVUuENgSB911WbnA4ua62ta+Ywvr/MHpXH5K
-         zicQ2Z/oFnz/w==
-Date:   Thu, 18 Feb 2021 18:14:57 +0530
-From:   Vinod Koul <vkoul@kernel.org>
+        id S233189AbhBRM7D (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 18 Feb 2021 07:59:03 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C85BE1FB;
+        Thu, 18 Feb 2021 04:58:11 -0800 (PST)
+Received: from [10.57.43.160] (unknown [10.57.43.160])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 203DD3F73B;
+        Thu, 18 Feb 2021 04:58:09 -0800 (PST)
+Subject: Re: [PATCH v7 1/3] scmi-cpufreq: Remove deferred probe
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Document SM8350
- CPUfreq compatible
-Message-ID: <20210218124457.GW2774@vkoul-mobl.Dlink>
-References: <20210216111251.1838149-1-vkoul@kernel.org>
- <20210217044955.qmbpd43wis7xtjoj@vireshk-i7>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com, rjw@rjwysocki.net,
+        vireshk@kernel.org, cristian.marussi@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        ionela.voinescu@arm.com
+References: <20210215075139.30772-1-nicola.mazzucato@arm.com>
+ <20210215075139.30772-2-nicola.mazzucato@arm.com>
+ <20210218103539.zkxhqxaivhifmjwj@vireshk-i7>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <2b8f34cc-5317-f839-5f51-f83c10f571c6@arm.com>
+Date:   Thu, 18 Feb 2021 13:01:12 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210217044955.qmbpd43wis7xtjoj@vireshk-i7>
+In-Reply-To: <20210218103539.zkxhqxaivhifmjwj@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-02-21, 10:19, Viresh Kumar wrote:
-> On 16-02-21, 16:42, Vinod Koul wrote:
-> > Add the CPUfreq compatible for SM8350 SoC along with note for using the
-> > specific compatible for SoCs
-> > 
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-> > index 9299028ee712..3eb3cee59d79 100644
-> > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-> > @@ -8,7 +8,9 @@ Properties:
-> >  - compatible
-> >  	Usage:		required
-> >  	Value type:	<string>
-> > -	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss".
-> > +	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss"
-> > +			along with SoC specific compatible:
-> > +			  "qcom,sm8350-cpufreq-epss", "qcom,cpufreq-epss"
-> 
-> And why is SoC specific compatible required here ? Is the implementation on
-> sm8350 any different than the ones using "qcom,cpufreq-epss" compatible ?
-> 
-> FWIW, the same compatible string must be reused until the time there is
-> difference in the hardware. The compatible string must be considered as a marker
-> for a particular version of the hardware.
+Hi Viresh,
 
-Rob has indicated that we should use a SoC specific compatible and I
-agree with that. We are using both soc and generic one here and driver
-will be loaded for generic one.
 
-Thanks
--- 
-~Vinod
+On 2/18/21 10:35 AM, Viresh Kumar wrote:
+> On 15-02-21, 07:51, Nicola Mazzucato wrote:
+>> The current implementation of the scmi_cpufreq_init() function returns
+>> -EPROBE_DEFER when the OPP table is not populated. In practice the
+>> cpufreq core cannot handle this error code.
+>> Therefore, fix the return value and clarify the error message.
+>>
+>> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+>> Signed-off-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
+>> ---
+>>  drivers/cpufreq/scmi-cpufreq.c | 8 +++++---
+>>  1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+>> index 491a0a24fb1e..34bf2eb8d465 100644
+>> --- a/drivers/cpufreq/scmi-cpufreq.c
+>> +++ b/drivers/cpufreq/scmi-cpufreq.c
+>> @@ -155,9 +155,11 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>>  
+>>  	nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
+>>  	if (nr_opp <= 0) {
+>> -		dev_dbg(cpu_dev, "OPP table is not ready, deferring probe\n");
+>> -		ret = -EPROBE_DEFER;
+>> -		goto out_free_opp;
+> 
+> Why change goto label as well ?
+
+oops! thanks for spotting this :)
+
+> 
+>> +		dev_err(cpu_dev, "%s: No OPPs for this device: %d\n",
+>> +			__func__, ret);
+>> +
+>> +		ret = -ENODEV;
+>> +		goto out_free_priv;
+>>  	}
+>>  
+>>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>> -- 
+>> 2.27.0
+> 
