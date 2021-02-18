@@ -2,84 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BE031E7EE
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 10:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C70A31E7F1
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 10:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbhBRJWs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 04:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S231603AbhBRJXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 04:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbhBRJJa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 04:09:30 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D94C061756
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:08:04 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id t2so1057873pjq.2
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:08:04 -0800 (PST)
+        with ESMTP id S231694AbhBRJUD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 04:20:03 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7F3C061574
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:18:52 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id z7so911132plk.7
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:18:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=f3r3WiCVRBxkJr6r7AbTWnygN26Y0ayRcsLAMnhB5sE=;
-        b=QJfuhgpsfxJIGJA7L4EjIiY6DEyWcy2XeX11Sjdmp0tnL/xm2fhNRDfpqeekkVc68k
-         cLciEQQLeXHIRRP+jUMf2De00Lbh7phPXh0yOG5xkNS48/lVAT8mUjDQxA69cfwTrIis
-         IBgJaAMLrVxQL1AAxvXWf2V2WYfo2v5zB8KcwrOF4PKSwZj50SJNI0Ys/RiaCyS3ZlIC
-         6akcb3M+uBkGQDezg1KslPejWH2IGR3y9FcvQy5y/FzlKdepiqmW1GLqV6bAcrI9HbtG
-         oHkWOUa56WYOHmkYaVbA9dWQtXkexHHawm1not80EdWu+sz2+Z5XmVQU23WRw0izsdno
-         cx0Q==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=ZfrYdTwVhl0qfLNFPC0R+RH2gzkng0p7ghdQ/UiF9U0=;
+        b=QT0+ucAdL/VqkeP+AFXTamPpid8J3w8Z28c1yrNS4fRPPakmtEAsRRFEYGRwmS/MMd
+         5SxKv7lx7c7yZMieFywn+VP6vmA9wK9GbOKyaYjs0ZeiVWsb8cii/FIvMhmtl3ij/52N
+         qmm2Y223ET31f/NaHwzvebYvWnn0qUpl2JM5hbqdx40L9psppC4k78Tu9fCTvvm4OZmy
+         ImGQKEUm70aiI0ZJddzTh/lg96+F+V00nd3GaAm8FNmZKtgr3tTQ7xsgoK8ZEUvWnNZV
+         Er36HcN4j+8mHNXNjUyMyKVPxQBrAlvgj3TMyUCq4CPNAUB6lRuaJiPQbeVXdDYVgEu2
+         N+0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=f3r3WiCVRBxkJr6r7AbTWnygN26Y0ayRcsLAMnhB5sE=;
-        b=YmFyOgH9tL3Aid2E6rn6LxU1bNqjIIJlje/LyZlOqNEvS6wS3VYWFkrt4LWd3wvCpu
-         vd0j6kW30wSYLVnIrwELsJP8axXzgp4iho0cGDwH7uJtcmteJTrITRfNUTZDEobzJ3bL
-         wRet3+ZOVrZZ70Fhm+DfEr2jxnCEVEwC6e0St4tJmeWxmwaSHZmfDARaia4T4ywixuEW
-         1llvsGRiKlmV8h02KEjpc80vLfOsn9ppiB3+r5NsnrWhaRA3fZ/LiYuI6pAtsUweCCGQ
-         dc2nJdpSIaM+GwQXzFLdBDPAIEtyapZ0mD94r7+L1dyTiHNWANKf7/JFtg9lgWObfVsz
-         cscQ==
-X-Gm-Message-State: AOAM530knCYSKf2VdWQtYnB7/Q9nsheOknf/pGJra8sKk5JfxWoni4dd
-        ZTRAiwaacvJw1AbOgV7f0bmUAg==
-X-Google-Smtp-Source: ABdhPJwH5Yb+V9WU6Cx8sm3sVmtL3vGefTKbMlzySB2jw+pGKiq2ngMGNLoDQ2nRFJ7mn1EAz9Gghw==
-X-Received: by 2002:a17:90a:7108:: with SMTP id h8mr3022005pjk.98.1613639284464;
-        Thu, 18 Feb 2021 01:08:04 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=ZfrYdTwVhl0qfLNFPC0R+RH2gzkng0p7ghdQ/UiF9U0=;
+        b=TJbK8T8XAc5Z4boZ13Y9P+iORqXRa9a3H2b8vj32og9D1s31Sv9c3x5IJG1UsRkcaw
+         76AcehGp7j+Jr4C0Zui/Eijsuc9eDCU1vKIZ15vr7TDG69fBIQ4czFFky7bPg4OEYAQ/
+         WpiF7hOhJgkJT/HvG/ou7bRoVCbl19o9TncqV7Bp/JulPH5e70rvPZDzBQ2UNw04v/Qf
+         HTJMx2Dk2jaGugeQCdR0HP2VICqb7Q+wuzhwovzPUtMBbJ62b/bJEo8QWfJM4elDwgEl
+         kBJgmCo5lH7FxrheX7lQt9yIRYlZ2gSN0s1+3w9OSjYrtYC25j99S+EAI0iKt8I14hgi
+         1Bew==
+X-Gm-Message-State: AOAM531g2YtQNAGh806KtoJ6MOzcmRkCRPnePcVfROhZ6kf8bWNufpIv
+        aGlPXWhlXCJAOu9L5AhnRvoUCA==
+X-Google-Smtp-Source: ABdhPJx52OLje2eMiNo+eoG4Hc/c+68bZ7JlWsyCiWVmjo6qfIs0Am1kxAbOZSVftHzg0LnA9yGZwA==
+X-Received: by 2002:a17:90a:8e83:: with SMTP id f3mr3373250pjo.70.1613639931853;
+        Thu, 18 Feb 2021 01:18:51 -0800 (PST)
 Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id fz24sm4783688pjb.35.2021.02.18.01.08.03
+        by smtp.gmail.com with ESMTPSA id y7sm4942926pfl.127.2021.02.18.01.18.50
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Feb 2021 01:08:03 -0800 (PST)
-Date:   Thu, 18 Feb 2021 14:38:02 +0530
+        Thu, 18 Feb 2021 01:18:51 -0800 (PST)
+Date:   Thu, 18 Feb 2021 14:48:49 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yue Hu <zbestahu@gmail.com>
-Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-pm@vger.kernel.org,
-        huyue2@yulong.com, zbestahu@163.com
-Subject: Re: [PATCH] cpufreq: schedutil: Remove the needless sg_policy
- parameter to ignore_dl_rate_limit()
-Message-ID: <20210218090802.x2znazuw7fxnvhtn@vireshk-i7>
-References: <20210218090132.1556-1-zbestahu@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm fixes for 5.12
+Message-ID: <20210218091849.6lem2iaags3dsrz3@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210218090132.1556-1-zbestahu@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-02-21, 17:01, Yue Hu wrote:
-> From: Yue Hu <huyue2@yulong.com>
-> 
-> Since sg_policy is a member of struct sugov_cpu. Also remove the local
-> variable in sugov_update_single_common() to make the code more clean.
-> 
-> Signed-off-by: Yue Hu <huyue2@yulong.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+Hi Rafael,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+This pull request contains a single patch to fix issue with cpu hotplug and
+policy recreation for qcom-cpufreq-hw driver..
 
--- 
-viresh
+Thanks.
+
+--
+Viresh
+
+-------------------------8<-------------------------
+
+The following changes since commit 7114ebffd330bfc5a95b9832a70b6bd857d26fd8:
+
+  cpufreq: remove tango driver (2021-01-21 09:34:46 +0530)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+
+for you to fetch changes up to 67fc209b527d023db4d087c68e44e9790aa089ef:
+
+  cpufreq: qcom-hw: drop devm_xxx() calls from init/exit hooks (2021-02-18 14:35:18 +0530)
+
+----------------------------------------------------------------
+Shawn Guo (1):
+      cpufreq: qcom-hw: drop devm_xxx() calls from init/exit hooks
+
+ drivers/cpufreq/qcom-cpufreq-hw.c | 40 +++++++++++++++++++++++++++++++--------
+ 1 file changed, 32 insertions(+), 8 deletions(-)
