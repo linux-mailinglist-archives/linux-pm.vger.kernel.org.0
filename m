@@ -2,83 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBA831EF65
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 20:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2252B31EF61
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 20:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbhBRTMA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 14:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234968AbhBRSCf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 13:02:35 -0500
-X-Greylist: delayed 1326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Feb 2021 10:01:55 PST
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BD8C061756
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 10:01:55 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.93.0.4)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1lCnHG-00017r-Ho; Thu, 18 Feb 2021 18:39:46 +0100
-Date:   Thu, 18 Feb 2021 17:39:39 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: small oddity in commit "power: reset: add driver for LinkStation
- power off"
-Message-ID: <YC6mW6hebIg7z9eA@makrotopia.org>
+        id S233466AbhBRTLu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 14:11:50 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:46459 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230446AbhBRRl6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 12:41:58 -0500
+Received: by mail-ot1-f50.google.com with SMTP id o10so2581405ote.13
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 09:41:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N8n6PzhTwwqc/x7VxdjKA2P81D19TXeAs+2o1Js6BYU=;
+        b=fPfYdsnlDbhnlERIdSWVReIk6KzCUnoAeW05O9Z7BPTfaTu3xLJhQGzdKSZqf3Ktop
+         1oLIGs0bS5B63kHB9KD47MhaNjL2HGpOBbn47CxH3aRe9egkW+lMOhvc5ItcxvMi4Ynm
+         rcEjEyufMhCeyxqMIy8qWVRBDzdU7b3CFfYlvvgb54rOV2Id5zx7qG5BS+zHHOBhWjQR
+         VzgUh1DKCr6V9y3UIIPBjGnC1anq0Rze4SHO/RC9v+pPYvAUyEd1ayNN6N9EriX6QGXN
+         yoeg+LDl1i+WlrCAQBo6a19Qzbekp4QeKrVGaEqZGd1+2Os1vRgMdSk3n4mKZxW3plTw
+         sNBA==
+X-Gm-Message-State: AOAM532nc4dSYfRR+c+Ov51dCcXF1LrCQOqkUZ7RJNtJOten0fAkTR5D
+        6sm2vSC2xeWbnjNpPy/24+qeHNbuomW/RkMj3Fs=
+X-Google-Smtp-Source: ABdhPJy3UHbQ9O0xfY7XZwwSIXoO5e1ANiDv+TVjSHQ1zluaR2ZRZbqidkwc/VqynojjKPtytwPUEtd21tWgBPczkEo=
+X-Received: by 2002:a9d:a2d:: with SMTP id 42mr3840497otg.321.1613670076619;
+ Thu, 18 Feb 2021 09:41:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20210218072055.tfnwyv3hzcrgtopx@vireshk-i7>
+In-Reply-To: <20210218072055.tfnwyv3hzcrgtopx@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 18 Feb 2021 18:41:05 +0100
+Message-ID: <CAJZ5v0g68-=00p2sREVa+wg3hECHyQXbH-9psmdvUq+aipkJAQ@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP fixes for 5.12
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Thu, Feb 18, 2021 at 8:21 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> This pull request contains a single patch to fix an issue where a frequency
+> update may get skipped.
+>
+> Thanks.
+>
+> --
+> Viresh
+>
+> -------------------------8<-------------------------
+>
+> The following changes since commit 86ad9a24f21ea7aac7deed06fe9556392568d88a:
+>
+>   PM / devfreq: Add required OPPs support to passive governor (2021-02-04 16:48:16 +0530)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+>
+> for you to fetch changes up to de04241ab87afcaac26f15fcc32a7bd27294dd47:
+>
+>   opp: Don't skip freq update for different frequency (2021-02-18 12:31:08 +0530)
 
-I stumbled upon a slight oddity in acommit you have contributed.
-Please see my comment below.
+Pulled, thanks!
 
-> commit a7f79f99541eff4e6bcae0014eb08d3019337565
-> Author: Daniel González Cabanelas <dgcbueu@gmail.com>
-> Date:   Wed Jul 15 15:35:14 2020 +0200
-> 
->     power: reset: add driver for LinkStation power off
->     
->     Some Buffalo LinkStations perform the power off operation, at restart
->     time, depending on the state of an output pin (LED2/INTn) at the ethernet
->     PHY. This pin is also used to wake the machine when a WoL packet is
->     received by the PHY.
->     
->     The driver is required by the Buffalo LinkStation LS421DE (ARM MVEBU),
->     and other models. Without it, the board remains forever halted if a
->     power off command is executed, unless the PSU is disconnected and
->     connected again.
->     
->     Add the driver to provide the power off function and also make the WoL
->     feature to be available.
->     
->     Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
->     Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ...
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index 5710ca4695170..c51eceba9ea39 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -10,6 +10,7 @@ obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) += gemini-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
->  obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
-> +obj-${CONFIG_POWER_RESET_LINKSTATION} += linkstation-poweroff.o
-
-Why are you using curly brackets (ie. shell variable) here instead of
-normal parentheses (ie. Make variable)? It might work, but if there is
-no special reason for this, we should just be consistent with the rest
-of the file.
-
-
-Cheers
-
-
-Daniel
+Please note that this will be pushed after the previous PM pull
+request has been merged, though.
