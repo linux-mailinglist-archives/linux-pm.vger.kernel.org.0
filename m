@@ -2,88 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E48D431E8CA
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 11:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48BE31E8CC
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 11:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbhBRKpC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 05:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S231803AbhBRKpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 05:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbhBRJy6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 04:54:58 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B48C061797
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:54:24 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id l18so1122818pji.3
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:54:24 -0800 (PST)
+        with ESMTP id S230458AbhBRKN5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 05:13:57 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0717AC061794
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 02:05:13 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id cl8so1060656pjb.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 02:05:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3cA3Vbjv1QbCqSAwzSTWfO1r4QtSmELsNFBlAofM0z8=;
-        b=u/4QOfQgdaR3dDIR31aIOvXa5uWPBS0K8zu7mhAvwBunnhMwfj94snONBRY1cb+v8l
-         AIPUQR1lN9eKb1w9b5240CEHqzirQFkPctBV/+85Yt8WA6mqAqmAOyGNR3m8HI9NMiWX
-         6q7DiZztQL1vOavP2tJJ3goq8RcsJeBwMd8FZRsS5EvqGJHL/L8h1PlyFJa4fJuOJw8t
-         tT5dqdP+Tn2e2mVHcH+rIWhMyZS8kbXNZa5n8SEraNPXkPICpvpgrsKBAQE37KoBRLA4
-         M2bHqfZwjOl1IKjolhRRd0+hlCi/fdOXKANHxIiVfUgvLAO9v5K+YRo6SV5AhSkUP8PF
-         kTSQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QqUlEVqUFxLYYj8AnwL4tFC5BJXkPMxniJs3C6hKrpM=;
+        b=FQVsNk7fKcaL9PiZFVq1VKNicrBTsDaKguZ6Q6e3lgpdbFD8gljU3ok+bRuVyhz4Vs
+         nSH2P1gRCuo9nfUXYBXmG8OdMMJNBxaP7H2ouoOCixARy18S5XvZKXSQHHE4OeOquGY6
+         tHPB4sHGc6+hJ8FT1yy1jREvCfRYE4mzvIDL8QAn5mZlmCZnpUbHZ33mq+q/DvBLl6EG
+         WfQyKCATHs9vbyeZ73rxMNGs2nE4jiJ9zKEhhNtgvCCGV2ghmT7b96KwvIKMErDrw+2R
+         84Q+BfvH/AEsGzpaUNFpv2ESIxZSMbeY+4yZGs9WR5y9pDUX77kGeapU4q6GKetvoTCE
+         zjcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3cA3Vbjv1QbCqSAwzSTWfO1r4QtSmELsNFBlAofM0z8=;
-        b=osiiBUZV7SRgujonNJ4sS8XKoCS829mFjO+nrYlu1CUGMGenzmOjK5vdJbYC1nhi31
-         bKF1JiBVp7xaPQ6UrjEvHOvk2P7Wj2S3x96RrS5VEKT3FfDL4eKMChhhEGf9mGNZ+ebU
-         hBBgpe29EE7W/HCdj2ik8jd31jV+8qlL/n5t6ZX4Q0tu71O6kKq1RgCM1fSh8JyPW8ry
-         AKIsWAzFBOcpL1gXfaIqN7mtc/HvnN9bbS2IAiQBnCNeBu1ooNNKUheKe20Dm8FoAyKk
-         /Wv1RiughzvHzEfS3ZABRn8Z0YY/9QNwAyI28KrMZWUiF2t3D6bGWdH+ZXnpnBh2qfou
-         qfPQ==
-X-Gm-Message-State: AOAM533irFFryaQyeVlbKUeNC28nYQWHHdWJRwunT8twmUCb3KHXa7kY
-        xk/4hG5+gk6sRQDHL2eNOpJN9GT/N6cG0A==
-X-Google-Smtp-Source: ABdhPJyTi5Xw4QPedUwjcvNH6Byv95BkyhIf2TmjWssZ5z3+o4Se6848rO1J1LzmwhPZ/jXtJ2d1Wg==
-X-Received: by 2002:a17:90a:bb0c:: with SMTP id u12mr3315331pjr.234.1613642063986;
-        Thu, 18 Feb 2021 01:54:23 -0800 (PST)
-Received: from tj.ccdomain.com ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id k5sm4867267pjl.50.2021.02.18.01.54.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Feb 2021 01:54:23 -0800 (PST)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, huyue2@yulong.com
-Subject: [PATCH] cpufreq: Fix typo in comments
-Date:   Thu, 18 Feb 2021 17:53:38 +0800
-Message-Id: <20210218095338.1766-1-zbestahu@gmail.com>
-X-Mailer: git-send-email 2.29.2.windows.3
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QqUlEVqUFxLYYj8AnwL4tFC5BJXkPMxniJs3C6hKrpM=;
+        b=Arw0HTZm6C4TSAIpOmb/RFO+7rOdWHjvmsNWkVPMKfewDYUM6wUP0kbAxJzZxqDlUv
+         jYYorwPhogd83+EdD1T1eMGadH8g7XRe/kAV5LoATa/j+WXesmMbYrz0jY5yYsBmKOR/
+         ol4PHGupMWBYq9BdQ7x2w+zmqX/RJWrBzDudp4rNwUF5g3UNkGKxlNecy0N9ZXmbPTWX
+         iXlHNqAdqf35IhGpMNOPZi2MXaTuw+o1MdJrflhzOEJr6Q02+Bfn/EUroD5tOFRVVDgz
+         5Rcb7T1yxR9DnKZVXDM6t96mHwQn5AQbZnX6WXT/zp8rXbxeLfzZyCwYsBcyA5MryREO
+         fRuA==
+X-Gm-Message-State: AOAM5305XKzza8pHPZEeMmOKE/nbZwxNqtHFI7jqBjMm2fuocgFmdOY6
+        +ZD6cofbsk56xdfPNvPWTuS0Uw==
+X-Google-Smtp-Source: ABdhPJyEDHRWzw5hc3tHKGnukExfAzOn9IIufBXE3DJwmLdE78T34qelXx7qDFAm6qY6CyLN6NfjQg==
+X-Received: by 2002:a17:90b:46cb:: with SMTP id jx11mr3353038pjb.45.1613642713510;
+        Thu, 18 Feb 2021 02:05:13 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id y20sm5532912pfo.210.2021.02.18.02.05.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Feb 2021 02:05:13 -0800 (PST)
+Date:   Thu, 18 Feb 2021 15:35:11 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org, huyue2@yulong.com
+Subject: Re: [PATCH] cpufreq: Fix typo in comments
+Message-ID: <20210218100511.nsjgtu3mdkr6f4zf@vireshk-i7>
+References: <20210218095338.1766-1-zbestahu@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210218095338.1766-1-zbestahu@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Yue Hu <huyue2@yulong.com>
+On 18-02-21, 17:53, Yue Hu wrote:
+> From: Yue Hu <huyue2@yulong.com>
+> 
+> Change 'Terget' to 'Target'.
+> 
+> Should be Target.
+> 
+> Signed-off-by: Yue Hu <huyue2@yulong.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index d0a3525..e4ec74d 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2101,7 +2101,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+>   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
+>   * @cpu: Target CPU.
+>   * @min_perf: Minimum (required) performance level (units of @capacity).
+> - * @target_perf: Terget (desired) performance level (units of @capacity).
+> + * @target_perf: Target (desired) performance level (units of @capacity).
+>   * @capacity: Capacity of the target CPU.
+>   *
+>   * Carry out a fast performance level switch of @cpu without sleeping.
 
-Change 'Terget' to 'Target'.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Should be Target.
-
-Signed-off-by: Yue Hu <huyue2@yulong.com>
----
- drivers/cpufreq/cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index d0a3525..e4ec74d 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2101,7 +2101,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-  * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
-  * @cpu: Target CPU.
-  * @min_perf: Minimum (required) performance level (units of @capacity).
-- * @target_perf: Terget (desired) performance level (units of @capacity).
-+ * @target_perf: Target (desired) performance level (units of @capacity).
-  * @capacity: Capacity of the target CPU.
-  *
-  * Carry out a fast performance level switch of @cpu without sleeping.
 -- 
-1.9.1
-
+viresh
