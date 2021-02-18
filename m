@@ -2,123 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C0E31F0CE
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 21:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EB131F12C
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 21:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbhBRUId (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 15:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbhBRUGl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 15:06:41 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DE0C061788
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 12:05:56 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id o38so1832243pgm.9
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 12:05:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=6dTck9PY3mL5nWCkfn4cWijMA877+yDLpdie40GUDLs=;
-        b=F8VcbDZBLF7kGrNeprzEqiZsydP6f1yQ1N8cOe7234VWdYUbbHYslP/F/9Eyc9vd6A
-         rppMlRXwdLWToZqBV0F+Onx6GUMpOe4CblmRzGb2hVwT29xc/G0vlqPiRsCHPDZD7TL5
-         lWOfY3YPms1x2U/QO1S+fhNgLnef/sqLyyn+8Xky9thyQWVGfBXWmbjmknkzZXKqqzoC
-         HGizHAtqT8isMAbxolaPonTNtwhZZbVwN+IBkanyHNzRkRWMLPtRcb1czxpabU8SfjKc
-         mH83fYAhmzAUUjIHxDNhla2mO/WGRCjpy273e73ilArjRzIBJLfTn08Z6ilFemy4zrDp
-         c2cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=6dTck9PY3mL5nWCkfn4cWijMA877+yDLpdie40GUDLs=;
-        b=eE+/T6Lv++HVmhVwyM+D2PckdrstpZG0HYncmR5Afsutff50pAxo9xsDQXLF4ckRZD
-         cKrsKfnMLCwlxnOwBI0GYjufVEPYdjRfhMuRgbszeIyE+BK3MJD8wgcPQlQEW5MUxc3i
-         V3U0vD3yU29L7WWXc/RzQqJVpTT+ObNNZOnVYz47wensc/S6yuwTWFu4abghPwiPl1vE
-         nOOgA8WDUtFh8GAkIqRxFF0DsvfqJcJhQ7q8gHcESvVZNGka3gf3dckIAKIdBTId+noo
-         Ba0BZJwtU4yuYZkEnX/DCR7KbRzukkdlatQULRoQw0mnHf4MQ0KjJgVR3OETKkHG2Euq
-         zQ2A==
-X-Gm-Message-State: AOAM530PJ16DwR17lbIbU7yPlRD9/BDnu1a8oKE8JxUpS7ebm/yw819o
-        XgpnrWmUlhvsLehZ6Spz6RMtwgglE0Q3Vw==
-X-Google-Smtp-Source: ABdhPJxLfe1vt35g2LumvDz2X9x27dy3OKvbY2FUf5vy5Gg5tK+yLZI2TjsO4m6+Sdggdl9hZaqGpA==
-X-Received: by 2002:a63:5c61:: with SMTP id n33mr5509464pgm.153.1613678755556;
-        Thu, 18 Feb 2021 12:05:55 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 8sm3231957pge.92.2021.02.18.12.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Feb 2021 12:05:55 -0800 (PST)
-Message-ID: <602ec8a3.1c69fb81.b1b94.6a5a@mx.google.com>
-Date:   Thu, 18 Feb 2021 12:05:55 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S230334AbhBRUlq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 15:41:46 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:54028 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230212AbhBRUkX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 15:40:23 -0500
+Date:   Thu, 18 Feb 2021 20:39:40 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1613680781;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f7uhS9/H1Kq5DnXviFTbVDNSgBtybxd6It87sw9+bfE=;
+        b=lnrUuAIphfQKTIrM+BhIJ9iuOYUm6HANiu3p6l2/eyMEsAt+q4KmCHRL8RabIVyJ1IYg1r
+        Mw8Oi9o0rdow3pw5E168uOlLUC/gV9xU8BzPE4ZAgc1f+lM9GStME947mbvAvDEgDyiy4r
+        TPe2s9YbpL5piidrqNtrbZgCeGjXs9nJpwUSvpFoCNtKyTNTTLDkTGEAGnVpGCNfC7PKYr
+        IhW63x5/g+MlTk2VoR0sY95+4WsPrqRMEer0BNeyNKJFF3/yRFSrr3la7cVoSZie5aPDfs
+        yCktITi8QiQKPzz6oappvSVk5isdzyUR6uoY+y8TUsyq5XtWR59yTreIYEnzJg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1613680781;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f7uhS9/H1Kq5DnXviFTbVDNSgBtybxd6It87sw9+bfE=;
+        b=86iYd0wYmYZQq/lVoHACrgJaSwQZXQAm6CTpvqUY3MNilkxzIdEqgnePX7xbRGn/MQhYNq
+        Rcu1Tq+1lh1G9lAw==
+From:   "thermal-bot for Viresh Kumar" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal: cpufreq_cooling:
+ freq_qos_update_request() returns < 0 on error
+Cc:     "v5.7+" <stable@vger.kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: =?utf-8?q?=3Cb2b7e84944937390256669df5a48ce5abba0c1ef=2E16135?=
+ =?utf-8?q?40713=2Egit=2Eviresh=2Ekumar=40linaro=2Eorg=3E?=
+References: =?utf-8?q?=3Cb2b7e84944937390256669df5a48ce5abba0c1ef=2E161354?=
+ =?utf-8?q?0713=2Egit=2Eviresh=2Ekumar=40linaro=2Eorg=3E?=
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: pm-5.11-rc8-201-g8b72d3aa065c
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (pm-5.11-rc8-201-g8b72d3aa065c)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Message-ID: <161368078026.20312.13727207651031195020.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (pm-5.11-rc8-201-g8b72d3aa06=
-5c)
+The following commit has been merged into the thermal/next branch of thermal:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
-5.11-rc8-201-g8b72d3aa065c/
+Commit-ID:     a51afb13311cd85b2f638c691b2734622277d8f5
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//a51afb13311cd85b2f638c691b2734622277d8f5
+Author:        Viresh Kumar <viresh.kumar@linaro.org>
+AuthorDate:    Wed, 17 Feb 2021 11:18:58 +05:30
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Wed, 17 Feb 2021 18:53:19 +01:00
 
-Tree: pm
-Branch: testing
-Git Describe: pm-5.11-rc8-201-g8b72d3aa065c
-Git Commit: 8b72d3aa065ce33df4f042840078542b1e5d2c45
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+thermal: cpufreq_cooling: freq_qos_update_request() returns < 0 on error
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+freq_qos_update_request() returns 1 if the effective constraint value
+has changed, 0 if the effective constraint value has not changed, or a
+negative error code on failures.
 
-Detailed per-defconfig build reports:
+The frequency constraints for CPUs can be set by different parts of the
+kernel. If the maximum frequency constraint set by other parts of the
+kernel are set at a lower value than the one corresponding to cooling
+state 0, then we will never be able to cool down the system as
+freq_qos_update_request() will keep on returning 0 and we will skip
+updating cpufreq_state and thermal pressure.
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Fix that by doing the updates even in the case where
+freq_qos_update_request() returns 0, as we have effectively set the
+constraint to a new value even if the consolidated value of the
+actual constraint is unchanged because of external factors.
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
+Cc: v5.7+ <stable@vger.kernel.org> # v5.7+
+Reported-by: Thara Gopinath <thara.gopinath@linaro.org>
+Fixes: f12e4f66ab6a ("thermal/cpu-cooling: Update thermal pressure in case of a maximum frequency capping")
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Tested-by: Thara Gopinath<thara.gopinath@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/b2b7e84944937390256669df5a48ce5abba0c1ef.1613540713.git.viresh.kumar@linaro.org
 ---
-For more info write to <info@kernelci.org>
+ drivers/thermal/cpufreq_cooling.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index 612f063..ddc166e 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -441,7 +441,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+ 	frequency = get_state_freq(cpufreq_cdev, state);
+ 
+ 	ret = freq_qos_update_request(&cpufreq_cdev->qos_req, frequency);
+-	if (ret > 0) {
++	if (ret >= 0) {
+ 		cpufreq_cdev->cpufreq_state = state;
+ 		cpus = cpufreq_cdev->policy->cpus;
+ 		max_capacity = arch_scale_cpu_capacity(cpumask_first(cpus));
