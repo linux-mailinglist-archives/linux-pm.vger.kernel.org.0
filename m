@@ -2,119 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA4031E7EF
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 10:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BE031E7EE
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Feb 2021 10:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbhBRJXN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 04:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S231199AbhBRJWs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Feb 2021 04:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbhBRJNo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 04:13:44 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7069C061574
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:03:07 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id a9so888748plh.8
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:03:07 -0800 (PST)
+        with ESMTP id S231542AbhBRJJa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 04:09:30 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D94C061756
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:08:04 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id t2so1057873pjq.2
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 01:08:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p5z9B2u088uQ+CohgqkwMdMY/blM4RoQ7vFqpPfdVHw=;
-        b=OtcLmuWCNewhWmnrjUzb3RNC15cdO7NSP19GGnxWEfRsuj2kgxfLKa7fTsrqPNCIVT
-         iaPJ3dU0vMTv0ws3fcfiT/JepGFXYefDdupU8Pjch/2bsHLquagq41dCXMR26xAt3o3K
-         ER+kDfVrHaUc9GTmn/1uGO27ObxQp72xBVeUMXAxEFTLxAZscRntwqyGbnxrzEJ2X/A6
-         XoDh5d02czk08ZrvmLFEOaTllXjTKJMMtQKP70IjBp9rqK+6xzLXeWNb/VmmQJJ/Mriu
-         Tyhqdq40BXBJREDnFgKC9hXuhV8U1kp6GE67piS2bz45oxgiRJEwlRWC7thgBS9amVju
-         Hr6w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=f3r3WiCVRBxkJr6r7AbTWnygN26Y0ayRcsLAMnhB5sE=;
+        b=QJfuhgpsfxJIGJA7L4EjIiY6DEyWcy2XeX11Sjdmp0tnL/xm2fhNRDfpqeekkVc68k
+         cLciEQQLeXHIRRP+jUMf2De00Lbh7phPXh0yOG5xkNS48/lVAT8mUjDQxA69cfwTrIis
+         IBgJaAMLrVxQL1AAxvXWf2V2WYfo2v5zB8KcwrOF4PKSwZj50SJNI0Ys/RiaCyS3ZlIC
+         6akcb3M+uBkGQDezg1KslPejWH2IGR3y9FcvQy5y/FzlKdepiqmW1GLqV6bAcrI9HbtG
+         oHkWOUa56WYOHmkYaVbA9dWQtXkexHHawm1not80EdWu+sz2+Z5XmVQU23WRw0izsdno
+         cx0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p5z9B2u088uQ+CohgqkwMdMY/blM4RoQ7vFqpPfdVHw=;
-        b=ayHN0Hp8NUbMmw/k9fBiOV0vpmdJqsIhFR2ywB3MgPrD78VSMJDhWDLZlpmLZ2MCs/
-         M5De9pXvTAHMdibqjaSo0/VcTWB6+MBWDfynCIeUE3NBubywDNZf9p3RMe1W38bjkNZP
-         b5MBV9OqgMzfTfWfiuzgjNH5C6Djxf+XgDH7UR5v8+sOxV4yw/KSU/PofXG60K7Iqxt5
-         Jb/XA1XDrfN2/LTQq6zV6rsUvPjENr/tnsuaIOLL7wJXC5ZmTPByNKzw2ogGN0+3hySq
-         MX7U6uMkfrlwWfxITxw/cnam+hrpXx6mzGgToI62eAEQhzdI2XV16G0J2KNk/9PWTcba
-         wl2A==
-X-Gm-Message-State: AOAM532+Da2qFObsaAtumFWhIgA4zxeWKUudgOxFSgsgP1iT4rwZD1+l
-        4OGJA8k3n0AWI4fKDLqjJwc=
-X-Google-Smtp-Source: ABdhPJyeHjmLysdmjZH+HJxKFAApGSoiEbnYRpns+wnU0ycyr78E8IoDcU5LGQn/Uop8PblDQaXRgg==
-X-Received: by 2002:a17:90a:eb02:: with SMTP id j2mr3196790pjz.226.1613638987498;
-        Thu, 18 Feb 2021 01:03:07 -0800 (PST)
-Received: from tj.ccdomain.com ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id 14sm5335540pfy.55.2021.02.18.01.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Feb 2021 01:03:06 -0800 (PST)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=f3r3WiCVRBxkJr6r7AbTWnygN26Y0ayRcsLAMnhB5sE=;
+        b=YmFyOgH9tL3Aid2E6rn6LxU1bNqjIIJlje/LyZlOqNEvS6wS3VYWFkrt4LWd3wvCpu
+         vd0j6kW30wSYLVnIrwELsJP8axXzgp4iho0cGDwH7uJtcmteJTrITRfNUTZDEobzJ3bL
+         wRet3+ZOVrZZ70Fhm+DfEr2jxnCEVEwC6e0St4tJmeWxmwaSHZmfDARaia4T4ywixuEW
+         1llvsGRiKlmV8h02KEjpc80vLfOsn9ppiB3+r5NsnrWhaRA3fZ/LiYuI6pAtsUweCCGQ
+         dc2nJdpSIaM+GwQXzFLdBDPAIEtyapZ0mD94r7+L1dyTiHNWANKf7/JFtg9lgWObfVsz
+         cscQ==
+X-Gm-Message-State: AOAM530knCYSKf2VdWQtYnB7/Q9nsheOknf/pGJra8sKk5JfxWoni4dd
+        ZTRAiwaacvJw1AbOgV7f0bmUAg==
+X-Google-Smtp-Source: ABdhPJwH5Yb+V9WU6Cx8sm3sVmtL3vGefTKbMlzySB2jw+pGKiq2ngMGNLoDQ2nRFJ7mn1EAz9Gghw==
+X-Received: by 2002:a17:90a:7108:: with SMTP id h8mr3022005pjk.98.1613639284464;
+        Thu, 18 Feb 2021 01:08:04 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id fz24sm4783688pjb.35.2021.02.18.01.08.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Feb 2021 01:08:03 -0800 (PST)
+Date:   Thu, 18 Feb 2021 14:38:02 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, linux-pm@vger.kernel.org,
         huyue2@yulong.com, zbestahu@163.com
-Subject: [PATCH] cpufreq: schedutil: Remove the needless sg_policy parameter to ignore_dl_rate_limit()
-Date:   Thu, 18 Feb 2021 17:01:32 +0800
-Message-Id: <20210218090132.1556-1-zbestahu@gmail.com>
-X-Mailer: git-send-email 2.29.2.windows.3
+Subject: Re: [PATCH] cpufreq: schedutil: Remove the needless sg_policy
+ parameter to ignore_dl_rate_limit()
+Message-ID: <20210218090802.x2znazuw7fxnvhtn@vireshk-i7>
+References: <20210218090132.1556-1-zbestahu@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210218090132.1556-1-zbestahu@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Yue Hu <huyue2@yulong.com>
+On 18-02-21, 17:01, Yue Hu wrote:
+> From: Yue Hu <huyue2@yulong.com>
+> 
+> Since sg_policy is a member of struct sugov_cpu. Also remove the local
+> variable in sugov_update_single_common() to make the code more clean.
+> 
+> Signed-off-by: Yue Hu <huyue2@yulong.com>
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 
-Since sg_policy is a member of struct sugov_cpu. Also remove the local
-variable in sugov_update_single_common() to make the code more clean.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Signed-off-by: Yue Hu <huyue2@yulong.com>
----
- kernel/sched/cpufreq_schedutil.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 5906ae5..add8081 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -320,23 +320,21 @@ static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
-  * Make sugov_should_update_freq() ignore the rate limit when DL
-  * has increased the utilization.
-  */
--static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu, struct sugov_policy *sg_policy)
-+static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
- {
- 	if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_dl)
--		sg_policy->limits_changed = true;
-+		sg_cpu->sg_policy->limits_changed = true;
- }
- 
- static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
- 					      u64 time, unsigned int flags)
- {
--	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
--
- 	sugov_iowait_boost(sg_cpu, time, flags);
- 	sg_cpu->last_update = time;
- 
--	ignore_dl_rate_limit(sg_cpu, sg_policy);
-+	ignore_dl_rate_limit(sg_cpu);
- 
--	if (!sugov_should_update_freq(sg_policy, time))
-+	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
- 		return false;
- 
- 	sugov_get_util(sg_cpu);
-@@ -452,7 +450,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 	sugov_iowait_boost(sg_cpu, time, flags);
- 	sg_cpu->last_update = time;
- 
--	ignore_dl_rate_limit(sg_cpu, sg_policy);
-+	ignore_dl_rate_limit(sg_cpu);
- 
- 	if (sugov_should_update_freq(sg_policy, time)) {
- 		next_f = sugov_next_freq_shared(sg_cpu, time);
 -- 
-1.9.1
-
+viresh
