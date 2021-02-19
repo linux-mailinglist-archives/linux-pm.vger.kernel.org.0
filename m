@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 160A431FBB9
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 16:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192A331FBD1
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 16:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhBSPMv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 10:12:51 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:39041 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhBSPMu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 10:12:50 -0500
-Received: by mail-ot1-f42.google.com with SMTP id d7so5345041otq.6
-        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 07:12:35 -0800 (PST)
+        id S229527AbhBSPQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 10:16:26 -0500
+Received: from mail-oo1-f54.google.com ([209.85.161.54]:44635 "EHLO
+        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229498AbhBSPQY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 10:16:24 -0500
+Received: by mail-oo1-f54.google.com with SMTP id n19so1325000ooj.11
+        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 07:16:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g9HQMxLvqX9mv3FzMFZoZFYYKJbLRvBBAfhN+2IXXWE=;
-        b=fhZUzCBk9ES7bFZ4h1JkJYtuOmlayR+8EPJ2LHfn3RgYr10BQG6ZjhILUKMVR4cJjv
-         tKftQ/EzSfXdpv1r3bkwLh+sCj7f7KOEcapc1hwMkF0GFIW5JkTxWzuXhl8ZqtSQkk4l
-         agYGQa3quMezPrrGnlIuNiBfPb9Os3e4UxlJFvYrmgVPHGEhjBv/MRZAUJwvWA0prwO+
-         /mvrQhse4pgwOIBIA3oTq3LEp1jQoVFkGWmgIVsvenXYC1OF8flUtS72xTUSZw3dMXBB
-         2ZsFVMUR7WJG+CWpD9uSEhYrzORHFbw8LpetPNTqvJAzaP48soEhGpadSgDqlK9nHcjx
-         rOyQ==
-X-Gm-Message-State: AOAM531TL/E3FsW3ZZopO2MsVnowJEnpA4IZS8zwKtNFuhAOmQBiuO/u
-        Tz4Bmd3qsxicUQYhHOvxkioFlzxjvE2Y2l9qZME=
-X-Google-Smtp-Source: ABdhPJyuyAzbZ1QsUBYK2XLFfqvln4kIlA35RGg3MBCrhzRZzFaM1up5I78nghPnu45DhVNt6/x7CBrQBmOOGcYDr5c=
-X-Received: by 2002:a05:6830:2466:: with SMTP id x38mr6559876otr.206.1613747529822;
- Fri, 19 Feb 2021 07:12:09 -0800 (PST)
+        bh=tIpXvz7iO1eR8Fibsb0ECbi0y3OEdvmMmerA/7bWnWA=;
+        b=Vttz/jpxYDLiLSxB698xsIMK0EyoodOLRsosGHifm9z+2N1Fe6cF0mHAW/XWYRAt86
+         pJLihkBHWTPWpDp13pLpKbdASxQWB7saa2Cq9hT2da2iN1BmXo2mg2y/+1GywxxDs3h1
+         uBMTC+d15k+rRvzBllk2kQg3I1Ylr1+u7pRyM1s7t9kFKfpmsYjHkDwSl09UafxkbmUZ
+         gEmnkw83jAkpYVbmpb9VGk/H/REeeJ9kKSuVyzGAgySbnzQRnW0yM/o/sAgc5Xi282Mf
+         H2k3iXFSzio6qHYVrsGuXmtlaDzZYV/mBnwuIAEeDNcwayzEGqrQH0K/CW3mh0JMj+ex
+         2sKQ==
+X-Gm-Message-State: AOAM5321fqMdoJM1Dt0DwN0bCtDsq7sYHEg/4wvcY1YRIJMVY4amXjwc
+        l4EAr9gQuHAAjeI/TXRkI28JAOFRaT002A4aOQDjGYTu
+X-Google-Smtp-Source: ABdhPJzlXZRRZvg3oazBRcUdiDGFSXTxDxBHFY3Bu1uYHBBiF8gXIOnJzgv6uZGa9VxeuVk1J3cTsptl6Ho2YE/5zYU=
+X-Received: by 2002:a4a:3bcb:: with SMTP id s194mr7291533oos.1.1613747743011;
+ Fri, 19 Feb 2021 07:15:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20210218090132.1556-1-zbestahu@gmail.com> <20210218090802.x2znazuw7fxnvhtn@vireshk-i7>
-In-Reply-To: <20210218090802.x2znazuw7fxnvhtn@vireshk-i7>
+References: <20210218093753.1700-1-zbestahu@gmail.com> <20210218093924.ye5i4vvwqqubkdqw@vireshk-i7>
+In-Reply-To: <20210218093924.ye5i4vvwqqubkdqw@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 19 Feb 2021 16:11:58 +0100
-Message-ID: <CAJZ5v0i7gNCqX-6UmE_+gBb2OkTqierd3=Q3f_+fVjew2fWi1g@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: Remove the needless sg_policy
- parameter to ignore_dl_rate_limit()
+Date:   Fri, 19 Feb 2021 16:15:31 +0100
+Message-ID: <CAJZ5v0jNtaRoUr4w3FWqavscmCoJ=2X+vKaFeQfcZ_j1kXwhaw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: schedutil: Remove comment to update_lock of
+ struct sugov_policy
 To:     Viresh Kumar <viresh.kumar@linaro.org>, Yue Hu <zbestahu@gmail.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Ingo Molnar <mingo@redhat.com>,
@@ -46,8 +46,6 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         Yue Hu <huyue2@yulong.com>, zbestahu@163.com
 Content-Type: text/plain; charset="UTF-8"
@@ -55,18 +53,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 18, 2021 at 10:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, Feb 18, 2021 at 11:51 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On 18-02-21, 17:01, Yue Hu wrote:
+> Always mention version number and version history in a patch. Don't
+> resend it now anyway.
+>
+> On 18-02-21, 17:37, Yue Hu wrote:
 > > From: Yue Hu <huyue2@yulong.com>
 > >
-> > Since sg_policy is a member of struct sugov_cpu. Also remove the local
-> > variable in sugov_update_single_common() to make the code more clean.
+> > Currently, update_lock is also used in sugov_update_single_freq(). The
+> > comment is not helpful anymore.
 > >
 > > Signed-off-by: Yue Hu <huyue2@yulong.com>
 > > ---
-> >  kernel/sched/cpufreq_schedutil.c | 12 +++++-------
-> >  1 file changed, 5 insertions(+), 7 deletions(-)
+> >  kernel/sched/cpufreq_schedutil.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index add8081..fd43d59 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -26,7 +26,7 @@ struct sugov_policy {
+> >       struct sugov_tunables   *tunables;
+> >       struct list_head        tunables_hook;
+> >
+> > -     raw_spinlock_t          update_lock;    /* For shared policies */
+> > +     raw_spinlock_t          update_lock;
+> >       u64                     last_freq_update_time;
+> >       s64                     freq_update_delay_ns;
+> >       unsigned int            next_freq;
 >
 > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
