@@ -2,113 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA94A31F48C
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 05:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C4D31F537
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 07:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbhBSE7J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Feb 2021 23:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
+        id S229527AbhBSGmb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 01:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhBSE7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Feb 2021 23:59:06 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DA1C061574
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 20:58:26 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id t26so2828682pgv.3
-        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 20:58:26 -0800 (PST)
+        with ESMTP id S229498AbhBSGma (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 01:42:30 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40726C061574;
+        Thu, 18 Feb 2021 22:41:50 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id f8so2826313plg.5;
+        Thu, 18 Feb 2021 22:41:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=VQ8JfAUf/ySg/ATklOLfVi6FRg+WrMTayYjOprp1Sx0=;
-        b=zrt/i2IK+MNx8nousJ5vhUkJhPOg+W4lAaza3KU7WU5akL9GwRYl6fQtYhNv5OPgY+
-         DH+LAVbb4FtDeXzzY815wVASFyQv3PCGNAStQH0V4uw8EBNU1Ir8Hsl/6tzswvd1TC8c
-         cU0qPNlAxe9fwZ4gRAFODY1w66JGzR3S+RYHoonlLtQt9BbnkLkdx8RBgxU2LTn/utZb
-         /YDLg1RG0yahHSXebbwpRlOJdhqjI14F0xjzasUbv7hvqKPJm2vwlVBm6T1JMwWWT2N9
-         NkJkVQb6OtohZ1RPApNY6L7wwiT0oR+nP9JDUape8vht0cXFLole/ud9E1+fq/+LyGZP
-         fUgg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=irQ99fwvyT3B4IXadbKZ2UTqLLi0pPWPv3qC3rVkQS4=;
+        b=KUWkEvGk2DoZBtwIH+TOaLF02h1TEf8NR2b33z6uu+BUZpu43B6bNPgZgymYZhQmOW
+         v9X8FtgFDnUiv35ItVlfq10yNeNKA7gLk6GLdn2YVXnKjLeKsJOcUe/6vj67Pk2rJW6e
+         vKVhvlEdLXIDSeDLBvGeypdwVfxZRR1eeYem8WkVaCVjQOpPOpQsioYvflVDzF1sBceX
+         SfkoEeJrKjEtjzmg+lGOoJf/FJBD8HJF4gb35GRvastjZESIwidOAaYwZ8h/wOQJ9OR8
+         020Vj7k7EEqYE4P8jTLPCZ9NvU3MfjZNtQwRqucJDP86Gf+dUqygguYP023+Zyjg9mRX
+         E/Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VQ8JfAUf/ySg/ATklOLfVi6FRg+WrMTayYjOprp1Sx0=;
-        b=EBmJH+2uckxAnr+Kh01R6KEz1jWO6iypyrurMos7/7ulxP0kJPsNe7AHQ1llANwAl7
-         L9zyc+wV0vgSFhzHiBLOEvD75xzmC048lzWa63ezfxopevCLalraAcx9aNAtzC3P16jL
-         NAmbF2LDNUl4E52b8u0jskecI11zpgudDUX9SvA9XUygoFHxqKUWxqVfu/Phkjxbdnhj
-         HjbIOad2gAhgHO78AfPNW0+7f+u1awhDjMud2NQEriAjiVbheBV54JI43evRAOCQ+/2y
-         eVMbfeMlDtN/Bct8b1RUc8bZ+i0aSARavOoWlgphKFob+2lweOWDnKXy06BIG6WoCRCI
-         V2RQ==
-X-Gm-Message-State: AOAM531pgnCUZfUhRQMgOY3qnYXHkO44dqS2LjxT4hhjkZc9k7ffGxFV
-        2PaBMiDc5pW+FqTphFVfxM1avw==
-X-Google-Smtp-Source: ABdhPJwu4+l3z0J6l2dIbzGBCfMCuNcRbcfi8xlFg/zWmBVxwfBMR2E2oxOYuMXfJN2cC8DQBRZXAg==
-X-Received: by 2002:a63:1845:: with SMTP id 5mr7015563pgy.244.1613710706075;
-        Thu, 18 Feb 2021 20:58:26 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id s18sm7433890pfm.129.2021.02.18.20.58.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Feb 2021 20:58:25 -0800 (PST)
-Date:   Fri, 19 Feb 2021 10:28:23 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
- sched_freq_tick() callback
-Message-ID: <20210219045823.beeijwaymd63prk7@vireshk-i7>
-References: <cover.1611829953.git.viresh.kumar@linaro.org>
- <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
- <20210203114521.GA6380@arm.com>
- <20210205091424.3od3tme3f7mh7ebp@vireshk-i7>
- <20210217002422.GA17422@arm.com>
- <20210218093304.3mt3o7kbeymn5ofl@vireshk-i7>
- <20210218163635.GA23622@arm.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=irQ99fwvyT3B4IXadbKZ2UTqLLi0pPWPv3qC3rVkQS4=;
+        b=MiyapQl2Xhf2dp0FMow9wORh2ipJ8O7UBdcr2f1VbJ4qxoxD0uLwlOHNlZTiD/nO8m
+         pr5JuqkCIsz9qdZ8OsupwBg9e7+CLiTQhQAwoMNWiYvwiCbCkc0TnN8D6s+lnX8enmdm
+         uA4Z5V8K3SpEYOM11TiCO90McfvDJ0K9Zu0/Cg0ZeooYKIHFktd8nsPnk54GW0Zw3Qv6
+         xxhswVH+UEuZuvYyeRrNMncwHj0pMUBwE+GvDXZlNpORXUL64yl9ASqz8br+OCYJKlo/
+         fpH+ITMeiUp/npGyPXmBrSgbwFwdK/YUdHwausTZb0RE/onEYCMA5QCMQBJLsfPlAg/C
+         sV/Q==
+X-Gm-Message-State: AOAM532SDaWkU1CDzTOYjq0ifbko/qjqA4S6oZAG/5TW7HF+3rp6nCX6
+        32pYZnQv7Ywye8owcRKL/Ew=
+X-Google-Smtp-Source: ABdhPJxE1DBe94IXWhawvDRdgvIhjbUVDqMUhgvUVrgaVZxDygq6F/07BjsER0aL8AMyvAB7/Z4Tsw==
+X-Received: by 2002:a17:90b:4c43:: with SMTP id np3mr5249398pjb.33.1613716909692;
+        Thu, 18 Feb 2021 22:41:49 -0800 (PST)
+Received: from localhost ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id g19sm7371936pjv.43.2021.02.18.22.41.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 18 Feb 2021 22:41:49 -0800 (PST)
+Date:   Fri, 19 Feb 2021 14:41:40 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, zbestahu@163.com
+Subject: Re: [PATCH] cpufreq: schedutil: Don't consider freq reduction to
+ busy CPU if need_freq_update is set
+Message-ID: <20210219144140.00004de9.zbestahu@gmail.com>
+In-Reply-To: <20210219040933.2o5hhbjb6emf3xl4@vireshk-i7>
+References: <20210218082514.1437-1-zbestahu@gmail.com>
+        <20210218102029.syj6vkltlbtoxsig@vireshk-i7>
+        <20210219113804.00004a7e.zbestahu@gmail.com>
+        <20210219040933.2o5hhbjb6emf3xl4@vireshk-i7>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210218163635.GA23622@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-02-21, 16:36, Ionela Voinescu wrote:
-> Yes, we don't care if there is no cpufreq driver, as the use of AMUs won't
-> get initialised either. But we do care if there is a cpufreq driver that
-> does not support frequency invariance, which is the example above.
+On Fri, 19 Feb 2021 09:39:33 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
+
+> On 19-02-21, 11:38, Yue Hu wrote:
+> > There's a possibility: we will use the previous freq to update if
+> > next_f is reduced for busy CPU if need_freq_update is set in
+> > sugov_update_next_freq().  
 > 
-> The intention with the patches that made cpufreq based invariance generic
-> a while back was for it to be present, seamlessly, for as many drivers as
-> possible, as a less than accurate invariance default method is still
-> better than nothing.
+> Right.
+> 
+> > This possibility would happen now? And this
+> > update is what we want if it happens?  
+> 
+> This is exactly what we want here, don't reduce speed for busy CPU,
 
-Right.
+I understand it should not skip this update but set the same freq as
+previous one again for the specail case if need_freq_update is set. Am
+i rt?
 
-> So only a few drivers today don't support cpufreq based FI
+> but we also need to make sure we are in the policy's valid range
+> which cpufreq core will take care of.
+> 
+> > This is related to another possible patch ready to send.  
+> 
+> I am not sure what's there to send now.
 
-Only two AFAICT, both x86, and the AMU stuff doesn't conflict with
-them.
+I will send later after figure out the doubt above.
 
-drivers/cpufreq/intel_pstate.c
-drivers/cpufreq/longrun.c
+> 
 
-> but it's not a guarantee that it will stay this way.
-
-What do you mean by "no guarantee" here ?
-
-The very core routines (cpufreq_freq_transition_end() and
-cpufreq_driver_fast_switch()) of the cpufreq core call
-arch_set_freq_scale() today and this isn't going to change anytime
-soon. If something gets changed there someone will need to see other
-parts of the kernel which may get broken with that.
-
-I don't see any need of complicating other parts of the kernel like,
-amu or cppc code for that. They should be kept simple and they should
-assume cpufreq invariance will be supported as it is today.
-
--- 
-viresh
