@@ -2,79 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1029B31FE76
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 19:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CF131FEEE
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 19:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbhBSSAn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 13:00:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42204 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229527AbhBSSAm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Feb 2021 13:00:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 54ECE64DED;
-        Fri, 19 Feb 2021 18:00:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613757602;
-        bh=kqVxXeKoanAaf4lKZCg0WZf+Os3oG4slsz+NXtiCX9k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VdH47edSAw+qcJPQl5fzToN0GK+9trQofhHiKj41c6KvQSUZnc4arcx5N5g5KUkX/
-         I6bWcxpi9j22wzGIC3ORCifeIHFRZ2PONF885XFhlQnTpCt2yKVYIn3xxVDYa50qmy
-         SKsbR5BcmwN0naa7cXzyDRvf6rq/9qhm5ma4a2beS00wldWSwul3801FpmhGTiVJ7c
-         4kK/MPOD/J4JS5GxsR1x7Op6BryCLY4q0jsT60vQM5271pEQn5lAKVPyS9uURsi4Vg
-         jqV5xklrKu4iI/sxFBNQ9SfsT5f8HzvyFXUzohNR7rE8z/LGEmdwDTrXKg8vBNreED
-         16Njh25CrntwQ==
-Date:   Fri, 19 Feb 2021 23:29:58 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>, mani@kernel.org
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Document SM8350
- CPUfreq compatible
-Message-ID: <20210219175958.GZ2774@vkoul-mobl.Dlink>
-References: <20210216111251.1838149-1-vkoul@kernel.org>
- <20210218161158.GC5254@yoga>
+        id S229607AbhBSSqM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 13:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229726AbhBSSqM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 13:46:12 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E03C061574
+        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 10:45:31 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id a9so3839466plh.8
+        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 10:45:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=qirvuIrsbL1q+VjYAqZwDmaJBpKw5jYIkK4Aieki2yY=;
+        b=mT7hqpXPSh2CMk8DpK1t/Mt5qwtAr0BcMPamOBYDk4mqAOB6DIzoAixlsFWcYaTQjp
+         nw2vginTkDpVhJAjt0NqKocKZvo/qhW1n7t88/Gj9q1cogOP2wo0hiHa8LBeQobdtjdt
+         w8JiGAPA+Y1STxHoBobC2srrUrCarjtTmqwGuwnLijjjVZaLzZJEgKvOC2P0fkQ5l3wg
+         yVzeNijl/dV4gp84Jw0h1Z6ViYcB63rHyv89d+VDGAfoc1n6tmu2Yzp/Z20wjm70/Ijz
+         9+egj0Ip4Efe4g+mu3D29yV891vjpw7y9EFgXeLPCchvGNAejPif9zGlmbU9uUTF3n0b
+         JEGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=qirvuIrsbL1q+VjYAqZwDmaJBpKw5jYIkK4Aieki2yY=;
+        b=pumAb4vM40n36I1QfduAnABdCVmn8eQO4tnpPzzpcaiTOEboDDvtgnMLgDdMXfUifa
+         KqectSoJv76PvIwM8AblJfjbEtHeJoPd0TnVmsTDvcAlKS7kvsjn7ucmmI3UN4n2y515
+         rFIrdOhZm/1wccgFwRUWVGq8f1PULly2+OL9u8uKL+OM0R+DVxDTcr/5L49rfJdAw7Hy
+         0w9uL2T7yDjFBWo3/XzpfD5HdjBiuBI5C0bGl4EmUFDwS1cqRypoGnfWPnZVjIEPhTGZ
+         vlB/aAwDGSI6U3SRQZ75c5+TAkujkhd61aLbniUc2P/xnIUNggRY01+4+pZInILdAudX
+         MBsQ==
+X-Gm-Message-State: AOAM531DVjGZV8c2IVWbE460FAjp3kPD7gkJ7MHN3ZX52Ua+XCpDiUIK
+        j86+35snM3ALJe1yGga8VpT08Q==
+X-Google-Smtp-Source: ABdhPJx7BX/9CzeRzgrICl8KGNwPM9Ix3HBp+NinoKOOlmb+dmTbSzKx39fTpZx/CFjsk+56Qw9ZKQ==
+X-Received: by 2002:a17:90a:31cd:: with SMTP id j13mr5235696pjf.27.1613760331397;
+        Fri, 19 Feb 2021 10:45:31 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id jx20sm6587012pjb.30.2021.02.19.10.45.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Feb 2021 10:45:30 -0800 (PST)
+Message-ID: <6030074a.1c69fb81.fe536.e91e@mx.google.com>
+Date:   Fri, 19 Feb 2021 10:45:30 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210218161158.GC5254@yoga>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: pm-5.11-rc8-205-g4475f0291af9
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed,
+ 7 passed (pm-5.11-rc8-205-g4475f0291af9)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-02-21, 10:11, Bjorn Andersson wrote:
-> On Tue 16 Feb 05:12 CST 2021, Vinod Koul wrote:
-> 
-> > Add the CPUfreq compatible for SM8350 SoC along with note for using the
-> > specific compatible for SoCs
-> > 
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-> > index 9299028ee712..3eb3cee59d79 100644
-> > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
-> > @@ -8,7 +8,9 @@ Properties:
-> >  - compatible
-> >  	Usage:		required
-> >  	Value type:	<string>
-> > -	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss".
-> > +	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss"
-> > +			along with SoC specific compatible:
-> > +			  "qcom,sm8350-cpufreq-epss", "qcom,cpufreq-epss"
-> 
-> Can you please extend this to add all the platforms that we currently
-> support?
-> 
-> PS. Didn't we have someone working on converting this to yaml?
+pm/testing build: 7 builds: 0 failed, 7 passed (pm-5.11-rc8-205-g4475f0291a=
+f9)
 
-Yep, Mani seems to have done that, I will wait for that to get merged
-and update this.. Thanks
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
+5.11-rc8-205-g4475f0291af9/
 
--- 
-~Vinod
+Tree: pm
+Branch: testing
+Git Describe: pm-5.11-rc8-205-g4475f0291af9
+Git Commit: 4475f0291af9a9a16535123a859e154e35ad2277
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
