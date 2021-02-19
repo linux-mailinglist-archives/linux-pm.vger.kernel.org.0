@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C4D31F537
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 07:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE7231F569
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 08:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbhBSGmb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 01:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S229623AbhBSHnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 02:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhBSGma (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 01:42:30 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40726C061574;
-        Thu, 18 Feb 2021 22:41:50 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id f8so2826313plg.5;
-        Thu, 18 Feb 2021 22:41:50 -0800 (PST)
+        with ESMTP id S229599AbhBSHnd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 02:43:33 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B0EC061786
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 23:42:53 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id b21so3218259pgk.7
+        for <linux-pm@vger.kernel.org>; Thu, 18 Feb 2021 23:42:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=irQ99fwvyT3B4IXadbKZ2UTqLLi0pPWPv3qC3rVkQS4=;
-        b=KUWkEvGk2DoZBtwIH+TOaLF02h1TEf8NR2b33z6uu+BUZpu43B6bNPgZgymYZhQmOW
-         v9X8FtgFDnUiv35ItVlfq10yNeNKA7gLk6GLdn2YVXnKjLeKsJOcUe/6vj67Pk2rJW6e
-         vKVhvlEdLXIDSeDLBvGeypdwVfxZRR1eeYem8WkVaCVjQOpPOpQsioYvflVDzF1sBceX
-         SfkoEeJrKjEtjzmg+lGOoJf/FJBD8HJF4gb35GRvastjZESIwidOAaYwZ8h/wOQJ9OR8
-         020Vj7k7EEqYE4P8jTLPCZ9NvU3MfjZNtQwRqucJDP86Gf+dUqygguYP023+Zyjg9mRX
-         E/Mw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=oTFV9rPg1nPKbc9S7atXr9xERXEJXr62YRZ7PlLRGUk=;
+        b=xHtaDBHF7cktpEpSmtIRptUM9MJbSCfCaiDkWIKvn4yYB2AOGab4GnEgjtxosNTgPh
+         J3Qf/G13bv3gmXK8nmp5j5aSQ4wg3VVUSHyaH9VA8GCdVZnLLOavPb5LWgdVZwLJTC0b
+         qvOLeoI384u9Ib9X5PbZJ0WYH/f6aCzuKBV/4sdMom3XdoMCITMWRWjkTEWsaZbHxwgC
+         KQCxGanO1yyWT+Dbf68TwYy5Jcf5rysXBje0TdXQ+puw2Km/BNmMWQHmZSJotqPm6muu
+         5dDEyEbDOZoGRsB+Cob/9wauVxeFRVVv9G5DVlRGdcx+tSYPPmhj5leRDE1F87BYXVea
+         cx9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=irQ99fwvyT3B4IXadbKZ2UTqLLi0pPWPv3qC3rVkQS4=;
-        b=MiyapQl2Xhf2dp0FMow9wORh2ipJ8O7UBdcr2f1VbJ4qxoxD0uLwlOHNlZTiD/nO8m
-         pr5JuqkCIsz9qdZ8OsupwBg9e7+CLiTQhQAwoMNWiYvwiCbCkc0TnN8D6s+lnX8enmdm
-         uA4Z5V8K3SpEYOM11TiCO90McfvDJ0K9Zu0/Cg0ZeooYKIHFktd8nsPnk54GW0Zw3Qv6
-         xxhswVH+UEuZuvYyeRrNMncwHj0pMUBwE+GvDXZlNpORXUL64yl9ASqz8br+OCYJKlo/
-         fpH+ITMeiUp/npGyPXmBrSgbwFwdK/YUdHwausTZb0RE/onEYCMA5QCMQBJLsfPlAg/C
-         sV/Q==
-X-Gm-Message-State: AOAM532SDaWkU1CDzTOYjq0ifbko/qjqA4S6oZAG/5TW7HF+3rp6nCX6
-        32pYZnQv7Ywye8owcRKL/Ew=
-X-Google-Smtp-Source: ABdhPJxE1DBe94IXWhawvDRdgvIhjbUVDqMUhgvUVrgaVZxDygq6F/07BjsER0aL8AMyvAB7/Z4Tsw==
-X-Received: by 2002:a17:90b:4c43:: with SMTP id np3mr5249398pjb.33.1613716909692;
-        Thu, 18 Feb 2021 22:41:49 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id g19sm7371936pjv.43.2021.02.18.22.41.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 18 Feb 2021 22:41:49 -0800 (PST)
-Date:   Fri, 19 Feb 2021 14:41:40 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oTFV9rPg1nPKbc9S7atXr9xERXEJXr62YRZ7PlLRGUk=;
+        b=pziPn2X4LY70TLdACQF2FMvaQfJgRMS1e2ATqO1JmkBHhKkSkWtMeCG9mkudHJdjYB
+         KguZ6JOVFWSivJ0l9HLdL5iOQPNwCjHK6MvGYtjmuZ+0lKv52b8qZ0hOqm6nvywccZ8d
+         bQrK0j3ZJ+DTGYUIt8Llcfz3LmCixAweSwpUOvmfEYNdFKrWVdKYtY/83Hl8fmO7Tka0
+         L/YcOBhoaH6Um5NYIr7t+aozzIuAt2pj+zdQJ95pNfjGDqnKc7xLbKcEqEKyjirCy5B6
+         Co4+WYPCI5+gmPvlxXs1MU70jwun8m+47lZQwTxZ9hXv0VxDJ2qbhPwADH3sXyXxzpb/
+         3r0w==
+X-Gm-Message-State: AOAM533RZnthF0bW4ZIDChTajJ3cHDcRtBgBsMLReU+LSAio9xTg8Oq8
+        rAd018N7Ju/WOOHgz0jm5BQmkA==
+X-Google-Smtp-Source: ABdhPJz6R8WPmQ9rp60/dvOE+XJsbB0+8/Dm92/fkVTd1/DwYDSv+2yUtyeKHhWJ04dPWq5SWTHmjQ==
+X-Received: by 2002:a63:5705:: with SMTP id l5mr2747337pgb.223.1613720572970;
+        Thu, 18 Feb 2021 23:42:52 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id b14sm8200562pfi.74.2021.02.18.23.42.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Feb 2021 23:42:51 -0800 (PST)
+Date:   Fri, 19 Feb 2021 13:12:49 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yue Hu <zbestahu@gmail.com>
 Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
         juri.lelli@redhat.com, vincent.guittot@linaro.org,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -57,47 +57,51 @@ Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
         huyue2@yulong.com, zbestahu@163.com
 Subject: Re: [PATCH] cpufreq: schedutil: Don't consider freq reduction to
  busy CPU if need_freq_update is set
-Message-ID: <20210219144140.00004de9.zbestahu@gmail.com>
-In-Reply-To: <20210219040933.2o5hhbjb6emf3xl4@vireshk-i7>
+Message-ID: <20210219074249.2hcwcnakihor343h@vireshk-i7>
 References: <20210218082514.1437-1-zbestahu@gmail.com>
-        <20210218102029.syj6vkltlbtoxsig@vireshk-i7>
-        <20210219113804.00004a7e.zbestahu@gmail.com>
-        <20210219040933.2o5hhbjb6emf3xl4@vireshk-i7>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+ <20210218102029.syj6vkltlbtoxsig@vireshk-i7>
+ <20210219113804.00004a7e.zbestahu@gmail.com>
+ <20210219040933.2o5hhbjb6emf3xl4@vireshk-i7>
+ <20210219144140.00004de9.zbestahu@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210219144140.00004de9.zbestahu@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 19 Feb 2021 09:39:33 +0530
-Viresh Kumar <viresh.kumar@linaro.org> wrote:
-
-> On 19-02-21, 11:38, Yue Hu wrote:
-> > There's a possibility: we will use the previous freq to update if
-> > next_f is reduced for busy CPU if need_freq_update is set in
-> > sugov_update_next_freq().  
+On 19-02-21, 14:41, Yue Hu wrote:
+> On Fri, 19 Feb 2021 09:39:33 +0530
+> Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > 
-> Right.
+> > On 19-02-21, 11:38, Yue Hu wrote:
+> > > There's a possibility: we will use the previous freq to update if
+> > > next_f is reduced for busy CPU if need_freq_update is set in
+> > > sugov_update_next_freq().  
+> > 
+> > Right.
+> > 
+> > > This possibility would happen now? And this
+> > > update is what we want if it happens?  
+> > 
+> > This is exactly what we want here, don't reduce speed for busy CPU,
 > 
-> > This possibility would happen now? And this
-> > update is what we want if it happens?  
-> 
-> This is exactly what we want here, don't reduce speed for busy CPU,
+> I understand it should not skip this update but set the same freq as
+> previous one again for the special case if need_freq_update is set. Am
+> i rt?
 
-I understand it should not skip this update but set the same freq as
-previous one again for the specail case if need_freq_update is set. Am
-i rt?
+The special check, about not reducing freq if CPU had been busy
+recently, doesn't have anything to do with need_freq_update.
 
-> but we also need to make sure we are in the policy's valid range
-> which cpufreq core will take care of.
-> 
-> > This is related to another possible patch ready to send.  
-> 
-> I am not sure what's there to send now.
+Though previously we added the need_freq_update check there to make
+sure we account for any recent policy min/max change and don't skip
+freq update anymore. That won't happen anymore and so we don't need
+any check here related to need_freq_update.
 
-I will send later after figure out the doubt above.
+If you still have doubt, please explain your concern in detail with an
+example as I am failing to understand it.
 
-> 
-
+-- 
+viresh
