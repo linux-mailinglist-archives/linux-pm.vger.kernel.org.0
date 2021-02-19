@@ -2,118 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D4B31FF8B
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 20:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD6D32014C
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 23:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbhBSTpC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 14:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhBSTpB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 14:45:01 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3392CC061574
-        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 11:44:21 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id o38so5486486pgm.9
-        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 11:44:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=gQLT+orF3JmWjsh3mE8lccCc7oyMnWdpo+VHMppPq9k=;
-        b=1L/zpR/LTdjzuOIb2oOI77l7dwAz/XepxpDmaFozRE87a0AOPQzk/xYu3I9p2jHFf/
-         9lZ6aFUPXi/tlRnznzijxF/CMFb3E1SPp5QqMBj930c7pdZfZjPLj70oPY75vWEpnEtJ
-         Eh0DihkQ9JQW4It4QmrF1QUdWiZw8MxGAsZbe0gvniQSw4ZpOmkAOseMapgHZSA2JLW5
-         DNRLToPSoq01W5wKmxQi2S9aJ+hr1u8IrnFNMMJGEaoVHGJrhhzMgAXMF5iZp6JJRzmF
-         ZEvP4Ewm3C904r5f9ITa6ss3GxkrQv3K+9jxCuZiwYctg+OTqYpKAsCeUBSsZ4vqsE4Z
-         siFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=gQLT+orF3JmWjsh3mE8lccCc7oyMnWdpo+VHMppPq9k=;
-        b=T8cYpweU37D9PuAC445pG4qJcArzO2dRjyFDzGRLYPZO+TafeCCd7tKGSRfbBsqjaS
-         xWZTqcQvgCJt6Pxalkd2YLJr2EimnQbX7P4LUxzRajKsONOTJRzRZMAEyhzX2RXqejD1
-         AQ6xe3cQGpOevh4Sr4pEJYUknKfjSx/n5zRjw8eSHYGjsRQV14AuOANPAtOLSoo+Cc9A
-         gaodPN1FFHtCY32SL9kfKO2jAT/S1uq3cTkGb+QdJyWSEijToJc5YE2BRReQzgTries7
-         UJD72AfqvdQSAv8/nV9l/I86WskymgDMh3ShnQWzOUtN41Wxcf/ZKqJsvsqZW933IwJm
-         jzcQ==
-X-Gm-Message-State: AOAM530Nh21KdfhIWcQF0GFzpq/HKTivx4O+qpZkbb40wyTO3WKLsjLL
-        KH4ieIUvMVV8dSCDBylsBWLhOgtP4cW3Tw==
-X-Google-Smtp-Source: ABdhPJzdDqw8SfTP2vpFZHZoQqOOdCpkcM6FXQy1ai/U2wGSFfUWnVXXf1vuCz0UoUshXSFM2Ep9zg==
-X-Received: by 2002:a65:648e:: with SMTP id e14mr9874638pgv.453.1613763860699;
-        Fri, 19 Feb 2021 11:44:20 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t4sm10369982pfe.161.2021.02.19.11.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Feb 2021 11:44:20 -0800 (PST)
-Message-ID: <60301514.1c69fb81.c83e.737c@mx.google.com>
-Date:   Fri, 19 Feb 2021 11:44:20 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S229623AbhBSWUx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 17:20:53 -0500
+Received: from mga12.intel.com ([192.55.52.136]:3822 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229515AbhBSWUx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Feb 2021 17:20:53 -0500
+IronPort-SDR: 31t5MkZPcATDe+5/2Ul2mgVW957nAtuLcx9ZrZz+7aScbsGtFrmCOx5tslOmiLK2ltCyZtPf/o
+ GLKz+QHa9YPg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9900"; a="163130565"
+X-IronPort-AV: E=Sophos;i="5.81,191,1610438400"; 
+   d="scan'208";a="163130565"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2021 14:20:12 -0800
+IronPort-SDR: pC71vhmFU2tDf6B0FQIZQWZDEOAgWg6yfu5JluhbEiLNoSljw3CVzq0128QAxaKgBDvTaNghzf
+ kIUWcTc0N00Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,191,1610438400"; 
+   d="scan'208";a="440443242"
+Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 19 Feb 2021 14:20:10 -0800
+Received: from kbuild by cd560a204411 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lDE89-000AfC-Fx; Fri, 19 Feb 2021 22:20:09 +0000
+Date:   Sat, 20 Feb 2021 06:19:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 8b72d3aa065ce33df4f042840078542b1e5d2c45
+Message-ID: <6030398b.B2E7yyx8RuCeVTwN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: pm-5.11-rc8-205-g4475f0291af9
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 7 runs,
- 1 regressions (pm-5.11-rc8-205-g4475f0291af9)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 7 runs, 1 regressions (pm-5.11-rc8-205-g4475f0291af9)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 8b72d3aa065ce33df4f042840078542b1e5d2c45  Merge branches 'pm-cpufreq-fixes' and 'pm-opp-fixes' into linux-next
 
-Regressions Summary
--------------------
+elapsed time: 723m
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+configs tested: 130
+configs skipped: 4
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/pm-5.11-=
-rc8-205-g4475f0291af9/plan/sleep/
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                      cm5200_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                     stx_gp3_defconfig
+sh                           se7780_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                     sequoia_defconfig
+ia64                             alldefconfig
+sh                             espt_defconfig
+arm                          pcm027_defconfig
+mips                      pistachio_defconfig
+arm                  colibri_pxa270_defconfig
+sh                            migor_defconfig
+arm                          pxa910_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                  storcenter_defconfig
+mips                       bmips_be_defconfig
+arm                            u300_defconfig
+powerpc                  iss476-smp_defconfig
+arm                        spear3xx_defconfig
+powerpc                   motionpro_defconfig
+arm                             pxa_defconfig
+sh                          polaris_defconfig
+arm                         at91_dt_defconfig
+sh                        edosk7760_defconfig
+powerpc                 mpc834x_mds_defconfig
+arm                         bcm2835_defconfig
+arm                         s5pv210_defconfig
+powerpc                 canyonlands_defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                      ppc44x_defconfig
+mips                         rt305x_defconfig
+arm                       omap2plus_defconfig
+powerpc                    amigaone_defconfig
+sparc64                          alldefconfig
+mips                          rb532_defconfig
+mips                           jazz_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                     sbc8548_defconfig
+arm                         hackkit_defconfig
+powerpc                    adder875_defconfig
+sh                           se7724_defconfig
+arm                           stm32_defconfig
+arm                          imote2_defconfig
+xtensa                         virt_defconfig
+arm                           corgi_defconfig
+m68k                        mvme16x_defconfig
+sh                   sh7770_generic_defconfig
+arm                            hisi_defconfig
+ia64                            zx1_defconfig
+sh                                  defconfig
+mips                     cu1830-neo_defconfig
+sparc                               defconfig
+arc                         haps_hs_defconfig
+powerpc                       ppc64_defconfig
+sh                          rsk7201_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210219
+i386                 randconfig-a003-20210219
+i386                 randconfig-a002-20210219
+i386                 randconfig-a004-20210219
+i386                 randconfig-a001-20210219
+i386                 randconfig-a006-20210219
+x86_64               randconfig-a012-20210219
+x86_64               randconfig-a016-20210219
+x86_64               randconfig-a013-20210219
+x86_64               randconfig-a015-20210219
+x86_64               randconfig-a011-20210219
+x86_64               randconfig-a014-20210219
+i386                 randconfig-a016-20210219
+i386                 randconfig-a012-20210219
+i386                 randconfig-a014-20210219
+i386                 randconfig-a013-20210219
+i386                 randconfig-a011-20210219
+i386                 randconfig-a015-20210219
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: pm-5.11-rc8-205-g4475f0291af9
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      4475f0291af9a9a16535123a859e154e35ad2277 =
+clang tested configs:
+x86_64               randconfig-a003-20210219
+x86_64               randconfig-a001-20210219
+x86_64               randconfig-a004-20210219
+x86_64               randconfig-a002-20210219
+x86_64               randconfig-a005-20210219
+x86_64               randconfig-a006-20210219
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/603008cd458c0c1d1aaddd0b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pm-5.11-rc8-205-g44=
-75f0291af9/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pm-5.11-rc8-205-g44=
-75f0291af9/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0215.2/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/603008cd458c0c1d1aaddd0c
-        failing since 184 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
