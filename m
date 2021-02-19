@@ -2,99 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EE431F6C1
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 10:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D9031F764
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 11:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbhBSJsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 04:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhBSJsx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 04:48:53 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08795C061574
-        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 01:48:13 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id j1so291751pgh.4
-        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 01:48:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=eXTn3zOUMXGAyBukHeWslQDjuh7yzOFRAU7s48iWGXY=;
-        b=zNgYaMrXXz6+R4FybaHK/hQx49PQbMvGjdW+JliE/hIJY13cHiHHZV0UTIdXwJwJ6j
-         7/LMQuIDF+c5ojsQdJlqV1Qh71w9MLzaCt4a60bIOi7irShdmyLAGGWV9T5wTyAKKh7I
-         cUhE5h9bwzDXEfsR5a1S3DH4Zuiui5hsnDl6KcSS5wJxwbdsZnjPAu9KXm2ZDoAR77DY
-         NleVaeMEhbhTTux/hiZVLPyYTP9N1wiUJu6CgvWM7vgPNLLzyWrJdmght2M66wwJSAds
-         hv4XBex5Camt9avhNo4xuMOaPqH+W89IMsYHHP7y7q2CLhAY+77HpSvV8PGivaW4e6D+
-         cmkQ==
+        id S229990AbhBSKgu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 05:36:50 -0500
+Received: from mail-lj1-f181.google.com ([209.85.208.181]:38274 "EHLO
+        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229527AbhBSKgl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 05:36:41 -0500
+Received: by mail-lj1-f181.google.com with SMTP id j6so17651396ljo.5;
+        Fri, 19 Feb 2021 02:36:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eXTn3zOUMXGAyBukHeWslQDjuh7yzOFRAU7s48iWGXY=;
-        b=UtST8rcUndIGQAOCueahZnHbSiNlaK4W/AEbWanloWAd88K4f0d9MtUwx90LJUnSlB
-         j/icDBbXTrEHiraX+Du8Xl227eBNSZ0OgyHZrwvDGV1teCC5Eixn1mzTOem+zjxY8ppG
-         Rp9EAqze0BxfMd1uR35Fbt3N1YHyJPREhgqaKZTTbe009EmUI55URK3crC0IpTqLO7jG
-         /+FaI2Cs+lOy2gJ0LaotvF5Q5MHapp6J+Wd5PBF0V95U8NEf+b3g2YWgtrxrLuUiuXbk
-         ZZvyy5JFFjCHEgF4tOUEobBaTEInlnm6JyArWX3kDN3S2L1kxSQLwp+e7DjvtdkVSmQV
-         FxEA==
-X-Gm-Message-State: AOAM530j0vuLS/CxHyfTpgQLezl9H16KHZVeujxrclWviTQKepNsYr9O
-        /kZ+vquTne/0naWS6xynGpZGUg==
-X-Google-Smtp-Source: ABdhPJwFlEMElb1VfgOFhwzwo+Ug/EgvHNFmYS3/8CpID39RYcy97gnkJFxUH41+HKt0qMYD6KDPiA==
-X-Received: by 2002:a63:5d59:: with SMTP id o25mr7657009pgm.322.1613728092545;
-        Fri, 19 Feb 2021 01:48:12 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id t18sm8094602pjs.57.2021.02.19.01.48.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Feb 2021 01:48:11 -0800 (PST)
-Date:   Fri, 19 Feb 2021 15:18:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
- sched_freq_tick() callback
-Message-ID: <20210219094809.ktvwx3pggnvatl3q@vireshk-i7>
-References: <cover.1611829953.git.viresh.kumar@linaro.org>
- <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
- <20210203114521.GA6380@arm.com>
- <20210205091424.3od3tme3f7mh7ebp@vireshk-i7>
- <20210217002422.GA17422@arm.com>
- <20210218093304.3mt3o7kbeymn5ofl@vireshk-i7>
- <20210218163635.GA23622@arm.com>
- <20210219045823.beeijwaymd63prk7@vireshk-i7>
- <20210219094440.GA29843@arm.com>
+        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
+         :in-reply-to:references:mime-version:date:user-agent
+         :content-transfer-encoding;
+        bh=nTn6ZavwiX+iUA/fKHbxz6oGLOlCA6cVyQWgY9ZgZLg=;
+        b=QOxCjO3HH+ADPyELPS+QSf9+cI77RXwHBMsIBsKkHVDB365VpD5Uuok1Qfiv4bMpwB
+         HEe3djJNrFMYB9dTScQbG4C5Ct+SpT0YxxK3lPo+C3VXugWnqh5ygmnEcmbSFYKDH/rH
+         HXhXKtbxq9j7LE+8EdpvO/rP4w4747SdT/D80t1AzypXTSz16XrSwIiHWtyjmBd0QNHn
+         lh4bsc2viQa1MGo6BOLSo2BpkkdrFvBC+rexNHGLgJP5mz/U+xwhZCKvDKhwvOmk9pJh
+         VNfFCMsp6nk3vdxWbOL8E65r5WWIxjH5AQvQn5S5ckOQ7te3fGn0nW1IuaGfIt6X+I9y
+         8KDw==
+X-Gm-Message-State: AOAM531kmq5iyUW/yLN/BbtHuU4uNSrs3eNHj2sJt2saEZpouWt9w7/N
+        9fzjFuShVF/0R4gaHhVcqSw=
+X-Google-Smtp-Source: ABdhPJzG0M58qPNdOEK8XmQmqu0DNkflmATorE93w4HYy6twMvFdiFngo70LAkHDlEnw10M77EQnCA==
+X-Received: by 2002:a2e:7c02:: with SMTP id x2mr5110440ljc.247.1613730958187;
+        Fri, 19 Feb 2021 02:35:58 -0800 (PST)
+Received: from dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id q3sm882433ljb.64.2021.02.19.02.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Feb 2021 02:35:57 -0800 (PST)
+Message-ID: <468a5c7820a510b8a12c10b1b8a107fb41e9d26c.camel@fi.rohmeurope.com>
+Subject: Re: [RFC PATCH 0/7] Add managed version of delayed work init
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Reply-To: matti.vaittinen@fi.rohmeurope.com
+To:     mgross@linux.intel.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+In-Reply-To: <20210218162821.GP154917@linux.intel.com>
+References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+         <20210218162821.GP154917@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210219094440.GA29843@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Date:   Fri, 19 Feb 2021 12:35:51 +0200
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-02-21, 09:44, Ionela Voinescu wrote:
-> On Friday 19 Feb 2021 at 10:28:23 (+0530), Viresh Kumar wrote:
-> > The very core routines (cpufreq_freq_transition_end() and
-> > cpufreq_driver_fast_switch()) of the cpufreq core call
-> > arch_set_freq_scale() today and this isn't going to change anytime
-> > soon. If something gets changed there someone will need to see other
-> > parts of the kernel which may get broken with that.
+Hello Mark,
+
+Thanks for taking a look at the series! This is the first time anyone
+has been commenting on a cover-letter which is likely to fade away and
+never be looked at again. Guess you are a thorough person :)
+
+On Thu, 2021-02-18 at 08:28 -0800, mark gross wrote:
+> On Sat, Feb 13, 2021 at 01:58:17PM +0200, Matti Vaittinen wrote:
+> > It's not rare that device drivers need delayed work.
+> > It's not rare that this work needs driver's data.
 > > 
-> 
-> Yes, but it won't really be straightforward to notice this breakage if
-> that happens, so in my opinion it was worth to keep that condition.
+> > Often this means that driver must ensure the work is not queued
+> > when
+> > driver exits. Usually this is done by ensuring new work is not
+> > added and
+> > then calling cancel_delayed_work_sync() at remove(). In many cases
+> > this
+> > may also require cleanup at probe error path - which is easy to
+> > forget.
+> > 
+> > It might be helpful for (a) few drivers if there was a work init
+>  why the (a) and not just a?
 
-Right, but chances of that happening are close to zero right now. I
-don't see any changes being made there in near future and so as we
-agreed, lets leave it as is.
+I am not sure how many drivers are needed to change it from 'few' to 'a
+few'. Additionally, this series converted only the drivers which I
+found could easily get rid of the .remove() - I did not analyze how
+many drivers would benefit from this by getting rid of mixed
+devm/manual resource management.
 
-Btw, thanks for your feedback, it was indeed very valuable.
+So to sum up - I don't know how many drivers will benefit and what
+people think makes 'few' to turn to 'a few'. '(a) few' leaves this
+decision to readers - and (a) few of them know the drivers better than
+I do.
 
--- 
-viresh
+> > Main reson why this is RFC is that I had hard time deciding where
+> > this
+> > function should be introduced. It's not nice to include all device
+> > stuff
+> > in workqueue - because many workqueue users are not interested in
+> > devices. In same way, not all of the devices are interested in WQs.
+> > OTOH, adding own file just for this sounds like an overkill.
+> s/own/one
+
+Hm. The 'own file for XXX' does not make sense for native English
+speakers? Didn't now that. Thanks for pointing it out.
+
+I will edit the cover letter when I respin this rebased on v5.12-rc1 -
+and it is likely the series v2 will add this function inlined in a new
+header dedicated for devm-helpers (as was suggested by Hans de Goede).
+
+Best Regards
+--Matti
+
