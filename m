@@ -2,24 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76ADA31F6B1
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 10:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EE431F6C1
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 10:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbhBSJph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 04:45:37 -0500
-Received: from foss.arm.com ([217.140.110.172]:60446 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229766AbhBSJp3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Feb 2021 04:45:29 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA595D6E;
-        Fri, 19 Feb 2021 01:44:42 -0800 (PST)
-Received: from localhost (unknown [10.1.195.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 686C13F694;
-        Fri, 19 Feb 2021 01:44:42 -0800 (PST)
-Date:   Fri, 19 Feb 2021 09:44:40 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S229587AbhBSJsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 04:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229555AbhBSJsx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 04:48:53 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08795C061574
+        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 01:48:13 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id j1so291751pgh.4
+        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 01:48:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eXTn3zOUMXGAyBukHeWslQDjuh7yzOFRAU7s48iWGXY=;
+        b=zNgYaMrXXz6+R4FybaHK/hQx49PQbMvGjdW+JliE/hIJY13cHiHHZV0UTIdXwJwJ6j
+         7/LMQuIDF+c5ojsQdJlqV1Qh71w9MLzaCt4a60bIOi7irShdmyLAGGWV9T5wTyAKKh7I
+         cUhE5h9bwzDXEfsR5a1S3DH4Zuiui5hsnDl6KcSS5wJxwbdsZnjPAu9KXm2ZDoAR77DY
+         NleVaeMEhbhTTux/hiZVLPyYTP9N1wiUJu6CgvWM7vgPNLLzyWrJdmght2M66wwJSAds
+         hv4XBex5Camt9avhNo4xuMOaPqH+W89IMsYHHP7y7q2CLhAY+77HpSvV8PGivaW4e6D+
+         cmkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eXTn3zOUMXGAyBukHeWslQDjuh7yzOFRAU7s48iWGXY=;
+        b=UtST8rcUndIGQAOCueahZnHbSiNlaK4W/AEbWanloWAd88K4f0d9MtUwx90LJUnSlB
+         j/icDBbXTrEHiraX+Du8Xl227eBNSZ0OgyHZrwvDGV1teCC5Eixn1mzTOem+zjxY8ppG
+         Rp9EAqze0BxfMd1uR35Fbt3N1YHyJPREhgqaKZTTbe009EmUI55URK3crC0IpTqLO7jG
+         /+FaI2Cs+lOy2gJ0LaotvF5Q5MHapp6J+Wd5PBF0V95U8NEf+b3g2YWgtrxrLuUiuXbk
+         ZZvyy5JFFjCHEgF4tOUEobBaTEInlnm6JyArWX3kDN3S2L1kxSQLwp+e7DjvtdkVSmQV
+         FxEA==
+X-Gm-Message-State: AOAM530j0vuLS/CxHyfTpgQLezl9H16KHZVeujxrclWviTQKepNsYr9O
+        /kZ+vquTne/0naWS6xynGpZGUg==
+X-Google-Smtp-Source: ABdhPJwFlEMElb1VfgOFhwzwo+Ug/EgvHNFmYS3/8CpID39RYcy97gnkJFxUH41+HKt0qMYD6KDPiA==
+X-Received: by 2002:a63:5d59:: with SMTP id o25mr7657009pgm.322.1613728092545;
+        Fri, 19 Feb 2021 01:48:12 -0800 (PST)
+Received: from localhost ([122.172.59.240])
+        by smtp.gmail.com with ESMTPSA id t18sm8094602pjs.57.2021.02.19.01.48.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Feb 2021 01:48:11 -0800 (PST)
+Date:   Fri, 19 Feb 2021 15:18:09 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
 Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -29,7 +59,7 @@ Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Subject: Re: [PATCH V3 1/2] topology: Allow multiple entities to provide
  sched_freq_tick() callback
-Message-ID: <20210219094440.GA29843@arm.com>
+Message-ID: <20210219094809.ktvwx3pggnvatl3q@vireshk-i7>
 References: <cover.1611829953.git.viresh.kumar@linaro.org>
  <d398729676f3d2b0d2ab024a2c9ea6e9ee1d0dca.1611829953.git.viresh.kumar@linaro.org>
  <20210203114521.GA6380@arm.com>
@@ -38,59 +68,33 @@ References: <cover.1611829953.git.viresh.kumar@linaro.org>
  <20210218093304.3mt3o7kbeymn5ofl@vireshk-i7>
  <20210218163635.GA23622@arm.com>
  <20210219045823.beeijwaymd63prk7@vireshk-i7>
+ <20210219094440.GA29843@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210219045823.beeijwaymd63prk7@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210219094440.GA29843@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 19 Feb 2021 at 10:28:23 (+0530), Viresh Kumar wrote:
-> On 18-02-21, 16:36, Ionela Voinescu wrote:
-> > Yes, we don't care if there is no cpufreq driver, as the use of AMUs won't
-> > get initialised either. But we do care if there is a cpufreq driver that
-> > does not support frequency invariance, which is the example above.
+On 19-02-21, 09:44, Ionela Voinescu wrote:
+> On Friday 19 Feb 2021 at 10:28:23 (+0530), Viresh Kumar wrote:
+> > The very core routines (cpufreq_freq_transition_end() and
+> > cpufreq_driver_fast_switch()) of the cpufreq core call
+> > arch_set_freq_scale() today and this isn't going to change anytime
+> > soon. If something gets changed there someone will need to see other
+> > parts of the kernel which may get broken with that.
 > > 
-> > The intention with the patches that made cpufreq based invariance generic
-> > a while back was for it to be present, seamlessly, for as many drivers as
-> > possible, as a less than accurate invariance default method is still
-> > better than nothing.
 > 
-> Right.
-> 
-> > So only a few drivers today don't support cpufreq based FI
-> 
-> Only two AFAICT, both x86, and the AMU stuff doesn't conflict with
-> them.
-> 
-> drivers/cpufreq/intel_pstate.c
-> drivers/cpufreq/longrun.c
-> 
-> > but it's not a guarantee that it will stay this way.
-> 
-> What do you mean by "no guarantee" here ?
-> 
-> The very core routines (cpufreq_freq_transition_end() and
-> cpufreq_driver_fast_switch()) of the cpufreq core call
-> arch_set_freq_scale() today and this isn't going to change anytime
-> soon. If something gets changed there someone will need to see other
-> parts of the kernel which may get broken with that.
-> 
+> Yes, but it won't really be straightforward to notice this breakage if
+> that happens, so in my opinion it was worth to keep that condition.
 
-Yes, but it won't really be straightforward to notice this breakage if
-that happens, so in my opinion it was worth to keep that condition.
+Right, but chances of that happening are close to zero right now. I
+don't see any changes being made there in near future and so as we
+agreed, lets leave it as is.
 
-> I don't see any need of complicating other parts of the kernel like,
-> amu or cppc code for that. They should be kept simple and they should
-> assume cpufreq invariance will be supported as it is today.
-> 
+Btw, thanks for your feedback, it was indeed very valuable.
 
-Fair enough! It is a corner case after all.
-
-Thanks,
-Ionela.
-
-> -- 
-> viresh
+-- 
+viresh
