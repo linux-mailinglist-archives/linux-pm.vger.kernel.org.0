@@ -2,193 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD6D32014C
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Feb 2021 23:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887A032027F
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Feb 2021 02:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbhBSWUx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 17:20:53 -0500
-Received: from mga12.intel.com ([192.55.52.136]:3822 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229515AbhBSWUx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Feb 2021 17:20:53 -0500
-IronPort-SDR: 31t5MkZPcATDe+5/2Ul2mgVW957nAtuLcx9ZrZz+7aScbsGtFrmCOx5tslOmiLK2ltCyZtPf/o
- GLKz+QHa9YPg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9900"; a="163130565"
-X-IronPort-AV: E=Sophos;i="5.81,191,1610438400"; 
-   d="scan'208";a="163130565"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2021 14:20:12 -0800
-IronPort-SDR: pC71vhmFU2tDf6B0FQIZQWZDEOAgWg6yfu5JluhbEiLNoSljw3CVzq0128QAxaKgBDvTaNghzf
- kIUWcTc0N00Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,191,1610438400"; 
-   d="scan'208";a="440443242"
-Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 19 Feb 2021 14:20:10 -0800
-Received: from kbuild by cd560a204411 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lDE89-000AfC-Fx; Fri, 19 Feb 2021 22:20:09 +0000
-Date:   Sat, 20 Feb 2021 06:19:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 8b72d3aa065ce33df4f042840078542b1e5d2c45
-Message-ID: <6030398b.B2E7yyx8RuCeVTwN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S229809AbhBTBds (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Feb 2021 20:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229802AbhBTBdr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Feb 2021 20:33:47 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266D6C06178A
+        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 17:33:07 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id x4so8799780ybj.22
+        for <linux-pm@vger.kernel.org>; Fri, 19 Feb 2021 17:33:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=6CYx/dMpUWhnaBhgXdOPJQFkQW+qYUUCxUHvQTIq/hw=;
+        b=F40eCNyvGJc0EnWR9ZPNcaYJMoCL0Z1saoI2XaNbsnmwP78mHNMnyjTc1ydkyON2zF
+         ACwEAk/BdSP0YuTuiKIIbhg22F2lsxITzu+WCi1SlhmrbxZngG/GX75loKzPncte2Eko
+         dAJ3iM3U2LWh9fYNTMf3YlRj7bQ3sr7crqO9TpBM6sa3ErHEkGd0z24i/RZpllfGu3EH
+         Y5TmoQh/opXSNzp7T44EpPnhsmHpqAijsGWy55sD1E5GOq7B8OmLc4LJjgcGgvZUucze
+         CTtR6x47ChPomKsp/E/L3+fjvKs8bul6A9j0CwH6g/BJ1+wAgxlNop2MCKHBgxERpFku
+         C05A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=6CYx/dMpUWhnaBhgXdOPJQFkQW+qYUUCxUHvQTIq/hw=;
+        b=dZaW5/QB1ITbIdPxBeZ+qiy9L6v2m1nofpa2U/GLy/L8iXkQ9C40gSNsd9fZMDMha/
+         XJot92ZnxLJiRDNpIlbX8c5sEGH3Yet2GaDxzSnpua8RAh620XNBWndf84IAlk0aZqLf
+         trvRlxcutnr4vNYKKYxrQpL9mEBcTidtTR+KyaH/fpCk8MP3I1/dfKll53hPweoJOpYw
+         sMBNThr6lqI0atZedXzGs9/gz+DuxtvlXbEddXANDJVlSkXLXTnHVJqDIo5MjSt5nxEj
+         6jKUdasoHdR+5b8FBNe0jboe3TaJ7J61+czwpL9Wh2E4TViPqR6TZPIM1LJEBku+eBWf
+         14DQ==
+X-Gm-Message-State: AOAM532Vu2MmV19tJKwE1I2I//1fgk2zaozgCPCfzMiTkCB9heK6IUzo
+        zsSEGYe/EclTpizc7E1hrh1mo8EEoKHAVRlDIRXEGw==
+X-Google-Smtp-Source: ABdhPJzUYzQX0oV7fl/lX8syZusalWetijMpmHVZ6iK56cekzBl+wjZ5xZyakjq+gp2/VuCmYC5MLuf8YeNX8AsC7o1luw==
+Sender: "matthewgarrett via sendgmr" 
+        <matthewgarrett@matthewgarrett-tmp.c.googlers.com>
+X-Received: from matthewgarrett-tmp.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1081])
+ (user=matthewgarrett job=sendgmr) by 2002:a25:7d84:: with SMTP id
+ y126mr17691890ybc.179.1613784786198; Fri, 19 Feb 2021 17:33:06 -0800 (PST)
+Date:   Sat, 20 Feb 2021 01:32:46 +0000
+Message-Id: <20210220013255.1083202-1-matthewgarrett@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
+Subject: [PATCH 0/9] Enable hibernation when Lockdown is enabled
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
+        keyrings@vger.kernel.org, zohar@linux.ibm.com, jejb@linux.ibm.com,
+        jarkko@kernel.org, corbet@lwn.net, rjw@rjwysocki.net
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 8b72d3aa065ce33df4f042840078542b1e5d2c45  Merge branches 'pm-cpufreq-fixes' and 'pm-opp-fixes' into linux-next
+Lockdown in integrity mode aims to ensure that arbitrary code cannot end
+up in ring 0 without owner approval. The combination of module signing
+and secure boot gets most of the way there, but various other features
+are disabled by lockdown in order to avoid more convoluted approaches
+that would enable unwanted code to end up in kernel space. One of these
+is hibernation, since at present the kernel performs no verification of
+the code it's resuming. If hibernation were permitted, an attacker with
+root (but not kernel) privileges could disable swap, write a valid
+hibernation image containing code of their own choosing to the swap
+partition, and then reboot. On reboot, the kernel would happily resume
+the provided code.
 
-elapsed time: 723m
+This patchset aims to provide a secure implementation of hibernation. It
+is based on the presumption that simply storing a key in-kernel is
+insufficient, since if Lockdown is merely in integrity (rather than
+confidentiality) mode we assume that root is able to read kernel memory
+and so would be able to obtain these secrets. It also aims to be
+unspoofable - an attacker should not be able to write out a hibernation
+image using cryptographic material under their control.
 
-configs tested: 130
-configs skipped: 4
+TPMs can be used to generate key material that is encrypted with a key
+that does not leave the TPM. This means that we can generate an AES key,
+encrypt the image hash with it, encrypt it with a TPM-backed key, and store
+the encrypted key in the hibernation image. On resume, we pass the key
+back to the TPM, receive the unencrypted AES key, and use that to
+validate the image.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+However, this is insufficient. Nothing prevents anyone else with access
+to the TPM asking it to decrypt the key. We need to be able to
+distinguish between accesses that come from the kernel directly and
+accesses that come from userland.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                      cm5200_defconfig
-mips                       rbtx49xx_defconfig
-powerpc                     stx_gp3_defconfig
-sh                           se7780_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                     sequoia_defconfig
-ia64                             alldefconfig
-sh                             espt_defconfig
-arm                          pcm027_defconfig
-mips                      pistachio_defconfig
-arm                  colibri_pxa270_defconfig
-sh                            migor_defconfig
-arm                          pxa910_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                  storcenter_defconfig
-mips                       bmips_be_defconfig
-arm                            u300_defconfig
-powerpc                  iss476-smp_defconfig
-arm                        spear3xx_defconfig
-powerpc                   motionpro_defconfig
-arm                             pxa_defconfig
-sh                          polaris_defconfig
-arm                         at91_dt_defconfig
-sh                        edosk7760_defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                         bcm2835_defconfig
-arm                         s5pv210_defconfig
-powerpc                 canyonlands_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc                      ppc44x_defconfig
-mips                         rt305x_defconfig
-arm                       omap2plus_defconfig
-powerpc                    amigaone_defconfig
-sparc64                          alldefconfig
-mips                          rb532_defconfig
-mips                           jazz_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                     sbc8548_defconfig
-arm                         hackkit_defconfig
-powerpc                    adder875_defconfig
-sh                           se7724_defconfig
-arm                           stm32_defconfig
-arm                          imote2_defconfig
-xtensa                         virt_defconfig
-arm                           corgi_defconfig
-m68k                        mvme16x_defconfig
-sh                   sh7770_generic_defconfig
-arm                            hisi_defconfig
-ia64                            zx1_defconfig
-sh                                  defconfig
-mips                     cu1830-neo_defconfig
-sparc                               defconfig
-arc                         haps_hs_defconfig
-powerpc                       ppc64_defconfig
-sh                          rsk7201_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210219
-i386                 randconfig-a003-20210219
-i386                 randconfig-a002-20210219
-i386                 randconfig-a004-20210219
-i386                 randconfig-a001-20210219
-i386                 randconfig-a006-20210219
-x86_64               randconfig-a012-20210219
-x86_64               randconfig-a016-20210219
-x86_64               randconfig-a013-20210219
-x86_64               randconfig-a015-20210219
-x86_64               randconfig-a011-20210219
-x86_64               randconfig-a014-20210219
-i386                 randconfig-a016-20210219
-i386                 randconfig-a012-20210219
-i386                 randconfig-a014-20210219
-i386                 randconfig-a013-20210219
-i386                 randconfig-a011-20210219
-i386                 randconfig-a015-20210219
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+TPMs have several Platform Configuration Registers (PCRs) which are used
+for different purposes. PCRs are initialised to a known value, and
+cannot be modified directly by the platform. Instead, the platform can
+provide a hash of some data to the TPM. The TPM combines the existing
+PCR value with the new hash, and stores the hash of this combination in
+the PCR. Most PCRs can only be extended, which means that the only way
+to achieve a specific value for a TPM is to perform the same series of
+writes.
 
-clang tested configs:
-x86_64               randconfig-a003-20210219
-x86_64               randconfig-a001-20210219
-x86_64               randconfig-a004-20210219
-x86_64               randconfig-a002-20210219
-x86_64               randconfig-a005-20210219
-x86_64               randconfig-a006-20210219
+When secrets are encrypted by the TPM, they can be accompanied by a
+policy that describes the state the TPM must be in in order for it to
+decrypt them. If the TPM is not in this state, it will refuse to decrypt
+the material even if it is otherwise capable of doing so. This allows
+keys to be tied to specific system state - if the system is not in that
+state, the TPM will not grant access.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+PCR 23 is special in that it can be reset on demand. This patchset
+re-purposes PCR 23 and blocks userland's ability to extend or reset it.
+The kernel is then free to impose policy by resetting PCR 23 to a known
+starting point, extending it with a known value, encrypting key material
+with a policy that ties it to PCR 23, and then resetting it. Even if
+userland has access to the encrypted blob, it cannot decrypt it since it
+has no way to force PCR 23 to be in the same state.
+
+So. During hibernation we freeze userland. We then reset PCR 23 and
+extend it to a known value. We generate a key, use it and then encrypt
+it with the TPM. When we encrypt it, we define a policy which states
+that the TPM must have the same PCR 23 value as it presently does. We
+also store the current PCR 23 value in the key metadata. On resume, we
+again freeze userland, reset PCR 23 and extend it to the same value. We
+decrypt the key, and verify from the metadata that it was created when
+PCR 23 had the expected value. If so, we use it to decrypt the hash used
+to verify the hibernation image and ensure that the image matches it. If
+everything looks good, we resume. If not, we return to userland. Either
+way, we reset PCR 23 before any userland code runs again.
+
+This all works on my machine, but it's imperfect - there's a meaningful
+performance hit on resume forced by reading all the blocks in-order, and
+it probably makes more sense to do that after reads are complete instead
+but I wanted to get the other components of this out for review first.
+It's also not ideal from a security perspective until there's more
+ecosystem integration - we need a kernel to be able to assert to a
+signed bootloader that it implements this, since otherwise an attacker
+can simply downgrade to a kernel that doesn't implement this policy and
+gain access to PCR 23 themselves. There's ongoing work in the UEFI
+bootloader space that would make this possible.
+
+
