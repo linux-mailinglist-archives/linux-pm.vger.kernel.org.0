@@ -2,64 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B50F320371
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Feb 2021 04:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E951320519
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Feb 2021 12:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbhBTDKE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Feb 2021 22:10:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45064 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229765AbhBTDKD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Feb 2021 22:10:03 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B717064EE0;
-        Sat, 20 Feb 2021 03:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613790563;
-        bh=BKUd+jallq37FDOP7XZNlKIoHsBYEgg+risJ2luufz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F2sQxU/R9X/6fZkIEcVkTVPkOug75dkQlMgvr2tDh/+49Rn3rP6Xe1/UPE2raBAdJ
-         vwTG3NOpHrftST365HlCBYQy9WyZeUmhZd8sFnZrz6G3xt4Vxw6IMGFzYXM+VyRRoH
-         DPCB+GmOfOlA1oAVNNoeEwWxZyvHX3UvF/2+YEEdvC1+xoKwbZrN+k2CAIZ+oYHvMq
-         r94OWRrCDwG+C3kJFKachpZkSh3PrpCsozjuVgnrL7oAMk2o9vZfbe/WcNsT6WetAd
-         xgZakwtUVC5GMfYJrUVPPXhxbeRFRdLpq/Cpa+Pz0aMKD5aKH9RNu1SCyjkdIPllxy
-         ciQmefUC0pHgw==
-Date:   Sat, 20 Feb 2021 05:09:07 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-pm@vger.kernel.org, keyrings@vger.kernel.org,
-        zohar@linux.ibm.com, jejb@linux.ibm.com, corbet@lwn.net,
-        rjw@rjwysocki.net, Matthew Garrett <mjg59@google.com>
-Subject: Re: [PATCH 5/9] security: keys: trusted: Allow storage of PCR values
- in creation data
-Message-ID: <YDB9U2oyt0fmvLDF@kernel.org>
-References: <20210220013255.1083202-1-matthewgarrett@google.com>
- <20210220013255.1083202-6-matthewgarrett@google.com>
+        id S229645AbhBTLfJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 20 Feb 2021 06:35:09 -0500
+Received: from mail-m2452.qiye.163.com ([220.194.24.52]:36310 "EHLO
+        mail-m2452.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229476AbhBTLfJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 20 Feb 2021 06:35:09 -0500
+X-Greylist: delayed 383 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Feb 2021 06:35:09 EST
+Received: from localhost.localdomain (unknown [106.75.220.3])
+        by mail-m2452.qiye.163.com (Hmail) with ESMTPA id 44BBB4C5032;
+        Sat, 20 Feb 2021 19:27:56 +0800 (CST)
+From:   Bingsong Si <owen.si@ucloud.cn>
+To:     linux-pm@vger.kernel.org
+Cc:     lenb@kernel.org
+Subject: [PATCH] tools/power turbostat: fix offset and idx on Amd F17h and newer
+Date:   Sat, 20 Feb 2021 19:27:49 +0800
+Message-Id: <20210220112749.3415192-1-owen.si@ucloud.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210220013255.1083202-6-matthewgarrett@google.com>
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSUI3V1ktWUFJV1kPCR
+        oVCBIfWUFZGR0fTh8fSxlCThgdVkpNSkhDSUtPTE1PSUNVGRETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0JITVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OFE6ODo4MD04AzkvTE5MEi1P
+        NBVPCSpVSlVKTUpIQ0lLT0xNTk9NVTMWGhIXVRQMHhVVCBI7DhgXFA4fVRgVRVlXWRILWUFZSktN
+        VUxOVUlJS1VIWVdZCAFZQUpMS0M3Bg++
+X-HM-Tid: 0a77bf323bb68c11kuqt44bbb4c5032
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 20, 2021 at 01:32:51AM +0000, Matthew Garrett wrote:
-> When TPMs generate keys, they can also generate some information
-> describing the state of the PCRs at creation time. This data can then
-> later be certified by the TPM, allowing verification of the PCR values.
-> This allows us to determine the state of the system at the time a key
-> was generated. Add an additional argument to the trusted key creation
-> options, allowing the user to provide the set of PCRs that should have
-> their values incorporated into the creation data.
-> 
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
+Amd uses a different pkg energy msr, without this fix, turbostat exit
+immediately on Amd Epyc Cpu.
 
-LGTM too.
+Fixes: 3316f99a9f1 ("tools/power turbostat: Also read package power on AMD F17h (Zen)")
 
-Something popped into mind: could we make PCR 23 reservation dynamic
-instead of a config option.
+Signed-off-by: Bingsong Si <owen.si@ucloud.cn>
+---
+ tools/power/x86/turbostat/turbostat.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-E.g. if the user space uses it, then it's dirty and hibernate will
-fail. I really dislike the static compilation time firewall on it.
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index a7c4f0772e53..68cb2ae632de 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -297,7 +297,10 @@ int idx_to_offset(int idx)
+ 
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+-		offset = MSR_PKG_ENERGY_STATUS;
++		if (do_rapl & RAPL_AMD_F17H)
++			offset = MSR_PKG_ENERGY_STAT;
++		else
++			offset = MSR_PKG_ENERGY_STATUS;
+ 		break;
+ 	case IDX_DRAM_ENERGY:
+ 		offset = MSR_DRAM_ENERGY_STATUS;
+@@ -326,6 +329,7 @@ int offset_to_idx(int offset)
+ 
+ 	switch (offset) {
+ 	case MSR_PKG_ENERGY_STATUS:
++	case MSR_PKG_ENERGY_STAT:
+ 		idx = IDX_PKG_ENERGY;
+ 		break;
+ 	case MSR_DRAM_ENERGY_STATUS:
+-- 
+2.27.0
 
-/Jarkko
