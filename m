@@ -2,165 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CA03215DA
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Feb 2021 13:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7C832198A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Feb 2021 14:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbhBVMLk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Feb 2021 07:11:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:44114 "EHLO foss.arm.com"
+        id S231896AbhBVN52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Feb 2021 08:57:28 -0500
+Received: from m12-12.163.com ([220.181.12.12]:51883 "EHLO m12-12.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230230AbhBVMLi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Feb 2021 07:11:38 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D95381FB;
-        Mon, 22 Feb 2021 04:10:52 -0800 (PST)
-Received: from [10.57.51.123] (unknown [10.57.51.123])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 754373F70D;
-        Mon, 22 Feb 2021 04:10:50 -0800 (PST)
-Subject: Re: [RFC][PATCH 0/3] New thermal interface allowing IPA to get max
- power
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, rafael@kernel.org, Dietmar.Eggemann@arm.com,
-        amitk@kernel.org, rui.zhang@intel.com, cw00.choi@samsung.com,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-References: <20210126104001.20361-1-lukasz.luba@arm.com>
- <2f4d7bf2-3f3e-ac24-20fb-b8d66dcdd809@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <042c06a3-eae4-85e4-54cd-4389cc343eb1@arm.com>
-Date:   Mon, 22 Feb 2021 12:10:48 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232050AbhBVN5O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Feb 2021 08:57:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Message-ID:MIME-Version; bh=GvcCr
+        CM141fUU/BWS1+ek65DoVTCnDSGKRfT0AdtWHI=; b=jP6Aaf3BaNJfyOQvobyyh
+        WQjLtwks9fwzgolijAwtnHB5eqM7HGaSveOAgb+5uPbI9DNLELRNld4NE8JdoE68
+        f4iF89IGBZf2NYtKsHg1YgNbVaLPFIm920l7VVvCFC9gmZEuOUU6xs0V9Azc+3tf
+        fE9CrHmiqniCX1X2APShEA=
+Received: from localhost (unknown [218.94.48.178])
+        by smtp8 (Coremail) with SMTP id DMCowAAXvcGIczNgtAbiRg--.3363S2;
+        Mon, 22 Feb 2021 17:04:10 +0800 (CST)
+Date:   Mon, 22 Feb 2021 17:04:20 +0800
+From:   Yue Hu <zbestahu@163.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Yue Hu <zbestahu@gmail.com>, rjw@rjwysocki.net, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyue2@yulong.com
+Subject: Re: [PATCH] cpufreq: schedutil: Don't consider freq reduction to
+ busy CPU if need_freq_update is set
+Message-ID: <20210222170420.000019a3.zbestahu@163.com>
+In-Reply-To: <20210222053014.s45odi3qsfio2ahp@vireshk-i7>
+References: <20210218082514.1437-1-zbestahu@gmail.com>
+        <20210218102029.syj6vkltlbtoxsig@vireshk-i7>
+        <20210219113804.00004a7e.zbestahu@gmail.com>
+        <20210219040933.2o5hhbjb6emf3xl4@vireshk-i7>
+        <20210219144140.00004de9.zbestahu@gmail.com>
+        <20210219074249.2hcwcnakihor343h@vireshk-i7>
+        <20210219162026.00002e2b.zbestahu@gmail.com>
+        <20210219093551.bykqhjk6xvs4kszi@vireshk-i7>
+        <20210219194509.00005884.zbestahu@gmail.com>
+        <20210222053014.s45odi3qsfio2ahp@vireshk-i7>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <2f4d7bf2-3f3e-ac24-20fb-b8d66dcdd809@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: DMCowAAXvcGIczNgtAbiRg--.3363S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF45Ary5ZFW5ArW5tF4fZrb_yoW8KF4xpF
+        W5Ca9Yvw1DK34kXwn3tF15XFW5XanrA34FgF45Gwn5ZwnFg340grW0ga17CrW5CrnYkr1S
+        yr1jqF9FyF1xZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j0OJ5UUUUU=
+X-Originating-IP: [218.94.48.178]
+X-CM-SenderInfo: p2eh23xdkxqiywtou0bp/1tbiTwpBEVsGXuC4XAAAsS
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Mon, 22 Feb 2021 11:00:14 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
 
-On 2/22/21 10:22 AM, Daniel Lezcano wrote:
+> On 19-02-21, 19:45, Yue Hu wrote:
+> > We will set next_f to next_freq(previous freq) if next_f is
+> > reduced for busy CPU. Then the next sugov_update_next_freq() will check
+> > if next_freq matches next_f if need_freq_update is not set.
+> > Obviously, we will do nothing for the case. And The related check to
+> > fast_switch_enabled and raw_spin_{lock,unlock} operations are
+> > unnecessary.  
 > 
-> Hi Lukasz,
-> 
-> sorry for the delay, it took more time to finish my current work before
-> commenting these patches.
+> Right, but we will still need sugov_update_next_freq() to have the
+> same implementation regardless and so I am not sure if we should add
 
-No worries, thank you looking at this.
+Yes, sugov_update_next_freq() should be keeping current logic for corner case.
 
+> this change:
 > 
-> On 26/01/2021 11:39, Lukasz Luba wrote:
->> Hi all,
->>
->> This patch set tries to add the missing feature in the Intelligent Power
->> Allocation (IPA) governor which is: frequency limit set by user space.
-> 
-> It is unclear if we are talking about frequency limit of the dvfs device
-> by setting the hardware limit (min-max freq). If it is the case, then
-> that is an energy model change, and all user of the energy model must be
-> notified about this change. But I don't see why userspace wants to
-> change that.
-> 
-> If we just want to set a frequency limit, then that is what we are doing
-> with the DTPM framework via power numbers.
-> 
->> User can set max allowed frequency for a given device which has impact on
->> max allowed power. In current design there is no mechanism to figure this
->> out. IPA must know the maximum allowed power for every device. It is then
->> used for proper power split and divvy-up. When the user limit for max
->> frequency is not know, IPA assumes it is the highest possible frequency.
->> It causes wrong power split across the devices.
-> 
-> That is because the IPA introduced the power rebalancing between devices
-> belonging the same thermal zone, so the feature was very use case specific.
-> 
-> The DTPM is supposed to solve this by providing an unified uW unit to
-> act on the different power capable devices on a generic way.
-> 
-> Today DTPM is mapped to userspace using the powercap framework, but it
-> is considered to add kernel API to let other subsystem to act on it
-> directly. May be, you can add those and call them from IPA directly, so
-> the governor does power decision and ask the DTPM to do the changes.
-> 
-> Conceptually, that would be much more consistent and will remove
-> duplicated code IMO.
-> 
-> May be create a power_qos framework to unify the units ...
-> 
->> This new mechanism provides the max allowed frequency to the thermal
->> framework and then max allowed power to the IPA.
->> The implementation is done in this way because currently there is no way
->> to retrieve the limits from the PM QoS, without uncapping the local
->> thermal limit and reading the next value. It would be a heavy way of
->> doing these things, since it should be done every polling time (e.g. 50ms).
->>
->> Also, the value stored in PM QoS can be different than the real OPP 'rate'
->> so still would need conversion into proper OPP for comparison with EM.
->> Furthermore, uncapping the device in thermal just to check the user freq
->> limit is not the safest way.
->> Thus, this simple implementation moves the calculation of the proper
->> frequency to the sysfs write code, since it's called less often. The value
->> is then used as-is in the thermal framework without any hassle.
-> 
-> Sounds like the DTPM is doing exactly that, no ?
-> 
->> As it's a RFC, it still misses the cpufreq sysfs implementation, but would
->> be addressed if all agree.
-> We are talking about power, frequency, in-kernel governor, userspace
-> having knowledge of max frequency limit to set power.
-> 
-> I'm a bit lost. What is the problem we want to solve here ?
-> 
-> May be I'm missing something. Is it possible to share a scenario where
-> the userspace acts on the devfreq and the IPA taking decision to
-> illustrate your proposal ?
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 41e498b0008a..7289e1adab73 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -362,6 +362,9 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+>          * recently, as the reduction is likely to be premature then.
+>          */
+>         if (sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
+> +               if (!sg_policy->need_freq_update)
+
+The initial purpose about code of `next_f = sg_policy->next_freq` here (for special CPU busy
+case) should be skipping the freq update.
+
+Since commit 600f5badb78c ("cpufreq: schedutil: Don't skip freq update when limits change"),
+we add the check to busy CPU for not skipping the update, we need to update the freq using
+computed one because limits change.
+
+After commit 23a881852f3e ("cpufreq: schedutil: Don't skip freq update if need_freq_update
+is set"), we removed the need_freq_update check(no issue of commit 600f5badb78c anymore?)
+and introduce to always do an update in sugov_update_next_freq() if need_freq_update is set
+even though current freq == sg_policy->next_freq because of corner case issue. But that is
+conflict with original purpose of the freq skip code (next_f = sg_policy->next_freq) of
+busy CPU. 
+
+> +                       return;
+> +
+
+Yes, it's what i want ot add for unnecessary behaviors i mentioned above. Add return here
+should just be for skipping update(different from corner case in commit23a881852f3e).
+
+>                 next_f = sg_policy->next_freq;
+>  
+>                 /* Restore cached freq as next_freq has changed */
 > 
 > 
 
-Sure, here is the description of the configuration and scenario in which
-the issue is present.
-SoC with 2 CPU clusters (consuming 1W (little cluster) and 3W (big
-cluster) at max freq, plenty of OPPs available),
-1 GPU (at max consuming ~6W, a few of OPPs),
-
-Scenario:
-IPA is working because temperature crossed 1st threshold and tries to
-control the system to 'converge' to 2nd temp threshold. It checks
-the actors max possible power [1], gets the current power, calculates
-current budget, split that budget and grants power across actors so
-max allowed frequency is set via QoS.
-
-The state2power() callback called at [1] with argument '0' would return
-the power from EM for the highest OPP. This is fine in most cases. That
-power information is used in line 359 and 364 during the split.
-
-If the user-space (the aware middleware) wants to switch into different
-power-performance mode e.g. power-saving, it writes into device sysfs
-to limit max allowed freq. Then IPA does not know about it and makes
-wrong decisions. It's an issue for GPUs (but CPUs also) which can
-consume big power at higher freq. For example to limit this 6W into
-3W, simple freq write via sysfs is enough, but IPA completely is not
-aware of that (as you can see in the code).
-
-The sysfs interface for GPU:
-$ cat /sys/class/devfreq/<device>/available_frequencies
-400000000 600000000 800000000 1000000000
-
-$ echo 600000000 > /sys/class/devfreq/<device>/max_freq
-$ cat /sys/class/devfreq/<device>/max_freq
-600000000
-
-IMHO is not an issue of IPA, because DTPM might suffer for this
-missing 'user write' information as well. It's just missing
-design feature, to provide that user information further to the
-other frameworks or governors.
-
-Regards,
-Lukasz
-
-[1] 
-https://elixir.bootlin.com/linux/latest/source/drivers/thermal/gov_power_allocator.c#L458
 
