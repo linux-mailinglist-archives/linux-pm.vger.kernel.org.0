@@ -2,67 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A19322CB0
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Feb 2021 15:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16351322CD2
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Feb 2021 15:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhBWOqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Feb 2021 09:46:39 -0500
-Received: from mail-oo1-f44.google.com ([209.85.161.44]:37962 "EHLO
-        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbhBWOqi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Feb 2021 09:46:38 -0500
-Received: by mail-oo1-f44.google.com with SMTP id f26so3895687oog.5;
-        Tue, 23 Feb 2021 06:46:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/wlqU5gFpV97zZnVyyRZleFZ9BWrIgZ2Rdcv8uzTHfM=;
-        b=izqpbqAQoHWERsUlLgCvQl2ltizRssvGosn5JHs3fxCkK7IDsw9/DMyw0d0l+lmpMU
-         ZTDZ6k/4WOfqEH9v6uCGixbuQy9Kc61HGZhiUwERnOUFLILzHpf616PVOG09qjL3rIbL
-         qSPyRZ5y+oADul1PhQL7kcBz5EzrociapohB0wT9NrJscoPHa5qxhbw2evkyWbUK1Exb
-         qBr/bYm+gB+T7pYo2LC1Kq0gzow67HGKmHkxKJG3elg15m+IHGqfnlxXepXnTQdJj2In
-         xvd662pRlgmJ9slqqptGRrsNTIFVfB5QcezsoVZJno7yKDmz5wVArlh+f7DnihoZv3AX
-         MQpA==
-X-Gm-Message-State: AOAM532w6MDpFTGdxvMCy1KWQV6bSuoGd79OvuJEGPnsryCv1rKFphzE
-        znuReNSTbRdoHEY6Ut0khKiR//LQaPjg0NVx79GSBqCW
-X-Google-Smtp-Source: ABdhPJwfbF7b/OCPMJaoTlBR5XDAWd6jhh1U74IHQx1E+yIxafmNB1Y0yypJR+U1IIrawU8zOKzF7Veu7yaSNnskD5E=
-X-Received: by 2002:a4a:3bcb:: with SMTP id s194mr20310533oos.1.1614091557912;
- Tue, 23 Feb 2021 06:45:57 -0800 (PST)
+        id S233145AbhBWOuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Feb 2021 09:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232594AbhBWOuc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Feb 2021 09:50:32 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD59FC061786;
+        Tue, 23 Feb 2021 06:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xaG2XnjEAwC4M07KJBi3PgFXfaTqupRbx3G9e9s1FeY=; b=E/QMLfDmUfV2jMzZ8VVexuOQMc
+        mEHrlLj2nUZIRlV+ooE9RpEy/topEzz45PJXZ9a6GIEsWqzknz47U5LZ8eF7+2DC1a0ETz3NbStmT
+        I50Ptd1+YOhlz6jsJlLFWm4IUBGf8VkeNU5JRCeKLkC147ph7t213e3tjaEIQJqy7CBk=;
+Received: from p200300ccff188c001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff18:8c00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1lEZ0V-0003Xb-15; Tue, 23 Feb 2021 15:49:47 +0100
+Date:   Tue, 23 Feb 2021 15:49:46 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Dan Murphy <dmurphy@ti.com>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] power: supply: bq27xxx: fix sign of current_now for
+ newer ICs
+Message-ID: <20210223154946.1ef58514@aktux>
+In-Reply-To: <20210223141122.9574-1-matthias.schiffer@ew.tq-group.com>
+References: <20210223141122.9574-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <5138173.kHyPcihzTF@kreacher> <10245832.OiMb8u2cOm@kreacher> <0faea0bd-107b-5c4c-5324-e0cd5e5cfba4@huawei.com>
-In-Reply-To: <0faea0bd-107b-5c4c-5324-e0cd5e5cfba4@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Feb 2021 15:45:46 +0100
-Message-ID: <CAJZ5v0i01rX0b-=dDJEdGsK2=6D3tXbC_wdOByTF_mJ0ggTPJQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] ACPI: processor: Get rid of ACPICA message printing
-To:     Hanjun Guo <guohanjun@huawei.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 12:31 PM Hanjun Guo <guohanjun@huawei.com> wrote:
->
-> On 2021/2/23 2:59, Rafael J. Wysocki wrote:
-> > Index: linux-pm/drivers/acpi/processor_idle.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/acpi/processor_idle.c
-> > +++ linux-pm/drivers/acpi/processor_idle.c
->
-> In this file, function acpi_processor_cstate_first_run_checks()
-> has a wrong pr_notice():
->
-> pr_notice("ACPI: processor limited to max C-state %d\n",
->                 max_cstate);
->
-> Since we have pr_fmt() for this file, "ACPI:" is duplicate,
-> we'd better cleanup this as below:
->
-> pr_notice("processor limited to max C-state %d\n", max_cstate);
+On Tue, 23 Feb 2021 15:11:20 +0100
+Matthias Schiffer <matthias.schiffer@ew.tq-group.com> wrote:
 
-Thanks for pointing this out, I'll make this change when applying the patch.
+> Commit cd060b4d0868 ("power: supply: bq27xxx: fix polarity of current_now")
+> changed the sign of current_now for all bq27xxx variants, but on BQ28Z610
+> I'm now seeing negated values *with* that patch.
+> 
+> The GTA04/Openmoko device that was used for testing uses a BQ27000 or
+> BQ27010 IC, so I assume only the BQ27XXX_O_ZERO code path was incorrect.
+> Revert the behaviour for newer ICs.
+> 
+> Fixes: cd060b4d0868 "power: supply: bq27xxx: fix polarity of current_now"
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+> 
+> @Andreas Kemnade: It would be great to get a confirmation that the
+> Openmoko battery indeed uses BQ27000/BQ27010 - I was having some trouble
+> finding that information.
+> 
+I can confirm that.
+here is the corresponding schematic:
+
+http://people.openmoko.org/tony_tu/GTA02/hardware/GTA02/CT-GTA02.pdf
+
+Regards,
+Andreas
