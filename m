@@ -2,54 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4423227C3
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Feb 2021 10:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C17322983
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Feb 2021 12:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbhBWJ02 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Feb 2021 04:26:28 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:48340 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232315AbhBWJ0K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Feb 2021 04:26:10 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UPLS4BZ_1614072309;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UPLS4BZ_1614072309)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 23 Feb 2021 17:25:09 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH] power: supply: Switch to using the new API kobj_to_dev()
-Date:   Tue, 23 Feb 2021 17:25:05 +0800
-Message-Id: <1614072305-29559-1-git-send-email-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S232276AbhBWLbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Feb 2021 06:31:00 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:13370 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230429AbhBWLbA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Feb 2021 06:31:00 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DlGyf3nMKz7pSw;
+        Tue, 23 Feb 2021 19:28:42 +0800 (CST)
+Received: from [10.174.178.147] (10.174.178.147) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 23 Feb 2021 19:30:15 +0800
+Subject: Re: [PATCH v1 1/4] ACPI: processor: Get rid of ACPICA message
+ printing
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+CC:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <5138173.kHyPcihzTF@kreacher> <10245832.OiMb8u2cOm@kreacher>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <0faea0bd-107b-5c4c-5324-e0cd5e5cfba4@huawei.com>
+Date:   Tue, 23 Feb 2021 19:30:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <10245832.OiMb8u2cOm@kreacher>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.147]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-fixed the following coccicheck:
-./drivers/power/supply/ds2760_battery.c:201:60-61: WARNING opportunity
-for kobj_to_dev()
+On 2021/2/23 2:59, Rafael J. Wysocki wrote:
+> Index: linux-pm/drivers/acpi/processor_idle.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/processor_idle.c
+> +++ linux-pm/drivers/acpi/processor_idle.c
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/power/supply/ds2760_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In this file, function acpi_processor_cstate_first_run_checks()
+has a wrong pr_notice():
 
-diff --git a/drivers/power/supply/ds2760_battery.c b/drivers/power/supply/ds2760_battery.c
-index 695bb67..5f50da5 100644
---- a/drivers/power/supply/ds2760_battery.c
-+++ b/drivers/power/supply/ds2760_battery.c
-@@ -198,7 +198,7 @@ static ssize_t w1_slave_read(struct file *filp, struct kobject *kobj,
- 			     struct bin_attribute *bin_attr, char *buf,
- 			     loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	return w1_ds2760_read(dev, buf, off, count);
- }
- 
--- 
-1.8.3.1
+pr_notice("ACPI: processor limited to max C-state %d\n",
+		max_cstate);
 
+Since we have pr_fmt() for this file, "ACPI:" is duplicate,
+we'd better cleanup this as below:
+
+pr_notice("processor limited to max C-state %d\n", max_cstate);
+
+Thanks
+Hanjun
