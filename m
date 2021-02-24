@@ -2,73 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4519324386
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 19:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB903243C5
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 19:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbhBXSHk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Feb 2021 13:07:40 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:43198 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbhBXSHh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 13:07:37 -0500
-Received: by mail-ot1-f53.google.com with SMTP id v12so1903825ott.10;
-        Wed, 24 Feb 2021 10:07:22 -0800 (PST)
+        id S231895AbhBXSbO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Feb 2021 13:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhBXSbN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 13:31:13 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B1CC06174A
+        for <linux-pm@vger.kernel.org>; Wed, 24 Feb 2021 10:30:33 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id e10so2618853wro.12
+        for <linux-pm@vger.kernel.org>; Wed, 24 Feb 2021 10:30:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=HNg21NrFFSzG03akl4ik4jz1Jh6GwsesirJ9uxFbwiU=;
+        b=mu++/MQTLxhrxBnIq7qWduUGmbOCTgcpg/K1MUKyzsPEvgWoczFajqUT2PUn1tyqty
+         88/iOpznl4DdlFoWt5bbEW8G+TWi2W2NaODfzFYFIqW7wlB0o7S7FkdXU7RmYJziWvWE
+         uw7ZQspVgYGALyjNfRDxE8mA0MlnlQhKUBiWjdJ/FtGugpdAsUCdeuv7ljurlnMUDO1q
+         XlAqJTQn42+dFtqhRvpwy98i2REuaJKoi0J64R4ekhZVivfZ83dVbg6n5WMzxX1aaQG6
+         cV1EaqPusecLBLtdTmM++T2xseC5nGB9Qww8/N/9PCQOZY0Y0gfzzncNSImga6iY6Hvs
+         zGvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oUyGjHMdzy5k0NymwhlK4usRhZbPwNaCWNv1VgX9sq4=;
-        b=Pp5d6XH31agMb/PNwaRhcF2uUPC9xGRRTh/nFuwn18cfpN0PBdnnbs4pT/gHSH7lr7
-         ItIIYL/9PPIzZe+uED3QfWaLHF51iZ/jC2pTfO7aqGmQmQDH7TgWsQ6HtapzR9y3twm/
-         HxlbGIPNdJ58BA6XhliD3BproNqS7vvsQPSV3mEpi/4H9bbnshER3xBztvoi7SEhF7ZO
-         GVkUZCeFVCuR8I8cynvLY5J9ihAZSYs7f8ehY9wZ8uMkVeCC4Tuczjp9YNeTv1hghGjg
-         nnDNlMv9WG3KjLxpCdd8xMX7NiWCyELNb4qpZeN7jH1y03OXE7MFK+oSj0TsnShzh30X
-         wNig==
-X-Gm-Message-State: AOAM533JOAulR06GUJuaIRZ1mrFSigEd93dnixfeoJxZnHLbl/tR9f9I
-        OA+KS25fEigY+B+rfzgicSGJi1HQX+ftp3mr22I=
-X-Google-Smtp-Source: ABdhPJxuXkX+666/Lv6ikmFdus5B0e+dUJwf/jEXpLD1oPXJSXdOJc6n6bAAaO45L9rZTfhBgGz28obtt+9kdAhehVE=
-X-Received: by 2002:a9d:22a5:: with SMTP id y34mr21745058ota.321.1614190017269;
- Wed, 24 Feb 2021 10:06:57 -0800 (PST)
-MIME-Version: 1.0
-References: <5138173.kHyPcihzTF@kreacher> <10245832.OiMb8u2cOm@kreacher>
- <0faea0bd-107b-5c4c-5324-e0cd5e5cfba4@huawei.com> <CAJZ5v0i01rX0b-=dDJEdGsK2=6D3tXbC_wdOByTF_mJ0ggTPJQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i01rX0b-=dDJEdGsK2=6D3tXbC_wdOByTF_mJ0ggTPJQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Feb 2021 19:06:46 +0100
-Message-ID: <CAJZ5v0hwouj_1KpZ_RrC3r50RxngvinBBJVgNhQkwA3bw0oXag@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] ACPI: processor: Get rid of ACPICA message printing
-To:     Hanjun Guo <guohanjun@huawei.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HNg21NrFFSzG03akl4ik4jz1Jh6GwsesirJ9uxFbwiU=;
+        b=B8+Py/0HHZBnHU+8DDLQ4zluLGUieHj8Ic0FCYls4Jf8VdCPUdntZ9BEOzdqsc8Vw2
+         G7KsI6jww0hOF6As8jfMjFE2k6f4WTsfC+ef+1foOZkjtBFyTB5lcTqX5l+lI3E19akb
+         gFDhwc4gMGd4el/M5fb3PnnRphYxoeq9diHDlaLxPgTD848qcU39lhafA4/+PRgQ1YBW
+         3G99eBvgUjtNL7Ra2n9RlOWnnJtsIKez6MRlhs5cUcjAKMzEdZZFqzPdX5xyfmcc8/Ud
+         islTp7FGlqfjeBXx9RtO/JY32AF6o33E8K+DKHPQ88CQMtGCruoeGcDrr3A12rWzAAtw
+         7CLg==
+X-Gm-Message-State: AOAM5330oyxs7FqMCsl3zzhf7I6NowZbt1NUp3S8CbW6MXKzfRiRxE6u
+        HLP+VqhAqSgL6gXm+Ycs0NL4QQ==
+X-Google-Smtp-Source: ABdhPJzJy+BLK7QYhJw1l12NeERtA6m/kc2WzhAzLxQEKBKKAcv85+3becrDuG5cYXWTx+aCViGE3g==
+X-Received: by 2002:adf:8151:: with SMTP id 75mr3926866wrm.152.1614191431901;
+        Wed, 24 Feb 2021 10:30:31 -0800 (PST)
+Received: from localhost.localdomain (lns-bzn-59-82-252-157-252.adsl.proxad.net. [82.252.157.252])
+        by smtp.gmail.com with ESMTPSA id c12sm5105987wru.71.2021.02.24.10.30.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Feb 2021 10:30:31 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 1/2] powercap/drivers/dtpm: Fix root node initialization
+Date:   Wed, 24 Feb 2021 19:30:21 +0100
+Message-Id: <20210224183022.11846-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 3:45 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Feb 23, 2021 at 12:31 PM Hanjun Guo <guohanjun@huawei.com> wrote:
-> >
-> > On 2021/2/23 2:59, Rafael J. Wysocki wrote:
-> > > Index: linux-pm/drivers/acpi/processor_idle.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/acpi/processor_idle.c
-> > > +++ linux-pm/drivers/acpi/processor_idle.c
-> >
-> > In this file, function acpi_processor_cstate_first_run_checks()
-> > has a wrong pr_notice():
-> >
-> > pr_notice("ACPI: processor limited to max C-state %d\n",
-> >                 max_cstate);
-> >
-> > Since we have pr_fmt() for this file, "ACPI:" is duplicate,
-> > we'd better cleanup this as below:
-> >
-> > pr_notice("processor limited to max C-state %d\n", max_cstate);
->
-> Thanks for pointing this out, I'll make this change when applying the patch.
+The root node is not set to NULL when the dtpm root node is
+removed. Consequently, it is not possible to create a new root as it
+is already set.
 
-Actually, this issue is not strictly related to the patch here, so I'm
-going to send a separate patch to fix it.
+Set the root node to NULL when the last node is removed.
+
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/powercap/dtpm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 5a51cd34a7e8..c2185ec5f887 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -207,6 +207,9 @@ int dtpm_release_zone(struct powercap_zone *pcz)
+ 	if (dtpm->ops)
+ 		dtpm->ops->release(dtpm);
+ 
++	if (root == dtpm)
++		root = NULL;
++
+ 	kfree(dtpm);
+ 
+ 	return 0;
+-- 
+2.17.1
+
