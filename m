@@ -2,212 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 104A1323B81
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 12:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8E0323C11
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 13:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbhBXLv1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Feb 2021 06:51:27 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:58150 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233445AbhBXLvZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 24 Feb 2021 06:51:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1614167484; x=1645703484;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=icYCP5cU+RA38rrwM1op/xIQLq/s0pzO62jNoky0aCg=;
-  b=DDdgRMCJG5IEAQ3/0hPwx+rIhS/g1DdmKzzeKK6kUQmT9zEYJwIQx4ba
-   Q3gKLjtl4hbtubKEEy6WP/vzqhYxLCSgPerCrQqs18E9le45mQXYc4fe3
-   ZB6Upg6qiuKaOnhnXLO29NmeCyTGqPDgXwiNNnOwQILfme6qEQCo1rNTR
-   fIWRVmd+F769HMjpNcx34X4y/zX51wq6M/6k/Ka6Mb4MUibd85Cf8n6Ah
-   ekXXrASezGkhd0F/ghZii8vlvvCUBhk559cHfhadPwwAzME98hpYZrUMM
-   yaVv/Ba0te3JT4Nt5k0hYP+XvK/QmoV9uYNVYLutkM0+zZXCi5J/uut3Y
-   Q==;
-IronPort-SDR: 0LltqTdV1DqXT7w//ES3q9IhEKptWbEhwjY0fzFOyX3yoYCXoGux46f1iF1mZC8wc/8vIlHhxr
- ogu6cw3slikiAjOlqAxtzm3VCe4F+uCU81teGzH5yW2jq9SkKqXoGI4aPnY0V6NfmIwuTL3y3C
- k3I9ihVv2wjLuWQc3nYQA+8atIgNz9s6f9ZoAA8+mRCO68Qi+/TAjVvfdnFv7KDpVjRHyDMAYD
- ed1r4Xl1Vc6fCqP86oWcwDspSLORQwxD7OcJi5TqeBwvF4BzF4e89417VFm9+yRqkMMfGavjyb
- SjA=
-X-IronPort-AV: E=Sophos;i="5.81,202,1610406000"; 
-   d="scan'208";a="16144924"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 24 Feb 2021 12:50:42 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 24 Feb 2021 12:50:42 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 24 Feb 2021 12:50:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1614167442; x=1645703442;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=icYCP5cU+RA38rrwM1op/xIQLq/s0pzO62jNoky0aCg=;
-  b=QAFk6EqH1svbyeJGwRov9MX5sYAnbzEoPiyTyQ6CFGceEr9usAV09sWe
-   +l3j8iyzK8E6Eqy1T9niWw/hWoCqYHYctc4as/qxADfvZNfqZy/BiwIao
-   JzVCKP51oqT+JwaQCUCRT2oTq1vLvfwxi6bFLXja/luu/mtgke5ST2ZOH
-   usx9cyOwFB69mOwMUcCC3DxxF62oRN0+LdX9wJLQEa5EGHxRR5wybEpDg
-   wxWiMMry8zD0yGlfPy0mpLsSlhc+k6EjFtmpbGlenDOq3Li0rCFbSha1a
-   aLzM9GfteQdoXij7sGt6mvgnc18CcTI1RcinkPLicO9/Cy2DqOH8AHToL
-   Q==;
-IronPort-SDR: elaRCa4IfFyxceGUdNyZsWvpCZr00m7648yC9CztrDsDthkuMq5Cv1mmK4nRAQxXH/lD3SbzMM
- NfbRkGK2uAFXAJ4jZNmM9xa0AktiN8sGJBd7Npy+YtgNicHrvtO/7Hbe9deMJtRxnel8zbnrgv
- aWrJDPqO57F3Kbwu7yLcrOY9tIpdz5z2L0pNo4Lu8eCtPdJMy6Tm0gB/XTwPPreLVXTXLgZQHp
- tH1oFeZi/b+GxdnLMTJ9KuAe4OuHvjKUapankLsCGrRvEpX2kk1y89iHQKq+4w/JJnxdxQLNbZ
- ZlE=
-X-IronPort-AV: E=Sophos;i="5.81,202,1610406000"; 
-   d="scan'208";a="16144923"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 24 Feb 2021 12:50:42 +0100
-Received: from schifferm-ubuntu4.tq-net.de (schifferm-ubuntu4.tq-net.de [10.121.48.12])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 1E503280070;
-        Wed, 24 Feb 2021 12:50:42 +0100 (CET)
-X-CheckPoint: {60363D8F-17-7A65FF6A-CBEA163E}
-X-MAIL-CPID: 603F260884BBEF3AA2A1D91C050EB747_5
-X-Control-Analysis: str=0001.0A782F24.60363D92.0052,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Message-ID: <b9fb6bc3255c085c6336736c2fd7e76b1fcb8de9.camel@ew.tq-group.com>
-Subject: Re: [PATCH 2/3] power: supply: bq27xxx: fix power_avg
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Dan Murphy <dmurphy@ti.com>,
-        Pali =?ISO-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Andreas Kemnade <andreas@kemnade.info>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 24 Feb 2021 12:50:39 +0100
-In-Reply-To: <20210223141122.9574-2-matthias.schiffer@ew.tq-group.com>
-References: <20210223141122.9574-1-matthias.schiffer@ew.tq-group.com>
-         <20210223141122.9574-2-matthias.schiffer@ew.tq-group.com>
+        id S231974AbhBXMrG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Feb 2021 07:47:06 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:40025 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231810AbhBXMrD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 07:47:03 -0500
+Received: by mail-ot1-f48.google.com with SMTP id b8so1983479oti.7;
+        Wed, 24 Feb 2021 04:46:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6jB0IWEXg2hyE52rBNDsQmAI4TXSzoyWftlUHEZ3npU=;
+        b=sT+lh+Leju4gBXc6zaymHskmfw+c5bFqoI7nlDxz8V8lK8UGlHagZP+46m9IYY8U4K
+         YL1qQNYOX9fRNzJyEFOZMVqrxQ3oou1EIQnJccavsGdsyi2IgAtPTA40Wir4ZPfGgJ/+
+         30VB7CwrKSisyvMsQ/8027zz8cfZr4dr4iyRCEhuFQU3RtN3NY4aL2Ro7H0WUH9rb0kM
+         Uo9uDdNw3N44xf+XPd2rv6fIQp603sJQn0/efE2nch3C2nTiw88eYmjKnBQqK/TQcc9u
+         mrjUQfmKVyXaL/8WAseaumZao+tEfbEgcQa4yhDLB4prjI3Kl6oHAl+H0eA0TUdfpzRC
+         T81A==
+X-Gm-Message-State: AOAM533V3HOacZEH6KNBTbB8BweVm1wfyxpkfWV2eshkLyZfcTXY4wXE
+        gh54S6tCWdEirjjcTfKjm9HEqNpUIOg0h1Z8PPQ=
+X-Google-Smtp-Source: ABdhPJx0enaS2hTi5q7KlOAmTRY3RKlyy8XwiRNO/88tppv++ojpnGyqvRlYpyDHETK4Q6aP/s7YQcDXxs5EEbMpvTs=
+X-Received: by 2002:a05:6830:1e03:: with SMTP id s3mr3606524otr.260.1614170782934;
+ Wed, 24 Feb 2021 04:46:22 -0800 (PST)
+MIME-Version: 1.0
+References: <20210218082514.1437-1-zbestahu@gmail.com> <20210218102029.syj6vkltlbtoxsig@vireshk-i7>
+ <20210219113804.00004a7e.zbestahu@gmail.com> <20210219040933.2o5hhbjb6emf3xl4@vireshk-i7>
+ <20210219144140.00004de9.zbestahu@gmail.com> <20210219074249.2hcwcnakihor343h@vireshk-i7>
+ <20210219162026.00002e2b.zbestahu@gmail.com> <20210219093551.bykqhjk6xvs4kszi@vireshk-i7>
+ <20210219194509.00005884.zbestahu@gmail.com> <20210222053014.s45odi3qsfio2ahp@vireshk-i7>
+ <20210222170420.000019a3.zbestahu@163.com> <CAJZ5v0jouxkj5uKrkNSBZUxXkSNjGY5NAo3zAqSaO9rJBGcqCQ@mail.gmail.com>
+ <20210224102435.00006325.zbestahu@gmail.com>
+In-Reply-To: <20210224102435.00006325.zbestahu@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 Feb 2021 13:46:11 +0100
+Message-ID: <CAJZ5v0jfSuWF2LX5c475P0hM0QED6SsWe_BdcogcPM2_8qpztA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: schedutil: Don't consider freq reduction to busy
+ CPU if need_freq_update is set
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yue Hu <huyue2@yulong.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2021-02-23 at 15:11 +0100, Matthias Schiffer wrote:
-> On all newer bq27xxx ICs, the AveragePower register contains a signed
-> value; in addition to handling the raw value as unsigned, the driver
-> code also didn't convert it to µW as expected.
-> 
-> At least for the BQ28Z610, the reference manual incorrectly states that
-> the value is in units of 1mA and not 10mA. I have no way of knowing
-> whether the manuals of other supported ICs contain the same error, or if
-> there are models that actually use 1mA. At least, the new code shouldn't
-> be *less* correct than the old version for any device
+On Wed, Feb 24, 2021 at 3:24 AM Yue Hu <zbestahu@gmail.com> wrote:
+>
+> On Mon, 22 Feb 2021 15:30:34 +0100
+> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>
+> > On Mon, Feb 22, 2021 at 2:57 PM Yue Hu <zbestahu@163.com> wrote:
+> > >
+> > > On Mon, 22 Feb 2021 11:00:14 +0530
+> > > Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > > On 19-02-21, 19:45, Yue Hu wrote:
+> > > > > We will set next_f to next_freq(previous freq) if next_f is
+> > > > > reduced for busy CPU. Then the next sugov_update_next_freq() will check
+> > > > > if next_freq matches next_f if need_freq_update is not set.
+> > > > > Obviously, we will do nothing for the case. And The related check to
+> > > > > fast_switch_enabled and raw_spin_{lock,unlock} operations are
+> > > > > unnecessary.
+> > > >
+> > > > Right, but we will still need sugov_update_next_freq() to have the
+> > > > same implementation regardless and so I am not sure if we should add
+> > >
+> > > Yes, sugov_update_next_freq() should be keeping current logic for corner case.
+> > >
+> > > > this change:
+> > > >
+> > > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > > > index 41e498b0008a..7289e1adab73 100644
+> > > > --- a/kernel/sched/cpufreq_schedutil.c
+> > > > +++ b/kernel/sched/cpufreq_schedutil.c
+> > > > @@ -362,6 +362,9 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+> > > >          * recently, as the reduction is likely to be premature then.
+> > > >          */
+> > > >         if (sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
+> > > > +               if (!sg_policy->need_freq_update)
+> > >
+> > > The initial purpose about code of `next_f = sg_policy->next_freq` here (for special CPU busy
+> > > case) should be skipping the freq update.
+> > >
+> > > Since commit 600f5badb78c ("cpufreq: schedutil: Don't skip freq update when limits change"),
+> > > we add the check to busy CPU for not skipping the update, we need to update the freq using
+> > > computed one because limits change.
+> > >
+> > > After commit 23a881852f3e ("cpufreq: schedutil: Don't skip freq update if need_freq_update
+> > > is set"), we removed the need_freq_update check(no issue of commit 600f5badb78c anymore?)
+> > > and introduce to always do an update in sugov_update_next_freq() if need_freq_update is set
+> > > even though current freq == sg_policy->next_freq because of corner case issue. But that is
+> > > conflict with original purpose of the freq skip code (next_f = sg_policy->next_freq) of
+> > > busy CPU.
+> >
+> > That's because we realized that it was not always a good idea to skip
+> > the update even if next_f == sg_policy->next_freq.
+> >
+> > That's why CPUFREQ_NEED_UPDATE_LIMITS has been introduced and the
+> > current flow is a result of subsequent code rearrangements.
+>
+> ok, care about unnecessary(should be) behaviors(fast_switch_enabled and raw_spin_{lock,unlock})
+> if need_freq_update is unset?
+>
+> If we care, i will send another patch (which is different from above change for busy CPU).
 
-Ugh, of course this section should talk about mW and not mA. I'll wait
-if there is more feedback and then send a v2.
-
-
-> .
-> 
-> power_avg is removed from the cache structure, se we don't have to
-> extend it to store both a signed value and an error code. Always getting
-> an up-to-date value may be desirable anyways, as it avoids inconsistent
-> current and power readings when switching between charging and
-> discharging.
-> 
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> ---
->  drivers/power/supply/bq27xxx_battery.c | 51 ++++++++++++++------------
->  include/linux/power/bq27xxx_battery.h  |  1 -
->  2 files changed, 27 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> index cb6ebd2f905e..20e1dc8a87cf 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -1661,27 +1661,6 @@ static int bq27xxx_battery_read_time(struct bq27xxx_device_info *di, u8 reg)
->  	return tval * 60;
->  }
->  
-> -/*
-> - * Read an average power register.
-> - * Return < 0 if something fails.
-> - */
-> -static int bq27xxx_battery_read_pwr_avg(struct bq27xxx_device_info *di)
-> -{
-> -	int tval;
-> -
-> -	tval = bq27xxx_read(di, BQ27XXX_REG_AP, false);
-> -	if (tval < 0) {
-> -		dev_err(di->dev, "error reading average power register  %02x: %d\n",
-> -			BQ27XXX_REG_AP, tval);
-> -		return tval;
-> -	}
-> -
-> -	if (di->opts & BQ27XXX_O_ZERO)
-> -		return (tval * BQ27XXX_POWER_CONSTANT) / BQ27XXX_RS;
-> -	else
-> -		return tval;
-> -}
-> -
->  /*
->   * Returns true if a battery over temperature condition is detected
->   */
-> @@ -1769,8 +1748,6 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
->  		}
->  		if (di->regs[BQ27XXX_REG_CYCT] != INVALID_REG_ADDR)
->  			cache.cycle_count = bq27xxx_battery_read_cyct(di);
-> -		if (di->regs[BQ27XXX_REG_AP] != INVALID_REG_ADDR)
-> -			cache.power_avg = bq27xxx_battery_read_pwr_avg(di);
->  
->  		/* We only have to read charge design full once */
->  		if (di->charge_design_full <= 0)
-> @@ -1833,6 +1810,32 @@ static int bq27xxx_battery_current(struct bq27xxx_device_info *di,
->  	return 0;
->  }
->  
-> +/*
-> + * Get the average power in µW
-> + * Return < 0 if something fails.
-> + */
-> +static int bq27xxx_battery_pwr_avg(struct bq27xxx_device_info *di,
-> +				   union power_supply_propval *val)
-> +{
-> +	int power;
-> +
-> +	power = bq27xxx_read(di, BQ27XXX_REG_AP, false);
-> +	if (power < 0) {
-> +		dev_err(di->dev,
-> +			"error reading average power register %02x: %d\n",
-> +			BQ27XXX_REG_AP, power);
-> +		return power;
-> +	}
-> +
-> +	if (di->opts & BQ27XXX_O_ZERO)
-> +		val->intval = (power * BQ27XXX_POWER_CONSTANT) / BQ27XXX_RS;
-> +	else
-> +		/* Other gauges return a signed value in units of 10mW */
-> +		val->intval = (int)((s16)power) * 10000;
-> +
-> +	return 0;
-> +}
-> +
->  static int bq27xxx_battery_status(struct bq27xxx_device_info *di,
->  				  union power_supply_propval *val)
->  {
-> @@ -2020,7 +2023,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
->  		ret = bq27xxx_simple_value(di->cache.energy, val);
->  		break;
->  	case POWER_SUPPLY_PROP_POWER_AVG:
-> -		ret = bq27xxx_simple_value(di->cache.power_avg, val);
-> +		ret = bq27xxx_battery_pwr_avg(di, val);
->  		break;
->  	case POWER_SUPPLY_PROP_HEALTH:
->  		ret = bq27xxx_simple_value(di->cache.health, val);
-> diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
-> index 111a40d0d3d5..8d5f4f40fb41 100644
-> --- a/include/linux/power/bq27xxx_battery.h
-> +++ b/include/linux/power/bq27xxx_battery.h
-> @@ -53,7 +53,6 @@ struct bq27xxx_reg_cache {
->  	int capacity;
->  	int energy;
->  	int flags;
-> -	int power_avg;
->  	int health;
->  };
->  
-
+Please send a patch and we'll see (this is how things go).
