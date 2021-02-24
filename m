@@ -2,156 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B02324364
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 18:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5889324375
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 19:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbhBXRy2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Feb 2021 12:54:28 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:52828 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbhBXRy1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 12:54:27 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_smtp) via UNIX with SMTP (IdeaSmtpServer 0.83.537)
- id 41ccb729f266e117; Wed, 24 Feb 2021 18:53:44 +0100
-Received: from kreacher.localnet (89-64-80-80.dynamic.chello.pl [89.64.80.80])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 79D6666152E;
-        Wed, 24 Feb 2021 18:53:43 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "elaine.zhang" <zhangqing@rock-chips.com>
-Subject: [PATCH v1] PM: runtime: Update device status before letting suppliers suspend
-Date:   Wed, 24 Feb 2021 18:53:42 +0100
-Message-ID: <1930477.9OOUKYNkGr@kreacher>
+        id S231561AbhBXSBs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Feb 2021 13:01:48 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41296 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229498AbhBXSBr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 13:01:47 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11OHYUs6186082;
+        Wed, 24 Feb 2021 13:00:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=7/iyiJqTTQ43euepQ5R46rfta0qytW9mHq3cQkcFOhA=;
+ b=rycovHuMHxJOBJiHGINaW215vwFddh/3XjJ3NlhVfmNwgH3+V94yGQzuPUJG7B2u2Z+L
+ Cw+s0JoSp07NaASebApB361naIz5s8+ZiGrWx/GgfP2ECACHfLL/hIbH7a8uri7JnuzO
+ ed4G7+jifQiWp0uUZzoLcvASqEM3tAuN6jRHijX/YmQCy5THYtTqNiEDtr2070ShmJAf
+ nQaWeRZw0X5ShdJTKxoW6qoe2IPronybjHE7m8yHc4R3gb8LmF4eKqvJuEz5zrTpbfvM
+ wm7hK6/UT2CYMMhysYvwTWVGoTsbdksdASUIP3u2817t/y6vgod8IdZ2f+7qlDB7A6lR vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36wmac1r3p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Feb 2021 13:00:59 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11OHale5005505;
+        Wed, 24 Feb 2021 13:00:58 -0500
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36wmac1r32-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Feb 2021 13:00:58 -0500
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11OHvRdI016687;
+        Wed, 24 Feb 2021 18:00:57 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma01dal.us.ibm.com with ESMTP id 36tt2a0mb9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Feb 2021 18:00:57 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11OI0uN438797644
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Feb 2021 18:00:56 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8678778063;
+        Wed, 24 Feb 2021 18:00:56 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 98E897805F;
+        Wed, 24 Feb 2021 18:00:54 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.80.227.153])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Feb 2021 18:00:54 +0000 (GMT)
+Message-ID: <b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/9] tpm: Allow PCR 23 to be restricted to kernel-only
+ use
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Matthew Garrett <matthewgarrett@google.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
+        keyrings@vger.kernel.org, zohar@linux.ibm.com, jarkko@kernel.org,
+        corbet@lwn.net, rjw@rjwysocki.net,
+        Matthew Garrett <mjg59@google.com>
+Date:   Wed, 24 Feb 2021 10:00:53 -0800
+In-Reply-To: <20210220013255.1083202-3-matthewgarrett@google.com>
+References: <20210220013255.1083202-1-matthewgarrett@google.com>
+         <20210220013255.1083202-3-matthewgarrett@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrkeejgddutdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtvdenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeeiueevhfeigffhffevueekgedtleeitdfhffejleevtddvtdettedvfffffffhjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrieegrdektddrkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedtrdektddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopeiihhgrnhhgqhhinhhgsehrohgtkhdqtghhihhpshdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-24_08:2021-02-24,2021-02-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1011
+ lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102240137
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sat, 2021-02-20 at 01:32 +0000, Matthew Garrett wrote:
+> Under certain circumstances it might be desirable to enable the
+> creation of TPM-backed secrets that are only accessible to the
+> kernel. In an ideal world this could be achieved by using TPM
+> localities, but these don't appear to be available on consumer
+> systems.
 
-Because the PM-runtime status of the device is not updated in
-__rpm_callback(), attempts to suspend the suppliers of the given
-device triggered by rpm_put_suppliers() called by it may fail.
+I don't understand this ... the localities seem to work fine on all the
+systems I have ... is this some embedded thing?
 
-Fix this by making __rpm_callback() update the device's status to
-RPM_SUSPENDED before calling rpm_put_suppliers() if the current
-status of the device is RPM_SUSPENDING and the callback just invoked
-by it has returned 0 (success).
+>  An alternative is to simply block userland from modifying one of the
+> resettable PCRs, leaving it available to the kernel. If the kernel
+> ensures that no userland can access the TPM while it is carrying out
+> work, it can reset PCR 23, extend it to an arbitrary value, create or
+> load a secret, and then reset the PCR again. Even if userland somehow
+> obtains the sealed material, it will be unable to unseal it since PCR
+> 23 will never be in the appropriate state.
 
-While at it, modify the code in __rpm_callback() to always check
-the device's PM-runtime status under its PM lock.
+This seems a bit arbitrary: You're removing this PCR from user space
+accessibility, but PCR 23 is defined as "Application Support" how can
+we be sure no application will actually want to use it (and then fail)?
 
-Link: https://lore.kernel.org/linux-pm/CAPDyKFqm06KDw_p8WXsM4dijDbho4bb6T4k50UqqvR1_COsp8g@mail.gmail.com/
-Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
-Reported-by: elaine.zhang <zhangqing@rock-chips.com>
-Diagnosed-by: Ulf Hansson <ulf.hansson@linaro.org> 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+Since PCRs are very scarce, why not use a NV index instead.  They're
+still a bounded resource, but most TPMs have far more of them than they
+do PCRs, and the address space is much bigger so picking a nice
+arbitrary 24 bit value reduces the chance of collisions.
 
-This is different from the previously posted tentative patch, please retest.
-
----
- drivers/base/power/runtime.c |   61 +++++++++++++++++++++++++------------------
- 1 file changed, 36 insertions(+), 25 deletions(-)
-
-Index: linux-pm/drivers/base/power/runtime.c
-===================================================================
---- linux-pm.orig/drivers/base/power/runtime.c
-+++ linux-pm/drivers/base/power/runtime.c
-@@ -325,22 +325,21 @@ static void rpm_put_suppliers(struct dev
- static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
- 	__releases(&dev->power.lock) __acquires(&dev->power.lock)
- {
--	int retval, idx;
- 	bool use_links = dev->power.links_count > 0;
-+	int retval, idx;
-+	bool get, put;
- 
- 	if (dev->power.irq_safe) {
- 		spin_unlock(&dev->power.lock);
-+	} else if (!use_links) {
-+		spin_unlock_irq(&dev->power.lock);
- 	} else {
-+		get = dev->power.runtime_status == RPM_RESUMING;
-+
- 		spin_unlock_irq(&dev->power.lock);
- 
--		/*
--		 * Resume suppliers if necessary.
--		 *
--		 * The device's runtime PM status cannot change until this
--		 * routine returns, so it is safe to read the status outside of
--		 * the lock.
--		 */
--		if (use_links && dev->power.runtime_status == RPM_RESUMING) {
-+		/* Resume suppliers if necessary. */
-+		if (get) {
- 			idx = device_links_read_lock();
- 
- 			retval = rpm_get_suppliers(dev);
-@@ -355,24 +354,36 @@ static int __rpm_callback(int (*cb)(stru
- 
- 	if (dev->power.irq_safe) {
- 		spin_lock(&dev->power.lock);
--	} else {
--		/*
--		 * If the device is suspending and the callback has returned
--		 * success, drop the usage counters of the suppliers that have
--		 * been reference counted on its resume.
--		 *
--		 * Do that if resume fails too.
--		 */
--		if (use_links
--		    && ((dev->power.runtime_status == RPM_SUSPENDING && !retval)
--		    || (dev->power.runtime_status == RPM_RESUMING && retval))) {
--			idx = device_links_read_lock();
-+		return retval;
-+	}
- 
-- fail:
--			rpm_put_suppliers(dev);
-+	spin_lock_irq(&dev->power.lock);
- 
--			device_links_read_unlock(idx);
--		}
-+	if (!use_links)
-+		return retval;
-+
-+	/*
-+	 * If the device is suspending and the callback has returned success,
-+	 * drop the usage counters of the suppliers that have been reference
-+	 * counted on its resume.
-+	 *
-+	 * Do that if the resume fails too.
-+	 */
-+	put = dev->power.runtime_status == RPM_SUSPENDING && !retval;
-+	if (put)
-+		__update_runtime_status(dev, RPM_SUSPENDED);
-+	else
-+		put = get && retval;
-+
-+	if (put) {
-+		spin_unlock_irq(&dev->power.lock);
-+
-+		idx = device_links_read_lock();
-+
-+fail:
-+		rpm_put_suppliers(dev);
-+
-+		device_links_read_unlock(idx);
- 
- 		spin_lock_irq(&dev->power.lock);
- 	}
-
+James
 
 
