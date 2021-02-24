@@ -2,68 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 491213243D8
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 19:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E2A3243F8
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 19:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbhBXSh6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Feb 2021 13:37:58 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:59938 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbhBXSh5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 13:37:57 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_smtp) via UNIX with SMTP (IdeaSmtpServer 0.83.537)
- id 4a655fdd08b609bf; Wed, 24 Feb 2021 19:37:14 +0100
-Received: from kreacher.localnet (89-64-80-80.dynamic.chello.pl [89.64.80.80])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 00E18661E2A;
-        Wed, 24 Feb 2021 19:37:12 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+        id S234371AbhBXSrK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Feb 2021 13:47:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34182 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233582AbhBXSrI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Feb 2021 13:47:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5623064F0B;
+        Wed, 24 Feb 2021 18:46:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614192388;
+        bh=9biktzQADayIun6a+EnBTvkBSvdnAjQigj83Wz68Bkg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=lwKvb1jc4aQU6E54cU0/rK180utsF/dCpPS12aHErAWefA9mGbeZYRBiSwZkkBrZi
+         /IYOVPi3C/dGDk8D+6XJ3ip2TeBe2HFyKBHiCxNe4N8mVKRmZLyQCHM0yvw4dZ6YS5
+         C2hvR0kaTdFtP2B6BAC9gEHoaJ9ghIodu9lM96aSFhkWaoegQy9tlkdc41kmvL6bCo
+         QC13wpjsG/jCPz/xJt/krKtNWcoSSCa42OTswmcaAwzB28e+j/HufCAYEtns1G5tQ9
+         /VqlESBL5L8BIrCtJnJWsCezcmcW8IvfzaFtqaolM8HWK5kiyuqqeqiCLPwtk+g8BP
+         2ytzNneTJyRLA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4FA3F60176;
+        Wed, 24 Feb 2021 18:46:28 +0000 (UTC)
+Subject: Re: [GIT PULL] Simple Firmware Interface (SFI) support removal for v5.12-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0j-pXGo4EFkwS23xWuhmw8ZgS8PPxE0NqQuj_3gzH+gMA@mail.gmail.com>
+References: <CAJZ5v0j-pXGo4EFkwS23xWuhmw8ZgS8PPxE0NqQuj_3gzH+gMA@mail.gmail.com>
+X-PR-Tracked-List-Id: <platform-driver-x86.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0j-pXGo4EFkwS23xWuhmw8ZgS8PPxE0NqQuj_3gzH+gMA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git sfi-removal-5.12-rc1
+X-PR-Tracked-Commit-Id: c9c26882776a7adddb0173778957e690ac47b195
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c4fbde84fedeaf513ec96f0c6ed3f352bdcd61d6
+Message-Id: <161419238832.20610.95673983797373463.pr-tracker-bot@kernel.org>
+Date:   Wed, 24 Feb 2021 18:46:28 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Hanjun Guo <guohanjun@huawei.com>
-Subject: [PATCH v1] ACPI: processor: idle: Drop extra prefix from pr_notice()
-Date:   Wed, 24 Feb 2021 19:37:12 +0100
-Message-ID: <1888725.8kdNXL6VX8@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrkeejgdduudefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtvdenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeevudefgfeguedtjedvhfetveegleduveeuvedvjeekleefhfduhfefheekffefveenucfkphepkeelrdeigedrkedtrdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdektddrkedtpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhuohhhrghnjhhunheshhhurgifvghirdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The pull request you sent on Wed, 24 Feb 2021 15:59:15 +0100:
 
-Drop "ACPI: " from the pr_noitice() instance in
-acpi_processor_cstate_first_run_checks(), because pr_fmt() causes
-that prefix to be added to the message already.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git sfi-removal-5.12-rc1
 
-Reported-by: Hanjun Guo <guohanjun@huawei.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/processor_idle.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c4fbde84fedeaf513ec96f0c6ed3f352bdcd61d6
 
-Index: linux-pm/drivers/acpi/processor_idle.c
-===================================================================
---- linux-pm.orig/drivers/acpi/processor_idle.c
-+++ linux-pm/drivers/acpi/processor_idle.c
-@@ -780,8 +780,8 @@ static inline void acpi_processor_cstate
- 	dmi_check_system(processor_power_dmi_table);
- 	max_cstate = acpi_processor_cstate_check(max_cstate);
- 	if (max_cstate < ACPI_C_STATES_MAX)
--		pr_notice("ACPI: processor limited to max C-state %d\n",
--			  max_cstate);
-+		pr_notice("processor limited to max C-state %d\n", max_cstate);
-+
- 	first_run++;
- 
- 	if (nocst)
+Thank you!
 
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
