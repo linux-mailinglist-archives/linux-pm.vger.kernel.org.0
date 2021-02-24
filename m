@@ -2,211 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66E632361D
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 04:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F142F3236FB
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 06:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbhBXDnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Feb 2021 22:43:09 -0500
-Received: from regular1.263xmail.com ([211.150.70.195]:36752 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbhBXDnI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Feb 2021 22:43:08 -0500
-Received: from localhost (unknown [192.168.167.69])
-        by regular1.263xmail.com (Postfix) with ESMTP id C902D1CB0;
-        Wed, 24 Feb 2021 11:37:07 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [172.16.12.236] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P17142T139833559475968S1614137826308926_;
-        Wed, 24 Feb 2021 11:37:07 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <81531836e9dde48ef5fd1b797e21ffcd>
-X-RL-SENDER: zhangqing@rock-chips.com
-X-SENDER: zhangqing@rock-chips.com
-X-LOGIN-NAME: zhangqing@rock-chips.com
-X-FST-TO: kever.yang@rock-chips.com
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-Subject: Re: [REPORT_ISSUE]: RK3399 pd power down failed
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     heiko <heiko@sntech.de>, Finley Xiao <finley.xiao@rock-chips.com>,
-        "len.brown" <len.brown@intel.com>, pavel <pavel@ucw.cz>,
-        gregkh <gregkh@linuxfoundation.org>,
-        khilman <khilman@kernel.org>,
-        linux-rockchip <linux-rockchip@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        "Huang, Tao" <huangtao@rock-chips.com>,
-        =?UTF-8?B?6LCi5L+u6ZGr?= <tony.xie@rock-chips.com>,
-        =?UTF-8?B?5p2o5Yev?= <kever.yang@rock-chips.com>
-References: <20210120172939160049119@rock-chips.com>
- <CAPDyKFqm06KDw_p8WXsM4dijDbho4bb6T4k50UqqvR1_COsp8g@mail.gmail.com>
- <5598462.KkIXRrj88c@kreacher>
-From:   "elaine.zhang" <zhangqing@rock-chips.com>
-Organization: rockchip
-Message-ID: <130265d7-25dc-2bb4-3120-a9730d2d85e1@rock-chips.com>
-Date:   Wed, 24 Feb 2021 11:37:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231790AbhBXFoH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Feb 2021 00:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230482AbhBXFoG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 00:44:06 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF7BC061574;
+        Tue, 23 Feb 2021 21:43:26 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id o22so2785733pjs.1;
+        Tue, 23 Feb 2021 21:43:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EeOAJg9FKeSFi8JUeRunyI4ewgAgU/gYkk0wbUE3MMo=;
+        b=ENGKoPwmhF5aq64yBqBKs+Df45aecC5/KDF+0CGujsPtHOUQXy1VTk5llja8JYBaYe
+         znSJeq2cBEwfRG2aADDw1RK+b6W/RuddFpVSXf79b1CSZLHZLOLyI2U6O7CiRkk9JQVi
+         cGPXoDrcPcCBD1UtAPvVHOlsZ5PLX94221gxS2Muz1UNZ+8+/bzQi9iu/YMjkF+j4zoz
+         IB9dj2xHnb3mMQZsr5eRUKOrkb93QqIH52ya9ni7cRmi0WtamtDhsAockVdxScWdS0DY
+         7fQ8KBzS+ehVwzuf8dPMfSbHoKKkGg1EdzkZgm7mC/5bs8xYFqAjJaGSzyX3pTBT05f8
+         Jv9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EeOAJg9FKeSFi8JUeRunyI4ewgAgU/gYkk0wbUE3MMo=;
+        b=Ud8Gl/fE9LIa55xuBLxbwAFh33hzqBQ3kkqbgP5sVW03MtLcD8maW9uuRIP2ohd0e5
+         aOONCv5SQJeSaPE17bUmMMuRDdr6j6AVdu9DWQ3hhku/3XrORJacueayFdIkxopSpC/b
+         aO/0Zp8er5t3a+09sUIqWtFfIUNQW8FuE24Y/zC4iJYEFpFe5GkJGuo+tfR5hoqc0WzU
+         ALWD5IKYUMTkj+1W8bva7PDnhYnwiVLA7iYk7TLg5B/zcNDv9Cn91ByEaJDCnWjU+0YB
+         SvQyhIs77jZA30Te1Ul0/GKYjGFL8AYr/6pKxK8eXZMTljAkRCkLbLrvR4diXHkS/QJ+
+         YmAA==
+X-Gm-Message-State: AOAM530mnH/TAPbXBzINjI1r7Jvw7n0tuYNi2D9Qhdfmx3EWjhRvpUd1
+        UfDhhOVzhrXB/xWpLRfkap4=
+X-Google-Smtp-Source: ABdhPJxv7hQd+dody8WrVrDzLEBnZCzzFNIPjcvVtwdIbfCtL9MhfWvPGh/5eZrL8TTyLk/PeMSY0w==
+X-Received: by 2002:a17:902:8342:b029:e1:6aa:d770 with SMTP id z2-20020a1709028342b02900e106aad770mr30536878pln.27.1614145405757;
+        Tue, 23 Feb 2021 21:43:25 -0800 (PST)
+Received: from tj.ccdomain.com ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id h2sm835264pgd.32.2021.02.23.21.43.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Feb 2021 21:43:25 -0800 (PST)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, zbestahu@163.com
+Subject: [PATCH] cpufreq: schedutil: Call sugov_update_next_freq() before check to fast_switch_enabled
+Date:   Wed, 24 Feb 2021 13:42:32 +0800
+Message-Id: <20210224054232.1222-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.29.2.windows.3
 MIME-Version: 1.0
-In-Reply-To: <5598462.KkIXRrj88c@kreacher>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,  Rafael:
+From: Yue Hu <huyue2@yulong.com>
 
-在 2021/2/24 上午1:09, Rafael J. Wysocki 写道:
-> On Tuesday, February 23, 2021 12:30:39 PM CET Ulf Hansson wrote:
->> On Wed, 20 Jan 2021 at 10:30, zhangqing@rock-chips.com
->> <zhangqing@rock-chips.com> wrote:
->>> Hi, Heiko :
->>>
->>> In rk3399 evb board,  I found a probabilistic problem about PD. Turning off PD occasionally failed.
->>>
->>> log show：
->>> Open the vop
->>> #modetest -M rockchip -s 42@36:1536x2048 -P 31@36:1536x2048@AR24 -a
->>>
->>> close the vop
->>> #enter
->>>
->>>   # cat sys/kernel/debug/pm_genpd/pm_genpd_summary
->>> domain                          status          slaves
->>>      /device                                             runtime status
->>> ----------------------------------------------------------------------
->>> pd_vopl                         off
->>> pd_vopb                         on
->>>      /devices/platform/ff903f00.iommu                     suspended
->>>      /devices/platform/ff900000.vop                          suspended
->>>
->>> I have checked the codes and concluded that there is a window of time for PD to be closed when using the device link. Once queue_work is executed immediately,  PD power off may be failed.
->>> The process is as follows:
->>>
->>> VOP requests to power off PD:
->>> pm_runtime_put_sync(vop->dev)
->>>      -> rpm_idle(vop)
->>>          -> rpm_suspend(vop)
->>>              -> __update_runtime_status(dev, RPM_SUSPENDING)
->>>                  -> rpm_callback(vop)
->>>                      -> __rpm_callback(vop)
->>>                          -> do power off pd callback(genpd_power_off)
->>>                              -> list_for_each_entry(pdd, &genpd->dev_list, list_node), ff900000.vop: suspending， ff903f00.iommu : active，so not_suspended = 2 return -EBUSY; Not really power off PD。
->>>                                  -> Handle link device callbacks according to device link（rpm_put_suppliers）
->>>                                      -> pm_runtime_put(link->supplier)
->>>                                          -> queue_work(pm_wq, &dev->power.work), execute immediately
->>>                                              ->rpm_idle(iommu)
->>>                                                  -> rpm_suspend(iommu)
->>>                                                      -> rpm_callback(iommu)
->>>                                                          -> rk_iommu_suspend
->>>                                                              ->  do power off pd callback(genpd_power_off)
->>>                                                                  -> list_for_each_entry(pdd, &genpd->dev_list, list_node), ff900000.vop: suspending， ff903f00.iommu : suspending，so not_suspended = 2 return -EBUSY; Not really power off PD。
->>>                                                                      -> iommu do __update_runtime_status(dev, RPM_SUSPENDED)
->>>                                                                          -> vop do __update_runtime_status(dev, RPM_SUSPENDED)
->> So, rpm_suspend() tries to suspend the supplier device link via
->> rpm_put_suppliers(), before it has updated its consumer device's state
->> to RPM_SUSPENDED.
->>
->> This looks worrying to me, both because it's seems wrong to allow a
->> supplier to be suspended before a consumers device's state has reached
->> RPM_SUSPENDED - but also because it's not consistent with the way we
->> treat parent/child devices. The child's state will always be set to
->> RPM_SUSPENDED, before we try to suspend its parent by calling
->> rpm_idle() for it in rpm_suspend().
->>
->> Rafael, what's your take on this? Would it make sense to align the
->> behavior for consumer/supplier-links in rpm_suspend() according to
->> child/parents?
-> Suspending the suppliers before changing the consumer RPM status to
-> "suspended" is indeed incorrect, which is something I overlooked when
-> writing the code in question.
->
-> Fortunately, it seems to be relatively easy to address.
->
-> Please see the appended tentative patch (untested).  It also avoids reading
-> runtime_status outside the lock which is arguably fishy.
->
-> ---
->   drivers/base/power/runtime.c |   24 ++++++++++++++++++++----
->   1 file changed, 20 insertions(+), 4 deletions(-)
->
-> Index: linux-pm/drivers/base/power/runtime.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/runtime.c
-> +++ linux-pm/drivers/base/power/runtime.c
-> @@ -330,7 +330,11 @@ static int __rpm_callback(int (*cb)(stru
->   
->   	if (dev->power.irq_safe) {
->   		spin_unlock(&dev->power.lock);
-> +	} else if (!use_links) {
-> +		spin_unlock_irq(&dev->power.lock);
->   	} else {
-> +		bool get = dev->power.runtime_status == RPM_RESUMING;
-> +
->   		spin_unlock_irq(&dev->power.lock);
->   
->   		/*
-> @@ -340,7 +344,7 @@ static int __rpm_callback(int (*cb)(stru
->   		 * routine returns, so it is safe to read the status outside of
->   		 * the lock.
->   		 */
-> -		if (use_links && dev->power.runtime_status == RPM_RESUMING) {
-> +		if (get) {
->   			idx = device_links_read_lock();
->   
->   			retval = rpm_get_suppliers(dev);
-> @@ -355,7 +359,21 @@ static int __rpm_callback(int (*cb)(stru
->   
->   	if (dev->power.irq_safe) {
->   		spin_lock(&dev->power.lock);
-> +	} if (!use_links) {
-> +		spin_lock_irq(&dev->power.lock);
->   	} else {
-> +		bool put;
-> +
-> +		spin_lock_irq(&dev->power.lock);
-> +
-> +		put = dev->power.runtime_status == RPM_SUSPENDING && !retval;
-> +		if (put)
-> +			__update_runtime_status(dev, RPM_SUSPENDED);
-> +		else
-> +			put = dev->power.runtime_status == RPM_RESUMING && retval;
-> +
-> +		spin_unlock_irq(&dev->power.lock);
-> +
->   		/*
->   		 * If the device is suspending and the callback has returned
->   		 * success, drop the usage counters of the suppliers that have
-> @@ -363,9 +381,7 @@ static int __rpm_callback(int (*cb)(stru
->   		 *
->   		 * Do that if resume fails too.
->   		 */
-> -		if (use_links
-> -		    && ((dev->power.runtime_status == RPM_SUSPENDING && !retval)
-> -		    || (dev->power.runtime_status == RPM_RESUMING && retval))) {
-> +		if (put) {
->   			idx = device_links_read_lock();
->   
->    fail:
+Note that sugov_update_next_freq() may return false, that means the
+caller sugov_fast_switch() will do nothing except fast switch check.
 
-Thank you for your reply.
+Similarly, sugov_deferred_update() also has unnecessary operations
+of raw_spin_{lock,unlock} in sugov_update_single_freq() for that case.
 
-I have tested this patch, and it's works well.Perfect solution to our 
-problem.
+So, let's call sugov_update_next_freq() before the fast switch check
+to avoid unnecessary behaviors above. Update the related interface
+definitions accordingly.
 
-We expect this patch to be committed to the mainline branch.
+Signed-off-by: Yue Hu <huyue2@yulong.com>
+---
+ kernel/sched/cpufreq_schedutil.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
->
->
->
->
-
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 41e498b..d23e5be 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -114,19 +114,13 @@ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+ 	return true;
+ }
+ 
+-static void sugov_fast_switch(struct sugov_policy *sg_policy, u64 time,
+-			      unsigned int next_freq)
++static void sugov_fast_switch(struct sugov_policy *sg_policy, unsigned int next_freq)
+ {
+-	if (sugov_update_next_freq(sg_policy, time, next_freq))
+-		cpufreq_driver_fast_switch(sg_policy->policy, next_freq);
++	cpufreq_driver_fast_switch(sg_policy->policy, next_freq);
+ }
+ 
+-static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
+-				  unsigned int next_freq)
++static void sugov_deferred_update(struct sugov_policy *sg_policy)
+ {
+-	if (!sugov_update_next_freq(sg_policy, time, next_freq))
+-		return;
+-
+ 	if (!sg_policy->work_in_progress) {
+ 		sg_policy->work_in_progress = true;
+ 		irq_work_queue(&sg_policy->irq_work);
+@@ -368,16 +362,19 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+ 		sg_policy->cached_raw_freq = cached_freq;
+ 	}
+ 
++	if (!sugov_update_next_freq(sg_policy, time, next_f))
++		return;
++
+ 	/*
+ 	 * This code runs under rq->lock for the target CPU, so it won't run
+ 	 * concurrently on two different CPUs for the same target and it is not
+ 	 * necessary to acquire the lock in the fast switch case.
+ 	 */
+ 	if (sg_policy->policy->fast_switch_enabled) {
+-		sugov_fast_switch(sg_policy, time, next_f);
++		sugov_fast_switch(sg_policy, next_f);
+ 	} else {
+ 		raw_spin_lock(&sg_policy->update_lock);
+-		sugov_deferred_update(sg_policy, time, next_f);
++		sugov_deferred_update(sg_policy);
+ 		raw_spin_unlock(&sg_policy->update_lock);
+ 	}
+ }
+@@ -456,12 +453,15 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+ 	if (sugov_should_update_freq(sg_policy, time)) {
+ 		next_f = sugov_next_freq_shared(sg_cpu, time);
+ 
++		if (!sugov_update_next_freq(sg_policy, time, next_f))
++			goto unlock;
++
+ 		if (sg_policy->policy->fast_switch_enabled)
+-			sugov_fast_switch(sg_policy, time, next_f);
++			sugov_fast_switch(sg_policy, next_f);
+ 		else
+-			sugov_deferred_update(sg_policy, time, next_f);
++			sugov_deferred_update(sg_policy);
+ 	}
+-
++unlock:
+ 	raw_spin_unlock(&sg_policy->update_lock);
+ }
+ 
+-- 
+1.9.1
 
