@@ -2,214 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D39D323C16
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 13:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF9832415D
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Feb 2021 17:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbhBXMu6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 Feb 2021 07:50:58 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:34220 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbhBXMu5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 07:50:57 -0500
-Received: by mail-ot1-f43.google.com with SMTP id b16so2033165otq.1
-        for <linux-pm@vger.kernel.org>; Wed, 24 Feb 2021 04:50:41 -0800 (PST)
+        id S232821AbhBXPta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Feb 2021 10:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234227AbhBXOnn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Feb 2021 09:43:43 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBDBC06178A
+        for <linux-pm@vger.kernel.org>; Wed, 24 Feb 2021 06:42:36 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id u125so2026695wmg.4
+        for <linux-pm@vger.kernel.org>; Wed, 24 Feb 2021 06:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=3ID/hgUKl1RSEU96QA4fvwKCcAxvndH9usR4QCrUTSg=;
+        b=eMxXV1Fgj/2c77+pZ1G2PmcAqH1R7S8K6jKMxhWmVffCbLwYmqDCbjUC7ilBJY5N6L
+         C6qoKcbIOEZavTSJRQRD2PI36JJBDZw+Iu9TljIiWxNK/VB1RTC1emqDmMHV3M7Nx0zO
+         H2/+skGmZ4CuHIVoriuud2Bm433BVpq2nfvjLFT9F50BsWSlX3P5t72wwasheAMw5DAN
+         K1EAEqFkEa3NF0MF1qwHnC8tiaK2JxGPWCf6bwqoWQ3exO8/zqIHtN2EZLJmSLgIx+Z4
+         TdR5WfnnrkWDjIvFoi72ikk0T+afh589Sv0OVtpyP2yF/fZJxd6Mo1Pkr77r3+8bAkB/
+         6OHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZKjKi7mocSw8ViiWmT6lfQr3sON+8D6k2wvtZXamjTg=;
-        b=XIElRFj/rDpm3JA5il5Asb5bB1aCQ84po8Sjce1+zyFlgqQwGMkylAVKZGBCK2YKIB
-         /mNR1PWSgq3l8uiSwWMwZJF9eem2EdjMA6P6PeLH78O9VJB0v3YAn5JRFX1VbneRjiEx
-         R70Xkbyop2jw1U5guenDDotjKAPjdR5Press5NsM5ZkvBBdLM1/B6GvopIwn0PYsT+tk
-         M7q3Qsw2MJm+L+XZZ3Oph572hz4K0PKSsBrQ6zdCh2vJKf3lksz5vC/3LzwaWUv8zd8w
-         kWMH4Zw9zxFokp87G1HF/q9QYvnZ1fv/868H2JnNozf+ZH1QtQl6Ut7+mPoR+lbbs/s+
-         j6Gg==
-X-Gm-Message-State: AOAM531bsY/BgfnjaAca99wwPF2FgQS1bHQVD9gLdrmWzhhh59ZvfJXM
-        EJ6BaVjelvz6e1so0gsMIND5gbG0d5FFwvJOaQk=
-X-Google-Smtp-Source: ABdhPJxfn4Vgnyd1YfBtd1hl0M79H5Mza06LtHvCy08BO9JW2HCtmP7+TjF2yXsi38VOVCml43YPjUghmUI/miEQEx0=
-X-Received: by 2002:a9d:22a5:: with SMTP id y34mr20618394ota.321.1614171015854;
- Wed, 24 Feb 2021 04:50:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20210120172939160049119@rock-chips.com> <CAPDyKFqm06KDw_p8WXsM4dijDbho4bb6T4k50UqqvR1_COsp8g@mail.gmail.com>
- <5598462.KkIXRrj88c@kreacher> <CAPDyKFphWe=Xu+tuhpoqUUuKV3oW57DNWgZ1X8ceEnN+RE_gpw@mail.gmail.com>
-In-Reply-To: <CAPDyKFphWe=Xu+tuhpoqUUuKV3oW57DNWgZ1X8ceEnN+RE_gpw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Feb 2021 13:50:04 +0100
-Message-ID: <CAJZ5v0grDtJAqLqzPb=xVLBH14_epv7x0s2Se5srzzSR6rKd5w@mail.gmail.com>
-Subject: Re: [REPORT_ISSUE]: RK3399 pd power down failed
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "zhangqing@rock-chips.com" <zhangqing@rock-chips.com>,
-        heiko <heiko@sntech.de>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        "len.brown" <len.brown@intel.com>, pavel <pavel@ucw.cz>,
-        gregkh <gregkh@linuxfoundation.org>,
-        khilman <khilman@kernel.org>,
-        linux-rockchip <linux-rockchip@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        "Huang, Tao" <huangtao@rock-chips.com>,
-        =?UTF-8?B?6LCi5L+u6ZGr?= <tony.xie@rock-chips.com>,
-        =?UTF-8?B?5p2o5Yev?= <kever.yang@rock-chips.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=3ID/hgUKl1RSEU96QA4fvwKCcAxvndH9usR4QCrUTSg=;
+        b=l67tWqA/banAnBC7ykc4w3TrcolSpxC5DxktEZPR2zgdtDEJTQO30wHN7K+EyasOzY
+         xGfc81psC8/dvdz1uF7+qiod59qp1CfIte4WEVDWm6Y2CAxgEu0oSKfQaxuEET/+SP/R
+         19HobdbW7CAKYvGTzgfK47gTKRO8Hz8hbXBeZkLOXUZEi/9gCZw0GUCDBV4+MGEcVCF0
+         IxtNuJs2Je3/mfTum45U26YytFVzBcdiaRS6IO5HPNP9ezrEbTnf+InW7KxHIjQWIsSy
+         UbPKtGMNF42JD6CjXC5BuZat8knsELQKs5crHdipqNTlK9g2po2Guc9IFd2DZYevQXzi
+         6ipw==
+X-Gm-Message-State: AOAM5339r1oYfkyxFl0giV2iv6jDcbcmOTT4/4XfqgEB94JBRMrtCv9P
+        uwC4lHC6Lat0sxFapLY7ZibEMg==
+X-Google-Smtp-Source: ABdhPJwPAmN1xgMC72zqcEAniQ3CRA0ZmA2VlvFovS01NjdoMcJUfwesHkwiEGuLYssl6T1oCYga+g==
+X-Received: by 2002:a1c:9a48:: with SMTP id c69mr696200wme.157.1614177754622;
+        Wed, 24 Feb 2021 06:42:34 -0800 (PST)
+Received: from localhost.localdomain (lns-bzn-59-82-252-157-252.adsl.proxad.net. [82.252.157.252])
+        by smtp.gmail.com with ESMTPSA id p3sm4170669wro.55.2021.02.24.06.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Feb 2021 06:42:34 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, andriy.shevchenko@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        linux-pm@vger.kernel.org (open list:THERMAL)
+Subject: [PATCH v2 2/9] thermal/drivers/devfreq_cooling: Use HZ macros
+Date:   Wed, 24 Feb 2021 15:42:12 +0100
+Message-Id: <20210224144222.23762-2-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210224144222.23762-1-daniel.lezcano@linaro.org>
+References: <20210224144222.23762-1-daniel.lezcano@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 10:46 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Tue, 23 Feb 2021 at 18:09, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > On Tuesday, February 23, 2021 12:30:39 PM CET Ulf Hansson wrote:
-> > > On Wed, 20 Jan 2021 at 10:30, zhangqing@rock-chips.com
-> > > <zhangqing@rock-chips.com> wrote:
-> > > >
-> > > > Hi, Heiko :
-> > > >
-> > > > In rk3399 evb board,  I found a probabilistic problem about PD. Turning off PD occasionally failed.
-> > > >
-> > > > log show：
-> > > > Open the vop
-> > > > #modetest -M rockchip -s 42@36:1536x2048 -P 31@36:1536x2048@AR24 -a
-> > > >
-> > > > close the vop
-> > > > #enter
-> > > >
-> > > >  # cat sys/kernel/debug/pm_genpd/pm_genpd_summary
-> > > > domain                          status          slaves
-> > > >     /device                                             runtime status
-> > > > ----------------------------------------------------------------------
-> > > > pd_vopl                         off
-> > > > pd_vopb                         on
-> > > >     /devices/platform/ff903f00.iommu                     suspended
-> > > >     /devices/platform/ff900000.vop                          suspended
-> > > >
-> > > > I have checked the codes and concluded that there is a window of time for PD to be closed when using the device link. Once queue_work is executed immediately,  PD power off may be failed.
-> > > > The process is as follows:
-> > > >
-> > > > VOP requests to power off PD:
-> > > > pm_runtime_put_sync(vop->dev)
-> > > >     -> rpm_idle(vop)
-> > > >         -> rpm_suspend(vop)
-> > > >             -> __update_runtime_status(dev, RPM_SUSPENDING)
-> > > >                 -> rpm_callback(vop)
-> > > >                     -> __rpm_callback(vop)
-> > > >                         -> do power off pd callback(genpd_power_off)
-> > > >                             -> list_for_each_entry(pdd, &genpd->dev_list, list_node), ff900000.vop: suspending， ff903f00.iommu : active，so not_suspended = 2 return -EBUSY; Not really power off PD。
-> > > >                                 -> Handle link device callbacks according to device link（rpm_put_suppliers）
-> > > >                                     -> pm_runtime_put(link->supplier)
-> > > >                                         -> queue_work(pm_wq, &dev->power.work), execute immediately
-> > > >                                             ->rpm_idle(iommu)
-> > > >                                                 -> rpm_suspend(iommu)
-> > > >                                                     -> rpm_callback(iommu)
-> > > >                                                         -> rk_iommu_suspend
-> > > >                                                             ->  do power off pd callback(genpd_power_off)
-> > > >                                                                 -> list_for_each_entry(pdd, &genpd->dev_list, list_node), ff900000.vop: suspending， ff903f00.iommu : suspending，so not_suspended = 2 return -EBUSY; Not really power off PD。
-> > > >                                                                     -> iommu do __update_runtime_status(dev, RPM_SUSPENDED)
-> > > >                                                                         -> vop do __update_runtime_status(dev, RPM_SUSPENDED)
-> > >
-> > > So, rpm_suspend() tries to suspend the supplier device link via
-> > > rpm_put_suppliers(), before it has updated its consumer device's state
-> > > to RPM_SUSPENDED.
-> > >
-> > > This looks worrying to me, both because it's seems wrong to allow a
-> > > supplier to be suspended before a consumers device's state has reached
-> > > RPM_SUSPENDED - but also because it's not consistent with the way we
-> > > treat parent/child devices. The child's state will always be set to
-> > > RPM_SUSPENDED, before we try to suspend its parent by calling
-> > > rpm_idle() for it in rpm_suspend().
-> > >
-> > > Rafael, what's your take on this? Would it make sense to align the
-> > > behavior for consumer/supplier-links in rpm_suspend() according to
-> > > child/parents?
-> >
-> > Suspending the suppliers before changing the consumer RPM status to
-> > "suspended" is indeed incorrect, which is something I overlooked when
-> > writing the code in question.
-> >
-> > Fortunately, it seems to be relatively easy to address.
-> >
-> > Please see the appended tentative patch (untested).  It also avoids reading
-> > runtime_status outside the lock which is arguably fishy.
->
-> Great, thanks for your quick reply!
->
-> A minor comment on the below change, but otherwise feel free add my
-> reviewed-by tag.
+HZ unit conversion macros are available in units.h, use them and
+remove the duplicate definition.
 
-Thanks!
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Christian Eggers <ceggers@arri.de>
+---
+ drivers/thermal/devfreq_cooling.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm going to submit an updated patch that avoids some unnecessary
-locking overhead.
+diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+index fed3121ff2a1..fa5b8b0c7604 100644
+--- a/drivers/thermal/devfreq_cooling.c
++++ b/drivers/thermal/devfreq_cooling.c
+@@ -19,10 +19,10 @@
+ #include <linux/pm_opp.h>
+ #include <linux/pm_qos.h>
+ #include <linux/thermal.h>
++#include <linux/units.h>
+ 
+ #include <trace/events/thermal.h>
+ 
+-#define HZ_PER_KHZ		1000
+ #define SCALE_ERROR_MITIGATION	100
+ 
+ static DEFINE_IDA(devfreq_ida);
+-- 
+2.17.1
 
-> >
-> > ---
-> >  drivers/base/power/runtime.c |   24 ++++++++++++++++++++----
-> >  1 file changed, 20 insertions(+), 4 deletions(-)
-> >
-> > Index: linux-pm/drivers/base/power/runtime.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/base/power/runtime.c
-> > +++ linux-pm/drivers/base/power/runtime.c
-> > @@ -330,7 +330,11 @@ static int __rpm_callback(int (*cb)(stru
-> >
-> >         if (dev->power.irq_safe) {
-> >                 spin_unlock(&dev->power.lock);
-> > +       } else if (!use_links) {
-> > +               spin_unlock_irq(&dev->power.lock);
-> >         } else {
-> > +               bool get = dev->power.runtime_status == RPM_RESUMING;
-> > +
-> >                 spin_unlock_irq(&dev->power.lock);
-> >
-> >                 /*
-> > @@ -340,7 +344,7 @@ static int __rpm_callback(int (*cb)(stru
-> >                  * routine returns, so it is safe to read the status outside of
-> >                  * the lock.
-> >                  */
-> > -               if (use_links && dev->power.runtime_status == RPM_RESUMING) {
-> > +               if (get) {
-> >                         idx = device_links_read_lock();
-> >
-> >                         retval = rpm_get_suppliers(dev);
-> > @@ -355,7 +359,21 @@ static int __rpm_callback(int (*cb)(stru
-> >
-> >         if (dev->power.irq_safe) {
-> >                 spin_lock(&dev->power.lock);
-> > +       } if (!use_links) {
->
-> This should be an "else if", I think.
-
-Yes, it should, thanks!
-
-> > +               spin_lock_irq(&dev->power.lock);
-> >         } else {
-> > +               bool put;
-> > +
-> > +               spin_lock_irq(&dev->power.lock);
-> > +
-> > +               put = dev->power.runtime_status == RPM_SUSPENDING && !retval;
-> > +               if (put)
-> > +                       __update_runtime_status(dev, RPM_SUSPENDED);
-> > +               else
-> > +                       put = dev->power.runtime_status == RPM_RESUMING && retval;
-> > +
-> > +               spin_unlock_irq(&dev->power.lock);
-> > +
-> >                 /*
-> >                  * If the device is suspending and the callback has returned
-> >                  * success, drop the usage counters of the suppliers that have
-> > @@ -363,9 +381,7 @@ static int __rpm_callback(int (*cb)(stru
-> >                  *
-> >                  * Do that if resume fails too.
-> >                  */
-> > -               if (use_links
-> > -                   && ((dev->power.runtime_status == RPM_SUSPENDING && !retval)
-> > -                   || (dev->power.runtime_status == RPM_RESUMING && retval))) {
-> > +               if (put) {
-> >                         idx = device_links_read_lock();
-> >
-> >   fail:
-> >
-> >
-> >
