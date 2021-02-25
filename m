@@ -2,159 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FA1325565
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Feb 2021 19:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8963258AB
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Feb 2021 22:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbhBYSYV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Feb 2021 13:24:21 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42216 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbhBYSYS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Feb 2021 13:24:18 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_smtp) via UNIX with SMTP (IdeaSmtpServer 0.83.537)
- id cb3e75c887120231; Thu, 25 Feb 2021 19:23:28 +0100
-Received: from kreacher.localnet (89-64-80-209.dynamic.chello.pl [89.64.80.209])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id B9CEC661F15;
-        Thu, 25 Feb 2021 19:23:27 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "elaine.zhang" <zhangqing@rock-chips.com>
-Subject: [PATCH v2] PM: runtime: Update device status before letting suppliers suspend
-Date:   Thu, 25 Feb 2021 19:23:27 +0100
-Message-ID: <2024466.aZ6alR0V7q@kreacher>
+        id S233286AbhBYVcV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Feb 2021 16:32:21 -0500
+Received: from relay03.th.seeweb.it ([5.144.164.164]:43763 "EHLO
+        relay03.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231160AbhBYVcJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Feb 2021 16:32:09 -0500
+Received: from localhost.localdomain (abab236.neoplus.adsl.tpnet.pl [83.6.165.236])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id B00701F9FF;
+        Thu, 25 Feb 2021 22:31:25 +0100 (CET)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal: qcom: tsens_v1: Enable sensor 3 on MSM8976
+Date:   Thu, 25 Feb 2021 22:31:19 +0100
+Message-Id: <20210225213119.116550-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrkeelgdduudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtvdenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeeiueevhfeigffhffevueekgedtleeitdfhffejleevtddvtdettedvfffffffhjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrieegrdektddrvddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdektddrvddtledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopeiihhgrnhhgqhhinhhgsehrohgtkhdqtghhihhpshdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The sensor *is* in fact used and does report temperature.
 
-Because the PM-runtime status of the device is not updated in
-__rpm_callback(), attempts to suspend the suppliers of the given
-device triggered by rpm_put_suppliers() called by it may fail.
-
-Fix this by making __rpm_callback() update the device's status to
-RPM_SUSPENDED before calling rpm_put_suppliers() if the current
-status of the device is RPM_SUSPENDING and the callback just invoked
-by it has returned 0 (success).
-
-While at it, modify the code in __rpm_callback() to always check
-the device's PM-runtime status under its PM lock.
-
-Link: https://lore.kernel.org/linux-pm/CAPDyKFqm06KDw_p8WXsM4dijDbho4bb6T4k50UqqvR1_COsp8g@mail.gmail.com/
-Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
-Reported-by: elaine.zhang <zhangqing@rock-chips.com>
-Diagnosed-by: Ulf Hansson <ulf.hansson@linaro.org> 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
+ drivers/thermal/qcom/tsens-v1.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v1 -> v2:
-   * Initialize the "get" variable to avoid a false-positive warning from
-     the compiler.
-
----
- drivers/base/power/runtime.c |   62 +++++++++++++++++++++++++------------------
- 1 file changed, 37 insertions(+), 25 deletions(-)
-
-Index: linux-pm/drivers/base/power/runtime.c
-===================================================================
---- linux-pm.orig/drivers/base/power/runtime.c
-+++ linux-pm/drivers/base/power/runtime.c
-@@ -325,22 +325,22 @@ static void rpm_put_suppliers(struct dev
- static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
- 	__releases(&dev->power.lock) __acquires(&dev->power.lock)
- {
--	int retval, idx;
- 	bool use_links = dev->power.links_count > 0;
-+	bool get = false;
-+	int retval, idx;
-+	bool put;
+diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+index 3c19a3800c6d..573e261ccca7 100644
+--- a/drivers/thermal/qcom/tsens-v1.c
++++ b/drivers/thermal/qcom/tsens-v1.c
+@@ -380,11 +380,11 @@ static const struct tsens_ops ops_8976 = {
+ 	.get_temp	= get_temp_tsens_valid,
+ };
  
- 	if (dev->power.irq_safe) {
- 		spin_unlock(&dev->power.lock);
-+	} else if (!use_links) {
-+		spin_unlock_irq(&dev->power.lock);
- 	} else {
-+		get = dev->power.runtime_status == RPM_RESUMING;
-+
- 		spin_unlock_irq(&dev->power.lock);
- 
--		/*
--		 * Resume suppliers if necessary.
--		 *
--		 * The device's runtime PM status cannot change until this
--		 * routine returns, so it is safe to read the status outside of
--		 * the lock.
--		 */
--		if (use_links && dev->power.runtime_status == RPM_RESUMING) {
-+		/* Resume suppliers if necessary. */
-+		if (get) {
- 			idx = device_links_read_lock();
- 
- 			retval = rpm_get_suppliers(dev);
-@@ -355,24 +355,36 @@ static int __rpm_callback(int (*cb)(stru
- 
- 	if (dev->power.irq_safe) {
- 		spin_lock(&dev->power.lock);
--	} else {
--		/*
--		 * If the device is suspending and the callback has returned
--		 * success, drop the usage counters of the suppliers that have
--		 * been reference counted on its resume.
--		 *
--		 * Do that if resume fails too.
--		 */
--		if (use_links
--		    && ((dev->power.runtime_status == RPM_SUSPENDING && !retval)
--		    || (dev->power.runtime_status == RPM_RESUMING && retval))) {
--			idx = device_links_read_lock();
-+		return retval;
-+	}
- 
-- fail:
--			rpm_put_suppliers(dev);
-+	spin_lock_irq(&dev->power.lock);
- 
--			device_links_read_unlock(idx);
--		}
-+	if (!use_links)
-+		return retval;
-+
-+	/*
-+	 * If the device is suspending and the callback has returned success,
-+	 * drop the usage counters of the suppliers that have been reference
-+	 * counted on its resume.
-+	 *
-+	 * Do that if the resume fails too.
-+	 */
-+	put = dev->power.runtime_status == RPM_SUSPENDING && !retval;
-+	if (put)
-+		__update_runtime_status(dev, RPM_SUSPENDED);
-+	else
-+		put = get && retval;
-+
-+	if (put) {
-+		spin_unlock_irq(&dev->power.lock);
-+
-+		idx = device_links_read_lock();
-+
-+fail:
-+		rpm_put_suppliers(dev);
-+
-+		device_links_read_unlock(idx);
- 
- 		spin_lock_irq(&dev->power.lock);
- 	}
-
-
+-/* Valid for both MSM8956 and MSM8976. Sensor ID 3 is unused. */
++/* Valid for both MSM8956 and MSM8976. */
+ struct tsens_plat_data data_8976 = {
+ 	.num_sensors	= 11,
+ 	.ops		= &ops_8976,
+-	.hw_ids		= (unsigned int[]){0, 1, 2, 4, 5, 6, 7, 8, 9, 10},
++	.hw_ids		= (unsigned int[]){0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+ 	.feat		= &tsens_v1_feat,
+ 	.fields		= tsens_v1_regfields,
+ };
+-- 
+2.30.1
 
