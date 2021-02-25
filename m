@@ -2,113 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88359325368
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Feb 2021 17:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FA1325565
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Feb 2021 19:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbhBYQWx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Feb 2021 11:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbhBYQWh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Feb 2021 11:22:37 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87426C06174A
-        for <linux-pm@vger.kernel.org>; Thu, 25 Feb 2021 08:21:56 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id d9so5973406ybq.1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Feb 2021 08:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/cP36naQj3qpC5i/IheYs6HlbPebR0MpDFfVJ183xi8=;
-        b=KeDpl/ntLDJO0xHlFgkxocqJLerEAuvIJ2EY3GHp0W3hUj+P/H80wjBdRtEMG9I6mk
-         mOgnF2arVx72Klh9ceuX9/gZrNp086hN7VWSm2CdPxWGVLlv/d3ygeohIOvkZz5l7Cyx
-         ZhFxLDCDeov/Avb6rWbqVkBHPzx5KAcHND5L3Oyd1ikRLLXkV4M2h1M2rxeBlmXO1FzC
-         h6wigFdFrnCmS2Ta1BenFcqq3z1TeWEZYayefvy101cUxA4uZ/76DzbLiVB0QDg4ef1t
-         RT0ZhWM3jjPl7MNJayNpq84oFbz/wj7Vm1HMTE9TGejYbOcy+PrX9l5mI0z5Sz0KgvLo
-         ksGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/cP36naQj3qpC5i/IheYs6HlbPebR0MpDFfVJ183xi8=;
-        b=Nj6KxAFSmo5x/3pG0wLMAeU26den+Pi/H8T92YsWMOvHWKtN7KNan/Rs3NXRDMjZR4
-         Fnj6Xfz/CZ/2VisA0g6Rt1asHBPxNVtA5rs2+29RBoy7OWOWEN01tf4z4Hh4ePxIBOT9
-         uo25nJ8q13ZNR5AS5ls7N694pGCueuBb5D4lHMf4gZfh0tuB24uCrXzjeF8pR9z1ejga
-         nTxRf1WMNTyOapts4oL0aOuTivs/5SFTp8b7k3HjZutgnFhSo1ZEFaXHKndmE8G5jzat
-         iPunwV6rXJJR4eIvdmWf4bgmTLP/cYSE1EmAdzDyAnoLXztTAV7QkGBgV1K+HnIfM1iG
-         QH+w==
-X-Gm-Message-State: AOAM530ObAAWB0V2L/V1qtlPYV1d1CX/CYRjqc8LxR2EtDku2+GaASTs
-        kKm1KbhoC5f2uLH/ZDLt8G1pL1hc2XkuTG4gOydgMA==
-X-Google-Smtp-Source: ABdhPJwM8YNyUIdNGpLL8VN5EQjunqmqzPDS5sX6h/EAdG7KRABzywLAjcwqJL7G07M7ZbMubkIt94W1wIhCADUnp+I=
-X-Received: by 2002:a25:aa43:: with SMTP id s61mr5354227ybi.32.1614270115514;
- Thu, 25 Feb 2021 08:21:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20210215151405.2551143-1-geert+renesas@glider.be>
- <CAGETcx-c5P76JkB-upi8ArDqa=TrR3bJMnpDTO-59sh83opW8g@mail.gmail.com>
- <CAMuHMdVXCH+27cpC=-viQev1HeN_DkU0=7Dydp4G50z0bB2Ang@mail.gmail.com>
- <CAGETcx_B7r6DErnxzDngh_KW9a33f4+cHhvthzfEHX8pO0et8w@mail.gmail.com> <CAMuHMdXr99COTVHyostPLfYC7hezwOf9GfBi_oPfBPQu9nLB9Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdXr99COTVHyostPLfYC7hezwOf9GfBi_oPfBPQu9nLB9Q@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 25 Feb 2021 08:21:19 -0800
-Message-ID: <CAGETcx8AYjq7jdGhNXZffg2Y_Jxn3RszuBeXJsRH8on8TC0A-g@mail.gmail.com>
-Subject: Re: [PATCH] staging: board: Fix uninitialized spinlock when attaching genpd
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
+        id S231439AbhBYSYV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Feb 2021 13:24:21 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42216 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233007AbhBYSYS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Feb 2021 13:24:18 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_smtp) via UNIX with SMTP (IdeaSmtpServer 0.83.537)
+ id cb3e75c887120231; Thu, 25 Feb 2021 19:23:28 +0100
+Received: from kreacher.localnet (89-64-80-209.dynamic.chello.pl [89.64.80.209])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id B9CEC661F15;
+        Thu, 25 Feb 2021 19:23:27 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "elaine.zhang" <zhangqing@rock-chips.com>
+Subject: [PATCH v2] PM: runtime: Update device status before letting suppliers suspend
+Date:   Thu, 25 Feb 2021 19:23:27 +0100
+Message-ID: <2024466.aZ6alR0V7q@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrkeelgdduudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtvdenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeeiueevhfeigffhffevueekgedtleeitdfhffejleevtddvtdettedvfffffffhjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrieegrdektddrvddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdektddrvddtledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopeiihhgrnhhgqhhinhhgsehrohgtkhdqtghhihhpshdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 1:25 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Saravana,
->
-> On Mon, Feb 15, 2021 at 10:03 PM Saravana Kannan <saravanak@google.com> wrote:
-> > On Mon, Feb 15, 2021 at 11:10 AM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> > > On Mon, Feb 15, 2021 at 7:37 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > > On Mon, Feb 15, 2021 at 7:14 AM Geert Uytterhoeven
-> > > > > @@ -148,7 +149,11 @@ static int board_staging_add_dev_domain(struct platform_device *pdev,
-> > > > >         pd_args.np = np;
-> > > > >         pd_args.args_count = 0;
-> > > > >
-> > > > > -       return of_genpd_add_device(&pd_args, &pdev->dev);
-> > > > > +       /* Cfr. device_pm_init_common() */
-> > > >
-> > > > What's Cfr?
-> > >
-> > > "compare to" (from Latin "confer").
-> >
-> > Can you please change this to "refer to" or "similar to"? Also, not
-> > sure if this comment is even adding anything useful even if you switch
-> > the words.
->
-> I changed it to "Initialization similar to device_pm_init_common()"
->
-> > Also, device_pm_init_common() is used in two places outside of
-> > drivers/base/ with this change. Maybe better to move it to
-> > linux/device.h?
->
-> arch/sh/drivers/platform_early.c has a separate definition, and this
-> is intentional, cfr. commit 507fd01d53333387 ("drivers: move the early
-> platform device support to arch/sh"):
->
->     In order not to export internal drivers/base functions to arch code for
->     this temporary solution - copy the two needed routines for driver
->     matching from drivers/base/platform.c to arch/sh/drivers/platform_early.c.
->
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks. The comments and decision to copy the code sounds okay to me.
-But I'll still leave the Ack/Review to Rafael or someone else as I'm
-not too familiar with the intent of this flag.
+Because the PM-runtime status of the device is not updated in
+__rpm_callback(), attempts to suspend the suppliers of the given
+device triggered by rpm_put_suppliers() called by it may fail.
 
--Saravana
+Fix this by making __rpm_callback() update the device's status to
+RPM_SUSPENDED before calling rpm_put_suppliers() if the current
+status of the device is RPM_SUSPENDING and the callback just invoked
+by it has returned 0 (success).
+
+While at it, modify the code in __rpm_callback() to always check
+the device's PM-runtime status under its PM lock.
+
+Link: https://lore.kernel.org/linux-pm/CAPDyKFqm06KDw_p8WXsM4dijDbho4bb6T4k50UqqvR1_COsp8g@mail.gmail.com/
+Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
+Reported-by: elaine.zhang <zhangqing@rock-chips.com>
+Diagnosed-by: Ulf Hansson <ulf.hansson@linaro.org> 
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2:
+   * Initialize the "get" variable to avoid a false-positive warning from
+     the compiler.
+
+---
+ drivers/base/power/runtime.c |   62 +++++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 25 deletions(-)
+
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -325,22 +325,22 @@ static void rpm_put_suppliers(struct dev
+ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
+ 	__releases(&dev->power.lock) __acquires(&dev->power.lock)
+ {
+-	int retval, idx;
+ 	bool use_links = dev->power.links_count > 0;
++	bool get = false;
++	int retval, idx;
++	bool put;
+ 
+ 	if (dev->power.irq_safe) {
+ 		spin_unlock(&dev->power.lock);
++	} else if (!use_links) {
++		spin_unlock_irq(&dev->power.lock);
+ 	} else {
++		get = dev->power.runtime_status == RPM_RESUMING;
++
+ 		spin_unlock_irq(&dev->power.lock);
+ 
+-		/*
+-		 * Resume suppliers if necessary.
+-		 *
+-		 * The device's runtime PM status cannot change until this
+-		 * routine returns, so it is safe to read the status outside of
+-		 * the lock.
+-		 */
+-		if (use_links && dev->power.runtime_status == RPM_RESUMING) {
++		/* Resume suppliers if necessary. */
++		if (get) {
+ 			idx = device_links_read_lock();
+ 
+ 			retval = rpm_get_suppliers(dev);
+@@ -355,24 +355,36 @@ static int __rpm_callback(int (*cb)(stru
+ 
+ 	if (dev->power.irq_safe) {
+ 		spin_lock(&dev->power.lock);
+-	} else {
+-		/*
+-		 * If the device is suspending and the callback has returned
+-		 * success, drop the usage counters of the suppliers that have
+-		 * been reference counted on its resume.
+-		 *
+-		 * Do that if resume fails too.
+-		 */
+-		if (use_links
+-		    && ((dev->power.runtime_status == RPM_SUSPENDING && !retval)
+-		    || (dev->power.runtime_status == RPM_RESUMING && retval))) {
+-			idx = device_links_read_lock();
++		return retval;
++	}
+ 
+- fail:
+-			rpm_put_suppliers(dev);
++	spin_lock_irq(&dev->power.lock);
+ 
+-			device_links_read_unlock(idx);
+-		}
++	if (!use_links)
++		return retval;
++
++	/*
++	 * If the device is suspending and the callback has returned success,
++	 * drop the usage counters of the suppliers that have been reference
++	 * counted on its resume.
++	 *
++	 * Do that if the resume fails too.
++	 */
++	put = dev->power.runtime_status == RPM_SUSPENDING && !retval;
++	if (put)
++		__update_runtime_status(dev, RPM_SUSPENDED);
++	else
++		put = get && retval;
++
++	if (put) {
++		spin_unlock_irq(&dev->power.lock);
++
++		idx = device_links_read_lock();
++
++fail:
++		rpm_put_suppliers(dev);
++
++		device_links_read_unlock(idx);
+ 
+ 		spin_lock_irq(&dev->power.lock);
+ 	}
+
+
+
