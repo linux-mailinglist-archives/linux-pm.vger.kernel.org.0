@@ -2,97 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EEB325D84
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 07:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA036325F6E
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 09:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbhBZGZx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Feb 2021 01:25:53 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:57298 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhBZGZw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 01:25:52 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 11Q6Ob2f100191;
-        Fri, 26 Feb 2021 00:24:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1614320677;
-        bh=2biBGk1+BsVwomDa/bJIak1U+MfLlq0iBBjwh0Cnf58=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=C+fn0jwGx7jTUjCQkNNAiipxOb9vXrYqZccJEnF4ePqGYovdqvi5aJAQXvGfUGXO1
-         JjmDlUzUEClAxJsSyQLOXyVl9dSQUO0ZX3dL26hCb4wCZfYg6uCPVKduzJvkLXNBak
-         pfRkH1VmuGsbBxF9W6w6KFVzXVtUg/E3PY5JYuL8=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 11Q6Ob5j086593
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 26 Feb 2021 00:24:37 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 26
- Feb 2021 00:24:37 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 26 Feb 2021 00:24:37 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 11Q6ObeS063664;
-        Fri, 26 Feb 2021 00:24:37 -0600
-Date:   Fri, 26 Feb 2021 00:24:37 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-CC:     <ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <tony@atomide.com>
-Subject: Re: [PATCH] PM: AVS: Replace DEFINE_SIMPLE_ATTRIBUTE with
- DEFINE_DEBUGFS_ATTRIBUTE
-Message-ID: <20210226062437.lvhy3ehwgwgn5nom@likewise>
-References: <1614156520-105525-1-git-send-email-yang.lee@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1614156520-105525-1-git-send-email-yang.lee@linux.alibaba.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S229556AbhBZIuH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Feb 2021 03:50:07 -0500
+Received: from lucky1.263xmail.com ([211.157.147.135]:37688 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229967AbhBZIuF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 03:50:05 -0500
+Received: from localhost (unknown [192.168.167.139])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 55C58A78B4;
+        Fri, 26 Feb 2021 16:47:47 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED: 0
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [124.126.19.250])
+        by smtp.263.net (postfix) whith ESMTP id P26070T139688400631552S1614329267704221_;
+        Fri, 26 Feb 2021 16:47:47 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <c2aaa023577d4f028ac0a933fc9e2a22>
+X-RL-SENDER: wangjingyu@uniontech.com
+X-SENDER: wangjingyu@uniontech.com
+X-LOGIN-NAME: wangjingyu@uniontech.com
+X-FST-TO: rjw@rjwysocki.net
+X-SENDER-IP: 124.126.19.250
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   wangjingyu <wangjingyu@uniontech.com>
+To:     rjw@rjwysocki.net
+Cc:     pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        x86@kernel.org, hpa@zytor.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wangjingyu <wangjingyu@uniontech.com>
+Subject: [PATCH] arch: x86/power Missing a blank line after declarations
+Date:   Fri, 26 Feb 2021 16:47:45 +0800
+Message-Id: <20210226084745.22996-1-wangjingyu@uniontech.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16:48-20210224, Yang Li wrote:
-> Fix the following coccicheck warning:
-> ./drivers/soc/ti/smartreflex.c:820:0-23: WARNING: pm_sr_fops should be
-> defined with DEFINE_DEBUGFS_ATTRIBUTE
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/soc/ti/smartreflex.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-> index 5376f3d..b3c7460 100644
-> --- a/drivers/soc/ti/smartreflex.c
-> +++ b/drivers/soc/ti/smartreflex.c
-> @@ -817,7 +817,7 @@ static int omap_sr_autocomp_store(void *data, u64 val)
->  	return 0;
->  }
->  
-> -DEFINE_SIMPLE_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
-> +DEFINE_DEBUGFS_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
->  			omap_sr_autocomp_store, "%llu\n");
->  
->  static int omap_sr_probe(struct platform_device *pdev)
-> -- 
-> 1.8.3.1
-> 
-LGTM.
+Ensure checkpatch compliance
 
-Reviewed-by: Nishanth Menon <nm@ti.com>
+Signed-off-by: wangjingyu <wangjingyu@uniontech.com>
+---
+ arch/x86/power/hibernate_32.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Though $subject might be soc: ti: smartreflex after the relocation to maintain
-consistency..
-
-Upto santosh if he might want to locally change on applying the patch..
-
+diff --git a/arch/x86/power/hibernate_32.c b/arch/x86/power/hibernate_32.c
+index 223d5bca29b8..90e40055a5ae 100644
+--- a/arch/x86/power/hibernate_32.c
++++ b/arch/x86/power/hibernate_32.c
+@@ -60,6 +60,7 @@ static pte_t *resume_one_page_table_init(pmd_t *pmd)
+ {
+ 	if (pmd_none(*pmd)) {
+ 		pte_t *page_table = (pte_t *)get_safe_page(GFP_ATOMIC);
++
+ 		if (!page_table)
+ 			return NULL;
+ 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.11.0
+
+
+
