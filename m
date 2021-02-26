@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F2D3267C3
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BE33267C6
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhBZUGb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Feb 2021 15:06:31 -0500
-Received: from m-r1.th.seeweb.it ([5.144.164.170]:37401 "EHLO
-        m-r1.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbhBZUGL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 15:06:11 -0500
+        id S230209AbhBZUGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Feb 2021 15:06:41 -0500
+Received: from relay01.th.seeweb.it ([5.144.164.162]:42833 "EHLO
+        relay01.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230211AbhBZUGQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 15:06:16 -0500
 Received: from localhost.localdomain (abab236.neoplus.adsl.tpnet.pl [83.6.165.236])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id B5A891F995;
-        Fri, 26 Feb 2021 21:05:18 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 1A55C1F87C;
+        Fri, 26 Feb 2021 21:05:23 +0100 (CET)
 From:   Konrad Dybcio <konrad.dybcio@somainline.org>
 To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
@@ -28,9 +28,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/41] arm64: dts: qcom: sdm630: Add SDHCI2 node
-Date:   Fri, 26 Feb 2021 21:03:40 +0100
-Message-Id: <20210226200414.167762-11-konrad.dybcio@somainline.org>
+Subject: [PATCH 11/41] arm64: dts: qcom: sdm630: Add interconnect and opp table to sdhc_1
+Date:   Fri, 26 Feb 2021 21:03:41 +0100
+Message-Id: <20210226200414.167762-12-konrad.dybcio@somainline.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210226200414.167762-1-konrad.dybcio@somainline.org>
 References: <20210226200414.167762-1-konrad.dybcio@somainline.org>
@@ -42,76 +42,63 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-This will enable usage of (generally) uSD cards.
-While at it, add accompanying OPP table for DVFS.
+The SDHC port 1 has interconnects and can make use of DVFS:
+define the interconnections and the OPP table in order to
+optimize performance and power consumption.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 50 ++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 410a97ea2bb3..c85a4a71fb0c 100644
+index c85a4a71fb0c..ed7d22aa734c 100644
 --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -1039,6 +1039,56 @@ qusb2phy: phy@c012000 {
- 			status = "disabled";
- 		};
+@@ -1106,14 +1106,42 @@ sdhc_1: sdhci@c0c4000 {
+ 				 <&gcc GCC_SDCC1_ICE_CORE_CLK>;
+ 			clock-names = "core", "iface", "xo", "ice";
  
-+		sdhc_2: sdhci@c084000 {
-+			compatible = "qcom,sdm630-sdhci", "qcom,sdhci-msm-v5";
-+			reg = <0x0c084000 0x1000>;
-+			reg-names = "hc";
-+
-+			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
-+					<GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "hc_irq", "pwr_irq";
-+
-+			bus-width = <4>;
-+			clocks = <&gcc GCC_SDCC2_APPS_CLK>,
-+					<&gcc GCC_SDCC2_AHB_CLK>,
-+					<&xo_board>;
-+			clock-names = "core", "iface", "xo";
-+
-+			interconnects = <&a2noc 3 &a2noc 10>,
-+				        <&gnoc 0 &cnoc 28>;
-+			operating-points-v2 = <&sdhc2_opp_table>;
-+
-+			pinctrl-names = "default", "sleep";
-+			pinctrl-0 = <&sdc2_state_on>;
-+			pinctrl-1 = <&sdc2_state_off>;
++			interconnects = <&a2noc 2 &a2noc 10>,
++					<&gnoc 0 &cnoc 27>;
++			interconnect-names = "sdhc1-ddr", "cpu-sdhc1";
++			operating-points-v2 = <&sdhc1_opp_table>;
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&sdc1_state_on>;
+ 			pinctrl-1 = <&sdc1_state_off>;
 +			power-domains = <&rpmpd SDM660_VDDCX>;
+ 
+ 			bus-width = <8>;
+ 			non-removable;
+ 
+ 			status = "disabled";
 +
-+			status = "disabled";
++			sdhc1_opp_table: sdhc1-opp-table {
++				compatible = "operating-points-v2";
 +
-+			sdhc2_opp_table: sdhc1-opp-table {
-+				 compatible = "operating-points-v2";
-+
-+				 opp-50000000 {
++				opp-50000000 {
 +					opp-hz = /bits/ 64 <50000000>;
 +					required-opps = <&rpmpd_opp_low_svs>;
 +					opp-peak-kBps = <200000 140000>;
 +					opp-avg-kBps = <130718 133320>;
-+				 };
-+				 opp-100000000 {
++				};
++				opp-100000000 {
 +					opp-hz = /bits/ 64 <100000000>;
 +					required-opps = <&rpmpd_opp_svs>;
 +					opp-peak-kBps = <250000 160000>;
 +					opp-avg-kBps = <196078 150000>;
-+				 };
-+				 opp-200000000 {
-+					opp-hz = /bits/ 64 <200000000>;
++				};
++				opp-384000000 {
++					opp-hz = /bits/ 64 <384000000>;
 +					required-opps = <&rpmpd_opp_nom>;
 +					opp-peak-kBps = <4096000 4096000>;
 +					opp-avg-kBps = <1338562 1338562>;
-+				 };
++				};
 +			};
-+		};
-+
- 		sdhc_1: sdhci@c0c4000 {
- 			compatible = "qcom,sdm630-sdhci", "qcom,sdhci-msm-v5";
- 			reg = <0x0c0c4000 0x1000>,
+ 		};
+ 
+ 		mmcc: clock-controller@c8c0000 {
 -- 
 2.30.1
 
