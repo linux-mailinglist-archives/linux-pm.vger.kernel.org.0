@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BE33267C6
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C186E3267CA
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbhBZUGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Feb 2021 15:06:41 -0500
-Received: from relay01.th.seeweb.it ([5.144.164.162]:42833 "EHLO
-        relay01.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhBZUGQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 15:06:16 -0500
+        id S230195AbhBZUGr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Feb 2021 15:06:47 -0500
+Received: from m-r1.th.seeweb.it ([5.144.164.170]:40971 "EHLO
+        m-r1.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230220AbhBZUGl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 15:06:41 -0500
 Received: from localhost.localdomain (abab236.neoplus.adsl.tpnet.pl [83.6.165.236])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 1A55C1F87C;
-        Fri, 26 Feb 2021 21:05:23 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id B1BCC1FADD;
+        Fri, 26 Feb 2021 21:05:27 +0100 (CET)
 From:   Konrad Dybcio <konrad.dybcio@somainline.org>
 To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
@@ -28,9 +28,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 11/41] arm64: dts: qcom: sdm630: Add interconnect and opp table to sdhc_1
-Date:   Fri, 26 Feb 2021 21:03:41 +0100
-Message-Id: <20210226200414.167762-12-konrad.dybcio@somainline.org>
+Subject: [PATCH 12/41] arm64: dts: qcom: sdm630: Add GPU Clock Controller node
+Date:   Fri, 26 Feb 2021 21:03:42 +0100
+Message-Id: <20210226200414.167762-13-konrad.dybcio@somainline.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210226200414.167762-1-konrad.dybcio@somainline.org>
 References: <20210226200414.167762-1-konrad.dybcio@somainline.org>
@@ -42,63 +42,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-The SDHC port 1 has interconnects and can make use of DVFS:
-define the interconnections and the OPP table in order to
-optimize performance and power consumption.
+Add the GPU Clock Controller in SDM630 and keep it disabled by
+default.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index c85a4a71fb0c..ed7d22aa734c 100644
+index ed7d22aa734c..cc8589cb5095 100644
 --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -1106,14 +1106,42 @@ sdhc_1: sdhci@c0c4000 {
- 				 <&gcc GCC_SDCC1_ICE_CORE_CLK>;
- 			clock-names = "core", "iface", "xo", "ice";
+@@ -4,6 +4,7 @@
+  */
  
-+			interconnects = <&a2noc 2 &a2noc 10>,
-+					<&gnoc 0 &cnoc 27>;
-+			interconnect-names = "sdhc1-ddr", "cpu-sdhc1";
-+			operating-points-v2 = <&sdhc1_opp_table>;
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&sdc1_state_on>;
- 			pinctrl-1 = <&sdc1_state_off>;
-+			power-domains = <&rpmpd SDM660_VDDCX>;
- 
- 			bus-width = <8>;
- 			non-removable;
- 
+ #include <dt-bindings/clock/qcom,gcc-sdm660.h>
++#include <dt-bindings/clock/qcom,gpucc-sdm660.h>
+ #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
+ #include <dt-bindings/clock/qcom,rpmcc.h>
+ #include <dt-bindings/power/qcom-rpmpd.h>
+@@ -925,6 +926,22 @@ kgsl_smmu: iommu@5040000 {
  			status = "disabled";
-+
-+			sdhc1_opp_table: sdhc1-opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-50000000 {
-+					opp-hz = /bits/ 64 <50000000>;
-+					required-opps = <&rpmpd_opp_low_svs>;
-+					opp-peak-kBps = <200000 140000>;
-+					opp-avg-kBps = <130718 133320>;
-+				};
-+				opp-100000000 {
-+					opp-hz = /bits/ 64 <100000000>;
-+					required-opps = <&rpmpd_opp_svs>;
-+					opp-peak-kBps = <250000 160000>;
-+					opp-avg-kBps = <196078 150000>;
-+				};
-+				opp-384000000 {
-+					opp-hz = /bits/ 64 <384000000>;
-+					required-opps = <&rpmpd_opp_nom>;
-+					opp-peak-kBps = <4096000 4096000>;
-+					opp-avg-kBps = <1338562 1338562>;
-+				};
-+			};
  		};
  
- 		mmcc: clock-controller@c8c0000 {
++		gpucc: clock-controller@5065000 {
++			compatible = "qcom,gpucc-sdm630";
++			#clock-cells = <1>;
++			#reset-cells = <1>;
++			#power-domain-cells = <1>;
++			reg = <0x05065000 0x9038>;
++
++			clocks = <&xo_board>,
++				 <&gcc GCC_GPU_GPLL0_CLK>,
++				 <&gcc GCC_GPU_GPLL0_DIV_CLK>;
++			clock-names = "xo",
++				      "gcc_gpu_gpll0_clk",
++				      "gcc_gpu_gpll0_div_clk";
++			status = "disabled";
++		};
++
+ 		lpass_smmu: iommu@5100000 {
+ 			compatible = "qcom,sdm630-smmu-v2", "qcom,smmu-v2";
+ 			reg = <0x05100000 0x40000>;
 -- 
 2.30.1
 
