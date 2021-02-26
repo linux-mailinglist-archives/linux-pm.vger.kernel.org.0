@@ -2,116 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C599325D6D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 07:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EEB325D84
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 07:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbhBZGJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Feb 2021 01:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbhBZGJB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 01:09:01 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A115FC061574;
-        Thu, 25 Feb 2021 22:08:21 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id ba1so4766083plb.1;
-        Thu, 25 Feb 2021 22:08:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=veBng1mAuJ4SODrmS5u/GO4AEOA3NFFcdFwKeTiCPqw=;
-        b=imS9E6f0cKH37G4/pJBghQJIRfaFYqbPgc/uDk/Cb84/2lxnLPn5gw2sjgnriHfbna
-         X1nbzoAqWsh0cz/8TTHSQGqiZyn0qGohBwaTiz5VRAvtRmrA+u+yowDmWCaMBaqoFJ2f
-         sEI9ccD0EfkymIWPal+gTh5OAnSMHcaX3vtuNclGsZ5BgwEsqOZmrY89gVabcIReH/pz
-         JTX7zUdhh4Yr9xyXnZmmEIWuZ8blyKjWGdbtJVmMbfwiTK+n3QcGU0DSsTeLbuqRux3d
-         Zq26A2ppStyhoj9KVxHNQIX/gpddWY4H5UZ7H/Jj76ru+ixrz2wj7UdLcz+1R8PBr4Bg
-         4hNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=veBng1mAuJ4SODrmS5u/GO4AEOA3NFFcdFwKeTiCPqw=;
-        b=dj7yG3dCTi2FzwPu8xWyzMQUMFQTuH616g1KJw4OS9OcnCoR2PtphI+WobXxqlOBux
-         YgBeHaTM5B45dLYfwgDfZS37h++/7r9MqB8Mg+KsfR7DwC73HuQHO8RF1ZQhlH0OdEzj
-         0/Czp+f5G0gItI861ucHZnzRflSgrY33qj3bHAbqqX1glxsiTsZn446NT65OsWPfXC9T
-         FPDNtgyNk11g/8LPP9U3BDgZu0uToLBUB8qr5OnfhcR2BNYc0Iz+82Vu1/KCPSjvdM5t
-         RxpvOGgqI4rd4pgldsLA3QqbyBwVWGuCLTb9ypJom85+M0RrGu4gGYWfjUxYadnLPc/4
-         Ai4Q==
-X-Gm-Message-State: AOAM530nscukfKDyQQM5re2PZEdE69Jpcujw4tjkqjeAcS7j6pc7qU4S
-        r5qkEoNHkEmj/CJrYre+UBragzUvhhwstg==
-X-Google-Smtp-Source: ABdhPJzs3SHNsIs9pVK0Q669l1yQaooGtPba2zpx6ofMuc9x3CIEHHfa6ZEbD9hpr/HKDYc40D/xnA==
-X-Received: by 2002:a17:902:b598:b029:e2:daa2:161c with SMTP id a24-20020a170902b598b02900e2daa2161cmr1785961pls.20.1614319700667;
-        Thu, 25 Feb 2021 22:08:20 -0800 (PST)
-Received: from [172.30.1.19] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id p26sm8419064pfn.127.2021.02.25.22.08.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Feb 2021 22:08:20 -0800 (PST)
-Subject: Re: [PATCH v2 3/9] devfreq: Use HZ macros
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
-        andriy.shevchenko@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>
-References: <20210224144222.23762-1-daniel.lezcano@linaro.org>
- <20210224144222.23762-3-daniel.lezcano@linaro.org>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Message-ID: <0db79cd7-f062-b31b-2a6c-ecf8dadaf572@gmail.com>
-Date:   Fri, 26 Feb 2021 15:08:16 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229482AbhBZGZx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Feb 2021 01:25:53 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:57298 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhBZGZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 01:25:52 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 11Q6Ob2f100191;
+        Fri, 26 Feb 2021 00:24:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1614320677;
+        bh=2biBGk1+BsVwomDa/bJIak1U+MfLlq0iBBjwh0Cnf58=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=C+fn0jwGx7jTUjCQkNNAiipxOb9vXrYqZccJEnF4ePqGYovdqvi5aJAQXvGfUGXO1
+         JjmDlUzUEClAxJsSyQLOXyVl9dSQUO0ZX3dL26hCb4wCZfYg6uCPVKduzJvkLXNBak
+         pfRkH1VmuGsbBxF9W6w6KFVzXVtUg/E3PY5JYuL8=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 11Q6Ob5j086593
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 26 Feb 2021 00:24:37 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 26
+ Feb 2021 00:24:37 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 26 Feb 2021 00:24:37 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 11Q6ObeS063664;
+        Fri, 26 Feb 2021 00:24:37 -0600
+Date:   Fri, 26 Feb 2021 00:24:37 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+CC:     <ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <tony@atomide.com>
+Subject: Re: [PATCH] PM: AVS: Replace DEFINE_SIMPLE_ATTRIBUTE with
+ DEFINE_DEBUGFS_ATTRIBUTE
+Message-ID: <20210226062437.lvhy3ehwgwgn5nom@likewise>
+References: <1614156520-105525-1-git-send-email-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <20210224144222.23762-3-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1614156520-105525-1-git-send-email-yang.lee@linux.alibaba.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 21. 2. 24. 오후 11:42, Daniel Lezcano wrote:
-> HZ unit conversion macros are available in units.h, use them and
-> remove the duplicate definition.
+On 16:48-20210224, Yang Li wrote:
+> Fix the following coccicheck warning:
+> ./drivers/soc/ti/smartreflex.c:820:0-23: WARNING: pm_sr_fops should be
+> defined with DEFINE_DEBUGFS_ATTRIBUTE
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Reviewed-by: Christian Eggers <ceggers@arri.de>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->   drivers/devfreq/devfreq.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/soc/ti/smartreflex.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index bf3047896e41..b6d63f02d293 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -26,6 +26,7 @@
->   #include <linux/hrtimer.h>
->   #include <linux/of.h>
->   #include <linux/pm_qos.h>
-> +#include <linux/units.h>
->   #include "governor.h"
->   
->   #define CREATE_TRACE_POINTS
-> @@ -33,7 +34,6 @@
->   
->   #define IS_SUPPORTED_FLAG(f, name) ((f & DEVFREQ_GOV_FLAG_##name) ? true : false)
->   #define IS_SUPPORTED_ATTR(f, name) ((f & DEVFREQ_GOV_ATTR_##name) ? true : false)
-> -#define HZ_PER_KHZ	1000
->   
->   static struct class *devfreq_class;
->   static struct dentry *devfreq_debugfs;
+> diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
+> index 5376f3d..b3c7460 100644
+> --- a/drivers/soc/ti/smartreflex.c
+> +++ b/drivers/soc/ti/smartreflex.c
+> @@ -817,7 +817,7 @@ static int omap_sr_autocomp_store(void *data, u64 val)
+>  	return 0;
+>  }
+>  
+> -DEFINE_SIMPLE_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
+> +DEFINE_DEBUGFS_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
+>  			omap_sr_autocomp_store, "%llu\n");
+>  
+>  static int omap_sr_probe(struct platform_device *pdev)
+> -- 
+> 1.8.3.1
 > 
+LGTM.
 
-I changed the patch title with 'PM /' prefix as following
-in order to keep the consistent patch style if there are no any special 
-objection.
-- PM / devfreq: Use HZ macros
+Reviewed-by: Nishanth Menon <nm@ti.com>
 
-Applied it.
+Though $subject might be soc: ti: smartreflex after the relocation to maintain
+consistency..
 
-Thanks,
-Chanwoo Choi
+Upto santosh if he might want to locally change on applying the patch..
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
