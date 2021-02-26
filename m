@@ -2,18 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C186E3267CA
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F453267CF
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbhBZUGr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Feb 2021 15:06:47 -0500
-Received: from m-r1.th.seeweb.it ([5.144.164.170]:40971 "EHLO
-        m-r1.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbhBZUGl (ORCPT
+        id S230347AbhBZUHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Feb 2021 15:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230227AbhBZUGl (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 15:06:41 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C667C06178A
+        for <linux-pm@vger.kernel.org>; Fri, 26 Feb 2021 12:05:36 -0800 (PST)
 Received: from localhost.localdomain (abab236.neoplus.adsl.tpnet.pl [83.6.165.236])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id B1BCC1FADD;
-        Fri, 26 Feb 2021 21:05:27 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 1BF051FABA;
+        Fri, 26 Feb 2021 21:05:32 +0100 (CET)
 From:   Konrad Dybcio <konrad.dybcio@somainline.org>
 To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
@@ -28,9 +31,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 12/41] arm64: dts: qcom: sdm630: Add GPU Clock Controller node
-Date:   Fri, 26 Feb 2021 21:03:42 +0100
-Message-Id: <20210226200414.167762-13-konrad.dybcio@somainline.org>
+Subject: [PATCH 13/41] arm64: dts: qcom: sdm630: Add clocks and power domains to SMMU nodes
+Date:   Fri, 26 Feb 2021 21:03:43 +0100
+Message-Id: <20210226200414.167762-14-konrad.dybcio@somainline.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210226200414.167762-1-konrad.dybcio@somainline.org>
 References: <20210226200414.167762-1-konrad.dybcio@somainline.org>
@@ -42,49 +45,75 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-Add the GPU Clock Controller in SDM630 and keep it disabled by
-default.
+Add the required clocks and power domains for the SMMUs to work.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 ---
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 31 +++++++++++++++++++++++++---
+ 1 file changed, 28 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index ed7d22aa734c..cc8589cb5095 100644
+index cc8589cb5095..9e50c9adada6 100644
 --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -4,6 +4,7 @@
-  */
- 
- #include <dt-bindings/clock/qcom,gcc-sdm660.h>
-+#include <dt-bindings/clock/qcom,gpucc-sdm660.h>
- #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-@@ -925,6 +926,22 @@ kgsl_smmu: iommu@5040000 {
- 			status = "disabled";
- 		};
- 
-+		gpucc: clock-controller@5065000 {
-+			compatible = "qcom,gpucc-sdm630";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+			reg = <0x05065000 0x9038>;
-+
-+			clocks = <&xo_board>,
-+				 <&gcc GCC_GPU_GPLL0_CLK>,
-+				 <&gcc GCC_GPU_GPLL0_DIV_CLK>;
-+			clock-names = "xo",
-+				      "gcc_gpu_gpll0_clk",
-+				      "gcc_gpu_gpll0_div_clk";
-+			status = "disabled";
-+		};
-+
- 		lpass_smmu: iommu@5100000 {
+@@ -563,9 +563,14 @@ snoc: interconnect@1626000 {
+ 		anoc2_smmu: iommu@16c0000 {
  			compatible = "qcom,sdm630-smmu-v2", "qcom,smmu-v2";
- 			reg = <0x05100000 0x40000>;
+ 			reg = <0x016c0000 0x40000>;
+-			#iommu-cells = <1>;
+ 
++			assigned-clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
++			assigned-clock-rates = <1000>;
++			clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
++			clock-names = "bus";
+ 			#global-interrupts = <2>;
++			#iommu-cells = <1>;
++
+ 			interrupts =
+ 				<GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
+ 				<GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
+@@ -907,9 +912,22 @@ pinconf-sd-cd {
+ 		kgsl_smmu: iommu@5040000 {
+ 			compatible = "qcom,sdm630-smmu-v2", "qcom,smmu-v2";
+ 			reg = <0x05040000 0x10000>;
+-			#iommu-cells = <1>;
+ 
++			/*
++			 * GX GDSC parent is CX. We need to bring up CX for SMMU
++			 * but we need both up for Adreno. On the other hand, we
++			 * need to manage the GX rpmpd domain in the adreno driver.
++			 * Enable CX/GX GDSCs here so that we can manage just the GX
++			 * RPM Power Domain in the Adreno driver.
++			 */
++			power-domains = <&gpucc GPU_GX_GDSC>;
++			clocks = <&gcc GCC_GPU_CFG_AHB_CLK>,
++				 <&gcc GCC_BIMC_GFX_CLK>,
++				 <&gcc GCC_GPU_BIMC_GFX_CLK>;
++			clock-names = "iface", "mem", "mem_iface";
+ 			#global-interrupts = <2>;
++			#iommu-cells = <1>;
++
+ 			interrupts =
+ 				<GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
+ 				<GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
+@@ -1600,9 +1618,16 @@ blsp_i2c8: i2c@c1b8000 {
+ 		mmss_smmu: iommu@cd00000 {
+ 			compatible = "qcom,sdm630-smmu-v2", "qcom,smmu-v2";
+ 			reg = <0x0cd00000 0x40000>;
+-			#iommu-cells = <1>;
+ 
++			clocks = <&mmcc MNOC_AHB_CLK>,
++				 <&mmcc BIMC_SMMU_AHB_CLK>,
++				 <&rpmcc RPM_SMD_MMSSNOC_AXI_CLK>,
++				 <&mmcc BIMC_SMMU_AXI_CLK>;
++			clock-names = "iface-mm", "iface-smmu",
++				      "bus-mm", "bus-smmu";
+ 			#global-interrupts = <2>;
++			#iommu-cells = <1>;
++
+ 			interrupts =
+ 				<GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
+ 				<GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.30.1
 
