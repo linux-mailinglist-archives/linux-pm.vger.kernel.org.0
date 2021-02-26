@@ -2,18 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98A43267AD
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58873267AF
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Feb 2021 21:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbhBZUFV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Feb 2021 15:05:21 -0500
-Received: from relay01.th.seeweb.it ([5.144.164.162]:41385 "EHLO
-        relay01.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbhBZUFR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 15:05:17 -0500
+        id S230010AbhBZUFZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Feb 2021 15:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbhBZUFV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Feb 2021 15:05:21 -0500
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E021C06178B
+        for <linux-pm@vger.kernel.org>; Fri, 26 Feb 2021 12:04:36 -0800 (PST)
 Received: from localhost.localdomain (abab236.neoplus.adsl.tpnet.pl [83.6.165.236])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id E6EBC1F87C;
-        Fri, 26 Feb 2021 21:04:29 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id C43201FAB6;
+        Fri, 26 Feb 2021 21:04:33 +0100 (CET)
 From:   Konrad Dybcio <konrad.dybcio@somainline.org>
 To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
@@ -28,9 +31,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 01/41] arm64: dts: qcom: sdm630: Rewrite memory map
-Date:   Fri, 26 Feb 2021 21:03:31 +0100
-Message-Id: <20210226200414.167762-2-konrad.dybcio@somainline.org>
+Subject: [PATCH 02/41] arm64: dts: qcom: sdm630: Add RPMPD nodes
+Date:   Fri, 26 Feb 2021 21:03:32 +0100
+Message-Id: <20210226200414.167762-3-konrad.dybcio@somainline.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210226200414.167762-1-konrad.dybcio@somainline.org>
 References: <20210226200414.167762-1-konrad.dybcio@somainline.org>
@@ -40,108 +43,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+Add the rpmpd node on the sdm630 and define the available levels.
 
-The memory map was wrong. Fix it.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 41 ++++++++++++----------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 47 ++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index f91a928466c3..5ea3884b3ccb 100644
+index 5ea3884b3ccb..0dd838ef5d6e 100644
 --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -343,10 +343,19 @@ wlan_msa_mem: wlan-msa-mem@85700000 {
- 		};
+@@ -5,6 +5,7 @@
  
- 		qhee_code: qhee-code@85800000 {
--			reg = <0x0 0x85800000 0x0 0x3700000>;
-+			reg = <0x0 0x85800000 0x0 0x600000>;
- 			no-map;
- 		};
+ #include <dt-bindings/clock/qcom,gcc-sdm660.h>
+ #include <dt-bindings/clock/qcom,rpmcc.h>
++#include <dt-bindings/power/qcom-rpmpd.h>
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
  
-+		rmtfs_mem: memory@85e00000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0x0 0x85e00000 0x0 0x200000>;
-+			no-map;
+@@ -423,6 +424,52 @@ rpmcc: clock-controller {
+ 				compatible = "qcom,rpmcc-sdm660", "qcom,rpmcc";
+ 				#clock-cells = <1>;
+ 			};
 +
-+			qcom,client-id = <1>;
-+			qcom,vmid = <15>;
-+		};
++			rpmpd: power-controller {
++				compatible = "qcom,sdm660-rpmpd";
++				#power-domain-cells = <1>;
++				operating-points-v2 = <&rpmpd_opp_table>;
 +
- 		smem_region: smem-mem@86000000 {
- 			reg = <0 0x86000000 0 0x200000>;
- 			no-map;
-@@ -357,58 +366,44 @@ tz_mem: memory@86200000 {
- 			no-map;
- 		};
- 
--		modem_fw_mem: modem-fw-region@8ac00000 {
-+		mpss_region: mpss@8ac00000 {
- 			reg = <0x0 0x8ac00000 0x0 0x7e00000>;
- 			no-map;
- 		};
- 
--		adsp_fw_mem: adsp-fw-region@92a00000 {
-+		adsp_region: adsp@92a00000 {
- 			reg = <0x0 0x92a00000 0x0 0x1e00000>;
- 			no-map;
- 		};
- 
--		pil_mba_mem: pil-mba-region@94800000 {
-+		mba_region: mba@94800000 {
- 			reg = <0x0 0x94800000 0x0 0x200000>;
- 			no-map;
- 		};
- 
--		buffer_mem: buffer-region@94a00000 {
-+		buffer_mem: tzbuffer@94a00000 {
- 			reg = <0x0 0x94a00000 0x0 0x100000>;
- 			no-map;
- 		};
- 
--		venus_fw_mem: venus-fw-region@9f800000 {
-+		venus_region: venus@9f800000 {
- 			reg = <0x0 0x9f800000 0x0 0x800000>;
- 			no-map;
- 		};
- 
--		secure_region2: secure-region2@f7c00000 {
--			reg = <0x0 0xf7c00000 0x0 0x5c00000>;
--			no-map;
--		};
--
- 		adsp_mem: adsp-region@f6000000 {
- 			reg = <0x0 0xf6000000 0x0 0x800000>;
- 			no-map;
- 		};
- 
--		qseecom_ta_mem: qseecom-ta-region@fec00000 {
--			reg = <0x0 0xfec00000 0x0 0x1000000>;
--			no-map;
--		};
--
- 		qseecom_mem: qseecom-region@f6800000 {
- 			reg = <0x0 0xf6800000 0x0 0x1400000>;
- 			no-map;
- 		};
- 
--		secure_display_memory: secure-region@f5c00000 {
--			reg = <0x0 0xf5c00000 0x0 0x5c00000>;
--			no-map;
--		};
--
--		cont_splash_mem: cont-splash-region@9d400000 {
--			reg = <0x0 0x9d400000 0x0 0x23ff000>;
-+		zap_shader_region: gpu@fed00000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x0 0xfed00000 0x0 0xa00000>;
- 			no-map;
++				rpmpd_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					rpmpd_opp_ret: opp1 {
++						opp-level = <RPM_SMD_LEVEL_RETENTION>;
++					};
++
++					rpmpd_opp_ret_plus: opp2 {
++						opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
++					};
++
++					rpmpd_opp_min_svs: opp3 {
++						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
++					};
++
++					rpmpd_opp_low_svs: opp4 {
++						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
++					};
++
++					rpmpd_opp_svs: opp5 {
++						opp-level = <RPM_SMD_LEVEL_SVS>;
++					};
++
++					rpmpd_opp_svs_plus: opp6 {
++						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
++					};
++
++					rpmpd_opp_nom: opp7 {
++						opp-level = <RPM_SMD_LEVEL_NOM>;
++					};
++
++					rpmpd_opp_nom_plus: opp8 {
++						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
++					};
++
++					rpmpd_opp_turbo: opp9 {
++						opp-level = <RPM_SMD_LEVEL_TURBO>;
++					};
++				};
++			};
  		};
  	};
+ 
 -- 
 2.30.1
 
