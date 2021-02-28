@@ -2,80 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B08432717D
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Feb 2021 09:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD8532731B
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Feb 2021 16:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbhB1H7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Feb 2021 02:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbhB1H7q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Feb 2021 02:59:46 -0500
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:84:22e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18070C06174A;
-        Sat, 27 Feb 2021 23:59:05 -0800 (PST)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 1B1A540A0A; Sun, 28 Feb 2021 07:59:02 +0000 (UTC)
-Date:   Sun, 28 Feb 2021 07:59:02 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Matthew Garrett <matthewgarrett@google.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-pm@vger.kernel.org, keyrings@vger.kernel.org,
-        zohar@linux.ibm.com, jarkko@kernel.org, corbet@lwn.net,
-        rjw@rjwysocki.net, Matthew Garrett <mjg59@google.com>
-Subject: Re: [PATCH 2/9] tpm: Allow PCR 23 to be restricted to kernel-only use
-Message-ID: <20210228075902.GA9183@codon.org.uk>
-References: <20210220013255.1083202-1-matthewgarrett@google.com>
- <20210220013255.1083202-3-matthewgarrett@google.com>
- <b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com>
+        id S230299AbhB1PoR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Feb 2021 10:44:17 -0500
+Received: from mga11.intel.com ([192.55.52.93]:12581 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230228AbhB1PoR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 28 Feb 2021 10:44:17 -0500
+IronPort-SDR: 5ooTB0pWCFQWSlAH4X1SUguk6O3g+zcYf/aI5fVJKuZ8P6Qpo2f6b2Y5NAl9LkSORWwmTRvudy
+ RvH+6zNIaRWg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9909"; a="182859921"
+X-IronPort-AV: E=Sophos;i="5.81,213,1610438400"; 
+   d="scan'208";a="182859921"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2021 07:42:31 -0800
+IronPort-SDR: +HjWRq1K/RLC7zS4juh4aHx8voq+CEGvmGCz8xnc2D+4yuSM0bdLXSf3Z8BLpVTw97CivYXp0v
+ lpqLWUBOCLIg==
+X-IronPort-AV: E=Sophos;i="5.81,213,1610438400"; 
+   d="scan'208";a="405808377"
+Received: from mvvallab-mobl1.amr.corp.intel.com ([10.254.180.194])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2021 07:42:30 -0800
+Message-ID: <0a8f11cfbc761767b7a994f724af3dac124184c9.camel@linux.intel.com>
+Subject: Re: [RFC PATCH] powercap: Add Hygon Fam18h RAPL support
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Pu Wen <puwen@hygon.cn>, linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, rjw@rjwysocki.net, rafael@kernel.org,
+        bp@alien8.de, victording@google.com, kim.phillips@amd.com,
+        rui.zhang@intel.com
+Date:   Sun, 28 Feb 2021 07:42:29 -0800
+In-Reply-To: <20210225130129.21512-1-puwen@hygon.cn>
+References: <20210225130129.21512-1-puwen@hygon.cn>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 10:00:53AM -0800, James Bottomley wrote:
-> On Sat, 2021-02-20 at 01:32 +0000, Matthew Garrett wrote:
-> > Under certain circumstances it might be desirable to enable the
-> > creation of TPM-backed secrets that are only accessible to the
-> > kernel. In an ideal world this could be achieved by using TPM
-> > localities, but these don't appear to be available on consumer
-> > systems.
+On Thu, 2021-02-25 at 21:01 +0800, Pu Wen wrote:
+> Enable Hygon Fam18h RAPL support for the power capping framework.
 > 
-> I don't understand this ... the localities seem to work fine on all the
-> systems I have ... is this some embedded thing?
+If this patch is tested and works on this processor, not sure why this
+is RFC?
 
-I haven't made it work on an HP Z440 or a Lenovo P520. So now I'm
-wondering whether having chipsets with TXT support (even if it's turned
-off) confuse this point. Sigh. I'd really prefer to use localities than
-a PCR, so if it works on client platforms I'd be inclined to say we'll
-do a self-test and go for that, and workstation vendors can just
-recommend their customers use UPSes or something.
+Thanks,
+Srinivas
 
-> >  An alternative is to simply block userland from modifying one of the
-> > resettable PCRs, leaving it available to the kernel. If the kernel
-> > ensures that no userland can access the TPM while it is carrying out
-> > work, it can reset PCR 23, extend it to an arbitrary value, create or
-> > load a secret, and then reset the PCR again. Even if userland somehow
-> > obtains the sealed material, it will be unable to unseal it since PCR
-> > 23 will never be in the appropriate state.
+> Signed-off-by: Pu Wen <puwen@hygon.cn>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 1 +
+>  drivers/powercap/intel_rapl_msr.c    | 1 +
+>  2 files changed, 2 insertions(+)
 > 
-> This seems a bit arbitrary: You're removing this PCR from user space
-> accessibility, but PCR 23 is defined as "Application Support" how can
-> we be sure no application will actually want to use it (and then fail)?
+> diff --git a/drivers/powercap/intel_rapl_common.c
+> b/drivers/powercap/intel_rapl_common.c
+> index fdda2a737186..73cf68af9770 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -1069,6 +1069,7 @@ static const struct x86_cpu_id rapl_ids[]
+> __initconst = {
+>  
+>  	X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_amd),
+>  	X86_MATCH_VENDOR_FAM(AMD, 0x19, &rapl_defaults_amd),
+> +	X86_MATCH_VENDOR_FAM(HYGON, 0x18, &rapl_defaults_amd),
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
+> diff --git a/drivers/powercap/intel_rapl_msr.c
+> b/drivers/powercap/intel_rapl_msr.c
+> index 78213d4b5b16..cc3b22881bfe 100644
+> --- a/drivers/powercap/intel_rapl_msr.c
+> +++ b/drivers/powercap/intel_rapl_msr.c
+> @@ -150,6 +150,7 @@ static int rapl_msr_probe(struct platform_device
+> *pdev)
+>  	case X86_VENDOR_INTEL:
+>  		rapl_msr_priv = &rapl_msr_priv_intel;
+>  		break;
+> +	case X86_VENDOR_HYGON:
+>  	case X86_VENDOR_AMD:
+>  		rapl_msr_priv = &rapl_msr_priv_amd;
+>  		break;
 
-Absolutely no way of guaranteeing that, and enabling this option is
-certainly an ABI break.
-
-> Since PCRs are very scarce, why not use a NV index instead.  They're
-> still a bounded resource, but most TPMs have far more of them than they
-> do PCRs, and the address space is much bigger so picking a nice
-> arbitrary 24 bit value reduces the chance of collisions.
-
-How many write cycles do we expect the NV to survive? But I'll find a
-client system with a TPM and play with locality support there - maybe we
-can just avoid this problem anyway.
