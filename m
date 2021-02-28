@@ -2,141 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4D432715C
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Feb 2021 07:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B08432717D
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Feb 2021 09:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhB1G7y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Feb 2021 01:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S230393AbhB1H7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Feb 2021 02:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbhB1G7N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Feb 2021 01:59:13 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBBC06174A;
-        Sat, 27 Feb 2021 22:58:33 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id k22so7636568pll.6;
-        Sat, 27 Feb 2021 22:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=r8CLTUXVVZcMiqETcvGKGx4dgIVTKeUoOcCN29WuOTI=;
-        b=pZXOz7dSMFcRlF92cWgx1jtDPCUCzNTibhUw/QK3IMW4hHVgCbD4UIsZXFsyRaE2ko
-         qcKIjE6+JXXMn5jICu0FGQY2RQ4ODfa6TTA38qzlCUolNqyw8K3bcWTNK0desIMxJU6i
-         /Pa3Z9gmK06ioRO7l2j3GSt0i5u+J3CXCQbtlofX+M+tK6BwtpuPWAs0fd6Pyxfw9H8C
-         AP06UL92/CkFi3JGp8AynbS9QTaMmAaZRcK6X0VAJ3Y/9MfOrmE0NZWECZbk/gdxFfk+
-         T21qztGHpCHFnuzhm/9uMSDYGUdlT0aU1neZo3qtMFOr/H9z2iB9WaF1qP8DZHy8CSjM
-         TeNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=r8CLTUXVVZcMiqETcvGKGx4dgIVTKeUoOcCN29WuOTI=;
-        b=L3AjQAI7g4HyA7rWSyEGR1umpSeAN6O9W2Efub6j6m/DikqohZhsOCc1My7/zw0qic
-         elh9Tcbhjf3Up3uqluAYNgDCYdkE3G/pCd/SRIUjo0lugBToQxw/CHSUFM26/STTX1UK
-         NCwZ+y5fbKgQjw/KquswE+HfKZcMIGlrGs+6YU5one5lIob8IyTDKMDrhbTD62/Aub1j
-         7H+sBVchQRSgMqwBpU1gqnUQaSn13Nqkk2yBX7WZ0bvfBj+r/2puy2U3idgZRl2AvhLE
-         XVCAmykgVC6MCZ18bQltwx9yUVLys5KjV4Mlw1g++ns5/UrWHaLYxf/xCgHjcaAGZwZR
-         2MxQ==
-X-Gm-Message-State: AOAM533DzKC0fxXjT0Ts9r8QTeABwVR2zBNLfFZpcPoKWc/iF7Xg/ibB
-        ZBXXIUzxB5Y6Sh7bLk6xhgV0D7uD6bUDsg==
-X-Google-Smtp-Source: ABdhPJxLl1eeT6VENQBjMZTEP9NmHMBjwg3TG64+8zuHU8eT3mS4phpRucptnYESkO+JHospYb5qZw==
-X-Received: by 2002:a17:90a:a10a:: with SMTP id s10mr11502337pjp.36.1614495512210;
-        Sat, 27 Feb 2021 22:58:32 -0800 (PST)
-Received: from [172.30.1.25] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id e8sm10252764pfl.101.2021.02.27.22.58.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Feb 2021 22:58:31 -0800 (PST)
-Subject: Re: [PATCH] devfreq: rk3399_dmc: Simplify with dev_err_probe()
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Chanwoo Choi <chanwoo@kernel.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20200828153100.19006-1-krzk@kernel.org>
- <CAGTfZH3+mxBXzVp5Wz=F6nbx3bfubrmJozVzVdt8s1e45WQOqg@mail.gmail.com>
- <CAJKOXPdw=2MMT+5=_TtOqEwPA8s40J21eYXfzv8Whk7F8uF9dw@mail.gmail.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Message-ID: <8c7f16ac-2287-eddb-e074-90cfec56500b@gmail.com>
-Date:   Sun, 28 Feb 2021 15:58:26 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S229984AbhB1H7q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Feb 2021 02:59:46 -0500
+Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:84:22e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18070C06174A;
+        Sat, 27 Feb 2021 23:59:05 -0800 (PST)
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id 1B1A540A0A; Sun, 28 Feb 2021 07:59:02 +0000 (UTC)
+Date:   Sun, 28 Feb 2021 07:59:02 +0000
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Matthew Garrett <matthewgarrett@google.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-pm@vger.kernel.org, keyrings@vger.kernel.org,
+        zohar@linux.ibm.com, jarkko@kernel.org, corbet@lwn.net,
+        rjw@rjwysocki.net, Matthew Garrett <mjg59@google.com>
+Subject: Re: [PATCH 2/9] tpm: Allow PCR 23 to be restricted to kernel-only use
+Message-ID: <20210228075902.GA9183@codon.org.uk>
+References: <20210220013255.1083202-1-matthewgarrett@google.com>
+ <20210220013255.1083202-3-matthewgarrett@google.com>
+ <b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPdw=2MMT+5=_TtOqEwPA8s40J21eYXfzv8Whk7F8uF9dw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21. 2. 28. 오전 1:35, Krzysztof Kozlowski wrote:
-> On Sat, 29 Aug 2020 at 15:10, Chanwoo Choi <chanwoo@kernel.org> wrote:
->>
->> On Sat, Aug 29, 2020 at 12:31 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>>
->>> Common pattern of handling deferred probe can be simplified with
->>> dev_err_probe().  Less code and the error value gets printed.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
->>> ---
->>>   drivers/devfreq/rk3399_dmc.c | 20 ++++++--------------
->>>   1 file changed, 6 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
->>> index 027769e39f9b..35b3542f1f7b 100644
->>> --- a/drivers/devfreq/rk3399_dmc.c
->>> +++ b/drivers/devfreq/rk3399_dmc.c
->>> @@ -324,22 +324,14 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
->>>          mutex_init(&data->lock);
->>>
->>>          data->vdd_center = devm_regulator_get(dev, "center");
->>> -       if (IS_ERR(data->vdd_center)) {
->>> -               if (PTR_ERR(data->vdd_center) == -EPROBE_DEFER)
->>> -                       return -EPROBE_DEFER;
->>> -
->>> -               dev_err(dev, "Cannot get the regulator \"center\"\n");
->>> -               return PTR_ERR(data->vdd_center);
->>> -       }
->>> +       if (IS_ERR(data->vdd_center))
->>> +               return dev_err_probe(dev, PTR_ERR(data->vdd_center),
->>> +                                    "Cannot get the regulator \"center\"\n");
->>>
->>>          data->dmc_clk = devm_clk_get(dev, "dmc_clk");
->>> -       if (IS_ERR(data->dmc_clk)) {
->>> -               if (PTR_ERR(data->dmc_clk) == -EPROBE_DEFER)
->>> -                       return -EPROBE_DEFER;
->>> -
->>> -               dev_err(dev, "Cannot get the clk dmc_clk\n");
->>> -               return PTR_ERR(data->dmc_clk);
->>> -       }
->>> +       if (IS_ERR(data->dmc_clk))
->>> +               return dev_err_probe(dev, PTR_ERR(data->dmc_clk),
->>> +                                    "Cannot get the clk dmc_clk\n");
->>>
->>>          data->edev = devfreq_event_get_edev_by_phandle(dev, 0);
->>>          if (IS_ERR(data->edev))
->>> --
->>> 2.17.1
->>>
->>
->> Applied it. Thanks.
+On Wed, Feb 24, 2021 at 10:00:53AM -0800, James Bottomley wrote:
+> On Sat, 2021-02-20 at 01:32 +0000, Matthew Garrett wrote:
+> > Under certain circumstances it might be desirable to enable the
+> > creation of TPM-backed secrets that are only accessible to the
+> > kernel. In an ideal world this could be achieved by using TPM
+> > localities, but these don't appear to be available on consumer
+> > systems.
 > 
-> Hi Chanwoo,
+> I don't understand this ... the localities seem to work fine on all the
+> systems I have ... is this some embedded thing?
+
+I haven't made it work on an HP Z440 or a Lenovo P520. So now I'm
+wondering whether having chipsets with TXT support (even if it's turned
+off) confuse this point. Sigh. I'd really prefer to use localities than
+a PCR, so if it works on client platforms I'd be inclined to say we'll
+do a self-test and go for that, and workstation vendors can just
+recommend their customers use UPSes or something.
+
+> >  An alternative is to simply block userland from modifying one of the
+> > resettable PCRs, leaving it available to the kernel. If the kernel
+> > ensures that no userland can access the TPM while it is carrying out
+> > work, it can reset PCR 23, extend it to an arbitrary value, create or
+> > load a secret, and then reset the PCR again. Even if userland somehow
+> > obtains the sealed material, it will be unable to unseal it since PCR
+> > 23 will never be in the appropriate state.
 > 
-> Do you know what happened with this patch? You replied that it is
-> applied but I cannot find it in the Linus' or next trees.
-> 
+> This seems a bit arbitrary: You're removing this PCR from user space
+> accessibility, but PCR 23 is defined as "Application Support" how can
+> we be sure no application will actually want to use it (and then fail)?
 
-Hi Krzysztof,
+Absolutely no way of guaranteeing that, and enabling this option is
+certainly an ABI break.
 
-There was some my mistake. I'm sorry.
-I applied it again to next branch.
+> Since PCRs are very scarce, why not use a NV index instead.  They're
+> still a bounded resource, but most TPMs have far more of them than they
+> do PCRs, and the address space is much bigger so picking a nice
+> arbitrary 24 bit value reduces the chance of collisions.
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+How many write cycles do we expect the NV to survive? But I'll find a
+client system with a TPM and play with locality support there - maybe we
+can just avoid this problem anyway.
