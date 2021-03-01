@@ -2,98 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8422F328187
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 15:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73754328531
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 17:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbhCAO4j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Mar 2021 09:56:39 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:64241
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236699AbhCAO4K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Mar 2021 09:56:10 -0500
-X-IronPort-AV: E=Sophos;i="5.81,215,1610406000"; 
-   d="scan'208";a="374413047"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Mar 2021 15:55:24 +0100
-Date:   Mon, 1 Mar 2021 15:55:23 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Saravana Kannan <skannan@codeaurora.org>
-cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kbuild-all@lists.01.org
-Subject: [PATCH] PM / devfreq: fix odd_ptr_err.cocci warnings (fwd)
-Message-ID: <alpine.DEB.2.22.394.2103011553490.2899@hadrien>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S234743AbhCAQuS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Mar 2021 11:50:18 -0500
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:46944 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235046AbhCAQqa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Mar 2021 11:46:30 -0500
+Received: by mail-oo1-f48.google.com with SMTP id l11so1907073oov.13;
+        Mon, 01 Mar 2021 08:46:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RwT1M9CwIR868czbWPMZ1oc4h+pxhg6CDMlbRgC10N8=;
+        b=JGlaa9hz4+12ulJG/m+9/jZ2nq4TNeoMkAn7D3ctBRmsC3q+a27hqvU+eVlAkOBDQO
+         K04aYZ3Alcas8ioFVhjzSnxZE+MHxgFLuKGhCjvMVWDNCxxS6f/91dsYY8Iah09Et4Wl
+         VaZsMCqIHqaHWIBkFxIRq3wongUQWdEr56lM3hIQGp6NWEMFLjQDijOXlDoPSZBvoO2y
+         g8/RusotxNufr1LDShy1RYpEJCvflLXJKoHvW2XMpXn+PueBra1+utVLmzjOL0Z2ZEDB
+         WjeETc7MlcM9VA2ISzfcUpAHTBO6jTsBOyiA330m9dgGEHsxO/BxzhzOlBLBw6mCMfaC
+         pmKg==
+X-Gm-Message-State: AOAM532/s4f84KBd2gF6VNyoIIs6fQ/Z9nWJIWUtmmgrFrfMC1Psc++0
+        2K0Q1Y8G1amXeGwYXq56aO+sCYwPYx5zT2YioY75+ceD
+X-Google-Smtp-Source: ABdhPJyGuCTWr1cs61Tgu5eJVrIRtmKvrsQP9DisOAGV9wpD7gMPnHU9gKZosfyDTJzLzzslRXz8KNzbyKAu9WpFXy4=
+X-Received: by 2002:a4a:d781:: with SMTP id c1mr3579908oou.44.1614617140271;
+ Mon, 01 Mar 2021 08:45:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20210224183022.11846-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20210224183022.11846-1-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 1 Mar 2021 17:45:29 +0100
+Message-ID: <CAJZ5v0igJztj3fRoGh9AjAPfe01wsBT27X8b19HAyr0t2kRgtg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] powercap/drivers/dtpm: Fix root node initialization
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Wed, Feb 24, 2021 at 7:30 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The root node is not set to NULL when the dtpm root node is
+> removed. Consequently, it is not possible to create a new root as it
+> is already set.
+>
+> Set the root node to NULL when the last node is removed.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/powercap/dtpm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+> index 5a51cd34a7e8..c2185ec5f887 100644
+> --- a/drivers/powercap/dtpm.c
+> +++ b/drivers/powercap/dtpm.c
+> @@ -207,6 +207,9 @@ int dtpm_release_zone(struct powercap_zone *pcz)
+>         if (dtpm->ops)
+>                 dtpm->ops->release(dtpm);
+>
+> +       if (root == dtpm)
+> +               root = NULL;
+> +
+>         kfree(dtpm);
+>
+>         return 0;
+> --
 
-There seems to be an inconsistency, but the patch proposed by Coccinelle
-does not look correct.  There should be a test on opp_table.
-
-julia
-
----------- Forwarded message ----------
-Date: Mon, 1 Mar 2021 16:35:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: kbuild@lists.01.org
-Cc: lkp@intel.com, Julia Lawall <julia.lawall@lip6.fr>
-Subject: [PATCH] PM / devfreq: fix odd_ptr_err.cocci warnings
-
-CC: kbuild-all@lists.01.org
-TO: Saravana Kannan <skannan@codeaurora.org>
-CC: Chanwoo Choi <cw00.choi@samsung.com>
-CC: Sibi Sankar <sibis@codeaurora.org>
-CC: MyungJoo Ham <myungjoo.ham@samsung.com>
-CC: Kyungmin Park <kyungmin.park@samsung.com>
-CC: linux-pm@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-
-From: kernel test robot <lkp@intel.com>
-
-drivers/devfreq/governor_passive.c:318:7-13: inconsistent IS_ERR and PTR_ERR on line 319.
-
- PTR_ERR should access the value just tested by IS_ERR
-
-Semantic patch information:
- There can be false positives in the patch case, where it is the call to
- IS_ERR that is wrong.
-
-Generated by: scripts/coccinelle/tests/odd_ptr_err.cocci
-
-Fixes: 82d4ff586ae2 ("PM / devfreq: Add cpu based scaling support to passive governor")
-CC: Saravana Kannan <skannan@codeaurora.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing-passive-gov
-head:   82d4ff586ae2fb6d89cad871949004bed3438ccb
-commit: 82d4ff586ae2fb6d89cad871949004bed3438ccb [3/3] PM / devfreq: Add cpu based scaling support to passive governor
-:::::: branch date: 3 hours ago
-:::::: commit date: 3 hours ago
-
-Please take the patch only if it's a positive warning. Thanks!
-
- governor_passive.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -316,7 +316,7 @@ static int cpufreq_passive_register(stru
-
- 			opp_table = dev_pm_opp_get_opp_table(cpu_dev);
- 			if (IS_ERR(devfreq->opp_table)) {
--				ret = PTR_ERR(opp_table);
-+				ret = PTR_ERR(devfreq->opp_table);
- 				goto out;
- 			}
-
+Applied along with the [2/2[ as 5.12-rc material, thanks!
