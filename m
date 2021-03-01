@@ -2,102 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 975B93276B7
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 05:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDFB3277CF
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 07:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbhCAEf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Feb 2021 23:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        id S232156AbhCAGwJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Mar 2021 01:52:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbhCAEf1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Feb 2021 23:35:27 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460C2C061756
-        for <linux-pm@vger.kernel.org>; Sun, 28 Feb 2021 20:34:47 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id d12so8087003pfo.7
-        for <linux-pm@vger.kernel.org>; Sun, 28 Feb 2021 20:34:47 -0800 (PST)
+        with ESMTP id S232146AbhCAGwE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Mar 2021 01:52:04 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607E1C061786
+        for <linux-pm@vger.kernel.org>; Sun, 28 Feb 2021 22:51:24 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id s23so11092729pji.1
+        for <linux-pm@vger.kernel.org>; Sun, 28 Feb 2021 22:51:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=i9osdsSIkxdstrMXBrLYm99WRkbkxANC4iCZNYOVSSg=;
-        b=gw7NyoPFNgY8PsipPfcdpS5Dvq6DCvUvZC/Zu7eGLdmROfBBAvjceQdCtYjjU02I8W
-         UDpp3JnwhLhSg3zuyPDL1/T6f+EKpoEiBenaEy4Ew/dfE9ciaFJFThiURSj5a6SYlmc/
-         N6WAzxkHla2hMySo6m5Tau4jyHVDyWo+V2n4EgufslgxZgXF81y/qjK/YJOhxfGrAjZC
-         znmZp5pJetDv21bfkrRmPKw+05pGfSru+TSNfrGRmwc/xwnluNQVqK5v8nET4YqaCqXX
-         6aOd6rv31602Eq7w7nMF19qxMYIFe6915IiunIMH1bq7tComEzxEfcRpFiUwRbn92wjb
-         8VuQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aqYwd+HQ765ezIeB0Bc/wTGpv0fipfbf8xfki7p6edQ=;
+        b=Y631LNIj8XPs2GZZlzOu/pCAPkeV03yi0tSc90ZFqdWNq4MwxG2RTvBVvVI7L1qhLr
+         DvAwJrrisVMtoRu9qYW0NODodR7cn0ldGEeIt5YpsHOyzJvEQ/Oig/cK4ucYwkVN9row
+         ase1SDeTqqe3UZ5a66nc1bl9NZeZNErYMsQbajplFOmEw+rEFNg1uHE9Kh1kMofQOZWs
+         E0L4wOnNiDQmCcYKoaB4apAqviTyz95oO3XfPlUhMeApoWbiasUEybs3nAoS/eYGD/KB
+         qA4ZK7bL8Vf9mWEIlM1kwRveM0x9KHA6EW2B8gbovP2pjL73L5vTnmbRRQYfzfXcK7TK
+         gnOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i9osdsSIkxdstrMXBrLYm99WRkbkxANC4iCZNYOVSSg=;
-        b=MmQ2yVdkHn3IiEVU1dXKGle7Inzuu5gAQPlOyw4we5+XOGanWondPyD3bEBl69j0/I
-         uIfLfGYv8OUZaQeqQ8CBjjyyAK/AMLskw1je1Oe/byIWA9rPT+ZsgIEbzDHq6NqvhECw
-         vLwCBk5htiv1bRTA8VMJnC4w/W+8eHpaJclcrBufdzuq8bOVhTKJJF7E+npiVVs6ERYC
-         uOIbB31jEtcUpgAW99VUqzK55mHL0fz8W0HU576qmzUhz5vGsot1G6DEscVDAOmcC3Il
-         wG55ivMGd7d8Gebmxrq6gdC2lF+4O8HnFQR+jd8s7fgQ85NxKQFeVzcXGQR0C0pLwgcK
-         +pGg==
-X-Gm-Message-State: AOAM5325vjP7ECvXRFsNDJsTZRKBv/6byX2IugTftkm2JBnix6z/bQsD
-        7IA8tZhlvo4cGRyXvHBo6Ka5zA==
-X-Google-Smtp-Source: ABdhPJyQ5HWnkD2hBCmKGlP5HS2VTvNWDNjZBe7FXjNYQ0jaoIUvqwaRsOvzNQsLismU3TppWAQ5AA==
-X-Received: by 2002:aa7:8ad0:0:b029:1ed:fb30:e5d5 with SMTP id b16-20020aa78ad00000b02901edfb30e5d5mr13667116pfd.79.1614573286763;
-        Sun, 28 Feb 2021 20:34:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aqYwd+HQ765ezIeB0Bc/wTGpv0fipfbf8xfki7p6edQ=;
+        b=HUU3UCFa4tdDS610oSlSXTCh4TJaVrSR4uahzl41xZIsgghdwijfJuoARYcY02Xq8u
+         vj4U4vh0Eb6JUFI605rRQWSZWgmPJ+SEV9bW31oz2rnyaZrFdM9s+4FP/HmWTpzRZHzb
+         HtJ2lcfWggHdTkq/9cbTNEQhlGxQgz4JJLbXJ0Hvhh14ibhGLco9LKDpEFOmeiRpXsWb
+         O0GU7rhfS1oBvZ3p3tH4KKUCvyoIbKVNuz2h3s/NPk0HW0Ck/nShWn8SZ3rqEUfxTFAB
+         9uSzkYLXFtrWmAbtzJquvKGeBY9ucdnoA9eefqA1x6Lt9qrVOt8ehDkyAhHPWEDn/jeN
+         T9EQ==
+X-Gm-Message-State: AOAM533YPEPRnldC/uGshKUG1NkcD3Fj34VOVOj64FqqOWb/VAmBP7ax
+        UH04zNKo0I5qtXszE7kIcqtNiQ==
+X-Google-Smtp-Source: ABdhPJyyeDkeZLl+9Bb9rZkhCqorIxui0T4q6log1k/2GJaVJJkHpEqq2xxfCVbgDiTyFMHDKRdJNg==
+X-Received: by 2002:a17:902:ce8d:b029:e4:bc38:c4 with SMTP id f13-20020a170902ce8db02900e4bc3800c4mr1231327plg.48.1614581483871;
+        Sun, 28 Feb 2021 22:51:23 -0800 (PST)
 Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id c6sm16496906pfc.94.2021.02.28.20.34.45
+        by smtp.gmail.com with ESMTPSA id x23sm16104211pff.133.2021.02.28.22.51.22
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 28 Feb 2021 20:34:46 -0800 (PST)
-Date:   Mon, 1 Mar 2021 10:04:44 +0530
+        Sun, 28 Feb 2021 22:51:23 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-hw: fix dereferencing freed memory 'data'
-Message-ID: <20210301043444.rbuauzhiu4n6nkay@vireshk-i7>
-References: <20210228013319.10469-1-shawn.guo@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Ben Segall <bsegall@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V5 0/2] cpufreq: cppc: Add support for frequency invariance
+Date:   Mon,  1 Mar 2021 12:21:16 +0530
+Message-Id: <cover.1614580695.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210228013319.10469-1-shawn.guo@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28-02-21, 09:33, Shawn Guo wrote:
-> Commit 67fc209b527d ("cpufreq: qcom-hw: drop devm_xxx() calls from
-> init/exit hooks") introduces an issue of dereferencing freed memory
-> 'data'.  Fix it.
-> 
-> Fixes: 67fc209b527d ("cpufreq: qcom-hw: drop devm_xxx() calls from init/exit hooks")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> ---
-> Viresh,
-> 
-> The issue was introduced by v2 of "cpufreq: qcom-hw: drop devm_xxx()
-> calls from init/exit hooks", which misses the conversion of 'data->base'
-> in error path.  Sorry!
-> 
-> Shawn
-> 
->  drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index d3c23447b892..bee5d67a8227 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -374,7 +374,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->  error:
->  	kfree(data);
->  unmap_base:
-> -	iounmap(data->base);
-> +	iounmap(base);
->  release_region:
->  	release_mem_region(res->start, resource_size(res));
->  	return ret;
+Hello,
 
-Applied. Thanks.
--- 
+CPPC cpufreq driver is used for ARM servers and this patch series tries
+to provide counter-based frequency invariance support for them in the
+absence for architecture specific counters (like AMUs).
+
+This is tested by:
+- /me with some hacks on Hikey, as I didn't have access to the right
+  hardware.
+
+- Vincent Guittot on ThunderX2, only initial testing done.
+
+- Ionela Voinescu on Juno R2, though she tested a previous version of
+  this.
+
+
+This is based of 5.12-rc1.
+
+Changes since V4:
+- Move some code to policy specific initialization for cppc driver.
+- Initialize kthread specific stuff only once in cppc driver.
+- Added a kerneldoc comment in cppc driver and improved changelog as
+  well.
+
+Changes since V3:
+- rebuild_sched_domains_energy() stuff moved from arm64 to drivers/base.
+- Added Reviewed/Tested-by Ionela for the first patch.
+- Remove unused max_freq field from structure in cppc driver.
+- s/cppc_f_i/cppc_freq_inv.
+- Fix an per-cpu access, there was a bug in earlier version.
+- Create a single kthread which can run on any CPU and takes care of
+  work from all the CPUs.
+- Do the whole FIE thing under a new CONFIG option for cppc driver.
+- Few minor improvements.
+
+Changes since V2:
+- Not sending as an RFC anymore.
+- Several renames, reordering of code in 1/2 based on Ionela's comments.
+- Several rebase changes for 2/2.
+- The freq_scale calculations are optimized a bit.
+- Better overall commenting and commit logs.
+
+Changes since V1:
+- The interface for setting the callbacks is improved, so different
+  parts looking to provide their callbacks don't need to think about
+  each other.
+
+- Moved to per-cpu storage for storing the callback related data, AMU
+  counters have higher priority with this.
+
+--
 viresh
+
+Viresh Kumar (2):
+  topology: Allow multiple entities to provide sched_freq_tick()
+    callback
+  cpufreq: CPPC: Add support for frequency invariance
+
+ arch/arm64/include/asm/topology.h |  10 +-
+ arch/arm64/kernel/topology.c      | 105 +++++--------
+ drivers/base/arch_topology.c      |  85 ++++++++++-
+ drivers/cpufreq/Kconfig.arm       |   9 ++
+ drivers/cpufreq/cppc_cpufreq.c    | 244 ++++++++++++++++++++++++++++--
+ include/linux/arch_topology.h     |  15 +-
+ kernel/sched/core.c               |   1 +
+ 7 files changed, 377 insertions(+), 92 deletions(-)
+
+
+base-commit: fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
