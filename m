@@ -2,66 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B15A7328099
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 15:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8422F328187
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 15:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbhCAOV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Mar 2021 09:21:26 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:35899 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbhCAOVU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Mar 2021 09:21:20 -0500
-Received: by mail-ot1-f47.google.com with SMTP id 105so16600903otd.3;
-        Mon, 01 Mar 2021 06:21:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sy7m8yMdRJD9qHAwI4o9FRXYAAVOzrnT3jeU5RjFYds=;
-        b=qfilI+PaN7HHbyPL8+H99oby7lJdiBu11oeLqTqdqcsMSvc72Exxo2Gz0e5bP5bsG3
-         kCSHmntaNdmYwVzdKmswW/9OrbAIQj+EOD2/lTFc8XZ/1gVFEsxK39jBqdHaQpNkmHcs
-         62OYlCsGuUUrUE7WJKY2j/4T3WutLR1/a8M0vOkphGiUd5tpUfeneYVkLpddKlJvJL1A
-         ArXBw+4OqlAXJiGs+pGHH0QHnKgwX5+VoEGFiX0CaMqBtBhBVdZgZ9/SG+9+vYq6DVRS
-         lyQItOwSnGe++E/B9tSDANNFmJOnJG5QvBhnP318CxVNYAvvKbiQ3kEvGYtQmO/zav4b
-         HQFg==
-X-Gm-Message-State: AOAM530AwHSoQtfzIid5AatunO2yDv1qbAC+RRPyh2DBpOFaUe4sfS3b
-        CtNT9PwyvGQjYxnc5OuVndmYx3TfjtQovn/eQoo=
-X-Google-Smtp-Source: ABdhPJyg3mWZKUOaqTvEmbv+6UWI6VNtAdjVnxTfgjWQ0rZ8fqdYdzHUW94Hw/BGGZL0HMxsnZO2VhjHy7/tpwdYiPM=
-X-Received: by 2002:a05:6830:1e03:: with SMTP id s3mr13486121otr.260.1614608435981;
- Mon, 01 Mar 2021 06:20:35 -0800 (PST)
+        id S236700AbhCAO4j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Mar 2021 09:56:39 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:64241
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236699AbhCAO4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Mar 2021 09:56:10 -0500
+X-IronPort-AV: E=Sophos;i="5.81,215,1610406000"; 
+   d="scan'208";a="374413047"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Mar 2021 15:55:24 +0100
+Date:   Mon, 1 Mar 2021 15:55:23 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Saravana Kannan <skannan@codeaurora.org>
+cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kbuild-all@lists.01.org
+Subject: [PATCH] PM / devfreq: fix odd_ptr_err.cocci warnings (fwd)
+Message-ID: <alpine.DEB.2.22.394.2103011553490.2899@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20210225130129.21512-1-puwen@hygon.cn> <0a8f11cfbc761767b7a994f724af3dac124184c9.camel@linux.intel.com>
- <6543a335-e84c-29ea-e20b-c56bdd60d1c6@hygon.cn>
-In-Reply-To: <6543a335-e84c-29ea-e20b-c56bdd60d1c6@hygon.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 1 Mar 2021 15:20:18 +0100
-Message-ID: <CAJZ5v0jyHywkUhF87sNHXMtG=QBmO23LwAFW0aHQMJsFSr1y+g@mail.gmail.com>
-Subject: Re: [RFC PATCH] powercap: Add Hygon Fam18h RAPL support
-To:     Wen Pu <puwen@hygon.cn>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "victording@google.com" <victording@google.com>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 1, 2021 at 3:18 AM Wen Pu <puwen@hygon.cn> wrote:
->
-> On 2021/2/28 23:42, Srinivas Pandruvada wrote:
-> > On Thu, 2021-02-25 at 21:01 +0800, Pu Wen wrote:
-> >> Enable Hygon Fam18h RAPL support for the power capping framework.
-> >>
-> > If this patch is tested and works on this processor, not sure why this
-> > is RFC?
->
-> This patch is tested and works on Hygon processor. The 'RFC' is automated
-> generated by my script ;)
+Hello,
 
-Well, care to resend as non-RFC, then?
+There seems to be an inconsistency, but the patch proposed by Coccinelle
+does not look correct.  There should be a test on opp_table.
+
+julia
+
+---------- Forwarded message ----------
+Date: Mon, 1 Mar 2021 16:35:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: kbuild@lists.01.org
+Cc: lkp@intel.com, Julia Lawall <julia.lawall@lip6.fr>
+Subject: [PATCH] PM / devfreq: fix odd_ptr_err.cocci warnings
+
+CC: kbuild-all@lists.01.org
+TO: Saravana Kannan <skannan@codeaurora.org>
+CC: Chanwoo Choi <cw00.choi@samsung.com>
+CC: Sibi Sankar <sibis@codeaurora.org>
+CC: MyungJoo Ham <myungjoo.ham@samsung.com>
+CC: Kyungmin Park <kyungmin.park@samsung.com>
+CC: linux-pm@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+
+From: kernel test robot <lkp@intel.com>
+
+drivers/devfreq/governor_passive.c:318:7-13: inconsistent IS_ERR and PTR_ERR on line 319.
+
+ PTR_ERR should access the value just tested by IS_ERR
+
+Semantic patch information:
+ There can be false positives in the patch case, where it is the call to
+ IS_ERR that is wrong.
+
+Generated by: scripts/coccinelle/tests/odd_ptr_err.cocci
+
+Fixes: 82d4ff586ae2 ("PM / devfreq: Add cpu based scaling support to passive governor")
+CC: Saravana Kannan <skannan@codeaurora.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing-passive-gov
+head:   82d4ff586ae2fb6d89cad871949004bed3438ccb
+commit: 82d4ff586ae2fb6d89cad871949004bed3438ccb [3/3] PM / devfreq: Add cpu based scaling support to passive governor
+:::::: branch date: 3 hours ago
+:::::: commit date: 3 hours ago
+
+Please take the patch only if it's a positive warning. Thanks!
+
+ governor_passive.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/devfreq/governor_passive.c
++++ b/drivers/devfreq/governor_passive.c
+@@ -316,7 +316,7 @@ static int cpufreq_passive_register(stru
+
+ 			opp_table = dev_pm_opp_get_opp_table(cpu_dev);
+ 			if (IS_ERR(devfreq->opp_table)) {
+-				ret = PTR_ERR(opp_table);
++				ret = PTR_ERR(devfreq->opp_table);
+ 				goto out;
+ 			}
+
