@@ -2,87 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD8532731B
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Feb 2021 16:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B661D32760B
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 03:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhB1PoR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Feb 2021 10:44:17 -0500
-Received: from mga11.intel.com ([192.55.52.93]:12581 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230228AbhB1PoR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 28 Feb 2021 10:44:17 -0500
-IronPort-SDR: 5ooTB0pWCFQWSlAH4X1SUguk6O3g+zcYf/aI5fVJKuZ8P6Qpo2f6b2Y5NAl9LkSORWwmTRvudy
- RvH+6zNIaRWg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9909"; a="182859921"
-X-IronPort-AV: E=Sophos;i="5.81,213,1610438400"; 
-   d="scan'208";a="182859921"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2021 07:42:31 -0800
-IronPort-SDR: +HjWRq1K/RLC7zS4juh4aHx8voq+CEGvmGCz8xnc2D+4yuSM0bdLXSf3Z8BLpVTw97CivYXp0v
- lpqLWUBOCLIg==
-X-IronPort-AV: E=Sophos;i="5.81,213,1610438400"; 
-   d="scan'208";a="405808377"
-Received: from mvvallab-mobl1.amr.corp.intel.com ([10.254.180.194])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2021 07:42:30 -0800
-Message-ID: <0a8f11cfbc761767b7a994f724af3dac124184c9.camel@linux.intel.com>
+        id S231185AbhCACRo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Feb 2021 21:17:44 -0500
+Received: from spam01.hygon.cn ([110.188.70.11]:21566 "EHLO spam2.hygon.cn"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231730AbhCACRl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 28 Feb 2021 21:17:41 -0500
+Received: from MK-DB.hygon.cn ([172.23.18.60])
+        by spam2.hygon.cn with ESMTP id 1212GjpF002954;
+        Mon, 1 Mar 2021 10:16:45 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from cncheex01.Hygon.cn ([172.23.18.10])
+        by MK-DB.hygon.cn with ESMTP id 1212Gf8n020388;
+        Mon, 1 Mar 2021 10:16:41 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex01.Hygon.cn
+ (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Mon, 1 Mar 2021
+ 10:16:26 +0800
+Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
+ ([172.23.18.10]) with mapi id 15.01.1466.003; Mon, 1 Mar 2021 10:16:26 +0800
+From:   Wen Pu <puwen@hygon.cn>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "victording@google.com" <victording@google.com>,
+        "kim.phillips@amd.com" <kim.phillips@amd.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>
 Subject: Re: [RFC PATCH] powercap: Add Hygon Fam18h RAPL support
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Pu Wen <puwen@hygon.cn>, linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, rjw@rjwysocki.net, rafael@kernel.org,
-        bp@alien8.de, victording@google.com, kim.phillips@amd.com,
-        rui.zhang@intel.com
-Date:   Sun, 28 Feb 2021 07:42:29 -0800
-In-Reply-To: <20210225130129.21512-1-puwen@hygon.cn>
+Thread-Topic: [RFC PATCH] powercap: Add Hygon Fam18h RAPL support
+Thread-Index: AQHXC3ZtcHkxrsdXYk+yZ96EVY24VKptM5qAgACxH4A=
+Date:   Mon, 1 Mar 2021 02:16:26 +0000
+Message-ID: <6543a335-e84c-29ea-e20b-c56bdd60d1c6@hygon.cn>
 References: <20210225130129.21512-1-puwen@hygon.cn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+ <0a8f11cfbc761767b7a994f724af3dac124184c9.camel@linux.intel.com>
+In-Reply-To: <0a8f11cfbc761767b7a994f724af3dac124184c9.camel@linux.intel.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.23.18.44]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EEBAD4DD581A50478C89BF8CEE857CF8@Hygon.cn>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-MAIL: spam2.hygon.cn 1212GjpF002954
+X-DNSRBL: 
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2021-02-25 at 21:01 +0800, Pu Wen wrote:
-> Enable Hygon Fam18h RAPL support for the power capping framework.
-> 
-If this patch is tested and works on this processor, not sure why this
-is RFC?
-
-Thanks,
-Srinivas
-
-> Signed-off-by: Pu Wen <puwen@hygon.cn>
-> ---
->  drivers/powercap/intel_rapl_common.c | 1 +
->  drivers/powercap/intel_rapl_msr.c    | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/drivers/powercap/intel_rapl_common.c
-> b/drivers/powercap/intel_rapl_common.c
-> index fdda2a737186..73cf68af9770 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -1069,6 +1069,7 @@ static const struct x86_cpu_id rapl_ids[]
-> __initconst = {
->  
->  	X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_amd),
->  	X86_MATCH_VENDOR_FAM(AMD, 0x19, &rapl_defaults_amd),
-> +	X86_MATCH_VENDOR_FAM(HYGON, 0x18, &rapl_defaults_amd),
->  	{}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
-> diff --git a/drivers/powercap/intel_rapl_msr.c
-> b/drivers/powercap/intel_rapl_msr.c
-> index 78213d4b5b16..cc3b22881bfe 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -150,6 +150,7 @@ static int rapl_msr_probe(struct platform_device
-> *pdev)
->  	case X86_VENDOR_INTEL:
->  		rapl_msr_priv = &rapl_msr_priv_intel;
->  		break;
-> +	case X86_VENDOR_HYGON:
->  	case X86_VENDOR_AMD:
->  		rapl_msr_priv = &rapl_msr_priv_amd;
->  		break;
-
+T24gMjAyMS8yLzI4IDIzOjQyLCBTcmluaXZhcyBQYW5kcnV2YWRhIHdyb3RlOg0KPiBPbiBUaHUs
+IDIwMjEtMDItMjUgYXQgMjE6MDEgKzA4MDAsIFB1IFdlbiB3cm90ZToNCj4+IEVuYWJsZSBIeWdv
+biBGYW0xOGggUkFQTCBzdXBwb3J0IGZvciB0aGUgcG93ZXIgY2FwcGluZyBmcmFtZXdvcmsuDQo+
+Pg0KPiBJZiB0aGlzIHBhdGNoIGlzIHRlc3RlZCBhbmQgd29ya3Mgb24gdGhpcyBwcm9jZXNzb3Is
+IG5vdCBzdXJlIHdoeSB0aGlzDQo+IGlzIFJGQz8NCg0KVGhpcyBwYXRjaCBpcyB0ZXN0ZWQgYW5k
+IHdvcmtzIG9uIEh5Z29uIHByb2Nlc3Nvci4gVGhlICdSRkMnIGlzIGF1dG9tYXRlZA0KZ2VuZXJh
+dGVkIGJ5IG15IHNjcmlwdCA7KQ0KDQpUaGFua3MsDQpQdSBXZW4NCg0KPiBUaGFua3MsDQo+IFNy
+aW5pdmFzDQo+IA0KPj4gU2lnbmVkLW9mZi1ieTogUHUgV2VuIDxwdXdlbkBoeWdvbi5jbj4NCj4+
+IC0tLQ0KPj4gIGRyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYyB8IDEgKw0KPj4g
+IGRyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9tc3IuYyAgICB8IDEgKw0KPj4gIDIgZmlsZXMg
+Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcG93
+ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYw0KPj4gYi9kcml2ZXJzL3Bvd2VyY2FwL2ludGVsX3Jh
+cGxfY29tbW9uLmMNCj4+IGluZGV4IGZkZGEyYTczNzE4Ni4uNzNjZjY4YWY5NzcwIDEwMDY0NA0K
+Pj4gLS0tIGEvZHJpdmVycy9wb3dlcmNhcC9pbnRlbF9yYXBsX2NvbW1vbi5jDQo+PiArKysgYi9k
+cml2ZXJzL3Bvd2VyY2FwL2ludGVsX3JhcGxfY29tbW9uLmMNCj4+IEBAIC0xMDY5LDYgKzEwNjks
+NyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHg4Nl9jcHVfaWQgcmFwbF9pZHNbXQ0KPj4gX19pbml0
+Y29uc3QgPSB7DQo+PiAgDQo+PiAgCVg4Nl9NQVRDSF9WRU5ET1JfRkFNKEFNRCwgMHgxNywgJnJh
+cGxfZGVmYXVsdHNfYW1kKSwNCj4+ICAJWDg2X01BVENIX1ZFTkRPUl9GQU0oQU1ELCAweDE5LCAm
+cmFwbF9kZWZhdWx0c19hbWQpLA0KPj4gKwlYODZfTUFUQ0hfVkVORE9SX0ZBTShIWUdPTiwgMHgx
+OCwgJnJhcGxfZGVmYXVsdHNfYW1kKSwNCj4+ICAJe30NCj4+ICB9Ow0KPj4gIE1PRFVMRV9ERVZJ
+Q0VfVEFCTEUoeDg2Y3B1LCByYXBsX2lkcyk7DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9wb3dl
+cmNhcC9pbnRlbF9yYXBsX21zci5jDQo+PiBiL2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9t
+c3IuYw0KPj4gaW5kZXggNzgyMTNkNGI1YjE2Li5jYzNiMjI4ODFiZmUgMTAwNjQ0DQo+PiAtLS0g
+YS9kcml2ZXJzL3Bvd2VyY2FwL2ludGVsX3JhcGxfbXNyLmMNCj4+ICsrKyBiL2RyaXZlcnMvcG93
+ZXJjYXAvaW50ZWxfcmFwbF9tc3IuYw0KPj4gQEAgLTE1MCw2ICsxNTAsNyBAQCBzdGF0aWMgaW50
+IHJhcGxfbXNyX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4+ICpwZGV2KQ0KPj4gIAlj
+YXNlIFg4Nl9WRU5ET1JfSU5URUw6DQo+PiAgCQlyYXBsX21zcl9wcml2ID0gJnJhcGxfbXNyX3By
+aXZfaW50ZWw7DQo+PiAgCQlicmVhazsNCj4+ICsJY2FzZSBYODZfVkVORE9SX0hZR09OOg0KPj4g
+IAljYXNlIFg4Nl9WRU5ET1JfQU1EOg0KPj4gIAkJcmFwbF9tc3JfcHJpdiA9ICZyYXBsX21zcl9w
+cml2X2FtZDsNCj4+ICAJCWJyZWFrOw0KPg==
