@@ -2,89 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B661D32760B
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 03:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 975B93276B7
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Mar 2021 05:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbhCACRo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Feb 2021 21:17:44 -0500
-Received: from spam01.hygon.cn ([110.188.70.11]:21566 "EHLO spam2.hygon.cn"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231730AbhCACRl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 28 Feb 2021 21:17:41 -0500
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam2.hygon.cn with ESMTP id 1212GjpF002954;
-        Mon, 1 Mar 2021 10:16:45 +0800 (GMT-8)
-        (envelope-from puwen@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id 1212Gf8n020388;
-        Mon, 1 Mar 2021 10:16:41 +0800 (GMT-8)
-        (envelope-from puwen@hygon.cn)
-Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Mon, 1 Mar 2021
- 10:16:26 +0800
-Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
- ([172.23.18.10]) with mapi id 15.01.1466.003; Mon, 1 Mar 2021 10:16:26 +0800
-From:   Wen Pu <puwen@hygon.cn>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "victording@google.com" <victording@google.com>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>
-Subject: Re: [RFC PATCH] powercap: Add Hygon Fam18h RAPL support
-Thread-Topic: [RFC PATCH] powercap: Add Hygon Fam18h RAPL support
-Thread-Index: AQHXC3ZtcHkxrsdXYk+yZ96EVY24VKptM5qAgACxH4A=
-Date:   Mon, 1 Mar 2021 02:16:26 +0000
-Message-ID: <6543a335-e84c-29ea-e20b-c56bdd60d1c6@hygon.cn>
-References: <20210225130129.21512-1-puwen@hygon.cn>
- <0a8f11cfbc761767b7a994f724af3dac124184c9.camel@linux.intel.com>
-In-Reply-To: <0a8f11cfbc761767b7a994f724af3dac124184c9.camel@linux.intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.18.44]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EEBAD4DD581A50478C89BF8CEE857CF8@Hygon.cn>
-Content-Transfer-Encoding: base64
+        id S233429AbhCAEf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Feb 2021 23:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231438AbhCAEf1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Feb 2021 23:35:27 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460C2C061756
+        for <linux-pm@vger.kernel.org>; Sun, 28 Feb 2021 20:34:47 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id d12so8087003pfo.7
+        for <linux-pm@vger.kernel.org>; Sun, 28 Feb 2021 20:34:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=i9osdsSIkxdstrMXBrLYm99WRkbkxANC4iCZNYOVSSg=;
+        b=gw7NyoPFNgY8PsipPfcdpS5Dvq6DCvUvZC/Zu7eGLdmROfBBAvjceQdCtYjjU02I8W
+         UDpp3JnwhLhSg3zuyPDL1/T6f+EKpoEiBenaEy4Ew/dfE9ciaFJFThiURSj5a6SYlmc/
+         N6WAzxkHla2hMySo6m5Tau4jyHVDyWo+V2n4EgufslgxZgXF81y/qjK/YJOhxfGrAjZC
+         znmZp5pJetDv21bfkrRmPKw+05pGfSru+TSNfrGRmwc/xwnluNQVqK5v8nET4YqaCqXX
+         6aOd6rv31602Eq7w7nMF19qxMYIFe6915IiunIMH1bq7tComEzxEfcRpFiUwRbn92wjb
+         8VuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=i9osdsSIkxdstrMXBrLYm99WRkbkxANC4iCZNYOVSSg=;
+        b=MmQ2yVdkHn3IiEVU1dXKGle7Inzuu5gAQPlOyw4we5+XOGanWondPyD3bEBl69j0/I
+         uIfLfGYv8OUZaQeqQ8CBjjyyAK/AMLskw1je1Oe/byIWA9rPT+ZsgIEbzDHq6NqvhECw
+         vLwCBk5htiv1bRTA8VMJnC4w/W+8eHpaJclcrBufdzuq8bOVhTKJJF7E+npiVVs6ERYC
+         uOIbB31jEtcUpgAW99VUqzK55mHL0fz8W0HU576qmzUhz5vGsot1G6DEscVDAOmcC3Il
+         wG55ivMGd7d8Gebmxrq6gdC2lF+4O8HnFQR+jd8s7fgQ85NxKQFeVzcXGQR0C0pLwgcK
+         +pGg==
+X-Gm-Message-State: AOAM5325vjP7ECvXRFsNDJsTZRKBv/6byX2IugTftkm2JBnix6z/bQsD
+        7IA8tZhlvo4cGRyXvHBo6Ka5zA==
+X-Google-Smtp-Source: ABdhPJyQ5HWnkD2hBCmKGlP5HS2VTvNWDNjZBe7FXjNYQ0jaoIUvqwaRsOvzNQsLismU3TppWAQ5AA==
+X-Received: by 2002:aa7:8ad0:0:b029:1ed:fb30:e5d5 with SMTP id b16-20020aa78ad00000b02901edfb30e5d5mr13667116pfd.79.1614573286763;
+        Sun, 28 Feb 2021 20:34:46 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id c6sm16496906pfc.94.2021.02.28.20.34.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 28 Feb 2021 20:34:46 -0800 (PST)
+Date:   Mon, 1 Mar 2021 10:04:44 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom-hw: fix dereferencing freed memory 'data'
+Message-ID: <20210301043444.rbuauzhiu4n6nkay@vireshk-i7>
+References: <20210228013319.10469-1-shawn.guo@linaro.org>
 MIME-Version: 1.0
-X-MAIL: spam2.hygon.cn 1212GjpF002954
-X-DNSRBL: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210228013319.10469-1-shawn.guo@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gMjAyMS8yLzI4IDIzOjQyLCBTcmluaXZhcyBQYW5kcnV2YWRhIHdyb3RlOg0KPiBPbiBUaHUs
-IDIwMjEtMDItMjUgYXQgMjE6MDEgKzA4MDAsIFB1IFdlbiB3cm90ZToNCj4+IEVuYWJsZSBIeWdv
-biBGYW0xOGggUkFQTCBzdXBwb3J0IGZvciB0aGUgcG93ZXIgY2FwcGluZyBmcmFtZXdvcmsuDQo+
-Pg0KPiBJZiB0aGlzIHBhdGNoIGlzIHRlc3RlZCBhbmQgd29ya3Mgb24gdGhpcyBwcm9jZXNzb3Is
-IG5vdCBzdXJlIHdoeSB0aGlzDQo+IGlzIFJGQz8NCg0KVGhpcyBwYXRjaCBpcyB0ZXN0ZWQgYW5k
-IHdvcmtzIG9uIEh5Z29uIHByb2Nlc3Nvci4gVGhlICdSRkMnIGlzIGF1dG9tYXRlZA0KZ2VuZXJh
-dGVkIGJ5IG15IHNjcmlwdCA7KQ0KDQpUaGFua3MsDQpQdSBXZW4NCg0KPiBUaGFua3MsDQo+IFNy
-aW5pdmFzDQo+IA0KPj4gU2lnbmVkLW9mZi1ieTogUHUgV2VuIDxwdXdlbkBoeWdvbi5jbj4NCj4+
-IC0tLQ0KPj4gIGRyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYyB8IDEgKw0KPj4g
-IGRyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9tc3IuYyAgICB8IDEgKw0KPj4gIDIgZmlsZXMg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcG93
-ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYw0KPj4gYi9kcml2ZXJzL3Bvd2VyY2FwL2ludGVsX3Jh
-cGxfY29tbW9uLmMNCj4+IGluZGV4IGZkZGEyYTczNzE4Ni4uNzNjZjY4YWY5NzcwIDEwMDY0NA0K
-Pj4gLS0tIGEvZHJpdmVycy9wb3dlcmNhcC9pbnRlbF9yYXBsX2NvbW1vbi5jDQo+PiArKysgYi9k
-cml2ZXJzL3Bvd2VyY2FwL2ludGVsX3JhcGxfY29tbW9uLmMNCj4+IEBAIC0xMDY5LDYgKzEwNjks
-NyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHg4Nl9jcHVfaWQgcmFwbF9pZHNbXQ0KPj4gX19pbml0
-Y29uc3QgPSB7DQo+PiAgDQo+PiAgCVg4Nl9NQVRDSF9WRU5ET1JfRkFNKEFNRCwgMHgxNywgJnJh
-cGxfZGVmYXVsdHNfYW1kKSwNCj4+ICAJWDg2X01BVENIX1ZFTkRPUl9GQU0oQU1ELCAweDE5LCAm
-cmFwbF9kZWZhdWx0c19hbWQpLA0KPj4gKwlYODZfTUFUQ0hfVkVORE9SX0ZBTShIWUdPTiwgMHgx
-OCwgJnJhcGxfZGVmYXVsdHNfYW1kKSwNCj4+ICAJe30NCj4+ICB9Ow0KPj4gIE1PRFVMRV9ERVZJ
-Q0VfVEFCTEUoeDg2Y3B1LCByYXBsX2lkcyk7DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9wb3dl
-cmNhcC9pbnRlbF9yYXBsX21zci5jDQo+PiBiL2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9t
-c3IuYw0KPj4gaW5kZXggNzgyMTNkNGI1YjE2Li5jYzNiMjI4ODFiZmUgMTAwNjQ0DQo+PiAtLS0g
-YS9kcml2ZXJzL3Bvd2VyY2FwL2ludGVsX3JhcGxfbXNyLmMNCj4+ICsrKyBiL2RyaXZlcnMvcG93
-ZXJjYXAvaW50ZWxfcmFwbF9tc3IuYw0KPj4gQEAgLTE1MCw2ICsxNTAsNyBAQCBzdGF0aWMgaW50
-IHJhcGxfbXNyX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4+ICpwZGV2KQ0KPj4gIAlj
-YXNlIFg4Nl9WRU5ET1JfSU5URUw6DQo+PiAgCQlyYXBsX21zcl9wcml2ID0gJnJhcGxfbXNyX3By
-aXZfaW50ZWw7DQo+PiAgCQlicmVhazsNCj4+ICsJY2FzZSBYODZfVkVORE9SX0hZR09OOg0KPj4g
-IAljYXNlIFg4Nl9WRU5ET1JfQU1EOg0KPj4gIAkJcmFwbF9tc3JfcHJpdiA9ICZyYXBsX21zcl9w
-cml2X2FtZDsNCj4+ICAJCWJyZWFrOw0KPg==
+On 28-02-21, 09:33, Shawn Guo wrote:
+> Commit 67fc209b527d ("cpufreq: qcom-hw: drop devm_xxx() calls from
+> init/exit hooks") introduces an issue of dereferencing freed memory
+> 'data'.  Fix it.
+> 
+> Fixes: 67fc209b527d ("cpufreq: qcom-hw: drop devm_xxx() calls from init/exit hooks")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> ---
+> Viresh,
+> 
+> The issue was introduced by v2 of "cpufreq: qcom-hw: drop devm_xxx()
+> calls from init/exit hooks", which misses the conversion of 'data->base'
+> in error path.  Sorry!
+> 
+> Shawn
+> 
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index d3c23447b892..bee5d67a8227 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -374,7 +374,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>  error:
+>  	kfree(data);
+>  unmap_base:
+> -	iounmap(data->base);
+> +	iounmap(base);
+>  release_region:
+>  	release_mem_region(res->start, resource_size(res));
+>  	return ret;
+
+Applied. Thanks.
+-- 
+viresh
