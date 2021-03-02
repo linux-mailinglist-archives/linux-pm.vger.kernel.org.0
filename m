@@ -2,260 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5FD32A2AD
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Mar 2021 15:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2738C32A2AE
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Mar 2021 15:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376892AbhCBIRN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Mar 2021 03:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        id S1376896AbhCBIRe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Mar 2021 03:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344746AbhCBGnZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Mar 2021 01:43:25 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D25C06178B
-        for <linux-pm@vger.kernel.org>; Mon,  1 Mar 2021 22:42:38 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d15so3396031wrv.5
-        for <linux-pm@vger.kernel.org>; Mon, 01 Mar 2021 22:42:38 -0800 (PST)
+        with ESMTP id S1379154AbhCBHRZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Mar 2021 02:17:25 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A73BC0617A9;
+        Mon,  1 Mar 2021 23:16:44 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id b8so19077925oti.7;
+        Mon, 01 Mar 2021 23:16:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=tfd97WX1co/bA1GShyJOLBPAN41kKS3JMrc0KxlzgGU=;
-        b=X3HySQSox1FrvVZIqGKp3GG6HIrkQQVlWJxpD5Cco4Ge2nF0iwz+VlZzafhh+7M7kK
-         Ec3QuQX8AccyoXeXbACGA6WDmbvBYjKDKKH+UpLB01eR6ha3wPafBmLjBhmpY6qJiOqw
-         bK2kyAE5fEuIRwu+B6ITr7rrY30tatyMOpGz+8exxEsQP2enrIsMEIN27dRfsMvLplZx
-         nlH+uXvkTP0FbPoFiBFwLFeJVzY0lU+WxTi+Y3lnpg+eG+caUSBga2HP1cv0ixswGjec
-         VRhGC6ZRxaBRCEeJrksMHekp+Xah/I+GfxaeShSi7hK5InuZn7lg7zDRWsnbVXyGYh6R
-         IsFg==
+        bh=cvv8ZYn5o9fAfH88FdY8LKHoCI4AuWaKRHSz9HOIfo4=;
+        b=vI8VnN1HjfU5ubeo7oar9dcdw1FjnOapzOUa/JjKEJraWJy9ZQU6i4W0TkH/AdUQpt
+         7UwZM9RLL2RxaPjfvrniGkjDOXP/GCypNlutbjhLaWYvn21EnvR1WyK7216zGRG3LTxG
+         k8RRzr82MnRXdExbacTsojVsNRUeI74IOedc1laMQqIP2rQkDprVmTxG+3v9B27PTOFT
+         kGuOQ9mNaJVC7QN4aCkSay4XLodac4r7pb/D6RJWY+tFPVNf0OTDrhuHHVIIkzDwx2rF
+         Wys6Rpbl/k53nXWjn5ZlLLSTmoXhe7mwdgsRyz+OPVZG8KVpE9xWjRKNso+QevBxvWjL
+         AioQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tfd97WX1co/bA1GShyJOLBPAN41kKS3JMrc0KxlzgGU=;
-        b=RbSzz1YJUgVY9IJzXFAuVzPnlZIhPSKwsh/brS5tuEquvTvYJ9hb7JLH//lSKxCI0i
-         zCRw72PNA1W/amCG+pN6a+uD307bnRYXmOuMd/VLOuoMtsvaIrAeOjayOLf1L2C1rjvP
-         PZH0mD0EpIZTb6IizTAp5qw3DEAbKC2UAArzpirZIP7VGQDpgSYeLNfwlYoupUPsypDY
-         +ZTmekWawid2yP1tpp8Q8qeiieuv17SnrRyNlfo6GjFPK4y79RxlBaS/foQMULcxD2z4
-         0EHK0RoM/Zr3uAS6M1eykclDENSWUuZZEmxKPjYR9wZ/WneHpZDHSAxeQTDIXnqpqgEK
-         7Xcw==
-X-Gm-Message-State: AOAM532KHwaPc5Yk/UbGjkkuvtcES4jheU70WsRFGXOvoPP64adc7W65
-        +VbLzpW67NJMk/aRFVitYgnh+wB6DuwGR8NeCzhUEg==
-X-Google-Smtp-Source: ABdhPJz1mZd5y4d1mGFzB+y5OipFPnyMJbdA+7nb01Qbnev+st2N3Fi1s+PseO+OVJpZp0oP8W2X+LgHDA+7KkohnTo=
-X-Received: by 2002:a5d:464f:: with SMTP id j15mr21059836wrs.390.1614667357370;
- Mon, 01 Mar 2021 22:42:37 -0800 (PST)
+        bh=cvv8ZYn5o9fAfH88FdY8LKHoCI4AuWaKRHSz9HOIfo4=;
+        b=qYf+VodDGDyqVUOrFFOJn+ZI066lLvXCwqWwzakqJW/2Ay+Zph9VnCEV6O/75jjZXH
+         swFMecPiKMu3mlk+hsiAp58eywl9vu8RiTc3nc/1OrpTzZselSwp067GE80XlIsKCnHR
+         htqg7yiHQUH+FKLyvcXKVvtBkCv1taQp4b6oq3jVJ9FaBDzEJ8H2fhCaYyDhGVFeqhjw
+         R8uDpV8WB66Rr8EojJu+jze6WsYJHKOJJcgpsMJxEe0P8JAzdNch6Xjvid9ca1XzfDhk
+         QWf1qg+RhB97hwrystkRpF1mZt6S7lQAbRgKFQi4tqCDkY6+iXjWVxCbH2WPeX4AGopN
+         6DWQ==
+X-Gm-Message-State: AOAM533OD48rROe02ChlrelRF5bGMvrpAf0ai75i2KkOxekeaqSir8sQ
+        YDO/oY1hwzNBC6cBmevzP4Tf8JoM8FyriFVvsJQ=
+X-Google-Smtp-Source: ABdhPJzbn+DmG8b0+YAooZV+sW8jO+BCSIm8/zqlbYXznrB9TaRejeGUUFs9CqxMhBQNv9z4O2KzuD0odgsc7iwM9wA=
+X-Received: by 2002:a9d:4b99:: with SMTP id k25mr16608843otf.327.1614669404078;
+ Mon, 01 Mar 2021 23:16:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20210221093758.210981-1-anup.patel@wdc.com> <20210221093758.210981-2-anup.patel@wdc.com>
- <3a6e2af7-934d-078f-4e19-d4241809e7fb@ghiti.fr>
-In-Reply-To: <3a6e2af7-934d-078f-4e19-d4241809e7fb@ghiti.fr>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 2 Mar 2021 12:12:26 +0530
-Message-ID: <CAAhSdy2cOoNK5f75e_mo5c-0-qo4zNWH+Lxoyg31br-+ZZ4n9w@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/8] RISC-V: Enable CPU_IDLE drivers
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     Anup Patel <anup.patel@wdc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Atish Patra <atish.patra@wdc.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <1605177598-23501-1-git-send-email-gene.chen.richtek@gmail.com>
+ <1605177598-23501-5-git-send-email-gene.chen.richtek@gmail.com>
+ <74b127eb-9a3c-20c9-5692-b00b982f4da3@gmail.com> <CAE+NS34qR9f2LOpvxTBDF4OR=Xq-SFP+uHdWe3dZ5x8xggS8kA@mail.gmail.com>
+ <20210115073241.GC3975472@dell>
+In-Reply-To: <20210115073241.GC3975472@dell>
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+Date:   Tue, 2 Mar 2021 15:16:34 +0800
+Message-ID: <CAE+NS37hVMVJA04ZmdcfKvw05ga1-vT=fGRAf=bh17XOJHEh4A@mail.gmail.com>
+Subject: Re: [PATCH v7 04/11] mfd: mt6360: Combine mt6360 pmic/ldo resources
+ into mt6360 regulator resources
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>, sre@kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gene Chen <gene_chen@richtek.com>, Wilma.Wu@mediatek.com,
+        shufan_lee@richtek.com, ChiYuan Huang <cy_huang@richtek.com>,
+        benjamin.chao@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 26, 2021 at 6:46 PM Alex Ghiti <alex@ghiti.fr> wrote:
+Lee Jones <lee.jones@linaro.org> =E6=96=BC 2021=E5=B9=B41=E6=9C=8815=E6=97=
+=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:32=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> Hi Anup,
+> On Fri, 15 Jan 2021, Gene Chen wrote:
 >
-> Le 2/21/21 =C3=A0 4:37 AM, Anup Patel a =C3=A9crit :
-> > We force select CPU_PM and provide asm/cpuidle.h so that we can
-> > use CPU IDLE drivers for Linux RISC-V kernel.
-> >
-> > Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> > ---
-> >   arch/riscv/Kconfig                |  7 +++++++
-> >   arch/riscv/configs/defconfig      |  7 +++----
-> >   arch/riscv/configs/rv32_defconfig |  4 ++--
-> >   arch/riscv/include/asm/cpuidle.h  | 24 ++++++++++++++++++++++++
-> >   arch/riscv/kernel/process.c       |  3 ++-
-> >   5 files changed, 38 insertions(+), 7 deletions(-)
-> >   create mode 100644 arch/riscv/include/asm/cpuidle.h
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index fe6862b06ead..4901200b6b6c 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -37,6 +37,7 @@ config RISCV
-> >       select CLONE_BACKWARDS
-> >       select CLINT_TIMER if !MMU
-> >       select COMMON_CLK
-> > +     select CPU_PM if CPU_IDLE
-> >       select EDAC_SUPPORT
-> >       select GENERIC_ARCH_TOPOLOGY if SMP
-> >       select GENERIC_ATOMIC64 if !64BIT
-> > @@ -430,4 +431,10 @@ source "kernel/power/Kconfig"
-> >
-> >   endmenu
-> >
-> > +menu "CPU Power Management"
-> > +
-> > +source "drivers/cpuidle/Kconfig"
-> > +
-> > +endmenu
-> > +
-> >   source "drivers/firmware/Kconfig"
-> > diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfi=
-g
-> > index 6c0625aa96c7..dc4927c0e44b 100644
-> > --- a/arch/riscv/configs/defconfig
-> > +++ b/arch/riscv/configs/defconfig
-> > @@ -13,11 +13,13 @@ CONFIG_USER_NS=3Dy
-> >   CONFIG_CHECKPOINT_RESTORE=3Dy
-> >   CONFIG_BLK_DEV_INITRD=3Dy
-> >   CONFIG_EXPERT=3Dy
-> > +# CONFIG_SYSFS_SYSCALL is not set
-> >   CONFIG_BPF_SYSCALL=3Dy
-> >   CONFIG_SOC_SIFIVE=3Dy
-> >   CONFIG_SOC_VIRT=3Dy
-> >   CONFIG_SMP=3Dy
-> >   CONFIG_HOTPLUG_CPU=3Dy
-> > +CONFIG_CPU_IDLE=3Dy
-> >   CONFIG_JUMP_LABEL=3Dy
-> >   CONFIG_MODULES=3Dy
-> >   CONFIG_MODULE_UNLOAD=3Dy
-> > @@ -65,10 +67,9 @@ CONFIG_HW_RANDOM=3Dy
-> >   CONFIG_HW_RANDOM_VIRTIO=3Dy
-> >   CONFIG_SPI=3Dy
-> >   CONFIG_SPI_SIFIVE=3Dy
-> > +# CONFIG_PTP_1588_CLOCK is not set
-> >   CONFIG_GPIOLIB=3Dy
-> >   CONFIG_GPIO_SIFIVE=3Dy
-> > -# CONFIG_PTP_1588_CLOCK is not set
-> > -CONFIG_POWER_RESET=3Dy
+> > Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2021=E5=B9=B41=E6=
+=9C=8812=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=888:32=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > >
+> > >
+> > >
+> > > On 12/11/2020 11:39, Gene Chen wrote:
+> > > > From: Gene Chen <gene_chen@richtek.com>
+> > > >
+> > > > Combine mt6360 pmic/ldo resources into mt6360 regulator resources
+> > > > to simplify the similar resources object.
+> > > >
+> > > > Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> > > > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > > > ---
+> > > >  drivers/mfd/mt6360-core.c | 11 +++--------
+> > > >  1 file changed, 3 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/drivers/mfd/mt6360-core.c b/drivers/mfd/mt6360-core.c
+> > > > index 692e47b..5119e51 100644
+> > > > --- a/drivers/mfd/mt6360-core.c
+> > > > +++ b/drivers/mfd/mt6360-core.c
+> > > > @@ -265,7 +265,7 @@ static const struct resource mt6360_led_resourc=
+es[] =3D {
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_FLED1_STRB_TO_EVT, "fled1_strb_to=
+_evt"),
+> > > >  };
+> > > >
+> > > > -static const struct resource mt6360_pmic_resources[] =3D {
+> > > > +static const struct resource mt6360_regulator_resources[] =3D {
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_BUCK1_PGB_EVT, "buck1_pgb_evt"),
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_BUCK1_OC_EVT, "buck1_oc_evt"),
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_BUCK1_OV_EVT, "buck1_ov_evt"),
+> > > > @@ -278,9 +278,6 @@ static const struct resource mt6360_pmic_resour=
+ces[] =3D {
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_LDO7_OC_EVT, "ldo7_oc_evt"),
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_LDO6_PGB_EVT, "ldo6_pgb_evt"),
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_LDO7_PGB_EVT, "ldo7_pgb_evt"),
+> > > > -};
+> > > > -
+> > > > -static const struct resource mt6360_ldo_resources[] =3D {
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_LDO1_OC_EVT, "ldo1_oc_evt"),
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_LDO2_OC_EVT, "ldo2_oc_evt"),
+> > > >       DEFINE_RES_IRQ_NAMED(MT6360_LDO3_OC_EVT, "ldo3_oc_evt"),
+> > > > @@ -298,10 +295,8 @@ static const struct mfd_cell mt6360_devs[] =3D=
+ {
+> > > >                   NULL, 0, 0, "mediatek,mt6360-chg"),
+> > > >       OF_MFD_CELL("mt6360-led", mt6360_led_resources,
+> > > >                   NULL, 0, 0, "mediatek,mt6360-led"),
+> > > > -     OF_MFD_CELL("mt6360-pmic", mt6360_pmic_resources,
+> > > > -                 NULL, 0, 0, "mediatek,mt6360-pmic"),
+> > > > -     OF_MFD_CELL("mt6360-ldo", mt6360_ldo_resources,
+> > > > -                 NULL, 0, 0, "mediatek,mt6360-ldo"),
+> > > > +     OF_MFD_CELL("mt6360-regulator", mt6360_regulator_resources,
+> > > > +                 NULL, 0, 0, "mediatek,mt6360-regulator"),
+> > >
+> > > As discussed with the MFD maintainer [1], the regulator (and probably=
+ all cells)
+> > > shouldn't have a DT binding.
+> > >
+> > > So please send a new version which fixes that.
+> > >
+> > > Regards,
+> > > Matthias
+> > >
+> > > [1] https://lore.kernel.org/linux-mediatek/20210111164118.GE4728@sire=
+na.org.uk/
 >
-> Why do you remove this config ?
+> I don't think Mark is correct here.
+>
+> We usually do implement compatible strings for sub-devices and they do
+> tend to have their own device nodes.
+>
+> It's a very long time ago since I coded this up myself, but from
+> memory, you can't have 2 devices share a compatible string.
+>
 
-This option is selected by CONFIG_SOC_VIRT so it is being
-removed from defconfig by savedefconfig.
+Either Mark or Lee suggestion is work.
+Is there a conclusion that we can apply it?
+If MFD is already supported of_compatible, we prefer use of_compatible mapp=
+ing.
 
->
-> >   CONFIG_DRM=3Dy
-> >   CONFIG_DRM_RADEON=3Dy
-> >   CONFIG_DRM_VIRTIO_GPU=3Dy
-> > @@ -132,5 +133,3 @@ CONFIG_DEBUG_BLOCK_EXT_DEVT=3Dy
-> >   # CONFIG_FTRACE is not set
-> >   # CONFIG_RUNTIME_TESTING_MENU is not set
-> >   CONFIG_MEMTEST=3Dy
-> > -# CONFIG_SYSFS_SYSCALL is not set
-> > -CONFIG_EFI=3Dy
->
-> And this is one too ? If those removals are intentional, maybe you can
-> add something about that in the commit description ?
-
-This is enabled by default so savedefconfig removes it.
-
->
-> > diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv3=
-2_defconfig
-> > index 8dd02b842fef..332e43a4a2c3 100644
-> > --- a/arch/riscv/configs/rv32_defconfig
-> > +++ b/arch/riscv/configs/rv32_defconfig
-> > @@ -13,12 +13,14 @@ CONFIG_USER_NS=3Dy
-> >   CONFIG_CHECKPOINT_RESTORE=3Dy
-> >   CONFIG_BLK_DEV_INITRD=3Dy
-> >   CONFIG_EXPERT=3Dy
-> > +# CONFIG_SYSFS_SYSCALL is not set
-> >   CONFIG_BPF_SYSCALL=3Dy
-> >   CONFIG_SOC_SIFIVE=3Dy
-> >   CONFIG_SOC_VIRT=3Dy
-> >   CONFIG_ARCH_RV32I=3Dy
-> >   CONFIG_SMP=3Dy
-> >   CONFIG_HOTPLUG_CPU=3Dy
-> > +CONFIG_CPU_IDLE=3Dy
-> >   CONFIG_JUMP_LABEL=3Dy
-> >   CONFIG_MODULES=3Dy
-> >   CONFIG_MODULE_UNLOAD=3Dy
-> > @@ -67,7 +69,6 @@ CONFIG_HW_RANDOM_VIRTIO=3Dy
-> >   CONFIG_SPI=3Dy
-> >   CONFIG_SPI_SIFIVE=3Dy
-> >   # CONFIG_PTP_1588_CLOCK is not set
-> > -CONFIG_POWER_RESET=3Dy
-> >   CONFIG_DRM=3Dy
-> >   CONFIG_DRM_RADEON=3Dy
-> >   CONFIG_DRM_VIRTIO_GPU=3Dy
-> > @@ -131,4 +132,3 @@ CONFIG_DEBUG_BLOCK_EXT_DEVT=3Dy
-> >   # CONFIG_FTRACE is not set
-> >   # CONFIG_RUNTIME_TESTING_MENU is not set
-> >   CONFIG_MEMTEST=3Dy
-> > -# CONFIG_SYSFS_SYSCALL is not set
-> > diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/=
-cpuidle.h
-> > new file mode 100644
-> > index 000000000000..1042d790e446
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/cpuidle.h
-> > @@ -0,0 +1,24 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2021 Allwinner Ltd
-> > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
-> > + */
-> > +
-> > +#ifndef _ASM_RISCV_CPUIDLE_H
-> > +#define _ASM_RISCV_CPUIDLE_H
-> > +
-> > +#include <asm/barrier.h>
-> > +#include <asm/processor.h>
-> > +
-> > +static inline void cpu_do_idle(void)
-> > +{
-> > +     /*
-> > +      * Add mb() here to ensure that all
-> > +      * IO/MEM access are completed prior
->
-> accessES ?
->
-> > +      * to enter WFI.
-> > +      */
-> > +     mb();
-> > +     wait_for_interrupt();
-> > +}
-> > +
-> > +#endif
-> > diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> > index dd5f985b1f40..b5b51fd26624 100644
-> > --- a/arch/riscv/kernel/process.c
-> > +++ b/arch/riscv/kernel/process.c
-> > @@ -21,6 +21,7 @@
-> >   #include <asm/string.h>
-> >   #include <asm/switch_to.h>
-> >   #include <asm/thread_info.h>
-> > +#include <asm/cpuidle.h>
+> > Should I use parent's device to find sub-devices of_node if without
+> > compatible name?
+> > I trace the function mfd_add_device,
 > >
-> >   register unsigned long gp_in_global __asm__("gp");
+> > if (IS_ENABLED(CONFIG_OF) && parent->of_node && cell->of_compatible) {
+> >     .....
+> >     ret =3D mfd_match_of_node_to_dev(pdev, np, cell);
+> >     .....
+> > }
 > >
-> > @@ -35,7 +36,7 @@ extern asmlinkage void ret_from_kernel_thread(void);
+> > which is binding mfd sub-device with compatible. Does it be removed in
+> > the feature?
 > >
-> >   void arch_cpu_idle(void)
-> >   {
-> > -     wait_for_interrupt();
-> > +     cpu_do_idle();
-> >       raw_local_irq_enable();
-> >   }
-> >
-> >
-
-Regards,
-Anup
+> > > >       OF_MFD_CELL("mt6360-tcpc", NULL,
+> > > >                   NULL, 0, 0, "mediatek,mt6360-tcpc"),
+> > > >  };
+> > > >
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Senior Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog
