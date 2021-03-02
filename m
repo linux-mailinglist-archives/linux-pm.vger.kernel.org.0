@@ -2,92 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE6632B320
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Mar 2021 04:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A37E32B329
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Mar 2021 04:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352422AbhCCDp6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Mar 2021 22:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S1352457AbhCCDsA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Mar 2021 22:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379914AbhCBKL4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Mar 2021 05:11:56 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1C3C061788;
-        Tue,  2 Mar 2021 02:10:40 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id 18so21821166lff.6;
-        Tue, 02 Mar 2021 02:10:40 -0800 (PST)
+        with ESMTP id S1350745AbhCBMrB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Mar 2021 07:47:01 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B5CC061356
+        for <linux-pm@vger.kernel.org>; Tue,  2 Mar 2021 04:36:09 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id u187so2069629wmg.4
+        for <linux-pm@vger.kernel.org>; Tue, 02 Mar 2021 04:36:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yCsFHJ11jeCeG9OEz0Pdb1yteRXMTBLqS2b+YDxwST4=;
-        b=o1Ysj7I+rI06anT9mhbxdL0d+M8/rvb03atQ1fIAjT5HTRD/A64NToXrlzf38JCm2D
-         ZAcBfyQIT8YEIlsV0LPZ9KnBZlf0ZTCHXBl/yVaUSifUqzbPH17zTla1cjUQXq/hElUb
-         rjwJuttdUqiP4Ng5Oe7EuS5ceIhxxYGNQVA+EXznCWq0bGl7dC5Kg4TO5b1BtnkmSjUg
-         3OLhJ4+CY0BoCoaMm9hxW9A0129So5NI4EsEv14AqAg6U+c0wltNLn83e3sgvFdKnxhI
-         qmIC72Paz5wPrbS+6PoTUhUfBl6dwclCkbyPTtInrIJj0nj0dVjmQtDG274OUf2u3+Cf
-         c/ZA==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=21H6X5rvFt0C32Ctuv5aBj/q0Nf5F/lL8iKvx7fYKHk=;
+        b=apLWEffqFWJnX7KTXo6D4CJSsEWb4++cob/WFqj+ZSeECfK3egaM5UKhOQuDfwySQV
+         feVV2+nEd9tXMLbQQXnJ937Un4uAy9pNfpIHg/m8WUVAiFzTxpVjjj7pBjd0MpZWRPax
+         QSqLoiHTSJyh3QR50ttVv6c6g//ROFYOoEHsJwH8lcfE7MN/ShB3kWbOXJK56FvuKGQz
+         XOXsELPeg+qLYSnwMHyLARMhPDP4d+jsn6Xj138vOCnacwtgaV2bAX2lWBGCCr4Wydgr
+         sNomdwMMbVxn9hLxD4YBvEIGX0X5OqPXuNI+4z4dRGX8f6/oXuwA441zfhGJZmzvTr59
+         B5xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yCsFHJ11jeCeG9OEz0Pdb1yteRXMTBLqS2b+YDxwST4=;
-        b=B/oo+IHmsvWrboerEi+/Fjgc4U68zw2Uq+9s9jRTkvzV4CX9MNptDUBl/ROB1WvVh6
-         xvj3BJp6j131t3656jvcf9z3dIDMVMB/Wo3t2dpucPIiKf/Uxb63KNGUVwb2yHoy3BW/
-         3xQjLhkq9zykPM56/1MEimGNO1oTdodAwqAiinyWRD4/926QXobM2LSEbJSB1BCVuTRr
-         dkTVLZtBsHFaAcjoujel3tQeW0MmgMAbOLAZ9+buv2f5l8MB4jZdaf4ACVGYPS115m+a
-         soBrJYbLZrlRZcL1/L7xqgeB8+rhtAZikIKV/ZcUgTlWal0ilWc3ZnmIUrQVTgg3wpof
-         YkMw==
-X-Gm-Message-State: AOAM531gk5rNmMR542J5WLWGWd4NFwOSTKEvQEZ5b0vKDyQAT29B01K8
-        aUjSNjzvkZ6DrpvLhJYszIU=
-X-Google-Smtp-Source: ABdhPJzY6UGBGPfd6CI/QgJaSmEpo7dC9wb0UfkpuRgOS+l4TGm2M8h81N3tme2YjEaNlN3p4oB0IQ==
-X-Received: by 2002:a19:ec1a:: with SMTP id b26mr11334102lfa.610.1614679839124;
-        Tue, 02 Mar 2021 02:10:39 -0800 (PST)
-Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.gmail.com with ESMTPSA id c16sm2571001lfb.36.2021.03.02.02.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Mar 2021 02:10:38 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] power: supply: smb347-charger: Clean up whitespaces in the code
-Date:   Tue,  2 Mar 2021 13:10:27 +0300
-Message-Id: <20210302101027.4505-2-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210302101027.4505-1-digetx@gmail.com>
-References: <20210302101027.4505-1-digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=21H6X5rvFt0C32Ctuv5aBj/q0Nf5F/lL8iKvx7fYKHk=;
+        b=l2K+4teYjcDy6xOrm7V9T9hhlqpO2tbz73wjnDEGYod57STYcdzeTXMDa3urgx91Ud
+         uH/8c5OJeiO7ngG7FX6awAMpreRsnPwHu+8OzNW4aRpYVM/Xc5+fBKeuY1hjVwMCd5ff
+         Zls5zKi0HUhTYPQCD5ql7Atjddlx+OLxNvPjYJCeMW9QJTQu6bJzvkZtyj9yoZSQqwP7
+         M6RPfzAofJ4gpbplV2evMx2egZ1aFKSQX4rDFNyfyP26FjbFZSzOzuLCT4h3vuz131pN
+         cyTFwI4CIC4GaOep1q1QMTiBwCwvPvHLDeprU2jdvS/RN8xswhqAmo7AGdA4SCgbOR7c
+         Sbzg==
+X-Gm-Message-State: AOAM533I8BydwMtLtHoyb+LN6ckJlvVTUJZNQshf2bxUhrO8wGslNZcg
+        1AatzwSFv89gd0BAEFekg7MlOA==
+X-Google-Smtp-Source: ABdhPJztIqxQQoKHKbCEJHOj5ZGVqCfgPg/mXSu5EYZczdOo18Qvlhplp3k1rR5y3c6D5xGl30CqBw==
+X-Received: by 2002:a7b:cc90:: with SMTP id p16mr3990395wma.45.1614688567906;
+        Tue, 02 Mar 2021 04:36:07 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-144-192.adsl.proxad.net. [82.252.144.192])
+        by smtp.googlemail.com with ESMTPSA id o2sm2417699wme.16.2021.03.02.04.36.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Mar 2021 04:36:07 -0800 (PST)
+Subject: Re: [PATCH RESEND v2 1/2] cpuidle: tegra: Fix C7 idling state on
+ Tegra114
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20210302095405.28453-1-digetx@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <36f5d767-d021-d1cb-dfc1-7b9dd63d7d9f@linaro.org>
+Date:   Tue, 2 Mar 2021 13:36:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20210302095405.28453-1-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Improve formatting of the code by removing unnecessary whitespaces.
+On 02/03/2021 10:54, Dmitry Osipenko wrote:
+> Trusted Foundation firmware doesn't implement the do_idle call and in
+> this case suspending should fall back to the common suspend path. In order
+> to fix this issue we will unconditionally set the NOFLUSH_L2 mode via
+> firmware call, which is a NO-OP on Tegra30/124, and then proceed to the
+> C7 idling, like it was done by the older Tegra114 cpuidle driver.
+> 
+> Fixes: 14e086baca50 ("cpuidle: tegra: Squash Tegra114 driver into the common driver")
+> Cc: stable@vger.kernel.org # 5.7+
+> Reported-by: Anton Bambura <jenneron@protonmail.com> # TF701 T114
+> Tested-by: Anton Bambura <jenneron@protonmail.com> # TF701 T114
+> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/power/supply/smb347-charger.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply/smb347-charger.c
-index ee13cd5d2b04..3376f42d46c3 100644
---- a/drivers/power/supply/smb347-charger.c
-+++ b/drivers/power/supply/smb347-charger.c
-@@ -1401,11 +1401,10 @@ static struct i2c_driver smb347_driver = {
- 		.name = "smb347",
- 		.of_match_table = smb3xx_of_match,
- 	},
--	.probe        = smb347_probe,
--	.remove       = smb347_remove,
--	.id_table     = smb347_id,
-+	.probe = smb347_probe,
-+	.remove = smb347_remove,
-+	.id_table = smb347_id,
- };
--
- module_i2c_driver(smb347_driver);
- 
- MODULE_AUTHOR("Bruce E. Robertson <bruce.e.robertson@intel.com>");
+> ---
+> 
+> Changelog:
+> 
+> v2: - No changes. V1 got no attention, hence re-sending.
+> 
+>  drivers/cpuidle/cpuidle-tegra.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+> index 191966dc8d02..29c5e83500d3 100644
+> --- a/drivers/cpuidle/cpuidle-tegra.c
+> +++ b/drivers/cpuidle/cpuidle-tegra.c
+> @@ -135,13 +135,13 @@ static int tegra_cpuidle_c7_enter(void)
+>  {
+>  	int err;
+>  
+> -	if (tegra_cpuidle_using_firmware()) {
+> -		err = call_firmware_op(prepare_idle, TF_PM_MODE_LP2_NOFLUSH_L2);
+> -		if (err)
+> -			return err;
+> +	err = call_firmware_op(prepare_idle, TF_PM_MODE_LP2_NOFLUSH_L2);
+> +	if (err && err != -ENOSYS)
+> +		return err;
+>  
+> -		return call_firmware_op(do_idle, 0);
+> -	}
+> +	err = call_firmware_op(do_idle, 0);
+> +	if (err != -ENOSYS)
+> +		return err;
+>  
+>  	return cpu_suspend(0, tegra30_pm_secondary_cpu_suspend);
+>  }
+> 
+
+
 -- 
-2.29.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
