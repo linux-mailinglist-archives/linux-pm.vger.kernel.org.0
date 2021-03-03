@@ -2,56 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EC132C310
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 01:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BFB32C30C
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 01:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345234AbhCDAAH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1345548AbhCDAAH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 3 Mar 2021 19:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449668AbhCCEBk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Mar 2021 23:01:40 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B095C061756
-        for <linux-pm@vger.kernel.org>; Tue,  2 Mar 2021 20:01:25 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id q20so15315368pfu.8
-        for <linux-pm@vger.kernel.org>; Tue, 02 Mar 2021 20:01:25 -0800 (PST)
+        with ESMTP id S1843004AbhCCKXq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Mar 2021 05:23:46 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C8DC06121E;
+        Wed,  3 Mar 2021 00:31:43 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id v9so17989081lfa.1;
+        Wed, 03 Mar 2021 00:31:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=Sf0sHmQlDAnRMVroNklxTV9sD5YAM/nZAMHjs+CyJB4=;
-        b=DqjN4DryIrwYkAZERDCNYsxYTCg/FgOx9g1tN3t7SP5NtBAhKPdo3lCnaiNnrvavBj
-         ydQv0eborD4BkC3Y+XzqoGy8aiCKnHRP/JylIcwHTxxvnmHfiNck3OubW7XBEGVgwM/E
-         eyPJ8aPDHdCm58TuvDHH1oXt8LBXlpvuzLeu0uEQYnF2tpIuFpM9aTgmkMnNPRxOhiUp
-         6urTlvt4r1gJIWV2+KwsuriqRhtODU56xJwHEbD5X45GvkFali3XUBHAsbusiBqISTAG
-         QjqQrRgogRk0iqTBD5b5SIRJMgViOx9k1dBWLNi6KV3Q8WtSrwTaeC9YwaQEP5fqZsTD
-         H6ag==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dA8KKHZiMQ0M1dMyQ+8WM+bKH9WXXF3VYD9qxoBSYVM=;
+        b=Q2BL7+lc+ylMlu+ydH2KPz1PqTODp5OqgVZiHR9jqO4OZm50aqIxSjjmz78JiiooFH
+         i7YC35lXSOUX9yg/ckanbCMcDnIlEnFIWaLOgdtj+UDXrH5hO9M8tW0d4lY0F73Zgtv0
+         EP4JLr8ALm6ZBEyiThejlCrrfIVjY9pIOHj19FhIOTMenDf39h9gGiIWXvyNDLGkM5mo
+         m/2nGyP009dWktprR8h6cgF5Vdo4NdkfBfb3BDPwDqJkwoi523txy9Y1R+1aHRYDxFMU
+         pbUa9veKiX8fC3Qy7J68bxgQZFZPn42rhUh6PUmrP6NqhAMjEwXXM5pQ+2lI5jRGc3fG
+         Miaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=Sf0sHmQlDAnRMVroNklxTV9sD5YAM/nZAMHjs+CyJB4=;
-        b=Z1k/QimIgBj/cwHI0/czQeGheaLKF0EjlNW8lNK1iUaV/gzFzm96O4E48p1meoE+p0
-         8+txxuaPZUnxqKyy3Fadr0TY5nYj4wsEPuG8gdd9z3e/tvKsALA6DgUf9JeiLibpaWZ4
-         sGLkQXimhLwEVmrDbXB6p16DjTr3tbch4/XET8WpKMIvDGlgHzpSy1xzWAv/lfJa6am8
-         kNM+i1SCGpLk9bEcTkst5jW17BxBCvpGIjhFY1nAr8rvADXxm84IARo+Lik0GctYWU91
-         pH22FsKl41I5WGNnOL/qurIrXpXvunaEOunmYSBo4c1Pe1XjwCWLtRZ3W2pE/1N9YPaq
-         N0+w==
-X-Gm-Message-State: AOAM531s1mlYW2AGVhMIgc+Rwsyvp5qzPQnZ4vV6mu70EJjeAudXwa8N
-        EUYWGwfUwW1Pt4oMiSPeZ8bmnw==
-X-Google-Smtp-Source: ABdhPJyoXDxfKpU/1wXB2PIFN0nnkGXEo3xzDutxggeVYQFsmIzt54/Cnp3VafjpSiT43J+plIUXXQ==
-X-Received: by 2002:a63:4a44:: with SMTP id j4mr20987404pgl.199.1614744084943;
-        Tue, 02 Mar 2021 20:01:24 -0800 (PST)
-Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id e1sm4992656pjt.10.2021.03.02.20.01.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Mar 2021 20:01:24 -0800 (PST)
-Date:   Wed, 3 Mar 2021 09:31:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dA8KKHZiMQ0M1dMyQ+8WM+bKH9WXXF3VYD9qxoBSYVM=;
+        b=f6ZSIMX8nAv5AFjL21Ejo5Bv3NJ3Rp8ijmSTbsKlQYt6Ekl94iKE9TQIHIFyeDf+eT
+         4U32HV13v5mTABQ3WNlZOivEzWGS1py9zHDoZZ6zFdY3g3+sfbqcspgY/f8SK3sTER5N
+         09uXG0t5uD2JUyWzIs0kA838rkFolPnrW+qjLsRR4EdvOGDZQ5dt0oiXEWGDRqNCc1vf
+         6YIgnCjMyKJCssoimM7iGriqww+KbKAaP3idu40E9el3QnDkQ7mdUdKnvVq+pDFA2i35
+         6uVUiZofGRHsrGdBUzcyXf31pXUoMJCHfRBq9hRRhjNCuNChYx9NHWqj2Ba6DxCP+7Ix
+         0Bww==
+X-Gm-Message-State: AOAM530n4Tohk0m88Dm8GcAfvRhgv+oALZsuZxkYrxBffq71r+aHyhk5
+        D6rUONzoAxuMVY/19AH/6iXMbEuXb0s=
+X-Google-Smtp-Source: ABdhPJyVYXtuCpQJixD14PrCS9E2RYkwzmpI6ancOTzzhejj1erUKOBHDXNJht8WUd/TI7wGU6pDCw==
+X-Received: by 2002:a05:6512:110b:: with SMTP id l11mr15110220lfg.468.1614760301712;
+        Wed, 03 Mar 2021 00:31:41 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.googlemail.com with ESMTPSA id 192sm2767251ljj.95.2021.03.03.00.31.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Mar 2021 00:31:41 -0800 (PST)
+Subject: Re: [PATCH 00/31] Introduce devm_pm_opp_* API
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
         kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
@@ -86,40 +84,44 @@ Cc:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 00/31] Introduce devm_pm_opp_* API
-Message-ID: <20210303040119.hpeybankxph4fyuj@vireshk-i7>
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
  <6bd6730c-6f4e-df93-65cd-93fa4785a8d8@gmail.com>
  <c7a246a4-ab25-a193-f74a-98351780135e@gmail.com>
+ <20210303040119.hpeybankxph4fyuj@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <9e5edc16-abfa-632b-97e9-1367c24ef8bc@gmail.com>
+Date:   Wed, 3 Mar 2021 11:31:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
+In-Reply-To: <20210303040119.hpeybankxph4fyuj@vireshk-i7>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c7a246a4-ab25-a193-f74a-98351780135e@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-03-21, 16:40, Dmitry Osipenko wrote:
-> 20.01.2021 19:01, Dmitry Osipenko пишет:
-> > 01.01.2021 19:54, Yangtao Li пишет:
-> >> Hi,
-> >>
-> >> This patchset add devm_pm_opp_set_clkname, devm_pm_opp_put_clkname,
-> >> devm_pm_opp_set_regulators, devm_pm_opp_put_regulators,
-> >> devm_pm_opp_set_supported_hw, devm_pm_opp_of_add_table and
-> >> devm_pm_opp_register_notifier.
-> > 
-> > Hello Yangtao,
-> > 
-> > Thank you for your effort, looking forward to v2!
+03.03.2021 07:01, Viresh Kumar пишет:
+> On 02-03-21, 16:40, Dmitry Osipenko wrote:
+>> 20.01.2021 19:01, Dmitry Osipenko пишет:
+>>> 01.01.2021 19:54, Yangtao Li пишет:
+>>>> Hi,
+>>>>
+>>>> This patchset add devm_pm_opp_set_clkname, devm_pm_opp_put_clkname,
+>>>> devm_pm_opp_set_regulators, devm_pm_opp_put_regulators,
+>>>> devm_pm_opp_set_supported_hw, devm_pm_opp_of_add_table and
+>>>> devm_pm_opp_register_notifier.
+>>>
+>>> Hello Yangtao,
+>>>
+>>> Thank you for your effort, looking forward to v2!
+>>
+>> Yangtao, could you please let me know what is the status of this series?
+>> Will you be able to make a v2 anytime soon?
 > 
-> Yangtao, could you please let me know what is the status of this series?
-> Will you be able to make a v2 anytime soon?
+> Dmitry, if Yangtao doesn't reply back this week with a proposal, please go ahead
+> and respin the patches yourself. Thanks.
+> 
 
-Dmitry, if Yangtao doesn't reply back this week with a proposal, please go ahead
-and respin the patches yourself. Thanks.
-
--- 
-viresh
+Alright!
