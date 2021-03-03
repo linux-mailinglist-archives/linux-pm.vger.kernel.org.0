@@ -2,122 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD00132C2E2
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 01:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D641032C2D4
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 01:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbhCDAAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Mar 2021 19:00:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577592AbhCCRs6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Mar 2021 12:48:58 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CB6C061756
-        for <linux-pm@vger.kernel.org>; Wed,  3 Mar 2021 09:48:17 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 18so1931319pfo.6
-        for <linux-pm@vger.kernel.org>; Wed, 03 Mar 2021 09:48:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=DQdGOAiJkqTPyzLoXEVeKPh/2PQ5YOKkFlSaLqof2c4=;
-        b=Xar6N691lsdKt4mB4K1pmdFP0hYMk+z6cleRmjDPcv6ROFLf1frFC2TCsbfavDhY2G
-         yX6RG2o529u8kLclmtH31NZ5HuJ/RaxKFSAnthm74cG6AP0w6MXBwHCdBpqpyTKC5NhS
-         POr6GwGHxCmpcIKSw3ZdEDp2Oh8R+11bV+2mNXZMK7DqYzuDYu51su4DxgTxIiINEWRc
-         FKha5Pg55sUpmuIDh8b+VtOt4m0rren5oMJGprKa4lSNuWqhq+uU04cRTdRvgg1HqClf
-         nmBGITdAOOKxkI8Tk90aJiRtKJDZa11oRzipbKxyImA7miDUHZGPrWklh9PmT/IgcUJ2
-         suhA==
+        id S236857AbhCDAAO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Mar 2021 19:00:14 -0500
+Received: from mail-wr1-f47.google.com ([209.85.221.47]:38275 "EHLO
+        mail-wr1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243936AbhCCSkl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Mar 2021 13:40:41 -0500
+Received: by mail-wr1-f47.google.com with SMTP id d15so9587786wrv.5;
+        Wed, 03 Mar 2021 10:40:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=DQdGOAiJkqTPyzLoXEVeKPh/2PQ5YOKkFlSaLqof2c4=;
-        b=LRoeyxwdFTiknngrhMnhYOi2iXlDD10aUv4O7svbX8wW9xSboUAcnuwQYy2PKbJCsh
-         2RQkG84A+5/YGqGSxhfTfy3i6kHGEJcogJSmtuIFCAD2EWllzn2jBNUf24/xqbL1T6wZ
-         7NAH0Thg5bGccuJspt2tk2jgb9j+H71gaiUN9rT7iDXxF54VNgEGQP6hGV1c2n8aPfof
-         Vx8jbG95U894jTpbQRAC9qcLyoiTX/yuNehiBBRC4lf894YpQBm2uwzlW1I+BwPF3Dz7
-         SfW1SrPUwBrssVxRX57KWuPX1UkCDKNirG9Ycmbiewp9+gkQsl/CJAHtISlxlO5Ke8FD
-         an8A==
-X-Gm-Message-State: AOAM532K3A8KiiShUSqvNsrRAxeb5zQ9SxMe/tfW9WFjbKUs4wwUKv16
-        Vz1s09Hf++JMe1fEIOHUrDY5kKYLD7e8IUPx
-X-Google-Smtp-Source: ABdhPJzQX4vxXnERUQT8OdGxbjODd6z7+rUSw+EC1mBoAUs9a3C0AGxH5xqZEXRMgNQSQ/k1aL2m6Q==
-X-Received: by 2002:a62:d454:0:b029:1ed:a6d6:539d with SMTP id u20-20020a62d4540000b02901eda6d6539dmr4062720pfl.63.1614793697499;
-        Wed, 03 Mar 2021 09:48:17 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j35sm10925221pgj.45.2021.03.03.09.48.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i+wsmGB3nPUNErG75HhRRgO2R+I8z7au1VtRNGbI3kU=;
+        b=S2nDDj6NaKIMfsme7aEjpMBG33w9VV4kEqGW5ih8EAtLxuxh9uZL8xdqaoRTXWxiMK
+         HQbx0HfoH7w8pGEfVbNxcHT5iwblIVZ4cGXgqy1MWrPZbvnVicMa4KhkVPKt67ilXQOS
+         Z/89ZyjTminPNvP1O3aNHPYSEf3C9KVw2p2rEbnclWrt//1hQx+Ba1ZJEpuGXu5k//M7
+         fKMgbO40Uih3T6CzaajXU4TE9UBgrvFrN/k6Q6K7XDLybINIxeKeYeytUENAt6pRMdly
+         D8qTTR+yxTt52FKIZKmoZ/6zyPmCuT42R8OA2NdG0ctFeL7OWUkKdRP4tag1Sp6VVy5e
+         KH1Q==
+X-Gm-Message-State: AOAM531EGJdDZzVHOS4AU467/zWAIaNVs7OkHM0K5xKOXQn4R6On1hF+
+        AI7BSs16fXGNH/KEXtQZUgFxMX8hGb4=
+X-Google-Smtp-Source: ABdhPJzXlIPSof8TuEU/xmd9uwKvcnqjSaqVZ9KBEX0z0xFsdcZ3JuEcemsbVzh06mpoU6nkjncGFQ==
+X-Received: by 2002:adf:c40b:: with SMTP id v11mr28144512wrf.320.1614795584154;
+        Wed, 03 Mar 2021 10:19:44 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id m14sm6511797wmi.27.2021.03.03.10.19.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 09:48:17 -0800 (PST)
-Message-ID: <603fcbe1.1c69fb81.891bd.7ec6@mx.google.com>
-Date:   Wed, 03 Mar 2021 09:48:17 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 03 Mar 2021 10:19:43 -0800 (PST)
+Date:   Wed, 3 Mar 2021 19:19:41 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Angus Ainslie <angus@akkea.ca>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 01/18] ARM: dts: exynos: correct fuel gauge interrupt
+ trigger level on GT-I9100
+Message-ID: <20210303181941.yercebdxswdetf3q@kozik-lap>
+References: <20201210212534.216197-1-krzk@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.12-rc1-5-g51165d52eceb9
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (v5.12-rc1-5-g51165d52eceb9)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (v5.12-rc1-5-g51165d52eceb9)
+On Thu, Dec 10, 2020 at 10:25:17PM +0100, Krzysztof Kozlowski wrote:
+> The Maxim fuel gauge datasheets describe the interrupt line as active
+> low with a requirement of acknowledge from the CPU.  The falling edge
+> interrupt will mostly work but it's not correct.
+> 
+> Fixes: 8620cc2f99b7 ("ARM: dts: exynos: Add devicetree file for the Galaxy S2")
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  arch/arm/boot/dts/exynos4210-i9100.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-12-rc1-5-g51165d52eceb9/
+Applied 1-10 (Exynos and S5P dts patches).
 
-Tree: pm
-Branch: testing
-Git Describe: v5.12-rc1-5-g51165d52eceb9
-Git Commit: 51165d52eceb9a6a227e39c9b369b4f437e4e620
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+Best regards,
+Krzysztof
