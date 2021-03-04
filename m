@@ -2,119 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F1F32D746
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 17:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3767832D820
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 17:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236203AbhCDQDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Mar 2021 11:03:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236242AbhCDQDH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 4 Mar 2021 11:03:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E73F64E28;
-        Thu,  4 Mar 2021 16:02:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614873747;
-        bh=cGEWlSoCTya/ot2EVTO9KSdGc7xk6jo0zMvEBvDQYHE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DUOSCaMGuj1tnFivMq/qcuHSVZnHEWqVmUFgwmlm6MqJfY/W1AG+kVeZAaHABqPLa
-         WvMkgfPTAGvSItB5FZaRBPTct+V6tD4fVgbQlthxSwzNUrRSzLjWh6rN8vnU3n2Sb/
-         msGx4V0vAVg5YmXDKCQk6WIo4HcUNmXjf88Id9PZdwo2rUW/GJOgsnG3DfWUH7YxdA
-         IyCRCXsFAdyBC2q8rm1N8sYpDRbfEwg37athcrO63WuY/VM54nKPv5xL11/BeaJd7H
-         jFeJjdCai9/XfMc3PKr2FwuD1wpkzN2TCPmIz61e7RnVljNSh+eOV2CvfgpNndWBVs
-         Z25hl6GXSAggg==
-Date:   Thu, 4 Mar 2021 10:02:25 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Netdev List <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/3] PCI: Convert rtw88 power cycle quirk to shutdown
- quirk
-Message-ID: <20210304160225.GA846157@bjorn-Precision-5520>
+        id S238638AbhCDQyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Mar 2021 11:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238653AbhCDQyK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Mar 2021 11:54:10 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2815C061760
+        for <linux-pm@vger.kernel.org>; Thu,  4 Mar 2021 08:53:29 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id a18so20201560wrc.13
+        for <linux-pm@vger.kernel.org>; Thu, 04 Mar 2021 08:53:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YnxlDtU5po5D1M53NldIE72sMInCUbrZRLnykBeu2V8=;
+        b=Ewxi+OReE6dJAiv1zXYkq05geSl/fq+jZkRgzrMwoyzv7/mX7eQzNkoXLfZA/H4WjA
+         dLxCRUQXjLaUaurQNnE2V1uuSVtL1ssUBtAdfk47+VjVE3TodqBAoyI+HNZr9jaugwih
+         QozPefxrDjjzljWSRoqtM5xVlGU9Pye4vHHgjW0WwQ5jmtTxzIbIessoty315fsV3Pto
+         3rUuogs9lyEX7c3FT883rgCuhQlAV95l3Ki/0K1GkqZhT2pUmINFxC/lBZLVmiOR6r0I
+         /mSml0hG8PHwm/dAmJQhv/t8QNpecklP1K6I1reeFu194Rh1icR2BB1MMK/v7koexmb3
+         k6ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YnxlDtU5po5D1M53NldIE72sMInCUbrZRLnykBeu2V8=;
+        b=fPHtzJYfe/t97e5bGfz21MSYt6sguoK83IuaRiNz1910GkwPxZLCbhp8lBOED6i6nL
+         2+dX/4yWa4iFLGR1w1wem3sit4SLLCUaqe/QHhraciLByVSVPhXNGxF+WUY7MpqxoKD2
+         0G5nesBVMEMLXOIk+02hzzB00CqaT9aBxcR981ehpTh54zruwa4w4wHdOydrCTybOgJX
+         rMJ9T2/tTwuNN7IZ5Dn2QS6sU6DTSlKawZwtIPPESJCwhXc7s2lrVKnGAOYziPyvAxI9
+         yOoszpigWh1DCVzJgSSDU4p+EggypSQe9HNXOXnCbtBxMZTM+M/dqCnWtp81ISo/pNWI
+         XuvQ==
+X-Gm-Message-State: AOAM53336HE3ZIGOyg2DMUzJetXPiPcDsQLN1KNCsIiYaoPKFm2/x3eI
+        CJ/3s3yZ2YRYECG//yENkINcUQ==
+X-Google-Smtp-Source: ABdhPJxucLioKZo95wCuntF7BE0hNv7s/6tGhLvI6FsbewLBgkboHJnD6mezrJaZmVK15Kbq98zepg==
+X-Received: by 2002:adf:d1c2:: with SMTP id b2mr4922891wrd.424.1614876808222;
+        Thu, 04 Mar 2021 08:53:28 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-144-192.adsl.proxad.net. [82.252.144.192])
+        by smtp.googlemail.com with ESMTPSA id b15sm36807595wrr.47.2021.03.04.08.53.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Mar 2021 08:53:27 -0800 (PST)
+Subject: Re: [PATCH] devfreq: Register devfreq as a cooling device
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     cwchoi00@gmail.com, kyungmin.park@samsung.com,
+        myungjoo.ham@samsung.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        "open list:DRM DRIVERS FOR LIMA" <dri-devel@lists.freedesktop.org>,
+        "moderated list:DRM DRIVERS FOR LIMA" <lima@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <freedreno@lists.freedesktop.org>
+References: <20210304125034.28404-1-daniel.lezcano@linaro.org>
+ <5f06e0c5-b2d9-5e11-01b6-fdd0dac635a7@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <8d153937-c5fc-1de2-d510-d3f91f7a9724@linaro.org>
+Date:   Thu, 4 Mar 2021 17:53:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p62zy64gsmdNYSuV1sxOiB1Hye5R0WkY-gNFf+CKbG12A@mail.gmail.com>
+In-Reply-To: <5f06e0c5-b2d9-5e11-01b6-fdd0dac635a7@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael, linux-pm]
 
-On Thu, Mar 04, 2021 at 02:07:18PM +0800, Kai-Heng Feng wrote:
-> On Sat, Feb 27, 2021 at 2:17 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, Feb 26, 2021 at 02:31:31PM +0100, Heiner Kallweit wrote:
-> > > On 26.02.2021 13:18, Kai-Heng Feng wrote:
-> > > > On Fri, Feb 26, 2021 at 8:10 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
-> > > >>
-> > > >> On 26.02.2021 08:12, Kalle Valo wrote:
-> > > >>> Kai-Heng Feng <kai.heng.feng@canonical.com> writes:
-> > > >>>
-> > > >>>> Now we have a generic D3 shutdown quirk, so convert the original
-> > > >>>> approach to a PCI quirk.
-> > > >>>>
-> > > >>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > >>>> ---
-> > > >>>>  drivers/net/wireless/realtek/rtw88/pci.c | 2 --
-> > > >>>>  drivers/pci/quirks.c                     | 6 ++++++
-> > > >>>>  2 files changed, 6 insertions(+), 2 deletions(-)
-> > > >>>
-> > > >>> It would have been nice to CC linux-wireless also on patches 1-2. I only
-> > > >>> saw patch 3 and had to search the rest of patches from lkml.
-> > > >>>
-> > > >>> I assume this goes via the PCI tree so:
-> > > >>>
-> > > >>> Acked-by: Kalle Valo <kvalo@codeaurora.org>
-> > > >>
-> > > >> To me it looks odd to (mis-)use the quirk mechanism to set a device
-> > > >> to D3cold on shutdown. As I see it the quirk mechanism is used to work
-> > > >> around certain device misbehavior. And setting a device to a D3
-> > > >> state on shutdown is a normal activity, and the shutdown() callback
-> > > >> seems to be a good place for it.
-> > > >> I miss an explanation what the actual benefit of the change is.
-> > > >
-> > > > To make putting device to D3 more generic, as there are more than one
-> > > > device need the quirk.
-> > > >
-> > > > Here's the discussion:
-> > > > https://lore.kernel.org/linux-usb/00de6927-3fa6-a9a3-2d65-2b4d4e8f0012@linux.intel.com/
-> > > >
-> > >
-> > > Thanks for the link. For the AMD USB use case I don't have a strong opinion,
-> > > what's considered the better option may be a question of personal taste.
-> > > For rtw88 however I'd still consider it over-engineering to replace a simple
-> > > call to pci_set_power_state() with a PCI quirk.
-> > > I may be biased here because I find it sometimes bothering if I want to
-> > > look up how a device is handled and in addition to checking the respective
-> > > driver I also have to grep through quirks.c whether there's any special
-> > > handling.
-> >
-> > I haven't looked at these patches carefully, but in general, I agree
-> > that quirks should be used to work around hardware defects in the
-> > device.  If the device behaves correctly per spec, we should use a
-> > different mechanism so the code remains generic and all devices get
-> > the benefit.
-> >
-> > If we do add quirks, the commit log should explain what the device
-> > defect is.
+Hi Lukasz,
+
+thanks for commenting this patch,
+
+On 04/03/2021 14:47, Lukasz Luba wrote:
+> Hi Daniel,
 > 
-> So maybe it's reasonable to put all PCI devices to D3 at shutdown?
+> On 3/4/21 12:50 PM, Daniel Lezcano wrote:
+>> Currently the default behavior is to manually having the devfreq
+>> backend to register themselves as a devfreq cooling device.
+>>
+>> There are no so many and actually it makes more sense to register the
+>> devfreq device when adding it.
+>>
+>> Consequently, every devfreq becomes a cooling device like cpufreq is.
+>>
+>> Having a devfreq being registered as a cooling device can not mitigate
+>> a thermal zone if it is not bound to this one. Thus, the current
+>> configurations are not impacted by this change.
+> 
+> There are also different type of devices, which register into devfreq
+> framework like NoC buses, UFS/eMMC, jpeg and video accelerators, ISP,
+> etc.
+> In some platforms there are plenty of those devices and they all would
+> occupy memory due to private freq_table in devfreq_cooling, function:
+> devfreq_cooling_gen_tables().
+> 
+> IIRC in OdroidXU4 there are ~20 devfreq devs for NoC buses.
 
-I don't know off-hand.  I added Rafael and linux-pm in case they do.
+I'm curious, do you have a pointer to such kernels having all those
+devfreq ?
 
-If not, I suggest working up a patch to do that and a commit log that
-explains why that's a good idea and then we can have a discussion
-about it.  This thread really doesn't have that justification.  It
-says "putting device X in D3cold at shutdown saves 0.03w while in S5",
-but doesn't explain why that's safe or desirable for all devices.
+> It's true that they will not affect thermal zones, but unnecessarily,
+> they all will show up in the /sys/class/thermal/ as
+> thermal-devfreq-X
+>
+>
+> IMO the devfreq shouldn't be tight with devfreq cooling thermal.
 
-Bjorn
+The energy model is tied with a cooling device initialization.
+
+So if we want to do power limitation, the energy model must be
+initialized with the device, thus the cooling device also.
+
+That is the reason why I'm ending up with this change. Chanwoo
+suggestion makes sense and that will allow to move the initialization to
+devfreq which is more sane but it does not solve the initial problem
+with the energy model.
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
