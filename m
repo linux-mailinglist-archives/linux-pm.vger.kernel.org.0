@@ -2,57 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DF032D827
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 17:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E1332D86C
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Mar 2021 18:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238708AbhCDQzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Mar 2021 11:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238720AbhCDQzK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Mar 2021 11:55:10 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB5EC06175F
-        for <linux-pm@vger.kernel.org>; Thu,  4 Mar 2021 08:54:30 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id u14so28426650wri.3
-        for <linux-pm@vger.kernel.org>; Thu, 04 Mar 2021 08:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cCLKoMFPN0gPx/rfyorI0twY4bbHy1nmLr1AxawYDHU=;
-        b=mOCVJrRupIKBqltJhO/hxffcZOiabNKzUrjWiiEl5nNPYF+CqEOmIl9yWWh7RQCCOt
-         c1aKLGID9U62OoI2uVF/cGTlokFOWuR6DgcdMxha5K5zg/owKCIS8gHdvnGfJfpXk3eO
-         iTw0Y/5nTCeGqlqIW/k2uwednxdTKegLaGc2FY/bKtmc+oD0VHye+ZkquYpoLFbDpEnL
-         /stI/unoZkmvPnrc0+M9nyzuOPVu6GWW8GJ66ROL+a37ocYrDpE7jx43bv9YiBn2xIAZ
-         va42vr8HJmnXt52Vi1iTj6byuKhMhqOVtG4RCqP38TKGyxF9xGPpVTwrh80Fwf5Luivq
-         kbJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cCLKoMFPN0gPx/rfyorI0twY4bbHy1nmLr1AxawYDHU=;
-        b=TTNYxza26C3Nmw9CWzllZyVLElqu5RBH856BoicGXCuS143+2x+BWLRo9w20Qs6Ocv
-         ozymCTY7xtv7Cy3OGlWk4amBxXwbP5lFL68Z+zfeTIj+3mZikoMwVRwLHab5LsZZyljc
-         LkqOot4q1yVTh8Y5stRAffpe9TL0YMSSRCp6IOjqfEMRQAXfbtkxNO8IqsDWSRTSxWG4
-         iqvX9UKKL5ZcjFyz8sZb99nhdZYW/K/U8V11ecSYcdxDpiDEUGbBO7fPggKSsI6qSZ7e
-         RNozDk5WwHyM2L3HRNi179nUk+yxt+3Jr1eTSzEv/qL6cIPi00LBGRfbb+KGHWIGbdN3
-         hjGw==
-X-Gm-Message-State: AOAM532yCdSQkqke0fEsyI7Z3/pDLurGK8Y2W3wflyEwmuKMOVTMXYKE
-        t1Xnto/rUBTm1MH1Ps1JCswk4Q==
-X-Google-Smtp-Source: ABdhPJzU8MAa7xzsW9jiUKg20K9ykL5kVNj6KlOTciEUf7Wp5tDMw82GCSRJJf5DbLGtrPkwRNcwKw==
-X-Received: by 2002:a5d:6a81:: with SMTP id s1mr4964478wru.401.1614876868875;
-        Thu, 04 Mar 2021 08:54:28 -0800 (PST)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-144-192.adsl.proxad.net. [82.252.144.192])
-        by smtp.googlemail.com with ESMTPSA id l2sm38451757wrv.50.2021.03.04.08.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Mar 2021 08:54:28 -0800 (PST)
+        id S239063AbhCDRN4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Mar 2021 12:13:56 -0500
+Received: from foss.arm.com ([217.140.110.172]:41858 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239072AbhCDRNZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 4 Mar 2021 12:13:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6110231B;
+        Thu,  4 Mar 2021 09:12:38 -0800 (PST)
+Received: from [10.57.19.206] (unknown [10.57.19.206])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 427663F7D7;
+        Thu,  4 Mar 2021 09:12:34 -0800 (PST)
 Subject: Re: [PATCH] devfreq: Register devfreq as a cooling device
-To:     Chanwoo Choi <cwchoi00@gmail.com>, kyungmin.park@samsung.com,
-        myungjoo.ham@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     cwchoi00@gmail.com, kyungmin.park@samsung.com,
+        myungjoo.ham@samsung.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
         Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
@@ -67,79 +36,133 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         "open list:DRM DRIVER FOR MSM ADRENO GPU" 
         <freedreno@lists.freedesktop.org>
 References: <20210304125034.28404-1-daniel.lezcano@linaro.org>
- <97e495cb-c685-e163-0909-0311530a5332@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <91afb936-71d7-057d-4d66-4a2e41b52332@linaro.org>
-Date:   Thu, 4 Mar 2021 17:54:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <5f06e0c5-b2d9-5e11-01b6-fdd0dac635a7@arm.com>
+ <8d153937-c5fc-1de2-d510-d3f91f7a9724@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <71bc8b07-ea0e-17a9-8c7f-d20669e9da12@arm.com>
+Date:   Thu, 4 Mar 2021 17:12:32 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <97e495cb-c685-e163-0909-0311530a5332@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <8d153937-c5fc-1de2-d510-d3f91f7a9724@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/03/2021 16:06, Chanwoo Choi wrote:
-> Hi Daniel,
+
+
+On 3/4/21 4:53 PM, Daniel Lezcano wrote:
 > 
-> As Lukasz's comment, actually some devfreq devices like memory bus
-> might not affect the thermal critically. In the mainline,
-> there are four types devfreq as following:
-> 1. GPU
-> 2. UFS Storage
-> 3. DMC (Memory Controller)
-> 4. Memory bus like AMBA AXI
+> Hi Lukasz,
 > 
-> I think that you can specify this devfreq device will be used
-> for cooling device by editing the devfreq_dev_profile structure.
-
-Thanks for the suggestion, it makes sense.
-
-I will do the change following your example below.
-
-  -- Daniel
-
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index bf3047896e41..77966a17d03f 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -935,6 +935,13 @@ struct devfreq *devfreq_add_device(struct device *dev,
+> thanks for commenting this patch,
 > 
->         mutex_unlock(&devfreq_list_lock);
+> On 04/03/2021 14:47, Lukasz Luba wrote:
+>> Hi Daniel,
+>>
+>> On 3/4/21 12:50 PM, Daniel Lezcano wrote:
+>>> Currently the default behavior is to manually having the devfreq
+>>> backend to register themselves as a devfreq cooling device.
+>>>
+>>> There are no so many and actually it makes more sense to register the
+>>> devfreq device when adding it.
+>>>
+>>> Consequently, every devfreq becomes a cooling device like cpufreq is.
+>>>
+>>> Having a devfreq being registered as a cooling device can not mitigate
+>>> a thermal zone if it is not bound to this one. Thus, the current
+>>> configurations are not impacted by this change.
+>>
+>> There are also different type of devices, which register into devfreq
+>> framework like NoC buses, UFS/eMMC, jpeg and video accelerators, ISP,
+>> etc.
+>> In some platforms there are plenty of those devices and they all would
+>> occupy memory due to private freq_table in devfreq_cooling, function:
+>> devfreq_cooling_gen_tables().
+>>
+>> IIRC in OdroidXU4 there are ~20 devfreq devs for NoC buses.
 > 
-> +       if (devfreq->profile->is_cooling_device) {
-> +               devfreq->cdev = devfreq_cooling_em_register(devfreq, NULL);
-> +               if (IS_ERR(devfreq->cdev))
-> +                       dev_info(dev,
-> +                               "Failed to register devfreq cooling
-> device\n");
-> +       }
-> +
->         return devfreq;
-> 
->  err_init:
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 26ea0850be9b..26dc69f1047b 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -103,6 +103,7 @@ struct devfreq_dev_profile {
->         unsigned long initial_freq;
->         unsigned int polling_ms;
->         enum devfreq_timer timer;
-> +       bool is_cooling_device;
-> 
->         int (*target)(struct device *dev, unsigned long *freq, u32 flags);
->         int (*get_dev_status)(struct device *dev,
-> 
+> I'm curious, do you have a pointer to such kernels having all those
+> devfreq ?
+
+Sure, it's mainline code, you can build it with exynos_defconfig.
+You can check the DT files to find them arch/arm/boot/dts/exynos*.
+(this particular OdroidXU4 is Exynos5422, but it grabs some generic dt
+files).
+
+Here is the mainline kernel content of /sys/class/devfreq/
+----------------------------------------------------------
+sys/class/devfreq /
+10c20000.memory-controller  soc:bus-g2d          soc:bus-mfc
+11800000.gpu                soc:bus-g2d-acp      soc:bus-mscl
+soc:bus-disp1               soc:bus-gen          soc:bus-noc
+soc:bus-disp1-fimd          soc:bus-gscl-scaler  soc:bus-peri
+soc:bus-fsys-apb            soc:bus-jpeg         soc:bus-wcore
+soc:bus-fsys2               soc:bus-jpeg-apb
+----------------------------------------------------------
+
+IIRC some Odroid kernel maintained by Hardkernel had more devices
+in this dir.
 
 
+Here is how these bus devices print themselves during boot:
+----------------------------------------------------------
+[    8.674840] exynos-bus: new bus device registered: soc:bus-wcore ( 
+88700 KHz ~ 532000 KHz)
+[    8.686412] exynos-bus: new bus device registered: soc:bus-noc ( 
+66600 KHz ~ 111000 KHz)
+[    8.696080] exynos-bus: new bus device registered: soc:bus-fsys-apb 
+(111000 KHz ~ 222000 KHz)
+[    8.706590] exynos-bus: new bus device registered: soc:bus-fsys2 ( 
+75000 KHz ~ 200000 KHz)
+[    8.717661] exynos-bus: new bus device registered: soc:bus-mfc ( 
+83250 KHz ~ 333000 KHz)
+[    8.728139] exynos-bus: new bus device registered: soc:bus-gen ( 
+88700 KHz ~ 266000 KHz)
+[    8.737551] exynos-bus: new bus device registered: soc:bus-peri ( 
+66600 KHz ~  66600 KHz)
+[    8.748625] exynos-bus: new bus device registered: soc:bus-g2d ( 
+83250 KHz ~ 333000 KHz)
+[    8.759427] exynos-bus: new bus device registered: soc:bus-g2d-acp ( 
+66500 KHz ~ 266000 KHz)
+[    8.770366] exynos-bus: new bus device registered: soc:bus-jpeg ( 
+75000 KHz ~ 300000 KHz)
+[    8.781135] exynos-bus: new bus device registered: soc:bus-jpeg-apb ( 
+83250 KHz ~ 166500 KHz)
+[    8.791366] exynos-bus: new bus device registered: soc:bus-disp1-fimd 
+(120000 KHz ~ 200000 KHz)
+[    8.802418] exynos-bus: new bus device registered: soc:bus-disp1 
+(120000 KHz ~ 300000 KHz)
+[    8.813050] exynos-bus: new bus device registered: 
+soc:bus-gscl-scaler (150000 KHz ~ 300000 KHz)
+[    8.825308] exynos-bus: new bus device registered: soc:bus-mscl ( 
+84000 KHz ~ 666000 KHz)
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+----------------------------------------------------------
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+
+> 
+>> It's true that they will not affect thermal zones, but unnecessarily,
+>> they all will show up in the /sys/class/thermal/ as
+>> thermal-devfreq-X
+>>
+>>
+>> IMO the devfreq shouldn't be tight with devfreq cooling thermal.
+> 
+> The energy model is tied with a cooling device initialization.
+> 
+> So if we want to do power limitation, the energy model must be
+> initialized with the device, thus the cooling device also.
+> 
+> That is the reason why I'm ending up with this change. Chanwoo
+> suggestion makes sense and that will allow to move the initialization to
+> devfreq which is more sane but it does not solve the initial problem
+> with the energy model.
+
+Make sense, the 'is_cooling_device' does the job.
+
+Regards,
+Lukasz
