@@ -2,123 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0BD32F275
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Mar 2021 19:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C833132F319
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Mar 2021 19:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbhCES0W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Mar 2021 13:26:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbhCES0C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Mar 2021 13:26:02 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B65C061574
-        for <linux-pm@vger.kernel.org>; Fri,  5 Mar 2021 10:26:01 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id t29so2605677pfg.11
-        for <linux-pm@vger.kernel.org>; Fri, 05 Mar 2021 10:26:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=b+6US9S2Mo/fA8cxA8PbORoFM9bf1HT3GRemrhIH+Wk=;
-        b=nS92C71VP6fKmc1z4Xia5Kszzq+MM3kIGz0hi8yicaoHQVeiysirqegk+h05Ad0Wr2
-         72bvSRExMwt8lF1HWqmIB45DN/U2n+1u7oye4RGhcaWSQ6Ly+vwZHJ+Tm/7Vy/kXw4Sa
-         nyy1hbX8QVKpU7rgm002WBwZWDgqnHRLXw3zx/5HZaKIpmSoBokOQ7EZuvF2mS2pTH9m
-         XSIjX5u5wzrMaH+PAg8x1C+eN/+UcZP52TDMOMLw7M1q57Bfl+Vw6TNw4q7y1oLoC9Q2
-         I+ClL+4nYdMl1xTP8wr8o52r8KdU9xhzRehnNq4MvwFTEBPVcRQjNdQo3utLziJXBzyz
-         znjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=b+6US9S2Mo/fA8cxA8PbORoFM9bf1HT3GRemrhIH+Wk=;
-        b=qs+vVZ3Qta8jveKN7JYhaHKD4TCqgU87hPVKipMUWsHCI9jtiaAyEbDAXLVoOHcYMX
-         Z7GQH8EXVvYfs9sdPIkRPNlHKySLsYUtCPZ6k15YlQZ1j+673eKhEW+2TbjNTv7OevPu
-         l5JH2Mc1i/r0ryka6b3MDW110goArJZoarkeEyVyogsDdkehqKy+zsMxe8I99ugNv3Wx
-         ooR04eiiFcZtHNY+m7AsGb/WSyL7SvV298/5nI43WqzbUBTyQvsI9AMjpjt3YtCanQV2
-         6UEPL+Pf3TWPffwLRBBemDjTXip92SZwNy3uBisCNbmaNeR/9dtD4k/hw4aejQWZtrpl
-         +y9g==
-X-Gm-Message-State: AOAM532kju4f02q8ZK10nII/aJkTNneWomeYw2qzOpxb/PDfltrYXEby
-        0RrPkrDKndvotZlyd/8iS4qbrA==
-X-Google-Smtp-Source: ABdhPJz9llIhPzUZiYF/KplyRwCVLCHhoCKvhb7Q1wliYHDG7YziuxnpItrwj3tIbZnosnHKVXmIrg==
-X-Received: by 2002:a63:5a0c:: with SMTP id o12mr9776037pgb.76.1614968761500;
-        Fri, 05 Mar 2021 10:26:01 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e185sm3199612pfe.117.2021.03.05.10.26.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Mar 2021 10:26:01 -0800 (PST)
-Message-ID: <604277b9.1c69fb81.fc654.8801@mx.google.com>
-Date:   Fri, 05 Mar 2021 10:26:01 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S230050AbhCESpP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Mar 2021 13:45:15 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:63644 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230051AbhCESoo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Mar 2021 13:44:44 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 0.83.537)
+ id de62d34a7a55f328; Fri, 5 Mar 2021 19:44:42 +0100
+Received: from kreacher.localnet (89-64-81-9.dynamic.chello.pl [89.64.81.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id D678C663EA1;
+        Fri,  5 Mar 2021 19:44:40 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-iio@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH v1 0/4] ACPI: New helper for warning messages and replacing ACPI_EXCEPTION()
+Date:   Fri, 05 Mar 2021 19:39:31 +0100
+Message-ID: <2775419.haJ69vZeI0@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: acpi-5.12-rc2-19-g5c476073a9df
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (acpi-5.12-rc2-19-g5c476073a9df)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledruddtiedguddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttddvnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvedufefggeeutdejvdfhteevgeeludevueevvdejkeelfefhudfhfeehkefffeevnecukfhppeekledrieegrdekuddrleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdekuddrledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepjhhitgdvfeeskhgvrhhnvghlrdhorhhgpdhrtghpthht
+ oheplhgrrhhssehmvghtrghfohhordguvgdprhgtphhtthhopehpmhgvvghrfiesphhmvggvrhifrdhnvghtpdhrtghpthhtoheplhhinhhugidqihhiohesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjuggvlhhvrghrvgesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugiesrhhovggtkhdquhhsrdhnvghtpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (acpi-5.12-rc2-19-g5c476073a=
-9df)
+Hi All,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-5.12-rc2-19-g5c476073a9df/
+The purpose of this series is to get rid of the remaining (questionable)
+usage of ACPI_EXCEPTION() outside ACPICA.
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-5.12-rc2-19-g5c476073a9df
-Git Commit: 5c476073a9df062a501edf9ea7b11ccc53c27bf7
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+The first patch is a tiny cleanup of the ACPI processor driver, but it is
+depended on by the second one which in turn is depended on by the last two.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+The second patch introduces a new helper function for logging messages
+regarding ACPI object evaluation failures and makes some code under
+drivers/acpi/ use it.
 
-Detailed per-defconfig build reports:
+The other two patches use the new helper to get rid of ACPI_EXCEPTION()
+and the related definitions from the acpi-als and acpi_power_meter drivers.
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Please see the patch changelogs for details.
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+Thanks!
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
