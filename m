@@ -2,155 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B3A32F096
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Mar 2021 18:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC7C32F112
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Mar 2021 18:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbhCEREI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Mar 2021 12:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231380AbhCERD5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Mar 2021 12:03:57 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E70C061756
-        for <linux-pm@vger.kernel.org>; Fri,  5 Mar 2021 09:03:56 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id v15so2860786wrx.4
-        for <linux-pm@vger.kernel.org>; Fri, 05 Mar 2021 09:03:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ahYwzRQmSJrX4v8ks57+n/tweaGVoFJT9QTc8vhlUHg=;
-        b=swIYYukmXBPaja9sOQciBRpjvLCS+zDwCEO0LYBBETH1USSmuqSzF0c5EQfiCG2Wo2
-         GLUPdq8UftrXP9o9q2Eu3qYe6zVzpqQIbQPM3uClUG5+DcyhsuBHBe+fsv5Qrs5K5EfX
-         oNfWy6b3fFjbQ6xAo4gIYcM9qYdOUwz3NJk84Bk3TbBXf8p7dSkL0pBOSDclsPQzWJ1z
-         XM6+6xA4ghBTSuC6vRQ3m60/51XI68pU/kbjgztoQqNuUg7aWcj0EDDJFfl/Dp6W7Rvo
-         2iireZy5lAjM/nLHQ13lB3v80mBbVi2Ka4GHqjgQl87pIk4q0ChWX7Q/P3tHGPNuzOfP
-         2l1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ahYwzRQmSJrX4v8ks57+n/tweaGVoFJT9QTc8vhlUHg=;
-        b=OKZxbL5kKv2wOMAQOhOJM8wCUWmdf8/6y2S+U5DlyhT0DiX14XcoaDTmdqZYkZwvIP
-         Sl48H70MFgNkVhW3BCFyhPz5QPgHqMw1cLd414Vn9+M/cPF8LwtjyXx0ttM9wzeI/k0g
-         Lt5X6cD5Nga9gWzuD7OImIFZXXerMDRWFHmTPSEf6B8Co1cte03UBaz9xQAzRhR6R/BQ
-         S8xiJmBkYMtxzk7CSebGe25rK+A5UoC7+N5lXc1lW4HIpIWX1QykQ/KRmSvPAcXRKQ8V
-         FGybn40zi2MCasN6I8p9PDZh6jkNgYD4I9ea+HcfgiUBwMyW786CgdP5MHPOF3kgD4sA
-         7aVg==
-X-Gm-Message-State: AOAM530IpEXJZdOPyE7eQUwNJ6+QKzMAMP+5lfPJ8xQmPM0qUB8JCcd8
-        EXChRQG8sCQlJ33op0lhN1W4DA==
-X-Google-Smtp-Source: ABdhPJy7Len8gQJ8kSf2MO/PaGZMBla5J7H3YzDlCMYsreVJGMZXypBM7ZvREdzhXmXw5/qQmz+p0A==
-X-Received: by 2002:a5d:6b0a:: with SMTP id v10mr10296497wrw.183.1614963835502;
-        Fri, 05 Mar 2021 09:03:55 -0800 (PST)
-Received: from localhost.localdomain (lns-bzn-59-82-252-141-80.adsl.proxad.net. [82.252.141.80])
-        by smtp.gmail.com with ESMTPSA id p17sm4760934wmq.47.2021.03.05.09.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Mar 2021 09:03:55 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     cwchoi00@gmail.com
-Cc:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, steven.price@arm.com,
-        Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:ARM MALI PANFROST DRM DRIVER)
-Subject: [PATCH v2 4/4] devfreq/drivers/panfrost: Use devfreq cooling device registration
-Date:   Fri,  5 Mar 2021 18:03:37 +0100
-Message-Id: <20210305170338.13647-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210305170338.13647-1-daniel.lezcano@linaro.org>
-References: <20210305170338.13647-1-daniel.lezcano@linaro.org>
+        id S229551AbhCERYb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Mar 2021 12:24:31 -0500
+Received: from m42-2.mailgun.net ([69.72.42.2]:35945 "EHLO m42-2.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229493AbhCERYU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Mar 2021 12:24:20 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1614965060; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=4NIisY4w811oIA/VcR62rR+yydbAx2ISOLfSurqEVg8=;
+ b=iYmezbiEGkphh+tI362GvzDEo+jAimPDMMIOpC/RoFPpxToUyPFLRFBULSKX9d4S53aKOzEK
+ 1JOvFB/C3SylDamkc6YGhe2dmhEPC2xvN4wJX3XmOxPZxzMlr9uDgRgA/LYnneyJxyx/lFpG
+ WTB3AgiV3iEgYupPbP9nE10dowE=
+X-Mailgun-Sending-Ip: 69.72.42.2
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 604269351a5c93533f2f7fce (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 05 Mar 2021 17:24:05
+ GMT
+Sender: manafm=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E4088C43461; Fri,  5 Mar 2021 17:24:04 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: manafm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2A61EC433CA;
+        Fri,  5 Mar 2021 17:24:04 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 05 Mar 2021 22:54:04 +0530
+From:   manafm@codeaurora.org
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drivers: thermal: Add NULL pointer check before using
+ cooling device stats
+In-Reply-To: <1607367181-24589-1-git-send-email-manafm@codeaurora.org>
+References: <1607367181-24589-1-git-send-email-manafm@codeaurora.org>
+Message-ID: <483eabf92d011964d58c2321c9344ed2@codeaurora.org>
+X-Sender: manafm@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The devfreq core code is able to register the devfreq device as a
-cooling device if the 'is_cooling_device' flag is set in the profile.
+On 2020-12-08 00:23, Manaf Meethalavalappu Pallikunhi wrote:
 
-Use this flag and remove the cooling device registering code.
+Gentle reminder..
 
-Tested on rock960.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/gpu/drm/panfrost/panfrost_devfreq.c | 14 +-------------
- drivers/gpu/drm/panfrost/panfrost_devfreq.h |  3 ---
- 2 files changed, 1 insertion(+), 16 deletions(-)
-
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-index 56b3f5935703..4d96edf1bc54 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-@@ -3,7 +3,6 @@
- 
- #include <linux/clk.h>
- #include <linux/devfreq.h>
--#include <linux/devfreq_cooling.h>
- #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
- 
-@@ -80,6 +79,7 @@ static struct devfreq_dev_profile panfrost_devfreq_profile = {
- 	.polling_ms = 50, /* ~3 frames */
- 	.target = panfrost_devfreq_target,
- 	.get_dev_status = panfrost_devfreq_get_dev_status,
-+	.is_cooling_device = true,
- };
- 
- int panfrost_devfreq_init(struct panfrost_device *pfdev)
-@@ -90,7 +90,6 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 	struct device *dev = &pfdev->pdev->dev;
- 	struct devfreq *devfreq;
- 	struct opp_table *opp_table;
--	struct thermal_cooling_device *cooling;
- 	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
- 
- 	opp_table = dev_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
-@@ -139,12 +138,6 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 	}
- 	pfdevfreq->devfreq = devfreq;
- 
--	cooling = devfreq_cooling_em_register(devfreq, NULL);
--	if (IS_ERR(cooling))
--		DRM_DEV_INFO(dev, "Failed to register cooling device\n");
--	else
--		pfdevfreq->cooling = cooling;
--
- 	return 0;
- 
- err_fini:
-@@ -156,11 +149,6 @@ void panfrost_devfreq_fini(struct panfrost_device *pfdev)
- {
- 	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
- 
--	if (pfdevfreq->cooling) {
--		devfreq_cooling_unregister(pfdevfreq->cooling);
--		pfdevfreq->cooling = NULL;
--	}
--
- 	if (pfdevfreq->opp_of_table_added) {
- 		dev_pm_opp_of_remove_table(&pfdev->pdev->dev);
- 		pfdevfreq->opp_of_table_added = false;
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.h b/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-index db6ea48e21f9..470f5c974703 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-@@ -9,14 +9,11 @@
- 
- struct devfreq;
- struct opp_table;
--struct thermal_cooling_device;
--
- struct panfrost_device;
- 
- struct panfrost_devfreq {
- 	struct devfreq *devfreq;
- 	struct opp_table *regulators_opp_table;
--	struct thermal_cooling_device *cooling;
- 	bool opp_of_table_added;
- 
- 	ktime_t busy_time;
--- 
-2.17.1
-
+> There is a possible chance that some cooling device stats buffer
+> allocation fails due to very high cooling device max state value.
+> Later cooling device update sysfs can try to access stats data
+> for the same cooling device. It will lead to NULL pointer
+> dereference issue.
+> 
+> Add a NULL pointer check before accessing thermal cooling device
+> stats data. It fixes the following bug
+> 
+> [ 26.812833] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000004
+> [ 27.122960] Call trace:
+> [ 27.122963] do_raw_spin_lock+0x18/0xe8
+> [ 27.122966] _raw_spin_lock+0x24/0x30
+> [ 27.128157] thermal_cooling_device_stats_update+0x24/0x98
+> [ 27.128162] cur_state_store+0x88/0xb8
+> [ 27.128166] dev_attr_store+0x40/0x58
+> [ 27.128169] sysfs_kf_write+0x50/0x68
+> [ 27.133358] kernfs_fop_write+0x12c/0x1c8
+> [ 27.133362] __vfs_write+0x54/0x160
+> [ 27.152297] vfs_write+0xcc/0x188
+> [ 27.157132] ksys_write+0x78/0x108
+> [ 27.162050] ksys_write+0xf8/0x108
+> [ 27.166968] __arm_smccc_hvc+0x158/0x4b0
+> [ 27.166973] __arm_smccc_hvc+0x9c/0x4b0
+> [ 27.186005] el0_svc+0x8/0xc
+> 
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+> ---
+>  drivers/thermal/thermal_sysfs.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal_sysfs.c 
+> b/drivers/thermal/thermal_sysfs.c
+> index 473449b..10ca4f5 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -827,6 +827,9 @@ void thermal_cooling_device_stats_update(struct
+> thermal_cooling_device *cdev,
+>  {
+>  	struct cooling_dev_stats *stats = cdev->stats;
+> 
+> +	if (!stats)
+> +		return;
+> +
+>  	spin_lock(&stats->lock);
+> 
+>  	if (stats->state == new_state)
