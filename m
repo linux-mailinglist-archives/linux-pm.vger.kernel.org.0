@@ -2,118 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4153732E464
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Mar 2021 10:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5691B32E4DE
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Mar 2021 10:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbhCEJK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Mar 2021 04:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S229578AbhCEJce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Mar 2021 04:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbhCEJKV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Mar 2021 04:10:21 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDB7C061756
-        for <linux-pm@vger.kernel.org>; Fri,  5 Mar 2021 01:10:19 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id j2so1227030wrx.9
-        for <linux-pm@vger.kernel.org>; Fri, 05 Mar 2021 01:10:19 -0800 (PST)
+        with ESMTP id S229611AbhCEJc1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Mar 2021 04:32:27 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B47C061756
+        for <linux-pm@vger.kernel.org>; Fri,  5 Mar 2021 01:32:27 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id kx1so1509545pjb.3
+        for <linux-pm@vger.kernel.org>; Fri, 05 Mar 2021 01:32:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=63BZTwf3MLMQAkn2BdrHZ1xTK2bwmRKITVezIt3sV9k=;
-        b=qIhQjiqOP57bI/hD1kFs2/6tOxvCVgreYU6SWkrNvwDFlxQwEnv3kFFVIEiRAtV0bs
-         ghqevsOeKImy2rOLICgbeqWEThfUBb62WD98f6OLGoRbJPi+3ECHQTjzD7T09L6iNH1X
-         oAm7OJWf/W0mgFiXr47BHOFHjWLpDx1yqdw07vCbJeqMn/SZ6et48VCP9iSh47jL2RrG
-         gVVStZeH/O8pcqGXOJ9EMd4F8njNQwNN9alPkOkaB3F9hedHZi9ivpiK4dy/1O75s2EC
-         b80SYjFrOOr3XHujkCejze9BNQcAsrZT3Cpqt9O3cmDicy//qO7rhTZOo3V9VbGlcI9b
-         TE4w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=sRn3+ObPWQ3XHzCtNgjJ8LM3MKdEUsxY3s2mSMEAkJU=;
+        b=RhgILeOmKshzKZL6xwNVmNjn1MpgVg4J/UFT930UFUIDLb+43QHI/fC8eKb6l+ANYi
+         X7ZzIQxWpO5c35SUGOkn9Zu2QAycaw9NDi9j7sOORhlXVkIF9L6UyuyEX3YG2u1bfEji
+         GTYlaHlP6DdZIIpj5zgT/7oB+1vnrU3Xy9v5nPyGdXsmj+FSrUTW6hvvqKL+jyIF4xrq
+         5zbGH14tLWb/loSKbf0g/M5+FEg2C5t4B4/6IPz8PVa3EL/P3Jwcu7CTzZeMDXHUedXO
+         Ci4EQPPNjrcJ/JkU4oFUzu2kpPitXLjCOxKZrSF5Trz0LFxkKkx5hqurql6D8QPZJytn
+         CgEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=63BZTwf3MLMQAkn2BdrHZ1xTK2bwmRKITVezIt3sV9k=;
-        b=RP2QB3AsGIyKucNlXuGpWaEyrhbhdiA8pTxrqRAVH4hMP3BzZrFanwV9lwbz1NSDU0
-         Bmt8vRPpzHHRKMYkLifYGW4bwKTYhK2O0gDDBC4mWy6LDzEsapzXHtZoI90CMILIDo8A
-         xOYyOZWnGcyTXEt1TooJQl4QVm/YvkfBI5wLkKIl3REjDp9Qv9unKAvK4Zgerj+lQhGv
-         A/y/HloKwOfEpUL2xVJxtX/kpwzClIFtAyk6ynD4ET5t9Z8yhzMAl7yO7gcK6UTzJVI9
-         FZWhgEq0YKElbWSZL5KGO6avH55uMyiwW++nz90jPVLmXIqOGogydvWe8Dk5i79CcxZ5
-         JDWw==
-X-Gm-Message-State: AOAM533/TzqrpRoJiYaE96P+AvuSVdONufKR6IviyR3YOgj1xVP9eDgA
-        E0ljKop6ayc3cNESeq+uSHl9hg==
-X-Google-Smtp-Source: ABdhPJwGPV9w/pRUAVZfWeOAHCnQFfI/8tinbzeWQre8iQkJRqLUzFYfp3bIvMhEWSuLcWlSXdr0MQ==
-X-Received: by 2002:a5d:5411:: with SMTP id g17mr8376871wrv.194.1614935418378;
-        Fri, 05 Mar 2021 01:10:18 -0800 (PST)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-144-192.adsl.proxad.net. [82.252.144.192])
-        by smtp.googlemail.com with ESMTPSA id 36sm3695411wrh.94.2021.03.05.01.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Mar 2021 01:10:17 -0800 (PST)
-Subject: Re: [PATCH] devfreq: Register devfreq as a cooling device
-To:     Steven Price <steven.price@arm.com>, cwchoi00@gmail.com,
-        kyungmin.park@samsung.com, myungjoo.ham@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        "open list:DRM DRIVERS FOR LIMA" <dri-devel@lists.freedesktop.org>,
-        "moderated list:DRM DRIVERS FOR LIMA" <lima@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <freedreno@lists.freedesktop.org>
-References: <20210304125034.28404-1-daniel.lezcano@linaro.org>
- <23db1b13-9418-91f5-4871-f45b983f6e3c@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <e8c5f550-0ca5-b4e4-1113-3af760d2780e@linaro.org>
-Date:   Fri, 5 Mar 2021 10:10:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sRn3+ObPWQ3XHzCtNgjJ8LM3MKdEUsxY3s2mSMEAkJU=;
+        b=gZJzmQFJONQYDZN/+9okZBdGSRjs651YLBgZwhCR/GjiGVoMgCijvH9vWfVF5Adk0z
+         5UlZX6FYQ1qs0gZt4rJPykTY+quTJezuN/sQ5PrCwD3YeqPeeZDRj/dW3bStYwYZMNye
+         u5ydq1kpKT+GrbP2W856Rh7tKv5vtI2Z4DRuqdS02SAy1Lr2oki1byO8IAGXtq3NSenc
+         mW717bJdQNxdx7FAQs5sJsaGD5EqSlOBjWJBALYP3MV5M5i6f1hybV1WIGHBv/XfNz++
+         6m0/5yg8C+oKkO8TP1BL9yAd5cpgWmsRSEE/d0ZeekWGmfca+UDTcO5gzZYvOW/CxcJS
+         yHAw==
+X-Gm-Message-State: AOAM53132KwvxzG1YsQBDMOM0V8XDFxf577dHIoXAF29rS8Ibk+iF3vE
+        Z+F0TuVsrC52LfOCnBYqnyu1jA==
+X-Google-Smtp-Source: ABdhPJyh4dbRFq47HOzJoSaVBh1JlCrEIB3ikSx3vl1RRjsQjPJa6s3qonpiQ7ediOp31RJpcfITmA==
+X-Received: by 2002:a17:902:e20c:b029:e4:7a08:8452 with SMTP id u12-20020a170902e20cb02900e47a088452mr8167977plb.74.1614936747144;
+        Fri, 05 Mar 2021 01:32:27 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id f6sm2013235pfk.11.2021.03.05.01.32.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Mar 2021 01:32:26 -0800 (PST)
+Date:   Fri, 5 Mar 2021 15:02:23 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     'Wei Yongjun <weiyongjun1@huawei.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next] cpufreq: qcom-hw: Fix return value check in
+ qcom_cpufreq_hw_cpu_init()
+Message-ID: <20210305093223.xiws4crr6iswi4t3@vireshk-i7>
+References: <20210304100423.3856265-1-weiyongjun1@huawei.com>
+ <CAAQ0ZWToj9Fq5bRce-f+JUnO6iPPdJEU=P9n5k+-zmyUfKPE_w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <23db1b13-9418-91f5-4871-f45b983f6e3c@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAQ0ZWToj9Fq5bRce-f+JUnO6iPPdJEU=P9n5k+-zmyUfKPE_w@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/03/2021 09:12, Steven Price wrote:
-> On 04/03/2021 12:50, Daniel Lezcano wrote:
->> Currently the default behavior is to manually having the devfreq
->> backend to register themselves as a devfreq cooling device.
->>
->> There are no so many and actually it makes more sense to register the
->> devfreq device when adding it.
->>
->> Consequently, every devfreq becomes a cooling device like cpufreq is.
->>
->> Having a devfreq being registered as a cooling device can not mitigate
->> a thermal zone if it is not bound to this one. Thus, the current
->> configurations are not impacted by this change.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
-
-[ ... ]
-
->>       if (pfdevfreq->opp_of_table_added) {
->>           dev_pm_opp_of_remove_table(&pfdev->pdev->dev);
->>           pfdevfreq->opp_of_table_added = false;
+On 04-03-21, 18:42, Shawn Guo wrote:
+> On Thu, Mar 4, 2021 at 5:55 PM 'Wei Yongjun <weiyongjun1@huawei.com> wrote:
+> >
+> > From: Wei Yongjun <weiyongjun1@huawei.com>
+> >
+> > In case of error, the function ioremap() returns NULL pointer
+> > not ERR_PTR(). The IS_ERR() test in the return value check
+> > should be replaced with NULL test.
+> >
+> > Fixes: 67fc209b527d ("cpufreq: qcom-hw: drop devm_xxx() calls from init/exit hooks")
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 > 
-> You've removed all references to pfdevfreq->cooling, so please also
-> remove the member from struct panfrost_devfreq (as already done with
-> lima and msm).
+> Acked-by: Shawn Guo <shawn.guo@linaro.org>
 
-Sure, thanks for spotting this.
-
+Applied. Thanks.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+viresh
