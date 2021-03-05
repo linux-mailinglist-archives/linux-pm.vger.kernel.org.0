@@ -2,60 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B2732F5A5
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Mar 2021 22:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DB932F645
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Mar 2021 00:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhCEV67 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Mar 2021 16:58:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57686 "EHLO mail.kernel.org"
+        id S229591AbhCEXDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Mar 2021 18:03:06 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:32669 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229792AbhCEV6n (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Mar 2021 16:58:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 71C7464FEE;
-        Fri,  5 Mar 2021 21:58:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614981523;
-        bh=+TBnC3SMnEC6Ds+3HIEQUoC9zq0kY2PaJsR3PO/+J0c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ZVppED+2ZLAqBwxyKgEeSgjZ+543sL9GprVu+yp7SCEdeLmr24zM+5iVwDD7FcADI
-         PdGgTOWUnaXcIU4Z/U2aN1okp4ngw570QqiiryvbKvFuDgobCllk0mS1/UryOwzFIz
-         6btwKcW31I6SA96NUsMDqpil2j2dPV91ka8DhCftlKg/aObq5fKOtHuj4MXNs2P9cB
-         mM37tUWxgWGKfmvPDkrfESo7QpwrjZf4weouIE3CGMDFQZ+SEeJ0YCSQuTF4HkfjLI
-         9GJKFhfVTWz5X/ar7nrioO0p/YH8hXGcqzSuwIGRH3KHxVrNYBN5Qzv8VHLiySkBHa
-         pyrOuvG4bjYGg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5F231609EA;
-        Fri,  5 Mar 2021 21:58:43 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fixes for v5.12-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0jrtn6cbeQ9rgqmeiV_rAc_GB+rRT6qjtwbmgcCFPg-Qg@mail.gmail.com>
-References: <CAJZ5v0jrtn6cbeQ9rgqmeiV_rAc_GB+rRT6qjtwbmgcCFPg-Qg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0jrtn6cbeQ9rgqmeiV_rAc_GB+rRT6qjtwbmgcCFPg-Qg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.12-rc2
-X-PR-Tracked-Commit-Id: 7bff4c26b6d2c82bebf8630f31b1cca11b1bd562
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6d47254c063426541e7134fc5632243356ee74b1
-Message-Id: <161498152333.14373.957763445346742559.pr-tracker-bot@kernel.org>
-Date:   Fri, 05 Mar 2021 21:58:43 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S229792AbhCEXCe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Mar 2021 18:02:34 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Dsjtb56rBzL0;
+        Sat,  6 Mar 2021 00:02:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1614985352; bh=SZHwnu6Rhn8QiMnEN2V1F4jUIvqNotWt5soGJPrBegA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oQId8WMfqBoaRrfZPG9CkUf0ZVKeWwczfSPSv0TOjPq4wAk55pdhc9Ew+V+8lPSCH
+         wR/HYFeMgFz63iYdebjAfc25Ui8cYBPeLUWgyRarMOH8GPzCx1XcoMeuetALOveUeb
+         F/BYmh5JP3VsdTW+4JtEzJAg+X4fmmIL3MyvGXJSOz/EkyQFeJPRWQzaijxbq/3HMy
+         mMgXbpOXMYC5J1H003FVZf2IP2WWemzYzbw3vkpKBP3H8RW991gZHSDohXnSlmY/ow
+         eDpRzkIREhXZfJ4nyAmM3yj8lvnlij5N35ftdWwCULVuL8DhAy0VCYUPbzkTZshKoc
+         B0P2pde08URTw==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.4 at mail
+Date:   Sat, 6 Mar 2021 00:02:22 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v13 1/2] drm/tegra: dc: Support memory bandwidth
+ management
+Message-ID: <20210305230222.GA28867@qmqm.qmqm.pl>
+References: <20210302124445.29444-1-digetx@gmail.com>
+ <20210302124445.29444-2-digetx@gmail.com>
+ <20210303230827.GA22628@qmqm.qmqm.pl>
+ <1b352c7e-cc72-ba08-32ba-08c05cc3aa03@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1b352c7e-cc72-ba08-32ba-08c05cc3aa03@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 5 Mar 2021 18:26:37 +0100:
+On Fri, Mar 05, 2021 at 12:45:51AM +0300, Dmitry Osipenko wrote:
+> 04.03.2021 02:08, Michał Mirosław пишет:
+> > On Tue, Mar 02, 2021 at 03:44:44PM +0300, Dmitry Osipenko wrote:
+> >> Display controller (DC) performs isochronous memory transfers, and thus,
+> >> has a requirement for a minimum memory bandwidth that shall be fulfilled,
+> >> otherwise framebuffer data can't be fetched fast enough and this results
+> >> in a DC's data-FIFO underflow that follows by a visual corruption.
+[...]
+> >> +	/*
+> >> +	 * Horizontal downscale takes extra bandwidth which roughly depends
+> >> +	 * on the scaled width.
+> >> +	 */
+> >> +	if (src_w > dst_w)
+> >> +		mul = (src_w - dst_w) * bpp / 2048 + 1;
+> >> +	else
+> >> +		mul = 1;
+> > 
+> > Does it really need more bandwidth to scale down? Does it read the same
+> > data multiple times just to throw it away?
+> The hardware isn't optimized for downscale, it indeed takes more
+> bandwidth. You'll witness a severe underflow of plane's memory FIFO
+> buffer on trying to downscale 1080p plane to 50x50.
+[...]
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.12-rc2
+In your example, does it really need 16x the bandwidth compared to
+no scaling case?  The naive way to implement downscaling would be to read
+all the pixels and only take every N-th.  Maybe the problem is that in
+downscaling mode the latency requirements are tighter?  Why would bandwidth
+required be proportional to a difference between the widths (instead e.g.
+to src/dst or dst*cacheline_size)?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6d47254c063426541e7134fc5632243356ee74b1
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best Regards
+Michał Mirosław
