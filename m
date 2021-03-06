@@ -2,84 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4AA32FAD8
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Mar 2021 14:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D90A32FAE9
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Mar 2021 14:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbhCFN3b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Mar 2021 08:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S230415AbhCFNjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Mar 2021 08:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbhCFN33 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Mar 2021 08:29:29 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E96AC06174A;
-        Sat,  6 Mar 2021 05:29:29 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id m6so4164514pfk.1;
-        Sat, 06 Mar 2021 05:29:29 -0800 (PST)
+        with ESMTP id S230512AbhCFNjN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Mar 2021 08:39:13 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2D6C06174A;
+        Sat,  6 Mar 2021 05:39:13 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id z9so4684464iln.1;
+        Sat, 06 Mar 2021 05:39:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=ax5gKdgKGbpA9ARYQFz+0Uz3IYFdiqoNAF//dqc3ZNs=;
-        b=DE8WpP8lqtbYyqNjtGXWVIGDhJtd2MdX5E/mcHLjLmjYwOJ9exD/zLb7shoCoCeX2+
-         yfDwRX6PmgoOMqqi25dHj84kTZryFfvzjeb6oO9ihj1c4pIOao5thqaFi9PUiyWDT63z
-         lxUeAN9OPAduSaGaJJkXaheOkcyt6p3jPs0MRDmEvKhdKi7i2c2YxqReZ2PiSFUmlKDD
-         7AXVX2kjz4Z/G02Qjuq/j3/nh3AVoqNShfdNZ1/FXo8Oy+as7tNKUb1D7beoq7haWYEK
-         6kckM1zHsJBJLvOPpuo/FZ1R3uICwPSN+Qbpk4M4Iiu7WTxMGJnpKjRPW+EfoBu4yU/G
-         Ngzw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UUtXX8/HZ0V6MQRHKlsjyuvUd1b9QHwqr/3loxbIPr0=;
+        b=LVnsIhWWvq/e9UQMz17fmPOgkualzCNApWudHFHQxA8iGpdpheK2LgtfHnrJqLhM8F
+         haBfBjTg3EJLyf4pLX4v63BdLQMKu0qF+P+ZMVlD6gI8U1FNeJB4Qu/FWBbiOGaJqfKU
+         Pdnhj9V9ruM0XuT9fdJq65KITijELkSNQo9a8BNRrN5+P8S0/X4tDAoUYxUqfNC3kErW
+         kDY9HgUkG79aY2obKhYb4O8Idg9Y6vHbNRGy99Aek78tHaURS3wYya6fsZPEEPjfbf/J
+         8vXvgdAS8SQ9HycGp9MB9kyQvoiHThXIfAFHmjQZRMZmPIPMt2iBmQ5qFin/1fIjgFRy
+         bAuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ax5gKdgKGbpA9ARYQFz+0Uz3IYFdiqoNAF//dqc3ZNs=;
-        b=Bk3JxTG9s2boWnu37oU4j879HXDLq6Uo2KQJGT1p6Id+eNR0T+Q5KTGEU9qtYh+4+j
-         nRfc/lLTjRGYPFNJLFFEdMgvB+1Ci7I9zYbxYaf6H3daN2se8Pf5FjGjrH7TNfp3Z3or
-         2joKxwONnJ7HT4FNuoOdWRs2C52UbMGnztW6F6kxOV0p3MAd6LrtMq+7gMaBS5fjE7R6
-         v4xw1LE/n5gogo4g0VAw6TE9yBd00Wx9OYvJAvqajXwnB/dpeCd0cGngvgJzdqgTtwU0
-         rgG33+8PcF7CqBYrE+FKlKIWwHq9aI2+YBTJprEFYgeHnBr2/NZLQXByIKWqB/98ZpP4
-         VaVw==
-X-Gm-Message-State: AOAM533PkQ3EkmC0dB1WJWbOghY3ceuItyN1GoR7OOeeWQV548Cwwkvp
-        C6yPDt8+YDU/wtJ5MJEmUaI2oM4b1aMKHg==
-X-Google-Smtp-Source: ABdhPJwKZHgMDW8YVo3p5gJ5I33Q+dui73J+CrFYI6yUAu3cJbFQRhdm5wvbxf5B4iusYBdbELORBQ==
-X-Received: by 2002:aa7:8b59:0:b029:1e9:8229:c100 with SMTP id i25-20020aa78b590000b02901e98229c100mr14049356pfd.19.1615037368873;
-        Sat, 06 Mar 2021 05:29:28 -0800 (PST)
-Received: from localhost.localdomain ([45.135.186.66])
-        by smtp.gmail.com with ESMTPSA id t23sm5222284pgv.34.2021.03.06.05.29.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Mar 2021 05:29:28 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     djakov@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH] interconnect: core: fix error return code of icc_link_destroy()
-Date:   Sat,  6 Mar 2021 05:28:57 -0800
-Message-Id: <20210306132857.17020-1-baijiaju1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UUtXX8/HZ0V6MQRHKlsjyuvUd1b9QHwqr/3loxbIPr0=;
+        b=DZ7f5IjUmseXljTQnfUrtCk7ypjd7IxhKERDehGqvS3AebOly0GNUMrE5D0fd0azFJ
+         7BXAmzUPuwCK7bcDMIxoek7TiwK+ZCpRv+fZsvqGx9L+7Vg2W2DZkLdpTNNKM1XsnPZm
+         Wx4v2i5JqVbXVos31nTnXJmHOaFZh1XEsqI1eqfYLK1cPBfFxsE6V+GTDP2DdEoelpcS
+         ff3OzCBNwXHH7oeuqthyg+7i1W4bnONGs/9GfFLhfISz4OlzJ8Egspfjuk3pVb7AxQys
+         pz1c1211/sbrr4tk4yYPBWLvWAn12n/2vmVfYKFd4TV4TFSrhIHcCfEYgQyUN3OWsO0Z
+         ZULg==
+X-Gm-Message-State: AOAM532WJx2+UwGpY//1RxTRm5JjJd2lrwyfpvtQbTiBfHiklqBwdWpA
+        etL2EUM2MyBSjLIJu5UzHqUlrcEO74SW2XP5mGU=
+X-Google-Smtp-Source: ABdhPJxHu2RjGeqsCKdYOEuGeOlX1kBsXprC1jCl5fML6RgYaPkTtZPueNlHOnznhZQMgvdfftrJupojm09iAk6wNWE=
+X-Received: by 2002:a05:6e02:20e8:: with SMTP id q8mr12395869ilv.205.1615037952694;
+ Sat, 06 Mar 2021 05:39:12 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1613134924.git.syednwaris@gmail.com> <CAMpxmJXWk8YJR6-DHMj3+Dk4-TdE-FuFtxK_MvbsoLVqZA9rLg@mail.gmail.com>
+In-Reply-To: <CAMpxmJXWk8YJR6-DHMj3+Dk4-TdE-FuFtxK_MvbsoLVqZA9rLg@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Sat, 6 Mar 2021 19:09:01 +0530
+Message-ID: <CACG_h5rjCYxn8F1xipX2tDB193B7Sj-86aGk07pmAtq2ot31Wg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Introduce the for_each_set_clump macro
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When krealloc() fails and new is NULL, no error return code of
-icc_link_destroy() is assigned.
-To fix this bug, ret is assigned with -ENOMEM hen new is NULL.
+On Wed, Mar 3, 2021 at 8:13 PM Bartosz Golaszewski
+<bgolaszewski@baylibre.com> wrote:
+>
+> On Fri, Feb 12, 2021 at 2:19 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> >
+> > Hello Bartosz,
+> >
+> > Since this patchset primarily affects GPIO drivers, would you like
+> > to pick it up through your GPIO tree?
+> >
+>
+> Sure, as soon as you figure out what's wrong with the xilinx patch.
+> Could you also follow William's suggestion and rename the functions?
+>
+> Bart
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
----
- drivers/interconnect/core.c | 2 ++
- 1 file changed, 2 insertions(+)
+I have incorporated William's suggestions and have also solved the
+build error coming in the xilinx patch.
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 5ad519c9f239..8a1e70e00876 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -942,6 +942,8 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
- 		       GFP_KERNEL);
- 	if (new)
- 		src->links = new;
-+	else
-+		ret = -ENOMEM;
- 
- out:
- 	mutex_unlock(&icc_lock);
--- 
-2.17.1
+I am sharing the v3 patchset. Thanks !
 
+Regards
+
+
+Syed Nayyar Waris
