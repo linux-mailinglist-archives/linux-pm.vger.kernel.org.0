@@ -2,353 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6990532F68D
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Mar 2021 00:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B6532F73D
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Mar 2021 01:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbhCEXW7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Mar 2021 18:22:59 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:34532 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbhCEXWt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Mar 2021 18:22:49 -0500
-Received: by mail-oi1-f175.google.com with SMTP id x78so4390262oix.1;
-        Fri, 05 Mar 2021 15:22:48 -0800 (PST)
+        id S229631AbhCFA0u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Mar 2021 19:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbhCFA0p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Mar 2021 19:26:45 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709C0C06175F
+        for <linux-pm@vger.kernel.org>; Fri,  5 Mar 2021 16:26:45 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id t26so2443971pgv.3
+        for <linux-pm@vger.kernel.org>; Fri, 05 Mar 2021 16:26:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NS5Lxo9BxfuP6QZPK99yTL5xf7oG57S72PW7587sqTc=;
+        b=OF6iKVvJm7nV+Gc6VzMBqvRN+neWOeuyd6iZR7wU09QDxn7EQnsj7+mPPzIhA1gFfz
+         qXUN0tIMY34ELyjVsu3NaI/MfTZe+jt4+rQDRc7hFeve/QQCJvijj4rI3wZggNfn7cAN
+         mUSGSDyOoEsAOQOwwLa3CtWnXCMsWKzKOJAaE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8bDgjusk3v3TEqzMR3iY18WopMlgkTf5ccZF+W6WfEc=;
-        b=uGqwwKS5O5uEj4LnLGVOdb2CoFWd9HRqvPUn5/mgIuz4OoQY5IksTvwoCel/mGyGPK
-         IJR7yeaAW2Lv7tc2AhzluiQXMctbpfBTaSXIWh7Jz9UPkRTf9LZoxLimCSMnoRJ2xm66
-         MVuRZgQdlbYoxeBKlwcEROOupaSKMARsJdWPYhBgnUojzq1VNw/znjsZP+UXYpQjzA9b
-         etL4ayk5YjYTJLLiZBnKhg1gYuEAokC+Qeflb/QcnFMdEcXoC9Q8K7YYG3XbuCV1GDgZ
-         fjkmtvzYsNSJlcMW7ux2Hd3vG7eh7sDX8zc2wbgZdoNnAGZSfQNlgs3mVBK6VWSyckS5
-         wRRw==
-X-Gm-Message-State: AOAM533uBexAxkOgLEfOxsjVFJ5zFmvhwwHOg0AA7VtH8AdOYdv/Nf1v
-        CfHhiu9tCbIHtph/aICMPw==
-X-Google-Smtp-Source: ABdhPJwnP2ACxLKHwogrpwaQEBPZ44ot+C/dBg82d6j3O7VgN3A+hrtebaQGCd0LIKGxwaRMuGNYrQ==
-X-Received: by 2002:a54:4689:: with SMTP id k9mr9011155oic.149.1614986568593;
-        Fri, 05 Mar 2021 15:22:48 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s21sm870385oos.5.2021.03.05.15.22.46
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NS5Lxo9BxfuP6QZPK99yTL5xf7oG57S72PW7587sqTc=;
+        b=C+SiwUXh9y90Q1FG6O7x0+/m2OKSbxPTKvf6FWMKattmT8mZv1XmAZHMl+PHj14666
+         cm9rfM+6azLN9/ZiPOVHavXcqts5xdvOujDY8B286DWwRYzR14AWX9Ap50qb1LGSvgcI
+         rDNgn166msvZR8VYWTrL2ZMVoUFTNUvtzYQdPDw+J+7RcOrvvmM4zkDcA+jzLGA7nOEz
+         G5iDefMMjokFImUO79iBGr7GKh6h9QCFndiWBilqC2tgL31WAesPPIHxGR3n7YRMOeKS
+         GzPlGIaGpWtfkGf2g5NjqCN/jTqwijPrd3pw/t3NpLsFvlhXsNRvk/7URbWQKxoPvpRe
+         5/EQ==
+X-Gm-Message-State: AOAM532EC+zzZH8lgUqXalXwSQdnuJGeZDCeSVqguaCZLjQ7Zbm0+G9D
+        m9JVv43ZloWGX2uGiPZNT6IghQ==
+X-Google-Smtp-Source: ABdhPJwYNoTKdPo4SqwlHiwi1KRPqS0VHMbOkjyM8E0HzhGRyeLI+96z4eeI1IbBhhONP/H+U667ow==
+X-Received: by 2002:a63:5c1e:: with SMTP id q30mr10501289pgb.259.1614990404968;
+        Fri, 05 Mar 2021 16:26:44 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:48f0:8f48:7388:d921])
+        by smtp.gmail.com with ESMTPSA id 192sm3608905pfa.122.2021.03.05.16.26.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Mar 2021 15:22:47 -0800 (PST)
-Received: (nullmailer pid 830239 invoked by uid 1000);
-        Fri, 05 Mar 2021 23:22:45 -0000
-Date:   Fri, 5 Mar 2021 17:22:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH 7/8] dt-bindings: Add bindings documentation for
- RISC-V idle states
-Message-ID: <20210305232245.GA820565@robh.at.kernel.org>
-References: <20210221093758.210981-1-anup.patel@wdc.com>
- <20210221093758.210981-8-anup.patel@wdc.com>
+        Fri, 05 Mar 2021 16:26:44 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Jordan Crouse <jcrouse@codeaurora.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Akhil P Oommen <akhilpo@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Niklas Cassel <nks@flawful.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 3/3] PM: AVS: qcom-cpr: Use nvmem_cell_read_variable_le_u32()
+Date:   Fri,  5 Mar 2021 16:26:22 -0800
+Message-Id: <20210305162546.3.Id1c70158722750aec0673d60c12e46a9c66bbfed@changeid>
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+In-Reply-To: <20210305162546.1.I323dad4343256b48af2be160b84b1e87985cc9be@changeid>
+References: <20210305162546.1.I323dad4343256b48af2be160b84b1e87985cc9be@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210221093758.210981-8-anup.patel@wdc.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Feb 21, 2021 at 03:07:57PM +0530, Anup Patel wrote:
-> The RISC-V CPU idle states will be described in DT under the
-> /cpus/riscv-idle-states DT node. This patch adds the bindings
-> documentation for riscv-idle-states DT nodes and idle state DT
-> nodes under it.
-> 
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> ---
->  .../bindings/riscv/idle-states.yaml           | 250 ++++++++++++++++++
->  1 file changed, 250 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/riscv/idle-states.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/riscv/idle-states.yaml b/Documentation/devicetree/bindings/riscv/idle-states.yaml
-> new file mode 100644
-> index 000000000000..3eff763fed23
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/riscv/idle-states.yaml
-> @@ -0,0 +1,250 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/riscv/idle-states.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: RISC-V idle states binding description
-> +
-> +maintainers:
-> +  - Anup Patel <anup.patel@wdc.com>
-> +
-> +description: |+
-> +  RISC-V systems can manage power consumption dynamically, where HARTs
-> +  (or CPUs) [1] can be put in different platform specific suspend (or
-> +  idle) states (ranging from simple WFI, power gating, etc). The RISC-V
-> +  SBI [2] hart state management extension provides a standard mechanism
-> +  for OSes to request HART state transitions.
-> +
-> +  The platform specific suspend (or idle) states of a hart can be either
-> +  retentive or non-rententive in nature. A retentive suspend state will
-> +  preserve hart register and CSR values for all privilege modes whereas
-> +  a non-retentive suspend state will not preserve hart register and CSR
-> +  values. The suspend (or idle) state entered by executing the WFI
-> +  instruction is considered standard on all RISC-V systems and therefore
-> +  must not be listed in device tree.
-> +
-> +  The device tree binding definition for RISC-V idle states described
-> +  in this document is quite similar to the ARM idle states [3].
-> +
-> +  References
-> +
-> +  [1] RISC-V Linux Kernel documentation - CPUs bindings
-> +      Documentation/devicetree/bindings/riscv/cpus.yaml
-> +
-> +  [2] RISC-V Supervisor Binary Interface (SBI)
-> +      http://github.com/riscv/riscv-sbi-doc/riscv-sbi.adoc
-> +
-> +  [3] ARM idle states binding description - Idle states bindings
-> +      Documentation/devicetree/bindings/arm/idle-states.yaml
+Let's delete the private function cpr_read_efuse() since it does the
+basically the same thing as the new API call
+nvmem_cell_read_variable_le_u32().
 
-I'd assume there's common parts we can share.
+Differences between the new API call and the old private function:
+* less error printing (I assume this is OK).
+* will give an error if the value doesn't fit in 32-bits (the old code
+  would have truncated silently).
 
-> +
-> +properties:
-> +  $nodename:
-> +    const: riscv-idle-states
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+I haven't done any more than compile-test this. Mostly I'm just
+writing this patch because it helped provide inspiration for the
+general API function.
 
-Just 'idle-states' like Arm.
+ drivers/soc/qcom/cpr.c | 43 +++++-------------------------------------
+ 1 file changed, 5 insertions(+), 38 deletions(-)
 
-> +
-> +patternProperties:
-> +  "^(cpu|cluster)-":
-> +    type: object
-> +    description: |
-> +      Each state node represents an idle state description and must be
-> +      defined as follows.
-> +
+diff --git a/drivers/soc/qcom/cpr.c b/drivers/soc/qcom/cpr.c
+index b24cc77d1889..4ce8e816154f 100644
+--- a/drivers/soc/qcom/cpr.c
++++ b/drivers/soc/qcom/cpr.c
+@@ -801,38 +801,6 @@ static int cpr_set_performance_state(struct generic_pm_domain *domain,
+ 	return ret;
+ }
+ 
+-static int cpr_read_efuse(struct device *dev, const char *cname, u32 *data)
+-{
+-	struct nvmem_cell *cell;
+-	ssize_t len;
+-	char *ret;
+-	int i;
+-
+-	*data = 0;
+-
+-	cell = nvmem_cell_get(dev, cname);
+-	if (IS_ERR(cell)) {
+-		if (PTR_ERR(cell) != -EPROBE_DEFER)
+-			dev_err(dev, "undefined cell %s\n", cname);
+-		return PTR_ERR(cell);
+-	}
+-
+-	ret = nvmem_cell_read(cell, &len);
+-	nvmem_cell_put(cell);
+-	if (IS_ERR(ret)) {
+-		dev_err(dev, "can't read cell %s\n", cname);
+-		return PTR_ERR(ret);
+-	}
+-
+-	for (i = 0; i < len; i++)
+-		*data |= ret[i] << (8 * i);
+-
+-	kfree(ret);
+-	dev_dbg(dev, "efuse read(%s) = %x, bytes %zd\n", cname, *data, len);
+-
+-	return 0;
+-}
+-
+ static int
+ cpr_populate_ring_osc_idx(struct cpr_drv *drv)
+ {
+@@ -843,8 +811,7 @@ cpr_populate_ring_osc_idx(struct cpr_drv *drv)
+ 	int ret;
+ 
+ 	for (; fuse < end; fuse++, fuses++) {
+-		ret = cpr_read_efuse(drv->dev, fuses->ring_osc,
+-				     &data);
++		ret = nvmem_cell_read_variable_le_u32(drv->dev, fuses->ring_osc, &data);
+ 		if (ret)
+ 			return ret;
+ 		fuse->ring_osc_idx = data;
+@@ -863,7 +830,7 @@ static int cpr_read_fuse_uV(const struct cpr_desc *desc,
+ 	u32 bits = 0;
+ 	int ret;
+ 
+-	ret = cpr_read_efuse(drv->dev, init_v_efuse, &bits);
++	ret = nvmem_cell_read_variable_le_u32(drv->dev, init_v_efuse, &bits);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -932,7 +899,7 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
+ 		}
+ 
+ 		/* Populate target quotient by scaling */
+-		ret = cpr_read_efuse(drv->dev, fuses->quotient, &fuse->quot);
++		ret = nvmem_cell_read_variable_le_u32(drv->dev, fuses->quotient, &fuse->quot);
+ 		if (ret)
+ 			return ret;
+ 
+@@ -1001,7 +968,7 @@ static int cpr_calculate_scaling(const char *quot_offset,
+ 	prev_fuse = fuse - 1;
+ 
+ 	if (quot_offset) {
+-		ret = cpr_read_efuse(drv->dev, quot_offset, &quot_diff);
++		ret = nvmem_cell_read_variable_le_u32(drv->dev, quot_offset, &quot_diff);
+ 		if (ret)
+ 			return ret;
+ 
+@@ -1701,7 +1668,7 @@ static int cpr_probe(struct platform_device *pdev)
+ 	 * initialized after attaching to the power domain,
+ 	 * since it depends on the CPU's OPP table.
+ 	 */
+-	ret = cpr_read_efuse(dev, "cpr_fuse_revision", &cpr_rev);
++	ret = nvmem_cell_read_variable_le_u32(dev, "cpr_fuse_revision", &cpr_rev);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.30.1.766.gb4fecdf3b7-goog
 
-       additionalProperties: false
-
-> +    properties:
-> +      compatible:
-> +        const: riscv,idle-state
-> +
-> +      local-timer-stop:
-> +        description:
-> +          If present the CPU local timer control logic is lost on state
-> +          entry, otherwise it is retained.
-> +        type: boolean
-> +
-> +      entry-latency-us:
-> +        description:
-> +          Worst case latency in microseconds required to enter the idle state.
-> +
-> +      exit-latency-us:
-> +        description:
-> +          Worst case latency in microseconds required to exit the idle state.
-> +          The exit-latency-us duration may be guaranteed only after
-> +          entry-latency-us has passed.
-> +
-> +      min-residency-us:
-> +        description:
-> +          Minimum residency duration in microseconds, inclusive of preparation
-> +          and entry, for this idle state to be considered worthwhile energy
-> +          wise (refer to section 2 of this document for a complete description).
-> +
-> +      wakeup-latency-us:
-> +        description: |
-> +          Maximum delay between the signaling of a wake-up event and the CPU
-> +          being able to execute normal code again. If omitted, this is assumed
-> +          to be equal to:
-> +
-> +            entry-latency-us + exit-latency-us
-> +
-> +          It is important to supply this value on systems where the duration
-> +          of PREP phase (see diagram 1, section 2) is non-neglibigle. In such
-> +          systems entry-latency-us + exit-latency-us will exceed
-> +          wakeup-latency-us by this duration.
-> +
-> +      idle-state-name:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        description:
-> +          A string used as a descriptive name for the idle state.
-> +
-> +    required:
-> +      - compatible
-> +      - entry-latency-us
-> +      - exit-latency-us
-> +      - min-residency-us
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    cpus {
-> +        #size-cells = <0>;
-> +        #address-cells = <1>;
-> +
-> +        cpu@0 {
-> +            device_type = "cpu";
-> +            compatible = "riscv";
-> +            reg = <0x0>;
-> +            riscv,isa = "rv64imafdc";
-> +            mmu-type = "riscv,sv48";
-> +            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
-> +                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
-
-You should need to add this property to your cpu schema.
-
-> +
-> +            cpu_intc0: interrupt-controller {
-> +                #interrupt-cells = <1>;
-> +                compatible = "riscv,cpu-intc";
-> +                interrupt-controller;
-> +            };
-> +        };
-> +
-> +        cpu@1 {
-> +            device_type = "cpu";
-> +            compatible = "riscv";
-> +            reg = <0x1>;
-> +            riscv,isa = "rv64imafdc";
-> +            mmu-type = "riscv,sv48";
-> +            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
-> +                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
-> +
-> +            cpu_intc1: interrupt-controller {
-> +                #interrupt-cells = <1>;
-> +                compatible = "riscv,cpu-intc";
-> +                interrupt-controller;
-> +            };
-> +        };
-> +
-> +        cpu@10 {
-> +            device_type = "cpu";
-> +            compatible = "riscv";
-> +            reg = <0x10>;
-> +            riscv,isa = "rv64imafdc";
-> +            mmu-type = "riscv,sv48";
-> +            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
-> +                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
-> +
-> +            cpu_intc10: interrupt-controller {
-> +                #interrupt-cells = <1>;
-> +                compatible = "riscv,cpu-intc";
-> +                interrupt-controller;
-> +            };
-> +        };
-> +
-> +        cpu@11 {
-> +            device_type = "cpu";
-> +            compatible = "riscv";
-> +            reg = <0x11>;
-> +            riscv,isa = "rv64imafdc";
-> +            mmu-type = "riscv,sv48";
-> +            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
-> +                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
-> +
-> +            cpu_intc11: interrupt-controller {
-> +                #interrupt-cells = <1>;
-> +                compatible = "riscv,cpu-intc";
-> +                interrupt-controller;
-> +            };
-> +        };
-> +
-> +        riscv-idle-states {
-> +            CPU_RET_0_0: cpu-retentive-0-0 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x10000000>;
-
-Not documented.
-
-> +                entry-latency-us = <20>;
-> +                exit-latency-us = <40>;
-> +                min-residency-us = <80>;
-> +            };
-> +
-> +            CPU_NONRET_0_0: cpu-nonretentive-0-0 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x90000000>;
-> +                entry-latency-us = <250>;
-> +                exit-latency-us = <500>;
-> +                min-residency-us = <950>;
-> +            };
-> +
-> +            CLUSTER_RET_0: cluster-retentive-0 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x11000000>;
-> +                local-timer-stop;
-> +                entry-latency-us = <50>;
-> +                exit-latency-us = <100>;
-> +                min-residency-us = <250>;
-> +                wakeup-latency-us = <130>;
-> +            };
-> +
-> +            CLUSTER_NONRET_0: cluster-nonretentive-0 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x91000000>;
-> +                local-timer-stop;
-> +                entry-latency-us = <600>;
-> +                exit-latency-us = <1100>;
-> +                min-residency-us = <2700>;
-> +                wakeup-latency-us = <1500>;
-> +            };
-> +
-> +            CPU_RET_1_0: cpu-retentive-1-0 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x10000010>;
-> +                entry-latency-us = <20>;
-> +                exit-latency-us = <40>;
-> +                min-residency-us = <80>;
-> +            };
-> +
-> +            CPU_NONRET_1_0: cpu-nonretentive-1-0 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x90000010>;
-> +                entry-latency-us = <250>;
-> +                exit-latency-us = <500>;
-> +                min-residency-us = <950>;
-> +            };
-> +
-> +            CLUSTER_RET_1: cluster-retentive-1 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x11000010>;
-> +                local-timer-stop;
-> +                entry-latency-us = <50>;
-> +                exit-latency-us = <100>;
-> +                min-residency-us = <250>;
-> +                wakeup-latency-us = <130>;
-> +            };
-> +
-> +            CLUSTER_NONRET_1: cluster-nonretentive-1 {
-> +                compatible = "riscv,idle-state";
-> +                riscv,sbi-suspend-param = <0x91000010>;
-> +                local-timer-stop;
-> +                entry-latency-us = <600>;
-> +                exit-latency-us = <1100>;
-> +                min-residency-us = <2700>;
-> +                wakeup-latency-us = <1500>;
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.25.1
-> 
