@@ -2,203 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50568330206
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Mar 2021 15:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C166330213
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Mar 2021 15:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbhCGOXM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Mar 2021 09:23:12 -0500
-Received: from mga11.intel.com ([192.55.52.93]:19604 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229757AbhCGOWv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 7 Mar 2021 09:22:51 -0500
-IronPort-SDR: QXFx4bURNfGhlpzkY00FgbDz0cJv/bO6am2kGSCEXe0+FTY97S0oolfhXtMi9WljwIE/o4zj9S
- 0KBBI7RMsNBQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="184531032"
-X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="184531032"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 06:22:51 -0800
-IronPort-SDR: gIWYoReKf6pdxmmgJUy0onQpT1UwsXXFHd5YXIhy5LScWtErvIgcUAT2zii6O/Jzj7RufZPkrF
- HsRL/7+90Hng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="402504422"
-Received: from lkp-server01.sh.intel.com (HELO 3e992a48ca98) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Mar 2021 06:22:49 -0800
-Received: from kbuild by 3e992a48ca98 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lIuIy-0000R7-PN; Sun, 07 Mar 2021 14:22:48 +0000
-Date:   Sun, 07 Mar 2021 22:22:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 5c476073a9df062a501edf9ea7b11ccc53c27bf7
-Message-ID: <6044e18e.bJjTnUBj+uJ5MB4v%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230301AbhCGO3L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Mar 2021 09:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230234AbhCGO3C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Mar 2021 09:29:02 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C01C06174A
+        for <linux-pm@vger.kernel.org>; Sun,  7 Mar 2021 06:29:02 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id e10so8595769wro.12
+        for <linux-pm@vger.kernel.org>; Sun, 07 Mar 2021 06:29:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oj/4Ujv3X0dQLWGyly5F5AZIrJiiPDr1GiSc4SFfBr4=;
+        b=K7cTTRzKD8ZqG7I6DgeAdDBmMlEdbmj8TjmC7EBfY//6YfjqT/cyWOO4skj79ARcAi
+         H3nFF3B14fOr3vwESDrHAoo1n5hLnJweQN4q0hCrPbFVA5nXWMNpVWSG/5PbfGnCRTvJ
+         t4GL94HffGxM+SH9292I2RCjR/jJXtTthkroSC3aONHw/f0l5punxzj2uc6gAPmvkKY0
+         k0iumYS5f/O8cGHTMFuEOFGD+jGNbI/u4FUSUS9H0hR3TqZ6unvonQPfNUZrkasTNukN
+         bk+w1KPyJydxw9jHCstddkvPkeqgh8HgWQBZyBz7gTcOT7BWG8PROGPWDscIYSvs2x2D
+         W8Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oj/4Ujv3X0dQLWGyly5F5AZIrJiiPDr1GiSc4SFfBr4=;
+        b=Iy2W2dyLi6aw1D7Wc6aXpwKGGKB+v8lLoh/wg03eOzdnjzI07GazU8RQGKKOdPuTaA
+         QCGmAM4sHjqwTV2lDG4m40Z4vz1HTn64jBfk7XR6+H8yltRlDwNFTmsBwgWV6NDXttUF
+         wazthxqsdKGfhHd4GaCF1wBYlewwZvGdPG91ElzdYzF/64kRtMT15UCTcYyRALYCeqVi
+         nvXfVgJvrFL7JOeEE3A9uYTLO7IPSOBaiTPnh27oA80zFdLg1vP+pCrMpFaxuuFtiQaW
+         AghIWd31/2j0opjdYpGTxZ4VXek9fTyzzJE2mSAZ5F1OKqxxRlC1b+IXGBgpc7KAlgte
+         Iukw==
+X-Gm-Message-State: AOAM530154WSRgCAixCzF7cUDvw73PqOVNctVKG4r6lRgDKepDxSWWj4
+        na45EgCK7DplGvF5cNprEu8GZg==
+X-Google-Smtp-Source: ABdhPJx7GDckM+FzIZ9842Rjfqnrx0MRMv64In8XYNTg1+mgs7oybawj/JOFnjgEgrhk77GvzdfY7A==
+X-Received: by 2002:a5d:4564:: with SMTP id a4mr18447531wrc.3.1615127341001;
+        Sun, 07 Mar 2021 06:29:01 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:b087:286:c426:25b5? ([2a01:e34:ed2f:f020:b087:286:c426:25b5])
+        by smtp.googlemail.com with ESMTPSA id o11sm14314514wrq.74.2021.03.07.06.29.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Mar 2021 06:29:00 -0800 (PST)
+Subject: Re: [PATCH v3 1/4] devfreq: Register devfreq as a cooling device on
+ demand
+To:     cwchoi00@gmail.com
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20210307094519.9032-1-daniel.lezcano@linaro.org>
+ <CAGTfZH3jFJ8CaJ1Yg=oxhVSYVDULWr83iPokL+tut8mKgSufFA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <76b5b6bc-952b-aa7c-025b-3eeb2ca23c79@linaro.org>
+Date:   Sun, 7 Mar 2021 15:28:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAGTfZH3jFJ8CaJ1Yg=oxhVSYVDULWr83iPokL+tut8mKgSufFA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 5c476073a9df062a501edf9ea7b11ccc53c27bf7  Merge branches 'acpi-drivers' and 'acpi-bus' into linux-next
+On 07/03/2021 15:16, Chanwoo Choi wrote:
+> On 21. 3. 7. 오후 6:45, Daniel Lezcano wrote:
+>> Currently the default behavior is to manually having the devfreq
+>> backend to register themselves as a devfreq cooling device.
+>>
+>> Instead of adding the code in the drivers for the thermal cooling
+>> device registering, let's provide a flag in the devfreq's profile to
+>> tell the common devfreq code to register the newly created devfreq as
+>> a cooling device.
+>>
+>> Suggested-by: Chanwoo Choi <cwchoi00@gmail.com>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   V3:
+>>     - Rebased on linux-pm branch without units.h
+>>     - Set the cdev to NULL in case of error
+>>     - Added description for the cdev field in the devfreq structure
+>>   V2:
+>>     - Added is_cooling_device boolean in profile structure
+>>     - Register cooling device when the is_cooling_device boolean is set
+>>     - Remove devfreq cooling device registration in the backend drivers
+>>   V1:
+>>     - Register devfreq as a cooling device unconditionnally
+>> ---
 
-elapsed time: 721m
 
-configs tested: 140
-configs skipped: 2
+[ ... ]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>>       return devfreq;
+>>
+>>   err_init:
+>> @@ -960,6 +971,8 @@ int devfreq_remove_device(struct devfreq *devfreq)
+>>       if (!devfreq)
+>>               return -EINVAL;
+>>
+>> +     thermal_cooling_device_unregister(devfreq->cdev);
+> 
+> I have a question. Why don't you use devfreq_cooling_unregister()?
+> When thermal_cooling_device_unregister(), how can we remove
+> the pm_qos_request of devfreq device?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                        sh7763rdp_defconfig
-powerpc                          g5_defconfig
-xtensa                    smp_lx200_defconfig
-csky                             alldefconfig
-arm                         orion5x_defconfig
-powerpc                      pasemi_defconfig
-arc                              allyesconfig
-powerpc                    klondike_defconfig
-sh                            titan_defconfig
-arm                       aspeed_g4_defconfig
-mips                      malta_kvm_defconfig
-arm                         lubbock_defconfig
-mips                            e55_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                    ge_imp3a_defconfig
-arm                         hackkit_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arc                         haps_hs_defconfig
-powerpc                      arches_defconfig
-sh                          rsk7264_defconfig
-arm                         bcm2835_defconfig
-mips                     decstation_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                          pcm027_defconfig
-arm                          lpd270_defconfig
-riscv                    nommu_k210_defconfig
-sparc                            allyesconfig
-mips                        maltaup_defconfig
-sh                        sh7785lcr_defconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                     ep8248e_defconfig
-powerpc                     sbc8548_defconfig
-parisc                generic-32bit_defconfig
-powerpc                     tqm8555_defconfig
-sh                          r7780mp_defconfig
-powerpc                      bamboo_defconfig
-parisc                generic-64bit_defconfig
-arc                           tb10x_defconfig
-ia64                                defconfig
-sparc                       sparc64_defconfig
-mips                           ci20_defconfig
-s390                       zfcpdump_defconfig
-mips                     cu1000-neo_defconfig
-arm                        keystone_defconfig
-sh                           se7705_defconfig
-nios2                            alldefconfig
-sh                   sh7724_generic_defconfig
-xtensa                    xip_kc705_defconfig
-m68k                            q40_defconfig
-mips                           rs90_defconfig
-arm                          pxa3xx_defconfig
-arc                      axs103_smp_defconfig
-mips                  decstation_64_defconfig
-powerpc                     tqm8560_defconfig
-microblaze                          defconfig
-mips                         tb0287_defconfig
-powerpc                     tqm8541_defconfig
-sh                          landisk_defconfig
-mips                       rbtx49xx_defconfig
-arm                       versatile_defconfig
-arm                          pxa910_defconfig
-mips                 decstation_r4k_defconfig
-mips                         tb0219_defconfig
-powerpc                     redwood_defconfig
-m68k                          sun3x_defconfig
-sh                        apsh4ad0a_defconfig
-arm                        shmobile_defconfig
-sh                           se7724_defconfig
-powerpc                       holly_defconfig
-powerpc                          allmodconfig
-ia64                             allyesconfig
-ia64                             allmodconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210307
-i386                 randconfig-a003-20210307
-i386                 randconfig-a002-20210307
-i386                 randconfig-a004-20210307
-i386                 randconfig-a006-20210307
-i386                 randconfig-a001-20210307
-x86_64               randconfig-a013-20210307
-x86_64               randconfig-a016-20210307
-x86_64               randconfig-a015-20210307
-x86_64               randconfig-a014-20210307
-x86_64               randconfig-a012-20210307
-x86_64               randconfig-a011-20210307
-i386                 randconfig-a016-20210307
-i386                 randconfig-a012-20210307
-i386                 randconfig-a013-20210307
-i386                 randconfig-a011-20210307
-i386                 randconfig-a015-20210307
-i386                 randconfig-a014-20210307
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+You are perfectly right. I failed to call the right function :/
 
-clang tested configs:
-x86_64               randconfig-a006-20210307
-x86_64               randconfig-a001-20210307
-x86_64               randconfig-a004-20210307
-x86_64               randconfig-a005-20210307
-x86_64               randconfig-a002-20210307
-x86_64               randconfig-a003-20210307
+Will fix it with a v4.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
