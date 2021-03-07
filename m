@@ -2,63 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A6632FFF4
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Mar 2021 10:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C9632FFF7
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Mar 2021 10:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbhCGJpu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Mar 2021 04:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S231388AbhCGJpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Mar 2021 04:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbhCGJpj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Mar 2021 04:45:39 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F2EC06175F
-        for <linux-pm@vger.kernel.org>; Sun,  7 Mar 2021 01:45:39 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id l12so8109571wry.2
-        for <linux-pm@vger.kernel.org>; Sun, 07 Mar 2021 01:45:39 -0800 (PST)
+        with ESMTP id S231296AbhCGJpl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Mar 2021 04:45:41 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDBAC06174A
+        for <linux-pm@vger.kernel.org>; Sun,  7 Mar 2021 01:45:40 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id b18so8115094wrn.6
+        for <linux-pm@vger.kernel.org>; Sun, 07 Mar 2021 01:45:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ahYwzRQmSJrX4v8ks57+n/tweaGVoFJT9QTc8vhlUHg=;
-        b=IMCG9brrQt9OXxOqUu9VRJQSaHO249Bi5pskoqucaUgqlSLXajvgNyj8fB5buczLrp
-         NVzKgCJwG8EjWaUo5rmBNG9GjT98RRRikYuauNSDXyxBFgM3QAxKN1/BAmCP1yQcKV5y
-         HJQbIvC+0sdx6bnuGncA1cURxt62iFmsLIXkdh4WgWW/1u/HpYi8XiZ0Rvjw8fQJMOSi
-         OUVmQjNb6FqCNZTMJguKbtukfUWtL7y5ebBdfxq1gZ76G+4qJhEiWGAezl5cY1Us0jPb
-         yw/KbYm6ulF7YkGN3s6IFni73fZttTj1qdwcAA0x3zqgCf+2wpvcV6M5ToWnvpEjBFn4
-         sUyg==
+        bh=lZkNk3yYW/8ijhrD082tSx7qBCi8O3cbnVc/FrlwdlU=;
+        b=rwqG0rGjDKgDJMDgyrPuL6fMMJ8FUmrimYfMpceWe9MkQbKAflo6IkH5SMQ0xZy9XR
+         opslnX4VVS00yl+S+cZsjXsVGexmEyL/1aA+2mQLXU/Hx63HARlTApMASp9/RIjQON8i
+         5sbeykvJEJzSN1AcprCRE+EgUGP90baUMv+1YStLGuOU7ffiFtNElY+IKz13LxrRnlgp
+         U1MW5w7tJbgVHjKiv5xn25VEvnNCzvjsyzZ77TsZy3ox3BgXwJt4C6mCUT+NjK6I5B5n
+         7bf3hQMhcHKcA1rS+DUGAwqAdw+cwpt2L6p1hDgO7x2nR3dMJvZM8DeCAD8gLhyASedW
+         tu9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ahYwzRQmSJrX4v8ks57+n/tweaGVoFJT9QTc8vhlUHg=;
-        b=Qhg+A2e/Ho8KIHz8MjoS2O8Lp+sIZ69nxbo5a4hde69SUvBwa36uYjOfFgxC+rl8F8
-         x7riJw/FH553vwiLLpXYZJmoGJjLx4N0lcbR4OxC2fagie6N1wbgWm4MOJk5NGEa5f9U
-         6Nx2sKcEhgPefCf2/VMF2MewEvtAVKI5HI7ZDqEC/uIAfUVoaSRUuENyAag5TfUBtj9d
-         M/WfeBO5ZCzHfuIlsGS+18ztf383Aj+1oIA3l16rLvqcRK8/8R9AAklNrn2zKYigukAe
-         ikUNzarZtfgaZlC9vh3pAZk/PsaTJFCmS1YIH7H/QHNxJH1K2McNbmQ1tW/BDbitXPtS
-         Acnw==
-X-Gm-Message-State: AOAM5300nAhZ3mJr3d9NrVCAJfQCd+yz+b8u1Nw/MurcnTY9GJ6nNJl0
-        XLD1M00A4dmfGoGRo9QTVfLmHQ==
-X-Google-Smtp-Source: ABdhPJyOGcafMeDaZLkMwnxAp2OBU2WWlF+NGAqbnYf+vb2lNG153g6/PTKMSqI0795e+xjNGw42eQ==
-X-Received: by 2002:a5d:5492:: with SMTP id h18mr6433869wrv.340.1615110338036;
-        Sun, 07 Mar 2021 01:45:38 -0800 (PST)
+        bh=lZkNk3yYW/8ijhrD082tSx7qBCi8O3cbnVc/FrlwdlU=;
+        b=BrG4ZkJDiDrpFLufZz642rdOYFxM0yemWxP4YKltpP4EnOR5bzW9bQqT0hKHfijhsE
+         GhQ68WL87xF42tYIzKa3MdH+YuHr743nns3q8N+aLBdQTEJRJ3iFF0lDrhqhkG4QrY8r
+         hAG4pZ2GfFk/TplrxUq22tVCH30xUY4Y30UW7JJAJg2c6wERtJdQtg3tZMBIlcRc1kfZ
+         50M+0RiS7YJNXtrDFexKqy12ZNGd0vySv5fb7ih4jhH3SLwZ+V6P3TO1ex26m9Gwa3q4
+         p9rbcEpnWSzo7oKRKnEb/Rid0u/epkfkBl9n21h2k42TYkCQjeoUMKnbK/xsQwoohbwM
+         tWdg==
+X-Gm-Message-State: AOAM533eYIkDBmqmxTEc+nuy5Y+z4psVQzDgdx6zbQj8uyVKQddQ+M8c
+        fYBvrwWcyi5PvfhXWrtyXqzUEA==
+X-Google-Smtp-Source: ABdhPJw99kGB8EMsZs3YEBktotNiQ5Quc/vbCuOVi/jHeofv++Ue1b0c6UMEtbJqQj4ihMOuVRQoVw==
+X-Received: by 2002:a5d:5043:: with SMTP id h3mr17350887wrt.120.1615110339583;
+        Sun, 07 Mar 2021 01:45:39 -0800 (PST)
 Received: from localhost.localdomain (lns-bzn-59-82-252-141-80.adsl.proxad.net. [82.252.141.80])
-        by smtp.gmail.com with ESMTPSA id z7sm12790737wrt.70.2021.03.07.01.45.36
+        by smtp.gmail.com with ESMTPSA id z7sm12790737wrt.70.2021.03.07.01.45.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Mar 2021 01:45:37 -0800 (PST)
+        Sun, 07 Mar 2021 01:45:39 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     cwchoi00@gmail.com
 Cc:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, steven.price@arm.com,
-        Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
+        Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:ARM MALI PANFROST DRM DRIVER)
-Subject: [PATCH v3 3/4] devfreq/drivers/panfrost: Use devfreq cooling device registration
-Date:   Sun,  7 Mar 2021 10:45:17 +0100
-Message-Id: <20210307094519.9032-3-daniel.lezcano@linaro.org>
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR LIMA),
+        lima@lists.freedesktop.org (moderated list:DRM DRIVERS FOR LIMA)
+Subject: [PATCH v3 4/4] devfreq/drivers/lima: Use devfreq cooling device registration
+Date:   Sun,  7 Mar 2021 10:45:18 +0100
+Message-Id: <20210307094519.9032-4-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210307094519.9032-1-daniel.lezcano@linaro.org>
 References: <20210307094519.9032-1-daniel.lezcano@linaro.org>
@@ -71,86 +69,84 @@ cooling device if the 'is_cooling_device' flag is set in the profile.
 
 Use this flag and remove the cooling device registering code.
 
-Tested on rock960.
-
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/gpu/drm/panfrost/panfrost_devfreq.c | 14 +-------------
- drivers/gpu/drm/panfrost/panfrost_devfreq.h |  3 ---
- 2 files changed, 1 insertion(+), 16 deletions(-)
+ drivers/gpu/drm/lima/lima_devfreq.c | 14 +-------------
+ drivers/gpu/drm/lima/lima_devfreq.h |  2 --
+ 2 files changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-index 56b3f5935703..4d96edf1bc54 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-@@ -3,7 +3,6 @@
- 
+diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
+index 5686ad4aaf7c..86aea1bdc4f4 100644
+--- a/drivers/gpu/drm/lima/lima_devfreq.c
++++ b/drivers/gpu/drm/lima/lima_devfreq.c
+@@ -7,7 +7,6 @@
+  */
  #include <linux/clk.h>
  #include <linux/devfreq.h>
 -#include <linux/devfreq_cooling.h>
+ #include <linux/device.h>
  #include <linux/platform_device.h>
  #include <linux/pm_opp.h>
- 
-@@ -80,6 +79,7 @@ static struct devfreq_dev_profile panfrost_devfreq_profile = {
+@@ -84,17 +83,13 @@ static struct devfreq_dev_profile lima_devfreq_profile = {
  	.polling_ms = 50, /* ~3 frames */
- 	.target = panfrost_devfreq_target,
- 	.get_dev_status = panfrost_devfreq_get_dev_status,
+ 	.target = lima_devfreq_target,
+ 	.get_dev_status = lima_devfreq_get_dev_status,
 +	.is_cooling_device = true,
  };
  
- int panfrost_devfreq_init(struct panfrost_device *pfdev)
-@@ -90,7 +90,6 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 	struct device *dev = &pfdev->pdev->dev;
- 	struct devfreq *devfreq;
- 	struct opp_table *opp_table;
+ void lima_devfreq_fini(struct lima_device *ldev)
+ {
+ 	struct lima_devfreq *devfreq = &ldev->devfreq;
+ 
+-	if (devfreq->cooling) {
+-		devfreq_cooling_unregister(devfreq->cooling);
+-		devfreq->cooling = NULL;
+-	}
+-
+ 	if (devfreq->devfreq) {
+ 		devm_devfreq_remove_device(ldev->dev, devfreq->devfreq);
+ 		devfreq->devfreq = NULL;
+@@ -110,7 +105,6 @@ void lima_devfreq_fini(struct lima_device *ldev)
+ 
+ int lima_devfreq_init(struct lima_device *ldev)
+ {
 -	struct thermal_cooling_device *cooling;
- 	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
+ 	struct device *dev = ldev->dev;
+ 	struct opp_table *opp_table;
+ 	struct devfreq *devfreq;
+@@ -173,12 +167,6 @@ int lima_devfreq_init(struct lima_device *ldev)
  
- 	opp_table = dev_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
-@@ -139,12 +138,6 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 	}
- 	pfdevfreq->devfreq = devfreq;
+ 	ldevfreq->devfreq = devfreq;
  
--	cooling = devfreq_cooling_em_register(devfreq, NULL);
+-	cooling = of_devfreq_cooling_register(dev->of_node, devfreq);
 -	if (IS_ERR(cooling))
--		DRM_DEV_INFO(dev, "Failed to register cooling device\n");
+-		dev_info(dev, "Failed to register cooling device\n");
 -	else
--		pfdevfreq->cooling = cooling;
+-		ldevfreq->cooling = cooling;
 -
  	return 0;
  
  err_fini:
-@@ -156,11 +149,6 @@ void panfrost_devfreq_fini(struct panfrost_device *pfdev)
- {
- 	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
- 
--	if (pfdevfreq->cooling) {
--		devfreq_cooling_unregister(pfdevfreq->cooling);
--		pfdevfreq->cooling = NULL;
--	}
--
- 	if (pfdevfreq->opp_of_table_added) {
- 		dev_pm_opp_of_remove_table(&pfdev->pdev->dev);
- 		pfdevfreq->opp_of_table_added = false;
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.h b/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-index db6ea48e21f9..470f5c974703 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-@@ -9,14 +9,11 @@
+diff --git a/drivers/gpu/drm/lima/lima_devfreq.h b/drivers/gpu/drm/lima/lima_devfreq.h
+index 2d9b3008ce77..c43a2069e5d3 100644
+--- a/drivers/gpu/drm/lima/lima_devfreq.h
++++ b/drivers/gpu/drm/lima/lima_devfreq.h
+@@ -9,7 +9,6 @@
  
  struct devfreq;
  struct opp_table;
 -struct thermal_cooling_device;
--
- struct panfrost_device;
  
- struct panfrost_devfreq {
+ struct lima_device;
+ 
+@@ -17,7 +16,6 @@ struct lima_devfreq {
  	struct devfreq *devfreq;
+ 	struct opp_table *clkname_opp_table;
  	struct opp_table *regulators_opp_table;
 -	struct thermal_cooling_device *cooling;
- 	bool opp_of_table_added;
  
  	ktime_t busy_time;
+ 	ktime_t idle_time;
 -- 
 2.17.1
 
