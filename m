@@ -2,151 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89067330F46
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 14:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6CC330F39
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 14:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbhCHNdc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 08:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S229701AbhCHNc0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 08:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhCHNdL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 08:33:11 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB28C06175F
-        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 05:33:10 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id n22so6059691wmc.2
-        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 05:33:10 -0800 (PST)
+        with ESMTP id S230126AbhCHNby (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 08:31:54 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2204AC06174A
+        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 05:31:53 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id q10so11319318pjd.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 05:31:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=lZkNk3yYW/8ijhrD082tSx7qBCi8O3cbnVc/FrlwdlU=;
-        b=M/AD+I7vDYIzgXiPb3lGfvD8fpS3TPgKXz/BSkCm+skoOnnl/gAtfI1w4j+QJsWeFl
-         ePthrlbIuh1GdQT/WEhUZODbL3oaBbUcItYBvmMNxcx2U/xnwJ0ssS9zDlLI6XCdK2iS
-         Xtu2+cSnY83dPBhyU02NiIxl7LffDP3pqfxmBmBf0tPEWRca4ZXonoE/eC+gVZ21axiP
-         TpxTmVLhB9rbiHstnBOxXTi1J+7o9JtBNnpIyGJINsD14apy1O7HWiBb4ZlzMvCHS9kw
-         6Ex1kW75fTtzaOND2JUJYKL84jVK1THIDMTkWHfXgkrmA3swY24Ldfp3hkVO/dOPyYiU
-         U7Yw==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=ncmPR+Ul4hj/YevEkIcgWGYc6btFpweVo1v4X4ckn/w=;
+        b=s3bAwjOaaVp63nrCFLpokW/AIOBoAXKXIUD+VkFsKXhOsvJvnN2MX5nNTolPwYaBDq
+         wphZjSNYPtKEwn3z5oobkYYaRs9w5BVOTv7fmKTZC6/gu+MGWjAbvpPGV8QHH15ekVHt
+         CEpg/0WhupzyWn4AKZG85ygECGbseVTYz3UwjsSwi7b03MN7C5Xe2ovXMCcbGy/Ykd32
+         4WlXAJBgzmyHb9+5aSMsniS3rhqVohOeFNP6BbPhyskNiikIrV3nLaVWx2WNjoxAn9Dr
+         D84WGJCk6sTsi7WICt5F6tCHr3zVViwGD+uNr2x+RpGIf84S1WVqVUY3TSWtBsJ34ZMy
+         7J/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=lZkNk3yYW/8ijhrD082tSx7qBCi8O3cbnVc/FrlwdlU=;
-        b=UWI3M8vaO/8lMn3Dz4kyB9E8Cy39IR3LQ6ylkQb6WHXELIIuYVwn7ElS9+q/fGXXVc
-         /dNNnhUp5TRRDkwxZAIAO/OLSxH3chm8QBnQ6Ev4N7C/Bt9N3ruW2KzhWbD9APV+Kai5
-         RNpSoGEnqdozjQCH2OOz7j/wIBKfP8shmChGZms6erukEroMzi2vKgpB9QTYd26hcoCU
-         LcBn4Ww1lXYwbvWZM1hptQdOLd+mfvgss5TgXcfgrGPngb0cNlueDUb1kFHORw6pPv5u
-         XJV9y8daz+cNjfKG1spqMQwdgArJeJ9MmASzw4zVFGvXU6a0noxqZjNCxuTxEpf/AmL7
-         Z2bw==
-X-Gm-Message-State: AOAM532I4+wS5iqNeCGW0aCanpOSp7hSSxsTNqLoq7NCM5JBRyIIGSY6
-        BL5ql+Wh9DQd5lPeDdqAUbH6xw==
-X-Google-Smtp-Source: ABdhPJwnioQkiEp3+z6Qv31ROIXRxQ4ReAnXp3xN6rJWgiz/US1JMbhImjsoxKyasPz/cuJFA1YWnw==
-X-Received: by 2002:a05:600c:210a:: with SMTP id u10mr14186060wml.147.1615210389361;
-        Mon, 08 Mar 2021 05:33:09 -0800 (PST)
-Received: from localhost.localdomain (lns-bzn-59-82-252-141-80.adsl.proxad.net. [82.252.141.80])
-        by smtp.gmail.com with ESMTPSA id m11sm18942665wrz.40.2021.03.08.05.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 05:33:09 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     cwchoi00@gmail.com
-Cc:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, steven.price@arm.com,
-        Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR LIMA),
-        lima@lists.freedesktop.org (moderated list:DRM DRIVERS FOR LIMA)
-Subject: [PATCH v6 4/4] PM / devfreq: lima: Use devfreq cooling device registration
-Date:   Mon,  8 Mar 2021 14:30:40 +0100
-Message-Id: <20210308133041.10516-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210308133041.10516-1-daniel.lezcano@linaro.org>
-References: <20210308133041.10516-1-daniel.lezcano@linaro.org>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=ncmPR+Ul4hj/YevEkIcgWGYc6btFpweVo1v4X4ckn/w=;
+        b=jhrvERIVf+t6F89HKkyWG0CD+znH9qS6x3FtBHFDDoxegmgE0hiJfWU0I2EtnDgW0d
+         ARx7a8d8CndC1RaEz1EM0mYKO/wM7kUbrbd7cgbjcBjqeR6OIPaMW7LFoM7SAjX/AlQn
+         uyTZnoWrgkyptraVJMlCaUqXfMZ8u//j2gdrQrCYIlefCl6W6W+K+aWqVubzqSf3HrQg
+         SUe6RhbjzYYnnFwgXfRNNm+THBxY0St7O2QI+PUU3RL+UGJ3sm2cuES2Z/cTqqTx8Z3C
+         uptQhzv4+WTADiZdWC4mZmZP47i5yKGk4zmKgirjRGhq07DIQti5qI3j86jHaOm38OcM
+         PW+w==
+X-Gm-Message-State: AOAM531D6SrCp2mzgOEeGkAhPC9NRwcIoRpp0bFAkCPTUX/DCJfK6zGR
+        9QihHsimRLvcjhVgsTO2oRnFJxgG5wc=
+X-Google-Smtp-Source: ABdhPJwvlFzosiB9AUVEYirfgYxKLuuHfbO0Hrn7Eg9GmchJhm9FdQ1yPs738gLDE/LMYBXaa6N2wlLsamg=
+Sender: "raychi via sendgmr" <raychi@raychi.tao.corp.google.com>
+X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:b0d0:d9f:e729:2209])
+ (user=raychi job=sendgmr) by 2002:a62:2b0d:0:b029:1ed:55cc:25d9 with SMTP id
+ r13-20020a622b0d0000b02901ed55cc25d9mr21893016pfr.54.1615210312591; Mon, 08
+ Mar 2021 05:31:52 -0800 (PST)
+Date:   Mon,  8 Mar 2021 21:31:46 +0800
+Message-Id: <20210308133146.3168995-1-raychi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+Subject: [PATCH] usb: dwc3: fix build error when POWER_SUPPLY is not enabled
+From:   Ray Chi <raychi@google.com>
+To:     sre@kernel.org, gregkh@linuxfoundation.org,
+        naresh.kamboju@linaro.org
+Cc:     kyletso@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ray Chi <raychi@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The devfreq core code is able to register the devfreq device as a
-cooling device if the 'is_cooling_device' flag is set in the profile.
+Fix build error when CONFIG_POWER_SUPPLY is not enabled.
 
-Use this flag and remove the cooling device registering code.
+The build error occurs in mips (cavium_octeon_defconfig).
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_remove':
+drivers/usb/dwc3/core.c:1657: undefined reference to `power_supply_put'
+mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_properties':
+drivers/usb/dwc3/core.c:1270: undefined reference to `power_supply_get_by_name'
+mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_probe':
+drivers/usb/dwc3/core.c:1632: undefined reference to `power_supply_put'
+
+Fixes: 59fa3def35de ("usb: dwc3: add a power supply for current control")
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Ray Chi <raychi@google.com>
 ---
- drivers/gpu/drm/lima/lima_devfreq.c | 14 +-------------
- drivers/gpu/drm/lima/lima_devfreq.h |  2 --
- 2 files changed, 1 insertion(+), 15 deletions(-)
+ include/linux/power_supply.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
-index 5686ad4aaf7c..86aea1bdc4f4 100644
---- a/drivers/gpu/drm/lima/lima_devfreq.c
-+++ b/drivers/gpu/drm/lima/lima_devfreq.c
-@@ -7,7 +7,6 @@
-  */
- #include <linux/clk.h>
- #include <linux/devfreq.h>
--#include <linux/devfreq_cooling.h>
- #include <linux/device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
-@@ -84,17 +83,13 @@ static struct devfreq_dev_profile lima_devfreq_profile = {
- 	.polling_ms = 50, /* ~3 frames */
- 	.target = lima_devfreq_target,
- 	.get_dev_status = lima_devfreq_get_dev_status,
-+	.is_cooling_device = true,
- };
- 
- void lima_devfreq_fini(struct lima_device *ldev)
- {
- 	struct lima_devfreq *devfreq = &ldev->devfreq;
- 
--	if (devfreq->cooling) {
--		devfreq_cooling_unregister(devfreq->cooling);
--		devfreq->cooling = NULL;
--	}
--
- 	if (devfreq->devfreq) {
- 		devm_devfreq_remove_device(ldev->dev, devfreq->devfreq);
- 		devfreq->devfreq = NULL;
-@@ -110,7 +105,6 @@ void lima_devfreq_fini(struct lima_device *ldev)
- 
- int lima_devfreq_init(struct lima_device *ldev)
- {
--	struct thermal_cooling_device *cooling;
- 	struct device *dev = ldev->dev;
- 	struct opp_table *opp_table;
- 	struct devfreq *devfreq;
-@@ -173,12 +167,6 @@ int lima_devfreq_init(struct lima_device *ldev)
- 
- 	ldevfreq->devfreq = devfreq;
- 
--	cooling = of_devfreq_cooling_register(dev->of_node, devfreq);
--	if (IS_ERR(cooling))
--		dev_info(dev, "Failed to register cooling device\n");
--	else
--		ldevfreq->cooling = cooling;
--
- 	return 0;
- 
- err_fini:
-diff --git a/drivers/gpu/drm/lima/lima_devfreq.h b/drivers/gpu/drm/lima/lima_devfreq.h
-index 2d9b3008ce77..c43a2069e5d3 100644
---- a/drivers/gpu/drm/lima/lima_devfreq.h
-+++ b/drivers/gpu/drm/lima/lima_devfreq.h
-@@ -9,7 +9,6 @@
- 
- struct devfreq;
- struct opp_table;
--struct thermal_cooling_device;
- 
- struct lima_device;
- 
-@@ -17,7 +16,6 @@ struct lima_devfreq {
- 	struct devfreq *devfreq;
- 	struct opp_table *clkname_opp_table;
- 	struct opp_table *regulators_opp_table;
--	struct thermal_cooling_device *cooling;
- 
- 	ktime_t busy_time;
- 	ktime_t idle_time;
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 81a55e974feb..6e776be5bfa0 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -381,8 +381,14 @@ struct power_supply_battery_info {
+ extern struct atomic_notifier_head power_supply_notifier;
+ extern int power_supply_reg_notifier(struct notifier_block *nb);
+ extern void power_supply_unreg_notifier(struct notifier_block *nb);
++#if IS_ENABLED(CONFIG_POWER_SUPPLY)
+ extern struct power_supply *power_supply_get_by_name(const char *name);
+ extern void power_supply_put(struct power_supply *psy);
++#else
++static inline void power_supply_put(struct power_supply *psy) {}
++static inline struct power_supply *power_supply_get_by_name(const char *name)
++{ return NULL; }
++#endif
+ #ifdef CONFIG_OF
+ extern struct power_supply *power_supply_get_by_phandle(struct device_node *np,
+ 							const char *property);
 -- 
-2.17.1
+2.30.1.766.gb4fecdf3b7-goog
 
