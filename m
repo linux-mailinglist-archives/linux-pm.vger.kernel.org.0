@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCB533093D
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 09:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F15330943
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 09:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbhCHIPK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S231664AbhCHIPK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 8 Mar 2021 03:15:10 -0500
-Received: from mail-lj1-f182.google.com ([209.85.208.182]:38289 "EHLO
-        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbhCHIOi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 03:14:38 -0500
-Received: by mail-lj1-f182.google.com with SMTP id 2so14948324ljr.5;
-        Mon, 08 Mar 2021 00:14:37 -0800 (PST)
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:37876 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230432AbhCHIOz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 03:14:55 -0500
+Received: by mail-lf1-f50.google.com with SMTP id n16so19647839lfb.4;
+        Mon, 08 Mar 2021 00:14:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=BsY7YkuLSTkyifbDrF2JneCtTyzv1UBxYFrackx4xR8=;
-        b=YTiiDJY12idIvV5K6HY8/qDaqt67/BybdmHTXpQgax2SEqMPgIYBEjsM5BvUy+rf7d
-         FEZehutzb1rRmBuJCOstWUU9S6qTQBihhpJRqAyFoAf/7C6q40rxAS2EOA09Fy5HE9pW
-         hcXOHtxvnA2ne3vD4PWmcKlxXkKnBtcxdaZ9nCRLy/Ax657orZDbRXzz3qU2Rot7+cam
-         9eVX6iJ9EjgN2fPx1dsotdMK8ZhGvizqOoMiaOxyvo+WwDbSlwVA9kj5vQZyCalKnXAe
-         DVm0ajKsW/cKydlO3WP0OA0YkOyIDfiWVbuQVeToVXpz7lWfct8qtorIK0EpjCtEki0q
-         DeBg==
-X-Gm-Message-State: AOAM532IG3DKq2+gZBD4/UvzhEU/gcOpUbKm1vjZfLSLpT4pCur5GsgH
-        Qza8gyjTxwGODuCHK0GDRT4=
-X-Google-Smtp-Source: ABdhPJy4xumvg0xGCoOKqEE8DnfFdePx7FGRoHfszIvelo6PtIuYKRw2B90h39CtVR+4XQkHZwtqzQ==
-X-Received: by 2002:a2e:2f0c:: with SMTP id v12mr12577254ljv.367.1615191276436;
-        Mon, 08 Mar 2021 00:14:36 -0800 (PST)
+        bh=lCgeptqSMyKzW16UNWHWlgRoMtG+0iEIlO7nDP/oAFQ=;
+        b=PgxP9QJTKXP2ulLWZptsVxtY0m3WwYNdWmAdiJcepCb9IdHIfHARTOduy1n6r4qcjL
+         P2aEuvez+BVM1Tua/cLSHSTx0cZpwP1vMm/L8PaAiPDrMSyCyACwoEnxIS2+q7D9VfQx
+         fASsIvwGeA8tygnpDm3b6LM8Od2Bic9tdPVf6ltbWfcMdo+1qNS4ri99NZV2UL5gz4Mb
+         nyWMsq06wpmSXLBEJRyvTHK+vvYs6/nOfVkcGZmwKualjiR1VXAcR9sVNoZSP913nFXM
+         mcwibVd5ZrFiUScIvPXIDg/wb26XiI/dZyBInEjbU2a3EzSF3H3YTxdR9rwS8n70r+DT
+         Z5Ng==
+X-Gm-Message-State: AOAM530PxgvNLmnTBPhGkZYr1UWP/R3gJU9xtaag1Go5OhNe0FSpTD3n
+        EoLXE5lU1WYbl56TDd3q7uU=
+X-Google-Smtp-Source: ABdhPJxQR6J2M4jgCmS7cRIRCbb+O5S1AbJyi70ot4XILJuJUhaUfi87OLkijIb5wu0ckRZOrq68+g==
+X-Received: by 2002:a19:ed8:: with SMTP id 207mr13196925lfo.164.1615191293579;
+        Mon, 08 Mar 2021 00:14:53 -0800 (PST)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id d3sm1271836lfq.249.2021.03.08.00.14.35
+        by smtp.gmail.com with ESMTPSA id z4sm1261722lfd.172.2021.03.08.00.14.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 00:14:36 -0800 (PST)
-Date:   Mon, 8 Mar 2021 10:14:29 +0200
+        Mon, 08 Mar 2021 00:14:53 -0800 (PST)
+Date:   Mon, 8 Mar 2021 10:14:46 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -54,9 +54,8 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: [RFC PATCH v2 1/8] workqueue: Add resource managed version of
- delayed work init
-Message-ID: <2ff44816b72a43f715d58552d2fadc1470e167d0.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [RFC PATCH v2 2/8] MAINTAINERS: Add entry for devm helpers
+Message-ID: <c9119c0a8d4daebff0221c67830b54314fc9e0f6.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -66,78 +65,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A few drivers which need a delayed work-queue must cancel work at driver
-detach. Some of those implement remove() solely for this purpose. Help
-drivers to avoid unnecessary remove and error-branch implementation by
-adding managed verision of delayed work initialization. This will also
-help drivers to avoid mixing manual and devm based unwinding when other
-resources are handled by devm.
+Devm helper header containing small inline helpers was added.
+Hans promised to maintain it.
+
+Add Hans as maintainer and myself as designated reviewer.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
- include/linux/devm-helpers.h | 53 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 include/linux/devm-helpers.h
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
-new file mode 100644
-index 000000000000..f64e0c9f3763
---- /dev/null
-+++ b/include/linux/devm-helpers.h
-@@ -0,0 +1,53 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __LINUX_DEVM_HELPERS_H
-+#define __LINUX_DEVM_HELPERS_H
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d92f85ca831d..ffcb00006e14 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5169,6 +5169,12 @@ M:	Torben Mathiasen <device@lanana.org>
+ S:	Maintained
+ W:	http://lanana.org/docs/device-list/index.html
+ 
++DEVICE RESOURCE MANAGEMENT HELPERS
++M:	Hans de Goede <hdegoede@redhat.com>
++R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++S:	Maintained
++F:	include/linux/devm-helpers.h
 +
-+/*
-+ * Functions which do automatically cancel operations or release resources upon
-+ * driver detach.
-+ *
-+ * These should be helpful to avoid mixing the manual and devm-based resource
-+ * management which can be source of annoying, rarely occurring,
-+ * hard-to-reproduce bugs.
-+ *
-+ * Please take into account that devm based cancellation may be performed some
-+ * time after the remove() is ran.
-+ *
-+ * Thus mixing devm and manual resource management can easily cause problems
-+ * when unwinding operations with dependencies. IRQ scheduling a work in a queue
-+ * is typical example where IRQs are often devm-managed and WQs are manually
-+ * cleaned at remove(). If IRQs are not manually freed at remove() (and this is
-+ * often the case when we use devm for IRQs) we have a period of time after
-+ * remove() - and before devm managed IRQs are freed - where new IRQ may fire
-+ * and schedule a work item which won't be cancelled because remove() was
-+ * already ran.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/workqueue.h>
-+
-+static inline void devm_delayed_work_drop(void *res)
-+{
-+	cancel_delayed_work_sync(res);
-+}
-+
-+/**
-+ * devm_delayed_work_autocancel - Resource-managed work allocation
-+ * @dev: Device which lifetime work is bound to
-+ * @pdata: work to be cancelled when driver is detached
-+ *
-+ * Initialize work which is automatically cancelled when driver is detached.
-+ * A few drivers need delayed work which must be cancelled before driver
-+ * is detached to avoid accessing removed resources.
-+ * devm_delayed_work_autocancel() can be used to omit the explicit
-+ * cancelleation when driver is detached.
-+ */
-+static inline int devm_delayed_work_autocancel(struct device *dev,
-+					       struct delayed_work *w,
-+					       work_func_t worker)
-+{
-+	INIT_DELAYED_WORK(w, worker);
-+	return devm_add_action(dev, devm_delayed_work_drop, w);
-+}
-+
-+#endif
+ DEVICE-MAPPER  (LVM)
+ M:	Alasdair Kergon <agk@redhat.com>
+ M:	Mike Snitzer <snitzer@redhat.com>
 -- 
 2.25.4
 
