@@ -2,109 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF4233194C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 22:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE56331AC7
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 00:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbhCHVVB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 16:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        id S230070AbhCHXIY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 18:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbhCHVUp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 16:20:45 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECD6C06175F
-        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 13:20:45 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id r15-20020a05600c35cfb029010e639ca09eso4669246wmq.1
-        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 13:20:45 -0800 (PST)
+        with ESMTP id S229971AbhCHXHw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 18:07:52 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8280FC061760
+        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 15:07:52 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id t83so2873137oih.12
+        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 15:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wu9oEK/xAOW3gNEBHL714OoOhpYk6t+OPca6LRUekWk=;
-        b=l+N+aBZyBLQ84Xc2qonMKfPS7O2smDSRBs6+j/Tq2b3Ps9waqqMvbHOyDBtXY7n7n1
-         h/7wW0CY7KT571n+Z4GG4Zyqv0isfcXDMwhXnbptQzeon+Ta6g1motpUHYUN3esxRyGt
-         x6TMzBHcCdnqkAEGDvHJeikOnGZypc4Px8eOHjOW2iW5aYbdJbC3m+9JtZEPbDlkVv5A
-         bNeqEg01ga04gIcbpSUfuH+h9xK9if5xYdqX8zwjb0JFOPKr2gfiUPCif1GMepnctB5C
-         Aposko2oQsUOU5tEt6caJTYEAQ+CQ3y2nnJGP7L0BTwptJelxdjUrtOsJVlq5LO2fy/d
-         3QXQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4hvbKRFY7Gs9YDqGOyz0/NvmnAh1JPz6EfNarEQ6wA8=;
+        b=G674hH9UyzvI0ioSt5BG9expqlepPHZakDtglNtJ5zHcpyc/GmtGTwrnFgcB2qP9rm
+         4PZ3Jqc/kZktu5JHYs1/xTfwjbdNykb0Hay6Rhme+ju/0BFUbMkiUQoaNqbpAmFMDpuQ
+         QY9lCsH61+rJL91wkQ0Bcca/MFDvG9eXHTrzC5Ebb5u5aTQM/nuVdZkdviREq/fFfZIt
+         ogNL0ntfGqyc1ZCeZ8zZUjWu2FdtX7+8CUH+Fv6XJ0m2WKttmicd3C1kZmQMYzfqHMhF
+         x3KfvEdj6wFzQclp85rXq2NLVQId/TdH9WL+57kK+B0nBkLjcA5hoDXRlWYEYt8UogQn
+         005A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wu9oEK/xAOW3gNEBHL714OoOhpYk6t+OPca6LRUekWk=;
-        b=WVx+vhS8W/8WjCEtT1BKC2UgGK9z+yZRJ2b1+Kca84AyXCM15y/fWrWpofdzEWarkX
-         NsZToyUBLDjTeO5plaGG9TtlUQwbJb4UIP+j3FDQiYXULRKXX/2iL5VqA10ZAWUVFi6h
-         pe5JEuvRS1T/FvUXozaTAi+KKS+2qXSAqRxjRX9Z9kuP4I3t/NaapQGckIxJ7ZOMQdYS
-         JIyWx4+QQ2lU9vfUEFIhAMJx4CHNGHXjwwCD4kK3XhZtQasRiXpfG9+WcQxk3+3yYkJ7
-         Sfbu/DA2UHD5gFFmz757HqK4hMlZyK1cxHICvel2bZI/WwYX/CJanOW82ZelSQQdyJIN
-         BtqQ==
-X-Gm-Message-State: AOAM531AHWQVDSznF9eG/6HWzQB1Pb8C2CKokPpi2Jiv9WpRvkXI6nKL
-        Kbz5zIJnHLmnT8RCaWANIU7ZKYfCasqcHQ==
-X-Google-Smtp-Source: ABdhPJx4Cn7xkmyuZRQVCSGlOMwAkEiRCQzXKjWNe05h+eRzWC3kXIdu9sKh+xq62pqoDghjIdy2eA==
-X-Received: by 2002:a7b:c2a9:: with SMTP id c9mr683024wmk.116.1615238444034;
-        Mon, 08 Mar 2021 13:20:44 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8499:4f69:106b:da0? ([2a01:e34:ed2f:f020:8499:4f69:106b:da0])
-        by smtp.googlemail.com with ESMTPSA id k12sm15190906wrx.7.2021.03.08.13.20.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Mar 2021 13:20:43 -0800 (PST)
-Subject: Re: [PATCH 1/5] powercap/drivers/dtpm: Encapsulate even more the code
-To:     Lukasz Luba <lukasz.luba@arm.com>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20210301212149.22877-1-daniel.lezcano@linaro.org>
- <f5a4be4d-b003-2751-7758-ef2c58e3fbbc@linaro.org>
- <2d5e7eff-ae9d-2c67-3f49-89cb006b4a1b@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <a6374a41-1e4b-e1f0-4c68-17dcae105f8b@linaro.org>
-Date:   Mon, 8 Mar 2021 22:20:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4hvbKRFY7Gs9YDqGOyz0/NvmnAh1JPz6EfNarEQ6wA8=;
+        b=XLXxDS9Ym5dEuAYPHCcbI17DvX+AQ4BH/euKqZQRUT/0sK10y5nmRlmFpCs6lFZkKT
+         Hot0qkc3xqRA+7bAJgI080eUSypxzrY3bRCJomw9DcqJiyh2c//ncPSID9QuBKpdL+UF
+         bg8jtYAuJGbC0eejw5YR+XxcBq2a+IafYa4Phvde8UJifLDjompFvLBJcfYROjgjZFPW
+         1vPNaIt43UxZNiDWJQ4LYjChJdG4aTWDQ2V4OnBBPAhiuM57Gw9MV3HOmwtQJIWeMZzZ
+         dwxbScmKq2nS9k3RDketsvGP0yrUf2mDA+F6QV5ynA1NSSwm+toJWRWiDfOGg5GeufFL
+         c5Kw==
+X-Gm-Message-State: AOAM532gaM+zvYSUuZKVisjcc3tQ6wXvu/pljM0rOu2xMLOYhvgbRckw
+        8u3zEm3lrqhv9PlRLu1lX41dKg==
+X-Google-Smtp-Source: ABdhPJxE5DEMhzUk2EXfK4SAN7Gzv+ovKX70wN9qc3D+l1U7WWpQVSjnKb+Y0Q99IB5cclKWi21c1Q==
+X-Received: by 2002:aca:2b13:: with SMTP id i19mr900239oik.148.1615244871809;
+        Mon, 08 Mar 2021 15:07:51 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id w7sm2772999oie.7.2021.03.08.15.07.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Mar 2021 15:07:51 -0800 (PST)
+Date:   Mon, 8 Mar 2021 17:07:49 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 34/41] arm64: dts: qcom: sdm630-nile: Configure WCN3990
+ Bluetooth
+Message-ID: <YEauRWCv7PENpiIc@builder.lan>
+References: <20210226200414.167762-1-konrad.dybcio@somainline.org>
+ <20210226200414.167762-35-konrad.dybcio@somainline.org>
+ <71ea4ebd-f446-ede3-7623-ae5b339d7905@somainline.org>
 MIME-Version: 1.0
-In-Reply-To: <2d5e7eff-ae9d-2c67-3f49-89cb006b4a1b@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <71ea4ebd-f446-ede3-7623-ae5b339d7905@somainline.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/03/2021 20:55, Lukasz Luba wrote:
-> Hi Daniel,
+On Sat 27 Feb 04:40 CST 2021, Konrad Dybcio wrote:
+
 > 
-> On 3/8/21 7:31 PM, Daniel Lezcano wrote:
->>
->> On 01/03/2021 22:21, Daniel Lezcano wrote:
->>> In order to increase the self-encapsulation of the dtpm generic code,
->>> the following changes are adding a power update ops to the dtpm
->>> ops. That allows the generic code to call directly the dtpm backend
->>> function to update the power values.
->>>
->>> The power update function does compute the power characteristics when
->>> the function is invoked. In the case of the CPUs, the power
->>> consumption depends on the number of online CPUs. The online CPUs mask
->>> is not up to date at CPUHP_AP_ONLINE_DYN state in the tear down
->>> callback. That is the reason why the online / offline are at separate
->>> state. As there is already an existing state for DTPM, this one is
->>> only moved to the DEAD state, so there is no addition of new state
->>> with these changes.
->>>
->>> That simplifies the code for the next changes and results in a more
->>> self-encapsulated code.
->>>
->>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>
->> Is there any comment on this series ?
+> > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > 
-> If you can wait 1 day, I will review it tomorrow...
+> From: Martin Botka <martin.botka@somainline.org>
+> 
+> 
+> That got caught in rebasing madness.. Should any additional mistakes appear, I'll send a V2.
+> 
 
-Sure, thanks
+Patches looks good, but I'm a little bit confused about author and s-o-b
+of the once you replied to.
 
-  -- Daniel
+Please respin the whole thing with the proper authors/s-o-b, and I'll be
+happy to apply it.
 
+(And please remember to pick up Rob's ack)
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regards,
+Bjorn
