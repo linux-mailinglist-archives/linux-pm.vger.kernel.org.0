@@ -2,119 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F296A3315A1
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 19:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0103F3315A7
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 19:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbhCHSOW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 13:14:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49652 "EHLO mail.kernel.org"
+        id S229463AbhCHSP1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 13:15:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:41854 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230490AbhCHSOB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Mar 2021 13:14:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 305AB6518A;
-        Mon,  8 Mar 2021 18:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615227241;
-        bh=NN2EdiQR/1KB14V2lMDtzBvuB5cMumLqu6/E5H9nAWQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rhOirhDyb9FlY5pap6WsMmv3JRDCz7mzXlMX6K4gUsBlJSAySR4uXTJ8tDD9GDsCu
-         /zqg9NR3Q7cAYmx/mc2rBqQUUpTQY++rVrfn3gKAgxtxotfn3tEm7d+ohy04HLpVzT
-         2yeRxwqA/KT5UDIgNHQrE9IG1wcc5esGRnXAqqrGrGJCzkIFbnvxZ2nO3/EQRdBpih
-         +mRkOI5sXdaCDanFRBHCUN4qMu1KafFJJ5g1lCyK6b9hxCdTY7OSj98Nr/KUAJNrCZ
-         H39wVQk+YGwx93P5Xsf9/KVaYqatjSZNbziOmPPndgTwcmjCFv/0RJiHI5Sq+ATE7S
-         hHaA8d1Ov1d4g==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 0AA393C0C95; Mon,  8 Mar 2021 19:13:59 +0100 (CET)
-Date:   Mon, 8 Mar 2021 19:13:58 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: driver notification when switching between battery vs AC power?
-Message-ID: <20210308181358.nxfdy4psvfv3mrwq@earth.universe>
-References: <20210305080748.GA17954@lst.de>
- <CAJZ5v0gjO24-Gb-8ejTCkS2z6MFR7ZVAbYveVPkW1B_71u-LsQ@mail.gmail.com>
- <357ec08b83bef385162c23f37b4efa439a120947.camel@intel.com>
- <20210308075048.GA983@lst.de>
- <CAJZ5v0hRef89EyU8nvbU0UXYHcd7gjk1e4BLDYCzKH7WSNBsWw@mail.gmail.com>
+        id S230299AbhCHSPA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Mar 2021 13:15:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 283E8D6E;
+        Mon,  8 Mar 2021 10:15:00 -0800 (PST)
+Received: from e120325.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8C283F71B;
+        Mon,  8 Mar 2021 10:14:58 -0800 (PST)
+Date:   Mon, 8 Mar 2021 18:14:49 +0000
+From:   Beata Michalska <beata.michalska@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
+Subject: Re: [PATCH] opp: Invalidate current opp when draining the opp list
+Message-ID: <20210308181446.GA26783@e120325.cambridge.arm.com>
+References: <1614870454-18709-1-git-send-email-beata.michalska@arm.com>
+ <20210305042401.gktrgach4dzxp7on@vireshk-i7>
+ <418fc3cb-d5ec-9216-269a-e055e78718e5@arm.com>
+ <20210308115053.ua2gfo6kfnfjslyd@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ih2y3nxf44lhwvys"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hRef89EyU8nvbU0UXYHcd7gjk1e4BLDYCzKH7WSNBsWw@mail.gmail.com>
+In-Reply-To: <20210308115053.ua2gfo6kfnfjslyd@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Mar 08, 2021 at 05:20:53PM +0530, Viresh Kumar wrote:
+> On 05-03-21, 13:55, Beata Michalska wrote:
+> > Actually, that one might be problematic: by the time the
+> > _opp_table_kref_release is being reached, the opp pointed to
+> > by current_opp may no longer be valid.
+> > _opp_remove_all_static and/or dev_pm_opp_remove_all_dynamic
+> > will release all the opps by going through opp_table->opp_list.
+> > It will drop the reference for each opp on the list, until
+> > the list gets empty(for given opp type), which means,
+> > all the opps will actually get released
+> > (only upon _opp_kref_release the opp will get removed
+> > from the list).
+> 
+> Sorry for missing the context completely, I get it now.
+> 
+> This is what I have applied instead, please see if it breaks anything
+> or works as expected.
+> 
+> -------------------------8<-------------------------
+> 
+> From: Beata Michalska <beata.michalska@arm.com>
+> Date: Thu, 4 Mar 2021 15:07:34 +0000
+> Subject: [PATCH] opp: Invalidate current opp when draining the opp list
+> 
+> The current_opp when set, grabs additional reference on the opp,
+> which is then supposed to be dropped upon releasing the opp table.
+> 
+> Still both dev_pm_opp_remove_table and dev_pm_opp_remove_all_dynamic
+> will completely drain the OPPs list, including dropping the additional
+> reference on current_opp because they run until the time list gets
+> empty.
+> 
+> This will lead releasing the current_opp one more time when the OPP
+> table gets removed and so will raise ref counting issues.
+> 
+> Fix that by making sure we don't release the extra reference to the
+> current_opp.
+> 
+> Fixes: 81c4d8a3c414 ("opp: Keep track of currently programmed OPP")
+> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> [ Viresh: Rewrite _opp_drain_list() to not drop the extra count instead
+> 	  of depending on reference counting. Update commit log and
+> 	  other minor changes. ]
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/opp/core.c | 52 +++++++++++++++++++++++++++++-----------------
+>  1 file changed, 33 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index c2689386a906..3cc0a1b82adc 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1502,10 +1502,38 @@ static struct dev_pm_opp *_opp_get_next(struct opp_table *opp_table,
+>  	return opp;
+>  }
+>  
+> -bool _opp_remove_all_static(struct opp_table *opp_table)
+> +/*
+> + * Can't remove the OPP from under the lock, debugfs removal needs to happen
+> + * lock less to avoid circular dependency issues. This must be called without
+> + * the opp_table->lock held.
+> + */
+> +static int _opp_drain_list(struct opp_table *opp_table, bool dynamic)
+>  {
+> -	struct dev_pm_opp *opp;
+> +	struct dev_pm_opp *opp, *current_opp = NULL;
+> +	int count = 0;
+> +
+> +	while ((opp = _opp_get_next(opp_table, dynamic))) {
+> +		if (opp_table->current_opp == opp) {
+> +			/*
+> +			 * Reached at current OPP twice, no other OPPs left. The
+> +			 * last reference to current_opp is dropped from
+> +			 * _opp_table_kref_release().
+> +			 */
+> +			if (current_opp)
+> +				break;
+> +
+> +			current_opp = opp;
+> +		}
+Having a quick look at the code ...
+Shouldn't the current_opp be moved at the end of the list ?
+Otherwise there is a risk of leaving unreferenced opps (and opp_table).
+Might be also worth adding warning (?)
 
---ih2y3nxf44lhwvys
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+    WARN_ONCE(!list_is_singular())
 
-Hi,
 
-On Mon, Mar 08, 2021 at 04:29:31PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Mar 8, 2021 at 8:50 AM Christoph Hellwig <hch@lst.de> wrote:
-> > On Sun, Mar 07, 2021 at 09:53:06PM +0800, Zhang Rui wrote:
-> > > Thanks for adding me in the loop.
-> > >
-> > > Yes, an ACPI notifier callback should be sufficient for this purpose.
-> > >
-> > > Usually, we get an ACPI notification upon AC plug/unplug, so what we
-> > > need in the NVMe driver is to get the notification and then get the
-> > > status of AC adapter. As ACPI AC driver always sends the AC events to
-> > > acpi notifier chain, what we need is
-> > > a) define a notifier callback, and in the notifier callback
-> > >    1. ignore non-AC devices,
-> > >    2. get AC status, you can refer to acpi_ac_get_state()
-> > > b) register the notifier cb to ACPI notifier chain, by invoking
-> > >    register_acpi_notifier()
-> >
-> > Not my direct priority now, but would there be any objections to
-> > wire up a power_source_notifier method in struct dev_pm_ops to
-> > avoid boilerplate code and ACPI dependencies in drivers?
->=20
-> That would work for me, unless there is something more generic than
-> the ACPI-based notification mechanism already in the power supply
-> framework. Sebastian?
-
-power-supply framework provides two things:
-
-a) One can register into the power-supply notifier chain using
-   power_supply_reg_notifier(). This should be triggered by AC
-   plug/unplug (among other things) as long as the driver calls
-   power_supply_changed() when online state changes. I took a
-   quick glance and ACPI AC driver does not seem to call it at
-   the moment. I think both calls to kobject_uevent() in the
-   driver need to change into power_supply_changed() for this
-   to work on ACPI based systems.
-
-b) There is power_supply_is_system_supplied() to check if the
-   system is supplied by a non-battery type device (which might
-   also be USB-C).
-
--- Sebastian
-
---ih2y3nxf44lhwvys
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBGaWAACgkQ2O7X88g7
-+ppgChAAiUAkVXfQ8/hDdjX4PyH37/8uuJlP7ZBhl9dsd0WNX/Jy+9oqCMldY3Yw
-xuGeGDsA4MlV/0/RtQHl0Rv5UDnvDbmA5nzPbFY9uZeMvn1NGkc2Ohu2x0hqVEka
-dvNMTS9hoFGvfc/7nR46rUjSroPAaVKywvvny7SypO+DVKI4OpJuetsqM8UhwpwU
-Fhl8jaEFv/98jl68Il21nH/DqjtNubpxi1lL1jiq35c/wy1m90GQbn3l7fZ9wcvZ
-8rFP1JiH0EUXsmx/8R6yH24WutJ8bVEJtn4ogvR+i+ByEJUtYv89TkyTQpeme+vU
-8M8brVrfA8tRaH3ZIOBj1kIQGya4fAdXIeZFyr0oWXru6Cq/rgjAd/DD6aJUSDa9
-C3xsEofIYgW1qfTSs0yLd7CZsQxwPbqQrvUfrgF0seF4QiTyWXOZFwCrYoFrEMcA
-iWuxN+Buq8NCMuegUIR0vA5w5U9cXJ4F72RWtW72V28gozMLxw2a84xez1lgHpUE
-FVlei10zZVrxMG8r24BvwfPhbzxoI/kkxMNJpIW1jukHnpcAPVKNRth41XwX+kg+
-0H2V2Xzm2KepVx3+wmTmaG0U9rbrYbKVESt1rT6Du+gDdBaqSfFm7IhoGcTLjSm9
-xYtu0zsr4vvPc5q5hCtH4FWYFKoPEix1mMowSrH7AEJfICEOxlU=
-=Zolk
------END PGP SIGNATURE-----
-
---ih2y3nxf44lhwvys--
+---
+BR
+B.
+> +
+> +		dev_pm_opp_put(opp);
+> +		count++;
+> +	}
+> +
+> +	return count;
+> +}
+>  
+> +bool _opp_remove_all_static(struct opp_table *opp_table)
+> +{
+>  	mutex_lock(&opp_table->lock);
+>  
+>  	if (!opp_table->parsed_static_opps) {
+> @@ -1520,13 +1548,7 @@ bool _opp_remove_all_static(struct opp_table *opp_table)
+>  
+>  	mutex_unlock(&opp_table->lock);
+>  
+> -	/*
+> -	 * Can't remove the OPP from under the lock, debugfs removal needs to
+> -	 * happen lock less to avoid circular dependency issues.
+> -	 */
+> -	while ((opp = _opp_get_next(opp_table, false)))
+> -		dev_pm_opp_put(opp);
+> -
+> +	_opp_drain_list(opp_table, false);
+>  	return true;
+>  }
+>  
+> @@ -1539,21 +1561,13 @@ bool _opp_remove_all_static(struct opp_table *opp_table)
+>  void dev_pm_opp_remove_all_dynamic(struct device *dev)
+>  {
+>  	struct opp_table *opp_table;
+> -	struct dev_pm_opp *opp;
+> -	int count = 0;
+> +	int count;
+>  
+>  	opp_table = _find_opp_table(dev);
+>  	if (IS_ERR(opp_table))
+>  		return;
+>  
+> -	/*
+> -	 * Can't remove the OPP from under the lock, debugfs removal needs to
+> -	 * happen lock less to avoid circular dependency issues.
+> -	 */
+> -	while ((opp = _opp_get_next(opp_table, true))) {
+> -		dev_pm_opp_put(opp);
+> -		count++;
+> -	}
+> +	count = _opp_drain_list(opp_table, true);
+>  
+>  	/* Drop the references taken by dev_pm_opp_add() */
+>  	while (count--)
