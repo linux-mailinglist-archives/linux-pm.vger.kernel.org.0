@@ -2,165 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F00B9331343
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 17:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D9C33136E
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 17:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbhCHQWA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 11:22:00 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:33733 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbhCHQVg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 11:21:36 -0500
-Received: by mail-ot1-f41.google.com with SMTP id j8so9768715otc.0;
-        Mon, 08 Mar 2021 08:21:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FdmlwqL/g+B/2VfTk8zhL1WU4aTeHYXEC8DaMHJdgnw=;
-        b=FOFuKN17ZrlotkN14U99tcMNzpduEEV9BA6W0Q6lIqO4PaD75KQW5qrgiPzGVccZVq
-         LULSR0nTwYalOxgone9uC0iDApB8x1VM+zdLFljgjOn9qey425y26Cbc3scdBhJyaUhj
-         CtF6PRvWCxjGccf+fKKWD/KMaSqFRfiEgQXX0LakLB/Xo3Hwr0Do3/ia8x4xdEUjRjd8
-         jaDzFzbRvBrT3VHiB3JbmwVJPOH+4o1rtrehosirey+nA4Vn2sYftiD4pUtKZjVjXmPL
-         U5nBC0yaUgIDX7P4gZBN+f1jcwHH9s+yVSt0ku31NYpXsFAGvlq59uzCZ1auz7XhV1a+
-         v3AA==
-X-Gm-Message-State: AOAM533ox2XBrbi2GUMOB0ruX7Jtd3kLmFmwXun4vZOjXUV4XujHEglu
-        vNnQaUcVB+KS6otrZf7AK5dcXPdPv1shqVlU2S0=
-X-Google-Smtp-Source: ABdhPJxkSm+vRErvxnVdnlfZPOfTP2+5r1iKjR1uFjXEMFxVg4HrI2WE1NCBGCa4i0QyVz0W2ujpGdVl3YJcIP6/4GE=
-X-Received: by 2002:a05:6830:1057:: with SMTP id b23mr21103814otp.206.1615220495655;
- Mon, 08 Mar 2021 08:21:35 -0800 (PST)
+        id S229701AbhCHQbk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 11:31:40 -0500
+Received: from mail-eopbgr60089.outbound.protection.outlook.com ([40.107.6.89]:29829
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229459AbhCHQbQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Mar 2021 11:31:16 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MuzCQxXggPR7qn6YaObrXEnRUvd+6K3D7ANMy8CJ0xtTeUrPdhNF4xPmRhTnK7gENzmwFkFij6HVYbbcUi/IyYUizO/j8+ddcLthLM33dfKtdNyIJCOtg8QxtIUWL8PCIay0vpK81v7TT/VRNVJXyCj5ktcjeON/4Ds0hpsf3UpsGf25lV64WO6X7n+hCianap/3X7rNxQDkLrdlFHaxoGNE3+AA3B5lRmGCKZJ29nIZTb21ace8D5IzJgg8muCMpvUuwiiybtUguReEiklxCbvYXzA8PvNJKhzGc7uQJtT2ObHW0feu3qxYhKJJeXLkC2vbfpftiyGxrfOVvKJjTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JlrTen4OdX5GXSGSTdoUv8zzvEP3vhtXdgDzLhBQJJk=;
+ b=Mki0HdqSMeeyeviYac8z5zP1OC0vL/HlIB8o5DpgMdrOPP+fo0B56BocTtdtVsAly4u1JV5vkZBVpXQJ+iSNieEYrpinWYlWczadL3332HS/qGUEOaO95ZKWJnUZCURYYLrcMLsewg4E6MKyKq7PuKXUpcG93hqjUtt6X830sRum/eh1yVEGrb5N3fV9J8sLppm9L+O2HCnoHzEK7OTUEXZMKJ9k/5vqGUu8s1UzT6+fklDtoDd9e+XMucm3f1zBkrx5yJZz3zjXVEmCnoTYCOc460f9y8LzmBv1+AKlNSydAN3bUfKIPCB4mt9Jz6nVY/R3iJNqrR/q5RtNJqzzXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rohmsemiconductoreurope.onmicrosoft.com;
+ s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JlrTen4OdX5GXSGSTdoUv8zzvEP3vhtXdgDzLhBQJJk=;
+ b=N52r2iMIgwFrmWuJv2WrqpHtYssjcd6XuzCz8zUGGIrCgoEGveQrcDmhk6feuTJ6G2ePDeRX8f9WTTYsf7UgAA/CCAUehBKLrMJBy/uedSUW7ClTHXNAQEA7Un3SxZJkmYMfzhuPY3GVUrcb00chW51UlWjmwbScty/8Sq2PBTk=
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
+ HE1PR0301MB2475.eurprd03.prod.outlook.com (2603:10a6:3:69::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3912.26; Mon, 8 Mar 2021 16:31:12 +0000
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::246a:935e:e8b:c581]) by HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::246a:935e:e8b:c581%4]) with mapi id 15.20.3912.027; Mon, 8 Mar 2021
+ 16:31:12 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "arnd@kernel.org" <arnd@kernel.org>
+CC:     "timon.baetz@protonmail.com" <timon.baetz@protonmail.com>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>
+Subject: Re: [PATCH] power: supply: max8997_charger: make EXTCON dependency
+ unconditional
+Thread-Topic: [PATCH] power: supply: max8997_charger: make EXTCON dependency
+ unconditional
+Thread-Index: AQHXFC/d7FvMVQrJLUaET9XT21g2rKp6QbeAgAAGZQA=
+Date:   Mon, 8 Mar 2021 16:31:12 +0000
+Message-ID: <2fc305c55e06c5740375013bc9a4d305ad985ed1.camel@fi.rohmeurope.com>
+References: <20210308152935.2263935-1-arnd@kernel.org>
+         <CAHp75VcMAWFCOFEXizuOvDZs=qDSYndH=Y9RhgLdjb9547Op+Q@mail.gmail.com>
+In-Reply-To: <CAHp75VcMAWFCOFEXizuOvDZs=qDSYndH=Y9RhgLdjb9547Op+Q@mail.gmail.com>
+Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Accept-Language: fi-FI, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none
+ header.from=fi.rohmeurope.com;
+x-originating-ip: [2001:14ba:16e2:8300::4]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 64989bd0-2e80-4dab-df41-08d8e24f965f
+x-ms-traffictypediagnostic: HE1PR0301MB2475:
+x-microsoft-antispam-prvs: <HE1PR0301MB24757561CAB78FFB0AB1DBB3AD939@HE1PR0301MB2475.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3826;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KSvJEzNkpzjyNNiskszxB/REf2DuFowu+vWzyQr57Hm/UKQHZptUFeBj6R2WJNTqIwjCcTlvbGTdgE40gLqhy3MS3GvC7IpWQisKvBumJeZL9D/ChduE6485l+QE0IQw/auMEbINj0qlej11ZjLJZcbTBQVlTEAEkqMqFNuu5T1+RgsqXq0v5A2169lmsHwHm81ZDbJWtPOFXMA0jkoDuviKaO5GhfrafzHx2kZsITG7+gZFh4HdOocH7Fv763Dc0QtTAWb0lZ9OA4Fz9g7JWrST4tYV0CD9aofcUDemypsctx5zmPefqD3h2cSEckikL5gfl8lzyHclhvLR8RlIEcEIqOHt10et6/DrGJiDUmAzugMrrVmlmK3HGjmQhCCmcMFAEPWq7xUmRkeug4hbOA3W/SuHvwmQOLPx6zSX8RNE+CSEISeSCflM/qbn489eUFP5sfageLd1Vuyccp2Zn2PrlLhK6MmPi9TmFDHED3MiRRrKkxtqXa6vI+BD0EIweR8naMvlhUZv9F1J3NjlAw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(376002)(136003)(366004)(346002)(396003)(66446008)(6486002)(64756008)(66946007)(83380400001)(53546011)(66556008)(66476007)(6506007)(8676002)(6512007)(186003)(76116006)(8936002)(86362001)(54906003)(71200400001)(316002)(4744005)(2906002)(110136005)(4326008)(2616005)(3450700001)(478600001)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?TWtxQ2sxbEtUcGorY1VGUThvM0R3OFVoK3lRREI0OTRPRWZ5dXJ1dDExdi9T?=
+ =?utf-8?B?WnNXNllja3RUV2MyZ2g1UzRMMGZmWFVFdjJBditJL3J5QTdObFE2TXVQaEJM?=
+ =?utf-8?B?akcraXdTclJsRG1USlpCT1VHdVRYYlg1V2I0Tld2b2h5OHZPSmQ0em1uaTBk?=
+ =?utf-8?B?bEthZmYxNmVqK25BVVZpek50UzcrekNkb3hRbHk2byt3d0hlOStMcUpVSEU5?=
+ =?utf-8?B?L2lBYUxqK2ZBdXZqT1VHdzdNRmZhb3dxb2tSNzcxT3c0aXJ1dHF3aitFSjRE?=
+ =?utf-8?B?OEZPUTJOdW0vaExZcTI1NkN1V1BlbFA3aGFUUjlpdzEwRVh4M0paT0Z3RCs5?=
+ =?utf-8?B?WmFXRisyUkNNalF6dlgzZ2RNQm50Slo0OWpNc0tHNk15Q0JyeFZ0WEdhbGkz?=
+ =?utf-8?B?ZElVV1ZqTGdsak9zZnZYZ3hycjFRRERJaHVnMFlLNXdCVVhBeVd0aEpqdFFa?=
+ =?utf-8?B?aWlHdDBIdzJWeDZjeHRoTDdnRUtWc0t2WHpGNnllVVA1YjZmaVZRL1c4blhE?=
+ =?utf-8?B?Rmp2WjV5SHdQZ2xjNFh3aEtTeE1lRGtzN1dhNTBUYzBFT0tJUE1oNFgySmsr?=
+ =?utf-8?B?S25ZaHU0dVZyenNMcDMya2hIU0xQTGxsV2hRM0VkN2VmQnA0WEJnM2RyTzJi?=
+ =?utf-8?B?emR2ZEs0V1VqbmMyOGN5dG9XN2hRYjNydmh5VFREWENWTGppckhnZ2tJTHdk?=
+ =?utf-8?B?UHFlbFJ2YktGZkFLSng4b3hOQXk1VmFPbTdKZmxHVmVLL2p1UXRIUGg2OTFS?=
+ =?utf-8?B?M1F2alNFaHFuWHNFVEFvOXFMRE9zblNXMkZBOTZjZ0RYVnk1bTlvS3F4RVU2?=
+ =?utf-8?B?aEtvOEpmU0c1eWErNXRZRlR2SGEyOXVCc2hXb0wzVmJKcVhhenhLTVgrQnpt?=
+ =?utf-8?B?OGJIbFlUaEE1YXBXS1UyRnJsVGlZeTdQZXRkY1lMVGFjMHNIR1ZpK2I0SzVk?=
+ =?utf-8?B?bit5dFZpTEJaekI4d3pNSjF0RmhzcTllMnZrODBibzdVVTY5WnR0N3NxMkNY?=
+ =?utf-8?B?dk1SSzV1YlpvTHowcUdGTE15UWQzUVkwV2dQVjl1ck5KZ2EvaFJkK1VjMjNS?=
+ =?utf-8?B?ckZtOEg0cng2RkpnTkhqYjkzTm5IWk1pdTBCTnlrWmRMM0hxTHlZMVhIYzBo?=
+ =?utf-8?B?bEYyOC92L0kvMDUvenJURmFQN2xiL2xPYnFNb0VQNHRxM1hmU0xSRDVGbnRP?=
+ =?utf-8?B?SmgzQjYyZzVBanU0TUNLcEg5UFVabkZuRi91TXVBOGNHZEFwU1FYR21IWlF5?=
+ =?utf-8?B?NmkvN1pqZGVLZFdCZ21MMHlOTUx3QWhCVkRzWlRTZWRoSlRYNEtyUmhFK1h2?=
+ =?utf-8?B?MmZPWU9PVEZQdm1OZ1lnNXNUcDY5WTM3RlBXZHN6ZGN1ZmxzUzBwakJUZEZT?=
+ =?utf-8?B?ck1BSk5IWk5DMHlGS1phd01PeDNXOXR3L0xTK2d1M29vS1dWMHJxODFudXVU?=
+ =?utf-8?B?cGtWYkIxcFdkcUwvbmNrNmNFR3FGQVRKeERuUlhSU0c0OFBROWNIa2Y1bEZE?=
+ =?utf-8?B?UUZYVzFuQ2tieG1rbU15d0s5dzg5clQ3bk1OSnlRY2svaFBLU2NPUmV3RW1a?=
+ =?utf-8?B?OHJmZU1leGUwMTgzTzRLRGw0Q0szUGNlcUFCdGRjb24rTTM2SGhsem9lWnNo?=
+ =?utf-8?B?emczWGg5UzZKVVFMZzAyS1NRQTZZcDVCczNkMW1pblA0TjRjejAzczluTWNj?=
+ =?utf-8?B?eVd0dCtyQXpTVG5qY3FvTlg3N0dBejhVc2lhS211ckhqWkRFOVo3UlJicm9B?=
+ =?utf-8?B?aURab2FVeS83Rml0Mzd6SGt3OExURDhYUjJCUldpWEFwS0RraVQwREpiMTcv?=
+ =?utf-8?Q?bQ6PxTC0OuGRIjN8yJrN6xFDiLKrsU6FpZgns=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <30C920DF28BEC54C9717C10AF196347A@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <cover.1614725302.git.asutoshd@codeaurora.org> <0576d6eae15486740c25767e2d8805f7e94eb79d.1614725302.git.asutoshd@codeaurora.org>
- <85086647-7292-b0a2-d842-290818bd2858@intel.com> <6e98724d-2e75-d1fe-188f-a7010f86c509@codeaurora.org>
- <20210306161616.GC74411@rowland.harvard.edu>
-In-Reply-To: <20210306161616.GC74411@rowland.harvard.edu>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 8 Mar 2021 17:21:24 +0100
-Message-ID: <CAJZ5v0ihJe8rNjWRwNic_BQUvKbALNcjx8iiPAh5nxLhOV9duw@mail.gmail.com>
-Subject: Re: [PATCH v10 1/2] scsi: ufs: Enable power management for wlun
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        "Asutosh Das (asd)" <asutoshd@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Adrian Hunter <adrian.hunter@intel.com>, cang@codeaurora.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Satya Tangirala <satyat@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux-PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64989bd0-2e80-4dab-df41-08d8e24f965f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2021 16:31:12.3565
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +bFcCa0tLUyrYLGIWjNNV4KP53wBufJX5jssx8BNqlZ6pHQgNh4oTObDSXtcKlco56Ac/VlxObFW7uf7/DZfL4Y5w6Z+iBc1fpSuwU6dn7N4JdavasAGh8Jo4NdPL99S
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0301MB2475
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Mar 6, 2021 at 5:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Mar 05, 2021 at 06:54:24PM -0800, Asutosh Das (asd) wrote:
->
-> > Now during my testing I see a weird issue sometimes (1 in 7).
-> > Scenario - bootups
-> >
-> > Issue:
-> > The supplier 'ufs_device_wlun 0:0:0:49488' goes into runtime suspend even
-> > when one/more of its consumers are in RPM_ACTIVE state.
-> >
-> > *Log:
-> > [   10.056379][  T206] sd 0:0:0:1: [sdb] Synchronizing SCSI cache
-> > [   10.062497][  T113] sd 0:0:0:5: [sdf] Synchronizing SCSI cache
-> > [   10.356600][   T32] sd 0:0:0:7: [sdh] Synchronizing SCSI cache
-> > [   10.362944][  T174] sd 0:0:0:3: [sdd] Synchronizing SCSI cache
-> > [   10.696627][   T83] sd 0:0:0:2: [sdc] Synchronizing SCSI cache
-> > [   10.704562][  T170] sd 0:0:0:6: [sdg] Synchronizing SCSI cache
-> > [   10.980602][    T5] sd 0:0:0:0: [sda] Synchronizing SCSI cache
-> >
-> > /** Printing all the consumer nodes of supplier **/
-> > [   10.987327][    T5] ufs_device_wlun 0:0:0:49488: usage-count @ suspend: 0
-> > <-- this is the usage_count
-> > [   10.994440][    T5] ufs_rpmb_wlun 0:0:0:49476: PM state - 2
-> > [   11.000402][    T5] scsi 0:0:0:49456: PM state - 2
-> > [   11.005453][    T5] sd 0:0:0:0: PM state - 2
-> > [   11.009958][    T5] sd 0:0:0:1: PM state - 2
-> > [   11.014469][    T5] sd 0:0:0:2: PM state - 2
-> > [   11.019072][    T5] sd 0:0:0:3: PM state - 2
-> > [   11.023595][    T5] sd 0:0:0:4: PM state - 0 << RPM_ACTIVE
-> > [   11.353298][    T5] sd 0:0:0:5: PM state - 2
-> > [   11.357726][    T5] sd 0:0:0:6: PM state - 2
-> > [   11.362155][    T5] sd 0:0:0:7: PM state - 2
-> > [   11.366584][    T5] ufshcd-qcom 1d84000.ufshc: __ufshcd_wl_suspend - 8709
-> > [   11.374366][    T5] ufs_device_wlun 0:0:0:49488: __ufshcd_wl_suspend -
-> > (0) has rpm_active flags
-
-Do you mean that rpm_active of the link between the consumer and the
-supplier is greater than 0 at this point and the consumer is
-RPM_ACTIVE, but the supplier suspends successfully nevertheless?
-
-> > [   11.383376][    T5] ufs_device_wlun 0:0:0:49488:
-> > ufshcd_wl_runtime_suspend <-- Supplier suspends fine.
-> > [   12.977318][  T174] sd 0:0:0:4: [sde] Synchronizing SCSI cache
-> >
-> > And the the suspend of sde is stuck now:
-> > schedule+0x9c/0xe0
-> > schedule_timeout+0x40/0x128
-> > io_schedule_timeout+0x44/0x68
-> > wait_for_common_io+0x7c/0x100
-> > wait_for_completion_io+0x14/0x20
-> > blk_execute_rq+0x90/0xcc
-> > __scsi_execute+0x104/0x1c4
-> > sd_sync_cache+0xf8/0x2a0
-> > sd_suspend_common+0x74/0x11c
-> > sd_suspend_runtime+0x14/0x20
-> > scsi_runtime_suspend+0x64/0x94
-> > __rpm_callback+0x80/0x2a4
-> > rpm_suspend+0x308/0x614
-> > pm_runtime_work+0x98/0xa8
-> >
-> > I added 'DL_FLAG_RPM_ACTIVE' while creating links.
-> >       if (hba->sdev_ufs_device) {
-> >               link = device_link_add(&sdev->sdev_gendev,
-> >                                   &hba->sdev_ufs_device->sdev_gendev,
-> >                                  DL_FLAG_PM_RUNTIME|DL_FLAG_RPM_ACTIVE);
-> > I didn't expect this to resolve the issue anyway and it didn't.
-> >
-> > Another interesting point here is when I resume any of the above suspended
-> > consumers, it all goes back to normal, which is kind of expected. I tried
-> > resuming the consumer and the supplier is resumed and the supplier is
-> > suspended when all the consumers are suspended.
-> >
-> > Any pointers on this issue please?
-> >
-> > @Bart/@Alan - Do you've any pointers please?
->
-> It's very noticeable that although you seem to have isolated a bug in
-> the power management subsystem (supplier goes into runtime suspend
-> even when one of its consumers is still active), you did not CC the
-> power management maintainer or mailing list.
->
-> I have added the appropriate CC's.
-
-Thanks Alan!
+DQpPbiBNb24sIDIwMjEtMDMtMDggYXQgMTg6MDYgKzAyMDAsIEFuZHkgU2hldmNoZW5rbyB3cm90
+ZToNCj4gT24gTW9uLCBNYXIgOCwgMjAyMSBhdCA1OjI5IFBNIEFybmQgQmVyZ21hbm4gPGFybmRA
+a2VybmVsLm9yZz4gd3JvdGU6DQo+IA0KPiA+IC0gICAgICAgZGVwZW5kcyBvbiBFWFRDT04gfHwg
+IUVYVENPTg0KPiANCj4gSSBzdHVtYmxlZCBvdmVyIHRoaXMuDQo+IFdoYXQgaXMgdGhlIHBvaW50
+IG9mIGhhdmluZyB0aGlzIGxpbmUgYXQgYWxsPw0KPiBXaGF0IG1hZ2ljIHRyaWNrIGRvZXMgaXQg
+c2VydmUgZm9yPw0KDQpUaGUgbG9naWMgd2FzIHNvbWV3aGF0IGhhaXJ5LiBJIHVzZWQgaXQgb25j
+ZSBmb3IgQkQ3MDUyOCB3YXRjaGRvZyB3aGljaA0KcHJvdmlkZXMgbG9jayBmdW5jdGlvbnMgZm9y
+IFJUQyAtIG9yIHN0dWJzIGlmIFdERyBpcyBub3QgdXNlZC4gUHJvYmxlbQ0Kd2hpY2ggdGhhdCBz
+b2x2ZWQgd2FzIHRoYXQgd2hlbiBSVEMgd2FzIGJ1aWx0LWluIGFuZCBXREcgd2FzIGEgbW9kdWxl
+IC0NCnRoZXNlIGZ1bmN0aW9ucyB3ZXJlIG1pc3NpbmcuIEl0IG1pZ2h0J3ZlIGJlZW4gR3VlbnRl
+ciBvciBBLiBCZWxsb25pDQp3aG8gc3VnZ2VzdGVkIGl0Lg0KDQpJIGRvbid0IHJlbWVtYmVyIDEw
+MCUgc3VyZSBidXQgSSB0aGluayBpdCBtaWdodCByZXF1aXJlIEVYVENPTiB0byBiZQ0KYnVpbGQg
+YXMgYSBtb2R1bGUuIEkgZ3Vlc3MgdGhlIGRpc2N1c3Npb24gSSBoYWQgcmVnYXJkaW5nIEJENzA1
+MjggY2FuDQpiZSBmb3VuZCBmcm9tIGxvcmUua2VybmVsLm9yZyAtIGJ1dCBpdCBpcyBwcm9iYWJs
+eSBidXJpZWQgZGVlcC4uLiBNYXliZQ0Kc29tZW9uZSB3aWxsIGdpdmUgYmV0dGVyIGFuZCBtb3Jl
+IGRlZmluaXRlIGFuc3dlci4NCg0KQmVzdCBSZWdhcmRzDQoJTWF0dGkgVmFpdHRpbmVuDQo=
