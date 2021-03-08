@@ -2,87 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0260E3312C9
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 17:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F003312CC
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 17:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbhCHQDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 11:03:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38752 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230078AbhCHQC4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Mar 2021 11:02:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F74D65228;
-        Mon,  8 Mar 2021 16:02:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615219375;
-        bh=81L55Ql71/PIDoeyenGJ6E24UkFDnhGsiFqB2FUgnnk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Qu6ApKeYNNZJfwMnHd8RoTXahkePw8+QB0qK26OmfXR7IaZruke3YY5kMz6nVarf9
-         bLQGEdu+k8QV3ujpY0Pa6G69E/rbJaz6y2+atBrAvrMttF/d3JrBNx+1zah0QLd3bN
-         j4YxN1iKuEGudCWxmktHIDl/QkSrgnIAVs40LAA74aZGLPKl0mczlw7zQmbrwQ5Rk0
-         ufEFBVBgUrUnwOxzsxdHvPuZM/pkxxS0vneF2ZSgA+ZaNGMdwpDKOPhXVKoS1FBeeT
-         mz/NcyBQZDv+fJio+zHgK3TPxWQoWt4tbCwVlQVH3ugHXFSX/UUlmoMJkqDMBX91bL
-         ozSLstqZDxNkQ==
-Received: by mail-ot1-f41.google.com with SMTP id f33so9618200otf.11;
-        Mon, 08 Mar 2021 08:02:55 -0800 (PST)
-X-Gm-Message-State: AOAM532xGSTQcgmMk1vY8/lpRWB7yn0QyuNmQZ021Zcbr30QCG3kXQkp
-        JNI9PIkvj1g2ZpksveCx8wmGEHEE8m9g1kviReU=
-X-Google-Smtp-Source: ABdhPJyNkTy8tsZDz8aNPrEjO+pd0M6+WYJzuDmR8+KfsUmhCtClsTL+pKmKL13p3R1++4uqRZ66UycBA+zhOi31Fsk=
-X-Received: by 2002:a05:6830:14c1:: with SMTP id t1mr831083otq.305.1615219375009;
- Mon, 08 Mar 2021 08:02:55 -0800 (PST)
+        id S230198AbhCHQDh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 11:03:37 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:42719 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230113AbhCHQDF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 11:03:05 -0500
+Received: by mail-ot1-f42.google.com with SMTP id e45so9643168ote.9
+        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 08:03:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DjU8DkAqqBNl4x/nwSBKlC66w3zKL7dbotZ+4VD+8Tw=;
+        b=T8mAcotqhpRSiK3ayGdutCf1S2kdIMztQmLkgfTU6KdsjPgS+iVhRCfLLlyujzAHIX
+         IgObc+OnjxUXpJP6ULtaOUWlVzoXqpIK5h1JhZns8qvYxjW2TMl07JOnK6rsu8JgJJzb
+         mVBXFK8V+zP+dG6xtemBjtxIg8mx6+auvIA/5tD7AI6fWBBj79mDW0FQTFX5WpjUdf3y
+         StqdlMSGSHbG9n9XM/hC+rA6Ipm54yZAVJq43AKSxcLHpgaOW2U99kEEzwym6bIFL2wv
+         wIdi3nAHyES4/FDwzSKcsoMEdw0oJk//kQx0r+6P0onDUJJZC9RnQdj9MSwnvy1f/Lys
+         IZKw==
+X-Gm-Message-State: AOAM53292UwopiCiqtfG6JWMbHCEN1JH2dWDtVOqRldDPD+HkERoM/ZX
+        nDHROlCL3SIfLFe5tz+l0gxHpzEYMZ1mhd3fR0vMhkUx
+X-Google-Smtp-Source: ABdhPJywv5HhKsXqAkJbsB8lSt2bfypgdyF+sXE7Z5y5n3bdr+FytbYwFTO+hkyZQAURhgfBGUZCHd3zYY/XiYLMStw=
+X-Received: by 2002:a05:6830:1057:: with SMTP id b23mr21023405otp.206.1615219384660;
+ Mon, 08 Mar 2021 08:03:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20210308152935.2263935-1-arnd@kernel.org> <12c5050f-feb3-e07f-45d2-5e89b678841a@kernel.org>
-In-Reply-To: <12c5050f-feb3-e07f-45d2-5e89b678841a@kernel.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 8 Mar 2021 17:02:38 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3xEw9yiVY-dDmQEKTSPSXaZJEhXEQ2M=7ZoUA8_P5Qzg@mail.gmail.com>
-Message-ID: <CAK8P3a3xEw9yiVY-dDmQEKTSPSXaZJEhXEQ2M=7ZoUA8_P5Qzg@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: max8997_charger: make EXTCON dependency unconditional
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Timon Baetz <timon.baetz@protonmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20210308105601.krfecfcjh6e63bqq@vireshk-i7>
+In-Reply-To: <20210308105601.krfecfcjh6e63bqq@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 8 Mar 2021 17:02:48 +0100
+Message-ID: <CAJZ5v0hA6UuoWD8mBcNh7b_nTHRWZgX8E0+oF3gc129+awjMUw@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm fixes for 5.12
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 4:33 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Mon, Mar 8, 2021 at 11:56 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On 08/03/2021 16:29, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Some of the extcon interfaces have a fallback implementation that can
-> > be used when EXTCON is disabled, but some others do not, causing a
-> > build failure:
-> >
-> > drivers/power/supply/max8997_charger.c:261:9: error: implicit declaration of function 'devm_extcon_register_notifier_all' [-Werror,-Wimplicit-function-declaration]
-> >                 ret = devm_extcon_register_notifier_all(&pdev->dev, charger->edev,
-> >                       ^
-> > drivers/power/supply/max8997_charger.c:261:9: note: did you mean 'devm_extcon_register_notifier'?
-> > include/linux/extcon.h:263:19: note: 'devm_extcon_register_notifier' declared here
-> > static inline int devm_extcon_register_notifier(struct device *dev,
-> >
-> > I assume there is no reason to actually build this driver without extcon
-> > support, so a hard dependency is the easiest fix. Alternatively the
-> > header file could be extended to provide additional inline stubs.
+> Hi Rafael,
 >
-> Hi Arnd,
+> This pull request contains:
 >
-> Thanks for the patch but I think I got it covered with:
-> https://lore.kernel.org/lkml/20210215100610.19911-2-cw00.choi@samsung.com/
-> (sent via extcon tree).
+> - Two patches for qcom-hw driver to fix dereferencing and return value
+>   check.
 >
-> Did you experience a new/different issue?
+> - Add vexpress to cpufreq-dt blacklist.
+>
+> Thanks.
+>
+> --
+> Viresh
+>
+> -------------------------8<-------------------------
+>
+> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+>
+>   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/fixes
+>
+> for you to fetch changes up to fbb31cb805fd3574d3be7defc06a7fd2fd9af7d2:
+>
+>   cpufreq: blacklist Arm Vexpress platforms in cpufreq-dt-platdev (2021-03-08 16:20:07 +0530)
+>
 
-The patch should be fine and address the problem, I just didn't see it was
-already fixed in linux-next as I'm still testing on mainline (rc2 at
-the moment).
-
-I assume the fix will make it into a future -rc then.
-
-      Arnd
+Pulled, thanks!
