@@ -2,96 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE56331AC7
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 00:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BF7331B04
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 00:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbhCHXIY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 18:08:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S231463AbhCHXja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 18:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbhCHXHw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 18:07:52 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8280FC061760
-        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 15:07:52 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id t83so2873137oih.12
-        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 15:07:52 -0800 (PST)
+        with ESMTP id S231321AbhCHXjX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 18:39:23 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6058C06175F
+        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 15:39:22 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id y124-20020a1c32820000b029010c93864955so4821755wmy.5
+        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 15:39:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4hvbKRFY7Gs9YDqGOyz0/NvmnAh1JPz6EfNarEQ6wA8=;
-        b=G674hH9UyzvI0ioSt5BG9expqlepPHZakDtglNtJ5zHcpyc/GmtGTwrnFgcB2qP9rm
-         4PZ3Jqc/kZktu5JHYs1/xTfwjbdNykb0Hay6Rhme+ju/0BFUbMkiUQoaNqbpAmFMDpuQ
-         QY9lCsH61+rJL91wkQ0Bcca/MFDvG9eXHTrzC5Ebb5u5aTQM/nuVdZkdviREq/fFfZIt
-         ogNL0ntfGqyc1ZCeZ8zZUjWu2FdtX7+8CUH+Fv6XJ0m2WKttmicd3C1kZmQMYzfqHMhF
-         x3KfvEdj6wFzQclp85rXq2NLVQId/TdH9WL+57kK+B0nBkLjcA5hoDXRlWYEYt8UogQn
-         005A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eqyLkN28+VbZJ1BodN0k6GRf4WGaBBOV7lcLbkfiJBQ=;
+        b=Xh+k5bGSptAyjUDGZQnXgFqbHzAG1QPvOAA81X4+86hLvLLPcBkxJp7PAp0mXyk8gI
+         yAvz8MiX/7rbhLuhxHMMxcYXxEfCti/hBoXil6MGBKkmQ7gkro9wSdEKf2JNbhliCu0i
+         VbGbqiqJfX8rUQjvkdQPoX6VJcl7sHNQuPGt309aH7ih1/9xWv+z297uaGFlfS+3Rijh
+         del9/iXKRiBxWOGvTcprNCOUtJ6jMglS3lo8yhrgrim/WBjV+AUkG5L2AEQx8hro87Wr
+         NRIbt0HqoqkQMZi1jxQpNbkKrBHGUatDDf4hPFqyXQIcIxSQ12Z2yRweL5U8hyLgpJ3+
+         +Eug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4hvbKRFY7Gs9YDqGOyz0/NvmnAh1JPz6EfNarEQ6wA8=;
-        b=XLXxDS9Ym5dEuAYPHCcbI17DvX+AQ4BH/euKqZQRUT/0sK10y5nmRlmFpCs6lFZkKT
-         Hot0qkc3xqRA+7bAJgI080eUSypxzrY3bRCJomw9DcqJiyh2c//ncPSID9QuBKpdL+UF
-         bg8jtYAuJGbC0eejw5YR+XxcBq2a+IafYa4Phvde8UJifLDjompFvLBJcfYROjgjZFPW
-         1vPNaIt43UxZNiDWJQ4LYjChJdG4aTWDQ2V4OnBBPAhiuM57Gw9MV3HOmwtQJIWeMZzZ
-         dwxbScmKq2nS9k3RDketsvGP0yrUf2mDA+F6QV5ynA1NSSwm+toJWRWiDfOGg5GeufFL
-         c5Kw==
-X-Gm-Message-State: AOAM532gaM+zvYSUuZKVisjcc3tQ6wXvu/pljM0rOu2xMLOYhvgbRckw
-        8u3zEm3lrqhv9PlRLu1lX41dKg==
-X-Google-Smtp-Source: ABdhPJxE5DEMhzUk2EXfK4SAN7Gzv+ovKX70wN9qc3D+l1U7WWpQVSjnKb+Y0Q99IB5cclKWi21c1Q==
-X-Received: by 2002:aca:2b13:: with SMTP id i19mr900239oik.148.1615244871809;
-        Mon, 08 Mar 2021 15:07:51 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w7sm2772999oie.7.2021.03.08.15.07.50
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eqyLkN28+VbZJ1BodN0k6GRf4WGaBBOV7lcLbkfiJBQ=;
+        b=rk3qSjSjTYVfPONoKp/OTEcMHbsNtrV0pH7k1qJp3TrCOdIRut48v7vxZk2FdS1qOZ
+         yVAt9gbIOpv+OEmvutXUyEYwY5OB0DTCntjFBof7M8wF19K/pSGnf+5XbkV4W+QbFG4+
+         bhirDg0RQpH5a5A0jT7K+p/Znrh8y+vL/ykO957McJsGdooaiOexHDEbqMTdR6JO4X8M
+         hPfnm+y/BhmYFW3svPiMR6ygddbFnR7Ag8o6c8Mpwce33e0ZWhy3okWEULZ96NDZYYs/
+         lZG47pvcsY7A8cf8BhFiLT93tANjdwCgRuHlMpw2fqYkPkBWcp8e3wPrPrYK5RVPUgYm
+         SSnA==
+X-Gm-Message-State: AOAM531tTjFxtqH60u/p5DXQ4u+zGSMVqbqwivlcxJ9x7gRmxTAP64Vf
+        upW6TryRNDDiSqDe4GR51HN4JA==
+X-Google-Smtp-Source: ABdhPJx6PRCVhueYee+s5rTUuSEOQ5BGaZfr6qtVs+qF+7WlrvYJ8gsYqpzm7ZADmb/sCt4UW4mj3g==
+X-Received: by 2002:a1c:9849:: with SMTP id a70mr1108634wme.48.1615246761430;
+        Mon, 08 Mar 2021 15:39:21 -0800 (PST)
+Received: from localhost.localdomain (lns-bzn-59-82-252-141-80.adsl.proxad.net. [82.252.141.80])
+        by smtp.gmail.com with ESMTPSA id b186sm1145408wmc.44.2021.03.08.15.39.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 15:07:51 -0800 (PST)
-Date:   Mon, 8 Mar 2021 17:07:49 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, Andy Gross <agross@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mon, 08 Mar 2021 15:39:21 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     heiko@sntech.de
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 34/41] arm64: dts: qcom: sdm630-nile: Configure WCN3990
- Bluetooth
-Message-ID: <YEauRWCv7PENpiIc@builder.lan>
-References: <20210226200414.167762-1-konrad.dybcio@somainline.org>
- <20210226200414.167762-35-konrad.dybcio@somainline.org>
- <71ea4ebd-f446-ede3-7623-ae5b339d7905@somainline.org>
+        linux-pm@vger.kernel.org (open list:DEVICE FREQUENCY (DEVFREQ)),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
+Subject: [RESEND PATCH v5 1/4] dt-bindings: devfreq: rk3399_dmc: Add rockchip,pmu phandle.
+Date:   Tue,  9 Mar 2021 00:38:55 +0100
+Message-Id: <20210308233858.24741-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <71ea4ebd-f446-ede3-7623-ae5b339d7905@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat 27 Feb 04:40 CST 2021, Konrad Dybcio wrote:
+From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-> 
-> > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> 
-> From: Martin Botka <martin.botka@somainline.org>
-> 
-> 
-> That got caught in rebasing madness.. Should any additional mistakes appear, I'll send a V2.
-> 
+The Rockchip DMC (Dynamic Memory Interface) needs to access to the PMU
+general register files to know the DRAM type, so add a phandle to the
+syscon that manages these registers.
 
-Patches looks good, but I'm a little bit confused about author and s-o-b
-of the once you replied to.
+Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Gaël PORTAY <gael.portay@collabora.com>
+Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Please respin the whole thing with the proper authors/s-o-b, and I'll be
-happy to apply it.
+diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+index a10d1f6d85c6..a41bcfef95c8 100644
+--- a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
++++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+@@ -12,6 +12,8 @@ Required properties:
+ 			 for details.
+ - center-supply:	 DMC supply node.
+ - status:		 Marks the node enabled/disabled.
++- rockchip,pmu:		 Phandle to the syscon managing the "PMU general register
++			 files".
+ 
+ Optional properties:
+ - interrupts:		 The CPU interrupt number. The interrupt specifier
+-- 
+2.17.1
 
-(And please remember to pick up Rob's ack)
-
-Regards,
-Bjorn
