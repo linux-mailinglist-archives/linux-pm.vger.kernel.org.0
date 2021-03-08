@@ -2,132 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1303A330AB5
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 10:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 032FE330BD6
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Mar 2021 11:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbhCHJ6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 04:58:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:33762 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231387AbhCHJ6L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 04:58:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615197491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lHjTxRwBzXntJjnY0Ab0qNZeR7P16kUC/t+zvNtECvA=;
-        b=Ktasm3kyUnY8L0r6l81BV9N+xqgZiXrcCzV/yLIt4e3YLooRPjhWzfE+xD5Bbg7cYH1uTJ
-        yjBbb5SW/AwpbJ2qqlC0g2OlGocnVKQjVhAwSAjtklO/pkcvmEOtycYUCrTZpeppcLpdQ/
-        V3calKFIE0JNBjcYdE2vJECBkBmb9cA=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-436-V13LJAxhPceLkoZNMISptA-1; Mon, 08 Mar 2021 04:58:08 -0500
-X-MC-Unique: V13LJAxhPceLkoZNMISptA-1
-Received: by mail-ed1-f71.google.com with SMTP id i6so4773819edq.12
-        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 01:58:08 -0800 (PST)
+        id S231215AbhCHK4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 05:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231139AbhCHK4E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 05:56:04 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C222BC06174A
+        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 02:56:04 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id z5so4693784plg.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 02:56:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=dO38jLHHhTlo9vAYLImzzhA3b23qgyQNZ/gvQEXrp/8=;
+        b=EqiJJfJwsEFSpmgfqMtBlGMnAJYTQEqGaLiDNeMw9GnmvnCEoFAlQRKtVpo0yPf8ud
+         mTxvxz9RRk72jZN+g1jm3EAjGuRJ8Khw2WlnnHp/7A+1c4LYiFwwPNNgaso07HymwqOy
+         Py64nUGi64qWF5FHXIEv9PAYw3rU9kRNT6/HIsJpxMShwIEmKshreDEp/EWo6RugLUPy
+         yIRsUeI5XGW73/dgdxWrgGB3VqdOmU5WzII70Qbs30CepvpsOo25Uk075ikzGfuq3g+g
+         0n13D6H6TrZzPf149cOiVpK/Cha3x5pj9PxlR6hI8ww6pd2WrFkCGhH4otlsv9JlBEOd
+         X8bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lHjTxRwBzXntJjnY0Ab0qNZeR7P16kUC/t+zvNtECvA=;
-        b=IMNcprZZN1FWPaRywOL9M1X/ajQXankeUhKIdwRBu8j/0YEW1c+FNjaMiCHwHJdOjN
-         p6+v2Stxt0GQknD+ids0ZA1wjCx64RmfXBw2SQQHEqMl49VklzmpRV+qtZxstuI8diyO
-         7c2w38LFwoj6j+oFOzwPAcCNzygfZlRx3eedj//rdPPWBgG1m0T5Hb6QRIXTq3EY1avL
-         Xo6QNJnbjvrPal2ck1S800h/VD3vMLab00rX5uhEcZGTejwsgBjm3BSTIduSDGXb/bZa
-         VPrrleVP80SbSW0Ph1NBFnwrGerBdw4wM5CNw+7zQKES4E80OB3nG8kn0GIQqErBRR6Z
-         BaSg==
-X-Gm-Message-State: AOAM533/doRyQVjyb5H3m/aEp4lUJ4kLXY0h+t3HYozI5ANRJAv5e4/K
-        IhB5WQ+weALvo7BZvuTr/6ls3ZnH9fi9N0wpXy33/BMk8BQWPCHpkz+kJxRxAJPrBTakCJGZdDF
-        8/vIGclvWJBlDopps7RE=
-X-Received: by 2002:a05:6402:254f:: with SMTP id l15mr2161732edb.189.1615197487651;
-        Mon, 08 Mar 2021 01:58:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwZ6fQefjQyWn03VsnOaZl1Am51qstz49gLS1yCwyNiMnlnimfXdBtL7FsXaaQ/90rp9JZYFg==
-X-Received: by 2002:a05:6402:254f:: with SMTP id l15mr2161713edb.189.1615197487533;
-        Mon, 08 Mar 2021 01:58:07 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id b6sm6075855ejb.8.2021.03.08.01.58.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Mar 2021 01:58:07 -0800 (PST)
-Subject: Re: [RFC PATCH v2 2/8] MAINTAINERS: Add entry for devm helpers
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        mazziesaccount@gmail.com
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <cover.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
- <c9119c0a8d4daebff0221c67830b54314fc9e0f6.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <c40d1454-836d-cbf2-d2de-232e5b39b9e9@redhat.com>
-Date:   Mon, 8 Mar 2021 10:58:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=dO38jLHHhTlo9vAYLImzzhA3b23qgyQNZ/gvQEXrp/8=;
+        b=QzhSKucMhw87CK0axz5IJGlZoMRt6DjRKBW2VjZO1/vZZM8/fA1317aAJwlP8Kh9pI
+         jFqXBo7nlb4IyG2sbUEkbzjQOIu+3wT0C128BumdmPO6+b6KEfhHE14UDQBcvvBwKbOe
+         4bNgjYnUWs3o9Fj7bKymPr1H0atXMAL68VUO1AljBEosL3UKT950TDJhF+XHzmGxaujb
+         J84ObZs/gGseyYEaUdTiiVqBwqY600WBnGBYqFnW9TEhjG7SVTSIOSAT9P7lyyDdW6e7
+         erU4KlYrtLhn/Vf3HGiexCMThZTkt531FPIdYmIEbuAO0v7LAcz+pgT8pFi5B8FItMzX
+         Sifg==
+X-Gm-Message-State: AOAM530eq0lSIfRc/1/q28akDGsuL6+sN0zTgG7yMKP7987jDTzOIr7k
+        nf/hIA/t/4NzmCCjut6xk1k9LlmMNq8wLw==
+X-Google-Smtp-Source: ABdhPJz/SldnF2Kwvmhgw6ORJainaMhoHAHJblD1U3T9l6eeP1zFC9VzDgzqWvGFDZyUsEbVoyViMg==
+X-Received: by 2002:a17:90b:3551:: with SMTP id lt17mr24455720pjb.89.1615200964251;
+        Mon, 08 Mar 2021 02:56:04 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id f20sm10163959pfa.10.2021.03.08.02.56.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Mar 2021 02:56:03 -0800 (PST)
+Date:   Mon, 8 Mar 2021 16:26:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm fixes for 5.12
+Message-ID: <20210308105601.krfecfcjh6e63bqq@vireshk-i7>
 MIME-Version: 1.0
-In-Reply-To: <c9119c0a8d4daebff0221c67830b54314fc9e0f6.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Rafael,
 
-On 3/8/21 9:14 AM, Matti Vaittinen wrote:
-> Devm helper header containing small inline helpers was added.
-> Hans promised to maintain it.
+This pull request contains:
 
-Yes I did promise that, didn't I?  FWIW going this route is still
-fine by me, assuming that having someone else maintain this makes
-this easier on / more acceptable to Greg.
+- Two patches for qcom-hw driver to fix dereferencing and return value
+  check.
 
-This is still going to need an Ack from Greg though.
+- Add vexpress to cpufreq-dt blacklist.
 
-Regards,
+Thanks.
 
-Hans
+--
+Viresh
 
+-------------------------8<-------------------------
 
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
-> 
-> Add Hans as maintainer and myself as designated reviewer.
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> ---
->  MAINTAINERS | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d92f85ca831d..ffcb00006e14 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5169,6 +5169,12 @@ M:	Torben Mathiasen <device@lanana.org>
->  S:	Maintained
->  W:	http://lanana.org/docs/device-list/index.html
->  
-> +DEVICE RESOURCE MANAGEMENT HELPERS
-> +M:	Hans de Goede <hdegoede@redhat.com>
-> +R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +S:	Maintained
-> +F:	include/linux/devm-helpers.h
-> +
->  DEVICE-MAPPER  (LVM)
->  M:	Alasdair Kergon <agk@redhat.com>
->  M:	Mike Snitzer <snitzer@redhat.com>
-> 
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/fixes
+
+for you to fetch changes up to fbb31cb805fd3574d3be7defc06a7fd2fd9af7d2:
+
+  cpufreq: blacklist Arm Vexpress platforms in cpufreq-dt-platdev (2021-03-08 16:20:07 +0530)
+
+----------------------------------------------------------------
+Shawn Guo (1):
+      cpufreq: qcom-hw: fix dereferencing freed memory 'data'
+
+Sudeep Holla (1):
+      cpufreq: blacklist Arm Vexpress platforms in cpufreq-dt-platdev
+
+Wei Yongjun (1):
+      cpufreq: qcom-hw: Fix return value check in qcom_cpufreq_hw_cpu_init()
+
+ drivers/cpufreq/cpufreq-dt-platdev.c | 2 ++
+ drivers/cpufreq/qcom-cpufreq-hw.c    | 6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+-- 
+viresh
