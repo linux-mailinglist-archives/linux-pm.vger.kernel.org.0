@@ -2,183 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F44A33227F
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 11:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0613E332472
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 12:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbhCIKBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 05:01:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:50756 "EHLO foss.arm.com"
+        id S229544AbhCILvl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 06:51:41 -0500
+Received: from z11.mailgun.us ([104.130.96.11]:25830 "EHLO z11.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229689AbhCIKBr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Mar 2021 05:01:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85BD831B;
-        Tue,  9 Mar 2021 02:01:46 -0800 (PST)
-Received: from [10.57.15.199] (unknown [10.57.15.199])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 79C6A3F71B;
-        Tue,  9 Mar 2021 02:01:45 -0800 (PST)
-Subject: Re: [PATCH 5/5] powercap/drivers/dtpm: Scale the power with the load
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20210301212149.22877-1-daniel.lezcano@linaro.org>
- <20210301212149.22877-5-daniel.lezcano@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <c30701f5-c1f8-cb5c-8791-f4068fb1bc14@arm.com>
-Date:   Tue, 9 Mar 2021 10:01:43 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20210301212149.22877-5-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S229546AbhCILvf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Mar 2021 06:51:35 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1615290695; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=YN9fzJ1SDHQH0Lz+TGW/8aZRxsC+jESqxCAq0M5A/dE=; b=G/Xq8khKI7M/qxsU6yYu+Orp2rCdiUq06D/ca3Avkvgh3xDjRwdZT0Tr3Lnxe1TQe/XXCwHi
+ 5tXW80YlKdAsAwNypD3eUxw4s02aO4uDbWCcYxg84L6dHJgwUJM+MFWoxg+2VWT3bXKyx4K2
+ DrvJwwy/hiK/DKk5FdMHXfh6j2o=
+X-Mailgun-Sending-Ip: 104.130.96.11
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 60476145fcddd4bda6546c93 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 09 Mar 2021 11:51:33
+ GMT
+Sender: okukatla=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6DD1AC433ED; Tue,  9 Mar 2021 11:51:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from okukatla1-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5CF46C433C6;
+        Tue,  9 Mar 2021 11:51:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5CF46C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=okukatla@codeaurora.org
+From:   Odelu Kukatla <okukatla@codeaurora.org>
+To:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
+        evgreen@google.com
+Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        elder@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm-owner@vger.kernel.org,
+        Odelu Kukatla <okukatla@codeaurora.org>
+Subject: [0/3] Add SC7280 interconnect provider driver 
+Date:   Tue,  9 Mar 2021 17:20:06 +0530
+Message-Id: <1615290609-21009-1-git-send-email-okukatla@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Add driver to support scaling of the on-chip interconnects on
+the SC7280-based platforms.
 
-I've started reviewing the series, please find some comments below.
+[1] https://lore.kernel.org/patchwork/cover/1389010/
+The series depends on ^^
 
-On 3/1/21 9:21 PM, Daniel Lezcano wrote:
-> Currently the power consumption is based on the current OPP power
-> assuming the entire performance domain is fully loaded.
-> 
-> That gives very gross power estimation and we can do much better by
-> using the load to scale the power consumption.
-> 
-> Use the utilization to normalize and scale the power usage over the
-> max possible power.
-> 
-> Tested on a rock960 with 2 big CPUS, the power consumption estimation
-> conforms with the expected one.
-> 
-> Before this change:
-> 
-> ~$ ~/dhrystone -t 1 -l 10000&
-> ~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
-> 2260000
-> 
-> After this change:
-> 
-> ~$ ~/dhrystone -t 1 -l 10000&
-> ~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
-> 1130000
-> 
-> ~$ ~/dhrystone -t 2 -l 10000&
-> ~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
-> 2260000
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/powercap/dtpm_cpu.c | 21 +++++++++++++++++----
->   1 file changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-> index e728ebd6d0ca..8379b96468ef 100644
-> --- a/drivers/powercap/dtpm_cpu.c
-> +++ b/drivers/powercap/dtpm_cpu.c
-> @@ -68,27 +68,40 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
->   	return power_limit;
->   }
->   
-> +static u64 scale_pd_power_uw(struct cpumask *cpus, u64 power)
+Odelu Kukatla (3):
+  dt-bindings: interconnect: Add Qualcomm SC7280 DT bindings
+  interconnect: qcom: Add SC7280 interconnect provider driver
+  arm64: dts: sc7280: Add interconnect provider DT nodes
 
-renamed 'cpus' into 'pd_mask', see below
+ .../bindings/interconnect/qcom,rpmh.yaml           |   12 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   88 +
+ drivers/interconnect/qcom/Kconfig                  |    9 +
+ drivers/interconnect/qcom/Makefile                 |    2 +
+ drivers/interconnect/qcom/sc7280.c                 | 1918 ++++++++++++++++++++
+ drivers/interconnect/qcom/sc7280.h                 |  152 ++
+ include/dt-bindings/interconnect/qcom,sc7280.h     |  163 ++
+ 7 files changed, 2344 insertions(+)
+ create mode 100644 drivers/interconnect/qcom/sc7280.c
+ create mode 100644 drivers/interconnect/qcom/sc7280.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sc7280.h
 
-> +{
-> +	unsigned long max, util;
-> +	int cpu, load = 0;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-IMHO 'int load' looks odd when used with 'util' and 'max'.
-I would put in the line above to have them all the same type and
-renamed to 'sum_util'.
-
-> +
-> +	for_each_cpu(cpu, cpus) {
-
-I would avoid the temporary CPU mask in the get_pd_power_uw()
-with this modified loop:
-
-for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
-
-
-> +		max = arch_scale_cpu_capacity(cpu);
-> +		util = sched_cpu_util(cpu, max);
-> +		load += ((util * 100) / max);
-
-Below you can find 3 optimizations. Since we are not in the hot
-path here, it's up to if you would like to use all/some of them
-or just ignore.
-
-1st optimization.
-If we use 'load += (util << 10) / max' in the loop, then
-we could avoid div by 100 and use a right shift:
-(power * load) >> 10
-
-2nd optimization.
-Since we use EM CPU mask, which span all CPUs with the same
-arch_scale_cpu_capacity(), you can avoid N divs inside the loop
-and do it once, below the loop.
-
-3rd optimization.
-If we just simply add all 'util' into 'sum_util' (no mul or div in
-the loop), then we might just have simple macro
-
-#define CALC_POWER_USAGE(power, sum_util, max) \
-	(((power * (sum_util << 10)) / max) >> 10)
-
-
-> +	}
-> +
-> +	return (power * load) / 100;
-> +}
-> +
->   static u64 get_pd_power_uw(struct dtpm *dtpm)
->   {
->   	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
->   	struct em_perf_domain *pd;
->   	struct cpumask cpus;
-
-Since we don't need the 'nr_cpus' we also don't need the
-cpumask which occupy stack; Maybe use
-	struct cpumask *pd_mask;
-
-then
-
->   	unsigned long freq;
-> -	int i, nr_cpus;
-> +	int i;
->   
->   	pd = em_cpu_get(dtpm_cpu->cpu);
->   	freq = cpufreq_quick_get(dtpm_cpu->cpu);
->   
->   	cpumask_and(&cpus, cpu_online_mask, to_cpumask(pd->cpus));
-
-	remove ^^^^^ and set
-	pd_mask = em_span_cpus(pd);
-
-> -	nr_cpus = cpumask_weight(&cpus);
->   
->   	for (i = 0; i < pd->nr_perf_states; i++) {
->   
->   		if (pd->table[i].frequency < freq)
->   			continue;
->   
-> -		return pd->table[i].power *
-> -			MICROWATT_PER_MILLIWATT * nr_cpus;
-> +		return scale_pd_power_uw(&cpus, pd->table[i].power *
-> +					 MICROWATT_PER_MILLIWATT);
-
-Instead of '&cpus' I would put 'pd_mask' and that should do the job.
-
->   	}
->   
->   	return 0;
-> 
-
-Apart from that, the design idea with util looks good.
-
-Regards,
-Lukasz
