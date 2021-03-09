@@ -2,114 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 783F5332525
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 13:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BD83325EA
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 13:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbhCIMPd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 07:15:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:52280 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230435AbhCIMPH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Mar 2021 07:15:07 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C2C21042;
-        Tue,  9 Mar 2021 04:15:06 -0800 (PST)
-Received: from e120325.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A607D3F70D;
-        Tue,  9 Mar 2021 04:15:04 -0800 (PST)
-Date:   Tue, 9 Mar 2021 12:14:56 +0000
-From:   Beata Michalska <beata.michalska@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
-Subject: Re: [PATCH] opp: Invalidate current opp when draining the opp list
-Message-ID: <20210309121455.GA13095@e120325.cambridge.arm.com>
-References: <1614870454-18709-1-git-send-email-beata.michalska@arm.com>
- <20210305042401.gktrgach4dzxp7on@vireshk-i7>
- <418fc3cb-d5ec-9216-269a-e055e78718e5@arm.com>
- <20210308115053.ua2gfo6kfnfjslyd@vireshk-i7>
- <20210308181446.GA26783@e120325.cambridge.arm.com>
- <20210309043121.546mlvl4jmshogor@vireshk-i7>
+        id S231152AbhCIM5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 07:57:30 -0500
+Received: from mail-vs1-f49.google.com ([209.85.217.49]:42570 "EHLO
+        mail-vs1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231149AbhCIM5J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 07:57:09 -0500
+Received: by mail-vs1-f49.google.com with SMTP id v123so6708139vsv.9;
+        Tue, 09 Mar 2021 04:57:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=px5BYZa22n9NMnXf16F73lQRxJVbRAsWmLe25Nhfm2w=;
+        b=LAEc4gqKgaSggUIgWNPTd4rc0heuofE9qEuVFUb9pRI0NUjkK1I/LoffSORyhTG2z5
+         omoK3rZSxKsYJQu31htXwJ+ny551tDPDqiRT285CUqKKkPXtPLlZtlBnQ/rPQqmMV2QR
+         mhw9veos+aVd/c8rxOVd5YETHGfxI6nXwhuURiJdYKzjz9db/BISvvxRrsm5OYX5se/M
+         8lVVOS4Nsf9oKgU13LaEiHlTC3kMhnYvEsYSLnj0HBt/LP3ifvXPqPCara6G7nln4hgy
+         rVWVgB3WNYCMaawlEmo1/Rl7z4VrL5ttFdEHaMsRBg60q/i7M0T8ljQ6LJqJdmejYMNQ
+         xonQ==
+X-Gm-Message-State: AOAM533DqJF53D1UUBs4IyKl3nKIF/c5FLQ7r60fRkESKto11777bLxS
+        3o/N3tlrNFS7WrIjylV2RiEE7bGFR4LCXtS7+C4=
+X-Google-Smtp-Source: ABdhPJziJnda90WhLZPahYsKdMwM7ZR2lhFiK7H4I+V5Wa/keIAzAlTaNY+FaZDfzFzGTLm9KS7gnXVtC+5fVXkyon8=
+X-Received: by 2002:a67:fe90:: with SMTP id b16mr16703554vsr.40.1615294628945;
+ Tue, 09 Mar 2021 04:57:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210309043121.546mlvl4jmshogor@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210127132840.2019595-1-geert+renesas@glider.be> <20210209192041.GA4168680@robh.at.kernel.org>
+In-Reply-To: <20210209192041.GA4168680@robh.at.kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 9 Mar 2021 13:56:57 +0100
+Message-ID: <CAMuHMdW+LKEWiygOb40mGDuLBucyF-xLcBgreA=txivGmjzdig@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] dt-bindings: power: sysc-remobile: Convert to json-schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 09, 2021 at 10:01:21AM +0530, Viresh Kumar wrote:
-> On 08-03-21, 18:14, Beata Michalska wrote:
-> > > -bool _opp_remove_all_static(struct opp_table *opp_table)
-> > > +/*
-> > > + * Can't remove the OPP from under the lock, debugfs removal needs to happen
-> > > + * lock less to avoid circular dependency issues. This must be called without
-> > > + * the opp_table->lock held.
-> > > + */
-> > > +static int _opp_drain_list(struct opp_table *opp_table, bool dynamic)
-> > >  {
-> > > -	struct dev_pm_opp *opp;
-> > > +	struct dev_pm_opp *opp, *current_opp = NULL;
-> > > +	int count = 0;
-> > > +
-> > > +	while ((opp = _opp_get_next(opp_table, dynamic))) {
-> > > +		if (opp_table->current_opp == opp) {
-> > > +			/*
-> > > +			 * Reached at current OPP twice, no other OPPs left. The
-> > > +			 * last reference to current_opp is dropped from
-> > > +			 * _opp_table_kref_release().
-> > > +			 */
-> > > +			if (current_opp)
-> > > +				break;
-> > > +
-> > > +			current_opp = opp;
-> > > +		}
-> > Having a quick look at the code ...
-> > Shouldn't the current_opp be moved at the end of the list ?
-> > Otherwise there is a risk of leaving unreferenced opps (and opp_table).
-> 
-> How exactly ? Note that it is expected that the OPP table isn't being
-> used by anyone anymore at this point and all the users went away.
+Hi Rob,
+
+On Tue, Feb 9, 2021 at 8:20 PM Rob Herring <robh@kernel.org> wrote:
+> On Wed, Jan 27, 2021 at 02:28:40PM +0100, Geert Uytterhoeven wrote:
+> > Convert the Renesas R-Mobile System Controller (SYSC) Device Tree
+> > binding documentation to json-schema.
+> >
+> > Document missing properties.
+> > Drop consumer example, as it does not belong here.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> > Marked RFC, as it does not check deeper levels than the first level of
+> > the "pm-domains" subnode.
+> >
+> > I think the reference in
+> >
+> >     additionalProperties:
+> >       $ref: "#/patternProperties"
+> >
+> > should become "#/patternProperties/0/additionalProperties", but that
+> > gives:
+> >
+> >     Unresolvable JSON pointer: 'patternProperties/0/additionalProperties'
 >
-With the current version, once the _opp_get_next returns opp
-that is the current_opp, the while loop will break, leaving all
-the opps that are on the list after current_opp: _opp_get_next
-is not actually getting the *next* entry from the list. If it
-reaches the current_opp, the _next_ one will still be the same opp
-as it will not be removed from the list at this point
-( _opp_get_next is a simple for_each_entry and until the first entry
-gets removed from the list it will always return the same one).
-If the opp_table->current_opp gets pushed at the end of the list,
-it should be safe to assume that if it gets reached for the second time,
-it's the last one on the list).
+> AFAIK, numbers only work on lists (such as 'allOf' values). So I think
+> you'd want '#/patternProperties/^pm-domains$/additionalProperties'.
+> However, regex's can have illegal characters. I think URI escaping them
+> would work, but that gets too readable and unmaintainable for my tastes.
+> The other way to do this is put the schema under a '$defs'. But in your
+> case, you have just a fixed string, so there's no need for it to be a
+> pattern. Just move it to 'properties'.
 
-The dev_pm_opp_remove_all_dynamic depends on the number of dynamic
-opps removed from the list to drop the according number of references
-on the opp_table. If the count does not correspond to number of calls
-to dev_pm_opp_add, the final refcount on opp_table might not drop to
-the point when the table will actually get released. And if the while
-loop above drops earlier - this might be the case.
+Thank you, I've dropped the patternProperties/regex, and moved the
+section to properties.
 
-Also, I am not sure how probable is the case, but if the current_opp
-has more references that the initial one and one from current_opp,
-it might not get released properly either.
+The result fails with:
 
-Or am I missing smth ?
+    Documentation/devicetree/bindings/power/renesas,sysc-rmobile.example.dt.yaml:
+system-controller@e6180000: pm-domains:c5:a4s@10: missing phandle tag
+in {'reg': [[10]], '#address-cells': [[1]], '#size-cells': [[0]],
+'#power-domain-cells': [[0]], 'a3sp@11': {'reg': [[11]],
+'#power-domain-cells': [[0]]}}
+    From schema:
+Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
+    Documentation/devicetree/bindings/power/renesas,sysc-rmobile.example.dt.yaml:
+system-controller@e6180000: pm-domains:c5:a4su@20: missing phandle tag
+in {'reg': [[20]], '#power-domain-cells': [[0]]}
+    From schema:
+Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
 
-> > Might be also worth adding warning (?)
-> > 
-> >     WARN_ONCE(!list_is_singular())
-> 
-> It is allowed for the list to contain both static and dynamic OPPs,
-> and so the list may have more OPPs here.
-> 
+Looking at Documentation/devicetree/bindings/power/renesas,sysc-rmobile.example.dt.yaml
+there's indeed no "phandle: [[0x1]]" generated, while there is in
+Documentation/devicetree/bindings/power/renesas,rcar-sysc.example.dt.yaml.
 
-True, jumped to the idea too early and the _opp_table_kref_release
-already warns on list not being empty.
+Reading other responses from you, that error means that "phandle-array"
+should be used instead of "phandle".  The only question is where?
 
----
-BR.
-B.
-> -- 
-> viresh
+Thanks again!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
