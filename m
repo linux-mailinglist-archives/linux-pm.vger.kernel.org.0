@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C983331AF
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 23:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA20B3331AD
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 23:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbhCIWnB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 17:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S232187AbhCIWnC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 17:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbhCIWmz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 17:42:55 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C813C06175F
-        for <linux-pm@vger.kernel.org>; Tue,  9 Mar 2021 14:42:55 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id w11so19098186wrr.10
-        for <linux-pm@vger.kernel.org>; Tue, 09 Mar 2021 14:42:55 -0800 (PST)
+        with ESMTP id S230215AbhCIWm4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 17:42:56 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13807C06174A
+        for <linux-pm@vger.kernel.org>; Tue,  9 Mar 2021 14:42:56 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d15so19103647wrv.5
+        for <linux-pm@vger.kernel.org>; Tue, 09 Mar 2021 14:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=84rQ3NvsOhm26IexTySRGDCIz117SxZ//6BzkM58sV8=;
-        b=gMh7U27m742GajfbBTcKF3cghgI5zQOkaYrdSmQpmxb1DaN/msJae1ytHLi5wcuF30
-         7KD/kqkI/lu8DsxU5YW/SXn87MeHBIvqZ0xH7s3sRZ4Fzfe3HAfehoK9zK2dspmijQdQ
-         sX58szXDngr5enfUG8Oj2T2hL69iKT4QJBf0iMBl2chBfpU++5IprhuCdjPjegcnrs0U
-         vQg8hsrwG4AsBa/M/v30kz/U4xHW21q/iFDuGFn8kGr6m/vnuya0ywiO3Pi0i/uamsrE
-         v1pmgpnTA0+bTFD81U+s9n4OYXlmYX8UCoBdmEiH/e0T1oWNrgPSEjoJshu7f935wGp3
-         QB6A==
+        bh=MUZ+0f1MMpnUEJ4a2J6EdFMV+wQUIe9TSPtGUldR/hk=;
+        b=s822vc9+x/Dq+3b8vhn5JB+q6n/TaZFZTgy5tpUU+Ly/AMYvK9PjZDZ+UOucjXSTxG
+         gahynK+1hhzvPDnPurnEUaU4lqdVWA+TpooeaFJptOOvxGHEPs3UqG1hELM/WkndTM3K
+         AlqG9RhLBSUp06dp1/FOYM4b5d8v7IJ9I9tm1fReqgcjofWK3jJq9S9SliQLwtSJAys/
+         m59+G8HYrdD5XFmbpnpQ8ByJV41BNhChGbi/R6nBLP/h/L4QDKf5USrnPjR0UAo8rapD
+         jdYM4Wss+MSFYs4Wbbr87mRQXXzt6aE40AHv8kXxdBCxeeqMqCATuK/fjo2NrPpuQsjt
+         5hjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=84rQ3NvsOhm26IexTySRGDCIz117SxZ//6BzkM58sV8=;
-        b=jjaVQH6gfiz347ku0lrhvIbOQtXNxGrieXUL/6kdbBtKHLKqSu9IUJ4Cag1cNXBBfW
-         FhjV9CoQdF5K3LIWAPAHoJAxxK6+fuEvcpNd5BLj33ZVDC09U8hkMip2x0Yv9FgsFsgJ
-         kpgIRpkqkSesRtpK75yJTFO/DE9wbAz8Uds97P2Q2z5Cqek5r79aU7HQ2TUxpthf+506
-         pLJOhKJMJDk81xb5q2yhIx6H2z80iLKv7sOY4AWTf44hPpoDtecfwLSvLusexdeOnzoK
-         LxFlXArmureyGrd71ebKR2DG5wuD+Nh75VTsAMMgUwd4LLdHs2JnlKJMAlItGIwqGLeE
-         deug==
-X-Gm-Message-State: AOAM531bnka0zcZB311TttdKEAKFRGQwmSmmOpXQQ3DF3a/Ger9dCao5
-        rsJB0pw9jLYq8rLNZdBDPIokEztsruUUmo5p
-X-Google-Smtp-Source: ABdhPJxEZT/VshtHZAD9ASpOR9dzBu1RWF2fD63V1rDfuovWSZhs4849m8H7Fq0E2VxKMVo1xd9G+Q==
-X-Received: by 2002:a05:6000:192:: with SMTP id p18mr107109wrx.403.1615329773814;
-        Tue, 09 Mar 2021 14:42:53 -0800 (PST)
+        bh=MUZ+0f1MMpnUEJ4a2J6EdFMV+wQUIe9TSPtGUldR/hk=;
+        b=Tkdnkq/OVSiTm+bvAt82335RQnPGEZedBF9zhLrT67Mjm6AjvHkqFw+SciueIeGpNJ
+         3o2fREKjhP7aIDNJ39tdd5IGJQit4VKApQ+1DYFiEx9iXyE5fAZFx0Mk1w+1Ah2E6J2s
+         7aubM1uA/hqqEx8hVQFKgdXJ2RLuOs1R7p+Hp/quc6Ol+VZH5tRmE1x010KusMAFC5Q1
+         NXkY2s7QOksnZn2O6TcKkX+ahukXZ1hxqNd3Rtq8dYC7r3fAc6NQFK0V8rY9T0s8kO0k
+         6jInYgGpQ8aVTLFh0S+xmvsvakQppZmH3m8TB7ewN/j4yvF8p8Z6Z0pi/7pK23VekXfu
+         nOZA==
+X-Gm-Message-State: AOAM530NPfkSq3u/OefyIjAjvBeJXJhzWpP82oUmlVYQ+YJ9TqxguHbp
+        kdN0EYcGwUU1LFfyZLK5s1GmRg==
+X-Google-Smtp-Source: ABdhPJzUyV6I1QijS8Ko0ei9rDgjs/1XxzRU35MtbjUtjHeyZrSHnsjlQEaisXWTscLgowYi6RsmRQ==
+X-Received: by 2002:adf:f148:: with SMTP id y8mr128607wro.107.1615329774764;
+        Tue, 09 Mar 2021 14:42:54 -0800 (PST)
 Received: from localhost.localdomain ([82.142.0.212])
-        by smtp.gmail.com with ESMTPSA id p16sm30352179wrt.54.2021.03.09.14.42.52
+        by smtp.gmail.com with ESMTPSA id p16sm30352179wrt.54.2021.03.09.14.42.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Mar 2021 14:42:53 -0800 (PST)
+        Tue, 09 Mar 2021 14:42:54 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         lukasz.luba@arm.com
-Subject: [PATCH v2 2/5] powercap/drivers/dtpm: Create a registering system
-Date:   Tue,  9 Mar 2021 23:42:41 +0100
-Message-Id: <20210309224244.27225-2-daniel.lezcano@linaro.org>
+Subject: [PATCH v2 3/5] powercap/drivers/dtpm: Simplify the dtpm table
+Date:   Tue,  9 Mar 2021 23:42:42 +0100
+Message-Id: <20210309224244.27225-3-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210309224244.27225-1-daniel.lezcano@linaro.org>
 References: <20210309224244.27225-1-daniel.lezcano@linaro.org>
@@ -60,330 +60,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A SoC can be differently structured depending on the platform and the
-kernel can not be aware of all the combinations, as well as the
-specific tweaks for a particular board.
-
-The creation of the hierarchy must be delegated to userspace.
-
-These changes provide a registering mechanism where the different
-subsystems will initialize their dtpm backends and register with a
-name the dtpm node in a list.
-
-The next changes will provide an userspace interface to create
-hierachically the different nodes. Those will be created by name and
-found via the list filled by the different subsystem.
-
-If a specified name is not found in the list, it is assumed to be a
-virtual node which will have children and the default is to allocate
-such node.
-
-When the node register in the list, the function will be dtpm_register
-where the previous semantic was to create the node. Thus, the
-functions are renamed to reflect their purpose.
+The dtpm table is an array of pointers, that forces the user of the
+table to define initdata along with the declaration of the table
+entry. It is more efficient to create an array of dtpm structure, so
+the declaration of the table entry can be done by initializing the
+different fields.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
-
- V2:
-   - Fixed error code path by dropping lock
----
- drivers/powercap/dtpm.c     | 161 ++++++++++++++++++++++++++++++++++--
- drivers/powercap/dtpm_cpu.c |   4 +-
- include/linux/dtpm.h        |  12 ++-
- 3 files changed, 164 insertions(+), 13 deletions(-)
+ drivers/powercap/dtpm.c     |  4 ++--
+ drivers/powercap/dtpm_cpu.c |  4 +++-
+ include/linux/dtpm.h        | 22 +++++++++-------------
+ 3 files changed, 14 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-index 58433b8ef9a1..d00f55f0ee30 100644
+index d00f55f0ee30..74d9603bd42a 100644
 --- a/drivers/powercap/dtpm.c
 +++ b/drivers/powercap/dtpm.c
-@@ -20,6 +20,7 @@
- #include <linux/dtpm.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
-+#include <linux/kref.h>
- #include <linux/powercap.h>
- #include <linux/slab.h>
- #include <linux/mutex.h>
-@@ -34,6 +35,14 @@ static DEFINE_MUTEX(dtpm_lock);
- static struct powercap_control_type *pct;
- static struct dtpm *root;
+@@ -610,7 +610,7 @@ int dtpm_create(const char *name, struct dtpm *dtpm, struct dtpm *parent)
  
-+struct dtpm_node {
-+	const char *name;
-+	struct dtpm *dtpm;
-+	struct list_head node;
-+};
-+
-+static LIST_HEAD(dtpm_list);
-+
- static int get_time_window_us(struct powercap_zone *pcz, int cid, u64 *window)
+ static int __init dtpm_init(void)
  {
- 	return -ENOSYS;
-@@ -152,6 +161,138 @@ static int __dtpm_update_power(struct dtpm *dtpm)
+-	struct dtpm_descr **dtpm_descr;
++	struct dtpm_descr *dtpm_descr;
+ 
+ 	pct = powercap_register_control_type(NULL, "dtpm", NULL);
+ 	if (IS_ERR(pct)) {
+@@ -619,7 +619,7 @@ static int __init dtpm_init(void)
+ 	}
+ 
+ 	for_each_dtpm_table(dtpm_descr)
+-		(*dtpm_descr)->init(*dtpm_descr);
++		dtpm_descr->init();
+ 
+ 	return 0;
+ }
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index 628d4d6d83a6..983f1ca27dc3 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -204,7 +204,7 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
  	return ret;
  }
  
-+static struct dtpm *__dtpm_lookup(const char *name)
-+{
-+	struct dtpm_node *node;
-+
-+	list_for_each_entry(node, &dtpm_list, node) {
-+		if (!strcmp(name, node->name))
-+			return node->dtpm;
-+	}
-+
-+	return NULL;
-+}
-+
-+/**
-+ * dtpm_get - Get a reference to a dtpm structure
-+ * @name: the name of the dtpm device
-+ *
-+ * The function looks up in the list of the registered dtpm
-+ * devices. If the dtpm device is not found, a virtual one is
-+ * allocated. This function must be called to create a dtpm node in
-+ * the powercap hierarchy.
-+ *
-+ * Return: a pointer to a dtpm structure, NULL if there is not enough
-+ * memory
-+ */
-+struct dtpm *dtpm_get(const char *name)
-+{
-+	struct dtpm *dtpm;
-+
-+	mutex_lock(&dtpm_lock);
-+	dtpm = __dtpm_lookup(name);
-+	if (!dtpm)
-+		dtpm = dtpm_alloc(NULL);
-+	else
-+		kref_get(&dtpm->kref);
-+	mutex_unlock(&dtpm_lock);
-+
-+	return dtpm;
-+}
-+
-+static void dtpm_release(struct kref *kref)
-+{
-+	struct dtpm *dtpm = container_of(kref, struct dtpm, kref);
-+
-+	kfree(dtpm);
-+}
-+
-+/**
-+ * dtpm_put - Release a reference on a dtpm device
-+ * @dtpm: a pointer to a dtpm structure
-+ *
-+ * Release the reference on the specified dtpm device. The last
-+ * reference leads to a memory release.
-+ */
-+void dtpm_put(struct dtpm *dtpm)
-+{
-+	kref_put(&dtpm->kref, dtpm_release);
-+}
-+
-+/**
-+ * dtpm_register - Register the dtpm in the dtpm list
-+ * @name: a name used as an identifier
-+ * @dtpm: the dtpm node to be registered
-+ *
-+ * Stores the dtpm device in a list.
-+ *
-+ * Return: 0 on success, -EEXIST if the device name is already present
-+ * in the list, -ENOMEM in case of memory allocation failure.
-+ */
-+int dtpm_register(const char *name, struct dtpm *dtpm)
-+{
-+	struct dtpm_node *node;
-+	int ret;
-+
-+	mutex_lock(&dtpm_lock);
-+
-+	ret = -EEXIST;
-+	if (__dtpm_lookup(name))
-+		goto out_unlock;
-+
-+	ret = -ENOMEM;
-+	node = kzalloc(sizeof(*node), GFP_KERNEL);
-+	if (!node)
-+		goto out_unlock;
-+
-+	node->name = kstrdup(name, GFP_KERNEL);
-+	if (!node->name) {
-+		kfree(node);
-+		goto out_unlock;
-+	}
-+
-+	node->dtpm = dtpm;
-+
-+	list_add(&node->node, &dtpm_list);
-+
-+	pr_info("Registered %s\n", name);
-+
-+	ret = 0;
-+out_unlock:
-+	mutex_unlock(&dtpm_lock);
-+
-+	return ret;
-+}
-+
-+/**
-+ * dtpm_unregister - Remove the dtpm device from the list
-+ * @name: the dtpm device name to be removed
-+ *
-+ * Remove the dtpm device from the list of the registered devices.
-+ */
-+void dtpm_unregister(const char *name)
-+{
-+	struct dtpm_node *node;
-+
-+	mutex_lock(&dtpm_lock);
-+
-+	list_for_each_entry(node, &dtpm_list, node) {
-+
-+		if (strcmp(name, node->name))
-+			continue;
-+
-+		list_del(&node->node);
-+		kfree(node->name);
-+		kfree(node);
-+
-+		pr_info("Unregistered %s\n", name);
-+
-+		break;
-+	}
-+
-+	mutex_unlock(&dtpm_lock);
-+}
-+
- /**
-  * dtpm_update_power - Update the power on the dtpm
-  * @dtpm: a pointer to a dtpm structure to update
-@@ -208,7 +349,7 @@ int dtpm_release_zone(struct powercap_zone *pcz)
- 	if (root == dtpm)
- 		root = NULL;
+-int dtpm_register_cpu(struct dtpm *parent)
++static int __init dtpm_cpu_init(void)
+ {
+ 	int ret;
  
--	kfree(dtpm);
-+	dtpm_put(dtpm);
+@@ -241,3 +241,5 @@ int dtpm_register_cpu(struct dtpm *parent)
  
  	return 0;
  }
-@@ -370,6 +511,7 @@ struct dtpm *dtpm_alloc(struct dtpm_ops *ops)
- 	if (dtpm) {
- 		INIT_LIST_HEAD(&dtpm->children);
- 		INIT_LIST_HEAD(&dtpm->sibling);
-+		kref_init(&dtpm->kref);
- 		dtpm->weight = 1024;
- 		dtpm->ops = ops;
- 	}
-@@ -378,28 +520,29 @@ struct dtpm *dtpm_alloc(struct dtpm_ops *ops)
- }
- 
- /**
-- * dtpm_unregister - Unregister a dtpm node from the hierarchy tree
-- * @dtpm: a pointer to a dtpm structure corresponding to the node to be removed
-+ * dtpm_destroy - Destroy a dtpm node from the hierarchy tree
-+ * @dtpm: a pointer to a dtpm structure corresponding to the node to be
-+ *	  removed and destroyed
-  *
-  * Call the underlying powercap unregister function. That will call
-  * the release callback of the powercap zone.
-  */
--void dtpm_unregister(struct dtpm *dtpm)
-+void dtpm_destroy(struct dtpm *dtpm)
- {
- 	powercap_unregister_zone(pct, &dtpm->zone);
- 
--	pr_info("Unregistered dtpm node '%s'\n", dtpm->zone.name);
-+	pr_info("Destroyed dtpm node '%s'\n", dtpm->zone.name);
- }
- 
- /**
-- * dtpm_register - Register a dtpm node in the hierarchy tree
-+ * dtpm_create - Create a dtpm node in the hierarchy tree
-  * @name: a string specifying the name of the node
-  * @dtpm: a pointer to a dtpm structure corresponding to the new node
-  * @parent: a pointer to a dtpm structure corresponding to the parent node
-  *
-  * Create a dtpm node in the tree. If no parent is specified, the node
-  * is the root node of the hierarchy. If the root node already exists,
-- * then the registration will fail. The powercap controller must be
-+ * then the creation will fail. The powercap controller must be
-  * initialized before calling this function.
-  *
-  * The dtpm structure must be initialized with the power numbers
-@@ -413,7 +556,7 @@ void dtpm_unregister(struct dtpm *dtpm)
-  *           * parent have ops which are reserved for leaves
-  *   Other negative values are reported back from the powercap framework
-  */
--int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
-+int dtpm_create(const char *name, struct dtpm *dtpm, struct dtpm *parent)
- {
- 	struct powercap_zone *pcz;
- 
-@@ -457,7 +600,7 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
- 	if (dtpm->ops && !dtpm->ops->update_power_uw(dtpm))
- 		__dtpm_add_power(dtpm);
- 
--	pr_info("Registered dtpm node '%s' / %llu-%llu uW, \n",
-+	pr_info("Created dtpm node '%s' / %llu-%llu uW, \n",
- 		dtpm->zone.name, dtpm->power_min, dtpm->power_max);
- 
- 	mutex_unlock(&dtpm_lock);
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index cfb120280887..628d4d6d83a6 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -177,7 +177,7 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
- 
- 	sprintf(name, "cpu%d-cpufreq", dtpm_cpu->cpu);
- 
--	ret = dtpm_register(name, dtpm, NULL);
-+	ret = dtpm_register(name, dtpm);
- 	if (ret)
- 		goto out_kfree_dtpm_cpu;
- 
-@@ -190,7 +190,7 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
- 	return 0;
- 
- out_dtpm_unregister:
--	dtpm_unregister(dtpm);
-+	dtpm_unregister(name);
- 	dtpm_cpu = NULL;
- 	dtpm = NULL;
- 
++
++DTPM_DECLARE(dtpm_cpu, dtpm_cpu_init);
 diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
-index acf8d3638988..d724c5a7b2f4 100644
+index d724c5a7b2f4..5f71ddc18ee9 100644
 --- a/include/linux/dtpm.h
 +++ b/include/linux/dtpm.h
-@@ -14,6 +14,7 @@
+@@ -34,25 +34,23 @@ struct dtpm_ops {
+ 	void (*release)(struct dtpm *);
+ };
  
- struct dtpm {
- 	struct powercap_zone zone;
-+	struct kref kref;
- 	struct dtpm *parent;
- 	struct list_head sibling;
- 	struct list_head children;
-@@ -69,10 +70,17 @@ int dtpm_release_zone(struct powercap_zone *pcz);
+-struct dtpm_descr;
+-
+-typedef int (*dtpm_init_t)(struct dtpm_descr *);
++typedef int (*dtpm_init_t)(void);
  
- struct dtpm *dtpm_alloc(struct dtpm_ops *ops);
+ struct dtpm_descr {
+-	struct dtpm *parent;
+-	const char *name;
+ 	dtpm_init_t init;
+ };
  
--void dtpm_unregister(struct dtpm *dtpm);
-+void dtpm_destroy(struct dtpm *dtpm);
+ /* Init section thermal table */
+-extern struct dtpm_descr *__dtpm_table[];
+-extern struct dtpm_descr *__dtpm_table_end[];
++extern struct dtpm_descr __dtpm_table[];
++extern struct dtpm_descr __dtpm_table_end[];
  
--int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent);
-+int dtpm_create(const char *name, struct dtpm *dtpm, struct dtpm *parent);
+-#define DTPM_TABLE_ENTRY(name)			\
+-	static typeof(name) *__dtpm_table_entry_##name	\
+-	__used __section("__dtpm_table") = &name
++#define DTPM_TABLE_ENTRY(name, __init)				\
++	static struct dtpm_descr __dtpm_table_entry_##name	\
++	__used __section("__dtpm_table") = {			\
++		.init = __init,					\
++	}
  
- int dtpm_register_cpu(struct dtpm *parent);
+-#define DTPM_DECLARE(name)	DTPM_TABLE_ENTRY(name)
++#define DTPM_DECLARE(name, init)	DTPM_TABLE_ENTRY(name, init)
  
-+int dtpm_register(const char *name, struct dtpm *dtpm);
-+
-+void dtpm_unregister(const char *name);
-+
-+struct dtpm *dtpm_get(const char *name);
-+
-+void dtpm_put(struct dtpm *dtpm);
- #endif
+ #define for_each_dtpm_table(__dtpm)	\
+ 	for (__dtpm = __dtpm_table;	\
+@@ -74,8 +72,6 @@ void dtpm_destroy(struct dtpm *dtpm);
+ 
+ int dtpm_create(const char *name, struct dtpm *dtpm, struct dtpm *parent);
+ 
+-int dtpm_register_cpu(struct dtpm *parent);
+-
+ int dtpm_register(const char *name, struct dtpm *dtpm);
+ 
+ void dtpm_unregister(const char *name);
 -- 
 2.17.1
 
