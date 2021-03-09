@@ -2,191 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7C6332EEA
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 20:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87022332F88
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 21:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbhCITWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 14:22:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
+        id S231510AbhCIUEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 15:04:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbhCITWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 14:22:30 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24597C06175F
-        for <linux-pm@vger.kernel.org>; Tue,  9 Mar 2021 11:22:30 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id e10so17911256wro.12
-        for <linux-pm@vger.kernel.org>; Tue, 09 Mar 2021 11:22:30 -0800 (PST)
+        with ESMTP id S231326AbhCIUEV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 15:04:21 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A0BC06175F
+        for <linux-pm@vger.kernel.org>; Tue,  9 Mar 2021 12:04:21 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id e23so3488754wmh.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 Mar 2021 12:04:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xECu7j4caESs4qHm6nqJu8LxqKwbnoC/gwB8ugNAdkc=;
-        b=BKKl/bb1yN1pyDH8UWZznH7A8TAOnXuAaC4MDooNgYjaYTG1VFo1AV4DLU3R94Ta+q
-         NAt26bRVkmCqFK/wJ9PDyeiL+mih9X8/U+5G2U7UONOCd5xIs3jcJ32qm4nG1/vqWYsd
-         IiqgijkUbUPP33enyN7Sx/bA29KFzW+Uh1QBgHVczt1mkVDmbK4SPDR29beJcI2Q4K3w
-         JvWvOVPgm5m87BlQF3AkS7n1MLiLrvdoodG9p4StzLa2PVT9VV0kMoRT+rDf65XBJ62L
-         MWWbePM1yRVM8Gh6BPAQvxbtgO0qD184ny0WsN7Ew1hPJbY5EEFw2K6Rdbw46XFpuu1M
-         iqwg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=th+pFGsKV4oACuzSEJwxa21qiSSHxcmfhJ8lnbdpJ3I=;
+        b=IkTZLESOhO3dhEUmEIFDXKWmjDhnOH/2/TsnOofR60AvPlmL995rGCwM18ScprpzuN
+         qKTBL0S5ILbpPgiJbbv8PFswofpDQDdBxW2zy711I3vgqJGADOZKzIwNPYnH1vGQnw7P
+         sGQDPwbJFBcJKbNN6jgmMBZIKTCsX3g8mVbfhii6obFESct2hXyjigZa1bVkLpdDJM9j
+         WmirkBTXoqYMdyYFITgFuuV6x+Gn6gP7sLkShYIjMWK+ESdjIL96Elq1txzvx/ijJ8Wq
+         dPUGEQGg+GMVUsQ3BRoHjHRLXJ1XFLql1kib4mT2G7Sc7rAssM6G3M6bhH1RLTWTIgkh
+         kbCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xECu7j4caESs4qHm6nqJu8LxqKwbnoC/gwB8ugNAdkc=;
-        b=MLVRk0GJhL7WezoJXVN9Xa5xAyVpiVSXrlfDp6mWdmomU7a8qELRvH3jwDm1mUHRwV
-         ZA8pRBsSV5mnwcZhbTSDIiB2iM7MDey4yGqgVUsZGd83j4ds71K0ahwWQGMD8stVgLPb
-         JPz0/zsOAj4rWEvLozvwlEgdTC64R3DqGyBSzbrEGbZgeGEqx+3LHZAqmya/1daUoUJU
-         /QCiwRhs/ONX+9+AESczKNJG5gyq5wCb9NhRsRs6rk40lxMIeKMg4Z4R/L0IE6/JrHXa
-         VChgbaUyexPZ4boSogVqHYyEzHUO/Q5kuc2o3wXGlNnKQP42ksQYJZN5jvLLjWcMXE4N
-         6XVA==
-X-Gm-Message-State: AOAM531tgNSWVd+Z7KrYjPmA9A+ibZvbyFXemPPEMOsGV4vBijNQJbzS
-        2eXTTmfUgb9eAgUSqr9s5sZGXZ7IZGgS6A==
-X-Google-Smtp-Source: ABdhPJz22jW2GRZbrjqfNQQ1FoRiVToCTnO3UqyZ3E6raDvxbIFc+7RE3uDldocx82g6E5b2Qz0s7g==
-X-Received: by 2002:a05:6000:118c:: with SMTP id g12mr30180353wrx.353.1615317748627;
-        Tue, 09 Mar 2021 11:22:28 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8018:efa9:4421:9140? ([2a01:e34:ed2f:f020:8018:efa9:4421:9140])
-        by smtp.googlemail.com with ESMTPSA id n6sm5831025wmd.27.2021.03.09.11.22.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Mar 2021 11:22:28 -0800 (PST)
-Subject: Re: [PATCH 5/5] powercap/drivers/dtpm: Scale the power with the load
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=th+pFGsKV4oACuzSEJwxa21qiSSHxcmfhJ8lnbdpJ3I=;
+        b=OCb9HM8r284bXzq6Ula6x6Aoum710LLKtUv8R2qz/5wwk25k2g/ECTPuU9HligZjBN
+         pkXWW0Z7A0LCHx6sU3tzFg5BHawy7Cnucn/8VMRVnWNfqxNcIaZmC13a3YKyTRWjOiOJ
+         KE1wrErIXbPdtGh77TJZSXieF+6XGmbN/Equbc+G5hcPMRjZYZBpYkjcia85p6kqcIQ1
+         apcUa0KPln3Dr4ExfyM1FFnXKk4zlA3XiVFMlYMPeV+oYCAkGcvkCd5JDTRLH4ucC2Qv
+         wZ+LjZL8AtbRo1wZL3e6mTgNBGMy35mtZntgW/PQe1fin5ClUrSRD/1eddaM49gmhQCx
+         hMAA==
+X-Gm-Message-State: AOAM531EG36AXKcwzb7VcquSK/Mgu80ZsW76zSZPhJEJKgBEOoilO8yp
+        4dArvTCbpLTQY4eLcJfPHgsnBQ==
+X-Google-Smtp-Source: ABdhPJzsA/giZodWpMf/MSCDx29xhRcNuXOsnjxVJqqjtET7bDyrxhp5eAHRqgpo3e5982jWMYZGAA==
+X-Received: by 2002:a05:600c:47d7:: with SMTP id l23mr5900872wmo.155.1615320259949;
+        Tue, 09 Mar 2021 12:04:19 -0800 (PST)
+Received: from dell ([91.110.221.204])
+        by smtp.gmail.com with ESMTPSA id h22sm6008483wmb.36.2021.03.09.12.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Mar 2021 12:04:19 -0800 (PST)
+Date:   Tue, 9 Mar 2021 20:04:17 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         linux-pm@vger.kernel.org
-References: <20210301212149.22877-1-daniel.lezcano@linaro.org>
- <20210301212149.22877-5-daniel.lezcano@linaro.org>
- <c30701f5-c1f8-cb5c-8791-f4068fb1bc14@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c863dad9-66d5-77b1-c1e2-53364dcbc805@linaro.org>
-Date:   Tue, 9 Mar 2021 20:22:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: Re: [GIT PULL] Immutable branch between MFD and Input due for the
+ v5.13 merge window
+Message-ID: <20210309200417.GZ4931@dell>
+References: <cover.1611653995.git.cristian.ciocaltea@gmail.com>
+ <20210309135302.GP4931@dell>
 MIME-Version: 1.0
-In-Reply-To: <c30701f5-c1f8-cb5c-8791-f4068fb1bc14@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210309135302.GP4931@dell>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/03/2021 11:01, Lukasz Luba wrote:
-> Hi Daniel,
-> 
-> I've started reviewing the series, please find some comments below.
-> 
-> On 3/1/21 9:21 PM, Daniel Lezcano wrote:
->> Currently the power consumption is based on the current OPP power
->> assuming the entire performance domain is fully loaded.
->>
->> That gives very gross power estimation and we can do much better by
->> using the load to scale the power consumption.
->>
->> Use the utilization to normalize and scale the power usage over the
->> max possible power.
->>
->> Tested on a rock960 with 2 big CPUS, the power consumption estimation
->> conforms with the expected one.
->>
->> Before this change:
->>
->> ~$ ~/dhrystone -t 1 -l 10000&
->> ~$ cat
->> /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
->>
->> 2260000
->>
->> After this change:
->>
->> ~$ ~/dhrystone -t 1 -l 10000&
->> ~$ cat
->> /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
->>
->> 1130000
->>
->> ~$ ~/dhrystone -t 2 -l 10000&
->> ~$ cat
->> /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
->>
->> 2260000
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/powercap/dtpm_cpu.c | 21 +++++++++++++++++----
->>   1 file changed, 17 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
->> index e728ebd6d0ca..8379b96468ef 100644
->> --- a/drivers/powercap/dtpm_cpu.c
->> +++ b/drivers/powercap/dtpm_cpu.c
->> @@ -68,27 +68,40 @@ static u64 set_pd_power_limit(struct dtpm *dtpm,
->> u64 power_limit)
->>       return power_limit;
->>   }
->>   +static u64 scale_pd_power_uw(struct cpumask *cpus, u64 power)
-> 
-> renamed 'cpus' into 'pd_mask', see below
-> 
->> +{
->> +    unsigned long max, util;
->> +    int cpu, load = 0;
-> 
-> IMHO 'int load' looks odd when used with 'util' and 'max'.
-> I would put in the line above to have them all the same type and
-> renamed to 'sum_util'.
-> 
->> +
->> +    for_each_cpu(cpu, cpus) {
-> 
-> I would avoid the temporary CPU mask in the get_pd_power_uw()
-> with this modified loop:
-> 
-> for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
-> 
-> 
->> +        max = arch_scale_cpu_capacity(cpu);
->> +        util = sched_cpu_util(cpu, max);
->> +        load += ((util * 100) / max);
-> 
-> Below you can find 3 optimizations. Since we are not in the hot
-> path here, it's up to if you would like to use all/some of them
-> or just ignore.
-> 
-> 1st optimization.
-> If we use 'load += (util << 10) / max' in the loop, then
-> we could avoid div by 100 and use a right shift:
-> (power * load) >> 10
-> 
-> 2nd optimization.
-> Since we use EM CPU mask, which span all CPUs with the same
-> arch_scale_cpu_capacity(), you can avoid N divs inside the loop
-> and do it once, below the loop.
-> 
-> 3rd optimization.
-> If we just simply add all 'util' into 'sum_util' (no mul or div in
-> the loop), then we might just have simple macro
-> 
-> #define CALC_POWER_USAGE(power, sum_util, max) \
->     (((power * (sum_util << 10)) / max) >> 10)
+On Tue, 09 Mar 2021, Lee Jones wrote:
 
-static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
-{
-        unsigned long max, sum_max = 0, sum_util = 0;
-        int cpu;
+> Enjoy!
+> 
+> The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
+> 
+>   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-input-v5.13
+> 
+> for you to fetch changes up to b58c808ca46c163c1924ec5d3285e67e9217ec74:
+> 
+>   MAINTAINERS: Add entry for ATC260x PMIC (2021-03-09 13:50:39 +0000)
+> 
+> ----------------------------------------------------------------
+> Immutable branch between MFD and Input due for the v5.13 merge window
+> 
+> ----------------------------------------------------------------
+> Cristian Ciocaltea (4):
+>       dt-bindings: input: Add reset-time-sec common property
+>       dt-bindings: mfd: Add Actions Semi ATC260x PMIC binding
+>       mfd: Add MFD driver for ATC260x PMICs
+>       input: atc260x: Add onkey driver for ATC260x PMICs
+> 
+> Manivannan Sadhasivam (1):
+>       MAINTAINERS: Add entry for ATC260x PMIC
+> 
+>  Documentation/devicetree/bindings/input/input.yaml |   7 +
+>  .../devicetree/bindings/mfd/actions,atc260x.yaml   | 183 ++++++++++++
+>  MAINTAINERS                                        |  12 +
+>  drivers/input/misc/Kconfig                         |  11 +
+>  drivers/input/misc/Makefile                        |   2 +-
+>  drivers/input/misc/atc260x-onkey.c                 | 305 ++++++++++++++++++++
+>  drivers/mfd/Kconfig                                |  18 ++
+>  drivers/mfd/Makefile                               |   3 +
+>  drivers/mfd/atc260x-core.c                         | 310 +++++++++++++++++++++
+>  drivers/mfd/atc260x-i2c.c                          |  64 +++++
+>  include/linux/mfd/atc260x/atc2603c.h               | 281 +++++++++++++++++++
+>  include/linux/mfd/atc260x/atc2609a.h               | 308 ++++++++++++++++++++
+>  include/linux/mfd/atc260x/core.h                   |  58 ++++
+>  13 files changed, 1561 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
+>  create mode 100644 drivers/input/misc/atc260x-onkey.c
+>  create mode 100644 drivers/mfd/atc260x-core.c
+>  create mode 100644 drivers/mfd/atc260x-i2c.c
+>  create mode 100644 include/linux/mfd/atc260x/atc2603c.h
+>  create mode 100644 include/linux/mfd/atc260x/atc2609a.h
+>  create mode 100644 include/linux/mfd/atc260x/core.h
 
-        for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
-                max = arch_scale_cpu_capacity(cpu);
-                sum_util += sched_cpu_util(cpu, max);
-                sum_max += max;
-        }
+FYI, if anyone has pulled this, they should probably rebase it onto
+v5.12-rc2 and delete the v5.12-rc1 tag from their tree:
 
-        return (power * ((sum_util << 10) / sum_max)) >> 10;
-}
-
-??
+ https://lwn.net/Articles/848431/
+  
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
