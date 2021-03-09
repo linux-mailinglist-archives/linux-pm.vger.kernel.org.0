@@ -2,108 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF36332991
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 16:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82ED3329D7
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 16:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbhCIPCt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 10:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbhCIPCY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 10:02:24 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEEEC06174A;
-        Tue,  9 Mar 2021 07:02:24 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id t26so8936301pgv.3;
-        Tue, 09 Mar 2021 07:02:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qwojpGqH1mYXH3RBXLlIpKaJqGztkkGelysn19yz+W0=;
-        b=EpNlX9oomJ4yB0MFbGVhvXl1DA+S3t4PZXeIJQU8mlerXSvvcgzpHtwIbukjxa2UQx
-         dDO6bIWHpMTp2IpiiMY1PkskPhpXuy9mf4rL2l5uwMlEIqHio8xK2bl029hGFRAhUH6H
-         HVASmZ70p784VtF9/mKd2MYE1+SvRWAFRmKuEiiJKrNvpYFowJCef8eYAbuV1xeH9Ak9
-         bb2NRss/9NClkVMixLvBCjO9ZBu6HuCnN455Wr9vAIem4MlVN/xQFzAxL9a09IMkYzml
-         QLrOoBvUnWpPQtbFLhA7nvhhL3F41sAuhfSLJSQlL6CLZnWnpfJUnS4pRD9IDBYAk7ss
-         j4cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qwojpGqH1mYXH3RBXLlIpKaJqGztkkGelysn19yz+W0=;
-        b=RjJZoI4rn+agbWvyZPuSsL66lqwg6m8B1XE1hrDm1yPFUF2YLi96qt6DTxJI15jEEa
-         162l5xcSdH8SV34uwFQu6JCS4y9v/RVi4pkL1XpquRAKZxMumV1UeW+g9xCv3lNbZ4rs
-         ifQN5JMcszCbwoj1O9YvYYtHkiGHePLdpLPo0wbwrLfB4T3rhAJTS0XYArLPSNc4phY5
-         Z42kRtNU49l/wx/G4io3//VWShHxxjcWjmuTSwh66s1HOuTznWx96HlRhbtpuwIUBgAv
-         GOpAeVFafm97DUPKIXyc5IeTsWxvovjcsWOAb7xKwSwaXWrJk1WSegFj7nAE13Yjv550
-         RVhg==
-X-Gm-Message-State: AOAM532Tvl2hE0JtXf1Bl/CVODvfA9A2ZPtz4hTDtsiPh48rTnTc4kLz
-        qhL3mdG0d9t9h1ZUWi90mko=
-X-Google-Smtp-Source: ABdhPJwZal/julGImampUwynUA0bXzGBPfS1KJrWbKivC0UAyI4Pw9jUORQ0DdW1IT8xanUghezcnA==
-X-Received: by 2002:a63:b60b:: with SMTP id j11mr16786499pgf.19.1615302143537;
-        Tue, 09 Mar 2021 07:02:23 -0800 (PST)
-Received: from [172.30.1.19] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id g72sm6304139pfb.189.2021.03.09.07.02.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Mar 2021 07:02:22 -0800 (PST)
-Subject: Re: [PATCH 02/11] PM / devfreq: remove the invalid description for
- get_target_freq
-To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     dongas86@gmail.com, kernel@pengutronix.de, shawnguo@kernel.org,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, abel.vesa@nxp.com
-References: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
- <1615294733-22761-3-git-send-email-aisheng.dong@nxp.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Message-ID: <c5f27c46-f1a0-cd19-3bec-3dd8800b2cae@gmail.com>
-Date:   Wed, 10 Mar 2021 00:02:18 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S230081AbhCIPKv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 10:10:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:55034 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231816AbhCIPKU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Mar 2021 10:10:20 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6C2C1042;
+        Tue,  9 Mar 2021 07:10:19 -0800 (PST)
+Received: from localhost (unknown [10.1.195.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 753833F71B;
+        Tue,  9 Mar 2021 07:10:19 -0800 (PST)
+Date:   Tue, 9 Mar 2021 15:10:17 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V5 2/2] cpufreq: CPPC: Add support for frequency
+ invariance
+Message-ID: <20210309151017.GA25243@arm.com>
+References: <cover.1614580695.git.viresh.kumar@linaro.org>
+ <f72383d451710fc4bc36e7e3015deba40fbe28f3.1614580695.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <1615294733-22761-3-git-send-email-aisheng.dong@nxp.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f72383d451710fc4bc36e7e3015deba40fbe28f3.1614580695.git.viresh.kumar@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21. 3. 9. 오후 9:58, Dong Aisheng wrote:
-> First of all, no_central_polling was removed since
-> commit 7e6fdd4bad03 ("PM / devfreq: Core updates to support devices
-> which can idle")
-> Secondly, get_target_freq() is not only called only with update_devfreq()
-> notified by OPP now, but also min/max freq qos notifier.
+Hey,
+
+On Monday 01 Mar 2021 at 12:21:18 (+0530), Viresh Kumar wrote:
+> The Frequency Invariance Engine (FIE) is providing a frequency scaling
+> correction factor that helps achieve more accurate load-tracking.
 > 
-> So remove this invalid description now to avoid confusing.
+> Normally, this scaling factor can be obtained directly with the help of
+> the cpufreq drivers as they know the exact frequency the hardware is
+> running at. But that isn't the case for CPPC cpufreq driver.
 > 
-> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Another way of obtaining that is using the arch specific counter
+> support, which is already present in kernel, but that hardware is
+> optional for platforms.
+> 
+> This patch updates the CPPC driver to register itself with the topology
+> core to provide its own implementation (cppc_scale_freq_tick()) of
+> topology_scale_freq_tick() which gets called by the scheduler on every
+> tick. Note that the arch specific counters have higher priority than
+> CPPC counters, if available, though the CPPC driver doesn't need to have
+> any special handling for that.
+> 
+> On an invocation of cppc_scale_freq_tick(), we schedule an irq work
+> (since we reach here from hard-irq context), which then schedules a
+> normal work item and cppc_scale_freq_workfn() updates the per_cpu
+> freq_scale variable based on the counter updates since the last tick.
+> 
+> To allow platforms to disable frequency invariance support if they want,
+                               ^
+			       this CPPC counter-based frequency invariance
+			       support..
+
+(disabling this config will not disable cpufreq or arch counter-based FIE)
+
+> this is all done under CONFIG_ACPI_CPPC_CPUFREQ_FIE, which is enabled by
+> default.
+> 
+> This also exports sched_setattr_nocheck() as the CPPC driver can be
+> built as a module.
+> 
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: linux-acpi@vger.kernel.org
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->   drivers/devfreq/governor.h | 2 --
->   1 file changed, 2 deletions(-)
+>  drivers/cpufreq/Kconfig.arm    |   9 ++
+>  drivers/cpufreq/cppc_cpufreq.c | 244 +++++++++++++++++++++++++++++++--
+>  include/linux/arch_topology.h  |   1 +
+>  kernel/sched/core.c            |   1 +
+>  4 files changed, 243 insertions(+), 12 deletions(-)
 > 
-> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-> index 70f44b3ca42e..5cee3f64fe2b 100644
-> --- a/drivers/devfreq/governor.h
-> +++ b/drivers/devfreq/governor.h
-> @@ -57,8 +57,6 @@
->    *			Basically, get_target_freq will run
->    *			devfreq_dev_profile.get_dev_status() to get the
->    *			status of the device (load = busy_time / total_time).
-> - *			If no_central_polling is set, this callback is called
-> - *			only with update_devfreq() notified by OPP.
->    * @event_handler:      Callback for devfreq core framework to notify events
->    *                      to governors. Events include per device governor
->    *                      init and exit, opp changes out of devfreq, suspend
-> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index e65e0a43be64..a3e2d6dfea70 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -19,6 +19,15 @@ config ACPI_CPPC_CPUFREQ
+>  
+>  	  If in doubt, say N.
+>  
+> +config ACPI_CPPC_CPUFREQ_FIE
+> +	bool "Frequency Invariance support for CPPC cpufreq driver"
+> +	depends on ACPI_CPPC_CPUFREQ
 
-As I replied from patch1, I recommend that squash it with patch1.
+It also depends on GENERIC_ARCH_TOPOLOGY.
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+> +	default y
+> +	help
+> +	  This enables frequency invariance support for CPPC cpufreq driver.
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^
+						    s//based on CPPC counters.
+
+.. or more detailed: This extends frequency invariance support in the
+CPPC cpufreq driver, by using CPPC delivered and reference performance
+counters.
+
+> +
+> +	  If in doubt, say N.
+> +
+>  config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+>  	tristate "Allwinner nvmem based SUN50I CPUFreq driver"
+>  	depends on ARCH_SUNXI
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 8a482c434ea6..c4580a37a1b1 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+[..]
+> +static void cppc_freq_invariance_policy_init(struct cpufreq_policy *policy,
+> +					     struct cppc_cpudata *cpu_data)
+> +{
+> +	struct cppc_freq_invariance *cppc_fi;
+> +	int i;
+> +
+> +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +		return;
+> +
+> +	for_each_cpu(i, policy->cpus) {
+> +		cppc_fi = &per_cpu(cppc_freq_inv, i);
+> +		cppc_fi->cpu = i;
+> +		cppc_fi->cpu_data = cpu_data;
+> +		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+> +		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+> +	}
+> +}
+> +
+> +static void cppc_freq_invariance_exit(void)
+> +{
+> +	struct cppc_freq_invariance *cppc_fi;
+> +	int i;
+> +
+> +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +		return;
+> +
+> +	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, cpu_present_mask);
+> +
+> +	for_each_possible_cpu(i) {
+> +		cppc_fi = &per_cpu(cppc_freq_inv, i);
+> +		irq_work_sync(&cppc_fi->irq_work);
+> +	}
+> +
+> +	kthread_destroy_worker(kworker_fie);
+> +	kworker_fie = NULL;
+> +}
+> +
+> +static void __init cppc_freq_invariance_init(void)
+> +{
+> +	struct cppc_perf_fb_ctrs fb_ctrs = {0};
+> +	struct cppc_freq_invariance *cppc_fi;
+> +	struct sched_attr attr = {
+> +		.size		= sizeof(struct sched_attr),
+> +		.sched_policy	= SCHED_DEADLINE,
+> +		.sched_nice	= 0,
+> +		.sched_priority	= 0,
+> +		/*
+> +		 * Fake (unused) bandwidth; workaround to "fix"
+> +		 * priority inheritance.
+> +		 */
+> +		.sched_runtime	= 1000000,
+> +		.sched_deadline = 10000000,
+> +		.sched_period	= 10000000,
+> +	};
+> +	int i, ret;
+> +
+> +	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +		return;
+> +
+> +	kworker_fie = kthread_create_worker(0, "cppc_fie");
+> +	if (IS_ERR(kworker_fie))
+> +		return;
+> +
+> +	ret = sched_setattr_nocheck(kworker_fie->task, &attr);
+> +	if (ret) {
+> +		pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
+> +			ret);
+> +		kthread_destroy_worker(kworker_fie);
+> +		return;
+> +	}
+> +
+
+Nit: to me it makes more sense to move the code below to 
+cppc_freq_invariance_policy_init(). It seems a bit strange to do part of
+the initialization of the per-cpu information there, and part here. But
+I do understand the reasons for it. Moving the code below would also
+save some cycles going through the CPUs again and will mimic the
+frequency invariance setup process in the arm64 topology, where we do
+amu_fie_setup() at policy creation time.
+
+It's not a big deal so I'll leave it up to you.
+
+> +	for_each_possible_cpu(i) {
+> +		cppc_fi = &per_cpu(cppc_freq_inv, i);
+> +
+> +		/* A policy failed to initialize, abort */
+> +		if (unlikely(!cppc_fi->cpu_data))
+> +			return cppc_freq_invariance_exit();
+> +
+> +		ret = cppc_get_perf_ctrs(i, &fb_ctrs);
+> +		if (ret) {
+> +			pr_warn("%s: failed to read perf counters: %d\n",
+> +				__func__, ret);
+> +			return cppc_freq_invariance_exit();
+> +		}
+> +
+> +		cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
+> +	}
+> +
+> +	/* Register for freq-invariance */
+> +	topology_set_scale_freq_source(&cppc_sftd, cpu_present_mask);
+> +}
+
+After another very quick round of testing:
+
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+
+I did not get the chance to test on ThunderX2 yet, but if you are happy
+with your testing on it, I won't delay this any further.
+
+Thanks,
+Ionela.
