@@ -2,65 +2,279 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 622CF332A16
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 16:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEFF332A89
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 16:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbhCIPRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 10:17:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:55184 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231829AbhCIPRk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Mar 2021 10:17:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB8B71042;
-        Tue,  9 Mar 2021 07:17:39 -0800 (PST)
-Received: from [10.57.15.199] (unknown [10.57.15.199])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 037AC3F71B;
-        Tue,  9 Mar 2021 07:17:38 -0800 (PST)
-Subject: Re: [PATCH 4/5] powercap/drivers/dtpm: Use container_of instead of a
- private data field
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20210301212149.22877-1-daniel.lezcano@linaro.org>
- <20210301212149.22877-4-daniel.lezcano@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <654792e7-f0ca-73b4-2a68-721bcffc8ff0@arm.com>
-Date:   Tue, 9 Mar 2021 15:17:37 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S230450AbhCIPd1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 10:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231286AbhCIPdR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 10:33:17 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA2EC061760
+        for <linux-pm@vger.kernel.org>; Tue,  9 Mar 2021 07:33:16 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id q14so21194370ljp.4
+        for <linux-pm@vger.kernel.org>; Tue, 09 Mar 2021 07:33:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GueXWEXYhGgyYi6RS/iDIZfnWgS+3C26tBBCX7qsJZ4=;
+        b=z2Y+Gz1eD/yQaUstRQIfbWCXO4frrvNYGP64q9xoN7I+ftNHuKnfMiLaKKarVDldsr
+         ksiKhYOs+YQAIA+o7mJ4jo8GQ3ExfzIIg2l7auI14Eo1bTAYTdD8FGTDlse27T9hpgW3
+         r/uDAZb2mUztArRDC42qzZCFznzG2qD7HORJhDjB32RqT475lwOXdMqJAf6RQDx6slQh
+         jF2KVKvMvHjcCDxtchWOYHF6SPUQRp9HFC/x5N2COkqY82uIt8oSXChvNwZVL0LOR+hj
+         dt2Vh8cub/3nTsv9Oi29tgWHzrWg6vLoopEEaa/DlvzR6vGCJst059Ye6a8RFS9Zyn1i
+         /J5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GueXWEXYhGgyYi6RS/iDIZfnWgS+3C26tBBCX7qsJZ4=;
+        b=Kw9z/UId0jBpbzhl0H36VJb2ax096NYcG6CJ8ssaCBlHPFFV/GrtNVxis0XfabfEW5
+         d/DsAn3EzttZ5kJRppKSkzsw2CRQm3+3irmYLwU2f+EPXSH8wc270J4ofZzdppUdgp/d
+         6RYxRqGyZ/bK/GwS7L4lFFOkvHOorNqdeE9aBtRyy1icM3+V9Mth8oJl64REr6lpapwR
+         EBTxB2VU57DPpKpeUUzpC+2ZtWgVdER4bUiXMYBUk1YWMKwL3C1GTVhTRU6NuQrnOpJ/
+         YlQQ66Ls9IJq9MRmpu0tbon6hfr3LT59rJh18VIy4AR4gHp0lppmPo7gg81kGAivOfrf
+         h2lg==
+X-Gm-Message-State: AOAM532b9N4kRF3D0cCaFqVPo6NT08KrSs07/GaHrinLWfOFoYIzZJZy
+        R/UbPXE6vz43Zjh9HxzJQNgXG5+H2yFolpi0wQC9ZQ==
+X-Google-Smtp-Source: ABdhPJwdiYjJdqBFXdRtFhpC8nmjCUSyb8p3FKa6ytdypXh//VwloAzsouYK1AjcyrQSDABBs6/mkeh/pmupWOxegwo=
+X-Received: by 2002:a05:651c:124b:: with SMTP id h11mr17357819ljh.401.1615303994941;
+ Tue, 09 Mar 2021 07:33:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210301212149.22877-4-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1614580695.git.viresh.kumar@linaro.org> <f72383d451710fc4bc36e7e3015deba40fbe28f3.1614580695.git.viresh.kumar@linaro.org>
+ <20210309151017.GA25243@arm.com>
+In-Reply-To: <20210309151017.GA25243@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 9 Mar 2021 16:33:03 +0100
+Message-ID: <CAKfTPtBQ2Y249LMQOep5HdfmkOQknP0jom=6RpDOFv_TajZLWQ@mail.gmail.com>
+Subject: Re: [PATCH V5 2/2] cpufreq: CPPC: Add support for frequency invariance
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 9 Mar 2021 at 16:10, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+>
+> Hey,
+>
+> On Monday 01 Mar 2021 at 12:21:18 (+0530), Viresh Kumar wrote:
+> > The Frequency Invariance Engine (FIE) is providing a frequency scaling
+> > correction factor that helps achieve more accurate load-tracking.
+> >
+> > Normally, this scaling factor can be obtained directly with the help of
+> > the cpufreq drivers as they know the exact frequency the hardware is
+> > running at. But that isn't the case for CPPC cpufreq driver.
+> >
+> > Another way of obtaining that is using the arch specific counter
+> > support, which is already present in kernel, but that hardware is
+> > optional for platforms.
+> >
+> > This patch updates the CPPC driver to register itself with the topology
+> > core to provide its own implementation (cppc_scale_freq_tick()) of
+> > topology_scale_freq_tick() which gets called by the scheduler on every
+> > tick. Note that the arch specific counters have higher priority than
+> > CPPC counters, if available, though the CPPC driver doesn't need to have
+> > any special handling for that.
+> >
+> > On an invocation of cppc_scale_freq_tick(), we schedule an irq work
+> > (since we reach here from hard-irq context), which then schedules a
+> > normal work item and cppc_scale_freq_workfn() updates the per_cpu
+> > freq_scale variable based on the counter updates since the last tick.
+> >
+> > To allow platforms to disable frequency invariance support if they want,
+>                                ^
+>                                this CPPC counter-based frequency invariance
+>                                support..
+>
+> (disabling this config will not disable cpufreq or arch counter-based FIE)
+>
+> > this is all done under CONFIG_ACPI_CPPC_CPUFREQ_FIE, which is enabled by
+> > default.
+> >
+> > This also exports sched_setattr_nocheck() as the CPPC driver can be
+> > built as a module.
+> >
+> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > Cc: linux-acpi@vger.kernel.org
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > ---
+> >  drivers/cpufreq/Kconfig.arm    |   9 ++
+> >  drivers/cpufreq/cppc_cpufreq.c | 244 +++++++++++++++++++++++++++++++--
+> >  include/linux/arch_topology.h  |   1 +
+> >  kernel/sched/core.c            |   1 +
+> >  4 files changed, 243 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> > index e65e0a43be64..a3e2d6dfea70 100644
+> > --- a/drivers/cpufreq/Kconfig.arm
+> > +++ b/drivers/cpufreq/Kconfig.arm
+> > @@ -19,6 +19,15 @@ config ACPI_CPPC_CPUFREQ
+> >
+> >         If in doubt, say N.
+> >
+> > +config ACPI_CPPC_CPUFREQ_FIE
+> > +     bool "Frequency Invariance support for CPPC cpufreq driver"
+> > +     depends on ACPI_CPPC_CPUFREQ
+>
+> It also depends on GENERIC_ARCH_TOPOLOGY.
+>
+> > +     default y
+> > +     help
+> > +       This enables frequency invariance support for CPPC cpufreq driver.
+>                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                     s//based on CPPC counters.
+>
+> .. or more detailed: This extends frequency invariance support in the
+> CPPC cpufreq driver, by using CPPC delivered and reference performance
+> counters.
+>
+> > +
+> > +       If in doubt, say N.
+> > +
+> >  config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+> >       tristate "Allwinner nvmem based SUN50I CPUFreq driver"
+> >       depends on ARCH_SUNXI
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > index 8a482c434ea6..c4580a37a1b1 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> [..]
+> > +static void cppc_freq_invariance_policy_init(struct cpufreq_policy *policy,
+> > +                                          struct cppc_cpudata *cpu_data)
+> > +{
+> > +     struct cppc_freq_invariance *cppc_fi;
+> > +     int i;
+> > +
+> > +     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +             return;
+> > +
+> > +     for_each_cpu(i, policy->cpus) {
+> > +             cppc_fi = &per_cpu(cppc_freq_inv, i);
+> > +             cppc_fi->cpu = i;
+> > +             cppc_fi->cpu_data = cpu_data;
+> > +             kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+> > +             init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+> > +     }
+> > +}
+> > +
+> > +static void cppc_freq_invariance_exit(void)
+> > +{
+> > +     struct cppc_freq_invariance *cppc_fi;
+> > +     int i;
+> > +
+> > +     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +             return;
+> > +
+> > +     topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, cpu_present_mask);
+> > +
+> > +     for_each_possible_cpu(i) {
+> > +             cppc_fi = &per_cpu(cppc_freq_inv, i);
+> > +             irq_work_sync(&cppc_fi->irq_work);
+> > +     }
+> > +
+> > +     kthread_destroy_worker(kworker_fie);
+> > +     kworker_fie = NULL;
+> > +}
+> > +
+> > +static void __init cppc_freq_invariance_init(void)
+> > +{
+> > +     struct cppc_perf_fb_ctrs fb_ctrs = {0};
+> > +     struct cppc_freq_invariance *cppc_fi;
+> > +     struct sched_attr attr = {
+> > +             .size           = sizeof(struct sched_attr),
+> > +             .sched_policy   = SCHED_DEADLINE,
+> > +             .sched_nice     = 0,
+> > +             .sched_priority = 0,
+> > +             /*
+> > +              * Fake (unused) bandwidth; workaround to "fix"
+> > +              * priority inheritance.
+> > +              */
+> > +             .sched_runtime  = 1000000,
+> > +             .sched_deadline = 10000000,
+> > +             .sched_period   = 10000000,
+> > +     };
+> > +     int i, ret;
+> > +
+> > +     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +             return;
+> > +
+> > +     kworker_fie = kthread_create_worker(0, "cppc_fie");
+> > +     if (IS_ERR(kworker_fie))
+> > +             return;
+> > +
+> > +     ret = sched_setattr_nocheck(kworker_fie->task, &attr);
+> > +     if (ret) {
+> > +             pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
+> > +                     ret);
+> > +             kthread_destroy_worker(kworker_fie);
+> > +             return;
+> > +     }
+> > +
+>
+> Nit: to me it makes more sense to move the code below to
+> cppc_freq_invariance_policy_init(). It seems a bit strange to do part of
+> the initialization of the per-cpu information there, and part here. But
+> I do understand the reasons for it. Moving the code below would also
+> save some cycles going through the CPUs again and will mimic the
+> frequency invariance setup process in the arm64 topology, where we do
+> amu_fie_setup() at policy creation time.
+>
+> It's not a big deal so I'll leave it up to you.
+>
+> > +     for_each_possible_cpu(i) {
+> > +             cppc_fi = &per_cpu(cppc_freq_inv, i);
+> > +
+> > +             /* A policy failed to initialize, abort */
+> > +             if (unlikely(!cppc_fi->cpu_data))
+> > +                     return cppc_freq_invariance_exit();
+> > +
+> > +             ret = cppc_get_perf_ctrs(i, &fb_ctrs);
+> > +             if (ret) {
+> > +                     pr_warn("%s: failed to read perf counters: %d\n",
+> > +                             __func__, ret);
+> > +                     return cppc_freq_invariance_exit();
+> > +             }
+> > +
+> > +             cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
+> > +     }
+> > +
+> > +     /* Register for freq-invariance */
+> > +     topology_set_scale_freq_source(&cppc_sftd, cpu_present_mask);
+> > +}
+>
+> After another very quick round of testing:
+>
+> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+>
+> I did not get the chance to test on ThunderX2 yet, but if you are happy
+> with your testing on it, I won't delay this any further.
+
+I have just run some functional  tests on thx2 with rt-app: I have run
+a periodic task (6ms running / 30ms periods) at different frequencies
+(2.5Ghz, 2Ghz, 1.5Ghz, 1.333Ghz, 1Ghz) and the PELT signals stays the
+same for all frequencies.
+
+Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
 
 
-On 3/1/21 9:21 PM, Daniel Lezcano wrote:
-> The dtpm framework provides an API to allocate a dtpm node. However
-> when a backend dtpm driver needs to allocate a dtpm node it must
-> define its own structure and store the pointer of this structure in
-> the private field of the dtpm structure.
-> 
-> It is more elegant to use the container_of macro and add the dtpm
-> structure inside the dtpm backend specific structure. The code will be
-> able to deal properly with the dtpm structure as a generic entity,
-> making all this even more self-encapsulated.
-> 
-> The dtpm_alloc() function does no longer make sense as the dtpm
-> structure will be allocated when allocating the device specific dtpm
-> structure. The dtpm_init() is provided instead.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/powercap/dtpm.c     | 27 ++++++++++------------
->   drivers/powercap/dtpm_cpu.c | 46 ++++++++++++++++++-------------------
->   include/linux/dtpm.h        |  3 +--
->   3 files changed, 35 insertions(+), 41 deletions(-)
-> 
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>
+> Thanks,
+> Ionela.
