@@ -2,158 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1493320E0
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 09:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD5B3321CC
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 10:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhCIIid (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 03:38:33 -0500
-Received: from mga02.intel.com ([134.134.136.20]:24748 "EHLO mga02.intel.com"
+        id S229527AbhCIJT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 04:19:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229520AbhCIIiC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Mar 2021 03:38:02 -0500
-IronPort-SDR: uwTUI6eqZhZINoxtZgwc5s39vwXxSJPoOc0VSkHDOI70/7c7ZeS0D4BX8wscUtI1dcaR9353On
- C1w9sDyCelRw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9917"; a="175295072"
-X-IronPort-AV: E=Sophos;i="5.81,234,1610438400"; 
-   d="scan'208";a="175295072"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2021 00:38:01 -0800
-IronPort-SDR: Mktqe4iOBYndJiX+r2p31MNzVaHz5PciBJOkKLAMFW/S6lrSZxu4SihCZqVEKRJos974FU7wVb
- ACycz8pG3jfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,234,1610438400"; 
-   d="scan'208";a="599227663"
-Received: from lkp-server01.sh.intel.com (HELO 3e992a48ca98) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Mar 2021 00:37:59 -0800
-Received: from kbuild by 3e992a48ca98 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lJXsN-0001UB-BM; Tue, 09 Mar 2021 08:37:59 +0000
-Date:   Tue, 09 Mar 2021 16:36:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 4612c104e41532886aeae80f37d15e14fdad6cbf
-Message-ID: <604733ab.66tA4ShyV6xeUbpG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229948AbhCIJTG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Mar 2021 04:19:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 24BBB6522E;
+        Tue,  9 Mar 2021 09:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615281546;
+        bh=iX5Ic4F1TQ9OsADSxd3DzW3ka+qK+zltIfosLa1xPnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KWXvM8qnjXRUrFChgfgfN8wrAg2Zw7mugk8o9/AZ6IM+OHZ2oZcY/0M8HhvLIxGvq
+         KRB6N0igFA3GEUaU02gMZTAl6wApANR6GSU4d2B0k4/wq9iuYQiFYy6CNckjCp3vVB
+         7bSEI+S9y7vbZkBpkQqUVl5uMUpR2yaIyI3/jnIsm0yWGIMPw7HN4jMehiFIbI2qU5
+         df0vWg1qG89M36dTl33cX6hHZwRAT2g3pdUF1pqlDB3UNApreiu4RU2L8Yl4KiHWKT
+         eo+JcoxU9vwVMkpscPY67n9xt6Y+Lwju0e0DKayD0gZKJq9p1voN6UqafKPKv2HDJf
+         autnRGTGsHx5A==
+Date:   Tue, 9 Mar 2021 09:19:00 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V5 1/2] topology: Allow multiple entities to provide
+ sched_freq_tick() callback
+Message-ID: <20210309091900.GA27747@willie-the-truck>
+References: <cover.1614580695.git.viresh.kumar@linaro.org>
+ <a34f549bc75eecd4804aebb7b7794b45769eccf0.1614580695.git.viresh.kumar@linaro.org>
+ <20210308145209.GA26458@willie-the-truck>
+ <20210309041643.tcyv6rpto4k3sv5v@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210309041643.tcyv6rpto4k3sv5v@vireshk-i7>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 4612c104e41532886aeae80f37d15e14fdad6cbf  Merge branch 'acpi-messages' into bleeding-edge
+On Tue, Mar 09, 2021 at 09:46:43AM +0530, Viresh Kumar wrote:
+> On 08-03-21, 14:52, Will Deacon wrote:
+> > On Mon, Mar 01, 2021 at 12:21:17PM +0530, Viresh Kumar wrote:
+> > > +EXPORT_SYMBOL_GPL(topology_set_scale_freq_source);
+> > 
+> > I don't get why you need to export this in this patch. The arm64 topology
+> > code is never built as a module.
+> > 
+> > > +EXPORT_SYMBOL_GPL(topology_clear_scale_freq_source);
+> > 
+> > Same here.
+> > 
+> > > +EXPORT_SYMBOL_GPL(freq_scale);
+> > 
+> > And here.
+> 
+> After this patch, any part of the kernel can use these
+> helpers/variables to run their own implementation of tick-freq-scale
+> and so this patch looked to be the right place for that to me.
+> 
+> And the second patch in the series updates the CPPC cpufreq driver
+> (tristate) to use these exported symbols, so we have the first user
+> who needs the exported symbols as well.
 
-elapsed time: 723m
+Ok, then how about putting the exports in their own patch that immediately
+precedes the patch which uses them? I think that would make it much clearer.
 
-configs tested: 95
-configs skipped: 2
+> > This one probably wants a less generic name as well if it's going
+> > to be exported.
+> 
+> x86 names it arch_freq_scale, perhaps we should stick to that instead.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Sounds like a improvement, thanks.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                        workpad_defconfig
-sh                           se7724_defconfig
-mips                         bigsur_defconfig
-mips                          ath25_defconfig
-m68k                           sun3_defconfig
-sh                         ap325rxa_defconfig
-m68k                       m5208evb_defconfig
-powerpc                       ppc64_defconfig
-riscv             nommu_k210_sdcard_defconfig
-mips                           ci20_defconfig
-sh                          rsk7201_defconfig
-powerpc                     tqm8541_defconfig
-powerpc                     pq2fads_defconfig
-arm                           stm32_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                      pcm030_defconfig
-um                           x86_64_defconfig
-mips                       rbtx49xx_defconfig
-arm                      integrator_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210308
-i386                 randconfig-a003-20210308
-i386                 randconfig-a002-20210308
-i386                 randconfig-a006-20210308
-i386                 randconfig-a004-20210308
-i386                 randconfig-a001-20210308
-i386                 randconfig-a016-20210308
-i386                 randconfig-a012-20210308
-i386                 randconfig-a014-20210308
-i386                 randconfig-a013-20210308
-i386                 randconfig-a011-20210308
-i386                 randconfig-a015-20210308
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20210309
-x86_64               randconfig-a001-20210309
-x86_64               randconfig-a004-20210309
-x86_64               randconfig-a002-20210309
-x86_64               randconfig-a005-20210309
-x86_64               randconfig-a003-20210309
-x86_64               randconfig-a013-20210308
-x86_64               randconfig-a016-20210308
-x86_64               randconfig-a015-20210308
-x86_64               randconfig-a014-20210308
-x86_64               randconfig-a011-20210308
-x86_64               randconfig-a012-20210308
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Will
