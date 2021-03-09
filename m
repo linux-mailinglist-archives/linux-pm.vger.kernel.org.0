@@ -2,117 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4824E331D4E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 04:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DB8331DD3
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 05:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbhCIDG0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Mar 2021 22:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S229797AbhCIERW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Mar 2021 23:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbhCIDGJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 22:06:09 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D70C06174A
-        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 19:05:54 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id w34so6727625pga.8
-        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 19:05:54 -0800 (PST)
+        with ESMTP id S229701AbhCIEQq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Mar 2021 23:16:46 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF610C06174A
+        for <linux-pm@vger.kernel.org>; Mon,  8 Mar 2021 20:16:46 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id x29so7891041pgk.6
+        for <linux-pm@vger.kernel.org>; Mon, 08 Mar 2021 20:16:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=cm7nJAHrCq0btANObGTQxjDGJufMVgvUTCdeM5dQd5Q=;
-        b=zsasfP/Edkt9z1xg3Bz1EqUjJ0S1iCpHYp29hsetZUeWADkV4fryPCuWtzS27xF2RU
-         0BPO3nxtUQENEISsAEggs4aBeJi6CjzALat/jtcwXr/mIczCQAKm+PQq8dV7buku/fkw
-         i/NouXjIhnKBTGRkVb+PHjG4l8orcBNdpCPtIU0epRxlLGkQevcwW5DOohTNIEUZM3Am
-         lR2eKQ1E02c9wyQC3/iFWGHrknyJCSHZR/rZUG9fzNOAu20cvo3XK2oAWfsUSlBQ57Kt
-         wUHaLWqclwsJHgZd8kNSSTZM6+mI+K138CvSwFbGvB9SUjmNN7abKWfrazyPaEwjCjnv
-         Uqnw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OOzXeoaDPDG4o7C6QAmsob4sFXF0PCvgXzZVS0klYx0=;
+        b=VkTs3X6JDzLp04bSLBCOaODP8wcxa6dTq9kp8PLjDNTn2k/wKlA8YDK7QIUb+gAxUw
+         eIQZuiHknEQKeUyy36vzovwOLSUIuGrCnwITT8IJ1t55doh6c6wgr5RUH8puDFSGVP8V
+         gy8tZ1hbaEhrExEsXy9cSK6yNBh+79lsX/Iexzilbh2cLtzfyVUi2NvCRRz1s034Tzct
+         Nr2IkssxTMW7qd9DCY/ANZkwFAPkQZrFeXNc0K5wLFPe6uN1h48RaCeQ+KieVcEq07U9
+         Khqqf5WZ/rxW8mNHilHP8Ojsom/4bvR/uJfHZZCN809av8gbgjGEk7vCTHomH27BT+zM
+         L/Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=cm7nJAHrCq0btANObGTQxjDGJufMVgvUTCdeM5dQd5Q=;
-        b=p7IlATgVaVGianp+LMfUJcUy7yRVyCAcsLTDhWFq1FbGygZfkzStH9HDj/Qf0bNaox
-         B8ApbVe47B988K2UlnIlccsXhaztZVfEAyvKwHr29cl+M2HLNcdAZw1rHdYnnXWKX8QJ
-         N8a5ZixXq1oeKfWVeuZjEKJeB10ohWkUD6s0a/0gurfEn67e6Xj3I7bGYw7OY5Zhlxei
-         UqShRYCwV2FkrDvB+bgPLSxjTEiw5T+dVYeH1YEcpalv28RF2jC3LrPx17Ij49YpSUaI
-         CfNfAaamwGTG+RWZuerGy/2+q0o3tnGAoMMup9FucUuHHI6/zWz2Bfmzz9Nq5Blo6PYh
-         7dYQ==
-X-Gm-Message-State: AOAM531l2FW+ece3so9ieRhZyRMZpGSSeN1vBy6NepTNj2BcBrxKDrSt
-        zdPIUMCHQaIcZpyh+K0059HshUbmpWlzHL52
-X-Google-Smtp-Source: ABdhPJxxmJ6MtQ7/66NJnuyKctsxOlYInBoONENBo2QSwjkgCmzEqo4QOno+HuQc426w76mPDTOgAQ==
-X-Received: by 2002:a63:fd0a:: with SMTP id d10mr22852319pgh.345.1615259153646;
-        Mon, 08 Mar 2021 19:05:53 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t5sm10646212pgl.89.2021.03.08.19.05.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 19:05:53 -0800 (PST)
-Message-ID: <6046e611.1c69fb81.23441.b1e0@mx.google.com>
-Date:   Mon, 08 Mar 2021 19:05:53 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OOzXeoaDPDG4o7C6QAmsob4sFXF0PCvgXzZVS0klYx0=;
+        b=BJSIcOcIZR3iUsWBJtOKz3T9OuTF2WAvHanZgGVEAxvgbU9FZfuwrjROz3zjBRI2zQ
+         XuOpEzBVwi/W2VQdxzVIeaFpB00eRJ0/lQuZI7nPJXHqcMhh/+79QXQXTL6fjuBg3/eV
+         AxlkN2o+oC5gNqgDCjJZDa7bMFDeYcDcPSpkG9RAzDCbpQa8j8Z6gzLvq3HthnSwZA5d
+         VbC+Rs1GJKVXQcpYAwrdQ95k0ug3xG0klxPtPJgcB6kcaySYWRu+gJ8iLdAZUsZR5cD3
+         oMSxEDiY1jAsRi8oAiuTkywjpPl1BfzLNMhr4XL2oUw4VbfQYp13NoYA6pmeJHMMcrAt
+         LC0w==
+X-Gm-Message-State: AOAM532v9lY15ZBX/CEibfL129cAL1ZDBWtIbOhk1cgaMEioN2ITKkxo
+        1m9cl4qF/hVpGPTKSp/SuRJd/Q==
+X-Google-Smtp-Source: ABdhPJxlnCGX2ecU6fCM4SKglrm857xKd9/sHAb+MjRrm2nf7HrUVkpgeXZh0ZbsNdK2qBqheigI5A==
+X-Received: by 2002:a63:1813:: with SMTP id y19mr15956854pgl.317.1615263406257;
+        Mon, 08 Mar 2021 20:16:46 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id l19sm864473pjt.16.2021.03.08.20.16.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Mar 2021 20:16:45 -0800 (PST)
+Date:   Tue, 9 Mar 2021 09:46:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V5 1/2] topology: Allow multiple entities to provide
+ sched_freq_tick() callback
+Message-ID: <20210309041643.tcyv6rpto4k3sv5v@vireshk-i7>
+References: <cover.1614580695.git.viresh.kumar@linaro.org>
+ <a34f549bc75eecd4804aebb7b7794b45769eccf0.1614580695.git.viresh.kumar@linaro.org>
+ <20210308145209.GA26458@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.12-rc2-18-gf15befeb2bc3
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 1 runs, 1 regressions (v5.12-rc2-18-gf15befeb2bc3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308145209.GA26458@willie-the-truck>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 1 runs, 1 regressions (v5.12-rc2-18-gf15befeb2bc3)
+On 08-03-21, 14:52, Will Deacon wrote:
+> On Mon, Mar 01, 2021 at 12:21:17PM +0530, Viresh Kumar wrote:
+> > +EXPORT_SYMBOL_GPL(topology_set_scale_freq_source);
+> 
+> I don't get why you need to export this in this patch. The arm64 topology
+> code is never built as a module.
+> 
+> > +EXPORT_SYMBOL_GPL(topology_clear_scale_freq_source);
+> 
+> Same here.
+> 
+> > +EXPORT_SYMBOL_GPL(freq_scale);
+> 
+> And here.
 
-Regressions Summary
--------------------
+After this patch, any part of the kernel can use these
+helpers/variables to run their own implementation of tick-freq-scale
+and so this patch looked to be the right place for that to me.
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+And the second patch in the series updates the CPPC cpufreq driver
+(tristate) to use these exported symbols, so we have the first user
+who needs the exported symbols as well.
 
+> This one probably wants a less generic name as well if it's going
+> to be exported.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.12-rc=
-2-18-gf15befeb2bc3/plan/sleep/
+x86 names it arch_freq_scale, perhaps we should stick to that instead.
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.12-rc2-18-gf15befeb2bc3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      f15befeb2bc3590b212cdec60241a25b78450bc4 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6046dbd5fda799b706addcc8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.12-rc2-18-gf15be=
-feb2bc3/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.12-rc2-18-gf15be=
-feb2bc3/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0301.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/6046dbd5fda799b706addcc9
-        failing since 201 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+-- 
+viresh
