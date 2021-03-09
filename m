@@ -2,68 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AABC332C1A
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 17:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DF2332DD0
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 19:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbhCIQax (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 11:30:53 -0500
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:15597 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230075AbhCIQat (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 11:30:49 -0500
-X-Halon-ID: f2346468-80f3-11eb-a542-005056917a89
-Authorized-sender: niklas.soderlund@fsdn.se
-Received: from bismarck.berto.se (p54ac5521.dip0.t-ipconnect.de [84.172.85.33])
-        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id f2346468-80f3-11eb-a542-005056917a89;
-        Tue, 09 Mar 2021 17:24:45 +0100 (CET)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH] thermal: rcar_gen3_thermal: Add support for up to five TSC nodes
-Date:   Tue,  9 Mar 2021 17:24:19 +0100
-Message-Id: <20210309162419.2621359-1-niklas.soderlund+renesas@ragnatech.se>
+        id S231776AbhCISEm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 13:04:42 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35232 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231718AbhCISEQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 13:04:16 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id F346F1F457FB
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id AB63F4800C3; Tue,  9 Mar 2021 19:04:12 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH 0/7] Cleanup SBS power-supply drivers
+Date:   Tue,  9 Mar 2021 19:04:00 +0100
+Message-Id: <20210309180407.650943-1-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for up to five TSC nodes. The new THCODE values are taken
-from the example in the datasheet.
+Hi,
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/thermal/rcar_gen3_thermal.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This is a collection of cleanups for the SBS battery/charger/manager.
+The series does three things:
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 75c69fe6e9553f25..e1e412348076b2ff 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -60,7 +60,7 @@
- #define MCELSIUS(temp)	((temp) * 1000)
- #define GEN3_FUSE_MASK	0xFFF
- 
--#define TSC_MAX_NUM	4
-+#define TSC_MAX_NUM	5
- 
- /* default THCODE values if FUSEs are missing */
- static const int thcodes[TSC_MAX_NUM][3] = {
-@@ -68,6 +68,7 @@ static const int thcodes[TSC_MAX_NUM][3] = {
- 	{ 3393, 2795, 2216 },
- 	{ 3389, 2805, 2237 },
- 	{ 3415, 2694, 2195 },
-+	{ 3356, 2724, 2244 },
- };
- 
- /* Structure for thermal temperature calculation */
+1. remove legacy gpio usage (only headers needed updates)
+2. simple code cleanups
+3. remove probe defer message logging
+
+To provide some more data for the last point: The following messages
+appeared on a SBS battery using system if the battery driver is probed
+before the charger at default loglevel and will be degraded to debug
+level:
+
+[    0.348325] power_supply sbs-0-000b: Not all required supplies found, defer probe
+[    0.348337] sbs-battery 0-000b: sbs_probe: Failed to register power supply
+[    0.588072] power_supply sbs-0-000b: sbs-0-000b: Found supply : battery-charger
+
+-- Sebastian
+
+Sebastian Reichel (7):
+  power: supply: sbs-battery: use dev_err_probe
+  power: supply: sbs-charger: use dev_err_probe
+  power: supply: sbs-charger: drop unused gpio includes
+  power: supply: sbs-manager: use managed i2c_mux_adapter
+  power: supply: sbs-manager: use dev_err_probe
+  power: supply: sbs-manager: update gpio include
+  power: supply: core: reduce loglevel for probe defer info
+
+ drivers/power/supply/power_supply_core.c |  4 +-
+ drivers/power/supply/sbs-battery.c       | 28 +++------
+ drivers/power/supply/sbs-charger.c       | 24 +++-----
+ drivers/power/supply/sbs-manager.c       | 78 +++++++++---------------
+ 4 files changed, 47 insertions(+), 87 deletions(-)
+
 -- 
 2.30.1
 
