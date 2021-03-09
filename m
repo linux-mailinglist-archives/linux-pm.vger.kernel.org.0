@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3BA33264C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 14:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A09633264A
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Mar 2021 14:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbhCINNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 08:13:00 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:47308 "EHLO inva020.nxp.com"
+        id S231325AbhCINNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 08:13:01 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:47444 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230492AbhCINMr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Mar 2021 08:12:47 -0500
+        id S230495AbhCINMt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Mar 2021 08:12:49 -0500
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id AFAAD1A101A;
-        Tue,  9 Mar 2021 14:12:46 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3179F1A09B2;
+        Tue,  9 Mar 2021 14:12:48 +0100 (CET)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 875E41A1009;
-        Tue,  9 Mar 2021 14:12:40 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0DC4C1A1010;
+        Tue,  9 Mar 2021 14:12:42 +0100 (CET)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 1BED9402EB;
-        Tue,  9 Mar 2021 14:12:33 +0100 (CET)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 758354031D;
+        Tue,  9 Mar 2021 14:12:34 +0100 (CET)
 From:   Dong Aisheng <aisheng.dong@nxp.com>
 To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     dongas86@gmail.com, kernel@pengutronix.de, shawnguo@kernel.org,
@@ -27,9 +27,9 @@ Cc:     dongas86@gmail.com, kernel@pengutronix.de, shawnguo@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, abel.vesa@nxp.com,
         Dong Aisheng <aisheng.dong@nxp.com>
-Subject: [PATCH 07/11] PM / devfreq: check get_dev_status before start monitor
-Date:   Tue,  9 Mar 2021 20:58:49 +0800
-Message-Id: <1615294733-22761-20-git-send-email-aisheng.dong@nxp.com>
+Subject: [PATCH 08/11] PM / devfreq: check get_dev_status in devfreq_update_stats
+Date:   Tue,  9 Mar 2021 20:58:50 +0800
+Message-Id: <1615294733-22761-21-git-send-email-aisheng.dong@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
 References: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
@@ -38,81 +38,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The devfreq monitor depends on the device to provide load information
-by .get_dev_status() to calculate the next target freq.
-
-And this will cause changing governor to simple ondemand fail
-if device can't support.
+Check .get_dev_status() in devfreq_update_stats in case it's abused
+when a device does not provide it.
 
 Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 ---
- drivers/devfreq/devfreq.c                 | 10 +++++++---
- drivers/devfreq/governor.h                |  2 +-
- drivers/devfreq/governor_simpleondemand.c |  3 +--
- 3 files changed, 9 insertions(+), 6 deletions(-)
+ drivers/devfreq/governor.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 7231fe6862a2..d1787b6c7d7c 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -482,10 +482,13 @@ static void devfreq_monitor(struct work_struct *work)
-  * to be called from governor in response to DEVFREQ_GOV_START
-  * event when device is added to devfreq framework.
-  */
--void devfreq_monitor_start(struct devfreq *devfreq)
-+int devfreq_monitor_start(struct devfreq *devfreq)
- {
- 	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
--		return;
-+		return 0;
-+
-+	if (!devfreq->profile->get_dev_status)
-+		return -EINVAL;
- 
- 	switch (devfreq->profile->timer) {
- 	case DEVFREQ_TIMER_DEFERRABLE:
-@@ -495,12 +498,13 @@ void devfreq_monitor_start(struct devfreq *devfreq)
- 		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
- 		break;
- 	default:
--		return;
-+		return -EINVAL;
- 	}
- 
- 	if (devfreq->profile->polling_ms)
- 		queue_delayed_work(devfreq_wq, &devfreq->work,
- 			msecs_to_jiffies(devfreq->profile->polling_ms));
-+	return 0;
- }
- EXPORT_SYMBOL(devfreq_monitor_start);
- 
 diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-index 5cee3f64fe2b..31af6d072a10 100644
+index 31af6d072a10..67a6dbdd5d23 100644
 --- a/drivers/devfreq/governor.h
 +++ b/drivers/devfreq/governor.h
-@@ -75,7 +75,7 @@ struct devfreq_governor {
- 				unsigned int event, void *data);
- };
+@@ -89,6 +89,9 @@ int devfreq_update_target(struct devfreq *devfreq, unsigned long freq);
  
--void devfreq_monitor_start(struct devfreq *devfreq);
-+int devfreq_monitor_start(struct devfreq *devfreq);
- void devfreq_monitor_stop(struct devfreq *devfreq);
- void devfreq_monitor_suspend(struct devfreq *devfreq);
- void devfreq_monitor_resume(struct devfreq *devfreq);
-diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-index d57b82a2b570..ea287b57cbf3 100644
---- a/drivers/devfreq/governor_simpleondemand.c
-+++ b/drivers/devfreq/governor_simpleondemand.c
-@@ -89,8 +89,7 @@ static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
+ static inline int devfreq_update_stats(struct devfreq *df)
  {
- 	switch (event) {
- 	case DEVFREQ_GOV_START:
--		devfreq_monitor_start(devfreq);
--		break;
-+		return devfreq_monitor_start(devfreq);
- 
- 	case DEVFREQ_GOV_STOP:
- 		devfreq_monitor_stop(devfreq);
++	if (!df->profile->get_dev_status)
++		return -EINVAL;
++
+ 	return df->profile->get_dev_status(df->dev.parent, &df->last_status);
+ }
+ #endif /* _GOVERNOR_H */
 -- 
 2.25.1
 
