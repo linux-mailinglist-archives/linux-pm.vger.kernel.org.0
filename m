@@ -2,177 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4975333AEE
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 12:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E537E333B10
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 12:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbhCJLCt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Mar 2021 06:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbhCJLCW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 06:02:22 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9795C061761
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 03:02:21 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id r10-20020a05600c35cab029010c946c95easo10420155wmq.4
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 03:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=v0a0P82FBqcJYMtTstBhU6OwDjxrI0ymrdgmVRwXE98=;
-        b=oSnESTuRrlSPD8vl748DcLdzGj6QpSScfFvSqW6pyUMeI5jXG4tMVHSYvKVBkuawlj
-         89UFnoMMkfLlf/vEwqmA+mMYghOq0Ji1bIzA7UXBRv+0/QvToOGMHyCtN1NDriEssZeb
-         U6RR95/XVyJ45HFSSjbAmamJU067SJx8F0YaOnWdiyyGdyUWGMYq/s8bpAkFgobt9Lri
-         MOViG6bwNvLYa8c1WMuPVu5Ha0sWIYyBvNtFSNLNBOkB1lJOfgUDNU7Ur5hhUdLRJKFD
-         ozrdV3mVMYFCB/pKfRnR2DTQkn2gBVIU9WOihIMwdBQ4t5bCIVpM7cbU61S7UcCtk8sI
-         vAFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=v0a0P82FBqcJYMtTstBhU6OwDjxrI0ymrdgmVRwXE98=;
-        b=SWPgfW0rVp0OVhisZ2tJLjkhF4cTfRdCV0WzvWngmo1tda48WoS4cfH++NC3+vS0VV
-         M8AnA0I/QDoqQqPskcmtXrje9vNlhluV4RxFbIYHNqFFoQvSjMoJUUmS7EEkQpahvtz8
-         heKwIhxNMIU9o0inqNZfs0FOngMd6Vge1ElC3txLB9OofHq0fvc8Pdn3iMILoQ8F7OzF
-         1lIUatw8FJ3AFoexRaQiIWoH84GG9RWaVVGmd55PnryU1JQmOhVlDFbO5ysNr/PPUHqW
-         jY3WI+44UAnVqak2x1NqblAodw+YbsAUL/lJpEZ268TUyrpkbXhLzBNHQy9YXVcUPsXj
-         YeCQ==
-X-Gm-Message-State: AOAM531ZNhR95oMsg1uSzwFHnSJcrmVf/jqGW6JhWHvfLYjQUhA6sbYF
-        uBZ5oM1GDttmxqt1xUA8buFXEw==
-X-Google-Smtp-Source: ABdhPJwumqdTQGcNS35dpB48M2Ryxk3bSaitVmd1n77FnIWGtJm8StbZCAcL5y/CjpbykEqdIpO2+g==
-X-Received: by 2002:a05:600c:2945:: with SMTP id n5mr2801524wmd.78.1615374140239;
-        Wed, 10 Mar 2021 03:02:20 -0800 (PST)
-Received: from localhost.localdomain ([82.142.0.212])
-        by smtp.gmail.com with ESMTPSA id k4sm36193902wrd.9.2021.03.10.03.02.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 03:02:19 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com
-Subject: [PATCH v3 5/5] powercap/drivers/dtpm: Scale the power with the load
-Date:   Wed, 10 Mar 2021 12:02:12 +0100
-Message-Id: <20210310110212.26512-5-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210310110212.26512-1-daniel.lezcano@linaro.org>
-References: <20210310110212.26512-1-daniel.lezcano@linaro.org>
+        id S230483AbhCJLIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Mar 2021 06:08:44 -0500
+Received: from vsp-unauthed02.binero.net ([195.74.38.227]:32907 "EHLO
+        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232613AbhCJLIQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 06:08:16 -0500
+X-Halon-ID: e06a4c7c-8190-11eb-b73f-0050569116f7
+Authorized-sender: niklas.soderlund@fsdn.se
+Received: from bismarck.berto.se (p54ac5521.dip0.t-ipconnect.de [84.172.85.33])
+        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
+        id e06a4c7c-8190-11eb-b73f-0050569116f7;
+        Wed, 10 Mar 2021 12:08:15 +0100 (CET)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2] dt-bindings: thermal: rcar-gen3-thermal: Support five TSC nodes on r8a779a0
+Date:   Wed, 10 Mar 2021 12:07:16 +0100
+Message-Id: <20210310110716.3297544-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.30.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the power consumption is based on the current OPP power
-assuming the entire performance domain is fully loaded.
+When adding support for V3U (r8a779a0) it was incorrectly recorded it
+supports four nodes, while in fact it supports five. The fifth node is
+named TSC0 and breaks the existing naming schema starting at 1. Work
+around this by separately defining the reg property for V3U and others.
 
-That gives very gross power estimation and we can do much better by
-using the load to scale the power consumption.
+Restore the maximum number of nodes to three for other compatibles as
+it was before erroneously increasing it for V3U.
 
-Use the utilization to normalize and scale the power usage over the
-max possible power.
-
-Tested on a rock960 with 2 big CPUS, the power consumption estimation
-conforms with the expected one.
-
-Before this change:
-
-~$ ~/dhrystone -t 1 -l 10000&
-~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
-2260000
-
-After this change:
-
-~$ ~/dhrystone -t 1 -l 10000&
-~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
-1130000
-
-~$ ~/dhrystone -t 2 -l 10000&
-~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
-2260000
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Fixes: d7fdfb6541f3be88 ("dt-bindings: thermal: rcar-gen3-thermal: Add r8a779a0 support")
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
-
-V3:
-  - Fixed uninitialized 'cpu' in scaled_power_uw()
-V2:
-  - Replaced cpumask by em_span_cpus
-  - Changed 'util' metrics variable types
-  - Optimized utilization scaling power computation
-  - Renamed parameter name for scale_pd_power_uw()
+* Changes since v1
+- The register layout for V3U is larger then for other SoCs, fix the
+  example to reflect this. Thanks Geert for spotting this!
+- Fix a bad copy-past in the register list in the example.
 ---
- drivers/powercap/dtpm_cpu.c | 46 +++++++++++++++++++++++++++++++------
- 1 file changed, 39 insertions(+), 7 deletions(-)
+ .../bindings/thermal/rcar-gen3-thermal.yaml   | 43 +++++++++++++++----
+ 1 file changed, 35 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index ac7f2e7e262f..47854923d958 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -68,27 +68,59 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
- 	return power_limit;
- }
+diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+index b33a76eeac4e4fed..f963204e0b162746 100644
+--- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+@@ -28,14 +28,7 @@ properties:
+       - renesas,r8a77980-thermal # R-Car V3H
+       - renesas,r8a779a0-thermal # R-Car V3U
  
-+static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
-+{
-+	unsigned long max = 0, sum_util = 0;
-+	int cpu;
+-  reg:
+-    minItems: 2
+-    maxItems: 4
+-    items:
+-      - description: TSC1 registers
+-      - description: TSC2 registers
+-      - description: TSC3 registers
+-      - description: TSC4 registers
++  reg: true
+ 
+   interrupts:
+     items:
+@@ -71,8 +64,25 @@ if:
+           enum:
+             - renesas,r8a779a0-thermal
+ then:
++  properties:
++    reg:
++      minItems: 2
++      maxItems: 3
++      items:
++        - description: TSC1 registers
++        - description: TSC2 registers
++        - description: TSC3 registers
+   required:
+     - interrupts
++else:
++  properties:
++    reg:
++      items:
++        - description: TSC0 registers
++        - description: TSC1 registers
++        - description: TSC2 registers
++        - description: TSC3 registers
++        - description: TSC4 registers
+ 
+ additionalProperties: false
+ 
+@@ -111,3 +121,20 @@ examples:
+                     };
+             };
+     };
++  - |
++    #include <dt-bindings/clock/r8a779a0-cpg-mssr.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/r8a779a0-sysc.h>
 +
-+	for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
-+
-+		/*
-+		 * The capacity is the same for all CPUs belonging to
-+		 * the same perf domain, so a single call to
-+		 * arch_scale_cpu_capacity() is enough. However, we
-+		 * need the CPU parameter to be initialized by the
-+		 * loop, so the call ends up in this block.
-+		 *
-+		 * We can initialize 'max' with a cpumask_first() call
-+		 * before the loop but the bits computation is not
-+		 * worth given the arch_scale_cpu_capacity() just
-+		 * returns a value where the resulting assembly code
-+		 * will be optimized by the compiler.
-+		 */
-+		max = arch_scale_cpu_capacity(cpu);
-+		sum_util += sched_cpu_util(cpu, max);
-+	}
-+
-+	/*
-+	 * In the improbable case where all the CPUs of the perf
-+	 * domain are offline, 'max' will be zero and will lead to an
-+	 * illegal operation with a zero division.
-+	 */
-+	return max ? (power * ((sum_util << 10) / max)) >> 10 : 0;
-+}
-+
- static u64 get_pd_power_uw(struct dtpm *dtpm)
- {
- 	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
- 	struct em_perf_domain *pd;
--	struct cpumask cpus;
-+	struct cpumask *pd_mask;
- 	unsigned long freq;
--	int i, nr_cpus;
-+	int i;
- 
- 	pd = em_cpu_get(dtpm_cpu->cpu);
--	freq = cpufreq_quick_get(dtpm_cpu->cpu);
- 
--	cpumask_and(&cpus, cpu_online_mask, to_cpumask(pd->cpus));
--	nr_cpus = cpumask_weight(&cpus);
-+	pd_mask = em_span_cpus(pd);
-+
-+	freq = cpufreq_quick_get(dtpm_cpu->cpu);
- 
- 	for (i = 0; i < pd->nr_perf_states; i++) {
- 
- 		if (pd->table[i].frequency < freq)
- 			continue;
- 
--		return pd->table[i].power *
--			MICROWATT_PER_MILLIWATT * nr_cpus;
-+		return scale_pd_power_uw(pd_mask, pd->table[i].power *
-+					 MICROWATT_PER_MILLIWATT);
- 	}
- 
- 	return 0;
++    tsc_r8a779a0: thermal@e6190000 {
++            compatible = "renesas,r8a779a0-thermal";
++            reg = <0xe6190000 0x200>,
++                  <0xe6198000 0x200>,
++                  <0xe61a0000 0x200>,
++                  <0xe61a8000 0x200>,
++                  <0xe61b0000 0x200>;
++            clocks = <&cpg CPG_MOD 919>;
++            power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
++            resets = <&cpg 919>;
++            #thermal-sensor-cells = <1>;
++    };
 -- 
-2.17.1
+2.30.1
 
