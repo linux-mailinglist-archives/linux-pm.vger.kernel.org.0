@@ -2,483 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6963334DF
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 06:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D098D3337C5
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 09:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbhCJFYH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Mar 2021 00:24:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S230453AbhCJIsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Mar 2021 03:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhCJFXx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 00:23:53 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C58CC06174A
-        for <linux-pm@vger.kernel.org>; Tue,  9 Mar 2021 21:23:53 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id g4so10616821pgj.0
-        for <linux-pm@vger.kernel.org>; Tue, 09 Mar 2021 21:23:53 -0800 (PST)
+        with ESMTP id S232356AbhCJIrm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 03:47:42 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB97C061760
+        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 00:47:41 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id u18so8116488plc.12
+        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 00:47:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MkVUxgwyPS3aEheKZYSBvapF/1MfUHgnW/8MUkfzrCE=;
-        b=o41+CqQkG9FctEKF9oKuahffqzu9TZE/9oxqYUhxniwB3TFnsWlD9AQQAOgDadbjE/
-         eQZJhsx7IoMJqbME2V37BWBoV7gF43PFep+bRFmABnnBkCIpHb7IJpXs0eTRHBnXagAG
-         HBc+oRWTxoLQdQn8B33suXFnLTjy1RUIcsrQlMlK9wYIYlzUC8kfg03uts5cYWPaEfjg
-         7kCJTipkfATqVXd73RDiQHb40sInsdBNngusbPHQVHhE/XoW+BSsdfAD8EBrqlXJN/RO
-         iZvw/q73G9npqraJ/yPgCNKTA0N6xum30lHoXe99mDVQL4A5MbW+kNYWV6N8Ba11Y+hE
-         5EqQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=IGrZBeaXF+HMjO/q86rB/lGHV4vmErBKjQ6gCEkLtJg=;
+        b=LiqddgMQU/ytIi87DsBUbe2czSBzJqyVO8mWfBcvKZcpV3AYXJYNzwIT2dgEpdUKb+
+         lTzfaPzKBKdiaPDCbnAtR+qhnpncnI3YH0lt/2tNzbd1ISnAZG/hvZLuS4TwpFkIWU88
+         UODjQpl2mVWPz7hTOBSl++o/TTlcnHzSJ3twXfm56y1ZeHU2xVw8iGrae2/S70qGVRKK
+         a6VIIg3XvVSHZQx38lqofxQiP6JBFLJ2HpvE1fGc6JGWgMNQ/DLW4WWhL5lQIoAIgLHG
+         od9Q6+EKg2Hx08Vgpo8ZlRxx2f1F7QLflQeAmAC6zSBUn2GG2ioJtsMZO6hwQxMEPy32
+         WZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MkVUxgwyPS3aEheKZYSBvapF/1MfUHgnW/8MUkfzrCE=;
-        b=Q6ag1pbe5WZKj+rMRUmLnNjso3lV4PJPjFIlGoZ6k8VLSFbHJobnJnkkClN/K7Eh5f
-         pZS+w69jrCHSVMxiL+hFGIc7s+HQfuwNSZ95E7CmId2rmvFIkLrpQFrw/PAt6j3vX0XA
-         +s4hEdLakbmeC33jAu/FoAZDqP/MxrYdOS+k3A9E+GGbYJznLRZS+Wgqp9zOvC+TWyua
-         nzo1rKMeV3Z/Ov7roRu046ITbv6uO616hWRWqTUw8B+S/ziTrqKqrowTv6JY1iNZbKrO
-         2EUJ+fvovfSf9IgIaNO008E7kILHYMq5l4emfmc+6SSks1AGCdyJz6QqKcUkpxV8lzvt
-         KGtw==
-X-Gm-Message-State: AOAM532jGXLnWdW8RYwGAdMJhjPeuPp1QMeRNI/IaBsm/tKTH806p/T/
-        NR4hLagZe6rMbU+OiBR3vdSHAQ==
-X-Google-Smtp-Source: ABdhPJy6xnfsJrkUj3uOk6RhMOfN24ZWOtCJb02Yz1JiSld9zo6DEIm3wY/Vx5iSksicOWD+yOq52g==
-X-Received: by 2002:aa7:8d92:0:b029:1ee:75d1:c87 with SMTP id i18-20020aa78d920000b02901ee75d10c87mr1573717pfr.9.1615353832983;
-        Tue, 09 Mar 2021 21:23:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IGrZBeaXF+HMjO/q86rB/lGHV4vmErBKjQ6gCEkLtJg=;
+        b=l3CmH/Ft60vLhHT2t6TtkPL5aClLKPzyawnB5aO4wTz1KgU4E/gbxFFUYKueSp7C5Y
+         LzxUoIsA9w4rQuxKa+cmKCNbyVqTyhkiPEE0x5tNqY1Uj0DbVdnZBWrlVlddvJ7PsOuv
+         +e4VYEZEIsO9yyfyFVwn6mwQ8VKCMbS9vCWIOmzZSMP1y1RPKiw+maKmixDLWB5wXObA
+         QI7KLImOZ0P4PknAq2GxlpNMZR6z5VZ6YkAir0PqeanBlN1k7wfWAxfucgM3QMuG0mac
+         HCAqWe7MTOPjpvxb86i/GMmtqJ08TDObBab02tBq99HbtgR2l9nsnurJdSAgn3Fx/vyP
+         3c1g==
+X-Gm-Message-State: AOAM532Cp91dUqvn7hLpVeKW1c/H18mTSc6GnhsfvoYUa8/XzYi75Cfg
+        2fMAZ1smZXZyfCMg0qoZJUw4xa89aASsCQ==
+X-Google-Smtp-Source: ABdhPJzJ/qdbZbQl+zKjvTIt4cG5snuGZzohy8/hMovj5qb9lLyI8rS+OxudEmZk5cxPuRJQyFBd6g==
+X-Received: by 2002:a17:90a:2a41:: with SMTP id d1mr2455382pjg.164.1615366061310;
+        Wed, 10 Mar 2021 00:47:41 -0800 (PST)
 Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id p184sm14818427pgp.13.2021.03.09.21.23.52
+        by smtp.gmail.com with ESMTPSA id j35sm15947670pgj.45.2021.03.10.00.47.40
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Mar 2021 21:23:52 -0800 (PST)
+        Wed, 10 Mar 2021 00:47:40 -0800 (PST)
+Date:   Wed, 10 Mar 2021 14:17:38 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     linux-pm@vger.kernel.org,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V6 4/4] cpufreq: CPPC: Add support for frequency invariance
-Date:   Wed, 10 Mar 2021 10:53:26 +0530
-Message-Id: <19fbb10acaaceaa25671c973b9eb6f170015de00.1615351622.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
-In-Reply-To: <cover.1615351622.git.viresh.kumar@linaro.org>
-References: <cover.1615351622.git.viresh.kumar@linaro.org>
+To:     Beata Michalska <beata.michalska@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
+Subject: Re: [PATCH] opp: Invalidate current opp when draining the opp list
+Message-ID: <20210310084738.pe7ppyeq6hn7wbvv@vireshk-i7>
+References: <1614870454-18709-1-git-send-email-beata.michalska@arm.com>
+ <20210305042401.gktrgach4dzxp7on@vireshk-i7>
+ <418fc3cb-d5ec-9216-269a-e055e78718e5@arm.com>
+ <20210308115053.ua2gfo6kfnfjslyd@vireshk-i7>
+ <20210308181446.GA26783@e120325.cambridge.arm.com>
+ <20210309043121.546mlvl4jmshogor@vireshk-i7>
+ <20210309121455.GA13095@e120325.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210309121455.GA13095@e120325.cambridge.arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Frequency Invariance Engine (FIE) is providing a frequency scaling
-correction factor that helps achieve more accurate load-tracking.
+On 09-03-21, 12:14, Beata Michalska wrote:
+> With the current version, once the _opp_get_next returns opp
+> that is the current_opp, the while loop will break, leaving all
+> the opps that are on the list after current_opp
 
-Normally, this scaling factor can be obtained directly with the help of
-the cpufreq drivers as they know the exact frequency the hardware is
-running at. But that isn't the case for CPPC cpufreq driver.
+Thanks for your excellent review Beata. I have been missing a lot
+lately :(
 
-Another way of obtaining that is using the arch specific counter
-support, which is already present in kernel, but that hardware is
-optional for platforms.
+Though now I have spent more time on it and the bug seems to be more
+severe. This is what I have applied now :)
 
-This patch updates the CPPC driver to register itself with the topology
-core to provide its own implementation (cppc_scale_freq_tick()) of
-topology_scale_freq_tick() which gets called by the scheduler on every
-tick. Note that the arch specific counters have higher priority than
-CPPC counters, if available, though the CPPC driver doesn't need to have
-any special handling for that.
+I was able to test that the OPP table gets freed without any reference
+counts issues now.
 
-On an invocation of cppc_scale_freq_tick(), we schedule an irq work
-(since we reach here from hard-irq context), which then schedules a
-normal work item and cppc_scale_freq_workfn() updates the per_cpu
-arch_freq_scale variable based on the counter updates since the last
-tick.
+-- 
+viresh
 
-To allow platforms to disable this CPPC counter-based frequency
-invariance support, this is all done under CONFIG_ACPI_CPPC_CPUFREQ_FIE,
-which is enabled by default.
+-------------------------8<-------------------------
+From: Beata Michalska <beata.michalska@arm.com>
+Date: Thu, 4 Mar 2021 15:07:34 +0000
+Subject: [PATCH] opp: Don't drop extra references to OPPs accidentally
 
-This also exports sched_setattr_nocheck() as the CPPC driver can be
-built as a module.
+We are required to call dev_pm_opp_put() from outside of the
+opp_table->lock as debugfs removal needs to happen lock-less to avoid
+circular dependency issues.
 
-Cc: linux-acpi@vger.kernel.org
-Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+commit cf1fac943c63 ("opp: Reduce the size of critical section in
+_opp_kref_release()") tried to fix that introducing a new routine
+_opp_get_next() which keeps returning OPPs that can be freed by the
+callers and this routine shall be called without holding the
+opp_table->lock.
+
+Though the commit overlooked the fact that the OPPs can be referenced by
+other users as well and this routine will end up dropping references
+which were taken by other users and hence freeing the OPPs prematurely.
+
+In effect, other users of the OPPs will end up having invalid pointers
+at hand. We didn't see any crash reports earlier as the exact situation
+never happened, though it is certainly possible.
+
+We need a way to mark which OPPs are no longer referenced by the OPP
+core, so we don't drop extra references to them accidentally.
+
+This commit adds another OPP flag, "removed", which is used to track
+this. And now we should never end up dropping extra references to the
+OPPs.
+
+Cc: v5.11+ <stable@vger.kernel.org> # v5.11+
+Fixes: cf1fac943c63 ("opp: Reduce the size of critical section in _opp_kref_release()")
+Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+[ Viresh: Almost rewrote entire patch, added new "removed" field,
+	  rewrote commit log and added the correct Fixes tag. ]
+Co-developed-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/Kconfig.arm    |  10 ++
- drivers/cpufreq/cppc_cpufreq.c | 245 +++++++++++++++++++++++++++++++--
- include/linux/arch_topology.h  |   1 +
- kernel/sched/core.c            |   1 +
- 4 files changed, 245 insertions(+), 12 deletions(-)
+ drivers/opp/core.c | 48 ++++++++++++++++++++++++----------------------
+ drivers/opp/opp.h  |  2 ++
+ 2 files changed, 27 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index e65e0a43be64..a5c5f70acfc9 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -19,6 +19,16 @@ config ACPI_CPPC_CPUFREQ
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index c2689386a906..150be4c28c99 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1492,7 +1492,11 @@ static struct dev_pm_opp *_opp_get_next(struct opp_table *opp_table,
  
- 	  If in doubt, say N.
- 
-+config ACPI_CPPC_CPUFREQ_FIE
-+	bool "Frequency Invariance support for CPPC cpufreq driver"
-+	depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
-+	default y
-+	help
-+	  This extends frequency invariance support in the CPPC cpufreq driver,
-+	  by using CPPC delivered and reference performance counters.
-+
-+	  If in doubt, say N.
-+
- config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
- 	tristate "Allwinner nvmem based SUN50I CPUFreq driver"
- 	depends on ARCH_SUNXI
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 8a482c434ea6..b8e1b8ea628c 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -10,14 +10,18 @@
- 
- #define pr_fmt(fmt)	"CPPC Cpufreq:"	fmt
- 
-+#include <linux/arch_topology.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/delay.h>
- #include <linux/cpu.h>
- #include <linux/cpufreq.h>
- #include <linux/dmi.h>
-+#include <linux/irq_work.h>
-+#include <linux/kthread.h>
- #include <linux/time.h>
- #include <linux/vmalloc.h>
-+#include <uapi/linux/sched/types.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -57,6 +61,204 @@ static struct cppc_workaround_oem_info wa_info[] = {
- 	}
- };
- 
-+#ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-+
-+/* Frequency invariance support */
-+struct cppc_freq_invariance {
-+	int cpu;
-+	struct irq_work irq_work;
-+	struct kthread_work work;
-+	struct cppc_perf_fb_ctrs prev_perf_fb_ctrs;
-+	struct cppc_cpudata *cpu_data;
-+};
-+
-+static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
-+static struct kthread_worker *kworker_fie;
-+static bool fie_disabled;
-+
-+static struct cpufreq_driver cppc_cpufreq_driver;
-+static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
-+static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-+				 struct cppc_perf_fb_ctrs fb_ctrs_t0,
-+				 struct cppc_perf_fb_ctrs fb_ctrs_t1);
-+
-+/**
-+ * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
-+ * @work: The work item.
-+ *
-+ * The CPPC driver register itself with the topology core to provide its own
-+ * implementation (cppc_scale_freq_tick()) of topology_scale_freq_tick() which
-+ * gets called by the scheduler on every tick.
-+ *
-+ * Note that the arch specific counters have higher priority than CPPC counters,
-+ * if available, though the CPPC driver doesn't need to have any special
-+ * handling for that.
-+ *
-+ * On an invocation of cppc_scale_freq_tick(), we schedule an irq work (since we
-+ * reach here from hard-irq context), which then schedules a normal work item
-+ * and cppc_scale_freq_workfn() updates the per_cpu arch_freq_scale variable
-+ * based on the counter updates since the last tick.
-+ */
-+static void cppc_scale_freq_workfn(struct kthread_work *work)
-+{
-+	struct cppc_freq_invariance *cppc_fi;
-+	struct cppc_perf_fb_ctrs fb_ctrs = {0};
-+	struct cppc_cpudata *cpu_data;
-+	unsigned long local_freq_scale;
-+	u64 perf;
-+
-+	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
-+	cpu_data = cppc_fi->cpu_data;
-+
-+	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
-+		pr_warn("%s: failed to read perf counters\n", __func__);
-+		return;
-+	}
-+
-+	cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
-+	perf = cppc_perf_from_fbctrs(cpu_data, cppc_fi->prev_perf_fb_ctrs,
-+				     fb_ctrs);
-+
-+	perf <<= SCHED_CAPACITY_SHIFT;
-+	local_freq_scale = div64_u64(perf, cpu_data->perf_caps.highest_perf);
-+	if (WARN_ON(local_freq_scale > 1024))
-+		local_freq_scale = 1024;
-+
-+	per_cpu(arch_freq_scale, cppc_fi->cpu) = local_freq_scale;
-+}
-+
-+static void cppc_irq_work(struct irq_work *irq_work)
-+{
-+	struct cppc_freq_invariance *cppc_fi;
-+
-+	cppc_fi = container_of(irq_work, struct cppc_freq_invariance, irq_work);
-+	kthread_queue_work(kworker_fie, &cppc_fi->work);
-+}
-+
-+static void cppc_scale_freq_tick(void)
-+{
-+	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, smp_processor_id());
-+
-+	/*
-+	 * cppc_get_perf_ctrs() can potentially sleep, call that from the right
-+	 * context.
-+	 */
-+	irq_work_queue(&cppc_fi->irq_work);
-+}
-+
-+static struct scale_freq_data cppc_sftd = {
-+	.source = SCALE_FREQ_SOURCE_CPPC,
-+	.set_freq_scale = cppc_scale_freq_tick,
-+};
-+
-+static void cppc_freq_invariance_policy_init(struct cpufreq_policy *policy,
-+					     struct cppc_cpudata *cpu_data)
-+{
-+	struct cppc_perf_fb_ctrs fb_ctrs = {0};
-+	struct cppc_freq_invariance *cppc_fi;
-+	int i, ret;
-+
-+	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+		return;
-+
-+	if (fie_disabled)
-+		return;
-+
-+	for_each_cpu(i, policy->cpus) {
-+		cppc_fi = &per_cpu(cppc_freq_inv, i);
-+		cppc_fi->cpu = i;
-+		cppc_fi->cpu_data = cpu_data;
-+		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
-+		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
-+
-+		ret = cppc_get_perf_ctrs(i, &fb_ctrs);
-+		if (ret) {
-+			pr_warn("%s: failed to read perf counters: %d\n",
-+				__func__, ret);
-+			fie_disabled = true;
-+		} else {
-+			cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
-+		}
-+	}
-+}
-+
-+static void __init cppc_freq_invariance_init(void)
-+{
-+	struct sched_attr attr = {
-+		.size		= sizeof(struct sched_attr),
-+		.sched_policy	= SCHED_DEADLINE,
-+		.sched_nice	= 0,
-+		.sched_priority	= 0,
+ 	mutex_lock(&opp_table->lock);
+ 	list_for_each_entry(temp, &opp_table->opp_list, node) {
+-		if (dynamic == temp->dynamic) {
 +		/*
-+		 * Fake (unused) bandwidth; workaround to "fix"
-+		 * priority inheritance.
++		 * Refcount must be dropped only once for each OPP by OPP core,
++		 * do that with help of "removed" flag.
 +		 */
-+		.sched_runtime	= 1000000,
-+		.sched_deadline = 10000000,
-+		.sched_period	= 10000000,
-+	};
-+	int ret;
++		if (!temp->removed && dynamic == temp->dynamic) {
+ 			opp = temp;
+ 			break;
+ 		}
+@@ -1502,10 +1506,27 @@ static struct dev_pm_opp *_opp_get_next(struct opp_table *opp_table,
+ 	return opp;
+ }
+ 
+-bool _opp_remove_all_static(struct opp_table *opp_table)
++/*
++ * Can't call dev_pm_opp_put() from under the lock as debugfs removal needs to
++ * happen lock less to avoid circular dependency issues. This routine must be
++ * called without the opp_table->lock held.
++ */
++static void _opp_drain_list(struct opp_table *opp_table, bool dynamic)
+ {
+ 	struct dev_pm_opp *opp;
+ 
++	while ((opp = _opp_get_next(opp_table, dynamic))) {
++		opp->removed = true;
++		dev_pm_opp_put(opp);
 +
-+	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+		return;
-+
-+	if (fie_disabled)
-+		return;
-+
-+	kworker_fie = kthread_create_worker(0, "cppc_fie");
-+	if (IS_ERR(kworker_fie))
-+		return;
-+
-+	ret = sched_setattr_nocheck(kworker_fie->task, &attr);
-+	if (ret) {
-+		pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
-+			ret);
-+		kthread_destroy_worker(kworker_fie);
-+		return;
++		/* Drop the references taken by dev_pm_opp_add() */
++		if (dynamic)
++			dev_pm_opp_put_opp_table(opp_table);
 +	}
-+
-+	/* Register for freq-invariance */
-+	topology_set_scale_freq_source(&cppc_sftd, cpu_present_mask);
 +}
 +
-+static void cppc_freq_invariance_exit(void)
++bool _opp_remove_all_static(struct opp_table *opp_table)
 +{
-+	struct cppc_freq_invariance *cppc_fi;
-+	int i;
-+
-+	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+		return;
-+
-+	if (fie_disabled)
-+		return;
-+
-+	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, cpu_present_mask);
-+
-+	for_each_possible_cpu(i) {
-+		cppc_fi = &per_cpu(cppc_freq_inv, i);
-+		irq_work_sync(&cppc_fi->irq_work);
-+	}
-+
-+	kthread_destroy_worker(kworker_fie);
-+	kworker_fie = NULL;
-+}
-+
-+#else
-+static inline void
-+cppc_freq_invariance_policy_init(struct cpufreq_policy *policy,
-+				 struct cppc_cpudata *cpu_data)
-+{
-+}
-+
-+static inline void cppc_freq_invariance_init(void)
-+{
-+}
-+
-+static inline void cppc_freq_invariance_exit(void)
-+{
-+}
-+#endif /* CONFIG_ACPI_CPPC_CPUFREQ_FIE */
-+
- /* Callback function used to retrieve the max frequency from DMI */
- static void cppc_find_dmi_mhz(const struct dmi_header *dm, void *private)
- {
-@@ -355,9 +557,12 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
+ 	mutex_lock(&opp_table->lock);
  
- 	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
--	if (ret)
-+	if (ret) {
- 		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
- 			 caps->highest_perf, cpu, ret);
-+	} else {
-+		cppc_freq_invariance_policy_init(policy, cpu_data);
-+	}
+ 	if (!opp_table->parsed_static_opps) {
+@@ -1520,13 +1541,7 @@ bool _opp_remove_all_static(struct opp_table *opp_table)
  
- 	return ret;
- }
-@@ -370,12 +575,12 @@ static inline u64 get_delta(u64 t1, u64 t0)
- 	return (u32)t1 - (u32)t0;
+ 	mutex_unlock(&opp_table->lock);
+ 
+-	/*
+-	 * Can't remove the OPP from under the lock, debugfs removal needs to
+-	 * happen lock less to avoid circular dependency issues.
+-	 */
+-	while ((opp = _opp_get_next(opp_table, false)))
+-		dev_pm_opp_put(opp);
+-
++	_opp_drain_list(opp_table, false);
+ 	return true;
  }
  
--static int cppc_get_rate_from_fbctrs(struct cppc_cpudata *cpu_data,
--				     struct cppc_perf_fb_ctrs fb_ctrs_t0,
--				     struct cppc_perf_fb_ctrs fb_ctrs_t1)
-+static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-+				 struct cppc_perf_fb_ctrs fb_ctrs_t0,
-+				 struct cppc_perf_fb_ctrs fb_ctrs_t1)
+@@ -1539,25 +1554,12 @@ bool _opp_remove_all_static(struct opp_table *opp_table)
+ void dev_pm_opp_remove_all_dynamic(struct device *dev)
  {
- 	u64 delta_reference, delta_delivered;
--	u64 reference_perf, delivered_perf;
-+	u64 reference_perf;
+ 	struct opp_table *opp_table;
+-	struct dev_pm_opp *opp;
+-	int count = 0;
  
- 	reference_perf = fb_ctrs_t0.reference_perf;
+ 	opp_table = _find_opp_table(dev);
+ 	if (IS_ERR(opp_table))
+ 		return;
  
-@@ -384,12 +589,21 @@ static int cppc_get_rate_from_fbctrs(struct cppc_cpudata *cpu_data,
- 	delta_delivered = get_delta(fb_ctrs_t1.delivered,
- 				    fb_ctrs_t0.delivered);
+-	/*
+-	 * Can't remove the OPP from under the lock, debugfs removal needs to
+-	 * happen lock less to avoid circular dependency issues.
+-	 */
+-	while ((opp = _opp_get_next(opp_table, true))) {
+-		dev_pm_opp_put(opp);
+-		count++;
+-	}
+-
+-	/* Drop the references taken by dev_pm_opp_add() */
+-	while (count--)
+-		dev_pm_opp_put_opp_table(opp_table);
++	_opp_drain_list(opp_table, true);
  
--	/* Check to avoid divide-by zero */
--	if (delta_reference || delta_delivered)
--		delivered_perf = (reference_perf * delta_delivered) /
--					delta_reference;
--	else
--		delivered_perf = cpu_data->perf_ctrls.desired_perf;
-+	/* Check to avoid divide-by zero and invalid delivered_perf */
-+	if (!delta_reference || !delta_delivered)
-+		return cpu_data->perf_ctrls.desired_perf;
-+
-+	return (reference_perf * delta_delivered) / delta_reference;
-+}
-+
-+static int cppc_get_rate_from_fbctrs(struct cppc_cpudata *cpu_data,
-+				     struct cppc_perf_fb_ctrs fb_ctrs_t0,
-+				     struct cppc_perf_fb_ctrs fb_ctrs_t1)
-+{
-+	u64 delivered_perf;
-+
-+	delivered_perf = cppc_perf_from_fbctrs(cpu_data, fb_ctrs_t0,
-+					       fb_ctrs_t1);
- 
- 	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
- }
-@@ -514,6 +728,8 @@ static void cppc_check_hisi_workaround(void)
- 
- static int __init cppc_cpufreq_init(void)
- {
-+	int ret;
-+
- 	if ((acpi_disabled) || !acpi_cpc_valid())
- 		return -ENODEV;
- 
-@@ -521,7 +737,11 @@ static int __init cppc_cpufreq_init(void)
- 
- 	cppc_check_hisi_workaround();
- 
--	return cpufreq_register_driver(&cppc_cpufreq_driver);
-+	ret = cpufreq_register_driver(&cppc_cpufreq_driver);
-+	if (!ret)
-+		cppc_freq_invariance_init();
-+
-+	return ret;
- }
- 
- static inline void free_cpu_data(void)
-@@ -538,6 +758,7 @@ static inline void free_cpu_data(void)
- 
- static void __exit cppc_cpufreq_exit(void)
- {
-+	cppc_freq_invariance_exit();
- 	cpufreq_unregister_driver(&cppc_cpufreq_driver);
- 
- 	free_cpu_data();
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index 11e555cfaecb..f180240dc95f 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -37,6 +37,7 @@ bool topology_scale_freq_invariant(void);
- enum scale_freq_source {
- 	SCALE_FREQ_SOURCE_CPUFREQ = 0,
- 	SCALE_FREQ_SOURCE_ARCH,
-+	SCALE_FREQ_SOURCE_CPPC,
- };
- 
- struct scale_freq_data {
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ca2bb629595f..3adedc7b1725 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6386,6 +6386,7 @@ int sched_setattr_nocheck(struct task_struct *p, const struct sched_attr *attr)
- {
- 	return __sched_setscheduler(p, attr, false, true);
- }
-+EXPORT_SYMBOL_GPL(sched_setattr_nocheck);
- 
- /**
-  * sched_setscheduler_nocheck - change the scheduling policy and/or RT priority of a thread from kernelspace.
--- 
-2.25.0.rc1.19.g042ed3e048af
-
+ 	/* Drop the reference taken by _find_opp_table() */
+ 	dev_pm_opp_put_opp_table(opp_table);
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 50fb9dced3c5..407c3bfe51d9 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -56,6 +56,7 @@ extern struct list_head opp_tables, lazy_opp_tables;
+  * @dynamic:	not-created from static DT entries.
+  * @turbo:	true if turbo (boost) OPP
+  * @suspend:	true if suspend OPP
++ * @removed:	flag indicating that OPP's reference is dropped by OPP core.
+  * @pstate: Device's power domain's performance state.
+  * @rate:	Frequency in hertz
+  * @level:	Performance level
+@@ -78,6 +79,7 @@ struct dev_pm_opp {
+ 	bool dynamic;
+ 	bool turbo;
+ 	bool suspend;
++	bool removed;
+ 	unsigned int pstate;
+ 	unsigned long rate;
+ 	unsigned int level;
