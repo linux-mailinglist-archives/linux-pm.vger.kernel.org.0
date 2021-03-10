@@ -2,218 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C79C33349D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 05:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4B33334D8
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 06:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbhCJE4k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 23:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S229470AbhCJFYF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Mar 2021 00:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbhCJE4P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 23:56:15 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A592C06174A;
-        Tue,  9 Mar 2021 20:56:15 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id u198so12775116oia.4;
-        Tue, 09 Mar 2021 20:56:15 -0800 (PST)
+        with ESMTP id S229483AbhCJFXl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 00:23:41 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50C9C061761
+        for <linux-pm@vger.kernel.org>; Tue,  9 Mar 2021 21:23:40 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gb6so924895pjb.0
+        for <linux-pm@vger.kernel.org>; Tue, 09 Mar 2021 21:23:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SNxyEDT/1YYIMUNJ6crj4rs1HbNgSQEUhcgbSR6Mbw4=;
-        b=IQqoS/3mp0tX6ylNFkb4OtlDc5uTILK2DbXVVqT7QUVAr0l+AEpQ6eZYs9fv16J311
-         R7Eld5jceoGk2/BZoTSKwFg2UQSxumZdaSi7eNZjv/mxQAKSKUGyR6eudrAGNDu/iPTi
-         7YwxpvjrySYn4gvqwVFluZmxkCLsSjiLGZbSceAyGf56z9SDnlF2nEMDNJYN5xatN0Em
-         c7+DLqkGY5k807BEGA41B9fGSJvrQorRdycNl+u1At9sZxkRSgxOl/Ukbudgu4Yyujp3
-         xDCmSVBE51+f0OQ9rBviW4aBaskKlUlzCyab77/WfeRgNkPh8SWnFHIIT9vxT/GhFHNV
-         eR9Q==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kzNfsTKHRqikZKDJpk3ZLLd8WdOKtskH70hYikTl5M4=;
+        b=lYvgYuHQ+43IDf50Nw1EmBSIyL7fXfv4Nr3KnquWOQck0aXiXI0d4TTDuMmJ5K/8ls
+         gT2RRp5DI35ogBnizM4GiIE/LF4cTmFh9/3vyHwU/OaX8HMhGlxkAVxy1T54sBYbTy7o
+         uPcjlLO8QPgoLl/3mh2tZyVwEkY3TqgtZYFMvOiF+IXDX10DQzE5Qm4rRrG+evkDYR+q
+         2Dgt9UNJ1m59MfPiMwGxHFxKJrR1bR1r0I6NU0W7JkXfXOPBXpbb9xfuWTzx4qTy/U4z
+         g7lQ27S/9Ae58/q69oDcKy25XqJmIBTx0/sR3R8JjbDF/+LL7c620nyyEirBH4a9Tzl4
+         0kVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SNxyEDT/1YYIMUNJ6crj4rs1HbNgSQEUhcgbSR6Mbw4=;
-        b=TMzdh6wMRkbWlh9+hsz0aqmSYwVJEQrnLMvP4n2xjsOnkRJPx76pwMLht76G9tHoTQ
-         j/eEebkU+AtzVJdhwTf+lLXSATTYuTYyRJ44vTLxFm4KAmCYigfVlMqw/X7HVnj0EqZE
-         eYxf8gueGc2hui9RJNuxAN0gCvPQCiq6yoIOzcSG2ympqWNyfD1foGpZPOVSEzdwEjxU
-         Ia93lvbnjhYgZuZhCAPBEAiA0eeWBSANAU5GqPus5zznN2QutwpDLdJ7+AC5O2YFeSez
-         BSCuTByKOLHKFOzjfHyX4Sg5vHZyD9to9Meq0EYkuqNCTK2u5kOA3lLcIuItw2m2WHDq
-         WMeg==
-X-Gm-Message-State: AOAM533zRk90f/SXUnSC0r/3RaeWAguFOcguv2J2hWRAyqLMHTYyabnd
-        /3xYXe4sWbQTQkpWdm4PxTMZ89rnXB65GBCA90o=
-X-Google-Smtp-Source: ABdhPJytJwvjgiXcPU53IP+PpAmK0DPP3Qjq7JcNqxmG2qo4/guybwc36KFeIJx3kqYE++Kk/ZAThB0u16kVSj6zcyo=
-X-Received: by 2002:aca:ab86:: with SMTP id u128mr1202369oie.47.1615352174373;
- Tue, 09 Mar 2021 20:56:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kzNfsTKHRqikZKDJpk3ZLLd8WdOKtskH70hYikTl5M4=;
+        b=dwhQXWS5vRc3pkdz7W0vc5execKv5TJXa+RfdcFkCRukFcmgWkhpcXFfd9pWc5CTuT
+         ZKTQsAKFDx9pjUggtTKDI5rjC3c15udbPSJnextP4a1TYQEgArXrW9X7A0EKj3IkahZE
+         YSzu26iMlc6LsUiu17A7MrIZXHzFOAHkJozwcGXnBY6stKvpkuIW8b6JE1pv7fb0MWK0
+         k+qHLgHjOmxk8smHB8JClLkKKgnNuwd01EKM4LVxFuwx6HJPc9FUKj/sK2hpFPXrdJ6n
+         4FOwS8ue3XpM8BM4O6C0rQVL4XH5hIB1PJLPYHgMLvpHWQ88qMNgJJyOIRXpgyrMpujR
+         q9dA==
+X-Gm-Message-State: AOAM530BjSS8aN1fi4MwmHL/7I4MZ2nKrHalV9Mj/pmvkO3Wonf1463z
+        uB7+lsbg7M7+OSUZhVHmUiHeFg==
+X-Google-Smtp-Source: ABdhPJzuL00Zp+tBMXN7pBV0GvYvFgNsl98h+A5+Yaf3P8yLznthV781A8esUxFwRezpcnDhfzruig==
+X-Received: by 2002:a17:902:b08b:b029:e4:deb:69a9 with SMTP id p11-20020a170902b08bb02900e40deb69a9mr1241127plr.35.1615353820285;
+        Tue, 09 Mar 2021 21:23:40 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id u9sm14776075pgc.59.2021.03.09.21.23.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Mar 2021 21:23:39 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Ben Segall <bsegall@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V6 0/4] cpufreq: cppc: Add support for frequency invariance
+Date:   Wed, 10 Mar 2021 10:53:22 +0530
+Message-Id: <cover.1615351622.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-References: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
- <1615294733-22761-8-git-send-email-aisheng.dong@nxp.com> <de25cd22-7f17-5902-21d3-881e3128dd31@gmail.com>
- <a546248b-3946-c781-94a9-30f0c92f88d2@gmail.com> <CGME20210310025703epcas1p10fdb324cc7ce1accfdc8f66315e8a93e@epcas1p1.samsung.com>
- <CAA+hA=QZbxE-aFh2UnH6wHBUStj8SAtW8C4SEZtGcxQwsOO=Aw@mail.gmail.com> <31be2267-8988-f162-f5a6-6e6389bbf1fb@samsung.com>
-In-Reply-To: <31be2267-8988-f162-f5a6-6e6389bbf1fb@samsung.com>
-From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Wed, 10 Mar 2021 12:56:13 +0800
-Message-ID: <CAA+hA=S76yHTeL_yCDkv55iKpBLbtZc_cV8sjORheLxbSuenzA@mail.gmail.com>
-Subject: Re: [PATCH 07/11] PM / devfreq: check get_dev_status before start monitor
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Chanwoo Choi <cwchoi00@gmail.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        Abel Vesa <abel.vesa@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 11:08 AM Chanwoo Choi <cw00.choi@samsung.com> wrote=
-:
->
-> On 3/10/21 11:56 AM, Dong Aisheng wrote:
-> > On Wed, Mar 10, 2021 at 12:12 AM Chanwoo Choi <cwchoi00@gmail.com> wrot=
-e:
-> >>
-> >> On 21. 3. 10. =EC=98=A4=EC=A0=84 12:58, Chanwoo Choi wrote:
-> >>> On 21. 3. 9. =EC=98=A4=ED=9B=84 9:58, Dong Aisheng wrote:
-> >>>> The devfreq monitor depends on the device to provide load informatio=
-n
-> >>>> by .get_dev_status() to calculate the next target freq.
-> >>>>
-> >>>> And this will cause changing governor to simple ondemand fail
-> >>>> if device can't support.
-> >>>>
-> >>>> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-> >>>> ---
-> >>>>   drivers/devfreq/devfreq.c                 | 10 +++++++---
-> >>>>   drivers/devfreq/governor.h                |  2 +-
-> >>>>   drivers/devfreq/governor_simpleondemand.c |  3 +--
-> >>>>   3 files changed, 9 insertions(+), 6 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> >>>> index 7231fe6862a2..d1787b6c7d7c 100644
-> >>>> --- a/drivers/devfreq/devfreq.c
-> >>>> +++ b/drivers/devfreq/devfreq.c
-> >>>> @@ -482,10 +482,13 @@ static void devfreq_monitor(struct work_struct
-> >>>> *work)
-> >>>>    * to be called from governor in response to DEVFREQ_GOV_START
-> >>>>    * event when device is added to devfreq framework.
-> >>>>    */
-> >>>> -void devfreq_monitor_start(struct devfreq *devfreq)
-> >>>> +int devfreq_monitor_start(struct devfreq *devfreq)
-> >>>>   {
-> >>>>       if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
-> >>>> -        return;
-> >>>> +        return 0;
-> >>>> +
-> >>>> +    if (!devfreq->profile->get_dev_status)
-> >>>> +        return -EINVAL;
-> >>
-> >> Again, I think that get_dev_status is not used for all governors.
-> >> So that it cause the governor start fail. Don't check whether
-> >> .get_dev_status is NULL or not.
-> >>
-> >
-> > I'm not quite understand your point.
-> > it is used by governor_simpleondemand.c and tegra_devfreq_governor.
-> > get_target_freq -> devfreq_update_stats -> get_dev_status
->
-> The devfreq can add the new governor by anyone.
-> So these functions like devfreq_monitor_* have to support
-> the governors and also must support the governor to be added
-> in the future.
+Hello,
 
-Yes, but devfreq_monitor_* is only used by polling mode, right?
-The governor using it has to implement get_dev_status unless
-there's an exception in the future.
+CPPC cpufreq driver is used for ARM servers and this patch series tries
+to provide counter-based frequency invariance support for them in the
+absence for architecture specific counters (like AMUs).
 
-Currently this patch wants to address the issue that user can switch
-to ondemand governor (polling mode) by sysfs even devices does
-not support it (no get_dev_status implemented).
+This is tested by:
+- Vincent Guittot on ThunderX2.
+- Ionela Voinescu on Juno R2.
+- /me with hacks on Hikey, as I don't have access to the right hardware.
 
-Regards
-Aisheng
+This is based of 5.12-rc2. I will merge these via the arm-cpufreq tree
+directly.
 
->
-> >
-> > Without checking, device can switch to ondemand governor if it does not=
- support.
-> >
-> > Am i missed something?
-> >
-> > Regards
-> > Aisheng
-> >
-> >>>>       switch (devfreq->profile->timer) {
-> >>>>       case DEVFREQ_TIMER_DEFERRABLE:
-> >>>> @@ -495,12 +498,13 @@ void devfreq_monitor_start(struct devfreq *dev=
-freq)
-> >>>>           INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
-> >>>>           break;
-> >>>>       default:
-> >>>> -        return;
-> >>>> +        return -EINVAL;
-> >>>>       }
-> >>>>       if (devfreq->profile->polling_ms)
-> >>>>           queue_delayed_work(devfreq_wq, &devfreq->work,
-> >>>>               msecs_to_jiffies(devfreq->profile->polling_ms));
-> >>>> +    return 0;
-> >>>>   }
-> >>>>   EXPORT_SYMBOL(devfreq_monitor_start);
-> >>>> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-> >>>> index 5cee3f64fe2b..31af6d072a10 100644
-> >>>> --- a/drivers/devfreq/governor.h
-> >>>> +++ b/drivers/devfreq/governor.h
-> >>>> @@ -75,7 +75,7 @@ struct devfreq_governor {
-> >>>>                   unsigned int event, void *data);
-> >>>>   };
-> >>>> -void devfreq_monitor_start(struct devfreq *devfreq);
-> >>>> +int devfreq_monitor_start(struct devfreq *devfreq);
-> >>>>   void devfreq_monitor_stop(struct devfreq *devfreq);
-> >>>>   void devfreq_monitor_suspend(struct devfreq *devfreq);
-> >>>>   void devfreq_monitor_resume(struct devfreq *devfreq);
-> >>>> diff --git a/drivers/devfreq/governor_simpleondemand.c
-> >>>> b/drivers/devfreq/governor_simpleondemand.c
-> >>>> index d57b82a2b570..ea287b57cbf3 100644
-> >>>> --- a/drivers/devfreq/governor_simpleondemand.c
-> >>>> +++ b/drivers/devfreq/governor_simpleondemand.c
-> >>>> @@ -89,8 +89,7 @@ static int devfreq_simple_ondemand_handler(struct
-> >>>> devfreq *devfreq,
-> >>>>   {
-> >>>>       switch (event) {
-> >>>>       case DEVFREQ_GOV_START:
-> >>>> -        devfreq_monitor_start(devfreq);
-> >>>> -        break;
-> >>>> +        return devfreq_monitor_start(devfreq);
-> >>>>       case DEVFREQ_GOV_STOP:
-> >>>>           devfreq_monitor_stop(devfreq);
-> >>>>
-> >>>
-> >>> Need to handle the all points of devfreq_monitor_start() usage.
-> >>> please check the tegra30-devfreq.c for this update.
-> >>>
-> >>> $ grep -rn "devfreq_monitor_start" drivers/
-> >>> drivers/devfreq/governor_simpleondemand.c:92:
-> >>> devfreq_monitor_start(devfreq);
-> >>> drivers/devfreq/tegra30-devfreq.c:744:
-> >>> devfreq_monitor_start(devfreq);
-> >>> ......
-> >>>
-> >>
-> >>
-> >> --
-> >> Best Regards,
-> >> Samsung Electronics
-> >> Chanwoo Choi
-> >
-> >
->
->
-> --
-> Best Regards,
-> Chanwoo Choi
-> Samsung Electronics
+Changes since V5:
+- New patch to rename freq_scale to arch_freq_scale (Will Deacon).
+- Separate patch to export arch_freq_scale and helpers (Will Deacon).
+- Some improvements in the last patch like commit log, moving more stuff
+  to policy init, new fie_disabled flag, etc. (Ionela Voinescu).
+- Added Reviewed/Acked/Tested-by tags.
+
+Changes since V4:
+- Move some code to policy specific initialization for cppc driver.
+- Initialize kthread specific stuff only once in cppc driver.
+- Added a kerneldoc comment in cppc driver and improved changelog as
+  well.
+
+Changes since V3:
+- rebuild_sched_domains_energy() stuff moved from arm64 to drivers/base.
+- Added Reviewed/Tested-by Ionela for the first patch.
+- Remove unused max_freq field from structure in cppc driver.
+- s/cppc_f_i/cppc_freq_inv.
+- Fix an per-cpu access, there was a bug in earlier version.
+- Create a single kthread which can run on any CPU and takes care of
+  work from all the CPUs.
+- Do the whole FIE thing under a new CONFIG option for cppc driver.
+- Few minor improvements.
+
+Changes since V2:
+- Not sending as an RFC anymore.
+- Several renames, reordering of code in 1/2 based on Ionela's comments.
+- Several rebase changes for 2/2.
+- The freq_scale calculations are optimized a bit.
+- Better overall commenting and commit logs.
+
+Changes since V1:
+- The interface for setting the callbacks is improved, so different
+  parts looking to provide their callbacks don't need to think about
+  each other.
+
+- Moved to per-cpu storage for storing the callback related data, AMU
+  counters have higher priority with this.
+
+--
+Viresh
+
+Viresh Kumar (4):
+  arch_topology: Rename freq_scale as arch_freq_scale
+  arch_topology: Allow multiple entities to provide sched_freq_tick()
+    callback
+  arch_topology: Export arch_freq_scale and helpers
+  cpufreq: CPPC: Add support for frequency invariance
+
+ arch/arm64/include/asm/topology.h |  10 +-
+ arch/arm64/kernel/topology.c      | 109 +++++--------
+ drivers/base/arch_topology.c      |  89 ++++++++++-
+ drivers/cpufreq/Kconfig.arm       |  10 ++
+ drivers/cpufreq/cppc_cpufreq.c    | 245 ++++++++++++++++++++++++++++--
+ include/linux/arch_topology.h     |  19 ++-
+ kernel/sched/core.c               |   1 +
+ 7 files changed, 385 insertions(+), 98 deletions(-)
+
+
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
