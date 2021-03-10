@@ -2,103 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884C8333B41
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 12:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AB3333B45
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 12:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbhCJLVK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Mar 2021 06:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbhCJLU6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 06:20:58 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E9AC06174A;
-        Wed, 10 Mar 2021 03:20:58 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id n9so10251409pgi.7;
-        Wed, 10 Mar 2021 03:20:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=226SqCfAh3qQ3UxQNI+mT8Jvh9PheA/4vqh6AF+hXfA=;
-        b=jqoYXmR4S+q84qQfnmGWNpD46mtj3/M+Js9Rd1SBW2mcYRnZEgipEXETod6fV5GvJS
-         OZO1ZZpU0Nje5BS2raek9dX0H/JVj7WZSgdPytszgVwW8ThTygEaZaose/lwPn7G7wnH
-         r5hGsIgPw0EI4USvJGzIue506B5l+2yQXmqQnSvqJ1v1rOx2eUlt6RlmG4k3iYoZohvX
-         wUIB9xQhLfT/jq7+SachAJMLQiqbVvkl2640NjlYCE/BowXSsxjzAIHS2OeB+OGE7P53
-         C/xsvwYidND3BmhFZLU1M4LilnmbVmHFqs8ijIaLYiUfijcLHa3BVL58kFRdScDJzNnG
-         vw3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=226SqCfAh3qQ3UxQNI+mT8Jvh9PheA/4vqh6AF+hXfA=;
-        b=Tpb2fMeXFyL3sEnsFboZ4LKO6X7THHTqfYwSGL1ndsX/L+iMqBXeN+qp+cdFUYX30e
-         uBrsRpNjfJAX90xCCN2yFy3g9pZmZLy2o0WsiDW+C+w8bsM/BjiEmV6lF70FLF+Yod5U
-         ya0slSKG6lKC0ayG04adc6SXfDN83XXTgh327CFSTXodUc6K6B9M/3I79oFUEdhYPtqr
-         2+lQ5CB5fT37ByU3y1UzbMIWzCGIG1tyqSSYRFVPrsSnMmEptmcIHZGOsHv8p5cQ5cqU
-         7i072+eZlLT3Y4dz54Qw2pBodBHuh+UFlZA0XSEJNjAvh2HqP8uNUAKENU2UOF3zPeh6
-         ga3g==
-X-Gm-Message-State: AOAM5324srT8DYkxQaaR7sj3ARmmCongJF3RwhHRETnuPaZv+I78QiL7
-        re0ECbmG3/58LBOIZ4mZYFk=
-X-Google-Smtp-Source: ABdhPJy5IufC3OBPEd6RVRZ7a1LMB0WM8rDn8GIUcFPid2pSmSzEOjGFDUOcSmOMmhNW3GIPftTBBg==
-X-Received: by 2002:a65:41c6:: with SMTP id b6mr2364903pgq.7.1615375254862;
-        Wed, 10 Mar 2021 03:20:54 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id z8sm6538195pjd.0.2021.03.10.03.20.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 10 Mar 2021 03:20:54 -0800 (PST)
-Date:   Wed, 10 Mar 2021 19:20:51 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     rafael@kernel.org
-Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyue2@yulong.com, zbestahu@163.com, viresh.kumar@linaro.org
-Subject: Re: [PATCH v2] cpufreq: schedutil: Call sugov_update_next_freq()
- before check to fast_switch_enabled
-Message-ID: <20210310192051.00006659.zbestahu@gmail.com>
-In-Reply-To: <20210224064727.w3w4b66jnsmcxdff@vireshk-i7>
-References: <20210224063927.1298-1-zbestahu@gmail.com>
-        <20210224064727.w3w4b66jnsmcxdff@vireshk-i7>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S232425AbhCJLWh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Mar 2021 06:22:37 -0500
+Received: from foss.arm.com ([217.140.110.172]:44402 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232598AbhCJLWT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Mar 2021 06:22:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AAA41FB;
+        Wed, 10 Mar 2021 03:22:19 -0800 (PST)
+Received: from [10.57.15.210] (unknown [10.57.15.210])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 577B83F85F;
+        Wed, 10 Mar 2021 03:22:15 -0800 (PST)
+Subject: Re: [PATCH v3 5/5] powercap/drivers/dtpm: Scale the power with the
+ load
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210310110212.26512-1-daniel.lezcano@linaro.org>
+ <20210310110212.26512-5-daniel.lezcano@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d2a57633-074a-f0c3-25dc-7ebdf8455d2f@arm.com>
+Date:   Wed, 10 Mar 2021 11:22:10 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20210310110212.26512-5-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
 
-Please also review the patch.
-I'm not sure if you have reviewed or not.
 
-Thank you!
-
-On Wed, 24 Feb 2021 12:17:27 +0530
-Viresh Kumar <viresh.kumar@linaro.org> wrote:
-
-> On 24-02-21, 14:39, Yue Hu wrote:
-> > From: Yue Hu <huyue2@yulong.com>
-> > 
-> > Note that sugov_update_next_freq() may return false, that means the
-> > caller sugov_fast_switch() will do nothing except fast switch check.
-> > 
-> > Similarly, sugov_deferred_update() also has unnecessary operations
-> > of raw_spin_{lock,unlock} in sugov_update_single_freq() for that case.
-> > 
-> > So, let's call sugov_update_next_freq() before the fast switch check
-> > to avoid unnecessary behaviors above. Accordingly, update interface
-> > definition to sugov_deferred_update() and remove sugov_fast_switch()
-> > since we will call cpufreq_driver_fast_switch() directly instead.
-> > 
-> > Signed-off-by: Yue Hu <huyue2@yulong.com>
-> > ---
-> > v2: remove sugov_fast_switch() and call cpufreq_driver_fast_switch()
-> >     directly instead, also update minor log message.
-> > 
-> >  kernel/sched/cpufreq_schedutil.c | 29 ++++++++++++-----------------
-> >  1 file changed, 12 insertions(+), 17 deletions(-)  
+On 3/10/21 11:02 AM, Daniel Lezcano wrote:
+> Currently the power consumption is based on the current OPP power
+> assuming the entire performance domain is fully loaded.
 > 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> That gives very gross power estimation and we can do much better by
+> using the load to scale the power consumption.
+> 
+> Use the utilization to normalize and scale the power usage over the
+> max possible power.
+> 
+> Tested on a rock960 with 2 big CPUS, the power consumption estimation
+> conforms with the expected one.
+> 
+> Before this change:
+> 
+> ~$ ~/dhrystone -t 1 -l 10000&
+> ~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
+> 2260000
+> 
+> After this change:
+> 
+> ~$ ~/dhrystone -t 1 -l 10000&
+> ~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
+> 1130000
+> 
+> ~$ ~/dhrystone -t 2 -l 10000&
+> ~$ cat /sys/devices/virtual/powercap/dtpm/dtpm:0/dtpm:0:1/constraint_0_max_power_uw
+> 2260000
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+> 
+> V3:
+>    - Fixed uninitialized 'cpu' in scaled_power_uw()
+> V2:
+>    - Replaced cpumask by em_span_cpus
+>    - Changed 'util' metrics variable types
+>    - Optimized utilization scaling power computation
+>    - Renamed parameter name for scale_pd_power_uw()
+> ---
+>   drivers/powercap/dtpm_cpu.c | 46 +++++++++++++++++++++++++++++++------
+>   1 file changed, 39 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+> index ac7f2e7e262f..47854923d958 100644
+> --- a/drivers/powercap/dtpm_cpu.c
+> +++ b/drivers/powercap/dtpm_cpu.c
+> @@ -68,27 +68,59 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
+>   	return power_limit;
+>   }
+>   
+> +static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
+> +{
+> +	unsigned long max = 0, sum_util = 0;
+> +	int cpu;
+> +
+> +	for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
+> +
+> +		/*
+> +		 * The capacity is the same for all CPUs belonging to
+> +		 * the same perf domain, so a single call to
+> +		 * arch_scale_cpu_capacity() is enough. However, we
+> +		 * need the CPU parameter to be initialized by the
+> +		 * loop, so the call ends up in this block.
+> +		 *
+> +		 * We can initialize 'max' with a cpumask_first() call
+> +		 * before the loop but the bits computation is not
+> +		 * worth given the arch_scale_cpu_capacity() just
+> +		 * returns a value where the resulting assembly code
+> +		 * will be optimized by the compiler.
+> +		 */
+> +		max = arch_scale_cpu_capacity(cpu);
+> +		sum_util += sched_cpu_util(cpu, max);
+> +	}
+> +
+> +	/*
+> +	 * In the improbable case where all the CPUs of the perf
+> +	 * domain are offline, 'max' will be zero and will lead to an
+> +	 * illegal operation with a zero division.
+> +	 */
+> +	return max ? (power * ((sum_util << 10) / max)) >> 10 : 0;
+> +}
+> +
+>   static u64 get_pd_power_uw(struct dtpm *dtpm)
+>   {
+>   	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
+>   	struct em_perf_domain *pd;
+> -	struct cpumask cpus;
+> +	struct cpumask *pd_mask;
+>   	unsigned long freq;
+> -	int i, nr_cpus;
+> +	int i;
+>   
+>   	pd = em_cpu_get(dtpm_cpu->cpu);
+> -	freq = cpufreq_quick_get(dtpm_cpu->cpu);
+>   
+> -	cpumask_and(&cpus, cpu_online_mask, to_cpumask(pd->cpus));
+> -	nr_cpus = cpumask_weight(&cpus);
+> +	pd_mask = em_span_cpus(pd);
+> +
+> +	freq = cpufreq_quick_get(dtpm_cpu->cpu);
+>   
+>   	for (i = 0; i < pd->nr_perf_states; i++) {
+>   
+>   		if (pd->table[i].frequency < freq)
+>   			continue;
+>   
+> -		return pd->table[i].power *
+> -			MICROWATT_PER_MILLIWATT * nr_cpus;
+> +		return scale_pd_power_uw(pd_mask, pd->table[i].power *
+> +					 MICROWATT_PER_MILLIWATT);
+>   	}
+>   
+>   	return 0;
+> 
 
+LGTM
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
