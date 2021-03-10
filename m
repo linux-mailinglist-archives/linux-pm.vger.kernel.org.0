@@ -2,144 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5F4333B2C
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 12:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884C8333B41
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 12:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhCJLND (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Mar 2021 06:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S231265AbhCJLVK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Mar 2021 06:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbhCJLMx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 06:12:53 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83407C061760
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 03:12:53 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h98so22805101wrh.11
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 03:12:53 -0800 (PST)
+        with ESMTP id S230319AbhCJLU6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 06:20:58 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E9AC06174A;
+        Wed, 10 Mar 2021 03:20:58 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id n9so10251409pgi.7;
+        Wed, 10 Mar 2021 03:20:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UGJeYMoiqsuqVVTeVoFglXOcNn/3QqsFMhjYUbI14nM=;
-        b=vvdoFTieL1xSFVCJscNZyaslJr62TOvUt/gV0k/8roKq7Tj7IiTvrEK98UXi0VADke
-         WYqY4ETLl5pqlXH8AkZuP4e8ZDg0kKZJ6obvSba9NWk6tvgmiuu5YdUXo0KqjAy3OkZo
-         n3w72Ccqki+lT0WYlyanGzpX3ZcOvTFQKKf0+Znvi5ETGURY6Uf/JRT8XGIGvURcdhh8
-         midXBVZv3MP9J2Viex66h4qlomOe36IfHT2Es0LFgw8eVbEw8NxlT6/VnWhNgdF1FW/m
-         b9o14JxWNZ8sVDy3QCyY9U9xt6olB0OgV36ni8MSJs6wFq81H1LaLi5BpaLYc+uY0nPE
-         b3sA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=226SqCfAh3qQ3UxQNI+mT8Jvh9PheA/4vqh6AF+hXfA=;
+        b=jqoYXmR4S+q84qQfnmGWNpD46mtj3/M+Js9Rd1SBW2mcYRnZEgipEXETod6fV5GvJS
+         OZO1ZZpU0Nje5BS2raek9dX0H/JVj7WZSgdPytszgVwW8ThTygEaZaose/lwPn7G7wnH
+         r5hGsIgPw0EI4USvJGzIue506B5l+2yQXmqQnSvqJ1v1rOx2eUlt6RlmG4k3iYoZohvX
+         wUIB9xQhLfT/jq7+SachAJMLQiqbVvkl2640NjlYCE/BowXSsxjzAIHS2OeB+OGE7P53
+         C/xsvwYidND3BmhFZLU1M4LilnmbVmHFqs8ijIaLYiUfijcLHa3BVL58kFRdScDJzNnG
+         vw3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UGJeYMoiqsuqVVTeVoFglXOcNn/3QqsFMhjYUbI14nM=;
-        b=jJ6BWO8nLFm8IOQ2xJh1W3+v6O+SIsaEx/QhoS2r40qO0o+m0Pf25JWeSJ8pbRbdxB
-         anKP6lIfrDCkayssmZNvxxMqEQQxSwyTp7qJS/vXS4H+8Rl9dYzKtYlIA7FiWyn6VVEX
-         jaIZTJzH/GHxfqZBrJtBw4DlJq6zGfVSK1dEZ2U6pvZXD3tJD9q5sjREWdiUmWqbXI6l
-         REcQwKs2dzZRwlfbL7QVc68s2SuqhghtZRv9X1qq7mNYOgzxdK27dRkovcHxUOakvDeo
-         AeYREVKC6DD6I02kCYDnZoeImCZ0MULb/fqXqM5uZEjohgdAd7KbalLggF3lALv6yc7D
-         Oy/Q==
-X-Gm-Message-State: AOAM532niseKyoizHcTHf/ygcwRiazuKYr2PNlR7tqN7/AJ+asl+PhBH
-        n8/yz6lUvB7hxKYxlj38RG6gJw==
-X-Google-Smtp-Source: ABdhPJyZZedLdiox6QwX0RPAqq4UkcbE+i7ALdKzi5RmxyINAwBjynOitvDYZFXAUrJ63Pinq0R9GA==
-X-Received: by 2002:a5d:6b84:: with SMTP id n4mr2942743wrx.402.1615374772316;
-        Wed, 10 Mar 2021 03:12:52 -0800 (PST)
-Received: from dell ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id a131sm8736012wmc.48.2021.03.10.03.12.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 03:12:51 -0800 (PST)
-Date:   Wed, 10 Mar 2021 11:12:50 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [GIT PULL] Immutable branch between MFD and Input due for the
- v5.13 merge window
-Message-ID: <20210310111250.GM701493@dell>
-References: <cover.1611653995.git.cristian.ciocaltea@gmail.com>
- <20210309135302.GP4931@dell>
- <20210309200417.GZ4931@dell>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=226SqCfAh3qQ3UxQNI+mT8Jvh9PheA/4vqh6AF+hXfA=;
+        b=Tpb2fMeXFyL3sEnsFboZ4LKO6X7THHTqfYwSGL1ndsX/L+iMqBXeN+qp+cdFUYX30e
+         uBrsRpNjfJAX90xCCN2yFy3g9pZmZLy2o0WsiDW+C+w8bsM/BjiEmV6lF70FLF+Yod5U
+         ya0slSKG6lKC0ayG04adc6SXfDN83XXTgh327CFSTXodUc6K6B9M/3I79oFUEdhYPtqr
+         2+lQ5CB5fT37ByU3y1UzbMIWzCGIG1tyqSSYRFVPrsSnMmEptmcIHZGOsHv8p5cQ5cqU
+         7i072+eZlLT3Y4dz54Qw2pBodBHuh+UFlZA0XSEJNjAvh2HqP8uNUAKENU2UOF3zPeh6
+         ga3g==
+X-Gm-Message-State: AOAM5324srT8DYkxQaaR7sj3ARmmCongJF3RwhHRETnuPaZv+I78QiL7
+        re0ECbmG3/58LBOIZ4mZYFk=
+X-Google-Smtp-Source: ABdhPJy5IufC3OBPEd6RVRZ7a1LMB0WM8rDn8GIUcFPid2pSmSzEOjGFDUOcSmOMmhNW3GIPftTBBg==
+X-Received: by 2002:a65:41c6:: with SMTP id b6mr2364903pgq.7.1615375254862;
+        Wed, 10 Mar 2021 03:20:54 -0800 (PST)
+Received: from localhost ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id z8sm6538195pjd.0.2021.03.10.03.20.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 10 Mar 2021 03:20:54 -0800 (PST)
+Date:   Wed, 10 Mar 2021 19:20:51 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     rafael@kernel.org
+Cc:     rjw@rjwysocki.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, zbestahu@163.com, viresh.kumar@linaro.org
+Subject: Re: [PATCH v2] cpufreq: schedutil: Call sugov_update_next_freq()
+ before check to fast_switch_enabled
+Message-ID: <20210310192051.00006659.zbestahu@gmail.com>
+In-Reply-To: <20210224064727.w3w4b66jnsmcxdff@vireshk-i7>
+References: <20210224063927.1298-1-zbestahu@gmail.com>
+        <20210224064727.w3w4b66jnsmcxdff@vireshk-i7>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210309200417.GZ4931@dell>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 09 Mar 2021, Lee Jones wrote:
+Hi Rafael,
 
-> On Tue, 09 Mar 2021, Lee Jones wrote:
+Please also review the patch.
+I'm not sure if you have reviewed or not.
+
+Thank you!
+
+On Wed, 24 Feb 2021 12:17:27 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
+
+> On 24-02-21, 14:39, Yue Hu wrote:
+> > From: Yue Hu <huyue2@yulong.com>
+> > 
+> > Note that sugov_update_next_freq() may return false, that means the
+> > caller sugov_fast_switch() will do nothing except fast switch check.
+> > 
+> > Similarly, sugov_deferred_update() also has unnecessary operations
+> > of raw_spin_{lock,unlock} in sugov_update_single_freq() for that case.
+> > 
+> > So, let's call sugov_update_next_freq() before the fast switch check
+> > to avoid unnecessary behaviors above. Accordingly, update interface
+> > definition to sugov_deferred_update() and remove sugov_fast_switch()
+> > since we will call cpufreq_driver_fast_switch() directly instead.
+> > 
+> > Signed-off-by: Yue Hu <huyue2@yulong.com>
+> > ---
+> > v2: remove sugov_fast_switch() and call cpufreq_driver_fast_switch()
+> >     directly instead, also update minor log message.
+> > 
+> >  kernel/sched/cpufreq_schedutil.c | 29 ++++++++++++-----------------
+> >  1 file changed, 12 insertions(+), 17 deletions(-)  
 > 
-> > Enjoy!
-> > 
-> > The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
-> > 
-> >   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-input-v5.13
-> > 
-> > for you to fetch changes up to b58c808ca46c163c1924ec5d3285e67e9217ec74:
-> > 
-> >   MAINTAINERS: Add entry for ATC260x PMIC (2021-03-09 13:50:39 +0000)
-> > 
-> > ----------------------------------------------------------------
-> > Immutable branch between MFD and Input due for the v5.13 merge window
-> > 
-> > ----------------------------------------------------------------
-> > Cristian Ciocaltea (4):
-> >       dt-bindings: input: Add reset-time-sec common property
-> >       dt-bindings: mfd: Add Actions Semi ATC260x PMIC binding
-> >       mfd: Add MFD driver for ATC260x PMICs
-> >       input: atc260x: Add onkey driver for ATC260x PMICs
-> > 
-> > Manivannan Sadhasivam (1):
-> >       MAINTAINERS: Add entry for ATC260x PMIC
-> > 
-> >  Documentation/devicetree/bindings/input/input.yaml |   7 +
-> >  .../devicetree/bindings/mfd/actions,atc260x.yaml   | 183 ++++++++++++
-> >  MAINTAINERS                                        |  12 +
-> >  drivers/input/misc/Kconfig                         |  11 +
-> >  drivers/input/misc/Makefile                        |   2 +-
-> >  drivers/input/misc/atc260x-onkey.c                 | 305 ++++++++++++++++++++
-> >  drivers/mfd/Kconfig                                |  18 ++
-> >  drivers/mfd/Makefile                               |   3 +
-> >  drivers/mfd/atc260x-core.c                         | 310 +++++++++++++++++++++
-> >  drivers/mfd/atc260x-i2c.c                          |  64 +++++
-> >  include/linux/mfd/atc260x/atc2603c.h               | 281 +++++++++++++++++++
-> >  include/linux/mfd/atc260x/atc2609a.h               | 308 ++++++++++++++++++++
-> >  include/linux/mfd/atc260x/core.h                   |  58 ++++
-> >  13 files changed, 1561 insertions(+), 1 deletion(-)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
-> >  create mode 100644 drivers/input/misc/atc260x-onkey.c
-> >  create mode 100644 drivers/mfd/atc260x-core.c
-> >  create mode 100644 drivers/mfd/atc260x-i2c.c
-> >  create mode 100644 include/linux/mfd/atc260x/atc2603c.h
-> >  create mode 100644 include/linux/mfd/atc260x/atc2609a.h
-> >  create mode 100644 include/linux/mfd/atc260x/core.h
-> 
-> FYI, if anyone has pulled this, they should probably rebase it onto
-> v5.12-rc2 and delete the v5.12-rc1 tag from their tree:
-> 
->  https://lwn.net/Articles/848431/
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-In case you haven't pulled this yet, I created a new tag:
-
-  ib-mfd-input-v5.13-1
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
