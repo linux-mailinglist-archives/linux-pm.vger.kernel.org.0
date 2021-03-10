@@ -2,88 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FC1333CC5
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 13:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A822B333D73
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 14:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbhCJMm2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Mar 2021 07:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbhCJMmK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 07:42:10 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01037C061761
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 04:42:09 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id l11so19785546wrp.7
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 04:42:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hY0Jhu8wT7V8ZQXnYvLhJQTUPLVmTFuidvQylpZANlI=;
-        b=LaCPxpPRFfgxla0eGWzfrNKvk/MWez1ih7ahc7n8iSHcGYJlA4MX4JCY1liBFJBWM4
-         ih2xdFuXbZX+w27Cm2KpOiYamMmiVhSuyVbfZ7zr/9P8zi+bssPQFckKOREb8fr/j37V
-         ZYjl60c0giHzX8qI9ioMTmHpWfvn7JaJ+HePyXP4Az+JFNdirUS2wSYn3Wn3vjyd+xWZ
-         qtIz1CRmRlRHcBURYfoAjCLT4VnpTRnq9xMq50/TL98nr5ZE/5Dcl5Ghn+Xr4yqorIwa
-         zp2VxLYBbw0dIZT4bl6HO2j6X7gVvhIWY8rN3Ja3eEpcTzLB4JZqF7IXBT1KTubpMGAL
-         lDlg==
+        id S231880AbhCJNO4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 10 Mar 2021 08:14:56 -0500
+Received: from mail-vs1-f49.google.com ([209.85.217.49]:35329 "EHLO
+        mail-vs1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231788AbhCJNO3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 08:14:29 -0500
+Received: by mail-vs1-f49.google.com with SMTP id j12so6425172vsm.2;
+        Wed, 10 Mar 2021 05:14:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hY0Jhu8wT7V8ZQXnYvLhJQTUPLVmTFuidvQylpZANlI=;
-        b=rS8+CIZXYETZedEe2gynAOLmkQ8ZGfLC5DVVqGGL/e8snB9xBdKHeoRoOC8mNxRGgC
-         5qf90nlB2Nu0U9AE1TmbRwz61ONDN+cBcDjf1LyjMssMdmT4wkzVm6x4FSKOD+eo9KFx
-         bzR7fbcJacdoIs7YxZM62DSfUuswAfDkUZkjkI9IGXGHPBfrUfRLb5UFUI4+2uu42iDg
-         buZ7Bc/fNd4uxfaGxa/Ee1z5LyiYGGDKWDnhNNcJKlTm6rthlhc6IiFOWzZ0zHryW+js
-         ezPylcWskGyQHHP3BsJW+STrskD+D2kPE6M1lJPX36kSJEyrVcH63nX+hCVp0ZBi3Y8o
-         OVag==
-X-Gm-Message-State: AOAM531Nhct+/v2rpMVfYL7l00+Of+fBQ6jay5V5hrfRAJqNlGLPGcWn
-        5YGkvXj+JvH6cN+vwBuKZr3FCQ==
-X-Google-Smtp-Source: ABdhPJxoxQR4GvIWoJVNiaP/ojkeJ6Dy26wSDJUoajoGdG3/DHN8BM0jq36K8XsS8f/eYzBks680mg==
-X-Received: by 2002:a5d:6ca6:: with SMTP id a6mr3296016wra.179.1615380128613;
-        Wed, 10 Mar 2021 04:42:08 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8018:efa9:4421:9140? ([2a01:e34:ed2f:f020:8018:efa9:4421:9140])
-        by smtp.googlemail.com with ESMTPSA id h20sm8670290wmb.1.2021.03.10.04.42.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Mar 2021 04:42:08 -0800 (PST)
-Subject: Re: [PATCH v2] thermal: thermal_of: fix error return code of
- thermal_of_populate_bind_params()
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, rui.zhang@intel.com,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210310122423.3266-1-baijiaju1990@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <bd1fde82-7e4d-9a3e-4054-60c7ee486b11@linaro.org>
-Date:   Wed, 10 Mar 2021 13:42:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=53hH6CSEIzCBZULTLy/0ufaoot71sUUYvZJYMTqZQsk=;
+        b=kjBqV9Iz+drUkPbUiiHEgRANcyy72mEwhaV7h/ZNf25LjKPJS5d7g5WMNNmo85DEdE
+         Wd2m3mpJ8jLsalWD9SEVSZOHO98vWX2B9IVGOgsbnR2sDRXos7+G9l/kpfQqds4+gK5v
+         Vi1yL4n+ZT2AgvkJeQXEvEhvPe6qWO14tYCEngsO+quLAxSLgUcbZ3RBdHzwBorAjpHV
+         16DCeaodZbglxndCsiqWZ4flS80548iQpOlG0/PzZqY8Zo2JtzYYORu4H8TnwGmElEvx
+         iGJHueeZk1xmGR43wlIHL6k+iefkSn5u1NIYCdU6TeGgcnLiZbr0/5eYdUgcs3I3GaMv
+         blTw==
+X-Gm-Message-State: AOAM531KUnEyB96z9oWn1+P81lNWuPzaA+8qDBgZMiI74aes/PoCfFv6
+        Vt2TneZkuhX25ibBElgoPpqYF5+SnVEyzlbbzpY=
+X-Google-Smtp-Source: ABdhPJxXTFq+3iCRbvvQ2oB861mpT5qLn4uHTnoVD1B3v1h2bwafXVSu2qidRHsPHTbzghSrJTX0b6DQg4Yc2DpPQF8=
+X-Received: by 2002:a67:fe90:: with SMTP id b16mr1565916vsr.40.1615382068261;
+ Wed, 10 Mar 2021 05:14:28 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210310122423.3266-1-baijiaju1990@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210310110716.3297544-1-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20210310110716.3297544-1-niklas.soderlund+renesas@ragnatech.se>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 10 Mar 2021 14:14:17 +0100
+Message-ID: <CAMuHMdXJ1o5hfXKcx1OnGR2prbW0nA5+GdOUgRrS+nXD2-CNzA@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: thermal: rcar-gen3-thermal: Support five
+ TSC nodes on r8a779a0
+To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/03/2021 13:24, Jia-Ju Bai wrote:
-> When kcalloc() returns NULL to __tcbp or of_count_phandle_with_args() 
-> returns zero or -ENOENT to count, no error return code of
-> thermal_of_populate_bind_params() is assigned.
-> To fix these bugs, ret is assigned with -ENOMEM and -ENOENT in these
-> cases, respectively.
-> 
-> Fixes: a92bab8919e3 ("of: thermal: Allow multiple devices to share cooling map")
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+On Wed, Mar 10, 2021 at 12:08 PM Niklas Söderlund
+<niklas.soderlund+renesas@ragnatech.se> wrote:
+> When adding support for V3U (r8a779a0) it was incorrectly recorded it
+> supports four nodes, while in fact it supports five. The fifth node is
+> named TSC0 and breaks the existing naming schema starting at 1. Work
+> around this by separately defining the reg property for V3U and others.
+>
+> Restore the maximum number of nodes to three for other compatibles as
+> it was before erroneously increasing it for V3U.
+>
+> Fixes: d7fdfb6541f3be88 ("dt-bindings: thermal: rcar-gen3-thermal: Add r8a779a0 support")
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> ---
+> * Changes since v1
+> - The register layout for V3U is larger then for other SoCs, fix the
+>   example to reflect this. Thanks Geert for spotting this!
+> - Fix a bad copy-past in the register list in the example.
 
-Thanks, applied.
+Thanks for the update!
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
