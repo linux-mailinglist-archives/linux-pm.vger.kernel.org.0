@@ -2,55 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C81E33333A
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 03:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85D033333D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 03:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbhCJCm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 21:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S231894AbhCJCnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 21:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbhCJCmg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 21:42:36 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBB0C06174A;
-        Tue,  9 Mar 2021 18:42:25 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id f8so9922109otp.8;
-        Tue, 09 Mar 2021 18:42:24 -0800 (PST)
+        with ESMTP id S231235AbhCJCnM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 21:43:12 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5B1C06174A;
+        Tue,  9 Mar 2021 18:43:12 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id u62so1637605oib.6;
+        Tue, 09 Mar 2021 18:43:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=2utguLb+xjj3ikHTA8ikx/XcO3Z3cihJ1pa67h6cpt8=;
-        b=m0niI2O7cd+ue03+vWQIM4tj5XtEGeV4j3ajNyAtKj9g2jsa+vIrGsqKh1KA+kndec
-         QO+jweKJUr7G0iqIAH4to9joHg/7Cjbext8t0vt/hMFxrLqUGXPlz1H4lQPTAZGt6X8w
-         2wWjgaoQvb1kv8XpyM/Y1rcK8LR2B4piQ2JnbEF1h35FURTcfSc2qQcSlTI23DGO9a2m
-         2EWQXFcjhsC0G0COPVsIzO+A+kmcJQakz5H8W85/MICBRbqVd7lbZi/4b9TmMbCzxHLn
-         dGnEozJRRXeh/0dOvcA1HB0h2yhUr4xMvviC9fpnk1hSFQbsnjF6AD33GkhijXuyejpn
-         GYHA==
+        bh=F2WtursS9FB/V5aB1Z4wEsHDTwsDtKaqk4kLHb7iNqk=;
+        b=Gl4EERA1yednX8DqjmI0QKeto5e6PjZ5bIosfYzxXIBvLkBhdvSQfeqiRpOaziedsr
+         LHFjLOui55NBy+ZwKOEd2i/gTUPUN97r52JG1wcFlYeABf7ra9das72cwWaRPgM9WzuF
+         RKNXvNBEkQMmk32Rf2+NyVzAazktsXe19nfUzoXYYbfXz8Jjfv9iTyXZ7Dlm8WkFdq+l
+         lKvaUtsO0h49ORaDtuRXAucHWtS6KquTtzBcudB7fh/hONhg6v7YaUP/9ASrlCELpPZM
+         wH3+FI2uQFi+zXOLUpaQw7uydc+hTstvdFhyukH0oITkyLG3Y33ej+s+evGwfKAnFVcg
+         eZpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2utguLb+xjj3ikHTA8ikx/XcO3Z3cihJ1pa67h6cpt8=;
-        b=jP1TMg9F6mU3WuEHfBicr5/SbV1kDxZUZpLlA2RSGU+tayS45CWgBBIyKcnVNItcjd
-         WtXsMYzqY9zXXb4EyHIaEU7BzkBaUtNd5/bjxryPI6W9OXA7e/jqLzMroa4teClitro0
-         rkbGvfqfkgbkaBQwMLO+7lRR8rmds6uKdklbbpcDxO0gNbuaFPUOX7NCTnDzxzfOtSdX
-         gTpdoRGNUTflUrAB7gGMwfQhHzLkzXGf9c8M5aU9IsIgrhXD5QSMvlAov/kSgE3F1yeU
-         WVe+VfPYQ0uEPVs46PDug3SGRackKw3BNSYLp90+s0FIR6pwloBxRETiO2Zg8KsokQCR
-         IVEA==
-X-Gm-Message-State: AOAM533f2s71+f5IKdbN3MD0eYdkVP/JsxQT/XPjo22OzTZ20mHBKic7
-        cOC3N/8CSomypH2ydC3RFPaj1LLrn4L8XgILIoy6O/Te
-X-Google-Smtp-Source: ABdhPJy22wFsGgKsa2n3bVCWccuBbSPxClxq2w/X08rHFcc2doIpnuK5khbpeFeams81rsppcyC1wOxmNCU4tyCWWsQ=
-X-Received: by 2002:a9d:6c8b:: with SMTP id c11mr1009169otr.52.1615344144282;
- Tue, 09 Mar 2021 18:42:24 -0800 (PST)
+        bh=F2WtursS9FB/V5aB1Z4wEsHDTwsDtKaqk4kLHb7iNqk=;
+        b=Qr1s9ieVCckpjLyfcyX6l60135DyL9CrRv60nRCNbhamfstu8DP32vl6pUPJ05xSSn
+         WXrL0SBc3r6D7eW6TD8XJz8m89jpBPMcthQ811TLKvvycVWQ9azK6vHs8+5YYxkp4LL0
+         cxcnwZOrtSF0Xttt3rT+yU91tr7sk6Wue2zUMZfcremxYBkJ5zyhKqsCsWub0tKrvt8q
+         Kc+iUYye/Tts+rVTRwSArn1ZaDyLP6O/sjUapyfQ3WBBFMr0wTX1jSwK/V8krSAEmBD5
+         oBsWIw9g7vpKJO9hgcxjI7Exnt/5zLFv8AZVxbxbw7CkN0ITne9pElHf2G9I2lOA51oX
+         Eclg==
+X-Gm-Message-State: AOAM533ad4sDIMoYpwAbIZTEyXhq2SzZOHJV7nSif8UFk/RRINiBY3tJ
+        EX2mo6IkrrMwrGTMN+hUTKkwlHSSRZgq+5evXZM=
+X-Google-Smtp-Source: ABdhPJxNAuoVvayE+DptArQ5dsyvuGOle2rMzs1MkMj+Gqzo0NcOmx+A8pTSKp8+0e+vHTpiyunyR/ZRb3z+FVJmU90=
+X-Received: by 2002:a05:6808:1413:: with SMTP id w19mr935543oiv.20.1615344191728;
+ Tue, 09 Mar 2021 18:43:11 -0800 (PST)
 MIME-Version: 1.0
 References: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
- <1615294733-22761-5-git-send-email-aisheng.dong@nxp.com> <b6de03c9-8744-90b2-11fe-914ef016fa1f@gmail.com>
-In-Reply-To: <b6de03c9-8744-90b2-11fe-914ef016fa1f@gmail.com>
+ <1615294733-22761-6-git-send-email-aisheng.dong@nxp.com> <83240e9d-383a-74a9-3222-68cf42d3d0e1@gmail.com>
+In-Reply-To: <83240e9d-383a-74a9-3222-68cf42d3d0e1@gmail.com>
 From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Wed, 10 Mar 2021 10:42:23 +0800
-Message-ID: <CAA+hA=RbvKSyeLVdJBiqnKwGVJQBzKLJi1z68BHoKHeypjQKCQ@mail.gmail.com>
-Subject: Re: [PATCH 04/11] PM / devfreq: bail out early if no freq changes in devfreq_set_target
+Date:   Wed, 10 Mar 2021 10:43:11 +0800
+Message-ID: <CAA+hA=QpAcu0OVZwm8DuqUsENMem-+59QwOt0Y9cqstuGO5VEw@mail.gmail.com>
+Subject: Re: [PATCH 05/11] PM / devfreq: use more accurate returned new_freq
+ as resume_freq
 To:     Chanwoo Choi <cwchoi00@gmail.com>
 Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -69,53 +70,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 9, 2021 at 11:47 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+On Tue, Mar 9, 2021 at 11:53 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
 >
 > On 21. 3. 9. =EC=98=A4=ED=9B=84 9:58, Dong Aisheng wrote:
-> > It's unnecessary to set the same freq again and run notifier calls.
+> > Use the more accurate returned new_freq as resume_freq.
+> > It's the same as how devfreq->previous_freq was updated.
 > >
 > > Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 > > ---
-> >   drivers/devfreq/devfreq.c | 5 ++++-
-> >   1 file changed, 4 insertions(+), 1 deletion(-)
+> >   drivers/devfreq/devfreq.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
 > >
 > > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> > index bf3047896e41..6e80bf70e7b3 100644
+> > index 6e80bf70e7b3..ce569bd9adfa 100644
 > > --- a/drivers/devfreq/devfreq.c
 > > +++ b/drivers/devfreq/devfreq.c
-> > @@ -358,6 +358,9 @@ static int devfreq_set_target(struct devfreq *devfr=
+> > @@ -390,7 +390,7 @@ static int devfreq_set_target(struct devfreq *devfr=
 eq, unsigned long new_freq,
-> >       else
-> >               cur_freq =3D devfreq->previous_freq;
+> >       devfreq->previous_freq =3D new_freq;
 > >
-> > +     if (new_freq =3D=3D cur_freq)
-> > +             return 0;
-> > +
-> >       freqs.old =3D cur_freq;
-> >       freqs.new =3D new_freq;
-> >       devfreq_notify_transition(devfreq, &freqs, DEVFREQ_PRECHANGE);
-> > @@ -374,7 +377,7 @@ static int devfreq_set_target(struct devfreq *devfr=
-eq, unsigned long new_freq,
-> >        * and DEVFREQ_POSTCHANGE because for showing the correct frequen=
-cy
-> >        * change order of between devfreq device and passive devfreq dev=
-ice.
-> >        */
-> > -     if (trace_devfreq_frequency_enabled() && new_freq !=3D cur_freq)
-> > +     if (trace_devfreq_frequency_enabled())
-> >               trace_devfreq_frequency(devfreq, new_freq, cur_freq);
+> >       if (devfreq->suspend_freq)
+> > -             devfreq->resume_freq =3D cur_freq;
+> > +             devfreq->resume_freq =3D new_freq;
 > >
-> >       freqs.new =3D new_freq;
+> >       return err;
+> >   }
 > >
 >
-> I'd like you to squash patch4 with patch6 because actually patch6
-> is too minor clean-up. I think it is possible.
+> This patch fixes the previous patch[1]. So that you need to
+> add 'Fixes' tag as following:
+>
+> Fixes: 83f8ca45afbf0 ("PM / devfreq: add support for suspend/resume of a
+> devfreq device")
+>
 
-Got it, will squash when re-send.
+Will add Fixes tag in next version.
 
-Regards
-Aisheng
-
+> commit 83f8ca45afbf041e312909f442128b99657d90b7
+> Refs: v4.20-rc6-2-g83f8ca45afbf
+> Author:     Lukasz Luba <lukasz.luba@arm.com>
+> AuthorDate: Wed Dec 5 12:05:53 2018 +0100
+> Commit:     MyungJoo Ham <myungjoo.ham@samsung.com>
+> CommitDate: Tue Dec 11 11:09:47 2018 +0900
+>
+>      PM / devfreq: add support for suspend/resume of a devfreq device
+>
 >
 > --
 > Best Regards,
