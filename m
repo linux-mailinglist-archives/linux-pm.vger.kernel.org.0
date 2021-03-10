@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A85D033333D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 03:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8D7333357
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Mar 2021 03:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbhCJCnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Mar 2021 21:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S232218AbhCJCvk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Mar 2021 21:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbhCJCnM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 21:43:12 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5B1C06174A;
-        Tue,  9 Mar 2021 18:43:12 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id u62so1637605oib.6;
-        Tue, 09 Mar 2021 18:43:12 -0800 (PST)
+        with ESMTP id S232240AbhCJCvY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Mar 2021 21:51:24 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45915C06174A;
+        Tue,  9 Mar 2021 18:51:13 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id e45so14967028ote.9;
+        Tue, 09 Mar 2021 18:51:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=F2WtursS9FB/V5aB1Z4wEsHDTwsDtKaqk4kLHb7iNqk=;
-        b=Gl4EERA1yednX8DqjmI0QKeto5e6PjZ5bIosfYzxXIBvLkBhdvSQfeqiRpOaziedsr
-         LHFjLOui55NBy+ZwKOEd2i/gTUPUN97r52JG1wcFlYeABf7ra9das72cwWaRPgM9WzuF
-         RKNXvNBEkQMmk32Rf2+NyVzAazktsXe19nfUzoXYYbfXz8Jjfv9iTyXZ7Dlm8WkFdq+l
-         lKvaUtsO0h49ORaDtuRXAucHWtS6KquTtzBcudB7fh/hONhg6v7YaUP/9ASrlCELpPZM
-         wH3+FI2uQFi+zXOLUpaQw7uydc+hTstvdFhyukH0oITkyLG3Y33ej+s+evGwfKAnFVcg
-         eZpw==
+        bh=JniFH/3k/PYbYXG0TKByd1M1CyWaZyyt4TIuDk3c8vA=;
+        b=IHrbJ0mjhMEjkgOXf49n9ndKRJL1sm8noxNHpJHDYbpFUIYQtxseLmU/Dndadsi89h
+         Umrr/npmmoQER33ePi+3IoiHG4aQ3gmizN3dOulTzaOhfAS5mMY+dcsJLg3tqigwLQdt
+         44DOfiNMRNVWoLcz1+WFMLaJ3RWyt9SYdO1ajwP50IrhnHV0TaC5rpqe1NmUfpaNRdLm
+         f7fNMoImtW6Gupb09Ua8I7HhKSLNi5CJYHfdVF41/Rf8crp7M26FTsifsGtr8E2L5dat
+         rEm35UsiRn2xUIzxomNwP/X2GiScQNBUoHLBcJAFwDmADi4vGO6cFq19VZKlHFpP/0Xu
+         X1Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=F2WtursS9FB/V5aB1Z4wEsHDTwsDtKaqk4kLHb7iNqk=;
-        b=Qr1s9ieVCckpjLyfcyX6l60135DyL9CrRv60nRCNbhamfstu8DP32vl6pUPJ05xSSn
-         WXrL0SBc3r6D7eW6TD8XJz8m89jpBPMcthQ811TLKvvycVWQ9azK6vHs8+5YYxkp4LL0
-         cxcnwZOrtSF0Xttt3rT+yU91tr7sk6Wue2zUMZfcremxYBkJ5zyhKqsCsWub0tKrvt8q
-         Kc+iUYye/Tts+rVTRwSArn1ZaDyLP6O/sjUapyfQ3WBBFMr0wTX1jSwK/V8krSAEmBD5
-         oBsWIw9g7vpKJO9hgcxjI7Exnt/5zLFv8AZVxbxbw7CkN0ITne9pElHf2G9I2lOA51oX
-         Eclg==
-X-Gm-Message-State: AOAM533ad4sDIMoYpwAbIZTEyXhq2SzZOHJV7nSif8UFk/RRINiBY3tJ
-        EX2mo6IkrrMwrGTMN+hUTKkwlHSSRZgq+5evXZM=
-X-Google-Smtp-Source: ABdhPJxNAuoVvayE+DptArQ5dsyvuGOle2rMzs1MkMj+Gqzo0NcOmx+A8pTSKp8+0e+vHTpiyunyR/ZRb3z+FVJmU90=
-X-Received: by 2002:a05:6808:1413:: with SMTP id w19mr935543oiv.20.1615344191728;
- Tue, 09 Mar 2021 18:43:11 -0800 (PST)
+        bh=JniFH/3k/PYbYXG0TKByd1M1CyWaZyyt4TIuDk3c8vA=;
+        b=P2Srbh7h1/mIhxrYuEEZGg7yNXlB9PfDrJhEz0c4HFm0g4pmfa/q0g/xMucaQUEkg9
+         238j+Xj5So9HdrHQVHzsyZ99BxBdk8sqELGrdlzLUi7be9SF83xn/BzWtfjoxaQ1+L0n
+         KsMzalTxi4SyzDZDfOYArTkdYUJsAYcb8Wj4fcL4hmaMI4hviEckjHQgIsYmLmLdzOLh
+         ylfy04SSJ04HhNriG/iOOpnUT6tplBHBBqs50tKEODa4fHdfW4O3bmUEZ/x+UqRddMFC
+         uymTtRMDoY2C6Yn1NzaVNE9s5r6IhfUO+3X89vH5Gqx06kA8De0S7AN0XWzH8SpdkoKC
+         DdXg==
+X-Gm-Message-State: AOAM5338Yc722bN1X1U+az1qXPZGTqEPLSXnyWjwiq/I3Ayffi5SH+y/
+        Vs7e3JJv4xlas1HCcsZ7Ezw9mB0Tj7L9Z2dyyIo=
+X-Google-Smtp-Source: ABdhPJyZ1asGGJjLJfX11lxrwv4ZPQiQ77qJFFu8hargl6jeehotVLUEkKj/pv/IORnOVJLkzbtcwe47d5w5WnkNe4k=
+X-Received: by 2002:a9d:6c8b:: with SMTP id c11mr1028652otr.52.1615344672621;
+ Tue, 09 Mar 2021 18:51:12 -0800 (PST)
 MIME-Version: 1.0
 References: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
- <1615294733-22761-6-git-send-email-aisheng.dong@nxp.com> <83240e9d-383a-74a9-3222-68cf42d3d0e1@gmail.com>
-In-Reply-To: <83240e9d-383a-74a9-3222-68cf42d3d0e1@gmail.com>
+ <1615294733-22761-8-git-send-email-aisheng.dong@nxp.com> <de25cd22-7f17-5902-21d3-881e3128dd31@gmail.com>
+In-Reply-To: <de25cd22-7f17-5902-21d3-881e3128dd31@gmail.com>
 From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Wed, 10 Mar 2021 10:43:11 +0800
-Message-ID: <CAA+hA=QpAcu0OVZwm8DuqUsENMem-+59QwOt0Y9cqstuGO5VEw@mail.gmail.com>
-Subject: Re: [PATCH 05/11] PM / devfreq: use more accurate returned new_freq
- as resume_freq
+Date:   Wed, 10 Mar 2021 10:51:12 +0800
+Message-ID: <CAA+hA=SAtQnFb3zUXzc_jfk=GnWe2Z2K0gAFXh4fnnCC9mP+ag@mail.gmail.com>
+Subject: Re: [PATCH 07/11] PM / devfreq: check get_dev_status before start monitor
 To:     Chanwoo Choi <cwchoi00@gmail.com>
 Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -70,51 +69,106 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 9, 2021 at 11:53 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+On Tue, Mar 9, 2021 at 11:58 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
 >
 > On 21. 3. 9. =EC=98=A4=ED=9B=84 9:58, Dong Aisheng wrote:
-> > Use the more accurate returned new_freq as resume_freq.
-> > It's the same as how devfreq->previous_freq was updated.
+> > The devfreq monitor depends on the device to provide load information
+> > by .get_dev_status() to calculate the next target freq.
+> >
+> > And this will cause changing governor to simple ondemand fail
+> > if device can't support.
 > >
 > > Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 > > ---
-> >   drivers/devfreq/devfreq.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >   drivers/devfreq/devfreq.c                 | 10 +++++++---
+> >   drivers/devfreq/governor.h                |  2 +-
+> >   drivers/devfreq/governor_simpleondemand.c |  3 +--
+> >   3 files changed, 9 insertions(+), 6 deletions(-)
 > >
 > > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> > index 6e80bf70e7b3..ce569bd9adfa 100644
+> > index 7231fe6862a2..d1787b6c7d7c 100644
 > > --- a/drivers/devfreq/devfreq.c
 > > +++ b/drivers/devfreq/devfreq.c
-> > @@ -390,7 +390,7 @@ static int devfreq_set_target(struct devfreq *devfr=
-eq, unsigned long new_freq,
-> >       devfreq->previous_freq =3D new_freq;
+> > @@ -482,10 +482,13 @@ static void devfreq_monitor(struct work_struct *w=
+ork)
+> >    * to be called from governor in response to DEVFREQ_GOV_START
+> >    * event when device is added to devfreq framework.
+> >    */
+> > -void devfreq_monitor_start(struct devfreq *devfreq)
+> > +int devfreq_monitor_start(struct devfreq *devfreq)
+> >   {
+> >       if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
+> > -             return;
+> > +             return 0;
+> > +
+> > +     if (!devfreq->profile->get_dev_status)
+> > +             return -EINVAL;
 > >
-> >       if (devfreq->suspend_freq)
-> > -             devfreq->resume_freq =3D cur_freq;
-> > +             devfreq->resume_freq =3D new_freq;
+> >       switch (devfreq->profile->timer) {
+> >       case DEVFREQ_TIMER_DEFERRABLE:
+> > @@ -495,12 +498,13 @@ void devfreq_monitor_start(struct devfreq *devfre=
+q)
+> >               INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
+> >               break;
+> >       default:
+> > -             return;
+> > +             return -EINVAL;
+> >       }
 > >
-> >       return err;
+> >       if (devfreq->profile->polling_ms)
+> >               queue_delayed_work(devfreq_wq, &devfreq->work,
+> >                       msecs_to_jiffies(devfreq->profile->polling_ms));
+> > +     return 0;
 > >   }
+> >   EXPORT_SYMBOL(devfreq_monitor_start);
+> >
+> > diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+> > index 5cee3f64fe2b..31af6d072a10 100644
+> > --- a/drivers/devfreq/governor.h
+> > +++ b/drivers/devfreq/governor.h
+> > @@ -75,7 +75,7 @@ struct devfreq_governor {
+> >                               unsigned int event, void *data);
+> >   };
+> >
+> > -void devfreq_monitor_start(struct devfreq *devfreq);
+> > +int devfreq_monitor_start(struct devfreq *devfreq);
+> >   void devfreq_monitor_stop(struct devfreq *devfreq);
+> >   void devfreq_monitor_suspend(struct devfreq *devfreq);
+> >   void devfreq_monitor_resume(struct devfreq *devfreq);
+> > diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfre=
+q/governor_simpleondemand.c
+> > index d57b82a2b570..ea287b57cbf3 100644
+> > --- a/drivers/devfreq/governor_simpleondemand.c
+> > +++ b/drivers/devfreq/governor_simpleondemand.c
+> > @@ -89,8 +89,7 @@ static int devfreq_simple_ondemand_handler(struct dev=
+freq *devfreq,
+> >   {
+> >       switch (event) {
+> >       case DEVFREQ_GOV_START:
+> > -             devfreq_monitor_start(devfreq);
+> > -             break;
+> > +             return devfreq_monitor_start(devfreq);
+> >
+> >       case DEVFREQ_GOV_STOP:
+> >               devfreq_monitor_stop(devfreq);
 > >
 >
-> This patch fixes the previous patch[1]. So that you need to
-> add 'Fixes' tag as following:
+> Need to handle the all points of devfreq_monitor_start() usage.
+> please check the tegra30-devfreq.c for this update.
 >
-> Fixes: 83f8ca45afbf0 ("PM / devfreq: add support for suspend/resume of a
-> devfreq device")
->
+> $ grep -rn "devfreq_monitor_start" drivers/
+> drivers/devfreq/governor_simpleondemand.c:92:
+> devfreq_monitor_start(devfreq);
+> drivers/devfreq/tegra30-devfreq.c:744:          devfreq_monitor_start(dev=
+freq);
 
-Will add Fixes tag in next version.
+I can add error check for tegra in the next versions.
+Thanks
 
-> commit 83f8ca45afbf041e312909f442128b99657d90b7
-> Refs: v4.20-rc6-2-g83f8ca45afbf
-> Author:     Lukasz Luba <lukasz.luba@arm.com>
-> AuthorDate: Wed Dec 5 12:05:53 2018 +0100
-> Commit:     MyungJoo Ham <myungjoo.ham@samsung.com>
-> CommitDate: Tue Dec 11 11:09:47 2018 +0900
->
->      PM / devfreq: add support for suspend/resume of a devfreq device
->
+Regards
+Aisheng
+
+> ......
 >
 > --
 > Best Regards,
