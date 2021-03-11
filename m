@@ -2,92 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0BD337A88
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 18:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2969A337AB2
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 18:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbhCKRMt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Mar 2021 12:12:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        id S229675AbhCKRYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Mar 2021 12:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbhCKRMi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 12:12:38 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8708C061574;
-        Thu, 11 Mar 2021 09:12:37 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id f1so41011328lfu.3;
-        Thu, 11 Mar 2021 09:12:37 -0800 (PST)
+        with ESMTP id S229806AbhCKRXv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 12:23:51 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BFAC061574;
+        Thu, 11 Mar 2021 09:23:51 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id u4so3168989ljo.6;
+        Thu, 11 Mar 2021 09:23:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3nZrNZAlQ7fNFVlB/ncHMU9Y9miXCLpFJ30rJ9BLUO0=;
-        b=IVGXWiOD7hDdyxq2bFepgOqkWt0DZxmoYTw6XqGU6pEShXZewrfqA8T9tolPtSbIYk
-         S61HsWxnZEuMEVPoj+gcBlWx/9Ptui0+iOe0QEoALTpTsCrelEg8NnWwnGqgJUuVKT2e
-         MYWcWhkWVY0FaiH3MK86Cjht7SyzC3WVB2jsQZwbduTJjhZt/GhMjaEeER01bOQMGEi3
-         n9Sxt5qLQoBbM948ZSoe0jqCReQnKbp5bhUDqWn/z0bs/9wqUVBw/D9OF36QH55DUQwT
-         LB8eRKKvutTv2B60vgmfCsxkB452Z1s9/mUHObrL5moifmaYHxkzCuG9nMozc2chVxQY
-         iSYw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NLoHiP3d+5lNwT7CIKnzK9m4XZbys2sERvq2/PuPWts=;
+        b=OjWK3wFbksojHdfmupqd5gy+Mg37v24f6j+8Ol8GghZXgYnlKwjv0D+10szaRXsatR
+         Oah/RPo7tgEpMBJvtNSlw0maRM+Sy/z6e7DURhN2dDk/0BLd9NniGeCDGeycTjsx+L8E
+         4UMAh+a7sNYJQFfJOsTBYMQv/v48mlax2rcic89sVYfdHzmpUrULmLBDcYK1Z7GwuyRl
+         cNgSclfnXPb2kTyAkNE4QRXrg2GSwJYRhApcLxH8VbA0uhwWzXpWSbwu4ZfpXCw8Rz63
+         VjQ4PcqUSKPdcy1A+adzAjOr/G75y9nppt6Wc9Rl8SkKovZ2g5jDen6onnP4LRhGSFFD
+         dY5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3nZrNZAlQ7fNFVlB/ncHMU9Y9miXCLpFJ30rJ9BLUO0=;
-        b=PtiQwyA5o5rAwfNUwD+gCc1oKUhxaA7JWEiQKYKh8ZMaMQWNyYH1QEa6dbh0R/85f+
-         4jbVuvclBb4SD4ZK1lmcRPmUF0U7vekvTI7WXH5kFG5H8WHaN59boPmhVExx/CYvssm3
-         qVjRBJ4HSxI/c8WrUdaK1cwXMBYvCvLeNU1UU+PZhv56ozqblGzvDTsPWGKsTvjKliEW
-         7LotQRG/WH4i60aDHolObVzpVR0fhRMfmv5NgsUEGr9oqaH3AbkjRJvzCJMRMQiycxQD
-         rkGtGMNIeAgTks2ubUU2ua48kBTnzj5tEeJiAd6HXQsgWTSG94TxH7XHK5JCuu/3uUOZ
-         sDtA==
-X-Gm-Message-State: AOAM530oCHgi2HLtf/7XDT4X+CDSD8tTeIeCNG4H5o4dTk2ijLZsFMnt
-        XqzClpi2reFyRnyqKlNr1dKLDAx0XB8=
-X-Google-Smtp-Source: ABdhPJwT6mHPhMsF54uxKS8z3qLJNi9SUeGjUOLfvAmSHkBDOAhV/V5E7fdMr1abW61xPhdiTZqtEw==
-X-Received: by 2002:a19:7fc3:: with SMTP id a186mr2691203lfd.626.1615482756315;
-        Thu, 11 Mar 2021 09:12:36 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id v70sm1004633lfa.106.2021.03.11.09.12.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 09:12:36 -0800 (PST)
-Subject: Re: [PATCH v14 1/2] drm/tegra: dc: Support memory bandwidth
- management
+        bh=NLoHiP3d+5lNwT7CIKnzK9m4XZbys2sERvq2/PuPWts=;
+        b=OMySTh6FovhfwIAOO1I7jPQ2mAsi781yaayIunrUG4b8UQAGHDK6Ayz7T7W0YNPUne
+         R1S+uEbOqeP4tvwgFI/Fo2IzO5auycbK6Yq/R8RTN6BUt5Bw00VcJGn9XjESkzwfBQiK
+         wl7FH7el3ZYFwpGCEaHrr4xh6Jl4xzeWULJGt7scaP7d4PZ8sgMUvnnhqrLWieuD3WLl
+         8WbwQlD2QWTnN4nWiOallFZVtu4VYnBFmvtM/phB+BJWQ+hqBMrrsPQWCovH6saciahl
+         /Gb+wPrJeULC730vfkGdycltxgusTRJCR92h6hvV/nprdKnYe3sj58ImpPK9DTzy/6Ni
+         8OPQ==
+X-Gm-Message-State: AOAM532mNJAMJnvDCD7ILxv2fqDxJc/4w7DbHmzxu7kNGWZJqIm4Wf1P
+        EL6bbWrR+87W//FK4khGk8MXnBBYE8k=
+X-Google-Smtp-Source: ABdhPJxudYcrz6shnnCY/yzrTieJmSXgC6cgM00Md07ielNo75CBMq/9vqKKoCu2ueg5MihZZ1OejQ==
+X-Received: by 2002:a2e:8111:: with SMTP id d17mr5366586ljg.337.1615483429543;
+        Thu, 11 Mar 2021 09:23:49 -0800 (PST)
+Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.gmail.com with ESMTPSA id p5sm1180088ljj.26.2021.03.11.09.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 09:23:49 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Matt Merhar <mattmerhar@protonmail.com>,
         Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>
+        Nicolas Chauvet <kwizart@gmail.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20210311170606.7543-1-digetx@gmail.com>
- <20210311170606.7543-2-digetx@gmail.com>
-Message-ID: <37ff0499-6601-e97a-9fba-8e3e6f338b86@gmail.com>
-Date:   Thu, 11 Mar 2021 20:12:35 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+Subject: [PATCH v15 0/2] Add memory bandwidth management to NVIDIA Tegra DRM driver
+Date:   Thu, 11 Mar 2021 20:22:53 +0300
+Message-Id: <20210311172255.25213-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20210311170606.7543-2-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-11.03.2021 20:06, Dmitry Osipenko пишет:
-> +static const char * const tegra_plane_icc_names[TEGRA_DC_LEGACY_PLANES_NUM] = {
-> +	"wina", "winb", "winc", "", "", "", "cursor",
-> +};
-> +
-> +int tegra_plane_interconnect_init(struct tegra_plane *plane)
-> +{
-> +	const char *icc_name = tegra_plane_icc_names[plane->index];
-> +	struct device *dev = plane->dc->dev;
-> +	struct tegra_dc *dc = plane->dc;
-> +	int err;
-> +
-> +	if (WARN_ON(plane->index >= TEGRA_DC_LEGACY_PLANES_NUM) ||
-> +	    WARN_ON(!tegra_plane_icc_names[plane->index]))
-> +		return -EINVAL;
+This series adds memory bandwidth management to the NVIDIA Tegra DRM driver,
+which is done using interconnect framework. It fixes display corruption that
+happens due to insufficient memory bandwidth.
 
-It just occurred to me that I added the NULL-check here, but missed to
-change "" to NULLs. I'll make a v15 shortly.
+Changelog:
+
+v15: - Corrected tegra_plane_icc_names[] NULL-check that was partially lost
+       by accident in v14 after unsuccessful rebase.
+
+v14: - Made improvements that were suggested by Michał Mirosław to v13:
+
+       - Changed 'unsigned int' to 'bool'.
+       - Renamed functions which calculate bandwidth state.
+       - Reworked comment in the code that explains why downscaled plane
+         require higher bandwidth.
+       - Added round-up to bandwidth calculation.
+       - Added sanity checks of the plane index and fixed out-of-bounds
+         access which happened on T124 due to the cursor plane index.
+
+v13: - No code changes. Patches missed v5.12, re-sending them for v5.13.
+
+Dmitry Osipenko (2):
+  drm/tegra: dc: Support memory bandwidth management
+  drm/tegra: dc: Extend debug stats with total number of events
+
+ drivers/gpu/drm/tegra/Kconfig |   1 +
+ drivers/gpu/drm/tegra/dc.c    | 362 ++++++++++++++++++++++++++++++++++
+ drivers/gpu/drm/tegra/dc.h    |  19 ++
+ drivers/gpu/drm/tegra/drm.c   |  14 ++
+ drivers/gpu/drm/tegra/hub.c   |   3 +
+ drivers/gpu/drm/tegra/plane.c | 127 ++++++++++++
+ drivers/gpu/drm/tegra/plane.h |  15 ++
+ 7 files changed, 541 insertions(+)
+
+-- 
+2.29.2
+
