@@ -2,58 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C225E336EE9
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 10:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D267336FAB
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 11:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbhCKJb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Mar 2021 04:31:28 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:51802 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbhCKJa6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 04:30:58 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lKHeg-0002ZS-C0; Thu, 11 Mar 2021 09:30:54 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: Fix spelling mistake "disabed" -> "disabled"
-Date:   Thu, 11 Mar 2021 09:30:54 +0000
-Message-Id: <20210311093054.5338-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.30.2
+        id S232050AbhCKKPX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Mar 2021 05:15:23 -0500
+Received: from foss.arm.com ([217.140.110.172]:60320 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231937AbhCKKPW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 11 Mar 2021 05:15:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17C641FB;
+        Thu, 11 Mar 2021 02:15:22 -0800 (PST)
+Received: from [10.57.19.51] (unknown [10.57.19.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B5A53F70D;
+        Thu, 11 Mar 2021 02:15:20 -0800 (PST)
+Subject: Re: [PATCH v3 1/5] powercap/drivers/dtpm: Encapsulate even more the
+ code
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210310110212.26512-1-daniel.lezcano@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d8d3c50c-fee6-6f31-c085-d1ebce5297da@arm.com>
+Date:   Thu, 11 Mar 2021 10:15:19 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210310110212.26512-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hi Daniel,
 
-There is a spelling mistake in a comment, fix it.
+On 3/10/21 11:02 AM, Daniel Lezcano wrote:
+> In order to increase the self-encapsulation of the dtpm generic code,
+> the following changes are adding a power update ops to the dtpm
+> ops. That allows the generic code to call directly the dtpm backend
+> function to update the power values.
+> 
+> The power update function does compute the power characteristics when
+> the function is invoked. In the case of the CPUs, the power
+> consumption depends on the number of online CPUs. The online CPUs mask
+> is not up to date at CPUHP_AP_ONLINE_DYN state in the tear down
+> callback. That is the reason why the online / offline are at separate
+> state. As there is already an existing state for DTPM, this one is
+> only moved to the DEAD state, so there is no addition of new state
+> with these changes. The dtpm node is not removed when the cpu is
+> unplugged.
+> 
+> That simplifies the code for the next changes and results in a more
+> self-encapsulated code.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+> V2:
+>   - Updated the changelog with the CPU node not being removed
+>   - Commented the cpu hotplug callbacks to explain why there are two callbacks
+>   - Changed 'upt_power_uw' to 'update_power_uw'
+>   - Removed unused cpumask variable
+> ---
+>   drivers/powercap/dtpm.c     |  54 ++++++-------
+>   drivers/powercap/dtpm_cpu.c | 148 ++++++++++++++++--------------------
+>   include/linux/cpuhotplug.h  |   2 +-
+>   include/linux/dtpm.h        |   3 +-
+>   4 files changed, 97 insertions(+), 110 deletions(-)
+> 
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- include/uapi/linux/thermal.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[snip]
 
-diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
-index c105054cbb57..9aa2fedfa309 100644
---- a/include/uapi/linux/thermal.h
-+++ b/include/uapi/linux/thermal.h
-@@ -60,7 +60,7 @@ enum thermal_genl_event {
- 	THERMAL_GENL_EVENT_UNSPEC,
- 	THERMAL_GENL_EVENT_TZ_CREATE,		/* Thermal zone creation */
- 	THERMAL_GENL_EVENT_TZ_DELETE,		/* Thermal zone deletion */
--	THERMAL_GENL_EVENT_TZ_DISABLE,		/* Thermal zone disabed */
-+	THERMAL_GENL_EVENT_TZ_DISABLE,		/* Thermal zone disabled */
- 	THERMAL_GENL_EVENT_TZ_ENABLE,		/* Thermal zone enabled */
- 	THERMAL_GENL_EVENT_TZ_TRIP_UP,		/* Trip point crossed the way up */
- 	THERMAL_GENL_EVENT_TZ_TRIP_DOWN,	/* Trip point crossed the way down */
--- 
-2.30.2
+> @@ -210,27 +175,20 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
+>   	for_each_cpu(cpu, policy->related_cpus)
+>   		per_cpu(dtpm_per_cpu, cpu) = dtpm;
+>   
+> -	sprintf(name, "cpu%d", dtpm_cpu->cpu);
+> +	sprintf(name, "cpu%d-cpufreq", dtpm_cpu->cpu);
+
+We should be safe in normal platforms, since there is less than
+< 300 cores. although, I would use 2x CPUFREQ_NAME_LEN array.
+
+Other than that
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Regards,
+Lukasz
 
