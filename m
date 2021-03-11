@@ -2,128 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EE333813F
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 00:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A9F33815B
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 00:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbhCKXPg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Mar 2021 18:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbhCKXPd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 18:15:33 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A986C061574;
-        Thu, 11 Mar 2021 15:15:32 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id n11-20020a05600c4f8bb029010e5cf86347so3757200wmq.1;
-        Thu, 11 Mar 2021 15:15:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=71fxTItf1AgeFQSKsbzR7kraZTpHLUDyfFhnrJaGwrw=;
-        b=uu6E6nC4/zN4upjsUSqJiiaqAa7h7mCnViSwz/8iM729ShQLcS8Vx2o/6NVAqAQuZ0
-         d+b/6iSxl7VikLNWT06+IS59xNF3uTyOfFL4NC+a7BkmaW07ei4eGnDc9GBn99vzsUyU
-         /iiVKRk6m9XDeqJxQZpeo1UTU2pePj4HDoEX0YCpDnjg5eF8lTlLg+dUzEyv9l5tQic4
-         wbTuxK/ztAH29YEQGBs6FcPZKJqsgFTJXtEsobac+3e+CaYupjY7fnUOgOCghjmuupqI
-         y+DP3bulX704gnYL8OmLSZ1HsIyjGVlN2RH+oFa7huc5d3edy/u9PyJq7BB9FN9P7CZh
-         613A==
+        id S231235AbhCKXTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Mar 2021 18:19:22 -0500
+Received: from mail-ej1-f54.google.com ([209.85.218.54]:37307 "EHLO
+        mail-ej1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231543AbhCKXTG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 18:19:06 -0500
+Received: by mail-ej1-f54.google.com with SMTP id bm21so49729332ejb.4;
+        Thu, 11 Mar 2021 15:19:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=71fxTItf1AgeFQSKsbzR7kraZTpHLUDyfFhnrJaGwrw=;
-        b=dfPtJYzyOhnC0kMgr4E0j3wBuAswZ29F4Hf2zVIfby4Yhv04T+v5M1uWMXhGN27fCR
-         YUD5MqfcbnXML6HVG+INpCaLVmGStwvbJ5yzaPx7tD3Dj4bbchJBojfExfPOCbzk0GZL
-         Iupyc1KWxphAH5Z8hIblxXre25u5kjnddIUSH5TogHU9Dbt5xdCKOo4S5AC5aOuIRpZF
-         g+Y3Kky7ClynR9ArgF8ZzWba8hx/OWoKRfJMXJFp5z82S6JuGWA6+pDe+JlpmYwE/1Jb
-         L1AkNjOu3fQE7PfZB29GMQzsDYyfimprPyFuxu/J5MKXmN6tEoW0H5evNeGhUdfOirVz
-         wxiA==
-X-Gm-Message-State: AOAM532Y0N8TStAebraqJ2p61UqUw/flsaCLj5k3+ReJRNzqpfrp9C1R
-        L3feiz7Lprz3vi6KYaUo3CY=
-X-Google-Smtp-Source: ABdhPJwE95EGQstZlkbfzbOnaIDxZzbh7wAuT5AJWDSf9qYPFZA4csf0zLMGekB4DJSl4V+V1/6WMw==
-X-Received: by 2002:a7b:c195:: with SMTP id y21mr10255440wmi.178.1615504530799;
-        Thu, 11 Mar 2021 15:15:30 -0800 (PST)
-Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.gmail.com with ESMTPSA id j203sm263918wmj.40.2021.03.11.15.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 15:15:30 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 6/6] soc/tegra: pmc: Link children power domains to the parent domain
-Date:   Fri, 12 Mar 2021 02:12:08 +0300
-Message-Id: <20210311231208.18180-7-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210311231208.18180-1-digetx@gmail.com>
-References: <20210311231208.18180-1-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lkuYEZAqpGMgAIDilawAHyGPAX0UYKuPxCa5VG+IXVI=;
+        b=PoYQGyGdES6lKcVYMsG+9i3VFGHvA98/GdXdWmMYOX+Q7uOngt++NSBoltJ6fWXoRJ
+         rDjPtMs/6q3AhZDtSglbq4G3e/Kvqw/X3sIh3m97SAeX7sjvof3v+qLQiPxK8OD+bCOO
+         B6fzFs3y/b/8iw28wJjKfN1ghOQSElSAtrlDimPBKHn0jJrJmpXVVvkPUUi9xXM4rTv2
+         JUFO7ZisR2F+Icr53XDsviPWQN0F/91bHE0iSv+mq93mjP/wkJ+yj6TOeiWLxUz/+4g1
+         HhfaqJG7I0bFhWhPAU5WMgDihVx+vtFfmBktJVV58u4gQR0rzD8bAAQoWr/4Drw0y0fT
+         4Rcw==
+X-Gm-Message-State: AOAM530AiWoL97GXWbKskvfruhwKJMnAU9ByMXuSXnqdrxyNIgPmyWC/
+        nY09P7qI9wT0tl7jnmPPL9MO1P144dsaZdKfqt8=
+X-Google-Smtp-Source: ABdhPJyetu1/Jo62K0jNGbmTdegVwelG65nNocUvIIAfozT303QgCVvPsBm0j348+GIxpmMaZaw8eEEsPKdnsW2n9J4=
+X-Received: by 2002:a17:906:5918:: with SMTP id h24mr5546144ejq.501.1615504744807;
+ Thu, 11 Mar 2021 15:19:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210116170725.5245-1-dsmythies@telus.net>
+In-Reply-To: <20210116170725.5245-1-dsmythies@telus.net>
+From:   Len Brown <lenb@kernel.org>
+Date:   Thu, 11 Mar 2021 18:18:53 -0500
+Message-ID: <CAJvTdKm3h_msmu-NjTPY+09bLqyVL_-GCHnGFdNGdTcSZRP4zQ@mail.gmail.com>
+Subject: Re: [PATCH] tools/power/x86/turbostat: Fix TCC offset bit mask
+To:     Doug Smythies <doug.smythies@gmail.com>
+Cc:     Doug Smythies <dsmythies@telus.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Core domain is a parent of PMC power domains, hence PMC domains
-should be set up as a sub-domains of the parent (Core) domain if
-"power-domains" phandle presents in a device-tree node of PMC domain.
+Thanks for the close read, Doug.
 
-This allows to propagate GENPD performance changes to the parent Core
-domain if performance change is applied to a PMC domain.
+This field size actually varies from system to system,
+but the reality is that the offset is never that big, and so the
+smaller mask is sufficient.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/soc/tegra/pmc.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Finally, this may all be moot, because there is discussion that using
+the offset this way is simply erroneous.  stay tuned.
 
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index 84ab27d85d92..ba8407819397 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -1283,6 +1283,7 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
- static int tegra_powergate_init(struct tegra_pmc *pmc,
- 				struct device_node *parent)
- {
-+	struct of_phandle_args child_args, parent_args;
- 	struct device_node *np, *child;
- 	int err = 0;
- 
-@@ -1296,6 +1297,21 @@ static int tegra_powergate_init(struct tegra_pmc *pmc,
- 			of_node_put(child);
- 			break;
- 		}
-+
-+		if (of_parse_phandle_with_args(child, "power-domains",
-+					       "#power-domain-cells",
-+					       0, &parent_args))
-+			continue;
-+
-+		child_args.np = child;
-+		child_args.args_count = 0;
-+
-+		err = of_genpd_add_subdomain(&parent_args, &child_args);
-+		of_node_put(parent_args.np);
-+		if (err) {
-+			of_node_put(child);
-+			break;
-+		}
- 	}
- 
- 	of_node_put(np);
+-Len
+
+
+On Sat, Jan 16, 2021 at 12:07 PM Doug Smythies <doug.smythies@gmail.com> wrote:
+>
+> The TCC offset mask is incorrect, resulting in
+> incorrect target temperature calculations, if
+> the offset is big enough to exceed the mask size.
+>
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> ---
+>  tools/power/x86/turbostat/turbostat.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+> index 389ea5209a83..d7acdd4d16c4 100644
+> --- a/tools/power/x86/turbostat/turbostat.c
+> +++ b/tools/power/x86/turbostat/turbostat.c
+> @@ -4823,7 +4823,7 @@ int read_tcc_activation_temp()
+>
+>         target_c = (msr >> 16) & 0xFF;
+>
+> -       offset_c = (msr >> 24) & 0xF;
+> +       offset_c = (msr >> 24) & 0x3F;
+>
+>         tcc = target_c - offset_c;
+>
+> --
+> 2.25.1
+>
+
+
 -- 
-2.29.2
-
+Len Brown, Intel Open Source Technology Center
