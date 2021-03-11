@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AC7336C6B
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 07:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE094336C89
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 07:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbhCKGpF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Mar 2021 01:45:05 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:33501 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbhCKGor (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 01:44:47 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210311064445epoutp020d45c6cac0fbdc3b9d5e3e957593e2ab~rNr8L0Ltr0462904629epoutp02N
-        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 06:44:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210311064445epoutp020d45c6cac0fbdc3b9d5e3e957593e2ab~rNr8L0Ltr0462904629epoutp02N
+        id S231268AbhCKGyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Mar 2021 01:54:13 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:11335 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230458AbhCKGyM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 01:54:12 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210311065410epoutp04a1a1e730ba49384f773c2a28d6d7c3e0~rN0KUjDcR0858908589epoutp042
+        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 06:54:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210311065410epoutp04a1a1e730ba49384f773c2a28d6d7c3e0~rN0KUjDcR0858908589epoutp042
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1615445085;
-        bh=pMFn9EayTQ69JcaUJZXw6TWW78K+IaDdH231vbsCQ5A=;
+        s=mail20170921; t=1615445650;
+        bh=1SKavNcvKEiXQ2vHcHjxl2zorqJ6iU+5NwC0spP2h9I=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=jxDGeKXLVLaPSJU5TjlxvpbzgOwc9gfbh9YnAuSF9S9fGH3kFjrYsLKh6n4p3aU7C
-         QgEihnhPIxH/jKl+rDhM78R1QXqx9fe5XQvAR6+g11o86PPoahzltlGgzrXAiQ33JT
-         c21u7WQC9MKMV1MmsYyLAAy5VXizh7yGfxqILdpA=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20210311064444epcas1p46d4bb2a7d5aa20a5babdf4dfc9ca7ffb~rNr7LFACm0463004630epcas1p46;
-        Thu, 11 Mar 2021 06:44:44 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4DwzvZ0RLwz4x9QK; Thu, 11 Mar
-        2021 06:44:42 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        b=ZBlBwuLjbCUfftkNtwPL2gd9cIQW51ObG+yddvN87OmYaxIxq726MyiZpVJry4HxB
+         dBXOMKaMsHEk0dMLO5gDfwH8IFoulhEH7MnM+tOM5SwJfYuyY/lclo0AR0zX9f3P1Y
+         OzXnusm7dGFRoAIKVu0pu4yoZLiFwyOk5uaVgaVE=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20210311065409epcas1p272adc96f7516eadfc7396ab070e8a196~rN0JvjZ3L3111631116epcas1p20;
+        Thu, 11 Mar 2021 06:54:09 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Dx06R31rQz4x9Pv; Thu, 11 Mar
+        2021 06:54:07 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
         epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BC.4A.59147.95CB9406; Thu, 11 Mar 2021 15:44:41 +0900 (KST)
+        16.4E.59147.F8EB9406; Thu, 11 Mar 2021 15:54:07 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210311064441epcas1p2959db5cf163809fcece8e0026b620b74~rNr4MrxKt2237022370epcas1p2U;
-        Thu, 11 Mar 2021 06:44:41 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20210311065406epcas1p374520f410148634741b2b9e2927c9d96~rN0G9J28Q2120621206epcas1p3J;
+        Thu, 11 Mar 2021 06:54:06 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210311064441epsmtrp1889f3c669a273651081f4f674d5ed2e2~rNr4LVIpx2132221322epsmtrp1H;
-        Thu, 11 Mar 2021 06:44:41 +0000 (GMT)
-X-AuditID: b6c32a38-e3dff7000000e70b-5a-6049bc59318a
+        20210311065406epsmtrp169106dc6487abccd2583e05d3251a5ac~rN0G8M6tj2566425664epsmtrp1Z;
+        Thu, 11 Mar 2021 06:54:06 +0000 (GMT)
+X-AuditID: b6c32a38-e3dff7000000e70b-47-6049be8f28b1
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        96.63.08745.95CB9406; Thu, 11 Mar 2021 15:44:41 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        50.F3.13470.E8EB9406; Thu, 11 Mar 2021 15:54:06 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20210311064440epsmtip1c429cb87b81f947f81f9faee99034d0a~rNr34MQir1126411264epsmtip1B;
-        Thu, 11 Mar 2021 06:44:40 +0000 (GMT)
-Subject: Re: [PATCH 08/11] PM / devfreq: check get_dev_status in
- devfreq_update_stats
-To:     Dong Aisheng <dongas86@gmail.com>,
-        Chanwoo Choi <cwchoi00@gmail.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
+        20210311065406epsmtip18ce31088337cb4f2f880d91a435e18c6~rN0Gnlp9o1552715527epsmtip1P;
+        Thu, 11 Mar 2021 06:54:06 +0000 (GMT)
+Subject: Re: [PATCH 07/11] PM / devfreq: check get_dev_status before start
+ monitor
+To:     Dong Aisheng <dongas86@gmail.com>
+Cc:     Chanwoo Choi <cwchoi00@gmail.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
@@ -64,129 +64,221 @@ Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
         Abel Vesa <abel.vesa@nxp.com>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <740a4f0e-ee41-1e14-7b06-ab0202fd1e9f@samsung.com>
-Date:   Thu, 11 Mar 2021 16:01:21 +0900
+Message-ID: <b5a3ee55-0c71-a0ca-b03f-3b6790f3d2f4@samsung.com>
+Date:   Thu, 11 Mar 2021 16:10:47 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <CAA+hA=T8qezc_oL8KmoWQXg9+3MzykFxh0kW2044hBxcVpmb+g@mail.gmail.com>
+In-Reply-To: <CAA+hA=S76yHTeL_yCDkv55iKpBLbtZc_cV8sjORheLxbSuenzA@mail.gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmnm7kHs8Eg54XphbLLh1ltPgydRez
-        xbOj2hZ/N09ns1g1dSeLxdmmN+wWmx5fY7Xo+rWS2eLyrjlsFp97jzBa3G5cwWbxYou4A4/H
-        zll32T02repk89i8pN5j47sdTB79fw08+rasYvT4vEkugD0q2yYjNTEltUghNS85PyUzL91W
-        yTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6EolhbLEnFKgUEBicbGSvp1NUX5pSapC
-        Rn5xia1SakFKToFlgV5xYm5xaV66XnJ+rpWhgYGRKVBhQnbG9l1zWQoOCFasO9bI1sB4gbeL
-        kZNDQsBEYnvjN/YuRi4OIYEdjBLvJ59jg3A+MUp8Pj8LKvOZUaLr2Vl2mJb1V3awgthCArsY
-        JZ4dl4coes8osen2RbAiYYFwiZaOO0wgtoiAh8Sl6VPAxjILLGSW+LznEQtIgk1AS2L/ixts
-        IDa/gKLE1R+PGUFsXgE7iTfNvWDNLAKqEg39f8HiogJhEie3tUDVCEqcnPkEbA6nQKDE+fv/
-        wS5iFhCXuPVkPhOELS/RvHU2M8hiCYEzHBJH73eyQLzgIvGlewYThC0s8er4FqjXpCRe9rdB
-        2dUSK08eYYNo7mCU2LL/AitEwlhi/9LJQM0cQBs0Jdbv0ocIK0rs/D2XEWIxn8S7rz2sICUS
-        ArwSHW1CECXKEpcf3IVaKymxuL2TbQKj0iwk78xC8sIsJC/MQli2gJFlFaNYakFxbnpqsWGB
-        CXJ0b2IEJ2Etix2Mc99+0DvEyMTBeIhRgoNZSYTX77hbghBvSmJlVWpRfnxRaU5q8SFGU2AA
-        T2SWEk3OB+aBvJJ4Q1MjY2NjCxNDM1NDQyVx3iSDB/FCAumJJanZqakFqUUwfUwcnFINTLE7
-        TMsMBR4Y9H7eddJKcyOv8nS1KVft53QsD5aep3Z4wtN9s1wZdOs3iUa1iWyb9pJL602skpy0
-        542c1y5XX02bfeHJFMG14ltKez72ickJ3YqLDmw2m9vzwmJL4YmMjd98zT2Obr4bYvV5V8on
-        QZ5Lds+f26ytOzmr9/G1XZI9CoHXXp7m3yjsv5KF161IOUV4/7v5DVkdjVcSX7gXOLfZNO18
-        V5SapVIl+8bPxzV67cbLnPZr83mfXdsmtX2bYkKm1ysR0bb5qWa36r4ulFusUNBSf/LNzHQX
-        n0fxG670LJPcP+3Zq6SZ10ofSJm1myjetis2umExUTcj7TD3RQNfhyWqOt0XBWy3rHy0Voml
-        OCPRUIu5qDgRAPGzz7JLBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsWy7bCSnG7kHs8Eg9avLBbLLh1ltPgydRez
-        xbOj2hZ/N09ns1g1dSeLxdmmN+wWmx5fY7Xo+rWS2eLyrjlsFp97jzBa3G5cwWbxYou4A4/H
-        zll32T02repk89i8pN5j47sdTB79fw08+rasYvT4vEkugD2KyyYlNSezLLVI3y6BK2P7rrks
-        BQcEK9Yda2RrYLzA28XIySEhYCKx/soO1i5GLg4hgR2MEg/OH2aCSEhKTLt4lLmLkQPIFpY4
-        fLgYouYtUE3POWaQGmGBcImWjjtg9SICHhKXpk9hAyliFljILLFw7wpmiI6zTBJ7pjxmBali
-        E9CS2P/iBhuIzS+gKHH1x2NGEJtXwE7iTXMv2CQWAVWJhv6/YHFRgTCJnUseM0HUCEqcnPmE
-        BcTmFAiUOH//P9hMZgF1iT/zLjFD2OISt57MZ4Kw5SWat85mnsAoPAtJ+ywkLbOQtMxC0rKA
-        kWUVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZwPGpp7WDcs+qD3iFGJg7GQ4wSHMxK
-        Irx+x90ShHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamCK
-        niMqLjHTNSKjo9zz9v2/dtYt307ysaxo0nA48/M5R+Sn3BXTvSc7xF3s6jtX9NQ0STE0/OPS
-        /wdc2yLEA6fOUek7ZjBXeO29piqltyZPprzwjL24uqrz/ayJ+ie7X7+XSTIq05q48Ne0lBKV
-        aZEfOO7IidyftFohbu+za85PP5YbhZh/etgzM+HAmdglHNK+FqpHM05K/zf698flygv9uirD
-        rSfee7vFW1+9f1VP8rHEu9IZzO67ko8qbCq6wHX6xIKbaYvN2LJVJZc8WH1MKPTJhqAfcapP
-        p3D/XrBO9hT7x9VBNjsuOipqlV36r3U2vSpB+tY6bjvNaxy/Ixek3km7/ik9V13qgkVtfYGP
-        EktxRqKhFnNRcSIAxJvI/zYDAAA=
-X-CMS-MailID: 20210311064441epcas1p2959db5cf163809fcece8e0026b620b74
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmgW7/Ps8Eg5dPRCyWXTrKaPFl6i5m
+        i2dHtS3+bp7OZrFq6k4Wi7NNb9gtNj2+xmrR9Wsls8XlXXPYLD73HmG0uN24gs3ixRZxBx6P
+        nbPusntsWtXJ5rF5Sb3Hxnc7mDz6/xp49G1ZxejxeZNcAHtUtk1GamJKapFCal5yfkpmXrqt
+        kndwvHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0JVKCmWJOaVAoYDE4mIlfTubovzSklSF
+        jPziElul1IKUnALLAr3ixNzi0rx0veT8XCtDAwMjU6DChOyMX4+OMxXM16v4uGouYwPjDtUu
+        Rk4OCQETifX/ZrCD2EICOxgldjV5djFyAdmfGCVaj+5hh3C+MUqcnf+QEabj++6lLBCJvYwS
+        3WcPMUE47xkltsxYyApSJSwQIjH59F9mEFtEQFVi7orvjCBFzAJHmCV+TZwAtpBNQEti/4sb
+        bCA2v4CixNUfj8FW8ArYSVz+tADMZgFqXrRgFli9qECYxMltLVA1ghInZz5hAbE5BQIleve0
+        gi1mFhCXuPVkPhOELS/RvHU2M8TZZzgkbnS4QNguEuvev2GCsIUlXh3fwg5hS0m87G+Dsqsl
+        Vp48wgZytIRAB9Bn+y+wQiSMJfYvnQzUzAG0QFNi/S59iLCixM7fcxkh9vJJvPvawwpSIiHA
+        K9HRJgRRoixx+cFdqLWSEovbO9kmMCrNQvLNLCQfzELywSyEZQsYWVYxiqUWFOempxYbFpgg
+        x/YmRnAK1rLYwTj37Qe9Q4xMHIyHGCU4mJVEeP2OuyUI8aYkVlalFuXHF5XmpBYfYjQFhu9E
+        ZinR5HxgFsgriTc0NTI2NrYwMTQzNTRUEudNMngQLySQnliSmp2aWpBaBNPHxMEp1cDkUHk4
+        OKg+eofKrB65pbJFTlmlvGmdud2qO6QOaFQ8y1rqc/KO8uEvkhefftIW2vdiv1reRWsVbuFt
+        mWWrP1wV1jg9f71OcMuX98sXv9rkWPH93/be95OLM0PCbp48EsnJ33rZvvji9zjHPzKRHFIJ
+        M/5fXDk979SLw3xrOdbz5P/suC3ZpFy98/7l3Y+nsa+f8Kz72+4jp6ZldYkcNrpz64jI7+a3
+        wXovX1+edXRaxNSuT24lk9jKTq27qrvklVTb20PFGnKGiy+WPy67dmrrZv7Ahr129y8s+L/g
+        YtEexioevgI5q9SV7ZetfqT88jjirpQ87eZUp1ktoU0f33hk/3ySWVOY8OfH50nn+f1KHiux
+        FGckGmoxFxUnAgBNx67eSgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsWy7bCSnG7fPs8Eg1PXtC2WXTrKaPFl6i5m
+        i2dHtS3+bp7OZrFq6k4Wi7NNb9gtNj2+xmrR9Wsls8XlXXPYLD73HmG0uN24gs3ixRZxBx6P
+        nbPusntsWtXJ5rF5Sb3Hxnc7mDz6/xp49G1ZxejxeZNcAHsUl01Kak5mWWqRvl0CV8avR8eZ
+        CubrVXxcNZexgXGHahcjJ4eEgInE991LWboYuTiEBHYzSpx49JgRIiEpMe3iUeYuRg4gW1ji
+        8OFiiJq3jBLdi1rZQWqEBUIkJp/+ywxiiwioSsxd8Z0RpIhZ4BizxPot75kgOv4wSzQcmgPW
+        wSagJbH/xQ02EJtfQFHi6g+IbbwCdhKXPy0As1mAJi1aMAusXlQgTGLnksdMEDWCEidnPmEB
+        sTkFAiV697SygtjMAuoSf+ZdYoawxSVuPZnPBGHLSzRvnc08gVF4FpL2WUhaZiFpmYWkZQEj
+        yypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOB41NLcwbh91Qe9Q4xMHIyHGCU4mJVE
+        eP2OuyUI8aYkVlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwLTl
+        ev3xjs5jk6NdeIS4BXnmdlbM6HyyanvxSZVY9aNbhIuaJucZqzjEzTOfK3N1RgDrE45sr6Xn
+        TIIfzG+sq1s5e0bHnW39Zi31YrsYJ7vZ7Og/Wdy/YPv1B+d1pue/uS8db6Ou1tXBJLSM8dzb
+        uQp2J613n3fh5DnwOeShTrOJ6+7L/z5Ov3Eq6OZ3+3OHL1ovc7gv4vvknWKc8MSVdqdPlO/8
+        viL5DhPfcqZ/KdfTTZYZ1Gp136/9XMm8x3Jz995z4npVmQWs+y3Oa1w6y5HMyrujlPdTiPz6
+        oqi0zV5HQjx5OjsPmi5U75zNH34u/v3XyUc/cEwrUoiYuvDPvRlSeZKT4l5k7GA7dEPh+Csl
+        luKMREMt5qLiRAA6aptENgMAAA==
+X-CMS-MailID: 20210311065406epcas1p374520f410148634741b2b9e2927c9d96
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210310030121epcas1p1eeee9aabd374b0346001b098810488fc
+X-CMS-RootMailID: 20210310025703epcas1p10fdb324cc7ce1accfdc8f66315e8a93e
 References: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
-        <1615294733-22761-9-git-send-email-aisheng.dong@nxp.com>
-        <0b6ceb75-040f-8e1c-73ea-9d60344b9918@gmail.com>
-        <CGME20210310030121epcas1p1eeee9aabd374b0346001b098810488fc@epcas1p1.samsung.com>
-        <CAA+hA=T8qezc_oL8KmoWQXg9+3MzykFxh0kW2044hBxcVpmb+g@mail.gmail.com>
+        <1615294733-22761-8-git-send-email-aisheng.dong@nxp.com>
+        <de25cd22-7f17-5902-21d3-881e3128dd31@gmail.com>
+        <a546248b-3946-c781-94a9-30f0c92f88d2@gmail.com>
+        <CGME20210310025703epcas1p10fdb324cc7ce1accfdc8f66315e8a93e@epcas1p1.samsung.com>
+        <CAA+hA=QZbxE-aFh2UnH6wHBUStj8SAtW8C4SEZtGcxQwsOO=Aw@mail.gmail.com>
+        <31be2267-8988-f162-f5a6-6e6389bbf1fb@samsung.com>
+        <CAA+hA=S76yHTeL_yCDkv55iKpBLbtZc_cV8sjORheLxbSuenzA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/10/21 12:00 PM, Dong Aisheng wrote:
-> On Wed, Mar 10, 2021 at 12:20 AM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+On 3/10/21 1:56 PM, Dong Aisheng wrote:
+> On Wed, Mar 10, 2021 at 11:08 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
 >>
->> On 21. 3. 9. 오후 9:58, Dong Aisheng wrote:
->>> Check .get_dev_status() in devfreq_update_stats in case it's abused
->>> when a device does not provide it.
+>> On 3/10/21 11:56 AM, Dong Aisheng wrote:
+>>> On Wed, Mar 10, 2021 at 12:12 AM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+>>>>
+>>>> On 21. 3. 10. 오전 12:58, Chanwoo Choi wrote:
+>>>>> On 21. 3. 9. 오후 9:58, Dong Aisheng wrote:
+>>>>>> The devfreq monitor depends on the device to provide load information
+>>>>>> by .get_dev_status() to calculate the next target freq.
+>>>>>>
+>>>>>> And this will cause changing governor to simple ondemand fail
+>>>>>> if device can't support.
+>>>>>>
+>>>>>> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+>>>>>> ---
+>>>>>>   drivers/devfreq/devfreq.c                 | 10 +++++++---
+>>>>>>   drivers/devfreq/governor.h                |  2 +-
+>>>>>>   drivers/devfreq/governor_simpleondemand.c |  3 +--
+>>>>>>   3 files changed, 9 insertions(+), 6 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>>>>>> index 7231fe6862a2..d1787b6c7d7c 100644
+>>>>>> --- a/drivers/devfreq/devfreq.c
+>>>>>> +++ b/drivers/devfreq/devfreq.c
+>>>>>> @@ -482,10 +482,13 @@ static void devfreq_monitor(struct work_struct
+>>>>>> *work)
+>>>>>>    * to be called from governor in response to DEVFREQ_GOV_START
+>>>>>>    * event when device is added to devfreq framework.
+>>>>>>    */
+>>>>>> -void devfreq_monitor_start(struct devfreq *devfreq)
+>>>>>> +int devfreq_monitor_start(struct devfreq *devfreq)
+>>>>>>   {
+>>>>>>       if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
+>>>>>> -        return;
+>>>>>> +        return 0;
+>>>>>> +
+>>>>>> +    if (!devfreq->profile->get_dev_status)
+>>>>>> +        return -EINVAL;
+>>>>
+>>>> Again, I think that get_dev_status is not used for all governors.
+>>>> So that it cause the governor start fail. Don't check whether
+>>>> .get_dev_status is NULL or not.
+>>>>
 >>>
->>> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
->>> ---
->>>   drivers/devfreq/governor.h | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
->>> index 31af6d072a10..67a6dbdd5d23 100644
->>> --- a/drivers/devfreq/governor.h
->>> +++ b/drivers/devfreq/governor.h
->>> @@ -89,6 +89,9 @@ int devfreq_update_target(struct devfreq *devfreq, unsigned long freq);
->>>
->>>   static inline int devfreq_update_stats(struct devfreq *df)
->>>   {
->>> +     if (!df->profile->get_dev_status)
->>> +             return -EINVAL;
->>> +
+>>> I'm not quite understand your point.
+>>> it is used by governor_simpleondemand.c and tegra_devfreq_governor.
+>>> get_target_freq -> devfreq_update_stats -> get_dev_status
 >>
->> I'm considering the following method instead of returning the error
->> when .get_dev_status is NULL.
->>
->>         if (!df->profile->get_dev_status) {
->>                 df->last_status.total_time = 0;
->>                 df->last_status.busy_time = 0;
->>                 df->last_status.current_frequency = 0;
->>                 return 0;
->>         }
+>> The devfreq can add the new governor by anyone.
+>> So these functions like devfreq_monitor_* have to support
+>> the governors and also must support the governor to be added
+>> in the future.
 > 
-> I might  suggest not cause it's meaningless for ondemand governor but
-> introducing confusing. Simply return error could make the life a bit easier.
-> does it make sense to you?
+> Yes, but devfreq_monitor_* is only used by polling mode, right?
+> The governor using it has to implement get_dev_status unless
+> there's an exception in the future.
+> 
+> Currently this patch wants to address the issue that user can switch
+> to ondemand governor (polling mode) by sysfs even devices does
+> not support it (no get_dev_status implemented).
 
-Actually, I considered the some corner case as following:
-We can see the simple_ondemand governor through available_governors
-even if the devfreq driver doesn't implement the .get_dev_status.
-In this corner case, My intention tried to prevent the error
-on this case. But, actually, it is different issue. I'll fix
-this issue when get_dev_status is NULL, don't show the
-simple_ondemand governor name through available_governors
-on other patch.
+As I commented, I'll fix this issue. If devfreq driver doesn't implement
+the .get_dev_status, don't show it via available_governors. I think that
+it is fundamental solution to fix this issue. So on this version,
+don't add the this conditional statement on this function
 
-And I applied it. Thanks.
+And on next version, please use the capital letter for first character
+on patch title as following:
+
+- PM / devfreq: Check get_dev_status before start monitor
 
 > 
 > Regards
 > Aisheng
 > 
 >>
->>>       return df->profile->get_dev_status(df->dev.parent, &df->last_status);
->>>   }
->>>   #endif /* _GOVERNOR_H */
+>>>
+>>> Without checking, device can switch to ondemand governor if it does not support.
+>>>
+>>> Am i missed something?
+>>>
+>>> Regards
+>>> Aisheng
+>>>
+>>>>>>       switch (devfreq->profile->timer) {
+>>>>>>       case DEVFREQ_TIMER_DEFERRABLE:
+>>>>>> @@ -495,12 +498,13 @@ void devfreq_monitor_start(struct devfreq *devfreq)
+>>>>>>           INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
+>>>>>>           break;
+>>>>>>       default:
+>>>>>> -        return;
+>>>>>> +        return -EINVAL;
+>>>>>>       }
+>>>>>>       if (devfreq->profile->polling_ms)
+>>>>>>           queue_delayed_work(devfreq_wq, &devfreq->work,
+>>>>>>               msecs_to_jiffies(devfreq->profile->polling_ms));
+>>>>>> +    return 0;
+>>>>>>   }
+>>>>>>   EXPORT_SYMBOL(devfreq_monitor_start);
+>>>>>> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+>>>>>> index 5cee3f64fe2b..31af6d072a10 100644
+>>>>>> --- a/drivers/devfreq/governor.h
+>>>>>> +++ b/drivers/devfreq/governor.h
+>>>>>> @@ -75,7 +75,7 @@ struct devfreq_governor {
+>>>>>>                   unsigned int event, void *data);
+>>>>>>   };
+>>>>>> -void devfreq_monitor_start(struct devfreq *devfreq);
+>>>>>> +int devfreq_monitor_start(struct devfreq *devfreq);
+>>>>>>   void devfreq_monitor_stop(struct devfreq *devfreq);
+>>>>>>   void devfreq_monitor_suspend(struct devfreq *devfreq);
+>>>>>>   void devfreq_monitor_resume(struct devfreq *devfreq);
+>>>>>> diff --git a/drivers/devfreq/governor_simpleondemand.c
+>>>>>> b/drivers/devfreq/governor_simpleondemand.c
+>>>>>> index d57b82a2b570..ea287b57cbf3 100644
+>>>>>> --- a/drivers/devfreq/governor_simpleondemand.c
+>>>>>> +++ b/drivers/devfreq/governor_simpleondemand.c
+>>>>>> @@ -89,8 +89,7 @@ static int devfreq_simple_ondemand_handler(struct
+>>>>>> devfreq *devfreq,
+>>>>>>   {
+>>>>>>       switch (event) {
+>>>>>>       case DEVFREQ_GOV_START:
+>>>>>> -        devfreq_monitor_start(devfreq);
+>>>>>> -        break;
+>>>>>> +        return devfreq_monitor_start(devfreq);
+>>>>>>       case DEVFREQ_GOV_STOP:
+>>>>>>           devfreq_monitor_stop(devfreq);
+>>>>>>
+>>>>>
+>>>>> Need to handle the all points of devfreq_monitor_start() usage.
+>>>>> please check the tegra30-devfreq.c for this update.
+>>>>>
+>>>>> $ grep -rn "devfreq_monitor_start" drivers/
+>>>>> drivers/devfreq/governor_simpleondemand.c:92:
+>>>>> devfreq_monitor_start(devfreq);
+>>>>> drivers/devfreq/tegra30-devfreq.c:744:
+>>>>> devfreq_monitor_start(devfreq);
+>>>>> ......
+>>>>>
+>>>>
+>>>>
+>>>> --
+>>>> Best Regards,
+>>>> Samsung Electronics
+>>>> Chanwoo Choi
+>>>
 >>>
 >>
 >>
 >> --
 >> Best Regards,
->> Samsung Electronics
 >> Chanwoo Choi
+>> Samsung Electronics
 > 
 > 
 
