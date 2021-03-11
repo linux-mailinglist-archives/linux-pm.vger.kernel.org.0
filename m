@@ -2,113 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF0833695E
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 02:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DC8336A40
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 03:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhCKBCi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Mar 2021 20:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbhCKBCK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Mar 2021 20:02:10 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794FCC061761
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 17:02:10 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id m11so175062lji.10
-        for <linux-pm@vger.kernel.org>; Wed, 10 Mar 2021 17:02:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c8MWUEPcWRqlNN6HV0ALExHUT0G/wuf/0Gpk6qlo1WE=;
-        b=UhMP6tzOupn8Kgm9qYDbMvA5SCQImG9o3THb5a8Ek4/IxA6Ws6YGQoiQaHOUEBSRcc
-         /ZpjF/pAJubmqTu9r/jwd7HBBwpIAp/E+cSIIircb7aU6kwwbRJuxr7BN5dvmMGw01io
-         5pVLAWKHtIxUn/RKgjkjffI+X8LpF5V88y1/uaJ9Ku/hMV1zyg+KDMDkBrczbFUCzhGs
-         S4hOB6Km+eAAvrBcseYvd3NlDzvkQTg6zzCq3AqRuJ06/FT5I8IqtJbek2KTykNN+zRz
-         s3z1LKVDczv1nd/6qnTe63ho1j/gNgmQLCSc3V4M1KuFMY7f99od7XGzD+aT+hY2pOVY
-         96xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c8MWUEPcWRqlNN6HV0ALExHUT0G/wuf/0Gpk6qlo1WE=;
-        b=dfhO1xzTiGWz3UFNX/AQaCh7C8tyysPPR94wblhdnzXwZT5vejOsXgAPn3qKD6AgL2
-         39vPqQMB4L0CUlmUujBLj/1rJ8KBY8lnx9yH7owS1xu90OcGxs044QpJrnsFyNs6aACn
-         pEc8iHcWdNOSRt3733KyKThP9z0A53F+jpp3DbZCNnWa+tGeTO93O87zymxzSuqy/3Sp
-         5kc2GciUnrXomr6bFqJZCliE0TzIY3UKPE+7YWh2Yj21P2phxffT5FQp1duEIt+mxc2K
-         GAhVqP/kKsMJ945ovB3QDW4wbYJHMXkrtpHJE3i+L54CNcuD/0EcRe6OhxTni4DPLY+I
-         9p4g==
-X-Gm-Message-State: AOAM533vxNPzuGtl27byWCapFtAWKF+mZRKMTl6NSNt44TUPkemAjOti
-        hnNKf/BnQwqopKGPmalFUr9JQxoR2uYYtH7wcG92QQ==
-X-Google-Smtp-Source: ABdhPJzkcZbjChLiKr2QTj6cupQ7Gt4EKlXJ9kqPzoWN9882YNqqEJKPD3YGlEuuS/DQkce8boJ9ojboDa+oHD5ilFI=
-X-Received: by 2002:a2e:1649:: with SMTP id 9mr3492915ljw.74.1615424528892;
- Wed, 10 Mar 2021 17:02:08 -0800 (PST)
+        id S229660AbhCKCwt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Mar 2021 21:52:49 -0500
+Received: from foss.arm.com ([217.140.110.172]:56834 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229624AbhCKCwa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Mar 2021 21:52:30 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 985A31FB;
+        Wed, 10 Mar 2021 18:52:24 -0800 (PST)
+Received: from bogus (unknown [10.163.66.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DC383F793;
+        Wed, 10 Mar 2021 18:52:21 -0800 (PST)
+Date:   Thu, 11 Mar 2021 02:52:13 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        Sudeep Holla <sudeep.holla@arm.com>, daniel.lezcano@linaro.org,
+        robh+dt@kernel.org, ksitaraman@nvidia.com, sanjayc@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 3/5] dt-bindings: arm: Add cpu-idle-states to Tegra194
+ CPU nodes
+Message-ID: <20210311025138.o4ub4j2ss725zpv4@bogus>
+References: <1614838092-30398-1-git-send-email-skomatineni@nvidia.com>
+ <1614838092-30398-4-git-send-email-skomatineni@nvidia.com>
+ <20210308043755.llvdsuz2jwvweovb@bogus>
+ <4cebf482-a2f8-5a79-a2f6-4ccd7d31c6ad@nvidia.com>
 MIME-Version: 1.0
-References: <20210310152900.149380-1-ulf.hansson@linaro.org>
-In-Reply-To: <20210310152900.149380-1-ulf.hansson@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 Mar 2021 02:01:57 +0100
-Message-ID: <CACRpkdayGkuJE9z+QT41ZVoJJN4sBx4e28c5OLzC9obvE94gBw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: Fix hanging on I/O during system suspend for
- removable cards
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc <linux-mmc@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cebf482-a2f8-5a79-a2f6-4ccd7d31c6ad@nvidia.com>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 4:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Mon, Mar 08, 2021 at 10:32:17AM -0800, Sowjanya Komatineni wrote:
+>
+> On 3/7/21 8:37 PM, Sudeep Holla wrote:
+> > On Wed, Mar 03, 2021 at 10:08:10PM -0800, Sowjanya Komatineni wrote:
+> > > This patch adds cpu-idle-states and corresponding state nodes to
+> > > Tegra194 CPU in dt-binding document
+> > >
+> > I see that this platform has PSCI support. Can you care to explain why
+> > you need additional DT bindings and driver for PSCI based CPU suspend.
+> > Until the reasons are convincing, consider NACK from my side for this
+> > driver and DT bindings. You should be really using those bindings and
+> > the driver may be with minor changes there.
+> >
+> MCE firmware is in charge of state transition for Tegra194 carmel CPUs.
+>
 
-> The mmc core uses a PM notifier to temporarily during system suspend, turn
-> off the card detection mechanism for removal/insertion of (e)MMC/SD/SDIO
-> cards. Additionally, the notifier may be used to remove an SDIO card
-> entirely, if a corresponding SDIO functional driver don't have the system
-> suspend/resume callbacks assigned. This behaviour has been around for a
-> very long time.
->
-> However, a recent bug report tells us there are problems with this
-> approach. More precisely, when receiving the PM_SUSPEND_PREPARE
-> notification, we may end up hanging on I/O to be completed, thus also
-> preventing the system from getting suspended.
->
-> In the end what happens, is that the cancel_delayed_work_sync() in
-> mmc_pm_notify() ends up waiting for mmc_rescan() to complete - and since
-> mmc_rescan() wants to claim the host, it needs to wait for the I/O to be
-> completed first.
->
-> Typically, this problem is triggered in Android, if there is ongoing I/O
-> while the user decides to suspend, resume and then suspend the system
-> again. This due to that after the resume, an mmc_rescan() work gets punted
-> to the workqueue, which job is to verify that the card remains inserted
-> after the system has resumed.
->
-> To fix this problem, userspace needs to become frozen to suspend the I/O,
-> prior to turning off the card detection mechanism. Therefore, let's drop
-> the PM notifiers for mmc subsystem altogether and rely on the card
-> detection to be turned off/on as a part of the system_freezable_wq, that we
-> are already using.
->
-> Moreover, to allow and SDIO card to be removed during system suspend, let's
-> manage this from a ->prepare() callback, assigned at the mmc_host_class
-> level. In this way, we can use the parent device (the mmc_host_class
-> device), to remove the card device that is the child, in the
-> device_prepare() phase.
->
-> Reported-by: Kiwoong Kim <kwmad.kim@samsung.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Sure, but I assume only TF-A talks to MCE and not any OSPM/Linux kernel.
 
-This makes sense to me.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> For run-time state transitions, need to provide state request along with its
+> residency time to MCE firmware which is running in the background.
+>
 
-Yours,
-Linus Walleij
+Sounds similar to x86 mwait, perhaps we need to extend PSCI if we need
+to make this firmware PSCI compliant or just say it is not and implement
+completely independent implementation. I am not saying that is acceptable
+ATM but I prefer not to mix some implementation to make it look like
+PSCI compliant.
+
+> State min residency is updated into power_state value along with state id
+> that is passed to psci_cpu_suspend_enter
+>
+
+Sounds like a hack/workaround. I would prefer to standardise that. IIUC
+the power_state is more static and derived from DT. I don't like to
+overload that TBH. Need to check with authors of that binding.
+
+> Also states cross-over idle times need to be provided to MCE firmware.
+>
+
+New requirements if this has to be PSCI compliant.
+
+> MCE firmware decides on state transition based on these inputs along with
+> its background work load.
+>
+> So, Tegra specific CPU idle driver is required mainly to provide cross-over
+> thresholds from DT and run time idle state information to MCE firmware
+> through Tegra MCE communication APIs.
+>
+
+I am worried if different vendors will come up with different custom
+solution for this. We need to either standardise this is Linux/DT or
+in PSCI.
+
+> Allowing cross-over threshold through DT allows users to vary idle time
+> thresholds for state transitions based on different use-cases.
+>
+
+Sounds like policy and not platform specific to be in DT, but I will leave
+that to DT maintainers.
+
+--
+Regards,
+Sudeep
