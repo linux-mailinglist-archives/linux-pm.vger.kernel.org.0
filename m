@@ -2,105 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DC8336A40
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 03:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A373336A84
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Mar 2021 04:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbhCKCwt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Mar 2021 21:52:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:56834 "EHLO foss.arm.com"
+        id S230150AbhCKDSX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Mar 2021 22:18:23 -0500
+Received: from mga06.intel.com ([134.134.136.31]:8795 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229624AbhCKCwa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Mar 2021 21:52:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 985A31FB;
-        Wed, 10 Mar 2021 18:52:24 -0800 (PST)
-Received: from bogus (unknown [10.163.66.77])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DC383F793;
-        Wed, 10 Mar 2021 18:52:21 -0800 (PST)
-Date:   Thu, 11 Mar 2021 02:52:13 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        Sudeep Holla <sudeep.holla@arm.com>, daniel.lezcano@linaro.org,
-        robh+dt@kernel.org, ksitaraman@nvidia.com, sanjayc@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 3/5] dt-bindings: arm: Add cpu-idle-states to Tegra194
- CPU nodes
-Message-ID: <20210311025138.o4ub4j2ss725zpv4@bogus>
-References: <1614838092-30398-1-git-send-email-skomatineni@nvidia.com>
- <1614838092-30398-4-git-send-email-skomatineni@nvidia.com>
- <20210308043755.llvdsuz2jwvweovb@bogus>
- <4cebf482-a2f8-5a79-a2f6-4ccd7d31c6ad@nvidia.com>
+        id S229971AbhCKDRz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Mar 2021 22:17:55 -0500
+IronPort-SDR: 2S9GaluZCZO/eQMHdZQQsV0NpE0YRFlGXpBmkitXEgDHXxX1dgdKapGsif0Tg7Kv8+WWhZhiej
+ BZowUci0RIxA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="249972624"
+X-IronPort-AV: E=Sophos;i="5.81,238,1610438400"; 
+   d="scan'208";a="249972624"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 19:17:54 -0800
+IronPort-SDR: cn7ZHmS5AzyTNQiA5TUWotxw1ceI82ZdXDggWeaBzi88r3ueyanln1Yqn3EY6rM+eGxBj7TFpY
+ ElKyZ+v4pFNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,238,1610438400"; 
+   d="scan'208";a="409341618"
+Received: from lkp-server02.sh.intel.com (HELO ce64c092ff93) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 10 Mar 2021 19:17:53 -0800
+Received: from kbuild by ce64c092ff93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lKBpg-0000Xe-EF; Thu, 11 Mar 2021 03:17:52 +0000
+Date:   Thu, 11 Mar 2021 11:16:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 8608bdeb4cdb5608b4073077e6e5d7bdedefd169
+Message-ID: <60498bab.jUzETAn78mtsiRfa%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cebf482-a2f8-5a79-a2f6-4ccd7d31c6ad@nvidia.com>
-User-Agent: NeoMutt/20171215
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 10:32:17AM -0800, Sowjanya Komatineni wrote:
->
-> On 3/7/21 8:37 PM, Sudeep Holla wrote:
-> > On Wed, Mar 03, 2021 at 10:08:10PM -0800, Sowjanya Komatineni wrote:
-> > > This patch adds cpu-idle-states and corresponding state nodes to
-> > > Tegra194 CPU in dt-binding document
-> > >
-> > I see that this platform has PSCI support. Can you care to explain why
-> > you need additional DT bindings and driver for PSCI based CPU suspend.
-> > Until the reasons are convincing, consider NACK from my side for this
-> > driver and DT bindings. You should be really using those bindings and
-> > the driver may be with minor changes there.
-> >
-> MCE firmware is in charge of state transition for Tegra194 carmel CPUs.
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 8608bdeb4cdb5608b4073077e6e5d7bdedefd169  Merge branch 'devprop' into linux-next
 
-Sure, but I assume only TF-A talks to MCE and not any OSPM/Linux kernel.
+elapsed time: 725m
 
-> For run-time state transitions, need to provide state request along with its
-> residency time to MCE firmware which is running in the background.
->
+configs tested: 141
+configs skipped: 2
 
-Sounds similar to x86 mwait, perhaps we need to extend PSCI if we need
-to make this firmware PSCI compliant or just say it is not and implement
-completely independent implementation. I am not saying that is acceptable
-ATM but I prefer not to mix some implementation to make it look like
-PSCI compliant.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> State min residency is updated into power_state value along with state id
-> that is passed to psci_cpu_suspend_enter
->
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sparc                            allyesconfig
+mips                         db1xxx_defconfig
+powerpc                     tqm8540_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                         lubbock_defconfig
+m68k                       bvme6000_defconfig
+arc                          axs103_defconfig
+arm                       imx_v4_v5_defconfig
+csky                                defconfig
+arm                         s5pv210_defconfig
+arm                           h5000_defconfig
+ia64                         bigsur_defconfig
+powerpc                   motionpro_defconfig
+nios2                            alldefconfig
+arm                     eseries_pxa_defconfig
+powerpc                     sbc8548_defconfig
+sh                        dreamcast_defconfig
+parisc                           alldefconfig
+arm                             mxs_defconfig
+sh                          r7785rp_defconfig
+sh                            titan_defconfig
+sh                           se7712_defconfig
+powerpc                mpc7448_hpc2_defconfig
+powerpc                    sam440ep_defconfig
+powerpc                     akebono_defconfig
+mips                        jmr3927_defconfig
+mips                        nlm_xlp_defconfig
+sh                                  defconfig
+powerpc                 mpc832x_rdb_defconfig
+arm                       cns3420vb_defconfig
+m68k                       m5275evb_defconfig
+h8300                               defconfig
+mips                        bcm63xx_defconfig
+s390                          debug_defconfig
+mips                     loongson1c_defconfig
+arm                         mv78xx0_defconfig
+powerpc                     tqm8548_defconfig
+m68k                           sun3_defconfig
+ia64                             allyesconfig
+h8300                       h8s-sim_defconfig
+arm                          moxart_defconfig
+arm                           tegra_defconfig
+sh                              ul2_defconfig
+arm                        multi_v7_defconfig
+arm                        mvebu_v7_defconfig
+sh                            hp6xx_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                 mpc8540_ads_defconfig
+arc                         haps_hs_defconfig
+powerpc                     skiroot_defconfig
+powerpc                      ep88xc_defconfig
+mips                           jazz_defconfig
+powerpc                  storcenter_defconfig
+arm                       versatile_defconfig
+mips                        bcm47xx_defconfig
+powerpc                      pmac32_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210308
+i386                 randconfig-a003-20210308
+i386                 randconfig-a002-20210308
+i386                 randconfig-a006-20210308
+i386                 randconfig-a004-20210308
+i386                 randconfig-a001-20210308
+i386                 randconfig-a005-20210309
+i386                 randconfig-a003-20210309
+i386                 randconfig-a002-20210309
+i386                 randconfig-a006-20210309
+i386                 randconfig-a004-20210309
+i386                 randconfig-a001-20210309
+x86_64               randconfig-a013-20210309
+x86_64               randconfig-a016-20210309
+x86_64               randconfig-a015-20210309
+x86_64               randconfig-a014-20210309
+x86_64               randconfig-a011-20210309
+x86_64               randconfig-a012-20210309
+i386                 randconfig-a016-20210309
+i386                 randconfig-a012-20210309
+i386                 randconfig-a014-20210309
+i386                 randconfig-a013-20210309
+i386                 randconfig-a011-20210309
+i386                 randconfig-a015-20210309
+i386                 randconfig-a013-20210310
+i386                 randconfig-a016-20210310
+i386                 randconfig-a011-20210310
+i386                 randconfig-a014-20210310
+i386                 randconfig-a015-20210310
+i386                 randconfig-a012-20210310
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-Sounds like a hack/workaround. I would prefer to standardise that. IIUC
-the power_state is more static and derived from DT. I don't like to
-overload that TBH. Need to check with authors of that binding.
+clang tested configs:
+x86_64               randconfig-a006-20210309
+x86_64               randconfig-a001-20210309
+x86_64               randconfig-a004-20210309
+x86_64               randconfig-a002-20210309
+x86_64               randconfig-a005-20210309
+x86_64               randconfig-a003-20210309
 
-> Also states cross-over idle times need to be provided to MCE firmware.
->
-
-New requirements if this has to be PSCI compliant.
-
-> MCE firmware decides on state transition based on these inputs along with
-> its background work load.
->
-> So, Tegra specific CPU idle driver is required mainly to provide cross-over
-> thresholds from DT and run time idle state information to MCE firmware
-> through Tegra MCE communication APIs.
->
-
-I am worried if different vendors will come up with different custom
-solution for this. We need to either standardise this is Linux/DT or
-in PSCI.
-
-> Allowing cross-over threshold through DT allows users to vary idle time
-> thresholds for state transitions based on different use-cases.
->
-
-Sounds like policy and not platform specific to be in DT, but I will leave
-that to DT maintainers.
-
---
-Regards,
-Sudeep
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
