@@ -2,147 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DE8338F41
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 14:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF86338F52
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 15:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbhCLN6Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 08:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbhCLN6I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 08:58:08 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F4EC061574
-        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 05:58:08 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id w11so33638iol.13
-        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 05:58:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NfGNxFGx/GSqQ8J+prbrVB3YoseYYdcfdmqBB1ZWsf4=;
-        b=KCVpgGaszvjmh10So7k3QGeTRqp7SjFil5pxA1T6Y6eWZaIKdoJYOOBL+T4IbWbkjo
-         UCD6o0LrAm5I5CJE9wjyA1ccZrqCeRnIopcWV31HmV1bSv+vGjsEDQU1qeASKHWc7ZbD
-         OMrENlRbdkMujDZ7uOHyjS/fAXQ/LbjN+Xt48kFu9tCuQunKi4OvE/2iFi4ft+TlDvRq
-         YGhb6hFJ8Gymj8rPMAr+qCERnnOckCHtgJiU3h/F//8LymiX+vKW0OU6fFfolII5h8/s
-         27yvKbWve/Ad7raTIzRyyY+k91G2HJolY4So7He/zevu5vm3N/HsLbiLvQyGBlGY0HsW
-         p2Yg==
+        id S229667AbhCLOBj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 09:01:39 -0500
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:36416 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230136AbhCLOBW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 09:01:22 -0500
+Received: by mail-wm1-f52.google.com with SMTP id r15-20020a05600c35cfb029010e639ca09eso15865511wmq.1;
+        Fri, 12 Mar 2021 06:01:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NfGNxFGx/GSqQ8J+prbrVB3YoseYYdcfdmqBB1ZWsf4=;
-        b=iLfWWxEKCpaXm7S/xstsRycgpDXYFlfFr/JDBjD8nykJxalIioJjR4VbhuEa9O431y
-         DZ1j+s9QWXIX6Se1Q56gXW9vTFDNQGqNByHWqo5ZJUiiwUrLAkMirndT7CCAN4J03Htq
-         aJ1MxaFvtITyOxp9F7OouG7M4yOxlBQA6sxLxgvd4K+P8nUfBrPrrQTVWSn1Fx8WnqJM
-         WzBQjRWjLVwuAZ87bZZkrEIobq0A+45sBIYRPSRbeYdsOChVWWZmIs4P/dsWRKc4sXiA
-         0EZ/x8cNR/Y1zlbiD28RvSAQwULcjNYOlhR2DoP5rN5IP5apfWwGaoXbii0I1EwvPfqq
-         /fug==
-X-Gm-Message-State: AOAM531sSfuWrTMGp8PU8gq6cnf5orPIDiclVWH8q9/HbSC24rVnZDsY
-        zd5xOu7mNnjVREIjpX/3zhzfudcHDSvyCXv/pHtxEw==
-X-Google-Smtp-Source: ABdhPJwKSJnXvI9/NG4m48LW0+vy+lK8zsv8TIliueMw8ZAxuGgekU1/vc+Rj3Qh3ZoQ7xO+ZF+8KpfOFY+a0mjoEwA=
-X-Received: by 2002:a6b:ea04:: with SMTP id m4mr9913728ioc.160.1615557487699;
- Fri, 12 Mar 2021 05:58:07 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dSgPlkTo0bSewDX1VN5wr7O5veJFSznpHWcEpbI4QKM=;
+        b=H5wckEC1Syf3wGHcBxgHmkYON/e8XPwf3RV3SoH6hNyv0vXkaNxPhlziTGBNZo/rsE
+         xS10zraOqCPt0l9zWgmzMpIKMuDpwC8mjgKqcDtzi2OA8Yh+lM5YvMIq3R1KsxLH77Qd
+         KBYGk5E/3zfWF3FNVzb2xROS4crMGLQT/YxgOM0GAOZlvSJyKqgAgTT33NWcA+HRfpzt
+         PZwHEco577fhBiYJVx66LsdWoE/gKZWHDGc6e6hoqQJRUJhkrWovudBQ7QZOmZ0Dh8e6
+         1WgTriiGHB60yhrdR4rMRAcBmrMRkr1hWOURRD4kJekquLfeMtWC5kr2CnZ/UG+V+KOD
+         WI5A==
+X-Gm-Message-State: AOAM530i9uwwxRopeAg42D9dllDp727QFKyjhlHc+sjY4f+L1THf4gZN
+        fgak9I+oJg+4lN/VHqBLDQY=
+X-Google-Smtp-Source: ABdhPJwiZEetYlMeeisQXsl4kW/wbXmh4k53PtOmwkq0FytsdghJcrC1Stammny/+lC5OhGuLfZizQ==
+X-Received: by 2002:a1c:f406:: with SMTP id z6mr13529356wma.24.1615557679040;
+        Fri, 12 Mar 2021 06:01:19 -0800 (PST)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id l9sm2170676wmq.2.2021.03.12.06.01.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Mar 2021 06:01:17 -0800 (PST)
+Subject: Re: [PATCH] cpufreq: Rudimentary typos fix in the file
+ s5pv210-cpufreq.c
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org
+References: <20210312120817.12604-1-unixbhaskar@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Message-ID: <4c0c0738-72c3-7704-500a-28cb1a068aa1@kernel.org>
+Date:   Fri, 12 Mar 2021 15:01:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-References: <20210308133146.3168995-1-raychi@google.com> <20210309185807.ka4iljasq5cmpmil@earth.universe>
-In-Reply-To: <20210309185807.ka4iljasq5cmpmil@earth.universe>
-From:   Ray Chi <raychi@google.com>
-Date:   Fri, 12 Mar 2021 21:57:56 +0800
-Message-ID: <CAPBYUsCJ3ftC4ur412rFZGeeM_kDHrCh=BVci3=8SE2eFdPcQg@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: fix build error when POWER_SUPPLY is not enabled
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, naresh.kamboju@linaro.org,
-        Kyle Tso <kyletso@google.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210312120817.12604-1-unixbhaskar@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+On 12/03/2021 13:08, Bhaskar Chowdhury wrote:
+> 
+> s/untile/until/
+> s/souce/source/
+> s/divier/divider/
+> 
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+> ---
+>  drivers/cpufreq/s5pv210-cpufreq.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/s5pv210-cpufreq.c b/drivers/cpufreq/s5pv210-cpufreq.c
+> index bed496cf8d24..1cfea5339beb 100644
+> --- a/drivers/cpufreq/s5pv210-cpufreq.c
+> +++ b/drivers/cpufreq/s5pv210-cpufreq.c
+> @@ -378,7 +378,7 @@ static int s5pv210_target(struct cpufreq_policy *policy, unsigned int index)
+>  		/*
+>  		 * 6. Turn on APLL
+>  		 * 6-1. Set PMS values
+> -		 * 6-2. Wait untile the PLL is locked
+> +		 * 6-2. Wait until the PLL is locked
+>  		 */
+>  		if (index == L0)
+>  			writel_relaxed(APLL_VAL_1000, S5P_APLL_CON);
+> @@ -390,7 +390,7 @@ static int s5pv210_target(struct cpufreq_policy *policy, unsigned int index)
+>  		} while (!(reg & (0x1 << 29)));
+> 
+>  		/*
+> -		 * 7. Change souce clock from SCLKMPLL(667Mhz)
+> +		 * 7. Change source clock from SCLKMPLL(667Mhz)
+>  		 * to SCLKA2M(200Mhz) in MFC_MUX and G3D MUX
+>  		 * (667/4=166)->(200/4=50)Mhz
+>  		 */
+> @@ -439,7 +439,7 @@ static int s5pv210_target(struct cpufreq_policy *policy, unsigned int index)
+>  	}
+> 
+>  	/*
+> -	 * L4 level need to change memory bus speed, hence onedram clock divier
+> +	 * L4 level need to change memory bus speed, hence onedram clock divider
 
-Sorry for the late reply.
+Also grammar fix: need/needs.
 
-On Wed, Mar 10, 2021 at 2:58 AM Sebastian Reichel <sre@kernel.org> wrote:
->
-> Hi,
->
-> On Mon, Mar 08, 2021 at 09:31:46PM +0800, Ray Chi wrote:
-> > Fix build error when CONFIG_POWER_SUPPLY is not enabled.
-> >
-> > The build error occurs in mips (cavium_octeon_defconfig).
-> >
-> > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_remove':
-> > drivers/usb/dwc3/core.c:1657: undefined reference to `power_supply_put'
-> > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_properties':
-> > drivers/usb/dwc3/core.c:1270: undefined reference to `power_supply_get_by_name'
-> > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_probe':
-> > drivers/usb/dwc3/core.c:1632: undefined reference to `power_supply_put'
-> >
-> > Fixes: 59fa3def35de ("usb: dwc3: add a power supply for current control")
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Signed-off-by: Ray Chi <raychi@google.com>
-> > ---
->
-> While I'm fine with merging this after fixing up the subject, the
-> original patch for dwc3 [0] looks completly incorrect to me.
->
-> First of all it uses wrong scale (power-supply uses uA, not mA),
-> so you are charging 1000x slower than expected. Then the patchset
-> introduces a new DT property to get the power-supply device, but
-> does not update the DT binding documentation and does not Cc the
-> DT binding maintainer.
-
-Yes, it should use uA and send this information, and I will update a
-patch to fix it and add the DT binding documentation.
-
-> Next the property itself looks not very
-> smart to me. Usually one would use a device reference, not the
-> Linux device name.
->
-> Finally all existing devices solve this by registering a usb
-> notifier from the charger, so why are you going the other way
-> around? This is going to break once you want to use one of the
-> existing chargers with dwc3.
-
-Only the USB controller will know USB state/speed so that I think it is
-better to send this information from the USB side.
-For example:
-For USB high speed, charging current should be limited to 500 mA in
-configured state.
-For USB super speed, charging current should be limited to 900 mA in
-configured state.
-
->
-> I suggest to drop/revert the whole patchset.
->
-> [0] https://lore.kernel.org/linux-usb/20210222115149.3606776-1-raychi@google.com/
->
-> -- Sebastian
->
-> >  include/linux/power_supply.h | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> > index 81a55e974feb..6e776be5bfa0 100644
-> > --- a/include/linux/power_supply.h
-> > +++ b/include/linux/power_supply.h
-> > @@ -381,8 +381,14 @@ struct power_supply_battery_info {
-> >  extern struct atomic_notifier_head power_supply_notifier;
-> >  extern int power_supply_reg_notifier(struct notifier_block *nb);
-> >  extern void power_supply_unreg_notifier(struct notifier_block *nb);
-> > +#if IS_ENABLED(CONFIG_POWER_SUPPLY)
-> >  extern struct power_supply *power_supply_get_by_name(const char *name);
-> >  extern void power_supply_put(struct power_supply *psy);
-> > +#else
-> > +static inline void power_supply_put(struct power_supply *psy) {}
-> > +static inline struct power_supply *power_supply_get_by_name(const char *name)
-> > +{ return NULL; }
-> > +#endif
-> >  #ifdef CONFIG_OF
-> >  extern struct power_supply *power_supply_get_by_phandle(struct device_node *np,
-> >                                                       const char *property);
-> > --
-> > 2.30.1.766.gb4fecdf3b7-goog
-> >
+Best regards,
+Krzysztof
