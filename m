@@ -2,104 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B6533847A
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 04:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11D8338499
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 05:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbhCLDu2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Mar 2021 22:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S232122AbhCLERG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Mar 2021 23:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbhCLDtv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 22:49:51 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036CC061761
-        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 19:49:51 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id z5so11294750plg.3
-        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 19:49:51 -0800 (PST)
+        with ESMTP id S232115AbhCLERF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 23:17:05 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6125DC061762
+        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 20:17:05 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d23so8100527plq.2
+        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 20:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iClR6zNoYi1tdWvry+Z+GUDxBYD0gbeye1VeSZY/vbw=;
-        b=nQ9nVaAjkMgb+JuywXQnMMRSNJsrArWT9wZe0Zt4UQcm027HVtc9YmUY0Tgq6pB75n
-         avK7mjuDcA6fHWOOKt16Bn6zzPsVXHfXglJLiMuchEDS6iKrGF1BJQ0dsWTentn0DKT0
-         RiexBqsQv2mJqfbO8ZCxs8a0Y7+eGkUf4f4UMuSN4XtC2kgNqdJNnnS4B0+LcRsySYrI
-         H/54aXYJ+eCSCPLQnLIWnZV6s3uVGake/hY+nXeOmSREonL8Kkaf0VNEIy7kfTaZ/pCP
-         xYZuWJSjxST95dEnRYgfh9eYdYRIxgg+QpzRz3snWYZXW3wTl1rPE5YbDXPqpkdliCyH
-         b2uw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=psCwVt+HMpuF/3ueFUvJ3Kzy08liF94PegpIe6jUsIw=;
+        b=k1X7gN79bF4A1DpE1plL6Cx86EhbOg4f5q1LzqlVl0/MzLs9k1G/w/f596T7c0jS3E
+         GF3qr9n0aWxWQ9nj7NcNbQ0lbHY2igl+pl0JnN8QltHk1TdCjTUc0EGUpxEqc7PAZSkZ
+         BHaq0mJ8EAArvE+aXmIPVBJvvoYl15SWgKYcoqqoAZdCNnwBfgHNj+I29Zh9TOVDp8I9
+         Jo1RXdlFWfgasLPPy+cG/J1c3aSjez8jLMIyNVbQUaZRuRBblbRnNG1lXH0GOdYe7knR
+         41insHDKPDGpLM6vBt8JJUTBDMQSkJQGpgkJPt4ssiLJ9iZEWqVgoC7hVeS8JxFm9c9k
+         ZFZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iClR6zNoYi1tdWvry+Z+GUDxBYD0gbeye1VeSZY/vbw=;
-        b=reWTLkL0anKtbXu6/z0zX83ziUd9vaLEyHghHf6k+FW4nBi5DzNYroNdlPf5Z7iiXK
-         E35iKRzOeSI6bMNzHUTPmNOlcG/gClEq7ArYR37YGlqTOLsfbSe1oA8hs5ZWXCYuZrrG
-         sUtUoZl7UR1jyk1Y0GLABdDG+wrNoEprF4qNOsHwSQe1lj5WkQMq772ApcInQS6/Tthy
-         Yi6LMYv3FQfChReDb8HG+IHyCgig756DN+oZOW1WD9ial3/ioL/P6Cmpy+qIuwJ3qQ4c
-         bxluBxEXvN3iCRqNVnLePeiqPBkGOmokhvqaIJ0/FH8QSwGiJi7n/jhUDPaXaRtV+mKR
-         d9Kw==
-X-Gm-Message-State: AOAM530IOmgO2w/N0Amv8QnZEqsWjhvSCHyPOOrUGHsNWVu/rMYxb4fO
-        ujWQ9GS1bbDcTYwpHUoZw5KeYg==
-X-Google-Smtp-Source: ABdhPJx1/YXBd5rjm1d6Lv3nqKUlMq082FYhUb2KfFzoFV4X/hbMyfw19avz6xZ5rBO4iKEs9shvNw==
-X-Received: by 2002:a17:90a:400f:: with SMTP id u15mr11904527pjc.80.1615520990723;
-        Thu, 11 Mar 2021 19:49:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=psCwVt+HMpuF/3ueFUvJ3Kzy08liF94PegpIe6jUsIw=;
+        b=HU1cPYNnX7fCLE5+VfZhZ8LzmojWqs6QNnyf+XVD4jnrBD2cAOK6JNq+oKev/Y3g6s
+         xbAuZjyNPqBeoHs0NPu0i7krnAFmta2mNZkiOJ/lDN0HxsK9iNqRr1IE6Xda6+JEtSlH
+         MV/rhctDumRUh+txOsnwA9jMRlo6EbSxx4HfqmFgVjxDyHqYYK8Iqm9x5cAr3nvZ2FTw
+         CTfEz6LMuuZSmUSWgjpwqf8FCPKHrNY19uNJy3kPFmpyEk0AHOOow7ruHcJmzdKU2gpI
+         wV+5wGbxexpj1zoA1c7+FOMIeomn4Q6L4wnRR6uljsyi/ZwAA32qcOnSblPkuFaldhfc
+         bMag==
+X-Gm-Message-State: AOAM5332EWTXARmI38jSurtzPOZ5SF/AJ4Jr5ATbOW8uL2nQGXj3iXbk
+        mQ2L8YjHKTnVp5nkFkE7ow2ivQ==
+X-Google-Smtp-Source: ABdhPJzV3jrLtEVNUi5lwDCIC7DmsJCHSkc5a3oEP4IMn/Op0uBDmPnajqJ6vyIEfI4ti6TbR1kYVw==
+X-Received: by 2002:a17:90a:bb02:: with SMTP id u2mr8027389pjr.175.1615522624606;
+        Thu, 11 Mar 2021 20:17:04 -0800 (PST)
 Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id v35sm3454767pga.3.2021.03.11.19.49.49
+        by smtp.gmail.com with ESMTPSA id b3sm3507535pgd.48.2021.03.11.20.17.02
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Mar 2021 19:49:49 -0800 (PST)
-Date:   Fri, 12 Mar 2021 09:19:42 +0530
+        Thu, 11 Mar 2021 20:17:03 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Beata Michalska <beata.michalska@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
-Subject: Re: [PATCH] opp: Invalidate current opp when draining the opp list
-Message-ID: <20210312034942.jh3txxoowbo2ekyn@vireshk-i7>
-References: <1614870454-18709-1-git-send-email-beata.michalska@arm.com>
- <20210305042401.gktrgach4dzxp7on@vireshk-i7>
- <418fc3cb-d5ec-9216-269a-e055e78718e5@arm.com>
- <20210308115053.ua2gfo6kfnfjslyd@vireshk-i7>
- <20210308181446.GA26783@e120325.cambridge.arm.com>
- <20210309043121.546mlvl4jmshogor@vireshk-i7>
- <20210309121455.GA13095@e120325.cambridge.arm.com>
- <20210310084738.pe7ppyeq6hn7wbvv@vireshk-i7>
- <20210310230300.GA26976@e120325.cambridge.arm.com>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Beata Michalska <beata.michalska@arm.com>,
+        "v5 . 11+" <stable@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH V2] opp: Don't drop extra references to OPPs accidentally
+Date:   Fri, 12 Mar 2021 09:46:59 +0530
+Message-Id: <606a5d4227e4610399c61086ac55c46068a90b03.1615522590.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210310230300.GA26976@e120325.cambridge.arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-03-21, 23:03, Beata Michalska wrote:
-> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> > index c2689386a906..150be4c28c99 100644
-> > --- a/drivers/opp/core.c
-> > +++ b/drivers/opp/core.c
-> > @@ -1492,7 +1492,11 @@ static struct dev_pm_opp *_opp_get_next(struct opp_table *opp_table,
-> >  
-> >  	mutex_lock(&opp_table->lock);
-> >  	list_for_each_entry(temp, &opp_table->opp_list, node) {
-> > -		if (dynamic == temp->dynamic) {
-> > +		/*
-> > +		 * Refcount must be dropped only once for each OPP by OPP core,
-> > +		 * do that with help of "removed" flag.
-> > +		 */
-> > +		if (!temp->removed && dynamic == temp->dynamic) {
-> >  			opp = temp;
-> >  			break;
-> >  		}
-> How about tweaking the _opp_get_next to use list_for_each_entry_continue
-> instead ? It would eliminate the need of tracking the 'removed' status
-> and could save few cycles as it wouldn't have to go through the list
-> starting from it's beginning each time it is being called.
-> Happy to draft another version.
+From: Beata Michalska <beata.michalska@arm.com>
 
-I tried that as well, but the problem is that we need to drop locks in
-between and if the next OPP somehow gets freed or another one gets
-added there, we can be in trouble. To make this work without any side
-effects, the new field was kind of required.
+We are required to call dev_pm_opp_put() from outside of the
+opp_table->lock as debugfs removal needs to happen lock-less to avoid
+circular dependency issues.
 
+commit cf1fac943c63 ("opp: Reduce the size of critical section in
+_opp_kref_release()") tried to fix that introducing a new routine
+_opp_get_next() which keeps returning OPPs that can be freed by the
+callers and this routine shall be called without holding the
+opp_table->lock.
+
+Though the commit overlooked the fact that the OPPs can be referenced by
+other users as well and this routine will end up dropping references
+which were taken by other users and hence freeing the OPPs prematurely.
+
+In effect, other users of the OPPs will end up having invalid pointers
+at hand. We didn't see any crash reports earlier as the exact situation
+never happened, though it is certainly possible.
+
+We need a way to mark which OPPs are no longer referenced by the OPP
+core, so we don't drop extra references to them accidentally.
+
+This commit adds another OPP flag, "removed", which is used to track
+this. And now we should never end up dropping extra references to the
+OPPs.
+
+Cc: v5.11+ <stable@vger.kernel.org> # v5.11+
+Fixes: cf1fac943c63 ("opp: Reduce the size of critical section in _opp_kref_release()")
+Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+[ Viresh: Almost rewrote entire patch, added new "removed" field,
+	  rewrote commit log and added the correct Fixes tag. ]
+Co-developed-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Sending it formally again so others don't miss it.
+
+ drivers/opp/core.c | 48 ++++++++++++++++++++++++----------------------
+ drivers/opp/opp.h  |  2 ++
+ 2 files changed, 27 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index c2689386a906..1556998425d5 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1492,7 +1492,11 @@ static struct dev_pm_opp *_opp_get_next(struct opp_table *opp_table,
+ 
+ 	mutex_lock(&opp_table->lock);
+ 	list_for_each_entry(temp, &opp_table->opp_list, node) {
+-		if (dynamic == temp->dynamic) {
++		/*
++		 * Refcount must be dropped only once for each OPP by OPP core,
++		 * do that with help of "removed" flag.
++		 */
++		if (!temp->removed && dynamic == temp->dynamic) {
+ 			opp = temp;
+ 			break;
+ 		}
+@@ -1502,10 +1506,27 @@ static struct dev_pm_opp *_opp_get_next(struct opp_table *opp_table,
+ 	return opp;
+ }
+ 
+-bool _opp_remove_all_static(struct opp_table *opp_table)
++/*
++ * Can't call dev_pm_opp_put() from under the lock as debugfs removal needs to
++ * happen lock less to avoid circular dependency issues. This routine must be
++ * called without the opp_table->lock held.
++ */
++static void _opp_remove_all(struct opp_table *opp_table, bool dynamic)
+ {
+ 	struct dev_pm_opp *opp;
+ 
++	while ((opp = _opp_get_next(opp_table, dynamic))) {
++		opp->removed = true;
++		dev_pm_opp_put(opp);
++
++		/* Drop the references taken by dev_pm_opp_add() */
++		if (dynamic)
++			dev_pm_opp_put_opp_table(opp_table);
++	}
++}
++
++bool _opp_remove_all_static(struct opp_table *opp_table)
++{
+ 	mutex_lock(&opp_table->lock);
+ 
+ 	if (!opp_table->parsed_static_opps) {
+@@ -1520,13 +1541,7 @@ bool _opp_remove_all_static(struct opp_table *opp_table)
+ 
+ 	mutex_unlock(&opp_table->lock);
+ 
+-	/*
+-	 * Can't remove the OPP from under the lock, debugfs removal needs to
+-	 * happen lock less to avoid circular dependency issues.
+-	 */
+-	while ((opp = _opp_get_next(opp_table, false)))
+-		dev_pm_opp_put(opp);
+-
++	_opp_remove_all(opp_table, false);
+ 	return true;
+ }
+ 
+@@ -1539,25 +1554,12 @@ bool _opp_remove_all_static(struct opp_table *opp_table)
+ void dev_pm_opp_remove_all_dynamic(struct device *dev)
+ {
+ 	struct opp_table *opp_table;
+-	struct dev_pm_opp *opp;
+-	int count = 0;
+ 
+ 	opp_table = _find_opp_table(dev);
+ 	if (IS_ERR(opp_table))
+ 		return;
+ 
+-	/*
+-	 * Can't remove the OPP from under the lock, debugfs removal needs to
+-	 * happen lock less to avoid circular dependency issues.
+-	 */
+-	while ((opp = _opp_get_next(opp_table, true))) {
+-		dev_pm_opp_put(opp);
+-		count++;
+-	}
+-
+-	/* Drop the references taken by dev_pm_opp_add() */
+-	while (count--)
+-		dev_pm_opp_put_opp_table(opp_table);
++	_opp_remove_all(opp_table, true);
+ 
+ 	/* Drop the reference taken by _find_opp_table() */
+ 	dev_pm_opp_put_opp_table(opp_table);
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 50fb9dced3c5..407c3bfe51d9 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -56,6 +56,7 @@ extern struct list_head opp_tables, lazy_opp_tables;
+  * @dynamic:	not-created from static DT entries.
+  * @turbo:	true if turbo (boost) OPP
+  * @suspend:	true if suspend OPP
++ * @removed:	flag indicating that OPP's reference is dropped by OPP core.
+  * @pstate: Device's power domain's performance state.
+  * @rate:	Frequency in hertz
+  * @level:	Performance level
+@@ -78,6 +79,7 @@ struct dev_pm_opp {
+ 	bool dynamic;
+ 	bool turbo;
+ 	bool suspend;
++	bool removed;
+ 	unsigned int pstate;
+ 	unsigned long rate;
+ 	unsigned int level;
 -- 
-viresh
+2.25.0.rc1.19.g042ed3e048af
+
