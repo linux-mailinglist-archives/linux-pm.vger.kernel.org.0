@@ -2,58 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B58F3396DE
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 19:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296AF3396EC
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 19:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbhCLSqO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 13:46:14 -0500
-Received: from foss.arm.com ([217.140.110.172]:59488 "EHLO foss.arm.com"
+        id S233840AbhCLSt6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 13:49:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:59532 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233973AbhCLSpu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 12 Mar 2021 13:45:50 -0500
+        id S233668AbhCLStr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 12 Mar 2021 13:49:47 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E333AED1;
-        Fri, 12 Mar 2021 10:45:49 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.57.17.106])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 40E8C3F7D7;
-        Fri, 12 Mar 2021 10:45:48 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 494C2ED1;
+        Fri, 12 Mar 2021 10:49:47 -0800 (PST)
+Received: from [10.57.17.106] (unknown [10.57.17.106])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C5D73F793;
+        Fri, 12 Mar 2021 10:49:45 -0800 (PST)
+Subject: Re: [PATCH v2 1/5] thermal/drivers/core: Use a char pointer for the
+ cooling device name
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>
+References: <20210312170316.3138-1-daniel.lezcano@linaro.org>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cw00.choi@samsung.com
-Cc:     lukasz.luba@arm.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-Subject: [PATCH] PM / devfreq: unlock mutex and free devfreq struct in error path
-Date:   Fri, 12 Mar 2021 18:45:34 +0000
-Message-Id: <20210312184534.6423-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
+Message-ID: <18fdc11b-abda-25d9-582f-de2f9dfa2feb@arm.com>
+Date:   Fri, 12 Mar 2021 18:49:43 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20210312170316.3138-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The devfreq->lock is held for time of setup. Release the lock in the
-error path, before jumping to the end of the function.
 
-Change the goto destination which frees the allocated memory.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/devfreq/devfreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 3/12/21 5:03 PM, Daniel Lezcano wrote:
+> We want to have any kind of name for the cooling devices as we do no
+> longer want to rely on auto-numbering. Let's replace the cooling
+> device's fixed array by a char pointer to be allocated dynamically
+> when registering the cooling device, so we don't limit the length of
+> the name.
+> 
+> Rework the error path at the same time as we have to rollback the
+> allocations in case of error.
+> 
+> Tested with a dummy device having the name:
+>   "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"
+> 
+> A village on the island of Anglesey (Wales), known to have the longest
+> name in Europe.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   .../ethernet/mellanox/mlxsw/core_thermal.c    |  2 +-
+>   drivers/thermal/thermal_core.c                | 38 +++++++++++--------
+>   include/linux/thermal.h                       |  2 +-
+>   3 files changed, 24 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> index bf85ce9835d7..7447c2a73cbd 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> @@ -141,7 +141,7 @@ static int mlxsw_get_cooling_device_idx(struct mlxsw_thermal *thermal,
+>   	/* Allow mlxsw thermal zone binding to an external cooling device */
+>   	for (i = 0; i < ARRAY_SIZE(mlxsw_thermal_external_allowed_cdev); i++) {
+>   		if (strnstr(cdev->type, mlxsw_thermal_external_allowed_cdev[i],
+> -			    sizeof(cdev->type)))
+> +			    strlen(cdev->type)))
+>   			return 0;
+>   	}
+>   
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 996c038f83a4..9ef8090eb645 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -960,10 +960,7 @@ __thermal_cooling_device_register(struct device_node *np,
+>   {
+>   	struct thermal_cooling_device *cdev;
+>   	struct thermal_zone_device *pos = NULL;
+> -	int result;
+> -
+> -	if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+> -		return ERR_PTR(-EINVAL);
+> +	int ret;
+>   
+>   	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+>   	    !ops->set_cur_state)
+> @@ -973,14 +970,17 @@ __thermal_cooling_device_register(struct device_node *np,
+>   	if (!cdev)
+>   		return ERR_PTR(-ENOMEM);
+>   
+> -	result = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+> -	if (result < 0) {
+> -		kfree(cdev);
+> -		return ERR_PTR(result);
+> +	ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+> +	if (ret < 0)
+> +		goto out_kfree_cdev;
+> +	cdev->id = ret;
+> +
+> +	cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
+> +	if (!cdev->type) {
+> +		ret = -ENOMEM;
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index b6d3e7db0b09..99b2eeedc238 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -822,7 +822,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 
- 	if (devfreq->profile->timer < 0
- 		|| devfreq->profile->timer >= DEVFREQ_TIMER_NUM) {
--		goto err_out;
-+		mutex_unlock(&devfreq->lock);
-+		goto err_dev;
- 	}
- 
- 	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
--- 
-2.17.1
+Since we haven't called the device_register() yet, I would call here:
+kfree(cdev);
+and then jump
 
+> +		goto out_ida_remove;
+>   	}
+>   
+
+Other than that, LGTM
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Regards,
+Lukasz
