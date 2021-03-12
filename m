@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F529338535
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 06:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E8B338573
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 06:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbhCLF1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 00:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S231727AbhCLFdh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 00:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbhCLF1C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 00:27:02 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F7EC061761
-        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 21:27:02 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id v14so8199214pgq.2
-        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 21:27:02 -0800 (PST)
+        with ESMTP id S231722AbhCLFdP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 00:33:15 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FFDC061762
+        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 21:33:15 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id kk2-20020a17090b4a02b02900c777aa746fso10513682pjb.3
+        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 21:33:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=J5fqwubZg87avI0rRtQwN+SXtjOKj2+8RaJp62TnkpA=;
-        b=mf2lohOPVRGidobqklbZjn3Xnmn4GilOSAPz/Es4rZMVhvRFW16qKSvJwGxacizmDM
-         tT+ibJwyDMj0dZ0QwtMsGsshtI9JpOBj3AoJvLaAxuhaZ4HL6tkdafRXi5HPx8aFNxZ7
-         4/jSQSqTdf3ieXs01o99B+bOnXCH2Vj1q5a3kEifOFtvDASGY1G+OFDLlWG+R79T9q7h
-         sdjbwjQxL/4vjj48pT1ohmJzSy1nFnAXg+AW9fFrnh+JpHsKDI6C6jrmli1PwCO/6P9O
-         ggAmfg1YDpRtAAdzDL+kVupEn08FqGF4jO3q4TaMYNg5dJBZY8ewfS1R7G6SA7fUhvy0
-         ssOg==
+        bh=Yn9um0RUV5qS6ZDS+XmJIEF5UruSaGYqcCAn+8nlwK0=;
+        b=AsT0a31K/s61Ur3ZyBxZIWuCMUPx2OBLJZtWxZ9I7oct+ejDM6jX9oK7HtwlYiPt7T
+         dQjLuYCZAG8rAuj79j6RFrwqsCBWIHl1zZxIxaGWyL3wXzAFxfvOrg1KVUKkCisdS34d
+         5unwD/W+yvGr48R+MEJBx6+vSiF9GuC3bTT6PSiuioz6uxAswGWKYpDGRzTepzNoAdRP
+         3zIxwnJJsHmQdX+JNQmt3cWaVTgrPnJuzFDEUWUoCjL87wnD0EeFgsqOudsTwbftnhUq
+         yCyR5d02IREhzNavc0wn85MY5VtSWg6BNEHGcN1VNCOVrtgMOvXZX1TUN4TzPyMcy21z
+         fhqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=J5fqwubZg87avI0rRtQwN+SXtjOKj2+8RaJp62TnkpA=;
-        b=Xs+VVQPEyYFyuOPriwMmQ6RZ6IfMJqNi0hpNvt+WeuVMOYuIKzvZICM8jbk/bihTqt
-         D/GBoW/n4WG1W66kZaQVD0RA76TW5OMgehE+KFI8nA/Bapqz3ELaJwRBRipBaMKfNKDT
-         dgsnglp7a0M9mhruMjnWIlqmm75g65fF9y1vJUzRKqiA14LWqWQy96zKUy6r8mizdqpR
-         oTLGWHEaFMBQt9fvoTH8X5rCQr4jMXfTBOq8Sjnz0xcQBhTWPYzJlN8aRchLX6efFc+h
-         oYhqEYnfhoxDX+q3XEEIjPyItxEKAIr/mQkrTV57BJg5BQOQPKGLunx79DLq85GL+T1B
-         Ae+A==
-X-Gm-Message-State: AOAM533gcA/PDz2Ywhvxc7Gv4NjW8xpnx4P0eiy4kfc/Bmjqix7qS3m0
-        I1b52rwkyBLweyJkoGktXDf1fg==
-X-Google-Smtp-Source: ABdhPJxSydG1zZQdQJipt4kFNAl189iLlI7sOzPMgqns7aTDEbaSzTwo9QPnHQ8GgoEZNmcDOq5YJA==
-X-Received: by 2002:a62:84c3:0:b029:1f5:8dbf:4e89 with SMTP id k186-20020a6284c30000b02901f58dbf4e89mr10615120pfd.49.1615526821953;
-        Thu, 11 Mar 2021 21:27:01 -0800 (PST)
+        bh=Yn9um0RUV5qS6ZDS+XmJIEF5UruSaGYqcCAn+8nlwK0=;
+        b=OOwwvjLT2ZmA6yY5GCIOTyDynyOI5HIlYgqOpIhK8ksOJcvZju6//4f0yJQOAXl9tk
+         Y+6EKRWTNpGZEIv0XjsLtwyAB3tQDBLOOwB0EKrcjb9dYRYouh6h/v0t6kxhstOuWR0K
+         oLVCDYJlWLWNx6NfZcHk9xBmtREOTukXU270fjwhKO/og7I0ExKUe4uYiKUgr1XzM3oV
+         S8f3wQm5XyFkOoAlSaIb+A/VjIrBVghHSIpF4jiup8i+GRy2yL8vzB4Q00Z5gw7YDlma
+         17TOFxLdwf696bo73TBCixv/YixifMzD1MUMsiVJ+cazgSI3m30SLxFGVPfu9w+OYAIa
+         ydOg==
+X-Gm-Message-State: AOAM5304dE8h0pWoAZiMfpNPf1fzxW89je9rPFhxp7woO3gX15GpXnwZ
+        WYkgE7GKv87eiLI7XUzG++InEQ==
+X-Google-Smtp-Source: ABdhPJyDxvuOHwV2kjRNLGoR8RcX493onMZPdYf0HajVty4Da/2VfFbEKgGgJtSunQpX+xy+QefzoQ==
+X-Received: by 2002:a17:902:e78e:b029:e4:84c1:51ce with SMTP id cp14-20020a170902e78eb02900e484c151cemr11595726plb.25.1615527194476;
+        Thu, 11 Mar 2021 21:33:14 -0800 (PST)
 Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id a144sm4185197pfd.200.2021.03.11.21.27.00
+        by smtp.gmail.com with ESMTPSA id z2sm4059367pfq.198.2021.03.11.21.33.13
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Mar 2021 21:27:01 -0800 (PST)
-Date:   Fri, 12 Mar 2021 10:56:59 +0530
+        Thu, 11 Mar 2021 21:33:13 -0800 (PST)
+Date:   Fri, 12 Mar 2021 11:03:12 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
@@ -76,35 +76,44 @@ Cc:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
         linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 05/14] opp: Add devres wrapper for
- dev_pm_opp_register_notifier
-Message-ID: <20210312052659.uih7ikjdnkc5kl4j@vireshk-i7>
+Subject: Re: [PATCH v2 01/14] opp: Add devres wrapper for
+ dev_pm_opp_set_clkname
+Message-ID: <20210312053312.zgke2mzjkqmwn67i@vireshk-i7>
 References: <20210311192105.14998-1-digetx@gmail.com>
- <20210311192105.14998-6-digetx@gmail.com>
+ <20210311192105.14998-2-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210311192105.14998-6-digetx@gmail.com>
+In-Reply-To: <20210311192105.14998-2-digetx@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 11-03-21, 22:20, Dmitry Osipenko wrote:
-> From: Yangtao Li <tiny.windzz@gmail.com>
-> 
-> Add devres wrapper for dev_pm_opp_register_notifier() to simplify driver
-> code.
-> 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/opp/core.c     | 38 ++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_opp.h |  6 ++++++
->  2 files changed, 44 insertions(+)
+> +struct opp_table *devm_pm_opp_set_clkname(struct device *dev, const char *name)
+> +{
+> +	struct opp_table *opp_table;
+> +	int err;
+> +
+> +	opp_table = dev_pm_opp_set_clkname(dev, name);
+> +	if (IS_ERR(opp_table))
+> +		return opp_table;
+> +
+> +	err = devm_add_action_or_reset(dev, devm_pm_opp_clkname_release, opp_table);
+> +	if (err)
+> +		opp_table = ERR_PTR(err);
+> +
+> +	return opp_table;
+> +}
 
-As I said in the previous version, I am not sure if we need this patch
-at all. This has only one user.
+I wonder if we still need to return opp_table from here, or a simple
+integer is fine.. The callers shouldn't be required to use the OPP
+table directly anymore I believe and so better simplify the return
+part of this and all other routines you are adding here..
+
+If there is a user which needs the opp_table, let it use the regular
+non-devm variant.
 
 -- 
 viresh
