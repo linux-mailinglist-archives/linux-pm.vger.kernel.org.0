@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E313338462
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 04:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117C533846B
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 04:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbhCLDkZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Mar 2021 22:40:25 -0500
+        id S231882AbhCLDlC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Mar 2021 22:41:02 -0500
 Received: from mailgw01.mediatek.com ([210.61.82.183]:46629 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231816AbhCLDkZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 22:40:25 -0500
-X-UUID: 8f6dea06bdc145759f0b089a88e1d1bc-20210312
-X-UUID: 8f6dea06bdc145759f0b089a88e1d1bc-20210312
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        with ESMTP id S231817AbhCLDk0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 22:40:26 -0500
+X-UUID: ed0fc046fec64e9b971f48c3defbe9d1-20210312
+X-UUID: ed0fc046fec64e9b971f48c3defbe9d1-20210312
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <michael.kao@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1749655158; Fri, 12 Mar 2021 11:40:19 +0800
+        with ESMTP id 1981339506; Fri, 12 Mar 2021 11:40:19 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Fri, 12 Mar 2021 11:40:18 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 12 Mar 2021 11:40:17 +0800
+ Transport; Fri, 12 Mar 2021 11:40:18 +0800
 From:   Michael Kao <michael.kao@mediatek.com>
 To:     <michael.kao@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -35,10 +35,12 @@ CC:     Eduardo Valentin <edubezval@gmail.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>
-Subject: [v3,0/3] thermal: mediatek: Add LVTS architecture thermal controller
-Date:   Fri, 12 Mar 2021 11:40:15 +0800
-Message-ID: <20210312034018.17437-1-michael.kao@mediatek.com>
+Subject: [v3,1/3] thermal: mediatek: Relocate driver to mediatek folder
+Date:   Fri, 12 Mar 2021 11:40:16 +0800
+Message-ID: <20210312034018.17437-2-michael.kao@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210312034018.17437-1-michael.kao@mediatek.com>
+References: <20210312034018.17437-1-michael.kao@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -46,55 +48,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch move thermal files related to Mediatek to the mediatek folder.
-And introduce the new architecture LVTS (low pressure thermal sensor) driver to report
-the highest temperature in the SoC and record the highest temperature sensor,
-each sensor as a hot zone.
-The LVTS body is divided into two parts, the LVTS controller and the LVTS device.
-The LVTS controller can connect up to 4 LVTS devices, and each LVTS device
-can connect up to 7 TSMCUs.
+Add Mediatek proprietary folder to upstream more thermal zone and cooler
+drivers. Relocate the original thermal controller driver to it and rename
+as soc_temp.c to show its purpose more clearly.
 
-The architecture will be the first to be used on mt6873 and mt8192.
-
-Change in v3:
-        - [2/3]
-          - change the expression in the lvts_temp_to_raw to dev_s64.
-
-Change in v2:
-	- Rebase to kernel-5.11-rc1.
-	- [2/3]
-	  - sort headers
-	  - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
-	  - disconstruct the api of lvts_read_tc_msr_raw.
-	  - add the initial value max_temp = 0 and compare e.q.
-	    in the lvts_read_all_tc_temperature.
-	  - add the return with invalid number in the lvts_init.
-
-This patch depends on [1].
-
-[1]https://patchwork.kernel.org/project/linux-mediatek/cover/1608642587-15634-1-git-send-email-weiyi.lu@mediatek.com/
-
-Michael Kao (3):
-  thermal: mediatek: Relocate driver to mediatek folder
-  thermal: mediatek: Add LVTS drivers for SoC theraml zones
-  dt-bindings: thermal: Add binding document for mt6873 thermal
-    controller
-
- .../thermal/mediatek-thermal-lvts.yaml        |   81 ++
- drivers/thermal/Kconfig                       |   14 +-
- drivers/thermal/Makefile                      |    2 +-
- drivers/thermal/mediatek/Kconfig              |   33 +
- drivers/thermal/mediatek/Makefile             |    2 +
- .../{mtk_thermal.c => mediatek/soc_temp.c}    |    0
- drivers/thermal/mediatek/soc_temp_lvts.c      | 1287 +++++++++++++++++
- drivers/thermal/mediatek/soc_temp_lvts.h      |  312 ++++
- 8 files changed, 1720 insertions(+), 11 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+---
+ drivers/thermal/Kconfig                       | 14 ++++-------
+ drivers/thermal/Makefile                      |  2 +-
+ drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
+ drivers/thermal/mediatek/Makefile             |  1 +
+ .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+ 5 files changed, 29 insertions(+), 11 deletions(-)
  create mode 100644 drivers/thermal/mediatek/Kconfig
  create mode 100644 drivers/thermal/mediatek/Makefile
  rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
- create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
- create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
 
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 7edc8dc6bbab..b2da0a1bda34 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -401,16 +401,10 @@ config DA9062_THERMAL
+ 	  zone.
+ 	  Compatible with the DA9062 and DA9061 PMICs.
+ 
+-config MTK_THERMAL
+-	tristate "Temperature sensor driver for mediatek SoCs"
+-	depends on ARCH_MEDIATEK || COMPILE_TEST
+-	depends on HAS_IOMEM
+-	depends on NVMEM || NVMEM=n
+-	depends on RESET_CONTROLLER
+-	default y
+-	help
+-	  Enable this option if you want to have support for thermal management
+-	  controller present in Mediatek SoCs
++menu "Mediatek thermal drivers"
++depends on ARCH_MEDIATEK || COMPILE_TEST
++source "drivers/thermal/mediatek/Kconfig"
++endmenu
+ 
+ config AMLOGIC_THERMAL
+ 	tristate "Amlogic Thermal Support"
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index b64dd50a6629..f9e07c3f529e 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -55,7 +55,7 @@ obj-y				+= st/
+ obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+ obj-y				+= tegra/
+ obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+-obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
++obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
+ obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+ obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
+ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+new file mode 100644
+index 000000000000..0351e73170b7
+--- /dev/null
++++ b/drivers/thermal/mediatek/Kconfig
+@@ -0,0 +1,23 @@
++config MTK_THERMAL
++	tristate "Mediatek thermal drivers"
++	depends on THERMAL_OF
++	help
++	  This is the option for Mediatek thermal software
++	  solutions. Please enable corresponding options to
++	  get temperature information from thermal sensors or
++	  turn on throttle mechaisms for thermal mitigation.
++
++if MTK_THERMAL
++
++config MTK_SOC_THERMAL
++	tristate "Temperature sensor driver for mediatek SoCs"
++	depends on HAS_IOMEM
++	depends on NVMEM
++	depends on RESET_CONTROLLER
++	help
++	  Enable this option if you want to get SoC temperature
++	  information for Mediatek platforms. This driver
++	  configures thermal controllers to collect temperature
++	  via AUXADC interface.
++
++endif
+diff --git a/drivers/thermal/mediatek/Makefile b/drivers/thermal/mediatek/Makefile
+new file mode 100644
+index 000000000000..f75313ddce5e
+--- /dev/null
++++ b/drivers/thermal/mediatek/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mediatek/soc_temp.c
+similarity index 100%
+rename from drivers/thermal/mtk_thermal.c
+rename to drivers/thermal/mediatek/soc_temp.c
 -- 
 2.18.0
+
