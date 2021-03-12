@@ -2,134 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CC333998C
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 23:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58C63399EF
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Mar 2021 00:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235491AbhCLWQF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 17:16:05 -0500
-Received: from mail-ej1-f44.google.com ([209.85.218.44]:35733 "EHLO
-        mail-ej1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbhCLWQE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 17:16:04 -0500
-Received: by mail-ej1-f44.google.com with SMTP id dx17so56249121ejb.2;
-        Fri, 12 Mar 2021 14:16:03 -0800 (PST)
+        id S235763AbhCLXQy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 18:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235762AbhCLXQc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 18:16:32 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F86C061574;
+        Fri, 12 Mar 2021 15:16:31 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id c6so5152771qtc.1;
+        Fri, 12 Mar 2021 15:16:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IVJkcSjjxe945bjRaf3/DZ5ob3yC2me2EmxXrb0K5JE=;
+        b=g/LAnkm3rVhqupxVCmJ8IWcq33cORsOmN4qkvPEwO8I/Zd2xL/Ul2OFOuYFHllED96
+         DU+lVXOWPjHJ/RjKt81t5lcm6hf6BATgtp4m3DLWJwFzdf0CnlSZuDnxTYIG03u6fp4K
+         a8b3Ks/bAsjESI/Zl/dvfgwrqqex0/2bp5lq1S3h5twaxb+M7f2Ef1/k0zQlWqz1ILst
+         SecpQHQgazilB3dHfljYJ2a9Kh4H6gUnPaRCmoJor7TSR+KpeaEf/i4pIfZtT21wC6lU
+         Oxr8uS+KObQ+d/GOyKOsYqNw8iWsee4MKpVkqf2UQ3YWx0Xl4FuO7V+ISDZxaA7Linxq
+         2pqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VTnFgkRrNhyDIIDutUBQeuTI7eGNqYLKDjmPe9hscB4=;
-        b=afi3LvS5P0oewgeHnQlxDaHZ2MtN20ewA24iWcZ21u97aNUDq4c8mhjiJNSo3V/hxt
-         l3pbmEK+DMRA/GVKbZyGKVJSfaKT9myE8GejkIhDBer3N235pxUDmce/bFHAXjRX/6uT
-         0fw7KGHUpJuLyYnB++BEXUG4zF1flyYW8fmH6rQVwDny5m+0a8lQwgVUCNysjbn0wnkN
-         0ZP+G6Z1iUCHnvhHlrxlvd4+XcLKrITEDwywA02d/1EOJv9+XF5h/E7OE0W0LnDrYyF0
-         iBm5+z8W7YubYc6SBCpx2b41LM4EIzixvxC+Zp4fJPbyb4qb/t/rpcVjXE8OYNXceXFL
-         SLhg==
-X-Gm-Message-State: AOAM533k+U3N4gR9yoii60R+li9U/cIQ9decevfA48EuZPPcWNua1Q3M
-        U0W9b9Vo6g67dVUlvS5jplZaA2941ikbGVORmXP8xKdj
-X-Google-Smtp-Source: ABdhPJyNEKfdBHy42Gk4bEjnDsPbgnxPd4Zn2UlYyF1aOI9e4CuYM1k71uyT5juAEwcP01ExzsQh24FGb7b74P3fEGA=
-X-Received: by 2002:a17:906:dfcc:: with SMTP id jt12mr11132874ejc.31.1615587362840;
- Fri, 12 Mar 2021 14:16:02 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=IVJkcSjjxe945bjRaf3/DZ5ob3yC2me2EmxXrb0K5JE=;
+        b=pZSHXmbbxWWyTOYNZkTDiJ79OBs2NPDw68AmkJ5Nshr/lEa5/vlFafwuimi/27IOqX
+         1tHSEdv7KKZDlWZghumWrJmknLxF5s5umjF3gZ2k9bdFEYRozIvTfzppzXDghj/bZ3p5
+         tfO/1Es0lc/c3/Nq1xbNnPeT7PaFd2pdl39aZuJC7UUvns5diNKx7rZBBYcCP8pqJSll
+         NXjkzb7BpqVYIv7F2STffYqDtOy6LoAMV6UcL8EqGmqX0PCj1QFvIwVvT0SAo1Vt5p1T
+         O8ic0sH+vq8S5sJ8j3ecN0+eiVZkFXO88DrYBx/hbW9v5xxl0SSGytDiQOJtDcn4FDAC
+         52vg==
+X-Gm-Message-State: AOAM530RniMSzwb5s/PG4tBBSCgZbs+vxW9XPBH7Ba+eldovZni/w9Sv
+        LZhrhj0U6Hi1TiTlVNLfTW8=
+X-Google-Smtp-Source: ABdhPJx71AdxgPjOi30uPe6oODNqkoD9dD2HCFDDvI42z3CtxECF3j1cIQMUDCr5FTpl1kia+L0zcQ==
+X-Received: by 2002:aed:20a8:: with SMTP id 37mr13685755qtb.170.1615590990890;
+        Fri, 12 Mar 2021 15:16:30 -0800 (PST)
+Received: from Gentoo ([156.146.54.3])
+        by smtp.gmail.com with ESMTPSA id p1sm5485922qkj.73.2021.03.12.15.16.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Mar 2021 15:16:29 -0800 (PST)
+Date:   Sat, 13 Mar 2021 04:46:20 +0530
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org
+Subject: Re: [PATCH] cpufreq: Rudimentary typos fix in the file
+ s5pv210-cpufreq.c
+Message-ID: <YEv2RDAdeJEU75ib@Gentoo>
+Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org
+References: <20210312120817.12604-1-unixbhaskar@gmail.com>
+ <4c0c0738-72c3-7704-500a-28cb1a068aa1@kernel.org>
 MIME-Version: 1.0
-References: <20210116170725.5245-1-dsmythies@telus.net> <CAJvTdKm3h_msmu-NjTPY+09bLqyVL_-GCHnGFdNGdTcSZRP4zQ@mail.gmail.com>
- <CAAYoRsVYejQRByDz78jbv5cMfd+ctT8N3YxfOBndW8FJiuk9MA@mail.gmail.com>
-In-Reply-To: <CAAYoRsVYejQRByDz78jbv5cMfd+ctT8N3YxfOBndW8FJiuk9MA@mail.gmail.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Fri, 12 Mar 2021 17:15:51 -0500
-Message-ID: <CAJvTdKkpbFqDRL9BP3Ri0Yeb0VMXv79dr+C=ym2+GWMRZEEYpw@mail.gmail.com>
-Subject: Re: [PATCH] tools/power/x86/turbostat: Fix TCC offset bit mask
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RJNsnmoOYLEO93ur"
+Content-Disposition: inline
+In-Reply-To: <4c0c0738-72c3-7704-500a-28cb1a068aa1@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Doug,
-The offset works for control.
 
-However, it is erroneous to use it for reporting of the actual
-temperature, like I did in turbostat.
-Thus, I'm going to revert the patch that added it's use in turbostat
-for the Temperature column.
+--RJNsnmoOYLEO93ur
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-thanks,
--Len
+On 15:01 Fri 12 Mar 2021, Krzysztof Kozlowski wrote:
+>On 12/03/2021 13:08, Bhaskar Chowdhury wrote:
+>>
+>> s/untile/until/
+>> s/souce/source/
+>> s/divier/divider/
+>>
+>> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+>> ---
+>>  drivers/cpufreq/s5pv210-cpufreq.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/s5pv210-cpufreq.c b/drivers/cpufreq/s5pv210-cpufreq.c
+>> index bed496cf8d24..1cfea5339beb 100644
+>> --- a/drivers/cpufreq/s5pv210-cpufreq.c
+>> +++ b/drivers/cpufreq/s5pv210-cpufreq.c
+>> @@ -378,7 +378,7 @@ static int s5pv210_target(struct cpufreq_policy *policy, unsigned int index)
+>>  		/*
+>>  		 * 6. Turn on APLL
+>>  		 * 6-1. Set PMS values
+>> -		 * 6-2. Wait untile the PLL is locked
+>> +		 * 6-2. Wait until the PLL is locked
+>>  		 */
+>>  		if (index == L0)
+>>  			writel_relaxed(APLL_VAL_1000, S5P_APLL_CON);
+>> @@ -390,7 +390,7 @@ static int s5pv210_target(struct cpufreq_policy *policy, unsigned int index)
+>>  		} while (!(reg & (0x1 << 29)));
+>>
+>>  		/*
+>> -		 * 7. Change souce clock from SCLKMPLL(667Mhz)
+>> +		 * 7. Change source clock from SCLKMPLL(667Mhz)
+>>  		 * to SCLKA2M(200Mhz) in MFC_MUX and G3D MUX
+>>  		 * (667/4=166)->(200/4=50)Mhz
+>>  		 */
+>> @@ -439,7 +439,7 @@ static int s5pv210_target(struct cpufreq_policy *policy, unsigned int index)
+>>  	}
+>>
+>>  	/*
+>> -	 * L4 level need to change memory bus speed, hence onedram clock divier
+>> +	 * L4 level need to change memory bus speed, hence onedram clock divider
+>
+>Also grammar fix: need/needs.
+>
+Hmmm ...good catch...V2 on the way...
 
-On Fri, Mar 12, 2021 at 1:26 AM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Len,
->
->
-> thank you for your reply.
->
-> On Thu, Mar 11, 2021 at 3:19 PM Len Brown <lenb@kernel.org> wrote:
-> >
-> > Thanks for the close read, Doug.
-> >
-> > This field size actually varies from system to system,
-> > but the reality is that the offset is never that big, and so the
-> > smaller mask is sufficient.
->
-> Disagree.
->
-> I want to use an offset of 26.
->
-> > Finally, this may all be moot, because there is discussion that using
-> > the offset this way is simply erroneous.
->
-> Disagree.
-> It works great.
-> As far as I know/recall I was the only person that responded to Rui's thread
-> "thermal/intel: introduce tcc cooling driver" [1]
-> And, I spent quite a bit of time doing so.
-> However, I agree the response seems different between the two systems
-> under test, Rui's and mine.
->
-> [1] https://marc.info/?l=linux-pm&m=161070345329806&w=2
->
-> >  stay tuned.
->
-> O.K.
->
-> ... Doug
-> >
-> > -Len
-> >
-> >
-> > On Sat, Jan 16, 2021 at 12:07 PM Doug Smythies <doug.smythies@gmail.com> wrote:
-> > >
-> > > The TCC offset mask is incorrect, resulting in
-> > > incorrect target temperature calculations, if
-> > > the offset is big enough to exceed the mask size.
-> > >
-> > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> > > ---
-> > >  tools/power/x86/turbostat/turbostat.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> > > index 389ea5209a83..d7acdd4d16c4 100644
-> > > --- a/tools/power/x86/turbostat/turbostat.c
-> > > +++ b/tools/power/x86/turbostat/turbostat.c
-> > > @@ -4823,7 +4823,7 @@ int read_tcc_activation_temp()
-> > >
-> > >         target_c = (msr >> 16) & 0xFF;
-> > >
-> > > -       offset_c = (msr >> 24) & 0xF;
-> > > +       offset_c = (msr >> 24) & 0x3F;
-> > >
-> > >         tcc = target_c - offset_c;
-> > >
-> > > --
-> > > 2.25.1
-> > >
-> >
-> >
-> > --
-> > Len Brown, Intel Open Source Technology Center
+>Best regards,
+>Krzysztof
 
+--RJNsnmoOYLEO93ur
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Len Brown, Intel Open Source Technology Center
+iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmBL9kAACgkQsjqdtxFL
+KRXfgwgAj9MS+zQZM0/LWmsaYBUzHsKvjQAmubXCv8z04y6vPO2JrDikuqh7K6jD
+qLjk4IHuUA58LscAixWxGt61ZkZvnKb/Fc3sakBezcfstJFbgoee+OJ4gGYPf0qi
+CbDtkzS8y5X7dcsbMYM4Sug18VZr5uT6NntlDB2fn5cOluDPQ+g/JAs0twSOo56o
+I1aWOrY6TQGnLaHC65j0LKYRJw2NpLAdc4t0BEup+QRsWqcXMx7bAQaTUuLfnGr1
+bxWqYHw9Xom1i42d9igmJmJlEZ9LvpRNg78fLqlMFY4aTO/4Zd/03xR3bEGSn23f
+w2EkC/P1E1G9ALPIXDvzjR7ITJ1PSQ==
+=q+mc
+-----END PGP SIGNATURE-----
+
+--RJNsnmoOYLEO93ur--
