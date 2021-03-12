@@ -2,76 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA1D3387CC
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 09:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BFF3389BF
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 11:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbhCLIkl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 03:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232335AbhCLIkg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 03:40:36 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D72C061574
-        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 00:40:35 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id n16so44481241lfb.4
-        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 00:40:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zd/n8ZjoI52cW2RYj7i2eUpePlcI6znelKNfg1+/N6g=;
-        b=o1nZH2ZQ0X9VrXrbqEGFgEhNlN3QHg85Kk3IILWmL2ENheieF9vVLkN5fJt17kg3U5
-         FvgjB1qbromZUMkt9zI6zOdss0FIje9puol31R/yXM+1rtLSk7FzhW8FSmloGOINUzAb
-         OOEd8aEnqm+hyqnyl8d3C5sb1bGiWkf+N7iO66TyOvtPM9sI3Ps8kuwqm9vGUcuq87A8
-         GiaDX4uOCCemdq8R7tZvrXiPFuwreIqRT6OlikLjxl/anV2q6b/TuJrH3yrBgVAJ87Nr
-         nJ4m/y5Yye87cZvqse9uO2f8TErSc3CV+vh9yUFLx/1xqh6zkgCsNqyfEIPSD426uw5D
-         LErw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zd/n8ZjoI52cW2RYj7i2eUpePlcI6znelKNfg1+/N6g=;
-        b=musaN02e9TYsRSPawuMgSihlHXfrZHb4EbaHSvh4orWzoraBDueX+69Bz1yk+OQDny
-         EpyYU22sjZ2bLnhR+HpFL3QJjaOOnjCS1wkzvkGpfKQa6o4qYQAcwxoS3xyJHoxdoH9p
-         daohUNxDSko9toGoPWgG7q5L4XeVYuFbE7k13pYZgeV7/btkVNF/2MVbLbO0K6mqqBMa
-         nHU7gEG6zxdyC+ebPXvYTuhb1IxN7n8Zypyj7siKJ8OHBp4/vL0vNYGu8mmpM4HRwcKK
-         pJG+E/FuG/HsUbNvsjbtn7wpP5t1UoGRsjB8JFf8az0MswV6FhGRklX1CC5z0fGSy98S
-         0fJQ==
-X-Gm-Message-State: AOAM530wIHY+mAHwvP6kxroChPONJztz3o5oTlbCIeRloXlrTYVe/wn3
-        R0NxOm2GPm6jtdcef6ucn/cQGbbFK6A1uzG5MlyBiA==
-X-Google-Smtp-Source: ABdhPJyemyZC2ugXlOB2/+8Bbu5VIHXDl/v5G/z59y/hua8qqd9ZcFkO7qbCqiZ4L3RX5HZb+5pdHg2Je6jQM+soCbE=
-X-Received: by 2002:ac2:4d95:: with SMTP id g21mr4985373lfe.29.1615538433856;
- Fri, 12 Mar 2021 00:40:33 -0800 (PST)
+        id S233072AbhCLKM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 05:12:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:50702 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233158AbhCLKL4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 12 Mar 2021 05:11:56 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 229C31FB;
+        Fri, 12 Mar 2021 02:11:55 -0800 (PST)
+Received: from [10.57.17.106] (unknown [10.57.17.106])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 169D13F70D;
+        Fri, 12 Mar 2021 02:11:53 -0800 (PST)
+Subject: Re: [PATCH v3 1/5] powercap/drivers/dtpm: Encapsulate even more the
+ code
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20210310110212.26512-1-daniel.lezcano@linaro.org>
+ <d8d3c50c-fee6-6f31-c085-d1ebce5297da@arm.com>
+ <aa1ecdaa-3f91-c886-ce1e-45557d01991a@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <c35d7d49-3772-a231-1690-bbea2af3f4f4@arm.com>
+Date:   Fri, 12 Mar 2021 10:11:52 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20210312083604.3708890-1-linus.walleij@linaro.org>
-In-Reply-To: <20210312083604.3708890-1-linus.walleij@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 12 Mar 2021 09:40:22 +0100
-Message-ID: <CACRpkdaHOf-WQVueBhiH20D8YvcoXe1Yjri5Vsp9sw_V4p3Cuw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] mfd/power: Push data into power supply
-To:     Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <aa1ecdaa-3f91-c886-ce1e-45557d01991a@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 9:36 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-> - The power maintainer (Sebastian) provide an ACK
 
-Ooops I noticed actuall Sebastian already gave an ACK for these
-patches:
-https://lore.kernel.org/linux-pm/20210128001700.pkuyfpq6uzcjb5ud@earth.universe/
+On 3/11/21 10:57 AM, Daniel Lezcano wrote:
+> On 11/03/2021 11:15, Lukasz Luba wrote:
+>> Hi Daniel,
+>>
+>> On 3/10/21 11:02 AM, Daniel Lezcano wrote:
+>>> In order to increase the self-encapsulation of the dtpm generic code,
+>>> the following changes are adding a power update ops to the dtpm
+>>> ops. That allows the generic code to call directly the dtpm backend
+>>> function to update the power values.
+>>>
+>>> The power update function does compute the power characteristics when
+>>> the function is invoked. In the case of the CPUs, the power
+>>> consumption depends on the number of online CPUs. The online CPUs mask
+>>> is not up to date at CPUHP_AP_ONLINE_DYN state in the tear down
+>>> callback. That is the reason why the online / offline are at separate
+>>> state. As there is already an existing state for DTPM, this one is
+>>> only moved to the DEAD state, so there is no addition of new state
+>>> with these changes. The dtpm node is not removed when the cpu is
+>>> unplugged.
+>>>
+>>> That simplifies the code for the next changes and results in a more
+>>> self-encapsulated code.
+>>>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> ---
+>>> V2:
+>>>    - Updated the changelog with the CPU node not being removed
+>>>    - Commented the cpu hotplug callbacks to explain why there are two
+>>> callbacks
+>>>    - Changed 'upt_power_uw' to 'update_power_uw'
+>>>    - Removed unused cpumask variable
+>>> ---
+>>>    drivers/powercap/dtpm.c     |  54 ++++++-------
+>>>    drivers/powercap/dtpm_cpu.c | 148 ++++++++++++++++--------------------
+>>>    include/linux/cpuhotplug.h  |   2 +-
+>>>    include/linux/dtpm.h        |   3 +-
+>>>    4 files changed, 97 insertions(+), 110 deletions(-)
+>>>
+>>
+>> [snip]
+>>
+>>> @@ -210,27 +175,20 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
+>>>        for_each_cpu(cpu, policy->related_cpus)
+>>>            per_cpu(dtpm_per_cpu, cpu) = dtpm;
+>>>    -    sprintf(name, "cpu%d", dtpm_cpu->cpu);
+>>> +    sprintf(name, "cpu%d-cpufreq", dtpm_cpu->cpu);
+>>
+>> We should be safe in normal platforms, since there is less than
+>> < 300 cores. although, I would use 2x CPUFREQ_NAME_LEN array.
+> 
+> I'm counting 9999 cores.
+> 
+> We have:
+> #define CPUFREQ_NAME_LEN 16
+> 
+> "cpu-cpufreq\0" counts 12 characters.
+> 
+> There are 4 characters left, 9999 max then, no ?
 
-Sorry for keeping bad track.
+Yes, my '< 300' was referring to some server platforms,
+which IIRC had 2 sockets, each with 128 cores. I don't
+know about future, though.
 
-This means Lee can add Sebastians ACK and
-merge these patches at will. (I can also resend
-with the ACKs if need be.)
+> 
+> The code is designed for cpufreq with the energy model which targets
+> ARM64 architecture and AFAICT we are far away of having so many cores on
+> our phones.
 
-Yours,
-Linus Walleij
+True, otherwise with such big number of cores in mobile, we would face
+probably more hard to investigate issues, than this simple one ;)
+
+> 
+> Except I'm wrong, I would prefer to keep the current CPUFREQ_NAME_LEN to
+> not introduce subtle bugs (like stack overflow) if the length is
+> increased in cpufreq.h.
+> 
+> What do you think ?
+
+Agree, please skip my former comment and just take the reviewed tag.
+
+> 
+>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>>
+>> Regards,
+>> Lukasz
+>>
+> 
+> 
