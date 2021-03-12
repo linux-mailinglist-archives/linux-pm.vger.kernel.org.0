@@ -2,123 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 525D3339826
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 21:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31273398CE
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 22:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234654AbhCLUX4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 15:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S235076AbhCLVBR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 16:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234644AbhCLUXd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 15:23:33 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A332C061574
-        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 12:23:33 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id mz6-20020a17090b3786b02900c16cb41d63so11618807pjb.2
-        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 12:23:33 -0800 (PST)
+        with ESMTP id S235138AbhCLVBF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 16:01:05 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22EEC061574
+        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 13:01:04 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id a18so5506178wrc.13
+        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 13:01:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=039rlWsKonP66C2q95Q26c9Ry4EAnI2qExSC2AZggGQ=;
-        b=f2QVQXsw1uFrurLMLl3UXwkKHb0bH6jd8laQ4Uo+QgQrxMoEWD3nmSoVJW80svro/z
-         dWe6e6D1vwmzjU6FJjrp4wlxCVZWq0DgyI4kBNOdNguyjneYwFUIgAUPruIXgVheI35I
-         KFQy15xfSy+udIx0X747gqi2nToxmyq11HB99D4nV9hLtbQvg8liL+Q4FRu+BhZ4sux/
-         03z2+t5kMFjGYULAVJ8W0n9uDBzwZO62A91hPRSyX6tYiWp/xhDVE4srmYSMdHKag027
-         6I9tjnH0BQLh6p2N0KsahFtM/2S+cIl/EaZ56Lrvvl0TiTsHDf9QryDBP73gy5MYRXBQ
-         HnCw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OW16M2oHQuCJpM+XkMtF+2gBz8Vr9GAENBLb54tN4k0=;
+        b=a2xUD1NIAyX1PU+RXEUjBJnwAyPaiu7CGe4gS/xted4LweaXqUDTmMu/L2xT28GfDK
+         aCQk2Pfmxce3Q33+KClCT08OPlVlX+fylA49UZwNoCT12pIqpWIwAbb0kZLMxFAKJT69
+         bCVyXy4T/kUAx1ZFePPd+Oa203ZkrXhrAtRWWB/2l/+6Hb+Skq9zrOCODCg2uvBacG7w
+         kfrIXtIQI7Dq4IFUsLD4slkq947MuBJpKLOXKO7TDZePieKwEfvMM35+IkXnS6zriObj
+         gLz/lwiVDr0TJeatb115lBvIxKSoaxjR13htAmvBEGu8qJ5BlXV/qOICOraoA/5f0f9q
+         OIOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=039rlWsKonP66C2q95Q26c9Ry4EAnI2qExSC2AZggGQ=;
-        b=cLj3kcB9QXrpUlpAzRUu4BfTwh2yup9VH388HHi4FLdgmaTCCOEVjdc8f3m0olrKNw
-         FhQVqErerYENbPC+AJTHl0kl+8bkPy33Sho/lZBs5mmLk0P6mkIQFMIuuZ4GxHHa0fd9
-         6ibmRf9gxFb+4PV6hUmvS1bp2RRBTrUO/0OHKTa8QzEdBv8b5wkJu9Gup/sMYDpF+aW7
-         HNA2JG/6ZuzL1BrdPnuY2zbPJVbhbqBl1xpiQ2rCKFt8SbobVp1xLRS/IQuMtw7aY5PI
-         i0Sun+Vo5UCVp7Q66yHB6SsodfWKYp3uCTnI8xg1HRQf4XCv65MYlNtmeUH4xde1ZADo
-         2zxA==
-X-Gm-Message-State: AOAM532JKSyfqFwicYzwS+kobZphx3SaIept0TUfY8vHJ4Ye0q1Ovc91
-        vu+O1wWxiiJYL8YcRh8L0sPuiQ==
-X-Google-Smtp-Source: ABdhPJywo7mRvQK2FXJ+rSW4YGtnpU6VNwXE2rZ+4vwffbNEFtvxXBetSXV930tFUpxOVgtoj8m4DA==
-X-Received: by 2002:a17:903:2286:b029:e6:6499:8c2d with SMTP id b6-20020a1709032286b02900e664998c2dmr241244plh.17.1615580612870;
-        Fri, 12 Mar 2021 12:23:32 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id r10sm6547078pfq.216.2021.03.12.12.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 12:23:32 -0800 (PST)
-Message-ID: <604bcdc4.1c69fb81.10fb4.139c@mx.google.com>
-Date:   Fri, 12 Mar 2021 12:23:32 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OW16M2oHQuCJpM+XkMtF+2gBz8Vr9GAENBLb54tN4k0=;
+        b=Q/7FV4EX/rel4k8XzQwvGy/onCUPCfbFWhUaqGwHkruxXKqitK/CjcE5drR5/3rtOQ
+         VAdWbtSka632YYKtcW/b8webCXy9UqI+k+p8XOp0Kke6J0ZVPFwRwIHs4rTR52CmiuEp
+         SL4P5u3mW1AcsAMkIP/83EBOCm0ay/s2hJ5yVrX9JOp6K9y0DRC6QZqPrCweV5jIv3ZY
+         HhjSvEQNvn3MKwbxMunZ9BxWBlnVu8KVL/fO8N05Ma2yID6vWDwzB3zOxlaNMqLJxqnX
+         6bCeml0DGkHYe1vB3wFrKREbRQGQ12Au0H+/B89VmPxDAJUjuxpLLXWGrOqljAhtlqN+
+         xHkA==
+X-Gm-Message-State: AOAM532y6OycTGp8eul5BBWmkOYsy9zQIcRKlNizhwzxDBEgtkUNhuNd
+        0okZvx4Svvl6VsXuYHhAp/HuPw==
+X-Google-Smtp-Source: ABdhPJxhfA3kkeuqBusRtxq6EFIznZgwWgg+rpuPM02a8+c1eg+ny7oLWW4UwxxUmR+bvfg+H5WJ1g==
+X-Received: by 2002:adf:fbce:: with SMTP id d14mr15343716wrs.44.1615582863265;
+        Fri, 12 Mar 2021 13:01:03 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:846c:d89e:20aa:2765? ([2a01:e34:ed2f:f020:846c:d89e:20aa:2765])
+        by smtp.googlemail.com with ESMTPSA id u2sm4434387wmm.5.2021.03.12.13.01.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Mar 2021 13:01:02 -0800 (PST)
+Subject: Re: [PATCH v2 1/5] thermal/drivers/core: Use a char pointer for the
+ cooling device name
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>
+References: <20210312170316.3138-1-daniel.lezcano@linaro.org>
+ <18fdc11b-abda-25d9-582f-de2f9dfa2feb@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <f51fcec0-1483-cecb-d984-591097c324ca@linaro.org>
+Date:   Fri, 12 Mar 2021 22:01:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: devprop-5.12-rc3-29-g42326a293954f
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed,
- 7 passed (devprop-5.12-rc3-29-g42326a293954f)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <18fdc11b-abda-25d9-582f-de2f9dfa2feb@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed (devprop-5.12-rc3-29-g42326a=
-293954f)
+On 12/03/2021 19:49, Lukasz Luba wrote:
+> 
+> 
+> On 3/12/21 5:03 PM, Daniel Lezcano wrote:
+>> We want to have any kind of name for the cooling devices as we do no
+>> longer want to rely on auto-numbering. Let's replace the cooling
+>> device's fixed array by a char pointer to be allocated dynamically
+>> when registering the cooling device, so we don't limit the length of
+>> the name.
+>>
+>> Rework the error path at the same time as we have to rollback the
+>> allocations in case of error.
+>>
+>> Tested with a dummy device having the name:
+>>   "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"
+>>
+>> A village on the island of Anglesey (Wales), known to have the longest
+>> name in Europe.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   .../ethernet/mellanox/mlxsw/core_thermal.c    |  2 +-
+>>   drivers/thermal/thermal_core.c                | 38 +++++++++++--------
+>>   include/linux/thermal.h                       |  2 +-
+>>   3 files changed, 24 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+>> b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+>> index bf85ce9835d7..7447c2a73cbd 100644
+>> --- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+>> +++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+>> @@ -141,7 +141,7 @@ static int mlxsw_get_cooling_device_idx(struct
+>> mlxsw_thermal *thermal,
+>>       /* Allow mlxsw thermal zone binding to an external cooling
+>> device */
+>>       for (i = 0; i < ARRAY_SIZE(mlxsw_thermal_external_allowed_cdev);
+>> i++) {
+>>           if (strnstr(cdev->type, mlxsw_thermal_external_allowed_cdev[i],
+>> -                sizeof(cdev->type)))
+>> +                strlen(cdev->type)))
+>>               return 0;
+>>       }
+>>   diff --git a/drivers/thermal/thermal_core.c
+>> b/drivers/thermal/thermal_core.c
+>> index 996c038f83a4..9ef8090eb645 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -960,10 +960,7 @@ __thermal_cooling_device_register(struct
+>> device_node *np,
+>>   {
+>>       struct thermal_cooling_device *cdev;
+>>       struct thermal_zone_device *pos = NULL;
+>> -    int result;
+>> -
+>> -    if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+>> -        return ERR_PTR(-EINVAL);
+>> +    int ret;
+>>         if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+>>           !ops->set_cur_state)
+>> @@ -973,14 +970,17 @@ __thermal_cooling_device_register(struct
+>> device_node *np,
+>>       if (!cdev)
+>>           return ERR_PTR(-ENOMEM);
+>>   -    result = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+>> -    if (result < 0) {
+>> -        kfree(cdev);
+>> -        return ERR_PTR(result);
+>> +    ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+>> +    if (ret < 0)
+>> +        goto out_kfree_cdev;
+>> +    cdev->id = ret;
+>> +
+>> +    cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
+>> +    if (!cdev->type) {
+>> +        ret = -ENOMEM;
+> 
+> Since we haven't called the device_register() yet, I would call here:
+> kfree(cdev);
+> and then jump
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/dev=
-prop-5.12-rc3-29-g42326a293954f/
+I'm not sure to understand, we have to remove the ida, no ?
 
-Tree: pm
-Branch: testing
-Git Describe: devprop-5.12-rc3-29-g42326a293954f
-Git Commit: 42326a293954f11eadf31161b8315bf6dc2279da
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+> Other than that, LGTM
+> 
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> 
+> Regards,
+> Lukasz
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
