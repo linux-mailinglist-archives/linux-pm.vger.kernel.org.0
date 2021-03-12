@@ -2,93 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EC2338FD6
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 15:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F298B33903E
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 15:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbhCLOXw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 09:23:52 -0500
-Received: from mail-il1-f177.google.com ([209.85.166.177]:38919 "EHLO
-        mail-il1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbhCLOXe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 09:23:34 -0500
-Received: by mail-il1-f177.google.com with SMTP id d5so2709781iln.6;
-        Fri, 12 Mar 2021 06:23:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=XxHhsjwJy7g25WZK0LUSCqs3RaOKr506xmdEiRVWi2k=;
-        b=qOsJ5EcJkWeZs/Yxxh+gFrzJ36XPfB/zJefPVOW7TQBDOYW0XvBD62YJz4FcMXaup7
-         wjKIwOBPWHDzcBKyiDWvzL7LbqWMPNLKwmkCCByncjFp6RNqT/pgJGXP3APGexf/UmwK
-         jeBLrZJ8y7qtMdvU1YhISrwtITLgiV2M3ym6NdB8VYVMTeGwf2LO+7ANVK4z17xGmEE5
-         rPOFgAaO9jV6e+ki4yXALvrlbYWC9nnxo8cPUomVw2pzYz7wVVZVafV9/P8NAUEBOiI0
-         R3VEM0fHElNltwsZOq/SwOXSD3DowMmd6mTPeVjnt2SXbwcRclZHkDjESQyPumuHukBj
-         igNQ==
-X-Gm-Message-State: AOAM531X4htN1b2DBFwQPpnMVTaBBO6EUvBGcBwaasXzCsJhYRi2Eze1
-        ygB2zeuYKzKR7yx4UQ3I1NRie/B6UQ==
-X-Google-Smtp-Source: ABdhPJxJpjz2GBDwmGLUkq6ApU5syUA42rdXTaVJFTACslbCnbG7UUeYEm+3qBCpJUXwA+woWTYoXw==
-X-Received: by 2002:a92:194b:: with SMTP id e11mr2925546ilm.184.1615559013695;
-        Fri, 12 Mar 2021 06:23:33 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id 23sm3162088iog.45.2021.03.12.06.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 06:23:32 -0800 (PST)
-Received: (nullmailer pid 2976050 invoked by uid 1000);
-        Fri, 12 Mar 2021 14:23:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S231378AbhCLOqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 09:46:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36042 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230443AbhCLOqC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 12 Mar 2021 09:46:02 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D5C1E64FF5;
+        Fri, 12 Mar 2021 14:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615560362;
+        bh=uKuPCJmVXKdSvoBoK1n5jZj6W+kPOug0nlBkfL0be5A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=im/9hk4ENclg5+Xl4SZnjFMg+ZqnI/vNYwKOmDApOE2g9OPfuPHZ4+gdVwr3iv9Sp
+         ljTJ3jAIBrJttHBCcHWkfxtGRpHoiDAF5u41/4Z3qKtEM/xCDq3ppv9/7pE0FBYFne
+         Hlb0XbbwiMn03x6YaRJYo9XdEQgLVYvR7FmUlBic2OHRmOelOELw7lniNnW4V0o+fQ
+         7eYE9RD26wO+JSZHBwkM6GQneAOBJfK/hAWl+USyGAs7Bi4KDq34uIEQhSlgxCANLu
+         8y0DVCXmX9GlX7ZrKU6prgXaojTZtCzatqQ9c568Ng9qEyRrQQPCWqpne6ECzstLdl
+         on3VTUlPz2kSw==
+Received: by mail-ej1-f41.google.com with SMTP id c10so53744966ejx.9;
+        Fri, 12 Mar 2021 06:46:01 -0800 (PST)
+X-Gm-Message-State: AOAM533MOIT4/NgZCKxAMhEaURsju2SiR2aBbnwIq/wXYdEKaKym0LN1
+        No+ViL7Xa5lPsthDussB5QEdSLgtMA8yXZ2aP/A=
+X-Google-Smtp-Source: ABdhPJzArJLq7E8p/Wrjxvx39fPZ3Za3s8FDD0PZIoHrONi5/qkRVSnSI5kJXYDPXrHvffWbTcGkp98tbeAWXs+gyXg=
+X-Received: by 2002:a17:906:a896:: with SMTP id ha22mr8774370ejb.503.1615560360439;
+ Fri, 12 Mar 2021 06:46:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20210312141051.blqkm2v2yx6psild@linutronix.de>
+In-Reply-To: <20210312141051.blqkm2v2yx6psild@linutronix.de>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Fri, 12 Mar 2021 15:45:48 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPeXQS2pZ-siZGP+E3y1Gus5_9-ByAetUD9Mk0UH+t0OYA@mail.gmail.com>
+Message-ID: <CAJKOXPeXQS2pZ-siZGP+E3y1Gus5_9-ByAetUD9Mk0UH+t0OYA@mail.gmail.com>
+Subject: Re: [PATCH] extcon: Provide *extcon_*_notifier_all() stubs for !CONFIG_EXTCON
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Timon Baetz <timon.baetz@protonmail.com>, linux-pm@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        sebastian.reichel@collabora.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-tegra@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?b?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20210311231208.18180-4-digetx@gmail.com>
-References: <20210311231208.18180-1-digetx@gmail.com> <20210311231208.18180-4-digetx@gmail.com>
-Subject: Re: [PATCH v3 3/6] dt-bindings: power: tegra: Add binding for core power domain
-Date:   Fri, 12 Mar 2021 07:23:29 -0700
-Message-Id: <1615559009.777144.2976049.nullmailer@robh.at.kernel.org>
+        Thomas Gleixner <tglx@linutronix.de>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 12 Mar 2021 02:12:05 +0300, Dmitry Osipenko wrote:
-> All NVIDIA Tegra SoCs have a core power domain where majority of hardware
-> blocks reside. Add binding for the core power domain.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+On Fri, 12 Mar 2021 at 15:10, Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> CHARGER_MAX8997 fails to compile without CONFIG_EXTCON. There are stubs
+> already present for *extcon_*_notifier() but are missing for the _all()
+> variant.
+>
+> Add *extcon_*_notifier_all() stubs for !CONFIG_EXTCON.
+>
+> Fixes: f384989e88d44 ("power: supply: max8997_charger: Set CHARGER current limit")
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > ---
->  .../power/nvidia,tegra20-core-domain.yaml     | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml
-> 
+>  include/linux/extcon.h | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Thanks for the patch.
 
-yamllint warnings/errors:
+Fix was sent some time ago and is already in extcon tree:
+https://lore.kernel.org/lkml/20210215100610.19911-2-cw00.choi@samsung.com/
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml: properties:power-supply: '$ref' is not one of ['description', 'deprecated']
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml: ignoring, error in schema: properties: power-supply
-warning: no schema found in file: ./Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml
+Did you base your work on next?
 
-See https://patchwork.ozlabs.org/patch/1451596
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best regards,
+Krzysztof
