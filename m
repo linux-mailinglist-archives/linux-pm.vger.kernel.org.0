@@ -2,135 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09E338E9E
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 14:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DE8338F41
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 14:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbhCLNTn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 08:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S230491AbhCLN6Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 08:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbhCLNTS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 08:19:18 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F676C061574;
-        Fri, 12 Mar 2021 05:19:17 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id p21so45635927lfu.11;
-        Fri, 12 Mar 2021 05:19:17 -0800 (PST)
+        with ESMTP id S230388AbhCLN6I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 08:58:08 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F4EC061574
+        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 05:58:08 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id w11so33638iol.13
+        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 05:58:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eRvXvpISF4IBOtvYHqIw0A7WGfnjimCkRZ9ja9m0ckM=;
-        b=Ut4qFXpcbkXJ22fKP6ZhuibyOgP96LyuXM/q1+jciXezVPuz/jxw6QKj6NuFX+A8sM
-         Z24vGAlcKIxP07ikydnjBeYEye0+2Q7JDXOPU6lIX+XaRsFrKKr3um681kRjPJZrSRUp
-         eq1JM3cs50lT4lyB9Q4dkTEpyA8USDUYlpj5qmZUY4MXfcP95ewRNJy9Nr+9JEy4KOQL
-         o5kGwjT7Ha1fQEK2V8Fgv9whnKvDILXVU/mNw9cisfDHr5RHMcZm1P090BCHyKsItgDK
-         8pK2wrIS0v0jwm1Gfa9g5rcIlLK4s9gS9RXRX3GlZzQf2Hm2p0knhCQeC4spgT4WR+3f
-         cXDg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NfGNxFGx/GSqQ8J+prbrVB3YoseYYdcfdmqBB1ZWsf4=;
+        b=KCVpgGaszvjmh10So7k3QGeTRqp7SjFil5pxA1T6Y6eWZaIKdoJYOOBL+T4IbWbkjo
+         UCD6o0LrAm5I5CJE9wjyA1ccZrqCeRnIopcWV31HmV1bSv+vGjsEDQU1qeASKHWc7ZbD
+         OMrENlRbdkMujDZ7uOHyjS/fAXQ/LbjN+Xt48kFu9tCuQunKi4OvE/2iFi4ft+TlDvRq
+         YGhb6hFJ8Gymj8rPMAr+qCERnnOckCHtgJiU3h/F//8LymiX+vKW0OU6fFfolII5h8/s
+         27yvKbWve/Ad7raTIzRyyY+k91G2HJolY4So7He/zevu5vm3N/HsLbiLvQyGBlGY0HsW
+         p2Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eRvXvpISF4IBOtvYHqIw0A7WGfnjimCkRZ9ja9m0ckM=;
-        b=kBuIn02rpveGaikYuHrX6s4rnbf1BF+YBsoywZdBicBFvUSlnEarGg/pLTi1huQA0n
-         g2sDyAnWtIj4zkjLndYTfDlIB0ruV0Oo6mZ9sIfr2C921ZmU10n5qfQllKZML0igmH/m
-         xjCaOFrBE8dSXwrFYOSl0m5U33wyzwQjB//diZz6dmIDifrD4Rop2xOLySKip70q0KES
-         iixaZZEYz/drUh67wtHZEXFSzJnSTryYPHcjq334qKw8vQhnkHIzRPoA34vCY1/znu0j
-         qt/DxEkPn1x5yEewYRxjpDVdBNfp1q0zM1/jy0nuy+/+FGFYkznkVVZLFBcE3P57izuD
-         bJSA==
-X-Gm-Message-State: AOAM533nk3N755Ef3jyxp5Lv0oenauyv5yht4fUGyTXJXqIKrHMICFEk
-        +71nJfYj+iHbTVjFoimn5E7nAwVrzTg=
-X-Google-Smtp-Source: ABdhPJyGS6708sF0bdyf6iWMHpkhy9JBsuOZ8wSAehH9LCLLnfAoUBl4FILaQoGRMgX23tFnvBnr5g==
-X-Received: by 2002:a19:a409:: with SMTP id q9mr5244748lfc.654.1615555155774;
-        Fri, 12 Mar 2021 05:19:15 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id x4sm1950915ljj.91.2021.03.12.05.19.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Mar 2021 05:19:15 -0800 (PST)
-Subject: Re: [PATCH v2 01/14] opp: Add devres wrapper for
- dev_pm_opp_set_clkname
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        lima@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20210311192105.14998-1-digetx@gmail.com>
- <20210311192105.14998-2-digetx@gmail.com>
- <20210312053312.zgke2mzjkqmwn67i@vireshk-i7>
- <CAPDyKFqrUCjTfrNqZ4gFfQS6LpoQCevGc-tv4WVOwuGhx5iiBg@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c9cb7a53-ece7-d71d-7ee2-abb959076954@gmail.com>
-Date:   Fri, 12 Mar 2021 16:19:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NfGNxFGx/GSqQ8J+prbrVB3YoseYYdcfdmqBB1ZWsf4=;
+        b=iLfWWxEKCpaXm7S/xstsRycgpDXYFlfFr/JDBjD8nykJxalIioJjR4VbhuEa9O431y
+         DZ1j+s9QWXIX6Se1Q56gXW9vTFDNQGqNByHWqo5ZJUiiwUrLAkMirndT7CCAN4J03Htq
+         aJ1MxaFvtITyOxp9F7OouG7M4yOxlBQA6sxLxgvd4K+P8nUfBrPrrQTVWSn1Fx8WnqJM
+         WzBQjRWjLVwuAZ87bZZkrEIobq0A+45sBIYRPSRbeYdsOChVWWZmIs4P/dsWRKc4sXiA
+         0EZ/x8cNR/Y1zlbiD28RvSAQwULcjNYOlhR2DoP5rN5IP5apfWwGaoXbii0I1EwvPfqq
+         /fug==
+X-Gm-Message-State: AOAM531sSfuWrTMGp8PU8gq6cnf5orPIDiclVWH8q9/HbSC24rVnZDsY
+        zd5xOu7mNnjVREIjpX/3zhzfudcHDSvyCXv/pHtxEw==
+X-Google-Smtp-Source: ABdhPJwKSJnXvI9/NG4m48LW0+vy+lK8zsv8TIliueMw8ZAxuGgekU1/vc+Rj3Qh3ZoQ7xO+ZF+8KpfOFY+a0mjoEwA=
+X-Received: by 2002:a6b:ea04:: with SMTP id m4mr9913728ioc.160.1615557487699;
+ Fri, 12 Mar 2021 05:58:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFqrUCjTfrNqZ4gFfQS6LpoQCevGc-tv4WVOwuGhx5iiBg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210308133146.3168995-1-raychi@google.com> <20210309185807.ka4iljasq5cmpmil@earth.universe>
+In-Reply-To: <20210309185807.ka4iljasq5cmpmil@earth.universe>
+From:   Ray Chi <raychi@google.com>
+Date:   Fri, 12 Mar 2021 21:57:56 +0800
+Message-ID: <CAPBYUsCJ3ftC4ur412rFZGeeM_kDHrCh=BVci3=8SE2eFdPcQg@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: fix build error when POWER_SUPPLY is not enabled
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, naresh.kamboju@linaro.org,
+        Kyle Tso <kyletso@google.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-12.03.2021 13:36, Ulf Hansson пишет:
-> On Fri, 12 Mar 2021 at 06:33, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>
->> On 11-03-21, 22:20, Dmitry Osipenko wrote:
->>> +struct opp_table *devm_pm_opp_set_clkname(struct device *dev, const char *name)
->>> +{
->>> +     struct opp_table *opp_table;
->>> +     int err;
->>> +
->>> +     opp_table = dev_pm_opp_set_clkname(dev, name);
->>> +     if (IS_ERR(opp_table))
->>> +             return opp_table;
->>> +
->>> +     err = devm_add_action_or_reset(dev, devm_pm_opp_clkname_release, opp_table);
->>> +     if (err)
->>> +             opp_table = ERR_PTR(err);
->>> +
->>> +     return opp_table;
->>> +}
->>
->> I wonder if we still need to return opp_table from here, or a simple
->> integer is fine.. The callers shouldn't be required to use the OPP
->> table directly anymore I believe and so better simplify the return
->> part of this and all other routines you are adding here..
-> 
-> Yes, please. I was thinking along the same lines, when I reviewed the
-> mmc patch (patch9).
-> 
->>
->> If there is a user which needs the opp_table, let it use the regular
->> non-devm variant.
+Hi Sebastian,
 
-Indeed, that's a very good suggestion! The opp_table isn't needed by the
-devm users, I'll change it in v3, thanks!
+Sorry for the late reply.
+
+On Wed, Mar 10, 2021 at 2:58 AM Sebastian Reichel <sre@kernel.org> wrote:
+>
+> Hi,
+>
+> On Mon, Mar 08, 2021 at 09:31:46PM +0800, Ray Chi wrote:
+> > Fix build error when CONFIG_POWER_SUPPLY is not enabled.
+> >
+> > The build error occurs in mips (cavium_octeon_defconfig).
+> >
+> > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_remove':
+> > drivers/usb/dwc3/core.c:1657: undefined reference to `power_supply_put'
+> > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_properties':
+> > drivers/usb/dwc3/core.c:1270: undefined reference to `power_supply_get_by_name'
+> > mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_probe':
+> > drivers/usb/dwc3/core.c:1632: undefined reference to `power_supply_put'
+> >
+> > Fixes: 59fa3def35de ("usb: dwc3: add a power supply for current control")
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > Signed-off-by: Ray Chi <raychi@google.com>
+> > ---
+>
+> While I'm fine with merging this after fixing up the subject, the
+> original patch for dwc3 [0] looks completly incorrect to me.
+>
+> First of all it uses wrong scale (power-supply uses uA, not mA),
+> so you are charging 1000x slower than expected. Then the patchset
+> introduces a new DT property to get the power-supply device, but
+> does not update the DT binding documentation and does not Cc the
+> DT binding maintainer.
+
+Yes, it should use uA and send this information, and I will update a
+patch to fix it and add the DT binding documentation.
+
+> Next the property itself looks not very
+> smart to me. Usually one would use a device reference, not the
+> Linux device name.
+>
+> Finally all existing devices solve this by registering a usb
+> notifier from the charger, so why are you going the other way
+> around? This is going to break once you want to use one of the
+> existing chargers with dwc3.
+
+Only the USB controller will know USB state/speed so that I think it is
+better to send this information from the USB side.
+For example:
+For USB high speed, charging current should be limited to 500 mA in
+configured state.
+For USB super speed, charging current should be limited to 900 mA in
+configured state.
+
+>
+> I suggest to drop/revert the whole patchset.
+>
+> [0] https://lore.kernel.org/linux-usb/20210222115149.3606776-1-raychi@google.com/
+>
+> -- Sebastian
+>
+> >  include/linux/power_supply.h | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> > index 81a55e974feb..6e776be5bfa0 100644
+> > --- a/include/linux/power_supply.h
+> > +++ b/include/linux/power_supply.h
+> > @@ -381,8 +381,14 @@ struct power_supply_battery_info {
+> >  extern struct atomic_notifier_head power_supply_notifier;
+> >  extern int power_supply_reg_notifier(struct notifier_block *nb);
+> >  extern void power_supply_unreg_notifier(struct notifier_block *nb);
+> > +#if IS_ENABLED(CONFIG_POWER_SUPPLY)
+> >  extern struct power_supply *power_supply_get_by_name(const char *name);
+> >  extern void power_supply_put(struct power_supply *psy);
+> > +#else
+> > +static inline void power_supply_put(struct power_supply *psy) {}
+> > +static inline struct power_supply *power_supply_get_by_name(const char *name)
+> > +{ return NULL; }
+> > +#endif
+> >  #ifdef CONFIG_OF
+> >  extern struct power_supply *power_supply_get_by_phandle(struct device_node *np,
+> >                                                       const char *property);
+> > --
+> > 2.30.1.766.gb4fecdf3b7-goog
+> >
