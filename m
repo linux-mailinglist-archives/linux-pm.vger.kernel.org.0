@@ -2,89 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A9F33815B
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 00:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E313338462
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 04:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbhCKXTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Mar 2021 18:19:22 -0500
-Received: from mail-ej1-f54.google.com ([209.85.218.54]:37307 "EHLO
-        mail-ej1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbhCKXTG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 18:19:06 -0500
-Received: by mail-ej1-f54.google.com with SMTP id bm21so49729332ejb.4;
-        Thu, 11 Mar 2021 15:19:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lkuYEZAqpGMgAIDilawAHyGPAX0UYKuPxCa5VG+IXVI=;
-        b=PoYQGyGdES6lKcVYMsG+9i3VFGHvA98/GdXdWmMYOX+Q7uOngt++NSBoltJ6fWXoRJ
-         rDjPtMs/6q3AhZDtSglbq4G3e/Kvqw/X3sIh3m97SAeX7sjvof3v+qLQiPxK8OD+bCOO
-         B6fzFs3y/b/8iw28wJjKfN1ghOQSElSAtrlDimPBKHn0jJrJmpXVVvkPUUi9xXM4rTv2
-         JUFO7ZisR2F+Icr53XDsviPWQN0F/91bHE0iSv+mq93mjP/wkJ+yj6TOeiWLxUz/+4g1
-         HhfaqJG7I0bFhWhPAU5WMgDihVx+vtFfmBktJVV58u4gQR0rzD8bAAQoWr/4Drw0y0fT
-         4Rcw==
-X-Gm-Message-State: AOAM530AiWoL97GXWbKskvfruhwKJMnAU9ByMXuSXnqdrxyNIgPmyWC/
-        nY09P7qI9wT0tl7jnmPPL9MO1P144dsaZdKfqt8=
-X-Google-Smtp-Source: ABdhPJyetu1/Jo62K0jNGbmTdegVwelG65nNocUvIIAfozT303QgCVvPsBm0j348+GIxpmMaZaw8eEEsPKdnsW2n9J4=
-X-Received: by 2002:a17:906:5918:: with SMTP id h24mr5546144ejq.501.1615504744807;
- Thu, 11 Mar 2021 15:19:04 -0800 (PST)
+        id S231823AbhCLDkZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Mar 2021 22:40:25 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:46629 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231816AbhCLDkZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Mar 2021 22:40:25 -0500
+X-UUID: 8f6dea06bdc145759f0b089a88e1d1bc-20210312
+X-UUID: 8f6dea06bdc145759f0b089a88e1d1bc-20210312
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <michael.kao@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1749655158; Fri, 12 Mar 2021 11:40:19 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 12 Mar 2021 11:40:18 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 12 Mar 2021 11:40:17 +0800
+From:   Michael Kao <michael.kao@mediatek.com>
+To:     <michael.kao@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
+CC:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [v3,0/3] thermal: mediatek: Add LVTS architecture thermal controller
+Date:   Fri, 12 Mar 2021 11:40:15 +0800
+Message-ID: <20210312034018.17437-1-michael.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20210116170725.5245-1-dsmythies@telus.net>
-In-Reply-To: <20210116170725.5245-1-dsmythies@telus.net>
-From:   Len Brown <lenb@kernel.org>
-Date:   Thu, 11 Mar 2021 18:18:53 -0500
-Message-ID: <CAJvTdKm3h_msmu-NjTPY+09bLqyVL_-GCHnGFdNGdTcSZRP4zQ@mail.gmail.com>
-Subject: Re: [PATCH] tools/power/x86/turbostat: Fix TCC offset bit mask
-To:     Doug Smythies <doug.smythies@gmail.com>
-Cc:     Doug Smythies <dsmythies@telus.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks for the close read, Doug.
+This patch move thermal files related to Mediatek to the mediatek folder.
+And introduce the new architecture LVTS (low pressure thermal sensor) driver to report
+the highest temperature in the SoC and record the highest temperature sensor,
+each sensor as a hot zone.
+The LVTS body is divided into two parts, the LVTS controller and the LVTS device.
+The LVTS controller can connect up to 4 LVTS devices, and each LVTS device
+can connect up to 7 TSMCUs.
 
-This field size actually varies from system to system,
-but the reality is that the offset is never that big, and so the
-smaller mask is sufficient.
+The architecture will be the first to be used on mt6873 and mt8192.
 
-Finally, this may all be moot, because there is discussion that using
-the offset this way is simply erroneous.  stay tuned.
+Change in v3:
+        - [2/3]
+          - change the expression in the lvts_temp_to_raw to dev_s64.
 
--Len
+Change in v2:
+	- Rebase to kernel-5.11-rc1.
+	- [2/3]
+	  - sort headers
+	  - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+	  - disconstruct the api of lvts_read_tc_msr_raw.
+	  - add the initial value max_temp = 0 and compare e.q.
+	    in the lvts_read_all_tc_temperature.
+	  - add the return with invalid number in the lvts_init.
 
+This patch depends on [1].
 
-On Sat, Jan 16, 2021 at 12:07 PM Doug Smythies <doug.smythies@gmail.com> wrote:
->
-> The TCC offset mask is incorrect, resulting in
-> incorrect target temperature calculations, if
-> the offset is big enough to exceed the mask size.
->
-> Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> ---
->  tools/power/x86/turbostat/turbostat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> index 389ea5209a83..d7acdd4d16c4 100644
-> --- a/tools/power/x86/turbostat/turbostat.c
-> +++ b/tools/power/x86/turbostat/turbostat.c
-> @@ -4823,7 +4823,7 @@ int read_tcc_activation_temp()
->
->         target_c = (msr >> 16) & 0xFF;
->
-> -       offset_c = (msr >> 24) & 0xF;
-> +       offset_c = (msr >> 24) & 0x3F;
->
->         tcc = target_c - offset_c;
->
-> --
-> 2.25.1
->
+[1]https://patchwork.kernel.org/project/linux-mediatek/cover/1608642587-15634-1-git-send-email-weiyi.lu@mediatek.com/
 
+Michael Kao (3):
+  thermal: mediatek: Relocate driver to mediatek folder
+  thermal: mediatek: Add LVTS drivers for SoC theraml zones
+  dt-bindings: thermal: Add binding document for mt6873 thermal
+    controller
+
+ .../thermal/mediatek-thermal-lvts.yaml        |   81 ++
+ drivers/thermal/Kconfig                       |   14 +-
+ drivers/thermal/Makefile                      |    2 +-
+ drivers/thermal/mediatek/Kconfig              |   33 +
+ drivers/thermal/mediatek/Makefile             |    2 +
+ .../{mtk_thermal.c => mediatek/soc_temp.c}    |    0
+ drivers/thermal/mediatek/soc_temp_lvts.c      | 1287 +++++++++++++++++
+ drivers/thermal/mediatek/soc_temp_lvts.h      |  312 ++++
+ 8 files changed, 1720 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
 
 -- 
-Len Brown, Intel Open Source Technology Center
+2.18.0
