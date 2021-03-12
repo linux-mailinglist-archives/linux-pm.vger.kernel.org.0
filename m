@@ -2,130 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAB63385DB
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 07:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A7733877E
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Mar 2021 09:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbhCLG0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Mar 2021 01:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S232274AbhCLIgV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Mar 2021 03:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbhCLG0P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 01:26:15 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6CDC061761
-        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 22:26:14 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id k2so1627973ili.4
-        for <linux-pm@vger.kernel.org>; Thu, 11 Mar 2021 22:26:14 -0800 (PST)
+        with ESMTP id S232281AbhCLIgL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Mar 2021 03:36:11 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8E5C061574
+        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 00:36:10 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id a1so5697156ljp.2
+        for <linux-pm@vger.kernel.org>; Fri, 12 Mar 2021 00:36:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X0qqxn9d92aoqYJoz6Fe423j5eYy1VZ6WOqrH+BLQFc=;
-        b=WTH1Ss5QdJSCirAjYWLMEp+yc+UiudzJNNNJD/XYVANXtdKSg1/KqijdnMRh1EW4CQ
-         NM7zlpykBtbl8Unb5uM/h+iwpngfHHuYgLsBUSZFcuuF2kVLotiQO4U0vuqpQIuiLW2h
-         NwTtuJlREvXUAmcLfl1ODO905+dKyAZsRrlIC9bLpmZLndIpPjDURSZAD/GGvLwRi/2Q
-         iejTVZwUDgGOBe7Ris9P2gWZWR/8ToDIM+y63XAFivjW/HHMeZFdF1zO6SIvT6yF+MXt
-         dVzzfQQGWQSKCzmPInyxo/9fSLA6P+Ck3neNwEE0fXQFWMMIYfFDykthUcFWq4DqZpZN
-         s9Ig==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=em7dfJLsuPWNoBZ5RIglWlkFRGvmQrMQ7HhOt27sGkg=;
+        b=KTwtsgfyiGwQF6XJDg2CkwPV+PNOhi0ZuS3gk4R5yeKgmlDmTeuxGyt6C5TDsrCQIS
+         89Z680OPXy4aWZd3KtXazaVSqOlOh5y6jYfcUqNH7BaoVG9BUVnzcIUaRCm25dVpi3b9
+         IZK4TyOe6TzqU63FFP33TMDkcRecrkOfjictUgiEwkB9/gUWm1hjkVi+MHWpus8WPee7
+         yCFNJk3c83FyhEjlTkaFK/aqokWlgz5cYeJ5yx7d9dvE6Qb3z4MU7+LtNF7CVEvkCGUc
+         SaSVGdKncOxbKcDcInz854nBrnZFsqjpw3bPTbbPfcbl88wtMc9n5H0oILrVA6BorOWH
+         mV7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X0qqxn9d92aoqYJoz6Fe423j5eYy1VZ6WOqrH+BLQFc=;
-        b=WC/JpB4UynO/FRfNVLUJa1OVMAVRkd20dw6Fp2AmVhgBNXIdNTbOtJ1hF1DslyIxAX
-         NkVyssLycNNw9Py/ZQd5SVLH/O2/CVJdAeJ+WZkpmxrFvE2aehiOsngsvuKpWc78S1G9
-         E6WzZlf29mI8Qk56PMEcnowLqL8OdiPnzS1vkknomBOtOxgdLOOZMU1YAH+aWXPbSWQ6
-         CcrwlobIWwKTCEWgXYmIi/i8rgur1U6V/XYxtbIMrHfKoc76xAjwckMHz0J2sbYGz7Sx
-         JkMl9ah3pGHooedt9I3HUco+tNTFxZO80Dj7SOQa38xq8tZ8ZO295Nr0MX2HT6pMnMsO
-         OpZA==
-X-Gm-Message-State: AOAM531DuJfE4+MaRMSjkrO644eWA8a047+rE89jWTYNmUVS+OBzNrWm
-        zdsIjk8upd9zXRb80m2bCoV+9Ku0EqAlBue/A0ZjDg==
-X-Google-Smtp-Source: ABdhPJxWWvl7xTn8efGrKNtuVUB+C0Qr7JY3SOIoAeN+1JAFAU2kz3GFa1WzrBg/QduyjnBbZKNnqP7vmPwjrcBMyvc=
-X-Received: by 2002:a92:6511:: with SMTP id z17mr1715365ilb.232.1615530374036;
- Thu, 11 Mar 2021 22:26:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=em7dfJLsuPWNoBZ5RIglWlkFRGvmQrMQ7HhOt27sGkg=;
+        b=lbdgNDnEBIFap+ouPz1EWBxBiYpuLGoYWatr3D9/lyogqB9WGYZw7HI2mU+GeZA2Ye
+         9qBZgSrSnbXZwSOHMv/1XzRJHr4eCcWmmNKDaL2D+zOMbcuptRpAsz8Gy8dKGBtt3SwF
+         pl6dIO4XNFy9GzKvmqcnYRjqz+LTcxgeocoioQsW5nRre/SLTA0qC9c+2kmjFUOzWZmH
+         zSarsy6jHoYnVrxxGTlTme/0fucKbNdB5kYP/Z+GRR0oXEs2fBZlCydyX46ctFQI7Vry
+         eSTmac3IBCs/NOzldhfGwZ1wb/KGz5gaOIJHCjVwyce5GhMDLECtU1yEqD4QU/0Yv235
+         ZWMA==
+X-Gm-Message-State: AOAM530BHRPQ2DY604IsQ8ebgkzmLVArVjmcEgkHIswFdEH9gTbtH4X8
+        1oB3cYc/jppxIvY+4y5K1OtZpw==
+X-Google-Smtp-Source: ABdhPJwudCeMpAQ/FIhQYdxteL/3mQVeO5HwZMu2xEg2lOFOrphhSNdVU9afiBQ1dWr+s+ZrgTWoRw==
+X-Received: by 2002:a2e:b4d0:: with SMTP id r16mr1741074ljm.324.1615538169164;
+        Fri, 12 Mar 2021 00:36:09 -0800 (PST)
+Received: from localhost.localdomain (c-d7cb225c.014-348-6c756e10.bbcust.telenor.se. [92.34.203.215])
+        by smtp.gmail.com with ESMTPSA id p6sm1617532lfc.71.2021.03.12.00.36.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Mar 2021 00:36:08 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     lee.jones@linaro.org, Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 0/4] mfd/power: Push data into power supply
+Date:   Fri, 12 Mar 2021 09:36:00 +0100
+Message-Id: <20210312083604.3708890-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20210116170725.5245-1-dsmythies@telus.net> <CAJvTdKm3h_msmu-NjTPY+09bLqyVL_-GCHnGFdNGdTcSZRP4zQ@mail.gmail.com>
-In-Reply-To: <CAJvTdKm3h_msmu-NjTPY+09bLqyVL_-GCHnGFdNGdTcSZRP4zQ@mail.gmail.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Thu, 11 Mar 2021 22:26:02 -0800
-Message-ID: <CAAYoRsVYejQRByDz78jbv5cMfd+ctT8N3YxfOBndW8FJiuk9MA@mail.gmail.com>
-Subject: Re: [PATCH] tools/power/x86/turbostat: Fix TCC offset bit mask
-To:     Len Brown <lenb@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Len,
+This series pushes some AB8500 power supply headers down
+into the power supply subsystem so the power supply code
+becomes independent from the other AB8500 stuff.
 
+The first patch makes the code require device tree so
+that the series make sense: once all data for the power
+supply comes from device tree, it makes sense for that
+code to not require global headers for platform data
+etc.
 
-thank you for your reply.
+This is in preparation for some finalization of the AB8500
+power code, as merge strategy I think it is best if:
 
-On Thu, Mar 11, 2021 at 3:19 PM Len Brown <lenb@kernel.org> wrote:
->
-> Thanks for the close read, Doug.
->
-> This field size actually varies from system to system,
-> but the reality is that the offset is never that big, and so the
-> smaller mask is sufficient.
+- The power maintainer (Sebastian) provide an ACK
 
-Disagree.
+- The MFD matinainer (Lee) merges this and provide an
+  immutable branch that the power maintainer can possibly
+  pull as a base for his tree
 
-I want to use an offset of 26.
+I hope both subsystems are happy with the changes.
 
-> Finally, this may all be moot, because there is discussion that using
-> the offset this way is simply erroneous.
+One of the patches already has Lee's Acked-for-MFD, but I
+got a bit stressed out in the last kernel cycle. Let's
+take this stepwise, first these four patches. No hurry.
 
-Disagree.
-It works great.
-As far as I know/recall I was the only person that responded to Rui's thread
-"thermal/intel: introduce tcc cooling driver" [1]
-And, I spent quite a bit of time doing so.
-However, I agree the response seems different between the two systems
-under test, Rui's and mine.
+Linus Walleij (4):
+  mfd/power: ab8500: Require device tree
+  mfd/power: ab8500: Push data to power supply code
+  mfd/power: ab8500: Push algorithm to power supply code
+  mfd/power: ab8500: Push data to power supply code
 
-[1] https://marc.info/?l=linux-pm&m=161070345329806&w=2
+ drivers/mfd/ab8500-core.c                     |  17 +-
+ drivers/power/supply/Kconfig                  |   2 +-
+ .../power/supply}/ab8500-bm.h                 | 297 ++++++++++++++++--
+ .../power/supply/ab8500-chargalg.h            |   6 +-
+ drivers/power/supply/ab8500_bmdata.c          |   3 +-
+ drivers/power/supply/ab8500_btemp.c           |  45 +--
+ drivers/power/supply/ab8500_charger.c         |  27 +-
+ drivers/power/supply/ab8500_fg.c              |  20 +-
+ drivers/power/supply/abx500_chargalg.c        |  22 +-
+ drivers/power/supply/pm2301_charger.c         |   4 +-
+ include/linux/mfd/abx500.h                    | 276 ----------------
+ 11 files changed, 326 insertions(+), 393 deletions(-)
+ rename {include/linux/mfd/abx500 => drivers/power/supply}/ab8500-bm.h (58%)
+ rename include/linux/mfd/abx500/ux500_chargalg.h => drivers/power/supply/ab8500-chargalg.h (93%)
 
->  stay tuned.
+-- 
+2.29.2
 
-O.K.
-
-... Doug
->
-> -Len
->
->
-> On Sat, Jan 16, 2021 at 12:07 PM Doug Smythies <doug.smythies@gmail.com> wrote:
-> >
-> > The TCC offset mask is incorrect, resulting in
-> > incorrect target temperature calculations, if
-> > the offset is big enough to exceed the mask size.
-> >
-> > Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> > ---
-> >  tools/power/x86/turbostat/turbostat.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> > index 389ea5209a83..d7acdd4d16c4 100644
-> > --- a/tools/power/x86/turbostat/turbostat.c
-> > +++ b/tools/power/x86/turbostat/turbostat.c
-> > @@ -4823,7 +4823,7 @@ int read_tcc_activation_temp()
-> >
-> >         target_c = (msr >> 16) & 0xFF;
-> >
-> > -       offset_c = (msr >> 24) & 0xF;
-> > +       offset_c = (msr >> 24) & 0x3F;
-> >
-> >         tcc = target_c - offset_c;
-> >
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Len Brown, Intel Open Source Technology Center
