@@ -2,95 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FD7339D9B
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Mar 2021 11:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4020339D9D
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Mar 2021 11:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbhCMKld (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Mar 2021 05:41:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41354 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230380AbhCMKlV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 13 Mar 2021 05:41:21 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3C09564F1D
-        for <linux-pm@vger.kernel.org>; Sat, 13 Mar 2021 10:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615632081;
-        bh=ySib2wRXNl+sxCpbNA6psO6GS+2DG9C1xprqmqlgTYA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=njAHB2YGL2HDRnqMf1md5Pyo/Y4Cw5TblCK8L/GswO97+DGfSocN5zKKuYzARkjEp
-         m80Uic9URco+wpRQIPpXJzOLXRTvpCAp/SACFYtir/xON667IyJJSTECwoIFjBq/ZA
-         OWS9FT6ftIxzmq8RXvAwVVaEs/gum1bbdgg/rfLlvQTQW/v/5op36RidYSTQbRqaAD
-         YCGZnfe3iEip6oxbXua1KlPw4GOzBv3cWmxfnW9ve1KkEqSm3tiCRwXp6AMjSIr50g
-         KgLNopqMRxW4vcnc6nB1BXoJbF8BAAmGRYGn+AYUpKyR8Z+zS84xVzIV6ExeZA2P2c
-         terHQPLr0B1xA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 22D4F6525D; Sat, 13 Mar 2021 10:41:21 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 211791] AMD CPU /proc/cpuinfo reported max potential boost
- frequency instead of actual operating frequency
-Date:   Sat, 13 Mar 2021 10:41:20 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: josh@sobo.red
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-211791-137361-jJD9wJiapI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-211791-137361@https.bugzilla.kernel.org/>
-References: <bug-211791-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S233233AbhCMKmh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Mar 2021 05:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233217AbhCMKmc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Mar 2021 05:42:32 -0500
+Received: from smtp.gentoo.org (dev.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E12C061574
+        for <linux-pm@vger.kernel.org>; Sat, 13 Mar 2021 02:42:32 -0800 (PST)
+Received: by sf.home (Postfix, from userid 1000)
+        id 34F4C5A22061; Sat, 13 Mar 2021 10:42:20 +0000 (GMT)
+From:   Sergei Trofimovich <slyfox@gentoo.org>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sergei Trofimovich <slyfox@gentoo.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH] ia64: fix format string for ia64-acpi-cpu-freq
+Date:   Sat, 13 Mar 2021 10:42:14 +0000
+Message-Id: <20210313104214.1548076-1-slyfox@gentoo.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D211791
+Fix warning with %lx / s64 mismatch:
 
-Joshua (josh@sobo.red) changed:
+  CC [M]  drivers/cpufreq/ia64-acpi-cpufreq.o
+    drivers/cpufreq/ia64-acpi-cpufreq.c: In function 'processor_get_pstate':
+      warning: format '%lx' expects argument of type 'long unsigned int',
+      but argument 3 has type 's64' {aka 'long long int'} [-Wformat=]
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |josh@sobo.red
+CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC: Viresh Kumar <viresh.kumar@linaro.org>
+CC: linux-pm@vger.kernel.org
+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
+---
+ drivers/cpufreq/ia64-acpi-cpufreq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #2 from Joshua (josh@sobo.red) ---
-I'm still having an issue with frequencies being reported incorrectly. Here=
-'s a
-thread for reference:
-https://bbs.archlinux.org/viewtopic.php?pid=3D1961500#p1961500
+diff --git a/drivers/cpufreq/ia64-acpi-cpufreq.c b/drivers/cpufreq/ia64-acpi-cpufreq.c
+index 2efe7189ccc4..c6bdc455517f 100644
+--- a/drivers/cpufreq/ia64-acpi-cpufreq.c
++++ b/drivers/cpufreq/ia64-acpi-cpufreq.c
+@@ -54,7 +54,7 @@ processor_set_pstate (
+ 	retval = ia64_pal_set_pstate((u64)value);
+ 
+ 	if (retval) {
+-		pr_debug("Failed to set freq to 0x%x, with error 0x%lx\n",
++		pr_debug("Failed to set freq to 0x%x, with error 0x%llx\n",
+ 		        value, retval);
+ 		return -ENODEV;
+ 	}
+@@ -77,7 +77,7 @@ processor_get_pstate (
+ 
+ 	if (retval)
+ 		pr_debug("Failed to get current freq with "
+-			"error 0x%lx, idx 0x%x\n", retval, *value);
++			"error 0x%llx, idx 0x%x\n", retval, *value);
+ 
+ 	return (int)retval;
+ }
+-- 
+2.30.2
 
-I've updated to kernel version 5.11.6. If I watch /proc/cpuinfo, that seems=
- to
-be reporting somewhat accurately now. However, lscpu and most everything el=
-se
-is still reporting inaccurately.
-
-~ =E2=86=92 uname -r
-5.11.6-arch1-1
-~ =E2=86=92 lscpu | grep MHz
-CPU MHz:                         3400.000
-CPU max MHz:                     7228.3198
-CPU min MHz:                     2200.0000
-~ =E2=86=92 geekbench --sysinfo | grep -E "Processor Information|Name|Base =
-Frequency"
-Processor Information
-  Name                          AMD Ryzen 9 5950X
-  Base Frequency                6.92 GHz
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
