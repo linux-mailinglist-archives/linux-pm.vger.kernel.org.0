@@ -2,317 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B272339C70
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Mar 2021 07:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F40C339C82
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Mar 2021 08:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbhCMGqH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Mar 2021 01:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbhCMGpp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Mar 2021 01:45:45 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D06C061574;
-        Fri, 12 Mar 2021 22:45:45 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so2573306otk.5;
-        Fri, 12 Mar 2021 22:45:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Wv/LMcmadMeUumH6ChNUQyFDgkOiRB4yQBi9GtlL0DY=;
-        b=uwFQXeSe5I4Y0uveJAgLUCSn08KNnILED4VTFjvZAGKPJ/QHGxMUDEBtkt04T4hh/k
-         lKud6//FkR9v90HqPAdywFlEJUujOUGTS/6RsEf2AwB9lZjZUxNQalKW3QAEvcDL3+aK
-         Fss16KlG7VpKILc84WERKovU2/9riFWSWdvHCdtU8unOMPjZDZtyHN5gRGZoLi1hyRin
-         WhMQ3SwIvLzTlCv5wUSGLThQGomyCdXwVPpD1Ss7Axsu20m8x4rqiSyI1/SlNq0VgzZ7
-         xVhB+YpraQKeQi096e3NkH36ARq9AWAiEx3tTcEjRz2KZ6Lnzqfy1JPjn+BeUpFriojo
-         Dr2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Wv/LMcmadMeUumH6ChNUQyFDgkOiRB4yQBi9GtlL0DY=;
-        b=WxpAq3IHgJWhLJ7aQ21pSOknUd61ZFfcGrYpC8rvfs64byASRkBfkFfOnTwO7V1NIk
-         q2QzlGJjGUzlNOIngWRYqvfWVrFYTb1WtzClfh7xNb9odMwhZ2JWc+k8axDWfxRDMCow
-         FBWnZWBPc1B5MbZk9921r/SmwfZyai44tzb7frrmKeq+acOF9q2EWa5Vraw1A/C29GMq
-         3hacnkKQj4SccU+KXrEJbWUNi/t18Dm64qxGHg5nbR43RtYkVCUxjdM9afsVhlXNSlEj
-         r3FzK48PqqkOJbPWPrzg58F8Pegty2zQyJhn839bzioaaW02EOcCCZXZlHGC3rmJ/vwM
-         4K1w==
-X-Gm-Message-State: AOAM533i7LS+qzoPoWfEf8+Wr24BooOjCs/0jW0Paj+fYqQCpUvOoZB+
-        WYX2Yyx9xwm/J4+PuEeGs/h2QnGnzwx0NnrY0OVxx6zXdy8=
-X-Google-Smtp-Source: ABdhPJwAkmsk5b/FgPzsWHNQadRp0KK8ozGAFNSA8BwyRwssRCe63Iowa88F4rlFCWcgeB/dBSswDtcg1jq/9997BiU=
-X-Received: by 2002:a05:6830:408a:: with SMTP id x10mr6228991ott.248.1615617944837;
- Fri, 12 Mar 2021 22:45:44 -0800 (PST)
+        id S231347AbhCMHQN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Mar 2021 02:16:13 -0500
+Received: from mga11.intel.com ([192.55.52.93]:12270 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230309AbhCMHPx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 13 Mar 2021 02:15:53 -0500
+IronPort-SDR: 2ndo3m4rVYs3omNgsRasE97SPIb4w2Fc+6hHQ/iNVJBmhfspvR6lZwZurXNG4G5QvOvGMp32n9
+ M+lkVDCdHb/Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9921"; a="185568146"
+X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
+   d="scan'208";a="185568146"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 23:15:53 -0800
+IronPort-SDR: n+xzo1uxc/WbYHxcN01yEu/1HoU7YFgnsohc1aMoSj3cHu/zHOEZAK3se6ZBAnjZ+juVuWM5KV
+ VbqTWSqeZxgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
+   d="scan'208";a="387572143"
+Received: from lkp-server02.sh.intel.com (HELO ce64c092ff93) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 12 Mar 2021 23:15:51 -0800
+Received: from kbuild by ce64c092ff93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lKyV4-0001tu-Ms; Sat, 13 Mar 2021 07:15:50 +0000
+Date:   Sat, 13 Mar 2021 15:15:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 42326a293954f11eadf31161b8315bf6dc2279da
+Message-ID: <604c6680.9ASwrqJeUl3Ji5mc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <1615294733-22761-1-git-send-email-aisheng.dong@nxp.com>
- <1615294733-22761-8-git-send-email-aisheng.dong@nxp.com> <de25cd22-7f17-5902-21d3-881e3128dd31@gmail.com>
- <a546248b-3946-c781-94a9-30f0c92f88d2@gmail.com> <CGME20210310025703epcas1p10fdb324cc7ce1accfdc8f66315e8a93e@epcas1p1.samsung.com>
- <CAA+hA=QZbxE-aFh2UnH6wHBUStj8SAtW8C4SEZtGcxQwsOO=Aw@mail.gmail.com>
- <31be2267-8988-f162-f5a6-6e6389bbf1fb@samsung.com> <CAA+hA=S76yHTeL_yCDkv55iKpBLbtZc_cV8sjORheLxbSuenzA@mail.gmail.com>
- <b5a3ee55-0c71-a0ca-b03f-3b6790f3d2f4@samsung.com> <CAA+hA=Q0M0bTf0VLjNmf23HqFn4Unk0h4BN-mEQXb1LkZLV=NQ@mail.gmail.com>
- <d92b7660-a622-06f3-6e1f-03c99fdf0a55@gmail.com>
-In-Reply-To: <d92b7660-a622-06f3-6e1f-03c99fdf0a55@gmail.com>
-From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Sat, 13 Mar 2021 14:45:39 +0800
-Message-ID: <CAA+hA=T3A=FW-kCu=3jDTP+o3JpPYVB6VnphazXVkybGZCanaQ@mail.gmail.com>
-Subject: Re: [PATCH 07/11] PM / devfreq: check get_dev_status before start monitor
-To:     Chanwoo Choi <cwchoi00@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        Abel Vesa <abel.vesa@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Mar 13, 2021 at 12:09 AM Chanwoo Choi <cwchoi00@gmail.com> wrote:
->
-> On 21. 3. 12. =EC=98=A4=ED=9B=84 7:57, Dong Aisheng wrote:
-> > On Thu, Mar 11, 2021 at 2:54 PM Chanwoo Choi <cw00.choi@samsung.com> wr=
-ote:
-> >>
-> >> On 3/10/21 1:56 PM, Dong Aisheng wrote:
-> >>> On Wed, Mar 10, 2021 at 11:08 AM Chanwoo Choi <cw00.choi@samsung.com>=
- wrote:
-> >>>>
-> >>>> On 3/10/21 11:56 AM, Dong Aisheng wrote:
-> >>>>> On Wed, Mar 10, 2021 at 12:12 AM Chanwoo Choi <cwchoi00@gmail.com> =
-wrote:
-> >>>>>>
-> >>>>>> On 21. 3. 10. =EC=98=A4=EC=A0=84 12:58, Chanwoo Choi wrote:
-> >>>>>>> On 21. 3. 9. =EC=98=A4=ED=9B=84 9:58, Dong Aisheng wrote:
-> >>>>>>>> The devfreq monitor depends on the device to provide load inform=
-ation
-> >>>>>>>> by .get_dev_status() to calculate the next target freq.
-> >>>>>>>>
-> >>>>>>>> And this will cause changing governor to simple ondemand fail
-> >>>>>>>> if device can't support.
-> >>>>>>>>
-> >>>>>>>> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-> >>>>>>>> ---
-> >>>>>>>>    drivers/devfreq/devfreq.c                 | 10 +++++++---
-> >>>>>>>>    drivers/devfreq/governor.h                |  2 +-
-> >>>>>>>>    drivers/devfreq/governor_simpleondemand.c |  3 +--
-> >>>>>>>>    3 files changed, 9 insertions(+), 6 deletions(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq=
-.c
-> >>>>>>>> index 7231fe6862a2..d1787b6c7d7c 100644
-> >>>>>>>> --- a/drivers/devfreq/devfreq.c
-> >>>>>>>> +++ b/drivers/devfreq/devfreq.c
-> >>>>>>>> @@ -482,10 +482,13 @@ static void devfreq_monitor(struct work_st=
-ruct
-> >>>>>>>> *work)
-> >>>>>>>>     * to be called from governor in response to DEVFREQ_GOV_STAR=
-T
-> >>>>>>>>     * event when device is added to devfreq framework.
-> >>>>>>>>     */
-> >>>>>>>> -void devfreq_monitor_start(struct devfreq *devfreq)
-> >>>>>>>> +int devfreq_monitor_start(struct devfreq *devfreq)
-> >>>>>>>>    {
-> >>>>>>>>        if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVE=
-N))
-> >>>>>>>> -        return;
-> >>>>>>>> +        return 0;
-> >>>>>>>> +
-> >>>>>>>> +    if (!devfreq->profile->get_dev_status)
-> >>>>>>>> +        return -EINVAL;
-> >>>>>>
-> >>>>>> Again, I think that get_dev_status is not used for all governors.
-> >>>>>> So that it cause the governor start fail. Don't check whether
-> >>>>>> .get_dev_status is NULL or not.
-> >>>>>>
-> >>>>>
-> >>>>> I'm not quite understand your point.
-> >>>>> it is used by governor_simpleondemand.c and tegra_devfreq_governor.
-> >>>>> get_target_freq -> devfreq_update_stats -> get_dev_status
-> >>>>
-> >>>> The devfreq can add the new governor by anyone.
-> >>>> So these functions like devfreq_monitor_* have to support
-> >>>> the governors and also must support the governor to be added
-> >>>> in the future.
-> >>>
-> >>> Yes, but devfreq_monitor_* is only used by polling mode, right?
-> >>> The governor using it has to implement get_dev_status unless
-> >>> there's an exception in the future.
-> >>>
-> >>> Currently this patch wants to address the issue that user can switch
-> >>> to ondemand governor (polling mode) by sysfs even devices does
-> >>> not support it (no get_dev_status implemented).
-> >>
-> >> As I commented, I'll fix this issue. If devfreq driver doesn't impleme=
-nt
-> >> the .get_dev_status, don't show it via available_governors. I think th=
-at
-> >> it is fundamental solution to fix this issue.
-> >
-> > Sounds good
-> >
-> >> So on this version,
-> >> don't add the this conditional statement on this function
-> >>
-> >
-> > Almost all this patch did is adding a checking for get_dev_status.
-> > So do you mean drop this patch?
-> > I wonder it's still a necessary checking to explicitly tell devfreq mon=
-itor
-> > users that get_dev_status is needed during governor startup.
->
-> I think that the it is enough to check .get_dev_status in
-> devfreq_update_stats. We have to check it on where it is used.
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 42326a293954f11eadf31161b8315bf6dc2279da  Merge branch 'pm-opp' into linux-next
 
-I think the drawback of only checking .get_dev_status in
-devfreq_update_stats is:
-1. devfreq will still register successfully and ondemand governor starts ok
-2. ondemand governor will still be shown in sysfs which is something
-you want to fix
-3. devfreq will end up printing endless error messages in devfreq_monitor w=
-orker
-    "dvfs failed with (%d) error" as the possible missing .get_dev_status
+elapsed time: 722m
 
-So i wonder if you don't like changing the common devfreq_monitor_start in =
-order
-to make it look common for all governors, then we probably still need
-to fix it in
-ondemand governor in order to avoid the possible above issues.
+configs tested: 125
+configs skipped: 2
 
-static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
-                                unsigned int event, void *data)
-{
-        switch (event) {
-        case DEVFREQ_GOV_START:
-                if (!devfreq->profile->get_dev_status)
-                        return -EINVAL;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-                return devfreq_monitor_start(devfreq);
-...
-}
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+h8300                       h8s-sim_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                     tqm8541_defconfig
+m68k                       m5475evb_defconfig
+powerpc64                        alldefconfig
+arm                             mxs_defconfig
+h8300                     edosk2674_defconfig
+sh                 kfr2r09-romimage_defconfig
+arm                          iop32x_defconfig
+arm                          badge4_defconfig
+arc                    vdk_hs38_smp_defconfig
+riscv                             allnoconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                                  defconfig
+powerpc64                           defconfig
+xtensa                          iss_defconfig
+sh                            hp6xx_defconfig
+sh                     sh7710voipgw_defconfig
+xtensa                         virt_defconfig
+m68k                        m5407c3_defconfig
+csky                             alldefconfig
+sh                           sh2007_defconfig
+sh                          r7785rp_defconfig
+mips                    maltaup_xpa_defconfig
+arm                         assabet_defconfig
+arm                          ixp4xx_defconfig
+arm                          pxa168_defconfig
+m68k                          hp300_defconfig
+powerpc                 linkstation_defconfig
+powerpc                      walnut_defconfig
+csky                                defconfig
+powerpc                         ps3_defconfig
+arm                         axm55xx_defconfig
+arm                          moxart_defconfig
+sh                             shx3_defconfig
+mips                           gcw0_defconfig
+m68k                             alldefconfig
+sh                             espt_defconfig
+powerpc                       eiger_defconfig
+arm                          simpad_defconfig
+xtensa                  cadence_csp_defconfig
+arm                       imx_v6_v7_defconfig
+mips                          malta_defconfig
+mips                        jmr3927_defconfig
+mips                       capcella_defconfig
+m68k                       bvme6000_defconfig
+nios2                         10m50_defconfig
+sparc                       sparc64_defconfig
+arc                           tb10x_defconfig
+mips                         tb0226_defconfig
+mips                     cu1830-neo_defconfig
+riscv                            allyesconfig
+sh                        edosk7705_defconfig
+m68k                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210312
+i386                 randconfig-a005-20210312
+i386                 randconfig-a002-20210312
+i386                 randconfig-a003-20210312
+i386                 randconfig-a004-20210312
+i386                 randconfig-a006-20210312
+x86_64               randconfig-a011-20210312
+x86_64               randconfig-a016-20210312
+x86_64               randconfig-a013-20210312
+x86_64               randconfig-a014-20210312
+x86_64               randconfig-a015-20210312
+x86_64               randconfig-a012-20210312
+i386                 randconfig-a013-20210312
+i386                 randconfig-a016-20210312
+i386                 randconfig-a011-20210312
+i386                 randconfig-a015-20210312
+i386                 randconfig-a014-20210312
+i386                 randconfig-a012-20210312
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-How do you think?
+clang tested configs:
+x86_64               randconfig-a001-20210312
+x86_64               randconfig-a003-20210312
+x86_64               randconfig-a002-20210312
+x86_64               randconfig-a004-20210312
+x86_64               randconfig-a006-20210312
+x86_64               randconfig-a005-20210312
 
-Regards
-Aisheng
-
-
-> >
-> >> And on next version, please use the capital letter for first character
-> >> on patch title as following:
-> >>
-> >> - PM / devfreq: Check get_dev_status before start monitor
-> >>
-> >
-> > Okay to me.
-> > Thanks for the suggestion.
-> >
-> > Regards
-> > Aisheng
-> >
-> >>>
-> >>> Regards
-> >>> Aisheng
-> >>>
-> >>>>
-> >>>>>
-> >>>>> Without checking, device can switch to ondemand governor if it does=
- not support.
-> >>>>>
-> >>>>> Am i missed something?
-> >>>>>
-> >>>>> Regards
-> >>>>> Aisheng
-> >>>>>
-> >>>>>>>>        switch (devfreq->profile->timer) {
-> >>>>>>>>        case DEVFREQ_TIMER_DEFERRABLE:
-> >>>>>>>> @@ -495,12 +498,13 @@ void devfreq_monitor_start(struct devfreq =
-*devfreq)
-> >>>>>>>>            INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
-> >>>>>>>>            break;
-> >>>>>>>>        default:
-> >>>>>>>> -        return;
-> >>>>>>>> +        return -EINVAL;
-> >>>>>>>>        }
-> >>>>>>>>        if (devfreq->profile->polling_ms)
-> >>>>>>>>            queue_delayed_work(devfreq_wq, &devfreq->work,
-> >>>>>>>>                msecs_to_jiffies(devfreq->profile->polling_ms));
-> >>>>>>>> +    return 0;
-> >>>>>>>>    }
-> >>>>>>>>    EXPORT_SYMBOL(devfreq_monitor_start);
-> >>>>>>>> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/govern=
-or.h
-> >>>>>>>> index 5cee3f64fe2b..31af6d072a10 100644
-> >>>>>>>> --- a/drivers/devfreq/governor.h
-> >>>>>>>> +++ b/drivers/devfreq/governor.h
-> >>>>>>>> @@ -75,7 +75,7 @@ struct devfreq_governor {
-> >>>>>>>>                    unsigned int event, void *data);
-> >>>>>>>>    };
-> >>>>>>>> -void devfreq_monitor_start(struct devfreq *devfreq);
-> >>>>>>>> +int devfreq_monitor_start(struct devfreq *devfreq);
-> >>>>>>>>    void devfreq_monitor_stop(struct devfreq *devfreq);
-> >>>>>>>>    void devfreq_monitor_suspend(struct devfreq *devfreq);
-> >>>>>>>>    void devfreq_monitor_resume(struct devfreq *devfreq);
-> >>>>>>>> diff --git a/drivers/devfreq/governor_simpleondemand.c
-> >>>>>>>> b/drivers/devfreq/governor_simpleondemand.c
-> >>>>>>>> index d57b82a2b570..ea287b57cbf3 100644
-> >>>>>>>> --- a/drivers/devfreq/governor_simpleondemand.c
-> >>>>>>>> +++ b/drivers/devfreq/governor_simpleondemand.c
-> >>>>>>>> @@ -89,8 +89,7 @@ static int devfreq_simple_ondemand_handler(str=
-uct
-> >>>>>>>> devfreq *devfreq,
-> >>>>>>>>    {
-> >>>>>>>>        switch (event) {
-> >>>>>>>>        case DEVFREQ_GOV_START:
-> >>>>>>>> -        devfreq_monitor_start(devfreq);
-> >>>>>>>> -        break;
-> >>>>>>>> +        return devfreq_monitor_start(devfreq);
-> >>>>>>>>        case DEVFREQ_GOV_STOP:
-> >>>>>>>>            devfreq_monitor_stop(devfreq);
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> Need to handle the all points of devfreq_monitor_start() usage.
-> >>>>>>> please check the tegra30-devfreq.c for this update.
-> >>>>>>>
-> >>>>>>> $ grep -rn "devfreq_monitor_start" drivers/
-> >>>>>>> drivers/devfreq/governor_simpleondemand.c:92:
-> >>>>>>> devfreq_monitor_start(devfreq);
-> >>>>>>> drivers/devfreq/tegra30-devfreq.c:744:
-> >>>>>>> devfreq_monitor_start(devfreq);
-> >>>>>>> ......
-> >>>>>>>
-> >>>>>>
-> >>>>>>
-> >>>>>> --
-> >>>>>> Best Regards,
-> >>>>>> Samsung Electronics
-> >>>>>> Chanwoo Choi
-> >>>>>
-> >>>>>
-> >>>>
-> >>>>
-> >>>> --
-> >>>> Best Regards,
-> >>>> Chanwoo Choi
-> >>>> Samsung Electronics
-> >>>
-> >>>
-> >>
-> >>
-> >> --
-> >> Best Regards,
-> >> Chanwoo Choi
-> >> Samsung Electronics
->
->
-> --
-> Best Regards,
-> Samsung Electronics
-> Chanwoo Choi
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
