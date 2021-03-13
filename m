@@ -2,188 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F40C339C82
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Mar 2021 08:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FD7339D9B
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Mar 2021 11:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbhCMHQN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Mar 2021 02:16:13 -0500
-Received: from mga11.intel.com ([192.55.52.93]:12270 "EHLO mga11.intel.com"
+        id S231134AbhCMKld (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Mar 2021 05:41:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230309AbhCMHPx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 13 Mar 2021 02:15:53 -0500
-IronPort-SDR: 2ndo3m4rVYs3omNgsRasE97SPIb4w2Fc+6hHQ/iNVJBmhfspvR6lZwZurXNG4G5QvOvGMp32n9
- M+lkVDCdHb/Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9921"; a="185568146"
-X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
-   d="scan'208";a="185568146"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 23:15:53 -0800
-IronPort-SDR: n+xzo1uxc/WbYHxcN01yEu/1HoU7YFgnsohc1aMoSj3cHu/zHOEZAK3se6ZBAnjZ+juVuWM5KV
- VbqTWSqeZxgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
-   d="scan'208";a="387572143"
-Received: from lkp-server02.sh.intel.com (HELO ce64c092ff93) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Mar 2021 23:15:51 -0800
-Received: from kbuild by ce64c092ff93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lKyV4-0001tu-Ms; Sat, 13 Mar 2021 07:15:50 +0000
-Date:   Sat, 13 Mar 2021 15:15:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 42326a293954f11eadf31161b8315bf6dc2279da
-Message-ID: <604c6680.9ASwrqJeUl3Ji5mc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230380AbhCMKlV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 13 Mar 2021 05:41:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3C09564F1D
+        for <linux-pm@vger.kernel.org>; Sat, 13 Mar 2021 10:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615632081;
+        bh=ySib2wRXNl+sxCpbNA6psO6GS+2DG9C1xprqmqlgTYA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=njAHB2YGL2HDRnqMf1md5Pyo/Y4Cw5TblCK8L/GswO97+DGfSocN5zKKuYzARkjEp
+         m80Uic9URco+wpRQIPpXJzOLXRTvpCAp/SACFYtir/xON667IyJJSTECwoIFjBq/ZA
+         OWS9FT6ftIxzmq8RXvAwVVaEs/gum1bbdgg/rfLlvQTQW/v/5op36RidYSTQbRqaAD
+         YCGZnfe3iEip6oxbXua1KlPw4GOzBv3cWmxfnW9ve1KkEqSm3tiCRwXp6AMjSIr50g
+         KgLNopqMRxW4vcnc6nB1BXoJbF8BAAmGRYGn+AYUpKyR8Z+zS84xVzIV6ExeZA2P2c
+         terHQPLr0B1xA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 22D4F6525D; Sat, 13 Mar 2021 10:41:21 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 211791] AMD CPU /proc/cpuinfo reported max potential boost
+ frequency instead of actual operating frequency
+Date:   Sat, 13 Mar 2021 10:41:20 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: josh@sobo.red
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-211791-137361-jJD9wJiapI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-211791-137361@https.bugzilla.kernel.org/>
+References: <bug-211791-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 42326a293954f11eadf31161b8315bf6dc2279da  Merge branch 'pm-opp' into linux-next
+https://bugzilla.kernel.org/show_bug.cgi?id=3D211791
 
-elapsed time: 722m
+Joshua (josh@sobo.red) changed:
 
-configs tested: 125
-configs skipped: 2
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |josh@sobo.red
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--- Comment #2 from Joshua (josh@sobo.red) ---
+I'm still having an issue with frequencies being reported incorrectly. Here=
+'s a
+thread for reference:
+https://bbs.archlinux.org/viewtopic.php?pid=3D1961500#p1961500
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-h8300                       h8s-sim_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                     tqm8541_defconfig
-m68k                       m5475evb_defconfig
-powerpc64                        alldefconfig
-arm                             mxs_defconfig
-h8300                     edosk2674_defconfig
-sh                 kfr2r09-romimage_defconfig
-arm                          iop32x_defconfig
-arm                          badge4_defconfig
-arc                    vdk_hs38_smp_defconfig
-riscv                             allnoconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                                  defconfig
-powerpc64                           defconfig
-xtensa                          iss_defconfig
-sh                            hp6xx_defconfig
-sh                     sh7710voipgw_defconfig
-xtensa                         virt_defconfig
-m68k                        m5407c3_defconfig
-csky                             alldefconfig
-sh                           sh2007_defconfig
-sh                          r7785rp_defconfig
-mips                    maltaup_xpa_defconfig
-arm                         assabet_defconfig
-arm                          ixp4xx_defconfig
-arm                          pxa168_defconfig
-m68k                          hp300_defconfig
-powerpc                 linkstation_defconfig
-powerpc                      walnut_defconfig
-csky                                defconfig
-powerpc                         ps3_defconfig
-arm                         axm55xx_defconfig
-arm                          moxart_defconfig
-sh                             shx3_defconfig
-mips                           gcw0_defconfig
-m68k                             alldefconfig
-sh                             espt_defconfig
-powerpc                       eiger_defconfig
-arm                          simpad_defconfig
-xtensa                  cadence_csp_defconfig
-arm                       imx_v6_v7_defconfig
-mips                          malta_defconfig
-mips                        jmr3927_defconfig
-mips                       capcella_defconfig
-m68k                       bvme6000_defconfig
-nios2                         10m50_defconfig
-sparc                       sparc64_defconfig
-arc                           tb10x_defconfig
-mips                         tb0226_defconfig
-mips                     cu1830-neo_defconfig
-riscv                            allyesconfig
-sh                        edosk7705_defconfig
-m68k                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210312
-i386                 randconfig-a005-20210312
-i386                 randconfig-a002-20210312
-i386                 randconfig-a003-20210312
-i386                 randconfig-a004-20210312
-i386                 randconfig-a006-20210312
-x86_64               randconfig-a011-20210312
-x86_64               randconfig-a016-20210312
-x86_64               randconfig-a013-20210312
-x86_64               randconfig-a014-20210312
-x86_64               randconfig-a015-20210312
-x86_64               randconfig-a012-20210312
-i386                 randconfig-a013-20210312
-i386                 randconfig-a016-20210312
-i386                 randconfig-a011-20210312
-i386                 randconfig-a015-20210312
-i386                 randconfig-a014-20210312
-i386                 randconfig-a012-20210312
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+I've updated to kernel version 5.11.6. If I watch /proc/cpuinfo, that seems=
+ to
+be reporting somewhat accurately now. However, lscpu and most everything el=
+se
+is still reporting inaccurately.
 
-clang tested configs:
-x86_64               randconfig-a001-20210312
-x86_64               randconfig-a003-20210312
-x86_64               randconfig-a002-20210312
-x86_64               randconfig-a004-20210312
-x86_64               randconfig-a006-20210312
-x86_64               randconfig-a005-20210312
+~ =E2=86=92 uname -r
+5.11.6-arch1-1
+~ =E2=86=92 lscpu | grep MHz
+CPU MHz:                         3400.000
+CPU max MHz:                     7228.3198
+CPU min MHz:                     2200.0000
+~ =E2=86=92 geekbench --sysinfo | grep -E "Processor Information|Name|Base =
+Frequency"
+Processor Information
+  Name                          AMD Ryzen 9 5950X
+  Base Frequency                6.92 GHz
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
