@@ -2,106 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9C533A4FE
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 14:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B8233A61A
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 17:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbhCNNWW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Mar 2021 09:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S233977AbhCNQev (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Mar 2021 12:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234064AbhCNNVw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 09:21:52 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03892C061762
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 06:21:50 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id r10-20020a05600c35cab029010c946c95easo17886514wmq.4
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 06:21:50 -0700 (PDT)
+        with ESMTP id S233530AbhCNQeb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 12:34:31 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB59C061574;
+        Sun, 14 Mar 2021 09:34:30 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v15so7488859wrx.4;
+        Sun, 14 Mar 2021 09:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ucTfiKz63mieQ2tKfaqkdxMrnodecmrh893BEUs65ok=;
-        b=hv1GfEBb+CHLRssqjP3rFGdeIms/TE2Ynr+K1Sneoeb44ZYw+jz+IMIl/bSC1scy4O
-         K0SG8Ezq8WxmzfbQ71yC6Li6x9URxPmTtRbj/FgC0s4U+uIrF7FaHJ+Pq6O/mWmNiuaT
-         kLXLgZ371lSVjSLk+TjJzwpFbVxBtom4GuGFbTCw8pa92kAGLrSCTZ4BGN2XWOy4yw8/
-         3F94HMyA9HCV5LTMIRd/7xnPtZYg/+hSgY2DYreEkZdml8UH6gAalUFghv66Md+XpoO6
-         M1noKS4/tyNFDvtUqnYb8avVENW9fTtwEBvQ0SuVpz45GOM7uYec+QRTQmAyeGj8rxFl
-         UgHQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dk+u80d7+DPr6f37qq0svEt55gFJ9tkcYaJUZ9gMJ0E=;
+        b=odz2KMFjnuhb+rsTA1UTIbkBLsTNRvMBNSMRiw8zxC4bWm7uwaiwsCXODkOpuWYygp
+         uPU8oyV7+fL4tqvAu2Qi/KxLJ0NMIZ38VJHySHemlGhL1DlopQm3WtA9Sht2KNeAoAP+
+         ZHlURy+2dKRSfqikCGrEaHH90tT+BwxckcE/dd9hWjs9MXYbwQY3As0wpUGcq06VDFmW
+         BZuQqJhYdotA3HLtV8KYQagN4hc9Y43XegpW96y5oVt/UTHFtXlOzYG8FybF7viwVXnW
+         Qb2ZZrGcp4g4aVCQ/jLBHK8TF8yiL1ImgA0Ni1kpRvRZgV5I0fPJPAEYubbKyERAh0xs
+         1gPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ucTfiKz63mieQ2tKfaqkdxMrnodecmrh893BEUs65ok=;
-        b=jKEYCCmOxKPKCAjXwmiwq717llEp63Ip56Yl2gAbyrlTd4nM3/MEQ36DM5Ma+lgypy
-         sCjGpLnhY8FdJlUmgVuDwoKFb5Zm7z+7zsNaBLJWb6LAA6mefmoGjVkMxdtCaEWmsolA
-         uAntD35FmNjP7j721o8SDo5uIfGTwhr+gcEWh5MDFf7k7M+yBzKKd/LPFRG6oVeI8D6Q
-         YR6Edsm9atYAI+twotSv9Nmq85tx55hhnymUEhnRPa1JeWVMbjcb6cRHH7sBv4nm9REZ
-         epkAMgQBSyVEw4aOyb2CGdewBBRBUYRa9QkDEBus5TV0pE1UFDS/ksbPcsO6lTcDHur5
-         NAfQ==
-X-Gm-Message-State: AOAM530YOc2xWC22e3YyQCNEb9+NiYkNPAlC70o4kEhRNQ0VL2DT0WKn
-        Oss7ISiqWGVh2Szy/ivg4VYLPw==
-X-Google-Smtp-Source: ABdhPJxLSXm8H6VsJLH45IRO7grdpD6tgv3nt6DMUuK88i8e8EngFuX8RylBZVgi/ib9h5nPUGF9mQ==
-X-Received: by 2002:a1c:1dd4:: with SMTP id d203mr21453627wmd.83.1615728109313;
-        Sun, 14 Mar 2021 06:21:49 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:1ed:80a3:b8d6:f6d3? ([2a01:e34:ed2f:f020:1ed:80a3:b8d6:f6d3])
-        by smtp.googlemail.com with ESMTPSA id f7sm9260216wmq.11.2021.03.14.06.21.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Mar 2021 06:21:48 -0700 (PDT)
-Subject: Re: [PATCH v3 1/5] thermal/drivers/core: Use a char pointer for the
- cooling device name
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, lukasz.luba@arm.com,
-        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>
-References: <20210314111333.16551-1-daniel.lezcano@linaro.org>
- <YE4FyiFgwM8cf5xe@shredder.lan>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <ba701ded-39e8-9e36-e828-a0ad14ba6caa@linaro.org>
-Date:   Sun, 14 Mar 2021 14:21:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        bh=Dk+u80d7+DPr6f37qq0svEt55gFJ9tkcYaJUZ9gMJ0E=;
+        b=sa9sIniQZDM0K1yHEQNiU560A5SPjTPXadJ0Ex/Rsgi9/WAyLIcHqEZzvBN4jRgpAD
+         IAMO65VvPfPsZQJKxdRxf2W2gRmqLH50bw6unkOVSSe8My9VV0tEuXs2N3B7sYq2hkld
+         t5B0SE1qZ+o5rQ4TUDnYWXXh8eg1Nt3L/GhJ0ksKyVosXiMyfCTN8JTA5htFHlsYZW+G
+         dXE8cLZCLD9Zl79rAbxHaGdDCO7NfFCyaZR8+gPC7uiwG5lbpKmI6mVWm1RSXeANk6qM
+         UcO6A5XH9nY254P9rogpUj2RJmTk0rh/6HpUzaVgJH/PG9+8/XOv62/RnHvmy/k3PMEG
+         bLVA==
+X-Gm-Message-State: AOAM533lWCsAygB6uwFH7NPu38ABjLQgiY9JNrJ4O1dLIPvYtkQWjmE8
+        yjUTwfZwMmGwCxQklTlktpM=
+X-Google-Smtp-Source: ABdhPJyleajyRpBrrXUjD8GqJPpb/1++iWRzfLdTQ72N8RYDVENKPnSXNItvO94J7ZdMRAdWS/ix6g==
+X-Received: by 2002:a5d:6412:: with SMTP id z18mr23774132wru.214.1615739669218;
+        Sun, 14 Mar 2021 09:34:29 -0700 (PDT)
+Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.gmail.com with ESMTPSA id o7sm15723239wrs.16.2021.03.14.09.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Mar 2021 09:34:28 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        lima@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v3 00/15] Introduce devm_pm_opp_* API
+Date:   Sun, 14 Mar 2021 19:33:53 +0300
+Message-Id: <20210314163408.22292-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YE4FyiFgwM8cf5xe@shredder.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/03/2021 13:47, Ido Schimmel wrote:
-> On Sun, Mar 14, 2021 at 12:13:29PM +0100, Daniel Lezcano wrote:
->> We want to have any kind of name for the cooling devices as we do no
->> longer want to rely on auto-numbering. Let's replace the cooling
->> device's fixed array by a char pointer to be allocated dynamically
->> when registering the cooling device, so we don't limit the length of
->> the name.
->>
->> Rework the error path at the same time as we have to rollback the
->> allocations in case of error.
->>
->> Tested with a dummy device having the name:
->>  "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"
->>
->> A village on the island of Anglesey (Wales), known to have the longest
->> name in Europe.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> 
-> Tested-by: Ido Schimmel <idosch@nvidia.com>
+This series adds resource-managed OPP API helpers and makes drivers
+to use them.
 
-Thanks !
+Changelog:
 
+v3: - Dropped dev_pm_opp_register_notifier().
+
+    - Changed return type of the devm helpers from opp_table pointer
+      to errno.
+
+    - Corrected drm/msm patch which missed to remove opp_put_supported_hw()
+      from a6xx_gpu. Note that the a5xx_gpu driver was missing the
+      opp_put_supported_hw() at all.
+
+    - Corrected spelling of the ack from Mark Brown.
+
+v2: - This is a continuation of the work that was started by Yangtao Li.
+      Apparently Yangtao doesn't have time to finish it, so I
+      (Dmitry Osipenko) picked up the effort since these patches are
+      wanted by the NVIDIA Tegra voltage-scaling series that I'm
+      working on.
+
+    - Fixed the double put of OPP resources.
+
+    - Dropped all patches that are unrelated to OPP API. I also dropped
+      the Tegra memory patch since it doesn't apply now and because I plan
+      to switch all Tegra drivers soon to a common tegra-specific OPP helper
+      that will use the resource-managed OPP API anyways.
+
+    - Squashed couple patches into a single ones since there was no
+      good reason to separate them.
+
+    - Added acks that were given to a couple of v1 patches.
+
+Dmitry Osipenko (2):
+  opp: Change return type of devm_pm_opp_register_set_opp_helper()
+  opp: Change return type of devm_pm_opp_attach_genpd()
+
+Yangtao Li (13):
+  opp: Add devres wrapper for dev_pm_opp_set_clkname
+  opp: Add devres wrapper for dev_pm_opp_set_regulators
+  opp: Add devres wrapper for dev_pm_opp_set_supported_hw
+  opp: Add devres wrapper for dev_pm_opp_of_add_table
+  serial: qcom_geni_serial: Convert to use resource-managed OPP API
+  spi: spi-geni-qcom: Convert to use resource-managed OPP API
+  spi: spi-qcom-qspi: Convert to use resource-managed OPP API
+  mmc: sdhci-msm: Convert to use resource-managed OPP API
+  drm/msm: Convert to use resource-managed OPP API
+  drm/lima: Convert to use resource-managed OPP API
+  drm/panfrost: Convert to use resource-managed OPP API
+  media: venus: Convert to use resource-managed OPP API
+  memory: samsung: exynos5422-dmc: Convert to use resource-managed OPP
+    API
+
+ drivers/gpu/drm/lima/lima_devfreq.c           |  47 ++-----
+ drivers/gpu/drm/lima/lima_devfreq.h           |   3 -
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c         |  11 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.h         |   2 -
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c       |   2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |  23 ++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h       |   2 -
+ drivers/gpu/drm/msm/dp/dp_ctrl.c              |  30 +----
+ drivers/gpu/drm/msm/dp/dp_ctrl.h              |   1 -
+ drivers/gpu/drm/msm/dp/dp_display.c           |   5 +-
+ drivers/gpu/drm/msm/dsi/dsi_host.c            |  13 +-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c   |  37 ++----
+ drivers/gpu/drm/panfrost/panfrost_devfreq.h   |   2 -
+ drivers/media/platform/qcom/venus/core.h      |   1 -
+ .../media/platform/qcom/venus/pm_helpers.c    |  35 ++---
+ drivers/memory/samsung/exynos5422-dmc.c       |  13 +-
+ drivers/mmc/host/sdhci-msm.c                  |  19 +--
+ drivers/opp/core.c                            | 122 ++++++++++++++----
+ drivers/opp/of.c                              |  36 ++++++
+ drivers/spi/spi-geni-qcom.c                   |  16 +--
+ drivers/spi/spi-qcom-qspi.c                   |  18 +--
+ drivers/tty/serial/qcom_geni_serial.c         |  23 ++--
+ include/linux/pm_opp.h                        |  43 +++++-
+ include/linux/qcom-geni-se.h                  |   2 -
+ 26 files changed, 250 insertions(+), 260 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.30.2
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
