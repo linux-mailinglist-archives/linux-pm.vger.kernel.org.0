@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FEC33A6E0
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 17:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A447B33A6DC
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 17:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbhCNQsm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S234433AbhCNQsm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Sun, 14 Mar 2021 12:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbhCNQsV (ORCPT
+        with ESMTP id S234287AbhCNQsV (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 12:48:21 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F40C061574;
-        Sun, 14 Mar 2021 09:48:20 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id f16so13406947ljm.1;
-        Sun, 14 Mar 2021 09:48:20 -0700 (PDT)
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7020FC061574;
+        Sun, 14 Mar 2021 09:48:21 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id x4so46485254lfu.7;
+        Sun, 14 Mar 2021 09:48:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1kQEK+vDmG5FfSSdZGh9UANwHmQxe+AZ4HqIwt9hQtI=;
-        b=dc/6Fwhy3kw5Z9ai/K8bW7qJnYlrvuVaIOC0Dp4yNxtGq1ld7NzSmoLh2ZZl8TSjNb
-         z/FNMTxxI5GHQqaPQJ9DPIfrt0Vb+qnbHWhzi2rzMHhk5T6OqeY2l5H5B7hbTaJECQ3Z
-         KY9vhhibKtPC2SuX26tYqCnNVltygSKcSjir/77XQw58pXVD57BDPVxMxSMdK9ejLiju
-         4YLKrbzMu10bH/e5Je811ldTiutyGkpC9Nr9EIYoHz4a/3EmvPo+OOjEqE6HannlQhZJ
-         Vsu+D6XUuWwI7aXHMOnhnRMKipaTtpfE+/pX58Z/Pi4sh+LFvTtsUrKHUbbaJjKJ3h89
-         c97w==
+        bh=1fIJlDcd71TT0jmkUZNR3ad9dZBjMysjRYOjtsTZlr4=;
+        b=mKV3MZpoO36TUQFcFLuG+Tn2Hdce+TPnf0EzISUvsjtS3JQBewFaRN3q7nTR5Vefdg
+         wWqL8xVUb6xwE3pkXMMPQEjKa4Rp6cIDQTfaGdDtIfTFwqEuMP9+/xoL/KNEN0cOL8go
+         Ca6RlJb1vxuZs2vKF6yUKd9+byYljyBhHgLyJTYD6CH+oJnia+WOCKps/3ti144ZFDLj
+         JkVlrFjuTUJtwtMsolAUb3Dj/swBvSBJWiM90NfpBrpw39NWDbrrpqGzz87Ywz8sYHft
+         wLB1pcP3z8Or0NTFEElYQYmDzuWRPyC3Ss5B8+eDgib+bi9ENpEKNlyXp8vo2ha77MXH
+         i0uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1kQEK+vDmG5FfSSdZGh9UANwHmQxe+AZ4HqIwt9hQtI=;
-        b=WihCU/UZpw1KH5vjh6qkRU7LfeM9OUu9YEPMjtBfogHwY1qTPAwzgsaRHWnJ5/OlUo
-         pxA9He9hEp5KyuhZBTy/0DXEgR7mSnF4wu+TY4DOpot6OTxroamNSh4hnPLEUHw1TlWa
-         7vPSWYBqUS3h3HKl1EJBAhx6O86sgkSzo8GaSyftAZte7LBV1EKB/+XT7HHYb1tlxFJx
-         RR0WPGyWsXvJ7Zidh8nMSdnJbqEePYgF1kJQT9uy3K0aiybOBFiZFgDiUBNouRGbuwtO
-         8G3HHdvujWI8lOpwx39Q1msHY5yytuA2MrKBBqXceg3UFQSiWP60HVhkhxHgY0AKAB+3
-         LVHg==
-X-Gm-Message-State: AOAM532KoWtjRBRIRVj5poj0HFi1bxtv6F+YI2OyT0ms+IOaKDlCCAIR
-        BsJQAdCxxCAm/gqRj85t3s8=
-X-Google-Smtp-Source: ABdhPJxONkqWJ0U9m/Tf7dewWR5YbxKsmfN40vxRK+2lG7TkT946V5VUWBNPC6CTkgXg8YRb35O7qQ==
-X-Received: by 2002:a2e:9704:: with SMTP id r4mr8096948lji.486.1615740499177;
+        bh=1fIJlDcd71TT0jmkUZNR3ad9dZBjMysjRYOjtsTZlr4=;
+        b=a0NmxoxByluJG4bhgVPl1gjVsFNOxMl84UmM9UxUx1ybhYf5Q1EB6tzcE1YN95wyrK
+         EqU2f8OvtVCnyYs6EgmC64KGeDnG/CLWG2dapljo2AV9i8OMxEJpZY/OeLJBJyDZ0UVE
+         +WamlSL4dlKv2oFUdSpzdkG2RsBVpzLTM3xtL2hVClwpH01SsoCThfoH6kwqhdYXshWq
+         I4gHFp5wuZJwb3uNT2Jekz3TDiO3kz8S2deV9heuxuw1QE7f8ZnF8cuZeDDQ4rJpFd5p
+         QGDYuaHXhb+egitiKIJxSTcr9mCgvKQKPLmYSH1ywY2WpFvgBvD3AnY2Mvb1LdtbGA13
+         7DpA==
+X-Gm-Message-State: AOAM530OjBTVjcRcHetU02Huj5SWUfgztIM02EgOIFm7DSgU/8huqv3g
+        QIF4LnX5iusuSgEiDiM9bsY=
+X-Google-Smtp-Source: ABdhPJztOtPxFLi6JgvnEmZbiJAiezCtcSFtFEDT+prwhQQKbGIkocxB3oQ9Zr76b8OiPgcjV6rvlg==
+X-Received: by 2002:a05:6512:32ab:: with SMTP id q11mr5610987lfe.106.1615740499965;
         Sun, 14 Mar 2021 09:48:19 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.gmail.com with ESMTPSA id a3sm2387993lfr.55.2021.03.14.09.48.18
+        by smtp.gmail.com with ESMTPSA id a3sm2387993lfr.55.2021.03.14.09.48.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Mar 2021 09:48:18 -0700 (PDT)
+        Sun, 14 Mar 2021 09:48:19 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -62,9 +62,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/6] soc/tegra: Add CONFIG_SOC_TEGRA_COMMON and select PM_OPP by default
-Date:   Sun, 14 Mar 2021 19:48:06 +0300
-Message-Id: <20210314164810.26317-3-digetx@gmail.com>
+Subject: [PATCH v4 3/6] dt-bindings: power: tegra: Add binding for core power domain
+Date:   Sun, 14 Mar 2021 19:48:07 +0300
+Message-Id: <20210314164810.26317-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210314164810.26317-1-digetx@gmail.com>
 References: <20210314164810.26317-1-digetx@gmail.com>
@@ -74,107 +74,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add new Kconfig SOC_TEGRA_COMMON option which selects configuration
-options that are common for all Tegra SoCs. Select PM_OPP by default
-since from now on OPPs will be used by Tegra drivers which present on
-all SoC generations, like display controller driver for example.
+All NVIDIA Tegra SoCs have a core power domain where majority of hardware
+blocks reside. Add binding for the core power domain.
 
-Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/soc/tegra/Kconfig | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .../power/nvidia,tegra20-core-domain.yaml     | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml
 
-diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
-index 976dee036470..bcd61ae59ba3 100644
---- a/drivers/soc/tegra/Kconfig
-+++ b/drivers/soc/tegra/Kconfig
-@@ -13,6 +13,7 @@ config ARCH_TEGRA_2x_SOC
- 	select PINCTRL_TEGRA20
- 	select PL310_ERRATA_727915 if CACHE_L2X0
- 	select PL310_ERRATA_769419 if CACHE_L2X0
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
- 	select SOC_TEGRA20_VOLTAGE_COUPLER
-@@ -27,6 +28,7 @@ config ARCH_TEGRA_3x_SOC
- 	select ARM_ERRATA_764369 if SMP
- 	select PINCTRL_TEGRA30
- 	select PL310_ERRATA_769419 if CACHE_L2X0
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
- 	select SOC_TEGRA30_VOLTAGE_COUPLER
-@@ -40,6 +42,7 @@ config ARCH_TEGRA_114_SOC
- 	select ARM_ERRATA_798181 if SMP
- 	select HAVE_ARM_ARCH_TIMER
- 	select PINCTRL_TEGRA114
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
- 	select TEGRA_TIMER
-@@ -51,6 +54,7 @@ config ARCH_TEGRA_124_SOC
- 	bool "Enable support for Tegra124 family"
- 	select HAVE_ARM_ARCH_TIMER
- 	select PINCTRL_TEGRA124
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
- 	select TEGRA_TIMER
-@@ -66,6 +70,7 @@ if ARM64
- config ARCH_TEGRA_132_SOC
- 	bool "NVIDIA Tegra132 SoC"
- 	select PINCTRL_TEGRA124
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
- 	help
-@@ -77,6 +82,7 @@ config ARCH_TEGRA_132_SOC
- config ARCH_TEGRA_210_SOC
- 	bool "NVIDIA Tegra210 SoC"
- 	select PINCTRL_TEGRA210
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
- 	select TEGRA_TIMER
-@@ -99,6 +105,7 @@ config ARCH_TEGRA_186_SOC
- 	select TEGRA_BPMP
- 	select TEGRA_HSP_MBOX
- 	select TEGRA_IVC
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_PMC
- 	help
- 	  Enable support for the NVIDIA Tegar186 SoC. The Tegra186 features a
-@@ -115,6 +122,7 @@ config ARCH_TEGRA_194_SOC
- 	select TEGRA_BPMP
- 	select TEGRA_HSP_MBOX
- 	select TEGRA_IVC
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_PMC
- 	help
- 	  Enable support for the NVIDIA Tegra194 SoC.
-@@ -125,6 +133,7 @@ config ARCH_TEGRA_234_SOC
- 	select TEGRA_BPMP
- 	select TEGRA_HSP_MBOX
- 	select TEGRA_IVC
-+	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_PMC
- 	help
- 	  Enable support for the NVIDIA Tegra234 SoC.
-@@ -132,6 +141,10 @@ config ARCH_TEGRA_234_SOC
- endif
- endif
- 
-+config SOC_TEGRA_COMMON
-+	bool
-+	select PM_OPP
+diff --git a/Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml b/Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml
+new file mode 100644
+index 000000000000..4692489d780a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/nvidia,tegra20-core-domain.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/nvidia,tegra20-core-domain.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- config SOC_TEGRA_FUSE
- 	def_bool y
- 	depends on ARCH_TEGRA
++title: NVIDIA Tegra Core Power Domain
++
++maintainers:
++  - Dmitry Osipenko <digetx@gmail.com>
++  - Jon Hunter <jonathanh@nvidia.com>
++  - Thierry Reding <thierry.reding@gmail.com>
++
++allOf:
++  - $ref: power-domain.yaml#
++
++properties:
++  compatible:
++    enum:
++      - nvidia,tegra20-core-domain
++      - nvidia,tegra30-core-domain
++
++  operating-points-v2:
++    description:
++      Should contain level, voltages and opp-supported-hw property.
++      The supported-hw is a bitfield indicating SoC speedo or process
++      ID mask.
++
++  "#power-domain-cells":
++    const: 0
++
++  power-supply:
++    description:
++      Phandle to voltage regulator connected to the SoC Core power rail.
++
++required:
++  - compatible
++  - operating-points-v2
++  - "#power-domain-cells"
++  - power-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    power-domain {
++        compatible = "nvidia,tegra20-core-domain";
++        operating-points-v2 = <&opp_table>;
++        power-supply = <&regulator>;
++        #power-domain-cells = <0>;
++    };
 -- 
 2.30.2
 
