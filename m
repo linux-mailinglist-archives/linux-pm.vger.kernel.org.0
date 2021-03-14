@@ -2,209 +2,335 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D32A833A1FD
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 01:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EB433A3BF
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 10:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbhCNAFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Mar 2021 19:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbhCNAFP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Mar 2021 19:05:15 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68591C061574;
-        Sat, 13 Mar 2021 16:05:15 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id e19so60442020ejt.3;
-        Sat, 13 Mar 2021 16:05:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+CXWQ7+4sGrdYWrJJDbJBWya0XStpZlHar12+cyRho8=;
-        b=j7sVR9K6FpFwxScOut4wrc10PxySxpv4ZZVsYmkKe1T9hE6FZTF0Yci2Kw3y6eVUtH
-         C6TuuEsBymzHt7vFIDhzpt2MvAR3csSeVVAU0O+kdQAs4h5/Nsnindd1o507+s5j7QH/
-         r5homKUU2kVCnaWx+rwAEg584Eo2ha+qHFqyozYG0FhOfcOG/pm324izjJ9SqV+IRvwY
-         d6UwnKg6YxiKpB7sDwWQiMCkslOUtibtMl3/JRXpD2ad2H7CfyzT15IsZjTrWyKzNxTN
-         90hBt0Cxs76jfvYJcn4nUDbgKWuW8ri1eucTXLRzAntzZVddgOFwYGyVOGWSZ21roArT
-         mb2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+CXWQ7+4sGrdYWrJJDbJBWya0XStpZlHar12+cyRho8=;
-        b=TdgzQ/j/9Z1MZmTesIiUyP+nx9awk0THw6V8/Kz0c1dMpe5MNdeZ3kOdHj4yKV0s1Q
-         FbBo6ht6/rmqfISV5y4nbUqyYuOZN3CVDx5P4bj57HmvRPggoOzETnr2CkUIMqjsvIds
-         rCoyjJllHk04JdeUjIMz7mG38MeVnpV+ZJBepZRStKYS6PdtM1K1Wpaz04JDu/hS4vIT
-         FiBC/jYmVG8oIQzc8OLpofrYunQohWl4pZnKAgMhO/PfOz9CQ9KjA+RIZtvgHMkkOcn2
-         IwbxuuWn04Hk3BO8ighYVCuSLQQG2hUgwyvBNhGqgqZTqyKdeuKy960+qO0pBVoCuhD3
-         DNYg==
-X-Gm-Message-State: AOAM532nQ1T8/uczMw4/XhNiVepVrG+Os8gkt5sgqP9nYXZnFjrGuxOc
-        PkHqkuxOmP5yagjAoJOHihGGytQjhPqpMA==
-X-Google-Smtp-Source: ABdhPJyPzltpaDg5XhE/G4ywUQJSFeR7sYykiqzumpbB2yqPd44htfcUiyJSCfsqXKhGSqBeNINl5Q==
-X-Received: by 2002:a17:906:f953:: with SMTP id ld19mr15622227ejb.164.1615680314180;
-        Sat, 13 Mar 2021 16:05:14 -0800 (PST)
-Received: from xws.localdomain ([37.58.58.229])
-        by smtp.gmail.com with ESMTPSA id a9sm5503835edt.82.2021.03.13.16.05.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Mar 2021 16:05:13 -0800 (PST)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] PCI: Run platform power transition on initial D0 entry
-Date:   Sun, 14 Mar 2021 01:04:39 +0100
-Message-Id: <20210314000439.3138941-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        id S234753AbhCNJLR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Mar 2021 05:11:17 -0400
+Received: from mga11.intel.com ([192.55.52.93]:53684 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234904AbhCNJLI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 14 Mar 2021 05:11:08 -0400
+IronPort-SDR: RUj4kGG1QLbyTle3TnbiOnSZ6GOIKXfIdcEFneo0CvHNs5KWG+KZRmaBpitJH5xobAyhOS1Dw8
+ slxCY5WX0rBw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9922"; a="185622924"
+X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
+   d="scan'208";a="185622924"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2021 01:11:05 -0800
+IronPort-SDR: W4Pgrv411RMHKDlBXBestqy3b70NnWFlbNwtzC3925eFFTt0bxoJmYWcacH/mhfTD4wzGRqT0e
+ BhyvAbVIkt5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
+   d="scan'208";a="590015788"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by orsmga005.jf.intel.com with ESMTP; 14 Mar 2021 01:10:56 -0800
+Subject: Re: [PATCH v10 1/2] scsi: ufs: Enable power management for wlun
+To:     "Asutosh Das (asd)" <asutoshd@codeaurora.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, cang@codeaurora.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Satya Tangirala <satyat@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux-PM mailing list <linux-pm@vger.kernel.org>
+References: <cover.1614725302.git.asutoshd@codeaurora.org>
+ <0576d6eae15486740c25767e2d8805f7e94eb79d.1614725302.git.asutoshd@codeaurora.org>
+ <85086647-7292-b0a2-d842-290818bd2858@intel.com>
+ <6e98724d-2e75-d1fe-188f-a7010f86c509@codeaurora.org>
+ <20210306161616.GC74411@rowland.harvard.edu>
+ <CAJZ5v0ihJe8rNjWRwNic_BQUvKbALNcjx8iiPAh5nxLhOV9duw@mail.gmail.com>
+ <CAJZ5v0iJ4yqRTt=mTCC930HULNFNTgvO4f9ToVO6pNz53kxFkw@mail.gmail.com>
+ <f1e9b21d-1722-d20b-4bae-df7e6ce50bbc@codeaurora.org>
+ <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <b13086f3-eea1-51a7-2117-579d520f21fc@intel.com>
+Date:   Sun, 14 Mar 2021 11:11:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
+In-Reply-To: <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On some devices and platforms, the initial platform (e.g. ACPI) power
-state is not in sync with the power state of the PCI device.
+On 10/03/21 5:04 am, Asutosh Das (asd) wrote:
+> On 3/9/2021 7:56 AM, Asutosh Das (asd) wrote:
+>> On 3/8/2021 9:17 AM, Rafael J. Wysocki wrote:
+>>> On Mon, Mar 8, 2021 at 5:21 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>>>
+>>>> On Sat, Mar 6, 2021 at 5:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>>>>>
+>>>>> On Fri, Mar 05, 2021 at 06:54:24PM -0800, Asutosh Das (asd) wrote:
+>>>>>
+>>>>>> Now during my testing I see a weird issue sometimes (1 in 7).
+>>>>>> Scenario - bootups
+>>>>>>
+>>>>>> Issue:
+>>>>>> The supplier 'ufs_device_wlun 0:0:0:49488' goes into runtime suspend even
+>>>>>> when one/more of its consumers are in RPM_ACTIVE state.
+>>>>>>
+>>>>>> *Log:
+>>>>>> [   10.056379][  T206] sd 0:0:0:1: [sdb] Synchronizing SCSI cache
+>>>>>> [   10.062497][  T113] sd 0:0:0:5: [sdf] Synchronizing SCSI cache
+>>>>>> [   10.356600][   T32] sd 0:0:0:7: [sdh] Synchronizing SCSI cache
+>>>>>> [   10.362944][  T174] sd 0:0:0:3: [sdd] Synchronizing SCSI cache
+>>>>>> [   10.696627][   T83] sd 0:0:0:2: [sdc] Synchronizing SCSI cache
+>>>>>> [   10.704562][  T170] sd 0:0:0:6: [sdg] Synchronizing SCSI cache
+>>>>>> [   10.980602][    T5] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+>>>>>>
+>>>>>> /** Printing all the consumer nodes of supplier **/
+>>>>>> [   10.987327][    T5] ufs_device_wlun 0:0:0:49488: usage-count @ suspend: 0
+>>>>>> <-- this is the usage_count
+>>>>>> [   10.994440][    T5] ufs_rpmb_wlun 0:0:0:49476: PM state - 2
+>>>>>> [   11.000402][    T5] scsi 0:0:0:49456: PM state - 2
+>>>>>> [   11.005453][    T5] sd 0:0:0:0: PM state - 2
+>>>>>> [   11.009958][    T5] sd 0:0:0:1: PM state - 2
+>>>>>> [   11.014469][    T5] sd 0:0:0:2: PM state - 2
+>>>>>> [   11.019072][    T5] sd 0:0:0:3: PM state - 2
+>>>>>> [   11.023595][    T5] sd 0:0:0:4: PM state - 0 << RPM_ACTIVE
+>>>>>> [   11.353298][    T5] sd 0:0:0:5: PM state - 2
+>>>>>> [   11.357726][    T5] sd 0:0:0:6: PM state - 2
+>>>>>> [   11.362155][    T5] sd 0:0:0:7: PM state - 2
+>>>>>> [   11.366584][    T5] ufshcd-qcom 1d84000.ufshc: __ufshcd_wl_suspend - 8709
+>>>>>> [   11.374366][    T5] ufs_device_wlun 0:0:0:49488: __ufshcd_wl_suspend -
+>>>>>> (0) has rpm_active flags
+>>>>
+>>>> Do you mean that rpm_active of the link between the consumer and the
+>>>> supplier is greater than 0 at this point and the consumer is
+>>>
+>>> I mean is rpm_active of the link greater than 1 (because 1 means "no
+>>> active references to the supplier")?
+>> Hi Rafael:
+>> No - it is not greater than 1.
+>>
+>> I'm trying to understand what's going on in it; will update when I've something.
+>>
+>>>
+>>>> RPM_ACTIVE, but the supplier suspends successfully nevertheless?
+>>>>
+>>>>>> [   11.383376][    T5] ufs_device_wlun 0:0:0:49488:
+>>>>>> ufshcd_wl_runtime_suspend <-- Supplier suspends fine.
+>>>>>> [   12.977318][  T174] sd 0:0:0:4: [sde] Synchronizing SCSI cache
+>>>>>>
+>>>>>> And the the suspend of sde is stuck now:
+>>>>>> schedule+0x9c/0xe0
+>>>>>> schedule_timeout+0x40/0x128
+>>>>>> io_schedule_timeout+0x44/0x68
+>>>>>> wait_for_common_io+0x7c/0x100
+>>>>>> wait_for_completion_io+0x14/0x20
+>>>>>> blk_execute_rq+0x90/0xcc
+>>>>>> __scsi_execute+0x104/0x1c4
+>>>>>> sd_sync_cache+0xf8/0x2a0
+>>>>>> sd_suspend_common+0x74/0x11c
+>>>>>> sd_suspend_runtime+0x14/0x20
+>>>>>> scsi_runtime_suspend+0x64/0x94
+>>>>>> __rpm_callback+0x80/0x2a4
+>>>>>> rpm_suspend+0x308/0x614
+>>>>>> pm_runtime_work+0x98/0xa8
+>>>>>>
+>>>>>> I added 'DL_FLAG_RPM_ACTIVE' while creating links.
+>>>>>>        if (hba->sdev_ufs_device) {
+>>>>>>                link = device_link_add(&sdev->sdev_gendev,
+>>>>>>                                    &hba->sdev_ufs_device->sdev_gendev,
+>>>>>>                                   DL_FLAG_PM_RUNTIME|DL_FLAG_RPM_ACTIVE);
+>>>>>> I didn't expect this to resolve the issue anyway and it didn't.
+>>>>>>
+>>>>>> Another interesting point here is when I resume any of the above suspended
+>>>>>> consumers, it all goes back to normal, which is kind of expected. I tried
+>>>>>> resuming the consumer and the supplier is resumed and the supplier is
+>>>>>> suspended when all the consumers are suspended.
+>>>>>>
+>>>>>> Any pointers on this issue please?
+>>>>>>
+>>>>>> @Bart/@Alan - Do you've any pointers please?
+>>>>>
+>>>>> It's very noticeable that although you seem to have isolated a bug in
+>>>>> the power management subsystem (supplier goes into runtime suspend
+>>>>> even when one of its consumers is still active), you did not CC the
+>>>>> power management maintainer or mailing list.
+>>>>>
+>>>>> I have added the appropriate CC's.
+>>>>
+>>>> Thanks Alan!
+>>
+>>
+> 
+> Hello
+> I & Can (thanks CanG) debugged this further:
+> 
+> Looks like this issue can occur if the sd probe is asynchronous.
+> 
+> Essentially, the sd_probe() is done asynchronously and driver_probe_device() invokes pm_runtime_get_suppliers() before invoking sd_probe().
+> 
+> But scsi_probe_and_add_lun() runs in a separate context.
+> So the scsi_autopm_put_device() invoked from scsi_scan_host() context reduces the link->rpm_active to 1. And sd_probe() invokes scsi_autopm_put_device() and starts a timer. And then driver_probe_device() invoked from __device_attach_async_helper context reduces the link->rpm_active to 1 thus enabling the supplier to suspend before the consumer suspends.
+> 
+> So if:
+> Context T1:
+> [1] scsi_probe_and_add_lun()
+> [2]    |- scsi_autopm_put_device() - reduce the link->rpm_active to 1
+> 
+> Context T2:
+> __device_attach_async_helper()
+>     |- driver_probe_device()
+>         |- sd_probe()
+> In between [1] and [2] say, driver_probe_device() -> sd_probe() is invoked in a separate context from __device_attach_async_helper().
+> The driver_probe_device() -> pm_runtime_get_suppliers() but [2] would reduce link->rpm_active to 1.
+> Then sd_probe() would invoke rpm_resume() and proceed as is.
+> When sd_probe() invokes scsi_autopm_put_device() it'd start a timer, dev->power.timer_autosuspends = 1.
+> 
+> Now then, pm_runtime_put_suppliers() is invoked from driver_probe_device() and that makes the link->rpm_active = 1.
+> But by now, the corresponding 'sd dev' (consumer) usage_count = 0, state = RPM_ACTIVE and link->rpm_active = 1.
+> At this point of time, all other 'sd dev' (consumers) _may_ be suspended or active but would have the link->rpm_active = 1.
 
-This seems like it is, for all intents and purposes, an issue with the
-device firmware (e.g. ACPI). On some devices, specifically Microsoft
-Surface Books 2 and 3, we encounter ACPI code akin to the following
-power resource, corresponding to a PCI device:
+Is this with DL_FLAG_RPM_ACTIVE?  In that case, wouldn't active
+consumers have link->rpm_active = 2 and also have incremented
+the supplier's usage_count?
 
-    PowerResource (PRP5, 0x00, 0x0000)
-    {
-        // Initialized to zero, i.e. off. There is no logic for checking
-        // the actual state dynamically.
-        Name (_STA, Zero)
+Another outstanding issue that comes to mind, is to ensure
+hba->sdev_ufs_device does not runtime suspend before it is probed.
+I suggest changing ufshcd_slave_configure() so it does not set
+sdev->rpm_autosuspend for hba->sdev_ufs_device, and instead do
+pm_runtime_allow / pm_runtime_forbid() in ufshcd_wl_probe() /
+ufshcd_wl_remove() respectively.
 
-        Method (_ON, 0, Serialized)
-        {
-            // ... code omitted ...
-            _STA = One
-        }
+However we still want to stop hba->sdev_ufs_device runtime
+suspending while consumers are being added.  With that in mind,
+I would expect pm_runtime_get_noresume(&hba->sdev_ufs_device->sdev_gendev)
+in ufshcd_scsi_add_wlus() to come *before*
+ufshcd_blk_pm_runtime_init(hba->sdev_ufs_device).  In fact, it would
+be more logical to make it, pm_runtime_get_sync() since we require
+hba->sdev_ufs_device to be active at that point.
 
-        Method (_OFF, 0, Serialized)
-        {
-            // ... code omitted ...
-            _STA = Zero
-        }
-    }
 
-This resource is initialized to 'off' and does not have any logic for
-checking its actual state, i.e. the state of the corresponding PCI
-device. The stored state of this resource can only be changed by running
-the (platform/ACPI) power transition functions (i.e. _ON and _OFF).
-
-This means that, at boot, the PCI device power state is out of sync with
-the power state of the corresponding ACPI resource.
-
-During initial bring-up of a PCI device, pci_enable_device_flags()
-updates its PCI core state (from initially 'unknown') by reading from
-its PCI_PM_CTRL register. It does, however, not check if the platform
-(here ACPI) state is in sync with/valid for the actual device state and
-needs updating.
-
-The later call to pci_set_power_state(..., PCI_D0), which would normally
-perform such platform transitions, will evaluate to a no-op if the
-stored state has been updated to D0 via this. Thus any such power
-resource, required for D0, will never get "officially" turned on.
-
-One could also make the case that this could cause PCI devices requiring
-some secondary power resources to not work properly, as no attempt is
-ever made at checking that they are in fact synchronized (i.e. turned
-on/off as required e.g. by ACPI) for the updated state.
-
-Ultimately, this breaks the first D3cold entry for the discrete GPU on
-the aforementioned Surface Books. On transition of the PCI device to
-D3cold, the power resource is not properly turned off as it is already
-considered off:
-
-    $ echo auto > /sys/bus/pci/devices/0000:02:00.0/power/control
-
-    [  104.430304] ACPI: \_SB_.PCI0.RP05: ACPI: PM: GPE69 enabled for wakeup
-    [  104.430310] pcieport 0000:00:1c.4: Wakeup enabled by ACPI
-    [  104.444144] ACPI: \_SB_.PCI0.RP05: ACPI: PM: Power state change: D3cold -> D3cold
-    [  104.444151] acpi device:3b: Device already in D3cold
-    [  104.444154] pcieport 0000:00:1c.4: power state changed by ACPI to D3cold
-
-However, the device still consumes a non-negligible amount of power and
-gets warm. A full power-cycle fixes this and results in the device being
-properly transitioned to D3cold:
-
-    $ echo on > /sys/bus/pci/devices/0000:02:00.0/power/control
-
-    [  134.258039] ACPI: \_SB_.PCI0.RP05: ACPI: PM: Power state change: D3cold -> D0
-    [  134.369140] ACPI: PM: Power resource [PRP5] turned on
-    [  134.369157] acpi device:3b: Power state changed to D0
-    [  134.369165] pcieport 0000:00:1c.4: power state changed by ACPI to D0
-    [  134.369338] pcieport 0000:00:1c.4: Wakeup disabled by ACPI
-
-    $ echo auto > /sys/bus/pci/devices/0000:02:00.0/power/control
-
-    [  310.338597] ACPI: \_SB_.PCI0.RP05: ACPI: PM: GPE69 enabled for wakeup
-    [  310.338604] pcieport 0000:00:1c.4: Wakeup enabled by ACPI
-    [  310.353841] ACPI: \_SB_.PCI0.RP05: ACPI: PM: Power state change: D0 -> D3cold
-    [  310.403879] ACPI: PM: Power resource [PRP5] turned off
-    [  310.403894] acpi device:3b: Power state changed to D3cold
-    [  310.403901] pcieport 0000:00:1c.4: power state changed by ACPI to D3cold
-
-By replacing pci_set_power_state(..., PCI_DO) with pci_power_up() in
-do_pci_enable_device(), we can ensure that the state of power resources
-is always checked. This essentially drops the initial (first) check on
-the current state of the PCI device and calls platform specific code,
-i.e. pci_platform_power_transition() to perform the appropriate platform
-transition.
-
-This can be verified by
-
-    $ echo auto > /sys/bus/pci/devices/0000:02:00.0/power/control
-
-    [  152.790448] ACPI: \_SB_.PCI0.RP05: ACPI: PM: GPE69 enabled for wakeup
-    [  152.790454] pcieport 0000:00:1c.4: Wakeup enabled by ACPI
-    [  152.804252] ACPI: \_SB_.PCI0.RP05: ACPI: PM: Power state change: D0 -> D3cold
-    [  152.857548] ACPI: PM: Power resource [PRP5] turned off
-    [  152.857563] acpi device:3b: Power state changed to D3cold
-    [  152.857570] pcieport 0000:00:1c.4: power state changed by ACPI to D3cold
-
-which yields the expected behavior.
-
-Note that
-
- a) pci_set_power_state() would call pci_power_up() if the check on the
- current state failed. This means that in case of the updated state not
- being D0, there is no functional change.
-
- b) The core and platform transitions, i.e. pci_raw_set_power_state()
- and pci_platform_power_transition() (should) both have checks on the
- current state. So in case either state is up to date, the corresponding
- transition should still evaluate to a no-op. The only notable
- difference made by the suggested replacement is pci_resume_bus() being
- called for devices where runtime D3cold is enabled.
-
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
-
-Changes in v2:
- - No code changes
- - Improve commit message, add details
- - Add Rafael and linux-pm to CCs
-
----
- drivers/pci/pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 16a17215f633..cc42315210e4 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1800,7 +1800,7 @@ static int do_pci_enable_device(struct pci_dev *dev, int bars)
- 	u16 cmd;
- 	u8 pin;
- 
--	err = pci_set_power_state(dev, PCI_D0);
-+	err = pci_power_up(dev);
- 	if (err < 0 && err != -EIO)
- 		return err;
- 
--- 
-2.30.2
+> 
+> Since the supplier has 0 auto-suspend delay, it now suspends!
+> 
+> 
+> Context [T1]
+> Call trace:
+> dump_backtrace+0x0/0x1d4
+> show_stack+0x18/0x24
+> dump_stack+0xc4/0x144
+> __pm_runtime_idle+0xb4/0x184
+> scsi_autopm_put_device+0x18/0x24
+> scsi_sysfs_add_sdev+0x26c/0x278
+> scsi_probe_and_add_lun+0xbac/0xd48
+> __scsi_scan_target+0x38c/0x510
+> scsi_scan_host_selected+0x14c/0x1e4
+> scsi_scan_host+0x1e0/0x228
+> ufshcd_async_scan+0x39c/0x408
+> async_run_entry_fn+0x48/0x128
+> process_one_work+0x1f0/0x470
+> worker_thread+0x26c/0x4c8
+> kthread+0x13c/0x320
+> ret_from_fork+0x10/0x18
+> 
+> 
+> Context [T2]
+> Call trace:
+> dump_backtrace+0x0/0x1d4
+> show_stack+0x18/0x24
+> dump_stack+0xc4/0x144
+> rpm_get_suppliers+0x48/0x1ac
+> __rpm_callback+0x58/0x12c
+> rpm_resume+0x3a4/0x618
+> __pm_runtime_resume+0x50/0x80
+> scsi_autopm_get_device+0x20/0x54
+> sd_probe+0x40/0x3d0
+> really_probe+0x1bc/0x4a0
+> driver_probe_device+0x84/0xf0
+> __device_attach_driver+0x114/0x138
+> bus_for_each_drv+0x84/0xd0
+> __device_attach_async_helper+0x7c/0xf0
+> async_run_entry_fn+0x48/0x128
+> process_one_work+0x1f0/0x470
+> worker_thread+0x26c/0x4c8
+> kthread+0x13c/0x320
+> ret_from_fork+0x10/0x18
+> 
+> Below prints show how link->rpm_active becomes 1 for sd 0:0:0:4
+> [    7.574654][  T212] Call trace:
+> [    7.574657][  T212]  dump_backtrace+0x0/0x1d4
+> [    7.574661][  T212]  show_stack+0x18/0x24
+> [    7.574665][  T212]  dump_stack+0xc4/0x144
+> [    7.574668][  T212]  __pm_runtime_idle+0xb4/0x184
+> [    7.574671][  T212]  scsi_autopm_put_device+0x18/0x24
+> [    7.574675][  T212]  sd_probe+0x314/0x3d0
+> [    7.574677][  T212]  really_probe+0x1bc/0x4a0
+> [    7.574680][  T212]  driver_probe_device+0x84/0xf0
+> [    7.574683][  T212]  __device_attach_driver+0x114/0x138
+> [    7.574686][  T212]  bus_for_each_drv+0x84/0xd0
+> [    7.574689][  T212]  __device_attach_async_helper+0x7c/0xf0
+> [    7.574692][  T212]  async_run_entry_fn+0x48/0x128
+> [    7.574695][  T212]  process_one_work+0x1f0/0x470
+> [    7.574698][  T212]  worker_thread+0x26c/0x4c8
+> [    7.574700][  T212]  kthread+0x13c/0x320
+> [    7.574703][  T212]  ret_from_fork+0x10/0x18
+> [    7.574706][  T212] sd 0:0:0:4: scsi_runtime_idle
+> [    7.574712][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: -16 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+> [    7.574715][  T212] sd 0:0:0:4: sd_probe: [UFSDBG]: Exit
+> [    7.574738][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+> 
+> [    7.574752][  T212] Workqueue: events_unbound async_run_entry_fn
+> [    7.574754][  T212] Call trace:
+> [    7.574758][  T212]  dump_backtrace+0x0/0x1d4
+> [    7.574761][  T212]  show_stack+0x18/0x24
+> [    7.574765][  T212]  dump_stack+0xc4/0x144
+> [    7.574767][  T212]  __pm_runtime_idle+0xb4/0x184
+> [    7.574770][  T212]  driver_probe_device+0x94/0xf0
+> [    7.574773][  T212]  __device_attach_driver+0x114/0x138
+> [    7.574775][  T212]  bus_for_each_drv+0x84/0xd0
+> [    7.574778][  T212]  __device_attach_async_helper+0x7c/0xf0
+> [    7.574781][  T212]  async_run_entry_fn+0x48/0x128
+> [    7.574783][  T212]  process_one_work+0x1f0/0x470
+> [    7.574786][  T212]  worker_thread+0x26c/0x4c8
+> [    7.574788][  T212]  kthread+0x13c/0x320
+> [    7.574791][  T212]  ret_from_fork+0x10/0x18
+> [    7.574848][   T80] sd 0:0:0:4: scsi_runtime_idle
+> [    7.574858][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: 0 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+> [    7.574863][  T212] sd 0:0:0:4: pm_runtime_put_suppliers: [UFSDBG]: rpm_status: 0 link-rpm_active:1
+> [    7.574866][  T212] sd 0:0:0:4: async probe completed
+> [    7.574870][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:1
+> 
+> 
+> So, from the above it looks like when async probe is enabled this is a possibility.
+> 
+> I don't see a way around this. Please let me know if you (@Alan/@Bart/@Adrian) have any thoughts on this.
+> 
+> Thanks,
+> -asd
+> 
 
