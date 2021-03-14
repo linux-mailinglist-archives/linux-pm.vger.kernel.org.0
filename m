@@ -2,128 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8409733A441
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 11:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5FF33A473
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 12:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235100AbhCNKtU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Mar 2021 06:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S235248AbhCNLOO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Mar 2021 07:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235178AbhCNKs5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 06:48:57 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8B1C061574
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 03:48:56 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id x16so4165902wrn.4
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 03:48:56 -0700 (PDT)
+        with ESMTP id S234904AbhCNLN5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 07:13:57 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92516C061762
+        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 04:13:55 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id k8so4171251wrc.3
+        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 04:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A3yM0E2XIIeHhpwSsShTH8f57YtVpUZzWbcZcvUk0cc=;
-        b=pdx2zG07Ivkui/nQ7jBCP+23ASSB2fnCc+vt+2JsM1t2Vgl/TWPbh5allOMrITOLVP
-         C7VGHUxbIg42pGUQsCbtZux7kOIFOZUsMaf6AoczHbdOkWhKxQ7NEL30VAzeTtq9v/yG
-         BHbVFl37j6bCV9zAtqRE8ieUzeQEFZXYM3rDoHRUSo+xxHEnZGmLsOpZKf4bfAF++Pvq
-         +gEiVSKe377nsa6Lr3DxGO/YU4Esl9qnLTd4Xt5T4+o0dBwhT0VtkU9NW/o8gk7C8LZP
-         0S/LiHEjpOmJI/4BIsk6oFPxrBEOqyv/DQfydenSSqBoC1ySgw22J9/5FvX1z975ogqc
-         Dwcw==
+        h=from:to:cc:subject:date:message-id;
+        bh=8xPAvMxHmY9pOZ0ZnygmV1N99XR+BZf8XBmni53ESgY=;
+        b=z6J3QWAUD5nKc3yZCQ4Wg8qGFur7mKvRy0vsI5FRjSEuyhyNqQIBJpbVYu5BNT44dG
+         hYVy3cZLFtt0f/aCvRmDJYchM9tg3u4qmGNJzekJrznushNnni1o/7434/rXMTAw5tYw
+         fGVKjU8u1OPfVb4G+oq98lIeH6fZ2FxBY/Ox4e+fDhNRC2DOFI0yXtsjQAfEaKaekLXx
+         oLdQVlc1HKIts44VvP3L+zYHe55HYCRpKslJV0cVpFL7Z2ShTjgeR5BRV54A4qTJvQjM
+         vDZaJxxohTSGC5WEvgv5I+yPj1WGByZsK1u/os2O2uuE/ZDXVZQSFAIzT+UXpY29URqC
+         Hyrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A3yM0E2XIIeHhpwSsShTH8f57YtVpUZzWbcZcvUk0cc=;
-        b=q7hhcVB9Z4nJ/RnXWFP4ewFFqaUR5RkQVR8MTFwdIQfE264MT1GXAjzxRQmfkdtcQv
-         Y6JIBRhp9jBylqI7aPif2ScYnpWK9MJ7w7KSw0m90D5Eek4KX9Swb+AB444BtSASqFe4
-         9zjDhIj9gPyMS7WxFuCLSsGPcFfLnPQ3yr8s8603VbllrP0lxBidkz4R6XQMGPVZfeg9
-         m7fHOENr/bfe9QozQHWfTn9obtNBBJCfjGObj8XZpOAhmmK7oUh0R/SWev+P23D3W3hJ
-         8dG/oGUJ8COVQTbcy5ssgKQAdiBJKHuD82eEfhqfoXTj050r9XGOysd+SAaXWm6J4xQh
-         V/Vg==
-X-Gm-Message-State: AOAM533N4vK8WIIojhZSC5eF68JtqerkIXNSB0qjl7pDuls0K2I2wYl3
-        xC9eXCYVPaT2lbJsOgDAPTr96w==
-X-Google-Smtp-Source: ABdhPJxO8AnD0OFEBp/F/EJSgQl90d9XEpEQ5+VL6JbW6iyuR3wYJ0lz4RCYVItN/ay1Czl6qu1e+g==
-X-Received: by 2002:adf:ded1:: with SMTP id i17mr22900596wrn.349.1615718935094;
-        Sun, 14 Mar 2021 03:48:55 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:1ed:80a3:b8d6:f6d3? ([2a01:e34:ed2f:f020:1ed:80a3:b8d6:f6d3])
-        by smtp.googlemail.com with ESMTPSA id f14sm9019461wmf.7.2021.03.14.03.48.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Mar 2021 03:48:54 -0700 (PDT)
-Subject: Re: [PATCH v2 1/5] thermal/drivers/core: Use a char pointer for the
- cooling device name
-To:     Ido Schimmel <idosch@idosch.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8xPAvMxHmY9pOZ0ZnygmV1N99XR+BZf8XBmni53ESgY=;
+        b=eTRji/koID4GJg0cP6H/Si7rh7wUmNPVCtzS9aHgRdU7YUaNqPYxM8aawbyYxSj/To
+         xkPlZENprrjJGQ/EnibR4pIaNyQllUuV18syBGrKOqkri57u5rM/apfxHssNI3Uj0OEr
+         cxhtAULGLxfeVbuclYZcEVA3N+O1RMG0ti8wo/Wl8OEhVOrJLJ5Dar76waiBv17vx8HI
+         MeIrgU8Ng1ANysmvE7voJPz9PhvbGdahS4SlEk3EoH833wsMbNDPR3KOLoKG5pt6d2Kb
+         X98tB2eM75TFqNlZRl2YBFYRo+iKA5EavyhAmaxS5LrSc8ldFBoht9tihX7QC6Fowfkk
+         PDeg==
+X-Gm-Message-State: AOAM533OFX/ZrPyXPjXAH+IrvpLDjIK+cs2zvaZs/rOE/7UKxDFdi0R3
+        m2ojs+Kkog8LHuz+gGHttyq0FQ==
+X-Google-Smtp-Source: ABdhPJwf29Ewk1BVqDqe5JiILemCbN7mEXaTAvkXzrCUuuRmVGP5nkSSndWDQxXhgoQj0SHkx0lF1g==
+X-Received: by 2002:adf:e84f:: with SMTP id d15mr22660387wrn.394.1615720434029;
+        Sun, 14 Mar 2021 04:13:54 -0700 (PDT)
+Received: from localhost.localdomain ([82.142.0.212])
+        by smtp.gmail.com with ESMTPSA id i8sm16828330wry.90.2021.03.14.04.13.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Mar 2021 04:13:53 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         lukasz.luba@arm.com, Jiri Pirko <jiri@nvidia.com>,
         Ido Schimmel <idosch@nvidia.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
         Amit Kucheria <amitk@kernel.org>,
-        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>
-References: <20210312170316.3138-1-daniel.lezcano@linaro.org>
- <YE3dMM7tqk5BbD/l@shredder.lan>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <f4d7d072-2c4f-2d9d-8628-0c8c83b76f4d@linaro.org>
-Date:   Sun, 14 Mar 2021 11:48:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <YE3dMM7tqk5BbD/l@shredder.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        netdev@vger.kernel.org (open list:MELLANOX ETHERNET SWITCH DRIVERS)
+Subject: [PATCH v3 1/5] thermal/drivers/core: Use a char pointer for the cooling device name
+Date:   Sun, 14 Mar 2021 12:13:29 +0100
+Message-Id: <20210314111333.16551-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+We want to have any kind of name for the cooling devices as we do no
+longer want to rely on auto-numbering. Let's replace the cooling
+device's fixed array by a char pointer to be allocated dynamically
+when registering the cooling device, so we don't limit the length of
+the name.
 
-Hi Ido,
+Rework the error path at the same time as we have to rollback the
+allocations in case of error.
 
-On 14/03/2021 10:53, Ido Schimmel wrote:
-> On Fri, Mar 12, 2021 at 06:03:12PM +0100, Daniel Lezcano wrote:
->> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->> index 996c038f83a4..9ef8090eb645 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -960,10 +960,7 @@ __thermal_cooling_device_register(struct device_node *np,
+Tested with a dummy device having the name:
+ "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"
 
-[ ... ]
+A village on the island of Anglesey (Wales), known to have the longest
+name in Europe.
 
->>  /**
->> @@ -1172,6 +1177,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
->>  	device_del(&cdev->device);
->>  	thermal_cooling_device_destroy_sysfs(cdev);
->>  	put_device(&cdev->device);
->> +	kfree(cdev->type);
->>  }
->>  EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
-> 
-> I'm getting the following user-after-free with this patch [1]. Fixed by:
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 9ef8090eb645..c8d4010940ef 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1176,8 +1176,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
->         ida_simple_remove(&thermal_cdev_ida, cdev->id);
->         device_del(&cdev->device);
->         thermal_cooling_device_destroy_sysfs(cdev);
-> -       put_device(&cdev->device);
->         kfree(cdev->type);
-> +       put_device(&cdev->device);
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+V3:
+  - Inverted kfree() and put_device() when unregistering the cooling device
+    (Reported by Ido Schimmel)
+---
+ .../ethernet/mellanox/mlxsw/core_thermal.c    |  2 +-
+ drivers/thermal/thermal_core.c                | 38 +++++++++++--------
+ include/linux/thermal.h                       |  2 +-
+ 3 files changed, 24 insertions(+), 18 deletions(-)
 
-Indeed 'thermal_release' frees the cdev pointer and is called by
-put_device, then kfree use the pointer right after.
-
-Thanks for the fix
-
-  -- Daniel
-
-
-
-
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+index bf85ce9835d7..7447c2a73cbd 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+@@ -141,7 +141,7 @@ static int mlxsw_get_cooling_device_idx(struct mlxsw_thermal *thermal,
+ 	/* Allow mlxsw thermal zone binding to an external cooling device */
+ 	for (i = 0; i < ARRAY_SIZE(mlxsw_thermal_external_allowed_cdev); i++) {
+ 		if (strnstr(cdev->type, mlxsw_thermal_external_allowed_cdev[i],
+-			    sizeof(cdev->type)))
++			    strlen(cdev->type)))
+ 			return 0;
+ 	}
+ 
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 996c038f83a4..c8d4010940ef 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -960,10 +960,7 @@ __thermal_cooling_device_register(struct device_node *np,
+ {
+ 	struct thermal_cooling_device *cdev;
+ 	struct thermal_zone_device *pos = NULL;
+-	int result;
+-
+-	if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+-		return ERR_PTR(-EINVAL);
++	int ret;
+ 
+ 	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+ 	    !ops->set_cur_state)
+@@ -973,14 +970,17 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	if (!cdev)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	result = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+-	if (result < 0) {
+-		kfree(cdev);
+-		return ERR_PTR(result);
++	ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
++	if (ret < 0)
++		goto out_kfree_cdev;
++	cdev->id = ret;
++
++	cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
++	if (!cdev->type) {
++		ret = -ENOMEM;
++		goto out_ida_remove;
+ 	}
+ 
+-	cdev->id = result;
+-	strlcpy(cdev->type, type ? : "", sizeof(cdev->type));
+ 	mutex_init(&cdev->lock);
+ 	INIT_LIST_HEAD(&cdev->thermal_instances);
+ 	cdev->np = np;
+@@ -990,12 +990,9 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	cdev->devdata = devdata;
+ 	thermal_cooling_device_setup_sysfs(cdev);
+ 	dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+-	result = device_register(&cdev->device);
+-	if (result) {
+-		ida_simple_remove(&thermal_cdev_ida, cdev->id);
+-		put_device(&cdev->device);
+-		return ERR_PTR(result);
+-	}
++	ret = device_register(&cdev->device);
++	if (ret)
++		goto out_kfree_type;
+ 
+ 	/* Add 'this' new cdev to the global cdev list */
+ 	mutex_lock(&thermal_list_lock);
+@@ -1013,6 +1010,14 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	mutex_unlock(&thermal_list_lock);
+ 
+ 	return cdev;
++
++out_kfree_type:
++	kfree(cdev->type);
++	put_device(&cdev->device);
++out_ida_remove:
++	ida_simple_remove(&thermal_cdev_ida, cdev->id);
++out_kfree_cdev:
++	return ERR_PTR(ret);
+ }
+ 
+ /**
+@@ -1171,6 +1176,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+ 	ida_simple_remove(&thermal_cdev_ida, cdev->id);
+ 	device_del(&cdev->device);
+ 	thermal_cooling_device_destroy_sysfs(cdev);
++	kfree(cdev->type);
+ 	put_device(&cdev->device);
+ }
+ EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 6ac7bb1d2b1f..169502164364 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -91,7 +91,7 @@ struct thermal_cooling_device_ops {
+ 
+ struct thermal_cooling_device {
+ 	int id;
+-	char type[THERMAL_NAME_LENGTH];
++	char *type;
+ 	struct device device;
+ 	struct device_node *np;
+ 	void *devdata;
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
