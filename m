@@ -2,335 +2,274 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EB433A3BF
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 10:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006BA33A3FC
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Mar 2021 10:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbhCNJLR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Mar 2021 05:11:17 -0400
-Received: from mga11.intel.com ([192.55.52.93]:53684 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234904AbhCNJLI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 14 Mar 2021 05:11:08 -0400
-IronPort-SDR: RUj4kGG1QLbyTle3TnbiOnSZ6GOIKXfIdcEFneo0CvHNs5KWG+KZRmaBpitJH5xobAyhOS1Dw8
- slxCY5WX0rBw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9922"; a="185622924"
-X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
-   d="scan'208";a="185622924"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2021 01:11:05 -0800
-IronPort-SDR: W4Pgrv411RMHKDlBXBestqy3b70NnWFlbNwtzC3925eFFTt0bxoJmYWcacH/mhfTD4wzGRqT0e
- BhyvAbVIkt5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
-   d="scan'208";a="590015788"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by orsmga005.jf.intel.com with ESMTP; 14 Mar 2021 01:10:56 -0800
-Subject: Re: [PATCH v10 1/2] scsi: ufs: Enable power management for wlun
-To:     "Asutosh Das (asd)" <asutoshd@codeaurora.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, cang@codeaurora.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Satya Tangirala <satyat@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux-PM mailing list <linux-pm@vger.kernel.org>
-References: <cover.1614725302.git.asutoshd@codeaurora.org>
- <0576d6eae15486740c25767e2d8805f7e94eb79d.1614725302.git.asutoshd@codeaurora.org>
- <85086647-7292-b0a2-d842-290818bd2858@intel.com>
- <6e98724d-2e75-d1fe-188f-a7010f86c509@codeaurora.org>
- <20210306161616.GC74411@rowland.harvard.edu>
- <CAJZ5v0ihJe8rNjWRwNic_BQUvKbALNcjx8iiPAh5nxLhOV9duw@mail.gmail.com>
- <CAJZ5v0iJ4yqRTt=mTCC930HULNFNTgvO4f9ToVO6pNz53kxFkw@mail.gmail.com>
- <f1e9b21d-1722-d20b-4bae-df7e6ce50bbc@codeaurora.org>
- <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <b13086f3-eea1-51a7-2117-579d520f21fc@intel.com>
-Date:   Sun, 14 Mar 2021 11:11:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229539AbhCNJyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Mar 2021 05:54:16 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:48035 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229495AbhCNJx6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 05:53:58 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C458958086F;
+        Sun, 14 Mar 2021 05:53:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 14 Mar 2021 05:53:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=GmvxaH
+        HP++oUz4zIydmbNhlkLE/p8XuZ+CjSkD0groA=; b=P8UIacQNjkm6t2QvH8d1+r
+        B7/N7BgUlb3a8wQDXG79uqPOpji+t9MGXc2mY+ENhMUhx2Pjd5Z9ZkPn2uCmujg3
+        NwGSpfztgs1uFg+aG97rg3Dc9KDOqsE8QFPld0sd75fyEZP3SOxOVlydqftaw4LN
+        g7a+VsXgktM5RwEkaRHmd4qyIWQvDMQYnGZvOv5CaXjmaHehhRC0q8zx51xC9yuU
+        cZvLUdr9ffuuP2iOB56uczgf5W99ZU0Khtc3oYxWI9BZpD2UYPHSyqGKUlpFZM0t
+        PTRb2XPkHSV2XCzLeo6K+j9VVHzxFOY4YV/gExPkrW7dJGYQN7QlhcvfbWSI0sGw
+        ==
+X-ME-Sender: <xms:M91NYIqqJJIZcphg6UQBYQwZU5OChTzbEvkx-YPlU1d3sl_YqPdE-w>
+    <xme:M91NYOq0Albq-6YLN0fSzQ_1yAFhqj284qw1vKEPVXK81qnqjZvkuh-dXyLDLr4S5
+    Y3CM92r_VRbPrc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledruddviecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgthhhi
+    mhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvghrnh
+    eptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleetnecu
+    kfhppeekgedrvddvledrudehfedrgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:M91NYNObybiV5C37A6lCn72eg0CfkMdiEw58cN14ef_FWh6qiagZPw>
+    <xmx:M91NYP5WPrVjqbNKBUqhtBja4egnirvYtsj907OLyF2zs2LDuph3Lw>
+    <xmx:M91NYH4CH-BY-Se21G9-hfLVSCHvPXJiHdxdRJh6OBWiHBA9U8TbcA>
+    <xmx:NN1NYKZNi4j-HxeMkzyDTAr0WCuXBtJmCacZntrJ5I81IkS4xf1k-w>
+Received: from localhost (igld-84-229-153-44.inter.net.il [84.229.153.44])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 660C4108005F;
+        Sun, 14 Mar 2021 05:53:55 -0400 (EDT)
+Date:   Sun, 14 Mar 2021 11:53:52 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Jiri Pirko <jiri@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 1/5] thermal/drivers/core: Use a char pointer for the
+ cooling device name
+Message-ID: <YE3dMM7tqk5BbD/l@shredder.lan>
+References: <20210312170316.3138-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210312170316.3138-1-daniel.lezcano@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/03/21 5:04 am, Asutosh Das (asd) wrote:
-> On 3/9/2021 7:56 AM, Asutosh Das (asd) wrote:
->> On 3/8/2021 9:17 AM, Rafael J. Wysocki wrote:
->>> On Mon, Mar 8, 2021 at 5:21 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>>
->>>> On Sat, Mar 6, 2021 at 5:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->>>>>
->>>>> On Fri, Mar 05, 2021 at 06:54:24PM -0800, Asutosh Das (asd) wrote:
->>>>>
->>>>>> Now during my testing I see a weird issue sometimes (1 in 7).
->>>>>> Scenario - bootups
->>>>>>
->>>>>> Issue:
->>>>>> The supplier 'ufs_device_wlun 0:0:0:49488' goes into runtime suspend even
->>>>>> when one/more of its consumers are in RPM_ACTIVE state.
->>>>>>
->>>>>> *Log:
->>>>>> [   10.056379][  T206] sd 0:0:0:1: [sdb] Synchronizing SCSI cache
->>>>>> [   10.062497][  T113] sd 0:0:0:5: [sdf] Synchronizing SCSI cache
->>>>>> [   10.356600][   T32] sd 0:0:0:7: [sdh] Synchronizing SCSI cache
->>>>>> [   10.362944][  T174] sd 0:0:0:3: [sdd] Synchronizing SCSI cache
->>>>>> [   10.696627][   T83] sd 0:0:0:2: [sdc] Synchronizing SCSI cache
->>>>>> [   10.704562][  T170] sd 0:0:0:6: [sdg] Synchronizing SCSI cache
->>>>>> [   10.980602][    T5] sd 0:0:0:0: [sda] Synchronizing SCSI cache
->>>>>>
->>>>>> /** Printing all the consumer nodes of supplier **/
->>>>>> [   10.987327][    T5] ufs_device_wlun 0:0:0:49488: usage-count @ suspend: 0
->>>>>> <-- this is the usage_count
->>>>>> [   10.994440][    T5] ufs_rpmb_wlun 0:0:0:49476: PM state - 2
->>>>>> [   11.000402][    T5] scsi 0:0:0:49456: PM state - 2
->>>>>> [   11.005453][    T5] sd 0:0:0:0: PM state - 2
->>>>>> [   11.009958][    T5] sd 0:0:0:1: PM state - 2
->>>>>> [   11.014469][    T5] sd 0:0:0:2: PM state - 2
->>>>>> [   11.019072][    T5] sd 0:0:0:3: PM state - 2
->>>>>> [   11.023595][    T5] sd 0:0:0:4: PM state - 0 << RPM_ACTIVE
->>>>>> [   11.353298][    T5] sd 0:0:0:5: PM state - 2
->>>>>> [   11.357726][    T5] sd 0:0:0:6: PM state - 2
->>>>>> [   11.362155][    T5] sd 0:0:0:7: PM state - 2
->>>>>> [   11.366584][    T5] ufshcd-qcom 1d84000.ufshc: __ufshcd_wl_suspend - 8709
->>>>>> [   11.374366][    T5] ufs_device_wlun 0:0:0:49488: __ufshcd_wl_suspend -
->>>>>> (0) has rpm_active flags
->>>>
->>>> Do you mean that rpm_active of the link between the consumer and the
->>>> supplier is greater than 0 at this point and the consumer is
->>>
->>> I mean is rpm_active of the link greater than 1 (because 1 means "no
->>> active references to the supplier")?
->> Hi Rafael:
->> No - it is not greater than 1.
->>
->> I'm trying to understand what's going on in it; will update when I've something.
->>
->>>
->>>> RPM_ACTIVE, but the supplier suspends successfully nevertheless?
->>>>
->>>>>> [   11.383376][    T5] ufs_device_wlun 0:0:0:49488:
->>>>>> ufshcd_wl_runtime_suspend <-- Supplier suspends fine.
->>>>>> [   12.977318][  T174] sd 0:0:0:4: [sde] Synchronizing SCSI cache
->>>>>>
->>>>>> And the the suspend of sde is stuck now:
->>>>>> schedule+0x9c/0xe0
->>>>>> schedule_timeout+0x40/0x128
->>>>>> io_schedule_timeout+0x44/0x68
->>>>>> wait_for_common_io+0x7c/0x100
->>>>>> wait_for_completion_io+0x14/0x20
->>>>>> blk_execute_rq+0x90/0xcc
->>>>>> __scsi_execute+0x104/0x1c4
->>>>>> sd_sync_cache+0xf8/0x2a0
->>>>>> sd_suspend_common+0x74/0x11c
->>>>>> sd_suspend_runtime+0x14/0x20
->>>>>> scsi_runtime_suspend+0x64/0x94
->>>>>> __rpm_callback+0x80/0x2a4
->>>>>> rpm_suspend+0x308/0x614
->>>>>> pm_runtime_work+0x98/0xa8
->>>>>>
->>>>>> I added 'DL_FLAG_RPM_ACTIVE' while creating links.
->>>>>>        if (hba->sdev_ufs_device) {
->>>>>>                link = device_link_add(&sdev->sdev_gendev,
->>>>>>                                    &hba->sdev_ufs_device->sdev_gendev,
->>>>>>                                   DL_FLAG_PM_RUNTIME|DL_FLAG_RPM_ACTIVE);
->>>>>> I didn't expect this to resolve the issue anyway and it didn't.
->>>>>>
->>>>>> Another interesting point here is when I resume any of the above suspended
->>>>>> consumers, it all goes back to normal, which is kind of expected. I tried
->>>>>> resuming the consumer and the supplier is resumed and the supplier is
->>>>>> suspended when all the consumers are suspended.
->>>>>>
->>>>>> Any pointers on this issue please?
->>>>>>
->>>>>> @Bart/@Alan - Do you've any pointers please?
->>>>>
->>>>> It's very noticeable that although you seem to have isolated a bug in
->>>>> the power management subsystem (supplier goes into runtime suspend
->>>>> even when one of its consumers is still active), you did not CC the
->>>>> power management maintainer or mailing list.
->>>>>
->>>>> I have added the appropriate CC's.
->>>>
->>>> Thanks Alan!
->>
->>
-> 
-> Hello
-> I & Can (thanks CanG) debugged this further:
-> 
-> Looks like this issue can occur if the sd probe is asynchronous.
-> 
-> Essentially, the sd_probe() is done asynchronously and driver_probe_device() invokes pm_runtime_get_suppliers() before invoking sd_probe().
-> 
-> But scsi_probe_and_add_lun() runs in a separate context.
-> So the scsi_autopm_put_device() invoked from scsi_scan_host() context reduces the link->rpm_active to 1. And sd_probe() invokes scsi_autopm_put_device() and starts a timer. And then driver_probe_device() invoked from __device_attach_async_helper context reduces the link->rpm_active to 1 thus enabling the supplier to suspend before the consumer suspends.
-> 
-> So if:
-> Context T1:
-> [1] scsi_probe_and_add_lun()
-> [2]    |- scsi_autopm_put_device() - reduce the link->rpm_active to 1
-> 
-> Context T2:
-> __device_attach_async_helper()
->     |- driver_probe_device()
->         |- sd_probe()
-> In between [1] and [2] say, driver_probe_device() -> sd_probe() is invoked in a separate context from __device_attach_async_helper().
-> The driver_probe_device() -> pm_runtime_get_suppliers() but [2] would reduce link->rpm_active to 1.
-> Then sd_probe() would invoke rpm_resume() and proceed as is.
-> When sd_probe() invokes scsi_autopm_put_device() it'd start a timer, dev->power.timer_autosuspends = 1.
-> 
-> Now then, pm_runtime_put_suppliers() is invoked from driver_probe_device() and that makes the link->rpm_active = 1.
-> But by now, the corresponding 'sd dev' (consumer) usage_count = 0, state = RPM_ACTIVE and link->rpm_active = 1.
-> At this point of time, all other 'sd dev' (consumers) _may_ be suspended or active but would have the link->rpm_active = 1.
+On Fri, Mar 12, 2021 at 06:03:12PM +0100, Daniel Lezcano wrote:
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 996c038f83a4..9ef8090eb645 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -960,10 +960,7 @@ __thermal_cooling_device_register(struct device_node *np,
+>  {
+>  	struct thermal_cooling_device *cdev;
+>  	struct thermal_zone_device *pos = NULL;
+> -	int result;
+> -
+> -	if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+> -		return ERR_PTR(-EINVAL);
+> +	int ret;
+>  
+>  	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+>  	    !ops->set_cur_state)
+> @@ -973,14 +970,17 @@ __thermal_cooling_device_register(struct device_node *np,
+>  	if (!cdev)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	result = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+> -	if (result < 0) {
+> -		kfree(cdev);
+> -		return ERR_PTR(result);
+> +	ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+> +	if (ret < 0)
+> +		goto out_kfree_cdev;
+> +	cdev->id = ret;
+> +
+> +	cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
+> +	if (!cdev->type) {
+> +		ret = -ENOMEM;
+> +		goto out_ida_remove;
+>  	}
+>  
+> -	cdev->id = result;
+> -	strlcpy(cdev->type, type ? : "", sizeof(cdev->type));
+>  	mutex_init(&cdev->lock);
+>  	INIT_LIST_HEAD(&cdev->thermal_instances);
+>  	cdev->np = np;
+> @@ -990,12 +990,9 @@ __thermal_cooling_device_register(struct device_node *np,
+>  	cdev->devdata = devdata;
+>  	thermal_cooling_device_setup_sysfs(cdev);
+>  	dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+> -	result = device_register(&cdev->device);
+> -	if (result) {
+> -		ida_simple_remove(&thermal_cdev_ida, cdev->id);
+> -		put_device(&cdev->device);
+> -		return ERR_PTR(result);
+> -	}
+> +	ret = device_register(&cdev->device);
+> +	if (ret)
+> +		goto out_kfree_type;
+>  
+>  	/* Add 'this' new cdev to the global cdev list */
+>  	mutex_lock(&thermal_list_lock);
+> @@ -1013,6 +1010,14 @@ __thermal_cooling_device_register(struct device_node *np,
+>  	mutex_unlock(&thermal_list_lock);
+>  
+>  	return cdev;
+> +
+> +out_kfree_type:
+> +	kfree(cdev->type);
+> +	put_device(&cdev->device);
+> +out_ida_remove:
+> +	ida_simple_remove(&thermal_cdev_ida, cdev->id);
+> +out_kfree_cdev:
+> +	return ERR_PTR(ret);
+>  }
+>  
+>  /**
+> @@ -1172,6 +1177,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+>  	device_del(&cdev->device);
+>  	thermal_cooling_device_destroy_sysfs(cdev);
+>  	put_device(&cdev->device);
+> +	kfree(cdev->type);
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
 
-Is this with DL_FLAG_RPM_ACTIVE?  In that case, wouldn't active
-consumers have link->rpm_active = 2 and also have incremented
-the supplier's usage_count?
+I'm getting the following user-after-free with this patch [1]. Fixed by:
 
-Another outstanding issue that comes to mind, is to ensure
-hba->sdev_ufs_device does not runtime suspend before it is probed.
-I suggest changing ufshcd_slave_configure() so it does not set
-sdev->rpm_autosuspend for hba->sdev_ufs_device, and instead do
-pm_runtime_allow / pm_runtime_forbid() in ufshcd_wl_probe() /
-ufshcd_wl_remove() respectively.
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 9ef8090eb645..c8d4010940ef 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1176,8 +1176,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+        ida_simple_remove(&thermal_cdev_ida, cdev->id);
+        device_del(&cdev->device);
+        thermal_cooling_device_destroy_sysfs(cdev);
+-       put_device(&cdev->device);
+        kfree(cdev->type);
++       put_device(&cdev->device);
+ }
+ EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
 
-However we still want to stop hba->sdev_ufs_device runtime
-suspending while consumers are being added.  With that in mind,
-I would expect pm_runtime_get_noresume(&hba->sdev_ufs_device->sdev_gendev)
-in ufshcd_scsi_add_wlus() to come *before*
-ufshcd_blk_pm_runtime_init(hba->sdev_ufs_device).  In fact, it would
-be more logical to make it, pm_runtime_get_sync() since we require
-hba->sdev_ufs_device to be active at that point.
-
-
-> 
-> Since the supplier has 0 auto-suspend delay, it now suspends!
-> 
-> 
-> Context [T1]
-> Call trace:
-> dump_backtrace+0x0/0x1d4
-> show_stack+0x18/0x24
-> dump_stack+0xc4/0x144
-> __pm_runtime_idle+0xb4/0x184
-> scsi_autopm_put_device+0x18/0x24
-> scsi_sysfs_add_sdev+0x26c/0x278
-> scsi_probe_and_add_lun+0xbac/0xd48
-> __scsi_scan_target+0x38c/0x510
-> scsi_scan_host_selected+0x14c/0x1e4
-> scsi_scan_host+0x1e0/0x228
-> ufshcd_async_scan+0x39c/0x408
-> async_run_entry_fn+0x48/0x128
-> process_one_work+0x1f0/0x470
-> worker_thread+0x26c/0x4c8
-> kthread+0x13c/0x320
-> ret_from_fork+0x10/0x18
-> 
-> 
-> Context [T2]
-> Call trace:
-> dump_backtrace+0x0/0x1d4
-> show_stack+0x18/0x24
-> dump_stack+0xc4/0x144
-> rpm_get_suppliers+0x48/0x1ac
-> __rpm_callback+0x58/0x12c
-> rpm_resume+0x3a4/0x618
-> __pm_runtime_resume+0x50/0x80
-> scsi_autopm_get_device+0x20/0x54
-> sd_probe+0x40/0x3d0
-> really_probe+0x1bc/0x4a0
-> driver_probe_device+0x84/0xf0
-> __device_attach_driver+0x114/0x138
-> bus_for_each_drv+0x84/0xd0
-> __device_attach_async_helper+0x7c/0xf0
-> async_run_entry_fn+0x48/0x128
-> process_one_work+0x1f0/0x470
-> worker_thread+0x26c/0x4c8
-> kthread+0x13c/0x320
-> ret_from_fork+0x10/0x18
-> 
-> Below prints show how link->rpm_active becomes 1 for sd 0:0:0:4
-> [    7.574654][  T212] Call trace:
-> [    7.574657][  T212]  dump_backtrace+0x0/0x1d4
-> [    7.574661][  T212]  show_stack+0x18/0x24
-> [    7.574665][  T212]  dump_stack+0xc4/0x144
-> [    7.574668][  T212]  __pm_runtime_idle+0xb4/0x184
-> [    7.574671][  T212]  scsi_autopm_put_device+0x18/0x24
-> [    7.574675][  T212]  sd_probe+0x314/0x3d0
-> [    7.574677][  T212]  really_probe+0x1bc/0x4a0
-> [    7.574680][  T212]  driver_probe_device+0x84/0xf0
-> [    7.574683][  T212]  __device_attach_driver+0x114/0x138
-> [    7.574686][  T212]  bus_for_each_drv+0x84/0xd0
-> [    7.574689][  T212]  __device_attach_async_helper+0x7c/0xf0
-> [    7.574692][  T212]  async_run_entry_fn+0x48/0x128
-> [    7.574695][  T212]  process_one_work+0x1f0/0x470
-> [    7.574698][  T212]  worker_thread+0x26c/0x4c8
-> [    7.574700][  T212]  kthread+0x13c/0x320
-> [    7.574703][  T212]  ret_from_fork+0x10/0x18
-> [    7.574706][  T212] sd 0:0:0:4: scsi_runtime_idle
-> [    7.574712][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: -16 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
-> [    7.574715][  T212] sd 0:0:0:4: sd_probe: [UFSDBG]: Exit
-> [    7.574738][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
-> 
-> [    7.574752][  T212] Workqueue: events_unbound async_run_entry_fn
-> [    7.574754][  T212] Call trace:
-> [    7.574758][  T212]  dump_backtrace+0x0/0x1d4
-> [    7.574761][  T212]  show_stack+0x18/0x24
-> [    7.574765][  T212]  dump_stack+0xc4/0x144
-> [    7.574767][  T212]  __pm_runtime_idle+0xb4/0x184
-> [    7.574770][  T212]  driver_probe_device+0x94/0xf0
-> [    7.574773][  T212]  __device_attach_driver+0x114/0x138
-> [    7.574775][  T212]  bus_for_each_drv+0x84/0xd0
-> [    7.574778][  T212]  __device_attach_async_helper+0x7c/0xf0
-> [    7.574781][  T212]  async_run_entry_fn+0x48/0x128
-> [    7.574783][  T212]  process_one_work+0x1f0/0x470
-> [    7.574786][  T212]  worker_thread+0x26c/0x4c8
-> [    7.574788][  T212]  kthread+0x13c/0x320
-> [    7.574791][  T212]  ret_from_fork+0x10/0x18
-> [    7.574848][   T80] sd 0:0:0:4: scsi_runtime_idle
-> [    7.574858][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: 0 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
-> [    7.574863][  T212] sd 0:0:0:4: pm_runtime_put_suppliers: [UFSDBG]: rpm_status: 0 link-rpm_active:1
-> [    7.574866][  T212] sd 0:0:0:4: async probe completed
-> [    7.574870][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:1
-> 
-> 
-> So, from the above it looks like when async probe is enabled this is a possibility.
-> 
-> I don't see a way around this. Please let me know if you (@Alan/@Bart/@Adrian) have any thoughts on this.
-> 
-> Thanks,
-> -asd
-> 
-
+[1]
+[  148.601815] ==================================================================
+[  148.610260] BUG: KASAN: use-after-free in thermal_cooling_device_unregister+0x6ca/0x6e0
+[  148.619304] Read of size 8 at addr ffff8881510a0808 by task devlink/574
+[  148.626768]
+[  148.628477] CPU: 2 PID: 574 Comm: devlink Not tainted 5.12.0-rc2-custom-12525-g7ba8a2feee15 #3301
+[  148.638463] Hardware name: Mellanox Technologies Ltd. MSN2100-CB2FO/SA001017, BIOS 5.6.5 06/07/2016
+[  148.648625] Call Trace:
+[  148.651408]  dump_stack+0xfa/0x151
+[  148.661701]  print_address_description.constprop.0+0x18/0x130
+[  148.681014]  kasan_report.cold+0x7f/0x111
+[  148.692003]  thermal_cooling_device_unregister+0x6ca/0x6e0
+[  148.703984]  mlxsw_thermal_fini+0xd2/0x1f0
+[  148.708664]  mlxsw_core_bus_device_unregister+0x158/0x8d0
+[  148.714794]  mlxsw_devlink_core_bus_device_reload_down+0x93/0xc0
+[  148.721594]  devlink_reload+0x15f/0x5e0
+[  148.749669]  devlink_nl_cmd_reload+0x7fc/0x1210
+[  148.775992]  genl_family_rcv_msg_doit+0x22a/0x320
+[  148.799789]  genl_rcv_msg+0x341/0x5a0
+[  148.818789]  netlink_rcv_skb+0x14d/0x430
+[  148.836450]  genl_rcv+0x29/0x40
+[  148.840034]  netlink_unicast+0x539/0x7e0
+[  148.859219]  netlink_sendmsg+0x8d7/0xe10
+[  148.879271]  __sys_sendto+0x23f/0x350
+[  148.904178]  __x64_sys_sendto+0xe2/0x1b0
+[  148.919297]  do_syscall_64+0x2d/0x40
+[  148.923365]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  148.929081] RIP: 0033:0x7f17c0dbaefa
+[  148.933139] Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb b8 0f 1f 00 f3 0f 1e fa 41 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 15 b8 2c 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 76
+ c3 0f 1f 44 00 00 55 48 83 ec 30 44 89 4c
+[  148.954190] RSP: 002b:00007ffd879c5e18 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+[  148.962723] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f17c0dbaefa
+[  148.970751] RDX: 0000000000000030 RSI: 0000000000ad0ad0 RDI: 0000000000000003
+[  148.978776] RBP: 0000000000ad0aa0 R08: 00007f17c0e8d000 R09: 000000000000000c
+[  148.986803] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000408d70
+[  148.994834] R13: 0000000000ad0910 R14: 0000000000000000 R15: 0000000000000001
+[  149.002978]
+[  149.004687] Allocated by task 1:
+[  149.008345]  kasan_save_stack+0x1b/0x40
+[  149.012711]  __kasan_kmalloc+0x7a/0x90
+[  149.016974]  __thermal_cooling_device_register.part.0+0x59/0x9e0
+[  149.023753]  thermal_cooling_device_register+0xb3/0x100
+[  149.029671]  mlxsw_thermal_init+0x78b/0xa10
+[  149.034427]  __mlxsw_core_bus_device_register+0xd05/0x1a30
+[  149.040634]  mlxsw_core_bus_device_register+0x56/0xb0
+[  149.046349]  mlxsw_pci_probe+0x53b/0x750
+[  149.050800]  local_pci_probe+0xc6/0x170
+[  149.055144]  pci_device_probe+0x2a3/0x4a0
+[  149.059683]  really_probe+0x2b6/0xec0
+[  149.063840]  driver_probe_device+0x1e2/0x330
+[  149.068673]  device_driver_attach+0x282/0x2f0
+[  149.073605]  __driver_attach+0x160/0x2f0
+[  149.078050]  bus_for_each_dev+0x14c/0x1d0
+[  149.082589]  bus_add_driver+0x3ac/0x650
+[  149.086935]  driver_register+0x225/0x3a0
+[  149.091381]  mlxsw_sp_module_init+0xa2/0x174
+[  149.096216]  do_one_initcall+0x108/0x690
+[  149.100660]  kernel_init_freeable+0x3ec/0x46b
+[  149.105595]  kernel_init+0x13/0x1eb
+[  149.109559]  ret_from_fork+0x1f/0x30
+[  149.113613]
+[  149.115311] Freed by task 574:
+[  149.118765]  kasan_save_stack+0x1b/0x40
+[  149.123116]  kasan_set_track+0x1c/0x30
+[  149.127373]  kasan_set_free_info+0x20/0x30
+[  149.132021]  __kasan_slab_free+0xe5/0x110
+[  149.136556]  slab_free_freelist_hook+0x59/0x150
+[  149.141681]  kfree+0xd5/0x3b0
+[  149.145055]  thermal_release+0xa0/0x110
+[  149.149414]  device_release+0xa4/0x240
+[  149.153680]  kobject_put+0x1c8/0x540
+[  149.157747]  put_device+0x20/0x30
+[  149.161530]  thermal_cooling_device_unregister+0x578/0x6e0
+[  149.167751]  mlxsw_thermal_fini+0xd2/0x1f0
+[  149.172414]  mlxsw_core_bus_device_unregister+0x158/0x8d0
+[  149.178529]  mlxsw_devlink_core_bus_device_reload_down+0x93/0xc0
+[  149.185327]  devlink_reload+0x15f/0x5e0
+[  149.189695]  devlink_nl_cmd_reload+0x7fc/0x1210
+[  149.194838]  genl_family_rcv_msg_doit+0x22a/0x320
+[  149.200182]  genl_rcv_msg+0x341/0x5a0
+[  149.204337]  netlink_rcv_skb+0x14d/0x430
+[  149.208799]  genl_rcv+0x29/0x40
+[  149.212381]  netlink_unicast+0x539/0x7e0
+[  149.216825]  netlink_sendmsg+0x8d7/0xe10
+[  149.221274]  __sys_sendto+0x23f/0x350
+[  149.225423]  __x64_sys_sendto+0xe2/0x1b0
+[  149.229864]  do_syscall_64+0x2d/0x40
+[  149.233912]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  149.239624]
+[  149.241322] The buggy address belongs to the object at ffff8881510a0800
+[  149.241322]  which belongs to the cache kmalloc-2k of size 2048
+[  149.255372] The buggy address is located 8 bytes inside of
+[  149.255372]  2048-byte region [ffff8881510a0800, ffff8881510a1000)
+[  149.268456] The buggy address belongs to the page:
+[  149.273850] page:000000006ec87a73 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1510a0
+[  149.284416] head:000000006ec87a73 order:3 compound_mapcount:0 compound_pincount:0
+[  149.292838] flags: 0x200000000010200(slab|head)
+[  149.297981] raw: 0200000000010200 ffffea000426e208 ffffea000544b808 ffff88810004de40
+[  149.306707] raw: 0000000000000000 0000000000050005 00000001ffffffff 0000000000000000
+[  149.315417] page dumped because: kasan: bad access detected
+[  149.321697]
+[  149.323403] Memory state around the buggy address:
+[  149.328811]  ffff8881510a0700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+[  149.336939]  ffff8881510a0780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+[  149.345075] >ffff8881510a0800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  149.353202]                       ^
+[  149.357159]  ffff8881510a0880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  149.365298]  ffff8881510a0900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  149.373424] ==================================================================
