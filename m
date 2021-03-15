@@ -2,107 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC3233AD57
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 09:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2D633ADF3
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 09:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbhCOI0E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 04:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbhCOIZo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 04:25:44 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CBDC061574;
-        Mon, 15 Mar 2021 01:25:43 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d21so43752pfn.1;
-        Mon, 15 Mar 2021 01:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=dRlZk3ytm/S+WmOL16Dr65U1HZgXL+WYJoDthUJhHBo=;
-        b=YIbN2o0CkR76K/h9pF1Ny+Slfx5lgCVjlesch5gY4YDZC0PUdWP5GJQ5XjZ2z267sB
-         nyXOXjahFH2L0YClDnmMvc0n1Ll2FHA/cvlBiJQmVEK1HR+xCssIZ0sW1f9PHUGMYpPp
-         PWejd+V7YTsiPOSyYO2i+uG1YXjdkN/TZBKdxbl2EkOgFxLCzaWL+V2RHZLBVLSbJlt0
-         783rcoeLR7WBOxyZ/X3XD3iX6MNPqvQqRmGXGbSfW6rZOECHxlh5GKqBbkVWmyqhPEP+
-         dX4Dj2Q6zQ6ywMhs3Fd5SNYxc26e7akHJdTD4JN7v6Jz5lg9heZlXNUs1B0zsqxeVnqR
-         1yqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dRlZk3ytm/S+WmOL16Dr65U1HZgXL+WYJoDthUJhHBo=;
-        b=oGNwfFtx9nZlYIp642NKL4ysDctLS2nSD9jN1dOg7cg0aQ+T8R+ly2gh1Tni4ptHJP
-         sz/n/W1DyDb6Mgc6LKjX4Jeu7gfDuYarX+iJYNXOYxeXG+tK2cKdDkxxV2G9uF9fKEtn
-         3LIQNwRwgDYJKUO0dA4bfJCsaJvGF2+T9aL/VkS9eNhTrn80ftYkLroHMeNVYZaWcs6v
-         O8KiHwl2A85lrO6nstGZPBiSA6mmM6V4I/oHcyQzV9IE6HMNR5zyz+1LQ33496SjyPx4
-         WchbsM4Ed2l8Gi7aYmGsNWEDxBi5a1HXIv6OWVDCmexNDx8wSOlLTQeDIcsv8/elb7H/
-         euow==
-X-Gm-Message-State: AOAM531wz/cL+xrlGCHUcPTk7lzzvtNt/Ni9WBXeUHus3LDIPA21do+j
-        fXMrjpNiGGsYQdGcN3Qz+Sw=
-X-Google-Smtp-Source: ABdhPJyYdxOZPAIxudMIm7Vqi7IjnsQBSst4Rz6Odef0gFSsYnNhKJItUjAfygiqC8KtfQQ4SDyO/w==
-X-Received: by 2002:a63:54:: with SMTP id 81mr22802983pga.410.1615796743535;
-        Mon, 15 Mar 2021 01:25:43 -0700 (PDT)
-Received: from bj04432pcu.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id v18sm13292837pfn.117.2021.03.15.01.25.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Mar 2021 01:25:43 -0700 (PDT)
-From:   gao.yunxiao6@gmail.com
-To:     lukasz.luba@arm.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        orsonzhai@gmail.com, zhang.lyra@gmail.com,
-        "jeson.gao" <jeson.gao@unisoc.com>
-Subject: [PATCH] thermal: power_allocator: using round the division when re-divvying up power
-Date:   Mon, 15 Mar 2021 16:25:37 +0800
-Message-Id: <1615796737-4688-1-git-send-email-gao.yunxiao6@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        id S229643AbhCOIxS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 04:53:18 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59835 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229607AbhCOIxI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 04:53:08 -0400
+X-UUID: 875778eec4ff490fa22b8e6ed6d8d70a-20210315
+X-UUID: 875778eec4ff490fa22b8e6ed6d8d70a-20210315
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 766196605; Mon, 15 Mar 2021 16:53:04 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 15 Mar 2021 16:53:03 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 15 Mar 2021 16:52:57 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v12 0/7] soc: mediatek: SVS: introduce MTK SVS
+Date:   Mon, 15 Mar 2021 16:52:38 +0800
+Message-ID: <20210315085244.6365-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "jeson.gao" <jeson.gao@unisoc.com>
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by
+get_cpu_device(). After retrieving subsys device, SVS driver does
+device_link_add() to make sure probe/suspend callback priority.
+3. SVS dts refers to reset controller [4] to help reset SVS HW.
 
-The division is used directly in re-divvying up power, the decimal part will
-be discarded, devices will get less than the extra_actor_power - 1.
-if using round the division to make the calculation more accurate.
+#mt8183 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+[3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
 
-For example:
-actor0 received more than it's max_power, it has the extra_power 759
-actor1 received less than it's max_power, it require extra_actor_power 395
-actor2 received less than it's max_power, it require extra_actor_power 365
-actor1 and actor2 require the total capped_extra_power 760
+#mt8192 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
+[3] https://lore.kernel.org/patchwork/patch/1360551/
+[4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
 
-using division in re-divvying up power
-actor1 would actually get the extra_actor_power 394
-actor2 would actually get the extra_actor_power 364
+changes since v11:
+- update mtk svs dt-bindings only.
 
-if using round the division in re-divvying up power
-actor1 would actually get the extra_actor_power 394
-actor2 would actually get the extra_actor_power 365
+Roger Lu (7):
+  [v12,1/7]: dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v12,2/7]: arm64: dts: mt8183: add svs device information
+  [v12,3/7]: soc: mediatek: SVS: introduce MTK SVS engine
+  [v12,4/7]: soc: mediatek: SVS: add debug commands
+  [v12,5/7]: dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v12,6/7]: arm64: dts: mt8192: add svs device information
+  [v12,7/7]: soc: mediatek: SVS: add mt8192 SVS GPU driver
 
-Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
----
- drivers/thermal/gov_power_allocator.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   89 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   18 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2492 +++++++++++++++++
+ 6 files changed, 2644 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 92acae53df49..2802a0e13c88 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -374,9 +374,11 @@ static void divvy_up_power(u32 *req_power, u32 *max_power, int num_actors,
- 	 */
- 	extra_power = min(extra_power, capped_extra_power);
- 	if (capped_extra_power > 0)
--		for (i = 0; i < num_actors; i++)
--			granted_power[i] += (extra_actor_power[i] *
--					extra_power) / capped_extra_power;
-+		for (i = 0; i < num_actors; i++) {
-+			u64 extra_range = (u64)extra_actor_power[i] * extra_power;
-+			granted_power[i] += DIV_ROUND_CLOSEST_ULL(extra_range,
-+							 capped_extra_power);
-+		}
- }
- 
- static int allocate_power(struct thermal_zone_device *tz,
--- 
-2.28.0
 
