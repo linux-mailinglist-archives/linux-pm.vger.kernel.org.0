@@ -2,242 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E02C33C5D9
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 19:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EBC33C5E2
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 19:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbhCOSiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 14:38:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54850 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231801AbhCOSiD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Mar 2021 14:38:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4544264F3F;
-        Mon, 15 Mar 2021 18:38:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615833483;
-        bh=uF298eM0LgGS85hwZQZdhr2Tvj40xbTDjSMSlStBdiE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WY3ykGyuf2z16E//2lN9Ht4BBF7x9q9KAlNOEsa3TVvelBahqe/tGWegrMKsNhzHX
-         phPZe+Wpi00XbfBRmrjKzI+ZbNVtUUKasaegNWyRoCqpJ5zcpR8sc/BJWhf6VV3a4f
-         c44sLRf8C8rsk+Ewhx12kvZRjEr2mHrGHZV8Q5R/6A3lC4V7P4d1oUyGZ5u6SLG+Cp
-         4fEq7VpyA51Ne70DgHNTg329XW/sbk2vjSC2xOSd3+scDieO4laW3OB+hLd/KE+Lm5
-         CBYVdz1nP28jV+SzNa8Ycv7XEUTq4+lCGtGmGgvNzqJ9swhmC8hjrNIKCuX0mfx1qF
-         nBMOyJl8QvUiQ==
-Received: by mail-ed1-f44.google.com with SMTP id bx7so18533511edb.12;
-        Mon, 15 Mar 2021 11:38:03 -0700 (PDT)
-X-Gm-Message-State: AOAM531WKOyqOjbM6nkTr3yUTxf3DgqhrQpu09EUM1Vvn6NrMip5/s90
-        urBz9vlJybvFQL09Cbyl8TWNDSj4Fz2rhfV+Xg==
-X-Google-Smtp-Source: ABdhPJwCS5XJGWYKh7bAlUpniPAputEA0i7ZybxpT5socnCxDSiPxZONyhD2Zf8cAJBagyAbp/RgXRg26/VkuqaO2w8=
-X-Received: by 2002:a05:6402:2d0:: with SMTP id b16mr31943444edx.194.1615833481821;
- Mon, 15 Mar 2021 11:38:01 -0700 (PDT)
+        id S229708AbhCOSjV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 14:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231665AbhCOSjJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 14:39:09 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291E9C06174A;
+        Mon, 15 Mar 2021 11:39:09 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 16so17483223ljc.11;
+        Mon, 15 Mar 2021 11:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KO44h0uObgEN+CbJaeye5M8R+QLroU33+3EnpKPK0Zc=;
+        b=Wcct+L78J7FhiuyEOC0azdpN42lEyaWldO9VbNqOm6WnWb2ACnpK2tS8sddTATuz8Z
+         qEyiWx7qk5RhASZPKdfFqglj1M06gkN52WRdYYGMHRgT6y12FTWCz50SvFw+nKqudF0M
+         E5SUe0QU+l2YnbixCqcUtkS0hfakWfgU/LwHOOG8bVt09Qi7RgjO2sdOAvxcAxjKvgRc
+         3R25ze+FNE1lO/NygEp5Lo2zyPnwrTlkbCSGrn3mbckT8/0XcMcz3LsUX7n+aoeUVYD1
+         geg3sanpe64KhyGqF5tofjAaBhLPVGyFyG3Meryb+bjmnOGUbzHRgJ3aDpzjy7kcAEln
+         hmGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KO44h0uObgEN+CbJaeye5M8R+QLroU33+3EnpKPK0Zc=;
+        b=mMrEKBHW1ATQgjsWQkMzyuFxVlf7GF/8VetRaNKLPsIa9K3V2nI0pcELic0hgjXW0t
+         aEA6BKINJt6WX3r9/48STxCGtQdDLctlS/1YJRkXWx6M6E2yNoY3esggqcxpvj8nR64f
+         6iwwuENAsrEW5KrB5l+MD5neIBKKaPKGG9vCdd09P/gnw8ZBzPDwnLFAqM1vF2bK1AD/
+         Nz9m96BWbise1WxDSXJ6MKNnvAWoevjyDF3Kf/uLTQS/FED1jutFtr6DgwSkFD2l6lrC
+         SRosw2IoYRSVKwkeSOs6EPsUXRoaXeJY64WBRoiJZ3+z/hgfyf74pqcqzAK3M2JxRo8q
+         PHtw==
+X-Gm-Message-State: AOAM5312B4OrwdIm6j9zEnsA+kAUB9yTCWyAzNhT/j6WvnlLqmph2slZ
+        uSe8VV1w4FoHKd+Kym3nDY2KLx3FVJo=
+X-Google-Smtp-Source: ABdhPJzAzvUfdIh5PrIN5KmKthL6Ugz5Zq8SwLs888Jv/nqvzEK2iGbdWqRlP0OG/eAQSjvojwJRtw==
+X-Received: by 2002:a2e:94c8:: with SMTP id r8mr235866ljh.332.1615833547675;
+        Mon, 15 Mar 2021 11:39:07 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.googlemail.com with ESMTPSA id z28sm2992541ljn.117.2021.03.15.11.39.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Mar 2021 11:39:07 -0700 (PDT)
+Subject: Re: [PATCH v15 1/2] drm/tegra: dc: Support memory bandwidth
+ management
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20210311172255.25213-1-digetx@gmail.com>
+ <20210311172255.25213-2-digetx@gmail.com>
+ <20210314223119.GC2733@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1158bbca-8880-918d-7564-e2e30552e6b3@gmail.com>
+Date:   Mon, 15 Mar 2021 21:39:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210312154357.1561730-1-sebastian.reichel@collabora.com> <20210312154357.1561730-31-sebastian.reichel@collabora.com>
-In-Reply-To: <20210312154357.1561730-31-sebastian.reichel@collabora.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 15 Mar 2021 12:37:50 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL59Lq5=x-kxpjBwa3dactNVnhXbDPWTPe965DPOs-bWw@mail.gmail.com>
-Message-ID: <CAL_JsqL59Lq5=x-kxpjBwa3dactNVnhXbDPWTPe965DPOs-bWw@mail.gmail.com>
-Subject: Re: [PATCH 30/38] dt-bindings: power: supply: lp8727: Convert to DT
- schema format
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210314223119.GC2733@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 8:52 AM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> Convert the binding to DT schema format.
->
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../bindings/power/supply/lp8727_charger.txt  |  43 -------
->  .../bindings/power/supply/ti,lp8727.yaml      | 112 ++++++++++++++++++
->  2 files changed, 112 insertions(+), 43 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/power/supply/lp8727_charger.txt
->  create mode 100644 Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
->
-> diff --git a/Documentation/devicetree/bindings/power/supply/lp8727_charger.txt b/Documentation/devicetree/bindings/power/supply/lp8727_charger.txt
-> deleted file mode 100644
-> index 0355a4b68f79..000000000000
-> --- a/Documentation/devicetree/bindings/power/supply/lp8727_charger.txt
-> +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -Binding for TI/National Semiconductor LP8727 Charger
-> -
-> -Required properties:
-> -- compatible: "ti,lp8727"
-> -- reg: I2C slave address 27h
-> -
-> -Optional properties:
-> -- interrupts: interrupt specifier (see interrupt binding[0])
-> -- debounce-ms: interrupt debounce time. (u32)
-> -
-> -AC and USB charging parameters
-> -- charger-type: "ac" or "usb" (string)
-> -- eoc-level: value of 'enum lp8727_eoc_level' (u8)
-> -- charging-current: value of 'enum lp8727_ichg' (u8)
-> -
-> -[0]: Documentation/devicetree/bindings/interrupt-controller/interrupts.txt
-> -
-> -Example)
-> -
-> -lp8727@27 {
-> -       compatible = "ti,lp8727";
-> -       reg = <0x27>;
-> -
-> -       /* GPIO 134 is used for LP8728 interrupt pin */
-> -       interrupt-parent = <&gpio5>;    /* base = 128 */
-> -       interrupts = <6 0x2>;           /* offset = 6, falling edge type */
-> -
-> -       debounce-ms = <300>;
-> -
-> -       /* AC charger: 5% EOC and 500mA charging current */
-> -       ac {
-> -               charger-type = "ac";
-> -               eoc-level = /bits/ 8 <0>;
-> -               charging-current = /bits/ 8 <4>;
-> -       };
-> -
-> -       /* USB charger: 10% EOC and 400mA charging current */
-> -       usb {
-> -               charger-type = "usb";
-> -               eoc-level = /bits/ 8 <1>;
-> -               charging-current = /bits/ 8 <2>;
-> -       };
-> -};
-> diff --git a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> new file mode 100644
-> index 000000000000..65894b36a69d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/ti,lp8727.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Binding for TI/National Semiconductor LP8727 Charger
-> +
-> +maintainers:
-> +  - Sebastian Reichel <sre@kernel.org>
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,lp8727
-> +
-> +  reg:
-> +    const: 0x27
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  debounce-ms:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: interrupt debounce time in ms
-> +
-> +  ac:
-> +    type: object
-> +    description: AC charging parameters
-> +    properties:
-> +      charger-type:
-> +        const: ac
-> +
-> +      eoc-level:
-> +        $ref: /schemas/types.yaml#/definitions/uint8
-> +        minimum: 0
-> +        maximum: 6
-> +        description: |
-> +          End of Charge Percentage with the following mapping:
-> +          0 = 5%, 1 = 10%, 2 = 16%, 3 = 20%, 4 = 25%, 5 = 33%, 6 = 50%
-> +
-> +      charging-current:
-> +        $ref: /schemas/types.yaml#/definitions/uint8
-> +        minimum: 0
-> +        maximum: 9
-> +        description: |
-> +          Charging current with the following mapping:
-> +          0 = 90mA, 1 = 100mA, 2 = 400mA, 3 = 450mA, 4 = 500mA, 5 = 600mA,
-> +          6 = 700mA, 7 = 800mA, 8 = 900mA, 9 = 1000mA
-> +
-> +  usb:
-> +    type: object
-> +    description: USB charging parameters
-> +    properties:
-> +      charger-type:
-> +        const: usb
-> +
-> +      eoc-level:
-> +        $ref: /schemas/types.yaml#/definitions/uint8
-> +        minimum: 0
-> +        maximum: 6
-> +        description: |
-> +          End of Charge Percentage with the following mapping:
-> +          0 = 5%, 1 = 10%, 2 = 16%, 3 = 20%, 4 = 25%, 5 = 33%, 6 = 50%
-> +
-> +      charging-current:
-> +        $ref: /schemas/types.yaml#/definitions/uint8
-> +        minimum: 0
-> +        maximum: 9
-> +        description: |
-> +          Charging current with the following mapping:
-> +          0 = 90mA, 1 = 100mA, 2 = 400mA, 3 = 450mA, 4 = 500mA, 5 = 600mA,
-> +          6 = 700mA, 7 = 800mA, 8 = 900mA, 9 = 1000mA
+15.03.2021 01:31, Michał Mirosław пишет:
+> On Thu, Mar 11, 2021 at 08:22:54PM +0300, Dmitry Osipenko wrote:
+>> Display controller (DC) performs isochronous memory transfers, and thus,
+>> has a requirement for a minimum memory bandwidth that shall be fulfilled,
+>> otherwise framebuffer data can't be fetched fast enough and this results
+>> in a DC's data-FIFO underflow that follows by a visual corruption.
+> [...]
+>> +static unsigned long
+>> +tegra_plane_overlap_mask(struct drm_crtc_state *state,
+>> +			 const struct drm_plane_state *plane_state)
+>> +{
+>> +	const struct drm_plane_state *other_state;
+>> +	const struct tegra_plane *tegra;
+>> +	unsigned long overlap_mask = 0;
+>> +	struct drm_plane *plane;
+>> +	struct drm_rect rect;
+>> +
+>> +	if (!plane_state->visible || !plane_state->fb)
+>> +		return 0;
+>> +
+>> +	drm_atomic_crtc_state_for_each_plane_state(plane, other_state, state) {
+> [...]
+>> +	/*
+>> +	 * Data-prefetch FIFO will easily help to overcome temporal memory
+>> +	 * pressure if other plane overlaps with the cursor plane.
+>> +	 */
+>> +	if (tegra_plane_is_cursor(plane_state) && overlap_mask)
+>> +		return 0;
+>> +
+>> +	return overlap_mask;
+>> +}
+> 
+> Since for cursor plane this always returns 0, you could test
+> tegra_plane_is_cursor() at the start of the function.
 
-You can avoid the duplication here with:
+Yes, thanks.
 
-patternProperties:
-  '^(ac|usb)$':
-     type: object
-     ...
+>> +static int tegra_crtc_calculate_memory_bandwidth(struct drm_crtc *crtc,
+>> +						 struct drm_atomic_state *state)
+> [...]
+>> +	/*
+>> +	 * For overlapping planes pixel's data is fetched for each plane at
+>> +	 * the same time, hence bandwidths are accumulated in this case.
+>> +	 * This needs to be taken into account for calculating total bandwidth
+>> +	 * consumed by all planes.
+>> +	 *
+>> +	 * Here we get the overlapping state of each plane, which is a
+>> +	 * bitmask of plane indices telling with what planes there is an
+>> +	 * overlap. Note that bitmask[plane] includes BIT(plane) in order
+>> +	 * to make further code nicer and simpler.
+>> +	 */
+>> +	drm_atomic_crtc_state_for_each_plane_state(plane, plane_state, new_state) {
+>> +		tegra_state = to_const_tegra_plane_state(plane_state);
+>> +		tegra = to_tegra_plane(plane);
+>> +
+>> +		if (WARN_ON_ONCE(tegra->index >= TEGRA_DC_LEGACY_PLANES_NUM))
+>> +			return -EINVAL;
+>> +
+>> +		plane_peak_bw[tegra->index] = tegra_state->peak_memory_bandwidth;
+>> +		mask = tegra_plane_overlap_mask(new_state, plane_state);
+>> +		overlap_mask[tegra->index] = mask;
+>> +
+>> +		if (hweight_long(mask) != 3)
+>> +			all_planes_overlap_simultaneously = false;
+>> +	}
+>> +
+>> +	old_state = drm_atomic_get_old_crtc_state(state, crtc);
+>> +	old_dc_state = to_const_dc_state(old_state);
+>> +
+>> +	/*
+>> +	 * Then we calculate maximum bandwidth of each plane state.
+>> +	 * The bandwidth includes the plane BW + BW of the "simultaneously"
+>> +	 * overlapping planes, where "simultaneously" means areas where DC
+>> +	 * fetches from the planes simultaneously during of scan-out process.
+>> +	 *
+>> +	 * For example, if plane A overlaps with planes B and C, but B and C
+>> +	 * don't overlap, then the peak bandwidth will be either in area where
+>> +	 * A-and-B or A-and-C planes overlap.
+>> +	 *
+>> +	 * The plane_peak_bw[] contains peak memory bandwidth values of
+>> +	 * each plane, this information is needed by interconnect provider
+>> +	 * in order to set up latency allowness based on the peak BW, see
+>> +	 * tegra_crtc_update_memory_bandwidth().
+>> +	 */
+>> +	for (i = 0; i < ARRAY_SIZE(plane_peak_bw); i++) {
+>> +		overlap_bw = 0;
+>> +
+>> +		for_each_set_bit(k, &overlap_mask[i], 3) {
+>> +			if (k == i)
+>> +				continue;
+>> +
+>> +			if (all_planes_overlap_simultaneously)
+>> +				overlap_bw += plane_peak_bw[k];
+>> +			else
+>> +				overlap_bw = max(overlap_bw, plane_peak_bw[k]);
+>> +		}
+>> +
+>> +		new_dc_state->plane_peak_bw[i] = plane_peak_bw[i] + overlap_bw;
+>> +
+>> +		/*
+>> +		 * If plane's peak bandwidth changed (for example plane isn't
+>> +		 * overlapped anymore) and plane isn't in the atomic state,
+>> +		 * then add plane to the state in order to have the bandwidth
+>> +		 * updated.
+>> +		 */
+>> +		if (old_dc_state->plane_peak_bw[i] !=
+>> +		    new_dc_state->plane_peak_bw[i]) {
+>> +			plane = tegra_crtc_get_plane_by_index(crtc, i);
+>> +			if (!plane)
+>> +				continue;
+>> +
+>> +			plane_state = drm_atomic_get_plane_state(state, plane);
+>> +			if (IS_ERR(plane_state))
+>> +				return PTR_ERR(plane_state);
+>> +		}
+>> +	}
+> [...]
+> 
+> Does it matter to which channel (plane) the peak bw is attached? Would
+> it still work if the first channel specified max(peak_bw of overlaps)
+> and others only zeroes?
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c0 {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      lp8727: charger@27 {
-> +        compatible = "ti,lp8727";
-> +        reg = <0x27>;
-> +        interrupt-parent = <&gpio5>;
-> +        interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-> +        debounce-ms = <300>;
-> +
-> +        /* AC charger: 5% EOC and 500mA charging current */
-> +        ac {
-> +          charger-type = "ac";
-> +          eoc-level = /bits/ 8 <0>;
-> +          charging-current = /bits/ 8 <4>;
-> +        };
-> +
-> +        /* USB charger: 10% EOC and 400mA charging current */
-> +        usb {
-> +          charger-type = "usb";
-> +          eoc-level = /bits/ 8 <1>;
-> +          charging-current = /bits/ 8 <2>;
-> +        };
-> +      };
-> +    };
-> +
-> --
-> 2.30.1
->
+The latency allowance will be configured incorrectly for the case of
+zeroes by the memory driver, hence it does matter.
+
+>> +	/*
+>> +	 * Horizontal downscale needs a lower memory latency, which roughly
+>> +	 * depends on the scaled width.  Trying to tune latency of a memory
+>> +	 * client alone will likely result in a strong negative impact on
+>> +	 * other memory clients, hence we will request a higher bandwidth
+>> +	 * since latency depends on bandwidth.  This allows to prevent memory
+>> +	 * FIFO underflows for a large plane downscales, meanwhile allowing
+>> +	 * display to share bandwidth fairly with other memory clients.
+>> +	 */
+>> +	if (src_w > dst_w)
+>> +		mul = (src_w - dst_w) * bpp / 2048 + 1;
+>> +	else
+>> +		mul = 1;
+> [...]
+> 
+> One point is unexplained yet: why is the multiplier proportional to a
+> *difference* between src and dst widths? Also, I would expect max (worst
+> case) is pixclock * read_size when src_w/dst_w >= read_size.
+
+IIRC, the difference gives a more adequate/practical result than the
+proportion. Although, downstream driver uses proportion. I'll try to
+revisit this for the next version of the patch.
+
+> BTW, you could move this below and : if (src > dst_w) peak_bandwidth *= ...
+
+Indeed, and should be a bit nicer to use 'mul' in both cases.
