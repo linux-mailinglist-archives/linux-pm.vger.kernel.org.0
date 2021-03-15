@@ -2,101 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75F333A9C0
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 04:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98C433A9C8
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 04:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbhCODIc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Mar 2021 23:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
+        id S229893AbhCODLL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Mar 2021 23:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbhCODH7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 23:07:59 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C68BC06175F
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 20:07:59 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id o10so2380470plg.11
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 20:07:59 -0700 (PDT)
+        with ESMTP id S229821AbhCODKp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Mar 2021 23:10:45 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA84C06175F
+        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 20:10:39 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v4so4947136wrp.13
+        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 20:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=E+C021S+MuuSehTRLZXDd2gMGgIwxJN7I46PHjbYIPA=;
-        b=qt+FGTFJTPJ2JZunn0BlihnzQxcyX9KbvW6foXCHaqjGRikyCE4uq8/JjJ7NJqkNH/
-         5BaxBNNwRRDglJz9aEfY7cyz8ogJU8SzsaHg4i2YruvJ1t6BAkTGvvT6Zi0EKm5NxedC
-         Xjm8l82WC1grrZDwaf00ov+Ngll7W8OR4u2lCrWiFvdmQv1mUgVvqccUAeiROBdjol/Y
-         u8nPi8URiiCdsV4AhYBDczpAvJR3D8b9Q/qgM3GB+TpgsD1ISHyZome0Uzj+YlD/lG/3
-         MtLeGytU3uUKr6q9Ai14P7RjwOWfdVQ5fhgXw845Da3PioZfH4hsw157vqSdISU7fBtJ
-         CC+Q==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FhTLju1NPn4NPgJImSXtm4ufxNg1Mw9xI4J0y2WfHqU=;
+        b=wOPEgb90hjcbYfs5esQzgQezxmckiHpmpzR2NvgQ87G6x2//Z2BhuDeKVoi+5I7pn4
+         Em0zqkvvbZOYH5yUAxY/wAF56bVZFJg5oqotd3FaCV1KoWRo6E2YGE+sWjDxGs4mXbqy
+         PW5BCBR+x/Gg5YASYPLnEzT0N8ycCCGMMf+byE4nwSjmFat58LfWyACF5GoVbpVGpvbN
+         V3BnwQ5ZOiUo7si5ZFI7hAr692tjS+Gr8eXXiINnJ8Tk2igu7wdDj4danMVRP4j868rt
+         LV4AefGORLckJbtD0qs63JQmp2Z2Nt6wGCaqct1bmHRswXibwx6N9Uwbx8FPh9w5VLjE
+         wk0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=E+C021S+MuuSehTRLZXDd2gMGgIwxJN7I46PHjbYIPA=;
-        b=shCjWQeG/2lgeTbnNDPzI6/fwVAQXGxWDDeacWKlxjxvJSxVbeuXhNIwQtQOCrbA0v
-         rahmvSXth7ENI0IJ2FqvE6U4FYkKCme4iPFCq68MqKSZ0qI/wmrDX9zu9UBNXGaQjTkm
-         E3fn/HgLzztUbFjPdLQlJUvYCWZd0DQzPX+HZ6FQ3Zqkxv63skKz4BCZrA4+ZnT0S2gK
-         EPwOIqEetzZInPBAzrQbzh8XZVv8GW4FZDdVKa3uwbPWsc1olDpTZ8rgp0cnHN3tg/oL
-         kaLrsaYL2WMaaBuo5rLF6l///IWAG3CWF2IqtRdqXVDqLzyvFaNvAZcIltlHUJTXiJKH
-         FtCA==
-X-Gm-Message-State: AOAM533MLM6rVnMWAFkKcbBlI8JFRMc9ABuhIdDPBErnTz3UEuiOl/go
-        68dUo/N5mjda56nMC8b5ACakoQ==
-X-Google-Smtp-Source: ABdhPJxL8lzjTY6PKezQCujtpxCj27hHlpUJ7MN8QLCdwRQ0Yyk8U87S9VWEB2aHazmsfSHDzfJosg==
-X-Received: by 2002:a17:902:ba94:b029:e6:5cd1:a4a2 with SMTP id k20-20020a170902ba94b02900e65cd1a4a2mr9363284pls.69.1615777678267;
-        Sun, 14 Mar 2021 20:07:58 -0700 (PDT)
-Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id k3sm11076919pgq.21.2021.03.14.20.07.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 14 Mar 2021 20:07:57 -0700 (PDT)
-Date:   Mon, 15 Mar 2021 08:37:55 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FhTLju1NPn4NPgJImSXtm4ufxNg1Mw9xI4J0y2WfHqU=;
+        b=tmIgvvaPAOyB+p/gHQ39bsA50ZC2XaBDWP2I43NFYyNLnkZ4jM/7whgDDH2CfjdstC
+         5faJ0Z/uxhFy955N3Z1FwQX/YY0v3lbTLrbIpoxyJCEmiBtYH2xTySVNVZOWXnZOD/M3
+         8Il7Js30NKVjOVnAkaB8WbH3GW0fylydwjedpjctjv27AsThkBKVO5JI4GuIqqiMr9ga
+         QAvf46PGvc3hJdQZMrq+ZNidXiU6gB0qlqu9s2FVz983GdbDzcZSiZHTD8GGDwmRoZTk
+         69p8gneRmyiXxacxvZwD3KLdtBXv42ce4Q4B/XLhC82fNk/LK5CmyX5kM8xz2EtuzL6Y
+         spOg==
+X-Gm-Message-State: AOAM531R9PxkGgJ//vycEx3jSYaHaYTRp249qXR8iZqqL780FwrJRT/9
+        gbuFq1LK9DOb/NzgzhEQj6rIIMOAsfh3qg==
+X-Google-Smtp-Source: ABdhPJzl3sQkIHfBR/CL0r3eK1hGRqS7qIXaHeZiVL4vcMzPZDnYoP2Jjf8DDh7LiKD0P/Ginv2GIA==
+X-Received: by 2002:adf:a418:: with SMTP id d24mr24872497wra.187.1615777838058;
+        Sun, 14 Mar 2021 20:10:38 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:fcf7:1d46:a8c5:fa1b? ([2a01:e34:ed2f:f020:fcf7:1d46:a8c5:fa1b])
+        by smtp.googlemail.com with ESMTPSA id c26sm17710075wrb.87.2021.03.14.20.10.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Mar 2021 20:10:37 -0700 (PDT)
+Subject: Re: [PATCH v2 4/5] thermal/drivers/cpuidle_cooling: Use device name
+ instead of auto-numbering
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         lukasz.luba@arm.com, Amit Daniel Kachhap <amit.kachhap@gmail.com>,
         Javi Merino <javi.merino@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v2 4/5] thermal/drivers/cpuidle_cooling: Use device name
- instead of auto-numbering
-Message-ID: <20210315030755.kl7gt66f45o254u3@vireshk-i7>
 References: <20210312170316.3138-1-daniel.lezcano@linaro.org>
  <20210312170316.3138-4-daniel.lezcano@linaro.org>
+ <20210315030755.kl7gt66f45o254u3@vireshk-i7>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <f18cdcc2-fcd0-3b87-d52d-19083d81d6cc@linaro.org>
+Date:   Mon, 15 Mar 2021 04:10:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210312170316.3138-4-daniel.lezcano@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210315030755.kl7gt66f45o254u3@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-03-21, 18:03, Daniel Lezcano wrote:
-> Currently the naming of a cooling device is just a cooling technique
-> followed by a number. When there are multiple cooling devices using
-> the same technique, it is impossible to clearly identify the related
-> device as this one is just a number.
+On 15/03/2021 04:07, Viresh Kumar wrote:
+> On 12-03-21, 18:03, Daniel Lezcano wrote:
+>> Currently the naming of a cooling device is just a cooling technique
+>> followed by a number. When there are multiple cooling devices using
+>> the same technique, it is impossible to clearly identify the related
+>> device as this one is just a number.
+>>
+>> For instance:
+>>
+>>  thermal-idle-0
+>>  thermal-idle-1
+>>  thermal-idle-2
+>>  thermal-idle-3
+>>  etc ...
+>>
+>> The 'thermal' prefix is redundant with the subsystem namespace. This
+>> patch removes the 'thermal prefix and changes the number by the device
+>> name. So the naming above becomes:
+>>
+>>  idle-cpu0
+>>  idle-cpu1
+>>  idle-cpu2
+>>  idle-cpu3
+>>  etc ...
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 > 
-> For instance:
-> 
->  thermal-idle-0
->  thermal-idle-1
->  thermal-idle-2
->  thermal-idle-3
->  etc ...
-> 
-> The 'thermal' prefix is redundant with the subsystem namespace. This
-> patch removes the 'thermal prefix and changes the number by the device
-> name. So the naming above becomes:
-> 
->  idle-cpu0
->  idle-cpu1
->  idle-cpu2
->  idle-cpu3
->  etc ...
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> I acked for both the patches :(
 
-I acked for both the patches :(
+Right, I'll add you when merging the patches.
+
+Thanks
+
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
