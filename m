@@ -2,88 +2,226 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E29E33C306
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 18:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D8333C576
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 19:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbhCOQ7T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 12:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234985AbhCOQ7B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 12:59:01 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90112C061764
-        for <linux-pm@vger.kernel.org>; Mon, 15 Mar 2021 09:59:00 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id d3so57913217lfg.10
-        for <linux-pm@vger.kernel.org>; Mon, 15 Mar 2021 09:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=nn1W9Wc+k1CJYE8WxkSJGXK0N+qf/mcCb4Whw81sCBc=;
-        b=bL2/J9ZXSj/seYZ4Yt/7xPJEUbrxkxkdBDA6LnkwlqM4B8UivxD38dABgszhIrmEYr
-         UhGjDGSgsEvVP1XNKN1ENwlFj3aC6J8YcQMN+KSz87MImeLvcmoa2WrxaLN/1gtDYyy6
-         HNMeMWCpVFtTuc4Wdcg2Gf3vHj9I7ijcrPWq/6k90SJj1PTtdIp2NOyhMIA7goX293nj
-         7eJi2vVtathVfMs1VtKqTa32KM6YhAKiR3rZg10ur8mJbHWEL13X0KoDzX9ucfq/oU7l
-         VVHj6HOcFTM90ZYBTtvpAwBuDvm30fUbSxjwYV4w7Fk+y6G8KcUW5H9tabzs2o80RBgI
-         psRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=nn1W9Wc+k1CJYE8WxkSJGXK0N+qf/mcCb4Whw81sCBc=;
-        b=WbbbGuhTIqBxmP3g2foeirjo9UOQtXKv+i76/jUuo7V+rdhtoK+7HRC32TeQTZzhCq
-         3q911h0AfeBs5VaRLRpRwsXz1+ReM/x3oOh77Pi5QAYj9NDB4MsMtTqMaEd/z5RWLH1v
-         /fl0IC7NJKlAwO+9MHwI9aOSBVZmyPlN2+WwvJLiRnDKCH+UgtyX7HvFy6b5bqOGuOQm
-         pq7rFOI9rVH5n5IkSIn7d2HNyKJRTmKpj3kobontM65HS2ZepiNaIyrLHSbprbopThCg
-         pwMVKigemAwTuVCmIHhPkFFXvhi7HSoBZrXBzGTodw0AwhVUBiG3LwhBdnWH7dHXrl5Z
-         f/rQ==
-X-Gm-Message-State: AOAM533iT437HZced3lZQTohfulVjlGejFzcZSYIldoRSgOjcIAwaPsa
-        9DNT49eJLg2pzg4TWfZJnNRM6XUF4lNOYXvM4BA=
-X-Google-Smtp-Source: ABdhPJzt1AJjOpfQyJCQnDNMzR0c2P65vmHMOU6UyOjVUogBQWRQM8Dneq7uviGgQb7oNrf1WSYEmJuc6DEymOnu2W8=
-X-Received: by 2002:a05:6512:ce:: with SMTP id c14mr8700564lfp.64.1615827539089;
- Mon, 15 Mar 2021 09:58:59 -0700 (PDT)
+        id S231770AbhCOSWR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 14:22:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51206 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231513AbhCOSVs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Mar 2021 14:21:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 878ED64F4C;
+        Mon, 15 Mar 2021 18:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615832507;
+        bh=afoa9GqZg2qqHylfjPMfhqp2/JmOVLX1GiaEqBxH+DM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aOjgCgPyePMGaMuQQI6WR/A02j6B7YlrIp4zZ3Z1By1mQEWgMzNRz4AgreOONuy/+
+         blnwZPlvetKkD+2HkKadVjMIZ0aMxJj4SeLObJIZ7fpXyCDAYR6jeHIZ16AWWK9Mcv
+         fU6Jplj6A/fwzmKsWaPzCnghPFP1cxZ9j6U7YiemIGM6F0dW8CVAkEEOJ74s2LYbRx
+         78NEk3TI/0Nu9RmRxdXNGQFoVA7H/UOYXHykAjfGLLe8VaC0fntO0kJS7jkWFEKY3M
+         YDHaYKW6275Jslc49Jb62DnwTTj/z0bfO8P24qQuLDSMIM5QzULLoYw1vqAR7s9LJu
+         q0onSoBY1n/wg==
+Received: by mail-ed1-f50.google.com with SMTP id z1so18490372edb.8;
+        Mon, 15 Mar 2021 11:21:47 -0700 (PDT)
+X-Gm-Message-State: AOAM532nLhReI9GdOZYrEPC1WDuKmcDAysPZqTwU9G/EzdF2FPw69VQv
+        epQMIdhe6UOwTzuy27cEjSynf5TPN+RrKvXfRA==
+X-Google-Smtp-Source: ABdhPJwXvaxf3Xd1WXC/uPyRinIjZ+scVfiqaCoSD1eCqTQBavGoOpWdvdB43Rk0TBOVIYIWudB8auhe+rWL0Mj14RU=
+X-Received: by 2002:a05:6402:c0f:: with SMTP id co15mr31140438edb.373.1615832506118;
+ Mon, 15 Mar 2021 11:21:46 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:651c:1382:0:0:0:0 with HTTP; Mon, 15 Mar 2021 09:58:58
- -0700 (PDT)
-Reply-To: ezbtg22@gmail.com
-From:   "Mrs.Glenn" <mrganuserge@gmail.com>
-Date:   Mon, 15 Mar 2021 09:58:58 -0700
-Message-ID: <CA+Wfa7bCFA+SzD6=YYUq8WDmT1xTGZFP_SSGjVZA7UPJTfDOXg@mail.gmail.com>
-Subject: From Mrs.Glenn
-To:     undisclosed-recipients:;
+References: <20210312154357.1561730-1-sebastian.reichel@collabora.com> <20210312154357.1561730-5-sebastian.reichel@collabora.com>
+In-Reply-To: <20210312154357.1561730-5-sebastian.reichel@collabora.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 15 Mar 2021 12:21:34 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKFJPSMyMbcrpnL1WgttHSP+3Q+U8bJ_m5hm=O0gEPe4g@mail.gmail.com>
+Message-ID: <CAL_JsqKFJPSMyMbcrpnL1WgttHSP+3Q+U8bJ_m5hm=O0gEPe4g@mail.gmail.com>
+Subject: Re: [PATCH 04/38] dt-bindings: power: supply: bq25890: Convert to DT
+ schema format
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
--- 
-Dear Beloved,
+On Fri, Mar 12, 2021 at 8:44 AM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> Convert the binding to DT schema format.
+>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../bindings/power/supply/bq25890.txt         |  60 ---------
+>  .../bindings/power/supply/bq25890.yaml        | 125 ++++++++++++++++++
+>  2 files changed, 125 insertions(+), 60 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/supply/bq25890.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/bq25890.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.txt b/Documentation/devicetree/bindings/power/supply/bq25890.txt
+> deleted file mode 100644
+> index 805040c6fff9..000000000000
+> --- a/Documentation/devicetree/bindings/power/supply/bq25890.txt
+> +++ /dev/null
+> @@ -1,60 +0,0 @@
+> -Binding for TI bq25890 Li-Ion Charger
+> -
+> -This driver will support the bq25892, the bq25896 and the bq25890. There are
+> -other ICs in the same family but those have not been tested.
+> -
+> -Required properties:
+> -- compatible: Should contain one of the following:
+> -    * "ti,bq25890"
+> -    * "ti,bq25892"
+> -    * "ti,bq25895"
+> -    * "ti,bq25896"
+> -- reg: integer, i2c address of the device.
+> -- interrupts: interrupt line;
+> -- ti,battery-regulation-voltage: integer, maximum charging voltage (in uV);
+> -- ti,charge-current: integer, maximum charging current (in uA);
+> -- ti,termination-current: integer, charge will be terminated when current in
+> -    constant-voltage phase drops below this value (in uA);
+> -- ti,precharge-current: integer, maximum charge current during precharge
+> -    phase (in uA);
+> -- ti,minimum-sys-voltage: integer, when battery is charging and it is below
+> -    minimum system voltage, the system will be regulated above
+> -    minimum-sys-voltage setting (in uV);
+> -- ti,boost-voltage: integer, VBUS voltage level in boost mode (in uV);
+> -- ti,boost-max-current: integer, maximum allowed current draw in boost mode
+> -    (in uA).
+> -
+> -Optional properties:
+> -- ti,boost-low-freq: boolean, if present boost mode frequency will be 500kHz,
+> -    otherwise 1.5MHz;
+> -- ti,use-ilim-pin: boolean, if present the ILIM resistor will be used and the
+> -    input current will be the lower between the resistor setting and the IINLIM
+> -    register setting;
+> -- ti,thermal-regulation-threshold: integer, temperature above which the charge
+> -    current is lowered, to avoid overheating (in degrees Celsius). If omitted,
+> -    the default setting will be used (120 degrees);
+> -- ti,ibatcomp-micro-ohms: integer, value of a resistor in series with
+> -    the battery;
+> -- ti,ibatcomp-clamp-microvolt: integer, maximum charging voltage adjustment due
+> -    to expected voltage drop on in-series resistor;
+> -
+> -Example:
+> -
+> -bq25890 {
+> -       compatible = "ti,bq25890";
+> -       reg = <0x6a>;
+> -
+> -       interrupt-parent = <&gpio1>;
+> -       interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
+> -
+> -       ti,battery-regulation-voltage = <4200000>;
+> -       ti,charge-current = <1000000>;
+> -       ti,termination-current = <50000>;
+> -       ti,precharge-current = <128000>;
+> -       ti,minimum-sys-voltage = <3600000>;
+> -       ti,boost-voltage = <5000000>;
+> -       ti,boost-max-current = <1000000>;
+> -
+> -       ti,use-ilim-pin;
+> -       ti,thermal-regulation-threshold = <120>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.yaml b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
+> new file mode 100644
+> index 000000000000..de6e03ec120c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
+> @@ -0,0 +1,125 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2021 Sebastian Reichel
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/power/supply/bq25890.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Binding for bq25890, bq25892, bq25895 and bq25896 Li-Ion Charger
+> +
+> +maintainers:
+> +  - Sebastian Reichel <sre@kernel.org>
+> +
+> +allOf:
+> +  - $ref: power-supply.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,bq25890
+> +      - ti,bq25892
+> +      - ti,bq25895
+> +      - ti,bq25896
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  ti,battery-regulation-voltage:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: maximum charging voltage (in uV)
+> +
+> +  ti,charge-current:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: maximum charging current (in uA)
+> +
+> +  ti,termination-current:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      charge will be terminated when current in constant-voltage phase
+> +      drops below this value (in uA)
+> +
+> +  ti,precharge-current:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: maximum charge current during precharge phase (in uA)
+> +
+> +  ti,minimum-sys-voltage:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      when battery is charging and it is below minimum system voltage,
+> +      the system will be regulated above minimum-sys-voltage setting (in uV)
+> +
+> +  ti,boost-voltage:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: VBUS voltage level in boost mode (in uV)
+> +
+> +  ti,boost-max-current:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: maximum allowed current draw in boost mode (in uA)
+> +
+> +  ti,boost-low-freq:
+> +    description: boost mode frequency will be 500kHz, otherwise 1.5MHz
+> +    type: boolean
+> +
+> +  ti,use-ilim-pin:
+> +    description: |
+> +      ILIM resistor will be used and the input current will be the lower
+> +      between the resistor setting and the IINLIM register setting
+> +    type: boolean
+> +
+> +  ti,thermal-regulation-threshold:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      temperature above which the charge current is lowered, to avoid overheating
+> +      (in degrees Celsius). If omitted, the default setting will be used (120 degrees)
+> +
+> +  ti,ibatcomp-micro-ohms:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: value of a resistor in series with the battery (in Micro Ohms)
+> +
+> +  ti,ibatcomp-clamp-microvolt:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: max. charging voltage adjustment due to expected voltage drop on in-series resistor
 
-I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
-in a hospital bed in Israel. I am 59 years and childless; my husband
-is dead. I was diagnosed with terminal cancer. And my doctor just
-predicted that I have but very limited time to live due to damages in
-my system and as a result of that I decided to dispose my 10.5 million
-US dollars to a God-fearing one for the continuation of charitable
-work. This is why I located you.My guess about you may not be accurate
-because I came across your contact at the humanitarian calendar event
-of the year but I believe in God who  divinely directed me to you for
-this solemn proposal of charitable work. I wholeheartedly wish to
-bequeath my fortune to you as a God-fearing person for the
-continuation of charitable work anywhere around the world.
+You don't need a type $ref on properties with a standard unit suffix.
+Though it looks like there's some non-standard ones (-microvolts) in
+the series.
 
-I shall be going in for a surgery operations soonest and desire this
-money to be transferred to you as I do not wish to leave this money in
-the bank because bankers might misuse it for their own interest after
-my death. As soon as I receive your quick reply assuring me that you
-will utilize the money as I instructed you for the benefit of the less
-privilege, I shall give you more details and also instruct my bank to
-release the money to you for the charity project. I hope you receive
-this mail in good health.
-
-Because I don t know what will be my situation in next minute,
-
-I am waiting for your reply.
-
-Yours sincerely,
-Mrs Elizabet Glenn.
+Rob
