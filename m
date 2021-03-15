@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15E433B488
+	by mail.lfdr.de (Postfix) with ESMTP id 265C633B486
 	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 14:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbhCONbB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 09:31:01 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:35735 "EHLO
+        id S230227AbhCONbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 09:31:00 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:35725 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230016AbhCONav (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 09:30:51 -0400
-X-UUID: 093d390238d04838abc5b6e4f6e91cde-20210315
-X-UUID: 093d390238d04838abc5b6e4f6e91cde-20210315
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        with ESMTP id S229956AbhCONau (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 09:30:50 -0400
+X-UUID: 8e1d58cc01e246de8452fa8e040e2867-20210315
+X-UUID: 8e1d58cc01e246de8452fa8e040e2867-20210315
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 344808132; Mon, 15 Mar 2021 21:30:46 +0800
+        with ESMTP id 532580802; Mon, 15 Mar 2021 21:30:45 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Mon, 15 Mar 2021 21:30:44 +0800
 Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 15 Mar 2021 21:30:43 +0800
+ Transport; Mon, 15 Mar 2021 21:30:44 +0800
 From:   Roger Lu <roger.lu@mediatek.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -44,51 +44,85 @@ CC:     Fan Chen <fan.chen@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v12 5/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
-Date:   Mon, 15 Mar 2021 21:30:16 +0800
-Message-ID: <20210315133018.4976-6-roger.lu@mediatek.com>
+Subject: [PATCH v12 6/7] arm64: dts: mt8192: add svs device information
+Date:   Mon, 15 Mar 2021 21:30:17 +0800
+Message-ID: <20210315133018.4976-7-roger.lu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20210315133018.4976-1-roger.lu@mediatek.com>
 References: <20210315133018.4976-1-roger.lu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 982E96737CD7DC355C6EE94DEDA94CA8253080F3AE7172726871ECD7ED7544BB2000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+add compitable/reg/irq/clock/efuse/reset setting in svs node
+
 Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 ---
- .../devicetree/bindings/soc/mediatek/mtk-svs.yaml         | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 34 ++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-index 0d8d12f927de..ed113fe80fb6 100644
---- a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-+++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-@@ -23,6 +23,7 @@ properties:
-   compatible:
-     enum:
-       - mediatek,mt8183-svs
-+      - mediatek,mt8192-svs
- 
-   reg:
-     maxItems: 1
-@@ -48,6 +49,13 @@ properties:
-       - const: svs-calibration-data
-       - const: t-calibration-data
- 
-+  resets:
-+    maxItems: 1
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 2f0b4824a024..f3a339de8992 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -268,6 +268,14 @@
+ 			compatible = "mediatek,mt8192-infracfg", "syscon";
+ 			reg = <0 0x10001000 0 0x1000>;
+ 			#clock-cells = <1>;
 +
-+  reset-names:
-+    items:
-+      - const: svs_rst
++			infracfg_rst: reset-controller {
++				compatible = "mediatek,infra-reset", "ti,syscon-reset";
++				#reset-cells = <1>;
++				ti,reset-bits = <
++					0x150 5 0x154 5 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 0: svs */
++				>;
++			};
+ 		};
+ 
+ 		pericfg: syscon@10003000 {
+@@ -362,6 +370,20 @@
+ 			status = "disabled";
+ 		};
+ 
++		svs: svs@1100b000 {
++			compatible = "mediatek,mt8192-svs";
++			reg = <0 0x1100b000 0 0x1000>;
++			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg CLK_INFRA_THERM>;
++			clock-names = "main";
++			nvmem-cells = <&svs_calibration>,
++				      <&lvts_e_data1>;
++			nvmem-cell-names = "svs-calibration-data",
++					   "t-calibration-data";
++			resets = <&infracfg_rst 0>;
++			reset-names = "svs_rst";
++		};
 +
- required:
-   - compatible
-   - reg
+ 		spi1: spi@11010000 {
+ 			compatible = "mediatek,mt8192-spi",
+ 				     "mediatek,mt6765-spi";
+@@ -473,6 +495,18 @@
+ 			status = "disable";
+ 		};
+ 
++		efuse: efuse@11c10000 {
++			compatible = "mediatek,efuse";
++			reg = <0 0x11c10000 0 0x1000>;
++
++			lvts_e_data1: data1 {
++				reg = <0x1C0 0x58>;
++			};
++			svs_calibration: calib@580 {
++				reg = <0x580 0x68>;
++			};
++		};
++
+ 		i2c3: i2c3@11cb0000 {
+ 			compatible = "mediatek,mt8192-i2c";
+ 			reg = <0 0x11cb0000 0 0x1000>,
 -- 
 2.18.0
 
