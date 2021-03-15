@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B0433C57C
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 19:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071CA33C5A0
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 19:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbhCOSYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 14:24:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51578 "EHLO mail.kernel.org"
+        id S231513AbhCOS2K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 14:28:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52342 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231673AbhCOSYX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Mar 2021 14:24:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 796F364F42;
-        Mon, 15 Mar 2021 18:24:22 +0000 (UTC)
+        id S229806AbhCOS1r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Mar 2021 14:27:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EEE3F64F42;
+        Mon, 15 Mar 2021 18:27:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615832662;
-        bh=IV0bAkeJaGcIEwdhxf9utetH1kbkq+bzuMqhnbT6NVc=;
+        s=k20201202; t=1615832866;
+        bh=qoYDstJDuKBPusQErDzsKJ7v8otxcmd+GoIi3yjBdvs=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qCjpCzFs8GdT/ZJwVi45AiS0fFJ1Ig884mwvJWclXcAdzhkMB4SxYwmxvFqyxt+NB
-         sMVG2QW6tfIYZEnSxy6M2kpK3b/VSauHXqQ4j6+ZQNv0JKR2KsTNIXdv8KFqhj3nYS
-         Lp3/NgNnOiDpLriY06aZoQ4SW30gTaIhXhcM2nNUqJJBMGru3fWjPopyxmo5Qwm4Fe
-         CBVJ5C31F3eoJpkl2DIcL5Y2pgKNJ4Hwcv1XjvIXxmyljDUTbvI+G5WMpSaWLV+egw
-         D9GOZxfl1jGaZy+dchhMA5PIEK4HqbuP9IMYhfQfiRFPvY2WW+qTiZ5BZJ/1H8QBMR
-         FHkFZcK5uYAzw==
-Received: by mail-ej1-f51.google.com with SMTP id jt13so67995116ejb.0;
-        Mon, 15 Mar 2021 11:24:22 -0700 (PDT)
-X-Gm-Message-State: AOAM532jwJcEAhR9M7KqRUM8xoYhytsOBrR59HndDz8cOPC4BQbmAEV6
-        PnHgPD3JaSQxpAZPpl2DoA6UCH89efR3oOVlMA==
-X-Google-Smtp-Source: ABdhPJy7sfPHsRK5luRVH+hfXvKweuaExpTxUT2ZIeWDSTiEYf+0NROToXyrQljKrbzTWKa8rVzIMe8RmtENELT+0mo=
-X-Received: by 2002:a17:906:7806:: with SMTP id u6mr4837571ejm.130.1615832661038;
- Mon, 15 Mar 2021 11:24:21 -0700 (PDT)
+        b=DbkMKoXKBITh8xp1IDTw5UlEpIGgV3TC9Xt3eDaxf9ytfDqJqotl2s7hcr/e9rSwG
+         O/PltwnQVJXFw3mjbY83DCoF1TtLzlc93Ivgk51slyXBzBuKJt7HT/kq8fdkXpCbMy
+         EgVZfCSGdfMvfF5WoUFMSizIOJ6Z3Ew58eH1ywnpXmYdw/5U7/oewvwId5G+4oW0Bq
+         I3avcRVRfRF75g77uZJRpGQnY0q4K0ENr9aLPIC3unksxUnnKZB4gr4Jrqsh6yeTfv
+         A/3MQd1NGXr7ygmsckhrOrZJGiXW8wim+e1OJKj2If3ZhbCNBR7tm9KF0fCwkuQ4Oy
+         j5DvAkYpAw+/w==
+Received: by mail-ej1-f41.google.com with SMTP id dx17so67996214ejb.2;
+        Mon, 15 Mar 2021 11:27:45 -0700 (PDT)
+X-Gm-Message-State: AOAM5310jR4im5n2Da3fx0qeYBy174KtJahtgaOlTNvCVhXwZ8NQ03hn
+        SLoFD/wIfI7jsD2bDXaWTXlCQEnyMaWuRypY+Q==
+X-Google-Smtp-Source: ABdhPJzJml081H6SIYahYqA8uEEgm/OD0od3fSnVnZVgt4FXBjqGqhAOSfDHPUGyU/lLLWSzdhf5vI72e94Y+2JcZVE=
+X-Received: by 2002:a17:906:7806:: with SMTP id u6mr4851146ejm.130.1615832864582;
+ Mon, 15 Mar 2021 11:27:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210312154357.1561730-1-sebastian.reichel@collabora.com> <20210312154357.1561730-9-sebastian.reichel@collabora.com>
-In-Reply-To: <20210312154357.1561730-9-sebastian.reichel@collabora.com>
+References: <20210312154357.1561730-1-sebastian.reichel@collabora.com> <20210312154357.1561730-12-sebastian.reichel@collabora.com>
+In-Reply-To: <20210312154357.1561730-12-sebastian.reichel@collabora.com>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 15 Mar 2021 12:24:09 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+i=sB7nDzBeF3nRa8FuM_8v=P2SMXQ5XNmuP3b615CKg@mail.gmail.com>
-Message-ID: <CAL_Jsq+i=sB7nDzBeF3nRa8FuM_8v=P2SMXQ5XNmuP3b615CKg@mail.gmail.com>
-Subject: Re: [PATCH 08/38] dt-bindings: power: supply: bq24735: Convert to DT
- schema format
+Date:   Mon, 15 Mar 2021 12:27:33 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+TLt0ousbggKGF5wEdJYLqofxt9a-qDqLCkq0AE_y2Rg@mail.gmail.com>
+Message-ID: <CAL_Jsq+TLt0ousbggKGF5wEdJYLqofxt9a-qDqLCkq0AE_y2Rg@mail.gmail.com>
+Subject: Re: [PATCH 11/38] dt-bindings: power: supply: sbs-manager: Convert to
+ DT schema format
 To:     Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     Sebastian Reichel <sre@kernel.org>,
         "open list:THERMAL" <linux-pm@vger.kernel.org>,
@@ -50,33 +50,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 8:44 AM Sebastian Reichel
+On Fri, Mar 12, 2021 at 8:45 AM Sebastian Reichel
 <sebastian.reichel@collabora.com> wrote:
 >
 > Convert the binding to DT schema format.
 >
 > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
->  .../bindings/power/supply/bq24735.yaml        | 88 +++++++++++++++++++
->  .../bindings/power/supply/ti,bq24735.txt      | 39 --------
->  2 files changed, 88 insertions(+), 39 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/bq24735.yaml
->  delete mode 100644 Documentation/devicetree/bindings/power/supply/ti,bq24735.txt
+>  .../bindings/power/supply/sbs,sbs-manager.txt |  66 -----------
+>  .../power/supply/sbs,sbs-manager.yaml         | 111 ++++++++++++++++++
+>  2 files changed, 111 insertions(+), 66 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
 >
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24735.yaml b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+
+
+> diff --git a/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml b/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
 > new file mode 100644
-> index 000000000000..8a3a31ada128
+> index 000000000000..592c476d83e6
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
-> @@ -0,0 +1,88 @@
+> +++ b/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
+> @@ -0,0 +1,111 @@
 > +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2021 Sebastian Reichel
 > +%YAML 1.2
 > +---
-> +$id: "http://devicetree.org/schemas/power/supply/bq24735.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +$id: http://devicetree.org/schemas/power/supply/sbs,sbs-manager.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Binding for TI BQ24735 Li-Ion Battery Charger
+> +title: SBS compliant manger
 > +
 > +maintainers:
 > +  - Sebastian Reichel <sre@kernel.org>
@@ -86,55 +87,104 @@ On Fri, Mar 12, 2021 at 8:44 AM Sebastian Reichel
 > +
 > +properties:
 > +  compatible:
-> +    const: ti,bq24735
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - lltc,ltc1760
+> +          - enum:
+> +              - sbs,sbs-manager
+> +      - items:
+> +          - const: sbs,sbs-manager
 > +
 > +  reg:
-> +    maxItems: 1
+> +    const: 0xa
 > +
-> +  interrupts:
-> +    description: AC adapter plug event interrupt
-> +    maxItems: 1
+> +  "#address-cells":
+> +    const: 1
 > +
-> +  ti,ac-detect-gpios:
-> +    maxItems: 1
-> +    description: |
-> +      This GPIO is optionally used to read the AC adapter status. This is a Host GPIO
-> +      that is configured as an input and connected to the ACOK pin on the bq24735.
-> +      Note: for backwards compatibility reasons, the GPIO must be active on AC adapter
-> +      absence despite ACOK being active (high) on AC adapter presence.
+> +  "#size-cells":
+> +    const: 0
 > +
-> +  ti,charge-current:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Used to control and set the charging current.
-> +      This value must be between 128mA and 8.128A with a 64mA step resolution.
-> +      The POR value is 0x0000h. This number is in mA (e.g. 8192).
-> +      See spec for more information about the ChargeCurrent (0x14h) register.
+> +  gpio-controller: true
 > +
-> +  ti,charge-voltage:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Used to control and set the charging voltage.
-> +      This value must be between 1.024V and 19.2V with a 16mV step resolution.
-> +      The POR value is 0x0000h. This number is in mV (e.g. 19200).
-> +      See spec for more information about the ChargeVoltage (0x15h) register.
+> +  "#gpio-cells":
+> +    const: 2
 > +
-> +  ti,input-current:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Used to control and set the charger input current.
-> +      This value must be between 128mA and 8.064A with a 128mA step resolution.
-> +      The POR value is 0x1000h. This number is in mA (e.g. 8064).
-> +      See the spec for more information about the InputCurrent (0x3fh) register.
+> +required:
+> +  - compatible
+> +  - reg
 > +
-> +  ti,external-control:
-> +    type: boolean
-> +    description: |
-> +      Indicates that the charger is configured externally and that the host should not
-> +      attempt to enable/disable charging or set the charge voltage/current.
+> +additionalProperties: false
 > +
-> +  poll-interval:
-> +    description: |
-> +      If 'interrupts' is not specified, poll AC adapter presence with this interval (milliseconds).
+> +dependencies:
+> +  '#gpio-cells': [gpio-controller]
+> +  gpio-controller: ['#gpio-cells']
 
-Needs a type.
+The core schema should capture these dependencies.
+
+> +
+> +patternProperties:
+> +  "^i2c@[1-4]$":
+> +    type: object
+> +
+> +    allOf:
+> +      - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      batman: battery-manager@a {
+> +        compatible = "lltc,ltc1760", "sbs,sbs-manager";
+> +        reg = <0x0a>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +
+> +        i2c@1 {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +          reg = <1>;
+> +
+> +          battery@b {
+> +            compatible = "ti,bq20z65", "sbs,sbs-battery";
+> +            reg = <0x0b>;
+> +            sbs,battery-detect-gpios = <&batman 1 1>;
+> +          };
+> +        };
+> +
+> +        i2c@2 {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +          reg = <2>;
+> +
+> +          battery@b {
+> +            compatible = "ti,bq20z65", "sbs,sbs-battery";
+> +            reg = <0x0b>;
+> +            sbs,battery-detect-gpios = <&batman 2 1>;
+> +          };
+> +        };
+> +
+> +        i2c@3 {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +          reg = <3>;
+> +
+> +          battery@b {
+> +            compatible = "ti,bq20z65", "sbs,sbs-battery";
+> +            reg = <0x0b>;
+> +            sbs,battery-detect-gpios = <&batman 3 1>;
+> +          };
+> +        };
+> +      };
+> +    };
+> --
+> 2.30.1
+>
