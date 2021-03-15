@@ -2,112 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5EF33AA45
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 05:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEB333AA93
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 05:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbhCOEGz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 00:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
+        id S229561AbhCOExT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 00:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbhCOEGp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 00:06:45 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E289C06175F
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 21:06:45 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id n9so18728303pgi.7
-        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 21:06:45 -0700 (PDT)
+        with ESMTP id S229506AbhCOExF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 00:53:05 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDFFC06175F
+        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 21:53:05 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id mz6-20020a17090b3786b02900c16cb41d63so14067167pjb.2
+        for <linux-pm@vger.kernel.org>; Sun, 14 Mar 2021 21:53:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=eI7ImkOM7sKEYOwpNZ2uQyL8ht6ELC4KAuDJxGH26WM=;
-        b=TsLroBKaOE0Ndal3uYSavlIbCvocBVruTCmOQbtWNCTqZn34fuCTFqFvPlo8zLD9fM
-         IO6v4CAcDC/jXHA7xn0roPtBnzHafVGRYUD8lfwBtTMxKxCleNiFo9fJ8rFHjAAcLLRG
-         n0IBxgxySYh/5P9qNs36aern3PGV0Kb7uyoKAm7WyekwifeK1ct2o4JPyQ1IQo4HlwZ+
-         40l1RBYIIqEDnveIIc7V/s/pxU7Eti6u2Sl5TecW4wLjWWQTpWhk9UCZrL8vgho1h49/
-         F2BmsDsOvuWGdJf6nM5P+UwNGUZyT5QM3C9s++AMz77q/FQEl28vDvRZAA/JnZ/kvkbJ
-         LAKg==
+        bh=9jlkZc4l57z4gYpyUQhwFM4YMqSzrWiY9Ig9xmWZ6CM=;
+        b=pGoQ3T8HqHZEyJXEatYySB5WORzlCF9PNfWlOpWXhw6jcEuay5IW7JD85GFR+K8SGh
+         8Y+u0LeCZhPO55P/eg2HEjPpjd90w3SafcUUWmRdzJAQ/iSwLDjtr1mremDYrsOs/+JD
+         uDBhIi4fjJ0fFDGGQ2iQDMD9E1bFLlqY2dF+uBpb0+WB/pYxbXRC58h7ROPWgMiCA0KV
+         mIYNHAPr/fRqXP654nOQangoyHSPjm3J1COuc9Tcco80HdjzVhlNLjYz2MtBJUDh+qjD
+         AMj6N9kFJte6G+20v07srvUhYdC8OtBYffvUMShBRMh7mhKz3z2mBquM+ER2T3+BXXEz
+         /eCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eI7ImkOM7sKEYOwpNZ2uQyL8ht6ELC4KAuDJxGH26WM=;
-        b=DtC1E9NjhDPyIQXe+At6Qazo2JSRPRXYOK9r71j/YHQwqjbx34O11v0VPpBd0QPO+9
-         ZffADgsiDpWaook6Wr/RUscSLvNipJ6v8ONbQXdLjpkbOYbxGaGch5NW4SGKIP6oEvCQ
-         mXy7GEnGYzBaboH6giJ3pIUOFa9mPrDQ6AyWFp5bOHklixfiBQgO6zmDtmSKLrccjpOl
-         zbk7JdNdYA2qXIBSlvShy0sr73kvl1f281Ci5gVifqwySVy06AXG7fmUJ/baamttKVob
-         ZRc6MspFSWp7bj5AajBv3WO4rfSM41ZYgUemx8265UTzdC35tDRY+mnO6pg9p5RtVH0z
-         RQfg==
-X-Gm-Message-State: AOAM531v7qwipDU7kiWN5k2hktVHJKTNw/WUj5Wy2hZQPxVBdeTQfVNH
-        GW5ejkJohuWi/WDS7uRIjd4uAQ==
-X-Google-Smtp-Source: ABdhPJzvcR9VDnxHyvgDVLMJYlxMP0Ms95A2JMyXTXyYfG5+umOTG/XVCk6roapJ92EyCnrv/2+ArQ==
-X-Received: by 2002:a63:1957:: with SMTP id 23mr3255166pgz.196.1615781204730;
-        Sun, 14 Mar 2021 21:06:44 -0700 (PDT)
+        bh=9jlkZc4l57z4gYpyUQhwFM4YMqSzrWiY9Ig9xmWZ6CM=;
+        b=L4GxNiOP+sOzJyRF2t6P1c6Jv4crEaR9veXNW4UJAPURqUCGTlzw8ZpX2lsfUVUCr+
+         XyVEUOnc7Dmkyg09tBlkq4rytxP1YjLH9cSpavatIuMmxGrygQ/Ck2ywDpUAx6eFO6AM
+         Bl2aIMwPU5DUcNn7msHy+5Ss7uXjrEcXrsuvqhgDT2tzCY03AAhu6dspAS4/LcC4gZqk
+         ojmusOySX/PvzdIUj1HSS23x0BpSO3dEdpZ9r1jgoR6JzbZY3lGOzA8KzemVB7J2snXm
+         /ExzGgT4I+xX+9wjJmoP1e2FKn9JHafGv+lYX3S3jfLYmJyU2jddQuLF5nzhHISjrOK3
+         e0sQ==
+X-Gm-Message-State: AOAM530mTTivksvPHy60dXJZJw/EI6BLbxyzMwcU0YY/uIBwj49Wg4Vj
+        xS6/AvxYm7fDFdHeURjX0WnHmw==
+X-Google-Smtp-Source: ABdhPJyy7I1OkZgc4AkQUPBPTiQ7mj6++oGWXw9qnwTSeqFRDGqwzlOIcW/m6hQeVd08Xgli2eFfiw==
+X-Received: by 2002:a17:90b:1213:: with SMTP id gl19mr10767093pjb.55.1615783985061;
+        Sun, 14 Mar 2021 21:53:05 -0700 (PDT)
 Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id l20sm12327033pfd.82.2021.03.14.21.06.43
+        by smtp.gmail.com with ESMTPSA id ms21sm9350052pjb.5.2021.03.14.21.53.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 14 Mar 2021 21:06:44 -0700 (PDT)
-Date:   Mon, 15 Mar 2021 09:36:42 +0530
+        Sun, 14 Mar 2021 21:53:04 -0700 (PDT)
+Date:   Mon, 15 Mar 2021 10:23:02 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 00/15] Introduce devm_pm_opp_* API
-Message-ID: <20210315040642.mw6jz7nalhthbwlr@vireshk-i7>
-References: <20210314163408.22292-1-digetx@gmail.com>
+To:     Tom Saeger <tom.saeger@oracle.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Prashanth Prakash <pprakash@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: cppc: simplify default delay_us setting
+Message-ID: <20210315045302.hdmu5ca4f7z3y5ki@vireshk-i7>
+References: <35ac53f3efdfe58337fb66ad899b548dfa3bbc1b.1615603452.git.tom.saeger@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210314163408.22292-1-digetx@gmail.com>
+In-Reply-To: <35ac53f3efdfe58337fb66ad899b548dfa3bbc1b.1615603452.git.tom.saeger@oracle.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14-03-21, 19:33, Dmitry Osipenko wrote:
-> This series adds resource-managed OPP API helpers and makes drivers
-> to use them.
+On 12-03-21, 19:50, Tom Saeger wrote:
+> Simplify case when setting default in cppc_cpufreq_get_transition_delay_us.
 > 
-> Changelog:
+> Signed-off-by: Tom Saeger <tom.saeger@oracle.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 14 ++------------
+>  1 file changed, 2 insertions(+), 12 deletions(-)
 > 
-> v3: - Dropped dev_pm_opp_register_notifier().
-> 
->     - Changed return type of the devm helpers from opp_table pointer
->       to errno.
-> 
->     - Corrected drm/msm patch which missed to remove opp_put_supported_hw()
->       from a6xx_gpu. Note that the a5xx_gpu driver was missing the
->       opp_put_supported_hw() at all.
-> 
->     - Corrected spelling of the ack from Mark Brown.
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 8a482c434ea6..2f769b1630c5 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -216,26 +216,16 @@ static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+>  {
+>  	unsigned long implementor = read_cpuid_implementor();
+>  	unsigned long part_num = read_cpuid_part_number();
+> -	unsigned int delay_us = 0;
+>  
+>  	switch (implementor) {
+>  	case ARM_CPU_IMP_QCOM:
+>  		switch (part_num) {
+>  		case QCOM_CPU_PART_FALKOR_V1:
+>  		case QCOM_CPU_PART_FALKOR:
+> -			delay_us = 10000;
+> -			break;
+> -		default:
+> -			delay_us = cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> -			break;
+> +			return 10000;
+>  		}
+> -		break;
+> -	default:
+> -		delay_us = cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> -		break;
+>  	}
+> -
+> -	return delay_us;
+> +	return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+>  }
 
-Applied all patches except 11/15.
-
-Thanks.
+Applied. Thanks.
 
 -- 
 viresh
