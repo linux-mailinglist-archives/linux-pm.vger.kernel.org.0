@@ -2,189 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071CA33C5A0
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 19:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3811333C5A5
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 19:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbhCOS2K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 14:28:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52342 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229806AbhCOS1r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Mar 2021 14:27:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EEE3F64F42;
-        Mon, 15 Mar 2021 18:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615832866;
-        bh=qoYDstJDuKBPusQErDzsKJ7v8otxcmd+GoIi3yjBdvs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DbkMKoXKBITh8xp1IDTw5UlEpIGgV3TC9Xt3eDaxf9ytfDqJqotl2s7hcr/e9rSwG
-         O/PltwnQVJXFw3mjbY83DCoF1TtLzlc93Ivgk51slyXBzBuKJt7HT/kq8fdkXpCbMy
-         EgVZfCSGdfMvfF5WoUFMSizIOJ6Z3Ew58eH1ywnpXmYdw/5U7/oewvwId5G+4oW0Bq
-         I3avcRVRfRF75g77uZJRpGQnY0q4K0ENr9aLPIC3unksxUnnKZB4gr4Jrqsh6yeTfv
-         A/3MQd1NGXr7ygmsckhrOrZJGiXW8wim+e1OJKj2If3ZhbCNBR7tm9KF0fCwkuQ4Oy
-         j5DvAkYpAw+/w==
-Received: by mail-ej1-f41.google.com with SMTP id dx17so67996214ejb.2;
-        Mon, 15 Mar 2021 11:27:45 -0700 (PDT)
-X-Gm-Message-State: AOAM5310jR4im5n2Da3fx0qeYBy174KtJahtgaOlTNvCVhXwZ8NQ03hn
-        SLoFD/wIfI7jsD2bDXaWTXlCQEnyMaWuRypY+Q==
-X-Google-Smtp-Source: ABdhPJzJml081H6SIYahYqA8uEEgm/OD0od3fSnVnZVgt4FXBjqGqhAOSfDHPUGyU/lLLWSzdhf5vI72e94Y+2JcZVE=
-X-Received: by 2002:a17:906:7806:: with SMTP id u6mr4851146ejm.130.1615832864582;
- Mon, 15 Mar 2021 11:27:44 -0700 (PDT)
+        id S232042AbhCOS2q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 14:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230299AbhCOS2U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 14:28:20 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF98C06174A;
+        Mon, 15 Mar 2021 11:28:19 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id p8so67935877ejb.10;
+        Mon, 15 Mar 2021 11:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sWH8WDgGlaNtTmRGXREl8G3caLX0Z/BKwZJMmT4Npt8=;
+        b=SOyZiIs4cssntaov+S0QFOm1CYOv7efw1R6VQZ/H7W4CGNmuV+4ofIrqKSRoBvjQJv
+         YBcVZdPKGbbXZ/Bd4M2c1JoohRnI8sn4G3rGbR+Z5NIQb9DAnqgaEk7IqYOdkf7V56pg
+         Ld6MARS1dVjgPTFf8VfGwMTvzh2mX2XeUJfhJu6kHspqNv+ocG9NCByRroDhmjhncxdu
+         EVeAE3CWymnBTliV0xLkF12mKTeyCqK5T7NVcyKrNPJ+I8i8Uoe7ohuq8d4RaeusbvzP
+         8t/O4hDb/TxRPdy0lK0aOqZfQmt/R2CxXIwCiAzxirvTRa6K+nGMVwjQjLJsUX5v/ubX
+         ZO9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sWH8WDgGlaNtTmRGXREl8G3caLX0Z/BKwZJMmT4Npt8=;
+        b=GJnRvxfoF0AWY7mJmumY4WYn57xuc9ocDZa3DHNMJtolGYlY92wC7ukh/KZ85ZwOES
+         WFdvfzSi4T0kgGSQGKwRgHfV2xM8Ryy9U5cRLEhydXTh2utiBKk635bb7AgB11LbaeFR
+         TjQBhoUpIjg7uKgggE4CfA0jeYLWPaT7QgD4KADbR+LQ9zRbt9RaSSwKalwgY9nMqgp1
+         lzscJ3caOl3zg6klVvXPRfR5r3jKhogeH/NjSR9V0NXRa9TdLRT0Li3GV4J12d0522OP
+         vUV4dbj6dmOACJOu7ICSuUgvMvCY/RQcZDX2Xhwuej7u7DusSzozlMJZJsL8+XGwWHVX
+         qkuA==
+X-Gm-Message-State: AOAM531IVY0V6ymx/CZD2/BfV1aaTbBI2bmZPkT4QkvyqlcaHL5cbatk
+        WYSjGKaHwb4RIekHBkKlBZfdVYFgUlwVLA==
+X-Google-Smtp-Source: ABdhPJwdiAjGStmqehcnj69o5tip/LQIH5t0xGu6+rOCIsJ/G5rIDbb5JpG8uBOJK79qsFhZ438C2g==
+X-Received: by 2002:a17:906:a8a:: with SMTP id y10mr25969284ejf.288.1615832898235;
+        Mon, 15 Mar 2021 11:28:18 -0700 (PDT)
+Received: from [10.16.0.11] ([37.58.58.229])
+        by smtp.gmail.com with ESMTPSA id o6sm8719202edw.24.2021.03.15.11.28.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Mar 2021 11:28:17 -0700 (PDT)
+Subject: Re: [PATCH v2] PCI: Run platform power transition on initial D0 entry
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210314000439.3138941-1-luzmaximilian@gmail.com>
+ <CAJZ5v0hY=NgKAU+N_kaya=q3Vk6SnkRTfXuiiP0ttoxHq+pRTA@mail.gmail.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+Message-ID: <781f0963-4ce6-74c9-e884-1e57f1ff9673@gmail.com>
+Date:   Mon, 15 Mar 2021 19:28:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210312154357.1561730-1-sebastian.reichel@collabora.com> <20210312154357.1561730-12-sebastian.reichel@collabora.com>
-In-Reply-To: <20210312154357.1561730-12-sebastian.reichel@collabora.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 15 Mar 2021 12:27:33 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+TLt0ousbggKGF5wEdJYLqofxt9a-qDqLCkq0AE_y2Rg@mail.gmail.com>
-Message-ID: <CAL_Jsq+TLt0ousbggKGF5wEdJYLqofxt9a-qDqLCkq0AE_y2Rg@mail.gmail.com>
-Subject: Re: [PATCH 11/38] dt-bindings: power: supply: sbs-manager: Convert to
- DT schema format
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0hY=NgKAU+N_kaya=q3Vk6SnkRTfXuiiP0ttoxHq+pRTA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 8:45 AM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> Convert the binding to DT schema format.
->
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../bindings/power/supply/sbs,sbs-manager.txt |  66 -----------
->  .../power/supply/sbs,sbs-manager.yaml         | 111 ++++++++++++++++++
->  2 files changed, 111 insertions(+), 66 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.txt
->  create mode 100644 Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
->
+On 3/15/21 4:34 PM, Rafael J. Wysocki wrote:
+> On Sun, Mar 14, 2021 at 1:06 AM Maximilian Luz <luzmaximilian@gmail.com> wrote:
+>>
+>> On some devices and platforms, the initial platform (e.g. ACPI) power
+>> state is not in sync with the power state of the PCI device.
+>>
+>> This seems like it is, for all intents and purposes, an issue with the
+>> device firmware (e.g. ACPI). On some devices, specifically Microsoft
+>> Surface Books 2 and 3, we encounter ACPI code akin to the following
+>> power resource, corresponding to a PCI device:
+>>
+>>      PowerResource (PRP5, 0x00, 0x0000)
+>>      {
+>>          // Initialized to zero, i.e. off. There is no logic for checking
+>>          // the actual state dynamically.
+>>          Name (_STA, Zero)
+>>
+>>          Method (_ON, 0, Serialized)
+>>          {
+>>              // ... code omitted ...
+>>              _STA = One
+>>          }
+>>
+>>          Method (_OFF, 0, Serialized)
+>>          {
+>>              // ... code omitted ...
+>>              _STA = Zero
+>>          }
+>>      }
+>>
+>> This resource is initialized to 'off' and does not have any logic for
+>> checking its actual state, i.e. the state of the corresponding PCI
+>> device. The stored state of this resource can only be changed by running
+>> the (platform/ACPI) power transition functions (i.e. _ON and _OFF).
+> 
+> Well, there is _STA that returns "off" initially, so the OS should set
+> the initial state of the device to D3cold and transition it into D0 as
+> appropriate (i.e. starting with setting all of the power resources
+> used by it to "on").
+> 
+>> This means that, at boot, the PCI device power state is out of sync with
+>> the power state of the corresponding ACPI resource.
+>>
+>> During initial bring-up of a PCI device, pci_enable_device_flags()
+>> updates its PCI core state (from initially 'unknown') by reading from
+>> its PCI_PM_CTRL register. It does, however, not check if the platform
+>> (here ACPI) state is in sync with/valid for the actual device state and
+>> needs updating.
+> 
+> Well, that's inconsistent.
+> 
+> Also, it is rather pointless to update the device's power state at
+> this point, because nothing between this point and the later
+> do_pci_enable_device() call in this function requires its
+> current_state to be up to date AFAICS.
+> 
+> Have you tried to drop the power state update from
+> pci_enable_device_flags()?  [Note that we're talking about relatively
+> old code here and it looks like that code is not necessary any more.]
 
+I had not tried this before, as I assumed the comment was still
+relevant. I did test that now and it works! I can't detect any
+regressions.
 
-> diff --git a/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml b/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
-> new file mode 100644
-> index 000000000000..592c476d83e6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
-> @@ -0,0 +1,111 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/sbs,sbs-manager.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SBS compliant manger
-> +
-> +maintainers:
-> +  - Sebastian Reichel <sre@kernel.org>
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - lltc,ltc1760
-> +          - enum:
-> +              - sbs,sbs-manager
-> +      - items:
-> +          - const: sbs,sbs-manager
-> +
-> +  reg:
-> +    const: 0xa
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  gpio-controller: true
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +dependencies:
-> +  '#gpio-cells': [gpio-controller]
-> +  gpio-controller: ['#gpio-cells']
+Do you want to send this in or should I do that?
 
-The core schema should capture these dependencies.
+> Either it should be possible to do that and all should work, or there
+> is a good reason to make current_state reflect the real current power
+> state of the device upfront, but then that should be done by putting
+> it into D0 diractly at that point rather than later.
+> 
+> Calling pci_power_up(dev) instead of pci_set_power_state(dev, PCI_D0)
+> when current_state is already 0 only pokes at the power resources,
+> because pci_raw_set_power_state() will do nothing then, but that is a
+> rather less-than-straightforward way of doing this.  Moreover, the
+> ordering of actions mandated by the spec is to set power resources to
+> "on" first and then write to the PMCSR, not the other way around.
 
-> +
-> +patternProperties:
-> +  "^i2c@[1-4]$":
-> +    type: object
-> +
-> +    allOf:
-> +      - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      batman: battery-manager@a {
-> +        compatible = "lltc,ltc1760", "sbs,sbs-manager";
-> +        reg = <0x0a>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +
-> +        i2c@1 {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +          reg = <1>;
-> +
-> +          battery@b {
-> +            compatible = "ti,bq20z65", "sbs,sbs-battery";
-> +            reg = <0x0b>;
-> +            sbs,battery-detect-gpios = <&batman 1 1>;
-> +          };
-> +        };
-> +
-> +        i2c@2 {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +          reg = <2>;
-> +
-> +          battery@b {
-> +            compatible = "ti,bq20z65", "sbs,sbs-battery";
-> +            reg = <0x0b>;
-> +            sbs,battery-detect-gpios = <&batman 2 1>;
-> +          };
-> +        };
-> +
-> +        i2c@3 {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +          reg = <3>;
-> +
-> +          battery@b {
-> +            compatible = "ti,bq20z65", "sbs,sbs-battery";
-> +            reg = <0x0b>;
-> +            sbs,battery-detect-gpios = <&batman 3 1>;
-> +          };
-> +        };
-> +      };
-> +    };
-> --
-> 2.30.1
->
+I don't know much about the PCI core (let alone spec), so that seemed
+like the least intrusive way to fix this for me.
+
+Thanks!
+Max
