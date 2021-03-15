@@ -2,74 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A78033B35E
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 14:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7380133B487
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 14:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbhCONLl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 09:11:41 -0400
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:46865 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbhCONLQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 09:11:16 -0400
-Received: by mail-wm1-f42.google.com with SMTP id d139-20020a1c1d910000b029010b895cb6f2so19404164wmd.5;
-        Mon, 15 Mar 2021 06:11:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qqfofxJJvL97CyThmJbWDOZDdOswFnLIDcDX1c+Xar8=;
-        b=E/1/21eCom8/UeCCN1H/SGTK20gXPcBEUCxPBTPyMFSRTrZThWkyC7p42spUNjemgB
-         r1UAXcp8+AWUTAyGSlkYqHs2KRbqYV3/XiqdsKO8Hs95z1PcLR0V2peizgPtxANPJn+y
-         Hh4RNvY2af/mHjlwdxp5DDxCEHpV0jMHxrv2uCaFUwUS1aF3TwOjnjrdEEpqr4ThqHhw
-         dujyokP04bPmLMk4wK4sx1zwbDq/pkaqXKKtrdVMgN3tFxEFj5bmAcIMKIc+JlBquxsq
-         stgJzKLa6Sb1DOQAfbJnfB9H9IAqxWWgQ5wU4s8qnY5CNpyMkX2tsW4NXRD7hVxjpih7
-         4Ggw==
-X-Gm-Message-State: AOAM5313gvK3lDXRRbRC+wQqlh1iDZOBV9r1oUMzBNHME6aUa1X08UkH
-        X/HRh0wjbOZTY9xrysVnZdE=
-X-Google-Smtp-Source: ABdhPJxzVnd9JjVflVxEo9H8HI0OmuYLgoqrLAbegOb2TJvYfm+4Lon8/TbZ6L0lTY7qvbw7Q2o8jQ==
-X-Received: by 2002:a1c:1f8f:: with SMTP id f137mr25819030wmf.66.1615813871521;
-        Mon, 15 Mar 2021 06:11:11 -0700 (PDT)
-Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id u23sm12362131wmn.26.2021.03.15.06.11.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Mar 2021 06:11:10 -0700 (PDT)
-Subject: Re: [PATCH] cpufreq:s5pv210:Fix typo issue
-To:     Xiaofeng Cao <cxfcosmos@gmail.com>, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaofeng Cao <caoxiaofeng@yulong.com>
-References: <20210315130855.9715-1-cxfcosmos@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Message-ID: <f8427d5b-24bd-cc54-4649-f2e6e006129c@kernel.org>
-Date:   Mon, 15 Mar 2021 14:11:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S230201AbhCONbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 09:31:00 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:35735 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229979AbhCONau (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 09:30:50 -0400
+X-UUID: fa3829e78c5b45468dbf5b45d72bf0bb-20210315
+X-UUID: fa3829e78c5b45468dbf5b45d72bf0bb-20210315
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1727180530; Mon, 15 Mar 2021 21:30:44 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 15 Mar 2021 21:30:43 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 15 Mar 2021 21:30:43 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v12 0/7] soc: mediatek: SVS: introduce MTK SVS
+Date:   Mon, 15 Mar 2021 21:30:11 +0800
+Message-ID: <20210315133018.4976-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <20210315130855.9715-1-cxfcosmos@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/03/2021 14:08, Xiaofeng Cao wrote:
-> change 'freqency' to 'frequency'
-> change 'accoriding' to 'according'
-> change 'untile' to 'until'
-> change 'souce' to 'source'
-> change 'divier' to 'divider'
-> 
-> Signed-off-by: Xiaofeng Cao <caoxiaofeng@yulong.com>
-> ---
->  drivers/cpufreq/s5pv210-cpufreq.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device(). After retrieving subsys device, SVS driver does
+device_link_add() to make sure probe/suspend callback priority.
+3. SVS dts refers to reset controller [4] to help reset SVS HW.
 
-Thanks, but already fixed here:
-https://lore.kernel.org/linux-arm-kernel/20210313034951.13269-1-unixbhaskar@gmail.com/
+#mt8183 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+[3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
 
-Best regards,
-Krzysztof
+#mt8192 SVS related patches
+[1] https://patchwork.kernel.org/patch/11193513/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
+[3] https://lore.kernel.org/patchwork/patch/1360551/
+[4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
+
+changes since v11:
+- update mtk svs dt-bindings only.
+
+Roger Lu (7):
+  [v12,1/7]: dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v12,2/7]: arm64: dts: mt8183: add svs device information
+  [v12,3/7]: soc: mediatek: SVS: introduce MTK SVS engine
+  [v12,4/7]: soc: mediatek: SVS: add debug commands
+  [v12,5/7]: dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v12,6/7]: arm64: dts: mt8192: add svs device information
+  [v12,7/7]: soc: mediatek: SVS: add mt8192 SVS GPU driver
+
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   89 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   18 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2492 +++++++++++++++++
+ 6 files changed, 2644 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
+
+
