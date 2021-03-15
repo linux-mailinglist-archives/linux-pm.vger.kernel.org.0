@@ -2,118 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C6D33BFEE
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 16:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E29E33C306
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Mar 2021 18:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbhCOPeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Mar 2021 11:34:23 -0400
-Received: from mail-ot1-f52.google.com ([209.85.210.52]:33894 "EHLO
-        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbhCOPeO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 11:34:14 -0400
-Received: by mail-ot1-f52.google.com with SMTP id n23so7213964otq.1;
-        Mon, 15 Mar 2021 08:34:14 -0700 (PDT)
+        id S234469AbhCOQ7T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Mar 2021 12:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234985AbhCOQ7B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Mar 2021 12:59:01 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90112C061764
+        for <linux-pm@vger.kernel.org>; Mon, 15 Mar 2021 09:59:00 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id d3so57913217lfg.10
+        for <linux-pm@vger.kernel.org>; Mon, 15 Mar 2021 09:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=nn1W9Wc+k1CJYE8WxkSJGXK0N+qf/mcCb4Whw81sCBc=;
+        b=bL2/J9ZXSj/seYZ4Yt/7xPJEUbrxkxkdBDA6LnkwlqM4B8UivxD38dABgszhIrmEYr
+         UhGjDGSgsEvVP1XNKN1ENwlFj3aC6J8YcQMN+KSz87MImeLvcmoa2WrxaLN/1gtDYyy6
+         HNMeMWCpVFtTuc4Wdcg2Gf3vHj9I7ijcrPWq/6k90SJj1PTtdIp2NOyhMIA7goX293nj
+         7eJi2vVtathVfMs1VtKqTa32KM6YhAKiR3rZg10ur8mJbHWEL13X0KoDzX9ucfq/oU7l
+         VVHj6HOcFTM90ZYBTtvpAwBuDvm30fUbSxjwYV4w7Fk+y6G8KcUW5H9tabzs2o80RBgI
+         psRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w2PzQp98xEVljnuInqGfZNpkRUMzLCMEZ5M6TM/sg/0=;
-        b=qBerCCiV3UsDsZgvgOxDfEzsfqmXUDUQK3HBe1tQ95dv1tPDCyvnzOSKZ+Sr43glfr
-         a9n2GkVti5+kSPrBeAfpJEzSrU6OYodGVXwtgv0LFGd4mUyOoApmchSdFiXa0sKAkKQh
-         miouKQqZs7+f0mVWScpFvRxN8XuZCAyUVyjptsN7tnvDvdURoVDpCIwi7JMeaI65gWUc
-         T2rp/EVh418R94Ih36RlIzWKKjxewe99PENV9sPu77SgbX62lwsUWkGdgQVyZEeaDFMm
-         y1KmOZTezNPfm0nIaL5Wm1bEFmthJcBlpGukkASc+vtSjNtcQDF8lEbpxwJBWe7stJ62
-         BOcA==
-X-Gm-Message-State: AOAM533o98jipz/LPxH6O72JI2uzvsfiltQYink8xglh6Xu7EntBhXkO
-        cgm5ztmcGGanZjuo0su/U0HQnQy3uN1YNgRLtQ0=
-X-Google-Smtp-Source: ABdhPJyl/cbr7pq28PHZ/0h31pXlvj6SfsiJtApwzlRSUKiFzC/UHOEFF4rEujy7pXbWO9dTlmsXetPUp2PHgNx7OEE=
-X-Received: by 2002:a9d:3422:: with SMTP id v31mr14466855otb.260.1615822453930;
- Mon, 15 Mar 2021 08:34:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=nn1W9Wc+k1CJYE8WxkSJGXK0N+qf/mcCb4Whw81sCBc=;
+        b=WbbbGuhTIqBxmP3g2foeirjo9UOQtXKv+i76/jUuo7V+rdhtoK+7HRC32TeQTZzhCq
+         3q911h0AfeBs5VaRLRpRwsXz1+ReM/x3oOh77Pi5QAYj9NDB4MsMtTqMaEd/z5RWLH1v
+         /fl0IC7NJKlAwO+9MHwI9aOSBVZmyPlN2+WwvJLiRnDKCH+UgtyX7HvFy6b5bqOGuOQm
+         pq7rFOI9rVH5n5IkSIn7d2HNyKJRTmKpj3kobontM65HS2ZepiNaIyrLHSbprbopThCg
+         pwMVKigemAwTuVCmIHhPkFFXvhi7HSoBZrXBzGTodw0AwhVUBiG3LwhBdnWH7dHXrl5Z
+         f/rQ==
+X-Gm-Message-State: AOAM533iT437HZced3lZQTohfulVjlGejFzcZSYIldoRSgOjcIAwaPsa
+        9DNT49eJLg2pzg4TWfZJnNRM6XUF4lNOYXvM4BA=
+X-Google-Smtp-Source: ABdhPJzt1AJjOpfQyJCQnDNMzR0c2P65vmHMOU6UyOjVUogBQWRQM8Dneq7uviGgQb7oNrf1WSYEmJuc6DEymOnu2W8=
+X-Received: by 2002:a05:6512:ce:: with SMTP id c14mr8700564lfp.64.1615827539089;
+ Mon, 15 Mar 2021 09:58:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210314000439.3138941-1-luzmaximilian@gmail.com>
-In-Reply-To: <20210314000439.3138941-1-luzmaximilian@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 15 Mar 2021 16:34:02 +0100
-Message-ID: <CAJZ5v0hY=NgKAU+N_kaya=q3Vk6SnkRTfXuiiP0ttoxHq+pRTA@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: Run platform power transition on initial D0 entry
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:651c:1382:0:0:0:0 with HTTP; Mon, 15 Mar 2021 09:58:58
+ -0700 (PDT)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.Glenn" <mrganuserge@gmail.com>
+Date:   Mon, 15 Mar 2021 09:58:58 -0700
+Message-ID: <CA+Wfa7bCFA+SzD6=YYUq8WDmT1xTGZFP_SSGjVZA7UPJTfDOXg@mail.gmail.com>
+Subject: From Mrs.Glenn
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 14, 2021 at 1:06 AM Maximilian Luz <luzmaximilian@gmail.com> wrote:
->
-> On some devices and platforms, the initial platform (e.g. ACPI) power
-> state is not in sync with the power state of the PCI device.
->
-> This seems like it is, for all intents and purposes, an issue with the
-> device firmware (e.g. ACPI). On some devices, specifically Microsoft
-> Surface Books 2 and 3, we encounter ACPI code akin to the following
-> power resource, corresponding to a PCI device:
->
->     PowerResource (PRP5, 0x00, 0x0000)
->     {
->         // Initialized to zero, i.e. off. There is no logic for checking
->         // the actual state dynamically.
->         Name (_STA, Zero)
->
->         Method (_ON, 0, Serialized)
->         {
->             // ... code omitted ...
->             _STA = One
->         }
->
->         Method (_OFF, 0, Serialized)
->         {
->             // ... code omitted ...
->             _STA = Zero
->         }
->     }
->
-> This resource is initialized to 'off' and does not have any logic for
-> checking its actual state, i.e. the state of the corresponding PCI
-> device. The stored state of this resource can only be changed by running
-> the (platform/ACPI) power transition functions (i.e. _ON and _OFF).
+-- 
+Dear Beloved,
 
-Well, there is _STA that returns "off" initially, so the OS should set
-the initial state of the device to D3cold and transition it into D0 as
-appropriate (i.e. starting with setting all of the power resources
-used by it to "on").
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.My guess about you may not be accurate
+because I came across your contact at the humanitarian calendar event
+of the year but I believe in God who  divinely directed me to you for
+this solemn proposal of charitable work. I wholeheartedly wish to
+bequeath my fortune to you as a God-fearing person for the
+continuation of charitable work anywhere around the world.
 
-> This means that, at boot, the PCI device power state is out of sync with
-> the power state of the corresponding ACPI resource.
->
-> During initial bring-up of a PCI device, pci_enable_device_flags()
-> updates its PCI core state (from initially 'unknown') by reading from
-> its PCI_PM_CTRL register. It does, however, not check if the platform
-> (here ACPI) state is in sync with/valid for the actual device state and
-> needs updating.
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death. As soon as I receive your quick reply assuring me that you
+will utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
 
-Well, that's inconsistent.
+Because I don t know what will be my situation in next minute,
 
-Also, it is rather pointless to update the device's power state at
-this point, because nothing between this point and the later
-do_pci_enable_device() call in this function requires its
-current_state to be up to date AFAICS.
+I am waiting for your reply.
 
-Have you tried to drop the power state update from
-pci_enable_device_flags()?  [Note that we're talking about relatively
-old code here and it looks like that code is not necessary any more.]
-
-Either it should be possible to do that and all should work, or there
-is a good reason to make current_state reflect the real current power
-state of the device upfront, but then that should be done by putting
-it into D0 diractly at that point rather than later.
-
-Calling pci_power_up(dev) instead of pci_set_power_state(dev, PCI_D0)
-when current_state is already 0 only pokes at the power resources,
-because pci_raw_set_power_state() will do nothing then, but that is a
-rather less-than-straightforward way of doing this.  Moreover, the
-ordering of actions mandated by the spec is to set power resources to
-"on" first and then write to the PMCSR, not the other way around.
+Yours sincerely,
+Mrs Elizabet Glenn.
