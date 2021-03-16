@@ -2,63 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A341F33D1F6
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 11:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB5F33D1FA
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 11:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236763AbhCPKmp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 06:42:45 -0400
+        id S236742AbhCPKmr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 06:42:47 -0400
 Received: from esa1.hgst.iphmx.com ([68.232.141.245]:13445 "EHLO
         esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236769AbhCPKmV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 06:42:21 -0400
+        with ESMTP id S236762AbhCPKmY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 06:42:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1615891340; x=1647427340;
+  t=1615891344; x=1647427344;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=yTb4qoGUflJi8m7HSJa5+nLEjyRfrdKGIcYDXHbPmSw=;
-  b=fm994LnllHYvuYiK40/RPo6bgB8heBAwQ0qmkJR5m81i3NihrUeAVSZX
-   +eYuw2kqwbtnvJoQxG4x8QoBBVvLbQLJlRZ5LX7YXnD9f4it8QBFczNzk
-   zHOguK68NIvbuw9Keb3QQLRmzp0zO9gNo+PkjrcgXufy4Vm4Q3X/6YxO3
-   yNSCIMdbZHEWBHFrP1K9yMWRYKS3oh2535bMorTMB5+2ZHYzPDTCEenIq
-   7tFt/4JJkLWqRakeGIx/QUyCuIJ6wu4JRQgBmndha+9jjZIeB7MCltiF5
-   QOdA4Rar8kIT2TPWXHfpGIcuqV1XpCCuNezLbAUm6WnbLxxqFoA+YbdwS
+  bh=ralm8k/63WyazuoS7AFhe+3kISfc1r0wmN3oTjhdH00=;
+  b=BSxjoPApf0O3Fxct8XQcTxh+/Pgi3WJWuBRhnrmVfH1PrNMy06kPptnq
+   ezEa0j6KauSOYXh3J0wRiVIAnX6FfFzOgVp2Dzi3781mhSdqjfuL2sAq2
+   m1nOwZF1wpQOoTUB+mjnCKI+LbVkf6f1aEsLNLk5vAysSpE46tWIH/r/S
+   WnxktZcC/pCegxkKOcveaniSLsBYZFI9S0oDxMQbO6qV1YCZ+xh98T4HE
+   2Z8Viqj5XWjCjKbkkGcHXJP+T6Hij2oq6hXP21CxgHjLIjlydSdf0WgQq
+   jZiTnjdMunTXNXL8JWOFepy5WVWx4kZVbzRLeBM0PBtiwx5tKxaszJx/2
    g==;
-IronPort-SDR: /NFbKST4N0gn6c2KYbF/N2d0nQsN1yGU0tAt9YQ4a188C784xULLgbcTVvoSHSf1jqx0Dx/M9h
- DLwSiCMX/Z5JjVr0WcHYFlE8z/S57wopxJy2ic3XL6GRrLj47v5Ggz9VDCWF4MXqL/XAf5+DJ+
- ZOVgE4pgiNc76ehY8Are06rpwUKf7FfhbdG4iadJX0O6Lw/QwNuqPreYWMRAzL8EjJOzNHQe2c
- MmZGXrKYKZopI1Gi1o4dOU4WuzqDCjYimexl0MaxkZORSV09dwyIILQy6e6j34w8tC4ST2Suv8
- wEA=
+IronPort-SDR: aJtyj2JWiG5p0bPLD61m0hyJ79uNfH4G/67sooyV5pywKLlqzU+tq/tzAF9rSEcjkmoZWP7Tni
+ wYZqtUBKpsE4ZhSkpzlyKSGGgRcnbxGxMMIXOtUjhwaP/HLyvtlLP16p6T4PSUcFedhUzQ73CG
+ xjY5a61c8AM3vMAqhpvOXkjvozS19lhJRKtA5+IZCrZSUnUq3RtQ3bjNvt+zmBfcrjmGrGm+sS
+ k+OM5LXpIUmlZZoijNJDEWsOx+reM4gGljhnf2TDhhKYdkD/C+zpMhhzWPkP+GMoq1trrmS1xe
+ y0s=
 X-IronPort-AV: E=Sophos;i="5.81,251,1610380800"; 
-   d="scan'208";a="272971730"
-Received: from mail-dm6nam12lp2177.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.177])
-  by ob1.hgst.iphmx.com with ESMTP; 16 Mar 2021 18:42:17 +0800
+   d="scan'208";a="272971741"
+Received: from mail-dm6nam12lp2171.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.171])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Mar 2021 18:42:23 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D9Oqf/y82PyQ70ZTxAbkVOmHGGtzzuUxMKwO8RIt0t8wfF3neiwUUCLFzFBh8q0M0nd6DH0gKsapLEdoxKpdVK81nOiWH0ZVxK488E3/X2vmrlxl19jIKJ3pvEp3WyLkZLj3gNFZbCYHhZDDVSGXdBHUtw2bmWgSDvuoLdK+TS+VOlL2fyHZroi0Jw+fdGYl3iYqLVjdKwna1XLH5DlbxI1ByEqgshm4yPZN3GtN+WEx+FXbETjm0i/69d+3U7Mnif/lZ2Ux3gZsjlWprdJtf7poY3ehORAK7V0eoXyNJlGsVt9xAO0X4tQh5RounN6WctpwuiwxcESgOoLSO9qPkw==
+ b=j/Wa8aoxe0bTDuMnNwrf6U8Hrk/hYnhOupwo6aVNPLHfrtDpXmEDDbwvvc6xZ5Xt2YN9xumCb2MmSd+NcxuHg9l/pzarAMSXl5tItvyXeUbzRLA2VNQ3Nl71ux/dkefi/n8xGXD4nJc0hyOuaKTf2JO9SYX498QKos7COUxefRQ090JL67TSg7wxqgg6N/HqUr+kBIqt5wxb+QA6jgkfmsrvbzLli4Gtk4xzkfGbYB4HC0/FNDkIQmwiJvz2xsRhPpH+S24UCuNvDfJ6Tn35GoNc1mM7UYGiYxYqPjK4tJef7RUEe7irJ8wT3sBwO7nGt060Bl8V7t6+Vj4DYMHa5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KvODrHxjR9O17ndKUIDhzXHw4AWnkKpIZcsCTapVmys=;
- b=OAlNNpAW4+L7SMJxqZS1mhlmjMXY4lNhUzyTs5EpnUCVUUcv3q+8AqfBCl+BW7XjtVHdBsIBF+tqGl4muvQx/4xe33HqtF8gMi3f9udNbegpcsJnxTvdIYUc/9hg17ZVuMqOu56RyDAW8LfowYeIDu7eZiCJ/Vz9StK1b/CqMzUCLpAucWhynbJcBgoEb3ChYILLSJ/rkA3uiDRRq13uFPk+BEoBpx3Lymef0vOURjj3Fs0pS5WBMyYbwQBxgLlXNjO7yWBp7w0IuaAEcwTyWqnquzJHj0oJscflLQPFnIxpKspr4nA2/UaTN/XB813wC4h1SbOVxCaNnmemBJiV+w==
+ bh=n0wPjTixz4TiJoGCIyTd0KmxUTeO+KNL6ZCrnJLaXhQ=;
+ b=MfHtJzZhEmwo9B7at7zb5QwOuC377iE7KdjI9QyscgIiGJgkiE/220idb0zBBaMTSD4Se0S3Y5P9OpRjZ17j3qUIUghazDMiQYQxzFgKaUCW4NVqgCkG9K03BUgRQ+dYTTEPIOPDtfmxTIwQpnpGdijO+/K6F/1O/fJU6ORYTVgZcStIj2KdwpIjlfaTkPLG9LafjYyLz39ZIAA790dX+/qmrYgaSX4ZNKYfhA7nNslxY6Fg0B0xo9OHyKcRqAH+WS4DdV3pZXKju5i3Srvbtzkl/yArIfOHapRfJ3IpI+QxWzZpSSDsdDQHdVD8BURAXSO971aBPPlLOpiov3yBRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
  header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KvODrHxjR9O17ndKUIDhzXHw4AWnkKpIZcsCTapVmys=;
- b=nxLHwjiNq4q95N67Gh4t4aGkebfZuV8KDsn0kRjT870EbnNpaNiwXi8jvRAOqpj1jXSogCKqMFbvD/RZzDwHTAiX/C72wvgHIs0F49SiMRVpUvoLa0FujEkGY+CTmJyb0lzFm0w4MlvwZUQRbqRIw+NmSqsJ096SaaWd/521/kk=
+ bh=n0wPjTixz4TiJoGCIyTd0KmxUTeO+KNL6ZCrnJLaXhQ=;
+ b=CXlCzGdsj0boJhttmT6RL2fymLnGQkuVahiX++CYBeW3y9TZAqi7Gblyfl7zqyRCAQP9WzBic8bebjUit+jKuedNW+EFJDjBWzeKfbDBBwkHOnyv17yNMziVGLtwPCtXn3NAJuU6xIL8YGUnWRRIskfeZu56VxCL1okS7hR7ZIM=
 Authentication-Results: dabbelt.com; dkim=none (message not signed)
  header.d=none;dabbelt.com; dmarc=none action=none header.from=wdc.com;
 Received: from DM6PR04MB6201.namprd04.prod.outlook.com (2603:10b6:5:127::32)
  by DM6PR04MB6377.namprd04.prod.outlook.com (2603:10b6:5:1e6::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31; Tue, 16 Mar
- 2021 10:42:16 +0000
+ 2021 10:42:22 +0000
 Received: from DM6PR04MB6201.namprd04.prod.outlook.com
  ([fe80::38c0:cc46:192b:1868]) by DM6PR04MB6201.namprd04.prod.outlook.com
  ([fe80::38c0:cc46:192b:1868%7]) with mapi id 15.20.3933.032; Tue, 16 Mar 2021
- 10:42:16 +0000
+ 10:42:22 +0000
 From:   Anup Patel <anup.patel@wdc.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Palmer Dabbelt <palmerdabbelt@google.com>,
@@ -76,9 +76,9 @@ Cc:     Sandeep Tripathy <milun.tripathy@gmail.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Anup Patel <anup.patel@wdc.com>
-Subject: [RFC PATCH v2 1/8] RISC-V: Enable CPU_IDLE drivers
-Date:   Tue, 16 Mar 2021 16:11:33 +0530
-Message-Id: <20210316104140.878019-2-anup.patel@wdc.com>
+Subject: [RFC PATCH v2 2/8] RISC-V: Rename relocate() and make it global
+Date:   Tue, 16 Mar 2021 16:11:34 +0530
+Message-Id: <20210316104140.878019-3-anup.patel@wdc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210316104140.878019-1-anup.patel@wdc.com>
 References: <20210316104140.878019-1-anup.patel@wdc.com>
@@ -90,212 +90,102 @@ X-ClientProxiedBy: MA1PR01CA0136.INDPRD01.PROD.OUTLOOK.COM
  (2603:10b6:5:127::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from wdc.com (122.167.218.45) by MA1PR01CA0136.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:35::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31 via Frontend Transport; Tue, 16 Mar 2021 10:42:10 +0000
+Received: from wdc.com (122.167.218.45) by MA1PR01CA0136.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:35::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31 via Frontend Transport; Tue, 16 Mar 2021 10:42:16 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: ce5575a4-7d08-4453-26ee-08d8e8682a4d
+X-MS-Office365-Filtering-Correlation-Id: d43ed711-2149-4d60-a00e-08d8e8682dfa
 X-MS-TrafficTypeDiagnostic: DM6PR04MB6377:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR04MB63770BA92E860E0A27E6BDB68D6B9@DM6PR04MB6377.namprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DM6PR04MB6377FC44C782419D8318F7758D6B9@DM6PR04MB6377.namprd04.prod.outlook.com>
 WDCIPOUTBOUND: EOP-TRUE
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4f6HilFrua3AV9312PesQbsIM2jCsSejZRpy95fc/w75/9ix5yEuolLMXK950FsfgFVmiFW6rYKvx3C1u+XVI+L5gmH/56/ygnr2iW6aOkWT1eEyXmXptLHxfzUaPeQLy6r9h0O9l/KWT50ndh9o3FiW+VonKlcOXxqW7w5cXbn5HFph0y8y434LelV1h/eqR9YCtbA53CpfBIiEE1sFHdObgBSmmukcl/bUi5p0jCAwIscPV6C8lKpjYQa7qUnT5OU8so6ICYbUqkvTLOKdKctp89JtqbRWnqvMLq+jUO35s2qSxqNmIorbjFLpj6iklssdRk/a3k6Q2Rt1AN66YXqCrgGxpFQ1LtVjFA2NsQvzWA2sc3ZSBQNF09toJi1H0y7UkC0nVXC4HV8aG3hw3eIMtKmSnLH4u2TXoW1NkJeZ8aFMbGjkozt4Oo+/5HWux/tg3sLstG/pUOEAUSNh8ha5nvpCgEoW3fZuWqEPN24fzSAFOuqi2RpgqzXxKwbe5bof4dk7Y2500a64oI2G9sSGxRjWnEZNigEnIB9gDttCt/qGZ8tm+QgKavtv6YYS
+X-Microsoft-Antispam-Message-Info: JeULs70o4zk9xrup/fBFEW/FVqb/dR0ETV5mInQM08NiiDIMAb/7SauA9LSXPFoszu67rTsRfBBZQ6t9mbCh1eabB6lQ39iLVCAonsndZKcnmR8FaKTF8Zqh7saLUOrfPf0P2SLKesQM2cjvO6IUcIJQ+4BDbcvamSW/0mRSdI1knvCVxpcVFIVjulPdzJKYM1GpxmLVz4swMTBH5JS14Ngb/5Qdk4HiBJ0Z+dzJ0621XDVO2E/M0ixvAIzyIL/HBa+vtjVX0heu3nIYa2n8YyAxECd1VIY7VjSCs8IQlC0P84xhugh/TL1G4uTKLYlA7hoEi9XykgZQCB2yG010IggogVW5xS+1xsB8RkYEEEQ+5tGgj8OZKxvVzNcarPRmY9QOogOijYvepgYBNl0M8WPXFv2CCO/6SEW+4woR0oghonCM2VN8LDMnjvXqkLX6D9b30PhOOuitveDr0bjWLG2t4zLktDADafnaLkS5kp8b61iP+990TpA2itmxSLzf7CtitladtTjxssMyL1VLpVnSbDGIlEU3yZFQMkqYKJ7d7OS6UUIbCo4nbxwgZsbv
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6201.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(36756003)(44832011)(52116002)(86362001)(83380400001)(110136005)(7696005)(8936002)(66946007)(8886007)(55016002)(7416002)(186003)(66556008)(16526019)(66476007)(26005)(956004)(2906002)(2616005)(4326008)(6666004)(5660300002)(498600001)(1076003)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?QrFnsxUkAcHaoBCR/hoZdDQX+1NmaBcRvHqc0RY9d0A/qMQyiCe/9FUOVc3G?=
- =?us-ascii?Q?oLsRZ8eEQolJBlqZt5UPmaIXd2K+0JSRY03BpXx4ofonCsu1nVBfxF8S6rYb?=
- =?us-ascii?Q?KCvxuPDCJ06XP0tIZyfRafRz1p6pSmzN6zUMWr21rO5DKiQgwzS659knbIzF?=
- =?us-ascii?Q?SJev3k8NsopUA81O1x2DR0Ix91sj0TldojuHt/3okFJjiZntMyMUF2q7wKai?=
- =?us-ascii?Q?h7gGVzosIXXBo9YNMygTbj0kVY7DF13JSxM3u8fsEqTYgpUiOmF5cG27tRvW?=
- =?us-ascii?Q?rzjKMVKqZE94AOqVtTPcPF+6PIfrVgVDj4aPZbNU++Mn1aexJiAiHsXhP8Xh?=
- =?us-ascii?Q?XFJvXpRPR2jBAW3KjiP/3oiqKGpKI8u6fItfX4LJ9WUMtRd1aXtf+9DceSMW?=
- =?us-ascii?Q?SIZC5+ttjSarb6vT3vc9bckvN4QTq1mgti3Qd5p5y1MYLvo8zcayg6aR0HeZ?=
- =?us-ascii?Q?bHd5AB+4VTHS4QNCgmHabOdBS6u+jwxsaKh44hVmCLxFSFgglwKMPT95H4F2?=
- =?us-ascii?Q?lVDXhqLcAyaOm4voDxch0RgeKyWGNQQHUvGaBQSsHQqZbhmQxItO10JOxJiF?=
- =?us-ascii?Q?XEmyNZ/UkrkVg+I8IhWRyxViP5r9u1O1OxkJKKUfTd6fTQJ04M/eTDyZlQlY?=
- =?us-ascii?Q?mi0uFngPfzjsgtAbAIOWTl13mu43WQBM3Jrqd4kwx12lf/XGMdflgxpl24Gd?=
- =?us-ascii?Q?JkM/gnLLWIjV3gy4oFc+Xjc+nO/d0Zn5QAK9THT8NmDeClCwQj4l1+gJcnST?=
- =?us-ascii?Q?DdfIbpr5yVukH+FiA8mSIe14K3uO49W5TQd3UDi3bK05rc2nq9Mdqm13szL7?=
- =?us-ascii?Q?7jhU9B1+IF2gCv9S4CbSmg0sctWKJ3f3dH+iieTkhbBukuBrHhoa7stpmFLx?=
- =?us-ascii?Q?x5ew5alGpSJnHSaotLEV8jn4s4mzTPzcSyy5I2EH96cu+mZd8bHUBTJIaI66?=
- =?us-ascii?Q?cVQeqxw/NNmqNYxOyg4ct7Ecb+En2LUu6ek2EeBYZQP4u/tBbfJV3KTqaMC5?=
- =?us-ascii?Q?C0hf2OL2+95JN5OpAfuLjXKqhU+Ay6/I9BNqJjzLXcMFUusCjvuz6kc4odpA?=
- =?us-ascii?Q?FwYuEHiIS16dtS57JR4iFsXYGZRdHlKxO7kbCt1sRFTsWsg0OqvIdf/1u4kM?=
- =?us-ascii?Q?xaGJwKd4mWzjNRCHzCRs1aw7im4y4zYMWQ5m5cDeFOgDd7xtgTz5b8Eeil0u?=
- =?us-ascii?Q?iWXf0II4KaqE5l0KoaGmSqqaKtLbAjTWTQ+JnwIgkP6p+rNzcfrrJFFl1AN4?=
- =?us-ascii?Q?zKSsoJx8DT7reNlIUhpO2m3sUTvjdyFoKAkQ9x3PuzgU8XybVfESn+cTgPJY?=
- =?us-ascii?Q?+ywzqW4Rc2iGazR5OpvjAif0?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?poxuE+jsx0N0iwmSJwl8qbyrmuzEwkx8joonPNWb9Xkmo3/GuCT9puolsyOM?=
+ =?us-ascii?Q?GMDOJH9Ho1qgmySloVGSihs7nQPwIKKHRXgEScLzOdJzw2/utObIfF5nbwRr?=
+ =?us-ascii?Q?HgioD3/l1WpOzUz6aq2dV6UKJoN5M/VfM3CWFqGrRYjkalSazPU/QFKr/ecQ?=
+ =?us-ascii?Q?ZRs7FQ7NwshO3uIqUXOgeBwgCjU7ETr6TDUKhFg7/Xr5XtHewvCww9DyUd7N?=
+ =?us-ascii?Q?gxvR9FPE1wCrrRMbZ7mXb/Zyv/2zgg5KEfzL5ZDtId3g0EZUHcS+wFOsV0bH?=
+ =?us-ascii?Q?dXrUJyIMc1lzv1aQtNuuSAO31HCaX1ID4tTwLzZVkuryV8MD2+5Lx7RhHNE3?=
+ =?us-ascii?Q?vWBnfeZ3FGfSqT41B6y5OA/n5JHhYGHbP2AszykiPtn1cadqg8yDKi4q59PB?=
+ =?us-ascii?Q?meOTSrodJUAe5j5Bd7leRdXUcpqdmYxuO/p/IfMu9H/OqVnObRDKSz+LtF2L?=
+ =?us-ascii?Q?OJmyxaWz/+TOYZY5xyB/j/yFHKKicyghm1ryHUxrAWbP7xUeCVW/e2i/Cj9+?=
+ =?us-ascii?Q?+wOlho+99EBwZIWbIgjc9Z9GkALjPfzbQG4OqH9kxhFLhUBtJMD1LFqyMMAm?=
+ =?us-ascii?Q?kDJfRWdbH7PcsrK12HEqhluQNvgsRFtU01vBd1tYjVnFujbVOocIdbHNgpeH?=
+ =?us-ascii?Q?jGW8r7KNecw15dGBOYw0PEhxDJU4ItZOPXY9lcatwLLjfuTqvivw1qvjyaEv?=
+ =?us-ascii?Q?LE9zPaA2HeSu3z0DVbqrEX/keUtN2gP3zmiHH10eylsJhMztOxBVreJDyF+d?=
+ =?us-ascii?Q?DzJYqFvSRqfOFjFEv3gAN4U323wASvegFzPfYZz8wsY2P9+h+y+YFPILkqpP?=
+ =?us-ascii?Q?W9oHjJwL8mfRl8OEPqcbWGT5DWRBNj+WUvDEOa1Vf+xTWHGAF/+AQKK9O1hq?=
+ =?us-ascii?Q?/n+SKaUoqPxuOHuoDd+kjecCVsrMcELcFOCia3JRJJfevrulbnDQdaDIoTpT?=
+ =?us-ascii?Q?plt8zadMm0KAGjoAKIn6WE8u481Tb3yeZXOTv1klKIAycum448vQHN+Mf+E4?=
+ =?us-ascii?Q?i1jHc3nE0mikwAa1W6cRXgB7BucuJs00n9xgEANfVnbBcF0VXLnkTseRSxKa?=
+ =?us-ascii?Q?3CTd5AMXSyw1L+1ErKvlQW47G1TmSXgOegxehnLYUSgaVZd2X2M6EwH5t/22?=
+ =?us-ascii?Q?73XB6/xkzVvUUQ91IzjsTJTDZNNVykjV5c2pXeQwjcoRB5TOASmHx1PCVshs?=
+ =?us-ascii?Q?Cu7xs545rUJ58aIRXy2OXL8iN8XcxKWVq1/o3iAdXIRU7jIOAUePMDTK1DYU?=
+ =?us-ascii?Q?oqUh1pBtvHOppCV9f+oYSsWZQDJepjWF/8SwymFo9HmtygIbM2ktKQq0Lt0x?=
+ =?us-ascii?Q?yG+QNjrzfIOsAwcSkU+305Ez?=
 X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce5575a4-7d08-4453-26ee-08d8e8682a4d
+X-MS-Exchange-CrossTenant-Network-Message-Id: d43ed711-2149-4d60-a00e-08d8e8682dfa
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6201.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2021 10:42:15.9215
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2021 10:42:22.2005
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b61c8803-16f3-4c35-9b17-6f65f441df86
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +gWcb3aQEFt3EIhbIfGfWuoo2Uw5UI+4SzYGoLtsFNatJ83gMu+c55TUIykL4SGGH5YmKTuho0OiC9nOj6TzCw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: yCMid6aQGvxrewXkPHnRrJL7qfWeDyfDxfafHZMXR4aDHp8FaD6bPbaw5lV88zYdWCdWrtPHPO8hz5BHwnbOWw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB6377
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We force select CPU_PM and provide asm/cpuidle.h so that we can
-use CPU IDLE drivers for Linux RISC-V kernel.
+The low-level relocate() function enables mmu and relocates
+execution to link-time addresses. We rename relocate() function
+to relocate_enable_mmu() function which is more informative.
+
+Also, the relocate_enable_mmu() function will be used in the
+resume path when a CPU wakes-up from a non-retentive suspend
+so we make it global symbol.
 
 Signed-off-by: Anup Patel <anup.patel@wdc.com>
 ---
- arch/riscv/Kconfig                |  7 +++++++
- arch/riscv/configs/defconfig      |  7 +++----
- arch/riscv/configs/rv32_defconfig |  4 ++--
- arch/riscv/include/asm/cpuidle.h  | 24 ++++++++++++++++++++++++
- arch/riscv/kernel/process.c       |  3 ++-
- 5 files changed, 38 insertions(+), 7 deletions(-)
- create mode 100644 arch/riscv/include/asm/cpuidle.h
+ arch/riscv/kernel/head.S | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 468642c4e92f..19c9ae909001 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -37,6 +37,7 @@ config RISCV
- 	select CLONE_BACKWARDS
- 	select CLINT_TIMER if !MMU
- 	select COMMON_CLK
-+	select CPU_PM if CPU_IDLE
- 	select EDAC_SUPPORT
- 	select GENERIC_ARCH_TOPOLOGY if SMP
- 	select GENERIC_ATOMIC64 if !64BIT
-@@ -475,4 +476,10 @@ source "kernel/power/Kconfig"
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index f5a9bad86e58..9d10f89e8ab7 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -67,7 +67,8 @@ pe_head_start:
  
- endmenu
+ .align 2
+ #ifdef CONFIG_MMU
+-relocate:
++	.global relocate_enable_mmu
++relocate_enable_mmu:
+ 	/* Relocate return address */
+ 	li a1, PAGE_OFFSET
+ 	la a2, _start
+@@ -156,7 +157,7 @@ secondary_start_common:
+ #ifdef CONFIG_MMU
+ 	/* Enable virtual memory and relocate to virtual address */
+ 	la a0, swapper_pg_dir
+-	call relocate
++	call relocate_enable_mmu
+ #endif
+ 	call setup_trap_vector
+ 	tail smp_callin
+@@ -268,7 +269,7 @@ clear_bss_done:
+ 	call setup_vm
+ #ifdef CONFIG_MMU
+ 	la a0, early_pg_dir
+-	call relocate
++	call relocate_enable_mmu
+ #endif /* CONFIG_MMU */
  
-+menu "CPU Power Management"
-+
-+source "drivers/cpuidle/Kconfig"
-+
-+endmenu
-+
- source "drivers/firmware/Kconfig"
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 6c0625aa96c7..dc4927c0e44b 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -13,11 +13,13 @@ CONFIG_USER_NS=y
- CONFIG_CHECKPOINT_RESTORE=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
-+# CONFIG_SYSFS_SYSCALL is not set
- CONFIG_BPF_SYSCALL=y
- CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_VIRT=y
- CONFIG_SMP=y
- CONFIG_HOTPLUG_CPU=y
-+CONFIG_CPU_IDLE=y
- CONFIG_JUMP_LABEL=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
-@@ -65,10 +67,9 @@ CONFIG_HW_RANDOM=y
- CONFIG_HW_RANDOM_VIRTIO=y
- CONFIG_SPI=y
- CONFIG_SPI_SIFIVE=y
-+# CONFIG_PTP_1588_CLOCK is not set
- CONFIG_GPIOLIB=y
- CONFIG_GPIO_SIFIVE=y
--# CONFIG_PTP_1588_CLOCK is not set
--CONFIG_POWER_RESET=y
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=y
- CONFIG_DRM_VIRTIO_GPU=y
-@@ -132,5 +133,3 @@ CONFIG_DEBUG_BLOCK_EXT_DEVT=y
- # CONFIG_FTRACE is not set
- # CONFIG_RUNTIME_TESTING_MENU is not set
- CONFIG_MEMTEST=y
--# CONFIG_SYSFS_SYSCALL is not set
--CONFIG_EFI=y
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-index 8dd02b842fef..332e43a4a2c3 100644
---- a/arch/riscv/configs/rv32_defconfig
-+++ b/arch/riscv/configs/rv32_defconfig
-@@ -13,12 +13,14 @@ CONFIG_USER_NS=y
- CONFIG_CHECKPOINT_RESTORE=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
-+# CONFIG_SYSFS_SYSCALL is not set
- CONFIG_BPF_SYSCALL=y
- CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_VIRT=y
- CONFIG_ARCH_RV32I=y
- CONFIG_SMP=y
- CONFIG_HOTPLUG_CPU=y
-+CONFIG_CPU_IDLE=y
- CONFIG_JUMP_LABEL=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
-@@ -67,7 +69,6 @@ CONFIG_HW_RANDOM_VIRTIO=y
- CONFIG_SPI=y
- CONFIG_SPI_SIFIVE=y
- # CONFIG_PTP_1588_CLOCK is not set
--CONFIG_POWER_RESET=y
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=y
- CONFIG_DRM_VIRTIO_GPU=y
-@@ -131,4 +132,3 @@ CONFIG_DEBUG_BLOCK_EXT_DEVT=y
- # CONFIG_FTRACE is not set
- # CONFIG_RUNTIME_TESTING_MENU is not set
- CONFIG_MEMTEST=y
--# CONFIG_SYSFS_SYSCALL is not set
-diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/cpuidle.h
-new file mode 100644
-index 000000000000..71fdc607d4bc
---- /dev/null
-+++ b/arch/riscv/include/asm/cpuidle.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2021 Allwinner Ltd
-+ * Copyright (C) 2021 Western Digital Corporation or its affiliates.
-+ */
-+
-+#ifndef _ASM_RISCV_CPUIDLE_H
-+#define _ASM_RISCV_CPUIDLE_H
-+
-+#include <asm/barrier.h>
-+#include <asm/processor.h>
-+
-+static inline void cpu_do_idle(void)
-+{
-+	/*
-+	 * Add mb() here to ensure that all
-+	 * IO/MEM accesses are completed prior
-+	 * to entering WFI.
-+	 */
-+	mb();
-+	wait_for_interrupt();
-+}
-+
-+#endif
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 6f728e731bed..dd2ef18517f4 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -22,6 +22,7 @@
- #include <asm/string.h>
- #include <asm/switch_to.h>
- #include <asm/thread_info.h>
-+#include <asm/cpuidle.h>
- 
- register unsigned long gp_in_global __asm__("gp");
- 
-@@ -36,7 +37,7 @@ extern asmlinkage void ret_from_kernel_thread(void);
- 
- void arch_cpu_idle(void)
- {
--	wait_for_interrupt();
-+	cpu_do_idle();
- 	raw_local_irq_enable();
- }
- 
+ 	call setup_trap_vector
 -- 
 2.25.1
 
