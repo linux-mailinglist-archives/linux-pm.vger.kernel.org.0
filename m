@@ -2,97 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2698433DB84
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 18:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E3233DE12
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 20:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbhCPRyR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 13:54:17 -0400
-Received: from mail-io1-f50.google.com ([209.85.166.50]:42133 "EHLO
-        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239351AbhCPRyM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 13:54:12 -0400
-Received: by mail-io1-f50.google.com with SMTP id u20so38105868iot.9;
-        Tue, 16 Mar 2021 10:54:12 -0700 (PDT)
+        id S231409AbhCPTsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 15:48:38 -0400
+Received: from mail-il1-f178.google.com ([209.85.166.178]:38136 "EHLO
+        mail-il1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231516AbhCPTs3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 15:48:29 -0400
+Received: by mail-il1-f178.google.com with SMTP id f10so13842395ilq.5;
+        Tue, 16 Mar 2021 12:48:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=Z93rlUj9sdWeq37uZfM03RuUP74yX70Y9MLTGZ1xQjw=;
-        b=e27tK+eOU1ayF0YZhD4iP21I89e/adqzgnYnwUeMh7rJbNJI8WLG9nfLWL6fZhm3sX
-         sCXxlc+tZKt92fmcbKhwOILvGYli2sZDWpN1rfJsTxuFSzPoPfvauqZKUHpv0wEPYJNz
-         xFzoULuBSL9OQIKBPh3zzuBjWaG+1IBDdGmlqX+Km9+3d0WAINSwhpa7Nw5iYRh1D+uu
-         czpMrUhJMy7Bn6DAGFXQwhRZsEWkxDGAULuIXyxXfLdTS5e79LODYQEr5iToT46823mk
-         9jT5hVZA/M8MR4gEoEspvmZGTKcY4Pxd//AcN8nczrN8+dYhcp5ORNlzCr5BdDATP7Ac
-         Gr7g==
-X-Gm-Message-State: AOAM533oUnr9C7vvlMbHmXNhWW//U16F9pDjnTCd3M5Jngj0qgSKJtj5
-        kyKUPmYlDPUlMi5NFN9Zag==
-X-Google-Smtp-Source: ABdhPJx9NqGassAFyEjEetsnxzPc4LiCv5OZO+q67dVfM9IFfAuk7yGqkR/agnODdaVp/QC2A1v/ig==
-X-Received: by 2002:a05:6602:26cb:: with SMTP id g11mr4090124ioo.180.1615917252062;
-        Tue, 16 Mar 2021 10:54:12 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id l16sm9795688ils.11.2021.03.16.10.54.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RdNKGj3FobG6MH1X+dKs4+VSnyyid6fFPtQXmtZq7o4=;
+        b=FwK6JVUO0CXmaLEmwBYx/Vfr7zKgCSvrWXulcsG9FtfTOSMjV9IDF0W0aEEjbHQCYH
+         1XOLbkEh7LTLO+z8jzW9Fjd4q5JUJrquB0Iz9m90ydMR7wtPm0MKA/eKVKmOCWv8gKYw
+         Egg5Mtai88a8jhxCbhkMa+9Bkeej2gTnBSw0gxKiX1uFwHmU31ZQcV/PpvEgsBYOm6FR
+         misFArx9eS2lQ2V33U0rzSW0b4yA9+8qKE1p+dUpe7SmIb8HZmAO8lY6QUjduh70olvu
+         OuuCmR/N6cZ8ZRThVzY/cKP6zgL+G0mnJtAc6bKjaz92JinKLFOu7/Ao7qxOQnu2QI0y
+         Pnfg==
+X-Gm-Message-State: AOAM533jK0xD7lqWMRxzKGlyrpdtZNlgKoWESiaDyTglDNFOAAMHNR4u
+        VBI37/mISv3F5/9O/MWImqtkMguLQg==
+X-Google-Smtp-Source: ABdhPJxr6112TJfnRPR0/Pblh7yamHgST8Dcm9ZPXpcv09y4FtrrYXucVBlNyp/mi8G3zDBhHJPhww==
+X-Received: by 2002:a92:7d0d:: with SMTP id y13mr5263148ilc.269.1615924108645;
+        Tue, 16 Mar 2021 12:48:28 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.253])
+        by smtp.googlemail.com with ESMTPSA id a16sm9928962ild.82.2021.03.16.12.48.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 10:54:11 -0700 (PDT)
-Received: (nullmailer pid 3326118 invoked by uid 1000);
-        Tue, 16 Mar 2021 17:54:09 -0000
+        Tue, 16 Mar 2021 12:48:27 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Nicolas Boichat <drinkcat@google.com>,
-        YT Lee <yt.lee@mediatek.com>, Stephen Boyd <sboyd@kernel.org>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Fan Chen <fan.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Nishanth Menon <nm@ti.com>, linux-pm@vger.kernel.org
-In-Reply-To: <20210315133018.4976-2-roger.lu@mediatek.com>
-References: <20210315133018.4976-1-roger.lu@mediatek.com> <20210315133018.4976-2-roger.lu@mediatek.com>
-Subject: Re: [PATCH v12 1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
-Date:   Tue, 16 Mar 2021 11:54:09 -0600
-Message-Id: <1615917249.208932.3326117.nullmailer@robh.at.kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kevin Tsai <ktsai@capellamicro.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH] dt-bindings: More cleanup of standard unit properties
+Date:   Tue, 16 Mar 2021 13:48:24 -0600
+Message-Id: <20210316194824.3526913-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 15 Mar 2021 21:30:12 +0800, Roger Lu wrote:
-> Document the binding for enabling mtk svs on MediaTek SoC.
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> ---
->  .../bindings/soc/mediatek/mtk-svs.yaml        | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> 
+Properties with standard unit suffixes already have a type and don't need
+type references. Fix a few more cases which have gotten added.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Kevin Tsai <ktsai@capellamicro.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-iio@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml | 1 -
+ Documentation/devicetree/bindings/input/input.yaml              | 1 -
+ Documentation/devicetree/bindings/power/supply/bq256xx.yaml     | 1 -
+ Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml   | 2 --
+ .../devicetree/bindings/regulator/qcom-labibb-regulator.yaml    | 1 -
+ .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml          | 1 -
+ 6 files changed, 7 deletions(-)
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml: properties:nvmem-cells:maxItems: False schema does not allow 2
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml: ignoring, error in schema: properties: nvmem-cells: maxItems
-warning: no schema found in file: ./Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-
-See https://patchwork.ozlabs.org/patch/1453275
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml b/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml
+index 27972938b60d..c63b79c3351b 100644
+--- a/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml
++++ b/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml
+@@ -48,7 +48,6 @@ properties:
+   vdd-supply: true
+ 
+   capella,aset-resistance-ohms:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+     enum: [50000, 100000, 300000, 600000]
+     description: >
+       Sensitivity calibration resistance. Note that calibration curves
+diff --git a/Documentation/devicetree/bindings/input/input.yaml b/Documentation/devicetree/bindings/input/input.yaml
+index ab407f266bef..3fc37478c0c0 100644
+--- a/Documentation/devicetree/bindings/input/input.yaml
++++ b/Documentation/devicetree/bindings/input/input.yaml
+@@ -32,6 +32,5 @@ properties:
+       Duration in seconds which the key should be kept pressed for device to
+       power off automatically. Device with key pressed shutdown feature can
+       specify this property.
+-    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+ additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+index 18b54783e11a..92ec7ed25668 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+@@ -39,7 +39,6 @@ properties:
+     maxItems: 1
+ 
+   ti,watchdog-timeout-ms:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+     default: 0
+     description: |
+       Watchdog timer in ms. 0 (default) disables the watchdog
+diff --git a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+index 1f88c9e013f4..6d7aa97a6475 100644
+--- a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
++++ b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+@@ -29,12 +29,10 @@ properties:
+     description: I2C address of the charger.
+ 
+   lltc,rsnsb-micro-ohms:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+     description: Battery sense resistor in microohm.
+     minimum: 1000
+ 
+   lltc,rsnsi-micro-ohms:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+     description: Input current sense resistor in microohm.
+     minimum: 1000
+ 
+diff --git a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
+index cf784bd1f5e5..1ddc1efd19e2 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
+@@ -23,7 +23,6 @@ properties:
+ 
+     properties:
+       qcom,soft-start-us:
+-        $ref: /schemas/types.yaml#/definitions/uint32
+         description: Regulator soft start time in microseconds.
+         enum: [200, 400, 600, 800]
+         default: 200
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+index 7cd364430573..95a728f4d333 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+@@ -78,7 +78,6 @@ patternProperties:
+           also known as absolute calibration.
+ 
+       qcom,hw-settle-time-us:
+-        $ref: /schemas/types.yaml#/definitions/uint32
+         description: Time between AMUX getting configured and the ADC starting conversion.
+         enum: [15, 100, 200, 300, 400, 500, 600, 700, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000]
+ 
+-- 
+2.27.0
 
