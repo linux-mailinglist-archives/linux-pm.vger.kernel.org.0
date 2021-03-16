@@ -2,118 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F5D33D7EE
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 16:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1051C33D83A
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 16:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234945AbhCPPpu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 11:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbhCPPpX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 11:45:23 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2144CC06174A
-        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 08:45:23 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id t37so12052808pga.11
-        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 08:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=eoMatMbqAVNaPafPDglVHDaItFh9/Kbqlh47hq3luGY=;
-        b=XlTlYO6ojdOEWAvkd/1L5qGo5aMb3XaqkVchr9UwYQGnafdeR/AZtXSFdjEYzTbIex
-         RAT19D1Fk6Jn8vg5wek5sqHtyd/p1NGpROboaN741M5qvvKr9NlIX4e1lr3uHxhPtVqI
-         Tp1Go1e0nWLTkShJgJfSfsIJ7p9ZwQ51EsL3xyXLFIwftekqOLhDdCbByahkLrGVDcc0
-         2r27SRPs/1lDJehUpT4Nbdyx6E5fOM/0UaVvB+Gd+InfWu4nQv1XF3FaZi6Qi89RWo7E
-         apYoAlRshKm8+wnH0AH7WATVAkV/h+zL9Lb0CSCGVFxS5jzHXE5dgSTCxDI3090raDoq
-         j95g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=eoMatMbqAVNaPafPDglVHDaItFh9/Kbqlh47hq3luGY=;
-        b=IHRFsp2D+qndFrYxl2fQv8OUy3OFDZ2MpznGKFPrKYIYETjnVhzvAeUY90SEt2SDfE
-         prs0YwbWtaYHPTX4t+eclWM/U83lhhiZpybrrd6fjuXLe3X1pu+QxYzOmZf+mSzFb3AW
-         R9YX9zZ3cqOO+A3qiGdyF8qt2pZQnaPrjCWNynVg3M/mUcsQdHPk1817tR/tZbgMAX+a
-         T+AGCTFMvq21n6xt1CmW755ZXGn6F8giY9+NYHA/l0jCrVu+uw1xfZJAfm3TesSTcNYP
-         eAdlRG6Qsrfz8S8nyLGDE22wYoweQ6tbuRkx5tC8CK4tr5A6QvQ1dmE5xc2dw42R5XaV
-         +tTA==
-X-Gm-Message-State: AOAM532OYooisbhEmVLyXip2GEG7eZrQ15HZXlDqwtXZrdckaQnZ/DFp
-        uxOGCJddZlKdIcUtKlOfliXVwTrUsfnOKw==
-X-Google-Smtp-Source: ABdhPJziQhymW6q9yP+pkL6vkpoBuNEOjNxGvN7RLFHL403dFrec6s4y+pmeDj/myJM+zCbebyMOtg==
-X-Received: by 2002:a05:6a00:856:b029:208:f11c:231f with SMTP id q22-20020a056a000856b0290208f11c231fmr239826pfk.25.1615909522638;
-        Tue, 16 Mar 2021 08:45:22 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i17sm18700207pfq.135.2021.03.16.08.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 08:45:22 -0700 (PDT)
-Message-ID: <6050d292.1c69fb81.982cf.d1f2@mx.google.com>
-Date:   Tue, 16 Mar 2021 08:45:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S238201AbhCPPwR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 11:52:17 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:51386 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232711AbhCPPvp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 11:51:45 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.3)
+ id c874691c4fc46822; Tue, 16 Mar 2021 16:51:42 +0100
+Received: from kreacher.localnet (89-64-82-37.dynamic.chello.pl [89.64.82.37])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 40065668CF6;
+        Tue, 16 Mar 2021 16:51:41 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: [PATCH] PCI: PM: Do not read power state in pci_enable_device_flags()
+Date:   Tue, 16 Mar 2021 16:51:40 +0100
+Message-ID: <3219454.74lMxhSOWB@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.12-rc3-19-g1a7a93e88ae21
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 66 runs,
- 1 regressions (v5.12-rc3-19-g1a7a93e88ae21)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudefvddgkedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtvdenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeeiueevhfeigffhffevueekgedtleeitdfhffejleevtddvtdettedvfffffffhjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrieegrdekvddrfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdeigedrkedvrdefjedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhiimhgrgihimhhilhhirghnsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhig
+ qdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 66 runs, 1 regressions (v5.12-rc3-19-g1a7a93e88ae21)
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Regressions Summary
--------------------
+It should not be necessary to update the current_state field of
+struct pci_dev in pci_enable_device_flags() before calling
+do_pci_enable_device() for the device, because none of the
+code between that point and the pci_set_power_state() call in
+do_pci_enable_device() invoked later depends on it.
 
-platform   | arch  | lab     | compiler | defconfig | regressions
------------+-------+---------+----------+-----------+------------
-imx8mp-evk | arm64 | lab-nxp | gcc-8    | defconfig | 1          =
+Moreover, doing that is actively harmful in some cases.  For example,
+if the given PCI device depends on an ACPI power resource whose _STA
+method initially returns 0 ("off"), but the config space of the PCI
+device is accessible and the power state retrieved from the
+PCI_PM_CTRL register is D0, the current_state field in the struct
+pci_dev representing that device will get out of sync with the
+power.state of its ACPI companion object and that will lead to
+power management issues going forward.
+
+To avoid such issues it is better to leave the current_state value
+as is until it is changed to PCI_D0 by do_pci_enable_device() as
+appropriate.  However, the power state of the device is not changed
+to PCI_D0 if it is already enabled when pci_enable_device_flags()
+gets called for it, so update its current_state in that case, but
+use pci_update_current_state() covering platform PM too for that.
+
+Link: https://lore.kernel.org/lkml/20210314000439.3138941-1-luzmaximilian@gmail.com/
+Reported-by: Maximilian Luz <luzmaximilian@gmail.com>
+Tested-by: Maximilian Luz <luzmaximilian@gmail.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+Max, I've added a T-by from you even though the patch is slightly different
+from what you have tested, but the difference shouldn't matter for your case.
+
+---
+ drivers/pci/pci.c |   16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
+
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1870,20 +1870,10 @@ static int pci_enable_device_flags(struc
+ 	int err;
+ 	int i, bars = 0;
+ 
+-	/*
+-	 * Power state could be unknown at this point, either due to a fresh
+-	 * boot or a device removal call.  So get the current power state
+-	 * so that things like MSI message writing will behave as expected
+-	 * (e.g. if the device really is in D0 at enable time).
+-	 */
+-	if (dev->pm_cap) {
+-		u16 pmcsr;
+-		pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+-		dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+-	}
+-
+-	if (atomic_inc_return(&dev->enable_cnt) > 1)
++	if (atomic_inc_return(&dev->enable_cnt) > 1) {
++		pci_update_current_state(dev, dev->current_state);
+ 		return 0;		/* already enabled */
++	}
+ 
+ 	bridge = pci_upstream_bridge(dev);
+ 	if (bridge)
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.12-rc=
-3-19-g1a7a93e88ae21/plan/baseline/
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.12-rc3-19-g1a7a93e88ae21
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      1a7a93e88ae21b39d09117d5a0dde26db783ff92 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform   | arch  | lab     | compiler | defconfig | regressions
------------+-------+---------+----------+-----------+------------
-imx8mp-evk | arm64 | lab-nxp | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6050c9da74742e5e11addcbd
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.12-rc3-19-g1a7a9=
-3e88ae21/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.12-rc3-19-g1a7a9=
-3e88ae21/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6050c9da74742e5e11add=
-cbe
-        new failure (last pass: devprop-5.12-rc3-29-g42326a293954f) =
-
- =20
