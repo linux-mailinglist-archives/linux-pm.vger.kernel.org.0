@@ -2,188 +2,372 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DF233DE9A
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 21:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A2333DEAC
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 21:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbhCPUZB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 16:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S229809AbhCPU0h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 16:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbhCPUY0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 16:24:26 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB28C061756
-        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 13:24:25 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id h3so301212qvh.8
-        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 13:24:25 -0700 (PDT)
+        with ESMTP id S229962AbhCPU0H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 16:26:07 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03EFC061762
+        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 13:26:07 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id o11so38706226iob.1
+        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 13:26:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZRTIY2VRWaUelPcwzaEI0tDQLBHGGalGScH52QJUhXk=;
-        b=UqJNZek9soDpdnk00d4/dL9psTBxWTzV+tYeYFNDQYV0BKDytCNQ69MvwYN732RSDJ
-         9z/KIGy53AmOoKPh/ehQ3LYc6fS8xrLN5mdpgoys0n332oG4dSirW0dLZzdy2WTTTcEV
-         ZksLlgxEY/ENzz448sa2tG7moPeAQI1bYgDymRLCqTn29J7rMMO5z2989rzOo1SRnZg3
-         Ip9JszE0RmHZ1V5hAd/teTQVOV0DdYlSFK1DTUgIiqdILWASdrjQ9XhdSCC7/S5HCPT0
-         5/eob51MuxaEANaot2r+fRJntylbb6jEhQdJeGxjBamauXisA9J2QGE+T5GkiWjaGI94
-         1QZQ==
+        d=ieee.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bvkqNr1q78jgqt9ME2KjhcsSH1MGlZ3R4wsxExVXRtc=;
+        b=aQI+a21P3/jQfp2XBCLpKA2XaF4d5h3u1dOHvC7XfJmy4Pv2OZk9eXfxC3Ka9vZNLg
+         EO21aV6GaVbMhwaByQY77Pz3lOGWZjsBh3Dtk919+/lWVtXwxYwuLSv2mdgmQ6lqIupI
+         nBE5rQzNd5O5jMR29ufLhcU7SA4WqArxE/PD8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZRTIY2VRWaUelPcwzaEI0tDQLBHGGalGScH52QJUhXk=;
-        b=riADbMI21WGJ+y3PCJXQIT7MzX6CyQCyAblvTgAy7EqYExaR8K+8inFJ2fnH/nbFoq
-         XIy3YobzWbQ1UtN786FXfA1bGc0t4wbQD2cyQ10ZSGP291Kte9xWPLTSkVwuKb5V2CWs
-         +NGKyOFwZaR89Gii6fk0m9drZkhVa1uaeE++Y0JLTxjKvorrAjA61+or9D6AKMe/u0G5
-         b5czalOkbCAxggNPLCpmLuQ6CixZYEy7MAaMU5I2PF+E4P7KMz2dzA0Av8NIVoDPCOn0
-         wTUeTaGtpopXTU2bxfG0KWPkyqgE1+J1gB3BqXWY1dbX6wJWkw9W0qMesnl6aKMsXhmP
-         w6Yw==
-X-Gm-Message-State: AOAM532LQQIYMRqsTsDRNzsgq55Hv0uHfXu0e3srYbgjp+om3h4tEBsB
-        Wlo3YzgQvLN7bmqCW/IhVsqnVeUUUl3eWP+oo6596Q==
-X-Google-Smtp-Source: ABdhPJzY574Rg7Wz9aGieNKAROsMyGwCIA8qjuCRNbxeNxJMPvzEX83368PfHnm6rqJJhBVCSbQbD7A91+oIns7Ifc4=
-X-Received: by 2002:a05:6214:1bcc:: with SMTP id m12mr1656197qvc.47.1615926264430;
- Tue, 16 Mar 2021 13:24:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210316194824.3526913-1-robh@kernel.org>
-In-Reply-To: <20210316194824.3526913-1-robh@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 16 Mar 2021 23:24:13 +0300
-Message-ID: <CAA8EJpp5R8_aH=mFxaqQMeNBgmBgJG4knjQkRF06Kgq5XXZT1g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: More cleanup of standard unit properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bvkqNr1q78jgqt9ME2KjhcsSH1MGlZ3R4wsxExVXRtc=;
+        b=edntSjS7yV3fx1TfUdNQYTEAIybzosJrTJZVp0UNKXdKMn6nSEkO1+mTahGFaUFKF/
+         W341mdeDnOp5LY/pJfhrIN+TGt/rjS3LnC9K+02HDtuFb8uszs0BkhjrdWmCE70qcBfb
+         x6SpQfETOavUP1/Cv6o4r7NLTVHeLq4yOcB2RTbTzt6be1n6OGBSr3refrwykRvQj4nU
+         jf6AU5vVWb4ikhWMXP32+zEGB7mhQlqYCc+zDYAk5sUiDHWG7Gh4frsP5VxFlGqUisF3
+         nI/nwpq8UQHQiSl0w0fXyZ3GVPH0xTGt3/eG2ULExDsPe6ybVUSS9qThoSIj6z6NVXSN
+         AsIQ==
+X-Gm-Message-State: AOAM530nt4moXsz/5YY4VaOYy0kkE2Iqy/+1Y++U3T7XvnuwbAcTNwpa
+        5ryQkMM7uVq8e3l8DQl4iC2SSQ==
+X-Google-Smtp-Source: ABdhPJzy4mGSz2YUBoXl8UAsu2NnVceuM4ynQkpHc0OrhVOY9bLUogPf0mJ7kYjy/ReSLuG6SxRI0Q==
+X-Received: by 2002:a05:6638:140e:: with SMTP id k14mr376382jad.31.1615926367038;
+        Tue, 16 Mar 2021 13:26:07 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id v4sm9907370ilo.26.2021.03.16.13.26.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Mar 2021 13:26:06 -0700 (PDT)
+Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mark Brown <broonie@kernel.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kevin Tsai <ktsai@capellamicro.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+References: <20210316194858.3527845-1-robh@kernel.org>
+From:   Alex Elder <elder@ieee.org>
+Message-ID: <b7599ef5-899f-5c38-d3e4-8ac8cfe06c56@ieee.org>
+Date:   Tue, 16 Mar 2021 15:26:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 16 Mar 2021 at 22:48, Rob Herring <robh@kernel.org> wrote:
->
-> Properties with standard unit suffixes already have a type and don't need
-> type references. Fix a few more cases which have gotten added.
->
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On 3/16/21 2:48 PM, Rob Herring wrote:
+> Users of common properties shouldn't have a type definition as the
+> common schemas already have one. Drop all the unnecessary type
+> references in the tree.
+> 
+> A meta-schema update to catch these is pending.
+
+For net/qcom,ipa.yaml:
+
+Acked-by: Alex Elder <elder@linaro.org>
+
+> 
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
 > Cc: Zhang Rui <rui.zhang@intel.com>
 > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Kevin Tsai <ktsai@capellamicro.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Stefan Wahren <wahrenst@gmx.net>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Odelu Kukatla <okukatla@codeaurora.org>
+> Cc: Alex Elder <elder@kernel.org>
+> Cc: Suman Anna <s-anna@ti.com>
+> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
 > Cc: linux-pm@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-
-For the qcom-spmi-adc-tm5.yaml:
-Acked-by: Dmity Baryshkov <dmitry.baryshkov@linaro.org>
-
->  Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml | 1 -
->  Documentation/devicetree/bindings/input/input.yaml              | 1 -
->  Documentation/devicetree/bindings/power/supply/bq256xx.yaml     | 1 -
->  Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml   | 2 --
->  .../devicetree/bindings/regulator/qcom-labibb-regulator.yaml    | 1 -
->  .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml          | 1 -
->  6 files changed, 7 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml b/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml
-> index 27972938b60d..c63b79c3351b 100644
-> --- a/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml
-> +++ b/Documentation/devicetree/bindings/iio/light/capella,cm3605.yaml
-> @@ -48,7 +48,6 @@ properties:
->    vdd-supply: true
->
->    capella,aset-resistance-ohms:
+>   .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
+>   Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
+>   .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
+>   .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
+>   .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
+>   .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+>   .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
+>   Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
+>   Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
+>   Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
+>   .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
+>   Documentation/devicetree/bindings/sound/ak4642.yaml          | 2 --
+>   .../devicetree/bindings/sound/google,cros-ec-codec.yaml      | 2 +-
+>   Documentation/devicetree/bindings/sound/renesas,rsnd.yaml    | 1 -
+>   .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml       | 1 -
+>   Documentation/devicetree/bindings/usb/usb.yaml               | 1 -
+>   16 files changed, 5 insertions(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+> index a2c63c8b1d10..c6144c8421fa 100644
+> --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+> +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+> @@ -26,10 +26,7 @@ properties:
+>         - const: simple-mfd
+>   
+>     mboxes:
+> -    $ref: '/schemas/types.yaml#/definitions/phandle'
+> -    description: |
+> -      Phandle to the firmware device's Mailbox.
+> -      (See: ../mailbox/mailbox.txt for more information)
+> +    maxItems: 1
+>   
+>     clocks:
+>       type: object
+> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+> index 26b886b20b27..6be4a8852ee5 100644
+> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+> @@ -256,13 +256,11 @@ properties:
+>         where voltage is in V, frequency is in MHz.
+>   
+>     power-domains:
+> -    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+>       description:
+>         List of phandles and PM domain specifiers, as defined by bindings of the
+>         PM domain provider (see also ../power_domain.txt).
+>   
+>     power-domain-names:
+> -    $ref: '/schemas/types.yaml#/definitions/string-array'
+>       description:
+>         A list of power domain name strings sorted in the same order as the
+>         power-domains property.
+> diff --git a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> index c13faf3e6581..3a7d5d731712 100644
+> --- a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> +++ b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> @@ -73,7 +73,6 @@ properties:
+>     clock-output-names:
+>       description:
+>         Name of the LCD pixel clock created.
+> -    $ref: /schemas/types.yaml#/definitions/string-array
+>       maxItems: 1
+>   
+>     dmas:
+> diff --git a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+> index 1a54db04f29d..bcafa494ed7a 100644
+> --- a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+> @@ -43,8 +43,7 @@ properties:
+>   
+>     gpio-ranges: true
+>   
+> -  gpio-ranges-group-names:
+> -    $ref: /schemas/types.yaml#/definitions/string-array
+> +  gpio-ranges-group-names: true
+>   
+>     socionext,interrupt-ranges:
+>       description: |
+> diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+> index 6f2398cdc82d..1e7894e524f9 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+> @@ -102,7 +102,6 @@ patternProperties:
+>   
+>         st,adc-channel-names:
+>           description: List of single-ended channel names.
+> -        $ref: /schemas/types.yaml#/definitions/string-array
+>   
+>         st,filter-order:
+>           description: |
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index 799e73cdb90b..13da7b29c707 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -82,7 +82,6 @@ properties:
+>         this interconnect to send RPMh commands.
+>   
+>     qcom,bcm-voter-names:
+> -    $ref: /schemas/types.yaml#/definitions/string-array
+>       description: |
+>         Names for each of the qcom,bcm-voters specified.
+>   
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
+> index 49ab09252e52..bc8477e7ab19 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
+> @@ -34,7 +34,7 @@ properties:
+>         - description: EMC general interrupt
+>   
+>     memory-region:
+> -    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+>       description:
+>         phandle to a reserved memory region describing the table of EMC
+>         frequencies trained by the firmware
+> diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> index fe6a949a2eab..55bff1586b6f 100644
+> --- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> @@ -57,7 +57,6 @@ properties:
+>         - const: per
+>   
+>     clock-frequency:
 > -    $ref: /schemas/types.yaml#/definitions/uint32
->      enum: [50000, 100000, 300000, 600000]
->      description: >
->        Sensitivity calibration resistance. Note that calibration curves
-> diff --git a/Documentation/devicetree/bindings/input/input.yaml b/Documentation/devicetree/bindings/input/input.yaml
-> index ab407f266bef..3fc37478c0c0 100644
-> --- a/Documentation/devicetree/bindings/input/input.yaml
-> +++ b/Documentation/devicetree/bindings/input/input.yaml
-> @@ -32,6 +32,5 @@ properties:
->        Duration in seconds which the key should be kept pressed for device to
->        power off automatically. Device with key pressed shutdown feature can
->        specify this property.
+>       description: |
+>         The oscillator frequency driving the flexcan device, filled in by the
+>         boot loader. This property should only be used the used operating system
+> diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+> index 8f86084bf12e..4e8dee4aa90d 100644
+> --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+> +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+> @@ -100,7 +100,6 @@ properties:
+>         - description: Whether the IPA clock is enabled (if valid)
+>   
+>     qcom,smem-state-names:
+> -    $ref: /schemas/types.yaml#/definitions/string-array
+>       description: The names of the state bits used for SMP2P output
+>       items:
+>         - const: ipa-clock-enabled-valid
+> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
+> index d5d7f113bade..828e4a1ece41 100644
+> --- a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
+> @@ -23,12 +23,10 @@ properties:
+>         List of phandle to the nvmem data cells.
+>   
+>     nvmem-names:
+> -    $ref: /schemas/types.yaml#/definitions/string-array
+>       description:
+>         Names for the each nvmem provider.
+>   
+>     nvmem-cell-names:
+> -    $ref: /schemas/types.yaml#/definitions/string-array
+>       description:
+>         Names for each nvmem-cells specified.
+>   
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> index 1a1159097a2a..73400bc6e91d 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> @@ -93,7 +93,7 @@ properties:
+>   # The following are the optional properties:
+>   
+>     memory-region:
+> -    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+>       description: |
+>         phandle to the reserved memory node to be associated
+>         with the remoteproc device. The reserved memory node
+> diff --git a/Documentation/devicetree/bindings/sound/ak4642.yaml b/Documentation/devicetree/bindings/sound/ak4642.yaml
+> index 6cd213be2266..1e2caa29790e 100644
+> --- a/Documentation/devicetree/bindings/sound/ak4642.yaml
+> +++ b/Documentation/devicetree/bindings/sound/ak4642.yaml
+> @@ -29,11 +29,9 @@ properties:
+>   
+>     clock-frequency:
+>       description: common clock binding; frequency of MCKO
 > -    $ref: /schemas/types.yaml#/definitions/uint32
->
->  additionalProperties: true
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> index 18b54783e11a..92ec7ed25668 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> @@ -39,7 +39,6 @@ properties:
->      maxItems: 1
->
->    ti,watchdog-timeout-ms:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->      default: 0
->      description: |
->        Watchdog timer in ms. 0 (default) disables the watchdog
-> diff --git a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> index 1f88c9e013f4..6d7aa97a6475 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
-> @@ -29,12 +29,10 @@ properties:
->      description: I2C address of the charger.
->
->    lltc,rsnsb-micro-ohms:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->      description: Battery sense resistor in microohm.
->      minimum: 1000
->
->    lltc,rsnsi-micro-ohms:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->      description: Input current sense resistor in microohm.
->      minimum: 1000
->
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> index cf784bd1f5e5..1ddc1efd19e2 100644
-> --- a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> @@ -23,7 +23,6 @@ properties:
->
->      properties:
->        qcom,soft-start-us:
-> -        $ref: /schemas/types.yaml#/definitions/uint32
->          description: Regulator soft start time in microseconds.
->          enum: [200, 400, 600, 800]
->          default: 200
+>   
+>     clock-output-names:
+>       description: common clock name
+> -    $ref: /schemas/types.yaml#/definitions/string
+>   
+>   required:
+>     - compatible
+> diff --git a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+> index acfb9db021dc..77adbebed824 100644
+> --- a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+> +++ b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+> @@ -32,7 +32,7 @@ properties:
+>             The last one integer is the length of the shared memory.
+>   
+>     memory-region:
+> -    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    maxItems: 1
+>       description: |
+>         Shared memory region to EC.  A "shared-dma-pool".
+>         See ../reserved-memory/reserved-memory.txt for details.
+> diff --git a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
+> index 2e1046513603..e494a0416748 100644
+> --- a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
+> +++ b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
+> @@ -78,7 +78,6 @@ properties:
+>   
+>     clock-frequency:
+>       description: for audio_clkout0/1/2/3
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+>   
+>     clkout-lr-asynchronous:
+>       description: audio_clkoutn is asynchronizes with lr-clock.
 > diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> index 7cd364430573..95a728f4d333 100644
+> index 95a728f4d333..3ea8c0c1f45f 100644
 > --- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
 > +++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> @@ -78,7 +78,6 @@ patternProperties:
->            also known as absolute calibration.
->
->        qcom,hw-settle-time-us:
+> @@ -59,7 +59,6 @@ patternProperties:
+>   
+>       properties:
+>         reg:
 > -        $ref: /schemas/types.yaml#/definitions/uint32
->          description: Time between AMUX getting configured and the ADC starting conversion.
->          enum: [15, 100, 200, 300, 400, 500, 600, 700, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000]
->
-> --
-> 2.27.0
->
+>           description: Specify the sensor channel. There are 8 channels in PMIC5's ADC TM
+>           minimum: 0
+>           maximum: 7
+> diff --git a/Documentation/devicetree/bindings/usb/usb.yaml b/Documentation/devicetree/bindings/usb/usb.yaml
+> index 78491e66ed24..939f217b8c7b 100644
+> --- a/Documentation/devicetree/bindings/usb/usb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb.yaml
+> @@ -16,7 +16,6 @@ properties:
+>       pattern: "^usb(@.*)?"
+>   
+>     phys:
+> -    $ref: /schemas/types.yaml#/definitions/phandle-array
+>       description:
+>         List of all the USB PHYs on this HCD
+>   
+> 
 
-
--- 
-With best wishes
-Dmitry
