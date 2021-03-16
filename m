@@ -2,77 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A1633DB8C
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 18:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2698433DB84
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 18:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239366AbhCPRyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 13:54:50 -0400
-Received: from mail-il1-f170.google.com ([209.85.166.170]:40269 "EHLO
-        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235659AbhCPRy1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 13:54:27 -0400
-Received: by mail-il1-f170.google.com with SMTP id e7so13504492ile.7;
-        Tue, 16 Mar 2021 10:54:25 -0700 (PDT)
+        id S230252AbhCPRyR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 13:54:17 -0400
+Received: from mail-io1-f50.google.com ([209.85.166.50]:42133 "EHLO
+        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239351AbhCPRyM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 13:54:12 -0400
+Received: by mail-io1-f50.google.com with SMTP id u20so38105868iot.9;
+        Tue, 16 Mar 2021 10:54:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=NkQ5GgQFc/YoK/N0gznOcS3i3bnLKgQpSfAaOAQnpB4=;
-        b=BZ031cnFeprxf0iLfTavP6bX/zzd2cWyDPxosdnWpvwwKV6EjdSTi03UNVWltwx0Zs
-         WpVKkZoO4u8phQWDGdMvIwL6tmLeiJy8hEnRHmp9W2mWjfCx0WV0UuLFBHBXkjGvUb+W
-         a4PVzp1ocOB6XS+ZIMN0N57fvoReDNeme0J+awvgTv25h07m5105rHJxBQVyoI4A2IrK
-         ta1x0d3rfNH1JKYNag5wuPNwFruUkc2fKok2SmSamsgZW7JtJ4OnC6OjJhaRUoZvFAl5
-         dkk/9eGq+yAhunhgBnxBlgVsA+9svyIQPlF3bj7JPLlNn+TZ3IO1Ene47nDnTf/dYAPB
-         tHWA==
-X-Gm-Message-State: AOAM532syBMiHnRDVOpQkw2j91G3ikAoP33pXRayhsAgXNK+WCoolM2z
-        czYUNR7ni2MzWhUrI5rVRA==
-X-Google-Smtp-Source: ABdhPJxS4LuvnNP7YIuCN0rhDra5QwrIwy0id/fLjLEHv7cot0FBcyYEg1H97tD9x5837opgVLDrPw==
-X-Received: by 2002:a05:6e02:1d98:: with SMTP id h24mr5059134ila.88.1615917265039;
-        Tue, 16 Mar 2021 10:54:25 -0700 (PDT)
+        bh=Z93rlUj9sdWeq37uZfM03RuUP74yX70Y9MLTGZ1xQjw=;
+        b=e27tK+eOU1ayF0YZhD4iP21I89e/adqzgnYnwUeMh7rJbNJI8WLG9nfLWL6fZhm3sX
+         sCXxlc+tZKt92fmcbKhwOILvGYli2sZDWpN1rfJsTxuFSzPoPfvauqZKUHpv0wEPYJNz
+         xFzoULuBSL9OQIKBPh3zzuBjWaG+1IBDdGmlqX+Km9+3d0WAINSwhpa7Nw5iYRh1D+uu
+         czpMrUhJMy7Bn6DAGFXQwhRZsEWkxDGAULuIXyxXfLdTS5e79LODYQEr5iToT46823mk
+         9jT5hVZA/M8MR4gEoEspvmZGTKcY4Pxd//AcN8nczrN8+dYhcp5ORNlzCr5BdDATP7Ac
+         Gr7g==
+X-Gm-Message-State: AOAM533oUnr9C7vvlMbHmXNhWW//U16F9pDjnTCd3M5Jngj0qgSKJtj5
+        kyKUPmYlDPUlMi5NFN9Zag==
+X-Google-Smtp-Source: ABdhPJx9NqGassAFyEjEetsnxzPc4LiCv5OZO+q67dVfM9IFfAuk7yGqkR/agnODdaVp/QC2A1v/ig==
+X-Received: by 2002:a05:6602:26cb:: with SMTP id g11mr4090124ioo.180.1615917252062;
+        Tue, 16 Mar 2021 10:54:12 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id k12sm9424772ilo.8.2021.03.16.10.54.22
+        by smtp.gmail.com with ESMTPSA id l16sm9795688ils.11.2021.03.16.10.54.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 10:54:24 -0700 (PDT)
-Received: (nullmailer pid 3326125 invoked by uid 1000);
+        Tue, 16 Mar 2021 10:54:11 -0700 (PDT)
+Received: (nullmailer pid 3326118 invoked by uid 1000);
         Tue, 16 Mar 2021 17:54:09 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     linux-pm@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-riscv@lists.infradead.org,
+To:     Roger Lu <roger.lu@mediatek.com>
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Liush <liush@allwinnertech.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20210316104140.878019-8-anup.patel@wdc.com>
-References: <20210316104140.878019-1-anup.patel@wdc.com> <20210316104140.878019-8-anup.patel@wdc.com>
-Subject: Re: [RFC PATCH v2 7/8] dt-bindings: Add bindings documentation for RISC-V idle states
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Nicolas Boichat <drinkcat@google.com>,
+        YT Lee <yt.lee@mediatek.com>, Stephen Boyd <sboyd@kernel.org>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Fan Chen <fan.chen@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Nishanth Menon <nm@ti.com>, linux-pm@vger.kernel.org
+In-Reply-To: <20210315133018.4976-2-roger.lu@mediatek.com>
+References: <20210315133018.4976-1-roger.lu@mediatek.com> <20210315133018.4976-2-roger.lu@mediatek.com>
+Subject: Re: [PATCH v12 1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
 Date:   Tue, 16 Mar 2021 11:54:09 -0600
-Message-Id: <1615917249.246376.3326124.nullmailer@robh.at.kernel.org>
+Message-Id: <1615917249.208932.3326117.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 16 Mar 2021 16:11:39 +0530, Anup Patel wrote:
-> The RISC-V CPU idle states will be described in DT under the
-> /cpus/idle-states DT node. This patch adds the bindings documentation
-> for riscv-idle-states DT nodes and idle state DT nodes under it.
+On Mon, 15 Mar 2021 21:30:12 +0800, Roger Lu wrote:
+> Document the binding for enabling mtk svs on MediaTek SoC.
 > 
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > ---
->  .../devicetree/bindings/riscv/cpus.yaml       |   6 +
->  .../bindings/riscv/idle-states.yaml           | 256 ++++++++++++++++++
->  2 files changed, 262 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/riscv/idle-states.yaml
+>  .../bindings/soc/mediatek/mtk-svs.yaml        | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
@@ -80,52 +79,11 @@ My bot found errors running 'make dt_binding_check' on your patch:
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-retentive-0-0:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-nonretentive-0-0:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-retentive-0:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-nonretentive-0:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-retentive-1-0:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-nonretentive-1-0:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-retentive-1:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-nonretentive-1:compatible:0: 'arm,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-retention-0-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-retention-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-0-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-retention-1-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-retention-1:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-1-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-1:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: 'entry-method' does not match any of the regexes: '^(cpu|cluster)-', 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-0-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-1-0:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-1:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/psci.example.dt.yaml: idle-states: cpu-power-down:compatible:0: 'riscv,idle-state' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml: properties:nvmem-cells:maxItems: False schema does not allow 2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml: ignoring, error in schema: properties: nvmem-cells: maxItems
+warning: no schema found in file: ./Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
 
-See https://patchwork.ozlabs.org/patch/1453810
+See https://patchwork.ozlabs.org/patch/1453275
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.
