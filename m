@@ -2,86 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C499233DF9A
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 21:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FF533E0F0
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 22:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbhCPUxM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 16:53:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36920 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232364AbhCPUww (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Mar 2021 16:52:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1884A64E76;
-        Tue, 16 Mar 2021 20:52:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615927971;
-        bh=+dogfZ43isbezmZjR8u8oBMqRI6I4K4OVSRSSOGkf2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YsWIEAjJBm0D4M77EqdYv/Leo+bMmaYAGUvI3VajtyYywcW/JFPzh9x57v3mfmwYf
-         YujlNJ+DBnuMusWrdfsN5gE1NlqpjUhmetkDfYik8DMM5yVHfoGGOJmNalRdHKTa6e
-         /0Ld2f5x1W77S1HfwxS33vLAcM4FgvAoeV/fKPZE+hHoZY6KURxMIPw+1a1PXp9y8g
-         eunsT2Tyv4+e/D2OgmBt2QBInqyEYuQpiF83O2YubdBBj+M54t5spPbxr0M0vWZo+5
-         fLJWcoGeXbyDgeobIKGeDLNj0hvA40Mb+Vpm01QLUawGk9fGKZxrebA+3ia2HFX5Jw
-         dkdqEWX2XCtww==
-Date:   Tue, 16 Mar 2021 20:52:49 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S229879AbhCPV6n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 17:58:43 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55640 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229948AbhCPV6j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 17:58:39 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12GLw7iv026455;
+        Tue, 16 Mar 2021 16:58:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1615931887;
+        bh=g14RBVCz+oZ5nDNrh2H5hGoVgfnfSkgeyZtgxiVB1KU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=snth7o2c0zQpX6lz2y5Qp4OPb2aRkDAJxlVWRTWOOtGuzB/br/yfkTp0Nnt3WHO5Y
+         aB5jtiKBglU+WwiSJZDCq+jcR1jm9w9PhR4aA9blYS0KTKb2nAJSvCzkMXqhG8ORTK
+         JLUBMNHY089pbHWEfsGGpIgvpnB3hpd8G9MZ0/eQ=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12GLw7tp012156
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 Mar 2021 16:58:07 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 16
+ Mar 2021 16:58:06 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Tue, 16 Mar 2021 16:58:06 -0500
+Received: from [10.250.64.197] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12GLw5Ym083325;
+        Tue, 16 Mar 2021 16:58:05 -0500
+Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
+To:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mark Brown <broonie@kernel.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Clean-up undocumented compatible strings
-Message-ID: <20210316205249.GG4309@sirena.org.uk>
-References: <20210316194918.3528417-1-robh@kernel.org>
+        Stefan Wahren <wahrenst@gmx.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Alex Elder <elder@kernel.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-usb@vger.kernel.org>
+References: <20210316194858.3527845-1-robh@kernel.org>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <91063147-88a9-4ee7-8f4a-d9d01aa4d33f@ti.com>
+Date:   Tue, 16 Mar 2021 16:58:05 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lQSB8Tqijvu1+4Ba"
-Content-Disposition: inline
-In-Reply-To: <20210316194918.3528417-1-robh@kernel.org>
-X-Cookie: Results vary by individual.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 3/16/21 2:48 PM, Rob Herring wrote:
+> Users of common properties shouldn't have a type definition as the
+> common schemas already have one. Drop all the unnecessary type
+> references in the tree.
+> 
+> A meta-schema update to catch these is pending.
+> 
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Stefan Wahren <wahrenst@gmx.net>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Odelu Kukatla <okukatla@codeaurora.org>
+> Cc: Alex Elder <elder@kernel.org>
+> Cc: Suman Anna <s-anna@ti.com>
+> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
+>  Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
+>  .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
+>  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
+>  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+>  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
+>  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
+>  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
+>  Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
+>  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
 
---lQSB8Tqijvu1+4Ba
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+For OMAP remoteproc,
+Acked-by: Suman Anna <s-anna@ti.com>
 
-On Tue, Mar 16, 2021 at 01:49:18PM -0600, Rob Herring wrote:
-> Adding checks for undocumented compatible strings reveals a bunch of
-> warnings in the DT binding examples. Fix the cases which are typos, just
-> a mismatch between the schema and the example, or aren't documented at all.
-> In a couple of cases, fixing the compatible revealed some schema errors
-> which are fixed.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---lQSB8Tqijvu1+4Ba
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBRGqAACgkQJNaLcl1U
-h9AAYwf/QQEXJESFxZVZKApeC2ypxUDckOjIAXw+3ZZYA3a9Mx/MllGedYIfGyqx
-aONmpU5uRZxnWP50YGV5Y5oYS6er1ey2MwMikahPpMxhLoUfXVdEQgsocEJxquWg
-3L0Yf9+3IZPTx0uH5yeyhiFnlUCjHxhm1CE3h1sKgQJsytcX+pHiew/vRQSfU8xW
-JDEEuG1WfeQgOQ7VU3RthJ118ifcy+QeZaU2oSA6GsrpFdQk/qyVUyIF3FVGCeck
-TAASFFWk7hmMFicdUN2pxZ3aUYewYwlZAsp2DdrfEvf2vIKCPxeVuLP8qSQ4O68+
-/7rhwzcbiO5Nkq6aIxXzcZ19meepFg==
-=bmyZ
------END PGP SIGNATURE-----
-
---lQSB8Tqijvu1+4Ba--
+regards
+Suman
