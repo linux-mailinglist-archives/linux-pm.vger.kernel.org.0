@@ -2,95 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F5733DB7D
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 18:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A1633DB8C
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 18:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbhCPRxN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 13:53:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43198 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239269AbhCPRxA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Mar 2021 13:53:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7EF196512F;
-        Tue, 16 Mar 2021 17:52:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615917179;
-        bh=W8rr8sTbWk/xigthIkTyoScmrkEHXz8tnd8LeK4Aq5U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=L7Qe6r7cy4oo3a7QC4RU5ShnI1IfUIXGMymWJJL18hoP+qr4a8ZlmErgMfOoQWY2q
-         I+YaFe3FcrFsNCFjwfQA/NUkr5Vyl1hjheDf0cH1T2Fy9kleyC9GyZYS/nxm8JT8MX
-         Dbbhr5IoBUtl+Tfft2wdeXYupzQRO6HVWl8qefQFnqIcrOqRmMhpoS2oHxwfPHATek
-         0US5gr2za1lShVj87zBMfiYTUZv5ZGxPrspuMOfmjVGaTWndwj+YsoEHzjQOoosw41
-         glO5ohMoFTmZgAM4+mYn79CnD7j0IJ0tfFSfUx9sXQKBEawxfJaVtDkHz9jGNYUIB8
-         oewgcyTXbsouw==
-Received: by mail-qt1-f181.google.com with SMTP id l13so12304799qtu.9;
-        Tue, 16 Mar 2021 10:52:59 -0700 (PDT)
-X-Gm-Message-State: AOAM533VVjS1w60iIaXJTU5UsKxHo5+jbuRBGIGT5g5+ieE1mLA6CUas
-        QeIdhgq0SbQYY5h3ufpfo9MVArnB9qQksonKsQ==
-X-Google-Smtp-Source: ABdhPJxG0ZFRjKxTysjTNHhJwM08UgCXG6fkHthhoVafsNybBo0emZ8KLn06OpgaliodW8DNOmRhuSOZzuNZ9pzhXaU=
-X-Received: by 2002:ac8:4ccc:: with SMTP id l12mr58779qtv.137.1615917178617;
- Tue, 16 Mar 2021 10:52:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210312154357.1561730-1-sebastian.reichel@collabora.com>
- <20210312154357.1561730-17-sebastian.reichel@collabora.com>
- <CAL_JsqLn9Mo_hTuCEPapNz3cFHbC8NKHH0npYrnV+dC85pBAsQ@mail.gmail.com> <20210316162045.cvvb226rpzxbovdl@earth.universe>
-In-Reply-To: <20210316162045.cvvb226rpzxbovdl@earth.universe>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 16 Mar 2021 11:52:47 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+rynEXFCJDL-Xrar1hSam65qP6ZAiOQUKRtDbu26BYSw@mail.gmail.com>
-Message-ID: <CAL_Jsq+rynEXFCJDL-Xrar1hSam65qP6ZAiOQUKRtDbu26BYSw@mail.gmail.com>
-Subject: Re: [PATCH 16/38] dt-bindings: power: supply: tps65217: Convert to DT
- schema format
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S239366AbhCPRyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 13:54:50 -0400
+Received: from mail-il1-f170.google.com ([209.85.166.170]:40269 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235659AbhCPRy1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 13:54:27 -0400
+Received: by mail-il1-f170.google.com with SMTP id e7so13504492ile.7;
+        Tue, 16 Mar 2021 10:54:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=NkQ5GgQFc/YoK/N0gznOcS3i3bnLKgQpSfAaOAQnpB4=;
+        b=BZ031cnFeprxf0iLfTavP6bX/zzd2cWyDPxosdnWpvwwKV6EjdSTi03UNVWltwx0Zs
+         WpVKkZoO4u8phQWDGdMvIwL6tmLeiJy8hEnRHmp9W2mWjfCx0WV0UuLFBHBXkjGvUb+W
+         a4PVzp1ocOB6XS+ZIMN0N57fvoReDNeme0J+awvgTv25h07m5105rHJxBQVyoI4A2IrK
+         ta1x0d3rfNH1JKYNag5wuPNwFruUkc2fKok2SmSamsgZW7JtJ4OnC6OjJhaRUoZvFAl5
+         dkk/9eGq+yAhunhgBnxBlgVsA+9svyIQPlF3bj7JPLlNn+TZ3IO1Ene47nDnTf/dYAPB
+         tHWA==
+X-Gm-Message-State: AOAM532syBMiHnRDVOpQkw2j91G3ikAoP33pXRayhsAgXNK+WCoolM2z
+        czYUNR7ni2MzWhUrI5rVRA==
+X-Google-Smtp-Source: ABdhPJxS4LuvnNP7YIuCN0rhDra5QwrIwy0id/fLjLEHv7cot0FBcyYEg1H97tD9x5837opgVLDrPw==
+X-Received: by 2002:a05:6e02:1d98:: with SMTP id h24mr5059134ila.88.1615917265039;
+        Tue, 16 Mar 2021 10:54:25 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id k12sm9424772ilo.8.2021.03.16.10.54.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 10:54:24 -0700 (PDT)
+Received: (nullmailer pid 3326125 invoked by uid 1000);
+        Tue, 16 Mar 2021 17:54:09 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     linux-pm@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-riscv@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Liush <liush@allwinnertech.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20210316104140.878019-8-anup.patel@wdc.com>
+References: <20210316104140.878019-1-anup.patel@wdc.com> <20210316104140.878019-8-anup.patel@wdc.com>
+Subject: Re: [RFC PATCH v2 7/8] dt-bindings: Add bindings documentation for RISC-V idle states
+Date:   Tue, 16 Mar 2021 11:54:09 -0600
+Message-Id: <1615917249.246376.3326124.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 10:20 AM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> Hi Rob,
->
-> On Mon, Mar 15, 2021 at 12:33:23PM -0600, Rob Herring wrote:
-> > On Fri, Mar 12, 2021 at 8:44 AM Sebastian Reichel
-> > <sebastian.reichel@collabora.com> wrote:
-> > > +  interrupts:
-> > > +    minItems: 2
-> > > +    maxItems: 2
-> >
-> > We've lost info that was in the original binding. You could do
-> > something like this:
-> >
-> > items:
-> >   - description: USB charger
-> >     const: 0
-> >   - description: AC charger
-> >     const: 1
-> >
-> > (Usually the interrupt values would be out of scope of the binding,
-> > but I guess here it makes some sense.)
->
-> I initially did this, but it did not work. I see the following for
-> dt_binding_check (dtbs_check triggers the same):
->
-> Documentation/devicetree/bindings/power/supply/tps65217-charger.example.dt.yaml: charger: interrupts:0: [0] is too short
->         From schema: Documentation/devicetree/bindings/power/supply/tps65217-charger.yaml
-> Documentation/devicetree/bindings/power/supply/tps65217-charger.example.dt.yaml: charger: interrupts: [[0], [1]] is too long
->         From schema: Documentation/devicetree/bindings/power/supply/tps65217-charger.yaml
-> Documentation/devicetree/bindings/power/supply/tps65217-charger.example.dt.yaml: charger: interrupts: Additional items are not allowed ([1] was unexpected)
->         From schema: Documentation/devicetree/bindings/power/supply/tps65217-charger.yaml
->
-> Seemed to be a limitation in the validation tool, so I just dropped
-> the extra information. If we do not want to loose information I can
-> add it to the description, or should the validation tool be fixed?
-> I suppose it's kind of unusual, that the binding can provide the
-> interrupt line numbers.
+On Tue, 16 Mar 2021 16:11:39 +0530, Anup Patel wrote:
+> The RISC-V CPU idle states will be described in DT under the
+> /cpus/idle-states DT node. This patch adds the bindings documentation
+> for riscv-idle-states DT nodes and idle state DT nodes under it.
+> 
+> Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> ---
+>  .../devicetree/bindings/riscv/cpus.yaml       |   6 +
+>  .../bindings/riscv/idle-states.yaml           | 256 ++++++++++++++++++
+>  2 files changed, 262 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/riscv/idle-states.yaml
+> 
 
-It is, so let's just leave it as-is.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Rob
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-retentive-0-0:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-nonretentive-0-0:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-retentive-0:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-nonretentive-0:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-retentive-1-0:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cpu-nonretentive-1-0:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-retentive-1:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.example.dt.yaml: idle-states: cluster-nonretentive-1:compatible:0: 'arm,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-retention-0-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-retention-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-0-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-retention-1-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-retention-1:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-1-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-1:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: 'entry-method' does not match any of the regexes: '^(cpu|cluster)-', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-0-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cpu-sleep-1-0:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/idle-states.example.dt.yaml: idle-states: cluster-sleep-1:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/psci.example.dt.yaml: idle-states: cpu-power-down:compatible:0: 'riscv,idle-state' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/riscv/idle-states.yaml
+
+See https://patchwork.ozlabs.org/patch/1453810
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
