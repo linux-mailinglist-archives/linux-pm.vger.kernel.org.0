@@ -2,151 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEB433D587
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 15:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CE833D653
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 16:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbhCPOKW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 10:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S233618AbhCPPCb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 11:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236008AbhCPOKI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 10:10:08 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05FFC06174A;
-        Tue, 16 Mar 2021 07:10:07 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id x13so7505349wrs.9;
-        Tue, 16 Mar 2021 07:10:07 -0700 (PDT)
+        with ESMTP id S237686AbhCPPCO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 11:02:14 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DBEC06174A
+        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 08:02:14 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id bt4so10772730pjb.5
+        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 08:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/Ym7C+v+G+nHYA0RKhBciTW1at/iqABpVo+V3RR3W7w=;
-        b=Vyo+juz38tvRQTnW+gpQFSmoqWw9bgG3p09EYc69VfW9scY10FxVrehbA09dQNEYVI
-         dSZ3YA9P2rnbpY82djmntu/4qBvY3ih24Q7SjDZ12PLwjIWxi2a9z2QZCYYi9IbsQ6sP
-         8Qah34E7tU9MotFkJhBiX7KvKxfoLwzqqjQitOxFjPBn3tADFb1r4+2xLSzHMPZBVYZI
-         Bc/enutC7eN1Y4J+BVPV3QdWYAPwQmTf2j9iQjyS9if5YDwoXS7xfHTZKZQuE4g2oOVn
-         6y4FJ98hGBKHx/HxYwpbFOA+3uPaI2LBqYN+JiROsh9SE+JSQkeacBwlKZrF4Pw1OGwF
-         Y73w==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=zJoI5PZsVo1slqsSvIa/KZHBxixmSVN7XKq89Unn3KM=;
+        b=PBtWE65x2Amg4pxbmYoAXAGBpHLtVn28mtQ39Ld2/OhNREbeaCq2KGBGn0HndjcGrV
+         UTqDgzzZJfuK8B9IUMQBtAQft+xjwKiumhTFT0pOzqUX0Gbauke5tJ6yUIKTdDNh8dCY
+         l5BNxmmVYTEvRF8TiR92IlMHoXiSA1CFA+rgrSSckhGDb/nGkuhnhaJhphbQ5AWMn5Z9
+         Cv20L2Uf40xj3w0VzVEkpyG2CFxkPVGijjUUrgYPZ9sZtxink8XCKTdqH+c1L6gNTdZD
+         I13oQ2cGRn4Zro3K7Xr5IHGBK7uZap81KNSZ6iQBCRKcw5NHT9B8x5mV0h8SWnH0QAFS
+         rS7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/Ym7C+v+G+nHYA0RKhBciTW1at/iqABpVo+V3RR3W7w=;
-        b=d6jAc3X/FEOGca4TB526RJY+8maNwf1MmCM8buRDaxKSRjm6sz//Z+g+DmSt6FFxco
-         Xug/EihEu8JGu+CUzyX/4SApdsaV1BJIJvgkeyGj+M3DNf80XHg2z0lYdPIAD0Q/CrAE
-         wZgJyHSkZH0k10ebRHJ+E2zWb1tEgW3mHUSH1ZQjud5M6bmSg58OzhNHl0tRQr9SrXv2
-         8QJkwh3vLCOWgJst7LmFy+TNfnG7+Kfr83gJphSm8Spl8JAPy1O378aNG2mXLaP4aysl
-         kSGkOwbjwyx1A3ntDWpoSVeTKOLejr1cAFZuLNUMr3Ca9wiYXa9Bl6ISkN+Q5Fh2QEJc
-         ef8Q==
-X-Gm-Message-State: AOAM532qONpo5+CKndGSmim01/TxOywcXDG8YfMJLp8ImcPcqokcbsPI
-        JycnO7OFP7Yeouc9no7Zdc2z8s7Ge1U=
-X-Google-Smtp-Source: ABdhPJwJnTh6pU7UtZmhnYooD/dc7Thfe4HSGgzD6CTj7siYIVAY4ZabwQ4+i80UIWrtdgR7FjHKXg==
-X-Received: by 2002:a5d:4445:: with SMTP id x5mr5283025wrr.30.1615903806343;
-        Tue, 16 Mar 2021 07:10:06 -0700 (PDT)
-Received: from [192.168.2.202] (p5487b93a.dip0.t-ipconnect.de. [84.135.185.58])
-        by smtp.gmail.com with ESMTPSA id o11sm22274687wrq.74.2021.03.16.07.10.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 07:10:05 -0700 (PDT)
-Subject: Re: [PATCH v2] PCI: Run platform power transition on initial D0 entry
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210314000439.3138941-1-luzmaximilian@gmail.com>
- <CAJZ5v0hY=NgKAU+N_kaya=q3Vk6SnkRTfXuiiP0ttoxHq+pRTA@mail.gmail.com>
- <781f0963-4ce6-74c9-e884-1e57f1ff9673@gmail.com>
- <CAJZ5v0g+wkyzrD120yiyyBFjVO=LYS3j0WK1Fi-j+LS5fwgqZg@mail.gmail.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-Message-ID: <821c10e8-ef19-4d2e-5ea2-a1964ef58d67@gmail.com>
-Date:   Tue, 16 Mar 2021 15:10:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=zJoI5PZsVo1slqsSvIa/KZHBxixmSVN7XKq89Unn3KM=;
+        b=f2DjmLK2FiQqA/dBo6gyCRebfXk/UHVsB3t2jLfbLrEJddPhqXrjNyNExTi6wLsKTV
+         5nctR9PQX91fB2xynLJ+Akjb1z48/1mqBEDZTF5PfvJQ4rtBOqzzwaxj0Xl+AUhwugAC
+         A+C7St0NlM64dYkqCgQWvhTP0tNVhXpeH2jAy/2+y0cUPWzTxotwrX8RoxP4i0j33Vlo
+         wPzpXHntzOW4CH91W6jG+evsqmySxwLe0rpxMgDKR1mqYaBzRl9VsJJAXLY2P3jpCO/R
+         mFBl03ZTaaz0g6YxmQ5sYWqFndVaph4AhlLmW0is50+rwjVe6ZZBvkKl+0bZnADra8bP
+         1ACw==
+X-Gm-Message-State: AOAM531MkGlOHyi8oIk/q6C0EEItq4UpSXj52bRnSeuNHvKQBmW5kyZq
+        4cyoUu9MCosqp0O04cgb1FVR/A==
+X-Google-Smtp-Source: ABdhPJw9tDOCcJwGN4yyyo9Es3XT3PkMjIQhW8KZ/CXp8FebxsMh959Ih8ZJ4xNV6ciVZ14gPBETew==
+X-Received: by 2002:a17:903:3093:b029:e4:7e03:d618 with SMTP id u19-20020a1709033093b02900e47e03d618mr17034616plc.54.1615906934054;
+        Tue, 16 Mar 2021 08:02:14 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id p11sm3418553pjo.48.2021.03.16.08.02.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 08:02:13 -0700 (PDT)
+Message-ID: <6050c875.1c69fb81.33547.84a7@mx.google.com>
+Date:   Tue, 16 Mar 2021 08:02:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0g+wkyzrD120yiyyBFjVO=LYS3j0WK1Fi-j+LS5fwgqZg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.12-rc3-19-g1a7a93e88ae21
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.12-rc3-19-g1a7a93e88ae21)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/16/21 2:36 PM, Rafael J. Wysocki wrote:
-> On Mon, Mar 15, 2021 at 7:28 PM Maximilian Luz <luzmaximilian@gmail.com> wrote:
->>
->> On 3/15/21 4:34 PM, Rafael J. Wysocki wrote:
->>> On Sun, Mar 14, 2021 at 1:06 AM Maximilian Luz <luzmaximilian@gmail.com> wrote:
->>>>
->>>> On some devices and platforms, the initial platform (e.g. ACPI) power
->>>> state is not in sync with the power state of the PCI device.
->>>>
->>>> This seems like it is, for all intents and purposes, an issue with the
->>>> device firmware (e.g. ACPI). On some devices, specifically Microsoft
->>>> Surface Books 2 and 3, we encounter ACPI code akin to the following
->>>> power resource, corresponding to a PCI device:
->>>>
->>>>       PowerResource (PRP5, 0x00, 0x0000)
->>>>       {
->>>>           // Initialized to zero, i.e. off. There is no logic for checking
->>>>           // the actual state dynamically.
->>>>           Name (_STA, Zero)
->>>>
->>>>           Method (_ON, 0, Serialized)
->>>>           {
->>>>               // ... code omitted ...
->>>>               _STA = One
->>>>           }
->>>>
->>>>           Method (_OFF, 0, Serialized)
->>>>           {
->>>>               // ... code omitted ...
->>>>               _STA = Zero
->>>>           }
->>>>       }
->>>>
->>>> This resource is initialized to 'off' and does not have any logic for
->>>> checking its actual state, i.e. the state of the corresponding PCI
->>>> device. The stored state of this resource can only be changed by running
->>>> the (platform/ACPI) power transition functions (i.e. _ON and _OFF).
->>>
->>> Well, there is _STA that returns "off" initially, so the OS should set
->>> the initial state of the device to D3cold and transition it into D0 as
->>> appropriate (i.e. starting with setting all of the power resources
->>> used by it to "on").
->>>
->>>> This means that, at boot, the PCI device power state is out of sync with
->>>> the power state of the corresponding ACPI resource.
->>>>
->>>> During initial bring-up of a PCI device, pci_enable_device_flags()
->>>> updates its PCI core state (from initially 'unknown') by reading from
->>>> its PCI_PM_CTRL register. It does, however, not check if the platform
->>>> (here ACPI) state is in sync with/valid for the actual device state and
->>>> needs updating.
->>>
->>> Well, that's inconsistent.
->>>
->>> Also, it is rather pointless to update the device's power state at
->>> this point, because nothing between this point and the later
->>> do_pci_enable_device() call in this function requires its
->>> current_state to be up to date AFAICS.
->>>
->>> Have you tried to drop the power state update from
->>> pci_enable_device_flags()?  [Note that we're talking about relatively
->>> old code here and it looks like that code is not necessary any more.]
->>
->> I had not tried this before, as I assumed the comment was still
->> relevant. I did test that now and it works! I can't detect any
->> regressions.
->>
->> Do you want to send this in or should I do that?
-> 
-> I'll post it, thanks!
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.12-rc3-19-g1a=
+7a93e88ae21)
 
-Thank you!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+12-rc3-19-g1a7a93e88ae21/
 
-Feel free to add my tested-by tag.
+Tree: pm
+Branch: testing
+Git Describe: v5.12-rc3-19-g1a7a93e88ae21
+Git Commit: 1a7a93e88ae21b39d09117d5a0dde26db783ff92
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Regards,
-Max
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved sy=
+mbol check will be entirely skipped.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    WARNING: modpost: Symbol info of vmlinux is missing. Unresolved symbol =
+check will be entirely skipped.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
