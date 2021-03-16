@@ -2,136 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 244F833D851
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 16:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA7333D884
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 17:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238178AbhCPPyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 11:54:25 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:46946 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238225AbhCPPyG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 11:54:06 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.3)
- id e5d6e2e5c90b9b90; Tue, 16 Mar 2021 16:54:04 +0100
-Received: from kreacher.localnet (89-64-82-37.dynamic.chello.pl [89.64.82.37])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9861F668CF6;
-        Tue, 16 Mar 2021 16:54:03 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: [PATCH] ACPI: CPPC: Add emtpy stubs of functions for CONFIG_ACPI_CPPC_LIB unset
-Date:   Tue, 16 Mar 2021 16:54:03 +0100
-Message-ID: <538668936.KFQZekuijD@kreacher>
+        id S238341AbhCPQCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 12:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238285AbhCPQBe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 12:01:34 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BC0C061786
+        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 09:00:46 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id lr10-20020a17090b4b8ab02900dd61b95c5eso1583630pjb.4
+        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 09:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Viguq9jrOmtQ50Lb4vbbHXGkQ7HnBO9QTNqnSKFu288=;
+        b=hoWPILHallZp8ku7SkzrX/woilFzYK6c1jq8bto2liaan8dF7oHIP0KEI7AtBSAyoB
+         7Kcv7+deWm87e6bQIPn845Qwik6Y5zDeue8IgJyMNDxx4uJwAlczONBQ5wBVLsnPYCg3
+         0ZXaocM0ofk0u+lqhEVOpnRvPFugG5V5SniTGVv1kzZvi8hCNUwb+hjHm5sofU0YplQy
+         i932MZs5XJib4Bx8Zu9SvYSKEYZbhF5iAqwCTNA+ER+K4ehQ1t/ZuTxnlEHIpizKwMDd
+         bvN7DEVQn7dnj/x79QOXEmMkdHxXgUlLmTyEwlggslEAyndNKBiYPqHz8WXyo63pESKo
+         7fTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Viguq9jrOmtQ50Lb4vbbHXGkQ7HnBO9QTNqnSKFu288=;
+        b=qHP4w5xCVkbRcJ7Yl2YqeH/chTphjX2rZMBkFxKBslqs7NJvpx9QaD+dMfAKsinxcj
+         FrABlcdO9LqU6VKa0EkGOxQvQ5DsBEvwP7jdLVstCmnaWAoS1ppaH+na1rSIeRgxkyuZ
+         HV90VbbL6LppX4xBtHzMZYaF8Bp0DgPEBZn8Du01u7D0u4uof7d2B0kjoXjtf54FkkKA
+         I9gKOF3NAYp/IJpShYq085yL7EXnYHGdqhKhMGCC/l+gkuZj+gT1cQqQhWQQD6XATS+l
+         apKvqbr93jqu4D+70DrpYeeHZIfBUbWxsqSUphWszWqH9octD036mIqOifVhwtwiXP24
+         eD/A==
+X-Gm-Message-State: AOAM530shLctsYTe+7rQmorbx8qFLJZApVMGh/P03HxenQlrIXgtKhxy
+        5euS5DT7SBdBIH+bglzP9OJOfgTpH5uKbA==
+X-Google-Smtp-Source: ABdhPJw037dFkXFgEq5oYeOZl9mQ1Xy6+9DOraNIvaq6v9RfVBS4J9jgZ1tM3GSyaXYURBPleBmaaA==
+X-Received: by 2002:a17:902:7246:b029:e6:78c4:48d8 with SMTP id c6-20020a1709027246b02900e678c448d8mr262397pll.18.1615910446046;
+        Tue, 16 Mar 2021 09:00:46 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 11sm7681265pfn.146.2021.03.16.09.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 09:00:45 -0700 (PDT)
+Message-ID: <6050d62d.1c69fb81.89b86.1443@mx.google.com>
+Date:   Tue, 16 Mar 2021 09:00:45 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudefvddgkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtvdenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeevudefgfeguedtjedvhfetveegleduveeuvedvjeekleefhfduhfefheekffefveenucfkphepkeelrdeigedrkedvrdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdekvddrfeejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopeihuhdrtgdr
- tghhvghnsehinhhtvghlrdgtohhmpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehiohhnvghlrgdrvhhoihhnvghstghusegrrhhmrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.12-rc3-19-g1a7a93e88ae21
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing sleep: 6 runs, 1 regressions (v5.12-rc3-19-g1a7a93e88ae21)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+pm/testing sleep: 6 runs, 1 regressions (v5.12-rc3-19-g1a7a93e88ae21)
 
-For convenience, add empty stubs of library functions defined in
-cppc_acpi.c for the CONFIG_ACPI_CPPC_LIB unset case.
+Regressions Summary
+-------------------
 
-Because one of them needs to return CPUFREQ_ETERNAL, include
-linux/cpufreq.h into the CPPC library header file and drop the
-direct inclusion of it from cppc_acpi.c.
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/cppc_acpi.c |    1 -
- include/acpi/cppc_acpi.h |   40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+), 1 deletion(-)
 
-Index: linux-pm/include/acpi/cppc_acpi.h
-===================================================================
---- linux-pm.orig/include/acpi/cppc_acpi.h
-+++ linux-pm/include/acpi/cppc_acpi.h
-@@ -11,6 +11,7 @@
- #define _CPPC_ACPI_H
- 
- #include <linux/acpi.h>
-+#include <linux/cpufreq.h>
- #include <linux/types.h>
- 
- #include <acpi/pcc.h>
-@@ -132,6 +133,7 @@ struct cppc_cpudata {
- 	cpumask_var_t shared_cpu_map;
- };
- 
-+#ifdef CONFIG_ACPI_CPPC_LIB
- extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
- extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
- extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
-@@ -142,5 +144,43 @@ extern unsigned int cppc_get_transition_
- extern bool cpc_ffh_supported(void);
- extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
- extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
-+#else /* !CONFIG_ACPI_CPPC_LIB */
-+static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
-+{
-+	return -ENOTSUPP;
-+}
-+static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
-+{
-+	return -ENOTSUPP;
-+}
-+static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
-+{
-+	return -ENOTSUPP;
-+}
-+static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
-+{
-+	return -ENOTSUPP;
-+}
-+static inline bool acpi_cpc_valid(void)
-+{
-+	return false;
-+}
-+static inline unsigned int cppc_get_transition_latency(int cpu)
-+{
-+	return CPUFREQ_ETERNAL;
-+}
-+static inline bool cpc_ffh_supported(void)
-+{
-+	return false;
-+}
-+static inline int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val)
-+{
-+	return -ENOTSUPP;
-+}
-+static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
-+{
-+	return -ENOTSUPP;
-+}
-+#endif /* !CONFIG_ACPI_CPPC_LIB */
- 
- #endif /* _CPPC_ACPI_H*/
-Index: linux-pm/drivers/acpi/cppc_acpi.c
-===================================================================
---- linux-pm.orig/drivers/acpi/cppc_acpi.c
-+++ linux-pm/drivers/acpi/cppc_acpi.c
-@@ -33,7 +33,6 @@
- 
- #define pr_fmt(fmt)	"ACPI CPPC: " fmt
- 
--#include <linux/cpufreq.h>
- #include <linux/delay.h>
- #include <linux/iopoll.h>
- #include <linux/ktime.h>
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.12-rc=
+3-19-g1a7a93e88ae21/plan/sleep/
+
+  Test:     sleep
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.12-rc3-19-g1a7a93e88ae21
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      1a7a93e88ae21b39d09117d5a0dde26db783ff92 =
 
 
 
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6050c98b4bf1954e55addd10
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.12-rc3-19-g1a7a9=
+3e88ae21/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.12-rc3-19-g1a7a9=
+3e88ae21/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
+0315.0/arm64/rootfs.cpio.gz =
+
+
+
+  * sleep.login: https://kernelci.org/test/case/id/6050c98b4bf1954e55addd11
+        failing since 208 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
+il: v5.9-rc1-4-g1f08d51cd57f) =
+
+ =20
