@@ -2,372 +2,470 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A2333DEAC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 21:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3758A33DEE4
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 21:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhCPU0h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 16:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbhCPU0H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 16:26:07 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03EFC061762
-        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 13:26:07 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id o11so38706226iob.1
-        for <linux-pm@vger.kernel.org>; Tue, 16 Mar 2021 13:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bvkqNr1q78jgqt9ME2KjhcsSH1MGlZ3R4wsxExVXRtc=;
-        b=aQI+a21P3/jQfp2XBCLpKA2XaF4d5h3u1dOHvC7XfJmy4Pv2OZk9eXfxC3Ka9vZNLg
-         EO21aV6GaVbMhwaByQY77Pz3lOGWZjsBh3Dtk919+/lWVtXwxYwuLSv2mdgmQ6lqIupI
-         nBE5rQzNd5O5jMR29ufLhcU7SA4WqArxE/PD8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bvkqNr1q78jgqt9ME2KjhcsSH1MGlZ3R4wsxExVXRtc=;
-        b=edntSjS7yV3fx1TfUdNQYTEAIybzosJrTJZVp0UNKXdKMn6nSEkO1+mTahGFaUFKF/
-         W341mdeDnOp5LY/pJfhrIN+TGt/rjS3LnC9K+02HDtuFb8uszs0BkhjrdWmCE70qcBfb
-         x6SpQfETOavUP1/Cv6o4r7NLTVHeLq4yOcB2RTbTzt6be1n6OGBSr3refrwykRvQj4nU
-         jf6AU5vVWb4ikhWMXP32+zEGB7mhQlqYCc+zDYAk5sUiDHWG7Gh4frsP5VxFlGqUisF3
-         nI/nwpq8UQHQiSl0w0fXyZ3GVPH0xTGt3/eG2ULExDsPe6ybVUSS9qThoSIj6z6NVXSN
-         AsIQ==
-X-Gm-Message-State: AOAM530nt4moXsz/5YY4VaOYy0kkE2Iqy/+1Y++U3T7XvnuwbAcTNwpa
-        5ryQkMM7uVq8e3l8DQl4iC2SSQ==
-X-Google-Smtp-Source: ABdhPJzy4mGSz2YUBoXl8UAsu2NnVceuM4ynQkpHc0OrhVOY9bLUogPf0mJ7kYjy/ReSLuG6SxRI0Q==
-X-Received: by 2002:a05:6638:140e:: with SMTP id k14mr376382jad.31.1615926367038;
-        Tue, 16 Mar 2021 13:26:07 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id v4sm9907370ilo.26.2021.03.16.13.26.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 13:26:06 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S231322AbhCPUgP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 16:36:15 -0400
+Received: from z11.mailgun.us ([104.130.96.11]:19295 "EHLO z11.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231348AbhCPUft (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Mar 2021 16:35:49 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1615926949; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=N4Hz6uBUkKf8smNohwwvtSXuWNFF6/smD+q/fi6b+7w=; b=DLvCu6MefLGG2vuUtVfsXEuZ+3ooce4klMQvM7YELiecufSGmrhZp/G2Es5uH45hAvqxCz8t
+ Y9AsE/Padl1iKraNbN+df6o3xc457pcySxjIANoBk1lSEp5kH9LD99nRHDwqmVGUXT+WKr0z
+ 6UYGG/L1/n1spzpv7YotYKHP0v0=
+X-Mailgun-Sending-Ip: 104.130.96.11
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 60511695c32ceb3a919faafe (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 16 Mar 2021 20:35:33
+ GMT
+Sender: asutoshd=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id DF09FC43468; Tue, 16 Mar 2021 20:35:33 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.8.168] (cpe-70-95-149-85.san.res.rr.com [70.95.149.85])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: asutoshd)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C0288C433CA;
+        Tue, 16 Mar 2021 20:35:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C0288C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=asutoshd@codeaurora.org
+Subject: Re: [PATCH v10 1/2] scsi: ufs: Enable power management for wlun
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, cang@codeaurora.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mark Brown <broonie@kernel.org>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-References: <20210316194858.3527845-1-robh@kernel.org>
-From:   Alex Elder <elder@ieee.org>
-Message-ID: <b7599ef5-899f-5c38-d3e4-8ac8cfe06c56@ieee.org>
-Date:   Tue, 16 Mar 2021 15:26:04 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Satya Tangirala <satyat@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux-PM mailing list <linux-pm@vger.kernel.org>
+References: <cover.1614725302.git.asutoshd@codeaurora.org>
+ <0576d6eae15486740c25767e2d8805f7e94eb79d.1614725302.git.asutoshd@codeaurora.org>
+ <85086647-7292-b0a2-d842-290818bd2858@intel.com>
+ <6e98724d-2e75-d1fe-188f-a7010f86c509@codeaurora.org>
+ <20210306161616.GC74411@rowland.harvard.edu>
+ <CAJZ5v0ihJe8rNjWRwNic_BQUvKbALNcjx8iiPAh5nxLhOV9duw@mail.gmail.com>
+ <CAJZ5v0iJ4yqRTt=mTCC930HULNFNTgvO4f9ToVO6pNz53kxFkw@mail.gmail.com>
+ <f1e9b21d-1722-d20b-4bae-df7e6ce50bbc@codeaurora.org>
+ <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
+ <b13086f3-eea1-51a7-2117-579d520f21fc@intel.com>
+ <20cbd52d-7254-3e1c-06a3-712326c99f75@codeaurora.org>
+ <c1b38327-fece-4e31-709b-84ec775c6e18@intel.com>
+From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
+Message-ID: <ae871d38-4865-5836-d370-e5f9b7be762c@codeaurora.org>
+Date:   Tue, 16 Mar 2021 13:35:26 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
+In-Reply-To: <c1b38327-fece-4e31-709b-84ec775c6e18@intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/16/21 2:48 PM, Rob Herring wrote:
-> Users of common properties shouldn't have a type definition as the
-> common schemas already have one. Drop all the unnecessary type
-> references in the tree.
-> 
-> A meta-schema update to catch these is pending.
+On 3/16/2021 12:48 AM, Adrian Hunter wrote:
+> On 16/03/21 12:22 am, Asutosh Das (asd) wrote:
+>> On 3/14/2021 1:11 AM, Adrian Hunter wrote:
+>>> On 10/03/21 5:04 am, Asutosh Das (asd) wrote:
+>>>> On 3/9/2021 7:56 AM, Asutosh Das (asd) wrote:
+>>>>> On 3/8/2021 9:17 AM, Rafael J. Wysocki wrote:
+>>>>>> On Mon, Mar 8, 2021 at 5:21 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>>>>>>
+>>>>>>> On Sat, Mar 6, 2021 at 5:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>>>>>>>>
+>>>>>>>> On Fri, Mar 05, 2021 at 06:54:24PM -0800, Asutosh Das (asd) wrote:
+>>>>>>>>
+>>>>>>>>> Now during my testing I see a weird issue sometimes (1 in 7).
+>>>>>>>>> Scenario - bootups
+>>>>>>>>>
+>>>>>>>>> Issue:
+>>>>>>>>> The supplier 'ufs_device_wlun 0:0:0:49488' goes into runtime suspend even
+>>>>>>>>> when one/more of its consumers are in RPM_ACTIVE state.
+>>>>>>>>>
+>>>>>>>>> *Log:
+>>>>>>>>> [   10.056379][  T206] sd 0:0:0:1: [sdb] Synchronizing SCSI cache
+>>>>>>>>> [   10.062497][  T113] sd 0:0:0:5: [sdf] Synchronizing SCSI cache
+>>>>>>>>> [   10.356600][   T32] sd 0:0:0:7: [sdh] Synchronizing SCSI cache
+>>>>>>>>> [   10.362944][  T174] sd 0:0:0:3: [sdd] Synchronizing SCSI cache
+>>>>>>>>> [   10.696627][   T83] sd 0:0:0:2: [sdc] Synchronizing SCSI cache
+>>>>>>>>> [   10.704562][  T170] sd 0:0:0:6: [sdg] Synchronizing SCSI cache
+>>>>>>>>> [   10.980602][    T5] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+>>>>>>>>>
+>>>>>>>>> /** Printing all the consumer nodes of supplier **/
+>>>>>>>>> [   10.987327][    T5] ufs_device_wlun 0:0:0:49488: usage-count @ suspend: 0
+>>>>>>>>> <-- this is the usage_count
+>>>>>>>>> [   10.994440][    T5] ufs_rpmb_wlun 0:0:0:49476: PM state - 2
+>>>>>>>>> [   11.000402][    T5] scsi 0:0:0:49456: PM state - 2
+>>>>>>>>> [   11.005453][    T5] sd 0:0:0:0: PM state - 2
+>>>>>>>>> [   11.009958][    T5] sd 0:0:0:1: PM state - 2
+>>>>>>>>> [   11.014469][    T5] sd 0:0:0:2: PM state - 2
+>>>>>>>>> [   11.019072][    T5] sd 0:0:0:3: PM state - 2
+>>>>>>>>> [   11.023595][    T5] sd 0:0:0:4: PM state - 0 << RPM_ACTIVE
+>>>>>>>>> [   11.353298][    T5] sd 0:0:0:5: PM state - 2
+>>>>>>>>> [   11.357726][    T5] sd 0:0:0:6: PM state - 2
+>>>>>>>>> [   11.362155][    T5] sd 0:0:0:7: PM state - 2
+>>>>>>>>> [   11.366584][    T5] ufshcd-qcom 1d84000.ufshc: __ufshcd_wl_suspend - 8709
+>>>>>>>>> [   11.374366][    T5] ufs_device_wlun 0:0:0:49488: __ufshcd_wl_suspend -
+>>>>>>>>> (0) has rpm_active flags
+>>>>>>>
+>>>>>>> Do you mean that rpm_active of the link between the consumer and the
+>>>>>>> supplier is greater than 0 at this point and the consumer is
+>>>>>>
+>>>>>> I mean is rpm_active of the link greater than 1 (because 1 means "no
+>>>>>> active references to the supplier")?
+>>>>> Hi Rafael:
+>>>>> No - it is not greater than 1.
+>>>>>
+>>>>> I'm trying to understand what's going on in it; will update when I've something.
+>>>>>
+>>>>>>
+>>>>>>> RPM_ACTIVE, but the supplier suspends successfully nevertheless?
+>>>>>>>
+>>>>>>>>> [   11.383376][    T5] ufs_device_wlun 0:0:0:49488:
+>>>>>>>>> ufshcd_wl_runtime_suspend <-- Supplier suspends fine.
+>>>>>>>>> [   12.977318][  T174] sd 0:0:0:4: [sde] Synchronizing SCSI cache
+>>>>>>>>>
+>>>>>>>>> And the the suspend of sde is stuck now:
+>>>>>>>>> schedule+0x9c/0xe0
+>>>>>>>>> schedule_timeout+0x40/0x128
+>>>>>>>>> io_schedule_timeout+0x44/0x68
+>>>>>>>>> wait_for_common_io+0x7c/0x100
+>>>>>>>>> wait_for_completion_io+0x14/0x20
+>>>>>>>>> blk_execute_rq+0x90/0xcc
+>>>>>>>>> __scsi_execute+0x104/0x1c4
+>>>>>>>>> sd_sync_cache+0xf8/0x2a0
+>>>>>>>>> sd_suspend_common+0x74/0x11c
+>>>>>>>>> sd_suspend_runtime+0x14/0x20
+>>>>>>>>> scsi_runtime_suspend+0x64/0x94
+>>>>>>>>> __rpm_callback+0x80/0x2a4
+>>>>>>>>> rpm_suspend+0x308/0x614
+>>>>>>>>> pm_runtime_work+0x98/0xa8
+>>>>>>>>>
+>>>>>>>>> I added 'DL_FLAG_RPM_ACTIVE' while creating links.
+>>>>>>>>>          if (hba->sdev_ufs_device) {
+>>>>>>>>>                  link = device_link_add(&sdev->sdev_gendev,
+>>>>>>>>>                                      &hba->sdev_ufs_device->sdev_gendev,
+>>>>>>>>>                                     DL_FLAG_PM_RUNTIME|DL_FLAG_RPM_ACTIVE);
+>>>>>>>>> I didn't expect this to resolve the issue anyway and it didn't.
+>>>>>>>>>
+>>>>>>>>> Another interesting point here is when I resume any of the above suspended
+>>>>>>>>> consumers, it all goes back to normal, which is kind of expected. I tried
+>>>>>>>>> resuming the consumer and the supplier is resumed and the supplier is
+>>>>>>>>> suspended when all the consumers are suspended.
+>>>>>>>>>
+>>>>>>>>> Any pointers on this issue please?
+>>>>>>>>>
+>>>>>>>>> @Bart/@Alan - Do you've any pointers please?
+>>>>>>>>
+>>>>>>>> It's very noticeable that although you seem to have isolated a bug in
+>>>>>>>> the power management subsystem (supplier goes into runtime suspend
+>>>>>>>> even when one of its consumers is still active), you did not CC the
+>>>>>>>> power management maintainer or mailing list.
+>>>>>>>>
+>>>>>>>> I have added the appropriate CC's.
+>>>>>>>
+>>>>>>> Thanks Alan!
+>>>>>
+>>>>>
+>>>>
+>>>> Hello
+>>>> I & Can (thanks CanG) debugged this further:
+>>>>
+>>>> Looks like this issue can occur if the sd probe is asynchronous.
+>>>>
+>>>> Essentially, the sd_probe() is done asynchronously and driver_probe_device() invokes pm_runtime_get_suppliers() before invoking sd_probe().
+>>>>
+>>>> But scsi_probe_and_add_lun() runs in a separate context.
+>>>> So the scsi_autopm_put_device() invoked from scsi_scan_host() context reduces the link->rpm_active to 1. And sd_probe() invokes scsi_autopm_put_device() and starts a timer. And then driver_probe_device() invoked from __device_attach_async_helper context reduces the link->rpm_active to 1 thus enabling the supplier to suspend before the consumer suspends.
+>>>>
+>>>> So if:
+>>>> Context T1:
+>>>> [1] scsi_probe_and_add_lun()
+>>>> [2]    |- scsi_autopm_put_device() - reduce the link->rpm_active to 1
+>>>>
+>>>> Context T2:
+>>>> __device_attach_async_helper()
+>>>>       |- driver_probe_device()
+>>>>           |- sd_probe()
+>>>> In between [1] and [2] say, driver_probe_device() -> sd_probe() is invoked in a separate context from __device_attach_async_helper().
+>>>> The driver_probe_device() -> pm_runtime_get_suppliers() but [2] would reduce link->rpm_active to 1.
+>>>> Then sd_probe() would invoke rpm_resume() and proceed as is.
+>>>> When sd_probe() invokes scsi_autopm_put_device() it'd start a timer, dev->power.timer_autosuspends = 1.
+>>>>
+>>>> Now then, pm_runtime_put_suppliers() is invoked from driver_probe_device() and that makes the link->rpm_active = 1.
+>>>> But by now, the corresponding 'sd dev' (consumer) usage_count = 0, state = RPM_ACTIVE and link->rpm_active = 1.
+>>>> At this point of time, all other 'sd dev' (consumers) _may_ be suspended or active but would have the link->rpm_active = 1.
+>>>
+>>> Is this with DL_FLAG_RPM_ACTIVE?  In that case, wouldn't active
+>>> consumers have link->rpm_active = 2 and also have incremented
+>>> the supplier's usage_count?
 
-For net/qcom,ipa.yaml:
+Yes this is with DL_FLAG_RPM_ACTIVE.
 
-Acked-by: Alex Elder <elder@linaro.org>
+Please let me share a log here:
+BEF means - Before, AFT means After.
 
+[    6.843445][    T7] scsi 0:0:0:4: [UFSDBG]: ufshcd_setup_links:4779: 
+  supp: usage_cnt: 3 Link - 0:0:0:49488 link-rpm_active: 2 avail_luns: 5
+[    6.892545][    T7] scsi 0:0:0:4: pm_runtime_get_suppliers: 
+(0:0:0:49488): supp: usage_count: 5 rpm_active: 4
+
+In the above log, T7 is the context in which this scsi device is being 
+added - scsi_sysfs_add_sdev()
+
+[    6.931846][    T7] ufs_rpmb_wlun 0:0:0:4: [UFSDBG]: 
+ufshcd_rpmb_probe:9692: invoked
+[    6.941246][    T7] scsi 0:0:0:4: pm_runtime_put_suppliers: rpm_active: 4
+
+[    6.941246][    T7] scsi 0:0:0:4: pm_runtime_put_suppliers: 
+(0:0:0:49488) [BEF] usage_count: 5
+[    6.941247][    T7] scsi 0:0:0:4: pm_runtime_put_suppliers: 
+(0:0:0:49488) [AFT] usage_count: 4 rpm_active: 3
+
+[    6.941267][    T7] scsi 0:0:0:4: rpm_put_suppliers: [BEF] Supp 
+(0:0:0:49488) usage_count: 4 rpm_active: 3
+
+------ T196 Context comes in while T7 is running ----------
+[    6.941466][  T196] scsi 0:0:0:4: pm_runtime_get_suppliers: 
+(0:0:0:49488): supp: usage_count: 5 rpm_active: 4
+--------------------------------------------------------------
+
+[    7.788397][    T7] scsi 0:0:0:4: rpm_put_suppliers: [AFT] Supp 
+(0:0:0:49488) usage_count: 2 rpm_active: 1
+
+-- 
+
+T196 is the context in which sd_probe() is invoked for this scsi device.
+
+[    7.974410][  T196] sd 0:0:0:4: [sde] Attached SCSI disk
+[    7.984188][  T196] sd 0:0:0:4: pm_runtime_put_suppliers: rpm_active: 2
+[    7.998424][  T196] sd 0:0:0:4: pm_runtime_put_suppliers: 
+(0:0:0:49488) [BEF] usage_count: 4
+[    8.017320][  T196] sd 0:0:0:4: pm_runtime_put_suppliers: 
+(0:0:0:49488) [AFT] usage_count: 1 rpm_active: 1
+
+The reference to the link is released after sd_probe() is completed.
+At this point, the rpm_active should be 2. And the rpm_active should 
+become 1 when sd 0:0:0:4 actually suspends. But at the end of sd_probe() 
+the suspend is only scheduled. However the supplier is now free to suspend.
+
+In this log, the usage_count of supplier becomes 0 here:
+[   11.963885][  T117] sd 0:0:0:7: rpm_put_suppliers: [BEF] Supp 
+(0:0:0:49488) usage_count: 1 rpm_active: 2
+[   11.973821][  T117] sd 0:0:0:7: rpm_put_suppliers: [AFT] Supp 
+(0:0:0:49488) usage_count: 0 rpm_active: 1
+
+However, the consumer sd 0:0:0:4 is still active but has released the 
+reference to the supplier:
+[   12.002792][  T117] scsi 0:0:0:49456: rpm_status - 2
+[   12.002806][  T117] sd 0:0:0:0: rpm_status - 2
+[   12.002834][  T117] sd 0:0:0:1: rpm_status - 2
+[   12.017730][  T117] sd 0:0:0:2: rpm_status - 2
+[   12.041317][  T117] sd 0:0:0:3: rpm_status - 2
+[   12.045953][  T117] sd 0:0:0:4: rpm_status - 0
+
+And sd 0:0:0:4 tries to suspend here:
+[   15.465914][  T117] sd 0:0:0:4: [sde] Synchronizing SCSI cache
+
+>>>
+>>> Another outstanding issue that comes to mind, is to ensure
+>>> hba->sdev_ufs_device does not runtime suspend before it is probed.
+>>> I suggest changing ufshcd_slave_configure() so it does not set
+>>> sdev->rpm_autosuspend for hba->sdev_ufs_device, and instead do
+>>> pm_runtime_allow / pm_runtime_forbid() in ufshcd_wl_probe() /
+>>> ufshcd_wl_remove() respectively.
+>>>
+If pm_runtime_allow() is invoked from ufshcd_wl_probe() it'd invoke 
+runtime_suspend on hba->sdev_ufs_device before exiting 
+scsi_sysfs_add_sdev(). So I think pm_runtime_allow() should be invoked 
+in ufshcd_scsi_add_wlus().
+
+>>> However we still want to stop hba->sdev_ufs_device runtime
+>>> suspending while consumers are being added.  With that in mind,
+>>> I would expect pm_runtime_get_noresume(&hba->sdev_ufs_device->sdev_gendev)
+>>> in ufshcd_scsi_add_wlus() to come *before*
+>>> ufshcd_blk_pm_runtime_init(hba->sdev_ufs_device).  In fact, it would
+>>> be more logical to make it, pm_runtime_get_sync() since we require
+>>> hba->sdev_ufs_device to be active at that point.
+>>>
+Correct, scsi_autopm_get_device(hba->sdev_ufs_device) should be invoked 
+before ufshcd_blk_pm_runtime_init(hba->sdev_ufs_device).
+Now a corresponding scsi_autopm_put_device(hba->sdev_ufs_device) is 
+invoked after the consumers are added in ufshcd_setup_links().
+Even then I think this issue would still pop up.
+
+>>>
+>>
+>> Hi Adrian,
+>> I think the v11 that I pushed can handle this.
+>> runtime-suspend is forbidden at probe and is re-enabled after probe is done. Please take a look and let me know if I'm missing something.
 > 
-> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Stefan Wahren <wahrenst@gmx.net>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Odelu Kukatla <okukatla@codeaurora.org>
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: Suman Anna <s-anna@ti.com>
-> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
->   Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
->   .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
->   .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
->   .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
->   .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->   .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
->   Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
->   Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->   Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
->   .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
->   Documentation/devicetree/bindings/sound/ak4642.yaml          | 2 --
->   .../devicetree/bindings/sound/google,cros-ec-codec.yaml      | 2 +-
->   Documentation/devicetree/bindings/sound/renesas,rsnd.yaml    | 1 -
->   .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml       | 1 -
->   Documentation/devicetree/bindings/usb/usb.yaml               | 1 -
->   16 files changed, 5 insertions(+), 23 deletions(-)
+> If the PM APIs are being used correctly, the usage and active
+> counts should never be wrong.  If they were, then that would
+> be an issue for the PM framework.
+>It is more likely that I'm using it incorrectly :).
+
+> However, it is hard to tell what the issues are until all the
+> UFS driver changes have been completed, such as the ones I
+> suggested above above.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> index a2c63c8b1d10..c6144c8421fa 100644
-> --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> @@ -26,10 +26,7 @@ properties:
->         - const: simple-mfd
->   
->     mboxes:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle'
-> -    description: |
-> -      Phandle to the firmware device's Mailbox.
-> -      (See: ../mailbox/mailbox.txt for more information)
-> +    maxItems: 1
->   
->     clocks:
->       type: object
-> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-> index 26b886b20b27..6be4a8852ee5 100644
-> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-> @@ -256,13 +256,11 @@ properties:
->         where voltage is in V, frequency is in MHz.
->   
->     power-domains:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle-array'
->       description:
->         List of phandles and PM domain specifiers, as defined by bindings of the
->         PM domain provider (see also ../power_domain.txt).
->   
->     power-domain-names:
-> -    $ref: '/schemas/types.yaml#/definitions/string-array'
->       description:
->         A list of power domain name strings sorted in the same order as the
->         power-domains property.
-> diff --git a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
-> index c13faf3e6581..3a7d5d731712 100644
-> --- a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
-> +++ b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
-> @@ -73,7 +73,6 @@ properties:
->     clock-output-names:
->       description:
->         Name of the LCD pixel clock created.
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       maxItems: 1
->   
->     dmas:
-> diff --git a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
-> index 1a54db04f29d..bcafa494ed7a 100644
-> --- a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
-> @@ -43,8 +43,7 @@ properties:
->   
->     gpio-ranges: true
->   
-> -  gpio-ranges-group-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
-> +  gpio-ranges-group-names: true
->   
->     socionext,interrupt-ranges:
->       description: |
-> diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> index 6f2398cdc82d..1e7894e524f9 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> @@ -102,7 +102,6 @@ patternProperties:
->   
->         st,adc-channel-names:
->           description: List of single-ended channel names.
-> -        $ref: /schemas/types.yaml#/definitions/string-array
->   
->         st,filter-order:
->           description: |
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index 799e73cdb90b..13da7b29c707 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -82,7 +82,6 @@ properties:
->         this interconnect to send RPMh commands.
->   
->     qcom,bcm-voter-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description: |
->         Names for each of the qcom,bcm-voters specified.
->   
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-> index 49ab09252e52..bc8477e7ab19 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-> @@ -34,7 +34,7 @@ properties:
->         - description: EMC general interrupt
->   
->     memory-region:
-> -    $ref: /schemas/types.yaml#/definitions/phandle
-> +    maxItems: 1
->       description:
->         phandle to a reserved memory region describing the table of EMC
->         frequencies trained by the firmware
-> diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> index fe6a949a2eab..55bff1586b6f 100644
-> --- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> @@ -57,7 +57,6 @@ properties:
->         - const: per
->   
->     clock-frequency:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->       description: |
->         The oscillator frequency driving the flexcan device, filled in by the
->         boot loader. This property should only be used the used operating system
-> diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> index 8f86084bf12e..4e8dee4aa90d 100644
-> --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> @@ -100,7 +100,6 @@ properties:
->         - description: Whether the IPA clock is enabled (if valid)
->   
->     qcom,smem-state-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description: The names of the state bits used for SMP2P output
->       items:
->         - const: ipa-clock-enabled-valid
-> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
-> index d5d7f113bade..828e4a1ece41 100644
-> --- a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
-> @@ -23,12 +23,10 @@ properties:
->         List of phandle to the nvmem data cells.
->   
->     nvmem-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description:
->         Names for the each nvmem provider.
->   
->     nvmem-cell-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description:
->         Names for each nvmem-cells specified.
->   
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> index 1a1159097a2a..73400bc6e91d 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> @@ -93,7 +93,7 @@ properties:
->   # The following are the optional properties:
->   
->     memory-region:
-> -    $ref: /schemas/types.yaml#/definitions/phandle
-> +    maxItems: 1
->       description: |
->         phandle to the reserved memory node to be associated
->         with the remoteproc device. The reserved memory node
-> diff --git a/Documentation/devicetree/bindings/sound/ak4642.yaml b/Documentation/devicetree/bindings/sound/ak4642.yaml
-> index 6cd213be2266..1e2caa29790e 100644
-> --- a/Documentation/devicetree/bindings/sound/ak4642.yaml
-> +++ b/Documentation/devicetree/bindings/sound/ak4642.yaml
-> @@ -29,11 +29,9 @@ properties:
->   
->     clock-frequency:
->       description: common clock binding; frequency of MCKO
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->   
->     clock-output-names:
->       description: common clock name
-> -    $ref: /schemas/types.yaml#/definitions/string
->   
->   required:
->     - compatible
-> diff --git a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
-> index acfb9db021dc..77adbebed824 100644
-> --- a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
-> +++ b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
-> @@ -32,7 +32,7 @@ properties:
->             The last one integer is the length of the shared memory.
->   
->     memory-region:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle'
-> +    maxItems: 1
->       description: |
->         Shared memory region to EC.  A "shared-dma-pool".
->         See ../reserved-memory/reserved-memory.txt for details.
-> diff --git a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-> index 2e1046513603..e494a0416748 100644
-> --- a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-> +++ b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-> @@ -78,7 +78,6 @@ properties:
->   
->     clock-frequency:
->       description: for audio_clkout0/1/2/3
-> -    $ref: /schemas/types.yaml#/definitions/uint32-array
->   
->     clkout-lr-asynchronous:
->       description: audio_clkoutn is asynchronizes with lr-clock.
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> index 95a728f4d333..3ea8c0c1f45f 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> @@ -59,7 +59,6 @@ patternProperties:
->   
->       properties:
->         reg:
-> -        $ref: /schemas/types.yaml#/definitions/uint32
->           description: Specify the sensor channel. There are 8 channels in PMIC5's ADC TM
->           minimum: 0
->           maximum: 7
-> diff --git a/Documentation/devicetree/bindings/usb/usb.yaml b/Documentation/devicetree/bindings/usb/usb.yaml
-> index 78491e66ed24..939f217b8c7b 100644
-> --- a/Documentation/devicetree/bindings/usb/usb.yaml
-> +++ b/Documentation/devicetree/bindings/usb/usb.yaml
-> @@ -16,7 +16,6 @@ properties:
->       pattern: "^usb(@.*)?"
->   
->     phys:
-> -    $ref: /schemas/types.yaml#/definitions/phandle-array
->       description:
->         List of all the USB PHYs on this HCD
->   
+Ok, understood.
+
+> v11 could be hiding issues rather than fixing them.
+> 
+Based on the logs, in v11, I tried to forbid any runtime-suspend until 
+sd_probe() is done.
+I could be misunderstanding the whole thing though.
+
+Having said that, I will make the changes as per your suggestions and 
+push a v12. I will test with v12 as well and see if this issue is seen.
+
+>>
+>>>>
+>>>> Since the supplier has 0 auto-suspend delay, it now suspends!
+>>>>
+>>>>
+>>>> Context [T1]
+>>>> Call trace:
+>>>> dump_backtrace+0x0/0x1d4
+>>>> show_stack+0x18/0x24
+>>>> dump_stack+0xc4/0x144
+>>>> __pm_runtime_idle+0xb4/0x184
+>>>> scsi_autopm_put_device+0x18/0x24
+>>>> scsi_sysfs_add_sdev+0x26c/0x278
+>>>> scsi_probe_and_add_lun+0xbac/0xd48
+>>>> __scsi_scan_target+0x38c/0x510
+>>>> scsi_scan_host_selected+0x14c/0x1e4
+>>>> scsi_scan_host+0x1e0/0x228
+>>>> ufshcd_async_scan+0x39c/0x408
+>>>> async_run_entry_fn+0x48/0x128
+>>>> process_one_work+0x1f0/0x470
+>>>> worker_thread+0x26c/0x4c8
+>>>> kthread+0x13c/0x320
+>>>> ret_from_fork+0x10/0x18
+>>>>
+>>>>
+>>>> Context [T2]
+>>>> Call trace:
+>>>> dump_backtrace+0x0/0x1d4
+>>>> show_stack+0x18/0x24
+>>>> dump_stack+0xc4/0x144
+>>>> rpm_get_suppliers+0x48/0x1ac
+>>>> __rpm_callback+0x58/0x12c
+>>>> rpm_resume+0x3a4/0x618
+>>>> __pm_runtime_resume+0x50/0x80
+>>>> scsi_autopm_get_device+0x20/0x54
+>>>> sd_probe+0x40/0x3d0
+>>>> really_probe+0x1bc/0x4a0
+>>>> driver_probe_device+0x84/0xf0
+>>>> __device_attach_driver+0x114/0x138
+>>>> bus_for_each_drv+0x84/0xd0
+>>>> __device_attach_async_helper+0x7c/0xf0
+>>>> async_run_entry_fn+0x48/0x128
+>>>> process_one_work+0x1f0/0x470
+>>>> worker_thread+0x26c/0x4c8
+>>>> kthread+0x13c/0x320
+>>>> ret_from_fork+0x10/0x18
+>>>>
+>>>> Below prints show how link->rpm_active becomes 1 for sd 0:0:0:4
+>>>> [    7.574654][  T212] Call trace:
+>>>> [    7.574657][  T212]  dump_backtrace+0x0/0x1d4
+>>>> [    7.574661][  T212]  show_stack+0x18/0x24
+>>>> [    7.574665][  T212]  dump_stack+0xc4/0x144
+>>>> [    7.574668][  T212]  __pm_runtime_idle+0xb4/0x184
+>>>> [    7.574671][  T212]  scsi_autopm_put_device+0x18/0x24
+>>>> [    7.574675][  T212]  sd_probe+0x314/0x3d0
+>>>> [    7.574677][  T212]  really_probe+0x1bc/0x4a0
+>>>> [    7.574680][  T212]  driver_probe_device+0x84/0xf0
+>>>> [    7.574683][  T212]  __device_attach_driver+0x114/0x138
+>>>> [    7.574686][  T212]  bus_for_each_drv+0x84/0xd0
+>>>> [    7.574689][  T212]  __device_attach_async_helper+0x7c/0xf0
+>>>> [    7.574692][  T212]  async_run_entry_fn+0x48/0x128
+>>>> [    7.574695][  T212]  process_one_work+0x1f0/0x470
+>>>> [    7.574698][  T212]  worker_thread+0x26c/0x4c8
+>>>> [    7.574700][  T212]  kthread+0x13c/0x320
+>>>> [    7.574703][  T212]  ret_from_fork+0x10/0x18
+>>>> [    7.574706][  T212] sd 0:0:0:4: scsi_runtime_idle
+>>>> [    7.574712][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: -16 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+>>>> [    7.574715][  T212] sd 0:0:0:4: sd_probe: [UFSDBG]: Exit
+>>>> [    7.574738][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+>>>>
+>>>> [    7.574752][  T212] Workqueue: events_unbound async_run_entry_fn
+>>>> [    7.574754][  T212] Call trace:
+>>>> [    7.574758][  T212]  dump_backtrace+0x0/0x1d4
+>>>> [    7.574761][  T212]  show_stack+0x18/0x24
+>>>> [    7.574765][  T212]  dump_stack+0xc4/0x144
+>>>> [    7.574767][  T212]  __pm_runtime_idle+0xb4/0x184
+>>>> [    7.574770][  T212]  driver_probe_device+0x94/0xf0
+>>>> [    7.574773][  T212]  __device_attach_driver+0x114/0x138
+>>>> [    7.574775][  T212]  bus_for_each_drv+0x84/0xd0
+>>>> [    7.574778][  T212]  __device_attach_async_helper+0x7c/0xf0
+>>>> [    7.574781][  T212]  async_run_entry_fn+0x48/0x128
+>>>> [    7.574783][  T212]  process_one_work+0x1f0/0x470
+>>>> [    7.574786][  T212]  worker_thread+0x26c/0x4c8
+>>>> [    7.574788][  T212]  kthread+0x13c/0x320
+>>>> [    7.574791][  T212]  ret_from_fork+0x10/0x18
+>>>> [    7.574848][   T80] sd 0:0:0:4: scsi_runtime_idle
+>>>> [    7.574858][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: 0 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
+>>>> [    7.574863][  T212] sd 0:0:0:4: pm_runtime_put_suppliers: [UFSDBG]: rpm_status: 0 link-rpm_active:1
+>>>> [    7.574866][  T212] sd 0:0:0:4: async probe completed
+>>>> [    7.574870][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:1
+>>>>
+>>>>
+>>>> So, from the above it looks like when async probe is enabled this is a possibility.
+>>>>
+>>>> I don't see a way around this. Please let me know if you (@Alan/@Bart/@Adrian) have any thoughts on this.
+>>>>
+>>>> Thanks,
+>>>> -asd
+>>>>
+>>>
+>>
+>>
 > 
 
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+Linux Foundation Collaborative Project
