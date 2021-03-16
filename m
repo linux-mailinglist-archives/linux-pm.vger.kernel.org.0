@@ -2,92 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7866833CE24
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 07:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CF233CE35
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Mar 2021 07:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbhCPGyd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 02:54:33 -0400
-Received: from mail-m972.mail.163.com ([123.126.97.2]:47306 "EHLO
-        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbhCPGyF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Mar 2021 02:54:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=nE5EzAm2XjoMPFmk0d
-        QnsxrzEQUfap6jHGH0saZ6ois=; b=GXfj+Xp7+E9ZVvmk181KABMCb3+D3beo2q
-        z2s7BrAJXmwmxqNSFYXPjtfqGCwwXwuHb+3oKKoa5Z7WAS59AqZWYwFSHgfo4a9Y
-        BLABumgXqxzpqJ3TNXRMa3ocdSljTiaPuDqTw3j5T7Mywpc9Tm1lmXUw66M2dBzu
-        4l+qOtgrY=
-Received: from bf-rmnj-02.ccdomain.com (unknown [218.94.48.178])
-        by smtp2 (Coremail) with SMTP id GtxpCgC3xej_VVBgqgy5AA--.2332S2;
-        Tue, 16 Mar 2021 14:53:59 +0800 (CST)
-From:   Jian Dong <dj0227@163.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyue2@yulong.com, dongjian <dongjian@yulong.com>
-Subject: [PATCH] power-supply: use kobj_to_dev()
-Date:   Tue, 16 Mar 2021 14:54:12 +0800
-Message-Id: <1615877652-31829-1-git-send-email-dj0227@163.com>
-X-Mailer: git-send-email 1.9.1
-X-CM-TRANSID: GtxpCgC3xej_VVBgqgy5AA--.2332S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7urW3JFWxCryfWry5GF4DJwb_yoW8uF1kpF
-        Z5Ja4YyrW8WrWDWw45Xr4DZa43Kr1vk34fCr97Kw1Sk3s7Jr90gFZ8JFy5Aw15Zr95CFsa
-        qryvkry7AFWfGrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jFUDJUUUUU=
-X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: dgmqjjqx6rljoofrz/1tbiqAdX3Vc7T8Nq1AAAs7
+        id S235791AbhCPG5q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Mar 2021 02:57:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:48936 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235775AbhCPG5S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Mar 2021 02:57:18 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33DEAD6E;
+        Mon, 15 Mar 2021 23:57:16 -0700 (PDT)
+Received: from bogus (unknown [10.163.66.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 846613F792;
+        Mon, 15 Mar 2021 23:57:12 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 06:57:05 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>, ksitaraman@nvidia.com,
+        sanjayc@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 3/5] dt-bindings: arm: Add cpu-idle-states to Tegra194
+ CPU nodes
+Message-ID: <20210316065705.bpuhsdjfa5nnwrik@bogus>
+References: <1614838092-30398-1-git-send-email-skomatineni@nvidia.com>
+ <1614838092-30398-4-git-send-email-skomatineni@nvidia.com>
+ <20210308043755.llvdsuz2jwvweovb@bogus>
+ <4cebf482-a2f8-5a79-a2f6-4ccd7d31c6ad@nvidia.com>
+ <20210311025138.o4ub4j2ss725zpv4@bogus>
+ <b31d14ef-81d8-0480-805b-a3cb64404b12@nvidia.com>
+ <08ac26c1-8257-4c6d-d274-595fee28a00f@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <08ac26c1-8257-4c6d-d274-595fee28a00f@nvidia.com>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: dongjian <dongjian@yulong.com>
+On Fri, Mar 12, 2021 at 02:27:30PM -0800, Sowjanya Komatineni wrote:
+> Hi Sudeep,
+>
+> To make our driver PSCI compliant below are few updates to be done
+>
+> 1. Standardize passing residency time run-time thru PSCI to ATF.
+>
 
-Use kobj_to_dev() instead of open-coding it
+Yes that was my initial understanding, but your previous response was
+confusing. I should have read this first.
 
-Signed-off-by: dongjian <dongjian@yulong.com>
----
- drivers/power/supply/ds2781_battery.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>     From PSCI specification I only see PSCI_STAT_RESIDENCY and
+> PSCI_STAT_COUNT optional functions for PSCI1.0/PSCI1.1
+>
 
-diff --git a/drivers/power/supply/ds2781_battery.c b/drivers/power/supply/ds2781_battery.c
-index 3df3c82..05b859b 100644
---- a/drivers/power/supply/ds2781_battery.c
-+++ b/drivers/power/supply/ds2781_battery.c
-@@ -626,7 +626,7 @@ static ssize_t ds2781_read_param_eeprom_bin(struct file *filp,
- 				struct bin_attribute *bin_attr,
- 				char *buf, loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct power_supply *psy = to_power_supply(dev);
- 	struct ds2781_device_info *dev_info = to_ds2781_device_info(psy);
- 
-@@ -639,7 +639,7 @@ static ssize_t ds2781_write_param_eeprom_bin(struct file *filp,
- 				struct bin_attribute *bin_attr,
- 				char *buf, loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct power_supply *psy = to_power_supply(dev);
- 	struct ds2781_device_info *dev_info = to_ds2781_device_info(psy);
- 	int ret;
-@@ -671,7 +671,7 @@ static ssize_t ds2781_read_user_eeprom_bin(struct file *filp,
- 				struct bin_attribute *bin_attr,
- 				char *buf, loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct power_supply *psy = to_power_supply(dev);
- 	struct ds2781_device_info *dev_info = to_ds2781_device_info(psy);
- 
-@@ -685,7 +685,7 @@ static ssize_t ds2781_write_user_eeprom_bin(struct file *filp,
- 				struct bin_attribute *bin_attr,
- 				char *buf, loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct power_supply *psy = to_power_supply(dev);
- 	struct ds2781_device_info *dev_info = to_ds2781_device_info(psy);
- 	int ret;
--- 
-1.9.1
+Indeed, we don't have any support to pass run-time residency hints in PSCI
+today.
 
+>    Can you please help add right people to explore on possible ways to add
+> PSCI function for passing corresponding state residency time to ATF?
+>
+
+Before we jump to implementation in TF-A we need to get agreement to get this
+added to the specification to support in OSPM/Linux. TF-A is just one
+implementation of PSCI and may not be only one.
+
+Formally you can raise any specification related queries to
+https://developer.arm.com/support or support@arm.com. I will ask the author
+of PSCI specification internally to take a look at this thread and chime in
+if they can.
+
+> 2. Tegra CPU Idle support definitely need to pass deepest cluster state and
+> threshold to MCE firmware from DT and looks like we can move this
+> implementation to ATF
+>
+
+Yes, I just asked the same question as response to your earlier email. Thanks
+for confirming that it can be moved out of OSPM/Linux and DT
+
+>      With both of the above implementation changes Tegra194 driver will be
+> PSCI compliant.
+>
+
+We still need to get agreement on the specification front 😉.
+
+--
+Regards,
+Sudeep
