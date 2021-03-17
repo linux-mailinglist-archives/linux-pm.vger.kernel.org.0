@@ -2,97 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2202D33F609
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 17:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D67AF33F638
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 18:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbhCQQuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Mar 2021 12:50:19 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:47332 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbhCQQuA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 12:50:00 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 2.0.3)
- id b5a2283f45a98cea; Wed, 17 Mar 2021 17:49:56 +0100
-Received: from kreacher.localnet (89-64-80-90.dynamic.chello.pl [89.64.80.90])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id A50E0668F2A;
-        Wed, 17 Mar 2021 17:49:55 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Box <david.e.box@linux.intel.com>
-Subject: [PATCH] ACPI: scan: Turn off unused power resources during initialization
-Date:   Wed, 17 Mar 2021 17:49:55 +0100
-Message-ID: <2527835.vZkJICojNU@kreacher>
+        id S232029AbhCQRCZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Mar 2021 13:02:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39904 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232670AbhCQRB6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Mar 2021 13:01:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EC1261580;
+        Wed, 17 Mar 2021 17:01:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616000516;
+        bh=D5aIjqmiOUYZl13Ajhpo46UMf5Qv0uThh2gxXrypg4Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P/lDAbTusNU8/I+ESum6PU/pLylMXRA05sso9tvoSpj1oxQJoR/zW6Z7R9EY6LtZM
+         Uvs7O3FjhBy7+kZlykyWDkSjt9lhcIJG7FB7uPyOyrR+8pnMLifCANcdqFYxvAQUkj
+         +Md3iz/vtf0Br6kdNrHT4wgX5R1YODHy9VFpeFcozXQBGLje1b1L/rWFrDnMyRYM1T
+         eyJ6h945OWso43VtenJ6HM+SAiWSPHzCjwbfvsckHXvDqxfwL+4UkeU9zQ6hqCN4lM
+         a2cELM02A/BBXBWOea+SHy1ZFOq720LpJHIilBACsEc44YUQDoxrxbwuEFPT+BOPGf
+         HynHOUtcm93bQ==
+Received: by pali.im (Postfix)
+        id 900E18A9; Wed, 17 Mar 2021 18:01:52 +0100 (CET)
+Date:   Wed, 17 Mar 2021 18:01:52 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCHv2 18/38] dt-bindings: power: supply: n900-battery:
+ Convert to DT schema format
+Message-ID: <20210317170152.dsg7s6kik5gyqd64@pali>
+References: <20210317134904.80737-1-sebastian.reichel@collabora.com>
+ <20210317134904.80737-19-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudefgedgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtvdenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeevudefgfeguedtjedvhfetveegleduveeuvedvjeekleefhfduhfefheekffefveenucfkphepkeelrdeigedrkedtrdeltdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdektddrledtpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhhiugdrvgdrsghogieslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210317134904.80737-19-sebastian.reichel@collabora.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wednesday 17 March 2021 14:48:44 Sebastian Reichel wrote:
+> Convert the binding to DT schema format.
+> 
+> Cc: Pali Rohár <pali@kernel.org>
 
-It is reported that on certain platforms unused ACPI power resources
-that have not been explicitly turned off prevent the platform from
-reaching the lowest power state in suspend-to-idle which leads to
-excessive power draw.
+Rejected-by: Pali Rohár <pali@kernel.org>
 
-For this reason, turn all of the unused ACPI power resources off
-at the end of the initial namespace scan for devices in analogy with
-resume from suspend-to-RAM.
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Reported-by: David Box <david.e.box@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/internal.h |    1 +
- drivers/acpi/scan.c     |    2 ++
- drivers/acpi/sleep.h    |    1 -
- 3 files changed, 3 insertions(+), 1 deletion(-)
+Hello Sebastian! I'm really really sorry, I have nothing against you,
+but personally I cannot ack change signed by company where some people
+are supporting censorship, GPL violations and other similar immoral
+activities against other individual developers.
 
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -139,6 +139,7 @@ int acpi_device_sleep_wake(struct acpi_d
- int acpi_power_get_inferred_state(struct acpi_device *device, int *state);
- int acpi_power_on_resources(struct acpi_device *device, int state);
- int acpi_power_transition(struct acpi_device *device, int state);
-+void acpi_turn_off_unused_power_resources(void);
- 
- /* --------------------------------------------------------------------------
-                               Device Power Management
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -2360,6 +2360,8 @@ int __init acpi_scan_init(void)
- 		}
- 	}
- 
-+	acpi_turn_off_unused_power_resources();
-+
- 	acpi_scan_initialized = true;
- 
-  out:
-Index: linux-pm/drivers/acpi/sleep.h
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.h
-+++ linux-pm/drivers/acpi/sleep.h
-@@ -8,7 +8,6 @@ extern struct list_head acpi_wakeup_devi
- extern struct mutex acpi_device_lock;
- 
- extern void acpi_resume_power_resources(void);
--extern void acpi_turn_off_unused_power_resources(void);
- 
- static inline acpi_status acpi_set_waking_vector(u32 wakeup_address)
- {
-
-
-
+> ---
+>  .../power/supply/nokia,n900-battery.yaml      | 49 +++++++++++++++++++
+>  .../bindings/power/supply/rx51-battery.txt    | 25 ----------
+>  2 files changed, 49 insertions(+), 25 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/nokia,n900-battery.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/power/supply/rx51-battery.txt
