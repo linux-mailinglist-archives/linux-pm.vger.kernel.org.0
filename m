@@ -2,130 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F321033F77D
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 18:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF23633F80F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 19:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbhCQRtw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Mar 2021 13:49:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36558 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232288AbhCQRtU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 13:49:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1616003360;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/+ibb3Br4K61RTkghPv+0gtVahorbHjJekn7ZK14QjI=;
-        b=hj+IJA7lvG0rzT3ti2zIYK0EipFdXmQNyT6x87lKq0QE/UruVXMmz/eVMNAhlFiqnkcS1x
-        cKAHqihlWUYT1xLXmwhHtxyyqpH04FGzJiY07xFTt2dsu1QA0oEAsoumuiVt65Dx4q9VwG
-        hY0JmojQ4DnjqG+ZwtvJ1eJ6n+GtcQg=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-333-B_915-E1PNimVXqg3jNTNQ-1; Wed, 17 Mar 2021 13:49:18 -0400
-X-MC-Unique: B_915-E1PNimVXqg3jNTNQ-1
-Received: by mail-ed1-f72.google.com with SMTP id m8so14109311edv.11
-        for <linux-pm@vger.kernel.org>; Wed, 17 Mar 2021 10:49:18 -0700 (PDT)
+        id S231991AbhCQSYC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Mar 2021 14:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229601AbhCQSXm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Mar 2021 14:23:42 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0159C061760
+        for <linux-pm@vger.kernel.org>; Wed, 17 Mar 2021 11:23:30 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id j17so1817751qvo.13
+        for <linux-pm@vger.kernel.org>; Wed, 17 Mar 2021 11:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tmX1Ahb9V3sePtb5QZrdh2WMnjcseF+r4zrPIY/87P0=;
+        b=JudSIsB3tY1OwDRAn7q8hOBmIE6Hjy1qoNBEGRre/XSwoESij+AS6HcIN/hmkNSNu1
+         ivMM8k3skN+gbY7zrsbj0nnqggtb5NfaUMzuX5jgjpD4v8G8HoDkWmf84ubJdBIVfg/X
+         90NJTN2cL1LDxvUdV+GVil5aWi4rea7wmX28xHNauSOWh69pyoekrFkAyX52D4j+muyL
+         q2bnxygDzS/3jhqUuLREHC786k+nIPCdY4W69MLHMbcJQfG/ihi5CbjAYs6GJOO3W0i9
+         NQhE4zxErzWw0mjt7D9ORf/XeHWrIX6dHqKw5qnrxOgZrcf5c05LKjTlHFIJYN9OzCbq
+         5HLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=/+ibb3Br4K61RTkghPv+0gtVahorbHjJekn7ZK14QjI=;
-        b=H0ws7Vbo0vuJh4f9HLziSY77PaRTgTNz+/m4McwZak/oC+gn5LP2Lb1HnFu4eLL88a
-         zPeVd7NPRma0za/Lku/Z970OQx1AiKp8Akhi9zLHCrLOXjOd2m1/CnJSUB++c8uMMqsb
-         7UhcyNt61WDbGLWqj6/S0qxZNUBvMtMlTtAEa8/kkprmFd0e4vdyyzzstcbwcRgPPQr9
-         zqu2/o6n7Oc59S7L+4jo+R9KUET+nch+2SU3SCTKtyDGG+OKnbt/AH106em/W20Nv0Mc
-         XtJq7CP0igxWAfq4zHj2VATMgoqAfquO2McvSxj7iB2Be3/qaK+AbupFRvNN5cQoSDBs
-         93ag==
-X-Gm-Message-State: AOAM5300fDfb+o/RELXuKjwbd1io1BdZh+JfsmZuiBzRhSJ+xbFikc5f
-        5bm1Bbgni7dLXXGP727Xd82zjYCXJ4OQpgYTVXW4s+ZTMxlT4jQNDfep265LBO8RaEtGh4FJtRR
-        O/kHjZaWJuW9LBHB5MH8=
-X-Received: by 2002:a05:6402:31a7:: with SMTP id dj7mr43645993edb.33.1616003356755;
-        Wed, 17 Mar 2021 10:49:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwR8fampzxEqdpvBY7gKviiN76BsjpAVvBgItH/BesZSGl36lmeZngX9SfAjECSbSJlEG9Lzg==
-X-Received: by 2002:a05:6402:31a7:: with SMTP id dj7mr43645978edb.33.1616003356623;
-        Wed, 17 Mar 2021 10:49:16 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id r17sm13942325edx.1.2021.03.17.10.49.16
+        bh=tmX1Ahb9V3sePtb5QZrdh2WMnjcseF+r4zrPIY/87P0=;
+        b=gBCiHd+7ofzDGv3NZbjU+tzo+6JSxv9K0S3WMarWLi2sI6YwzOmeApyYv2nFVU1npV
+         awexl6iIvf8krdkFW1vIJlDCKkxYRF+xaRNTZhhC1m8gMtbohKZsYFxWmszOfhMxIwWD
+         yZCpegeXZ+gSpBdXSY1ymwVqtcaezCWSkC68l7B1R/dmHi7brfZA7QntQH7mhp3Bfac1
+         qU6RK5/7ZDGDLPSKHs6k1FADZZVrJU4+KC2UgwufJs05MvB4Ds4Jn0pyH9yXbeCiIYbZ
+         RWYOiPZ7sf8YoDY7Wq7uxWXl1vG6MiwV9OgvUmwBQlYToH0km/KCjg9OhpGl54CUeeuZ
+         yfbQ==
+X-Gm-Message-State: AOAM531iILMeFQuZH9mGAWaVG6AxmXM3mbiGDN17fTtmOXPcf9HCgABr
+        zL+Q29NOItI5PAAV/dHvp+xBSw==
+X-Google-Smtp-Source: ABdhPJy5oMDnLUedtldYvmssFVi0CydnnEM1GUpYPgOHziN330zps7u7+EgaSkhqS4rUZsk5yvDE/Q==
+X-Received: by 2002:ad4:4421:: with SMTP id e1mr455578qvt.48.1616005409600;
+        Wed, 17 Mar 2021 11:23:29 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id z4sm18535935qkb.94.2021.03.17.11.23.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Mar 2021 10:49:16 -0700 (PDT)
-Subject: Re: [PATCH 0/2] power: supply: Add battery and AC drivers for Surface
- devices
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Wed, 17 Mar 2021 11:23:29 -0700 (PDT)
+Subject: Re: [PATCH] thermal: qcom: tsens_v1: Enable sensor 3 on MSM8976
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20210309000530.2165752-1-luzmaximilian@gmail.com>
- <edcbe108-8cd7-4034-222f-c8ce56918dee@redhat.com>
- <f124e477-2786-d842-5694-13aa4146ba34@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <efdf4d60-64e7-2dd8-5349-29725ec5cbea@redhat.com>
-Date:   Wed, 17 Mar 2021 18:49:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+References: <20210225213119.116550-1-konrad.dybcio@somainline.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <f36f63c7-4427-58fa-fed4-c97c5ee47159@linaro.org>
+Date:   Wed, 17 Mar 2021 14:23:27 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <f124e477-2786-d842-5694-13aa4146ba34@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210225213119.116550-1-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On 3/17/21 6:47 PM, Maximilian Luz wrote:
-> On 3/17/21 6:39 PM, Hans de Goede wrote:
->> Hi,
->>
->> On 3/9/21 1:05 AM, Maximilian Luz wrote:
->>> This series provides battery and AC drivers for Microsoft Surface
->>> devices, where this information is provided via an embedded controller
->>> (the Surface System Aggregator Module, SSAM) instead of the usual ACPI
->>> interface.
->>>
->>> Specifically, 7th generation Surface devices, i.e. Surface Pro 7,
->>> Surface Book 3, Surface Laptop 3, as well as the Surface Laptop Go use
->>> this new interface.
->>>
->>> Note: This series depends on the
->>>
->>>      platform/surface: Add Surface Aggregator device registry
->>>
->>> series. More specifically patch
->>>
->>>      platform/surface: Set up Surface Aggregator device registry
->>>
->>> The full series has been merged into the for-next branch of the
->>> platform-drivers-x86 tree [1]. The commit in question can be found at
->>> [2].
->>>
->>> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=for-next
->>> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?h=for-next&id=fc622b3d36e6d91330fb21506b9ad1e3206a4dde
->>
->> Sebastian, I guess you want a pull-req from an immutable branch from me for
->> that dependend commit and then you will merge these 2 patches ?
->>
->> Maximillian, this only needs that commit right, or would it be better if
->> I send Sebastian a pull-req for a branch with the entire series?
+
+On 2/25/21 4:31 PM, Konrad Dybcio wrote:
+> The sensor *is* in fact used and does report temperature.
+
+I can't find any info that says otherwise. So,
+
+Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
+
+Warm Regards
+Thara
+
 > 
-> The entire series would be better, I think.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+>   drivers/thermal/qcom/tsens-v1.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Strictly speaking, it only requires the mentioned commit to compile
-> successfully, but if anyone would want to test this they'd need the full
-> series (or at least the battery/power subsystem commit) due to the
-> device instantiation.
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index 3c19a3800c6d..573e261ccca7 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -380,11 +380,11 @@ static const struct tsens_ops ops_8976 = {
+>   	.get_temp	= get_temp_tsens_valid,
+>   };
+>   
+> -/* Valid for both MSM8956 and MSM8976. Sensor ID 3 is unused. */
+> +/* Valid for both MSM8956 and MSM8976. */
+>   struct tsens_plat_data data_8976 = {
+>   	.num_sensors	= 11,
+>   	.ops		= &ops_8976,
+> -	.hw_ids		= (unsigned int[]){0, 1, 2, 4, 5, 6, 7, 8, 9, 10},
+> +	.hw_ids		= (unsigned int[]){0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+>   	.feat		= &tsens_v1_feat,
+>   	.fields		= tsens_v1_regfields,
+>   };
+> 
 
-Ack, I think the whole series makes the most sense too, so I will
-prepare a pull-req for that.
-
-> Same reasoning applies to the HID series.
-
-Ack.
-
-Regards,
-
-Hans
-
+-- 
+Warm Regards
+Thara
