@@ -2,220 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6047733E704
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 03:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3168533E94A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Mar 2021 06:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbhCQCbX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Mar 2021 22:31:23 -0400
-Received: from mga11.intel.com ([192.55.52.93]:44290 "EHLO mga11.intel.com"
+        id S229972AbhCQFxD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Mar 2021 01:53:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45950 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229900AbhCQCbU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Mar 2021 22:31:20 -0400
-IronPort-SDR: 8p2AfVpLH07TqI/7nZDbMhA4G2cnQdfvCyJNN9sLKCCqHSjF+pfHDNVV3DNXvAlOjNH/EimO20
- ljOMKjYi1kwg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="186013501"
-X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="186013501"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 19:31:19 -0700
-IronPort-SDR: doniqSzyYDgogqX9NOBTkvD/As6Vz08wUu/WIR7h5tY2aVMGvRO3RqXHifHTfamtcivysTV+UB
- srJ8qMonX0lg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="374002329"
-Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2021 19:31:18 -0700
-Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lMLxt-0000ST-9Z; Wed, 17 Mar 2021 02:31:17 +0000
-Date:   Wed, 17 Mar 2021 10:31:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 1a7a93e88ae21b39d09117d5a0dde26db783ff92
-Message-ID: <605169e7.TzSxUjLg7ne2zDiG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229862AbhCQFwr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Mar 2021 01:52:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9BAE64F8C;
+        Wed, 17 Mar 2021 05:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1615960367;
+        bh=tOgFJ4o5PgryrZSo/91PbTtI3nbI+1J8paf/6XTa9WM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HJ9lKY4hGhS1co2uTb9cICsaNrZmtCRDTA55GJgvzxAPdZEb1OjpPKZIOfBwYDu7+
+         xn+uL5wP9w8GPZvQZijePGNwKkZHL+c8obT2jisoZudWe1R+gYYnEZfI1GJ87WqKsw
+         VWZICVxNTlWraAgPFUH1RTY+mog6FAfryPhI102k=
+Date:   Wed, 17 Mar 2021 06:52:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mark Brown <broonie@kernel.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
+Message-ID: <YFGZLM7MbypuE15L@kroah.com>
+References: <20210316194858.3527845-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 1a7a93e88ae21b39d09117d5a0dde26db783ff92  Merge branch 'acpi-drivers' into linux-next
+On Tue, Mar 16, 2021 at 01:48:58PM -0600, Rob Herring wrote:
+> Users of common properties shouldn't have a type definition as the
+> common schemas already have one. Drop all the unnecessary type
+> references in the tree.
+> 
+> A meta-schema update to catch these is pending.
+> 
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Stefan Wahren <wahrenst@gmx.net>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Odelu Kukatla <okukatla@codeaurora.org>
+> Cc: Alex Elder <elder@kernel.org>
+> Cc: Suman Anna <s-anna@ti.com>
+> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
+>  Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
+>  .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
+>  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
+>  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+>  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
+>  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
+>  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
+>  Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
+>  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
+>  Documentation/devicetree/bindings/sound/ak4642.yaml          | 2 --
+>  .../devicetree/bindings/sound/google,cros-ec-codec.yaml      | 2 +-
+>  Documentation/devicetree/bindings/sound/renesas,rsnd.yaml    | 1 -
+>  .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml       | 1 -
+>  Documentation/devicetree/bindings/usb/usb.yaml               | 1 -
+>  16 files changed, 5 insertions(+), 23 deletions(-)
 
-elapsed time: 722m
-
-configs tested: 157
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-openrisc                         alldefconfig
-powerpc                     redwood_defconfig
-arm                            lart_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                        realview_defconfig
-sh                           se7343_defconfig
-nds32                             allnoconfig
-mips                malta_qemu_32r6_defconfig
-ia64                          tiger_defconfig
-arm                    vt8500_v6_v7_defconfig
-sh                           se7722_defconfig
-m68k                         apollo_defconfig
-sh                             espt_defconfig
-arm                      footbridge_defconfig
-powerpc                     taishan_defconfig
-arm                         hackkit_defconfig
-arc                              allyesconfig
-arm                          gemini_defconfig
-sh                               j2_defconfig
-arm                         vf610m4_defconfig
-powerpc                      pmac32_defconfig
-powerpc                       maple_defconfig
-arc                                 defconfig
-sh                           se7724_defconfig
-arm                           omap1_defconfig
-sh                   sh7770_generic_defconfig
-arm                        multi_v7_defconfig
-powerpc                     akebono_defconfig
-mips                     loongson1b_defconfig
-arc                         haps_hs_defconfig
-arm                           u8500_defconfig
-sh                           se7705_defconfig
-h8300                       h8s-sim_defconfig
-mips                        bcm47xx_defconfig
-ia64                             alldefconfig
-nios2                         3c120_defconfig
-parisc                generic-32bit_defconfig
-powerpc                      ppc6xx_defconfig
-microblaze                      mmu_defconfig
-csky                             alldefconfig
-powerpc                  storcenter_defconfig
-powerpc                       ppc64_defconfig
-mips                           ip27_defconfig
-sh                          r7785rp_defconfig
-arm                         lubbock_defconfig
-mips                    maltaup_xpa_defconfig
-arm                       spear13xx_defconfig
-arm                        spear6xx_defconfig
-arm                         lpc32xx_defconfig
-arm                           tegra_defconfig
-arm                        neponset_defconfig
-arc                     nsimosci_hs_defconfig
-xtensa                generic_kc705_defconfig
-sh                        edosk7760_defconfig
-openrisc                            defconfig
-powerpc                      bamboo_defconfig
-powerpc                 mpc85xx_cds_defconfig
-powerpc                   bluestone_defconfig
-mips                         tb0219_defconfig
-arm                         assabet_defconfig
-mips                      pistachio_defconfig
-mips                  decstation_64_defconfig
-powerpc                    sam440ep_defconfig
-powerpc                      walnut_defconfig
-arm                        vexpress_defconfig
-mips                       bmips_be_defconfig
-arm                          imote2_defconfig
-m68k                          atari_defconfig
-powerpc                   lite5200b_defconfig
-powerpc                         wii_defconfig
-sh                            shmin_defconfig
-arm                              alldefconfig
-arm                       aspeed_g4_defconfig
-i386                             alldefconfig
-powerpc                 mpc8540_ads_defconfig
-um                             i386_defconfig
-mips                         bigsur_defconfig
-powerpc                     ep8248e_defconfig
-powerpc                      cm5200_defconfig
-mips                     loongson1c_defconfig
-sparc64                             defconfig
-arm                            mps2_defconfig
-powerpc                     pseries_defconfig
-arm                        trizeps4_defconfig
-sh                        edosk7705_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210316
-i386                 randconfig-a005-20210316
-i386                 randconfig-a002-20210316
-i386                 randconfig-a003-20210316
-i386                 randconfig-a004-20210316
-i386                 randconfig-a006-20210316
-x86_64               randconfig-a011-20210316
-x86_64               randconfig-a016-20210316
-x86_64               randconfig-a013-20210316
-x86_64               randconfig-a014-20210316
-x86_64               randconfig-a015-20210316
-x86_64               randconfig-a012-20210316
-i386                 randconfig-a013-20210316
-i386                 randconfig-a016-20210316
-i386                 randconfig-a011-20210316
-i386                 randconfig-a012-20210316
-i386                 randconfig-a015-20210316
-i386                 randconfig-a014-20210316
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20210316
-x86_64               randconfig-a001-20210316
-x86_64               randconfig-a005-20210316
-x86_64               randconfig-a004-20210316
-x86_64               randconfig-a003-20210316
-x86_64               randconfig-a002-20210316
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
